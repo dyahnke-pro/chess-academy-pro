@@ -1,579 +1,571 @@
 {
- "videoId": "gyOxMMJWiYg",
- "title": "Master Class | Crushing The Caro-Kann | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Caro-Kann Defense: Fantasy Variation",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:gyOxMMJWiYg",
- "moves": [
-  {
-   "ply": 2,
-   "t": 11.5,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 46,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "d4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 48.5,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 50.5,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "f3"
-   ],
-   "spoken": "The pawn to f3, the Fantasy again — a line with a shoddy reputation that is genuinely dangerous once you know it.",
-   "kind": "main",
-   "teaches": "f3 keeps the centre and invites the sharp, less-charted play Black often mishandles."
-  },
-  {
-   "ply": 6,
-   "t": 54,
-   "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "h5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 101,
-   "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 1 4",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 116.5,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 142,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 153.5,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 5",
-   "line": [
-    "Nf6",
-    "Nc3",
-    "h5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 167,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
-   "line": [
-    "e5"
-   ],
-   "spoken": "Black's early h5 neglects the centre, so White strikes with e5. The knight on f6 has no good square and is shoved back to the miserable h7, leaving White a huge space edge.",
-   "kind": "main",
-   "teaches": "Punish a flank move that ignores the centre by grabbing space with e5."
-  },
-  {
-   "ply": 10,
-   "t": 174,
-   "fen": "rnbqkb1r/pp2pppn/2p5/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
-   "line": [
-    "Nh7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 252,
-   "fen": "rnbqkb1r/pp2pppn/2p5/3pP2p/3P4/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 2 6",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 272,
-   "fen": "rn1qkb1r/pp1bpppn/2p5/3pP2p/3P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 3 7",
-   "line": [
-    "Bd7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 287.5,
-   "fen": "rn1qkb1r/pp1bpppn/2p5/3pP2p/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 7",
-   "line": [
-    "f4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 300,
-   "fen": "rn1qkb1r/pp2pppn/2p5/3pP2p/3P1Pb1/2NB4/PPP3PP/R1BQK1NR w KQkq - 1 8",
-   "line": [
-    "Bg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 314.5,
-   "fen": "rn1qkb1r/pp2pppn/2p5/3pP2p/3P1Pb1/2NB1N2/PPP3PP/R1BQK2R b KQkq - 2 8",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 317.5,
-   "fen": "rn2kb1r/pp2pppn/1qp5/3pP2p/3P1Pb1/2NB1N2/PPP3PP/R1BQK2R w KQkq - 3 9",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 378,
-   "fen": "rn2kb1r/pp2pppn/1qp5/3pP2p/3P1Pb1/P1NB1N2/1PP3PP/R1BQK2R b KQkq - 0 9",
-   "line": [
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 383,
-   "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1Pb1/P1NB1N2/1PP3PP/R1BQK2R w KQkq - 0 10",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 385,
-   "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1Pb1/P1NB1N1P/1PP3P1/R1BQK2R b KQkq - 0 10",
-   "line": [
-    "h3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 389.5,
-   "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1P2/P1NB1Q1P/1PP3P1/R1B1K2R b KQkq - 0 11",
-   "line": [
-    "Bxf3",
-    "Qxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 396,
-   "fen": "rn2kb1r/pp3ppn/2p1p3/3pP2p/3q1P2/P1NBBQ1P/1PP3P1/R3K2R b KQkq - 1 12",
-   "line": [
-    "Qxd4",
-    "Be3"
-   ],
-   "spoken": "White lays a trap: the move h3 quietly offers a central pawn as bait. Black bites — the bishop trades on f3, the queen recaptures, and then wins the pawn, its queen now planted on d4. The bishop to e3 springs the trap, hemming the queen in with tempo where every escape loses.",
-   "kind": "trap",
-   "teaches": "Bait a pawn grab and trap the greedy queen by attacking it with a gain of tempo."
-  },
-  {
-   "ply": 24,
-   "t": 407.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/3q1P2/P1NBBQ1P/1PP3P1/R3K2R w KQkq - 2 13",
-   "line": [
-    "Ng5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 429.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/3q1P2/P1NBB2P/1PP1Q1P1/R3K2R b KQkq - 3 13",
-   "line": [
-    "Qe2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 489.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/5P2/P1NBq2P/1PP1Q1P1/R3K2R w KQkq - 0 14",
-   "line": [
-    "Qxe3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 491.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/5P2/P1NBQ2P/1PP3P1/R3K2R b KQkq - 0 14",
-   "line": [
-    "Qxe3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 493.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP2p/4nP2/P1NBQ2P/1PP3P1/R3K2R w KQkq - 1 15",
-   "line": [
-    "Ne4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 525,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/3pP2p/4BP2/P1N1Q2P/1PP3P1/R3K2R b KQkq - 0 15",
-   "line": [
-    "Bxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 527.5,
-   "fen": "rn2kb1r/pp3pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/R3K2R b KQkq - 0 16",
-   "line": [
-    "dxe4",
-    "Nxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 531.5,
-   "fen": "r3kb1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/R3K2R w KQkq - 1 17",
-   "line": [
-    "Nd7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 33,
-   "t": 539,
-   "fen": "r3kb1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/2KR3R b kq - 2 17",
-   "line": [
-    "O-O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 554,
-   "fen": "2kr1b1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/2KR3R w - - 3 18",
-   "line": [
-    "O-O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 35,
-   "t": 567.5,
-   "fen": "2kr1b1r/Qp1n1pp1/2p1p3/4P2p/4NP2/P6P/1PP3P1/2KR3R b - - 0 18",
-   "line": [
-    "Qxa7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 36,
-   "t": 575.5,
-   "fen": "2kr3r/Qp1nbpp1/2p1p3/4P2p/4NP2/P6P/1PP3P1/2KR3R w - - 1 19",
-   "line": [
-    "Be7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 37,
-   "t": 589,
-   "fen": "2kr3r/Qp1nbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2K4R b - - 2 19",
-   "line": [
-    "Rd6"
-   ],
-   "spoken": "Up a queen, White drives home the theme: the weak d6-square. A rook plants itself on d6, using the outpost the e5-pawn created, and Black's position folds.",
-   "kind": "main",
-   "teaches": "An advanced outpost like d6 is a permanent home for a piece — here a rook the pawn on e5 protects."
-  },
-  {
-   "ply": 38,
-   "t": 598,
-   "fen": "3r3r/Qpknbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2K4R w - - 3 20",
-   "line": [
-    "Kc7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 39,
-   "t": 603,
-   "fen": "3r3r/Qpknbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2KR4 b - - 4 20",
-   "line": [
-    "Rhd1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 40,
-   "t": 618,
-   "fen": "3r3r/Qpk1bpp1/1npRp3/4P2p/4NP2/P6P/1PP3P1/2KR4 w - - 5 21",
-   "line": [
-    "Nb6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 41,
-   "t": 634,
-   "fen": "3r3r/Qpk1bpp1/1npRp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 b - - 6 21",
-   "line": [
-    "Nc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 42,
-   "t": 657.5,
-   "fen": "3r3r/Qpk2pp1/1npbp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 w - - 0 22",
-   "line": [
-    "Bxd6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 43,
-   "t": 658.5,
-   "fen": "3r3r/1Qk2pp1/1npbp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 b - - 0 22",
-   "line": [
-    "Qxb7#"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 2,
-   "t": 671.5,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 673,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "d4",
-    "d5",
-    "f3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 723.5,
-   "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "g6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 726,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 727,
-   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 728.5,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 729.5,
-   "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 731,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 732,
-   "fen": "rnb1kbnr/pp2pppp/1qp5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 1 4",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 740,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 741.5,
-   "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "h5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 748.5,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
-   "line": [
-    "Nc3",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 751.5,
-   "fen": "rnbqkb1r/pp2ppp1/2p2n2/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 753,
-   "fen": "rnbqkb1r/pp1nppp1/2p5/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
-   "line": [
-    "Nfd7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 754,
-   "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 755,
-   "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 7",
-   "line": [
-    "fxe6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 773,
-   "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P1P2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 7",
-   "line": [
-    "f4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 774,
-   "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 775,
-   "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 1 7",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 778.5,
-   "fen": "rnbqkb1r/pp2p1p1/2p1pn2/3p3p/3P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 2 8",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 779.5,
-   "fen": "rnbqkb1r/pp2p1p1/2p1pn2/3p3p/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 8",
-   "line": [
-    "f4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 792,
-   "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "gyOxMMJWiYg",
+  "title": "Master Class | Crushing The Caro-Kann | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Caro-Kann Defense: Fantasy Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:gyOxMMJWiYg",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 11.5,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c6"
+      ],
+      "spoken": "We take White and face the Caro-Kann."
+    },
+    {
+      "ply": 3,
+      "t": 46,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "d4"
+      ],
+      "spoken": "We build the centre with d4."
+    },
+    {
+      "ply": 4,
+      "t": 48.5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "Black challenges with d5."
+    },
+    {
+      "ply": 5,
+      "t": 50.5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "f3"
+      ],
+      "spoken": "We play f3 — the Fantasy Variation."
+    },
+    {
+      "ply": 6,
+      "t": 54,
+      "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "h5"
+      ],
+      "spoken": "Black plays the odd ...h5."
+    },
+    {
+      "ply": 7,
+      "t": 101,
+      "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 1 4",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "We develop the knight to c3."
+    },
+    {
+      "ply": 8,
+      "t": 116.5,
+      "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "Black develops the knight to f6."
+    },
+    {
+      "ply": 5,
+      "t": 142,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 8,
+      "t": 153.5,
+      "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 5",
+      "line": [
+        "Nf6",
+        "Nc3",
+        "h5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 167,
+      "fen": "rnbqkb1r/pp2ppp1/2p2n2/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
+      "line": [
+        "e5"
+      ],
+      "spoken": "We push e5, kicking the knight."
+    },
+    {
+      "ply": 10,
+      "t": 174,
+      "fen": "rnbqkb1r/pp2pppn/2p5/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+      "line": [
+        "Nh7"
+      ],
+      "spoken": "Black shuffles the knight to h7."
+    },
+    {
+      "ply": 11,
+      "t": 252,
+      "fen": "rnbqkb1r/pp2pppn/2p5/3pP2p/3P4/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 2 6",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "We develop the bishop to d3."
+    },
+    {
+      "ply": 12,
+      "t": 272,
+      "fen": "rn1qkb1r/pp1bpppn/2p5/3pP2p/3P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 3 7",
+      "line": [
+        "Bd7"
+      ],
+      "spoken": "Black develops the bishop to d7."
+    },
+    {
+      "ply": 13,
+      "t": 287.5,
+      "fen": "rn1qkb1r/pp1bpppn/2p5/3pP2p/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 7",
+      "line": [
+        "f4"
+      ],
+      "spoken": "We roll f4, building the pawn front."
+    },
+    {
+      "ply": 14,
+      "t": 300,
+      "fen": "rn1qkb1r/pp2pppn/2p5/3pP2p/3P1Pb1/2NB4/PPP3PP/R1BQK1NR w KQkq - 1 8",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "Black pins with ...Bg4."
+    },
+    {
+      "ply": 15,
+      "t": 314.5,
+      "fen": "rn1qkb1r/pp2pppn/2p5/3pP2p/3P1Pb1/2NB1N2/PPP3PP/R1BQK2R b KQkq - 2 8",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "We develop the knight to f3."
+    },
+    {
+      "ply": 16,
+      "t": 317.5,
+      "fen": "rn2kb1r/pp2pppn/1qp5/3pP2p/3P1Pb1/2NB1N2/PPP3PP/R1BQK2R w KQkq - 3 9",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "Black plays the queen to b6."
+    },
+    {
+      "ply": 17,
+      "t": 378,
+      "fen": "rn2kb1r/pp2pppn/1qp5/3pP2p/3P1Pb1/P1NB1N2/1PP3PP/R1BQK2R b KQkq - 0 9",
+      "line": [
+        "a3"
+      ],
+      "spoken": "We play a3."
+    },
+    {
+      "ply": 18,
+      "t": 383,
+      "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1Pb1/P1NB1N2/1PP3PP/R1BQK2R w KQkq - 0 10",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Black plays ...e6."
+    },
+    {
+      "ply": 19,
+      "t": 385,
+      "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1Pb1/P1NB1N1P/1PP3P1/R1BQK2R b KQkq - 0 10",
+      "line": [
+        "h3"
+      ],
+      "spoken": "We poke the bishop with h3."
+    },
+    {
+      "ply": 21,
+      "t": 389.5,
+      "fen": "rn2kb1r/pp3ppn/1qp1p3/3pP2p/3P1P2/P1NB1Q1P/1PP3P1/R1B1K2R b KQkq - 0 11",
+      "line": [
+        "Bxf3",
+        "Qxf3"
+      ],
+      "spoken": "Black takes our knight on f3; we recapture with the queen."
+    },
+    {
+      "ply": 23,
+      "t": 396,
+      "fen": "rn2kb1r/pp3ppn/2p1p3/3pP2p/3q1P2/P1NBBQ1P/1PP3P1/R3K2R b KQkq - 1 12",
+      "line": [
+        "Qxd4",
+        "Be3"
+      ],
+      "spoken": "Black grabs on d4 with the queen; we develop the bishop to e3, hitting it."
+    },
+    {
+      "ply": 24,
+      "t": 407.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/3q1P2/P1NBBQ1P/1PP3P1/R3K2R w KQkq - 2 13",
+      "line": [
+        "Ng5"
+      ],
+      "spoken": "Black plays ...Ng5."
+    },
+    {
+      "ply": 25,
+      "t": 429.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/3q1P2/P1NBB2P/1PP1Q1P1/R3K2R b KQkq - 3 13",
+      "line": [
+        "Qe2"
+      ],
+      "spoken": "We play the queen to e2."
+    },
+    {
+      "ply": 26,
+      "t": 489.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/5P2/P1NBq2P/1PP1Q1P1/R3K2R w KQkq - 0 14",
+      "line": [
+        "Qxe3"
+      ],
+      "spoken": "Black takes on e3."
+    },
+    {
+      "ply": 27,
+      "t": 491.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP1np/5P2/P1NBQ2P/1PP3P1/R3K2R b KQkq - 0 14",
+      "line": [
+        "Qxe3"
+      ],
+      "spoken": "We recapture with the queen."
+    },
+    {
+      "ply": 28,
+      "t": 493.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP2p/4nP2/P1NBQ2P/1PP3P1/R3K2R w KQkq - 1 15",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "Black jumps the knight to e4."
+    },
+    {
+      "ply": 29,
+      "t": 525,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/3pP2p/4BP2/P1N1Q2P/1PP3P1/R3K2R b KQkq - 0 15",
+      "line": [
+        "Bxe4"
+      ],
+      "spoken": "We take on e4."
+    },
+    {
+      "ply": 31,
+      "t": 527.5,
+      "fen": "rn2kb1r/pp3pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/R3K2R b KQkq - 0 16",
+      "line": [
+        "dxe4",
+        "Nxe4"
+      ],
+      "spoken": "Black recaptures with the d-pawn; we recapture with the knight."
+    },
+    {
+      "ply": 32,
+      "t": 531.5,
+      "fen": "r3kb1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/R3K2R w KQkq - 1 17",
+      "line": [
+        "Nd7"
+      ],
+      "spoken": "Black develops ...Nd7."
+    },
+    {
+      "ply": 33,
+      "t": 539,
+      "fen": "r3kb1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/2KR3R b kq - 2 17",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "We castle queenside."
+    },
+    {
+      "ply": 34,
+      "t": 554,
+      "fen": "2kr1b1r/pp1n1pp1/2p1p3/4P2p/4NP2/P3Q2P/1PP3P1/2KR3R w - - 3 18",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "Black castles queenside."
+    },
+    {
+      "ply": 35,
+      "t": 567.5,
+      "fen": "2kr1b1r/Qp1n1pp1/2p1p3/4P2p/4NP2/P6P/1PP3P1/2KR3R b - - 0 18",
+      "line": [
+        "Qxa7"
+      ],
+      "spoken": "We grab on a7 with the queen."
+    },
+    {
+      "ply": 36,
+      "t": 575.5,
+      "fen": "2kr3r/Qp1nbpp1/2p1p3/4P2p/4NP2/P6P/1PP3P1/2KR3R w - - 1 19",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "Black develops the bishop to e7."
+    },
+    {
+      "ply": 37,
+      "t": 589,
+      "fen": "2kr3r/Qp1nbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2K4R b - - 2 19",
+      "line": [
+        "Rd6"
+      ],
+      "spoken": "We lift the rook to d6."
+    },
+    {
+      "ply": 38,
+      "t": 598,
+      "fen": "3r3r/Qpknbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2K4R w - - 3 20",
+      "line": [
+        "Kc7"
+      ],
+      "spoken": "Black's king steps to c7."
+    },
+    {
+      "ply": 39,
+      "t": 603,
+      "fen": "3r3r/Qpknbpp1/2pRp3/4P2p/4NP2/P6P/1PP3P1/2KR4 b - - 4 20",
+      "line": [
+        "Rhd1"
+      ],
+      "spoken": "We double rooks with ...Rhd1."
+    },
+    {
+      "ply": 40,
+      "t": 618,
+      "fen": "3r3r/Qpk1bpp1/1npRp3/4P2p/4NP2/P6P/1PP3P1/2KR4 w - - 5 21",
+      "line": [
+        "Nb6"
+      ],
+      "spoken": "Black plays the knight to b6."
+    },
+    {
+      "ply": 41,
+      "t": 634,
+      "fen": "3r3r/Qpk1bpp1/1npRp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 b - - 6 21",
+      "line": [
+        "Nc5"
+      ],
+      "spoken": "We jump the knight to c5, threatening b7."
+    },
+    {
+      "ply": 42,
+      "t": 657.5,
+      "fen": "3r3r/Qpk2pp1/1npbp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 w - - 0 22",
+      "line": [
+        "Bxd6"
+      ],
+      "spoken": "Black takes our rook, capturing on d6."
+    },
+    {
+      "ply": 43,
+      "t": 658.5,
+      "fen": "3r3r/1Qk2pp1/1npbp3/2N1P2p/5P2/P6P/1PP3P1/2KR4 b - - 0 22",
+      "line": [
+        "Qxb7#"
+      ],
+      "spoken": "The queen delivers mate on b7."
+    },
+    {
+      "ply": 2,
+      "t": 671.5,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 673,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "d4",
+        "d5",
+        "f3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 723.5,
+      "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "g6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 726,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 727,
+      "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "e6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 728.5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 729.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "e5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 731,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 732,
+      "fen": "rnb1kbnr/pp2pppp/1qp5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 1 4",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 740,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 741.5,
+      "fen": "rnbqkbnr/pp2ppp1/2p5/3p3p/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "h5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 8,
+      "t": 748.5,
+      "fen": "rnbqkb1r/pp2ppp1/2p2n2/3p3p/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
+      "line": [
+        "Nc3",
+        "Nf6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 751.5,
+      "fen": "rnbqkb1r/pp2ppp1/2p2n2/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
+      "line": [
+        "e5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 10,
+      "t": 753,
+      "fen": "rnbqkb1r/pp1nppp1/2p5/3pP2p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+      "line": [
+        "Nfd7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 11,
+      "t": 754,
+      "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 12,
+      "t": 755,
+      "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 7",
+      "line": [
+        "fxe6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 13,
+      "t": 773,
+      "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P1P2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 7",
+      "line": [
+        "f4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 12,
+      "t": 774,
+      "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 7",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 13,
+      "t": 775,
+      "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 1 7",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 14,
+      "t": 778.5,
+      "fen": "rnbqkb1r/pp2p1p1/2p1pn2/3p3p/3P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 2 8",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 15,
+      "t": 779.5,
+      "fen": "rnbqkb1r/pp2p1p1/2p1pn2/3p3p/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 8",
+      "line": [
+        "f4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 11,
+      "t": 792,
+      "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
+      "line": [],
+      "spoken": ""
+    }
+  ]
 }
