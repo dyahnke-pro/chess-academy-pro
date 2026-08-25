@@ -1,7 +1,7 @@
 {
  "videoId": "PHAmfkkrSSs",
  "title": "Grandmaster Naroditsky Chess Speedrun Pt. 5",
- "openingName": "Borg Defense",
+ "openingName": "Queen's Pawn Game",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "d4",
     "g5"
    ],
-   "spoken": "White plays d4, and Black replies with the bizarre g5 — the Borg, a reversed Grob."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Bxg5",
     "f6"
    ],
-   "spoken": "White simply grabs on g5."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -52,7 +52,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "The opponent is walking into trouble — if the bishop gets taken, a capture on h5 leads to a forced mate in two. The whole ragged pawn adventure is backfiring.",
+   "kind": "tactic"
   },
   {
    "ply": 8,
@@ -61,7 +62,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "If Black takes the bishop, White takes on h5 with mate in two."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -70,7 +71,7 @@
    "line": [
     "Bxh5+"
    ],
-   "spoken": "Black stops the mate, but White grabs another pawn — up two now, and dragging the king into the open."
+   "spoken": "The mate gets parried, but the pawn is still there for the taking — two pawns up now, and the enemy king dragged out into the open. It's hard to ask for more out of the first few moves."
   },
   {
    "ply": 10,
@@ -79,7 +80,7 @@
    "line": [
     "Ke7"
    ],
-   "spoken": "The king is hauled out to e7 — what more could you ask from five moves?"
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -88,7 +89,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Careful with the bishop — Black wants to take on d4, and if White recaptures with the queen, the bishop on h5 hangs. So the bishop to e3, adding a defender to d4 — now recapturing with a pawn deforms Black's camp."
+   "spoken": "Care is needed with the bishop's retreat: the opponent wants to capture on d4, and recapturing with the queen would leave the far-flung bishop hanging. So the bishop drops to e3, adding a second defender to d4 — now the pawn can be retaken by a pawn and the bishop kept.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -106,7 +108,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Develop — but the knight to f3 would be a blunder. The knight to c3 is right, threatening the knight to c5, almost mate."
+   "spoken": "Watch the developing move — the natural knight to f3 would be an outright blunder. The knight belongs on c3, because from there it threatens a leap to c5 that's very nearly mate.",
+   "kind": "tactic"
   },
   {
    "ply": 14,
@@ -124,7 +127,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": "This bishop is a nuisance, so retreat it to e2. Sometimes a bishop on e2 is fine — not super active, but with two extra pawns and the black king stranded on e7, it is totally OK for a piece to sit on a quiet square, provided there is a good reason for it."
+   "spoken": "That bishop has become a nuisance, so tuck it back to e2 and out of harm's way. It's a quiet, unspectacular square — but it's perfectly fine to park a piece passively when there's a concrete reason, and being two pawns up against an exposed king is reason enough.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -142,7 +146,7 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": "No reason not to trade — take, and keep developing with the knight to f3."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -161,7 +165,8 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "Which side to castle? Since Black no longer has those kingside pawns, castling short would hand him a ready-made attack — so White will castle long."
+   "spoken": "Now an instructive question — which way to castle? Because the opponent has already stripped away the pawns in front of one wing, castling toward it would hand them a ready-made attack and justify the whole gambit. So the king goes the other way, castling long.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -170,7 +175,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Ignore the knight on g4 — a knight there does not always do anything. But before castling long, get rid of it, or Black forks the pawn on f2."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -179,7 +184,8 @@
    "line": [
     "Na6"
    ],
-   "spoken": "So chase it — only to prepare castling, not because the knight is doing anything."
+   "spoken": "Before castling long, shoo the advanced knight away — but only as castling prep, since otherwise there'd be a fork winning a pawn. The knight itself isn't doing anything; removing it is purely about clearing the way to safety.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -215,7 +221,8 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "And remember — it matters less to ruin the pawn structure, more to wreck the structure around the king."
+   "spoken": "A guiding priority: it matters far less to wreck the opponent's pawns in general than to wreck the shelter around their king. Capturing here would only open a file that helps them attack, so it's declined.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -233,7 +240,7 @@
    "line": [
     "Na6"
    ],
-   "spoken": "Taking on a6 would open the b-file and help Black attack — don't. The time has come to open the centre."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -242,7 +249,8 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "And do not push d5 — exactly what to avoid. Just take the pawn and open the d-file."
+   "spoken": "The moment has come to open the centre — and the key is what not to do: resist locking it with a pawn push. Simply capture, prying the d-file open. Restraint over the tempting advance is the whole point.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -251,7 +259,8 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "Black weakens a square with the recapture. Look for the tactic: the rook and queen sit in an x-ray, and with an x-ray you look for a discovery."
+   "spoken": "The recapture weakens a key square, and now a tactic is waiting. Notice the relationship — the rook and queen stand on one line in an x-ray. Whenever that pattern appears, hunt for a discovery: if the front piece steps aside and a certain pawn were gone, the queen falls.",
+   "kind": "tactic"
   },
   {
    "ply": 31,
@@ -260,7 +269,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Move the knight and clear the d6-pawn and White wins the queen — the knight takes on e5 does both, and if Black recaptures, a check wins."
+   "spoken": "The move that makes both wishes come true at once is the knight capture on e5 — it removes the shielding pawn and unmasks the line in a single stroke. If it's recaptured, a discovered check crashes through.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -278,7 +288,8 @@
    "line": [
     "Qg5+"
    ],
-   "spoken": "The queen check ends it — Black loses the queen and gets mated in the bargain."
+   "spoken": "And the discovered check on g5 ends it — not merely winning the queen but delivering mate in the process. Tactical awareness is exactly what makes these hidden shots easy to spot.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -296,7 +307,8 @@
    "line": [
     "Bh5+"
    ],
-   "spoken": "There is even a mate in two: check first with the bishop to h5..."
+   "spoken": "There's an even faster finish than grabbing the queen — a bishop check first, planting a piece on f7 to seal the king's flight square, and then the rook delivers mate. Blocking the escape before cashing in is the cleaner path.",
+   "kind": "tactic"
   },
   {
    "ply": 37,
@@ -306,15 +318,14 @@
     "Nf7",
     "Rxd8#"
    ],
-   "spoken": "...then a piece to f7 blocks the king's escape, and the rook delivers mate."
+   "spoken": ""
   },
   {
    "ply": 2,
    "t": 1425,
    "fen": "rnbqkbnr/pppppp1p/8/6p1/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": "g5 is terrible, and terrible after e4 too. Nothing extraordinary was needed — e4 prepared the mate, the bishop to e2 threatened to take on h5 with mate, and the key move to notice was dropping the bishop back: it had done its job, so retreat it and keep developing. No crazy g4 — just develop, and castle long to deny any attack.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }
