@@ -1,8 +1,8 @@
 {
  "videoId": "B53SGK_SLTk",
  "title": "Daniel Vs Chessbrah | Eric Hansen | Streamer Match",
- "openingName": "Sicilian Defense",
- "studentSide": "black",
+ "openingName": "Sicilian Defence",
+ "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
  "source": "yt:B53SGK_SLTk",
@@ -104,7 +104,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "There is a cost to this setup — White concedes some light squares almost by default."
+   "spoken": "Propping the centre with c3 comes at a cost — it concedes the light squares. Once the pawns commit like this, those holes don't come back, and the opponent gets a lasting square to work with."
   },
   {
    "ply": 21,
@@ -150,7 +150,8 @@
    "line": [
     "h3"
    ],
-   "spoken": "But a real idea is in the air: the knight jumps into d4, and White has no comfortable way to meet it."
+   "spoken": "The d4 break is the idea here — striking in the centre when the opponent has no comfortable way to meet it. That's the lever that turns a passive setup into an initiative.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -206,7 +207,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Pushing d5 and following with c4 is the structural plan, clamping down on space. It's a committal choice — these locked structures cut both ways, but the space grab is the point.",
+   "kind": "plan"
   },
   {
    "ply": 35,
@@ -243,7 +245,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "Even down a piece here, there is genuine compensation — enough to call it a sacrifice rather than a blunder."
+   "spoken": ""
   }
  ]
 }
