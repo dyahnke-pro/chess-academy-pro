@@ -1,7 +1,7 @@
 {
  "videoId": "oF7Rh6qXj1A",
  "title": "Owen's Defense | The Sensei Speedrun | GM Naro",
- "openingName": "Owen's Defense",
+ "openingName": "Owen's Defence",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "b6"
    ],
-   "spoken": "b6 — the Owen's Defense."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -42,7 +42,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Whatever you do, defend the e4-pawn — and the simplest way is the knight to c3."
+   "spoken": "This is Owen's Defence — and whatever system you choose, the one constant is that the central pawn must be defended. The simplest way is the knight to c3, doing exactly that while developing.",
+   "kind": "plan"
   },
   {
    "ply": 6,
@@ -51,7 +52,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black plays e6, intending the bishop to b4."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +61,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "A system I really like here — the bishop to d3."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -98,7 +99,8 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "Not the knight to f3 — the knight to e2, connecting the knights, so when one is traded it isn't a pawn recapture that hurts us; the real worry is the e4-pawn becoming a weakness."
+   "spoken": "The subtle choice is to develop the knight to e2 rather than its natural square, in order to connect the knights — so that if one is traded for the other, the pawn structure stays intact. The real concern isn't the trade; it's the central pawn turning into a weakness.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -136,7 +138,8 @@
    "line": [
     "a3"
    ],
-   "spoken": "a3, forcing Black to take on c3 and handing us the two bishops — which I like."
+   "spoken": "A rook-pawn to a3 forces the opponent to capture, handing over the bishop pair — and two bishops are an asset well worth the little tempo. Put the question and collect the pieces.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -164,7 +167,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Now castle."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -173,7 +176,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Development is done. Not the bishop to g5 — it shoots into nothing and lets Black roll his kingside pawns with h6 and g5. The GM move here is the queen to g4, poking at the kingside; then the bishop to g5 becomes far more annoying, and c7 becomes a target."
+   "spoken": "Once the opponent castles, don't reflexively lunge the bishop, which would allow a knight to interpose and shove it back. Instead swing the queen to g4 — anticipating a kingside attack, that probing move is remarkably hard to meet. Then apply whole-board awareness: after forcing the enemy queen back, notice a pawn on the far wing left undefended, and pile onto it with a knight that can't be chased off — a classic idea in cramped positions where the defender simply can't marshal a defence in time. A pawn up, take the foot off the gas and make general improving moves — a rook to the open file, preparing a lift, and chasing the intruding knight with a pawn. And keep looking for checks and for the drawback of every enemy pawn push, since advancing a pawn weakens a diagonal a bishop check can exploit. The one caution learned the hard way: don't get so intoxicated by combinations that you start playing unobjectively — the cleanest mate is often the quiet rook infiltration, not the flashiest try.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -211,8 +215,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black should really play the knight to f6 here — more flexible.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -230,8 +233,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "And meet the knight to e2 with d5, the main move, reaching a French-like position where c5 is coming.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -248,7 +250,8 @@
    "t": 631,
    "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
    "line": [],
-   "spoken": "The bishop to b4 is an inaccuracy — it walks right into our concept.",
+   "spoken": "For the theory record, the bishop pin here is an inaccuracy, because it walks straight into the whole plan — the more flexible route is to develop the knight and strike in the centre, reaching a French-like structure with counterplay to come.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -271,7 +274,8 @@
     "Bxc3",
     "Nxc3"
    ],
-   "spoken": "The key idea: the queen out to g4 to poke and prod for weaknesses — an underrated concept. g6 would weaken all the dark squares and let our bishop reach h6.",
+   "spoken": "The underrated concept threading the whole game is using the queen — out to g4 or b3 — to poke and prod at weaknesses from a distance. The dream is to provoke a kingside pawn move that weakens the dark squares and opens the door for the bishop to invade. Patience: castle, then set the bait rather than grabbing at it, identify the drawback, and improve.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
