@@ -1,7 +1,7 @@
 {
  "videoId": "j4-gTbXfwXg",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2030",
- "openingName": "Alekhine Defense",
+ "openingName": "Alekhine Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -25,7 +25,7 @@
     "e5",
     "Nd5"
    ],
-   "spoken": "He plays e5, and my knight jumps to d5 — a serious opening."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -52,7 +52,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 — a slightly different way of handling the Alekhine, developing pieces rather than grabbing the centre with pawns; there's even a Bxf7 sacrifice line to watch for."
+   "spoken": "The bishop out to c4 is a different way to handle the Alekhine — prioritising rapid piece development over grabbing the centre with pawns. It carries a sacrificial idea against f7 to stay alert for."
   },
   {
    "ply": 8,
@@ -61,7 +61,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "Worried about a trap, protect the knight with e6 — passive, but solid."
+   "spoken": "Wary of a trap, prop the centralised knight with a pawn — passive, but rock-solid. There's real merit in openings where you sit slightly worse yet remain almost impossible to break down.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -70,7 +71,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Passive but solid — there's real value in openings that are hard to break, even if you're slightly worse."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -79,7 +80,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Develop the knight and attack the pawn on e5, forcing him to decide; and after exd6 we recapture with the bishop."
+   "spoken": "Develop the knight to attack the advanced pawn and force the opponent to make a decision — and when it's exchanged, recapture with the bishop, keeping the structure harmonious.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -88,7 +90,8 @@
    "line": [
     "d4"
    ],
-   "spoken": "Allow him d4 — he gets more of the centre, but our piece placement is rock-solid."
+   "spoken": "Allowing the opponent a broad centre is fine here, because the compensation is superb piece placement. Then capturing on e5 clears the diagonal for the bishop to come to life.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -97,7 +100,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Take on e5, clearing the diagonal for our bishop."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -106,7 +109,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Look how nicely the knight on d5 sits — solid and central."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -115,7 +118,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop to e7, not c5 — a bit of a trick question: c5 would let a white piece reach the g5 square."
+   "spoken": "Where does the bishop belong — e7 or c5? It's a trick question. The answer is e7, because developing to c5 would concede the g5 square to an enemy piece, handing over exactly the outpost you don't want to give.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -133,7 +137,8 @@
    "line": [
     "Nxf4"
    ],
-   "spoken": "And that's how you play the Alekhine — it wins by force in eight moves. You can't make this stuff up."
+   "spoken": "The opponent's bishop move is inexplicable, and the simple capture wins by force — a reminder that a single careless developing move can lose on the spot.",
+   "kind": "tactic"
   },
   {
    "ply": 7,
@@ -210,7 +215,8 @@
    "t": 1476,
    "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
    "line": [],
-   "spoken": "e6 isn't actually best — it blocks the development of our bishop; the knight to b6 is the strongest move.",
+   "spoken": "On reflection, the pawn move to e6 isn't ideal, because it shuts in the light-squared bishop — the accurate move is the knight retreat to b6, keeping everything mobile.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -230,7 +236,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "And don't play the bishop to g4 — a big mistake: Bxf7-check, king takes, then the knight to g5 opens the attack. A very typical tactic.",
+   "spoken": "And a trap to sidestep afterwards — don't pin with the bishop to g4, because it runs into the familiar sacrifice on f7 followed by a knight check, blowing the position open. Recognise the pattern before you walk into it.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -266,7 +273,8 @@
    "t": 1508,
    "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
    "line": [],
-   "spoken": "White should have played the queen to e2 and the rook to d1, piling pressure on the knight — not taking on d5, which would just hand our bishop a fine diagonal.",
+   "spoken": "What the opponent should have done, instead of the losing bishop move, is pile up on the centralised knight — the queen to e2 and a rook to d1, since removing that knight is the key to the whole position. But not by capturing it outright, which would only hand over a strong diagonal; the pressure has to be applied by piece, not by brute force. Play these lines without proper knowledge at your peril.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
