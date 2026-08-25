@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:mCzuNeWLYBs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — it props up e4 with a pawn instead of a piece, keeps the whole centre, and turns the Caro into a sharp, attacking fight.",
-   "kind": "main",
-   "teaches": "f3 defends the centre with a pawn so White can play for space and an attack, not a quiet game.",
-   "plans": "Hold the centre, aim the pieces at f7, and castle."
+   "spoken": "We play f3 — the Fantasy Variation."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4."
   },
   {
    "ply": 8,
@@ -72,7 +69,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...e5, the main line."
   },
   {
    "ply": 9,
@@ -81,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 10,
@@ -90,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with ...Bg4 — but without ...e6, it's flirting with disaster."
   },
   {
    "ply": 11,
@@ -99,7 +96,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to c4, aiming at f7."
   },
   {
    "ply": 12,
@@ -108,7 +105,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nd7."
   },
   {
    "ply": 13,
@@ -117,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 14,
@@ -126,7 +123,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Bd6 — walking into the shot."
   },
   {
    "ply": 15,
@@ -135,9 +132,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "White gives up the bishop to crash into f7. The point sits behind it: once the king is dragged out to f7, the knight on f3 can leap away and unveil a check from the rook down the file — a discovered check that wins the material back with the king stranded.",
-   "kind": "trap",
-   "teaches": "Sacrifice to strip the king when a discovered check waits behind the very piece you give up."
+   "spoken": "The bishop crashes on f7 with check."
   },
   {
    "ply": 16,
@@ -146,7 +141,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": ""
+   "spoken": "Black's king steps to f8."
   },
   {
    "ply": 17,
@@ -155,7 +150,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to e6, keeping the pawn and the attack."
   },
   {
    "ply": 18,
@@ -164,7 +159,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops ...Ngf6."
   },
   {
    "ply": 19,
@@ -173,7 +168,7 @@
    "line": [
     "Bxg4"
    ],
-   "spoken": ""
+   "spoken": "We take on g4."
   },
   {
    "ply": 20,
@@ -182,7 +177,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight."
   },
   {
    "ply": 21,
@@ -191,7 +186,7 @@
    "line": [
     "Ng5+"
    ],
-   "spoken": ""
+   "spoken": "We check with the knight to g5."
   },
   {
    "ply": 22,
@@ -200,7 +195,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with ...Ngf6."
   },
   {
    "ply": 23,
@@ -209,9 +204,7 @@
    "line": [
     "Ne6+"
    ],
-   "spoken": "The knight lands on e6 with check and forks the king on f8 and the queen on d8 at once. The king must move, and the queen falls.",
-   "kind": "main",
-   "teaches": "When the enemy king and queen stand a knight's-move apart, the square that forks them wins the queen."
+   "spoken": "The knight leaps to e6 with check, forking the queen."
   },
   {
    "ply": 24,
@@ -220,7 +213,7 @@
    "line": [
     "Ke7"
    ],
-   "spoken": ""
+   "spoken": "Black's king steps to e7."
   },
   {
    "ply": 26,
@@ -230,7 +223,7 @@
     "Nxd8",
     "Raxd8"
    ],
-   "spoken": ""
+   "spoken": "The knight grabs the queen, taking on d8; Black recaptures with the rook."
   },
   {
    "ply": 27,
@@ -239,7 +232,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We solidify with c3, up a queen."
   },
   {
    "ply": 28,
@@ -248,7 +241,7 @@
    "line": [
     "Rdf8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to f8."
   },
   {
    "ply": 29,
@@ -257,7 +250,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We pin with the bishop to g5."
   },
   {
    "ply": 30,
@@ -266,7 +259,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6."
   },
   {
    "ply": 31,
@@ -275,7 +268,7 @@
    "line": [
     "Bxf6+"
    ],
-   "spoken": ""
+   "spoken": "We take on f6 with check."
   },
   {
    "ply": 32,
@@ -284,7 +277,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight."
   },
   {
    "ply": 33,
@@ -293,7 +286,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 34,
@@ -302,7 +295,7 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "Black plays g5."
   },
   {
    "ply": 35,
@@ -311,7 +304,7 @@
    "line": [
     "Rf5"
    ],
-   "spoken": ""
+   "spoken": "We lift the rook to f5."
   },
   {
    "ply": 34,
@@ -328,7 +321,8 @@
     "Rf5",
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "From here it's a mating net: after ...exd4, e5 hits the bishop, and following exd6+ Kxd6, Ne4+ drives the king out — then Qd6+, Kb6, and the queen finishes with Qa3 mate.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -390,9 +384,7 @@
    "line": [
     "Ne4+"
    ],
-   "spoken": "The knight springs to e4 for a double check — knight and queen strike the king together. A double check can never be blocked or captured away, so the king has to walk into the net.",
-   "kind": "main",
-   "teaches": "A double check forces the king to move; nothing answers two checks at once."
+   "spoken": ""
   },
   {
    "ply": 42,
@@ -464,9 +456,7 @@
    "line": [
     "Qa3#"
    ],
-   "spoken": "The queen to a3 is mate. It checks up the open a-file and every escape is sealed: the rook on f5 rakes the fifth rank to deny b5 and a5, the knight on d7 covers b6, and Black's own pawns choke a7 and b7.",
-   "kind": "main",
-   "teaches": "Mate is one piece checking while the rest quietly remove every flight square."
+   "spoken": ""
   },
   {
    "ply": 46,
