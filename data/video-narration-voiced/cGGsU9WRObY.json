@@ -1,8 +1,8 @@
 {
  "videoId": "cGGsU9WRObY",
  "title": "Daniel Vs GM Sam Shankland | Blitz Battle | Pt. 2",
- "openingName": "Sicilian Defense: Maroczy Bind",
- "studentSide": "white",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
  "source": "yt:cGGsU9WRObY",
@@ -36,7 +36,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "c4 — the Maroczy Bind, clamping down hard on the d5 square."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -94,7 +94,8 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "Take on c6, fixing Black's structure; after the recapture he'll be looking at a c5 break."
+   "spoken": "The critical decision after the pin is to capture — and once the pawn recaptures, the freeing break to c5 is available, striking back at the bind before it clamps down.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -112,7 +113,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 — the classic Maroczy setup, bolstering e4 and the centre."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -131,7 +132,7 @@
     "Be3",
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "Conceding the bishop pair here is worth weighing honestly — the resulting position is only slightly worse for the second player, and never as frightening as it looks. Solid and a shade passive is a perfectly playable bargain."
   },
   {
    "ply": 23,
@@ -203,7 +204,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Let's start by attacking — the pawn to h5, going at the kingside."
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -212,7 +213,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "And challenge the fianchettoed bishop with the bishop to h6."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -239,7 +240,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "The pawn break to b5 injects life into the queenside — a committal try to crack the bind open, though it invites a sharp scramble where the central push in reply can turn dangerous.",
+   "kind": "plan"
   },
   {
    "ply": 36,
@@ -259,7 +261,7 @@
     "Ncxb5",
     "Qb6"
    ],
-   "spoken": "The knight takes on b5 — an interesting idea to stir up some trouble."
+   "spoken": ""
   },
   {
    "ply": 41,
@@ -333,7 +335,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "The bishop capture on d4 is the topical shot — the kind of central exchange that reshapes the whole position in a stroke, easy to overlook until it lands.",
+   "kind": "tactic"
   },
   {
    "ply": 50,
