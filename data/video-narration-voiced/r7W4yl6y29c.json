@@ -1,10 +1,10 @@
 {
  "videoId": "r7W4yl6y29c",
  "title": "Stunning Sicilian Showdown!! | Alapin, Stoltz Attack | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Alapin, 2…Nf6 (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:r7W4yl6y29c",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nf6, hitting e4."
   },
   {
    "ply": 3,
@@ -58,7 +58,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We push e5, gaining space and kicking the knight."
   },
   {
    "ply": 6,
@@ -67,10 +67,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "After the pawn to e5 the knight drops to d5 — the standard Alapin-versus-Nf6 tabiya. From here White develops naturally and fights for the small centre.",
-   "kind": "main",
-   "teaches": "2…Nf6 3.e5 Nd5 is the main Alapin structure against the knight move.",
-   "plans": "Develop with Nf3 and contest the centre."
+   "spoken": "Black hops the knight to d5."
   },
   {
    "ply": 7,
@@ -79,7 +76,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 8,
@@ -88,7 +85,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 9,
@@ -97,10 +94,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 looks, on the surface, like a positional mistake — it invites the knight to be hit — but it is a fresh, concrete idea: the bishop eyes f7 and d5, and the tactics justify it.",
-   "kind": "main",
-   "teaches": "A move that looks positionally wrong can be justified by concrete tactics — check before dismissing it.",
-   "plans": "Pressure f7 and the d5-knight with active piece play."
+   "spoken": "We develop the bishop to c4, eyeing the d5-knight."
   },
   {
    "ply": 10,
@@ -109,7 +103,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nb6, hitting the bishop."
   },
   {
    "ply": 11,
@@ -118,7 +112,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to b3."
   },
   {
    "ply": 12,
@@ -127,7 +121,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black plays d5, striking at the centre."
   },
   {
    "ply": 11,
@@ -152,7 +146,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": ""
+   "spoken": "We take en passant on d6."
   },
   {
    "ply": 14,
@@ -161,7 +155,7 @@
    "line": [
     "Qxd6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 15,
@@ -170,7 +164,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 16,
@@ -179,7 +173,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 15,
@@ -204,7 +198,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": ""
+   "spoken": "We trade on e6."
   },
   {
    "ply": 18,
@@ -213,7 +207,7 @@
    "line": [
     "Qxe6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 19,
@@ -222,7 +216,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "We begin a queenside push with a4."
   },
   {
    "ply": 20,
@@ -231,7 +225,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to d7."
   },
   {
    "ply": 21,
@@ -240,7 +234,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "We push a5, kicking the knight."
   },
   {
    "ply": 22,
@@ -249,7 +243,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "Black centralizes the knight on d5."
   },
   {
    "ply": 23,
@@ -258,7 +252,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We push a6, cramping the queenside."
   },
   {
    "ply": 24,
@@ -267,7 +261,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "Black plays b6."
   },
   {
    "ply": 25,
@@ -276,7 +270,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We open the centre with d4."
   },
   {
    "ply": 26,
@@ -285,7 +279,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6."
   },
   {
    "ply": 27,
@@ -294,7 +288,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight into e5."
   },
   {
    "ply": 28,
@@ -303,7 +297,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight on e5."
   },
   {
    "ply": 29,
@@ -312,7 +306,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the pawn."
   },
   {
    "ply": 30,
@@ -321,7 +315,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to d8."
   },
   {
    "ply": 29,
@@ -346,7 +340,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to a3."
   },
   {
    "ply": 32,
@@ -355,7 +349,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 34,
@@ -365,7 +359,7 @@
     "Qg4",
     "Bf8"
    ],
-   "spoken": ""
+   "spoken": "We swing the queen to g4; Black retreats the bishop to f8."
   }
  ]
 }
