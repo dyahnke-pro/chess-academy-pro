@@ -1,0 +1,395 @@
+{
+ "videoId": "24yObE8SLzY",
+ "title": "Drowning The Hippo Attack | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Hippopotamus Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:24yObE8SLzY",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 18,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P1P1/PPPP1P1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e3",
+    "d5",
+    "g3"
+   ],
+   "spoken": "White settles into a Hippo — those quiet little pawn moves, e3 and g3, both bishops heading for the fianchetto. The recipe against this whole family of setups is to grab the centre at once, so Black stakes a claim with d5."
+  },
+  {
+   "ply": 4,
+   "t": 30.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1P1P/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "And follows up with e5, the second big central pawn. The plan is simple and classical: occupy the ground the Hippo hands you."
+  },
+  {
+   "ply": 5,
+   "t": 31.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "White sends the bishop out to g2, onto the long diagonal."
+  },
+  {
+   "ply": 6,
+   "t": 44.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black brings the knight to f6 — this is the key to the whole method: knight to f6, and next the pawn to c6."
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R b KQkq - 3 4",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "White develops the knight to e2, keeping the flexible Hippo shape."
+  },
+  {
+   "ply": 8,
+   "t": 48.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Now the point: Black plays c6, building a pawn chain so White's fianchettoed bishop runs into a granite wall it cannot break."
+  },
+  {
+   "ply": 9,
+   "t": 49.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles short — and that king becomes the target of the coming pawn storm."
+  },
+  {
+   "ply": 10,
+   "t": 63,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 w kq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The pawn triangle hands Black a perfect home on d6 for the dark-squared bishop, London-style, eyeing the kingside."
+  },
+  {
+   "ply": 11,
+   "t": 64,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2P1P1/P1PPNPBP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "b3"
+   ],
+   "spoken": "White carries on with the Hippo, the second bishop heading for b2."
+  },
+  {
+   "ply": 13,
+   "t": 83.5,
+   "fen": "r1bqk2r/pp1n1ppp/2pb1n2/3pp3/8/1P2P1P1/PBPPNPBP/RN1Q1RK1 b kq - 2 7",
+   "line": [
+    "Nbd7",
+    "Bb2"
+   ],
+   "spoken": "With the pawn on c6, the queen's knight can no longer go there, so it reroutes — first to d7. Not to c5, where it would just invite d4 and sit doing nothing; its real destination is the kingside."
+  },
+  {
+   "ply": 16,
+   "t": 97.5,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/8/1PP1P1P1/PB1PNPBP/RN1Q1RK1 w kq - 1 9",
+   "line": [
+    "Nf8",
+    "c3",
+    "Ng6"
+   ],
+   "spoken": "The knight continues its journey — to f8, then g6, Ruy Lopez style — swinging over to join the attack."
+  },
+  {
+   "ply": 17,
+   "t": 99,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/3P4/1PP1P1P1/PB2NPBP/RN1Q1RK1 b kq - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White strikes with d4, but look where that knight has landed — over on the kingside, ready for sacrifices later and making the h5-h4 storm far more dangerous."
+  },
+  {
+   "ply": 18,
+   "t": 129.5,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB2NPBP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Since Black is attacking on the kingside, the right idea is to shut the centre with e4, locking things up. White may try c4, but it changes nothing — the d5 point is rock-solid."
+  },
+  {
+   "ply": 19,
+   "t": 134,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "White drops the knight back to d2 to lean on the e4-pawn, but Black's development is essentially done while White has barely finished his."
+  },
+  {
+   "ply": 20,
+   "t": 157.5,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Here is the common misconception — that Black must develop the light bishop first. Not so; it is perfectly happy at home for now. Straight to business instead: h5, and the plan is nothing less than checkmate."
+  },
+  {
+   "ply": 21,
+   "t": 161.5,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/2PPp3/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 11",
+   "line": [
+    "c4"
+   ],
+   "spoken": "White tries c4 again, but it accomplishes nothing against that solid d5."
+  },
+  {
+   "ply": 22,
+   "t": 167,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p4/2PPp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "h4"
+   ],
+   "spoken": "Black keeps rolling with h4 — already on the verge of breaking the king open. That is how fast this attack arrives."
+  },
+  {
+   "ply": 23,
+   "t": 172,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3P4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 12",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "White takes on d5."
+  },
+  {
+   "ply": 24,
+   "t": 173.5,
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 13",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 175.5,
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 b kq - 1 13",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight comes to c3 — but again, does it really do anything? No. Now Black must be careful how the kingside gets opened. Grabbing on g3 at once is double-edged: after the recapture with the f-pawn, White's rook gets the open f-file. And the tempting jump to g4, hitting h2, has a hidden flaw, the same one it would have this instant — it drops the d5-pawn, and if d5 falls, e4 goes with it and the whole centre unravels. So don't rush."
+  },
+  {
+   "ply": 26,
+   "t": 252,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 w kq - 2 14",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "So Black makes one calm, prophylactic move — the bishop to e6. It completes development, yes, but the real point is that it guards d5 and clears the way for the knight to come to g4 later. These are exactly the quiet moves attackers hate to make."
+  },
+  {
+   "ply": 27,
+   "t": 264,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/2RQ1RK1 b kq - 3 14",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": "White lifts a rook to c1, perhaps eyeing Nb5 — but if the knight goes to b5, Black just drops the bishop back to b8. And now the moment has come to open fire on the kingside."
+  },
+  {
+   "ply": 28,
+   "t": 278,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp3/1PN1P1p1/PB1N1PBP/2RQ1RK1 w kq - 0 15",
+   "line": [
+    "hxg3"
+   ],
+   "spoken": "Black takes on g3, prising the h-file open at last."
+  },
+  {
+   "ply": 30,
+   "t": 282,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3p4/3Pp1n1/1PN1P1P1/PB1N2BP/2RQ1RK1 w kq - 1 16",
+   "line": [
+    "fxg3",
+    "Ng4"
+   ],
+   "spoken": "White recaptures, and the knight springs to g4. Here is the point worth seeing: a White defender is overstretched, tied to the d5-pawn and to covering a piece at the same time."
+  },
+  {
+   "ply": 31,
+   "t": 290.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp1n1/1P2P1P1/PB1N2BP/2RQ1RK1 b kq - 0 16",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "White snatches the central pawn, the knight landing on d5 — a quick, strong-looking grab. But Black has seen further: that knight is loose now, and if Black shoves his own knight off with tempo, White ends up with two pieces hanging at once."
+  },
+  {
+   "ply": 32,
+   "t": 315.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp3/1P2P1P1/PB1N2Bn/2RQ1RK1 w kq - 0 17",
+   "line": [
+    "Nxh2"
+   ],
+   "spoken": "And there it is — the knight takes on h2. Not the other knight, which would simply hang; this one, because it hits the rook. If the rook runs, Black scoops the loose piece."
+  },
+  {
+   "ply": 33,
+   "t": 324,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2Bn/2RQ1RK1 b kq - 1 17",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": "White finds a good reply, the knight coming to f4 — and yes, that knight could also just retreat to c3. It is not one-way."
+  },
+  {
+   "ply": 34,
+   "t": 334,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2B1/2RQ1nK1 w kq - 0 18",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": "Black cashes in and takes the rook, the knight crashing down to f1."
+  },
+  {
+   "ply": 35,
+   "t": 337.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB4B1/2RQ1NK1 b kq - 0 18",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": "White recaptures on f1."
+  },
+  {
+   "ply": 36,
+   "t": 341,
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3Ppn2/1P2P1P1/PB4B1/2RQ1NK1 w kq - 0 19",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": "And Black trades on f4, cleaning up — the extra exchange is now in the bank."
+  },
+  {
+   "ply": 37,
+   "t": 343.5,
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3PpP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 19",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "White recaptures, and the transformation is complete: the attack has been turned into hard material, a whole exchange to the good. Now comes the technical job of converting, and it is trickier than it looks."
+  },
+  {
+   "ply": 38,
+   "t": 387,
+   "fen": "r2qk2r/pp4p1/3bb3/5p2/3PpP2/1P4P1/PB4B1/2RQ1NK1 w kq - 0 20",
+   "line": [
+    "f5"
+   ],
+   "spoken": "The most important pawn to hold is e4, so Black props it up with f5."
+  },
+  {
+   "ply": 39,
+   "t": 394.5,
+   "fen": "r2qk2r/pp4p1/3bb3/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 20",
+   "line": [
+    "d5"
+   ],
+   "spoken": "White pushes d5 with real venom — it hits the bishop on e6 and threatens to shove it to a miserable square."
+  },
+  {
+   "ply": 40,
+   "t": 399.5,
+   "fen": "r2qk2r/pp3bp1/3b4/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 w kq - 1 21",
+   "line": [
+    "Bf7"
+   ],
+   "spoken": "Black has to retreat the bishop to f7."
+  },
+  {
+   "ply": 41,
+   "t": 403.5,
+   "fen": "r2qk2r/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b kq - 0 21",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": "White's bishop grabs on g7 — but this was exactly the trade Black had weighed and accepted: holding the big e4-pawn matters far more than that flank pawn."
+  },
+  {
+   "ply": 42,
+   "t": 404.5,
+   "fen": "r2qk1r1/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 1 22",
+   "line": [
+    "Rg8"
+   ],
+   "spoken": "Black swings a rook to g8, hitting the bishop."
+  },
+  {
+   "ply": 43,
+   "t": 421,
+   "fen": "r2qk1r1/pp3b2/3b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b q - 2 22",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "White retreats to h6 — but this is the losing move. And here is the lesson: whenever the enemy king sits on g1 and a pawn has left f2, that long diagonal into the king cracks open. Stay alert to it, on both wings."
+  },
+  {
+   "ply": 44,
+   "t": 455,
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 3 23",
+   "line": [
+    "Qb6+"
+   ],
+   "spoken": "And Black finds it — not the check on c5, which the rook on c1 covers, but the queen to b6 with check, driving the king to the h-file. And there the bishop on h6 stands undefended: Black drops the rook back and collects it. A clean finish."
+  },
+  {
+   "ply": 45,
+   "t": 485,
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K b q - 4 23",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "The king is forced to h1. A rook to g6 would not trap the bishop — it slips to g5 — so the clean route lies elsewhere."
+  },
+  {
+   "ply": 46,
+   "t": 487.5,
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K w q - 5 24",
+   "line": [
+    "Rh8"
+   ],
+   "spoken": "So the rook swings to h8, pinning the bishop against the king down the h-file."
+  },
+  {
+   "ply": 47,
+   "t": 490.5,
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5BN/2RQ3K b q - 6 24",
+   "line": [
+    "Nh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 492,
+   "fen": "r3k3/pp3b2/1q1b3r/3P1p2/4pP2/1P4P1/P5BN/2RQ3K w q - 0 25",
+   "line": [
+    "Rxh6"
+   ],
+   "spoken": "Black scoops the bishop off h6 — the piece is in the bag. Now, how to convert fastest? White's knight on h2 is horribly vulnerable, and Black wants to double on the h-file. Nothing stops it: the king simply walks up to e7 and the other rook joins on the h-file. There is even a forced mate in the air — once White's queen leaves e2 and the bishop is gone from g2, the f2-square lights up: take on h2, bring the second rook over, and after a block, crash into f2."
+  }
+ ]
+}
