@@ -1,7 +1,7 @@
 {
  "videoId": "qlEZdH3nEZs",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1220",
- "openingName": "Modern Defense",
+ "openingName": "Modern Defence",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "g6"
    ],
-   "spoken": "He plays the Modern — Black fianchettoes immediately and yields the centre."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -51,7 +51,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Against the Modern, which cedes the centre, a brute-force approach really tests the opponent's understanding — they've pushed out a lot of pawns and created targets, so the plan is to storm the h-file and start attacking one of them directly.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -60,7 +61,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "A brute-force approach that tests his understanding — Black's pushed pawns are targets, so we push up the h-file with h4."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +70,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "He answers h5 at once — but ask yourself what square that has just weakened."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -78,7 +79,8 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop to g5, creating a threat and a chain reaction — h5 was already a mistake."
+   "spoken": "The rook-pawn advance in reply is already a mistake — ask which square it weakens. That hole invites the bishop out with a threat, and the whole thing sets off a chain reaction in your favour.",
+   "kind": "tactic"
   },
   {
    "ply": 10,
@@ -96,7 +98,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "Accept the trade — his dark squares have been badly weakened by g6 and e6."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +107,8 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": ""
+   "spoken": "Accept the bishop trade — and look at the damage: the opponent's dark squares are terribly weak, hollowed out by their own pawn advances. Trading off the defender of those squares is exactly what you want.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -114,7 +117,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Cement control of those dark squares — e5, and now the f6 square is firmly ours."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -123,7 +126,8 @@
    "line": [
     "Qe7"
    ],
-   "spoken": ""
+   "spoken": "Cement control of those dark squares with the central pawn to e5, seizing the key square for good — but don't get carried away. Combining a positional grip with actual piece development is what turns an advantage into a win.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -132,7 +136,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Combine the dark-square control with development — complete our pieces first."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -168,7 +172,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "A great developing move with tempo — the queen to d2, preparing to castle long, and later it can swing to g5 to attack."
+   "spoken": "Develop with tempo — the queen to d2 does three jobs at once: it prepares castling long, it hits an enemy piece, and it eyes a later swing to the attack. The best developing moves come with a threat attached.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -188,7 +193,8 @@
     "d6",
     "Nf6"
    ],
-   "spoken": "Maneuver the knight to the f6 outpost, protected by the pawn on e5 — which is itself protected by the pawn on d4. That's the power of a pawn chain."
+   "spoken": "Now the knight heads for its dream outpost on f6 — shielded by a pawn chain that's extremely hard to break, each pawn propping up the next. A protected knight on that square is the backbone of the whole attack.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -224,7 +230,8 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "He plays the knight to d7, which I underestimated — so admit it and bring our knight back to e4. Sometimes you just have to say sorry."
+   "spoken": "The opponent finds a strong move that was underestimated — and part of mastery is reacting to the unforeseen and admitting when a plan hasn't worked. So bring the knight back rather than stubbornly pressing on. A coach's phrase for it is simply 'saying sorry' — retreating gracefully beats clinging to a flawed idea.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -242,7 +249,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Now castle long."
+   "spoken": ""
   },
   {
    "ply": 30,
@@ -260,7 +267,7 @@
    "line": [
     "Qf4"
    ],
-   "spoken": "Bring the queen to a more active square — the queen to f4 — to act as the glue keeping the e5 pawn defended."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -287,7 +294,8 @@
    "line": [
     "Rxa6"
    ],
-   "spoken": ""
+   "spoken": "To keep the attack going you need more pieces, and there's a standard mechanism — the rook lift or doubling. Doubling the rooks on the open file piles onto the enemy knight, clearing the way to plant your own knight back on its outpost. Bring the reserves to the front.",
+   "kind": "plan"
   },
   {
    "ply": 36,
@@ -297,7 +305,7 @@
     "Rd2",
     "Nf5"
    ],
-   "spoken": "Double the rooks on the d-file to attack the knight — because we still want to land our knight on f6."
+   "spoken": ""
   },
   {
    "ply": 37,
@@ -324,7 +332,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "A simple tactic — the knight to f6; and if he takes, don't grab the rook yet — the intermediate exf6 with check wins the maximum material."
+   "spoken": "A clean finish through an in-between move — the knight leaps in, and if it's captured, don't grab the rook at once. Insert the pawn recapture with check first, then collect the rook, harvesting the maximum material. That's how you find intermediate moves: pause and ask how to get the most, rather than snatching the first thing on offer.",
+   "kind": "tactic"
   },
   {
    "ply": 41,
@@ -380,7 +389,8 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "Bring the final piece into the attack — the knight to g5, hitting f7 and e6, where the pawn is pinned."
+   "spoken": "Even with queens off, the attack lives — bring the last piece in with the knight to g5, hitting a pawn that's pinned and can't be defended. The endgame doesn't extinguish an attack; it just needs the final piece.",
+   "kind": "tactic"
   },
   {
    "ply": 49,
@@ -390,7 +400,8 @@
     "Nh6",
     "Nxe6+"
    ],
-   "spoken": ""
+   "spoken": "A closing maxim for endgames — do not hurry. There's a strong temptation to rush both on the clock and in your ideas, but often the most effective way to convert is simply to keep improving your position one patient step at a time.",
+   "kind": "plan"
   }
  ]
 }
