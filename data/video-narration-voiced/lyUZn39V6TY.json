@@ -24,7 +24,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The London — Bf4. The system you pick against it depends entirely on what you play against d4 and c4."
+   "spoken": "Which system to use against the London depends entirely on what you already play against the two main queenside openings — a Queen's Gambit player answers with the central pawn, a King's Indian or Grünfeld player fianchettoes, a Benoni player strikes with the c-pawn. Reach for the setup you already know, and the least flexible choice is the passive one.",
+   "kind": "plan"
   },
   {
    "ply": 4,
@@ -33,7 +34,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "A conventional, Queen's-Gambit-style setup — d5."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -51,7 +52,8 @@
    "line": [
     "c5"
    ],
-   "spoken": "c5 really challenges the London — immediately contesting the centre, essentially playing it like a Queen's Gambit with Black."
+   "spoken": "The move that really challenges the London is c5 — it lets the opponent capture, which is ambitious and mainstream, and immediately contests the centre, essentially playing it like a Queen's Gambit a move down. Confrontation, not accommodation.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -60,7 +62,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3, very much in the spirit of the London."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +71,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Keep the tension — the knight to c6. Now taking on c5 makes little sense, because e5 with tempo regains the pawn."
+   "spoken": "Keep the tension and develop the knight to c6 — now grabbing the pawn is far less appealing, because a central push with tempo regains it at once. That resource is part of the reason the knight went there.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -87,7 +90,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 — pressuring the pawn, and creating a structure a lot of players in this range struggle against."
+   "spoken": "The queen swings to b6, pressing the pawn and setting up the tension between the queens. This is the move that leads to a structure many opponents in this range struggle to handle.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +100,8 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "Don't trade the queen — the semi-open a-file matters, and we want to be the ones controlling it."
+   "spoken": "Should you trade the queens? No — that would let the opponent recapture with a pawn, and the resulting semi-open file matters enormously; you want to be the side controlling it. So instead encourage the trade on your own terms with the pawn to c4.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -106,7 +111,7 @@
     "c4",
     "Qxb6"
    ],
-   "spoken": "So encourage the trade ourselves with c4."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -133,7 +138,8 @@
    "line": [
     "b5"
    ],
-   "spoken": "The key plan — the rooks stand off along the a-file, so we steamroll the queenside with b5."
+   "spoken": "The typical plan hinges on a detail — the enemy rook in the corner is undefended, so there's a standoff between the rooks. Exploit it to steamroll the queenside with b5, which also supports the advanced c-pawn and threatens to break through, the follow-up knight capture being untouchable because taking it would drop the hanging rook.",
+   "kind": "tactic"
   },
   {
    "ply": 17,
@@ -149,7 +155,9 @@
    "t": 265,
    "fen": "r1b1kb1r/1p2pppp/2n2n2/1p1p4/2pP1B2/P1P1P3/1P1N1PPP/R3KBNR w KQkq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "The concrete threat is to advance and capture on the b-file, then recapture with the knight, smashing through the first layer of the defence — and the knight can't be taken, since the rook behind falls. A pawn break backed by a tactical point.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -167,7 +175,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "He breaks in the centre — just take with the pawn."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -195,7 +203,9 @@
     "e4",
     "dxe4"
    ],
-   "spoken": "b4 no longer works — it would drop the c4-pawn — so focus on defending e4 with the bishop to f5."
+   "spoken": "The situation has shifted — with the centre changed, the queenside break makes less sense because the advanced pawn is now loose. So refocus on holding the extra central pawn, developing the bishop to f5 to defend it. Re-evaluate what's hanging every time the structure changes.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -213,7 +223,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "A prophylactic drop back to g6, making him show his cards."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -222,7 +232,8 @@
    "line": [
     "Ng3"
    ],
-   "spoken": ""
+   "spoken": "Drop the bishop back to g6 as a prophylactic probe — it makes the opponent show their hand before you commit. And take stock: a lead in development, a space edge, better-placed pieces, and an extra pawn the opponent must spend several moves just to regain.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -231,7 +242,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "With a space edge and better development, open the centre — e5; once he gives up his bishop, our two bishops will be very strong in the open position."
+   "spoken": "The rule with a space advantage and better development is to open the centre — and since the queenside break no longer works, the way to do it is the pawn to e5. Once the opponent gives up a bishop, the resulting bishop pair in an open position becomes hugely valuable.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -267,7 +279,8 @@
    "line": [
     "f5"
    ],
-   "spoken": "The e5 pawn is a sitting duck — f5 supports e4, builds a chain, and that pawn is toast."
+   "spoken": "Look closely at the centre for a way to resolve the tension in your favour — the advanced enemy pawn is a sitting duck. A pawn to f5 props your own central pawn, forms a chain, and leaves that loose pawn simply doomed. The best of all worlds.",
+   "kind": "plan"
   },
   {
    "ply": 29,
@@ -276,7 +289,8 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "Stay alert — the opponent wants to advance the rook-pawn to trap the bishop, so pre-empt it by pushing your own rook-pawn to the same square. Meet the threat before it arrives.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -285,7 +299,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "He wants h5 to trap our bishop — so play h5 ourselves first."
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -303,7 +317,8 @@
    "line": [
     "e3"
    ],
-   "spoken": "Don't just grab the pawn — the beautiful e3, then f4, builds a monster pawn chain."
+   "spoken": "Don't snatch the pawn on autopilot, and above all don't take toward the centre, which would let the enemy knight back into the game. The natural move keeps the knight shut out, and the follow-up builds a pawn chain that locks in the advantage.",
+   "kind": "tactic"
   },
   {
    "ply": 33,
@@ -339,7 +354,8 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "Protect the base of the chain, f4, by getting the bishop out to h6."
+   "spoken": "The base of the pawn chain is the key square to protect — lose that pawn and the whole chain starts to unravel. The simplest way is to develop the bishop out to h6, defending it from a distance.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -357,7 +373,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "The knight takes on e5 and swings toward d3 — with devastating effect."
+   "spoken": "The cleanest finish is the less materialistic one — capturing on e5 and swinging the knight around toward d3, where it lands with devastating effect. Don't cling to a pawn count when a piece invasion decides the game.",
+   "kind": "tactic"
   },
   {
    "ply": 39,
@@ -384,7 +401,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "A free bishop — and that's the game."
+   "spoken": ""
   },
   {
    "ply": 42,
@@ -409,8 +426,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "The most ambitious try for White is to take the pawn on c5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -429,7 +445,8 @@
     "Nc3",
     "Qxc5"
    ],
-   "spoken": "And if Black grabs it back with the check on a5 and then Qxc5, that's two queen moves — and White gets nasty ideas like Bxb8 and the check on b5, costing Black his castling rights.",
+   "spoken": "For the theory record, the most ambitious white try is to snatch the pawn immediately. The tempting check to win it back only makes two queen moves, after which the opponent has nasty ideas — a capture on the back rank, then a check that costs castling rights, and the central pawn falls for a healthy extra pawn. Winning the pawn back has to be done more craftily than the obvious way.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -625,7 +642,8 @@
    "t": 725,
    "fen": "rnbqkb1r/pp2pppp/5n2/2Pp4/5B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "This is exactly why I like c5 — London players prefer something systematic and predictable, and a sharp tactical position forces them out of the system. You're playing the psychology of the opening.",
+   "spoken": "The deepest point is psychological — London players choose the system precisely because it's predictable and systematic. The early c-pawn challenge forces them into a sharp, tactical position that departs from the script, so you're playing the psychology of the opening as much as the board. And the semi-open file really does outweigh the doubled pawns.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
