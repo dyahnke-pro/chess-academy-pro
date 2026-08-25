@@ -26,7 +26,7 @@
     "exd4",
     "c3"
    ],
-   "spoken": "The Danish Gambit — c3."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -44,7 +44,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "He semi-accepts with the knight to f6."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -78,7 +78,8 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "e5 is tempting, but with the bishop on c4 Black has the counter d5, hitting the bishop — so it's better to just take on c3."
+   "spoken": "Recapture the pawn with the knight — the tempting central push has a drawback while the bishop sits on c4, because a counter-thrust to d5 hits that bishop and frees the defender's game. Once the knight recaptures, that push becomes a genuine threat of your own.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -87,7 +88,8 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "We have a lead in development, so we must act fast — if he castles and consolidates, we're just a pawn down."
+   "spoken": "The entire point of the gambit is a lead in development, and it demands speed — let the opponent castle and consolidate and you're simply a pawn down for nothing. Step on the gas before the king finds shelter.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +98,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Now the time has come for e5 — if we don't play it, he castles next move."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -121,7 +123,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "He plays d5. The check on a4 looks like it wins the bishop, but the knight to c6 defends it."
+   "spoken": "When calculating, always start with the simplest move — if it already leads to a good position, you save time and dodge mistakes. Here the straightforward captures win the queen, and the far-advanced passed pawn becomes a huge endgame asset: it ties down a rook, keeps the enemy king weak, and lets you castle long with check. A pawn like that is worth more than it looks.",
+   "kind": "tactic"
   },
   {
    "ply": 13,
@@ -130,7 +133,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "The simplest is to take the knight — and after the queen trade, fxg7 leaves a huge passed pawn that ties his rook down."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -148,7 +151,8 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "Safely take on d5 — if he tries Bxc3, then after the recapture his fork on c3 is simply met by Bd2."
+   "spoken": "The opponent's hope, that recapturing wins the piece back via a fork on the king and rook, fails — the fork is simply parried by interposing the bishop. So the central pawn can be safely collected, and it's just a clean piece to the good.",
+   "kind": "tactic"
   },
   {
    "ply": 16,
@@ -175,7 +179,8 @@
    "line": [
     "Qxc3+"
    ],
-   "spoken": ""
+   "spoken": "Here's the crucial follow-up to the interposition — with the e-file open, the queen steps to e2, pinning the enemy king to its queen and forcing the trade that wins. Whenever a file opens toward the kings, always look for a check on the second or seventh rank; it changes everything.",
+   "kind": "tactic"
   },
   {
    "ply": 19,
@@ -194,7 +199,7 @@
     "Qe5+",
     "Qe2"
    ],
-   "spoken": "There it is — the queen to e2, pinning his king to his queen and forcing the trade. Remember: an open e-file always means look for a check on e2."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -203,7 +208,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "The enemy queen can't move until the king steps off the open file, so you dictate the terms — force the opponent to capture your queen, which lets your king come to the centre, exactly where it belongs in an endgame. Trading on your own terms turns the pin into an advantage.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -239,7 +245,8 @@
    "line": [
     "Kxe7"
    ],
-   "spoken": ""
+   "spoken": "A nice concrete question — castle short or long? The answer is long. It may look risky with the queenside pawns gone, but with the queens off and the opponent undeveloped the king is in zero danger, and castling long automatically springs the rook into the game. Far more efficient than a slow rook move.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -249,7 +256,7 @@
     "O-O-O",
     "Nf6"
    ],
-   "spoken": "Castle long — with the queens off, the king is in zero danger, and the rook is instantly activated."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -258,7 +265,8 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "The bishop to b4 first, with check — denying his king the f8 square."
+   "spoken": "Before the check, insert the bishop to b4 first — denying the king its escape to f8. Not playing the obvious move immediately, and surveying all the options, is what makes the follow-up so much more efficient.",
+   "kind": "tactic"
   },
   {
    "ply": 30,
@@ -276,7 +284,8 @@
    "line": [
     "Bxb7+"
    ],
-   "spoken": "The simplest is to win material — take on b7 with check, grabbing the rook."
+   "spoken": "It isn't mate — the opponent can always block a check with the bishop — so simply win as much material as possible, snapping off the rook with check. When there's no forced mate, take the practical, decisive material rather than hunting a marginally prettier line.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -312,7 +321,7 @@
    "line": [
     "Bc6+"
    ],
-   "spoken": "The check on c6 — he can still block with the knight."
+   "spoken": ""
   },
   {
    "ply": 37,
@@ -350,7 +359,7 @@
    "line": [
     "Bc8#"
    ],
-   "spoken": "And the bishop to c8 is mate."
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -446,7 +455,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "The traditional way to equalise is d5 — sacrificing a pawn back to accelerate development; White recaptures with the bishop, never the pawn, or the bishop looks stupid.",
+   "spoken": "For the theory record, the traditional way to equalise against the Danish is the central break d5, handing a pawn back to accelerate development. It's the safest, most reliable route to a level game.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -456,7 +466,9 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": ""
+   "spoken": "After that break, recapture with the bishop, not the pawn — taking with the pawn would leave the bishop looking foolish. Grabbing with the bishop opens a diagonal against it and lands it awkwardly, so the knight develops with tempo, gaining time on the opponent's main attacking piece.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -511,7 +523,8 @@
     "Qd2",
     "Bb4"
    ],
-   "spoken": "Against Bxf7-check, king takes, and Qxd8, Black has the discovered-check idea with the bishop to c5 — but Qd2 blocks and wins the bishop back, reaching an equal opposite-coloured-bishop endgame.",
+   "spoken": "A beautiful defensive idea against the sacrifice — when facing a discovered check, remember you can sometimes use the piece that's already lost to block it and get something back in return. Interposing and then recapturing wins the piece back, reaching an equal opposite-coloured-bishop endgame with drawish tendencies.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -614,7 +627,8 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "Changing the move order of a line often completely changes its nature and hands your opponent new defensive resources.",
+   "spoken": "A vital lesson on move order — reversing the sequence of a line often completely changes its nature and hands the opponent extra defensive resources. The same moves in a different order can turn a winning attack into nothing, so the order is the idea, not just the moves.",
+   "kind": "plan",
    "reanchor": true
   },
   {
