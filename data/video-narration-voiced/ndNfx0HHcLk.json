@@ -34,7 +34,7 @@
     "Nc6",
     "Bb5"
    ],
-   "spoken": "My main opening — the Ruy Lopez, the bishop to b5."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -61,7 +61,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "He plays the deferred Steinitz with d6, creating the threat of winning the e4-pawn."
+   "spoken": "The pawn to d6 is the Deferred Steinitz, quietly creating a threat to snap off the central pawn. There are several ways to respond, and the choice reveals how you like to handle a passive opponent."
   },
   {
    "ply": 9,
@@ -70,7 +70,8 @@
    "line": [
     "d4"
    ],
-   "spoken": "When the opponent plays passively, strike in the centre immediately — d4, opening the position up."
+   "spoken": "The way to punish passive play is to strike immediately in the centre and open the position — and in the Ruy Lopez that means the central break to d4, recapturing with the knight. Meet quiet development with a jolt in the middle.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -80,7 +81,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "Open it up and recapture with the knight."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -98,7 +99,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "No need to rush the trade on c6 — just develop the knight to c3 and wait it out. If he takes on d4, we recapture and post the queen there."
+   "spoken": "A moment where players often go wrong — there's no need to grab the knight on c6 straight away. Just keep developing, bringing the knight out; and if the opponent trades in the centre, recapture and swing the queen to a fine central post. Patience over a premature exchange.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -116,7 +118,8 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "A tricky question — take with the knight or the bishop? Standard principles say keep the bishop in an open position, but here taking with the knight is actually worse: after bxc6 he recaptures with tempo."
+   "spoken": "When the moment comes to take, the choice of recapture is a trap for the unwary — standard principle says preserve the bishop in an open position, yet taking with the knight is actually worse, because the opponent recaptures with tempo and forces the bishop to move. The general rule bows to the concrete point.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -125,7 +128,8 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "Take a good hard look at our knight — it has real prospects, heading for f5; and the e5 break, with the queen x-raying and the knight pressuring, ruins Black's structure even further."
+   "spoken": "Look hard at the surviving knight — it has real prospects, eyeing a leap to f5, so prepare that jump without fear of moving the queen. And there's more: with the queen x-raying and the knight pressing a loose enemy pawn, a central push wrecks the opponent's structure, leaving isolated, weak pawns everywhere. Don't trade queens — keep the queen active, pressing the backward pawn, and steer toward an endgame where the guiding question is who owns the passed pawns. Making a passer of your own, and denying the opponent one, is the compass for the whole ending.",
+   "kind": "plan"
   },
   {
    "ply": 3,
