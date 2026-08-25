@@ -1,7 +1,7 @@
 {
  "videoId": "vMY6Wr3niUg",
  "title": "Four Knights Game | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Four Knights Game",
+ "openingName": "Four Knights Game: Scotch",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Hopefully we get the Four Knights Scotch main line."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -70,7 +70,8 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "The centre opens up — Black's main move is the bishop to b4, and the second most popular is Bc5, both active squares."
+   "spoken": "This is the Four Knights Scotch — a simpler, less theoretical cousin of the main Scotch, and a fine vehicle for illustrating basic opening principles. The centre has been opened, and now the ideas do the talking rather than memorised theory.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -79,7 +80,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "He threatens the knight to e4, pinning ours — and we can't answer with Bd2, that drops the knight; the centre is under real pressure, so play accurately."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -88,7 +89,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": "First, relieve the pressure — trade the knight, which then lets us reinforce the e4 pawn."
+   "spoken": "The pin puts the centre under real pressure with a threat to win the central pawn, and the natural retreat would just drop a piece. So the first job is to relieve that pressure by trading off the knight, which then lets the central pawn be reinforced.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -106,7 +108,8 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "He doubles our pawns, but in return we keep the dark-squared bishop — and doubled queenside pawns just aren't as weak as a lot of people think."
+   "spoken": "The opponent doubles the queenside pawns, but in return comes the dark-squared bishop, a valuable piece for the coming middlegame. This opening is a lovely demonstration that doubled, isolated queenside pawns matter far less than people fear.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -124,7 +127,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Defend e4 — the bishop to d3. Bad bishops defend good pawns, and once e5 comes, this bishop becomes an absolute beast."
+   "spoken": "Defend the central pawn with the bishop — and yes, it stares blankly at its own pawn for now, but the maxim holds: bad bishops defend good pawns. Later, when the pawn advances, that same bishop becomes an absolute beast. Resist the tempting pin that only ends up looking silly.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -142,7 +146,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "A low-key approach — castle first, get the fundamentals in order."
+   "spoken": "The immediate central advance is possible, but the low-key, disciplined choice is to castle first and put the fundamentals in order. Get the house in order before launching anything.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -160,7 +165,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Now e5 — opening our bishop and clamping down on his position."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -169,7 +174,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Black wants d6 to undermine the centre — but we have a small window with the clamp on, so put the attacking hat on."
+   "spoken": "There's a small window — the opponent's bishop is undeveloped, the position is clamped, and pieces are aimed at the king, so put the attacking hat on. Rather than the queen sortie that lets the centre be undermined, the queen to h5 is stronger: it sets up a sacrifice on the weakened square and brings the heaviest piece toward the king. And don't fret over the loose pawn — you're going for mate, so let the opponent waste moves grabbing it.",
+   "kind": "tactic"
   },
   {
    "ply": 22,
@@ -179,7 +185,7 @@
     "Qh5",
     "Nf6"
    ],
-   "spoken": "The queen to h5 — better than Qg4, since it sets up a sacrifice on h6 and brings the queen toward the king."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -188,7 +194,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "He blunders a knight — we take."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -206,7 +212,8 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "Just develop the bishop and defend the pawn — up a piece, there's no need to give away any more material."
+   "spoken": "Now the mindset shifts — a piece to the good, simply develop and defend, with no need whatsoever to give back any material. When you're winning, don't complicate; consolidate.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -215,7 +222,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Convert with natural moves — a rook to the only open file, taking care not to bury one rook behind the other. A vulnerable pawn is no concern while nothing real attacks it.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -224,7 +232,7 @@
    "line": [
     "Rfe1"
    ],
-   "spoken": "The rook to e1 — the only open file."
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -242,7 +250,8 @@
    "line": [
     "Re3"
    ],
-   "spoken": "Go directly for mate — lift the rook via e3 toward g3."
+   "spoken": "And don't rush to trade queens to convert — keeping the queens on doesn't make the win any harder. In fact, up a piece, the cleanest path is often to go straight for mate: lift the rook into the attack and turn the extra material directly into a decisive assault on the king.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -278,7 +287,8 @@
    "line": [
     "Qxh6"
    ],
-   "spoken": "Not the bishop — the queen takes on h6; after the trade, Black's g7 pawn simply cannot be defended, and it's over."
+   "spoken": "Crucially, don't recapture the weak point with the bishop, which would give up the queen — take with the queen instead. It's not a mere trade, because once the queens come off, the pawn shielding the king simply can't be held, and the game is over.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -303,7 +313,9 @@
    "t": 651.5,
    "fen": "5rk1/p1pb1pp1/2p2q1Q/3pr3/8/2PB2R1/P1PB1PPP/R5K1 b - - 0 17",
    "line": [],
-   "spoken": ""
+   "spoken": "A pattern always worth remembering — a pinned pawn cannot move, so whatever that pinned pawn was defending is suddenly hanging. Every rook pin quietly undefends something down the line; keep an eye out for it.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -340,7 +352,8 @@
    "line": [
     "Kh8"
    ],
-   "spoken": ""
+   "spoken": "Making luft doesn't have to be the reflexive rook-pawn move — here a different pawn push serves two purposes at once, both parrying an annoying rook lunge and preparing to anchor a piece. In the endgame especially, if another luft move accomplishes something extra, don't be afraid to play it.",
+   "kind": "plan"
   },
   {
    "ply": 39,
@@ -399,7 +412,8 @@
    "line": [
     "g5"
    ],
-   "spoken": "The diminishing-returns theory: winning the first piece is huge, a second piece a bit less, and every extra pawn after that adds less and less — so never damage your position just to grab one.",
+   "spoken": "A formalised idea worth carrying — the diminishing-returns theory. Winning the first piece is enormous, taking the position from equal to winning; a second piece adds less; and each additional pawn after that adds less still. So grab free pawns, yes, but never damage your position to win one more.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -492,7 +506,8 @@
     "Kg8",
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "And a satisfying finish — the rook that sat out the entire game finally activates down the open file and reaps all the rewards. The piece that waited out the war emerges at the end and takes all the credit.",
+   "kind": "plan"
   },
   {
    "ply": 54,
@@ -607,8 +622,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": "The traditional main line: d5, a trade of pawns in the centre, both sides castle, and White develops the bishop to g5, then the queen to f3, piling onto the knight.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -653,8 +667,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "His main mistake was not playing d6 — pushing a central pawn to clamp down, then later removing the clamp, usually requires concessions; neglecting it leads to unpleasant consequences even at grandmaster level.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
