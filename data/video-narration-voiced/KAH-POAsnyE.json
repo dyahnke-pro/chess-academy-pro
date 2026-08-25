@@ -15,7 +15,7 @@
     "d4",
     "d5"
    ],
-   "spoken": "d4, and Black answers d5 — we have been playing the Queen's Gambit Declined."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "But e4 here is the Blackmar-Diemer Gambit — common at the beginner level, seen occasionally even higher up."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "The best response is simply to take the pawn."
+   "spoken": "Against this gambit the cleanest reply is simply to accept — take the pawn and make the opponent prove the compensation they don't really have."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White develops the knight to c3."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black defends the pawn with the knight to f6 — White will likely follow with f3."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,8 @@
    "line": [
     "f3"
    ],
-   "spoken": "The Blackmar-Diemer is a Smith-Morra on the other side of the board. Taking on f3 is the engine's move — White just hasn't enough compensation — but to disarm a gambit solidly, it is often best to give the pawn back and take a development lead instead."
+   "spoken": "Here's a principle for disarming any gambit. Grabbing the second pawn is best by the engine's cold count — there just isn't enough compensation. But in practice the middle path is often wiser: hand the pawn back and, in return, claim a development lead. Stop worrying about clinging to the extra material and just get pieces out.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -69,7 +70,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "So forget the extra pawn and develop. The bishop to f5 is one idea, but the knight to c6 is better — it counter-attacks the pawn. If White pushes d5, the knight simply slides into e5, a knight up."
+   "spoken": "The developing move that also bites is the knight to c6 — it counterattacks the loose pawn. The natural-looking bishop development isn't as good as it seems, because a pawn thrust to d5 would kick the knight and hand over the e5 outpost.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -78,7 +80,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "White plays the bishop to f4, insisting on the sacrifice — but it is a poor move."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -87,7 +89,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "It just lets Black grab on d4 — White's centre has collapsed, giving away far too much."
+   "spoken": "Insisting on the sacrifice is just a bad decision — so capture on d4. The opponent's centre has caved in and they're simply shedding pawns for nothing; there's no reason to decline the gift."
   },
   {
    "ply": 11,
@@ -96,7 +98,8 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "White tries the knight to b5, looking intimidating — but calculation lets you stay calm. The obvious question: can Black just take the knight?"
+   "spoken": "The knight jump to b5 is pure intimidation — the sort of scary-looking move that concrete calculation keeps you safe from. Ask the obvious question: is there any reason not to just take the knight? The only pause is that the queens could come off and the king lose its castling — but two pawns up, with pieces trading, a king in the centre is a long way from getting mated.",
+   "kind": "tactic"
   },
   {
    "ply": 12,
@@ -105,7 +108,7 @@
    "line": [
     "Nxb5"
    ],
-   "spoken": "The only pause is that White could take the queen and cost Black castling — but he is down two pawns, trading pieces, and a king on d8 is no mating net. So — take on b5."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -114,7 +117,7 @@
    "line": [
     "Qxd8+"
    ],
-   "spoken": "White grabs the queen with check..."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -132,8 +135,7 @@
    "line": [
     "O-O-O+"
    ],
-   "spoken": "...and gives a check by castling long, planning to scoop the knight leisurely next — a common mistake.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -142,7 +144,8 @@
    "line": [
     "Nd6"
    ],
-   "spoken": "Because he missed that Black can move the knight and block the check at once — the knight to d6. That is basically the game: Black is up two pawns and a piece."
+   "spoken": "This is a classic trap the opponent falls into — expecting an in-between check followed by a leisurely capture. What they've missed is that a single knight move to d6 does two jobs at once: it saves the knight and blocks the check. Two pawns and a piece to the good, the rest is technique.",
+   "kind": "tactic"
   },
   {
    "ply": 17,
@@ -151,7 +154,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "White plays the bishop to b5, but it achieves nothing."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -160,7 +163,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Now, even in an endgame, keep developing — the bishop to d7, offering a trade."
+   "spoken": "Even deep in an endgame, the rule holds: keep developing, don't forget your pieces. So offer the trade of bishops — because when you're up material and a clean path to simplification appears, you take it. Every swap brings the win closer.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -169,7 +173,7 @@
    "line": [
     "Bxd7"
    ],
-   "spoken": "When there is a clear path to simplification and you are up material, take it."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -187,7 +191,7 @@
    "line": [
     "Nh3"
    ],
-   "spoken": "White develops the knight to h3."
+   "spoken": "The plan is just e6 and the fianchetto — no need to overthink the technique. Grab the pawn back now that the knight has cleared away from its home square."
   },
   {
    "ply": 22,
@@ -196,7 +200,7 @@
    "line": [
     "exf3"
    ],
-   "spoken": "Now Black takes on f3, since the knight has left g1."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -214,7 +218,8 @@
    "line": [
     "h6"
    ],
-   "spoken": "A clinical touch — h6, asking where White's knight is headed. Probably g5, so stop it."
+   "spoken": "A touch of class: ask where the enemy knight wants to go — most likely g5 — and quietly deny it with h6. Not strictly necessary, but clinical, snuffing out counterplay before it starts.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -232,7 +237,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "And continue developing — e6, then the bishop steps out."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -250,7 +255,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop to e7, then a rook to d8 and the king aside — straightforward technique."
+   "spoken": ""
   },
   {
    "ply": 30,
@@ -296,7 +301,7 @@
    "line": [
     "Kc8"
    ],
-   "spoken": "The king to c8 — up a whole piece, Black need not march the king to the centre; the usual endgame rules matter far less when you are this far ahead."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -443,7 +448,8 @@
    "line": [
     "Kf2"
    ],
-   "spoken": "The fastest win does not even need the king. A bishop and one pawn are not quite enough alone — so make a second passer, starting with f5."
+   "spoken": "A neat realisation about the winning method — the king isn't even needed here. Recognise that the bishop and lone pawn together can't force the issue by themselves, so the plan is to manufacture more.",
+   "kind": "plan"
   },
   {
    "ply": 54,
@@ -461,7 +467,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "Two connected passed pawns together with the bishop are more than enough to force promotion — no king required."
+   "spoken": ""
   },
   {
    "ply": 56,
@@ -470,7 +476,8 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "Roll out a second passer with the kingside pawns, and now two connected passed pawns backed by the bishop are more than enough force to march one home to promotion. Connected passers plus a piece is overwhelming.",
+   "kind": "plan"
   },
   {
    "ply": 58,
@@ -507,7 +514,7 @@
    "line": [
     "Kg1"
    ],
-   "spoken": "One thing to avoid: do not push to h2, which lets the king blockade the pawns himself."
+   "spoken": "The one thing to avoid is the careless push to h2 — that would let the king plant itself in front and blockade the pawns by hand. Keep the king out of the blockade and the pawns keep rolling."
   },
   {
    "ply": 62,
@@ -516,7 +523,8 @@
    "line": [
     "Be3+"
    ],
-   "spoken": "Instead, check first with the bishop to e3, then push to g2 and g1 — clean and precise."
+   "spoken": "The precise route is to insert the bishop check on e3 first, and only then advance the pawn toward promotion. The check gains the tempo that clears the path cleanly.",
+   "kind": "tactic"
   },
   {
    "ply": 64,
@@ -544,7 +552,8 @@
    "line": [
     "g1=N"
    ],
-   "spoken": ""
+   "spoken": "The fastest finish is to see that this promotion square is the mating square — under-promote to seal the king's escape and deliver mate, and since there are still spare pawn moves in reserve, there's no stalemate to worry about.",
+   "kind": "tactic"
   }
  ]
 }
