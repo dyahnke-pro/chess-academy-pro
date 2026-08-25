@@ -1,0 +1,249 @@
+{
+ "videoId": "LJa5Df75CJI",
+ "title": "Master Class | Controlling Center | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Van't Kruijs Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:LJa5Df75CJI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 124,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e3",
+    "e5"
+   ],
+   "spoken": "White opens with e3 — the Van't Kruijs, a kind of reversed French. Nothing inherently wrong with it, and Black meets it with e5."
+  },
+  {
+   "ply": 3,
+   "t": 127,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B5/4P3/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "But the bishop to c4 is not good — developing the bishop before the knight and doing little to fight for the centre."
+  },
+  {
+   "ply": 4,
+   "t": 146,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/2B5/4P3/PPPP1PPP/RNBQK1NR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "It hands Black the chance to seize the centre with tempo — d5, hitting the bishop."
+  },
+  {
+   "ply": 5,
+   "t": 152.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "The bishop retreats to b3. Now some players are tempted to keep grabbing space with c5 — but controlling the centre is a balance: pawns, yes, but don't overdo it and forget to develop."
+  },
+  {
+   "ply": 6,
+   "t": 191,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Some openings are designed to overextend you — too many pawns that then crumble. So instead of c5, develop: the knight to f6, supporting the pawn."
+  },
+  {
+   "ply": 7,
+   "t": 195,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1BN1P3/PPPP1PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Where should the dark bishop go? Ideally d6 — it supports e5, and if White castles short, ideas like a later e-pawn push and a Greek-gift sacrifice appear. But can Black play the bishop to d6 at once?"
+  },
+  {
+   "ply": 8,
+   "t": 248,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/1BN1P3/PPPP1PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Not quite — the knight would take on d5, winning the pawn. So first c6, defending with another pawn, building a chain, and paving the way for the bishop to d6."
+  },
+  {
+   "ply": 9,
+   "t": 272,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "And yes, c6 takes that square from the knight — but a knight can go to d7 instead. The squares c6 and f6 are conventional, not compulsory; chess is a game of trade-offs."
+  },
+  {
+   "ply": 10,
+   "t": 296,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "So — the bishop to d6, as intended, supporting the pawn."
+  },
+  {
+   "ply": 6,
+   "t": 303.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 310,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "Nc3",
+    "Bd6",
+    "Nf3",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 312,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "White plays the knight to g5 — a typical-looking move, but here it does nothing. It is usually played to hit f7, and there is no attack on f7 now."
+  },
+  {
+   "ply": 12,
+   "t": 340.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R w KQ - 2 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Kicking it with h6 is sensible, but for solidity Black just ignores it and castles — this lone knight, scary as it looks, cannot do anything."
+  },
+  {
+   "ply": 13,
+   "t": 345,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/4P3/1BN5/PPPP1PPP/R1BQK2R b KQ - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": "In fact, a piece parked on your side of the board can become an asset for you."
+  },
+  {
+   "ply": 14,
+   "t": 377.5,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/3pp1N1/4P3/1BN5/PPPP1PPP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": "White tries e4 to grab more centre, but he is not ready — his pieces are scattered. Now h6 hits the knight, and if it moves the e4-pawn is attacked twice and defended once. By saving h6 for the right moment, Black gains more from it."
+  },
+  {
+   "ply": 15,
+   "t": 418,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/3pp3/4P3/1BN4N/PPPP1PPP/R1BQK2R b KQ - 1 8",
+   "line": [
+    "Nh3"
+   ],
+   "spoken": "Don't take this too far — sometimes the knight to g5 really is dangerous. But here, with White underdeveloped and Black holding a strong pawn centre, there is nothing to fear."
+  },
+  {
+   "ply": 16,
+   "t": 445,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/4p3/4p3/1BN4N/PPPP1PPP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Black could take the knight and wreck White's structure, but that opens the g-file — double-edged. Simplest is just to take the pawn. And a key practical point: when you are agonising over whether to take or trade, often simply not doing it and finding an alternative is the best solution."
+  },
+  {
+   "ply": 17,
+   "t": 506.5,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/4p3/4p3/1BN4N/PPPP1PPP/R1BQKR2 b Q - 1 9",
+   "line": [
+    "Rf1"
+   ],
+   "spoken": "The rook to f1 leaves White's king stranded in the centre — and he has not touched his queenside, so the queen is badly hemmed in."
+  },
+  {
+   "ply": 18,
+   "t": 538,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/4p1b1/1BN4N/PPPP1PPP/R1BQKR2 w Q - 2 10",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "And because the queen is boxed in, the bishop to g4 hits it — the queen has no squares; White must block awkwardly or play f3."
+  },
+  {
+   "ply": 19,
+   "t": 553.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/4p1b1/1BN2P1N/PPPP2PP/R1BQKR2 b Q - 0 10",
+   "line": [
+    "f3"
+   ],
+   "spoken": "If f3, Black takes, White recaptures, and the knight loses the support of the g2-pawn."
+  },
+  {
+   "ply": 20,
+   "t": 554.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP2PP/R1BQKR2 w Q - 0 11",
+   "line": [
+    "exf3"
+   ],
+   "spoken": "Black takes, and White loses more — decline it and Black wins a pawn with a discovery. Completely crushing, and Black did nothing tactical, just sensible development."
+  },
+  {
+   "ply": 21,
+   "t": 582.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP1KPP/R1BQ1R2 b - - 1 11",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 588,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN4N/PPPP1KpP/R1BQ1R2 w - - 0 12",
+   "line": [
+    "fxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 599.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN4N/PPPP2KP/R1BQ1R2 b - - 0 12",
+   "line": [
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 611,
+   "fen": "rn3rk1/pp3pp1/2pb1q1p/4p3/6b1/1BN4N/PPPP2KP/R1B1Q3 b - - 1 14",
+   "line": [
+    "Qe7",
+    "Rxf6",
+    "Qxf6",
+    "Qe1"
+   ],
+   "spoken": "The queen falls, and the game is over."
+  },
+  {
+   "ply": 3,
+   "t": 619,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B5/4P3/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [],
+   "spoken": "White got off on the wrong foot with the Van't Kruijs and the bishop to c4 — a classic beginner miscalibration between the two dials: control the centre with pawns, and develop the pieces. Do too much of one and too little of the other, and the pieces' weight is never felt. Always play one of these central pawn moves, and at least part of the centre is yours.",
+   "reanchor": true
+  }
+ ]
+}
