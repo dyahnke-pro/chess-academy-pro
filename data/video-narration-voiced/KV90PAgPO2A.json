@@ -1,10 +1,10 @@
 {
  "videoId": "KV90PAgPO2A",
  "title": "Master Class | Panov Attack (Caro–Kann) | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Caro-Kann Defense: Panov-Botvinnik Attack",
+ "openingName": "Caro-Kann Defense: Panov Attack",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:KV90PAgPO2A",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5 — the traditional, old-school way into a sharp Caro."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on d5."
   },
   {
    "ply": 7,
@@ -60,10 +60,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The pawn to c4 is the Panov Attack — rather than a quiet Exchange, White challenges d5 at once and steers into a sharp, tactical fight built around an isolated queen's pawn.",
-   "kind": "main",
-   "teaches": "The Panov turns the Exchange Caro into an aggressive IQP battle.",
-   "plans": "Pressure d5, accept an isolated d-pawn for space and active pieces."
+   "spoken": "We contest the centre at once with c4 — the Panov Attack."
   },
   {
    "ply": 8,
@@ -72,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6, eyeing our c4-pawn."
   },
   {
    "ply": 9,
@@ -81,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 10,
@@ -90,7 +87,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on c4, relenting in the centre."
   },
   {
    "ply": 11,
@@ -99,9 +96,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "Black releases the tension and White recaptures on c4, reaching the famous isolated queen's-pawn structure: the d4-pawn now stands alone, a long-term weakness but the source of open lines and piece activity.",
-   "kind": "main",
-   "teaches": "The IQP is a two-sided bargain — a weak pawn traded for space and active pieces."
+   "spoken": "We recapture with the bishop — reaching the famous Isolated Queen's Pawn structure, our lone pawn on d4 with no neighbours on c or e."
   },
   {
    "ply": 12,
@@ -110,9 +105,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Black develops the bishop to f5 before a later e6 would shut it in. The middlegame theme is set: White leans on the d4-pawn's space while both sides fight over d5, the blockade square right in front of the isolated pawn.",
-   "kind": "main",
-   "teaches": "With an isolated queen's pawn, the square in front of it decides everything — control d5 and the pawn is a spearhead; blockade it and the pawn is a target."
+   "spoken": "Black plays the bishop to f5 — a mistake, and not because of the IQP, but because it leaves two pawns weak and walks into a fork."
   },
   {
    "ply": 16,
@@ -124,7 +117,7 @@
     "Qb5",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We hit the queenside with the queen to b3, forking two of Black's weak pawns to win one; Black defends with ...Nbd7, we slide to b5, and Black shores up with ...e6. Now the discipline is to finish development, not to lunge the knight into c7."
   },
   {
    "ply": 20,
@@ -136,7 +129,8 @@
     "Nf3",
     "Qd8"
    ],
-   "spoken": ""
+   "spoken": "A pawn up and pressing, the plan is patient: complete development, castle, and if Black keeps chasing the queen, calmly sidestep — to a6 or c6 — without ever allowing a draw by repetition. His rook sorties to the queenside would only misplace the rook, and a well-timed knight-takes-d7 with check could win it. Once the IQP has done its job we trade it off and turn the attack on the king.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -274,7 +268,8 @@
    "t": 1177,
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The quick way to judge an IQP position: look at who controls the square in front of the pawn. If White owns it, White tends to be better; if Black blockades it with a knight, Black is usually fine.",
+   "reanchor": true
   }
  ]
 }
