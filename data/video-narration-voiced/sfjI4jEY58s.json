@@ -1,0 +1,468 @@
+{
+ "videoId": "sfjI4jEY58s",
+ "title": "New Speedrun!?? | \"Def. We Play 1. E4\" | The Sensei | Grandmaster Naroditsky",
+ "openingName": "Four Knights Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:sfjI4jEY58s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 34,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "Definitely we play e4 — starting with the Four Knights Scotch."
+  },
+  {
+   "ply": 3,
+   "t": 40.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 44,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "He plays the queen to f6 — a bad move: it develops no minor piece and deprives the g8-knight of its natural square."
+  },
+  {
+   "ply": 3,
+   "t": 46.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 49.5,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 83,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "First grab a lead in development — the knight to c3 — then think about opening the centre."
+  },
+  {
+   "ply": 4,
+   "t": 85,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 86.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 132.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "With two pieces developed to his zero, this is the moment — d4, opening the centre."
+  },
+  {
+   "ply": 8,
+   "t": 135,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 137.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 139.5,
+   "fen": "rnb1k1nr/pp1p1ppp/2p2q2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 164.5,
+   "fen": "rnb1k1nr/pp1p1ppp/2p2q2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 2 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "An easy developing move that also defends the knight — don't hesitate to defend a piece with another piece; a bishop on the neighbouring square is one of the safest ways."
+  },
+  {
+   "ply": 12,
+   "t": 177.5,
+   "fen": "rnb1k1nr/pp3ppp/2pp1q2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 215.5,
+   "fen": "rnb1k1nr/pp3ppp/2pp1q2/2b5/2BNP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 1 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Develop the bishop — c4 is the most active square."
+  },
+  {
+   "ply": 14,
+   "t": 220.5,
+   "fen": "rnb1k2r/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQkq - 2 8",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": "The knight to h6 — an unusual developing move to the rim, so smell a rat; there's usually a hidden intention."
+  },
+  {
+   "ply": 15,
+   "t": 270.5,
+   "fen": "rnb1k2r/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPP2PP1/R2QK2R b KQkq - 0 8",
+   "line": [
+    "h3"
+   ],
+   "spoken": "He wants the knight to g4, ruining our pawn structure — so h3 stops it in its tracks."
+  },
+  {
+   "ply": 16,
+   "t": 286.5,
+   "fen": "rnb2rk1/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPP2PP1/R2QK2R w KQ - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 287.5,
+   "fen": "rnb2rk1/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPPQ1PP1/R3K2R b KQ - 2 9",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Having pushed h3, the queen to d2 and castle queenside — that h3 pawn anchors a later g4 push."
+  },
+  {
+   "ply": 18,
+   "t": 293.5,
+   "fen": "rnb2rk1/p4ppp/2pp1q1n/1pb5/2BNP3/2N1B2P/PPPQ1PP1/R3K2R w KQ - 0 10",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 317.5,
+   "fen": "rnb2rk1/p4ppp/2pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/R3K2R b KQ - 1 10",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 323,
+   "fen": "r1b2rk1/p4ppp/n1pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/R3K2R w KQ - 2 11",
+   "line": [
+    "Na6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 327.5,
+   "fen": "r1b2rk1/p4ppp/n1pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/2KR3R b - - 3 11",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Castle long — and now, at last, we're ready to attack on the kingside."
+  },
+  {
+   "ply": 22,
+   "t": 337.5,
+   "fen": "r1b2rk1/p4ppp/nbpp1q1n/1p6/3NP3/1BN1B2P/PPPQ1PP1/2KR3R w - - 4 12",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 357,
+   "fen": "r1b2rk1/p4ppp/nbNp1q1n/1p6/4P3/1BN1B2P/PPPQ1PP1/2KR3R b - - 0 12",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "The knight takes on c6, grabbing a free pawn and chopping the legs right off his pawn phalanx."
+  },
+  {
+   "ply": 24,
+   "t": 365.5,
+   "fen": "r1b2rk1/p4ppp/1bNp1q1n/1pn5/4P3/1BN1B2P/PPPQ1PP1/2KR3R w - - 1 13",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 389.5,
+   "fen": "r1b2rk1/p4ppp/1bNp1q1n/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 2 13",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight to d5 — centralising and attacking the queen, which suddenly has very few good squares."
+  },
+  {
+   "ply": 26,
+   "t": 415,
+   "fen": "r1b2rk1/p4ppp/1bNp2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 3 14",
+   "line": [
+    "Qg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 421,
+   "fen": "r1b2rk1/p3Nppp/1b1p2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 4 14",
+   "line": [
+    "Nce7+"
+   ],
+   "spoken": "The fork — and it doesn't matter which knight goes to e7 when you're winning the queen; don't overthink a winning move."
+  },
+  {
+   "ply": 28,
+   "t": 426,
+   "fen": "r1b2r1k/p3Nppp/1b1p2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 5 15",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 430.5,
+   "fen": "r1b2r1k/p4ppp/1b1p2Nn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 0 15",
+   "line": [
+    "Nxg6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 432,
+   "fen": "r1b2r1k/p5pp/1b1p2pn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 0 16",
+   "line": [
+    "fxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 469.5,
+   "fen": "r1b2r1k/p5pp/1b1p2pB/1pnN4/4P3/1B5P/PPPQ1PP1/2KR3R b - - 0 16",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": "Brute force — the bishop takes on h6; look straight at his king."
+  },
+  {
+   "ply": 32,
+   "t": 475.5,
+   "fen": "r1b2r1k/p6p/1b1p2pp/1pnN4/4P3/1B5P/PPPQ1PP1/2KR3R w - - 0 17",
+   "line": [
+    "gxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 490.5,
+   "fen": "r1b2r1k/p6p/1b1p2pp/1pnN4/4P3/1BQ4P/PPP2PP1/2KR3R b - - 1 17",
+   "line": [
+    "Qc3+"
+   ],
+   "spoken": "His pawn recaptured on h6, so it left g7 — that opens a diagonal, and the check on c3 sets up mate."
+  },
+  {
+   "ply": 34,
+   "t": 498.5,
+   "fen": "r1b2rk1/p6p/1b1p2pp/1pnN4/4P3/1BQ4P/PPP2PP1/2KR3R w - - 2 18",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 523,
+   "fen": "r1b2rk1/p3N2p/1b1p2pp/1pn5/4P3/1BQ4P/PPP2PP1/2KR3R b - - 3 18",
+   "line": [
+    "Ne7#"
+   ],
+   "spoken": "The knight to e7 — a double check, and mate: the queen covers every one of the king's escape squares."
+  },
+  {
+   "ply": 2,
+   "t": 539.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 547,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 572.5,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 574.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 580.5,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 582,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 586,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/3Np3/4P3/5N2/PPPP1PPP/R1BQKB1R b KQkq - 5 4",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 626.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/3Np3/4P3/5N2/PPPP1PPP/R1BQKB1R w KQkq - 6 5",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": "The knight to d5 early is not as impressive as it looks — Black just develops the knight to f6 and offers a trade, and you've moved your knight twice for nothing. That's one-move-itis.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 645,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 8 6",
+   "line": [
+    "Nc3",
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 647,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 9 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 652.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "Nb8",
+    "Bf1",
+    "c6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 657,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 9",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 659.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/6B1/3pP3/2N2N2/PPP2PPP/R2QKB1R b KQkq - 1 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 664.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 7 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
