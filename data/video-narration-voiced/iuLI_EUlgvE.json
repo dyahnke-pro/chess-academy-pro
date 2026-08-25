@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:iuLI_EUlgvE",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take Black and play the Caro-Kann, c6."
   },
   {
    "ply": 3,
@@ -24,9 +24,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White grabs space with an early e5 — offbeat, and not dangerous. It shoves a pawn deep before a single piece comes out, and that pawn can be challenged at once.",
-   "kind": "main",
-   "teaches": "An early space grab that skips development can be undermined immediately."
+   "spoken": "White plays the unusual e5 — rare, but not terrible. We can't play ...d5 now, and White could later push d4 into an Advance Caro."
   },
   {
    "ply": 4,
@@ -35,9 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The pawn to d6 strikes at the base of the e5-pawn straight away, forcing the trade so White gets no space edge at all.",
-   "kind": "main",
-   "teaches": "Meet a premature advanced pawn by hitting its base and trading it off — the simplest road to equality."
+   "spoken": "To leave White no advantage at all, we hit the pawn at once with d6, simply trading it off — the simplest response."
   },
   {
    "ply": 5,
@@ -46,7 +42,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": ""
+   "spoken": "White captures on d6."
   },
   {
    "ply": 6,
@@ -55,7 +51,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": ""
+   "spoken": "We recapture — the position is dead equal."
   },
   {
    "ply": 7,
@@ -64,7 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4. It's a bone-dry, equal position — White isn't fighting for anything, and sometimes you just accept that."
   },
   {
    "ply": 8,
@@ -73,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We can play ...d5 now or later; first we develop the knight to f6."
   },
   {
    "ply": 9,
@@ -82,7 +78,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "White plays c3. After ...d5 we reach a symmetrical structure where we're effectively playing the white side, a tempo up."
   },
   {
    "ply": 10,
@@ -91,10 +87,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "With d5 Black settles into a symmetrical, dry structure, but with an extra tempo in hand — effectively playing the white side of it.",
-   "kind": "main",
-   "teaches": "In a symmetrical position the free tempo is the small edge to nurse.",
-   "plans": "Develop smoothly and keep the tempo edge."
+   "spoken": "So we push d5, opening a path for the bishop to d6."
   },
   {
    "ply": 11,
@@ -103,7 +96,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "White pins with the bishop to g5. There's no single right answer here — but learning to handle dry positions well matters."
   },
   {
    "ply": 12,
@@ -112,7 +105,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "The simplest is the bishop to e7, breaking the pin."
   },
   {
    "ply": 13,
@@ -121,7 +114,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3. With the pin gone we can play ambitiously — the knight to e4 centralizes and forces White to resolve the tension — or castle first; it hardly matters."
   },
   {
    "ply": 14,
@@ -130,9 +123,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "The knight jumps to e4, the one bid for an imbalance — planted on a strong central square and daring White to resolve the tension instead of drifting into dead symmetry.",
-   "kind": "main",
-   "teaches": "To play for a win from a symmetrical position, seek a small asymmetry — a centralized knight is one."
+   "spoken": "We choose the knight to e4, introducing an asymmetry — ...Bg4 would just be met by the bishop to e2 and stay too symmetrical."
   },
   {
    "ply": 15,
@@ -141,7 +132,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "White retreats the bishop to f4 — a surprise; I expected the trade on e7."
   },
   {
    "ply": 16,
@@ -150,7 +141,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We don't change our plan and simply castle."
   },
   {
    "ply": 17,
@@ -159,7 +150,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to d3. Notice we held our own bishop back to see where his went — a subtle posturing, making the opponent show his cards first."
   },
   {
    "ply": 18,
@@ -168,7 +159,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to g4 — no need to defend the e4-knight, our pawn supports it. This makes White waste a tempo retreating to e2, a small annoyance. The plan is patient: the knight comes to d7, pinning White's f3-knight to the queen, and we build pressure inch by inch."
   },
   {
    "ply": 19,
@@ -177,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles. You can't do everything at once — you pile on pressure by degrees, and small problems eventually coalesce into big ones."
   },
   {
    "ply": 20,
@@ -186,7 +177,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "We complete development with the knight to d7, keeping ...f5 in reserve. When White loses patience with the queen to b3, the point of ...Bg4 pays off — we take on f3. Even a b7-pawn sacrifice would be worth it, but we needn't: the knight to d6 defends b7, and if White grabs both, his king is stripped bare. A mating tip: drive the king in first with a queen check on g5 — before the tempting queen to h4 — then the queen to f4 sets up the battery and mate; the check first stops the defender making luft with the rook."
   },
   {
    "ply": 3,
@@ -202,7 +193,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "A note for White: to avoid all this, start with the knight to d2 so ...Ne4 has no bite, then the knight to f3 and bishop to d3 — dead equal. And simply trading on e7 was better than the passive bishop to f4.",
+   "reanchor": true
   }
  ]
 }
