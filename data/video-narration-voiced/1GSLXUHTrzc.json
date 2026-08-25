@@ -4,7 +4,7 @@
  "openingName": "Scotch Game",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:1GSLXUHTrzc",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take Black and answer the king's pawn with e5 — back to our roots."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 — the Scotch."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "We capture on d4."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight — the pure Scotch."
   },
   {
    "ply": 6,
@@ -76,7 +76,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "White also has the Scotch Gambit with the bishop to c4 and the rare c3, but the knight recapture is the main line. Black's two main replies cover most top games: the sharp ...Nf6, which gets wildly messy, and the bishop to c5 — the more practical, less theory-heavy choice, and the one I recommend.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -85,7 +86,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "We choose the bishop to c5 — still theoretical, but more manageable than the chaos of the ...Nf6 lines."
   },
   {
    "ply": 9,
@@ -94,7 +95,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e3."
   },
   {
    "ply": 10,
@@ -103,9 +104,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "Queen to f6 is the main move — it heaps pressure on the knight on d4 and steps out of the Nxc6-then-Bxc5 fork that White was about to spring.",
-   "kind": "main",
-   "teaches": "In the Scotch, meet the d4-knight with piece pressure while dodging the c6/c5 fork trick."
+   "spoken": "The main move: the queen to f6, piling pressure on the d4-knight."
   },
   {
    "ply": 9,
@@ -122,7 +121,7 @@
     "Qf6",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "White's point was the capture on c6, hitting the queen, and then taking our c5-bishop; the queen on f6 slips out of the knight's reach. White supports with c3, the main continuation."
   },
   {
    "ply": 12,
@@ -131,9 +130,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": "The knight comes to e7 without blocking the queen's pressure, ready to reroute toward g6 and keep Black's options open.",
-   "kind": "main",
-   "teaches": "Develop knights to squares that preserve your pressure and your flexibility."
+   "spoken": "We develop the knight from g8 to e7. We don't fear the capture on c6: we'd first grab the bishop on e3, threatening mate on f2 — part of why the queen sits on f6 — and after White recaptures, we take back on c6, having wrecked his structure."
   },
   {
    "ply": 13,
@@ -142,7 +139,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "So a capture on c6 would be a poor move. White instead develops — the bishop to c4 is the most popular."
   },
   {
    "ply": 14,
@@ -151,7 +148,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c4 changes nothing about our plan, so we castle."
   },
   {
    "ply": 15,
@@ -160,7 +157,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles. A subtlety: if White now takes on c6, we can no longer grab the e3-bishop — the knight would answer with a check on g7 — so we'd just recapture with the queen, still comfortable. The known move is the centralizing knight to e5, punishing the exposed c4-bishop. But careful: ...d6 here is a serious positional error — it severs the queen from the knight, so White takes on c6, and after we recapture, he trades on c5 and ruins our queenside pawns."
   },
   {
    "ply": 16,
@@ -169,7 +166,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "We play Bologan's move, b6 — sidestepping theory. It heads for a fianchetto without the drawback of ...d6: if White takes on c6 we keep the queen recapture that supports our c5-bishop, and that bishop is now anchored by the b6-pawn."
   },
   {
    "ply": 17,
@@ -178,7 +175,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "White plays f4, the main move — but it threatens little. If you fear e5: with our bishop soon on b7, that push has a real cost, opening the long diagonal for the bishop, and our queen could swing to g6 hitting g2. There's the awkward f5 in reply, so it may be wiser to route the queen to h6, where White can't play f5 because his e3-bishop would hang."
   },
   {
    "ply": 18,
@@ -187,7 +184,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": ""
+   "spoken": "We develop straightforwardly with the bishop to b7. It looks scary opposite White's centre, but just developing pieces can't be that bad."
   },
   {
    "ply": 19,
@@ -196,7 +193,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "White pushes e5. It looks menacing, but there's nothing to attack — you can't be blown off the board without targets and weaknesses, and we have none."
   },
   {
    "ply": 20,
@@ -205,16 +202,15 @@
    "line": [
     "Qh6"
    ],
-   "spoken": "The queen swings to h6, leaning on the e3-bishop and White's kingside; those advanced e5 and f4 pawns look menacing but they're fixed and vulnerable.",
-   "kind": "main",
-   "teaches": "When the opponent overextends with pawns, target the squares they abandoned rather than fearing the front."
+   "spoken": "We play the queen to h6, as planned. White's pawns look intimidating but they're stuck in molasses — and the queen sets a hidden threat: an x-ray works both ways, so our queen now x-rays the undefended bishop on e3, making ...Nxe5 a real threat. A further cost of f4: any capture on e3 now comes with check."
   },
   {
    "ply": 19,
    "t": 572,
    "fen": "r4rk1/pbppnppp/1pn2q2/2b1P3/2BN1P2/2P1B3/PP4PP/RN1Q1RK1 b - - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "Against White's queen to d2 — defending the bishop and eyeing f5 — the f5 break is the scary prospect; a knight sacrifice on e5 would be far too early, since White simply takes and plays a bishop to f4, and the initiative fizzles.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -223,7 +219,8 @@
    "line": [
     "Qh6"
    ],
-   "spoken": ""
+   "spoken": "The battle here is over the f5-square: control it and White's kingside pawns freeze — a big asset. To control f5 we must remove White's knight, and recapturing with our own knight fails — a pawn retakes and our bishop is trapped by a bishop check on a3 — so we'd give up our dark-squared bishop to win that control.",
+   "reanchor": true
   }
  ]
 }
