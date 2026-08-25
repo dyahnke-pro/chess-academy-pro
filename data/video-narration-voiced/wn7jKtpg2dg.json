@@ -1,7 +1,7 @@
 {
  "videoId": "wn7jKtpg2dg",
  "title": "Beginner To Master | Chess Speedrun | 1420 | Grandmaster Naroditsky",
- "openingName": "French Defense: Advance Variation",
+ "openingName": "French Defence: Advance",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "The main move against the French — d4."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The Advance French — e5."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -60,7 +60,8 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3, developing the pawn chain."
+   "spoken": "This is the Advance French, chosen deliberately to practise closed positions — thriving in them is a genuine skill few players are comfortable with. The first job is the modest pawn to c3, building and bracing the pawn chain.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -78,7 +79,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The whole game revolves around the d4 pawn — whoever controls this pawn chain wins the argument: space for White, or a collapse if Black cracks it."
+   "spoken": "The way to understand a closed position is to zero in on what the battle revolves around — here it's the d-pawn at the head of the chain. Whoever controls that fight wins: hold it and you keep a big space advantage and easy development; lose it and the whole structure collapses.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -87,7 +89,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 is the theoretical move, pressuring that pawn."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -96,7 +98,8 @@
    "line": [
     "a3"
    ],
-   "spoken": "An odd-looking move — a3."
+   "spoken": "Against the pressure on the chain comes an odd-looking rook-pawn move to a3 — and its purpose is to prepare b4, shoving the enemy pawn away and keeping the chain intact. Prophylaxis that also gains space.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -114,7 +117,8 @@
    "line": [
     "b4"
    ],
-   "spoken": "The purpose is b4 — kicking the c5 pawn away and preserving our pawn chain; that's how important the chain's health is."
+   "spoken": "Yes, it's two pawn moves and no piece development — but preserving the health of the pawn chain is exactly that important. And it isn't wasted: the queenside expansion also readies a further push to kick a knight, and opens the door to a fianchetto. Several gains from one plan.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -142,7 +146,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 — and it involves a tactic: if he takes on d4 twice, the queens stand off, and a bishop check on b5 or g6 wins his queen."
+   "spoken": "Develop the bishop to d3 — and the square is chosen by seeing a tactic. It looks like the central pawn hangs, but it doesn't: after the exchanges a check springs in on the exposed diagonal, exploiting a standoff to win the queen. Always confirm the pawn is really loose before fearing for it.",
+   "kind": "tactic"
   },
   {
    "ply": 18,
@@ -160,7 +165,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We can castle rather than defend — the check on g6 is still available; and play flexibly, deciding this bishop's square only once Black shows his cards."
+   "spoken": "Castle now — the pin-check resource is still available, so the pawn is safe. And notice the deeper point: don't develop the other bishop yet. Make the moves you know you must, wait for the opponent to reveal their plan, and only then place the discretionary pieces. That posturing over who commits first is a genuine grandmaster sub-battle.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -178,7 +184,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The familiar maneuver — the knight heading to a4 and then c5, targeting the weak e6 pawn."
+   "spoken": "Recall the recurring idea — reroute the knight around to c5, targeting the weak enemy pawn. Same weak pawn, same maneuver, just a different transit square; and even the outpost itself is a fine square in its own right.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -195,7 +202,8 @@
     "Nc3",
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "Don't relieve the tension by capturing — it would hand the opponent an open file aimed at your king and let a pawn occupy the centre. Holding the tension keeps those doors shut.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -204,7 +212,8 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "Simple chess — defend the key central pawn with the rook and let the opponent be the one to decide whether to capture. Forcing your opponent to make the decision means sometimes you don't have to make it at all.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -213,7 +222,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Complete development — the bishop to b2. It looks blunted by its own pawns, but good bishops defend good pawns, and these pawns are vital."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -222,7 +231,8 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "Now a counter-intuitive developing move — the bishop to b2, seemingly blunted by its own pawns. But you can assign a piece the perfectly legitimate task of supporting others: bad bishops defend good pawns. These pawns are too important to abandon, so one piece is put on guard duty while the rest do the heavy lifting.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -258,7 +268,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "The queen to d2 coordinates the rooks — and notice his bishop on d7 is completely locked, with no squares at all."
+   "spoken": "The queen steps to d2, coordinating the rooks in a way that also does a second job. And here's a crucial observation — the opponent's light-squared bishop is locked, with no squares at all. A piece with nowhere to go is a piece you can win by attacking it with a pawn.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -276,7 +287,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "So fire up the tactics — the knight takes on d5, then e6, forcing that pawn out; and trading knight for bishop is exactly the point."
+   "spoken": "So fire up the tactical engine — the recurring cues are a king and queen on one diagonal, or a piece stuck without a square. Here a knight captures on d5 and then a pawn to e6 forces the trapped bishop out. Train yourself to make these qualitative observations and the moves appear on their own.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -285,7 +297,8 @@
    "line": [
     "exd5"
    ],
-   "spoken": "With his bishop gone, the d5 pawn is weak — and the e-file, the main artery to his king, is about to open."
+   "spoken": "Why is trading the knight for the bishop a good bargain? Because with that bishop gone the enemy's central pawn is weak, and above all the file toward the king cracks open — the main artery to the enemy king. Once two rooks pour down it, the position simply falls apart.",
+   "kind": "plan"
   },
   {
    "ply": 33,
@@ -294,7 +307,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "e6 opens the e-file; once two rooks land there, his position simply falls apart."
+   "spoken": ""
   },
   {
    "ply": 34,
@@ -348,7 +361,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "The Rubenstein maneuver — the bishop to b3 attacking the pawn, and then the queen swings via b1 to a2, loading the battery."
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -366,7 +379,9 @@
    "line": [
     "Rxb6"
    ],
-   "spoken": ""
+   "spoken": "The idea underpinning the whole plan is the Rubinstein maneuver — swinging the queen the long way around to a raking diagonal to improve it and prepare a pawn break at the base of the chain. It looks like a waste of moves, and it is possible only because the position is closed, and that's the master principle of closed positions: everything slows down, so maneuvers that take four moves become entirely feasible. The one caveat — preemptively check whether the opponent can blow the position open, or your wandering queen gets caught miles from home.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -415,8 +430,7 @@
    "t": 2908,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "The key principle of closed positions: with the centre closed you have far more time — a four-move maneuver that would be unthinkable in an open position becomes very possible; just be sure your opponent can't suddenly open things up.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -470,7 +484,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "When White trades fxe5, he grabs the d4 blockade square in front of the passed pawn, leaves Black with the bad French bishop hemmed in on e6, and a weak king on the a2-g8 diagonal.",
+   "spoken": "A subtle structural point — allowing the exchange that hands the opponent a protected passed pawn while leaving you an isolated one still favours you, for three reasons: you control the square in front of that passer and can blockade it with a knight, the opponent's problem bishop stays entombed, and the king is left weak by the very pawn move that opened lines toward it. And remember, chipping at the base of a pawn chain is rarely as effective as striking at its tip.",
+   "kind": "plan",
    "reanchor": true
   },
   {
