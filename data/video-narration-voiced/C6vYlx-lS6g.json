@@ -1,10 +1,10 @@
 {
  "videoId": "C6vYlx-lS6g",
  "title": "The Glek System Explained | GM Naroditsky Theory Speedrun",
- "openingName": "Glek System (Four Knights)",
+ "openingName": "Four Knights Game: Glek System",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:C6vYlx-lS6g",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 3,
@@ -58,7 +58,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 6,
@@ -67,7 +67,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 7,
@@ -76,16 +76,15 @@
    "line": [
     "g3"
    ],
-   "spoken": "g3 sets up the Glek — the bishop heads to g2 to bear down the long diagonal, a flexible fianchetto system that steers the open games into fresh, less-charted waters.",
-   "kind": "main",
-   "teaches": "Choose a fianchetto system to sidestep mainstream theory and press the long diagonal."
+   "spoken": "We play g3 — the Glek System, an underrated weapon that flies under the radar."
   },
   {
    "ply": 2,
    "t": 120.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The Glek can arise through several move orders, but the essence is the fianchetto against the king's-pawn game. Much depends on where Black puts the d-pawn: the principled counter is ...d5 for an open centre, but most players drift into ...d6.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -115,7 +114,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to c5."
   },
   {
    "ply": 9,
@@ -124,7 +123,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto the bishop to g2 — the heart of the Glek."
   },
   {
    "ply": 10,
@@ -133,7 +132,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 11,
@@ -142,7 +141,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We play d3 — stage one, completing our setup flexibly."
   },
   {
    "ply": 12,
@@ -151,7 +150,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6."
   },
   {
    "ply": 13,
@@ -160,7 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 14,
@@ -169,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 15,
@@ -178,7 +177,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3, preparing the main plan — Kh2, Nd2, then the f4 strike."
   },
   {
    "ply": 16,
@@ -187,7 +186,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Black plays a5, grabbing queenside space."
   },
   {
    "ply": 17,
@@ -196,9 +195,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "King to h2 is prophylactic — it tucks the king away and, crucially, defends the h3-pawn so the knight can reroute to d2 and the f-pawn can advance with no loose ends.",
-   "kind": "main",
-   "teaches": "A quiet king move can shore up a pawn and free your pieces for the coming plan."
+   "spoken": "We tuck the king to h2, so the f-pawn can advance unpinned."
   },
   {
    "ply": 18,
@@ -207,7 +204,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "Black reroutes the knight to e7, heading for g6."
   },
   {
    "ply": 19,
@@ -216,14 +213,15 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We drop the knight to d2, clearing the way for f4."
   },
   {
    "ply": 18,
    "t": 606,
    "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10",
    "line": [],
-   "spoken": ""
+   "spoken": "The alternative was the Ruy-style d4 break, but after ...exd4 Nxd4, ...d5 gives Black active central play — so we follow Glek's plan. The point of f4 is the kingside attack: after ...exf4 gxf4, the ...Ng4+ then ...Qh4 mating idea fails, because the fianchettoed bishop can always block the check on h3.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -242,9 +240,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "With everything prepared, f4 finally breaks — it challenges e5 and rips open the f-file, the whole point of the Glek's kingside setup.",
-   "kind": "main",
-   "teaches": "Launch the prepared pawn break once your king is safe and your pieces support it."
+   "spoken": ""
   },
   {
    "ply": 22,
