@@ -1,7 +1,7 @@
 {
  "videoId": "aoWDLhcoQtE",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1770",
- "openingName": "English Opening",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "c4 isn't a great move — it weakens the d4 square."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "And we occupy that weak square, developing the knight toward it."
+   "spoken": "The early c-pawn advance isn't great — it permanently weakens the d4 square, and that hole can be occupied straight away by developing a knight toward it."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "The fianchetto, exactly as in an Accelerated Dragon — and it reinforces our grip on d4."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -61,7 +61,8 @@
     "Nc3",
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Develop as if this were an Accelerated Dragon — the fianchetto with g6 and the bishop to g7 controls the d4 square with even greater force. Everything is aimed at that one weakness.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -80,7 +81,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Often the choice is whether to stick to the main setup — and often the answer is yes."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -89,7 +90,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "The knight to f6 would block the bishop's control of d4, so instead this knight can head to e7."
+   "spoken": "The knight-development question has a subtle answer: the natural square would block the bishop's grip on d4, so route the knight to e7 instead. It looks odd, but it's a very typical set-up that keeps the bishop's control of the key square intact.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -99,7 +101,7 @@
     "Nge2",
     "Nge7"
    ],
-   "spoken": "It looks a little odd, but this is a very typical setup — it keeps the bishop's eye on d4."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -117,7 +119,8 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "Now reap the reward — the knight lands on the d4 outpost."
+   "spoken": "Now cash in that control — the knight leaps into the d4 outpost, a permanent monster in the heart of the position, soon to be reinforced by its partner so the two knights guard each other.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -135,7 +138,7 @@
    "line": [
     "Nec6"
    ],
-   "spoken": "Support it with the other knight; now both knights guard one another."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -153,7 +156,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Before jumping the gun, finish development — castle and make the king safe."
+   "spoken": "Before adding any spice, finish the basics — castle and get the king safe. Don't jump the gun on an attack until development is complete.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -171,7 +175,8 @@
    "line": [
     "f5"
    ],
-   "spoken": "f5, opening the position — we have a beautiful knight on d4 and better-placed pieces, and that's exactly the moment to open the centre. Risky in front of our own king, but sound."
+   "spoken": "One way forward is to break with f5 and open the position — the logic being the classic one: with better-placed pieces, especially that dominant knight, it's often the moment to open lines. It's risky in front of your own king, but the piece superiority justifies it.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -180,7 +185,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "He pushes to f4 — but having pushed g4, he's created a hook for us to attack."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -189,7 +194,8 @@
    "line": [
     "fxg4"
    ],
-   "spoken": ""
+   "spoken": "The opponent's kingside pawn push has handed over a hook — a fixed target to lever against. The plan is to attack it, capturing to open lines and prise the shelter apart.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -198,7 +204,7 @@
    "line": [
     "hxg4"
    ],
-   "spoken": "This is how you attack a hook."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -207,7 +213,8 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "Attack the g4-pawn with the queen — the queen to h4."
+   "spoken": "The queen swings to h4 to pile onto that weak pawn — bringing the heaviest piece to bear exactly where the opponent overextended.",
+   "kind": "tactic"
   },
   {
    "ply": 27,
@@ -216,7 +223,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "He pushes on, but keeps overextending — his pawns only get harder to defend."
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -225,7 +232,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "And we strike with e5, trying to shatter his defences."
+   "spoken": "As the opponent shoves pawns further forward, they only overextend — the pawns become harder and harder to defend. The way to punish it is a central strike to shatter what's left of the defences.",
+   "kind": "plan"
   },
   {
    "ply": 29,
@@ -252,7 +260,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "Kh2 is not a good move — he's lost the initiative. And the knight on d4 is already paying off: the jump to f3 was a huge threat."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -261,7 +269,8 @@
    "line": [
     "exf4"
    ],
-   "spoken": "No need for anything fancy — just take the free pawn on f4; it will march to f3, kick the bishop back, and then the queen comes to h3."
+   "spoken": "No need for fireworks — the calm capture wins a free pawn, and it rolls forward to send the defending bishop back, clearing the way for the queen to infiltrate. Simplicity beats a speculative sacrifice when the position is already winning.",
+   "kind": "tactic"
   },
   {
    "ply": 33,
@@ -279,7 +288,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Recapture with the knight."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -288,7 +297,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "We allow him to trade off that knight — but look at the dark squares around his king now."
+   "spoken": "Recapture with the knight — and even though it allows the outpost knight to be traded off, look at the dark squares laid bare around the enemy king. The exchange rips open the very colour complex the attack needs.",
+   "kind": "tactic"
   },
   {
    "ply": 36,
@@ -306,7 +316,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5 — threatening the queen to h4, which is essentially mate in two."
+   "spoken": "With the king boxed into the corner and no escape, the threat of the queen to h4 is essentially mate in two. The collapse came purely from pushing too many pawns in front of the king.",
+   "kind": "tactic"
   },
   {
    "ply": 38,
@@ -315,7 +326,7 @@
    "line": [
     "Qh3+"
    ],
-   "spoken": "The check on h3 — and his king can't escape to g1. That's how fast it collapses once you push too many pawns in front of the king."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -379,7 +390,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Why not the knight to f6? It's perfectly fine, but it gives up part of our control of d4 and leaves the bishop unhappy — so we find the knight another home. And White's big miss was not playing d4 himself to cure his weakness.",
+   "spoken": "The opponent's biggest missed chance was to strike with a central pawn to d4 himself, curing the weakness at its root. Left uncured, that hole is what gives the second player such harmonious, dominating pieces.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
