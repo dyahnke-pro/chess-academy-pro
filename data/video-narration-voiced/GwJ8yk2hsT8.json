@@ -1,10 +1,10 @@
 {
  "videoId": "GwJ8yk2hsT8",
  "title": "Best Game So Far! Sacrifice to Win! | Sicilian Defence, Alapin | Top Theory Speedrun | GM Naroditsky",
- "openingName": "Sicilian Defense: Alapin, 2…Nf6 (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:GwJ8yk2hsT8",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "c5",
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We open the Alapin move order — c3, and after ...c5, e4."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops ...Nf6, hitting e4."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We push e5, kicking the knight."
   },
   {
    "ply": 6,
@@ -43,10 +43,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "After the pawn to e5 the knight swings to d5 — this is essentially an Alekhine with the moves c3 and c5 thrown in. Conceptually that slightly favours Black, since c3 is a passive square for the pawn, but it is very playable for White.",
-   "kind": "main",
-   "teaches": "Recognise the transposition: 2…Nf6 3.e5 Nd5 is an Alekhine-flavoured structure with c3/c5 inserted.",
-   "plans": "Occupy the centre and develop flexibly."
+   "spoken": "Black hops the knight to d5."
   },
   {
    "ply": 7,
@@ -55,7 +52,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We challenge with d4."
   },
   {
    "ply": 8,
@@ -64,7 +61,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 9,
@@ -73,10 +70,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Occupy the centre with d4 and develop with the knight to f3 — a maximally flexible move. This knight never needs the passive e2-square, so f3 keeps every option open.",
-   "kind": "main",
-   "teaches": "Develop where the piece is both active and flexible — Nf3, not the passive Ne2.",
-   "plans": "Complete development and support the big centre."
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 10,
@@ -85,7 +79,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 11,
@@ -94,10 +88,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "This is a good moment to release the central tension by capturing on d4. Left alone, the advancing pawn mass could push the knights around, so White clarifies the centre on his own terms.",
-   "kind": "main",
-   "teaches": "Resolve central tension when leaving it lets the opponent's pawns gain space with tempo.",
-   "plans": "Fix the centre, then develop toward the kingside."
+   "spoken": "We recapture on d4."
   },
   {
    "ply": 12,
@@ -106,7 +97,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6."
   },
   {
    "ply": 13,
@@ -115,7 +106,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to c4, hitting the d5-knight."
   },
   {
    "ply": 14,
@@ -124,7 +115,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nb6."
   },
   {
    "ply": 15,
@@ -133,7 +124,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to b3."
   },
   {
    "ply": 14,
@@ -168,7 +159,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto with the bishop to g7."
   },
   {
    "ply": 19,
@@ -177,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 20,
@@ -186,7 +177,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 21,
@@ -195,7 +186,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3, taking the g4-square."
   },
   {
    "ply": 23,
@@ -277,7 +268,8 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "The finish is a demolition: Bxf7+ drags the king out, and after the knight lands on d6 with check, Qxe5+ and Qh8 delivers mate.",
+   "reanchor": true
   },
   {
    "ply": 32,
