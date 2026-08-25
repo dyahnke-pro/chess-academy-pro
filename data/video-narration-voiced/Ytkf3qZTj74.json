@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He plays the Scotch — one of the oldest openings there is. Its idea is to contest the centre at once and open the bishop's diagonal."
+   "spoken": "The Scotch is one of the oldest openings there is — the whole idea is to contest the centre at once and open lines for the bishop. It's principled, but it comes with a catch."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "We have to answer the central tension."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "The downside of the Scotch: White has moved the same piece twice in the opening."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +69,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "The bishop to c5 develops while attacking his knight — developing with tempo, which is exactly what punishes moving a piece twice."
+   "spoken": "The downside is that the knight has moved twice already — and that's dangerous, because it lets the other side develop pieces while attacking them at the same time. That's developing with tempo, and the bishop to c5 does exactly that.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -87,7 +88,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "The queen to f6 — an in-between move; we do not recapture the knight yet."
+   "spoken": "Rather than recapture, bring the queen to f6 — and crucially don't grab the knight. It's an in-between move, and the knight isn't going anywhere while the opponent scrambles to defend.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
@@ -96,7 +98,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "He props things up with f3."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +107,8 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Recapture with the d-pawn — it opens the diagonal for the bishop, and f3 has already weakened his king."
+   "spoken": "That f-pawn defence weakens the king. Recapture with the d-pawn, because it opens the diagonal for the bishop — a reminder that when choosing between recaptures, pick the one that also serves your development.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -123,7 +126,8 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "Developing the knight to e7 — and he can't castle: the bishop on c5 rakes into g1, and f3 just opened everything up. That's why strong players warn never to play f3."
+   "spoken": "Develop the knight — and notice the opponent simply can't castle. That's why the f-pawn move is so reviled: it opened the diagonal, and with the bishop already glaring down it, tucking the king to safety becomes a nightmare.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -132,7 +136,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "He plays the bishop to f4 — but the problem is he only sees that he's hitting a pawn; he misses my queen. This is tunnel vision, the source of most beginner mistakes."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -141,7 +145,8 @@
    "line": [
     "Qxf4"
    ],
-   "spoken": "So he's simply blundered a piece."
+   "spoken": "The bishop move blunders a piece, and it teaches the single biggest beginner affliction — tunnel vision. The opponent saw only that they were attacking a pawn and never noticed the queen eyeing the bishop. Most mistakes at the improving level are exactly this narrowing of view.",
+   "kind": "tactic"
   },
   {
    "ply": 17,
@@ -159,7 +164,8 @@
    "line": [
     "Qe5"
    ],
-   "spoken": "Do we trade queens? Today's theme is converting a material advantage — and that starts here."
+   "spoken": "Now the theme of the whole game — converting a material advantage. Being up material is only half the job; turning it into a win with clean, purposeful play is the skill worth drilling.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -168,7 +174,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "He plays f4 — and whenever a pawn moves, check what it left unprotected; a pawn push always leaves weaknesses in its wake."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -177,7 +183,8 @@
    "line": [
     "Qxb2"
    ],
-   "spoken": "It leaves both e4 and b2 loose. Qb2 is the better grab — it also attacks the rook on a1, which he can't save."
+   "spoken": "A pawn just advanced — so run the check: whenever a pawn moves it leaves weaknesses in its wake. Two pawns are now loose, and when you see a good capture, look for a better one: taking on b2 not only grabs the pawn but also hits the rook in the corner, which can't escape.",
+   "kind": "tactic"
   },
   {
    "ply": 21,
@@ -186,7 +193,8 @@
    "line": [
     "f5"
    ],
-   "spoken": "Now the queen and king sit on the same diagonal — whenever that happens, look for pins."
+   "spoken": "And a pattern to file away: if the opponent tries to x-ray-defend the rook, the queen and king end up on the same diagonal — so always look for a pin whenever the queen and king line up like that. It happens astonishingly often.",
+   "kind": "tactic"
   },
   {
    "ply": 22,
@@ -195,7 +203,8 @@
    "line": [
     "Qxa1"
    ],
-   "spoken": "He never moves the rook, so we take it — up a rook and a piece."
+   "spoken": "The rook is simply collected — now up a rook and a piece, hitting the knight, and the opponent still can't castle. That inability to get the king safe is what ultimately sinks them.",
+   "kind": "tactic"
   },
   {
    "ply": 23,
@@ -204,7 +213,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": "And he still can't castle — that's what kills him; the king has to walk out just to defend the knight."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -213,7 +222,8 @@
    "line": [
     "Qe5"
    ],
-   "spoken": "Evacuate the queen before it can be trapped on a1 — back to e5, pinning the pawn to the king."
+   "spoken": "Before pressing on, evacuate the queen so it doesn't get stranded in the corner — retreating it to e5, where it also pins a pawn against the king. Rescue the far-flung piece before it becomes a liability.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -241,7 +251,7 @@
     "Nc6",
     "Qd8"
    ],
-   "spoken": "The correct move for White was the queen to f3.",
+   "spoken": "For the record, the correct defence was the queen to f3, and the trade that follows leads to an endgame that's appeared thousands of times at the top level. The queen sortie was tempting — developing and eyeing a scholar's-mate threat — but the calm defensive move was the right one.",
    "reanchor": true
   },
   {
@@ -261,8 +271,7 @@
     "gxf3",
     "dxc6"
    ],
-   "spoken": "After the queens come off — Qxf3, gxf3, then the recapture on c6 — you reach an endgame that has occurred thousands of times in top-level play.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
