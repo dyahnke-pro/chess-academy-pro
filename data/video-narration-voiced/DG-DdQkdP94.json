@@ -1,7 +1,7 @@
 {
  "videoId": "DG-DdQkdP94",
  "title": "Famous Game Analysis + Live Chess | Moistcr1tikal / Penguinz0",
- "openingName": "Tarrasch Defense",
+ "openingName": "Queen's Gambit Declined",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "d4",
     "d5"
    ],
-   "spoken": "A famous Rubinstein brilliancy, and it opens quietly — White's d4, and Rubinstein answers d5."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "A queen's-pawn opening — White develops the knight to f3."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black plays e6, reinforcing the pawn on d5."
+   "spoken": "e6 quietly shores up the d5 pawn, giving the centre a firm second layer of support before anything else develops."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "White mirrors with e3. The drawback of both e6 and e3 is the same — each shuts in a bishop; conservative, but not bad."
+   "spoken": "Both sides play this modest pawn move, and it carries a real drawback worth naming: it hems in the queen's bishop. It isn't a mistake — just a conservative way to build, trading a little piece activity for solidity."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black contests the centre with c5."
+   "spoken": "c5 strikes back at the centre, refusing to let the position settle into something one-sided. Contesting the middle early is the whole idea."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "White challenges with c4."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "And the knight to c3."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Now a little box of pawns forms in the centre — it looks tangled, but everything defends everything, so neither side wants to be first to flinch."
+   "spoken": "The centre becomes a little interlocked box of pawns — it looks tangled but it's beautifully balanced, every unit propped up by another. Because nothing can be won by force, neither side wants to be the one to flinch and release the tension."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "But White flinches — the capture on c5, releasing the tension."
+   "spoken": "The tension finally breaks — capturing on c5 is a decision to clarify the centre rather than keep sitting on the standoff."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "Rubinstein recaptures, the bishop to c5."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -114,7 +114,8 @@
    "line": [
     "a3"
    ],
-   "spoken": "White plays a3 — preparing something. What is it?"
+   "spoken": "This little rook-pawn nudge is preparation, not an end in itself — it's clearing the way for a pawn to expand on the queenside with b4.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -123,7 +124,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "The idea is b4 — so Rubinstein slips in a6 first; you will see the point in a moment."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -132,7 +133,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "White expands with b4."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -141,7 +142,8 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop drops back to d6 — and here is the point of a6: it discourages White from harassing the knight with b5, because Black would take on b5 and blast open the a-file."
+   "spoken": "The point of the earlier rook-pawn move now shows: it discourages a pawn from lunging to b5 to harass the knight, because the answer would be to capture on b5 and rip open the a-file. A small prophylactic move that quietly rules out the opponent's plan.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -150,7 +152,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "White takes on d5."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -160,7 +162,7 @@
     "exd5",
     "Nxd5"
    ],
-   "spoken": "After the recapture White grabs on d5 with the knight — so why isn't this just a free pawn?"
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -169,7 +171,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "Because the move order is everything. Black takes the knight first, and if White grabs back with the queen, that queen becomes a sitting duck — the check on b4 wins it."
+   "spoken": "Why isn't the pawn just hanging for free? Because loose pieces drop off. The move order is everything — capture the knight first, and then the recaptured queen is left a sitting duck: a check springs in from b4, forking and collecting it. Snatch the pawn in the wrong order and the trick evaporates.",
+   "kind": "tactic"
   },
   {
    "ply": 19,
@@ -185,8 +188,7 @@
    "line": [
     "Bxb4+"
    ],
-   "spoken": "The bishop checks on b4, and next move the queen is snapped off. Take the pawn first, though, and it all falls apart.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -195,15 +197,15 @@
    "line": [
     "Nxb4"
    ],
-   "spoken": "Because if Black grabs the pawn first, White simply recaptures the bishop — with knight or pawn — and just wins the pawn straight back. Order matters."
+   "spoken": "That's the reason the greedy pawn grab fails first: the bishop simply gets recaptured, by knight or by pawn, and the material comes straight back. The order of operations is what turns the same idea from winning into nothing.",
+   "reanchor": true
   },
   {
    "ply": 20,
    "t": 255,
    "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
    "line": [],
-   "spoken": "So instead White fianchettoes the bishop to b2, Black castles, and the queen comes to d2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -221,8 +223,7 @@
     "O-O",
     "Qd2"
    ],
-   "spoken": "In fact White never captured on d5 at all — he just left the d-pawn alone and developed: the bishop to b2, castling, the queen to d2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -231,8 +232,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "Rubinstein plays the queen to e7, connecting the rooks.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -241,7 +241,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White develops the bishop to d3. Now look at Black's light bishop, still back on c8 — can it be developed just as actively as White's, and all by force?",
+   "spoken": "Now a model question: the light-squared bishop is still stuck at home — can it be developed the way the opponent developed theirs, but entirely by force, gaining time on every move? That's the standard to aim for — not just developing, but developing with tempo.",
    "reanchor": true
   },
   {
@@ -251,7 +251,8 @@
    "line": [
     "b5"
    ],
-   "spoken": "The goal is to get that bishop out to b7 with tempo — but you cannot just fire out b5 first."
+   "spoken": "Firing the pawn straight to b5 would be premature — it simply hands over a free pawn. There's a preparatory move that has to come first.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -260,7 +261,7 @@
    "line": [
     "cxb5"
    ],
-   "spoken": "Because White would simply take the free pawn."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -276,7 +277,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "So first Black takes on c4, luring the bishop out — don't be so reluctant to trade in order to get things done.",
+   "spoken": "The preparation is a capture — take on c4 to lure the bishop out. Don't be so reluctant to trade; grabbing a pawn or piece is often exactly how you make progress. Here the capture sets the whole tempo-gaining sequence in motion.",
    "reanchor": true
   },
   {
@@ -286,8 +287,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "The bishop recaptures on c4...",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -296,7 +296,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "...and NOW b5, hitting the bishop."
+   "spoken": "Now b5 arrives with a threat, hitting the bishop that was lured forward — the pawn push comes with a punch instead of hanging."
   },
   {
    "ply": 25,
@@ -305,7 +305,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White has to waste a move retreating the bishop to d3."
+   "spoken": "Forced to retreat the bishop, the opponent burns another tempo — exactly the time being harvested."
   },
   {
    "ply": 26,
@@ -314,7 +314,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "And the bishop swings out to b7 — developed actively and with tempo, reaching a near-symmetrical position but with Black a step ahead."
+   "spoken": "The bishop finally reaches its long diagonal and the structure is nearly symmetrical — but every developing move was made with tempo, so the same-looking position has been reached a move ahead."
   },
   {
    "ply": 25,
@@ -330,7 +330,8 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "One small drawback remains — that white queen sitting on d2. Can we make it uncomfortable? Yes: a rook to d8 pins the bishop against it down the open file, and parking the queen on d2 turns out to be a real mistake. It sets up the Greek-gift idea too — both bishops x-ray White's king — but first the knight must step out, to e5 offering a trade, to clear the way for the sacrifice.",
+   "spoken": "The early queen sortie can be punished: pin the bishop against it and swing a rook to the open d-file, which is a strong move in its own right. From there the attacking picture forms — both bishops x-ray toward the king, one of them screened by its own knight while the enemy knight guards the castled position. Shift that knight, and both problems are solved with one move, laying the groundwork for a bishop sacrifice on the king.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
