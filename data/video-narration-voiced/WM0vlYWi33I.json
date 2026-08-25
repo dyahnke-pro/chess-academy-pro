@@ -1,0 +1,306 @@
+{
+ "videoId": "WM0vlYWi33I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1280",
+ "openingName": "Sicilian Defense: Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:WM0vlYWi33I",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 649,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 651.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 654.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "spoken": "The Accelerated Dragon — Black will fianchetto and get quick, harmonious development."
+  },
+  {
+   "ply": 8,
+   "t": 657,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxd4",
+    "g6"
+   ],
+   "spoken": "The bishop heads to the long diagonal; White, meanwhile, is about to trade on c6."
+  },
+  {
+   "ply": 10,
+   "t": 672.5,
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "spoken": "That trade is already a slight inaccuracy: recapturing toward the centre opens the b-file and prepares the d5 break."
+  },
+  {
+   "ply": 11,
+   "t": 674,
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 682.5,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R w KQkq - 2 7",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The fianchetto completed — the open b-file and a coming d5 are the source of Black's play."
+  },
+  {
+   "ply": 13,
+   "t": 684,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2B5/PPP2PPP/RN1QKB1R b KQkq - 3 7",
+   "line": [
+    "Bc3"
+   ],
+   "spoken": "White offers a trade of dark-squared bishops on the long diagonal — do we allow it?"
+  },
+  {
+   "ply": 14,
+   "t": 699.5,
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B5/PPP2PPP/RN1QKB1R w KQkq - 4 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Developing the knight to f6 declines the trade cleanly; the tempting e5 would be bad, weakening the d6 square."
+  },
+  {
+   "ply": 15,
+   "t": 705.5,
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R b KQkq - 0 8",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 is the kind of move players make on autopilot, but it is incredibly weakening."
+  },
+  {
+   "ply": 16,
+   "t": 714.5,
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R w KQ - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castle and finish development."
+  },
+  {
+   "ply": 17,
+   "t": 716,
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/2B1P3/2B2P2/PPP3PP/RN1QK2R b KQ - 2 9",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 walks straight into a break Black should be playing automatically."
+  },
+  {
+   "ply": 18,
+   "t": 726,
+   "fen": "r1bq1rk1/p3ppbp/2p2np1/3p4/2B1P3/2B2P2/PPP3PP/RN1QK2R w KQ - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 — occupying the centre and challenging at once."
+  },
+  {
+   "ply": 20,
+   "t": 728.5,
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/2B5/2B2P2/PPP3PP/RN1QK2R w KQ - 0 11",
+   "line": [
+    "exd5",
+    "cxd5"
+   ],
+   "spoken": "White will drop the bishop back; that leads to a very instructive moment."
+  },
+  {
+   "ply": 21,
+   "t": 752,
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R b KQ - 1 11",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop to d3 is a genuinely good move. First order of business now: prevent White from castling."
+  },
+  {
+   "ply": 22,
+   "t": 777.5,
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R w KQ - 2 12",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "The queen to b6 stops castling. It may not prevent it forever, but every tempo White spends dislodging the queen, Black spends expanding in the centre."
+  },
+  {
+   "ply": 23,
+   "t": 823,
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RNQ1K2R b KQ - 3 12",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": "Stay flexible. There is a reason strong players warn never to play f3 — it is one of the most weakening moves on the board."
+  },
+  {
+   "ply": 24,
+   "t": 853,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Expanding in the centre — d4 would close off the bishop's long diagonal and help him castle, so the move is e5."
+  },
+  {
+   "ply": 25,
+   "t": 855,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 856.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "line": [],
+   "spoken": "Had White captured on e5, the bishop would have been pinned with devastating effect.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 860.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": "White wants the bishop to e3, but he is not in time — Black is ready to rampage in the centre.",
+   "reanchor": true
+  },
+  {
+   "ply": 26,
+   "t": 871,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4p3/3B1P2/PPPB2PP/RNQ1K2R w KQ - 0 14",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4 — and the beauty is Black can recapture with either the knight or the pawn."
+  },
+  {
+   "ply": 27,
+   "t": 874.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4P3/3B4/PPPB2PP/RNQ1K2R b KQ - 0 14",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 879,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Recapturing with the pawn to keep things simple, though taking with the knight was also very strong."
+  },
+  {
+   "ply": 29,
+   "t": 882.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/2B1p3/8/PPPB2PP/RNQ1K2R b KQ - 1 15",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White's whole intention is the bishop to e3 and then castling — that is why the queen went to c1."
+  },
+  {
+   "ply": 30,
+   "t": 917,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1K2R w KQ - 2 16",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "The knight to g4 stops the bishop reaching e3, and with the long diagonal open the bishop eyes the pawn on b2. If h3, then not only a capture on b2 hitting the queen, but even a check on f2 with mate to follow — you don't need the exact mate, only to trust the position."
+  },
+  {
+   "ply": 31,
+   "t": 973,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "line": [
+    "Rf1"
+   ],
+   "spoken": "He defends against the check on f2 — but don't forget the other set of ideas."
+  },
+  {
+   "ply": 32,
+   "t": 986,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "Simplest of all: just take on b2 and win a load of material. Call it life insurance — if the attack ever misfires, you are still up a rook."
+  },
+  {
+   "ply": 28,
+   "t": 1031.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1033.5,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bc4",
+    "Ng4",
+    "Rf1",
+    "Bxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1037,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "line": [],
+   "spoken": "The immediate e3 is tempting, but it blunts our own queen; better to keep those squares open for it.",
+   "reanchor": true
+  },
+  {
+   "ply": 32,
+   "t": 1066.5,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "When you can win a full rook, take it — the safe, clean conversion, even when a mate might be lurking.",
+   "reanchor": true
+  }
+ ]
+}
