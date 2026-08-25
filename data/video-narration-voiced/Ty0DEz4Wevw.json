@@ -15,7 +15,7 @@
     "c4",
     "e6"
    ],
-   "spoken": "Another Black game — the Queen's Gambit Declined structure, e6. A big benefit of being a QGD player: you barely need to study the English."
+   "spoken": "Meeting the c-pawn with e6 heads for a Queen's Gambit Declined structure — and there's a hidden bonus: as a QGD player you barely need to study the English at all, which slashes the amount of theory you have to carry."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "White has few ways to avoid the QGD — most English players end up with d4. Black plays d5."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "White handles it in English style with g3 — likely transposing to a Catalan if d4 comes, or a reversed Benoni with b3."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -69,7 +69,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "But taking on d5 prematurely is a bad move — it releases the central tension, hands Black better control of the centre, and is completely toothless."
+   "spoken": "Capturing on d5 this early is simply a bad move — it releases the central tension prematurely, hands over better control of the middle, and is completely toothless. It's a sign the opening's ideas aren't fully understood."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Now, how to place the minor pieces — there is no single right answer."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -88,7 +88,8 @@
     "Bd6",
     "Bg2"
    ],
-   "spoken": "I am partial to the bishop to d6, London-style, followed later by c6."
+   "spoken": "There's no single right way to develop, but a fine plan is the bishop to d6 followed, London-style, by c6 — a compact, harmonious shell that's easy to handle in any move order.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -97,7 +98,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castle first — this is not a sharp Najdorf, so the move order is flexible."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -115,7 +116,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "Then c6 — a lovely structure with the bishop in the middle. Where does the light bishop go? If you are a London player, you lean toward f5. White prevents it with the queen to c2 — no problem. The flexible move is the rook to e8: it is good there and it stops the knight to e5."
+   "spoken": "Now the question of the light-squared bishop. It wants the good diagonal, but a pawn move to prepare it would weaken the kingside — so instead insert a flexible move first, a rook to e8. It's a square the rook is simply happy on, and it quietly rules out an annoying central knight leap. When unsure, play the move you know can't hurt.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -126,7 +128,8 @@
     "Re8",
     "Qc2"
    ],
-   "spoken": "There is a typical maneuver to reach that diagonal without the weakening g6: the bishop to g4, then swing it via h5 toward g6. A subtle point too — you can allow White's b4 and answer a6, freezing the pawn, rather than automatically playing a5. Then h6 forces the bishop to decide, and if the bishop goes to e3 it is a blunder: the pawn on f2 that defends it is overloaded, since it also holds g3. And the hallmark of great attackers like Tal and Morphy is knowing when to just play simple and win — the clean order here is the knight takes on f2 first, then after the recapture the bishop takes on f3, and White cannot recapture in any of three ways."
+   "spoken": "Here's the elegant way to get the bishop to its diagonal without the weakening pawn push: develop to g4, then swing it around via h5 toward g6 — no hurry, it's happy where it sits. And a strategic point on the queenside: most players would automatically stop the pawn expansion, but you can allow it and then freeze the pawn in place, which isn't good for the opponent at all. Then a rook-pawn nudge puts the question to the pinning bishop. If it retreats to a square where a pawn is its lone defender, watch for an overload — one pawn guarding two things at once is a defender stretched too thin. And the meta-lesson of the finish: the hallmark of the great attackers is knowing when to just play simple. Don't chase the brilliancy prize and leave points on the table — a clean pawn grab ends it, and even then order of operations matters: the right capture sequence leaves the opponent unable to recapture in any legal way.",
+   "kind": "tactic"
   },
   {
    "ply": 3,
@@ -161,7 +164,7 @@
     "Nf6",
     "d4"
    ],
-   "spoken": "d4 here would steer into a Catalan — but the Catalan is very unpopular below 2300: too complex, and you must be comfortable playing down a pawn for long stretches.",
+   "spoken": "Be aware of the transposition — a central pawn push here would steer into a Catalan, which is a demanding, theory-heavy opening best left alone below master strength, since it asks you to be comfortable a pawn down for long stretches.",
    "reanchor": true
   },
   {
@@ -178,8 +181,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "Taking on d5 is just bad. To handle it like an English, White should play the bishop to g2 — and Black can take on c4, a legitimate sideline.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -188,8 +190,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The most popular route is to treat it like a Queen's Gambit Declined — the bishop to e7 and castle.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -208,8 +209,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "And with b3 it becomes a reversed Benoni structure.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -316,7 +316,7 @@
     "d4",
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "With the tension released, the bishop develops freely and the second player is, if anything, already slightly the better side — the premature capture yielded the centre for nothing."
   },
   {
    "ply": 14,
@@ -330,7 +330,9 @@
    "t": 1311,
    "fen": "rnbqr1k1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K b - - 9 7",
    "line": [],
-   "spoken": ""
+   "spoken": "And a crucial structural warning: don't develop the knight to c6 in these positions. Beginners do it for lack of understanding that the d5 pawn must be kept under lock and key — the knight blocks the c-pawn, so a knight-and-bishop set-up starts pressing d5 while it can't be properly defended. The very same trap catches players in the Caro-Kann for exactly the same reason.",
+   "kind": "plan",
+   "reanchor": true
   }
  ]
 }
