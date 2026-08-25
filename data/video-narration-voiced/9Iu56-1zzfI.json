@@ -1,7 +1,7 @@
 {
  "videoId": "9Iu56-1zzfI",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1830",
- "openingName": "Alapin Sicilian",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "First 2000-rated opponent — and against the Sicilian, White reaches for the Alapin."
+   "spoken": "Our first 2000-rated opponent — and I'll play the c3 Sicilian, the Alapin, which I've recommended in this rating range for a while."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The quiet c3 — the Alapin — preparing to build a big centre with d4."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black replies d6, which is not the most testing choice: it lets White seize the centre."
+   "spoken": "He plays d6, which isn't the best line against it — it lets us take control of the centre."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So White grabs it with d4."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black develops and leans on the e4-pawn."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White defends by developing the bishop to d3 — with a couple of subtleties to keep in mind, especially against the knight to c6."
+   "spoken": "He hits the e4-pawn, so we defend it with the bishop to d3 — and there are subtleties to watch for, particularly if he plays the knight to c6."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "And there it is, the knight to c6."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3, guarding d4. The bishop to g4 would look intimidating here — more on that after the game."
+   "spoken": "The knight to f3 defends d4. His bishop to g4 here would look intimidating..."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black chooses the very passive e6."
+   "spoken": "...but instead he plays the very passive e6."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles — nothing special is required against such a quiet setup."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black develops the bishop to e7. White has two good roads: open the centre with the capture, or play flexibly."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "White chooses flexibility with the bishop to g5, developing by the book."
+   "spoken": "Two ways to continue here: open the centre with dxc5, which makes a lot of sense, or play flexibly with the bishop to g5."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
     "O-O",
     "Nbd2"
    ],
-   "spoken": "The queen's knight goes to d2 — the one drawback of the Alapin is that it cannot reach c3 — but it is fine here, and it also props up the e4-pawn. White is comfortably better with a lovely pawn centre."
+   "spoken": "Let's develop by the book — the knight to d2. That's the downside of the Alapin: you can't route this knight to c3. But it's fine here, and it buttresses the e4-pawn. We're clearly better, with a nice pawn centre."
   },
   {
    "ply": 18,
@@ -135,7 +135,7 @@
     "cxd4",
     "e5"
    ],
-   "spoken": "Black strikes with e5. Now the decision many players find hard — capture or push? Taking would open the position in Black's favour and hit the bishop, so..."
+   "spoken": "He plays e5. Now a lot of people struggle with the decision between capturing and pushing."
   },
   {
    "ply": 19,
@@ -144,7 +144,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "...White keeps it closed with d5, holding the space advantage, which in theory should tell."
+   "spoken": "Taking on e5 would open the position to his benefit and let him attack our bishop — so d5, keeping the centre closed. Our space advantage should, in theory, tell against him."
   },
   {
    "ply": 20,
@@ -153,7 +153,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "Black jumps the knight to b4."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -162,7 +162,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "White retreats the bishop to e2 — but there is a tactical detail here White failed to anticipate."
+   "spoken": "There's a tactical detail here I failed to anticipate — let's see if he finds it."
   },
   {
    "ply": 22,
@@ -171,7 +171,7 @@
    "line": [
     "Nfxd5"
    ],
-   "spoken": "And Black finds it — the knight takes on d5. White had missed this. But this is the beauty of being positionally better: you can slip and still be fine."
+   "spoken": "He does — the knight takes on d5. I'd missed this move."
   },
   {
    "ply": 23,
@@ -180,7 +180,7 @@
    "line": [
     "Bxe7"
    ],
-   "spoken": "White captures on e7."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -189,7 +189,7 @@
    "line": [
     "Nxe7"
    ],
-   "spoken": "Black recaptures — and because the d-file is now open, the question becomes how to pressure the pawn on d6."
+   "spoken": "But that's the beauty of being positionally better — you can blunder a pawn and still be fine. He's opened the d-file, so the question is how to pressure the pawn on d6."
   },
   {
    "ply": 25,
@@ -198,7 +198,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "The knight to c4, leaning on d6. No disaster — White still has a good game — but this was an instructive mistake in the making."
+   "spoken": "The knight to c4 — no disaster, still a good position, but I did just make an instructive mistake."
   },
   {
    "ply": 26,
@@ -207,7 +207,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black develops the bishop to e6 — and this lets White win the pawn straight back."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -216,7 +216,7 @@
    "line": [
     "Nxd6"
    ],
-   "spoken": "White wins it back with the knight on d6, and the position is roughly level. Had Black tried to push, White would take and the e5-pawn would hang — and White has designs on that pawn too."
+   "spoken": "We win the pawn back on d6; roughly equal. And if he pushes d5, we take, and his e5-pawn hangs — we're eyeing that pawn too."
   },
   {
    "ply": 28,
@@ -225,7 +225,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "Black's knight on b4 gives some counterplay. The queen to c7 is not the most accurate — the queen to b6 was better, planning to pile on that knight. Now White has ideas, starting with the knight to b5 with tempo."
+   "spoken": "His knight on b4 is a nice counterweight. His best was the queen to b6, preparing a rook to d8; the queen to c7 is not the most accurate."
   },
   {
    "ply": 29,
@@ -234,7 +234,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "Most players would activate the rook to c1, but the real priority is that loose knight — chess is about priorities — so White evacuates it to b5 first."
+   "spoken": "The knight on d6 is our vulnerable piece — so rather than use the get-out-of-jail rook to c1 to activate the rook, we evacuate the knight to b5. Chess is all about priorities, and the top priority is getting that knight out."
   },
   {
    "ply": 30,
@@ -243,7 +243,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "And now, with the knight safely out and defended, White can do something impossible a moment ago — because Black has forgotten the e5-pawn is hanging."
+   "spoken": "Now our knight is safely out and defended — something we couldn't do a move ago."
   },
   {
    "ply": 31,
@@ -252,7 +252,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "The knight grabs on e5, and White is up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising instead."
+   "spoken": "He's forgotten the pawn is hanging — the knight takes on e5, and we're up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising."
   },
   {
    "ply": 32,
@@ -261,7 +261,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "Grabbing on a2 would lose material, so Black plays a6, shooing the knight."
+   "spoken": "If he grabs on a2 he'll lose material."
   },
   {
    "ply": 33,
@@ -270,7 +270,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "No problem — the knight retreats to c3, an even safer square."
+   "spoken": "We retreat the knight to c3 — an even safer square."
   },
   {
    "ply": 34,
@@ -279,14 +279,14 @@
    "line": [
     "Rad8"
    ],
-   "spoken": "Black brings a rook to d8. White must take care — the queen to e1 would walk into a fork — so the queen goes to a4 instead, staying active and pressing the knights."
+   "spoken": "The rook to d8 — and we must be careful, because the queen to e1 walks into a fork. So the queen goes to a4 instead, active and pressuring his knights. When he tries the queen to c5 it doesn't actually attack our knight, because his knight on b4 would hang. That b4-knight is what cramps us, so e3 compels the trade — and with us a pawn up, trades are good, plus it removes his strongest piece. Then the finishing trick: with his queen in contact with the rook, we swing a rook to d8, and he can't defend it without a back-rank mate or giving up the rook; the queen to f5 finishes with mate to follow."
   },
   {
    "ply": 8,
    "t": 494,
    "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
    "line": [],
-   "spoken": "In review: Black's d6 hands White the centre — a line worth knowing from both sides.",
+   "spoken": "A quick recap: he played d6, which handed us central control — a line I've even played from the Black side.",
    "reanchor": true
   },
   {
@@ -296,8 +296,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "If Black tries the pin with the bishop to g4, White simply plays d5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -324,8 +323,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "And here a knight to e5 might look strong, but with that diagonal open White has a lovely, typical idea.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -337,7 +335,7 @@
     "Nxe5",
     "Bxb5"
    ],
-   "spoken": "The check on b5 is the key — after the bishop blocks, White takes on e5, and when the smoke clears White is up a piece. It is not a queen blunder, it is a setup — and this same trick turns up in countless openings, including a famous Queen's Gambit version.",
+   "spoken": "When his bishop pins from g4 and the long diagonal opens, the knight takes on e5 becomes possible — we're not blundering the queen, we're setting up a combination: the check on b5 in between wins the queen back, and when the smoke clears we're up a piece. It's the same idea as the famous Queen's Gambit knight-to-d7 trap.",
    "reanchor": true
   },
   {
@@ -345,7 +343,8 @@
    "t": 538,
    "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
    "line": [],
-   "spoken": ""
+   "spoken": "My key mistake was developing the bishop to g5 — it became a big liability. Better to just take, play the queen to e2, and put a rook on d1 to x-ray his queen, maybe even e5 to cement the centre. This bishop-to-g5 setup, facing off with his dark-squared bishop, gets into trouble precisely because of the knight takes on d5 — that same knight then defends the bishop. Taking on f6 was possible, but it hands Black the two bishops and a later f5 break.",
+   "reanchor": true
   }
  ]
 }
