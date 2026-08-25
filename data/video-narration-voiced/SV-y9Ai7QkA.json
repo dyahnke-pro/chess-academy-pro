@@ -1,0 +1,1491 @@
+{
+ "videoId": "SV-y9Ai7QkA",
+ "title": "Expanding Early on the Queenside | Sicilian | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Sicilian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:SV-y9Ai7QkA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 21,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "The Sicilian — in the mood for a combative game."
+  },
+  {
+   "ply": 3,
+   "t": 27,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 — the jumping-off point for the Grand Prix, but also a tricky move order: White can develop the other knight and transpose to an Open Sicilian with d4."
+  },
+  {
+   "ply": 4,
+   "t": 59.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "a6"
+   ],
+   "spoken": "How you meet the knight to c3 depends on your Sicilian. The long-time favourite here is the early a6 — underrated, and a fine way to combat the Grand Prix and the Closed Sicilian."
+  },
+  {
+   "ply": 5,
+   "t": 70,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 78,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1P1P/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": "The point: an early b5, expanding on the queenside quickly."
+  },
+  {
+   "ply": 7,
+   "t": 84,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/P1N3P1/1PPP1P1P/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 86,
+   "fen": "rn1qkbnr/1b1ppppp/p7/1pp5/4P3/P1N3P1/1PPP1P1P/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The bishop to b7, fianchettoed."
+  },
+  {
+   "ply": 9,
+   "t": 91,
+   "fen": "rn1qkbnr/1b1ppppp/p7/1pp5/4P3/P1N3P1/1PPP1PBP/R1BQK1NR b KQkq - 2 5",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "Now a setup taught long ago: the pawns to d6 and e6, a Scheveningen-like structure controlling key central squares — passive-looking, but the heart of the Sicilian. You can start with the knight to f6, unafraid of e5 since the bishop on g2 would hang."
+  },
+  {
+   "ply": 10,
+   "t": 144.5,
+   "fen": "rn1qkbnr/1b2pppp/p2p4/1pp5/4P3/P1N3P1/1PPP1PBP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Start with d6 — flexible, and it opens a future home on d7 for the other knight."
+  },
+  {
+   "ply": 11,
+   "t": 158,
+   "fen": "rn1qkbnr/1b2pppp/p2p4/1pp5/4P3/P1NP2P1/1PP2PBP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "d3"
+   ],
+   "spoken": "The knight often goes to d7 rather than c6, since c6 would block the bishop awkwardly."
+  },
+  {
+   "ply": 12,
+   "t": 168.5,
+   "fen": "rn1qkbnr/1b3ppp/p2pp3/1pp5/4P3/P1NP2P1/1PP2PBP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Then e6 — you can see why the pawns sit on d6 and e6: they control the centre and give the kingside pieces room."
+  },
+  {
+   "ply": 13,
+   "t": 180.5,
+   "fen": "rn1qkbnr/1b3ppp/p2pp3/1pp5/4PP2/P1NP2P1/1PP3BP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 185.5,
+   "fen": "rn1qkb1r/1b3ppp/p2ppn2/1pp5/4PP2/P1NP2P1/1PP3BP/R1BQK1NR w KQkq - 1 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Now development begins — the knight to f6."
+  },
+  {
+   "ply": 15,
+   "t": 193,
+   "fen": "rn1qkb1r/1b3ppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQK2R b KQkq - 2 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 204,
+   "fen": "rn1qk2r/1b2bppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQK2R w KQkq - 3 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "The bishop to e7, preparing to castle."
+  },
+  {
+   "ply": 17,
+   "t": 207.5,
+   "fen": "rn1qk2r/1b2bppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 b kq - 4 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles, and the queen to c7 is well-timed — it connects the rooks, and once the knight reaches d7, both it and the queen control e5, blunting White's e5 break."
+  },
+  {
+   "ply": 18,
+   "t": 253.5,
+   "fen": "r2qk2r/1b1nbppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 w kq - 5 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The knight to d7 — a developing move first is more flexible than the queen move."
+  },
+  {
+   "ply": 19,
+   "t": 261,
+   "fen": "r2qk2r/1b1nbppp/p2ppn2/1pp5/4PP2/P1NP1NPP/1PP3B1/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 268,
+   "fen": "r3k2r/1bqnbppp/p2ppn2/1pp5/4PP2/P1NP1NPP/1PP3B1/R1BQ1RK1 w kq - 1 11",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "White prepares g4 with h3; Black plays the queen to c7."
+  },
+  {
+   "ply": 21,
+   "t": 284,
+   "fen": "r3k2r/1bqnbppp/p2ppn2/1pp5/4PP2/P2P1NPP/1PP1N1B1/R1BQ1RK1 b kq - 2 11",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "This resembles a Hedgehog. Now, which way to castle? Long is very risky — those queenside pawns become hooks White can use to prise open files — so kingside is safer, though not mandatory."
+  },
+  {
+   "ply": 22,
+   "t": 324.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/1pp4p/4PP2/P2P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 12",
+   "line": [
+    "h5"
+   ],
+   "spoken": "A risky, annoying move — h5, stopping g4 and keeping the king in the centre for now."
+  },
+  {
+   "ply": 23,
+   "t": 354,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/1pp4p/P3PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 b kq - 0 12",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 365,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 13",
+   "line": [
+    "b4"
+   ],
+   "spoken": "White's a4 is premature; Black answers b4, keeping the queenside closed."
+  },
+  {
+   "ply": 25,
+   "t": 369.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/2PP1NPP/1P2N1B1/R1BQ1RK1 b kq - 0 13",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 419.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2pP1NPP/1P2N1B1/R1BQ1RK1 w kq - 0 14",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 427.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2PP1NPP/4N1B1/R1BQ1RK1 b kq - 0 14",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 428.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/7p/P1p1PP2/2PP1NPP/4N1B1/R1BQ1RK1 w kq - 0 15",
+   "line": [
+    "c4"
+   ],
+   "spoken": "c3 invites c4 in reply — and White is already in some trouble."
+  },
+  {
+   "ply": 29,
+   "t": 460,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/6Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 1 15",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 494,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 w kq - 2 16",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight to c5 — don't play it on autopilot, but here it piles on pressure and cuts White's targets from two to one."
+  },
+  {
+   "ply": 29,
+   "t": 516,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/6Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 1 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 544.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 w kq - 2 16",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 614.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 0 16",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5, and after the bishop trade on g2 there is nothing left to worry about with the bishops."
+  },
+  {
+   "ply": 32,
+   "t": 653.5,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1b1/R1BQ1RK1 w kq - 0 17",
+   "line": [
+    "Bxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 659,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1K1/R1BQ1R2 b kq - 0 17",
+   "line": [
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 713,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P4P2/2Pp2PP/4N1K1/R1BQ1R2 w kq - 0 18",
+   "line": [
+    "cxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 738,
+   "fen": "r3k2r/2q1bpp1/p2ppP2/2n3Np/P4P2/2Pp2PP/4N1K1/R1BQ1R2 b kq - 0 18",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "After the recaptures Black stays up a pawn, and the g-file swings open."
+  },
+  {
+   "ply": 36,
+   "t": 748.5,
+   "fen": "r3k2r/2q1bpp1/p2ppP2/2n3Np/P4P2/2P3PP/4p1K1/R1BQ1R2 w kq - 0 19",
+   "line": [
+    "dxe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 877,
+   "fen": "r3k2r/2q1bp2/p2pp3/2nQ1p1p/P4P2/2P2NPP/4p1K1/R1B2R2 w kq - 0 21",
+   "line": [
+    "Nf3",
+    "gxf6",
+    "Qd5",
+    "f5"
+   ],
+   "spoken": "Black can chase the knight away with f5."
+  },
+  {
+   "ply": 44,
+   "t": 880.5,
+   "fen": "r3k2r/2q1bp2/p2pp3/2n2p1p/P4P2/2P1BNPP/4p1K1/R4R2 w kq - 2 23",
+   "line": [
+    "Qc6+",
+    "Qxc6",
+    "Be3",
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 882.5,
+   "fen": "r3k2r/2q1bp2/p2pp3/2nQ1p1p/P4P2/2P2NPP/4p1K1/R1B2R2 w kq - 0 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 884,
+   "fen": "r3k2r/2q1bp2/p2pp3/2n2p1p/P4P2/2P1BNPP/4p1K1/R4R2 w kq - 2 23",
+   "line": [
+    "Qc6+",
+    "Qxc6",
+    "Be3",
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 896,
+   "fen": "r3k2r/2q1bp2/p2pp3/5p1p/P2BnP2/2P2NPP/4p1K1/R4R2 w kq - 4 24",
+   "line": [
+    "Bd4",
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 912,
+   "fen": "r3k1r1/2q1bp2/p2pp3/5pNp/P2BnP2/2P3PP/4p1K1/R4R2 w q - 6 25",
+   "line": [
+    "Ng5",
+    "Rg8"
+   ],
+   "spoken": "White is losing — Black has so many strong continuations here."
+  },
+  {
+   "ply": 52,
+   "t": 928,
+   "fen": "r3k1r1/2q2p2/p2pp3/5pbp/P2BnP2/2P3PP/4p1K1/R4R2 w q - 0 27",
+   "line": [
+    "Nh7",
+    "Bd8",
+    "Ng5",
+    "Bxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 933.5,
+   "fen": "r3k1r1/2q2p2/p2pp3/5pPp/P2Bn3/2P3PP/4p1K1/R4R2 b q - 0 27",
+   "line": [
+    "fxg5"
+   ],
+   "spoken": "This is already essentially resignable."
+  },
+  {
+   "ply": 54,
+   "t": 939,
+   "fen": "r3k3/2q2p2/p2pp3/5prp/P2Bn3/2P3PP/4p1K1/R4R2 w q - 0 28",
+   "line": [
+    "Rxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 945.5,
+   "fen": "r3k3/2q2p2/p2pp3/5prp/P2Bn3/2P2RPP/4p1K1/R7 b q - 1 28",
+   "line": [
+    "Rf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 959,
+   "fen": "r3k3/2q2p2/p3p3/3p1prp/P2Bn3/2P2RPP/4p1K1/R7 w q - 0 29",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Careful — the king is not fully safe — but d5 is strong, stronger than the immediate h4."
+  },
+  {
+   "ply": 4,
+   "t": 1311.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1314.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1326.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1328.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "Nf3",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1329.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "With d4 this becomes the Open Sicilian, White's main line.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1333.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1334.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1339,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": "There are four major Sicilians here: the Najdorf with a6, the Classical with the knight to c6, the Dragon with g6, and the Scheveningen with e6.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1340.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1341.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1344.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1352.5,
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1354.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1362,
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1376.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1380,
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1381,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1382,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1384.5,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/1B2p3/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "There is also the bishop to d7, and the Kalashnikov with e5 — but e5 is met by the check on b5. That is exactly why you play a6: to prepare e5 and take away b5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1388,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1395,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1396.5,
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1400.5,
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/8/3NP1P1/2N5/PPP2P1P/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "g4"
+   ],
+   "spoken": "The Kalashnikov fell from fashion thanks to Keres and his g4 attack — dangerous for Black.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1413,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1419.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1423.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1425.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1427.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1429.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1432.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The snag of meeting the knight to c3 with e6 as a Najdorf player: White can play the knight to f3 and d4, reaching a Scheveningen — not a Najdorf, since the a-pawn hasn't moved.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 1449,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1451.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "The fix is to play d6 here — so if White plays the knight to f3, you play the knight to f6 and you are chilling.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1454.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1455.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1458,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1461.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1466.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1469.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1471,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "Sveshnikov and Accelerated Dragon players meet it with the knight to c6, then g6 for the Accelerated.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1473,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1474.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1478.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1494,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "It is like three freeway exits — you take one depending on which Sicilian you play.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1500,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1503,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1504,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1506.5,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1510.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1512.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1522,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1536.5,
+   "fen": "rnbqkbnr/1p2pppp/p2p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1544,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1546.5,
+   "fen": "rnbqkbnr/1p2pppp/p2p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "a6 suits Najdorf, Kan, or Taimanov players. If White plays the knight to f3, a Najdorf player answers d6, a Kan player e6 — closing the window.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1549.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1550.5,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1552.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1558,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1562.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1565,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": "Most of the time after the knight to c3 White does not play the knight to f3 — instead the Closed Sicilian with g3, popular in the seventies and eighties, still reputable.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 1569.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1571,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": "Or the Grand Prix, with the knight to c3 and f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 1576.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1583.5,
+   "fen": "rnbqkbnr/1p1ppppp/p7/2p5/4P3/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1587.5,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1P1P/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1590,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/P1N3P1/1PPP1P1P/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "a3"
+   ],
+   "spoken": "So against the Closed Sicilian, Black plays a6 and expands with b5. a3 is a timid, automatic move — b4 is not a dangerous prospect at all.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1591.5,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1P1P/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1595,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1597,
+   "fen": "rnbqkbnr/3ppppp/p7/2p5/1p2P3/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1604,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1606,
+   "fen": "rn1qkbnr/1b1ppppp/p7/1pp5/4P3/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 5",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1607,
+   "fen": "rnbqkbnr/3ppppp/p7/1pp5/4P3/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1612.5,
+   "fen": "rn1qkbnr/1b1ppppp/p7/1pp5/4P3/P1N3P1/1PPP1PBP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "Bb7",
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1613.5,
+   "fen": "rn1qkbnr/1b2pppp/p2p4/1pp5/4P3/P1N3P1/1PPP1PBP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "It is the Closed Sicilian precisely because White does not play d4 — the centre stays closed.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1625,
+   "fen": "rn1qkbnr/1b2pppp/p2p4/1pp5/4P3/P1NP2P1/1PP2PBP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1636,
+   "fen": "rn1qkbnr/1b3ppp/p2pp3/1pp5/4P3/P1NP2P1/1PP2PBP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1639,
+   "fen": "rn1qkbnr/1b3ppp/p2pp3/1pp5/4PP2/P1NP2P1/1PP3BP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1640.5,
+   "fen": "rn1qkb1r/1b3ppp/p2ppn2/1pp5/4PP2/P1NP2P1/1PP3BP/R1BQK1NR w KQkq - 1 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1643.5,
+   "fen": "rn1qkb1r/1b3ppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQK2R b KQkq - 2 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1644.5,
+   "fen": "rn1qk2r/1b2bppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQK2R w KQkq - 3 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1646.5,
+   "fen": "rn1qk2r/1b2bppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 b kq - 4 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1647.5,
+   "fen": "r2qk2r/1b2bppp/p1nppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 w kq - 5 10",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1653,
+   "fen": "rn1qk2r/1b2bppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 b kq - 4 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1659,
+   "fen": "r2qk2r/1b1nbppp/p2ppn2/1pp5/4PP2/P1NP1NP1/1PP3BP/R1BQ1RK1 w kq - 5 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The knight to c6 has been tried, but I prefer to route the knight to d7 — it does not obstruct the bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1720,
+   "fen": "r2qk2r/1b1nbppp/p2ppn2/1pp5/4PP2/P1NP1NPP/1PP3B1/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1727,
+   "fen": "r2qk2r/1b1nbpp1/p2ppn2/1pp4p/4PP2/P1NP1NPP/1PP3B1/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "This setup is more active than just developing the bishop and pushing g4 on the kingside; the fianchetto with g6 was possible but less to my taste.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1846.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/1pp4p/4PP2/P2P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 2 12",
+   "line": [
+    "Ne2",
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1850,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 13",
+   "line": [
+    "a4",
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1852,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/2PP1NPP/1P2N1B1/R1BQ1RK1 b kq - 0 13",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 was a serious inaccuracy — after the recapture and c4, Black is already better, White's centre collapsing.",
+   "reanchor": true
+  },
+  {
+   "ply": 26,
+   "t": 1856.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2pP1NPP/1P2N1B1/R1BQ1RK1 w kq - 0 14",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1858.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2NP1NPP/1P4B1/R1BQ1RK1 b kq - 0 14",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1869,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2pP1NPP/1P2N1B1/R1BQ1RK1 w kq - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1870.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/P3PP2/2NP1NPP/1P4B1/R1BQ1RK1 b kq - 0 14",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1873,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/7p/P1p1PP2/2NP1NPP/1P4B1/R1BQ1RK1 w kq - 0 15",
+   "line": [
+    "c4"
+   ],
+   "spoken": "Recapturing on c3 with the knight keeps the centre more intact — then the c4 break loses its punch, since the knight now guards e4.",
+   "reanchor": true
+  },
+  {
+   "ply": 29,
+   "t": 1882,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/6Np/P1p1PP2/2NP2PP/1P4B1/R1BQ1RK1 b kq - 1 15",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1885,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2NP2PP/1P4B1/R1BQ1RK1 w kq - 2 16",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1887.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1P1PP2/2N3PP/1P4B1/R1BQ1RK1 b kq - 0 16",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1895,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2NP2PP/1P4B1/R1BQ1RK1 w kq - 2 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1904,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/1pp4p/P3PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 b kq - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1907.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p2P1p/Pp2P3/3P1NPP/1PP1N1B1/R1BQ1RK1 b kq - 0 13",
+   "line": [
+    "b4",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1912.5,
+   "fen": "r3k2r/1bqnbpp1/p2p1n2/2p1pP1p/Pp2P3/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 14",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1917,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p2P1p/Pp2P3/3P1NPP/1PP1N1B1/R1BQ1RK1 b kq - 0 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1922,
+   "fen": "2kr3r/1bqnbpp1/p2ppn2/2p2P1p/Pp2P3/3P1NPP/1PP1N1B1/R1BQ1RK1 w - - 1 14",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1923.5,
+   "fen": "2kr3r/1bqnbpp1/p2ppn2/2p2PNp/Pp2P3/3P2PP/1PP1N1B1/R1BQ1RK1 b - - 2 14",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1928.5,
+   "fen": "2kr3r/1bqnbpp1/p2ppn2/2p2P1p/Pp2P3/3P1NPP/1PP1N1B1/R1BQ1RK1 w - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1961.5,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1964,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/7p/P1p1PP2/2PP1NPP/4N1B1/R1BQ1RK1 w kq - 0 15",
+   "line": [
+    "c3",
+    "bxc3",
+    "bxc3",
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1966.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 w kq - 2 16",
+   "line": [
+    "Ng5",
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1968.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 0 16",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1971.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 w kq - 2 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1973.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1P1PP2/2P3PP/4N1B1/R1BQ1RK1 b kq - 0 16",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1976.5,
+   "fen": "r3k2r/1bq1bpp1/p2pp3/2n3Np/P1P1nP2/2P3PP/4N1B1/R1BQ1RK1 w kq - 0 17",
+   "line": [
+    "Nfxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1980.5,
+   "fen": "r3k2r/1bq1bpp1/p2pn3/7p/P1P1nP2/2P3PP/4N1B1/R1BQ1RK1 w kq - 0 18",
+   "line": [
+    "Nxe6",
+    "Nxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1996,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2PP2PP/4N1B1/R1BQ1RK1 w kq - 2 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2001,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 0 16",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 2002,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1b1/R1BQ1RK1 w kq - 0 17",
+   "line": [
+    "Bxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2003.5,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P4P2/2Pp2PP/4N1K1/R1BQ1R2 w kq - 0 18",
+   "line": [
+    "Kxg2",
+    "cxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2016.5,
+   "fen": "r3k2r/1bq1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1B1/R1BQ1RK1 b kq - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 2022.5,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P1p2P2/2PP2PP/4N1K1/R1BQ1R2 b kq - 0 17",
+   "line": [
+    "Bxg2",
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2031,
+   "fen": "r3k2r/2q1bpp1/p2ppn2/2n1P1Np/P4P2/2Pp2PP/4N1K1/R1BQ1R2 w kq - 0 18",
+   "line": [
+    "cxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2161,
+   "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 13",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
