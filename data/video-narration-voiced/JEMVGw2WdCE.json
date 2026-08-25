@@ -1,7 +1,7 @@
 {
  "videoId": "JEMVGw2WdCE",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2100",
- "openingName": "King's Indian Defense",
+ "openingName": "King's Indian Defence: Saemisch",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "Black heads into the King's Indian with g6."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The fianchetto completed, the bishop to g7 — a King's Indian."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "White builds the full centre with e4."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -78,7 +78,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "And here is the recommendation against the King's Indian — the Sämisch, marked by f3."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -87,7 +87,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The idea of f3, familiar from the Sicilian: cement the e4-pawn."
+   "spoken": "Against the King's Indian around this level the recommendation is the Sämisch, and its signature is the modest pawn to f3. The idea is one you'll have met in the Sicilian — it braces the e4-pawn like a strut, so the big centre can't be undermined.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +97,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Not the premature d5 — instead develop the bishop to e3; the h4 storm is the ultimate idea."
+   "spoken": "Resist the urge to lunge d5 too early. Instead develop the dark-squared bishop to e3 — and the deeper plan is the pawn storm with h4, prying open the kingside.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -105,7 +107,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "The Sämisch is the one King's Indian line where White routinely castles long."
+   "spoken": "The Sämisch is the one King's Indian line where the king routinely goes long. That's the mainline framework here — castle queenside and hurl the kingside pawns at the enemy king."
   },
   {
    "ply": 13,
@@ -114,7 +116,7 @@
    "line": [
     "Nge2"
    ],
-   "spoken": "Two reasons for f3: it cements the centre, and it stops Black harassing the bishop with the knight to g4 — and White won't give up that bishop except for its counterpart."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -123,7 +125,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "So f3 earns its keep two ways: it cements central control, and it slams the door on the knight jump to g4 that would otherwise harass the bishop. That bishop is precious — it isn't traded except for its opposite number.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -141,7 +144,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black has reached an Accelerated-Dragon-type structure — but this is not the best way to meet the Sämisch; White is just solidly better now."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -150,7 +153,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "The queen to d2 is good. White could also retreat the knight to c2 to dodge the trade, but the trade is fine here."
+   "spoken": "The opponent has drifted into an accelerated-dragon-style setup, which isn't the best answer to the Sämisch — the position is now simply better for the first player. A quiet queen move consolidates; the tempting retreat to prevent a trade isn't needed, since the trade is perfectly fine."
   },
   {
    "ply": 18,
@@ -159,7 +162,8 @@
    "line": [
     "Re8"
    ],
-   "spoken": "A lesson in flexibility: begin the game with one plan, but be ready to stop on a dime. White planned a quick attack, but with a positional edge in hand, the plan can change."
+   "spoken": "Now a word on flexibility, the mark of strong play: begin the game with one plan but be ready to stop on a dime — you lined up a layup, and now you pull up for the three. Concretely, a positional edge means you no longer have to force an immediate mate.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -168,7 +172,8 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "The rook to e8 was a bit of an empty move — so White castles long, intentions perfectly clear."
+   "spoken": "That empty-looking rook move hands over the initiative, so castle long and make the intentions plain — go straight for the throat in the classical manner: h4, h5, rip open the h-file and hunt the king.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -177,7 +182,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "White goes straight for the throat, conventional style — h4, h5, open the h-file, checkmate."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -186,7 +191,8 @@
    "line": [
     "h4"
    ],
-   "spoken": "So — h4, no delay. And the pawn will be sacrificed; that is the whole point of the attack."
+   "spoken": "No reason to delay — push the h-pawn, fully intending to sacrifice it. Feeding that pawn is the entire point of the attack; the open lines are worth far more than the material.",
+   "kind": "plan"
   },
   {
    "ply": 22,
@@ -204,7 +210,8 @@
    "line": [
     "Kb1"
    ],
-   "spoken": "And the Russian-school move: the king to b1. Once you have castled long, this is a healthy prophylactic step — the king is simply safer, off the c-file where Black's rooks will point."
+   "spoken": "Here's a piece of classical prophylaxis — the king step to b1. After castling long it's a wonderfully healthy move, tucking the king off the exposed c-file so that a rook lift and queenside pressure lose much of their bite. A little insurance before the storm.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -222,7 +229,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Now the attack flows more smoothly with the king tucked away — not globally safe, but harder to reach, buying time to orchestrate the kingside storm."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -231,7 +238,7 @@
    "line": [
     "Nxh5"
    ],
-   "spoken": "Careful now — g4 to chase the knight runs into a nasty reply."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -240,7 +247,8 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "The knight to g3 would hit the rook. So, in the spirit of prepare-slowly-attack-fast, White drops the knight back to b3 — reducing the tension on d4, forcing the queen to move, and untying White's hands for the attack."
+   "spoken": "A wrinkle: kicking the advanced knight with g4 runs into a nasty leap to g3, hitting the rook and eyeing the bishop. So prepare slowly and attack fast — drop the knight back to b3 instead, easing the central tension, forcing the queen to declare itself, and untying the hands for a single-minded kingside assault.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -256,8 +264,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "The point of easing the d4 tension is to attack single-mindedly on the kingside, with no more worry about trades. If Black takes on c3, White recaptures and has removed Black's best piece — structure be damned, well worth it.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -266,7 +273,8 @@
    "line": [
     "Qe5"
    ],
-   "spoken": "The battle is simple: who mates first — White on the kingside, Black on the queenside. And the alarm bells ring: a move that failed before can work now. Consider g4."
+   "spoken": "A crucial habit: a move that failed a moment ago doesn't stay refused forever. Because the queen has repositioned to a vulnerable central square, the whole picture has changed — the same g4 idea is worth a fresh look.",
+   "kind": "plan"
   },
   {
    "ply": 29,
@@ -275,7 +283,8 @@
    "line": [
     "g4"
    ],
-   "spoken": "Because the queen has repositioned to the centre, where it is most exposed, after g4 and the knight to g3 a new resource appears."
+   "spoken": "And now it works: after g4 chases the knight to g3, a bishop drops to f4 forking the queen and the knight at once. It's a semi-fake fork — the knight can grab on f1 and hit the queen back — but that never mattered, because the real aim was only to remove the knight and clear the road.",
+   "kind": "tactic"
   },
   {
    "ply": 31,
@@ -285,7 +294,7 @@
     "Ng3",
     "Bf4"
    ],
-   "spoken": "The bishop to f4 forks the queen and the knight — a fake fork, since Black can take on f1 and hit the queen."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -303,7 +312,8 @@
    "line": [
     "Rdxf1"
    ],
-   "spoken": "But remember the goal — not to win material, just to remove that knight and finally free the queen for the h-file and mate on h2."
+   "spoken": "Recall the true objective — not to win material, but to be rid of that knight so the queen is finally free to swing to the h-file and mate. And the queenside remains completely intact, so this side of the attack is miles ahead of anything the opponent has managed.",
+   "kind": "plan"
   },
   {
    "ply": 34,
@@ -312,7 +322,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": "White is far closer to mating than Black is to anything on the queenside — and that whole wing is intact, thanks to the king move."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -321,7 +331,8 @@
    "line": [
     "Qh2"
    ],
-   "spoken": "Here comes the queen to h2 — big trouble, because taking on h7 leads to mate in just a couple of moves."
+   "spoken": "The queen arrives on h2, and the capture on h7 sets up mate within a couple of moves. The defence can wriggle, but with so many pieces trained on the king it's just a matter of technique — and the enemy queen is marooned uselessly in the centre.",
+   "kind": "plan"
   },
   {
    "ply": 36,
@@ -330,7 +341,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "With so many pieces aimed at the king, Black is busted — his own queen stuck out of play, unable to help."
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -342,16 +353,15 @@
     "Qg7+",
     "Kxg7"
    ],
-   "spoken": "A very typical idea: the queen to h8 would be mate but for the bishop — so eliminate it with the bishop to h6, and it is mate anyway, thanks to the pin.",
-   "reanchor": true
+   "spoken": "Here's a pattern to bank: the queen would deliver mate on the corner but for a defending bishop — so remove the bishop with a check on h6, and thanks to the pin the mate lands anyway. Clearing the last defender is the whole trick.",
+   "kind": "tactic"
   },
   {
    "ply": 9,
    "t": 498,
    "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQkq - 0 5",
    "line": [],
-   "spoken": "White never even got touched — the pawn structure stayed whole. The Sämisch, with f3, was first played by Sämisch himself in 1925, one of those openings named for the man who first played it.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -376,7 +386,8 @@
    "line": [
     "f3"
    ],
-   "spoken": "The Sämisch has two ideas. First, protect the e4-pawn — because against the King's Indian it is not how much centre you control but how well: the bishop guards the d-pawn, a pawn guards the e-pawn.",
+   "spoken": "The two ideas behind the f3 setup, restated: first, it shelters the e4-pawn. Against a King's Indian it's never about how much of the centre you own but how well you hold it — so the central pawns must be firmly propped by pieces and pawns alike.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -396,8 +407,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Then castle long and roll h4-h5. As it happens, c5 is one of Black's best replies — a pawn sacrifice; taking it is possible but leads to wild complications where Black is fine.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -450,8 +460,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "So White leaves it, and Black's capture on d4 was a serious inaccuracy.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -468,7 +477,8 @@
     "cxd4",
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Releasing the central tension with that early capture was a real inaccuracy, because it lets the first player settle into a Maroczy-style bind. Holding the tension instead and pressing the d-pawn would have kept the position full of life.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -484,8 +494,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "It releases the tension into a Maroczy-type bind. Instead the knight to c6, keeping the tension and pressing the d-pawn, was the better path.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -503,7 +512,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "And after d5, where does the knight go? When a central pawn advances, ask which squares weaken — here it is e5, so the knight to e5, hitting the pawn.",
+   "spoken": "A logical rule worth repeating: whenever a pawn advances in the centre, ask at once which squares it just weakened. Here the answer is e5 — and that's exactly where a knight belongs, striking at the pawn rather than blundering into a triple-attacked square.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -552,8 +562,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "From there Black strikes back in the centre with Benoni-style pawn breaks — a whole world of theory.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -567,8 +576,7 @@
    "t": 663.5,
    "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 2 8",
    "line": [],
-   "spoken": "But the capture Black actually chose gives White a comfortable, easy game.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -676,7 +684,8 @@
    "t": 707.5,
    "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 5 12",
    "line": [],
-   "spoken": ""
+   "spoken": "The king tuck isn't strictly forced — it's a judgment call, and playing the immediate pawn thrust was fully possible. But when there's time for it, the safer king is worth having: if the attack later stumbles, that quiet move is the insurance that buys survival.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -800,7 +809,9 @@
    "line": [
     "Qh2"
    ],
-   "spoken": ""
+   "spoken": "And a subtle finishing point — on the h-file the queen must lead, in front of the rook. With the heavy pieces the other way round the attack is still strong, but it isn't immediate mate: you'd have to haul a second rook up and shuffle the first aside, far more cumbersome than having the queen spearhead the charge.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 42,
