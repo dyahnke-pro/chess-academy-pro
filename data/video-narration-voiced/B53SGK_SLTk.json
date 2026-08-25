@@ -1,0 +1,249 @@
+{
+ "videoId": "B53SGK_SLTk",
+ "title": "Daniel Vs Chessbrah | Eric Hansen | Streamer Match",
+ "openingName": "Sicilian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:B53SGK_SLTk",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1068,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1069.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/1P3N2/P1PP1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e6",
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1071.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/4P3/1P3N2/PBPP1PPP/RN1QKB1R b KQkq - 2 4",
+   "line": [
+    "Nc6",
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1073.5,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/2p5/4P3/1P3N2/PBPP1PPP/RN1QKB1R w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1075,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/2p5/4P3/1PN2N2/PBPP1PPP/R2QKB1R b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1077.5,
+   "fen": "r1bqkb1r/1p1pnppp/p1n1p3/2p5/4P3/1PN2N2/PBPP1PPP/R2QKB1R w KQkq - 2 6",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1079,
+   "fen": "r1bqkb1r/1p1pnppp/p1n1p3/2p5/4P3/1PN2NP1/PBPP1P1P/R2QKB1R b KQkq - 0 6",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1083,
+   "fen": "r1bqkb1r/1p1p1ppp/p1n1p3/2p5/3nP3/1PN2NP1/PBPP1PBP/R2Q1RK1 b kq - 4 8",
+   "line": [
+    "Nf5",
+    "Bg2",
+    "Nfd4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1087,
+   "fen": "r1bqkb1r/1p3ppp/p1np4/2p1p3/3nP3/1P3NP1/PBPPNPBP/R2Q1RK1 w kq - 0 10",
+   "line": [
+    "d6",
+    "Ne2",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1089.5,
+   "fen": "r1bqkb1r/1p3ppp/p1np4/2p1p3/3nP3/1PP2NP1/PB1PNPBP/R2Q1RK1 b kq - 0 10",
+   "line": [
+    "c3"
+   ],
+   "spoken": "There is a cost to this setup — White concedes some light squares almost by default."
+  },
+  {
+   "ply": 21,
+   "t": 1093.5,
+   "fen": "r1bqkb1r/1p3ppp/p1np4/2p1p3/4P3/1PP2BP1/PB1PNP1P/R2Q1RK1 b kq - 0 11",
+   "line": [
+    "Nxf3+",
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1097,
+   "fen": "r1b1kb1r/1p3ppp/p1np1q2/2p1p3/4P3/1PP2BP1/PB1PNP1P/R2Q1RK1 w kq - 1 12",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1098,
+   "fen": "r1b1kb1r/1p3ppp/p1np1q2/2p1p3/4P3/1PP3P1/PB1PNPBP/R2Q1RK1 b kq - 2 12",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1102.5,
+   "fen": "r1b1kb1r/1p3pp1/p1np1q2/2p1p2p/4P3/1PP3P1/PB1PNPBP/R2Q1RK1 w kq - 0 13",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1103.5,
+   "fen": "r1b1kb1r/1p3pp1/p1np1q2/2p1p2p/4P3/1PP3PP/PB1PNPB1/R2Q1RK1 b kq - 0 13",
+   "line": [
+    "h3"
+   ],
+   "spoken": "But a real idea is in the air: the knight jumps into d4, and White has no comfortable way to meet it."
+  },
+  {
+   "ply": 28,
+   "t": 1149,
+   "fen": "r1b1k2r/1p2bpp1/p1np2q1/2p1p2p/3PP3/1PP3PP/PB2NPB1/R2Q1RK1 w kq - 1 15",
+   "line": [
+    "Be7",
+    "d4",
+    "Qg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1163.5,
+   "fen": "r1b1k2r/1p2bpp1/p1np2q1/2p1p2p/3PP3/1PP3PP/PB2NPBK/R2Q1R2 b kq - 2 15",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1179,
+   "fen": "r1b1k2r/1p2b1p1/p1np2q1/2p1pp1p/3PP3/1PP3PP/PB2NPBK/R2Q1R2 w kq - 0 16",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1196,
+   "fen": "r1b1k2r/1p2b1p1/p1np2q1/2p1pP1p/3P4/1PP3PP/PB2NPBK/R2Q1R2 b kq - 0 16",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1199,
+   "fen": "r3k2r/1p2b1p1/p1np2q1/2p1pb1p/3P4/1PP3PP/PB2NPBK/R2Q1R2 w kq - 0 17",
+   "line": [
+    "Bxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1211.5,
+   "fen": "r3k2r/1p2b1p1/p1np2q1/2pPpb1p/8/1PP3PP/PB2NPBK/R2Q1R2 b kq - 0 17",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1214.5,
+   "fen": "r2nk2r/1p2b1p1/p2p2q1/2pPpb1p/2P5/1P4PP/PB2NPBK/R2Q1R2 b kq - 0 18",
+   "line": [
+    "Nd8",
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1223,
+   "fen": "r3k2r/1p2bnp1/p2p2q1/2pPpb1p/2P5/1P4PP/PB2NPBK/R2Q1R2 w kq - 1 19",
+   "line": [
+    "Nf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1224,
+   "fen": "r3k2r/1p2bnp1/p2p2q1/2pPpb1p/2P5/1PN3PP/PB3PBK/R2Q1R2 b kq - 2 19",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1226.5,
+   "fen": "r3k2r/1p2b1p1/p2p2q1/2pPpbnp/2P5/1PN3PP/PB3PBK/R2Q1R2 w kq - 3 20",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Even down a piece here, there is genuine compensation — enough to call it a sacrifice rather than a blunder."
+  }
+ ]
+}
