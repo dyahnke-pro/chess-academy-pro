@@ -1,0 +1,424 @@
+{
+ "videoId": "-4hTQEnwa7s",
+ "title": "",
+ "openingName": "Nimzowitsch-Larsen Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:-4hTQEnwa7s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 77.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "spoken": "White opens with the flank move b3, planning to fianchetto and lean on the long diagonal rather than grab the middle. Black takes the invitation and plants a pawn in the centre with e5, occupying the ground White has left alone."
+  },
+  {
+   "ply": 5,
+   "t": 80,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P3N2/PBPPPPPP/RN1QKB1R b KQkq - 3 3",
+   "line": [
+    "Bb2",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": "White fianchettoes and brings the knight out, and it immediately leans on the pawn on e5. Black has already put the queen's knight on c6 to guard it, so the tension in the centre is set."
+  },
+  {
+   "ply": 6,
+   "t": 84,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Rather than defend, Black shoves the pawn forward to e4, kicking the knight and grabbing space deep in White's half. That is the hypermodern bargain — the pawn goes far forward and dares White to prove it is weak."
+  },
+  {
+   "ply": 7,
+   "t": 85,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The knight leaps into e5, the well-known and perfectly sound reply. White is happy to let Black build a big pawn front, meaning to chip away at it later — that lure-the-pawns-forward idea is the whole point of this setup."
+  },
+  {
+   "ply": 8,
+   "t": 110.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 2 5",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "Black declines the trade and chases the intruder with the queen to f6. It looks slightly awkward, almost a self-pin, but the point is concrete: White's bishop on the long diagonal is loose, so the knight will find no easy retreat."
+  },
+  {
+   "ply": 9,
+   "t": 112.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/8/2N1p3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 3 5",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "Sure enough the knight has to scramble, and c4 is the one square that keeps it out of trouble given the awkward geometry Black has set up."
+  },
+  {
+   "ply": 10,
+   "t": 120,
+   "fen": "r1b1kbnr/pppp1ppp/2n3q1/8/2N1p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 4 6",
+   "line": [
+    "Qg6"
+   ],
+   "spoken": "With the knight shooed back, Black swings the queen over to g6 — a fine, active post that keeps an eye on the kingside where White is about to castle."
+  },
+  {
+   "ply": 11,
+   "t": 121.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n3q1/8/4p3/1P2N3/PBPPPPPP/RN1QKB1R b KQkq - 5 6",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "White keeps prodding with the same knight, this time to e3, moving one piece again and again while the rest of the army sleeps. Playing quickly is not the same as playing well."
+  },
+  {
+   "ply": 12,
+   "t": 135.5,
+   "fen": "r1b1kb1r/pppp1ppp/2n2nq1/8/4p3/1P2N3/PBPPPPPP/RN1QKB1R w KQkq - 6 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black just keeps developing, the knight coming to f6. There is no reason to be rattled by an opponent who breaks the rules — the answer is simply to follow them yourself."
+  },
+  {
+   "ply": 13,
+   "t": 137,
+   "fen": "r1b1kb1r/pppp1ppp/2n2nq1/8/4p3/1P2N1P1/PBPPPP1P/RN1QKB1R b KQkq - 0 7",
+   "line": [
+    "g3"
+   ],
+   "spoken": "White plays g3, and the way to punish this kind of loose play is exactly to keep obeying the principles to the letter: develop, castle, own the centre."
+  },
+  {
+   "ply": 14,
+   "t": 155.5,
+   "fen": "r1b1kb1r/ppp2ppp/2n2nq1/3p4/4p3/1P2N1P1/PBPPPP1P/RN1QKB1R w KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black rounds out the centre with d5, building a broad pawn chain and finishing the job White never bothered to contest."
+  },
+  {
+   "ply": 15,
+   "t": 159,
+   "fen": "r1b1kb1r/ppp2ppp/2n2nq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1QK2R b KQkq - 1 8",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "White finally fianchettoes with Bg2. Now all that is left for Black is to bring the pieces to life."
+  },
+  {
+   "ply": 16,
+   "t": 169,
+   "fen": "r3kb1r/ppp2ppp/2n1bnq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1QK2R w KQkq - 2 9",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "The bishop steps out to e6, bracing the d5 and e4 pawns and getting ready to connect the rooks."
+  },
+  {
+   "ply": 17,
+   "t": 172.5,
+   "fen": "r3kb1r/ppp2ppp/2n1bnq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1Q1RK1 b kq - 3 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles short — and this is the telling moment. The queenside is still fast asleep, nothing developed over there, so even though Black is not fully mobilised either, the initiative is there for the taking."
+  },
+  {
+   "ply": 18,
+   "t": 201.5,
+   "fen": "r3kb1r/ppp2pp1/2n1bnq1/3p3p/4p3/1P2N1P1/PBPPPPBP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Black judges it is already time to strike and pushes h5, ready to lever open the h-file against the castled king."
+  },
+  {
+   "ply": 19,
+   "t": 204,
+   "fen": "r3kb1r/ppp2pp1/2n1bnq1/3p3p/4p2P/1P2N1P1/PBPPPPB1/RN1Q1RK1 b kq - 0 10",
+   "line": [
+    "h4"
+   ],
+   "spoken": "White answers with h4, trying to jam the file shut — but this only loosens the kingside further, and that pawn is going to become a target."
+  },
+  {
+   "ply": 20,
+   "t": 210.5,
+   "fen": "2kr1b1r/ppp2pp1/2n1bnq1/3p3p/4p2P/1P2N1P1/PBPPPPB1/RN1Q1RK1 w - - 1 11",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Black castles long, tucking the king away on the far wing and finishing development. And keep an eye on that pawn on g3 — it is going to matter."
+  },
+  {
+   "ply": 21,
+   "t": 216,
+   "fen": "2kr1b1r/ppp2pp1/2n1bnq1/3p3p/P3p2P/1P2N1P1/1BPPPPB1/RN1Q1RK1 b - - 0 11",
+   "line": [
+    "a4"
+   ],
+   "spoken": "White lunges with a4 — creative, but not something that objectively holds up. The recipe against it is calm: don't panic, finish developing, and only then start the attack."
+  },
+  {
+   "ply": 22,
+   "t": 230,
+   "fen": "2kr3r/ppp2pp1/2nbbnq1/3p3p/P3p2P/1P2N1P1/1BPPPPB1/RN1Q1RK1 w - - 1 12",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "Black completes the setup, the dark-squared bishop swinging to d6 and pointing straight at White's kingside."
+  },
+  {
+   "ply": 23,
+   "t": 233.5,
+   "fen": "2kr3r/ppp2pp1/2nbbnq1/3p3p/P3p2P/1P2N1P1/1BPPPPBK/RN1Q1R2 b - - 2 12",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "White tucks the king to h2 — and walks it right into trouble, onto the very file and diagonal Black is massing against."
+  },
+  {
+   "ply": 24,
+   "t": 265.5,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p3p/P3p1nP/1P2N1P1/1BPPPPBK/RN1Q1R2 w - - 3 13",
+   "line": [
+    "Ng4+"
+   ],
+   "spoken": "The knight jumps in with check to g4. If White captures, Black takes back with the pawn and the h-file is ripped open — exactly what Black has been angling for."
+  },
+  {
+   "ply": 26,
+   "t": 269,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p4/P3p1pP/1P4P1/1BPPPPBK/RN1Q1R2 w - - 0 14",
+   "line": [
+    "Nxg4",
+    "hxg4"
+   ],
+   "spoken": "White grabs the knight and Black recaptures with the h-pawn, tearing the h-file wide open. Already Black is threatening to win the h4-pawn, and the king has to scurry."
+  },
+  {
+   "ply": 27,
+   "t": 274,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p4/P3p1pP/BP4P1/2PPPPBK/RN1Q1R2 b - - 1 14",
+   "line": [
+    "Ba3"
+   ],
+   "spoken": "The cleanest defence was to drop the king back to g1, but White instead swings the bishop out to a3, leaving the h4-pawn hanging to a check."
+  },
+  {
+   "ply": 28,
+   "t": 284,
+   "fen": "2kr3r/ppp2pp1/2n1b1q1/3pb3/P3p1pP/BP4P1/2PPPPBK/RN1Q1R2 w - - 2 15",
+   "line": [
+    "Be5"
+   ],
+   "spoken": "First Black slides the bishop to e5, lifting it out of the awkward spot where White's bishop was eyeing it and onto the long diagonal."
+  },
+  {
+   "ply": 29,
+   "t": 286.5,
+   "fen": "2kr3r/ppp2pp1/2n1b1q1/3pb3/P3p1pP/BP4P1/R1PPPPBK/1N1Q1R2 b - - 3 15",
+   "line": [
+    "Ra2"
+   ],
+   "spoken": "White shuffles the rook to a2, a passive move that does nothing to meet the coming storm."
+  },
+  {
+   "ply": 30,
+   "t": 288.5,
+   "fen": "2kr4/ppp2pp1/2n1b1q1/3pb3/P3p1pr/BP4P1/R1PPPPBK/1N1Q1R2 w - - 0 16",
+   "line": [
+    "Rxh4+"
+   ],
+   "spoken": "Now the rook crashes down onto h4 with check, and the finish is in sight — the whole thing has come as a shock, and White resigns right here."
+  },
+  {
+   "ply": 31,
+   "t": 319.5,
+   "fen": "2kr4/ppp2pp1/2n1b1q1/3pb3/P3p1pr/BP4P1/R1PPPPB1/1N1Q1RK1 b - - 1 16",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "So why resign? Say White steps the king back to g1 to escape the check. Black has a crushing way to finish.",
+   "reanchor": true
+  },
+  {
+   "ply": 32,
+   "t": 326,
+   "fen": "2kr4/ppp2pp1/2n1b2q/3pb3/P3p1pr/BP4P1/R1PPPPB1/1N1Q1RK1 w - - 2 17",
+   "line": [
+    "Qh6"
+   ],
+   "spoken": "The key is the queen to h6 — quietly leaving the rook where it stands, offering it up, and renewing the threat down the h-file.",
+   "reanchor": true
+  },
+  {
+   "ply": 33,
+   "t": 328.5,
+   "fen": "2kr4/ppp2pp1/2n1b2q/3pb3/P3p1pP/BP6/R1PPPPB1/1N1Q1RK1 b - - 0 17",
+   "line": [
+    "gxh4"
+   ],
+   "spoken": "White snaps off the rook with the g-pawn. But it takes only a moment to see that even a whole rook down, Black's pressure on the kingside is overwhelming.",
+   "reanchor": true
+  },
+  {
+   "ply": 34,
+   "t": 330.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p1pq/BP6/R1PPPPB1/1N1Q1RK1 w - - 0 18",
+   "line": [
+    "Qxh4"
+   ],
+   "spoken": "Black scoops the pawn straight back with the queen to h4, and now mate is in the air.",
+   "reanchor": true
+  },
+  {
+   "ply": 35,
+   "t": 339,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p1pq/BP6/R1PPPPB1/1N1QR1K1 b - - 1 18",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The only way to put off the mate is Re1, prising open a flight for the king.",
+   "reanchor": true
+  },
+  {
+   "ply": 36,
+   "t": 342.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p2q/BP4p1/R1PPPPB1/1N1QR1K1 w - - 0 19",
+   "line": [
+    "g3"
+   ],
+   "spoken": "But now the pawn drives in with g3, and every black piece comes pouring toward the king.",
+   "reanchor": true
+  },
+  {
+   "ply": 37,
+   "t": 347,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p2q/BP4P1/R1PPP1B1/1N1QR1K1 b - - 0 19",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": "For instance, if White grabs the pawn with fxg3...",
+   "reanchor": true
+  },
+  {
+   "ply": 38,
+   "t": 348.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3p4/P3p2q/BP4b1/R1PPP1B1/1N1QR1K1 w - - 0 20",
+   "line": [
+    "Bxg3"
+   ],
+   "spoken": "...the bishop takes on g3, planting itself right in front of the king.",
+   "reanchor": true
+  },
+  {
+   "ply": 39,
+   "t": 349.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3p4/P3p2q/BP2P1b1/R1PP2B1/1N1QR1K1 b - - 0 20",
+   "line": [
+    "e3"
+   ],
+   "spoken": "Say White tries e3 instead. Even then Black is winning — the rook can be taken back, or the game finished still more elegantly.",
+   "reanchor": true
+  },
+  {
+   "ply": 40,
+   "t": 356,
+   "fen": "2kr4/ppp2pp1/2n5/3p4/P3p1bq/BP2P1b1/R1PP2B1/1N1QR1K1 w - - 1 21",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "One clean route is the bishop to g4, hauling in the last attacker; the position is bursting with mating ideas and simply crushing. And if White declines the rook and drifts with something like b4, an elegant win is to lift the rook to h1 — leaving White's bishop loose and threatening mate, with any block on g2 also walking into mate.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 388.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P3N2/PBPPPPPP/RN1QKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": "Stepping back to the opening itself: White's system here is not a bad one at all.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 396,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The critical point is right here — the jump to e5 is a touch inaccurate, and dropping the knight back to d4 is the stronger try.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 397,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3Np3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "The idea behind d4 is that the knight can be propped up and given a stable home.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 400.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/8/3Np3/1P2P3/PBPP1PPP/RN1QKB1R b KQkq - 0 5",
+   "line": [
+    "Qf6",
+    "e3"
+   ],
+   "spoken": "It can be braced by the pawn to e3 — unlike c4 in the game, where the knight had no such shelter and could simply be harried.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 404,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3Np3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 408,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": "For a less experienced player, handling this kind of provocative, pawn-forward style is genuinely hard.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 417,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 2 5",
+   "line": [
+    "Ne5",
+    "Qf6"
+   ],
+   "spoken": "It is the sort of thing strong players can get away with — bending the opening rules and still landing on their feet — but the advice for anyone drawn to offbeat lines is to master sensible, classical development first.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 449.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/3Pp3/1P6/PBP1PPPP/RN1QKB1R b KQkq d3 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "In this position d4 was the interesting try, staking a real claim in the centre. Instead White's knight scrambled to c4, Black lifted the queen to that lovely g6 square, and after the knight went to e3 — another loss of time — White really needed to start developing, with something like e3 or d3. Instead the pieces kept shuffling while Black seized the centre; then h5 softened the wing, and that h-pawn push cost White the game, because opening the h-file was a disaster. Black never rushed, never lashed out early, just kept developing until everything was in play — and only then came the decisive invasion, after the king stepped to h2 and walked straight into the pin.",
+   "reanchor": true
+  }
+ ]
+}
