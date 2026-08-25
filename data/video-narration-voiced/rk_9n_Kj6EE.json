@@ -1,10 +1,10 @@
 {
  "videoId": "rk_9n_Kj6EE",
  "title": "Masterclass: Victory with Tactical Play | Alapin Sicilian Defense | GM Naroditsky's Theory Speed Run",
- "openingName": "Sicilian Defense: Alapin, 2…d5 (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:rk_9n_Kj6EE",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
     "exd5",
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5; Black recaptures with the queen."
   },
   {
    "ply": 3,
@@ -70,10 +70,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "After the queen recaptures, the pawn to d4 sets the standard structure. Knowing this move isn't enough — you have to know the follow-up, because Black's choices here decide the character of the game.",
-   "kind": "main",
-   "teaches": "Memorising a move is worthless without its plan — the follow-up is the real theory.",
-   "plans": "Develop with tempo and hold the centre."
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 8,
@@ -82,7 +79,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 9,
@@ -91,10 +88,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "Releasing the tension early with cxd4 is a risky inaccuracy: it sets White's d-pawn in motion as a strong central passer instead of leaving it under pressure. Conceptually, Black has done White a favour.",
-   "kind": "main",
-   "teaches": "Don't release central tension when it frees the opponent's pawn into a passer.",
-   "plans": "Use the mobile d-pawn as a spearhead."
+   "spoken": "We recapture on d4."
   },
   {
    "ply": 10,
@@ -103,10 +97,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6 hits the d4-pawn, so White must defend it — the knight comes to f3, guarding the pawn and continuing development smoothly.",
-   "kind": "main",
-   "teaches": "Defend the central pawn with a developing move that also builds toward castling.",
-   "plans": "Support d4, complete development, and advance."
+   "spoken": "Black develops the knight to c6, hitting d4."
   },
   {
    "ply": 11,
@@ -115,7 +106,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We defend with the knight to f3."
   },
   {
    "ply": 12,
@@ -124,7 +115,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6."
   },
   {
    "ply": 13,
@@ -133,7 +124,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, hitting the queen."
   },
   {
    "ply": 12,
@@ -200,7 +191,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": ""
+   "spoken": "Black jumps the knight to b4, threatening the fork on c2."
   },
   {
    "ply": 8,
@@ -280,7 +271,8 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "That ...Nb4 overreaches: even if Black grabs the exchange on a1 with the fork, Nb5 and Nc7 with check would fork the king and rook and even scoop the a8-rook, leaving White the material ahead.",
+   "reanchor": true
   },
   {
    "ply": 18,
