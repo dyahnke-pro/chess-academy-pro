@@ -1,0 +1,346 @@
+{
+ "videoId": "k9EmWn_MvQc",
+ "title": "QGD - Colle System | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen's Gambit Declined",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:k9EmWn_MvQc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 13,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/4P3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e3"
+   ],
+   "spoken": "e3 — the Colle. Solid, but Black doesn't change plans: we play the Queen's Gambit Declined setup regardless of how White arranges his pieces."
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 — the QGD setup."
+  },
+  {
+   "ply": 5,
+   "t": 34,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 46,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 — the Queen's Gambit Declined, even though e3 has blocked in White's own bishop."
+  },
+  {
+   "ply": 4,
+   "t": 51.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 57,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 58,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 62.5,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "The bishop to e7 — all the regular QGD moves."
+  },
+  {
+   "ply": 9,
+   "t": 64,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/P1N1P3/1P3PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 68.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/P1N1P3/1P3PPP/R1BQKBNR w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 75.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/1PPP4/P1N1P3/5PPP/R1BQKBNR b KQ - 0 6",
+   "line": [
+    "b4"
+   ],
+   "spoken": "White isn't developing a single kingside piece — and the way to punish that is to open the centre. We can't play c5, it's defended, nor e5; so first undermine the b4-pawn."
+  },
+  {
+   "ply": 12,
+   "t": 139.5,
+   "fen": "rnbq1rk1/1pp1bppp/4pn2/p2p4/1PPP4/P1N1P3/5PPP/R1BQKBNR w KQ - 0 7",
+   "line": [
+    "a5"
+   ],
+   "spoken": "a5 — a typical undermining move, forcing the issue and making the c5 break possible."
+  },
+  {
+   "ply": 13,
+   "t": 148,
+   "fen": "rnbq1rk1/1pp1bppp/4pn2/p2p4/1PPP4/P1N1P3/1B3PPP/R2QKBNR b KQ - 1 7",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 152.5,
+   "fen": "rnbq1rk1/1pp1bppp/4pn2/3p4/1pPP4/P1N1P3/1B3PPP/R2QKBNR w KQ - 0 8",
+   "line": [
+    "axb4"
+   ],
+   "spoken": "Take on b4 — but grab the hanging rook first."
+  },
+  {
+   "ply": 16,
+   "t": 157,
+   "fen": "1nbq1rk1/1pp1bppp/4pn2/3p4/1PPP4/2N1P3/1B3PPP/r2QKBNR w K - 0 9",
+   "line": [
+    "axb4",
+    "Rxa1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 165,
+   "fen": "1nbq1rk1/1pp2ppp/4pn2/3p4/1bPP4/2N1P3/1B3PPP/Q3KBNR w K - 0 10",
+   "line": [
+    "Qxa1",
+    "Bxb4"
+   ],
+   "spoken": "Thank you for the pawn — and we're ready for c5, with a nice pin going."
+  },
+  {
+   "ply": 19,
+   "t": 187.5,
+   "fen": "1nbq1rk1/1pp2ppp/4pn2/3p4/1bPP4/B1N1P3/5PPP/Q3KBNR b K - 1 10",
+   "line": [
+    "Ba3"
+   ],
+   "spoken": "The bishop to a3 is a decent move — but rather than trade automatically, keep the tension."
+  },
+  {
+   "ply": 20,
+   "t": 253.5,
+   "fen": "1nbq1rk1/1p3ppp/4pn2/2pp4/1bPP4/B1N1P3/5PPP/Q3KBNR w K - 0 11",
+   "line": [
+    "c5"
+   ],
+   "spoken": "The best move is c5 — it carries two ideas: a passed pawn if he takes, and it opens a pathway for another of our pieces."
+  },
+  {
+   "ply": 21,
+   "t": 266,
+   "fen": "1nbq1rk1/1p3ppp/4pn2/2Pp4/1bP5/B1N1P3/5PPP/Q3KBNR b K - 0 11",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 289,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1Pp4/1bP5/B1N1P3/5PPP/Q3KBNR w K - 1 12",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "There it is — the queen to a5, pinning the bishop. Taking on b4 now loses the queen, so White's reply is absolutely forced."
+  },
+  {
+   "ply": 23,
+   "t": 303,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1Pp4/1bP5/B1N1P3/4NPPP/Q3KB1R b K - 2 12",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 319,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1Pp4/2P5/b1N1P3/4NPPP/Q3KB1R w K - 0 13",
+   "line": [
+    "Bxa3"
+   ],
+   "spoken": "Take with the bishop — keep the queens on the board, his king stuck in the centre, and win faster."
+  },
+  {
+   "ply": 25,
+   "t": 342,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1Pp4/2P5/b1N1P3/4NPPP/Q2K1B1R b - - 1 13",
+   "line": [
+    "Kd1"
+   ],
+   "spoken": "King to d1 is pure desperation, unpinning the knight — now open the centre as fast as we can; that king is trapped."
+  },
+  {
+   "ply": 26,
+   "t": 368.5,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1P5/2p5/b1N1P3/4NPPP/Q2K1B1R w - - 0 14",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "Open the d-file with dxc4 — that's the avenue of attack, straight to his king."
+  },
+  {
+   "ply": 27,
+   "t": 385,
+   "fen": "1nb2rk1/1p3ppp/4pn2/q1P5/2pN4/b1N1P3/5PPP/Q2K1B1R b - - 1 14",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 401,
+   "fen": "1nb2rk1/1p3ppp/5n2/q1P1p3/2pN4/b1N1P3/5PPP/Q2K1B1R w - - 0 15",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Kick the knight out of d4 with e5, and then the rook comes to d8 with check."
+  },
+  {
+   "ply": 29,
+   "t": 419,
+   "fen": "1nb2rk1/1p3ppp/5n2/qNP1p3/2p5/b1N1P3/5PPP/Q2K1B1R b - - 1 15",
+   "line": [
+    "Ndb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 437,
+   "fen": "1nbr2k1/1p3ppp/5n2/qNP1p3/2p5/b1N1P3/5PPP/Q2K1B1R w - - 2 16",
+   "line": [
+    "Rd8+"
+   ],
+   "spoken": "The rook to d8, check."
+  },
+  {
+   "ply": 31,
+   "t": 445,
+   "fen": "1nbr2k1/1p3ppp/5n2/qNP1p3/2p5/b1N1P3/2K2PPP/Q4B1R b - - 3 16",
+   "line": [
+    "Kc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 459.5,
+   "fen": "1n1r2k1/1p3ppp/5n2/qNP1pb2/2p5/b1N1P3/2K2PPP/Q4B1R w - - 4 17",
+   "line": [
+    "Bf5+"
+   ],
+   "spoken": "Develop with check — the king on c2 is horribly exposed, and the bishop to f5 is almost mate."
+  },
+  {
+   "ply": 33,
+   "t": 484,
+   "fen": "1n1r2k1/1p3ppp/5n2/qNP1pb2/2p1P3/b1N5/2K2PPP/Q4B1R b - - 0 17",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4 is literally forced — and our threats against his king far outweigh the fact that our bishop on a3 is hanging."
+  },
+  {
+   "ply": 34,
+   "t": 493,
+   "fen": "1n1r2k1/1p3ppp/8/qNP1pb2/2p1n3/b1N5/2K2PPP/Q4B1R w - - 0 18",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "Take on e4 with the knight, setting up a devastating discovered check."
+  },
+  {
+   "ply": 35,
+   "t": 508.5,
+   "fen": "1n1r2k1/1p3ppp/8/q1P1pb2/2p1n3/N1N5/2K2PPP/Q4B1R b - - 0 18",
+   "line": [
+    "Nxa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 554,
+   "fen": "1n1r2k1/1p3ppp/8/q1P1pb2/2p5/N1n5/2K2PPP/Q4B1R w - - 0 19",
+   "line": [
+    "Nxc3+"
+   ],
+   "spoken": "The knight takes on c3 with check — attacking from a distance beats crowding the king, where your own pieces can get loose."
+  },
+  {
+   "ply": 37,
+   "t": 566,
+   "fen": "1n1r2k1/1p3ppp/8/q1P1pb2/2p5/N1n5/1K3PPP/Q4B1R b - - 1 19",
+   "line": [
+    "Kb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 576,
+   "fen": "1n1r2k1/1p3ppp/8/2P1pb2/1qp5/N1n5/1K3PPP/Q4B1R w - - 2 20",
+   "line": [
+    "Qb4+"
+   ],
+   "spoken": "The cleanest is the queen to b4 with check — then king to c1, and the rook to d1 is mate."
+  }
+ ]
+}
