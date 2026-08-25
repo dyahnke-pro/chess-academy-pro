@@ -4,7 +4,7 @@
  "openingName": "Scotch Gambit",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:NqtT3roFaBs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take Black; White answers our king's pawn game."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 — the Scotch."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "We take on d4."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to c4 — the Scotch Gambit."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "We cling to the pawn with the bishop to c5."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "White plays c3, which hides a vicious trap."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": ""
+   "spoken": "We grab the c-pawn, taking on c3 — walking into the trap on purpose."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": ""
+   "spoken": "White springs it — the bishop takes on f7 with check."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Kxf7"
    ],
-   "spoken": ""
+   "spoken": "We take the bishop with the king."
   },
   {
    "ply": 15,
@@ -116,9 +116,7 @@
     "Kf8",
     "Qxc5+"
    ],
-   "spoken": "After the f7 sacrifice, White's queen grabs the bishop on c5 with check — but the king is best on f8, tucked off the e-file where it's temporarily safe from the coming pressure.",
-   "kind": "main",
-   "teaches": "When your king is exposed, choose the square that shelters it from the most dangerous open lines."
+   "spoken": "White forks with the queen to d4; our king steps to f8; and the queen grabs our bishop, taking on c5 with check."
   },
   {
    "ply": 16,
@@ -127,7 +125,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We block the check with d6, hitting the queen."
   },
   {
    "ply": 17,
@@ -136,7 +134,7 @@
    "line": [
     "Qxc3"
    ],
-   "spoken": ""
+   "spoken": "White scoops up the c-pawn with the queen, recapturing on c3."
   },
   {
    "ply": 18,
@@ -145,9 +143,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "With the king weak, Black's priority is rapid development — Nf6 hits e4 and brings a piece out toward the plan of castling by hand.",
-   "kind": "main",
-   "teaches": "When your king is caught in the center, develop with tempo and race to shelter it."
+   "spoken": "We develop the knight to f6."
   },
   {
    "ply": 19,
@@ -156,7 +152,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to d2."
   },
   {
    "ply": 20,
@@ -165,7 +161,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "We play h6."
   },
   {
    "ply": 21,
@@ -174,7 +170,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles."
   },
   {
    "ply": 22,
@@ -183,7 +179,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": ""
+   "spoken": "We walk the king to f7, connecting our rooks — no castling for us, but the position holds."
   },
   {
    "ply": 23,
@@ -192,7 +188,7 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "White plays b3."
   },
   {
    "ply": 24,
@@ -201,7 +197,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "We bring the rook to e8."
   },
   {
    "ply": 25,
@@ -210,7 +206,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "White contests the file with the rook to e1."
   },
   {
    "ply": 26,
@@ -219,9 +215,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": "The king finally reaches g8 — Black has castled by hand, walking the king to safety one step at a time and weathering the storm from the sacrifice.",
-   "kind": "main",
-   "teaches": "Reroute an exposed king to a safe corner manually when normal castling is gone."
+   "spoken": "We tuck the king to g8."
   },
   {
    "ply": 27,
@@ -230,7 +224,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "White fianchettoes the bishop to b2."
   },
   {
    "ply": 28,
@@ -239,7 +233,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to g4."
   },
   {
    "ply": 3,
