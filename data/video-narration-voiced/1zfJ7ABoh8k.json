@@ -1,10 +1,10 @@
 {
  "videoId": "1zfJ7ABoh8k",
  "title": "The Risks of Queenside Castle | Scandinavian Defence | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Scandinavian Defense: 3.Nc3 Qa5, g3 System (White)",
+ "openingName": "Scandinavian Defense (g3 System vs 3...Qa5)",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:1zfJ7ABoh8k",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We go for the kill with e4, and Black answers with the Scandinavian, d5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "exd5",
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "We take, and Black recaptures early with the queen, capturing on d5."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We hit the queen with the knight to c3."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "The queen retreats to a5."
   },
   {
    "ply": 7,
@@ -52,10 +52,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "The fianchetto with g3 — an effective, low-theory system against the Qa5 Scandinavian that many opponents in this range have never faced.",
-   "kind": "main",
-   "teaches": "A quiet fianchetto is a practical surprise weapon precisely because it's under-prepared.",
-   "plans": "Fianchetto, develop with Nge2, and build the plan."
+   "spoken": "Now the special setup — g3, preparing to fianchetto. It looks tame, but it gets dangerous fast."
   },
   {
    "ply": 8,
@@ -64,7 +61,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 9,
@@ -73,7 +70,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto the bishop to g2, planning a modest d3 and a specific attacking idea."
   },
   {
    "ply": 10,
@@ -82,7 +79,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to g4."
   },
   {
    "ply": 11,
@@ -91,10 +88,7 @@
    "line": [
     "Nge2"
    ],
-   "spoken": "The knight goes to e2, not f3 — putting it on f3 would block the very bishop we fianchettoed. Keeping the long diagonal open is the whole idea.",
-   "kind": "main",
-   "teaches": "Route the knight to e2 so the fianchettoed bishop breathes.",
-   "plans": "Complete development, then advance the queenside."
+   "spoken": "We put the knight on e2, not f3 — the knight to f3 would block our own fianchettoed bishop."
   },
   {
    "ply": 12,
@@ -103,7 +97,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the typical c6, making a little home for the queen."
   },
   {
    "ply": 13,
@@ -112,10 +106,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The pawn to h3 is a no-brainer to throw in: it questions the bishop on g4 and, crucially, opens the possibility of a later g4 to harass it further — a free improving move.",
-   "kind": "main",
-   "teaches": "A prophylactic h3 that also unlocks g4 is a useful, low-commitment gain.",
-   "plans": "Follow with development and the queenside break."
+   "spoken": "A useful no-brainer — h3, so that g4 is available later to unpin."
   },
   {
    "ply": 14,
@@ -124,7 +115,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "The bishop slides back to h5."
   },
   {
    "ply": 15,
@@ -133,7 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 16,
@@ -142,7 +133,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to d7."
   },
   {
    "ply": 17,
@@ -151,10 +142,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "The pawn to d3 completes the setup — it opens the fianchettoed bishop's diagonal and readies the main plan. With everything harmonious, White can turn to the queenside.",
-   "kind": "main",
-   "teaches": "Open your key bishop's diagonal as you finish developing.",
-   "plans": "Then execute the queenside expansion."
+   "spoken": "We play the modest d3, opening the fianchettoed bishop."
   },
   {
    "ply": 18,
@@ -163,7 +151,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles queenside — which actually makes our plan five times stronger. Long castling here is very risky."
   },
   {
    "ply": 19,
@@ -172,7 +160,7 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "We hit immediately with b4 — if Black takes, the b-file opens straight onto the king."
   },
   {
    "ply": 20,
@@ -181,7 +169,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "Black declines and drops the queen to c7."
   },
   {
    "ply": 21,
@@ -190,7 +178,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "We push on with b5."
   },
   {
    "ply": 22,
@@ -199,7 +187,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black closes with c5."
   },
   {
    "ply": 23,
@@ -208,7 +196,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "We keep the storm rolling with a4, planning a5 and b6."
   },
   {
    "ply": 24,
@@ -217,7 +205,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "Black plays b6 — but that just creates a hook."
   },
   {
    "ply": 25,
@@ -226,7 +214,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "We absolutely play a5, prying open the king."
   },
   {
    "ply": 26,
@@ -235,7 +223,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6."
   },
   {
    "ply": 27,
@@ -244,7 +232,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "No rush to take b6 — first we develop the bishop to f4, connecting the rooks."
   },
   {
    "ply": 28,
@@ -253,7 +241,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black tries the bishop to d6 — tempting, but there's a trick."
   },
   {
    "ply": 30,
@@ -263,7 +251,7 @@
     "Bxd6",
     "Qxd6"
    ],
-   "spoken": ""
+   "spoken": "We take on d6, and Black recaptures with the queen, capturing on d6 — move order matters here."
   },
   {
    "ply": 31,
@@ -272,7 +260,7 @@
    "line": [
     "axb6"
    ],
-   "spoken": ""
+   "spoken": "Now we take, capturing on b6 — and Black is in huge trouble."
   },
   {
    "ply": 32,
@@ -281,14 +269,15 @@
    "line": [
     "Nxb6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight, capturing on b6 — but that opens the a-file, which is deadly."
   },
   {
    "ply": 31,
    "t": 437,
    "fen": "2kr3r/p2n1ppp/1P1qpn2/1Pp4b/8/2NP2PP/2P1NPB1/R2Q1RK1 b - - 0 16",
    "line": [],
-   "spoken": ""
+   "spoken": "Recapturing with the queen instead would have let the rook swing from a1 to a6 and double on the a-file.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -297,7 +286,8 @@
    "line": [
     "Nxb6"
    ],
-   "spoken": ""
+   "spoken": "Either way, that a-file becomes the highway to Black's king.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -306,7 +296,7 @@
    "line": [
     "Rxa7"
    ],
-   "spoken": ""
+   "spoken": "We grab, capturing on a7 with the rook, and the queen will join the attack via a1."
   },
   {
    "ply": 34,
@@ -315,7 +305,7 @@
    "line": [
     "Rd7"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the rook to d7. Already devastating."
   },
   {
    "ply": 35,
@@ -324,7 +314,7 @@
    "line": [
     "Ra6"
    ],
-   "spoken": ""
+   "spoken": "The queen is the supporting actress — so rather than rush her out, we keep the rook alive with a6, pinning the knight."
   },
   {
    "ply": 36,
@@ -333,7 +323,7 @@
    "line": [
     "Nfd5"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the knight to d5."
   },
   {
    "ply": 38,
@@ -343,7 +333,7 @@
     "Nxd5",
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We remove it — the knight takes, and Black recaptures with the pawn, capturing on d5 — killing the knight-to-b4 idea."
   },
   {
    "ply": 39,
@@ -352,7 +342,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "First we insert g4."
   },
   {
    "ply": 40,
@@ -361,7 +351,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "The bishop retreats to g6."
   },
   {
    "ply": 41,
@@ -370,7 +360,7 @@
    "line": [
     "Qa1"
    ],
-   "spoken": ""
+   "spoken": "Now the queen finally comes to a1 — dictating from behind, with the attack coming from all sides."
   },
   {
    "ply": 42,
@@ -379,7 +369,7 @@
    "line": [
     "Rb7"
    ],
-   "spoken": ""
+   "spoken": "Black shuffles the rook to b7."
   },
   {
    "ply": 43,
@@ -388,7 +378,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight jumps to c3, threatening to take on d5. The queen on a1 supports the knight, the rook, and an a5 leap."
   },
   {
    "ply": 44,
@@ -397,7 +387,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": ""
+   "spoken": "Black covers with the rook back to d8."
   },
   {
    "ply": 45,
@@ -406,7 +396,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "We win material, capturing on d5 with the knight."
   },
   {
    "ply": 46,
@@ -415,7 +405,7 @@
    "line": [
     "Kb8"
    ],
-   "spoken": ""
+   "spoken": "The king steps to b8."
   },
   {
    "ply": 47,
@@ -424,7 +414,7 @@
    "line": [
     "Nxb6"
    ],
-   "spoken": ""
+   "spoken": "The fastest path — we take, capturing on b6 with the knight, so the a6-rook can swing to a8."
   },
   {
    "ply": 48,
@@ -433,7 +423,7 @@
    "line": [
     "Qxb6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen, capturing on b6 — the most resilient try."
   },
   {
    "ply": 49,
@@ -442,7 +432,7 @@
    "line": [
     "Rxb6"
    ],
-   "spoken": ""
+   "spoken": "We take back, capturing on b6 with the rook."
   },
   {
    "ply": 50,
@@ -451,7 +441,7 @@
    "line": [
     "Rxb6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures, capturing on b6 — and now we check on a8."
   },
   {
    "ply": 53,
@@ -462,14 +452,15 @@
     "Kc7",
     "Qa7+"
    ],
-   "spoken": ""
+   "spoken": "The queen swings to a2, the king runs to c7, and the queen to a7 with check wins the rook and the game. Long castling — dangerous, over and over."
   },
   {
    "ply": 7,
    "t": 841.5,
    "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Unpacking it: this g3 setup — the engine isn't especially thrilled with it, but it's brought a lot of practical success.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -479,7 +470,8 @@
     "Nf6",
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "After the knight to f6 and our fianchetto...",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -488,7 +480,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "...the bishop to g4 is a completely fine reply.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -500,7 +493,8 @@
     "Nge2",
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "The c6, h3, knight-to-e2, bishop-to-h5 sequence shows up in plenty of database games.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -509,7 +503,8 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "One thing missed here: the immediate b4 was already available.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -518,7 +513,8 @@
    "line": [
     "Qxb4"
    ],
-   "spoken": ""
+   "spoken": "If Black grabs the pawn with the queen on b4...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -527,14 +523,16 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "...the rook to b1 would win it back with interest, wrecking Black's queenside.",
+   "reanchor": true
   },
   {
    "ply": 15,
    "t": 882,
    "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/1P6/2N3PP/P1PPNPB1/R1BQK2R b KQkq - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "So the immediate b4 was fully playable — several database games went this way.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -543,7 +541,8 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "If Black declines with the queen to c7...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -552,14 +551,16 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "...the rook to b1 would ready b5, opening the bishop — this line at its best.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 895,
    "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQK2R w KQkq - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The lesson: you don't always have to prepare b4 — sometimes you can remove the middleman and play it at once.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -568,7 +569,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "That's true of many openings — preparation isn't always required.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -577,7 +579,8 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "In the game we castled and Black developed the knight to d7.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -586,7 +589,8 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We played d3; database games from here continued with e6.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -595,7 +599,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "...Black plays e6.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -604,7 +609,8 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "Here we would have prepared with a3, readying b4.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -613,7 +619,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "After the bishop to e7...",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -623,14 +630,16 @@
     "b4",
     "Bxb4"
    ],
-   "spoken": ""
+   "spoken": "...b4 immediately would run into the bishop capturing on b4 — a tactic to be aware of.",
+   "reanchor": true
   },
   {
    "ply": 20,
    "t": 931.5,
    "fen": "r3k2r/pp1nbppp/2p1pn2/q6b/8/P1NP2PP/1PP1NPB1/R1BQ1RK1 w kq - 1 11",
    "line": [],
-   "spoken": ""
+   "spoken": "So to play b4 there, we would first develop the bishop.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -639,7 +648,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3, for instance.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -648,7 +658,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "The line would run: castle...",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -657,7 +668,8 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "...then b4.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -666,7 +678,8 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "Black would retreat the queen to c7...",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -675,7 +688,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "...and b5 gets unpleasant for Black.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -684,7 +698,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "If Black closes with c5, it opens the bishop's diagonal...",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -693,35 +708,40 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "...and we would storm exactly as in the game, pushing the a-pawn up to a6 — strong even without a king on that wing.",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 972.5,
    "fen": "r4rk1/ppqnbppp/2p1pn2/7b/1P6/P1NPB1PP/2P1NPB1/R2Q1RK1 w - - 1 13",
    "line": [],
-   "spoken": ""
+   "spoken": "So White contends for a small but stable edge — simple and practical.",
+   "reanchor": true
   },
   {
    "ply": 17,
    "t": 975.5,
    "fen": "r3kb1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 b kq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "Very simple.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 977,
    "fen": "r3kb1r/pp1npppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQ1RK1 w kq - 4 9",
    "line": [],
-   "spoken": ""
+   "spoken": "I'd recommend doing your own research rather than just playing it blind.",
+   "reanchor": true
   },
   {
    "ply": 15,
    "t": 982.5,
    "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQ1RK1 b kq - 3 8",
    "line": [],
-   "spoken": ""
+   "spoken": "Use these speedrun games as a basis for a practical, low-theory line against the Scandinavian.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -731,7 +751,8 @@
     "Nbd7",
     "d3"
    ],
-   "spoken": ""
+   "spoken": "After castling, the b4 push is essentially a no-brainer.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -741,7 +762,8 @@
     "O-O-O",
     "b4"
    ],
-   "spoken": ""
+   "spoken": "The bigger idea: in the middlegame, sacrificing a pawn for a strong, lasting attack is rarely a real risk — the practical chances are worth it, whereas in an endgame a single pawn matters far more.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -750,14 +772,16 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "Back to the setup — after the queen to c7.",
+   "reanchor": true
   },
   {
    "ply": 19,
    "t": 1475,
    "fen": "2kr1b1r/pp1npppp/2p2n2/q6b/1P6/2NP2PP/P1P1NPB1/R1BQ1RK1 b - - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "Now an important subtlety, before Black takes on b4.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -766,7 +790,8 @@
    "line": [
     "Qxb4"
    ],
-   "spoken": ""
+   "spoken": "If Black grabs with the queen on b4...",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -775,7 +800,8 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "...the tempting rook to b1 is actually a mistake.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -784,7 +810,8 @@
    "line": [
     "Bxe2"
    ],
-   "spoken": ""
+   "spoken": "Because either the queen takes on c3 or the bishop takes on e2 — the knight is overloaded.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -793,7 +820,8 @@
    "line": [
     "Rxb4"
    ],
-   "spoken": ""
+   "spoken": "So you would have to take the queen, and Black forces an endgame.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -803,21 +831,24 @@
     "Bxd1",
     "Rxd1"
    ],
-   "spoken": ""
+   "spoken": "White is still fine there, with attacking potential even in the endgame.",
+   "reanchor": true
   },
   {
    "ply": 21,
    "t": 1507.5,
    "fen": "2kr1b1r/pp1npppp/2p2n2/7b/1q6/2NP2PP/P1P1NPB1/1RBQ1RK1 b - - 1 11",
    "line": [],
-   "spoken": ""
+   "spoken": "But you'd rather not trade queens if you can help it.",
+   "reanchor": true
   },
   {
    "ply": 20,
    "t": 1509,
    "fen": "2kr1b1r/pp1npppp/2p2n2/7b/1q6/2NP2PP/P1P1NPB1/R1BQ1RK1 w - - 0 11",
    "line": [],
-   "spoken": ""
+   "spoken": "So this would be a good spot to play g4 instead.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -826,7 +857,8 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "The g4 push would unpin the knight.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -835,7 +867,8 @@
    "line": [
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "After the bishop drops to g6...",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -844,21 +877,24 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "...you could calmly play the rook to b1 and keep attacking.",
+   "reanchor": true
   },
   {
    "ply": 20,
    "t": 1520.5,
    "fen": "2kr1b1r/pp1npppp/2p2n2/7b/1q6/2NP2PP/P1P1NPB1/R1BQ1RK1 w - - 0 11",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent didn't go for that line — can't blame him.",
+   "reanchor": true
   },
   {
    "ply": 19,
    "t": 1522,
    "fen": "2kr1b1r/pp1npppp/2p2n2/q6b/1P6/2NP2PP/P1P1NPB1/R1BQ1RK1 b - - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "The game continued with the queen to c7 and b5...",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -867,7 +903,8 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "...the queen to c7...",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -876,7 +913,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "...and b5.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -886,7 +924,8 @@
     "c5",
     "a4"
    ],
-   "spoken": ""
+   "spoken": "Then, textbook — we'd shove the pawn to provoke weaknesses, exactly as before.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -896,14 +935,16 @@
     "b6",
     "a5"
    ],
-   "spoken": ""
+   "spoken": "The pawn storm provokes the weaknesses we need.",
+   "reanchor": true
   },
   {
    "ply": 23,
    "t": 1531.5,
    "fen": "2kr1b1r/ppqnpppp/5n2/1Pp4b/P7/2NP2PP/2P1NPB1/R1BQ1RK1 b - - 0 12",
    "line": [],
-   "spoken": ""
+   "spoken": "How are pawns used in an attack? Two main ways — the first is to sacrifice them to open files and squares for your pieces.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -914,7 +955,8 @@
     "a5",
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Let me show both uses.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -923,7 +965,8 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "The first is a move like b6 — the classic pawn-storm break, blasting things open.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -932,7 +975,8 @@
    "line": [
     "axb6"
    ],
-   "spoken": ""
+   "spoken": "What does b6 accomplish?",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -943,14 +987,16 @@
     "Qb8",
     "Nb5"
    ],
-   "spoken": ""
+   "spoken": "It hands the knight the b5 square and hands the rook the a-file — a pawn sacrificed for entry points.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 1593,
    "fen": "2kr3r/ppqnbppp/4pn2/PPp4b/8/2NP2PP/2P1NPB1/R1BQ1RK1 w - - 1 14",
    "line": [],
-   "spoken": ""
+   "spoken": "The second way is to create anchor points for your own pieces.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -959,7 +1005,8 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "That would be a move like a6 — worse here, but it illustrates pawns as anchors.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -968,14 +1015,16 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "You create entry points where a queen can sit, using the pawns to anchor your pieces.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 1622.5,
    "fen": "2kr3r/ppqnbppp/4pn2/PPp4b/8/2NP2PP/2P1NPB1/R1BQ1RK1 w - - 1 14",
    "line": [],
-   "spoken": ""
+   "spoken": "Pawns can even be attackers themselves — but a storm isn't always required; often pushing a single pawn to open one file is enough. Understand the goal, usually opening as many files as possible against the king, rather than shoving pawns blindly.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -987,7 +1036,8 @@
     "Bf4",
     "Bf8"
    ],
-   "spoken": ""
+   "spoken": "Skipping ahead — after a5 our play was all intuitive; the bishop to f4.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -999,7 +1049,8 @@
     "Bf4",
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Then the take-order question after the bishop to d6.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -1010,14 +1061,16 @@
     "Qxd6",
     "axb6"
    ],
-   "spoken": ""
+   "spoken": "We take on d6 first, then on b6 — not the other way round.",
+   "reanchor": true
   },
   {
    "ply": 34,
    "t": 1908,
    "fen": "2kr3r/p1qn1ppp/1p1bpn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 6 18",
    "line": [],
-   "spoken": ""
+   "spoken": "The order matters...",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -1026,7 +1079,8 @@
    "line": [
     "axb6"
    ],
-   "spoken": ""
+   "spoken": "...because if we take on b6 first, the knight would recapture on b6...",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -1037,14 +1091,16 @@
     "Bxd6",
     "Rxd6"
    ],
-   "spoken": ""
+   "spoken": "...and Black holds by recapturing on d6 with the rook, keeping a7 defended. So we do it the other way.",
+   "reanchor": true
   },
   {
    "ply": 37,
    "t": 1915.5,
    "fen": "2kr3r/p1q2ppp/1n1Bpn2/1Pp4b/8/2NP2PP/2P1NPB1/R2Q1RK1 b - - 0 19",
    "line": [],
-   "spoken": ""
+   "spoken": "Take, take — and if the queen recaptures on b6...",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -1055,7 +1111,8 @@
     "Ra6",
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "...we would have the rook to a6, incredibly strong, with the queen to a1 to follow.",
+   "reanchor": true
   },
   {
    "ply": 41,
@@ -1064,7 +1121,8 @@
    "line": [
     "Ra1"
    ],
-   "spoken": ""
+   "spoken": "The rook would lift along the a-file...",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -1073,14 +1131,16 @@
    "line": [
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "...and the queen would support from behind.",
+   "reanchor": true
   },
   {
    "ply": 30,
    "t": 1927.5,
    "fen": "2kr1b1r/p1qn1ppp/1p2pn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 2 16",
    "line": [],
-   "spoken": ""
+   "spoken": "Why provoke e5? There's a positional point.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -1090,7 +1150,8 @@
     "Be3",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Provoking e5 gains us the d5 square — attacking doesn't mean positional sense goes out the window.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -1102,7 +1163,8 @@
     "g5",
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "If Black plays the bishop to b7, we'd have g4 and g5 to build a monster on d5.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -1112,14 +1174,16 @@
     "Nd5",
     "Ng8"
    ],
-   "spoken": ""
+   "spoken": "A knight would land on d5 and the game is over — Black overwhelmed.",
+   "reanchor": true
   },
   {
    "ply": 32,
    "t": 1972.5,
    "fen": "2kr1b1r/p1qn1ppp/1p3n2/PPp1p2b/8/2NPB1PP/2P1NPB1/R2Q1RK1 w - - 0 17",
    "line": [],
-   "spoken": ""
+   "spoken": "When attacking, think about all parts of the board — the centre bears on the queenside.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -1131,14 +1195,16 @@
     "f4",
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "Even if Black plays h6, the square is a long-term weakness — f4 could prise open another route, and a knight reaches d5.",
+   "reanchor": true
   },
   {
    "ply": 34,
    "t": 2007.5,
    "fen": "2kr1b1r/p1qn1pp1/1p3n1p/PPp1p2b/6P1/2NPB2P/2P1NPB1/R2Q1RK1 w - - 0 18",
    "line": [],
-   "spoken": ""
+   "spoken": "So it collapses for Black — the bishop to d6, we trade, take a7, and it's over. Moves like the rook to a6 can be hard to find.",
+   "reanchor": true
   }
  ]
 }
