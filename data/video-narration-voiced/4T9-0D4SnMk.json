@@ -1,10 +1,10 @@
 {
  "videoId": "4T9-0D4SnMk",
  "title": "King's Indian + Bowdler Attack | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
- "openingName": "King's Indian Defense",
- "studentSide": "black",
+ "openingName": "Indian Defense",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:4T9-0D4SnMk",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take White and open d4; Black plays ...Nf6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We grab space early with d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "We buttress the wedge with c4."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto with the bishop to g7."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e3."
   },
   {
    "ply": 10,
@@ -87,10 +87,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Against White's early space grab with d5, Black strikes at its base with c6. The plan is simple: undermine and trade off the overextended pawn, and the extra space evaporates.",
-   "kind": "main",
-   "teaches": "Meet a premature space grab by challenging the advanced pawn at its base.",
-   "plans": "Develop smoothly and exploit White's loose, overextended setup."
+   "spoken": "Black challenges the wedge with c6."
   },
   {
    "ply": 11,
@@ -99,7 +96,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 10,
@@ -125,7 +122,7 @@
     "cxd5",
     "Qc2"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d5, capturing our advanced pawn; we bring the queen to c2."
   },
   {
    "ply": 14,
@@ -134,7 +131,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6, hitting d4."
   },
   {
    "ply": 15,
@@ -143,7 +140,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight into d4."
   },
   {
    "ply": 17,
@@ -153,7 +150,7 @@
     "d6",
     "N2b3"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...d6; we reroute a knight to b3."
   },
   {
    "ply": 18,
@@ -162,7 +159,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 20,
@@ -172,7 +169,7 @@
     "Bxd4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the bishop; Black hits it with ...e5."
   },
   {
    "ply": 21,
@@ -181,7 +178,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We drop the bishop back to e3."
   },
   {
    "ply": 22,
@@ -190,9 +187,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Black develops the bishop to f5 with tempo, hitting White's queen on c2 and forcing a concession. Every move gains time because White's pieces are placed so awkwardly.",
-   "kind": "main",
-   "teaches": "Develop with a threat against a poorly-placed queen — each tempo compounds."
+   "spoken": "Black develops the bishop to f5."
   },
   {
    "ply": 23,
@@ -201,7 +196,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "We bring the queen to d2."
   },
   {
    "ply": 24,
@@ -210,7 +205,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on c4."
   },
   {
    "ply": 25,
@@ -219,7 +214,7 @@
    "line": [
     "Na5"
    ],
-   "spoken": ""
+   "spoken": "We swing the knight to a5, eyeing c4 and c6."
   },
   {
    "ply": 26,
@@ -228,7 +223,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "Black pushes the pawn to c3, jamming things up."
   },
   {
    "ply": 27,
@@ -237,7 +232,7 @@
    "line": [
     "Qxc3"
    ],
-   "spoken": ""
+   "spoken": "We grab on c3 with the queen."
   },
   {
    "ply": 28,
@@ -246,7 +241,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "Black centralizes the knight on d5."
   },
   {
    "ply": 29,
@@ -255,7 +250,7 @@
    "line": [
     "Qb3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the queen to b3."
   },
   {
    "ply": 33,
@@ -283,9 +278,7 @@
    "line": [
     "Nxe3"
    ],
-   "spoken": "The combination lands: Black removes the bishop on e3 first, then collects. With White's king still stuck in the centre and the pieces loose, the position simply falls apart and Black wins a piece.",
-   "kind": "main",
-   "teaches": "Eliminate the defender, then cash in — a king stuck in the centre invites the tactics."
+   "spoken": ""
   },
   {
    "ply": 31,
