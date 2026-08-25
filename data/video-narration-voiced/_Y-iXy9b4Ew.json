@@ -1,0 +1,384 @@
+{
+ "videoId": "_Y-iXy9b4Ew",
+ "title": "Master Class | Sicilian Defence, Smith–Morra Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense: Smith-Morra Gambit",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:_Y-iXy9b4Ew",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Take the pawn — and it looks like a Smith-Morra is coming."
+  },
+  {
+   "ply": 5,
+   "t": 41.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Yes, the Smith-Morra. I don't recommend accepting it — for people who don't want to get mated, there are clean ways to decline."
+  },
+  {
+   "ply": 6,
+   "t": 78,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The best decline I've found without taking the pawn is the knight to f6 — you develop and counterattack the e4-pawn, and White essentially has to transpose with e5."
+  },
+  {
+   "ply": 7,
+   "t": 98,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3pP3/2PB4/PP3PPP/RNBQK1NR b KQkq - 2 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "He plays the bishop to d3 rather than e5."
+  },
+  {
+   "ply": 9,
+   "t": 130.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/4P3/2NB4/PP3PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "spoken": "Now we take the pawn — a much better version of the Morra, because with the bishop on d3 instead of c4 it just stares at its own pawn, and White's activity is muted."
+  },
+  {
+   "ply": 10,
+   "t": 165,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/8/4P3/2NB4/PP3PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "e5 would weaken the d5 square — he could pin with the bishop to g5, trade the knight, and plant a piece there. Instead, the flexible knight to c6, and then d6."
+  },
+  {
+   "ply": 11,
+   "t": 178,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/8/4P3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 179.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/4P3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6, to stop him playing e5."
+  },
+  {
+   "ply": 13,
+   "t": 201.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/4P3/2NB1N1P/PP3PP1/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "h3"
+   ],
+   "spoken": "In the Morra his bishop usually sits on c4, which changes everything — here we can breathe. h3 is a good move, stopping our bishop from coming to g4."
+  },
+  {
+   "ply": 14,
+   "t": 243.5,
+   "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/4P3/2NB1N1P/PP3PP1/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "g6"
+   ],
+   "spoken": "There's no urgency to our development, so g6 and the bishop to g7 — since e5 isn't possible, we can afford to give the bishop its best square."
+  },
+  {
+   "ply": 15,
+   "t": 255,
+   "fen": "r1bqkb1r/pp2pp1p/2np1np1/8/4P3/2NB1N1P/PP3PP1/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 264,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/8/4P3/2NB1N1P/PP3PP1/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 283.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/4P3/2NB1N1P/PP3PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 290,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/8/4P3/2NB1N1P/PP3PP1/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "g6",
+    "O-O",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 302,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/6B1/4P3/2NB1N1P/PP3PP1/R2Q1RK1 b kq - 3 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The bishop to g5 doesn't threaten the knight, so we needn't move it — the question is whether to play h6."
+  },
+  {
+   "ply": 18,
+   "t": 354,
+   "fen": "r1bqk2r/pp2ppb1/2np1npp/6B1/4P3/2NB1N1P/PP3PP1/R2Q1RK1 w kq - 0 10",
+   "line": [
+    "h6"
+   ],
+   "spoken": "Play h6 first, while the rook is still home: his plan is Qd2 and the bishop to h6, trading off our dark-squared bishop — our strongest piece, whose loss would leave the kingside full of holes."
+  },
+  {
+   "ply": 19,
+   "t": 368.5,
+   "fen": "r1bqk2r/pp2ppb1/2np1npp/8/4P3/2NBBN1P/PP3PP1/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 377,
+   "fen": "r1bq1rk1/pp2ppb1/2np1npp/8/4P3/2NBBN1P/PP3PP1/R2Q1RK1 w - - 2 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Now castle, playing it conventionally."
+  },
+  {
+   "ply": 21,
+   "t": 389.5,
+   "fen": "r1bq1rk1/pp2ppb1/2np1npp/8/4P3/2NBBN1P/PP1Q1PP1/R4RK1 b - - 3 11",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 394,
+   "fen": "r1bq1r2/pp2ppbk/2np1npp/8/4P3/2NBBN1P/PP1Q1PP1/R4RK1 w - - 4 12",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": "The king to h7 — the key move; it supports the pawn, and without it the whole h6 idea falls apart."
+  },
+  {
+   "ply": 21,
+   "t": 398.5,
+   "fen": "r1bq1rk1/pp2ppb1/2np1npp/8/4P3/2NBBN1P/PP1Q1PP1/R4RK1 b - - 3 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 401.5,
+   "fen": "r1bq1r2/pp2ppbk/2np1npp/8/4P3/2NBBN1P/PP1Q1PP1/R4RK1 w - - 4 12",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": "The king is quite safe on h7 — the pawn guards against the check and the chain holds; just keep an eye on the pin down the road.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 430.5,
+   "fen": "r1bq1r2/pp2ppbk/2np1npp/8/4P3/2NBBN1P/PP1Q1PP1/2R2RK1 b - - 5 12",
+   "line": [
+    "Rac1"
+   ],
+   "spoken": "We don't play e5 — it would blunt our bishop and still weaken d5."
+  },
+  {
+   "ply": 24,
+   "t": 444.5,
+   "fen": "r2q1r2/pp2ppbk/2npbnpp/8/4P3/2NBBN1P/PP1Q1PP1/2R2RK1 w - - 6 13",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "Address the bishop instead — out to e6. Normally a square to avoid, but here it's a fine post: centralised, controlling d5, and we don't need the e-pawn for now."
+  },
+  {
+   "ply": 25,
+   "t": 464,
+   "fen": "r2q1r2/pp2ppbk/2npbnpp/8/4P3/P1NBBN1P/1P1Q1PP1/2R2RK1 b - - 0 13",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 492,
+   "fen": "2rq1r2/pp2ppbk/2npbnpp/8/4P3/P1NBBN1P/1P1Q1PP1/2R2RK1 w - - 1 14",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "The rook to c8, activating and contesting the c-file — not every move has to climb Everest; solid improving moves keep the edge."
+  },
+  {
+   "ply": 27,
+   "t": 562.5,
+   "fen": "2rq1r2/pp2ppbk/2npbnpp/8/4P3/P1NBBN1P/1P1Q1PP1/2R1R1K1 b - - 2 14",
+   "line": [
+    "Rfe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 627.5,
+   "fen": "2rq1r2/pp1nppbk/2npb1pp/8/4P3/P1NBBN1P/1P1Q1PP1/2R1R1K1 w - - 3 15",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The knight to d7 is lovely: it can reroute to e5 or c5, it covers the d4 square, and it opens the bishop's diagonal."
+  },
+  {
+   "ply": 29,
+   "t": 672,
+   "fen": "2rq1r2/pp1nppbk/2npb1pp/8/4P3/P2BBN1P/1P1QNPP1/2R1R1K1 b - - 4 15",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 713,
+   "fen": "2rq1r2/pp2ppbk/2npb1pp/4n3/4P3/P2BBN1P/1P1QNPP1/2R1R1K1 w - - 5 16",
+   "line": [
+    "Nde5"
+   ],
+   "spoken": "The knight to e5 — the secondary point behind d7. It isn't really blocking the bishop again, because this knight won't stay: it either takes his important bishop or hops into c4."
+  },
+  {
+   "ply": 31,
+   "t": 736.5,
+   "fen": "2rq1r2/pp2ppbk/2npb1pp/4N3/4P3/P2BB2P/1P1QNPP1/2R1R1K1 b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 739,
+   "fen": "2rq1r2/pp2ppbk/3pb1pp/4n3/4P3/P2BB2P/1P1QNPP1/2R1R1K1 w - - 0 17",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 740.5,
+   "fen": "2rq1r2/pp2ppbk/2npb1pp/4N3/4P3/P2BB2P/1P1QNPP1/2R1R1K1 b - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 743.5,
+   "fen": "2rq1r2/pp2ppbk/3pb1pp/4n3/4P3/P2BB2P/1P1QNPP1/2R1R1K1 w - - 0 17",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The knight to c5, and if he shifts the bishop away, the knight to c4 is very strong. The a7-pawn is offered deliberately — losing it wouldn't be the end of the world, and White is stuck either way.",
+   "reanchor": true
+  },
+  {
+   "ply": 33,
+   "t": 782,
+   "fen": "2Rq1r2/pp2ppbk/3pb1pp/4n3/4P3/P2BB2P/1P1QNPP1/4R1K1 b - - 0 17",
+   "line": [
+    "Rxc8"
+   ],
+   "spoken": "White's best is to give up the bishop with Bd4 — thinking ahead so it doesn't lose all its effectiveness in the coming trade.",
+   "reanchor": true
+  },
+  {
+   "ply": 34,
+   "t": 807,
+   "fen": "2bq1r2/pp2ppbk/3p2pp/4n3/4P3/P2BB2P/1P1QNPP1/4R1K1 w - - 0 18",
+   "line": [
+    "Bxc8"
+   ],
+   "spoken": "Take with the bishop — the positionally conscious choice; recapturing with the queen would allow the rook to c1 with tempo on the file."
+  },
+  {
+   "ply": 35,
+   "t": 829.5,
+   "fen": "2bq1r2/pp2ppbk/3p2pp/4n3/4P3/P3B2P/1PBQNPP1/4R1K1 b - - 1 18",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 833.5,
+   "fen": "2bq1r2/pp2ppbk/3p2pp/8/2n1P3/P3B2P/1PBQNPP1/4R1K1 w - - 2 19",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "The knight to c4 — and the bishop to c2 was an inaccuracy, even a mistake; White's position here is simply worse."
+  },
+  {
+   "ply": 40,
+   "t": 953,
+   "fen": "3q1r2/pp2ppbk/3pb1pp/8/4P3/P3B2P/1nB1NPP1/4R1K1 w - - 0 21",
+   "line": [
+    "Qd5",
+    "Nxb2",
+    "Qe6",
+    "Bxe6"
+   ],
+   "spoken": "Here's the idea some forget: a vulnerable queen can be 'attacked' by your own queen to force a trade — welcome when you're up a pawn or want a file. We hit the bishop, hit the queen, force the trade, stay a pawn up, and dominate the queenside."
+  }
+ ]
+}
