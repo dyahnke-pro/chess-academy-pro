@@ -1,10 +1,10 @@
 {
  "videoId": "MMELgpZ4CeQ",
  "title": "DON'T DO THIS TO YOUR KING!! | Glek, Pirc/Caro-Kann | GM Naroditsky's DYI Speedrun",
- "openingName": "Glek System (Four Knights)",
+ "openingName": "Four Knights Game: Glek System",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:MMELgpZ4CeQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 3,
@@ -58,7 +58,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 7,
@@ -68,9 +68,7 @@
     "Nf6",
     "g3"
    ],
-   "spoken": "g3 is the Glek's signature — the bishop heads to g2 to press the long light diagonal, a flexible and pleasant way to meet 1.e4 e5.",
-   "kind": "main",
-   "teaches": "The Glek fianchettoes to control the long diagonal and reach a comfortable game."
+   "spoken": "Black develops ...Nf6; we start the Glek fianchetto with g3."
   },
   {
    "ply": 8,
@@ -79,7 +77,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to c5."
   },
   {
    "ply": 9,
@@ -88,7 +86,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with the bishop to g2."
   },
   {
    "ply": 10,
@@ -97,7 +95,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 11,
@@ -106,7 +104,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We play d3."
   },
   {
    "ply": 12,
@@ -115,7 +113,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 13,
@@ -124,7 +122,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 14,
@@ -133,7 +131,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to d7."
   },
   {
    "ply": 17,
@@ -144,7 +142,7 @@
     "Qd8",
     "Kh1"
    ],
-   "spoken": ""
+   "spoken": "We play the rook to e1; Black shuffles the queen to d8; we tuck the king to h1."
   },
   {
    "ply": 18,
@@ -153,7 +151,7 @@
    "line": [
     "Bc8"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the bishop to c8."
   },
   {
    "ply": 22,
@@ -165,7 +163,7 @@
     "Kg1",
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "We reposition the rook to f1; Black replays ...Be6; we step the king back to g1; and Black returns the queen to d7."
   },
   {
    "ply": 23,
@@ -174,7 +172,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We pin the knight with the bishop to g5."
   },
   {
    "ply": 24,
@@ -183,7 +181,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Bh3, offering to trade our fianchettoed bishop."
   },
   {
    "ply": 25,
@@ -192,9 +190,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "Bishop takes on f6 shatters Black's kingside — even at the cost of the bishop pair, it strips the defender and cripples any pawn cover around the king.",
-   "kind": "main",
-   "teaches": "Trade a bishop to wreck the pawn shield in front of a king you mean to attack."
+   "spoken": "We take on f6."
   },
   {
    "ply": 26,
@@ -203,7 +199,7 @@
    "line": [
     "gxf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the g-pawn, wrecking his kingside."
   },
   {
    "ply": 27,
@@ -212,9 +208,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Knight to d5 leaps to the outpost with the black king and queen sitting on awkward, exposed squares — Black is in deep trouble.",
-   "kind": "main",
-   "teaches": "Occupy a central outpost with tempo when the enemy king and queen are poorly placed."
+   "spoken": "We plant the knight on d5."
   },
   {
    "ply": 28,
@@ -223,7 +217,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles queenside."
   },
   {
    "ply": 29,
@@ -232,7 +226,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": ""
+   "spoken": "The knight grabs on f6."
   },
   {
    "ply": 30,
@@ -241,7 +235,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to e6."
   },
   {
    "ply": 31,
@@ -250,7 +244,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "We return the knight to d5."
   },
   {
    "ply": 32,
@@ -259,7 +253,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Black plays h5."
   },
   {
    "ply": 33,
@@ -268,7 +262,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight to g5."
   },
   {
    "ply": 9,
