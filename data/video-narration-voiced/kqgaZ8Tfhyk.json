@@ -15,7 +15,7 @@
     "b3",
     "c5"
    ],
-   "spoken": "c5 — set up a Sicilian structure against b3."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -43,7 +43,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Develop the knight to f6."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "And grab more of the centre with d5."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -70,7 +70,8 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop to b5 — this is a reverse Nimzo-Indian; how do we handle the pin?"
+   "spoken": "This has become a reversed Nimzo-Indian, and the pin needs answering. A queen move handles it, but remember the rule — when a lesser piece can do the job, use it rather than the queen. Not every piece needs to be doing heavy work.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -79,7 +80,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Remember the rule: when a lesser piece can do a queen's job, use it — so the bishop to d7 is the simplest answer."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -88,7 +89,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "To free the other bishop, avoid the fianchetto route — it would allow a capture that ruins the pawn structure in an unpleasant way. The modest pawn to e6 is the sounder path.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -97,7 +99,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "g6 would be dubious — the trade on f6 ruins our structure — so e6 instead."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -107,7 +109,7 @@
     "d3",
     "Bd6"
    ],
-   "spoken": "The bishop to d6, the more active square."
+   "spoken": "The bishop belongs on d6, the more active square — pointing toward the kingside rather than sitting passively."
   },
   {
    "ply": 17,
@@ -127,7 +129,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Force the knight off e5 with the knight to d7. It looks like it drops a pawn — but if he takes, he opens the g-file and hands us huge attacking chances."
+   "spoken": "Now a subtle idea — the knight retreats to d7 to force the strong enemy knight off its central square. It looks like it hangs a pawn, but there's a point: if the pawn is taken, it rips open a file that hands over massive attacking chances.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -136,7 +139,8 @@
    "line": [
     "f4"
    ],
-   "spoken": "He plays f4 to cement the knight anyway."
+   "spoken": "This beats the routine queen move, where the opponent could cement the knight with a pawn to f4. They play the pawn thrust anyway, but now the knight can simply be taken — and the queen gains access to the very square that thrust just opened up.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -145,7 +149,7 @@
    "line": [
     "Bxe5"
    ],
-   "spoken": "But we simply take the knight — and now our queen can reach the g5 square, opened up by his f-pawn capture."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -163,7 +167,8 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "Whenever the position transforms substantially, stop and ask the same question — how has it changed? The queen swings to g5 to occupy the newly opened lines. Re-evaluating after every big shift is what keeps you finding the right plan.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -172,7 +177,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 was a bit of a blunder — look around the whole position."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -181,7 +186,8 @@
    "line": [
     "Qxe3+"
    ],
-   "spoken": "Take on e3, with check."
+   "spoken": "The opponent slips — so grab the pawn with check, then survey the whole board before deciding the next capture. Take stock before you strike again.",
+   "kind": "tactic"
   },
   {
    "ply": 25,
@@ -199,7 +205,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "And take on d4 — destroying his pawn chain."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -208,7 +214,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "Capturing in the centre is right because it destroys the opponent's pawn chain — dismantling the structure that was holding everything together.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -217,7 +224,8 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "The winning method is patient improvement — finish development and castle, overprotect the sensitive f7 pawn by swinging the queen back, blunt the long-diagonal bishop with a pawn, and open some air on the kingside with a pawn break. Then, since the opponent has vacated a file, double the rooks on it, centralise the queen, and tuck the king to safety before pushing. Small, purposeful moves, each leaving the position healthier, until the advantage becomes decisive.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -298,8 +306,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The queen to c7 is the typical move — but the problem is he answers with f4, cementing the knight.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -315,7 +322,8 @@
    "t": 773,
    "fen": "r3k2r/ppq2ppp/2bbpn2/2ppN3/8/1P1PP3/PBP2PPP/RN1Q1RK1 w kq - 2 10",
    "line": [],
-   "spoken": "f4 defends the knight and it's very hard to dislodge — so the knight to d7 forces it off e5; and if he grabs, a piece sacrifice with the rook to g8 and the queen to g5 gives a messy attack, all about buying time.",
+   "spoken": "The deeper rationale for the sacrifice — the pawn thrust defends the knight and makes it hard to dislodge, so the retreat forces it out, and even if the opponent grabs material and snatches on the fianchetto, a rook to the open file brings a swarm of pieces to bear on the king. A queen move induces a weakness and long castling keeps the attack rolling — it may not be full compensation objectively, but it's the classic time-buying sacrifice, keeping the initiative alive and the position messy.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
