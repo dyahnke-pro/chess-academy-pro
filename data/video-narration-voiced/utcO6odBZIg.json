@@ -1,0 +1,362 @@
+{
+ "videoId": "utcO6odBZIg",
+ "title": "Master Class | The Queen's Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen's Gambit Accepted",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:utcO6odBZIg",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 20.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "The Queen's Gambit Accepted — and there are two fundamentally different ways to play it: the solid approach with e3, or the aggressive one."
+  },
+  {
+   "ply": 5,
+   "t": 56.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The aggressive continuation — e4. Not the only move, but the most testing one currently."
+  },
+  {
+   "ply": 7,
+   "t": 73,
+   "fen": "rnbqkbnr/ppp1ppp1/7p/8/2BPP3/8/PP3PPP/RNBQK1NR b KQkq - 0 4",
+   "line": [
+    "h6",
+    "Bxc4"
+   ],
+   "spoken": "h6 is weird — he just lets us take the pawn; and every tempo matters here."
+  },
+  {
+   "ply": 8,
+   "t": 76.5,
+   "fen": "rnbqkbnr/ppp2pp1/4p2p/8/2BPP3/8/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 102,
+   "fen": "rnbqkbnr/ppp2pp1/4p2p/8/2BPP3/2N5/PP3PPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Just develop — the knight to c3, a touch more flexible; maybe the other knight goes to e2 later."
+  },
+  {
+   "ply": 10,
+   "t": 106.5,
+   "fen": "rnbqkbnr/pp3pp1/4p2p/2p5/2BPP3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Don't take on c5 — it would allow a queen trade."
+  },
+  {
+   "ply": 11,
+   "t": 122,
+   "fen": "rnbqkbnr/pp3pp1/4p2p/2pP4/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Push d5 — controlling more of the centre and creating a lot of tension."
+  },
+  {
+   "ply": 12,
+   "t": 130,
+   "fen": "rnbqkbnr/pp3pp1/7p/2pp4/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 133.5,
+   "fen": "rnbqkbnr/pp3pp1/7p/2pN4/2B1P3/8/PP3PPP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "If he takes, we establish a phenomenal knight on the d5 outpost."
+  },
+  {
+   "ply": 14,
+   "t": 157.5,
+   "fen": "rnbqkb1r/pp3pp1/5n1p/2pN4/2B1P3/8/PP3PPP/R1BQK1NR w KQkq - 1 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "An instructive moment — don't over-react to the 'tension'. Black isn't actually threatening anything: if he takes on d5 we just replace the knight with the bishop, and taking on e4 would be catastrophic, opening the e-file into a rook check."
+  },
+  {
+   "ply": 15,
+   "t": 237,
+   "fen": "rnbqkb1r/pp3pp1/5n1p/2pN4/2B1P3/5N2/PP3PPP/R1BQK2R b KQkq - 2 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "So develop as if nothing happened — the knight to f3 — because nothing did."
+  },
+  {
+   "ply": 17,
+   "t": 246,
+   "fen": "rnbqkb1r/pp3pp1/7p/2pB4/4P3/5N2/PP3PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "Nxd5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 247,
+   "fen": "rnbqkb1r/1p3pp1/p6p/2pB4/4P3/5N2/PP3PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "a6"
+   ],
+   "spoken": "A blunder — spot the standoff: the queens face off, and the king is the only thing defending his."
+  },
+  {
+   "ply": 19,
+   "t": 267,
+   "fen": "rnbqkb1r/1p3Bp1/p6p/2p5/4P3/5N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "Distract the king with the classic bishop takes on f7, check."
+  },
+  {
+   "ply": 20,
+   "t": 279.5,
+   "fen": "rnbq1b1r/1p3kp1/p6p/2p5/4P3/5N2/PP3PPP/R1BQK2R w KQ - 0 11",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 286,
+   "fen": "rnbQ1b1r/1p3kp1/p6p/2p5/4P3/5N2/PP3PPP/R1B1K2R b KQ - 0 11",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": "And win the queen."
+  },
+  {
+   "ply": 4,
+   "t": 310,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 311,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 315,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 316.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "The benefit of e3 over e4 is that it keeps the d4 pawn nicely protected — the downside is that it blocks the c1-bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 341.5,
+   "fen": "rnbqkbnr/p1p1pppp/8/1p6/2pP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 353.5,
+   "fen": "rnbqkbnr/p1p1pppp/8/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 356,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 368,
+   "fen": "rnbqkbnr/p3pppp/8/1p6/2pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "axb5",
+    "cxb5"
+   ],
+   "spoken": "A 400-year-old trap: after b5, undermine the base of the chain with a4; if he tries c6, then axb5 and cxb5 open the diagonal, and the queen to f3 just wins a piece or the rook.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 386,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 389,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 409,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4P3/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "Bxc4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 417,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 423.5,
+   "fen": "rnbqkbnr/ppp1ppp1/7p/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "h6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 438,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 442.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "e5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 456.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/2p1P3/8/PP3KPP/RNBQ1BNR b kq - 0 6",
+   "line": [
+    "Qf6",
+    "dxe5",
+    "Qxf2+",
+    "Kxf2"
+   ],
+   "spoken": "e5 is a counter-gambit — if you take, Black trades queens and exposes White's king, which has lost its castling rights; and since Black was a pawn up, material is even and the king is weak.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 460.5,
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/2p1P3/8/PP3KPP/RNBQ1BNR w kq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 467.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 471.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/8/2ppP3/5N2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "exd4",
+    "Nf3"
+   ],
+   "spoken": "So White plays the knight to f3 — Black takes on d4, White takes on c4, preserving the gambit spirit: down a pawn, but two pieces developed to Black's zero, with pressure on f7.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 503.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 551.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3Pp3/2p1P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 565,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
