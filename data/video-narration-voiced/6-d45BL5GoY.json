@@ -1,0 +1,557 @@
+{
+ "videoId": "6-d45BL5GoY",
+ "title": "Danya Is Sick!? Coming Back Strong vs GM Alexander Rustemov!! | Blitz Match | GM Naroditsky",
+ "openingName": "Slav Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:6-d45BL5GoY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1463.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1467,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1468,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1469,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1470,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1473,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1477,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2pP4/2N2NP1/PP2PP1P/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1481.5,
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/2pP4/2N2NP1/PP2PPBP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "b5",
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1482.5,
+   "fen": "rn1qkb1r/pb2pppp/2p2n2/1p6/2pP4/2N2NP1/PP2PPBP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1485.5,
+   "fen": "rn1qkb1r/pb3ppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "e4",
+    "e6",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1489,
+   "fen": "rn1qk2r/pb2bppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1492,
+   "fen": "rn1qk2r/pb2bppp/2p1pn2/1p2N3/2pPP3/2N3P1/PP3PBP/R1BQ1RK1 b kq - 3 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1494.5,
+   "fen": "rn1q1rk1/pb2bppp/2p1pn2/1p2N3/2pPPP2/2N3P1/PP4BP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "O-O",
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1498,
+   "fen": "r2q1rk1/pb1nbppp/2p1pn2/1p2N3/2pPPP2/2N3P1/PP4BP/R1BQ1RK1 w - - 1 11",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1510,
+   "fen": "r2q1rk1/pb1Nbppp/2p1pn2/1p6/2pPPP2/2N3P1/PP4BP/R1BQ1RK1 b - - 0 11",
+   "line": [
+    "Nxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1513.5,
+   "fen": "r4rk1/pb1qbppp/2p1pn2/1p6/2pPPP2/2N1B1P1/PP4BP/R2Q1RK1 b - - 1 12",
+   "line": [
+    "Qxd7",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1521.5,
+   "fen": "r4rk1/pb1qbppp/2p1pn2/8/1ppPPP2/2N1B1P1/PP4BP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "b4"
+   ],
+   "spoken": "Black hits back with b4. And the nagging truth for White is that the compensation for the gambited pawn just is not quite enough — that is the core of the problem, and getting castled sooner would have helped."
+  },
+  {
+   "ply": 25,
+   "t": 1525,
+   "fen": "r4rk1/pb1qbppp/2p1pn2/8/NppPPP2/4B1P1/PP4BP/R2Q1RK1 b - - 1 13",
+   "line": [
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1526,
+   "fen": "r4rk1/pb1qbppp/4pn2/2p5/NppPPP2/4B1P1/PP4BP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1529.5,
+   "fen": "r4rk1/pb1qbppp/4pn2/2N5/1ppPPP2/4B1P1/PP4BP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Nxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1535.5,
+   "fen": "r4rk1/pb3ppp/4pn2/2P5/1pp1PP2/4B1P1/PP4BP/R2R2K1 b - - 0 16",
+   "line": [
+    "Bxc5",
+    "dxc5",
+    "Qxd1",
+    "Rfxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1536.5,
+   "fen": "r4rk1/p4ppp/4pn2/2P5/1pp1bP2/4B1P1/PP4BP/R2R2K1 w - - 0 17",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1562.5,
+   "fen": "r4rk1/p4ppp/4pn2/2P5/1pp1BP2/4B1P1/PP5P/R2R2K1 b - - 0 17",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1564.5,
+   "fen": "r4rk1/p4ppp/4p3/2P5/1pp1nP2/4B1P1/PP5P/R2R2K1 w - - 0 18",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1566.5,
+   "fen": "r4rk1/p4ppp/4p3/2P5/1ppRnP2/4B1P1/PP5P/R5K1 b - - 1 18",
+   "line": [
+    "Rd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1572.5,
+   "fen": "r4rk1/p4ppp/4p3/2n5/1pR2P2/4B1P1/PP5P/R5K1 b - - 0 19",
+   "line": [
+    "Nxc5",
+    "Rxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1574.5,
+   "fen": "r4rk1/p4ppp/4p3/8/1pR2P2/3nB1P1/PP5P/R5K1 w - - 1 20",
+   "line": [
+    "Nd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1581.5,
+   "fen": "r4rk1/p4ppp/4p3/8/1p1R1P2/3nB1P1/PP5P/R5K1 b - - 2 20",
+   "line": [
+    "Rd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1592.5,
+   "fen": "r4rk1/p4ppp/4p3/8/1p1R1P2/4B1P1/Pn5P/R5K1 w - - 0 21",
+   "line": [
+    "Nxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1598.5,
+   "fen": "r4rk1/p4ppp/4p3/8/1R3P2/4B1P1/Pn5P/R5K1 b - - 0 21",
+   "line": [
+    "Rxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1599.5,
+   "fen": "r4rk1/p4ppp/4p3/8/1R3P2/3nB1P1/P6P/R5K1 w - - 1 22",
+   "line": [
+    "Nd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1606.5,
+   "fen": "r4rk1/p4ppp/4p3/8/5P2/1R1nB1P1/P6P/R5K1 b - - 2 22",
+   "line": [
+    "Rb3"
+   ],
+   "spoken": "And the tables turn — with the rook to b3, Black's knight is suddenly trapped. Earlier the rook to d4 ran into the knight to c5, cutting the bishop off, but now the rook to d1 comes next move and the knight has nowhere to run."
+  },
+  {
+   "ply": 44,
+   "t": 1647,
+   "fen": "r4rk1/p4ppp/4p3/8/5n2/1R2B1P1/P6P/R5K1 w - - 0 23",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1650.5,
+   "fen": "r4rk1/p4ppp/4p3/8/5P2/1R2B3/P6P/R5K1 b - - 0 23",
+   "line": [
+    "gxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1651.5,
+   "fen": "r4rk1/p4ppp/4p3/8/5n2/1R2B1P1/P6P/R5K1 w - - 0 23",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1652.5,
+   "fen": "r4rk1/p4ppp/4p3/8/5P2/1R2B3/P6P/R5K1 b - - 0 23",
+   "line": [
+    "gxf4"
+   ],
+   "spoken": "Recapturing with the pawn is the practical call here — it stops Black from generating easy passed pawns on the kingside.",
+   "reanchor": true
+  },
+  {
+   "ply": 46,
+   "t": 1659.5,
+   "fen": "r2r2k1/p4ppp/4p3/8/5P2/1R2B3/P6P/R5K1 w - - 1 24",
+   "line": [
+    "Rfd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1661,
+   "fen": "r2r2k1/p4ppp/4p3/8/5P2/1R2B3/P6P/1R4K1 b - - 2 24",
+   "line": [
+    "Rab1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1663,
+   "fen": "r2r2k1/5ppp/4p3/p7/5P2/1R2B3/P6P/1R4K1 w - - 0 25",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 1665,
+   "fen": "r2r2k1/5ppp/4p3/p7/P4P2/1R2B3/7P/1R4K1 b - - 0 25",
+   "line": [
+    "a4"
+   ],
+   "spoken": "White fixes the pawn on a dark square — precisely so the dark-squared bishop can come and hound it. Creating a fixed, colour-bound target is exactly how these endings are won."
+  },
+  {
+   "ply": 50,
+   "t": 1673,
+   "fen": "r2r2k1/6pp/4pp2/p7/P4P2/1R2B3/7P/1R4K1 w - - 0 26",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 1675.5,
+   "fen": "r2r2k1/1R4pp/4pp2/p7/P4P2/4B3/7P/1R4K1 b - - 1 26",
+   "line": [
+    "Rb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1678.5,
+   "fen": "r5k1/1R4pp/4pp2/p7/P4P2/3rB3/5K1P/1R6 b - - 3 27",
+   "line": [
+    "Rd3",
+    "Kf2"
+   ],
+   "spoken": "Now White goes for the direct attack — the king steps up to f2 and the rooks bear down on g7."
+  },
+  {
+   "ply": 54,
+   "t": 1684.5,
+   "fen": "3r2k1/1R4pp/4pp2/p7/P4P2/3rB3/5K1P/1R6 w - - 4 28",
+   "line": [
+    "Rad8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1692,
+   "fen": "3r2k1/2R3pp/4pp2/p7/P4P2/3rB3/5K1P/1R6 b - - 5 28",
+   "line": [
+    "Rc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1696.5,
+   "fen": "6k1/2Rr2pp/4pp2/p7/P4P2/3rB3/5K1P/1R6 w - - 6 29",
+   "line": [
+    "R8d7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1699,
+   "fen": "6k1/3R2pp/4pp2/p7/P4P2/3rB3/5K1P/1R6 b - - 0 29",
+   "line": [
+    "Rxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 1700,
+   "fen": "6k1/3r2pp/4pp2/pR6/P4P2/4B3/5K1P/8 b - - 1 30",
+   "line": [
+    "Rxd7",
+    "Rb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 1702,
+   "fen": "6k1/6pp/4pp2/pR6/P4P2/3rB3/5K1P/8 w - - 2 31",
+   "line": [
+    "Rd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 1703,
+   "fen": "6k1/6pp/4pp2/R7/P4P2/3rB3/5K1P/8 b - - 0 31",
+   "line": [
+    "Rxa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 1704,
+   "fen": "8/5kpp/4pp2/R7/P4P2/3rB3/5K1P/8 w - - 1 32",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 1705,
+   "fen": "8/R4kpp/4pp2/8/P4P2/3rB3/5K1P/8 b - - 2 32",
+   "line": [
+    "Ra7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 1708,
+   "fen": "8/5kpp/4pp2/R7/P4P2/3rB3/5K1P/8 w - - 1 32",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 1712.5,
+   "fen": "R7/5kpp/4pp2/8/P4P2/3rB3/5K1P/8 b - - 2 32",
+   "line": [
+    "Ra8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 65,
+   "t": 1714,
+   "fen": "R7/5kpp/4pp2/P7/5P2/r3B3/5K1P/8 b - - 0 33",
+   "line": [
+    "Ra3",
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 69,
+   "t": 1717.5,
+   "fen": "R7/P5pp/4pp2/5k2/5P2/r3B3/5K1P/8 b - - 0 35",
+   "line": [
+    "Kg6",
+    "a6",
+    "Kf5",
+    "a7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 71,
+   "t": 1718.5,
+   "fen": "1R6/P5pp/4pp2/8/4kP2/r3B3/5K1P/8 b - - 2 36",
+   "line": [
+    "Ke4",
+    "Rb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 72,
+   "t": 1720,
+   "fen": "1R6/P5pp/4pp2/8/4kP2/4B3/r4K1P/8 w - - 3 37",
+   "line": [
+    "Ra2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 73,
+   "t": 1721,
+   "fen": "1R6/P5pp/4pp2/8/4kP2/4B1K1/r6P/8 b - - 4 37",
+   "line": [
+    "Kg3"
+   ],
+   "spoken": ""
+  }
+ ]
+}
