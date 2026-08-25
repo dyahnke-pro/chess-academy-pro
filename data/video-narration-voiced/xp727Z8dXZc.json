@@ -1,7 +1,7 @@
 {
  "videoId": "xp727Z8dXZc",
  "title": "Master Class | Philidor Defence | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Philidor Defense",
+ "openingName": "Philidor Defence",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The Philidor — d6. Apply basic principles: the main move is d4, opening the centre."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -42,7 +42,8 @@
    "line": [
     "d4"
    ],
-   "spoken": "d6 is passive — it develops no piece and shuts in the bishop — so the logical response is to open the centre."
+   "spoken": "Against the Philidor, apply basic principles — the modest pawn to d6 is passive, closing in the bishop and developing nothing. The logical response is to open the centre with the pawn to d4, punishing the passivity with lines.",
+   "kind": "plan"
   },
   {
    "ply": 6,
@@ -51,7 +52,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Passive development can't defend a quick onslaught — and in the opening, associate onslaught with the f7 square, the only accessible weak point."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +61,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "For the quick kill — the bishop to c4."
+   "spoken": "Passive development leaves the defender short of resources against a quick onslaught — and in the opening, always associate an onslaught with the f7 square, the only accessible weak point. So the bishop swings to c4, aiming straight at it for a fast kill.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -69,7 +71,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": "The knight to f6 is already a bad move here."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -78,7 +80,8 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "The knight to g5 — now he'll have a very hard time defending."
+   "spoken": "Developing the knight to f6 is a mistake — the knight jump to g5 leaves the defence in real trouble, and a central break wins a pawn outright. It's the Fried Liver pattern, but an even worse version for the defender because they're so passive.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
@@ -88,7 +91,7 @@
     "d5",
     "exd5"
    ],
-   "spoken": "d5, exd5, and we're just up a pawn — essentially a Fried Liver, but a worse version for Black, since he's more passive."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -106,7 +109,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "His knight has left the bishop hanging — so the bishop to b5 with check, since c6 isn't available, wins another tempo."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -115,7 +118,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "A check on b5 is the precise move, since the natural block isn't available — and if the bishop interposes, capturing wins a tempo. In a position built on a development lead, every extra tempo is gold.",
+   "kind": "tactic"
   },
   {
    "ply": 15,
@@ -142,7 +146,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "We're going to win the knight on d5 anyway — so take here and be up a pawn."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -160,7 +164,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castle and develop — up a pawn, with a nice position."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -169,7 +173,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "The opponent hasn't castled — and any time your opponent's king is stuck in the centre, the alarm bells for tactics should ring. An uncastled king by definition means a heightened chance of a combination.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -178,7 +183,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "He still hasn't castled — alarm bells for tactics. If his queen lands on the e-file and it opens, the rook to e1 follows — so e6, forcing it open."
+   "spoken": "Here's the common pattern to bank — if the enemy queen lands on the open central file, a rook to e1 wins it. Combining that with the exposed king yields the pawn thrust to e6, which forces a capture, and the recapture keeps the tactic alive because the queen can't take without walking into the rook.",
+   "kind": "tactic"
   },
   {
    "ply": 23,
@@ -206,7 +212,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "The rook to e1 — his king is simply far too weak."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -231,7 +237,9 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "For the theory record, the bishop to e7 is a common trap-move that does stop the knight jump — but after the exchanges the defender is almost lost anyway, because the very same breakthrough pattern reappears.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -240,8 +248,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "A very common trap: the bishop to e7 tries to stop Ng5 — but after dxe5 and dxe5, the queen to d5 hits everything, and Black is almost lost.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -313,7 +320,9 @@
    "t": 347,
    "fen": "r1bqk1nr/ppp1bppp/8/4n3/2B1P3/8/PPP2PPP/RNBQK2R w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "And a vital discipline when carrying a pattern from one position to another — always check that this position is really the same. Here the bishop defends the queen, but there's also a loose pawn under pressure; combining those two facts yields a queen move to h5, a classic fork that's very hard to meet.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -325,8 +334,7 @@
     "Qxe5",
     "g6"
    ],
-   "spoken": "The fork — the queen to h5, hitting the loose pawn while combining with the pressure; it's very hard for Black to find an adequate defence.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -358,7 +366,9 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "The best practical defence is simply to capture the pawn and accept being slightly worse — less of the centre, but solid. Sometimes admitting a small disadvantage and staying sturdy beats clutching at an unsound alternative.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -368,15 +378,16 @@
     "Nxd4",
     "Ngf6"
    ],
-   "spoken": "The best for Black is simply to take the pawn — exd4, Nxd4, then the knight to f6 — worse and with less of the centre, but pretty solid.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
    "t": 390,
    "fen": "r1bqkbnr/pppn1ppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "A moment to break the development rule — when you can just pile up on a target and it works, do it: bring the queen out to f3, and after the forced defence, an in-between pawn thrust to e6 springs a winning fork. Constantly modulating between applying the principles and knowing when to violate them is what makes chess exhilarating.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -402,7 +413,9 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "In the modern treatment of the Philidor the defender captures in the centre first — the best move — and fianchettoes the bishop. It's a fully legitimate, hotly contested line that isn't easy to break, though it demands accuracy from the defender.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -422,8 +435,7 @@
     "Nc3",
     "g6"
    ],
-   "spoken": "In the modern Philidor, Black takes on d4 and fianchettoes the bishop — a legitimate, hotly contested line, not refuted, though Black must be very accurate.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
