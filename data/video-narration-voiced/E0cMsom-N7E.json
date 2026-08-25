@@ -1,7 +1,7 @@
 {
  "videoId": "E0cMsom-N7E",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2070 Cheater!",
- "openingName": "King's Indian Defense",
+ "openingName": "King's Indian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "Another King's Indian."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "c4",
     "g6"
    ],
-   "spoken": "White grabs the centre, and Black fianchettoes with g6 — the King's Indian again."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -37,7 +37,7 @@
     "Bg2",
     "O-O"
    ],
-   "spoken": "White chooses the Fianchetto Variation, and Black completes the kingside setup — the bishop to g7 and castling."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -47,7 +47,7 @@
     "Nc3",
     "d6"
    ],
-   "spoken": "Development, and Black holds back with d6."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -56,7 +56,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3. Now, where does Black's queen's knight belong — c6 or d7? At a high level, the knight to c6 can backfire."
+   "spoken": "The developing question in the King's Indian is where this knight belongs — c6 or d7. Bringing it to c6 can backfire at a high level, because it invites an annoying pawn thrust to d5 that gains space and kicks the knight around.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -65,7 +66,8 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The reason: the knight to c6 invites the annoying d5. So the knight to d7 is the typical choice — safe, and preparing e5."
+   "spoken": "So the knight goes to d7 instead — the typical choice, prepping the central break e5 while staying perfectly safe. It doesn't get chased, and it clears the path for the pawn.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -75,7 +77,7 @@
     "O-O",
     "e5"
    ],
-   "spoken": "And there it is, e5 — with the knight on d7, that break is well supported."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -84,7 +86,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "White builds with e4. And yes, what about that bishop on c8? It will get out in due course."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -93,7 +95,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "Here is an interesting idea: c6, controlling the d5 square — and it also prepares the queen to a5."
+   "spoken": "c6 does two jobs: it clamps down on the d5 square, and it opens the door to swing the queen out to a5. Small pawn move, two ideas riding on it.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -103,7 +106,7 @@
     "h3",
     "Qa5"
    ],
-   "spoken": "The queen swings to a5 — this is the main line, leaning on the c4-pawn."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -122,7 +125,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "At the right moment Black strikes with the capture on d4, and White recaptures with the knight."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -131,7 +134,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "And now the knight jumps into e5 — hyper-modern chess in action: White holds more of the centre, but Black's pieces swarm it, and this one leans on the c4-pawn."
+   "spoken": "The knight lands on e5, hitting the c4-pawn and leaning on the whole centre. This is the hypermodern bargain — the opponent holds more of the middle, but every one of those pawns is under fire from pieces. The fight will come down to whether that initiative can be beaten back.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -140,7 +144,7 @@
    "line": [
     "Bf1"
    ],
-   "spoken": "White retreats the bishop to f1 to defend. But look — both White pawns are under fire from Black's pieces, and the whole battle turns on whether White can beat back the initiative."
+   "spoken": "Look at the coordination — both knights bearing down on the enemy pawns at once. The pieces are doing the work the pawns usually do."
   },
   {
    "ply": 24,
@@ -149,7 +153,8 @@
    "line": [
     "Re8"
    ],
-   "spoken": "Black brings the rook to e8, ramping up the pressure on the e-pawn and tempting White into f4."
+   "spoken": "The rook slides to e8 to pile more pressure on the e-pawn. It also baits a natural-looking f4 push — the kind of move many players fire off automatically, without noticing the drawback it carries.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -158,7 +163,8 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "White tucks the king to h2. Now, that knight on d4 is very active — can Black force it to move while piling on the e-pawn and developing at the same time? Note that c5 would be a mistake, badly weakening the d5 square; a subtler method is wanted."
+   "spoken": "The enemy knight on d4 is a nuisance — the plan is to compel it out of the picture, and the same move can pile onto the e-pawn and develop a piece all at once. Note the trap to avoid: shoving c5 to hit it is a common mistake, because it badly weakens the d5 square. There's a subtler way to do the job.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -167,7 +173,8 @@
    "line": [
     "Qc5"
    ],
-   "spoken": "And there it is — the queen to c5, a really clever move, x-raying f2. The threat is the capture on d4 and then a knight to f3. Here is the tell: when White has played g3 but the bishop has left the fianchetto, the f3 square becomes a tactical hot-spot — let your tactical metal detector start beeping."
+   "spoken": "The subtle way is the queen to c5, x-raying down onto f2 and threatening to snap the knight off with a fork to follow. Here's the pattern to file away: when the opponent has played g3 but the bishop has abandoned its fianchetto post, the f3 square lights up as a tactical hotspot — a warning bell for your tactical metal detector.",
+   "kind": "tactic"
   },
   {
    "ply": 27,
@@ -176,7 +183,7 @@
    "line": [
     "Na4"
    ],
-   "spoken": "White scrambles the knight to a4, but he is in deep trouble."
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -185,14 +192,15 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "And the queen takes on d4 — winning the knight, and the game is over."
+   "spoken": "The queen collects the knight, and with the fork lurking behind it there's simply no good answer — the position collapses.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
    "t": 1434,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
    "line": [],
-   "spoken": "In review, the queen to a5 is genuinely the main line here, hitting the c4-pawn — a line worth practising, and one played for years at the top.",
+   "spoken": "The queen's tour to a5 is a well-worn main line against the fianchetto — from there it immediately eyes the c4-pawn, putting the question to the opponent's centre.",
    "reanchor": true
   }
  ]
