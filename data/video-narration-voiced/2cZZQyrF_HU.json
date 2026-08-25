@@ -1,10 +1,10 @@
 {
  "videoId": "2cZZQyrF_HU",
  "title": "Deconstructing The Philidor Defence  | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Philidor Defence",
+ "openingName": "Philidor Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:2cZZQyrF_HU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We open e4, Black replies e5, and we head for our Four Knights Scotch."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight goes to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops to c6. A bonus of this system: you needn't learn a separate line against the Petrov — the knight to c3 covers it, saving work."
   },
   {
    "ply": 3,
@@ -59,7 +59,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — a souped-up Philidor, quite passive; it doesn't change our plan."
   },
   {
    "ply": 7,
@@ -68,9 +68,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Against the passive Philidor setup, d4 strikes at once — Black has spent a move on the modest d6 and left the center open to challenge.",
-   "kind": "main",
-   "teaches": "Meet a passive defense by opening the center to exploit its lag in development."
+   "spoken": "We play d4 as usual — with Black so passive, why not."
   },
   {
    "ply": 8,
@@ -79,7 +77,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 9,
@@ -88,7 +86,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 11,
@@ -98,7 +96,7 @@
     "Nxd4",
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "The knights come off and our queen recaptures on d4 — Black often trades everything here, but our queen sits beautifully."
   },
   {
    "ply": 12,
@@ -107,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6. Note: a later ...c5 is no threat — it would only weaken d6 badly and hand us the d5-square as an outpost for a knight. Don't fear your queen being attacked; it isn't inherently dangerous."
   },
   {
    "ply": 13,
@@ -116,7 +114,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to g5, natural and strong — and since our queen has already left d1, castling long is on the cards."
   },
   {
    "ply": 14,
@@ -125,7 +123,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to e7. The principled path is to castle queenside and then steamroll on the kingside and in the centre."
   },
   {
    "ply": 15,
@@ -134,9 +132,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Castling long connects the rooks and swings the king's rook onto the d-file, setting the classic plan: pawns and pieces storming Black's king.",
-   "kind": "main",
-   "teaches": "With queens castling on opposite wings, castle into your attack and open lines toward the enemy king."
+   "spoken": "We castle long."
   },
   {
    "ply": 16,
@@ -145,7 +141,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...c5, in love with hitting the queen. But don't rush to move it — the best move here isn't a queen move at all: it's the bishop check on b5."
   },
   {
    "ply": 17,
@@ -154,9 +150,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "Bishop to b5 checks and forces the light-squared bishops off — with Black's defender of d5 gone, the knight will crash into that outpost.",
-   "kind": "main",
-   "teaches": "Trade off the piece guarding a key outpost, then occupy it."
+   "spoken": "We check with the bishop on b5. Black will block with ...Bd7 and we trade the light-squared bishops — excellent positionally: d5 grows even weaker, and with the light bishops gone nothing guards it, so we can take the f6-knight whenever we like and plant a knight on d5."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to d7. Careful, though — recapturing at once allows the famous ...Nxd7 trap, and then grabbing g7 would run into ...Bxg5 with check. Played accurately the resulting endgame is still much better for White — Black's d6-pawn is doomed — but it's an important line to calculate."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": ""
+   "spoken": "We take on d7 with check."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Qxd7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen on d7. Now a good square for our queen: e3 walks into ...Ng4, and d3 blocks our rook — we want the d1-rook to x-ray down the file, so we clear it. That leaves c4: active and pressing, with ...b5 harmless since we guard it twice. And the x-ray is the point — it enables e5."
   },
   {
    "ply": 23,
@@ -194,7 +188,7 @@
     "O-O",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to c4. Now e5 is almost a no-brainer — it forces the f6-knight back and Black's position teeters, all because ...c5 wrecked the centre. The x-ray on the d-pawn is exactly why e5 works: meet ...d5 with a capture on f6, and if Black takes our queen we take his and emerge a piece up. From here we simply release the tension and collect — the weakened c5-pawn falls, and with a pin — while our rook heads to e1 and a knight to d5, tremendous energy in our pieces."
   }
  ]
 }
