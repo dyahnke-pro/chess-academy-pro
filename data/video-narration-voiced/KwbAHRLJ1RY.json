@@ -1,10 +1,10 @@
 {
  "videoId": "KwbAHRLJ1RY",
  "title": "Why you CHEATING!? | Ruy Lopez | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Ruy Lopez, Exchange Variation",
+ "openingName": "Ruy Lopez: Exchange Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:KwbAHRLJ1RY",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take Black and mirror the king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 2,
@@ -49,7 +49,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c6."
   },
   {
    "ply": 5,
@@ -58,7 +58,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to b5 — the Ruy Lopez, pressuring the knight that guards e5."
   },
   {
    "ply": 6,
@@ -67,7 +67,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We follow the main line with a6, chasing the bishop."
   },
   {
    "ply": 7,
@@ -76,7 +76,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "White takes on c6 — the Exchange Variation."
   },
   {
    "ply": 8,
@@ -85,14 +85,15 @@
    "line": [
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the d-pawn onto c6 — opening our bishop and, with ...Qd4 in hand, taking the sting out of Nxe5."
   },
   {
    "ply": 7,
    "t": 178.5,
    "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Take with the d-pawn, not the b-pawn: it frees the bishop for quick development and, more importantly, prepares ...Qd4 to neutralize Nxe5 — following the \"take toward the centre\" rule blindly would miss both.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -101,9 +102,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Recapturing with the d-pawn opens the diagonal for the light-squared bishop — in the Exchange Ruy, Black willingly doubles the c-pawns to speed development and use the bishop pair.",
-   "kind": "main",
-   "teaches": "Recapture to activate a piece and gain the bishop pair, accepting a structural blemish."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -112,7 +111,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles, and now our e5-pawn needs defending."
   },
   {
    "ply": 10,
@@ -121,7 +120,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "We choose f6 — historically the most solid answer to the Exchange, holding e5."
   },
   {
    "ply": 11,
@@ -130,7 +129,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4."
   },
   {
    "ply": 10,
@@ -146,7 +145,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 is the critical try. Because ...f6 has weakened our king and our only developed piece was traded, we want to keep the centre closed — better yet, trade queens to blunt any attack.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -155,9 +155,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Bishop to g4 pins the knight on f3 — with the e5-pawn firmly held, Black leans on the bishop pair to create pressure and tie White's pieces down.",
-   "kind": "main",
-   "teaches": "Use a bishop pin to restrain the opponent's knight and exploit the two bishops."
+   "spoken": "We play the bishop to g4, pinning the knight to the queen."
   },
   {
    "ply": 13,
@@ -166,7 +164,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "White reinforces d4 with c3."
   },
   {
    "ply": 12,
@@ -191,9 +189,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Bishop to d6 is the classic Exchange setup — it guards e5 and eyes the kingside, completing a harmonious, solid deployment for Black.",
-   "kind": "main",
-   "teaches": "Place the dark-squared bishop where it both defends the center and points at the enemy king."
+   "spoken": "We develop the bishop to d6 — solid and simple."
   },
   {
    "ply": 15,
@@ -202,7 +198,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to d2."
   },
   {
    "ply": 16,
@@ -211,7 +207,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "We develop the last piece, the knight to e7, heading for the centre rather than the rim."
   },
   {
    "ply": 17,
@@ -220,7 +216,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White plays h3, poking the bishop."
   },
   {
    "ply": 18,
@@ -229,7 +225,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "We drop back to h5, preserving the pin — a retreating move isn't inherently bad."
   },
   {
    "ply": 19,
@@ -238,14 +234,15 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "White takes on e5."
   },
   {
    "ply": 18,
    "t": 502.5,
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "If White chased the bishop with g4, that would only weaken the pawns in front of his own king — it would play right into our hands.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -263,7 +260,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the f-pawn onto e5."
   },
   {
    "ply": 21,
@@ -272,7 +269,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "White brings the knight to c4."
   },
   {
    "ply": 22,
