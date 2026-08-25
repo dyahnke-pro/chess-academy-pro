@@ -1,7 +1,7 @@
 {
  "videoId": "LJa5Df75CJI",
  "title": "Master Class | Controlling Center | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Van't Kruijs Opening",
+ "openingName": "French Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e3",
     "e5"
    ],
-   "spoken": "White opens with e3 — the Van't Kruijs, a kind of reversed French. Nothing inherently wrong with it, and Black meets it with e5."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "But the bishop to c4 is not good — developing the bishop before the knight and doing little to fight for the centre."
+   "spoken": "There's nothing wrong with the opponent's reversed-French idea in itself, but this bishop sortie is a mistake — it develops a bishop before a knight and does nothing to stake a claim in the centre. That leaves the door open to seize the middle with tempo."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "It hands Black the chance to seize the centre with tempo — d5, hitting the bishop."
+   "spoken": "So grab the centre with gain of time — d5 both plants a pawn in the middle and slaps the bishop, forcing it to react."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "The bishop retreats to b3. Now some players are tempted to keep grabbing space with c5 — but controlling the centre is a balance: pawns, yes, but don't overdo it and forget to develop."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Some openings are designed to overextend you — too many pawns that then crumble. So instead of c5, develop: the knight to f6, supporting the pawn."
+   "spoken": "The tempting continuation is to keep grabbing space with another pawn, but centre control is a balance — pawns on one hand, and on the other, not overreaching and not neglecting development. Whole openings exist to lure you into overextending until the pawns crumble. So develop instead: the knight to f6 shores up the centre.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -60,7 +61,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Where should the dark bishop go? Ideally d6 — it supports e5, and if White castles short, ideas like a later e-pawn push and a Greek-gift sacrifice appear. But can Black play the bishop to d6 at once?"
+   "spoken": "The bishop's ideal home is d6 — it braces the e-pawn, and if the opponent castles short it sets up a later pawn thrust with Greek-gift and attacking ideas. But it can't go there just yet, and knowing why is the key.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -69,7 +71,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "Not quite — the knight would take on d5, winning the pawn. So first c6, defending with another pawn, building a chain, and paving the way for the bishop to d6."
+   "spoken": "The obstacle is a capture on d5 winning the pawn — so play c6 first, defending with a pawn, building a chain, and clearing the way for the bishop. A pawn defended by a pawn is always a healthy structure.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -78,7 +81,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "And yes, c6 takes that square from the knight — but a knight can go to d7 instead. The squares c6 and f6 are conventional, not compulsory; chess is a game of trade-offs."
+   "spoken": "And don't fret that c6 takes the natural square from the other knight — the idea that knights must live on c6 and f6 is beginner's lore. Routing a knight to d7 is no tragedy. Those are the conventional posts, usually the best, but chess is a game of trade-offs; a slightly inferior placement doesn't mean a bad position."
   },
   {
    "ply": 10,
@@ -87,7 +90,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "So — the bishop to d6, as intended, supporting the pawn."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -115,7 +118,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "White plays the knight to g5 — a typical-looking move, but here it does nothing. It is usually played to hit f7, and there is no attack on f7 now."
+   "spoken": "The knight leap to g5 looks aggressive but achieves nothing here — its whole purpose is normally to hit f7, and f7 simply isn't a target in this position. There's a solid way to treat it that doesn't even involve reacting."
   },
   {
    "ply": 12,
@@ -124,7 +127,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Kicking it with h6 is sensible, but for solidity Black just ignores it and castles — this lone knight, scary as it looks, cannot do anything."
+   "spoken": "Rather than shooing the knight, just castle and ignore it. A piece sitting deep in your half isn't automatically a threat — often it's an asset, a stranded horse with nothing to do. Getting the king safe matters more than swatting at a bluff.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -133,7 +137,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "In fact, a piece parked on your side of the board can become an asset for you."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -142,7 +146,8 @@
    "line": [
     "h6"
    ],
-   "spoken": "White tries e4 to grab more centre, but he is not ready — his pieces are scattered. Now h6 hits the knight, and if it moves the e4-pawn is attacked twice and defended once. By saving h6 for the right moment, Black gains more from it."
+   "spoken": "Here the intruder becomes an asset. The opponent's central push is premature with pieces scattered — and holding the h-pawn move in reserve pays off, because the moment the knight is finally kicked, the overextended e4-pawn is left attacked twice and defended only once. Reserving that move for the right moment wins more than playing it on reflex.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -151,7 +156,7 @@
    "line": [
     "Nh3"
    ],
-   "spoken": "Don't take this too far — sometimes the knight to g5 really is dangerous. But here, with White underdeveloped and Black holding a strong pawn centre, there is nothing to fear."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -160,7 +165,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "Black could take the knight and wreck White's structure, but that opens the g-file — double-edged. Simplest is just to take the pawn. And a key practical point: when you are agonising over whether to take or trade, often simply not doing it and finding an alternative is the best solution."
+   "spoken": "Don't overthink the recapture — taking the knight to wreck the structure is double-edged, since it also cracks open a file that could rebound. Just take the pawn simply. The wider lesson: when you're agonising over whether to grab a piece, often the best practical answer is to not take it and find a clean alternative, sparing yourself the time and the second-guessing."
   },
   {
    "ply": 17,
@@ -169,7 +174,7 @@
    "line": [
     "Rf1"
    ],
-   "spoken": "The rook to f1 leaves White's king stranded in the centre — and he has not touched his queenside, so the queen is badly hemmed in."
+   "spoken": "That rook move leaves the king stranded in the centre — and notice the whole queenside is still untouched, which means the queen is boxed in with almost no scope. A trapped king and a smothered queen are exactly the cues to pounce on."
   },
   {
    "ply": 18,
@@ -178,7 +183,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "And because the queen is boxed in, the bishop to g4 hits it — the queen has no squares; White must block awkwardly or play f3."
+   "spoken": "The exploitation is straightforward — the bishop swings to g4 and hits the queen, which has no squares to run to. The opponent is reduced to an ugly retreat or a weakening pawn move just to give it air.",
+   "kind": "tactic"
   },
   {
    "ply": 19,
@@ -187,7 +193,8 @@
    "line": [
     "f3"
    ],
-   "spoken": "If f3, Black takes, White recaptures, and the knight loses the support of the g2-pawn."
+   "spoken": "If the pawn shields the queen, capture it — the recapture then robs the knight of its own pawn's support, and everything starts to fall. This is all coming from sensible developing moves, no fireworks required.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -196,7 +203,7 @@
    "line": [
     "exf3"
    ],
-   "spoken": "Black takes, and White loses more — decline it and Black wins a pawn with a discovery. Completely crushing, and Black did nothing tactical, just sensible development."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -235,14 +242,16 @@
     "Qxf6",
     "Qe1"
    ],
-   "spoken": "The queen falls, and the game is over."
+   "spoken": "The queen falls and the game is over — a whole attack built out of nothing but healthy development and centre control.",
+   "kind": "tactic"
   },
   {
    "ply": 3,
    "t": 619,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B5/4P3/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
    "line": [],
-   "spoken": "White got off on the wrong foot with the Van't Kruijs and the bishop to c4 — a classic beginner miscalibration between the two dials: control the centre with pawns, and develop the pieces. Do too much of one and too little of the other, and the pieces' weight is never felt. Always play one of these central pawn moves, and at least part of the centre is yours.",
+   "spoken": "The takeaway is a picture of two dials: one for controlling the centre with pawns, one for developing the pieces. Miscalibrate them — too little of one, too much of the other — and the position sours. Here too few pawns held the middle while the pieces came out in a rush, so their weight was never felt. Anchoring at least part of the centre with pawns first is what makes the pieces matter.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
