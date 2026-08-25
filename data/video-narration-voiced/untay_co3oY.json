@@ -1,10 +1,10 @@
 {
  "videoId": "untay_co3oY",
  "title": "Building Patient, Unstoppable Attacks | Torre Attack & Alapin | GM Naroditsky's DYI Speedrun",
- "openingName": "King's Indian / Torre Attack (Black)",
+ "openingName": "King's Indian Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:untay_co3oY",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "Nf3",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We face a knight to f3 and answer, of course, with a knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 — another King's Indian is coming."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto with g6."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White's quiet pawn to c3 keeps the cards hidden — it could become a London, a Torre, or a Colle. The right approach is to develop naturally and wait for White to commit before choosing a plan.",
-   "kind": "main",
-   "teaches": "Against a flexible, non-committal setup, develop soundly and react once it declares itself.",
-   "plans": "Fianchetto, castle, and wait to see White's system."
+   "spoken": "White plays c3 — a move with no independent value, the gateway to the London, the Torre, or a fianchetto setup."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We play a bishop to g7 and wait for White to show his cards."
   },
   {
    "ply": 7,
@@ -63,10 +60,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop to g5 declares the Torre Attack — the pin alters the whole character of the game, pressuring the f6-knight and eyeing the dark squares around Black's king.",
-   "kind": "main",
-   "teaches": "Bg5 marks the Torre — the pin on f6 is the system's central idea.",
-   "plans": "Break the pin and challenge the bishop at the right moment."
+   "spoken": "A bishop to g5 — the Torre Attack, essentially a London but with the bishop on g5 instead of f4, which completely alters the character of the game."
   },
   {
    "ply": 8,
@@ -75,10 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Complete development by castling. Against the Torre there is no need to rush — finish the setup, then challenge the g5-bishop and strike in the centre on your own terms.",
-   "kind": "main",
-   "teaches": "Finish developing before confronting the pin — patience beats a premature challenge.",
-   "plans": "Castle, then question the bishop and expand."
+   "spoken": "We castle. Because the bishop is on g5, treating this like a London is innocuous for White."
   },
   {
    "ply": 9,
@@ -94,7 +85,8 @@
    "t": 84,
    "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/2P2N2/PP2PPPP/RN1QKB1R w KQ - 3 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Torre players usually go a knight to d2 and then either push e4 or play e3 — the ideas differ from the London, so keep them separate.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -112,7 +104,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We keep the King's Indian spirit and push d6."
   },
   {
    "ply": 11,
@@ -121,7 +113,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "Now h4 — not a move I've faced, and it looks scary if you don't know it. Against h4 there are three options: ignore it and allow h5; push h5 ourselves to freeze the kingside; or push the pawn one square."
   },
   {
    "ply": 12,
@@ -130,7 +122,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "We choose the third — h6, encouraging White to hand us the bishop pair, then we push h5."
   },
   {
    "ply": 13,
@@ -139,7 +131,8 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "White captures on f6.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -149,7 +142,8 @@
     "Bxf6",
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We recapture and White pushes h5.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -158,7 +152,7 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "And now the point of h6: we push g5, and the kingside is essentially frozen."
   },
   {
    "ply": 17,
@@ -167,14 +161,16 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to d2. The drawback of what we did is the light squares.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 194,
    "fen": "rnbq1rk1/ppp1ppb1/3p1npp/6B1/3P3P/2P1PN2/PP3PP1/RN1QKB1R w KQ - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "We pushed h6, encouraged the trade, then h5 and g5 — what can bite us?",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -195,7 +191,8 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "The light squares, in particular h7 — we must never allow White to build a battery on that diagonal, since a queen to h7 is no light threat.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -204,7 +201,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "One interesting move probably not on your radar: we push d5, restricting the knight and preventing it from jumping to e4."
   },
   {
    "ply": 19,
@@ -220,7 +217,8 @@
    "t": 264,
    "fen": "rnbq1rk1/ppp1pp2/5b1p/3p2pP/3P4/2P1PN2/PP1N1PP1/R2QKB1R w KQ - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "A theme of these King's Indian games is flexibility — being a King's Indian player doesn't mean you can't play the move you think is best. I pushed d5 to restrict e4 and prepare an e5 break.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -229,7 +227,8 @@
    "line": [
     "Nh2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to h2, heading for g4.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -238,7 +237,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "A knight to g4 isn't scary, just annoying since it hits two pieces — so we bring the bishop back to g7."
   },
   {
    "ply": 21,
@@ -247,7 +246,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": ""
+   "spoken": "White plays a queen to e2. Now we attack White's center — e5 wouldn't make sense here."
   },
   {
    "ply": 22,
@@ -256,7 +255,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "So we play the other break, c5 — because after e5, White just takes and we'd shuffle the bishop repeatedly."
   },
   {
    "ply": 23,
@@ -265,7 +264,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles queenside — right into a massive attack. The queenside is never safe for White's king, but punishing it takes patience, not a hasty sacrifice."
   },
   {
    "ply": 24,
@@ -274,7 +273,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "A queen to a5 looks good, but the white king could evacuate to b1 and a1 — so first a bishop to f5, fixing the king on c1."
   },
   {
    "ply": 25,
@@ -283,7 +282,8 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to e1. It's harder to shoot at a moving target — by fixing the king, we stop it fleeing to a1, and now a queen to a5 is much more effective.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -292,7 +292,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "A queen to a5 — mate is incoming very soon."
   },
   {
    "ply": 27,
@@ -301,7 +301,8 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "White plays a3. The immediate threat is a queen capture on a2.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -310,7 +311,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We capture on d4 — not a bishop capture on d4, which is a blunder."
   },
   {
    "ply": 29,
@@ -319,7 +320,8 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on d4.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -328,7 +330,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "Patience is the crucial element — we set everything up by bringing the rook to c8, threatening a rook capture on c3."
   },
   {
    "ply": 31,
@@ -337,7 +339,8 @@
    "line": [
     "Qxe7"
    ],
-   "spoken": ""
+   "spoken": "The threatened rook capture on c3 leads to a quick mate: rook takes c3, the recapture, queen takes c3, king to d1, then a bishop check on c2 forces the king to e2, and a queen to d3 is mate.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -346,7 +349,8 @@
    "line": [
     "Rxc3+"
    ],
-   "spoken": ""
+   "spoken": "We play the rook sacrifice on c3 with check.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -356,7 +360,8 @@
     "bxc3",
     "Qxc3+"
    ],
-   "spoken": ""
+   "spoken": "White recaptures and we check with the queen on c3.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -365,7 +370,8 @@
    "line": [
     "Kd1"
    ],
-   "spoken": ""
+   "spoken": "The king goes to d1 — the bishop to c2 is the key move.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -374,7 +380,8 @@
    "line": [
     "Bc2+"
    ],
-   "spoken": ""
+   "spoken": "A bishop check on c2 — if the king goes to c1, we play a bishop to d3 and a queen to c2.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -383,7 +390,8 @@
    "line": [
     "Ke2"
    ],
-   "spoken": ""
+   "spoken": "The king is forced to e2 — a classic pattern to know.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -392,7 +400,8 @@
    "line": [
     "Qd3#"
    ],
-   "spoken": ""
+   "spoken": "And a queen to d3 is checkmate.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -409,7 +418,8 @@
     "g6",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "So c3, a bishop to g7 — if White plays a bishop to f4...",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -427,7 +437,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "...we have a London.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -443,7 +454,8 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "Our opponent chose the Torre, so we start by castling.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -461,7 +473,8 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "The main line here is a knight to d2, preparing e4.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -470,7 +483,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "You play d6...",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -479,7 +493,8 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "...and it turns out e4 is not scary in these positions.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -488,7 +503,8 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "But I like h6, asking the bishop where it's going.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -497,7 +513,8 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "Most people drop back to h4. One idea for your toolkit...",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -513,7 +530,8 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "...if White captures on f6, how do you recapture?",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -522,7 +540,8 @@
    "line": [
     "exf6"
    ],
-   "spoken": ""
+   "spoken": "Often in this structure the e-pawn recapture is strong, because you want to push f5.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -540,7 +559,8 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "After f5 you reopen the diagonal and chip at White's center — Black is doing great. An experienced Torre player puts the bishop on d3, but even there a knight to c6 preparing c5 keeps Black completely fine.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -556,7 +576,8 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "A bishop to h4 is more common, since White doesn't want to give up the bishop.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -565,7 +586,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "And here remember that c5 is typically much better than e5 in the Torre.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -581,7 +603,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "You can orient toward the e5 break...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -592,7 +615,8 @@
     "dxe5",
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "...but it's hard to get through with the bishop pinning the knight — an immediate e5 just blunders a pawn.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -618,21 +642,24 @@
     "Bc4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Preparing e5 with a knight to d7 is annoying because of the pin, and Black stays cramped.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 661,
    "fen": "r1bq1rk1/pppnppb1/3p1npp/8/3PP2B/2P2N2/PP1N1PPP/R2QKB1R w KQ - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "c5 is a much better move. If White plays d5, then e6 gets rid of the pawn with free play; and if c4, then a rook to e8 collapses White's position, with the king stuck in the center.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 694,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/3P4/2P2N2/PP1NPPPP/R2QKB1R w KQ - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The key point to remember: if White plays a knight to d2 and e4, throw in h6...",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -659,7 +686,8 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "...then push c5, unafraid of d5.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -677,14 +705,16 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "You're not afraid of the captures on d5, the main line. White plays a bishop to c4, a knight to c6, and it's innocuous. Then the powerful knight to h5 leaves the h4 bishop with nowhere to go — the computer even prefers Black. A queen to c7 prevents the nasty e5, and a knight to a5 hits the other bishop.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 761,
    "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/2P2N2/PP1NPPPP/R2QKB1R b KQ - 4 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent played the less ambitious e3 — nothing wrong, just unambitious. We proceed with d6, and h4 was already a novelty. We answered h6, forcing White's hand: after a bishop to f6, h5, g5, we have a great position. Then a knight to d2, d5, restricting e4.",
+   "reanchor": true
   }
  ]
 }
