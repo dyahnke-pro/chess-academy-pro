@@ -1,0 +1,138 @@
+{
+ "videoId": "ndNfx0HHcLk",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | Cheater??",
+ "openingName": "Ruy Lopez",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:ndNfx0HHcLk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 892.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 894,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 899,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "spoken": "My main opening — the Ruy Lopez, the bishop to b5."
+  },
+  {
+   "ply": 6,
+   "t": 926.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 943.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 948,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "He plays the deferred Steinitz with d6, creating the threat of winning the e4-pawn."
+  },
+  {
+   "ply": 9,
+   "t": 969.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "When the opponent plays passively, strike in the centre immediately — d4, opening the position up."
+  },
+  {
+   "ply": 11,
+   "t": 976,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": "Open it up and recapture with the knight."
+  },
+  {
+   "ply": 12,
+   "t": 981,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 990.5,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 2 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "No need to rush the trade on c6 — just develop the knight to c3 and wait it out. If he takes on d4, we recapture and post the queen there."
+  },
+  {
+   "ply": 14,
+   "t": 997,
+   "fen": "r2qk2r/pppbbppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1029,
+   "fen": "r2qk2r/pppbbppp/2Bp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "A tricky question — take with the knight or the bishop? Standard principles say keep the bishop in an open position, but here taking with the knight is actually worse: after bxc6 he recaptures with tempo."
+  },
+  {
+   "ply": 16,
+   "t": 1034,
+   "fen": "r2qk2r/p1pbbppp/2pp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": "Take a good hard look at our knight — it has real prospects, heading for f5; and the e5 break, with the queen x-raying and the knight pressuring, ruins Black's structure even further."
+  },
+  {
+   "ply": 3,
+   "t": 1538.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
