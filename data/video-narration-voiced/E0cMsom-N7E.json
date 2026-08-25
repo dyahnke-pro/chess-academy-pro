@@ -1,0 +1,199 @@
+{
+ "videoId": "E0cMsom-N7E",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2070 Cheater!",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:E0cMsom-N7E",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1181.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "Another King's Indian."
+  },
+  {
+   "ply": 4,
+   "t": 1184,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": "White grabs the centre, and Black fianchettoes with g6 — the King's Indian again."
+  },
+  {
+   "ply": 8,
+   "t": 1189.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/6P1/PP2PPBP/RNBQK1NR w KQ - 3 5",
+   "line": [
+    "g3",
+    "Bg7",
+    "Bg2",
+    "O-O"
+   ],
+   "spoken": "White chooses the Fianchetto Variation, and Black completes the kingside setup — the bishop to g7 and castling."
+  },
+  {
+   "ply": 10,
+   "t": 1192,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N3P1/PP2PPBP/R1BQK1NR w KQ - 0 6",
+   "line": [
+    "Nc3",
+    "d6"
+   ],
+   "spoken": "Development, and Black holds back with d6."
+  },
+  {
+   "ply": 11,
+   "t": 1194,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White develops the knight to f3. Now, where does Black's queen's knight belong — c6 or d7? At a high level, the knight to c6 can backfire."
+  },
+  {
+   "ply": 12,
+   "t": 1220,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R w KQ - 2 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The reason: the knight to c6 invites the annoying d5. So the knight to d7 is the typical choice — safe, and preparing e5."
+  },
+  {
+   "ply": 14,
+   "t": 1222,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "O-O",
+    "e5"
+   ],
+   "spoken": "And there it is, e5 — with the knight on d7, that break is well supported."
+  },
+  {
+   "ply": 15,
+   "t": 1224,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "e4"
+   ],
+   "spoken": "White builds with e4. And yes, what about that bishop on c8? It will get out in due course."
+  },
+  {
+   "ply": 16,
+   "t": 1232,
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Here is an interesting idea: c6, controlling the d5 square — and it also prepares the queen to a5."
+  },
+  {
+   "ply": 18,
+   "t": 1238,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "h3",
+    "Qa5"
+   ],
+   "spoken": "The queen swings to a5 — this is the main line, leaning on the c4-pawn."
+  },
+  {
+   "ply": 19,
+   "t": 1241,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1243.5,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PNP3/2N3PP/PP3PB1/R1BQR1K1 b - - 0 11",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": "At the right moment Black strikes with the capture on d4, and White recaptures with the knight."
+  },
+  {
+   "ply": 22,
+   "t": 1245,
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3PB1/R1BQR1K1 w - - 1 12",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "And now the knight jumps into e5 — hyper-modern chess in action: White holds more of the centre, but Black's pieces swarm it, and this one leans on the c4-pawn."
+  },
+  {
+   "ply": 23,
+   "t": 1271,
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 b - - 2 12",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": "White retreats the bishop to f1 to defend. But look — both White pawns are under fire from Black's pieces, and the whole battle turns on whether White can beat back the initiative."
+  },
+  {
+   "ply": 24,
+   "t": 1276,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 w - - 3 13",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Black brings the rook to e8, ramping up the pressure on the e-pawn and tempting White into f4."
+  },
+  {
+   "ply": 25,
+   "t": 1288.5,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 b - - 4 13",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "White tucks the king to h2. Now, that knight on d4 is very active — can Black force it to move while piling on the e-pawn and developing at the same time? Note that c5 would be a mistake, badly weakening the d5 square; a subtler method is wanted."
+  },
+  {
+   "ply": 26,
+   "t": 1343,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 w - - 5 14",
+   "line": [
+    "Qc5"
+   ],
+   "spoken": "And there it is — the queen to c5, a really clever move, x-raying f2. The threat is the capture on d4 and then a knight to f3. Here is the tell: when White has played g3 but the bishop has left the fianchetto, the f3 square becomes a tactical hot-spot — let your tactical metal detector start beeping."
+  },
+  {
+   "ply": 27,
+   "t": 1416,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/N1PNP3/6PP/PP3P1K/R1BQRB2 b - - 6 14",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "White scrambles the knight to a4, but he is in deep trouble."
+  },
+  {
+   "ply": 28,
+   "t": 1418.5,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/4n3/N1PqP3/6PP/PP3P1K/R1BQRB2 w - - 0 15",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": "And the queen takes on d4 — winning the knight, and the game is over."
+  },
+  {
+   "ply": 11,
+   "t": 1434,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
+   "line": [],
+   "spoken": "In review, the queen to a5 is genuinely the main line here, hitting the c4-pawn — a line worth practising, and one played for years at the top.",
+   "reanchor": true
+  }
+ ]
+}
