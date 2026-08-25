@@ -1,0 +1,666 @@
+{
+ "videoId": "HAMhInc37gI",
+ "title": "Queen's Gambit Declined | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen's Gambit Declined",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:HAMhInc37gI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 70.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "Absolutely classical chess today — the queen's pawn met by d5."
+  },
+  {
+   "ply": 4,
+   "t": 73.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "spoken": "The Queen's Gambit, met with e6 — the Queen's Gambit Declined with Black."
+  },
+  {
+   "ply": 5,
+   "t": 76.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 78.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "This is the QGD, the opening to recommend to every beginner — a gateway to so much else."
+  },
+  {
+   "ply": 7,
+   "t": 81.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White pins with the bishop to g5. The traditional reply is the bishop to e7, but for a little edge there is the knight to d7 — which looks like it just drops a pawn."
+  },
+  {
+   "ply": 8,
+   "t": 97,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "And there it is, the knight to d7 — inviting a very old, very famous trap."
+  },
+  {
+   "ply": 9,
+   "t": 99.5,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 101,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 119,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "e3"
+   ],
+   "spoken": "White plays the main move e3. And Black develops the bishop to e7 — not d6 — mainly to break the pin, since White was threatening to win a pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 132,
+   "fen": "r1bqk2r/pppnbppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR w KQkq - 1 6",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "The bishop comes to e7, unpinning."
+  },
+  {
+   "ply": 11,
+   "t": 135,
+   "fen": "r1bqk2r/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/R2QKB1R b KQkq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 140,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/R2QKB1R w KQ - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Black completes the kingside — castling short."
+  },
+  {
+   "ply": 13,
+   "t": 147,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 4 7",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": "Now the question is what to do with this bishop. This is the Capablanca simplifying system — a way of playing the QGD that has been around since the 1800s."
+  },
+  {
+   "ply": 14,
+   "t": 186.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R w K - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The move is c6 — and be warned, it looks bad, it looks passive. But it is the heart of the system."
+  },
+  {
+   "ply": 15,
+   "t": 195,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p2B1/2PP4/2NBPN2/PP3PPP/2RQK2R b K - 1 8",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "White develops the bishop to d3. Yes, c6 does hem in Black's own light bishop for now."
+  },
+  {
+   "ply": 16,
+   "t": 207,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/6B1/2pP4/2NBPN2/PP3PPP/2RQK2R w K - 0 9",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "Now something even more paradoxical — the capture on c4. Notice Black waited for White to commit that bishop first, so taking now wins a tempo."
+  },
+  {
+   "ply": 13,
+   "t": 209,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 210.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/6B1/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 9",
+   "line": [
+    "dxc4",
+    "Bxc4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 212.5,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/6B1/2BP4/2N1PN2/PP3PPP/2RQK2R b K - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 215.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/6B1/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 9",
+   "line": [
+    "c6"
+   ],
+   "spoken": "And here the simplifying move: the knight to d5, inviting the trade of dark-squared bishops. Black recaptures with the queen, keeping a knight on that fine central stronghold.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 274.5,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 11",
+   "line": [
+    "Bh4",
+    "Nd5",
+    "Bxe7",
+    "Qxe7"
+   ],
+   "spoken": "This system really teaches how pieces and pawns work: at first glance Black looks worse — a passive bishop, White with more centre — but it is very close to equal."
+  },
+  {
+   "ply": 21,
+   "t": 286.5,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BP4/2N1PN2/PP3PPP/2RQ1RK1 b - - 1 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "And much of that is the lack of weaknesses in Black's camp. An underrated truth: with no weaknesses, a position is hard to crack even when it is passive."
+  },
+  {
+   "ply": 22,
+   "t": 326,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/8/2BP4/2n1PN2/PP3PPP/2RQ1RK1 w - - 0 12",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "Now, the freeing break e5 played at once would blunder — it leaves the knight on d5 underprotected — so Black takes on c3 first."
+  },
+  {
+   "ply": 24,
+   "t": 332.5,
+   "fen": "r1b2rk1/pp1nqppp/2p5/4p3/2BP4/2R1PN2/PP3PPP/3Q1RK1 w - - 0 13",
+   "line": [
+    "Rxc3",
+    "e5"
+   ],
+   "spoken": "And now Black uncoils with e5, opening the diagonal for the bishop. The position is very balanced; the question is whether Black can outplay from here."
+  },
+  {
+   "ply": 25,
+   "t": 345.5,
+   "fen": "r1b2rk1/pp1nqppp/2p5/4P3/2B5/2R1PN2/PP3PPP/3Q1RK1 b - - 0 13",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 346.5,
+   "fen": "r1b2rk1/pp2qppp/2p5/4n3/2B5/2R1PN2/PP3PPP/3Q1RK1 w - - 0 14",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 350.5,
+   "fen": "r1b2rk1/pp3ppp/2p5/4q3/2B5/2R1P3/PP3PPP/3Q1RK1 w - - 0 15",
+   "line": [
+    "Nxe5",
+    "Qxe5"
+   ],
+   "spoken": "Black has essentially equalised — all that remains is to develop the bishop, to e6 to neutralise White's, or to f5 with tempo. The whole approach is simple, fundamentally sound chess."
+  },
+  {
+   "ply": 32,
+   "t": 431.5,
+   "fen": "r4rk1/pp3ppp/2p1B3/4q3/8/2R1P3/PPb2PPP/5RK1 w - - 0 17",
+   "line": [
+    "Qc2",
+    "Bf5",
+    "Be6",
+    "Bxc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 434,
+   "fen": "r4rk1/pp3ppp/2p1q3/8/8/2R1P3/PPb2PPP/5RK1 w - - 0 19",
+   "line": [
+    "Bd7",
+    "Qd6",
+    "Be6",
+    "Qxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 454,
+   "fen": "r4rk1/pp3ppp/2p1q3/8/8/2R1P3/PPb2PPP/3R2K1 b - - 1 19",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": "White slips, and here is a free pawn — but before grabbing such a pawn, always verify your queen cannot be trapped."
+  },
+  {
+   "ply": 38,
+   "t": 484,
+   "fen": "r4rk1/pp3ppp/2p5/8/8/2R1P3/qPb2PPP/3R2K1 w - - 0 20",
+   "line": [
+    "Qxa2"
+   ],
+   "spoken": "So Black takes on a2. If White tries to trap it, the queen simply returns to e6, the square it came from."
+  },
+  {
+   "ply": 39,
+   "t": 487,
+   "fen": "r4rk1/pp3ppp/2p5/8/8/2R1P2P/qPb2PP1/3R2K1 b - - 0 20",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Care is needed now — those queenside pawns are delicate, and a careless move allows a rook to d7."
+  },
+  {
+   "ply": 40,
+   "t": 528.5,
+   "fen": "r4rk1/pp3ppp/2p1q3/8/8/2R1P2P/1Pb2PP1/3R2K1 w - - 1 21",
+   "line": [
+    "Qe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 536.5,
+   "fen": "r4rk1/pp3ppp/2p1q3/8/8/3RP2P/1Pb2PP1/3R2K1 b - - 2 21",
+   "line": [
+    "Rcd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 580,
+   "fen": "r3r1k1/pp3ppp/2p1q3/8/8/3RP2P/1Pb2PP1/3R2K1 w - - 3 22",
+   "line": [
+    "Rfe8"
+   ],
+   "spoken": "There is a standard technique for a rook infiltrating to the seventh rank, worth committing to memory: the rook to e8 first, so that a rook to d7 can be met by a rook to e7.",
+   "reanchor": true
+  },
+  {
+   "ply": 43,
+   "t": 587.5,
+   "fen": "r3r1k1/pp1R1ppp/2p1q3/8/8/4P2P/1Pb2PP1/3R2K1 b - - 4 22",
+   "line": [
+    "Rd7"
+   ],
+   "spoken": "And the key detail — a rook to d8 is not needed; Black just meets the infiltration and drops the rook back.",
+   "reanchor": true
+  },
+  {
+   "ply": 45,
+   "t": 598,
+   "fen": "r5k1/pp2rppp/2pRq3/8/8/4P2P/1Pb2PP1/3R2K1 b - - 6 23",
+   "line": [
+    "Re7",
+    "R7d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 628.5,
+   "fen": "r5k1/pp2rppp/2pR4/4q3/8/4P2P/1Pb2PP1/3R2K1 w - - 7 24",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 650.5,
+   "fen": "r5k1/pp2rppp/3R4/1q6/8/1b2P2P/1P3PP1/3R2K1 w - - 3 26",
+   "line": [
+    "Rxc6",
+    "Qb5",
+    "Rcd6",
+    "Bb3"
+   ],
+   "spoken": "It resolves into a drawn rook ending — the plan is to push the b-pawn all the way and hope the defender slips, which eventually he does."
+  },
+  {
+   "ply": 8,
+   "t": 800,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 801,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3P2B1/3P4/2N5/PP2PPPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "Now the trap in full — White takes on d5...",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 802.5,
+   "fen": "r1bqkb1r/pppn1ppp/5n2/3N2B1/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 805,
+   "fen": "r1bqkb1r/pppn1ppp/8/3n2B1/3P4/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 807.5,
+   "fen": "r1bBkb1r/pppn1ppp/8/3n4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
+   "line": [
+    "Bxd8"
+   ],
+   "spoken": "...and after the recaptures, White snatches the queen with the bishop — but this is the point.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 808.5,
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/1b1P4/8/PP2PPPP/R2QKBNR w KQkq - 1 8",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "The bishop checks on b4. It is not mate — White blocks with the queen to d2 — but Black takes on d2 with check, and when the dust settles Black takes the queen and is up a clean piece.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 810,
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/1b1P4/8/PP1QPPPP/R3KBNR b KQkq - 2 8",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 812,
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/3P4/8/PP1bPPPP/R3KBNR w KQkq - 0 9",
+   "line": [
+    "Bxd2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 814.5,
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/3P4/8/PP1KPPPP/R4BNR b kq - 0 9",
+   "line": [
+    "Kxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 815.5,
+   "fen": "r1bk3r/pppn1ppp/8/3n4/3P4/8/PP1KPPPP/R4BNR w - - 0 10",
+   "line": [
+    "Kxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 821,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "line": [],
+   "spoken": "So the knight to d7 is a lovely way to make a sound theoretical move and set a trap at the same time.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 830.5,
+   "fen": "r1bqk2r/pppnbppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR w KQkq - 1 6",
+   "line": [
+    "e3",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 833,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 4 7",
+   "line": [
+    "Rc1",
+    "O-O",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 838,
+   "fen": "r1bq1rk1/p1pnbppp/1p2pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R w K - 0 8",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 841.5,
+   "fen": "r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/2RQKB1R b K - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 848.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/6B1/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 9",
+   "line": [
+    "dxc4",
+    "Bxc4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 854,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 11",
+   "line": [
+    "Bh4",
+    "Nd5",
+    "Bxe7",
+    "Qxe7"
+   ],
+   "spoken": "This is all main line — a very reputable system with well over a thousand games in the database.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 855,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BP4/2N1PN2/PP3PPP/2RQ1RK1 b - - 1 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 857,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BP4/2N1PN2/PP3PPP/2RQK2R w K - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 858,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BPP3/2N2N2/PP3PPP/2RQK2R b K - 0 11",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 860.5,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/8/2BPP3/2n2N2/PP3PPP/2RQK2R w K - 0 12",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 862.5,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/8/2BPP3/2P2N2/P4PPP/2RQK2R b K - 0 12",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": "After the knight trade and the recapture, here is one of the main ideas of the line.",
+   "reanchor": true
+  },
+  {
+   "ply": 27,
+   "t": 879.5,
+   "fen": "r1b2rk1/pp1n1ppp/2p1p3/8/1qBPP3/2P2N2/PR3PPP/3QK2R b K - 4 14",
+   "line": [
+    "Qd6",
+    "Rc2",
+    "Qb4",
+    "Rb2"
+   ],
+   "spoken": "The queen to b4 is tempting but superficial — a lone queen rarely causes real damage. And on pins: two factors decide their danger. First, is the pinned piece defended by a pawn — if so, the pin is far less dangerous. Second, how temporary is it — a pin against a king that is about to castle loses almost all its value. That is exactly why queens make poor pinners: they are so easy to chase away.",
+   "reanchor": true
+  },
+  {
+   "ply": 28,
+   "t": 952,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/8/2BPP3/2P2N2/PR3PPP/3QK2R w K - 5 15",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The move is e5, contesting the centre — notice how perfectly Black's pieces are poised on it. And remember: a space advantage by itself is no reason to worry.",
+   "reanchor": true
+  },
+  {
+   "ply": 30,
+   "t": 994,
+   "fen": "r1b2rk1/pp1nqppp/4p3/2p5/2BPP3/2P2N2/PR3PPP/3Q1RK1 w - - 0 16",
+   "line": [
+    "O-O",
+    "c5"
+   ],
+   "spoken": "Why e5 over c5? White could just castle and ignore c5, then trade in the centre — and it leaves Black's bishop problem unsolved.",
+   "reanchor": true
+  },
+  {
+   "ply": 33,
+   "t": 997.5,
+   "fen": "r1b2rk1/pp1nqppp/4p3/8/2BQP3/2P2N2/PR3PPP/5RK1 b - - 0 17",
+   "line": [
+    "Qd2",
+    "cxd4",
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1007,
+   "fen": "r1b2rk1/pp1n1ppp/2p1p3/8/1qBPP3/2P2N2/PR3PPP/3QK2R b K - 4 14",
+   "line": [],
+   "spoken": "The point of e5 is that it not only breaks in the centre but also opens the diagonal for Black's light bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 28,
+   "t": 1008,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/8/2BPP3/2P2N2/PR3PPP/3QK2R w K - 5 15",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1012.5,
+   "fen": "r1b2rk1/pp1n1ppp/2p1p3/8/1qBPP3/2P2N2/PR3PPP/3QK2R w K - 9 17",
+   "line": [
+    "Rb4",
+    "Qd6",
+    "Rb2",
+    "Qb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1015,
+   "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BPP3/2N2N2/PP3PPP/2RQK2R b K - 0 11",
+   "line": [],
+   "spoken": "And why not the fianchetto with the bishop to b7? It is playable, but a little passive — after some pressure the defence gets awkward, so this simplifying system is the cleaner path.",
+   "reanchor": true
+  }
+ ]
+}
