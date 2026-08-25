@@ -1,9 +1,10 @@
 {
  "videoId": "PmStO-m1Eu4",
  "title": "Unveiling the Power of the Exchange | Sicilian Defense  | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Moscow Variation (Bb5+), Nd7",
+ "openingName": "Sicilian Defense: Moscow Variation",
+ "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:PmStO-m1Eu4",
  "moves": [
   {
@@ -14,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take Black and answer the king's pawn with the Sicilian."
   },
   {
    "ply": 3,
@@ -23,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3. As a gateway Sicilian for improving players the accelerated dragon is the recommendation, but nearing the top of the run we reach for the Sicilian we know best."
   },
   {
    "ply": 4,
@@ -32,10 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Instead of the accelerated setup Black answers with the small pawn to d6 — the classical Sicilian move order, a window into how a grandmaster handles the opening he knows best.",
-   "kind": "main",
-   "teaches": "d6 keeps every classical Sicilian structure open — Najdorf, Scheveningen, Dragon — deferring the choice.",
-   "plans": "Develop flexibly and pick the structure later."
+   "spoken": "We play d6 — and note we're not even facing the Open Sicilian here."
   },
   {
    "ply": 5,
@@ -44,17 +42,15 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop checks from b5 — the Moscow, or Canal, Variation. Rather than the open Sicilian, White pins toward the king and invites a block.",
-   "kind": "main",
-   "teaches": "The Moscow (Bb5+) sidesteps mainline Sicilian theory by trading or provoking a block on d7.",
-   "plans": "Choose the block that keeps winning chances."
+   "spoken": "White plays the bishop to b5 with check — the Moscow, also called the Canal Attack."
   },
   {
    "ply": 3,
    "t": 73,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "After ...Nc6 we'd have met the Rossolimo instead — a line less familiar from Black's side.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -64,7 +60,8 @@
     "d6",
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "Against the check there are several replies. Setting ...Qd7 aside, ...Nc6 is judged the most dubious yet potentially the most rewarding; ...Bd7 is the most solid but often drifts into dry, drawish positions; ...Nd7 strikes the balance — sharp, offering winning chances, and still objectively sound, which is why most top players who want to win pick it.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -73,10 +70,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The knight to d7 is the ambitious block. The bishop to d7 leads to a lot of draws and the queen to d7 to dry positions; the knight strikes the balance — sharp, playing for a win, yet not objectively dubious. It is the choice of top players pressing with Black.",
-   "kind": "main",
-   "teaches": "When choosing how to meet a check, weigh solidity against winning chances — the knight block keeps the game alive.",
-   "plans": "Develop behind the knight and keep the position rich."
+   "spoken": "We block the check with the knight to d7."
   },
   {
    "ply": 7,
@@ -85,10 +79,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "White grabs queenside space with the pawn to a4, a recently fashionable try that clamps down on Black's ...b5 expansion before it can start.",
-   "kind": "main",
-   "teaches": "A rook-pawn thrust like a4 is prophylaxis — it stops the opponent's freeing break in advance.",
-   "plans": "Ignore it and develop; the break can wait."
+   "spoken": "White plays a4 — a recent fashion, ultra-positional, straight from a course; many who follow it reach the middlegame with no plan."
   },
   {
    "ply": 8,
@@ -97,7 +88,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f6, forcing White to decide how to defend e4. Inducing the knight to c3 is a plus: it stops White from setting up c3 and d4 in the quiet, Alapin-like manner."
   },
   {
    "ply": 9,
@@ -106,7 +97,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to c3. We're happy to transpose into an Open Sicilian structure once d4 arrives. Why not ...e5 to stop d4? It's positionally dubious — it weakens the d5-square, and we actually welcome d4."
   },
   {
    "ply": 10,
@@ -115,10 +106,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 sets up a Scheveningen structure — the flexible small-centre Sicilian. Black actively welcomes White playing d4, which simply hands over the very structure Black is aiming for.",
-   "kind": "main",
-   "teaches": "The Scheveningen's small pawn centre (d6/e6) is flexible and hard to attack — invite d4 to reach it.",
-   "plans": "Complete development and meet d4 with the standard recapture."
+   "spoken": "We play e6 — the Scheveningen structure, pawns on e6 and d6 rather than the ...e5 you see in other lines."
   },
   {
    "ply": 11,
@@ -127,7 +115,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles. White could instead keep the centre closed with a modest c3 or d3."
   },
   {
    "ply": 12,
@@ -136,7 +124,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "We continue developing with the bishop to e7. Against a quiet d3 we could even strike with ...d5 ourselves."
   },
   {
    "ply": 13,
@@ -145,10 +133,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White obliges with the pawn to d4, and the position becomes exactly the Sicilian structure Black wanted — a familiar open-Sicilian Scheveningen with a slightly better-placed white bishop as the only difference.",
-   "kind": "main",
-   "teaches": "Transposing into a structure you know beats fighting an unfamiliar one, even at a small objective cost.",
-   "plans": "Recapture, castle, and play the standard plans."
+   "spoken": "White plays d4 — exactly the Scheveningen we wanted. Why not kick with ...a6 first? The b5-bishop is no real nuisance and the d7-knight is our best-defended piece, so we save ...a6 for a rainy day when it truly counts."
   },
   {
    "ply": 14,
@@ -157,7 +142,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We release the tension and take on d4."
   },
   {
    "ply": 15,
@@ -166,7 +151,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the queen on d4 — a queen rather than a knight in the centre, and with the rare bishop on b5, an unusual flavour of Open Sicilian."
   },
   {
    "ply": 16,
@@ -175,10 +160,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castling completes development into a clean open-Sicilian Scheveningen. There is no rush for ...a6 — the b5-bishop is not a real nuisance, and the move is saved for the moment it truly counts, the threat stronger than the execution.",
-   "kind": "main",
-   "teaches": "Hold a useful move in reserve — an unforced ...a6 spends a tempo the position may need later.",
-   "plans": "Finish the setup, keep ...a6 for the right moment."
+   "spoken": "We castle, completing kingside development. On the surface White looks better — more space, the d6-pawn a target — but the position is deceptively robust. If White ever tries the bishop to f4, then ...e5 would fork it and win a piece; and Black's pieces all guard one another, so d6 is far harder to reach than it appears."
   },
   {
    "ply": 17,
@@ -187,7 +169,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": ""
+   "spoken": "White plays the rook to d1, piling on d6 — the best move. We can delay ...a6 one move more."
   },
   {
    "ply": 18,
@@ -196,17 +178,15 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The queen settles on c7 — the move that completes the standard Sicilian formation. Nothing deep, just good development: the queen is better placed here, eyeing the c-file and supporting the central and queenside breaks.",
-   "kind": "main",
-   "teaches": "Queen to c7 is the natural finishing touch of the Scheveningen — c-file pressure and break support.",
-   "plans": "Prepare the ...d5 or ...b5 break from a fully developed position."
+   "spoken": "We play the queen to c7, completing the setup — it x-rays the c2-pawn, adds a defender to d6, and stands ready to jump to c5."
   },
   {
    "ply": 5,
    "t": 570,
    "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "A Moscow that has morphed into an Open Sicilian structure. Now a plan like ...Bd7 followed by Nb5 would be bad for White, because the c2-pawn hangs — which is why the queen went to c7 — often tying White's knight to the defence of c2. And ...a6 is finally the moment to make White commit the bishop: concede the bishop pair or retreat, giving us breathing room.",
+   "reanchor": true
   }
  ]
 }
