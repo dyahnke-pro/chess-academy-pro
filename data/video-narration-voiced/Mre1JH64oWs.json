@@ -1,0 +1,221 @@
+{
+ "videoId": "Mre1JH64oWs",
+ "title": "Reverse Hippo Attack | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Hippopotamus Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Mre1JH64oWs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e3",
+    "d5"
+   ],
+   "spoken": "White opens with e3 — not bad in itself — and Black answers d5."
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d3"
+   ],
+   "spoken": "Looks like a Hippo brewing."
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 27,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "A reverse Hippo. Black just settles into the preferred setup."
+  },
+  {
+   "ply": 6,
+   "t": 35.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 37.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 61,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The defining feature of Black's anti-Hippo system: the bishop to d6, and next the pawn to c6 — that pawn chain means White's fianchettoed bishop will bite on granite."
+  },
+  {
+   "ply": 9,
+   "t": 63,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 69,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "And there is c6 — the point is exactly that chain, so White's long-diagonal bishop runs into a wall."
+  },
+  {
+   "ply": 11,
+   "t": 72.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 84,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR w KQ - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 85.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR b KQ - 2 7",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "What about the queen's knight? Often it goes to d7, then swings via f8 to g6, so as not to block the bishop."
+  },
+  {
+   "ply": 14,
+   "t": 112.5,
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR w KQ - 3 8",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "A flexible move first — a rook to e8, reinforcing the centre while Black waits to see White's kingside plan."
+  },
+  {
+   "ply": 15,
+   "t": 118.5,
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR b KQ - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": "White's setup is a Hippo on steroids. Careful — the knight to d7 could get trapped, since g5 is coming. So the rook lift was not the most accurate, but there are ways around it."
+  },
+  {
+   "ply": 16,
+   "t": 153,
+   "fen": "r1bqr1k1/pp3ppp/n1pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR w KQ - 1 9",
+   "line": [
+    "Na6"
+   ],
+   "spoken": "Something that looks strange — the knight to a6, meaning to reroute back into the centre via c7."
+  },
+  {
+   "ply": 18,
+   "t": 157.5,
+   "fen": "r1bqr1k1/ppn2ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1PB1/R2QK1NR w KQ - 3 10",
+   "line": [
+    "Bg2",
+    "Nc7"
+   ],
+   "spoken": "So the knight comes to c7, later heading for e6. And a5 is a good moment — grabbing queenside space and discouraging White from castling long. From c5 the knight eyes the centre, and the real plan is the knight to e6 and then f4, prime real estate, where it almost always brings a tactic. The finish: rather than automatically grabbing the bishop on b2, look for the better move — the bishop to g4 wins the queen. Never play on autopilot."
+  },
+  {
+   "ply": 2,
+   "t": 328.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "A total collapse by White at the end. In review, Black did not play the opening ideally.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 331,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 333,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nf6",
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 335.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 343.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 346.5,
+   "fen": "r1bqkbnr/ppp3pp/2n5/3ppp2/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "h3",
+    "f5"
+   ],
+   "spoken": "In a serious game Black might pick a different plan — the knight to c6 and then f5, a reverse-Pirc Austrian Attack — but here Black stayed consistent with the c6 and bishop-d6 system. Still very solid.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 357.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": "Two takeaways: don't run the knight to d7 into g5 — reroute it through c7 instead. And don't fear the kingside pawn storm: there is a wide gap between pawns landing on g5 and h4 and any actual checkmate. Beginners often think h4 and g4 mean it is already over — it is not; White has a long way to go to convert it.",
+   "reanchor": true
+  }
+ ]
+}
