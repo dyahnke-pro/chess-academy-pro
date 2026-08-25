@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "I don't like facing the Petrov — so the Four Knights, with the knight to c3."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -44,7 +44,8 @@
     "Nc6",
     "g3"
    ],
-   "spoken": "The Glek System — g3, heading for the fianchetto."
+   "spoken": "The kingside fianchetto ushers in the Glek System — a practical way to sidestep the symmetrical defences and steer the game into quieter, less-charted positional territory where understanding matters more than memory.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -101,7 +102,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "The plan runs h6, h3, the bishop to e6, the king tucked away — and then a5."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -120,7 +121,7 @@
     "a4",
     "a3"
    ],
-   "spoken": "a3, holding back his queenside pawns."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -145,8 +146,8 @@
    "t": 49.5,
    "fen": "r2q1rk1/1ppb1pp1/2np1n1p/2b1p3/p3P3/P1NP1NPP/1PP2PBK/R1BQ1R2 w - - 1 11",
    "line": [],
-   "spoken": "Typically White continues with the knight to d2 and then f4.",
-   "reanchor": true
+   "spoken": "The thematic plan in this structure is to reroute the knight to d2 and follow with the f-pawn thrust — regrouping the piece before expanding on the kingside.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -182,7 +183,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "f5 is an option here."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -191,7 +192,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight back to f3 makes sense."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -209,7 +210,8 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The knight to e2 — take back with the pawn, then c3 to stop b4, and get the rook into the game."
+   "spoken": "As the opponent readies queenside expansion, the prophylactic pawn to c3 stops the pawn break before it starts, and then the rooks come into the game — restrain the plan first, activate second.",
+   "kind": "plan"
   }
  ]
 }
