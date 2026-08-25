@@ -1,7 +1,7 @@
 {
  "videoId": "EfHnGTCO1s4",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2050",
- "openingName": "Queen's Gambit Declined",
+ "openingName": "Slav Defence",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -16,7 +16,7 @@
     "d5",
     "d4"
    ],
-   "spoken": "White offers the Queen's Gambit — like the King's Gambit on the other wing, you give a pawn to seize the centre, one of the most basic things you want in chess."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "Taking the pawn is the Queen's Gambit Accepted — a perfectly legitimate variation, not a mistake at all."
+   "spoken": "Grabbing the gambit pawn is perfectly fine — that's the Queen's Gambit Accepted, a fully legitimate way to play. Taking here isn't greed, it's theory."
   },
   {
    "ply": 3,
@@ -41,8 +41,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "But this opponent declines and plays c6 — the Slav.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -58,7 +57,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black has other ways to decline too — e6 is the Queen's Gambit Declined, while c6 is the Slav.",
+   "spoken": "The gambit gets declined instead: propping the centre with c6 is the Slav, while the alternative of e6 is the Queen's Gambit Declined. Two respectable ways to say no to the pawn.",
    "reanchor": true
   },
   {
@@ -71,7 +70,7 @@
     "Nf3",
     "c6"
    ],
-   "spoken": "Both sides simply develop. Black's e6 reinforces control of d5 and frees the dark bishop. Remember the goal: deploy your army to good squares — you don't win a war with your soldiers sitting idle."
+   "spoken": "That e6 shores up control of d5 and frees the dark-squared bishop to come out. This is the bedrock of the opening — deploy the army. Think of it as a war: pieces sitting idle on their starting squares win nothing; they have to be marched to active posts before any attack on the king is possible."
   },
   {
    "ply": 9,
@@ -80,7 +79,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "White fianchettoes with g3, bringing the bishop to the long diagonal."
+   "spoken": "g3 begins the fianchetto — the bishop is headed for the long diagonal, the sniper's post that rakes all the way across the board."
   },
   {
    "ply": 11,
@@ -90,7 +89,7 @@
     "Nbd7",
     "Bg2"
    ],
-   "spoken": "More development, the bishop coming to g2."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -118,7 +117,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "White plays b3, defending the pawn. Now there are two good homes for the dark bishop — f4, or b2."
+   "spoken": "b3 quietly braces the c-pawn, and it poses the real question of the setup: where does the queen's bishop belong — actively on f4, or on b2 aiming down the long diagonal."
   },
   {
    "ply": 16,
@@ -136,7 +135,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "One choice is the bishop to f4, a fine active square."
+   "spoken": "f4 is a genuinely nice square, but b2 is the deeper choice — it's potential energy. The bishop sits behind the pawns, doing nothing visible now, storing up force for the moment the centre cracks open."
   },
   {
    "ply": 13,
@@ -161,7 +160,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "The main line is e4, grabbing the centre — an extension of the Queen's Gambit.",
+   "spoken": "This is really an extension of the Queen's Gambit: the standard try is to build the big centre with e4, seizing the middle before the opponent can organise.",
    "reanchor": true
   },
   {
@@ -171,8 +170,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "To hold the extra pawn Black wants b5, propping it up with a neighbour. White stops that with a4, then rounds the pawn up with the queen to e2 or the knight to d2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -188,7 +186,8 @@
    "line": [
     "b5"
    ],
-   "spoken": "And here a very important principle: when your opponent spends a long time playing on the flank, you often want to strike in the centre — because while his attention is on the wing, his centre tends to grow weak.",
+   "spoken": "Here's a principle worth carving into memory: when the opponent spends time playing out on the wing, the antidote is to strike in the centre. Flank activity almost always leaves the middle under-defended, and that's exactly where the counterblow lands.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -198,8 +197,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The push e5 would only hand Black a nice outpost — so the right break is d5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -224,8 +222,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now Black cannot keep the centre closed — it is forced open, and White's fianchettoed bishop comes alive.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -235,7 +232,8 @@
     "cxd5",
     "exd5"
    ],
-   "spoken": "The centre cracks open, the long-diagonal bishop turns monstrous, and Black's position starts to creak."
+   "spoken": "So the central break is d5, not e5 — e5 would only hand over a comfortable outpost, whereas d5 forces the centre open. Once it opens, the fianchettoed bishop turns monstrous and the defence starts to buckle.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -258,7 +256,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "A key idea against b4: don't reflexively move the attacked knight — capture on e6 and counter-attack, or even leave the knight and play the knight to d4, meaning to crash on c6, hitting the queen and pawn for a huge attack. That is compensation — a lasting advantage in return for the piece.",
+   "spoken": "If a pawn lunges to attack the knight, resist the knee-jerk retreat — capture on e6 and hit back, or go further and sacrifice: leave the knight en prise, play into d4 and then take on c6, hitting queen and pawn at once. The piece is given up for a raging attack — and an attack like that is exactly what compensation means.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -301,7 +300,8 @@
     "Re8",
     "Bb2"
    ],
-   "spoken": "Why park the bishop where it just stares at a pawn? Because the plan is to prepare e4, remove Black's pawn from d5, then push our own pawn to d5 and unleash that bishop.",
+   "spoken": "Why post the bishop where it just stares at its own pawn? Because the plan runs forward: prepare e4 to dislodge the enemy pawn from d5, then eventually push our own pawn to d5 and blast the diagonal open — and then the bishop is worth a rook.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -320,8 +320,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "So the knight reroutes to d2, preparing e4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -332,8 +331,7 @@
     "e4",
     "dxe4"
    ],
-   "spoken": "Now e4, forcing the pawn off d5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -344,7 +342,8 @@
     "g6",
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "e4 evicts the pawn from d5, and now the real breakthrough is prepared — improve every piece first. Don't fire d5 off immediately; prepare slowly, then attack fast. The rooks come to their best files while the break waits.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -354,7 +353,7 @@
     "Rc8",
     "Rad1"
    ],
-   "spoken": "And then White prepares the d5 breakthrough — patiently improving every piece first. Prepare slowly, attack fast."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -382,7 +381,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Boom — d5. White is ready because every piece already sits on an ideal square."
+   "spoken": "Now the dynamite: d5 is ready precisely because every piece already occupies its ideal square. The break lands with the whole army behind it."
   },
   {
    "ply": 32,
@@ -391,7 +390,8 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "It's a pawn sacrifice — and it comes wrapped in a lesson. The recapture can't be taken lightly, because how you take matters as much as whether you can.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -401,7 +401,7 @@
     "cxd5",
     "exd5"
    ],
-   "spoken": "It is a pawn sacrifice — White cannot recapture on d5 with the knight, because Black just takes it with his own knight."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -429,7 +429,7 @@
     "Qxd5",
     "Bxd5"
    ],
-   "spoken": "And White cannot grab back on d5 either, because the bishop takes on e5. A small piece of advice: to judge whether a capture works, don't just count attackers and defenders."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -463,8 +463,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "It also depends on what specifically is attacking. Here there are actually more attackers than defenders on the pawn — but you cannot take with the queen, or you simply lose the queen.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 36,
@@ -473,7 +472,9 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "A piece of counting advice: when deciding if a capture works, don't just tally attackers against defenders — it depends on what specifically is doing the attacking. There may be more attackers than defenders on the pawn, yet recapturing with the queen is impossible, because the queen herself would fall. Win the pawn that way and you've traded a queen for it — a medal for the wrong achievement.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -492,7 +493,7 @@
    "line": [
     "Rxd5"
    ],
-   "spoken": "Sure, you could take on d5 and congratulate yourself on the breakthrough — but you gave up a queen to do it, so be careful."
+   "spoken": ""
   },
   {
    "ply": 33,
@@ -509,7 +510,8 @@
     "exd5",
     "Nb5"
    ],
-   "spoken": "Instead the knight goes to b5 — attacking the queen and opening the diagonal for the bishop. Mission accomplished: the bishop on b2 is an absolute monster.",
+   "spoken": "The knight jumps to b5 with two purposes — it harasses the queen and clears the long diagonal so the bishop can breathe fire. Mission accomplished: that bishop is now an absolute monster.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -528,8 +530,7 @@
    "line": [
     "Rxe4"
    ],
-   "spoken": "The simplest move is the rook takes on c4 — still hitting the queen, and now the bishop too. The queen to h6 looks tempting with mate in the air, but the bishop to f8 both defends and counter-attacks.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 36,
@@ -556,7 +557,8 @@
     "Qd2",
     "Be7"
    ],
-   "spoken": "The point of taking on c4 is to remove the knight and hit the bishop, forcing the queen to move while still guarding it."
+   "spoken": "The rook capture on c4 does double duty: it removes the knight and attacks the bishop, forcing the queen to move while still babysitting that bishop. Every move keeps a threat attached.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -594,7 +596,8 @@
    "line": [
     "b4"
    ],
-   "spoken": "Then b4 — attacking the queen and prising it away from the bishop; after the trades White is finally ready to swing the queen to d4 with a mate threat.",
+   "spoken": "Then b4 pries the queen loose — attacking it to divorce it from the bishop it was defending. Once the pieces are separated, the queen can swing to d4 and threaten mate.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -646,7 +649,8 @@
    "line": [
     "Ned6"
    ],
-   "spoken": "Black is on his last legs — the knight to d6 forks the rook and the bishop.",
+   "spoken": "The knight leaps in to d6, forking rook and bishop at once. The queens come off, which eases the defence, but the resulting position stays completely dominant.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -685,7 +689,7 @@
    "line": [
     "Re7"
    ],
-   "spoken": "The rook lands on the seventh with the rook to e7, hitting a pawn and eyeing the knight.",
+   "spoken": "The rook swings to the seventh rank — the classic invasion square, hitting a pawn and eyeing the knight. A rook on the seventh is worth its weight in the ending.",
    "reanchor": true
   },
   {
@@ -704,7 +708,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "Here White nearly erred — the bishop takes on f6 looked winning, since the pin means taking the bishop costs Black his rook.",
+   "spoken": "Here comes an honest confession of a miscalculation: from a distance the bishop capture on f6 looked winning, resting on a pin — if the bishop is taken, the rook behind it falls.",
    "reanchor": true
   },
   {
@@ -739,7 +743,8 @@
    "line": [
     "Rc1+"
    ],
-   "spoken": "But Black had the check on c1, which White must answer first — and only then can Black safely take the bishop, because the rook is no longer hanging.",
+   "spoken": "But there was an in-between check on c1 that had to be dealt with first — and once the check is answered, the rook is no longer hanging, so the bishop can be taken after all. The pin evaporated because the tempo was spent elsewhere. The lesson: always check for the opponent's checks before trusting a pin.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -774,7 +779,7 @@
    "line": [
     "Rxf7"
    ],
-   "spoken": "So White doubled back and just snapped off the f-pawn instead — but Black found a very good defence.",
+   "spoken": "So the plan is reset — simply take the pawn on f7 instead, staying on top rather than chasing the flawed combination.",
    "reanchor": true
   },
   {
@@ -791,7 +796,8 @@
    "t": 1384,
    "fen": "b2r2k1/p1rn1R1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 0 23",
    "line": [],
-   "spoken": "Time for a key concept — undefended pieces. A type-one undefended piece is defended by nothing at all; here that is the pinned rook. A type-two undefended piece is defended by only one other piece, and pawns do not count.",
+   "spoken": "Now a framework worth internalising — undefended pieces come in two flavours. A type-one is a piece with no defenders at all. A type-two is defended by only one other piece, and pawns don't count as defenders. Spotting both in every position is how tactics announce themselves.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -801,7 +807,8 @@
    "line": [
     "Rc6"
    ],
-   "spoken": "So one knight is type-one undefended, the rook type-two — a desperately flimsy structure, the knight defending the rook while itself hanging. Move the knight and the rook falls; move the rook and the knight falls.",
+   "spoken": "This is exactly that flimsiness in action: a knight defends a rook while the knight itself is attacked and undefended. Move the knight and the rook drops; move the rook and the knight drops. A structure held together by a single thread never ends well.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -828,8 +835,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "So White has to bail out, taking the knight with the bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 48,
@@ -857,7 +863,9 @@
    "line": [
     "Rf4"
    ],
-   "spoken": "Now, why is White still better even though the worst seems over? Two reasons: Black has a weakness on d5, and specifically an isolated pawn there."
+   "spoken": "Why is the side with more force still better once the smoke clears? Two reasons — a hole on d5, and an isolated pawn sitting on it. And the key question with any isolated pawn is always the same: who controls the square directly in front of it? Here that square belongs to the stronger side.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 52,
@@ -866,7 +874,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "And the key question with an isolated pawn — one with no neighbours to guard it — is who controls the square in front of it. Here it is White: Black cannot push, because White takes the bishop and simply wins the pawn."
+   "spoken": ""
   },
   {
    "ply": 53,
@@ -893,22 +901,21 @@
    "line": [
     "Rfxd4"
    ],
-   "spoken": "So White blockades the pawn with a rook, tying Black's whole army to its defence — which frees White to expand on the other wing. With a kingside pawn majority, the goal is to manufacture a passed pawn, and best of all a protected one that can never be attacked. Bring the king up carefully — mind that a careless king walk can even be mate — trade down, roll the passer through, and it wins the game."
+   "spoken": "Blockade the isolated pawn with a rook and the opponent's whole army gets chained to defending it, which frees a free hand on the other wing. From there it's textbook conversion: use the kingside pawn majority to manufacture a passed pawn, and better still a protected passed pawn — the ideal, because it can never be attacked. March the king up, keep dropping the bishop back to harass the pawn so the enemy pieces are forever herded backward, and the protected passer ends up guarding the very square that delivers mate. Even in the endgame a careless king walk gets checkmated — activity never stops mattering."
   },
   {
    "ply": 22,
    "t": 1720,
    "fen": "r2qr1k1/pb1nbppp/1pp1pn2/8/2PPp3/1PN3P1/PB1N1PBP/R2Q1RK1 w - - 0 12",
    "line": [],
-   "spoken": "With more accurate defence Black could probably have held — tying his rook to the passed pawn — but that is very hard to find in time trouble.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
    "t": 1790.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": "And on evaluating a pin: the crucial shortcut is whether a pawn protects the pinned piece. With a pawn guarding it, don't fear the pin; without one, the defending piece is glued in place and cracks under pressure.",
+   "spoken": "A shortcut for judging whether a pin is dangerous: is there a pawn protecting the pinned piece? If a pawn shields it, there's little to fear. If nothing but the queen holds it, the pin bites — the moment pressure piles onto the pinned piece, it becomes very hard to defend.",
    "reanchor": true
   }
  ]
