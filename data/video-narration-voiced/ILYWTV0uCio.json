@@ -1,610 +1,650 @@
 {
- "videoId": "ILYWTV0uCio",
- "title": "Breaking Down The Trompowsky Attack | King's Indian | Top Theory Speedrun | GM Naroditsky",
- "openingName": "Trompowsky Attack",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:ILYWTV0uCio",
- "moves": [
-  {
-   "ply": 2,
-   "t": 58.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "line": [
-    "d4",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 61.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
-   "line": [
-    "Bg5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 99.5,
-   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
-   "line": [
-    "Ne4"
-   ],
-   "spoken": "Against the Trompowsky's bishop on g5, Black hits back with the knight to e4, attacking the bishop at once and refusing to let White dictate. It is the most testing reply.",
-   "kind": "main",
-   "teaches": "Meet the Trompowsky's g5-bishop by jumping the knight to e4 to harass it immediately."
-  },
-  {
-   "ply": 5,
-   "t": 120.5,
-   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn2P/8/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
-   "line": [
-    "h4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 231.5,
-   "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 0 4",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 262.5,
-   "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPPNPPP1/R2QKBNR b KQkq - 1 4",
-   "line": [
-    "Nd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 326,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPPNPPP1/R2QKBNR w KQkq - 2 5",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 364,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
-   "line": [
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 449,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 474.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 483,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 485,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPNNPP1/R2QKB1R b KQkq - 1 6",
-   "line": [
-    "Ne2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 532.5,
-   "fen": "rnbqkb1r/pp3ppp/4pn2/2Pp2B1/7P/4P3/PPPNNPP1/R2QKB1R b KQkq - 0 7",
-   "line": [
-    "c5",
-    "dxc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 540.5,
-   "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/4P3/PPPNNPP1/R2QKB1R w KQkq - 0 8",
-   "line": [
-    "Bxc5"
-   ],
-   "spoken": "Black opens the centre: after the c5 break and recapture, the bishop lands actively on c5, and Black is already better developed than White's passive knights on d2 and e2.",
-   "kind": "main",
-   "teaches": "Open the centre when you are better developed and the opponent has spent time on the flank."
-  },
-  {
-   "ply": 15,
-   "t": 556,
-   "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R b KQkq - 0 8",
-   "line": [
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 603.5,
-   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R w KQkq - 1 9",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 636,
-   "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R b KQkq - 0 8",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 637,
-   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R w KQkq - 1 9",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 646.5,
-   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/5N1P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 2 9",
-   "line": [
-    "Nf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 673.5,
-   "fen": "r1bqk2r/pp3pp1/2n1pB1p/2bp4/5N1P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 0 10",
-   "line": [
-    "h6",
-    "Bxf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 674.5,
-   "fen": "r1b1k2r/pp3pp1/2n1pq1p/2bp4/5N1P/P3P3/1PPN1PP1/R2QKB1R w KQkq - 0 11",
-   "line": [
-    "Qxf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 691.5,
-   "fen": "r1b1k2r/pp3pp1/2n1pq1p/2bp3N/7P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 1 11",
-   "line": [
-    "Nh5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 781.5,
-   "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPN1PP1/R2QKB1R w KQkq - 0 12",
-   "line": [
-    "Qxb2"
-   ],
-   "spoken": "The pressure tells: with the dark-squared bishop traded off, the queen rakes the long diagonal and snatches b2. Black is up material with the initiative, and the Trompowsky is thoroughly refuted here.",
-   "kind": "main",
-   "teaches": "A queen on the long diagonal against a loose b2 is a standing invitation to grab material."
-  },
-  {
-   "ply": 23,
-   "t": 888.5,
-   "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
-   "line": [
-    "Be2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 911.5,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R w KQ - 2 13",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 970,
-   "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 979.5,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp4/7P/P3P1N1/1qPNBPP1/R2QK2R b KQ - 3 13",
-   "line": [
-    "O-O",
-    "Ng3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 981.5,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R w KQ - 2 13",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 983,
-   "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 996,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp4/7P/P3P1N1/1qPNBPP1/R2QK2R b KQ - 3 13",
-   "line": [
-    "O-O",
-    "Ng3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 1013,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/7P/b3P1N1/1qPNBPP1/R2QK2R w KQ - 0 14",
-   "line": [
-    "Bxa3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 1036.5,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/4P2P/b5N1/1qPNBPP1/R2QK2R b KQ - 0 14",
-   "line": [
-    "e4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 1147,
-   "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/R2QK2R w KQ - 1 15",
-   "line": [
-    "Bd6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 1165,
-   "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/4P2P/b5N1/1qPNBPP1/R2QK2R w K - 5 17",
-   "line": [
-    "Ra3",
-    "Be7",
-    "Ra1",
-    "Ba3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 1173,
-   "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/R2QK2R w KQ - 1 15",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 1176,
-   "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/1R1QK2R b K - 2 15",
-   "line": [
-    "Rb1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 1222,
-   "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/3qP2P/6N1/2PNBPP1/1R1QK2R w K - 3 16",
-   "line": [
-    "Qd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 1230,
-   "fen": "r1b2rk1/pp3pp1/2nbp2p/3P4/3q3P/6N1/2PNBPP1/1R1QK2R b K - 0 16",
-   "line": [
-    "exd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 1235,
-   "fen": "r1b2rk1/pp3pp1/2nb3p/3p4/3q3P/6N1/2PNBPP1/1R1QK2R w K - 0 17",
-   "line": [
-    "exd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 33,
-   "t": 1239,
-   "fen": "r1b2rk1/pp3pp1/2nb3p/3p1N2/3q3P/8/2PNBPP1/1R1QK2R b K - 1 17",
-   "line": [
-    "Nf5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 1240.5,
-   "fen": "r4rk1/pp3pp1/2nb3p/3p1b2/3q3P/8/2PNBPP1/1R1QK2R w K - 0 18",
-   "line": [
-    "Bxf5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 1272.5,
-   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 1278.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 1287.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 1295.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 1298.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 1301,
-   "fen": "rnbqkb1r/ppp1pppp/5B2/3p4/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
-   "line": [
-    "Bxf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 1323,
-   "fen": "rnbqkb1r/ppp1pp1p/5p2/3p4/3P4/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 4",
-   "line": [
-    "gxf6",
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1330,
-   "fen": "rnbqkb1r/pp2pp1p/5p2/2pp4/3P4/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 5",
-   "line": [
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 1332,
-   "fen": "rnbqkb1r/pp2pp1p/5p2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 5",
-   "line": [
-    "dxc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1338,
-   "fen": "rnbqkb1r/pp3p1p/4pp2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 6",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1343.5,
-   "fen": "rnbqkb1r/pp3p1p/4pp2/2Pp4/1P6/4P3/P1P2PPP/RN1QKBNR b KQkq - 0 6",
-   "line": [
-    "b4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1378,
-   "fen": "rnbqkb1r/1p3p1p/4pp2/p1Pp4/1P6/P3P3/2P2PPP/RN1QKBNR b KQkq - 0 7",
-   "line": [
-    "a5",
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 1415,
-   "fen": "r1bqkb1r/1p3p1p/2n1pp2/2Pp4/1P6/P3P3/5PPP/RN1QKBNR b KQkq - 0 9",
-   "line": [
-    "Nc6",
-    "c3",
-    "axb4",
-    "cxb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 1416,
-   "fen": "r1bqkb1r/1p3p1p/4pp2/2Pp4/1n6/P3P3/5PPP/RN1QKBNR w KQkq - 0 10",
-   "line": [
-    "Nxb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 1428.5,
-   "fen": "rnbqkb1r/pp2pp1p/5p2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 5",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 1444.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1448.5,
-   "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 1 4",
-   "line": [
-    "h4",
-    "Ne4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 1451,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1490,
-   "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 1 4",
-   "line": [
-    "Ne4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1492,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPPNPPP1/R2QKBNR w KQkq - 3 5",
-   "line": [
-    "Nd2",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 1496.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
-   "line": [
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1497.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1506,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPNNPP1/R2QKB1R b KQkq - 1 6",
-   "line": [
-    "Ne2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1512,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1513,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4PN2/PPPN1PP1/R2QKB1R b KQkq - 1 6",
-   "line": [
-    "Ngf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1518.5,
-   "fen": "rnbqkb1r/pp3ppp/4pn2/2pp2B1/3P3P/2P1PN2/PP1N1PP1/R2QKB1R b KQkq - 0 7",
-   "line": [
-    "c5",
-    "c3"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "ILYWTV0uCio",
+  "title": "Breaking Down The Trompowsky Attack | King's Indian | Top Theory Speedrun | GM Naroditsky",
+  "openingName": "Trompowsky Attack",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:ILYWTV0uCio",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 58.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "We're playing the King's Indian — the knight to f6."
+    },
+    {
+      "ply": 3,
+      "t": 61.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": "The bishop to g5 — the Trompowsky, named after the Brazilian Octavio Trompowsky. There's a misconception that only the knight to e4 works here; actually Black has many ways to equalize."
+    },
+    {
+      "ply": 4,
+      "t": 99.5,
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "e6 and even g6 are reasonable, d5 is underrated, even c5 is playable — but I've always played the principled knight to e4."
+    },
+    {
+      "ply": 5,
+      "t": 120.5,
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn2P/8/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
+      "line": [
+        "h4"
+      ],
+      "spoken": "At a lower level, h4 — the Hodgson variation, a very double-edged move — causes consternation. Its idea is simple: it defends the bishop, and if Black takes on g5, White recaptures with the h-pawn, opening the h-file (Black has the h7 pawn, restricting the rook) and creating a deep-freeze — the g5 pawn making it very hard for Black to ever fix the h7 weakness, since after h6 White takes and damages Black's kingside. So taking the bishop isn't best."
+    },
+    {
+      "ply": 6,
+      "t": 231.5,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "Black has many options; I'll play it simply with d5 — occupy the centre and toss the ball back. h4's drawback, beyond not developing, is that it commits White to an uncertain king: kingside castling is unlikely with the damage, queenside is risky with the knight on e4, and staying central is dubious."
+    },
+    {
+      "ply": 7,
+      "t": 262.5,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPPNPPP1/R2QKBNR b KQkq - 1 4",
+      "line": [
+        "Nd2"
+      ],
+      "spoken": "The knight to d2 — he knows his theory. I don't want to take on g5, which plays into White's hands; instead I'll simply drop the knight back to f6 or d6, a symmetrical Queen's-Gambit-Declined-type position."
+    },
+    {
+      "ply": 8,
+      "t": 326,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPPNPPP1/R2QKBNR w KQkq - 2 5",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "The knight back to f6. Moving the same piece three times seems wrong, but the centre is closed, so the effect is diminished — and White spent tempi on the weakening h4."
+    },
+    {
+      "ply": 9,
+      "t": 364,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
+      "line": [
+        "e3"
+      ],
+      "spoken": "e3. The point of the knight's to-and-fro: we induced h4, provoking a serious kingside weakness, and now develop conventionally. We've been move-ordered into a reverse Queen's Gambit Declined — where White plays c4, we play c5 from the black side, but after c5 we must watch d takes c5."
+    },
+    {
+      "ply": 10,
+      "t": 449,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Since White is developed, after c5, d takes c5, e6, White solidifies with b4 — so we start with the solid e6 and follow with c5 to contest and pressure White's centre."
+    },
+    {
+      "ply": 9,
+      "t": 474.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
+      "line": [],
+      "spoken": "Don't overthink c5 — normal stuff. Are we worried about blocking our bishop? Yes, that's e6's drawback — so why not the bishop to f5 first? Because a bishop developed to f5 can be quite vulnerable here.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 483,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "And because the centre is closed, not every piece needs immediate development — the light bishop can wait, its temporary block by our own pawn no issue.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 485,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPNNPP1/R2QKB1R b KQkq - 1 6",
+      "line": [
+        "Ne2"
+      ],
+      "spoken": "The knight to e2. Let's play c5 — we can also throw in h6 to force the bishop to commit, but no rush; this pin isn't dangerous, since an easy test is whether the pinned piece is protected by a pawn, and it is."
+    },
+    {
+      "ply": 13,
+      "t": 532.5,
+      "fen": "rnbqkb1r/pp3ppp/4pn2/2Pp2B1/7P/4P3/PPPNNPP1/R2QKB1R b KQkq - 0 7",
+      "line": [
+        "c5",
+        "dxc5"
+      ],
+      "spoken": "We play c5, and White takes, capturing on c5."
+    },
+    {
+      "ply": 14,
+      "t": 540.5,
+      "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/4P3/PPPNNPP1/R2QKB1R w KQkq - 0 8",
+      "line": [
+        "Bxc5"
+      ],
+      "spoken": "We recapture with the bishop, capturing on c5 — precisely why we started with e6."
+    },
+    {
+      "ply": 15,
+      "t": 556,
+      "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R b KQkq - 0 8",
+      "line": [
+        "a3"
+      ],
+      "spoken": "White's knights on e2 and d2 are passive; a3 is a good move, preparing b4. Many would auto-play a5, but not every idea must be prevented — b4 isn't a threat, just an idea; what does b4 actually do?"
+    },
+    {
+      "ply": 16,
+      "t": 603.5,
+      "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R w KQkq - 1 9",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "b4 chases our bishop from c5 — but the bishop is happy to drop to e7, ending the pin. So we develop the knight to c6. And after b4, that pawn becomes a target: we chisel with a5 once White's pawn is on b4 — the base of the chain, or sometimes the tip."
+    },
+    {
+      "ply": 15,
+      "t": 636,
+      "fen": "rnbqk2r/pp3ppp/4pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R b KQkq - 0 8",
+      "line": [],
+      "spoken": "You attack the base — like pulling the bottom Jenga block — but you can also attack the tip, which sometimes has strong effect too.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 637,
+      "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/7P/P3P3/1PPNNPP1/R2QKB1R w KQkq - 1 9",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "The knight to c6 — we could also castle here; both are entirely acceptable.",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 646.5,
+      "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp2B1/5N1P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 2 9",
+      "line": [
+        "Nf4"
+      ],
+      "spoken": "The knight to f4 — a perfect chance for the move I mentioned earlier: the bishop on g5 is now fully deprived of squares."
+    },
+    {
+      "ply": 19,
+      "t": 673.5,
+      "fen": "r1bqk2r/pp3pp1/2n1pB1p/2bp4/5N1P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 0 10",
+      "line": [
+        "h6",
+        "Bxf6"
+      ],
+      "spoken": "So it's time for h6, forcing White to trade the bishop for the knight, capturing on f6, letting our queen come to the active f6."
+    },
+    {
+      "ply": 20,
+      "t": 674.5,
+      "fen": "r1b1k2r/pp3pp1/2n1pq1p/2bp4/5N1P/P3P3/1PPN1PP1/R2QKB1R w KQkq - 0 11",
+      "line": [
+        "Qxf6"
+      ],
+      "spoken": "We recapture with the queen, capturing on f6. White has traded the dark-squared bishop, the pride of the Trompowsky — a great position for us."
+    },
+    {
+      "ply": 21,
+      "t": 691.5,
+      "fen": "r1b1k2r/pp3pp1/2n1pq1p/2bp3N/7P/P3P3/1PPN1PP1/R2QKB1R b KQkq - 1 11",
+      "line": [
+        "Nh5"
+      ],
+      "spoken": "The queen on f6 attacks b2 and pressures f2 — Black's already better. The knight to h5. We can grab the pawn on b2: people fear the queen getting trapped, but calculate concretely — after the queen takes b2, the rook to b1, our queen defends g7, so we drop it to e5, not c3 where the rook to b3 chases it; the central queen looks vulnerable to f4, but f4 gives up e3 with check."
+    },
+    {
+      "ply": 22,
+      "t": 781.5,
+      "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPN1PP1/R2QKB1R w KQkq - 0 12",
+      "line": [
+        "Qxb2"
+      ],
+      "spoken": "The queen takes, capturing on b2. After the rook to b1, the queen to e5 — and if White chases with the knight, it severs the connection to the h5-knight, letting us take on h5. So we can safely take b2. Even if e5 were unavailable, taking on a3 would be fine — a king move to f8 isn't the end of the world."
+    },
+    {
+      "ply": 23,
+      "t": 888.5,
+      "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "The bishop to e2. We have ways to deal with g7 — g6 is the forcing option, or we simply castle. The king is safest on f8, surrounded by pawn cover; d7 walks into the d-file x-ray."
+    },
+    {
+      "ply": 24,
+      "t": 911.5,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R w KQ - 2 13",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Castling kills two birds — it develops and protects g7. If I were White I'd contemplate g4 for kingside counterplay, using the uncastled king: the trope where the uncastled side can benefit from the h1-rook if the h-file opens — see Vukovic's Art of Attack."
+    },
+    {
+      "ply": 23,
+      "t": 970,
+      "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
+      "line": [],
+      "spoken": "Why not take on a3 earlier? It would have been possible and not terrible, but it creates awkwardness with the queen and bishop, and I feared losing the bishop.",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 979.5,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp4/7P/P3P1N1/1qPNBPP1/R2QK2R b KQ - 3 13",
+      "line": [
+        "O-O",
+        "Ng3"
+      ],
+      "spoken": "More concretely...",
+      "reanchor": true
+    },
+    {
+      "ply": 24,
+      "t": 981.5,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R w KQ - 2 13",
+      "line": [],
+      "spoken": "...here's the reason.",
+      "reanchor": true
+    },
+    {
+      "ply": 23,
+      "t": 983,
+      "fen": "r1b1k2r/pp3pp1/2n1p2p/2bp3N/7P/P3P3/1qPNBPP1/R2QK2R b KQkq - 1 12",
+      "line": [],
+      "spoken": "...the bishop takes a3 would have allowed the knight takes g7 with check, deflecting the queen — the queen takes g7, the rook takes a3 — and I didn't want any kingside damage.",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 996,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/2bp4/7P/P3P1N1/1qPNBPP1/R2QK2R b KQ - 3 13",
+      "line": [
+        "O-O",
+        "Ng3"
+      ],
+      "spoken": "But now we absolutely can take on a3.",
+      "reanchor": true
+    },
+    {
+      "ply": 26,
+      "t": 1013,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/7P/b3P1N1/1qPNBPP1/R2QK2R w KQ - 0 14",
+      "line": [
+        "Bxa3"
+      ],
+      "spoken": "So we take, capturing on a3 — a free pawn, having solved our problems: castled, centre secure. Don't think I always caution against taking material — take it when it's literally free.",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 1036.5,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/4P2P/b5N1/1qPNBPP1/R2QK2R b KQ - 0 14",
+      "line": [
+        "e4"
+      ],
+      "spoken": "Now up two pawns — remember diminishing returns: the second pawn matters more than the third. White plays e4, a great-looking move that does nothing: d5 is defended by the e6 pawn, and if White takes on d5 and we recapture, our light bishop opens up — we'd welcome White taking on e4. Not the knight to b4 or d4 grabbing c2 — that's greed too far, our pieces clustering on the queenside with the queen overextended after the rook to b1. Instead, improve: our a3-bishop is awkward and ties the queen down, so move it.",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 1147,
+      "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/R2QK2R w KQ - 1 15",
+      "line": [
+        "Bd6"
+      ],
+      "spoken": "The bishop to b4 pins the d2-knight, but that pin is temporary — White castles and the bishop looks silly. I like the bishop to d6, where the pressure is meaningful.",
+      "reanchor": true
+    },
+    {
+      "ply": 32,
+      "t": 1165,
+      "fen": "r1b2rk1/pp3pp1/2n1p2p/3p4/4P2P/b5N1/1qPNBPP1/R2QK2R w K - 5 17",
+      "line": [
+        "Ra3",
+        "Be7",
+        "Ra1",
+        "Ba3"
+      ],
+      "spoken": "The rook to a3, the bishop to e7, the rook to a1, the bishop to a3 — and the bishop-takes-g3 is a serious positional threat ruining White's kingside structure. So the bishop to c5 or d6, both fine, but I like d6.",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 1173,
+      "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/R2QK2R w KQ - 1 15",
+      "line": [],
+      "spoken": "Both are about equivalent.",
+      "reanchor": true
+    },
+    {
+      "ply": 29,
+      "t": 1176,
+      "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/4P2P/6N1/1qPNBPP1/1R1QK2R b K - 2 15",
+      "line": [
+        "Rb1"
+      ],
+      "spoken": "The rook to b1 chases the queen from b2 — glad we moved the bishop off a3. Where to? Not the queen to c3, chased by the rook to b3; I like the queen to f6, though it runs into the knight to h5, then the queen to e7.",
+      "reanchor": true
+    },
+    {
+      "ply": 30,
+      "t": 1222,
+      "fen": "r1b2rk1/pp3pp1/2nbp2p/3p4/3qP2P/6N1/2PNBPP1/1R1QK2R w K - 3 16",
+      "line": [
+        "Qd4"
+      ],
+      "spoken": "Or the queen to d4 — I like that most, because it's very hard to attack: if the d2-knight moves, it opens a queen trade.",
+      "reanchor": true
+    },
+    {
+      "ply": 31,
+      "t": 1230,
+      "fen": "r1b2rk1/pp3pp1/2nbp2p/3P4/3q3P/6N1/2PNBPP1/1R1QK2R b K - 0 16",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "...e takes d5, we recapture...",
+      "reanchor": true
+    },
+    {
+      "ply": 32,
+      "t": 1235,
+      "fen": "r1b2rk1/pp3pp1/2nb3p/3p4/3q3P/6N1/2PNBPP1/1R1QK2R w K - 0 17",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "...and the second reason I like the queen to d4...",
+      "reanchor": true
+    },
+    {
+      "ply": 33,
+      "t": 1239,
+      "fen": "r1b2rk1/pp3pp1/2nb3p/3p1N2/3q3P/8/2PNBPP1/1R1QK2R b K - 1 17",
+      "line": [
+        "Nf5"
+      ],
+      "spoken": "...is that it prevents castling, since the knight to f5 blunders a knight.",
+      "reanchor": true
+    },
+    {
+      "ply": 34,
+      "t": 1240.5,
+      "fen": "r4rk1/pp3pp1/2nb3p/3p1b2/3q3P/8/2PNBPP1/1R1QK2R w K - 0 18",
+      "line": [
+        "Bxf5"
+      ],
+      "spoken": "The knight to f5 prevents castling, and our opponent resigns — if White had castled, the bishop takes g3 wins a piece via the pin on f2. The same narrative: pressure in the opening and early middlegame, and people collapse.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 1272.5,
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "line": [],
+      "spoken": "White's position was already losing. A meatier game — let's focus on general concepts.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 1278.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "line": [],
+      "spoken": "In this position there are many good moves.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 1287.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "I really like d5, often under-discussed since the main moves are the knight to e4 and e6.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 1295.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+      "line": [],
+      "spoken": "d5 is a really good move.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 1298.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "...and usually White takes on f6...",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 1301,
+      "fen": "rnbqkb1r/ppp1pppp/5B2/3p4/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+      "line": [
+        "Bxf6"
+      ],
+      "spoken": "...because that's the point of the bishop to g5, and I like recapturing g takes f6 — a gritty, interesting pawn structure with the bishop pair.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1323,
+      "fen": "rnbqkb1r/ppp1pp1p/5p2/3p4/3P4/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 4",
+      "line": [
+        "gxf6",
+        "e3"
+      ],
+      "spoken": "...g takes f6, and White plays e3, and much like the game the structure calls for c5.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1330,
+      "fen": "rnbqkb1r/pp2pp1p/5p2/2pp4/3P4/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 5",
+      "line": [
+        "c5"
+      ],
+      "spoken": "...c5...",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1332,
+      "fen": "rnbqkb1r/pp2pp1p/5p2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 5",
+      "line": [
+        "dxc5"
+      ],
+      "spoken": "...and if White takes on c5, Black's in no hurry to win it back.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1338,
+      "fen": "rnbqkb1r/pp3p1p/4pp2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "...we try to win it back with e6.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1343.5,
+      "fen": "rnbqkb1r/pp3p1p/4pp2/2Pp4/1P6/4P3/P1P2PPP/RN1QKBNR b KQkq - 0 6",
+      "line": [
+        "b4"
+      ],
+      "spoken": "...White shouldn't cling with b4. How to deal with the pawn chain? You can attack the base or the tip — attacking the base is generally more successful.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1378,
+      "fen": "rnbqkb1r/1p3p1p/4pp2/p1Pp4/1P6/P3P3/2P2PPP/RN1QKBNR b KQkq - 0 7",
+      "line": [
+        "a5",
+        "a3"
+      ],
+      "spoken": "So play a5, and White can't play a3, because the a1-rook is undefended — had the knight already reached d2, a3 would be possible. White can defend from the other side with c3, but then a takes b4, c takes b4, and b6, the traditional way of attacking the chain, softening it up.",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 1415,
+      "fen": "r1bqkb1r/1p3p1p/2n1pp2/2Pp4/1P6/P3P3/5PPP/RN1QKBNR b KQkq - 0 9",
+      "line": [
+        "Nc6",
+        "c3",
+        "axb4",
+        "cxb4"
+      ],
+      "spoken": "Then attack the tip — if c takes b4, you take on b4 and then on b6, a great position; or simply the knight to c6, exploiting that a3 runs into the knight takes b4.",
+      "reanchor": true
+    },
+    {
+      "ply": 18,
+      "t": 1416,
+      "fen": "r1bqkb1r/1p3p1p/4pp2/2Pp4/1n6/P3P3/5PPP/RN1QKBNR w KQkq - 0 10",
+      "line": [
+        "Nxb4"
+      ],
+      "spoken": "...the knight takes b4, the same undefended-rook principle — a super common scenario in speedruns.",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1428.5,
+      "fen": "rnbqkb1r/pp2pp1p/5p2/2Pp4/8/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 5",
+      "line": [],
+      "spoken": "A common occurrence in these d4 openings — one side grabbing the c5 pawn; understanding these structures is integral.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 1444.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "So d5 is a good move. We played the knight to e4, White plays h4...",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1448.5,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 1 4",
+      "line": [
+        "h4",
+        "Ne4"
+      ],
+      "spoken": "...and we kept it simple with d5.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 1451,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": "There's a bunch of lines — Levy's course recommends this — where White pushes the pawn to g6; the point of g6 is that you can't take with the h-pawn without dropping the rook, and taking with the f-pawn damages your kingside, giving White long-term pressure on h7. I don't love that for Black.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1490,
+      "fen": "rnbqkb1r/ppp1pppp/8/3p2B1/3Pn2P/8/PPP1PPP1/RN1QKBNR w KQkq - 1 4",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "...so we played d5 to keep it simple.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1492,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/8/PPPNPPP1/R2QKBNR w KQkq - 3 5",
+      "line": [
+        "Nd2",
+        "Nf6"
+      ],
+      "spoken": "...the knight back to f6.",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1496.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
+      "line": [
+        "e3"
+      ],
+      "spoken": "White is slightly better here, no dispute...",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1497.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "...but Black's position is tremendously solid, so we play e6 to prepare c5.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1506,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPNNPP1/R2QKB1R b KQkq - 1 6",
+      "line": [
+        "Ne2"
+      ],
+      "spoken": "...and the knight to e2 is a step in the wrong direction, too passive.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1512,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR w KQkq - 0 6",
+      "line": [],
+      "spoken": "Not a big mistake, but why not just develop...",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1513,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/3P3P/4PN2/PPPN1PP1/R2QKB1R b KQkq - 1 6",
+      "line": [
+        "Ngf3"
+      ],
+      "spoken": "...either knight to f3, and we'd play c5, and White can play it like a London with c3 and the bishop to d3 — a good position.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1518.5,
+      "fen": "rnbqkb1r/pp3ppp/4pn2/2pp2B1/3P3P/2P1PN2/PP1N1PP1/R2QKB1R b KQkq - 0 7",
+      "line": [
+        "c5",
+        "c3"
+      ],
+      "spoken": "So the knight to e2 is passive, and d takes c5 is passive too — I already think Black is better. Yielding the centre is a bad idea; White should play c3 to be solid, or c4 to counter-strike. After a3, we don't fear b4, since it sends our bishop to e7 where it wants to go — and this is a Trompowsky, not a King's Indian; we'd just ignore it and castle.",
+      "reanchor": true
+    }
+  ]
 }
