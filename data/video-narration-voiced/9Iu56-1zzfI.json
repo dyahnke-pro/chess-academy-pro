@@ -234,7 +234,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "The knight on d6 is our vulnerable piece — so rather than use the get-out-of-jail rook to c1 to activate the rook, we evacuate the knight to b5. Chess is all about priorities, and the top priority is getting that knight out."
+   "spoken": "Our knight was the vulnerable piece — so rather than use the get-out-of-jail rook to c1 to activate the rook, we've evacuated it to b5. Chess is all about priorities, and the top priority was getting that knight out."
   },
   {
    "ply": 30,
@@ -343,7 +343,7 @@
    "t": 538,
    "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
    "line": [],
-   "spoken": "My key mistake was developing the bishop to g5 — it became a big liability. Better to just take, play the queen to e2, and put a rook on d1 to x-ray his queen, maybe even e5 to cement the centre. This bishop-to-g5 setup, facing off with his dark-squared bishop, gets into trouble precisely because of the knight takes on d5 — that same knight then defends the bishop. Taking on f6 was possible, but it hands Black the two bishops and a later f5 break.",
+   "spoken": "My key mistake was developing the bishop to g5 — it became a big liability. Better to just take, play the queen to e2, and bring a rook to d1 to x-ray his queen, maybe even e5 to cement the centre. This bishop-to-g5 setup, facing off with his dark-squared bishop, gets into trouble precisely because of the knight takes on d5 — that same knight then defends the bishop. Taking on f6 was possible, but it hands Black the two bishops and a later f5 break.",
    "reanchor": true
   }
  ]
