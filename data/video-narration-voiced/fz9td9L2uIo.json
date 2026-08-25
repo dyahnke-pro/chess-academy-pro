@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:fz9td9L2uIo",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "c6",
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We take Black; White plays c4, we answer c6, and after e4 we're in Caro-Kann territory."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We meet the centre head-on with d5."
   },
   {
    "ply": 6,
@@ -35,7 +35,7 @@
     "cxd5",
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "White takes on d5; we recapture with the c-pawn."
   },
   {
    "ply": 7,
@@ -44,9 +44,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White pushes e5, locking the centre and handing Black an ideal French-style structure — but a French where the light-squared bishop is not yet shut in. The advanced pawn can be undermined at leisure.",
-   "kind": "main",
-   "teaches": "When White locks the centre with e5, get the light bishop OUTSIDE the pawn chain before playing e6."
+   "spoken": "White pushes e5 — handing us an ideal French, our bishop free to develop outside the chain."
   },
   {
    "ply": 8,
@@ -55,7 +53,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c6."
   },
   {
    "ply": 10,
@@ -65,10 +63,7 @@
     "d4",
     "Bf5"
    ],
-   "spoken": "The bishop comes out to f5 before e6 would ever trap it — the one problem piece of the French, solved for free. Black already has an easy, comfortable game against the e5-pawn.",
-   "kind": "main",
-   "teaches": "Developing the light-squared bishop to f5 before e6 is Black's whole edge in these Advance structures.",
-   "plans": "Play e6, finish developing, and pile onto d4 and e5."
+   "spoken": "White plays d4; we develop the bishop to f5, outside the pawn chain — a French player's paradise."
   },
   {
    "ply": 11,
@@ -77,7 +72,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to c3."
   },
   {
    "ply": 12,
@@ -86,7 +81,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We play e6, completing the ideal French setup."
   },
   {
    "ply": 13,
@@ -95,7 +90,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 14,
@@ -104,7 +99,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "We bring the queen to b6, French-style, pressuring d4 — and unlike the French, our bishop is already outside on f5."
   },
   {
    "ply": 15,
@@ -113,7 +108,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e2."
   },
   {
    "ply": 16,
@@ -122,7 +117,7 @@
    "line": [
     "Nh6"
    ],
-   "spoken": ""
+   "spoken": "We play ...Nh6, planning to reroute the knight to f5."
   },
   {
    "ply": 17,
@@ -131,7 +126,7 @@
    "line": [
     "Na4"
    ],
-   "spoken": ""
+   "spoken": "White hits our queen with the knight to a4."
   },
   {
    "ply": 18,
@@ -140,7 +135,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "We drop the queen back to c7, keeping our valuable dark-squared bishop."
   },
   {
    "ply": 19,
@@ -149,7 +144,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles."
   },
   {
    "ply": 20,
@@ -158,7 +153,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e7."
   },
   {
    "ply": 21,
@@ -167,7 +162,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to d2."
   },
   {
    "ply": 22,
@@ -176,7 +171,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to g6, clearing f5 for the knight."
   },
   {
    "ply": 24,
@@ -186,7 +181,7 @@
     "a3",
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "White plays a3; we land the knight on f5 — every piece now in place."
   },
   {
    "ply": 25,
@@ -195,7 +190,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e3."
   },
   {
    "ply": 26,
@@ -204,7 +199,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 27,
@@ -213,7 +208,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White brings the knight back to c3."
   },
   {
    "ply": 28,
@@ -222,9 +217,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "The pawn to f6 strikes at the head of White's chain, prising open the centre and the f-file to get at the d4- and e5-pawns Black has been pressuring.",
-   "kind": "main",
-   "teaches": "Break a cramping pawn chain at its head with f6 to open lines onto its base."
+   "spoken": "We strike with f6 — the thematic French break."
   },
   {
    "ply": 29,
@@ -233,7 +226,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to b5, hitting our queen."
   },
   {
    "ply": 30,
@@ -242,7 +235,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "We pull the queen back to b6, pinning the knight to the d-pawn and piling on d4."
   },
   {
    "ply": 31,
@@ -251,14 +244,15 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to d3."
   },
   {
    "ply": 30,
    "t": 647,
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
    "line": [],
-   "spoken": ""
+   "spoken": "We held off ...a6 on purpose: the b5-knight looks like a bone in our throat, but it's actually a burden on White, tying the bishop down. After ...fxe5, if White recaptures with the d-pawn we take the e3-bishop and the position collapses; if he defends the knight, ...Nxc3 wins. Either way White is busted.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -276,7 +270,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "We take on e5 — and White is busted: the b5-knight hangs at the end of the line."
   },
   {
    "ply": 31,
@@ -292,9 +286,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "With the centre cracked open the pressure tells: White is overloaded. The knight on b5 is loose under the queen on b6, and taking on e5 also bares the bishop on e3 to the knight — two things hang at once and Black wins material.",
-   "kind": "main",
-   "teaches": "Converging pressure creates an overload — when two enemy pieces hang at the same moment, one of them falls."
+   "spoken": ""
   },
   {
    "ply": 16,
