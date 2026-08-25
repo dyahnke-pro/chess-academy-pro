@@ -1,7 +1,7 @@
 {
  "videoId": "d-CFu7RMVoY",
  "title": "Breaking Down F4 Weaknesses | Sicilian Defence | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 — a move we've faced a few times, and the answer is the immediate d5."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "The immediate d5 — this is exactly why f4 isn't recommended; a Grand Prix player should start with the knight to c3 instead."
+   "spoken": "Against the early f-pawn thrust, the antidote is the immediate central break to d5 — and that's exactly why this move order isn't recommended; a genuine Grand Prix player would develop the knight first.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -42,7 +43,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "After exd5, we don't recapture with the queen."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +52,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The proper continuation is the knight to f6 — taking the pawn back on our own terms."
+   "spoken": "Don't recapture with the queen — instead develop the knight to f6, aiming to win the pawn back on your own terms rather than being dictated to.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -60,7 +62,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "He defends the pawn — but no, we haven't made a mistake."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +71,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "The d4 square is now badly weakened, so we switch into gambit mode: e6, forcing the trade for massive compensation — a well-known line every Sicilian player should know."
+   "spoken": "The opponent defends the extra pawn, but that's no cause for alarm — the point is that the d4 square is now badly weakened. So switch into gambit mode: play e6, force the trade, and emerge with enormous compensation for the pawn. It's a well-known line every Sicilian player should carry.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -106,7 +109,8 @@
    "line": [
     "a3"
    ],
-   "spoken": "The compensation is huge: control of the centre and d4, a weak pawn on f4 sticking out like a sore thumb, a bad bishop on f1 biting on granite, and a White king with no clear safe haven. a3 plays with fire — he simply isn't developing."
+   "spoken": "The compensation, in one breath: huge central control anchored on d4, an enemy pawn stuck out like a sore thumb, a wretched bishop hemmed in behind its own pawns biting on granite, and an opponent's king with no safe haven, since the advanced pawn leaves castling short far from a cure. Spending a tempo on a rook-pawn move here is playing with fire when nothing is developed.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -115,7 +119,8 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Develop with tempo — the bishop to d6, attacking the pawn."
+   "spoken": "So develop with tempo — the bishop to d6, coming out with a hit on the weak pawn. Every developing move should also pose a threat when the opponent is this far behind.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -133,7 +138,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "Pile onto the pawn — the queen to c7, forcing still more weaknesses in an already flimsy position."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -151,7 +156,8 @@
    "line": [
     "Bxf4"
    ],
-   "spoken": "He ignores the threat, so grab the free pawn — and it opens a dangerous diagonal too."
+   "spoken": "The opponent ignores the threat, so simply grab the free pawn — it also unmasks a diagonal that can spell real trouble for the enemy king. Winning a pawn and opening a line in one is worth it.",
+   "kind": "tactic"
   },
   {
    "ply": 19,
@@ -169,7 +175,8 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Castle queenside — the adventurous choice; the rook lands on d8 already in the game, x-raying the queen and reinforcing d4. And not the knight to d4 yet — the knight to g4 is stronger, threatening Bxh2 and eyeing e3."
+   "spoken": "Castle long for the adventurous game — the rook lands on the file already x-raying the queen and threatening a capture on c4, and above all it reinforces control of the key d4 square. Hold that square and everything is comfortable; now it's time to move in for the kill.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -180,7 +187,8 @@
     "Ng4",
     "Qc3"
    ],
-   "spoken": "He really should take the bishop — otherwise the capture on h2 comes with check. The plan: the knight on f3 is the only thing guarding h2, so pull it away, then the bishop checks from e3 and the queen crashes into h2 for mate."
+   "spoken": "Don't rush the central knight jump — the move to reach for is the knight to g4, generating threats at the king with a capture on h2 looming and the knight eyeing an infiltration square. The storm clouds gather fast.",
+   "kind": "tactic"
   },
   {
    "ply": 24,
@@ -189,7 +197,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "Step one is to distract the knight — and after all that talk about the d4 square, here's a tactical use for it: the knight to d4, purely to drag the defender away."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -199,7 +207,8 @@
     "Nxd4",
     "Be3+"
    ],
-   "spoken": "He takes, and the bishop checks on e3 — mate in two."
+   "spoken": "Here's the mating mechanism — the queen would mate on h2 but for the knight guarding it, and it can't leap over its own bishop. So distract the knight by planting a piece on d4 purely for tactics, not as an outpost; once it's captured, a bishop check on e3 forces the issue and the queen crashes into h2 for mate in two.",
+   "kind": "tactic"
   },
   {
    "ply": 28,
@@ -209,7 +218,7 @@
     "Bxe3",
     "Qxh2#"
    ],
-   "spoken": "The queen takes on h2 — checkmate. That's how you dismantle this whole line."
+   "spoken": ""
   },
   {
    "ply": 2,
@@ -311,7 +320,9 @@
    "t": 419.5,
    "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R b KQkq - 2 9",
    "line": [],
-   "spoken": ""
+   "spoken": "The opponent's better practical try was a pawn to g3 — though even that creates fresh kingside weaknesses, which a quick rook-pawn charge with h5 and h4 exploits, tearing the wing open for the attack. At least it would have been double-edged.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -350,7 +361,8 @@
    "t": 465.5,
    "fen": "r3k2r/ppq2pp1/2nbbn1p/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R w KQkq - 0 10",
    "line": [],
-   "spoken": "The key idea once more — the Sam Shankland question, 'what if I do it anyway?' The knight to d4: if the queens come off, the bishop takes on e2, forking king and queen, and we win the queen with an extra piece.",
+   "spoken": "And a pretty resource to know: if the opponent forces a queen trade, ask the honest question — what if I just do it anyway? That yields the knight to d4, because after queens come off, a capture on the bishop forks the king and queen, winning the queen with an extra piece. The threats are simply too many to meet.",
+   "kind": "tactic",
    "reanchor": true
   }
  ]
