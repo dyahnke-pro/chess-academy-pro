@@ -15,7 +15,7 @@
     "c4",
     "e5"
    ],
-   "spoken": "The English — and we answer with e5, the reversed Sicilian."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -60,7 +60,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "A slightly weird setup by White."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -87,7 +87,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "Just develop our pieces."
+   "spoken": "Against this slightly offbeat English setup, just develop and identify the target — the d4 square is weak, and the whole plan revolves around planting a knight there. A weak square is an invitation to occupy it.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +97,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The d4 square is weak — our ultimate idea is to plant the knight on d4."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +106,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 — but don't rush to give it up for the knight; keep the option of taking on f3 in your pocket for the right moment."
+   "spoken": "The route to that square begins with the bishop pin to g4, tying down the knight that guards it. Set up the occupation before playing it.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -114,7 +116,8 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "Crucially, don't rush to trade the bishop for the knight — keep that capture in your pocket as an option, to be played only when the moment is exactly right. Holding a threat in reserve is often stronger than executing it.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -132,7 +135,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "He plays the knight to d5; and rather than rush our own knight to d4, first get rid of that annoying knight."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -141,7 +144,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "Take on d5 — then the knight to d4, to shatter his kingside pawn structure."
+   "spoken": "First eliminate the annoying enemy knight, then plant your own on d4 to shatter the kingside pawn structure. And there's a bonus — removing the knight from f6 opens up a powerful pawn break in the future.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -160,7 +164,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Because the f5 idea is so strong, we do the opposite of the normal move — instead of keeping the knight on d4, we take the bishop."
+   "spoken": "Here's a fine judgement call — normally you'd take the knight and keep your own established in the centre, but because the coming pawn break is so strong, take the bishop instead. Then castle and ram the f-pawn through, piling pressure on the pinned knight, exploiting the kingside weaknesses the opponent created to stop it.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -169,7 +174,8 @@
    "line": [
     "Nxe2+"
    ],
-   "spoken": "Take the bishop, castle, and ram f5 through — piling as much pressure as possible on the f3 knight."
+   "spoken": "Before launching the sacrifice, crack open the centre — a pawn break there is essential, because while the opponent's pawns hold the middle it's hard to get anything going. Unpin the king, connect the rooks with a queen move that keeps the f-rook home for the break, and prepare the pawn advances. Once the enemy queen strays from the defence, sacrifice a piece to blow the king open, trusting the two rooks and queen to be more than enough force.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -194,7 +200,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "The point of avoiding Bc5: with a knight on c6 and a bishop on c5, White has Nxe5 — the very same trick — which is why the bishop to b4 is considered best.",
+   "spoken": "For the theory record, the recurring pattern — whenever there's a knight on c6 and a bishop on c5, look for the central capture and pawn fork winning material. It's the same idea from the sister line, and it's precisely why the bishop pin is considered the best move here.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -222,7 +229,8 @@
     "Bd3",
     "Bb4"
    ],
-   "spoken": "So everything follows — the knight to d4, and the judgment call to take the bishop, because f5 needs the pin on the f3 knight kept intact; then open the centre with c6, the king to h8 to unpin, the queen to e7 to connect the rooks, and b5 to stop a4.",
+   "spoken": "The reasoning behind taking the bishop rather than the knight — the pawn break's whole benefit is intensifying the pressure on the pinned knight, so it's vital to keep that piece pinned in place, and to castle so the rook can recapture on the break square and stack even more pressure. Every choice served that one plan.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
