@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "Another London System."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black plays d5."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
     "e3",
     "c5"
    ],
-   "spoken": "And c5, as before."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight to f3 gives Black more options than c3 does."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "No need to reinvent the wheel — the knight to c6."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -70,7 +70,8 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop to b5 is a little odd — in the London you usually play c3 first. Black could play the natural bishop to d7, but many of you see the queen to a5 with check. It does not win the bishop, because of the knight to c3 — but at this level you play moves not to win material, but to induce an undesirable one."
+   "spoken": "The bishop out to b5 is slightly offbeat — normally the c-pawn goes first in the London. And here's a deep positional idea: a queen check to a5 doesn't win the bishop, but at this level you play moves that induce a move you want. The whole London rests on d4 being a fortress, and it's rock-solid only once c3 supports it.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -79,7 +80,8 @@
    "line": [
     "Qa5+"
    ],
-   "spoken": "The whole point of the London is that the pawn on d4 is a stronghold — mega-defended once White plays c3. So the queen to a5 with check induces the knight to c3, preventing that c3, and d4 turns from a strength into a weakness."
+   "spoken": "So the check induces a knight to c3, which permanently denies the c-pawn that support — and d4 flips from a strength into a weakness. As a bonus the queen stands beautifully active, and there's nothing wrong with leaning on the bishop while you're at it.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -97,7 +99,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "After the knight to c3, play actively — not e6, which is underdeveloped and allows the knight to e5. Restrict the knight on f3 while developing: the bishop to g4."
+   "spoken": "Stay active — e6 now would be too passive with development lagging, inviting a central knight leap. The move is a bishop to g4, pinning the knight that props up d4 while developing a piece. Restrain and develop in one stroke.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -106,7 +109,7 @@
    "line": [
     "Bxc6+"
    ],
-   "spoken": "It pressures the knight that defends d4. White takes, Black recaptures — a compact, pleasant pawn structure."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -115,7 +118,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": ""
+   "spoken": "The bishops come off, and the recapture toward the centre leaves a compact, healthy pawn structure — the kind of solid shell that's a pleasure to play from."
   },
   {
    "ply": 15,
@@ -133,7 +136,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black could take on d4, but e6 develops the bishop. When in doubt, keep the tension — let White decide whether to take; that is always less of a headache than asking yourself the same question."
+   "spoken": "There's a choice of resolving the centre now or playing e6 first — and the guiding rule when unsure is keep the tension. Let the opponent be the one to decide whether to capture; carrying that question is always more of a headache for them than for you.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -151,7 +155,8 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "Take on f3, or retreat? Ask: will White realistically play g4? No — it is tremendously weakening, right in front of his own king. So keep the tension."
+   "spoken": "Take on the knight, or retreat the bishop? The deciding question is whether the opponent would realistically lash out with a weakening kingside pawn push — and the answer is no, there's no reason to fear it. So hold the tension and drop the bishop back.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -169,7 +174,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "When g4 does come, just drop the bishop back to g6 — it is weakening because White is shoving a pawn out in front of his king."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -178,7 +183,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight to e5 looks intimidating but it is surface-level — it hits c6. Just defend the pawn carefully: the queen to b6 walks into the knight to a4."
+   "spoken": "That pawn thrust weakens the shelter in front of the king. The central knight jump looks intimidating but it's surface-level — it merely hits the loose pawn, which just needs careful defending, sidestepping the tempting queen move that runs into a knight fork."
   },
   {
    "ply": 22,
@@ -187,7 +192,8 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "The rule of piece value: do any given task with the least valuable piece — so the rook to c8 defends the pawn. Not glamorous, but sometimes a piece has to do the dirty work."
+   "spoken": "Now a principle to bank — the rule of piece value: carry out any task with the least valuable piece that can do it. So a rook drops back to defend the pawn. It isn't glamorous, but pieces have to do the dirty work sometimes, and there's nothing wrong with that.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -196,7 +202,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "White wants to trap the bishop with h4 — the reaction is h6 or h5. If he takes on g6, Black just recaptures and White keeps weakening his king."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -239,7 +245,8 @@
    "line": [
     "hxg5"
    ],
-   "spoken": "Take on g5 to open the h-file — and now it becomes Black's turn."
+   "spoken": "Capture to blow open the h-file straight at the enemy king. Up to now the opponent has been calling the shots — but the moment that initiative is snuffed out, it becomes the other side's turn to attack.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -266,7 +273,8 @@
    "line": [
     "Bxg5"
    ],
-   "spoken": ""
+   "spoken": "Now it's time to take stock — keep the king in the centre for the moment, and set the priority: to make the open h-file pay, the defending bishop has to be eliminated so the advanced pawn behind it loses its guard.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -284,7 +292,8 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The goal now: make the h-file work, because the h4-pawn will lose its defender."
+   "spoken": "The obvious knight jump fails to concrete calculation — a trade sequence leaves a pawn hanging with a fork and the queen crashing in. But failing on one move doesn't kill the plan; it only rules out that one route.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -293,7 +302,8 @@
    "line": [
     "Nh5"
    ],
-   "spoken": ""
+   "spoken": "So modify rather than abandon — the knight to h5 instead. It temporarily clogs the h-file, but piece placement is temporary while the long-term priority of prying that file open is permanent. Don't confuse a short-term blemish with a real problem.",
+   "kind": "plan"
   },
   {
    "ply": 33,
@@ -302,7 +312,7 @@
    "line": [
     "Bxe7"
    ],
-   "spoken": "You might get frustrated — 'we can't take the h-file' — but piece placement is temporary; the permanent priority is prising open that file, and the h4-pawn cannot be held forever."
+   "spoken": ""
   },
   {
    "ply": 34,
@@ -329,7 +339,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight loops back around, and now the advanced enemy pawn simply can't be held. Distinguishing the temporary from the permanent is the whole art here — you can't make an omelette without cracking a few eggs.",
+   "kind": "plan"
   },
   {
    "ply": 38,
@@ -359,7 +370,8 @@
     "Rxh4",
     "Rxh4"
    ],
-   "spoken": "Temporary versus permanent — the h-pawn falls, and Black doubles rooks on the file."
+   "spoken": "Double the rooks and never surrender the file — a pawn to the good, heavy pressure down the h-file, and every positional trump. Now it's just a matter of precise conversion.",
+   "kind": "plan"
   },
   {
    "ply": 43,
@@ -389,7 +401,7 @@
     "Qxb5",
     "cxb5"
    ],
-   "spoken": "Play precisely to carry it home — c4 anyway, trading queens into a knight endgame."
+   "spoken": ""
   },
   {
    "ply": 49,
@@ -417,7 +429,8 @@
     "Kxh1",
     "a5"
    ],
-   "spoken": "Trading rooks goes astray for White — in the knight endgame Black starts queenside pressure with a5."
+   "spoken": "The queens and a pair of rooks come off into a knight endgame a clean pawn up — and now the plan is to open a second front, rolling the queenside pawns forward starting with a5.",
+   "kind": "plan"
   },
   {
    "ply": 53,
@@ -435,7 +448,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "b4, orchestrating the queenside pressure."
+   "spoken": ""
   },
   {
    "ply": 56,
@@ -455,7 +468,7 @@
     "Ke1",
     "e5"
    ],
-   "spoken": "Bring the king to the centre, and break with e5 to grab space and open lines."
+   "spoken": ""
   },
   {
    "ply": 59,
@@ -473,7 +486,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Route the knight toward a4, as in these endings, tying White down."
+   "spoken": ""
   },
   {
    "ply": 61,
@@ -491,7 +504,8 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "A move that looks dreadful — b3, deliberately closing the position — but its purpose is to fix the weakness so it can be targeted. Locking the pawn in place is what makes it a permanent target rather than a runner.",
+   "kind": "plan"
   },
   {
    "ply": 63,
@@ -500,7 +514,8 @@
    "line": [
     "dxe5+"
    ],
-   "spoken": "A move that looks bad, but it fixes the weakness on b2."
+   "spoken": "And the point is revealed: the opponent can't stop the knight from reaching d3, and with the weakness now fixed it can't be defended either. One quiet preparatory move set up the decisive infiltration.",
+   "kind": "plan"
   },
   {
    "ply": 66,
@@ -529,7 +544,7 @@
    "line": [
     "Nxb2"
    ],
-   "spoken": "The knight grabs on b2 — and after the king moves, the knight to d3 wins the other pawn."
+   "spoken": ""
   },
   {
    "ply": 69,
@@ -563,8 +578,7 @@
    "line": [
     "Na4"
    ],
-   "spoken": "Back to a4, tying White to the c3-pawn — and now the principle of two weaknesses.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 71,
@@ -582,7 +596,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "A creative idea — use the g-pawn as a battering ram to shake things loose and open a direct path for the king."
+   "spoken": ""
   },
   {
    "ply": 73,
@@ -618,7 +632,7 @@
    "line": [
     "Nxc3+"
    ],
-   "spoken": "The moment the knight moves, Black takes on c3, the king marching in."
+   "spoken": ""
   },
   {
    "ply": 77,
@@ -646,8 +660,7 @@
     "Kc1",
     "Nxe3"
    ],
-   "spoken": "The knight forks and then grabs on e3 — a third pawn, and White finally crumbles.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 82,
@@ -675,7 +688,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Push the passed pawn — don't dilly-dally."
+   "spoken": ""
   },
   {
    "ply": 85,
@@ -757,7 +770,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "The most accurate finish is not the obvious push but the knight to c4, and then the pawn promotes."
+   "spoken": ""
   },
   {
    "ply": 95,
@@ -822,8 +835,7 @@
     "Nc6",
     "Nd2"
    ],
-   "spoken": "In review, the more accurate London move order is c3 followed by the knight to d2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -840,8 +852,7 @@
    "t": 993,
    "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - 1 5",
    "line": [],
-   "spoken": "The bishop to b5 is not best, and Black's c and d pushes only make sense if you understand controlling the centre with pawns.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -895,8 +906,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "And the key concept: provoking the knight to c3 with the queen to a5, so that the d4 pawn becomes a weakness.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
