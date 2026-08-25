@@ -1,0 +1,125 @@
+{
+ "videoId": "iZyf2oBcR9Q",
+ "title": "Ponziani Opening | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Ponziani Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:iZyf2oBcR9Q",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 15,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 17,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "And the Ponziani — c3."
+  },
+  {
+   "ply": 6,
+   "t": 40.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Strike in the centre with d5 — the thematic disarming move. The point: after exd5 and the queen recaptures, the knight can't jump to c3; and the little-known gambit with the bishop to d7 prepares to trade off White's only developed piece and seize a massive lead in development."
+  },
+  {
+   "ply": 5,
+   "t": 1324,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1328,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1335.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "He played the knight to f6 — an excellent, popular move; and after d4, the simplest is to take, exd4.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1338,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1340,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Then e5 — this gets complicated, but Black is totally fine here."
+  },
+  {
+   "ply": 10,
+   "t": 1341.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight to d5 — theoretically Black is fine; it's White who has to be careful to equalise."
+  },
+  {
+   "ply": 7,
+   "t": 1358,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1362,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [],
+   "spoken": "The line I recommend is d5: meet the queen to a4 with the bishop to d7, and after the exchanges, quickly develop with a great game.",
+   "reanchor": true
+  }
+ ]
+}
