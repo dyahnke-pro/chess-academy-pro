@@ -1,0 +1,137 @@
+{
+ "videoId": "f8alAsVJRc8",
+ "title": "The Value of Retreating Moves | Sicilian Defense | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Sicilian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:f8alAsVJRc8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 29,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 34,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 right away — essentially playing the Italian against the Sicilian, which is pretty innocuous."
+  },
+  {
+   "ply": 2,
+   "t": 51,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 58,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop wants to make contact with f7, but once we can play e6 and shut it out, the move makes very little sense.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 85,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "No need to play e6 right away — White isn't threatening to take on f7 — so first bring the knight out."
+  },
+  {
+   "ply": 5,
+   "t": 89,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR b KQkq - 0 3",
+   "line": [
+    "a3"
+   ],
+   "spoken": "a3 is probably not real preparation — and the best answer to odd play is to follow principles to a tee."
+  },
+  {
+   "ply": 6,
+   "t": 114,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The simplest approach: the other knight to f6. And White can't play e5, because that square is defended — that's exactly why we played the knight to c6 first."
+  },
+  {
+   "ply": 7,
+   "t": 119,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The centre fork trick — take on e4, then win the piece back with d5 — is available, but here it's a little premature and leads to needless complications."
+  },
+  {
+   "ply": 8,
+   "t": 149,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Simpler is e6, preparing to expand with d5 — and the fork-trick idea doesn't disappear, it just depends on how White develops."
+  },
+  {
+   "ply": 9,
+   "t": 159.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/4P3/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Ba2"
+   ],
+   "spoken": "The bishop retreats to a2 — no more fork trick, but we simply keep calmly expanding in the centre."
+  },
+  {
+   "ply": 10,
+   "t": 212,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/4P3/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Playing principled chess against a second-string opening — d5, grabbing the centre and taking it right to the opponent."
+  },
+  {
+   "ply": 11,
+   "t": 216,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pP4/8/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 217,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "Recapture with the pawn — already a very pleasant position, with the better control of the centre."
+  },
+  {
+   "ply": 13,
+   "t": 231.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N2N2/BPPP1PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Develop the kingside, since our king is still in the centre — but note White signals d4, and we mustn't sleepwalk into an isolated-queen-pawn structure with that bishop eyeing d5."
+  }
+ ]
+}
