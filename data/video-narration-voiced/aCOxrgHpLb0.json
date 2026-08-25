@@ -1,7 +1,7 @@
 {
  "videoId": "aCOxrgHpLb0",
  "title": "Sub Battle W/ ChessBrahs! Pt. 2",
- "openingName": "Sicilian Defense: Accelerated Dragon",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -80,7 +80,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "An Accelerated Dragon — his bread and butter."
+   "spoken": "The c-pawn thrust turns this into a Maróczy Bind out of the Accelerated Dragon — the classic cramping structure, and familiar territory for a player who lives in these positions."
   },
   {
    "ply": 12,
@@ -171,7 +171,8 @@
    "line": [
     "Re8"
    ],
-   "spoken": "The rook to e8, preparing the e5 break — though you must be careful; a6 or a5 were both fine too."
+   "spoken": "A rook to e8 is a natural move here, quietly preparing the central break — but it has to be handled with care, since the centre can bite back before it's fully prepared.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -189,7 +190,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "This is a very bad move — now the knight to b5 is strong."
+   "spoken": "The central pawn advance to e6 is a serious error, because it invites a knight to b5 hitting the weakened dark squares. A single loosening move can hand the initiative straight over."
   },
   {
    "ply": 25,
@@ -198,7 +199,7 @@
    "line": [
     "Ndb5"
    ],
-   "spoken": "White finds it — the knight to b5."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -207,7 +208,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black has to hit back with d5, sacrificing the exchange."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -216,7 +217,7 @@
    "line": [
     "Nd6"
    ],
-   "spoken": "The knight to d6 here would be a blunder — d4 refutes it."
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -225,7 +226,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — Black will drop an exchange, but he stays very much in the game."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -234,7 +235,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "The way to stay in the fight is a pawn to d4, striking the bishop — it concedes the exchange, but keeps the position alive and full of play rather than passively worse.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -251,7 +253,8 @@
    "t": 1030.5,
    "fen": "2rqr1k1/pp1b1pbp/2nNpnp1/8/2PpP3/2N1BP2/PP1QB1PP/2R2RK1 w - - 0 15",
    "line": [],
-   "spoken": "The best try is to take on e4, and then eye that beautiful bishop dropping into e5.",
+   "spoken": "The follow-up is the key: don't recapture on d4, which yields the exchange with no compensation. Instead capture in the centre and let the dark-squared bishop settle on a beautiful central post — and then a queen swing to h4 goes straight for a direct attack. The sacrificed material is repaid by initiative.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -262,8 +265,7 @@
     "Bxd4",
     "Nxe4"
    ],
-   "spoken": "Take on e4 — and even the queen to h4, straight for the direct attack.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 33,
@@ -310,7 +312,8 @@
    "line": [
     "Nd6"
    ],
-   "spoken": "He's about to lose another exchange — so take on e5, and the knight comes to d4."
+   "spoken": "The theme repeats — a second exchange can be given up for the same idea, capturing and rerouting the knight to a dominant central square with full compensation. When the pieces are this active, a little material is a fair price.",
+   "kind": "tactic"
   },
   {
    "ply": 39,
@@ -329,7 +332,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "e5, and the knight heads for d4 — full compensation, or even a second exchange sacrifice."
+   "spoken": ""
   },
   {
    "ply": 41,
@@ -365,7 +368,8 @@
    "line": [
     "Bc6"
    ],
-   "spoken": ""
+   "spoken": "With material sacrificed, the practical trump is the clock — keeping the time advantage is what ultimately carries the game, so keep posing problems and make the opponent spend.",
+   "kind": "plan"
   },
   {
    "ply": 45,
@@ -438,7 +442,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "c5, and the bishop to c4 — incredibly resourceful play."
+   "spoken": ""
   },
   {
    "ply": 54,
@@ -447,7 +451,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "The queen to h4 — White is simply losing now."
+   "spoken": ""
   },
   {
    "ply": 55,
@@ -483,7 +487,7 @@
    "line": [
     "Qb4"
    ],
-   "spoken": "Keep the queens on the board — the queen to b4."
+   "spoken": ""
   },
   {
    "ply": 59,
@@ -501,7 +505,7 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "White has a perpetual available, but he's bleeding into his clock."
+   "spoken": ""
   },
   {
    "ply": 61,
@@ -519,7 +523,8 @@
    "line": [
     "Qd5"
    ],
-   "spoken": "The queen to d5 — what a move."
+   "spoken": "And the finishing touch is presence of mind — recognising the exact moment to trade queens and step into a winning endgame, rather than getting lost in the complications. Composure at the end converts everything the attack built.",
+   "kind": "plan"
   },
   {
    "ply": 65,
@@ -530,7 +535,7 @@
     "Qxe6",
     "b4"
    ],
-   "spoken": "The presence of mind to trade queens — then the pawn falls with check, the queen swings to e5, collects on c4 and d6, and the whole thing collapses."
+   "spoken": ""
   }
  ]
 }
