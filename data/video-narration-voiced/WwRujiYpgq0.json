@@ -1,7 +1,7 @@
 {
  "videoId": "WwRujiYpgq0",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1630",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Another Sicilian, and White tries the early bishop to c4 — more of a lower-rated try. How do we meet it?"
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Develop the knight first, but the plan is e6 to blunt that bishop."
+   "spoken": "The standard way to meet the bishop out to c4 is e6, blunting its diagonal — but develop the knight first, keeping the move order flexible before committing the pawn.",
+   "kind": "plan"
   },
   {
    "ply": 6,
@@ -43,7 +44,7 @@
     "Nf3",
     "e6"
    ],
-   "spoken": "e6, taking the sting out of the diagonal."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -61,7 +62,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 is actually the best move here."
+   "spoken": "The knight comes to f6, and this is actually the most accurate move — it hits the centre and sets up a tactical resource that's about to appear.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -79,7 +81,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "The knight grabs on e4 — the cool tactical idea. The follow-up is to snap off the bishop on c4 and play d5, wiping out White's control of the centre."
+   "spoken": "Here's the cool device — the centre-fork trick: capture on e4, and the follow-up of grabbing the bishop and striking with d5 tears down the opponent's grip on the centre. A theme that recurs across many openings.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
@@ -88,7 +91,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He declines the knight, so we just carry on with d5."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -104,8 +107,7 @@
    "t": 999.5,
    "fen": "r1bqkb1r/pp1p1ppp/2n1p3/2p5/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 0 6",
    "line": [],
-   "spoken": "Had he taken the knight, d5 comes anyway.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -115,7 +117,9 @@
     "d5",
     "Bb5"
    ],
-   "spoken": "d5 eliminates his central control, and next it removes his important light-squared bishop — Black is simply a pawn up."
+   "spoken": "The point of the trick, in full: the central push to d5 both wipes out the opponent's control of the middle and rounds up their important light-squared bishop — emerging a clean pawn up with the centre in hand.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -124,7 +128,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Continue in conventional fashion — the bishop to d7 first, unpinning against the bishop on b5."
+   "spoken": "Now just develop conventionally — start by unpinning with the bishop to d7, untangling before pressing the extra material."
   },
   {
    "ply": 15,
@@ -133,7 +137,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White offers the knight — and yes, we should take it."
+   "spoken": "Should the knight be taken? Yes — and don't assume no just because the question is posed. The capture improves the pawn structure, and trades are good when you're the one who's ahead.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -151,7 +156,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "Trades are good when you are ahead; his recapture doubles his pawns."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -160,7 +165,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Develop the other bishop. Passive in a strict sense, but a pawn up with a huge centre — not every piece must be storming the frontier at once."
+   "spoken": "Bring out the other bishop even though it looks passive — up a pawn with a huge centre, that's fine. Not every piece has to be conquering the frontier at every moment; solid and ahead beats flashy and even.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -169,7 +175,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Which pawn to take, if any — the care here is not to open the e-file before we've castled."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -178,7 +184,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "The knight takes on d4 is the cleanest capture: after the exchanges, the bishop lands on f6 and skewers the queen to the rook, winning it."
+   "spoken": "Draw the sting from the centre with a capture on d4 — and take care not to open the e-file before castling. The reason this recapture is best over the others: at the end of the trade sequence a bishop swings to f6, skewering the queen against the rook and winning the exchange.",
+   "kind": "tactic"
   }
  ]
 }
