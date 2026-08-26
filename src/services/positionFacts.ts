@@ -111,7 +111,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     threatNet: mustDefend.net,
     teachingBeat: !!input.teachingBeat,
     evalCpWhitePov,
-    wdl: analysis.wdl ?? null,
+    // WdlRead {win,draw,loss} → the [w,d,l] tuple the importance model reads.
+    // (Passing the object directly makes wdl[0]/wdl[2] undefined → every
+    // position falsely reads "decided" and goes silent.)
+    wdl: analysis.wdl ? [analysis.wdl.win, analysis.wdl.draw, analysis.wdl.loss] : null,
   }, rating);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
