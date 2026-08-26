@@ -1,0 +1,159 @@
+{
+  "videoId": "OwrIaWwPJvM",
+  "title": "Grandmaster Naroditsky | Chess Speedrun | 1470",
+  "openingName": "Sicilian Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:OwrIaWwPJvM",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 698.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": "One last game — let's play a Sicilian. e4, c5."
+    },
+    {
+      "ply": 4,
+      "t": 700.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "line": [
+        "Bc4",
+        "Nc6"
+      ],
+      "spoken": "The bishop to c4, the knight to c6."
+    },
+    {
+      "ply": 5,
+      "t": 702,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR b KQkq - 0 3",
+      "line": [
+        "b3"
+      ],
+      "spoken": "This guy is playing very weird chess — b3, wasting time trying to"
+    },
+    {
+      "ply": 6,
+      "t": 712,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR w KQkq - 1 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "fianchetto his bishop, which doesn't make too much sense. Let's just develop our knights,"
+    },
+    {
+      "ply": 7,
+      "t": 716,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR b KQkq - 0 4",
+      "line": [
+        "d3"
+      ],
+      "spoken": "and then you know the drill in such positions —"
+    },
+    {
+      "ply": 8,
+      "t": 717,
+      "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR w KQkq - 0 5",
+      "line": [
+        "e6"
+      ],
+      "spoken": "the best thing to do is to play e6 and prepare the move d5."
+    },
+    {
+      "ply": 10,
+      "t": 723,
+      "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 0 6",
+      "line": [
+        "Bb2",
+        "d5"
+      ],
+      "spoken": "And he's already lost a bishop, because his bishop only has one square, and that"
+    },
+    {
+      "ply": 12,
+      "t": 727,
+      "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2B5/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 0 7",
+      "line": [
+        "exd5",
+        "exd5"
+      ],
+      "spoken": "results in the loss of a bishop and the loss of the game — e-takes-d5, e-takes-d5, a tactical pattern most of you are probably aware of."
+    },
+    {
+      "ply": 13,
+      "t": 728.5,
+      "fen": "r1bqkb1r/pp3ppp/2n2n2/1Bpp4/8/1P1P4/PBP2PPP/RN1QK1NR b KQkq - 1 7",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "The bishop to b5 — the fianchetto doesn't make sense; it's just weird to develop bishops this way, and there's the chess principle, knights before bishops,"
+    },
+    {
+      "ply": 14,
+      "t": 743,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 2 8",
+      "line": [
+        "Qa5+"
+      ],
+      "spoken": "which he's violating. The queen to a5 with check —"
+    },
+    {
+      "ply": 15,
+      "t": 748,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/1PNP4/PBP2PPP/R2QK1NR b KQkq - 3 8",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "we're going to force him to develop his knight, and what do we do with it?"
+    },
+    {
+      "ply": 16,
+      "t": 755,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBp5/3p4/1PNP4/PBP2PPP/R2QK1NR w KQkq - 0 9",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4 — exactly, winning the knight."
+    },
+    {
+      "ply": 18,
+      "t": 757.5,
+      "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/3p4/1PNP4/PBP2PPP/R2QK1NR w KQkq - 0 10",
+      "line": [
+        "Bxc6+",
+        "bxc6"
+      ],
+      "spoken": "The bishop takes c6, b-takes-c6 — we don't care about that; he's got to give up a pawn for the knight, and we're just going to be up a full piece for no compensation. This stuff people will try to do to you; we can play the bishop to e7 or the bishop to b6, it doesn't matter, as long as we cover the check — and he doesn't even get a pawn for the knight. Now a trick question: can we castle here? Don't get caught — it is actually possible to castle, because after the queen takes c7 we play the rook to e8 and pin the king. Sometimes our brain tells us something is impossible, but before concluding that, ask what happens if we do it anyway — that awakens the possibility of finding something like this. So we're up a full piece, and there's nothing else to really talk about — we can just go about trading as many pieces as possible. His queen, over on e3, is very clearly vulnerable; we can attack it by shifting the knight over to d5, opening a channel between the bishops, or we can take the knight and start trading pieces, ruining his structure. The game is essentially over — we take all the pieces, up a knight, his kingside completely ruined, and we approach fifteen hundred. These triple pawns remind me of a famous game. Now we win another piece — we take the knight, removing the defender from the bishop, and we're up two pieces; the rest you know the drill: put a rook to e8, and don't forget to deploy the remainder of our pieces.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 893.5,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR b KQkq - 0 4",
+      "line": [],
+      "spoken": "He simply resigns — a perfect game to end today's session, up two pieces. Now, why is it a bad idea to fianchetto the bishop here? First of all, the move d3 people should rule out, because the bishop has no way back,",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 909.5,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR w KQkq - 1 4",
+      "line": [],
+      "spoken": "and to do such a thing, particularly when your bishop has come outside the pawn chain, is just very dangerous. He should have at least defended this pawn, or maybe even not",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 912.5,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/PBPP1PPP/RN1QK1NR b KQkq - 2 4",
+      "line": [
+        "Bb2"
+      ],
+      "spoken": "defended it and just played the bishop to b2 — but after d3 and e6 it's already very difficult to save the bishop; he has to do something like d4 or b4, which is obviously very undesirable. So this move is almost a killer almost immediately."
+    }
+  ]
+}
