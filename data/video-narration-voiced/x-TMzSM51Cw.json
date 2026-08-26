@@ -1,0 +1,532 @@
+{
+  "videoId": "x-TMzSM51Cw",
+  "title": "Master Class | Tennison Gambit | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Tennison Gambit",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:x-TMzSM51Cw",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 9.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
+      "line": [
+        "Nf3",
+        "d5"
+      ],
+      "spoken": "A Black game — the knight to f3, and we answer d5, so no Philidor this time."
+    },
+    {
+      "ply": 3,
+      "t": 11.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+      "line": [
+        "e4"
+      ],
+      "spoken": "And e4 — the Lisitsin Gambit, also called the Tennison."
+    },
+    {
+      "ply": 4,
+      "t": 24.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/4p3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "We're supposed to take the pawn, d takes e4."
+    },
+    {
+      "ply": 5,
+      "t": 26.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/6N1/4p3/8/PPPP1PPP/RNBQKB1R b KQkq - 1 3",
+      "line": [
+        "Ng5"
+      ],
+      "spoken": "The knight to g5 — a good case study in how to react to a gambit you've maybe never seen."
+    },
+    {
+      "ply": 6,
+      "t": 65,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/8/PPPP1PPP/RNBQKB1R w KQkq - 2 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "The knight threatens to grab the pawn and pressures f7, so our first priority is to develop — the knight to f6."
+    },
+    {
+      "ply": 7,
+      "t": 68.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "d3"
+      ],
+      "spoken": "No need to panic; White plays d3. Keep in the back of your mind that you can always give the pawn back and trade into an endgame — the last thing a gambit player wants."
+    },
+    {
+      "ply": 8,
+      "t": 159,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "Just make a developing move and don't touch his knight — let him waste time. The knight to c6."
+    },
+    {
+      "ply": 9,
+      "t": 182,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/2NP4/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "You're using the psychology of gambit players against them. White plays the knight to c3."
+    },
+    {
+      "ply": 10,
+      "t": 194.5,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/4p1b1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "Keep developing — the bishop to g4 is very effective; if he plays f3, we take and open up his position."
+    },
+    {
+      "ply": 12,
+      "t": 206.5,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/6b1/2NP1p2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+      "line": [
+        "f3",
+        "exf3"
+      ],
+      "spoken": "f3, and we take, e takes f3."
+    },
+    {
+      "ply": 13,
+      "t": 208.5,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/6b1/2NP1P2/PPP4P/R1BQKB1R b KQkq - 0 7",
+      "line": [
+        "gxf3"
+      ],
+      "spoken": "White recaptures with the g-pawn — look at his structure now: the bishop undeveloped, the king exposed, and we keep our extra pawn."
+    },
+    {
+      "ply": 14,
+      "t": 216.5,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/5bN1/8/2NP1P2/PPP4P/R1BQKB1R w KQkq - 1 8",
+      "line": [
+        "Bf5"
+      ],
+      "spoken": "We step the bishop back to f5, no problem."
+    },
+    {
+      "ply": 15,
+      "t": 219,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/5bN1/8/2NP1P1B/PPP4P/R1BQK2R b KQkq - 2 8",
+      "line": [
+        "Bh3"
+      ],
+      "spoken": "White plays the bishop to h3."
+    },
+    {
+      "ply": 16,
+      "t": 224.5,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/8/2NP1P1b/PPP4P/R1BQK2R w KQkq - 0 9",
+      "line": [
+        "Bxh3"
+      ],
+      "spoken": "We take on h3."
+    },
+    {
+      "ply": 17,
+      "t": 227,
+      "fen": "r2qkb1r/ppp1pppp/2n2n2/8/8/2NP1P1N/PPP4P/R1BQK2R b KQkq - 0 9",
+      "line": [
+        "Nxh3"
+      ],
+      "spoken": "White recaptures. Here it makes sense to play conservatively rather than grabbing more space."
+    },
+    {
+      "ply": 18,
+      "t": 239,
+      "fen": "r2qkb1r/ppp2ppp/2n1pn2/8/8/2NP1P1N/PPP4P/R1BQK2R w KQkq - 0 10",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Let's build a solid structure — e6."
+    },
+    {
+      "ply": 19,
+      "t": 243.5,
+      "fen": "r2qkb1r/ppp2ppp/2n1pn2/8/5B2/2NP1P1N/PPP4P/R2QK2R b KQkq - 1 10",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "White develops the bishop to f4."
+    },
+    {
+      "ply": 20,
+      "t": 259,
+      "fen": "r2qk2r/ppp2ppp/2n1pn2/2b5/5B2/2NP1P1N/PPP4P/R2QK2R w KQkq - 2 11",
+      "line": [
+        "Bc5"
+      ],
+      "spoken": "The bishop to c5, stopping him from castling."
+    },
+    {
+      "ply": 21,
+      "t": 273,
+      "fen": "r2qk2r/ppp2ppp/2n1pn2/1Nb5/5B2/3P1P1N/PPP4P/R2QK2R b KQkq - 3 11",
+      "line": [
+        "Nb5"
+      ],
+      "spoken": "White plays the knight to b5, eyeing c7."
+    },
+    {
+      "ply": 22,
+      "t": 290,
+      "fen": "r2qk2r/ppp2ppp/2n1p3/1Nbn4/5B2/3P1P1N/PPP4P/R2QK2R w KQkq - 4 12",
+      "line": [
+        "Nd5"
+      ],
+      "spoken": "Now, that knight left c3, so it no longer covers d5 — the knight to d5 is a great square, and it defends the c7-pawn."
+    },
+    {
+      "ply": 23,
+      "t": 295.5,
+      "fen": "r2qk2r/ppp2ppp/2n1p3/1Nbn4/8/3P1PBN/PPP4P/R2QK2R b KQkq - 5 12",
+      "line": [
+        "Bg3"
+      ],
+      "spoken": "White plays the bishop to g3."
+    },
+    {
+      "ply": 24,
+      "t": 299.5,
+      "fen": "r2qk2r/1pp2ppp/p1n1p3/1Nbn4/8/3P1PBN/PPP4P/R2QK2R w KQkq - 0 13",
+      "line": [
+        "a6"
+      ],
+      "spoken": "That b5-knight is on my nerves — a6, get off my back and go back to c3."
+    },
+    {
+      "ply": 25,
+      "t": 318,
+      "fen": "r2qk2r/1pp2ppp/p1n1p3/2bn4/8/2NP1PBN/PPP4P/R2QK2R b KQkq - 1 13",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "White retreats the knight to c3."
+    },
+    {
+      "ply": 26,
+      "t": 361.5,
+      "fen": "r2qk2r/1pp2ppp/p1n1p3/2b5/8/2NPnPBN/PPP4P/R2QK2R w KQkq - 2 14",
+      "line": [
+        "Ne3"
+      ],
+      "spoken": "Think about his weak squares — his pawn on f3 leaves holes — so the knight to e3 is more aggressive than the queen to f6."
+    },
+    {
+      "ply": 27,
+      "t": 380,
+      "fen": "r2qk2r/1pp2ppp/p1n1p3/2b5/8/2NPnPBN/PPPQ3P/R3K2R b KQkq - 3 14",
+      "line": [
+        "Qd2"
+      ],
+      "spoken": "White plays the queen to d2; he can't take our knight because of the fork."
+    },
+    {
+      "ply": 28,
+      "t": 381,
+      "fen": "r2qk2r/1pp2ppp/p3p3/2b5/3n4/2NPnPBN/PPPQ3P/R3K2R w KQkq - 4 15",
+      "line": [
+        "Nd4"
+      ],
+      "spoken": "The knight to d4 — the great thing about a knight here is that it prevents him from castling either way; his king is stuck."
+    },
+    {
+      "ply": 29,
+      "t": 401.5,
+      "fen": "r2qk2r/1pp2ppp/p3p3/2b5/3n4/2NPnPBN/PPPQ3P/2R1K2R b Kkq - 5 15",
+      "line": [
+        "Rc1"
+      ],
+      "spoken": "White plays the rook to c1, but he's overwhelmed with threats."
+    },
+    {
+      "ply": 30,
+      "t": 406,
+      "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPnnBN/PPPQ3P/2R1K2R w Kkq - 0 16",
+      "line": [
+        "Nxf3+"
+      ],
+      "spoken": "The knight takes on f3 with check — goodbye queen."
+    },
+    {
+      "ply": 32,
+      "t": 425,
+      "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPnK2P/2R4R w kq - 0 17",
+      "line": [
+        "Ke2",
+        "Nxd2"
+      ],
+      "spoken": "White plays the king to e2, and we take the queen, capturing on d2."
+    },
+    {
+      "ply": 33,
+      "t": 427,
+      "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPK3P/2R4R b kq - 0 17",
+      "line": [
+        "Kxd2"
+      ],
+      "spoken": "White recaptures with the king."
+    },
+    {
+      "ply": 34,
+      "t": 432.5,
+      "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPK3P/2R4R w - - 1 18",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "We castle."
+    },
+    {
+      "ply": 35,
+      "t": 441,
+      "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/4N3/3Pn1BN/PPPK3P/2R4R b - - 2 18",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "White plays the knight to e4."
+    },
+    {
+      "ply": 36,
+      "t": 444,
+      "fen": "r2q1rk1/1pp2ppp/pb2p3/8/4N3/3Pn1BN/PPPK3P/2R4R w - - 3 19",
+      "line": [
+        "Bb6"
+      ],
+      "spoken": "The bishop to b6, tucking it safely."
+    },
+    {
+      "ply": 37,
+      "t": 453,
+      "fen": "r2q1rk1/1pp2ppp/pb2p3/8/4N3/3Pn1BN/PPPK3P/2R3R1 b - - 4 19",
+      "line": [
+        "Rhg1"
+      ],
+      "spoken": "White plays the rook to g1."
+    },
+    {
+      "ply": 38,
+      "t": 462.5,
+      "fen": "r2q1rk1/1pp2ppp/pb2p3/8/2n1N3/3P2BN/PPPK3P/2R3R1 w - - 5 20",
+      "line": [
+        "Nc4+"
+      ],
+      "spoken": "The knight to c4 with check — winning the exchange."
+    },
+    {
+      "ply": 35,
+      "t": 464,
+      "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/4N3/3Pn1BN/PPPK3P/2R4R b - - 2 18",
+      "line": [],
+      "spoken": "Earlier the king could just step aside, but now the knight to c4 wins.",
+      "reanchor": true
+    },
+    {
+      "ply": 38,
+      "t": 465,
+      "fen": "r2q1rk1/1pp2ppp/pb2p3/8/2n1N3/3P2BN/PPPK3P/2R3R1 w - - 5 20",
+      "line": [
+        "Bb6",
+        "Rhg1",
+        "Nc4+"
+      ],
+      "spoken": "The bishop to b6, the rook to g1, the knight to c4 with check — he resigns, and we also win the exchange.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 477.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+      "line": [],
+      "spoken": "So this is the Lisitsin Gambit — Georgy Lisitsin was a Soviet international master.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 556.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/8/4p3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "He developed this interesting but very dubious gambit.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 557.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/6N1/4p3/8/PPPP1PPP/RNBQKB1R b KQkq - 1 3",
+      "line": [
+        "Ng5"
+      ],
+      "spoken": "The knight to g5.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 559.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "Nf6",
+        "d3"
+      ],
+      "spoken": "The knight to f6, d3.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 561.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/8/3p4/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "exd3"
+      ],
+      "spoken": "e takes d3.",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 563,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/8/3B4/PPP2PPP/RNBQK2R b KQkq - 0 5",
+      "line": [
+        "Bxd3"
+      ],
+      "spoken": "The bishop recaptures on d3 — and White is often going for a famous trap.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 568.5,
+      "fen": "rnbqkb1r/ppp1ppp1/5n1p/6N1/8/3B4/PPP2PPP/RNBQK2R w KQkq - 0 6",
+      "line": [
+        "h6"
+      ],
+      "spoken": "The trap appears after h6.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 582.5,
+      "fen": "rnbq1b1r/ppp1pkp1/5n1p/8/8/3B4/PPP2PPP/RNBQK2R w KQ - 0 7",
+      "line": [
+        "Nxf7",
+        "Kxf7"
+      ],
+      "spoken": "The knight takes on f7, the king recaptures — a standoff, with the queen undefended and the king weak.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 587,
+      "fen": "rnbq1b1r/ppp1pkp1/5nBp/8/8/8/PPP2PPP/RNBQK2R b KQ - 1 7",
+      "line": [
+        "Bg6+"
+      ],
+      "spoken": "The bishop to g6 with check wins the queen — not the bishop to c4, you have to be careful.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 599.5,
+      "fen": "rnbq1b1r/ppp1pkp1/5n1p/8/8/3B4/PPP2PPP/RNBQK2R w KQ - 0 7",
+      "line": [],
+      "spoken": "Against the bishop to c4, Black might wriggle out with the knight to f5, so the bishop to g6 is far more accurate.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 601,
+      "fen": "rnbq1b1r/ppp1pkp1/5nBp/8/8/8/PPP2PPP/RNBQK2R b KQ - 1 7",
+      "line": [
+        "Bg6+"
+      ],
+      "spoken": "The bishop to g6 with check.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 609,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": "But the thing is, Black can just play the knight to c6 and be better — I'm giving you a road map for these scenarios.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 615,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "The knight to c6 is powerful, because your opponent is almost certainly rolling his eyes.",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 620.5,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "Objectively he should probably play d takes e4.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 626,
+      "fen": "r1b1kb1r/ppp1pppp/2n5/8/4N3/8/PPP2PPP/RNBK1B1R b kq - 0 7",
+      "line": [
+        "Qxd1+",
+        "Kxd1",
+        "Nxe4",
+        "Nxe4"
+      ],
+      "spoken": "The queens come off on d1, the king recaptures losing castling rights, and the knights trade — Tennyson is another name for it, but no gambit player wants this position.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 649,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "line": [],
+      "spoken": "From a practical standpoint, nobody wants to play this — a good example of harnessing your opponent's psychology.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 654.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": "But again, don't take this too far.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 657,
+      "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "The knight to c6.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 659.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": "If they're giving up pieces for nothing, don't refuse the material — take it.",
+      "reanchor": true
+    }
+  ]
+}
