@@ -19,6 +19,7 @@ import { computeImportance, type ImportanceVerdict } from './narrationImportance
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
+import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -56,12 +57,15 @@ export interface PositionFactsResult {
   /** The OPPONENT's best-placed piece + what it leans on — the counter, so the
    *  coach can explain their asset AND how to undermine it. */
   opponentLeansOn: LeansOn | null;
+  /** The weighing — the top candidates + why each falls short (the discussion).
+   *  Null when it's not the student's move or there's nothing to weigh. */
+  deliberation: Deliberation | null;
   /** Board-true clauses, most-important-first, each TAGGED by kind so a surface
    *  can emit only what its existing lanes don't already cover (no walk-over). */
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+export type ClauseKind = 'deliberation' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
 export interface ClauseItem { kind: ClauseKind; rank: number; text: string; }
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
@@ -139,9 +143,18 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     try { opponentLeansOn = await computeLeansOn(fen, opponentColor, input.evalBoard); } catch { opponentLeansOn = null; }
   }
 
+  // The weighing (the discussion) — the top candidates + why each falls short.
+  // Only the STUDENT's own move is worth weighing out loud, and never in the
+  // opening (book, nothing to deliberate). Cheap: no search, chess.js over the
+  // fan we already have.
+  const studentToMove = moverColor === studentColor;
+  const deliberation = (!openingPhase && studentToMove)
+    ? buildDeliberation({ analysis, fenBefore: fen, moverColor })
+    : null;
+
   return {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove: moverColor === studentColor, openingPhase }),
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation,
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation }),
   };
 }
 
@@ -158,10 +171,20 @@ function buildClauses(a: {
   opponentLeansOn: LeansOn | null;
   studentToMove: boolean;
   openingPhase: boolean;
+  deliberation: Deliberation | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation } = a;
   if (!importance.speak) return [];
   const ranked: ClauseItem[] = [];
+
+  // THE WEIGHING LEADS (David 2026-08-26, the keystone) — narrate the choice, not
+  // just the winner: the tempting alternatives + why each falls short, then the
+  // move. Highest rank so it opens the discussion. Only fires on a genuine
+  // student choice out of the opening (gated at computePositionFacts).
+  if (deliberation?.isRealChoice) {
+    const text = deliberationFacts(deliberation);
+    if (text) ranked.push({ kind: 'deliberation', rank: 95, text });
+  }
 
   // Incoming fire — the opponent's standing threat against the student (their
   // intent, and the student's must-defend). Board-true, named. This is the ONE

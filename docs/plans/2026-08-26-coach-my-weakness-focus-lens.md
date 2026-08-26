@@ -78,6 +78,74 @@ and the coach never drives it.
   `tacticClassifier` (fork / pin / skewer / discovery / removal-of-guard /
   back-rank), `perturbation` (best piece + what it leans on).
 
+## 4.0 THE KEYSTONE — broadcast → one-sided discussion (David, locked, emphatic)
+
+**The single realization the whole voice build turns on.** Danya has a
+**one-sided discussion** with his viewers; **we broadcast.** Every scattered gap
+— the opponent as an agent, the tempting wrong move, the reaction, the arc "with
+a destination" (David first read *destination* as *discussion* — that reframe IS
+the fix) — is one root: he's in a conversation, we deliver a bulletin.
+
+**It's literal in the architecture, not a metaphor.** `voiceFacts` is a one-shot
+broadcast: "here's the fact package, voice all of it in order, add nothing, the
+student may move before you finish." No memory of the last move, no model of what
+the student is wondering, no turn. Structurally a monologue. Danya's is a
+**stateful, one-sided discussion** — he anticipates your half, reacts, calls
+back; he doesn't need you to talk back because he *imagines your side and answers
+it.*
+
+**THE UNLOCK — we compute the entire deliberation and then throw it away.** Every
+position we run the MultiPV fan — the top candidates and why each falls short.
+**That IS the discussion:** "Knight f3? No, drops the pawn. Bishop d3? Solid but
+slow. It's got to be this." Danya speaks that weighing out loud — the whole
+charm. We compute all of it and speak only the winner, as a bare fact. The
+tempting move you'd have played and why it's wrong is already in hand
+(`moveReasonOptions` computes "what a player would be tempted to think here").
+**We're not missing the data for the discussion — we delete it before we speak.**
+
+**The build frame (all downstream of this):**
+1. **Narrate the WEIGHING, not the conclusion** — speak the top **3 (maybe 4)
+   candidates** from the fan (David's call on depth) + why each falls short, then
+   the move. Not the whole 5-fan; the first 3–4.
+2. **Voice the listener's half** — the temptation / the question the student has
+   here (from `moveReasonOptions` + the natural-but-wrong move), then answer it.
+3. **Make the voice STATEFUL** — narration memory across moves so it can set up
+   and pay off (the "destination"/through-line, callbacks). Today it's per-ply
+   memoryless — that's the structural gap for the arc.
+4. **React** — the good register already permits it ("clean", "that's nasty");
+   the flat tiers (§4b-tiers) don't reach the coaching-you surfaces. Fix the
+   routing, not the prompt.
+
+All four are computed (G0 intact): the weighing is the fan; the temptation is
+`moveReasonOptions`; the state is our own move history; the reaction is bounded
+warmth the register already allows. Nothing invented — deliberation *spoken*, not
+manufactured.
+
+### 4b-tiers. WHERE the voice is actually flat (grounded — the good voice is walled off)
+
+Four production tiers of voice, discovered by tracing `voiceFacts` callers:
+- **RAW (`preferRaw`, no LLM):** weaknesses, mistakes summary, stats, strengths,
+  opening-accuracy, best-move, move-rating — the entire coach-**about-you**
+  surface. Spoken as a raw computed string. Zero Danya. **Deliberate tradeoff:**
+  `preferRaw` is instant and guarantees numbers/SAN survive verbatim ("warmth
+  needs the phrasing model, not a raw echo") — fidelity + speed picked over voice.
+- **STERILE (default register):** the actual **mistake-puzzle narration**
+  (`voiceMistakeNarration`, intent `mistake-review`, no `warm`) → the flat "one
+  or two friendly sentences" prompt. The crown-jewel drill speaks flat.
+- **DANYA (`warm: true`):** opening sections, middlegame plans, model-game
+  annotations, the review walk. The rich voice — reserved for **content**, not
+  for coaching you.
+- **TEMPLATE (`voiceService.speak`, bypasses `voiceFacts`):** in-game move
+  commentary (`USE_LLM_MOVE_COMMENTARY = false`).
+
+**The fix (the pattern already exists):** route the coaching-you surfaces
+(weakness / mistakes / drill / in-game) through the **Danya register** with
+`mustPreserve` protecting the numbers/SAN (the mistake path already uses
+`mustPreserve`) — so we get voice without the fidelity risk `preferRaw` guarded
+— AND enrich their fact packages (§4a) so the register has depth to phrase. Not
+"write a better prompt" (the prompt is good) — stop spending the good voice only
+on openings, point it at the student, feed it the weighing.
+
 ## 4. The MANDATORY voice package — the FULL general's briefing, EVERYWHERE
 
 **David, emphatic: the voice must be spoken at EVERY narration — lesson, review,
@@ -265,6 +333,19 @@ not a generic prompt.
 
 **Phase 1 comes first — David: "start with the mandatory DNA phrasing THAT
 SHOULD HAVE BEEN DONE ALREADY."**
+
+> **SLICE 1 LANDED (2026-08-26): the deliberation voice.** `src/services/
+> deliberation.ts` — `buildDeliberation` turns the MultiPV fan into the weighing
+> (top 3, maybe 4 candidates + why each falls short: drops-material board-true /
+> clearly-worse / less-precise), `deliberationFacts` renders it. Wired into
+> `positionFacts.ts` as the top-ranked (`rank 95`, leads) `deliberation` clause,
+> firing only on a genuine STUDENT-to-move choice out of the opening — so it
+> reaches every surface already routed through the voice (hints, read-position,
+> live play at your turn, Learn pre-move). 6 + 8 tests green. This is the
+> keystone (§4.0) made real: we stop deleting the deliberation and speak it.
+> NEXT slices: voice the listener's half (temptation, from `moveReasonOptions`);
+> stateful narration (callback/through-line); route the coaching-you surfaces off
+> `preferRaw`/sterile into the Danya register (§4b-tiers).
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the
