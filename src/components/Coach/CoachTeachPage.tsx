@@ -6434,7 +6434,7 @@ export function CoachTeachPage(): JSX.Element {
           kind: 'coach-narration-spoken',
           category: 'narration',
           source: 'CoachTeachPage.openingAnnouncement',
-          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}${idea ? ' (+corpus idea)' : ''}`,
+          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}`,
           fen: args.fenAfterReply,
         });
       }
@@ -8128,7 +8128,7 @@ export function CoachTeachPage(): JSX.Element {
                           kind: 'coach-narration-spoken',
                           category: 'narration',
                           source: 'CoachTeachPage.openingAnnouncement',
-                          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}${idea ? ' (+corpus idea)' : ''}`,
+                          summary: `opening ${firstResolve ? 'identified' : 'refined'}: ${det.name}`,
                           fen: probe.fen(),
                         });
                       }
