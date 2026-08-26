@@ -9979,6 +9979,52 @@ export function CoachTeachPage(): JSX.Element {
           />
         </div>
 
+        {/* IN-GAME PICKER BAR (David 2026-08-26) — every decision point that
+            appears DURING a live walkthrough hoists here, directly under the
+            board where PlayerInfoBar sits, so the options are visible with NO
+            scroll. Previously the fork picker sat below the chat input, off the
+            bottom of the screen, and the walkthrough looked like it silently
+            stopped. Thin, horizontal, purple-with-highlights = the standard
+            decision accent (purpleGlowStyle). Opening / mode / stage-menu
+            pickers are NOT in-game — they stay in their own menus below. */}
+        {walkthrough.isActive && walkthrough.phase === 'fork' && walkthrough.forkOptions.length > 0 && (
+          <div className="px-2 pb-1" data-testid="walkthrough-fork-bar">
+            <div
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg overflow-x-auto"
+              style={purpleGlowStyle}
+            >
+              <span className="text-[11px] font-semibold text-theme-text-muted whitespace-nowrap flex-shrink-0">
+                Which line?
+              </span>
+              {walkthrough.forkOptions.map((opt, idx) => {
+                // "⚠ trap" ONLY on a branch that carries a REAL, engine-verified
+                // punish (David 2026-08-26: "if we code for any, they need to be
+                // real"). A plain variation fork never gets trap framing.
+                const childPath = [...walkthrough.pathSans, opt.node.san ?? ''];
+                const hasRealTrap = !!walkthrough.tree?.punish?.some(
+                  (p) =>
+                    !p.setupFen &&
+                    p.setupMoves.length >= childPath.length &&
+                    childPath.every((m, i) => p.setupMoves[i] === m),
+                );
+                return (
+                  <button
+                    key={`forkbar-${opt.label ?? idx}-${idx}`}
+                    onClick={() => walkthrough.pickFork(idx)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
+                    data-testid={`walkthrough-forkbar-option-${idx}`}
+                  >
+                    <span className="truncate max-w-[9rem]">{opt.label ?? `Option ${idx + 1}`}</span>
+                    {hasRealTrap && (
+                      <span className="text-[10px] font-medium text-red-400 flex-shrink-0">⚠ trap</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
 
         {/* The "why did you play that?" card is GONE (2026-08-05). Learn
             teaches by talking through the game, not by stopping it to ask.
@@ -11325,58 +11371,15 @@ function WalkthroughControls({
   if (phase === 'fork') {
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-fork-panel">
-        <div className="text-xs font-medium text-theme-text-muted px-1">
-          Which line would you like to explore?
-        </div>
+        {/* Primary "Which line?" tap targets now hoist into the under-board
+            in-game picker bar (David 2026-08-26) so they're visible with no
+            scroll. Only the secondary "dive deeper" options + Pause/End stay
+            here in the controls area. */}
         <div className="flex flex-col gap-2">
-          {forkOptions.map((opt, idx) => {
-            // Trap foreshadowing: red glow on fork tiles whose branch
-            // contains a known punish lesson. Lets the student see
-            // "watch out — this path has a trap" before committing.
-            // Puzzle-DB-derived punishes (setupFen present) are NOT
-            // anchored to the walkthrough path — their setupMoves is
-            // the canonical opening's PGN purely for display, while
-            // the actual position lives at setupFen (a mid-game
-            // puzzle position). Glowing every fork tile under the
-            // canonical spine for those is meaningless. Filter them.
-            const childPath = [...walkthrough.pathSans, opt.node.san ?? ''];
-            const hasTrapDownBranch = !!tree?.punish?.some(
-              (p) =>
-                !p.setupFen &&
-                p.setupMoves.length >= childPath.length &&
-                childPath.every((m, i) => p.setupMoves[i] === m),
-            );
-            return (
-              <button
-                key={`${opt.label ?? idx}-${idx}`}
-                onClick={() => walkthrough.pickFork(idx)}
-                className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[56px] transition-colors"
-                style={hasTrapDownBranch ? redGlowStyle : goldGlowStyle}
-                data-testid={`walkthrough-fork-option-${idx}`}
-              >
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-theme-text">
-                    {opt.label ?? `Option ${idx + 1}`}
-                    {hasTrapDownBranch && (
-                      <span className="ml-1.5 text-[10px] font-medium text-red-400">
-                        ⚠ trap ahead
-                      </span>
-                    )}
-                  </span>
-                  {opt.forkSubtitle && (
-                    <span className="text-xs text-theme-text-muted">
-                      {opt.forkSubtitle}
-                    </span>
-                  )}
-                </div>
-                <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-              </button>
-            );
-          })}
           {tree && forkOptions.length > 0 && (
             <>
               <div className="text-xs font-medium text-theme-text-muted px-1 pt-2">
-                Or dive deeper into one of these
+                Dive deeper into a line
               </div>
               {forkOptions.map((opt, idx) => {
                 const variationName =
