@@ -1,0 +1,357 @@
+{
+ "videoId": "qv6IQBhWWsc",
+ "title": "Brilliant Combinations | Moistcr1tikal | Streamer Lesson",
+ "openingName": "Ruy Lopez, Spanish (coaching game)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:qv6IQBhWWsc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1774,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1779,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1780.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1785.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5 — the Ruy Lopez, the Spanish. At the top level this is the most popular move, and one I play myself with White.",
+   "kind": "main",
+   "teaches": [
+    "the Ruy Lopez"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1791,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1798,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1825,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/1Bb1p3/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1835.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/1Bb1p3/4P3/3P1N2/PPP2PPP/RNBQ1RK1 b kq - 2 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1849.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/1Bb1p3/4P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "We don't need to chase the bishop; it isn't doing much. But note the principle of proximity — the closer things happen to your king, the more attentive you must be. If the bishop had pinned a knight near your king, then h6 would be the move.",
+   "kind": "plan",
+   "teaches": [
+    "proximity to the king"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1904.5,
+   "fen": "r1bqk2r/ppp2ppp/2Bp1n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "Bxc6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1908,
+   "fen": "r1bqk2r/p1p2ppp/2pp1n2/2b1p3/4P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": "He captures unprovoked, so you actually saved a tempo by never playing a6. The recapture opens the b-file, and don't fret the doubled pawn — one doubled pawn is nothing, and you've got the two bishops.",
+   "kind": "main",
+   "teaches": [
+    "doubled pawns for the bishop pair"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 1932,
+   "fen": "r1bqk2r/p1p2ppp/2pp1n2/2b1p3/4P3/3PBN2/PPP2PPP/RN1Q1RK1 b kq - 1 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1956.5,
+   "fen": "r1bqk2r/p1p2ppp/1bpp1n2/4p3/4P3/3PBN2/PPP2PPP/RN1Q1RK1 w kq - 2 8",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": "Don't trade the bishops here — that would open the f-file for HIM. Drop the bishop back to b6 instead, so that if he takes it, YOU get to open the a-file for your rook.",
+   "kind": "plan",
+   "teaches": [
+    "open files for you, not him"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 1967.5,
+   "fen": "r1bqk2r/p1p2ppp/1bpp1n2/4p3/4P3/2NPBN2/PPP2PPP/R2Q1RK1 b kq - 3 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2002,
+   "fen": "r2qk2r/p1p2ppp/1bpp1n2/4p3/4P1b1/2NPBN2/PPP2PPP/R2Q1RK1 w kq - 4 9",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Now develop the bishop to its most active square, g4, setting the pin. If he shoves a pawn at it he only weakens himself, and we simply hold the pin.",
+   "kind": "main",
+   "teaches": [
+    "develop actively, keep the pin"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 2027.5,
+   "fen": "r2qk2r/p1p2ppp/1bpp1n2/4p3/4P1b1/2NPBN2/PPP2PPP/R2QR1K1 b kq - 5 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2043,
+   "fen": "r2q1rk1/p1p2ppp/1bpp1n2/4p3/4P1b1/2NPBN2/PPP2PPP/R2QR1K1 w - - 6 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2068,
+   "fen": "r2q1rk1/p1p2ppp/1bpp1n2/4p3/4P1b1/2NPBN1P/PPP2PP1/R2QR1K1 b - - 0 10",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2070.5,
+   "fen": "r2q1rk1/p1p2ppp/1bpp1n2/4p2b/4P3/2NPBN1P/PPP2PP1/R2QR1K1 w - - 1 11",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": "Keep developing and hold the pin. It's a tough position for him — the pin, your piece coordination — and because he's already given up his light-squared bishop, that pin is very hard for him to break.",
+   "kind": "plan",
+   "teaches": [
+    "a pin is stronger once the defender’s bishop is gone"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 2131.5,
+   "fen": "r2q1rk1/p1p2ppp/1bpp1n2/4p1Bb/4P3/2NP1N1P/PPP2PP1/R2QR1K1 b - - 2 11",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2143.5,
+   "fen": "r2q1rk1/p1p2pp1/1bpp1n1p/4p1Bb/4P3/2NP1N1P/PPP2PP1/R2QR1K1 w - - 0 12",
+   "line": [
+    "h6"
+   ],
+   "spoken": "He pins you back, so chase it with h6 — because now if he pushes his bishop's pawn you can't be taken by his knight, which is itself pinned. Your pin is better than his.",
+   "kind": "main",
+   "teaches": [
+    "whose pin is stronger"
+   ]
+  },
+  {
+   "ply": 23,
+   "t": 2172.5,
+   "fen": "r2q1rk1/p1p2pp1/1bpp1n1p/4p2b/4P2B/2NP1N1P/PPP2PP1/R2QR1K1 b - - 1 12",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2189,
+   "fen": "r2q1rk1/p1p2p2/1bpp1n1p/4p1pb/4P2B/2NP1N1P/PPP2PP1/R2QR1K1 w - - 0 13",
+   "line": [
+    "g5"
+   ],
+   "spoken": "The pawn pushes to g5, excommunicating his bishop from the game.",
+   "kind": "main",
+   "teaches": [
+    "shut the bishop out"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 2199,
+   "fen": "r2q1rk1/p1p2p2/1bpp1n1p/4p1pb/4P3/2NP1NBP/PPP2PP1/R2QR1K1 b - - 1 13",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 2263,
+   "fen": "r2q1rk1/p1p2p2/1bpp1n1p/4p2b/4P1p1/2NP1NBP/PPP2PP1/R2QR1K1 w - - 0 14",
+   "line": [
+    "g4"
+   ],
+   "spoken": "This is great practice for finding moves in unclear positions. The plan is to open the f-file with f5, and g4 prepares it — and by recapturing on g4 with the knight rather than the bishop, you keep your pin intact. Best of both worlds.",
+   "kind": "plan",
+   "teaches": [
+    "recapture to preserve the pin"
+   ]
+  },
+  {
+   "ply": 27,
+   "t": 2320.5,
+   "fen": "r2q1rk1/p1p2p2/1bpp1n1p/4p2b/4P1P1/2NP1NB1/PPP2PP1/R2QR1K1 b - - 0 14",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2323,
+   "fen": "r2q1rk1/p1p2p2/1bpp3p/4p2b/4P1n1/2NP1NB1/PPP2PP1/R2QR1K1 w - - 0 15",
+   "line": [
+    "Nxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2340.5,
+   "fen": "r2q1rk1/p1p2p2/1bpp3p/4p2b/4P1n1/2NP1NB1/PPPQ1PP1/R3R1K1 b - - 1 15",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2361.5,
+   "fen": "r2q1rk1/p1p5/1bpp3p/4pp1b/4P1n1/2NP1NB1/PPPQ1PP1/R3R1K1 w - - 0 16",
+   "line": [
+    "f5"
+   ],
+   "spoken": "With the file about to open, push f5 — and don't fall into thinking attacks happen in two moves. You often spend a long time just accumulating pieces before it breaks.",
+   "kind": "plan",
+   "teaches": [
+    "attacks take time to build"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 2406.5,
+   "fen": "r2q1rk1/p1p5/1bpp3p/4pp1b/4P1n1/3P1NB1/PPPQNPP1/R3R1K1 b - - 1 16",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "And sometimes you play a quiet, near-empty move to bide your time while the tension holds — knowing when to wait is its own skill.",
+   "teaches": [
+    "biding time under tension"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 2417.5,
+   "fen": "r2q1rk1/p1p5/1bpp3p/4p2b/4p1n1/3P1NB1/PPPQNPP1/R3R1K1 w - - 0 17",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 2424,
+   "fen": "r2q1rk1/p1p5/1bpp3p/4p2b/4P1n1/5NB1/PPPQNPP1/R3R1K1 b - - 0 17",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2435.5,
+   "fen": "r4rk1/p1p5/1bpp1q1p/4p2b/4P1n1/5NB1/PPPQNPP1/R3R1K1 w - - 1 18",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "Decide your queen's ideal square first — where it sits most harmoniously with the rook. To f6, then it can slide to g6, and you slowly bring both rooks to bear. And keep in reserve that the bishop eyes f2: not now, but the moment his defender moves or you sacrifice for it, that becomes real.",
+   "kind": "plan",
+   "teaches": [
+    "place the queen relative to the rook",
+    "bank the latent tactic"
+   ]
+  }
+ ]
+}
