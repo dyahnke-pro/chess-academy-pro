@@ -1,0 +1,268 @@
+{
+ "videoId": "U7pqt57VwuU",
+ "title": "Attacking F7 Early W/ Theory | QGA | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Queen's Gambit Accepted",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:U7pqt57VwuU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 756,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 787,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "dxc4"
+   ],
+   "spoken": "Black takes the gambit pawn on c4. Main lines are worth learning precisely because an opponent who doesn't know them often just loses out of the opening.",
+   "kind": "main",
+   "teaches": [
+    "why main lines pay off"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 789,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "We recover the pawn while developing — the knight to f3, not a queen check on a4. Winning the pawn back is only half the job; you have to develop while doing it, and dragging the queen out early achieves nothing.",
+   "kind": "main",
+   "teaches": [
+    "recover the pawn with a developing move, not the queen"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 791,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 814,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 815,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 816,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": "e3 is the positional route, opening the bishop to recapture — cleaner here than the knight to c3.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 821,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 822.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4PN2/PP3PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": "We take the pawn back with the bishop on c4, raking toward f7.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 825,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/2BP4/4PN2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black hits back with c5, and after the exchange we reach the classic isolated-queen-pawn structure — the same battleground you get from the Queen's Gambit Declined.",
+   "kind": "main",
+   "teaches": [
+    "the IQP structure from the QGA"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 829,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/2BP4/4PN2/PP3PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 843,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 844,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 856.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 859,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 862.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 5 5",
+   "line": [
+    "Ng8",
+    "Ng1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 866,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "A concept worth filing away: the ...e5 push used as a bargaining chip — giving the extra pawn back to force a queen trade and drag the opponent into an awkward recapture.",
+   "teaches": [
+    "...e5 to trade queens as a bargaining chip"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 889,
+   "fen": "rnbqkbnr/ppp2ppp/8/4P3/2p5/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 897,
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/2p5/8/PP2PPPP/R1BNKBNR b KQkq - 0 7",
+   "line": [
+    "Qxd1+",
+    "Nxd1"
+   ],
+   "spoken": "With the queens off, the recapture has to be made awkwardly — with the knight or the king — an unpleasant position to defend even a pawn up. The same idea recurs in the Blackmar-Diemer and the c3-Sicilian.",
+   "teaches": [
+    "a pawn up can still be unpleasant"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 898.5,
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/2p5/8/PP2PPPP/R1BNKBNR w KQkq - 1 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 906.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 909.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4",
+    "dxe4",
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 923,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 924.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4P3/4p3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 926,
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/4p3/5P2/PPP3PP/RNBK1BNR b kq - 0 5",
+   "line": [
+    "Qxd1+",
+    "Kxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 928,
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/4p3/5P2/PPP3PP/RNBK1BNR w kq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  }
+ ]
+}
