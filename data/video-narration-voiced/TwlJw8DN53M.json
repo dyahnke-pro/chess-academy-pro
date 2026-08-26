@@ -1,0 +1,115 @@
+{
+ "videoId": "TwlJw8DN53M",
+ "title": "Daniel VS Vladimir Kramnik",
+ "openingName": "Grünfeld Defense (fianchetto, from a Réti move order)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:TwlJw8DN53M",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 110.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5NP1/PPPPPP1P/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "g3",
+    "d5",
+    "Nf3"
+   ],
+   "spoken": "White opens on the flank with the g3 fianchetto, and the knight-and-d5 setup transposes toward Grünfeld territory.",
+   "kind": "main",
+   "teaches": [
+    "flank openings transpose into main structures"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 113.5,
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3p4/8/5NP1/PPPPPP1P/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "We fianchetto in turn with g6, heading for a Grünfeld.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 118,
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R b KQkq - 1 3",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 119,
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 121.5,
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "With d4 White steers into the symmetrical Grünfeld fianchetto — a deeply theoretical line. Black can grab the pawn with dxc4 or hold the center with c6; both are heavily played and sound.",
+   "kind": "main",
+   "teaches": [
+    "the symmetrical Grünfeld fianchetto"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 122.5,
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 124,
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQ1RK1 b kq - 3 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 125,
+   "fen": "rnbqk1nr/ppp2pbp/6p1/3pp3/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "A handy sideline to know: if White castles instead of pushing d4, Black simply takes the center with e5 — a reverse-Pirc that's completely comfortable and not at all dangerous for Black.",
+   "teaches": [
+    "...e5 reverse-Pirc if White delays d4"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 129,
+   "fen": "rnbqk1nr/ppp2pbp/6p1/3pp3/8/3P1NP1/PPP1PPBP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 131.5,
+   "fen": "r1bqk1nr/ppp2pbp/2n3p1/3pp3/8/3P1NP1/PPP1PPBP/RNBQ1RK1 w kq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 backs the center up, and Black is doing perfectly well.",
+   "reanchor": true
+  }
+ ]
+}
