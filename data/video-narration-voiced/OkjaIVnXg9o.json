@@ -1,0 +1,493 @@
+{
+ "videoId": "OkjaIVnXg9o",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1600",
+ "openingName": "Pirc Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:OkjaIVnXg9o",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 6.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 8,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 17.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 19,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 28,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f4"
+   ],
+   "spoken": "The Austrian Attack — f4 alongside e4 and d4 for a big pawn centre.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 30,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 36,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 37.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQ - 3 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The mindset: don't rush a kingside attack. Bank on the centre and develop each piece to support it, so you never overextend and bite off more than you can chew.",
+   "kind": "main",
+   "teaches": "In broad-centre systems, develop to reinforce the centre first; the attack comes only once it's secure."
+  },
+  {
+   "ply": 11,
+   "t": 69.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQ - 4 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Bc4 would be the natural-looking mistake — it runs into Nxe4 and d5, blasting the centre apart. So the bishop goes to d3 instead, quietly buttressing e4. Not every piece has to climb Everest.",
+   "kind": "main",
+   "teaches": "Place a piece to defend your centre even if the square looks passive; the flashy square can hang tactically."
+  },
+  {
+   "ply": 12,
+   "t": 74,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R w KQ - 5 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 90,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/4P3/3P1P2/2NB1N2/PPP3PP/R1BQK2R b KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Because everything is healthily placed, we can expand further with e5.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 92,
+   "fen": "r1bq1rk1/pppnppbp/5np1/4p3/3P1P2/2NB1N2/PPP3PP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "An instructive recapture choice: fxe5 opens the f-bishop and lets us storm the h-pawn for mate, but in a serious game dxe5 is better — it opens the d-file so a rook can x-ray the queen painfully.",
+   "kind": "main",
+   "teaches": "Pick the recapture that opens the file your pieces want, not just the one that looks natural."
+  },
+  {
+   "ply": 15,
+   "t": 124,
+   "fen": "r1bq1rk1/pppnppbp/5np1/4P3/3P4/2NB1N2/PPP3PP/R1BQK2R b KQ - 0 8",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 126.5,
+   "fen": "r1bq1rk1/pppnppbp/6p1/4P3/3P2n1/2NB1N2/PPP3PP/R1BQK2R w KQ - 1 9",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 138,
+   "fen": "r1bq1rk1/pppnppbp/6p1/4P3/3P2n1/2NB1N1P/PPP3P1/R1BQK2R b KQ - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 141,
+   "fen": "r1bq1rk1/pppnppbp/6pn/4P3/3P4/2NB1N1P/PPP3P1/R1BQK2R w KQ - 1 10",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 142.5,
+   "fen": "r1bq1rk1/pppnppbp/6pn/4P3/3P1B2/2NB1N1P/PPP3P1/R2QK2R b KQ - 2 10",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "Develop the bishop to f4, placed precisely so it over-protects the e5-pawn — exactly the point behind taking with the d-pawn.",
+   "kind": "main",
+   "teaches": "Post your bishop where it guards your advanced pawn, tying your development to your structure."
+  },
+  {
+   "ply": 20,
+   "t": 150.5,
+   "fen": "r1bq1rk1/pp1nppbp/6pn/2p1P3/3P1B2/2NB1N1P/PPP3P1/R2QK2R w KQ - 0 11",
+   "line": [
+    "c5"
+   ],
+   "spoken": "When Black tries c5 to break the chain, the principle is to capture toward the centre — but our central grip is so strong we can often just push past and ignore the poke.",
+   "kind": "main",
+   "teaches": "With an overwhelming centre you can sometimes brush aside a flank break instead of resolving it."
+  },
+  {
+   "ply": 21,
+   "t": 173.5,
+   "fen": "r1bq1rk1/pp1nppbp/6pn/2pPP3/5B2/2NB1N1P/PPP3P1/R2QK2R b KQ - 0 11",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 175.5,
+   "fen": "r1bq1rk1/pp1nppbp/6pn/2p1P3/3P1B2/2NB1N1P/PPP3P1/R2QK2R w KQ - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 183,
+   "fen": "r1bq1rk1/pp1nppbp/6pn/2pPP3/5B2/2NB1N1P/PPP3P1/R2QK2R b KQ - 0 11",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 187,
+   "fen": "r1b2rk1/pp1nppbp/1q4pn/2pPP3/5B2/2NB1N1P/PPP3P1/R2QK2R w KQ - 1 12",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 200,
+   "fen": "r1b2rk1/pp1nppbp/1q4pn/2pPP3/5B2/2NB1N1P/PPPQ2P1/R3K2R b KQ - 2 12",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Qd2 piles on and hits the knight; the greedy Qxb2 in reply just loses a piece.",
+   "kind": "main"
+  },
+  {
+   "ply": 24,
+   "t": 215,
+   "fen": "r1b2rk1/pp1nppbp/6pn/2pPP3/5B2/2NB1N1P/PqPQ2P1/R3K2R w KQ - 0 13",
+   "line": [
+    "Qxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 222,
+   "fen": "r1b2rk1/pp1nppbp/6pn/2pPP3/5B2/2NB1N1P/PqPQ2P1/1R2K2R b K - 1 13",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": "The queen grabbed b2 and attacks our rook, so first things first — Rb1 gets it out of the fork.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 225.5,
+   "fen": "r1b2rk1/pp1nppbp/6pn/2pPP3/5B2/q1NB1N1P/P1PQ2P1/1R2K2R w K - 2 14",
+   "line": [
+    "Qa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 248,
+   "fen": "r1b2rk1/pp1nppbp/6pn/2pPP3/5B2/qRNB1N1P/P1PQ2P1/4K2R b K - 3 14",
+   "line": [
+    "Rb3"
+   ],
+   "spoken": "Here's the key move: before winning the knight on h6, ask whether we can preemptively defend our own c3-knight with tempo, so Black's knight can't wriggle free. Rb3 does exactly that — it shields c3 and hits the queen at once.",
+   "kind": "main",
+   "teaches": "Before cashing a win, secure your loose piece with tempo so the opponent gets no escape and no fork."
+  },
+  {
+   "ply": 29,
+   "t": 252,
+   "fen": "r1b2rk1/pp1nppbp/6pB/q1pPP3/8/1RNB1N1P/P1PQ2P1/4K2R b K - 0 15",
+   "line": [
+    "Qa5",
+    "Bxh6"
+   ],
+   "spoken": "Now Bxh6 collects the piece cleanly — the rook guards c3, so there's no Nxc3-check fork to save Black.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 262,
+   "fen": "r1b2rk1/pp2ppbp/6pB/q1pPn3/8/1RNB1N1P/P1PQ2P1/4K2R w K - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 272,
+   "fen": "r1b2rk1/pp2ppbp/6pB/q1pPN3/8/1RNB3P/P1PQ2P1/4K2R b K - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 286.5,
+   "fen": "r1b2Bk1/pp2pp1p/6p1/q1pPb3/8/1RNB3P/P1PQ2P1/4K2R b K - 0 17",
+   "line": [
+    "Bxe5",
+    "Bxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 297.5,
+   "fen": "r1b2Bk1/pp2pp1p/6p1/q1pP4/8/1RNB2bP/P1PQ2P1/4K2R w K - 1 18",
+   "line": [
+    "Bg3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 298.5,
+   "fen": "r1b2Bk1/pp2pp1p/6p1/q1pP4/8/1RNB2bP/P1PQ2P1/5K1R b - - 2 18",
+   "line": [
+    "Kf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 306.5,
+   "fen": "r1b2k2/pp2pp1p/6p1/q1pP4/8/1RNB2bP/P1PQ2P1/5K1R w - - 0 19",
+   "line": [
+    "Kxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 329.5,
+   "fen": "r1b2k2/pp2pp1p/6p1/q1pP4/4N3/1R1B2bP/P1PQ2P1/5K1R b - - 1 19",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Ne4 forces the issue: the queens x-ray each other through the knight, and Black must also defend the g3-bishop, so he's overloaded — either trade queens down a rook or lose the bishop.",
+   "kind": "main",
+   "teaches": "A knight that both unmasks a queen trade and attacks a second piece overloads the defender."
+  },
+  {
+   "ply": 39,
+   "t": 359,
+   "fen": "r1b2k2/pp2pp1p/6p1/2pP4/8/1R1B2bP/P1PN2P1/5K1R b - - 0 20",
+   "line": [
+    "Qxd2",
+    "Nxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 363,
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/8/1R1B2bP/P1PN2P1/5K1R w - - 0 21",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 368.5,
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/4B3/1R4bP/P1PN2P1/5K1R b - - 1 21",
+   "line": [
+    "Be4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 375.5,
+   "fen": "1rb2k2/p3pp1p/1p4p1/2pP4/4B3/6RP/P1PN2P1/5K1R b - - 0 22",
+   "line": [
+    "Rb8",
+    "Rxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 379.5,
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/4B3/1R4bP/P1PN2P1/5K1R b - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 384,
+   "fen": "1rb2k2/p3pp1p/1p4p1/2pP4/4B3/6RP/P1PN2P1/5K1R b - - 0 22",
+   "line": [
+    "Rb8",
+    "Rxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 393,
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/4B3/1R4bP/P1PN2P1/5K1R b - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 394,
+   "fen": "r1b2k2/p1b1pp1p/1p4p1/2pP4/4B3/1R5P/P1PN2P1/5K1R w - - 2 22",
+   "line": [
+    "Bc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 405.5,
+   "fen": "r1b2k2/p1b1pp1p/1p1P2p1/2p5/4B3/1R5P/P1PN2P1/5K1R b - - 0 22",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Full-board awareness is everything here — a rook on one side of the board can control a decisive square on the other. Miss that and you drop a piece; see it and you find the winning shot.",
+   "kind": "review",
+   "teaches": "Always scan the whole board: a distant rook can guard or attack a square right by the action.",
+   "reanchor": true
+  },
+  {
+   "ply": 39,
+   "t": 409.5,
+   "fen": "r1b2k2/pp2pp1p/6p1/2pP4/8/1R1B2bP/P1PN2P1/5K1R b - - 0 20",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 410.5,
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/4B3/1R4bP/P1PN2P1/5K1R b - - 1 21",
+   "line": [
+    "b6",
+    "Be4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 647,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 689,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Bg7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 692.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQ - 3 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 694,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2BPPP2/2N2N2/PPP3PP/R1BQK2R b KQ - 4 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 696,
+   "fen": "rnbq1rk1/ppp1ppbp/6p1/3n4/2BPPP2/5N2/PPP3PP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "d5",
+    "Nxd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  }
+ ]
+}
