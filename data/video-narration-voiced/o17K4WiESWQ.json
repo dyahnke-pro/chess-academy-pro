@@ -1,0 +1,385 @@
+{
+  "videoId": "o17K4WiESWQ",
+  "title": "Master Class | Veresov / Benoni | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Benoni Defense",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:o17K4WiESWQ",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 1078,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "Finally we get White — and we're going to play the mainline, d4 and c4, grabbing the big classical center."
+    },
+    {
+      "ply": 3,
+      "t": 1079.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "c4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 4,
+      "t": 1081.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "e6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 1082.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 4,
+      "t": 1084,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "This is the Nimzo-Indian territory, and there are three main systems White can choose against it — all reputable, all positionally rich.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 1126.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The knight to c3 keeps us in the most positionally rich waters.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1129,
+      "fen": "rnbqkb1r/pp1p1ppp/4pn2/2p5/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "c5"
+      ],
+      "spoken": "Black strikes with c5 — he's steering into the Benoni."
+    },
+    {
+      "ply": 3,
+      "t": 1139,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": "This is one of several move orders into the Benoni; Black can also play c5 here and transpose after the knight to c3.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1143,
+      "fen": "rnbqkb1r/pp1p1ppp/4pn2/2p5/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "c5",
+        "Nc3",
+        "e6"
+      ],
+      "spoken": "So after c5, the knight to c3, e6, we head into a mainline Benoni with d5.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1146,
+      "fen": "rnbqkb1r/pp1p1ppp/4pn2/2pP4/2P5/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "d5, clamping down and gaining space in the center."
+    },
+    {
+      "ply": 8,
+      "t": 1153.5,
+      "fen": "rnbqkb1r/pp3ppp/3ppn2/2pP4/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+      "line": [
+        "d6"
+      ],
+      "spoken": "Black plays d6 immediately, which is a bit inaccurate — a little passive; not terrible, but passive."
+    },
+    {
+      "ply": 9,
+      "t": 1166.5,
+      "fen": "rnbqkb1r/pp3ppp/3ppn2/2pP4/2P1P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+      "line": [
+        "e4"
+      ],
+      "spoken": "How should White expand? The typical Benoni move, of course, is e4, building the full pawn center — and comparing move orders is exactly what reveals why d6 was slightly off."
+    },
+    {
+      "ply": 10,
+      "t": 1182,
+      "fen": "rnbqk2r/pp2bppp/3ppn2/2pP4/2P1P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "Comparison often yields wisdom about a position you'd otherwise miss. Black develops the bishop to e7."
+    },
+    {
+      "ply": 11,
+      "t": 1207.5,
+      "fen": "rnbqk2r/pp2bppp/3ppn2/2pP4/2P1P3/2NB4/PP3PPP/R1BQK1NR b KQkq - 2 6",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "The bishop to d3 is the right square, anticipating that Black will probably capture on d5 — and even if he doesn't, it's well placed there."
+    },
+    {
+      "ply": 12,
+      "t": 1212.5,
+      "fen": "r1bqk2r/pp1nbppp/3ppn2/2pP4/2P1P3/2NB4/PP3PPP/R1BQK1NR w KQkq - 3 7",
+      "line": [
+        "Nbd7"
+      ],
+      "spoken": "Black plays the knight to d7. There's no need for us to take on c5 — that trade doesn't especially help White."
+    },
+    {
+      "ply": 13,
+      "t": 1240.5,
+      "fen": "r1bqk2r/pp1nbppp/3ppn2/2pP4/2P1P3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 4 7",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "You could play f4 immediately to grab a pawn, but I don't like that — playing positionally, we simply develop the knight to f3."
+    },
+    {
+      "ply": 14,
+      "t": 1250,
+      "fen": "r1bqk2r/pp1nbppp/3pp3/2pP4/2P1P1n1/2NB1N2/PP3PPP/R1BQK2R w KQkq - 5 8",
+      "line": [
+        "Ng4"
+      ],
+      "spoken": "Black is cramped, and we're going to squeeze the life out of him. He tries the knight to g4."
+    },
+    {
+      "ply": 15,
+      "t": 1268.5,
+      "fen": "r1bqk2r/pp1nbppp/3pp3/2pP4/2P1P1n1/2NB1N2/PP3PPP/R1BQ1RK1 b kq - 6 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "No need to go out of our way to stop it — we just castle, because if you calculate a bit further you'll see it resolves in our favor."
+    },
+    {
+      "ply": 16,
+      "t": 1277,
+      "fen": "r1bqk2r/pp1nbppp/3pp3/2pPn3/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 w kq - 7 9",
+      "line": [
+        "Nge5"
+      ],
+      "spoken": "Black plays the knight to e5. There's a misconception about pieces in the center — you can't assume a central piece is automatically strong."
+    },
+    {
+      "ply": 17,
+      "t": 1293.5,
+      "fen": "r1bqk2r/pp1nbppp/3pp3/2pPN3/2P1P3/2NB4/PP3PPP/R1BQ1RK1 b kq - 0 9",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "The real question is how easily you can chase it, and we'll be able to hit it with f4 — so we take, the knight capturing on e5."
+    },
+    {
+      "ply": 18,
+      "t": 1301,
+      "fen": "r1bqk2r/pp2bppp/3pp3/2pPn3/2P1P3/2NB4/PP3PPP/R1BQ1RK1 w kq - 0 10",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "Black recaptures on e5. That knight is good for a couple of moves, but then f4 comes."
+    },
+    {
+      "ply": 19,
+      "t": 1311,
+      "fen": "r1bqk2r/pp2bppp/3pp3/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 b kq - 1 10",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "Be careful not to automatically drop the bishop to c2 — that would blunder the pawn. The bishop to e2 is precise, and then we hit with a nice f4 with tempo."
+    },
+    {
+      "ply": 20,
+      "t": 1334.5,
+      "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+      "line": [
+        "Bf6"
+      ],
+      "spoken": "Black plays the bishop to f6."
+    },
+    {
+      "ply": 21,
+      "t": 1345.5,
+      "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 b kq - 0 11",
+      "line": [
+        "f4"
+      ],
+      "spoken": "I don't see a reason not to play f4 — let's go."
+    },
+    {
+      "ply": 20,
+      "t": 1355.5,
+      "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+      "line": [],
+      "spoken": "The bottom line: among the three pawns in front of the king, pushing the f-pawn is the most innocuous, because you're not actually shattering the king's shell.",
+      "reanchor": true
+    },
+    {
+      "ply": 22,
+      "t": 1360,
+      "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 w kq - 1 12",
+      "line": [
+        "f4",
+        "Ng6"
+      ],
+      "spoken": "You still have your g- and h-pawns, and you can always tuck the king over to h1 — so f4 and the knight to g6 is nothing to fear.",
+      "reanchor": true
+    },
+    {
+      "ply": 20,
+      "t": 1374,
+      "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+      "line": [],
+      "spoken": "Making a move like g4 is infinitely more weakening — that doesn't mean you never play it, but the danger comes when you push all three pawns in front of your king.",
+      "reanchor": true
+    },
+    {
+      "ply": 22,
+      "t": 1379.5,
+      "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 w kq - 1 12",
+      "line": [
+        "f4",
+        "Ng6"
+      ],
+      "spoken": "So f4 and the knight to g6 leaves a very rich position, fully sound for White.",
+      "reanchor": true
+    },
+    {
+      "ply": 23,
+      "t": 1404,
+      "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 b kq - 2 12",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "The bishop to e3 is important, and we've also got interesting ideas with an e5 break brewing."
+    },
+    {
+      "ply": 24,
+      "t": 1436.5,
+      "fen": "r1bq1rk1/pp3ppp/3ppbn1/2pP4/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 w - - 3 13",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Black castles."
+    },
+    {
+      "ply": 25,
+      "t": 1533.5,
+      "fen": "r1bq1rk1/pp3ppp/3pPbn1/2p5/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 13",
+      "line": [
+        "dxe6"
+      ],
+      "spoken": "Now look at the d-file: there's a weak backward pawn on d6. We take, d5 takes e6, opening the file and putting that weakness on trial."
+    },
+    {
+      "ply": 26,
+      "t": 1539,
+      "fen": "r2q1rk1/pp3ppp/3pbbn1/2p5/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 w - - 0 14",
+      "line": [
+        "Bxe6"
+      ],
+      "spoken": "Black recaptures with the bishop on e6 — and now all of White's pieces coordinate beautifully."
+    },
+    {
+      "ply": 27,
+      "t": 1540,
+      "fen": "r2q1rk1/pp3ppp/3pbbn1/2p2P2/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 14",
+      "line": [
+        "f5"
+      ],
+      "spoken": "f5 — a fork, hitting the bishop and the knight at once."
+    },
+    {
+      "ply": 28,
+      "t": 1563.5,
+      "fen": "r2q1rk1/pp1b1ppp/3p1bn1/2p2P2/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 w - - 1 15",
+      "line": [
+        "Bd7"
+      ],
+      "spoken": "Black saves the bishop with the retreat to d7."
+    },
+    {
+      "ply": 29,
+      "t": 1565,
+      "fen": "r2q1rk1/pp1b1ppp/3p1bP1/2p5/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 15",
+      "line": [
+        "fxg6"
+      ],
+      "spoken": "We take, f takes g6, ripping open the kingside."
+    },
+    {
+      "ply": 30,
+      "t": 1569.5,
+      "fen": "r2q1rk1/pp1b2pp/3p1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 w - - 0 16",
+      "line": [
+        "fxg6"
+      ],
+      "spoken": "Black recaptures on g6."
+    },
+    {
+      "ply": 31,
+      "t": 1609,
+      "fen": "r2q1rk1/pp1b2pp/3Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R4RK1 b - - 0 16",
+      "line": [
+        "Qxd6"
+      ],
+      "spoken": "The queen scoops up the weak pawn, taking on d6."
+    },
+    {
+      "ply": 32,
+      "t": 1631.5,
+      "fen": "r2q1rk1/p2b2pp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R4RK1 w - - 0 17",
+      "line": [
+        "b6"
+      ],
+      "spoken": "The rook to d1 is coming. Black plays b6."
+    },
+    {
+      "ply": 33,
+      "t": 1633,
+      "fen": "r2q1rk1/p2b2pp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/3R1RK1 b - - 1 17",
+      "line": [
+        "Rad1"
+      ],
+      "spoken": "We bring the rook to d1, piling onto the d-file."
+    },
+    {
+      "ply": 34,
+      "t": 1676,
+      "fen": "r2q2k1/p2b1rpp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/3R1RK1 w - - 2 18",
+      "line": [
+        "Rf7"
+      ],
+      "spoken": "Black tries the rook to f7 — but we can't let him escape. How should we continue?"
+    },
+    {
+      "ply": 35,
+      "t": 1691.5,
+      "fen": "r2q2k1/p2b1rpp/1p1Q1bp1/2p1P3/2P5/2N1B3/PP2B1PP/3R1RK1 b - - 0 18",
+      "line": [
+        "e5"
+      ],
+      "spoken": "e5 is very natural here — crushing him down every file and every avenue."
+    }
+  ]
+}
