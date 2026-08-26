@@ -1,0 +1,129 @@
+{
+ "videoId": "WmCImz1fv5s",
+ "title": "Tearing Down The Slavic Wall | Slav Defense | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Slav Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:WmCImz1fv5s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "c6"
+   ],
+   "spoken": "Let's play one game. There have been a lot of requests to play d4, so we're going to stick with d4 for a couple of games. c6 — this"
+  },
+  {
+   "ply": 3,
+   "t": 33,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": "offers us the possibility of transposing to a Caro-Kann, but we're going to stick with d4, so we play c4 and"
+  },
+  {
+   "ply": 4,
+   "t": 35,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "transpose into a Slav. This is the first time we"
+  },
+  {
+   "ply": 5,
+   "t": 42,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "face the Slav, I think, in all of our speedruns. The knight to f3 is the main line — we"
+  },
+  {
+   "ply": 6,
+   "t": 44,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "develop both of our knights, standard fare here."
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3. Here Black has a major fork in the road —"
+  },
+  {
+   "ply": 8,
+   "t": 48.5,
+   "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": "a couple of possible variations, of which a6 is one."
+  },
+  {
+   "ply": 7,
+   "t": 51,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+   "line": [],
+   "spoken": "a6 is one of them —",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 52,
+   "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": "this is called the Chebanenko variation; I think it got popular around the 60s or 70s. Black prepares a very quick b5."
+  },
+  {
+   "ply": 9,
+   "t": 72,
+   "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2NP1/PP2PP1P/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "g3"
+   ],
+   "spoken": "I don't know much about a6, since I don't really play the Slav with White that much, but one thing I've always played here is the move g3, a very Catalan kind of style — I'm a big fan of playing g3 in the Slav; I think it leads to very dynamic positions."
+  },
+  {
+   "ply": 10,
+   "t": 92.5,
+   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3p4/2PP2b1/2N2NP1/PP2PP1P/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Of course this is a pawn sacrifice, so Black can take on c4, and we will not try particularly hard to win that pawn back immediately, so you have to be ready to play sacrificial lines. The bishop to g4 is quite dubious — why? Generally in these positions the bishop to g4 walks right into the knight to e5."
+  },
+  {
+   "ply": 11,
+   "t": 107.5,
+   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3pN3/2PP2b1/2N3P1/PP2PP1P/R1BQKB1R b KQkq - 2 6",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The knight to e5 — so we centralise our knight."
+  },
+  {
+   "ply": 12,
+   "t": 113,
+   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3pN2b/2PP4/2N3P1/PP2PP1P/R1BQKB1R w KQkq - 3 7",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": "And of course you should also be aware of the move queen to b3, which in many cases comes with great effect. But before we do any of that, we should probably develop our bishop to g2 — but then Black plays e6 and solidifies his position. So the other option is to play the immediate queen to b3 and go for Black's throat. I actually like the look of the queen to b3, hoping for b5 here. What some players do in these positions is play a very weird b6 — that has to be inaccurate; it just looks really ugly and weakens the queenside, though it's not losing. When you play d4, you've got to be ready to play long games. So here's what we're going to do: try to open the centre as quickly as we possibly can — so let's start by taking on d5 and finally completing our development.",
+   "reanchor": true
+  }
+ ]
+}
