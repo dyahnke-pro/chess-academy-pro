@@ -1,0 +1,253 @@
+{
+ "videoId": "vkmohzpmqS4",
+ "title": "PogChamps 3 In Depth Training | MoistCr1TiKaL | Pt. 1",
+ "openingName": "Sicilian Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:vkmohzpmqS4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 108,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 110,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 111,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 112.5,
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 113.5,
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 114.5,
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 115.5,
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 is a strong move here — it grabs central space and cramps his position.",
+   "kind": "main",
+   "teaches": [
+    "Claim space in the center when you can hold it"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 118,
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 1 6",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 120,
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 131.5,
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 7",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 134,
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 2 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 137,
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 141.5,
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 b kq - 4 8",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "The knight swings to a4, hitting the c5-pawn — that was the plan, to win it or chase it.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 145,
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 148.5,
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/2PP1N2/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 152,
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1B5/2PP1N2/PP3PPP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Ndc6"
+   ],
+   "spoken": "Careful — his knight is now attacking your e5-pawn. Think about how to defend it.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 163.5,
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "d4"
+   ],
+   "spoken": "You push d4 — very good. The best way to defend a pawn is with another pawn.",
+   "kind": "main",
+   "teaches": [
+    "The best way to defend a pawn is with another pawn"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 165.5,
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Now watch for his b5: it would fork two of your pieces at once. There's a piece you need to tuck out of the way first.",
+   "kind": "main",
+   "teaches": [
+    "Sidestep a pawn fork before it lands"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 188.5,
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 1 11",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop steps back so that b5 no longer forks anything.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 193.5,
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pp1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 w kq - 0 12",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 197,
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 0 12",
+   "line": [
+    "Nxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 200.5,
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 w - - 1 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 206,
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P1B1/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 2 13",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 210.5,
+   "fen": "r1bq1rk1/3p1pbp/p1n1p1p1/1pN1PnB1/3P4/2P2N2/PP2BPPP/R2Q1RK1 w - - 3 14",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 213.5,
+   "fen": "r1bB1rk1/3p1pbp/p1n1p1p1/1pN1Pn2/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Bxd8"
+   ],
+   "spoken": ""
+  }
+ ]
+}

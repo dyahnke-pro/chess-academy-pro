@@ -51,10 +51,12 @@ describe('the opening never borrows another position ideas', () => {
 });
 
 describe('selection keeps looking until the caller can use the note', () => {
-  it('rejecting the first pick yields a DIFFERENT note, not silence', () => {
+  it('never hands back a rejected note (exact-position only)', () => {
     const { history, fen } = boardAfter(VIENNA);
     const first = teachingSourceForBoard(history, fen, 'Vienna Game: Vienna Gambit');
-    expect(first).not.toBeNull();
+    // Exact-position only since 2026-08-26 (no opening-family/structure/concept
+    // fallback): silence is valid and common when no voiced note sits here.
+    if (!first) return;
 
     const second = teachingSourceForBoard(
       history,

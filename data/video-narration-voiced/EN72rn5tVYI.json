@@ -1,0 +1,126 @@
+{
+ "videoId": "EN72rn5tVYI",
+ "title": "\"Let Switch It Up and Play D4!!\" | Catalan Opening | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Catalan Opening",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:EN72rn5tVYI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "We switch to the queen's pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 17.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": "With c4 we head into Catalan waters — offering the pawn to open the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 19,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 22,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 23.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 24.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "g3"
+   ],
+   "spoken": "g3 is the move that defines the Catalan: the bishop heads to the long diagonal, raking across d5 and the queenside.",
+   "kind": "main",
+   "teaches": [
+    "the Catalan fianchetto"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 26.5,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 28.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQK2R w KQ - 3 6",
+   "line": [
+    "Bg2",
+    "O-O"
+   ],
+   "spoken": "The Catalan bishop settles on g2, and the whole opening is built around its pressure down that diagonal.",
+   "kind": "main",
+   "teaches": [
+    "the g2 bishop is the Catalan’s soul"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 31.5,
+   "fen": "rnbq1rk1/1pp1bppp/p3pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "O-O",
+    "a6"
+   ],
+   "spoken": "With a6 Black prepares to grab on c4 and hold the pawn with b5. So we protect the c4-pawn the Catalan way — the queen to c2, which guards it without blocking a single developing piece — and we'll bring a rook to d1 to keep the d4-pawn solid. From here the entire battle turns on one break: Black wants c5, trading his backward pawn and equalizing; we spend the middlegame preventing it. The bishop to g5 discourages it by overloading the piece that guards both f6 and c5, and once c5 is stopped for good we grind down the half-open c-file — that slow squeeze is what makes the Catalan so unpleasant to face.",
+   "kind": "plan",
+   "teaches": [
+    "Qc2 holds c4 without blocking development",
+    "the whole fight is over Black’s ...c5 break"
+   ],
+   "plans": [
+    "Qc2 + Rd1 to hold the center",
+    "Bg5 to overload the ...c5 defender",
+    "pressure down the c-file"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 855.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "The Catalan reaches this position through countless move orders — the g3 fianchetto against the Queen's-Gambit structure IS the Catalan — and what makes it so hard to study is the sheer number of viable setups Black can choose.",
+   "teaches": [
+    "the Catalan’s many move orders"
+   ],
+   "reanchor": true
+  }
+ ]
+}

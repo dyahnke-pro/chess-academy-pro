@@ -1,0 +1,343 @@
+{
+ "videoId": "aHzb3XGiG08",
+ "title": "INSANELY Close 3 0 Blitz | Daniel Naroditsky VS Alireza Firouzja",
+ "openingName": "Ruy Lopez",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:aHzb3XGiG08",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 2572.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "The open game — both sides stake a claim in the centre with the king's pawns.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 2574.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2576,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "spoken": "White develops the knight and then pins with the bishop to b5 — the Ruy Lopez, leaning on the knight that guards e5.",
+   "kind": "main",
+   "teaches": [
+    "The Ruy Lopez pressures the e5-defender via Bb5"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 2578.5,
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "Ba4",
+    "a6",
+    "d3"
+   ],
+   "spoken": "Black plays the knight to f6 and puts the question with a6; the bishop retreats along the diagonal to a4, keeping the pin alive, and White plays the modest d3 — a quiet, modern Ruy.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 2580,
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/B3P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black gains space and shoves the bishop with b5.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 2582.5,
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+   "line": [
+    "Bb3",
+    "Be7",
+    "O-O"
+   ],
+   "spoken": "The bishop tucks back to b3, still eyeing the a2-g8 diagonal and the f7-square; both sides finish the kingside and castle.",
+   "kind": "main",
+   "teaches": [
+    "The b3-bishop trains on f7 in the closed Ruy"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 2585.5,
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black bolsters the centre with d6 — the classic closed Ruy structure.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 2587,
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N1P/PPP2PP1/RNBQ1RK1 b kq - 0 8",
+   "line": [
+    "h3"
+   ],
+   "spoken": "White plays h3, making luft and denying Black the ...Bg4 pin.",
+   "kind": "main",
+   "teaches": [
+    "h3 prevents the ...Bg4 pin before it can land"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 2588,
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N1P/PPP2PP1/RNBQ1RK1 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2591.5,
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/PB1P1N1P/1PP2PP1/RNBQ1RK1 b - - 0 9",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2593,
+   "fen": "r2q1rk1/2p1bppp/p1npbn2/1p2p3/4P3/PB1P1N1P/1PP2PP1/RNBQ1RK1 w - - 1 10",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "Black develops the bishop to e6, offering to trade off White's strong light-squared bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 2597,
+   "fen": "r2q1rk1/2p1bppp/p1npBn2/1p2p3/4P3/P2P1N1P/1PP2PP1/RNBQ1RK1 b - - 0 10",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": "White obliges and takes on e6.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 2599,
+   "fen": "r2q1rk1/2p1b1pp/p1nppn2/1p2p3/4P3/P1NP1N1P/1PP2PP1/R1BQ1RK1 b - - 1 11",
+   "line": [
+    "fxe6",
+    "Nc3"
+   ],
+   "spoken": "Black recaptures with the f-pawn — a double-edged choice: it hands Black a half-open f-file for the rook, but it also leaves doubled, isolated e-pawns. White brings the knight to c3 and points at the soft d5-square.",
+   "kind": "main",
+   "teaches": [
+    "Recapturing ...fxe6 trades a half-open file for doubled e-pawns"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 2601.5,
+   "fen": "r3qrk1/2p1b1pp/p1nppn2/1p2p3/4P3/P1NP1N1P/1PP2PP1/R1BQ1RK1 w - - 2 12",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2608,
+   "fen": "r3qrk1/2p1b1pp/p1nppn2/1p2p1N1/4P3/P1NP3P/1PP2PP1/R1BQ1RK1 b - - 3 12",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight hops to g5, probing the weakened e6 and f7 squares.",
+   "kind": "main"
+  },
+  {
+   "ply": 24,
+   "t": 2617,
+   "fen": "r3qrk1/2p1b1pp/p2ppn2/1p2p1N1/3nP3/P1NP3P/1PP2PP1/R1BQ1RK1 w - - 4 13",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Black answers by planting the knight on d4 — a proud central outpost right in White's half.",
+   "kind": "main",
+   "teaches": [
+    "A knight on d4 is a powerful central outpost"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 2618,
+   "fen": "r3qrk1/2p1b1pp/p2ppn2/1p2p1N1/3nP3/P2P3P/1PP1NPP1/R1BQ1RK1 b - - 5 13",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "White challenges it immediately with the knight to e2, offering to swap off the intruder.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 2626.5,
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p2p1N1/3nP3/P2P3P/1PP1NPP1/R1BQ1RK1 w - - 6 14",
+   "line": [
+    "Bd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2630,
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/3pP3/P2P3P/1PP2PP1/R1BQ1RK1 w - - 0 15",
+   "line": [
+    "Nxd4",
+    "exd4"
+   ],
+   "spoken": "The knights come off, and Black recaptures to leave a pawn wedged on d4.",
+   "kind": "main"
+  },
+  {
+   "ply": 29,
+   "t": 2636,
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/3pP3/P1PP3P/1P3PP1/R1BQ1RK1 b - - 0 15",
+   "line": [
+    "c3"
+   ],
+   "spoken": "White plays c3 to chip at that wedge and open lines against it.",
+   "kind": "main",
+   "teaches": [
+    "Undermine an advanced enemy pawn with a pawn lever"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 2640.5,
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/4P3/P1PP3P/5PP1/R1BQ1RK1 b - - 0 16",
+   "line": [
+    "dxc3",
+    "bxc3"
+   ],
+   "spoken": "After the trade White rebuilds a c3-d3 pawn chain, and the structure settles.",
+   "kind": "main"
+  },
+  {
+   "ply": 32,
+   "t": 2643.5,
+   "fen": "r2bqrk1/2pn2pp/p2pp3/1p4N1/4P3/P1PP3P/5PP1/R1BQ1RK1 w - - 1 17",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 2647.5,
+   "fen": "r2bqrk1/2pn2pp/p2pp3/1p6/4P3/P1PP1N1P/5PP1/R1BQ1RK1 b - - 2 17",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2649.5,
+   "fen": "r2bqrk1/2p3pp/p2pp3/1pn5/4P3/P1PP1N1P/5PP1/R1BQ1RK1 w - - 3 18",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 2651,
+   "fen": "r2bqrk1/2p3pp/p2pp3/1pn5/4P3/P1PPBN1P/5PP1/R2Q1RK1 b - - 4 18",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 2653.5,
+   "fen": "r2bqrk1/2p3pp/p2pp3/1p6/n3P3/P1PPBN1P/5PP1/R2Q1RK1 w - - 5 19",
+   "line": [
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 2657,
+   "fen": "r2bqrk1/2p3pp/p2pp3/1p6/n3P3/P1PPBN1P/5PP1/2RQ1RK1 b - - 6 19",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 2660,
+   "fen": "r3qrk1/2p3pp/p2ppb2/1p6/n3P3/P1PPBN1P/5PP1/2RQ1RK1 w - - 7 20",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 2665.5,
+   "fen": "r3qrk1/2p3pp/p2ppb2/1p6/n2PP3/P1P1BN1P/5PP1/2RQ1RK1 b - - 0 20",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White expands in the centre with d4, claiming space and opening the position for the better-placed pieces.",
+   "kind": "main"
+  },
+  {
+   "ply": 40,
+   "t": 2670.5,
+   "fen": "r4rk1/2p3pp/p1qppb2/1p6/n2PP3/P1P1BN1P/5PP1/2RQ1RK1 w - - 1 21",
+   "line": [
+    "Qc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 2697,
+   "fen": "r4rk1/2p3pp/p1qppb2/1p6/n2PP3/P1P1BN1P/3Q1PP1/2R2RK1 b - - 2 21",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen slides to d2, coordinating the pieces — and the engine now reads a clear pull for White, the small edges finally adding up.",
+   "kind": "plan",
+   "teaches": [
+    "Accumulated small edges become a real advantage"
+   ],
+   "plans": [
+    "Coordinate the queen and rooks on the central files",
+    "Press the slightly better structure"
+   ]
+  }
+ ]
+}

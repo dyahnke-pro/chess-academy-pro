@@ -6,9 +6,9 @@ import { logAppAudit } from '../services/appAuditor';
 
 import { db } from '../db/schema';
 import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
-import { isSpokenSentenceGrounded, gradeNarrationText, gradeBorrowedTeaching } from '../services/coachAnswerGates';
+import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
-import { transitionTeachingSourceForGame, generalizedTeaching } from '../services/danyaTeachingService';
+import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
 import { buildVoicePackage } from '../services/voicePackage';
 import { detectOpening } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
@@ -430,11 +430,17 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // kind of position is heading, which is the point of a transition
             // ritual and stays true when the note is borrowed.
             const { note, origin } = source;
-            const rawRitual = (origin === 'position'
+            // 🔒 POSITION-ONLY on the play/learn surface (David 2026-08-26:
+            // "make sure I hear no floating notes in the play surfaces"). Only
+            // the exact-position tier was authored at the board the student is
+            // looking at; the borrowed tiers (recent-path / opening-family /
+            // structure) describe a DIFFERENT position and are silenced here.
+            // Floating teaching lives on tactics + endgame now.
+            const rawRitual = origin === 'position'
               ? [note.explains, note.teaches, note.plans ? `The plan: ${note.plans}` : '']
-              : [note.plans ? generalizedTeaching(origin, note.plans) : ''])
-              .filter((s) => s && s.trim())
-              .join(' ');
+                  .filter((s) => s && s.trim())
+                  .join(' ')
+              : '';
             // THE BACKUP THAT SHOULD NEVER FIRE (G0). Selection now refuses a
             // note whose spoken text names pieces this board no longer has —
             // but this text is about to ride into the model's package as
@@ -450,9 +456,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             // which is right for prose about the line actually being played.
             const ritual = !rawRitual.trim()
               ? ''
-              : origin === 'position'
-                ? (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '')
-                : gradeBorrowedTeaching(rawRitual, event.fen, 'usePhaseNarration.transitionNote');
+              : (gradeNarrationText(rawRitual, event.fen, 'usePhaseNarration.transitionNote') ?? '');
             if (ritual.trim()) {
               transitionSentence += ` ${ritual}`;
               ritualSpoken = true;

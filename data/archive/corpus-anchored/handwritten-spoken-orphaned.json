@@ -1,0 +1,803 @@
+{
+ "dt-1ee": {
+  "unspeakable": "misfiled: the prose teaches the Grunfeld, the anchor is the Open Sicilian"
+ },
+ "hp-5xd": {
+  "spoken": "Black continues with e6 here. If Bf4 appears, Bd6 challenges the bishop at once, and White must pick one of three: take, drop back to g3, or post the bishop on d3 and permit the exchange."
+ },
+ "dt-5gi": {
+  "spoken": "e3 shores up the centre and the d4 pawn, at the cost of shutting in the c1 bishop. A trap four hundred years old lurks behind it: if Black grabs with b5, a4 undermines the chain, and after c6 b5 cxb5, Qf3 hits the loose rook on a8 and collects material."
+ },
+ "cb-2d7": {
+  "spoken": "Against the c3 Sicilian the same Taimanov shape works. With the c-file shut, the queen has a natural home on c7. Black hits the centre with d6 and follows with e5, and when Bc4 eyes f7 it can usually be ignored."
+ },
+ "dt-kt": {
+  "spoken": "An early d5 is dubious for White here, though hardly fatal. Black simply finishes development with Bg7 and castling, then picks a setup: d6 comes first, with e6 or c6 to follow. e6 is played, and Bd3 keeps the tension."
+ },
+ "sl-mls": {
+  "spoken": "After f3 Black has a spread of natural moves: castling, Nc6, c5, d5. Castling is the natural choice — the pieces stay coiled on the back rank and strike at the centre later, while White builds a broad centre and plays for mate. Nc6 is the awkward one, since it shuts in the c-pawn that wants c5 or c6."
+ },
+ "dt-1sz": {
+  "spoken": "In the Declined, Be7 is the answer to Bg5. It unpins the knight, which White was ready to exploit against the d5 pawn, and it readies kingside castling."
+ },
+ "ir-j8": {
+  "spoken": "With the piece recovered, Black chooses between trading queens and keeping them on — and keeping them is the point, since Qh4 develops with threats. White's doubled d-pawns clog the development, the bishop most of all, and the pawn on e5 kills the fianchetto."
+ },
+ "dt-5up": {
+  "spoken": "Meet Bc4 with d5: the bishop is chased to d3, and g5 arrives with tempo. If White then pushes c4, Black takes on c4 and swings Rg8, readying g4 for a kingside assault, and White's game slides into chaos."
+ },
+ "dt-2lz": {
+  "spoken": "After c4, Qe7 check looks tempting but Qe2 answers it. The queen trade suits Black anyway: Bg4 punishes the lagging development and the soft d4 square. cxd5 then runs into Nxd4 with check, Kf1 is forced, and once Nxb3 axb3 has been played, White's weak squares and broken structure tell."
+ },
+ "dt-2yx": {
+  "spoken": "Nf6 invites Bg5: the pin ties the knight down and clears the way for a knight to land on d5, the classic Sicilian idea. While the pin holds, Black cannot fight for d5, and Be7 is only a stopgap, because Bg5 comes anyway."
+ },
+ "dt-1vx": {
+  "spoken": "c4 arrives with the threat of a fork on d5, but Bg4 answers by pinning the knight. If Nc3 follows, Black takes on f3 first and then on d4 with discovered check, so Qxd4 drops the queen. White stays better, having made the game needlessly messy."
+ },
+ "dt-23n": {
+  "spoken": "Bb5 check is the critical try: it drags a piece to d7 and cuts the queen's guard of the c5 pawn. Nbd7 holds, and a6 then puts the question to the bishop. If White grabs on d5, the queen recaptures and Black is content a pawn down for a while, since the bishop pair and the coming recovery of c5 with a5 are compensation enough."
+ },
+ "dt-5gj": {
+  "spoken": "With c6, Nc3, c5 and d5 played, the position is a natural one. Qf3 attracts attention, but after Nd5 Bxd5 the threat is a single move and simply parried; White keeps the edge while Nf6 or Qf6 nags. Nf3 is the better try, holding the tension and the winning chances with it."
+ },
+ "hp-5pl": {
+  "spoken": "Once the queen retreats, d4 is the move: space, and the c1 bishop is freed. Black picks between the g6 sideline, a Caro-flavoured structure whose pawns sit on c6 and g6 but which engines rate in White's favour, and Nf6, the main line and the recommended path."
+ },
+ "hp-5yw": {
+  "spoken": "White usually castles here, and Black chooses among a6, Nc6, Qc7, or cxd4 at once. If cxd4 comes, take back with the e-pawn: Nxd4 puts the knight offside and hands over the centre."
+ },
+ "hp-6de": {
+  "spoken": "Against Bb4 check the practical answer is Qc2 — it sidesteps the check and keeps White flexible. Black's solid tries, Nbd7 and b6, tend to transpose, so treat them as one line."
+ },
+ "hp-7hw": {
+  "spoken": "After cxd5 cxd5 the structure comes back to one already seen. a6 rules out Nb5, and Bf5 is welcome even though Bxf5 gxf5 doubles the f-pawns: the pawns stand on light squares and the position holds."
+ },
+ "dt-1l1": {
+  "spoken": "If Nxc6 is met by dxc6, Qxd8 Kxd8 follows and Bd2 is the accurate continuation. Black's king sits exposed and the queenside pawns are loose."
+ },
+ "hp-6hh": {
+  "spoken": "White stands at the crossroads: castle, or Bc4 — the main line, developing the bishop and, the real point, taking the freeing d5 break away from Black."
+ },
+ "hp-780": {
+  "spoken": "Two sensible moves here, Re1 and d3, and both get played eventually; the order is what matters. Start with d3 and Black may try Rb8, but the b2 pawn is not really hanging — taking it runs into tactics."
+ },
+ "sl-qm9": {
+  "spoken": "If Bc5 appears, Nxe5 is worth a look, but the bishop pair and the forks make it sharp. Recapturing with the knight hands White that bishop pair; d5 or Be7 holds the balance instead."
+ },
+ "dt-1pb": {
+  "spoken": "Against e5, b4 comes straight in with pressure. If Black answers e4, the d4 square opens up for the knight. Bf5, the popular choice, runs into Be3, and should Black castle queenside, the white king walks to c1 in safety — a pawn to the good and an easy game."
+ },
+ "dt-3ol": {
+  "spoken": "With Bg4 on the board, the natural Nc3 is a mistake: Nxc3 bxc3 Bxf3 and the in-between Be2 collects the bishop. Ng5 is correct, putting the question to the bishop. After Bxe6 fxe6 the knight on d5 is rock solid, f4 is needed to prop up e5, and Black follows with Qb6 and Rd8, comfortable."
+ },
+ "dt-65s": {
+  "spoken": "When Bb2 comes, the e5 pawn wants a defender. Bg4 runs into h3, and with g6 taken there is no h5 square to retreat to; Qe7 walks into Ba3, where the queen is pinned against the rook; Re8 achieves nothing. Nh5 is the move: it guards e5, frees the bishop, and readies Nf4, a superb outpost and a standard King's Indian idea."
+ },
+ "hp-5xh": {
+  "spoken": "Qb3 is White's try, and Na5 is the answer, hitting the queen. She must step away; Qa4 Nc6 and the time is squandered, with the bishop pair to follow once Nh5 and b5 arrive."
+ },
+ "hp-6hg": {
+  "spoken": "Every tempo counts in this attack. Be3, f3, Qd2 and Bc4 build toward a pawn storm on the kingside, while Black castles fast and gets counterplay going on the other wing. One wasted move can decide it."
+ },
+ "hp-7hx": {
+  "spoken": "Black has just pushed b5 and the bishop has dropped back to d3. a6 now denies b5 to every white piece, and Bf5 comes next. Allowing Bxf5 and the doubled f-pawns is no disaster — it is a standard setup in the Slav, the Semi-Slav and the Caro-Kann with the centre closed. e6 follows, the light-squared bishop is gone but the pawns sit on light squares, and with no quick attack coming the defence holds."
+ },
+ "sl-gyt": {
+  "spoken": "After Bb5 the c5 pawn is untouchable, since the knight is pinned. Grabbing with Nxg7 fails to Kf8, when the knight must scuttle back having lost time. Defending the pawn is the whole point of Bb5, and Qc7 is the usual answer, though a rarer move is tried here."
+ },
+ "sl-qid": {
+  "spoken": "Bf5 hits the queen. Pushing the d-pawn fails tactically — the in-between capture leaves Black winning the central pawn — so Qb3 is played, and when Ne4 attacks the bishop, White must take the knight or the bishop drops."
+ },
+ "cb-216": {
+  "spoken": "Nc3 is White fighting for d5 and e4. If Black pushes e4, Ng5 hits the pawn a third time while d5 stays covered, and the pawn cannot be held."
+ },
+ "cb-ol": {
+  "spoken": "With Nd7 rather than e6, the usual Ne5 plan loses its bite, because the knight already guards e5. h3 is the alternative start: if the bishop grabs on f3 it is lost, and otherwise the move simply gains a tempo."
+ },
+ "dt-15t": {
+  "spoken": "The b-pawn and c-pawn advances leave White's structure awkward. Black's idea is cxd4, exd4, and then Qb6, leaning on the b2 pawn and making the whole setup uncomfortable."
+ },
+ "dt-19y": {
+  "spoken": "After Na4 Bb6 Nxb6 axb6, h3 and Kh2 tidy the kingside, and Re1 is prophylaxis: it rules out the d5 break. Allow that break and White takes on d5 and then e5, a pawn to the good; Re1 also clears the way for f4 or c4."
+ },
+ "dt-1t7": {
+  "spoken": "With e5 played White castles, and the main road runs Nc3 Rxc3 d5 Qxe5, followed by f4 or Qc2. Be6 and Bf5 are both available. Meet Rd1 with something active — a passive b6 is the wrong instinct."
+ },
+ "dt-24s": {
+  "spoken": "Facing Bc4 in the Sicilian, hold g6 back; the commitment comes too early. Nc6 develops and keeps every option alive."
+ },
+ "dt-2nr": {
+  "spoken": "After Nf3 Bc5, d4 is the critical try, but Bb4 check makes White block with c3 or Bd2 and the development stumbles. The bishop has moved twice, and the bishop pair plus the pressure against the centre is the compensation."
+ },
+ "dt-4hc": {
+  "spoken": "Nd4 hits the bishop, though the real aim is to snarl Black's development and loosen the king. Qd6 is the answer: it eyes e6 and readies e5 for the centre. Grabbing with Nxe6 backfires — Qd7 comes, White takes the bishop, the king must recapture, and Black has surrendered the right to castle along with the dark-squared bishop."
+ },
+ "dt-4ln": {
+  "spoken": "White's King's Indian Attack is built on g3 and Nd2, and the order matters: play g3 first and Black may offer a queen trade, which White would rather duck. Nd2 beats Nc3, because Nc3 Nf6 and then dxc4 drags White into an endgame nobody asked for — and from there the knight can later feed a kingside attack."
+ },
+ "dt-5ln": {
+  "spoken": "After Ng4, if h6 arrives, Bxf6 is an idea: White's dark-squared bishop stays the livelier piece. Recapture with gxf6 and the structure suits White, who keeps the attack rolling with Qh5."
+ },
+ "dt-oz": {
+  "spoken": "In the Fianchetto Grünfeld, d5 is the equalising push that mirrors the structure. c4 is White's principal answer, and the critical position is on the board."
+ },
+ "hp-5r5": {
+  "spoken": "After d4 Nf6 Nf3, a d5 reply invites the London setup. Against c5, answer c3: the London shape holds together, c3 propping the centre while the bishop watches from f4."
+ },
+ "hp-676": {
+  "spoken": "In the main line, Bf5 Ng3 Bg6 is met by h4, putting the question to the bishop, and h6 keeps it on g6. Nf3 comes next, and Black develops Nd7 rather than Nf6, which would hand White activity with Ne5. h5 then chases the bishop, White trades it off, and the main tabiya is reached."
+ },
+ "hp-68e": {
+  "spoken": "Be7 is the main move after Nb3. Should Bg5 follow, Nbd7 or castling sidesteps the pin. Chances are level and Black has nothing to worry about."
+ },
+ "hp-68k": {
+  "spoken": "Nd5 is challenged by Nge7. c4 comes next to break the queenside bind, and Nd4 answers it, giving up a pawn for activity."
+ },
+ "hp-7i5": {
+  "spoken": "Nf3 in the Advance French leaves Black with three roads: Qb6, sharpest and most complex; Bd7, passive but sturdy; and Nh6, which is gaining followers. Each is a different kind of game."
+ },
+ "cb-1mc": {
+  "spoken": "After c4 the knight on c3 looks loose, both a block in front of the c-pawn and a target. Bg5 develops while the d5 square stays covered; Black answers b5 and Bxc3, handing over the bishop pair."
+ },
+ "cb-228": {
+  "spoken": "An early e3 invites Nh5, which hits the bishop sitting on f4. Retreat or capture, White has to choose. Taking with Bg5 gets complicated after d6, and the bishop can be lost."
+ },
+ "cb-p4": {
+  "spoken": "In a Stonewall the bishop on c8 is the problem child, walled in behind the d6, e5 and f5 pawns. Put a knight on the d5 outpost and that bishop can never challenge it, so the knight grows into the best piece on the board."
+ },
+ "dt-11l": {
+  "spoken": "The King's Indian structure here has pawns on e4 and c4 with the d-file clear, and the dark-squared bishop is what holds d4 together. Trading that bishop off is the whole plan: once it goes, a knight owns d4 as a permanent outpost and White's game starts to creak."
+ },
+ "dt-15z": {
+  "spoken": "Bishop e5 dodges the trap, but f6 drives it back to g3 and h5 follows. d5 is the best try, and h4 still comes: after Bxh4 the knight goes back to d8, the h-file is open, and White's position is miserable."
+ },
+ "dt-19u": {
+  "spoken": "Bc5 is the accurate move; White castles and follows with Re1, leaning on the e5 pawn. Ra8 would be the error, because d4 comes — exd4 then allows the trade on e8 and the recapture on d4, with a splendid game."
+ },
+ "dt-1a3": {
+  "spoken": "Even after d5, f4 is still the push, because White's grip on the centre is the better one. Release the tension and the pawns roll with e5 and then Ne4, and the initiative is enormous."
+ },
+ "dt-1ia": {
+  "spoken": "Against the queenside push White plays a3, keeping Nc5 off the board; after Nc5 Ba2, a5 is the usual follow-up. Bb3 completes the development and d4 is slipped in at the moment Black least wants it, cramped as the position already is."
+ },
+ "dt-1jc": {
+  "spoken": "Bg5 brings up the critical position, and Black's errors here all trace back to missing how much the c5 square matters. If Nxc3 comes, the queen cannot take back: Ne4 follows, Bxe7 Qxe7, and material goes."
+ },
+ "dt-1oj": {
+  "spoken": "b6 comes so the light-squared bishop gets a diagonal, and White answers Bg5, provoking f6 before dropping the bishop back to f4 — a tempo gained and a hole on e6. The provocation can rebound: with the king on h8, f6 actually helps Black play e5, since the long diagonal holds no checks. With the king on g8 instead, the weakness is worth having."
+ },
+ "dt-1p9": {
+  "spoken": "Guarding b5 with a6 leaves c4 soft. Be3 follows, and if the queen heads for h5, the knight steps into c4 and on to b6 with serious threats. Securing one wing has manufactured a weakness on the other."
+ },
+ "dt-1t0": {
+  "spoken": "Capablanca's simplifying system runs c6, then dxc4 the moment the light-squared bishop commits, which is a tempo. Nd5 comes next, swapping the dark-squared bishops and draining the position."
+ },
+ "dt-25u": {
+  "spoken": "f5 opens holes on the kingside that nobody asked Black to create; capturing on f4 was the sounder choice. The structure hands White a brutal plan — f4, then g4, then f5, and the kingside is smashed open. There is no queenside counterplay to weigh against it, and the bishop is left a lame duck. Answer c5 with g4; after cxd4 Nxd4 hits the e6 pawn, f5 follows, and the kingside caves in."
+ },
+ "dt-2fw": {
+  "spoken": "Bishop to c5 invites castling first. If e5 comes, Nxe5 and a trade, then Re1 bears down on that bishop, which b4 and Qh5 hunt down — a piece often drops out of it. Once d5 appears, c4 is the strong idea: take en passant and Bxh7 collects the queen, and if she steps away instead, b4 traps the bishop."
+ },
+ "dt-2se": {
+  "spoken": "In the Marshall, the point was never to recapture on d5 with the knight. Nf6 was tried into the 1940s and now reads as inaccurate. The modern route is c6, introduced by Chod Alexander in 1939; from there d4 Bd6 is one road, Qe1 Qh4 g3 Qh3 another."
+ },
+ "dt-2xa": {
+  "spoken": "With Nb4 on the board, e4 allows Black to take on c4 and follow with Ne5. Qe7 is the slip: a3 arrives, Nd5 lands, and it is crushing. Recapturing on d5 with the knight is the necessity, but the a-file swings open and the king is short of shelter."
+ },
+ "dt-38u": {
+  "spoken": "Once Nc6 Qxe4 has been played, Bf5 looks natural and is still not right, because that bishop's best square shifts and sometimes it wants e6. Playing e6 shuts the c8 bishop in, and e5 invites Qg4 to pin the pawn. g6 is the plan, with Bg7 behind it, even though on the long diagonal the bishop bites on granite."
+ },
+ "dt-39z": {
+  "spoken": "The collinear Rd7 hands Black the tempo to push e4 and keep the d-file. The cleanest continuation was the bishop manoeuvre into an endgame; e4 was chosen instead. After Bb1, why not tuck the queen on e6? Because the bishop on f5 is then undefended, and Nh4 arrives with g4 behind it, costing the bishop pair."
+ },
+ "dt-3oe": {
+  "spoken": "White plays c4 without first stepping to e2, and Nxe5 works, because the tactics rest on an x-ray hitting the bishop on c1. Rb8 is the intermezzo that drives the queen from the fifth rank; Qa4 Qxc5 Bb2 then leaves the knight free. Capture at once instead and the knight is pinned, with far less clarity."
+ },
+ "dt-3ok": {
+  "spoken": "In the Alapin, Black can sidestep the main roads: d5, the recapture on d5 with the queen, then d4 Nf6 Nf3 Bg4, a variation almost nobody plays. The plan is g6, fianchetto the bishop, and quarrel with the knight's development. Nc3 drops a piece to Nxc3 and Be2. Ng5 is the right try, but once the exchanges on e6 are done, the pawn there props up the knight on d5. f4 becomes necessary, Qb6 check forces Kf1, and Rd8 leaves Black comfortable."
+ },
+ "dt-4p4": {
+  "spoken": "Meet Qb3 with Rb8, which chains the queen to b7. b6 is the inferior try: Rc1 follows, the c-pawn comes under fire, and White gets the hanging pawns on favourable terms."
+ },
+ "dt-4rl": {
+  "spoken": "Once b4 lands, the c4 pawn hangs, since the d5 pawn no longer covers it. Defending e4 is the real question now, so bishop f5 is right. Recapturing with the knight was a slight inaccuracy, because the knight could then reach g3; dropping back to g6 makes the opponent declare his intentions."
+ },
+ "dt-4vc": {
+  "spoken": "If Black fianchettos with g6, keep it modest — Be2 rather than Bc4, so Nb6 never gains time. Once castled, answer Nb6 with c4, and answer b6 with d3 and c4 again. Should e6 come, Black is obliged to take back with the pawn after dxe6, and a similar structure appears."
+ },
+ "dt-4vd": {
+  "spoken": "The improvement on the ninth move is c4 at once rather than d3, with d4 straight after. Once the trades are done White is a pawn up with a compact centre. Qa4 check is the alternative to Bb5 check, dropping back to Qb3, much as the main line does."
+ },
+ "dt-4wa": {
+  "spoken": "In the Alapin after exd5 Nf6, Qa4 check drags a piece to d7 and cuts the queen off from the d5 pawn. Bd7 is the best reply, developing in the technical sense but clumsy: it severs the queen's line to d5, and the knight on b8 has nowhere good to go."
+ },
+ "dt-55a": {
+  "spoken": "Nxd4 is the error in this Four Knights Scotch; Bb4 or Bc5 is the way. d6 beats c5, which only manufactures weaknesses. The white queen wants a4, which rules out d6, and e5 becomes a threat."
+ },
+ "dt-56w": {
+  "spoken": "In this Accelerated Dragon, an early a3 spends a tempo and the king stays in the centre. The d5 fork hits bishop and knight at once, and the usual cure Bd3 fails: after the capture on c3, the b2 pawn falls with tempo."
+ },
+ "dt-59j": {
+  "spoken": "With Bd3 Nc6 c3 Nf6 Bf4 on the board, Bg4 becomes available. Qa4 is a fine reply — it hits the knight and sends the bishop back to d7, after which White finishes developing and keeps the initiative."
+ },
+ "dt-5gk": {
+  "spoken": "Her place is the d-file, opposite her counterpart, and the rook's is e1. e2 is the weaker square for the queen: f5 defends the knight, so she would be stuck holding a pin instead of free for better work."
+ },
+ "dt-5l5": {
+  "spoken": "After exd4 Nxd4, Bb6 and Bd6 are the usual choices. Bd6 is correct. Bb6 is worse, because Black does not even collect a pawn for the fork, and Bxd4 is worse still — the bishop goes early and the queen can skewer the knight."
+ },
+ "dt-5m4": {
+  "spoken": "The main line runs Bd6 d4, then dxc4 Bxc4 and Bb5 Qh5. Grabbing with Qxd4 runs into Qxf7 Kd8 Qf8 Kd7 Bxg8, when Be6 check is coming to take the rook on h8. Qe7 is the sound choice, and Qxe5 steers into an endgame that favours White."
+ },
+ "dt-5re": {
+  "spoken": "With the piece in the bag, the job is not to hand it straight back. Bg6 walks into h4, and the bishop must either give itself up for two pawns or permit e5 and h5. Bc8 or Bd7 is sounder, keeping the queen in touch with d4 and leaving room to redeploy."
+ },
+ "dt-5rt": {
+  "spoken": "Black's c6 and Nc6 setup goes after White's pawn structure, with the a3 weakness as the target. Once a4 is in, the knight reroutes through d4 and b3, and the position plays itself."
+ },
+ "dt-5s1": {
+  "spoken": "After c5, a reply of d5 hands White a monster on e5; capturing on c5 lets the pawn recapture, the d-file opens, and b2 falls."
+ },
+ "dt-5um": {
+  "spoken": "Once the line reaches Nh5, d4 is the usual choice. Black answers d6, with g6 to follow and the kingside knitted together. Try g5 instead and d5 comes, prising open lines for the pawns, which is dangerous. g6 keeps it solid and stops the pawns rolling to e6."
+ },
+ "dt-5us": {
+  "spoken": "Nc3 lets Black simply take on e5. The knight cannot recapture because of Qh4 check, and dxe5 hands Black a favourable queen trade. Qe2 is the only playable move, but Bg4 and Qxe5 Be7 arrive, and here Black must know Nc6: after Nxd5, Nc6 hits the queen, and Nxc7 Kf8 leaves the knight unprotectable, so it drops."
+ },
+ "dt-64b": {
+  "spoken": "After Bc4 the best Black has is Kd8, an enormous concession. White takes on d4, carries on developing, and that king is a wreck. Qxd4 is the engine's pick, though Bc4 is strong too. In the Be3 line, where g6 Nf3 Bg7 is met by Na3, then cxd4 Bc4 and Qe4 check, the stunning resource is Be3, and it is genuine theory."
+ },
+ "dt-666": {
+  "spoken": "With both sides castled, e4 is the move. If Black tries e5, then dxe5 dxe5 Nxe5 runs into Nxe4, because Nxf7 is answered by Bxf7 — not Nxc3 — and a piece goes. Unlike the King's Indian Exchange, the knight has not yet come to f3, so the desperado sacrifice has no legs."
+ },
+ "dt-6af": {
+  "spoken": "If Nf6 comes instead, put a knight into d5 — b5 also works — then retreat the bishop: Smith-Morra style compensation, where activity is the currency. Black cannot get untangled."
+ },
+ "dt-6ak": {
+  "spoken": "Be7 is the mistake, and Qg4 is the reply. The sacrifice on c7 holds up because White's pieces flood in. Bg5 comes first, and then Be7 runs into Qa4, forking knight and king; Kxc7 loses to Rd1; a rook move invites Rfd1 with the knight arriving after. The a6 pawn is a monster — take it and the a-file opens, leave it and it queens."
+ },
+ "dt-a4": {
+  "spoken": "Once the line reaches fxe5, the classical continuations are c5 or e6. Hold Nf3 back, since Bg4 is waiting, and play Be3 first; after Bf5, Nc3. Nf3 turns safe later, with enough pieces out."
+ },
+ "dt-ti": {
+  "spoken": "Bishop to d3 is the positional road. Take it and White recaptures with the pawn, doubled d-pawns and all. Those pawns hold e4 and c4, the queen gets the b3 diagonal to lean on the queenside, and the rook inherits the open c-file."
+ },
+ "dt-u5": {
+  "spoken": "The bishop is doing nothing on g3, and e5 is the square that solves it. From there it rules out Rg7 check and readies Qg6 check, which now crushes: Kf8 meets Bd6, Kh8 meets Be5, and a rook has to be handed over."
+ },
+ "dt-z0": {
+  "spoken": "Qb2 walks into Rb1, and the skewer costs Black the knight. Qd3 is met by the capture, leaving White a rook to the good. The b5 push is beside the point — ignore the pawn and keep the bishop in the crosshairs. Bh6 is no danger either, since g6 is a safe retreat, and trades only make the extra material easier to convert."
+ },
+ "hp-56c": {
+  "spoken": "With d4 d5 met by Nc3 Nf6 and Bf4 e6, an early Bf5 lets White expand with e4. The engine calls the position equal, but White has taken a free tempo and the extra space with it."
+ },
+ "hp-5ns": {
+  "spoken": "In the Open Spanish, once dxe5 Be6 is on the board, the queen's knight heads for d2 or c3 and the two usually transpose. Black has a choice of setups — Bc5, Be7, Nc5 — and Nc5 is both the commonest and the recommendation."
+ },
+ "hp-5qx": {
+  "spoken": "An early g6 heading for the Leningrad invites h4 straight away, giving White something to aim at on that wing. A bishop on f4 backed by a pawn on e3 beats the setup with the knight on f3, because that knight blocks the bishop's road to e2, and Be2 is exactly what answers Nh5."
+ },
+ "hp-5th": {
+  "spoken": "With Bb5 Nf6 and castling, Black has picked the Berlin and offered the famous endgame. There White usually plays d4 and Black answers Nd6; Bxc6 and dxc6 follow, leaving Black the bishop pair and the dynamism while White holds the better structure, four pawns against three on the kingside. The line came into fashion once it had defused e4 in a title match at the turn of the century."
+ },
+ "hp-6dc": {
+  "spoken": "With Bb4 check and Be7 played, Black has nothing weak to attack, while the g2 bishop finds itself shut out. The pawn on d5 is what makes e4 awkward. That light-squared bishop of Black's is the poor piece, but it can be looked after."
+ },
+ "hp-6gb": {
+  "spoken": "In the Bf8 line, Na5 is the standard way to chase the bishop off c4. It retreats to e2, and once d6 appears, Qa4 check provokes c6 — a tempo won and the queenside pawns loosened."
+ },
+ "hp-6p2": {
+  "spoken": "Rg8 lays a trap: g5 is coming, and it hits the queen. Send her to h3 and g4 picks off the knight on e4. The natural moves — castling, Be3, h3 — all walk into it."
+ },
+ "hp-6su": {
+  "spoken": "In the Vienna Hybrid, White slots in d3 before bringing the knight to f3. Black picks a lane: grab the bishop with Na5, or leave it alone and play Bc5 or Bb4. Leave it, and White's plan is f4 and f5, leaning on the kingside."
+ },
+ "hp-73f": {
+  "spoken": "In the Advance Caro with h4, once Bf5 is out, Qb3 hits b7 and d5 at the same time. Qb6 is one answer, offering the trade and saddling White with doubled isolated pawns on the b-file if the recapture comes to b3. cxd4 is the other: White gets an isolated pawn, Black gets a queenside majority."
+ },
+ "hp-75t": {
+  "spoken": "Nc3 is the alternative and the engine's top choice. Take on c4 and the queen can recapture, but dxc4 is Black's best. dxe5 follows, then Qxd1 Rxd1 and fxe5: the pawns are undoubled, yet the king is stuck in the centre and the e-pawns are targets."
+ },
+ "hp-7e2": {
+  "spoken": "With the centre closed, the break already chosen decides the follow-up: after e5, undermine d5 with c6; after c5, undermine it with e6."
+ },
+ "hp-7hg": {
+  "spoken": "The position is sharp after Bg5 Ne4, Bf4 d5 and e3 c5. That early c5 disputes the centre, and White can muddy it with f3, taking space and the initiative."
+ },
+ "hp-7r4": {
+  "spoken": "White's second sideline is Qe2, leaning on e5. Black can recapture on d5 using the c-pawn and then take on f4, pulling a pawn toward the centre with d4 in mind to firm up the chain."
+ },
+ "hp-7s1": {
+  "spoken": "In the Classical Pirc, with the moves through c6 played, Qd2 is White's usual choice. Black strikes with e5, and the break shuts in the bishop looking out from g7. White's whole aim is to make one black piece worse than its counterpart, and that bishop is the one chosen."
+ },
+ "hp-7v3": {
+  "spoken": "Choose e3 over Nf3 and Black gets the bishop to f5, a fine square. Nf3 later transposes, only with that bishop on f5 rather than g4. Bd3 is the strong try then, but Ng7 or Nf6 answers, and once Ng6 and Bg3 are in there is little left to break down: Black owns e5 and has a splendid knight. c4 is the one source of counterplay, and it can be ignored, or answered by taking on g3."
+ },
+ "sl-hu1": {
+  "spoken": "Ne4 has just been played, and the question is what to do about the kingside pressure. That king is a touch airy, and the breaks f5 and g4 are in reserve — set against Black's play on the other wing."
+ },
+ "sl-p61": {
+  "spoken": "This Marshall position, reached through c3 d5, leaves White with an untangling problem: the c1 bishop and the b1 knight both need a route while Black plays fast. Queen f3 is the theoretical choice, propping up e4 and clearing the way. Knight d2 hands over the initiative, since knight d4 comes with tricks like knight f4 behind it."
+ },
+ "cb-154": {
+  "spoken": "c4 in a Stonewall can be a weakness: it invites trades and drains the position. g4 is the more promising try — lines open, and e5 beckons as a protected passer."
+ },
+ "cb-1e4": {
+  "spoken": "With h4 played in this gambit, Black will most often reply f6 or g4. Play g4 and Ne5 arrives, joining the bishop on c4 against f7, while g4 and f4 are both left undefended — a menu of captures."
+ },
+ "cb-1ui": {
+  "spoken": "Nc6 against the Stonewall must be answered by f4 at once, or e5 comes in and the centre is undermined. Delay, and Black equalises or better."
+ },
+ "cb-1xo": {
+  "spoken": "In the b4 opening the pieces come out in a pattern: e3, Nf3, Be2, castle, then c4 and Nc3 — that knight almost never leads — with d4 to finish. The b-pawn usually stays on b4 to deny Nc6, though it can push to b5 when needed."
+ },
+ "cb-251": {
+  "spoken": "Playing the Sicilian a tempo up, with c4 against e5, the pieces come out naturally: the knight to f3, the bishop to f5, and then either d3 or e4. e4 forces matters, because the knight has to be taken, and the d-pawn recaptures to open the c1 bishop. It is one of the rare moments when taking that way is right — a diagonal opened and the queen trade dodged."
+ },
+ "cb-2ag": {
+  "spoken": "Bxf6 and Nd5 are no reason to panic. Qa5 comes, and if b4 follows, the greedy capture is the one to avoid, since Nc7 check is bad news; Qc7 or Qd8 is the safe square. The alternative is to recapture on d5 with a pawn and carry on developing."
+ },
+ "cb-2dx": {
+  "spoken": "When Black has no pawn left to recapture on d5 with, e4 should come at once and claim the centre. The centre is the priority."
+ },
+ "cb-2e2": {
+  "spoken": "In this Accepted structure, a4 is the key lever undermining the b5 chain. It stops a6 from propping the pawn up, and it usually either wins that pawn or wrecks the structure."
+ },
+ "cb-2hi": {
+  "spoken": "If White steers round the b5 trap with d3, Be3 or castling, go back to standard Taimanov development: Nc6, then Qc7, then a6 with b5 behind it, or d6 on occasion. The one thing not to hurry is Nf6, when Bg5 would come and pin it."
+ },
+ "cb-ar": {
+  "spoken": "With g5 unavailable there is still plenty on the menu — central pushes, Nf6, and more. The opponent is often lured into d5, and that is exactly what lets the knight jump in."
+ },
+ "cb-ci": {
+  "spoken": "When f5 appears, Ng5 answers it and grips the key squares. a4 comes next to rule out b5, and from there the game revolves around f4 and f5. Nd3 readies f4 even though the d4 square is conceded; the capture on f4 is compulsory, or Black gets f4 in first."
+ },
+ "cb-iz": {
+  "spoken": "In a Stonewall where the pawns stand on c5 and d5, e4 is a horrible move — the centre loosens and an isolated pawn appears. Once c4 has been played the same push is strong, because the c-pawn can no longer recapture on d5, and the centre changes hands."
+ },
+ "cb-k9": {
+  "spoken": "Knight c3 is rare in the b4 opening, played only when the diagonal is safe. c4 and that knight usually wait; the other knight goes to f3 unless a pawn is in the way, and knight e2 is the alternative when it is. The bishop has a spread of homes — b2, d3, c4, b5 — and the position decides."
+ },
+ "cb-ki": {
+  "spoken": "A setup with the b4, c4 and e4 pawns and a bishop on b2 is a fine one. The knight on c6 is the target: the moment it moves, b5 wins material. Keep Nc3 out of the c-pawn's way, or the advance is blocked."
+ },
+ "cb-qc": {
+  "spoken": "In the Taimanov, once cxd4 has been played, Black usually brings out Nc6 and Qc7. The white knight sits centrally on d4, and Black wants an answer ready for Bg5, which would pin the knight."
+ },
+ "cb-wr": {
+  "spoken": "Hold the bishop back from f5 or g4 and a queenside sortie like Qb6 is nothing to fear. Keeping Nf3 in reserve also denies Black Nh5, which would trade the light-squared bishop off."
+ },
+ "cb-xn": {
+  "spoken": "In the Colle-Zukertort, job one is denying Black the e5 break. b3 readies Bb2 to watch that square, a3 keeps Nb4 out, and Bd3 supports e4 while ruling out Ne4. Order follows the threat: b3 early when e5 looms, otherwise a3 can go first."
+ },
+ "dt-116": {
+  "spoken": "With the pawn on g2, Bf6 gains appeal, because g5 is off the table. The idea is Bg5 and then Bf6, so that the dark-squared bishop, White's key defender, is traded away."
+ },
+ "dt-143": {
+  "spoken": "Bd3 is inaccurate. e5 arrives with tempo, forking bishop and knight, and it opens e4 for Black besides. The signpost is clear — build the game around the e5 break."
+ },
+ "dt-15i": {
+  "spoken": "The trades are there to drag the white queen onto d4, where Nf5 and Nc6 can come at her. h4 is answered by Nc6; Qd2 is answered by the d4 push, and counterplay flows against the queenside."
+ },
+ "dt-15y": {
+  "spoken": "In the queen b6 line against b3, the knight on c6 is a fine piece. Once e3 is played, knight e4 is the best move: it eyes d5 and sets up g5 to snare the bishop on g3."
+ },
+ "dt-17q": {
+  "spoken": "c5 usually draws Ne5, planting the knight in the middle. Nfd7 puts the question to it — trade, or be kicked. And if Nxd5 comes, cxd4 with Qa5 check behind it forks king and knight, so the pawn returns."
+ },
+ "dt-1bz": {
+  "spoken": "In the Fantasy, once e5 has been pushed, Nc6 and patience: let White commit first. Nf3 invites the pin with Bg4; h3 invites the capture, and then Nd4 arrives with e6 in the air — should c3 be played, mate comes quickly."
+ },
+ "dt-1lk": {
+  "spoken": "In this Scotch Four Knights, Qf3 may be hunted with h6 and Bg4, but the queen slips out to g3. The exception is a bishop on h4: g5 drives it back first, g3 is gone, and now Bg4 really does trap her."
+ },
+ "dt-1pl": {
+  "spoken": "In the Morra Accepted, Black usually chooses e6. Bc4 is the theoretical reply and looks wrong, the bishop staring at granite in the shape of that pawn. The point comes later: the moment d5 or Nxd5 happens, e6 disappears and the diagonal opens."
+ },
+ "dt-1sc": {
+  "spoken": "In a winning attack, dropping the bishop back to e4 to hit g6, with h4 and h5 to follow, can settle matters. The knight retreat Nd6 also severs the queen from the bishop, so Qxe5 works with a discovered attack behind it."
+ },
+ "dt-1uj": {
+  "spoken": "Nf5 is the alternative and it turns tactical. Once Bb2 e5 f5 has been played, theory gives d5, undercutting the knight's defender. Bg5 is answered by d4; Nc5 is answered by Bxf5, and a piece falls, since that pawn is overloaded."
+ },
+ "dt-1ut": {
+  "spoken": "Bd4 offers a trade of dark-squared bishops, which would strip away the guardian on g7. Dodging it is awkward with f4 coming, so Qc7 is the preparation, keeping e5 free for the pawn."
+ },
+ "dt-1xz": {
+  "spoken": "Once f6 appears White has to be concrete, because d4 is loose, and if it falls then f2 comes under rook and bishop. The hasty knight jump to g5 runs into h6, and if Nxe6 follows, Bxc6 Rxc6 Bxd4 gives Black real play against f2 and h4."
+ },
+ "dt-22d": {
+  "spoken": "The Chigorin is a second-string opening that does real damage at club level. Theory points to Nc3 as White's best, yet the sequence dxc4, then d5 Ne5 and Nf3 Bg4, gives Black a game worth playing. Meet cxd5 not with the queen recapture, which Nc3 punishes, but with Bxf3: either dxc6 Bxc6, or gxf3 Qxd5 hitting d4 and forcing White to prop it up. The main road runs e5 Nc3 Bb4 into a rich position with opposite-coloured bishops, Black a shade worse and full of activity."
+ },
+ "dt-23s": {
+  "spoken": "Nb6 came before Nc6 for a reason: after d4, an immediate Bf5 walks into the awkward d5. Lead with e6 and the bishop is boxed in. So the order runs Bf5, then e6, then Nc6, and d5 is off the table."
+ },
+ "dt-274": {
+  "spoken": "Nf3 followed f6, and later d5 came, the better of the two pushes: the bishop's diagonal opens and queen and rook line up on the d-file. e5 instead would hand Black the queen trade after gxf4 and dxe5."
+ },
+ "dt-290": {
+  "spoken": "Into the endgame, White's knight is short of a route: Nf3 is blocked by the pawn on e4, and g3 is taken. Black's bishop comes alive on d5 or a6, working against the soft light squares. Choosing Bxe3 over the capture on c6 lets Black answer Bd7, keeping both the bishop pair and the structure."
+ },
+ "dt-2kj": {
+  "spoken": "Qa5 is the challenging try, eyeing Ne4 and play on the queenside. Bd3 rules out Ne4 but, unlike Be2, it permits Bg4 at the right instant. Bg4 straight away is premature: with Qa5 played, Nc6 comes first and a tactic against d5 is brewing."
+ },
+ "dt-2mo": {
+  "spoken": "In the Slav, an exchange with cxd5 cxd5 tends to be colourless and drawish. The Boor Attack — Nc3 Nf6 and f3 — is after e4 and a menacing mass of pawns in the middle. Bf5 is the critical equaliser, and most players under 2200 handle what follows badly."
+ },
+ "dt-2n0": {
+  "spoken": "The attack is on the kingside, and the defender's hope is counter-threats to pull attention away. The knight jumps in with f7 in its sights, and f7 is hard to hold. Castling leaves h7 tender, and Qd3 arrives threatening mate while vacating d5, from where a knight forks queen and bishop."
+ },
+ "dt-2on": {
+  "spoken": "Move order decides this one. Once cxd4 cxd4 has been played, g5 must come immediately. Lead with g5 instead and Black gets Rxc5 dxe5 Bxc5 with the heat on f2. With the pawns traded first, though, the d5 pawn is loose and Qxd5 check is crushing."
+ },
+ "dt-2pk": {
+  "spoken": "With the bishop back on c1, e6 is Black's best: it develops and frees a diagonal. Knight c4 is then a blunder, since queen e6 check hits bishop and king together; the piece must drop back to e3, Black turns on the queenside, the knight is driven to e5, a knight comes to c6, and Black dominates."
+ },
+ "dt-2wk": {
+  "spoken": "With an isolated queen's pawn on the board, Black's pieces are the busier ones while White's knight is the defence holding everything together. g6 goes in first to hem that knight, and h5 and h4 follow to chase it away."
+ },
+ "dt-2x9": {
+  "spoken": "Against the Baltic, Nc3 is the challenge. Leave the queen sortie alone and simply play Nf6. If e3 comes, Nb4 is available with Qxd4 behind it — which is why Bg5, or a3 to keep that knight out, is the better choice."
+ },
+ "dt-2xw": {
+  "spoken": "e5 was the answer to Nf6, and d5 is the reply, a tactical device. Should Qb5 check come, the knight interposes on d7, or even Qd7 — though with Black already better, the queen trade is not the point. The same trick turns up in other Bowdler positions."
+ },
+ "dt-31u": {
+  "spoken": "For the Bxh6 sacrifice to work, exd4 has to be thrown in first. That obliges a recapture with a knight, Nd4 among them, which firms up the centre but also leaves Black the later resource d5, shutting the bishop out and clearing the way for Bf8 and Qf4 to force the queens off."
+ },
+ "dt-32h": {
+  "spoken": "That c5 push is the standard error: d5 is weakened and a backward pawn is born. The reflex retreat Nf3 is not best. Bb5 check is, forcing a trade of bishops on good terms and freeing the knight to leap into f5, where d6 and g7 are both hit."
+ },
+ "dt-33l": {
+  "spoken": "Ba6 sets Black problems, and b6 in reply only helps White. Nc4 then eyes a5, working the x-ray against the queen. Nb6 leaves the bishop hanging, so White must move with tempo: Nxe5, punishing the lost grip on e5."
+ },
+ "dt-356": {
+  "spoken": "c6 is met by Bc4. If d5 follows, take, take, and Bb5 check leaves White splendidly placed. Nf6 is the main line, and d3 is the simple road to an edge."
+ },
+ "dt-3ck": {
+  "spoken": "With g3 played, Bg4 is a dubious visit: h3 asks the bishop to retreat or trade itself off, and Ne5 then plants the knight in the middle with tempo. Qb3 is the other strong try, hitting b7 and squeezing."
+ },
+ "dt-3de": {
+  "spoken": "In the position reached by Bc3 Nf6, Ba3 check d6 and Rd1 Nxe4, f3 is the error. Bd5 is the idea, hitting b7 and the knight together — that pawn is loose because the queen bears down on it, which is what was missed. Bd5 wins: Bc5 is answered by dxc5 and Bxb7, forking the queen and the rook at once. Bh5 with Bf3 to follow does the same job."
+ },
+ "dt-3eb": {
+  "spoken": "a5 expands on the queenside and denies b4, and the regrouping follows: Re8, Nf8, Ng6. The centre stays shut, and there is no good way to open it, since dxc4 would hand White's bishop a diagonal."
+ },
+ "dt-3et": {
+  "spoken": "With queen d7 and castling behind us, White takes on f5, but the attack has already landed. Bishop g4 is shoved away by h5. Pawn g4 may be the sternest defence, and then e4 crushes: the rooks link up, the capture on c4 comes, and a rook lands on e8."
+ },
+ "dt-3f6": {
+  "spoken": "d4 in the Grand Prix is the central break that opens lines. Once cxd4 is played, Nb5 is the dangerous follow-up, leaning on d6 and eyeing the recapture on d4. The trap to sidestep is a6, which lets that knight take on d4 with threats attached."
+ },
+ "dt-3fu": {
+  "spoken": "Only the bishop swing to d5 was seen, which drops a rook while connecting them and staying a minor piece ahead. Stronger was the check on d2: the king is dragged to h5 and mating ideas like Rf5 appear. The resource that finally turned up is Ne5 — it looks refuted by Bd5, yet the rook on f1 is left on an x-ray, and b4 then makes chaos."
+ },
+ "dt-3fw": {
+  "spoken": "The Grand Prix with f4 ran into Bg7 Nf3 Nc6, and White picked the old-school Bc4. Black may answer d6 or e6. After d6, castling and e6, the risky d4 came and cxd4 was correct. Nb5 followed, Nge7 answered, and once Bb3, castling, Nbxd4 Na5 Be3 b6 and c4 have been played the game is level. Ba6 was the grandmaster choice, but f5 is the improvement."
+ },
+ "dt-3if": {
+  "spoken": "In the Accelerated Dragon, d6 has been kept in hand, a tempo saved. It means d5 comes in a single move when White sets up with f3 and Qd2, where the ordinary Dragon would give White the move and the capture on d5. Here Black moves first: Nxd5 Nxd5 Qxd5 and Nxc4 nets a pawn, while Bxd5 is answered by Nxe4, very pleasant for Black with the white structure damaged."
+ },
+ "dt-3n7": {
+  "spoken": "In the c3 Sicilian, once that long theoretical sequence has run its course, Be7 was the old main line, when Qg4 and castling follow. Bh6 is the blunder, because Qxd4 hits g7 and the queen at the same time and collects a pawn."
+ },
+ "dt-3og": {
+  "spoken": "After the queenside push and c4 Nxd4 Rxd4, Rc8 was the move; Qb6 was chosen instead. White's losing error was Qd2, when the exchange sacrifice was the way: Bxd5 check Kh8 Bxa8 Rxa8, and the light squares make life unpleasant with Bb7 and Qc6 arriving. Take on d5 and Bxc4 leaves nothing at all for the exchange."
+ },
+ "dt-3uo": {
+  "spoken": "In this gambit line, where Bc4 and Bxb2 have been met by the usual Nf3, Black keeps developing with Nf6 and both sides castle. Black is a pawn to the good and the compensation is thin; White's small lead in development is neutralised by careful play. The move to resist is a hasty e5 — d6 is the one, propping up the centre."
+ },
+ "dt-3ws": {
+  "spoken": "Queen d6 was missed. Queen g4 to prop up the bishop may well be a blunder, since f5 comes. So the plan changes: the bishop comes back, or knight f4 offers the queen trade, or bishop h3. Knight f4 looks best, because g5 is toothless — the queen can simply be taken."
+ },
+ "dt-43y": {
+  "spoken": "Nf5 is a mistake, because Bh6 muddies everything. Taking on f6 hands Black positional compensation, and after Rb1, Nxe4 punishes the loose knight."
+ },
+ "dt-44d": {
+  "spoken": "In the Morra, Black's usual choices are Nc6, Nf6 or e6. The well-known trap comes after d6, Bc4 and Nf6: e5 arrives, and dxe5 costs the queen to Qxd8 check. Against e6 White still chooses Bc4 despite the bishop biting on granite, because tactics like the knight sacrifice on d5 outweigh the positional cost."
+ },
+ "dt-48c": {
+  "spoken": "In the Englund, the move to watch for is Qe7, hitting the pawn on e5. The trap is Bf4 or Bg5, when Qb4 check forks king and bishop. Bf4 Qb4 Bd2 Qxb2 wins the pawn back and lands on the rook — but the compensation is real: Black is desperately behind in development and the queen is stranded deep in enemy ground."
+ },
+ "dt-4a7": {
+  "spoken": "In the Ponziani, d5 is a fine answer, and Qa4 is met by Bd7. The sequence exd5 Nd4, Qd1 Nxf3, Qxf3 and Nf6 leaves Black perfectly placed. Bc4 is the main line, propping the pawn up. Play then runs e4 Qe2, Bd6, and d4, with castling or h6 to choose from. Once Bb3 appears, b5 is strong — it undermines c4 and keeps d5 weak."
+ },
+ "dt-4dz": {
+  "spoken": "The white queen sets off for g3, and a rook lifts to d1. Black answers a5 and a6, so a3 keeps Nb4 out, since that knight would come at the dark-squared bishop. Rd1 and Qg3 follow, and if c5 arrives, d5 blows the position open."
+ },
+ "dt-4g2": {
+  "spoken": "Nh6 is odd-looking but it readies f5, and it sidesteps Nf6, which would invite the plan of f5 with Bh6. If h3 comes expecting Ng4, that is a tempo thrown away. Get f5 in straight away, before g4 expands and traps the knight."
+ },
+ "dt-4ky": {
+  "spoken": "In the Morra after e6 a6 Bc4, Be7 is too passive. Once d6 appears White plays Qe2, and Nc6 transposes into known theory with Rd1. Nd7 is stranger still and just as passive, which makes Rd1 hit all the harder."
+ },
+ "dt-4tx": {
+  "spoken": "Black meets e4 with the Najdorf move order, Nf6 included. Bc4 carries no sting while e5 has not been pushed: e6 blunts the bishop, Nc6 develops, and d5 comes later to claim the centre."
+ },
+ "dt-4v9": {
+  "spoken": "In this Alapin line, once e5 and Qb6 have been played, Bc4 keeps the tension. Black develops Na6 and reroutes the knight to c7, the standard manoeuvre. White waits, then opens with d4 at the right moment, handing the pawn back for a big initiative."
+ },
+ "dt-551": {
+  "spoken": "With the bishop still on f1, Bc4 beats Bd3: e4 already has two defenders, so Bd3 would only overprotect it. Bb5 check achieves nothing, since c6 gains time. Bc4 it is, aiming at the soft spot on f7."
+ },
+ "dt-5dd": {
+  "spoken": "A piece up, with the white knights sitting on e5 and f6, d6 is the move to shore things up. Nc6 instead allows c4 Nb6 d5, and then f4 comes at the other knight — knights are desperately vulnerable to pawns when no pawn stands on d6."
+ },
+ "dt-5dz": {
+  "spoken": "After g4, h6 comes. Nfg5 is chosen over Neg5 because the knight on f3 blocks the queen's road to h3 and the rook's to f7. Nfg5 threatens mate by Nf6 check followed by Qxh7, and a capture only frees the queen along the third rank."
+ },
+ "dt-5fy": {
+  "spoken": "Facing h4 early in this Torre, answer h6: the bishop is pushed to a duller post like Bf4, and Nc6 follows with e5 coming next, gaining tempo. If h5 is pushed, take it with Nxh5, since the sacrifice does not work, or lock the wing with g5."
+ },
+ "dt-5j0": {
+  "spoken": "Against Qf5, e4 is the move. Qg6 is met by Qd2, with the long castle in mind. Qa5 is met by a3, which rules out Bb4 and readies b4 to hunt the queen down. Bg4 is met by Bb5 — not for the capture on c6, but so that b4 can come, and once Qb6 is played the bishop drops to e3 and she is trapped."
+ },
+ "dt-5j5": {
+  "spoken": "If Bc5 comes, develop plainly with Nc3. Against d6, Bf4 sets up exd6 or a wretched endgame. Against Ng7, Ne4 clamps down on d6, and then Bg5, with the queen marching Qd2, Qh6 and Qg7 mate."
+ },
+ "dt-5pw": {
+  "spoken": "After Nf3, a check only sends the king back into the corner and the knight is stranded in no-man's land. Qd8 and Nc3 was the way. The move overlooked is Kf2, when Black has h5 to stop g4, or c5 to rip the centre open and get at the king."
+ },
+ "dt-5qr": {
+  "spoken": "After Bxf7 Ke7 Bc4, the plan is c3, which hits that knight sitting on d4 — Black's one good piece — so the reply has to come with tempo. Bg4 is answered by f3, safe however it looks, and Bh5 is forced; c3 then drives the knight back to c6. Rather than trade queens, Qe2 comes with Ne6 in the air. Stop that and Be3 trades bishops, White castles short a pawn up, and the black king is marooned on e7."
+ },
+ "dt-5tc": {
+  "spoken": "With the win missed, Black snatched the bishop on e7, and the calm Bc5 was needed. Rc6 came, and the exchange sacrifice Rd1 was best; Rc1 was the error, since Qc8 arrives and Bf5 pins the queen."
+ },
+ "dt-5zd": {
+  "spoken": "The fianchetto idea reaches past Bg7. Black can play Bh6 with the bishop heading for e3, to mate or to break through. White has the same trick here with Bh3 — a hyper-fianchetto of sorts."
+ },
+ "dt-62s": {
+  "spoken": "Qd4 answers Nf6, hitting knight and g7 pawn at once. The safe reply is to bring the knight back to f6, or perhaps d6, and Bb5 check is met by Bd7. What matters is keeping the kingside pawns whole."
+ },
+ "dt-649": {
+  "spoken": "Working from an opening book, you find the position and read what the author gives. Once Na3 has appeared in this Alapin, the recommendation in Squeezing the Sicilian is Be2, and with cxd4 Nxd4 on the board, Qxg2 is answered by Bf3 with enormous compensation. The main line runs through e5 and f5 into a queen trade and a small pull."
+ },
+ "dt-67l": {
+  "spoken": "With a3 and Nc5, Qc4 Qb6, and Bf6 behind us, Qc2 was the best move, aiming at the weak pawn on e6 and the sorry bishop on c8. Black's game turns unpleasant: that pawn is a permanent worry and there is no active plan to set against it."
+ },
+ "dt-7r": {
+  "spoken": "Castled, and the pawn on d4 taken, Black has to choose a home for the bishop. Bc5 tempts, but the knight reroutes to e4 with tempo. Bb6 is playable, though the other knight then jumps to d5 and White has play. Simplest is c3 and a trade of bishops, keeping it clean while two pawns up."
+ },
+ "dt-dq": {
+  "spoken": "The defensive resource is c4: g5 is covered, the queen gets c5 or e5, and the attack loses its edge. Once Qh6 arrives, the knight is given up at the right instant so the queen can reach d8 and join in with Qg7."
+ },
+ "dt-fw": {
+  "spoken": "c4, played in reply to c5, sends the knight home, and d5 is the natural follow-up. e6 came and White took there, but recapturing with the pawn from c6 is the strong choice: the f-file opens halfway for Black, an outpost waits on d4, and the pawn on c4 is weak."
+ },
+ "dt-ht": {
+  "spoken": "The d4 push looks active and achieves little. d6 can simply be pushed, and Black is made to help the white queen join in. There is nothing wrong with taking the bishop, but Bg5 is, because Nxf3 check drops it. Snapping off d4 with Nxd4 Qxd4 is also not best — the knight returns through c5, b3 turns weak, and the bishop is nudged out of the centre. d6 and f6 are the real targets."
+ },
+ "dt-i5": {
+  "spoken": "Rb1 was played, and Black held back the natural Bf5. The provocation came first, drawing out b3, and only then Bf5, with the rook now stuck on b1. Slide it to a1 and Nxd5 uncovers an attack on it; play Rb2 and the knight steps back or forward to trap it again."
+ },
+ "dt-o8": {
+  "spoken": "In the Elephant Gambit, Nxe5 is White's move. After the capture on e4, Bc4 is tempting but risky because of Qd4. The safer path is d4, shoring up the knight and opening lines. Bc4 comes later, aiming at f7, and if it is ignored, Bxf7 check drags the king out and wins."
+ },
+ "dt-po": {
+  "spoken": "With Bf3 played, c6 builds the chain and covers d5, and that bishop starts to look misplaced. The b2 pawn can then be taken, a second one in hand."
+ },
+ "dt-q6": {
+  "spoken": "Once b5 has been pushed, that pawn becomes a target, and c6 is overloaded, holding b5 and d5 between them. The concrete answer is to take on d5, releasing the tension and putting the question. Nxd5 is met by Nxd5, a pawn to the good, and Bxb5 comes with check so there is no fork; Qxd5 then guards the bishop, hits the rook and leans on the knight."
+ },
+ "dt-rj": {
+  "spoken": "In the Alapin, Black usually answers d6, Nf6 or e6. d6 tends to steer into a closed Sicilian, White setting up with d3, Nf3, g3, Bg2 and castling. The plan from there is a kingside attack with f4 and f5, or h4 and h5. It is a strategic game: White takes space, Black hits back on the queenside."
+ },
+ "dt-vn": {
+  "spoken": "There are too many tempting continuations here, which is what makes the choice hard. The obvious one is Rc1, hitting the queen, who will likely step to c5 and hit the bishop, and the bishop drops back to b3. Nd5 is the other thought, centralising, though it may stretch White too far, and Qe4 then looks fine for Black."
+ },
+ "dt-yb": {
+  "spoken": "Qd2 with Bh6 behind it does not mean Re8 by reflex. With the bishop on g7, Bh6 Bh8 lets White get h4 in, stopping h5 and grabbing space. The question to ask is whether the trade really needs avoiding."
+ },
+ "hk-ch": {
+  "spoken": "After Be7, if a rook comes to guard the e4 pawn, b5 hits the bishop; once it retreats, Black castles. Then c3 is met by d6, with the bishop heading to g4 to pin the knight."
+ },
+ "hk-cr": {
+  "spoken": "With d3 and Be2 played, Black's best is Ng4, d5 and Qh4, with Qxf2 in the air. g3 is the necessary deflection, and Qf6 is then the right square. Play f3 too early and Black keeps rolling with h4 and Bf4."
+ },
+ "hp-55j": {
+  "spoken": "Rd8 is the move, with Kf8 to follow, and it gives White the chance to trade bishops with Be6, leaving the a-pawn isolated. If Bf6 or something like it comes, Bd2 stops Black doubling the pawns on the c-file."
+ },
+ "hp-55u": {
+  "spoken": "e5 from Black is a strong positional stroke if White does not get there first: it nails down the soft pawns, e4 and c2 both, and Black is very comfortable. So White pushes e5 himself, d5 is forced, Qxe5 follows, the knight has to move, and the bishops and the rook turn dangerous."
+ },
+ "hp-580": {
+  "spoken": "With f3 played, exf3 is answered by gxf3 and the g-file swings open. Ne3 comes next, gripping d5 while eyeing the c7 pawn and shoring up the bishop from behind. Every black piece is the worse of its pair, and White's arrive with tempo."
+ },
+ "hp-5a3": {
+  "spoken": "With d6 met by e4, the principled reply is a5: it shuts down play on the e-file, locks things up, and gives Black counterplay. The same pattern turns up in the Semi-Slav and elsewhere after a first move of the d-pawn."
+ },
+ "hp-5gb": {
+  "spoken": "With a6 played, White can start swinging at once. Bb4 is the reply, pinning the knight on c3. Bb5 then guards that knight and keeps the pawns healthy, and in some lines Nd6 hangs in the air."
+ },
+ "hp-5gg": {
+  "spoken": "After Nb3 b5, the knight on c3 is pinned by the queen on c7, and that pin has to be dealt with. Qe1 is safe and flexible, with Bd2 to unpin. Qd4 hits the bishop instead, but Black can force a repetition or drop the knight back to c6, which is no clear improvement."
+ },
+ "hp-5gz": {
+  "spoken": "In the Max Lange, once Bc4 Nf6 is on the board White may go e5 or elsewhere. The line under discussion has d4 played, d6 answering, and the bishop coming to e3 or h3. h3 is a handy waiting move — Black should leave that pawn alone, since grabbing it wrecks the structure."
+ },
+ "hp-5k3": {
+  "spoken": "With White castled, the knight on f6 is pinned by the bishop opposite, and the threat of Bxf6 has to be met. Bd7 props the knight up, but Ne4 then comes at the pinned piece with a whole one at stake."
+ },
+ "hp-5kg": {
+  "spoken": "a6 announces b5 and expansion on the queenside. One idea is to hold g3 back and play Ng2 first, keeping the f-pawn free and supporting d4. Let e6 and g3 come, then b5 and Bg2 and Bb7, and the push d4 punishes that slow play. cxd4 Nxd4 with Qc7 is met by castling, Nf6 by a strong Re1, and when d6 stops e5, Nd5 is the resource."
+ },
+ "hp-5lx": {
+  "spoken": "c5 can be met by dxc5, and if bxc5 recaptures, Bxc5 offers a pawn for the moment, the queen being loose. Qa5 comes, Ba3 answers, and Black takes on e5 to get the pawn back."
+ },
+ "hp-5me": {
+  "spoken": "Against Qc2, b6 is also playable, laying claim to the light-squared diagonal. a3 comes again, Bxc3 is forced, Qxc3 recaptures, and Black unfolds with Bb7, d6 and Nbd7 — not Nc6, with the bishop on b7. White then chooses between g3 and e3, and e3 is the better one: no trade of bishops, so the pair stays."
+ },
+ "hp-5rd": {
+  "spoken": "Bf5 gives White the option of c4 straight away, leaning on b7, which the c-pawn's departure has left tender. The catch is that Black can end up playing a London against White, so be ready for it."
+ },
+ "hp-5sn": {
+  "spoken": "Two plans in this English setup. One is the kingside attack: Be3 and Qd2, Bh6, then f4. The other prepares d4 to reach a favourable Sicilian structure. The drawback is the hole on d4, and Black will work to shore it up."
+ },
+ "hp-5ua": {
+  "spoken": "The move order c4 and Nf6, then Nc3 with g6, Nf3 with Bg7, and e4, gives Black a setup that avoids the Grünfeld proper. The space e4 brings, and the coming d4, are the point, because d5 is no longer available."
+ },
+ "hp-602": {
+  "spoken": "In the Qe2 variation both kings go long. Bb4 appears, and a3 is answered best by Bxc3, parting with the dark-squared bishop. White holds the pair; the remaining bishop finds few targets, and the structure is sound."
+ },
+ "hp-62z": {
+  "spoken": "Any time the e-pawn moves, to e6 or e5, something concrete appears: e4 is left undefended and Qh4 check becomes possible. Meet that with g3 and Qxe4 collects the rook on h1. It has to be dealt with — Nc3 or Bf4 will do."
+ },
+ "hp-647": {
+  "spoken": "After exd5 in this French, Black has a choice. Recapture with the pawn and an isolated queen's pawn appears, with a small edge for White. Qxd5 is the better call: no structural weakness, and the pawn stays on e6 where it shields the king."
+ },
+ "hp-64c": {
+  "spoken": "The main answer to c5 is Be3, sidestepping a queen trade that would cost the right to castle. Once Qc7 appears, Bb5 may be tried to disturb the development, but Bd7 handles it, and a capture on c6 is met by the b-pawn, which props up c5."
+ },
+ "hp-6cn": {
+  "spoken": "At the end of that long forcing sequence, Black chooses between Bb4 and d6. The bishop on b4 is active, outside the pawn chain, and risky with it: White gains time and builds a big centre. d6 is the steadier move — the centre is solidified and any e5 expansion is off the table."
+ },
+ "hp-6it": {
+  "spoken": "Three ideas run the Veresov: doubling the f-pawns with Bxf6, getting e4 in as fast as possible, and bringing the queen out to castle. Black has seven playable replies in two families — those that rule out the capture, Nbd7 and e6 among them, and those that permit it: h6 and g6, c5 and c6, Bf5."
+ },
+ "hp-6kf": {
+  "spoken": "Early Dragon games often saw the Yugoslav ducked in favour of quiet stuff, Be2 and h3. Black unfolded harmoniously with d6, Bd7, Rc8 and Qa5, reaching equality or the barest white pull, with nothing to fear."
+ },
+ "hp-6nc": {
+  "spoken": "Take the Open Catalan where b5 has been played: if the pawn on c4 is never won back, Black keeps three against two on that wing. The compensation is a broad centre and a huge development lead, e4 and e5 on the way."
+ },
+ "hp-6p5": {
+  "spoken": "h6 chases the knight and drops a pawn. Ne6 is the resource: the queen is attacked and the rook on f8 is next in line. Take with fxe6 and Qh5 check comes, g6 is forced, and Qxg6 is mate."
+ },
+ "hp-6qm": {
+  "spoken": "e6 is playable with d5 as the follow-up. If Nc3 comes to stop d5, then a6, readying b5 with tempo; and if a4 answers that, Nf6 and d5 arrive anyway."
+ },
+ "hp-6r1": {
+  "spoken": "In the Sicilian the choice between e6 and d6 decides how quickly d5 can come. e6 backs an early d5; d6 gives a solid but slower shape."
+ },
+ "hp-6rl": {
+  "spoken": "With the queen out at the end of that Queen's Gambit sequence, Black has a few sound replies: Nxc3, c5, or cxd5. c5 is the main line, though Nxc3 is popular too, and the structures end up much alike."
+ },
+ "hp-6u1": {
+  "spoken": "d6 hits the knight and the pawn on g4 at once. The knight has only d3 to run to, since interposing a piece in front of the bishop would be wretched. Nxd3 follows; Nf6 is met by Nxf6, Qxf6 by Nc3, e4 is guarded, and the material stands level at seven points apiece. White's structure is the healthier one, and though that king is airy, Black's is nowhere near castling: double-edged."
+ },
+ "hp-6ur": {
+  "spoken": "After g4 Bg6, Nf4 is the threat, coming at the bishop. h6 or h5 allows the capture on g6, and the f-pawn has to recapture: the kingside loosens and the h-pawn is left weak. Bd3 comes at it, and if Qf7 defends, Qf3 arrives and the attack decides."
+ },
+ "hp-6xb": {
+  "spoken": "Nc6 allows Bb5 and the pin. Let the capture come and take the doubled pawns; then Bd6 develops, with the long castle in mind."
+ },
+ "hp-737": {
+  "spoken": "Winning the pawn back at once with dxe3 tempts, but it is not what the Chigorin is about. Bxe3 recaptures, the queens can come off, and Black has lost the right to castle while White keeps the bishop pair. Nc3 and Be6 follow, and Black is a little worse."
+ },
+ "hp-74t": {
+  "spoken": "Against the main move Nb6, Bb3 is right, keeping the bishop on the working diagonal. Bd3 is the error: the pressure against f7 goes, and that diagonal is the whole reason for the variation."
+ },
+ "hp-75e": {
+  "spoken": "The trickiest try is Qh4 check, which turns on which square the bishop has taken, Bc4 or Bb3. Kf1 is the only move, and d6 is Black's. From there White may pick Nf3, d4 or Nc3. Fischer took Nc3; the engines like d4. After d4, Be6 offers a trade that takes some sting out of the attack, and White can allow it and keep an edge."
+ },
+ "hp-772": {
+  "spoken": "Bf5 is a serious error here. cxd5 cxd5 comes, and then Qb3 forks d5 and b7 — the position is suddenly very hard to hold."
+ },
+ "hp-77i": {
+  "spoken": "In this Grand Prix, the light-squared bishop usually belongs on b5, pressing the knight on c6, the piece holding Black's centre together. The g6 and Bg7 fianchetto is fine as far as it goes, but the bishop on b5 forces concessions along the way."
+ },
+ "hp-79r": {
+  "spoken": "d5, trying to reach a classical Petrov while a knight already sits on c3, is awkward: d4 comes, and c4 — the move that makes the normal lines work — is unavailable. White gets a favourable version, with Black's pawns liable to be doubled on poor terms."
+ },
+ "hp-79w": {
+  "spoken": "Qd2 gives Black the chance to pin with Bg4. It edges out the alternative because it steers clear of the Bxa2 tactics, and the bishop keeps both g6 and e6 in reserve."
+ },
+ "hp-7be": {
+  "spoken": "In the Wing Gambit, declining with b6 lets White trade on c5 and follow with Nc3, taking the b-file. The bishop is kept out of a6 and the rook out of b8, so despite the symmetry White has a small pull."
+ },
+ "hp-7bg": {
+  "spoken": "Once cxb4 a3 has been played, the critical test is d5, and exd5 Qxd5 leaves White close to level — a rare verdict in the Wing Gambit. The queen is safe on d5 because there is no Nc3 to come at her with tempo."
+ },
+ "hp-7bw": {
+  "spoken": "Nh5 challenges the bishop on f4, and the exchange is available though it may promise nothing. The bishop pair balances things out, while White may keep some pressure against h7."
+ },
+ "hp-7ct": {
+  "spoken": "The rare c5 break often leaves the queen's pawn isolated once the trades are done, and with it dynamic play on the kingside, Ne5 and Bg5 leading. Black has to defend accurately."
+ },
+ "hp-7et": {
+  "spoken": "In the Nc3 line Qc7 comes, hitting the pawn twice; Bf4 defends, Ng6 arrives, and Bg3 steps back. Taking at once fails: after Nxe5 the rook swings from a1 to d1 and pins the knight, with the capture on d7 in the air. So Nxf3 Qxf3 Qd8 is played instead, and Ne4 then leaves White better."
+ },
+ "hp-7g6": {
+  "spoken": "That last move readies c5 and a fight for the centre. The critical reply cxd5 is in fact a mistake: exd5 Bxf6 Bxf6 Qxd5 Nc6 and Black is active and pressing, in spite of White's better structure. An isolated queen's pawn is a dynamic asset when the pieces stand behind it."
+ },
+ "hp-7g9": {
+  "spoken": "With h6 and b6 played, the bishop on h4 is exposed to e4 and Qb4, so it must be saved with Bg3. Bg4 is no real threat to the knight on f3, which has two defenders — but only once White has castled; before that, e4 wins a piece."
+ },
+ "hp-7gw": {
+  "spoken": "After Nxe4, Nf3 is the move, since e3 is far too passive. Black can hit back at once with e5, taking space and activity. Once Nf3 Nf6 is on the board there are several roads for Black, and e3 need not worry anyone."
+ },
+ "hp-7jf": {
+  "spoken": "Nf6 and d6 point to a regrouping, the bishop heading through to f7 to cover the key squares. White has to move fast with h4 and make Black answer. Bg7 is met by the trade on h6, wrecking the structure; Be6 drops a pawn, the rook being pinned."
+ },
+ "hp-7mz": {
+  "spoken": "If d5 comes and the knight drops to d7 after e5, cxd5 is available. Recapture on e5 with the knight and d4 arrives, the knight ending up on g6. Then d6 and Be6 are met by d5, chasing the bishop home to c8. White has natural development and an open centre for the bishops; the black pawn is isolated and overstretched."
+ },
+ "hp-7no": {
+  "spoken": "An early Bc5 in this King's Gambit is a mistake: d4 comes with tempo, the centre is seized, and the bishop has to move again. The Qh4 threat is nothing to fear either, since Nf3 hits the queen and prepares d4 in the same breath."
+ },
+ "hp-5xm": {
+  "spoken": "c5 is a chronic hole for Black in this Exchange Slav. White's plan has the flavour of a minority attack: park a rook there, or push a3 and b4 to squeeze the queenside. The answer is Nd7, ruling out Ng5 and Rc5, or a strike in the middle with e5."
+ },
+ "hp-7o2": {
+  "spoken": "With d5 pushed, White may take there, and Qxd5 is the main recapture. A sideline runs Nxd4 Qxd4, then d5 exd5 Nf6, a pawn given up for compensation. If c4 comes, e6 answers, White is obliged to capture, and the e4 pawn is left weak with a backward d-pawn behind it — compensation again."
+ },
+ "hp-7ok": {
+  "spoken": "With c4 Nf6 and Nc3 d5 played, Black either takes on c4, which is the critical line, or keeps developing, which is the flexible road. Staying flexible allows c6 into the Semi-Slav, c5 into the Tarrasch, d4 to change the character altogether, or a quiet Be7."
+ },
+ "hp-7q9": {
+  "spoken": "White holds two bishops, a strong pawn majority through the middle and active rooks, while the black knights are short of squares. The king is safe where it stands and need only castle once Black has committed to the kingside. Rb1 leans on the b-pawn, and every reply is unpleasant."
+ },
+ "hp-7qd": {
+  "spoken": "The usual move is b6, leaving the king where it stands. f4 comes, exf4 and e4 follow, and Black gets Ng7 in and castles short. The engine likes White, though converting is far from trivial."
+ },
+ "hp-7su": {
+  "spoken": "Against c4 c5, White picks between Nf3 and the g3 with Nc3 setup. Nf3 invites an early d4 and tends to transpose into Catalan or Tarrasch shapes, which are not really English at all. Keep the symmetry with g3 and Nc3, and the variety survives — structures from the King's Indian, from the Benoni, from the Sicilian, all within reach."
+ },
+ "hp-7ve": {
+  "spoken": "In the Four Pawns, once fxe5 is on the board, c5 is Black's risky try. Steer clear of d6, which simply loses, and play Nc3 instead, ready to answer cxd4 with Nb5 or something like it."
+ },
+ "ir-jh": {
+  "spoken": "The commonest trap runs Nc3, Bc5, d3, when Ng4 comes at f2. Be3 is the only defence, and the knight recaptures and dominates the bishop. Play Bc4 instead and Ng4 hits f2 again; castle and Qh4 crushes. h3 is answered by Nxf2 and Qxf3, and the double check mates."
+ },
+ "ir-ko": {
+  "spoken": "Against the e6 setup, the f5 plan loses its bite, since both pawns can recapture. But e6 leaves f6 tender, so the plan changes: f4 first to stop d5, then a build-up with e5, the bishop rerouted, and d4 if it fits — all of it aimed at owning f6."
+ },
+ "sl-fp0": {
+  "spoken": "After Nf6, the testing reply is e5, hitting the knight. Black picks Ne4 or Nd5. Ne4 invites Qe2, harrying the knight, which then needs f5 or d5 to hold its ground; move it a third time and the time is gone, and the capture on d4 leaves White clearly on top."
+ },
+ "sl-ou6": {
+  "spoken": "e5 is met by Nd5, and the knight on c3 comes under fire. The crossroads is real: Nxc3 bxc3 Bxc3 check is devastating. Nb5 and Bd2 both fail to stop the c-pawns being doubled, and the structure is left in ruins."
+ },
+ "sl-ou8": {
+  "spoken": "Qg4 is answered by g6, inviting the capture on c3 — but after Bxc3 check comes the irritating a3, the bishop is sent back, and Bh6 or Bg5 keeps pestering. Master practice says that line is bad for Black, so g6 is the choice, guarding the knight and keeping the pin."
+ },
+ "sl-pwu": {
+  "spoken": "Two queen moves have been spent, out to d4 and back to d2, all to get the bishop onto b2 and the long diagonal. Once the pieces are arranged the king is comfortable on that wing and the plan is obvious, while Black's position asks harder questions of its owner."
+ },
+ "sl-qme": {
+  "spoken": "That bishop is pinned on the diagonal that runs a5 to e1: a3 comes, it has to move, and White gains time. Choose d6 over castling and the other pin bites — the c6 knight against its own king. d4 then follows, and the centre cannot be held, because that knight is not truly guarding d4."
+ },
+ "sl-raa": {
+  "spoken": "Rather than trade knights on d5, White would rather bring the one on d2 out to e4, ready either to recapture on c3 or to take there. The bishop capture is the better way: the diagonal stays under pressure, bishops come off, and the result is balance, with open files and a bishop apiece."
+ },
+ "sl-rr3": {
+  "spoken": "In this Exchange Queen's Gambit, the knight on f6 is pinned by the bishop opposite, and h6 is the standard way to pester it. With Qc2 just played the position is sharp: the Bxh2 trick is the tactical idea to know, and it is sidestepped by tucking the king on h1, where that capture arrives without check and a zwischenzug is available."
+ },
+ "sl-ruk": {
+  "spoken": "Once Nxd4 Nf6 has been played in this Sicilian, setups with Bc4 or Bd3 let Black equalise easily with d5. Nd2 is suspect too: it shuts in the queen and the bishop, and Black develops comfortably in Scheveningen style."
+ },
+ "sl-run": {
+  "spoken": "In the Pin Variation, e5 hits the knight on d4 and offers it d5 or e4. A third try, Qa5, piles onto c3 and ignores what is happening to the knight on f6 — and it loses."
+ },
+ "sl-s05": {
+  "spoken": "With the queen sitting on b3, the rook is drawn to b8 and Black gets the b-file, so taking on c5 is unappealing. d5 is no better, since Nd4 hands Black a powerful central outpost. e3 fails to impress either: h6 comes, the bishop must trade or retreat, and Nxd4 follows."
+ },
+ "sl-s5a": {
+  "spoken": "Putting her on c2 is a precise piece of move-ordering in this Declined line. It denies Black Bf5 — an easy way to develop, and one that could bring the queens off and level the game, whatever the pawn structure says."
+ },
+ "cb-2gs": {
+  "spoken": "With no pawn left to recapture on c4, Black is a pawn up for the moment. White's compensation is the pair of central pawns on d4 and e4: space, and black pieces with nowhere to breathe."
+ }
+}

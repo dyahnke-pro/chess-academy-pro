@@ -1,0 +1,133 @@
+{
+ "videoId": "NQQnQ9X9dL8",
+ "title": "F2 is a HUGE Weakness...Here's Why! | Scotch Game | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Jobava London System (Na4 queen-probe)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:NQQnQ9X9dL8",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 951,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "The Jobava London — the queen's pawn paired with an early knight to c3 and the bishop bound for f4, a sharp, tricky setup.",
+   "kind": "main",
+   "teaches": [
+    "the Jobava London setup"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 952,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 954.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [
+    "Bf4",
+    "c5",
+    "e3"
+   ],
+   "spoken": "The bishop comes to f4, and against Black's c5 we hold the center calmly with e3.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 958.5,
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/q1Pp4/5B2/2N1PN2/PPP2PPP/R2QKB1R b KQkq - 2 6",
+   "line": [
+    "Nc6",
+    "dxc5",
+    "Qa5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 960,
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/2qp4/5B2/P1N1PN2/1PP2PPP/R2QKB1R b KQkq - 0 7",
+   "line": [
+    "Qxc5",
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 961,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2qp4/5B2/P1N1PN2/1PP2PPP/R2QKB1R w KQkq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 963.5,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R b KQkq - 1 8",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 965.5,
+   "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R w KQkq - 2 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 966.5,
+   "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/N4B2/P3PN2/1PPQ1PPP/R3KB1R b KQkq - 3 9",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "Here's the recurring idea worth knowing: the knight to a4, jabbing at the black queen on c5. It nudges the queen around and, in some lines, actually snares it.",
+   "kind": "main",
+   "teaches": [
+    "the Na4 queen-harassment motif"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 969.5,
+   "fen": "r1b1k2r/pp2bppp/2n1pn2/q2p4/N4B2/P3PN2/1PPQ1PPP/R3KB1R w KQkq - 4 10",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "The queen is driven to a5, and we can probe again — a maneuver that repeats and, at the right moment, wins the queen outright.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 973.5,
+   "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R w KQkq - 6 11",
+   "line": [
+    "Nc3",
+    "Qc5"
+   ],
+   "spoken": "One general warning this line teaches: never lean on a pin alone to keep your queen safe. If the pinning piece can be distracted, the queen is hanging the instant it happens, and you bleed tempi trying to save it.",
+   "teaches": [
+    "don’t rely on a pin to shield the queen"
+   ],
+   "reanchor": true
+  }
+ ]
+}

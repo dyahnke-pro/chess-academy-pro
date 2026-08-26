@@ -242,8 +242,8 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     await waitFor(() => {
       expect(screen.getByText("Teach me the Italian.")).toBeInTheDocument();
       expect(screen.getByText(/let's walk through the Italian Game/i)).toBeInTheDocument();
-    });
-  });
+    }, { timeout: 8000 });
+  }, 20_000); // slower under the full-file load + merged corpus; passes isolated
 
   it('does NOT set providerOverride at the surface (let the spine pick + fall back)', async () => {
     // Test history: this used to assert `providerOverride.name === 'anthropic'`

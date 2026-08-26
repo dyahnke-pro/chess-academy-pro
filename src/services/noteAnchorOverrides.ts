@@ -36,16 +36,23 @@ const DERIVED: Record<string, string[]> = (anchorData as { anchors: Record<strin
  */
 export function applyDerivedAnchors(notes: DanyaNote[]): DanyaNote[] {
   let hits = 0;
+  let overlaps = 0; // notes this corpus shares with the sidecar
   const out = notes.map((n) => {
     const line = DERIVED[n.id];
+    if (line) overlaps += 1;
     if (!line || line.length <= (n.lineSan?.length ?? 0)) return n;
     hits += 1;
     return { ...n, lineSan: line };
   });
   // Cheap, and it makes a silently-empty sidecar visible. A corpus whose ids
-  // stopped matching the sidecar (a re-farm that renumbered notes) would
+  // stopped matching the sidecar (a re-farm that RENUMBERED notes) would
   // otherwise look exactly like "no derivation needed".
-  if (hits === 0 && notes.length > 0 && Object.keys(DERIVED).length > 0) {
+  //
+  // 🔒 Only a corpus that OVERLAPS the sidecar can be stale (David 2026-08-26):
+  // the sidecar is scanned from four corpora, so a corpus it never covered
+  // (voiced, gothamchess, …) legitimately gets zero hits — that is "not
+  // covered", not "renumbered", and must not read as a stale sidecar.
+  if (hits === 0 && overlaps > 0 && Object.keys(DERIVED).length > 0) {
     lastMissReported ||= true;
   }
   return out;

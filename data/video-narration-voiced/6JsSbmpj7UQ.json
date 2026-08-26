@@ -1,0 +1,1132 @@
+{
+ "videoId": "6JsSbmpj7UQ",
+ "title": "Amazing Game!! 95% Accuracy! | Grunfeld Defense | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Grünfeld Defense: Exchange Variation (Bb5+ sideline)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:6JsSbmpj7UQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 53,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "We open with the queen's pawn, looking for a solid, structured game.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 59.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 62,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The fianchetto — this could be a King's Indian or a Grünfeld.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 79,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 81,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black commits to the Grünfeld with d5 — the ultimate hypermodern opening. It concedes the center on purpose, then swarms it with pieces. You rarely see it below master level because it demands staggering memorization; it's one of the hardest openings to learn.",
+   "kind": "main",
+   "teaches": [
+    "the Grünfeld hypermodern idea"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 132.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "cxd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 141.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The natural e4 kicks the knight and builds the broad pawn center Black has invited us to build.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 143.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 145.5,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "bxc3",
+    "Bg7"
+   ],
+   "spoken": "There's the hypermodern bargain: Black lets us plant pawns on d4 and c3 and fianchettoes, planning to strike with c5, the knight to c6, and the bishop to g4 — giving up the center only to assault it as fast as possible.",
+   "kind": "main",
+   "teaches": [
+    "Black concedes then attacks the center"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 211.5,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/1B6/3PP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "Here's my sideline that sidesteps the theoretical ocean — the bishop check on b5. Practically it's hard for Black to equalize against it.",
+   "kind": "main",
+   "teaches": [
+    "a practical anti-Grünfeld sideline"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 222.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/1B6/3PP3/2P5/P4PPP/R1BQK1NR w KQkq - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 229.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR b KQkq - 1 8",
+   "line": [
+    "Ba4"
+   ],
+   "spoken": "The point is simpler than it looks: induce c6, then tuck the bishop back to a4. It delays Black's freeing c5, slices through the position, and can later drop to b3 to eye f7.",
+   "kind": "main",
+   "teaches": [
+    "induce c6 to delay c5"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 260.5,
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR w KQ - 2 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 265,
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P3NPPP/R1BQK2R b KQ - 3 9",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The knight goes to e2, not f3 — f3 would walk into the g4 pin, while e2 keeps f3 in reserve to shoo the bishop and, above all, lends another defender to the d4-pawn for the coming c5 and Nc6 pressure.",
+   "kind": "main",
+   "teaches": [
+    "Ne2 keeps f3 available and guards d4"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 375.5,
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR w KQ - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 463.5,
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQK2R w KQ - 0 10",
+   "line": [
+    "Ne2",
+    "c5"
+   ],
+   "spoken": "Black hits the center the classical way with c5. No action needed yet: the d4-pawn is defended three times and attacked three — no fourth defender required until it is.",
+   "kind": "main",
+   "teaches": [
+    "count attackers and defenders before reacting"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 486,
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 b - - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Top priority is getting the king out of the center, so we castle. A brazen h4 lunge would be far too loose with our center already under fire.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 489,
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQK2R w KQ - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 501,
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 b - - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 623.5,
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 w - - 2 11",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Black develops to c6, and it's tempting to swap it off — but capturing wrecks our light squares: it opens the bishop's path to a6 to harass the e2-knight, and the doubled c-pawns actually become a Grünfeld asset. So we don't take.",
+   "kind": "main",
+   "teaches": [
+    "why Bxc6 helps Black"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 644,
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/2p5/B2PP3/2P1B3/P3NPPP/R2Q1RK1 b - - 3 11",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Instead we bring up reinforcements — the bishop to e3, buttressing d4. White is now a shade better.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 664.5,
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/B2pP3/2P1B3/P3NPPP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 667,
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/B2PP3/4B3/P3NPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 675,
+   "fen": "r2q1rk1/pp1bppbp/2n3p1/8/B2PP3/4B3/P3NPPP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "The bishop to d7 is passive; it's fair to say White already holds a pleasant edge out of the opening.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 777.5,
+   "fen": "r2q1rk1/pp1bppbp/2n3p1/8/B2PP3/4B3/P3NPPP/2RQ1RK1 b - - 2 13",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": "Now a plan: lift the rook off a1 so a future d5 never drops it, and Rc1 reads better than Rb1, which would hand Black an anchor on a5. One caution — with the bishops eyeing each other, always watch for a knight-takes-d4 trick, which only bites once the queen loses contact with its bishop.",
+   "kind": "plan",
+   "teaches": [
+    "unpin before the d5 break",
+    "beware Nxd4 when the bishops face off"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 859,
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/8/B2PP3/4B3/P3NPPP/2RQ1RK1 w - - 0 14",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 965.5,
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/2R5/B2PP3/4B3/P3NPPP/3Q1RK1 b - - 1 14",
+   "line": [
+    "Rc5"
+   ],
+   "spoken": "A mysterious but strong improving move — the rook to c5. It's hard to evict, it prepares d5, and it isn't committal: a lifted piece can always come back down.",
+   "kind": "main",
+   "teaches": [
+    "a rook lift that isn’t committal"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 1025,
+   "fen": "r2q1rk1/pp1bnpbp/4p1p1/2R5/B2PP3/4B3/P3NPPP/3Q1RK1 w - - 2 15",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1063.5,
+   "fen": "r2q1rk1/pp1bnpbp/4p1p1/2R5/3PP3/1B2B3/P3NPPP/3Q1RK1 b - - 3 15",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "We keep the bishops on with the retreat to b3, backing the future d5 break rather than trading pieces.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 1074.5,
+   "fen": "2rq1rk1/pp1bnpbp/4p1p1/2R5/3PP3/1B2B3/P3NPPP/3Q1RK1 w - - 4 16",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1082.5,
+   "fen": "2Rq1rk1/pp1bnpbp/4p1p1/8/3PP3/1B2B3/P3NPPP/3Q1RK1 b - - 0 16",
+   "line": [
+    "Rxc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1110.5,
+   "fen": "2bq1rk1/pp2npbp/4p1p1/8/3PP3/1B2B3/P3NPPP/3Q1RK1 w - - 0 17",
+   "line": [
+    "Bxc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1118,
+   "fen": "2bq1rk1/pp2npbp/4p1p1/8/3PP3/1B2B3/P2QNPPP/5RK1 b - - 1 17",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "With the rooks traded the queen finally comes to d2, connecting our forces free of any Nxd4 tricks.",
+   "kind": "main"
+  },
+  {
+   "ply": 34,
+   "t": 1162,
+   "fen": "2bq1rk1/p3npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/5RK1 w - - 0 18",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1214,
+   "fen": "2bq1rk1/p3npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/3R2K1 b - - 1 18",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": "An instructive rook choice: not c1, which becomes a veiled trade once Black answers with his own rook, but the rook to d1 — the side with the space advantage wants to keep pieces on.",
+   "kind": "main",
+   "teaches": [
+    "the space side keeps pieces on"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 1217,
+   "fen": "3q1rk1/pb2npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/3R2K1 w - - 2 19",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1218,
+   "fen": "3q1rk1/pb2npbp/1p2p1p1/8/3PP3/1B2BP2/P2QN1PP/3R2K1 b - - 0 19",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 shores up the e4-pawn and locks the little chain together.",
+   "kind": "main"
+  },
+  {
+   "ply": 38,
+   "t": 1254.5,
+   "fen": "5rk1/pb1qnpbp/1p2p1p1/8/3PP3/1B2BP2/P2QN1PP/3R2K1 w - - 1 20",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1273,
+   "fen": "5rk1/pb1qnpbp/1p2p1p1/8/3PP2P/1B2BP2/P2QN1P1/3R2K1 b - - 0 20",
+   "line": [
+    "h4"
+   ],
+   "spoken": "The classic h4. Not a three-move mate — a nagging, Soviet-style improving move that leans on Black's g6 hook. We march to h5 and maybe h6 to seed back-rank ideas; our king is perfectly safe and Black has no counterplay at all.",
+   "kind": "plan",
+   "teaches": [
+    "h4 exploits the g6 hook"
+   ],
+   "plans": [
+    "h4-h5-h6 to open the king"
+   ]
+  },
+  {
+   "ply": 40,
+   "t": 1407,
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Black replies h5, softening the dark squares his fianchetto bishop was covering even further.",
+   "kind": "main"
+  },
+  {
+   "ply": 41,
+   "t": 1450.5,
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "So the bishop swings to h6 to trade off that Grünfeld bishop and multiply the kingside weaknesses — that bishop's old job of holding d4 is now taken over by the e2-knight.",
+   "kind": "main",
+   "teaches": [
+    "trade the fianchetto bishop, keep d4 held"
+   ]
+  },
+  {
+   "ply": 40,
+   "t": 1458,
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1464,
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1488,
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1499,
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1518.5,
+   "fen": "5rk1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 w - - 2 22",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "This trade is a limited-time offer: taking on g7 lets us plant the knight on f4 — impossible right now, since it would sever queen and bishop and hang the h6-bishop.",
+   "teaches": [
+    "sequence the captures to keep the pieces connected"
+   ]
+  },
+  {
+   "ply": 43,
+   "t": 1606.5,
+   "fen": "5rk1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 b - - 3 22",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": "The decision: the knight to g3, playing for mate. Unlike f4 it keeps the queen's road to g5 open, setting up the jump to h5.",
+   "kind": "plan",
+   "teaches": [
+    "choose the square that keeps the attack flowing"
+   ]
+  },
+  {
+   "ply": 44,
+   "t": 1671,
+   "fen": "3r2k1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 w - - 4 23",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1679,
+   "fen": "3r2k1/p2qnpB1/bp2p1p1/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 b - - 0 23",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1680,
+   "fen": "3r4/p2qnpk1/bp2p1p1/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 w - - 0 24",
+   "line": [
+    "Kxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1694,
+   "fen": "3r4/p2qnpk1/bp2p1p1/6Qp/3PP2P/1B3PN1/P5P1/3R2K1 b - - 1 24",
+   "line": [
+    "Qg5"
+   ],
+   "spoken": "We dive in with the queen to g5, eyeing h5. A sac on h5 right now would be two empty checks — no pieces behind it — so we build first.",
+   "kind": "main",
+   "teaches": [
+    "don’t sacrifice without follow-up force"
+   ]
+  },
+  {
+   "ply": 48,
+   "t": 1767.5,
+   "fen": "3r4/p2qnp1k/bp2p1p1/6Qp/3PP2P/1B3PN1/P5P1/3R2K1 w - - 2 25",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": "With the king on h7 the d5 break opens a second front: after d5 the g3-knight gets the e4 and f6 route, and the b3-bishop can drop to c2 to reinforce the threat on h5.",
+   "kind": "plan",
+   "plans": [
+    "d5 to open a second front",
+    "Ne4-f6 and Bc2 to pile on h5"
+   ]
+  },
+  {
+   "ply": 49,
+   "t": 1824,
+   "fen": "3r4/p2qnp1k/bp2p1p1/3P2Qp/4P2P/1B3PN1/P5P1/3R2K1 b - - 0 25",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 — opening the center is all in our favor here; it carries the strong points of e5 with none of the drawbacks, and it threatens to take on e6.",
+   "kind": "main"
+  },
+  {
+   "ply": 50,
+   "t": 1835,
+   "fen": "3r4/p2qnp1k/bp4p1/3p2Qp/4P2P/1B3PN1/P5P1/3R2K1 w - - 0 26",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 1849,
+   "fen": "3r4/p2qnp1k/bp4p1/3P2Qp/7P/1B3PN1/P5P1/3R2K1 b - - 0 26",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "We recapture with the e-pawn, not the bishop, which would leave the d1-rook loose. This keeps a passed pawn rolling toward d6 and opens both the knight's and the bishop's pathways.",
+   "kind": "main",
+   "teaches": [
+    "recapture to keep the passer and the lines"
+   ]
+  },
+  {
+   "ply": 52,
+   "t": 1915.5,
+   "fen": "3r4/p2qn2k/bp4p1/3P1pQp/7P/1B3PN1/P5P1/3R2K1 w - - 0 27",
+   "line": [
+    "f5"
+   ],
+   "spoken": "f5 reeks of desperation but has a point — trying to stop the knight reaching e4 and to hem in our light-squared bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 53,
+   "t": 1940.5,
+   "fen": "3r4/p2qn2k/bp1P2p1/5pQp/7P/1B3PN1/P5P1/3R2K1 b - - 0 27",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Back to the trump card: push d6. It reopens the fire on the d8-rook, and a tactic is already brewing off exactly that.",
+   "kind": "main"
+  },
+  {
+   "ply": 54,
+   "t": 1966,
+   "fen": "3r2n1/p2q3k/bp1P2p1/5pQp/7P/1B3PN1/P5P1/3R2K1 w - - 1 28",
+   "line": [
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1998,
+   "fen": "3r2n1/p2q1B1k/bp1P2p1/5pQp/7P/5PN1/P5P1/3R2K1 b - - 2 28",
+   "line": [
+    "Bf7"
+   ],
+   "spoken": "The deflection: the bishop to f7 hits g6 and forces the queen to take, or it's mate — after which we grab the rook and the pawn queens.",
+   "kind": "main",
+   "teaches": [
+    "deflection to the promotion"
+   ]
+  },
+  {
+   "ply": 56,
+   "t": 2017,
+   "fen": "3r2n1/p4q1k/bp1P2p1/5pQp/7P/5PN1/P5P1/3R2K1 w - - 0 29",
+   "line": [
+    "Qxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 2018.5,
+   "fen": "3Q2n1/p4q1k/bp1P2p1/5p1p/7P/5PN1/P5P1/3R2K1 b - - 0 29",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": "We collect the rook. The rest is just clean technique.",
+   "kind": "main"
+  },
+  {
+   "ply": 58,
+   "t": 2019.5,
+   "fen": "3Q4/p4q1k/bp1P1np1/5p1p/7P/5PN1/P5P1/3R2K1 w - - 1 30",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Don't grab with the queen — win as simply as possible, the discipline that matters once you're winning.",
+   "teaches": [
+    "simplest, not flashiest, when ahead"
+   ]
+  },
+  {
+   "ply": 59,
+   "t": 2052,
+   "fen": "3Q4/p2P1q1k/bp3np1/5p1p/7P/5PN1/P5P1/3R2K1 b - - 0 30",
+   "line": [
+    "d7"
+   ],
+   "spoken": "The simplest path is to push d7, threatening to promote — no need to trade queens at all.",
+   "kind": "main"
+  },
+  {
+   "ply": 60,
+   "t": 2067.5,
+   "fen": "3Q4/p2P1q1k/bp3np1/7p/5p1P/5PN1/P5P1/3R2K1 w - - 0 31",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 2103,
+   "fen": "8/p1QP1q1k/bp3np1/7p/5p1P/5PN1/P5P1/3R2K1 b - - 1 31",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "Simpler still: step the queen off d8 so that promoting is unstoppable, and if the knight is given up we recapture and win the queen anyway.",
+   "kind": "main"
+  },
+  {
+   "ply": 62,
+   "t": 2119,
+   "fen": "8/p1QP1q1k/bp4p1/3n3p/5p1P/5PN1/P5P1/3R2K1 w - - 2 32",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 2130,
+   "fen": "8/p1QP1q1k/bp4p1/3R3p/5p1P/5PN1/P5P1/6K1 b - - 0 32",
+   "line": [
+    "Rxd5"
+   ],
+   "spoken": "The finishing shot is the rook taking on d5, and after the queen recaptures the promotion arrives with a discovered check.",
+   "kind": "main",
+   "teaches": [
+    "clear the path so promotion comes with check"
+   ]
+  },
+  {
+   "ply": 65,
+   "t": 2140.5,
+   "fen": "3N4/p1Q4k/bp4p1/3q3p/5p1P/5PN1/P5P1/6K1 b - - 0 33",
+   "line": [
+    "Qxd5",
+    "d8=N+"
+   ],
+   "spoken": "We promote to a knight with check — the underpromotion delivers a discovered check on the king, winning the queen and the game.",
+   "kind": "main",
+   "teaches": [
+    "promotion-with-check underpromotion"
+   ]
+  },
+  {
+   "ply": 66,
+   "t": 2148.5,
+   "fen": "3N4/p1Qq3k/bp4p1/7p/5p1P/5PN1/P5P1/6K1 w - - 1 34",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 2162.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2167,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "c4",
+    "g6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2186,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The key contrast: in the King's Indian Black plays the bishop out early and lets White build a huge pawn front, planning a slow kingside pawn storm.",
+   "teaches": [
+    "King’s Indian vs Grünfeld"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 2189,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2194.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2199,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2201,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR w KQ - 2 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2204,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2210.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2233,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2234.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2237,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
+   "line": [
+    "O-O",
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2239,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2241.5,
+   "fen": "r1bq1rk1/ppp2pbp/2np1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 2 8",
+   "line": [
+    "d5",
+    "Nc6",
+    "O-O"
+   ],
+   "spoken": "In the King's Indian White usually locks the center with d5, producing a closed position and opposite-wing attacks — White on the queenside, Black on the kingside.",
+   "teaches": [
+    "the closed KID with opposite-side attacks"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 2262,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": "The Grünfeld is a different animal: Black not only concedes the center but pries it open, so the tactics arrive far earlier — frontloaded into the opening rather than saved for the middlegame like in the King's Indian.",
+   "teaches": [
+    "Grünfeld tactics come early"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2300,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nf3",
+    "d5"
+   ],
+   "spoken": "Taking on d5 is not forced. One of the most popular modern setups is a London-style treatment: the knight to f3 and the bishop to f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 2303,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP1B2/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2307,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6",
+   "line": [
+    "O-O",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2311,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": "And Black answers with c5, the super-typical Grünfeld pawn lever against that structure.",
+   "teaches": [
+    "the c5 lever"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2332.5,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": "Another topical try is the Russian System with the queen to b3, angling to make Black be the one to release the tension on c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 2336,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p2B1/2PP4/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2339.5,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2340.5,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "line": [
+    "Ng1",
+    "Bf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2342,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 6",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2344,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2346.5,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2349,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2351,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2356,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2360,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2361.5,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 4 7",
+   "line": [
+    "Nf3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2364.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 9",
+   "line": [
+    "Bf4",
+    "c5",
+    "e3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2368.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 9",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2370.5,
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 10",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2374,
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1PP4/5B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 10",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2394.5,
+   "fen": "rnb2rk1/pp2ppbp/6p1/q1Pn4/5B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 11",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "A trap worth knowing: capturing on d5 with the pawn is the mistake — the knight recapture is correct, because the queen on a5 pins the c3-knight, so after the queen takes on d5 the bishop check on c3 wins material.",
+   "teaches": [
+    "the Qa5 pin and Bxc3+ shot"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 2406,
+   "fen": "rnb2rk1/pp2pp1p/6p1/2Pn4/5B2/2q1PN2/PP3PPP/R3KB1R w KQ - 0 13",
+   "line": [
+    "Qc2",
+    "Bxc3+",
+    "Qxc3",
+    "Qxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2417,
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2429,
+   "fen": "rnb2rk1/pp2ppbp/5np1/1q1p4/2P2B2/2N1PN2/PP3PPP/R3KB1R w KQ - 0 12",
+   "line": [
+    "Qb3",
+    "Qxc5",
+    "Qb5",
+    "Qxb5"
+   ],
+   "spoken": "So the main line runs with the queen to a4; Black recaptures on c5, White chases with the queen to b5, and the resulting endgame is known to be equal.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 2431,
+   "fen": "rnb2rk1/pp2ppbp/5np1/1N1p4/2P2B2/4PN2/PP3PPP/R3KB1R b KQ - 0 12",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2435.5,
+   "fen": "r1b2rk1/pp2ppbp/n4np1/1N1p4/2P2B2/4PN2/PP3PPP/R3KB1R w KQ - 1 13",
+   "line": [
+    "Na6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2445.5,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

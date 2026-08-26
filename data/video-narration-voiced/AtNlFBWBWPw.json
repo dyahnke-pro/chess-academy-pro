@@ -1,0 +1,521 @@
+{
+ "videoId": "AtNlFBWBWPw",
+ "title": "A Grandmaster Plays a Beginner Pt. 2 | Chess Mastery Explained",
+ "openingName": "Modern Defense (opposite-side castling attack)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:AtNlFBWBWPw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 80,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": "Black answers with g6 — the Modern Defense. It's uncommon and, crucially, makes no claim on the center at all.",
+   "kind": "main",
+   "teaches": [
+    "the Modern concedes the center"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 114.5,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "So we take the invitation and occupy the center with our pawns.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 117.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "Black fianchettoes — the bishop to the long diagonal — a hypermodern idea: hand over the center, then pressure it from a distance.",
+   "kind": "main",
+   "teaches": [
+    "hypermodern: attack the center from afar"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 141.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 153,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 203,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2N1B3/PPP2PPP/R2QKBNR b KQkq - 1 4",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "We develop with our pawns in mind — the bishop to e3, reinforcing d4 so a knight to c6 won't win it.",
+   "kind": "main",
+   "teaches": [
+    "develop to defend your center"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 210,
+   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/3PP3/2N1B3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 242.5,
+   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/P2PP3/2N1B3/1PP2PPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "a4"
+   ],
+   "spoken": "To the rescue comes the corner pawn: a4 stops Black's queenside expansion with b5 before it can grab space.",
+   "kind": "main",
+   "teaches": [
+    "a4 to deny b5"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 254,
+   "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/P2PP3/2N1B3/1PP2PPP/R2QKBNR w KQkq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 306.5,
+   "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/P2PP3/2N1BP2/1PP3PP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 looks like it violates principle, but it does two jobs: it denies the knight the g4 jump that would dislodge our e3-bishop, and it further braces the center.",
+   "kind": "main",
+   "teaches": [
+    "f3 stops Ng4 and props the center"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 311.5,
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/P2PP3/2N1BP2/1PP3PP/R2QKBNR w KQ - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 351.5,
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/P2PP3/2N1BP2/1PPQ2PP/R3KBNR b KQ - 2 7",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Now the attacking scheme: the queen to d2, so we can bring the bishop to h6 and trade off Black's fianchetto bishop — the guardian of the dark squares around his king.",
+   "kind": "plan",
+   "teaches": [
+    "Qd2 and Bh6 to trade the fianchetto bishop"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 384.5,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/4p3/P2PP3/2N1BP2/1PPQ2PP/R3KBNR w KQ - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Black strikes back correctly in the center with e5 — distraction. Note we can't grab with the bishop to h6 yet: the trade would cost us the d4-pawn.",
+   "kind": "main",
+   "teaches": [
+    "a central break answers a wing attack"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 417.5,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/4p3/P2PP3/2N1BP2/1PPQN1PP/R3KB1R b KQ - 1 8",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": "So first we brace d4 again with the knight to e2 — not its dream square, blocking our own bishop, but priorities: the king attack comes first.",
+   "kind": "main",
+   "teaches": [
+    "accept a small concession for the main plan"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 446,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/8/P2pP3/2N1BP2/1PPQN1PP/R3KB1R w KQ - 0 9",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 456.5,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/8/P2NP3/2N1BP2/1PPQ2PP/R3KB1R b KQ - 0 9",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Black takes and we recapture with the knight, centralizing it on d4.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 482,
+   "fen": "rnbq1rk1/pp3pbp/2p2np1/3p4/P2NP3/2N1BP2/1PPQ2PP/R3KB1R w KQ - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black keeps distracting with d5 — sensible play, striking in the center to pull us off the kingside plan.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 513.5,
+   "fen": "rnbq1rk1/pp3pbp/2p2np1/3pP3/P2N4/2N1BP2/1PPQ2PP/R3KB1R b KQ - 0 10",
+   "line": [
+    "e5"
+   ],
+   "spoken": "We keep the center closed with e5, refusing to take on d5 — opening it would expose our own king and make us regret f3.",
+   "kind": "main",
+   "teaches": [
+    "keep the center shut to keep your king safe"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 537.5,
+   "fen": "rnbq1rk1/pp1n1pbp/2p3p1/3pP3/P2N4/2N1BP2/1PPQ2PP/R3KB1R w KQ - 1 11",
+   "line": [
+    "Nfd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 578,
+   "fen": "rnbq1rk1/pp1n1pbp/2p1P1p1/3p4/P2N4/2N1BP2/1PPQ2PP/R3KB1R b KQ - 0 11",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Instead of defending the e5-pawn, we push it to e6 — a shot: if Black takes, the knight recaptures with a fork on the queen and rook. And even the forced capture on f7 only helps us, tearing away a pawn shielding his king.",
+   "kind": "main",
+   "teaches": [
+    "e6 push: the fork or the shattered shelter"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 694.5,
+   "fen": "rnbq1rk1/pp3pbp/2p1P1p1/3pn3/P2N4/2N1BP2/1PPQ2PP/R3KB1R w KQ - 1 12",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 708,
+   "fen": "rnbq1rk1/pp3Pbp/2p3p1/3pn3/P2N4/2N1BP2/1PPQ2PP/R3KB1R b KQ - 0 12",
+   "line": [
+    "exf7+"
+   ],
+   "spoken": "We capture on f7 — eliminating one of the pawns that form his kingside foundation, exactly what we want before an attack.",
+   "kind": "main",
+   "teaches": [
+    "strip the king’s pawn cover"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 720.5,
+   "fen": "rnbq2k1/pp3rbp/2p3p1/3pn3/P2N4/2N1BP2/1PPQ2PP/R3KB1R w KQ - 0 13",
+   "line": [
+    "Rxf7"
+   ],
+   "spoken": "Black recaptures with the rook, and now the e-file is open — with our own king still on it, we need to move it.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 731.5,
+   "fen": "rnbq2k1/pp3rbp/2p3p1/3pn3/P2N4/2N1BP2/1PPQ2PP/2KR1B1R b - - 1 13",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "So we castle long. It looks odd to castle where we pushed the a-pawn, but the a4-pawn is protected and there's no quick attack — don't let a knee-jerk assumption stop the right move.",
+   "kind": "main",
+   "teaches": [
+    "question the assumption: long castling is safe here"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 853,
+   "fen": "rnbq2k1/pp3rbp/6p1/2ppn3/P2N4/2N1BP2/1PPQ2PP/2KR1B1R w - - 0 14",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 872,
+   "fen": "rnbq2k1/pp3rbp/6p1/2ppn3/P7/1NN1BP2/1PPQ2PP/2KR1B1R b - - 1 14",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "The knight is hit, so we drop it back to b3 with tempo — now two pieces bear on the c5-pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 984.5,
+   "fen": "rnbq2k1/pp3rbp/6p1/3pn3/P1p5/1NN1BP2/1PPQ2PP/2KR1B1R w - - 0 15",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1042.5,
+   "fen": "rnbq2k1/pp3rbp/6p1/2Npn3/P1p5/2N1BP2/1PPQ2PP/2KR1B1R b - - 1 15",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight goes to c5 — active, and keeping the pressure on the weak d5-pawn, unlike a retreat to d4 which would drop that pressure.",
+   "kind": "main",
+   "teaches": [
+    "pick the square that keeps the pressure"
+   ]
+  },
+  {
+   "ply": 30,
+   "t": 1161.5,
+   "fen": "rnbq2k1/p4rbp/1p4p1/2Npn3/P1p5/2N1BP2/1PPQ2PP/2KR1B1R w - - 0 16",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1164.5,
+   "fen": "rnbq2k1/p4rbp/1p4p1/3pn3/P1p1N3/2N1BP2/1PPQ2PP/2KR1B1R b - - 1 16",
+   "line": [
+    "N5e4"
+   ],
+   "spoken": "The knight lands on e4 — a square the d5-pawn supposedly guards, but that pawn is pinned and can't capture, so the knight sits there safely, ready to help win d5.",
+   "kind": "main",
+   "teaches": [
+    "exploit the pinned defender"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 1215,
+   "fen": "rn1q2k1/p4rbp/1p2b1p1/3pn3/P1p1N3/2N1BP2/1PPQ2PP/2KR1B1R w - - 2 17",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1277,
+   "fen": "rn1q2k1/p4rbp/1p2b1p1/3pn1N1/P1p5/2N1BP2/1PPQ2PP/2KR1B1R b - - 3 17",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "With the knight centralized we look for the fork by default — the knight to g5 hits bishop and rook. It won't win a piece, but it erodes Black's grip on d5, and clears the way for our bishop to c4 later.",
+   "kind": "main",
+   "teaches": [
+    "centralized knights hunt forks",
+    "invest for a future Bc4"
+   ]
+  },
+  {
+   "ply": 34,
+   "t": 1408.5,
+   "fen": "rn1q2k1/p3r1bp/1p2b1p1/3pn1N1/P1p5/2N1BP2/1PPQ2PP/2KR1B1R w - - 4 18",
+   "line": [
+    "Re7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1410.5,
+   "fen": "rn1q2k1/p3r1bp/1p2N1p1/3pn3/P1p5/2N1BP2/1PPQ2PP/2KR1B1R b - - 0 18",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1413.5,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3pn3/P1p5/2N1BP2/1PPQ2PP/2KR1B1R w - - 0 19",
+   "line": [
+    "Rxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1415,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3Nn3/P1p5/4BP2/1PPQ2PP/2KR1B1R b - - 0 19",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "We take on d5 with the knight, planting it in the middle and dominating the center.",
+   "kind": "main"
+  },
+  {
+   "ply": 36,
+   "t": 1419,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3pn3/P1p5/2N1BP2/1PPQ2PP/2KR1B1R w - - 0 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1451.5,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3Nn3/P1p5/4BP2/1PPQ2PP/2KR1B1R b - - 0 19",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1456,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3N4/P1p5/3nBP2/1PPQ2PP/2KR1B1R w - - 1 20",
+   "line": [
+    "Nd3+"
+   ],
+   "spoken": "Black tries an interception tactic — the knight to d3, forcing something onto that square to cut our defense of the d5-knight. In effect it's just a trade of pieces, nothing more.",
+   "teaches": [
+    "interception tactic"
+   ]
+  },
+  {
+   "ply": 37,
+   "t": 1476,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3Nn3/P1p5/4BP2/1PPQ2PP/2KR1B1R b - - 0 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1481,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3N4/P1p5/3nBP2/1PPQ2PP/2KR1B1R w - - 1 20",
+   "line": [
+    "Nd3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1507.5,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3N4/P1p5/3BBP2/1PPQ2PP/2KR3R b - - 0 20",
+   "line": [
+    "Bxd3"
+   ],
+   "spoken": "We take with the bishop, not the pawn, so our knight keeps its protection.",
+   "kind": "main",
+   "teaches": [
+    "recapture to preserve a defender"
+   ]
+  },
+  {
+   "ply": 40,
+   "t": 1510.5,
+   "fen": "rn1q2k1/p5bp/1p2r1p1/3N4/P7/3pBP2/1PPQ2PP/2KR3R w - - 0 21",
+   "line": [
+    "cxd3"
+   ],
+   "spoken": "After the dust settles we're two pawns up with a monster knight on d5 and beautiful control of the center — conceding our light-squared bishop was worth it. Now discovered-check ideas are in the air.",
+   "kind": "main",
+   "teaches": [
+    "stay flexible — the plan can change"
+   ]
+  },
+  {
+   "ply": 44,
+   "t": 1610,
+   "fen": "rnq3k1/p5bp/1p2r1p1/3N4/P7/3pBP2/1PP3PP/2KR3R w - - 0 23",
+   "line": [
+    "Qc3",
+    "Qe8",
+    "Qc8",
+    "Qxc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1645,
+   "fen": "rnq3k1/p5bp/1p2r1p1/3N4/P2B4/3p1P2/1PP3PP/2KR3R b - - 1 23",
+   "line": [
+    "Bd4"
+   ],
+   "spoken": "The bishop is Black's only working piece, the gatekeeper of his king. With the queen no longer on d2 we can't play Bh6, but the bishop to d4 contests it — trade it and his king is defenseless.",
+   "kind": "main",
+   "teaches": [
+    "remove the last defender"
+   ]
+  },
+  {
+   "ply": 49,
+   "t": 1670.5,
+   "fen": "rnq3k1/p5bp/1p2r1p1/3N4/P7/3pBP2/1PP3PP/2KR3R b - - 5 25",
+   "line": [
+    "Re3",
+    "Bc5",
+    "Re6",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 1692,
+   "fen": "rnq3k1/p6p/1p2r1p1/3N4/P2b4/3p1P2/1PP3PP/2KR3R w - - 0 27",
+   "line": [
+    "Bh8",
+    "Bd4",
+    "Bxd4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

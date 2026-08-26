@@ -1,0 +1,870 @@
+{
+ "videoId": "UN41NRg5Ul4",
+ "title": "Crushing the Nimzowitsch-Larsen | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "openingName": "Nimzowitsch-Larsen Attack (1.b3)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:UN41NRg5Ul4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 29.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "spoken": "White opens with the Nimzowitsch-Larsen, the pawn to b3. The principled reply is e5 — the move that fights for the advantage rather than just equalizing.",
+   "kind": "main",
+   "teaches": [
+    "answer 1.b3 with e5"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 53.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P4P1/P1PPPP1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 75,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/1P4P1/P1PPPP1P/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We occupy the center with d5. The formula against any flank opening is simple: take a sound chunk of the center and back it with pieces — it's not a race to cram in the most pawns.",
+   "kind": "main",
+   "teaches": [
+    "occupy and support, don’t over-push"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 89.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/PP4P1/2PPPP1P/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 130,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/PP4P1/2PPPP1P/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "So we develop the knight to f6 instead of shoving more pawns forward and biting off more than we can chew.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 145,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/PP4PP/2PPPP2/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 163.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/PP4PP/2PPPP2/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Then the c6 setup — a pawn to c6 with a specific purpose.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 168,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/PP4PP/2PPPPB1/RNBQK1NR b KQkq - 1 5",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "White fianchettoes, and the bishop on g2 immediately bites on granite: it stares at the d5-pawn, which our pawn chain defends beautifully, so the bishop is nearly useless. The knight will develop via d7 and reroute f8-g6 rather than block it.",
+   "kind": "main",
+   "teaches": [
+    "blunt the fianchetto bishop with the c6/d5 wall"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 195,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP4PP/2PPPPB1/RNBQK1NR w KQkq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 206,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP1P2PP/2P1PPB1/RNBQK1NR b KQkq - 0 6",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 230.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1P2PP/2P1PPB1/RNBQK1NR w KQ - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 233.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1P2PP/1BP1PPB1/RN1QK1NR b KQ - 2 7",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 264,
+   "fen": "rnbq1rk1/1p3ppp/2pb1n2/p2pp3/8/PP1P2PP/1BP1PPB1/RN1QK1NR w KQ - 0 8",
+   "line": [
+    "a5"
+   ],
+   "spoken": "a5 clamps the queenside, making White's textbook b4-c4 hippo expansion very hard to organize.",
+   "kind": "main",
+   "teaches": [
+    "a5 to stop the b4-c4 plan"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 302,
+   "fen": "rnbq1rk1/1p3ppp/2pb1n2/p2pp3/8/PPNP2PP/1BP1PPB1/R2QK1NR b KQ - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "White's knight to c3 is out of step with the hippo setup — it just invites us to grab more space.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 344.5,
+   "fen": "rnbq1rk1/1p3ppp/2pb1n2/p3p3/3p4/PPNP2PP/1BP1PPB1/R2QK1NR w KQ - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": "So we play d4, seizing space and asking the knight awkward questions — the very reason we put the pawn on c6.",
+   "kind": "main",
+   "teaches": [
+    "d4 to gain space and harass the knight"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 355.5,
+   "fen": "rnbq1rk1/1p3ppp/2pb1n2/p3p3/N2p4/PP1P2PP/1BP1PPB1/R2QK1NR b KQ - 1 9",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "The knight to a4 is a natural-looking reaction in many openings, but here it's a classic blunder.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 371,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/pp2p3/N2p4/PP1P2PP/1BP1PPB1/R2QK1NR w KQ - 0 10",
+   "line": [
+    "b5"
+   ],
+   "spoken": "The punish is b5 — trapping the knight on a4. This resource is a genuine blind spot that even strong players miss on both sides of the board.",
+   "kind": "main",
+   "teaches": [
+    "...b5 traps the a4 knight"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 392.5,
+   "fen": "rnbq1rk1/1p3ppp/2pb1n2/p3p3/3p4/PPNP2PP/1BP1PPB1/R2QK1NR w KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 407,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/pp2p3/N2p4/PP1PP1PP/1BP2PB1/R2QK1NR b KQ - 0 10",
+   "line": [
+    "Na4",
+    "b5",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 424,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/p2p4/PP1PP1PP/1BP2PB1/R2QK1NR w KQ - 0 11",
+   "line": [
+    "bxa4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 440.5,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/p2p4/PP1PP1PP/1BP1NPB1/R2QK2R b KQ - 1 11",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 445,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/p7/PP1Pp1PP/1BP1NPB1/R2QK2R w KQ - 0 12",
+   "line": [
+    "dxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 448.5,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/p7/PP1PP1PP/1BP1N1B1/R2QK2R b KQ - 0 12",
+   "line": [
+    "fxe3"
+   ],
+   "spoken": "After the central tension resolves, the pawn on e3 becomes the juiciest target in White's camp.",
+   "kind": "main",
+   "teaches": [
+    "identify the weak target"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 455.5,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/8/Pp1PP1PP/1BP1N1B1/R2QK2R w KQ - 0 13",
+   "line": [
+    "axb3"
+   ],
+   "spoken": "We clear the queenside with axb3, and now White's d3 and e3 pawns are exposed, attackable targets.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 476,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/8/Pp1PP1PP/1BP1N1B1/R2Q1RK1 b - - 1 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 479.5,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/8/P2PP1PP/1Bp1N1B1/R2Q1RK1 w - - 0 14",
+   "line": [
+    "bxc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 482,
+   "fen": "rnbq1rk1/5ppp/2pb1n2/p3p3/8/P2PP1PP/1BQ1N1B1/R4RK1 b - - 0 14",
+   "line": [
+    "Qxc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 517,
+   "fen": "rnbq1rk1/5ppp/2pb4/p2np3/8/P2PP1PP/1BQ1N1B1/R4RK1 w - - 1 15",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight to d5 is a dream outpost, supported by that c6-pawn, and it clears the queen's road to g5 to pile onto the weakness — this is exactly what knights are for: attacking fixed targets.",
+   "kind": "main",
+   "teaches": [
+    "the c6-supported d5 outpost"
+   ]
+  },
+  {
+   "ply": 29,
+   "t": 557,
+   "fen": "rnbq1rk1/5ppp/2pb4/p2np3/3P4/P3P1PP/1BQ1N1B1/R4RK1 b - - 0 15",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 560.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P3n1PP/1BQ1N1B1/R4RK1 w - - 0 16",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 578,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P3n1PP/1B1QN1B1/R4RK1 b - - 1 16",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 587.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P5PP/1B1QN1n1/R4RK1 w - - 0 17",
+   "line": [
+    "Nxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 594.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P5PP/1B1QN1K1/R4R2 b - - 0 17",
+   "line": [
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 637,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P3n1PP/1B1QN1B1/R4RK1 b - - 1 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 642.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p3p3/3P4/P5PP/1B1QN1K1/R4R2 b - - 0 17",
+   "line": [
+    "Nxg2",
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 652.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p7/3p4/P5PP/1B1QN1K1/R4R2 w - - 0 18",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 672.5,
+   "fen": "rnbq1rk1/5ppp/2pb4/p7/3N4/P5PP/1B1Q2K1/R4R2 b - - 0 18",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 674,
+   "fen": "rnbq1rk1/5ppp/2pb4/p7/3p4/P5PP/1B1QN1K1/R4R2 w - - 0 18",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 684,
+   "fen": "rnbq1rk1/5ppp/2pb4/p7/3N4/P5PP/1B1Q2K1/R4R2 b - - 0 18",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 709,
+   "fen": "rnbq1rk1/5ppp/2p5/p3b3/3N4/P5PP/1B1Q2K1/R4R2 w - - 1 19",
+   "line": [
+    "Be5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 732.5,
+   "fen": "rnbq1rk1/5ppp/2p5/p3b3/3N4/P5PP/1B4K1/R1Q2R2 b - - 2 19",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 734.5,
+   "fen": "rnbq1rk1/5ppp/2p5/p7/3b4/P5PP/1B4K1/R1Q2R2 w - - 0 20",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 743,
+   "fen": "rnbq1rk1/5ppp/2p5/p7/3b4/P5PP/1B4K1/R1QR4 b - - 1 20",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 750,
+   "fen": "rnbq1rk1/5ppp/8/p1p5/3b4/P5PP/1B4K1/R1QR4 w - - 0 21",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 762.5,
+   "fen": "rnbq1rk1/5ppp/8/p1p5/3B4/P5PP/6K1/R1QR4 b - - 0 21",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 765,
+   "fen": "rn1q1rk1/1b3ppp/8/p1p5/3B4/P5PP/6K1/R1QR4 w - - 1 22",
+   "line": [
+    "Bb7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 770,
+   "fen": "rn1q1rk1/1b3ppp/8/p1p5/3B4/P5PP/7K/R1QR4 b - - 2 22",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 771,
+   "fen": "rn1q1rk1/1b3ppp/8/p7/3p4/P5PP/7K/R1QR4 w - - 0 23",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 773.5,
+   "fen": "rn1q1rk1/1b3ppp/8/p1p5/3B4/P5PP/7K/R1QR4 b - - 2 22",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 777.5,
+   "fen": "rn1q1rk1/1b3ppp/8/p7/3p4/P5PP/7K/R1QR4 w - - 0 23",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 781,
+   "fen": "rn1q1rk1/1b3ppp/8/p7/3p4/P5PP/7K/R1Q3R1 b - - 1 23",
+   "line": [
+    "Rg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 783.5,
+   "fen": "rn1qr1k1/1b3ppp/8/p7/3p4/P5PP/7K/R1Q3R1 w - - 2 24",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 793.5,
+   "fen": "rn1qr1k1/1b3ppp/8/p7/3p1Q2/P5PP/7K/R5R1 b - - 3 24",
+   "line": [
+    "Qf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 795,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P5PP/4r2K/R5R1 w - - 4 25",
+   "line": [
+    "Re2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 814.5,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P5PP/4r1RK/R7 b - - 5 25",
+   "line": [
+    "Rg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 815.5,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P5PP/6rK/R7 w - - 0 26",
+   "line": [
+    "Rxg2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 818.5,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P5rP/8/R6K w - - 0 27",
+   "line": [
+    "Kh1",
+    "Rxg3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 831.5,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P6P/6rK/R7 w - - 2 28",
+   "line": [
+    "Kh2",
+    "Rg2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 834,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P6P/6r1/R6K b - - 3 28",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 835,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1Q2/P6P/5r2/R6K w - - 4 29",
+   "line": [
+    "Rf2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 837,
+   "fen": "rn1q2k1/1b3ppp/8/p7/3p1r2/P6P/8/R5K1 w - - 0 30",
+   "line": [
+    "Kg1",
+    "Rxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 845,
+   "fen": "rn4k1/1b3ppp/8/p5q1/3p1r2/P6P/8/1R4K1 w - - 2 31",
+   "line": [
+    "Rb1",
+    "Qg5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 850.5,
+   "fen": "rn4k1/1b3ppp/8/p7/3p1r2/P6P/6qK/1R6 w - - 4 32",
+   "line": [
+    "Kh2",
+    "Qg2#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 851.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/PP4PP/2PPPPB1/RNBQK1NR b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1003,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1005.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P4P1/P1PPPP1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1010,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1011.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1013.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1016.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1019.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1021,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/8/1P2P3/PBPP1PPP/RN1QK1NR b KQkq - 2 4",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1024.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1025.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2PN2/PBPP1PPP/RN1QKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1029.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/4p3/1P2PN2/PBPP1PPP/RN1QKB1R w KQkq - 0 5",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1031,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3Np3/1P2P3/PBPP1PPP/RN1QKB1R b KQkq - 1 5",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1036.5,
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3np3/1P2P3/PBPP1PPP/RN1QKB1R w KQkq - 0 6",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1038.5,
+   "fen": "r1bqkb1r/ppp2ppp/5n2/3p4/3Bp3/1P2P3/P1PP1PPP/RN1QKB1R w KQkq - 0 7",
+   "line": [
+    "Bxd4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1044.5,
+   "fen": "r1bqkb1r/ppp2ppp/5n2/3p4/2PBp3/1P2P3/P2P1PPP/RN1QKB1R b KQkq - 0 7",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1050.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1053,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2PN2/PBPP1PPP/RN1QKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1054.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/4p3/8/1P2PN2/PBPP1PPP/RN1QKB1R w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1061.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/4p3/3P4/1P2PN2/PBP2PPP/RN1QKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1063.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3Pp3/1P2PN2/PBP2PPP/RN1QKB1R w KQkq - 0 6",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1066,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3p4/3Pp3/1P2P3/PBPN1PPP/RN1QKB1R w KQkq - 0 7",
+   "line": [
+    "Nfd2",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1071,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1075,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1090.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 4 4",
+   "line": [
+    "Bc1",
+    "Nb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1094.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/PP4P1/2PPPP1P/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "a3",
+    "d5",
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1095.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/PP4P1/2PPPP1P/RNBQKBNR w KQkq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1099.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/PP4P1/2PPPP1P/RNBQKBNR b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1101.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/PP4PP/2PPPP2/RNBQKBNR w KQkq - 0 7",
+   "line": [
+    "Nf6",
+    "h3",
+    "c6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

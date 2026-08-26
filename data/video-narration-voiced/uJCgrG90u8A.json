@@ -1,0 +1,607 @@
+{
+ "videoId": "uJCgrG90u8A",
+ "title": "Beginner To Master | Viewer Games | Chess Speedrun",
+ "openingName": "Sicilian Defense: Najdorf Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:uJCgrG90u8A",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 25,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "We answer the king-pawn with the Sicilian and head for the Najdorf, my main opening from 1600 all the way to 2500.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 26.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 57,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "For the 1400-1500 crowd I'd recommend the Accelerated Dragon, but here we go for the Najdorf itself, starting with the little d6.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 63,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "He opens with d4, the Open Sicilian, and after the trades we reach the tabiya.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 64.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 66.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 71.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 74,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Now the move that defines it: a6, the Najdorf. Its simple purpose is to take the b5-square away — no bishop or knight check on b5 — and to prepare a later b7-b5, grabbing queenside space, an idea that runs through almost every Sicilian.",
+   "kind": "main",
+   "teaches": [
+    "Najdorf: ...a6 controls b5 and prepares ...b5"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 116.5,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N2P2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "f3"
+   ],
+   "spoken": "He chooses f3, the English Attack — the signal that he's going to castle long and storm my king with his pawns.",
+   "kind": "main",
+   "teaches": [
+    "English Attack: f3 prepares queenside castling and a kingside pawn storm"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 159,
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N2P2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "And here's the move I grew up on: e5, kicking the knight. The downside is obvious — it weakens the d6-pawn and gouges a permanent hole on d5. The pawn and the square in front of it go weak together, as they so often do.",
+   "kind": "main",
+   "teaches": [
+    "A pawn push weakens the square in front of it",
+    "...e5 in the Najdorf concedes d5 for dynamic play"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 188,
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 1 7",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "He retreats the knight to b3. What Black gets for that weak pawn and weak square is dynamic, concrete counterplay — that's exactly why the Sicilian is so sharp and theoretical.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 223,
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R w KQkq - 2 8",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "First we solve our light-squared bishop, developing it to e6 to lend cover to d5, so he can't just plant a knight there and blockade.",
+   "kind": "main",
+   "teaches": [
+    "Cover the weak square before the opponent occupies it"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 238,
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p1B1/4P3/1NN2P2/PPP3PP/R2QKB1R b KQkq - 3 8",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "He pins with the bishop to g5 — not actually the main move; Be3 is. And that misplaced bishop is going to cost him dearly, because it sits right where his own g-pawn wants to go.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 270.5,
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p1B1/4P3/1NN2P2/PPP3PP/R2QKB1R w KQkq - 4 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "We simply unpin by developing the bishop to e7. Note we avoid h6: that pawn would become a hook his g-pawn could latch onto once we castle short, so we keep our kingside pawns intact.",
+   "kind": "main",
+   "teaches": [
+    "Don\\u2019t create a pawn hook in front of your king"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 284,
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/R3KB1R b KQkq - 5 9",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 286,
+   "fen": "r2qk2r/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/R3KB1R w KQkq - 6 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The queen-knight reroutes to d7, where the two knights defend one another — the classic Najdorf configuration.",
+   "kind": "main",
+   "teaches": [
+    "The b8-knight belongs on d7 in this structure"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 289,
+   "fen": "r2qk2r/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/2KR1B1R b kq - 7 10",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "He castles queenside; we castle short. Opposite wings — now the race is on, each side storming the other's king.",
+   "kind": "main",
+   "teaches": [
+    "Opposite-side castling means a pawn-storm race"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 292,
+   "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/2KR1B1R w - - 8 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 314,
+   "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p1B1/4P2P/1NN2P2/PPPQ2P1/2KR1B1R b - - 0 11",
+   "line": [
+    "h4"
+   ],
+   "spoken": "He starts the storm with h4, intending g4-g5 to pry my king open. We answer on the other flank.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 347.5,
+   "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p1B1/4P2P/1NN2P2/PPPQ2P1/2KR1B1R w - - 0 12",
+   "line": [
+    "b5"
+   ],
+   "spoken": "This is where a6 pays off: we counterattack with b5, and both sides are charging on opposite sides of the board. My follow-up is b4, a5, a4.",
+   "kind": "main",
+   "teaches": [
+    "Race the opponent\\u2019s attack with your own — tempo is everything"
+   ]
+  },
+  {
+   "ply": 23,
+   "t": 376.5,
+   "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p1B1/4P1PP/1NN2P2/PPPQ4/2KR1B1R b - - 0 12",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 396,
+   "fen": "r2q1rk1/3nbppp/p2pbn2/4p1B1/1p2P1PP/1NN2P2/PPPQ4/2KR1B1R w - - 0 13",
+   "line": [
+    "b4"
+   ],
+   "spoken": "We push b4, hitting his knight — and watch how much time that stranded g5-bishop costs him: it blocks his g-pawn, so the storm he wanted in one move now takes several.",
+   "kind": "main",
+   "teaches": [
+    "A misplaced bishop that blocks your own pawn storm loses crucial tempi"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 403.5,
+   "fen": "r2q1rk1/3nbppp/p2pbn2/3Np1B1/1p2P1PP/1N3P2/PPPQ4/2KR1B1R b - - 1 13",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "He drops the knight into d5. We don't let it marinate on such a fine square.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 443,
+   "fen": "r2q1rk1/3nbppp/p2p1n2/3bp1B1/1p2P1PP/1N3P2/PPPQ4/2KR1B1R w - - 0 14",
+   "line": [
+    "Bxd5"
+   ],
+   "spoken": "And we take with the bishop, not the knight — because recapturing with the knight lets him take back and trap our e6-bishop, while his g5-bishop stays defended by the h-pawn.",
+   "kind": "main",
+   "teaches": [
+    "Choose the recapture that doesn\\u2019t leave a piece trapped"
+   ]
+  },
+  {
+   "ply": 27,
+   "t": 451,
+   "fen": "r2q1rk1/3nbppp/p2p1n2/3Pp1B1/1p4PP/1N3P2/PPPQ4/2KR1B1R b - - 0 14",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "After he recaptures, that d5-pawn is like a dental filling: it closes the center and walls off our weak d6-pawn from the d-file, sealing the very weakness he was pressuring.",
+   "kind": "main",
+   "teaches": [
+    "A closed center can neutralize your own structural weakness"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 465.5,
+   "fen": "r2q1rk1/3nbppp/3p1n2/p2Pp1B1/1p4PP/1N3P2/PPPQ4/2KR1B1R w - - 0 15",
+   "line": [
+    "a5"
+   ],
+   "spoken": "With the center shut, we roll on with a5 and a4 — pure, sharp Najdorf, which fits my style like a glove.",
+   "kind": "main"
+  },
+  {
+   "ply": 29,
+   "t": 484,
+   "fen": "r2q1rk1/3nbppp/3p1n2/p2Pp1B1/1p4PP/1N3P2/PPPQ4/1K1R1B1R b - - 1 15",
+   "line": [
+    "Kb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 485,
+   "fen": "r2q1rk1/3nbppp/3p1n2/3Pp1B1/pp4PP/1N3P2/PPPQ4/1K1R1B1R w - - 0 16",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 489.5,
+   "fen": "r2q1rk1/3nbppp/3p1n2/3Pp1B1/pp4PP/5P2/PPPQ4/1KNR1B1R b - - 1 16",
+   "line": [
+    "Nc1"
+   ],
+   "spoken": "He tucks the king toward safety, but we're a step ahead in the race. Now we bring in the beef — pawns alone won't break through; the pieces have to join.",
+   "kind": "main",
+   "teaches": [
+    "A pawn storm needs pieces behind it to break through"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 518,
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1B1/pp4PP/5P2/PPPQ4/1KNR1B1R w - - 2 17",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "The queen swings to b6, sidestepping while it connects the rooks and clears the way for a rook to c8.",
+   "kind": "main"
+  },
+  {
+   "ply": 33,
+   "t": 536.5,
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/pp4P1/5P2/PPPQ4/1KNR1B1R b - - 0 17",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 541,
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/p5P1/1p3P2/PPPQ4/1KNR1B1R w - - 0 18",
+   "line": [
+    "b3"
+   ],
+   "spoken": "Now b3 — we sacrifice a pawn to blast open the files around his king.",
+   "kind": "main",
+   "teaches": [
+    "Sacrifice pawns to open lines toward the enemy king"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 547.5,
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1p3P2/PP1Q4/1KNR1B1R w - - 0 19",
+   "line": [
+    "cxb3",
+    "axb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 550.5,
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/PP1Q4/1K1R1B1R b - - 0 19",
+   "line": [
+    "Nxb3"
+   ],
+   "spoken": "We crash through on b3, opening the b-file, and prepare a frontal assault against the exposed king.",
+   "kind": "main"
+  },
+  {
+   "ply": 38,
+   "t": 584,
+   "fen": "5rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/rP1Q4/1K1R1B1R w - - 0 20",
+   "line": [
+    "Rxa2"
+   ],
+   "spoken": "The exchange sacrifice on a2 — cutting the legs out from under his knight and ripping the a-file wide open.",
+   "kind": "main"
+  },
+  {
+   "ply": 39,
+   "t": 596,
+   "fen": "5rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/KP1Q4/3R1B1R b - - 0 20",
+   "line": [
+    "Kxa2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 597,
+   "fen": "r5k1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/KP1Q4/3R1B1R w - - 1 21",
+   "line": [
+    "Ra8+"
+   ],
+   "spoken": "Ra8+ chases the king, then we scoop the knight back with the queen. And the key lesson: sacrifices live on a sliding scale — an exchange sac is nothing like a queen sac. Even if the attack fizzles we're only down the exchange, so there's no reason to be scared.",
+   "kind": "main",
+   "teaches": [
+    "Sacrifices exist on a sliding scale — risk the exchange freely"
+   ]
+  },
+  {
+   "ply": 42,
+   "t": 651,
+   "fen": "r5k1/3nbppp/3p1n2/3Pp1BP/6P1/1q3P2/1P1Q4/1K1R1B1R w - - 0 22",
+   "line": [
+    "Kb1",
+    "Qxb3"
+   ],
+   "spoken": "Look how many attackers we have. Even the d7-knight, seemingly outside the zone, comes roaring in with Nc5. The Najdorf poses very human problems that are hard to defend at the board.",
+   "kind": "plan",
+   "plans": [
+    "Bring the d7-knight in via c5",
+    "Pile every piece onto the open king"
+   ]
+  },
+  {
+   "ply": 43,
+   "t": 723,
+   "fen": "r5k1/3nbppp/3p1n2/3Pp1BP/6P1/1qQ2P2/1P6/1K1R1B1R b - - 1 22",
+   "line": [
+    "Qc3"
+   ],
+   "spoken": "He plays Qc3 to trade queens, but that lifts the defender off his d1-rook.",
+   "kind": "main",
+   "teaches": [
+    "Beware trades that undefend a piece"
+   ]
+  },
+  {
+   "ply": 44,
+   "t": 739,
+   "fen": "r5k1/3nbppp/3p1n2/3qp1BP/6P1/2Q2P2/1P6/1K1R1B1R w - - 0 23",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": "We collect on d5 — up a piece, his position collapsing. The game is over.",
+   "kind": "main"
+  },
+  {
+   "ply": 45,
+   "t": 755,
+   "fen": "r5k1/3nbppp/3p1n2/3qp2P/6P1/2Q2P2/1P6/1KBR1B1R b - - 1 23",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 775.5,
+   "fen": "r5k1/3nbppp/3p4/3np2P/6P1/5P2/1P1Q4/1KBR1B1R w - - 1 25",
+   "line": [
+    "Qd2",
+    "Qxd2",
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 846.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": "With a knight loitering next to his open king, we finish with the fork. Clean game.",
+   "kind": "review",
+   "teaches": [
+    "A knight near an exposed king is a forking weapon"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 952.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 955,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 956,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1027,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1036.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1040,
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1043,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1044,
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1052,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1055,
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1069,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "Ba6",
+    "Bc8",
+    "Bf1",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1089.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1095,
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

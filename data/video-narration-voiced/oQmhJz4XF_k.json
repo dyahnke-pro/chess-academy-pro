@@ -1,0 +1,139 @@
+{
+ "videoId": "oQmhJz4XF_k",
+ "title": "Magnus Carlsen Vs Wesley So | FTX Crypto Finals Commentary",
+ "openingName": "Sicilian Defense: Moscow Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:oQmhJz4XF_k",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1074.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Black meets the king-pawn with c5 — the Sicilian, the great fighting reply when Black wants an unbalanced game rather than a symmetrical one.",
+   "kind": "main",
+   "teaches": [
+    "The Sicilian unbalances the game from move one"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 1077.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White develops the knight to f3, the natural Open Sicilian move-order — but he has a quieter idea in mind than d4.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 1080.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "line": [
+    "d6",
+    "Bb5+"
+   ],
+   "spoken": "There it is — the bishop checks from b5, the Moscow Variation. White sidesteps the sharp theory of the Open Sicilian and steers for a calmer, positional game.",
+   "kind": "main",
+   "teaches": [
+    "Bb5+ is the Moscow — a positional anti-Sicilian"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1083.5,
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Black has three ways to block the check, and the choice is a statement of intent. Dropping the bishop to d7 offers a trade and the peaceful road; the knight to d7, the combative one — it keeps the pieces on and plays for a win. Black takes the fighting square.",
+   "kind": "main",
+   "teaches": [
+    "How you meet Bb5+ chooses between a peaceful and a fighting game"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 1098.5,
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White simply castles, tucking the king away and keeping the tension. The engine calls the position dead level — a classic, slow Moscow middlegame is brewing.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 1104.5,
+   "fen": "r1bqkb1r/pp1npppp/3p1n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black develops the knight to f6, hitting the centre and completing the kingside pieces.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 1107.5,
+   "fen": "r1bqkb1r/pp1npppp/3p1n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 5 5",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook lifts to e1, backing the e-pawn and readying the centre. Nothing forcing — both sides are just improving, and the balance holds.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 1110.5,
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Black nudges the pawn to a6, putting the question to the bishop and gaining a little queenside space in the bargain.",
+   "kind": "main",
+   "teaches": [
+    "...a6 questions the bishop and claims queenside space"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1116.5,
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/2p5/4P3/5N2/PPPP1PPP/RNBQRBK1 b kq - 1 6",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": "Rather than trade on d7 or sidle to a4, the bishop retreats all the way to f1. It keeps the bishop pair and stays flexible — and here the engine even gives Black the whisper of an edge, exactly the sort of slow pull Black was fighting for.",
+   "kind": "main",
+   "teaches": [
+    "Retreat to keep a flexible bishop rather than trade it off"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 1125.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "line": [],
+   "spoken": "On the recap: this is the Moscow, and the fork in the road was that check on b5. The bishop back to d7 is the peaceful choice — a quick trade and a quiet game; the knight to d7 keeps everything on the board and plays for the full point.",
+   "kind": "review"
+  },
+  {
+   "ply": 6,
+   "t": 1135,
+   "fen": "rn1qkbnr/pp1bpppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Take the peaceful line with the bishop to d7. From here White can push d4 and transpose into an Open-Sicilian hedgehog, a cramped-but-springy structure; or clamp the centre with c4, the Maroczy bind, trading winning chances for a lasting space grip. The choice sets the whole character of the game.",
+   "kind": "review",
+   "teaches": [
+    "d4 gives a hedgehog; c4 is the space-gaining Maroczy bind"
+   ]
+  }
+ ]
+}

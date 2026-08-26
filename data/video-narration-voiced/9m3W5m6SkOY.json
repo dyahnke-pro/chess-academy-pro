@@ -1,0 +1,243 @@
+{
+ "videoId": "9m3W5m6SkOY",
+ "title": "Refuting Unsound Attacks | Sicilian Defense: Tal Gambit | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defense: McDonnell (f4) — Tal Gambit refutation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:9m3W5m6SkOY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Our patented Sicilian again.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 37.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White lunges with f4 — a legitimate but slightly dubious try, because it invites an immediate central strike.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 60.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We punish it with d5 at once. This is precisely why the Grand Prix Attack is supposed to start with the knight to c3 — to stop this very move. Skip it, and d5 is the refutation.",
+   "kind": "main",
+   "teaches": [
+    "d5 punishes an early f4"
+   ]
+  },
+  {
+   "ply": 2,
+   "t": 64.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 72.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "f4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 99,
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "After the capture we do NOT slide into a Scandinavian with the queen — that would throw away the whole point of d5.",
+   "teaches": [
+    "don’t recapture with the queen here"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 101.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "Instead the knight to f6. White can't just hold the extra pawn with c4, because e6 undermines it and Black gets tremendous positional compensation — in fact the better game.",
+   "kind": "main",
+   "teaches": [
+    "e6 undermines a c4 pawn-grab"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 132.5,
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/5P2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "So we safely recapture on d5, and here the queen would sit far more securely than in a normal Scandinavian — White has no second knight to hit it from c3.",
+   "kind": "main",
+   "teaches": [
+    "the point: no Nc3 available to harass the queen"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 155,
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/2B2P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The f4-pawn hangs, but grabbing it isn't the spirit of the line. The prudent move is to drop the knight back to b6 — after which a later c4 nearly traps the bishop and forces an awkward check. And we're glad to keep White's dark-squared bishop terrible, hemmed in by its own f4-pawn.",
+   "kind": "main",
+   "teaches": [
+    "don’t contort for a pawn you want left on the board"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 244,
+   "fen": "rnbqkb1r/pp2pppp/1n6/2p5/2B2P2/2N5/PPPP2PP/R1BQK1NR w KQkq - 2 6",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": "The knight to b6 is the practical choice, forcing the bishop to decide. That f4-pawn is actually in our favor — it dries up White's kingside and buries his bishop — and we own the d4-square, which is the whole job of the c5-pawn.",
+   "kind": "main",
+   "teaches": [
+    "a cramping enemy pawn can be your asset"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 301.5,
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "Out comes the sacrifice on f7 — not entirely stupid, but just as clearly unsound. These are exactly the tries people struggle to refute, so let's do it cleanly.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 323,
+   "fen": "rnbq1b1r/pp2pkpp/1n6/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R b KQ - 1 7",
+   "line": [
+    "Kxf7",
+    "Nf3"
+   ],
+   "spoken": "We take, and the refutation is castling by hand. Since the king has moved we build the shelter from scratch — clear the bishop, swing a rook to f8, tuck the king to g8. Short term, the f3-knight eyes e5, but any knight check we simply answer by stepping the king to g8; we only avoid the blunder of the bishop to g4.",
+   "kind": "plan",
+   "teaches": [
+    "manual castling",
+    "answer the checks, avoid Bg4"
+   ],
+   "plans": [
+    "develop the kingside, then Rf8 and Kg8"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 444,
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "g6"
+   ],
+   "spoken": "g6 is the classy move — get the kingside out so the king feels safe. There's no rush to develop the other knight yet.",
+   "kind": "main",
+   "teaches": [
+    "safety first when up a piece"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 447.5,
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 b - - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 451.5,
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 w - - 2 9",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The bishop to g7, and even a knight check we'd meet calmly, because White is simply out of attackers — the c1-bishop is buried and the c3-knight has no prospects. Next comes the rook to f8 and the manual castling is complete.",
+   "kind": "main",
+   "teaches": [
+    "count the attackers — the defense holds"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 494.5,
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p2P2/8/2N2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "f5"
+   ],
+   "spoken": "White has to throw in f5 to keep any hope alive; its point is to rip open the file. Taking with the bishop plays into his hands — it runs into g4 and a crushing double check. If we capture, we capture with the pawn.",
+   "kind": "main",
+   "teaches": [
+    "open-file sac: capture with the pawn, not the bishop"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 668.5,
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/8/2N2N2/PPPP2PP/R1BQ1RK1 w - - 0 10",
+   "line": [
+    "gxf5"
+   ],
+   "spoken": "So we take with the pawn — the principled choice. Don't fear ghosts: if there's no forced mate, an uncomfortable-looking king is nothing to be afraid of.",
+   "kind": "main",
+   "teaches": [
+    "no forced mate means no reason to panic"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 671.5,
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "g4"
+   ],
+   "spoken": "g4 just loses on the spot — pure trickery — so of course we don't take it.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 687.5,
+   "fen": "rnbq1r2/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 w - - 1 11",
+   "line": [
+    "Rf8"
+   ],
+   "spoken": "We follow through with the rook to f8: castling by hand is complete, and the win won't be far behind.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 699.5,
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

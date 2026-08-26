@@ -232,12 +232,37 @@ Ship a test that proves a voiced note comes OUT by position:
 `secondaryNotesForFen(fen)` returns a `vc-` note for real positions (the KIA
 d2-knight note included).
 
+### 🔒 VOICED IS THE SOLE EXACT-POSITION NARRATION ON THE COACH TAB (David 2026-08-26)
+
+The coach tab was cleaned up so the new voiced (hand-authored, board-true,
+exact-position) notes are the *only* thing spoken about the board in front of
+the student, and the old generated/farmed narration can't mix in:
+
+- **Generic teach bake RETIRED.** `src/data/walkthrough-narrations.json` (the
+  LLM-reworded-from-transcript bake, `bakedNarrationFor`) is archived to
+  `data/archive/` and its dataset emptied — board-anchored but *generated*, and
+  superseded by the voiced walkthroughs (§2) which serve teach directly.
+- **Anchored FARMED notes ARCHIVED.** Every farmed-corpus note with a `lineSan`
+  (~6,738: danya/chessbrah/hangingpawns/saintlouis/hikaru/imrosen) was moved to
+  `data/archive/corpus-anchored/`. The farmed corpora now ship **floating notes
+  only**; voiced (560, growing) is the sole exact-position corpus.
+- **Floating notes are FENCED to tactics + endgame ONLY.** They no longer fire
+  on any play surface — teach, read-position, free-play, review, or phase-
+  transition narration. `teachingSourceForBoard` is exact-position only (the
+  opening-family / structure / concept tiers are removed); the floating corpus
+  is reached solely through `tacticNoteForPuzzleThemes` (tactics drill) and
+  `endgameNoteForLesson` (endgame lessons). `noteAtPosition` was always
+  floating-free (a floating note has no line to FEN-index).
+  Kept deliberately: `buildDanyaTeachingBlock`'s detector-driven live-tactic
+  concept tier (David 2026-08-07).
+- Gate: `voicedCorpus.integration.test.ts` proves a voiced note comes OUT of
+  `noteAtPosition` + `teachingSourceForBoard(origin='position')` per play
+  surface, and that a floating note never does.
+
 ### Tier 1 (baked) vs Tier 2 (corpus) — don't confuse them
 Free-play / review read the **corpus** (Tier 2, note-driven), which is what §4
-wires. **Tier-1 baked** (`src/data/walkthrough-narrations.json` via
-`bakedNarrationFor`) is a different path used by the teach *generator* only;
-the voiced walkthroughs already serve teach directly (§2), so promoting voiced
-beats into Tier-1 baked is low-value. Do it only if explicitly asked.
+wires. The old Tier-1 baked teach path (`walkthrough-narrations.json`) is
+retired per the note above.
 
 ---
 

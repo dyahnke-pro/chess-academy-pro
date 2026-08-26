@@ -1,0 +1,133 @@
+{
+ "videoId": "kvpSIPdCvmw",
+ "title": "Never Play F6! | Master Class | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:kvpSIPdCvmw",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 277.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": "The Danish Gambit — d4 and e4, offering pawns to blast the position open for lightning-fast development.",
+   "kind": "main",
+   "teaches": [
+    "the Danish Gambit idea"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 280,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "A warning the whole title is built on — never play ...f6 in these open positions. The Damiano refutation runs on it: after ...f6 White has a queen check on h5, and the pawn stuck on e5 gets forked by the queen, hitting king and rook at once — a sacrifice as old as the 17th century.",
+   "teaches": [
+    "never ...f6: the Qh5 / Qxe5 fork"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 585,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c3",
+    "dxc3"
+   ],
+   "spoken": "We offer the second pawn with c3, and Black grabs it.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 586,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop swings to c4, raking straight at f7.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 587,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/Pp3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "cxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 588,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "And the second Danish bishop lands on b2 — now both bishops cut clear across the board at Black's king, the whole point of the double pawn sacrifice.",
+   "kind": "main",
+   "teaches": [
+    "the two raking Danish bishops"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 597.5,
+   "fen": "rnbqk1nr/pppp1ppp/8/8/1bB1P3/8/PB3PPP/RN1QK1NR w KQkq - 1 6",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "Black's bishop check on b4 is the computer's best try, though the theory runs deep and Black must be very accurate to hold — which shouldn't stop you playing the gambit at all.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 618,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": "Play with gambit mentality — once you've committed to a gambit, be ready to give up more than the initial pawn. Snatching material back with a move like Qxd4 the moment your e-pawn is hit would be inconsistent with the whole idea.",
+   "teaches": [
+    "gambit mentality: consistency over grabbing back"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 669,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 671.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "Bc4",
+    "cxb2",
+    "Bxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 672.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3p4/2B1P3/8/PB3PPP/RN1QK1NR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The classical antidote for Black, recommended for over a century, is d5 — giving one pawn straight back to open lines and speed his own development.",
+   "teaches": [
+    "...d5 give-back against the Danish"
+   ],
+   "reanchor": true
+  }
+ ]
+}

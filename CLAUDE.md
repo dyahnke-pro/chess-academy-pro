@@ -2667,6 +2667,31 @@ exists to close, and to keep closed.
   to speak.
 - **Kid surfaces** — permanently EXCLUDED by contract. Do not wire them.
 
+**🔒🔒 UPDATE 2026-08-26 — FLOATING NOTES ARE FENCED TO TACTICS + ENDGAME ONLY;
+VOICED IS THE SOLE EXACT-POSITION SOURCE ON THE PLAY SURFACES (David, emphatic:
+"make sure I hear no floating notes in the play surfaces — make them stay where
+they belong").** The every-surface-gets-the-corpus contract above still holds,
+but WHICH notes each surface may speak is now split by anchoring:
+- **Floating notes** (no `lineSan` → no exact position) fire ONLY on the
+  **tactics drill** (`tacticNoteForPuzzleThemes`) and **endgame lessons**
+  (`endgameNoteForLesson`) — where geometry-free pattern teaching belongs. They
+  NO LONGER fire on teach / read-position / free-play / review / phase-
+  transitions. `teachingSourceForBoard` is exact-position ONLY (the opening-
+  family / structure / concept tiers were removed); `noteAtPosition` was always
+  floating-free. Kept: `buildDanyaTeachingBlock`'s detector-driven live-tactic
+  concept tier (David 2026-08-07).
+- **Exact-position narration** on the play surfaces now comes SOLELY from the
+  hand-authored **voiced** corpus (`vc-`, board-truth-verified). The old farmed
+  ANCHORED notes (~6,738, any farmed note with a `lineSan`) were archived to
+  `data/archive/corpus-anchored/`; the farmed corpora ship floating-only. The
+  LLM-reworded generic teach bake (`walkthrough-narrations.json` /
+  `bakedNarrationFor`) is retired (archived, dataset emptied).
+- Consequence, accepted: until the voiced corpus grows, the play surfaces are
+  quiet where voiced has no note yet — silence > a farmed/borrowed note about a
+  different board. Gate: `voicedCorpus.integration.test.ts` (a voiced note comes
+  OUT of `noteAtPosition` + `teachingSourceForBoard(origin='position')` per play
+  surface; a floating note never does).
+
 **Use the existing retrieval, never a new one.** `teachingNoteForBoard`
 (exact position → prefix → opening family → structure → concept) and
 `transitionTeachingForGame` are the reference implementations; they are already

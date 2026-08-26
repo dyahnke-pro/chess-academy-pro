@@ -1,0 +1,310 @@
+{
+ "videoId": "cdEASsRLWcg",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1420",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:cdEASsRLWcg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 14.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 17,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 20.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White tries a Bg5 line against our King's Indian.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 27,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQ - 4 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 29,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2PPP3/2N5/PP3PPP/R2QKBNR b KQ - 0 5",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 40,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP3PPP/R2QKBNR w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 42.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPPP2/2N5/PP4PP/R2QKBNR b KQ - 0 6",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White builds a huge pawn front. That's the hypermodern bargain — we cede the center on purpose, attack it from a distance with our pieces, and only claim the center ourselves when WE are ready.",
+   "kind": "main",
+   "teaches": [
+    "hypermodern: cede the center, then strike it"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 65.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p3B1/2PPPP2/2N5/PP4PP/R2QKBNR w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Now the strike — c5. It looks like White is winning, but Black is already better: White has overextended, his pieces are uncoordinated, and when we hit the center we mean business.",
+   "kind": "main",
+   "teaches": [
+    "strike when the big center is overextended"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 75,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p1P1B1/2PP1P2/2N5/PP4PP/R2QKBNR b KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "White pushes e5, attacking our knight.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 86,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/4P1B1/2Pp1P2/2N5/PP4PP/R2QKBNR w KQ - 0 8",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "The key move order — we take on d4 first.",
+   "kind": "main",
+   "teaches": [
+    "insert the zwischenzug ...cxd4"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 89.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1Pp1/6B1/2Pp1P2/2N5/PP4PP/R2QKBNR b KQ - 0 8",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "White grabs the knight with the pawn on f6...",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 105,
+   "fen": "rnbq1rk1/pp3pbp/3p1pp1/6B1/2Pp1P2/2N5/PP4PP/R2QKBNR w KQ - 0 9",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "...but we recapture, and now we're a pawn up, attacking two pieces at once with an open avenue straight at his king.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 146.5,
+   "fen": "rnbq1rk1/pp3pbp/3p1Bp1/8/2Pp1P2/2N5/PP4PP/R2QKBNR b KQ - 0 9",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 156.5,
+   "fen": "rnbq1rk1/pp3p1p/3p1bp1/8/2Pp1P2/2N5/PP4PP/R2QKBNR w KQ - 0 10",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "We recapture with the bishop, keeping our King's-Indian bishop alive — taking with the queen would allow a knight to f5 harassing it.",
+   "kind": "main",
+   "teaches": [
+    "keep the queen for better duties"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 159,
+   "fen": "rnbq1rk1/pp3p1p/3p1bp1/8/2PpNP2/8/PP4PP/R2QKBNR b KQ - 1 10",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 170,
+   "fen": "rnbqr1k1/pp3p1p/3p1bp1/8/2PpNP2/8/PP4PP/R2QKBNR w KQ - 2 11",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "The rook to e8 piles onto the knight on e4.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 183.5,
+   "fen": "rnbqr1k1/pp3p1p/3p1bp1/8/2PpNP2/5N2/PP4PP/R2QKB1R b KQ - 3 11",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 186.5,
+   "fen": "rnbq2k1/pp3p1p/3p1bp1/8/2PprP2/5N2/PP4PP/R2QKB1R w KQ - 0 12",
+   "line": [
+    "Rxe4+"
+   ],
+   "spoken": "And we win it with check, the rook capturing on e4.",
+   "kind": "main"
+  },
+  {
+   "ply": 23,
+   "t": 189,
+   "fen": "rnbq2k1/pp3p1p/3p1bp1/8/2PprP2/5N2/PP2B1PP/R2QK2R b KQ - 1 12",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 214.5,
+   "fen": "rnb3k1/pp2qp1p/3p1bp1/8/2PprP2/5N2/PP2B1PP/R2QK2R w KQ - 2 13",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The queen to e7 kills two birds — it stops him from castling AND builds pressure down the e-file toward e5.",
+   "kind": "main",
+   "teaches": [
+    "one move, two purposes"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 251,
+   "fen": "rnb3k1/pp2qp1p/3p1bp1/8/2Pp1P2/4rN2/PP1QB1PP/R3K2R w KQ - 4 14",
+   "line": [
+    "Qd2",
+    "Re3"
+   ],
+   "spoken": "The rook to e3 attacks the queen, and then — never forget pawns as attackers...",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 270,
+   "fen": "rnb3k1/pp2qp1p/3p1bp1/8/2P2P2/3prN2/PP1QB1PP/R4RK1 w - - 0 15",
+   "line": [
+    "O-O",
+    "d3"
+   ],
+   "spoken": "...the pawn crashes in to d3 and wins the bishop; castling comes too late to save him.",
+   "kind": "main",
+   "teaches": [
+    "pawns are full participants in the attack"
+   ]
+  },
+  {
+   "ply": 30,
+   "t": 277.5,
+   "fen": "rnb3k1/pp2qp1p/3p1bp1/8/2P2P2/4rN2/PP1Qp1PP/R3R1K1 w - - 0 16",
+   "line": [
+    "Rfe1",
+    "dxe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 299.5,
+   "fen": "r1b3k1/pp2qp1p/2np1bp1/8/2P2P2/4rN2/PP1Qp1PP/3RR1K1 w - - 2 17",
+   "line": [
+    "Rad1",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 303,
+   "fen": "r1b3k1/pp2qp1p/2np1bp1/8/2P2P2/4rN2/PP1Q2PP/3R2K1 b - - 0 18",
+   "line": [
+    "Rf1",
+    "exd1=N",
+    "Rxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 304.5,
+   "fen": "r5k1/pp2qp1p/2np1bp1/8/2P2Pb1/4rN2/PP1Q2PP/3R2K1 w - - 1 19",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 311.5,
+   "fen": "r5k1/pp2qp1p/2np1bp1/8/2P2Pb1/4r3/PP1Q2PP/3RN1K1 b - - 2 19",
+   "line": [
+    "Ne1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 370.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQ - 4 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

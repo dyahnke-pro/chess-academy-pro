@@ -7,8 +7,8 @@ import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevC
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
-import { detectTactics } from './tacticsDetector';
-import { spokenTacticNote, generalizedTeaching } from './danyaTeachingService';
+// (removed spokenTacticNote / generalizedTeaching — review no longer voices a
+// floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded } from './masterPlayLookup';
@@ -1018,14 +1018,6 @@ export function buildReviewSegments(
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once.
   let tradeIdeaSpoken = false;
-  // THE PATTERN THEY MISSED — one corpus note per game, on the student's worst
-  // error, teaching the tactic that was on the board when they went wrong.
-  // Review had NO corpus access at all across its 43 facet computers, which is
-  // the surface where a missed pattern is most teachable: the game is over, the
-  // stakes are gone, and the student is looking at the exact moment it cost
-  // them. Once per game, because a lesson repeated is a lesson ignored.
-  let patternNoteSpoken = false;
-  const patternNoteSeen = new Set<string>();
   // Per-GAME seed (stable within a game, different across games) — rotates the
   // dev-plan's lead idea + stem so the same opening never reads as the same
   // recording every game (David 2026-07-21: "the same response every time").
@@ -1390,39 +1382,13 @@ export function buildReviewSegments(
       if (concession) narration = `${narration} ${concession}`;
     }
     // THE CORPUS NOTE — the pattern that was live when the student erred. Only
-    // on THEIR blunders and mistakes (an inaccuracy rarely turns on a pattern),
-    // and only once per game. The note is geometry-free by construction: it
-    // teaches the shape, never this board's squares, because it was written
-    // about someone else's position.
-    if (
-      narration && !patternNoteSpoken && !m.isCoachMove &&
-      (m.classification === 'blunder' || m.classification === 'mistake')
-    ) {
-      // ONE ATTEMPT per game, not one SUCCESS. The flag used to trip only when
-      // a note was found, so a game with several blunders re-ran the detector
-      // and a 40-candidate corpus scan on every one of them — enough to time
-      // out the Opera Game review at 5s. Both calls are heavy and synchronous,
-      // and the beat is once-per-game either way, so the first flagged move is
-      // the only one that pays.
-      patternNoteSpoken = true;
-      try {
-        const types = detectTactics(fenPair.fenBefore).tactics
-          .map((t) => t.type)
-          .filter((t) => t !== 'none');
-        const hit = types.length > 0
-          ? spokenTacticNote({ types, phase: 'middlegame', seenIds: patternNoteSeen, fen: fenPair.fenBefore })
-          : null;
-        // FRAMED, not appended bare. The tactic TYPE is real here — it came
-        // from `detectTactics` on this very position — but the note is
-        // floating, so its narrative ("the rook takes the knight", "the queen
-        // steps out") belongs to the game it was written about, not this one.
-        // Glued on unframed it read as a description of the student's board,
-        // the same defect David heard three times in live play on 2026-08-08.
-        // The concept framing says what it is: a rule for this kind of
-        // position, not a claim about this one.
-        if (hit) narration = `${narration} ${generalizedTeaching('concept', hit.text)}`;
-      } catch { /* the note is a bonus, never a blocker */ }
-    }
+    // 🔒 NO FLOATING NOTE IN REVIEW (David 2026-08-26: "make sure I hear no
+    // floating notes in the play surfaces — make them stay where they belong").
+    // This once-per-game blunder/mistake beat used to append a floating
+    // tactic-pattern note (geometry-free, but still a note written about a
+    // DIFFERENT game). Review is a play surface, so it is removed. The tactics
+    // DRILL keeps exactly this teaching via `tacticNoteForPuzzleThemes`, where
+    // the floating corpus belongs.
     // Don't scold a near-FORCED recapture the engine only dings as an inaccuracy/
     // mistake (David 2026-07-20 Opera nitpick: the loser's forced takes-back got
     // "Qb4+ was the try" nags). If this move recaptures on the square the opponent
