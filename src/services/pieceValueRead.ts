@@ -133,6 +133,26 @@ function meanByType(values: readonly PieceValue[]): Map<string, number> {
   return out;
 }
 
+/** The colour's OUTPERFORMING piece — highest contribution vs its own KIND (the
+ *  outpost knight, not the naturally-big queen). Exported for the perturbation
+ *  why-probe, which asks what that piece leans on. Excludes king + pawns; null
+ *  when the side has no such piece or the table is empty. Reuses the same
+ *  scale-free delta as pieceQualityLines, so the two never disagree on "best". */
+export function strongestByDelta(
+  values: readonly PieceValue[],
+  color: 'w' | 'b',
+): { square: string; piece: string; contribution: number; delta: number } | null {
+  if (values.length === 0) return null;
+  const own = (v: PieceValue): number => (v.color === 'w' ? v.value : -v.value);
+  const mean = meanByType(values);
+  const cand = values.filter((v) => v.color === color && !'kp'.includes(v.piece.toLowerCase()));
+  if (cand.length === 0) return null;
+  const best = cand
+    .map((v) => ({ v, d: Math.abs(own(v)) - (mean.get(v.piece.toLowerCase()) ?? Math.abs(own(v))) }))
+    .sort((a, b) => b.d - a.d)[0];
+  return { square: best.v.square, piece: best.v.piece, contribution: +Math.abs(own(best.v)).toFixed(2), delta: +best.d.toFixed(2) };
+}
+
 export interface PieceQualityLine {
   text: string;
   kind: 'their-best-piece' | 'your-worst-piece';
