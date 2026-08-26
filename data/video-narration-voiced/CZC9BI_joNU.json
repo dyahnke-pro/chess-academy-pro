@@ -1,0 +1,316 @@
+{
+ "videoId": "CZC9BI_joNU",
+ "title": "Master Class | Sicilian and Nimzovich | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Nimzowitsch Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:CZC9BI_joNU",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1581,
+   "fen": "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 2",
+   "line": [
+    "e4",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": "e4, the knight to c6 — the Nimzowitsch Defense; the Alekhine would be the knight to f6. We play the knight to f3."
+  },
+  {
+   "ply": 6,
+   "t": 1587.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 5 4",
+   "line": [
+    "Nf6",
+    "Ng1",
+    "Nb8"
+   ],
+   "spoken": "This is a completely different opening, and it definitely is underrated.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1594.5,
+   "fen": "r1bqkbnr/pppppppp/2n5/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 6",
+   "line": [
+    "d3",
+    "Nc6",
+    "d4",
+    "Ng8"
+   ],
+   "spoken": "d4 is the principled way to meet it, and now Black has d5 — a line I find incredibly annoying for White. I don't like playing it, because it's a form of the Scandinavian where Black often quickly castles long. There's a lot of theory, White's supposed to be better, but I never know how to play it, and White can literally get crushed here, because this pawn comes under fire and e5 is coming — not a good line to play in blitz.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1637.5,
+   "fen": "r1bqkbnr/pppppppp/8/3Pn3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 7",
+   "line": [
+    "d5",
+    "Ne5"
+   ],
+   "spoken": "Another move for Black is e5 — this one is a little more innocuous; I can just take on e5, or play d5, but even in that closed centre the knight reroutes to g6 and it can be hard to play with White. So I wouldn't give people what they",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 1653,
+   "fen": "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 2",
+   "line": [],
+   "spoken": "want. Black players like these positions — that's why I play the knight to f3; and if they go d5 here,",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 1655,
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "well, you can take it and play the knight to c3, and"
+  },
+  {
+   "ply": 8,
+   "t": 1658.5,
+   "fen": "r1b1kbnr/ppp1pppp/2n5/7q/8/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 5",
+   "line": [
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qh5"
+   ],
+   "spoken": "there's still a lot of theory, but you don't have to play d4 — you can play"
+  },
+  {
+   "ply": 9,
+   "t": 1662.5,
+   "fen": "r1b1kbnr/ppp1pppp/2n5/1B5q/8/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "the bishop to b5 and emphasise piece development."
+  },
+  {
+   "ply": 13,
+   "t": 1665.5,
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 7 7",
+   "line": [
+    "Qg5",
+    "Bf1",
+    "Qd5",
+    "Nb1"
+   ],
+   "spoken": "You can look up the theory here — you don't need me to tell you the theory.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 1675.5,
+   "fen": "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 2",
+   "line": [],
+   "spoken": "But this is a very dangerous move and you shouldn't take it lightly, in my opinion. g6.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 1677.5,
+   "fen": "r1bqkbnr/pppppp1p/2n3p1/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1680.5,
+   "fen": "r1bqkbnr/pppppp1p/2n3p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1685.5,
+   "fen": "r1bqk1nr/ppppppbp/2n3p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "So g6 and the bishop to g7 is possible — there's nothing wrong with it."
+  },
+  {
+   "ply": 7,
+   "t": 1689,
+   "fen": "r1bqk1nr/ppppppbp/2n3p1/8/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": "We go c3 — solid, definitely solid. c3 makes sense to everybody, right?"
+  },
+  {
+   "ply": 8,
+   "t": 1706.5,
+   "fen": "r1bqk1nr/ppp1ppbp/2np2p1/8/3PP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Biting on granite — the sting has been taken out of the bishop, so d6; the bishop to d3, protecting the centre."
+  },
+  {
+   "ply": 9,
+   "t": 1707.5,
+   "fen": "r1bqk1nr/ppp1ppbp/2np2p1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 1 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1712,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 5 7",
+   "line": [
+    "Nf6",
+    "Bg5",
+    "O-O",
+    "O-O"
+   ],
+   "spoken": "Our opening development was very straightforward. The bishop to g5 — again, the bishop to f4 walks essentially right into"
+  },
+  {
+   "ply": 15,
+   "t": 1719.5,
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/8/3PPBb1/2PB1N2/PP3PPP/RN1Q1RK1 b - - 7 8",
+   "line": [
+    "Bg4",
+    "Bf4"
+   ],
+   "spoken": "e5 with tempo; so, for instance, the bishop to g4 would be a good way to preface this, and after h3, the bishop takes f3, and"
+  },
+  {
+   "ply": 17,
+   "t": 1733.5,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 b - - 9 9",
+   "line": [
+    "Bc8",
+    "Bc1"
+   ],
+   "spoken": "there comes e5 with tempo. We don't want to invite that with tempo, so we play the bishop to g5"
+  },
+  {
+   "ply": 13,
+   "t": 1735.5,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 5 7",
+   "line": [],
+   "spoken": "in fact it's the opposite —",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1739,
+   "fen": "r1bq1rk1/ppp2pbp/2np1np1/4p1B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "we're discouraging e5, because that would open up a pin."
+  },
+  {
+   "ply": 13,
+   "t": 1742.5,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 5 7",
+   "line": [],
+   "spoken": "Now if h6, then",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1744,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1746,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": "I would recommend simply dropping to h4."
+  },
+  {
+   "ply": 17,
+   "t": 1751.5,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1n1p/6p1/3PP3/2PB1NB1/PP3PPP/RN1Q1RK1 b - - 1 9",
+   "line": [
+    "g5",
+    "Bg3"
+   ],
+   "spoken": "Sometimes in this line g5, the bishop to g3 happens, and Black can go after the bishop,"
+  },
+  {
+   "ply": 18,
+   "t": 1753,
+   "fen": "r1bq1rk1/ppp1ppb1/2np3p/6pn/3PP3/2PB1NB1/PP3PPP/RN1Q1RK1 w - - 2 10",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "but notice that he's really, really weakening his king in doing so."
+  },
+  {
+   "ply": 15,
+   "t": 1762.5,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8",
+   "line": [],
+   "spoken": "So this is a price we're willing to pay. Castling queenside can be",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1764,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 5 7",
+   "line": [],
+   "spoken": "possible, but I like the setup a lot — the knight to d2.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1766,
+   "fen": "r1bq1rk1/1pp1ppbp/p1np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1767.5,
+   "fen": "r1bq1rk1/1pp1ppbp/p1np1np1/6B1/3PP3/2PB1N2/PP1N1PPP/R2Q1RK1 b - - 1 8",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1768.5,
+   "fen": "r1bq1rk1/1pp1ppbp/p1np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "line": [],
+   "spoken": "What I want you to understand is that a lot of people automatically play a4",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1772,
+   "fen": "r1bq1rk1/1pp1ppbp/p1np1np1/6B1/P2PP3/2PB1N2/1P3PPP/RN1Q1RK1 b - - 0 8",
+   "line": [
+    "a4"
+   ],
+   "spoken": "in such a position to stop b5 — and a4 is fine, but not all so-called threats need to be stopped. In fact b5 is a positional mistake: the fact that Black plays it alone means nothing, and on the contrary Black will later have to deal with that weakness after a4 — so it's unnecessary prophylaxis. Prophylaxis is great, but only when it's necessary. You could consider sacking on g5 in such positions, though maybe premature — after e5 I don't think White has enough firepower yet, but you should consider it. Then the rook to e1, the knight to d7, the knight to f1 transferring the knight, and the bishop to e3."
+  }
+ ]
+}
