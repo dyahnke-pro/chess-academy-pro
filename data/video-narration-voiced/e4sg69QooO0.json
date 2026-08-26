@@ -1,0 +1,311 @@
+{
+ "videoId": "e4sg69QooO0",
+ "title": "Master Class | Central Control | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Caro-Kann Defense: Tartakower (Nf6) Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:e4sg69QooO0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 794.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 798,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 799.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 807,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 812.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 816.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "After the main-line exchanges we have three good replies — the bishop to f5, the knight to d7, or the knight to f6.",
+   "kind": "main",
+   "teaches": [
+    "the three Caro-Kann main replies"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 833.5,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 is the Tartakower — it accepts a slightly damaged pawn structure in return for solid, active piece play. Once the least popular of the three, it's now among the most popular.",
+   "kind": "main",
+   "teaches": [
+    "the Tartakower: structure for activity"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 841.5,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/5P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "f3"
+   ],
+   "spoken": "White's f3 is premature — it weakens the king far too early.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 867,
+   "fen": "rn1qkb1r/pp2pppp/2p2n2/5b2/3PN3/5P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "We develop with the bishop to f5, pressuring the knight. No need to rush to punish f3 — it's not a race, and White pays for it later.",
+   "kind": "main",
+   "teaches": [
+    "develop first; the weakness keeps"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 883.5,
+   "fen": "rn1qkb1r/pp2pppp/2p2n2/5b2/2BPN3/5P2/PPP3PP/R1BQK1NR b KQkq - 2 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White's bishop to c4 tempts us to capture on e4, but taking there is risky — it opens the f-file and hands White real compensation. So we simply keep developing.",
+   "kind": "main",
+   "teaches": [
+    "don’t grab a pawn that opens a file at you"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 942,
+   "fen": "r2qkb1r/pp1npppp/2p2n2/5b2/2BPN3/5P2/PPP3PP/R1BQK1NR w KQkq - 3 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The knight to d7 is the ideal Caro-Kann arrangement — some players are allergic to the square, but this knight pair is excellent here.",
+   "kind": "main",
+   "teaches": [
+    "the ...Nbd7 setup"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 952.5,
+   "fen": "r2qkb1r/pp1npppp/2p2n2/5bN1/2BP4/5P2/PPP3PP/R1BQK1NR b KQkq - 4 7",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight to g5 threatens mate.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 961,
+   "fen": "r2qkb1r/pp1n1ppp/2p1pn2/5bN1/2BP4/5P2/PPP3PP/R1BQK1NR w KQkq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Which is the perfect moment for e6, blunting the bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 967,
+   "fen": "r2qkb1r/pp1n1ppp/2p1pn2/3P1bN1/2B5/5P2/PPP3PP/R1BQK1NR b KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 984,
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/3p1bN1/2B5/5P2/PPP3PP/R1BQK1NR w KQkq - 0 9",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "We recapture toward the center and, as a bonus, open the c-file for a future rook.",
+   "kind": "main",
+   "teaches": [
+    "recapture toward the center"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 993,
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/1B1p1bN1/8/5P2/PPP3PP/R1BQK1NR b KQkq - 1 9",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "White pins with the bishop to b5.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 1008.5,
+   "fen": "r3kb1r/pp1n1ppp/4pn2/qB1p1bN1/8/5P2/PPP3PP/R1BQK1NR w KQkq - 2 10",
+   "line": [
+    "Qa5+"
+   ],
+   "spoken": "And the shot — the queen check on a5 wins the undefended bishop, exploiting the loose bishop and the uncastled king together. Keep your eyes peeled for this tactic; it's missed at every level.",
+   "kind": "main",
+   "teaches": [
+    "Qa5+ forking the loose bishop and the king"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 1035.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1039,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1092.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1097.5,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1137,
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxf6+",
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1158,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1176.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxf6+",
+    "exf6"
+   ],
+   "spoken": "A key idea behind this whole line: the doubled f-pawns are actually healthy — the front one controls important central squares. And there's the shedding-the-skin concept — you can ram the f-pawn all the way down as a battering ram and still be left with an intact kingside shell, so you can attack on the very side you castled.",
+   "teaches": [
+    "healthy doubled pawns; the shedding-the-skin attack"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1272,
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1279,
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/2P5/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1280,
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/2PB4/PP3PPP/R1BQK1NR b KQkq - 2 7",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1308,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1310.5,
+   "fen": "rnbqkb1r/pp2pp1p/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxf6+",
+    "gxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1315.5,
+   "fen": "rnbqkb1r/pp2pppp/2p2N2/8/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
