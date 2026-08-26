@@ -4,7 +4,7 @@
   "openingName": "Caro-Kann Defense: Fantasy Variation",
   "studentSide": "white",
   "voice": "danya-dna",
-  "rewrittenAt": "2026-08-25",
+  "rewrittenAt": "2026-08-26",
   "source": "yt:k4T6TJGOSA0",
   "moves": [
     {
@@ -15,7 +15,7 @@
         "e4",
         "c6"
       ],
-      "spoken": "We take White and face the Caro-Kann."
+      "spoken": "We have White against the Caro-Kann — the pawn to e4, met by c6."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "We build the centre with d4."
+      "spoken": "The pawn to d4, taking the centre."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "We play f3 — the Fantasy Variation."
+      "spoken": "The pawn to f3 — the Fantasy Variation, my official recommendation: the most fun line against the Caro by a country mile."
     },
     {
       "ply": 6,
@@ -51,7 +51,7 @@
       "line": [
         "dxe4"
       ],
-      "spoken": "Black takes on e4."
+      "spoken": "Black takes on e4, giving up the centre."
     },
     {
       "ply": 7,
@@ -60,14 +60,15 @@
       "line": [
         "fxe4"
       ],
-      "spoken": "We recapture on e4."
+      "spoken": "We recapture on e4. Capturing there only makes sense in the context of one specific follow-up."
     },
     {
       "ply": 5,
       "t": 88,
       "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
       "line": [],
-      "spoken": ""
+      "spoken": "Giving up the centre only makes sense if Black immediately follows with an important move.",
+      "reanchor": true
     },
     {
       "ply": 7,
@@ -77,7 +78,8 @@
         "dxe4",
         "fxe4"
       ],
-      "spoken": ""
+      "spoken": "That move is the pawn to e5, opening a path for the queen to h4, where it would fork the king and the e4-pawn — one of the main Fantasy lines.",
+      "reanchor": true
     },
     {
       "ply": 8,
@@ -86,7 +88,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "Black develops ...Nf6, hitting the pawn."
+      "spoken": "Against the pawn to e5 we don't take and don't play d5 — both allow the queen to h4 — instead the knight to f3, sacrificing d4 for quick development. But Black plays the knight to f6, a developing move that isn't the main line and invites e5, like a souped-up Alekhine. The knight to c3 would let Black revert with the pawn to e5, so we go the other way."
     },
     {
       "ply": 9,
@@ -95,7 +97,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "We push e5, kicking the knight."
+      "spoken": "The pawn to e5 — if we mishandle this, the knight leaps to g4 threatening a fork on f2 and to win e5 back with interest, so e5 is near-automatic."
     },
     {
       "ply": 10,
@@ -104,7 +106,7 @@
       "line": [
         "Nd5"
       ],
-      "spoken": "Black hops the knight to d5."
+      "spoken": "Black retreats the knight to d5. We've bitten off a big centre with only pawns, so the pawn to c4 is tempting but risky — pushing more pawns invites overextension. Still, c4 chases the annoying d5-knight, and Black's one central break is the pawn to c5; if we ever meet that with c3, the d5-knight becomes unassailable."
     },
     {
       "ply": 11,
@@ -113,7 +115,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "We chase with c4."
+      "spoken": "So the pawn to c4 — I flip-flopped, but it works, provided we follow up with accurate development."
     },
     {
       "ply": 12,
@@ -122,7 +124,7 @@
       "line": [
         "Nb6"
       ],
-      "spoken": "Black retreats the knight to b6."
+      "spoken": "Black retreats the knight to b6. The knight to b4 would be no danger — a3 chases it. And the pawn to c5 is simply met by d5, making our centre even more imposing while the c4-pawn stays protected by the bishop. This transposes toward the Four Pawns Alekhine, where you develop the queen's knight first — otherwise the bishop to g4 pins the king's knight."
     },
     {
       "ply": 13,
@@ -131,7 +133,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We develop the knight to c3."
+      "spoken": "So the knight to c3 — the most accurate, waiting for Black's bishop before committing the king's knight."
     },
     {
       "ply": 14,
@@ -140,7 +142,7 @@
       "line": [
         "Bf5"
       ],
-      "spoken": "Black develops the bishop to f5."
+      "spoken": "Black develops the bishop to f5 — exactly the cat-and-mouse we wanted, the bishop out first."
     },
     {
       "ply": 15,
@@ -149,7 +151,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We develop the knight to f3."
+      "spoken": "Now we can safely play the knight to f3."
     },
     {
       "ply": 16,
@@ -158,7 +160,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "Black plays e6."
+      "spoken": "Black plays the pawn to e6 — and still not threatening c5, because we always have d5 in response; that's why developing the knight to c3 promptly mattered."
     },
     {
       "ply": 17,
@@ -167,7 +169,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "We develop the bishop to e2."
+      "spoken": "The bishop to e2 — not d3, which would encourage the bishop to g4. Then we castle and bring the other bishop to e3 to solidify. The centre is our main industry; we check for the c5 break every single turn, since we need d5 to answer it — then the queen to d2, a rook to d1, even b3 Alekhine-style to reinforce c4."
     },
     {
       "ply": 18,
@@ -176,7 +178,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "Black develops the bishop to e7."
+      "spoken": "Black develops the bishop to e7 — and it really does look like a Four Pawns Alekhine."
     },
     {
       "ply": 19,
@@ -185,7 +187,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "We castle — an inferior version of that Alekhine for Black."
     },
     {
       "ply": 20,
@@ -194,7 +196,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Black castles."
+      "spoken": "Black castles. As White we have everything we could ask for."
     },
     {
       "ply": 21,
@@ -203,7 +205,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "We develop the bishop to e3."
+      "spoken": "We complete development with the bishop to e3 — the bishop to f4 was a viable alternative, but for now we overprotect d4, the linchpin of the whole structure, in Nimzowitsch's sense."
     },
     {
       "ply": 22,
@@ -212,7 +214,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "Black plays a5."
+      "spoken": "Black plays the pawn to a5, grabbing queenside space — but it loosens the b6-knight, so d5 gains appeal. We avoid a4, which would leave a hole on b4 for Black's knight; if the pawn reaches a3 we just play b3, a move we wanted anyway. So we keep improving flexibly and decide where the queen belongs."
     },
     {
       "ply": 23,
@@ -221,7 +223,7 @@
       "line": [
         "Qe1"
       ],
-      "spoken": "We reroute the queen to e1."
+      "spoken": "The queen to e1 — heading for g3 and a kingside attack down the semi-open f-file. It allows c5, but Black is so poorly developed that the rook to d1 answers it, and d1 is a better home than the queen there, since the rook x-rays the black queen."
     },
     {
       "ply": 24,
@@ -230,7 +232,7 @@
       "line": [
         "Na6"
       ],
-      "spoken": "Black develops ...Na6."
+      "spoken": "Black plays the knight to a6, rerouting — and we'll make that hard."
     },
     {
       "ply": 25,
@@ -239,7 +241,7 @@
       "line": [
         "a3"
       ],
-      "spoken": "We play a3."
+      "spoken": "The pawn to a3 — no downside, and it locks the knight in place on a6."
     },
     {
       "ply": 26,
@@ -248,7 +250,7 @@
       "line": [
         "Qc7"
       ],
-      "spoken": "Black plays the queen to c7."
+      "spoken": "Black plays the queen to c7. The c5 break is still serious, but after the rook to d1 we either push d5 or Black trades on d4 into a central massacre."
     },
     {
       "ply": 27,
@@ -257,7 +259,7 @@
       "line": [
         "Rd1"
       ],
-      "spoken": "We play the rook to d1."
+      "spoken": "The rook to d1 — protect the centre before anything else."
     },
     {
       "ply": 28,
@@ -266,7 +268,7 @@
       "line": [
         "Rad8"
       ],
-      "spoken": "Black doubles rooks with ...Rad8."
+      "spoken": "Black plays the rook to d8. The c5 break still isn't a threat, because we can meet it with d5."
     },
     {
       "ply": 29,
@@ -275,7 +277,7 @@
       "line": [
         "Qg3"
       ],
-      "spoken": "We swing the queen to g3."
+      "spoken": "The queen to g3, completing the maneuver. Why is c5 and d5 bad for Black? The pawn travels to d6, forking the queen and bishop and trapping the e7-bishop. Players under 1800 struggle under strain, and Black is very cramped with a storm brewing on the kingside."
     },
     {
       "ply": 30,
@@ -284,7 +286,7 @@
       "line": [
         "Rd7"
       ],
-      "spoken": "Black plays the rook to d7."
+      "spoken": "Black plays the rook to d7, preparing to double. Now the d6-square is a major weakness — it'd be a dream to plant a knight there, so we manoeuvre toward it with the knight to g5 or d2. The knight to g5 lets Black trade the important dark-squared bishop, but after the recapture we threaten the bishop to f6 and stop Black doubling."
     },
     {
       "ply": 31,
@@ -293,14 +295,15 @@
       "line": [
         "Ng5"
       ],
-      "spoken": "We jump the knight to g5."
+      "spoken": "So the knight to g5 — the more adventurous choice, packing a slightly bigger punch."
     },
     {
       "ply": 30,
       "t": 1143,
       "fen": "5rk1/1pqrbppp/nnp1p3/p3Pb2/2PP4/P1N1BNQ1/1P2B1PP/3R1RK1 w - - 5 16",
       "line": [],
-      "spoken": ""
+      "spoken": "In a classical game I'd lean toward the knight to d2.",
+      "reanchor": true
     },
     {
       "ply": 31,
@@ -309,7 +312,8 @@
       "line": [
         "Ng5"
       ],
-      "spoken": ""
+      "spoken": "But the knight to g5 is intimidating to face — and we still have d5 against any c5. An adventure with the knight.",
+      "reanchor": true
     },
     {
       "ply": 32,
@@ -318,7 +322,7 @@
       "line": [
         "Rfd8"
       ],
-      "spoken": "Black doubles with ...Rfd8."
+      "spoken": "Black plays the rook to d8 — a lot of players would reflexively play h6 here. There's a juicy rook sacrifice available, but in time pressure we just complete the maneuver with the knight to e4."
     },
     {
       "ply": 33,
@@ -327,7 +331,7 @@
       "line": [
         "Nge4"
       ],
-      "spoken": "We bring the knight to e4."
+      "spoken": "The knight to e4, heading for d6. The knight to d6 looks like it drops a pawn, but at the end of the line the pawn to c5 forks the b6-knight and whatever sits on d6."
     },
     {
       "ply": 34,
@@ -336,7 +340,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "Black plays c5."
+      "spoken": "So the pawn to c5 first, establishing the stronghold before infiltrating d6 — and Black meets us head-on with the pawn to c5."
     },
     {
       "ply": 35,
@@ -345,7 +349,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "We push d5."
+      "spoken": "The tempting knight to f6 with check fails to the bishop taking f6 and the recapture, winning our queen, with a fork on d4 at the end. So instead the pawn to d5 — the move we've prepared all game. The point: the f5-bishop is loose, so if Black takes on d5, the rook takes f5."
     },
     {
       "ply": 36,
@@ -354,7 +358,7 @@
       "line": [
         "Bxe4"
       ],
-      "spoken": "Black takes our knight, capturing on e4."
+      "spoken": "Black plays the bishop takes e4, correctly — and we don't automatically recapture."
     },
     {
       "ply": 37,
@@ -363,7 +367,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "We push the passed pawn to d6."
+      "spoken": "The pawn to d6 — a beautiful in-between move, shoving the pawn to fork the minor piece and the queen while the e4-bishop still hangs. It gets very dicey for Black; the bishop takes d6 is the only grandmaster-level try, meeting the recapture with the queen to c6."
     },
     {
       "ply": 38,
@@ -372,7 +376,7 @@
       "line": [
         "Bxd6"
       ],
-      "spoken": "Black takes on d6 with the bishop."
+      "spoken": "Black finds the bishop takes d6. But after the queen to c6 we play the pawn takes e7, and Black can't recapture, because the d8-rook would hang with mate once the queen has left."
     },
     {
       "ply": 39,
@@ -381,7 +385,7 @@
       "line": [
         "exd6"
       ],
-      "spoken": "We recapture with the e-pawn."
+      "spoken": "We recapture on d6. Black's defence is resilient, but we're winning anyway."
     },
     {
       "ply": 40,
@@ -390,14 +394,15 @@
       "line": [
         "Rxd6"
       ],
-      "spoken": "Black takes on d6 with the rook."
+      "spoken": "Black plays the rook takes d6 — the losing move."
     },
     {
       "ply": 39,
       "t": 1484,
       "fen": "3r2k1/1pqr1ppp/nn1Pp3/p1p5/2P1b3/P1N1B1Q1/1P2B1PP/3R1RK1 b - - 0 20",
       "line": [],
-      "spoken": ""
+      "spoken": "The rook takes d6 loses; the queen to c6 would also have lost, but far more resiliently.",
+      "reanchor": true
     },
     {
       "ply": 40,
@@ -406,7 +411,8 @@
       "line": [
         "Rxd6"
       ],
-      "spoken": ""
+      "spoken": "This loses on the spot to several moves — what's the simplest for White?",
+      "reanchor": true
     },
     {
       "ply": 41,
@@ -415,14 +421,15 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "We take on e4, winning the bishop."
+      "spoken": "Just the knight takes e4 — always look for hanging pieces first. The knight to b5 is even stronger, but I want my bishop."
     },
     {
       "ply": 40,
       "t": 1525,
       "fen": "3r2k1/1pq2ppp/nn1rp3/p1p5/2P1b3/P1N1B1Q1/1P2B1PP/3R1RK1 w - - 0 21",
       "line": [],
-      "spoken": ""
+      "spoken": "The knight to b5 wins the rook outright.",
+      "reanchor": true
     },
     {
       "ply": 41,
@@ -431,14 +438,16 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": ""
+      "spoken": "But I'll take the bishop — in a way it shows the strength of our whole strategy.",
+      "reanchor": true
     },
     {
       "ply": 40,
       "t": 1537,
       "fen": "3r2k1/1pq2ppp/nn1rp3/p1p5/2P1b3/P1N1B1Q1/1P2B1PP/3R1RK1 w - - 0 21",
       "line": [],
-      "spoken": ""
+      "spoken": "The knight to b5 is objectively better.",
+      "reanchor": true
     },
     {
       "ply": 41,
@@ -447,14 +456,16 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": ""
+      "spoken": "Still, I wanted the hanging bishop — and the recapture on d1 changes nothing; we just take back and convert the extra piece.",
+      "reanchor": true
     },
     {
       "ply": 40,
       "t": 1566.5,
       "fen": "3r2k1/1pq2ppp/nn1rp3/p1p5/2P1b3/P1N1B1Q1/1P2B1PP/3R1RK1 w - - 0 21",
       "line": [],
-      "spoken": ""
+      "spoken": "The knight to b5 wins the whole rook, not just the exchange — I stand corrected.",
+      "reanchor": true
     },
     {
       "ply": 41,
@@ -463,7 +474,8 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": ""
+      "spoken": "The knight to b5 wins the rook because there are three attackers on d6 — the queen can't hold it.",
+      "reanchor": true
     },
     {
       "ply": 42,
@@ -472,14 +484,15 @@
       "line": [
         "Nc8"
       ],
-      "spoken": "Black retreats the knight to c8."
+      "spoken": "Black plays the knight to c8. The downside is that Black gets three pawns for the piece, so conversion won't be trivial."
     },
     {
       "ply": 41,
       "t": 1613.5,
       "fen": "3r2k1/1pq2ppp/nn1rp3/p1p5/2P1N3/P3B1Q1/1P2B1PP/3R1RK1 b - - 0 21",
       "line": [],
-      "spoken": ""
+      "spoken": "My guess is the opponent forgot the queen was protected by the knight — c7-square tactics are easy to miss.",
+      "reanchor": true
     },
     {
       "ply": 42,
@@ -488,7 +501,8 @@
       "line": [
         "Nc8"
       ],
-      "spoken": ""
+      "spoken": "Like the famous Magnus one-move blunder, dropping a bishop to c7. Now we can play fancy or utilitarian chess.",
+      "reanchor": true
     },
     {
       "ply": 43,
@@ -497,14 +511,15 @@
       "line": [
         "Nxd6"
       ],
-      "spoken": "We take on d6, winning the rook."
+      "spoken": "Let's play utilitarian — the knight captures on d6, taking the rook, the no-calculation move that ends the game."
     },
     {
       "ply": 40,
       "t": 1660.5,
       "fen": "3r2k1/1pq2ppp/nn1rp3/p1p5/2P1b3/P1N1B1Q1/1P2B1PP/3R1RK1 w - - 0 21",
       "line": [],
-      "spoken": ""
+      "spoken": "I regret grabbing the d4-pawn earlier — taking on e4 first and then d6 would have been cleaner. The knight takes e4 was sloppy: had Black recaptured on d1 correctly, the c4-pawn would fall, costing a third pawn for the piece and making conversion far from easy.",
+      "reanchor": true
     },
     {
       "ply": 43,
@@ -515,7 +530,8 @@
         "Nc8",
         "Nxd6"
       ],
-      "spoken": ""
+      "spoken": "It's over. We can pre-move: after either capture on d6, the bishop to f4 pins, and Black simply dies on the d6-square. Notice Black's queenside knight has been out of the game the whole time — my coach's lesson, that it's incredibly hard to play a middlegame effectively down an idle piece.",
+      "reanchor": true
     },
     {
       "ply": 44,
@@ -524,7 +540,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "Black plays the queen to e7."
+      "spoken": "Black plays the queen to e7. That knight on a6 was dead the entire game — the c5 break was a dead end with a pawn in the way."
     },
     {
       "ply": 45,
@@ -533,14 +549,15 @@
       "line": [
         "Rxf7"
       ],
-      "spoken": "The rook smashes into f7."
+      "spoken": "The rook takes f7 — simple. It matters that our d1-rook is protected by the bishop; otherwise Black could take on f7 and then on d1 with check and recapture, winning material."
     },
     {
       "ply": 10,
       "t": 1804.5,
       "fen": "rnbqkb1r/pp2pppp/2p5/3nP3/3P4/8/PPP3PP/RNBQKBNR w KQkq - 1 6",
       "line": [],
-      "spoken": ""
+      "spoken": "A nice, instructive game. For context: the Alekhine is the pawn to e4 met by the knight to f6 — a move Alekhine popularized in the early 1800s, a period rich with historical chess tangents.",
+      "reanchor": true
     }
   ]
 }
