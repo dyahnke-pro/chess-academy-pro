@@ -56,8 +56,17 @@ export interface PositionFactsResult {
   /** The OPPONENT's best-placed piece + what it leans on — the counter, so the
    *  coach can explain their asset AND how to undermine it. */
   opponentLeansOn: LeansOn | null;
-  /** Board-true clauses, most-important-first, ready for the facts string. */
-  clauses: string[];
+  /** Board-true clauses, most-important-first, each TAGGED by kind so a surface
+   *  can emit only what its existing lanes don't already cover (no walk-over). */
+  clauses: ClauseItem[];
+}
+
+export type ClauseKind = 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+export interface ClauseItem { kind: ClauseKind; rank: number; text: string; }
+
+/** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
+export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
+  return items.filter((c) => !exclude.includes(c.kind)).map((c) => c.text);
 }
 
 /** Best-for-the-mover minus runner-up, from the analysis fan (mover-POV, so a
@@ -130,32 +139,32 @@ function buildClauses(a: {
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
   studentToMove: boolean;
-}): string[] {
+}): ClauseItem[] {
   const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove } = a;
   if (!importance.speak) return [];
-  const ranked: Array<{ rank: number; text: string }> = [];
+  const ranked: ClauseItem[] = [];
 
   // Incoming fire — the opponent's standing threat against the student (their
   // intent, and the student's must-defend). Board-true, named.
   if (mustDefend.net >= 3 && mustDefend.pieces[0]) {
     const p = mustDefend.pieces[0];
-    ranked.push({ rank: 75, text: `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.` });
+    ranked.push({ kind: 'must-defend', rank: 75, text: `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.` });
   }
   // Decision leverage — framed by whose move it is.
   if (studentToMove) {
-    if (importance.tier === 'only-move') ranked.push({ rank: 85, text: `Only one move really holds here — this is the moment to slow down.` });
-    else if (importance.tier === 'critical') ranked.push({ rank: 65, text: `This is a critical moment — the choice here is the one that decides it.` });
+    if (importance.tier === 'only-move') ranked.push({ kind: 'key-moment', rank: 85, text: `Only one move really holds here — this is the moment to slow down.` });
+    else if (importance.tier === 'critical') ranked.push({ kind: 'key-moment', rank: 65, text: `This is a critical moment — the choice here is the one that decides it.` });
   } else {
     // The opponent is on move → explain their intent, not a "slow down" to the
     // student who isn't choosing anything right now.
-    if (importance.tier === 'only-move') ranked.push({ rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
-    else if (importance.tier === 'critical') ranked.push({ rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
+    if (importance.tier === 'only-move') ranked.push({ kind: 'opponent-intent', rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
+    else if (importance.tier === 'critical') ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
   }
   // The campaign — the student's asset, and the opponent's (with the counter).
-  if (leansOn) ranked.push({ rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
-  if (opponentLeansOn) ranked.push({ rank: 45, text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.` });
+  if (leansOn) ranked.push({ kind: 'student-leans', rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
+  if (opponentLeansOn) ranked.push({ kind: 'opponent-leans', rank: 45, text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.` });
   // Convert-mode — decided game, one beat.
-  if (importance.tier === 'convert') ranked.push({ rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
+  if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
 
-  return ranked.sort((a2, b2) => b2.rank - a2.rank).map((c) => c.text);
+  return ranked.sort((a2, b2) => b2.rank - a2.rank);
 }
