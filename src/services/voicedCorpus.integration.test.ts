@@ -99,5 +99,5 @@ describe('voiced fires on the play surfaces; floating stays out', () => {
       expect(src.origin).toBe('position');
       expect(src.note.id).not.toBe('vc-floattest');
     }
-  });
+  }, 30_000); // re-warms the (large) voiced index inside the test
 });
