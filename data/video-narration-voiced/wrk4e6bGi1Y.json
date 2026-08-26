@@ -1,0 +1,474 @@
+{
+ "videoId": "wrk4e6bGi1Y",
+ "title": "QGD + C3 Sicilian | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense: Alapin Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:wrk4e6bGi1Y",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 707,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "We answer c5 with our workhorse — the c3 Sicilian, in my view the best Sicilian to face for anyone under 1900.",
+   "kind": "main",
+   "teaches": [
+    "The c3 Sicilian is a reliable anti-Sicilian below 1900"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 712.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 716.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "He plays e6, a common reply at this level, and we grab the center with d4.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 732.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 734.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "The trade on d4 is already a little inaccurate — it hands us the c3-square for the knight, giving us almost a perfect French position, though only if he follows with d5 to contest the center.",
+   "kind": "main",
+   "teaches": [
+    "...cxd4 cxd4 hands White a natural French-style center"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 741.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 762,
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "He develops the knight to f6 instead. Tempting as e5 looks here, there's no need to give up the d5-square — after e5 his knight just hops into d5 and entrenches on that hole.",
+   "kind": "main",
+   "teaches": [
+    "Don\\u2019t push e5 if it concedes a strong outpost on d5"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 784,
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "So we develop the knight to c3. And the pin with Bb4 that's coming is nothing to fear.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 796,
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/8/1b1PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "He pins with the bishop to b4. Note the moves we avoid: f3 is horribly weakening — never play it in the opening; and Bg5 is a common mistake, because he plays h6 and g5 chasing the bishop, and once it retreats the e4-pawn hangs. A counter-pin is a flimsy way to defend.",
+   "kind": "main",
+   "teaches": [
+    "Never weaken with f3 in the opening",
+    "A counter-pin is a flimsy defense if it leaves a pawn hanging"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 867,
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/8/1b1PP3/2NB4/PP3PPP/R1BQK1NR b KQkq - 4 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The correct move is the bishop to d3, a clean developing square eyeing the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 879.5,
+   "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b1PP3/2NB4/PP3PPP/R1BQK1NR w KQkq - 5 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 892,
+   "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b1PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 908,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/3p4/1b1PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "He plays d5, and I'm already smelling a Greek gift. Crucially, we don't take on d5 — that lets him recapture with the knight and hand us an isolated queen pawn under blockade.",
+   "kind": "main",
+   "teaches": [
+    "Avoid trades that saddle you with a blockaded isolated pawn"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 919,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/3pP3/1b1P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The move is to push e5, gaining space and shutting the door — this should be clear to everyone.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 930.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1Pn3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 1 9",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "He jumps the knight into e4. Now the adventurous, instructive choice: castle, offering the c3-knight and prioritizing development — the very same idea as a main-line Italian.",
+   "kind": "main",
+   "teaches": [
+    "Sacrifice a pawn for a development lead when the attack is real"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 984.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1Pn3/2NB1N2/PP3PPP/R1BQ1RK1 b kq - 2 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle. I keep the dark-squared bishop rather than trading it, because our d4-pawn sits on a dark square and I want to defend it later with Be3.",
+   "kind": "main",
+   "teaches": [
+    "Keep the bishop that guards your weak-colored squares"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 992.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1P4/2nB1N2/PP3PPP/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "He grabs on c3, and if you know the main-line Italian, this whole structure should feel familiar.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 993.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1P4/2PB1N2/P4PPP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 994.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/3P4/2bB1N2/P4PPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1037.5,
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/3P4/2bB1N2/P4PPP/1RBQ1RK1 b kq - 1 11",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": "Rb1 — and here's the trap: if he tries the knight fork on d4, remember from last game that a forking knight can simply return to c6 and block the fork.",
+   "kind": "main",
+   "teaches": [
+    "A forked knight can often retreat to block the fork"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 1051,
+   "fen": "r1bqk2r/pp3ppp/4p3/3pP3/3n4/2bB1N2/P4PPP/1RBQ1RK1 w kq - 0 12",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "He does grab on d4. We just take the knight first, and now a check picks up the piece cleanly.",
+   "kind": "main",
+   "teaches": [
+    "Remove the defender first, then collect the fork"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 1061,
+   "fen": "r1bqk2r/pp3ppp/4p3/3pP3/3b4/3B4/P4PPP/1RBQ1RK1 w kq - 0 13",
+   "line": [
+    "Nxd4",
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1079.5,
+   "fen": "r2q1rk1/pp1b1ppp/4p3/3pP3/3Q4/3B4/P4PPP/1RB2RK1 w - - 1 15",
+   "line": [
+    "Qa4+",
+    "Bd7",
+    "Qxd4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1092,
+   "fen": "r2q1rk1/pR1b1ppp/4p3/3pP3/3Q4/3B4/P4PPP/2B2RK1 b - - 0 15",
+   "line": [
+    "Rxb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1129.5,
+   "fen": "r2q1rk1/pR3ppp/2b1p3/3pP3/3Q4/3B4/P4PPP/2B2RK1 w - - 1 16",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1158.5,
+   "fen": "r2q1rk1/p4ppp/2b1p3/3pP3/3Q4/1R1B4/P4PPP/2B2RK1 b - - 2 16",
+   "line": [
+    "Rb3"
+   ],
+   "spoken": "Now we switch fronts: the rook lifts to b3, ready to swing to the kingside. Look how bare his king is — once the bishop clears d3, this rook comes over for the mating attack.",
+   "kind": "plan",
+   "teaches": [
+    "A rook lift can transfer an attack to the other wing"
+   ],
+   "plans": [
+    "Lift the rook to b3",
+    "Swing it to the kingside for the attack"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 1167.5,
+   "fen": "r4rk1/p4ppp/2b1p3/q2pP3/3Q4/1R1B4/P4PPP/2B2RK1 w - - 3 17",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1198,
+   "fen": "r4rk1/p4ppB/2b1p3/q2pP3/3Q4/1R6/P4PPP/2B2RK1 b - - 0 17",
+   "line": [
+    "Bxh7+"
+   ],
+   "spoken": "The Greek gift — bishop takes h7. It's not as clear-cut as it looks, but it's winning, and it's worth seeing.",
+   "kind": "main",
+   "teaches": [
+    "The Bxh7+ Greek gift sacrifice"
+   ]
+  },
+  {
+   "ply": 34,
+   "t": 1204.5,
+   "fen": "r4r2/p4ppk/2b1p3/q2pP3/3Q4/1R6/P4PPP/2B2RK1 w - - 0 18",
+   "line": [
+    "Kxh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1246,
+   "fen": "r4r2/p4ppk/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 b - - 1 18",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "I start with the queen check on h4 — a flexible entry. The point: Qh4 then Rh3 does NOT force immediate mate, because f6 opens an escape for the king. Always check the escape before you commit.",
+   "kind": "main",
+   "teaches": [
+    "Qh4+ first keeps the attack flexible",
+    "Verify the king has no escape before sacrificing further"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 1251,
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 w - - 2 19",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1268,
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/6R1/P4PPP/2B2RK1 b - - 3 19",
+   "line": [
+    "Rg3"
+   ],
+   "spoken": "And the constructive idea — look at the semi-open files too, not just the open ones. That g7-pawn is pitiful cover, so the rook to g3 sets up Qf6, Bh6, and a sac on g7.",
+   "kind": "main",
+   "teaches": [
+    "Attack down semi-open files where the pawn cover is thin"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 1284.5,
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 w - - 2 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1289.5,
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/6R1/P4PPP/2B2RK1 b - - 3 19",
+   "line": [
+    "Rg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1292.5,
+   "fen": "r4rk1/p4p2/2b1p1p1/q2pP3/7Q/6R1/P4PPP/2B2RK1 w - - 0 20",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1335,
+   "fen": "r4rk1/p4p2/2b1p1p1/q2pP3/7Q/7R/P4PPP/2B2RK1 b - - 1 20",
+   "line": [
+    "Rh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1361.5,
+   "fen": "r4rk1/p7/2b1p1p1/q2pPp2/7Q/7R/P4PPP/2B2RK1 w - f6 0 21",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1520,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1522.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1524,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1534,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1535,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1538,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1540.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1542.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  }
+ ]
+}
