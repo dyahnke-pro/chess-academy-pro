@@ -1,0 +1,120 @@
+{
+  "videoId": "HiCeU8tIh0U",
+  "title": "Grandmaster Naroditsky Chess Speedrun Pt. 2",
+  "openingName": "Scholar's Mate Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:HiCeU8tIh0U",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 10.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "e5"
+      ],
+      "spoken": "Another game with Black. e4, e5 — obviously e5."
+    },
+    {
+      "ply": 4,
+      "t": 24,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3",
+      "line": [
+        "Qh5",
+        "Nc6"
+      ],
+      "spoken": "The queen to h5 — a very common move at the beginner level — attacks the e5-pawn, which you all probably know is a bad idea. The knight to c6, defending."
+    },
+    {
+      "ply": 5,
+      "t": 27,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "The bishop to c4 threatens checkmate. How do we defend against scholar's mate? Do not play"
+    },
+    {
+      "ply": 6,
+      "t": 41,
+      "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 4",
+      "line": [
+        "g6"
+      ],
+      "spoken": "the knight to f6 — that doesn't defend against it — and do not move the queen out; we play g6. I'll later explain why not the queen to e7. He brings his queen back to f3 and threatens mate again, so we develop the knight and intercept the queen's control of f7 — and now he can't take the knight, because it's defended. But I find this queen very annoying — can we chase it away? I don't want to deal with the possibility of scholar's mate, so I'm centralising my knight. Aren't I moving the same piece more than once in the opening, against my own advice? Yes, but every rule has exceptions, and he has already played his queen twice, so I can afford to delay my development by a move to get rid of this pesky queen; in an actual classical game I'd play the bishop to g7, but I just want to illustrate. He plays the queen to e3 — and whenever there's a knight landing on d4, it's a royal-family fork. Do we take the rook? No — we look for a better move: we take the queen. Not only are we up a queen, his king has to move away from castling, which is a total disaster. The game is basically over, but let me talk about converting. When you're up a queen, especially with the opponent's king out in the open, you have to open up the centre — only that makes your huge material lead manifest. How? We play d5 — two defenders, two attackers, we can safely proceed. He plays the knight to f3, attacking our pawn; can we develop a piece and defend the pawn at the same time? Yes — the fianchetto, developing the bishop to the long diagonal. Take the knight; and another important piece of advice, when you're up material you still want to develop — a common weakness is to win a queen and then forget to develop and still get mated. He plays d4, doing our bidding: whenever there's a capture, take stock of what has changed — have any files opened, and can we occupy them? Yes — a rook to the e-file, x-raying the king; so we're up a queen, opening the centre, and developing to active squares. Now take the knight — and here's an instructive moment: do you see the pin? Because of the pin, this bishop is immobile, a ghost, so are there pieces or pawns we can take? Count attackers and defenders: the immobile bishop is not a defender, so only the rook defends the pawn, but the queen is another attacker — if the rook takes, we'd take the queen. Can we take on e3? No. So can we move the queen to keep the bishop protected and unpin our own bishop? There are two squares — the queen to g6. Now we're ready to take his bishop with ours, keep trading, and then attack that pawn with our queen to checkmate him. He takes, we take, and he can't take our queen because of the pin — now we're up a queen and a rook. He plays a rook to e1 — very important, involve all your pieces: is any piece doing nothing? A rook — bring it into the game. Careful, though: when you have a piece untouchable due to a pin and he moves his king away from that pin, you have to be careful. I'll just sacrifice my rook for the bishop, because I'm up so much. The queen takes f3, and now I vacuum up the pawns — when you're up this much material you don't need to hunt this pawn, you can go straight for mate: bring the rook. Remember, if the pawn were on g7 we wouldn't, because a rook to e8 would be mate. He plays a rook to e2; I give a check on d1 and checkmate on h1. We could also have taken the rook and the bishop and promoted the c-pawn, but this is a little faster.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 388.5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+      "line": [],
+      "spoken": "Earlier there was the queen to b2 with check, sacking the exchange to win the rook over on b1. When you're completely winning like this, there are multiple ways to accomplish things — I'm trying to choose the most instructive, so take it with a grain of salt. He resigns.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 408.5,
+      "fen": "r1b1kbnr/ppppqppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+      "line": [
+        "Qe7"
+      ],
+      "spoken": "The bishop to c4 was played. A lot of people, and even some strong players in classical games, play the queen to h5 — not such a bad move, but obviously not good. Now, the queen to e7 is inaccurate — what does it block? The development of the bishop. Say we did play the queen to e7 but still wanted to develop that bishop; how could we?"
+    },
+    {
+      "ply": 7,
+      "t": 457,
+      "fen": "r1b1kbnr/ppppqppp/2n5/4p2Q/2B1P3/2N5/PPPP1PPP/R1B1K1NR b KQkq - 5 4",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The fianchetto — g6, which also simultaneously attacks the queen, then we fianchetto the bishop. But another reason I don't like the queen to e7 is that after the knight to c3, White could do something very similar to what we did — attack our queen"
+    },
+    {
+      "ply": 9,
+      "t": 467.5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5",
+      "line": [
+        "Qd8",
+        "Nb1"
+      ],
+      "spoken": "and centralise the knight. Why allow that? There's no need. We go g6, the queen to f3, the knight to f6 — obviously he can't take the knight, because the queen defends that square."
+    },
+    {
+      "ply": 10,
+      "t": 482,
+      "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 6",
+      "line": [
+        "g6"
+      ],
+      "spoken": "He plays d3, the knight to d4. Someone asks, why not the queen to f6,"
+    },
+    {
+      "ply": 9,
+      "t": 483,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5",
+      "line": [],
+      "spoken": "doesn't that not block the bishop's development?",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 485,
+      "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 8 6",
+      "line": [
+        "Qf6"
+      ],
+      "spoken": "Well, first of all, it makes the queen a voluntary target; and second,"
+    },
+    {
+      "ply": 9,
+      "t": 494,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5",
+      "line": [],
+      "spoken": "it blocks the natural development of the knight to f6. He plays d3, the knight to d4. Where should he have gone with the queen? The only move is the queen to d1, and after that I'd fianchetto. And if you were White, how would you chase this knight from d4? c3 is correct — you could also play the knight to f3, but after the knight takes f3 the queen comes out again, a third queen move, a bit extreme, so I'd play c3 and keep developing. Black has great development, I'm fine — but so is White. He went the queen to e3, the knight takes c2, the knight takes e3, and now I play d5 — so I hope it makes sense that when you're up a queen or a rook you open up the centre, because only that way is the full power of the queen displayed. And no, it's not a bad idea here to just develop your pieces and complete your development — that's totally fine too.",
+      "reanchor": true
+    }
+  ]
+}
