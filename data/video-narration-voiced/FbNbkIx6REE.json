@@ -1,0 +1,411 @@
+{
+ "videoId": "FbNbkIx6REE",
+ "title": "Daniels First Int. Tourney (Police Called) | Learning The Scotch | Moistcr1tikal / Penguinz0",
+ "openingName": "Scotch (via the Four Knights move order)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:FbNbkIx6REE",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 945.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "spoken": "The Scotch starts on familiar ground — the king's-pawn game with knights out. It's less well-known than the Italian, so a prepared player wins a lot of quick games with it.",
+   "kind": "main",
+   "teaches": [
+    "the Scotch as a surprise weapon"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 947,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 960.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The purest move order runs through the knight to c3 first, keeping options open before the d4 break.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 968.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 970.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 981.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "Bc5",
+    "Nxe5"
+   ],
+   "spoken": "If Black slips with the bishop to c5, there's a clean tactic: the knight snaps on e5. You're not blundering it — you win it straight back.",
+   "kind": "main",
+   "teaches": [
+    "the Nxe5 shot against ...Bc5"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 985,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1021,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The recovery is the pawn fork d4 — you give the knight back but come out with a huge lead in development while Black has been shuffling one piece.",
+   "kind": "main",
+   "teaches": [
+    "d4 fork: trade a pawn for development"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1035,
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "line": [
+    "Bxd4",
+    "Qxd4"
+   ],
+   "spoken": "After the trade the queen recaptures on d4, skewering the e5-knight to the pawn behind it.",
+   "kind": "main",
+   "teaches": [
+    "the Qd4 skewer"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 1039,
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black props the e5-knight up with d6, but White is essentially winning already.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 1053,
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QPP2/2N5/PPP3PP/R1B1KB1R b KQkq - 0 7",
+   "line": [
+    "f4"
+   ],
+   "spoken": "You dislodge the knight with the pawn to f4, and then collect on g7 — you might even win the rook in the corner.",
+   "kind": "main",
+   "teaches": [
+    "kick the defender, then take on g7"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 1059.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1064,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1103,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1110,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1111,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1114.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "In the real line White strikes with d4, the heart of the Scotch — opening the center for fast development.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 1120.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1130.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1144.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Bb4",
+    "Nxe5"
+   ],
+   "spoken": "The critical try is the pin with the bishop to b4. The little-known reply is to grab on e5 anyway.",
+   "kind": "main",
+   "teaches": [
+    "the pin variation and its refutation"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 1157.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/4N3/1b1Pn3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "Black regains it with the knight to e4 off the pin — but then the queen to f3 defends your knight, hits the e4-knight, and threatens mate, forcing Black to retreat.",
+   "kind": "main",
+   "teaches": [
+    "Qf3: defend, attack, and threaten at once"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 1203.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1206.5,
+   "fen": "r1bqk2r/pppp1ppp/8/4P3/1b2n3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Nxe4"
+   ],
+   "spoken": "The refutation to remember: the queen swings to g4, hitting the e4-knight and the g7-pawn together — Black can't cover both.",
+   "kind": "main",
+   "teaches": [
+    "the Qg4 double attack"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1263,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1370,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1373,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": "Most often Black just takes on d4 and you recapture with the knight — the whole point of d4 is to open beautiful squares for your pieces.",
+   "kind": "main",
+   "teaches": [
+    "Nxd4 for free development"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 1418,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1419,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1424,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "For demonstration take the passive d6 — it's positionally poor because it shuts in the f8-bishop, which is stuck settling for e7.",
+   "kind": "main",
+   "teaches": [
+    "why ...d6 is a passive concession"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1451.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1457,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1461,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 4 8",
+   "line": [
+    "Bf1",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1462,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 5 8",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop comes to c4, its ideal diagonal, raking toward f7.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 1468,
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "line": [
+    "Ke7",
+    "O-O",
+    "Rg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1501.5,
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQR1K1 b - - 9 10",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "A solid maintenance move — the rook to e1, flexible and harmonious.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 1503,
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1536.5,
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N4P/PPP2PP1/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Then prophylactic h3, taking the g4 square away from Black's bishop before it can get active, and clearing the way for the bishop to g5.",
+   "kind": "main",
+   "teaches": [
+    "h3 prophylaxis before Bg5"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 1549,
+   "fen": "r1bq1br1/ppp1kppp/3p1n2/8/2BnP3/2N4P/PPP2PP1/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1553,
+   "fen": "r1bq1br1/pp2kppp/3p1n2/2p5/2BQP3/2N4P/PPP2PP1/R1B2RK1 w - - 0 12",
+   "line": [
+    "Qxd4",
+    "c5"
+   ],
+   "spoken": "A common instinct here — recapture on d4 and push c5 — is actually a bad idea: it leaves the d6-pawn backward with no pawn to defend it. Drop the queen to d3 and pile on it, starting with the bishop to f4 hitting it directly.",
+   "kind": "main",
+   "teaches": [
+    "...c5 creates a fatal backward d6 pawn"
+   ]
+  }
+ ]
+}
