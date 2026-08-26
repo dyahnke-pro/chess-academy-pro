@@ -3836,7 +3836,11 @@ export async function getCoachChatResponse(
           const answer = key ? assembleFamousGameAnswer(key) : null;
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
-            if (voiced) return voiced;
+            if (voiced) {
+              // Offer to walk the game move-by-move in the grounded review.
+              lastCoachActionOffer = [{ type: 'walk_game', id: answer.reviewId }];
+              return voiced;
+            }
           }
         }
 
@@ -3853,7 +3857,12 @@ export async function getCoachChatResponse(
           const answer = assembleFundamentalsAnswer(fundamentalsTopicFromText(userText));
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
-            if (voiced) return voiced;
+            if (voiced) {
+              // Hand off to the real game that illustrates the principle
+              // (development/general → the Opera Game walk). Others self-hide.
+              if (answer.exampleReviewId) lastCoachActionOffer = [{ type: 'walk_game', id: answer.exampleReviewId }];
+              return voiced;
+            }
           }
         }
 

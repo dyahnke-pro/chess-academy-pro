@@ -50,6 +50,15 @@ describe('fundamentals teaching handler', () => {
     // Piece values must state the canonical numbers (the load-bearing fact).
     expect(assembleFundamentalsAnswer('piece-values')!.facts).toMatch(/rook.*5|5.*rook/i);
   });
+
+  it('links development + general to a real game to walk (the see-it hand-off)', () => {
+    // development/general point at the Opera Game review; others self-hide.
+    expect(assembleFundamentalsAnswer('development')!.exampleReviewId).toBe('sample-morphy-opera-1858');
+    expect(assembleFundamentalsAnswer('general')!.exampleReviewId).toBe('sample-morphy-opera-1858');
+    expect(assembleFundamentalsAnswer('development')!.facts).toMatch(/opera game/i);
+    expect(assembleFundamentalsAnswer('piece-values')!.exampleReviewId).toBeUndefined();
+    expect(assembleFundamentalsAnswer('king-safety')!.exampleReviewId).toBeUndefined();
+  });
 });
 
 describe('weakness ask is TAUGHT in-chat, not drilled away', () => {

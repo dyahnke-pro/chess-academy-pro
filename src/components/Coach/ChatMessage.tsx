@@ -57,6 +57,7 @@ function ActionButton({ action, onClick }: {
     drill_opening: 'Practice Opening',
     puzzle_theme: 'Try Puzzles',
     review_game: 'Review Game',
+    walk_game: 'Walk it move-by-move',
     analyse_position: 'Analyse Position',
     start_review: 'Start review',
     // Game-sourced training actions (David 2026-07-04: pull from real user
@@ -104,6 +105,13 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         break;
       case 'review_game':
         void navigate('/games');
+        break;
+      case 'walk_game':
+        // A famous game the app teaches move-by-move in the grounded review
+        // walk (id = a review sample, e.g. the Opera Game). This is the
+        // "see the fundamentals in a real game" hand-off from the fundamentals
+        // + famous-game lanes (David 2026-08-26).
+        void navigate(action.id ? `/coach/review/${action.id}` : '/coach/review');
         break;
       case 'analyse_position':
         // The analysis board lives at /coach/analyse (CoachAnalysePage) —

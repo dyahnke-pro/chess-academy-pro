@@ -1835,7 +1835,7 @@ const FUNDAMENTALS: Record<Exclude<FundamentalsTopic, 'general'>, { facts: strin
     source: 'concept:fundamentals-piece-values',
   },
   development: {
-    facts: 'Development means getting your pieces into the game. In the opening, bring your knights and bishops off the back rank toward the centre before you start an attack. Two rules keep it clean: do not move the same piece twice before the others are out, and do not bring the queen out early, where the opponent chases it and gains time.',
+    facts: 'Development means getting your pieces into the game. In the opening, bring your knights and bishops off the back rank toward the centre before you start an attack. Two rules keep it clean: do not move the same piece twice before the others are out, and do not bring the queen out early, where the opponent chases it and gains time. The Opera Game — Morphy in 1858 — is the textbook example: he develops with a threat on almost every move and the game plays itself.',
     source: 'concept:fundamentals-development',
   },
   center: {
@@ -1848,10 +1848,22 @@ const FUNDAMENTALS: Record<Exclude<FundamentalsTopic, 'general'>, { facts: strin
   },
 };
 
-export function assembleFundamentalsAnswer(topic: FundamentalsTopic): GroundedAnswer | null {
+/** The famous game that best ILLUSTRATES a fundamental, so the chat answer can
+ *  offer to walk it (the "see it in a real game" hand-off — David 2026-08-26).
+ *  Only development/general point at the Opera Game today (the one game the app
+ *  has real annotated data for); the others self-hide their walk offer. */
+const FUNDAMENTALS_EXAMPLE_REVIEW: Partial<Record<FundamentalsTopic, string>> = {
+  development: 'sample-morphy-opera-1858',
+  general: 'sample-morphy-opera-1858',
+};
+
+export function assembleFundamentalsAnswer(
+  topic: FundamentalsTopic,
+): (GroundedAnswer & { exampleReviewId?: string }) | null {
+  const exampleReviewId = FUNDAMENTALS_EXAMPLE_REVIEW[topic];
   if (topic !== 'general') {
     const entry = FUNDAMENTALS[topic];
-    return { facts: entry.facts, bestMoveSan: null, bestMoveFromTo: null, sources: [entry.source] };
+    return { facts: entry.facts, bestMoveSan: null, bestMoveFromTo: null, sources: [entry.source], exampleReviewId };
   }
   // General "teach me the fundamentals" — the core four, most-load-bearing
   // first (king safety and the centre win more beginner games than anything).
@@ -1860,12 +1872,14 @@ export function assembleFundamentalsAnswer(topic: FundamentalsTopic): GroundedAn
     'Control the centre — e4, d4, e5, d5 — so your pieces reach more of the board.',
     'Develop: get your knights and bishops out toward the centre before attacking, and do not move one piece twice or bring the queen out early.',
     'And castle early to get your king safe behind its pawns — a king stuck in the centre is how most games are lost.',
+    'Want to see it? The Opera Game shows every one of these winning a game.',
   ].join(' ');
   return {
     facts,
     bestMoveSan: null,
     bestMoveFromTo: null,
     sources: Object.values(FUNDAMENTALS).map((f) => f.source),
+    exampleReviewId,
   };
 }
 
