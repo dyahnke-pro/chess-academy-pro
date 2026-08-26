@@ -1,0 +1,348 @@
+{
+ "videoId": "gcx89fY8nZQ",
+ "title": "Sicilian Defense, Drazic Variation | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:gcx89fY8nZQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 49.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": "A ten-minute game. e4, e6 — the French. Those of you who've watched a while know what I do against the French."
+  },
+  {
+   "ply": 3,
+   "t": 62.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 — the variation someone introduced me to, and we're going to play it again."
+  },
+  {
+   "ply": 4,
+   "t": 65,
+   "fen": "rnbqkbnr/1ppp1ppp/p3p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Actually, no — White plays a6. That's not a move you see every day, but believe it or not, a6 is a move."
+  },
+  {
+   "ply": 5,
+   "t": 81.5,
+   "fen": "rnbqkbnr/1ppp1ppp/p3p3/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "When you face such moves, there's nothing in particular you should do — you should simply develop your pieces. The knight to f3 seems reasonable, not the knight to c3, because we want to be able to play c3"
+  },
+  {
+   "ply": 6,
+   "t": 89,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "when the moment is right. c5 — Black is trying to transpose the game into a Sicilian; if we play the knight to c3 here, Black takes on d4 and we transpose. But of course we're not going to play the knight to c3; we're going"
+  },
+  {
+   "ply": 7,
+   "t": 109,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2pP4/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "to punish Black for all these pawn moves — we play principled chess and push the pawn down to d5, almost a Benoni structure, except Black has lost a bunch of tempo on weird pawn moves."
+  },
+  {
+   "ply": 8,
+   "t": 123,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 — a reasonable move."
+  },
+  {
+   "ply": 9,
+   "t": 132.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "But we defend the pawn — the knight to c3."
+  },
+  {
+   "ply": 8,
+   "t": 134.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": "Not g5, because that drops the pawn on d5 — and d6, which a lot of people are tempted by in such positions, is premature, because",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 147.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "then we drop e4 and we're going to lose the d6-pawn."
+  },
+  {
+   "ply": 10,
+   "t": 153.5,
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 is a good move — I was really hoping he'd take on d5, which would be wrong. There are multiple ways to play this with White; don't feel White is winning, just solidly better. Now we have a positional approach and a more tactical one — we can take on e6 and keep the centre open, White is definitely better, and given our lead in development it makes sense to go after him."
+  },
+  {
+   "ply": 11,
+   "t": 197,
+   "fen": "rnbqkb1r/1p3ppp/p2pPn2/2p5/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": "The other approach is the positional move a4, preventing Black's main idea, b5 — largely a matter of taste, but with White I feel we should go for a more principled approach. Take on e6."
+  },
+  {
+   "ply": 12,
+   "t": 202,
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/2p5/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": "The bishop takes e6. Now what? Of course we can develop with the bishop to f4 or g5, but I'm hinting at principled play — this might not be the best thing, but I feel like playing ambitiously and really trying to punish Black. e5, d-takes-e5 leads to an endgame we don't want. We want a move that's often extremely superficial, one I've discouraged in many positions, but here has a specific aim."
+  },
+  {
+   "ply": 13,
+   "t": 242,
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/2p3N1/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 7",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight to g5 — its very specific aim is to destroy Black's pawn structure and get rid of the bishop on e6. We want to take the bishop, then get our bishop out to c4 and hit him where it hurts, on that e6-pawn; and if the bishop moves away, the bishop to c4 is totally crushing, that threat against f7 incredibly nasty. The knight to g5 might not be best — as Black here I'd simply develop with the knight to c6, not h6, since we want to take the bishop anyway, and h6 weakens the diagonal. The bishop to g4 isn't dangerous — we go f3, or the bishop to e2, trading the light-squared bishops and getting nice control of the d5-square. Black's best is the knight to c6; b5 could be considered but it's dangerous to keep not developing."
+  },
+  {
+   "ply": 14,
+   "t": 315,
+   "fen": "rn1qkb1r/1p3ppp/p2pb3/2p3N1/4P1n1/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 8",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "I'd go the knight to c6 here, and then the knight takes c6, f-takes-c6, the bishop to c4, and White is better but the game isn't over. Instead he blunders a piece — the knight to g4"
+  },
+  {
+   "ply": 15,
+   "t": 320.5,
+   "fen": "rn1qkb1r/1p3ppp/p2pN3/2p5/4P1n1/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": "walks right into the knight takes e6, and we win the knight; I think he had internet problems that distracted him. This type of play often works, so at this level don't be afraid"
+  },
+  {
+   "ply": 13,
+   "t": 344.5,
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/2p3N1/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 7",
+   "line": [],
+   "spoken": "to go for something like this if you know what you're doing — don't play a move like the knight to g5 just because it looks cool; play it when you have a very specific aim, such as, I want to take on e6, eliminate the light-squared bishop, and then attack the pawn that's going to be on that weak square.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 354.5,
+   "fen": "rn1qkb1r/1p3ppp/p2pN3/2p5/4P1n1/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "Ng4",
+    "Nxe6"
+   ],
+   "spoken": "Black can try the queen to h4, but then we go g3, hitting the queen and preventing checkmate; and if Black plays the queen to f6, we have multiple moves, including the simple"
+  },
+  {
+   "ply": 16,
+   "t": 372,
+   "fen": "rn1qkb1r/1p3ppp/p2pN3/2p5/4P3/2N5/PPP2nPP/R1BQKB1R w KQkq - 0 9",
+   "line": [
+    "Nxf2"
+   ],
+   "spoken": "queen takes g4. He plays the knight to f2. Let's try to be accurate — a lot of people would just instantly grab this. We have a choice: we can play the knight takes d8 and simplify into an endgame up a piece; the king takes f2; but there's a third move I think"
+  },
+  {
+   "ply": 19,
+   "t": 406.5,
+   "fen": "rn1qkb1r/1p4pp/p2pp3/2p5/4P3/2N5/PPP2QPP/R1B1KB1R b KQkq - 0 10",
+   "line": [
+    "Qd2",
+    "fxe6",
+    "Qxf2"
+   ],
+   "spoken": "is even more accurate. Not the queen to f3 — though I like the queen to f3 too, because then we can take on f2 with the queen and preserve the right to castle — I like the queen to h5, pinning the pawn and going for the throat: we're pinning the pawn, still attacking the knight, and attacking the queen; and after the queen to f6, rather than the knight to c7 with check, which isn't the most accurate though still completely winning, there's a very typical concept that wins on the spot — g5; and of course if the queen to e6, the knight to c7"
+  },
+  {
+   "ply": 7,
+   "t": 456,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2pP4/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": "wins the queen. So there are multiple ways to win here, but in any case the queen to h5 ends the game anyway — just bad opening play by Black.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 457.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "the knight to f6, the knight to c3. The one thing I'll say is that against",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 463.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p4n2/2pp4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "if he takes on d5 — who can tell me the proper approach here? This is a common oversight at the lower levels.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 477,
+   "fen": "rnbqkb1r/1p1p1ppp/p4n2/2ppP3/8/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "g6 maybe keeps Black in the game a little longer, I agree — and that's e5, and then I've seen this so many times:",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 480,
+   "fen": "rnbqkb1r/1p1p1ppp/p4n2/2p1P3/3p4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "d4"
+   ],
+   "spoken": "people will often play d4, and if you feel cool",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 485.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p4P2/2p5/3p4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "White wins a piece here — e-takes-f6, d-takes-c3,",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 487.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p4P2/2p5/8/2p2N2/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": "and now there's a cold shower waiting:",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 488.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p4P2/2p5/8/2p2N2/PPP1QPPP/R1B1KB1R b KQkq - 1 8",
+   "line": [
+    "Qe2+"
+   ],
+   "spoken": "the queen to e2 with check, and the pawn on f6 is defending",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 494.5,
+   "fen": "rnbqk2r/1p1pPppp/p7/2p5/8/2p2N2/PPP1QPPP/R1B1KB1R b KQkq - 0 9",
+   "line": [
+    "Be7",
+    "fxe7"
+   ],
+   "spoken": "e7. You can win a bunch of games like this, or the queen takes c7, just forcing the queen straight; and if Black goes g4, then the knight to d5 is a total disaster,",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 512,
+   "fen": "rnbqkb1r/1p1p1ppp/p4n2/2pp4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [],
+   "spoken": "because you're going to go the bishop to d3 and the knight is just going to be trapped there — White has a big lead in development and a positional advantage, so just file this away into your mental directory.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 513.5,
+   "fen": "rnbqkb1r/1p1p1ppp/p3pn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": "You should just automatically recapture in the centre — these moves that push the pawn forward",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 522.5,
+   "fen": "rnbqkb1r/1p3ppp/p2pPn2/2p5/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d6",
+    "dxe6"
+   ],
+   "spoken": "can be very dangerous. So d6, we decided to take on e6.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 524,
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/2pP4/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [],
+   "spoken": "The alternate approach was a4,",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 525,
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/2pP4/P3P3/2N2N2/1PP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "a4"
+   ],
+   "spoken": "a4,",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 527,
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/2pp4/P3P3/2N2N2/1PP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "which leads to",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 528,
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/2pP4/P7/2N2N2/1PP2PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "this type of structure. I once lost a game like this with Black — I used to experiment with the move c5 here, and there was one game where I just got crushed in this structure, incredibly cramped the whole game and pushed off the board, which really soured me on this line. It's just not very fun. And that's going to end the stream for today — thank you so much for the incredible support.",
+   "reanchor": true
+  }
+ ]
+}
