@@ -1,353 +1,373 @@
 {
- "videoId": "ngKFZPlhP2c",
- "title": "Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM Naroditsky",
- "openingName": "French Defense: Tarrasch Variation",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
- "source": "yt:ngKFZPlhP2c",
- "moves": [
-  {
-   "ply": 2,
-   "t": 15.5,
-   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "e6"
-   ],
-   "spoken": "We take White and face the French."
-  },
-  {
-   "ply": 3,
-   "t": 18,
-   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "d4"
-   ],
-   "spoken": "We build the centre with d4."
-  },
-  {
-   "ply": 4,
-   "t": 19.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": "Black challenges with d5."
-  },
-  {
-   "ply": 5,
-   "t": 32,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [
-    "Nd2"
-   ],
-   "spoken": "We introduce the Tarrasch — the knight to d2, keeping the c-pawn free for c3."
-  },
-  {
-   "ply": 6,
-   "t": 34.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": "Black develops the knight to f6."
-  },
-  {
-   "ply": 7,
-   "t": 43.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "e5"
-   ],
-   "spoken": "We grab space with e5."
-  },
-  {
-   "ply": 8,
-   "t": 47.5,
-   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
-   "line": [
-    "Nfd7"
-   ],
-   "spoken": "Black tucks the knight to d7."
-  },
-  {
-   "ply": 9,
-   "t": 55.5,
-   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/3B4/PPPN1PPP/R1BQK1NR b KQkq - 2 5",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": "We develop the bishop to d3."
-  },
-  {
-   "ply": 11,
-   "t": 60,
-   "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
-   "line": [
-    "c5",
-    "c3"
-   ],
-   "spoken": "Black strikes with ...c5; we hold the centre with c3 — the whole point of Nd2."
-  },
-  {
-   "ply": 12,
-   "t": 69,
-   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 1 7",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": "Black develops the knight to c6."
-  },
-  {
-   "ply": 13,
-   "t": 84,
-   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 2 7",
-   "line": [
-    "Ngf3"
-   ],
-   "spoken": "We develop the knight to f3 — more testing than the old Ne2."
-  },
-  {
-   "ply": 14,
-   "t": 89.5,
-   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 3 8",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": "Black plays ...Qb6, the classical line, pressuring d4."
-  },
-  {
-   "ply": 15,
-   "t": 114.5,
-   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQ1RK1 b kq - 4 8",
-   "line": [
-    "O-O"
-   ],
-   "spoken": "We castle."
-  },
-  {
-   "ply": 16,
-   "t": 119,
-   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3p4/2PB1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 9",
-   "line": [
-    "cxd4"
-   ],
-   "spoken": "Black takes on d4."
-  },
-  {
-   "ply": 17,
-   "t": 120,
-   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3P4/3B1N2/PP1N1PPP/R1BQ1RK1 b kq - 0 9",
-   "line": [
-    "cxd4"
-   ],
-   "spoken": "We recapture on d4."
-  },
-  {
-   "ply": 18,
-   "t": 122.5,
-   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3n4/3B1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 10",
-   "line": [
-    "Nxd4"
-   ],
-   "spoken": "Black takes with the knight."
-  },
-  {
-   "ply": 19,
-   "t": 126.5,
-   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3N4/3B4/PP1N1PPP/R1BQ1RK1 b kq - 0 10",
-   "line": [
-    "Nxd4"
-   ],
-   "spoken": "We recapture with the knight."
-  },
-  {
-   "ply": 20,
-   "t": 128.5,
-   "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B4/PP1N1PPP/R1BQ1RK1 w kq - 0 11",
-   "line": [
-    "Qxd4"
-   ],
-   "spoken": "Black recaptures with the queen, centralizing on d4."
-  },
-  {
-   "ply": 21,
-   "t": 135,
-   "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B1N2/PP3PPP/R1BQ1RK1 b kq - 1 11",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": "We develop the knight to f3 with tempo, hitting the queen."
-  },
-  {
-   "ply": 22,
-   "t": 138,
-   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/8/3B1N2/PP3PPP/R1BQ1RK1 w kq - 2 12",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": "Black retreats the queen to b6."
-  },
-  {
-   "ply": 6,
-   "t": 688.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 689.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 692,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 787.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 792.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [
-    "Nd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 800,
-   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 5 5",
-   "line": [
-    "Be7",
-    "Nb1",
-    "Bb4+",
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 804.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 7 6",
-   "line": [
-    "Bf8",
-    "Nb1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 806.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 808,
-   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
-   "line": [
-    "Bb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 809.5,
-   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2P5/PP1N1PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "c3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 812.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 826,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 827,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 830,
-   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
-   "line": [
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 833,
-   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/5N2/PPPN1PPP/R1BQKB1R b KQkq - 1 4",
-   "line": [
-    "Ngf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 837,
-   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 1609.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1614.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1616,
-   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
-   "line": [
-    "e5",
-    "Nfd7"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "ngKFZPlhP2c",
+  "title": "Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "French Defense: Tarrasch Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:ngKFZPlhP2c",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 15.5,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "e6"
+      ],
+      "spoken": "The pawn to e4, e6 — the French."
+    },
+    {
+      "ply": 3,
+      "t": 18,
+      "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4 — let's play the main line."
+    },
+    {
+      "ply": 4,
+      "t": 19.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "We've been playing e5 exclusively; I want to vary it up a little."
+    },
+    {
+      "ply": 5,
+      "t": 32,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nd2"
+      ],
+      "spoken": "Let me introduce the Tarrasch — the knight to d2, what I actually play myself."
+    },
+    {
+      "ply": 6,
+      "t": 34.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "The knight to f6. The point of the knight on d2 instead of c3 — which should jump out if you've never played this — is that you block in your own bishop —"
+    },
+    {
+      "ply": 7,
+      "t": 43.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "e5"
+      ],
+      "spoken": "— why? Because you can meet c5 with c3 and keep your centre intact. e5."
+    },
+    {
+      "ply": 8,
+      "t": 47.5,
+      "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
+      "line": [
+        "Nfd7"
+      ],
+      "spoken": "The knight to d7."
+    },
+    {
+      "ply": 9,
+      "t": 55.5,
+      "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/3B4/PPPN1PPP/R1BQK1NR b KQkq - 2 5",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "The bishop to d3."
+    },
+    {
+      "ply": 11,
+      "t": 60,
+      "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
+      "line": [
+        "c5",
+        "c3"
+      ],
+      "spoken": "c5, and we meet it with c3, keeping our centre intact. In a way you get the best of all worlds: you develop your pieces and keep the centre —"
+    },
+    {
+      "ply": 12,
+      "t": 69,
+      "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 1 7",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "— with the other knight responsible for defending d4. The knight to c6. For many decades the knight to e2 was considered automatic here —"
+    },
+    {
+      "ply": 13,
+      "t": 84,
+      "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 2 7",
+      "line": [
+        "Ngf3"
+      ],
+      "spoken": "— and the knight to f3, which looks more natural, was thought inferior; yet we're going to play it. That changed about 25 years ago —"
+    },
+    {
+      "ply": 14,
+      "t": 89.5,
+      "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 3 8",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "— when computers came and people figured out that the knight to f3 is perhaps more testing than the knight to e2. The queen to b6 is the classical old line — the reason old-timers thought the knight to f3 was bad."
+    },
+    {
+      "ply": 15,
+      "t": 114.5,
+      "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQ1RK1 b kq - 4 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "The old worry: you have a hard time defending d4. But computers asked an interesting question — what if you don't defend d4 at all, simply sacrifice the pawn, and in return get a lead in development —"
+    },
+    {
+      "ply": 16,
+      "t": 119,
+      "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3p4/2PB1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 9",
+      "line": [
+        "cxd4"
+      ],
+      "spoken": "— more space —"
+    },
+    {
+      "ply": 17,
+      "t": 120,
+      "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3P4/3B1N2/PP1N1PPP/R1BQ1RK1 b kq - 0 9",
+      "line": [
+        "cxd4"
+      ],
+      "spoken": "— we recapture on d4 —"
+    },
+    {
+      "ply": 18,
+      "t": 122.5,
+      "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3n4/3B1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 10",
+      "line": [
+        "Nxd4"
+      ],
+      "spoken": "— and a clamp on the centre with the pawn on e5. Black goes for the line and takes on d4."
+    },
+    {
+      "ply": 19,
+      "t": 126.5,
+      "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3N4/3B4/PP1N1PPP/R1BQ1RK1 b kq - 0 10",
+      "line": [
+        "Nxd4"
+      ],
+      "spoken": "We take on d4."
+    },
+    {
+      "ply": 20,
+      "t": 128.5,
+      "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B4/PP1N1PPP/R1BQ1RK1 w kq - 0 11",
+      "line": [
+        "Qxd4"
+      ],
+      "spoken": "The queen takes d4. Now, without our next move, White's entire position would collapse — the bishop is hanging and the pawn is hanging —"
+    },
+    {
+      "ply": 21,
+      "t": 135,
+      "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B1N2/PP3PPP/R1BQ1RK1 b kq - 1 11",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "— so we play the knight to f3."
+    },
+    {
+      "ply": 22,
+      "t": 138,
+      "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/8/3B1N2/PP3PPP/R1BQ1RK1 w kq - 2 12",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "The knight to f3 forces the queen back, and the main move here is the queen to b6. This isn't the only French line where you give up the d-pawn — the Milner-Barry is another — but you must follow up very accurately or Black consolidates and we get nothing. White's best is the queen to a4, stopping the knight from coming to c5 and preparing to swing to g4. So the queen to g4, attacking g7 — Black can't castle, since that runs into the bishop to h6 winning the exchange, and if g6, we put the bishop on h6 anyway, with serious control of the dark squares. The bishop to f8 is a serious concession. Nothing happens fast here; White mounts a slow campaign, massaging the weak dark squares, getting the rooks in, a rook to e1 to overprotect e5. Moving the bishop back to e3 would be a tempo move, but I like the queen to f4 — b2 is hanging, but we're happy to sacrifice it; in these lines you must be ready to give up two or even three pawns to keep control, and the knight to g5, hitting f7, is a real threat. We keep the tension to get the queen to h6 and prevent castling. The queen to d8. Now a perfect chance to bring pieces in — the rook to c1 stops the knight to c5, confining it to d7, and controls the only open file; if the queen to e7, we infiltrate to c7. A cool idea against an opponent with all his pawns on one color: chip at the pawn shell with h4 and h5, since g6 is our primary target — if we play h5 and Black ignores it, we take on g6 with devastating effect. The knight to c5 — now tactics: calculate the h-pawn takes g6; if the bishop is taken, we have the pawn to g7 and then the queen to h7, forking the knight and rook, re-establishing material at worst. The queen to a3 heads into d6, the mouth of madness, and the queen to e7 is an elementary blunder — the rook to c7 wins the queen, with mate to follow. A nice technical game showing the power of this line; don't get tunnel vision on checkmate — you can use the king's weakness to win material — though here the rook takes c8 and the queen to d6 with check is mate in three.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 688.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+      "line": [],
+      "spoken": "Or mate in four — and he resigns. This line is called the Tarrasch.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 689.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "e5"
+      ],
+      "spoken": "e5.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 692,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [],
+      "spoken": "It's named after Siegbert Tarrasch, surely a top-five player in the late 1800s — not only influential as a player but an opening expert who wrote a lot and had strong opinions: he believed you had to control the centre and play traditionally, and he butted heads with Nimzowitsch and the hypermoderns. But he wasn't just a dogmatic Luddite — he beat Nimzowitsch a gazillion times, and a lot of other people too; he was really good.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 787.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "You don't just stumble into having topical lines named after you that are still played today. The knight to e2 is the second most popular move after the knight to c3, with the Advance variation third.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 792.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nd2"
+      ],
+      "spoken": "As I explained, the idea of the knight on d2 is very simple: the knight to c3 has the serious drawback of allowing the bishop to b4, the Winawer —",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 800,
+      "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 5 5",
+      "line": [
+        "Be7",
+        "Nb1",
+        "Bb4+",
+        "Nc3"
+      ],
+      "spoken": "— the bishop to b4, the Winawer.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 804.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 7 6",
+      "line": [
+        "Bf8",
+        "Nb1"
+      ],
+      "spoken": "The knight to d2 takes the sting out —",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 806.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [],
+      "spoken": "— of all these shenanigan-type moves —",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 808,
+      "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "— the bishop to b4 is now totally ineffective —",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 809.5,
+      "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2P5/PP1N1PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "c3"
+      ],
+      "spoken": "— due to c3.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 812.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [],
+      "spoken": "The secondary reason is that you unblock the c-pawn, so when Black challenges your centre —",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 826,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "— as Black did in the game, we can play c3 to support d4. The knight to f6 is one of two main responses —",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 827,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [],
+      "spoken": "— to the Tarrasch; the other is —",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 830,
+      "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "c5"
+      ],
+      "spoken": "— the immediate c5.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 833,
+      "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/5N2/PPPN1PPP/R1BQKB1R b KQkq - 1 4",
+      "line": [
+        "Ngf3"
+      ],
+      "spoken": "In the modern day people play the knight to f3 here, with a lot of theory.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 837,
+      "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+      "line": [],
+      "spoken": "The knight to f6, e5, the knight to d7 is super-old theory; c5, c3 has obvious similarities to the Advance variation, and after the knight to c6 we reach a fork in the road. A historical detour: the first three times this position occurred were Tarrasch's own games, 1890 to 1892; everybody played the knight to e2 until Israel Horowitz first tried the knight to f3 in 1938, and Frank Marshall, after whom the Marshall Club is named, played the queen to a4 here, which isn't considered good anymore — you can see how understanding has grown, since sacrificing the d4-pawn wouldn't have crossed even a strong attacker's radar in the thirties. The knight to e2 and the knight to f3 are about equivalent; everybody played the knight to e2 because after the queen to b6 you have the knight to f3 supporting d4. The main move now is the queen to b4 — a queen trade is out of the question for us, down a pawn, so we drop back to c2; the old-school line goes the queen to c5, and the queen to a4 makes a draw while the queen to e2 is more combative, reaching a roughly equal but very cramped position for Black that I love playing as White. Wesley So once crushed me in one of these — he got all his pieces out and I was down a pawn with nothing; he pinned his own knight with the knight to c5, well protected, his king perfectly safe on d7, then the queen to a6 sacking the exchange, and I resigned. So be very careful with this line as White. Back to our game: after the bishop to f8 we kept the tension with the queen to f4 — Black struggling to keep the tension gives our queen prime real estate, a Manhattan penthouse over the square it covets; the bishop takes h6 lacks resilience. What worried me was the queen to b4, using the bishop to offer a queen trade, and after the queen to c1, the queen to c5 keeps harassing — the white queen is pegged to the bishop, and wherever it goes, Black has a corresponding square to offer the trade, so a draw is likely; trading into an endgame with an extra pawn is a big deal, so I'd be reluctant. Instead Black traded on h6 and it went downhill; the queen to d8 was another bad move — I'd prioritize getting the queen off h6 or at least getting the pieces off their passive squares with the knight to c5 and the bishop to d7. On the queen takes b2, I was just planning the rook to c1, bringing pieces in — the pawns are irrelevant. And the knight to g5 idea: play it prematurely and Black has the annoying knight takes e5, since the queen also defends that pawn, so we force the queen off the diagonal by making it take on a2, and then the knight to g5 is crushing, the bishop takes h6 being checkmate; if instead the queen to c3, we keep going with the rook to b3. Compensation is poorly taught — it's made to sound mystical, but there's nothing mysterious here: more active pieces, weak pawns, a weak king, all visible. So the bishop to h6, the queen recaptures, the queen to d8, we deploy a rook to c1, and after a6, we apply the classic h4 and h5 to destroy Black's pawn cover so our pieces infiltrate — not the queen to g7, which spends two tempi to grab the corner pawn. b6, h5, and if Black takes on h5, the knight to g5 with the detail that if Black takes on e5, the queen to g7 forks the rook and knight, and the knight takes d3 is mate. Black's b6 plan was the bishop to b7 and the rook to c8 to contest the c-file, but it's a runaway train — we win back the knight, the king to e8 is most resilient, and the game goes on, though White is much better.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 1609.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+      "line": [],
+      "spoken": "The queen to e7 was total collapse — the rook to c7 and it's all over. A good little illustration of the Tarrasch, a very dynamic line —",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1614.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "— you definitely need to study this line very carefully.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1616,
+      "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
+      "line": [
+        "e5",
+        "Nfd7"
+      ],
+      "spoken": "I'll leave you with that — thanks for hanging out, and I'll see you later.",
+      "reanchor": true
+    }
+  ]
 }
