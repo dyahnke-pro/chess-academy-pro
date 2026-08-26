@@ -86,7 +86,10 @@ threat two moves away; the plan is structure→where-it-leads.
 **OFFLINE BUILD 100% COMPLETE** (Phases 0–6). Phase 7 (live runtime wiring into
 `groundedAnswer.ts` / `voiceFacts` + the play/teach surfaces + the "key moment —
 don't rush" event) is the separate, WITH-David pass — NOT started here.
-- **Phase 7 (separate, WITH David)** — live wiring: extend `groundedAnswer.ts`, route criticality into `voiceFacts` + the play/teach surfaces, add the "key moment — don't rush" narration event. **NOT in this offline pass.** `pending`
+- **Phase 7 — live wiring (IN PROGRESS, David greenlit 2026-08-26).** The runtime stack is built + tested: `criticality.ts` (score) · `narrationImportance.ts` (speak/rank verdict) · `threatOut.ts` (must-defend, turn-aware) · `perturbation.ts` (leans-on) · `positionFacts.ts` (composer → kind-tagged DNA clauses, both sides: student decision + opponent intent + how to undermine their piece). Reconciled with `scanCriticality`/`findHangingPieces`/`parseEvalTable`/`criticalityThresholds` — no second criticality, no duplicated detection. `clauseText(items, exclude)` lets each surface emit only what its existing lanes don't cover.
+  - **Wired:** Learn (`CoachTeachPage.handleStudentMove`) — excludes `must-defend` (tactics lane covers it).
+  - **Remaining:** review, read-position, hints, matchup/Watch, tactics, Play phase-narration — same `clauseText` pattern.
+  - **Audit:** ALL surfaces at the end (David's call), then land on `main`.
 
 ## Decisions log
 
