@@ -1,0 +1,151 @@
+{
+ "videoId": "f5V0W6btKdY",
+ "title": "Master Class | Passive Vs Quiet | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense: Closed",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:f5V0W6btKdY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 593,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "He resigns — good game. Let's look at the game. e4, c5."
+  },
+  {
+   "ply": 3,
+   "t": 594.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d3"
+   ],
+   "spoken": "d3."
+  },
+  {
+   "ply": 4,
+   "t": 597,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "the knight to c6."
+  },
+  {
+   "ply": 5,
+   "t": 600,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "the knight to c3."
+  },
+  {
+   "ply": 6,
+   "t": 601,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The best way for White to handle the situation is to play g3 and transpose into"
+  },
+  {
+   "ply": 7,
+   "t": 607.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP2P1/PPP2P1P/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "g3"
+   ],
+   "spoken": "what's called the Closed Sicilian — the point of the Closed is that you don't play d4, that's why it's closed; the centre remains"
+  },
+  {
+   "ply": 6,
+   "t": 628.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": "largely closed. It's a viable anti-Sicilian I used to play, and it would at least bring White into a tenable position — but the moment he",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 630.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 2 5",
+   "line": [
+    "Nf3",
+    "Bg7"
+   ],
+   "spoken": "played the knight to f3, things start going downhill. The bishop"
+  },
+  {
+   "ply": 9,
+   "t": 632.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPPB1PPP/R2QKB1R b KQkq - 3 5",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": "to d2 is too passive — this bishop just isn't doing enough."
+  },
+  {
+   "ply": 8,
+   "t": 637,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 2 5",
+   "line": [],
+   "spoken": "So if you were to develop this bishop, maybe the bishop to b3, maybe the bishop to f4,",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 642.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/4P3/2NP1N2/PPPB1PPP/R2QKB1R w KQkq - 0 6",
+   "line": [
+    "Bd2",
+    "d6"
+   ],
+   "spoken": "somewhat better developing moves. d6."
+  },
+  {
+   "ply": 11,
+   "t": 644.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/4P3/2NP1N1P/PPPB1PP1/R2QKB1R b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": "h3. The Open Sicilian is considered a more principled line, a better chance at an advantage than the Closed — but at a lower level there's no reason the Open should be the most popular; I'd say the Alapin and the Closed should be prioritised by beginners and intermediate players over the Open."
+  },
+  {
+   "ply": 12,
+   "t": 666,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/4P3/2NP1N1P/PPPB1PP1/R2QKB1R w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6, and the queen to e2, or castling long, is asking for trouble. Why should Black be so happy to see White castle long? We have this bishop on g7 aiming at the b2-pawn, with a lot sitting on this diagonal. What do we need to jump-start Black's attack as quickly as possible? If b2 is the pawn we ultimately pile up on, we want to open the b-file — so the move that meets all our goals is b5, which we can play immediately. If he doesn't take the pawn, we go b4, dislodge the knight, then follow with the queen to a5; if he does take, we follow with the rook to b8, opening the file, and the knight has to move back — if White tries to support it, we chase it away with a6. And now the queen to b6 comes with tremendous effect, threatening checkmate. If White pushes b3, the moment a move like that is made it creates holes — and this is where a lot of people struggle with being flexible: you've done the last three things to attack b2, White plays b3, and now the goal is no longer to attack that pawn, it's gone; you have to adapt to the change in circumstances, and that dictates the next course of the attack. Notice the dark squares have been weakened — what move exploits that? c4 would be unnecessary, you don't have to rip open the position further; I like the queen to b4, even the queen to a6 is cool, trying to get to a3 with the queen and b4 with the knight, and something comes with checkmate — too many threats, absolutely crushing. Is a5 significantly weaker than b5? Yes. A lot of people consider pawn storms a monolithic thing where you must move all three pawns together — I think that comes from seeing games where White does this in Sicilians — but it's not always true. If you play a5, White can play a4 and say good luck playing b5 now; and if you do play b5 and I play the knight takes b5, that knight is on an outpost, buying White time to begin his own attack. Even if White does nothing and just stops you with a3, you've spent two moves making very questionable progress, kind of locking up the queenside. What you need to understand is that the point of most pawn storms is to open up avenues for your pieces — and two conclusions follow: first, pawn storms are sometimes unnecessary, because in some situations you already have so many pieces in the attack that you can sacrifice a piece to open up the structure around the king rather than pushing pawns; and second, if you are using your pawns, you don't always have to advance them in pairs — you can advance just one, or sacrifice one — it's not about advancing two or three pawns in synchrony, because the end goal is",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 937.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "usually to rip open your opponent's king. I know that was a whole speech, but this is very often misunderstood — a lot of my students, when we start going over attacks,",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 938.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "line": [
+    "Nc6",
+    "Nc3",
+    "g6",
+    "Nf3"
+   ],
+   "spoken": "will always attack in the same way, starting with a pawn storm that looks exactly the same. A lot of people would propose a move like a5 or a6 and b5, which is understandable, but you have to be flexible with pawn storms. If the knight doesn't take b5, then you go b4, and a move like the queen to a5 would be devastating, because this pawn is not easy to defend; after a3, Black has many good moves. Can you spot a particularly sexy one? Attacking properly is a lifelong journey — the move is b-takes-a3; you might say, bishop takes queen, you're blundering your queen, but this pawn comes out to a2.",
+   "reanchor": true
+  }
+ ]
+}
