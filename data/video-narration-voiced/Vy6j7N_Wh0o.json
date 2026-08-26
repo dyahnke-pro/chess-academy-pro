@@ -1,0 +1,327 @@
+{
+ "videoId": "Vy6j7N_Wh0o",
+ "title": "Beginner To Master | Chess Speedrun | 1440 | Grandmaster Naroditsky",
+ "openingName": "King’s Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Vy6j7N_Wh0o",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1389,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1394.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1400,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1427,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 is the Sämisch — it props up a future e4. In true King's Indian spirit we don't fight it; we just fianchetto and let White build the centre.",
+   "kind": "main",
+   "teaches": "Against the Sämisch, don't contest e4 directly — fianchetto and prepare to strike the centre later."
+  },
+  {
+   "ply": 6,
+   "t": 1446,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1451,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/5P2/PP4PP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1459.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/5P2/PP4PP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 stops e5, and then we castle and finish development.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 1462,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 2 6",
+   "line": [
+    "Nc3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1464,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2NB1P2/PP4PP/R1BQK1NR b KQ - 3 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Bd3 is an instructive inaccuracy — and it goes to the heart of why the King's Indian is so annoying: White carelessly severs the queen from the d4-pawn, leaving it weak.",
+   "kind": "main",
+   "teaches": "Watch for the moment White's own move disconnects the defense of his centre pawn — that's your target."
+  },
+  {
+   "ply": 12,
+   "t": 1506,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP4PP/R1BQK1NR w KQ - 4 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Normally we'd hit d4 with a pawn, but c5 or e5 here just lets White push d5. So Nc6 is the move — attack the pawn with a piece instead.",
+   "kind": "main",
+   "teaches": "When a pawn break lets the opponent lock the centre, pressure the target with a piece rather than a pawn."
+  },
+  {
+   "ply": 13,
+   "t": 1510,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 5 7",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1524.5,
+   "fen": "r1bq1rk1/pppnppbp/2np2p1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R w KQ - 6 8",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Nd7 is the subtle reroute — it brings the g7-bishop to life, and remember, bad bishops defend good pawns. Now e5 comes with real force.",
+   "kind": "main",
+   "teaches": "Reroute a knight to unblock your fianchetto bishop before you strike in the centre."
+  },
+  {
+   "ply": 15,
+   "t": 1528,
+   "fen": "r1bq1rk1/pppnppbp/2np2p1/8/2PPP3/2NBBP2/PP2N1PP/R2QK2R b KQ - 7 8",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1531,
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/4p3/2PPP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Now e5 strikes at d4, and if White pushes d5, the central square opens for our pieces.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 1532.5,
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1538.5,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 5 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1540,
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 2 9",
+   "line": [
+    "e5",
+    "d5",
+    "Nd7",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1554.5,
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 3 10",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Nd4 is the payoff — the bishop supports the square and the knight plants itself on the finest central outpost.",
+   "kind": "main",
+   "teaches": "Occupy the outpost your bishop already supports; it can never be dislodged by a pawn."
+  },
+  {
+   "ply": 19,
+   "t": 1557,
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R b KQ - 4 10",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1573.5,
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R w KQ - 5 11",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight tour continues to c5 — look at the pressure these two knights pour onto White's position.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 1583,
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2N1BP2/PP1QN1PP/RB2K2R b KQ - 6 11",
+   "line": [
+    "Bb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1623.5,
+   "fen": "r1bq1rk1/ppp3bp/3p2p1/2nPpp2/2PnP3/2N1BP2/PP1QN1PP/RB2K2R w KQ - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": "When the knight is attacked by a third piece, don't defend it — let White spend time capturing it while we coordinate and strike. f5 fires up the attack.",
+   "kind": "main",
+   "teaches": "Rather than passively defend an attacked piece, let it go for tempo and open your own attack."
+  },
+  {
+   "ply": 23,
+   "t": 1627.5,
+   "fen": "r1bq1rk1/ppp3bp/3p2pB/2nPpp2/2PnP3/2N2P2/PP1QN1PP/RB2K2R b KQ - 1 12",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "Bh6 is a blunder — a type-two piece, defended only once. Combine that with the diagonal f3 weakened: once the f6-knight steps aside, the queen swings to h4, and the bishop falls with the game.",
+   "kind": "main",
+   "teaches": "After f3, remember the queen's route to h4; unmask it by moving the f6-knight to snap off a loose piece."
+  },
+  {
+   "ply": 15,
+   "t": 1665.5,
+   "fen": "r1bq1rk1/ppp2pbp/2np1np1/3Pp3/2P1P3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1693,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1697.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 2 6",
+   "line": [
+    "e4",
+    "d6",
+    "Nc3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1698.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 3 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1733,
+   "fen": "r1bq1rk1/ppp1ppbp/3p1np1/3Pn3/2P1P3/2N2P2/PP4PP/R1BQKBNR b KQ - 2 8",
+   "line": [
+    "Nbd7",
+    "d5",
+    "Ne5",
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1793,
+   "fen": "r1bq1rk1/ppp2pbp/3ppnp1/3Pn3/2P1P3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 9",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Use the method of comparison — a pawn on e7 instead of e5 means you can chip at the d5-pawn with e6 and c6, ripping the centre open to punish the weaknesses f3 created.",
+   "kind": "review",
+   "teaches": "Open the centre against a Sämisch to expose the very holes the early f3 left behind.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1885,
+   "fen": "r1bq1rk1/ppp1ppbp/3p1np1/3Pn3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 1 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1893,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1896.5,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1903,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
