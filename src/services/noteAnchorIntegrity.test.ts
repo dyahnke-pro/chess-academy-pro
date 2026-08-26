@@ -20,8 +20,8 @@
 // letting the coach narrate more confident nonsense.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
+import { readFileSync } from 'node:fs';
 import { noteDescribesPosition, noteTeachesChessNotItsSource } from './noteAnchorIntegrity';
-import danyaRaw from '../data/danya-teachings.json';
 import type { DanyaNote } from './danyaTeachingService';
 
 /** The board a note's own taught line produces, or null if it won't replay. */
@@ -40,14 +40,14 @@ describe('corpus notes describe the position they are filed at', () => {
   let positioned: DanyaNote[] = [];
 
   beforeAll(() => {
-    // The PRIMARY corpus, which is the house voice and the worst offender of the
-    // four (5.1% against 1.8–3.9%). Scoped to it deliberately: it is a static
-    // import, so this reads the same bytes the app ships, with no fetch to prime
-    // and no chance of measuring an empty set. The farmed corpora are held to the
-    // same rule at SELECTION — `noteDescribesPosition` runs on every candidate
-    // regardless of corpus — so this watches the source most likely to drift.
-    positioned = (danyaRaw as unknown as { notes: DanyaNote[] }).notes
-      .filter((n) => n.lineSan.length > 0);
+    // The VOICED corpus — the sole exact-position (anchored) house voice now
+    // (David 2026-08-26: the farmed corpora are floating-only; voiced replaced
+    // their anchored notes). It ships in `public/data`, read here as bytes so
+    // there is no fetch to prime and no chance of measuring an empty set. Voiced
+    // is hand-authored + board-verified, so its mis-anchor rate is far under the
+    // ceiling — this watches it stay that way across re-farms/rewrites.
+    positioned = (JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as { notes: DanyaNote[] })
+      .notes.filter((n) => n.lineSan.length > 0);
     expect(positioned.length).toBeGreaterThan(1_000);
   });
 
@@ -80,7 +80,7 @@ describe('corpus notes describe the position they are filed at', () => {
     // Selection drops every one of these, so the corpus keeps working — this is
     // a health signal, not a ship-blocker for the runtime.
     console.log(`[anchor integrity] ${misAnchored}/${judged} mis-anchored (${(rate * 100).toFixed(1)}%)`);
-  });
+  }, 30_000); // iterates the whole voiced corpus (4k+ notes) with a chess.js replay each
 
   it('rejects a note that opens on a move unreachable from its board', () => {
     // The Caro-Kann case that started this: a note filed after 1.e4 c6 2.d4 d5
