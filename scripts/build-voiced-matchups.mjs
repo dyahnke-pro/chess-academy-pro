@@ -17,29 +17,16 @@
  * walkthroughs. G0/G3: moves from real games (chess.js-legal), prose is the DNA note.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
+import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
 const OUT = 'src/data/voiced-matchups.json';
 
-/** Ply-monotonic legal main line (same as the single-opening builder). */
+/** Fen-anchored legal main line — never splices a narrator's rewind (see
+ *  scripts/voiced-authoring/fen-spine.mjs). Same return shape the tree merge
+ *  expects: one {san, movedBy, spoken?, kind?} per ply. */
 function reconstructSpine(moves) {
-  const g = new Chess(); const out = []; let last = 0;
-  for (const m of moves) {
-    if (typeof m.ply === 'number' && m.ply <= last) continue;
-    const line = Array.isArray(m.line) ? m.line : [];
-    if (!line.length) continue;
-    const snap = g.fen(); const applied = []; let ok = true;
-    for (const s of line) { try { if (!g.move(s)) { ok = false; break; } applied.push(s); } catch { ok = false; break; } }
-    if (!ok) { g.load(snap); continue; }
-    for (let i = 0; i < applied.length; i++) {
-      out.push({ san: applied[i], movedBy: (out.length % 2 === 0) ? 'white' : 'black',
-        spoken: i === applied.length - 1 ? (m.spoken || undefined) : undefined,
-        kind: i === applied.length - 1 ? m.kind : undefined });
-    }
-    if (typeof m.ply === 'number') last = m.ply;
-  }
-  return out;
+  return reconstructSpineFen(moves).spine;
 }
 const whiteSans = (spine) => spine.filter((_, i) => i % 2 === 0).map((n) => n.san);
 const blackSans = (spine) => spine.filter((_, i) => i % 2 === 1).map((n) => n.san);
