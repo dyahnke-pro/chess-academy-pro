@@ -108,7 +108,7 @@ export const SAMPLE_GAMES: SampleGame[] = [
       { m: 7, c: 'black', san: 'Qe7', eval: 380, classification: 'inaccuracy', best: 'Qd7' },
       { m: 8, c: 'white', san: 'Nc3', eval: 360, classification: 'good' },
       { m: 8, c: 'black', san: 'c6', eval: 400, classification: 'good' },
-      { m: 9, c: 'white', san: 'Bg5', eval: 420, classification: 'great', comment: 'The last minor piece joins the attack. Every White piece is now developed and aimed at Black — that lead in development is what makes the coming sacrifices work.' },
+      { m: 9, c: 'white', san: 'Bg5', eval: 420, classification: 'great', comment: 'The last minor piece joins the attack — every White knight and bishop is now in play and aimed at Black, while Black is still untangling. That lead in development is what makes the coming sacrifices work.' },
       { m: 9, c: 'black', san: 'b5', eval: 800, classification: 'blunder', comment: 'Loses on the spot. Black needed Qc7 to defend.', best: 'Qc7' },
       { m: 10, c: 'white', san: 'Nxb5', eval: 850, classification: 'brilliant', comment: 'Knight sac to demolish the queenside.' },
       { m: 10, c: 'black', san: 'cxb5', eval: 870, classification: 'good' },
@@ -461,6 +461,26 @@ function buildGameRecord(s: SampleGame): GameRecord {
  *  flag; subsequent calls are no-ops. Designed to be invoked from
  *  /coach/review on mount so the user has something to click into
  *  immediately on the preview deploy. */
+/** Force-seed ONE sample game by id if it's a known sample missing from Dexie.
+ *  The review LIST page seeds all samples on first visit, but a deep link
+ *  straight to /coach/review/sample-* — e.g. the "Walk it move-by-move" chip
+ *  the fundamentals + famous-game lanes now emit — can fire before that ever
+ *  happens, dead-ending on "no longer in your library" (David 2026-08-26 audit).
+ *  This bypasses the once-only SEEDED flag so it also recovers a sample the user
+ *  deleted. Returns true if the id names a real sample (seeded or already there). */
+export async function ensureSampleGameSeeded(id: string): Promise<boolean> {
+  try {
+    const sample = SAMPLE_GAMES.find((g) => g.id === id);
+    if (!sample) return false;
+    const existing = await db.games.get(id);
+    if (existing) return true;
+    await db.games.bulkPut([buildGameRecord(sample)]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function seedReviewSamplesIfNeeded(): Promise<{ seeded: number }> {
   try {
     const flag = await db.meta.get(SAMPLES_SEEDED_META_KEY);

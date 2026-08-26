@@ -48,3 +48,22 @@ describe('reviewSampleGames — PGN integrity', () => {
     });
   }
 });
+
+// David 2026-08-26 self-audit: the "Walk it move-by-move" chip deep-links to
+// /coach/review/sample-*; that must work even before the review LIST seeded
+// the samples. ensureSampleGameSeeded backfills the one game on demand.
+describe('reviewSampleGames — ensureSampleGameSeeded (deep-link backfill)', () => {
+  it('seeds a known sample on demand and rejects unknown ids', async () => {
+    const { db } = await import('../db/schema');
+    const { ensureSampleGameSeeded } = await import('./reviewSampleGames');
+    await db.games.where('id').equals('sample-morphy-opera-1858').delete();
+    expect(await db.games.get('sample-morphy-opera-1858')).toBeUndefined();
+
+    expect(await ensureSampleGameSeeded('sample-morphy-opera-1858')).toBe(true);
+    const rec = await db.games.get('sample-morphy-opera-1858');
+    expect(rec).toBeDefined();
+    expect(rec?.pgn).toContain('Rd8#');
+
+    expect(await ensureSampleGameSeeded('not-a-real-sample')).toBe(false);
+  });
+});

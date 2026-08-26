@@ -809,6 +809,11 @@ export function isFundamentalsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // App-surface asks ("what does the basics TAB do") are app-help, not teaching.
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // OPENING-SCOPED "basics of X" is NOT the generic fundamentals lane — "teach
+  // me the basics of the Sicilian" must reach the opening resolver, not the
+  // piece-values-and-castling answer. Only a whole-game scope ("of chess", "of
+  // the game", "of playing") stays generic (David 2026-08-26 self-audit).
+  if (/\b(?:basics?|fundamentals?|principles?)\s+(?:of|in|for|behind)\s+(?!chess\b|the\s+game\b|playing\b|good\s+chess\b)/i.test(ask)) return false;
   return FUNDAMENTALS_QUESTION_RE.test(ask);
 }
 

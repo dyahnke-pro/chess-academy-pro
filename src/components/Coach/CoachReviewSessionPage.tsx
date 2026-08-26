@@ -22,6 +22,7 @@ import { Chess } from 'chess.js';
 import { CoachGameReview } from './CoachGameReview';
 import { db } from '../../db/schema';
 import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysisService';
+import { ensureSampleGameSeeded } from '../../services/reviewSampleGames';
 import { detectOpeningTranspositional } from '../../services/openingDetectionService';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
@@ -245,7 +246,15 @@ export function CoachReviewSessionPage(): JSX.Element {
         return;
       }
       try {
-        const rec = await db.games.get(gameId);
+        let rec = await db.games.get(gameId);
+        // Deep link to a sample game (e.g. the Opera Game "Walk it" chip from
+        // the fundamentals lane) can arrive before the review LIST seeded the
+        // samples — seed the one we need on demand, then re-read.
+        if (!rec && gameId.startsWith('sample-')) {
+          await ensureSampleGameSeeded(gameId);
+          if (cancelled) return;
+          rec = await db.games.get(gameId);
+        }
         if (cancelled) return;
         if (!rec) {
           setLoadError('That game is no longer in your library.');

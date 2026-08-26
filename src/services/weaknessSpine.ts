@@ -372,26 +372,34 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   // unhandled-rejection on capacitor://…/weaknesses). Same fix pattern as
   // coachContextSnapshot.buildCoachContextSnapshot. The three aggregate helpers
   // manage their own transactions and stay concurrent.
-  const [misAgg, direct, heatmap, addressedConv] = await Promise.all([
-    getMisconceptionProfile({ countedOnly: true }),
+  // getMisconceptionProfile reads db.misconceptionTags — the SAME store the
+  // shared transaction scans — so running it as a separate concurrent branch
+  // raced two cursors on one store ("Attempt to iterate a cursor that doesn't
+  // exist", the same class fixed in computeWeaknessProfile; David 2026-08-26
+  // self-audit). It now runs INSIDE the shared transaction (misconceptionTags
+  // is already in the store list, so it joins the ambient tx). getSquareHeatmap
+  // (findSquareAttempts) and getAddressedConversions (meta) read OTHER stores,
+  // so they stay concurrent without competing on the transaction's cursors.
+  const [direct, heatmap, addressedConv] = await Promise.all([
     db.transaction(
       'r',
       [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games],
       async () => {
-        const [allMis, mistakes, weakSpots, tactics, games] = await Promise.all([
+        const [misAgg, allMis, mistakes, weakSpots, tactics, games] = await Promise.all([
+          getMisconceptionProfile({ countedOnly: true }),
           db.misconceptionTags.toArray(),
           db.mistakePuzzles.toArray(),
           db.openingWeakSpots.toArray(),
           db.classifiedTactics.toArray(),
           db.games.toArray(),
         ]);
-        return { allMis, mistakes, weakSpots, tactics, games };
+        return { misAgg, allMis, mistakes, weakSpots, tactics, games };
       },
     ),
     getSquareHeatmap(),
     getAddressedConversions(),
   ]);
-  const { allMis, mistakes, weakSpots, tactics, games } = direct;
+  const { misAgg, allMis, mistakes, weakSpots, tactics, games } = direct;
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const conversions = detectConversionFailures(games, {

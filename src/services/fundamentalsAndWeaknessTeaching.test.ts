@@ -31,6 +31,16 @@ describe('fundamentals teaching handler', () => {
     expect(isFundamentalsQuestion('what does the basics tab do')).toBe(false);
   });
 
+  it('does NOT hijack opening-scoped "basics of X" (must teach the opening)', () => {
+    // "the basics of the Sicilian" is an OPENING ask, not generic fundamentals.
+    expect(isFundamentalsQuestion('teach me the basics of the sicilian')).toBe(false);
+    expect(isFundamentalsQuestion('show me the fundamentals of the london')).toBe(false);
+    expect(isFundamentalsQuestion('principles of the caro-kann')).toBe(false);
+    // …but whole-game scope stays generic.
+    expect(isFundamentalsQuestion('teach me the fundamentals of chess')).toBe(true);
+    expect(isFundamentalsQuestion('the basics of the game')).toBe(true);
+  });
+
   it('scopes to the right sub-topic', () => {
     expect(fundamentalsTopicFromText('what are the pieces worth')).toBe('piece-values');
     expect(fundamentalsTopicFromText('teach me king safety')).toBe('king-safety');
