@@ -94,6 +94,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const opponentColor: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
   const rating = input.rating ?? 1500;
 
+  // OPENING PHASE — PositionFacts is a MIDDLEGAME live supply. The opening is
+  // owned by corpus notes + baked narration (Tiers 1–2); a perturbation "best
+  // piece" probe on a near-home position is noise ("their knight on b8 is doing
+  // the most work — trade it off" on move one). So in the opening we suppress
+  // the whole positional-campaign + decision-leverage set and keep ONLY a real
+  // hanging threat (a genuinely dropped piece IS worth saying, even early).
+  const fullmove = Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1;
+  const openingPhase = fullmove < 10;
+
   // Cheap facts (no search): what the STUDENT must defend + the sharpness score.
   const mustDefend = computeMustDefend(fen, studentColor);
   const criticality = computeCriticality(
@@ -118,19 +127,21 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   }, rating);
 
   // Perturbation is expensive → only when the moment earns it AND a probe fn was
-  // supplied. Probe BOTH sides: the student's asset, and the opponent's best
-  // piece (so the coach can name their asset and how to undermine it — intent +
-  // counter). Its own thresholds still gate whether there's a real supporter.
+  // supplied AND we're out of the opening. Probe BOTH sides: the student's
+  // asset, and the opponent's best piece (name their asset + how to undermine
+  // it). A teaching beat alone no longer opens this gate — the "best piece"
+  // read is a real middlegame imbalance, not opening narration. Its own
+  // thresholds still gate whether there's a genuine supporter.
   let leansOn: LeansOn | null = null;
   let opponentLeansOn: LeansOn | null = null;
-  if (importance.speak && input.evalBoard && (importance.rank >= 45 || importance.tier === 'teaching')) {
+  if (importance.speak && input.evalBoard && !openingPhase && importance.rank >= 45) {
     try { leansOn = await computeLeansOn(fen, studentColor, input.evalBoard); } catch { leansOn = null; }
     try { opponentLeansOn = await computeLeansOn(fen, opponentColor, input.evalBoard); } catch { opponentLeansOn = null; }
   }
 
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove: moverColor === studentColor }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove: moverColor === studentColor, openingPhase }),
   };
 }
 
@@ -146,17 +157,24 @@ function buildClauses(a: {
   leansOn: LeansOn | null;
   opponentLeansOn: LeansOn | null;
   studentToMove: boolean;
+  openingPhase: boolean;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase } = a;
   if (!importance.speak) return [];
   const ranked: ClauseItem[] = [];
 
   // Incoming fire — the opponent's standing threat against the student (their
-  // intent, and the student's must-defend). Board-true, named.
+  // intent, and the student's must-defend). Board-true, named. This is the ONE
+  // fact that speaks in the opening: a genuinely dropped piece is worth saying
+  // even on move two.
   if (mustDefend.net >= 3 && mustDefend.pieces[0]) {
     const p = mustDefend.pieces[0];
     ranked.push({ kind: 'must-defend', rank: 75, text: `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.` });
   }
+  // In the opening, nothing but a real hanging threat speaks — no "critical
+  // moment" / "knife-edge" / "best piece, trade it off" narration on move one.
+  if (openingPhase) return ranked;
+
   // Decision leverage — framed by whose move it is.
   if (studentToMove) {
     if (importance.tier === 'only-move') ranked.push({ kind: 'key-moment', rank: 85, text: `Only one move really holds here — this is the moment to slow down.` });

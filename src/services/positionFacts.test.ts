@@ -20,9 +20,9 @@ describe('computePositionFacts — the composer', () => {
   });
 
   it('frames the decision as the OPPONENT’s intent when the opponent is on move', async () => {
-    // Opponent (White) is to move in a sharp position; the student is Black.
+    // Opponent (White) is to move in a sharp MIDDLEGAME position; student is Black.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', moverColor: 'w', studentColor: 'b', analysis: sharp });
+    const r = await computePositionFacts({ fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'b', analysis: sharp });
     expect(r.importance.speak).toBe(true);
     // No "your critical moment" — it's the opponent's decision, framed as theirs.
     expect(r.clauses.some((c) => c.kind === 'opponent-intent')).toBe(true);
@@ -30,20 +30,31 @@ describe('computePositionFacts — the composer', () => {
   });
 
   it('calls a critical moment when one move stands far ahead (mover-POV)', async () => {
-    // White to move, best line +300 vs the field at +20/+10 → gap 280 → only-move.
+    // White to move in a MIDDLEGAME, best line +300 vs the field at +20/+10 → only-move.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
-    const r = await computePositionFacts({ fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', moverColor: 'w', studentColor: 'w', analysis: sharp });
+    const r = await computePositionFacts({ fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: sharp });
     expect(r.importance.speak).toBe(true);
     expect(r.clauses.some((c) => /critical moment|only one move/i.test(c.text))).toBe(true);
   });
 
-  it('runs the expensive perturbation ONLY when the moment matters', async () => {
+  it('stays quiet of campaign/decision talk in the OPENING — only a real hanging piece speaks (David 2026-08-26 regression)', async () => {
+    // A sharp analysis on a MOVE-2 board must NOT produce "critical moment" /
+    // "knife-edge" / "best piece, trade it off" — that flooded move one.
+    const evalBoard = vi.fn().mockResolvedValue('');
+    const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
+    const r = await computePositionFacts({ fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', moverColor: 'w', studentColor: 'w', analysis: sharp, evalBoard });
+    expect(r.clauses.some((c) => c.kind === 'key-moment' || c.kind === 'opponent-intent')).toBe(false);
+    expect(r.clauses.some((c) => c.kind === 'student-leans' || c.kind === 'opponent-leans')).toBe(false);
+    expect(evalBoard).not.toHaveBeenCalled(); // no perturbation probe in the opening
+  });
+
+  it('runs the expensive perturbation ONLY when the moment matters (and out of the opening)', async () => {
     const evalBoard = vi.fn().mockResolvedValue('');
     // Quiet → not called.
     await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: flat, evalBoard });
     expect(evalBoard).not.toHaveBeenCalled();
-    // Must-defend (important) → called.
-    await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat, evalBoard });
+    // Must-defend (important) in a MIDDLEGAME → called. (Ne5 hangs to …dxe5.)
+    await computePositionFacts({ fen: 'r1bqk2r/ppp2ppp/3p1n2/4N3/1bB1P3/2N5/PPPP1PPP/R1BQ1RK1 w kq - 0 12', moverColor: 'w', studentColor: 'w', analysis: flat, evalBoard });
     expect(evalBoard).toHaveBeenCalled();
   });
 
