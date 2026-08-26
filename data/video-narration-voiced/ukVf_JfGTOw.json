@@ -4,7 +4,7 @@
  "openingName": "King's Indian Defense: Fianchetto Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:ukVf_JfGTOw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "Nf3",
     "Nf6"
    ],
-   "spoken": "White opens with the knight to f3; we reply with the knight to f6."
+   "spoken": "The knight to f3, the knight to f6 — against a 2431, the highest-rated player we've faced in the speedrun."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "White claims space with c4."
+   "spoken": "c4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We start the fianchetto with g6."
+   "spoken": "g6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White builds the big centre with d4."
+   "spoken": "d4 — I have to play my main repertoire; can't dilly-dally here."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We complete the fianchetto with the bishop to g7."
+   "spoken": "The bishop to g7 — the King's Indian."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "White chooses g3 — the Fianchetto Variation, one of the most respected and positionally dangerous answers to the King's Indian."
+   "spoken": "g3 — our opponent trots out the Fianchetto Variation, one of the most reputable and positionally dangerous responses: White fianchettoes the kingside bishop and castles. We haven't committed to a King's Indian yet — we commit by pushing d6; we could also play it Grünfeld or Grünfeld-Slav style with c6 and d5."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle. We haven't committed to a King's Indian yet — that comes when we push ...d6."
+   "spoken": "The c6-and-d5 line does equalize, no doubt, but it's more fun and more in the spirit of my repertoire to play a traditional King's Indian."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "White fianchettoes the bishop to g2."
+   "spoken": "The bishop to g2."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We play d6, committing to a traditional King's Indian."
+   "spoken": "— which is why we play d6, reaching a very wide theoretical crossroads."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White develops the knight to c3 — a wide theoretical crossroads."
+   "spoken": "Black has a million setups against the Fianchetto, broadly three categories: setups preparing e5 — the most traditional, which we play here; setups with c5, more Benoni-flavored, which Gawain Jones recommends; and systems with neither immediately, like c6, the bishop to f5, or the knight to c6 and a6, the Panov."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "We choose the knight to d7, preparing a quick ...e5 — the most classic, King's-Indian-like setup."
+   "spoken": "So many decent variations, but we choose the one I've played the longest — the knight to d7."
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles."
+   "spoken": "The knight to d7, quickly pushing e5. White castles."
   },
   {
    "ply": 14,
@@ -123,7 +123,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We strike in the centre with e5."
+   "spoken": "e5."
   },
   {
    "ply": 15,
@@ -132,7 +132,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "White's main try — striking back with e4, a Maroczy-like clamp with pawns on c4 and e4."
+   "spoken": "White's main response is to strike back in the centre with e4. Here I've played two lines: the first is the pawn takes d4, trading immediately, then the knight to c5 — a Maroczy-bind-like construction with pawns on e4 and c4, resembling an Accelerated Dragon where Black is cramped and White has a big space advantage —"
   },
   {
    "ply": 16,
@@ -141,7 +141,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Rather than release with ...exd4, we play the older, trickier c6 — a line that slips past even experienced fianchetto players."
+   "spoken": "— but Black applies long-lasting pressure to White's centre, which can collapse if mishandled. In this game I'll play a second, older line I used to play over the board up to IM level and still play almost exclusively in blitz — c6, an incredibly tricky line."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "White plays h3."
+   "spoken": "h3 — this line often slips through the cracks of even very experienced Fianchetto players."
   },
   {
    "ply": 18,
@@ -159,7 +159,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "We bring the queen out to a5 — the whole point of the line."
+   "spoken": "The point of the line is to bring the queen out to a5. Our opponent already shows very good knowledge of this system."
   },
   {
    "ply": 19,
@@ -168,14 +168,15 @@
    "line": [
     "Be3"
    ],
-   "spoken": "White plays the bishop to e3 — the modern top recommendation, where players used to prefer the rook to e1."
+   "spoken": "The bishop to e3."
   },
   {
    "ply": 18,
    "t": 263,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop to e3 is the new recommendation, what top grandmasters play nowadays; the old move, played by almost everyone until a year ago, was the rook to e1 — I'll give the lowdown after the game.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -185,14 +186,16 @@
     "Be3",
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "After the bishop to e3 we're supposed to release the tension with the pawn takes d4 — this is theory, so I'm just making the moves.",
+   "reanchor": true
   },
   {
    "ply": 19,
    "t": 294,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BNPP/PP3PB1/R2Q1RK1 b - - 2 10",
    "line": [],
-   "spoken": ""
+   "spoken": "We discharge the central tension right now because White is already prepared to push d5 and close the centre, and the bishop on e3 is very harmoniously placed —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -201,7 +204,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Against the older rook to e1, the idea is to release with ...exd4 just before White can push d5 and lock the centre — and then White must choose between the bishop and the routine knight recapture on d4.",
+   "spoken": "— so this is the last chance to exchange the pawns before White closes. White's at a further crossroads: the bishop takes d4, or the more traditional knight takes d4. Most of the time White doesn't even have the bishop-takes-d4 option, so less-experienced players auto-recapture with the knight. Run it through the computer and White is better, but he has to show tremendous precision, as in most King's Indian lines, and in a rapid game Black has a lot of easy moves and threats — and you know what happens in a King's Indian when Black gets the initiative.",
    "reanchor": true
   },
   {
@@ -209,7 +212,8 @@
    "t": 369,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "I'm pretty sure I had this queen-to-a5 variation in a previous speedrun game.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -220,7 +224,7 @@
     "exd4",
     "Bxd4"
    ],
-   "spoken": "The annoying reply is the bishop recapture on d4: then the natural ...Ne5 would run into c5, undermining the knight — and if we take on f3, the queen recaptures and our f6-knight suddenly hangs. That's why we keep the knight on d7 for now.",
+   "spoken": "Our opponent plays the annoying move, the bishop takes d4, which I really dislike facing: your standard response is the knight to e5, but White has a tactic that kills the line, so the knight to e5 is almost a decisive mistake — that's why we keep the knight on d7 for the time being. Against the knight to e5, White undermines the knight with c5 —",
    "reanchor": true
   },
   {
@@ -230,7 +234,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "So we pick the low-hanging fruit — the rook to e8, a move that can't hurt us — and wait for White to show his cards."
+   "spoken": "— and typically you take on f3, but White recaptures with the queen and the knight on f6 is suddenly hanging — that's the power of recapturing with the bishop. So the knight to e5 walks into c5, which is why we make a more flexible move: the low-hanging rook to e8, which won't harm our position, waiting for White to show his cards. Our queen on a5 may have done its job and should drop back to c7 to make the knight to e5 possible, since we can't keep the knight on d7 forever — it blocks the bishop on c8 and cramps us. The knight to c5 is tempting to hit e4, but I prefer it on e5, since with the queen on a5 White has a3 and b4 ideas, the knight on c5 seems flimsy, and White defends e4 easily and could push e5."
   },
   {
    "ply": 23,
@@ -239,7 +243,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "White answers with the rook to e1."
+   "spoken": "This is the kind of thing you feel from playing a line many times — you develop a finer understanding of where the pieces belong that can't always be explained step by step. The rook to e1 — and I think we should drop our queen back to c7, since the knight to e5 still allows c5, and the queen on a5 is neither here nor there; the queen to c7, then jump out to e5 with the knight."
   },
   {
    "ply": 24,
@@ -248,14 +252,14 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "We reroute the queen to c7, so that ...Ne5 finally becomes playable — the knight can't sit on d7 forever, blocking in the c8-bishop."
+   "spoken": "We have other maneuvers around the hurdles — the knight to f8 and e6, a Ruy-Lopez-style idea — but the queen to c7 seems a lot more King's-Indian in nature. A cramped but solid position."
   },
   {
    "ply": 18,
    "t": 566,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": "The point of ...Qa5: it can swing to h5, and it eyes the knight on c3 — so White can't slot in the useful b3 to defend c4, because b3 would simply drop that knight, a common blunder even at higher levels.",
+   "spoken": "A classic King's Indian situation. What was the idea of the queen to a5? It's harder to see because of the bishop to e3; had our opponent played the main rook to e1, you'd really understand its value — it can swing over to h5, and it aims at the knight on c3, so b3, a very useful move for White to defend the c4-pawn, isn't possible with the queen on a5; that's a very common blunder at lower levels, since after b3 the knight hangs — I've even beaten titled players that way. So when c4 is attacked from b6 or e5, it's very hard to defend it adequately without b3. The queen to c2 — our opponent continues to improve his position.",
    "reanchor": true
   }
  ]
