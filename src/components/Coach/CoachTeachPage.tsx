@@ -239,6 +239,7 @@ import type { OpeningRecord, OpeningVariation } from '../../types';
 import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
@@ -7440,6 +7441,31 @@ export function CoachTeachPage(): JSX.Element {
                     }
                   }
                 } catch { /* the piece read is a bonus, never a blocker */ }
+
+                // ── POSITION FACTS — the computed board-truth supply (G0) ──────
+                // The new stack: importance-gated, DNA-voiced clauses for the
+                // decision (the student's critical moment when they're on move,
+                // or the OPPONENT's intent when the opponent is) plus the
+                // leans-on why-probe. `must-defend` is EXCLUDED — the tactics
+                // lane below already speaks hanging pieces (no walk-over). The
+                // importance model decides what speaks; the perturbation probe
+                // runs only on a moment that earns it.
+                try {
+                  if (studentBest?.topLines?.length) {
+                    const pf = await computePositionFacts({
+                      fen: probe.fen(),
+                      moverColor: probe.turn(),
+                      studentColor: playerColor === 'white' ? 'w' : 'b',
+                      rating,
+                      analysis: studentBest,
+                      evalBoard: (f) => stockfishEngine.evalBoard(f),
+                    });
+                    for (const c of clauseText(pf.clauses, ['must-defend'])) {
+                      queueSpokenHint(probe.fen(), c, 'computed');
+                    }
+                    if (pf.importance.speak) captureEvent('position_facts_spoken', { surface: 'coach-teach', tier: pf.importance.tier, clauses: pf.clauses.length });
+                  }
+                } catch { /* the position-facts lane is a bonus, never a blocker */ }
 
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision
