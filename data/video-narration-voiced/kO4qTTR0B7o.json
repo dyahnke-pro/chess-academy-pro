@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Exchange Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:kO4qTTR0B7o",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "c6",
     "e4"
    ],
-   "spoken": "We play the Caro-Kann; White builds a big centre with d4 and e4."
+   "spoken": "d4, c6, e4 — another Caro-Kann."
   },
   {
    "ply": 7,
@@ -28,7 +28,7 @@
     "cxd5",
     "Nc3"
    ],
-   "spoken": "We challenge with d5, the centre is exchanged, and White plays the knight to c3 — an inaccuracy. It blocks the c2-pawn, so White's d4-pawn effectively becomes isolated, with no pawn left to defend it. The sharp c4, the Panov, is fine; the solid path I teach is the bishop to d3 and then c3 to shore the pawn up."
+   "spoken": "d5, the pawns trade on d5, and the knight to c3 — an inaccuracy, not huge, but after it White is basically fighting for equality. The knight to c3 blocks the c2-pawn, and with a pawn on d4, that pawn in effect becomes isolated, since the knight blocks its only pawn defense. c4 is the Panov Attack, a legitimate line, but the more solid line I recommend to beginners is the bishop to d3 and then c3, to protect the pawn with another pawn."
   },
   {
    "ply": 8,
@@ -37,7 +37,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the knight to c6, hitting the d4-pawn."
+   "spoken": "Then White's knight can develop eventually via d2. The knight to c6."
   },
   {
    "ply": 9,
@@ -46,7 +46,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3."
+   "spoken": "The knight to f3."
   },
   {
    "ply": 10,
@@ -55,7 +55,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We develop the knight to f6."
+   "spoken": "The knight to f6, developing."
   },
   {
    "ply": 12,
@@ -65,7 +65,7 @@
     "Bb5",
     "Bg4"
    ],
-   "spoken": "White pins with the bishop to b5, and we pin back with the bishop to g4."
+   "spoken": "The bishop to b5, the bishop to g4 — this is where you should ask questions if you have them."
   },
   {
    "ply": 13,
@@ -74,7 +74,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "White plays h3, questioning our bishop."
+   "spoken": "And the queen to d3 is a good move. Now, if White had played h3, here's an instructive question —"
   },
   {
    "ply": 14,
@@ -83,14 +83,15 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "Here's the instructive decision: take on f3, or retreat the bishop to h5?"
+   "spoken": "— should we take on f3, or drop the bishop back to h5?"
   },
   {
    "ply": 13,
    "t": 1248,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Let's see what people think.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -99,14 +100,16 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "The reason the bishop to d3 is good: if c3 immediately, you allow the bishop to come to f5, prime real estate on Broadway — you don't want to let that bishop develop there, so you play the bishop to d3 first.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1277.5,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Most people say drop it back, but I kind of tricked you — I think you should take.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -115,14 +118,16 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "As I said earlier, the rule for deciding when to take and when to procrastinate —",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1282.5,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "— is to procrastinate until the point of no return, the point at which your opponent can actually permanently prevent you from doing what you want to do.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -131,7 +136,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "The rule for when to capture versus procrastinate: delay until the point of no return — the moment your opponent can permanently prevent what you want. Here, retreating to h5 lets White play g4, and suddenly you've lost the chance to take the knight at all.",
+   "spoken": "And if you drop the bishop back —",
    "reanchor": true
   },
   {
@@ -141,7 +146,8 @@
    "line": [
     "g4"
    ],
-   "spoken": "See it: had we retreated, g4 hits the bishop."
+   "spoken": "— then why does the move g4, attacking the bishop, matter? Everybody should understand this.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -150,7 +156,8 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "The bishop goes to g6 — and the whole point, taking the knight, is gone."
+   "spoken": "The bishop to g6 — and guess what, you've lost the possibility of taking the knight. Why is that a problem?",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -159,7 +166,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "White lands the knight on e5, very unpleasant: the bishop that was supposed to capture White's knight now becomes the instrument of our own demise — it can even get trapped."
+   "spoken": "The knight to e5 — a very unpleasant move. The whole point was to pin the knight and eventually take it, but now the knight jumps to e5; this isn't winning for White, but it's just very unpleasant.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -168,14 +176,16 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "We're forced into the rook to c8, and with h4–h5 coming it's grim."
+   "spoken": "You have to play the rook to c8, and then maybe h4 and h5 comes, and this bishop becomes the instrument of Black's demise — when it was supposed to be the instrument of White's.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1352.5,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "You were supposed to use this bishop to take White's knight; now this bishop might get trapped.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -185,14 +195,16 @@
     "Bh5",
     "g4"
    ],
-   "spoken": ""
+   "spoken": "Some people don't see this because you've been conditioned to think g4 is very weakening and something to induce — but stay away from categorical thoughts; g4 is far more weakening once White has castled, and even then there are many situations where it's perfectly justified. It's not as weakening as some make it out to be.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1393.5,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "So be really careful — sometimes it's good to induce this move, but make sure you're not giving your opponent a big initiative. We actually would want to take this knight —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -201,7 +213,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "The real lesson: don't treat g4 as automatically weakening and something to induce — here inducing it backfires. Instead we simply take the knight and play ...e6, ...Bd6, castle, and press the weak pawn with ...Qb6. For White, castling long is dangerous with that weak d-pawn and the semi-open c-file, and castling short just drops the pawn.",
+   "spoken": "— and play as we did in the game: e6, the bishop to d6, castle, and maybe eventually the queen to b6 to increase pressure on the pawn. The queen to d3, we take, that's why we played e6, and the knight takes d5 gave up the game immediately. Taking on g4 is fine in plenty of positions, but generally when White has castled, be careful. As for what White should do here — I'd consider castling long, though it's very dangerous, since the d-pawn is weak and there's the semi-open c-file; castling short is bad because you blunder the pawn.",
    "reanchor": true
   }
  ]
