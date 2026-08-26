@@ -1,0 +1,528 @@
+{
+ "videoId": "_zT8aWZh2x0",
+ "title": "Facing Off Against Kramnik and WINNING!! | Titled Tuesday | GM Naroditsky",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:_zT8aWZh2x0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 38,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "d4, and the knight to f6 — Black declines to fight for the centre with a pawn, planning to let White build it and then strike back. The makings of a King's Indian."
+  },
+  {
+   "ply": 3,
+   "t": 39,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3, the classical set-up — White is happy to take the whole centre and dare Black to challenge it."
+  },
+  {
+   "ply": 4,
+   "t": 42,
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 — the King's Indian in earnest. Black cedes space on purpose, banking on a later …e5 or …c5 break to hit the centre from the side."
+  },
+  {
+   "ply": 5,
+   "t": 43.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4, and White has the broad pawn centre the opening invites. The whole game is now a question: can Black crack it before White uses it?"
+  },
+  {
+   "ply": 6,
+   "t": 45.5,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "g6, preparing the fianchetto — the dark-squared bishop is the soul of this defence, and it belongs on the long diagonal aiming straight through the centre at White's queenside."
+  },
+  {
+   "ply": 7,
+   "t": 46.5,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP1BPPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop to e2, a calm, classical developing square."
+  },
+  {
+   "ply": 9,
+   "t": 49.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Bg7",
+    "Nf3"
+   ],
+   "spoken": "The bishop settles on g7 and White brings the knight to f3 — both sides just developing, the tension still coiled."
+  },
+  {
+   "ply": 10,
+   "t": 50.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R w KQ - 4 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Black castles, tucking the king behind the fianchetto — one of the safest shelters in all of chess."
+  },
+  {
+   "ply": 11,
+   "t": 54,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQ1RK1 b - - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles too. A textbook classical King's Indian; now the plans diverge — White expands, Black looks for a break."
+  },
+  {
+   "ply": 12,
+   "t": 58.5,
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/8/3PP1b1/2N2N2/PPP1BPPP/R1BQ1RK1 w - - 6 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The bishop to g4, pinning the f3-knight. Black would love to trade it off, because that knight is the natural defender of White's centre."
+  },
+  {
+   "ply": 13,
+   "t": 60,
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/8/3PP1b1/2N1BN2/PPP1BPPP/R2Q1RK1 b - - 7 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The bishop to e3, developing and eyeing the dark squares."
+  },
+  {
+   "ply": 14,
+   "t": 66,
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/8/3PP1b1/2N1BN2/PPP1BPPP/R2Q1RK1 w - - 8 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6, piling a second attacker onto d4 and White's centre."
+  },
+  {
+   "ply": 15,
+   "t": 68,
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P4/4P1b1/2N1BN2/PPP1BPPP/R2Q1RK1 b - - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 — White answers the pressure by pushing past, grabbing space and kicking the knight. This is the main King's Indian tension: a big White pawn chain versus Black's piece pressure."
+  },
+  {
+   "ply": 17,
+   "t": 70,
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P4/4P3/2N1BB2/PPP2PPP/R2Q1RK1 b - - 0 9",
+   "line": [
+    "Bxf3",
+    "Bxf3"
+   ],
+   "spoken": "The bishop takes on f3 and White recaptures with the bishop — Black cashes in the pin, trading off a key defender of the light squares."
+  },
+  {
+   "ply": 19,
+   "t": 72.5,
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn3/4P3/2N1B3/PPP1BPPP/R2Q1RK1 b - - 2 10",
+   "line": [
+    "Ne5",
+    "Be2"
+   ],
+   "spoken": "The knight swings to e5, the classic King's Indian outpost, and White retreats the bishop to e2 to keep it. A beautiful square: central, secure, hard to dislodge."
+  },
+  {
+   "ply": 20,
+   "t": 75,
+   "fen": "r2q1rk1/pp2ppbp/2pp1np1/3Pn3/4P3/2N1B3/PPP1BPPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "c6"
+   ],
+   "spoken": "c6 — the thematic break. Black chips at the base of White's pawn chain to open lines on the queenside."
+  },
+  {
+   "ply": 21,
+   "t": 76,
+   "fen": "r2q1rk1/pp2ppbp/2pp1np1/3Pn3/P3P3/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 11",
+   "line": [
+    "a4"
+   ],
+   "spoken": "a4 — White grabs queenside space of its own and takes b5 away from Black. The two sides are now racing on opposite wings."
+  },
+  {
+   "ply": 23,
+   "t": 83.5,
+   "fen": "r2q1rk1/pp2ppbp/3p1np1/3Pn3/P7/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "spoken": "The tension resolves on d5 — the pawns come off and the position opens a touch, both recaptures the engine's top choice."
+  },
+  {
+   "ply": 24,
+   "t": 95.5,
+   "fen": "r2q1rk1/pp1nppbp/3p1np1/3P4/P7/2N1B3/1PP1BPPP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Ned7"
+   ],
+   "spoken": "The knight reroutes toward d7, unclogging and eyeing c5 and e5. Still all main-road stuff; the engine can't separate the sides."
+  },
+  {
+   "ply": 25,
+   "t": 101.5,
+   "fen": "r2q1rk1/pp1nppbp/3p1np1/P2P4/8/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "a5"
+   ],
+   "spoken": "a5, clamping down — White fixes the queenside and cramps Black's play there."
+  },
+  {
+   "ply": 26,
+   "t": 107,
+   "fen": "r2q1rk1/1p1nppbp/p2p1np1/P2P4/8/2N1B3/1PP1BPPP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "a6"
+   ],
+   "spoken": "a6, shoring up b5 and keeping the structure intact."
+  },
+  {
+   "ply": 27,
+   "t": 110,
+   "fen": "r2q1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PP1BPPP/R2Q1RK1 b - - 1 14",
+   "line": [
+    "Bd4"
+   ],
+   "spoken": "The bishop to d4, offering to trade the dark-squared bishops. It's a slight concession — the engine would rather reroute the knight to a4 — but trading Black's proud g7-bishop is a reasonable positional aim."
+  },
+  {
+   "ply": 28,
+   "t": 117,
+   "fen": "2rq1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PP1BPPP/R2Q1RK1 w - - 2 15",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "The rook comes to c8, onto the half-open c-file — the natural home for a King's Indian rook once the c-file opens."
+  },
+  {
+   "ply": 29,
+   "t": 119,
+   "fen": "2rq1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PPQBPPP/R4RK1 b - - 3 15",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen to d2, connecting the rooks and supporting the dark-squared plans."
+  },
+  {
+   "ply": 30,
+   "t": 123.5,
+   "fen": "2rq1rk1/1p2ppbp/p2p1np1/P1nP4/3B4/2N5/1PPQBPPP/R4RK1 w - - 4 16",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight to c5, a strong central post eyeing the queenside light squares."
+  },
+  {
+   "ply": 31,
+   "t": 125,
+   "fen": "2rq1rk1/1p2ppbp/p2p1np1/P1nP4/3B4/2N2B2/1PPQ1PPP/R4RK1 b - - 5 16",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": "The bishop to f3, defending the centre and reinforcing d5. The position is balanced and rich — both sides fully developed, no weaknesses yet."
+  },
+  {
+   "ply": 32,
+   "t": 131.5,
+   "fen": "2rq1rk1/1p1nppbp/p2p2p1/P1nP4/3B4/2N2B2/1PPQ1PPP/R4RK1 w - - 6 17",
+   "line": [
+    "Nfd7"
+   ],
+   "spoken": "And here's the slip. The knight steps back to d7 — but it pulls a guard off c5, and the engine's needle lurches almost four points toward White. The right idea was to keep the pieces coordinated, not to loosen the knights."
+  },
+  {
+   "ply": 33,
+   "t": 133,
+   "fen": "2rq1rk1/1p1nppBp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R4RK1 b - - 0 17",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": "White pounces the way the engine demands: the bishop takes on g7, stripping away the fianchetto — and the follow-up b4 will hit the loose knight. White is suddenly winning."
+  },
+  {
+   "ply": 34,
+   "t": 134.5,
+   "fen": "2rq1r2/1p1nppkp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R4RK1 w - - 0 18",
+   "line": [
+    "Kxg7"
+   ],
+   "spoken": "Black recaptures with the king. The dark squares around it are now permanently tender, and White should be collecting material."
+  },
+  {
+   "ply": 35,
+   "t": 146.5,
+   "fen": "2rq1r2/1p1nppkp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R3R1K1 b - - 1 18",
+   "line": [
+    "Rfe1"
+   ],
+   "spoken": "But the favour is returned. The rook to e1 instead of b4 — and the winning pawn-fork on c5 simply evaporates. A blitz game between two very fast players; the advantage sloshes back and forth."
+  },
+  {
+   "ply": 36,
+   "t": 170,
+   "fen": "2rq1r2/1p2ppkp/p2p1np1/P1nP4/8/2N2B2/1PPQ1PPP/R3R1K1 w - - 2 19",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black seizes the reprieve — the knight back to f6, re-covering the light squares and climbing back to level. Crisis survived."
+  },
+  {
+   "ply": 37,
+   "t": 192.5,
+   "fen": "2rq1r2/1p2ppkp/p2p1np1/P1nP4/3Q4/2N2B2/1PP2PPP/R3R1K1 b - - 3 19",
+   "line": [
+    "Qd4"
+   ],
+   "spoken": "The queen to d4, centralising and pressuring the dark squares."
+  },
+  {
+   "ply": 38,
+   "t": 200.5,
+   "fen": "2rq1r2/1p1nppkp/p2p1np1/P2P4/3Q4/2N2B2/1PP2PPP/R3R1K1 w - - 4 20",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The knight to d7, calmly holding everything together."
+  },
+  {
+   "ply": 39,
+   "t": 210,
+   "fen": "2rq1r2/1p1nppkp/p2p1np1/P2P4/3Q4/2N5/1PP1BPPP/R3R1K1 b - - 5 20",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop drops to e2, a quiet regroup."
+  },
+  {
+   "ply": 40,
+   "t": 219.5,
+   "fen": "2r2r2/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP1BPPP/R3R1K1 w - - 6 21",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "The queen to c7, eyeing the open c-file and the loose queenside."
+  },
+  {
+   "ply": 41,
+   "t": 224,
+   "fen": "2r2r2/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP2PPP/R3RBK1 b - - 7 21",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": "The bishop to f1 — passive, the engine would rather reroute more actively, but the position is roughly balanced."
+  },
+  {
+   "ply": 42,
+   "t": 226.5,
+   "fen": "2r1r3/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP2PPP/R3RBK1 w - - 8 22",
+   "line": [
+    "Rfe8"
+   ],
+   "spoken": "The rooks come to e8, contesting the centre file."
+  },
+  {
+   "ply": 43,
+   "t": 232.5,
+   "fen": "2r1r3/1pqnppkp/p2p1np1/P2P4/3Q4/2N4P/1PP2PP1/R3RBK1 b - - 0 22",
+   "line": [
+    "h3"
+   ],
+   "spoken": "h3, a useful little luft, taking g4 away from Black's pieces."
+  },
+  {
+   "ply": 44,
+   "t": 234.5,
+   "fen": "2r1r3/1p1nppkp/p2p1np1/P1qP4/3Q4/2N4P/1PP2PP1/R3RBK1 w - - 1 23",
+   "line": [
+    "Qc5"
+   ],
+   "spoken": "The queen to c5, offering to trade queens into a comfortable position."
+  },
+  {
+   "ply": 45,
+   "t": 237,
+   "fen": "2r1r3/1p1nppkp/p2p1np1/P1qP4/8/2N4P/1PPQ1PP1/R3RBK1 b - - 2 23",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen to d2, sidestepping the trade for now."
+  },
+  {
+   "ply": 46,
+   "t": 242,
+   "fen": "2r1r3/1p2ppkp/p2p1np1/P1qPn3/8/2N4P/1PPQ1PP1/R3RBK1 w - - 3 24",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The knight returns to e5 — that outpost again, the heart of Black's play."
+  },
+  {
+   "ply": 47,
+   "t": 248.5,
+   "fen": "2r1r3/1p2ppkp/p2p1np1/P1qPn3/R7/2N4P/1PPQ1PP1/4RBK1 b - - 4 24",
+   "line": [
+    "Ra4"
+   ],
+   "spoken": "The rook to a4, defending along the fourth rank and keeping an eye on the queenside."
+  },
+  {
+   "ply": 48,
+   "t": 258.5,
+   "fen": "2r1r3/1p2ppk1/p2p1np1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RBK1 w - - 0 25",
+   "line": [
+    "h5"
+   ],
+   "spoken": "h5, grabbing a little kingside space — slightly loosening, but the position stays roughly level."
+  },
+  {
+   "ply": 49,
+   "t": 266.5,
+   "fen": "2r1r3/1p2ppk1/p2p1np1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RB1K b - - 1 25",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "The king to h1, a prudent tuck out of any back-rank or diagonal ideas."
+  },
+  {
+   "ply": 50,
+   "t": 286,
+   "fen": "2r1r3/1p3pk1/p2ppnp1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 26",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 — Black strikes at the centre, prying open lines against White's slightly awkward pieces."
+  },
+  {
+   "ply": 51,
+   "t": 295,
+   "fen": "2r1r3/1p3pk1/p2pPnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K b - - 0 26",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": "White takes on e6 — but the engine calls it an error; a quiet move like f4 was stronger, and now Black's rooks come alive on the open file."
+  },
+  {
+   "ply": 52,
+   "t": 300,
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 27",
+   "line": [
+    "Rxe6"
+   ],
+   "spoken": "The rook recaptures on e6, seizing the file."
+  },
+  {
+   "ply": 53,
+   "t": 302.5,
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 1 27",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": "The rook to d1 — again the engine prefers f4; White keeps missing the most testing continuation as the clock bites."
+  },
+  {
+   "ply": 52,
+   "t": 303.5,
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 27",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 305,
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 1 27",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 312.5,
+   "fen": "4r3/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K w - - 2 28",
+   "line": [
+    "Rce8"
+   ],
+   "spoken": "The rooks double on the e-file — Black is building real pressure down the centre now."
+  },
+  {
+   "ply": 55,
+   "t": 321.5,
+   "fen": "4r3/1p3pk1/p2prnp1/P1q1n2p/R2Q4/2N4P/1PP2PP1/3R1B1K b - - 3 28",
+   "line": [
+    "Qd4"
+   ],
+   "spoken": "The queen to d4, trying to hold the fort — but it's an inaccuracy; the engine wanted to force matters instead."
+  },
+  {
+   "ply": 56,
+   "t": 327.5,
+   "fen": "4r3/1p3pk1/p1nprnp1/P1q4p/R2Q4/2N4P/1PP2PP1/3R1B1K w - - 4 29",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6, hitting the queen and gaining a tempo for the coming break."
+  },
+  {
+   "ply": 57,
+   "t": 331.5,
+   "fen": "4r3/1p3pk1/p1nprnp1/P1q4p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 5 29",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen to d2 — and now the eval tips to Black. Small errors have accumulated, and White's position is quietly worse."
+  },
+  {
+   "ply": 58,
+   "t": 338,
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1qp3p/R7/2N4P/1PPQ1PP1/3R1B1K w - - 0 30",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 — Black plants the pawn in the centre and takes over. This is the payoff of all that pressure: a mobile centre against a passive White army."
+  },
+  {
+   "ply": 59,
+   "t": 344.5,
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1qp3p/R7/2NB3P/1PPQ1PP1/3R3K b - - 1 30",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop to d3, trying to blunt the coming push."
+  },
+  {
+   "ply": 61,
+   "t": 348,
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1q4p/R2p4/3B3P/1PPQNPP1/3R3K b - - 1 31",
+   "line": [
+    "d4",
+    "Ne2"
+   ],
+   "spoken": "The pawn storms on to d4 and the knight is driven to e2 — Black's centre knifes forward, and it's Black firmly in control now, on the board and on the clock."
+  }
+ ]
+}
