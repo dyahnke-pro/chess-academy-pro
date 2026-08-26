@@ -1,10 +1,10 @@
 {
  "videoId": "g36Y1YDdqoQ",
  "title": "Dance Off Adoption Match | Naroditsky vs Botez Sisters | Adoption Challenge",
- "openingName": "Sicilian Defence: Alapin",
+ "openingName": "c3-Sicilian (consultation blitz)",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:g36Y1YDdqoQ",
  "moves": [
   {
@@ -40,8 +40,8 @@
     "cxd4",
     "cxd4"
    ],
-   "spoken": "A sound practical idea against a theory-heavy opponent — capture to pull them out of their preparation, then develop simply with a modest pawn or the knight. There are no threats to fear, so calm development is the safe course.",
-   "kind": "plan"
+   "spoken": "We recapture on d5 with the queen. It's centralised but carries no real threat, so the priority is speed — e6 or the knight to f6, and just develop.",
+   "kind": "main"
   },
   {
    "ply": 12,
@@ -50,8 +50,10 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 is chosen with a follow-up in mind — it clears the way to develop the bishop actively to g4, pinning and pressuring rather than sitting passively.",
-   "kind": "plan"
+   "spoken": "e6 is chosen partly to open the door for the bishop to g4 later.",
+   "teaches": [
+    "e6 to free Bg4"
+   ]
   },
   {
    "ply": 13,
@@ -108,7 +110,10 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "When a knight lunges toward a central outpost, the pawn to h6 is the necessary defence, shoring up the piece under fire before anything else. First keep everything protected, then look for counterplay."
+   "spoken": "The bishop swings to g5, eyeing the knight on f6, and there's a knight-to-d5 idea in the air. The queen has to find a square and the f6-knight needs support — h6 covers the g5 bishop's pressure without loosening the structure the way f5 would.",
+   "teaches": [
+    "meeting the pin with h6"
+   ]
   }
  ]
 }

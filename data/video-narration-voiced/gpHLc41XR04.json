@@ -1,10 +1,10 @@
 {
  "videoId": "gpHLc41XR04",
  "title": "What is the Difference Between FM & GM?",
- "openingName": "King's Indian Attack",
+ "openingName": "King's Indian Attack vs Caro-Modern (positional teaching game)",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:gpHLc41XR04",
  "moves": [
   {
@@ -44,8 +44,11 @@
    "line": [
     "Be2"
    ],
-   "spoken": "The choice here is a quiet, Philidor-like structure — modest development, no early confrontation, a slow positional game where small advantages are accumulated rather than forced.",
-   "kind": "plan"
+   "spoken": "We settle into a Philidor-like structure — quiet, positional, no rush.",
+   "kind": "plan",
+   "teaches": [
+    "quiet positional setup"
+   ]
   },
   {
    "ply": 9,
@@ -138,8 +141,11 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "With the centre settling, the pawn to c3 is the thematic idea — bracing the position and preparing to challenge the opponent's central pawns on favourable terms.",
-   "kind": "plan"
+   "spoken": "Now we work out the plan. The standard idea in this kind of structure is c3, challenging the opponent's central pawn before committing anywhere else.",
+   "kind": "plan",
+   "teaches": [
+    "c3 to challenge the centre"
+   ]
   },
   {
    "ply": 22,
@@ -196,7 +202,10 @@
     "b6",
     "Bf1"
    ],
-   "spoken": ""
+   "spoken": "We retool the position, rerouting the bishop back to a more civilised square where it actually does something.",
+   "teaches": [
+    "rerouting a bad bishop"
+   ]
   },
   {
    "ply": 31,
@@ -251,8 +260,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": "A trade evaluation worth making explicitly: who benefits from swapping bishops? Here it favours this side, because both of these bishops are poorly placed — and trading off your bad pieces is a quiet way to improve the whole position.",
-   "kind": "plan"
+   "spoken": ""
   },
   {
    "ply": 37,
@@ -261,7 +269,11 @@
    "line": [
     "Bc1"
    ],
-   "spoken": ""
+   "spoken": "Ask who benefits from a bishop trade here — it's us, because both of our bishops are passive. Swapping the poor pieces off is a small win.",
+   "kind": "plan",
+   "teaches": [
+    "trade your bad pieces"
+   ]
   },
   {
    "ply": 39,
@@ -326,7 +338,10 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "The plan is to make the bishop better; right now it just bites on our own pawns.",
+   "teaches": [
+    "improve the worst piece"
+   ]
   },
   {
    "ply": 49,
@@ -355,7 +370,10 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The opponent's centre had been biting on granite — solidly held — but this advance changes the picture.",
+   "teaches": [
+    "the granite break"
+   ]
   },
   {
    "ply": 52,
@@ -364,8 +382,10 @@
    "line": [
     "f6"
    ],
-   "spoken": "The plan has been to breathe life into the bad bishop, which was staring blankly into a pawn — and now, with the central pawn lever resolved, it finally has scope. One problem solved, the focus shifts to the next: a weak pawn to target and a strong enemy knight to neutralise.",
-   "kind": "plan"
+   "spoken": "Now the bishop has a future and can breathe. But new problems arrive at the same time: the advanced pawn is weak, and the opponent's knight has become a monster.",
+   "teaches": [
+    "weighing the trade-offs of a break"
+   ]
   },
   {
    "ply": 53,
@@ -374,8 +394,11 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "Before pressing, tuck the king out of the danger zone — a quiet step to solidify. Getting the king safe first is what lets the initiative be pursued without fear of a counterblow.",
-   "kind": "plan"
+   "spoken": "First, king safety — tuck the king to h2, out of the danger zone, and solidify before doing anything ambitious.",
+   "kind": "plan",
+   "teaches": [
+    "king safety first"
+   ]
   },
   {
    "ply": 54,
@@ -479,9 +502,10 @@
    "line": [
     "Re2"
    ],
-   "spoken": "The refined, prophylactic choice — the Karpov-style rook to e2, quietly shoring things up and stopping the opponent's idea before pushing on. Prevention before ambition is the mark of the mature move.",
-   "kind": "plan",
-   "reanchor": true
+   "spoken": "The Karpov move: the rook drops back to e2, pure prophylaxis to shut down the counterplay before it starts.",
+   "teaches": [
+    "prophylactic rook retreat"
+   ]
   },
   {
    "ply": 62,
@@ -499,7 +523,10 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "This is the break we were worried about — the position may already be objectively better for the other side here.",
+   "teaches": [
+    "honest assessment"
+   ]
   },
   {
    "ply": 64,
@@ -535,7 +562,10 @@
    "line": [
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "The queen lands on d6 and dominates the board — now it's simply winning.",
+   "teaches": [
+    "the queen infiltration"
+   ]
   }
  ]
 }
