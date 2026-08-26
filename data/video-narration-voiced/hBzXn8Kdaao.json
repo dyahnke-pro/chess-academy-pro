@@ -1,0 +1,478 @@
+{
+  "videoId": "hBzXn8Kdaao",
+  "title": "King's Gambit Deconstructed | The Sensei Speedrun | Grandmaster Naroditsky",
+  "openingName": "King's Gambit",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:hBzXn8Kdaao",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 12.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "e5"
+      ],
+      "spoken": "Our first 1500 — once again playing the basics, the classics. e4, e5."
+    },
+    {
+      "ply": 3,
+      "t": 15.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "f4"
+      ],
+      "spoken": "The King's Gambit — nice, because I can remind you of my King's-Gambit system, an incredibly rare move"
+    },
+    {
+      "ply": 4,
+      "t": 39,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c6"
+      ],
+      "spoken": "that scores incredibly well. c6 — what the hell are we doing? This looks like the worst move in the position, and that's exactly the point: c6 is like the Caro-Kann against the King's Gambit."
+    },
+    {
+      "ply": 5,
+      "t": 42.5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "Why do you play c6 in the Caro-Kann? To prepare d5 — that's the whole point: we wait for the knight to f3,"
+    },
+    {
+      "ply": 6,
+      "t": 57,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/4PP2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "and then we strike with d5. If he takes on d5, we can push e4 — that's why"
+    },
+    {
+      "ply": 7,
+      "t": 69.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/4PP2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "d3"
+      ],
+      "spoken": "most of the time I end up getting better positions with the Black pieces. d3. Now, the actual objective evaluation of c6 is that Black is slightly worse, but only if"
+    },
+    {
+      "ply": 5,
+      "t": 71,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "line": [],
+      "spoken": "White knows exactly how to play, and",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 76.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/4PP2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "d5",
+        "d3"
+      ],
+      "spoken": "most of the time I end up better with Black. So what now — should we take on e4? Don't say no just because I'm asking the question."
+    },
+    {
+      "ply": 8,
+      "t": 105.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/4p3/4pP2/3P1N2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "The answer is yes, of course we should — because after d-takes-e4, d-takes-e4, we can trade queens and force the king onto d1, an incredibly undesirable square. Take on e4. It's possible he'll take on e5 with the knight, probably the best move."
+    },
+    {
+      "ply": 9,
+      "t": 122.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/4N3/4pP2/3P4/PPP3PP/RNBQKB1R b KQkq - 0 5",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "If d-takes-e4 happens, that endgame is better for us — the king on d1 is really vulnerable even though there are no queens on the board. The knight takes e5. Now, f6 is impossible because of the queen to h5 with check — an important thing to note — and we shouldn't rush to take on d3 and help White develop."
+    },
+    {
+      "ply": 10,
+      "t": 149.5,
+      "fen": "rnbqkb1r/pp3ppp/2p2n2/4N3/4pP2/3P4/PPP3PP/RNBQKB1R w KQkq - 1 6",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "So we trade on our own terms, and do it while developing our pieces — the knight to f6, developing; if he wants to take on e4, be my guest, we'll trade queens and recapture"
+    },
+    {
+      "ply": 11,
+      "t": 164,
+      "fen": "rnbqkb1r/pp3ppp/2p2n2/4N3/4pP2/2NP4/PPP3PP/R1BQKB1R b KQkq - 2 6",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "with the knight. You might say aren't we worried about the knight on e5? It's annoying, but what is it actually attacking? Not really anything — we'll deal with it later with the knight to d7. The knight to c3, and we have several options: we can take on d3 and follow with the bishop to c5, preventing White from castling and keeping the king in the centre — we'd love the bishop to c5 immediately, but it gives up a pawn. The other approach is the bishop to b4, developing, pinning the knight, and taking the sting out of d-takes-d4."
+    },
+    {
+      "ply": 12,
+      "t": 216,
+      "fen": "rnbqk2r/pp3ppp/2p2n2/4N3/1b2pP2/2NP4/PPP3PP/R1BQKB1R w KQkq - 3 7",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "The bishop to b4 is the more positional approach — we'll probably end up taking his knight on c3 and damaging his pawn structure. Let's go the bishop to b4, playing more positionally; I'm expecting a3, the instinctual response,"
+    },
+    {
+      "ply": 13,
+      "t": 238.5,
+      "fen": "rnbqk2r/pp3ppp/2p2n2/4N3/1b2pP2/2NP4/PPPB2PP/R2QKB1R b KQkq - 4 7",
+      "line": [
+        "Bd2"
+      ],
+      "spoken": "which is maybe even the best move. The Falkbeer Counter-Gambit is one of the most overrated systems against the King's Gambit — it sounds cool, but it's actually just bad. The bishop to d2, a good move, our opponent's playing well — it unpins the knight and"
+    },
+    {
+      "ply": 14,
+      "t": 254.5,
+      "fen": "rnbqk2r/pp3ppp/2p2n2/4N3/1b3P2/2Np4/PPPB2PP/R2QKB1R w KQkq - 0 8",
+      "line": [
+        "exd3"
+      ],
+      "spoken": "reinforces the attack on e4, essentially forcing us to trade on d3 — but now that we've developed most of our pieces, we're fine taking on d3, because we can castle next move; and my point is that the pawn on f4 will, in the long run, be a weakness."
+    },
+    {
+      "ply": 15,
+      "t": 280,
+      "fen": "rnbqk2r/pp3ppp/2p2n2/4N3/1b3P2/2NB4/PPPB2PP/R2QK2R b KQkq - 0 8",
+      "line": [
+        "Bxd3"
+      ],
+      "spoken": "In the short run it looks good, like it supports the knight, but once White castles kingside, my claim is that this pawn will end up causing trouble. The bishop takes d3. Now let's castle."
+    },
+    {
+      "ply": 16,
+      "t": 281.5,
+      "fen": "rnbq1rk1/pp3ppp/2p2n2/4N3/1b3P2/2NB4/PPPB2PP/R2QK2R w KQ - 1 9",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "And on the next move, after he castles, we need to deal with the knight on e5 — try to trade it, ideally, by going the knight to d7; this is more important than developing the bishop, so I wouldn't play the bishop to e6, I'd immediately go the knight to d7 and address the knight before he solidifies it. The queen to f3 is another very good move; he wants to castle queenside, but that doesn't change what we do — the knight to d7, and obviously we recapture with the bishop, developing a piece. This is a blunder, and I've seen people blunder like this all the time: when you castle and swing the queen to f3, your rook and queen end up on the same diagonal, a very common blunder — so it's skewer time, the bishop to g4 wins the exchange, a massive material win, and our position is essentially winning. People forget to visualise the position after they castle. The queen to g3, the bishop takes d1. Now the technical stage: make priorities as always — what haven't we finished? Getting our pieces into the game. Don't rush to move the queen — there are two bishops on the d-file, so when he moves the bishop from d2, then we move our queen. The rook to e8, getting our rook on the open file. At this level, be very concrete; I'm not afraid of anything on the d-file, because you can't move two bishops at the same time, so nothing can happen as long as he keeps both there — but I make a mental note to move my queen the moment a bishop moves; it can go to c7 or a5, depending. The queen to f3. Again, multiple approaches — less about the exact move, more about the general approach: we want to trade pieces. There's a move that initiates a bunch of trades — the knight takes d5, the bishop takes d2 with check, the rook takes d2; we don't recapture with the queen, which walks into the discovery, we take with a pawn — and if we reach that moment, we have an even better move than pawn-takes-d5. If he doesn't take on d5, some of you might worry about the h7-pawn and the queen to h5 or h3, but that's not worrisome, because you can always play g6 — White doesn't have sufficient material on the kingside; never just be afraid of a mate threat. The knight takes d5, the bishop takes c2 with check, and after the rook takes d2, another lesson in not playing automatically — he plays the king takes d2, probably seeing that after the rook takes d2 there's the rook to e1 with check, forcing a rook trade, and then the queen takes d5. We can take with either piece, but in the interest of playing consecutively, having initiated this campaign to trade, I keep to our strategy; this won't be the easiest endgame, White is well coordinated and we'll have a weak pawn on d5, but we'll make it happen. The queen to h3 makes our job easier — I like the queens off; it threatens h7 because pinned pieces protect. Now, h6 or g6? Both are fine, but one is more accurate: when making luft with a bishop on d3, h6 often doesn't accomplish it, because the bishop controls h7, so I much prefer g6, shutting the bishop down entirely — and I'm not worried about weakening my dark squares, because White has no dark-squared bishop to occupy them. Now a very nasty queen move: I understood White is probably intending the king to c1, so, rather than pushing the a-pawn, the queen to a5 is a great move that wins the a-pawn — in fact the queen to a5 with check is superior to the queen to d4. The queen takes a2. The idea of a5, a4 is a good follow-up. Before that, it makes sense to bring a piece in — the rook to a8, getting the final piece into the action, and it creates a hidden threat of forced checkmate that starts with a quiet, deadly move: the queen to a1 is almost mate — it would be mate if the d2-square were controlled, and we can control it with either rook, but the bishop on d3 is blocking the rook, which is how the rook to e2 comes to mind, not immediately because White checks, but after a move like the queen to h6, the rook to e2 controls d2, forcing the bishop takes e2, and then the queen to a1 is just mate. There's another pretty mating sequence starting with the queen to a1 with check. f-takes is very weakening, opening the diagonal for the bishop, and loses to the bishop to c4 with check. We can pre-move the queen to a1 — there's literally nothing White can do.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 858,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "Good stuff, we're over 1400 — a short but sweet game. You can find other streams where I played c6 here; this is not a novelty,",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 871.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": "it has about 50 games in the database, tremendously rare. If you want to play something more mainstream,",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 873,
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "exf4"
+      ],
+      "spoken": "taking the pawn is considered best",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 876.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "according to modern theory. There are many possible lines you can play — the King's Gambit obviously isn't what it once was.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 884.5,
+      "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "g5"
+      ],
+      "spoken": "The sort of principled move was g5, but this is extremely theoretical.",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 890,
+      "fen": "rnbqkbnr/pppp1p1p/8/4N3/4PppP/8/PPPP2P1/RNBQKB1R b KQkq h3 0 5",
+      "line": [
+        "Ne5",
+        "g4",
+        "h4"
+      ],
+      "spoken": "This line with h4, g4, g5 I wouldn't recommend",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 895,
+      "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+      "line": [],
+      "spoken": "going into — there's a lot of theory here.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 896,
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "line": [],
+      "spoken": "The line I'd recommend if you're looking for an alternative to c6",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 901,
+      "fen": "rnbqkb1r/ppppnppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+      "line": [
+        "Ne7"
+      ],
+      "spoken": "is actually the knight to e7 here.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 903,
+      "fen": "rnbqkb1r/ppppnppp/8/8/3PPp2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "d4"
+      ],
+      "spoken": "The point is that after d4, you go",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 904,
+      "fen": "rnbqkb1r/pppp1ppp/6n1/8/3PPp2/5N2/PPP3PP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "Ng6"
+      ],
+      "spoken": "well, I think you go the knight to g6 — no, no,",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 906.5,
+      "fen": "rnbqkb1r/ppppnppp/8/8/3PPp2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 8,
+      "t": 907.5,
+      "fen": "rnbqkb1r/ppp1nppp/8/3p4/3PPp2/5N2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "d5"
+      ],
+      "spoken": "sorry, you go d5 here. The point of putting the knight on e7 is that if White takes it,",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 918.5,
+      "fen": "rnbqkb1r/ppp1nppp/8/3p4/3PPp2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 1 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "you take with a knight, and then the knight can swing to e3. If White goes the knight to c3, that's the main line, and you take",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 920.5,
+      "fen": "rnbqkb1r/ppp1nppp/8/8/3PNp2/5N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+      "line": [
+        "dxe4",
+        "Nxe4"
+      ],
+      "spoken": "on e4, and then you still go the knight to d5 and cling to this pawn; White can eventually win it back, but not without giving up the dark-",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 922.5,
+      "fen": "rnbqkb1r/ppp2ppp/8/3n4/3PNp2/5N2/PPP3PP/R1BQKB1R w KQkq - 1 7",
+      "line": [
+        "Nd5"
+      ],
+      "spoken": "squared bishop, which is an important piece.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 934.5,
+      "fen": "rnbqkb1r/ppp1nppp/8/3p4/3PPp2/5N2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+      "line": [],
+      "spoken": "So you could investigate this on your own — I'm not going to talk too much about openings in the speedrun.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 939,
+      "fen": "rnbqkb1r/ppppnppp/8/8/3PPp2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": "But you can dig around if you're an e5",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 941,
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+      "line": [],
+      "spoken": "player — there are many, many systems in the King's Gambit.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 943.5,
+      "fen": "rnbqkbnr/ppp2ppp/8/3p4/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "d5 is also",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 947,
+      "fen": "rnbqkb1r/ppp2ppp/5n2/3P4/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "exd5",
+        "Nf6"
+      ],
+      "spoken": "traditionally considered a good system, with the knight to f6.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 951,
+      "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "The Queen's Gambit is a lot more reputable,",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 952,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": "but the King's Gambit is also not as bad as people make it out to be — it's not losing, and if Black isn't theoretically competent, the King's Gambit can still produce a lot of good positions, so at fifteen or sixteen hundred you could absolutely pick it up and do extremely well. There's a very good book by a Scottish grandmaster,",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 988.5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c6"
+      ],
+      "spoken": "who's a very good analyst — you can pick up that book. I don't know if he analyses c6. The knight to f3 is already a mistake, actually,",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 994.5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "believe it or not — you have to play the knight to c3, because then d5 doesn't come with tempo anymore.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1001.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "And here, d5, e-takes-d5.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1003,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3Pp3/5P2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "e-takes-d5.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1004.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3P4/5p2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+      "line": [
+        "exf4"
+      ],
+      "spoken": "e-takes-f4 transposes to a variation of the Falkbeer where",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1010.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3P4/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 1 5",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "White is supposed to be a tiny",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1013.5,
+      "fen": "rnbqk1nr/pp3ppp/2pb4/3P4/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 6",
+      "line": [
+        "Bd6"
+      ],
+      "spoken": "bit better, but I'm not sure — again, you can investigate this on your own.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 1017.5,
+      "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "But I do know that the knight to c3 is the best move.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1022.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3P4/4pP2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "Nf3",
+        "d5",
+        "exd5",
+        "e4"
+      ],
+      "spoken": "The knight to f3, d5 — the point is e-takes-d5, you have e4, the pawns get connected, and Black is better.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1028.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/3Pp3/5P2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+      "line": [],
+      "spoken": "d3 is decent; d4, the knight to e5, and again, if d-takes-e4 we trade queens, take on f4, and we're better — because White has a very weak isolated pawn on e4 and an awkward king that's lost his castling rights. The knight to f6, and we're doing great. So g5, from that perspective, is good. The knight to f6, the knight to c3, and the bishop to b4 is what we decided on; e-takes-d3 and the bishop to c5 is the other approach, stopping White from castling — I was a little concerned about the bishop to c4 in this position. An isolated pawn is an isolated pawn; the IQP has its own name just because it occurs so commonly, but at its core it's just an isolated pawn, and isolated pawns are bad unless there's a very special set of circumstances that make them good.",
+      "reanchor": true
+    }
+  ]
+}
