@@ -1,6 +1,5 @@
 # Shard C — SPARSELY-NARRATED videos SET ASIDE for the new narration technique
 # (banter/blitz/joke/hand-and-brain/commentary-only; not dense-authored here)
 # format: <videoId>  <reason>
-5M0c_EwRQiI  Title-Tuesday blitz — banter/distracted, no sustained teaching
 Gd2wANUtm_4  Botez collab bullet+analysis — conversational two-person register
 yAF1Bpa4m5Q  competitive IM-vs-GM match game — near-silent, only tilt/banter reactions, no teaching
