@@ -8,6 +8,7 @@ import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
+import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -223,6 +224,26 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         readingFacts = '';
       }
 
+      // POSITION FACTS — the computed board-truth supply (importance-gated, DNA).
+      // A read of the board earns the decision/intent read + the leans-on
+      // why-probe. `must-defend` is excluded — readingFacts above already lists
+      // the material at risk (no walk-over). Reuses the analysis already in hand.
+      let positionFactsBlock = '';
+      try {
+        if (stockfishAnalysis?.topLines?.length) {
+          const pf = await computePositionFacts({
+            fen: args.fen,
+            moverColor: args.fen.split(' ')[1] === 'b' ? 'b' : 'w',
+            studentColor: posStudentCC,
+            rating,
+            analysis: stockfishAnalysis,
+            evalBoard: (f) => stockfishEngine.evalBoard(f),
+          });
+          positionFactsBlock = clauseText(pf.clauses, ['must-defend']).join(' ');
+        }
+      } catch { positionFactsBlock = ''; }
+      if (token !== activeTokenRef.current) return;
+
       // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
       // gen to the llm — it will have no choice but to speak the words"). The
       // app's DEEPEST foresight is the PV scan in posTactics; feeding it to the
@@ -265,7 +286,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         playerMove: null,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
-        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredLookahead}`,
+        additionalContext: `${positionFactsBlock ? `${positionFactsBlock}\n\n` : ''}${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredLookahead}`,
       };
 
       const userMessage = buildChessContextMessage(context);

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
+import { computePositionFacts, clauseText } from '../services/positionFacts';
 import { logAppAudit } from '../services/appAuditor';
 
 import { db } from '../db/schema';
@@ -236,6 +237,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
        *  one — see the silence rule below. */
       let ritualSpoken = false;
       let transitionSentence = '';
+      let pfConcrete = false; // positionFacts produced a real board-truth clause
 
       let sentenceBuffer = '';
       let speechChain: Promise<void> = Promise.resolve();
@@ -555,6 +557,27 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       ).catch(() => undefined);
       if (token !== activeTokenRef.current) return;
 
+      // POSITION FACTS — enrich the phase beat with the computed board-truth
+      // supply: the opponent's standing threat, their intent, and the leans-on
+      // why-probe. Excludes key-moment + convert — this surface deliberately
+      // drops the eval/decision framing (David 2026-08-23). Reuses the analysis
+      // already read; the importance model gates whether anything speaks.
+      try {
+        if (stockfishAnalysis?.topLines?.length) {
+          const pf = await computePositionFacts({
+            fen: event.fen,
+            moverColor: event.fen.split(' ')[1] === 'b' ? 'b' : 'w',
+            studentColor: event.playerColor === 'white' ? 'w' : 'b',
+            rating,
+            analysis: stockfishAnalysis,
+            evalBoard: (f) => stockfishEngine.evalBoard(f),
+          });
+          const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
+          if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
+        }
+      } catch { /* the position-facts lane is a bonus, never a blocker */ }
+      if (token !== activeTokenRef.current) return;
+
       const transitionLabel = event.kind === 'opening-to-middlegame'
         ? 'Opening → Middlegame'
         : 'Middlegame → Endgame';
@@ -598,7 +621,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // Returning here also skips the engine read and the timeout templates,
       // which is the point: "* We're entering the middlegame" is the same noise
       // with an asterisk on it.
-      if (!ritualSpoken && !phaseLookahead) {
+      if (!ritualSpoken && !phaseLookahead && !pfConcrete) {
         void logAppAudit({
           kind: 'coach-surface-migrated',
           category: 'subsystem',

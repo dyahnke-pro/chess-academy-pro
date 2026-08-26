@@ -28,6 +28,8 @@ import { voiceService } from '../services/voiceService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
+import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { stockfishEngine } from '../services/stockfishEngine';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
 import {
   evaluateOpponentMoveTriggers,
@@ -206,6 +208,27 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         // groundCoachReply bandaid are both gone. Returns null (→ stay silent)
         // when there's no engine/tactic data to ground on.
         const cached = ctx.fenAfter ? getCachedStockfish(ctx.fenAfter) : null;
+        // POSITION FACTS — Play is a PURE PLAYING surface, so this stays
+        // DESCRIPTIVE commentary only: the opponent's INTENT and how their best
+        // piece leans (teaching what's happening), NEVER "you must defend X" or
+        // "slow down" — those would coach the student through their own live
+        // game. Excludes must-defend + key-moment; the trigger `moment` already
+        // conveys "this mattered". Rides the existing extraFacts chokepoint.
+        let liveExtraFacts: string | undefined;
+        try {
+          if (cached?.topLines?.length && ctx.fenAfter) {
+            const pf = await computePositionFacts({
+              fen: ctx.fenAfter,
+              moverColor: ctx.fenAfter.split(' ')[1] === 'b' ? 'b' : 'w',
+              studentColor: playerColor === 'white' ? 'w' : 'b',
+              rating: useAppStore.getState().activeProfile?.currentRating ?? 1200,
+              analysis: cached,
+              evalBoard: (f) => stockfishEngine.evalBoard(f),
+            });
+            const cl = clauseText(pf.clauses, ['must-defend', 'key-moment']);
+            if (cl.length) liveExtraFacts = cl.join(' ');
+          }
+        } catch { /* the position-facts lane is a bonus, never a blocker */ }
         const promise = groundedMoveFeedback({
           fen: ctx.fenAfter ?? '',
           bestMoveUci: cached?.bestMove ?? null,
@@ -214,6 +237,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
           tactics: tactics ?? undefined,
           studentColor: playerColor,
           studentMessage: ctx.san ? `Played ${ctx.san}` : undefined,
+          extraFacts: liveExtraFacts,
           // The trigger + eval numbers are COMPUTED (liveCoachTriggers); pass them
           // as a moment so the warm voice can say "nice recovery" TRUTHFULLY
           // (David 2026-07-09: "good recovery … when the eval swings up").
