@@ -193,7 +193,22 @@ export function stripUngroundedTacticSentences(
         // this board: a square, a file/rank/diagonal, or the student.
         && !/\bthere\s+(?:is|are)\b/i.test(prose)
         && !/[a-h][1-8]\b|\b[a-h][- ]file\b|\brank\b|\bdiagonal\b|\byours?\b|\byou\b|\bhere\b|\bright now\b|\bthis (?:position|board|game)\b|\bon the board\b/i.test(prose);
-      if (prose && outOfVocab.length > 0 && !TACTIC_NEGATION_GUARD.test(prose) && !isDefinition) {
+      // A WEAKNESS / HISTORY STAT is not a live-board claim either. "Missed
+      // forks 114 times, from your own games" is a retrospective count, not a
+      // claim that a fork exists on THIS board — so grading it against the
+      // current position's tactic context deleted the whole weakness summary
+      // and the coach couldn't tell the student their weaknesses (David
+      // 2026-08-26). Past-game stat shape + no live-board cue = exempt; note
+      // "you/your" is EXPECTED here ("from YOUR games"), so it is not a cue.
+      const isHistoryStat =
+        (/\b\d+\s+times\b/i.test(prose)
+          || /\bfrom your (?:own )?games?\b/i.test(prose)
+          || /\byou(?:'ve| have)?\s*(?:tend(?:ed)? to |often |frequently |usually |repeatedly |sometimes )?miss(?:ed|ing)?\b/i.test(prose)
+          || /\bmost (?:frequent|common)\b/i.test(prose)
+          || /\bareas?\s+to\s+train\b/i.test(prose)
+          || /\byour (?:most |biggest |main )?(?:weakness|weak spot|weak area|blind spot)/i.test(prose))
+        && !/[a-h][1-8]\b|\b[a-h][- ]file\b|\bdiagonal\b|\bhere\b|\bright now\b|\bthis (?:position|board|game)\b|\bon the board\b/i.test(prose);
+      if (prose && outOfVocab.length > 0 && !TACTIC_NEGATION_GUARD.test(prose) && !isDefinition && !isHistoryStat) {
         dropped.push(prose);
         // Preserve any tool markers (arrow / action) that shared the dropped
         // sentence — they belong to the move, not the fabricated claim.
