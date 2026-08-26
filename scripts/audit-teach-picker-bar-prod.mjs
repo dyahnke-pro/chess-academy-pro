@@ -36,7 +36,14 @@ const record = (name, pass, detail) => {
 };
 
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
-const ctx = await b.newContext(sandboxContextOptions());
+// David hit this on an iPhone in Safari — a SHORT viewport where the full-width
+// board shoves the picker off the bottom. Test at that shape, not a desktop one.
+const ctx = await b.newContext({
+  ...sandboxContextOptions(),
+  viewport: { width: 390, height: 664 },
+  isMobile: true,
+  deviceScaleFactor: 3,
+});
 await ctx.addInitScript(muteTtsForAudit); // SILENT — no synthesis, no bill (non-negotiable)
 const p = await ctx.newPage();
 const pageErrors = [];

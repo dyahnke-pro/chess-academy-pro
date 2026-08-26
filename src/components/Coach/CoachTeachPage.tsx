@@ -9246,6 +9246,18 @@ export function CoachTeachPage(): JSX.Element {
   const teachMaterialAdv = getMaterialAdvantage(teachBoardFen);
   const isTeachPlayerWhite = playerColor === 'white';
 
+  // An in-game decision picker (fork / trap / gem) is showing under the board.
+  // On mobile the full-width board otherwise shoves that bar past the bottom of
+  // the screen (David 2026-08-26: "still can't see the picker" — his Safari
+  // viewport is short, board huge). When a picker is up, cap the board by
+  // available height (mobile only) so the bar stays on screen. Desktop keeps
+  // its 420px cap. Pure layout — no behaviour change.
+  const pickerActive =
+    walkthrough.isActive &&
+    (walkthrough.phase === 'fork' ||
+      walkthrough.phase === 'trap-prompt' ||
+      walkthrough.phase === 'gem-picker');
+
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
@@ -9800,7 +9812,18 @@ export function CoachTeachPage(): JSX.Element {
             opening lines while the chat panel stays available for
             tangent questions. */}
         <div className="px-2 py-1 flex justify-center w-full">
-          <div className="w-full md:max-w-[420px]">
+          <div
+            className="w-full md:max-w-[420px] mx-auto"
+            // When a picker is up on a NARROW (mobile) viewport, cap the board by
+            // available height so the under-board picker bar stays on screen
+            // (plain CSS calc/dvh — guaranteed, unlike an arbitrary Tailwind
+            // class). Desktop (≥768) keeps the 420px cap; no picker → no cap.
+            style={
+              pickerActive && typeof window !== 'undefined' && window.innerWidth < 768
+                ? { maxWidth: 'min(100%, calc(100dvh - 23rem))' }
+                : undefined
+            }
+          >
             {walkthrough.isActive ? (
               // In drill mode, the board becomes interactive — the
               // student plays moves on it and the hook routes them
