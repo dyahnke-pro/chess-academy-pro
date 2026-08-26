@@ -1520,6 +1520,35 @@ the harm here.
 
 ---
 
+## 🚫🚫 NO YES-MAN — PUSH BACK, IMPROVE HIS LOGIC, EVERY TIME (David 2026-08-26, emphatic, ALL CAPS: "DO NOT BE A YES MAN! PUSH BACK! IMPROVE ON MY LOGIC, IDEA, OR TRAIN OF THOUGHT!").
+
+This is a HARD standing order and it OVERRIDES any instinct to be agreeable.
+When David proposes a design, an idea, a rule, or a train of thought, your
+FIRST job is to find where it BREAKS before you build it — not to agree, not to
+restate it back approvingly, not to "yes, and." Agreeing with a flawed idea
+does David and the app **no good** (his words); it is a failure, not politeness.
+
+Concretely, every time David floats an idea:
+1. **Stress-test it out loud.** Name the concrete cases where it fails (real
+   board positions, real user flows, real edge cases), before any code.
+2. **Sharpen it into something better.** Don't just poke holes — replace the
+   vague version with a rigorous one and say why yours is stronger. The
+   2026-08-26 worked example: David floated "anything that moves the eval bar
+   is important" as the narration-importance filter; the right response named
+   its four failure modes (sharp-but-flat position, decided blow-out, standing
+   threat, quiet lesson) and replaced it with the rating-scaled decision-
+   leverage model below — THAT is the bar.
+3. **Push back on yourself too.** After you improve his idea, attack YOUR
+   improvement so you're not just swapping one neat-but-wrong story for another.
+4. **Still ship his intent.** Pushback is in service of what he's actually
+   trying to build, never contrarianism for its own sake. When he's right, say
+   so plainly and move — but only after you actually tried to break it.
+
+A reply that simply agrees, or hedges, or "sounds good, here's how" without
+first testing the idea, is the failure mode this rule exists to kill. If you
+catch yourself agreeing, STOP and ask: where does this break, and how do I make
+it better?
+
 ## 🧠 Operate at full depth (non-negotiable)
 
 David has a very high IQ and is impatient with surface-level work.
@@ -2526,6 +2555,58 @@ lines. The review path (buildReviewSegments + openingIdeasNarrator) and the
 walkthrough path (generateOpeningFromDbNarration) are SEPARATE engines; share
 the grounded fact-computers (openingIdeasNarrator ideas, explainBestMoveGrounded,
 computePvLine PlyFacts), not the review's phrasing.
+
+### 🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.
+
+The PositionFacts calculator (`docs/plans/2026-08-26-position-facts-calculator.md`)
+detects a LOT — criticality, threats-played-out, perturbation, structure→plan,
+move-reason. **Not all of it should be spoken, and the LLM must NOT be the one
+that decides what to keep.** Deciding what matters is a chess judgment, and G0
+says the LLM makes none. So:
+
+- **The COMPUTER selects + orders; the LLM voices EVERYTHING it is handed** (in
+  the order given, most-important-first — `voiceFacts`, `coachApi.ts:2159-2162`).
+  The LLM has zero discretion over inclusion or omission.
+- **DNA runs through BOTH layers** (David 2026-08-26: "lets run DNA through both
+  computer and llm"). The computer writes the facts ALREADY in the DNA register
+  (the ranked-briefing renderer, DNA-structured), AND the phrasing model carries
+  the DNA register (`voiceFacts` warm/review system prompt). When the computed
+  prose is tight, `preferRaw` speaks it and the LLM is bypassed entirely — the
+  purest G0. Neither layer alone owns the voice; both hold DNA.
+
+**THE IMPORTANCE FILTER — rating-scaled decision-leverage, NOT "did the eval bar
+move" (David 2026-08-26; he floated eval-bar-movement, then: "make my ideas
+better, dont just agree").** "Anything that moves the eval bar is important" is
+too blunt and fails four ways: (1) the **sharp-but-flat** position — the student
+finds the only move that holds, the bar doesn't move, yet it was THE critical
+moment; (2) the **decided blow-out** — +8→+5 in a won game moves the bar three
+pawns and means nothing; (3) the **standing threat** — a piece hangs to the
+opponent's next move, the bar is flat NOW but it's the most actionable fact;
+(4) the **quiet lesson** — the opening's plan in a calm position, bar flat, but
+that's the masterclass. The right question is not "did a number change" but
+"does the right choice here matter to THIS student, or is something actionable/
+decisive on the board." A fact earns voice when ANY of these fire, each
+**rating-scaled** (same board is different importance to a 1200 vs a 2200):
+
+1. **Decision leverage** (prospective) — how much the outcome hinges on the move
+   choice: `scanCriticality` gapCp/severity (`criticalityScan.ts`, already
+   rating-scaled). Catches the sharp-but-flat case.
+2. **Realized swing** (retrospective) — the played move's cpLoss, rating-banded.
+   The honest form of "the bar moved."
+3. **Must-defend** (incoming) — a live standing threat from the null-move probe.
+   Catches the hanging-piece the flat bar hides.
+4. **Teaching beat** (declared) — opening name, the plan, a keystone. The
+   quiet-lesson case; gated by the note/bake tiers + phase, not by eval.
+
+…all gated by a **contested gate**: none of 1–3 earns voice if the position is
+already decided (WDL lopsided) — a swing inside a won game is silent (kills
+failure #2). **Silence = quiet position + nothing threatened + no teaching
+beat** — the computed "empty > generic" silence, decided in code, never by the
+LLM. Importance gates WHETHER a fact speaks; the ranked briefing decides WHAT
+leads — two jobs, both the computer's. Reconcile with the existing grounded
+signals (`scanCriticality`, `cpLoss`, the threat probe, the note/bake tiers) —
+do NOT add a second parallel criticality (that is the walk-over this build
+exists to remove).
 
 ### 🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")
 

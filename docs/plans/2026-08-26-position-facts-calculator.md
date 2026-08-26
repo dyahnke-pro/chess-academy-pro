@@ -95,6 +95,35 @@ don't rush" event) is the separate, WITH-David pass — NOT started here.
 - **2026-08-26** Layer 2 has **no hard cap** — rank by decision-impact; the vital tier is never dropped, the voice flexes depth.
 - **2026-08-26** Same `PositionFacts` feeds both phrasers (hand offline / `voiceFacts` live), unifying the two narration pipelines.
 
+### Phase 7 design decisions (David, live design session 2026-08-26 — see CLAUDE.md "THE COMPUTER DECIDES WHAT IS SPOKEN")
+
+- **Use case ranking:** #1 is strengthening the EXISTING computed narration
+  (weakest at Tier 3 — no bake, no note); then post-game review (criticality =
+  turning-point selection; move-reason+refutation = precise fault). Also:
+  "read this position", hints, matchup/Watch demos, tactics drill.
+- **DNA runs through BOTH the computer and the LLM.** Computer writes
+  DNA-structured facts (ranked briefing); LLM carries the DNA register too;
+  `preferRaw` speaks the computed prose and bypasses the LLM where it's tight.
+- **The computer decides what is spoken, not the LLM.** Importance is COMPUTED
+  (selection + order); the LLM voices everything handed to it, in order.
+- **Importance filter = rating-scaled decision-leverage**, NOT "eval-bar moved"
+  (that fails on sharp-but-flat / decided blow-out / standing threat / quiet
+  lesson). A fact speaks when ANY of {decision-leverage (`scanCriticality`),
+  realized swing (cpLoss), must-defend (null-move threat), declared teaching
+  beat} fires, each rating-scaled, gated by a contested (WDL) check. Silence =
+  quiet + nothing threatened + no teaching beat.
+- **Reconcile, do not duplicate.** `scanCriticality` is the existing grounded
+  criticality primitive — build the composite ON it, never a second parallel
+  criticality. Reuse `describeStructure` (features), the grounded move-reason
+  family (`moveRating`/`whyItFailed`/`describeMoveMerit`), and `detectNewThreat`.
+- **Walk-overs to remove (verified superseded, surgical):** the
+  `opponentsBestPiece` best-piece/outpost branch of `buildPlayCommentary`
+  (superseded by `pieceQualityLines`); overlapping `buildPositionalRead` /
+  `assessPositionalEdge` / `describeMoveConsequence`; and the dead files
+  `narrationEngine.ts` (0 refs) + `layeredNarration.ts` (test-only). Each
+  proven dead/superseded before deletion (David's "verify it's actually dead"
+  rule) — grep all consumers first.
+
 ## Sequencing logic
 
 Criticality first because it is load-bearing for everything else: it decides
