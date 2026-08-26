@@ -167,6 +167,118 @@ async function supporterProbe(evalFn, fen, table, moverColor, starSquare) {
   return { piece: PNAME[star.piece.toLowerCase()], square: star.square, contribution: +Math.abs(own(star)).toFixed(2), leansOn: top, all: sups };
 }
 
+// ── positional feature vector + structure→plan (Phase 4) ────────────────────
+// All MECHANICAL — pure chess.js/FEN, no engine, no fuzzy judgment. A feature is
+// only asserted when the skeleton unambiguously has it (empty > generic >
+// invented). The structure→plan text is the canonical, mainstream plan for that
+// structure ("translation, not invention" — the board-true structure is the
+// raw material; the established plan is the phrasing).
+const FILE_OF = (sq) => sq.charCodeAt(0) - 97;
+const RANK_OF = (sq) => +sq[1];
+function pawnsOf(board, color) {
+  const out = [];
+  for (const row of board) for (const c of row) if (c && c.type === 'p' && c.color === color) out.push(c.square);
+  return out;
+}
+function positionalFeatures(fen, moverColor) {
+  let b; try { b = new Chess(fen); } catch { return null; }
+  const board = b.board();
+  const wp = pawnsOf(board, 'w'), bp = pawnsOf(board, 'b');
+  const filesOf = (ps) => ps.map(FILE_OF);
+  const countByFile = (ps) => { const m = {}; for (const f of filesOf(ps)) m[f] = (m[f] || 0) + 1; return m; };
+  const wf = countByFile(wp), bf = countByFile(bp);
+  const doubled = (cnt) => Object.entries(cnt).filter(([, n]) => n >= 2).map(([f]) => FILES[+f]);
+  const isolated = (ps, cnt) => ps.filter((s) => { const f = FILE_OF(s); return !cnt[f - 1] && !cnt[f + 1]; }).map((s) => s);
+  const passed = (ps, enemyPs, dir) => ps.filter((s) => { const f = FILE_OF(s), r = RANK_OF(s);
+    return !enemyPs.some((e) => Math.abs(FILE_OF(e) - f) <= 1 && (dir > 0 ? RANK_OF(e) > r : RANK_OF(e) < r)); }).map((s) => s);
+  const allFiles = [...Array(8).keys()];
+  const openFiles = allFiles.filter((f) => !wf[f] && !bf[f]).map((f) => FILES[f]);
+  const halfOpen = (mine, cnt, oppCnt) => allFiles.filter((f) => !cnt[f] && oppCnt[f]).map((f) => FILES[f]);
+  // bad bishop: ≥4 friendly pawns on the bishop's own square colour
+  const sqColor = (sq) => (FILE_OF(sq) + RANK_OF(sq)) % 2 === 0 ? 'dark' : 'light';
+  const badBishops = (color, ps) => { const out = [];
+    for (const row of board) for (const c of row) if (c && c.type === 'b' && c.color === color) {
+      const same = ps.filter((p) => sqColor(p) === sqColor(c.square)).length;
+      if (same >= 4) out.push({ square: c.square, on: sqColor(c.square), blockedBy: same }); }
+    return out; };
+  // king zone pressure: distinct enemy pieces attacking the king's ring
+  const kingPressure = (color) => { const ks = (() => { for (const row of board) for (const c of row) if (c && c.type === 'k' && c.color === color) return c.square; return null; })();
+    if (!ks) return null; const foe = color === 'w' ? 'b' : 'w';
+    const f = FILE_OF(ks), r = RANK_OF(ks); const ring = new Set();
+    for (let df = -1; df <= 1; df++) for (let dr = -1; dr <= 1; dr++) { const nf = f + df, nr = r + dr;
+      if (nf < 0 || nf > 7 || nr < 1 || nr > 8) continue; ring.add(`${FILES[nf]}${nr}`); }
+    const attackers = new Set(), defenders = new Set();
+    for (const sq of ring) { try { for (const a of (b.attackers(sq, foe) || [])) attackers.add(a); for (const d of (b.attackers(sq, color) || [])) defenders.add(d); } catch { /* */ } }
+    return { attackers: attackers.size, defenders: defenders.size }; };
+
+  // phase — mechanical (piece count + development). Gates placement judgments:
+  // "improve your worst piece" is a middlegame idea; in the opening a minor is
+  // idle because it isn't developed YET (pieceValueRead's isMiddlegame gate).
+  const nonPawn = board.flat().filter((c) => c && c.type !== 'p' && c.type !== 'k').length;
+  const homeMinors = (color) => { const br = color === 'w' ? 1 : 8; let n = 0;
+    for (const row of board) for (const c of row) if (c && c.color === color && (c.type === 'n' || c.type === 'b') && RANK_OF(c.square) === br) n += 1; return n; };
+  const phase = nonPawn <= 6 ? 'endgame' : (homeMinors('w') >= 2 || homeMinors('b') >= 2) ? 'opening' : 'middlegame';
+
+  const feat = {
+    phase,
+    doubled: { w: doubled(wf), b: doubled(bf) },
+    isolated: { w: isolated(wp, wf), b: isolated(bp, bf) },
+    passed: { w: passed(wp, bp, 1), b: passed(bp, wp, -1) },
+    openFiles,
+    halfOpen: { w: halfOpen(wp, wf, bf), b: halfOpen(bp, bf, wf) },
+    badBishop: { w: badBishops('w', wp), b: badBishops('b', bp) },
+    kingPressure: { w: kingPressure('w'), b: kingPressure('b') },
+  };
+  // structure→plan is a middlegame read; in the opening it's premature.
+  feat.structure = phase === 'opening' ? null : classifyStructure(wf, bf, wp, bp, moverColor, feat);
+  return feat;
+}
+// Canonical middlegame structures → the mainstream plan for each side.
+function classifyStructure(wf, bf, wp, bp, moverColor, feat) {
+  const has = (cnt, file) => !!cnt[FILES.indexOf(file)];
+  // closed centre = a real head-on pawn lock in the centre: BOTH central files
+  // locked (the KID/French chain), or one central file locked WITH a flank pawn
+  // also in contact (a chain, not one blocked pawn). One lone locked pawn with
+  // tension elsewhere is NOT closed — that stays null (empty > generic).
+  const contact = (file) => { const wr = wp.filter((s) => s[0] === file).map(RANK_OF); const br = bp.filter((s) => s[0] === file).map(RANK_OF);
+    return wr.some((a) => br.some((c) => c === a + 1)); };
+  const centerLocked = (contact('d') && contact('e'))
+    || ((contact('d') || contact('e')) && (contact('c') || contact('f')));
+  const dFileOpen = !has(wf, 'd') && !has(bf, 'd');
+  const eFileOpen = !has(wf, 'e') && !has(bf, 'e');
+  // IQP: the DYNAMIC isolani only — an isolated d-pawn ADVANCED to the 4th
+  // (white) / 5th (black) rank, controlling central squares. An isolated d2/d3
+  // or d6/d7 pawn is a static WEAKNESS, not this structure, and gets the wrong
+  // "it's a strength" plan — so it is NOT tagged here (the isolated-pawn feature
+  // already lists it as the target it is). David's outpost-bug lesson: a
+  // plausible structure claim that's wrong is worse than none.
+  const iqp = (color) => { const cnt = color === 'w' ? wf : bf; const rank = color === 'w' ? 4 : 5;
+    return has(cnt, 'd') && !has(cnt, 'c') && !has(cnt, 'e')
+      && (color === 'w' ? feat.isolated.w : feat.isolated.b).some((s) => s[0] === 'd' && RANK_OF(s) === rank); };
+  // hanging pawns: the advanced c+d duo (c4/d4 white, c5/d5 black) with half-open
+  // b- and e-flanks. Rank-guarded for the same reason as the IQP.
+  const hanging = (color) => { const cnt = color === 'w' ? wf : bf; const ps = color === 'w' ? wp : bp; const rank = color === 'w' ? 4 : 5;
+    return has(cnt, 'c') && has(cnt, 'd') && !has(cnt, 'b') && !has(cnt, 'e')
+      && ps.some((s) => s[0] === 'c' && RANK_OF(s) === rank) && ps.some((s) => s[0] === 'd' && RANK_OF(s) === rank); };
+  const me = moverColor, foe = moverColor === 'w' ? 'b' : 'w';
+  const side = (c) => (c === me ? 'you' : 'they');
+  if (iqp('w') || iqp('b')) { const holder = iqp('w') ? 'w' : 'b';
+    return { type: 'isolated queen pawn', holder: holder === me ? 'you' : 'they',
+      plan: holder === me
+        ? 'The isolated d-pawn gives you space and open lines for the pieces — play actively, aim the d-pawn at a d5 break, and keep pieces on; the pawn is a strength while the middlegame lasts.'
+        : 'They hold the isolani — blockade the square in front of it with a piece, trade the active pieces off, and the pawn becomes a pure endgame target.' }; }
+  if (hanging('w') || hanging('b')) { const holder = hanging('w') ? 'w' : 'b';
+    return { type: 'hanging pawns', holder: holder === me ? 'you' : 'they',
+      plan: holder === me
+        ? 'The hanging pawns own the centre and the space — you look for the d5 (or c5) break to open lines while they stand; let them be provoked into advancing and you gain the squares behind.'
+        : 'Against the hanging pawns you press until one has to advance, then blockade the square it leaves and pile onto the pawn that stayed behind.' }; }
+  if (centerLocked) return { type: 'closed centre',
+    plan: 'The centre is locked, so the play is on the flanks — the pawn breaks at the base of the chains are where the game is decided; the side with more space attacks, the other strikes back at the base.' };
+  if (dFileOpen && eFileOpen) return { type: 'open centre',
+    plan: 'The centre is open — piece activity and king safety decide it; put the rooks on the open files and make every tempo count before the position simplifies.' };
+  return null;
+}
+
 // ── move classification WITH the reason (missing item 5) ─────────────────────
 // Not just cpLoss's label — WHY. Computed from signals already in hand: the
 // after-position SEE, the standing threat before/after, the forcing win missed,
@@ -301,6 +413,7 @@ for (const beat of beats) {
     const table = parseEvalTable(evalTxt);
     const split = parseEvalSplit(evalTxt);
     const forces = forcesRead(table, mover);
+    const positional = positionalFeatures(fen, mover); // mechanical, no engine
 
     // ── THREAT, calculated out (null-move) ──────────────────────────────────
     // Give the opponent the move at THIS position; their best line = the thing
@@ -392,7 +505,7 @@ for (const beat of beats) {
       evalAfter: playedCp == null ? null : +(playedCp / 100).toFixed(2), cpLoss, label: lbl, reason,
       best: bestSan, bestPv, refutation,
       candidates: deep.map((r) => ({ san: uciSan(fen, r.pv[0]), cp: r.cp, pv: pvSans(fen, r.pv, 6) })),
-      threat, forces, support, split: split ? { material: +split.material.toFixed(2), positional: +split.positional.toFixed(2) } : null,
+      threat, forces, support, positional, split: split ? { material: +split.material.toFixed(2), positional: +split.positional.toFixed(2) } : null,
       wdl, seldepth, forceNet, loose, hangAfter, seeNow, trap: trapMove ? 'move' : (trapEval >= 60 ? 'eval' : ''),
       crit: { V: +V.toFixed(2), O: +O.toFixed(2), T: +T.toFixed(2), F: +F.toFixed(2), L: +L.toFixed(2), Tr: +Tr.toFixed(2), score, band },
       fenAfter: chess.fen(),
@@ -413,5 +526,6 @@ for (const t of facts) {
   const w = t.wdl ? `wdl ${t.wdl.map((x) => String(x).padStart(3)).join('/')}` : '';
   const thr = t.threat?.net > 0 ? `THREAT+${t.threat.net}${t.threat.landsAt ? '@' + t.threat.landsAt : ''}` : '';
   const sup = t.support ? `leans:${t.support.piece}${t.support.square}←${t.support.leansOn.piece}${t.support.leansOn.square}(-${t.support.leansOn.drop})` : '';
-  console.log(`${bar} ${String(t.ply).padStart(3)} ${t.mover} ${t.san.padEnd(6)} sc ${String(t.crit.score).padStart(3)} [${t.crit.band.padEnd(8)}] loss ${String(t.cpLoss).padStart(5)} ${(t.reason || '').padEnd(18)} ${w} ${t.trap ? ('trap:' + t.trap) : ''} ${t.threat?.net ? thr : ''} ${t.loose ? ('loose+' + t.loose) : ''} ${sup}`.replace(/\s+$/, ''));
+  const st = t.positional?.structure ? `[${t.positional.structure.type}]` : '';
+  console.log(`${bar} ${String(t.ply).padStart(3)} ${t.mover} ${t.san.padEnd(6)} sc ${String(t.crit.score).padStart(3)} [${t.crit.band.padEnd(8)}] loss ${String(t.cpLoss).padStart(5)} ${(t.reason || '').padEnd(18)} ${w} ${t.trap ? ('trap:' + t.trap) : ''} ${t.threat?.net ? thr : ''} ${t.loose ? ('loose+' + t.loose) : ''} ${sup} ${st}`.replace(/\s+$/, ''));
 }
