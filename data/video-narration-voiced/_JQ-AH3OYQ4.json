@@ -1,0 +1,331 @@
+{
+ "videoId": "_JQ-AH3OYQ4",
+ "title": "Owen's Defense + Ruy Lopez (Morphy Defense)  | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Owen’s Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:_JQ-AH3OYQ4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 45.5,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 50.5,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 51.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 75.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Against Owen's b6, resist f3 — that's weakening and violates the don't-block-your-own-pieces rule; it belongs against g6, not here. Simply play Nc3 first.",
+   "kind": "main",
+   "teaches": "Don't reach for f3 by reflex against ...b6; develop naturally with Nc3."
+  },
+  {
+   "ply": 6,
+   "t": 77.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 85,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Black wants Bb4, so we neutralize it with Bd3 rather than committing a3.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 89.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Bb4",
+    "Ne2"
+   ],
+   "spoken": "Ne2 is the key — the g1-knight goes to e2 so that after a3 and Bxc3, we recapture with the other knight, keeping our pawn structure whole and the e4-pawn firmly defended.",
+   "kind": "main",
+   "teaches": "Reroute so a knight can recapture on c3, avoiding doubled pawns and keeping e4 solid."
+  },
+  {
+   "ply": 10,
+   "t": 94,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 4 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 99.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 103.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Bxc3+",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 107.5,
+   "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R w KQ - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "After the trades we own the two bishops and stand solidly better; castling is simplest, but Bg5 is the more ambitious, annoying try.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 138.5,
+   "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/6B1/3PP3/P1NB4/1PP2PPP/R2QK2R b KQ - 2 8",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "Bg5 threatens e5, and its bite grows the less developed Black is — he has fewer resources to meet the break.",
+   "kind": "main",
+   "teaches": "A pin that threatens a central break is most dangerous against an underdeveloped opponent."
+  },
+  {
+   "ply": 16,
+   "t": 143.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/6B1/3PP3/P1NB4/1PP2PPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 151,
+   "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/4P1B1/3P4/P1NB4/1PP2PPP/R2QK2R b KQ - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": "d6 doesn't solve the threat, so e5 crashes through and White is already winning.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 155,
+   "fen": "rn1q1rk1/pbp2ppp/1p2pn2/4p1B1/3P4/P1NB4/1PP2PPP/R2QK2R w KQ - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 156,
+   "fen": "rn1q1rk1/pbp2ppp/1p2pn2/4P1B1/8/P1NB4/1PP2PPP/R2QK2R b KQ - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 159,
+   "fen": "rn1q1rk1/p1p2ppp/1p2pn2/4P1B1/8/P1NB4/1PP2PbP/R2QK2R w KQ - 0 11",
+   "line": [
+    "Bxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 178,
+   "fen": "rn1q1rk1/p1p2ppp/1p2pn2/4P1B1/8/P1NB4/1PP2PbP/R2QK1R1 b Q - 1 11",
+   "line": [
+    "Rg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 197.5,
+   "fen": "rn1q1rk1/p1p2pp1/1p2pn1p/4P1B1/8/P1NB4/1PP2PbP/R2QK1R1 w Q - 0 12",
+   "line": [
+    "h6"
+   ],
+   "spoken": "The bigger takeaway: don't play these offbeat sidelines as Black until you're nearly a master, and never as a main opening — meanwhile you rack up points with a good setup ready against them.",
+   "kind": "main",
+   "teaches": "Have a prepared setup against dubious sidelines; you score heavily against players who overuse them."
+  },
+  {
+   "ply": 23,
+   "t": 229,
+   "fen": "rn1q1rk1/p1p2pp1/1p2pB1p/4P3/8/P1NB4/1PP2PbP/R2QK1R1 b Q - 0 12",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "Now don't get greedy for minor pieces — go for mate. The pieces fall into place: open the g-file, get the queen to h5. Bxf6 forces the pawn recapture, then Rxg2-check and Qh5, and Qxh6 is unstoppable.",
+   "kind": "main",
+   "teaches": "When a mating net is available, aim for checkmate, not the maximum material."
+  },
+  {
+   "ply": 25,
+   "t": 235,
+   "fen": "rn1q1rk1/p1p2p2/1p2pp1p/4P3/8/P1NB4/1PP2PRP/R2QK3 b Q - 0 13",
+   "line": [
+    "gxf6",
+    "Rxg2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 265,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 272.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 276,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Nc3",
+    "e6",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 278,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 2 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 279,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 283.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 4 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 284.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 321.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 324.5,
+   "fen": "rn1qk2r/pbppbppp/1p2pn2/8/3PP3/P1NB4/1PP1NPPP/R1BQK2R w KQkq - 1 7",
+   "line": [
+    "Nf6",
+    "a3",
+    "Be7"
+   ],
+   "spoken": "This is a masterclass in when a pin is deadly: the pinned knight is pawn-defended, yet the pin still crushes — because Black has no dark bishop for e7, he's castled into the pin so moving the queen is no option, and the usual h6-g5 escape is suicide against h4.",
+   "kind": "main",
+   "teaches": "A pin is fatal when the defender can't relieve it — no bishop to interpose, king castled into it, and h6-g5 punished by h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 463,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1bB4/1PP1NPPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "Na4",
+    "Bb4+",
+    "Nac3",
+    "Bxc3+"
+   ],
+   "spoken": "Against h6 there's an elegant forced win — exf6, then after hxg5, Qh5 threatens mate, and g6 runs into Bxg6. Many roads lead to the queen reaching the king.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 469.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 477,
+   "fen": "rn1qk2r/pbp2ppp/1p1ppn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  }
+ ]
+}
