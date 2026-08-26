@@ -2,8 +2,9 @@
  "videoId": "qfiO5HGBWWc",
  "title": "Master Class | Accelerated Dragon Sicilian | Chess Speedrun | Grandmaster Naroditsky",
  "openingName": "Sicilian Defense: Accelerated Dragon",
+ "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:qfiO5HGBWWc",
  "moves": [
   {
@@ -14,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We answer the king's-pawn with c5 — the Sicilian, heading for the Accelerated Dragon."
   },
   {
    "ply": 3,
@@ -23,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 4,
@@ -32,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6 — reinforcing the concepts of the Accelerated."
   },
   {
    "ply": 6,
@@ -42,7 +43,8 @@
     "d4",
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "White strikes with d4 and we take on d4. The Accelerated is the gateway Sicilian: not too theoretical, easy to learn, built on simple development moves.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -52,7 +54,8 @@
     "Nxd4",
     "g6"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight, and we fianchetto with the pawn to g6 — a setup that leads to really strong positions if White isn't careful.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -61,7 +64,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e3."
   },
   {
    "ply": 10,
@@ -70,10 +73,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The bishop reaches g7 and leans down the long diagonal, pressing at once on the knight that anchors White's centre.",
-   "kind": "main",
-   "teaches": "The fianchettoed bishop is the Dragon's engine — it fights for the centre from the corner.",
-   "plans": "Castle, then break the centre."
+   "spoken": "The bishop to g7 — the fianchetto, applying immediate pressure on White's centre down the long diagonal."
   },
   {
    "ply": 11,
@@ -82,10 +82,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 is a mediocre choice: it props up the d4-knight and blunts the g7-bishop, but it develops nothing and, worse, robs White's own knight of its natural c3 square — so White's queenside comes out passively.",
-   "kind": "main",
-   "teaches": "A pawn move that solves one problem can create a bigger one — here c3 steals the best square from White's own knight.",
-   "plans": "Develop naturally and exploit White's slow queenside."
+   "spoken": "White plays the pawn to c3 — already a mediocre move. It reinforces the knight and takes some sting out of our bishop, but it doesn't develop anything, it robs White's own knight of the c3-square, and it leads to very passive development."
   },
   {
    "ply": 12,
@@ -94,10 +91,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "No need to reinvent anything: the knight comes to f6, then castling, then the pawn to d5 in one move. In the accelerated setup Black often never needs the small d6 step at all.",
-   "kind": "main",
-   "teaches": "The accelerated move order aims for the full central break in a single move — d5, not d6 then d5.",
-   "plans": "Knight to f6, castle, strike with d5."
+   "spoken": "So the knight to f6 — no need to reinvent the wheel: knight out, castle, then d5, often without even needing d6."
   },
   {
    "ply": 13,
@@ -106,10 +100,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop to b5 simply drops the e4-pawn — there is nothing defending it, and the f6-knight is ready to collect.",
-   "kind": "trap",
-   "teaches": "Before committing a piece, check what it stops defending — b5 abandons e4.",
-   "plans": "Take the free pawn."
+   "spoken": "White plays the bishop to b5 — and simply blunders a pawn."
   },
   {
    "ply": 14,
@@ -118,10 +109,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "The knight snaps off e4 — a clean extra pawn, and the whole setup already pays off.",
-   "kind": "main",
-   "teaches": "When a central pawn hangs for nothing, take it and ask questions later.",
-   "plans": "Consolidate the extra pawn."
+   "spoken": "No reason not to take — the knight captures on e4, and the mediocre opening is already bearing fruit."
   },
   {
    "ply": 15,
@@ -130,7 +118,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "White takes on c6 — moving the bishop twice to grab a knight that only moved once. Both recaptures are reasonable, but I like to prioritize piece activity over pawn structure."
   },
   {
    "ply": 16,
@@ -139,10 +127,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Recapture toward the centre with the d-pawn: it opens the queen's file, frees the light-squared bishop onto a juicier diagonal, and leaves Black with the two bishops — a pawn up.",
-   "kind": "main",
-   "teaches": "Recapturing toward the centre trades a doubled pawn for open lines and the bishop pair — usually a fine deal.",
-   "plans": "Open the position for the two bishops."
+   "spoken": "We recapture with the d-pawn on c6 — up a pawn, it opens a line for the queen and frees our light-squared bishop onto a juicier diagonal. And we keep the two bishops as a unit."
   },
   {
    "ply": 17,
@@ -151,7 +136,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles."
   },
   {
    "ply": 18,
@@ -160,7 +145,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle too. The e4-knight is perfectly placed — undefended, but there's no way for White to fork it, and everything else is covered."
   },
   {
    "ply": 19,
@@ -169,7 +154,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to d2. We could trade knights, but for spice we keep them on: White's d2-knight is passive with no prospects, while ours is central and flexible — we can even retreat it to f6 and reroute to g4 or d5."
   },
   {
    "ply": 21,
@@ -179,7 +164,8 @@
     "Nf6",
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "So the knight goes back to f6 — a retreat in name only, redeploying toward an outpost on d5 or the strong g4-square, and keeping pieces on makes it harder for White to breathe. White jumps the knight to c4, where it feels a touch loose — the queen to c7 or d5 comes to mind.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -188,10 +174,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The queen tucks onto c7 — a universal, safe post. The pawn on c6 already guards the b5 and d5 outposts, so the queen sits behind it untouchable while keeping the tension.",
-   "kind": "main",
-   "teaches": "Queen to c7 behind a c6-pawn is a standard, safe home across many Sicilians.",
-   "plans": "Keep the tension and prepare the central pawns."
+   "spoken": "We play the queen to c7, keeping the tension. This is a universal, very safe construction — the c6-pawn guards against knight jumps to b5 and d5, and the queen sits comfortably."
   },
   {
    "ply": 23,
@@ -200,7 +183,7 @@
    "line": [
     "Qf3"
    ],
-   "spoken": ""
+   "spoken": "White plays the queen to f3, intending the bishop to f4 to hit our queen — something we can cut across with a bit of calculation."
   },
   {
    "ply": 24,
@@ -209,10 +192,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight centralises on d5 — a magnificent outpost that also stops the freeing bishop to f4. From here the central pawns are ready to roll.",
-   "kind": "main",
-   "teaches": "A knight on a protected central outpost is worth more than a pawn grab elsewhere — centralise and dominate.",
-   "plans": "Follow with the central pawn storm."
+   "spoken": "The knight to d5 — centralizing and stopping the bishop to f4; the knight to g4 was also good. Now we're ready to push our central pawns."
   },
   {
    "ply": 25,
@@ -221,7 +201,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to d1. We don't take the bishop — our central knight is a monster, defended by the pawn and blanketing the position. The theme is keeping the tension, not trading unless forced, and it's time to start the kingside plan of e5, f5, and e4. The pawn to h5 threatening the bishop to g4 is met simply by h3, so it's not worth the weakening."
   },
   {
    "ply": 26,
@@ -230,10 +210,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Time for the main plan: the pawn to e5 kicks the knight off d4, and f5 with e4 follows, ramming the pawns down the board. White's pieces are loose and hard to coordinate; Black's are anchored.",
-   "kind": "main",
-   "teaches": "When your pieces are better anchored, open with a pawn storm — push the loose enemy pieces around.",
-   "plans": "e5, then f5 and e4 — roll the centre."
+   "spoken": "So the pawn to e5 — kicking the d4-knight, with f5 and then e4 or f4 to ram our pawns down the board. Notice how vulnerable White's queen is compared to ours."
   },
   {
    "ply": 28,
@@ -243,14 +220,16 @@
     "Nb3",
     "f5"
    ],
-   "spoken": ""
+   "spoken": "White retreats the knight to b3, and we push the pawn to f5. White's pieces are like unanchored bowling pins — we just keep rolling them back with our pawns, while our own pieces are well anchored, either far away or protected by a pawn.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 436.5,
    "fen": "r1b2rk1/ppq2pbp/2p3p1/3np3/2NN4/2P1BQ2/PP3PPP/3R1RK1 w - - 0 14",
    "line": [],
-   "spoken": ""
+   "spoken": "If White tries the knight to b5, we simply take it and hit his other knight.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -261,7 +240,8 @@
     "f5",
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to c5 — a good move — and now we need to move our rook.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -270,10 +250,8 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "Rook to d8, not e8 — pure prophylaxis. If the bishop lands on d6, the rook simply takes it, winning two pieces for the rook. Always ask where the enemy pieces want to go, not only what they threaten now.",
-   "kind": "main",
-   "teaches": "Prophylaxis is asking where the opponent's pieces are headed and denying it in advance.",
-   "plans": "Neutralise the bishop's best square, then press."
+   "spoken": "The rook to d8, not e8 — it takes the sting out of a coming bishop to d6, since we'd answer with the rook taking on d6, two pieces for a rook. Always ask where the opponent's pieces are heading, not just the immediate threat — and the rook is more active on the semi-open file anyway.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -282,7 +260,7 @@
    "line": [
     "Rfe1"
    ],
-   "spoken": ""
+   "spoken": "White centralizes the other rook to e1. Our e5-pawn needs no more defence — it's going to e4."
   },
   {
    "ply": 32,
@@ -291,7 +269,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, gaining space."
   },
   {
    "ply": 33,
@@ -300,7 +278,7 @@
    "line": [
     "Qg3"
    ],
-   "spoken": ""
+   "spoken": "White plays the queen to g3, offering a queen trade — which we could accept."
   },
   {
    "ply": 34,
@@ -309,7 +287,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "But we keep the tension and stay aggressive with the pawn to f4 — risky, and it loosens our e4-pawn, but it blunts White's pressure."
   },
   {
    "ply": 35,
@@ -318,7 +296,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": ""
+   "spoken": "White plays the queen to h4. Now the c8-bishop has the square the f-pawn vacated, which also defends f5 — and White's queen is running short of squares."
   },
   {
    "ply": 36,
@@ -327,7 +305,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to f5 — not rushing, but keeping an eye on White's queen for a possible trap."
   },
   {
    "ply": 37,
@@ -336,7 +314,8 @@
    "line": [
     "Nd4"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to d4 — a strong player, though not threatening anything. It might be worth bringing pieces to the kingside; the queen to f7 tempts, but it runs into the knight to d6, which I'd rather not face.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -345,7 +324,8 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "The core problem is White's pieces encroaching, so we push them back — the pawn to b6, kicking the c5-bishop and looking to dislodge a central knight, making it easier to manoeuvre.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -354,7 +334,8 @@
    "line": [
     "Nxf5"
    ],
-   "spoken": ""
+   "spoken": "White captures on f5. The downside for us: our c6-pawn loses the support of its neighbour and the queen is a little tied — but our position is active enough to handle it.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -363,7 +344,8 @@
    "line": [
     "gxf5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the pawn on f5 rather than allow the capture of our fianchetto bishop. A nice pawn box — the king is slightly weakened, but nothing we can't deal with.",
+   "reanchor": true
   },
   {
    "ply": 41,
@@ -372,7 +354,8 @@
    "line": [
     "Bd4"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to d4. Many players would look at our king and call it weak — but be concrete: White has no rook lift, our pawns cover the whole third rank.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -381,10 +364,8 @@
    "line": [
     "Kh8"
    ],
-   "spoken": "The king steps to h8. The exposed look is an illusion — Black's pawns cover the third rank, so there is no rook lift and no real attack; tucking the king away simply keeps it out of the crossfire.",
-   "kind": "main",
-   "teaches": "A king looks weak but is safe when its own pawns deny every entry square — count the attackers, don't eyeball the shell.",
-   "plans": "Complete king safety, then convert the extra material."
+   "spoken": "Still, we tuck the king to h8, out of the crossfire — unworried by the pin, since the bishop trade is coming. And note the half-open g-file can favour US too: a rook to g8 targets White's f-pawn.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -393,7 +374,8 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "White finds the queen to g5 — a brilliant move.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -402,7 +384,8 @@
    "line": [
     "Rf8"
    ],
-   "spoken": ""
+   "spoken": "We defend with the rook to f8, guarding the f5-pawn.",
+   "reanchor": true
   },
   {
    "ply": 45,
@@ -411,7 +394,8 @@
    "line": [
     "Bxg7+"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop takes g7 with check. His best was actually to trade everything and then play the knight to e5, exploiting our weak c6-pawn — a very advanced idea.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -421,7 +405,8 @@
     "Qxg7",
     "Nd6"
    ],
-   "spoken": ""
+   "spoken": "We recapture on g7 — and White's knight to d6 is an odd try that blunders the queen.",
+   "reanchor": true
   },
   {
    "ply": 48,
@@ -430,7 +415,7 @@
    "line": [
     "Qxg5"
    ],
-   "spoken": ""
+   "spoken": "So the queen takes on g5, winning it."
   },
   {
    "ply": 49,
@@ -439,7 +424,8 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to c4. Don't jump to conclusions about an opponent from a couple of good moves — always give the benefit of the doubt.",
+   "reanchor": true
   },
   {
    "ply": 50,
@@ -448,7 +434,7 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "The pawn to f3, targeting the g2-pawn and laying the groundwork for the classic pincer mate."
   },
   {
    "ply": 51,
@@ -457,7 +443,7 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "White pushes the pawn to g3. Now, what's the cleanest way to orchestrate the mate?"
   },
   {
    "ply": 52,
@@ -466,7 +452,7 @@
    "line": [
     "Qg4"
    ],
-   "spoken": ""
+   "spoken": "The queen to g4 — the clinical route; the queen to h4 would let White play h4 and cost us a move."
   },
   {
    "ply": 54,
@@ -476,7 +462,8 @@
     "Kh1",
     "Qh3"
    ],
-   "spoken": ""
+   "spoken": "White's king goes to h1, and we play the queen to h3.",
+   "reanchor": true
   },
   {
    "ply": 55,
@@ -485,7 +472,7 @@
    "line": [
     "Rg1"
    ],
-   "spoken": ""
+   "spoken": "White plays the rook to g1 — it stops the pincer mate but locks his own king in."
   },
   {
    "ply": 56,
@@ -494,10 +481,7 @@
    "line": [
     "Rf6"
    ],
-   "spoken": "The rook lift — to f6 and up to h6 for mate. A clean, common finishing pattern once the enemy king is boxed in.",
-   "kind": "main",
-   "teaches": "With the king walled in on the h-file, lift a rook along the sixth rank to the mating square.",
-   "plans": "Deliver the rook to h6."
+   "spoken": "The rook to f6 — the pretty idea: lift the rook to h6 for mate, or begin with a queen sacrifice."
   },
   {
    "ply": 57,
@@ -506,7 +490,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to e5."
   },
   {
    "ply": 58,
@@ -515,7 +499,8 @@
    "line": [
     "Qxh2+"
    ],
-   "spoken": ""
+   "spoken": "We begin with the queen sacrifice, the queen taking on h2 with check.",
+   "reanchor": true
   },
   {
    "ply": 59,
@@ -524,7 +509,8 @@
    "line": [
     "Kxh2"
    ],
-   "spoken": ""
+   "spoken": "White's king recaptures on h2.",
+   "reanchor": true
   },
   {
    "ply": 60,
@@ -533,16 +519,15 @@
    "line": [
     "Rh6#"
    ],
-   "spoken": "Checkmate. The queen sacrifice a move earlier dragged the king to h2, and the rook to h6 seals it — the enemy rook on g1 blocks its own king's only flight. Same idea either way; the sac just came with check to save a tempo.",
-   "kind": "main",
-   "teaches": "A queen sacrifice is worth it when it forces the mating net one tempo faster."
+   "spoken": "And the rook to h6 — checkmate, with White's own rook on g1 blocking the king's only escape."
   },
   {
    "ply": 57,
    "t": 896,
    "fen": "r6k/p6p/1pp2r2/3nNp2/4p3/2P2pPq/PP3P1P/3R2RK b - - 6 29",
    "line": [],
-   "spoken": ""
+   "spoken": "The rook lift arriving with check saves a tempo when you don't have time to complete it slowly — a good tool for the kit.",
+   "reanchor": true
   },
   {
    "ply": 60,
@@ -553,16 +538,15 @@
     "Kxh2",
     "Rh6#"
    ],
-   "spoken": ""
+   "spoken": "The queen sacrifice, the recapture, and the rook to h6 — mate. A nicely played game by the opponent.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 907.5,
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
    "line": [],
-   "spoken": "The opening verdict: c3 was subpar and the bishop to b5 was outright bad. White's correct try here is the knight to d2, at least defending the pawn — then Black castles and, as a rule, strikes with d5 in one move.",
-   "kind": "review",
-   "teaches": "Against the accelerated setup White must guard e4 first; failing that, Black gets a free pawn and the d5 break.",
+   "spoken": "The opening went perfectly: the pawn to c3 was subpar, and the bishop to b5 was very bad — White should have defended with the knight to d2. We castle and play d5 in one stroke for a great position. Recapturing on c6 toward the centre was arguably better, but the d-pawn recapture was easier — opening the centre and the bishop, already a pawn up.",
    "reanchor": true
   }
  ]

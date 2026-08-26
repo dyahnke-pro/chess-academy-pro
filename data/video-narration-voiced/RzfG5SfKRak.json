@@ -1,0 +1,1378 @@
+{
+ "videoId": "RzfG5SfKRak",
+ "title": "London System Unveiled | A Comprehensive Analysis | GM Naroditsky’s Theory Speed Run",
+ "openingName": "London System",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:RzfG5SfKRak",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 2345.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2362,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [
+    "c5"
+   ],
+   "spoken": "A framing note before the theory: if you already have an answer to the London that makes you comfortable — a central strike, a fianchetto, whatever — keep playing it. What follows are proposals, not a demand to tear up a repertoire that already makes you happy."
+  },
+  {
+   "ply": 5,
+   "t": 2374.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2P5/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "The opponent has a handful of tries against the early c-pawn break: an immediate capture, which is rare and simply not good; the ambitious central push to d5; the modest c3; and the topical e3. Knowing which is which is half the battle."
+  },
+  {
+   "ply": 4,
+   "t": 2377.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2380,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2388,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2389.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/2P5/PP2PPPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2400,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/2p5/3P1B2/2P5/PP2PPPP/RN1QKBNR w KQkq - 1 4",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "One appeal of the c5 break is that after c3 the queen swings to b6 and the first player is already close to worse — starved for a good move, with the b-pawn under fire. This is a signature London theme: with the queen on b6, a bishop to f5 exploits the loose queenside, forking heavy pieces, and a follow-up knight to d3 uses the pin to make the piece untouchable and drags the king into the open.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 7,
+   "t": 2565.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/2p5/3P1B2/2P5/PP1NPPPP/R2QKBNR b KQkq - 2 4",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "The better, lesser-known try is a knight to d2 — grabbing the b-pawn leads to insane complications, so the clean path is to just plant d5 and reach a superior version of a standard London.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 2574,
+   "fen": "rnb1kb1r/pp2pppp/1q3n2/2pp4/3P1B2/2P5/PP1NPPPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2585.5,
+   "fen": "rnb1kb1r/pp2pppp/1Q3n2/3p4/3p1B2/2P5/PP1NPPPP/R3KBNR b KQkq - 0 6",
+   "line": [
+    "Qb3",
+    "cxd4",
+    "Qxb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2589.5,
+   "fen": "rnb1kb1r/1p2pppp/1p3n2/3p4/3P1B2/8/PP1NPPPP/R3KBNR b KQkq - 0 7",
+   "line": [
+    "axb6",
+    "cxd4"
+   ],
+   "spoken": "If the queen probes to b3, capture on d4 to force matters — the queens come off, and as ever, the side that owns the open a-file holds the edge. The pawns may look ragged, but the position is far more comfortable.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 2598,
+   "fen": "r1b1kb1r/1p2pppp/1pn2n2/3p4/3P1B2/8/PP1NPPPP/R3KBNR w KQkq - 1 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2600,
+   "fen": "r1b1kb1r/1p2pppp/1p3n2/3p4/1n1P1B2/4P3/PP1N1PPP/R3KBNR w KQkq - 1 9",
+   "line": [
+    "e3",
+    "Nb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2605,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2606.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2613,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2619,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2621,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp3/5B2/2N5/PPP1PPPP/R2QKBNR w KQkq e6 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Against the ambitious central push, the plan is a modest d6 and then e5, building an odd little pawn triangle that forces the opponent to commit. It looks passive but it seizes the initiative in the centre.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 2628,
+   "fen": "rnbqkb1r/pp3ppp/3pPn2/2p5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2631,
+   "fen": "rn1qkb1r/pp3ppp/3pbn2/2p5/5B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2633.5,
+   "fen": "rn1qkb1r/pp3ppp/3pbn2/2p5/4PB2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2634.5,
+   "fen": "r2qkb1r/pp3ppp/2npbn2/2p5/4PB2/2N5/PPP2PPP/R2QKBNR w KQkq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2637.5,
+   "fen": "r2qkb1r/pp3ppp/2npbn2/2p5/4PB2/2N2N2/PPP2PPP/R2QKB1R b KQkq - 2 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2639,
+   "fen": "r2qk2r/pp2bppp/2npbn2/2p5/4PB2/2N2N2/PPP2PPP/R2QKB1R w KQkq - 3 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "You might fear the backward pawn — but it's only a temporary weakness, because the freeing push to d5 is inevitable: the opponent simply can't guard that square enough times. Once it goes in the structure is symmetrical, and if anything the second player is to be preferred.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 2659.5,
+   "fen": "r2qk2r/pp2bppp/2npbn2/2p5/4PB2/2N2N2/PPP1BPPP/R2QK2R b KQkq - 4 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2662,
+   "fen": "r2q1rk1/pp2bppp/2npbn2/2p5/4PB2/2N2N2/PPP1BPPP/R2Q1RK1 b - - 6 9",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2663.5,
+   "fen": "r2q1rk1/pp2bpp1/2npbn1p/2p5/4PB2/2N2N2/PPP1BPPP/R2Q1RK1 w - - 0 10",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2671.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2673,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp3/5B2/2N5/PPP1PPPP/R2QKBNR w KQkq e6 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2676,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp1B1/8/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "If the bishop pins with a jump to g5, step back with the bishop to e7 — and there's a lovely tactical detail waiting, because the natural central push runs into a knight capture on d5 that simultaneously defends the pinned bishop.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 10,
+   "t": 2678,
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2pPp1B1/8/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 6",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2689,
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2pPp1B1/4P3/2N5/PPP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2693,
+   "fen": "rnbqk2r/pp2bppp/3p4/2pnp1B1/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2702,
+   "fen": "rnbqk2r/pp2nppp/3p4/2p1p3/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 8",
+   "line": [
+    "Bxe7",
+    "Nxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2704,
+   "fen": "rnbqk2r/pp2bppp/3p4/2pnp1B1/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [],
+   "spoken": "After the dust settles the king is perfectly safe on f8, and a warning: don't develop the bishop to e6, which drops the b-pawn and traps the rook. The right move is the queen to e8 — the opponent has enough for the pawn but no more, and no clear plan against the queenside expansion to come.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 10,
+   "t": 2790.5,
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2pPp1B1/8/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2792.5,
+   "fen": "rnbqk2r/pp2bppp/3p1B2/2pPp3/8/2N5/PPP1PPPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2799,
+   "fen": "rnbqk2r/pp3ppp/3p1b2/2pPp3/8/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2801.5,
+   "fen": "rnbqk2r/pp3ppp/3p1b2/2pPp3/4P3/2N5/PPP2PPP/R2QKBNR b KQkq - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2804.5,
+   "fen": "rnbqk2r/pp3p1p/3p1bp1/2pPp3/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 8",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2830.5,
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2pPp1B1/8/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2833,
+   "fen": "rnbqk2r/pp2bppp/3p4/2pnp1B1/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e4",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2834,
+   "fen": "rnbqk2r/pp2bppp/3p4/2pNp1B1/4P3/8/PPP2PPP/R2QKBNR b KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2841,
+   "fen": "rnbqk2r/pp3ppp/3p4/2pNp1b1/4P3/8/PPP2PPP/R2QKBNR w KQkq - 0 8",
+   "line": [
+    "Bxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2848.5,
+   "fen": "r1bqk2r/pp3ppp/2np4/1BpNp1b1/4P3/8/PPP2PPP/R2QK1NR w KQkq - 2 9",
+   "line": [
+    "Bb5+",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2852,
+   "fen": "rnbqk2r/pp2bppp/3p4/2pnp1B1/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2854,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp3/5B2/2N5/PPP1PPPP/R2QKBNR w KQkq e6 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2856.5,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp3/8/2N3B1/PPP1PPPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": "If the bishop retreats to g3 it just bites on granite, doing nothing behind its own pawns. That inactivity is the cue to grab kingside space with a bold pawn to h5 — challenging, energetic play.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 2871,
+   "fen": "rnbqkb1r/pp3pp1/3p1n2/2pPp2p/8/2N3B1/PPP1PPPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2874.5,
+   "fen": "rnbqkb1r/pp3pp1/3p1n2/2pPp2p/8/2N3BP/PPP1PPP1/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2885.5,
+   "fen": "rnbqkb1r/pp3pp1/3p1n2/2pPp3/7p/2N4P/PPP1PPPB/R2QKBNR b KQkq - 1 7",
+   "line": [
+    "h4",
+    "Bh2"
+   ],
+   "spoken": "Push on with h4 and then b5 in Benko-Gambit style, exploiting the fact that the queenside is still undeveloped. The pawn offer isn't about one tactic — it's about keeping the opponent from ever organising the central break, while every black piece comes to life.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 2887,
+   "fen": "rnbqkb1r/p4pp1/3p1n2/1ppPp3/7p/2N4P/PPP1PPPB/R2QKBNR w KQkq - 0 8",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2893,
+   "fen": "rnbqkb1r/p4pp1/3p1n2/1NpPp3/7p/7P/PPP1PPPB/R2QKBNR b KQkq - 0 8",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2898,
+   "fen": "rnb1kb1r/p4pp1/3p1n2/qNpPp3/7p/7P/PPP1PPPB/R2QKBNR w KQkq - 1 9",
+   "line": [
+    "Qa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2899,
+   "fen": "rnb1kb1r/p4pp1/3p1n2/q1pPp3/7p/2N4P/PPP1PPPB/R2QKBNR b KQkq - 2 9",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2913.5,
+   "fen": "r1b1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N4P/PPP1PPPB/R2QKBNR w KQkq - 3 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2923,
+   "fen": "r1b1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N2N1P/PPP1PPPB/R2QKB1R b KQkq - 4 10",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2925,
+   "fen": "1rb1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N2N1P/PPP1PPPB/R2QKB1R w KQk - 5 11",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 2929,
+   "fen": "1rb1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N2N1P/PPP1PPPB/1R1QKB1R b Kk - 6 11",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2930,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N2N1P/PrP1PPPB/1R1QKB1R w Kk - 0 12",
+   "line": [
+    "Rxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2937,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/q1pPp3/7p/2N2N1P/PrPQPPPB/1R2KB1R b Kk - 1 12",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2953,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/2pPp3/7p/2q2N1P/PrPQPPPB/1R2KB1R w Kk - 0 13",
+   "line": [
+    "Qxc3"
+   ],
+   "spoken": "And a gorgeous finish appears — a queen capture on the knight is a deflection: the defender is dragged off its guard, the rook falls with check, and a knight fork on the king and queen leaves a whole rook to the good.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 25,
+   "t": 2955,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/2pPp3/7p/2Q2N1P/PrP1PPPB/1R2KB1R b Kk - 0 13",
+   "line": [
+    "Qxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 2956.5,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/2pPp3/7p/2Q2N1P/P1P1PPPB/1r2KB1R w Kk - 0 14",
+   "line": [
+    "Rxb1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 2957.5,
+   "fen": "2b1kb1r/p2n1pp1/3p1n2/2pPp3/7p/2Q2N1P/P1PKPPPB/1r3B1R b k - 1 14",
+   "line": [
+    "Kd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2958.5,
+   "fen": "2b1kb1r/p2n1pp1/3p4/2pPp3/4n2p/2Q2N1P/P1PKPPPB/1r3B1R w k - 2 15",
+   "line": [
+    "Ne4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2969,
+   "fen": "rnbqkb1r/p4pp1/3p1n2/1ppPp3/7p/2N4P/PPP1PPPB/R2QKBNR w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2972.5,
+   "fen": "rnbqkb1r/pp3pp1/3p1n2/2pPp2p/8/2N3B1/PPP1PPPP/R2QKBNR w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2977.5,
+   "fen": "rnbqkb1r/pp3pp1/3p1n2/2pPp2p/8/2N2NB1/PPP1PPPP/R2QKB1R b KQkq - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2979.5,
+   "fen": "rnb1kb1r/pp3pp1/3p1n2/q1pPp2p/8/2N2NB1/PPP1PPPP/R2QKB1R w KQkq - 2 7",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2984.5,
+   "fen": "rnb1kb1r/pp3pp1/3p1n2/q1pPp3/7p/2N3B1/PPPNPPPP/R2QKB1R w KQkq - 0 8",
+   "line": [
+    "Nd2",
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2993.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2994.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2996.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 3001.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/2P2B2/8/PP2PPPP/RN1QKBNR b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 3004.5,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp3/2P2B2/8/PP2PPPP/RN1QKBNR w KQkq e6 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3008,
+   "fen": "rnbqkb1r/pp3ppp/3p1n2/2pPp1B1/2P5/8/PP2PPPP/RN1QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3010.5,
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2pPp1B1/2P5/8/PP2PPPP/RN1QKBNR w KQkq - 2 6",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 3093.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 3095.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "Against the rare pawn-grab capture, the crisp reply is a knight to a6. If the queen recaptures, a check on a5 wins the pawn straight back, and keeping the queens on leads to a superior game with a better centre.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 6,
+   "t": 3183.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3p1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Now the topical main move — and the recommended treatment is to capture in the centre first and only then bring the queen to b6. Taking first is the point: it rules out an awkward queen retreat that would otherwise defend, since the pawn is left hanging, and it steers into a fresher position.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 3184.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
+   "line": [
+    "exd4",
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 3192,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 3195,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3p1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 3196,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
+   "line": [
+    "exd4",
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3212,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 3220,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3224.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/N7/PPP2PPP/R2QKBNR b KQkq - 2 5",
+   "line": [
+    "Na3"
+   ],
+   "spoken": "The engine's one bid for an edge is the very rare knight to a3 rather than c3 — and the whole difference is that it leaves the c-pawn free to advance to c3 and shore up the d-pawn. When you play the white side of a London, keeping that d4-pawn well guarded is the essence of the system.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 3252.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/3P1B2/N7/PPP2PPP/R2QKBNR w KQkq - 3 6",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The interesting reply is a knight hop to d5, forcing the bishop to shuffle all the way home to c1 — and a natural-looking knight to c4 walks into a queen check on e6 that hits bishop and king at once. Active piece play breeds these tactics.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 3256.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/3P4/N7/PPP2PPP/R1BQKBNR b KQkq - 4 6",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 3263,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/2NP1B2/8/PPP2PPP/R2QKBNR b KQkq - 8 8",
+   "line": [
+    "Nf4",
+    "Nc4",
+    "Nd5",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 3281.5,
+   "fen": "rnb1kb1r/pp1ppppp/4q3/3n4/2NP1B2/8/PPP2PPP/R2QKBNR w KQkq - 9 9",
+   "line": [
+    "Qe6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 3286,
+   "fen": "rnb1kb1r/pp1ppppp/4q3/3n4/2NP4/4B3/PPP2PPP/R2QKBNR b KQkq - 10 9",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 3289,
+   "fen": "rnb1kb1r/p2ppppp/4q3/1p1n4/2NP4/4B3/PPP2PPP/R2QKBNR w KQkq - 0 10",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 3294.5,
+   "fen": "rnb1kb1r/p2ppppp/4q3/1p1nN3/3P4/4B3/PPP2PPP/R2QKBNR b KQkq - 1 10",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 3297.5,
+   "fen": "r1b1kb1r/p2ppppp/2n1q3/1p1nN3/3P4/4B3/PPP2PPP/R2QKBNR w KQkq - 2 11",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 3305,
+   "fen": "r1b1kb1r/p2ppppp/2n1q3/1p1nN3/3P4/4BN2/PPP2PPP/R2QKB1R b KQkq - 3 11",
+   "line": [
+    "Ngf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 3306,
+   "fen": "r1b1kb1r/p2pp1pp/2n1qp2/1p1nN3/3P4/4BN2/PPP2PPP/R2QKB1R w KQkq - 0 12",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 3309,
+   "fen": "r1b1kb1r/p2pp1pp/2N1qp2/1p6/3P4/4nN2/PPP2PPP/R2QKB1R w KQkq - 0 13",
+   "line": [
+    "Nxc6",
+    "Nxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3311,
+   "fen": "r1b1kb1r/p2pp1pp/2N2p2/1p6/3P4/4qN2/PPP3PP/R2QKB1R w KQkq - 0 14",
+   "line": [
+    "fxe3",
+    "Qxe3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3317.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/3P1B2/N7/PPP2PPP/R2QKBNR w KQkq - 3 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3319,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/3P4/N7/PPP2PPP/R1BQKBNR b KQkq - 4 6",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3323.5,
+   "fen": "rnb1kb1r/pp1p1ppp/1q2p3/3n4/3P4/N7/PPP2PPP/R1BQKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Once the bishop is chased back, the clean idea is e6 — developing and opening the diagonal for the light-squared bishop. No edge exists for the opponent in this whole line; the second player is simply fine.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 3329.5,
+   "fen": "rnb1kb1r/pp1p1ppp/1q2p3/3n4/2NP4/8/PPP2PPP/R1BQKBNR b KQkq - 1 7",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 3332,
+   "fen": "rnb1kb1r/ppqp1ppp/4p3/3n4/2NP4/8/PPP2PPP/R1BQKBNR w KQkq - 2 8",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 3340,
+   "fen": "rnb1kb1r/ppqp1ppp/4p3/3n4/2NP4/5N2/PPP2PPP/R1BQKB1R b KQkq - 3 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 3341.5,
+   "fen": "rnb1kb1r/p1qp1ppp/1p2p3/3n4/2NP4/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 9",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 3359,
+   "fen": "rnb1kb1r/p1qp1ppp/1p2p3/3n4/3P4/4NN2/PPP2PPP/R1BQKB1R b KQkq - 1 9",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 3365,
+   "fen": "rn2kb1r/pbqp1ppp/1p2p3/3n4/3P4/4NN2/PPP2PPP/R1BQKB1R w KQkq - 2 10",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 3372.5,
+   "fen": "rn2kb1r/p1qp1ppp/1p2p3/3b4/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 1 11",
+   "line": [
+    "Nxd5",
+    "Bxd5",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 3380.5,
+   "fen": "rn2k2r/p1qp1ppp/1p2p3/3b4/1b1P4/3B1N2/PPP2PPP/R1BQK2R w KQkq - 2 12",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "A bishop check on b4 forces the king to f1, because blocking with c3 runs into a capture on c3 with check — the line brims with these shots precisely because the pieces are so active. Activity, not material, is doing the talking.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 3384,
+   "fen": "rn2k2r/p1qp1ppp/1p2p3/3b4/1b1P4/2PB1N2/PP3PPP/R1BQK2R b KQkq - 0 12",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 3385.5,
+   "fen": "rn2k2r/p1qp1ppp/1p2p3/3b4/3P4/2bB1N2/PP3PPP/R1BQK2R w KQkq - 0 13",
+   "line": [
+    "Bxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3389,
+   "fen": "rn2k2r/p2p1ppp/1p2p3/3b4/3P4/2qB1N2/P4PPP/R1BQK2R w KQkq - 0 14",
+   "line": [
+    "bxc3",
+    "Qxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 3394.5,
+   "fen": "rn2k2r/p2p1ppp/1p2p3/3b4/3P4/3q1N2/P2B1PPP/R2QK2R w KQkq - 0 15",
+   "line": [
+    "Bd2",
+    "Qxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3444.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/N7/PPP2PPP/R2QKBNR b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3445.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q6/3n4/3P1B2/N7/PPP2PPP/R2QKBNR w KQkq - 3 6",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3448,
+   "fen": "rnb1kb1r/pp1p1ppp/1q2p3/3n4/3P4/N7/PPP2PPP/R1BQKBNR w KQkq - 0 7",
+   "line": [
+    "Bc1",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 3451,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3463,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/1P6/P1P2PPP/RN1QKBNR b KQkq - 0 5",
+   "line": [
+    "b3"
+   ],
+   "spoken": "If the opponent props things with b3, nothing much happens — just answer with d5, and now the queenside light squares are permanently weakened, an inferior version of the main line for the first player.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 3468,
+   "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P1B2/1P6/P1P2PPP/RN1QKBNR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3476.5,
+   "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P1B2/1P3N2/P1P2PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The one rule always to remember here: a knight to f3 is met by the bishop pin to g4. Miss that chance and the natural developing move can allow an annoying central knight leap — so the pin comes first, every time.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 3478,
+   "fen": "rn2kb1r/pp2pppp/1q3n2/3p4/3P1Bb1/1P3N2/P1P2PPP/RN1QKB1R w KQkq - 2 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3480.5,
+   "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P1B2/1P3N2/P1P2PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3483.5,
+   "fen": "r1b1kb1r/pp2pppp/1qn2n2/3p4/3P1B2/1P3N2/P1P2PPP/RN1QKB1R w KQkq - 2 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3490.5,
+   "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P1B2/1P3N2/P1P2PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 3494.5,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 3497,
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3502.5,
+   "fen": "rnb1kb1r/1p1ppppp/pq3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": "And the move to love in the main line is a6 — Black scores a staggering fifty-nine percent from here in serious over-the-board games, an astonishing figure against the London.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 3514.5,
+   "fen": "rnb1kb1r/1p1ppppp/pq3n2/8/3P1B2/2N5/PPP2PPP/1R1QKBNR b Kkq - 1 6",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3518.5,
+   "fen": "rnb1kb1r/1p2pppp/pq3n2/3p4/3P1B2/2N5/PPP2PPP/1R1QKBNR w Kkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3522.5,
+   "fen": "rnb1kb1r/1p1ppppp/pq3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3528,
+   "fen": "rnb1kb1r/1p1ppppp/pq3n2/8/3P1B2/P1N5/1PP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": "The only way to hold equality is the typical London prophylaxis a3, defusing the queenside — because otherwise grabbing the b-pawn walks into a knight to a4, and the queen is trapped.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 3534,
+   "fen": "rnb1kb1r/1p1ppppp/p4n2/8/N2P1B2/P7/1qP2PPP/R2QKBNR b KQkq - 1 7",
+   "line": [
+    "Qxb2",
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3536.5,
+   "fen": "rnb1kb1r/1p1ppppp/pq3n2/8/3P1B2/P1N5/1PP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3539,
+   "fen": "rnb1kb1r/1p2pppp/pq3n2/3p4/3P1B2/P1N5/1PP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 3542.5,
+   "fen": "rnb1kb1r/1p2pppp/pq3n2/3p4/3P1B2/P1N2N2/1PP2PPP/R2QKB1R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 3548,
+   "fen": "rn2kb1r/1p2pppp/pq3n2/3p4/3P1Bb1/P1N2N2/1PP2PPP/R2QKB1R w KQkq - 2 8",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 3557,
+   "fen": "rn2kb1r/1p2pppp/pq3n2/3p4/N2P1Bb1/P4N2/1PP2PPP/R2QKB1R b KQkq - 3 8",
+   "line": [
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 3563,
+   "fen": "rn2kb1r/1p2pppp/p4n2/q2p4/N2P1Bb1/P4N2/1PP2PPP/R2QKB1R w KQkq - 4 9",
+   "line": [
+    "Qa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 3565,
+   "fen": "rn2kb1r/1p2pppp/p4n2/q2p4/N2P1Bb1/P1P2N2/1P3PPP/R2QKB1R b KQkq - 0 9",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 3576,
+   "fen": "rn2kb1r/1p2pppp/p4n2/q2p4/N2P1B2/P1P2b2/1P3PPP/R2QKB1R w KQkq - 0 10",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "Here the point is a capture on f3 exploiting an overloaded queen — it can't recapture, so the pawn must, shattering the kingside, and then e6 leaves the second player comfortably better.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 3578.5,
+   "fen": "rn2kb1r/1p2pppp/p4n2/q2p4/N2P1B2/P1P2P2/1P3P1P/R2QKB1R b KQkq - 0 10",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 3580.5,
+   "fen": "rn2kb1r/1p3ppp/p3pn2/q2p4/N2P1B2/P1P2P2/1P3P1P/R2QKB1R w KQkq - 0 11",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 3583.5,
+   "fen": "rn2kb1r/1p2pppp/pq3n2/3p4/3P1Bb1/P1N2N2/1PP2PPP/R2QKB1R w KQkq - 2 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 3588,
+   "fen": "rn2kb1r/1p2pppp/pq3n2/3p4/3P1Bb1/P1N2N2/1PP1BPPP/R2QK2R b KQkq - 3 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 3613.5,
+   "fen": "rn2kb1r/1p3ppp/pq2pn2/3p4/3P1Bb1/P1N2N2/1PP1BPPP/R2QK2R w KQkq - 0 9",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The deeper truth of the whole line: London players hate seeing a knight committed to c3, because it saddles them with a weakness on c4 — the exact opposite of what they signed up for. So just play e6, press the knight with a capture and a knight to c6, and enjoy an excellent exchange-Caro structure that a London can transpose straight into.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 3617,
+   "fen": "rn2kb1r/1p3ppp/pq2pn2/3p4/3P1Bb1/P1N2N2/1PP1BPPP/R2Q1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 3621.5,
+   "fen": "rn2kb1r/1p3ppp/pq2pn2/3p4/3P1B2/P1N2b2/1PP1BPPP/R2Q1RK1 w kq - 0 10",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 3623.5,
+   "fen": "r3kb1r/1p3ppp/pqn1pn2/3p4/3P1B2/P1N2B2/1PP2PPP/R2Q1RK1 w kq - 1 11",
+   "line": [
+    "Bxf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,541 @@
+{
+ "videoId": "aCOxrgHpLb0",
+ "title": "Sub Battle W/ ChessBrahs! Pt. 2",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:aCOxrgHpLb0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 931,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 937.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 939.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 941,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/2PN4/8/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 942,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/2PN4/8/PP2PPPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 943.5,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/2PN4/2N5/PP2PPPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 945,
+   "fen": "rnbqk2r/pp1pppbp/5np1/8/2PN4/2N5/PP2PPPP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 946.5,
+   "fen": "rnbqk2r/pp1pppbp/5np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The c-pawn thrust turns this into a Maróczy Bind out of the Accelerated Dragon — the classic cramping structure, and familiar territory for a player who lives in these positions."
+  },
+  {
+   "ply": 12,
+   "t": 948.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R w KQkq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 950.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/2PNP3/2N1B3/PP3PPP/R2QKB1R b KQkq - 2 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 951.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2PNP3/2N1B3/PP3PPP/R2QKB1R w KQ - 3 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 953.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R b KQ - 4 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 954.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 957,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 b - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 958.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 2 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 961.5,
+   "fen": "2rq1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/2RQ1RK1 w - - 4 11",
+   "line": [
+    "Rc1",
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 966,
+   "fen": "2rq1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP2B1PP/2RQ1RK1 b - - 0 11",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 976.5,
+   "fen": "2rqr1k1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP2B1PP/2RQ1RK1 w - - 1 12",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "A rook to e8 is a natural move here, quietly preparing the central break — but it has to be handled with care, since the centre can bite back before it's fully prepared.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 979,
+   "fen": "2rqr1k1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP1QB1PP/2R2RK1 b - - 2 12",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 983,
+   "fen": "2rqr1k1/pp1b1pbp/2nppnp1/8/2PNP3/2N1BP2/PP1QB1PP/2R2RK1 w - - 0 13",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The central pawn advance to e6 is a serious error, because it invites a knight to b5 hitting the weakened dark squares. A single loosening move can hand the initiative straight over."
+  },
+  {
+   "ply": 25,
+   "t": 993,
+   "fen": "2rqr1k1/pp1b1pbp/2nppnp1/1N6/2P1P3/2N1BP2/PP1QB1PP/2R2RK1 b - - 1 13",
+   "line": [
+    "Ndb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 997.5,
+   "fen": "2rqr1k1/pp1b1pbp/2n1pnp1/1N1p4/2P1P3/2N1BP2/PP1QB1PP/2R2RK1 w - - 0 14",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1003.5,
+   "fen": "2rqr1k1/pp1b1pbp/2nNpnp1/3p4/2P1P3/2N1BP2/PP1QB1PP/2R2RK1 b - - 1 14",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1017.5,
+   "fen": "2rqr1k1/pp1b1pbp/2nNpnp1/8/2PpP3/2N1BP2/PP1QB1PP/2R2RK1 w - - 0 15",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1024,
+   "fen": "2rqr1k1/pp1b1pbp/2nNpnp1/8/2PBP3/2N2P2/PP1QB1PP/2R2RK1 b - - 0 15",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": "The way to stay in the fight is a pawn to d4, striking the bishop — it concedes the exchange, but keeps the position alive and full of play rather than passively worse.",
+   "kind": "plan"
+  },
+  {
+   "ply": 31,
+   "t": 1026,
+   "fen": "2rqr1k1/pp1b1pbp/3Npnp1/8/2PQP3/2N2P2/PP2B1PP/2R2RK1 b - - 0 16",
+   "line": [
+    "Nxd4",
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1030.5,
+   "fen": "2rqr1k1/pp1b1pbp/2nNpnp1/8/2PpP3/2N1BP2/PP1QB1PP/2R2RK1 w - - 0 15",
+   "line": [],
+   "spoken": "The follow-up is the key: don't recapture on d4, which yields the exchange with no compensation. Instead capture in the centre and let the dark-squared bishop settle on a beautiful central post — and then a queen swing to h4 goes straight for a direct attack. The sacrificed material is repaid by initiative.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 30,
+   "t": 1040,
+   "fen": "2rqr1k1/pp1b1pbp/2nNp1p1/8/2PBn3/2N2P2/PP1QB1PP/2R2RK1 w - - 0 16",
+   "line": [
+    "Bxd4",
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1069,
+   "fen": "2rqr1k1/pp1b1p1p/2nNp1p1/8/2PbN3/5P2/PP1QB1PP/2R2R1K b - - 1 17",
+   "line": [
+    "Ncxe4",
+    "Bxd4+",
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1074.5,
+   "fen": "2rqr1k1/pp1b1p1p/2nNp1p1/4b3/2P1N3/5P2/PP1QB1PP/2R2R1K w - - 2 18",
+   "line": [
+    "Be5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1080.5,
+   "fen": "2rqN1k1/pp1b1p1p/2n1p1p1/4b3/2P1N3/5P2/PP1QB1PP/2R2R1K b - - 0 18",
+   "line": [
+    "Nxe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1083.5,
+   "fen": "2r1q1k1/pp1b1p1p/2n1p1p1/4b3/2P1N3/5P2/PP1QB1PP/2R2R1K w - - 0 19",
+   "line": [
+    "Qxe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1087,
+   "fen": "2r1q1k1/pp1b1p1p/2nNp1p1/4b3/2P5/5P2/PP1QB1PP/2R2R1K b - - 1 19",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": "The theme repeats — a second exchange can be given up for the same idea, capturing and rerouting the knight to a dominant central square with full compensation. When the pieces are this active, a little material is a fair price.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 39,
+   "t": 1102,
+   "fen": "2r1q1k1/pp1b1p1p/2nQp1p1/8/2P5/5P2/PP2B1PP/2R2R1K b - - 0 20",
+   "line": [
+    "Bxd6",
+    "Qxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1103,
+   "fen": "2r1q1k1/pp1b1p1p/2nQ2p1/4p3/2P5/5P2/PP2B1PP/2R2R1K w - - 0 21",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1108,
+   "fen": "2r1q1k1/pp1b1p1p/2nQ2p1/4p3/2P5/5P2/PP2B1PP/2RR3K b - - 1 21",
+   "line": [
+    "Rfd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1109.5,
+   "fen": "2r1q1k1/pp1b1p1p/3Q2p1/4p3/2Pn4/5P2/PP2B1PP/2RR3K w - - 2 22",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1113.5,
+   "fen": "2r1q1k1/pp1b1p1p/3Q2p1/4p3/2Pn4/5P2/PP4PP/2RR1B1K b - - 3 22",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1122,
+   "fen": "2r1q1k1/pp3p1p/2bQ2p1/4p3/2Pn4/5P2/PP4PP/2RR1B1K w - - 4 23",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": "With material sacrificed, the practical trump is the clock — keeping the time advantage is what ultimately carries the game, so keep posing problems and make the opponent spend.",
+   "kind": "plan"
+  },
+  {
+   "ply": 45,
+   "t": 1133,
+   "fen": "2r1q1k1/pp3p1p/2bQ2p1/4p3/2Pn4/5P2/PP4PP/2R1RB1K b - - 5 23",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1149,
+   "fen": "3rq1k1/pp3p1p/2bQ2p1/4p3/2Pn4/5P2/PP4PP/2R1RB1K w - - 6 24",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1151,
+   "fen": "3rq1k1/pp3p1p/2b3p1/4Q3/2Pn4/5P2/PP4PP/2R1RB1K b - - 0 24",
+   "line": [
+    "Qxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1152,
+   "fen": "3r1qk1/pp3p1p/2b3p1/4Q3/2Pn4/5P2/PP4PP/2R1RB1K w - - 1 25",
+   "line": [
+    "Qf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 1157.5,
+   "fen": "3r1qk1/pp3p1p/2b3p1/4Q3/2Pn4/5P2/PP4PP/3RRB1K b - - 2 25",
+   "line": [
+    "Rcd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 1167.5,
+   "fen": "3r1qk1/pp3p1p/2b1n1p1/4Q3/2P5/5P2/PP4PP/3RRB1K w - - 3 26",
+   "line": [
+    "Ne6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 1169.5,
+   "fen": "3q2k1/pp3p1p/2b1n1p1/4Q3/2P5/5P2/PP4PP/4RB1K w - - 0 27",
+   "line": [
+    "Rxd8",
+    "Qxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1173,
+   "fen": "3q2k1/pp3p1p/2b1n1p1/2P1Q3/8/5P2/PP4PP/4RB1K b - - 0 27",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 1195.5,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P1Q3/7q/5P2/PP4PP/4RB1K w - - 1 28",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1204.5,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P5/7q/5PQ1/PP4PP/4RB1K b - - 2 28",
+   "line": [
+    "Qg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1207.5,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P5/3q4/5PQ1/PP4PP/4RB1K w - - 3 29",
+   "line": [
+    "Qd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1213,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P1Q3/3q4/5P2/PP4PP/4RB1K b - - 4 29",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 1222.5,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P1Q3/1q6/5P2/PP4PP/4RB1K w - - 5 30",
+   "line": [
+    "Qb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 1228.5,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P1Q3/1q6/P4P2/1P4PP/4RB1K b - - 0 30",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 1231,
+   "fen": "6k1/pp3p1p/2b1n1p1/2P1Q3/8/Pq3P2/1P4PP/4RB1K w - - 1 31",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 1245.5,
+   "fen": "6k1/pp3p1p/2bQn1p1/2P5/8/Pq3P2/1P4PP/4RB1K b - - 2 31",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 1248,
+   "fen": "6k1/pp3p1p/2bQn1p1/2Pq4/8/P4P2/1P4PP/4RB1K w - - 3 32",
+   "line": [
+    "Qd5"
+   ],
+   "spoken": "And the finishing touch is presence of mind — recognising the exact moment to trade queens and step into a winning endgame, rather than getting lost in the complications. Composure at the end converts everything the attack built.",
+   "kind": "plan"
+  },
+  {
+   "ply": 65,
+   "t": 1251,
+   "fen": "6k1/pp3p1p/2b1q1p1/2P5/1P6/P4P2/6PP/4RB1K b - - 0 33",
+   "line": [
+    "Qxe6",
+    "Qxe6",
+    "b4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

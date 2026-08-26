@@ -4,7 +4,7 @@
  "openingName": "Four Knights Game, Scotch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:-FRuDd_oXz4",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take the white pieces and open with the king's pawn; Black answers symmetrically with e5, a reply we haven't met in a while. Into it we've been alternating two systems — the Vienna and the Four Knights Scotch — and today we steer for the Scotch."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The king's knight develops to f3, the first step into the Four Knights."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
     "Nc6",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "Black brings a knight to c6, and we mirror with the queen's knight to c3. Both sides simply develop the knights first; once Black adds the knight to f6, we're set to break in the centre."
   },
   {
    "ply": 7,
@@ -44,9 +44,7 @@
     "Nf6",
     "d4"
    ],
-   "spoken": "With all four knights developed, White strikes with d4, hitting the e5-pawn and prying the center open before Black finishes coordinating.",
-   "kind": "main",
-   "teaches": "The Scotch Four Knights breaks the center early to cash in a lead in development."
+   "spoken": "Black plays the last knight to f6, and now the point of the system: d4, striking the e5-pawn with every piece already developed."
   },
   {
    "ply": 8,
@@ -55,14 +53,15 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Instead of resolving the centre, Black steps the bishop to b4 — a rare sideline here that we've almost never faced, and a touch passive. The main road would have been the capture on d4, we retake with the knight, and only then the bishop to b4. This is playable, but it leaves White a small edge."
   },
   {
    "ply": 7,
    "t": 70.5,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "For contrast, the tabiya most players reach runs with the capture on d4, we recapture with the knight on d4, and then the bishop to b4 — the well-trodden main line we've somehow never reached here.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -71,7 +70,8 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "In our own games here we've usually seen the reply d6; this opponent's bishop to b4 is a decent sideline — an okay move that still leaves White pulling slightly ahead.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -80,7 +80,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We must not grab with the pawn: after taking on e5 the knight springs to e4 and hits our c3-knight. Instead we push d5, seizing space and locking the centre. Black sometimes steers into this very structure with the black pieces, because it forces White to close up and gives the second player something to play for — though positionally Black is simply more cramped."
   },
   {
    "ply": 10,
@@ -89,7 +89,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "Black swings the knight from c6 to e7, heading for g6."
   },
   {
    "ply": 11,
@@ -98,7 +98,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3, defending e4 and drawing the sting from any jump to e4 — with that square covered, the knight can no longer hit our c3-knight with tempo. And we're untroubled by a capture on c3."
   },
   {
    "ply": 12,
@@ -107,7 +107,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black bolsters the centre with d6. We're not afraid of the trade on c3: yes, it damages our pawns, but in return we get the bishop pair and the chance to buttress the centre with c4."
   },
   {
    "ply": 13,
@@ -116,7 +116,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle kingside. We could also slip in h3 to discourage the bishop coming to g4, but that pin is toothless here — Black's pieces are too passive to make anything of it."
   },
   {
    "ply": 14,
@@ -125,7 +125,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "Black captures on c3. Had he tried the bishop to g4 instead, we'd have answered h3 to chase it back, and could even have followed with g4."
   },
   {
    "ply": 15,
@@ -134,7 +134,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the b-pawn, accepting the doubled c-pawns in exchange for the bishop pair and a broad centre."
   },
   {
    "ply": 16,
@@ -143,7 +143,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "Black lands the knight on g6 — the correct setup in this closed centre. And that's the lesson of these positions: when the centre is locked, the worth of any single move drops. Move orders turn flexible; what matters is reaching the right setup and the right plan, not the exact sequence."
   },
   {
    "ply": 17,
@@ -152,7 +152,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We begin with h3, denying the bishop the g4-square. In a closed position the emphasis shifts from the individual move to the overall aim."
   },
   {
    "ply": 18,
@@ -161,7 +161,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles. Another strong move for us is c4, reinforcing the d5-pawn."
   },
   {
    "ply": 19,
@@ -170,9 +170,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The pawn to c4 braces the advanced d5-wedge and stakes out queenside space, hinting at a future c5 break.",
-   "kind": "main",
-   "teaches": "Support an advanced pawn wedge and expand behind it before committing to action."
+   "spoken": "We play c4, cementing d5 and hinting at a future c5 break."
   },
   {
    "ply": 20,
@@ -181,7 +179,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "Black plays b6, holding the queenside confidently. We simply keep developing."
   },
   {
    "ply": 21,
@@ -190,7 +188,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g5 would catch the eye, but Black just plays h6 and shoos it away — so we settle for the bishop to e3, completing our development. Now we can turn to the side where we hold the edge: the kingside. On the queenside we'll never get in c5; on the kingside we have more force gathered."
   },
   {
    "ply": 22,
@@ -199,7 +197,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": ""
+   "spoken": "Black centralizes the queen to e7. Our development is done, and the extra pieces sit on the kingside — that's where the game will be decided, and we have several promising ideas there."
   },
   {
    "ply": 23,
@@ -208,9 +206,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "King to h2 is quietly prophylactic — it steps off the checking diagonals and clears the way for a kingside pawn storm with g3 and f4.",
-   "kind": "main",
-   "teaches": "Tuck the king to safety before launching a pawn advance in front of it."
+   "spoken": "We tuck the king to h2 — a quiet move with a double purpose that will show itself: it is at once prophylactic and aggressive."
   },
   {
    "ply": 24,
@@ -219,7 +215,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": ""
+   "spoken": "Black lunges the knight to h5, aiming for f4. Now the point of the king move surfaces: it is prophylaxis against exactly this, and our reply is g3."
   },
   {
    "ply": 25,
@@ -228,14 +224,15 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "We meet it with g3. This is only safe because the king stands on h2 — otherwise the h3-pawn could fall to a sacrifice; with the king there, that door is shut. And why did Black go to h5 at all? He is angling for f5, but it fails tactically: after f5 we take, the bishop retakes, we take again, the rook recaptures, and g4 at the very end forks the rook and the knight. There is a hidden cost to the knight sitting on h5 too — our queen x-rays it straight through our own f3-knight, so we can lift that knight, which we wanted to do anyway to prepare f4, and chase the h5-knight back to f6, gaining a tempo on our own plan."
   },
   {
    "ply": 23,
    "t": 334,
    "fen": "r1b2rk1/p1p1qppp/1p1p1nn1/3Pp3/2P1P3/3BBN1P/P1P2PPK/R2Q1R2 b - - 3 12",
    "line": [],
-   "spoken": ""
+   "spoken": "Even had Black not played to h5, the plan was identical — g3, lift the knight, push f4 — so the knight on h5 mostly just helps our idea along and hands us a tempo.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -245,7 +242,8 @@
     "Nh5",
     "g3"
    ],
-   "spoken": ""
+   "spoken": "Look deeper at the f5 break: after f5 we take, and Black's counter-push to e4 is the tactical try — we simply capture the knight on g6, the h7-pawn hangs, and once Black grabs our bishop we recapture on d3, so material can't be restored; Black is already at a loss. This is why the pawn went to c4 — d5 is so well reinforced that even c6 can be ignored, and nothing at all is happening on the queenside. If Black instead swings the queen to d7 to hit h3, that's no threat: the knight would drop back to g1 to hold the square and could later return to f3. Such a knight on g1 would look passive, tied to h3 — but the queen on d7 would be equally tied to attacking it, so neither side gains, and we are glad to let a knight babysit the square and keep the queen at bay.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -254,7 +252,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to f6. With the knight back, we press on — but carefully. Play the knight to d2 now and the queen comes to d7, forcing g4; and g4 fatally weakens the f4-square, killing the very break we're preparing."
   },
   {
    "ply": 27,
@@ -263,7 +261,7 @@
    "line": [
     "Ng1"
    ],
-   "spoken": ""
+   "spoken": "So we play the knight back to g1, preemptively: it guards h3 and clears the path to prepare f4. We're not ready to play f4 just yet."
   },
   {
    "ply": 28,
@@ -272,7 +270,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to d7 — pre-moved, so he never saw the queen-to-d7 resource. But committing to a plan doesn't mean closing your eyes: you must read how the opponent's move reshapes the position. And f4 still carries a serious flaw — after f4, the capture on f4, and g-takes-f4, Black strikes back with f5, and once the centre opens our e3-bishop falls under the queen's x-ray, so taking on f5 walks into tactics that leave our king badly exposed. Piling another defender on f4 with the knight to e2 isn't the cure; the cure is to shield the bishop first — but there's no time, because after the queen to d2 the knight swings to c5 and the break fails anyway, since capturing on f4 leaves our e4-pawn hanging."
   },
   {
    "ply": 29,
@@ -281,7 +279,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "So we change tack — shelve f4 for now and open a second front with h4. It doesn't come from nowhere: the g3-pawn supports the advance. Worried about the sacrifice on h4? The knight takes, g-takes, queen-takes-h4 with check, and we simply slide the king to g2 — and here the knight on g1 earns its keep, guarding h3, so once Black's d7-knight moves there's no check on h3. The upside of h4: the straightforward h5 next, shoving the g6-knight to the rim; the knight on g1 is freed and the h3-pawn stops being a worry — the queen can still reach h3, but no longer with a capture — and we may win the g5-square as an outpost for the bishop."
   },
   {
    "ply": 30,
@@ -290,7 +288,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "Black jumps the knight to c5. A healthy positional move for us either way — and we haven't wholly abandoned f4, though with the pawn heading to h5 it's far less likely: once h5 is in, an f4 break would only gut our own king, so we'd allow it only under perfect circumstances. Black is playing this very well."
   },
   {
    "ply": 31,
@@ -299,7 +297,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We push h5. This can hardly hurt — and it looks like the knight is more or less forced to h8, buried on the edge."
   },
   {
    "ply": 32,
@@ -308,7 +306,7 @@
    "line": [
     "Nf4"
    ],
-   "spoken": ""
+   "spoken": "Instead Black finds the knight to f4 — I'll admit I missed it. Does it work? The lines run deep: it holds tactically to a draw by perpetual, but it doesn't win. And crucially we don't have to take it — we can capture on c5 first, which may be the real solution."
   },
   {
    "ply": 33,
@@ -317,7 +315,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": ""
+   "spoken": "We take on c5 first with the bishop. Now the queen to h4 is not mate, because the g3-pawn covers that square."
   },
   {
    "ply": 34,
@@ -326,7 +324,7 @@
    "line": [
     "bxc5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the b-pawn on c5. There was a very specific reason to take on c5 first."
   },
   {
    "ply": 35,
@@ -335,7 +333,7 @@
    "line": [
     "gxf4"
    ],
-   "spoken": ""
+   "spoken": "Now g-takes-f4 works — though it's razor-thin, move-for-move calculation where you get it exactly right or lose ground."
   },
   {
    "ply": 36,
@@ -344,7 +342,7 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": ""
+   "spoken": "Black checks with the queen on h4."
   },
   {
    "ply": 37,
@@ -353,7 +351,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": ""
+   "spoken": "We step the king to g2. The looming idea is the queen to f3 — a genuinely frightening move; there may be a hidden win for Black I can't see, but move-for-move I believe we hold. Behind these choices sit the details: if the bishop comes to g4 now, we take on e5, and the bishop to h3 only looks like it traps the queen — our knight swings in, takes the bishop and defends the queen at once; and if Black tries a perpetual with the queen to g5 and back to h4, that same knight blocks on h3."
   }
  ]
 }

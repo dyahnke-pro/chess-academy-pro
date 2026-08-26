@@ -1,0 +1,302 @@
+{
+ "videoId": "dqYU2XP72pM",
+ "title": "Bishop & Knight for a Rook?! Sneaky!! | Jobava London | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Jobava London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:dqYU2XP72pM",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 23,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 26.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 30,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 52,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": "This is the Jobava London — the knight to c3 paired with the bishop on f4. It looks innocuous, hardly an attacking weapon, but that's an illusion: it's a genuinely aggressive system, and players who underestimate its potential get burned."
+  },
+  {
+   "ply": 8,
+   "t": 74,
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": "The pawn to c5 is already a slip. It tries to punish the early knight development — in a normal London you'd prop the centre with a pawn — but committing the knight to c3 has a hidden virtue: it puts immediate pressure on the d5 pawn, which changes everything."
+  },
+  {
+   "ply": 9,
+   "t": 116,
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "Because of that pressure, a capture on c5 becomes available — a move you'd never make in the traditional London. It intensifies the heat on d5 and makes winning the pawn back surprisingly awkward for the opponent without falling behind.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 125,
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 146,
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": "The natural knight development is the common online choice but it's wrong here — the accurate move is the rook-pawn to a3, with the obvious idea of following up with b4 to cement the extra pawn on c5. Preparation before consolidation.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 155,
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp3/5B2/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 167,
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 1 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The opponent grabs the centre and eyes winning the pawn back with interest — but there's a catch. Instead of meekly retreating the bishop, plant it on g5, and the power of the early knight shines: now there's a threat to swap on f6 and capture on d5, knocking out a key central pawn while keeping the extra material.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 14,
+   "t": 179,
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 2 8",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 190,
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR b KQkq - 0 8",
+   "line": [
+    "b4"
+   ],
+   "spoken": "The opponent has to waste a tempo defending, which is exactly the opening to secure the c5 pawn with b4 — the whole reason the rook-pawn went to a3 earlier. A full pawn up, and for no compensation.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 194,
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR w KQkq - 1 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 233,
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R b KQkq - 2 9",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 235.5,
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R w KQ - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 245,
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R b KQ - 4 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Develop modestly to e2, not the more natural square, which would walk into a fork. And appreciate the extra pawn — it's not just any pawn; sitting on e3 it's a speed bump, restricting the opponent's central break and choking the squares their pieces want.",
+   "kind": "plan"
+  },
+  {
+   "ply": 20,
+   "t": 332.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R w KQ - 5 11",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": "The queen shift to e8 is tricky — it lays a trap. Snatch on d5 too soon and the alignment of the opponent's bishop with the rook in the corner springs a discovered attack on the knight, winning the pawn back with interest. Just stay up the pawn and don't take the bait.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 21,
+   "t": 381.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 388.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "And a genuine surprise — a knight leap to e4 that's easy to miss. It forces a sequence leaving one side with a rook and two pawns against two minor pieces, a fascinating material imbalance to navigate.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 25,
+   "t": 401.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QR2K b - - 10 13",
+   "line": [
+    "Re1",
+    "Nf6",
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 404.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 417,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2N3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 424,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2P1p1B1/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 437.5,
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "Bxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 439.5,
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 442.5,
+   "fen": "r3qBk1/1p3ppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Bxf8"
+   ],
+   "spoken": "With a rook against two pieces, the whole evaluation turns on activity — rook activity versus the minor pieces. So aim for total rook activity at once: occupy the only open file, keep the other rook eyeing the queenside pawns, and target the juicy central square as an anchor to double on the file.",
+   "kind": "plan"
+  },
+  {
+   "ply": 31,
+   "t": 501.5,
+   "fen": "r4qk1/1p3ppp/p1n1b3/2P1p3/1P6/P3P3/2P1pPPP/RQ1R2K1 b - - 1 16",
+   "line": [
+    "Qxf8",
+    "Qb1",
+    "fxe2",
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 510.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 513.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "A useful rule of thumb in these imbalances: with two rooks against two minor pieces, trading a pair of rooks favours the side with the rook — and in pure rook-versus-two-pieces endings, with nothing else on the board, the rook often dominates outright.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

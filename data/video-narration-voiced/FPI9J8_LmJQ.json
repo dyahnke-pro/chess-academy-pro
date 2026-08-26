@@ -1,0 +1,386 @@
+{
+ "videoId": "FPI9J8_LmJQ",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1720",
+ "openingName": "London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:FPI9J8_LmJQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1151,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1155,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1156,
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Black transposes into a Dutch with f5, but a London player doesn't change course — keep playing the standard London moves.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 1168.5,
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1170.5,
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1173.5,
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1175,
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "Think about what f5 costs Black: it weakens the a2-g8 diagonal and makes castling awkward — if we react correctly.",
+   "kind": "main",
+   "teaches": "The Dutch f5 concedes the a2-g8 diagonal; punish it before Black consolidates."
+  },
+  {
+   "ply": 9,
+   "t": 1206.5,
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 4 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "So we break our own routine: Bc4 instead of the usual Bd3 or Be2. This is a schematic opening, but when the opponent deviates you must think outside the setup — Bc4 seizes the diagonal f5 just weakened and slows his castling.",
+   "kind": "main",
+   "teaches": "In a system opening, abandon the automatic move when the opponent's play demands a concrete reaction."
+  },
+  {
+   "ply": 10,
+   "t": 1211.5,
+   "fen": "r1bqkb1r/ppp1p1pp/1n1p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 5 6",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1212.5,
+   "fen": "r1bqkb1r/ppp1p1pp/1n1p1n2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1QK2R b KQkq - 6 6",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1214.5,
+   "fen": "r1bqkb1r/ppp3pp/1n1ppn2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1QK2R w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "He struggles to play e6, and we keep the Ng5 jump in our pocket — but don't rush it, just finish developing patiently.",
+   "kind": "main",
+   "teaches": "Bank a strong idea for later; complete development before cashing it in."
+  },
+  {
+   "ply": 13,
+   "t": 1222,
+   "fen": "r1bqkb1r/ppp3pp/1n1ppn2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1Q1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1224,
+   "fen": "r1bqk2r/ppp1b1pp/1n1ppn2/5p2/3P1B2/1B2PN1P/PPP2PP1/RN1Q1RK1 b kq - 0 8",
+   "line": [
+    "Be7",
+    "h3"
+   ],
+   "spoken": "h3 is a typical London move, reserving the h2 retreat for the bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 1225.5,
+   "fen": "r1bqk2r/ppp1b1p1/1n1ppn1p/5p2/3P1B2/1B2PN1P/PPP2PP1/RN1Q1RK1 w kq - 0 9",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1233,
+   "fen": "r1bqk2r/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1B2PN1P/PP3PP1/RN1Q1RK1 b kq - 0 9",
+   "line": [
+    "c4"
+   ],
+   "spoken": "Now expand on the queenside with c4. Yes, it blunts our own bishop for the moment — but the plan is a later c5, which reopens the diagonal and cranks up the queenside pressure.",
+   "kind": "main",
+   "teaches": "Temporarily blocking your own bishop is fine when a later break reopens it with interest."
+  },
+  {
+   "ply": 18,
+   "t": 1292.5,
+   "fen": "r1bq1rk1/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1B2PN1P/PP3PP1/RN1Q1RK1 w - - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1294.5,
+   "fen": "r1bq1rk1/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/R2Q1RK1 b - - 2 10",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Nc3 develops and points us toward the c5 or e4 break — either one gets at the e6-pawn.",
+   "kind": "plan",
+   "plans": "Prepare c5 or e4 to open lines against e6."
+  },
+  {
+   "ply": 20,
+   "t": 1308.5,
+   "fen": "r1bq1rk1/1pp1b1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/R2Q1RK1 w - - 0 11",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1328,
+   "fen": "r1bq1rk1/1pp1b1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/2RQ1RK1 b - - 1 11",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": "Rc1 is playing for your future self — not an immediate threat, but the rook wants to be on the c-file long before c5 ever lands.",
+   "kind": "main",
+   "teaches": "Place pieces for the break you'll make later, not only for the threat you can make now."
+  },
+  {
+   "ply": 22,
+   "t": 1330.5,
+   "fen": "r2q1rk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/2RQ1RK1 w - - 2 12",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Here's the deep plan: c5 is much easier with a pawn on b4 first.",
+   "kind": "plan",
+   "plans": "Reroute so you can push b4, then break with c5."
+  },
+  {
+   "ply": 23,
+   "t": 1367,
+   "fen": "r2q1rk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/PBN1PN1P/1P3PP1/2RQ1RK1 b - - 0 12",
+   "line": [
+    "a3"
+   ],
+   "spoken": "But b4 fails right now — the bishop on b3 would have to go to c2, off the diagonal, dropping the c4-knight. The fix, learned from a painful loss: play a3 first, tuck the bishop back to a2, then send the pawn forward.",
+   "kind": "main",
+   "teaches": "When a pawn break needs a square a piece occupies, reroute the piece first, then push."
+  },
+  {
+   "ply": 25,
+   "t": 1391,
+   "fen": "r3qrk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/P1N1PN1P/BP3PP1/2RQ1RK1 b - - 2 13",
+   "line": [
+    "Qe8",
+    "Ba2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1397,
+   "fen": "r1n1qrk1/1ppbb1p1/p2ppn1p/5p2/2PP1B2/P1N1PN1P/BP3PP1/2RQ1RK1 w - - 3 14",
+   "line": [
+    "Nc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1404.5,
+   "fen": "r1n1qrk1/2pbb1p1/p2ppn1p/1p3p2/1PPP1B2/P1N1PN1P/B4PP1/2RQ1RK1 w - - 0 15",
+   "line": [
+    "b4",
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1406,
+   "fen": "r1n1qrk1/2pbb1p1/p2ppn1p/1pP2p2/1P1P1B2/P1N1PN1P/B4PP1/2RQ1RK1 b - - 0 15",
+   "line": [
+    "c5"
+   ],
+   "spoken": "c5 breaks through. Don't fear him carving out d5 — the square is firmly held by our bishop and knight, so a knight can't settle there.",
+   "kind": "main",
+   "teaches": "A pawn break is safe to make when your pieces already blanket the hole it concedes."
+  },
+  {
+   "ply": 30,
+   "t": 1419.5,
+   "fen": "r1n1qrk1/2p1b1p1/p1bppn1p/1pP2p2/1P1P1B2/P1N1PN1P/B4PP1/2RQ1RK1 w - - 1 16",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1437,
+   "fen": "r1n1qrk1/2p1b1p1/p1bpBn1p/1pP2p2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 b - - 0 16",
+   "line": [
+    "Bxe6+"
+   ],
+   "spoken": "And there's the payoff of reopening the diagonal: Bxe6-check slices straight through, and we simply help ourselves to the free pawns.",
+   "kind": "main",
+   "teaches": "The point of opening a bishop's diagonal is the sacrifice-free tactic waiting at the end of it."
+  },
+  {
+   "ply": 32,
+   "t": 1439,
+   "fen": "r1n1qr1k/2p1b1p1/p1bpBn1p/1pP2p2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 w - - 1 17",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1442,
+   "fen": "r1n1qr1k/2p1b1p1/p1bp1n1p/1pP2B2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 b - - 0 17",
+   "line": [
+    "Bxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1444.5,
+   "fen": "r1n1qr1k/2p1b1p1/p2p1n1p/1pP2B2/1P1P1B2/P1N1Pb1P/5PP1/2RQ1RK1 w - - 0 18",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "To convert, note Black has no light bishop, so build a queen-and-bishop battery down the light squares — queen in front, since it's the queen that delivers mate on h7. And don't hurry to grab the knight on f6: it isn't going anywhere, Black stays permanently weak on the diagonal, so improve elsewhere and open a file with f4 to pile on.",
+   "kind": "main",
+   "teaches": "Against a king with no light bishop, stack a light-square battery led by the queen at h7, and never rush a capture the target can't flee."
+  },
+  {
+   "ply": 2,
+   "t": 1670,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1672,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1691.5,
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1697,
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1698,
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1700,
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1705,
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1708,
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 4 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1710,
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

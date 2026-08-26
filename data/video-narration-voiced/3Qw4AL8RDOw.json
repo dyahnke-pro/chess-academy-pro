@@ -1,10 +1,10 @@
 {
  "videoId": "3Qw4AL8RDOw",
  "title": "Natural Developing Moves | Scandinavian Defense: Modern | GM Naroditsky’s Top Theory Speedrun",
- "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "openingName": "Scandinavian Defense: Modern Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:3Qw4AL8RDOw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, d5 — a Scandinavian, the first time in the speedrun."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 — a poor man's Scandi; technically it's in the Portuguese Gambit family, but White isn't supposed to keep the extra pawn. Why not simply c4? Because Black responds with c6, and after we either transpose to the Panov Caro-Kann or take greedily with the d-pawn, Black gets massive central control, a stronghold on d4, and White has a terrible light-squared bishop biting on c4 — tremendous compensation for the pawn."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 — an easy-to-learn, effective line against the Nf6 Scandinavian. It forces Black to block and commit awkwardly.",
-   "kind": "main",
-   "teaches": "The b5 check is a low-theory way to get a pleasant, slightly better game against the Scandinavian.",
-   "plans": "Provoke a clumsy block, then develop with a pull."
+   "spoken": "So the line my coach taught me years ago — easy to learn, cool, and demonstrating positional principles: a check on b5. It's weird that our first move is with a bishop, but it develops with tempo, and if Black plays c6 now, we play the d-pawn takes c6, and since we haven't pushed to c4, c6 makes no sense for him. Black covers the check with the knight to d7 or —"
   },
   {
    "ply": 6,
@@ -54,10 +51,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Most players block with the bishop to d7 — but that piece is poorly placed: it deprives the queen's knight of its natural d7-square and clogs Black's development.",
-   "kind": "main",
-   "teaches": "A blocking bishop on d7 is a liability — it robs the b8-knight of its best square.",
-   "plans": "Keep that bishop stuck; don't trade it off."
+   "spoken": "— the bishop to d7, which most people play. Is that bishop well placed? Absolutely not — it deprives the b8-knight of a square, cuts the queen off from the centre, and stands in the middle of everything, so we should leave it there. That's the idea: provoking a move that ends up counterproductive. You might reason we should play the bishop back to c4 to defend the pawn, but the bishop to c4 allows the bishop to g4, hitting the queen — and f3 isn't a move you want in the opening, and we might not keep the extra pawn on d5."
   },
   {
    "ply": 7,
@@ -66,10 +60,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Retreat the bishop to e2 rather than allowing an exchange — the whole idea is to leave Black's awkward d7-bishop on the board, a lasting inconvenience.",
-   "kind": "main",
-   "teaches": "Preserve the opponent's bad piece by declining the trade.",
-   "plans": "Recover the d5-pawn and take the centre."
+   "spoken": "So not the queen to e2 or a4, which give Black a way out by letting him trade off that awkward piece on d7 — we physically move the bishop to e2 to stop the bishop to g4."
   },
   {
    "ply": 11,
@@ -81,7 +72,8 @@
     "Bd7",
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "The idea is to stop the bishop to g4, and the reason we move the bishop at all is so that after a move like a4, Black doesn't rid himself of that awkward piece by agreeing to the bishop trade —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -91,14 +83,16 @@
     "Nxd5",
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "— and then taking on d5, say with the queen. The queen to e2 does prevent the immediate bishop takes b5, which would be a fork, but after the queen to e2 Black just plays the knight takes d5 —",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 243,
    "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 8 6",
    "line": [],
-   "spoken": ""
+   "spoken": "— and asks what you're doing on b5. So we continue by occupying the centre with our pawn, playing d4 —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -108,7 +102,8 @@
     "Nxd5",
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "— and it's important to start with d4, because the slightly sloppy knight to f3 allows the extra option of the knight jumping into f4, and suddenly the bishop and g2 are under fire.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -118,10 +113,8 @@
     "e6",
     "d4"
    ],
-   "spoken": "Grab the centre with the pawn to d4 — and it is important to start with d4, not a sloppy e6-type move that would leave the bishop and the g2-square under fire.",
-   "kind": "main",
-   "teaches": "Move order matters — take the centre with d4 before the pieces can be harassed.",
-   "plans": "Complete development behind the centre."
+   "spoken": "So we prevent that and grab the centre at the same time. You'd be right that c4 is coming — it won't be taken away from us — to push the knight from d5, giving us nice development and better central control, a small but stable advantage. Start with a simple developing move, the knight to f3, then castle, and only then c4. Conversely, that gives Black the extra option of the bishop to d6, intending to meet c4 with the knight to f4.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -131,7 +124,8 @@
     "c5",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "But we'll find a way around it. c5 is a good move — Black contests the centre and forces our hand. I said castle next, but the opportune moment has come to play c4, meeting Black in the centre instead of giving free rein, knocking the knight out immediately; if we castle instead, Black takes on d4 and plays the knight to c6, and by the time we play c4 it might be less effective.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -141,7 +135,8 @@
     "Nf6",
     "c4"
    ],
-   "spoken": ""
+   "spoken": "If the knight to b4, we just play a3, not dangerous — though in some Alekhine and Scandi lines, with the light-squared bishop on f5, the knight to b4 is unpleasant, threatening a fork. Black plays the knight to f6. We can play the knight to c3 or castle. d5 might look appealing to create a passer, but it's totally innocuous — Black can trade, and an isolated passer this early is a liability, blockaded by the dark-squared bishop on d6. So instead of rushing forward, keep the tension with the knight to c3, and if the pawns trade we recapture with the knight, not the queen, which walks right into the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -151,17 +146,16 @@
     "Nc6",
     "Nc3"
    ],
-   "spoken": "Develop the knight to c6 — principled, by-the-book play. With the extra space and Black's awkward bishop, White simply stands more comfortably.",
-   "kind": "main",
-   "teaches": "When you have a structural edge, keep developing soundly — the advantage compounds.",
-   "plans": "Finish development and press the space."
+   "spoken": "The knight to c6. Now d5 makes perfect sense — a tempo move hitting the knight, and, most importantly, denying Black the time to play the bishop to d6. We can prevent the bishop to d6 with the bishop to f4, a move we want anyway, because the bishop to d6 is the only way to blockade the passer; after the bishop to f4, the bishop to e7, d6, the bishop is almost trapped, and the passer becomes a great asset. g4 blunders a pawn, since we have two attackers on d4, so Black panics and blunders. The bishop to b4 is good; I don't like d6 here, since it doesn't gain a tempo and runs into the queen to b6 forcing a queen trade that leaves the pawn unguarded with the knight to e4 — too concrete — so we just castle, not a3. Like the e4-b6 game, we don't chase the bishop; we take the sting out of the pin by castling, and we want Black to take on c3 himself, losing a tempo compared to a3, and a3 would also take the a3-square from our dark-squared bishop, which gets a nice post there after the b-pawn recaptures. Then we develop the dark-squared bishop to g5 — this pin is underrated and very dangerous with Black castled kingside, the queen pressuring the knight, and the knight to g4 a huge threat; the bishop to e7 to escape the pin fails to d5 and d6. h6 — we can trade with the bishop takes f6, but it's early to trade queens when up a pawn, unlike up a piece where a queen trade helps simplify, so we keep the tension with the bishop to h4; if g5, that's amazing to provoke, weakening the knight and the king. The bishop to b7 walks into our idea, and the passer ends up deciding the game. The tricky bishop to c6 sets up an x-ray against the queen and precludes the take on c7, so we answer with the rook to d1, which protects the queen and the pawn at once and ends it, renewing the threat and keeping the bishop trapped. The queen to c6 is the most-popular-wrong-answer — we've won a minor piece and will trade queens soon. There's an elegant combination to win a second piece: the bishop takes f6, since the queen can't recapture, forcing the g-pawn to recapture, which opens the g-file for the queen to g3 with check — but not immediately, since the king goes to h8, so first the rook to d1 x-raying the queen, and if the bishop moves, the queen to g3 wins the queen; order of operations matters, since the rook to d1 first then the bishop takes f6 lets the queen recapture. The knight to e4 is terrible, since Black takes it hitting our queen. The rook to c7 — heavy pieces are bad defenders, and the bishop on d7 is on life support, so the knight to b5 plays itself; if he takes, the queen to g3 with check wins the queen and the rook. Let's finish in style: the queen to g3 with check, a discovery against the queen, we take the queen, and then take the rook, which has lost its support.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1162,
    "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "We won the queen, then the rook, then the bishop, all in a row — decisive, lethal, crushing. A quick look over.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -170,7 +164,8 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "We'll separate the queen to d5 for another time. The knight to f6 is a fundamentally different line, not popular anymore — Black knows he's worse, and White has a million ways to cement the advantage. Stockfish 15 might say the bishop to b5 trick isn't the best move — I need to update my analysis from 2011 — but it won't ruin the edge. If the knight to d7, the simplest is d4, the knight takes d5, the knight to f3 — just develop your pieces; if a6, drop the bishop back to the nice active square on d3. And after the bishop to d7, we play the bishop to e2.",
+   "reanchor": true
   }
  ]
 }

@@ -1,175 +1,172 @@
 {
- "videoId": "nkDlJMpLezk",
- "title": "Best Game So Far!! | Mastering the Alapin Sicilian | GM Naroditsky's Theory Speed Run",
- "openingName": "London System (Black)",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:nkDlJMpLezk",
- "moves": [
-  {
-   "ply": 2,
-   "t": 2565,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "d4",
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 2566,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
-   "line": [
-    "Bf4"
-   ],
-   "spoken": "The bishop to f4 outside the pawn chain is the London System — a solid, low-theory setup White can play on autopilot. Black should meet it with a clear, active plan rather than mirroring passively.",
-   "kind": "main",
-   "teaches": "The London is easy to play but not threatening — answer it with an active, concrete plan.",
-   "plans": "Build c5/Nc6 and pressure b2 with the queen."
-  },
-  {
-   "ply": 5,
-   "t": 2568.5,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
-   "line": [
-    "Nf6",
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 2569.5,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 2573,
-   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 4",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 2574,
-   "fen": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 5",
-   "line": [
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 2576,
-   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6",
-   "line": [
-    "c3",
-    "Nc6"
-   ],
-   "spoken": "Black sets up the standard counter: pawns on d5 and c5 with the knight on c6, striking at White's centre and preparing pressure on the queenside.",
-   "kind": "main",
-   "teaches": "Against the London, hit the centre with c5 and develop the knight to c6.",
-   "plans": "Prepare the queen sortie to b6."
-  },
-  {
-   "ply": 11,
-   "t": 2577,
-   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R b KQkq - 2 6",
-   "line": [
-    "Nbd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 2579.5,
-   "fen": "r1b1kb1r/pp3ppp/1qn1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - 3 7",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": "The queen to b6 is the most standard way to play — it eyes the b2-pawn and the loose queenside, forcing White to react before he can complete his comfortable setup.",
-   "kind": "main",
-   "teaches": "Queen to b6 is the thematic London antidote — it targets b2 and asks White real questions.",
-   "plans": "Pressure b2 and c4-type breaks, seizing the initiative."
-  },
-  {
-   "ply": 14,
-   "t": 2586.5,
-   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
-   "line": [
-    "Qb3",
-    "Qxb3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 2588,
-   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
-   "line": [
-    "axb3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 2590.5,
-   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 2592.5,
-   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
-   "line": [
-    "axb3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 2,
-   "t": 2598.5,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 2600.5,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "c4",
-    "c6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 2614,
-   "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
-   "line": [
-    "Nc3",
-    "Nf6",
-    "Nf3",
-    "a6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 4510,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "nkDlJMpLezk",
+  "title": "Best Game So Far!! | Mastering the Alapin Sicilian | GM Naroditsky's Theory Speed Run",
+  "openingName": "Sicilian Defense: Alapin Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:nkDlJMpLezk",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 2565,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "d4",
+        "d5"
+      ],
+      "spoken": "The queen-to-b3 versus queen-to-b6 standoff is standard — it mostly turns up in d4-based openings, so in the London system you get it very often. For instance, one of the main lines of the London runs the bishop to f4,"
+    },
+    {
+      "ply": 3,
+      "t": 2566,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "the knight to f6, e3, and then e6 — this can happen through"
+    },
+    {
+      "ply": 5,
+      "t": 2568.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "line": [
+        "Nf6",
+        "e3"
+      ],
+      "spoken": "the knight to f6 and e3,"
+    },
+    {
+      "ply": 6,
+      "t": 2569.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+      "line": [
+        "e6"
+      ],
+      "spoken": "and e6,"
+    },
+    {
+      "ply": 7,
+      "t": 2573,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 4",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "various move orders, but the bottom line is c5, c3, the knight to c6, the knight to d2 — so here,"
+    },
+    {
+      "ply": 8,
+      "t": 2574,
+      "fen": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 5",
+      "line": [
+        "c5"
+      ],
+      "spoken": "c5, staking out the centre,"
+    },
+    {
+      "ply": 10,
+      "t": 2576,
+      "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6",
+      "line": [
+        "c3",
+        "Nc6"
+      ],
+      "spoken": "c3 and the knight to c6,"
+    },
+    {
+      "ply": 11,
+      "t": 2577,
+      "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R b KQkq - 2 6",
+      "line": [
+        "Nbd2"
+      ],
+      "spoken": "the knight to d2. For example, the queen to b6 is a very standard"
+    },
+    {
+      "ply": 12,
+      "t": 2579.5,
+      "fen": "r1b1kb1r/pp3ppp/1qn1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - 3 7",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "way to play, and White responds often with the queen to b3, and"
+    },
+    {
+      "ply": 14,
+      "t": 2586.5,
+      "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
+      "line": [
+        "Qb3",
+        "Qxb3"
+      ],
+      "spoken": "you get this exact standoff, where Black doesn't want to be the one to"
+    },
+    {
+      "ply": 15,
+      "t": 2588,
+      "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
+      "line": [
+        "axb3"
+      ],
+      "spoken": "take on b3. The a-pawn recaptures. And as you can confirm with"
+    },
+    {
+      "ply": 14,
+      "t": 2590.5,
+      "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
+      "line": [],
+      "spoken": "the engine, White is supposed to take",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 2592.5,
+      "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
+      "line": [
+        "axb3"
+      ],
+      "spoken": "here not with the knight but with the pawn — recapturing a-takes-b3 — and here White holds a serious",
+      "reanchor": true
+    },
+    {
+      "ply": 2,
+      "t": 2598.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "line": [],
+      "spoken": "advantage. You also see this in the Slav, as some of you are pointing out — you also",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 2600.5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c4",
+        "c6"
+      ],
+      "spoken": "get a lot of these queen-to-b3, queen-to-b6 positions. So what are some variations of the Slav where you get the queen to b3 and the queen to b6? Let",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 2614,
+      "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+      "line": [
+        "Nc3",
+        "Nf6",
+        "Nf3",
+        "a6"
+      ],
+      "spoken": "me think. In the Chebanenko Slav — the one with a6 — you often see White be the one to play the queen to b3; in the g3 Slav you get the queen to b3 and the queen to b6 occasionally, and if Black plays the bishop to f5, one main line runs the queen to b3, the queen out to b6, and it's the same drill: the queens stare at each other for a while, and White's best is either c5, trying to force Black to be the one to capture on b3, or dropping the queen back to c7 so the bishop can come out with tempo. The point is that the standoff of the queens on b3 and b6 is very standard, and its main feature is that neither side usually wants to be the one to capture the opposing queen, even though it slightly damages the pawn structure — because the pawn structure is subservient to piece placement, piece activity, and control of squares. So, in our line: the bishop to c4, the knight to a6, the knight to f3, the knight to c7. Their main try, by the way, is d4, and they claim d4 also gives an advantage. Their line goes: the queen takes on b3, and now you recapture with the pawn — pawn takes b3 — then c-takes-d4, the knight takes on d4. It's also possible for White to choose d6 here, planting an isolated pawn in the opponent's camp — a desperado sacrifice, since you're going to lose the pawn anyway, so you ruin Black's structure while you're at it and get a slight endgame edge: the bishop to b2, the bishop to c5, the bishop to e3, the knight to g4, bishop takes, bishop takes f3, the king steps up, and they give a small plus for White, which seems reasonable. Or, instead of d6, Black can play the no-frills knight takes on d5, and here they claim a small but stable advantage for White — a game from Spain, 2008, where Black has regained the sacrificed pawn but is still short of full equality. One piece of advice: if you use an opening book or a Chessable course, yes, learn the given moves, but always spend a couple of minutes analysing the position the author stops on — really try to understand the resulting middlegames, just make some moves with the engine and get a sense for why the position is good. Why is White better here? It isn't immediately obvious, but the engine confirms it — the a-file we've talked about, and the nice central placement of White's pieces. Say Black plays e6; the engine gives b4. Why b4, beyond grabbing space? It's prophylactic: we're preventing Black's bishop from developing to c5, because we want to keep our knight on d4 — the last thing we want is the transformation where Black gets a massive blockading knight there. So I really like b4. Say Black plays the bishop to b7; where does our knight go? The engine gives the knight to d2, castle, then the knight to f3, and it becomes clear why White is better: a big space advantage, with the knight coming into e5. Black plays a6; now the bishop comes out to g5, a rook to e1, plenty of ways to improve — very pleasant for White. In the next game we'll play d4, but in this game we played the recapture with the g-pawn, and the best move was to take back with the bishop. What's the difference? If Black plays the bishop to f5, we have the move c4 — and at a high level you have to treat everything very concretely. You might ask, if c4 is good later, why not just play c4 immediately? It isn't the same, because the queens are still on the board: Black's best is e6, trading the pawns off, and Black gets full compensation for the sacrificed pawn in the form of massive control of the d4-square. But compare that instance of c4 to this one with the queens off — here e6 is impossible, and White is essentially winning on the spot. There's a check on a4 that's devastating: the king to e7 runs into the beautiful d6 deflection, winning the rook. Black has b5, but after c-takes-b6 White threatens b6 and Black is destroyed. If Black doesn't free himself with e6, the bishop to a4 is a huge threat, Black can't castle because f7 falls, and after the engine's knight to d7 White simply trades and develops with d3 and the knight to c3 — a disaster with d6 coming. So everything in the opening is concrete: a move that's bad in one position is good in another. Now, if we had taken back with the bishop, our opponent would have taken on d5 with the knight, and my intention was to take on d7 and play d3 — White is solidly better, with the bishop pair and clear prospects for the queenside minor pieces; the knight to d2 and the knight to f3 is a great manoeuvre to contest the central squares, and if Black overextends with e5 we use that pawn as a target and put a rook on e1, with the bishop swinging b3-to-a4 with check being very awkward — a rook to e8 there is already a blunder, a clear example of the bishop pair being a very good thing. Now, why was the move played a mistake? Because Black's bishop gets stuck in the netherworld — what I wouldn't give to plant a pawn on top of it. I saw the bishop to f5 but wrongly believed d6 refutes it, e-takes-d6, the knight to f7, which looks great for White — but d5 is what I missed from a distance: an interference move, where if you move the bishop you lose the knight, and if you take the rook you lose the bishop and then the knight too. There's the classic g6, the bishop to g7, and the knight is lost — but that's not Black's best, because the knight isn't going anywhere, it can't be evacuated. So make life as difficult as possible for White: what does White want to develop? Chiefly that bishop and that knight, and for both he needs to push the pawn to d4 — so we put the bishop on top of the pawn, sitting on d6, and we also prevent castling. Look how much that one bishop accomplishes — White is borderline lost, having to wriggle with something like f3, but now Black calmly develops the other bishop and walks the king over to g8, winning the knight back with the bishop unassailable. This is the classic technique: a knight or bishop parked on d6 is unbelievably strong, especially when it blocks the development of a piece on c1 or c8. I have a couple of nice games with this. One, from 2013 against a Ukrainian grandmaster who underestimated it — a Rossolimo, a completely different opening, but he plays the dubious e5, which weakens the d6-square; you'd expect d6 to fill it with a pawn, but he never does. I played the knight to a3, the knight to c4, and he still doesn't play d6; I played d4 to blast open the centre, sacrificing a pawn; he takes; the queen to f3, castle, and White is already borderline winning with the bishop to f4 and the knight to d6 — Black is simply playing without a queenside, and even b6 fails because the knight controls the bishop's only developing square. I transformed the queenside pressure into a kingside attack: the knight jumps back to f5 at the right moment; if g-takes-f5, the bishop to h6 leads to mate because the f-pawn is pinned; I eliminate the fianchetto bishop and take the pawn, Black's position riddled with weaknesses; the knight takes e5 is a tactical try but I mate anyway, the bishop to f6 a nice final flourish driving the king out. The takeaway again is the power of the knight landing on d6. The other game, an older one from just before the World Youth Championship in 2012 — again he plays e5, the knight to f7, allowing the knight to d6, which is terrible; he never recovers from giving up his light-squared bishop. Here I'm not sitting on d6 so much as using it as a jumping-off point to eliminate that bishop, and without it his light squares are horribly weak, as is d6; the whole game is won on the light squares, the queen to h5, the bishop to f5. There's a famous Petrosian game in the same spirit. Just remember the power of putting something on d3 or d6 when the opponent's whole queenside is undeveloped. So all of that explained why d6 is a bad move here; the knight to f7 — and note that inverting the move order is even worse, because Black saves the piece with the knight to e6. Instead I accepted the inevitable and got the knight out to a3, a good move, and our opponent replied very accurately with a6 — a high-level move; most would automatically take on d5. If Black takes with the other knight, I play the knight to b5, very problematic — Black is strained in the centre and on the kingside, and if e6 I can snag the pawn on a7 with the knight evacuating via b5. So a6 was a patient, prophylactic move, realising that pawn isn't actually going anywhere. We castled, Black played the knight takes on d5, and now I'm really happy with g4, which spices things up. How do you find a move like this? Any time two knights defend each other and you make contact with one, look for a way to chase the other away with a pawn — put like that, g4 becomes obvious; that knight is also overloaded, not really controlling anything on the kingside. There's a little Bulgarian women's game with the same idea: a bishop on c4, a knight on d5, White plays g4, Black errs — the best was to drop back to e6 — the rook defends the knight but the back rank is weak, so White takes on d5 anyway, the rook takes on a7 winning a big pawn and reaching an active square, then rounds up a second pawn on b6. In our game g4 forces the bishop to e6, because the bishop to g6 would simply lose a piece to g5, and the benefit of forcing it to e6 is twofold: the whole game Black struggles to develop the dark-squared bishop — this is where it starts, since we prevent e6 — and it opens new prospects for our knight, which drops back to c2 preparing the central break with d4. When you have a development advantage you want to open the centre. Once castling happens — which I missed — I have to notice that the knight takes on g4 is a threat, so I play g5, forcing the knight back. Somebody asked about the knight to b5 instead of the knight to c2: what's the threat? There isn't one — c7 is defended and I can just retreat the rook — the knight would have to drop back to a3 ignominiously; White's only real idea there is g5 and bishop takes d5 forking on c7, but it's too slow and Black moves the rook. The eval after g4 is about a 0.7, 0.8 edge for White; the bishop takes g4, the knight takes g4, and the knight on d5 is lost in the end. So: the bishop to e6, the knight to c2, castle, g5, the knight forced back, we trade and play d4. I'll admit I missed one powerful defensive resource — the bishop to f5 is the decisive mistake, and after bishop takes d5 Black is objectively lost. Black's concept is right — the bishop must be developed at all costs — so you might try g6, but that attacks the c5-pawn, and White uses c5 as a battering ram to shatter Black's king; a disaster. You need to get the pawn to e6, so the bishop to f5 was the right call and the bishop to h3 the right execution — it hits the rook, the rook moves, and now Black can play e6. But that doesn't solve all of Black's problems: there's a concrete approach giving White a big queenside attack. It's not bishop takes d5 and c4 — that gives up the light-squared bishop and the light squares get weak — it's d-takes-c5, the bishop takes c5, and then you push the b-pawn. Why? Because that rook on a1 has tremendous power in this game: b5, and if a-takes-b5, the rook wins the one in the corner; even better, take on d5 first, then the rook to a8 and the rook takes h8 winning a whole rook. I call it potential energy — the rook biting on granite has no current energy, but the moment the a-file opens it's the game-winning piece. The instant Black castled queenside, that king wasn't safe. So: the bishop to h3, a rook to e1, e6, d-takes-c5, the bishop to c5, b4, the bishop to b6, b5, and if Black tries to keep the a-file plugged, it's the same theme — the power of the doubled pawns: b4, the other pawn comes, Black simply can't keep the pawn alive; the knight to b4 doesn't threaten anything because the knight on d5 is defended enough. You might worry b4 blunders c3, but you recapture on a5 and push a6, a monster passed pawn, with Black's king wide open and ours completely safe. Someone asked about the knight to e3 instead of d-takes-c5, to trade off one of Black's only good pieces — reasonable, but Black drops the knight back to b6, and you haven't accomplished much; you also get logistical problems, because if you move your bishop I take on d4 and get my bishop out, seizing the initiative — so d-takes-c5 and b4 is much more effective. So we play bishop takes d5, and the point is it wins the exchange, hitting both pieces so the rook can't keep the bishop protected, and the bishop to h3 fails because at the end of the line you recapture and White is up a piece. Our opponent chose the lesser evil, giving up f7 — but not just any pawn: now Black is permanently unable to push the e-pawn, so his kingside stays forever paralysed. The real game-winner, though, is d5 — the key follow-up. Most would automatically take a second pawn, but that lets Black's pieces out, and in a position like this White is better but not by much once Black's pieces spring to life. Prophylactic thinking reigns: first ask what my opponent's next move is — his kingside is undeveloped, he wants e6 or e5, and the bishop to f4 would even walk into e5 losing a piece — so d5 is the move, because e5 then runs into en passant; you're simply denying Black his only way of getting his pieces out. A perfect game to show this: an old one of mine, a National championship in Houston, 2005 — I sacrificed a piece with the rook takes on a6; Black plays c5, and the knight can't move because he loses the queen; the queen to a1 hooks the queen up with the rook; c-takes-d4, and I found a move I was proud of — not the bishop takes d4, because my worry was Black's king escaping into the centre or the queenside, and not the tempting knight check either, because it just forces the king where it wants to go; instead the quiet rook to a7, keeping the king imprisoned, relying on d-takes-e6, the queen to a6 check, the queen to b6 check, the queen to c7 mate. Black brought the queen back, I calmly took on d4, the king under lock and key; a rook to d7, then the rook to a8 check — the familiar tactic — the rook takes a8; the knight to f6 brought the other rook in, and after the knight to d5 a pretty finish: the rook back to a6 forcing the queen to the seventh, a check, the rook to a7 pinning and winning the queen. Prophylactic thinking even in a tactical position. Back to the game: the king to d8, and I really like the bishop to f4 — he wants g6, so prevent it by preparing the bishop to e5 in reply, which would win; Black is paralysed; if b6, Black loses the a6-pawn — technically a fork, in fact a mate — and the bishop planted on f4 also blocks the king's escape to the seventh rank. Remember e5 runs into en passant. Black is in zugzwang; the bishop to c2, and we calmly play an awkward-looking move that removes all of Black's counterplay. Why not the bishop to e6? Because I didn't want to give Black a chance to sacrifice the exchange and win the d5-pawn — once that pawn goes, Black finally frees his kingside. No hurry; Black is paralysed, and that's the power of it — you have all the time in the world. E6 is desperation, Black is dead lost anyway. Someone asked about g6 there — the best move, Black's last chance to develop the bishop, but I'd still play the bishop to f4, and then a move that wins a third pawn: the rook to a5. It's good because Black has no b6 (that loses a6, and we double and win on the a-file), and no way to defend c7 since the bishop planted on f4 stops the rook to c7 — so Black loses a pawn, the king is driven to the centre, and the other bishop comes back too late. After the rook takes f8, the bishop to e6 is the important detail, because the rook on d7 is hanging, otherwise we'd lose our bishop; then a rook check on d3, the bishop to b6, and the rook to c8 is an unstoppable mate.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 4510,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": "So in the game we had e6, the bishop to e6, the bishop to d6, and the bishop to g3 — the same concept as the queen standoff on b3 and b6, and if you're a London player this bishop-to-g3 idea should be second nature. In the London one of the most standard sequences is the bishop to d6 met by the bishop to g3; the difference is that here you're not recapturing with the f-pawn toward the outside, you're taking toward the centre to open the file — f-takes-g3 opens access to the f7-square — and then we chase the bishop away. There was one further detail: in response to the bishop to d1, we had a really pretty move — straightforward but reliant on a cool tactic. It's not d6, which I'd call premature because of the rook to c6, since you've created an extra weakness; and it's not the rook to d2, because I don't want to move that rook off the f-file — can we do it with the other rook instead? That's the hint.",
+      "reanchor": true
+    }
+  ]
 }

@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:475QvJRimkI",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "A big game against a very strong player. The pawn to e4, c6 — a Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 — I'm going to play my real stuff, the Fantasy Variation, which I've already played in the speedrun."
   },
   {
    "ply": 5,
@@ -34,9 +34,7 @@
     "d5",
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — White keeps the big centre and plays for a rich, tactical middlegame rather than a theoretical duel.",
-   "kind": "main",
-   "teaches": "f3 defends the centre with a pawn and steers toward sharp, less-charted play."
+   "spoken": "d5, f3."
   },
   {
    "ply": 6,
@@ -45,7 +43,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4."
   },
   {
    "ply": 8,
@@ -55,7 +53,7 @@
     "fxe4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the f-pawn, and Kusha responds with one of the most reputable lines against the Fantasy — the e5 variation; the point is that the d-pawn taking e5 runs into the queen to h4 with check."
   },
   {
    "ply": 9,
@@ -64,7 +62,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "So it's important to proceed with the knight to f3 — this is theory —"
   },
   {
    "ply": 10,
@@ -73,7 +71,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "— and the bishop to g4, the recommendation in quite a few books, incredibly solid. White has many reactions; the main move is the bishop to c4, threatening the bishop takes f7 and the knight takes e5. After it Black plays the knight to d7 to cover e5, White castles, Black plays the knight to f6. There's another move I analyzed — c3 — but what worries me is Black grabbing the pawn."
   },
   {
    "ply": 11,
@@ -82,10 +80,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 trains on f7 and must stay on that diagonal — it is what keeps the pressure on f7 alive for the tactics to come.",
-   "kind": "main",
-   "teaches": "Keep the light-squared bishop on the a2-g8 diagonal; f7 is the target the whole attack leans on.",
-   "plans": "Castle, then build against f7."
+   "spoken": "The bishop takes f3, the queen takes f3, the pawn takes d4, and I'm hunting for compensation. Let's play the bishop to c4 and stick to what I know is fine."
   },
   {
    "ply": 12,
@@ -94,7 +89,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "The knight to d7 — I'm definitely out of my league theory-wise here."
   },
   {
    "ply": 13,
@@ -103,7 +98,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We should probably castle and keep developing."
   },
   {
    "ply": 14,
@@ -112,7 +107,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 — this is the line. If White plays d5, Black responds with the bishop takes f3 and recaptures the pawn on e5."
   },
   {
    "ply": 15,
@@ -121,9 +116,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The quiet pawn to c3 shores up d4, the pawn holding White's centre. If d4 ever falls, a black knight lands on the e5 outpost and White is in trouble, so the centre is secured first.",
-   "kind": "main",
-   "teaches": "Before attacking, defend the central pawn that keeps the enemy knight out of e5."
+   "spoken": "So we support the d4-pawn, because Black is constantly threatening the pawn takes d4 — the move is c3."
   },
   {
    "ply": 16,
@@ -132,7 +125,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "The bishop to h5. Kusha knows this line very well; let's try to take him out of theory. We can play the bishop to g5 and then the knight to d2, or the knight to d2 immediately — but that blocks the c1-bishop, so I lean toward developing the bishop first. We can also play the queen to e1 to get out of the pin."
   },
   {
    "ply": 17,
@@ -141,21 +134,23 @@
    "line": [
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "I like the queen to e1 — flexible, solidifying the centre, taking the sting out of the pawn takes d4. If Black develops the bishop to d6, a typical idea is the knight to h4 and f5, with the queen swinging to g3. The Fantasy is an attacking, tactical weapon — we want to play for the kingside attack."
   },
   {
    "ply": 16,
    "t": 289,
    "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
    "line": [],
-   "spoken": ""
+   "spoken": "A very serious game. I didn't like the queen to b3, since it didn't really create a threat — f7 is protected by Black's bishop — and it might run into b5; if b5, we have the b3-square for the bishop.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 312.5,
    "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
    "line": [],
-   "spoken": ""
+   "spoken": "It's very important to keep this bishop on the diagonal to pressure f7, currently well defended but potentially a weakness later. Also the knight takes e4 fails for tactical reasons —",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -164,7 +159,8 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "— I was aware the e4-pawn was hanging; it certainly could not have been captured.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -174,7 +170,8 @@
     "Bh5",
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "I'm expecting the bishop to d6, or maybe the more modest bishop to e7.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -183,7 +180,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "I really like the queen to e1 — a dangerous move. The bishop takes f3 — a big move; Kusha gives up the important light-squared bishop, an integral defender, without which f7 becomes weak, and our bishop is now uncontested. How to recapture? Not a given — the g-pawn recapture solidifies e4, opens the g-file, and prepares f4 to knock out e5; a serious alternative, since Black hasn't finished kingside development."
   },
   {
    "ply": 19,
@@ -192,7 +189,7 @@
    "line": [
     "Rxf3"
    ],
-   "spoken": ""
+   "spoken": "But I'm not in an overly adventurous mood — I prefer the conventional rook takes f3."
   },
   {
    "ply": 20,
@@ -201,14 +198,15 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d6 — Kusha pre-moves it."
   },
   {
    "ply": 18,
    "t": 407.5,
    "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "The g-pawn recapture would have been basically winning, because after the bishop to d6, f4 and we fork with e5 —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -218,7 +216,8 @@
     "Rxf3",
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "— but that's not how we want to win, with a dirty pre-move trick. Let's keep pondering how to mass our pieces on the kingside: the obvious bishop to g5 develops but doesn't really attack the knight, since the two knights defend each other; the queen to h4 brings the queen over to attack if Black castles kingside. We don't want the knight to d2, obstructing the bishop. What worries me about the bishop to g5 is the queen to b6, hitting d4 and b2 at once; but after the queen to h4 there's still the queen to b6 — a generally very annoying threat. Let's find a response: the queen to f2, that looks good.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -227,14 +226,15 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g5, the queen to f2, and if the knight takes e4 we snap off f7 and the king is in huge trouble. This is a bit flimsy, but it's the Fantasy — and potentially very rewarding: with the centre, if we complete development we're better, but if the centre collapses we're in huge trouble."
   },
   {
    "ply": 18,
    "t": 541.5,
    "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "If we lose control of the centre and the d-pawn falls, Black's knight jumps into the juicy e5-square and we're dead, so accuracy is vital. I'm honestly regretting not playing the g-pawn recapture — I think it was better.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -245,7 +245,8 @@
     "Bd6",
     "Rxf3"
    ],
-   "spoken": ""
+   "spoken": "Too late now. I'm expecting castling kingside or the queen to b6; if h6, we just play the bishop to h4. Next is the knight to d2 to complete development, and it'd be nice to throw in the king to h1 so that if the queen to b6, the d4-pawn isn't pinned. The battle is clear: I complete development and start the kingside attack once he castles, while Kusha tries to hit me before I'm developed.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -254,7 +255,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "The queen to c7 — I didn't expect it, but it's reasonable; maybe he wants to castle queenside. Why not the knight to d2? We must reckon with the pawn takes d4 and the bishop takes h2 with check — but that's a worthy pawn to sacrifice, since the pawn takes d4 is a massive concession giving us a juicy centre."
   },
   {
    "ply": 23,
@@ -263,7 +264,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "The knight to d2 is essentially a no-brainer — I'm more than willing to part with a corner pawn for full control of the centre. The rook to f8."
   },
   {
    "ply": 24,
@@ -272,7 +273,7 @@
    "line": [
     "Rf8"
    ],
-   "spoken": ""
+   "spoken": "He's telegraphing queenside castling; the point of the rook to f8 is to defend f7. We can't prevent castling, but we can prepare. I have an idea combining tactics and positional play: the bishop from c4 to d3 — I know I said the bishop is crucial there, but circumstances have changed; f7 is no longer a weakness —"
   },
   {
    "ply": 25,
@@ -281,7 +282,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "— especially since Black is going to castle queenside, so protecting the centre matters more. The knight wants the c4-square more than the bishop; the knight to c4 comes with greater effect. After he castles and puts a rook on e8, our e4-pawn is nicely protected, freeing the knight for c4, pressuring the bishop and the e5-pawn; I'll happily take that bishop for two bishops against two knights. Pawn storms are slow, cumbersome, and generally overrated."
   },
   {
    "ply": 26,
@@ -290,7 +291,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "In opposite-side castling, a lot of people indiscriminately go b4, a4, b5 — that's not the only way."
   },
   {
    "ply": 27,
@@ -299,9 +300,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "Rather than a caveman pawn storm, White improves the pieces: the knight to c4 eyes the bishop on d6 and the dark squares. Against opposite-side castling, a piece build-up is a valid, less committal plan.",
-   "kind": "main",
-   "teaches": "Opposite-side castling can be attacked with pieces, not only by hurling pawns."
+   "spoken": "You can also play with your pieces — the knight from d2 to c4. We're still sacrificing the h2-pawn; if he takes d4 and the bishop takes h2, nothing has changed — we'll still have a monster centre, and Black will have logistical problems getting the bishop back out."
   },
   {
    "ply": 28,
@@ -310,7 +309,7 @@
    "line": [
     "Rde8"
    ],
-   "spoken": ""
+   "spoken": "The caveman attack has its time and place, but not every position. The rook to e8 — a great move. Let me think in silence."
   },
   {
    "ply": 29,
@@ -319,7 +318,7 @@
    "line": [
     "Qg3"
    ],
-   "spoken": ""
+   "spoken": "The queen to g3 — its intention is to prevent the pawn takes d4. Didn't I want to encourage that? This is a dynamic position — things change every move: now the pawn takes d4 is an x-ray against my queen, with the knight takes c4 and f5 ideas, so it's a bigger enemy. The queen to g3 sits on a good square and stops the pawn takes d4, because the knight takes d6 wins the bishop with check. If the knight to h5, the queen tucks away on h3, x-raying the knight on d7. I'm starting to get control, though there's a lot of work to do."
   },
   {
    "ply": 30,
@@ -328,7 +327,7 @@
    "line": [
     "Ng8"
    ],
-   "spoken": ""
+   "spoken": "The knight to g8. Notice the work of the bishop on d3 — a purely defensive piece, and defensive pieces are underrated: it guards the pawn on e4 so I needn't worry. Kusha probably wants f6 or f5. The tempting rook to f1 runs into f6, so maybe drop the bishop from g5."
   },
   {
    "ply": 31,
@@ -337,7 +336,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3 — I like it a lot, because it solidifies the centre and attacks the g7-pawn. The bishop has done its job on g5; now it's time for a more defensive posture. Now g7 is hanging — that's our first threat."
   },
   {
    "ply": 32,
@@ -346,7 +345,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "g6 is a pretty significant weakness we can try to exploit later; Black's position is starting to show cracks. f5 isn't a threat — we can take the bishop, but no hurry, though maybe there is, or the bishop drops back to e7. One idea: the rook to f1 inducing f6, then take the bishop and reposition it to c4, or move the queen to h3, or launch the pawn storm — a4 is tempting, grabbing queenside space."
   },
   {
    "ply": 33,
@@ -355,7 +354,7 @@
    "line": [
     "Raf1"
    ],
-   "spoken": ""
+   "spoken": "Let's start by doubling — the rook to f1 — and speed up a little; Kusha is a very fast player."
   },
   {
    "ply": 34,
@@ -364,7 +363,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "f6. I have an idea — the queen to h3, attacking h7 and x-raying the knight; the knight is protecting e5 and f6, so the queen to h3 strains those pawns, and that may lead to an unexpected tactic. I wanted the pawn to sit on f6 first, to restrict the knight."
   }
  ]
 }

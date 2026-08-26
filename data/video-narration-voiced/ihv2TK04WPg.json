@@ -1,10 +1,10 @@
 {
  "videoId": "ihv2TK04WPg",
  "title": "Master Class | Open Sicilian | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Open, …e5 (White)",
+ "openingName": "Sicilian Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:ihv2TK04WPg",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
     "d6",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6; we open with d4."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
     "cxd4",
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4; we recapture with the knight."
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 9,
@@ -62,10 +62,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 reaches the standard Open Sicilian tabiya — the classical, richly-theoretical battleground where White fights for the d5-square and central space.",
-   "kind": "main",
-   "teaches": "The Open Sicilian is the main test — both sides play for the d5-square and the initiative.",
-   "plans": "Develop and pressure d5."
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 10,
@@ -74,7 +71,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the ...e5 Sicilian."
   },
   {
    "ply": 11,
@@ -83,10 +80,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "Black's pawn to e5 is premature — and the punishment is the bishop check on b5. After the block, the hole on d5 becomes permanent: even if the knight is chased to a3, White's grip on that outpost is worth the awkwardness.",
-   "kind": "main",
-   "teaches": "Meet an early …e5 in the Open Sicilian with Bb5+ — the d5-hole it creates is a lasting asset.",
-   "plans": "Trade the defender of d5 and occupy the outpost."
+   "spoken": "We give the check on b5."
   },
   {
    "ply": 12,
@@ -95,7 +89,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to d7."
   },
   {
    "ply": 11,
@@ -120,7 +114,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": ""
+   "spoken": "We trade on d7 with check."
   },
   {
    "ply": 15,
@@ -130,7 +124,7 @@
     "Nbxd7",
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight; we jump the knight into f5."
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b6, eyeing b2."
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 18,
@@ -157,7 +151,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to d8."
   },
   {
    "ply": 20,
@@ -167,7 +161,7 @@
     "Bg5",
     "Qxb2"
    ],
-   "spoken": ""
+   "spoken": "We pin with the bishop to g5; Black greedily grabs on b2."
   },
   {
    "ply": 21,
@@ -176,7 +170,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "We plant the knight on d5 — a huge threat."
   },
   {
    "ply": 22,
@@ -185,7 +179,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "Black takes it off."
   },
   {
    "ply": 23,
@@ -194,7 +188,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the queen, centralized on d5."
   },
   {
    "ply": 24,
@@ -203,7 +197,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to c8."
   },
   {
    "ply": 25,
@@ -212,7 +206,7 @@
    "line": [
     "Nxd6+"
    ],
-   "spoken": ""
+   "spoken": "The knight crashes on d6 with check."
   },
   {
    "ply": 28,
@@ -223,7 +217,7 @@
     "Qxd6",
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Black takes with the bishop; we recapture with the queen; Black tries ...f6."
   },
   {
    "ply": 29,
@@ -232,7 +226,7 @@
    "line": [
     "Qe6+"
    ],
-   "spoken": ""
+   "spoken": "We check with the queen on e6."
   },
   {
    "ply": 31,
@@ -242,7 +236,7 @@
     "Kd8",
     "Rad1"
    ],
-   "spoken": ""
+   "spoken": "Black's king goes to d8; we bring a rook to d1."
   },
   {
    "ply": 32,
@@ -251,7 +245,7 @@
    "line": [
     "Qb5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b5."
   },
   {
    "ply": 33,
@@ -260,7 +254,7 @@
    "line": [
     "Rd5"
    ],
-   "spoken": ""
+   "spoken": "We swing the rook to d5."
   },
   {
    "ply": 34,
@@ -269,7 +263,7 @@
    "line": [
     "Qa4"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to a4."
   },
   {
    "ply": 35,
@@ -278,7 +272,7 @@
    "line": [
     "Rfd1"
    ],
-   "spoken": ""
+   "spoken": "We double rooks, the other one to d1."
   },
   {
    "ply": 36,
@@ -287,7 +281,7 @@
    "line": [
     "Kc7"
    ],
-   "spoken": ""
+   "spoken": "Black's king walks to c7."
   },
   {
    "ply": 37,
@@ -296,7 +290,7 @@
    "line": [
     "Qd6+"
    ],
-   "spoken": ""
+   "spoken": "We check on d6."
   },
   {
    "ply": 38,
@@ -305,7 +299,7 @@
    "line": [
     "Kd8"
    ],
-   "spoken": ""
+   "spoken": "Black returns to d8."
   },
   {
    "ply": 39,
@@ -314,7 +308,7 @@
    "line": [
     "Qxd7+"
    ],
-   "spoken": ""
+   "spoken": "The queen sacrifices itself on d7 with check."
   },
   {
    "ply": 41,
@@ -324,7 +318,7 @@
     "Qxd7",
     "Rxd7+"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen; our rook takes on d7 with check."
   },
   {
    "ply": 42,
@@ -333,7 +327,7 @@
    "line": [
     "Ke8"
    ],
-   "spoken": ""
+   "spoken": "Black's king steps to e8."
   },
   {
    "ply": 43,
@@ -342,7 +336,7 @@
    "line": [
     "Bc1"
    ],
-   "spoken": ""
+   "spoken": "We reroute the bishop to c1."
   },
   {
    "ply": 44,
@@ -351,7 +345,7 @@
    "line": [
     "Rg8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to g8."
   },
   {
    "ply": 45,
@@ -360,7 +354,7 @@
    "line": [
     "Ba3"
    ],
-   "spoken": ""
+   "spoken": "The bishop swings to a3."
   },
   {
    "ply": 46,
@@ -369,7 +363,7 @@
    "line": [
     "Rc3"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to c3."
   },
   {
    "ply": 47,
@@ -378,7 +372,7 @@
    "line": [
     "Re7+"
    ],
-   "spoken": ""
+   "spoken": "We check with the rook on e7."
   },
   {
    "ply": 48,
@@ -387,7 +381,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": ""
+   "spoken": "Black's king goes to f8."
   },
   {
    "ply": 49,
@@ -396,7 +390,7 @@
    "line": [
     "Rd8#"
    ],
-   "spoken": ""
+   "spoken": "The rook delivers mate on d8."
   },
   {
    "ply": 3,

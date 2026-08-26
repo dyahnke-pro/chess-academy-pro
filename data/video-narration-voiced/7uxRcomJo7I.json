@@ -1,0 +1,591 @@
+{
+ "videoId": "7uxRcomJo7I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1920",
+ "openingName": "King’s Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:7uxRcomJo7I",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 4,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 11,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 13.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 15,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The King's Indian looks wrong — you hand White the whole centre — but that's the point: you cede it in pawns to attack it later with your pieces from a distance. That's the hypermodern idea.",
+   "kind": "main",
+   "teaches": "Hypermodern openings surrender the pawn centre on purpose, then bombard it with pieces."
+  },
+  {
+   "ply": 8,
+   "t": 26,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 27.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 39,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 40.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 42,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 is the main move, striking straight at the d4-pawn. It doesn't lose a pawn, and the point is to open the centre so our pieces can get at e4.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 52.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2QK2R b KQ - 1 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 55,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N1BN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 59.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R b KQ - 0 8",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 72.5,
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R w KQ - 1 9",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "The simplest way to lean on e4 is Re8, putting the rook behind the pawn on the open file.",
+   "kind": "main",
+   "teaches": "Attack a central pawn with the simplest tool — a rook on the file it stands on."
+  },
+  {
+   "ply": 17,
+   "t": 75,
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N1BP2/PP2B1PP/R2QK2R b KQ - 0 9",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 is a general weakening move, and here's the concrete flaw: it leaves the bishop on e3 undefended. If we can lever the e4-pawn out of the way, that loose bishop turns into a target.",
+   "kind": "main",
+   "teaches": "Every f3 push weakens something — log the pieces it leaves undefended."
+  },
+  {
+   "ply": 18,
+   "t": 109.5,
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N1BP2/PP2B1PP/R2QK2R w KQ - 0 10",
+   "line": [
+    "c6"
+   ],
+   "spoken": "We can't play d5 at once, so prepare it with c6 — this is main-line theory, and if White doesn't know exactly how to handle it he's in serious trouble.",
+   "kind": "plan",
+   "plans": "Follow up with the d5 break to blast open the centre."
+  },
+  {
+   "ply": 20,
+   "t": 113,
+   "fen": "rnbqr1k1/pp3pbp/2p2np1/3p4/2PNP3/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 11",
+   "line": [
+    "Qd2",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 115.5,
+   "fen": "rnbqr1k1/pp3pbp/2p2np1/3P4/3NP3/2N1BP2/PP1QB1PP/R3K2R b KQ - 0 11",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 116.5,
+   "fen": "rnbqr1k1/pp3pbp/5np1/3p4/3NP3/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 12",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "d5 goes in anyway — even with the bishop defended the whole centre is flimsy, and the pawn break cracks it open.",
+   "kind": "main"
+  },
+  {
+   "ply": 23,
+   "t": 123.5,
+   "fen": "rnbqr1k1/pp3pbp/5np1/3pP3/3N4/2N1BP2/PP1QB1PP/R3K2R b KQ - 0 12",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 126,
+   "fen": "rnbq2k1/pp3pbp/5np1/3pr3/3N4/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 13",
+   "line": [
+    "Rxe5"
+   ],
+   "spoken": "White's e5 just drops a pawn; Rxe5 grabs it and hands us exactly what we wanted — the open e-file.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 132,
+   "fen": "rnbq2k1/pp3pbp/5np1/3pr3/3N4/2N1BP2/PP1QB1PP/R4RK1 b - - 1 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 135.5,
+   "fen": "r1bq2k1/pp3pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/R4RK1 w - - 2 14",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Keep developing with Nc6; if he takes, we recapture with the pawn and shore up our passed pawn on d5.",
+   "kind": "main",
+   "teaches": "Recapture toward the centre to reinforce your advanced pawn."
+  },
+  {
+   "ply": 27,
+   "t": 148,
+   "fen": "r1bq2k1/pp3pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/3R1RK1 b - - 3 14",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 184,
+   "fen": "r2q2k1/pp1b1pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/3R1RK1 w - - 4 15",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "By the book we develop the bishop — not Bf5, which allows Nxf5, but Bd7. Not every piece needs an active job; some just connect the rooks and sit quietly, and that's fine.",
+   "kind": "main",
+   "teaches": "A modestly-placed developing move that connects the rooks beats a flashy square that hangs."
+  },
+  {
+   "ply": 29,
+   "t": 191,
+   "fen": "r2q2k1/pp1b1pbp/2n2np1/3pr3/3N1B2/2N2P2/PP1QB1PP/3R1RK1 b - - 5 15",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 195,
+   "fen": "r2qr1k1/pp1b1pbp/2n2np1/3p4/3N1B2/2N2P2/PP1QB1PP/3R1RK1 w - - 6 16",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 201,
+   "fen": "r2qr1k1/pp1b1pbp/2n2np1/3p4/3N1B2/2N2P2/PP1QB1PP/3R1R1K b - - 7 16",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 214.5,
+   "fen": "r2qr1k1/pp1b1pbp/5np1/3p4/3n1B2/2N2P2/PP1QB1PP/3R1R1K w - - 0 17",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Now the metal detector goes off: Nxd4. The knight is defended by the queen, but taking drags the queen onto d4 — a square x-rayed by our bishop on g7. That x-ray is the seed of a discovered attack.",
+   "kind": "main",
+   "teaches": "Lure the queen onto a square your bishop already x-rays, then tear the cover off."
+  },
+  {
+   "ply": 33,
+   "t": 220,
+   "fen": "r2qr1k1/pp1b1pbp/5np1/3p4/3Q1B2/2N2P2/PP2B1PP/3R1R1K b - - 0 17",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 233.5,
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p3n/3Q1B2/2N2P2/PP2B1PP/3R1R1K w - - 1 18",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "Get the most from it: Nh5 makes contact with the f4-bishop before we cash in.",
+   "kind": "main"
+  },
+  {
+   "ply": 35,
+   "t": 236.5,
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p3n/5B2/2N2P2/PP1QB1PP/3R1R1K b - - 2 18",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 237.5,
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p4/5n2/2N2P2/PP1QB1PP/3R1R1K w - - 0 19",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 242.5,
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p4/5Q2/2N2P2/PP2B1PP/3R1R1K b - - 0 19",
+   "line": [
+    "Qxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 254.5,
+   "fen": "r2qr1k1/pp1b1p1p/6p1/3p4/5Q2/2b2P2/PP2B1PP/3R1R1K w - - 0 20",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": "Bxc3 is the winning stroke — it chops off the only defender of the bishop on e2, and that undefended piece falls next move. We're up a clean piece.",
+   "kind": "main",
+   "teaches": "Win a piece by removing the single defender of a loosely-guarded target."
+  },
+  {
+   "ply": 39,
+   "t": 275,
+   "fen": "r2qr1k1/pp1b1p1p/6p1/3p4/5Q2/2P2P2/P3B1PP/3R1R1K b - - 0 20",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": "This is the beauty of the King's Indian: White makes one inaccurate move and the game is simply over.",
+   "kind": "main"
+  },
+  {
+   "ply": 42,
+   "t": 278.5,
+   "fen": "r5k1/pp1bqp1p/6p1/3R4/5Q2/2P2P2/P3r1PP/5R1K w - - 1 22",
+   "line": [
+    "Rxe2",
+    "Rxd5",
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 283,
+   "fen": "r5k1/pp1bqp1p/6p1/3R4/5Q1P/2P2P2/P3r1P1/5R1K b - - 0 22",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 289.5,
+   "fen": "r5k1/pp1bqp2/6p1/3R3p/5Q1P/2P2P2/P3r1P1/5R1K w - - 0 23",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 297.5,
+   "fen": "r5k1/pp1bqp2/6p1/3R3p/5Q1P/2P2P2/P3r1P1/3R3K b - - 1 23",
+   "line": [
+    "Rfd1"
+   ],
+   "spoken": "The key vocabulary: a type-one piece is defended by nothing, a type-two by a single piece — never a pawn — and the queen counts as undefended always, because it must flee any attacker. Harp on those loose pieces and the tactics find themselves.",
+   "kind": "main",
+   "teaches": "Scan for type-one and type-two pieces every move; they are where combinations live."
+  },
+  {
+   "ply": 46,
+   "t": 310.5,
+   "fen": "r5k1/pp2qp2/2b3p1/3R3p/5Q1P/2P2P2/P3r1P1/3R3K w - - 2 24",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": "So the bishop goes to c6, not b5 — c6 is defended by a pawn, and a piece is only truly safe when a pawn guards it.",
+   "kind": "main",
+   "teaches": "A piece is genuinely secure only when a pawn, not another piece, defends it."
+  },
+  {
+   "ply": 47,
+   "t": 331.5,
+   "fen": "r5k1/pp2qp2/2bR2p1/7p/5Q1P/2P2P2/P3r1P1/3R3K b - - 3 24",
+   "line": [
+    "Rd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 339.5,
+   "fen": "4r1k1/pp2qp2/2bR2p1/7p/5Q1P/2P2P2/P3r1P1/3R3K w - - 4 25",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Bring the sad, out-of-play rook into the game and build Alekhine's gun — tripling the heavy pieces along the file.",
+   "kind": "plan",
+   "plans": "Triple queen and rooks on the file for a crushing battery."
+  },
+  {
+   "ply": 49,
+   "t": 361,
+   "fen": "4r1k1/pp2qp2/2bR2pQ/7p/7P/2P2P2/P3r1P1/3R3K b - - 5 25",
+   "line": [
+    "Qh6"
+   ],
+   "spoken": "And catalog the opponent's weaknesses like a librarian — h4 was one, and the queen is tied to it, so we simply collect it with check.",
+   "kind": "main",
+   "teaches": "Keep a running list of enemy weaknesses; the winning move is usually already on it."
+  },
+  {
+   "ply": 50,
+   "t": 377,
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P3r1P1/3R3K w - - 0 26",
+   "line": [
+    "Qxh4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 386,
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P5P1/3Rr1K1 w - - 2 27",
+   "line": [
+    "Kg1",
+    "Re1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 425,
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P3r1P1/3R3K w - - 0 26",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 428.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 439.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 456.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "e4",
+    "Bg7",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 505,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 516.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "line": [
+    "Nf3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 518,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "Be2",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 526,
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4p3/2P1P3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "dxe5",
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 527,
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4N3/2P1P3/2N5/PP2BPPP/R1BQK2R b KQ - 0 8",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 535.5,
+   "fen": "rnbq1rk1/ppp2pbp/6p1/4N3/2P1n3/2N5/PP2BPPP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 544.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 550.5,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 2 8",
+   "line": [
+    "d5",
+    "Nbd7",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 562,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 563.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N1BN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "Be3",
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 956,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,10 +1,10 @@
 {
  "videoId": "Qkv7D-BGAt4",
  "title": "French Defence | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Modern Defense (1...g6), French-Advance pawn structure",
+ "openingName": "Modern Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:Qkv7D-BGAt4",
  "moves": [
   {
@@ -15,10 +15,7 @@
     "e4",
     "g6"
    ],
-   "spoken": "Black opens with the pawn to g6 — the Modern, not a French, though it will soon take on a French-shaped centre. Against it the plan is a broad pawn chain to blunt the fianchettoed bishop.",
-   "kind": "main",
-   "teaches": "1...g6 is the Modern Defense; meet it by building a big centre.",
-   "plans": "d4 and a c3 chain."
+   "spoken": "We take White; Black plays the Modern with ...g6."
   },
   {
    "ply": 4,
@@ -28,7 +25,7 @@
     "d4",
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We grab the centre with d4; Black fianchettoes with ...Bg7."
   },
   {
    "ply": 5,
@@ -37,10 +34,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 builds the chain, so the bishop on g7 is biting on granite — it stares at d4 but can't budge it. The one downside is that c3 denies the knight its natural c3-square; no problem, the knight simply develops to d2 instead.",
-   "kind": "main",
-   "teaches": "c3 blunts the fianchetto and hands the b1-knight a d2 route instead of c3.",
-   "plans": "c3, then Nbd2."
+   "spoken": "We play c3, a solid Advance-French-like setup."
   },
   {
    "ply": 6,
@@ -49,7 +43,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6."
   },
   {
    "ply": 7,
@@ -58,10 +52,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Just like in the London, once you've built the little pawn house you put the bishop in its hole — the bishop to d3. Try to get the dark-squared pieces sorted before that knight commits, and otherwise just develop naturally.",
-   "kind": "main",
-   "teaches": "Slot the bishop into the pawn-chain's hole and develop by principle.",
-   "plans": "Bd3, then complete development."
+   "spoken": "We develop the bishop to d3."
   },
   {
    "ply": 8,
@@ -70,7 +61,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black plays d5."
   },
   {
    "ply": 9,
@@ -79,10 +70,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black plays the pawn to d5, and closing with e5 is a no-brainer. The move to g6 already weakened all the dark squares, and shutting the centre makes those squares far easier to target — this becomes a French-style Advance with an extra hole on f6.",
-   "kind": "main",
-   "teaches": "Close the centre to fix the opponent's dark-square weaknesses in place.",
-   "plans": "e5, then play on the dark squares."
+   "spoken": "We lock the chain with e5."
   },
   {
    "ply": 10,
@@ -91,7 +79,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to e7."
   },
   {
    "ply": 11,
@@ -100,7 +88,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 12,
@@ -109,7 +97,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black strikes with c5."
   },
   {
    "ply": 13,
@@ -118,7 +106,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 14,
@@ -127,10 +115,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "When Black locks it further with the pawn to c4, that suits White perfectly — the queenside is sealed, the d4-pawn is under no real pressure, and White gets what amounts to a free hand to attack on the kingside.",
-   "kind": "main",
-   "teaches": "A closed queenside frees you to throw everything at the other wing.",
-   "plans": "Ignore c4, attack the kingside."
+   "spoken": "Black closes with ...c4."
   },
   {
    "ply": 15,
@@ -139,7 +124,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to c2."
   },
   {
    "ply": 16,
@@ -148,10 +133,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The attack will aim at the dark squares Black conceded — above all f6 and e5. The job now is to route the b1-knight toward those holes, and everything is arranged around getting it there.",
-   "kind": "main",
-   "teaches": "Plan a knight tour toward the opponent's key dark-square holes.",
-   "plans": "Maneuver the knight to f6/e5."
+   "spoken": "Black castles."
   },
   {
    "ply": 17,
@@ -160,10 +142,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "The rook to e1 looks odd, even bad — but its purpose is to vacate f1 for the knight. The route is knight to d2, to f1, then to e3 or g4, and on toward the f6-square.",
-   "kind": "main",
-   "teaches": "A quiet rook move can clear a path for a knight maneuver — look past the surface.",
-   "plans": "Re1, then Nd2-f1-e3."
+   "spoken": "We play the rook to e1."
   },
   {
    "ply": 18,
@@ -172,7 +151,7 @@
    "line": [
     "Nbc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 19,
@@ -181,7 +160,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 21,
@@ -191,7 +170,7 @@
     "Bd7",
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d7; we reroute the knight to f1."
   },
   {
    "ply": 22,
@@ -200,7 +179,7 @@
    "line": [
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "Black plants the knight on f5."
   },
   {
    "ply": 23,
@@ -209,10 +188,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The knight came to f5, and the bishop to g5 exploits its drawback: it hits the queen with tempo along the now-open diagonal, keeps the clamp on f6, and readies the pawn to g4 to chase the knight.",
-   "kind": "main",
-   "teaches": "Punish a knight sortie by developing with tempo while maintaining your grip on the key square.",
-   "plans": "Bg5, then g4 to harass."
+   "spoken": "We develop the bishop to g5, hitting the queen."
   },
   {
    "ply": 24,
@@ -221,7 +197,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with f6."
   },
   {
    "ply": 26,
@@ -231,7 +207,7 @@
     "exf6",
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "We take on f6; Black recaptures with the bishop."
   },
   {
    "ply": 27,
@@ -240,7 +216,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "We take the bishop on f6."
   },
   {
    "ply": 28,
@@ -249,10 +225,7 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": "Black's pawn to f6 does White's work: after the trades the e5-square becomes a gaping weakness. Occupy it with a knight, not a rook — a rook is a poor blockader — and there's no rush to do it.",
-   "kind": "main",
-   "teaches": "When the opponent trades off a defender, the vacated square is a permanent outpost; garrison it with a knight.",
-   "plans": "Aim a knight at e5."
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 29,
@@ -261,10 +234,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "The knight to e3 keeps to the plan, eyeing g4 and then the e5-outpost. Flexible, unhurried — the square isn't going anywhere.",
-   "kind": "main",
-   "teaches": "Reroute the knight step by step toward the outpost; flexibility beats haste.",
-   "plans": "Ne3-g4, then e5."
+   "spoken": "We reroute the knight to e3."
   },
   {
    "ply": 30,
@@ -273,7 +243,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black expands with b5."
   },
   {
    "ply": 31,
@@ -282,7 +252,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight to g4, hitting the queen."
   },
   {
    "ply": 32,
@@ -291,7 +261,7 @@
    "line": [
     "Qg7"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the queen to g7."
   },
   {
    "ply": 33,
@@ -300,10 +270,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "With total control of e5 there's no need to rush a piece onto it — nobody can contest it. Connect the rooks first, maybe double on the e-file, and stay patient; here the threat is stronger than the execution.",
-   "kind": "main",
-   "teaches": "When you own a square, improve elsewhere first — the threat to occupy it is often worth more than occupying it.",
-   "plans": "Connect rooks, keep e5 in reserve."
+   "spoken": "We bring the queen to d2."
   },
   {
    "ply": 34,
@@ -312,7 +279,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Black plays h5, stopping Ng4."
   },
   {
    "ply": 35,
@@ -321,7 +288,7 @@
    "line": [
     "Nge5"
    ],
-   "spoken": ""
+   "spoken": "We plant a knight on e5."
   },
   {
    "ply": 36,
@@ -330,7 +297,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e5."
   },
   {
    "ply": 37,
@@ -339,7 +306,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 38,
@@ -348,7 +315,7 @@
    "line": [
     "Be8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to e8."
   },
   {
    "ply": 39,
@@ -357,7 +324,7 @@
    "line": [
     "Re2"
    ],
-   "spoken": ""
+   "spoken": "We double on the e-file with the rook to e2."
   },
   {
    "ply": 40,
@@ -366,10 +333,7 @@
    "line": [
     "Nh6"
    ],
-   "spoken": "Before anything else, stop Black's one idea — the pawn to g5. The move to h4 does it; f4 would only weaken things by cutting the queen's diagonal. The h4 and g3 arrangement locks the kingside down.",
-   "kind": "main",
-   "teaches": "Prevent the opponent's only break; choose the restraining pawn move that doesn't weaken your own position.",
-   "plans": "h4 (not f4), then g3."
+   "spoken": "Black plays the knight to h6."
   },
   {
    "ply": 41,
@@ -378,7 +342,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "We play h4, prying at the kingside."
   },
   {
    "ply": 42,
@@ -387,7 +351,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Ng4."
   },
   {
    "ply": 43,
@@ -396,10 +360,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "Normally you'd keep the knight on e5, but concretely the capture on g4 transforms the advantage — the knight has done its job, and now the rook simply collects the pawn on e6, leaving White up material with that monster e5-square intact.",
-   "kind": "main",
-   "teaches": "Trade a dominating piece when the concrete line converts the positional edge into material.",
-   "plans": "Nxg4, then Rxe6."
+   "spoken": "We take the knight on g4."
   },
   {
    "ply": 45,
@@ -409,7 +370,7 @@
     "hxg4",
     "Rxe6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the h-pawn; we sacrifice on e6, ripping open the king."
   },
   {
    "ply": 46,
@@ -418,10 +379,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Don't reflexively retreat the rook — marinate on the position and remember the bishop kept on c2 all game. It rakes the diagonal toward h7, and that's why the rook can crash into g6 with decisive threats. Black resigns.",
-   "kind": "trap",
-   "teaches": "A quietly preserved bishop can be the piece that finishes — don't forget your long-diagonal attacker.",
-   "plans": "Rxg6 with the Bc2 battery."
+   "spoken": "Black returns the bishop to d7."
   },
   {
    "ply": 47,
@@ -430,7 +388,7 @@
    "line": [
     "Rxg6"
    ],
-   "spoken": ""
+   "spoken": "The rook grabs on g6."
   },
   {
    "ply": 46,
@@ -444,11 +402,7 @@
    "t": 535.5,
    "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
    "line": [],
-   "spoken": "For the record, this was the Modern Defense — Black delays the g8-knight and fianchettoes, a cousin of the Pirc, and the two frequently transpose. Here it simply melted into a French-shaped centre where the dark squares decided everything.",
-   "kind": "review",
-   "teaches": "The Modern and Pirc are related fianchetto systems that often transpose into structures like this.",
-   "plans": "Treat the resulting structure on its merits.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "videoId": "TPTu9YuBMwU",
  "title": "Master Class | King's Gambit Declined, C6?!! | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "King’s Gambit Declined",
+ "openingName": "King's Gambit Declined",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:TPTu9YuBMwU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We have Black and answer the king's-pawn with e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "White plays the pawn to f4 — the King's Gambit. There's an incredibly rare reply here, not the capture on f4, not d5, not the bishop to c5."
   },
   {
    "ply": 4,
@@ -33,9 +33,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "c6 is a provocative waiting move against the King's Gambit — it holds ...d5 back for one move, luring White to commit before Black strikes the center.",
-   "kind": "main",
-   "teaches": "A quiet waiting move can provoke the opponent into a committal setup before you counter."
+   "spoken": "The pawn to c6 — it looks completely insane, one of the rarest lines against the King's Gambit."
   },
   {
    "ply": 5,
@@ -44,7 +42,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3. The pawn to c6 is a waiting move on steroids — a souped-up Caro-Kann where White has badly weakened his kingside with f4."
   },
   {
    "ply": 6,
@@ -53,9 +51,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now d5 strikes the center — with White's knight already on f3, this counter hits e4 and prepares to seize a dominant pawn front.",
-   "kind": "main",
-   "teaches": "Time the central ...d5 break to hit the opponent's pawns once their pieces are committed."
+   "spoken": "The pawn to d5 — the whole point of c6, now that we've waited for the knight to commit to f3."
   },
   {
    "ply": 7,
@@ -64,7 +60,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "White captures on d5, walking right into it."
   },
   {
    "ply": 8,
@@ -73,9 +69,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "e4 is the key thrust — it drives the knight from f3, and after Black recovers the pawn he owns a huge, dominating center while White's king sits exposed.",
-   "kind": "main",
-   "teaches": "Gain tempo by attacking a knight with a pawn, then convert the space into a strong center."
+   "spoken": "The pawn to e4 — the f3-knight, far from productive, is now vulnerable. We recover the pawn and get a monster centre with White's king very weak."
   },
   {
    "ply": 9,
@@ -84,7 +78,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "White jumps the knight to e5."
   },
   {
    "ply": 10,
@@ -93,7 +87,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d5 — Black is in very good shape."
   },
   {
    "ply": 11,
@@ -102,7 +96,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "White gives a check with the bishop to b5 — how should we cover it?"
   },
   {
    "ply": 12,
@@ -111,7 +105,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "The knight to d7, not to c6 — and we hope White castles, a very common oversight."
   },
   {
    "ply": 13,
@@ -120,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles — the oversight, leaving loose pieces."
   },
   {
    "ply": 14,
@@ -129,7 +123,7 @@
    "line": [
     "Qb6+"
    ],
-   "spoken": ""
+   "spoken": "The queen to b6 with check! With f4 played, White is weak on the diagonal, and this wins the bishop and the game."
   },
   {
    "ply": 15,
@@ -138,7 +132,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays the pawn to d4."
   },
   {
    "ply": 16,
@@ -147,7 +141,7 @@
    "line": [
     "Qxb5"
    ],
-   "spoken": ""
+   "spoken": "We take the bishop — we could have captured en passant first, but it doesn't matter."
   },
   {
    "ply": 17,
@@ -156,7 +150,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to c3, keeping the centre closed. We're up a piece; now consolidate."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "The queen to a5 — the correct square, holding on to the pawn rather than the queen to d3."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to d2, x-raying the queen and threatening the knight to take e4 — not the knight to d5, which the queen would just capture."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "We cover the pin with the bishop to b4, preparing to remove the c3-knight."
   },
   {
    "ply": 22,
@@ -193,7 +187,7 @@
     "a3",
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "White plays a3 and we take on c3 — the simplest."
   },
   {
    "ply": 23,
@@ -202,7 +196,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on c3."
   },
   {
    "ply": 24,
@@ -211,7 +205,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Now we can safely retreat the queen to b6 — the d5-pawn no longer hangs, and we're up a full piece."
   },
   {
    "ply": 25,
@@ -220,7 +214,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to b4, resiliently — but it won't be enough."
   },
   {
    "ply": 26,
@@ -229,7 +223,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f6, completing development before worrying about dislodging the bishop."
   },
   {
    "ply": 27,
@@ -238,7 +232,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White plays the pawn to c4. We must be careful — the goal is to castle short, which solves all our problems."
   },
   {
    "ply": 28,
@@ -247,7 +241,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "We can't castle yet because of the b4-bishop, so we push the pawn to a5 to kick it out."
   },
   {
    "ply": 29,
@@ -256,7 +250,7 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": ""
+   "spoken": "White takes on d7. Which piece do we recapture with? Keep the prize in mind — castling — so we deny the bishop the c5-diagonal."
   },
   {
    "ply": 30,
@@ -265,28 +259,31 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight on d7 — it covers c5. Taking with the bishop, also winning, would let White's bishop park on c5 and delay our castling."
   },
   {
    "ply": 29,
    "t": 393,
    "fen": "r1b1k2r/1p1N1ppp/1q3n2/p2p4/1BPPpP2/P7/1P4PP/R2Q1RK1 b kq - 0 15",
    "line": [],
-   "spoken": ""
+   "spoken": "The clean conversion. The queen to c6 forces a queen trade — queens are poor at holding a position together, and an endgame a piece up needs no castling. Crucially, don't play the queen takes d4: up a piece, the priority is to consolidate, not grab pawns that open files for the opponent. Then the bishop to a6 pins the c4-pawn to the rook; the pawn to a4 is the Russian-school touch, keeping en passant ready against b4; we castle by hand, walking the king to f7 and e6, bring the rook in, and infiltrate down the a-file. The rook to c8 forces a rook trade or a passive retreat, we cut off White's king, double on the second rank, and finish by pushing the e-pawn or mating down the a-file.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 701,
    "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/4PP2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "Mate follows shortly.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 712,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The pawn to c6 is astonishingly rare — the main capture on f4 has over thirty thousand games, while c6 has barely forty.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -295,7 +292,8 @@
    "line": [
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "The capture on f4 is objectively best if you want to play the King's Gambit for an advantage.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -304,7 +302,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to f3, and there's a huge web of lines from here.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -313,7 +312,8 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "The knight to e7 is an interesting recent try, heading for g6.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -323,14 +323,16 @@
     "d4",
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "The knight to g6 plan gives Black a comfortable game — the traditional main line being the pawn to g5.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 805.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The pawn to g5 is fine but incredibly theoretical and sharp.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -339,7 +341,8 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "So the pawn to c6 is a good way to sidestep theory into an interesting position.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -348,7 +351,8 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "The capture on e5 is clearly bad because of the typical queen to h4 with check.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -357,14 +361,16 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": ""
+   "spoken": "The queen to h4 forks — check and a hit on the loose material.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 819.5,
    "fen": "rnbqkbnr/pp1p1ppp/2p5/4P3/4P3/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The knight to f3 is what most play; then the pawn to d5 is the whole idea, like a Falkbeer counter-gambit with the knight already on f3. The capture on d5 isn't correct; against the knight to c3, the capture on f4 gives Black the c6-square for the knight and a nice position. And remember: a lead in development is a dynamic, temporary advantage — once Black develops it equalizes — while White's surrendered f-pawn is a permanent kingside weakness, so the development lead can't be exploited when Black's king isn't weak and there are no targets.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -376,7 +382,8 @@
     "d5",
     "Nf4"
    ],
-   "spoken": ""
+   "spoken": "Hang on to the extra pawn in these lines — the best move is to take on e5 with the knight.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -385,7 +392,8 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "After the capture on e4 the complications begin.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -394,7 +402,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c4 comes.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -403,7 +412,8 @@
    "line": [
     "Nh6"
    ],
-   "spoken": ""
+   "spoken": "And Black has the nice knight to h6, defending the pawn.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -412,7 +422,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "If White simply castles, that move essentially loses.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -421,7 +432,8 @@
    "line": [
     "Qd4+"
    ],
-   "spoken": ""
+   "spoken": "The queen to d4 with check is tempting but does nothing, because the bishop on c4 is protected by the knight.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -430,7 +442,8 @@
    "line": [
     "Kh1"
    ],
-   "spoken": ""
+   "spoken": "White's king steps to h1.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -440,7 +453,8 @@
     "Qd8",
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "The queen retreats and White's king returns.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -449,35 +463,40 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Instead play the immediate pawn to f6 — the knight simply has nowhere to go. The queen to h5 with check looks scary, but White's initiative dissipates after the pawn to g6 and the capture on g6, thanks to a key intermezzo: the bishop to g4, getting the queen off its x-ray of the king, and then the game is over.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1087.5,
    "fen": "rnbqkbnr/pp3ppp/2p5/4P3/2B1pN2/8/PPPP2PP/RNBQK2R b KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Openings matter a lot at this level — you need to know concrete lines and have some weapons.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 1089.5,
    "fen": "rnbqkbnr/pp3ppp/2p5/3pP3/4PN2/8/PPPP2PP/RNBQKB1R b KQkq - 1 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Rare lines you can roll out to win quick games are part of improving here.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 1091,
    "fen": "rnbqkbnr/pp3ppp/2pp4/4P3/4P3/8/PPPP2PP/RNBQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "White played poorly. The bishop to b5 was fine, but castling was the decisive mistake — the pawn to d3 was the only way to hold. And on the technique point, the reason to avoid the queen takes d4: up a piece, grabbing pawns can open the c-file and hand counterplay, so trading queens into a clean extra piece is the better practical choice. There's even a brilliant grandmaster-level shot, the pawn to b5, which wins the bishop by breaking the pin, but it's not worth the risk when a simple consolidation wins.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 1538.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "On balance, the king's-pawn openings are far more theory-heavy than the Caro-Kann or the French, which are more manageable at the beginner-to-intermediate level.",
+   "reanchor": true
   }
  ]
 }

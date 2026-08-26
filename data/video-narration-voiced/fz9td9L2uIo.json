@@ -1,314 +1,311 @@
 {
- "videoId": "fz9td9L2uIo",
- "title": "Master Class | Caro-Kann Defense | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Caro-Kann Defense",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:fz9td9L2uIo",
- "moves": [
-  {
-   "ply": 3,
-   "t": 21.5,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "c4",
-    "c6",
-    "e4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 42.5,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 83,
-   "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "cxd5",
-    "cxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 86,
-   "fen": "rnbqkbnr/pp2pppp/8/3pP3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
-   "line": [
-    "e5"
-   ],
-   "spoken": "White pushes e5, locking the centre and handing Black an ideal French-style structure — but a French where the light-squared bishop is not yet shut in. The advanced pawn can be undermined at leisure.",
-   "kind": "main",
-   "teaches": "When White locks the centre with e5, get the light bishop OUTSIDE the pawn chain before playing e6."
-  },
-  {
-   "ply": 8,
-   "t": 144.5,
-   "fen": "r1bqkbnr/pp2pppp/2n5/3pP3/8/8/PP1P1PPP/RNBQKBNR w KQkq - 1 5",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 159,
-   "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
-   "line": [
-    "d4",
-    "Bf5"
-   ],
-   "spoken": "The bishop comes out to f5 before e6 would ever trap it — the one problem piece of the French, solved for free. Black already has an easy, comfortable game against the e5-pawn.",
-   "kind": "main",
-   "teaches": "Developing the light-squared bishop to f5 before e6 is Black's whole edge in these Advance structures.",
-   "plans": "Play e6, finish developing, and pile onto d4 and e5."
-  },
-  {
-   "ply": 11,
-   "t": 199.5,
-   "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 201.5,
-   "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 273,
-   "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 319,
-   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 345.5,
-   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
-   "line": [
-    "Be2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 406,
-   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
-   "line": [
-    "Nh6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 412,
-   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R b KQkq - 5 9",
-   "line": [
-    "Na4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 458,
-   "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R w KQkq - 6 10",
-   "line": [
-    "Qc7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 461,
-   "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 b kq - 7 10",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 463,
-   "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 w kq - 8 11",
-   "line": [
-    "Be7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 467,
-   "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP1BBPPP/R2Q1RK1 b kq - 9 11",
-   "line": [
-    "Bd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 471,
-   "fen": "r3k2r/ppq1bppp/2n1p1bn/3pP3/N2P4/5N2/PP1BBPPP/R2Q1RK1 w kq - 10 12",
-   "line": [
-    "Bg6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 473.5,
-   "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P4N2/1P1BBPPP/R2Q1RK1 w kq - 1 13",
-   "line": [
-    "a3",
-    "Nf5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 488,
-   "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 b kq - 2 13",
-   "line": [
-    "Be3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 519.5,
-   "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 3 14",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 531.5,
-   "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 b - - 4 14",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 551,
-   "fen": "r4rk1/ppq1b1pp/2n1ppb1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 w - - 0 15",
-   "line": [
-    "f6"
-   ],
-   "spoken": "The pawn to f6 strikes at the head of White's chain, prising open the centre and the f-file to get at the d4- and e5-pawns Black has been pressuring.",
-   "kind": "main",
-   "teaches": "Break a cramping pawn chain at its head with f6 to open lines onto its base."
-  },
-  {
-   "ply": 29,
-   "t": 556.5,
-   "fen": "r4rk1/ppq1b1pp/2n1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 b - - 1 15",
-   "line": [
-    "Nb5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 572.5,
-   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
-   "line": [
-    "Qb6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 624,
-   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 647,
-   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 648.5,
-   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 712.5,
-   "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
-   "line": [
-    "fxe5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 764,
-   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 779.5,
-   "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
-   "line": [
-    "fxe5"
-   ],
-   "spoken": "With the centre cracked open the pressure tells: White is overloaded. The knight on b5 is loose under the queen on b6, and taking on e5 also bares the bishop on e3 to the knight — two things hang at once and Black wins material.",
-   "kind": "main",
-   "teaches": "Converging pressure creates an overload — when two enemy pieces hang at the same moment, one of them falls."
-  },
-  {
-   "ply": 16,
-   "t": 1005.5,
-   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 1013,
-   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "fz9td9L2uIo",
+  "title": "Master Class | Caro-Kann Defense | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Caro-Kann Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:fz9td9L2uIo",
+  "moves": [
+    {
+      "ply": 3,
+      "t": 21.5,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "c4",
+        "c6",
+        "e4"
+      ],
+      "spoken": "We're Black, playing the Caro. c4 — the first time we see this move; White is clearly preparing to grab the d5-square as soon as possible."
+    },
+    {
+      "ply": 4,
+      "t": 42.5,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "But we still play d5 — very likely to transpose into the Panov Attack after the pawns trade and d4; White can also grab twice. Both variations likely lead to the same structure — the classic isolated queen's pawn."
+    },
+    {
+      "ply": 6,
+      "t": 83,
+      "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "cxd5",
+        "cxd5"
+      ],
+      "spoken": "The pawns trade on d5 — probably an IQP; the fact that he's thinking tells me he's maybe not too familiar with the Caro. Takes, takes, and e5."
+    },
+    {
+      "ply": 7,
+      "t": 86,
+      "fen": "rnbqkbnr/pp2pppp/8/3pP3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
+      "line": [
+        "e5"
+      ],
+      "spoken": "e5 is definitely not the way, for many reasons — one is that it gives us an ideal French. We'd normally bring the bishop to f5 and then e6, but no rush; we could also develop the knight to c6. There's the idea of d4, to prevent White's d4 and sever the connection between the d- and e-pawns —"
+    },
+    {
+      "ply": 8,
+      "t": 144.5,
+      "fen": "r1bqkbnr/pp2pppp/2n5/3pP3/8/8/PP1P1PPP/RNBQKBNR w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "— which also gives the bishop a nice square on c4, but let's not be too adventurous — the knight to c6 and the bishop to f5; no reason to refuse an ideal French setup handed to us like this."
+    },
+    {
+      "ply": 10,
+      "t": 159,
+      "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
+      "line": [
+        "d4",
+        "Bf5"
+      ],
+      "spoken": "The bishop to f5 — French players are completely in paradise: an Advanced French with the bishop on f5. One semi-drawback: in the French we'd have pawns fixed at c5 and c3, and here we've traded on d4 so the knight has a natural square on c3, but the bishop outside the pawn chain is no contest."
+    },
+    {
+      "ply": 11,
+      "t": 199.5,
+      "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The knight to c3. Black has a very comfortable position — I don't think Black is better, it's still equal, but White is the one who has to be careful his pawn chain doesn't collapse."
+    },
+    {
+      "ply": 12,
+      "t": 201.5,
+      "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Of course we play e6. Even with White’s pawn advanced to c3, there's also one advanced to c5 — they cancel; the presence of c5 and c3 doesn't make d4 any weaker or stronger, just one more attacker and defender, but Black holds the power, deciding when to take on d4, and White's queen's knight lacks the c3-square. g4 is interesting but not dangerous — we'd meet it with h5, and White overextends further."
+    },
+    {
+      "ply": 13,
+      "t": 273,
+      "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "The knight to f3 — he's a bit out of his depth, which is why the Caro or French can be effective at this level: not that they haven't seen it, just perhaps less well studied. Why not the knight to b4, threatening the knight to c2? Because the knight to b4 exposes the king to a check on b5 —"
+    },
+    {
+      "ply": 14,
+      "t": 319,
+      "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "— we don't want to bring the king up, so the queen to b6, just like in the French, putting significant pressure on the d4-pawn; the queen to a4 is the same concept, also forcing the knight back. Unlike the French, our bishop is on f5."
+    },
+    {
+      "ply": 15,
+      "t": 345.5,
+      "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "The one drawback, if you can call it that: we'll have to be creative developing the g8-knight, since in the French it often goes to f5, but the bishop is there. Two or three ways — the knight to h6, leaving room for the dark-squared bishop, then castle; or the knight to h6 or e7 and then a maneuver to vacate the f5-square for the knight. We'll do the bishop to g6 and the knight to f5."
+    },
+    {
+      "ply": 16,
+      "t": 406,
+      "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
+      "line": [
+        "Nh6"
+      ],
+      "spoken": "I like starting with either e7 or the knight to h6. With the knight to h6, you should be curious why I'm not afraid of the bishop takes h6 — I hope he takes, so I can demonstrate."
+    },
+    {
+      "ply": 17,
+      "t": 412,
+      "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R b KQkq - 5 9",
+      "line": [
+        "Na4"
+      ],
+      "spoken": "As I showed in my own game against a Peruvian grandmaster, it's not dangerous, because his dark-squared bishop is a very important defensive piece — without it the d4-pawn is much harder to defend and his position looser. The knight to a4 — fine; we can go the queen to a5 with check, but then the bishop to d2; the bishop to b4 with check looks good, but he just plays the bishop to d2, and trading dark-squared bishops isn't good for us."
+    },
+    {
+      "ply": 18,
+      "t": 458,
+      "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R w KQkq - 6 10",
+      "line": [
+        "Qc7"
+      ],
+      "spoken": "It's good if he trades his dark-squared bishop for our knight, but I want to keep a bishop. No need for anything crazy — just drop the queen back to c7."
+    },
+    {
+      "ply": 19,
+      "t": 461,
+      "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 b kq - 7 10",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "He castles."
+    },
+    {
+      "ply": 20,
+      "t": 463,
+      "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 w kq - 8 11",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "Let's begin by developing our bishop to e7."
+    },
+    {
+      "ply": 21,
+      "t": 467,
+      "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP1BBPPP/R2Q1RK1 b kq - 9 11",
+      "line": [
+        "Bd2"
+      ],
+      "spoken": "The bishop to d2."
+    },
+    {
+      "ply": 22,
+      "t": 471,
+      "fen": "r3k2r/ppq1bppp/2n1p1bn/3pP3/N2P4/5N2/PP1BBPPP/R2Q1RK1 w kq - 10 12",
+      "line": [
+        "Bg6"
+      ],
+      "spoken": "Now complete our regrouping — the bishop to g6, and then the knight to f5."
+    },
+    {
+      "ply": 24,
+      "t": 473.5,
+      "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P4N2/1P1BBPPP/R2Q1RK1 w kq - 1 13",
+      "line": [
+        "a3",
+        "Nf5"
+      ],
+      "spoken": "a3, and the knight to f5 — everything is in perfect place; our knight has a home, our bishop has a home, all our pieces are developed except our king. We're going to castle —"
+    },
+    {
+      "ply": 25,
+      "t": 488,
+      "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 b kq - 2 13",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "— and then embark on the middlegame. I have to compliment my opponent — he's handling this very well; not better for us, but a very comfortable position. Do we take on e3? No, for two reasons: that bishop isn't going anywhere, it'll be there for us to take later —"
+    },
+    {
+      "ply": 26,
+      "t": 519.5,
+      "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 3 14",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "— and why open the f-file for him, or eliminate a knight that's putting the d4-pawn under significant pressure? Instead let's begin by castling, the most flexible move. A very typical French idea follows —"
+    },
+    {
+      "ply": 27,
+      "t": 531.5,
+      "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 b - - 4 14",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "— the pressure has reached its apex; how do we take it to the next level? The move is f6."
+    },
+    {
+      "ply": 28,
+      "t": 551,
+      "fen": "r4rk1/ppq1b1pp/2n1ppb1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 w - - 0 15",
+      "line": [
+        "f6"
+      ],
+      "spoken": "f6, opening up the centre — there are some subtleties, but let's keep things simple."
+    },
+    {
+      "ply": 29,
+      "t": 556.5,
+      "fen": "r4rk1/ppq1b1pp/2n1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 b - - 1 15",
+      "line": [
+        "Nb5"
+      ],
+      "spoken": "The knight to b5, attacking the queen. Where should we go?"
+    },
+    {
+      "ply": 30,
+      "t": 572.5,
+      "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "We can go to b8, that's okay, but I like dragging the queen back to b6 — it pins the knight to the pawn and reinforces the pressure on d4; after the pawns take on f6 and the bishop recaptures, look how many of our pieces will be trained on that d4-pawn, his position close to collapsing. If he doesn't take, we play a6, or remember we can still take the bishop and then the pawn — that's why we held off."
+    },
+    {
+      "ply": 31,
+      "t": 624,
+      "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "So we hold that over his head. A very funny subtlety I just realized: after a6 and the knight to c3, is the knight takes b2 possible? I missed this at first — after a6, the knight to c3, taking, there's the pattern the knight to a4, and the rook to b1 blunders the knight on c3 —"
+    },
+    {
+      "ply": 30,
+      "t": 647,
+      "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
+      "line": [],
+      "spoken": "— a pin, since that knight would be hanging on c3; what I mean is the knight to a4 traps the queen, a puzzle-rush theme. He plays the bishop to d3, and now it's time to collect the harvest.",
+      "reanchor": true
+    },
+    {
+      "ply": 31,
+      "t": 648.5,
+      "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "In what order? The most obvious is to take on e5, and after the d-pawn recaptures, take the bishop, and his position collapses — the f-pawn takes e3, the queen recaptures, and we win at least a pawn, probably also a piece. But after the f-pawn takes e5, does White have the bishop takes f5? Let's calculate: the bishop takes f5, the bishop recaptures, and he takes back on e5 — is that good for White, or are we missing something? Takes, takes, takes — what happens at the end?",
+      "reanchor": true
+    },
+    {
+      "ply": 32,
+      "t": 712.5,
+      "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
+      "line": [
+        "fxe5"
+      ],
+      "spoken": "The knight on b5 is hanging — that's why it's so important to note all the undefended pieces; forgetting a piece hangs at the end of a line is one of the most common causes of miscalculation. Doesn't that give White an attack on the queen? No — the bishop is gone, and if White takes with the d-pawn, we take his bishop on e3 and his position collapses."
+    },
+    {
+      "ply": 31,
+      "t": 764,
+      "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+      "line": [],
+      "spoken": "So either he takes the knight to stop the knight takes c3, and his knight hangs, or he takes on e5 and allows the knight takes e3 — that's why I didn't want to play a6 first. This knight, though it may seem a bone in our throat, is actually a very big asset: it burdens White's defenders —",
+      "reanchor": true
+    },
+    {
+      "ply": 32,
+      "t": 779.5,
+      "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
+      "line": [
+        "fxe5"
+      ],
+      "spoken": "— it burdens the bishop, which is no longer free to do other things. White is busted. Opening the f-file is fine, since we also have an open rook — it's a moot point; we're winning a piece, and concrete gains outweigh a positional advantage like the f-file.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 1005.5,
+      "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
+      "line": [],
+      "spoken": "On the earlier question about blocking pieces — the possibility of the knight to e7 —",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 1013,
+      "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
+      "line": [],
+      "spoken": "— there's a place where blocking is fine versus not. Let's have a look at the game. We had a Caro, c6, d4, and c4 is reasonable, but after the pawns trade —",
+      "reanchor": true
+    }
+  ]
 }

@@ -1,0 +1,375 @@
+{
+ "videoId": "kO23hnArI4Y",
+ "title": "Winning with Strategy!! | Closed Sicilian | GM Naroditsky's Theory Speed Run",
+ "openingName": "Closed Sicilian / Rossolimo (accelerated-Dragon setup)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:kO23hnArI4Y",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 56,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 59.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Below about 1500 almost nobody plays the open Sicilian. The knight to c3 is the gateway to all the anti-Sicilians — the Closed Sicilian, the Grand Prix with an early f-pawn push, and the bishop-to-b5 lines.",
+   "kind": "main",
+   "teaches": [
+    "Nc3 as the anti-Sicilian hub"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 93.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "We answer with the knight to c6. The reason is move-order safety: White could still play the king's knight and steer us into a Sicilian we don't play, and this keeps our accelerated-Dragon transposition available.",
+   "kind": "main",
+   "teaches": [
+    "move-order safety"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 98,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5, the Rossolimo idea — a Ruy Lopez against the Sicilian, and the recommendation in a lot of anti-Sicilian books.",
+   "kind": "main",
+   "teaches": [
+    "the Rossolimo bishop"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 111.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 5 4",
+   "line": [
+    "Nb8",
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 138,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 6 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 151,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 7 5",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 175,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The book move against the bishop is the knight to d4, mirroring the Trompowsky motif on the other wing. But to dodge theory we play the immediate g6, simply setting up the accelerated-Dragon structure against this slightly different move order.",
+   "kind": "main",
+   "teaches": [
+    "sidestep theory with g6"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 194.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2B3p1/2p5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "After g6, White takes on c6. Recapturing with the b-pawn damages the structure visually, but look at the compensation: the bishop pair, the half-open b-file, early access to the d5-break, and solid central control. A fine practical bargain — theory calls White a touch better, but this dodges a mountain of preparation.",
+   "kind": "plan",
+   "teaches": [
+    "structure for the bishop pair"
+   ]
+  },
+  {
+   "ply": 2,
+   "t": 199,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "Now the strategic heart of the game — an underrated plan against this Grand-Prix-style setup, taught to me years ago. The knight goes to h6, and the point is not to head for g4, where a rook-pawn push just chases it back. It's to prepare f5. Striking with f5 freezes White's advanced f-pawn, contests the kingside, and denies White the f5 break — and without that break White's dark-squared bishop has no natural home, while the queen wants to swing over to h4 to hunt our king. So strike with f5 at once, before White can expand and trap the knight. Objectively we're a shade worse, but White has to solve the central tension perfectly: capturing on f5 would be terrible for him, releasing the tension so our knight leaps back into the game. Then we reroute the knight from h6 to f7 — a real home controlling the centre, and baiting a premature e5 that would just become a weakness. The bishop pair loves an opening position, and White's queen's knight is a chronic target that ties his pieces down. From there the plan is a King's-Indian-style pawn storm — g5, h5, then g4 — and you accept giving up the whole queenside if you must, because in a race like this you have no time to defend it; the fianchettoed bishop supports both our king and the storm. Make the least committal moves first to keep your options open, use the bishop to chase the queen off h5, and if White's queen ever strays there's a bishop-to-f7 trap waiting.",
+   "kind": "plan",
+   "teaches": [
+    "the Nh6-f7 anti-Grand-Prix plan",
+    "close the centre to attack the wing",
+    "King’s-Indian pawn storm",
+    "sacrifice a flank for the attack",
+    "least-committal moves first"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 2070.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2072.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2075,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 4 4",
+   "line": [
+    "Nb1",
+    "Nb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2077.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 5 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "After the game, why the knight to c3 is such a tricky move to face.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2087.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2090,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Say you're an accelerated-Dragon player who learned from a book that d6 is best here. Now White plays the king's knight and you've been 'move-ordered' — dragged into an open Sicilian you don't actually play.",
+   "kind": "review",
+   "teaches": [
+    "the move-order trap explained"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 2101,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "A Najdorf-style player shrugs and plays the knight to f6 into the open Sicilian they know. But an accelerated-Dragon player has a problem to solve.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 2103,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2105,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2106,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2110.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2112.5,
+   "fen": "rnbqkbnr/pp3ppp/3p4/2p1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The only way to stop d4 outright is to play e5 — but it should be self-evident why that's bad: it hands over key central squares.",
+   "kind": "review",
+   "teaches": [
+    "why e5 weakens the centre"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 2116.5,
+   "fen": "rnbqkbnr/pp3ppp/3p4/2p1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2120.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2122,
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "Nf3",
+    "e5"
+   ],
+   "spoken": "There is a legitimate e5 line here with plenty of grandmaster games, but it's positionally dubious — not something to recommend to a beginner or intermediate.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 2145,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2147,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "spoken": "So the whole point: your move-two choice depends on what you play against the open Sicilian. As accelerated-Dragon players we play the knight to c6, meet the king's knight with g6, and after d4 we're perfectly comfortable.",
+   "kind": "review",
+   "teaches": [
+    "choose by your open-Sicilian repertoire"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 2148.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2149.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2152,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2191.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2198.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2204.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2206,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2213,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2214.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

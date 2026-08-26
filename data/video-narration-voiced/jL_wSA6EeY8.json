@@ -1,0 +1,259 @@
+{
+ "videoId": "jL_wSA6EeY8",
+ "title": "Attacking The Scandi Kingside | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Scandinavian Defense (with an early a6)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:jL_wSA6EeY8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/1ppppppp/p7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 20.5,
+   "fen": "rnbqkbnr/1ppppppp/p7/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 23,
+   "fen": "rnbqkbnr/1pp1pppp/p7/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 35,
+   "fen": "rnbqkbnr/1pp1pppp/p7/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "It's a Scandinavian, just dressed up with an early a6 — not that bad, but our strategy doesn't change. We capture and treat it like a normal Scandi.",
+   "kind": "main",
+   "teaches": [
+    "treat the a6 Scandi normally"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 37.5,
+   "fen": "rnb1kbnr/1pp1pppp/p7/3q4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 43.5,
+   "fen": "rnb1kbnr/1pp1pppp/p7/3q4/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "With the d-pawn already advanced we simply develop the knight to c3, gaining a tempo on the exposed queen — exactly as in the main Scandinavian.",
+   "kind": "main",
+   "teaches": [
+    "develop with tempo"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 49,
+   "fen": "rnbqkbnr/1pp1pppp/p7/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": "One subtlety: Black's idea may be b5. You can always meet b5 with a4, softening the queenside pawns — or develop the bishop to c4 first, before b5 ever arrives.",
+   "kind": "plan",
+   "teaches": [
+    "meeting b5 with a4"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 83.5,
+   "fen": "rnbqkbnr/1pp1pppp/p7/8/2BP4/2N5/PPP2PPP/R1BQK1NR b KQkq - 3 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 develops and lays a trap: if Black grabs space with b5, there's a crushing tactic waiting — a very common mistake at this level.",
+   "kind": "main",
+   "teaches": [
+    "Bc4 sets a trap"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 92,
+   "fen": "r1bqkbnr/1pp1pppp/p1n5/8/2BP4/2N5/PPP2PPP/R1BQK1NR w KQkq - 4 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 is a touch odd because it invites d5. But d5 isn't as good as it looks — it blocks the very bishop we just developed, and pushing the pawn weakens a square the knight can hop into on e5. Better to just keep developing.",
+   "teaches": [
+    "do not push into your own bishop"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 116,
+   "fen": "r1bqkbnr/1pp1pppp/p1n5/8/2BP4/2N2N2/PPP2PPP/R1BQK2R b KQkq - 5 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "So the knight comes to f3. Note that a bishop sortie to g4 here would be a blunder — the sacrifice on f7 with check refutes it, and it must be that capture first, not the knight jump, which only draws.",
+   "kind": "main",
+   "teaches": [
+    "the Bxf7+ refutation"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 122,
+   "fen": "r2qkbnr/1pp1pppp/p1n5/8/2BP2b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 6 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 131,
+   "fen": "r2qkbnr/1pp1pBpp/p1n5/8/3P2b1/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "So we crash on f7 with check. The king loses castling rights and the whole kingside is wrecked — well worth it, even though the d4-pawn will hang at the very end, so this isn't the usual clean win.",
+   "kind": "main",
+   "teaches": [
+    "sacrifice to strip the king"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 136.5,
+   "fen": "r2q1bnr/1pp1pkpp/p1n5/8/3P2b1/2N2N2/PPP2PPP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 137.5,
+   "fen": "r2q1bnr/1pp1pkpp/p1n5/6N1/3P2b1/2N5/PPP2PPP/R1BQK2R b KQ - 1 8",
+   "line": [
+    "Ng5+"
+   ],
+   "spoken": "The knight comes to g5 with check, driving the exposed king.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 158,
+   "fen": "r2qkb1r/1pp1p1pp/p1n2n2/6N1/3P2Q1/2N5/PPP2PPP/R1B1K2R w KQ - 1 10",
+   "line": [
+    "Ke8",
+    "Qxg4",
+    "Nf6"
+   ],
+   "spoken": "Queen and knight are the strongest attacking tandem in chess, so the usual 'let the queen support from behind' rule bends here. The queen to e6 is the move — it eyes a landing on f7. We even allow the knight to grab d4 with tempo; it doesn't matter, the queen is going to f7 regardless.",
+   "kind": "plan",
+   "teaches": [
+    "queen-and-knight tandem",
+    "the queen infiltration"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 213,
+   "fen": "r2qkb1r/1pp1p1pp/p3Qn2/6N1/3n4/2N5/PPP2PPP/R1B1K2R w KQ - 0 11",
+   "line": [
+    "Qe6",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 218.5,
+   "fen": "r2q1b1r/1ppkpQpp/p4n2/6N1/3n4/2N5/PPP2PPP/R1B1K2R w KQ - 2 12",
+   "line": [
+    "Qf7+",
+    "Kd7"
+   ],
+   "spoken": "After the king runs to d7, Black threatens to grab on c2. Do we bend over backwards to defend it? Absolutely not — the cleanest, most elegant move is to castle, straight out of the fork, preparing the rook to d1. The c2-grab then simply loses to a rook check on d1 with a skewer. When you do play the rook to d1, watch the weak back rank for discoveries, but the knight-to-e2 check is harmless — the king steps to f1, hitting the queen, and it's over. And when converting, keep completing development — the Russian-school habit of bringing every piece in, even when you're up a queen — then the back-rank mating net with the bishop on b6 finishes it.",
+   "kind": "plan",
+   "teaches": [
+    "castle out of a fork",
+    "skewer defence",
+    "finish development when winning",
+    "back-rank mate pattern"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 497,
+   "fen": "rnbqkbnr/1ppppppp/p7/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "A limitation of the speedrun is that these games get won straight out of the opening — but genuinely, every move here was natural, nothing exotic.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 518.5,
+   "fen": "rnb1kbnr/1pp1pppp/p7/3q4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5",
+    "exd5",
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 520.5,
+   "fen": "rnbqkbnr/1ppppppp/p7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 521.5,
+   "fen": "rnbqkbnr/1ppppppp/p7/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 522.5,
+   "fen": "rnbqkbnr/2pppppp/p7/1p6/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "b5"
+   ],
+   "spoken": "The proper way to handle Black's setup is b5 — the a6-and-b5 idea is legitimate, not as bad as its reputation. Karpov famously lost a classical game to Tony Miles from this very opening; White is clearly better, but proving a huge advantage isn't so easy.",
+   "kind": "review",
+   "teaches": [
+    "the St. George / Miles history"
+   ],
+   "reanchor": true
+  }
+ ]
+}

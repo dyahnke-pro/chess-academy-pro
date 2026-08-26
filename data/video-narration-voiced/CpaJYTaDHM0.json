@@ -1,10 +1,10 @@
 {
  "videoId": "CpaJYTaDHM0",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2021",
- "openingName": "Ruy Lopez, Berlin Defense",
+ "openingName": "Ruy Lopez: Steinitz Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:CpaJYTaDHM0",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We open another e4 game."
   },
   {
    "ply": 3,
@@ -34,9 +34,7 @@
     "Nc6",
     "Bb5"
    ],
-   "spoken": "Bishop to b5 is the Ruy Lopez — pinning pressure on the c6-knight that guards e5, the most respected weapon against 1.e4 e5.",
-   "kind": "main",
-   "teaches": "The Ruy pressures the knight defending e5 to slowly undermine Black's center."
+   "spoken": "The knight develops to f3, Black answers with the knight to c6, and we pin with the bishop to b5 — the Ruy Lopez, our main weapon."
   },
   {
    "ply": 6,
@@ -45,7 +43,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to f6 — the Berlin."
   },
   {
    "ply": 7,
@@ -54,7 +52,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "There are many ways to face the Berlin, but we go straight in — heading for the Berlin endgame, to show it's more than a draw."
   },
   {
    "ply": 8,
@@ -63,7 +61,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black declines the Berlin endgame with ...d6 — passive, but a legitimate Steinitz Defence."
   },
   {
    "ply": 9,
@@ -72,9 +70,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 strikes the center at once — against Black's passive ...d6 Berlin, opening lines exploits the lag rather than allowing a slow, solid setup.",
-   "kind": "main",
-   "teaches": "Open the center against a passive defense to make your development lead count."
+   "spoken": "Previously we'd prepare with c3; now, at a higher level, we play the more topical immediate d4."
   },
   {
    "ply": 10,
@@ -83,7 +79,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4. We open the centre precisely because Black has played passively."
   },
   {
    "ply": 11,
@@ -92,7 +88,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 12,
@@ -101,7 +97,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d7."
   },
   {
    "ply": 13,
@@ -110,7 +106,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, opening things up to press our lead in development."
   },
   {
    "ply": 14,
@@ -119,7 +115,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to e7."
   },
   {
    "ply": 15,
@@ -128,9 +124,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "Capturing on c6 keeps the knight proudly centralized on d4 while saddling Black with doubled, damaged queenside pawns — a lasting structural plus.",
-   "kind": "main",
-   "teaches": "Trade bishop for knight to inflict permanent pawn weaknesses while keeping your best piece."
+   "spoken": "Theory says take on c6 with the bishop, keeping our knight strongly centralized."
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the b-pawn, taking a defect into his queenside structure. Now the point: Black wants ...c5 to kick our knight, and we'd love to answer with the knight to f5 — but playing it right now lets Black trade it, and recapturing with a pawn would wreck our kingside and pull a pawn from the centre; b4 would be artificial. We don't need to prevent ...c5 at all — we prepare our response to it. Prophylaxis cuts both ways: you can stop a move, or ready an answer to it. The queen to f3 is best — it improves a piece and readies the knight to f5 the moment ...c5 arrives."
   }
  ]
 }

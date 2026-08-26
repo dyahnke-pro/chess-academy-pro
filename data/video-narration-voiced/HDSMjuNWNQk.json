@@ -1,0 +1,299 @@
+{
+ "videoId": "HDSMjuNWNQk",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2200",
+ "openingName": "Jobava London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:HDSMjuNWNQk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 54,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 55.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 58,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "Nf6",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 59.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 68.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London, and my main opening.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 80.5,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 is already a small inaccuracy, because it opens a square the knight will jump into.",
+   "kind": "main",
+   "teaches": "In the Jobava, an early ...e6 invites the Nb5 leap — watch for it."
+  },
+  {
+   "ply": 9,
+   "t": 96.5,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/1Npp4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": "Nb5 — a fried-liver-style leap transposed to the other wing. The point isn't to win the rook with a fork; it's to plant a maddening knight that Black can't easily remove.",
+   "kind": "main",
+   "teaches": "A knight jump like Nb5 is worth it for the lasting outpost, not just the tactic behind it."
+  },
+  {
+   "ply": 10,
+   "t": 100.5,
+   "fen": "r1bqkb1r/pp3ppp/n3pn2/1Npp4/3P1B2/4P3/PPP2PPP/R2QKBNR w KQkq - 2 6",
+   "line": [
+    "Na6"
+   ],
+   "spoken": "After Na6 the knight on a6 is stuck out of play, and Black can't kick the b5-knight with a pawn — so we calmly develop the other side.",
+   "kind": "main",
+   "teaches": "Provoke a defender to an offside square, then develop while it languishes."
+  },
+  {
+   "ply": 11,
+   "t": 108,
+   "fen": "r1bqkb1r/pp3ppp/n3pn2/1Npp4/3P1B2/4PN2/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 112.5,
+   "fen": "r1bqk2r/pp2bppp/n3pn2/1Npp4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 114,
+   "fen": "r1bqk2r/pp2bppp/n3pn2/1Npp4/3P1B2/2P1PN2/PP3PPP/R2QKB1R b KQkq - 0 7",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 in true London style, making sure the centre pawn is rock-solid before anything else.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 116.5,
+   "fen": "r1bq1rk1/pp2bppp/n3pn2/1Npp4/3P1B2/2P1PN2/PP3PPP/R2QKB1R w KQ - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 129,
+   "fen": "r1bq1rk1/pp2bppp/n3pn2/1Npp4/3P1B2/2PBPN2/PP3PPP/R2QK2R b KQ - 2 8",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop goes to d3 rather than e2 — both are fine, but d3 is a touch more active.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 131.5,
+   "fen": "r2q1rk1/pp1bbppp/n3pn2/1Npp4/3P1B2/2PBPN2/PP3PPP/R2QK2R w KQ - 3 9",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Careful now: castling immediately would drop a piece to c4, which severs the knight from the bishop's defense.",
+   "kind": "main",
+   "teaches": "Before castling, check the opponent can't fork away the defender of one of your pieces."
+  },
+  {
+   "ply": 17,
+   "t": 145.5,
+   "fen": "r2q1rk1/pp1bbppp/n3pn2/1Npp4/P2P1B2/2PBPN2/1P3PPP/R2QK2R b KQ - 0 9",
+   "line": [
+    "a4"
+   ],
+   "spoken": "Support the knight with a4 — a pawn, because pawns are the best defenders of a piece.",
+   "kind": "main",
+   "teaches": "Whenever possible, prop up an advanced piece with a pawn rather than another piece."
+  },
+  {
+   "ply": 18,
+   "t": 158.5,
+   "fen": "r2q1rk1/pp1bbppp/n3pn2/1N1p4/P1pP1B2/2PBPN2/1P3PPP/R2QK2R w KQ - 0 10",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 160,
+   "fen": "r2q1rk1/pp1bbppp/n3pn2/1N1p4/P1pP1B2/2P1PN2/1PB2PPP/R2QK2R b KQ - 1 10",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": "And be ready to give the whole thing up: drop the bishop to c2, don't move the knight, and simply let Black take it — the compensation is real.",
+   "kind": "main",
+   "teaches": "In a gambit-flavored position, offer the piece rather than retreat it; activity is the payment."
+  },
+  {
+   "ply": 20,
+   "t": 163,
+   "fen": "r2q1rk1/pp2bppp/n3pn2/1b1p4/P1pP1B2/2P1PN2/1PB2PPP/R2QK2R w KQ - 0 11",
+   "line": [
+    "Bxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 164.5,
+   "fen": "r2q1rk1/pp2bppp/n3pn2/1P1p4/2pP1B2/2P1PN2/1PB2PPP/R2QK2R b KQ - 0 11",
+   "line": [
+    "axb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 167,
+   "fen": "r2q1rk1/ppn1bppp/4pn2/1P1p4/2pP1B2/2P1PN2/1PB2PPP/R2QK2R w KQ - 1 12",
+   "line": [
+    "Nc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 200.5,
+   "fen": "r2q1rk1/ppn1bppp/1P2pn2/3p4/2pP1B2/2P1PN2/1PB2PPP/R2QK2R b KQ - 0 12",
+   "line": [
+    "b6"
+   ],
+   "spoken": "The clever b6 pawn sacrifice forces his knight offside to a8, buying us time — his knight now has to trek all the way back into the game.",
+   "kind": "main",
+   "teaches": "Sacrifice a pawn to shove an enemy piece to the corner; the tempi it loses are your compensation."
+  },
+  {
+   "ply": 25,
+   "t": 205,
+   "fen": "R2q1rk1/1pn1bppp/1p2pn2/3p4/2pP1B2/2P1PN2/1PB2PPP/3QK2R b K - 0 13",
+   "line": [
+    "axb6",
+    "Rxa8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 207.5,
+   "fen": "n2q1rk1/1p2bppp/1p2pn2/3p4/2pP1B2/2P1PN2/1PB2PPP/3QK2R w K - 0 14",
+   "line": [
+    "Nxa8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 210.5,
+   "fen": "n2q1rk1/1p2bppp/1p2pn2/3p4/2pP1B2/2P1PN2/1PB2PPP/3Q1RK1 b - - 1 14",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "While his knight is exiled, we complete development and start piling onto the king, combined with pressure down the a-file.",
+   "kind": "plan",
+   "plans": "Finish developing, then attack the king and the a-file together."
+  },
+  {
+   "ply": 28,
+   "t": 221,
+   "fen": "n2q1rk1/1p2bppp/4pn2/1p1p4/2pP1B2/2P1PN2/1PB2PPP/3Q1RK1 w - - 0 15",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 226,
+   "fen": "n2q1rk1/1p2bppp/4pn2/1p1pN3/2pP1B2/2P1P3/1PB2PPP/3Q1RK1 b - - 1 15",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "Ne5 centralizes the knight on its best square while his own knight is still marooned on a8.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 237.5,
+   "fen": "3q1rk1/1p2bppp/1n2pn2/1p1pN3/2pP1B2/2P1P3/1PB2PPP/3Q1RK1 w - - 2 16",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 252.5,
+   "fen": "3q1rk1/1p2bppp/1n2pn2/1p1pN3/2pP1BP1/2P1P3/1PB2P1P/3Q1RK1 b - - 0 16",
+   "line": [
+    "g4"
+   ],
+   "spoken": "g4 launches the attack — we have to use this window before Black reroutes his pieces to the queenside.",
+   "kind": "main",
+   "teaches": "When you're ahead in development, strike before the opponent untangles."
+  },
+  {
+   "ply": 32,
+   "t": 258,
+   "fen": "3q1rk1/1p1nbppp/1n2p3/1p1pN3/2pP1BP1/2P1P3/1PB2P1P/3Q1RK1 w - - 1 17",
+   "line": [
+    "Nfd7"
+   ],
+   "spoken": "Bring the queen in with Qf3, keep the a-file with Ra1, and prepare e4 to blow the centre open — tighten the noose from every side.",
+   "kind": "plan",
+   "plans": "Qf3 and Ra1, then e4 to open lines against the king."
+  }
+ ]
+}

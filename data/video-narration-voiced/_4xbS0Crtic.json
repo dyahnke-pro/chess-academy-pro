@@ -1,0 +1,648 @@
+{
+ "videoId": "_4xbS0Crtic",
+ "title": "Master Class | No Stafford's For Danya! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Scotch Game",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:_4xbS0Crtic",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 17,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 24.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 33.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 45,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 56,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 66.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b5/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 68.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "This is a Scotch where the queen's knight was never committed — an odd but pleasant version, with the bishop already leaning on the centre. The most ambitious choice isn't a quiet developing move but to castle: it keeps a central break in reserve for the right moment, and it readies a rook to pile onto the weak e-pawn.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 143,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 234,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R b KQ - 2 6",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 263,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R w KQ - 3 7",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Press the luck — the rook swings to e8 to attack the weak pawn. If the opponent props it with the f-pawn, that's a huge concession, weakening the diagonal and inviting a central strike.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 272,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b3B1/3NP3/2N5/PPP1BPPP/R2QK2R b KQ - 4 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 283,
+   "fen": "rnbqr1k1/pppp1pp1/5n1p/2b3B1/3NP3/2N5/PPP1BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 286.5,
+   "fen": "rnbqr1k1/pppp1pp1/5n1p/2b5/3NP2B/2N5/PPP1BPPP/R2QK2R b KQ - 1 8",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": "When the bishop pins to defend the pawn indirectly and then retreats, the real question is whether to grab the pawn with a further push that weakens the king — so weigh it concretely. The verdict is yes: it's a valuable central pawn, and the calculation holds up, because after the dust settles the enemy knight hangs and the king is still stuck in the centre, tied up, buying the time to consolidate. That's the judgement: a concrete line, not a general rule, decides it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 350.5,
+   "fen": "rnbqr1k1/pppp1p2/5n1p/2b3p1/3NP2B/2N5/PPP1BPPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 352.5,
+   "fen": "rnbqr1k1/pppp1p2/5n1p/2b3p1/3NP3/2N3B1/PPP1BPPP/R2QK2R b KQ - 1 9",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 377,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b3p1/3Nn3/2N3B1/PPP1BPPP/R2QK2R w KQ - 0 10",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "A tactic to watch for in the resulting position — a knight leap to f5 becomes possible precisely because the central pawn hasn't moved yet, so that square isn't yet under control. Always check which squares your own un-played pawns are leaving open.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 19,
+   "t": 399,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b2Np1/4n3/2N3B1/PPP1BPPP/R2QK2R b KQ - 1 10",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": "Don't snatch the bishop — the recapture would open a file and hand the opponent pressure. Instead the knight captures on c3, and the in-between check doesn't work because the king simply steps up and wins the piece back. Calculate the zwischenzug one step further before trusting it.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 20,
+   "t": 476,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b2Np1/8/2n3B1/PPP1BPPP/R2QK2R w KQ - 0 11",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 486.5,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b2Np1/8/2P3B1/P1P1BPPP/R2QK2R b KQ - 0 11",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 492,
+   "fen": "rnb1r1k1/pppp1p2/5q1p/2b2Np1/8/2P3B1/P1P1BPPP/R2QK2R w KQ - 1 12",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "The queen to f6 does triple duty — attacking, defending, and eyeing threats at once. And if the opponent lunges the queen out, the central pawn advances to shove the knight back, and the position is officially consolidated.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 522,
+   "fen": "rnb1r1k1/pppp1p2/5q1p/2b3p1/3N4/2P3B1/P1P1BPPP/R2QK2R b KQ - 2 12",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 543.5,
+   "fen": "r1b1r1k1/pppp1p2/2n2q1p/2b3p1/3N4/2P3B1/P1P1BPPP/R2QK2R w KQ - 3 13",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Rather than the automatic pawn move, develop as incisively as possible — with threats. The knight to c6 piles onto the enemy knight immediately, and if it's captured, a recapture leaves a piece hanging. Develop while harassing, not just developing.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 557,
+   "fen": "r1b1r1k1/pppp1p2/2n2q1p/2b3p1/3N4/2P3B1/P1P1BPPP/R2Q1RK1 b - - 4 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 577,
+   "fen": "r1b1r1k1/pppp1p2/5q1p/2b3p1/3n4/2P3B1/P1P1BPPP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "When there's a choice of recaptures, take with the knight rather than the queen — keeping the dark-squared bishop, because bishops guard weak squares better than knights do. Grabbing with the queen would tempt a trade but creates no threat and lets a pawn fall.",
+   "kind": "plan"
+  },
+  {
+   "ply": 27,
+   "t": 579.5,
+   "fen": "r1b1r1k1/pppp1p2/5q1p/2b3p1/3P4/6B1/P1P1BPPP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 592,
+   "fen": "r1b1r1k1/pppp1p2/5q1p/6p1/3b4/6B1/P1P1BPPP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 601.5,
+   "fen": "r1b1r1k1/pppp1p2/5q1p/6p1/3b4/6B1/P1P1BPPP/1R1Q1RK1 b - - 1 15",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 604.5,
+   "fen": "r1b1r1k1/ppp2p2/3p1q1p/6p1/3b4/6B1/P1P1BPPP/1R1Q1RK1 w - - 0 16",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Only now, once the pressure has done its work, is it time for the modest pawn to d6 — the king is still a touch airy, so a couple of consolidating moves finish the job and leave an excellent position.",
+   "kind": "plan"
+  },
+  {
+   "ply": 31,
+   "t": 635.5,
+   "fen": "r1b1r1k1/ppp2p2/3p1q1p/6p1/3b4/5BB1/P1P2PPP/1R1Q1RK1 b - - 1 16",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 652,
+   "fen": "r1b1r1k1/pp3p2/2pp1q1p/6p1/3b4/5BB1/P1P2PPP/1R1Q1RK1 w - - 0 17",
+   "line": [
+    "c6"
+   ],
+   "spoken": "When the bishop attacks the pawn, the passive rook retreat ties a heavy piece to defence — better is a pawn to c6, building a chain so the bishop just bites on granite, with a further central expansion to follow.",
+   "kind": "plan"
+  },
+  {
+   "ply": 31,
+   "t": 678.5,
+   "fen": "r1b1r1k1/ppp2p2/3p1q1p/6p1/3b4/5BB1/P1P2PPP/1R1Q1RK1 b - - 1 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 681.5,
+   "fen": "r1b1r1k1/pp3p2/2pp1q1p/6p1/3b4/5BB1/P1P2PPP/1R1Q1RK1 w - - 0 17",
+   "line": [
+    "c6"
+   ],
+   "spoken": "A cluster of technique here. Instead of shackling a rook to defend a pawn, remember you can intercept the attackers — a rook to e7 both guards the pawn and prepares to double, better still. Double and trade on your own terms. And before committing, ask the honest question — what happens if I just do it anyway? Here that reveals the killer: with a pawn already on g5, the opponent's bishop has no retreat, so a pawn thrust to g4 traps it outright. That's pure pattern recognition — the very trap a young world-champion-to-be once famously missed in an Alekhine, earning himself the nickname of that move. Studying such games is how the shot becomes instinctive.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1070.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1072,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1073.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1075,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 1 6",
+   "line": [
+    "exd4",
+    "Nxd4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1080.5,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/2BNP3/2N5/PPP2PPP/R1BQK2R b KQ - 2 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1084.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 3 7",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1086.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/2BNP3/2N5/PPP2PPP/R1BQ1RK1 b - - 4 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1088.5,
+   "fen": "rnbqr1k1/pppp1ppp/8/2b5/2BNn3/2N5/PPP2PPP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1108,
+   "fen": "rnbqr3/pppp1kpp/8/2b5/3Nn3/2N5/PPP2PPP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "Bxf7+",
+    "Kxf7"
+   ],
+   "spoken": "A tactical footnote from the analysis — a bishop sacrifice on f7 followed by the king's exposure, exactly the kind of idea an Italian player should recognise, opens the way to regain the material with interest.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1110,
+   "fen": "rnbqr3/pppp1kpp/8/2b5/3NN3/8/PPP2PPP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1114,
+   "fen": "rnbq4/pppp1kpp/8/2b5/3Nr3/8/PPP2PPP/R1BQ1RK1 w - - 0 10",
+   "line": [
+    "Rxe4"
+   ],
+   "spoken": "And a trap in that line to avoid: the popular wrong answer thinks it wins a rook, but calculating one move further, a queen move gathers two pieces for the rook and full compensation — so a quieter queen retreat is the safer route, only switching back to winning the rook once the knight can't be given for it. Don't stop calculating at the move that looks like it wins.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1165,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/2BNP3/2N5/PPP2PPP/R1BQ1RK1 b - - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1166,
+   "fen": "rnbqr1k1/ppp2ppp/3p1n2/2b5/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1170.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/2BNP3/2N5/PPP2PPP/R1BQ1RK1 b - - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1172,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1175.5,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R b KQ - 2 6",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1177,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R w KQ - 3 7",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1179.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b3B1/3NP3/2N5/PPP1BPPP/R2QK2R b KQ - 4 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1183,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R w KQ - 3 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1184.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N2P2/PPP1B1PP/R1BQK2R b KQ - 0 7",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1186.5,
+   "fen": "rnbqr1k1/ppp2ppp/5n2/2bp4/3NP3/2N2P2/PPP1B1PP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1190.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N2P2/PPP1B1PP/R1BQK2R b KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1191.5,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP1BPPP/R1BQK2R w KQ - 3 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1193,
+   "fen": "rnbqr1k1/pppp1ppp/5n2/2b3B1/3NP3/2N5/PPP1BPPP/R2QK2R b KQ - 4 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1195,
+   "fen": "rnbqr1k1/pppp1pp1/5n1p/2b3B1/3NP3/2N5/PPP1BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1197,
+   "fen": "rnbqr1k1/pppp1p2/5n1p/2b3p1/3NP2B/2N5/PPP1BPPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "Bh4",
+    "g5"
+   ],
+   "spoken": "The deeper lesson of the whole game — there's a clear shift as you improve. Early on, chess is applying the rules by the book, and it wins plenty of games. To go further you must know the rules cold and also know when to break them: this is underdeveloped, this weakens my king, yet the specific features of the position let me get away with it. That's where concrete calculation transcends general reasoning.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1251,
+   "fen": "rnbqr1k1/pppp1p2/5n1p/2b3p1/3NP3/2N3B1/PPP1BPPP/R2QK2R b KQ - 1 9",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1252,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b3p1/3Nn3/2N3B1/PPP1BPPP/R2QK2R w KQ - 0 10",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1264.5,
+   "fen": "rnbq2k1/pppp1p2/7p/2b3p1/3Nr3/6B1/PPP1BPPP/R2QK2R w KQ - 0 11",
+   "line": [
+    "Nxe4",
+    "Rxe4"
+   ],
+   "spoken": "The two things that reassured the intuition before a single line was calculated: after the pawn thrust the enemy knight hangs, which is a free tempo, and the king is uncastled, which is another tempo lost to getting safe. The whole risk came down to a race — whether the extra pawn could be consolidated before the counterplay arrived.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 1284,
+   "fen": "rnbq2k1/pppp1p2/7p/2b2Np1/4r3/6B1/PPP1BPPP/R2QK2R b KQ - 1 11",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1288,
+   "fen": "rnb3k1/pppp1p2/5q1p/2b2Np1/4r3/6B1/PPP1BPPP/R2QK2R w KQ - 2 12",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1323.5,
+   "fen": "rnb3k1/pppp1p2/3Q1q1p/2b2Np1/4r3/6B1/PPP1BPPP/R3K2R b KQ - 3 12",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1408,
+   "fen": "rnb3k1/pppp1p2/7p/2Q2Np1/8/6B1/PqP1rPPP/R4RK1 b - - 0 14",
+   "line": [
+    "Qxb2",
+    "O-O",
+    "Rxe2",
+    "Qxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1567.5,
+   "fen": "rnb3k1/pppp1p2/5q1p/2b2Np1/4r3/6B1/PPP1BPPP/R2QK2R w KQ - 2 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1595,
+   "fen": "rnbqr1k1/pppp1p2/7p/2b3p1/3NN3/6B1/PPP1BPPP/R2QK2R b KQ - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1700,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1701,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

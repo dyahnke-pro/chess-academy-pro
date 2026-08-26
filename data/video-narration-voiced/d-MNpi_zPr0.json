@@ -1,0 +1,440 @@
+{
+ "videoId": "d-MNpi_zPr0",
+ "title": "Beginner To Master | Chess Speedrun | 1620 | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:d-MNpi_zPr0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1794.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1800,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1804,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1808,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "Nc6"
+   ],
+   "spoken": "Against the e6 Sicilian and Nc6 we're into Taimanov territory — a flexible Paulsen-family setup.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 1820.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1825.5,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1842,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "g3"
+   ],
+   "spoken": "White has countless setups here; the g3 fianchetto is a matter of taste — the bishop stays out of the way and rakes the centre from g2.",
+   "kind": "main",
+   "teaches": "The g3 fianchetto against the Taimanov keeps the bishop safe while it pressures the centre."
+  },
+  {
+   "ply": 13,
+   "t": 1866.5,
+   "fen": "r1bqkb1r/1p1pnppp/p1n1p3/8/3NP3/2N3P1/PPP2PBP/R1BQK2R b KQkq - 2 7",
+   "line": [
+    "Nge7",
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1874,
+   "fen": "r1bqkb1r/1p2nppp/p1npp3/8/3NP3/2N3P1/PPP2PBP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1877,
+   "fen": "r1bqkb1r/1p2nppp/p1npp3/8/3NP3/2N3P1/PPP2PBP/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1886.5,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/2N3P1/PPP2PBP/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "After castling, make a plan: the c1-bishop still needs a home, and the f1-rook wants e1 to x-ray Black's king down the file.",
+   "kind": "plan",
+   "plans": "Reposition the rook to e1 and find the right square for the dark bishop."
+  },
+  {
+   "ply": 17,
+   "t": 1971,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/1PN3P1/P1P2PBP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "b3"
+   ],
+   "spoken": "The dark bishop is awkward everywhere — Bf4 runs into Nxd4 and e5, Bg5 is kicked by h6, Bd2 hangs the knight. When you're unsure where a piece belongs, one answer is not to develop it there at all. We fianchettoed one bishop — why not the other? b3.",
+   "kind": "main",
+   "teaches": "When no good square exists for a bishop, consider a second fianchetto rather than forcing a bad developing move."
+  },
+  {
+   "ply": 18,
+   "t": 1981,
+   "fen": "r1b1kb1r/1pq1np1p/p1npp1p1/8/3NP3/1PN3P1/P1P2PBP/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1984,
+   "fen": "r1b1kb1r/1pq1np1p/p1npp1p1/8/3NP3/1PN3P1/PBP2PBP/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1985.5,
+   "fen": "r1b1k2r/1pq1npbp/p1npp1p1/8/3NP3/1PN3P1/PBP2PBP/R2Q1RK1 w kq - 2 11",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "And here's the payoff of the double fianchetto — the moment Black plays Bg7 the bishop is undefended, and with both knights gone the two bishops would stare each other down. That's the seed of a discovery.",
+   "kind": "main",
+   "teaches": "Two undefended bishops facing each other down a diagonal signal a discovered-attack tactic."
+  },
+  {
+   "ply": 21,
+   "t": 2030.5,
+   "fen": "r1b1k2r/1pq1npbp/p1npp1p1/1N6/4P3/1PN3P1/PBP2PBP/R2Q1RK1 b kq - 3 11",
+   "line": [
+    "Ndb5"
+   ],
+   "spoken": "Ndb5 is the precise execution — sacrifice just one knight, not both, and exploit Black's queen. After axb5, Nxb5 hits the queen, and then Bxg7 tears the king open. The move order is everything; the other knight to b5 would let Black decline.",
+   "kind": "main",
+   "teaches": "In a knight sacrifice, choose the piece and order that also attacks the queen, denying the defender a decline."
+  },
+  {
+   "ply": 22,
+   "t": 2081.5,
+   "fen": "r1b1k2r/1pq1npbp/2npp1p1/1p6/4P3/1PN3P1/PBP2PBP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "axb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2084,
+   "fen": "r1b1k2r/1pq1npbp/p1npp1p1/8/3NP3/1PN3P1/PBP2PBP/R2Q1RK1 w kq - 2 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2092.5,
+   "fen": "r1b1k2r/1pq1npbp/2npp1p1/1N6/4P3/1P4P1/PBP2PBP/R2Q1RK1 b kq - 0 12",
+   "line": [
+    "Ndb5",
+    "axb5",
+    "Nxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2094,
+   "fen": "r1b1k2r/1p1qnpbp/2npp1p1/1N6/4P3/1P4P1/PBP2PBP/R2Q1RK1 w kq - 1 13",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2118,
+   "fen": "r1b1k2r/1p1qnpBp/2npp1p1/1N6/4P3/1P4P1/P1P2PBP/R2Q1RK1 b kq - 0 13",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": "Bxg7 rather than Nxd6 — Nxd6 would allow Kf8 to defend the bishop. This way we hit the rook, grab the pawn, and Black's whole position collapses.",
+   "kind": "main",
+   "teaches": "Pick the capture that doesn't let the enemy king step over to defend."
+  },
+  {
+   "ply": 27,
+   "t": 2121,
+   "fen": "r1b1k1r1/1p1qnpBp/2nNp1p1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 b q - 0 14",
+   "line": [
+    "Rg8",
+    "Nxd6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2124.5,
+   "fen": "r1bk2r1/1p1qnpBp/2nNp1p1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 w - - 1 15",
+   "line": [
+    "Kd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2125.5,
+   "fen": "r1bk2r1/1p1qnNBp/2n1p1p1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 b - - 0 15",
+   "line": [
+    "Nxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2129,
+   "fen": "r1bk2r1/1p1qnpBp/2nNp1p1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 w - - 1 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2157,
+   "fen": "r1bk2r1/1p1qnp1p/2nNpBp1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 b - - 2 15",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": "Don't grab f7 — after Kc7 it forces a queen trade, and we want mate, not a trade. Retreat the bishop to f6 and keep the queens on to finish the attack.",
+   "kind": "main",
+   "teaches": "Refuse a pawn grab that forces a queen trade when you're playing for mate."
+  },
+  {
+   "ply": 30,
+   "t": 2167,
+   "fen": "r1bk1r2/1p1qnp1p/2nNpBp1/8/4P3/1P4P1/P1P2PBP/R2Q1RK1 w - - 3 16",
+   "line": [
+    "Rf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2174.5,
+   "fen": "r1bk1r2/1p1qnp1p/2nNpBp1/8/4P3/1P4P1/P1PQ1PBP/R4RK1 b - - 4 16",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 2203.5,
+   "fen": "r1b2r2/1pkqnp1p/2nNpBp1/8/4P3/1P4P1/P1PQ1PBP/R4RK1 w - - 5 17",
+   "line": [
+    "Kc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 2205.5,
+   "fen": "r1b2r2/1pkqnp1p/2nNpBp1/8/4P3/1P4P1/P1PQ1PBP/R2R2K1 b - - 6 17",
+   "line": [
+    "Rfd1"
+   ],
+   "spoken": "Double on the d-file, the natural highway to the king, then hunt for a knight discovery. No need to triple — that's killing an ant with a cannonball; doubling is plenty.",
+   "kind": "main",
+   "teaches": "Use exactly the force the position needs; over-loading a file wastes moves the attack could use."
+  },
+  {
+   "ply": 34,
+   "t": 2248.5,
+   "fen": "r1b2rn1/1pkq1p1p/2nNpBp1/8/4P3/1P4P1/P1PQ1PBP/R2R2K1 w - - 7 18",
+   "line": [
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 2267.5,
+   "fen": "r1b2rn1/1pkq1p1p/2n1pBp1/1N6/4P3/1P4P1/P1PQ1PBP/R2R2K1 b - - 8 18",
+   "line": [
+    "Nb5+"
+   ],
+   "spoken": "Nb5-check, and now the rook x-rays Black's queen through our own — move our queen with tempo and his queen simply falls.",
+   "kind": "main",
+   "teaches": "An x-ray down a file can win the queen: move your own piece off the line with tempo."
+  },
+  {
+   "ply": 36,
+   "t": 2272,
+   "fen": "r1b2rn1/1p1q1p1p/1kn1pBp1/1N6/4P3/1P4P1/P1PQ1PBP/R2R2K1 w - - 9 19",
+   "line": [
+    "Kb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 2286,
+   "fen": "r1b2rn1/1p1q1p1p/1kn1pBp1/1N6/4P3/1P2Q1P1/P1P2PBP/R2R2K1 b - - 10 19",
+   "line": [
+    "Qe3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 2293.5,
+   "fen": "r1b2rn1/1p1q1p1p/2n1pBp1/1k6/4P3/1P2Q1P1/P1P2PBP/R2R2K1 w - - 0 20",
+   "line": [
+    "Kxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 2311,
+   "fen": "r1b2rn1/1p1q1p1p/2n1pBp1/1k6/4P3/1P2Q1P1/P1P2P1P/R2R1BK1 b - - 1 20",
+   "line": [
+    "Bf1+"
+   ],
+   "spoken": "We don't even need the queen — Bf1-check drags the king further into the open, and the fianchetto bishop that looked idle all game redeems itself by joining the mate.",
+   "kind": "main",
+   "teaches": "Draw the exposed king further out with checks; a quiet piece often delivers the final blow."
+  },
+  {
+   "ply": 40,
+   "t": 2314.5,
+   "fen": "r1b2rn1/1p1q1p1p/2n1pBp1/k7/4P3/1P2Q1P1/P1P2P1P/R2R1BK1 w - - 2 21",
+   "line": [
+    "Ka5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 2333,
+   "fen": "r1b2rn1/1p1q1p1p/2n1pBp1/k1Q5/4P3/1P4P1/P1P2P1P/R2R1BK1 b - - 3 21",
+   "line": [
+    "Qc5+"
+   ],
+   "spoken": "Qc5-check, b5 is forced, and Qxb5 is mate — supported by that long-diagonal bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 2359.5,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/2N3P1/PPP2PBP/R1BQ1RK1 w kq - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2363.5,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/2N1B1P1/PPP2PBP/R2Q1RK1 b kq - 3 9",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2393,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/2N3P1/PPP2PBP/R1BQ1RK1 w kq - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2394,
+   "fen": "r1b1kb1r/1pq1nppp/p1npp3/8/3NP3/1PN3P1/P1P2PBP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2396,
+   "fen": "r1b1kb1r/1pq1nppp/p2pp3/8/3nP3/1PN3P1/P1P2PBP/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2398,
+   "fen": "r1b1kb1r/1pq2ppp/p1npp3/8/3QP3/1PN3P1/P1P2PBP/R1B2RK1 w kq - 1 11",
+   "line": [
+    "Qxd4",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2407,
+   "fen": "r1b1k2r/1pq1bppp/p1npp3/8/4P3/1PN3P1/P1PQ1PBP/R1B2RK1 w kq - 3 12",
+   "line": [
+    "Qd2",
+    "Be7"
+   ],
+   "spoken": ""
+  }
+ ]
+}

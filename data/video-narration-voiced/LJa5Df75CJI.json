@@ -1,0 +1,258 @@
+{
+ "videoId": "LJa5Df75CJI",
+ "title": "Master Class | Controlling Center | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "French Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:LJa5Df75CJI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 124,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e3",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 127,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B5/4P3/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "There's nothing wrong with the opponent's reversed-French idea in itself, but this bishop sortie is a mistake — it develops a bishop before a knight and does nothing to stake a claim in the centre. That leaves the door open to seize the middle with tempo."
+  },
+  {
+   "ply": 4,
+   "t": 146,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/2B5/4P3/PPPP1PPP/RNBQK1NR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "So grab the centre with gain of time — d5 both plants a pawn in the middle and slaps the bishop, forcing it to react."
+  },
+  {
+   "ply": 5,
+   "t": 152.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 191,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The tempting continuation is to keep grabbing space with another pawn, but centre control is a balance — pawns on one hand, and on the other, not overreaching and not neglecting development. Whole openings exist to lure you into overextending until the pawns crumble. So develop instead: the knight to f6 shores up the centre.",
+   "kind": "plan"
+  },
+  {
+   "ply": 7,
+   "t": 195,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1BN1P3/PPPP1PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The bishop's ideal home is d6 — it braces the e-pawn, and if the opponent castles short it sets up a later pawn thrust with Greek-gift and attacking ideas. But it can't go there just yet, and knowing why is the key.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 248,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/1BN1P3/PPPP1PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The obstacle is a capture on d5 winning the pawn — so play c6 first, defending with a pawn, building a chain, and clearing the way for the bishop. A pawn defended by a pawn is always a healthy structure.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 272,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "And don't fret that c6 takes the natural square from the other knight — the idea that knights must live on c6 and f6 is beginner's lore. Routing a knight to d7 is no tragedy. Those are the conventional posts, usually the best, but chess is a game of trade-offs; a slightly inferior placement doesn't mean a bad position."
+  },
+  {
+   "ply": 10,
+   "t": 296,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 303.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/1B2P3/PPPP1PPP/RNBQK1NR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 310,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1BN1PN2/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "Nc3",
+    "Bd6",
+    "Nf3",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 312,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight leap to g5 looks aggressive but achieves nothing here — its whole purpose is normally to hit f7, and f7 simply isn't a target in this position. There's a solid way to treat it that doesn't even involve reacting."
+  },
+  {
+   "ply": 12,
+   "t": 340.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/8/1BN1P3/PPPP1PPP/R1BQK2R w KQ - 2 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Rather than shooing the knight, just castle and ignore it. A piece sitting deep in your half isn't automatically a threat — often it's an asset, a stranded horse with nothing to do. Getting the king safe matters more than swatting at a bluff.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 345,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp1N1/4P3/1BN5/PPPP1PPP/R1BQK2R b KQ - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 377.5,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/3pp1N1/4P3/1BN5/PPPP1PPP/R1BQK2R w KQ - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": "Here the intruder becomes an asset. The opponent's central push is premature with pieces scattered — and holding the h-pawn move in reserve pays off, because the moment the knight is finally kicked, the overextended e4-pawn is left attacked twice and defended only once. Reserving that move for the right moment wins more than playing it on reflex.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 418,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/3pp3/4P3/1BN4N/PPPP1PPP/R1BQK2R b KQ - 1 8",
+   "line": [
+    "Nh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 445,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/4p3/4p3/1BN4N/PPPP1PPP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Don't overthink the recapture — taking the knight to wreck the structure is double-edged, since it also cracks open a file that could rebound. Just take the pawn simply. The wider lesson: when you're agonising over whether to grab a piece, often the best practical answer is to not take it and find a clean alternative, sparing yourself the time and the second-guessing."
+  },
+  {
+   "ply": 17,
+   "t": 506.5,
+   "fen": "rnbq1rk1/pp3pp1/2pb1n1p/4p3/4p3/1BN4N/PPPP1PPP/R1BQKR2 b Q - 1 9",
+   "line": [
+    "Rf1"
+   ],
+   "spoken": "That rook move leaves the king stranded in the centre — and notice the whole queenside is still untouched, which means the queen is boxed in with almost no scope. A trapped king and a smothered queen are exactly the cues to pounce on."
+  },
+  {
+   "ply": 18,
+   "t": 538,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/4p1b1/1BN4N/PPPP1PPP/R1BQKR2 w Q - 2 10",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The exploitation is straightforward — the bishop swings to g4 and hits the queen, which has no squares to run to. The opponent is reduced to an ugly retreat or a weakening pawn move just to give it air.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 19,
+   "t": 553.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/4p1b1/1BN2P1N/PPPP2PP/R1BQKR2 b Q - 0 10",
+   "line": [
+    "f3"
+   ],
+   "spoken": "If the pawn shields the queen, capture it — the recapture then robs the knight of its own pawn's support, and everything starts to fall. This is all coming from sensible developing moves, no fireworks required.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 20,
+   "t": 554.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP2PP/R1BQKR2 w Q - 0 11",
+   "line": [
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 582.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP1KPP/R1BQ1R2 b - - 1 11",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 588,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN4N/PPPP1KpP/R1BQ1R2 w - - 0 12",
+   "line": [
+    "fxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 599.5,
+   "fen": "rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN4N/PPPP2KP/R1BQ1R2 b - - 0 12",
+   "line": [
+    "Kxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 611,
+   "fen": "rn3rk1/pp3pp1/2pb1q1p/4p3/6b1/1BN4N/PPPP2KP/R1B1Q3 b - - 1 14",
+   "line": [
+    "Qe7",
+    "Rxf6",
+    "Qxf6",
+    "Qe1"
+   ],
+   "spoken": "The queen falls and the game is over — a whole attack built out of nothing but healthy development and centre control.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 3,
+   "t": 619,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B5/4P3/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [],
+   "spoken": "The takeaway is a picture of two dials: one for controlling the centre with pawns, one for developing the pieces. Miscalibrate them — too little of one, too much of the other — and the position sours. Here too few pawns held the middle while the pieces came out in a rush, so their weight was never felt. Anchoring at least part of the centre with pawns first is what makes the pieces matter.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,463 @@
+{
+ "videoId": "TvgWwc1dBb8",
+ "title": "Sacking the Queen!?! | Italian Game | The Sensei Speedrun | GM Naro",
+ "openingName": "Two Knights Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:TvgWwc1dBb8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 49,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 51,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 54,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 56,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 89.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Nf6, the Two Knights, is a very practical intermediate choice — the Fried Liver isn't as scary as its reputation, and there's less tricky theory than after Bc5.",
+   "kind": "main",
+   "teaches": "The Two Knights is a sound practical weapon; the Fried Liver is more bark than bite."
+  },
+  {
+   "ply": 7,
+   "t": 96,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 98,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 110.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 is the Max Lange / Nakhmanson tricky line. We take, exd4, and castle — nothing to fear if you know the ideas.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 124,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 127.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 176,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/8/2Bpn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "Playing principled chess, we grab on e4 into the Max Lange — the tamer d6 keeps it out of theory but leaves the bishop passive on e7.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 185.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/8/2Bpn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 6",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 194.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3p4/2Bpn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The knight is attacked, so d5 defends it, and for a moment Black looks two pawns up and dominant — but this is the Max Lange, and it's all theory.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 197,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3B4/3pn3/5N2/PPP2PPP/RNBQR1K1 b kq - 0 7",
+   "line": [
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 201,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/3q4/3pn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 8",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 203.5,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/3q4/3pn3/2N2N2/PPP2PPP/R1BQR1K1 b kq - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The century-old point: Nc3 can't be taken — the knight is pinned, and capturing with the pawn drops the queen — so the queen must move, and White recaptures with heavy e-file pressure. The whole line is objectively equal.",
+   "kind": "main",
+   "teaches": "In the Max Lange, White's compensation is the e-file pin, not an advantage — it's dead level with accurate play."
+  },
+  {
+   "ply": 16,
+   "t": 281.5,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/7q/3pn3/2N2N2/PPP2PPP/R1BQR1K1 w kq - 2 9",
+   "line": [
+    "Qh5"
+   ],
+   "spoken": "Qh5 is a safe square and x-rays the knight on f3 — never a bad thing in these positions.",
+   "kind": "main",
+   "teaches": "Park the queen where it's safe and quietly x-rays an enemy piece."
+  },
+  {
+   "ply": 17,
+   "t": 286,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/7q/3pR3/2N2N2/PPP2PPP/R1BQ2K1 b kq - 0 9",
+   "line": [
+    "Rxe4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 291.5,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/7q/3pn3/2N2N2/PPP2PPP/R1BQR1K1 w kq - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 299,
+   "fen": "r1b1kb1r/ppp2ppp/2n5/7q/3pR3/2N2N2/PPP2PPP/R1BQ2K1 b kq - 0 9",
+   "line": [
+    "Rxe4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 439,
+   "fen": "r1b1k2r/ppp1bppp/2n5/7q/3pR3/2N2N2/PPP2PPP/R1BQ2K1 w kq - 1 10",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "The calculation that decides it: after a queen trade, the d4-knight would be guarded only by the rook on e4 — and rooks and queens are terrible defenders, being so easy to chase. So Be7, then f5 shoves the rook along the fourth rank and g5 again, until White must give up the exchange.",
+   "kind": "main",
+   "teaches": "Rooks and queens defend pieces poorly; attack the piece they guard and chase the clumsy defender off."
+  },
+  {
+   "ply": 19,
+   "t": 458,
+   "fen": "r1b1k2r/ppp1bppp/2n5/7q/3pR3/5N2/PPP1NPPP/R1BQ2K1 b kq - 2 10",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 524.5,
+   "fen": "r1b1k2r/ppp1bppp/2n5/3q4/3pR3/5N2/PPP1NPPP/R1BQ2K1 w kq - 3 11",
+   "line": [
+    "Qd5"
+   ],
+   "spoken": "Qd5 centralizes the queen, hits the rook, and adds a second defender to d4 all at once.",
+   "kind": "main",
+   "teaches": "Prefer the centralizing move that defends and attacks in the same breath."
+  },
+  {
+   "ply": 21,
+   "t": 560.5,
+   "fen": "r1b1k2r/ppp1bppp/2n5/3q4/3pR3/5NN1/PPP2PPP/R1BQ2K1 b kq - 4 11",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 637,
+   "fen": "r1b2rk1/ppp1bppp/2n5/3q4/3pR3/5NN1/PPP2PPP/R1BQ2K1 w - - 5 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 640,
+   "fen": "r1b1k2r/ppp1bppp/2n5/3q4/3pR3/5NN1/PPP2PPP/R1BQ2K1 b kq - 4 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 644.5,
+   "fen": "r1b2rk1/ppp1bppp/2n5/3q4/3pR3/2P2NN1/PP3PPP/R1BQ2K1 b - - 0 12",
+   "line": [
+    "O-O",
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 679.5,
+   "fen": "r1b2rk1/ppp1bppp/2n5/3q4/4R3/2Pp1NN1/PP3PPP/R1BQ2K1 w - - 0 13",
+   "line": [
+    "d3"
+   ],
+   "spoken": "d3 is the star — a strong passed pawn deep in White's camp. Even if he wins it back, the tempi and energy he burns doing so let us pour our other pieces into the game. It's win-win.",
+   "kind": "main",
+   "teaches": "A far-advanced passed pawn is worth it even if it eventually falls, because it drags the enemy pieces out of play."
+  },
+  {
+   "ply": 25,
+   "t": 701.5,
+   "fen": "r1b2rk1/ppp1bppp/2n5/3q4/4R3/2Pp1NNP/PP3PP1/R1BQ2K1 b - - 0 13",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 750,
+   "fen": "r1br2k1/ppp1bppp/2n5/3q4/4R3/2Pp1NNP/PP3PP1/R1BQ2K1 w - - 1 14",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 765.5,
+   "fen": "r1br2k1/ppp1bppp/2n5/3q4/4RB2/2Pp1NNP/PP3PP1/R2Q2K1 b - - 2 14",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 801,
+   "fen": "r2r2k1/ppp1bppp/2n5/3q1b2/4RB2/2Pp1NNP/PP3PP1/R2Q2K1 w - - 3 15",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 812,
+   "fen": "r2r2k1/ppp1bppp/2n5/3q1b2/2P1RB2/3p1NNP/PP3PP1/R2Q2K1 b - - 0 15",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 844.5,
+   "fen": "r2r2k1/ppp1bppp/2n5/5b2/2P1qB2/3p1NNP/PP3PP1/R2Q2K1 w - - 0 16",
+   "line": [
+    "Qxe4"
+   ],
+   "spoken": "Now the positional queen sacrifice: Qxe4, giving the queen for a rook and a piece. It's not a two-move tactic — it's a judgment. The d3-pawn is so strong, and White so passive, that the pieces and the pawn will outweigh the queen. After a sac like this, there's no need to hurry.",
+   "kind": "main",
+   "teaches": "A positional queen sacrifice can be sound when a monster passed pawn and active pieces promise long-term dominance."
+  },
+  {
+   "ply": 32,
+   "t": 865.5,
+   "fen": "r2r2k1/ppp1bppp/2n5/8/2P1bB2/3p1N1P/PP3PP1/R2Q2K1 w - - 0 17",
+   "line": [
+    "Nxe4",
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 870,
+   "fen": "r2r2k1/ppB1bppp/2n5/8/2P1b3/3p1N1P/PP3PP1/R2Q2K1 b - - 0 17",
+   "line": [
+    "Bxc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 873.5,
+   "fen": "r5k1/ppBrbppp/2n5/8/2P1b3/3p1N1P/PP3PP1/R2Q2K1 w - - 1 18",
+   "line": [
+    "Rd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 888.5,
+   "fen": "r5k1/pp1rbppp/2n5/8/2P1b3/3p1NBP/PP3PP1/R2Q2K1 b - - 2 18",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 912,
+   "fen": "r5k1/pp1r1ppp/2n2b2/8/2P1b3/3p1NBP/PP3PP1/R2Q2K1 w - - 3 19",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": "Improve calmly — the bishop to the long diagonal — because with a rook, knight, and bishop for the queen we have time on our side.",
+   "kind": "main",
+   "teaches": "After a material-for-position sacrifice, improve your pieces slowly; you don't owe the position a quick knockout."
+  },
+  {
+   "ply": 37,
+   "t": 920,
+   "fen": "r5k1/pp1r1ppp/2n2b2/8/2P1b3/3p1NBP/PP1Q1PP1/R5K1 b - - 4 19",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 942.5,
+   "fen": "r5k1/pp1r1ppp/2n2b2/8/2P5/3p1bBP/PP1Q1PP1/R5K1 w - - 0 20",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "Bxf3 wrecks White's structure and opens the d4 square for the knight — though the immediate Nd4 would be a blunder to Qxd3, so stay patient.",
+   "kind": "main",
+   "teaches": "Damage the structure first; rush the follow-up knight jump and you can hang your own passed pawn."
+  },
+  {
+   "ply": 39,
+   "t": 946,
+   "fen": "r5k1/pp1r1ppp/2n2b2/8/2P5/3p1PBP/PP1Q1P2/R5K1 b - - 0 20",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 972.5,
+   "fen": "4r1k1/pp1r1ppp/2n2b2/8/2P5/3p1PBP/PP1Q1P2/R5K1 w - - 1 21",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Re8 seizes the freshly opened file, beating White to it — if he tries Rd1 we trade and strip the defenders away from our d-pawn.",
+   "kind": "main",
+   "teaches": "Grab the open file before your opponent; trading his active rook off leaves his weakness undefended."
+  },
+  {
+   "ply": 41,
+   "t": 990,
+   "fen": "4r1k1/pp1r1ppp/2n2b2/8/2P5/3p1PBP/PP1Q1P2/3R2K1 b - - 2 21",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1001,
+   "fen": "6k1/pp1r1ppp/2n2b2/8/2P5/3p1PBP/PP1QrP2/3R2K1 w - - 3 22",
+   "line": [
+    "Re2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1003,
+   "fen": "6k1/pp1r1ppp/2n2b2/8/2P5/3p1PBP/PP2rP2/2QR2K1 b - - 4 22",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1038,
+   "fen": "6k1/pp1r1ppp/2n2b2/8/2P5/5PBP/PP1prP2/2QR2K1 w - - 0 23",
+   "line": [
+    "d2"
+   ],
+   "spoken": "d2 marches the pawn a step from queening. But find the order — Re1-check at once just lets the king run to g2, so first crank the pieces to maximum, centralize the knight, and only then break through.",
+   "kind": "main",
+   "teaches": "In a promotion race, maximize your pieces before the pawn's final push; the wrong order lets the king escape."
+  },
+  {
+   "ply": 3,
+   "t": 1450.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

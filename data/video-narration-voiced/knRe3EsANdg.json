@@ -4,7 +4,7 @@
  "openingName": "King's Indian Attack",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:knRe3EsANdg",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "e6",
     "e4"
    ],
-   "spoken": ""
+   "spoken": "A game of Fischer's — he was ahead of his time, playing openings unpopular in his day and understanding them very well. The pawn to d3, e6, then e4."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "d5 — a very familiar King's Indian Attack setup."
   },
   {
    "ply": 5,
@@ -34,10 +34,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "The knight belongs on d2, not c3 — the whole point of the King's Indian Attack. On c3 it invites dxe4 and a queen trade that would kill the attack; on d2 White keeps the queens on and the plan intact.",
-   "kind": "main",
-   "teaches": "In the King's Indian Attack, develop the knight to d2 to avoid a queen-trading dxe4 and keep attacking chances.",
-   "plans": "g3, Bg2, then e5 and a kingside attack."
+   "spoken": "The knight to d2."
   },
   {
    "ply": 7,
@@ -47,14 +44,15 @@
     "Nf6",
     "g3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6, and Fischer plays g3 first — the order doesn't really matter."
   },
   {
    "ply": 4,
    "t": 904.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "Just to recap —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -63,7 +61,8 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "— if you go g3 first, you allow —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -72,7 +71,8 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "— the option of trading queens, which White doesn't necessarily want to allow.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -83,14 +83,16 @@
     "Qxd1+",
     "Kxd1"
    ],
-   "spoken": ""
+   "spoken": "After the pawn takes e4, the queen trade on d1 and the king recaptures — that's the endgame White wants to avoid.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 915,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The second question —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -99,7 +101,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "— why the knight to d2 rather than the knight to c3? The simplest reason —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -108,7 +111,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— after the knight to c3 and the knight to f6 you're up against the same problem as before —",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -117,7 +121,8 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "— if you play g3 —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -126,21 +131,24 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "— Black can play the pawn takes e4, the simplest move, and again you're forced into an endgame you don't want.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 939.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/2NP4/PPP2PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "So the knight to d2 is the only way to make this setup work — and long-term, that's precisely the knight that contributes most to an attack against Black's king.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 957.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "It sounds crazy to talk about attacking Black's king, but in the main line that's exactly what White is aiming for. The knight to c3 and d4 isn't scary —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -149,7 +157,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "— the knight to c3 —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -158,7 +167,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "— and d4, because to a King's Indian player closing the centre is rarely a scary prospect.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -167,14 +177,16 @@
    "line": [
     "Nce2"
    ],
-   "spoken": ""
+   "spoken": "In fact you'd want Black to close it, since with the centre closed your hands are untied for kingside action — the knight reroutes via e2.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 976,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/2NP4/PPP2PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "So that's not scary — what is scary is —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -183,7 +195,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— the specific difficulty White has in preventing the pawn takes e4.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -194,7 +207,8 @@
     "Ng8",
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "So the knight to d2, the knight to f6.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -204,7 +218,8 @@
     "Nf6",
     "g3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6, g3.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -213,9 +228,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black builds a French-style centre with e6, d5 and c5, but that is exactly what White wants: the King's Indian Attack hands over the centre on purpose, planning to gain kingside space with e5 — a King's Indian with colours reversed and a tempo to spare.",
-   "kind": "main",
-   "teaches": "The KIA concedes the centre deliberately to play a reversed King's Indian a tempo up."
+   "spoken": "Now Fischer's opponent plays the main line, c5, and the knight to c6 — very natural play."
   },
   {
    "ply": 14,
@@ -225,7 +238,8 @@
     "Bg2",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g2, the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -234,7 +248,7 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 — Black plays as if he were White in a King's Indian."
   },
   {
    "ply": 16,
@@ -243,7 +257,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e7.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -253,7 +268,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Both sides castle. If Black's pawn were on e5 here, you'd literally have the old main-line King's Indian with the knight on d2 — a King's Indian reversed."
   },
   {
    "ply": 19,
@@ -262,9 +277,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 is the King's Indian Attack's signature push. It seizes kingside space and cramps Black exactly as a King's Indian cramps White — and now White turns to storming the kingside.",
-   "kind": "main",
-   "teaches": "The e5 push gains space and launches White's kingside attack."
+   "spoken": "It's precisely that Black doesn't have time to play e5 that makes this so dangerous for White — because it's White who now plays e5, as in the game."
   },
   {
    "ply": 21,
@@ -274,7 +287,8 @@
     "Nd7",
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "e5, the knight to d7, and the rook to e1. This game is famous because Fischer shows, in vivid, textbook fashion —",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -283,7 +297,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "— how White unfurls his pieces and creates massive attacking chances. Black starts a queenside attack with b5 —"
   },
   {
    "ply": 23,
@@ -292,7 +306,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "— just like in the King's Indian, and White plays the knight to f1."
   },
   {
    "ply": 24,
@@ -301,14 +315,15 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "b4. Nowadays a5 —"
   },
   {
    "ply": 23,
    "t": 1052.5,
    "fen": "r1bq1rk1/p2nbppp/2n1p3/1pppP3/8/3P1NP1/PPP2PBP/R1BQRNK1 b - - 1 12",
    "line": [],
-   "spoken": ""
+   "spoken": "— is preferred.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -317,7 +332,8 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "— a5 is considered the best move; Black generally pushes the a-pawn forward first.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -329,14 +345,16 @@
     "Bf4",
     "b4"
    ],
-   "spoken": ""
+   "spoken": "h4 and the bishop to f4. h4 serves a dual purpose: first, it prevents g5.",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 1078,
    "fen": "r1bq1rk1/3nbppp/p1n1p3/1pppP3/8/3P1NP1/PPP2PBP/R1BQRNK1 w - - 0 13",
    "line": [],
-   "spoken": ""
+   "spoken": "Is g5 really a threat? It is — so why not the bishop to f4 immediately? Because g5 is very strong: the knight has no good squares, and after g4 it's essentially stranded, forced to an awkward square where Black can take on e5 or take the knight on h4. So h4 prevents g5 in the first place, and in the second it creates the h2-square as a transit point for either knight — the maneuver knight to h2, knight to g4, or reaching g4 via e3, or the other knight to h2 to release the queen, what I call opening the gate.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -348,7 +366,8 @@
     "h4",
     "b4"
    ],
-   "spoken": ""
+   "spoken": "There's no other way to do that. And finally the h-pawn itself becomes a battering ram with h5 and h6. So a5, the bishop to f4, a4 — Black tries —",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -358,7 +377,8 @@
     "Bf4",
     "a4"
    ],
-   "spoken": ""
+   "spoken": "The bishop to f4, a4 — Black does what he can to attack on the queenside.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -367,14 +387,15 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "Fischer plays a3 — a nice prophylactic move, because —"
   },
   {
    "ply": 30,
    "t": 1143,
    "fen": "r1bq1rk1/3nbppp/2n1p3/2ppP3/pp3B1P/3P1NP1/PPP2PB1/R2QRNK1 w - - 0 16",
    "line": [],
-   "spoken": ""
+   "spoken": "— if Fischer just plays the knight to e3 or the knight to h2 immediately —",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -383,7 +404,8 @@
    "line": [
     "N1h2"
    ],
-   "spoken": ""
+   "spoken": "— the knight to h2 —",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -392,7 +414,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "— he was worried, I think, about creating —"
   },
   {
    "ply": 33,
@@ -401,14 +423,15 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "— a Swiss-cheese complex on the queenside."
   },
   {
    "ply": 31,
    "t": 1152.5,
    "fen": "r1bq1rk1/3nbppp/2n1p3/2ppP3/pp3B1P/3P1NP1/PPP2PBN/R2QR1K1 b - - 1 16",
    "line": [],
-   "spoken": ""
+   "spoken": "You see this a lot in the legends' games: while attacking, they take one or two very well-timed tempi to slow the opponent's attack — incredibly annoying to face. The b-pawn takes a3, and Black keeps trying on the queenside, but the knight to a5 is a bad move — this wasn't well known when the game was played, so Fischer's strong opponent was stranded at sea, not knowing the typical ideas. b4 was probably already an inaccuracy. After the knight to a5, Fischer plays the knight to e3 as we discussed, then the bishop to a6, and Bobby plays the move I hadn't mentioned — the bishop to h3, again not a move you see every day in the King's Indian.",
+   "reanchor": true
   }
  ]
 }

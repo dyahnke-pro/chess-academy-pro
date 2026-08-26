@@ -1,0 +1,476 @@
+{
+ "videoId": "-rqPeGKVPbA",
+ "title": "",
+ "openingName": "King’s Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:-rqPeGKVPbA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 104,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "c4",
+    "Nf6"
+   ],
+   "spoken": "The beauty of the King's Indian is one setup against everything — an English can transpose to a Queen's-Pawn game, but with this system you don't have to care.",
+   "kind": "main",
+   "teaches": "A universal setup buys you move-order immunity; you learn one plan instead of ten."
+  },
+  {
+   "ply": 5,
+   "t": 122.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2P5/2NP4/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d3",
+    "g6",
+    "Nc3"
+   ],
+   "spoken": "Unlike the Queen's Gambit Declined or the Slav, you never rewire your own move order depending on whether White chooses c4, d4, or Nf3 — the same moves work against all of it.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 128.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2P5/2NP4/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "Complete the fianchetto with Bg7; the bishop takes up its long-diagonal post and the kingside is ready to castle.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 131,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2P1P3/2NP4/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 135,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "We answer the big centre with d6. White's most testing plan from here is the fianchetto with g3 and Ng2 — the Botvinnik setup.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 160.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2P1P3/2NP4/PP2BPPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Be2 doesn't fit White's structure. With the pawn on d4 this would be a mainline King's Indian; the pawn on d3 instead is a real positional downgrade, because it hands us the d4 square as a stronghold. So don't reflexively play e5 here — think flexibly about what the structure actually wants.",
+   "kind": "main",
+   "teaches": "A pawn on d3 instead of d4 gifts the opponent d4 as an outpost; don't play the automatic move, play the structure."
+  },
+  {
+   "ply": 10,
+   "t": 218,
+   "fen": "rnbqk2r/pp2ppbp/3p1np1/2p5/2P1P3/2NP4/PP2BPPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Against this semi-Botvinnik setup, c5 fits better than e5 — it steers into a Dragon-Sicilian formation and stakes a direct claim to d4.",
+   "kind": "plan",
+   "plans": "Follow with Nc6 to pile onto d4 and clamp the square."
+  },
+  {
+   "ply": 11,
+   "t": 220.5,
+   "fen": "rnbqk2r/pp2ppbp/3p1np1/2p5/2P1P3/2NP4/PP1BBPPP/R2QK1NR b KQkq - 1 6",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": "White drifts with Bd2; there's really no fight for d4 to speak of — we simply occupy and control it. A bloodless war.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 225.5,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2NP4/PP1BBPPP/R2QK1NR w KQkq - 2 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Nc6 completes the clamp. The battle for the key central square is over before it started.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 228,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2NP4/PP1BBPPP/2RQK1NR b Kkq - 3 7",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 235,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P1P3/2NP4/PP1BBPPP/2RQK1NR w K - 4 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White shuffles fairly randomly, which doesn't disturb our development at all — we just keep bringing pieces out.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 237,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P1P2P/2NP4/PP1BBPP1/2RQK1NR b K - 0 8",
+   "line": [
+    "h4"
+   ],
+   "spoken": "h4 flips White from quiet play to hunting the king, but positionally he isn't equipped to do real kingside damage. Still, there's no reason to let him play h5 and rip open the h-file — and the instructive point is that the popular answer here is wrong.",
+   "kind": "main",
+   "teaches": "Don't allow the opponent a free rook-file opening just because the attack looks toothless."
+  },
+  {
+   "ply": 16,
+   "t": 295,
+   "fen": "r1bq1rk1/pp2ppb1/2np1np1/2p4p/2P1P2P/2NP4/PP1BBPP1/2RQK1NR w K - 0 9",
+   "line": [
+    "h5"
+   ],
+   "spoken": "h5 is the accurate reply, not h6 — it clamps the g4 square and denies White the break, whereas h6 carries drawbacks we'd rather avoid.",
+   "kind": "main",
+   "teaches": "Meeting a wing pawn thrust by fixing it with your own pawn can be stronger than inviting the exchange."
+  },
+  {
+   "ply": 17,
+   "t": 301.5,
+   "fen": "r1bq1rk1/pp2ppb1/2np1np1/2p3Bp/2P1P2P/2NP4/PP2BPP1/2RQK1NR b K - 1 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "With the g4 square locked down, it's very hard for White to prise our kingside open at all.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 315,
+   "fen": "r1bq1rk1/pp2ppb1/3p1np1/2p3Bp/2PnP2P/2NP4/PP2BPP1/2RQK1NR w K - 2 10",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Nd4 plants the knight on the dream square and starts angling to win the bishop pair.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 321,
+   "fen": "r1bq1rk1/pp2ppb1/3p1Bp1/2p4p/2PnP2P/2NP4/PP2BPP1/2RQK1NR b K - 0 10",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 322.5,
+   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2p4p/2PnP2P/2NP4/PP2BPP1/2RQK1NR w K - 0 11",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "White simply hands over the bishop pair. A hidden bonus of Nd4 was that it took the g4 break away — if White plays g4 anyway, we take the bishop and recapture on g4 with our structure fully intact.",
+   "kind": "main",
+   "teaches": "A well-placed knight can quietly veto a pawn break before it's played."
+  },
+  {
+   "ply": 21,
+   "t": 353.5,
+   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2pN3p/2PnP2P/3P4/PP2BPP1/2RQK1NR b K - 1 11",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "A good exercise: pause and list the factors giving Black the edge, then try to guess the engine's number. The honest assessment here is around minus one and a half, maybe closer to minus two.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 387.5,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2PnP2P/3P4/PP2BPP1/2RQK1NR w K - 2 12",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "We're close to positionally winning, so we keep the dark-squared bishop rather than trade it, retreat it to safety, and plan to chase the knight from the centre at our leisure with e6.",
+   "kind": "plan",
+   "plans": "Nudge the centralized knight back with e6 once we're ready."
+  },
+  {
+   "ply": 23,
+   "t": 395,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2PnP2P/3P1N2/PP2BPP1/2RQK2R b K - 3 12",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "After Nf3, think flexibly — don't just grab on e2 because that was the earlier plan; the position has changed and asks a new question.",
+   "kind": "main",
+   "teaches": "A plan formed three moves ago isn't binding; re-evaluate every time the board shifts."
+  },
+  {
+   "ply": 25,
+   "t": 406.5,
+   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2pN3p/2PnP2P/3P4/PP2BPP1/2RQK1NR b K - 5 13",
+   "line": [
+    "Bf6",
+    "Ng1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 407.5,
+   "fen": "r1bq1rk1/pp2pp2/3p1bp1/2p4p/2PnP2P/2NP4/PP2BPP1/2RQK1NR w K - 0 11",
+   "line": [],
+   "spoken": "The key realization: once the knight leaves c3, the long diagonal springs open and the b2-pawn becomes a target we're entitled to grab.",
+   "kind": "branch",
+   "plans": "Exploit the opened long diagonal against b2.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 412,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2PnP2P/3P1N2/PP2BPP1/2RQK2R b K - 3 12",
+   "line": [
+    "Nd5",
+    "Bg7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 414.5,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2P1P2P/3P1n2/PP2BPP1/2RQK2R w K - 0 13",
+   "line": [
+    "Nxf3+"
+   ],
+   "spoken": "Concretely, Nxf3+ followed by Bxb2 collects the loose pawn, since White is uncastled and can't punish it.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 425,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2P1P2P/3P1B2/PP3PP1/2RQK2R b K - 0 13",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 427,
+   "fen": "r1bq1rk1/pp2pp2/3p2p1/2pN3p/2P1P2P/3P1B2/Pb3PP1/2RQK2R w K - 0 14",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "Grabbing on b2 is fine, but keep Qa5-check filed away as a resource — play it at the wrong moment and the e7-pawn hangs, so it isn't a check to toss in for fun.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 27,
+   "t": 433,
+   "fen": "r1bq1rk1/pp2pp2/3p2p1/2pN3p/2P1P2P/3P1B2/PbR2PP1/3QK2R b K - 1 14",
+   "line": [
+    "Rc2"
+   ],
+   "spoken": "Retreat the bishop to g7. With the knight gone from d4 we now have to respect g4 again — kept near the king, the bishop helps us meet it.",
+   "kind": "main",
+   "teaches": "When your blockading knight leaves a square, re-check every break it used to prevent."
+  },
+  {
+   "ply": 28,
+   "t": 471,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2P1P2P/3P1B2/P1R2PP1/3QK2R w K - 2 15",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "This is exactly why g7 beats d4 for the bishop — after Bd4, g4 would leave our king a shade too exposed, so we keep the bishop closer to home.",
+   "kind": "main"
+  },
+  {
+   "ply": 29,
+   "t": 475.5,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN3p/2P1P1PP/3P1B2/P1R2P2/3QK2R b K - 0 15",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 481,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN4/2P1P1pP/3P1B2/P1R2P2/3QK2R w K - 0 16",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 483,
+   "fen": "r1bq1rk1/pp2ppb1/3p2p1/2pN4/2P1P1BP/3P4/P1R2P2/3QK2R b K - 0 16",
+   "line": [
+    "Bxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 489,
+   "fen": "r1bq1rk1/pp3pb1/3pp1p1/2pN4/2P1P1BP/3P4/P1R2P2/3QK2R w K - 0 17",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 chases the knight out of the centre and meets fire with fire on the very wing White wanted to attack.",
+   "kind": "main"
+  },
+  {
+   "ply": 33,
+   "t": 501,
+   "fen": "r1bq1rk1/pp3pb1/3pp1p1/2p5/2P1P1BP/3PN3/P1R2P2/3QK2R b K - 1 17",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "White's g4 is double-edged: he may be eyeing h5, but he's uncastled, can't castle queenside with the rook moved, and has no kingside left to castle into. Fundamentally our position is the sounder one.",
+   "kind": "main",
+   "teaches": "A wing attack from an uncastled king cuts both ways — count whose king is safer first."
+  },
+  {
+   "ply": 34,
+   "t": 530,
+   "fen": "r1bq1rk1/pp4b1/3pp1p1/2p2p2/2P1P1BP/3PN3/P1R2P2/3QK2R w K - 0 18",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Because our structure is healthier and our pieces better coordinated, we benefit if the position opens — which is the whole idea behind f5. Why should White have a monopoly on the kingside?",
+   "kind": "main"
+  },
+  {
+   "ply": 35,
+   "t": 538.5,
+   "fen": "r1bq1rk1/pp4b1/3pp1p1/2p2P2/2P3BP/3PN3/P1R2P2/3QK2R b K - 0 18",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 550,
+   "fen": "r1bq1rk1/pp4b1/3p2p1/2p2p2/2P3BP/3PN3/P1R2P2/3QK2R w K - 0 19",
+   "line": [
+    "exf5"
+   ],
+   "spoken": "Recapturing exf5 keeps our king's pawn shelter more or less intact while opening the e-file for our rooks — cleaner than taking with the g-pawn.",
+   "kind": "main",
+   "teaches": "Choose the recapture that opens a file for you while preserving your own king cover."
+  },
+  {
+   "ply": 37,
+   "t": 559.5,
+   "fen": "r1bq1rk1/pp4b1/3p2p1/2p2p2/2P4P/3PNB2/P1R2P2/3QK2R b K - 1 19",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": "Yes, f5 concedes the d5 square — but a move having an obvious drawback doesn't make it bad. The drawback is a price worth paying for the open lines.",
+   "kind": "main",
+   "teaches": "Weigh a concession against what it buys; drawbacks and strong moves routinely coexist."
+  },
+  {
+   "ply": 38,
+   "t": 561,
+   "fen": "r1bqr1k1/pp4b1/3p2p1/2p2p2/2P4P/3PNB2/P1R2P2/3QK2R w K - 2 20",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Rook to e8 loads the open file; we're threatening f4 and getting the heavy pieces into the attack.",
+   "kind": "plan",
+   "plans": "Push f4 and pile down the e-file."
+  },
+  {
+   "ply": 39,
+   "t": 581,
+   "fen": "r1bqr1k1/pp4b1/3p2p1/2p2p2/2P4P/3PNB2/P1R2P2/3Q1K1R b - - 3 20",
+   "line": [
+    "Kf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 608.5,
+   "fen": "1rbqr1k1/pp4b1/3p2p1/2p2p2/2P4P/3PNB2/P1R2P2/3Q1K1R w - - 4 21",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": "Rb8 overprotects the queenside pawn so it can never become a distraction — we can afford the tempo here.",
+   "kind": "main"
+  },
+  {
+   "ply": 41,
+   "t": 614.5,
+   "fen": "1rbqr1k1/pp4b1/3p2p1/2p2p1P/2P5/3PNB2/P1R2P2/3Q1K1R b - - 0 21",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Keep the king's pawn structure intact with g5. Letting White reach h6 looks scary, but once the pawn parks on h7 we simply tuck the king in behind it.",
+   "kind": "main",
+   "teaches": "A rammed enemy pawn on h6/h7 can become a shield for your king rather than a battering ram."
+  },
+  {
+   "ply": 42,
+   "t": 616.5,
+   "fen": "1rbqr1k1/pp4b1/3p4/2p2ppP/2P5/3PNB2/P1R2P2/3Q1K1R w - - 0 22",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 617.5,
+   "fen": "1rbqr1k1/pp4b1/3p2p1/2p2p1P/2P5/3PNB2/P1R2P2/3Q1K1R b - - 0 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 619,
+   "fen": "1rbqr1k1/pp4b1/3p4/2p2ppP/2P5/3PNB2/P1R2P2/3Q1K1R w - - 0 22",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 628.5,
+   "fen": "1rbqr1k1/pp4b1/3p4/2pB1ppP/2P5/3PN3/P1R2P2/3Q1K1R b - - 1 22",
+   "line": [
+    "Bd5+"
+   ],
+   "spoken": "Bd5 comes with check; step the king to h7, sidestepping ideas like Bf7. Our position isn't optimal, but there's nothing to fear on the king.",
+   "kind": "main"
+  },
+  {
+   "ply": 44,
+   "t": 635.5,
+   "fen": "1rbqr3/pp4bk/3p4/2pB1ppP/2P5/3PN3/P1R2P2/3Q1K1R w - - 2 23",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": ""
+  }
+ ]
+}

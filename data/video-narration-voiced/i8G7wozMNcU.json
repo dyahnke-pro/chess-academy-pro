@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:i8G7wozMNcU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, c6 — the Caro-Kann. We haven't faced it too many times."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4. There are countless setups against the Caro; what matters more than which you pick is that you know it well."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "d5."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — an offbeat, tricky way to keep the full centre and steer for a quick attack. Its reputation is far worse than its bite.",
-   "kind": "main",
-   "teaches": "f3 holds the centre and invites sharp play many Caro players simply don't know."
+   "spoken": "f3 — the Fantasy Variation, the line we played the one time we faced the Caro. Let's see how it holds up here."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4. The Fantasy doesn't have the greatest reputation, in my opinion very undeservedly — it's incredibly tricky and can lead to quick wins against imprecise play."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "e5 — the main line, a classic idea. You don't want to take on e5, because of the super-nasty check on h4."
   },
   {
    "ply": 9,
@@ -80,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "And you don't play c3, which doesn't stop that check either — so, almost Vienna-style, the knight to f3. The Fantasy is very annoying for Caro players who like a quiet positional game."
   },
   {
    "ply": 10,
@@ -89,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g4 — the main move, pinning the knight. Again we don't take on e5: that allows the queen trade and Black wins the pawn back."
   },
   {
    "ply": 11,
@@ -98,7 +96,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "The correct move is the bishop to c4, aiming at f7 — threatening the bishop takes f7 and the knight takes e5, the classic idea. If Black takes the knight, you take back with a massive attack on f7; the bishop takes f3 is terrible. Black has to be very precise — reminds me of Tal."
   },
   {
    "ply": 12,
@@ -107,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 — immediately a blunder. This is exactly why you choose lines based on what your opponent won't like to face."
   },
   {
    "ply": 13,
@@ -116,9 +114,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "White sacrifices the bishop on f7 with check. The point is the reply: after the king takes, the knight leaps to e5 with check and forks the king together with the loose bishop on g4 — check first, win the piece next.",
-   "kind": "trap",
-   "teaches": "A sacrifice works when the recapture runs into a knight that checks the king and hits a piece in the same move."
+   "spoken": "The point Black missed: after the knight takes e5 with check, the bishop is attacked by two pieces and defended by only one, so the bishop takes f7 with check is crushing. The move was the knight to d7."
   },
   {
    "ply": 14,
@@ -127,7 +123,7 @@
    "line": [
     "Kxf7"
    ],
-   "spoken": ""
+   "spoken": "The king takes on f7 — you had to know the knight to d7 to cover the e5-square."
   },
   {
    "ply": 15,
@@ -136,7 +132,7 @@
    "line": [
     "Nxe5+"
    ],
-   "spoken": ""
+   "spoken": "The knight takes e5 with check."
   },
   {
    "ply": 16,
@@ -145,7 +141,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": ""
+   "spoken": "The king to g8."
   },
   {
    "ply": 17,
@@ -154,9 +150,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "Two pawns up, the black king dragged to g8 and stripped bare, White's knight picks off the bishop that had come to g4. This is already winning, straight out of the opening.",
-   "kind": "main",
-   "teaches": "The sacrifice's dividend is material plus a permanently exposed king."
+   "spoken": "The knight takes g4 — now we're two pawns up, the king in shambles, completely winning eight moves in. It could become one pawn if the knight takes c4, but we have mating ideas on the a2-to-g8 diagonal."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "The knight to d7 — as good a move as any, and it leaves our centre intact. We can choose between the materialistic knight to c3 protecting e4, or simply castling; we care far more about the open f-file and activating quickly. There's also c3 threatening the queen to b3, but that over-relies on a gimmick and under-emphasizes development."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3 — probably simpler, keeping the two extra pawns; we'll castle next. Don't fall for one-move-itis: seeing a cool mating pattern, getting excited, and not asking whether your opponent can stop the threat."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "The bishop to b4."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Now of course we castle, not fearing the bishop takes c3 and the knight takes d4 — because without the dark-squared bishop, Black's dark squares will also be really weak."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "The queen to c7. Time to step on the gas. Some of you are contemplating the bishop to f4 —"
   },
   {
    "ply": 23,
@@ -210,14 +204,15 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "— but I don't like it, since it blocks the f-file. The best is e5: the idea is to dislodge the knight from f6 — you control that square, so after it takes, we recapture and threaten the queen to e6 checkmate, with nothing able to block the rook; our centre evicts Black's last remaining defender."
   },
   {
    "ply": 22,
    "t": 386,
    "fen": "r5kr/ppqn2pp/2p2n2/8/1b1PP1N1/2N5/PPP3PP/R1BQ1RK1 w - - 5 12",
    "line": [],
-   "spoken": ""
+   "spoken": "A disaster for Black. The queen to d3 intending the queen to c4 was also proposed, and that was good too.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -226,14 +221,16 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Pretty one-sided, but good that you lost this one here rather than in something serious.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 397,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "It's very important to know the Fantasy —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -243,7 +240,8 @@
     "d5",
     "f3"
    ],
-   "spoken": ""
+   "spoken": "— it's uncommon at any level, which is also what makes it such a dangerous weapon. If you're not familiar, the bishop takes f7 threat isn't easy to figure out. The move is the knight to d7, the only move; then White castles — it looks scary, but Black is in time to put the knight on f6 covering the rook. White plays c3, not the queen to f6, because you don't do with the queen what you can do with the knight; here h3 is strong, showing why: you'd have to move the queen and lose f7. So develop the knight, White plays c3 intending the queen to b3, which creates both a battery and an attack on b7, and after the bishop to d6 you get a very complicated central position.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -252,14 +250,16 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "After the queen to b3, Black castles, and grabbing the pawn is very dangerous because White is underdeveloped. The bottom line: Black has many good systems against the Fantasy —",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 517,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "— but all of them lead to really sharp positions not to the liking of the average Caro player.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -268,7 +268,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "As for Black's other options, the queen to b6 is a relatively recent move some grandmasters like —",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -277,7 +278,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "— pressuring d4. There's an idea, not a great line but one I like online: the knight to c3, then e5.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -286,7 +288,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "— e5 here —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -296,7 +299,8 @@
     "dxe5",
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "— the pawn takes e5, the bishop to c5, and again, if White isn't careful, this could get really spicy.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -305,7 +309,8 @@
    "line": [
     "Nge2"
    ],
-   "spoken": ""
+   "spoken": "The knight to e2 gets checkmated on the dark squares —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -316,14 +321,16 @@
     "Kd2",
     "Qe3#"
    ],
-   "spoken": ""
+   "spoken": "— the bishop to f2 with check, the king to d2, the queen to e3 is mate.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 555,
    "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/4P3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "So White needs the move the knight to a4 —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -332,9 +339,8 @@
    "line": [
     "Na4"
    ],
-   "spoken": "In the ...Qb6 sideline lurks a trap: Black's bishop to c5 builds a dark-square battery, and a careless knight to e2 is mated — check on f2, the king dragged to d2, and the queen to e3 finishes it. The antidote is the knight to a4, which hits the c5-bishop and shores up those dark squares.",
-   "kind": "trap",
-   "teaches": "Know the one defensive move that both attacks the intruder and plugs the mating squares."
+   "spoken": "— a very classic way of dealing with this battery.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -345,7 +351,8 @@
     "Ke2",
     "Qe3+"
    ],
-   "spoken": ""
+   "spoken": "You have to keep the e3-square protected — the bishop to f2 with check, the king to e2, the queen to e3 with check; this checkmating mechanism is often missed at lower levels, but here a bishop guards e3.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -357,14 +364,16 @@
     "Qc1",
     "Bd4"
    ],
-   "spoken": ""
+   "spoken": "So if Black takes on e3 and White recaptures, Black has to retreat the queen to d4, and you reach a very interesting endgame — better for White, but you must know a bunch of accurate moves.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 607,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "That's one line. You can also play e6, a little passive but very reputable —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -373,7 +382,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "— e6, a reputable system —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -383,14 +393,16 @@
     "Nc3",
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "— the knight to c3, the bishop to b4, resembling a Winawer French, with a lot of similarities.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 623.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "That's about it — I'd research the Black side if you want to know it well. Once the bishop takes f7 happens, the game is over: you take the bishop. Had Black taken the pawn instead, White castles, the knight to d7, then the queen to d3 looks crushing, threatening the queen to b3 and forking the knight. A short but sweet game.",
+   "reanchor": true
   }
  ]
 }

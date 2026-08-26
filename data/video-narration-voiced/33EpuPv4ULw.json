@@ -1,10 +1,10 @@
 {
  "videoId": "33EpuPv4ULw",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1000",
- "openingName": "Philidor Defence",
+ "openingName": "Philidor Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:33EpuPv4ULw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black meets our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Let's diversify from the Italian — the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — the Philidor."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 is the principled reply to the Philidor — Black's d6 blocks his own bishop and develops nothing, so opening the center punishes both concessions at once.",
-   "kind": "main",
-   "teaches": "Open the center against a defense that develops slowly and hems in its own pieces."
+   "spoken": "Against the Philidor we strike with d4. It's strong because ...d6 has left Black undeveloped and boxed in his own bishop."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight on d4. Those concessions mean we open the centre to exploit them."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 9,
@@ -80,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We simply develop the knight to c3 — no need to rush the d4-knight; once he trades it off, our queen will be perfectly safe."
   },
   {
    "ply": 11,
@@ -90,7 +88,7 @@
     "Nxd4",
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "Black trades on d4 and we recapture with the queen — safe, because with no knight left on b8 there's no ...c-pawn or ...Nb8 tempo to chase it."
   },
   {
    "ply": 12,
@@ -99,7 +97,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d7. A caution: ...c5 to hit the queen is a classic mistake here — attacking the queen isn't automatically a good thing."
   },
   {
    "ply": 13,
@@ -108,7 +106,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We continue with the bishop to c4, pressuring f7. The queen needs no move; we're happy to provoke ...c5, which would permanently weaken the d5-square."
   },
   {
    "ply": 15,
@@ -118,7 +116,7 @@
     "Ne7",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to e7; we castle."
   },
   {
    "ply": 16,
@@ -127,7 +125,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black attacks the queen with the knight to c6."
   },
   {
    "ply": 17,
@@ -136,7 +134,7 @@
    "line": [
     "Qd1"
    ],
-   "spoken": ""
+   "spoken": "We tuck the queen back to d1 — Qd5 would walk into ...Be6, Qd3 into ...Ne5, and we don't want to give up our bishop. Sometimes you retreat, and it costs nothing when your pieces are this active."
   },
   {
    "ply": 18,
@@ -145,7 +143,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 19,
@@ -154,9 +152,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight leaps to the d5 outpost — a dream square, protected and unassailable, dominating the center and eyeing weaknesses around Black's king.",
-   "kind": "main",
-   "teaches": "Plant a knight on a central outpost the opponent can't chase, and let it dominate."
+   "spoken": "We swing the knight to the d5 outpost — a beautiful square. We could take the bishop at our leisure, but the knight is so strong we'd rather make him be the one to take it."
   },
   {
    "ply": 20,
@@ -165,7 +161,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 21,
@@ -174,7 +170,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "We grab more central space with f4 — not necessarily what I'd play myself, but a lesson in how to attack."
   },
   {
    "ply": 22,
@@ -183,7 +179,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to e6. Development isn't finished — a good moment to maneuver."
   },
   {
    "ply": 23,
@@ -192,7 +188,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "The bishop looks awkward on d2, but it's a maneuver heading for the long diagonal — not b3, which would weaken it."
   },
   {
    "ply": 24,
@@ -201,7 +197,7 @@
    "line": [
     "Na5"
    ],
-   "spoken": ""
+   "spoken": "Black lunges the knight to a5, hitting our bishop."
   },
   {
    "ply": 25,
@@ -210,7 +206,7 @@
    "line": [
     "Bxa5"
    ],
-   "spoken": ""
+   "spoken": "We snap off the knight, the bishop landing on a5."
   },
   {
    "ply": 26,
@@ -219,7 +215,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "Black plays b6, attacking the bishop."
   },
   {
    "ply": 27,
@@ -228,9 +224,7 @@
    "line": [
     "Bc3"
    ],
-   "spoken": "The bishop completes its maneuver to c3, seizing the long dark diagonal that points straight at g7 and Black's king.",
-   "kind": "main",
-   "teaches": "Reroute a bishop onto the long diagonal to team up with an outpost knight against the castled king."
+   "spoken": "We slot the bishop onto c3 — the long diagonal we were aiming for all along — a clean piece up."
   },
   {
    "ply": 28,
@@ -239,7 +233,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black hits our knight with c6."
   },
   {
    "ply": 29,
@@ -248,7 +242,7 @@
    "line": [
     "Qd4"
    ],
-   "spoken": ""
+   "spoken": "Rather than move the attacked knight, we set threats — the queen to d4, forming a battery with the bishop down the long diagonal toward g7."
   },
   {
    "ply": 30,
@@ -257,7 +251,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "Black grabs the knight, a pawn recapturing on d5 — but that opens the long diagonal straight to g7."
   },
   {
    "ply": 31,
@@ -266,7 +260,7 @@
    "line": [
     "Qxg7#"
    ],
-   "spoken": ""
+   "spoken": "The queen crashes into g7 — checkmate."
   }
  ]
 }

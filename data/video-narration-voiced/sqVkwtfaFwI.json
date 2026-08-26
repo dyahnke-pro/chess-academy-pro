@@ -1,0 +1,264 @@
+{
+ "videoId": "sqVkwtfaFwI",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Smith-Morra Gambit Accepted",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:sqVkwtfaFwI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 62,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 66.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 70.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "cxd4",
+    "c3"
+   ],
+   "spoken": "The Smith-Morra — we offer the c-pawn to rip the centre open.",
+   "kind": "main",
+   "teaches": [
+    "the Smith-Morra Gambit"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 75,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 76.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 77.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 80.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": "He sets up with e6, the most popular and honestly the most annoying reply to face.",
+   "kind": "main",
+   "teaches": [
+    "the e6 setup"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 88.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 94.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 111,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Here's the counter-intuitive move: the bishop to c4. It looks like it violates development, but it isn't as passive as it appears — it supports a future knight sacrifice on d5, and if the e6-pawn ever collapses, this bishop is beautifully poised to wreak havoc. Pure potential energy.",
+   "kind": "plan",
+   "teaches": [
+    "Bc4 potential energy"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 132,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 133.5,
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 144,
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "We retreat the bishop to b3 and reach the edge of theory — from here we're on our own. The core idea to hold in mind is the knight sacrifice on d5, shoving it into the centre to blow up the e6-pawn and open the e-file.",
+   "kind": "plan",
+   "teaches": [
+    "the Nd5 sacrifice idea"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 170,
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 201,
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 b kq - 3 9",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "With Black's whole kingside undeveloped, this is the moment for the knight to d5 — and we can play it almost without calculation, because if it's taken we get tremendous play down the e-file. Some sacrifices are so typical you can trust them intuitively. The knight disrupts his coordination, and a bishop to e3 and b6 even sets up a fork on c7.",
+   "kind": "main",
+   "teaches": [
+    "the intuitive sacrifice",
+    "long-term pressure"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 340,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": "Notice his king is boxed in with no squares — file that away. Now develop our last minor piece: the bishop to g5 pins and piles on, while the bishop to e3 would close the e-file and make a recapture on d5 more palatable for him.",
+   "kind": "plan",
+   "teaches": [
+    "note the boxed-in king",
+    "develop the last piece"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 484.5,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "Both are fine — a matter of taste. We choose the long-term move, the bishop to g5, and if he ever meets it with f6, a bishop sacrifice there becomes very interesting.",
+   "kind": "main",
+   "teaches": [
+    "choosing the long-term move"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 494.5,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 499.5,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 529.5,
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 532.5,
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N4/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 11",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": "After h6 and the bishop to h4, we're hoping for g5 — because then the knight to f6 is checkmate, a smothered mate with the king boxed in. The only reason the knight to f6 isn't already mate is that the g7-pawn still covers that square.",
+   "kind": "main",
+   "teaches": [
+    "the smothered-mate trap"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 571,
+   "fen": "r2qkb1r/1b1pnp2/p1n1p2p/1p1N2p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 575.5,
+   "fen": "r2qkb1r/1b1pnp2/p1n1pN1p/1p4p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 12",
+   "line": [
+    "Nf6#"
+   ],
+   "spoken": "He plays g5, and the knight to f6 is smothered mate. That's what happens when you pile long-term pressure on an undeveloped position — it collapses.",
+   "kind": "main",
+   "teaches": [
+    "pressure induces the collapse"
+   ]
+  }
+ ]
+}

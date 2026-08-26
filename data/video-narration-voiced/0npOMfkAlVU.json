@@ -1,242 +1,245 @@
 {
- "videoId": "0npOMfkAlVU",
- "title": "Beginner To Master | Chess Speedrun | Najdorf Sicilian | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Najdorf Variation (Black)",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:0npOMfkAlVU",
- "moves": [
-  {
-   "ply": 2,
-   "t": 12.5,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 31.5,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 47,
-   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
-   "line": [
-    "d6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 49.5,
-   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
-   "line": [
-    "d4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 52,
-   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
-   "line": [
-    "cxd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 54.5,
-   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
-   "line": [
-    "Nxd4",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 59,
-   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": "After the knight to c3 the Open Sicilian reaches its great fork: the fianchetto to g6 is the Dragon, the knight to c6 is the Classical, and the little pawn to a6 is the Najdorf — each a different world.",
-   "kind": "main",
-   "teaches": "The 5th-move choice defines your whole Sicilian — Dragon, Classical, or Najdorf.",
-   "plans": "Pick the Najdorf: maximum flexibility."
-  },
-  {
-   "ply": 10,
-   "t": 69,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
-   "line": [
-    "a6"
-   ],
-   "spoken": "The pawn to a6 is the Najdorf — the most respected Sicilian of all. It takes the b5-square away from White's pieces and keeps every plan open, deciding on the setup only after White commits.",
-   "kind": "main",
-   "teaches": "…a6 is prophylaxis plus flexibility — it denies b5 and delays Black's commitment.",
-   "plans": "Wait for White's system, then choose …e5 or …e6 accordingly."
-  },
-  {
-   "ply": 11,
-   "t": 82,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
-   "line": [
-    "Be2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 112,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 121,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
-   "line": [
-    "Be2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 136,
-   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 172,
-   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R b KQkq - 1 7",
-   "line": [
-    "Nb3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 235.5,
-   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 2 8",
-   "line": [
-    "Be7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 266.5,
-   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 b kq - 3 8",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 282.5,
-   "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 940,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 965,
-   "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
-   "line": [
-    "e6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1329.5,
-   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 0 8",
-   "line": [
-    "Nb3",
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 1332.5,
-   "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1KR1 w - - 4 10",
-   "line": [
-    "Kf1",
-    "Ke7",
-    "Rg1",
-    "Rg8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 1472.5,
-   "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4PP2/1NN5/PPP1B1PP/R1BQ1KR1 b - - 0 10",
-   "line": [
-    "f4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 1494,
-   "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4Pp2/1NN5/PPP1B1PP/R1BQ1KR1 w - - 0 11",
-   "line": [
-    "exf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 1495.5,
-   "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4PB2/1NN5/PPP1B1PP/R2Q1KR1 b - - 0 11",
-   "line": [
-    "Bxf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1669,
-   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1703.5,
-   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "0npOMfkAlVU",
+  "title": "Beginner To Master | Chess Speedrun | Najdorf Sicilian | Grandmaster Naroditsky",
+  "openingName": "Sicilian Defense: Najdorf Variation",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:0npOMfkAlVU",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 12.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": "The pawn to e4, c5 — a Sicilian."
+    },
+    {
+      "ply": 3,
+      "t": 31.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "The knight to f3 — a Najdorf?"
+    },
+    {
+      "ply": 4,
+      "t": 47,
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "line": [
+        "d6"
+      ],
+      "spoken": "d6. We've mostly been playing the Accelerated Dragon, but lately we've experimented with the Najdorf."
+    },
+    {
+      "ply": 5,
+      "t": 49.5,
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4 — the Open Sicilian."
+    },
+    {
+      "ply": 6,
+      "t": 52,
+      "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "cxd4"
+      ],
+      "spoken": "We take on d4."
+    },
+    {
+      "ply": 8,
+      "t": 54.5,
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+      "line": [
+        "Nxd4",
+        "Nf6"
+      ],
+      "spoken": "The knight takes d4, the knight to f6. After the knight to c3 we have several moves: g6 is the traditional Dragon —"
+    },
+    {
+      "ply": 9,
+      "t": 59,
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "— the knight to c6 is the Rauzer or Classical Sicilian, there's e6, and there's e5 —"
+    },
+    {
+      "ply": 10,
+      "t": 69,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "line": [
+        "a6"
+      ],
+      "spoken": "— e5 isn't great, but the Najdorf holds a special place in Sicilian players' hearts: a6. The most immediate idea is to cover the b5-square, stopping the knight from going to b5."
+    },
+    {
+      "ply": 11,
+      "t": 82,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "The bishop to e2 — one of the most popular responses to the Najdorf, considered among White's quietest options; quiet in the proper context, not boring."
+    },
+    {
+      "ply": 10,
+      "t": 112,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+      "line": [],
+      "spoken": "It's relatively quiet because White wants to castle short, whereas in the bishop to g5 or e3 lines White castles long, giving opposite-side castling — the position is still very interesting.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 121,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "Najdorf players are split into two categories: e6 players and e5 players.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 136,
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+      "line": [
+        "e5"
+      ],
+      "spoken": "e6 leads to the Scheveningen structure, but I've always been an e5 player. If you don't play the Najdorf and this move doesn't seem weird to you, then you're doing something wrong."
+    },
+    {
+      "ply": 13,
+      "t": 172,
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R b KQkq - 1 7",
+      "line": [
+        "Nb3"
+      ],
+      "spoken": "Why does the knight to b3 look like a big positional mistake, when it's the theoretical move? Because e5 weakens d6 and correspondingly the d5-square. This is precisely why I don't recommend the Najdorf to beginners — you have to earn the right to violate these basic rules by knowing them first; practice violating them too early and you build a rotten foundation. There isn't one single reason Black gets away with e5 — it's a very complex network of reasons."
+    },
+    {
+      "ply": 14,
+      "t": 235.5,
+      "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 2 8",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "First, we develop and get our king out of the centre — the bishop to e6 is possible, but the main move is the bishop to e7, preparing to castle as early as possible, and the c8-bishop might later fianchetto to b7. The first of the reasons d5 isn't the end of the world: Black has a lot of pieces to contest d5 —"
+    },
+    {
+      "ply": 15,
+      "t": 266.5,
+      "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 b kq - 3 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "— you can put the bishop to e6, and the knight on f6 is supported by its brother on d7, so two pieces directly and one indirectly control d5, making it incredibly hard for White to plant and hold a knight there in practice, with Black's pieces clustered on the kingside."
+    },
+    {
+      "ply": 16,
+      "t": 282.5,
+      "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "That's reason one why the weakness of d5 isn't as devastating as it looks. Reason two: Black has counterplay on both sides of the board, one source being the b-pawn advance to b4 — though games have been lost by letting a knight sit on d5 all game; I once mishandled it and lost. Now we deploy the bishop to e6, adding another protector to d5; the queen to d3 is a legitimate try. Against the bishop to g5, the knight to d7 is correct — it's very hard to dislodge the f6-knight, and if he takes we retake — and all four minors are clustered, ready for queenside operations. He drops the knight, a blunder, and I take it, up a piece; part of the benefit of playing what most people don't is that unfamiliar positions cause blunders. We keep making Najdorf moves: the rook to c8, a typical Sicilian move pressuring the knight, sometimes with an exchange sac on c3; h6 to tickle the bishop and make luft. The bishop drops to d2, x-raying the queen, so we move the queen — since our rook is on the c-file, the queen to c7, queen and rook on the c-file, very common in the Najdorf. What does doubling do when the knight isn't hanging? Pressure — the knight can't move because pieces fall behind it. Then b5, expanding on the queenside and making an outpost on c4 for a knight, bishop or queen, and the queen gets access to b7 to pressure e4. The ultimate goal is d5, prepared flexibly: not the knight to b6, which with b3 played has no c4 prospects, but the queen to b7 — flexible, a standalone good move pressuring e4 and threatening the knight to c5. Then the knight to c5, the knight takes c4 winning the pawn, and d5 in the best version. On the recapture on e4, we trade queens to simplify while up a piece, since he can't move the queen without dropping the bishop; the knight takes d4 pins us, but White can't exploit it because d5 supports the knight next move — the queen takes e4 is great. He gives up the bishop, two pieces down, and resigns. The knight to a5 was the decisive blunder.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 940,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "line": [],
+      "spoken": "The bishop to e2 is again a relatively quiet move — Anatoly Karpov, Kasparov's arch-nemesis and one of the strongest positional players in history, was a champion of it, for its balance of tactics and positional chess; still Najdorf, still tactical, but more positional than the bishop to e3 or g5.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 965,
+      "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Let me show my most painful experience with e6, from the 2006 Pan-American Championships in Ecuador against Jorge Cori, now a grandmaster over 2650 but then, like me, a bright-eyed 2000. e6 looks the same as e5 without weakening d5, so what's the drawback? A few: it obstructs the bishop, which must fianchetto or reroute via d7; the e6-pawn becomes a target of White's typical f4 and f5 plan; and Black is very cramped, making it hard to defend against kingside attacks, whereas e5 makes it literally harder for White to attack. Watch how I make normal moves — castle, the knight to c6, the queen to c7, the rook, the bishop to f8, the rook to b8 for b5, the knight to a5 toward c4, g6 to blunt the queen — and then he plays e5, which would have been impossible if my pawn were on e5, and follows with a sick move, a bolt from the blue, winning on the spot, because all of Black's pieces are cramped and the king is weak, so White simply slams a knight onto d5. The knight takes d5, the bishop takes d5, pressuring f7, and if the knight takes e5, the rook takes f7 wins the queen and mates anyway. He demolished me. That's a come-to-papa system — e6 and d6 invite White to come at you; I'd rather be the one coming to papa, with more space, which is why I don't like e6.",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 1329.5,
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 0 8",
+      "line": [
+        "Nb3",
+        "e5"
+      ],
+      "spoken": "It's also why a lot of people don't like the French — you get similar types of positions. So e5, the knight to b3, the bishop to e7.",
+      "reanchor": true
+    },
+    {
+      "ply": 18,
+      "t": 1332.5,
+      "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1KR1 w - - 4 10",
+      "line": [
+        "Kf1",
+        "Ke7",
+        "Rg1",
+        "Rg8"
+      ],
+      "spoken": "Castles, the queen to d3, the bishop to e6. The queen to d3 is legitimate — its point is to overprotect the e4-pawn, freeing the c3-knight, which no longer defends e4, to go to d5; here Black can take on d5, giving very combative play, White on the queenside, Black on the kingside. The bishop to g5 is fine; the knight to a5 is a typical move but doesn't pass muster because of the queen — the rook to d1, or a quiet h3, was better, though Black's already comfortable after b5, and a4 to prevent b5 would have been White's best move.",
+      "reanchor": true
+    },
+    {
+      "ply": 19,
+      "t": 1472.5,
+      "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4PP2/1NN5/PPP1B1PP/R1BQ1KR1 b - - 0 10",
+      "line": [
+        "f4"
+      ],
+      "spoken": "For Black, if you want to keep playing this line, there's a move here where you play f4 —"
+    },
+    {
+      "ply": 20,
+      "t": 1494,
+      "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4Pp2/1NN5/PPP1B1PP/R1BQ1KR1 w - - 0 11",
+      "line": [
+        "exf4"
+      ],
+      "spoken": "— it doesn't come with the same effect as f4 does in the Scheveningen, and here you can actually take on f4 —"
+    },
+    {
+      "ply": 21,
+      "t": 1495.5,
+      "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4PB2/1NN5/PPP1B1PP/R2Q1KR1 b - - 0 11",
+      "line": [
+        "Bxf4"
+      ],
+      "spoken": "— the bishop takes f4, and you get a very typical structure where the d6-pawn may look weak, but bad pawns defend good squares: d6 supports a knight coming to e5, via the knight to c6 and then e5, solid as a rock. This idea of taking on f4 and planting a knight to e5 is one of the main, oldest Najdorf ideas — in an old 2008 game of mine I did exactly that, and my dormant bishop got a juicy square on b4 for a very nice endgame I converted into a win."
+    },
+    {
+      "ply": 11,
+      "t": 1669,
+      "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+      "line": [],
+      "spoken": "That was a little overview of the bishop-to-e2 Najdorf, a vast line — books have been written about it alone, with tons of sub-variations. I played one of the nicest games I've ever played in it, with Black —",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 1703.5,
+      "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+      "line": [
+        "e5"
+      ],
+      "spoken": "— against Alexander Shabalov when I was rated about 2350, on the Black side with e5; once I switched from the Scheveningen, it was like I'd been blind but now I see. That game really inspired me to keep playing the Najdorf.",
+      "reanchor": true
+    }
+  ]
 }

@@ -1,10 +1,10 @@
 {
  "videoId": "Gti01VN0zXA",
  "title": "Master Class | Ruy Lopez, Bishop Sac Variation | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Ruy Lopez (bishop-odds showcase)",
+ "openingName": "Ruy Lopez",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:Gti01VN0zXA",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "e5",
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "We go e4, e5 — and a mouse slip: the bishop to a6 instead of b5. Oh no."
   },
   {
    "ply": 4,
@@ -25,9 +25,7 @@
    "line": [
     "Nxa6"
    ],
-   "spoken": "White has deliberately given up the bishop on a6 — a huge handicap taken on purpose. The whole game is a lesson in generating attacking chances from a lost position: develop fast and create complications.",
-   "kind": "main",
-   "teaches": "When down material by design, seek activity and complications rather than passive defense."
+   "spoken": "The knight takes a6 — he takes correctly. Rome wasn't built in a day; down a piece, we'll have to unbalance the position and get attacking chances, but first we develop and don't make it worse."
   },
   {
    "ply": 5,
@@ -36,7 +34,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3, developing. And funnily, because we sacked the bishop, he can't play the knight to c6 — that may fluster him. d6 is fine here, a Philidor, slightly better than usual since he's up a piece."
   },
   {
    "ply": 6,
@@ -45,7 +43,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "d6 — a Philidor. To get attacking chances we'll have to open the position at some point, and not having a light-squared bishop doesn't mean we shouldn't open the centre."
   },
   {
    "ply": 7,
@@ -54,9 +52,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 stakes a claim in the center — down a piece, White must fight for space and open lines, and Black's passive ...d6 with the offside knight on a6 offers real practical chances.",
-   "kind": "main",
-   "teaches": "Build a strong center to turn a material deficit into attacking initiative."
+   "spoken": "d6 is a bit passive — his bishop is restricted by the pawn, his knight on a6 is on the rim. Even without the bishop, d4 makes sense; we need to plan how to unbalance and create some intrigue to confuse him."
   },
   {
    "ply": 8,
@@ -65,7 +61,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "The easiest formula to unbalance is to castle opposite your opponent — he'll castle kingside, so we head for queenside. And don't automatically grab free pawns when down a piece: taking on e5 and trading queens would blunder mate to the rook to d1, and even without mate, trading queens is far too steep a price for one pawn. The bishop to g4 is phenomenal — we need to keep and defend the d4-pawn, best done with another pawn."
   },
   {
    "ply": 9,
@@ -74,7 +70,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "The queen to d3 escapes the pin but doesn't defend the pawn. I like c3 — you know this move from all our Ruy Lopez games — building a little pawn chain, keeping our pawns in the centre."
   },
   {
    "ply": 10,
@@ -83,7 +79,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e7. Now we develop patiently — nothing crazy like the queen to a4 with nothing developed."
   },
   {
    "ply": 11,
@@ -92,16 +88,15 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Bishop to e3 shores up a solid pawn-and-piece center and prepares to castle long — the plan is to castle opposite Black and race a pawn storm at his king.",
-   "kind": "main",
-   "teaches": "Castle on the opposite wing from your opponent to launch a mutual pawn-storm race."
+   "spoken": "The knight to d2 has the drawback of blocking the bishop, so we change the order and start with the bishop to e3."
   },
   {
    "ply": 10,
    "t": 266,
    "fen": "r2qk1nr/ppp1bppp/n2p4/4p3/3PP1b1/2P2N2/PP3PPP/RNBQK2R w KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop to g5 blunders the bishop to the bishop takes g5.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -110,7 +105,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "So we start with the bishop to e3, then the knight to d2 — down a piece, every undeveloped piece hurts you quite a bit more than with equal material.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -119,7 +115,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Of course we're lost, everything is bad, but we're trying to make the most of the situation."
   },
   {
    "ply": 13,
@@ -128,7 +124,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "The knight to d2."
   },
   {
    "ply": 14,
@@ -137,7 +133,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "He castles. As I explained, the ideal plan is to move the queen and castle queenside — risky, since c3 already weakened us — but we can't afford any luxury in king safety. The queen to c2 is interesting; I still prefer the queen to e2. Not the queen to b3, which gets vulnerable and too far from a future kingside attack."
   },
   {
    "ply": 15,
@@ -146,7 +142,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "Escaping the pin isn't the top priority, but we want the capacity to end it — so we start with h3. If he takes and trades, that's not necessarily good for us, but it eliminates a headache bishop, activates our queen, and prepares castling."
   },
   {
    "ply": 16,
@@ -155,7 +151,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f3 — we accomplish some of what we wanted, eliminating the bishop, and now we have a clear plan of g4, g5, beginning the pawn storm. The g-pawn recapture opening the g-file wouldn't do us too many favors."
   },
   {
    "ply": 18,
@@ -165,7 +161,7 @@
     "Qxf3",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "The queen recaptures. c5 — we must be very careful; d5 is very bad, closing the centre and untying his hands for a queenside attack with b5, c4, b4, the queen to a5, far faster than us. Keeping the centre open dilutes his attack."
   },
   {
    "ply": 19,
@@ -174,7 +170,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "Plus, c5 weakened a lot of squares — he's blunted his own bishop —"
   },
   {
    "ply": 20,
@@ -183,7 +179,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "— and the knight on a6 can't go to c5 anymore. Keeping the centre open emphasizes the superiority of our pieces; we can play positionally even down a piece. We can castle, but I like the knight to c4 — with one problem."
   },
   {
    "ply": 21,
@@ -192,7 +188,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4 lets him slide the queen to d3, incredibly nasty. So I'd risk castling first — the kingside attack plan is still very much available."
   },
   {
    "ply": 22,
@@ -201,7 +197,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "The queen to a5 — we have to defend the pawn. A lot of you would play a3 automatically, but —"
   },
   {
    "ply": 23,
@@ -210,7 +206,7 @@
    "line": [
     "Kb1"
    ],
-   "spoken": ""
+   "spoken": "— you don't want to make any more queenside weaknesses; we've already played c3. So the king to b1 is the automatic response. If he attacks in a focused way he wins, but we bank on him hesitating or getting scared of our attack."
   },
   {
    "ply": 24,
@@ -219,7 +215,7 @@
    "line": [
     "Rad8"
    ],
-   "spoken": ""
+   "spoken": "The rook to d8. It's not as easy as when we gave the piece up. What's our plan? I've indicated g4 many times — what's its function?"
   },
   {
    "ply": 25,
@@ -228,7 +224,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "The pawn storm does two things: first, it removes the knight from f6, the main defender, the gatekeeper; once it's gone we push h5 and try g6. The fundamental purpose is to break open the king's cover; a lesser-known purpose is using the pawns to secure squares for your pieces."
   },
   {
    "ply": 27,
@@ -238,7 +234,7 @@
     "b5",
     "g5"
    ],
-   "spoken": ""
+   "spoken": "b5 — a move that's good for us, since his rook should have been on b8. We've entered a point of no return; we have to continue the attack and pray we end up faster than he is."
   },
   {
    "ply": 28,
@@ -247,7 +243,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "If only we had a light-squared bishop."
   },
   {
    "ply": 29,
@@ -256,7 +252,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "We've got to send it — h4, the only way to attack; you don't need to be a GM to make these moves."
   },
   {
    "ply": 30,
@@ -265,7 +261,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "He panics, trying to slow the progress of our pawns, but in doing so he creates a pawn hook, making it a lot worse for himself."
   },
   {
    "ply": 31,
@@ -274,7 +270,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We go h5 — this pawn, acting as a hook, lets us open the h-file a lot faster, and all we need is one open file to create serious threats against this king. Not winning yet, but greatly complicated — that's why the rule warns against pushing pawns where you're being attacked. The h-pawn takes g6 would be hasty; what do we play first to prepare it? The threat is stronger than the execution."
   },
   {
    "ply": 32,
@@ -283,7 +279,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "We have only one shot to open the h-file, so we play the queen to h3, doubling up first, then take on g6 — a crushing move, though it may seem absurd."
   },
   {
    "ply": 33,
@@ -292,7 +288,7 @@
    "line": [
     "Qh3"
    ],
-   "spoken": ""
+   "spoken": "What's wrong with taking and then the queen to h3? He'd play the f-pawn takes g6 and use f7 for his rook to defend the pawn. By keeping things closed until we need to open them, we disallow defences like the rook to f7. He's busted — the h-file massacre is coming whether he likes it or not, and g6 lost him the game; he even trapped his own queen, though that's much less important. A very nice game, only seventeen moves."
   },
   {
    "ply": 34,
@@ -301,7 +297,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4. Do we need to take the knight, or react to this move?"
   },
   {
    "ply": 35,
@@ -310,14 +306,15 @@
    "line": [
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "No — god forbid, do not take, do not pass go; ignore everything and make sure he isn't threatening checkmate."
   },
   {
    "ply": 33,
    "t": 1009.5,
    "fen": "3r1rk1/p3bp1p/nn4p1/qpp1p1PP/4P3/2P1B2Q/PP1N1P2/1K1R3R b - - 2 17",
    "line": [],
-   "spoken": ""
+   "spoken": "If he had gone b4, then yes, we'd have had to take his knight. On the cusp of mate, one piece of advice: pay attention to what your opponent is doing —",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -327,7 +324,8 @@
     "Nc4",
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "— he might make spite moves to threaten something, and if you tunnel-vision your own idea, you might miss a crazy resource at the last second.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -336,7 +334,7 @@
    "line": [
     "Nxd2+"
    ],
-   "spoken": ""
+   "spoken": "The knight takes d2 with check — it's over."
   },
   {
    "ply": 37,
@@ -345,7 +343,7 @@
    "line": [
     "Rxd2"
    ],
-   "spoken": ""
+   "spoken": "We can take with either piece; the rook takes d2 has more of an elegance to it."
   },
   {
    "ply": 38,
@@ -354,7 +352,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "h5."
   },
   {
    "ply": 39,
@@ -363,7 +361,7 @@
    "line": [
     "Qxh5"
    ],
-   "spoken": ""
+   "spoken": "The queen takes h5 — and mate is on the board."
   },
   {
    "ply": 40,
@@ -372,21 +370,23 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Nice game. On offering a draw over the board, you usually play a move and say 'I offer a draw' —"
   },
   {
    "ply": 39,
    "t": 1056.5,
    "fen": "3r1rk1/p3bp2/n5P1/qpp1p1PQ/4P3/2P1B3/PP1R1P2/1K5R b - - 0 20",
    "line": [],
-   "spoken": ""
+   "spoken": "— or you can just say draw; in international play, when there's no common language, you make the symbol.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1076,
    "fen": "rnbqkbnr/pppp1ppp/B7/4p3/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "There's a lot to unpack in this game — amazing, starting with the bishop to a6.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -397,7 +397,8 @@
     "Nf3",
     "d6"
    ],
-   "spoken": ""
+   "spoken": "The knight takes a6, the knight to f3, d6.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -406,7 +407,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4, opening up the centre.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -415,14 +417,16 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "And I like his move, the bishop to g4.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 1091,
    "fen": "r1bqkbnr/ppp2ppp/n2p4/4p3/3PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "He takes on d4 —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -431,7 +435,8 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "— he takes on d4; which piece would we have recaptured with? An interesting question to test your understanding of our plan.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -440,14 +445,16 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "The queen — first, because he has no knight to c6, and second, because we want to castle long as fast as possible, which needs the queen off the board; then the knight to c3, the bishop to g5, castle long, and perhaps e5 quickly if he doesn't develop.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 1138,
    "fen": "r1bqkbnr/ppp2ppp/n2p4/8/3pP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "c3 defends the pawn. Why castle long? Because the easiest way to unbalance a position is to generate attacking chances, and to attack with pawns you generally castle to the opposite side; castling opposite means you don't worry as much about king safety and can throw your pawns at your opponent. c3 also stops the knight to b4, a nice byproduct, but the main reason is just to buttress the pawn.",
+   "reanchor": true
   }
  ]
 }

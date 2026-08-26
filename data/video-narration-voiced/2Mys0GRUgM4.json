@@ -4,7 +4,7 @@
  "openingName": "King's Indian Defense: Sämisch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:2Mys0GRUgM4",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "d4, the knight to f6 — let's play some positional d4 openings this game."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "c4",
     "g6"
    ],
-   "spoken": ""
+   "spoken": "c4 — we could play a London or Trompowsky, but let's play the main line. g6 — either the King's Indian or the Grünfeld."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3 — a King's Indian."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g7."
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "e4 — against the King's Indian."
   },
   {
    "ply": 8,
@@ -61,14 +61,15 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "He castles."
   },
   {
    "ply": 7,
    "t": 45.5,
    "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "d6 is generally the move, but castling is fine —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -77,7 +78,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— and e5, which aims to punish Black, is bad, and known to be bad ever since Bobby Fischer won a famous game in that line in the 60s. So play it exactly as a normal King's Indian; the line I recommend around 1700 is the Sämisch, easiest to understand and most dangerous against someone not well-versed.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -86,10 +88,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Sämisch — White braces e4 and prepares to castle long and storm the kingside with g4 and the h-pawn. It also denies Black's knight the g4 square.",
-   "kind": "main",
-   "teaches": "The Sämisch pairs a big centre with a pawn-storm attack; f3 is its keystone.",
-   "plans": "Be3, Qd2, castle long, then push g4 and h4."
+   "spoken": "Black can get checkmated really easily — so we play f3."
   },
   {
    "ply": 10,
@@ -98,7 +97,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "d6. The point of f3 is threefold: it reinforces the e4-pawn, it prepares a later pawn storm with g4, and it prevents the knight from coming to g4 —"
   },
   {
    "ply": 11,
@@ -107,7 +106,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "— which is important, because we now develop the bishop to e3."
   },
   {
    "ply": 12,
@@ -116,7 +115,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "e5. The ideal Sämisch scenario: close the centre, play the queen to d2, castle long, and checkmate Sicilian-style on the kingside with the bishop to h6, h4, h5, and the pawn takes g6. Black has to stop us in that order, which isn't as easy as it seems. e5 is the old-school main line."
   },
   {
    "ply": 13,
@@ -125,7 +124,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We go d5, closing down the centre — the first step."
   },
   {
    "ply": 14,
@@ -134,7 +133,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "c6 is indeed the correct move."
   },
   {
    "ply": 15,
@@ -143,7 +142,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "Now we aim at step two — tuck our king away with the queen to d2. We'll take on c6."
   },
   {
    "ply": 16,
@@ -152,7 +151,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d7 is very awkward — it deprives the knight of its natural developing square; I'm not sure what he's trying to do."
   },
   {
    "ply": 17,
@@ -161,7 +160,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Now obviously we castle long, completing the second stage of our plan."
   },
   {
    "ply": 18,
@@ -170,7 +169,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "b5 — his heart's in the right place, trying to attack the queenside, but the wheels are going to come off. We can play the pawn takes b5, that's fine, but there's an even better version —"
   },
   {
    "ply": 19,
@@ -179,9 +178,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Black's b5 lunges on the queenside where White's king sits, but it's premature. White cracks the position open first with the capture on c6, exposing the weak d6-pawn and clearing lines to it.",
-   "kind": "main",
-   "teaches": "Meet a flank pawn-lunge by opening the centre before it gathers momentum."
+   "spoken": "— the d-pawn takes c6, which exposes a very weak pawn on d6, and we'll take b5 in a very good version. Aren't we opening the centre I said to keep closed? Circumstances have changed — he gave us a pawn, and the great thing about the Sämisch is that it's structurally healthy —"
   },
   {
    "ply": 20,
@@ -190,7 +187,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "— so opening the centre doesn't expose us; we're perfectly developed and our centre is in good hands. What do we take the pawn with? Tricky — a lot of you will be tempted to take with the pawn to carry a threat, but you should take with the knight."
   },
   {
    "ply": 21,
@@ -199,7 +196,7 @@
    "line": [
     "Nxb5"
    ],
-   "spoken": ""
+   "spoken": "The knight takes b5 — taking with the pawn opens the c-file only he benefits from, and lets him play the knight to d4. This is definitely the best move."
   },
   {
    "ply": 22,
@@ -208,7 +205,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Now we're attacking d6 with three pieces — the rook, the queen, and the knight. a5 — he keeps trying to attack, but he's grasping at straws."
   },
   {
    "ply": 23,
@@ -217,9 +214,7 @@
    "line": [
     "Qxd6"
    ],
-   "spoken": "The pressure converges: several pieces bear down on d6 and the queen simply collects it. Black's loose queenside play has left him a pawn down and clearly worse.",
-   "kind": "main",
-   "teaches": "When several attackers hit one weak pawn, it falls — punish over-extension concretely."
+   "spoken": "Time to reap the harvest — take the pawn with the queen, swooping in and paralyzing him; if he moves the bishop, we trade queens, up two pawns. The knight takes d6 was also possible."
   },
   {
    "ply": 24,
@@ -228,7 +223,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": ""
+   "spoken": "The knight to b4 is a good try, attacking the a2-pawn — no need to give that pawn away."
   },
   {
    "ply": 25,
@@ -237,7 +232,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "The simplest is a3, chasing the knight away with tempo; the king to b1 is also good prophylaxis, but a3 comes with tempo. Our king is perfectly safe on c1. After he moves the knight, the bishop to g5 is coming — the bishop on d7 is defended by queen and knight, and the bishop to g5 pins the knight and threatens to win the bishop by taking it."
   },
   {
    "ply": 26,
@@ -246,7 +241,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The only way to defend is to move his bishop, which allows the queen trade. The knight to c6 —"
   },
   {
    "ply": 27,
@@ -255,14 +250,15 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "— and the bishop to g5, very reasonable."
   },
   {
    "ply": 26,
    "t": 397,
    "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
    "line": [],
-   "spoken": ""
+   "spoken": "Against another GM I'd probably develop my knight and bring it to c3 just to beef up kingside security —",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -271,7 +267,8 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "— but here we can go in for the kill; I don't mind.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -280,7 +277,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "The rook to c8 — he's not effectively doing anything against our threat."
   },
   {
    "ply": 29,
@@ -289,7 +286,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "Why did we play the bishop to g5? To take on f6, and then the bishop on d7 is toast."
   },
   {
    "ply": 31,
@@ -299,14 +296,16 @@
     "Bxf6",
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f6 wins a piece, and now he plays the queen to b6. It's a dangerous period — we're still quite undeveloped, our whole kingside is at home, so it's like we won a lottery ticket but we're in a war zone and need to escape before we can cash it in. Identify the threats: the rook to d8, and the bishop to g5 with check disattaching our king from the rook, which would make the rook to d8 a devastating pin. We can't cover d8, but the queen to d2 takes the sting out of both — keep the queen close to the king, don't abandon it. If the knight to d4, we just take it; c4 is well defended. Then the bishop to d3, to stop him opening his bishop with the d3 pawn-sac, and we consolidate. After a check, the king to b1, a move we wanted anyway; then, against an Alekhine's-gun triple on the b-file, the king to a1 is prophylaxis so a rook can come to b1 — a1 over a2, since the queen could later come to b3 with check. Now, it's the Sämisch, so we attack: h5, ripping open the h-file, and the rook to b1; the rook takes b2, we recapture, and the queen takes a3 with check is a paper tiger — the rook to a2 ends it. He tries the rook to b3, and now the king to a2, then a4. We play f4 to lock his bishop, then e5, eyeing a bishop sacrifice on g6 to rip open his king — I've verified he has zero queenside threats, so think concretely, not by how scary it looks. e5 threatens the sac on g6, or f5 as a battering ram to open the king; take on g6, and the queen to f5, or checks on f7 or h7, lead to mate; the bishop to e4 rerouting to d5 also opens the diagonal. Then the queen to d7 with check, and the king hunt begins — don't rush the first check you see, like the rook to f1 with check; map the king's escape, e8-d8-c7, and prevent it. Give a check on h8, the king goes to e7, and now every square is covered — the bishop covers e6, the pawn covers d6, the rook covers the eighth rank — and one more check is checkmate.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 1108,
    "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "That wins the game — I saw the mate when we gave the check. The Fischer game went e5, the knight to g8, f4, and Bobby crushed White's pawn chain with d6 and c5, no good for White — so don't play e5 here; play it the same way you would against d6. The bishop to d7 was the first mistake; the way to play this line is a6, preparing b5 — you develop the knight, go b5, the queen to a5 — but White is better played properly.",
+   "reanchor": true
   }
  ]
 }

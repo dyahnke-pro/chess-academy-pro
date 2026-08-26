@@ -1,10 +1,10 @@
 {
  "videoId": "6si_sctYAS0",
  "title": "Strong Moves, Tricky Lines! | French Defense, Adv. Nimzowitsch",
- "openingName": "French Defense: Advance Variation, Nimzowitsch (4.Nf3), queenside undermining",
+ "openingName": "French Defense: Advance, Nimzowitsch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:6si_sctYAS0",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We open with e4, and Black chooses the French Defense, e6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We take the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges it with d5 — the heart of the French."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The French, and the pawn to e5 sets up the Advance. What follows is the Nimzowitsch treatment — a dangerous line that teaches closed structures and positional chess as much as it wins games.",
-   "kind": "main",
-   "teaches": "The Nimzowitsch Advance is a positional weapon built around the e5-clamp.",
-   "plans": "e5, then Nf3 without c3."
+   "spoken": "We push past into the Advance, e5, grabbing space."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black strikes at the base of the chain with c5 — standard fare. Most players now automatically prop the chain with c3, entering heavy theory."
   },
   {
    "ply": 7,
@@ -63,10 +60,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Instead of the automatic c3 to prop up the chain, slip through the cracks with the knight to f3 — develop as if nothing were wrong and let Black ruin the pawn chain by capturing on d4. It looks utterly counter-intuitive, and that's the point.",
-   "kind": "main",
-   "teaches": "Nf3 over c3: concede the d4-pawn's shelter for rapid development.",
-   "plans": "Nf3, allow ...cxd4, develop fast."
+   "spoken": "But my recommendation slips through the cracks — the Nimzowitsch French: the knight to f3, developing as if nothing's wrong, letting Black wreck our pawn chain by taking on d4. It seems utterly counter-intuitive to allow that, even to sacrifice the d4 pawn, which is what we'll do."
   },
   {
    "ply": 8,
@@ -75,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6. We keep developing as though Black exerts no pressure on d4. One common beginner mistake here is the bishop to b5 — not because it drops a piece, since after a queen-a5 check there's the knight to c3, but conceptually: the bishop on b5 is a paper tiger, and Black just blocks with the bishop to d7."
   },
   {
    "ply": 9,
@@ -84,10 +78,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop's best square is d3, behind the pawn. The bishop to b5 is a paper tiger — Black just blocks with the bishop to d7 — whereas from d3 it eyes h7, so if Black castles kingside a Greek-gift sacrifice is always waiting.",
-   "kind": "main",
-   "teaches": "Post the bishop on d3 for the h7 diagonal and the Greek-gift, not on b5 where the pin is easily blocked.",
-   "plans": "Bd3, keep Bxh7+ in reserve."
+   "spoken": "The best square for our bishop is d3, for several reasons. With a pawn on d4 like this, placing the bishop behind it is good practice: if Black castles kingside — the likeliest direction — we'll have a Greek-gift sacrifice ready."
   },
   {
    "ply": 10,
@@ -96,7 +87,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "Now — doesn't Black just have c4, hitting the bishop?"
   },
   {
    "ply": 11,
@@ -105,10 +96,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Black lunges with the pawn to c4, and the bishop simply steps back to e2. In a closed centre you can afford to move the same piece twice — and White has provoked c4, which relieves all the pressure on d4 and hands White a free hand on the queenside.",
-   "kind": "main",
-   "teaches": "In a closed position, provoking ...c4 releases the central tension and frees you to attack a wing.",
-   "plans": "Be2, then break the queenside chain."
+   "spoken": "They do, and we retreat the bishop to e2 — but we've PROVOKED c4, and with the centre relatively closed we can afford to move the same piece twice. What did provoking c4 achieve? It took the pressure off d4 — our chain is safe now — so we can focus on completing kingside development."
   },
   {
    "ply": 12,
@@ -117,7 +105,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black's queenside pawns look imposing, and b5 is actually a good move — but Black has bitten off more than she can chew, pushing all those pawns without piece support. We'll use OUR pawns, a very typical idea, to break down the whole chain."
   },
   {
    "ply": 13,
@@ -126,10 +114,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "Now break the chain at its links: the pawn to b3 leans on c4, and the pawn to a4 will lean on b5. Classic pawn play — put pressure on both pawns at once and dismantle the structure without delay.",
-   "kind": "main",
-   "teaches": "Attack a pawn chain by pressuring its members with your own pawns, base first.",
-   "plans": "b3 and a4 to break c4/b5."
+   "spoken": "We pressure both the c4 and b5 pawns at once: b3 hits c4, and we'll follow with a4 — classic pawn play to demolish Black's chain as fast as possible."
   },
   {
    "ply": 14,
@@ -138,7 +123,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b6."
   },
   {
    "ply": 15,
@@ -147,17 +132,15 @@
    "line": [
     "a4"
    ],
-   "spoken": "The pawn to a4 hits b5, the base of the chain — and note the tactical detail: the defence ...a6 is futile, because after the trade on b5 Black can't recapture with the a-pawn without hanging the undefended rook on a8. Timing is everything; strike before Black consolidates.",
-   "kind": "trap",
-   "teaches": "a4 undermines b5; ...a6 fails because ...axb5 drops the a8-rook — act before the defender arrives.",
-   "plans": "a4 now, exploit the loose rook."
+   "spoken": "We don't even castle first — we play a4 at once, and Black is under serious fire on the queenside. One key tactical detail: a6 is futile here."
   },
   {
    "ply": 13,
    "t": 366.5,
    "fen": "r1bqkbnr/p4ppp/2n1p3/1p1pP3/2pP4/1P3N2/P1P1BPPP/RNBQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "a6 fails to a takes b5, because Black can't recapture with the a-pawn — the rook on a8 would hang. That's why timing matters: the bishop to b7, played not to develop but to defend the rook, is far less effective now.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -167,7 +150,8 @@
     "Qb6",
     "a4"
    ],
-   "spoken": ""
+   "spoken": "So the bishop to b7, while decent, is much less effective because a6 is now possible — this is time-sensitive, with the rook on a8 undefended.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -176,7 +160,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "The bishop to a6 is powerful — our opponent tries to shield the chain with the minor pieces, but they're just not good at keeping a pawn chain intact."
   },
   {
    "ply": 17,
@@ -185,10 +169,7 @@
    "line": [
     "axb5"
    ],
-   "spoken": "Take the base first — the capture on b5 removes the linchpin of the chain. Only then does the pawn on c4 fall, and with it comes a permanent structural weakness.",
-   "kind": "main",
-   "teaches": "Eliminate the base of a pawn chain before harvesting the pawns it supported.",
-   "plans": "axb5 first, then win c4."
+   "spoken": "Which pawn first? Normally you start at the base — a takes b5, capturing on b5, removing the linchpin."
   },
   {
    "ply": 18,
@@ -197,7 +178,7 @@
    "line": [
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures, capturing on b5. Now step two: take on c4, opening the centre and leaving a major weakness there."
   },
   {
    "ply": 19,
@@ -206,7 +187,7 @@
    "line": [
     "bxc4"
    ],
-   "spoken": ""
+   "spoken": "We play b takes c4, capturing on c4 — consecutive and to the point."
   },
   {
    "ply": 20,
@@ -215,7 +196,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": ""
+   "spoken": "Black takes, capturing on c4, and gets a massive weakness there."
   },
   {
    "ply": 21,
@@ -224,7 +205,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": ""
+   "spoken": "We complete the trade, capturing on c4."
   },
   {
    "ply": 22,
@@ -233,10 +214,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "After the trades resolve on c4, White has achieved exactly the plan: a long-term, permanent weakness on the queenside. The c4-pawn is a chronic target that isn't going anywhere.",
-   "kind": "main",
-   "teaches": "Convert temporary pressure into a permanent structural weakness you can besiege at leisure.",
-   "plans": "Fix c4, then surround it."
+   "spoken": "And after d takes c4, capturing on c4, we've achieved exactly what we set out to do — a long-term, permanent weakness on c4. Step three has two parts: complete development and solidify our own chain. The solidifying move every French-with-White player knows is c3. Not the knight to c3 — the knight goes to d2 here, because the ultimate plan is to harass and win the c4 pawn. I like to castle kingside first, getting the king clear with no nasty checks on b4, then play c3."
   },
   {
    "ply": 23,
@@ -245,10 +223,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castle first — it's safe, because Black has no way to get at the d4-pawn, and the knight on f3 guards e5 so a capture there is impossible. Then the pawn to c3 secures d4, and only after those preliminaries does White set about winning c4.",
-   "kind": "main",
-   "teaches": "Secure your own position (king safety, hold d4/e5) before going after the target.",
-   "plans": "O-O, c3, then win c4."
+   "spoken": "So we castle first — safe, since Black has no good way to hit d4; the rook to d8 is likely at this level — then we follow with c3."
   },
   {
    "ply": 24,
@@ -257,7 +232,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Instead Black plays f6. Note the knight can't take on e5 — our f3-knight guards it. Black tries to open the centre, but that's counterproductive when you're behind in development. This is a great moment for flexibility: our whole c3-then-knight-d2 scheme is set aside, because f6 changes everything. Who benefits when the centre opens? The better-developed side with fewer weaknesses — clearly us."
   },
   {
    "ply": 25,
@@ -266,10 +241,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "Black tries the pawn to f6 to open the centre — but that's counterproductive when you're behind in development, so welcome it. Capture on f6 and pry open the e-file, right onto the chronic weakness on e6.",
-   "kind": "main",
-   "teaches": "Welcome the opponent opening the centre when you're better developed — it exposes his weaknesses.",
-   "plans": "exf6, open the e-file onto e6."
+   "spoken": "So we welcome it — e takes f6, capturing on f6: you want to open the centre? Thank you very much."
   },
   {
    "ply": 26,
@@ -278,7 +250,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight, capturing on f6 — and now the e-file opens onto a massive weakness on e6. Two weaknesses in Black's camp: the new one on e6 and the old one on c4. Put them together and you get the classy move, the queen to e2, hitting both pawns at once. A good alternative is simply the rook to e1 — e6 is the juicy pawn; win it and we mate soon. After the queen to e2, though, there's the nasty knight takes d4: knight takes d4, knight takes d4, queen takes d4, we grab e6 with check, Black plays the bishop to e7, and I'm not sure White has a crystal-clear finish."
   },
   {
    "ply": 27,
@@ -287,10 +259,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "No need to force it — the controlled move is the rook to e1, keeping the queen back to guard d4 for now. With two weaknesses on e6 and c4 and no time to develop, Black simply cannot hold.",
-   "kind": "main",
-   "teaches": "With two weaknesses and a lead, apply pressure calmly — the second weakness does the work.",
-   "plans": "Re1, pile on e6."
+   "spoken": "So the more controlled move is the rook to e1, leaving the queen guarding d4. It's incredibly hard for Black to defend e6, and Black's lack of development costs her — a developed f8-bishop would let her castle."
   },
   {
    "ply": 28,
@@ -299,7 +268,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": ""
+   "spoken": "Black just doesn't have time to develop. The king to f7 tries to defend e6, but it's futile — the king is a poor defender in these positions."
   },
   {
    "ply": 29,
@@ -308,10 +277,7 @@
    "line": [
     "Ng5+"
    ],
-   "spoken": "The king came out to f7 to defend e6, but the knight to g5 forks it with check and knocks it back. The pawn is won — though there's still technique to show with the king this exposed.",
-   "kind": "main",
-   "teaches": "A knight check can fork the king off a defensive square and collect the target.",
-   "plans": "Ng5+, then win e6."
+   "spoken": "There's a rip move — the simple fork on g5, knocking the king back. The game's far from over, though: we've won a pawn but our queenside is still undeveloped, so we need accuracy."
   },
   {
    "ply": 30,
@@ -320,7 +286,7 @@
    "line": [
     "Ke7"
    ],
-   "spoken": ""
+   "spoken": "I'm expecting the king to g8, but our opponent plays fast and walks straight into the pin with the king to e7 — a terrible move. How do we punish it most clinically? The knight takes c6 is tempting, to set up a discovery, but it gives Black life."
   },
   {
    "ply": 31,
@@ -329,10 +295,7 @@
    "line": [
     "Rxe6+"
    ],
-   "spoken": "Black's king walks into the pin, and the clinical punish is the rook takes e6 with check — but the check is just a bonus. The real point is that next comes the pawn to d5, winning the knight on c6 because its defender is pinned, and the whole queenside can stay home.",
-   "kind": "trap",
-   "teaches": "Sacrifice to set up the follow-up: Rxe6+ then d5 wins the pinned knight.",
-   "plans": "Rxe6+, then d5."
+   "spoken": "The knight takes c6 lets the king slip via f7 back to g8. Better is to take on e6 with the rook, capturing on e6 — the check is a nice byproduct; what matters is the pin against the knight on c6."
   },
   {
    "ply": 32,
@@ -341,7 +304,7 @@
    "line": [
     "Kd7"
    ],
-   "spoken": ""
+   "spoken": "The king to d7 — and now we can pre-move d5, ending the game: it wins the pinned knight on c6, and once that minor piece falls the king is hunted down."
   },
   {
    "ply": 33,
@@ -350,10 +313,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The pawn to d5 is the game-winner — it wins the pinned knight, and once that minor piece falls the king is hunted down. White won't even need most of the queenside pieces; the already-active ones are that powerful.",
-   "kind": "main",
-   "teaches": "Cash the pin: winning the key defender collapses the whole position.",
-   "plans": "d5, win the knight, mate the king."
+   "spoken": "So d5 is the game-winning move — we'll win without even using our back-rank knight or bishop, that's how powerful our existing pieces are."
   },
   {
    "ply": 34,
@@ -362,7 +322,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "The game's totally over — we take the knight next move, the knight can't move because the queen is pinned, and it's mate in three."
   },
   {
    "ply": 35,
@@ -371,7 +331,7 @@
    "line": [
     "dxc6+"
    ],
-   "spoken": ""
+   "spoken": "d takes c6, capturing on c6 with check — and importantly the pawn defends our rook. After the king to c7, the mating move is the bishop to f4."
   },
   {
    "ply": 36,
@@ -380,7 +340,7 @@
    "line": [
     "Kc7"
    ],
-   "spoken": ""
+   "spoken": "The king to c7 — Black technically has the bishop to d6, which is why it's mate in three."
   },
   {
    "ply": 37,
@@ -389,10 +349,7 @@
    "line": [
     "Bf4+"
    ],
-   "spoken": "The finish is straightforward attacking chess: after the capture on c6 with check the knight defends the rook — that detail matters — and the king is dragged to c7. The bishop to f4 checks, and after the block the queen takes on d6 with checkmate.",
-   "kind": "trap",
-   "teaches": "Bring even the sleeping pieces into a forced mating net once the king is stripped bare.",
-   "plans": "dxc6+, Bf4+, Qxd6 mate."
+   "spoken": "We bring the bishop out with a devastating check, the bishop to f4 — no moratorium on developing the queenside pieces."
   },
   {
    "ply": 38,
@@ -401,7 +358,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to d6."
   },
   {
    "ply": 39,
@@ -410,14 +367,15 @@
    "line": [
     "Qxd6#"
    ],
-   "spoken": ""
+   "spoken": "The queen takes d6, capturing on d6 — checkmate. Straightforward attacking chess, and the power of this French line at any level up to 2300."
   },
   {
    "ply": 3,
    "t": 926,
    "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Let's go over the game — the line I've played almost exclusively against the French across the speedruns.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -426,7 +384,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "...d5...",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -435,7 +394,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "...e5, the Advance...",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -444,7 +404,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "...but now we deviate from standard waters.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -453,7 +414,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 has an interesting history. Aaron Nimzowitsch — one of the patriarchs of modern positional chess, who wrote My System in the 1920s, originating over-protection, prophylaxis, and much of the vocabulary we now take for granted — faced the French often and played the knight to f3 religiously. It was first played back in 1826 by an unknown player; Nimzowitsch was maybe the seventh or eighth to play it, but he championed it.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -462,7 +424,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Most of Nimzowitsch's opponents did play c takes d4, and he was the first to realise the best recapture is NOT the knight.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -471,7 +434,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "The knight takes d4 defeats the whole purpose of the line — that's not where the party is.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -480,14 +444,16 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black just plays the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 1034,
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Which begs the question — why not just play c3?",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -496,14 +462,16 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "Instead White aims for very rapid development.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 1037.5,
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "So White needs to develop fast.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -513,7 +481,8 @@
     "Nf3",
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "What's the actual move after c takes d4? Not the queen takes d4 — that walks into the knight to c6 even more blatantly.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -522,10 +491,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The engine of the whole line, in Nimzowitsch's own conception: the e5-pawn is a clamp. It severs Black's position, cramps the pieces, prevents ...Bd6, and lets White pour development at the kingside — and the correct recapture on d4 is never with the knight, which would defeat the purpose, but with the bishop to d3 keeping the clamp.",
-   "kind": "review",
-   "teaches": "The e5 clamp-pawn is the point of the line; recapture on d4 with Bd3, never Nxd4.",
-   "plans": "Keep e5, develop, attack the king.",
+   "spoken": "It's the bishop to d3. Nimzowitsch's idea: the advanced e5 pawn is a clamp — it severs Black's queenside from the kingside and makes the pieces hard to develop, in particular preventing the knight to f6.",
    "reanchor": true
   },
   {
@@ -535,7 +501,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "It also prevents the bishop to d6 and makes it hard for Black to breathe, while White accelerates kingside development. So if Black develops normally with the knight to c6...",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -544,7 +511,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "...White castles, and you can already see how hard it is for Black to develop comfortably.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -553,7 +521,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "If Black plays the bishop to c5, we're not trying to win the pawn back quickly — we'll win it back eventually, by routing the back-rank knight.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -562,7 +531,8 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "The knight goes to d2 — but what's its final destination?",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -572,7 +542,8 @@
     "Nge7",
     "Nb3"
    ],
-   "spoken": ""
+   "spoken": "The lovely b3 square, where it's out of the bishops' way, not obstructing them, and pressuring d4.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -581,7 +552,8 @@
    "line": [
     "Bb6"
    ],
-   "spoken": ""
+   "spoken": "So eventually we win the pawn back; Black drops the bishop to b6.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -590,7 +562,8 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "One great thing about this line: it offers the Greek-gift sacrifice.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -599,7 +572,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "A ton of people castle here, and it loses on the spot.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -608,7 +582,8 @@
    "line": [
     "Bxh7+"
    ],
-   "spoken": ""
+   "spoken": "The classic Greek gift — the bishop takes h7 with check...",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -617,7 +592,8 @@
    "line": [
     "Kxh7"
    ],
-   "spoken": ""
+   "spoken": "...the king takes, the knight to g5 with check...",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -626,14 +602,16 @@
    "line": [
     "Ng5+"
    ],
-   "spoken": ""
+   "spoken": "...you know the drill: the king to g6, the queen to g4, and so on. You'll win plenty of games with the Greek gift here.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1160.5,
    "fen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/3p4/3B1N2/PPPN1PPP/R1BQ1RK1 b kq - 5 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Of course, Black needn't fall for it.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -642,7 +620,8 @@
    "line": [
     "Nge7"
    ],
-   "spoken": ""
+   "spoken": "...the knight to e7...",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -651,7 +630,8 @@
    "line": [
     "Nb3"
    ],
-   "spoken": ""
+   "spoken": "...the knight to b3...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -661,7 +641,8 @@
     "Bb6",
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "This is a legitimate theoretical position in my analysis.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -670,7 +651,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black avoids the Greek gift either by delaying castling with the bishop to d7...",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -682,7 +664,8 @@
     "Bd3",
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "...or by putting a knight on g6 to stop the bishop taking h7.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -691,7 +674,8 @@
    "line": [
     "Bxg6"
    ],
-   "spoken": ""
+   "spoken": "But then White can already win the pawn back — the bishop takes g6...",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -700,7 +684,8 @@
    "line": [
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "...h takes g6...",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -709,14 +694,16 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "...and I think you throw in h3 to take the sting out of the queen to h4; the engine sometimes gives White a small edge. We take back on d4 and support the knight with c3.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1208,
    "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 6",
    "line": [],
-   "spoken": ""
+   "spoken": "...leaving Black with that terrible French light-squared bishop buried at home. There's a lot of theory here, and Black has many ways to equalise, but there's good meat on the bone. The core idea: develop your kingside very quickly, and never give up the e5 pawn easily.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -725,7 +712,8 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "At a high level, one of Black's main weapons is f6, trying to physically remove the e5 pawn — but White doesn't part with it easily.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -734,7 +722,8 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "Here White has the strong bishop to b5. Didn't I say the bishop to b5 was misplaced in this line?",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -743,7 +732,8 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "The situation has changed completely because of f6 — now the bishop to b5 makes perfect sense, taking the sting out of f takes e5. After f takes e5...",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -752,35 +742,40 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "...the knight takes e5 is incredibly strong, attacking from both sides: the queen to h5 is a threat and the knight takes c6 is a threat.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 1288,
    "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "So the bishop to b5 is a prophylactic measure against f takes e5. f6 is no panacea — it's risky.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1293,
    "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 6",
    "line": [],
-   "spoken": ""
+   "spoken": "If Black knows what they're doing they can get away with it, but it's risky.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 1303.5,
    "fen": "rnbqkbnr/pp3ppp/4p3/3pP3/3p4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent took a different approach — the knight to c6, the bishop to d3, then not taking on d4 at all but pushing c4, which already gives White a sizable advantage after the bishop to e2. b5 was a further inaccuracy, but Black's main mistake was the queen to b6: after a4 the queenside is already collapsing, borderline lost, plus-over-minus. The last chance to hold the queenside was the bishop to d7 — the engine likes it, a touch more centralised than b7 — so that after a4, a6, Black holds because the queen and rook are connected and a takes b5 no longer wins the rook. Then Black tries to free the kingside with the knight to e7 and f5. White is better, and needn't even rush a4: there's the idea of pushing the h-pawn all the way to h5 and even h6, to provoke dark-square weaknesses, to stop the knight jumping to g6, and to take the sting out of the knight to f5, because now g4 is supported. Without the pawn on h5, if White plays g4, Black has the nasty knight to h4, and you've overextended the kingside; with the pawn on h5, after g4 the rook controls h4 and the knight is pushed back. That's why closed positions are hard — everything boils down to nuance and who positions their pieces better. On the queenside timing: you fix the root of the chain first, because if you allow b4 then a4 is futile, and after c3 Black can bury your knight with b3, a nightmare you must avoid. So the plan switches at the drop of a hat: our first plan after a move like the rook to d8 was c3 and the knight to d2, surrounding c4, which Black can't defend — if the queen to b5, then the queen to e2; if Black tries the knight to d5 hitting c3, we switch to the knight to e4, a very typical square, in no rush to win c4, using the other knight to drop back to d2 and take it. Then the bishop from c1 to a3 clears the d6 square — devastating, because the knight to d6 becomes unstoppable, and Black falls apart. Instead our opponent played f6, so we switched from attacking c4 to the more relevant weakness, e6. The king to f7 was decisive; after the knight to g5 check, the king to e7 loses at once, while the king to g8 would have held longer — there we'd take e6 with the knight and switch back to the queen to e2, winning c4. And on the queen-e2-versus-rook-e1 question: I rejected the queen to e2 to avoid the complications after the knight takes d4; with the engine on, White is in fact winning, but not with a hasty queen-c6 check, because after the king to f7 the rooks connect and the attack dies — the move is the rook to e1, hitting the bishop on e7, forcing the queen back to d7, which finally leaves c4 unprotected, and then the bishop to a3 creates devastating threats while Black can't castle.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 1873.5,
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
    "line": [],
-   "spoken": ""
+   "spoken": "A good illustration of play in a closed centre and typical Nimzowitsch-French ideas. The takeaways: attacking an imposing queenside pawn chain isn't about how much space the opponent controls, but how well-defended the chain is — you can use your own pawns to blast through it, most commonly by pushing b3 and then a4, leaving the opponent a jumble of weaknesses to attack. And crucially, if you're on the Black side of a position like this, keep the rook on a8 protected so you can push a6 and support the pawn on b5.",
+   "reanchor": true
   }
  ]
 }

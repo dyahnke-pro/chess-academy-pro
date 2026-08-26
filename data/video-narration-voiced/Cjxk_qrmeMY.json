@@ -1,630 +1,656 @@
 {
- "videoId": "Cjxk_qrmeMY",
- "title": "Master Class | Open Sicilian / Grünfeld | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Grunfeld Defense",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:Cjxk_qrmeMY",
- "moves": [
-  {
-   "ply": 2,
-   "t": 1054,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "line": [
-    "d4",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 1071,
-   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "c4",
-    "g6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 1074,
-   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1079.5,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "line": [
-    "d5"
-   ],
-   "spoken": "This is the Grünfeld — d5 meets the center head-on, striking c4 and daring White to build a broad pawn center that Black will then chip away at from the wings.",
-   "kind": "main",
-   "teaches": "The hypermodern idea: let White occupy the center, then dismantle it with pieces and timely pawn breaks."
-  },
-  {
-   "ply": 7,
-   "t": 1098.5,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 1 4",
-   "line": [
-    "Bf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1144,
-   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 2 5",
-   "line": [
-    "Bg7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 1161,
-   "fen": "rnbqk2r/ppp1ppbp/5np1/3P4/3P1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 0 5",
-   "line": [
-    "cxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1162,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1189,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1193.5,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "cxd5",
-    "Bg7",
-    "Bf4",
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1201.5,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P4/2N3B1/PP2PPPP/R2QKBNR b KQkq - 1 6",
-   "line": [
-    "Bg3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1303,
-   "fen": "rnbqk2r/pp2ppbp/6p1/2pn4/3P4/2N3B1/PP2PPPP/R2QKBNR w KQkq - 0 7",
-   "line": [
-    "c5"
-   ],
-   "spoken": "The thematic c5 strikes at White's d4-pawn, prying at the center before it can settle. A knight to c6 would let White reinforce with e3 — the pawn break is far sharper.",
-   "kind": "main",
-   "teaches": "Undermine the base of the opponent's center with a pawn break rather than a slow piece hit."
-  },
-  {
-   "ply": 13,
-   "t": 1348,
-   "fen": "rnbqk2r/pp2ppbp/6p1/2Pn4/8/2N3B1/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "line": [
-    "dxc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1350,
-   "fen": "rnbqk2r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "line": [
-    "Nxc3"
-   ],
-   "spoken": "Knight takes c3 and the game is essentially decided. White muddled two different setups, and now the knight forks the queen on d1; once the queens come off, the bishop crashes in with check.",
-   "kind": "main",
-   "teaches": "Punish a mixed-up move order with the concrete tactic it allows — here a knight fork through the center."
-  },
-  {
-   "ply": 16,
-   "t": 1354.5,
-   "fen": "rnbk3r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R3KBNR w KQ - 0 9",
-   "line": [
-    "Qxd8+",
-    "Kxd8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 1383.5,
-   "fen": "rnbk3r/pp2ppbp/6p1/2P5/8/2P3B1/P3PPPP/R3KBNR b KQ - 0 9",
-   "line": [
-    "bxc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 1386,
-   "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/2b3B1/P3PPPP/R3KBNR w KQ - 0 10",
-   "line": [
-    "Bxc3+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 1400.5,
-   "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b2K1BNR w - - 0 11",
-   "line": [
-    "Kd1",
-    "Bxa1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 1402.5,
-   "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b1K2BNR b - - 1 11",
-   "line": [
-    "Kc1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 1403.5,
-   "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/8/6B1/P3PPPP/b1K2BNR w - - 2 12",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 1408,
-   "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/4P3/6B1/P4PPP/b1K2BNR b - - 0 12",
-   "line": [
-    "e4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 1434.5,
-   "fen": "r2k3r/pp2pp1p/2n1b1p1/2P5/4P3/6B1/P4PPP/b1K2BNR w - - 1 13",
-   "line": [
-    "Be6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 1442.5,
-   "fen": "r2k3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR b - - 2 13",
-   "line": [
-    "Bb5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 1466,
-   "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR w - - 3 14",
-   "line": [
-    "Rc8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 1480.5,
-   "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/5NB1/P4PPP/b1K4R b - - 4 14",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 1482.5,
-   "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3nP3/5NB1/P4PPP/b1K4R w - - 5 15",
-   "line": [
-    "Nd4"
-   ],
-   "spoken": "The knight jumps into d4, offering to trade White's defender on f3 and turning the whole army toward the king. Forget regaining pawns — this is a mating attack.",
-   "kind": "main",
-   "teaches": "When far ahead in development, ignore material and pile pieces onto the exposed king."
-  },
-  {
-   "ply": 29,
-   "t": 1504.5,
-   "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3NP3/6B1/P4PPP/b1K4R b - - 0 15",
-   "line": [
-    "Nxd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 1506.5,
-   "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2K4R w - - 0 16",
-   "line": [
-    "Bxd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 1520,
-   "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2KR4 b - - 1 16",
-   "line": [
-    "Rd1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 1521.5,
-   "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/2KR4 w - - 0 17",
-   "line": [
-    "Rxc5+"
-   ],
-   "spoken": "Rook takes c5 with check, tearing the c-file wide open at the king on c1. The bishop on d4 joins the rook and White's king has nowhere left to run.",
-   "kind": "review",
-   "teaches": "Give up pawns without a thought to keep lines crashing open against a stranded king."
-  },
-  {
-   "ply": 33,
-   "t": 1546.5,
-   "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/1K1R4 b - - 1 17",
-   "line": [
-    "Kb1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 1548,
-   "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P4PPP/1K1R4 w - - 0 18",
-   "line": [
-    "Rxb5+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 35,
-   "t": 1551.5,
-   "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P1K2PPP/3R4 b - - 1 18",
-   "line": [
-    "Kc2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 37,
-   "t": 1585,
-   "fen": "3k3r/pp2pp1p/4b1p1/8/1r1bP3/P5B1/2K2PPP/3R4 b - - 0 19",
-   "line": [
-    "Rb4",
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 35,
-   "t": 1614,
-   "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P1K2PPP/3R4 b - - 1 18",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 1617,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 1697,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "cxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1699.5,
-   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
-   "line": [
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 1701.5,
-   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
-   "line": [
-    "e4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1703.5,
-   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR b KQkq - 0 6",
-   "line": [
-    "Nxc3",
-    "bxc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1718,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
-   "line": [
-    "Bg7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1732,
-   "fen": "rnbqk2r/pp2ppbp/6p1/2p5/3PP3/2P2N2/P4PPP/R1BQKB1R w KQkq - 0 8",
-   "line": [
-    "Nf3",
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1743,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1744.5,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 1748,
-   "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P3NPPP/R1BQK2R b KQkq - 1 8",
-   "line": [
-    "c5",
-    "Ne2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 1753.5,
-   "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P5/P3NPPP/R1BQK2R w KQkq - 2 9",
-   "line": [
-    "Bg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 1756,
-   "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P2P2/P3N1PP/R1BQK2R b KQkq - 0 9",
-   "line": [
-    "f3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1780.5,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 1792.5,
-   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 1794,
-   "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1828,
-   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "line": [
-    "Bg7",
-    "Bf4",
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1831.5,
-   "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "line": [
-    "Nxd5",
-    "Qxd5",
-    "Bxc7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1837,
-   "fen": "rnb1k2r/ppB1pp1p/6p1/3q4/3b4/8/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "line": [
-    "Bxd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1841.5,
-   "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1853.5,
-   "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR w KQ - 1 8",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 1859.5,
-   "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/4P3/PP3PPP/R2QKBNR b KQ - 0 8",
-   "line": [
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 1863,
-   "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4P3/PP3PPP/R2QKBNR w KQ - 1 9",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 1865,
-   "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4PN2/PP3PPP/R2QKB1R b KQ - 2 9",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 1867.5,
-   "fen": "r1b2rk1/ppB2pbp/2n3p1/3qp3/3P4/4PN2/PP3PPP/R2QKB1R w KQ - 0 10",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1872,
-   "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1916.5,
-   "fen": "rnb1k2r/ppp1ppbp/6p1/3q4/3P1B2/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 1919.5,
-   "fen": "rnb1k2r/pp2ppbp/6p1/2Pq4/8/6B1/PP2PPPP/R2QKBNR b KQkq - 0 8",
-   "line": [
-    "Bg3",
-    "c5",
-    "dxc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 1921.5,
-   "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/R2QKBNR w KQkq - 0 9",
-   "line": [
-    "Qxc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 1925.5,
-   "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/2RQKBNR b Kkq - 1 9",
-   "line": [
-    "Rc1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 1928.5,
-   "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP2PPPP/2RQKBNR w Kkq - 2 10",
-   "line": [
-    "Qa5+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 1929.5,
-   "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP1QPPPP/2R1KBNR b Kkq - 3 10",
-   "line": [
-    "Qd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 1932,
-   "fen": "r1b1k2r/pp2ppbp/2n3p1/8/8/6B1/PP1KPPPP/2R2BNR w kq - 1 12",
-   "line": [
-    "Qxd2+",
-    "Kxd2",
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 1942,
-   "fen": "rnb1k2r/pp2ppbp/6p1/2pq4/3P4/6B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "Cjxk_qrmeMY",
+  "title": "Master Class | Open Sicilian / Grünfeld | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Grünfeld Defense (Brinckmann Attack)",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:Cjxk_qrmeMY",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 1054,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "White plays d4, and we develop the knight to f6, keeping our options open."
+    },
+    {
+      "ply": 4,
+      "t": 1071,
+      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c4",
+        "g6"
+      ],
+      "spoken": "White grabs space with c4, and we fianchetto with g6 — heading for a Grünfeld this time rather than the King's Indian."
+    },
+    {
+      "ply": 5,
+      "t": 1074,
+      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The knight to c3. The Grünfeld, unlike the King's Indian, meets this with d5, not d6."
+    },
+    {
+      "ply": 6,
+      "t": 1079.5,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "We strike in the centre with d5 — the Grünfeld, universally regarded as one of the best objective defenses to d4. Nobody has found an advantage against it anywhere; the downside is just the out-of-this-world amount of theory to play it professionally."
+    },
+    {
+      "ply": 7,
+      "t": 1098.5,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 1 4",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "The bishop to f4 is a legitimate try. The Grünfeld's idea is simple: we grab central control by combining the King's Indian fianchetto with a proactive d5, instead of letting White build with e4."
+    },
+    {
+      "ply": 8,
+      "t": 1144,
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 2 5",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": "We don't take the c4 pawn — that's not the point. The point is rapid development so we can attack White's centre; it's a hypermodern opening. So the bishop goes to g7, and c6 is unnecessary."
+    },
+    {
+      "ply": 9,
+      "t": 1161,
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3P4/3P1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 0 5",
+      "line": [
+        "cxd5"
+      ],
+      "spoken": "We're perfectly happy to recapture on d5 with the knight. White takes, capturing on d5."
+    },
+    {
+      "ply": 10,
+      "t": 1162,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "The knight takes, capturing on d5."
+    },
+    {
+      "ply": 6,
+      "t": 1189,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "line": [],
+      "spoken": "The bishop to f4 is a legitimate line, but combining c takes d5 with it isn't great: White's main plan is to take and play e4, but with the bishop on f4 the bishop would hang — he's mixed up two lines.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1193.5,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "cxd5",
+        "Bg7",
+        "Bf4",
+        "Nxd5"
+      ],
+      "spoken": "So White's centre immediately comes under fire.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1201.5,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P4/2N3B1/PP2PPPP/R2QKBNR b KQkq - 1 6",
+      "line": [
+        "Bg3"
+      ],
+      "spoken": "The bishop to g3 is correct. What makes the Grünfeld both fun and hard is constant tactical alertness — these centralized pieces are integral to Black's central strategy, and unlike the King's Indian, where you play the long game, here you assault White's centre directly, with moves like c5 and the knight to c6. White can lose quickly if he doesn't develop precisely. So between c5 and the knight to c6, which harasses the centre more effectively?"
+    },
+    {
+      "ply": 12,
+      "t": 1303,
+      "fen": "rnbqk2r/pp2ppbp/6p1/2pn4/3P4/2N3B1/PP2PPPP/R2QKBNR w KQkq - 0 7",
+      "line": [
+        "c5"
+      ],
+      "spoken": "It's c5 — the knight to c6 can be met by e3, forming a pawn chain, but c5 is very strong: if White simply takes with d takes c5, we play the knight takes c3, and after trading queens he loses a piece, because he can't recapture the bishop takes c3 with check between the king and rook. If instead e3, after the trade he gets an isolated queen pawn and we blockade the square in front of it — phenomenal for Black."
+    },
+    {
+      "ply": 13,
+      "t": 1348,
+      "fen": "rnbqk2r/pp2ppbp/6p1/2Pn4/8/2N3B1/PP2PPPP/R2QKBNR b KQkq - 0 7",
+      "line": [
+        "dxc5"
+      ],
+      "spoken": "He should probably take the knight first, then the pawn — but he takes the pawn, capturing on c5. Unless I miscalculated, we're in great shape."
+    },
+    {
+      "ply": 14,
+      "t": 1350,
+      "fen": "rnbqk2r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
+      "line": [
+        "Nxc3"
+      ],
+      "spoken": "The knight takes, capturing on c3 — this basically wins the game."
+    },
+    {
+      "ply": 16,
+      "t": 1354.5,
+      "fen": "rnbk3r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R3KBNR w KQ - 0 9",
+      "line": [
+        "Qxd8+",
+        "Kxd8"
+      ],
+      "spoken": "He miscalculated something — maybe he thought he had a check — but the queen takes d8 with check, and we simply recapture on d8. A nice introduction to the Grünfeld."
+    },
+    {
+      "ply": 17,
+      "t": 1383.5,
+      "fen": "rnbk3r/pp2ppbp/6p1/2P5/8/2P3B1/P3PPPP/R3KBNR b KQ - 0 9",
+      "line": [
+        "bxc3"
+      ],
+      "spoken": "He takes, capturing on c3 — making things worse, but people familiar with an opening still don't always handle it well at this level."
+    },
+    {
+      "ply": 18,
+      "t": 1386,
+      "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/2b3B1/P3PPPP/R3KBNR w KQ - 0 10",
+      "line": [
+        "Bxc3+"
+      ],
+      "spoken": "We take, capturing on c3 with check — and at this point it's already over."
+    },
+    {
+      "ply": 20,
+      "t": 1400.5,
+      "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b2K1BNR w - - 0 11",
+      "line": [
+        "Kd1",
+        "Bxa1"
+      ],
+      "spoken": "The king to d1, and the bishop grabs the rook, capturing on a1. The Grünfeld isn't an opening you pick up casually — which is why fewer top players play it full-time, not because it's bad but because of the vast theory to remember."
+    },
+    {
+      "ply": 21,
+      "t": 1402.5,
+      "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b1K2BNR b - - 1 11",
+      "line": [
+        "Kc1"
+      ],
+      "spoken": "The king to c1."
+    },
+    {
+      "ply": 22,
+      "t": 1403.5,
+      "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/8/6B1/P3PPPP/b1K2BNR w - - 2 12",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "Let's develop our knight to c6."
+    },
+    {
+      "ply": 23,
+      "t": 1408,
+      "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/4P3/6B1/P4PPP/b1K2BNR b - - 0 12",
+      "line": [
+        "e4"
+      ],
+      "spoken": "e4. We just need to develop and get the king out of the centre. Where should this bishop go? Even when we're not up a rook, there's a good square for it in the Grünfeld."
+    },
+    {
+      "ply": 24,
+      "t": 1434.5,
+      "fen": "r2k3r/pp2pp1p/2n1b1p1/2P5/4P3/6B1/P4PPP/b1K2BNR w - - 1 13",
+      "line": [
+        "Be6"
+      ],
+      "spoken": "The bishop to e6 — not g4, which does nothing. It's not about developing as far into enemy territory as possible, but about the piece's role: this attacks a2, is centralized, and prevents White's bishop from coming out to c4."
+    },
+    {
+      "ply": 25,
+      "t": 1442.5,
+      "fen": "r2k3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR b - - 2 13",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "The bishop to b5. We could take the a2 pawn, but up a rook we'd rather prioritise piece play, as you often do in the Grünfeld."
+    },
+    {
+      "ply": 26,
+      "t": 1466,
+      "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR w - - 3 14",
+      "line": [
+        "Rc8"
+      ],
+      "spoken": "Many good moves here. One approach is to target the c5 pawn, realizing it's a conduit toward his king — so we begin with the rook to c8. The knight to d4 is stronger once it's prepared this way."
+    },
+    {
+      "ply": 27,
+      "t": 1480.5,
+      "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/5NB1/P4PPP/b1K4R b - - 4 14",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "The knight to f3 — and we're going for a mating attack, with the knight to d4 next."
+    },
+    {
+      "ply": 28,
+      "t": 1482.5,
+      "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3nP3/5NB1/P4PPP/b1K4R w - - 5 15",
+      "line": [
+        "Nd4"
+      ],
+      "spoken": "The knight to d4 — the bishop can come back to capture it, and note White has the rook to d1 if he wants, but then we take on c5 just in time."
+    },
+    {
+      "ply": 29,
+      "t": 1504.5,
+      "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3NP3/6B1/P4PPP/b1K4R b - - 0 15",
+      "line": [
+        "Nxd4"
+      ],
+      "spoken": "White takes, capturing on d4."
+    },
+    {
+      "ply": 30,
+      "t": 1506.5,
+      "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2K4R w - - 0 16",
+      "line": [
+        "Bxd4"
+      ],
+      "spoken": "We recapture, capturing on d4, eliminating that bishop."
+    },
+    {
+      "ply": 31,
+      "t": 1520,
+      "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2KR4 b - - 1 16",
+      "line": [
+        "Rd1"
+      ],
+      "spoken": "The rook to d1. If you want to learn the Grünfeld, I'd say at a minimum around 2000 — it's so theoretical and concrete."
+    },
+    {
+      "ply": 32,
+      "t": 1521.5,
+      "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/2KR4 w - - 0 17",
+      "line": [
+        "Rxc5+"
+      ],
+      "spoken": "The rook takes, capturing on c5 with check."
+    },
+    {
+      "ply": 33,
+      "t": 1546.5,
+      "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/1K1R4 b - - 1 17",
+      "line": [
+        "Kb1"
+      ],
+      "spoken": "The king to b1. You might win quick games learning it earlier, but you'd build the wrong habits — that's just my opinion; use your own judgment, and be in charge of your own chess development."
+    },
+    {
+      "ply": 34,
+      "t": 1548,
+      "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P4PPP/1K1R4 w - - 0 18",
+      "line": [
+        "Rxb5+"
+      ],
+      "spoken": "The rook takes, capturing on b5 with check."
+    },
+    {
+      "ply": 35,
+      "t": 1551.5,
+      "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P1K2PPP/3R4 b - - 1 18",
+      "line": [
+        "Kc2"
+      ],
+      "spoken": "The king to c2. Now, we can't save this bishop, which is kind of funny. If we play the rook to b4 to defend it, what does White do?"
+    },
+    {
+      "ply": 37,
+      "t": 1585,
+      "fen": "3k3r/pp2pp1p/4b1p1/8/1r1bP3/P5B1/2K2PPP/3R4 b - - 0 19",
+      "line": [
+        "Rb4",
+        "a3"
+      ],
+      "spoken": "We play the rook to b4, and White tries a3 — but the rook to a4 wins, or the bishop to b3 with check. The move is the bishop to e5, since the bishop-b5 attacks both the rook and the bishop; probably f6, walk the king over to f7, swing the rook to c8, and win easily."
+    },
+    {
+      "ply": 35,
+      "t": 1614,
+      "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P1K2PPP/3R4 b - - 1 18",
+      "line": [],
+      "spoken": "Now the Grünfeld's history, as usual.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 1617,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+      "line": [],
+      "spoken": "Ernst Grünfeld — Austrian, a long career, a strong player and theoretician who developed this and other openings. It was first played back in 1855; the second to play it was Alekhine; then Grünfeld played it three times in 1922, famously beating Alekhine with Black in Vienna 1922 — Grünfeld was the first to show the main ideas, while Alekhine was just experimenting. Alekhine took a liking to it and beat someone with it in 1923.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1697,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "cxd5"
+      ],
+      "spoken": "It caught on as early as the 1930s — Botvinnik and others took it seriously, and White players understood the best way to meet it.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1699.5,
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "...the best way to meet it...",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1701.5,
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+      "line": [
+        "e4"
+      ],
+      "spoken": "...was to take and immediately grab the centre with e4.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1703.5,
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR b KQkq - 0 6",
+      "line": [
+        "Nxc3",
+        "bxc3"
+      ],
+      "spoken": "The similarity to the King's Indian: you concede White control of the centre.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 1718,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": "White gets the centre, and it's a hypermodern opening — you develop, fianchetto the bishop with an eye to attacking the centre from a distance, the main instrument being c5.",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 1732,
+      "fen": "rnbqk2r/pp2ppbp/6p1/2p5/3PP3/2P2N2/P4PPP/R1BQKB1R w KQkq - 0 8",
+      "line": [
+        "Nf3",
+        "c5"
+      ],
+      "spoken": "c5 aims to break down the d4 pawn; alongside it, Black has the knight to c6 and the bishop to g4, all ways to turn up the dial on d4.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 1743,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
+      "line": [],
+      "spoken": "For that reason White's main line is...",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1744.5,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "...the bishop to c4.",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 1748,
+      "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P3NPPP/R1BQK2R b KQkq - 1 8",
+      "line": [
+        "c5",
+        "Ne2"
+      ],
+      "spoken": "c5, the knight to e2 — the old main line, still very reputable. The point?",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 1753.5,
+      "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P5/P3NPPP/R1BQK2R w KQkq - 2 9",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "If Black plays the bishop to g4 at some point...",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 1756,
+      "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P2P2/P3N1PP/R1BQK2R b KQkq - 0 9",
+      "line": [
+        "f3"
+      ],
+      "spoken": "...White has f3, keeping the knight intact and the d4 pawn well protected; the bishop comes out to e3.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1780.5,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
+      "line": [],
+      "spoken": "If White plays e5, the pawn chain overextends, so Black takes and plays the knight to c6 to attack it, and you get a hole on d5 for Black to occupy — a lot of nuance I won't get into.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 1792.5,
+      "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+      "line": [],
+      "spoken": "I won't get into the nuance.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 1794,
+      "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+      "line": [],
+      "spoken": "The bishop to f4 is called the Brinckmann Attack, and the best continuation for White is just to play e3, not to take the pawn at all — the proper theoretical line. Black castles, often plays c5; the Grünfeld is very tactical, you often sacrifice two pawns and things get crazy.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 1828,
+      "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+      "line": [
+        "Bg7",
+        "Bf4",
+        "Nxd5"
+      ],
+      "spoken": "There are probably nine or ten reputable counters to the Grünfeld, which is mind-boggling. But our opponent takes.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1831.5,
+      "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
+      "line": [
+        "Nxd5",
+        "Qxd5",
+        "Bxc7"
+      ],
+      "spoken": "There was a question about taking on c7. If you don't know the Grünfeld, you might think the best approach is to grab the pawn back.",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 1837,
+      "fen": "rnb1k2r/ppB1pp1p/6p1/3q4/3b4/8/PP2PPPP/R2QKBNR w KQkq - 0 8",
+      "line": [
+        "Bxd4"
+      ],
+      "spoken": "But a Grünfeld player won't do that.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1841.5,
+      "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
+      "line": [],
+      "spoken": "A Grünfeld player would rather develop quickly and go for a fast attack on the king...",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 1853.5,
+      "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR w KQ - 1 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "...than bend over backwards to win the pawn back. So Black just castles or plays the knight to c6, and that bishop is awkward — White has to waste a tempo bringing it back.",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 1859.5,
+      "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/4P3/PP3PPP/R2QKBNR b KQ - 0 8",
+      "line": [
+        "e3"
+      ],
+      "spoken": "...for example e3.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 1863,
+      "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4P3/PP3PPP/R2QKBNR w KQ - 1 9",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "...say the knight to c6...",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 1865,
+      "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4PN2/PP3PPP/R2QKB1R b KQ - 2 9",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "...the knight to f3...",
+      "reanchor": true
+    },
+    {
+      "ply": 18,
+      "t": 1867.5,
+      "fen": "r1b2rk1/ppB2pbp/2n3p1/3qp3/3P4/4PN2/PP3PPP/R2QKB1R w KQ - 0 10",
+      "line": [
+        "e5"
+      ],
+      "spoken": "...and Black could already consider e5, blasting open the centre.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 1872,
+      "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
+      "line": [],
+      "spoken": "You get the point — Black gets full compensation for the pawn; there are Grünfeld lines where Black sacrifices one or even two pawns for this quick development. My 2000 figure is a rough guess — try it and see how it treats you.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 1916.5,
+      "fen": "rnb1k2r/ppp1ppbp/6p1/3q4/3P1B2/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
+      "line": [],
+      "spoken": "MVL and Svidler are probably the top two super-grandmaster Grünfeld specialists. So our opponent played the bishop to g3, we played c5 — he should have taken the knight first.",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 1919.5,
+      "fen": "rnb1k2r/pp2ppbp/6p1/2Pq4/8/6B1/PP2PPPP/R2QKBNR b KQkq - 0 8",
+      "line": [
+        "Bg3",
+        "c5",
+        "dxc5"
+      ],
+      "spoken": "...and then taken the pawn.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 1921.5,
+      "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/R2QKBNR w KQkq - 0 9",
+      "line": [
+        "Qxc5"
+      ],
+      "spoken": "...and in this position, with the queen recapturing on c5...",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 1925.5,
+      "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/2RQKBNR b Kkq - 1 9",
+      "line": [
+        "Rc1"
+      ],
+      "spoken": "...Black has solved all the opening problems. White plays the rook to c1 — and it's important to see you have this check.",
+      "reanchor": true
+    },
+    {
+      "ply": 18,
+      "t": 1928.5,
+      "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP2PPPP/2RQKBNR w Kkq - 2 10",
+      "line": [
+        "Qa5+"
+      ],
+      "spoken": "The queen to a5 with check, but after the queen to d2...",
+      "reanchor": true
+    },
+    {
+      "ply": 19,
+      "t": 1929.5,
+      "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP1QPPPP/2R1KBNR b Kkq - 3 10",
+      "line": [
+        "Qd2"
+      ],
+      "spoken": "...Black is slightly better.",
+      "reanchor": true
+    },
+    {
+      "ply": 22,
+      "t": 1932,
+      "fen": "r1b1k2r/pp2ppbp/2n3p1/8/8/6B1/PP1KPPPP/2R2BNR w kq - 1 12",
+      "line": [
+        "Qxd2+",
+        "Kxd2",
+        "Nc6"
+      ],
+      "spoken": "After trading queens and the knight to c6, I have a beautiful bishop and White's king is weak, though White can play on — this is what he should have done to limit the damage.",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 1942,
+      "fen": "rnb1k2r/pp2ppbp/6p1/2pq4/3P4/6B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
+      "line": [],
+      "spoken": "But after d takes c5, the knight to c3, the game is over. On the top level: Magnus has a much wider repertoire than MVL, who plays the Grünfeld and Najdorf almost exclusively; that predictability is a slight disadvantage now that preparation has grown so powerful, but he's survived for years and won tons of games — he might just need to widen his repertoire a little to stay unpredictable.",
+      "reanchor": true
+    }
+  ]
 }

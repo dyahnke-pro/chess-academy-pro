@@ -1,10 +1,10 @@
 {
  "videoId": "C6vYlx-lS6g",
  "title": "The Glek System Explained | GM Naroditsky Theory Speedrun",
- "openingName": "Glek System (Four Knights)",
+ "openingName": "Four Knights Game: Glek System",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:C6vYlx-lS6g",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3."
   },
   {
    "ply": 4,
@@ -33,14 +33,15 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6."
   },
   {
    "ply": 3,
    "t": 45,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "I'm going to play my actual repertoire —",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -49,7 +50,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— which includes the real Ruy Lopez, my main opening. But against the knight to f6 —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -58,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3 — not the Belgrade Gambit, not the Four Knights Scotch, but an opening I've played and analyzed for about two years: an incredibly underrated, dangerous weapon that flies under the radar. It's the Glek System, named after Igor Glek."
   },
   {
    "ply": 6,
@@ -67,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6. A lot of Black players don't study this, so they misplace their pieces, and you seriously contend for an advantage."
   },
   {
    "ply": 7,
@@ -76,16 +78,15 @@
    "line": [
     "g3"
    ],
-   "spoken": "g3 sets up the Glek — the bishop heads to g2 to bear down the long diagonal, a flexible fianchetto system that steers the open games into fresh, less-charted waters.",
-   "kind": "main",
-   "teaches": "Choose a fianchetto system to sidestep mainstream theory and press the long diagonal."
+   "spoken": "g3 — the fianchetto of the bishop in a king-pawn game."
   },
   {
    "ply": 2,
    "t": 120.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "There are several move orders into the Glek — the knight to c3 and g3, or the knight to f3 and g3. I won't introduce specific ideas until we see Black's setup, because a lot depends on where the d-pawn goes.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -97,7 +98,8 @@
     "Nf3",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "There are systems where Black plays d6, usually after developing the bishop outside the pawn chain, which is what our opponent seems to be aiming for. Most books recommend the more principled central strike d5 —",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -106,7 +108,8 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "— which leads to a completely different, open-centre position; some ideas are shared, but there's a big distinction between the open and closed centre.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -115,7 +118,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c5."
   },
   {
    "ply": 9,
@@ -124,7 +127,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g2."
   },
   {
    "ply": 10,
@@ -133,7 +136,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "d6 — the most popular reply if you actually check the database; most people who don't know what to do with Black develop in exactly this manner."
   },
   {
    "ply": 11,
@@ -142,7 +145,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "The first step in the Glek is to finish kingside development with d3 — stage one, flexible, delaying castling a touch."
   },
   {
    "ply": 12,
@@ -151,7 +154,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "h6 is a move Black often defaults to; we weren't intending the bishop to g5 anyway, but it's a healthy enough move."
   },
   {
    "ply": 13,
@@ -160,7 +163,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Now we castle —"
   },
   {
    "ply": 14,
@@ -169,7 +172,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— and Black castles. Stage two. There's a branching point: one plan is the bishop to e3, which the engine dislikes but I've scored with online; the way Glek intended is a King's-Indian-style setup preparing the f2-f4 strike — h3, the king to h2 to unpin the f-pawn, the knight back to d2, then push f4."
   },
   {
    "ply": 15,
@@ -178,7 +181,8 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "The bishop-to-e3 plan poses Black the dilemma of trading bishops, and with the semi-open f-file White gets serious attacking chances connected to the knight transfer to h5. I want to play the main line here as an introduction to the system.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -187,7 +191,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "h3 — healthy and non-committal. Black plays a5, crossing the t's and dotting the i's; with our next move we already choose between the bishop to e3 and the king to h2."
   },
   {
    "ply": 17,
@@ -196,9 +200,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "King to h2 is prophylactic — it tucks the king away and, crucially, defends the h3-pawn so the knight can reroute to d2 and the f-pawn can advance with no loose ends.",
-   "kind": "main",
-   "teaches": "A quiet king move can shore up a pawn and free your pieces for the coming plan."
+   "spoken": "The king to h2. Rather than meeting a4 with a4, in blitz I like to allow a4 and stop the pawn with a3 — or even allow a3, met calmly by b3 — and keep preparing f4. The whole Zen of this opening is that f4 push. A byproduct of the king to h2: the h3-pawn is now safely protected, so if Black builds the classic bishop-and-queen battery we don't lose a tempo defending it."
   },
   {
    "ply": 18,
@@ -207,7 +209,8 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "The knight to e7 — unconventional; not bad, but it changes how we handle the position, and it relinquishes Black's grip on the d4-square. Because we've played h3 and the king to h2, we're still uncommitted — we could even revert to the bishop to e3. One thematic try is to strike with d4 ourselves, as any Ruy player would look for: after d4 the pawns come off, and thanks to our e4-pawn we keep slightly superior central control, a minuscule edge. The other candidate is the knight to d2 following the plan with f4; after it Black may reroute the knight to g6, we push f4, Black trades, and there's a move to be aware of — the knight from g6 to h4, hitting our g2-bishop; we don't want to give that bishop up, so we'd drop it back to h1, which looks a little flimsy. The knight to h4 for us is possible too, then the knight to g6, then the knight to f5. The knight to g1 is also playable — it keeps the bishop's diagonal open but is more passive and undevelops the knight, and after it Black might counter-strike with d5. A hard call between d4 and the knight to d2.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -216,14 +219,15 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "Let's play by the textbook — the knight to d2 — and see if Mr. Glek knew what he was talking about."
   },
   {
    "ply": 18,
    "t": 606,
    "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10",
    "line": [],
-   "spoken": ""
+   "spoken": "After the game we'll explore why I didn't play d4; the reason was the line where the pawns come off on d4 and Black finds an active way to fight for the centre —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -233,7 +237,8 @@
     "Nd2",
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "— the counter-strike d5, which liquidates the position. I'll show it after the game.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -242,9 +247,8 @@
    "line": [
     "f4"
    ],
-   "spoken": "With everything prepared, f4 finally breaks — it challenges e5 and rips open the f-file, the whole point of the Glek's kingside setup.",
-   "kind": "main",
-   "teaches": "Launch the prepared pawn break once your king is safe and your pieces support it."
+   "spoken": "Let's close our eyes and push f4. One tactical insight: after the e-pawn takes f4 and the g-pawn recaptures, the knight to g4 with check and then the queen to h4 looks like checkmate — but it isn't, because the fianchettoed bishop can block on h3 and then take on g4, and our queen also guards g4. That's the power of the fianchetto, and it's what makes the whole line work. In such positions, ask what your next move would be: if Black doesn't take on f4, we'll either reroute the knight to f3 to open the bishop or, more likely, push f5 — the King's-Indian structure with d3, e4 and f5.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -253,7 +257,8 @@
    "line": [
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "That structure should be familiar even though the King's Indian is a Black opening — the pawn chain and the fianchetto are much the same, and after f5 the position largely plays itself.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -262,7 +267,8 @@
    "line": [
     "gxf4"
    ],
-   "spoken": ""
+   "spoken": "It'll stay behind the scenes for now.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -271,7 +277,8 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "The knight to h4. Why is giving up the bishop such a bad idea? It really weakens the h3-pawn: if we let Black take on g2, in the long run we pay for it, and Black could add the queen to d7 for a relatively nasty battery.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -280,7 +287,8 @@
    "line": [
     "Bh1"
    ],
-   "spoken": ""
+   "spoken": "After the bishop to h1, Black can still play the queen to d7 — I missed that — but there we push f5 and slice the battery off. The margins are thin.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -289,7 +297,8 @@
    "line": [
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "Our opponent really is testing us with the queen to d7.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -298,14 +307,16 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "But f5 — and now the knight is in trouble.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 793,
    "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B w - - 3 14",
    "line": [],
-   "spoken": ""
+   "spoken": "The knight is in trouble, and f5 was the only move: without it we could resign, because there was a mate-in-one threat.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -314,21 +325,24 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "We control g6. Black could try the knight to g6 — I'd seriously consider it as Black — but we can't take, since that reopens the battery and the queen takes h3 is checkmate, the king having no g1 escape because the bishop covers it. Still, if the queen ever leaves d7, the knight is in real trouble. Our next move might be the queen to e1, or the knight to f3 to open the bishop and lend the king support.",
+   "reanchor": true
   },
   {
    "ply": 20,
    "t": 854.5,
    "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 w - - 4 11",
    "line": [],
-   "spoken": ""
+   "spoken": "A little fear is healthy — this is why some players prefer the queen to e1 first, and it may have been more prudent. Black plays g5, reinforcing the knight parked at h4; with the Glek, an opening that looks passive because you're arranging pieces on the back ranks, the kingside attack comes very fast once you unfurl. Since that knight is now essentially unattackable, we trade it off with the knight to f3, threatening the knight takes h4 and the bishop takes h6; if Black allows the trade we recapture with the queen to reach an attacking post, and Black's kingside pawns become targets — even the h-pawn can march to h4 as a battering ram. Our pawn wedged on f5 is a plug that keeps Black's forces from crossing to defend. There's the ingenious knight to g6 — but it may be a blunder: after the f-pawn takes g6, the queen takes h3 would be mate because the bishop covers g1, so first we play d4 to chase the dark-squared bishop off that diagonal, and only then take on g6; after the queen takes h3 with check, the king steps to g1 and we survive. Watch the sacrifice: the knight takes g5 is barely a sacrifice — a minor piece for two pawns — so the threshold to justify it is low; if you judge the attack winning, take it. After the h-pawn takes g5, the bishop takes g5, the knight drops back to h7, and the bishop to h6 looks overwhelming, with the knight to d5 on top. Move the bishop — and not for a cute knight to d5 first; play simple, functional chess, and keep the g-file open for a rook to g1 or the queen to g4 pinning the knight. To reinforce the f-takes-g6 threat we guard h3 with the bishop to g2, forcing the knight to move. The whole theme: keep Black's dark-squared bishop out of the defence, since the bishop takes d4 is its only disruption — so the queen to d3 is quietly ideal, guarding h3 laterally and guarding d4, and eyeing g6, so that after we take there, e5 brings the queen into the attack. Don't fall into checkmate-mode: converting the attack into a decisive material haul, using the king as the vehicle, is often the simplest win. After the f-pawn takes g6 we recapture, with the knight to f6 forking and the exchange on e8 in our pocket. The mating finish: the knight to f6 with check, then keep the bishop out with the queen to d1 and the queen to h5 is basically unstoppable; if the rook comes to e6, the queen to h5, and after the rook takes f6 the bishop to g5 and the bishop takes f6 is mate — or the rook to g1 threatening the queen to h8 mate, or the clinical rook to f5 to cut the queen off from h3, then the queen to h6. And the elegant version: the queen to h8 with check deflects the knight, the rook to g8 mates, with Black's own queen blocking the king's escape; if the knight covers f8, the rook to h5 sets up the queen takes f8 and the rook to h8 — the classic pattern of a bishop reaching f6 with a rook on the h-file. None of it strictly necessary — we're up a fortune, and d5 alone wins the queen and ends it.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 2020,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "It ended not in checkmate but in winning all of our opponent's pieces. The good thing about the Glek is you can play it against the Petrov too — the knight to c3, and most people go the knight to c6 — a weapon against both. It's conceptual, not very theory-heavy. It's not that White is objectively better; Black has several ways to equalize, but it's a dangerous practical system.",
+   "reanchor": true
   }
  ]
 }

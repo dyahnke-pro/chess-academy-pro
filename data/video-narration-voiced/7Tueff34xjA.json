@@ -1,10 +1,10 @@
 {
  "videoId": "7Tueff34xjA",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2330",
- "openingName": "Ruy Lopez, Steinitz Defense",
+ "openingName": "Ruy Lopez: Steinitz Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:7Tueff34xjA",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "e5",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Against a strong opponent we bring out our real weapon — the Ruy Lopez. We open e4, Black meets e5, and the knight develops to f3."
   },
   {
    "ply": 5,
@@ -26,7 +26,7 @@
     "Nc6",
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "Black develops to c6 and we pin with the bishop to b5 — the Ruy Lopez."
   },
   {
    "ply": 6,
@@ -35,7 +35,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — the Steinitz Variation. It's fine, and doesn't change our approach; note that ...d6 sets up a pin of its own."
   },
   {
    "ply": 7,
@@ -44,9 +44,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 opens the position to exploit the pin on the c6-knight — the Ruy's point against Steinitz's ...d6, prying the center while Black's king is still in it.",
-   "kind": "main",
-   "teaches": "Open the center to cash in a pin you've already established."
+   "spoken": "To exploit that pin we open the centre. The Ruy offers two roads — c3 preparing d4, or the immediate d4, which is perfectly good; after ...exd4 we recapture with the knight."
   },
   {
    "ply": 8,
@@ -55,7 +53,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the bishop to d7."
   },
   {
    "ply": 10,
@@ -65,9 +63,7 @@
     "Bxc6",
     "Bxc6"
    ],
-   "spoken": "White voluntarily trades on c6 — surprising, since the pin was the pride of the position — but it softens the e5-pawn and clears the way to press the center.",
-   "kind": "main",
-   "teaches": "Surrender the bishop pair when the resulting pressure on the center outweighs the pin."
+   "spoken": "Now a hard-to-grasp move: we capture on c6. You'd think the whole point was to keep that bishop, but there's a deeper idea here."
   },
   {
    "ply": 11,
@@ -76,9 +72,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Nc3 completes development and adds a second guard to the center, building pressure before Black can fully coordinate against the tension.",
-   "kind": "main",
-   "teaches": "Finish developing with tempo, reinforcing your central squares."
+   "spoken": "We are pressing and keeping the pin — White stands better. There is a buffet of captures, and the e5-point is not going anywhere: Black will not take on d4 himself, as it disastrously opens the e-file, so we can round that pawn up in due course, with Black's queenside wrecked and our pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
   },
   {
    "ply": 12,
@@ -87,7 +81,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6. Played right, this eventually forces Black to release the centre by taking on d4."
   },
   {
    "ply": 13,
@@ -96,7 +90,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. If Black grabs on e4, he opens the e-file — and once his bishop lands on e4 we get a big initiative."
   },
   {
    "ply": 14,
@@ -105,7 +99,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4."
   },
   {
    "ply": 15,
@@ -114,7 +108,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4 with the knight."
   },
   {
    "ply": 16,
@@ -123,7 +117,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the bishop on e4. How do we hit it while improving?"
   },
   {
    "ply": 17,
@@ -132,7 +126,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "The rook to e1 — we can reclaim the e5-pawn later, no hurry; the rook attacks down the file and adds a pin."
   },
   {
    "ply": 21,
@@ -144,7 +138,7 @@
     "Bf3",
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "We are pressing and keeping the pin — White stands better. There is a buffet of captures, and that central point is not going anywhere: Black will not take on d4 himself, as it disastrously opens the e-file, so we can round up the pawn in due course, with Black's queenside wrecked and our pieces active. But careful: a mindless bishop to e3 allows ...Rb8 hitting b2, and fianchettoing with b3 weakens the dark squares."
   }
  ]
 }

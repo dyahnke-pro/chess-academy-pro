@@ -4,7 +4,7 @@
  "openingName": "Scotch Game",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:OE2pJpVVzYw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, e5 — the move most people actually play."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6. I like to showcase different openings and how to play them."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 is the Scotch — striking e5 at once to open the center and free the pieces for quick, active development.",
-   "kind": "main",
-   "teaches": "The Scotch opens the center immediately with d4."
+   "spoken": "d4 — the Scotch, the one opening among my recommendations that I suggest to beginners."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d4. The Scotch teaches you to play with all your pieces, because d4 opens up the centre."
   },
   {
    "ply": 8,
@@ -71,14 +69,15 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "When the centre is closed you have a crutch; open, it teaches active development and punishes your mistakes. d6 is passive — not terrible, but it opens one bishop while blocking the dark-squared bishop, which can now only come to e7."
   },
   {
    "ply": 7,
    "t": 151.5,
    "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "e7 is serviceable, not a ten-out-of-ten square; that would be the bishop to c5, one of the main moves, or the knight to f6, the other.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -87,7 +86,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "What should we do? Just develop the knight — no rocket science.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -96,7 +96,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3. Now we develop the bishops — where does this bishop go?"
   },
   {
    "ply": 10,
@@ -105,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6. Two squares to consider: b5 and c4. I like the bishop to b5 less — surprising, since people love pins, but the problem is Black unpins with the bishop to d7 —"
   },
   {
    "ply": 11,
@@ -114,9 +114,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Bishop to c4 trains on f7 — the softest square in Black's camp — building long-term pressure and setting up sacrificial ideas against the king.",
-   "kind": "main",
-   "teaches": "Place the bishop on c4 to pressure f7 and prepare tactics."
+   "spoken": "— and then that pin is empty. Instead, the bishop to c4 is quite a bit better, mounting sustained pressure on the f7-pawn."
   },
   {
    "ply": 12,
@@ -125,7 +123,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Chess is gradual — we're not threatening to take f7 yet, just applying long-term pressure and setting up an attack. Black plays g6 to fianchetto. We have an even sexier move — the bishop to g5, but let me explain the logic. Notice the queens are in a standoff: two pieces facing each other with more than one piece between them. If the position opens, they'll face each other directly. Black's queen is defended by the knight and the king. Can I decoy the king off its defence of the queen?"
   },
   {
    "ply": 13,
@@ -134,7 +132,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f7 — but not immediately; only if the queens end up staring at each other. First, can I remove the knight on c6? Let's take it. Then the only thing preventing the bishop takes f7 is the d6-pawn."
   },
   {
    "ply": 15,
@@ -144,9 +142,7 @@
     "bxc6",
     "e5"
    ],
-   "spoken": "e5 is a decoy thrust — it attacks the knight on f6 and, if Black grabs it, opens lines to spring Bxf7-based tactics against the king.",
-   "kind": "main",
-   "teaches": "A central pawn push can act as a decoy, luring pieces away and opening attacking lines."
+   "spoken": "The b-pawn recaptures, and to the rescue comes another decoy sacrifice — e5, attacking the knight; if he doesn't take, that pawn wreaks havoc."
   },
   {
    "ply": 16,
@@ -155,7 +151,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "If he does take, we play the bishop takes f7, distracting the king from the queen. He didn't have to take the bishop, but his position would be ruined regardless. Black plays d5, counter-attacking the bishop. Should we take the knight —"
   },
   {
    "ply": 17,
@@ -164,14 +160,15 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "— actually there's a better way: the bishop to g5. Conceptually we should take the knight — it opens the position when the opponent is behind in development — but we take it with the bishop, which forks. If he takes our bishop we take his knight, or we can take his queen first —"
   },
   {
    "ply": 16,
    "t": 410.5,
    "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "— and then the bishop forks the rook and queen. The reason to take the knight: when your opponent is less developed — both his bishops undeveloped, not close to castling — the side furthest from castling often stands to lose when the centre opens —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -181,7 +178,8 @@
     "Bg5",
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "— because the open e-file can be used to check an exposed king. The bishop to e7. What should we take the knight with? Remember, our bishop is hanging, so we have to be careful.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -190,7 +188,8 @@
    "line": [
     "exf6"
    ],
-   "spoken": ""
+   "spoken": "We should take the knight with a pawn. If we take with the bishop, he takes our bishop then the other bishop and material is equal; if we take with the pawn, he gets at most a pawn for the bishop —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -199,7 +198,8 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "— and if he takes the bishop, we take his bishop and remain up a piece. Now we trade —",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -208,7 +208,8 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes f6, and after he recaptures with the queen we need to move our bishop off c4, since it was getting attacked —",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -217,7 +218,8 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": ""
+   "spoken": "— the queen takes f6. Where should we move the bishop? It doesn't really matter — a less essential decision.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -226,7 +228,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "Let's just drop it to d3, in the vicinity of the king in case he castles.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -236,7 +239,8 @@
     "O-O",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "And of course we also need to castle. We're up a piece — now the conversion stage; being up a piece is, in grandmaster terms, a decisive advantage.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -245,7 +249,8 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "Two overarching methods of converting an extra piece: trade as many pieces as possible until you have just your extra piece against pawns, giving it target practice; or use the extra piece as another attacker against the king. Coaches usually teach the trade method, but I'll push back slightly — players try too hard to trade all the pieces and end up making a mistake.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -254,7 +259,8 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "Here we're going to attack Black's king. To attack it we open some files: f4 followed by f5, opening the f-file as an avenue to the king. Just remember, trading pieces is not the only way to convert an advantage.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -264,7 +270,8 @@
     "Qf6",
     "f5"
    ],
-   "spoken": ""
+   "spoken": "Attacking your opponent's king is a full-fledged alternative — often quicker and more effective. We shove f5 and sacrifice it; if he takes with the pawn, he ruins the structure around his king —",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -273,7 +280,8 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "— if he takes with the bishop, we take his bishop and he still ends up recapturing with a pawn. He plays g5, making a weakness. Ask how the position changed: g5 opens the h5-square for our queen, a great attacking post. The bishop takes f5 is a blunder, but Black is losing anyway — we have two attackers and one defender; we take with the rook to involve it in the attack. Up two pieces, the check isn't scary — not all checks are; we tuck the king into the corner, perfectly safe, and use our extra pieces to deliver checkmate.",
+   "reanchor": true
   }
  ]
 }

@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:gyOxMMJWiYg",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We're White — the pawn to e4, c6, the Caro-Kann. There are so many good lines against it."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4. We could play the Nimzowitsch, but that's a little too cheap — let's play the Fantasy, which doesn't get nearly enough love."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "d5 — the Fantasy has a shoddy reputation —"
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3, the Fantasy again — a line with a shoddy reputation that is genuinely dangerous once you know it.",
-   "kind": "main",
-   "teaches": "f3 keeps the centre and invites the sharp, less-charted play Black often mishandles."
+   "spoken": "f3 — undeservedly, because played well it's a very dangerous line, and Caro players just don't like to face it."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "The idea of the Fantasy is obvious: maintain the centre, yield no control, and keep the light-squared bishop at bay — the Advance's problem is that it lets that bishop out to f5 — while not prematurely defining the pawn structure. h5 — I've never seen that; it's totally off-base."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3. White's scheme is simple: develop the bishop, generally to e3, and castle short or long depending on Black's setup —"
   },
   {
    "ply": 8,
@@ -71,14 +69,15 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— and if he continues this way, we'll probably go long to exploit these shenanigans. The knight to f6 is just bad."
   },
   {
    "ply": 5,
    "t": 142,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "When you play the Fantasy you have to be flexible — a lot of players say 'I'm a Fantasy player, I never play e5' —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -89,7 +88,8 @@
     "Nc3",
     "h5"
    ],
-   "spoken": ""
+   "spoken": "— and that's a limited, narrow-minded way to be, because when you do need e5, out of emotional attachment you won't play the moves you need.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -98,9 +98,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black's early h5 neglects the centre, so White strikes with e5. The knight on f6 has no good square and is shoved back to the miserable h7, leaving White a huge space edge.",
-   "kind": "main",
-   "teaches": "Punish a flank move that ignores the centre by grabbing space with e5."
+   "spoken": "Here the knight on f6 is very vulnerable, so e5 is clearly right — this isn't like playing the Advance; Black is almost busted."
   },
   {
    "ply": 10,
@@ -109,7 +107,7 @@
    "line": [
     "Nh7"
    ],
-   "spoken": ""
+   "spoken": "The knight to h7 — this is not the way to play the Caro. Had he played the knight to d7, we'd play e6, a typical gambit. f4 is possible but we don't need it yet — we have something far better."
   },
   {
    "ply": 11,
@@ -118,7 +116,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d3 — not f4 — stopping him from coming out to f5; now his bishop has nowhere good to go, and if we want we can follow with a4, the knight to f3, and so on."
   },
   {
    "ply": 12,
@@ -127,7 +125,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d7. Now the time has arrived —"
   },
   {
    "ply": 13,
@@ -136,7 +134,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "— to figure out where the knight goes: f4 and the knight to f3 is the natural way to continue, reinforcing our centre. An amazing position — look how passive he is."
   },
   {
    "ply": 14,
@@ -145,7 +143,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "The h5-pawn adds to his passivity. He plays the bishop to g4 — no need to panic and drop the bishop back to e2; not every pin is dangerous, particularly this one."
   },
   {
    "ply": 15,
@@ -154,7 +152,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "So we simply play the knight to f3 and follow it up with h3 — no need to change how we play at all."
   },
   {
    "ply": 16,
@@ -163,7 +161,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "He keeps making moves with the same piece and will pay the price. The queen to b6. The key question: can we play h3, or must we first defend the d4-pawn? A cool trap: after h3, the bishop takes f3, the queen takes f3, there's the queen takes d4 — painful to give up the central pawn, but see the bigger picture; your development lead gives full compensation. And there's a very cool idea here."
   },
   {
    "ply": 17,
@@ -172,7 +170,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "I'll play a move and let someone decode the idea — a3."
   },
   {
    "ply": 18,
@@ -181,7 +179,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "He plays e6."
   },
   {
    "ply": 19,
@@ -190,7 +188,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "Now h3, pretending to blunder the pawn —"
   },
   {
    "ply": 21,
@@ -200,7 +198,7 @@
     "Bxf3",
     "Qxf3"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes f3, the queen takes f3."
   },
   {
    "ply": 23,
@@ -210,9 +208,7 @@
     "Qxd4",
     "Be3"
    ],
-   "spoken": "White lays a trap: the move h3 quietly offers a central pawn as bait. Black bites — the bishop trades on f3, the queen recaptures, and then wins the pawn, its queen now planted on d4. The bishop to e3 springs the trap, hemming the queen in with tempo where every escape loses.",
-   "kind": "trap",
-   "teaches": "Bait a pawn grab and trap the greedy queen by attacking it with a gain of tempo."
+   "spoken": "The idea is to trap the queen — he bites, the queen takes d4, and here comes the queen trap with the bishop to e3. It works like a charm."
   },
   {
    "ply": 24,
@@ -221,7 +217,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "There's a cool application of this in the Sicilian, where I originally learned the idea. The knight to g5 — he won't go gentle into that good night. A lot of players out of happiness just grab the knight, satisfied to be up a piece — don't settle for good enough; find the best idea."
   },
   {
    "ply": 25,
@@ -230,7 +226,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": ""
+   "spoken": "Do we have to take the knight and let his queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and his queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource."
   },
   {
    "ply": 26,
@@ -239,7 +235,7 @@
    "line": [
     "Qxe3"
    ],
-   "spoken": ""
+   "spoken": "He started to think, but a little too late — now he gives up the queen."
   },
   {
    "ply": 27,
@@ -248,7 +244,7 @@
    "line": [
     "Qxe3"
    ],
-   "spoken": ""
+   "spoken": "The queen takes e3."
   },
   {
    "ply": 28,
@@ -257,7 +253,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": ""
+   "spoken": "The knight to e4. It doesn't matter — we're up a queen — but let's be precise: should we take with the knight or the bishop?"
   },
   {
    "ply": 29,
@@ -266,7 +262,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "We should take with the bishop, because d6 is a huge weakness, and the knight is the piece best equipped to exploit it — so we sack the bishop back."
   },
   {
    "ply": 31,
@@ -276,7 +272,7 @@
     "dxe4",
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "You might say he has a dark-squared bishop that defends d6 —"
   },
   {
    "ply": 32,
@@ -285,7 +281,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "— but that doesn't mean the square isn't a weakness; we can still slam a knight onto d6, and that trade is desirable since we're up a queen."
   },
   {
    "ply": 33,
@@ -294,7 +290,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Clearly we should castle — always compare and contrast. The knight is much better equipped than a bishop to exploit these weaknesses; a bishop on e4 would just bite on granite."
   },
   {
    "ply": 34,
@@ -303,7 +299,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Understanding how the position has changed: we can play the knight to g5 to go after the pawn, or the knight to d6, but the simplest —"
   },
   {
    "ply": 35,
@@ -312,7 +308,7 @@
    "line": [
     "Qxa7"
    ],
-   "spoken": ""
+   "spoken": "— is to take what's hanging: the queen takes a7, which wins on the spot."
   },
   {
    "ply": 36,
@@ -321,7 +317,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e7 — many ways to finish straight away. There's one really cool idea —"
   },
   {
    "ply": 37,
@@ -330,9 +326,7 @@
    "line": [
     "Rd6"
    ],
-   "spoken": "Up a queen, White drives home the theme: the weak d6-square. A rook plants itself on d6, using the outpost the e5-pawn created, and Black's position folds.",
-   "kind": "main",
-   "teaches": "An advanced outpost like d6 is a permanent home for a piece — here a rook the pawn on e5 protects."
+   "spoken": "— we could put a knight on d6, but we could also put a rook on d6, using the knight; I really hope he plays f5 so we can demonstrate the finale."
   },
   {
    "ply": 38,
@@ -341,7 +335,7 @@
    "line": [
     "Kc7"
    ],
-   "spoken": ""
+   "spoken": "The king to c7. Even up a queen, I have a nice idea cooked up — it doesn't quite do it; I'll show you after."
   },
   {
    "ply": 39,
@@ -350,7 +344,7 @@
    "line": [
     "Rhd1"
    ],
-   "spoken": ""
+   "spoken": "One idea was just doubling rooks, putting insurmountable pressure on his knight."
   },
   {
    "ply": 40,
@@ -359,7 +353,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "The knight to b6. In such positions, looking for mate, always look at the squares — the queen eyes the b7-pawn —"
   },
   {
    "ply": 41,
@@ -368,7 +362,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "— a potential mating square, so the knight to c5 stems naturally from that; and as soon as his knight leaves d7 he relinquishes control of squares, accelerating the search for mate. It's over."
   },
   {
    "ply": 42,
@@ -377,7 +371,7 @@
    "line": [
     "Bxd6"
    ],
-   "spoken": ""
+   "spoken": "He'll probably play the rook to b8, and then he's going to lose."
   },
   {
    "ply": 43,
@@ -386,14 +380,15 @@
    "line": [
     "Qxb7#"
    ],
-   "spoken": ""
+   "spoken": "He takes instead, and it's checkmate on b7. Let's analyze quickly and call it a night."
   },
   {
    "ply": 2,
    "t": 671.5,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The Fantasy again — this line doesn't get a lot of love —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -404,7 +399,8 @@
     "d5",
     "f3"
    ],
-   "spoken": ""
+   "spoken": "— but more people found out about it when MVL crushed Alekseenko in the Candidates. It was played as early as the 1800s — Morozzi, Spielmann — impressive, because early players didn't really violate rules like f3.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -413,14 +409,16 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black has a bunch of viable responses: g6 —",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 726,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "—",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -429,14 +427,16 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "— e6, a very solid move —",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 728.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "— e5 also exists, a kind of counter-gambit —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -445,14 +445,16 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "— e5 —",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 731,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "—",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -461,14 +463,16 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "— and the queen to b6, a modern move considered one of the best responses, immediately trying to exploit the weaknesses this creates.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 740,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "So if you play the Caro, we'll probably face the Fantasy at some point —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -477,7 +481,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "— and I'll walk you through the lines; h5 is certainly not one of them.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -487,7 +492,8 @@
     "Nc3",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "And the knight to f6 is certainly not the best way to follow up.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -496,7 +502,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "So had he played the knight to d7 —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -505,7 +512,8 @@
    "line": [
     "Nfd7"
    ],
-   "spoken": ""
+   "spoken": "— the knight to d7 —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -514,7 +522,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "— we would definitely have played e6.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -523,7 +532,8 @@
    "line": [
     "fxe6"
    ],
-   "spoken": ""
+   "spoken": "One very important concept: how to follow this up. Black wants e5 to liberate his bishop, so e6 often has a follow-up just as important as the move itself —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -532,14 +542,16 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "— the awkward-looking but important f4; you can also play the bishop to d3 first.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 774,
    "fen": "rnbqkb1r/pp1np1p1/2p1p3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop to d3 first —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -548,7 +560,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "— because in this case you're threatening checkmate; but after the knight to f6 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -557,7 +570,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— the knight to f6 —",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -566,14 +580,16 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "— it's a good idea to clamp down on e5 with f4, plus the idea of the knight to f3 and g5; White is basically winning.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 792,
    "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Black is totally paralyzed, barely able to move — this is crushing. So the knight to h7, the bishop to d3. Where did I learn this trap? A little-known line in the Nimzowitsch; one day I found out about it and thought it was cool, and we applied it here — that's pattern recognition, and that's how learning works: keep your eyes peeled for chances to apply what you know. After e6, White plays the queen to f3, Black the queen to b6, and a3 — one of White's main theoretical moves, even played by Anand.",
+   "reanchor": true
   }
  ]
 }

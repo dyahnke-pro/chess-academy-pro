@@ -4,7 +4,7 @@
  "openingName": "Ruy Lopez",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:FqVMAv3wKes",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3; Black defends with ...Nc6."
   },
   {
    "ply": 5,
@@ -34,9 +34,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "Bishop to b5 is the Ruy Lopez — the Spanish bishop pins pressure on the knight guarding e5, the classical main-line fight against 1.e4 e5.",
-   "kind": "main",
-   "teaches": "The Ruy leans on the c6-knight to chip away at Black's grip on e5."
+   "spoken": "We play the bishop to b5 — the Ruy Lopez."
   },
   {
    "ply": 6,
@@ -45,7 +43,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Black chases with a6."
   },
   {
    "ply": 7,
@@ -54,7 +52,7 @@
    "line": [
     "Ba4"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to a4, keeping the pin."
   },
   {
    "ply": 8,
@@ -63,7 +61,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 9,
@@ -72,7 +70,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 10,
@@ -81,7 +79,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 11,
@@ -90,7 +88,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "We play the rook to e1, defending e4."
   },
   {
    "ply": 12,
@@ -99,7 +97,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black plays b5, gaining time."
   },
   {
    "ply": 13,
@@ -108,7 +106,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to b3."
   },
   {
    "ply": 14,
@@ -117,7 +115,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6, the closed setup."
   },
   {
    "ply": 15,
@@ -126,9 +124,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3 is the quiet linchpin of the Ruy — it prepares the central advance d4 and hands the b3-bishop a retreat on c2, unhurried and deeply positional.",
-   "kind": "main",
-   "teaches": "Prepare your central break with a modest pawn move that also frees a retreat for your key bishop."
+   "spoken": "We play c3, preparing a later d4 and giving the bishop a bolthole."
   },
   {
    "ply": 16,
@@ -137,7 +133,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 17,
@@ -146,7 +142,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We play the modest d3."
   },
   {
    "ply": 18,
@@ -155,7 +151,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to g4."
   },
   {
    "ply": 19,
@@ -164,7 +160,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2, heading for the kingside."
   },
   {
    "ply": 22,
@@ -175,7 +171,7 @@
     "Bc2",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black hits our bishop with ...Na5; we tuck it to c2; and Black expands with ...c5 — the typical Chigorin plan."
   },
   {
    "ply": 23,
@@ -184,7 +180,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to f1 — the classic Ruy maneuver toward e3."
   },
   {
    "ply": 24,
@@ -193,7 +189,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black brings the knight back to c6."
   },
   {
    "ply": 25,
@@ -202,7 +198,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": ""
+   "spoken": "We swing the knight to e3."
   },
   {
    "ply": 26,
@@ -211,7 +207,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 27,
@@ -220,9 +216,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Finally d4 breaks in the center — the whole point of the slow c3 build-up, challenging e5 and opening lines for the bishops.",
-   "kind": "main",
-   "teaches": "After the preparatory moves, strike with the central break you've been readying."
+   "spoken": "We finally strike with d4."
   },
   {
    "ply": 28,
@@ -231,7 +225,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 29,
@@ -240,7 +234,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d4 — but now Black threatens a fork with ...d5."
   },
   {
    "ply": 30,
@@ -249,7 +243,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4 again."
   },
   {
    "ply": 31,
@@ -258,7 +252,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 32,
@@ -267,7 +261,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes the knight."
   },
   {
    "ply": 33,
@@ -276,7 +270,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the queen, centralized on d4."
   },
   {
    "ply": 34,
@@ -285,7 +279,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nd7."
   },
   {
    "ply": 35,
@@ -294,7 +288,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight into d5."
   },
   {
    "ply": 36,
@@ -303,7 +297,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": ""
+   "spoken": "Black takes it off with the bishop."
   },
   {
    "ply": 37,
@@ -312,7 +306,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the pawn."
   },
   {
    "ply": 38,
@@ -321,7 +315,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to f6, onto a nice diagonal."
   },
   {
    "ply": 40,
@@ -331,7 +325,7 @@
     "Qd3",
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We reposition the queen to d3; Black plays g6."
   },
   {
    "ply": 23,

@@ -1,10 +1,10 @@
 {
  "videoId": "A-HTpnOfVcE",
  "title": "Sideline Strategies: Beginner Level Openings | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
- "openingName": "Four Knights: Center Fork Trick",
+ "openingName": "Four Knights Game (Center Fork Trick)",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:A-HTpnOfVcE",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We open e4, and Black replies e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3, hitting e5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the knight to c6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, heading for a Four Knights or Glek system."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to c5 — a sideline."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
     "Nb1",
     "Bf8"
    ],
-   "spoken": ""
+   "spoken": "Our opponent takes it back — the knight returns to b1, the bishop to f8 — so we're back to the earlier position."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3 again."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "And the bishop to c5 again — a sideline, and not a good one: not conceptually bad, but tactically flawed."
   },
   {
    "ply": 11,
@@ -88,9 +88,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Nxe5 launches the center fork trick — White briefly sacrifices the knight, knowing that after the recapture, d4 forks the bishop and knight to win the piece straight back.",
-   "kind": "main",
-   "teaches": "The center fork trick sacs a knight to regain it with a pawn fork and a superior center."
+   "spoken": "If you've spent time around these e5 openings you should already sense why the bishop to c5 is a serious inaccuracy — the center fork trick: the knight takes on e5, capturing on e5."
   },
   {
    "ply": 12,
@@ -99,14 +97,15 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures, capturing on e5 — there's a lot going on here."
   },
   {
    "ply": 11,
    "t": 80,
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "What about the bishop takes f2 with check, or the queen to h4? All easily met — more on those shortly.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -116,9 +115,8 @@
     "Nxe5",
     "d4"
    ],
-   "spoken": "There it is — d4 forks the bishop on c5 and the knight on e5, regaining the piece and leaving White with a broad, dominant pawn center.",
-   "kind": "main",
-   "teaches": "Play the pawn fork that recovers the sacrificed material and rewards you with the center."
+   "spoken": "This is the classical execution of the center fork trick — you push d4, forking the bishop and the knight.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -127,14 +125,16 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "You temporarily sacrificed a piece in the centre, and now win it back by forking — generally the bishop on c5 and the knight on e5.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 94,
    "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The fork wins one of them back.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -143,7 +143,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "Why it's good for us...",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -152,7 +153,8 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "In this case our opponent is forced to part with the bishop, and after the queen recaptures on d4 the e5-knight is unstable.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -161,7 +163,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "The g7 pawn is already under fire and Black's in huge trouble — the bishop takes d4 was a serious mistake. Now pause: the obvious move is f4, on the tip of everyone's tongue, but whenever you push a pawn like that, watch the weaknesses it creates. Against f4, Black has the unpleasant queen-h4 check; we can't play g3, because the knight sneaks into f3, forking our queen. We could meet it with the queen to f2, but why trade queens when we have the lead in development, the bishop pair and a huge centre? Keep the queens on and play for maximum. So instead of f4, we develop — bring the dark-squared bishop out.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -170,7 +173,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to f4 pressures the knight, but it allows the queen to f6 with annoying tactical ideas — so instead the solid Russian-schoolboy move, the bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -179,7 +183,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "The queen to f6 — our opponent gets excited about a discovered check, but with the bishop guarding the queen we've nothing to fear; the queen to f6 is a waste of time and potentially fatal.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -188,9 +193,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Knight to d5 leaps in with tempo, hitting the queen on f6 and claiming a monster central outpost — Black's pieces are already tangled and losing.",
-   "kind": "main",
-   "teaches": "Use an outpost jump that also gains a tempo by attacking an enemy piece."
+   "spoken": "When you see a queen out early on f6, think of the piece that most commonly attacks it — the knight. So the knight to d5 leaps to mind, forcing the queen back. This is exactly why we put the bishop on e3 and not f4: on f4, Black would have the counter-strike knight to f3 with check, winning the queen.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -199,7 +203,8 @@
    "line": [
     "Qd8"
    ],
-   "spoken": ""
+   "spoken": "So the queen is forced all the way back to d8 — but at this level people hate doing that, so the opponent might stubbornly try the knight to f3 or just collapse. Black is borderline lost. And a key rule: just because a move didn't work once doesn't mean you abandon it — remember f4? The circumstances have changed; re-check it, because now it wins the g7 pawn, maybe the game.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -208,7 +213,8 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "The problem with f4 was the queen-h4 check — but now we have the bishop on e3 to block it, and the knight on d5 guards f4 from behind. So f4 is not just viable now but incredibly strong.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -217,7 +223,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "c5 — that doesn't scare us; we'd prefer to stay on the same diagonal.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -226,14 +233,16 @@
    "line": [
     "Qc3"
    ],
-   "spoken": ""
+   "spoken": "Can we? Yes — the queen drops back to c3, staying on the long diagonal.",
+   "reanchor": true
   },
   {
    "ply": 22,
    "t": 309.5,
    "fen": "r1bqk1nr/pp3ppp/3p4/2pNn3/3QPP2/4B3/PPP3PP/R3KB1R w KQkq - 0 12",
    "line": [],
-   "spoken": ""
+   "spoken": "Some wanted the queen-a4 check, thinking it wins the knight, but Black blocks with the bishop — the queen-a4 check is just awkward here.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -243,7 +252,8 @@
     "Qc3",
     "Ng4"
    ],
-   "spoken": ""
+   "spoken": "The knight to g4 — is the coast clear?",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -252,7 +262,8 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": ""
+   "spoken": "Yes, we can take on g7, and the game's essentially over. If the opponent takes our bishop, we'll have a pleasant choice of what to take back — the rook or the knight.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -261,7 +272,8 @@
    "line": [
     "N8f6"
    ],
-   "spoken": ""
+   "spoken": "Notice how damaging c5 was — the d5-knight is a monster. But it's moot: we have forced mate. A good example of not rushing — the queen takes h8, the king to d7, the bishop to b5 is nearly as good, but the most accurate is to start with the bishop to b5, taking away the king's escape square.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -270,7 +282,8 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "The bishop to b5 first, cutting off the escape square.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -280,21 +293,24 @@
     "Bd7",
     "Qxh8+"
    ],
-   "spoken": ""
+   "spoken": "This idea of taking away the king's only retreat before starting the mating combination is important — there's a famous game on exactly this: Alekhine versus Mindeno, a 1933 simul in the Netherlands, Alekhine White, a piece sacrificed for a massive attack down the h-file. Many players want to check immediately, but the king runs to f7 and the attack fizzles — the rook to h7, the king to g6, and White may even lose. The key: the king has only one escape, through f7. Cover it, and the rook to h8 becomes unstoppable. The obvious g6 fails to the queen taking g6; then sliding the queen over is met by the block d5; and the knight to e5 threatening rook-h8 mate is refuted by the queen taking h5 as a desperado, and Black wins. Move order is everything. Alekhine's solution: to safely stop the king to f7 he must push g6, and to push g6 he must deflect Black's queen from e6 — but that's not easy. The queen to c4 comes to mind, a queen sac, but after the queen takes c4, g6, Black has the queen-f1 check to buy time and escape via f8 and e7. The only move order that works is the knight to e5 FIRST, temporarily covering f7; Black is forced to take, d takes e5 — if the queen takes e5, you trade queens and play g6, mate unstoppable — then, not the queen to c4 because of that queen-f1 resource, the correct move is g6, an incredible quiet threat with no checks; Black must take, you give the side check with the queen, Black blocks, but eventually a piece must go to f7 and the rook to h8 is checkmate. The lesson: don't rush the obvious check — identify the escape route, block it, then mate.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 628,
    "fen": "r1bqk2r/pp3pQp/3p1n2/2pN4/4PPn1/4B3/PPP3PP/R3KB1R w KQkq - 1 14",
    "line": [],
-   "spoken": ""
+   "spoken": "In our game it was much simpler, but the similarity holds: often you don't grab the material or give the check immediately — first identify the escape route, and give the check, or even a quiet move that blocks it, and only then capture the rook with checkmate. That's the most clinical approach.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 641.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Let me talk a little about the opening.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -305,7 +321,8 @@
     "Nc3",
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Again a sideline, the bishop to c5, met by the knight taking on e5 — a move you must know for the Glek system or the Four Knights.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -314,7 +331,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "...the knight takes e5...",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -323,7 +341,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "The queen to f6 isn't scary.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -332,7 +351,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "You just drop the knight back to f3 with an extra pawn.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -343,7 +363,8 @@
     "Ne5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 transposes into a form of the Stafford Gambit after the knight takes c6, d takes c6...",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -353,7 +374,8 @@
     "Nxc6",
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "...but a bad form, because Black isn't supposed to play the knight to f6.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -362,7 +384,8 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White plays h3, preventing the nasty knight-g4 escapade...",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -371,7 +394,8 @@
    "line": [
     "Qd4"
    ],
-   "spoken": ""
+   "spoken": "...and the queen to d4 isn't scary — you bring the queen out to f3.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -380,7 +404,8 @@
    "line": [
     "Qf3"
    ],
-   "spoken": ""
+   "spoken": "...the queen to f3.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -389,7 +414,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "All this is illusory activity, because once you play d3...",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -398,7 +424,8 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "...d3 already threatens to knock the queen back with the bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -407,7 +434,8 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black can make a bunch of one-move threats...",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -416,14 +444,16 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "...but they're very easy to parry; eventually you develop and you're up a centre pawn, a disaster for Black. The queen to h4 scares some, but you just play g3 and Black is sent back to f6.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 733,
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
    "line": [],
-   "spoken": ""
+   "spoken": "You can play the knight to d3, the bishop to b6, then the knight to d5 forcing the queen back — none of it is remotely scary.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -432,7 +462,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "...the knight takes e5...",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -441,7 +472,8 @@
    "line": [
     "Bxf2+"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f2 with check scares people unfamiliar with the center fork trick...",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -450,7 +482,8 @@
    "line": [
     "Kxf2"
    ],
-   "spoken": ""
+   "spoken": "...the king takes on f2, and they think the king is weak forever — but that's not true.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -459,7 +492,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "...the knight takes e5. Black has given away the bishop pair and central control.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -468,7 +502,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "So we play d4, with major assets, and once the bishop comes out we simply castle by hand — tucking the king manually back to g1.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -477,7 +512,8 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": ""
+   "spoken": "Actually it's good in the long run that Black took f2, because you get the semi-open f-file when Black castles kingside. Are we afraid of the queen-h4 check? Absolutely not.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -486,7 +522,8 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "We parry with g3.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -495,7 +532,8 @@
    "line": [
     "Ng4+"
    ],
-   "spoken": ""
+   "spoken": "This is the opposite of scary — it just loses for Black.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -504,7 +542,8 @@
    "line": [
     "Kg2"
    ],
-   "spoken": ""
+   "spoken": "...the king to g2, the queen to h5, the bishop to b2...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -514,21 +553,24 @@
     "Qh5",
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "...and the knight is lost because h3 is coming. There's no magic in chess.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 797,
    "fen": "r1b1k1nr/pppp1ppp/8/4n3/3PP2q/2N5/PPP2KPP/R1BQ1B1R w kq - 1 7",
    "line": [],
-   "spoken": ""
+   "spoken": "You can't mate a whole army with two pieces.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 798.5,
    "fen": "r1bqk1nr/pppp1ppp/8/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R b kq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Which is why, after d4...",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -537,7 +579,8 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "...Black basically has to play the knight to g6.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -546,7 +589,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "Then we develop the bishop; say Black plays d6...",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -556,7 +600,8 @@
     "d6",
     "Rf1"
    ],
-   "spoken": ""
+   "spoken": "...and we're set to play the rook to f1.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -565,7 +610,8 @@
    "line": [
     "N8e7"
    ],
-   "spoken": ""
+   "spoken": "...the knight to e7, the king to g1, an amazing position.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -574,14 +620,16 @@
    "line": [
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "You'd never know White didn't castle if you looked at it.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 822,
    "fen": "r1bqk1nr/pppp1ppp/2n5/4N3/4P3/2N5/PPPP1bPP/R1BQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "So these bishop-f2 moves aren't scary. Our opponent took d4, and the bishop takes d4 was a further inaccuracy — Black is in some trouble. If you miss the center fork trick, the textbook best reaction most of the time is to keep your bishop with the bishop to d6; White is better with the development lead and a good centre, but Black has a playable position after the knight to f6. This isn't dogma, though — there's the Four Knights English, where White plays a modern setup and, after the bishop to c5, actually implements the center fork trick himself.",
+   "reanchor": true
   }
  ]
 }

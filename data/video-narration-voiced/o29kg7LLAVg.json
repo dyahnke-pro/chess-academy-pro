@@ -1,227 +1,219 @@
 {
- "videoId": "o29kg7LLAVg",
- "title": "The Alapin (C3) Sicilian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Alapin Variation (2.c3)",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:o29kg7LLAVg",
- "moves": [
-  {
-   "ply": 2,
-   "t": 23,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 31,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "c3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 35,
-   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": "The principled reply is the pawn to d5, striking the centre at once — one of the two main lines, and the move that keeps Black fully in the game.",
-   "kind": "main",
-   "teaches": "Meet the Alapin with the central break d5 before White completes the big centre.",
-   "plans": "Trade in the centre and develop the queen actively."
-  },
-  {
-   "ply": 5,
-   "t": 40.5,
-   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "exd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 43.5,
-   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "Qxd5"
-   ],
-   "spoken": "The queen recaptures on d5 — centralised, but exposed. That early queen is the target White will develop against, gaining time with each piece that comes out.",
-   "kind": "main",
-   "teaches": "An early recapturing queen is active but vulnerable — its exposure hands the other side tempi.",
-   "plans": "Chase it with natural developing moves."
-  },
-  {
-   "ply": 7,
-   "t": 45,
-   "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "line": [
-    "d4"
-   ],
-   "spoken": "White answers with the pawn to d4 — the standard Alapin tabiya. From here Black chooses between the knights to c6 or f6, and the c-pawn tension defines the middlegame.",
-   "kind": "main",
-   "teaches": "The exd5 Qxd5 d4 structure is the Alapin main battleground — small centre versus the c-pawn tension.",
-   "plans": "Develop with tempo and keep the tension."
-  },
-  {
-   "ply": 8,
-   "t": 58,
-   "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": "With the knight on c6 the tension between the c5- and c3-pawns sits unresolved — and usually Black should not release it, since capturing on d4 would open the c3-square for White's knight.",
-   "kind": "main",
-   "teaches": "Holding pawn tension is often better than releasing it into your opponent's development.",
-   "plans": "Keep the tension; develop and pressure the queen."
-  },
-  {
-   "ply": 9,
-   "t": 68.5,
-   "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 110.5,
-   "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
-   "line": [
-    "Bg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 149.5,
-   "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R b KQkq - 4 6",
-   "line": [
-    "Nbd2"
-   ],
-   "spoken": "The knight to d2 accepts that Black may take on f3 and damage the structure — but the plan comes first: reroute the knights and hit the exposed queen. The structural cost is worth the initiative.",
-   "kind": "main",
-   "teaches": "Sometimes a slight structural concession is the price of a faster, more active plan.",
-   "plans": "Follow with the bishop to c4, gaining time on the queen."
-  },
-  {
-   "ply": 12,
-   "t": 215,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 227,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": "The bishop to c4 strikes the queen, gaining a tempo and driving Black to react while White completes development and keeps the initiative.",
-   "kind": "main",
-   "teaches": "Develop with tempo against a centralised queen — every gained move compounds.",
-   "plans": "Chase the queen, castle, and press."
-  },
-  {
-   "ply": 14,
-   "t": 231,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP4/2P2b2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
-   "line": [
-    "Bxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 732,
-   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 733,
-   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "Qxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 734.5,
-   "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
-   "line": [
-    "d4",
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 737,
-   "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R b KQkq - 4 6",
-   "line": [
-    "Nd2",
-    "Bg4",
-    "Ngf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 738.5,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 742.5,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 744,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP4/2P2b2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
-   "line": [
-    "Bxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 762,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 776.5,
-   "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "o29kg7LLAVg",
+  "title": "The Alapin (C3) Sicilian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
+  "openingName": "Sicilian Defense: Alapin Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:o29kg7LLAVg",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 23,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": "The pawn to e4, c5 — a Sicilian."
+    },
+    {
+      "ply": 3,
+      "t": 31,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "c3"
+      ],
+      "spoken": "c3 — once again we go for the Alapin."
+    },
+    {
+      "ply": 4,
+      "t": 35,
+      "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "d5 — one of the two main lines."
+    },
+    {
+      "ply": 5,
+      "t": 40.5,
+      "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "We take on d5."
+    },
+    {
+      "ply": 6,
+      "t": 43.5,
+      "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "Qxd5"
+      ],
+      "spoken": "The queen recaptures on d5, and d4 — we've had this a thousand times in the speedrun."
+    },
+    {
+      "ply": 7,
+      "t": 45,
+      "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4. Now Black generally plays the knight to f6 or the knight to c6, the two main moves."
+    },
+    {
+      "ply": 8,
+      "t": 58,
+      "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "The knight to c6. As often in the Alapin, there's tension between the c5 and c3 pawns, and it's usually not a good idea for Black to take on d4 prematurely —"
+    },
+    {
+      "ply": 9,
+      "t": 68.5,
+      "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "— because it opens the c3-square for White's knight. The knight to c6, the knight to f3 — there's the bishop to g4, the knight to f6, e6; many possible moves, but under 2000 a lot of people don't know the theory, and the queen on d5 is both a strength and a weakness — controlling a lot of squares, but incredibly vulnerable if we can get a bishop to c4."
+    },
+    {
+      "ply": 10,
+      "t": 110.5,
+      "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "The bishop to g4. A couple of moves here: the bishop to b2 is what most people think of, but there's a more dangerous move if Black doesn't know the theory — it kills two birds, guarding against the bishop takes f3, which would ruin our structure —"
+    },
+    {
+      "ply": 11,
+      "t": 149.5,
+      "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R b KQkq - 4 6",
+      "line": [
+        "Nbd2"
+      ],
+      "spoken": "— the knight to d2, the same idea as the knight to a3 but reinforcing the knight on f3. Now we've lost the queen's connection to the d4-pawn — can't Black just take on d4 and win a pawn? He can, but that's exactly why we play the knight to d2: we sacrifice the pawn for very rapid development. After the pawn takes d4, the idea isn't just to recapture — against almost all of Black's moves except the bishop takes f3, it's the bishop to c4, developing with tempo, and then the queen to b3, since b7 and f7 are vulnerable. Yes, it blocks the bishop, a drawback, but we prioritize developing our other pieces."
+    },
+    {
+      "ply": 12,
+      "t": 215,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "The knight to f6 — that doesn't fundamentally change what we want to do."
+    },
+    {
+      "ply": 13,
+      "t": 227,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "So the bishop to c4, following our plan, hitting the queen."
+    },
+    {
+      "ply": 14,
+      "t": 231,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP4/2P2b2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+      "line": [
+        "Bxf3"
+      ],
+      "spoken": "The bishop takes f3, as I expected, and now a very interesting decision. The queen takes f3 allows a queen trade, which neutralizes our initiative, so I'd consider the pawn recapture on f3 — risky, but later the queen to b3 hits both pawns — or a third move, the queen to b3, ignoring the bishop entirely; the key is that Black's queen can't escape with check, since a4 is controlled by the knight, b5 by the pawn, and e6 by the bishop. After the queen moves, we take on f7 with check or take the bishop on f3, recapturing with the knight, preserving the queens with a tremendous initiative, since his king is nowhere near castling. The knight to a5 is the only move to stay in the game — we give a check, the queen to b5 rather than a4, since the queen to a4 leaves our queen undefended after the queen to d7, whereas after the queen to b5 with the queen covering, we take on f3 and stay a little better. But he plays the unexpected queen to c6, a mistake, because now the bishop to b5 is a far more serious threat, so we play the queen takes a5 — checking first that there are no e-file checks leading to mate, and there aren't — taking the knight with the threat of the bishop to b5. He plays b6, and the important follow-up is the queen to a6, preserving the bishop-to-b5 threat. Panic creeps in at this level when players see their queen threatened, so they stop resisting. The simplest win: our queen is defended by the bishop, so we just take Black's bishop on f3, emerging up a piece — game over in twelve moves. Then the bishop to b5 with check keeps the king in the centre, and even in the endgame the knight to e5 or g5 hits f7.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 732,
+      "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": "Anytime the king is caught in the centre with the rook back on h8, you have to look for the knight to e5 and the knight to g5 — manually consider that move. Great game.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 733,
+      "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "Qxd5"
+      ],
+      "spoken": "The Alapin Sicilian.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 734.5,
+      "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+      "line": [
+        "d4",
+        "Nc6"
+      ],
+      "spoken": "The knight to c6, the knight to f3, the bishop to g4, the knight to d2.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 737,
+      "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R b KQkq - 4 6",
+      "line": [
+        "Nd2",
+        "Bg4",
+        "Ngf3"
+      ],
+      "spoken": "The knight to d2, the bishop to g4, the knight to f3.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 738.5,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "The knight to f6 — and let's get right to the meat, the bishop to c4.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 742.5,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "The bishop to c4 —",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 744,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP4/2P2b2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+      "line": [
+        "Bxf3"
+      ],
+      "spoken": "— and the bishop takes f3. Honestly, I underestimated the bishop takes f3, and after the queen to b3, I believe Black had a move here that I initially missed —",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 762,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/3P2b1/2P2N2/PP1N1PPP/R1BQKB1R w KQkq - 5 7",
+      "line": [],
+      "spoken": "— that might have given Black even an advantage, so it's possible the bishop to c4 is a mistake; I may have confused the theory, and it may be that the d-pawn takes e5 is the move — I'll look it up.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 776.5,
+      "fen": "r3kb1r/pp2pppp/2n2n2/2pq4/2BP2b1/2P2N2/PP1N1PPP/R1BQK2R b KQkq - 6 7",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "Looking it up — no, it is the bishop to c4, the bishop takes f3, the queen to b3. The knight to a5 is the main move, but there's an alternative that shows where Black could have improved instead of giving up a piece — a very hard move to see, because you're taught from the moment you start chess that the worst thing is blundering your queen, so players develop an irrational fear of anything that sacrifices the queen. But what about the bishop takes g2? After the bishop takes d5, you don't just rush to take the rook.",
+      "reanchor": true
+    }
+  ]
 }

@@ -1,10 +1,10 @@
 {
  "videoId": "H0Fln-ujA3w",
  "title": "Scotch Game: Göring, Main Line | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Scotch Game",
+ "openingName": "Scotch Game: Göring Attack",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:H0Fln-ujA3w",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We're Black against a 1552, expecting e4 — and we get it."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3, the knight to c6."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "And we're facing a Scotch — or a Scotch Gambit, depending on what White does here."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "We take on d4."
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "A traditional Scotch. The Four Knights Scotch would include the knight to c3 and the knight to f6; there are many systems against the Scotch."
   },
   {
    "ply": 8,
@@ -61,9 +61,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Bishop to c5 is the practical choice against the Scotch — it hits the knight on d4 and develops actively, dodging the heavy theory of ...Nf6.",
-   "kind": "main",
-   "teaches": "Pick an active, less-theoretical developing move to sidestep the opponent's preparation."
+   "spoken": "The two main tries are the knight to f6 and — the one I recommend around 1500 — the bishop to c5: practical, easy to learn, not much theory."
   },
   {
    "ply": 9,
@@ -72,7 +70,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "After the bishop to c5 White has a few moves. The bishop to e3 — and here it's vital not to blunder. A lot of people lose by casually developing this knight, because the bishops are x-raying each other: White takes on c6 and then on c5 for a free bishop. So Black has two main replies."
   },
   {
    "ply": 10,
@@ -81,9 +79,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "Queen to f6 doubles the pressure on d4 and quietly parries the Nxc6-then-Bxc5 fork — active without exposing itself.",
-   "kind": "main",
-   "teaches": "Add a second attacker to a target while defusing the opponent's tactical trick."
+   "spoken": "We can drop the bishop back to b6 and anchor it, or develop the queen to f6 — this is our move, the other main line, and it avoids losing a piece: if the knight takes c6, we take on e3 and our queen isn't hanging."
   },
   {
    "ply": 11,
@@ -92,7 +88,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "So c3, the main line. The drawback of the queen to f6 is that it takes the f6-square from the knight — but that's not an issue."
   },
   {
    "ply": 12,
@@ -101,7 +97,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": ""
+   "spoken": "Where does the knight go? The knight to e7 — a fine developing move; I like it because it connects the knights. And we shouldn't fear the standoff: if White ever takes on c6 or moves the knight, we take on e3, threatening mate on f2 and forcing a recapture."
   },
   {
    "ply": 13,
@@ -110,7 +106,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight takes c6 — actually a mistake. We answer with the bishop takes e3, threatening mate, so the f-pawn recapture is forced, and White's structure is ruined."
   },
   {
    "ply": 14,
@@ -119,9 +115,7 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": "Taking on e3 first is the key in-between move — it wrecks White's structure and, after fxe3, uncorks a Qh4+ fork, so Black wins back the knight with a superior position.",
-   "kind": "main",
-   "teaches": "Insert an in-between capture that damages structure before you recapture."
+   "spoken": "The bishop takes e3. White's pawns are wrecked — doubled, and worse, doubled on the e-file where they're most accessible and easiest to target. And after the recapture, the queen to h4 with check becomes a fork once we take back the knight."
   },
   {
    "ply": 15,
@@ -130,7 +124,7 @@
    "line": [
     "fxe3"
    ],
-   "spoken": ""
+   "spoken": "After the f-pawn takes e3, the queen to h4 check is a threat once we recapture. What do we take back with? We can make a case for several pieces. Not the queen — that makes no sense. We can take with the b-pawn to keep our structure healthy, or —"
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "— the d-pawn takes c6, which I actually prefer: it opens the bishop's diagonal fastest and streamlines development. I don't care about these doubled pawns — they aren't accessible, they aren't targets. With White's king stuck in the centre, developing quickly is crucial; maybe we win before White even castles. We trade a little structure for speed."
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to d2. Against another GM I'd take with the knight and play d6, but here let's have some fun. The knight to d2 defends the e4-pawn, so the queen to h4 no longer makes sense — I'll cover why after the game."
   },
   {
    "ply": 18,
@@ -157,7 +151,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle short — flexible, since it's a move we need anyway, whereas we don't yet know where the bishop belongs. In some lines it could go to g4, for instance if White prepared long castling."
   },
   {
    "ply": 19,
@@ -166,7 +160,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to e2. Important moment: White isn't threatening to castle, which means we keep the queen on f6, and the rook to f1 isn't a real threat — in fact we'd welcome it, since it permanently costs White castling rights."
   },
   {
    "ply": 20,
@@ -175,7 +169,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Now that our bishop won't reach g4, the time has come for the bishop to e6 — developing, unafraid of moves that hit our queen. If the rook to f1, we play the queen to h4 with check and win the h2-pawn."
   },
   {
    "ply": 21,
@@ -184,7 +178,7 @@
    "line": [
     "Bf3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to f3 — a great move; White has managed to castle. Now we switch gears from preventing castling to arranging our pieces for the new circumstances. Three jobs: a good square for the knight — e5 is juicy — a good square for the queen, and where to put the rooks."
   },
   {
    "ply": 22,
@@ -193,14 +187,16 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "The queen to g5 — more central than h6, it attacks the e3-pawn and delays castling another move. Next the knight routes to e5, a dominant anchor. Then the rooks: with only one open file, it's crucial we occupy it, so a rook comes to d8 — the more important rook first. I note the alignment of White's queen and our rook in case of the knight to b3, when the bishop to c4 would pin. White plays b3, which weakens c3, and now, using the knight's e5 outpost as an anchor, the rook swings to d3 — total positional domination, every white piece miserable. The knight to c4 tries to break the bind, but we answer with the bishop takes c4 — taking with the bishop, not the knight, so the knight stays on its outpost; if the rook takes d3, the bishop takes d3 and we win everything. Then we calmly collect pawns. Remember diminishing returns: the first pawns matter most, so at some point stop improving and convert. Watch for forks — the knight to d3 combines a fork with deflection along the e-file, hitting a loose piece on e1. For luft I'd prefer g6 and h5 over g6 alone, restricting the f3-bishop further. To finish with a flourish: control the g3-square — a pawn to h4 then h5 does it — and sink the queen to g3 for mate; if White grabs on f7 with check, we sidestep, the king's hiding spot is h6, and White must give up material. An instructive game — twenty-three moves showing how effective clean positional play can be.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 1113.5,
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/3NP3/4B3/PPP2PPP/RN1QKB1R w KQkq - 3 6",
    "line": [],
-   "spoken": ""
+   "spoken": "That h4 push was a nice way to illustrate the idea. So the bishop to c5 with the queen to f6 is the system I recommend.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -210,7 +206,8 @@
     "c3",
     "Nge7"
    ],
-   "spoken": ""
+   "spoken": "c3, the knight to e7.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -219,7 +216,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "The knight takes c6 is already a mistake.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -228,14 +226,16 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": ""
+   "spoken": "It forgets about the bishop takes e3.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 1128.5,
    "fen": "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The main move here, if you check the explorer, is the bishop out to c4, simply keeping the tension.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -244,7 +244,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c4.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -253,21 +254,24 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "And now the knight to e5 — a well-studied theoretical line you can explore on your own.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 1144.5,
    "fen": "r1b1k2r/ppppnppp/2n2q2/2b5/2BNP3/2P1B3/PP3PPP/RN1QK2R b KQkq - 2 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Black is supposed to be fine here; it's equal.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 1147,
    "fen": "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop to c4 keeps the tension.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -276,7 +280,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3, the f-pawn takes e3, then the pawn takes c6 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -285,7 +290,8 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes e3.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -295,7 +301,8 @@
     "fxe3",
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "The f-pawn recaptures, the d-pawn takes c6, and our bishop comes out.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -304,7 +311,8 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "The knight to d2, then castles.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -313,7 +321,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -322,7 +331,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e2. Here we devise an ideal arrangement — we look at every undeveloped piece and find it a good square; the more experienced you are, the easier this is.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -331,7 +341,8 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "The queen to g5, the bishop to e6.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -341,14 +352,16 @@
     "Bf3",
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "The knight goes from g6 to e5, then a rook to d8 — a general piece configuration, not a single-piece plan. There's a Capablanca game that inspired me to teach this way. Capablanca is up a pawn, an extra a-pawn, and wants to push it, but a black rook sitting back blockades it. So he reverse-engineers the win by arranging every piece ideally: reroute the knight to d4, advance the b-pawn, and bring the king in the most efficient way — the pawn to f4 grabs space and controls e5, then the king comes via f2. Where does the rook go? Not passively behind the passed pawn on a1 — that's the instructive mistake, because a bishop controls a4 and the rook would be tied down forever; instead defend from c3, where the rook multitasks, threatening a discovered check to drive the king back. Then activate the king toward the b-file, using tactics — a rook check, the knight to c3, a discovered check — and the b5 break lets the a-pawn run. The whole point: a centralized knight dominates a passive bishop. Our own arrangement is simpler, but it's the same approach.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 1605,
    "fen": "r1b1k2r/ppppnppp/2N2q2/8/4P3/2P1b3/PP3PPP/RN1QKB1R w KQkq - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "Once the rook reaches d3 the game is over — we just win all of White's pawns. One thing to cover: why not the queen to h4 with check, as some suggested?",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -359,7 +372,8 @@
     "Qh4+",
     "g3"
    ],
-   "spoken": ""
+   "spoken": "After the f-pawn takes e3, the queen to h4 check, then g3, then the queen takes c4 — it looks enticing, forking a knight and a rook.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -368,7 +382,8 @@
    "line": [
     "Qxe4"
    ],
-   "spoken": ""
+   "spoken": "We fork with the queen taking e4 — but there's a tactical refutation; use your vision.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -377,7 +392,8 @@
    "line": [
     "Nxe7"
    ],
-   "spoken": ""
+   "spoken": "The knight takes e7. Count the pieces —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -386,7 +402,8 @@
    "line": [
     "Qxh1"
    ],
-   "spoken": ""
+   "spoken": "— the queen grabs on h1. First, the knight to d5 is possible;",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -395,14 +412,16 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "then the knight takes c8, and it's a mess — two pieces for a rook. Why would White want that? White plays the knight to d2 and castles long; it's unclear. So we make progress with g6 or c6, and from either square the knight reaches e5.",
+   "reanchor": true
   },
   {
    "ply": 15,
    "t": 1661,
    "fen": "r1b1k2r/ppppnppp/2N2q2/8/4P3/2P1P3/PP4PP/RN1QKB1R b KQkq - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent offered us a chance to do two things at once. Whether the pawn ends on d6 or c6 matters little —",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -411,7 +430,8 @@
    "line": [
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "— the knight to c6 with the pawn to d6 is very similar, and the knight takes c6 is marginally better. But the d-pawn taking c6 also opens the d-file, which we benefit from — a tit-for-tat, so both are fine. I just like getting that bishop's diagonal open; e5 is such a nice square.",
+   "reanchor": true
   }
  ]
 }

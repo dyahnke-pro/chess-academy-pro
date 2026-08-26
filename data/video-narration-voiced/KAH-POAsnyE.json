@@ -1,0 +1,559 @@
+{
+ "videoId": "KAH-POAsnyE",
+ "title": "Master Class | Blackmar–Diemer Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Blackmar-Diemer Gambit",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:KAH-POAsnyE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 6.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 9.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 27,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Against this gambit the cleanest reply is simply to accept — take the pawn and make the opponent prove the compensation they don't really have."
+  },
+  {
+   "ply": 5,
+   "t": 39.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 46,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 64,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f3"
+   ],
+   "spoken": "Here's a principle for disarming any gambit. Grabbing the second pawn is best by the engine's cold count — there just isn't enough compensation. But in practice the middle path is often wiser: hand the pawn back and, in return, claim a development lead. Stop worrying about clinging to the extra material and just get pieces out.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 115.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The developing move that also bites is the knight to c6 — it counterattacks the loose pawn. The natural-looking bishop development isn't as good as it seems, because a pawn thrust to d5 would kick the knight and hand over the e5 outpost.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 127.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3PpB2/2N2P2/PPP3PP/R2QKBNR b KQkq - 2 5",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 139,
+   "fen": "r1bqkb1r/ppp1pppp/5n2/8/3npB2/2N2P2/PPP3PP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Insisting on the sacrifice is just a bad decision — so capture on d4. The opponent's centre has caved in and they're simply shedding pawns for nothing; there's no reason to decline the gift."
+  },
+  {
+   "ply": 11,
+   "t": 150,
+   "fen": "r1bqkb1r/ppp1pppp/5n2/1N6/3npB2/5P2/PPP3PP/R2QKBNR b KQkq - 1 6",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": "The knight jump to b5 is pure intimidation — the sort of scary-looking move that concrete calculation keeps you safe from. Ask the obvious question: is there any reason not to just take the knight? The only pause is that the queens could come off and the king lose its castling — but two pawns up, with pieces trading, a king in the centre is a long way from getting mated.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 12,
+   "t": 188,
+   "fen": "r1bqkb1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 193,
+   "fen": "r1bQkb1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R3KBNR b KQkq - 0 7",
+   "line": [
+    "Qxd8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 194,
+   "fen": "r1bk1b1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R3KBNR w KQ - 0 8",
+   "line": [
+    "Kxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 199,
+   "fen": "r1bk1b1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/2KR1BNR b - - 1 8",
+   "line": [
+    "O-O-O+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 212,
+   "fen": "r1bk1b1r/ppp1pppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR1BNR w - - 2 9",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": "This is a classic trap the opponent falls into — expecting an in-between check followed by a leisurely capture. What they've missed is that a single knight move to d6 does two jobs at once: it saves the knight and blocks the check. Two pawns and a piece to the good, the rest is technique.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 17,
+   "t": 220.5,
+   "fen": "r1bk1b1r/ppp1pppp/3n1n2/1B6/4pB2/5P2/PPP3PP/2KR2NR b - - 3 9",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 237.5,
+   "fen": "r2k1b1r/pppbpppp/3n1n2/1B6/4pB2/5P2/PPP3PP/2KR2NR w - - 4 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Even deep in an endgame, the rule holds: keep developing, don't forget your pieces. So offer the trade of bishops — because when you're up material and a clean path to simplification appears, you take it. Every swap brings the win closer.",
+   "kind": "plan"
+  },
+  {
+   "ply": 19,
+   "t": 248,
+   "fen": "r2k1b1r/pppBpppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR2NR b - - 0 10",
+   "line": [
+    "Bxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 251,
+   "fen": "r4b1r/pppkpppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR2NR w - - 0 11",
+   "line": [
+    "Kxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 255.5,
+   "fen": "r4b1r/pppkpppp/3n1n2/8/4pB2/5P1N/PPP3PP/2KR3R b - - 1 11",
+   "line": [
+    "Nh3"
+   ],
+   "spoken": "The plan is just e6 and the fianchetto — no need to overthink the technique. Grab the pawn back now that the knight has cleared away from its home square."
+  },
+  {
+   "ply": 22,
+   "t": 259,
+   "fen": "r4b1r/pppkpppp/3n1n2/8/5B2/5p1N/PPP3PP/2KR3R w - - 0 12",
+   "line": [
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 261.5,
+   "fen": "r4b1r/pppkpppp/3n1n2/8/5B2/5P1N/PPP4P/2KR3R b - - 0 12",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 279,
+   "fen": "r4b1r/pppkppp1/3n1n1p/8/5B2/5P1N/PPP4P/2KR3R w - - 0 13",
+   "line": [
+    "h6"
+   ],
+   "spoken": "A touch of class: ask where the enemy knight wants to go — most likely g5 — and quietly deny it with h6. Not strictly necessary, but clinical, snuffing out counterplay before it starts.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 282.5,
+   "fen": "r4b1r/pppkppp1/3n1n1p/8/5B2/5P1N/PPP4P/2KRR3 b - - 1 13",
+   "line": [
+    "Rhe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 283.5,
+   "fen": "r4b1r/pppk1pp1/3npn1p/8/5B2/5P1N/PPP4P/2KRR3 w - - 0 14",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 290.5,
+   "fen": "r4b1r/pppk1pp1/3npn1p/8/5B2/5P1N/PPP1R2P/2KR4 b - - 1 14",
+   "line": [
+    "Re2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 291.5,
+   "fen": "r6r/pppkbpp1/3npn1p/8/5B2/5P1N/PPP1R2P/2KR4 w - - 2 15",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 304,
+   "fen": "3r3r/pppkbpp1/3npn1p/8/5B2/5P2/PPP1RN1P/2KR4 w - - 4 16",
+   "line": [
+    "Nf2",
+    "Rad8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 307,
+   "fen": "3r3r/pppkbpp1/3npn1p/8/4NB2/5P2/PPP1R2P/2KR4 b - - 5 16",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 309,
+   "fen": "3r3r/pppkbpp1/3np2p/8/4nB2/5P2/PPP1R2P/2KR4 w - - 0 17",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 313.5,
+   "fen": "3r3r/pppkbpp1/3np2p/8/4RB2/5P2/PPP4P/2KR4 b - - 0 17",
+   "line": [
+    "Rxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 314.5,
+   "fen": "2kr3r/ppp1bpp1/3np2p/8/4RB2/5P2/PPP4P/2KR4 w - - 1 18",
+   "line": [
+    "Kc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 326.5,
+   "fen": "2kr3r/ppp1bpp1/3Bp2p/8/4R3/5P2/PPP4P/2KR4 b - - 0 18",
+   "line": [
+    "Bxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 329,
+   "fen": "2k4r/ppp1bpp1/3rp2p/8/4R3/5P2/PPP4P/2KR4 w - - 0 19",
+   "line": [
+    "Rxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 337.5,
+   "fen": "2k4r/ppp1bpp1/3rp2p/8/3R4/5P2/PPP4P/2KR4 b - - 1 19",
+   "line": [
+    "Red4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 343.5,
+   "fen": "2kr4/ppp1bpp1/3rp2p/8/3R4/5P2/PPP4P/2KR4 w - - 2 20",
+   "line": [
+    "Rhd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 349.5,
+   "fen": "2kr4/ppp1bpp1/3Rp2p/8/8/5P2/PPP4P/2KR4 b - - 0 20",
+   "line": [
+    "Rxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 350.5,
+   "fen": "2k5/ppp1bpp1/3rp2p/8/8/5P2/PPP4P/2KR4 w - - 0 21",
+   "line": [
+    "Rxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 354,
+   "fen": "2k5/ppp2pp1/3bp2p/8/8/5P2/PPP4P/2K5 w - - 0 22",
+   "line": [
+    "Rxd6",
+    "Bxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 359,
+   "fen": "2k5/ppp2pp1/3bp2p/8/1P6/5P2/P1P4P/2K5 b - - 0 22",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 360.5,
+   "fen": "2k5/ppp2pp1/4p2p/8/1P6/5P2/P1P4b/2K5 w - - 0 23",
+   "line": [
+    "Bxh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 364,
+   "fen": "2k5/ppp2pp1/4p2p/8/1PP5/5P2/P6b/2K5 b - - 0 23",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 365,
+   "fen": "2k5/ppp2pp1/4p3/7p/1PP5/5P2/P6b/2K5 w - - 0 24",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 368.5,
+   "fen": "2k5/ppp2pp1/4p3/7p/1PP5/5P2/P6b/3K4 b - - 1 24",
+   "line": [
+    "Kd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 369.5,
+   "fen": "2k5/ppp2pp1/4p3/8/1PP4p/5P2/P6b/3K4 w - - 0 25",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 372.5,
+   "fen": "2k5/ppp2pp1/4p3/8/1PP5/5P1p/P6b/4K3 w - - 0 26",
+   "line": [
+    "Ke1",
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 377,
+   "fen": "2k5/ppp2pp1/4p3/8/1PP2b2/5P1p/P7/5K2 w - - 2 27",
+   "line": [
+    "Kf1",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 379,
+   "fen": "2k5/ppp2pp1/4p3/8/1PP2b2/5P1p/P4K2/8 b - - 3 27",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": "A neat realisation about the winning method — the king isn't even needed here. Recognise that the bishop and lone pawn together can't force the issue by themselves, so the plan is to manufacture more.",
+   "kind": "plan"
+  },
+  {
+   "ply": 54,
+   "t": 413,
+   "fen": "2k5/ppp3p1/4p3/5p2/1PP2b2/5P1p/P4K2/8 w - - 0 28",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 417,
+   "fen": "2k5/ppp3p1/4p3/5p2/PPP2b2/5P1p/5K2/8 b - - 0 28",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 418,
+   "fen": "2k5/ppp5/4p3/5pp1/PPP2b2/5P1p/5K2/8 w - - 0 29",
+   "line": [
+    "g5"
+   ],
+   "spoken": "Roll out a second passer with the kingside pawns, and now two connected passed pawns backed by the bishop are more than enough force to march one home to promotion. Connected passers plus a piece is overwhelming.",
+   "kind": "plan"
+  },
+  {
+   "ply": 58,
+   "t": 422,
+   "fen": "2k5/ppp5/4p3/2P2p2/PP3bp1/5P1p/5K2/8 w - - 0 30",
+   "line": [
+    "c5",
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 424.5,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4bp1/5P1p/5K2/8 b - - 0 30",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 425.5,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4b2/5Ppp/5K2/8 w - - 0 31",
+   "line": [
+    "g3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 429,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4b2/5Ppp/8/6K1 b - - 1 31",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "The one thing to avoid is the careless push to h2 — that would let the king plant itself in front and blockade the pawns by hand. Keep the king out of the blockade and the pawns keep rolling."
+  },
+  {
+   "ply": 62,
+   "t": 441.5,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bPpp/8/6K1 w - - 2 32",
+   "line": [
+    "Be3+"
+   ],
+   "spoken": "The precise route is to insert the bishop check on e3 first, and only then advance the pawn toward promotion. The check gains the tempo that clears the path cleanly.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 64,
+   "t": 447,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/6p1/7K w - - 0 33",
+   "line": [
+    "Kh1",
+    "g2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 65,
+   "t": 449.5,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/6pK/8 b - - 1 33",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 450.5,
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/7K/6n1 w - - 0 34",
+   "line": [
+    "g1=N"
+   ],
+   "spoken": "The fastest finish is to see that this promotion square is the mating square — under-promote to seal the king's escape and deliver mate, and since there are still spare pawn moves in reserve, there's no stalemate to worry about.",
+   "kind": "tactic"
+  }
+ ]
+}

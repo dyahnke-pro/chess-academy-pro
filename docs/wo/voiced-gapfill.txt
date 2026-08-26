@@ -1,0 +1,56 @@
+# VOICED GAPFILL — COMPLETE (2026-08-26)
+#
+# All 45 under-authored voiced files ("Fix the 74 first") have been
+# re-authored by hand, move-by-move, at full teaching depth — ZERO LLM,
+# nothing position-relevant dropped, board-true, hypothetical lines kept.
+# Every one passes verify-shard: 0 fidelity fails / 0 board-truth fails / 0 missing.
+#
+# The realGap/cov figures below were the ORIGINAL pre-authoring snapshot
+# (worst-first). Each id has since been re-authored (see the fix(voiced)
+# commits) — kept here only as the record of what was fixed.
+#
+# -PSQS88VdZU realGap=12 cov=0.48
+# bRMHNmDMLqw realGap=12 cov=0.48
+# k4T6TJGOSA0 realGap=12 cov=0.72
+# cKeN_oR3VEA realGap=11 cov=0.58
+# H0Fln-ujA3w realGap=10 cov=0.44
+# _j8aiuqS4_0 realGap=10 cov=0.47
+# C6vYlx-lS6g realGap=10 cov=0.56
+# rk_9n_Kj6EE realGap=9 cov=0.27
+# i8G7wozMNcU realGap=9 cov=0.52
+# bXAHcPB2hEk realGap=9 cov=0.61
+# 8wVtlbPj9bo realGap=9 cov=0.78
+# knRe3EsANdg realGap=8 cov=0.36
+# EiH21nGiRGs realGap=8 cov=0.42
+# MmF7dhysiAQ realGap=8 cov=0.44
+# MMELgpZ4CeQ realGap=8 cov=0.46
+# OE2pJpVVzYw realGap=8 cov=0.62
+# gyOxMMJWiYg realGap=8 cov=0.62
+# BzN6MEleBlQ realGap=7 cov=0.6
+# 8urm2D1HhX8 realGap=7 cov=0.66
+# 475QvJRimkI realGap=7 cov=0.79
+# Gti01VN0zXA realGap=6 cov=0.73
+# r7W4yl6y29c realGap=6 cov=0.8
+# MvaAX4pTvYU realGap=6 cov=0.87
+# ngKFZPlhP2c realGap=5 cov=0.51
+# INCkZzSMk98 realGap=5 cov=0.6
+# 1671V8LrEwk realGap=5 cov=0.64
+# KwbAHRLJ1RY realGap=5 cov=0.74
+# fz9td9L2uIo realGap=5 cov=0.85
+# FozbGMUOOjs realGap=4 cov=0.43
+# kO4qTTR0B7o realGap=4 cov=0.64
+# 358seoKegqA realGap=4 cov=0.81
+# 2Mys0GRUgM4 realGap=4 cov=0.85
+# Q0CTfDwnd3A realGap=4 cov=0.86
+# ukVf_JfGTOw realGap=4 cov=0.86
+# 8QxDmN_BMaU realGap=3 cov=0.43
+# KV90PAgPO2A realGap=3 cov=0.48
+# o29kg7LLAVg realGap=3 cov=0.64
+# 3Qw4AL8RDOw realGap=3 cov=0.75
+# 0npOMfkAlVU realGap=3 cov=0.84
+# QOb_ElHrC14 realGap=3 cov=0.84
+# 9JUlD51s6zE realGap=3 cov=0.91
+# 9qWUk9eDpTg realGap=3 cov=0.91
+# nkDlJMpLezk realGap=1 cov=0.65
+# NqtT3roFaBs realGap=1 cov=0.69
+# ieznxMQccW0 realGap=0 cov=0.63

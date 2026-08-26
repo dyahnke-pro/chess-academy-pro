@@ -1,0 +1,395 @@
+{
+ "videoId": "24yObE8SLzY",
+ "title": "Drowning The Hippo Attack | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "King's Indian Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:24yObE8SLzY",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 18,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P1P1/PPPP1P1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e3",
+    "d5",
+    "g3"
+   ],
+   "spoken": "We've seen e3 before, and the response is d5. This looks like a Hippo setup — g3, e3, then b3 and d3."
+  },
+  {
+   "ply": 4,
+   "t": 30.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1P1P/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Against all of these flank defences, the best plan is to occupy the centre — e5."
+  },
+  {
+   "ply": 5,
+   "t": 31.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 44.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The effective anti-Hippo setup starts with the knight to f6..."
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R b KQkq - 3 4",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 48.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": "...and then c6, which I really like — it builds a pawn chain so his fianchettoed bishop bites on granite."
+  },
+  {
+   "ply": 9,
+   "t": 49.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 63,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 w kq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "That pawn triangle, just like in the London, gives the bishop a home on d6."
+  },
+  {
+   "ply": 11,
+   "t": 64,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2P1P1/P1PPNPBP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "b3"
+   ],
+   "spoken": "You might ask where the queen's knight goes now that c6 is taken — the answer is d7."
+  },
+  {
+   "ply": 13,
+   "t": 83.5,
+   "fen": "r1bqk2r/pp1n1ppp/2pb1n2/3pp3/8/1P2P1P1/PBPPNPBP/RN1Q1RK1 b kq - 2 7",
+   "line": [
+    "Nbd7",
+    "Bb2"
+   ],
+   "spoken": "The knight to d7 — heading, ultimately, toward the kingside to feed an attack. Not c5, where it would walk into d4 and do nothing."
+  },
+  {
+   "ply": 16,
+   "t": 97.5,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/8/1PP1P1P1/PB1PNPBP/RN1Q1RK1 w kq - 1 9",
+   "line": [
+    "Nf8",
+    "c3",
+    "Ng6"
+   ],
+   "spoken": "The knight reroutes, f8 then g6 — Ruy Lopez style."
+  },
+  {
+   "ply": 17,
+   "t": 99,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/3P4/1PP1P1P1/PB2NPBP/RN1Q1RK1 b kq - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": "What is that knight doing? It sits on the kingside — so future sacrifices are in the air, and it makes the h5-then-h4 storm much more effective."
+  },
+  {
+   "ply": 18,
+   "t": 129.5,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB2NPBP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Since we're attacking on the kingside, close the centre — e4. If he plays c4 it achieves nothing; the pawn on d5 is very well protected."
+  },
+  {
+   "ply": 19,
+   "t": 134,
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 157.5,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "A common misconception is that we must develop the bishop. We don't — it's perfectly happy on c8, and we'll bring it out only when we need it. Play h5; we're going for the king."
+  },
+  {
+   "ply": 21,
+   "t": 161.5,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/2PPp3/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 11",
+   "line": [
+    "c4"
+   ],
+   "spoken": "c4 accomplishes nothing."
+  },
+  {
+   "ply": 22,
+   "t": 167,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p4/2PPp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "h4"
+   ],
+   "spoken": "The pawn on d5 is well protected, so h4 — we're already on the verge of delivering mate. That's how fast this is."
+  },
+  {
+   "ply": 23,
+   "t": 172,
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3P4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 12",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 173.5,
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 13",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 175.5,
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 b kq - 1 13",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Recapture on d5. His knight to c3 accomplishes nothing. Now be careful how we open the kingside — hxg3 is double-edged, since after fxg3 he opens the f-file for his rook, so we need a follow-up. Don't hurry: the tempting knight to e4 hits h2, but it's wrong — it gives up the pawn on d5, and if d5 falls, the e4-pawn goes with it."
+  },
+  {
+   "ply": 26,
+   "t": 252,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 w kq - 2 14",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "One prophylactic move first — the bishop to e6. It defends the pawn on d5 and clears the way for a future knight to g4. These are exactly the quiet moves people hate to play when they're attacking."
+  },
+  {
+   "ply": 27,
+   "t": 264,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/2RQ1RK1 b kq - 3 14",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": "If he's angling for the knight to b5, we can always retreat the bishop to b8. Now the time has come to open fire on the kingside."
+  },
+  {
+   "ply": 28,
+   "t": 278,
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp3/1PN1P1p1/PB1N1PBP/2RQ1RK1 w kq - 0 15",
+   "line": [
+    "hxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 282,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3p4/3Pp1n1/1PN1P1P1/PB1N2BP/2RQ1RK1 w kq - 1 16",
+   "line": [
+    "fxg3",
+    "Ng4"
+   ],
+   "spoken": "hxg3, and the knight to g4."
+  },
+  {
+   "ply": 31,
+   "t": 290.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp1n1/1P2P1P1/PB1N2BP/2RQ1RK1 b kq - 0 16",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "Notice his bishop is overloaded — defending both d5 and the knight. He grabs on d5, but I'd planned for this: his knight is now hanging, and if we move ours with tempo, he'll have two loose pieces at once."
+  },
+  {
+   "ply": 32,
+   "t": 315.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp3/1P2P1P1/PB1N2Bn/2RQ1RK1 w kq - 0 17",
+   "line": [
+    "Nxh2"
+   ],
+   "spoken": "Not taking on f3 — that just drops the knight. The knight takes on h2, hitting the rook: if it moves, we win the other knight. It isn't fully clear-cut, since his knight can return to c3."
+  },
+  {
+   "ply": 33,
+   "t": 324,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2Bn/2RQ1RK1 b kq - 1 17",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": "He finds the knight to f4, also a good move."
+  },
+  {
+   "ply": 34,
+   "t": 334,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2B1/2RQ1nK1 w kq - 0 18",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": "We take the rook."
+  },
+  {
+   "ply": 35,
+   "t": 337.5,
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB4B1/2RQ1NK1 b kq - 0 18",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": "Now we're up the exchange, and still attacking."
+  },
+  {
+   "ply": 36,
+   "t": 341,
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3Ppn2/1P2P1P1/PB4B1/2RQ1NK1 w kq - 0 19",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": "Trade on f4 to remove his knight."
+  },
+  {
+   "ply": 37,
+   "t": 343.5,
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3PpP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 19",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "He recaptures, and we've converted the attack into material — an extra exchange. Now the technique: f5 is one way, but it allows d5, opening his bishop's diagonal, so this must be handled very carefully."
+  },
+  {
+   "ply": 38,
+   "t": 387,
+   "fen": "r2qk2r/pp4p1/3bb3/5p2/3PpP2/1P4P1/PB4B1/2RQ1NK1 w kq - 0 20",
+   "line": [
+    "f5"
+   ],
+   "spoken": "f5 — defending the e4-pawn, which feels like the most important pawn on the board."
+  },
+  {
+   "ply": 39,
+   "t": 394.5,
+   "fen": "r2qk2r/pp4p1/3bb3/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 20",
+   "line": [
+    "d5"
+   ],
+   "spoken": "It also shuts his bishop out of the game. He answers d5 — he's good."
+  },
+  {
+   "ply": 40,
+   "t": 399.5,
+   "fen": "r2qk2r/pp3bp1/3b4/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 w kq - 1 21",
+   "line": [
+    "Bf7"
+   ],
+   "spoken": "We retreat the bishop to f7."
+  },
+  {
+   "ply": 41,
+   "t": 403.5,
+   "fen": "r2qk2r/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b kq - 0 21",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": "He takes on g7 — the question I was weighing is whether that pawn is worth giving up."
+  },
+  {
+   "ply": 42,
+   "t": 404.5,
+   "fen": "r2qk1r1/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 1 22",
+   "line": [
+    "Rg8"
+   ],
+   "spoken": "And it is worth it — because we keep the e4-pawn, which is enormous."
+  },
+  {
+   "ply": 43,
+   "t": 421,
+   "fen": "r2qk1r1/pp3b2/3b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b q - 2 22",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "The bishop to h6 is a mistake — a losing move. Whenever the king on g1 is this weak, be hyper-aware of every route to it, on both wings — and the f2-square is the sensitive one."
+  },
+  {
+   "ply": 44,
+   "t": 455,
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 3 23",
+   "line": [
+    "Qb6+"
+   ],
+   "spoken": "The bishop to c5 with check is guarded, but the queen to b6 with check forces his king onto the h-file — and there sits his undefended bishop on h6. We swing the rook to h8 and collect it."
+  },
+  {
+   "ply": 45,
+   "t": 485,
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K b q - 4 23",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "My technique here was a touch sloppy — the bishop to d4 was not actually so clear."
+  },
+  {
+   "ply": 46,
+   "t": 487.5,
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K w q - 5 24",
+   "line": [
+    "Rh8"
+   ],
+   "spoken": "The rook to g6 doesn't trap the bishop, because of bishop g5. The rook to h8 is better — it pins."
+  },
+  {
+   "ply": 47,
+   "t": 490.5,
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5BN/2RQ3K b q - 6 24",
+   "line": [
+    "Nh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 492,
+   "fen": "r3k3/pp3b2/1q1b3r/3P1p2/4pP2/1P4P1/P5BN/2RQ3K w q - 0 25",
+   "line": [
+    "Rxh6"
+   ],
+   "spoken": "Convert as fast as possible: his knight on h2 is very vulnerable, so double on the h-file — walk the king to e7 and bring the other rook to h8. We're not afraid of him grabbing on c4; he's out of pieces and our king is safe in the centre. And there's even a forced mate: once his queen leaves e2 and the bishop is gone from g2, the f2-square lights up — take on h2, swing the rook to the h-file, and after the block, crash into f2."
+  }
+ ]
+}

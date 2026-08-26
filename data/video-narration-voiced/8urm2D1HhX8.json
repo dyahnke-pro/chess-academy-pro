@@ -1,10 +1,10 @@
 {
  "videoId": "8urm2D1HhX8",
  "title": "Master Class | Stafford Gambit / BongCloud!!! | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Stafford Gambit",
+ "openingName": "Petrov Defense: Stafford Gambit",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:8urm2D1HhX8",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We're Black — e5. And ladies and gentlemen, let's hope for the Stafford."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 — there's nothing wrong with playing a guilty-pleasure opening once in a while."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 — let's see how the Stafford holds up at an 1800 level."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "The knight takes e5 — let's see if these guys know the refutation."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6 — the Stafford."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "The knight takes c6."
   },
   {
    "ply": 8,
@@ -69,9 +69,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Recapturing with the d-pawn defines the Stafford — Black accepts doubled c-pawns in return for open lines, rapid development, and dangerous piece play against f2.",
-   "kind": "main",
-   "teaches": "Trade structural soundness for open lines and initiative in a gambit."
+   "spoken": "The d-pawn recaptures — this is the Stafford Gambit; everybody should know what it is."
   },
   {
    "ply": 9,
@@ -80,7 +78,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "d3 — let's see if he falls into one of the traps. How should Black continue?"
   },
   {
    "ply": 10,
@@ -89,9 +87,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Bishop to c5 is the Stafford's fang — it rakes the a7-g1 diagonal straight at f2, the softest square in White's camp, setting up a swarm of tactics.",
-   "kind": "main",
-   "teaches": "Point your pieces at f2, the weakest square near the enemy king, to manufacture threats."
+   "spoken": "We want the bishop to c5, aiming at the f2-pawn — this creates a very wide range of tricks."
   },
   {
    "ply": 11,
@@ -100,7 +96,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3 by our opponent takes a little of the sting out — it's accurate, though as I remember not the best move."
   },
   {
    "ply": 12,
@@ -109,7 +105,7 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": ""
+   "spoken": "The reason it's not best is obvious: he weakens his kingside. After the bishop trade —"
   },
   {
    "ply": 13,
@@ -118,7 +114,7 @@
    "line": [
     "fxe3"
    ],
-   "spoken": ""
+   "spoken": "— look how nasty: he creates all these weaknesses on his kingside, which we exploit through targeted play and rapid development. The key word is rapid — if he plays the bishop to e2 and castles, the flame of the Stafford initiative is extinguished."
   },
   {
    "ply": 14,
@@ -127,9 +123,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The knight jumps to g4, hitting h2 and swarming the weak squares around White's king that the early trades left tender — the initiative is in full flow.",
-   "kind": "main",
-   "teaches": "Pile jumping pieces onto the weakened squares near the king to keep the attack going."
+   "spoken": "The knight takes e4 doesn't work here — we play the knight to g4, going straight after the e3-pawn; we don't let him consolidate. How can we pile up the pressure on it?"
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
     "Qf3",
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "The queen to f3. Don't fall into queen-attacks-queen syndrome — don't play g5 just because it hits the queen; if you pose a threat, make sure it's meaningful. This one is —"
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": ""
+   "spoken": "— it forces the king up. Now, as many of you spot, if the knight were gone from g4 we'd have a pin —"
   },
   {
    "ply": 18,
@@ -157,14 +151,15 @@
    "line": [
     "Nxh2"
    ],
-   "spoken": ""
+   "spoken": "— so the knight takes h2 comes to mind. In a classical game I'd play it — and it's too cool to pass up, so the knight takes h2."
   },
   {
    "ply": 17,
    "t": 194.5,
    "fen": "r1b1k2r/ppp2ppp/2p5/6q1/4P1n1/3PPQ2/PPP1K1PP/RN3B1R b kq - 4 9",
    "line": [],
-   "spoken": ""
+   "spoken": "I was going to make the point that castling is also very good — patiently bringing the rook into the game and then going f5, straight for checkmate —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -173,7 +168,8 @@
    "line": [
     "Nxh2"
    ],
-   "spoken": ""
+   "spoken": "— but this move is too cool to pass up, so we'll indulge; I actually think castling might have been even stronger.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -182,7 +178,7 @@
    "line": [
     "Rxh2"
    ],
-   "spoken": ""
+   "spoken": "The rook takes h2 — and he blunders the queen."
   },
   {
    "ply": 20,
@@ -191,7 +187,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "I can't believe he just thought and then did that."
   },
   {
    "ply": 21,
@@ -200,7 +196,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "Should we take the queen, or is there a slightly more accurate move?"
   },
   {
    "ply": 22,
@@ -209,14 +205,15 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Let's just castle — the queen's not going anywhere."
   },
   {
    "ply": 21,
    "t": 235,
    "fen": "r3k2r/ppp2ppp/2p5/6q1/4P1b1/3PPQ2/PPPNK1PR/R4B2 b kq - 2 11",
    "line": [],
-   "spoken": ""
+   "spoken": "Castling long is also good —",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -225,7 +222,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— but I'll castle short since Tommy suggested long.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -234,7 +232,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": ""
+   "spoken": "The king to f2. Don't forget to take the queen, though —"
   },
   {
    "ply": 24,
@@ -243,7 +241,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "— he actually escaped the pin, so don't forget to take the queen when the time comes."
   },
   {
    "ply": 25,
@@ -252,7 +250,7 @@
    "line": [
     "gxf3"
    ],
-   "spoken": ""
+   "spoken": "The g-pawn recaptures. A clear application of 'strike while the iron is hot' — after winning material, your opponent often blunders more, less attentive to tactics. What tactical detail do we watch here? This rook — tactical observation 101."
   },
   {
    "ply": 26,
@@ -261,7 +259,7 @@
    "line": [
     "Qe5"
    ],
-   "spoken": ""
+   "spoken": "The rook is unprotected. Is anything else undefended? The queen to e5 forms a classic triangle —"
   },
   {
    "ply": 27,
@@ -270,7 +268,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "— a fork: not only do we win b2, we're going to take all the other queenside pawns."
   },
   {
    "ply": 28,
@@ -279,7 +277,7 @@
    "line": [
     "Qxb2"
    ],
-   "spoken": ""
+   "spoken": "Give me that, and that, and that — our king is perfectly safe, the game is over."
   },
   {
    "ply": 29,
@@ -288,7 +286,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "Assuming the rook to b1, and wanting to win efficiently, which pawn do we take? We can take c2 then a2 — could a case be made for a2 immediately? Yes, both create a passed pawn, but there's a subtle reason: if we play the queen takes c2, he walks the king to g3, opening his rook's defence and the queen x-ray."
   },
   {
    "ply": 30,
@@ -297,7 +295,7 @@
    "line": [
     "Qxa2"
    ],
-   "spoken": ""
+   "spoken": "So when we push the a-pawn, he might get his rook into the defence. Largely irrelevant — we're totally winning — but keeping the c-pawn alive walls his rook off from its defence."
   },
   {
    "ply": 31,
@@ -306,7 +304,7 @@
    "line": [
     "Rxb7"
    ],
-   "spoken": ""
+   "spoken": "That pawn on c2 sections the rook off from its defence, like plexiglas. Now —"
   },
   {
    "ply": 32,
@@ -315,7 +313,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "— should we defend the a-pawn? No — push it. a4, a3 —"
   },
   {
    "ply": 33,
@@ -324,7 +322,7 @@
    "line": [
     "Kf3"
    ],
-   "spoken": ""
+   "spoken": "— and the game is over."
   },
   {
    "ply": 34,
@@ -333,7 +331,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "a4."
   },
   {
    "ply": 35,
@@ -342,7 +340,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4."
   },
   {
    "ply": 36,
@@ -351,7 +349,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "a3 — trying to make him give up the knight for the pawn. I hope he takes c7, because there's a very sexy winning continuation. And a big shout out to Eric Rosen, the king of the Stafford."
   },
   {
    "ply": 37,
@@ -360,7 +358,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to h3. The queen takes c4 is the fancy move I mentioned, but it's not a good idea — the queen takes c4, the pawn takes c4, and a2 gets a little too fancy."
   },
   {
    "ply": 38,
@@ -369,7 +367,7 @@
    "line": [
     "Qa1"
    ],
-   "spoken": ""
+   "spoken": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and we'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless he plays the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end."
   },
   {
    "ply": 39,
@@ -378,7 +376,7 @@
    "line": [
     "Rxc7"
    ],
-   "spoken": ""
+   "spoken": "He plays the rook takes c7."
   },
   {
    "ply": 40,
@@ -387,7 +385,7 @@
    "line": [
     "a2"
    ],
-   "spoken": ""
+   "spoken": "a2."
   },
   {
    "ply": 41,
@@ -396,7 +394,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "No threats, so a2. What here? The queen to d1 with check —"
   },
   {
    "ply": 42,
@@ -405,14 +403,15 @@
    "line": [
     "Qd1+"
    ],
-   "spoken": ""
+   "spoken": "— the queen to d1 with check, and then the a-pawn queens."
   },
   {
    "ply": 3,
    "t": 655,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Let me take a quick look. I'll completely defer to Eric for the Stafford videos —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -423,7 +422,8 @@
     "Nxe5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— his videos are expertly made and cover all sorts of traps.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -433,7 +433,8 @@
     "Nxc6",
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "In my Snuffing the Stafford video, the line I recommended —",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -442,7 +443,8 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "— starts with d3, as my opponent did, and after the bishop to c5 —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -451,7 +453,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "— the bishop to c5 —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -460,7 +463,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "— the bishop to e2, one of the moves; I've already forgotten exactly what I recommend.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -469,7 +473,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "You start with the bishop to e2, and I think most people play h5 here —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -478,14 +483,16 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "— and then we play the very simple and very nasty move c3.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 704.5,
    "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Trying to remember what I recommended — it's been a while since I reviewed this.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -494,7 +501,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e2, the bishop to b2.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -503,7 +511,8 @@
    "line": [
     "Ng4"
    ],
-   "spoken": ""
+   "spoken": "If they go the knight to g4, we simply take it —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -512,7 +521,8 @@
    "line": [
     "Bxg4"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes g4 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -521,7 +531,8 @@
    "line": [
     "Qh4"
    ],
-   "spoken": ""
+   "spoken": "— the queen to h4, and I think we go something like the queen to f3 and g3.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -532,14 +543,16 @@
     "Bxg4",
     "Qg3"
    ],
-   "spoken": ""
+   "spoken": "That forces a very desirable queen trade.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 726,
    "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "So investigate it, or take a look at my video for how to play against it. The point of c3 —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -549,14 +562,16 @@
     "h5",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "— is to prepare the move d4, slicing off the bishop's contact with f2 — that's the key, and it basically ends all of Black's counterplay; Black has very little compensation for the pawn.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 745,
    "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "So the Stafford is a good backup weapon; the bishop to e3 is inaccurate on this very account. But why shouldn't you make the Stafford your exclusive opening even if it works? Even if a gambit brings amazing short-term results, have at least one sounder opening, so you expose yourself to more positions and build a solid foundation. Offbeat players who reach 1700, 1800 then have to change their whole repertoire, having never played anything else.",
+   "reanchor": true
   }
  ]
 }

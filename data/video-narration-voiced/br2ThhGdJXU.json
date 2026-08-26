@@ -1,10 +1,10 @@
 {
  "videoId": "br2ThhGdJXU",
  "title": "Master Class | Alekhine (The Better Scandi) | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Alekhine's Defense: Exchange/Bc4, Queen Trade",
+ "openingName": "Alekhine Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:br2ThhGdJXU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We try another Alekhine — a knight to f6, hoping White commits with e5 rather than a quiet knight to c3."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "White plays e5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "And the idea: a knight to d5 — the ultimate hypermodern opening, where you refuse to touch your center for a few moves and try to get White to overextend."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop jumps to c4, hitting the knight — but this is the Alekhine's game. The knight retreats to b6, its ideal square, and the bishop must move again, having gained nothing.",
-   "kind": "main",
-   "teaches": "In the Alekhine the knight belongs on b6 — let it be chased there and the attacker loses time.",
-   "plans": "Retreat to b6, then strike the centre."
+   "spoken": "White plays a bishop to c4 — a move, but not the best; we'll cover the theory later."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "A knight to b6 — where this knight belongs in the Alekhine — attacking the bishop, so it retreats and loses a tempo."
   },
   {
    "ply": 7,
@@ -63,10 +60,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "The bishop drops back to e2, a passive post — and that is the signal to press. White has spent moves shuffling the bishop while building no real centre.",
-   "kind": "main",
-   "teaches": "When the opponent's pieces retreat without a plan, seize the initiative.",
-   "plans": "Challenge the centre before White consolidates."
+   "spoken": "A bishop to e2 is passive. Our strategy doesn't change: White's e5 pawn is a hook we'll use to contest the center while developing."
   },
   {
    "ply": 8,
@@ -75,10 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The most accurate move is the pawn to d6, striking at the e5-pawn. The knight to c6 is playable, but with White holding so little of the centre there is no reason not to challenge it directly.",
-   "kind": "main",
-   "teaches": "Attack an overextended centre at once rather than developing around it.",
-   "plans": "Trade on e5 and expose the weakness."
+   "spoken": "The most accurate move is d6, saying we want to remove that e5 pawn — and if we do, White has no central control left."
   },
   {
    "ply": 9,
@@ -87,7 +78,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 to fight for the center. Now a knight to c6 makes sense — the way to stop your pieces being trampled by pawns is to combine piece moves with pawn moves, so the pawns act as anchors."
   },
   {
    "ply": 10,
@@ -96,7 +87,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Is d5 a problem before we play the knight to c6? Look carefully — no, because d5 loses control of e5 and drops a pawn."
   },
   {
    "ply": 11,
@@ -105,7 +96,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to f3. Now we transform the position — a bishop to g4 is obvious, but in the spirit of positional chess we take on e5 into an endgame."
   },
   {
    "ply": 12,
@@ -114,7 +105,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "We capture on e5."
   },
   {
    "ply": 13,
@@ -123,10 +114,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Take on e5 and steer for the trade of queens. If White recaptures on the knight, the knight takes d4 and wins; and once the queens come off, the pawn on e5 becomes a huge, permanent weakness — the whole point of the Alekhine laid bare.",
-   "kind": "main",
-   "teaches": "The Alekhine's payoff: provoke the big centre, trade down, and target the overextended pawn.",
-   "plans": "Trade queens, then win or tie White to the e5-pawn."
+   "spoken": "If White recaptures with the knight, a knight to d4 wins a pawn; he takes with the pawn instead."
   },
   {
    "ply": 15,
@@ -136,7 +124,7 @@
     "Qxd1+",
     "Bxd1"
    ],
-   "spoken": ""
+   "spoken": "We trade queens, and now that e5 pawn becomes a huge weakness — that's the whole point of the Alekhine: White has more central control, but he'll likely lose that pawn or wreck his pieces defending it."
   },
   {
    "ply": 16,
@@ -145,14 +133,15 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "How do we pressure e5? First its defender, the knight — a bishop to g4."
   },
   {
    "ply": 15,
    "t": 1124.5,
    "fen": "r1b1kb1r/ppp1pppp/1nn5/4P3/8/5N2/PPP2PPP/RNBBK2R b KQkq - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "Not e6, which would be passive and lock the bishop in — we'll play e6 later.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -170,10 +159,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "A key restraint: do NOT simply grab on f3 and then take e5 — that drops the b7-pawn. Making the pawn a lasting weakness and tying White to its defence is often stronger than winning it outright and freeing White's pieces.",
-   "kind": "main",
-   "teaches": "A fixed weakness you pressure can be worth more than the pawn itself — restraint over greed.",
-   "plans": "Pile on e5; don't release the tension prematurely."
+   "spoken": "Critical moment: don't just grab on f3 and e5, because it drops the b7 pawn — and even if it didn't, giving up that g4 bishop isn't clearly worth a pawn. The threat is stronger than the execution: keeping him tortured by the weak pawn beats winning it and relieving him.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -182,7 +169,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "So we castle long, defending b7, keeping pressure on the bishop and mobilizing our knight. Now we threaten to take on f3, but we could also just keep pressing with e6."
   },
   {
    "ply": 19,
@@ -191,7 +178,8 @@
    "line": [
     "Nfd2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to d2 — a bit of a panic; a knight to g5 would have dropped the bishop to two attackers.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -201,7 +189,8 @@
     "Bxd1",
     "Rxd1"
    ],
-   "spoken": ""
+   "spoken": "We win a piece — take the bishop, which also pins the rook, rather than traveling to g4.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -210,10 +199,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Now the pawn on e5 falls to the knight — the pressure converts to material cleanly, with White's pieces still tangled.",
-   "kind": "main",
-   "teaches": "Once the defender is overloaded, collect the weakness you've been pressing.",
-   "plans": "Bank the pawn and complete development."
+   "spoken": "We take the pawn on e5 — otherwise a knight to a3 could defend.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -222,7 +209,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to c3. Now we just play e6.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -231,10 +219,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 comes at the right moment — earlier it would have locked the light-squared bishop behind the pawns; now it opens the bishop's path out.",
-   "kind": "main",
-   "teaches": "Time the freeing pawn move so it releases your bishop rather than entombing it.",
-   "plans": "Develop the bishop and convert the extra pawn."
+   "spoken": "e6, to get our bishop out."
   },
   {
    "ply": 25,
@@ -243,7 +228,8 @@
    "line": [
     "Nde4"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to e4, untangling. We could take the rook, but I like just developing — trading on your own terms forces the opponent into uncomfortable decisions.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -252,7 +238,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to e7 is fine — its main job here is to connect the rooks; it restricts the e4 knight and controls g5. Not every piece has to climb Everest at once."
   },
   {
    "ply": 27,
@@ -261,7 +247,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to f4, also controlling d8, and attacks our knight — we can move it with tempo.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -270,7 +257,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "A knight to g6, in Alekhine spirit — and it sets a trap: a bishop to g3 loses a piece."
   },
   {
    "ply": 29,
@@ -279,7 +266,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White sees it and plays a bishop to e3 — little relief. That e4 knight has been a recurring theme: a central piece still vulnerable to pawns.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -288,7 +276,8 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "So f5, attacking the e4 knight — it has no good squares; the ones near it touch our e7 bishop, and its only defender is the bishop, a vulnerable undefended piece we can dislodge from e3.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -298,7 +287,8 @@
     "Rxd8+",
     "Rxd8"
    ],
-   "spoken": ""
+   "spoken": "If White retreats the knight to d2 it only grows more passive — a big win for us. We trade the rooks and recapture.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -307,7 +297,8 @@
    "line": [
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "White found a creative solution — a knight to c5, attacking c6, so if f4 he has a knight capture on e6 counterattacking our rook. We have to calculate.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -316,7 +307,8 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "Two pieces for a rook with no other rook pair usually favors the rook, but here the minors are super active, so we go for it — also to show how to play with this common imbalance.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -325,7 +317,8 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": ""
+   "spoken": "White captures on e6 — he's playing very well.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -334,7 +327,8 @@
    "line": [
     "fxe3"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e3.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -353,7 +347,8 @@
    "line": [
     "Kxf2"
    ],
-   "spoken": ""
+   "spoken": "The king recaptures on f2. Now, to be surgical...",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -362,7 +357,8 @@
    "line": [
     "Bc5+"
    ],
-   "spoken": ""
+   "spoken": "...a bishop check on c5, improving the bishop first — an intermediate move.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -372,7 +368,8 @@
     "Kf1",
     "Kxd8"
    ],
-   "spoken": ""
+   "spoken": "You're always hunting for intermediate moves, which can be tactical or positional — like improving the bishop before taking the knight.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -381,7 +378,8 @@
    "line": [
     "Rd1+"
    ],
-   "spoken": ""
+   "spoken": "A rook check on d1.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -390,7 +388,8 @@
    "line": [
     "Ke7"
    ],
-   "spoken": ""
+   "spoken": "The king goes to e7 — the only good square.",
+   "reanchor": true
   },
   {
    "ply": 45,
@@ -399,7 +398,8 @@
    "line": [
     "Nd5+"
    ],
-   "spoken": ""
+   "spoken": "White made a small error bringing his king backward — you shouldn't do that in the endgame — and he trades the knights.",
+   "reanchor": true
   },
   {
    "ply": 46,
@@ -408,7 +408,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d5.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -417,7 +418,8 @@
    "line": [
     "Rxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the rook, reaching bishop and knight against rook with equal pawns — a great imbalance.",
+   "reanchor": true
   },
   {
    "ply": 48,
@@ -426,7 +428,8 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "White attacks the bishop; we drop it back to d6 to attack the pawn. In these situations piece activity decides everything.",
+   "reanchor": true
   },
   {
    "ply": 49,
@@ -435,7 +438,8 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White plays c4.",
+   "reanchor": true
   },
   {
    "ply": 50,
@@ -444,7 +448,8 @@
    "line": [
     "Bxh2"
    ],
-   "spoken": ""
+   "spoken": "A bishop capture on h2 nets a free pawn — and if he relies on a rook to h5, we have a sexy idea.",
+   "reanchor": true
   },
   {
    "ply": 51,
@@ -453,7 +458,8 @@
    "line": [
     "Rh5"
    ],
-   "spoken": ""
+   "spoken": "A rook to h5 forks the bishop and pawn — and how do we punish it?",
+   "reanchor": true
   },
   {
    "ply": 52,
@@ -462,7 +468,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "A rook in the corner looks invincible, but it isn't — a bishop to f4 threatens to trap it. Rooks can be caught by minor pieces.",
+   "reanchor": true
   },
   {
    "ply": 53,
@@ -471,7 +478,8 @@
    "line": [
     "Rxh7"
    ],
-   "spoken": ""
+   "spoken": "White grabs on h7.",
+   "reanchor": true
   },
   {
    "ply": 54,
@@ -480,7 +488,8 @@
    "line": [
     "Bh6"
    ],
-   "spoken": ""
+   "spoken": "A bishop to h6 — the rook is trapped: the knight covers its escape, the bishop covers the h-file, and our king will walk to g8 to finish it. He can try to ram the pawn, but there's no time — that's jail.",
+   "reanchor": true
   },
   {
    "ply": 56,
@@ -490,7 +499,8 @@
     "Kf2",
     "Kf7"
    ],
-   "spoken": ""
+   "spoken": "Don't free the rook by moving carelessly — the king walk is a brutal idea.",
+   "reanchor": true
   },
   {
    "ply": 58,
@@ -510,7 +520,8 @@
     "Rxh6",
     "gxh6"
    ],
-   "spoken": ""
+   "spoken": "It's over — he has to take the bishop.",
+   "reanchor": true
   },
   {
    "ply": 61,
@@ -519,7 +530,8 @@
    "line": [
     "Kf3"
    ],
-   "spoken": ""
+   "spoken": "Now we're up a full knight.",
+   "reanchor": true
   },
   {
    "ply": 62,
@@ -528,7 +540,8 @@
    "line": [
     "Ne5+"
    ],
-   "spoken": ""
+   "spoken": "A knight check on e5 to win the pawn.",
+   "reanchor": true
   },
   {
    "ply": 63,
@@ -556,7 +569,8 @@
     "b3",
     "Nd6"
    ],
-   "spoken": ""
+   "spoken": "Bring the knight back, and there are many ways to win.",
+   "reanchor": true
   },
   {
    "ply": 67,
@@ -574,21 +588,24 @@
    "line": [
     "Kf7"
    ],
-   "spoken": ""
+   "spoken": "We bring the king up, he gives us access to the pawn, and we push — had he defended, I'd just create a passer and distract his king. He resigns.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 1739.5,
    "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "A great game. The bishop to c4 is sub-optimal for White.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 1743.5,
    "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The main line is d4.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -606,7 +623,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Then Black plays d6 and White plays c4.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -624,7 +642,8 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "And you get this kind of position.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -634,14 +653,16 @@
     "exd6",
     "cxd6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with either pawn — the c-pawn recapture is more adventurous, something to cover later.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1788,
    "fen": "rnbqkb1r/pppppppp/8/3nP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The Alekhine is a great weapon in the 1600-1700 range if you want to spice up your repertoire, both positional and tactical. In our game a bishop to b2 was passive — b3 was better.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -652,14 +673,16 @@
     "Be2",
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "Then d6 — don't overthink it; it just removes e5, grabs some center, and opens the bishop, a normal developing move. After d4 and a knight to c6, don't slip into passivity with an early e6, or White tramples the center and you're miserable — that's the downside of the Alekhine if you don't play it well.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 1870.5,
    "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "People either love the Alekhine or try it and hate it — the trick is not to treat d6 as some special move.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -671,7 +694,8 @@
     "Be2",
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "It just controls some center and opens the bishop — a typical developing move played in all openings.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -683,7 +707,8 @@
     "d4",
     "d6"
    ],
-   "spoken": ""
+   "spoken": "So d6, d4, a knight to c6, a knight to f3...",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -692,7 +717,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "...and we take on e5, trading queens.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -710,7 +736,8 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "White should have recaptured on d6 and played c4, resembling the main line — a tempo up for us, and then we fianchetto.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -721,7 +748,8 @@
     "Bxd1",
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "After the queen trade and a bishop to g4, White should have played a bishop to f4.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -731,7 +759,8 @@
     "O-O",
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Either there or earlier — the knight to d2 was far too passive.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -756,7 +785,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "After a bishop to f4...",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -765,7 +795,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "...we'd play e6, get the bishop out, maybe bring a knight to d5 — White is uncomfortable because e5 is a permanent weakness, sticking out like a sore thumb, and Black is slightly better.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -792,7 +823,8 @@
     "Rxd1",
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "So here he gives us the pawn...",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -810,7 +842,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "...e6, a knight to e4, a bishop to e7 covering the squares.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -829,7 +862,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "A bishop to f4, a knight to g6 — and there was one little issue.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -854,7 +888,8 @@
    "line": [
     "Nec4"
    ],
-   "spoken": ""
+   "spoken": "A knight to c4 might support a knight to b5, and I was looking at those lines.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -873,7 +908,8 @@
     "c6",
     "Nxa7#"
    ],
-   "spoken": ""
+   "spoken": "This is actually checkmate — we'd have played c6, but it felt a bit unpleasant.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -903,7 +939,8 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "So instead we went a knight to g6, actively retrieving the bishop.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -924,7 +961,8 @@
     "Ng6",
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "Had he gone a bishop to g3, as I hinted...",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -934,7 +972,8 @@
     "f5",
     "Bg3"
    ],
-   "spoken": ""
+   "spoken": "...then f5, and the bishop is trapped.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -951,7 +990,8 @@
    "t": 1984,
    "fen": "2kr3r/ppp1bppp/1n2p1n1/8/4N3/2N1B3/PPP2PPP/R2R2K1 b - - 5 15",
    "line": [],
-   "spoken": ""
+   "spoken": "That's completely winning, so he goes a bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -960,7 +1000,8 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "And we go f5, dislodging the knight from e4.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -969,7 +1010,8 @@
    "line": [
     "Rxd8+"
    ],
-   "spoken": ""
+   "spoken": "After the rook trade and a knight to c5, why is playing a knight to c5 immediately less accurate? Think about it.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -980,7 +1022,8 @@
     "Nc5",
     "f4"
    ],
-   "spoken": ""
+   "spoken": "The problem: if we play f4 it transposes to the game...",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -989,7 +1032,8 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": ""
+   "spoken": "...but its power comes from the knight attacking the rook — otherwise it's just a pawn and we take the bishop. We'd capture on d1 and play f4.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -1000,14 +1044,16 @@
     "Rd1",
     "fxe3"
    ],
-   "spoken": ""
+   "spoken": "Why give up the open file? Tactics trump general considerations — a bishop to d4, e5, and the bishop is trapped; if it moves back we take the knight, and if a knight capture on c6, we take the bishop.",
+   "reanchor": true
   },
   {
    "ply": 31,
    "t": 2098,
    "fen": "2kR3r/ppp1b1pp/1n2p1n1/5p2/4N3/2N1B3/PPP2PPP/R5K1 b - - 0 16",
    "line": [],
-   "spoken": ""
+   "spoken": "So it was a good decision to take the rook first with a knight to c5.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -1017,7 +1063,8 @@
     "Rxd8",
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "And that forces us to win it out. He went backward with the king, which is fine, but I probably should have gone forward. When he traded the knights he collapsed — that c3 knight should have gone to e4, which is exactly why the bishop on c5 is a sitting duck.",
+   "reanchor": true
   }
  ]
 }

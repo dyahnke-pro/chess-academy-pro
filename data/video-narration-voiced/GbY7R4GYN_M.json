@@ -1,0 +1,174 @@
+{
+ "videoId": "GbY7R4GYN_M",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Smith-Morra Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:GbY7R4GYN_M",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 26.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 29.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The Smith-Morra — sacrifice the d-pawn for rapid development and open lines against the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 31.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 33,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 35,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 36.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 37.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 40,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 41.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Against the solid e6 system, one of Black's better tries, the theoretical move is coming up.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 63.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bc4 — deeply counter-intuitive, since it seems to bite on granite against e6, but the point is hidden: if a knight later lands on d5 and Black takes, the e6-pawn vanishes and the bishop's diagonal blazes open.",
+   "kind": "main",
+   "teaches": "A bishop that looks blunted by a pawn can be aimed at the moment that pawn is forced to disappear."
+  },
+  {
+   "ply": 12,
+   "t": 65.5,
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 125.5,
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Rather than hunt for something insane, just castle — put the decision off and trust straightforward development.",
+   "kind": "main",
+   "teaches": "When no forcing idea works, don't force it; a calm developing move keeps the initiative."
+  },
+  {
+   "ply": 14,
+   "t": 127,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p1n1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 8",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 155.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p1n1/3N4/2B1P3/5N2/PP3PPP/R1BQ1RK1 b kq - 5 8",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Now simple chess with an edge: sling the knight into d5. Probably not objectively sound, but it's a very real practical try.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 165.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n3n1/3p4/2B1P3/5N2/PP3PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 167,
+   "fen": "r1bqkb1r/pp1p1ppp/2n3n1/3P4/2B5/5N2/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 193,
+   "fen": "r1bqkb1r/pp1p1ppp/6n1/n2P4/2B5/5N2/PP3PPP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Na5"
+   ],
+   "spoken": "The knight lunges at the bishop, but this sacrifice isn't preposterous — you should feel intuitively why it works. Black is utterly undeveloped, neither bishop is out, castling is far away, and the e-file is wide open for Re1-check and d6 ideas. In the gambit mindset you don't reflexively defend the attacked bishop — you move it by choice, keeping every threat alive.",
+   "kind": "main",
+   "teaches": "A sacrifice is justified when the defender is undeveloped and the lines against his king are already open."
+  }
+ ]
+}

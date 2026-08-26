@@ -1,10 +1,10 @@
 {
  "videoId": "zhfOsKtD2vk",
  "title": "Scandinavian Defense Dissected | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
- "openingName": "Sicilian Defense: Classical, 5.Bd3 (Black)",
+ "openingName": "Sicilian Defense: Classical Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:zhfOsKtD2vk",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We play the Sicilian — c5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We play d6."
   },
   {
    "ply": 6,
@@ -43,7 +43,8 @@
     "d4",
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 and we capture on d4.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -53,7 +54,8 @@
     "Nxd4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight and we develop a knight to f6.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -62,17 +64,15 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 is a modern, dangerous try — but it leaves the knight on d4 loose, and that gives Black an immediate way to hit back while developing.",
-   "kind": "main",
-   "teaches": "When a setup leaves a central piece unsupported, strike at it at once.",
-   "plans": "Attack the d4-knight and develop with tempo."
+   "spoken": "White plays a bishop to d3 — a move that's gotten more popular. Its point is to reserve c4 for a Maroczy-style clamp. We're not tied to the Najdorf; stay flexible."
   },
   {
    "ply": 8,
    "t": 1275.5,
    "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
    "line": [],
-   "spoken": ""
+   "spoken": "The d4 knight is vulnerable, so we exploit it and develop at once — Rauzer style, the Classical Sicilian: a knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -82,7 +82,8 @@
     "Bd3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "A knight to c6, challenging the d4 knight and asking White a question.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -91,10 +92,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": "Provoke the trade on c6 by developing the knight there. In the Sicilian, trading off the d4-knight is almost always good for Black — it hands over the centre and opens lines.",
-   "kind": "main",
-   "teaches": "In the Sicilian, exchanging White's d4-knight favours Black nearly every time.",
-   "plans": "Recapture toward the centre and open the b-file."
+   "spoken": "White captures on c6 — but this trade is almost always good for Black in the Sicilian.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -103,10 +102,8 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "Recapture with the b-pawn: Black gets a mobile central pawn mass and a semi-open b-file. Not decisive on their own, but a pleasant, flexible position with clear plans.",
-   "kind": "main",
-   "teaches": "Recapturing toward the centre trades structure for mobility and an open file.",
-   "plans": "Fianchetto, castle, and roll the centre."
+   "spoken": "We recapture with the b-pawn, getting a very mobile pawn mass and the semi-open b-file.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -115,7 +112,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White plays c4. Now we decide about our f8 bishop — as an experienced Sicilian player, we make the right call."
   },
   {
    "ply": 14,
@@ -124,10 +121,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "The pawn to g6 prepares the fianchetto — the natural way to meet White's clamp, putting the bishop on the long diagonal against the loosened dark squares.",
-   "kind": "main",
-   "teaches": "Against a central clamp, fianchetto to pressure the long diagonal.",
-   "plans": "Bishop to g7, castle, contest the centre."
+   "spoken": "e5 and a bishop to e7 lack pizzazz — instead we play Dragon-style and fianchetto with g6."
   },
   {
    "ply": 15,
@@ -136,7 +130,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to c3 — and I'm eyeing the weak dark squares.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -145,14 +140,15 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto with a bishop to g7."
   },
   {
    "ply": 12,
    "t": 1366,
    "fen": "r1bqkb1r/p3pppp/2pp1n2/8/4P3/3B4/PPP2PPP/RNBQK2R w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Because White has committed to c4, this bishop's control of the long diagonal can never be blocked by a pawn — and in the long run I eye the b2 pawn.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -161,7 +157,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White could have played c3, the way we do in the Modern — but having committed to c4, that tells us our fianchetto bishop is going to be powerful."
   },
   {
    "ply": 16,
@@ -172,7 +168,8 @@
     "Nc3",
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Its control of the long diagonal can't be impeded by any pawn — and long-term I'm eyeing the b2-pawn, with the rook to b8 and a knight reroute to support that.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -182,7 +179,8 @@
     "O-O",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. We still have the light-squared bishop to develop, but no rush — let's see what White does.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -191,7 +189,8 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White plays h3, a nonchalant move usually preparing a bishop to e3 while guarding against a knight to g4. The c4 pawn is a long-term target: a bishop to e6 or a6 is where it belongs, but we needn't commit yet.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -200,7 +199,8 @@
    "line": [
     "Rb8"
    ],
-   "spoken": ""
+   "spoken": "So a rook to b8 onto the semi-open file — a low-risk improving move that pressures b2, and White's rook will be passive after a rook to b1.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -209,7 +209,8 @@
    "line": [
     "Qa4"
    ],
-   "spoken": ""
+   "spoken": "White plays a queen to a4 — risky, since the queen is easily targeted. A knight to d7 comes to mind, eyeing c5; c6 isn't really hanging, as a queen grab drops to a knight to e5.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -218,7 +219,8 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "But we don't need tactics — a queen to c7 defends both pawns easily, and keeps the capture on b2 alive since the c3 knight is undermined.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -227,7 +229,8 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "White plays b4 — and we have a tactic. Not the automatic knight to d7: the money move is a knight capture on e4. After a bishop recaptures, we play a bishop capture on a1; if a bishop to h6, we drop back to g7.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -236,7 +239,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "We capture on e4. We're not afraid to give up the fianchettoed bishop, because we'll be up the exchange with White's queen far offside.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -245,7 +249,8 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on e4 — a move that should never be played automatically, with hidden dangers.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -254,7 +259,8 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "We capture on c3.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -263,7 +269,8 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to b1. We're up a pawn, but c6 is hanging and we'd like to defend it.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -272,7 +279,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to d7 defends and sets up discoveries against the queen — I don't mind trading the dark-squared bishops, since White has no kingside attack and our structure keeps the king safe.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -281,7 +289,8 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "White plays a3 — slow. d5 tempts, but it has a hidden defect: a queen to c2 sets up a capture on d5. So don't engage tactically yet.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -290,7 +299,8 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We simply drop the bishop back to g7 — not glamorous, but it avoids complications and makes d5 a huge idea.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -299,7 +309,8 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to b2 — and trading bishops is fine; e5 setting up d5 is also excellent.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -308,7 +319,8 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": ""
+   "spoken": "We trade on b2.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -318,7 +330,8 @@
     "Rxb2",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "White recaptures, and now it's time for d5 — we shift focus to the center where our extra pawn lives and steamroll: not d4 first, but e5, then e4, f5, f4, f3.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -327,7 +340,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to d3, and we push e5.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -336,7 +350,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "e5 — we want to follow with e4.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -345,7 +360,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "White plays b5. Not a capture on b5, which the queen retakes — keep the central mass intact by not giving up d5.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -354,7 +370,8 @@
    "line": [
     "cxb5"
    ],
-   "spoken": ""
+   "spoken": "We capture on b5, hitting the queen.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -363,7 +380,8 @@
    "line": [
     "cxb5"
    ],
-   "spoken": ""
+   "spoken": "White recaptures. A queen to c3 tempts, but a rook to b3 defends both bishop and rook — unless we deflect the queen first.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -372,14 +390,16 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "So a6, deflecting the queen — a queen grab on a6 runs into a queen to c3 forking, and a6 also threatens a capture on b5. Probably the best move.",
+   "reanchor": true
   },
   {
    "ply": 39,
    "t": 1922.5,
    "fen": "1r3rk1/p1qb1p1p/6p1/1P1pp3/Q7/P2B3P/1R3PP1/5RK1 b - - 0 20",
    "line": [],
-   "spoken": ""
+   "spoken": "The alternative is the pawn to e4, continuing to roll the pawns forward.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -397,7 +417,8 @@
    "line": [
     "Rfb1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to b1, not biting.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -406,7 +427,8 @@
    "line": [
     "axb5"
    ],
-   "spoken": ""
+   "spoken": "Many roads lead to Rome — we capture on b5.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -415,7 +437,8 @@
    "line": [
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on b5.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -424,7 +447,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "A bishop to f5, chasing a rook while keeping the bishop pinned to the other rook — don't over-simplify; the more you trade, the harder the win.",
+   "reanchor": true
   },
   {
    "ply": 45,
@@ -433,7 +457,8 @@
    "line": [
     "Rd1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to d1. A queen to c3 tempts and might be crushing, but let's see.",
+   "reanchor": true
   },
   {
    "ply": 46,
@@ -442,7 +467,8 @@
    "line": [
     "Qc3"
    ],
-   "spoken": ""
+   "spoken": "A queen to c3 — after a rook to b3 we drop back threatening a bishop to c2.",
+   "reanchor": true
   },
   {
    "ply": 45,
@@ -458,14 +484,16 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "I avoid the queen to c3 because of a queen to b4 trading into an undefended rook — so d4 for now, keeping options open.",
+   "reanchor": true
   },
   {
    "ply": 45,
    "t": 2010,
    "fen": "1r3rk1/2q2p1p/6p1/1B1ppb2/Q7/P6P/1R3PP1/3R2K1 b - - 2 23",
    "line": [],
-   "spoken": ""
+   "spoken": "d4 pushes the passer.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -484,7 +512,8 @@
    "line": [
     "Qc1+"
    ],
-   "spoken": ""
+   "spoken": "I like a check — or now a queen to c3 on a protected square, since the d-pawn guards the queen, so any queen trade forks the rooks.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -500,7 +529,8 @@
    "line": [
     "Qc3"
    ],
-   "spoken": ""
+   "spoken": "The b2 rook is attacked twice and defended once, so we threaten a bishop to d7 — and, for extra credit, a bishop to d3 does the same via a second deflection.",
+   "reanchor": true
   },
   {
    "ply": 49,
@@ -509,7 +539,8 @@
    "line": [
     "Qa6"
    ],
-   "spoken": ""
+   "spoken": "White plays a queen to a6, wanting a4 to protect the bishop.",
+   "reanchor": true
   },
   {
    "ply": 50,
@@ -518,7 +549,8 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "I combine ideas — e4, so that with d4 the idea is to push e3.",
+   "reanchor": true
   },
   {
    "ply": 51,
@@ -527,7 +559,8 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "White plays a4.",
+   "reanchor": true
   },
   {
    "ply": 52,
@@ -536,7 +569,8 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "We push e3 to win — huff and puff on White's position and something gives.",
+   "reanchor": true
   },
   {
    "ply": 54,
@@ -546,7 +580,8 @@
     "fxe3",
     "dxe3"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e3 with the pawn, not forgetting our old ideas.",
+   "reanchor": true
   },
   {
    "ply": 55,
@@ -555,7 +590,8 @@
    "line": [
     "Re2"
    ],
-   "spoken": ""
+   "spoken": "The old idea was to deflect the bishop.",
+   "reanchor": true
   },
   {
    "ply": 56,
@@ -564,7 +600,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "So a great time for a bishop to d3.",
+   "reanchor": true
   },
   {
    "ply": 57,
@@ -573,7 +610,8 @@
    "line": [
     "Bxd3"
    ],
-   "spoken": ""
+   "spoken": "White captures on d3.",
+   "reanchor": true
   },
   {
    "ply": 58,
@@ -582,7 +620,8 @@
    "line": [
     "Rxb2"
    ],
-   "spoken": ""
+   "spoken": "And we win with a capture on b2 — if a rook to e3, the king is vulnerable, so look for forks.",
+   "reanchor": true
   },
   {
    "ply": 60,
@@ -592,7 +631,8 @@
     "Rxe3",
     "Qc1+"
    ],
-   "spoken": ""
+   "spoken": "After a rook capture on e3, a queen check on c1.",
+   "reanchor": true
   },
   {
    "ply": 62,
@@ -602,7 +642,8 @@
     "Kh2",
     "Qxe3"
    ],
-   "spoken": ""
+   "spoken": "We take another rook — beautiful.",
+   "reanchor": true
   },
   {
    "ply": 63,
@@ -611,7 +652,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "A queen to f6 — sometimes 1100s are damn good; what's the cleanest win?",
+   "reanchor": true
   },
   {
    "ply": 64,
@@ -620,7 +662,8 @@
    "line": [
     "Rf2"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to f2.",
+   "reanchor": true
   },
   {
    "ply": 68,
@@ -632,7 +675,8 @@
     "Qf6",
     "Rb2"
    ],
-   "spoken": ""
+   "spoken": "A queen to b2 is better than taking on d3 — go for mate or the queen trade.",
+   "reanchor": true
   },
   {
    "ply": 72,
@@ -653,7 +697,8 @@
    "line": [
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "A queen to d6 — if you can win the bishop, do it; winning material eases the task.",
+   "reanchor": true
   },
   {
    "ply": 74,
@@ -662,7 +707,8 @@
    "line": [
     "Rd2"
    ],
-   "spoken": ""
+   "spoken": "We win the bishop with a rook to d2 using another pin.",
+   "reanchor": true
   },
   {
    "ply": 75,
@@ -671,7 +717,8 @@
    "line": [
     "Qxf8+"
    ],
-   "spoken": ""
+   "spoken": "A queen capture on f8 with check — we take the bishop next.",
+   "reanchor": true
   },
   {
    "ply": 76,
@@ -680,7 +727,8 @@
    "line": [
     "Kxf8"
    ],
-   "spoken": ""
+   "spoken": "The king recaptures on f8.",
+   "reanchor": true
   },
   {
    "ply": 77,
@@ -689,7 +737,8 @@
    "line": [
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to a6.",
+   "reanchor": true
   },
   {
    "ply": 78,
@@ -698,7 +747,8 @@
    "line": [
     "Qf3"
    ],
-   "spoken": ""
+   "spoken": "A queen to f3 is clinical, preventing a bishop to b7 — because there a rook capture on g2 and a queen to f1 is mate.",
+   "reanchor": true
   },
   {
    "ply": 80,
@@ -708,7 +758,8 @@
     "Bb7",
     "Rxg2+"
    ],
-   "spoken": ""
+   "spoken": "There a rook capture on g2 and a queen to f1 is mate.",
+   "reanchor": true
   },
   {
    "ply": 82,
@@ -718,14 +769,16 @@
     "Kh1",
     "Qf1#"
    ],
-   "spoken": ""
+   "spoken": "Checkmate — a big round of applause to our opponent.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 2221.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "On the opening: a knight to c6 is the best move against a bishop to d3. That's the Rauzer — an underrated Sicilian. White's main try is a bishop to g5, and if White plays f4 like in the Najdorf, that's already bad here, because Black has h6 and a bishop to e7 and White can't play a queen to f3. Against a queen to d2, the knight-takes-e4 tactic wins a pawn, the same theme as the Najdorf. The whole line is a very similar shape to an Accelerated Dragon against the Maroczy: notice how our knight is a key piece, rerouting to c5 or d4 to clamp the weak dark squares. After a queen to a4, the engine move is a knight to d7, and after a queen grab on a7 the correct move is the surprising queen to b6 — Benko-Gambit style, where Black gets long-term queenside counterplay White can never solve, even with queens off, because the b2 pawn is a permanent problem. A key caution: be careful with the knight-takes-c4 tactic — it isn't always as good as it looks. In a 2014 King's Indian of mine, a similar knight-and-bishop grab on a1 backfired to a knight to b2 forcing the rook, then a bishop to h6 and a crushing kingside attack. It only worked for us here because we came out up the exchange with White's kingside bare.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -734,7 +787,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "One clarification: the real Maroczy Bind is a c4 response to the Accelerated Dragon — I was using the term informally for the e4-and-c4 pawns. Notice again how the knight, rerouting to c5 or d4, is what clamps the central dark squares — the main drawback of this White system.",
+   "reanchor": true
   }
  ]
 }

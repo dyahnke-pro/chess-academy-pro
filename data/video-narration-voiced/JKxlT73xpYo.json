@@ -1,10 +1,10 @@
 {
  "videoId": "JKxlT73xpYo",
  "title": "How to Kill the French Defense | A Tactical Showcase | GM Naroditsky’s Theory Speed Run",
- "openingName": "French Defense: Tarrasch Variation (3.Nd2), 7.Ngf3 — theory showcase",
+ "openingName": "French Defense: Tarrasch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:JKxlT73xpYo",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We open e4 and meet a French — e6, preparing to challenge our center with d5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4, grabbing the full center. This is the heart of the French: our broad pawn duo against Black's coming counterstrike."
   },
   {
    "ply": 4,
@@ -33,7 +33,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "d5, and we're at an early crossroads. In earlier speedruns I've recommended the Nimzowitsch Advance — e5, and after c5 you skip the automatic c3 and develop the knight instead, voluntarily giving up the pawn chain and inviting a capture on d4. It's counterintuitive, with a deep positional underpinning, and genuinely dangerous for an unprepared opponent.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -42,10 +43,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "This time the knight to d2 — the Tarrasch, the line played for a lifetime. It straddles the bridge: not as theory-heavy as the knight to c3, not as dry as the Exchange, yet with real venom to crush an underprepared opponent.",
-   "kind": "main",
-   "teaches": "The Tarrasch (3.Nd2) balances low theory upkeep with genuine bite.",
-   "plans": "Nd2, e5, Bd3, c3."
+   "spoken": "But today I'll play the line I'm most comfortable with, the one I've played my whole life — the Tarrasch, the knight to d2."
   },
   {
    "ply": 6,
@@ -54,7 +52,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to d2 is what defines the Tarrasch. It shields e4 without blocking the c-pawn, keeping c3 in reserve to buttress d4.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -64,7 +63,8 @@
     "Nb1",
     "Ng8"
    ],
-   "spoken": ""
+   "spoken": "A quick primer if you don't know the French: against d5 White's most natural, most popular try is a knight to c3.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -73,7 +73,8 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "But a knight to c3 leads to incredibly theoretical waters we don't want to touch with a ten-foot pole, and the Exchange is equally to be avoided. The Tarrasch is the answer.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -82,14 +83,16 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The Tarrasch straddles the bridge — it isn't drowning in theory, yet it carries real venom that lets you crush an unprepared opponent. Against it Black has two main replies.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 205,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 5 5",
    "line": [],
-   "spoken": ""
+   "spoken": "The reply more common in modern grandmaster play is the immediate c5. The more traditional, French-spirited move is different.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -98,7 +101,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "That traditional move is a knight to f6, and in response we push e5, reaching an Advanced-French structure.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -107,10 +111,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Against the knight to f6 the pawn goes to e5 and the structure becomes an Advanced-French shape — Black's f6-knight is chased back and White has the familiar space clamp.",
-   "kind": "main",
-   "teaches": "3...Nf6 4.e5 reaches a French Advance-type structure with a space edge.",
-   "plans": "e5, cramp, develop."
+   "spoken": "e5 gains space and shoves the f6 knight back, locking the center into that Advanced-French shape."
   },
   {
    "ply": 12,
@@ -119,7 +120,7 @@
    "line": [
     "Nfd7"
    ],
-   "spoken": ""
+   "spoken": "The knight retreats to d7, ready to regroup and to help hit our chain with a later c5 or f6."
   },
   {
    "ply": 13,
@@ -128,10 +129,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop comes to d3, its most natural square, eyeing the kingside. Simple, principled development before the central tension arrives.",
-   "kind": "main",
-   "teaches": "Develop the bishop to its best diagonal before the middlegame breaks.",
-   "plans": "Bd3, then meet ...c5 with c3."
+   "spoken": "The main line is the bishop to d3 — the most natural square, and one that already eyes the h7 pawn for a future kingside strike."
   },
   {
    "ply": 14,
@@ -140,7 +138,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black plays c5, striking at the base of our chain, the d4 pawn."
   },
   {
    "ply": 15,
@@ -149,10 +147,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "And here, unlike in the Nimzowitsch line, White does play the pawn to c3. Don't confuse this with the Advance proper — it's a common French structure, but the piece configurations are very different.",
-   "kind": "main",
-   "teaches": "In the Tarrasch, c3 supports d4; the resulting play differs from the Advance despite the pawn shape.",
-   "plans": "c3, hold the centre, develop."
+   "spoken": "And here we do play c3. Don't file this under the Advance variation — this pawn structure shows up across many French lines, and the Advance has very different piece configurations for both sides."
   },
   {
    "ply": 16,
@@ -161,21 +156,23 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6, and there's actually very little in common between this Tarrasch line and a true Advanced French."
   },
   {
    "ply": 9,
    "t": 253,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 5 5",
    "line": [],
-   "spoken": ""
+   "spoken": "The piece placements diverge so much that comparing this to the Advance — the one with an early e5 on move three — only misleads you.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 254.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 4 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Here's the strategic backbone of the whole game. White must defend d4, and there are two ways. The traditional route is a knight to e2, positional and solid; the move I've always played is the sharper knight-g1-to-f3. For a decade or two it caught even strong French experts off guard, and it's still less common than routing the knight to e2 but, to my eye, more dangerous and easier for an intermediate player to handle. After a developing bishop to e7 we castle kingside, and Black's most testing try is the tactical g5, hoping to chase the f3 knight and collapse our grip on d4 — I'll show what's really going on there. In the game Black chooses a5, grabbing queenside space and aiming to clamp with a4, often paired with a queen to b6 hitting d4. We answer a4, freezing that pawn in its tracks and denying Black his main aim. Then comes a capture on d4, which grants Black the b4 outpost — but a newer player overrates that: we have the mirror outpost on b5, and because the center is closed we have the tempi to reroute a knight there via b1 and c3. We also stay alert to the universal French break, f6; a rook to e1 discourages it, since after a trade on f6 the e-file opens onto e6 and the e5 square becomes a glorious knight outpost. Black plants a knight into b4, so the bishop retreats to b1 — still raking the b1-h7 diagonal at h7 for Greek-gift ideas, and now a rook lift, a1-a3, is available under the knight's nose. Then the signature maneuver: the knight from d2 goes f1 and g3, the same Ruy Lopez regrouping, unclogging our pieces and heading for h5 or f6. We add h2-h4 — not to close the kingside with h5, but to prepare a knight leap to g5 and open the diagonal for the queen to h5. A single pawn sacrifice is nothing like a piece sacrifice, so h4 costs us little. Black tries f6; we take on f6 from a position of strength and fight for e5 with a bishop to g5, repurposing a tactical idea into a positional squeeze. When the moment ripens, a knight to e5 breaks through — a fork after a knight capture, and after a bishop takes e5 we recapture with the pawn and the kingside is simply hopeless. The finish is a knight sacrifice on g7, shattering the pawn cover and clearing h5 so the queen crashes in — resignable. One caution the whole time: a premature bishop check on f6 would let Black sacrifice the exchange and run the king toward the center, so we keep our dark-squared bishop alive to bolt the e7 escape. That, in one breath, is how to kill the French.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -184,7 +181,8 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "The time investment to play a knight to c3 successfully is just unrealistic for most people with a job and a family. The knight to d2 strikes the balance — a serious fight for the advantage without ruinous theory. You can learn the Tarrasch and win with it.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -194,14 +192,16 @@
     "Nf6",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "I can't cover even a fraction of this variation's theory or all the ideas in this rich structure, but I'll paint the general picture of what White wants and what you should study.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 2343,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 4 5",
    "line": [],
-   "spoken": ""
+   "spoken": "I still stand by the Nimzowitsch Advance I recommended before — a great line — but I want to give you a choice.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -210,7 +210,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "One road is the push e5.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -219,7 +220,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "After e5, Black replies c5, hitting the chain.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -228,14 +230,16 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "And c3 is the traditional Advance variation — also very good.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 2355,
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "But the line we played previously instead of c3 was a knight to f3.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -244,7 +248,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "That knight-f3 Advance is the Nimzowitsch idea.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -253,7 +258,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "The point: if Black captures on d4, you don't recapture — you aim for rapid development and control of the key central squares, keeping the chain alive to clamp Black down.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -262,14 +268,16 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "You keep the pawn alive to strangle Black's development, but at a high level this line is considered slightly dubious.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 2391,
    "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "With precise play Black even leaves White fighting for equality, which is why at the 2100-plus level I prefer the Tarrasch, the knight to d2.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -279,7 +287,8 @@
     "d5",
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "After the knight to d2 Black has two main continuations plus a few sidelines.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -288,14 +297,16 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The two you'll meet by far the most are a knight to f6 and the immediate central strike c5.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 2401.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "Those are the workhorses — a knight to f6, or c5 straight away.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -304,7 +315,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Against c5 I'd point you to Wesley So's Chessable course on 1.e4 — some of the best analysis of this variation anywhere.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -313,14 +325,16 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "One caveat: Wesley recommends the more traditional, positional knight-e2 setup, whereas I like to play more tactically — so pick and choose from his course.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 2437.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "As an elevator summary of c5: it's the modern main try.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -338,7 +352,8 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "Against c5 I recommend a knight to g1-f3, aiming for quick development while covering both central pawns.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -347,7 +362,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "There's a staggering amount of theory; the modern main line runs through a capture on d4.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -356,7 +372,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "You recapture with the knight on d4.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -365,7 +382,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Then a knight to c6 is the most straightforward continuation.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -374,7 +392,8 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "You bring the bishop out to b5, pinning down the c6 knight.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -383,7 +402,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black answers with a bishop to d7.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -392,7 +412,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "You capture on c6, reaching another very typical structure you must understand to play the Tarrasch well.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -401,21 +422,24 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "Black can recapture with the bishop, but more common lately is the pawn recapture on c6; I faced this recently. The bishop drops back to d3, and I find the position simply easier to play for White.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 2503,
    "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "That's especially true for a newer-to-intermediate player. We'll leave that line for the next time we face the French and focus on the knight to f6, which has plenty to talk about.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 2508,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "As for sidelines, one is a capture on e4.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -424,7 +448,8 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "That capture on e4 is the Rubinstein.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -433,14 +458,16 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "You recapture with the knight on e4. This is favored by French experts like Georg Meier, but it's nothing to fear — Black can fight for equality only with super-accurate play, and White's position is far easier to handle.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 2536.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "None of this should stop you from playing the Tarrasch successfully.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -449,7 +476,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Then a few third-rate lines, like a knight to c6 — the Guimard.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -458,7 +486,8 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "White answers the Guimard with a knight to f3.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -467,7 +496,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "And that line can get very tactical too, with a bishop coming out.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -483,7 +513,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to e7 was also popular.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -492,7 +523,8 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "After a bishop to e7 you play a knight to f3, and it usually transposes.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -501,7 +533,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "It transposes right back — after a knight to f6, e5, bishop to d3, we reach the exact game position.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -510,14 +543,16 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "After the knight to f6, White plays e5 and then the bishop to d3 — reaching the exact position we had in the game.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 2570.5,
    "fen": "rnbqk1nr/ppp1bppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
    "line": [],
-   "spoken": ""
+   "spoken": "So Black can start with a bishop to e7.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -526,7 +561,8 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "You reply with a knight to f3.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -535,7 +571,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "The one real deviation is that Black can play c5 here, leading to a fundamentally different variation.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -544,14 +581,16 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "There you study some theory after a capture on c5. The bottom line: there's a lot to know, but all of these positions are hard to play for Black.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 2586.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "And Black has to know a ton too. In any position where both sides are on their own, my central contention is that it's simply easier to play White here.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -560,7 +599,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "It's easier if you're acquainted with the basic ideas and structures than to defend as Black in most Tarrasch lines. So let's go with the knight to f6.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -570,7 +610,8 @@
     "e5",
     "Nfd7"
    ],
-   "spoken": ""
+   "spoken": "Knight to d7, bishop to d3 — these moves are basically automatic.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -581,7 +622,8 @@
     "c5",
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "There's a sideline where Black plays b6, but it's nothing to write home about.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -590,7 +632,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We'll stick to a knight to c6, knight-g-f3.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -599,7 +642,8 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "A word on Black's traditional tries: the most important one to know is a queen to b6, the old main line and the most testing at an intermediate level, because White should be content to sacrifice the d4 pawn.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -608,10 +652,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The move you absolutely must know is the queen to b6 — the old main line and the most testing try at club level. It leans on d4 and b2, and the appeal of the knight-f3 setup is precisely that White should be happy to sacrifice the d4-pawn for activity.",
-   "kind": "review",
-   "teaches": "...Qb6 is the critical test; the Ngf3 setup answers it with a principled pawn sacrifice.",
-   "plans": "Castle and let d4 go.",
+   "spoken": "The queen to b6 is the classical main line, and being ready to give up the d4 pawn is exactly the appeal of the knight-f3 Tarrasch to me.",
    "reanchor": true
   },
   {
@@ -623,7 +664,8 @@
     "Qd8",
     "Ne2"
    ],
-   "spoken": ""
+   "spoken": "This is why the more positional players prefer a knight to e2: if Black plays the queen to b6 there, White has an extra resource that defends d4 without any sacrifice.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -632,7 +674,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Spot the difference — with the knight already on f3, we have enough defenders of d4: three defenders against three attackers.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -641,10 +684,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "This is why more positional players prefer the knight to e2: with the knight on f3 you can't reroute to b3 because of a fork, and only the awkward queen to a4 holds d4 without the sac. The knight to e2 keeps everything defended and flexible.",
-   "kind": "review",
-   "teaches": "Ne2 defends d4 flexibly, avoiding the Ngf3 lines where Nb3 fails to a fork.",
-   "plans": "Ne2 if you'd rather not sacrifice.",
+   "spoken": "The count holds: three guards, three hitters, so the pawn stands.",
    "reanchor": true
   },
   {
@@ -657,7 +697,8 @@
     "Qd8",
     "Nc1"
    ],
-   "spoken": ""
+   "spoken": "But in this version, if we'd committed the other knight to f3, we couldn't reroute a knight to b3 — it would get forked.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -666,7 +707,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "That's the catch — a knight to b3 walks into a fork.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -677,14 +719,16 @@
     "c4",
     "Bc1"
    ],
-   "spoken": ""
+   "spoken": "Technically you can prop up the pawn with a queen to a4, but that isn't in the spirit of the line.",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 2707,
    "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1B1PPP/R1NQK2R w KQkq - 14 13",
    "line": [],
-   "spoken": ""
+   "spoken": "The queen sits awkwardly there doing nothing — not how you want to play. So why not just capture on c5?",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -693,7 +737,8 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "Because breaking up your own pawn chain like that is strategically undesirable.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -702,14 +747,16 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": ""
+   "spoken": "You can end up losing the e5 pawn with little compensation. There's a line with a queen to e2, the only way to hold both pawns, but after the queen drops to c7 it's already very hard for White to defend.",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 2802.5,
    "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1B1PPP/R1NQK2R w KQkq - 14 13",
    "line": [],
-   "spoken": ""
+   "spoken": "You can play more resiliently, but you have to accept losing the e5 pawn — no fun. That's exactly why you should be at peace with the pawn sacrifice, and the way to do it is to castle kingside.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -718,10 +765,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "So against the queen to b6, castle kingside and be ready to give the pawn. Black takes on d4, and then the d2-knight springs to f3, hitting the queen and re-protecting the pawn in one move — the modern main line.",
-   "kind": "review",
-   "teaches": "The pawn-sac line: O-O, allow ...cxd4, then Nf3 hits the queen and regains control.",
-   "plans": "O-O, then Nf3 with tempo.",
+   "spoken": "So after the queen to b6, the main move is to castle kingside.",
    "reanchor": true
   },
   {
@@ -731,7 +775,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black almost always takes the pawn.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -743,21 +788,24 @@
     "Nxd4",
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "After the captures, the knight from d2 springs to f3, hitting the queen and reclaiming the pawn; the queen retreats to b6 — the main line. Modern engines then found a strong new plan for White, where the old main move was a queen to a4 pressuring the knight.",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 3259,
    "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1B1PPP/R1NQK2R w KQkq - 14 13",
    "line": [],
-   "spoken": ""
+   "spoken": "And if Black plays a queen to c7, there's a classic combination — a knight sacrifice on f7, then a bishop to g6 pinning the queen.",
+   "reanchor": true
   },
   {
    "ply": 23,
    "t": 3260.5,
    "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP1B1PPP/R1NQK2R b KQkq - 13 12",
    "line": [],
-   "spoken": ""
+   "spoken": "That covers what to do after the queen to b6.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -766,10 +814,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The opponent chose the second main line — the bishop to e7 — a solid, flexible developing move that often transposes back into the same structures.",
-   "kind": "main",
-   "teaches": "...Be7 is the solid second main line, frequently transposing.",
-   "plans": "Develop, castle, choose a plan."
+   "spoken": "Our opponent chose the second main line, a bishop to e7.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -778,7 +824,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle, and there's one more critical branch to explore.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -787,10 +834,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Now the scary one: the pawn to g5. There was a time this was considered the outright refutation of the knight-f3 line. The idea is ...g4, throwing the knight off f3 and releasing White's grip on d4 — handled carelessly, the whole centre collapses.",
-   "kind": "trap",
-   "teaches": "...g5-g4 aims to evict the f3-knight and crash White's centre.",
-   "plans": "Meet ...g5 without weakening the king.",
+   "spoken": "That's the move g5 — one of my deeply held opening secrets. There was a time this was considered the outright refutation of the knight-f3 Tarrasch, and every French player should know the idea.",
    "reanchor": true
   },
   {
@@ -801,14 +845,16 @@
     "Re1",
     "g4"
    ],
-   "spoken": ""
+   "spoken": "What makes g5 scary is that Black wants to follow with g4; in some versions it literally traps the f3 knight.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 3300.5,
    "fen": "r1bqk2r/pp1nbp1p/2n1p3/2ppP1p1/3P4/2PB1N2/PP1B1PPP/R1NQ1RK1 w kq - 0 14",
    "line": [],
-   "spoken": ""
+   "spoken": "The larger point is to evict the knight from f3, releasing White's grip on d4 — handle it carelessly and the whole center collapses.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -817,10 +863,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The tempting reply, the pawn to h3, only makes it worse — then ...g4 comes and can rip open the h-file, the last thing you want in front of your own king. Never meet g5 this way.",
-   "kind": "trap",
-   "teaches": "Answering ...g5 with h3 invites ...g4 and a lethal opening of the h-file.",
-   "plans": "Avoid h3/g4 against ...g5.",
+   "spoken": "If White plays h3, that often makes it worse, because g4 comes and can rip open the h-file — the last thing you want.",
    "reanchor": true
   },
   {
@@ -830,14 +873,16 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "After h5 the g4 break looms and the h-file opens.",
+   "reanchor": true
   },
   {
    "ply": 27,
    "t": 3325,
    "fen": "r1bqk2r/pp1nbp1p/2n1p3/2ppP1p1/3P4/2PB1N1P/PP1B1PP1/R1NQ1RK1 b kq - 0 14",
    "line": [],
-   "spoken": ""
+   "spoken": "When I first faced this fifteen years ago, I tried something.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -846,7 +891,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "After h5 I decided to stop the pawns.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -855,7 +901,8 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "I played g4 to halt them — and my opponent unleashed one of the most beautiful ideas ever played against me in the French.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -864,7 +911,8 @@
    "line": [
     "hxg4"
    ],
-   "spoken": ""
+   "spoken": "That opponent was the Indian grandmaster Abhijeet Gupta, and after the game I went back to the drawing board — I got smashed.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -873,7 +921,8 @@
    "line": [
     "hxg4"
    ],
-   "spoken": ""
+   "spoken": "The refutation involved a capture on g4 that tore my kingside apart, and only afterward did I build a genuinely good system against g5.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -882,31 +931,31 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays a queen to b6, and now a pawn sacrifice makes far less sense because our pawn is on g4 and the king is exposed; White is reduced to a queen to a4, and the crushing idea still applies.",
+   "reanchor": true
   },
   {
    "ply": 29,
    "t": 3437.5,
    "fen": "r1bqk2r/pp1nbp2/2n1p3/2ppP1pp/3P2P1/2PB1N1P/PP1B1P2/R1NQ1RK1 b kq - 0 15",
    "line": [],
-   "spoken": ""
+   "spoken": "It was simply crushing — my opponent carried it out and won. That taught me: never meet g5 with h3 and g4.",
+   "reanchor": true
   },
   {
    "ply": 28,
    "t": 3438.5,
    "fen": "r1bqk2r/pp1nbp2/2n1p3/2ppP1pp/3P4/2PB1N1P/PP1B1PP1/R1NQ1RK1 w kq - 0 15",
    "line": [],
-   "spoken": ""
+   "spoken": "That plan weakens the kingside far too much.",
+   "reanchor": true
   },
   {
    "ply": 26,
    "t": 3444.5,
    "fen": "r1bqk2r/pp1nbp1p/2n1p3/2ppP1p1/3P4/2PB1N2/PP1B1PPP/R1NQ1RK1 w kq - 0 14",
    "line": [],
-   "spoken": "The antidote, still rare enough to catch strong players off guard, is the queen to e2. Now the f3-pawn thrust doesn't win material because the queen guards the centre, and White is ready to punish the whole g5-adventure.",
-   "kind": "review",
-   "teaches": "Qe2 is the strong, surprising answer to ...g5 — it defends the centre and turns the tables.",
-   "plans": "Qe2, hold d4, then strike.",
+   "spoken": "So I came back with an idea I still think is very strong and still rare — a queen to e2 — that will catch a lot of players by surprise.",
    "reanchor": true
   },
   {
@@ -918,7 +967,8 @@
     "h5",
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "First, understand what happens if Black plays g4: the pawn is now protected so you can't grab it, but the point of the queen to e2 appears — you play the queen to e3 to defend d4.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -927,7 +977,8 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "Typically Black excitedly plays g4.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -936,7 +987,8 @@
    "line": [
     "Ne1"
    ],
-   "spoken": ""
+   "spoken": "And the queen looks awful because it can be harassed.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -945,10 +997,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "When Black chases the queen with the bishop to g5, out comes the third trump — the pawn to f4. If Black takes en passant, the recapture on f3 leaves a decisive attack on f7; and if he defends, the retreating knight guards d4 in the most harmonious way. Black is already close to lost.",
-   "kind": "trap",
-   "teaches": "After ...Bg5, f4 is the breakthrough — the pressure on f7 becomes decisive.",
-   "plans": "f4, then hammer f7.",
+   "spoken": "A bishop to g5 chases it — I've had exactly this against grandmasters — and it's already almost lost for Black.",
    "reanchor": true
   },
   {
@@ -958,7 +1007,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "Because you pull out your third trump card: the f-pawn, playing f4."
   },
   {
    "ply": 34,
@@ -967,14 +1016,15 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "If Black captures en passant, you recapture with the queen on f3 and the pressure on f7 becomes decisive; and if Black defends instead, the d2 knight can be rerouted to guard d4 in perfect harmony — Black has no more pressure there."
   },
   {
    "ply": 31,
    "t": 3621.5,
    "fen": "r1bqk2r/pp1nbp2/2n1p3/2ppP2p/3P2p1/2PBB3/PP1Q1PPP/R1N1NRK1 b kq - 1 16",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop always has a retreat, so it's never scary; White just enjoys long-term, massive pressure on f7 while Black stays cramped. If Black tries a queen to b6 again...",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -992,10 +1042,7 @@
    "line": [
     "Nc2"
    ],
-   "spoken": "Against the queen to b6 here, drive the knight up to c2 — that kills the bishop-to-g5 chase — and the plan is simply to push the f-pawn to f5, break Black's chain, and checkmate on the kingside. That's the preparation in a nutshell.",
-   "kind": "review",
-   "teaches": "Nc2 stops ...Bg5, then f4-f5 breaks the chain for a kingside mating attack.",
-   "plans": "Nc2, then f5 and attack.",
+   "spoken": "You drive the knight to c2, and now Black has no bishop-g5 harassment. The plan is simply to push the f-pawn to f5, smash the chain, and mate on the kingside. That's my prep in a nutshell — you're welcome.",
    "reanchor": true
   },
   {
@@ -1003,7 +1050,8 @@
    "t": 3677,
    "fen": "r1bqk2r/pp1nbppp/2n1p3/2ppP3/3P4/2PB1N2/PP1B1PPP/R1NQK2R w KQkq - 14 13",
    "line": [],
-   "spoken": ""
+   "spoken": "Now you can already capture on c5. The difference from the version I warned you off — the early queen-b6 version — is that here the e5 pawn lacks sufficient defenders, and discerning that distinction is exactly what separates levels.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -1012,7 +1060,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "It's just awful for Black — a knight to a5, we answer a knight to b3, open the bishop, and Black collapses on all sides. That's g5 in a nutshell.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -1021,7 +1070,8 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Now to our opponent's actual move, a5.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -1030,10 +1080,8 @@
    "line": [
     "a4"
    ],
-   "spoken": "Against Black's pawn to a5, the simple pawn to a4 does the job — no deep preparation required, just fixing the queenside and getting on with it.",
-   "kind": "main",
-   "teaches": "Meet a queenside pawn poke with the simple fixing move a4.",
-   "plans": "a4, then central play."
+   "spoken": "Against a5, a4 is a very simple move you can play without much preparation — that's why I chose it, freezing the pawn.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -1042,7 +1090,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Our opponent follows with a capture on d4. If Black instead plays a queen to b6 here...",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -1051,7 +1100,8 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "We can already capture on c5, because we have sufficient resources to defend the e5 pawn. I had this over the board and won convincingly.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -1060,7 +1110,8 @@
    "line": [
     "Nxc5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on c5.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -1069,7 +1120,8 @@
    "line": [
     "Bc2"
    ],
-   "spoken": ""
+   "spoken": "You play a bishop to c2.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -1078,7 +1130,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "And if the knight returns to d7, no big deal.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -1087,14 +1140,16 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "You just play a rook to e1 with exactly enough defenders to keep the pawn safe. Now — who was paying attention? If instead Black castles kingside here, the strong plan is the very maneuver we played: a knight to f1 and g3.",
+   "reanchor": true
   },
   {
    "ply": 27,
    "t": 3803,
    "fen": "r1bqk2r/1p1nbppp/2n1p3/p1ppP3/P2P4/2PB1N2/1P1B1PPP/R1NQ1RK1 b kq - 0 14",
    "line": [],
-   "spoken": ""
+   "spoken": "That gives a beautiful outpost for the knights; White is better on both wings — the b5 square, the diagonal, attacking chances. A terrible version for Black.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -1103,7 +1158,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "So the capture on d4 is the more natural way for Black to continue.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -1113,7 +1169,8 @@
     "cxd4",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to b4. This position has occurred over 150 times — the highest-rated example being Adams against Caruana, 2009.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -1124,10 +1181,7 @@
     "Nb4",
     "Re1"
    ],
-   "spoken": "Here's the mind-expanding subtlety: after the knight to b4 and the bishop back to b1, castling kingside would be a serious mistake for Black. Commit the king to that side and, with the rook to e1, White's pressure condemns it to a lifetime of misery — the king is actually safer in the centre in this specific position.",
-   "kind": "review",
-   "teaches": "Move-order subtlety: with Nb4/Bb1 in, ...O-O walks the king into a crushing attack.",
-   "plans": "Provoke ...O-O, then Re1 and attack.",
+   "spoken": "Here's a mind-expanding subtlety: I actually think castling kingside is a mistake for Black. After castling, rook to e1, knight to b4, bishop to b1 — the king is committed to a lifetime of misery under our attack.",
    "reanchor": true
   },
   {
@@ -1140,7 +1194,8 @@
     "Kh8",
     "Rf1"
    ],
-   "spoken": ""
+   "spoken": "But after the immediate knight to b4 and our bishop to b1, Black doesn't have to castle kingside — and, believe it or not, the king is safer in the center here than on the kingside.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -1150,7 +1205,8 @@
     "b6",
     "Bb1"
    ],
-   "spoken": ""
+   "spoken": "So the bishop to b1 is a lot less effective in this move order. Black can play b6, and if we try the same rook-e1 idea from the game...",
+   "reanchor": true
   },
   {
    "ply": 41,
@@ -1160,7 +1216,8 @@
     "Ba6",
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "Black meets rook to e1 with a bishop to a6 — fifty games in the database — and after our knight to f1, Black...",
+   "reanchor": true
   },
   {
    "ply": 45,
@@ -1172,14 +1229,16 @@
     "Rc8",
     "Be1"
    ],
-   "spoken": ""
+   "spoken": "...saves a tempo on castling and swings a rook to c8 for immediate queenside pressure. This has happened many times at the top, and after our knight to g3 Black has a crazy-looking resource he wouldn't have if he'd castled.",
+   "reanchor": true
   },
   {
    "ply": 37,
    "t": 3995.5,
    "fen": "r1bqr2k/1p1nbppp/4p3/p2pP3/Pn1P4/3B1N2/1P1B1PPP/R1NQ1RK1 b - - 8 19",
    "line": [],
-   "spoken": ""
+   "spoken": "The lines here are wild — the computer gives White an edge but both sides get ample chances — which is why Adams and others prefer a bishop to b5 and the knight regrouping b1-c3 for a clear positional plus.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -1188,7 +1247,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "With the bishop to b5, White plays on the queenside rather than the kingside. But after Black has castled kingside, rook to e1...",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -1206,7 +1266,8 @@
     "Nb4",
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "...and the knight to b4, the bishop to b1 is a no-brainer, because the king is stuck kingside and we're setting up a massive attack. It all comes down to these tiny move-order subtleties that decide the game at this level.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -1215,10 +1276,8 @@
    "line": [
     "Nb8"
    ],
-   "spoken": "Black plays the knight back to b8 — sensible — and White completes the standard maneuver with the knight to f1, heading for g3. With no queenside play for Black and White poised for a decisive kingside attack, the engine already reads plus two and a half.",
-   "kind": "main",
-   "teaches": "The Nf1-g3 regrouping sets up a decisive kingside attack when Black lacks counterplay.",
-   "plans": "Nf1-g3, then storm the kingside."
+   "spoken": "After a bishop back to e1, Black is borderline lost from a human standpoint, White's attack is so strong. Our opponent sensibly played a knight to b8, and we played the knight to f1.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -1229,17 +1288,16 @@
     "N8c6",
     "Be1"
    ],
-   "spoken": "The bishop to e1 completes the picture — Black is borderline lost from a human standpoint. And note the extra asset: the e5-pawn is a platform for the bishop to leap into f6. All the small move-order subtleties have added up to a winning attack.",
-   "kind": "main",
-   "teaches": "Small accurate move orders compound into a winning kingside attack; e5 gives a Bf6 springboard.",
-   "plans": "Complete the maneuver, break with f5/Bf6."
+   "spoken": "Completing the standard maneuver. The engine already gives White plus two and a half — Black has no queenside play while we're fully positioned for a decisive kingside attack.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 4672.5,
    "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Why allow any of that? And that advanced e-pawn is also a platform for a bishop to leap into f6. Hopefully that wasn't too rambly — that's the Tarrasch in a nutshell.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -1266,7 +1324,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We focused on the second main line, ready to sacrifice the d4-pawn after the queen to b6, and the sharp line with g5 where the queen to e2 is a powerful weapon to have up your sleeve. The pawn to g6 is probably Black's best bet for dynamic equality, with the immediate a5 also interesting — but most players meet the bishop to e7, and against kingside castling you answer with the rook to e1.",
+   "reanchor": true
   }
  ]
 }

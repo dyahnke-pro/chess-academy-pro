@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Tartakower Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:cPVp5TWZR0w",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We play another Caro-Kann — c6."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "d4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "White plays d4 and we answer d5, challenging e4."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to d2. If you want to get better, embrace positions that make you uncomfortable — you never improve at what you avoid."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "We capture on e4, heading for the Tartakower — a line I've played a lot in blitz."
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on e4. The main line for Black is a bishop to f5, and a knight to d7 is the old main line."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "But we play a knight to f6 — old-fashioned wisdom calls it bad because we voluntarily ruin our structure, but strong players including Magnus have taken it up."
   },
   {
    "ply": 9,
@@ -70,7 +70,8 @@
    "line": [
     "Nxf6+"
    ],
-   "spoken": ""
+   "spoken": "White captures on f6.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -79,10 +80,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "Recapturing with the e-pawn defines the Tartakower: Black takes on doubled f-pawns to blast open the e-file and hand the dark-squared bishop a clear diagonal and effortless development.",
-   "kind": "main",
-   "teaches": "Doubled f-pawns are a fair trade for the open e-file and free, harmonious piece play.",
-   "plans": "Develop actively, castle, and work the open e-file."
+   "spoken": "And we recapture with the e-pawn — the Tartakower. Recapturing with the g-pawn instead is the Bronstein, considered too weakening."
   },
   {
    "ply": 11,
@@ -91,7 +89,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to f3. Magnus lost to Duda from here but had a great position — the e-file recapture opens our bishop's diagonal.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -100,7 +99,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "So a very natural bishop to d6."
   },
   {
    "ply": 13,
@@ -109,7 +108,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "White develops a bishop to d3."
   },
   {
    "ply": 14,
@@ -118,7 +117,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle — another natural developing move."
   },
   {
    "ply": 15,
@@ -127,7 +126,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles, which is already inaccurate, because it allows us a very nasty move that's hard to meet."
   },
   {
    "ply": 16,
@@ -136,9 +135,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 pins the knight on f3 to the queen behind it — a standard way to build pressure once White has committed the king.",
-   "kind": "main",
-   "teaches": "Pin the defender to develop with a threat instead of a quiet move."
+   "spoken": "A bishop to g4, pinning the knight. Meeting it with h3 and g4 is tremendously weakening, and retreating the bishop to e2 is far too passive — so this causes White real problems."
   },
   {
    "ply": 18,
@@ -148,7 +145,8 @@
     "Be3",
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "In the Caro-Kann there's often a pawn on c6, so this knight develops to d7.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -157,7 +155,8 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "Black's plan now revolves around improving that d7 knight, which isn't well placed.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -166,7 +165,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "First we drop the bishop to h5."
   },
   {
    "ply": 21,
@@ -175,7 +174,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "This is a Ruy-Lopez-style plan: a rook to e8, a knight to f8, and then to g6 or e6; the secondary idea is to centralize the knight via b6 and d5.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -184,7 +184,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "Let's play a rook to e8 — a good move regardless, putting the rook on a semi-open file."
   },
   {
    "ply": 23,
@@ -193,7 +193,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to g4 — a creative idea I've never seen; it gives us a choice.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -202,7 +203,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "We play a bishop to g6, keeping the tension — and it threatens f5, which would trap White's bishop, while pointing toward the pawn-box structure I love."
   },
   {
    "ply": 25,
@@ -211,7 +212,8 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "White has to play a knight to h4 to hold the balance, since we threatened f5. After a knight capture on g6 we recapture with the h-pawn and get the pawn box.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -220,7 +222,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "We keep improving with a knight to b6 — a bit more active, maybe heading to d5. Another idea is to drop the bishop to c7 and prepare a queen to d6."
   },
   {
    "ply": 27,
@@ -229,7 +231,8 @@
    "line": [
     "Nxg6"
    ],
-   "spoken": ""
+   "spoken": "White captures on g6.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -238,9 +241,8 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "The recapture leaves Black with a solid pawn cube on the kingside — f6, f7, g6, g7 — a compact mass that shields the king while Black plays on the open files.",
-   "kind": "main",
-   "teaches": "A doubled-pawn cluster can be a sturdy defensive cube, not just a weakness."
+   "spoken": "We recapture on g6 — the pawn cube. After a bishop to c7 and a queen to d6, if White plays g3 to block the battery, a rook capture on e3 works because his f2 pawn is overloaded, guarding both g3 and the bishop.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -249,7 +251,8 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "White plays b3 — but a rook capture on e3 wins, since f2 is overloaded. So delaying a knight to d5 is a good idea.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -258,7 +261,8 @@
    "line": [
     "Bc7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to c7 — and delaying a knight to d5 matters, because if we jump there and he retreats the bishop, we lose this tactic.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -268,7 +272,8 @@
     "c4",
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "White plays c4, and we play a queen to d6 — he's already basically losing.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -278,9 +283,8 @@
     "g3",
     "Rxe3"
    ],
-   "spoken": "The pressure cashes in: taking on e3 exploits an overload — the pawn on f2 is guarding two squares at once and cannot hold both, so material falls.",
-   "kind": "main",
-   "teaches": "An overloaded defender guarding two points collapses the moment you strike one of them."
+   "spoken": "If White plays g3, we capture on e3; if f4, we capture on e3 anyway. This was not boring — you can score many nice attacking wins in the Tartakower.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -289,7 +293,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "White finds a queen to e2 — a super move, the only way to stay alive. When attacking, be flexible about converting: a stubborn rook capture on g3 lets his king drop back since h2 is no longer accessible, so we retreat the rook, aware his next move is c5 to win the piece back.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -298,7 +303,8 @@
    "line": [
     "Re4"
    ],
-   "spoken": ""
+   "spoken": "So a rook to e4, preparing to grab as many pawns as possible if he plays c5 — then a capture on d4 leaves us two pawns up and winning even in an opposite-colored-bishop endgame.",
+   "reanchor": true
   },
   {
    "ply": 37,
@@ -307,7 +313,8 @@
    "line": [
     "Bf3"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to f3 — not resilient.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -316,7 +323,8 @@
    "line": [
     "Rxd4"
    ],
-   "spoken": ""
+   "spoken": "We just capture on d4, and now it's over even faster — kudos to him for the queen to e2, but the bishop to f3 blunders.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -325,7 +333,8 @@
    "line": [
     "Qe2"
    ],
-   "spoken": ""
+   "spoken": "White plays a queen to e2. A rook to e8 would be nice but the square is undefended; he's no longer threatening c5, so we have a free hand.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -334,7 +343,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "A queen to d7 prepares the cube, and the knight on b6 is annoying since it blocks d5 — so we bring it back to d7 to centralize. Don't overthink these; there are a million good moves.",
+   "reanchor": true
   },
   {
    "ply": 41,
@@ -343,7 +353,8 @@
    "line": [
     "Rad1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to d1. Taking the rook is bad, because he recaptures and pins our knight.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -352,7 +363,8 @@
    "line": [
     "Bb6"
    ],
-   "spoken": ""
+   "spoken": "A bishop to b6 — how to trade on our terms. Assume his rook takes on d4: we want the bishop to land there, centralizing and threatening a capture on g3, then a knight to e5. No need to be fancy with a rook to h4.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -361,7 +373,8 @@
    "line": [
     "Kg2"
    ],
-   "spoken": ""
+   "spoken": "White plays a king to g2, seeing it — again, we don't have to take his rook; let him improve our position.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -370,7 +383,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "Now we centralize the knight with a knight to e5, and then a rook to d8 controls the d-file.",
+   "reanchor": true
   },
   {
    "ply": 46,
@@ -380,7 +394,8 @@
     "Be4",
     "Rd8"
    ],
-   "spoken": ""
+   "spoken": "White's bishop to e4 and our rook to d8 — a good moment to study how the pawn structure shapes both sides' plans.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -389,7 +404,8 @@
    "line": [
     "Rc1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to c1, sidestepping to keep pieces on.",
+   "reanchor": true
   },
   {
    "ply": 48,
@@ -398,7 +414,8 @@
    "line": [
     "Rd2"
    ],
-   "spoken": ""
+   "spoken": "A rook to d2 almost traps the queen and forces it back to e1 — easy play. We could play f5 first, but it's not necessary.",
+   "reanchor": true
   },
   {
    "ply": 49,
@@ -407,7 +424,8 @@
    "line": [
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "White plays a queen to e1 — like a snake shedding its skin.",
+   "reanchor": true
   },
   {
    "ply": 50,
@@ -416,7 +434,8 @@
    "line": [
     "Qd4"
    ],
-   "spoken": ""
+   "spoken": "We centralize with a queen to d4, piling on the f-pawn — no need to play f5.",
+   "reanchor": true
   },
   {
    "ply": 51,
@@ -425,7 +444,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "White plays c5.",
+   "reanchor": true
   },
   {
    "ply": 52,
@@ -434,14 +454,16 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": ""
+   "spoken": "Can we take it? Yes — after a rook capture on c5 and a queen recapture, our rooks are doubled on the d-file so our d2 rook is defended. He resigns.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 735,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "A nice game. Let's delve in.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -451,7 +473,8 @@
     "dxe4",
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "The Tartakower is named after Savielly Tartakower, a GM famous for his quotes.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -462,7 +485,8 @@
     "Nxf6+",
     "exf6"
    ],
-   "spoken": ""
+   "spoken": "It was actually first played by Horatio Caro himself, in 1898 — people really knew what they were doing. Tartakower played it a lot, Capablanca too, but it didn't catch on until the 70s and 80s, with a recent resurgence.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -471,14 +495,16 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "As you saw, a knight to f3 isn't even an inaccuracy, but it gives Black an easier life by allowing the bishop to g4.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 804,
    "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "That's a beautiful developing square, or White must waste time on h3 creating a hook — so the sophisticated players play c3.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -487,7 +513,8 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "c3 defends the pawn.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -497,7 +524,8 @@
     "Bd6",
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "They play a bishop to d3...",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -515,7 +543,8 @@
    "line": [
     "Qc2"
    ],
-   "spoken": ""
+   "spoken": "...and, as my blitz games show, everybody plays a queen to c2 — the idea being to avoid a knight to f3 because of the bishop to g4, so the queen steps off d1.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -524,7 +553,8 @@
    "line": [
     "Re8+"
    ],
-   "spoken": ""
+   "spoken": "You force Black to create a weakness, and after a rook check on e8 the knight develops to e2.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -542,14 +572,16 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Recently people play the weird-looking h5.",
+   "reanchor": true
   },
   {
    "ply": 17,
    "t": 841.5,
    "fen": "rnbqr1k1/pp3ppp/2pb1p2/8/3P4/2PB4/PPQ1NPPP/R1B1K2R b KQ - 6 9",
    "line": [],
-   "spoken": ""
+   "spoken": "It's hard to explain — doesn't it look self-destructive? The bottom line is that h6 creates too many hooks on the kingside.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -567,7 +599,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White's plan is g4, h4, and g5 — and the moment g5 lands, everything explodes on the kingside.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -587,7 +620,8 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "If Black plays the same way with a pawn on h5, White can even contemplate g4 immediately...",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -597,7 +631,8 @@
     "Bxg4",
     "Rhg1"
    ],
-   "spoken": ""
+   "spoken": "...because after a bishop capture on g4 and a rook to g1, the g-file opens and it's extremely unpleasant — and once g5 comes, the whole kingside explodes against Black.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -613,7 +648,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "So people came up with h5, violating the rule about pushing pawns in front of your king — but the point is that g4 becomes much harder to organize.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -624,7 +660,8 @@
     "Nd7",
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Because you simply capture on g4, which closes the g-file rather than opening it, buying Black time to attack — remember Duda-Carlsen, Carlsen's first loss in two years.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -633,21 +670,24 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Carlsen had a great position and played the rare b5, starting the attack and carving out the light squares.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 941,
    "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Current theory says Black is fine, and after our opponent's setup the position is equal. Let me introduce the pawn cube. Why is that f6 pawn actually good? Think of the snake: when you push the pawn up to attack the bishop, what's left behind is a fully intact structure, so you can do it even with your king on the kingside — it assists the attack, and stops a knight to g5 or e5. With the pawn cube the same idea works with even greater effect: you can push two pawns for attacking purposes without your king becoming weak. Look how safe the king is. The one drawback is that doubled pawns can be clumsy in an endgame. So b3 weakens White; we play a bishop to c7, preparing a queen to d6. White should have tried a rook to e1 so g3 is possible and the bishop is defended — but even then f5 and a queen to h4 pile immense pressure on, and Black is better. It's more positional than tactical, but there are plenty of tactics: against a queen to f3, f5 traps the bishop, and sacrificing it opens nothing because the king is so safe. After c4, a queen to d6, and g3, a rook to e3 — and if he'd played c5, a rook capture on g3, a king to h1, and a very pretty finish, the same rook-and-discovery idea I used to win a game as a 1500 back in 2004. All hail the pawn cube.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 1243.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "At a GM level you don't get to show all these ideas, but at 1600-1700 you can definitely consider this. White doesn't have to play a knight to d2 — he can take on d5.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -656,14 +696,16 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "You can't play a line just for one cool variation — be realistic and know all the lines. Why would White let you get the pawn cube? Many don't understand how good it is, and here his knight on h4 had no other prospect.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 1284.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "Maybe a knight to f5 was an idea, but after a bishop to c7 we still threaten a queen to d6. The most challenging Caro-Kann line is the Advance.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -672,7 +714,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The Advance is the hardest to learn — a ton of theory.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -681,7 +724,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "You've seen me play c5 there, my main line.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -697,7 +741,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "The main move is a bishop to f5, tremendously theoretical.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -722,7 +767,8 @@
     "cxd5",
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "The Exchange Caro with a bishop to d3 can also be dangerous if Black isn't accurate.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -738,14 +784,16 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "The Fantasy with f3 has a bad reputation but is very interesting — MVL won with it in the Candidates, so tactical players can take it up.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 1332.5,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The Two Knights is good too, very popular.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -768,7 +816,8 @@
     "Nf6",
     "Qe2"
    ],
-   "spoken": ""
+   "spoken": "And if you play the Tartakower against the Two Knights, White has an extra option, a queen to e2, which everybody plays now.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -785,7 +834,8 @@
    "t": 1345.5,
    "fen": "rnbqkb1r/pp2pppp/2p2n2/8/4N3/5N2/PPPPQPPP/R1B1KB1R b KQkq - 2 5",
    "line": [],
-   "spoken": ""
+   "spoken": "You've seen me take and go a knight to d7 there — its own theoretical line. And on the rook-to-h4 question: it's tempting to play a fancy move just because the opponent can't take it, but don't — after a rook capture on d4 and a queen to h4, a rook to a1 asks for trouble. Fortunately a rook back to d4 saves it, but the first question with any fancy move is: is it necessary, and are there simpler alternatives? The fancier the move, the higher the chance of a miscalculation.",
+   "reanchor": true
   }
  ]
 }

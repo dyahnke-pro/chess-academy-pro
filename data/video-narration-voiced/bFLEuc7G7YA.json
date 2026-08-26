@@ -1,10 +1,10 @@
 {
  "videoId": "bFLEuc7G7YA",
  "title": "The Alapin Antidote: Smith-Mora's Downfall | Ft. Yasser Seirawan | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Smith-Morra/Alapin transposition (Black)",
+ "openingName": "Sicilian Defense: Smith-Morra Gambit Declined (Alapin)",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:bFLEuc7G7YA",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We answer e4 with c5 — the Sicilian, our fighting reply."
   },
   {
    "ply": 3,
@@ -24,14 +24,15 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 already. This is an anti-Sicilian move — the entry point into the Smith-Morra Gambit, where White throws a pawn at us to rip the position open."
   },
   {
    "ply": 2,
    "t": 28,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Against a quiet knight to f3 our plan would be the Najdorf, but a direct d4 tells us the Morra is coming, and the Morra needs a very different answer.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -40,7 +41,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 is how the Smith-Morra begins. White is about to sacrifice a pawn with c3 to blast the center open and pour pieces down the c- and d-files.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -49,7 +51,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We take, capturing on d4. Now White has a choice — recapture, or slip into an open Sicilian with a knight to f3."
   },
   {
    "ply": 5,
@@ -58,10 +60,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White tries the gambit move order — the pawn to c3, offering the Smith-Morra. There is no need to grab it and play into White's development lead.",
-   "kind": "main",
-   "teaches": "You don't have to accept a gambit — a sound decline can sidestep the attacker's whole idea.",
-   "plans": "Decline by transposing to a structure you know."
+   "spoken": "c3 — the true Morra pawn offer. Here there's almost an ideological choice: grab the pawn and play right into a Morra player's dream, or refuse it and take the fun out of White's whole setup."
   },
   {
    "ply": 6,
@@ -70,10 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 is the antidote: it declines the Morra and transposes straight into an Alapin structure, where White has no dangerous gambit — just an ordinary position.",
-   "kind": "main",
-   "teaches": "Nf6 here converts the Smith-Morra into a harmless Alapin — refute the gambit by transposition.",
-   "plans": "Reach the familiar Alapin and equalise comfortably."
+   "spoken": "The knight to f6 is that refusal. We won't touch the c3 pawn — that's exactly what Morra specialists want. Instead we hit e4 and steer the game somewhere White is far less prepared for."
   },
   {
    "ply": 7,
@@ -82,7 +78,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "e5 lunges forward, kicking our knight. This is the transposition we were after — the pawn structure is now an Alapin, not a gambit."
   },
   {
    "ply": 8,
@@ -91,10 +87,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "After the pawn to e5 and the knight to d5, the position is a normal Alapin Sicilian — comfortable and low-risk for Black, with none of the Morra's initiative to fear.",
-   "kind": "main",
-   "teaches": "Steer a gambit into a quiet known structure and the attacking chances evaporate.",
-   "plans": "Develop soundly; no gambit pressure remains."
+   "spoken": "The knight settles on d5, and we've reached an Alapin Sicilian by force. This is the whole point: instead of memorizing forcing Morra theory where one slip loses in five moves, we've reached a much safer, more understandable structure."
   },
   {
    "ply": 9,
@@ -103,7 +96,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on d4, rebuilding the center. The beauty of this whole line is that you can play it without fear — you don't have to know it to the same razor's-edge depth the accepted Morra demands."
   },
   {
    "ply": 10,
@@ -112,7 +105,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "d6 immediately, chipping away at White's advanced center. We start questioning that e5 spearhead right away rather than letting White sit comfortably."
   },
   {
    "ply": 11,
@@ -121,7 +114,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "A knight to f3 develops and props up e5. Now we have several tries — we could grab on e5 — but the cleanest is the main road."
   },
   {
    "ply": 12,
@@ -130,7 +123,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6 is the main, principled continuation, piling on d4 and finishing our development. Against the standard bishop to c4 there's a rare line — one Sam Shankland showed me — that really tests how deep our opponent's theory runs."
   },
   {
    "ply": 13,
@@ -139,14 +132,15 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "But White plays the bishop to d3 instead of c4. The pause before it tells us they're already out of book — this is just a developing move, nothing special, and crucially it doesn't do what c4 would."
   },
   {
    "ply": 12,
    "t": 133,
    "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 2 7",
    "line": [],
-   "spoken": ""
+   "spoken": "In almost every high-level game the bishop goes to c4 here automatically. Bishop to d3 is a step off the main path.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -155,7 +149,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "Here's why bishop to d3 matters. Our instinct is to trade on e5 and open the center, because when White misplays the Alapin he often bites off more than he can chew. And notice the difference: if the bishop were on c4 and we captured on e5, our knight on d5 would already be hanging — from d3 it isn't, so we've effectively been gifted a tempo. We don't rush the immediate bishop to g4 though, because that hands White a bailout with a capture on d6; and after a trade on e5, White can also answer with a knight taking on e5 and things get very sharp. A knight grab on d4 even runs into a queen check on a4.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -164,14 +159,15 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "So we develop the bishop to g4, eyeing the f3 knight. If White does bail out by capturing on d6, we recapture with the queen and land an ideal isolated-queen's-pawn setup, with our knight already planted on the blockading square in front of that pawn."
   },
   {
    "ply": 13,
    "t": 213.5,
    "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/3P4/3B1N2/PP3PPP/RNBQK2R b KQkq - 3 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The trigger for choosing g4 over trading first is the line where we take on e5 and White answers with the knight — that recapture would rob us of ever getting the bishop out to g4. So we get it out first.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -180,14 +176,16 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "We're developing in a completely principled fashion — a piece toward the center, pressure on the defender of the sacrificed square.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 229,
    "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/3P4/3B1N2/PP3PPP/RNBQK2R b KQkq - 3 7",
    "line": [],
-   "spoken": ""
+   "spoken": "More modest setups with g6 or e6 were also available, but here we're trying to actually punish White for the inaccuracy of bishop to d3, not just equalize.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -196,7 +194,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Whenever you play the bishop to g4 in the Alapin, for either color, you learn to watch for the blindsiding queen to b3. Once our bishop leaves the back rank, the b7 pawn loses its guard and the knight on d5 is undefended — so a queen to b3 lunges at both loose targets at once. But here it just isn't that scary. We have several answers. We can throw in a capture on f3 first — White should recapture with the g-pawn, because grabbing b7 with the queen runs into a knight jump to b4 hitting the queen. Yes, trading our light-squared bishop carries some risk, but White's center is so brittle that ruining the pawns around it is well worth the bishop. Then we choose a calm follow-up: either e6 — sacrificing b7 but cementing that d5 knight and preparing to fianchetto — or the safe retreat of the knight to b6, killing two birds by guarding b7 and stepping to safety. The critical line runs e6, queen takes b7, knight takes d4, and a bishop check on b5 leads by force to a better endgame for us, because White's shattered pawns tell in the long run. Calmer souls can just play a rook to b8 or the queen to d7 — pure Soviet-schoolboy moves — and stay completely fine.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -208,7 +207,8 @@
     "gxf3",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "White does go queen to b3, we chop on f3, White recaptures with the g-pawn, and we commit to e6. Now the sharp line is queen takes b7, knight takes d4, and the check on b5 has to be reckoned with — we capture the bishop, White checks with the queen from b5, and the point I'd missed at first is that we don't have to run the king to e7; we simply block with the queen to d7, and the resulting endgame favors us because White's pawn structure is a wreck. In the game White actually declines the b7 pawn, which makes our path obvious — keep striking at the center with a capture on e5 while White still can't finish developing. The safe alternatives, a rook to b8 or the queen to d7, were both excellent; honestly the queen to d7 would have been far easier to handle. But we're playing maximally principled, trusting the complications, because our lead in development is enormous and White's whole position is on the verge of collapse.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -220,7 +220,8 @@
     "Be3",
     "Bxb4+"
    ],
-   "spoken": ""
+   "spoken": "Our knight is hanging and can't move — a retreat walks into a bishop check on b5 that's mating, and the knight on c6 will be under crushing fire. So the near-automatic move is the bishop check on b4, played essentially without further calculation, because it can only help us: it opens the door to castle kingside — a safety valve, a worst-case escape. Even in the grimmest scenario we could sacrifice the knight on c6, throw a rook to c8 with tempo, and dream of infiltrating on c1 after a knight takes c3. That's all brainstorming, not forced yet.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -229,7 +230,8 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "White blocks with the bishop to d2. The first question I ask is simply: can we castle? If yes, most of our problems dissolve and we never have to shuffle the king to f8. And there's a gorgeous resource lurking — after we castle and White grabs on c6, a rook to c8 sets up a rook lift to c1 with check that isn't a blunder, because the blocking bishop on d2 is pinned. When the king steps to e2 we scoop the rook on h1, and even if White interposes by capturing our bishop, we have one more blow: the knight swings to f4 with a nasty check and then collects the d-pawn with the queen. It all works because White's queenside has never developed.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -238,7 +240,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "So we castle — the answer was yes. This is why we did the hard thinking in the opening's first ten moves: now the play is straightforward, and White is simply lost if the calculation holds. Once a queen takes c6 fails to that rook lift, White's position caves in; his queen goes from greatest asset to greatest liability — stranded offside on the queenside, unable to rejoin the game or defend the loose points scattered across the board. White can't even castle safely: a capture on d2 with a queen check on g5 rakes in the minor pieces, and our knight leaping to f4 hits g2 with mate ideas.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -247,7 +250,8 @@
    "line": [
     "Rg1"
    ],
-   "spoken": ""
+   "spoken": "White tries a rook to g1. Now we shift from sharp tactics to simple technique. Our knight isn't really hanging — we can leave it on c6 — but why would we, when it has a dream square on d4? After the knight lands on d4 we've checked the ideas: if White captures our bishop, we recapture, and should the queen take on b4 our knight jumps to f3 forking the king and rook while unmasking a discovered hit on the d3 bishop. White can't hold everything together.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -256,7 +260,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We take on d4, and there's nothing to fear — a bishop lunge to h6 at g7 is simply illegal, and there are no pieces near our king for White to attack. The one thing to avoid is pushing the f-pawn, which would allow a lateral back-rank mate. White's best try to stave off the doom is a bishop to e4, since it guards the sore f3 pawn; there's no easy way to hold f3 otherwise. Meanwhile we can pile up on the queenside with a rook to b8 or even set about trapping that stranded queen with a quiet a5.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -265,7 +270,8 @@
    "line": [
     "Be4"
    ],
-   "spoken": ""
+   "spoken": "White does defend with the bishop to e4. Now we just maximize — and the straightforward path is a rook to b8, bringing our last piece into the attack with tempo against the offside queen.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -274,14 +280,16 @@
    "line": [
     "Rb8"
    ],
-   "spoken": ""
+   "spoken": "The rook swings to b8. From here it's take the bishop, take the b2 pawn, and our rook roars into the attack while White's queen is hopelessly stranded on a7 — it did its job snatching b7 and a7, but now it can't get home. When you sense the win is close, don't hunt only for mate: look for the move that wins material outright. A knight to c3 is the cleanest, hitting the rook and preparing tactics down the file. There are a dozen winning tries — a queen to h4, a knight to f4 — but the discipline is to choose simple, healthy moves and never blow it chasing a brilliancy: a flashy queen check that lets the king slip out can hand back the whole advantage. White is completely cooked and resigns.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1286,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Now let's walk through the whole game from the start. We faced the Smith-Morra Gambit.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -291,7 +299,8 @@
     "cxd4",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "I recommend the Smith-Morra heartily with White in the speedruns, but to play it at a higher level you'd have to know Mark Esserman's book almost by heart — and, just as importantly, you have to know how it gets declined.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -300,14 +309,16 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The knight to f6 is the main way to decline the Morra, forcibly steering the game into an Alapin structure where the gambit's fireworks simply evaporate.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1308.5,
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "There are other ways to decline the Morra worth knowing about, so we don't stumble into a worse version by accident.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -316,7 +327,8 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "One is a quiet d3. I've experimented with it, but I believe d3 is a mistake — it erases all the tactical potential from the position, and after it Black is simply worse.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -325,7 +337,8 @@
    "line": [
     "Bxd3"
    ],
-   "spoken": ""
+   "spoken": "We'd recapture, picking up the pawn on d3. The trouble is White then gets to install something resembling a Maroczy bind, clamping down on our position.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -334,7 +347,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "An important detail: the freeing break with d5 doesn't work here.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -343,7 +357,8 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "A bishop check on b5 discovers an attack on d5 and simply wins a pawn, so the d5 break is off the table.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -352,14 +367,16 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "After a bishop to d7 White can capture on d7 or on d5. If instead we play the modest d6, White gets an excellent Maroczy bind with c4, and Black ends up playing like a passive Dragon — I used to try this until I realized it just doesn't work. White covers g4 with h3, reroutes the knight via e2 toward g3, expands with f4, and Black runs out of useful moves fast. The bishop pair means nothing against that grip on the center; the engine even likes f3 to smother our light-squared bishop, which has no good home.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1425,
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "It's a very pleasant position for White and a thankless one for Black — which is exactly why I don't recommend meeting the Morra this way.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -368,7 +385,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "You can also try the sharper d5.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -378,7 +396,8 @@
     "exd5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "After White captures on d5, a knight to f6 is interesting — I haven't explored it as deeply.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -387,7 +406,8 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "But a bishop check on b5 is supposed to leave White better, so there's a shadow over the whole idea.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -397,14 +417,16 @@
     "Bd7",
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "There's theory here to dig into on your own, but this line is generally considered dubious for Black. You can also recapture with the queen on d5, which transposes into an Alapin line that's likewise regarded as a bit dubious.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 1456.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "That queen-recapture Alapin can arise by a different move order — d4, both captures on d4, and then Black tosses in e5. It's an interesting line, but after a knight to f3 only White is fighting for the advantage: Black plays a knight to c6, a knight to c3, a bishop to b4, White answers bishop to d2, we capture on c3 and White recaptures — Dubov played this against me in a recent Titled Tuesday. Black is meant to take and reroute a knight to e7, but White is unquestionably the one pressing. A queen check on a4 is Jobava's Chessable recommendation; the queen swings a4-to-b4 to stop castling and pin down the e7 knight, and Black has to contort himself — a knight to c6 loses b7 — so a5 is the best try to stay afloat.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -416,14 +438,16 @@
     "d4",
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "It's rather forcing, and yes, you can equalize — but why bother, when the far more reputable knight to f6 is right there?",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1529,
    "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "What I won't do here is wade into the accepted Morra — that's entirely beyond our scope today. Let's stay on the Alapin.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -432,7 +456,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "After we take on d4, White is in the Alapin structure we care about.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -442,7 +467,8 @@
     "e5",
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "In this position there are essentially three tries for White, two of which often transpose into one another.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -451,14 +477,16 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "One is the capture on d4 we saw in the game; the other is a knight to f3, which is how I like to handle the Alapin — a more flexible move whose whole point is that Black can't grab on c3.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 1562,
    "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
    "line": [],
-   "spoken": ""
+   "spoken": "And then there's the third option — a queen recapture on d4.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -467,7 +495,8 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "The queen takes d4 is considered a sideline, but a very dangerous one: if Black is imprecise, White can whip up a monumental initiative. If you're a Morra player looking to breathe new life into this position, this queen recapture is well worth a look — Esserman gives it some attention, rightly a small slice of a book that's really about the accepted gambit.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -476,7 +505,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Typically Black plays e6 to shore up the knight, and White develops toward the center.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -485,14 +515,16 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3, Black brings out a knight to c6, and the main line is a queen to e4, planting the queen beautifully in the center. Here's how Black gets in trouble: a passive bishop to b7 lets White stand better after c4, or after a queen shift to g4 — a nasty move, because it meets castling with a bishop to h6 winning the exchange, and if it provokes g6 it's a permanent kingside weakness. The engine prefers a bishop to b5 to contest the knight and ease the pressure on e5, but Black stays cramped and can barely find a useful move. The way to a decent position runs through the aggressive f5 — hard to play unless you know it's best. If White dodges by capturing en passant, everything's simple: White loses his center grip and we get a dream French-style setup. So White's queen usually drops back to e2 to hold e5, and now the key is a pawn to b5 — a sacrifice to lure the queen onto a vulnerable square so that a queen to c7 hits e5; White retreats to e2, and the real point of b5 appears: a bishop to a6. Why was b5 needed first? Because a5 alone doesn't get the bishop out efficiently, and b5 also stops c4. The very same idea appears in the Scotch — after e5, queen to e7, queen to e2, knight to d5, c4, the bishop to a6 is the main line, an exact parallel. Then a4 opens the queenside — not for space but concretely: a knight to a5 piles on c4 and b3, White can't defend, a knight takes c4 sacrifice crashes through, and White's queenside collapses. If White never escapes to e2 and grabs on c4 directly, a knight takes e5 works tactically because the c1 bishop is x-rayed. It's a lot of theory, but this is genuinely how Black equalizes and more against the queen recapture.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 2267.5,
    "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3Q4/2P5/PP3PPP/RNB1KBNR b KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "There's even a g5, hitting from the other wing, and an f4 break — none of it pleasant for White. If Black knows this cold, you take all the sting out of the queen recapture.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -501,7 +533,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "There are also more recent innovations for White to be aware of.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -510,7 +543,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "One is a bishop to c4, the choice of many grandmasters lately, while the knight to f3 remains the traditional main line.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -519,14 +553,16 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Even after the bishop to c4 Black is better. We play a knight to c6, White a queen to e4, and the right setup is to reroute a knight to e7 and around to g6, then pile on e5 with a queen to c7. The point is that Black can still play a knight to g5 tactically, and to avoid dropping a pawn White has to capture on c6 and accept a worse endgame. It's a lovely little maneuver — the knight via e7 to g6, and there's nothing White can do about it. If White tries a bishop to f4, then knight to g6, bishop to g3, and the nasty queen to b6 hits the weak b2 pawn, just like in the game; if White defends with the queen to e2, the knight capture on c4 wins the b2 pawn and a rook at the end of the line. White simply can't sustain that e5 pawn; and if he lashes out with f4, it's terribly weakening.",
+   "reanchor": true
   },
   {
    "ply": 8,
    "t": 2398.5,
    "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
    "line": [],
-   "spoken": ""
+   "spoken": "We answer f4 by striking the center at once with d5 and a knight to f5, scooping the pawn with the bishop rather than the queen — White's position just falls apart. Legendary ideas for Black; that's the overview of the queen recapture.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -535,7 +571,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Now back to the actual game: we take on d4, then d6, knight to f3, knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -554,7 +591,8 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We've reached this position from the other side, and the bishop to c4 is the main line.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -563,7 +601,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "Bishop to c4 is the main road, but I want to show you one more idea — what I'd actually recommend in this exact position.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -573,14 +612,16 @@
     "dxe5",
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "It's a hidden line: a capture on e5 and the recapture on e5, which I think offers excellent practical chances.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 2424.5,
    "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/2BP4/5N2/PP3PPP/RNBQK2R b KQkq - 3 7",
    "line": [],
-   "spoken": ""
+   "spoken": "First, take a step back — what's the main line here, the one every book gives?",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -589,7 +630,8 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "It's a knight retreat to b6, met by a bishop to b5.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -598,7 +640,8 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "A bishop to b5, with an older bishop-to-b3 as the alternative.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -610,7 +653,8 @@
     "Nb6",
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "Nowadays you almost always get a very long forcing sequence out of this.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -622,7 +666,8 @@
     "dxe5",
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "It runs through a string of trades and a knight to c3 with e6.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -634,14 +679,16 @@
     "Qxd7",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "And you land in a well-known isolated-queen's-pawn position.",
+   "reanchor": true
   },
   {
    "ply": 13,
    "t": 2444.5,
    "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/2BP4/5N2/PP3PPP/RNBQK2R b KQkq - 3 7",
    "line": [],
-   "spoken": ""
+   "spoken": "But there are sidelines nobody talks about enough that give Black great practical chances and essentially equalize. One is to capture on e5 and follow with a bishop to e6 — an almost unknown variation. The point is that after White castles you play g6: yes, you block your own bishop's diagonal, but you can still fianchetto around it. It looks awkward because White can try a knight to g5, but the standoff between the bishops favors us. If White stubbornly plays a knight to c3 he loses a piece — we take on c3, and after the recaptures there's an intermezzo on e2 that wins the bishop with an extra piece. So the whole line is aimed at White's knight; it can only limp to d2, a very awkward square, and then a bishop to g7 hits the center pawn. A knight to g5 is the principled challenge.",
+   "reanchor": true
   }
  ]
 }

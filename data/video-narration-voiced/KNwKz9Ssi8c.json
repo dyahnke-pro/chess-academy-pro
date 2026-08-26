@@ -1,10 +1,10 @@
 {
  "videoId": "KNwKz9Ssi8c",
  "title": "Top Theory Speedrun | Sicilian Defense, Alapin Variation",
- "openingName": "Sicilian Defense: Alapin Variation (2.c3)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:KNwKz9Ssi8c",
  "moves": [
   {
@@ -17,7 +17,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "The Alapin — the pawn to c3 and then e4 against the Sicilian, and Black replies with the pawn to d5, an impressive choice at this level."
   },
   {
    "ply": 7,
@@ -28,7 +28,7 @@
     "Qxd5",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We capture on d5, the queen recaptures, and we play the pawn to d4, gaining the centre with tempo."
   },
   {
    "ply": 9,
@@ -38,7 +38,7 @@
     "Nf6",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6, we play the knight to f3 — a famous, well-studied theoretical position."
   },
   {
    "ply": 10,
@@ -47,10 +47,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 is the solid main line, reaching a famous, deeply-studied theoretical position — Black shores up d5 and prepares normal development.",
-   "kind": "main",
-   "teaches": "e6 is the reliable Alapin main line, a sound small-centre setup for Black.",
-   "plans": "Develop harmoniously; White will manoeuvre for the squeeze."
+   "spoken": "Black plays the pawn to e6 — a good move."
   },
   {
    "ply": 11,
@@ -59,7 +56,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "The knight to a3 — I've had this against grandmasters in serious games."
   },
   {
    "ply": 12,
@@ -68,7 +65,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the pawn to a6 — one of the two best moves here."
   },
   {
    "ply": 13,
@@ -77,10 +74,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "The knight route to a3 and then c4 is the heart of White's squeeze — heading for the b6- and d6-outposts and cramping Black's queenside. This is how you throttle the Sicilian slowly.",
-   "kind": "main",
-   "teaches": "The Na3-Nc4 manoeuvre targets b6/d6 — a positional clamp on Black's queenside.",
-   "plans": "Land the knight on c4 and press the weak dark squares."
+   "spoken": "The knight to c4. Now, how does Black defend the b6-square?"
   },
   {
    "ply": 14,
@@ -89,10 +83,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "Black defends the b6-square the right way — with the knight to d7, guarding while developing. Both jobs in one move.",
-   "kind": "main",
-   "teaches": "Meet a positional threat with a move that also develops, not a passive pawn move.",
-   "plans": "(For White:) restrict with a4 and keep squeezing."
+   "spoken": "The knight to d7 — defending b6 while developing, and Black's next is likely the pawn to b5, chasing the knight from c4 and preparing the bishop to b7. This is exactly where opening books earn their keep: you look up what the authors recommend."
   },
   {
    "ply": 15,
@@ -101,14 +92,15 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e2 — the book's main line, squeezing the Sicilian."
   },
   {
    "ply": 14,
    "t": 1348.5,
    "fen": "r1b1kb1r/1p1n1ppp/p3pn2/2pq4/2NP4/2P2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The authors note the pawn to a4 deserves attention, restricting Black's queenside.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -117,7 +109,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "But the main line is the bishop to e2, with a lot of analysis to follow.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -126,7 +119,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black captures on d4."
   },
   {
    "ply": 17,
@@ -135,7 +128,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight on d4. Now the queen grabbing g2 allows the bishop to f3 with a massive initiative."
   },
   {
    "ply": 19,
@@ -145,17 +138,16 @@
     "Qxg2",
     "Bf3"
    ],
-   "spoken": "The greedy capture on g2 is the trap: it runs straight into the bishop to f3, which traps the queen's escape and hands White a massive initiative and full compensation for the pawn.",
-   "kind": "trap",
-   "teaches": "Grabbing g2 with the queen often loses to Bf3 skewering it against the rook — count before you grab.",
-   "plans": "(Black must instead break with e5.)"
+   "spoken": "After the queen takes g2, the bishop to f3 gives White huge compensation for the pawn.",
+   "reanchor": true
   },
   {
    "ply": 17,
    "t": 1376,
    "fen": "r1b1kb1r/1p1n1ppp/p3pn2/3q4/2NN4/2P5/PP2BPPP/R1BQK2R b KQkq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "The upshot is White has huge compensation, and the main line is the pawn to e5, trying to force the queen trade.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -164,10 +156,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "The critical try is the pawn to e5, aiming to force the queen trade and relieve the pressure — and White sinks a knight into f5, keeping the bind and the initiative.",
-   "kind": "main",
-   "teaches": "When the defender tries to trade queens to escape a bind, keep pieces active — the knight to f5 keeps the squeeze.",
-   "plans": "Plant the knight on f5 and maintain the clamp."
+   "spoken": "The pawn to e5.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -176,7 +166,8 @@
    "line": [
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "And the knight sinks into f5.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -186,7 +177,8 @@
     "Qxd1+",
     "Bxd1"
    ],
-   "spoken": ""
+   "spoken": "After the queen trade, White has a slight advantage, per a correspondence game.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -195,7 +187,8 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the pawn to g6.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -204,21 +197,24 @@
    "line": [
     "Nfd6+"
    ],
-   "spoken": ""
+   "spoken": "The knight to d6 with check — White is slightly better. If Black tries the knight to c5, White drops the knight back to e3, forces the queen trade, and stays slightly better thanks to the improved knight on c4.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 1431,
    "fen": "rnb1kb1r/1p3ppp/p3pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "That's what opening study looks like past a certain level — though I wouldn't tell a 600-rated player to buy such a book and dig for hours.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1433.5,
    "fen": "rnb1kb1r/pp3ppp/4pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R b KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The pawn to a6 might not fully equalize.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -227,7 +223,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black captures on d4, which the engine supports. This book is from 2020 — engines have improved, but a book past 2015 by a solid grandmaster is still a reliable base.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -236,7 +233,8 @@
    "line": [
     "Nb5"
    ],
-   "spoken": ""
+   "spoken": "After the capture on d4 we play the knight to b5, threatening the knight to c7.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -245,7 +243,8 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Here came a big mistake — the bishop to d6. Conceptually it defends c7 while developing, but doing so with the bishop is very inefficient.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -254,7 +253,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "Because of the nasty response, the bishop to c4.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -264,7 +264,8 @@
     "Bf8",
     "Bf1"
    ],
-   "spoken": ""
+   "spoken": "So what was the correct move?",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -273,21 +274,24 @@
    "line": [
     "Na6"
    ],
-   "spoken": ""
+   "spoken": "The only correct move is the knight to a6 — a ubiquitous idea whenever a knight lands on b5, just like in the totally unrelated Jobava London.",
+   "reanchor": true
   },
   {
    "ply": 17,
    "t": 1527.5,
    "fen": "rnb1kb1r/pp3ppp/4pn2/1N1q4/3p4/2P2N2/PP3PPP/R1BQKB1R b KQkq - 5 9",
    "line": [],
-   "spoken": ""
+   "spoken": "The knight to a6 is a fine square from which to cover the c7-square.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1532.5,
    "fen": "rnb1kb1r/pp3ppp/4pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R b KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The queen to d7 is the move in a different position.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -296,7 +300,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "That's if Black plays the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -305,7 +310,8 @@
    "line": [
     "Nb5"
    ],
-   "spoken": ""
+   "spoken": "And White plays the knight to b5.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -314,21 +320,24 @@
    "line": [
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "Then the queen to d7 is the topical equalizing try — but do your own research.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 1549.5,
    "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
    "line": [],
-   "spoken": ""
+   "spoken": "So the capture on d4, the knight to b5, and the knight to a6 is the main line, where White plays the queen or knight to take d4 and is solidly better. The authors give the bishop to e7, the bishop to e5 with check, the bishop to d7, and a tension-keeping queen to e2, leaving Black cramped with a vulnerable queen — once both sides castle, a rook to d1 causes real anguish. The bishop to d6 instead runs into the bishop to c4 with massively unpleasant consequences, and the king to d8 to defend c7 is a huge concession, at which point we just take on d4 and keep developing. After the bishop to c4 and the queen to e4 with check, the bishop to e3 is a beautiful theoretical move. The engine likes the queen to d4, but note a hidden winning move — not f4, which fails to the capture on d4, because you mustn't stop calculating just because you win a rook; instead the knight to f3 prevents the capture on d4, and Black must play a6, dropping a pawn into a technically winning endgame.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 1708,
    "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "I didn't spot the knight to f3 from a distance, but I still like the bishop to c4. The bishop-to-e3 idea also features when Black plays the pawn to g6.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -337,7 +346,8 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "The pawn to g6 is a viable sub-variation of the d5 line.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -346,7 +356,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "After the knight to f3 and the bishop to g7.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -355,7 +366,8 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g7.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -364,7 +376,8 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "White again plays the knight to a3.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -373,7 +386,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "There's an old line where White captures on d4.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -382,7 +396,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "Now the bishop to c4 — a move we didn't play in the game, but the position is different.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -391,7 +406,8 @@
    "line": [
     "Qe4+"
    ],
-   "spoken": ""
+   "spoken": "And after the queen to e4 with check, if you've never seen it, a stunning idea follows.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -400,7 +416,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White's move is the bishop to e3 — actual theory.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -409,7 +426,8 @@
    "line": [
     "dxe3"
    ],
-   "spoken": ""
+   "spoken": "After Black takes on e3 — an undeveloped queen in the centre always invites tactics.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -418,7 +436,8 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "But not the check on b5.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -427,7 +446,8 @@
    "line": [
     "Kf8"
    ],
-   "spoken": ""
+   "spoken": "The king would step aside.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -436,14 +456,16 @@
    "line": [
     "Qd8#"
    ],
-   "spoken": ""
+   "spoken": "There's no mate there.",
+   "reanchor": true
   },
   {
    "ply": 17,
    "t": 1758,
    "fen": "rnb1k1nr/pp2ppbp/6p1/1B6/4q3/N1P1pN2/PP3PPP/R2QK2R b KQkq - 1 9",
    "line": [],
-   "spoken": ""
+   "spoken": "The check on b5 is easily met.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -452,7 +474,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The check on b5 is easily parried by the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -462,7 +485,8 @@
     "Bc4",
     "Nb8"
    ],
-   "spoken": ""
+   "spoken": "The move is the bishop takes f7.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -471,7 +495,8 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f7 with check — a stock tactic.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -481,14 +506,16 @@
     "Kxf7",
     "Ng5+"
    ],
-   "spoken": ""
+   "spoken": "And if the king recaptures, it's forked by the knight to g5.",
+   "reanchor": true
   },
   {
    "ply": 21,
    "t": 1769.5,
    "fen": "rnb1k1nr/pp2pBbp/6p1/8/4q3/N1P1pN2/PP3PPP/R2QK2R b KQkq - 0 11",
    "line": [],
-   "spoken": ""
+   "spoken": "Most importantly, if the king goes to f8 instead.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -497,7 +524,8 @@
    "line": [
     "Kf8"
    ],
-   "spoken": ""
+   "spoken": "The king to f8.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -506,7 +534,8 @@
    "line": [
     "Qd8+"
    ],
-   "spoken": ""
+   "spoken": "There's the extra check on d8 — without which the whole line would fall apart.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -515,7 +544,8 @@
    "line": [
     "Kxf7"
    ],
-   "spoken": ""
+   "spoken": "Forcing the king to take on f7.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -524,14 +554,16 @@
    "line": [
     "Ng5+"
    ],
-   "spoken": ""
+   "spoken": "And the knight to g5 wins the queen with mate.",
+   "reanchor": true
   },
   {
    "ply": 15,
    "t": 1783.5,
    "fen": "rnb1k1nr/pp2ppbp/6p1/8/2Bpq3/N1P1BN2/PP3PPP/R2QK2R b KQkq - 3 8",
    "line": [],
-   "spoken": ""
+   "spoken": "So the beautiful bishop to b3, and because of the threat of taking f7.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -540,7 +572,8 @@
    "line": [
     "Nh6"
    ],
-   "spoken": ""
+   "spoken": "Black is forced to spend a tempo on the knight to h6.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -549,21 +582,24 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "And White simply recaptures on d4 — better by modern theory, thanks to the lead in development.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 1803,
    "fen": "rnb1k1nr/pp2ppbp/6p1/8/2Bpq3/N1P2N2/PP3PPP/R1BQK2R w KQkq - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop to b3 is a known idea in that different position — but in our game the knight takes d6 just wins, no calculation needed. The bishop to d6 and the king to e7 were the decisive mistakes; Black is completely lost given the wretched king. Even against a Magnus-level defence with the queen to g6, the knight to f5 with check doesn't work, and the engine's brute-force route is the bishop back to d3 to unpin, then the check on f5 leads to spectacular mating lines with the pieces in perfect coordination. The human moves are the queen to b3 or f3, or a slow h3 — all keeping a huge advantage. And after the pawn to e5 and the bishop to g5, the game ends at once; after the queen to g6, the rook takes c5 with check, the king to f8, and the knight to e6 with check picks up the rook. You simply can't survive as Black without developing.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 2100.5,
    "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "A simple game that made for a nice theory discussion — an introduction to the Alapin, or Elephant Sicilian, with much more to come.",
+   "reanchor": true
   }
  ]
 }

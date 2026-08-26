@@ -1,0 +1,311 @@
+{
+ "videoId": "u6uLgifbn5I",
+ "title": "Down a Bishop!? | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Ponziani Opening",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:u6uLgifbn5I",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 203,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 206,
+   "fen": "rnbqkbnr/pppp1ppp/B7/4p3/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "The opponent throws in an unusual bishop-to-a6 — a positional sacrifice, aiming either to wreck our structure or to drag our knight off the centre. Odd, but genuinely sensible.",
+   "kind": "main",
+   "teaches": [
+    "a positional piece sacrifice"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 278,
+   "fen": "r1bqkbnr/pppp1ppp/n7/4p3/4P3/8/PPPP1PPP/RNBQK1NR w KQkq - 0 3",
+   "line": [
+    "Nxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 290,
+   "fen": "r1bqkbnr/pppp1ppp/n7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "We recapture, but this will be hard to come back from — we've given up our light-squared bishop, the one that so often fuels a kingside attack, so attacking chances will be scarce.",
+   "kind": "main",
+   "teaches": [
+    "losing the attacking bishop"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 312,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "Nb8"
+   ],
+   "spoken": "When you're down material, your first aim is to create difficulties — keep as many pieces on the board as you can and generate complications, so your opponent gets a chance to go wrong.",
+   "kind": "plan",
+   "teaches": [
+    "create difficulties when worse"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 362,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 367,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Best is to steer into a Ponziani with c3, preparing a quick d4 to fight for the centre — and perhaps to throw an unprepared opponent off. It's worth a bishop for two tempi and a fresh problem to solve.",
+   "kind": "plan",
+   "teaches": [
+    "the Ponziani try"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 396.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 402.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 426,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Don't defend the e-pawn passively with a rook or d3 — play d4, right in the Ponziani spirit. The point: if he captures, we push on to e5, a common gambit motif; and a knight grab on e4 is harmless, met by taking on e5 or by d5.",
+   "kind": "main",
+   "teaches": [
+    "d4 and the e5 push"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 445.5,
+   "fen": "r1bqk2r/pppp1ppp/2nb1n2/4p3/3PP3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop to d6 almost hands the piece back and hands us a big lead in development, because it blocks in his other bishop. The tactical idea is to trade twice on e5, then f4 to shove the bishop back, then e5 — though it doesn't quite win a piece because of a bishop check on c5 and a knight jump to e4. So keeping the tension with the bishop to g5 is the sober alternative.",
+   "kind": "plan",
+   "teaches": [
+    "the f4 tactic and its flaw"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 542.5,
+   "fen": "r1bqk2r/pppp1ppp/2nb1n2/4P3/4P3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 679,
+   "fen": "rnbqkbnr/pppp1ppp/B7/4p3/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 686.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "Nxa6",
+    "Nf3",
+    "Nb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 688,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 689.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "Nc6",
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 691,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 692,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 694,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 697.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 3 4",
+   "line": [
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 699,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "In the main-line Ponziani, after c3, the knight to f6 and d4, if he captures we push e5 into tremendous complications — this is my own US Championship game.",
+   "kind": "review",
+   "teaches": [
+    "the Ponziani main line"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 702,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "exd4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 712,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Black's most reliable defence is the knight to d5, which resembles an Alapin Sicilian with the whole structure shifted — he has the c-pawn instead of the e-pawn.",
+   "kind": "review",
+   "teaches": [
+    "the Nd5 defence"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 724.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/2Bp4/2P2N2/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Against it the move is the bishop to c4, Smith-Morra style; after the knight to b6 and the bishop to b3, it's interesting complications, objectively equal.",
+   "kind": "review",
+   "teaches": [
+    "Bc4 vs Nd5, roughly equal"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 728,
+   "fen": "r1bqkb1r/pppp1ppp/1nn5/4P3/3p4/1BP2N2/PP3PPP/RNBQK2R b KQkq - 4 7",
+   "line": [
+    "Nb6",
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 740,
+   "fen": "r1bqkb1r/pppn1ppp/2n5/3pP3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 3 9",
+   "line": [
+    "d5",
+    "Bc4",
+    "Nd7",
+    "Bf1"
+   ],
+   "spoken": "Black's other main try is d5, where White has the odd-looking queen to a4, pinning the bishop. All told the Ponziani is a fine interesting sideline if you want an alternative to the Ruy or Italian without going as wild as the King's Gambit.",
+   "kind": "review",
+   "teaches": [
+    "the d5 line and Qa4 pin"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 796.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/2Bp4/2P2N2/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 850,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

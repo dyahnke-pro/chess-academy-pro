@@ -1,10 +1,10 @@
 {
  "videoId": "KwbAHRLJ1RY",
  "title": "Why you CHEATING!? | Ruy Lopez | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Ruy Lopez, Exchange Variation",
+ "openingName": "Ruy Lopez: Exchange Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:KwbAHRLJ1RY",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, e5."
   },
   {
    "ply": 3,
@@ -24,14 +24,15 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3."
   },
   {
    "ply": 2,
    "t": 27.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The most basic openings are the ones where you copy your opponent's move — e4 and e5, or d4 and d5.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -40,7 +41,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 — of course we play the knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -49,7 +51,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6."
   },
   {
    "ply": 5,
@@ -58,7 +60,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "The bishop to b5 — the Ruy Lopez, also known as the Spanish, the most popular opening at the highest levels, around for over 500 years and named after a priest who extolled it in the 1500s. White develops a piece to do something — here the bishop pressures the knight, and since the knight defends the pawn, indirectly White pressures the pawn."
   },
   {
    "ply": 6,
@@ -67,7 +69,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We follow the main line with a6, chasing the bishop away from b5. White must decide: take on c6 — the Exchange Variation — or drop the bishop back to a4."
   },
   {
    "ply": 7,
@@ -76,7 +78,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes c6 — a legitimate move. Aren't we blundering a pawn if White then grabs e5? It's actually a trap a lot of beginners miss. Which pawn do we recapture with?"
   },
   {
    "ply": 8,
@@ -85,14 +87,15 @@
    "line": [
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "The queen to d4 — to enable that, we have to recapture with the d-pawn. There's a rule to take toward the centre, but it's highly overrated; always weigh the pros and cons."
   },
   {
    "ply": 7,
    "t": 178.5,
    "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Taking toward the centre would be the b-pawn, but a move that follows the rules isn't necessarily good —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -101,9 +104,8 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "Recapturing with the d-pawn opens the diagonal for the light-squared bishop — in the Exchange Ruy, Black willingly doubles the c-pawns to speed development and use the bishop pair.",
-   "kind": "main",
-   "teaches": "Recapture to activate a piece and gain the bishop pair, accepting a structural blemish."
+   "spoken": "— the d-pawn recapture opens the bishop for quicker development and, more importantly, takes the sting out of the knight takes e5, because we bring our queen up to d4.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -112,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "He knows not to take the pawn, and he castles. Now we have to do something about the e5-pawn, which is hanging — the knight takes e5 is a threat. Many ways to defend it: directly with f6 or the bishop to d6, or indirectly with the bishop to g4, pinning the knight. I'll play the old main line —"
   },
   {
    "ply": 10,
@@ -121,7 +123,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "— f6, historically considered the most solid response to the Exchange Variation, even though it violates the basic rules of development."
   },
   {
    "ply": 11,
@@ -130,14 +132,15 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4. It makes Ben Finegold cringe, and where is the knight going to go —"
   },
   {
    "ply": 10,
    "t": 276,
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "— do we just not care about developing our knight?",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -146,7 +149,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "That's why I'm playing this — to explain a couple of specific properties that make f6 not only possible but quite effective. d4 is correct, and it's an important moment: if we take on d4 we play into White's hands, opening the centre. Having played f6 we've physically weakened our king, and we've developed nothing — the one piece we developed was exchanged — so it's important to keep the centre closed, or better, trade queens, since trading queens makes it less likely your opponent checkmates you.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -155,9 +159,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Bishop to g4 pins the knight on f3 — with the e5-pawn firmly held, Black leans on the bishop pair to create pressure and tie White's pieces down.",
-   "kind": "main",
-   "teaches": "Use a bishop pin to restrain the opponent's knight and exploit the two bishops."
+   "spoken": "So the best move, the one I just mentioned, is the bishop to g4 — pinning the knight, since behind it stands the more valuable queen, so the knight can't move."
   },
   {
    "ply": 13,
@@ -166,14 +168,15 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "c3 — also a good move, reinforcing the d4-pawn."
   },
   {
    "ply": 12,
    "t": 366.5,
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Had White taken on e5, we'd have traded queens and recaptured — I'll talk about that endgame after the game.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -182,7 +185,8 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "c3 reinforces the d4-pawn. Now we develop our pieces — nothing extraordinary, but there's a really cool move I remember analyzing —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -191,9 +195,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Bishop to d6 is the classic Exchange setup — it guards e5 and eyes the kingside, completing a harmonious, solid deployment for Black.",
-   "kind": "main",
-   "teaches": "Place the dark-squared bishop where it both defends the center and points at the enemy king."
+   "spoken": "— most people play the bishop to d6, and that's what we play too, for solid, simple chess, though it's not the move I actually play over the board; I'll show that after."
   },
   {
    "ply": 15,
@@ -202,7 +204,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "The knight to d2 — our opponent continues developing well, and we should keep developing too."
   },
   {
    "ply": 16,
@@ -211,7 +213,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "We need to develop the knight from g8, our last piece preventing castling. The knight to h6 is awkward — you don't usually develop knights to the rim — so the knight to e7."
   },
   {
    "ply": 17,
@@ -220,7 +222,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "h3 — he's playing all the top theoretical moves. As a beginner there's a temptation to trade the knight on f3, but —"
   },
   {
    "ply": 18,
@@ -229,7 +231,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "— there's no need: the bishop was pinning White's knight to the queen, a valuable bishop, so we simply drop it back to h5, preserving the pin. Retreating moves are never inherently bad."
   },
   {
    "ply": 19,
@@ -238,14 +240,15 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "It's perfectly acceptable. As a beginner you might fear g4 chasing that bishop away —"
   },
   {
    "ply": 18,
    "t": 502.5,
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "— but g4 pushes a pawn in front of your own king, and when you push pawns in front of your own king, it becomes more exposed —",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -254,7 +257,8 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "— and those pawns become easier to attack; g4 would play right into our hands.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -263,7 +267,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "The pawns come off; we simply recapture with the f-pawn, and I think the queen to b3 is the theoretical move."
   },
   {
    "ply": 21,
@@ -272,7 +276,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4 — I already don't know the theory here, but it's also very good."
   },
   {
    "ply": 22,
@@ -281,7 +285,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Let's figure out this position. There's no problem — we just castle, and we're not blundering our bishop, because the c7-pawn guards the bishop on d6. By castling we exert more pressure on the knight on f3, still pinning it. But the queen to b3 is a very powerful move: it sets up an x-ray against our king and unpins the knight, which can now move without fear of losing White's queen. Our top priority is to deal with that x-ray, which in many cases leads to a discovered check — White threatens the knight takes d6 with a devastating check."
   }
  ]
 }

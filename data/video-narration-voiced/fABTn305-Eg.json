@@ -1,0 +1,316 @@
+{
+ "videoId": "fABTn305-Eg",
+ "title": "Castle Queenside!!? | Sicilian Defense: Grand Prix Attack | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defense: Grand Prix Attack (Accelerated Dragon)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:fABTn305-Eg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 21,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "We meet the king's-pawn opening with the Sicilian and settle in for a quiet, principled game.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 26,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The queen's knight to c3 is a rare guest here. The rule of thumb against it: play the same line you'd choose in the open Sicilian, because White can still slide the king's knight out and push the d-pawn to transpose straight back into one. A Najdorf player answers with d6, a Taimanov or Kan player with e6 — pick the matching setup or you risk getting move-ordered into a line you don't actually play. For an Accelerated Dragon there's an underrated try that dodges a mountain of theory.",
+   "teaches": [
+    "transposition awareness",
+    "move-order traps"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 112,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The immediate g6 flies under the radar. It sidesteps all the Nc6, Bb5 Rossolimo-style theory you'd otherwise have to know, and it's perfectly sound — a bishop sortie to b5 makes no sense against this move order.",
+   "kind": "main",
+   "teaches": [
+    "fianchetto setup"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 121,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White transposes into the Grand Prix Attack. It shares the DNA of the Closed Sicilian, but where the Closed version fianchettoes and plays positionally, the Grand Prix goes for the throat — the light-squared bishop swings to c4, often after a check on b5, to lean on the f7-square. It's a genuinely scary weapon against a less experienced Sicilian player.",
+   "teaches": [
+    "Grand Prix vs Closed Sicilian",
+    "the f7 target"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 141,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "We complete the fianchetto, exactly the setup we'd want whether we'd started with the knight or with g6.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 153,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Against the knight coming to f3 we assemble the structure regarded as Black's best answer to the Grand Prix — and it doubles as a recipe against the Closed Sicilian too.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 203.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 3 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "First things first, develop. The queen's knight to c6 is the most flexible start — it commits to no pawn move yet and simply waits to see where White's pieces go.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 211,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/1Bp5/4PP2/2N2N2/PPPP2PP/R1BQK2R b KQkq - 4 5",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "Now the bishop on b5 tells us more about White's plan. The key is what to avoid: don't reach for e6. After e6, White snaps the knight and rams the pawn to e5, leaving Black riddled with dark-square holes on d6, f6 and c5 — a miserable version to defend.",
+   "teaches": [
+    "avoiding e6",
+    "dark-square holes"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 259,
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Bp5/3nPP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 5 6",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Instead the immediate knight to d4 flies under the radar. It's the same motif you meet in the Trompowsky: a bishop parked on b5 is simply loose, vulnerable to a knight leaping into d4. We ask the bishop a question right away.",
+   "kind": "main",
+   "teaches": [
+    "harassing the loose bishop"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 287.5,
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Bp5/3nPP2/2N2N2/PPPP2PP/R1BQ1RK1 b kq - 6 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles and turns the tables — daring us to take the bishop. We're delighted to. That light-squared bishop, once it lands on c4 bearing down on f7, is the Grand Prix's main attacker, the bishop from hell in these positions. Off it comes.",
+   "teaches": [
+    "trading the attacker"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 319,
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1np5/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": "So we capture, eliminating the bishop before it can do any damage.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 325,
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": "White recaptures and we hit our second decision. The instinct against a knight on b5 is to shove it back with a6 — but resist. The knight isn't threatening c7 or d7; it's just sitting there, undefended and harmless. Save a6 for a rainy day, because playing it now only invites the knight back to c3 where it clamps the d5-square. Leave it be and finish our development.",
+   "teaches": [
+    "patience over reflex a6",
+    "tempo economy"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 394.5,
+   "fen": "r1bqk1nr/pp2ppbp/3p2p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "If we develop the king's knight to f6 immediately, White gets to push e5 and jam a pawn into our position. So we prep with d6 first — the classic Sicilian move, staking out the central squares and taking e5 off the table.",
+   "kind": "main",
+   "teaches": [
+    "prophylaxis against e5"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 413,
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 b kq - 0 7",
+   "line": [],
+   "spoken": "With that in hand we'll finally be ready to develop the knight, with or without a6.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 415,
+   "fen": "r1bqk1nr/pp2ppbp/3p2p1/1Np5/4PP2/3P1N2/PPP3PP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "d6",
+    "d3"
+   ],
+   "spoken": "A greedy d5 would have backfired — exchanges on d5 let the knight reach c7. White settles for d3. Don't be seduced by Bd7 'developing with tempo'; the bishop is dull there, and chasing the knight only escorts it back to the useful c3-square.",
+   "teaches": [
+    "not helping the enemy knight"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 441.5,
+   "fen": "r1bqk2r/pp2ppbp/3p1np1/1Np5/4PP2/3P1N2/PPP3PP/R1BQ1RK1 w kq - 1 9",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "So the knight goes to f6 conventionally. Nh6 exists in these structures, but there's no need to get fancy here.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 472.5,
+   "fen": "r1bqk2r/pp2ppbp/3p1np1/1Np5/4PP2/3P1N2/PPP3PP/R1B1QRK1 b kq - 2 9",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": "Is e5 dangerous now? No — we'd just take it, and if White recaptures the knight reroutes through d5. But White is playing every right Grand Prix idea: the queen swings to h4, then f5, Bh6, Ng5, the whole mating machine that punishes a Black king that falls asleep. That's the case for delaying castling — castling kingside makes the king a sitting duck. The bold alternative is to castle queenside, hard to organize but very much on the table.",
+   "kind": "plan",
+   "teaches": [
+    "delaying castling",
+    "king safety choice"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 583,
+   "fen": "r2qk2r/pp2ppbp/3p1np1/1Np5/4PPb1/3P1N2/PPP3PP/R1B1QRK1 w kq - 3 10",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The complications work. The bishop to g4 develops and prepares the queen to d7, hitting the knight and clearing the way to castle queenside — and it lets us take the knight on f3 on demand. The move to calculate was e5; after the exchanges the knight simply swings into d5 and we're fine.",
+   "kind": "main",
+   "teaches": [
+    "Bg4 multipurpose",
+    "calculating the e5 break"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 626,
+   "fen": "r2qk2r/pp2ppbp/3p1np1/1Np5/4PPbQ/3P1N2/PPP3PP/R1B2RK1 b kq - 4 10",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The scary follow-up was a knight jump to g5, but the king can castle kingside and cover f7 at the same time. White chooses a different road, lifting the queen to h4.",
+   "teaches": [
+    "seeing the defensive resource"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 635,
+   "fen": "r3k2r/pp1qppbp/3p1np1/1Np5/4PPbQ/3P1N2/PPP3PP/R1B2RK1 w kq - 5 11",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": "We stay on plan and play the queen to d7 — hitting the knight, readying the long castle.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 646,
+   "fen": "r3k2r/pp1qppbp/3p1np1/2p5/4PPbQ/2NP1N2/PPP3PP/R1B2RK1 b kq - 6 11",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Castling queenside is brazen, no question, but it feels safer than kingside here: White has already committed the queen to h4, all but daring us to castle into it. So we go the other way. First, though, deal with the knight — if we castle at once, a knight to g5 hits the bishop on g4 and h3 traps it. Eliminate the knight first.",
+   "kind": "plan",
+   "teaches": [
+    "removing the trapper before castling"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 686,
+   "fen": "r3k2r/pp1qppbp/3p1np1/2p5/4PP1Q/2NP1b2/PPP3PP/R1B2RK1 w kq - 0 12",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "So the bishop takes on f3. It hurts to surrender the light-squared bishop and the bishop pair, and honestly White may be a touch better here — but our position is fundamentally sound, and there was a concrete reason we couldn't castle first.",
+   "kind": "main",
+   "teaches": [
+    "conceding the bishop pair for concrete reasons"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 701,
+   "fen": "r1k4r/pp1qppbp/3p1np1/2p5/4PP1Q/2NP1R2/PPP3PP/R1B3K1 w - - 1 14",
+   "line": [
+    "Rf2",
+    "Kd8",
+    "Rxf3",
+    "Kc8"
+   ],
+   "spoken": "Castled queenside at last, king tucked on c8. The roadmap has two tracks. First, quiet improvements: the king slides to b8, dodging the c-file and guarding the a7-pawn; then h5, cramping White's queen and staking out g4 as an outpost, with a fishing-pole trick if White answers h3. Second, an attack — h6 and g5 to blast open the g-file against White's king. When White strikes with e5 you calculate: the knight would love the g4-square, and a whole family of interception tactics appears, dropping the bishop into f6 to break a diagonal before delivering a check on d4. And study which piece checks: a knight sitting on g4 is a type-2 piece defended only by the queen, so you check with the bishop, not the queen — leave the queen its defensive job or you undermine your own knight. Then the practical rules take over: up a full piece, the one-piece threshold rule says steer toward a queen trade to simplify; and prepare the e5 break with a pawn via f6, a multipurpose move that also restricts White's bishop and gives the king luft. Prepare things with your lowest-value piece whenever you can.",
+   "kind": "plan",
+   "teaches": [
+    "queenside-castle attack plan",
+    "interception tactics",
+    "type-2 undefended piece",
+    "one-piece threshold rule",
+    "prepare with the lowest-value piece"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 1946,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [],
+   "spoken": "After the game we open the engine to look honestly at the Grand Prix theory behind these choices.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 1949.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "Here's the honest downside of g6 — and it's why many Accelerated Dragon players still allow the Rossolimo instead. White can grab the pawn with the queen, capturing on d4. It looks terrifying: we develop the knight to f6, White rolls the pawn to e5 — but theory, and the engine, judge the whole line dead equal. So the concession is real but small.",
+   "kind": "review",
+   "teaches": [
+    "the g6 downside",
+    "Qxd4 line is equal"
+   ],
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,300 @@
+{
+ "videoId": "iLiE-uWRfBc",
+ "title": "Master Class | Budapest Gambit, Amazing Trap! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Budapest Gambit",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:iLiE-uWRfBc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 19.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 49,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 56.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Let's play the Budapest. Compared with other offbeat lines it's on the reputable side — not a gimmick you play just for a cheap trick, but a legitimate gambit.",
+   "kind": "main",
+   "teaches": [
+    "Budapest is sound"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 61,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 98,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/8/PP2PPPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "Two ways to chase the pawn back: the knight to e4 is very speculative — essentially trash — while the reputable try is the knight to g4, which goes straight after the gambit pawn.",
+   "kind": "main",
+   "teaches": [
+    "Ng4 over Ne4"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 104,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "As with every gambit, the currency is development and initiative: bring pieces out fast, push White into passivity, then turn to a kingside attack. Committing the queen to e7 straight away would be too awkward.",
+   "kind": "plan",
+   "teaches": [
+    "gambit = development + initiative"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 135.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R w KQkq - 3 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 is the move, simply pressing to win the pawn back — and after the bishop comes to f4, there's an interesting check on b4 waiting.",
+   "kind": "main",
+   "teaches": [
+    "Nc6 to regain the pawn"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 146.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P3/2P2Bn1/5N2/PP2PPPP/RN1QKB1R b KQkq - 4 5",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The bishop to c5 is tempting but less effective than it looks — e3 blunts it. The bishop to b4 with check is the real try, because it carries a trap.",
+   "teaches": [
+    "Bb4+ over Bc5"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 160.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/4P3/1bP2Bn1/5N2/PP2PPPP/RN1QKB1R w KQkq - 5 6",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "So we develop with tempo, giving check.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 167,
+   "fen": "r1bqk2r/pppp1ppp/2n5/4P3/1bP2Bn1/5N2/PP1NPPPP/R2QKB1R b KQkq - 6 6",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "White usually blocks with the queen's knight to d2 — and that's exactly the setup for a smothered mate.",
+   "teaches": [
+    "the smothered-mate setup"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 173.5,
+   "fen": "r1b1k2r/ppppqppp/2n5/4P3/1bP2Bn1/5N2/PP1NPPPP/R2QKB1R w KQkq - 7 7",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "We play the queen to e7, and White typically continues a3 — after which a very pretty tactic wins the pawn back.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 182,
+   "fen": "r1b1k2r/ppppqppp/2n5/4P3/1bP2Bn1/P4N2/1P1NPPPP/R2QKB1R b KQkq - 0 7",
+   "line": [
+    "a3"
+   ],
+   "spoken": "Look at what the queen is doing: it x-rays down toward the king. If the e5-pawn were to vanish and a knight were to land on d3, that would be checkmate.",
+   "teaches": [
+    "queen x-ray on the king"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 196.5,
+   "fen": "r1b1k2r/ppppqppp/2n5/4n3/1bP2B2/P4N2/1P1NPPPP/R2QKB1R w KQkq - 0 8",
+   "line": [
+    "Ngxe5"
+   ],
+   "spoken": "So the knight captures on e5 — threatening that smothered mate. Someone at this level really shouldn't miss it.",
+   "kind": "main",
+   "teaches": [
+    "spring the smothered-mate threat"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 213.5,
+   "fen": "r1b1k2r/ppppqppp/2n5/4n3/1PP2B2/5N2/1P1NPPPP/R2QKB1R b KQkq - 0 8",
+   "line": [
+    "axb4"
+   ],
+   "spoken": "But he grabs the bishop on b4 instead, walking straight into it — one of the appeals of these gambits is that eventually someone does.",
+   "teaches": [
+    "the opponent misses the mate"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 226,
+   "fen": "r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9",
+   "line": [
+    "Nd3#"
+   ],
+   "spoken": "The knight to d3 — smothered mate. Exactly what the line was built for.",
+   "kind": "main",
+   "teaches": [
+    "smothered mate delivered"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 264.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R b KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 267.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/4P3/1bP2Bn1/5N2/PP2PPPP/RN1QKB1R w KQkq - 5 6",
+   "line": [
+    "Nc6",
+    "Bf4",
+    "Bb4+"
+   ],
+   "spoken": "This smothered-mate motif recurs elsewhere. In the Caro-Kann there's a famous version after an early queen to e2, and it turns up in the Blackburne Shilling too: the queen grab on g2, rook to f1, and mate with the knight to f3. If you ever face that Shilling line yourself, just castle, play d3, then c3 to trade the pawn off, and White is much better.",
+   "kind": "review",
+   "teaches": [
+    "the smothered-mate family"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 350.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/8/PP2PPPP/RNBQKBNR w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 366.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R w KQkq - 3 5",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": "Played properly, White's correct path against the check is a3, and then e3 defends the mate for a tiny edge. Black usually takes the knight and plays d6, reaching a harmonious position — the bishop on the long diagonal, easy development, no real targets to worry about.",
+   "kind": "review",
+   "teaches": [
+    "the correct White antidote"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 403.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4n3/2P5/7P/PP2PPP1/RNBQKBNR w KQkq - 0 7",
+   "line": [
+    "Ng1",
+    "Nb8",
+    "h3",
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 417.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/8/PP2PPPP/RNBQKBNR w KQkq - 5 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 440.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 443,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The one downside of playing the Budapest full-time: White can simply play the knight to f3 first and sidestep it entirely — if opponents know your gambit, they'll dodge it.",
+   "kind": "review",
+   "teaches": [
+    "the Budapest can be avoided"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 451.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 453,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/3P4/8/PPP1PPPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 455.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "line": [],
+   "spoken": "So treat the Budapest as a second weapon alongside a slightly more mainstream opening, not as your only answer.",
+   "kind": "review",
+   "teaches": [
+    "pair it with a main line"
+   ],
+   "reanchor": true
+  }
+ ]
+}

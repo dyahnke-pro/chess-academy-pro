@@ -1,10 +1,10 @@
 {
  "videoId": "1PI3xfMiUE4",
  "title": "Sacrifice The Knight!!! \"OK, NP\" | Three Knights Game | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Three Knights Game (knight sacrifice)",
+ "openingName": "Three Knights Game",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:1PI3xfMiUE4",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White. Today is a defensive lesson — we're going to sacrifice a knight on purpose and show how to fight on when down material."
   },
   {
    "ply": 3,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, a Three Knights setup."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to c5. Our plan: sacrifice the knight — but not just yet."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to c4."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 9,
@@ -78,9 +78,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "White grabs the pawn on e5, a knowingly unsound piece sacrifice — the whole idea is a fast attack on f7 and the uncastled king, betting the opponent can't defend cleanly.",
-   "kind": "main",
-   "teaches": "A speculative sac trades material for initiative against a king stuck in the center — an attacking try, not a sound line."
+   "spoken": "Here's the sacrifice — the knight takes on e5, giving up the piece for at least a pawn."
   },
   {
    "ply": 10,
@@ -89,7 +87,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures, dxe5. Objectively we're a piece down and lost — but development isn't finished, so the plan is to complete it and make Black work for the win."
   },
   {
    "ply": 11,
@@ -98,9 +96,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "Down a piece, White plays d3 to open the light bishop's diagonal and rush development — with the sac made, only quick, purposeful moves can justify it.",
-   "kind": "main",
-   "teaches": "After a sacrifice every move must develop with threats; slow play refutes it."
+   "spoken": "We play d3, part of finishing development — castle next, then start thinking in earnest."
   },
   {
    "ply": 12,
@@ -109,7 +105,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to f6, going for mate — and honestly that's encouraging: this walks into our hands."
   },
   {
    "ply": 13,
@@ -118,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle, defending f2. The trouble with the queen on f6 is that it invites a later knight to d5."
   },
   {
    "ply": 14,
@@ -127,7 +123,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": ""
+   "spoken": "Black guards the square with the knight to e7. Now, the best defensive moves both improve your position and set a trap. The bishop to e3 is logical — if Black trades, we retake with the f-pawn and hit f7 from two sources. But there's something sharper: after the bishop to b3, Black plays ...Bb6 and comes to regret it."
   },
   {
    "ply": 15,
@@ -136,7 +132,7 @@
    "line": [
     "Kh1"
    ],
-   "spoken": ""
+   "spoken": "We want f4 to prise open the f-file for chances — so first the king steps to h1, the classic preparation."
   },
   {
    "ply": 16,
@@ -145,7 +141,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles, and we're ready for f4."
   },
   {
    "ply": 17,
@@ -154,9 +150,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 tears open the f-file toward Black's king — the point of the sacrifice, manufacturing concrete kingside pressure before the extra piece can speak.",
-   "kind": "main",
-   "teaches": "Convert a material investment into an open file and direct attacking chances."
+   "spoken": "We push f4, opening the file and stirring real intrigue on the kingside — the first progress in our counterplay."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "Black captures on f4."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Bxf4"
    ],
-   "spoken": ""
+   "spoken": "We must recapture with the bishop. Taking with the rook tempts you — it hits the queen — but attacking the queen isn't automatically good: the rook on f4 would be badly placed."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Qg6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to g6. Remember we're only a piece down — win three pawns for it and material is level."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "Bxc7"
    ],
-   "spoken": ""
+   "spoken": "So we take on c7 with the bishop, snapping off a pawn — pawns like that don't lie by the roadside."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to g4. We must move the queen — to d2, or the interesting e1 to drag it toward the kingside."
   },
   {
    "ply": 23,
@@ -210,7 +204,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "The queen goes to d2. I avoid e1 because it runs into the knight rerouting to d4, and we want c2 guarded; from d2 the queen can also swing to f4 later."
   },
   {
    "ply": 24,
@@ -219,7 +213,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": ""
+   "spoken": "Black jumps the knight to d4 — but it no longer carries a threat and hands us a free tempo."
   },
   {
    "ply": 25,
@@ -228,7 +222,7 @@
    "line": [
     "Be5"
    ],
-   "spoken": ""
+   "spoken": "We play the cryptic bishop to e5, pressing the knight on d4 — hoping Black obliges with the knight from e7 to c6."
   },
   {
    "ply": 26,
@@ -237,7 +231,7 @@
    "line": [
     "Qh5"
    ],
-   "spoken": ""
+   "spoken": "Black finds the queen to h5 instead — a different, even stronger way of hitting our e5-bishop."
   },
   {
    "ply": 27,
@@ -246,7 +240,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": ""
+   "spoken": "We drop the bishop back to g3 — where it was headed anyway, off the awkward c7-square and out of tactical trouble."
   },
   {
    "ply": 29,
@@ -275,7 +269,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to g6. My trick failed — yet it half-worked, because moving that knight has the same effect I was after."
   },
   {
    "ply": 33,
@@ -284,7 +278,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "Here's why I wanted that knight off e7: it guarded d5. Now we plant the knight on d5 and start building central pressure."
   },
   {
    "ply": 34,
@@ -293,7 +287,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": ""
+   "spoken": "We were eyeing c3 next — but Black finds the knight to e2, a really nasty shot I missed. The bishop to f2 would defend, but ...Bd6 keeps the pressure; our emergency resource is the queen to e1."
   },
   {
    "ply": 35,
@@ -302,7 +296,7 @@
    "line": [
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "So the queen to e1, forced — Black is playing superbly; that knight leap completely escaped me."
   },
   {
    "ply": 37,
@@ -312,7 +306,7 @@
     "Nxg3+",
     "Qxg3"
    ],
-   "spoken": ""
+   "spoken": "The knight takes on g3 with check — it was a mating threat — and we recapture with the queen. The trade actually helps us: Black has thinned his own attack, and now h3 is coming."
   },
   {
    "ply": 38,
@@ -321,7 +315,7 @@
    "line": [
     "Rad8"
    ],
-   "spoken": ""
+   "spoken": "Black brings a rook to d8, setting a threat. We have two pawns for the piece — consolidate and we hold real chances."
   },
   {
    "ply": 39,
@@ -330,7 +324,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "The threat was ...Bd6, skewering the queen with mate to follow — so h3 must come at once, blunting it; if Black tries ...Bd6 anyway, we simply take the bishop on g4."
   },
   {
    "ply": 40,
@@ -339,7 +333,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the bishop to e6. Our sole trump is the central pawn mass Black doesn't have, so we must expand there."
   },
   {
    "ply": 41,
@@ -348,7 +342,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3, preparing to roll the centre with d4 and later e4–e5."
   },
   {
    "ply": 42,
@@ -357,7 +351,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to d6. We're in deep trouble — ...Qe5 next is a serious problem."
   },
   {
    "ply": 43,
@@ -366,7 +360,7 @@
    "line": [
     "Qf2"
    ],
-   "spoken": ""
+   "spoken": "We try the queen to f2 — a long shot, hoping to bait a sacrifice on h3."
   },
   {
    "ply": 44,
@@ -375,7 +369,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": ""
+   "spoken": "Black takes the bait, sacrificing on h3."
   },
   {
    "ply": 45,
@@ -384,7 +378,7 @@
    "line": [
     "gxh3"
    ],
-   "spoken": ""
+   "spoken": "We recapture, gxh3 — and I can't quite see where Black's mate is."
   },
   {
    "ply": 47,
@@ -394,7 +388,7 @@
     "Qxh3+",
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "Black checks on h3, our king goes to g1 — and ...Nh4 is a bolt from the blue, threatening ...Nf3 with check and a mating net."
   },
   {
    "ply": 48,
@@ -403,7 +397,7 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "But there may be a defence. The knight lands on h4 threatening ...Nf3, which works only by pulling our queen off f2 — so we sidestep the queen. And here c3 pays off: a bishop to c5 now would allow d4, so if ...Nf3 comes we take it with the rook and keep control of h2. Black has a perpetual for a draw if he wants it — I'd gladly take that; what would truly worry me is a slow strengthening move like ...Re8."
   }
  ]
 }

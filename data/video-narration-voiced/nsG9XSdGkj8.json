@@ -1,0 +1,517 @@
+{
+ "videoId": "nsG9XSdGkj8",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1150",
+ "openingName": "Open Sicilian",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:nsG9XSdGkj8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 553,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 554,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 557.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "A Sicilian, and we go for the Open with the knight to f3 and d4.",
+   "kind": "main",
+   "teaches": [
+    "the Open Sicilian"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 562,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 567,
+   "fen": "r1bqkbnr/pp2pppp/2np4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "He's already erred — d6 here is not how you play the Sicilian; you're meant to capture on d4 first.",
+   "kind": "main",
+   "teaches": [
+    "capture on d4 first"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 581.5,
+   "fen": "r1bqkbnr/pp2pppp/2np4/2pP4/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Why is d6 a mistake? It lets us expand in the centre with d5 and kick the knight, and now it has nowhere good to go — a retreat to e5 wrecks his structure this early.",
+   "teaches": [
+    "punish d6 with d5"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 590.5,
+   "fen": "r1bqkbnr/pp2pppp/3p4/2pPn3/4P3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 591.5,
+   "fen": "r1bqkbnr/pp2pppp/3p4/2pPN3/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 594,
+   "fen": "r1bqkbnr/pp2pppp/8/2pPp3/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "After the trades a lot of players reach for the knight to c3, but that's a positional error once the position transforms like this. Develop with purpose: his pawn on e5 is weak, so the question is how to bring a piece to bear on it.",
+   "kind": "plan",
+   "teaches": [
+    "purposeful development"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 617.5,
+   "fen": "r1bqkbnr/pp2pppp/8/2pPp3/4P3/8/PPPN1PPP/R1BQKB1R b KQkq - 1 6",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "Don't play c4 yet — reserve that square for the knight. The knight belongs on c4, not f3, where a bishop pin would annoy us.",
+   "kind": "main",
+   "teaches": [
+    "reserve the square for the knight"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 630.5,
+   "fen": "r1bqkb1r/pp2pppp/5n2/2pPp3/4P3/8/PPPN1PPP/R1BQKB1R w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 646.5,
+   "fen": "r1bqkb1r/pp2pppp/5n2/2pPp3/4P3/3B4/PPPN1PPP/R1BQK2R b KQkq - 3 7",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "This is what purposeful development means — at this level you can't just put pieces on the same squares every game; you reinforce the plan of landing the knight on its best square.",
+   "kind": "plan",
+   "teaches": [
+    "develop to a plan, not by rote"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 651,
+   "fen": "r1bqkb1r/pp3ppp/4pn2/2pPp3/2P1P3/3B4/PP1N1PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "e6",
+    "c4"
+   ],
+   "spoken": "So we prop the pawn up with c4 — which does mean the knight now has to go to f3 instead; our development has to react dynamically to what the position needs.",
+   "kind": "main",
+   "teaches": [
+    "adapt development to the position"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 655.5,
+   "fen": "r1bqk2r/pp2bppp/4pn2/2pPp3/2P1P3/3B1N2/PP3PPP/R1BQK2R b KQkq - 2 9",
+   "line": [
+    "Be7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 667,
+   "fen": "r1bq1rk1/pp2bppp/4pn2/2pPp3/2P1P3/3B1N2/PP3PPP/R1BQK2R w KQ - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 680.5,
+   "fen": "r1bq1rk1/pp2bppp/4pn2/2pPN3/2P1P3/3B4/PP3PPP/R1BQK2R b KQ - 0 10",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "He castles and we can grab the weak pawn — though personally I'd have castled first, for reasons I'll explain after the game.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 689.5,
+   "fen": "r1bq1rk1/pp1nbppp/4p3/2pPN3/2P1P3/3B4/PP3PPP/R1BQK2R w KQ - 1 11",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 699.5,
+   "fen": "r1bq1rk1/pp1nbppp/4p3/2pP4/2P1P3/3B1N2/PP3PPP/R1BQK2R b KQ - 2 11",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Rather than trade, drop the knight back. Beyond the extra pawn we have a space advantage, and with more space you want to keep pieces on — no reason to ease his defence with a trade.",
+   "kind": "plan",
+   "teaches": [
+    "keep pieces on when you have space"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 703.5,
+   "fen": "r1bq1rk1/pp1nbppp/8/2pPp3/2P1P3/3B1N2/PP3PPP/R1BQK2R w KQ - 0 12",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 712.5,
+   "fen": "r1bq1rk1/pp1nbppp/8/2pPp3/2P1P3/3B1N2/PP3PPP/R1BQ1RK1 b - - 1 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "That knight on f3 is excellent — it pressures the e5-pawn and ties his knight to its defence, which in turn keeps his bishop bottled up.",
+   "teaches": [
+    "tie down and cramp"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 719,
+   "fen": "r1bq1rk1/pp1n1ppp/3b4/2pPp3/2P1P3/3B1N2/PP3PPP/R1BQ1RK1 w - - 2 13",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 736,
+   "fen": "r1bq1rk1/pp1n1ppp/3b4/2pPp3/2P1P3/3B1N1P/PP3PP1/R1BQ1RK1 b - - 0 13",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Many plans exist; one is a queenside expansion. But first, h3 — prophylaxis before anything else, taking a bishop-to-g4 pin off the table.",
+   "kind": "plan",
+   "teaches": [
+    "prophylaxis first"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 738.5,
+   "fen": "r1bq1rk1/pp3ppp/3b1n2/2pPp3/2P1P3/3B1N1P/PP3PP1/R1BQ1RK1 w - - 1 14",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 752.5,
+   "fen": "r1bq1rk1/pp3ppp/3b1n2/2pPp3/2P1P3/P2B1N1P/1P3PP1/R1BQ1RK1 b - - 0 14",
+   "line": [
+    "a3"
+   ],
+   "spoken": "To prepare the b4 push we play a3 first — at this level the plans we run are no longer one-move plans; they take two or three moves, and that's fine.",
+   "kind": "plan",
+   "teaches": [
+    "multi-move plans"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 759,
+   "fen": "r2q1rk1/pp1b1ppp/3b1n2/2pPp3/2P1P3/P2B1N1P/1P3PP1/R1BQ1RK1 w - - 1 15",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 761,
+   "fen": "r2q1rk1/pp1b1ppp/3b1n2/2pPp3/2P1P3/P2B1N1P/1P1B1PP1/R2Q1RK1 b - - 2 15",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 763.5,
+   "fen": "r1q2rk1/pp1b1ppp/3b1n2/2pPp3/2P1P3/P2B1N1P/1P1B1PP1/R2Q1RK1 w - - 3 16",
+   "line": [
+    "Qc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 775,
+   "fen": "r1q2rk1/pp1b1ppp/3b1n2/2pPp3/1PP1P3/P2B1N1P/3B1PP1/R2Q1RK1 b - - 0 16",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 777,
+   "fen": "r1q2rk1/p2b1ppp/1p1b1n2/2pPp3/1PP1P3/P2B1N1P/3B1PP1/R2Q1RK1 w - - 0 17",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 783,
+   "fen": "r1q2rk1/p2b1ppp/1p1b1n2/2pPp3/1PP1P3/P2B1N1P/3B1PP1/2RQ1RK1 b - - 1 17",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 785,
+   "fen": "r1q2rk1/p4ppp/1p1b1n2/2pPp3/1PP1P3/P2B1N1P/3B1P2/2RQ1RK1 b - - 0 18",
+   "line": [
+    "Bxh3",
+    "gxh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 787.5,
+   "fen": "r4rk1/p4ppp/1p1b1n2/2pPp3/1PP1P3/P2B1N1q/3B1P2/2RQ1RK1 w - - 0 19",
+   "line": [
+    "Qxh3"
+   ],
+   "spoken": "His queen crashes in to complete the bishop sacrifice. Why not be scared? Because it's actually harmless — but to refute it cleanly we make an escape route for the king and note he has no threat beyond a check on g4.",
+   "teaches": [
+    "refuting an unsound sac"
+   ]
+  },
+  {
+   "ply": 37,
+   "t": 813.5,
+   "fen": "r4rk1/p4ppp/1p1b1n2/2pPp3/1PP1P3/P2B1N1q/3B1P2/2RQR1K1 b - - 1 19",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook to e1 does two jobs: it opens a path for the king toward the centre — safer here since the centre is closed — and it prepares to reroute the bishop to g2.",
+   "kind": "plan",
+   "teaches": [
+    "king to the closed centre"
+   ]
+  },
+  {
+   "ply": 38,
+   "t": 826.5,
+   "fen": "r4rk1/p4ppp/1p1b4/2pPp3/1PP1P1n1/P2B1N1q/3B1P2/2RQR1K1 w - - 2 20",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 829.5,
+   "fen": "r4rk1/p4ppp/1p1b4/2pPp3/1PP1P1n1/P4N1q/3B1P2/2RQRBK1 b - - 3 20",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": "The knight jump looks like it prepares mate, and that's what frightens people — but the knight on f3 already guards h2, so there's no mate. At this level the margins are narrow; don't fear phantom threats.",
+   "teaches": [
+    "don’t fear phantom threats"
+   ]
+  },
+  {
+   "ply": 40,
+   "t": 844.5,
+   "fen": "r4rk1/p4ppp/1p1b4/2pPp2q/1PP1P1n1/P4N2/3B1P2/2RQRBK1 w - - 4 21",
+   "line": [
+    "Qh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 845.5,
+   "fen": "r4rk1/p4ppp/1p1b4/2pPp2q/1PP1P1n1/P4N2/3B1PB1/2RQR1K1 b - - 5 21",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 853,
+   "fen": "r4rk1/p5pp/1p1b4/2pPpp1q/1PP1P1n1/P4N2/3B1PB1/2RQR1K1 w - - 0 22",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 856,
+   "fen": "r4rk1/p5pp/1p1b4/2pPpp1q/1PP1P1n1/P1R2N2/3B1PB1/3QR1K1 b - - 1 22",
+   "line": [
+    "Rc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 865.5,
+   "fen": "r5k1/p4rpp/1p1b4/2pPpp1q/1PP1P1n1/P1R2N2/3B1PB1/3QR1K1 w - - 2 23",
+   "line": [
+    "Rf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 889.5,
+   "fen": "r5k1/p4rpp/1p1b4/2pPppNq/1PP1P1n1/P1R5/3B1PB1/3QR1K1 b - - 3 23",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "To swing the rook to h3 we must move the knight — most players won't, fearing the check on h2. But that's exactly why the rook went to e1 earlier: it takes the sting out of that check, so we just slide the king.",
+   "kind": "plan",
+   "teaches": [
+    "prepared prophylaxis pays off"
+   ]
+  },
+  {
+   "ply": 46,
+   "t": 894.5,
+   "fen": "r5k1/p5pp/1p1b1r2/2pPppNq/1PP1P1n1/P1R5/3B1PB1/3QR1K1 w - - 4 24",
+   "line": [
+    "Rf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 896,
+   "fen": "r5k1/p5pp/1p1b1r2/2pPppNq/1PP1P1n1/P6R/3B1PB1/3QR1K1 b - - 5 24",
+   "line": [
+    "Rh3"
+   ],
+   "spoken": "The rook lands on h3 and his position begins to collapse — the queen is chased off, and once it moves the h-pawn falls, opening our own file for the attack.",
+   "kind": "main",
+   "teaches": [
+    "open the h-file"
+   ]
+  },
+  {
+   "ply": 49,
+   "t": 907.5,
+   "fen": "r5k1/p5pN/1p1b1rq1/2pPpp2/1PP1P1n1/P6R/3B1PB1/3QR1K1 b - - 0 25",
+   "line": [
+    "Qg6",
+    "Nxh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 916.5,
+   "fen": "r5k1/p4rp1/1p1b2q1/2pPppN1/1PP1P1n1/P6R/3B1PB1/3QR1K1 b - - 2 26",
+   "line": [
+    "Rf7",
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 920,
+   "fen": "r5k1/p5p1/1p1b1rq1/2pPpPN1/1PP3n1/P6R/3B1PB1/3QR1K1 b - - 0 27",
+   "line": [
+    "Rf6",
+    "exf5"
+   ],
+   "spoken": "Now his position is weak enough that we open the board — taking on f5 lets our pieces stream in toward a decisive attack.",
+   "kind": "main",
+   "teaches": [
+    "open lines when he’s weakened"
+   ]
+  },
+  {
+   "ply": 54,
+   "t": 931.5,
+   "fen": "r5k1/p5p1/1p1b2q1/2pPprN1/1PP3n1/P6R/3B1PB1/3QR1K1 w - - 0 28",
+   "line": [
+    "Rxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 955.5,
+   "fen": "5rk1/p5p1/1p1b2q1/2pPprN1/1PP4Q/P6R/3B1PB1/4R1K1 b - - 2 29",
+   "line": [
+    "Qxg4",
+    "Raf8",
+    "Qh4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,573 @@
+{
+ "videoId": "7f2sPY2U204",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2000",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:7f2sPY2U204",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 3.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "Another King's Indian — since we've spent so long talking about it, we might as well play it."
+  },
+  {
+   "ply": 4,
+   "t": 5.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 10,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 12.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 17,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "line": [
+    "Nf3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 26,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "Be2",
+    "e5"
+   ],
+   "spoken": "He plays the main line."
+  },
+  {
+   "ply": 13,
+   "t": 28,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 34.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "I'll play an interesting line I like myself — take on d4."
+  },
+  {
+   "ply": 15,
+   "t": 37.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PNP3/2N5/PP2BPPP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "In effect we've reached the Maroczy structure from the last game — but with one key difference."
+  },
+  {
+   "ply": 16,
+   "t": 39.5,
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N5/PP2BPPP/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 43.5,
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "f3"
+   ],
+   "spoken": "Our pawn is on c7 instead of e7, and that gives us a direct line of fire at the e4-pawn. The question is what breakthrough to prepare."
+  },
+  {
+   "ply": 18,
+   "t": 64,
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1RK1 w - - 0 10",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The typical idea is c6, aiming for the c5 break — the combative main line; the knight to c6 is also possible."
+  },
+  {
+   "ply": 19,
+   "t": 69,
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1R1K b - - 1 10",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "He plays the king to h1 — the best move, prophylaxis."
+  },
+  {
+   "ply": 20,
+   "t": 76,
+   "fen": "rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N2P2/PP2B1PP/R1BQ1R1K w - - 2 11",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The plan is the knight to h5 — no surprise to anyone who watched the previous King's Indian game."
+  },
+  {
+   "ply": 21,
+   "t": 84.5,
+   "fen": "rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N1BP2/PP2B1PP/R2Q1R1K b - - 3 11",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "This opens ideas like the queen to h4 — and note, his bishop is now on a square where it's undefended, and our rook on e8 x-rays it."
+  },
+  {
+   "ply": 22,
+   "t": 102.5,
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/5p1n/2PNP3/2N1BP2/PP2B1PP/R2Q1R1K w - - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Combine those two ideas: f5, planning to drive the pawn to f4 — which builds a stronghold for the knight on g3."
+  },
+  {
+   "ply": 23,
+   "t": 113,
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/5p1n/2PNP3/2N1BP2/PP1QB1PP/R4R1K b - - 1 12",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "He's stopped f4 — so ask the Sam Shankland question: can we play it anyway?"
+  },
+  {
+   "ply": 24,
+   "t": 132.5,
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/7n/2PNPp2/2N1BP2/PP1QB1PP/R4R1K w - - 0 13",
+   "line": [
+    "f4"
+   ],
+   "spoken": "Yes we can — because if he captures, we recapture, and he's forced to shed a tempo with the knight."
+  },
+  {
+   "ply": 25,
+   "t": 135.5,
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/7n/2PNPp2/2N2P2/PP1QBBPP/R4R1K b - - 1 13",
+   "line": [
+    "Bf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 139.5,
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b2n/2PNPp2/2N2P2/PP1QBBPP/R4R1K w - - 2 14",
+   "line": [
+    "Be5"
+   ],
+   "spoken": "The typical move: centralise the bishop on e5, a fine central outpost."
+  },
+  {
+   "ply": 27,
+   "t": 146.5,
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b2n/2P1Pp2/2N2P2/PPNQBBPP/R4R1K b - - 3 14",
+   "line": [
+    "Nc2"
+   ],
+   "spoken": "And there's a sacrifice we're beginning to eye — one we can apply right now."
+  },
+  {
+   "ply": 28,
+   "t": 161.5,
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b3/2P1Pp2/2N2Pn1/PPNQBBPP/R4R1K w - - 4 15",
+   "line": [
+    "Ng3+"
+   ],
+   "spoken": "It's not d5 anymore — he's clamped that down — it's the knight to g3, with check."
+  },
+  {
+   "ply": 29,
+   "t": 164.5,
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b3/2P1Pp2/2N2Pn1/PPNQBBPP/R4RK1 b - - 5 15",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 183,
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2P1Pp1q/2N2Pn1/PPNQBBPP/R4RK1 w - - 6 16",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "It looks like we should just grab the rook on f1 — and against another grandmaster I would. But here we're going for mate: the queen to h4."
+  },
+  {
+   "ply": 31,
+   "t": 186,
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2Pn1/PPNQB1PP/R4RK1 b - - 7 16",
+   "line": [
+    "Bd4"
+   ],
+   "spoken": "He defends with the bishop to d4 — a really good move."
+  },
+  {
+   "ply": 32,
+   "t": 198.5,
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2P2/PPNQB1PP/R4nK1 w - - 0 17",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": "So we take the exchange, not forfeiting the opportunity."
+  },
+  {
+   "ply": 33,
+   "t": 202,
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2P2/PPNQ2PP/R4BK1 b - - 0 17",
+   "line": [
+    "Bxf1"
+   ],
+   "spoken": "We've won the exchange — and now the key principle: the number one cause of disaster after winning material is forgetting to keep applying basic principles, like continuing your development."
+  },
+  {
+   "ply": 34,
+   "t": 220,
+   "fen": "rn2r1k1/pp5p/2ppb1p1/4b3/2PBPp1q/2N2P2/PPNQ2PP/R4BK1 w - - 1 18",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "His best try here would be c5, but he doesn't find it."
+  },
+  {
+   "ply": 36,
+   "t": 224.5,
+   "fen": "rn2r1k1/pp5p/2p1b1p1/4p3/2P1Pp1q/2N2P2/PPNQ2PP/R4BK1 w - - 0 19",
+   "line": [
+    "Bxe5",
+    "dxe5"
+   ],
+   "spoken": "He trades pieces, which only cements our pawn structure."
+  },
+  {
+   "ply": 37,
+   "t": 233.5,
+   "fen": "rn2r1k1/pp5p/2pQb1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 b - - 1 19",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": "To consolidate: develop the knight and bring a rook to d8 — the question is whether we can do both, or first have to defend the pawn."
+  },
+  {
+   "ply": 38,
+   "t": 246,
+   "fen": "r3r1k1/pp1n3p/2pQb1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 w - - 2 20",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The knight to d7 — and we can always smoke his queen out with the queen to e7 next."
+  },
+  {
+   "ply": 39,
+   "t": 256.5,
+   "fen": "r3r1k1/ppQn3p/2p1b1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 b - - 3 20",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "He goes pawn-hunting with the queen to c7."
+  },
+  {
+   "ply": 40,
+   "t": 265.5,
+   "fen": "r2qr1k1/ppQn3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 w - - 4 21",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": "A good move — and I offer the queen trade with the queen to d8."
+  },
+  {
+   "ply": 41,
+   "t": 269,
+   "fen": "r2Qr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 b - - 0 21",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 270.5,
+   "fen": "3rr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 w - - 0 22",
+   "line": [
+    "Raxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 272.5,
+   "fen": "3rr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN2KPP/R4B2 b - - 1 22",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": "Against the queen to b7 I'd planned to trade queens with the queen to b6."
+  },
+  {
+   "ply": 44,
+   "t": 289.5,
+   "fen": "3rr1k1/pp5p/2p1b1p1/2n1p3/2P1Pp2/2N2P2/PPN2KPP/R4B2 w - - 2 23",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight to c5 — nothing has happened to the idea from the previous game: we threaten a check on d2 that would win his knight."
+  },
+  {
+   "ply": 45,
+   "t": 296.5,
+   "fen": "3rr1k1/pp5p/2p1b1p1/2n1p3/2P1Pp2/2N2P2/PPN2KPP/3R1B2 b - - 3 23",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": "He doesn't seem aware he's down the exchange. We double the rooks on d8, and a5 will stop him chasing our knight away."
+  },
+  {
+   "ply": 49,
+   "t": 309.5,
+   "fen": "3r2k1/1p5p/2p1b1p1/p1n1p3/2P1Pp2/2N2P2/PPN3PP/4KB2 b - - 1 25",
+   "line": [
+    "a5",
+    "Rxd8",
+    "Rxd8",
+    "Ke1"
+   ],
+   "spoken": "a5 — even in an endgame, the typical middlegame ideas still apply."
+  },
+  {
+   "ply": 50,
+   "t": 311,
+   "fen": "3r4/1p3k1p/2p1b1p1/p1n1p3/2P1Pp2/2N2P2/PPN3PP/4KB2 w - - 2 26",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": "Now bring our king into the picture."
+  },
+  {
+   "ply": 52,
+   "t": 317.5,
+   "fen": "3r4/1p3k1p/2p1b3/p1n1p1p1/2P1Pp2/2N2P2/PPN1B1PP/4K3 w - - 0 27",
+   "line": [
+    "Be2",
+    "g5"
+   ],
+   "spoken": "And begin the kingside attack — play it as if it's a middlegame, because the same ideas apply."
+  },
+  {
+   "ply": 54,
+   "t": 321.5,
+   "fen": "3r4/1p3k2/2p1b3/p1n1p1pp/2P1Pp2/2N2P1P/PPN1B1P1/4K3 w - - 0 28",
+   "line": [
+    "h3",
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 323,
+   "fen": "3r4/1p3k2/2p1b3/p1n1p1pp/2P1Pp2/1PN2P1P/P1N1B1P1/4K3 b - - 0 28",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 324,
+   "fen": "3r4/1p6/2p1bk2/p1n1p1pp/2P1Pp2/1PN2P1P/P1N1B1P1/4K3 w - - 1 29",
+   "line": [
+    "Kf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 327,
+   "fen": "3r4/1p6/2p1bk2/p1n1p1pp/2P1Pp2/1P3P1P/P1N1B1P1/3NK3 b - - 2 29",
+   "line": [
+    "Nd1"
+   ],
+   "spoken": "A textbook King's Indian position — the pawn on c6 guarding d5."
+  },
+  {
+   "ply": 58,
+   "t": 342,
+   "fen": "3r4/1p6/2p1bk2/p1n1p2p/2P1Ppp1/1P3P1P/P1N1B1P1/3NK3 w - - 0 30",
+   "line": [
+    "g4"
+   ],
+   "spoken": "Push the pawn — it breaks through, and it opens a path for our king to march all the way to g3, Russian-school style."
+  },
+  {
+   "ply": 60,
+   "t": 347,
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Ppp1/1P3P2/P1N1B1P1/3NK3 w - - 0 31",
+   "line": [
+    "hxg4",
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 351.5,
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Ppp1/1P3P2/P1N1BNP1/4K3 b - - 1 31",
+   "line": [
+    "Nf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 353,
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1BNP1/4K3 w - - 0 32",
+   "line": [
+    "g3"
+   ],
+   "spoken": "Instead g3. Doesn't that lock the position in White's favour? No — keep your eye on the g2-pawn."
+  },
+  {
+   "ply": 63,
+   "t": 359.5,
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1B1P1/3NK3 b - - 1 32",
+   "line": [
+    "Nd1"
+   ],
+   "spoken": "The tempting move doesn't work — let's find a more methodical way to apply pressure on that pawn."
+  },
+  {
+   "ply": 64,
+   "t": 375,
+   "fen": "7r/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1B1P1/3NK3 w - - 2 33",
+   "line": [
+    "Rh8"
+   ],
+   "spoken": "Reroute a piece that has already done its job on its square — that's flexibility of thinking. People get almost emotionally attached to a piece's placement, but once its work is done, move it on."
+  },
+  {
+   "ply": 65,
+   "t": 379.5,
+   "fen": "7r/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N1B1P1/4K3 b - - 3 33",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 382.5,
+   "fen": "8/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N1B1Pr/4K3 w - - 4 34",
+   "line": [
+    "Rh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 385.5,
+   "fen": "8/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N3Pr/4KB2 b - - 5 34",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 68,
+   "t": 396,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1PN2Ppb/P1N3Pr/4KB2 w - - 6 35",
+   "line": [
+    "Bh3"
+   ],
+   "spoken": "Always look at the undefended pieces and the x-rays. The bishop to h3, textbook style, forces the pawn forward — then we win the knight and promote, or force him to give up his bishop for the pawn."
+  },
+  {
+   "ply": 69,
+   "t": 418,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Ppb/P1N1N1Pr/4KB2 b - - 7 35",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 70,
+   "t": 420.5,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N1N1br/4KB2 w - - 0 36",
+   "line": [
+    "Bxg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 71,
+   "t": 423.5,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N3br/4KBN1 b - - 1 36",
+   "line": [
+    "Ng1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 72,
+   "t": 426.5,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N4r/4KbN1 w - - 0 37",
+   "line": [
+    "Bxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 74,
+   "t": 431.5,
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1r5/5KN1 w - - 0 38",
+   "line": [
+    "Kxf1",
+    "Rxc2"
+   ],
+   "spoken": "Now his knight is lost — we send our knight forward with a check, or simply promote; the game is over."
+  },
+  {
+   "ply": 10,
+   "t": 443.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "line": [],
+   "spoken": "A note: the king to h1 is good prophylaxis, tucking the king away. White's best was actually g4 — theory — sending the knight back to f6; but there's Gelfand's stunning knight-to-f5 sacrifice that cast serious doubt on this whole line. Still — just because a line isn't objectively viable at grandmaster level doesn't mean you shouldn't play it.",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,10 +1,10 @@
 {
  "videoId": "EiH21nGiRGs",
  "title": "Obliterate the Open Sicilian! | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Open (odd move order) (Black)",
+ "openingName": "Sicilian Defense: Accelerated Dragon",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:EiH21nGiRGs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We're Black against a 2050 — this is going to be juicy. The pawn to e4, c5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 — what appears to be the Smith-Morra —"
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "— we take on d4."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 — a slightly odd move order, not bad for White. You could try to keep the pawn with e5, but that's bad: White gets an improved Smith-Morra with c3, and after the trade Black has a gaping weakness on d5."
   },
   {
    "ply": 6,
@@ -51,10 +51,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "White's move order is slightly odd, but the recipe is simple: play whatever Sicilian you normally play. The knight to c6 keeps every standard setup available.",
-   "kind": "main",
-   "teaches": "Against an offbeat move order, transpose into your familiar main lines — don't be thrown.",
-   "plans": "Develop naturally toward your usual structure."
+   "spoken": "So essentially play whatever Sicilian you normally play: a Najdorf player goes d6, a Kan player e6 — we're accelerated Dragon players, so the knight to c6."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6, and the knight takes d4 with g6 would transpose to the main line — but our opponent insists on a unique style with the bishop to c4, a weird move delaying the knight takes d4. One approach is g6, then after the knight takes d4 the bishop to g7, back to normal territory."
   },
   {
    "ply": 8,
@@ -72,10 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Develop the knight to f6, adding a piece and pressing on the e4-pawn. With the pieces coming out actively, Black is comfortable against the passive bishop setup.",
-   "kind": "main",
-   "teaches": "Develop with pressure on the centre — the knight on f6 hits e4 and readies the freeing break.",
-   "plans": "Prepare a central break and equalise."
+   "spoken": "But rather than meekly playing g6, we can punish White for being cute — the knight to f6 is a much better, more testing developing move, hitting the e4-pawn directly, with no real downside."
   },
   {
    "ply": 9,
@@ -84,7 +78,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "e5 is the try — but it falls into a well-known tactic. With the king on e1 in the Sicilian, always watch for the check on a5; giving it immediately is wrong, though, since the bishop to d2 then costs us a minor piece, and our queen and knight hang."
   },
   {
    "ply": 10,
@@ -93,14 +87,15 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "That's what our opponent relies on, but a little tactical trickery lets us apply the idea properly: we start by taking on e5, and after the knight takes back —"
   },
   {
    "ply": 9,
    "t": 186,
    "fen": "r1bqkb1r/pp1ppppp/2n2n2/4P3/2Bp4/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "— we play the queen to a5, winning the knight. The difference: with the queen to a5 immediately, the knight still defends the pawn, so we can't take with the queen —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -109,7 +104,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "— but taking with the knight on e5 first fixes that, and we've already won the opening battle. The bishop takes f7 with check might seem annoying —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -118,7 +114,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "— but we could take that bishop with the knight rather than the king, avoiding White taking e5 with check. The queen takes d4 — our opponent digs deeper. Two candidates: take the knight to ruin White's kingside structure, or take the bishop for the bishop pair; both are good. The more positional move is the knight takes c4, cashing in for a long-term advantage."
   },
   {
    "ply": 12,
@@ -127,21 +123,23 @@
    "line": [
     "Nxc4"
    ],
-   "spoken": ""
+   "spoken": "The knight takes c4 — cashing in our chips, grabbing the bishop while we still can, playing methodically."
   },
   {
    "ply": 11,
    "t": 252.5,
    "fen": "r1bqkb1r/pp1ppppp/5n2/4n3/2BQ4/5N2/PPP2PPP/RNB1K2R b KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "I don't like the knight takes f3 — we don't have the machinery to attack White's king yet. We have the follow-up d5, grabbing the centre; d6 is too slow, and this isn't really a Sicilian anymore. The queen drops to b3, eyeing b7. Many would play the queen to b6, but a trade isn't clearly in our favor — it creates a queenside target White harasses with the bishop to e3. There's no obligation to develop our bishop immediately; we work on the kingside first, then later fianchetto with b6 and the bishop to b7 or a6, after castling. The check on a5 is pointless — it just walks into the bishop to d2. c4 by White isn't scary; our centre chain is super protected and White is underdeveloped. For the dark-squared bishop, modest is best: the bishop to c5 walks into the check on b5 forcing the knight back to d7, and the bishop to d6 invites the annoying bishop to g5 pin, so the bishop to e7 is more solid — we're up a piece with the bishop pair, no need to rush. We castle, unafraid of the x-ray, since d5 is well protected. If c4, then the pawn takes c4 hitting the queen, and after the trade on d8 and f8 White ends up a pawn down in a miserable endgame. The final priority is the bishop, via b6. White plays c4; the bishop to b7 supports d5 beautifully, or the pawn takes c4 — interchangeable, depending on whether you allow an endgame; I don't mind, so the pawn takes c4, keeping it calculation-free. The queen to c2, and we can block with the knight to d5 — a powerful knight, supported from behind by the bishop; our queen on the eighth still has the e8-a4 diagonal and can build a battery on c6. I choose the aggressive knight to d5, establishing it centrally — the absence of a white light-squared bishop means d5 can never be over-pressured. Then the accurate queen to c4, offering a trade and unpinning the knight, exploiting the contact between our knight sitting on d5 and White's bishop sitting on f4, which leaves White's queen overextended; if White declines, the queen is stuck on the fourth rank or loses the bishop. Our opponent resigns. Finishing in style: don't rush the bishop takes f3 — keep the bishop, since if the knight jumps to d5 we take it with the bishop, hitting the queen and winning a piece; there's also a fork on e2 if the knight goes the other way. Then the queen to c5, connecting the rooks and threatening the bishop takes f3, the g-pawn recaptures, the queen swings to g5, and the king gets hunted down by the queen with mate. The opponent walks into it; the bishop takes f3, and the king hunt begins — don't over-fixate on mate, cash material: the queen to g1 with check, the queen takes f2 with check driving the king to d1, the queen takes f3 with check, and finally the rook comes to c1 with mate, the b4-square controlled so the king can't escape and e5 would have been mate.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1056,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "More straightforward than I expected against a 2000-plus opponent. Where did it go wrong for our opponent? First —",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -151,7 +149,8 @@
     "cxd4",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "— this whole knight to f3 business is unnecessary; if you're playing it, just go Open Sicilian — there's no downside to the knight to f3.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -160,7 +159,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "White isn't really avoiding anything. The only so-called trap this order sets is e5, which many play without knowing the line, thinking the knight takes e5 and the queen to a5 wins the knight —",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -170,14 +170,16 @@
     "Nxe5",
     "Qa5+"
    ],
-   "spoken": ""
+   "spoken": "— but after c3 it's a terrible Smith-Morra; Black isn't lost after d6, but you've created massive light-square weaknesses, and after the bishop to c4 White's development lead becomes alarming — one more careless move and the bishop to g5 ends it, since f7 can't be defended. So the best move is the knight to c6, transposing to an Alapin line normally reached via the e5 order —",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 1156,
    "fen": "rnbqkbnr/pp1p1ppp/8/4p3/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "— a very legitimate, recently popular line against the elephant; if White plays d4 and after the mass trade on d4, a top move is the bishop to c4, transposing directly, and after the knight to f6 it's a common position.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -187,7 +189,8 @@
     "c3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "So you can reach it via e5, c3, the knight to c6, the pawns trade —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -197,7 +200,8 @@
     "cxd4",
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "— the pawns come off on d4 —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -206,7 +210,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "— and then either the bishop to c4 or the knight takes d4, transposing into that Alapin line —",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -215,7 +220,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— via this move order.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -224,7 +230,8 @@
    "line": [
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "If the knight to g5 here, I don't think it works, because Black has a check on b4 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -233,7 +240,8 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": ""
+   "spoken": "— the check on b4 —",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -242,7 +250,8 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "— and the point of that check —",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -251,14 +260,16 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— is to get yourself castled so you protect f7, a unique defensive resource that doesn't exist in most fried-liver positions. Black also has d5 here.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1200.5,
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
    "line": [],
-   "spoken": ""
+   "spoken": "But after the trade you get a fried-liver-ish situation where Black can get caught in the crossfire quickly, so we don't touch e5 — we don't need it.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -267,7 +278,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "You could also consider d5 —",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -276,14 +288,16 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "— but that's unnecessarily theoretical; just play the move you normally play.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 1208.5,
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "In this case the knight to c6, and the bishop to c4 is a serious mistake, because after the knight to f6 I don't see how White keeps material equality. Our opponent overlooked the knight takes e5, the source of all his struggles. Even without e5, the e4-pawn is hard to defend; and the bishop takes f7 might actually be best, recovering the piece — but not via the knight, as you'd think; there's a trap, so instead you go diagonally with the queen to h5.",
+   "reanchor": true
   }
  ]
 }

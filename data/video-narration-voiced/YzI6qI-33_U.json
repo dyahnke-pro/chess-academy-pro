@@ -2,8 +2,9 @@
  "videoId": "YzI6qI-33_U",
  "title": "Understanding the Accelerated Dragon!! | Open Sicilian | GM Naroditsky's Theory Speed Run",
  "openingName": "Sicilian Defense: Accelerated Dragon",
+ "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:YzI6qI-33_U",
  "moves": [
   {
@@ -14,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We have Black against a strong player and answer the king's-pawn with c5 — the Sicilian."
   },
   {
    "ply": 3,
@@ -23,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 4,
@@ -32,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6, heading for a mainline Accelerated Dragon."
   },
   {
    "ply": 5,
@@ -41,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White strikes with the pawn to d4 — the Open Sicilian."
   },
   {
    "ply": 6,
@@ -50,7 +51,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We capture on d4."
   },
   {
    "ply": 7,
@@ -59,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight — music to my ears."
   },
   {
    "ply": 8,
@@ -68,10 +69,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "With the pawn on g6 Black clears the way to fianchetto the bishop to g7, where it will rake the long diagonal from the corner straight through the centre toward White's queenside.",
-   "kind": "main",
-   "teaches": "In the Dragon the dark-squared bishop is the star piece — the whole setup is built around its diagonal.",
-   "plans": "Fianchetto the bishop to g7, castle, and lean on the centre from afar."
+   "spoken": "The pawn to g6, the Accelerated Dragon fianchetto — only our second of the whole run."
   },
   {
    "ply": 9,
@@ -80,14 +78,15 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays the knight to c3 — the other main line, as opposed to the Maroczy Bind with c4."
   },
   {
    "ply": 8,
    "t": 217.5,
    "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Against the Maroczy Bind with c4, I have a sideline where you play the knight to f6 before fianchettoing.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -96,7 +95,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "But the knight to c3 is the other main line.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -105,10 +105,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The bishop settles on g7 and immediately leans on the long diagonal; its first target is the knight on d4, the piece holding White's grip on the centre.",
-   "kind": "main",
-   "teaches": "A fianchettoed bishop fights for the centre from a distance — contesting d4 is the Dragon's opening battle.",
-   "plans": "Castle, then pile onto d4 and the half-open c-file."
+   "spoken": "The bishop to g7, developing and pressuring the d4-knight down the long diagonal."
   },
   {
    "ply": 11,
@@ -117,17 +114,15 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop backs up the d4-knight and readies castling long — the sharp opposite-wings main line. Capturing on c6 instead would be a concession: Black recaptures toward the centre and the b-file opens against b2.",
-   "kind": "main",
-   "teaches": "Trading the knight on c6 hands Black the open b-file and an easy central break — so White keeps the tension.",
-   "plans": "Both sides head for opposite-side castling and a race."
+   "spoken": "White develops the bishop to e3 — the main line."
   },
   {
    "ply": 10,
    "t": 251.5,
    "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Newer players tend to capture on c6 here, which is an immediate concession: Black recaptures toward the centre and the open b-file lets the rook pressure b2.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -136,7 +131,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "So the bishop to e3 is a no-brainer at higher levels. A mainline Dragon player would play d6 here — but from an Accelerated standpoint that lets White transition to a mainline Dragon with f3.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -145,10 +141,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "This is what keeps it an ACCELERATED Dragon: the knight comes to f6 before the d-pawn commits. Play the pawn to d6 now and White gets f3, transposing into a Main-Line Dragon; holding the pawn on its home square keeps the one-move central break in reserve.",
-   "kind": "main",
-   "teaches": "Move order is the Accelerated Dragon's whole point — delay the small pawn push so the full central break in a single move stays available.",
-   "plans": "Keep the d-pawn home; aim to strike the centre in one move later."
+   "spoken": "So we keep it uniquely Accelerated by developing the knight to f6 first — not pushing any central pawns yet, maybe not for several more moves."
   },
   {
    "ply": 13,
@@ -157,10 +150,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "A rule to burn in: once White's queen leaves its home square in a Dragon, look hard at the knight leap to g4. Trading that knight for the dark-squared bishop leaves the g7-bishop without a rival on its diagonal. The catch — after the leap the bishop can't step off e3, since the twice-attacked d4-knight would fall, so White's only try is to capture on c6 first.",
-   "kind": "main",
-   "teaches": "Prise off White's dark-squared bishop and your g7-bishop rules the long diagonal uncontested.",
-   "plans": "Castle, keep the g4-leap in reserve, and watch the d-file."
+   "spoken": "White plays the queen to d2 — a not-especially-good sideline; the main is the bishop to c4. In any Dragon setup, once the queen leaves d1, consider the knight to g4: trading it for White's dark-squared bishop leaves our Dragon bishop uncontested. After the knight to g4 the bishop can't move — it would drop the twice-attacked d4-knight — though White can take on c6 and shift the bishop to d4."
   },
   {
    "ply": 14,
@@ -169,10 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "With the concrete lines still murky, the soundest choice is to finish developing and castle. The pawn deliberately stays home: if White insists on a Main-Line Dragon setup, the central break in one move is the reward.",
-   "kind": "main",
-   "teaches": "When the calculation is unclear, complete development before forcing matters.",
-   "plans": "King to safety, pieces ready, break the centre when it counts."
+   "spoken": "We castle. And we don't play d6, which would let White transition to the Dragon with f3 — keeping the pawn on d7 means we can later strike with d5 in one move."
   },
   {
    "ply": 15,
@@ -181,10 +168,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "White castles long, and now the king and queen sit on the same file — that changes the whole assessment. The knight leap to g4 comes back on: after the capture on c6 and the bishop's move to d4, the bishop swings to h6 and pins the queen to the king. White blocks with f4, but then the e-pawn hits f4 and, with the pin freezing it, wins material.",
-   "kind": "main",
-   "teaches": "A move that failed a moment ago can work once the pieces shift — recalculate the instant the position changes.",
-   "plans": "Play the knight to g4 now, heading for the h6-pin."
+   "spoken": "White castles queenside. Now the king and queen are aligned, so we recalculate the knight to g4: if White takes c6 and plays the bishop to d4, we have the bishop to h6, pinning the queen. White blocks with f4 — but then the pawn to e5 is winning."
   },
   {
    "ply": 16,
@@ -193,10 +177,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The knight jumps in with a double point: it eyes the bishop on e3 and, with the queen no longer home, the whole h6-pin idea is live. The bishop still can't move — the d4-knight is attacked twice and would drop.",
-   "kind": "main",
-   "teaches": "A knight on g4 both harasses the e3-bishop and clears the g7-bishop's diagonal.",
-   "plans": "Provoke the capture on c6, then swing the bishop to h6."
+   "spoken": "The knight to g4 — hitting the f4-pawn, threatening the capture on f4, and attacking the d4-bishop: a simple double attack that costs White at least a piece."
   },
   {
    "ply": 17,
@@ -205,7 +186,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "White takes on c6."
   },
   {
    "ply": 18,
@@ -214,10 +195,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "Recapturing toward the centre swings the b-file wide open, and with White castled long that file points straight at b2 — the attack writes itself. The c-pawn now becomes a battering ram against White's king cover.",
-   "kind": "main",
-   "teaches": "Recapture toward the centre to open a file; against a queenside-castled king the half-open b-file is gold.",
-   "plans": "Queen to b6 or a5, rook to b8, and prise open b2."
+   "spoken": "We recapture with the b-pawn, ruining White's structure and opening the b-file — with White castled queenside that often spells immediate doom. The queen to b6 hits f2, which the g4-knight also attacks; the pawn to e5 chasing the bishop is another plan."
   },
   {
    "ply": 19,
@@ -226,7 +204,7 @@
    "line": [
     "Bd4"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to d4."
   },
   {
    "ply": 20,
@@ -235,10 +213,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "There it is — the bishop swings to h6 and pins the queen to the king along the dark diagonal. The queen is nailed in place.",
-   "kind": "main",
-   "teaches": "With White's king on c1 and queen on d2, the h6-to-c1 diagonal is a pin waiting to happen.",
-   "plans": "Meet the block f4 with the pawn break e5."
+   "spoken": "We respond instantly with the bishop to h6, pinning the queen."
   },
   {
    "ply": 21,
@@ -247,7 +222,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "White plays the pawn to f4, walking right into the losing line."
   },
   {
    "ply": 22,
@@ -256,17 +231,16 @@
    "line": [
     "e5"
    ],
-   "spoken": "The crusher. The e-pawn strikes f4, and because the queen is pinned the pawn cannot capture back — it is as if f4 were not there — so the bishop on d4 falls and Black emerges a full piece up. Precision first, though: snatching with the bishop on f4 with check is the tempting error; after the king steps aside, taking on d4 lets White recapture and the f4-bishop is left hanging. Take on d4 first — the f4-pawn is not going anywhere.",
-   "kind": "main",
-   "teaches": "The power of a pin is that the pinned piece cannot defend — a frozen pawn effectively does not exist.",
-   "plans": "Collect on d4, keep the pin, and convert the extra piece."
+   "spoken": "The pawn to e5 — the crusher. With the queen pinned, the f4-pawn can't move, so it's as if it isn't there and e5 wins. White's best is to take on e5 and decline the recapture, down a full piece. Then the attack is decisive: the c3-pawn becomes a battering ram shattering White's queenside cover, the queen to b6 threatens mate in one plus a check on e3, and the lobster-pincer mate with the queen reaching a3 finishes it — first opening the centre with d5 so the king finds no relief, and connecting the rooks with the bishop to g4 to bring a rook to d8.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1455,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "An easy game — the Accelerated is the Sicilian nobody studies, and when you're on your own in a Sicilian, bad things happen. Against the Maroczy the recommendation is the knight to f6 first, setting a trap: if White grabs and pushes e5, there's a fork on the king and pawn. And in an earlier game White's bishop to e3 was a positional mistake punished by the knight to g4 — trading the knight for the bishop for uncontested dark squares.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -278,7 +252,8 @@
     "cxd4",
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "With precise play White is slightly better, but it's a very playable position that's easy to learn.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -288,7 +263,8 @@
     "g6",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We're facing the knight to c3 and the bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -298,7 +274,8 @@
     "Bg7",
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to g7 and the bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -307,7 +284,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "After the knight to f6, the queen to d2.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -316,7 +294,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "The queen to d2 is a move I honestly hadn't come across.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -325,7 +304,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "And the engine confirms castling is the correct reply — so we made the right decision.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -337,17 +317,16 @@
     "Qc3",
     "Kh8"
    ],
-   "spoken": "Against the offbeat queen move, White's soundest setup reroutes the knight back to d1 and swings the queen to c3; Black finishes developing with the rook to e8 and the king to h8. A quiet, level middlegame — the point is only that this queen move is a harmless sideline, not a real test.",
-   "kind": "branch",
-   "teaches": "Not every unusual move is a threat — meet a passive sideline by simply completing development.",
-   "plans": "Reach a sound middlegame and play for the better structure."
+   "spoken": "Why avoid the mainline Dragon? It and the Accelerated are completely different animals.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1624.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The mainline Dragon and the Accelerated produce utterly different positions.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -356,9 +335,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "The Main-Line Dragon starts differently: the small pawn step to d6 first. That single choice defines it — the pawn commits early and the whole character of the position changes.",
-   "kind": "branch",
-   "teaches": "One pawn move can define an entire opening's character; committing the d-pawn early is what separates the classical Dragon from the accelerated one."
+   "spoken": "The traditional Dragon runs through the pawn to d6 and d4.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -370,7 +348,8 @@
     "Nxd4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "That's the entry point to the Najdorf and the Dragon.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -379,7 +358,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The Najdorf with a6, which I could also have recommended.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -388,9 +368,8 @@
    "line": [
     "g6"
    ],
-   "spoken": "Here the fianchetto arrives with the pawn already on d6 — the classical Dragon. It is not refuted, but it is razor-sharp and drenched in theory, and a single slip can be mate.",
-   "kind": "branch",
-   "teaches": "A sound opening can still be impractical: heavy forced theory and a fragile king are real costs."
+   "spoken": "The Dragon with g6 isn't refuted, but it's ridiculously risky and demands loads of theory.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -399,7 +378,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3 — and even knowing tons of theory you can still get mated; the Dragon's standing is a bit dubious.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -408,7 +388,8 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "So players are more likely to study the Dragon from White's side than the Accelerated.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -417,9 +398,8 @@
    "line": [
     "f3"
    ],
-   "spoken": "The Main-Line Dragon's signature is the pawn to f3: White braces the e4-pawn, then castles long and storms the kingside with the pawns. That f3 build-up is exactly what the accelerated move order is designed to sidestep.",
-   "kind": "branch",
-   "teaches": "f3 is the tell of the Yugoslav setup — brace the centre, castle long, and push the h- and g-pawns."
+   "spoken": "The key distinction: in the mainline Dragon White plays f3, and the main line runs the knight to c6 and the queen to d2.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -428,7 +408,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight to c6.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -438,7 +419,8 @@
     "Qd2",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "The queen to d2 and castling, normally into opposite-side castling.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -447,14 +429,16 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "That's one main line.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 1675.5,
    "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
    "line": [],
-   "spoken": ""
+   "spoken": "In the other, White develops first.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -463,16 +447,16 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "In the mainline White develops the bishop to c4, aimed at f7 and, above all, clamping down on the d5-break — the one freeing move Black wants.",
-   "kind": "branch",
-   "teaches": "Stopping the opponent's key freeing break is worth a developing move; the bishop on c4 guards d5."
+   "spoken": "The bishop to c4 to stop d5 — the Yugoslav Attack.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 1683,
    "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
    "line": [],
-   "spoken": ""
+   "spoken": "In the line where Black plays d5.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -482,7 +466,8 @@
     "O-O-O",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Castling and the pawn to d5.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -492,7 +477,8 @@
     "exd5",
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "The capture on d5 and the recapture with the knight.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -502,7 +488,8 @@
     "Nxc6",
     "bxc6"
    ],
-   "spoken": ""
+   "spoken": "The knight takes c6 and the recapture — the most popular line nowadays.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -511,7 +498,8 @@
    "line": [
     "Bd4"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to d4 — that same idea of taking Black's fianchetto bishop out of commission.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -520,7 +508,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "And Black is often forced into the undesirable pawn to e5.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -529,9 +518,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "This is the sting of the mainline: Black is often forced to push the pawn to e5, and the bishop drops to c5, shutting down the g7-bishop's diagonal. It takes much of the fun out of the Dragon, and White is considered better here.",
-   "kind": "branch",
-   "teaches": "When your best piece is a fianchettoed bishop, a clamp that permanently closes its diagonal is a real positional concession."
+   "spoken": "The bishop to c5, closing the diagonal — which takes a lot of the fun out of the Dragon; a very popular line where White is considered better.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -540,16 +528,15 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "The rook to e8 — Black often sacrifices the exchange here, though Giri recommends this relatively rare rook move.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 1728.5,
    "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
    "line": [],
-   "spoken": "Back in the Accelerated move order comes the key point — a trap that even Bobby Fischer once fell into. Because Black has NOT committed the pawn to d6, when White tries the same f3-and-queen setup the knight leap to g4 hits the bishop with the queen off its square, and White cannot hold everything. The uncommitted d-pawn is exactly what makes the difference.",
-   "kind": "trap",
-   "teaches": "Keeping a pawn uncommitted preserves tactical resources a premature push would throw away.",
+   "spoken": "Back to the Accelerated — the important point, a trap even Fischer fell into: White tries the same idea with f3 and the queen to d2, but since we haven't committed to d6, we save a tempo and strike with d5 in one move. The same position arises in the mainline Dragon but with White to move; here it's White who must react, and after the capture on d5 we have a simple discovery, the knight to c4, leaving Black much better — the queen to a5 gives a great position against White's damaged structure.",
    "reanchor": true
   }
  ]

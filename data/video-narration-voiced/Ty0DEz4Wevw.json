@@ -1,0 +1,338 @@
+{
+ "videoId": "Ty0DEz4Wevw",
+ "title": "Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Queen's Gambit Declined",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Ty0DEz4Wevw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 621.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "spoken": "Meeting the c-pawn with e6 heads for a Queen's Gambit Declined structure — and there's a hidden bonus: as a QGD player you barely need to study the English at all, which slashes the amount of theory you have to carry."
+  },
+  {
+   "ply": 3,
+   "t": 638.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 639.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5N2/PP1PPPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 646,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 659.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 664,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/8/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 668,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/8/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "Capturing on d5 this early is simply a bad move — it releases the central tension prematurely, hands over better control of the middle, and is completely toothless. It's a sign the opening's ideas aren't fully understood."
+  },
+  {
+   "ply": 9,
+   "t": 678.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 703.5,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bd6",
+    "Bg2"
+   ],
+   "spoken": "There's no single right way to develop, but a fine plan is the bishop to d6 followed, London-style, by c6 — a compact, harmonious shell that's easy to handle in any move order.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 708.5,
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQK2R w KQ - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 717,
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQ1RK1 b - - 4 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 719,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3p4/3P4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Now the question of the light-squared bishop. It wants the good diagonal, but a pawn move to prepare it would weaken the kingside — so instead insert a flexible move first, a rook to e8. It's a square the rook is simply happy on, and it quietly rules out an annoying central knight leap. When unsure, play the move you know can't hurt.",
+   "kind": "plan"
+  },
+  {
+   "ply": 17,
+   "t": 803.5,
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3p4/3P4/2N2NP1/PPQ1PPBP/R1B2RK1 b - - 3 9",
+   "line": [
+    "Nc3",
+    "Re8",
+    "Qc2"
+   ],
+   "spoken": "Here's the elegant way to get the bishop to its diagonal without the weakening pawn push: develop to g4, then swing it around via h5 toward g6 — no hurry, it's happy where it sits. And a strategic point on the queenside: most players would automatically stop the pawn expansion, but you can allow it and then freeze the pawn in place, which isn't good for the opponent at all. Then a rook-pawn nudge puts the question to the pinning bishop. If it retreats to a square where a pawn is its lone defender, watch for an overload — one pawn guarding two things at once is a defender stretched too thin. And the meta-lesson of the finish: the hallmark of the great attackers is knowing when to just play simple. Don't chase the brilliancy prize and leave points on the table — a clean pawn grab ends it, and even then order of operations matters: the right capture sequence leaves the opponent unable to recapture in any legal way.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 3,
+   "t": 1197.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1200.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1203,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "g3",
+    "d5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1207,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nf6",
+    "d4"
+   ],
+   "spoken": "Be aware of the transposition — a central pawn push here would steer into a Catalan, which is a demanding, theory-heavy opening best left alone below master strength, since it asks you to be comfortable a pawn down for long stretches.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1241.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1245.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQK2R b KQkq - 3 4",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1252.5,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQK2R w KQkq - 4 5",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1257.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQ1RK1 w - - 6 6",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1260,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1266.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2Pp4/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1270,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2Pp4/1P2PNP1/P2P1PBP/RNBQ1RK1 b - - 0 7",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1271,
+   "fen": "rnbq1rk1/pp2bppp/4pn2/2p5/2Pp4/1P2PNP1/P2P1PBP/RNBQ1RK1 w - - 0 8",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1273.5,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1277,
+   "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1283,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1284,
+   "fen": "rnbq1rk1/p1p1bppp/1p2pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1287,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1288,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQ1RK1 w - - 6 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1289.5,
+   "fen": "rnbqr2k/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K w - - 10 8",
+   "line": [
+    "Re1",
+    "Re8",
+    "Kh1",
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1296,
+   "fen": "rnbqrb1k/ppp2ppp/5n2/3p4/8/5NP1/PP1PPP1P/RNBQRB1K w - - 0 10",
+   "line": [
+    "cxd5",
+    "Bf8",
+    "Bf1",
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1301.5,
+   "fen": "rnbqr2k/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PP1P/RNBQRB1K w - - 1 11",
+   "line": [
+    "d4",
+    "Bd6"
+   ],
+   "spoken": "With the tension released, the bishop develops freely and the second player is, if anything, already slightly the better side — the premature capture yielded the centre for nothing."
+  },
+  {
+   "ply": 14,
+   "t": 1306.5,
+   "fen": "rnbqr2k/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K w - - 10 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1311,
+   "fen": "rnbqr1k1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K b - - 9 7",
+   "line": [],
+   "spoken": "And a crucial structural warning: don't develop the knight to c6 in these positions. Beginners do it for lack of understanding that the d5 pawn must be kept under lock and key — the knight blocks the c-pawn, so a knight-and-bishop set-up starts pressing d5 while it can't be properly defended. The very same trap catches players in the Caro-Kann for exactly the same reason.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

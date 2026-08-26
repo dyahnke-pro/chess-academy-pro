@@ -1,0 +1,398 @@
+{
+ "videoId": "aoWDLhcoQtE",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1770",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:aoWDLhcoQtE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 924.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 927,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 936,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The early c-pawn advance isn't great — it permanently weakens the d4 square, and that hole can be occupied straight away by developing a knight toward it."
+  },
+  {
+   "ply": 5,
+   "t": 937.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 951.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 953.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": "Develop as if this were an Accelerated Dragon — the fianchetto with g6 and the bishop to g7 controls the d4 square with even greater force. Everything is aimed at that one weakness.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 956,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB3/PP3PPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "Be3",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 959,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 986,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The knight-development question has a subtle answer: the natural square would block the bishop's grip on d4, so route the knight to e7 instead. It looks odd, but it's a very typical set-up that keeps the bishop's control of the key square intact.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 990,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P3/2NPB2P/PP2NPP1/R2QKB1R w KQkq - 2 8",
+   "line": [
+    "Nge2",
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 992.5,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P1P1/2NPB2P/PP2NP2/R2QKB1R b KQkq - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 995.5,
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NP2/R2QKB1R w KQkq - 1 9",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Now cash in that control — the knight leaps into the d4 outpost, a permanent monster in the heart of the position, soon to be reinforced by its partner so the two knights guard each other.",
+   "kind": "plan"
+  },
+  {
+   "ply": 17,
+   "t": 998,
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R b KQkq - 2 9",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1000,
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R w KQkq - 3 10",
+   "line": [
+    "Nec6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1002.5,
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R b KQkq - 4 10",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1017,
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R w KQ - 5 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Before adding any spice, finish the basics — castle and get the king safe. Don't jump the gun on an attack until development is complete.",
+   "kind": "plan"
+  },
+  {
+   "ply": 21,
+   "t": 1018.5,
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 b - - 6 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1042,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 w - - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": "One way forward is to break with f5 and open the position — the logic being the classic one: with better-placed pieces, especially that dominant knight, it's often the moment to open lines. It's risky in front of your own king, but the piece superiority justifies it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 1051,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnPPP1/2NPB2P/PP1QN1B1/R4RK1 b - - 0 12",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1054.5,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPp1/2NPB2P/PP1QN1B1/R4RK1 w - - 0 13",
+   "line": [
+    "fxg4"
+   ],
+   "spoken": "The opponent's kingside pawn push has handed over a hook — a fixed target to lever against. The plan is to attack it, capturing to open lines and prise the shelter apart.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 1062.5,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPP1/2NPB3/PP1QN1B1/R4RK1 b - - 0 13",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1065.5,
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p5/2PnPPPq/2NPB3/PP1QN1B1/R4RK1 w - - 1 14",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The queen swings to h4 to pile onto that weak pawn — bringing the heaviest piece to bear exactly where the opponent overextended.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 27,
+   "t": 1067.5,
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p3P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 b - - 0 14",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1081,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 w - - 0 15",
+   "line": [
+    "e5"
+   ],
+   "spoken": "As the opponent shoves pawns further forward, they only overextend — the pawns become harder and harder to defend. The way to punish it is a central strike to shatter what's left of the defences.",
+   "kind": "plan"
+  },
+  {
+   "ply": 29,
+   "t": 1088.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NP4/PP1QNBB1/R4RK1 b - - 1 15",
+   "line": [
+    "Bf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1090.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBB1/R4RK1 w - - 2 16",
+   "line": [
+    "Qg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1099.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBBK/R4R2 b - - 3 16",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1118.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PnPpq1/2NP4/PP1QNBBK/R4R2 w - - 0 17",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "No need for fireworks — the calm capture wins a free pawn, and it rolls forward to send the defending bishop back, clearing the way for the queen to infiltrate. Simplicity beats a speculative sacrifice when the position is already winning.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 33,
+   "t": 1129.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PNPpq1/2NP4/PP1Q1BBK/R4R2 b - - 0 17",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1131,
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PnPpq1/2NP4/PP1Q1BBK/R4R2 w - - 0 18",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1136.5,
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PBPpq1/2NP4/PP1Q2BK/R4R2 b - - 0 18",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": "Recapture with the knight — and even though it allows the outpost knight to be traded off, look at the dark squares laid bare around the enemy king. The exchange rips open the very colour complex the attack needs.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 36,
+   "t": 1143,
+   "fen": "r1b2rk1/pp5p/3p2p1/2p3P1/2PbPpq1/2NP4/PP1Q2BK/R4R2 w - - 0 19",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1150.5,
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPpq1/3P4/PP1Q2BK/R4R2 b - - 1 19",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "With the king boxed into the corner and no escape, the threat of the queen to h4 is essentially mate in two. The collapse came purely from pushing too many pawns in front of the king.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 38,
+   "t": 1153.5,
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPp2/3P3q/PP1Q2BK/R4R2 w - - 2 20",
+   "line": [
+    "Qh3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1170.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1173,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "Nc6",
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1174.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "g6",
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1176.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "line": [
+    "h3",
+    "d6",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1178,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1179,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1181.5,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The opponent's biggest missed chance was to strike with a central pawn to d4 himself, curing the weakness at its root. Left uncured, that hole is what gives the second player such harmonious, dominating pieces.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

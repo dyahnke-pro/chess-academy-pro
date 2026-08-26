@@ -1,10 +1,10 @@
 {
  "videoId": "8QxDmN_BMaU",
  "title": "Beginner To Master | Chess Speedrun | King's Gambit | Grandmaster Naroditsky",
- "openingName": "King’s Gambit",
+ "openingName": "King's Gambit",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:8QxDmN_BMaU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to e4, e5. The King's Gambit has been around since the 16th century — essentially forever."
   },
   {
    "ply": 3,
@@ -24,16 +24,15 @@
    "line": [
     "f4"
    ],
-   "spoken": "The King's Gambit — f4 offers a pawn to blast open the f-file and seize the center, the oldest romantic attacking try in chess.",
-   "kind": "main",
-   "teaches": "Gambit a wing pawn to open lines and build a big center for a direct attack."
+   "spoken": "f4 — as long as chess has existed in Europe, so has the King's Gambit."
   },
   {
    "ply": 2,
    "t": 1274.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The first recorded King's Gambit game was played by Ruy Lopez — in 1560 in Rome, against an Italian player, Giovanni Leonardo da Cutri —",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -43,7 +42,8 @@
     "f4",
     "d6"
    ],
-   "spoken": ""
+   "spoken": "— and Lopez absolutely demolished him. Black played d6, an old-fashioned way of declining the King's Gambit — not a great move, really passive.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -55,7 +55,8 @@
     "Nf3",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Lopez played the bishop to c4, c6, the knight to f3, the bishop to g4, and Black is already in big trouble.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -65,7 +66,8 @@
     "fxe5",
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "The f-pawn takes e5, the d-pawn recaptures — and what very typical tactical move did White play now?",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -76,7 +78,8 @@
     "Kxf7",
     "Nxe5+"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes f7 with check, the king takes, and the knight takes e5 with check — Lopez was quite good; he wrote a book on chess, while Leonardo just wasn't a very good player.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -85,7 +88,8 @@
    "line": [
     "Ke8"
    ],
-   "spoken": ""
+   "spoken": "The king to e8, the queen takes g4, and now the queen to e6.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -97,14 +101,16 @@
     "Qf6",
     "Nxf6"
    ],
-   "spoken": ""
+   "spoken": "White to play and win the game in the fastest way — Lopez played a perfect game: the queen to f3, the bishop to e6, the queen to f6, and the knight takes f6. He might as well have been using an engine — notorious; he got banned.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1389,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "That was the first ever recorded King's Gambit, Lopez versus Leonardo. What's impressive is that f4 isn't an intuitive move — the intuitive move is the knight to f3; f4 actually weakens White's king, so it took some courage, squarely to those early players' credit. Then Giulio Polerio crushed Busnardo in 1590, and Gioachino Greco, in the early 1600s, formalized a lot of the analysis. By Morphy's day in the 1800s it was all the rage, for a time more popular than any other opening; then the Italian, the Ruy Lopez, and the Scotch overtook it, and it fell out of favor in the early 1900s as Black found precise ways to play. Computers have not refuted it — Black isn't winning and has no big advantage — but Black has several ways to a very comfortable position that take the sting out, which is really why it fell out of favor.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -115,7 +121,8 @@
     "Nf3",
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "He takes on f4, the knight to f3 — d6 is the second most popular move; I played d4.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -125,9 +132,8 @@
     "d4",
     "g5"
    ],
-   "spoken": "In the classical King's Gambit Black clings to the extra pawn with g5, propping up a pawn chain — but that chain is loose, and White strikes it with h4.",
-   "kind": "main",
-   "teaches": "When the opponent over-defends a gambit pawn on the wing, undermine the chain that supports it."
+   "spoken": "And g5, of course, to keep the pawn, otherwise this makes no sense — the bishop to c4 is actually rare; h4 is the main line.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -136,9 +142,8 @@
    "line": [
     "h4"
    ],
-   "spoken": "h4 hits the g5-pawn at once, prying open the h-file and refusing to let Black consolidate the extra pawn — the sharp, sacrificial soul of the opening.",
-   "kind": "main",
-   "teaches": "In sharp gambits, keep hitting the opponent's defensive pawns before they finish developing."
+   "spoken": "h4 —",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -148,7 +153,8 @@
     "g4",
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "— a sacrifice line: h4, g4, and the knight to g5, which Morozevich played and is interesting but probably unsound; the real move is the knight back to g1, since you've softened f4 enough to undevelop the knight, justified if you take the pawn in the end. I was out of book, so I played the natural bishop to c4 — nothing particularly wrong with it. If Black had played g4, I fully intended to sacrifice the knight and castle, a variety of the Muzio Gambit — the spirit stays sound because of how many pieces White develops and how weak Black's king is; practically, if Black doesn't know the theory, this is dangerous.",
+   "reanchor": true
   }
  ]
 }
