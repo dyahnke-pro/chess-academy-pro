@@ -2002,7 +2002,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       if (!activeProfile) return;
       void detectBadHabitsFromGame(gameState.moves, activeProfile);
       void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
-        void computeWeaknessProfile(activeProfile);
+        // Background recompute — a transient DB hiccup here is non-fatal (the
+        // per-game puzzles already persisted above), so swallow rather than let
+        // it surface as an unhandled rejection (David 2026-08-26).
+        void computeWeaknessProfile(activeProfile).catch(() => undefined);
       });
       // Thinking-Errors capture from this game's annotations — the live "why
       // did you play that?" faucet is retired, so capture happens here on

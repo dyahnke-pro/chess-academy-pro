@@ -443,7 +443,7 @@ export function App(): JSX.Element {
             store reviewer) can always reach them. */}
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/support" element={<SupportPage />} />
-        <Route element={<AccessGate><AppLayout /></AccessGate>}>
+        <Route element={<AccessGate><ErrorBoundary><AppLayout /></ErrorBoundary></AccessGate>}>
           <Route path="/" element={<ErrorBoundary><DashboardPage /></ErrorBoundary>} />
           <Route path="/academy" element={<ErrorBoundary><AcademyPage /></ErrorBoundary>} />
           <Route path="/academy/course/:id" element={<ErrorBoundary><CourseSyllabusPage /></ErrorBoundary>} />

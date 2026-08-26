@@ -967,30 +967,45 @@ function buildStrengthItems(
 export async function computeWeaknessProfile(
   profile: UserProfile,
 ): Promise<WeaknessProfile> {
-  // Gather all data in parallel. The five direct store scans run inside ONE
-  // shared read transaction so concurrent auto-transactions don't tear each
-  // other's cursors down mid-iteration on iOS WebKit ("cursor that doesn't
-  // exist" / "…without an in-progress transaction" — PostHog on /weaknesses).
-  // Same fix pattern as coachContextSnapshot + getUnifiedWeaknessProfile.
-  const [themeSkills, repertoire, direct, misconceptions] = await Promise.all([
-    getThemeSkills(),
-    getRepertoireOpenings(),
-    db.transaction(
-      'r',
-      [db.games, db.sessions, db.flashcards, db.mistakePuzzles, db.openingWeakSpots],
-      async () => {
-        const [recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots] = await Promise.all([
-          db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
-          db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
-          db.flashcards.toArray(),
-          db.mistakePuzzles.toArray(),
-          db.openingWeakSpots.toArray(),
-        ]);
-        return { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots };
-      },
-    ),
-    getMisconceptionProfile({ countedOnly: true }),
-  ]);
+  // Gather EVERY read inside ONE shared read transaction so no concurrent
+  // auto-transactions tear each other's cursors down mid-scan on WebKit
+  // ("Attempt to iterate a cursor that doesn't exist" — the crash David hit on
+  // "Analyzing your games", 2026-08-26; recurring web+native in PostHog).
+  //
+  // The earlier fix wrapped only the five direct scans, but getThemeSkills
+  // (db.puzzles.filter → a cursor scan), getRepertoireOpenings (db.openings.
+  // filter → a cursor scan) and getMisconceptionProfile (db.misconceptionTags)
+  // still ran as three SEPARATE auto-transactions in the same Promise.all — the
+  // exact competing-cursor pattern this comment names. They now run INSIDE the
+  // shared transaction: Dexie's zone is ambient, so each helper joins it because
+  // every store it touches is listed below. Same fix pattern as
+  // coachContextSnapshot + getUnifiedWeaknessProfile.
+  const { themeSkills, repertoire, misconceptions, direct } = await db.transaction(
+    'r',
+    [
+      db.puzzles, db.openings, db.misconceptionTags,
+      db.games, db.sessions, db.flashcards, db.mistakePuzzles, db.openingWeakSpots,
+    ],
+    async () => {
+      const [
+        themeSkills, repertoire, misconceptions,
+        recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots,
+      ] = await Promise.all([
+        getThemeSkills(),
+        getRepertoireOpenings(),
+        getMisconceptionProfile({ countedOnly: true }),
+        db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
+        db.sessions.orderBy('date').reverse().limit(RECENT_SESSIONS_LIMIT).toArray(),
+        db.flashcards.toArray(),
+        db.mistakePuzzles.toArray(),
+        db.openingWeakSpots.toArray(),
+      ]);
+      return {
+        themeSkills, repertoire, misconceptions,
+        direct: { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots },
+      };
+    },
+  );
   const { recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots } = direct;
 
   // Run each analyzer

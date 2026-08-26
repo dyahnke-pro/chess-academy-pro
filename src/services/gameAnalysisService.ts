@@ -8,6 +8,7 @@ import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { detectBadHabitsFromGame } from './coachFeatureService';
 import { classifyTacticsFromGame } from './tacticClassifierService';
 import { useAppStore } from '../stores/appStore';
+import { logAppAudit } from './appAuditor';
 import type { GameRecord, MoveAnnotation, MoveClassification, StockfishAnalysis, UserProfile } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -1035,15 +1036,32 @@ async function recomputeWeaknessFromGames(): Promise<void> {
   const profile = useAppStore.getState().activeProfile;
   if (!profile) return;
 
-  // Update Game ELO from the most recent imported game with rating data
-  await updateEloFromImportedGames(profile);
+  // NON-FATAL: the per-game mistake puzzles / tactic classifications already
+  // persisted INLINE as each game finished (see generateInsightsForGame). This
+  // is only the aggregate refresh at the tail of "Analyzing your games", so a
+  // transient DB hiccup here must NOT sink the whole run — the analysis work is
+  // already saved. A rejection escaping this used to crash the "Analyzing your
+  // games" screen at the computing_weaknesses phase (David 2026-08-26, PostHog
+  // "cursor that doesn't exist"). Root-fixed in computeWeaknessProfile (one
+  // shared read transaction); this catch is the belt-and-suspenders.
+  try {
+    await updateEloFromImportedGames(profile);
 
-  const weaknessProfile = await computeWeaknessProfile(profile);
-  useAppStore.getState().setWeaknessProfile(weaknessProfile);
+    const weaknessProfile = await computeWeaknessProfile(profile);
+    useAppStore.getState().setWeaknessProfile(weaknessProfile);
 
-  const updatedProfile = await db.profiles.get(profile.id);
-  if (updatedProfile) {
-    useAppStore.getState().setActiveProfile(updatedProfile);
+    const updatedProfile = await db.profiles.get(profile.id);
+    if (updatedProfile) {
+      useAppStore.getState().setActiveProfile(updatedProfile);
+    }
+  } catch (err) {
+    void logAppAudit({
+      kind: 'dexie-error',
+      category: 'subsystem',
+      source: 'gameAnalysisService.recomputeWeaknessFromGames',
+      summary: 'aggregate weakness refresh failed (non-fatal — per-game analysis already saved)',
+      details: err instanceof Error ? (err.stack ?? err.message) : String(err),
+    });
   }
 }
 
