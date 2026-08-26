@@ -1,0 +1,510 @@
+{
+ "videoId": "n5BL4u1QpfY",
+ "title": "Beginner To Master | Chess Speedrun | 1500 | Grandmaster Naroditsky",
+ "openingName": "Sicilian Alapin",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:n5BL4u1QpfY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 454.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Another game — a ten-plus-five. I want to keep hammering a narrow set of key concepts rather than sprawling across openings; the focus here isn't really theory. e4, c5."
+  },
+  {
+   "ply": 3,
+   "t": 471,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 — the Alapin, preparing to build a big center with d4."
+  },
+  {
+   "ply": 4,
+   "t": 480.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 is correct and in fact main-line theory."
+  },
+  {
+   "ply": 5,
+   "t": 491.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "We capture, e takes d5."
+  },
+  {
+   "ply": 6,
+   "t": 495,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": "Black recaptures with the queen on d5, pulled out early — but here it's fine."
+  },
+  {
+   "ply": 7,
+   "t": 496,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4, challenging the center. And Black doesn't need to rush the queen away, because it's well placed for the moment."
+  },
+  {
+   "ply": 8,
+   "t": 523,
+   "fen": "rnb1kbnr/pp2pppp/8/3q4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Black takes, c takes d4."
+  },
+  {
+   "ply": 10,
+   "t": 558,
+   "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
+   "line": [
+    "cxd4",
+    "Nc6"
+   ],
+   "spoken": "We recapture and Black develops the knight to c6. A word of warning: people have a tendency to release the tension — if there's a trade available, they grab it — but sometimes you should resist clarifying the position."
+  },
+  {
+   "ply": 11,
+   "t": 559,
+   "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "We develop the knight to f3."
+  },
+  {
+   "ply": 12,
+   "t": 577,
+   "fen": "r3kbnr/pp2pppp/2n5/3q4/3P2b1/5N2/PP3PPP/RNBQKB1R w KQkq - 3 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Black pins with the bishop to g4."
+  },
+  {
+   "ply": 13,
+   "t": 583.5,
+   "fen": "r3kbnr/pp2pppp/2n5/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R b KQkq - 4 7",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Here's the trick: the bishop to e2. You might think Black can just win the d4-pawn — but that's not the whole story, because the queen becomes a loosely-defended piece and White gets tactics."
+  },
+  {
+   "ply": 14,
+   "t": 608.5,
+   "fen": "r3kbnr/pp3ppp/2n1p3/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R w KQkq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Black plays e6, shoring up."
+  },
+  {
+   "ply": 15,
+   "t": 616.5,
+   "fen": "r3kbnr/pp3ppp/2n1p3/3q4/3P2b1/2N2N2/PP2BPPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Now we reap the reward and develop the knight to c3, hitting the queen with tempo."
+  },
+  {
+   "ply": 16,
+   "t": 626,
+   "fen": "r3k1nr/pp3ppp/2n1p3/3q4/1b1P2b1/2N2N2/PP2BPPP/R1BQK2R w KQkq - 2 9",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "Black tries the bishop to b4 — it may look fancy, but it's not that good. What should White do to break the pin?"
+  },
+  {
+   "ply": 17,
+   "t": 649,
+   "fen": "r3k1nr/pp3ppp/2n1p3/3q4/1b1P2b1/2N2N2/PP2BPPP/R1BQ1RK1 b kq - 3 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle — the passive bishop to d2 is unnecessary; castling is the move."
+  },
+  {
+   "ply": 18,
+   "t": 691.5,
+   "fen": "r3k1nr/pp1q1ppp/2n1p3/8/1b1P2b1/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 4 10",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": "Now we can develop the light-squared bishop toward a3, and if Black doesn't castle in time, that king in the center will have a very bad time. Black plays the queen to d7."
+  },
+  {
+   "ply": 19,
+   "t": 723,
+   "fen": "r3k1nr/pp1q1ppp/2n1p3/3P4/1b4b1/2N2N2/PP2BPPP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5, a thematic pawn thrust I played almost without calculating, dislodging the knight on c6."
+  },
+  {
+   "ply": 20,
+   "t": 757.5,
+   "fen": "r3k1nr/pp1q1ppp/2n1p3/3P4/6b1/2b2N2/PP2BPPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": "Black takes on c3."
+  },
+  {
+   "ply": 21,
+   "t": 790,
+   "fen": "r3k1nr/pp1q1ppp/2P1p3/8/6b1/2b2N2/PP2BPPP/R1BQ1RK1 b kq - 0 11",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "Resist the automatic recapture — consider the options. d5 takes c6, and now Black loses either his queen or his bishop."
+  },
+  {
+   "ply": 23,
+   "t": 806.5,
+   "fen": "r3k1nr/pp3ppp/2P1p3/8/6b1/2b2N2/PP2BPPP/R1BR2K1 b kq - 0 12",
+   "line": [
+    "Qxd1",
+    "Rxd1"
+   ],
+   "spoken": "Black trades queens on d1 and we recapture with the rook — and now two of Black's pieces are hanging at once."
+  },
+  {
+   "ply": 24,
+   "t": 839.5,
+   "fen": "r3k1nr/pp3ppp/2P1p3/b7/6b1/5N2/PP2BPPP/R1BR2K1 w kq - 1 13",
+   "line": [
+    "Ba5"
+   ],
+   "spoken": "Black retreats the bishop to a5, but he simply doesn't have the firepower to contain our passed pawn on the queenside."
+  },
+  {
+   "ply": 25,
+   "t": 843,
+   "fen": "r3k1nr/pP3ppp/4p3/b7/6b1/5N2/PP2BPPP/R1BR2K1 b kq - 0 13",
+   "line": [
+    "cxb7"
+   ],
+   "spoken": "The pawn storms forward, c takes b7, one step from queening."
+  },
+  {
+   "ply": 26,
+   "t": 848.5,
+   "fen": "1r2k1nr/pP3ppp/4p3/b7/6b1/5N2/PP2BPPP/R1BR2K1 w k - 1 14",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": "Black throws the rook to b8 to blockade the pawn."
+  },
+  {
+   "ply": 27,
+   "t": 909,
+   "fen": "1r2k1nr/pP3ppp/B3p3/b7/6b1/5N2/PP3PPP/R1BR2K1 b k - 2 14",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "One key mistake people make is taking their foot off the gas — instead let's defend the pawn with tempo, the bishop to a6."
+  },
+  {
+   "ply": 30,
+   "t": 950,
+   "fen": "1r2k2r/pP3ppp/B3pn2/b7/8/5P2/PP3P1P/R1BR2K1 w k - 1 16",
+   "line": [
+    "Bxf3",
+    "gxf3",
+    "Nf6"
+   ],
+   "spoken": "Black takes on f3 and we recapture with the g-pawn, and Black develops the knight to f6."
+  },
+  {
+   "ply": 31,
+   "t": 952,
+   "fen": "1r2k2r/pP3ppp/B3pn2/b7/5B2/5P2/PP3P1P/R2R2K1 b k - 2 16",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The bishop to f4 — this just wins on the spot, hitting the blockading rook."
+  },
+  {
+   "ply": 32,
+   "t": 973,
+   "fen": "1r2k2r/pP1n1ppp/B3p3/b7/5B2/5P2/PP3P1P/R2R2K1 w k - 3 17",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Black plays the knight to d7 — he has to move the rook, and then we promote the pawn."
+  },
+  {
+   "ply": 33,
+   "t": 996,
+   "fen": "1B2k2r/pP1n1ppp/B3p3/b7/8/5P2/PP3P1P/R2R2K1 b k - 0 17",
+   "line": [
+    "Bxb8"
+   ],
+   "spoken": "Taking on b8 with the bishop is good, no doubt — let's not overthink it, keep it simple."
+  },
+  {
+   "ply": 34,
+   "t": 997.5,
+   "fen": "1n2k2r/pP3ppp/B3p3/b7/8/5P2/PP3P1P/R2R2K1 w k - 0 18",
+   "line": [
+    "Nxb8"
+   ],
+   "spoken": "Black recaptures with the knight on b8."
+  },
+  {
+   "ply": 35,
+   "t": 1006.5,
+   "fen": "1n2k2r/pP3ppp/B3p3/b7/8/5P2/PP3P1P/2RR2K1 b k - 1 18",
+   "line": [
+    "Rac1"
+   ],
+   "spoken": "The rook to c1 — could you propose an alternative? This is a clear second-nature move, aiming the rook at c8."
+  },
+  {
+   "ply": 36,
+   "t": 1020,
+   "fen": "1n5r/pP2kppp/B3p3/b7/8/5P2/PP3P1P/2RR2K1 w - - 2 19",
+   "line": [
+    "Ke7"
+   ],
+   "spoken": "Black shuffles the king to e7."
+  },
+  {
+   "ply": 37,
+   "t": 1021.5,
+   "fen": "1nR4r/pP2kppp/B3p3/b7/8/5P2/PP3P1P/3R2K1 b - - 3 19",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "We plant the rook on c8, and it's goodbye — no matter what Black does."
+  },
+  {
+   "ply": 38,
+   "t": 1040,
+   "fen": "1nR1r3/pP2kppp/B3p3/b7/8/5P2/PP3P1P/3R2K1 w - - 4 20",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Black tries the rook to e8, staying on the back rank."
+  },
+  {
+   "ply": 39,
+   "t": 1052.5,
+   "fen": "1nR1r3/pP2kppp/4p3/bB6/8/5P2/PP3P1P/3R2K1 b - - 5 20",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "Now something cool: the bishop to b5, continuing to harass his rook."
+  },
+  {
+   "ply": 40,
+   "t": 1073,
+   "fen": "1nR2r2/pP2kppp/4p3/bB6/8/5P2/PP3P1P/3R2K1 w - - 6 21",
+   "line": [
+    "Rf8"
+   ],
+   "spoken": "Black slides the rook to f8."
+  },
+  {
+   "ply": 41,
+   "t": 1082,
+   "fen": "1nR2r2/pP1Rkppp/4p3/bB6/8/5P2/PP3P1P/6K1 b - - 7 21",
+   "line": [
+    "Rd7+"
+   ],
+   "spoken": "The rook to d7, a beautiful check."
+  },
+  {
+   "ply": 43,
+   "t": 1086.5,
+   "fen": "2R2r2/pP1Bkppp/4p3/b7/8/5P2/PP3P1P/6K1 b - - 0 22",
+   "line": [
+    "Nxd7",
+    "Bxd7"
+   ],
+   "spoken": "We force the knight to take, and after we recapture the red carpet is unrolled — the pawn is about to promote."
+  },
+  {
+   "ply": 3,
+   "t": 1126.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "It's simply over — nothing can stop the pawn from queening.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1160,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4"
+   ],
+   "spoken": "Let's unpack the opening: d5, e takes d5, the queen recaptures, d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1161,
+   "fen": "rnb1kbnr/pp2pppp/8/3q4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Black took with c takes d4 — which isn't a mistake per se, if Black follows up very precisely.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1179.5,
+   "fen": "rnb1kbnr/pp2pppp/8/3q4/3P4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "We recapture with c takes d4, and the real question is whether Black can handle the resulting isolated-pawn position accurately.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1189.5,
+   "fen": "rnb1kbnr/pp2pppp/8/3q4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": "And that's the ultimate error in the move order — so what should Black do instead?",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1190.5,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "Black should basically do the same thing he did.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1192.5,
+   "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 — just without releasing the tension with c takes d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1197,
+   "fen": "r3kbnr/pp3ppp/2n1p3/2pq4/3P2b1/2P2N2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "Be2",
+    "Bg4",
+    "Nf3",
+    "e6"
+   ],
+   "spoken": "In this version Black can play e6 or the knight to f6, and crucially White doesn't get the key knight-to-c3 with tempo.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1203,
+   "fen": "r3kbnr/pp3ppp/2n1p3/2pq4/3P2b1/N1P2N2/PP2BPPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Na3"
+   ],
+   "spoken": "White can try the knight to a3, angling for b5, but that's quite a bit less scary than being able to play the knight to c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1219,
+   "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P5/PP2BPPP/RNBQK1NR w KQkq - 3 6",
+   "line": [],
+   "spoken": "So the move order runs c takes d4, we recapture, the knight to c6, the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1221,
+   "fen": "r3kbnr/pp2pppp/2n5/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "Nf3",
+    "cxd4",
+    "cxd4"
+   ],
+   "spoken": "The bishop pins on g4 — and here's an important principle: when you have an isolated pawn, it helps to know this trick.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1233.5,
+   "fen": "r3kbnr/pp2pppp/2n5/3q4/3P4/5b2/PP2BPPP/RNBQK2R w KQkq - 0 8",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "The bishop takes on f3 — you can unpin yourself in this precise way.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 1235.5,
+   "fen": "r3kbnr/pp2pppp/2n5/8/3q4/5B2/PP3PPP/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "Bxf3",
+    "Qxd4"
+   ],
+   "spoken": "We recapture and Black grabs on d4 — but the point is you don't actually lose the pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1242,
+   "fen": "r3kbnr/pp2pppp/2B5/8/3q4/8/PP3PPP/RNBQK2R b KQkq - 0 9",
+   "line": [
+    "Bxc6+"
+   ],
+   "spoken": "Because the knight is defending the queen, we can take the knight with check, the bishop capturing on c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1249,
+   "fen": "r3kbnr/p3pppp/2p5/8/3Q4/8/PP3PPP/RNB1K2R b KQkq - 0 10",
+   "line": [
+    "bxc6",
+    "Qxd4"
+   ],
+   "spoken": "Black recaptures, and then we take on d4 — the game is over, we're up a queen.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1336.5,
+   "fen": "r3kbnr/pp2pppp/2n5/3q4/3P4/5B2/PP3PPP/RNBQK2R b KQkq - 0 8",
+   "line": [],
+   "spoken": "That's the key concept — now let's get back to the speedrun.",
+   "reanchor": true
+  }
+ ]
+}
