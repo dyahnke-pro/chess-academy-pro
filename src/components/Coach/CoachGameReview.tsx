@@ -1118,7 +1118,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!walkNarration || moves.length === 0) return;
     if (walkPlayback.currentPly !== moves.length) return;
     turningAskedRef.current = true; // one ask per game, even when unanswerable
-    const q = buildTurningPointQuestion(walkNarration.segments);
+    const q = buildTurningPointQuestion(walkNarration.segments, playerRating ?? 1500);
     if (!q) return; // clean game / single obvious moment — no question to ask
     setTurningQ(q);
     captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });

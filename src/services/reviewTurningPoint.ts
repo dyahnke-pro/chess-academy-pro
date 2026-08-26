@@ -3,6 +3,24 @@
 // computer over the review walk's segments: the candidates and the answer are
 // COMPUTED from the eval record (G0) — the student self-assesses, the board
 // grades. The question is asked once per game, at the end of the walk.
+//
+// IMPORTANCE MODEL (David 2026-08-26 — CLAUDE.md "THE COMPUTER DECIDES WHAT IS
+// SPOKEN"). Which swings count as turning points is now RATING-SCALED (a
+// 2-pawn swing is a must-know for a 1200; a 0.5 subtlety is for a 2200 —
+// `criticalityThresholds`) and CONTESTED-GATED: a blowout that stays a blowout
+// (+8→+5, both sides still decided the same way) never "turned"; throwing a
+// won game (+8→−2) did. A flat 1.0-pawn threshold caught the first as loudly
+// as the second, and treated every rating the same.
+
+import { criticalityThresholds } from './criticalityScan';
+
+/** A position is decided when |eval| clears this (white-POV cp). */
+const DECIDED_CP = 600;
+/** Both endpoints decided for the SAME side — the game never turned here. */
+function decidedSameSide(beforeCp: number, afterCp: number): boolean {
+  return Math.abs(beforeCp) >= DECIDED_CP && Math.abs(afterCp) >= DECIDED_CP
+    && Math.sign(beforeCp) === Math.sign(afterCp);
+}
 
 export interface TurningPointSegmentLike {
   ply: number;
@@ -39,8 +57,12 @@ export interface TurningPointQuestion {
   reveal: string;
 }
 
-/** Min mover-POV cost (pawns) for a moment to be a turning-point candidate. */
-export const TURNING_POINT_MIN_SWING_PAWNS = 1.0;
+/** Rating-scaled min mover-POV cost (pawns) for a turning-point candidate.
+ *  Intermediate (1500) → 1.0 (the old flat bar); beginner (900) → 2.0 (only
+ *  real blunders); expert (2200) → 0.5 (subtleties turn their games). */
+export function minSwingPawns(rating: number): number {
+  return criticalityThresholds(rating).critical / 100;
+}
 /** The question needs a real choice — at least this many candidates. */
 export const TURNING_POINT_MIN_CANDIDATES = 2;
 const MAX_CANDIDATES = 4;
@@ -64,13 +86,19 @@ function swingPawns(s: TurningPointSegmentLike): number | null {
  */
 export function buildTurningPointQuestion(
   segments: ReadonlyArray<TurningPointSegmentLike>,
+  rating = 1500,
 ): TurningPointQuestion | null {
+  const minSwing = minSwingPawns(rating);
   const costed: TurningPointCandidate[] = [];
   for (const s of segments) {
     const swing = swingPawns(s);
-    if (swing !== null && swing >= TURNING_POINT_MIN_SWING_PAWNS) {
-      costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing, fenBefore: s.fenBefore });
-    }
+    if (swing === null || swing < minSwing) continue;
+    // Contested gate: a blowout that stayed a blowout (both endpoints decided
+    // for the same side) never turned — skip it. Throwing a won game, or any
+    // swing that crosses into/out of contested territory, is kept.
+    if (typeof s.evalBefore === 'number' && typeof s.evalAfter === 'number'
+      && decidedSameSide(s.evalBefore, s.evalAfter)) continue;
+    costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing, fenBefore: s.fenBefore });
   }
   if (costed.length < TURNING_POINT_MIN_CANDIDATES) return null;
 
