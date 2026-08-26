@@ -3872,6 +3872,41 @@ export function CoachTeachPage(): JSX.Element {
             requestedName = top.canonicalName;
           }
         } else if (fuzzy.candidates.length > 0) {
+          // Before a confusing "did you mean" picker, check the VOICED corpus:
+          // the DB-name fuzzy match can miss a hand-authored lesson we DO have.
+          // David 2026-08-26: "caro-kann fantasy" / "fantasy" surfaced a picker
+          // of Caro-Kann / Panov / Labahn / Karpov — never Fantasy — so he
+          // "couldn't get the opening I asked for", even though our richest
+          // Caro lesson IS the Fantasy Variation. If voiced answers the raw
+          // query, serve that instead of the picker.
+          const voicedForFuzzy =
+            resolveVoicedWalkthrough(fuzzy.query) ?? resolveVoicedWalkthrough(text);
+          if (voicedForFuzzy) {
+            const vfTurnId = freshTurnId('voiced-fuzzy');
+            setMessages((prev) => [...prev, {
+              id: `${vfTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'user', text,
+              fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+            });
+            const vfAck = `Sure — let's walk through the ${voicedForFuzzy.openingName}.`;
+            setMessages((prev) => [...prev, {
+              id: `${vfTurnId}-c`, role: 'assistant', content: vfAck, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: vfAck, fen: gameRef.current.fen, trigger: null,
+            });
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.voicedOverFuzzy',
+              summary: `voiced lesson over fuzzy picker: "${fuzzy.query}" → ${voicedForFuzzy.openingName}`,
+            });
+            voiceService.stop();
+            startWalkthrough(voicedForFuzzy);
+            return;
+          }
           // Ambiguous — surface the picker. Append the user's ask
           // first so the transcript shows what they typed.
           //
