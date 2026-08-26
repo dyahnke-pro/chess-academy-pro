@@ -72,6 +72,19 @@ messy game — the failure that would break trust when it runs on other players.
 5. **Depersonalized, no verbatim, no move-numbers, no interface talk** (DNA
    rules ride in full). The register is a STYLE — it applies to any player's game
    without naming the player, channel, or that it's a demo.
+6. **The calculator GROUNDS, it does not dictate — read which flags are truly
+   one-sided** (locked 2026-08-26, Kramnik ply 45). The `PositionFacts` threat
+   probe (`docs/plans/2026-08-26-position-facts-calculator.md`) is a null-move
+   heuristic: "if you passed, the opponent wins X." When the flagged piece sits
+   in a MUTUAL attack the mover can resolve by capturing first (two queens eyeing
+   each other, mover to move), it is a **trade tension, not a one-sided hanging
+   piece** — narrating "your queen is hanging, you must save it" OVERSTATES it.
+   The hand-author reads the board and keeps the accurate framing ("ducking the
+   trade"), never the heuristic's naive one. This is the same discipline as
+   "don't overstate the why" — the engine facts are the raw material, judgment
+   about which are one-sided is the author's job. (Kramnik ply 34, by contrast,
+   IS a true one-sided must-recapture — the bishop on g7 takes the f8-rook next
+   if it's left — so "no choice" is honest there.)
 
 ## 4. Register by material (the triage the engine drives)
 

@@ -78,7 +78,14 @@ threat two moves away; the plan is structure→where-it-leads.
 - **Phase 5** — Layer-2 ranked-briefing renderer (`render-briefing.mjs`), fact→board-true clause in the general's hierarchy, **no hard cap**. `done`
   - 1 STATUS (eval+WDL, band-change only, "decided" gated to agree with the post-move eval) · 2 INCOMING (threat calculated out + landsAt) · 3 THE MOVE + WHY (teach-both baked in for bad moves) · 4 FORCED? (only-move / MultiPV gap) · 5 FORCES (best/worst piece, perturbation "leans on", weak pawns, edge type) · 6 CAMPAIGN (structure→plan, PV trajectory).
   - Per-move facts (status/threat/move) fire every ply; standing facts (forces/structure/edge) use a say-once set (pieceValueRead's pattern) so they're stated when they first appear/change, not re-read every ply. Proven: Qd2(45) renders "Incoming: they threaten the queen (Qxd4…) — lands at once" → "Qd2 meets the threat" — the general's briefing exactly.
-- **Phase 6** — re-cut the Kramnik narration off full `PositionFacts` to show the lift; board-truth gate. `next`
+- **Phase 6** — re-cut the Kramnik narration off full `PositionFacts`; board-truth gate. `done`
+  - Re-cut the crux beats (32/34/35) with the exact facts: ply 32 …Nfd7 corrected from "almost four points" to the real ~3 (cpLoss 301) with the concrete refutation (Bxg7 strips the king, b4 wins the c5 knight); ply 34 …Kxg7 now stated as the FORCED recapture it is (leave the g7-bishop and Bxf8 takes the rook — threat net 5 @1); ply 35 Rfe1 sharpened around the missed b4 kill.
+  - **Honesty catch (locked in `engine-fused-narration.md` rule 6):** the threat probe flagged ply 45 Qd2 as a +9 must-defend, but it's a MUTUAL queen attack the mover resolves by capturing first — a trade tension, not a one-sided hang. The existing "sidestepping the trade" was kept; the "hanging queen" rewrite the heuristic invited would have OVERSTATED it. The calculator grounds; the author reads which flags are truly one-sided.
+  - **Gate:** `verify-shard.mjs` → 55/57 authored, **fidelity 0 / board-truth 0 / missing 0**.
+
+**OFFLINE BUILD 100% COMPLETE** (Phases 0–6). Phase 7 (live runtime wiring into
+`groundedAnswer.ts` / `voiceFacts` + the play/teach surfaces + the "key moment —
+don't rush" event) is the separate, WITH-David pass — NOT started here.
 - **Phase 7 (separate, WITH David)** — live wiring: extend `groundedAnswer.ts`, route criticality into `voiceFacts` + the play/teach surfaces, add the "key moment — don't rush" narration event. **NOT in this offline pass.** `pending`
 
 ## Decisions log
@@ -99,6 +106,22 @@ consume the facts the earlier phases produce.
 
 ## Next-session pickup
 
-Phase 1 lands the criticality score in `fuse-engine` + a Kramnik proof
-(`audit-reports/engine-packets/`). Resume at Phase 2 (threat-out + PV branches).
-All offline; no runtime touched until Phase 7 with David.
+**Phases 0–6 (the offline build) are DONE.** The calculator is
+`scripts/voiced-authoring/position-facts.mjs` (per-ply `PositionFacts` →
+`audit-reports/position-facts/<id>.json` + a criticality tape); the Layer-2
+renderer is `scripts/voiced-authoring/render-briefing.mjs` (→ `<id>-briefing.json`
++ readable briefing). Regenerate for any video with:
+```bash
+git show 09120f6:data/video-narration/<id>.json > data/video-narration/<id>.json
+SF_DEPTH=18 SF_THREAT_DEPTH=14 node scripts/voiced-authoring/position-facts.mjs <id> --json
+node scripts/voiced-authoring/render-briefing.mjs <id> --json
+```
+Validated on Kramnik (clean) / MVL (blitz) / Nepo (scramble). Kramnik re-cut is
+gated 0/0/0.
+
+**The two remaining bodies of work, both DOWNSTREAM of this and NOT started:**
+1. **Author the 9 sparse videos** off the briefing (hand, zero LLM), per
+   `docs/engine-fused-narration.md`. This is the immediate producer-side use.
+2. **Phase 7 — live wiring, WITH David only.** Extend `groundedAnswer.ts`, route
+   criticality into `voiceFacts` + the play/teach surfaces, add the "key moment —
+   don't rush" narration event. Do NOT start unprompted.

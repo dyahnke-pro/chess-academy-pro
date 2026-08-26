@@ -253,7 +253,7 @@
    "line": [
     "Nfd7"
    ],
-   "spoken": "And here's the slip. The knight steps back to d7 — but it pulls a guard off c5, and the engine's needle lurches almost four points toward White. The right idea was to keep the pieces coordinated, not to loosen the knights."
+   "spoken": "And here's the slip. It was the c-knight that wanted to reroute to d7; instead the f6-knight drops back, and the g7-bishop is left to its fate. Bishop takes g7, the roof comes off, and then b4 rounds up the loose knight on c5 — a whole piece, and the needle swings past three points to White. Send the other knight to d7 and none of this is on the board."
   },
   {
    "ply": 33,
@@ -271,7 +271,7 @@
    "line": [
     "Kxg7"
    ],
-   "spoken": "Black recaptures with the king. The dark squares around it are now permanently tender, and White should be collecting material."
+   "spoken": "The king has to do the recapturing — leave the bishop on g7 and it takes the f8-rook next, so there's no choice. Kxg7, and the dark squares around the king are permanently tender now; White is one pawn-thrust from collecting the loose knight."
   },
   {
    "ply": 35,
@@ -280,7 +280,7 @@
    "line": [
     "Rfe1"
    ],
-   "spoken": "But the favour is returned. The rook to e1 instead of b4 — and the winning pawn-fork on c5 simply evaporates. A blitz game between two very fast players; the advantage sloshes back and forth."
+   "spoken": "But the favour is returned. b4 was the kill — the pawn hits the knight on c5, and once it's taken the piece simply falls. Instead the rook swings to e1, the win evaporates, and the eval more than halves. A blitz game between two very fast players; the advantage sloshes back and forth."
   },
   {
    "ply": 36,

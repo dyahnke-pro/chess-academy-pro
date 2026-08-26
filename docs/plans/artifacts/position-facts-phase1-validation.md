@@ -80,3 +80,19 @@ captured (why it failed, played out) — e.g. …Nfd7's refutation is
 **Caveat (do not lose):** the immediate-SEE is 1-ply (defended? subtract one
 recapture), not a full SEE swap-off — adequate for the offline must-defend
 heuristic; the live side would use `positionalRead`'s richer SEE.
+
+## Phases 3–6 — validated (2026-08-26)
+
+- **Phase 3** (perturbation + move-reason): supporter leave-one-out on the
+  delta-best piece surfaces board-true dependencies (KID `knightf6←bishopg7`);
+  move-reasons land right (Kxg7 only-move, Qd2 defends-threat, f4 walked-into-tactic).
+- **Phase 4** (positional vector + structure→plan): mechanical features + phase;
+  rank-guarded structure killed the false d6-IQP "strength" (10→2, both real d5
+  isolani).
+- **Phase 5** (`render-briefing.mjs`): general's-hierarchy briefing, no cap,
+  teach-both + say-once. Qd2(45) renders "Incoming: they threaten the queen →
+  Qd2 meets the threat."
+- **Phase 6** (Kramnik re-cut): crux beats sharpened with exact facts; gate 0/0/0.
+  **Honesty catch:** the ply-45 +9 threat is a MUTUAL queen attack (trade tension),
+  NOT a one-sided hang — kept "sidestepping the trade", refused the overstatement
+  (engine-fused rule 6).
