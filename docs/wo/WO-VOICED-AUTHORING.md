@@ -12,15 +12,23 @@ substitute your letter. Your id list is `docs/wo/voiced-shards/shard-<X>.txt`
 
 ---
 
+## THE STANDARD, IN ONE LINE: every move, every narration captured (David 2026-08-26)
+
+**Mirror the teacher move by move — nothing position-relevant is ever lost.**
+EVERY move that carries teaching gets an original, board-true spoken line. EVERY
+narration he gives — the idea behind the move, the plan, the threat, the
+subtlety, AND every hypothetical / what-if line he walks ("if Black takes,
+then…") — is captured, in our words. The ONLY blank moves (`spoken: ""`) are pure
+non-position chatter (greetings, results-talk, "we'll have plenty after the
+game"). If in doubt whether a line is position-relevant, KEEP it. **Never drop a
+line to fix a board-truth or wording problem — REPHRASE so the idea survives.**
+Dropping loses teaching; that is the exact failure this WO exists to prevent.
+
 ## What's wrong and what "done" means
 
 The voiced narrations were authored sparsely — a handful of hand-picked beats
-per video, most moves left silent. **David's standard: mirror the teacher move
-by move.** Every move that carries teaching about the position gets an original,
-board-true spoken line — the idea behind the move, the plan, the threat, the
-subtlety, AND the hypothetical / what-if lines he walks ("if Black takes,
-then…"). Only genuinely non-position chatter (greetings, results-talk, "we'll
-have plenty after the game") is left blank.
+per video, most moves left silent. That is the failure mode. The standard above
+supersedes it: **mirror the teacher move by move**, board-true, nothing dropped.
 
 ### 🚫 ZERO LLM — YOU HAND-WRITE EVERY LINE. This is non-negotiable (David msgs 51, 147).
 
@@ -52,6 +60,26 @@ surfaces. Nothing position-relevant may be lost.** The rules:
   Rewrite in the DNA voice.
 - **No attribution** (never name him/the channel/"speedrun") and **no move-number
   prefixes** ("Nc3", never "2.Nc3").
+
+## 🔒 TWO SOURCES, ONE VOICE — transcript OR the board (David 2026-08-26, LOCKED)
+
+Every voiced beat is computed from facts and phrased in the DNA voice — the
+narrator DECIDES nothing (G0). There are two fact sources, and they compose:
+
+1. **The video's own teaching** (`said`, distilled) — the primary source when the
+   video actually teaches. This is the transcript path below.
+2. **The board computer facts** — when the transcript is thin, banter, or absent
+   (and for any FUTURE game that is not his), the **board carries the teaching**:
+   `scripts/voiced-authoring/facts.mjs` computes, per move, the move + its class,
+   material, checks/captures, and the **Stockfish eval / best move / principal
+   variation**. You phrase THOSE facts in the DNA voice, board-true.
+
+**Read `docs/voiced-narration-from-board.md`** — the locked standard for the
+board-facts path. It is a strict extension of the DNA outline (same gates, same
+G0/G3), proven 2026-08-26 on the 7 formerly-set-aside "sparse banter" videos
+(pure-podcast transcripts turned into full lessons, 130 beats / 315 nodes, 0
+board-truth failures). **A sparse transcript is NOT a reason to set a video
+aside** — narrate it from the board.
 
 ## The voice (house register — apply to every line)
 
@@ -125,6 +153,53 @@ For **each** video id in your shard, one at a time:
 
 Work through the shard video by video. Yes, it's slow — that's the point; this
 is the coach's most important teaching data and it is authored by hand.
+
+## Sparse / no-transcript videos — narrate from the BOARD (the exact steps, David 2026-08-26)
+
+When a video's transcript is banter / blitz distraction / two-person commentary
+with only a handful of real chess remarks — or is any game that isn't his — do
+NOT set it aside. Narrate it from the board computer facts, in the DNA voice.
+Full standard: `docs/voiced-narration-from-board.md`. The exact loop:
+
+```bash
+# One-time: the engine must be present (facts.mjs reads /usr/games/stockfish).
+apt-get install -y stockfish   # lands at /usr/games/stockfish; verify it evals
+
+# Per video:
+node scripts/voiced-authoring/facts.mjs <id> 14   # board facts per move:
+                                                  #   move+class, material,
+                                                  #   eval / bestmove / PV
+node scripts/voiced-authoring/_dump.mjs <id>      # the thin transcript (any real remark)
+```
+
+Then hand-author each teaching node's `spoken` from **facts + any transcript
+remark**, in the DNA voice, board-true. The discipline:
+
+- **Every claim traces to a `facts.mjs` row or the transcript.** Name a piece on
+  a square only if the FEN has it; a "best move / the point is…" is the engine's
+  `best`/`pv`, not your guess; a verdict ("level", "a pull for White") is the
+  engine `eval`.
+- **Eval is side-to-move-relative** — convert to a fixed side before you voice a
+  verdict, and keep it depersonalized ("the engine calls it level", never "you're
+  better"). The engine is also the honest record: it corrected two games this
+  session where the streamer's self-talk ("disaster", "happy with a draw")
+  disagreed with the board.
+- **Name a tactic only if `pv` shows it.** Quiet PV → teach the maneuver; forcing
+  PV → play it out ("if the rook takes, the line runs …, and the point is …").
+- **Thin facts → stay thin.** Empty > invented (G0/G3). Same "rephrase, never
+  drop" rule for board-truth trips.
+
+Then gate + commit exactly as the transcript path (verify-shard, board-truth 0).
+
+## The efficient loop this session used (reference)
+
+Per video: write a throwaway `scripts/voiced-authoring/_author-<id>.mjs` (the
+`build()` chokepoint), run it, gate it with `verify-shard.mjs` on a one-id file,
+fix any board-truth trip by **rephrasing** (move-phrasing "to/into/off c3" and
+hypothetical framing "if/would/plan" are exempt from the present-tense check),
+then `rm` the scratch script (never commit it) and commit the
+`data/video-narration-voiced/<id>.json` in small batches. `facts.mjs` and
+`_dump.mjs` ARE committed (reusable tools); `_author-*.mjs` scratch is not.
 
 ## Verify (must pass before you commit)
 
