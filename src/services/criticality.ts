@@ -102,6 +102,6 @@ export function criticalitySignalsFromAnalysis(
     loose: clamp01(looseRaw / 3),
     threat: threatRaw > 0 ? clamp01(threatRaw / 5) : 0,
     looseRaw, threatRaw,
-    mateInAir: !!analysis.isMate || Math.abs(cp1) >= 100000,
+    mateInAir: analysis.isMate || Math.abs(cp1) >= 100000,
   };
 }
