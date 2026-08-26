@@ -1,0 +1,489 @@
+{
+ "videoId": "CXvo1dMF1Qs",
+ "title": "Taking Down the Benko Gambit!! | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Benko Gambit (Nd2 anti-Benko line)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:CXvo1dMF1Qs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 23,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 29,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 32,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We wave the pawn by with d5, heading into Benoni/Benko territory.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 35,
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black offers the Benko Gambit — b5, giving up a pawn for lasting queenside pressure down the half-open a- and b-files.",
+   "kind": "main",
+   "teaches": [
+    "the Benko pawn sac for queenside files"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 51,
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP1NPPPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "Instead of the topical capture we play an old Soviet sideline — the knight to d2. Little-known, but it has teeth.",
+   "kind": "main",
+   "teaches": [
+    "a rare but venomous anti-Benko"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 62,
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p5/8/PP1NPPPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 63,
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Here's the point: we meet the capture on c4 with e4, almost reversing the gambit — sacrificing a pawn ourselves, but only temporarily, since we'll win it straight back.",
+   "kind": "main",
+   "teaches": [
+    "reverse the gambit with e4"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 66.5,
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 70.5,
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 76,
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 77.5,
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2B1P3/8/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": "We recapture on c4 with the bishop — it has to be the bishop, or the pawn on e4 hangs. White holds a small but stable edge.",
+   "kind": "main",
+   "teaches": [
+    "recapture to keep e4 defended"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 85.5,
+   "fen": "rnbqkb1r/p3pp1p/3p1np1/2pP4/2B1P3/8/PP1N1PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 91,
+   "fen": "rnbqkb1r/p3pp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Ngf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 100,
+   "fen": "r1bqkb1r/p2npp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQK2R w KQkq - 2 8",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 105.5,
+   "fen": "r1bqkb1r/p2npp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQ1RK1 b kq - 3 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 108,
+   "fen": "r1bqk2r/p2nppbp/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQ1RK1 w kq - 4 9",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "Black sets up the Benko-Benoni structure with the fianchetto to g7. There's a standard plan here — Black's knight rerouting through g4 to e5 — so we'll want to restrain it.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 148,
+   "fen": "r1bqk2r/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": "h3 restrains that knight from g4. We can't rush the bishop to b2 yet — b3 right now runs into the Nxc4 tactic — so first we prepare it.",
+   "kind": "main",
+   "teaches": [
+    "prepare the fianchetto around the Nxc4 trick"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 150,
+   "fen": "r1bq1rk1/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 169,
+   "fen": "r1bq1rk1/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQR1K1 b - - 2 10",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook to e1 is one of those moves that's almost always useful — quietly improving while we sort out the bishop's route.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 175,
+   "fen": "r1bq1rk1/p3ppbp/1n1p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQR1K1 w - - 3 11",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": "Now the whole middlegame plan. Our overarching aim is to fix on the d6-pawn and lean on Black's center as a whole. We finally want the dark-squared bishop on b2 — reached either through a rook to b1, then b3, then bishop to b2, or the creative rook-swing to a3 and into the center. Then it's a division of labor: one rook hammers d6 while the other lifts to g3 against the king. Squeeze both wings, and the position cracks with a mating tactic on the kingside.",
+   "kind": "plan",
+   "teaches": [
+    "squeeze d6 and the king at once",
+    "division of labor between the rooks"
+   ],
+   "plans": [
+    "Rb1-b3-Bb2 to activate the bishop",
+    "one rook on d6, one lifted to g3"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 623,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 666.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 668.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 670.5,
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 690,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 736,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 737.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 739.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 743.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 747.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 749,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 755,
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 1 5",
+   "line": [
+    "b6",
+    "d5",
+    "b5",
+    "Ng1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 770.5,
+   "fen": "rnbqkb1r/3ppppp/p4n2/1PpP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 6",
+   "line": [
+    "a6",
+    "cxb5"
+   ],
+   "spoken": "The line that essentially retired the Benko at the top: after a6 White takes on b5, and modern theory judges the whole structure clearly better for White.",
+   "teaches": [
+    "the a6, cxb5 refutation line"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 785.5,
+   "fen": "rnbqkb1r/3ppp1p/P4np1/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 7",
+   "line": [
+    "g6",
+    "bxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 789,
+   "fen": "rn1qkb1r/3ppp1p/b4np1/2pP4/8/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 8",
+   "line": [
+    "Bxa6",
+    "Nc3"
+   ],
+   "spoken": "Black recaptures the bishop on a6, White develops the knight to c3, and then the key push e4 is coming.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 790.5,
+   "fen": "rn1qkb1r/3ppp1p/b4np1/2pP4/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 10",
+   "line": [
+    "Ne4",
+    "e3",
+    "Nf6",
+    "e4"
+   ],
+   "spoken": "With e4 White allows the bishop to grab on f1 — because after the king recaptures, White simply fianchettoes the king on g2, where it sits perfectly safe.",
+   "teaches": [
+    "allow Bxf1 and fianchetto the king"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 794.5,
+   "fen": "rn1qkb1r/3ppp1p/5np1/2pP4/4P3/2N5/PP3PPP/R1BQKbNR w KQkq - 0 11",
+   "line": [
+    "Bxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 795.5,
+   "fen": "rn1qkb1r/3ppp1p/5np1/2pP4/4P3/2N5/PP3PPP/R1BQ1KNR b kq - 0 11",
+   "line": [
+    "Kxf1"
+   ],
+   "spoken": "The king takes on f1, heading for the g2 fianchetto shelter.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 803,
+   "fen": "rn1qkb1r/4pp1p/3p1np1/2pP4/4P3/2N5/PP3PPP/R1BQ1KNR w kq - 0 12",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 809.5,
+   "fen": "rn1qkb1r/4pp1p/3p1np1/2pP4/4P3/2N2N2/PP3PPP/R1BQ1K1R b kq - 1 12",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 811,
+   "fen": "rn1qk2r/4ppbp/3p1np1/2pP4/4P3/2N2N2/PP3PPP/R1BQ1K1R w kq - 2 13",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 813.5,
+   "fen": "rn1qk2r/4ppbp/3p1np1/2pP4/4P3/2N2NP1/PP3P1P/R1BQ1K1R b kq - 0 13",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 820.5,
+   "fen": "rn1q1rk1/4ppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R b - - 2 14",
+   "line": [
+    "O-O",
+    "Kg2"
+   ],
+   "spoken": "With the king tucked on g2 modern engines say Black simply lacks full compensation for the pawn — which is why this line is considered better for White. That doesn't make the Benko unplayable below master level; it's a wonderful weapon for a tactical player when the queenside counterplay ignites.",
+   "teaches": [
+    "objectively better for White, still playable below GM"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1182.5,
+   "fen": "rnbqkb1r/p2ppppp/1p3n2/2pP4/2P5/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 1270,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1271.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1274,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2"
+   ],
+   "spoken": ""
+  }
+ ]
+}
