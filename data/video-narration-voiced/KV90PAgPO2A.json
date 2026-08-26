@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Panov Attack",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:KV90PAgPO2A",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We take White and face the Caro-Kann."
+   "spoken": "The pawn to e4, c6 — we're facing the Caro-Kann. How dare he play something I play with Black."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the centre with d4."
+   "spoken": "d4. Against the Caro, for a sharp line we could play the Nimzowitsch, but the classic sharp way —"
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black challenges with d5."
+   "spoken": "— the traditional, old-school way —"
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We take on d5 — the traditional, old-school way into a sharp Caro."
+   "spoken": "— is the Panov Attack: we take on d5, the Exchange Caro, a gateway to very peaceful lines —"
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "Black recaptures on d5."
+   "spoken": "— but the way to make it interesting and tactical, not to suggest the Exchange with the bishop to d3 isn't a great line —"
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "We contest the centre at once with c4 — the Panov Attack."
+   "spoken": "— is c4, immediately contesting the centre. You're trying to get rid of the d5-pawn, and developing with an eye toward pressuring it."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black develops the knight to f6, eyeing our c4-pawn."
+   "spoken": "The knight to f6."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "The knight to c3, pressuring the pawn."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "Black takes on c4, relenting in the centre."
+   "spoken": "He takes it, so he relents — and this leads to one of the most well-studied, most famous structures of all time, the IQP."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "We recapture with the bishop — reaching the famous Isolated Queen's Pawn structure, our lone pawn on d4 with no neighbours on c or e."
+   "spoken": "The bishop takes c4 — the Isolated Queen's Pawn structure. Why is it called that?"
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Black plays the bishop to f5 — a mistake, and not because of the IQP, but because it leaves two pawns weak and walks into a fork."
+   "spoken": "Because there's a pawn on d4 and it's isolated — no neighboring pawns, no c-pawn, no e-pawn; we gave both up. Whether the IQP is good or bad depends entirely on the circumstances — that's the magic; it can be the reason you win the game or the reason you lose it. But the bishop to f5 is a mistake — a classic fork, the queen to b3 forking two pawns, and we take one."
   },
   {
    "ply": 16,
@@ -117,7 +117,7 @@
     "Qb5",
     "e6"
    ],
-   "spoken": "We hit the queenside with the queen to b3, forking two of Black's weak pawns to win one; Black defends with ...Nbd7, we slide to b5, and Black shores up with ...e6. Now the discipline is to finish development, not to lunge the knight into c7."
+   "spoken": "The queen to b3, the knight to d7, the queen to b5, e6. We shouldn't go crazy — this is where a lot of people go off a cliff with the knight to b5 and c7; we haven't completed our development, particularly the kingside. Instead of anything rash, let's complete development mindfully — the bishop to f4 prevents the rook to b8, though he's not really threatening it, because we're going to take the a7-pawn."
   },
   {
    "ply": 20,
@@ -129,7 +129,7 @@
     "Nf3",
     "Qd8"
    ],
-   "spoken": "A pawn up and pressing, the plan is patient: complete development, castle, and if Black keeps chasing the queen, calmly sidestep — to a6 or c6 — without ever allowing a draw by repetition. His rook sorties to the queenside would only misplace the rook, and a well-timed knight-takes-d7 with check could win it. Once the IQP has done its job we trade it off and turn the attack on the king.",
+   "spoken": "We take the a7-pawn — careful the queen isn't trapped in a repetition as he chases it with the rook. He plays the rook to b4, hitting the bishop, which isn't scary at all: the bishop moves to b5, a great square protected by the knight, pinning his knight to his king while he's still undeveloped, and the rook on b4 is misplaced, so we threaten a3 to trap it. He plays the bishop to b8, and the queen to b7 is amazing because it pins the rook — a piece of higher value can x-ray a lower one, so if the rook goes to b3 it's undefended, and the knight takes with check exposes the attack on the rook. The queen takes d7 is bad, since the knight is defended by the other knight, and the bishop takes d7 would open the gates for his rook to come back — we want the gates closed. If he castles, we take his rook anyway. He plays the rook to b3, and the knight takes with check — check supersedes, we're not blundering the queen — and we take the rook; his queenside is gone. Now we castle and complete development. He builds a battery on h2, so rather than toy with it, we play g3 — weakening the light squares, yes, but we're up a rook and he has nothing on the kingside to do real damage — and it prepares the bishop to f4; the rule against pushing pawns in front of your king is overrated and needs moderation. The bishop to g4 attacks the knight, but instead of moving it we play the prepared bishop to f4, hitting his queen and getting our last piece out. Then we start trading everything on e5 — no more IQP; it's retired to the beaches. The bishop to f3 is delicate, because the queen to h3 would threaten mate on g2, so we deal with the bishop: the knight on b5 isn't really defending the king, so we drop it back to e2, heading to f4, which limits his queen to g4, and then h3 knocks the queen off its defense of the bishop. He takes, our king is perfectly safe, and we just push the pawn and win.",
    "reanchor": true
   },
   {
@@ -137,14 +137,16 @@
    "t": 921,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "We come after Black's queen, and he resigns. A good game — you were never in trouble, except when I told you to move.",
+   "reanchor": true
   },
   {
    "ply": 2,
    "t": 922,
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "The Panov again —",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -156,7 +158,8 @@
     "exd5",
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "— when I talk about these opening variations, don't think good and bad; think about the kinds of positions they typically lead to.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -165,7 +168,8 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d3 is the Exchange Caro, a great line — you build a little pawn chain, develop your pieces normally, and it's pretty peaceful.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -175,14 +179,16 @@
     "Nc6",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "It's one of White's best chances to get an edge, played by a lot of GMs, but the Panov is a very old line.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 954,
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "The Panov is a very very old line —",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -191,7 +197,8 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "— let's see when it was first played. Vasily Panov, born 1906, died 1973, was very obscure outside the Panov Caro-Kann; there was a Soviet 'black book' series annotating obscure players' best games by top grandmasters, and one was on Panov. But the opening itself was first played in 1844, long before Panov was born — as always, the person an opening is named after rarely invented it; Alekhine played it a million times. It's murky how these get named; maybe he wrote an article that went viral in the '50s.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -200,7 +207,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "In the Panov, the pawn takes c4 isn't bad, but it's not great — he should just develop.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -210,14 +218,16 @@
     "Nc3",
     "dxc4"
    ],
-   "spoken": ""
+   "spoken": "He should just develop.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 1149.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Just develop.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -226,14 +236,16 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "I'm a little fried, so I won't go full-deep into the IQP positions —",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 1160,
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
    "line": [],
-   "spoken": ""
+   "spoken": "— probably tomorrow.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -242,7 +254,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "But the bottom line is that by taking on c4, he's helping me develop.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -251,7 +264,8 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "And the square in front of the pawn is crucial —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -261,14 +275,15 @@
     "Nb8",
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "— the shortest, easiest way to understand who's better in an IQP position is to look at who controls the square in front of the pawn.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 1177,
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": "The quick way to judge an IQP position: look at who controls the square in front of the pawn. If White owns it, White tends to be better; if Black blockades it with a knight, Black is usually fine.",
+   "spoken": "If White controls the square in front of the IQP, White's generally good; if Black blockades it, usually with his knight, Black's often in good shape — a cheap, un-nuanced but useful emergency way to evaluate. The bishop to f5 is bad for reasons unrelated to the IQP — two weak pawns, and we win one. And if he'd kept harassing the queen, we'd have evacuated with c6, and after the rook to b6, a4, and the rook to b4.",
    "reanchor": true
   }
  ]
