@@ -1,0 +1,390 @@
+{
+ "videoId": "ii1vl5wLPWU",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1520",
+ "openingName": "Pirc Defense (Austrian/150-attack setup)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:ii1vl5wLPWU",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1495,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "d6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1498.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1501,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The other side plays the Pirc — d6 and g6. It gets a bad rap for a simple reason: it hands us the full centre without a fight.",
+   "kind": "main",
+   "teaches": [
+    "the Pirc cedes the centre"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 1524.5,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N1B3/PPP2PPP/R2QKBNR b KQkq - 1 4",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1528.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N1B3/PPP2PPP/R2QKBNR w KQkq - 2 5",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1539,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N1B3/PPPQ1PPP/R3KBNR b KQkq - 3 5",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "White's key strategy in the Pirc is to castle queenside and storm the kingside — you can't launch a pawn avalanche at the wing where your own king lives. So we clear the path for the king to c1 by lining the bishop and queen up on e3 and d2.",
+   "kind": "plan",
+   "teaches": [
+    "opposite-side castling attack"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 1545,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N1B3/PPPQ1PPP/R3KBNR w KQ - 4 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1557.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1npB/8/3PP3/2N5/PPPQ1PPP/R3KBNR b KQ - 5 6",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "That battery has a bonus: the bishop can swing to h6 and forcibly trade off the fianchettoed bishop — Black's strongest piece, the one that supervises his whole defence. No need to rush the swap, though.",
+   "kind": "main",
+   "teaches": [
+    "trade the fianchetto defender"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 1560,
+   "fen": "r1bq1rk1/pppnppbp/3p1npB/8/3PP3/2N5/PPPQ1PPP/R3KBNR w KQ - 6 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1578.5,
+   "fen": "r1bq1rk1/pppnppbp/3p1npB/8/3PP2P/2N5/PPPQ1PP1/R3KBNR b KQ - 0 7",
+   "line": [
+    "h4"
+   ],
+   "spoken": "Now start the attack — h4. Take the hammer to Black's position; without ripping open files and avenues on the kingside, we never reach his king.",
+   "kind": "plan",
+   "teaches": [
+    "pawn storm the castled king"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 1590.5,
+   "fen": "r1bq1rk1/pppnppbp/3p2pB/7n/3PP2P/2N5/PPPQ1PP1/R3KBNR w KQ - 1 8",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1602.5,
+   "fen": "r1bq1rk1/pppnppbp/3p2pB/7n/3PP1PP/2N5/PPPQ1P2/R3KBNR b KQ - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": "The knight jumps to h5, so g4 chases it out — we don't want it sitting there.",
+   "kind": "main",
+   "teaches": [
+    "kick the blockading knight"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 1649.5,
+   "fen": "r1bq1rk1/pppnppbp/3p1npB/8/3PP1PP/2N5/PPPQ1P2/R3KBNR w KQ - 1 9",
+   "line": [
+    "Nhf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1651,
+   "fen": "r1bq1rk1/pppnppbp/3p1npB/8/3PP1PP/2N2P2/PPPQ4/R3KBNR b KQ - 0 9",
+   "line": [
+    "f3"
+   ],
+   "spoken": "The whole aim is to pry open the h-file, the artery to the king. Rather than sac immediately, we play f3 to defend the g4-pawn — patience first, elimination later.",
+   "kind": "plan",
+   "teaches": [
+    "open the h-file",
+    "patience when attacking"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 1661,
+   "fen": "r1bq1rk1/pppn1pbp/3p1npB/4p3/3PP1PP/2N2P2/PPPQ4/R3KBNR w KQ - 0 10",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1677,
+   "fen": "r1bq1rk1/pppn1pbp/3p1npB/3Pp3/4P1PP/2N2P2/PPPQ4/R3KBNR b KQ - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "How to handle the centre? Since we're attacking on the wing, we want it closed — so d5 slams it shut. A closed centre buys the time to focus everything on the kingside; an open one splits your attention.",
+   "kind": "main",
+   "teaches": [
+    "close the centre when attacking the wing"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 1684,
+   "fen": "r1bq1rk1/ppp2pbp/3p1npB/2nPp3/4P1PP/2N2P2/PPPQ4/R3KBNR w KQ - 1 11",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1685,
+   "fen": "r1bq1rk1/ppp2pbp/3p1npB/2nPp2P/4P1P1/2N2P2/PPPQ4/R3KBNR b KQ - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "With the centre shut we transition straight back to the plan — h5, prising open the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 1722.5,
+   "fen": "r1bq1rk1/ppp2pbp/3p1n1B/2nPp1pP/4P1P1/2N2P2/PPPQ4/R3KBNR w KQ - 0 12",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1736.5,
+   "fen": "r1bq1rk1/ppp2pbp/3p1n1B/2nPp1QP/4P1P1/2N2P2/PPP5/R3KBNR b KQ - 0 12",
+   "line": [
+    "Qxg5"
+   ],
+   "spoken": "He plays g5 to keep things closed, but the queen takes on g5 and it's simply winning — it threatens mate, and his only defence of the bishop drops the queen.",
+   "kind": "main",
+   "teaches": [
+    "the crashing capture"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 1749,
+   "fen": "r1bq1rk1/ppp2pbp/3p3B/2nPp1Qn/4P1P1/2N2P2/PPP5/R3KBNR w KQ - 0 13",
+   "line": [
+    "Nxh5"
+   ],
+   "spoken": "We recapture with the queen rather than the rook. The rook would have won a second piece, but keeping the queens on lets us keep taking the hammer to him.",
+   "teaches": [
+    "keep the initiative over material"
+   ]
+  },
+  {
+   "ply": 26,
+   "t": 1779,
+   "fen": "r1b2rk1/ppp2pbp/3p1q1B/2nPp2n/4P1P1/2N2P2/PPP5/R3KBNR w KQ - 0 14",
+   "line": [
+    "Qf6",
+    "Qxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1782.5,
+   "fen": "r1b2rk1/ppp2pBp/3p1q2/2nPp2n/4P1P1/2N2P2/PPP5/R3KBNR b KQ - 0 14",
+   "line": [
+    "Bxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1786,
+   "fen": "r1b2rk1/ppp2pqp/3p4/2nPp2n/4P1P1/2N2P2/PPP5/R3KBNR w KQ - 0 15",
+   "line": [
+    "Qxg7"
+   ],
+   "spoken": "He trades the dark-squared bishops to slow the attack, but we're still up a full piece.",
+   "kind": "main"
+  },
+  {
+   "ply": 29,
+   "t": 1798.5,
+   "fen": "r1b2rk1/ppp2pqp/3p4/2nPp2n/4P1P1/2N2P2/PPP5/2KR1BNR b - - 1 15",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Now, fresh blood — don't forget to finish developing. Castle, then reroute the knight toward f5 to lever open the g-file.",
+   "kind": "plan",
+   "teaches": [
+    "finish development mid-attack"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 1815,
+   "fen": "r1b2rk1/1pp2pqp/3p4/2nPp2n/p3P1P1/2N2P2/PPP1N3/2KR1B1R w - - 0 17",
+   "line": [
+    "a5",
+    "Nge2",
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1816,
+   "fen": "r1b2rk1/1pp2pqp/3p4/2nPp2n/p3P1P1/P1N2P2/1PP1N3/2KR1B1R b - - 0 17",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1820.5,
+   "fen": "r4rk1/1ppb1pqp/3p4/2nPp2n/p3P1P1/P1N2PN1/1PP5/2KR1B1R b - - 2 18",
+   "line": [
+    "Bd7",
+    "Ng3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1831,
+   "fen": "1r3rk1/1ppb1pqp/3p4/2nPp2n/p3P1P1/P1N2PN1/1PP5/2KR1B1R w - - 3 19",
+   "line": [
+    "Rab8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1832,
+   "fen": "1r3rk1/1ppb1pqp/3p4/2nPpN1n/p3P1P1/P1N2P2/1PP5/2KR1B1R b - - 4 19",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": "This is the maneuver: the knight to f5 either forces a trade that opens the g-file, or dislodges the queen — and then a rook lands on that file with crushing effect.",
+   "kind": "main",
+   "teaches": [
+    "knight maneuver to open a file"
+   ]
+  },
+  {
+   "ply": 39,
+   "t": 1834.5,
+   "fen": "1r3rk1/1pp2pqp/3p4/2nPpP1n/p3P3/P1N2P2/1PP5/2KR1B1R b - - 0 20",
+   "line": [
+    "Bxf5",
+    "gxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1837,
+   "fen": "1r3rk1/2p2pqp/3p4/1BnPpP1n/p3P3/P1N2P2/1PP5/2KR3R b - - 0 21",
+   "line": [
+    "b5",
+    "Bxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1874,
+   "fen": "1r3r1k/2p2pqp/3p4/1BnPpP1n/p3P3/P1N2P2/1PP5/2KR2R1 b - - 2 22",
+   "line": [
+    "Kh8",
+    "Rhg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1884.5,
+   "fen": "1r3r1k/2p2p1p/3p1q2/1BnPpP1n/p3P3/P1N2P2/1PP5/2KR3R b - - 4 23",
+   "line": [
+    "Qf6",
+    "Rh1"
+   ],
+   "spoken": "Even after a queen trade it doesn't matter — the attack has done its work and it's still mate in a couple of moves.",
+   "teaches": [
+    "the attack survives simplification"
+   ]
+  },
+  {
+   "ply": 46,
+   "t": 1891.5,
+   "fen": "1r3r1k/2p2p2/3p1q1p/1BnPpP1n/p3P3/P1N2P2/1PP5/2KR3R w - - 0 24",
+   "line": [
+    "h6"
+   ],
+   "spoken": "So how should Black have defended? The Pirc doesn't lose — but castling this early is already inaccurate by modern theory, because it walks straight into the bishop-to-h6 and h4-h5 assault.",
+   "kind": "review",
+   "teaches": [
+    "castle later in the Pirc"
+   ]
+  }
+ ]
+}
