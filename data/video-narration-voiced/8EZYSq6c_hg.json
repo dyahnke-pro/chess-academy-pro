@@ -1,0 +1,314 @@
+{
+ "videoId": "8EZYSq6c_hg",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1240",
+ "openingName": "Sicilian Defense (vs the Bishop on c4)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:8EZYSq6c_hg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 78,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "We stay with the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 85.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White tries the bishop to c4, and its main flaw against the Sicilian is that e6 can blunt it entirely at any moment — we don't even have to hurry.",
+   "kind": "main",
+   "teaches": [
+    "e6 blunts the c4 bishop"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 98.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "We develop the knight to c6 first; e6 stays in our pocket for later.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 114.5,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 4 4",
+   "line": [
+    "Nc3",
+    "Nf6"
+   ],
+   "spoken": "We bring out this knight to f6 rather than the other — developing the far knight first could invite an annoying e5. No rush.",
+   "kind": "main",
+   "teaches": [
+    "develop the right knight to deny e5"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 116.5,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/2N2P2/PPPP2PP/R1BQK1NR b KQkq - 0 4",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 118.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2N2P2/PPPP2PP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Now e6 does its job: it blunts the bishop, and it clears the way for d5, killing two birds — because opening the center is especially good now that White has committed to f3.",
+   "kind": "main",
+   "teaches": [
+    "e6 then d5 to open the center"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 124.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/2NP1P2/PPP3PP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d3",
+    "d5"
+   ],
+   "spoken": "d5 strikes the center open — the punishment for that early f3.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 127.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/1Bpp4/4P3/2NP1P2/PPP3PP/R1BQK1NR b KQkq - 1 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 155,
+   "fen": "r2qkb1r/pp1b1ppp/2n1pn2/1Bpp4/4P3/2NP1P2/PPP3PP/R1BQK1NR w KQkq - 2 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Development doesn't have to be a volcano of activity — a plain, effective bishop to d7 is fine, and it stops White from taking on c6 and wrecking our structure.",
+   "kind": "main",
+   "teaches": [
+    "quiet development is still development"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 156.5,
+   "fen": "r2qkb1r/pp1b1ppp/2B1pn2/2pp4/4P3/2NP1P2/PPP3PP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 158.5,
+   "fen": "r2qkb1r/pp3ppp/2b1pn2/2pp4/4P3/2NP1P2/PPP3PP/R1BQK1NR w KQkq - 0 8",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "We recapture with the bishop to keep our pawns healthy.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 167,
+   "fen": "r2qkb1r/pp3ppp/2b1pn2/2pp2B1/4P3/2NP1P2/PPP3PP/R2QK1NR b KQkq - 1 8",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 213.5,
+   "fen": "r3kb1r/pp3ppp/1qb1pn2/2pp2B1/4P3/2NP1P2/PPP3PP/R2QK1NR w KQkq - 2 9",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "Out of the pin, the spicier move is the queen to b6 — it hits the b2-pawn and, crucially, it eyes the long diagonal that White weakened the moment he played f3.",
+   "kind": "main",
+   "teaches": [
+    "Qb6 exploits the f3 weakness"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 224,
+   "fen": "r3kb1r/pp3ppp/1qb1pB2/2pp4/4P3/2NP1P2/PPP3PP/R2QK1NR b KQkq - 0 9",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 225.5,
+   "fen": "r3kb1r/pp3p1p/1qb1pp2/2pp4/4P3/2NP1P2/PPP3PP/R2QK1NR w KQkq - 0 10",
+   "line": [
+    "gxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 228,
+   "fen": "r3kb1r/pp3p1p/1qb1pp2/2pp4/4P3/1PNP1P2/P1P3PP/R2QK1NR b KQkq - 0 10",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 244,
+   "fen": "r3kb1r/pp3p1p/1qb1pp2/3p4/2p1P3/1PNP1P2/P1P3PP/R2QK1NR w KQkq - 0 11",
+   "line": [
+    "c4"
+   ],
+   "spoken": "Now the breakthrough: c4. It looks mysterious but it's the direct punishment for f3 — blasting open the diagonal straight at White's king.",
+   "kind": "main",
+   "teaches": [
+    "the c4 lever to open the diagonal"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 261,
+   "fen": "r3kb1r/pp3p1p/1qb1pp2/3p4/2p1P3/1PNP1P2/P1P3PP/1R1QK1NR b Kkq - 1 11",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 272.5,
+   "fen": "r3k2r/pp3p1p/1qb1pp2/3p4/1bp1P3/1PNP1P2/P1P3PP/1R1QK1NR w Kkq - 2 12",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "The pin with the bishop to b4 wins material — it attacks the c3-knight, which has only a pawn to defend it, and we can pile more pressure on with d-pawn support.",
+   "kind": "main",
+   "teaches": [
+    "pin and pile onto the undefended knight"
+   ]
+  },
+  {
+   "ply": 23,
+   "t": 286.5,
+   "fen": "r3k2r/pp3p1p/1qb1pp2/3P4/1bp5/1PNP1P2/P1P3PP/1R1QK1NR b Kkq - 0 12",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 287.5,
+   "fen": "r3k2r/pp3p1p/1qb1pp2/3P4/2p5/1PbP1P2/P1P3PP/1R1QK1NR w Kkq - 0 13",
+   "line": [
+    "Bxc3+"
+   ],
+   "spoken": "Black hands over the knight with check — a total disaster for White.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 292,
+   "fen": "r3k2r/pp3p1p/1qb2p2/3p4/2p5/1PbP1P2/P1P1K1PP/1R1Q2NR w kq - 0 14",
+   "line": [
+    "Ke2",
+    "exd5"
+   ],
+   "spoken": "With the king stuck on e2, we recapture and head straight for the finish.",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 311.5,
+   "fen": "2kr3r/pp3p1p/1qb2p2/3p4/2P5/1Pb2P2/P1P1K1PP/1R1Q2NR w - - 1 15",
+   "line": [
+    "dxc4",
+    "O-O-O"
+   ],
+   "spoken": "The king marooned on e2 should immediately scream long castle — bringing the rook to the d-file with the enemy king trapped in the center.",
+   "kind": "main",
+   "teaches": [
+    "castle toward the stranded king"
+   ]
+  },
+  {
+   "ply": 29,
+   "t": 314,
+   "fen": "2kr3r/pp3p1p/1qb2p2/3p4/2P5/1Pb2P1N/P1P1K1PP/1R1Q3R b - - 2 15",
+   "line": [
+    "Nh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 315.5,
+   "fen": "2krr3/pp3p1p/1qb2p2/3p4/2P5/1Pb2P1N/P1P1K1PP/1R1Q3R w - - 3 16",
+   "line": [
+    "Rhe8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 325,
+   "fen": "2krr3/pp3p1p/1qb2p2/8/2p5/1Pb2P1N/P1P3PP/1R1Q1K1R w - - 0 17",
+   "line": [
+    "Kf1",
+    "dxc4"
+   ],
+   "spoken": "After the king shuffles we open every file and diagonal we can — the point of taking on c4 isn't to level the pawns, it's to tear more lines open.",
+   "kind": "plan",
+   "teaches": [
+    "open lines, don’t count pawns, when attacking"
+   ]
+  },
+  {
+   "ply": 33,
+   "t": 346,
+   "fen": "2krr3/pp3p1p/1qb2p2/8/2P5/2b2P1N/P1P3PP/1R1Q1K1R b - - 0 17",
+   "line": [
+    "bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 360,
+   "fen": "2k1r3/pp3p1p/2b2p2/8/2P5/2b1qP1N/P1P3PP/3R1K1R w - - 1 19",
+   "line": [
+    "Rxd1+",
+    "Rxd1",
+    "Qe3"
+   ],
+   "spoken": "We take the queen and infiltrate — simple, direct, and the rest is history.",
+   "kind": "main"
+  }
+ ]
+}
