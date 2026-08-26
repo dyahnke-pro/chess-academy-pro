@@ -1,0 +1,585 @@
+{
+ "videoId": "dowe5Oy7u_Y",
+ "title": "Master Class | Potential Vs Kinetic | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:dowe5Oy7u_Y",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": "We've been playing the Danish Gambit almost exclusively — if it ain't broke, don't fix it. d4, e5, e4."
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "e-takes-d4."
+  },
+  {
+   "ply": 5,
+   "t": 28.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3."
+  },
+  {
+   "ply": 6,
+   "t": 31,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": "d-takes-c3."
+  },
+  {
+   "ply": 7,
+   "t": 38,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4."
+  },
+  {
+   "ply": 8,
+   "t": 40.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/Pp3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "cxb2"
+   ],
+   "spoken": "c-takes-b2."
+  },
+  {
+   "ply": 9,
+   "t": 44,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "The bishop takes b2."
+  },
+  {
+   "ply": 10,
+   "t": 45.5,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/8/2B1P3/8/PB3PPP/RN1QK1NR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The bishop to b2, c6 — I think we faced this once; the motivation is to prepare d5, but the d5-square is well defended by three of our pieces, so we respond to"
+  },
+  {
+   "ply": 11,
+   "t": 78.5,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/8/2B1P3/5N2/PB3PPP/RN1QK2R b KQkq - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "this move in a very unremarkable way — we need to complete our development, since we don't have enough out to mount any serious threats against the king. The knight to f3."
+  },
+  {
+   "ply": 12,
+   "t": 91,
+   "fen": "rnbqk1nr/pp1p1ppp/2p5/8/1bB1P3/5N2/PB3PPP/RN1QK2R w KQkq - 2 7",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "The bishop to b4 with check, a good move — which begs the question, do we cover with the knight to c3, the knight to d2, or move the king? In the Danish you can sometimes move the king. The move we can rule out is the knight to c3 — it may look most natural, but it covers up the bishop, and we want this bishop attacking g7, one of the appealing things about the Danish. So that leaves the king to f1"
+  },
+  {
+   "ply": 13,
+   "t": 139,
+   "fen": "rnbqk1nr/pp1p1ppp/2p5/8/1bB1P3/5N2/PB1N1PPP/R2QK2R b KQkq - 3 7",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "or the knight to d2 — I'm pretty indifferent, both make sense, but I want to castle and not move the king around, so let's go the knight to d2. Actually I have a feeling the king to f1 is the theoretical move here, but I'm not playing theory, just the most natural moves. He could play d5, but g7 is hanging, so the bishop takes g7 would win the rook — so d5 isn't"
+  },
+  {
+   "ply": 14,
+   "t": 183.5,
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/1bB1P3/5N2/PB1N1PPP/R2QK2R w KQkq - 0 8",
+   "line": [
+    "f6"
+   ],
+   "spoken": "justified. f6 — not the greatest move; he's blunting the bishop, but look at the weaknesses he's creating on his kingside; the first thing I see is the knight on g8, targeted by the bishop —"
+  },
+  {
+   "ply": 15,
+   "t": 216,
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/1bB1P3/1Q3N2/PB1N1PPP/R3K2R b KQkq - 1 8",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": "a type-two undefended piece. So there's a very natural move that doesn't win a piece but creates further difficulties for him: the queen to b3, stacking the bishop and the queen. I'd have preferred this battery flipped,"
+  },
+  {
+   "ply": 16,
+   "t": 227.5,
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/2B1P3/1Q3N2/PB1b1PPP/R3K2R w KQkq - 0 9",
+   "line": [
+    "Bxd2+"
+   ],
+   "spoken": "then we'd be threatening checkmate, but this is good enough — he has to take. A lot of people would grab instinctively with the knight, and we will take with the knight — but I'll point out that the king takes wouldn't be stupid either: the king in the centre isn't great, but he's got no pieces out, and there's something to be said for opening the e-file quickly and slamming e5. But something"
+  },
+  {
+   "ply": 17,
+   "t": 267.5,
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/2B1P3/1Q6/PB1N1PPP/R3K2R b KQkq - 0 9",
+   "line": [
+    "Nxd2"
+   ],
+   "spoken": "gives me the creeps about that move. I'll take with the knight, because we're not in a hurry to put a rook anywhere — he's not castling anytime soon; two of our pieces stop his king from castling, so this is justified"
+  },
+  {
+   "ply": 18,
+   "t": 294.5,
+   "fen": "rnbqk2r/pp1p2pp/2p2p1n/8/2B1P3/1Q6/PB1N1PPP/R3K2R w KQkq - 1 10",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": "in the sense that we tuck our king away on the kingside — and sometimes playing the simplest chess is the most reliable kind. The knight to h6; let's castle."
+  },
+  {
+   "ply": 19,
+   "t": 297,
+   "fen": "rnbqk2r/pp1p2pp/2p2p1n/8/2B1P3/1Q6/PB1N1PPP/R4RK1 b kq - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "He can go d5, we take on d5; he can't castle there, and we take everything on c6 — he'll play a Danish Gambit of his own, the difference being he'll lose a bunch of his pieces."
+  },
+  {
+   "ply": 20,
+   "t": 306.5,
+   "fen": "rnb1k2r/pp1pq1pp/2p2p1n/8/2B1P3/1Q6/PB1N1PPP/R4RK1 w kq - 3 11",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The queen to e7. He's not threatening to castle, so ask what his idea is: I think it's to bring the knight back to f7 and then castle, so we don't have forever. A lot of you say the rook to f1, and I like it, but there's an important question to ask: do we need the rook to f1?"
+  },
+  {
+   "ply": 21,
+   "t": 349,
+   "fen": "rnb1k2r/pp1pq1pp/2p2p1n/4P3/2B5/1Q6/PB1N1PPP/R4RK1 b kq - 0 11",
+   "line": [
+    "e5"
+   ],
+   "spoken": "When you're preparing a move, allocate a couple of seconds to whether you even need the preparatory move — can you eliminate the middleman? Those with sharp tactical vision see that you don't: you can play e5 straight away, f-takes-e5, take with the bishop, and if he takes that bishop, his queen gets skewered with the rook to e1."
+  },
+  {
+   "ply": 22,
+   "t": 365.5,
+   "fen": "rnb1k2r/pp1pq1pp/2p4n/4Pp2/2B5/1Q6/PB1N1PPP/R4RK1 w kq - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": "So just ask, do I need the middleman — sometimes yes, sometimes no. f5, but that leaves us with a beautiful pawn on e5, which can't be captured even without the bishop on b2 — it's a pin. The bishop to a3 is a great move now: you can think of the bishop on b2 as having done its job."
+  },
+  {
+   "ply": 23,
+   "t": 415.5,
+   "fen": "rnb1k2r/pp1pq1pp/2p4n/4Pp2/2B5/BQ6/P2N1PPP/R4RK1 b kq - 1 12",
+   "line": [
+    "Ba3"
+   ],
+   "spoken": "It's a superfluous bishop now — its role was to help prepare e5, and now that e5 is played and doesn't need protection, this bishop can seek greener pastures, particularly because the bishop on a3 covers the f8-square and makes it even harder for him to castle."
+  },
+  {
+   "ply": 24,
+   "t": 430.5,
+   "fen": "rnb1k2r/pp1pq1pp/7n/2p1Pp2/2B5/BQ6/P2N1PPP/R4RK1 w kq - 0 13",
+   "line": [
+    "c5"
+   ],
+   "spoken": "It would be amazing to put the knight on d6. c5 is a great move — this guy is good — but I do see a way to get the knight onto that unbelievably juicy outpost, even better than a kebab."
+  },
+  {
+   "ply": 25,
+   "t": 466,
+   "fen": "rnb1k2r/pp1pq1pp/7n/2pBPp2/8/BQ6/P2N1PPP/R4RK1 b kq - 1 13",
+   "line": [
+    "Bd5"
+   ],
+   "spoken": "The bishop to d5."
+  },
+  {
+   "ply": 27,
+   "t": 471.5,
+   "fen": "r1b1k2r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 b kq - 3 14",
+   "line": [
+    "Nc6",
+    "Nc4"
+   ],
+   "spoken": "Why d5? Because we want the bishop to remain on this diagonal, and now the knight can go to c4."
+  },
+  {
+   "ply": 24,
+   "t": 488,
+   "fen": "rnb1k2r/pp1pq1pp/7n/2p1Pp2/2B5/BQ6/P2N1PPP/R4RK1 w kq - 0 13",
+   "line": [],
+   "spoken": "The bishop to d5 because there are no other good squares — I want the bishop on this diagonal to make sure he's not castled, and it also centralises the bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 27,
+   "t": 496.5,
+   "fen": "r1b1k2r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 b kq - 3 14",
+   "line": [
+    "Bd5",
+    "Nc6",
+    "Nc4"
+   ],
+   "spoken": "He can't take on e5 — nothing changed, we'd just take back and then pin his queen. Look at these holes in his position. His knight coming out — he should go the knight to d4 here and attack my queen, and then we shouldn't rush with a check, we should just move our queen."
+  },
+  {
+   "ply": 28,
+   "t": 580,
+   "fen": "r1bk3r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 w - - 4 15",
+   "line": [
+    "Kd8"
+   ],
+   "spoken": "The king to d8."
+  },
+  {
+   "ply": 29,
+   "t": 584.5,
+   "fen": "r1bk3r/pp1pq1pp/2nN3n/2pBPp2/8/BQ6/P4PPP/R4RK1 b - - 5 15",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": "Let's not eat quite yet —"
+  },
+  {
+   "ply": 28,
+   "t": 585.5,
+   "fen": "r1bk3r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 w - - 4 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 586.5,
+   "fen": "r1bk3r/pp1pq1pp/2nN3n/2pBPp2/8/BQ6/P4PPP/R4RK1 b - - 5 15",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 589,
+   "fen": "r1bk3r/pp1pq1pp/2n4n/2pBPp2/2N5/BQ6/P4PPP/R4RK1 w - - 4 15",
+   "line": [],
+   "spoken": "g6 — maybe he can then take on e5; I think he's trying to unpin himself preemptively so he can take on e5. But let's not stop calculating: if we go the knight to d6 and he plays the queen takes e5, how can we support the knight?",
+   "reanchor": true
+  },
+  {
+   "ply": 29,
+   "t": 622.5,
+   "fen": "r1bk3r/pp1pq1pp/2nN3n/2pBPp2/8/BQ6/P4PPP/R4RK1 b - - 5 15",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": "Because we don't have to support the knight with a pawn — we have a piece ready to jump in: after the queen takes e5, the bishop takes c5, our bishop jumps into the game and operates in the pawn's place, supporting the knight."
+  },
+  {
+   "ply": 30,
+   "t": 641,
+   "fen": "r1bk3r/p2pq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/R4RK1 w - - 0 16",
+   "line": [
+    "b6"
+   ],
+   "spoken": "Why is that even a good thing — don't we want a pawn to support the knight? In principle yes, but the queen takes e5 works in our benefit, because it opens up the position further, and the side with more active pieces generally benefits — so we want him to take. He plays b6, very solid. I see taking the knight on c6, which doesn't lead anywhere after d-takes-c6 — but imagine a rook on d1 x-raying his king; then we could step aside with the knight and win his queen. Which rook to d1? If we put this rook on d1, it restricts the other from coming to e1; he'll probably play the king to c7."
+  },
+  {
+   "ply": 31,
+   "t": 690,
+   "fen": "r1bk3r/p2pq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/R2R2K1 b - - 1 16",
+   "line": [
+    "Rfd1"
+   ],
+   "spoken": "You want to escape the pin, and if he does, we might want this other rook to come to c1, to once again re-pin the king — so the rook to d1, and if he takes on e5, we take his knight with a devastating discovery. The consideration is simple: when deciding which rook to put on a square, look at what the other rook will be doing."
+  },
+  {
+   "ply": 32,
+   "t": 724.5,
+   "fen": "r1b4r/p1kpq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/R2R2K1 w - - 2 17",
+   "line": [
+    "Kc7"
+   ],
+   "spoken": "That sometimes requires a prediction — I predicted he'd go the king to c7, and then we'd put the other rook on c1. He does."
+  },
+  {
+   "ply": 33,
+   "t": 725.5,
+   "fen": "r1b4r/p1kpq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/2RR2K1 b - - 3 17",
+   "line": [
+    "Rac1"
+   ],
+   "spoken": "They don't call me the prophet for nothing."
+  },
+  {
+   "ply": 32,
+   "t": 727.5,
+   "fen": "r1b4r/p1kpq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/R2R2K1 w - - 2 17",
+   "line": [],
+   "spoken": "Okay, let me think for a second.",
+   "reanchor": true
+  },
+  {
+   "ply": 33,
+   "t": 735,
+   "fen": "r1b4r/p1kpq1pp/1pnN3n/2pBPp2/8/BQ6/P4PPP/2RR2K1 b - - 3 17",
+   "line": [
+    "Rac1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 746.5,
+   "fen": "r1b4r/p1kp2pp/1pnN3n/2pBqp2/8/BQ6/P4PPP/2RR2K1 w - - 0 18",
+   "line": [
+    "Qxe5"
+   ],
+   "spoken": "And we have once again x-rayed the king. Now this is where things get very tactical and tricky."
+  },
+  {
+   "ply": 35,
+   "t": 754.5,
+   "fen": "r1b4r/p1kp2pp/1pn4n/1NpBqp2/8/BQ6/P4PPP/2RR2K1 b - - 1 18",
+   "line": [
+    "Nb5+"
+   ],
+   "spoken": "We're going to step aside with the knight — I'm making this quickly to not lose on time — and this puts him in a very difficult situation: if he goes the king back to d8, that's why we put the rook there, and we take his"
+  },
+  {
+   "ply": 36,
+   "t": 774,
+   "fen": "rkb4r/p2p2pp/1pn4n/1NpBqp2/8/BQ6/P4PPP/2RR2K1 w - - 2 19",
+   "line": [
+    "Kb8"
+   ],
+   "spoken": "knight, a free knight, and that's winning. If he goes the king to b8, then the queen — and this is elegant, all three of our major pieces have taken a turn x-raying the king; if this pawn were gone from b6, we'd have a devastating discovery. So what move comes to mind here?"
+  },
+  {
+   "ply": 37,
+   "t": 787.5,
+   "fen": "rkb4r/p2p2pp/1pn4n/1NBBqp2/8/1Q6/P4PPP/2RR2K1 b - - 0 19",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": "This guy is definitely not an easy opponent. I like the bishop takes c5, blasting open the pathways to his king and threatening the bishop to d6. He has to take, and it's still not easy for us to win — in fact we might want to hold off on the discovered check until we get all of our pieces into the attack."
+  },
+  {
+   "ply": 38,
+   "t": 818,
+   "fen": "rkb4r/p2p2pp/2n4n/1NpBqp2/8/1Q6/P4PPP/2RR2K1 w - - 0 20",
+   "line": [
+    "bxc5"
+   ],
+   "spoken": "Not an easy game, not an easy opponent, but we're keeping our foot on the gas pedal, and at some point, if you stay calm, something will come up. We're going to take with the rook."
+  },
+  {
+   "ply": 39,
+   "t": 820,
+   "fen": "rkb4r/p2p2pp/2n4n/1NRBqp2/8/1Q6/P4PPP/3R2K1 b - - 0 20",
+   "line": [
+    "Rxc5"
+   ],
+   "spoken": "Here we're just going to take, no rush — we create another x-ray against this queen, and hopefully this is the final straw that leads him to collapse."
+  },
+  {
+   "ply": 40,
+   "t": 828,
+   "fen": "rk5r/pb1p2pp/2n4n/1NRBqp2/8/1Q6/P4PPP/3R2K1 w - - 1 21",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The bishop to b7, a good move. There's a line I'm calculating that potentially leads to a beautiful win, but I want to make sure I'm not screwing it up — oh, there's a defense there; let me focus and find a win."
+  },
+  {
+   "ply": 41,
+   "t": 884.5,
+   "fen": "rk5r/pb1p2pp/2nN3n/2RBqp2/8/1Q6/P4PPP/3R2K1 b - - 2 21",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": "I think the knight to d6 is the move here."
+  },
+  {
+   "ply": 40,
+   "t": 890.5,
+   "fen": "rk5r/pb1p2pp/2n4n/1NRBqp2/8/1Q6/P4PPP/3R2K1 w - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 897,
+   "fen": "rk5r/pb1p2pp/2n4n/2RBqp2/3N4/1Q6/P4PPP/3R2K1 b - - 2 21",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "The knight to d4 it is — I'll show you everything I was thinking, but we're just going to play it safe. I really wish that had worked. This is completely winning, because we're threatening a million things and overwhelming him."
+  },
+  {
+   "ply": 42,
+   "t": 928.5,
+   "fen": "rk2r3/pb1p2pp/2n4n/2RBqp2/3N4/1Q6/P4PPP/3R2K1 w - - 3 22",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "The immediate threat, by the way, is the bishop takes c6, opening the attack on his queen and simultaneously threatening checkmate. That rook to e8 is a really good move."
+  },
+  {
+   "ply": 43,
+   "t": 931,
+   "fen": "rk2r3/pb1p2pp/2n4n/2RBqp2/3N4/1Q5P/P4PP1/3R2K1 b - - 0 22",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Let's go h3 to stop the back-rank threats — he's definitely defending super well, but I don't see a defense; there are just too many threats. h3 was important, because he was threatening the rook takes e1, mate."
+  },
+  {
+   "ply": 44,
+   "t": 982,
+   "fen": "r3r3/pbkp2pp/2n4n/2RBqp2/3N4/1Q5P/P4PP1/3R2K1 w - - 1 23",
+   "line": [
+    "Kc7"
+   ],
+   "spoken": "So again the queen is x-raying the king and the rook is x-raying the queen, which means we can combine the two."
+  },
+  {
+   "ply": 45,
+   "t": 987,
+   "fen": "r3r3/pbkp2pp/2B4n/2R1qp2/3N4/1Q5P/P4PP1/3R2K1 b - - 0 23",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "the bishop takes c6."
+  },
+  {
+   "ply": 46,
+   "t": 1001.5,
+   "fen": "r3r3/pbk3pp/2p4n/2R1qp2/3N4/1Q5P/P4PP1/3R2K1 w - - 0 24",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "So he's going to lose his queen — he has to take back and then he loses his queen; I don't see a defense here."
+  },
+  {
+   "ply": 47,
+   "t": 1004,
+   "fen": "r3r3/pbk3pp/2p4n/4Rp2/3N4/1Q5P/P4PP1/3R2K1 b - - 0 24",
+   "line": [
+    "Rxe5"
+   ],
+   "spoken": "We take his queen, and now on top of that"
+  },
+  {
+   "ply": 48,
+   "t": 1007.5,
+   "fen": "r7/pbk3pp/2p4n/4rp2/3N4/1Q5P/P4PP1/3R2K1 w - - 0 25",
+   "line": [
+    "Rxe5"
+   ],
+   "spoken": "we have a very strong move in this position that ends the game — actually a couple of wins here."
+  },
+  {
+   "ply": 49,
+   "t": 1030,
+   "fen": "r7/pbk3pp/2p1N2n/4rp2/8/1Q5P/P4PP1/3R2K1 b - - 1 25",
+   "line": [
+    "Ne6+"
+   ],
+   "spoken": "g6 is what I'm thinking, but looking a little longer I see an even better move — the queen to g3, or g6, it really doesn't matter; the knight to e6 with check. He can't bring his king back because we check, so he has to give up his rook, and he ends with two pieces for the queen and his king in huge trouble — completely winning."
+  },
+  {
+   "ply": 51,
+   "t": 1041,
+   "fen": "r7/pbk3pp/2p1Q2n/5p2/8/7P/P4PP1/3R2K1 b - - 0 26",
+   "line": [
+    "Rxe6",
+    "Qxe6"
+   ],
+   "spoken": "the rook takes e6, the queen recaptures. This was a very tactically rich game, and you can learn a lot from these."
+  },
+  {
+   "ply": 52,
+   "t": 1069.5,
+   "fen": "r1b5/p1k3pp/2p1Q2n/5p2/8/7P/P4PP1/3R2K1 w - - 1 27",
+   "line": [
+    "Bc8"
+   ],
+   "spoken": "the bishop to c8."
+  },
+  {
+   "ply": 53,
+   "t": 1072,
+   "fen": "r1b5/p1k3pp/2pQ3n/5p2/8/7P/P4PP1/3R2K1 b - - 2 27",
+   "line": [
+    "Qd6+"
+   ],
+   "spoken": "Check, check, and checkmate is very easy."
+  },
+  {
+   "ply": 55,
+   "t": 1095.5,
+   "fen": "r1b5/p5pp/1kpQ3n/5p2/8/7P/P4PP1/1R4K1 b - - 4 28",
+   "line": [
+    "Kb6",
+    "Rb1+"
+   ],
+   "spoken": "the king to b6, the rook to b1 with check."
+  },
+  {
+   "ply": 56,
+   "t": 1099.5,
+   "fen": "r1b5/p5pp/2pQ3n/k4p2/8/7P/P4PP1/1R4K1 w - - 5 29",
+   "line": [
+    "Ka5"
+   ],
+   "spoken": "the king to a5."
+  },
+  {
+   "ply": 57,
+   "t": 1104,
+   "fen": "r1b5/p5pp/2p4n/k4p2/8/Q6P/P4PP1/1R4K1 b - - 6 29",
+   "line": [
+    "Qa3#"
+   ],
+   "spoken": "the queen to a3, mate."
+  },
+  {
+   "ply": 7,
+   "t": 1118,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": "For that earlier game — it was just a big blunder; you've got to have that timer awareness, though it's easy for me to say, because you've got to have the timer open and that can be hard to watch.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 1132.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "Small change of plans. The accuracy, since you're curious — I messed up at several points, probably didn't play precisely, but it was 98.4 to 72.3, better than I expected. So, the Danish Gambit, c6, the knight to f3, the bishop to b4 with check, and we decided on the knight to d2 — I think this is fine. To those who thought Black can play d5: after e-takes-d5, c-takes-d5, who can spot the most clinical move?",
+   "reanchor": true
+  }
+ ]
+}
