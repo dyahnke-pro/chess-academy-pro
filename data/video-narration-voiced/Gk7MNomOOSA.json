@@ -1,0 +1,330 @@
+{
+  "videoId": "Gk7MNomOOSA",
+  "title": "Nimzo-Indian Positional Break Down | Queen's Indian | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "Nimzo-Indian Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:Gk7MNomOOSA",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 17,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "d4, the knight to f6."
+    },
+    {
+      "ply": 4,
+      "t": 19,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c4",
+        "e6"
+      ],
+      "spoken": "c4, e6 — let's do a Nimzo, sliding into a Queen's Indian."
+    },
+    {
+      "ply": 5,
+      "t": 23,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The knight to c3 — not something we've played often, but it's my second opening after"
+    },
+    {
+      "ply": 6,
+      "t": 24,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "the King's Indian. The bishop to b4 — the Nimzo pin."
+    },
+    {
+      "ply": 7,
+      "t": 25,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP1BPPPP/R2QKBNR b KQkq - 3 4",
+      "line": [
+        "Bd2"
+      ],
+      "spoken": "The bishop to d2 — not considered theoretically topical, quite passive, but it's been gaining popularity recently. The Nimzo is a very easy opening"
+    },
+    {
+      "ply": 8,
+      "t": 40,
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N5/PP1BPPPP/R2QKBNR w KQ - 4 5",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "to pick up: you basically just develop your pieces, and then there are a couple of specific setups you should know."
+    },
+    {
+      "ply": 9,
+      "t": 41,
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/P1N5/1P1BPPPP/R2QKBNR b KQ - 0 5",
+      "line": [
+        "a3"
+      ],
+      "spoken": "a3."
+    },
+    {
+      "ply": 10,
+      "t": 51,
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1b5/1P1BPPPP/R2QKBNR w KQ - 0 6",
+      "line": [
+        "Bxc3"
+      ],
+      "spoken": "We take on c3 — that's kind of the point of the Nimzo:"
+    },
+    {
+      "ply": 11,
+      "t": 53,
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1B5/1P2PPPP/R2QKBNR b KQ - 0 6",
+      "line": [
+        "Bxc3"
+      ],
+      "spoken": "we make it harder for White to occupy the centre with e4, by weakening his control of the e4-square, taking that knight off the board. One of the most typical Nimzo setups is:"
+    },
+    {
+      "ply": 12,
+      "t": 70.5,
+      "fen": "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1B5/1P2PPPP/R2QKBNR w KQ - 0 7",
+      "line": [
+        "b6"
+      ],
+      "spoken": "b6, the bishop to b7, then d6 and the knight to d7 — you create these little holes for your pieces."
+    },
+    {
+      "ply": 13,
+      "t": 75.5,
+      "fen": "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1B1P3/1P3PPP/R2QKBNR b KQ - 0 7",
+      "line": [
+        "e3"
+      ],
+      "spoken": "e3."
+    },
+    {
+      "ply": 14,
+      "t": 77,
+      "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/8/2PP4/P1B1P3/1P3PPP/R2QKBNR w KQ - 1 8",
+      "line": [
+        "Bb7"
+      ],
+      "spoken": "The bishop to b7 — one of the most solid setups available in the Nimzo. The move d5 here"
+    },
+    {
+      "ply": 15,
+      "t": 79,
+      "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/8/2PP4/P1B1PN2/1P3PPP/R2QKB1R b KQ - 2 8",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "would be fine, but not really in the spirit of the Nimzo, so we play in its spirit:"
+    },
+    {
+      "ply": 16,
+      "t": 90.5,
+      "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/8/2PP4/P1B1PN2/1P3PPP/R2QKB1R w KQ - 0 9",
+      "line": [
+        "d6"
+      ],
+      "spoken": "d6,"
+    },
+    {
+      "ply": 17,
+      "t": 92.5,
+      "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2QK2R b KQ - 1 9",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "the bishop to e2, and the knight to d7 —"
+    },
+    {
+      "ply": 18,
+      "t": 93.5,
+      "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2QK2R w KQ - 2 10",
+      "line": [
+        "Nbd7"
+      ],
+      "spoken": "the knight to d7, a very common and very solid setup, because there are no weaknesses."
+    },
+    {
+      "ply": 19,
+      "t": 97.5,
+      "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2Q1RK1 b - - 3 10",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Now we have to continue improving our position. We placed our pieces where they belong, and now there are a couple of follow-up plans."
+    },
+    {
+      "ply": 20,
+      "t": 120.5,
+      "fen": "r2q1rk1/pbpn1ppp/1p1pp3/8/2PPn3/P1B1PN2/1P2BPPP/R2Q1RK1 w - - 4 11",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "One plan is the queen to e7 and then e5; but a more aggressive idea I really like is the knight to e4, a natural move, following up with f5 — the g4-and-f5 idea, ubiquitous across openings. A rook to d1. Now we have the option of subtracting White's bishop from the board: one way is to take the bishop and then reroute the other knight to e4, another classic concept. I don't feel strongly either way — the bishop on c3 does have a bright future, especially if White pushes d5 at some point, so it might be worth taking it, even though our knight on e4 is a strong piece, because we're just replacing one knight with the other; unless he plays the knight to d2, which would be passive but would take the sting out of g4. The queen to c2 — I don't see a reason to refrain from shoving the other knight into the outpost, the knight to d2. That was his idea, and now we need some tactics to preserve this knight on e4. Anybody see how we could create a situation where White can't take on e4? We play the queen to g5, a classic move with a couple of ideas, threatening — and White immediately blunders. After the king to h1, I see a much sexier move than the knight to f2 with check. The most efficient mate: the queen takes e2 wins, the knight to f2 with check wins, but the knight to g3 with check is the fastest — h-takes-g3, the rook to f6 with the rook to h6 to follow. There's no smothered mate, because White can give up an exchange on f2, but despite it being White to move there's nothing he can do — remember this classic mechanism: if White puts a rook on f2, we just take it. That's mate.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 277,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "So that's mate — a pretty underwhelming game, we didn't really get a chance to do anything. The Nimzo flies under the radar — I don't think there's even a course for it, even though it's definitely top three among objectively best openings, especially when paired with something good against",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 290,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "the knight to f3. Against the knight to f3 you can play a bunch of things — the Bogo-Indian, still giving this check;",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 296.5,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+      "line": [
+        "Bb4+"
+      ],
+      "spoken": "the bishop to b4 with check;",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 298,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "line": [],
+      "spoken": "the Queen's Indian is b6, and then you",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 299,
+      "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "b6"
+      ],
+      "spoken": "play b6.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 300.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+      "line": [],
+      "spoken": "or you can play",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 302,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "d5"
+      ],
+      "spoken": "d5, and after the knight to c3, the bishop to b4 is the",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 304.5,
+      "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 2 5",
+      "line": [
+        "Nc3",
+        "Bb4"
+      ],
+      "spoken": "Ragozin, which has been extremely popular in the last few years.",
+      "reanchor": true
+    },
+    {
+      "ply": 4,
+      "t": 314,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [],
+      "spoken": "And of course White can also play the Catalan, a big reason a lot of people don't play the Nimzo — they don't like facing",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 315.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "g3"
+      ],
+      "spoken": "the Catalan. But honestly, below 2500 the Catalan isn't that scary — as Black you just choose a setup and learn it; there are five or six variations that all",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 321.5,
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 1 4",
+      "line": [
+        "d5",
+        "Nf3"
+      ],
+      "spoken": "lead to very decent positions for Black. The simplest is probably the main line —",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 341,
+      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R w KQkq - 2 5",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "the bishop to e7, castle, then d-takes-c4; and if you",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 343.5,
+      "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 2 7",
+      "line": [
+        "Bg2",
+        "dxc4",
+        "O-O",
+        "O-O"
+      ],
+      "spoken": "want to play like the pros: b5 here — a move that was never even played before, because of a4, since it was considered forced that Black had to play b4 and couldn't afford to wreck his structure. But it turns out White can't just grab: a-takes-b5 exposes the rook, and after the bishop to a6, the knight to a6, the queen to c4, and the bishop to d5, Black gets a big initiative for the pawn and basically equalises. White can avoid it with the queen to a4, but that allows the favourable main line — a6, the queen takes c4, and b5. People started playing the queen to c2 because after a6, a4 became the way to fight for an advantage, whereas earlier people were taking automatically on c4.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 451.5,
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+      "line": [],
+      "spoken": "So you should learn the Catalan if you're a Nimzo player, and then the Nimzo proper, because it's pretty vast. Against me in the tournament, e3 was played — the Rubinstein, probably the most reputable line;",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 474,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N3P1/PP2PP1P/R1BQKBNR b KQkq - 2 4",
+      "line": [
+        "Bb4+",
+        "Nc3"
+      ],
+      "spoken": "the queen to c2 is the more ambitious variation; there's the bishop to d2, and our opponent played the bishop to g5, the Leningrad; g3 is possible; and White can play the knight to",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 476,
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/6P1/PP2PP1P/RNBQKBNR w KQkq - 1 4",
+      "line": [],
+      "spoken": "f3, and then Black has the option of transposing into the Ragozin with d5; there's the move f3, which I've played with White, and a3, quite similar to f3. There's a ton to learn if you're a Nimzo player, but the good thing is that most of the time you can improvise, if you know the main setups and where the pieces usually go. One very typical setup is indeed to take the knight — the idea of the bishop to d2 is to recapture with the bishop and keep the integrity of the queenside pawn structure — and then we play b6, and Black is slightly worse in this setup; I don't dispute the engine usually gives about 0.4, but it's really, really solid: no weaknesses, every piece doing something, very easy to play.",
+      "reanchor": true
+    }
+  ]
+}
