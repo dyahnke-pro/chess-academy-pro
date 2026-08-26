@@ -1,0 +1,138 @@
+{
+ "videoId": "kbQl_tsSo8w",
+ "title": "Calculating A BRUTAL Bishop Sac | Smith–Morra Gambit | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Smith-Morra Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:kbQl_tsSo8w",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Facing an eighteen-eighty-something. e4, c5 — and another Smith-Morra, just like the last game started; let's hope for a different result."
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4, throwing the pawn into the fray."
+  },
+  {
+   "ply": 4,
+   "t": 19.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Black grabs it, c takes d4."
+  },
+  {
+   "ply": 5,
+   "t": 22,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 — the true Smith-Morra, offering a second pawn for a big lead in development."
+  },
+  {
+   "ply": 7,
+   "t": 26,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "spoken": "Black accepts with d takes c3, and we recapture, the knight to c3 — a fully accepted Morra."
+  },
+  {
+   "ply": 8,
+   "t": 29.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Black plays e6. The guideline here is that you generally want the knight to f3 before the bishop to c4 in most of these positions."
+  },
+  {
+   "ply": 9,
+   "t": 61,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "So we develop the knight to f3 first, staying as flexible as possible and waiting for Black to commit to a setup before we do."
+  },
+  {
+   "ply": 10,
+   "t": 70,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Black plays a6, heading into a main-line structure."
+  },
+  {
+   "ply": 11,
+   "t": 116.5,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Now the bishop to c4 — you don't want it drifting to f4 where the e5-break could hit it with tempo. On c4 it's perfectly placed."
+  },
+  {
+   "ply": 12,
+   "t": 167.5,
+   "fen": "rnbqk1nr/1p1pbppp/p3p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Black develops the bishop to e7. Our bishop on c4 is what makes the position tick — it quietly supports the knight that later jumps to d5."
+  },
+  {
+   "ply": 13,
+   "t": 225,
+   "fen": "rnbqk1nr/1p1pbppp/p3p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle, tucking the king away and finishing development ahead of schedule."
+  },
+  {
+   "ply": 12,
+   "t": 228.5,
+   "fen": "rnbqk1nr/1p1pbppp/p3p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "line": [],
+   "spoken": "And remember: after our knight eventually lands on d5, Black is not obliged to take it — that tension is part of what gives White the initiative.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 230,
+   "fen": "rnbqk1nr/1p2bppp/p2pp3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "O-O",
+    "d6"
+   ],
+   "spoken": "Black plays d6, essentially transposing into a line I'm quite comfortable against."
+  },
+  {
+   "ply": 3,
+   "t": 1555,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "You have to trust that this gambit lead eventually creates an impact — and it did; a nice game.",
+   "reanchor": true
+  }
+ ]
+}
