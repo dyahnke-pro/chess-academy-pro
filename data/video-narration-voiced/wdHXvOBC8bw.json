@@ -1,0 +1,673 @@
+{
+ "videoId": "wdHXvOBC8bw",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1740",
+ "openingName": "Ponziani Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:wdHXvOBC8bw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 669,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "Six thousand viewers — let's go. e4, e5."
+  },
+  {
+   "ply": 4,
+   "t": 671,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": "The knight to f3 and the knight to c6."
+  },
+  {
+   "ply": 5,
+   "t": 672,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "He plays c3 — the Ponziani, a genuinely dangerous opening; White wants to build a big center."
+  },
+  {
+   "ply": 6,
+   "t": 699,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "f5"
+   ],
+   "spoken": "There are several ways to meet it, but I go for f5 — a very sharp move. Yes, it exposes my king, but I'm banking on the counterplay."
+  },
+  {
+   "ply": 7,
+   "t": 722,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White plays d4."
+  },
+  {
+   "ply": 8,
+   "t": 726.5,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4p3/3Pp3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": "I take, f takes e4, which lessens the immediate risk of my king being blown open."
+  },
+  {
+   "ply": 9,
+   "t": 728,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "White grabs on e5. Now his queen wants to come to h5 and do damage, so I have to develop fast."
+  },
+  {
+   "ply": 10,
+   "t": 734.5,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6, developing quickly — this is theory."
+  },
+  {
+   "ply": 11,
+   "t": 739.5,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2P5/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White plays the bishop to c4, threatening a fork. How do we deal with it?"
+  },
+  {
+   "ply": 12,
+   "t": 751.5,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2P5/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We play d5, blocking the bishop. The bishop to b5 is theory here."
+  },
+  {
+   "ply": 13,
+   "t": 754,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/3Pp3/1BP5/PP3PPP/RNBQK2R b KQkq - 1 7",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "Instead he plays the bishop to b3, a bit passive."
+  },
+  {
+   "ply": 14,
+   "t": 774.5,
+   "fen": "r1bqk2r/ppp3pp/2nb1n2/3pN3/3Pp3/1BP5/PP3PPP/RNBQK2R w KQkq - 2 8",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "We don't want to take the e5-knight — if we do, he recaptures and piles pressure on us. So the bishop to d6, dislodging the knight."
+  },
+  {
+   "ply": 15,
+   "t": 789.5,
+   "fen": "r1bqk2r/ppp3pp/2Nb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQK2R b KQkq - 0 8",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "White takes on c6."
+  },
+  {
+   "ply": 16,
+   "t": 790.5,
+   "fen": "r1bqk2r/p1p3pp/2pb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": "We recapture, b takes c6 — doubled pawns, but a solid pawn chain; that's not the end of the world."
+  },
+  {
+   "ply": 17,
+   "t": 794,
+   "fen": "r1bqk2r/p1p3pp/2pb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQ1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles."
+  },
+  {
+   "ply": 18,
+   "t": 813,
+   "fen": "r1bq1rk1/p1p3pp/2pb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQ1RK1 w - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle too. Now the Greek Gift sacrifice does NOT work here — I'll show exactly why."
+  },
+  {
+   "ply": 19,
+   "t": 815,
+   "fen": "r1bq1rk1/p1p3pp/2pb1n2/3p2B1/3Pp3/1BP5/PP3PPP/RN1Q1RK1 b - - 3 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White plays the bishop to g5."
+  },
+  {
+   "ply": 21,
+   "t": 858,
+   "fen": "r1b1qrk1/p1p3pp/2pb1n2/3p2B1/3Pp3/1BP5/PP1N1PPP/R2Q1RK1 b - - 5 11",
+   "line": [
+    "Qe8",
+    "Nd2"
+   ],
+   "spoken": "We involve the queen with the queen to e8, a very typical idea; White plays the knight to d2."
+  },
+  {
+   "ply": 22,
+   "t": 866.5,
+   "fen": "r1b1qrk1/p1p3pp/2p2n2/3p2B1/3Pp3/1BP5/PP1N1PPb/R2Q1RK1 w - - 0 12",
+   "line": [
+    "Bxh2+"
+   ],
+   "spoken": "Let me demonstrate the Greek Gift — the bishop takes on h2 with check. I wouldn't play it in a real game here, but watch."
+  },
+  {
+   "ply": 23,
+   "t": 877.5,
+   "fen": "r1b1qrk1/p1p3pp/2p2n2/3p2B1/3Pp3/1BP5/PP1N1PPK/R2Q1R2 b - - 0 12",
+   "line": [
+    "Kxh2"
+   ],
+   "spoken": "White takes the bishop, king takes on h2."
+  },
+  {
+   "ply": 24,
+   "t": 879,
+   "fen": "r1b1qrk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP1N1PPK/R2Q1R2 w - - 1 13",
+   "line": [
+    "Ng4+"
+   ],
+   "spoken": "The knight to g4 with check — this isn't as simple as it looks; White has defensive resources."
+  },
+  {
+   "ply": 25,
+   "t": 885,
+   "fen": "r1b1qrk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP1N1PP1/R2Q1RK1 b - - 2 13",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "The king to g1."
+  },
+  {
+   "ply": 26,
+   "t": 893.5,
+   "fen": "r1b2rk1/p1p3pp/2p5/3p2Bq/3Pp1n1/1BP5/PP1N1PP1/R2Q1RK1 w - - 3 14",
+   "line": [
+    "Qh5"
+   ],
+   "spoken": "The queen to h5 — not attacking the bishop, but heading to h2."
+  },
+  {
+   "ply": 27,
+   "t": 907,
+   "fen": "r1b2rk1/p1p3pp/2p5/3p2Bq/3Pp1n1/1BP2P2/PP1N2P1/R2Q1RK1 b - - 0 14",
+   "line": [
+    "f3"
+   ],
+   "spoken": "White plays f3, but there's no way to stop the mate except giving up the queen."
+  },
+  {
+   "ply": 28,
+   "t": 908,
+   "fen": "r1b2rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP2P2/PP1N2Pq/R2Q1RK1 w - - 1 15",
+   "line": [
+    "Qh2#"
+   ],
+   "spoken": "The queen to h2 — checkmate. Well earned."
+  },
+  {
+   "ply": 9,
+   "t": 915,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": "Let's rewind and unpack all of this.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 920,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": "First some history — c3 is called the Ponziani, one of the oldest openings.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 963.5,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "f5"
+   ],
+   "spoken": "And guess what: in the old games Black played f5 too.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 994.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": "The knight to f6 leads to interesting complications; White plays d4 and the center comes under fire.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 997,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "f5"
+   ],
+   "spoken": "But f5 is one of the better defenses against the Ponziani even now.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1002,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 by White.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1004,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": "That old game was a draw.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1005,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pP2/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "exf5"
+   ],
+   "spoken": "Now, what if White takes on f5? Why am I not simply blundering my king open?",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1021,
+   "fen": "r1bqkbnr/pppp2pp/2n5/5P2/4p3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "e4"
+   ],
+   "spoken": "The best continuation is e4 immediately, attacking the knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1025.5,
+   "fen": "r1bqkbnr/pppp2pp/2n5/5P2/3Np3/2P5/PP1P1PPP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "The knight has nowhere good to go; if it goes to d4,",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1027,
+   "fen": "r1bqkbnr/pppp2pp/8/5P2/3np3/2P5/PP1P1PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "we capture it, ruining White's pawn structure.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1029,
+   "fen": "r1bqkbnr/pppp2pp/2n5/5P2/4p3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": "And we stake a big claim in the center.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1032,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": "Kind of like the Schliemann against the Ruy Lopez.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1034.5,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 stakes the center.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1036.5,
+   "fen": "r1bqkbnr/pppp2pp/2n5/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "fxe4",
+    "Nxe5"
+   ],
+   "spoken": "f takes e4, the knight takes on e5, then the knight to f6 develops.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1040,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2P5/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "Nf6",
+    "Bc4",
+    "d5"
+   ],
+   "spoken": "The knight to f6, the bishop to c4, d5 — we block the bishop, and now I think White made a big mistake.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1042,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/1B1pN3/3Pp3/2P5/PP3PPP/RNBQK2R b KQkq - 1 7",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5 is more active, attacking c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1046,
+   "fen": "r2qkb1r/pppb2pp/2n2n2/1B1pN3/3Pp3/2P5/PP3PPP/RNBQK2R w KQkq - 2 8",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "It probably forces us to develop the bishop to d7.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1048,
+   "fen": "r2qkb1r/pppN2pp/2n2n2/1B1p4/3Pp3/2P5/PP3PPP/RNBQK2R b KQkq - 0 8",
+   "line": [
+    "Nxd7"
+   ],
+   "spoken": "He takes on d7 — and now he has the two bishops.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1080,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [],
+   "spoken": "In the Hikaru game, Black was surprised by the Ponziani but replied f5 — a very dangerous move.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1081.5,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/1B2N3/3Pp3/2P5/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5, to prevent the deployment of the d-pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1083,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/1B1pN3/3Pp3/2P5/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1087,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/1B2N3/3Pp3/2P5/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [],
+   "spoken": "That was an old correspondence game.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1088,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2P5/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [],
+   "spoken": "I wasn't a hundred percent sure of the reference.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1089.5,
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2P5/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1091.5,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2P5/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1094,
+   "fen": "r1bqk2r/ppp3pp/2nb1n2/3pN3/3Pp3/1BP5/PP3PPP/RNBQK2R w KQkq - 2 8",
+   "line": [
+    "Bb3",
+    "Bd6"
+   ],
+   "spoken": "The bishop to b3, the bishop to d6, dislodging the knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1095.5,
+   "fen": "r1bqk2r/p1p3pp/2pb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQ1RK1 b kq - 1 9",
+   "line": [
+    "Nxc6",
+    "bxc6",
+    "O-O"
+   ],
+   "spoken": "The knight takes on c6, we recapture, White castles — now, why does the Greek Gift not work? There's a checklist to run through.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1100.5,
+   "fen": "r1bqk2r/p1p3pp/2p2n2/3p4/3Pp3/1BP5/PP3PPK/RNBQ1R2 b kq - 0 10",
+   "line": [
+    "Bxh2+",
+    "Kxh2"
+   ],
+   "spoken": "The bishop takes on h2 with check, the king recaptures.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1119.5,
+   "fen": "r1bqk2r/p1p3pp/2pb1n2/3p4/3Pp3/1BP5/PP3PPP/RNBQ1RK1 b kq - 1 9",
+   "line": [],
+   "spoken": "Item four is the one people always forget — like a pilot's checklist before landing.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1129.5,
+   "fen": "r1bqk2r/p1p3pp/2p2n2/3p4/3Pp3/1BP5/PP3PPK/RNBQ1R2 b kq - 0 10",
+   "line": [
+    "Bxh2+",
+    "Kxh2"
+   ],
+   "spoken": "Item one: it's symmetrical, yes. Item two: is there a knight that can follow up with a check on g4 or g5, and is that square defended?",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 1141,
+   "fen": "r1bqk2r/p1p3pp/2p5/3p4/3Pp1n1/1BP5/PP3PPK/RNBQ1R2 w kq - 1 11",
+   "line": [
+    "Ng4+"
+   ],
+   "spoken": "The knight to g4 with check — sometimes without the bishop guarding from c8, you couldn't play this because the queen would just capture.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1143.5,
+   "fen": "r2qk2r/p1p3pp/2p5/3p4/3Pp1b1/1BP5/PP3PPK/RNB2R2 w kq - 0 12",
+   "line": [
+    "Qxg4",
+    "Bxg4"
+   ],
+   "spoken": "The queen takes on g4, the bishop recaptures.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 1146.5,
+   "fen": "r1bqk2r/p1p3pp/2p5/3p4/3Pp1n1/1BP5/PP3PPK/RNBQ1R2 w kq - 1 11",
+   "line": [],
+   "spoken": "Item three.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 1147.5,
+   "fen": "r1bqk2r/p1p3pp/2p5/3p4/3Pp1n1/1BP5/PP3PP1/RNBQ1RK1 b kq - 2 11",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "The king to g1 — do you have a queen that can swing to h4 or h5 and combine with the knight?",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1158,
+   "fen": "r1b1k2r/p1p3pp/2p5/3p4/3Pp1nq/1BP5/PP3PP1/RNBQ1RK1 w kq - 3 12",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The queen to h4 — yes, three out of three.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 1175,
+   "fen": "r1b1k2r/p1p3pp/2p5/3p4/3PpBnq/1BP5/PP3PP1/RN1Q1RK1 b kq - 4 12",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "Item four: after all this, can your opponent defend g5 or h2 directly? White plays the bishop to f4 — this is the item people forget to check.",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1301,
+   "fen": "r1bqk2r/p1p3pp/2p2n2/3p4/3Pp3/1BP5/PP3PPb/RNBQ1RK1 w kq - 0 10",
+   "line": [],
+   "spoken": "Real players really do miss this stuff — that's why it's worth explaining; it has real practical value.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1310.5,
+   "fen": "r1bq1rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP3PPK/RN1Q1R2 w - - 3 12",
+   "line": [
+    "Kxh2",
+    "O-O",
+    "Bg5",
+    "Ng4+"
+   ],
+   "spoken": "Some say the bishop takes on h2 works because of the knight to g4, exposing the bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 1312.5,
+   "fen": "r1bq1rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP3PP1/RN1Q1RK1 b - - 4 12",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "The king to g1.",
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 1314,
+   "fen": "r1b2rk1/p1p3pp/2p5/3p2q1/3Pp1n1/1BP5/PP3PP1/RN1Q1RK1 w - - 0 13",
+   "line": [
+    "Qxg5"
+   ],
+   "spoken": "The queen takes on g5.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1316,
+   "fen": "r1bq1rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP3PPK/RN1Q1R2 w - - 3 12",
+   "line": [],
+   "spoken": "But what are we missing? What can White do? I've seen people fall for this.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 1330.5,
+   "fen": "r2B1rk1/p1p3pp/2p5/3p4/3Pp1b1/1BP5/PP3PPK/RN3R2 b - - 0 13",
+   "line": [
+    "Qxg4",
+    "Bxg4",
+    "Bxd8"
+   ],
+   "spoken": "The problem is our queen is hanging — White has the license to take on g4, and if we take back he takes on d8.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1352,
+   "fen": "r1bq1rk1/p1p3pp/2p5/3p2B1/3Pp1n1/1BP5/PP3PPK/RN1Q1R2 w - - 3 12",
+   "line": [],
+   "spoken": "Our pieces are hanging, so we'd need to move our queen with check — but he can block it.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 1357,
+   "fen": "r1bq1rk1/p1p3pp/2p2n2/3p2B1/3Pp3/1BP5/PP3PPK/RN1Q1R2 b - - 2 11",
+   "line": [],
+   "spoken": "So does the Greek sacrifice work here? Run the four items: a bishop to sacrifice on h2, a knight to follow up, a queen to join — and crucially, can he defend? That last item is why it fails.",
+   "reanchor": true
+  }
+ ]
+}
