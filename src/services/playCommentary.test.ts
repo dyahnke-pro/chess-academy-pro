@@ -6,18 +6,10 @@ import { Chess } from 'chess.js';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
-  it('names the opponent knight on an unchallengeable outpost when the trade is available', () => {
-    // White to move. Black knight on d4 (White's half), defended by the e5
-    // pawn; White has no c- or e-pawn behind it to ever challenge — a textbook
-    // outpost. White's knight on f3 can capture it right now.
-    const fen = '4k3/8/5p2/4p3/3n4/5N2/6P1/4K3 w - - 0 1';
-    // Sanity: the position is legal and Nxd4 exists.
-    expect(new Chess(fen).moves()).toContain('Nxd4');
-    const beat = buildPlayCommentary({ fen, studentColor: 'white' });
-    expect(beat?.kind).toBe('trade-the-best-piece');
-    expect(beat?.facts[0]).toContain('d4');
-    expect(beat?.facts[0]).toContain('outpost');
-  });
+  // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
+  // hand-written `opponentsBestPiece` outpost heuristic is superseded by the
+  // engine lane `pieceQualityLines(parseEvalTable())` (see CLAUDE.md "THE
+  // COMPUTER DECIDES WHAT IS SPOKEN"). Its test went with it.
 
   it('says nothing when it is not the student to move', () => {
     const fen = '4k3/8/5p2/4p3/3n4/5N2/6P1/4K3 w - - 0 1';
@@ -376,7 +368,7 @@ describe('the ladder falls through a kind the caller cannot use', () => {
     expect(buildPlayCommentary({
       fen,
       studentColor: 'white',
-      skipKinds: new Set(['tactic', 'seeding-observation', 'trade-the-best-piece', 'improving-move']),
+      skipKinds: new Set(['tactic', 'seeding-observation', 'improving-move']),
     })).toBeNull();
   });
 });
@@ -406,7 +398,7 @@ describe('the improving move is a middlegame habit', () => {
       studentColor: 'white',
       bestUci: 'f1e2',
       bestMoveWhy: 'it connects the rooks',
-      skipKinds: new Set(['tactic', 'seeding-observation', 'trade-the-best-piece']),
+      skipKinds: new Set(['tactic', 'seeding-observation']),
     });
     expect(beat?.kind).toBe('improving-move');
   });

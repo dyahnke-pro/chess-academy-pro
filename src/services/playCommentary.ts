@@ -22,7 +22,6 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 export type CommentaryKind =
   | 'tactic'
   | 'seeding-observation'
-  | 'trade-the-best-piece'
   | 'improving-move';
 
 export interface PlayCommentary {
@@ -74,83 +73,11 @@ const NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
-/** Can the side to move capture this square? Used both for "you can trade it"
- *  and to check a piece is genuinely reachable rather than merely annoying. */
-function capturesOf(chess: Chess, square: string): string[] {
-  try {
-    return chess.moves({ verbose: true })
-      .filter((m) => m.to === square && m.isCapture())
-      .map((m) => m.san);
-  } catch {
-    return [];
-  }
-}
-
-/**
- * The opponent's BEST-PLACED piece, when one plainly stands out — the video's
- * "trade off the opponent's best piece".
- *
- * Deliberately narrow: a knight on a pawn-defended outpost in your half, or a
- * rook on a file with no pawns at all. Those are positions a coach actually
- * names. A merely-developed bishop is not, and calling one "their best piece"
- * would be the kind of confident filler the narration rules ban.
- */
-function opponentsBestPiece(
-  all: Piece[],
-  them: 'w' | 'b',
-): { piece: Piece; why: string } | null {
-  const theirPawns = all.filter((p) => p.type === 'p' && p.color === them);
-  const myPawns = all.filter((p) => p.type === 'p' && p.color !== them);
-  const dir = them === 'w' ? 1 : -1;
-
-  for (const n of all) {
-    if (n.type !== 'n' || n.color !== them) continue;
-    const f = fileOf(n.square);
-    const r = rankOf(n.square);
-    // In OUR half — a knight on its own third rank is not an outpost.
-    if (them === 'w' ? r < 5 : r > 4) continue;
-    const defended = theirPawns.some((p) =>
-      Math.abs(fileOf(p.square) - f) === 1 && rankOf(p.square) === r - dir);
-    if (!defended) continue;
-    // No pawn of ours can ever challenge it.
-    //
-    // 🔒 THE DIRECTION WAS BACKWARDS, AND IT SHIPPED A FALSE CLAIM. David's
-    // game, 2026-08-11: "the knight on e4 sits on an outpost no pawn can
-    // challenge" — with a white pawn on f2, one move from f3, attacking e4.
-    //
-    // A pawn challenges a knight by advancing to the square DIAGONALLY BEHIND
-    // it, so the pawns that can ever do so are the ones that have not yet
-    // passed it. White pawns advance up the board, so a white pawn threatens a
-    // BLACK knight from below it; black pawns advance down, so a black pawn
-    // threatens a WHITE knight from above. The test asked for the opposite in
-    // both cases — it looked for pawns that had already gone by and could never
-    // come back, which is why it almost always found none and almost always
-    // claimed an outpost.
-    //
-    // The gate could not catch this: "outpost" names a SQUARE, and the knight
-    // really is on it. Board-truth grading checks that the pieces named are
-    // where the sentence says, not that a positional judgement about them
-    // holds. Which is exactly why the judgement has to be right here.
-    const challengeable = myPawns.some((p) => {
-      const pf = fileOf(p.square);
-      const pr = rankOf(p.square);
-      return Math.abs(pf - f) === 1 && (them === 'w' ? pr > r : pr < r);
-    });
-    if (!challengeable) {
-      return { piece: n, why: `the knight on ${n.square} sits on an outpost no pawn can challenge` };
-    }
-  }
-
-  for (const rk of all) {
-    if (rk.type !== 'r' || rk.color !== them) continue;
-    const f = fileOf(rk.square);
-    const anyPawn = all.some((p) => p.type === 'p' && fileOf(p.square) === f);
-    if (!anyPawn) {
-      return { piece: rk, why: `the rook on ${rk.square} owns an open file` };
-    }
-  }
-  return null;
-}
+// `capturesOf` + `opponentsBestPiece` REMOVED 2026-08-26 — the hand-written
+// "their best piece / outpost" heuristic (with the direction-reversed outpost
+// bug that shipped a false claim) is superseded by the engine lane
+// `pieceQualityLines(parseEvalTable())` in pieceValueRead.ts. See CLAUDE.md
+// "THE COMPUTER DECIDES WHAT IS SPOKEN".
 
 /**
  * The video's opening beat — "there is an alignment of the Rooks…". Two big
@@ -830,23 +757,14 @@ export function buildPlayCommentary(args: {
     if (usable(seedBeat)) return seedBeat;
   }
 
-  // ── 2. TRADE OFF THEIR BEST PIECE. Only when the trade is actually
-  // available on this move — otherwise it is advice about a different position.
-  const best = opponentsBestPiece(all, them);
-  if (best) {
-    const trades = capturesOf(chess, best.piece.square);
-    if (trades.length > 0) {
-      const tradeBeat: PlayCommentary = {
-        kind: 'trade-the-best-piece',
-        key: `trade:${best.piece.square}`,
-        spoken: `${best.why}. You can trade it off right now${once('trade-best', " — the opponent's best piece is the one worth exchanging")}.`,
-        facts: [
-          `THEIR BEST PIECE: ${best.why}. The student can trade it off right now. Teach the idea — the opponent's best piece is the one worth exchanging — and name the piece and its square. Do NOT give the capturing move.`,
-        ],
-      };
-      if (usable(tradeBeat)) return tradeBeat;
-    }
-  }
+  // ── 2. TRADE OFF THEIR BEST PIECE — REMOVED 2026-08-26. The hand-written
+  // `opponentsBestPiece` heuristic (with the direction-reversed outpost bug that
+  // shipped a false claim) is superseded by the engine lane
+  // `pieceQualityLines(parseEvalTable())` (pieceValueRead.ts), which reads
+  // "their best piece — trade it off" straight off Stockfish's eval table — a
+  // number that cannot have its direction reversed. Both ran side-by-side (the
+  // walk-over this build removes); the engine lane is the one true source now.
+  // See CLAUDE.md "THE COMPUTER DECIDES WHAT IS SPOKEN".
 
   // ── 3. THE IMPROVING MOVE. The quiet beat, and the one that makes the video
   // teach: nothing is forcing, so the plan is to put a piece on a better square.

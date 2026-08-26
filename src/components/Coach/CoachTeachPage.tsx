@@ -8072,7 +8072,7 @@ export function CoachTeachPage(): JSX.Element {
                     studentColor: playerColor,
                     skipKinds: SKIP_TACTIC_BEATS,
                   });
-                  if (beat && (beat.kind === 'trade-the-best-piece' || beat.kind === 'seeding-observation')) {
+                  if (beat && beat.kind === 'seeding-observation') {
                     facts.push(...beat.facts);
                     // The prompt-only half of the same lane. `spoke:false` is
                     // honest here by construction — these reach the model's
