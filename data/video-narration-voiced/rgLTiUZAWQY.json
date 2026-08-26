@@ -160,7 +160,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "Because after a trade on e6 the b7-pawn would hang — I was making it hard for Black to develop. Now the knight comes to g6, and whenever a knight lands on g6 like this, there's a familiar idea."
   },
   {
    "ply": 17,
@@ -206,7 +206,8 @@
     "h6",
     "h5"
    ],
-   "spoken": ""
+   "spoken": "And now we literally win the knight — it's simply trapped on g6.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -1148,7 +1149,8 @@
    "line": [
     "Qxd8+"
    ],
-   "spoken": ""
+   "spoken": "Black will cover it with a pawn; and if we lead with the queen trade, Black just recaptures with the rook.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -1308,7 +1310,8 @@
    "t": 3354,
    "fen": "r2qkb1r/pppbpppp/5n2/3Pn3/2P5/5N2/PP2BPPP/RNBQK2R b KQkq - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "On the alternative of the bishop to d4 rather than developing the knight and castling — a reasonable question to raise.",
+   "reanchor": true
   },
   {
    "ply": 19,

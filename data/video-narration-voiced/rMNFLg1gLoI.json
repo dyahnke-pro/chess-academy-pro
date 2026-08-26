@@ -114,7 +114,8 @@
    "t": 164,
    "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 3 7",
    "line": [],
-   "spoken": ""
+   "spoken": "There's a line where White tries to punish us by trading on c6 and playing e5 — but Black sacrifices a pawn with the knight to d5 for a very nice initiative.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -123,7 +124,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "The pawn to a3 is a move I've never seen — not good, a waste of time, since we're not putting anything on b4. We can proceed as if handed a free move; d5 is nearly playable, though before castling it runs into the annoying bishop to b5, pinning."
   },
   {
    "ply": 14,
@@ -273,7 +274,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "White collapses with the rook to b1 — and it lands there unprotected: loose pieces drop off."
   },
   {
    "ply": 28,
@@ -319,7 +320,8 @@
     "Bxc3+",
     "Ke2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c3 with check is simple and strong — blocking loses a piece to the trade. Now the capture on b2, or more clinically the rook takes b2, leaving us essentially three pawns up.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -376,7 +378,8 @@
    "t": 679.5,
    "fen": "2br2k1/B3pp1p/2p3p1/8/2p5/P5N1/1b2KPPP/7R b - - 0 17",
    "line": [],
-   "spoken": ""
+   "spoken": "The moves are straightforward, asking to be played — grabbing on a3 is fine, nothing wrong with it.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -838,7 +841,8 @@
    "t": 1362.5,
    "fen": "r1bqk2r/pp1pppbp/2N2np1/8/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "If White castles and takes on d4, White loses a minor piece: moving the knight drops the bishop, and otherwise Black takes the knight with the rook coming to d8 protected.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -907,7 +911,8 @@
    "t": 1452.5,
    "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/P1N1B3/1PP2PPP/R2QKB1R w KQ - 1 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The attack on c3 is very powerful, the rook coming to d8, the evaluation already favouring Black — and the bishop to c4 only makes it worse.",
+   "reanchor": true
   },
   {
    "ply": 16,

@@ -667,7 +667,8 @@
    "t": 1117,
    "fen": "rnbqk1nr/ppp2ppp/3p4/2b5/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Here you can even castle short — nothing wrong with it at all.",
+   "reanchor": true
   },
   {
    "ply": 13,

@@ -157,7 +157,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White could have played c3, the way we do in the Modern — but having committed to c4, that tells us our fianchetto bishop is going to be powerful."
   },
   {
    "ply": 16,
@@ -168,7 +168,8 @@
     "Nc3",
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Its control of the long diagonal can't be impeded by any pawn — and long-term I'm eyeing the b2-pawn, with the rook to b8 and a knight reroute to support that.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -397,7 +398,8 @@
    "t": 1922.5,
    "fen": "1r3rk1/p1qb1p1p/6p1/1P1pp3/Q7/P2B3P/1R3PP1/5RK1 b - - 0 20",
    "line": [],
-   "spoken": ""
+   "spoken": "The alternative is the pawn to e4, continuing to roll the pawns forward.",
+   "reanchor": true
   },
   {
    "ply": 40,

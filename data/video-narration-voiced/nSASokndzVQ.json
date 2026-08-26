@@ -117,7 +117,8 @@
     "Nbd7",
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "And correspondingly the d4-square becomes a big outpost for Black's knight.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -160,7 +161,8 @@
    "t": 371,
    "fen": "r1bqkb1r/1p1npppp/p4n2/1BpP4/3P4/2P5/PP3PPP/RNBQK1NR w KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "With the bishop to d3, Black could capture on d4 — and we don't want an isolated queen's pawn with Black's knight already blockading the square in front of it.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -170,7 +172,8 @@
     "Be2",
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "So we drop the bishop back to e2 and simply keep developing — an early c4 and d5 has served me well before.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -356,7 +359,8 @@
     "Bxc5",
     "Nbxd5"
    ],
-   "spoken": ""
+   "spoken": "After the knight takes d5 we navigate carefully — lots of undefended pieces around, so mind a fork. From a bird's-eye view we want to trade: with connected passed pawns, any endgame is winning for us.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -365,7 +369,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "So we recapture on d5 — absent a reason not to, trade everything down, minor pieces and queens alike.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -746,7 +751,8 @@
    "line": [
     "cxb5"
    ],
-   "spoken": ""
+   "spoken": "The pawn to b5 was worth a tempo — I'd forgotten the knight to b6 wins the pawn straight back; the most clinical route for Black is different.",
+   "reanchor": true
   },
   {
    "ply": 18,

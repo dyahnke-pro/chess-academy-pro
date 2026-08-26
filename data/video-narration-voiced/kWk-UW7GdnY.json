@@ -395,7 +395,8 @@
    "line": [
     "Rb8"
    ],
-   "spoken": ""
+   "spoken": "Bringing the rook to b6 overprotects the e6-pawn, and later the pawn to b4 can pry open the queenside.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -751,7 +752,8 @@
    "t": 1181,
    "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The king to f6 and the pawn to d5 ends it — the rook is lost.",
+   "reanchor": true
   },
   {
    "ply": 6,
