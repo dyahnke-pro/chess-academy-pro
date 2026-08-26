@@ -40,10 +40,15 @@ if (!BIN) { console.error('no stockfish'); process.exit(1); }
 // row so we read the deep fan AND the shallow (d8) line from one search.
 function engine(bin) {
   const sf = spawn(bin);
-  let buf = '', rows = [], resolver = null;
+  let buf = '', rows = [], resolver = null, rawLines = [], rawResolver = null;
   sf.stdout.on('data', (d) => {
     buf += d.toString(); const lines = buf.split('\n'); buf = lines.pop() ?? '';
     for (const l of lines) {
+      if (rawResolver) { // capturing an `eval` text block until readyok
+        if (l.trim() === 'readyok') { const r = rawResolver; rawResolver = null; r(rawLines.join('\n')); rawLines = []; }
+        else rawLines.push(l);
+        continue;
+      }
       if (l.startsWith('info') && / multipv /.test(l) && / pv /.test(l)) {
         const depth = +(/ depth (\d+)/.exec(l)?.[1] ?? 0);
         const seldepth = +(/ seldepth (\d+)/.exec(l)?.[1] ?? 0);
@@ -63,8 +68,126 @@ function engine(bin) {
     go(fen, depth = DEPTH) { return new Promise((res) => { rows = []; resolver = res;
       sf.stdin.write(`position fen ${fen}\ngo depth ${depth}\n`);
       setTimeout(() => { if (resolver === res) { resolver = null; res(rows); } }, 30000); }); },
+    // Static `eval` — the NNUE per-piece contribution board + the material/
+    // positional bucket split. No search: the perturbation probe's cheap engine.
+    evalRaw(fen) { return new Promise((res) => { rawLines = []; rawResolver = res;
+      sf.stdin.write(`position fen ${fen}\neval\nisready\n`);
+      setTimeout(() => { if (rawResolver === res) { rawResolver = null; res(rawLines.join('\n')); } }, 8000); }); },
     quit() { try { sf.stdin.write('quit\n'); sf.kill(); } catch { /* */ } },
   };
+}
+
+// ── `eval` parsers (ported from src/services/pieceValueRead.ts) ──────────────
+const FILES = 'abcdefgh';
+function parseEvalTable(raw) {
+  const lines = raw.split('\n');
+  const isCell = (l) => l.trimStart().startsWith('|') && l.includes('|');
+  const cellsOf = (l) => l.split('|').slice(1, -1).map((c) => c.trim());
+  const out = []; let rank = 8;
+  for (let i = 0; i < lines.length - 1 && rank >= 1; i += 1) {
+    const pl = lines[i], vl = lines[i + 1];
+    if (!isCell(pl) || !isCell(vl)) continue;
+    const pieces = cellsOf(pl), values = cellsOf(vl);
+    if (pieces.length !== 8 || values.length !== 8) continue;
+    if (!pieces.every((c) => c === '' || /^[pnbrqkPNBRQK]$/.test(c))) continue;
+    if (!values.every((c) => c === '' || /^[+-]?\d+(\.\d+)?$/.test(c.replace(/\s+/g, '')))) continue;
+    for (let f = 0; f < 8; f += 1) {
+      const piece = pieces[f]; if (!piece) continue;
+      const rv = values[f].replace(/\s+/g, ''); if (!rv) continue;
+      const value = Number(rv); if (!Number.isFinite(value)) continue;
+      out.push({ square: `${FILES[f]}${rank}`, piece, color: piece === piece.toUpperCase() ? 'w' : 'b', value });
+    }
+    rank -= 1; i += 1;
+  }
+  return out;
+}
+function parseEvalSplit(raw) {
+  const line = raw.split('\n').find((l) => /this bucket is used/.test(l));
+  if (!line) return null;
+  const cells = line.split('|').slice(1, -1).map((c) => c.replace(/\s+/g, ''));
+  if (cells.length < 4) return null;
+  const material = Number(cells[1]), positional = Number(cells[2]);
+  if (!Number.isFinite(material) || !Number.isFinite(positional)) return null;
+  return { material, positional };
+}
+const PNAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+// A piece's contribution in ITS OWN side's favour (table is white-positive).
+function own(v) { return v.color === 'w' ? v.value : -v.value; }
+function meanByType(vals) {
+  const s = new Map();
+  for (const v of vals) { const t = v.piece.toLowerCase(); const c = s.get(t) ?? { tot: 0, n: 0 }; c.tot += Math.abs(v.value); c.n += 1; s.set(t, c); }
+  const m = new Map(); for (const [t, { tot, n }] of s) m.set(t, tot / n); return m;
+}
+// Mover's strongest piece + weakest minor, opponent's strongest — each measured
+// as delta vs what its OWN KIND is managing here (scale-free, per pieceValueRead).
+function forcesRead(table, moverColor) {
+  if (!table.length) return null;
+  const me = moverColor; // 'w' | 'b'
+  const play = table.filter((v) => v.piece.toLowerCase() !== 'k');
+  const mean = meanByType(table);
+  const delta = (v) => Math.abs(own(v)) - (mean.get(v.piece.toLowerCase()) ?? Math.abs(own(v)));
+  const mine = play.filter((v) => v.color === me), theirs = play.filter((v) => v.color !== me);
+  const myBest = mine.filter((v) => v.piece.toLowerCase() !== 'p').map((v) => ({ v, d: delta(v) })).sort((a, b) => b.d - a.d)[0];
+  const myWorst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b').map((v) => ({ v, d: delta(v) })).sort((a, b) => a.d - b.d)[0];
+  const theirBest = theirs.filter((v) => v.piece.toLowerCase() !== 'p').map((v) => ({ v, d: delta(v) })).sort((a, b) => b.d - a.d)[0];
+  const fmt = (x) => x ? { square: x.v.square, piece: PNAME[x.v.piece.toLowerCase()], contribution: +Math.abs(own(x.v)).toFixed(2), delta: +x.d.toFixed(2) } : null;
+  return { myBest: fmt(myBest), myWorst: myWorst && myWorst.d <= -0.3 ? fmt(myWorst) : null, theirBest: theirBest && theirBest.d >= 0.3 ? fmt(theirBest) : null };
+}
+
+// ── perturbation causal why-probe (the genuinely-NEW capability) ─────────────
+// Leave-one-out on the SUPPORTERS of the mover's strongest piece: remove each
+// defender, re-run the static `eval`, measure how much the star piece's own
+// contribution drops. The biggest drop = the load-bearing supporter ("the
+// knight leans on the d-pawn; take it and it's ordinary"). Cheap: static eval,
+// no search. Gated to key+ plies so the extra evals stay bounded.
+async function supporterProbe(evalFn, fen, table, moverColor, starSquare) {
+  // The star is the mover's genuinely-OUTPERFORMING piece (highest delta vs its
+  // own kind — the outpost knight, not the naturally-big queen). Caller passes
+  // its square from forces.myBest so "leans on" lands on a real strong piece.
+  const star = table.find((v) => v.square === starSquare && v.color === moverColor);
+  if (!star || 'kp'.includes(star.piece.toLowerCase())) return null;
+  const c = new Chess(fen);
+  let defenders = [];
+  try { defenders = c.attackers(star.square, moverColor) || []; } catch { defenders = []; }
+  const sups = [];
+  for (const dsq of defenders) {
+    const cc = new Chess(fen);
+    const removed = cc.remove(dsq);
+    if (!removed || removed.type === 'k') continue;
+    let t2;
+    try { t2 = parseEvalTable(await evalFn(cc.fen())); } catch { continue; }
+    const after = t2.find((v) => v.square === star.square);
+    if (!after) continue;
+    const drop = Math.abs(own(star)) - Math.abs(own(after));
+    sups.push({ square: dsq, piece: PNAME[removed.type], drop: +drop.toFixed(2) });
+  }
+  sups.sort((a, b) => b.drop - a.drop);
+  const top = sups[0];
+  if (!top || top.drop < 0.5) return null;
+  return { piece: PNAME[star.piece.toLowerCase()], square: star.square, contribution: +Math.abs(own(star)).toFixed(2), leansOn: top, all: sups };
+}
+
+// ── move classification WITH the reason (missing item 5) ─────────────────────
+// Not just cpLoss's label — WHY. Computed from signals already in hand: the
+// after-position SEE, the standing threat before/after, the forcing win missed,
+// the only-move gap. Fault reasons for bad moves; merit reasons for good ones.
+function classifyReason({ label, isBest, cpLoss, gap12, threatNetBefore, hangAfter, forceNetBest, capture, seeNow, refuteNet }) {
+  if (Math.abs(cpLoss ?? 0) >= 100000) return 'mate';
+  const bad = label === 'mistake' || label === 'blunder';
+  if (bad) {
+    if (hangAfter >= 3) return 'hung-piece';                 // left material en prise NOW (SEE)
+    if (threatNetBefore >= 3) return 'ignored-threat';       // a standing must-defend went unmet
+    if (refuteNet >= 2) return 'walked-into-tactic';         // the refutation wins material a few ply in
+    if (forceNetBest >= 2) return 'missed-forcing-win';      // a concrete win was on, and this wasn't it
+    return 'lost-the-thread';                                // positional slip, no tactic found
+  }
+  if (label === 'inaccuracy') return threatNetBefore >= 3 ? 'imprecise-defence' : 'second-best';
+  // good / best
+  if (isBest && gap12 >= 150) return 'only-move';
+  if (threatNetBefore >= 3) return 'defends-threat';
+  if (capture && seeNow >= 2) return 'wins-material';
+  if (isBest) return 'best';
+  return 'solid';
 }
 
 // ── opening naming (DB longest prefix) ──────────────────────────────────────
@@ -122,6 +245,13 @@ function lineNet(fen, pv, side, n = 8) {
     if (m.captured) net += (m.color === side ? 1 : -1) * (VAL[m.captured] || 0); }
   return net;
 }
+// Same, but for a SAN line (the refutation PV, played from the after-position).
+function sanLineNet(fen, sans, side, n = 8) {
+  const c = new Chess(fen); let net = 0;
+  for (const s of sans.slice(0, n)) { let m; try { m = c.move(s); } catch { break; } if (!m) break;
+    if (m.captured) net += (m.color === side ? 1 : -1) * (VAL[m.captured] || 0); }
+  return net;
+}
 function label(cpLoss, isBest, mate) {
   if (isBest) return 'best'; if (mate) return 'forcing'; if (cpLoss == null) return '?';
   if (cpLoss <= 15) return 'best'; if (cpLoss <= 50) return 'good'; if (cpLoss <= 100) return 'inaccuracy';
@@ -165,6 +295,12 @@ for (const beat of beats) {
     const forceNet = deep[0] ? forcingWinsMaterial(fen, deep[0].pv, mover) : 0;
     const seldepthSpike = Math.max(0, seldepth - dmax);
     const loose = looseMaterial(fen);
+
+    // ── STATE OF FORCES — per-piece contribution (one static eval, every ply) ─
+    const evalTxt = await sf.evalRaw(fen);
+    const table = parseEvalTable(evalTxt);
+    const split = parseEvalSplit(evalTxt);
+    const forces = forcesRead(table, mover);
 
     // ── THREAT, calculated out (null-move) ──────────────────────────────────
     // Give the opponent the move at THIS position; their best line = the thing
@@ -235,14 +371,29 @@ for (const beat of beats) {
     if (Math.abs(cp1) >= 100000) score = Math.max(score, 80);
     const band = score >= 70 ? 'CRITICAL' : score >= 45 ? 'key' : score >= 20 ? 'think' : 'quiet';
 
+    // ── PERTURBATION why-probe (gated to key+ — bounded extra evals) ─────────
+    // Only probe a genuinely well-placed piece (myBest delta ≥ 0.3), so "leans
+    // on" describes a real strong piece, never the naturally-big queen.
+    let support = null;
+    if (score >= 45 && table.length && forces?.myBest && forces.myBest.delta >= 0.3) {
+      support = await supporterProbe((f) => sf.evalRaw(f), fen, table, mover, forces.myBest.square);
+    }
+
+    // ── MOVE REASON (why, not just the label) ───────────────────────────────
+    const hangAfter = looseMaterial(afterFen); // what hangs to the opponent after the move (SEE)
+    const seeNow = (() => { if (!mv.captured) return 0; const cc = new Chess(afterFen); let def = 0; try { def = (cc.attackers(mv.to, cc.turn()) || []).length; } catch { def = 0; } return (VAL[mv.captured] || 0) - (def > 0 ? (VAL[mv.piece] || 0) : 0); })();
+    const refuteNet = refutation ? sanLineNet(afterFen, refutation, oppColor, 8) : 0; // material the opponent nets in the refutation
+    const reason = classifyReason({ label: lbl, isBest, cpLoss, gap12, threatNetBefore: threatNet, hangAfter, forceNetBest: forceNet, capture: !!mv.captured, seeNow, refuteNet });
+
     facts.push({
       ply: beat.ply, t: beat.t, mover: mover === 'w' ? 'W' : 'B', san: mv.san,
       capture: !!mv.captured, check: mv.san.includes('+') || mv.san.includes('#'),
       opening: openingAt(sanSoFar),
-      evalAfter: playedCp == null ? null : +(playedCp / 100).toFixed(2), cpLoss, label: lbl,
+      evalAfter: playedCp == null ? null : +(playedCp / 100).toFixed(2), cpLoss, label: lbl, reason,
       best: bestSan, bestPv, refutation,
       candidates: deep.map((r) => ({ san: uciSan(fen, r.pv[0]), cp: r.cp, pv: pvSans(fen, r.pv, 6) })),
-      threat, wdl, seldepth, forceNet, loose, trap: trapMove ? 'move' : (trapEval >= 60 ? 'eval' : ''),
+      threat, forces, support, split: split ? { material: +split.material.toFixed(2), positional: +split.positional.toFixed(2) } : null,
+      wdl, seldepth, forceNet, loose, hangAfter, seeNow, trap: trapMove ? 'move' : (trapEval >= 60 ? 'eval' : ''),
       crit: { V: +V.toFixed(2), O: +O.toFixed(2), T: +T.toFixed(2), F: +F.toFixed(2), L: +L.toFixed(2), Tr: +Tr.toFixed(2), score, band },
       fenAfter: chess.fen(),
     });
@@ -261,5 +412,6 @@ for (const t of facts) {
   const bar = { quiet: '·', think: '▂', key: '▆', CRITICAL: '█' }[t.crit.band];
   const w = t.wdl ? `wdl ${t.wdl.map((x) => String(x).padStart(3)).join('/')}` : '';
   const thr = t.threat?.net > 0 ? `THREAT+${t.threat.net}${t.threat.landsAt ? '@' + t.threat.landsAt : ''}` : '';
-  console.log(`${bar} ${String(t.ply).padStart(3)} ${t.mover} ${t.san.padEnd(6)} sc ${String(t.crit.score).padStart(3)} [${t.crit.band.padEnd(8)}] spread ${String(t.candidates[0]?.cp - (t.candidates[t.candidates.length-1]?.cp)).padStart(5)} loss ${String(t.cpLoss).padStart(5)} ${(t.label||'').padEnd(10)} ${w} ${t.trap?('trap:'+t.trap):''} ${t.forceNet?('force+'+t.forceNet):''} ${t.loose?('loose+'+t.loose):''} ${thr}`);
+  const sup = t.support ? `leans:${t.support.piece}${t.support.square}←${t.support.leansOn.piece}${t.support.leansOn.square}(-${t.support.leansOn.drop})` : '';
+  console.log(`${bar} ${String(t.ply).padStart(3)} ${t.mover} ${t.san.padEnd(6)} sc ${String(t.crit.score).padStart(3)} [${t.crit.band.padEnd(8)}] loss ${String(t.cpLoss).padStart(5)} ${(t.reason || '').padEnd(18)} ${w} ${t.trap ? ('trap:' + t.trap) : ''} ${t.threat?.net ? thr : ''} ${t.loose ? ('loose+' + t.loose) : ''} ${sup}`.replace(/\s+$/, ''));
 }
