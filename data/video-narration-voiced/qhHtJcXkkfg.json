@@ -196,7 +196,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "White's best try — the knight leaps to d5, generating real pressure, so we must be careful. A warning too: the natural queen-back-to-d6 to threaten mate actually loses on the spot to the check on c7, which peels away the queen's own defender."
+   "spoken": "White's best try — the knight leaps to d5, generating real pressure, so we must stay careful. Even so, it's hard to see much for the pawn; our position is solid. To consolidate we want the queen back — either to c5, or to d6. But the queen-to-d6 has to be calculated: it steps off the a3-e7 diagonal, dropping the guard on e7, and then the knight crashes in with a check on e7, forking the king and the knight on c6 — losing material. So d6 is out, and c5 is the safe route."
   },
   {
    "ply": 24,
@@ -223,7 +223,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "Instead we start kicking. The real problem is White's two strong pieces on d5 and g5, so we chase at least one of them off. The pawn to h6 first — the most flexible poke, keeping options open depending on where the bishop runs."
+   "spoken": "Instead we start kicking. Trying to fianchetto with b6 wouldn't cure the real disease — White's two strong pieces on d5 and g5. We need to chase at least one away, maybe both later with a well-timed e6. The pawn to h6 first — the most flexible poke, keeping options open depending on where the bishop runs."
   },
   {
    "ply": 27,
@@ -232,7 +232,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "The bishop retreats to h4, staying on the pin."
+   "spoken": "The bishop retreats to h4, staying on the pin — and where it lands decides our next step."
   },
   {
    "ply": 28,
@@ -313,7 +313,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The queen to a5, offering the trade. There's a tactical wrinkle — the check on c7 — but calculate one step further: after that check the king goes to h7, and because we're then hitting both White's queen and the checking knight, the queens come off. We hand back the extra pawn, but the mating danger evaporates."
+   "spoken": "The queen to a5, offering the trade. There's a tactical wrinkle — White has the check on e7 — but calculate one step further: after the knight takes e7 with check, the king steps to h7, and now we hit two things at once, White's queen and the checking knight, so the queens come off. We hand back the extra pawn, but the mating danger evaporates."
   },
   {
    "ply": 35,
@@ -322,7 +322,7 @@
    "line": [
     "Qe3"
    ],
-   "spoken": "White declines and lifts the queen to e3 — music to the ears, because the c7-check no longer works: that knight is now tied to defending the queen."
+   "spoken": "White declines and lifts the queen to e3 — music to the ears, because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so the moment it moves, the queen falls."
   },
   {
    "ply": 36,
