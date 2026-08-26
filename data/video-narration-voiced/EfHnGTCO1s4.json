@@ -1,0 +1,922 @@
+{
+ "videoId": "EfHnGTCO1s4",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2050",
+ "openingName": "Slav Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:EfHnGTCO1s4",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 648,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 649.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "Grabbing the gambit pawn is perfectly fine — that's the Queen's Gambit Accepted, a fully legitimate way to play. Taking here isn't greed, it's theory."
+  },
+  {
+   "ply": 3,
+   "t": 655,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 656,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 669.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 671,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The gambit gets declined instead: propping the centre with c6 is the Slav, while the alternative of e6 is the Queen's Gambit Declined. Two respectable ways to say no to the pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 686.5,
+   "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6"
+   ],
+   "spoken": "That e6 shores up control of d5 and frees the dark-squared bishop to come out. This is the bedrock of the opening — deploy the army. Think of it as a war: pieces sitting idle on their starting squares win nothing; they have to be marched to active posts before any attack on the king is possible."
+  },
+  {
+   "ply": 9,
+   "t": 751,
+   "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PP1P/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "g3"
+   ],
+   "spoken": "g3 begins the fianchetto — the bishop is headed for the long diagonal, the sniper's post that rakes all the way across the board."
+  },
+  {
+   "ply": 11,
+   "t": 755,
+   "fen": "r1bqkb1r/pp1n1ppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQkq - 2 6",
+   "line": [
+    "Nbd7",
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 757,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "line": [
+    "Be7",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 758,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 768,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "b3"
+   ],
+   "spoken": "b3 quietly braces the c-pawn, and it poses the real question of the setup: where does the queen's bishop belong — actively on f4, or on b2 aiming down the long diagonal."
+  },
+  {
+   "ply": 16,
+   "t": 771,
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 773.5,
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP1B2/1PN2NP1/P3PPBP/R2Q1RK1 b - - 2 9",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "f4 is a genuinely nice square, but b2 is the deeper choice — it's potential energy. The bishop sits behind the pawns, doing nothing visible now, storing up force for the moment the centre cracks open."
+  },
+  {
+   "ply": 13,
+   "t": 803,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 804.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pP4/2N2NP1/PP2PPBP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 815.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "e4"
+   ],
+   "spoken": "This is really an extension of the Queen's Gambit: the standard try is to build the big centre with e4, seizing the middle before the opponent can organise.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 820.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 852.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 853.5,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Here's a principle worth carving into memory: when the opponent spends time playing out on the wing, the antidote is to strike in the centre. Flank activity almost always leaves the middle under-defended, and that's exactly where the counterblow lands.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 879.5,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p2P3/2pP4/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 882,
+   "fen": "r1bqk2r/p2nbppp/2p1p3/1p1nP3/2pP4/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 885,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 886,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p1P4/2p1P3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 892.5,
+   "fen": "r1bqk2r/p2nbppp/4pn2/1p1P4/2p5/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "spoken": "So the central break is d5, not e5 — e5 would only hand over a comfortable outpost, whereas d5 forces the centre open. Once it opens, the fianchettoed bishop turns monstrous and the defence starts to buckle.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 903,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 920.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 931.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "If a pawn lunges to attack the knight, resist the knee-jerk retreat — capture on e6 and hit back, or go further and sacrifice: leave the knight en prise, play into d4 and then take on c6, hitting queen and pawn at once. The piece is given up for a raging attack — and an attack like that is exactly what compensation means.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 996.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pP4/2N2NP1/PP2PPBP/R1BQ1RK1 w kq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 999.5,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1001.5,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1003,
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1005.5,
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/PB2PPBP/R2Q1RK1 b - - 2 9",
+   "line": [
+    "Re8",
+    "Bb2"
+   ],
+   "spoken": "Why post the bishop where it just stares at its own pawn? Because the plan runs forward: prepare e4 to dislodge the enemy pawn from d5, then eventually push our own pawn to d5 and blast the diagonal open — and then the bishop is worth a rook.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1039.5,
+   "fen": "r1bqr1k1/p2nbppp/1pp1pn2/3p4/2PP4/1PN2NP1/PB2PPBP/R2Q1RK1 w - - 0 10",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1040.5,
+   "fen": "r1bqr1k1/p2nbppp/1pp1pn2/3p4/2PP4/1PN3P1/PB1NPPBP/R2Q1RK1 b - - 1 10",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1044.5,
+   "fen": "r2qr1k1/pb1nbppp/1pp1pn2/8/2PPp3/1PN3P1/PB1N1PBP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "Bb7",
+    "e4",
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1047,
+   "fen": "r2qr1k1/pb1nbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/R4RK1 b - - 1 13",
+   "line": [
+    "Ndxe4",
+    "g6",
+    "Qd2"
+   ],
+   "spoken": "e4 evicts the pawn from d5, and now the real breakthrough is prepared — improve every piece first. Don't fire d5 off immediately; prepare slowly, then attack fast. The rooks come to their best files while the break waits.",
+   "kind": "plan"
+  },
+  {
+   "ply": 27,
+   "t": 1056,
+   "fen": "2rqr1k1/pb1nbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3R1RK1 b - - 3 14",
+   "line": [
+    "Rc8",
+    "Rad1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1057,
+   "fen": "2r1r1k1/pbqnbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 5 15",
+   "line": [
+    "Qc7",
+    "Rfe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1059,
+   "fen": "2rr2k1/pbqnbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 6 16",
+   "line": [
+    "Red8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1060,
+   "fen": "2rr2k1/pbqnbp1p/1pp1pnp1/3P4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 16",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Now the dynamite: d5 is ready precisely because every piece already occupies its ideal square. The break lands with the whole army behind it."
+  },
+  {
+   "ply": 32,
+   "t": 1081,
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3p4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 17",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "It's a pawn sacrifice — and it comes wrapped in a lesson. The recapture can't be taken lightly, because how you take matters as much as whether you can.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 34,
+   "t": 1083.5,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1085.5,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3N4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 0 18",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1086.5,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/3n4/4N3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1101,
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3b4/4N3/1P4P1/PB3PBP/3RR1K1 w - - 0 20",
+   "line": [
+    "Qxd5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1104.5,
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3p4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1107.5,
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3P4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 17",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1109,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1114.5,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3N4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 0 18",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1118,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/3n4/4N3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "A piece of counting advice: when deciding if a capture works, don't just tally attackers against defenders — it depends on what specifically is doing the attacking. There may be more attackers than defenders on the pawn, yet recapturing with the queen is impossible, because the queen herself would fall. Win the pawn that way and you've traded a queen for it — a medal for the wrong achievement.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 38,
+   "t": 1125,
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3b4/4N3/1P4P1/PB3PBP/3RR1K1 w - - 0 20",
+   "line": [
+    "Qxd5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1126,
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3R4/4N3/1P4P1/PB3PBP/4R1K1 b - - 0 20",
+   "line": [
+    "Rxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1133.5,
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3P4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1135,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/1N1p4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 1 18",
+   "line": [
+    "exd5",
+    "Nb5"
+   ],
+   "spoken": "The knight jumps to b5 with two purposes — it harasses the queen and clears the long diagonal so the bishop can breathe fire. Mission accomplished: that bishop is now an absolute monster.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 36,
+   "t": 1149,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1167.5,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4R3/1P4P1/PB1Q1PBP/3R2K1 b - - 0 19",
+   "line": [
+    "Rxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1200,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1208,
+   "fen": "2rr2k1/pbqn1p1p/1p3bp1/1N1p4/3Qn3/1P4P1/PB3PBP/3RR1K1 w - - 2 20",
+   "line": [
+    "Qd4",
+    "Bf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1216.5,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 4 21",
+   "line": [
+    "Qd2",
+    "Be7"
+   ],
+   "spoken": "The rook capture on c4 does double duty: it removes the knight and attacks the bishop, forcing the queen to move while still babysitting that bishop. Every move keeps a threat attached.",
+   "reanchor": true
+  },
+  {
+   "ply": 42,
+   "t": 1220.5,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "line": [
+    "Rxe4",
+    "Qc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1222,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 5 24",
+   "line": [
+    "Nc7",
+    "Qc6",
+    "Nb5",
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1225,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1232,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/1P2R3/6P1/PB1Q1PBP/3R2K1 b - - 0 22",
+   "line": [
+    "b4"
+   ],
+   "spoken": "Then b4 pries the queen loose — attacking it to divorce it from the bishop it was defending. Once the pieces are separated, the queen can swing to d4 and threaten mate.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 44,
+   "t": 1239,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1q1p4/1P2R3/6P1/PB1Q1PBP/3R2K1 w - - 0 23",
+   "line": [
+    "Qxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1241,
+   "fen": "2rr2k1/pb1nRp1p/1p4p1/1q1p4/1P6/6P1/PB1Q1PBP/3R2K1 b - - 0 23",
+   "line": [
+    "Rxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1252,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1254.5,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1256,
+   "fen": "2rr2k1/pb1nbp1p/1p3np1/1N1p4/4N3/1P4P1/PBqQ1PBP/3RR1K1 w - - 2 19",
+   "line": [
+    "Nb5",
+    "Qc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1264.5,
+   "fen": "2rr2k1/pb1nbp1p/1p1N1np1/1N1p4/8/1P4P1/PBqQ1PBP/3RR1K1 b - - 3 19",
+   "line": [
+    "Ned6"
+   ],
+   "spoken": "The knight leaps in to d6, forking rook and bishop at once. The queens come off, which eases the defence, but the resulting position stays completely dominant.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 39,
+   "t": 1268.5,
+   "fen": "2rr2k1/pb1nbp1p/1p1N1np1/1N1p4/8/1P4P1/PB1R1PBP/4R1K1 b - - 0 20",
+   "line": [
+    "Qxd2",
+    "Rxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1270,
+   "fen": "2rr2k1/pb1n1p1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/4R1K1 b - - 0 21",
+   "line": [
+    "Bxd6",
+    "Nxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1272.5,
+   "fen": "3r2k1/pbrn1p1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/4R1K1 w - - 1 22",
+   "line": [
+    "Rc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1275.5,
+   "fen": "3r2k1/pbrnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 2 22",
+   "line": [
+    "Re7"
+   ],
+   "spoken": "The rook swings to the seventh rank — the classic invasion square, hitting a pawn and eyeing the knight. A rook on the seventh is worth its weight in the ending.",
+   "reanchor": true
+  },
+  {
+   "ply": 44,
+   "t": 1319,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 3 23",
+   "line": [
+    "Ba8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1326,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 23",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "Here comes an honest confession of a miscalculation: from a distance the bishop capture on f6 looked winning, resting on a pin — if the bishop is taken, the rook behind it falls.",
+   "reanchor": true
+  },
+  {
+   "ply": 46,
+   "t": 1333,
+   "fen": "b2r2k1/p1r1Rp1p/1p1N1np1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 24",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1334.5,
+   "fen": "b2r2k1/p1R2p1p/1p1N1np1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 24",
+   "line": [
+    "Rxc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1337,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 23",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1346.5,
+   "fen": "b2r2k1/p2nRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/2r3K1 w - - 1 24",
+   "line": [
+    "Rc1+"
+   ],
+   "spoken": "But there was an in-between check on c1 that had to be dealt with first — and once the check is answered, the rook is no longer hanging, so the bishop can be taken after all. The pin evaporated because the tempo was spent elsewhere. The lesson: always check for the opponent's checks before trusting a pin.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 47,
+   "t": 1350,
+   "fen": "b2r2k1/p2nRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1P1P/2r2BK1 b - - 2 24",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1353,
+   "fen": "b2r2k1/p3Rp1p/1p1N1np1/3p4/8/1P4P1/P2R1P1P/2r2BK1 w - - 0 25",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1365,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 3 23",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1367,
+   "fen": "b2r2k1/p1rn1R1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 0 23",
+   "line": [
+    "Rxf7"
+   ],
+   "spoken": "So the plan is reset — simply take the pawn on f7 instead, staying on top rather than chasing the flawed combination.",
+   "reanchor": true
+  },
+  {
+   "ply": 46,
+   "t": 1379,
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "line": [
+    "Rc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1384,
+   "fen": "b2r2k1/p1rn1R1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 0 23",
+   "line": [],
+   "spoken": "Now a framework worth internalising — undefended pieces come in two flavours. A type-one is a piece with no defenders at all. A type-two is defended by only one other piece, and pawns don't count as defenders. Spotting both in every position is how tactics announce themselves.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 46,
+   "t": 1442.5,
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "line": [
+    "Rc6"
+   ],
+   "spoken": "This is exactly that flimsiness in action: a knight defends a rook while the knight itself is attacked and undefended. Move the knight and the rook drops; move the rook and the knight drops. A structure held together by a single thread never ends well.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 48,
+   "t": 1453.5,
+   "fen": "b2r4/p2n1k1p/1pr2np1/1N1p4/8/1P4P1/PB1R1PBP/6K1 w - - 0 25",
+   "line": [
+    "Nb5",
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1454.5,
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1459.5,
+   "fen": "b2r2k1/p2n1R1p/1prN1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 24",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1460.5,
+   "fen": "b2r2k1/p4R1p/1prN1np1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 25",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 1462,
+   "fen": "b2r2k1/p6p/1p1r1Rp1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 26",
+   "line": [
+    "Rxf6",
+    "Rcxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 1483.5,
+   "fen": "b2r2k1/p6p/1p1r2p1/3p4/5R2/1P4P1/P2R1PBP/6K1 b - - 1 26",
+   "line": [
+    "Rf4"
+   ],
+   "spoken": "Why is the side with more force still better once the smoke clears? Two reasons — a hole on d5, and an isolated pawn sitting on it. And the key question with any isolated pawn is always the same: who controls the square directly in front of it? Here that square belongs to the stronger side.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 52,
+   "t": 1545,
+   "fen": "b2r2k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1PBP/6K1 w - - 0 27",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1547.5,
+   "fen": "B2r2k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1P1P/6K1 b - - 0 27",
+   "line": [
+    "Bxa8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 1550,
+   "fen": "r5k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1P1P/6K1 w - - 0 28",
+   "line": [
+    "Rxa8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1551,
+   "fen": "r5k1/p6p/1p1r2p1/8/3R4/1P4P1/P2R1P1P/6K1 b - - 0 28",
+   "line": [
+    "Rfxd4"
+   ],
+   "spoken": "Blockade the isolated pawn with a rook and the opponent's whole army gets chained to defending it, which frees a free hand on the other wing. From there it's textbook conversion: use the kingside pawn majority to manufacture a passed pawn, and better still a protected passed pawn — the ideal, because it can never be attacked. March the king up, keep dropping the bishop back to harass the pawn so the enemy pieces are forever herded backward, and the protected passer ends up guarding the very square that delivers mate. Even in the endgame a careless king walk gets checkmated — activity never stops mattering."
+  },
+  {
+   "ply": 22,
+   "t": 1720,
+   "fen": "r2qr1k1/pb1nbppp/1pp1pn2/8/2PPp3/1PN3P1/PB1N1PBP/R2Q1RK1 w - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1790.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "A shortcut for judging whether a pin is dangerous: is there a pawn protecting the pinned piece? If a pawn shields it, there's little to fear. If nothing but the queen holds it, the pin bites — the moment pressure piles onto the pinned piece, it becomes very hard to defend.",
+   "reanchor": true
+  }
+ ]
+}

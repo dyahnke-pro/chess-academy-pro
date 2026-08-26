@@ -1,0 +1,394 @@
+{
+ "videoId": "SXsVWpN8e1A",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2170",
+ "openingName": "Nimzo-Indian Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:SXsVWpN8e1A",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 20,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 23,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "e6",
+    "Nc3",
+    "Bb4"
+   ],
+   "spoken": "The Nimzo-Indian — Black pins the c3-knight to fight for the centre.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 31.5,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f3"
+   ],
+   "spoken": "f3 is the Sämisch, and its whole idea is simple: build toward e4.",
+   "kind": "main",
+   "teaches": "The Sämisch f3 exists for one reason — to prepare the e4 break."
+  },
+  {
+   "ply": 8,
+   "t": 35,
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 38.5,
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/P1N2P2/1P2P1PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "a3"
+   ],
+   "spoken": "a3 chases the bishop, and after it takes on c3 we get the Sämisch structure. The entire game now revolves around one question: can White get e4 in under the right conditions?",
+   "kind": "main",
+   "teaches": "In the Sämisch, everything hinges on whether White can achieve e4 safely."
+  },
+  {
+   "ply": 11,
+   "t": 43,
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/2PP4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "Bxc3+",
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 52.5,
+   "fen": "rnbqk2r/pp3ppp/4pn2/2pP4/3P4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 7",
+   "line": [
+    "c5",
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 56,
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P2P2/4P1PP/R1BQKBNR w KQkq - 0 8",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 86,
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P1PP2/6PP/R1BQKBNR b KQkq - 0 8",
+   "line": [
+    "e3"
+   ],
+   "spoken": "So every move aims at e4 as fast as possible — and first the kingside must develop and castle, so the king isn't caught in the centre when the position bursts open.",
+   "kind": "main",
+   "teaches": "Before a central break, tuck your king away so opening the position doesn't expose it."
+  },
+  {
+   "ply": 17,
+   "t": 106.5,
+   "fen": "rnbq1rk1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/6PP/R1BQK1NR b KQ - 2 9",
+   "line": [
+    "O-O",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 125,
+   "fen": "rnbqr1k1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/4N1PP/R1BQK2R b KQ - 4 10",
+   "line": [
+    "Re8",
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 138.5,
+   "fen": "rnbqr1k1/pp3ppp/5n2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R b KQ - 1 11",
+   "line": [
+    "c4",
+    "Bc2"
+   ],
+   "spoken": "c4 is a mistake for Black — it releases the tension, and the d4-pawn now sits better protected, so White can aim everything at e4. Keeping the tension would have made e4 far harder to prepare.",
+   "kind": "main",
+   "teaches": "Don't resolve a central tension when it only frees your opponent to complete his own break."
+  },
+  {
+   "ply": 22,
+   "t": 154.5,
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R w KQ - 2 12",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 166.5,
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 b - - 3 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 180.5,
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 w - - 4 13",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 196,
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 b - - 5 13",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": "Ng3 goes in before e4 — the knight is bound for the strong f5 square, and preparing e4 patiently makes it land far harder. Be a good Russian schoolboy: castle first.",
+   "kind": "main",
+   "teaches": "Improve your pieces to their attacking squares before the break; a prepared push hits twice as hard."
+  },
+  {
+   "ply": 26,
+   "t": 207.5,
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 w - - 6 14",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 208.5,
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 14",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Now e4 — the break the whole setup was built for — and we steamroll the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 213.5,
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 w - - 1 15",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 231,
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3pP3/2pP4/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 15",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 rams forward, locking Black's knight out and seizing a huge space advantage.",
+   "kind": "main"
+  },
+  {
+   "ply": 31,
+   "t": 235,
+   "fen": "r2qr1k1/pp1n1ppp/4b1n1/3pP3/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 16",
+   "line": [
+    "Nd7",
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 257.5,
+   "fen": "r2qr1k1/pp1n2pp/4b1n1/3pPp2/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - f6 0 17",
+   "line": [
+    "f5"
+   ],
+   "spoken": "The pawn storm rolls with f4 and f5 — and en passant is worth it here, even though it hurts to part with the pawn mass. You have to transform an advantage at some point; kill your darlings.",
+   "kind": "main",
+   "teaches": "Convert a space advantage into concrete gains when the chance comes; don't cling to a pretty pawn chain."
+  },
+  {
+   "ply": 33,
+   "t": 280,
+   "fen": "r2qr1k1/pp1n2pp/4bPn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 17",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 306.5,
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 18",
+   "line": [
+    "Bf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 313,
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 18",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 317,
+   "fen": "r2qrnk1/pp1n1bPp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 19",
+   "line": [
+    "Ngf8",
+    "fxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 318.5,
+   "fen": "r2qrn2/pp1n1bkp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 0 20",
+   "line": [
+    "Kxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 333.5,
+   "fen": "r2qrn2/pp1n1bkp/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 20",
+   "line": [
+    "f6+"
+   ],
+   "spoken": "f6-check pries the king's cover open and drags more pieces into the attack.",
+   "kind": "main"
+  },
+  {
+   "ply": 40,
+   "t": 347,
+   "fen": "r2qrn1k/pp1n1b1p/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 21",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 383,
+   "fen": "r2qrn1k/pp1n1b1p/5P1B/3p4/2pP4/P1P3N1/2B3PP/R2Q1RK1 b - - 2 21",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "And the pin is deadly precisely because no pawn protects the pinned knight — so we simply pile up on it, win the piece, and transform into a won endgame a piece up.",
+   "kind": "main",
+   "teaches": "A pin is fatal when no pawn defends the pinned piece; stack attackers and collect it."
+  },
+  {
+   "ply": 44,
+   "t": 402,
+   "fen": "r2qr2k/pp1n1b1p/5n2/3p2B1/2pP4/P1P3N1/2B3PP/R2Q1RK1 w - - 2 23",
+   "line": [
+    "Nxf6",
+    "Bg5",
+    "N8d7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 472,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 473,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f3"
+   ],
+   "spoken": "The deeper lesson: space is like money — it has no inherent value until you transform it into something real. Grabbing space only pays if you convert it, whereas an extra piece has immediate, winning value.",
+   "kind": "review",
+   "teaches": "Space must be converted into material or attack to matter; extra material wins on its own.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 909.5,
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 912.5,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 915,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/P1N2P2/1P2P1PP/R1BQKBNR w KQkq - 1 6",
+   "line": [
+    "d5",
+    "a3",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 916,
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PPP3/P1N2P2/1P4PP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 919.5,
+   "fen": "rnbqk2r/ppp1bppp/5n2/4p3/2PPP3/P1N5/1P4PP/R1BQKBNR w KQkq - 0 8",
+   "line": [
+    "dxe4",
+    "fxe4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 926.5,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,512 @@
+{
+ "videoId": "hzotV0aslmY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 750",
+ "openingName": "Scandinavian Defense (750 speedrun)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:hzotV0aslmY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 18.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "A Scandinavian. It isn't a bad opening in itself, but at this level it's genuinely hard to play well.",
+   "kind": "main",
+   "teaches": [
+    "Scandinavian at club level"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 29.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Qxd5",
+    "Nc3"
+   ],
+   "spoken": "The queen's knight to c3 is the move — developing with tempo by hitting the exposed queen.",
+   "kind": "main",
+   "teaches": [
+    "develop with tempo"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 43.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "We could develop a knight, but occupy the centre first with d4, so the other side never gets in e5 or c5.",
+   "kind": "main",
+   "teaches": [
+    "grab the centre first"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 46.5,
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 54,
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "We could shove the pawn to d5, but let's stay principled: the knight to f3 defends the pawn while developing.",
+   "kind": "main",
+   "teaches": [
+    "defend while developing"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 59,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Now it's actually time to bend our own rules. That queen's knight has hopped around so many times, and the other side still hasn't moved a single central pawn — a clear drawback we can pounce on.",
+   "teaches": [
+    "when to violate a principle"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 98.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3P4/8/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "So d5 punishes it. Can the pawn be taken? Count: two attackers, two defenders — so no, the capture doesn't win it.",
+   "kind": "main",
+   "teaches": [
+    "count attackers and defenders"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 105,
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3n4/8/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 107,
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3N4/8/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "A lot of players miscount here. The subtlety: a knight is an attacker, but the instant it captures the pawn it stops being one — that's why the count comes out in our favour.",
+   "teaches": [
+    "the capturing piece leaves the count"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 114.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3P4/8/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 115.5,
+   "fen": "r2qkb1r/ppp1pppp/2n5/3N4/6b1/5N2/PPP2PPP/R1BQKB1R w KQkq - 1 8",
+   "line": [
+    "Nxd5",
+    "Nxd5",
+    "Bg4"
+   ],
+   "spoken": "We're up a piece — a perfect time to practise converting an advantage cleanly.",
+   "kind": "plan",
+   "teaches": [
+    "convert an extra piece"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 124.5,
+   "fen": "r2qkb1r/ppp1pppp/2n5/3N4/6b1/5N2/PPP1BPPP/R1BQK2R b KQkq - 2 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Develop the bishop and unpin ourselves.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 136.5,
+   "fen": "r2qkb1r/ppp2ppp/2n5/3Np3/6b1/5N2/PPP1BPPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Broadly there are two ways to convert material: trade pieces down, or use the extra force to attack. But before choosing a plan at all, finish development.",
+   "kind": "plan",
+   "teaches": [
+    "develop before you convert"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 146,
+   "fen": "r2qkb1r/ppp2ppp/2n5/3Np3/6b1/5N2/PPP1BPPP/R1BQ1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "This is where people slip — they're up a piece and forget the fundamentals. Castle, complete development, then think about the plan.",
+   "kind": "main",
+   "teaches": [
+    "fundamentals still apply when ahead"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 158.5,
+   "fen": "r2qk2r/ppp2ppp/2n5/2bNp3/6b1/5N2/PPP1BPPP/R1BQ1RK1 w kq - 2 10",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 175,
+   "fen": "r2qk2r/ppp2ppp/2n5/2bNp3/6b1/4BN2/PPP1BPPP/R2Q1RK1 b kq - 3 10",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Against the bishop coming to c5, the bishop to e3 disarms it — and we welcome the trade, because when you're up a piece, trades help you.",
+   "kind": "main",
+   "teaches": [
+    "trade freely when ahead"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 191,
+   "fen": "r2qk2r/ppp2ppp/2n5/3Np3/6b1/4bN2/PPP1BPPP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "Bxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 203.5,
+   "fen": "r2qk2r/ppp2ppp/2n5/4p3/6b1/4NN2/PPP1BPPP/R2Q1RK1 b kq - 0 11",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": "Recapture with the knight, not the pawn: it comes with a hit on the queen and forces a queen trade — exactly the simplifying method we chose.",
+   "kind": "main",
+   "teaches": [
+    "recapture toward a queen trade"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 208,
+   "fen": "r2qk2r/ppp2ppp/2n5/8/4p1b1/4NN2/PPP1BPPP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 227.5,
+   "fen": "r2Qk2r/ppp2ppp/2n5/8/4p1b1/4NN2/PPP1BPPP/R4RK1 b kq - 0 12",
+   "line": [
+    "Qxd8+"
+   ],
+   "spoken": "He counter-attacks the knight, so order matters. Trade the queens first — methodical over greedy — and only then collect the piece.",
+   "kind": "main",
+   "teaches": [
+    "order of operations"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 234,
+   "fen": "3rk2r/ppp2ppp/2n5/8/4p1N1/5N2/PPP1BPPP/R4RK1 b k - 0 13",
+   "line": [
+    "Rxd8",
+    "Nxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 238.5,
+   "fen": "3rk2r/ppp2ppp/2n5/8/6N1/5B2/PPP2PPP/R4RK1 b k - 0 14",
+   "line": [
+    "exf3",
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 243,
+   "fen": "3r1rk1/ppp2ppp/2n5/8/6N1/5B2/PPP2PPP/R4RK1 w - - 1 15",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Up a full piece, the method is clear: trade as many pieces as possible without spoiling anything.",
+   "kind": "plan",
+   "teaches": [
+    "trade down a winning position"
+   ]
+  },
+  {
+   "ply": 29,
+   "t": 265,
+   "fen": "3r1rk1/ppp2ppp/2B5/8/6N1/8/PPP2PPP/R4RK1 b - - 0 15",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "Before the safe rook move, grab another trade by taking the knight — does it concede anything? No, the opposite.",
+   "kind": "main",
+   "teaches": [
+    "take the free trade"
+   ]
+  },
+  {
+   "ply": 30,
+   "t": 269.5,
+   "fen": "3r1rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/R4RK1 w - - 0 16",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": "On the contrary, it wrecks his pawn structure, leaving him with doubled, weak pawns.",
+   "teaches": [
+    "damage the structure in a trade"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 273,
+   "fen": "3r1rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3R1RK1 b - - 1 16",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": "Now the rook to d1, offering another rook trade — he does our bidding.",
+   "kind": "main",
+   "teaches": [
+    "keep trading"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 278.5,
+   "fen": "5rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3r1RK1 w - - 0 17",
+   "line": [
+    "Rxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 280.5,
+   "fen": "5rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3R2K1 b - - 0 17",
+   "line": [
+    "Rxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 283.5,
+   "fen": "5rk1/p1p2pp1/2p5/7p/6N1/8/PPP2PPP/3R2K1 w - - 0 18",
+   "line": [
+    "h5"
+   ],
+   "spoken": "In these positions it's worth investing a single tempo: shove the knight away and hit his pawn at the same time.",
+   "kind": "plan",
+   "teaches": [
+    "invest a tempo with purpose"
+   ]
+  },
+  {
+   "ply": 35,
+   "t": 286.5,
+   "fen": "5rk1/p1p2pp1/2p5/4N2p/8/8/PPP2PPP/3R2K1 b - - 1 18",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "And take care of your future self — make luft for the king. There are many ways to do it; you don't always have to default to a rook-pawn push.",
+   "teaches": [
+    "make luft early"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 291,
+   "fen": "5rk1/p1p2p2/2p5/4N1pp/8/8/PPP2PPP/3R2K1 w - - 0 19",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 304.5,
+   "fen": "5rk1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 b - - 0 19",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "First, though, just take the free pawn — no rush, but there's no reason to leave it.",
+   "kind": "main"
+  },
+  {
+   "ply": 38,
+   "t": 308.5,
+   "fen": "4r1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 w - - 1 20",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 325.5,
+   "fen": "3Rr1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/6K1 b - - 2 20",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "Here we kill every bird with one stone: the rook to d8. Play it carefully — but for the pin holding his back rank together, he'd be the one giving checkmate. One move accomplishing everything.",
+   "kind": "main",
+   "teaches": [
+    "maximise every move",
+    "mind the pin"
+   ]
+  },
+  {
+   "ply": 38,
+   "t": 331.5,
+   "fen": "4r1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 w - - 1 20",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 338,
+   "fen": "3Rr1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/6K1 b - - 2 20",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 343.5,
+   "fen": "4Rk2/N1p2p2/8/6pp/8/8/PPP2PPP/6K1 b - - 0 22",
+   "line": [
+    "Kg7",
+    "Nxa7",
+    "Kf8",
+    "Rxe8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 345.5,
+   "fen": "4k3/N1p2p2/8/6pp/8/8/PPP2PPP/6K1 w - - 0 23",
+   "line": [
+    "Kxe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 364,
+   "fen": "4k3/N1p5/8/5ppp/8/8/PPP2PPP/5K2 w - - 0 24",
+   "line": [
+    "Kf1",
+    "f5"
+   ],
+   "spoken": "To win the pawn ending, bring the king up first, then either promote a pawn or use it to distract his king and promote elsewhere.",
+   "kind": "plan",
+   "teaches": [
+    "king first in pawn endings"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 2,
+   "t": 376.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 377.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd5",
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 378.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 380,
+   "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "For context: the Scandinavian's main line is the queen to a5; the retreat to d8 is a respectable book move too. The knight to c6 was the first real mistake, and the critical moment. If instead the knight had hopped to b4, the bishop to c4 defends and a3 chases it off. And here's a higher-level idea — distinguish activity from pseudo-activity: a position can look unpleasant while being a total illusion. Just defend what's attacked and sweep his pieces away.",
+   "kind": "review",
+   "teaches": [
+    "Scandi main lines",
+    "activity vs pseudo-activity"
+   ],
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,571 @@
+{
+ "videoId": "gpHLc41XR04",
+ "title": "What is the Difference Between FM & GM?",
+ "openingName": "King's Indian Attack vs Caro-Modern (positional teaching game)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:gpHLc41XR04",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 3708,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 3715,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "Nf3",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 3717.5,
+   "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/4P3/3P1N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 3721.5,
+   "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/4P3/3P1N2/PPP1BPPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "We settle into a Philidor-like structure — quiet, positional, no rush.",
+   "kind": "plan",
+   "teaches": [
+    "quiet positional setup"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 3724,
+   "fen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/4P3/3P1N2/PPP1BPPP/RNBQ1RK1 b kq - 3 5",
+   "line": [
+    "Bg7",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 3732.5,
+   "fen": "rnbqk1nr/pp3pbp/2p3p1/3pp3/4P3/3P1N2/PPP1BPPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3736,
+   "fen": "rnbqk1nr/pp3pbp/2p3p1/3pp3/4P3/3P1N2/PPPNBPPP/R1BQ1RK1 b kq - 1 6",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 3737.5,
+   "fen": "rnbqk2r/pp2npbp/2p3p1/3pp3/4P3/3P1N2/PPPNBPPP/R1BQ1RK1 w kq - 2 7",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 3741,
+   "fen": "rnbqk2r/pp2npbp/2p3p1/3pp3/4P3/1P1P1N2/P1PNBPPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 3743,
+   "fen": "rnbq1rk1/pp2npbp/2p3p1/3pp3/P3P3/1P1P1N2/2PNBPPP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "O-O",
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 3751,
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p2pp3/P3P3/1P1P1N2/1BPNBPPP/R2Q1RK1 b - - 1 9",
+   "line": [
+    "a5",
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 3758,
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p3p3/P2pP3/1P1P1N2/1BPNBPPP/R2Q1RK1 w - - 0 10",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 3760,
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p3p3/P1NpP3/1P1P1N2/1BP1BPPP/R2Q1RK1 b - - 1 10",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 3765,
+   "fen": "r1bq1rk1/1p1nnpbp/2p3p1/p3p3/P1NpP3/1P1P1N2/1BP1BPPP/R2Q1RK1 w - - 2 11",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Now we work out the plan. The standard idea in this kind of structure is c3, challenging the opponent's central pawn before committing anywhere else.",
+   "kind": "plan",
+   "teaches": [
+    "c3 to challenge the centre"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 3773,
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p1p3/P1NpP3/1PPP1N2/1B2BPPP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "c3",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 3776,
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p1p3/P1NPP3/1P1P1N2/1B2BPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 3783,
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQ1RK1 b - - 1 13",
+   "line": [
+    "exd4",
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3786.5,
+   "fen": "r1bq1rk1/1p1n1pbp/2n3p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQ1RK1 w - - 2 14",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3789,
+   "fen": "r1bq1rk1/1p1n1pbp/2n3p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQR1K1 b - - 3 14",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 3799.5,
+   "fen": "r1bq1rk1/3n1pbp/1pn3p1/p1p5/P1NpP3/1P1P1N2/1B3PPP/2RQRBK1 b - - 1 15",
+   "line": [
+    "b6",
+    "Bf1"
+   ],
+   "spoken": "We retool the position, rerouting the bishop back to a more civilised square where it actually does something.",
+   "teaches": [
+    "rerouting a bad bishop"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 3802,
+   "fen": "r2q1rk1/3n1pbp/bpn3p1/p1p5/P1NpP3/1P1P1NP1/1B3P1P/2RQRBK1 b - - 0 16",
+   "line": [
+    "Ba6",
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 3810,
+   "fen": "r2q1rk1/3n1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/2RQRBK1 w - - 1 17",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3812.5,
+   "fen": "r2q1rk1/3n1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/1R1QRBK1 b - - 2 17",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3818,
+   "fen": "r4rk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/1R1QRBK1 w - - 3 18",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 3819,
+   "fen": "r4rk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3PBP/1R1QR1K1 b - - 4 18",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 3820,
+   "fen": "4rrk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3PBP/1R1QR1K1 w - - 5 19",
+   "line": [
+    "Rae8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 3824.5,
+   "fen": "4rrk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/5PBP/1RBQR1K1 b - - 6 19",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": "Ask who benefits from a bishop trade here — it's us, because both of our bishops are passive. Swapping the poor pieces off is a small win.",
+   "kind": "plan",
+   "teaches": [
+    "trade your bad pieces"
+   ]
+  },
+  {
+   "ply": 39,
+   "t": 3828,
+   "fen": "4rrk1/2qn1p1p/bpn3p1/p1p5/P1NpP3/1P1P1NP1/5PBP/2RQR1K1 b - - 0 20",
+   "line": [
+    "Bxc1",
+    "Rxc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 3831,
+   "fen": "4rrk1/2qn1p1p/1pn3p1/p1p5/P1bpP3/1P1P1NP1/5PBP/2RQR1K1 w - - 0 21",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 3832,
+   "fen": "4rrk1/2qn1p1p/1pn3p1/p1p5/P1PpP3/3P1NP1/5PBP/2RQR1K1 b - - 0 21",
+   "line": [
+    "bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 3837,
+   "fen": "4rrk1/2qn1p1p/1p4p1/p1p5/PnPpP3/3P1NP1/3Q1PBP/2R1R1K1 b - - 2 22",
+   "line": [
+    "Nb4",
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 3838.5,
+   "fen": "4rr2/2qn1pkp/1p4p1/p1p5/PnPpP3/3P1NP1/3Q1PBP/2R1R1K1 w - - 3 23",
+   "line": [
+    "Kg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 3842.5,
+   "fen": "4rr2/2qn1pkp/1p4p1/p1p5/PnPpP2P/3P1NP1/3Q1PB1/2R1R1K1 b - - 0 23",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 3852,
+   "fen": "4rr2/2q2pkp/1p4p1/p1p1n3/PnPpP2P/3P1NP1/3Q1PB1/2R1R1K1 w - - 1 24",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The plan is to make the bishop better; right now it just bites on our own pawns.",
+   "teaches": [
+    "improve the worst piece"
+   ]
+  },
+  {
+   "ply": 49,
+   "t": 3855,
+   "fen": "4rr2/5pkp/1p4p1/p1p1q3/PnPpPP1P/3P2P1/3Q2B1/2R1R1K1 b - - 0 25",
+   "line": [
+    "Nxe5",
+    "Qxe5",
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 3864.5,
+   "fen": "4rr2/5pkp/1p2q1p1/p1p5/PnPpPP1P/3P2P1/3Q2B1/2R1R1K1 w - - 1 26",
+   "line": [
+    "Qe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 3868,
+   "fen": "4rr2/5pkp/1p2q1p1/p1p1P3/PnPp1P1P/3P2P1/3Q2B1/2R1R1K1 b - - 0 26",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The opponent's centre had been biting on granite — solidly held — but this advance changes the picture.",
+   "teaches": [
+    "the granite break"
+   ]
+  },
+  {
+   "ply": 52,
+   "t": 3875,
+   "fen": "4rr2/6kp/1p2qpp1/p1p1P3/PnPp1P1P/3P2P1/3Q2B1/2R1R1K1 w - - 0 27",
+   "line": [
+    "f6"
+   ],
+   "spoken": "Now the bishop has a future and can breathe. But new problems arrive at the same time: the advanced pawn is weak, and the opponent's knight has become a monster.",
+   "teaches": [
+    "weighing the trade-offs of a break"
+   ]
+  },
+  {
+   "ply": 53,
+   "t": 3890.5,
+   "fen": "4rr2/6kp/1p2qpp1/p1p1P3/PnPp1P1P/3P2P1/3Q2BK/2R1R3 b - - 1 27",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "First, king safety — tuck the king to h2, out of the danger zone, and solidify before doing anything ambitious.",
+   "kind": "plan",
+   "teaches": [
+    "king safety first"
+   ]
+  },
+  {
+   "ply": 54,
+   "t": 3897.5,
+   "fen": "4rr2/6kp/1p2q1p1/p1p1p3/PnPp1P1P/3P2P1/3Q2BK/2R1R3 w - - 0 28",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 3900.5,
+   "fen": "4rr2/6kp/1p2q1p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/2R5 b - - 0 28",
+   "line": [
+    "Rxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 3901.5,
+   "fen": "4rr2/3q2kp/1p4p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/2R5 w - - 1 29",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 3904,
+   "fen": "4rr2/3q2kp/1p4p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/4R3 b - - 2 29",
+   "line": [
+    "Rce1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 3913.5,
+   "fen": "5r2/3q2kp/1p4p1/p1p1r3/PnPp1P1P/3P2P1/3Q2BK/4R3 w - - 0 30",
+   "line": [
+    "Rxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 3918.5,
+   "fen": "5r2/3q2kp/1p4p1/p1p1P3/PnPp3P/3P2P1/3Q2BK/4R3 b - - 0 30",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 3920,
+   "fen": "5r2/3q2kp/1p4p1/p1p1r3/PnPp1P1P/3P2P1/3Q2BK/4R3 w - - 0 30",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 3922.5,
+   "fen": "5r2/3q2kp/1p4p1/p1p1P3/PnPp3P/3P2P1/3Q2BK/4R3 b - - 0 30",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 3927,
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3Q2BK/4R3 w - - 0 31",
+   "line": [
+    "Qxa4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 3929.5,
+   "fen": "5r2/6kp/1p2P1p1/p1p5/qnPp3P/3P2P1/3Q2BK/4R3 b - - 0 31",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 3931,
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3Q2BK/4R3 w - - 0 31",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 3952.5,
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3QR1BK/8 b - - 1 31",
+   "line": [
+    "Re2"
+   ],
+   "spoken": "The Karpov move: the rook drops back to e2, pure prophylaxis to shut down the counterplay before it starts.",
+   "teaches": [
+    "prophylactic rook retreat"
+   ]
+  },
+  {
+   "ply": 62,
+   "t": 3962,
+   "fen": "5r2/6kp/1p4p1/p1p1P3/1nPp3P/1q1P2P1/3QR1BK/8 w - - 2 32",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 3963,
+   "fen": "5r2/6kp/1p2P1p1/p1p5/1nPp3P/1q1P2P1/3QR1BK/8 b - - 0 32",
+   "line": [
+    "e6"
+   ],
+   "spoken": "This is the break we were worried about — the position may already be objectively better for the other side here.",
+   "teaches": [
+    "honest assessment"
+   ]
+  },
+  {
+   "ply": 64,
+   "t": 3971.5,
+   "fen": "4r3/6kp/1p2P1p1/p1p5/1nPp3P/1q1P2P1/3QR1BK/8 w - - 1 33",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 65,
+   "t": 3974.5,
+   "fen": "4r3/6kp/1p2P1p1/p1p5/1nPp1Q1P/1q1P2P1/4R1BK/8 b - - 2 33",
+   "line": [
+    "Qf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 3986,
+   "fen": "8/4r1kp/1p2P1p1/p1p5/1nPp1Q1P/1q1P2P1/4R1BK/8 w - - 3 34",
+   "line": [
+    "Re7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 3991,
+   "fen": "8/4r1kp/1p1QP1p1/p1p5/1nPp3P/1q1P2P1/4R1BK/8 b - - 4 34",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": "The queen lands on d6 and dominates the board — now it's simply winning.",
+   "teaches": [
+    "the queen infiltration"
+   ]
+  }
+ ]
+}

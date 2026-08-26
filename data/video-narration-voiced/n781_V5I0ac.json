@@ -1,0 +1,296 @@
+{
+ "videoId": "n781_V5I0ac",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1800",
+ "openingName": "Modern Defense: Gurgenidze System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:n781_V5I0ac",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 596.5,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 597.5,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 599.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 601.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The Modern — Black fianchettoes the bishop at once, often transposing into a Pirc.",
+   "kind": "main",
+   "teaches": [
+    "the Modern setup"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 605,
+   "fen": "rnbqk1nr/pp1pppbp/2p3p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "c6"
+   ],
+   "spoken": "He plays the Gurgenidze system, a cross between the Caro-Kann and the Modern, preparing to strike with d5.",
+   "kind": "main",
+   "teaches": [
+    "the Gurgenidze system"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 621.5,
+   "fen": "rnbqk1nr/pp1pppbp/2p3p1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "There are many ways to meet it, but an underestimated one is to develop the bishop to c4 immediately — the point is to take d5 away from him.",
+   "kind": "plan",
+   "teaches": [
+    "Bc4 to stop d5"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 625,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "And here's the common mistake: he props up d5 with e6, not noticing the very subtle reply that cements the weakness he's just created.",
+   "teaches": [
+    "e6 creates a hole"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 647,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/4P3/2BP4/2N5/PPP2PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "That reply is e5 — a move that permanently cements the dark-square weaknesses, straight out of a famous game that shaped how I see these positions.",
+   "kind": "main",
+   "teaches": [
+    "e5 cements the dark squares"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 649,
+   "fen": "rnbqk1nr/pp3pbp/2p1p1p1/3pP3/2BP4/2N5/PPP2PPP/R1BQK1NR w KQkq d6 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 651,
+   "fen": "rnbqk1nr/pp3pbp/2pPp1p1/8/2BP4/2N5/PPP2PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "exd6"
+   ],
+   "spoken": "He's forced to push d5, and we snap it off en passant.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 653.5,
+   "fen": "rnb1k1nr/pp3pbp/2pqp1p1/8/2BP4/2N5/PPP2PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "Qxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 658.5,
+   "fen": "rnb1k1nr/pp3pbp/2pqp1p1/8/2BP4/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Look at the wreckage: his bishop is passive, he's saddled with a weakness on d6, and he's dragged the queen out early instead of developing — a badly cramped position that's hard to untangle.",
+   "teaches": [
+    "diagnosing the ruined structure"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 663,
+   "fen": "rnb1k2r/pp3pbp/2pqpnp1/8/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 665.5,
+   "fen": "rnb1k2r/pp3pbp/2pqpnp1/8/2BP4/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 3 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 670.5,
+   "fen": "rnb1k2r/pp3pbp/2pqp1p1/3n4/2BP4/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 4 9",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 679,
+   "fen": "rnb1k2r/pp3pbp/2pqp1p1/3n4/2BPN3/5N2/PPP2PPP/R1BQ1RK1 b kq - 5 9",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "By jumping the knight to d5 he surrenders control of a gorgeous central square — so we slam our own knight into e4, eyeing the d6-hole.",
+   "kind": "main",
+   "teaches": [
+    "occupy the vacated square"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 683.5,
+   "fen": "rnbqk2r/pp3pbp/2p1p1p1/3n4/2BPN3/5N2/PPP2PPP/R1BQ1RK1 w kq - 6 10",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 695.5,
+   "fen": "rnbqk2r/pp3pbp/2p1p1p1/3n2B1/2BPN3/5N2/PPP2PPP/R2Q1RK1 b kq - 7 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "We could play the modest c3, but let's be ambitious with the bishop to g5, trying to induce f6 — a horribly weakening move.",
+   "kind": "plan",
+   "teaches": [
+    "provoke a weakening pawn move"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 710,
+   "fen": "rnbqk2r/pp3pbp/2p1pnp1/6B1/2BPN3/5N2/PPP2PPP/R2Q1RK1 w kq - 8 11",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 728,
+   "fen": "rnbqk2r/pp3pbp/2p1pnp1/4N1B1/2BPN3/8/PPP2PPP/R2Q1RK1 b kq - 9 11",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "He pins himself. His position is desperately passive, so we lay it on by centralising the knight on e5 — look at the disparity in piece activity.",
+   "kind": "main",
+   "teaches": [
+    "centralise and pile up"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 735.5,
+   "fen": "rnbq1rk1/pp3pbp/2p1pnp1/4N1B1/2BPN3/8/PPP2PPP/R2Q1RK1 w - - 10 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Keep a running wish list, updated every move — the ideas you'd love to play if only they were possible. Here, after a rook-pawn nudge, the queen swings to f3 and his knight is simply lost.",
+   "kind": "plan",
+   "teaches": [
+    "keep a wish list"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 781.5,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 783,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/4P3/2BP4/2N5/PPP2PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "His whole downfall traced back to e6.",
+   "kind": "review",
+   "teaches": [
+    "the root mistake was e6"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 786.5,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 788.5,
+   "fen": "rnbqk1nr/pp1p1pbp/2p1p1p1/4P3/2BP4/2N5/PPP2PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "This idea of cementing dark-square weaknesses with e5 recurs across a surprisingly wide range of openings. Petrosian showed exactly this against Pachman — the same e5, the same forced d6, the same trail of weaknesses, and he won very quickly. The same elements, the same harassment.",
+   "kind": "review",
+   "teaches": [
+    "the Petrosian–Pachman model"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 855.5,
+   "fen": "rnbqk2r/pp1pnpbp/2p1p1p1/4P3/2BP4/2N5/PPP2PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": "And if he never plays d5, we simply plant a knight on d6 — even more disastrous for him. Natural development, hit the queen, then chase the knight off d5 by retreating the bishop and advancing the pawn.",
+   "kind": "review",
+   "teaches": [
+    "the d6 outpost plan"
+   ],
+   "reanchor": true
+  }
+ ]
+}

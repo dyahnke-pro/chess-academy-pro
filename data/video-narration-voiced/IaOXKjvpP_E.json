@@ -1,0 +1,486 @@
+{
+ "videoId": "IaOXKjvpP_E",
+ "title": "Titled Tuesday!! Brutal Battle for the Top Spot! | GM Naroditsky",
+ "openingName": "Sicilian Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:IaOXKjvpP_E",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 58,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 60,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 61.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "line": [
+    "d6",
+    "Bb5+"
+   ],
+   "spoken": "Bb5-check is the Moscow anti-Sicilian: check, then retreat, steering the game toward a comfortable Ruy-Lopez-style structure instead of a sharp Open Sicilian.",
+   "kind": "main",
+   "teaches": "Bb5+ against the Sicilian sidesteps theory and transposes into familiar Ruy structures."
+  },
+  {
+   "ply": 7,
+   "t": 64,
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4",
+   "line": [
+    "Nd7",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 65.5,
+   "fen": "r1bqkbnr/1p1npppp/p2p4/2p5/4P3/3B1N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "a6",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 66.5,
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/2p5/4P3/3B1N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "line": [
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 67.5,
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/2p5/4P3/3B1N2/PPPP1PPP/RNBQR1K1 b kq - 3 6",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 72,
+   "fen": "r1bqkb1r/1p1npp1p/p2p1np1/2p5/4P3/3B1N2/PPPP1PPP/RNBQR1K1 w kq - 0 7",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 73,
+   "fen": "r1bqkb1r/1p1npp1p/p2p1np1/2p5/4P3/2PB1N2/PP1P1PPP/RNBQR1K1 b kq - 0 7",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 74.5,
+   "fen": "r1bqk2r/1p1nppbp/p2p1np1/2p5/4P3/2P2N2/PPBP1PPP/RNBQR1K1 b kq - 2 8",
+   "line": [
+    "Bg7",
+    "Bc2"
+   ],
+   "spoken": "c3 and then Bc2 — the classic Ruy Lopez retreat, keeping the bishop alive on the b1-h7 diagonal while preparing d4.",
+   "kind": "main",
+   "teaches": "Reroute the Spanish bishop to c2 so it eyes the kingside once the centre opens."
+  },
+  {
+   "ply": 18,
+   "t": 76,
+   "fen": "r1bq1rk1/1p1n1pbp/p2p1np1/2p1p3/3PP3/2P2N2/PPB2PPP/RNBQR1K1 w - - 1 10",
+   "line": [
+    "e5",
+    "d4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 79.5,
+   "fen": "r1bq1rk1/1p1n1pbp/p2p1np1/2p1p3/P2PP3/2P2N2/1PB2PPP/RNBQR1K1 b - - 0 10",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 88,
+   "fen": "r1b2rk1/1pqn1pbp/p2p1np1/2p1p3/P2PP3/2P2N2/1PB2PPP/RNBQR1K1 w - - 1 11",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "Many players don't know to take twice here, and after Qc7 a4 gives White a pleasant edge.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 101.5,
+   "fen": "r1b2rk1/1pqn1pbp/p2p1np1/2pPp3/P3P3/2P2N2/1PB2PPP/RNBQR1K1 b - - 0 11",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 locks the centre into a full Ruy Lopez structure — space and a clear plan, rather than an early clarifying trade.",
+   "kind": "main",
+   "teaches": "Closing the centre with d5 hands you the space and the standard Spanish maneuvers."
+  },
+  {
+   "ply": 22,
+   "t": 104,
+   "fen": "r1b2rk1/1pqn1pb1/p2p1npp/2pPp3/P3P3/2P2N2/1PB2PPP/RNBQR1K1 w - - 0 12",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 105,
+   "fen": "r1b2rk1/1pqn1pb1/p2p1npp/2pPp3/P3P3/2P2N2/1PBN1PPP/R1BQR1K1 b - - 1 12",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "Now the signature Ruy knight tour begins with Nbd2, heading for a better home.",
+   "kind": "plan",
+   "plans": "Route the knight Nbd2-f1-e3 toward the kingside."
+  },
+  {
+   "ply": 25,
+   "t": 109,
+   "fen": "r1b2rk1/2qn1pb1/pp1p1npp/2pPp3/P3P3/2P2N2/1PB2PPP/R1BQRNK1 b - - 1 13",
+   "line": [
+    "b6",
+    "Nf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 112.5,
+   "fen": "r1b2rk1/2qn1pb1/pp1p2pp/2pPp2n/P3P3/2P2N2/1PB2PPP/R1BQRNK1 w - - 2 14",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 114.5,
+   "fen": "r1b2rk1/2qn1pb1/pp1p2pp/2pPp2n/P3P3/2P1NN2/1PB2PPP/R1BQR1K1 b - - 3 14",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "Ne3 completes the reroute — the knight's ideal square, eyeing f5 and d5.",
+   "kind": "main",
+   "teaches": "The Spanish knight belongs on e3 after the f1 pivot; it hits f5 and supports the centre."
+  },
+  {
+   "ply": 28,
+   "t": 122.5,
+   "fen": "r1b2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NN2/1PB2PPP/R1BQR1K1 w - - 4 15",
+   "line": [
+    "Ndf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 128,
+   "fen": "r1b2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NNP1/1PB2P1P/R1BQR1K1 b - - 0 15",
+   "line": [
+    "g3"
+   ],
+   "spoken": "g3 and a follow-up Nh4 clamp down on Black's knight, denying it the active squares it's angling for.",
+   "kind": "main",
+   "teaches": "Use g3 and Nh4 to fence in an enemy knight before it reaches an outpost."
+  },
+  {
+   "ply": 30,
+   "t": 136.5,
+   "fen": "1rb2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NNP1/1PB2P1P/R1BQR1K1 w - - 1 16",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 138.5,
+   "fen": "1rb2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PB2P1P/R1BQR1K1 b - - 2 16",
+   "line": [
+    "Nh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 144.5,
+   "fen": "1r3rk1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PB2P1P/R1BQR1K1 w - - 3 17",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 154,
+   "fen": "1r3rk1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PBB1P1P/R2QR1K1 b - - 4 17",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 157.5,
+   "fen": "1rr3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PBB1P1P/R2QR1K1 w - - 5 18",
+   "line": [
+    "Rfc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 160.5,
+   "fen": "1rr3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/3QR1K1 b - - 6 18",
+   "line": [
+    "Ra3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 164,
+   "fen": "r1r3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/3QR1K1 w - - 7 19",
+   "line": [
+    "Ra8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 165.5,
+   "fen": "r1r3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/Q3R1K1 b - - 8 19",
+   "line": [
+    "Qa1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 170.5,
+   "fen": "r1rq2k1/3b1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/Q3R1K1 w - - 9 20",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 172.5,
+   "fen": "r1rq2k1/3b1pb1/pp1p1npp/2pPp2n/P1P1P2N/R3N1P1/1PBB1P1P/Q3R1K1 b - - 0 20",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 179.5,
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp2n/P1P1P2N/R3N1P1/1PBB1P1P/Q3R1K1 w - - 1 21",
+   "line": [
+    "Nh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 182,
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp2n/P1P1P2N/R3N1P1/1P1B1P1P/Q2BR1K1 b - - 2 21",
+   "line": [
+    "Bd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 184.5,
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp3/P1P1Pn1N/R3N1P1/1P1B1P1P/Q2BR1K1 w - - 3 22",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 203,
+   "fen": "r1r3k1/3b1pbn/pp1p2pp/2pPp3/P1P1PP1q/R7/1P1B1PNP/Q2BR1K1 b - - 0 23",
+   "line": [
+    "Neg2",
+    "Qxh4",
+    "gxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 207,
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPp3/P1P1PP2/R7/1P1B1PNP/Q2BR1K1 w - - 1 24",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 208,
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPP3/P1P1P3/R7/1P1B1PNP/Q2BR1K1 b - - 0 24",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 217.5,
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pP4/P1P1P3/R1B5/1P3PNP/Q2BR1K1 w - - 2 26",
+   "line": [
+    "Qxe5",
+    "Bc3",
+    "Qe7"
+   ],
+   "spoken": "The tactical turn: if the queen grabs e5, Bc3 pins it along the long diagonal, winning back the initiative with tempo.",
+   "kind": "main",
+   "teaches": "A bishop to the long diagonal can pin a queen that ventured onto it, reclaiming the tempo."
+  },
+  {
+   "ply": 52,
+   "t": 219.5,
+   "fen": "r1r5/3bqpkn/pp1p2pp/2pP4/P1P1P3/R7/1P3PNP/Q2BR1K1 w - - 0 27",
+   "line": [
+    "Bxg7",
+    "Kxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 222.5,
+   "fen": "r1r5/3bqpkn/pp1p2pp/2pP4/P1P1P3/4R3/1P3PNP/Q2BR1K1 b - - 1 27",
+   "line": [
+    "Rae3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 235,
+   "fen": "r1r5/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/4R3/1P4NP/Q2BR1K1 b - - 0 28",
+   "line": [
+    "f6",
+    "f4"
+   ],
+   "spoken": "Bxg7 then a rook lift and f4 — trade off the strong bishop and roll the central pawns forward.",
+   "kind": "plan",
+   "plans": "Swap the fianchetto bishop, lift a rook, and advance the centre."
+  },
+  {
+   "ply": 56,
+   "t": 236.5,
+   "fen": "r3r3/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/4R3/1P4NP/Q2BR1K1 w - - 1 29",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 239,
+   "fen": "r3r3/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/6NP/Q2BR1K1 b - - 0 29",
+   "line": [
+    "b3"
+   ],
+   "spoken": "Slip in b3 first — it opens the queen's diagonal and simply can't hurt before the central break.",
+   "kind": "main",
+   "teaches": "Insert a useful, risk-free improving move before committing to the main break."
+  },
+  {
+   "ply": 58,
+   "t": 244.5,
+   "fen": "r3r3/3b1qkn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/6NP/Q2BR1K1 w - - 1 30",
+   "line": [
+    "Qf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 249.5,
+   "fen": "r3r3/3b1qkn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/2B3NP/Q3R1K1 b - - 2 30",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 252.5,
+   "fen": "r3r1k1/3b1q1n/pp1p1ppp/2pP4/P1P1PP2/1P2R3/2B3NP/Q3R1K1 w - - 3 31",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 260.5,
+   "fen": "r3r1k1/3b1q1n/pp1p1ppp/2pP4/P1P1PP1P/1P2R3/2B3N1/Q3R1K1 b - - 0 31",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 266,
+   "fen": "r3r2k/3b1q1n/pp1p1ppp/2pP4/P1P1PP1P/1P2R3/2B3N1/Q3R1K1 w - - 1 32",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 267,
+   "fen": "r3r2k/3b1q1n/pp1p1ppp/2pPP3/P1P2P1P/1P2R3/2B3N1/Q3R1K1 b - - 0 32",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 finally breaks in the centre, tearing open lines toward the king with the pieces already aimed there.",
+   "kind": "main"
+  }
+ ]
+}

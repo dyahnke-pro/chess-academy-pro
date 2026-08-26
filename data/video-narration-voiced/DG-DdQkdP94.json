@@ -1,0 +1,338 @@
+{
+ "videoId": "DG-DdQkdP94",
+ "title": "Famous Game Analysis + Live Chess | Moistcr1tikal / Penguinz0",
+ "openingName": "Queen's Gambit Declined",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:DG-DdQkdP94",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 61,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 76,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 79,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 quietly shores up the d5 pawn, giving the centre a firm second layer of support before anything else develops."
+  },
+  {
+   "ply": 5,
+   "t": 85.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "Both sides play this modest pawn move, and it carries a real drawback worth naming: it hems in the queen's bishop. It isn't a mistake — just a conservative way to build, trading a little piece activity for solidity."
+  },
+  {
+   "ply": 6,
+   "t": 103,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3P4/4PN2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "c5 strikes back at the centre, refusing to let the position settle into something one-sided. Contesting the middle early is the whole idea."
+  },
+  {
+   "ply": 7,
+   "t": 106.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 115.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 117,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 118,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The centre becomes a little interlocked box of pawns — it looks tangled but it's beautifully balanced, every unit propped up by another. Because nothing can be won by force, neither side wants to be the one to flinch and release the tension."
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/2P5/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "The tension finally breaks — capturing on c5 is a decision to clarify the centre rather than keep sitting on the standoff."
+  },
+  {
+   "ply": 12,
+   "t": 136.5,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 139,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "a3"
+   ],
+   "spoken": "This little rook-pawn nudge is preparation, not an end in itself — it's clearing the way for a pawn to expand on the queenside with b4.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 148.5,
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 152,
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/1PP5/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 153.5,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The point of the earlier rook-pawn move now shows: it discourages a pawn from lunging to b5 to harass the knight, because the answer would be to capture on b5 and rip open the a-file. A small prophylactic move that quietly rules out the opponent's plan.",
+   "kind": "plan"
+  },
+  {
+   "ply": 17,
+   "t": 196,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3P4/1P6/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 9",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 198,
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 230,
+   "fen": "r1bqk2r/1p3ppp/p1nb4/3n4/1P6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "Why isn't the pawn just hanging for free? Because loose pieces drop off. The move order is everything — capture the knight first, and then the recaptured queen is left a sitting duck: a check springs in from b4, forking and collecting it. Snatch the pawn in the wrong order and the trick evaporates.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 19,
+   "t": 241,
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 242.5,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [
+    "Bxb4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 253,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/8/1N6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 11",
+   "line": [
+    "Nxb4"
+   ],
+   "spoken": "That's the reason the greedy pawn grab fails first: the bishop simply gets recaptured, by knight or by pawn, and the material comes straight back. The order of operations is what turns the same idea from winning into nothing.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 255,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 276,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 284,
+   "fen": "r1bq1rk1/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R b KQ - 4 10",
+   "line": [
+    "Bb2",
+    "O-O",
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 289.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R w KQ - 5 11",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 293,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Now a model question: the light-squared bishop is still stuck at home — can it be developed the way the opponent developed theirs, but entirely by force, gaining time on every move? That's the standard to aim for — not just developing, but developing with tempo.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 319,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p1p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Firing the pawn straight to b5 would be premature — it simply hands over a free pawn. There's a preparatory move that has to come first.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 321,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1P1p4/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "line": [
+    "cxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 323.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 366,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1Pp5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "The preparation is a capture — take on c4 to lure the bishop out. Don't be so reluctant to trade; grabbing a pawn or piece is often exactly how you make progress. Here the capture sets the whole tempo-gaining sequence in motion.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 368.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1PB5/P1N1PN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 369.5,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1PB5/P1N1PN2/1B1Q1PPP/R3K2R w KQ - 0 13",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Now b5 arrives with a threat, hitting the bishop that was lured forward — the pawn push comes with a punch instead of hanging."
+  },
+  {
+   "ply": 25,
+   "t": 374.5,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Forced to retreat the bishop, the opponent burns another tempo — exactly the time being harvested."
+  },
+  {
+   "ply": 26,
+   "t": 377.5,
+   "fen": "r4rk1/1b2qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The bishop finally reaches its long diagonal and the structure is nearly symmetrical — but every developing move was made with tempo, so the same-looking position has been reached a move ahead."
+  },
+  {
+   "ply": 25,
+   "t": 383,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 403,
+   "fen": "r1br2k1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "The early queen sortie can be punished: pin the bishop against it and swing a rook to the open d-file, which is a strong move in its own right. From there the attacking picture forms — both bishops x-ray toward the king, one of them screened by its own knight while the enemy knight guards the castled position. Shift that knight, and both problems are solved with one move, laying the groundwork for a bishop sacrifice on the king.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,177 @@
+{
+ "videoId": "LuezTOsWVMk",
+ "title": "Breaking Through With The Jobava London! | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Jobava London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:LuezTOsWVMk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Against a strong opponent, reach for something you're comfortable in — the Jobava London: Nc3 with Bf4, still effective at this level and not deeply known.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 27.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 28.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 36,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 51,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 59.5,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Black has several sound replies to Bf4 — c5, the symmetrical Bf5, e6, g6, a6 — and a6 is a sensible one, taking the Nb5 leap off the table.",
+   "kind": "main",
+   "teaches": "In the Jobava, a6 pre-empts White's key Nb5 jump."
+  },
+  {
+   "ply": 7,
+   "t": 65.5,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": "We answer with the pedestrian e3, and note Black still has Bf5 or c5 available.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 78.5,
+   "fen": "rnbqkb1r/1pp2ppp/p3pn2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 107.5,
+   "fen": "rnbqkb1r/1pp2ppp/p3pn2/3p4/3P1B2/2NBP3/PPP2PPP/R2QK1NR b KQkq - 1 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Rather than the g4 sideline, we keep it strictly positional and start with Bd3.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 110.5,
+   "fen": "rnbqk2r/1pp2ppp/p2bpn2/3p4/3P1B2/2NBP3/PPP2PPP/R2QK1NR w KQkq - 2 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "After Bd6 we face a choice, and one option is out: Bxd6 is bad because cxd6 hands Black a broad central pawn mass. Bg3 is the usual retreat.",
+   "kind": "main",
+   "teaches": "Don't trade into a recapture that gifts your opponent a central pawn majority."
+  },
+  {
+   "ply": 11,
+   "t": 150.5,
+   "fen": "rnbqk2r/1pp2ppp/p2bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R b KQkq - 3 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "But there's nothing to fear if Black takes on f4 — after exf4 the doubled f-pawns actually increase our central control. Think of it as a reverse Maroczy bind, clamping the e5 square.",
+   "kind": "main",
+   "teaches": "Doubled f-pawns from an exf4 recapture bind e5 and boost central control — welcome them, don't avoid them."
+  },
+  {
+   "ply": 12,
+   "t": 166.5,
+   "fen": "rnbq1rk1/1pp2ppp/p2bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R w KQ - 4 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 171.5,
+   "fen": "rnbq1rk1/1pp2ppp/p2bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2Q1RK1 b - - 5 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Both sides castle and often maneuver around the two bishops staring each other down; Black's ...Bxf4 with a timely c5 is a fine equalizer that strikes at the bind.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 194,
+   "fen": "rnbq1rk1/2p2ppp/pp1bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2Q1RK1 w - - 0 8",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 211,
+   "fen": "rnbq1rk1/2p2ppp/pp1bpn2/3pN3/3P1B2/2NBP3/PPP2PPP/R2Q1RK1 b - - 1 8",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "Now the heart of London and Jobava play: plant the Pillsbury knight on e5. It's a superb piece in its own right, and it clears a path for the other pieces to join an attack.",
+   "kind": "main",
+   "teaches": "The e5 knight is the London's engine — a dominant outpost that opens lines for the heavy pieces."
+  },
+  {
+   "ply": 16,
+   "t": 216.5,
+   "fen": "rn1q1rk1/1bp2ppp/pp1bpn2/3pN3/3P1B2/2NBP3/PPP2PPP/R2Q1RK1 w - - 2 9",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The maneuver to know: Qf3, then swing to h3 to bear down on h7. The pawn is guarded by the f6-knight, but that knight is far from invulnerable — and from g3 the queen can x-ray instead.",
+   "kind": "main",
+   "teaches": "Route the queen f3-h3 to pressure h7; then look for ways to remove its knight defender."
+  }
+ ]
+}

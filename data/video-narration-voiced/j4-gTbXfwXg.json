@@ -1,0 +1,281 @@
+{
+ "videoId": "j4-gTbXfwXg",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2030",
+ "openingName": "Alekhine Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:j4-gTbXfwXg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1316,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1319.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1320.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1321.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1322.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop out to c4 is a different way to handle the Alekhine — prioritising rapid piece development over grabbing the centre with pawns. It carries a sacrificial idea against f7 to stay alert for."
+  },
+  {
+   "ply": 8,
+   "t": 1358.5,
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Wary of a trap, prop the centralised knight with a pawn — passive, but rock-solid. There's real merit in openings where you sit slightly worse yet remain almost impossible to break down.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 1362.5,
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1371.5,
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Develop the knight to attack the advanced pawn and force the opponent to make a decision — and when it's exchanged, recapture with the bishop, keeping the structure harmonious.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 1383,
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2BP4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Allowing the opponent a broad centre is fine here, because the compensation is superb piece placement. Then capturing on e5 clears the diagonal for the bishop to come to life.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 1387,
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3np3/2BP4/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1394,
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1415,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Where does the bishop belong — e7 or c5? It's a trick question. The answer is e7, because developing to c5 would concede the g5 square to an enemy piece, handing over exactly the outpost you don't want to give.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 1421.5,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B2B2/5N2/PPP2PPP/RN1Q1RK1 b kq - 2 8",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1426.5,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/4P3/2B2n2/5N2/PPP2PPP/RN1Q1RK1 w kq - 0 9",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": "The opponent's bishop move is inexplicable, and the simple capture wins by force — a reminder that a single careless developing move can lose on the spot.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 7,
+   "t": 1457,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1461,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1463,
+   "fen": "rnbqkb1r/ppp1pBpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1465,
+   "fen": "rnbq1b1r/ppp1pkpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R w KQ - 0 6",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1466,
+   "fen": "rnbq1b1r/ppp1pkpp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R b KQ - 0 6",
+   "line": [
+    "e6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1467.5,
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R w KQ - 1 7",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1469.5,
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R b KQ - 2 7",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1470.5,
+   "fen": "rnb1qbkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R w KQ - 3 8",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1476,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [],
+   "spoken": "On reflection, the pawn move to e6 isn't ideal, because it shuts in the light-squared bishop — the accurate move is the knight retreat to b6, keeping everything mobile.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1481,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/8/1B3N2/PPPP1PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Nb6",
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1484,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "And a trap to sidestep afterwards — don't pin with the bishop to g4, because it runs into the familiar sacrifice on f7 followed by a knight check, blowing the position open. Recognise the pattern before you walk into it.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1501,
+   "fen": "rn1q1b1r/ppp1pkpp/1n1p4/4P1N1/6b1/8/PPPP1PPP/RNBQK2R b KQ - 1 7",
+   "line": [
+    "Bxf7+",
+    "Kxf7",
+    "Ng5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1505,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1506,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 7",
+   "line": [
+    "Bc4",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1508,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [],
+   "spoken": "What the opponent should have done, instead of the losing bishop move, is pile up on the centralised knight — the queen to e2 and a rook to d1, since removing that knight is the key to the whole position. But not by capturing it outright, which would only hand over a strong diagonal; the pressure has to be applied by piece, not by brute force. Play these lines without proper knowledge at your peril.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

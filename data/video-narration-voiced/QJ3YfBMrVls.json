@@ -1,0 +1,412 @@
+{
+ "videoId": "QJ3YfBMrVls",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1100",
+ "openingName": "Italian Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:QJ3YfBMrVls",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 113,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 114,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 117,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 120,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 123.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d3"
+   ],
+   "spoken": "Simple, effective chess in the Italian — d3 and castle, quiet but perfect for illustrating principles.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 127,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/4p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "h6",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 132.5,
+   "fen": "r1bqk2r/pppp1pp1/2n2n1p/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "Bc5",
+    "c3"
+   ],
+   "spoken": "c3 is typical theory: it quietly prepares the d4 break, the backbone of the modern Italian.",
+   "kind": "main",
+   "teaches": "In the Italian, c3 sets up d4 — the central lever the whole system revolves around."
+  },
+  {
+   "ply": 12,
+   "t": 139,
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 157.5,
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/2b1p3/2B1P3/2PP1N2/PP1N1PPP/R1BQ1RK1 b - - 2 7",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "This is the modern main-line Italian with Nbd2, hugely popular now.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 162.5,
+   "fen": "r1bq1rk1/1ppp1pp1/p1n2n1p/2b1p3/2B1P3/2PP1N2/PP1N1PPP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 165.5,
+   "fen": "r1bq1rk1/1ppp1pp1/p1n2n1p/2b1p3/4P3/1BPP1N2/PP1N1PPP/R1BQ1RK1 b - - 1 8",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "Retreat the bishop to b3 — off the b5-a6 chase, but still glaring down the a2-g8 diagonal at f7.",
+   "kind": "main",
+   "teaches": "Reroute the Italian bishop to b3 so it keeps eyeing f7 while dodging the pawn kicks."
+  },
+  {
+   "ply": 16,
+   "t": 170.5,
+   "fen": "r1bq1rk1/2pp1pp1/p1n2n1p/1pb1p3/4P3/1BPP1N2/PP1N1PPP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 183,
+   "fen": "r1bq1rk1/2pp1pp1/p1n2n1p/1pb1p3/4P3/1BPP1N2/PP1N1PPP/R1BQR1K1 b - - 1 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 187,
+   "fen": "r1bq1rk1/2p2pp1/p1np1n1p/1pb1p3/4P3/1BPP1N2/PP1N1PPP/R1BQR1K1 w - - 0 10",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 190.5,
+   "fen": "r1bq1rk1/2p2pp1/p1np1n1p/1pb1p3/4P3/1BPP1N2/PP3PPP/R1BQRNK1 b - - 1 10",
+   "line": [
+    "Nf1"
+   ],
+   "spoken": "Now the Ruy-Lopez knight tour: Nd2-f1 and onward, angling the knight toward the powerful f5 square. We don't jump in at once — the bishop guards it — but the threat looms.",
+   "kind": "main",
+   "teaches": "Reroute the knight via f1 to g3, targeting f5; the threat pressures even before you land it."
+  },
+  {
+   "ply": 20,
+   "t": 194.5,
+   "fen": "r1bq1rk1/2p2pp1/p1np3p/1pb1p3/4P1n1/1BPP1N2/PP3PPP/R1BQRNK1 w - - 2 11",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 218,
+   "fen": "r1bq1rk1/2p2pp1/p1np3p/1pb1p3/3PP1n1/1BP2N2/PP3PPP/R1BQRNK1 b - - 0 11",
+   "line": [
+    "d4"
+   ],
+   "spoken": "When Ng4 pokes at us, the second point of c3 arrives: d4 intercepts the bishop with tempo. That's the Italian's resilience — the same pawn that prepared the break also parries the threat.",
+   "kind": "main",
+   "teaches": "A prepared d4 in the Italian both opens the centre and answers threats with tempo."
+  },
+  {
+   "ply": 23,
+   "t": 226,
+   "fen": "r1bq1rk1/2p2pp1/p1np3p/1pb5/3PP1n1/1B3N2/PP3PPP/R1BQRNK1 b - - 0 12",
+   "line": [
+    "exd4",
+    "cxd4"
+   ],
+   "spoken": "And Black hands us the whole centre — after h3 chases the knight, we're simply better with a free hand.",
+   "kind": "main"
+  },
+  {
+   "ply": 24,
+   "t": 233.5,
+   "fen": "r1bq1rk1/b1p2pp1/p1np3p/1p6/3PP1n1/1B3N2/PP3PPP/R1BQRNK1 w - - 1 13",
+   "line": [
+    "Ba7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 238.5,
+   "fen": "r1bq1rk1/b1p2pp1/p1np3p/1p6/3PP1n1/1B3N1P/PP3PP1/R1BQRNK1 b - - 0 13",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 241.5,
+   "fen": "r1bq1rk1/b1p2pp1/p1np1n1p/1p6/3PP3/1B3N1P/PP3PP1/R1BQRNK1 w - - 1 14",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 243,
+   "fen": "r1bq1rk1/b1p2pp1/p1np1n1p/1p6/3PP3/1B3NNP/PP3PP1/R1BQR1K1 b - - 2 14",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 246,
+   "fen": "r1bqr1k1/b1p2pp1/p1np1n1p/1p6/3PP3/1B3NNP/PP3PP1/R1BQR1K1 w - - 3 15",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 273,
+   "fen": "r1bqr1k1/b1p2pp1/p1np1n1p/1p6/3PPB2/1B3NNP/PP3PP1/R2QR1K1 b - - 4 15",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "Complete development — Be3 is the thematic Italian square, since e4 is untouchable on tactics, though Bf4 keeps it simple here.",
+   "kind": "main",
+   "teaches": "In the Italian, Be3 is normal because the e4-pawn is defended by tactics, not just pieces."
+  },
+  {
+   "ply": 30,
+   "t": 283.5,
+   "fen": "r2qr1k1/bbp2pp1/p1np1n1p/1p6/3PPB2/1B3NNP/PP3PP1/R2QR1K1 w - - 5 16",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "Bb7 gives up control of f5, and notice Black's king is genuinely weak — every piece is clustered on the queenside, so the kingside is bare.",
+   "kind": "main",
+   "teaches": "When the opponent's pieces all huddle on one wing, his king on the other is ripe for attack."
+  },
+  {
+   "ply": 31,
+   "t": 330.5,
+   "fen": "r2qr1k1/bbp2pp1/p1np1n1p/1p6/3PPB2/1B3NNP/PP1Q1PP1/R3R1K1 b - - 6 16",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Rather than jump to f5 and give up a pawn, prepare the Bxh6 sacrifice with Qd2 — so the queen lands on h6 after the trade. Prepare slowly, attack fast. The knights that quietly hold the centre now stand ready to switch to attack.",
+   "kind": "main",
+   "teaches": "Prepare a sacrifice fully first; then the attack is a few easy moves, not a desperate lunge."
+  },
+  {
+   "ply": 32,
+   "t": 377.5,
+   "fen": "r3r1k1/bbpq1pp1/p1np1n1p/1p6/3PPB2/1B3NNP/PP1Q1PP1/R3R1K1 w - - 7 17",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 378.5,
+   "fen": "r3r1k1/bbpq1pp1/p1np1n1B/1p6/3PP3/1B3NNP/PP1Q1PP1/R3R1K1 b - - 0 17",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": "Bxh6 tears the king's cover apart.",
+   "kind": "main"
+  },
+  {
+   "ply": 35,
+   "t": 382.5,
+   "fen": "r3r1k1/bbpq1p2/p1np1n1Q/1p6/3PP3/1B3NNP/PP3PP1/R3R1K1 b - - 0 18",
+   "line": [
+    "gxh6",
+    "Qxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 387,
+   "fen": "r3r1k1/bbpq1p1n/p1np3Q/1p6/3PP3/1B3NNP/PP3PP1/R3R1K1 w - - 1 19",
+   "line": [
+    "Nh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 388.5,
+   "fen": "r3r1k1/bbpq1p1n/p1np3Q/1p3N2/3PP3/1B3N1P/PP3PP1/R3R1K1 b - - 2 19",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": "With the king wide open, Nf5 is crushing — there's no defense to the mate, so Black has to shed his queen.",
+   "kind": "main",
+   "teaches": "Once the shelter is gone, a knight to f5 with the queen behind it is usually decisive."
+  },
+  {
+   "ply": 36,
+   "t": 409.5,
+   "fen": "r3r1k1/bbpq1p1n/p1np3Q/1p6/3PP3/1B3NNP/PP3PP1/R3R1K1 w - - 1 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 412.5,
+   "fen": "r3r1k1/bbp2p1n/p1np3Q/1p3q2/3PP3/1B3N1P/PP3PP1/R3R1K1 w - - 0 20",
+   "line": [
+    "Nf5",
+    "Qxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 416.5,
+   "fen": "r3r1k1/bbpq1p1n/p1np3Q/1p6/3PP3/1B3NNP/PP3PP1/R3R1K1 w - - 1 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 431,
+   "fen": "r3r1k1/bbp2p1n/p1np3Q/1p3q2/3PP3/1B3N1P/PP3PP1/R3R1K1 w - - 0 20",
+   "line": [
+    "Nf5",
+    "Qxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 433,
+   "fen": "r3r1k1/bbp2p1n/p1np3Q/1p3P2/3P4/1B3N1P/PP3PP1/R3R1K1 b - - 0 20",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 434.5,
+   "fen": "r5k1/bbp2p1n/p1np3Q/1p3P2/3P4/1B3N1P/PP3PP1/R3r1K1 w - - 0 21",
+   "line": [
+    "Rxe1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 436.5,
+   "fen": "r5k1/bbp2p1n/p1np3Q/1p3P2/3P4/1B3N1P/PP3PP1/4R1K1 b - - 0 21",
+   "line": [
+    "Rxe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 441.5,
+   "fen": "r6k/bbp2p1n/p1np3Q/1p3P2/3P4/1B3N1P/PP3PP1/4R1K1 w - - 1 22",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 444,
+   "fen": "r6k/bbp2p1n/p1np3Q/1p3PN1/3P4/1B5P/PP3PP1/4R1K1 b - - 2 22",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 456.5,
+   "fen": "r5k1/bbp2p1n/p1np3Q/1p3P2/3P4/1B3N1P/PP3PP1/4R1K1 b - - 4 23",
+   "line": [
+    "Kg8",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 458.5,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/4p3/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

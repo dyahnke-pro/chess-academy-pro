@@ -1,0 +1,551 @@
+{
+ "videoId": "dqhX895Md84",
+ "title": "Exploiting the Bongcloud!! | Central Control and King Hunt | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Barnes Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:dqhX895Md84",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 18,
+   "fen": "rnbqkbnr/ppppp1pp/5p2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/ppppp1pp/5p2/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbq1bnr/pppppkpp/5p2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQ - 1 3",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 119,
+   "fen": "rnbq1bnr/pppp1kpp/4pp2/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQ - 0 4",
+   "line": [
+    "Nc3",
+    "e6"
+   ],
+   "spoken": "The formula against a troll opening: develop your pieces, blast open the centre, then go for mate. Don't lunge with Qh5-check or Bc4-check — they run into g6 and e6. Start with the most flexible developing move, Nc3.",
+   "kind": "main",
+   "teaches": "Punish an offbeat opening by developing first; premature checks just hand the opponent the moves he wanted."
+  },
+  {
+   "ply": 7,
+   "t": 159.5,
+   "fen": "rnbq1bnr/pppp1kpp/4pp2/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQ - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bc4 is better than Bd3 here — it loads up the d5 break to blast the centre, and d5 is dangerous because Black's queen sits undefended on the long diagonal.",
+   "kind": "main",
+   "teaches": "Aim the bishop at the break that opens lines onto an undefended enemy queen."
+  },
+  {
+   "ply": 8,
+   "t": 208,
+   "fen": "rnbq2nr/pppp1kpp/4pp2/8/1bBPP3/2N5/PPP2PPP/R1BQK1NR w KQ - 2 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 308,
+   "fen": "rnbq2nr/pppp1kpp/4pp2/3P4/1bB1P3/2N5/PPP2PPP/R1BQK1NR b KQ - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5 is really a positional threat that Black himself wants to play — so we push it first, staking the larger claim in the centre.",
+   "kind": "main",
+   "teaches": "Pre-empt a break your opponent is angling for by making it yourself with more support."
+  },
+  {
+   "ply": 8,
+   "t": 317.5,
+   "fen": "rnbq2nr/pppp1kpp/4pp2/8/1bBPP3/2N5/PPP2PPP/R1BQK1NR w KQ - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 321.5,
+   "fen": "rnbq2nr/pppp1kpp/4pp2/3P4/1bB1P3/2N5/PPP2PPP/R1BQK1NR b KQ - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 371,
+   "fen": "rnbq3r/ppppnkpp/4pp2/3P4/1bB1P3/2N5/PPP2PPP/R1BQK1NR w KQ - 1 6",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": "Keep expectations realistic: these troll openings don't lose by force — the evaluation is plus two, not plus six. Aim for a solid middlegame edge and don't excoriate yourself for not mating in five.",
+   "kind": "main",
+   "teaches": "A bad opening is a lasting edge, not a forced win; play for a healthy advantage, not a quick knockout."
+  },
+  {
+   "ply": 11,
+   "t": 390.5,
+   "fen": "rnbq3r/ppppnkpp/4pp2/3P4/1bB1P3/2N5/PPP1NPPP/R1BQK2R b KQ - 2 6",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "Ne2, not Nf3 — it connects the knights, defuses Bxc3 against our structure, and eyes f4 to lean on the soft e6-pawn.",
+   "kind": "main",
+   "teaches": "Develop the knight to e2 when it keeps your structure intact and reroutes toward the weak pawn."
+  },
+  {
+   "ply": 12,
+   "t": 419,
+   "fen": "rnbq1r2/ppppnkpp/4pp2/3P4/1bB1P3/2N5/PPP1NPPP/R1BQK2R w KQ - 3 7",
+   "line": [
+    "Rf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 429.5,
+   "fen": "rnbq1r2/ppppnkpp/4pp2/3P4/1bB1P3/2N5/PPP1NPPP/R1BQ1RK1 b - - 4 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castle, but keep an eye on e5 and d6 — the one thing we must never allow is Black closing the centre, because a locked centre lets him move the same piece five times without cost.",
+   "kind": "main",
+   "teaches": "Keep the centre open against a passive setup; a closed centre erases your development lead."
+  },
+  {
+   "ply": 14,
+   "t": 482.5,
+   "fen": "rnbq1rk1/ppppn1pp/4pp2/3P4/1bB1P3/2N5/PPP1NPPP/R1BQ1RK1 w - - 5 8",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 552,
+   "fen": "rnbq1rk1/ppppn1pp/4Pp2/8/1bB1P3/2N5/PPP1NPPP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": "dxe6 wins the chronically soft e6-pawn — the first concrete gain.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 554,
+   "fen": "rnbq1rk1/ppppn1pp/4pp2/3P4/1bB1P3/2N5/PPP1NPPP/R1BQ1RK1 w - - 5 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 562,
+   "fen": "rnbq1rk1/ppp1n1pp/4pp2/8/1bB1P3/2N5/PPP1NPPP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "dxe6",
+    "dxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 564.5,
+   "fen": "rnbq1rk1/ppp1n1pp/4pp2/8/1bB1PN2/2N5/PPP2PPP/R1BQ1RK1 b - - 1 9",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 575,
+   "fen": "r1bq1rk1/ppp1n1pp/2n1pp2/8/1bB1PN2/2N5/PPP2PPP/R1BQ1RK1 w - - 2 10",
+   "line": [
+    "Nbc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 641,
+   "fen": "r1bq1rk1/ppp1n1pp/2n1Np2/8/1bB1P3/2N5/PPP2PPP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": "Nxe6 over Bxe6 — the Naroditsky school. It secures the bishop pair and keeps the queens on the board for the attack, where the routine capture would trade them.",
+   "kind": "main",
+   "teaches": "Choose the recapture that keeps your attacking pieces on and banks the bishop pair."
+  },
+  {
+   "ply": 20,
+   "t": 648.5,
+   "fen": "r2q1rk1/ppp1n1pp/2n1bp2/8/1bB1P3/2N5/PPP2PPP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 651,
+   "fen": "r2q1r1k/ppp1n1pp/2n1Bp2/8/1b2P3/2N5/PPP2PPP/R1BQ1RK1 w - - 1 12",
+   "line": [
+    "Bxe6+",
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 671.5,
+   "fen": "r2q1r1k/ppp1n1pp/2n1Bp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 b - - 2 12",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Nd5 loads up the centre and boxes in the king, but it turned out impulsive — it missed Qd6. The lesson stands: when in doubt, just develop a piece.",
+   "kind": "main",
+   "teaches": "Don't force a flashy central move when a quiet developing move is safer; check the strongest reply first."
+  },
+  {
+   "ply": 24,
+   "t": 696.5,
+   "fen": "r4r1k/ppp1n1pp/2nqBp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 w - - 3 13",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 742,
+   "fen": "r4r1k/ppp1n1pp/2nq1p2/3N4/1b2P3/7B/PPP2PPP/R1BQ1RK1 b - - 4 13",
+   "line": [
+    "Bh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 743.5,
+   "fen": "r4r1k/ppp1n1pp/2nqBp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 b - - 8 15",
+   "line": [
+    "Qe6",
+    "Bg4",
+    "Qd6",
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 778,
+   "fen": "r2q1r1k/ppp1n1pp/2n1Bp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 w - - 9 16",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 780,
+   "fen": "r4r1k/ppp1n1pp/2nqBp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 b - - 8 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 782.5,
+   "fen": "r2q1r1k/ppp1n1pp/2n1Bp2/3N4/1b2P3/8/PPP2PPP/R1BQ1RK1 w - - 9 16",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 784.5,
+   "fen": "r2q1r1k/ppp1n1pp/2n1Bp2/8/1b2P3/2N5/PPP2PPP/R1BQ1RK1 b - - 10 16",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 792,
+   "fen": "r4r1k/ppp1n1pp/2n1Bp2/8/1b2PN2/8/PPP2PPP/R1BQ1RK1 b - - 0 18",
+   "line": [
+    "Qd6",
+    "Nd5",
+    "Qf4",
+    "Nxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 793.5,
+   "fen": "3r1r1k/ppp1n1pp/2n1Bp2/8/1b2PN2/8/PPP2PPP/R1BR2K1 b - - 1 20",
+   "line": [
+    "Rab8",
+    "Qd8",
+    "Rbxd8",
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 856,
+   "fen": "3r1r1k/ppp1n2p/2n1Bp2/6p1/1b2PN2/4B3/PPP2PPP/R2R2K1 b - - 1 21",
+   "line": [
+    "g5",
+    "Be3"
+   ],
+   "spoken": "Into the endgame, our edge rests on three pillars: the extra pawn, the bishop pair with far better pieces, and superior central control. Harness all three patiently and keep accumulating — these endings are rarely won with a knockout.",
+   "kind": "main",
+   "teaches": "Convert a multi-factor endgame edge by patient accumulation, not by hunting a single decisive blow."
+  },
+  {
+   "ply": 43,
+   "t": 897,
+   "fen": "3r1r1k/ppp1n2p/2nbBp2/3N2p1/4P3/4B3/PPP2PPP/R2R2K1 b - - 3 22",
+   "line": [
+    "Bd6",
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 980.5,
+   "fen": "3r1r1k/ppp1n3/2nbBp1p/3N2p1/4P2P/4B3/PPP2PP1/R2R2K1 b - - 0 23",
+   "line": [
+    "h6",
+    "h4"
+   ],
+   "spoken": "h4 and h5 open the h-file so a rook can swing to h1 against the king — the standard king-blocking-rook plan, prepared with g3 and Kg2. Remember the law of diminishing returns: don't contort yourself for a third pawn when up two, but do take what's simply free.",
+   "kind": "main",
+   "teaches": "Open a file for the rook toward a boxed-in king; grab free material but don't over-reach for it."
+  },
+  {
+   "ply": 49,
+   "t": 1026,
+   "fen": "3r1r1k/ppp5/2nbBp2/3n2p1/4P3/4B1P1/PPP2P2/R2R2K1 b - - 0 25",
+   "line": [
+    "Nxd5",
+    "hxg5",
+    "hxg5",
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1038,
+   "fen": "3r1r1k/ppp5/2nb1p2/3B2p1/4P3/4B1P1/PPP2P2/R2R2K1 b - - 0 27",
+   "line": [
+    "Nb6",
+    "Bf7",
+    "Nd5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 1040.5,
+   "fen": "3r1r1k/ppp5/2nbBp2/3n2p1/4P3/4B1P1/PPP2P2/R2R2K1 b - - 0 25",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 1044.5,
+   "fen": "3r1r1k/ppp5/3b1p2/3Bn1p1/4P3/4B1P1/PPP2P2/R2R2K1 b - - 0 26",
+   "line": [
+    "Ne5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1108.5,
+   "fen": "3r1r2/pBp3k1/3b1p2/4n1p1/4P3/4B1P1/PPP2P2/R2R2K1 b - - 0 27",
+   "line": [
+    "Kg7",
+    "Bxb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1156.5,
+   "fen": "3r1r2/p1p3k1/3b1p2/3B4/4P1p1/4BnP1/PPP2PK1/R2R4 b - - 1 29",
+   "line": [
+    "Nf3+",
+    "Kg2",
+    "g4",
+    "Bd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 1175.5,
+   "fen": "3r3r/p1p3k1/3b1p2/3B4/4P1p1/4BnP1/PPP2PK1/R6R b - - 3 30",
+   "line": [
+    "Rh8",
+    "Rh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 1229,
+   "fen": "3r3r/B5k1/2pb1p2/3B4/4P1p1/5nP1/PPP2PK1/R6R b - - 0 31",
+   "line": [
+    "c6",
+    "Bxa7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 1279.5,
+   "fen": "3r4/B5k1/2pbBp2/8/4P1p1/5nP1/PPP2PK1/R6r b - - 1 32",
+   "line": [
+    "Rxh1",
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 65,
+   "t": 1283,
+   "fen": "r7/B5k1/2pbBp2/8/4P1p1/5nP1/PPP2PK1/7R b - - 0 33",
+   "line": [
+    "Ra8",
+    "Rxh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 1298.5,
+   "fen": "1r6/6k1/2pbBp2/8/4P1p1/4BnP1/PPP2PK1/7R b - - 2 34",
+   "line": [
+    "Rb8",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 71,
+   "t": 1332,
+   "fen": "8/6k1/2pbBp2/4n3/4P3/4B1P1/PrP2PK1/7R b - - 2 36",
+   "line": [
+    "Rxb2",
+    "Bxg4",
+    "Ne5",
+    "Be6"
+   ],
+   "spoken": "The finishing motif: trap the rook with the bishop — Be6 back to b3 — the classic pattern where the bishop guards two pawns, the rook holds the rank, and a third piece delivers the blow.",
+   "kind": "branch",
+   "teaches": "Trap a rook by fixing its escape squares with a bishop, then bring a third piece to win it.",
+   "reanchor": true
+  },
+  {
+   "ply": 75,
+   "t": 1333.5,
+   "fen": "8/6k1/2pb1p2/4n3/4P3/1B2B1P1/PrP2PK1/7R b - - 6 38",
+   "line": [
+    "Rb3",
+    "Bf7",
+    "Rb2",
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 76,
+   "t": 1339,
+   "fen": "8/6k1/3b1p2/2p1n3/4P3/1B2B1P1/PrP2PK1/7R w - - 0 39",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 77,
+   "t": 1358,
+   "fen": "8/6k1/3b1p2/2p1n3/4P3/1B4P1/PrP2PK1/2B4R b - - 1 39",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 76,
+   "t": 1362,
+   "fen": "8/6k1/3b1p2/2p1n3/4P3/1B2B1P1/PrP2PK1/7R w - - 0 39",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 77,
+   "t": 1369.5,
+   "fen": "8/6k1/3b1p2/2p1n3/4P3/1B4P1/PrP2PK1/2B4R b - - 1 39",
+   "line": [
+    "Bc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 78,
+   "t": 1371,
+   "fen": "8/6k1/3b1p2/2p1n3/4P3/1B4P1/P1P2PK1/1rB4R w - - 2 40",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 79,
+   "t": 1372.5,
+   "fen": "8/6k1/3b1p1B/2p1n3/4P3/1B4P1/P1P2PK1/1r5R b - - 3 40",
+   "line": [
+    "Bh6+"
+   ],
+   "spoken": "And the elegant end — Bh6-check works only now that the king sits on a dark square; that's a move you keep in your pocket until the moment is right.",
+   "kind": "main",
+   "teaches": "Hold a check in reserve until the king steps onto the colour your bishop controls."
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+{
+ "videoId": "hWVGjZaX7mU",
+ "title": "Grandmaster Odds Chess Vs MoistCr1tikal",
+ "openingName": "Queen-odds coaching game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:hWVGjZaX7mU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 28,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
+   "line": [
+    "Nf3",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 31,
+   "fen": "rnb1kbnr/pppp1ppp/4p3/8/4P2q/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 3",
+   "line": [
+    "e4",
+    "Qh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 32.5,
+   "fen": "rnb1kbnr/pppp1ppp/4p3/8/4P2N/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "Nxh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 42.5,
+   "fen": "rnb1kb1r/pppp1ppp/4pn2/8/4P2N/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The whole plan with an extra queen is: develop normally first, then open the centre — because in a closed position the queen just sits there doing nothing; only open lines let that material advantage speak. A few running principles from the lesson. When a pawn is attacked, the queen is the worst defender — it's the easiest piece to chase — so defend the pawn with something modest, even a knight to the rim on a3, and keep the queen free. Learn the material threshold: up a queen, shedding a pawn or two to open lines is fine, but giving up a whole piece to open a file is only worth it if you forcibly deliver mate down it — otherwise the open file is a mansion in a ghost town. Treat undefended pieces as the pressure points on the map. And when two of your pieces are attacked at once, run the checklist: can one move to defend the other; if not, can one move away and capture or attack something in return. Then activate the idle pieces and finish with a forced mate.",
+   "kind": "plan",
+   "teaches": [
+    "open the centre to use the extra queen",
+    "the queen is the worst defender",
+    "material threshold when up a queen",
+    "undefended pieces as pressure points",
+    "the two-attacked-pieces checklist"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 1299.5,
+   "fen": "rnb1kbnr/pppp1ppp/4p3/8/4P2q/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1302.5,
+   "fen": "rnb1kb1r/pppp1ppp/4pn2/8/4P2N/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nxh4",
+    "Nf6"
+   ],
+   "spoken": "After the game, the student explains the plan: a cheeky pre-emptive attack, opening the middle of the board to get the queen working. The instinct was the knight to f5 to prise open the e-file and start pressing.",
+   "kind": "review",
+   "teaches": [
+    "the open-a-file plan"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1361.5,
+   "fen": "rnb1kb1r/pppp1ppp/5n2/5P2/8/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "Nf5",
+    "exf5",
+    "exf5"
+   ],
+   "spoken": "But here's the correction. Sacrificing a piece to open a file isn't worth it unless you're actively mating on it — the king simply won't stay in the centre, it castles to the other wing, and then the file you opened is worthless, like owning a mansion in a ghost town.",
+   "kind": "review",
+   "teaches": [
+    "open lines only mean something with a target"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1389,
+   "fen": "rnb1kb1r/pppp1ppp/4pn2/8/4P2N/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1452.5,
+   "fen": "rnb1kb1r/pppp1ppp/4pn2/8/4P2N/2N5/PPPP1PPP/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Developing the bishop early blocked the queen's own natural development. The conventional path is cleaner: bring the knight out to defend and develop, then fight for the centre on the next move.",
+   "kind": "review",
+   "teaches": [
+    "do not block your own development"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1459.5,
+   "fen": "rnb1k2r/ppppbppp/4pn2/8/3PP2N/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Be7",
+    "d4"
+   ],
+   "spoken": "The right way to open the centre is with d4 and d5 — no rush, complete development first. A push like f4 would have been wrong: it gives up the queen's coverage of h4 and does nothing to control the centre. Once you volunteer to open lines while up a queen, your opponent accepts with open arms and just takes.",
+   "kind": "review",
+   "teaches": [
+    "open the centre with pawn breaks, unhurried"
+   ],
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,231 @@
+{
+ "videoId": "NnQmNvrOmCI",
+ "title": "Master Class | 700 Elo | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen’s Pawn Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:NnQmNvrOmCI",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 549,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 551,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c6"
+   ],
+   "spoken": "c6 is a poor move on two counts: it robs the knight of its natural c6 square and it fails to defend the e-pawn.",
+   "kind": "main",
+   "teaches": "A pawn move that both blocks your own knight's square and leaves a pawn hanging is doubly bad."
+  },
+  {
+   "ply": 5,
+   "t": 566,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "So we simply take on e5, and if Black wants the pawn back he'll have to spend time and moves for it.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 574,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Qa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 622.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Qa5-check regains the pawn but drags the queen out while nothing develops. Block with Nc3, not the tempting Bd2 — Bd2 only shoves the queen toward the pawn it was going to take anyway, and it's an awful square for the bishop.",
+   "kind": "main",
+   "teaches": "Meet a check with a developing move, not one that improves the opponent's plan while misplacing your piece."
+  },
+  {
+   "ply": 8,
+   "t": 631.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "Qxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 639,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Nf3 develops and defends e4; now two pieces are out, the queen is harassed, and Black's knight is stuck with both of its squares blocked by pawns.",
+   "kind": "main",
+   "teaches": "When the opponent burns time on the queen, pile up developed pieces and the edge snowballs."
+  },
+  {
+   "ply": 10,
+   "t": 662,
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/8/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Qe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 707.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/6N1/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 3 6",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Ng5 manufactures our own fried liver — it hits the queen and sets up Bc4 against f7. Moving a piece twice is usually wrong, but a lead in development buys you that liberty.",
+   "kind": "main",
+   "teaches": "A big development lead licenses breaking the rules — even moving one piece twice for a concrete attack."
+  },
+  {
+   "ply": 12,
+   "t": 726.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q1N1/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 4 7",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 754.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q1N1/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 5 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bc4 trains onto f7 — but be careful: b5 is coming, and a move isn't good just because it makes a threat.",
+   "kind": "main",
+   "teaches": "Don't equate a threatening move with a good move; check the opponent's reply first."
+  },
+  {
+   "ply": 14,
+   "t": 774,
+   "fen": "rnb1kbnr/p2p1ppp/2p5/1p2q1N1/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 862,
+   "fen": "rnb1kbnr/p2p1Npp/2p5/1p2q3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "Nxf7"
+   ],
+   "spoken": "A calculation lesson: Nxf7 forks queen and rook, but grabbing the rook lets Black trap the knight. When a line fails, don't restart from the top — back up to the last move where you had a choice. Taking the rook wasn't forced; Bb3 first keeps the knight defended, then collect the rook. Uncouple your emotions from the calculation.",
+   "kind": "main",
+   "teaches": "When a variation fails, backtrack to the last branching point, not the first move — and judge it analytically, not by taste."
+  },
+  {
+   "ply": 16,
+   "t": 931.5,
+   "fen": "rnb1kbnr/p2p1Npp/2p5/4q3/1pB1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "b4"
+   ],
+   "spoken": "And note Bxf7 is also simply crushing — there was more than one road in.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 933.5,
+   "fen": "rnb1kbnr/p2p2pp/2p5/4N3/1pB1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 936.5,
+   "fen": "rnb1kbnr/p2p2pp/2p5/4N3/2B1P3/2p5/PPP2PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": "Up a queen, resist grabbing every scrap — but do take what's literally free. Qh5-check, then a knight sacrifice on g6 rips it open, Qa5-check swings across, and a picture mate follows because the bishop already covers d6.",
+   "kind": "main",
+   "teaches": "With a decisive material lead, take what's free and steer for the clean mate, not extra material."
+  },
+  {
+   "ply": 4,
+   "t": 1038,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1039.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "dxe5",
+    "Qa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1044,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPPB1PPP/RN1QKBNR b KQkq - 2 4",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1049.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N5/PPPB1PPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Qxe5",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1060.5,
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/8/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 5 7",
+   "line": [
+    "Qd6",
+    "Bc1",
+    "Qe6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1073,
+   "fen": "rnb1kbnr/pp1p1ppp/2pq4/8/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 3 6",
+   "line": [],
+   "spoken": "Black's best defense was d5 — it opens the bishop and hits ours, and we can't take because of the pin. But don't be intimidated: after we castle, that d5-pawn becomes a blessing, since exd5 can rip open the e-file against the stranded king.",
+   "kind": "review",
+   "teaches": "A pawn that pins your bishop now can become a target the moment you castle and can capture it.",
+   "reanchor": true
+  }
+ ]
+}

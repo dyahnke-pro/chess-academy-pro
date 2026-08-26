@@ -1,0 +1,411 @@
+{
+ "videoId": "-4hTQEnwa7s",
+ "title": "",
+ "openingName": "Nimzowitsch-Larsen Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:-4hTQEnwa7s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 77.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "spoken": "White opens with the Nimzowitsch-Larsen, b3. The classical reply is to occupy the centre at once — e5."
+  },
+  {
+   "ply": 5,
+   "t": 80,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P3N2/PBPPPPPP/RN1QKB1R b KQkq - 3 3",
+   "line": [
+    "Bb2",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": "He develops, and the knight to f3 attacks our pawn on e5."
+  },
+  {
+   "ply": 6,
+   "t": 84,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Rather than defend it, we push the pawn forward to e4."
+  },
+  {
+   "ply": 7,
+   "t": 85,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "This is a well-known, fully legitimate theoretical line — and a very complex one. White's hypermodern idea is to tempt our pawns forward now so he can attack them later."
+  },
+  {
+   "ply": 8,
+   "t": 110.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 2 5",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "We don't capture the knight — instead the queen comes to f6 to chase it. It may look like we're pinning ourselves..."
+  },
+  {
+   "ply": 9,
+   "t": 112.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/8/2N1p3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 3 5",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "...but because his bishop was hanging, the knight was forced to run specifically to c4."
+  },
+  {
+   "ply": 10,
+   "t": 120,
+   "fen": "r1b1kbnr/pppp1ppp/2n3q1/8/2N1p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 4 6",
+   "line": [
+    "Qg6"
+   ],
+   "spoken": "And we reposition the queen to g6."
+  },
+  {
+   "ply": 11,
+   "t": 121.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n3q1/8/4p3/1P2N3/PBPPPPPP/RN1QKB1R b KQkq - 5 6",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "He's blitzing his moves out, shuffling the same knight again and again in the opening."
+  },
+  {
+   "ply": 12,
+   "t": 135.5,
+   "fen": "r1b1kb1r/pppp1ppp/2n2nq1/8/4p3/1P2N3/PBPPPPPP/RN1QKB1R w KQkq - 6 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "There's no reason to be intimidated by an opponent who flouts opening principles — you simply obey them yourself. The knight comes to f6."
+  },
+  {
+   "ply": 13,
+   "t": 137,
+   "fen": "r1b1kb1r/pppp1ppp/2n2nq1/8/4p3/1P2N1P1/PBPPPP1P/RN1QKB1R b KQkq - 0 7",
+   "line": [
+    "g3"
+   ],
+   "spoken": "He plays g3. The way to punish this kind of play is precisely to follow opening principles to the letter."
+  },
+  {
+   "ply": 14,
+   "t": 155.5,
+   "fen": "r1b1kb1r/ppp2ppp/2n2nq1/3p4/4p3/1P2N1P1/PBPPPP1P/RN1QKB1R w KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "What have we not done yet? Completed development, and fully occupied the centre with pawns. So d5, building a big central pawn chain."
+  },
+  {
+   "ply": 15,
+   "t": 159,
+   "fen": "r1b1kb1r/ppp2ppp/2n2nq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1QK2R b KQkq - 1 8",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "He fianchettoes with the bishop to g2. Now all that remains is to bring our pieces out."
+  },
+  {
+   "ply": 16,
+   "t": 169,
+   "fen": "r3kb1r/ppp2ppp/2n1bnq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1QK2R w KQkq - 2 9",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "We develop the bishop to e6 first, reinforcing the centre."
+  },
+  {
+   "ply": 17,
+   "t": 172.5,
+   "fen": "r3kb1r/ppp2ppp/2n1bnq1/3p4/4p3/1P2N1P1/PBPPPPBP/RN1Q1RK1 b kq - 3 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "He castles. This is the instructive moment: we could keep developing or castle long — but notice White has completely neglected his queenside development."
+  },
+  {
+   "ply": 18,
+   "t": 201.5,
+   "fen": "r3kb1r/ppp2pp1/2n1bnq1/3p3p/4p3/1P2N1P1/PBPPPPBP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Even though we're not fully developed either, we're ready to start attacking — so h5, aiming to pry open the h-file."
+  },
+  {
+   "ply": 19,
+   "t": 204,
+   "fen": "r3kb1r/ppp2pp1/2n1bnq1/3p3p/4p2P/1P2N1P1/PBPPPPB1/RN1Q1RK1 b kq - 0 10",
+   "line": [
+    "h4"
+   ],
+   "spoken": "He answers with h4, but that only softens his kingside further."
+  },
+  {
+   "ply": 20,
+   "t": 210.5,
+   "fen": "2kr1b1r/ppp2pp1/2n1bnq1/3p3p/4p2P/1P2N1P1/PBPPPPB1/RN1Q1RK1 w - - 1 11",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Now we castle long, completing our development — and mark that pawn on g3; sacrifices are in the air."
+  },
+  {
+   "ply": 21,
+   "t": 216,
+   "fen": "2kr1b1r/ppp2pp1/2n1bnq1/3p3p/P3p2P/1P2N1P1/1BPPPPB1/RN1Q1RK1 b - - 0 11",
+   "line": [
+    "a4"
+   ],
+   "spoken": "He lunges with a4 — very creative, but not objectively sound."
+  },
+  {
+   "ply": 22,
+   "t": 230,
+   "fen": "2kr3r/ppp2pp1/2nbbnq1/3p3p/P3p2P/1P2N1P1/1BPPPPB1/RN1Q1RK1 w - - 1 12",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The refutation is patience: don't panic, finish developing, and only attack once you're ready. The bishop swings to d6."
+  },
+  {
+   "ply": 23,
+   "t": 233.5,
+   "fen": "2kr3r/ppp2pp1/2nbbnq1/3p3p/P3p2P/1P2N1P1/1BPPPPBK/RN1Q1R2 b - - 2 12",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "He plays the king to h2, walking right into it. We're eyeing a knight check on g4 — though he can capture the knight."
+  },
+  {
+   "ply": 24,
+   "t": 265.5,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p3p/P3p1nP/1P2N1P1/1BPPPPBK/RN1Q1R2 w - - 3 13",
+   "line": [
+    "Ng4+"
+   ],
+   "spoken": "But that's the point: the knight checks on g4, and after he takes, we recapture with the pawn, ripping open the h-file — exactly what we wanted."
+  },
+  {
+   "ply": 26,
+   "t": 269,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p4/P3p1pP/1P4P1/1BPPPPBK/RN1Q1R2 w - - 0 14",
+   "line": [
+    "Nxg4",
+    "hxg4"
+   ],
+   "spoken": "Now we threaten to grab his pawn, and he's forced to drop the king back toward g1."
+  },
+  {
+   "ply": 27,
+   "t": 274,
+   "fen": "2kr3r/ppp2pp1/2nbb1q1/3p4/P3p1pP/BP4P1/2PPPPBK/RN1Q1R2 b - - 1 14",
+   "line": [
+    "Ba3"
+   ],
+   "spoken": "That retreat was his only serious move; instead he lets us capture on h4 with check."
+  },
+  {
+   "ply": 28,
+   "t": 284,
+   "fen": "2kr3r/ppp2pp1/2n1b1q1/3pb3/P3p1pP/BP4P1/2PPPPBK/RN1Q1R2 w - - 2 15",
+   "line": [
+    "Be5"
+   ],
+   "spoken": "But don't rush the capture — first the bishop steps to e5, out of the sticky spot it was in."
+  },
+  {
+   "ply": 29,
+   "t": 286.5,
+   "fen": "2kr3r/ppp2pp1/2n1b1q1/3pb3/P3p1pP/BP4P1/R1PPPPBK/1N1Q1R2 b - - 3 15",
+   "line": [
+    "Ra2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 288.5,
+   "fen": "2kr4/ppp2pp1/2n1b1q1/3pb3/P3p1pr/BP4P1/R1PPPPBK/1N1Q1R2 w - - 0 16",
+   "line": [
+    "Rxh4+"
+   ],
+   "spoken": "Now we take on h4 with check, and head for a beautiful little finale."
+  },
+  {
+   "ply": 31,
+   "t": 319.5,
+   "fen": "2kr4/ppp2pp1/2n1b1q1/3pb3/P3p1pr/BP4P1/R1PPPPB1/1N1Q1RK1 b - - 1 16",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": "This is what happens when you shamelessly violate opening principles. After the king to g1, there's a lovely way to finish."
+  },
+  {
+   "ply": 32,
+   "t": 326,
+   "fen": "2kr4/ppp2pp1/2n1b2q/3pb3/P3p1pr/BP4P1/R1PPPPB1/1N1Q1RK1 w - - 2 17",
+   "line": [
+    "Qh6"
+   ],
+   "spoken": "The queen swings to h6..."
+  },
+  {
+   "ply": 33,
+   "t": 328.5,
+   "fen": "2kr4/ppp2pp1/2n1b2q/3pb3/P3p1pP/BP6/R1PPPPB1/1N1Q1RK1 b - - 0 17",
+   "line": [
+    "gxh4"
+   ],
+   "spoken": "...sacrificing the rook."
+  },
+  {
+   "ply": 34,
+   "t": 330.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p1pq/BP6/R1PPPPB1/1N1Q1RK1 w - - 0 18",
+   "line": [
+    "Qxh4"
+   ],
+   "spoken": "Despite being a whole rook down, Black's pressure on the kingside is absolutely overwhelming."
+  },
+  {
+   "ply": 35,
+   "t": 339,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p1pq/BP6/R1PPPPB1/1N1QR1K1 b - - 1 18",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "We're threatening mate; his only way to stave it off is the rook to e1."
+  },
+  {
+   "ply": 36,
+   "t": 342.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p2q/BP4p1/R1PPPPB1/1N1QR1K1 w - - 0 19",
+   "line": [
+    "g3"
+   ],
+   "spoken": "But after g3, all of our pieces come pouring in."
+  },
+  {
+   "ply": 37,
+   "t": 347,
+   "fen": "2kr4/ppp2pp1/2n1b3/3pb3/P3p2q/BP4P1/R1PPP1B1/1N1QR1K1 b - - 0 19",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 348.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3p4/P3p2q/BP4b1/R1PPP1B1/1N1QR1K1 w - - 0 20",
+   "line": [
+    "Bxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 349.5,
+   "fen": "2kr4/ppp2pp1/2n1b3/3p4/P3p2q/BP2P1b1/R1PP2B1/1N1QR1K1 b - - 0 20",
+   "line": [
+    "e3"
+   ],
+   "spoken": "If he tries e3, we can simply take the rook, winning the material back..."
+  },
+  {
+   "ply": 40,
+   "t": 356,
+   "fen": "2kr4/ppp2pp1/2n5/3p4/P3p1bq/BP2P1b1/R1PP2B1/1N1QR1K1 w - - 1 21",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "...or play the bishop to g4. The position is overflowing with mating ideas — completely crushing, which is why he resigned."
+  },
+  {
+   "ply": 5,
+   "t": 388.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P3N2/PBPPPPPP/RN1QKB1R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 396,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "A note on the opening: the Nimzowitsch-Larsen itself is not a bad opening at all. Pushing the knight to e5 was the inaccuracy...",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 397,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3Np3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "...the knight to d4 is the better move, because from there it can be supported with e3.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 400.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/8/3Np3/1P2P3/PBPP1PPP/RN1QKB1R b KQkq - 0 5",
+   "line": [
+    "Qf6",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 404,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3Np3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 408,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/4p3/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 417,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/4p3/1P6/PBPPPPPP/RN1QKB1R w KQkq - 2 5",
+   "line": [
+    "Ne5",
+    "Qf6"
+   ],
+   "spoken": "The real lesson: strong players can bend opening principles strategically and still get a decent position — that's what modern chess is about — but it's very hard without experience. Get comfortable with sensible, classical openings first; only then start experimenting.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 449.5,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4N3/3Pp3/1P6/PBP1PPPP/RN1QKB1R b KQkq d3 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Here d4 would have been interesting, at least staking a claim in the centre. Instead he drifted — the knight to c4, then to e3, ignoring development when e3 or d3 was called for. Then h5 softened him up, and that pawn cost him the game; opening the h-file was a disaster. d3 was his last fighting chance — but after the king to h2, it walked straight into the pin.",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,337 @@
+{
+ "videoId": "R2skmBe07aQ",
+ "title": "Beginner To Master | Chess Speedrun | 1100 | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:R2skmBe07aQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 45.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 52,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 57,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 71,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "This bishop out to c4 is the Italian-style idea against the Sicilian — but it simply doesn't work the same way here. The clean reply is e6, blunting the bishop's diagonal and quietly readying a central break."
+  },
+  {
+   "ply": 7,
+   "t": 78.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 87.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 94.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 95.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 111,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2ppP3/2B5/2N2N2/PPPP1PPP/R1BQK2R w KQkq d6 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Here's the eye-opener: the central thrust to d5 becomes possible precisely because a bishop is sitting on c4. Train yourself to link those two — a bishop on c4 and the chance to strike with d5. It seizes the middle in one blow.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 11,
+   "t": 130.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pP2/2pp4/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "So plant the pawn in the centre — and if the knight gets taken, recapture on the bishop, leading to a distinctive pawn structure that looks damaged but isn't. There's plenty going on beneath the surface."
+  },
+  {
+   "ply": 12,
+   "t": 133.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pP2/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 142,
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "fxg7",
+    "Bxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 150.5,
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 152,
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 165,
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Why the ragged structure is actually fine: the opponent struggles to develop the light-squared bishop, since a pawn move to challenge would just be captured and leave a sitting-duck pawn behind. On top of that comes the bishop pair — golden in an open position, with one already pre-developed to a fine post — and those supposedly weak pawns are strong, choking the opponent's grip on the centre.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 190.5,
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "b6"
+   ],
+   "spoken": "The c-pawn is under fire, so defend it and prepare development in one stroke — b6 kills two birds, bracing the pawn while opening the way to fianchetto the other bishop.",
+   "kind": "plan"
+  },
+  {
+   "ply": 17,
+   "t": 203,
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/2p1N3/3P1N2/PPP2PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 213.5,
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/4N3/3p1N2/PPP2PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "cxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 216.5,
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/4N3/3P1N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "line": [
+    "cxd3"
+   ],
+   "spoken": "A lesson in flexibility and vigilance: the natural intention is the bishop to a6 hitting the pawn — but that runs into a queen sortie to a4 forking two undefended pieces. Be obsessed with loose pieces; the instant you place a man on an undefended square, the alarm should ring. So the bishop goes to b7 instead.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 20,
+   "t": 268,
+   "fen": "r2qk2r/pb3pbp/1pn1p3/2p5/4N3/3P1N2/PP3PPP/R1BQK2R w KQkq - 1 11",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 283,
+   "fen": "r2qk2r/pb3pbp/1pn1p3/2p5/4NB2/3P1N2/PP3PPP/R2QK2R b KQkq - 2 11",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 301.5,
+   "fen": "r2q1rk1/pb3pbp/1pn1p3/2p5/4NB2/3P1N2/PP3PPP/R2QK2R w KQ - 3 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castling doesn't literally prevent the knight jump to d6 — it takes the sting out of it. The move is no longer a fork, so there's simply no need to react to the threat directly.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 316,
+   "fen": "r2q1rk1/pb3pbp/1pn1p3/2p3N1/4NB2/3P4/PP3PPP/R2QK2R b KQ - 4 12",
+   "line": [
+    "Nfg5"
+   ],
+   "spoken": "The knight leap to g5 looks menacing but has no leg to stand on. There's no need to spend a move shooing it — head straight for the counterattack. Just keep the dark-squared bishop back for defence, since surrendering it would invite a real attack; hold onto it and the intimidation amounts to nothing.",
+   "kind": "plan"
+  },
+  {
+   "ply": 24,
+   "t": 360,
+   "fen": "r2q1rk1/pb3pbp/1p2p3/2p3N1/1n2NB2/3P4/PP3PPP/R2QK2R w KQ - 5 13",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "For the counterattack, ask what's weak — and the d3 pawn is the opponent's glaring weakness. So the knight swings to b4 to target it. If the queen lunges out to attack, the position collapses: a capture on d3 with check disarms the assault and wins a piece.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 385,
+   "fen": "r2q1rk1/pb3pbp/1p2p3/2p3N1/1n2NB2/3P4/PP3PPP/R2Q1RK1 b - - 6 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 397.5,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p3N1/1n2NB2/3P4/PP3PPP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "h6"
+   ],
+   "spoken": "First, needle the opponent — the pawn to h6 shoves the knight away before the real recapture. And a timing point: depending on where the knight retreats, a capture on d3 may hit two pieces at once, since the knight would have lost its defender.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 27,
+   "t": 443,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/1n2NB2/3P1N2/PP3PPP/R2Q1RK1 b - - 1 14",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 444.5,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "Nxd3"
+   ],
+   "spoken": "The knight crashes into d3, attacking the bishop — and the central knight, until now propped by that pawn, has just lost its defender. Two threats, and no clean way to meet both.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 27,
+   "t": 451,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/1n2NB2/3P1N2/PP3PPP/R2Q1RK1 b - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 453.5,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "Nxd3"
+   ],
+   "spoken": "If the bishop tries to wriggle out with a counterattacking retreat, it doesn't save the day — the knight is taken anyway, leaving two pieces for a rook and a pawn and total piece domination. Ahead in quality even where the count is close.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 29,
+   "t": 504,
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/1R1Q1RK1 b - - 1 15",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 514.5,
+   "fen": "r2q1rk1/p4pb1/1p2p2p/2p5/4bB2/3n1N2/PP3PPP/1R1Q1RK1 w - - 0 16",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": "With a rook hanging, either capture wins — but the deeper habit is to defend correctly when it's your turn to be hit. Rather than any old defence of the attacked bishop, choose the one that coordinates the most force: the queen to d5 builds a battery against the knight, connects the rooks and cements the whole advantage. And the apparent pin is an illusion — it isn't against the king, so a knight capture on f4 just wins the queen.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 6,
+   "t": 631.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 637,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 2 5",
+   "line": [
+    "e5",
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "That d5 idea shows up most famously in the Scotch Gambit and its Italian cousin, where advancing to d5 is the main theoretical line. It's the same concept reappearing across many openings — worth recognising wherever a bishop lands on c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 2,
+   "t": 663.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "And a closing note on the structure: doubled pawns can work in tandem, partners in denying the opponent the centre. They're not easy to attack — try to win one and it can be defended by counterattacking the other, chasing the aggressor's queen back home.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

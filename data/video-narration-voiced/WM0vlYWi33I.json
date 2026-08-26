@@ -1,0 +1,313 @@
+{
+ "videoId": "WM0vlYWi33I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1280",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:WM0vlYWi33I",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 649,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 651.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 654.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 657,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxd4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 672.5,
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "spoken": "Capturing on c6 is already a slight error — it opens the b-file for the second player and, just as usefully, clears the way to prepare the central break to d5. A trade that helps the defender is no trade to make.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 674,
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 682.5,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R w KQkq - 2 7",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 684,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2B5/PPP2PPP/RN1QKB1R b KQkq - 3 7",
+   "line": [
+    "Bc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 699.5,
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B5/PPP2PPP/RN1QKB1R w KQkq - 4 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The fianchettoed bishop must not be traded — resist by developing the knight to f6. And note the pawn move to e5 would be poor, since it hands over the d6 square as a lasting hole.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 705.5,
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R b KQkq - 0 8",
+   "line": [
+    "f3"
+   ],
+   "spoken": "There it is again — that f-pawn move is one of the most weakening moves on the board, yet players toss it in reflexively. There's a good reason the old advice is simply never to play it."
+  },
+  {
+   "ply": 16,
+   "t": 714.5,
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R w KQ - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 716,
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/2B1P3/2B2P2/PPP3PP/RN1QK2R b KQ - 2 9",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop out to c4 walks straight into the break you should be playing on autopilot — a pawn to d5, seizing the centre and opening lines while the opponent is still sorting out development.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 726,
+   "fen": "r1bq1rk1/p3ppbp/2p2np1/3p4/2B1P3/2B2P2/PPP3PP/RN1QK2R w KQ - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 728.5,
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/2B5/2B2P2/PPP3PP/RN1QK2R w KQ - 0 11",
+   "line": [
+    "exd5",
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 752,
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R b KQ - 1 11",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 777.5,
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R w KQ - 2 12",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "The first order of business is to stop the opponent from castling and keep the king stranded in the centre — a queen to b6 does it. It may not prevent castling forever, but every tempo spent chasing the queen away is a tempo spent expanding in the centre, so even if the king eventually tucks away, it does so into a hot mess.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 823,
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RNQ1K2R b KQ - 3 12",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 853,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Expand — but with the right pawn. The natural central push would close the queen's diagonal and actually help the opponent castle. The move is e5 instead, keeping the diagonal live and the pressure on.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 855,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 856.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "line": [],
+   "spoken": "And a trap in the offing — had the opponent captured on e5, the bishop would have been pinned with devastating effect. The break carried a hidden sting.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 860.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 871,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4p3/3B1P2/PPPB2PP/RNQ1K2R w KQ - 0 14",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 874.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4P3/3B4/PPPB2PP/RNQ1K2R b KQ - 0 14",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 879,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 882.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/2B1p3/8/PPPB2PP/RNQ1K2R b KQ - 1 15",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Now a crushing quiet move — a knight to g4. It's found by reading the opponent's intention: they want a bishop to e3 so they can finally castle. The knight leap stops that while feeding the attack, and the fianchettoed bishop rakes into b2. If the knight is challenged, a queen check on f2 leads to mate.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 30,
+   "t": 917,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1K2R w KQ - 2 16",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "This is where intuition earns its keep. You don't need to see the exact mating sequence — one glance at the opponent's tangled pieces tells you it's there, and it's either checkmate or catastrophic material loss. Intuition is trusting that judgment instead of burning your whole clock trying to calculate it to the end.",
+   "kind": "plan"
+  },
+  {
+   "ply": 31,
+   "t": 973,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "line": [
+    "Rf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 986,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": "Don't forget the other route — sometimes the simplest conversion is just to win a heap of material, a kind of insurance. If the attack ever misfires, you're still up a rook. When a full rook is on offer, take it, even if a mate might be lurking; the safe path is nothing to be ashamed of.",
+   "kind": "plan"
+  },
+  {
+   "ply": 28,
+   "t": 1031.5,
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1033.5,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bc4",
+    "Ng4",
+    "Rf1",
+    "Bxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1037,
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "line": [],
+   "spoken": "Note why the flashier pawn thrust is less convincing — it blunts the queen, and the queen wants access to those squares. With a whole rook there for the taking, the clean grab beats the showy try every time.",
+   "reanchor": true
+  },
+  {
+   "ply": 32,
+   "t": 1066.5,
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,432 @@
+{
+ "videoId": "Z4WjtjMl3j8",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2120",
+ "openingName": "Modern Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Z4WjtjMl3j8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1103,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1104.5,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1105.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1107.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1110,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "The Modern is the Pirc's cousin — g6 and Bg7, often transposing, the hypermodern way to hand White the centre and shoot at it later.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 1111.5,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1117,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1118.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White just castled — and that quietly hangs the e4-pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 1132.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p2p1/8/2BPn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "So take it: Nxe4, a free pawn with no reason to decline. The lesson is to never autopilot against an unusual opening — your opponent did, and dropped a pawn for nothing.",
+   "kind": "main",
+   "teaches": "Don't play on autopilot against offbeat openings; check for free material every move."
+  },
+  {
+   "ply": 11,
+   "t": 1139.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p2p1/8/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 6",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1152,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3p4/2BPn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Now react accurately: d5 cements the knight on its e4 outpost.",
+   "kind": "main",
+   "teaches": "Support a well-placed knight with a pawn rather than leaving it to be kicked."
+  },
+  {
+   "ply": 13,
+   "t": 1154,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/1B1p4/3Pn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1159.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/1B1p4/3Pn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Answer the check by building a pawn chain with c6 rather than blocking with a piece.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 1161.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 8",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1191.5,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3Pn3/3B1N2/PPP2PPP/RNBQR1K1 w kq - 0 9",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Here's the key: not Bf5, which runs into the nasty Nh4 hitting the bishop and toppling the whole construction. Instead f5 — the Pillsbury knight. Pawns are the best defenders of a piece, and now the e4-knight is a rock.",
+   "kind": "main",
+   "teaches": "Anchor an advanced knight with a pawn, not a piece; a pawn-defended outpost can't be dislodged."
+  },
+  {
+   "ply": 17,
+   "t": 1209.5,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQR1K1 b kq - 1 9",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1220,
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQR1K1 w - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1222.5,
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/2PB4/PP3PPP/RNBQR1K1 b - - 0 10",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Just castle and develop — and don't take the g5-knight, which would defeat the whole purpose of the knight on e4.",
+   "kind": "main",
+   "teaches": "Don't trade off the piece whose only job is to support your dominant outpost."
+  },
+  {
+   "ply": 20,
+   "t": 1235.5,
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3Pn3/2PB4/PP3PPP/RNBQR1K1 w - - 0 11",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Now the strike: the knight on e4 is a type-two piece, and the queen already x-rays it through the pawn — so push the pawn to e5, occupying the centre while keeping the knight supported. If White replies f3, we take on d4 with devastating consequences to his loose king.",
+   "kind": "main",
+   "teaches": "When your queen x-rays your own advanced knight through a pawn, advance that pawn to gain the centre with tempo."
+  },
+  {
+   "ply": 21,
+   "t": 1241,
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3Pn3/2PB1P2/PP4PP/RNBQR1K1 b - - 0 11",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1242,
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppn1/3P4/2PB1P2/PP4PP/RNBQR1K1 w - - 0 12",
+   "line": [
+    "Nxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1255.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1257,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "Bc4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1271,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3p4/2BPn3/5N2/PPP2PPP/RNBQK1R1 w Qkq - 0 7",
+   "line": [
+    "Rf1",
+    "d5",
+    "Rg1",
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1274.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 0 8",
+   "line": [
+    "Bd3",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1277.5,
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "line": [
+    "Nh4",
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1287,
+   "fen": "rn1q1rk1/pp2ppbp/2p3p1/3p1N2/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Q - 1 10",
+   "line": [
+    "Nxf5",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1292,
+   "fen": "rn1q1rk1/pp2ppbp/2p5/3p1p2/3Pn3/2PB4/PP3PPP/RNBQK1R1 w Q - 0 11",
+   "line": [
+    "c3",
+    "gxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1300,
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1304.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "line": [
+    "Nf3",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1306,
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1310,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Qkq - 0 11",
+   "line": [
+    "Nf3",
+    "Bc8",
+    "Ng5",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1312,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pB1/3P4/3B4/PPP2PPP/RN1QK1R1 b Qkq - 0 12",
+   "line": [
+    "Bd2",
+    "Nxg5",
+    "Bxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1316,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1317.5,
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B1P2/PPP3PP/RNBQK1R1 w Q - 1 12",
+   "line": [
+    "Ng5",
+    "f5",
+    "f3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1324,
+   "fen": "rnbq1rk1/pp2p2p/2p3p1/3p1pN1/3bn3/3B1P2/PPP3PP/RNBQKR2 w Q - 0 13",
+   "line": [
+    "Rf1",
+    "Bxd4"
+   ],
+   "spoken": "Even Kf1 doesn't help — the rook x-rays its own king, so we play e5 as if nothing happened; if White takes, he's mated in the centre of the board.",
+   "kind": "branch",
+   "teaches": "A rook that x-rays its own king can leave a capture illegal in effect — exploit the pin.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 1352,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Qkq - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1364.5,
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3PB3/2P5/PP3PPP/RNBQK1R1 w Q - 1 13",
+   "line": [
+    "Bxe4",
+    "e5",
+    "c3",
+    "O-O"
+   ],
+   "spoken": "When recapturing, take with the f-pawn to open the f-file — taking with the d-pawn would only open the diagonal instead. Opening the centre is the whole point.",
+   "kind": "branch",
+   "teaches": "Choose the recapture that opens the file your rooks want, not the one that helps the opponent's bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1372,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p2N1/3Pn3/3B4/PPP2PPP/RNBQK1R1 b Qkq - 5 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1403.5,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 b Qkq - 1 11",
+   "line": [
+    "f5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1405,
+   "fen": "r1bqk2r/pp1np1bp/2p3p1/3pNp2/3Pn3/3B4/PPP2PPP/RNBQK1R1 b Qkq - 3 12",
+   "line": [
+    "Nd7",
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1413.5,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "line": [],
+   "spoken": "One honest caveat: f5 does weaken e5, and you must always factor that in — here it's fine only because we have plenty of pieces, like Nd7, to contest that square.",
+   "kind": "main",
+   "teaches": "Before playing f5, count the pieces guarding the e5 hole it creates.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 1442.5,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3PnB2/3B1N2/PPP2PPP/RN1QK1R1 w Qkq - 0 11",
+   "line": [
+    "Bf4",
+    "f5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

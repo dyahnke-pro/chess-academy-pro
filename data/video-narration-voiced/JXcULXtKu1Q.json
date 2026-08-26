@@ -1,0 +1,152 @@
+{
+ "videoId": "JXcULXtKu1Q",
+ "title": "Winning Bullet Brawl!! | Daniel Naroditsky Claims VICTORY | 4.5 to 1.5 vs Hikaru! | GM Games",
+ "openingName": "Nimzo-Larsen Attack",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:JXcULXtKu1Q",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 701,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [
+    "b3",
+    "Nc6",
+    "Bb2",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 703.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/8/1P2Pp2/PBPP2PP/RN1QKBNR w KQkq - 0 5",
+   "line": [
+    "e3",
+    "e4",
+    "f3",
+    "exf3"
+   ],
+   "spoken": "When Black grabs space by pushing the pawn to e4, undermine it at once with f3 rather than let an advanced pawn sit unchallenged.",
+   "kind": "main",
+   "teaches": "Challenge an overextended enemy pawn immediately with a pawn break instead of playing around it."
+  },
+  {
+   "ply": 10,
+   "t": 705,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/8/1P2PN2/PBPP2PP/RN1QKB1R w KQkq - 1 6",
+   "line": [
+    "Nxf3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 706.5,
+   "fen": "r1bqk2r/ppp1bppp/2n2n2/3p4/8/1P2PN2/PBPPB1PP/RN1QK2R w KQkq - 0 8",
+   "line": [
+    "Bd3",
+    "Be7",
+    "Be2",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 707.5,
+   "fen": "r1bqk2r/ppp1bppp/2n2n2/3p4/8/1PN1PN2/PBPPB1PP/R2QK2R b KQkq - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 709,
+   "fen": "r1bq1rk1/ppp1bppp/2n2n2/3p4/8/1PN1PN2/PBPPB1PP/R2Q1RK1 b - - 3 9",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 712,
+   "fen": "rnbq1rk1/ppp1bppp/5n2/1B1p4/8/1PN1PN2/PBPP2PP/R2Q1RK1 b - - 5 10",
+   "line": [
+    "Nb8",
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 717,
+   "fen": "rn1q1rk1/pp2bppp/2p2n2/3p4/6b1/1P1BPN2/PBPPN1PP/R2Q1RK1 b - - 1 12",
+   "line": [
+    "Bg4",
+    "Bd3",
+    "c6",
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 718.5,
+   "fen": "r2q1rk1/pp1nbppp/2p2n2/3p4/2P3b1/1P1BPN2/PB1PN1PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "Nbd7",
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 722,
+   "fen": "r2q1rk1/pp1n1ppp/2pb1n2/3p4/2P3b1/1P2PN2/PBBPN1PP/R2Q1RK1 b - - 2 14",
+   "line": [
+    "Bd6",
+    "Bc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 724,
+   "fen": "r2q1rk1/pp1n1ppp/2pb1n2/3p3b/2P5/1P2PN1P/PBBPN1P1/R2Q1RK1 b - - 0 15",
+   "line": [
+    "Bh5",
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 729.5,
+   "fen": "r2q1rk1/pp1n1ppp/3b1nb1/3p4/3N4/1P2PN1P/PBBP2P1/R2Q1RK1 b - - 1 17",
+   "line": [
+    "Bg6",
+    "cxd5",
+    "cxd5",
+    "Ned4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 731.5,
+   "fen": "r2q1rk1/ppbn1ppp/5nb1/3p1N2/8/1P2PN1P/PBBP2P1/R2Q1RK1 b - - 3 18",
+   "line": [
+    "Bc7",
+    "Nf5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

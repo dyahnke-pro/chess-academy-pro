@@ -1,0 +1,373 @@
+{
+ "videoId": "utcO6odBZIg",
+ "title": "Master Class | The Queen's Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen's Gambit Accepted",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:utcO6odBZIg",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 20.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 56.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": "In the Accepted there are two fundamentally different roads — the solid one built around a modest pawn move, or the aggressive central grab with e4. The big centre isn't the only move, or even the main one, but it's considered the most testing.",
+   "kind": "plan"
+  },
+  {
+   "ply": 7,
+   "t": 73,
+   "fen": "rnbqkbnr/ppp1ppp1/7p/8/2BPP3/8/PP3PPP/RNBQK1NR b KQkq - 0 4",
+   "line": [
+    "h6",
+    "Bxc4"
+   ],
+   "spoken": "The rook-pawn move is odd — it just lets the pawn be recaptured, and in this line every tempo matters. Facing passive play, there's nothing exotic to do; simply develop the pieces cleanly."
+  },
+  {
+   "ply": 8,
+   "t": 76.5,
+   "fen": "rnbqkbnr/ppp2pp1/4p2p/8/2BPP3/8/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 102,
+   "fen": "rnbqkbnr/ppp2pp1/4p2p/8/2BPP3/2N5/PP3PPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 106.5,
+   "fen": "rnbqkbnr/pp3pp1/4p2p/2p5/2BPP3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 122,
+   "fen": "rnbqkbnr/pp3pp1/4p2p/2pP4/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Follow your instincts — capturing would only invite a queen trade, so the obvious move is to push to d5, grabbing more of the centre and building tension. If it's exchanged, a knight lands on a beautiful central outpost.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 130,
+   "fen": "rnbqkbnr/pp3pp1/7p/2pp4/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 133.5,
+   "fen": "rnbqkbnr/pp3pp1/7p/2pN4/2B1P3/8/PP3PPP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 157.5,
+   "fen": "rnbqkb1r/pp3pp1/5n1p/2pN4/2B1P3/8/PP3PPP/R1BQK1NR w KQkq - 1 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "A very instructive moment — many players see the knight tension and assume they must react, breaking the position or lunging the queen out. It's a false alarm: nothing is actually threatened. A capture is met by recapturing with the bishop, which is just as good, and grabbing the central pawn would be catastrophic, opening the file for a rook and a decisive pin. So develop as if nothing happened, because nothing did.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 237,
+   "fen": "rnbqkb1r/pp3pp1/5n1p/2pN4/2B1P3/5N2/PP3PPP/R1BQK2R b KQkq - 2 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 246,
+   "fen": "rnbqkb1r/pp3pp1/7p/2pB4/4P3/5N2/PP3PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "Nxd5",
+    "Bxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 247,
+   "fen": "rnbqkb1r/1p3pp1/p6p/2pB4/4P3/5N2/PP3PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 267,
+   "fen": "rnbqkb1r/1p3Bp1/p6p/2p5/4P3/5N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "The opponent blunders — spot the standoff, the two queens facing off with the king tied to defending its own. Distract that defender with the classic bishop check on f7, and the queen falls. A queen guarded by only one piece is always susceptible to exactly this kind of shot.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 20,
+   "t": 279.5,
+   "fen": "rnbq1b1r/1p3kp1/p6p/2p5/4P3/5N2/PP3PPP/R1BQK2R w KQ - 0 11",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 286,
+   "fen": "rnbQ1b1r/1p3kp1/p6p/2p5/4P3/5N2/PP3PPP/R1B1K2R b KQ - 0 11",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": "Do run the safety check first — after the king takes, make sure there's no in-between check that saves the defender. Here that resource is blocked by the opponent's own pawn, so the queen is simply won and the game with it.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 4,
+   "t": 310,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 311,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 315,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 316.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 341.5,
+   "fen": "rnbqkbnr/p1p1pppp/8/1p6/2pP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 353.5,
+   "fen": "rnbqkbnr/p1p1pppp/8/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "a4"
+   ],
+   "spoken": "The solid pawn move hides a trap over four hundred years old — if the opponent tries to hold the extra pawn with a queenside advance, undermine the base of that pawn chain with the rook-pawn. Attack the foundation and the whole structure trembles.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 356,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 368,
+   "fen": "rnbqkbnr/p3pppp/8/1p6/2pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "axb5",
+    "cxb5"
+   ],
+   "spoken": "If the defender props the pawn with the c-pawn, a further break opens the diagonal, and a queen swing to f3 wins a piece or the rook — because, absurd as it looks, the rook simply can't be defended. A famous position that has stood the test of centuries.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 386,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/P1pP4/4P3/1P3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 389,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 409,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4P3/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "Bxc4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 417,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 423.5,
+   "fen": "rnbqkbnr/ppp1ppp1/7p/8/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "h6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 438,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 442.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "e5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 456.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/2p1P3/8/PP3KPP/RNBQ1BNR b kq - 0 6",
+   "line": [
+    "Qf6",
+    "dxe5",
+    "Qxf2+",
+    "Kxf2"
+   ],
+   "spoken": "The principled reply is the counter-thrust to e5 — and it's a counter-gambit, because capturing it lets the queens come off with a check that strips the castling rights and leaves the king exposed. With the material level again, that's simply bad for the first player.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 460.5,
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/2p1P3/8/PP3KPP/RNBQ1BNR w kq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 467.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 471.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/8/2ppP3/5N2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "exd4",
+    "Nf3"
+   ],
+   "spoken": "So instead the knight develops, and after the exchanges the gambit spirit is preserved — down a pawn, but two pieces out against none, with pressure bearing down on f7. The line equalises for the defender only with great precision; anyone who hasn't studied it gets swept away.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 503.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "A closing lesson on choosing openings — modelling your repertoire on the elite often backfires, because they can violate the rules only after years of study. For anyone with less time, pick lines where forgetting a move order doesn't get you blown off the board. Forgiving beats fashionable.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 551.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3Pp3/2p1P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "Nf6",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 565,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

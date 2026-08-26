@@ -1,0 +1,525 @@
+{
+ "videoId": "KDrTj4SBgkU",
+ "title": "Sub Battle W/ ChessBrahs! Hilarity Ensues Pt. 1",
+ "openingName": "English Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:KDrTj4SBgkU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1781,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "c4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1783.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1784.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1786.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2NP4/PP2PPPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1787.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/2P5/2NP4/PP2PPPP/R1BQKBNR w KQkq - 1 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1789.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/2P1P3/2NP4/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1791,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b1p3/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQ - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1793,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/2b1p3/2P1P3/2NP1N2/PP3PPP/R1BQKB1R b KQ - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1797,
+   "fen": "rnbq1rk1/ppp2ppp/3p1n2/2b1p3/2P1P3/2NP1N2/PP3PPP/R1BQKB1R w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1798.5,
+   "fen": "rnbq1rk1/ppp2ppp/3p1n2/2b1p3/2P1P3/2NP1N2/PP2BPPP/R1BQK2R b KQ - 1 6",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1800,
+   "fen": "rnbq1rk1/ppp2pp1/3p1n1p/2b1p3/2P1P3/2NP1N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1801.5,
+   "fen": "rnbq1rk1/ppp2pp1/3p1n1p/2b1p3/2P1P3/2NPBN2/PP2BPPP/R2QK2R b KQ - 1 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1807,
+   "fen": "rnbq1rk1/ppp2pp1/3p1n1p/4p3/2P1P3/2NPbN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "Bxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1808,
+   "fen": "rnbq1rk1/ppp2pp1/3p1n1p/4p3/2P1P3/2NPPN2/PP2B1PP/R2QK2R b KQ - 0 8",
+   "line": [
+    "fxe3"
+   ],
+   "spoken": "White's recapture leaves doubled pawns on e3 and e4. The old line that doubled pawns are always weaknesses is only half true — here they're dynamic, bracing the centre and enabling a knight to swing via h4 to f5.",
+   "kind": "main",
+   "teaches": "Doubled pawns aren't automatically weak; when they control key squares they can be a strength."
+  },
+  {
+   "ply": 16,
+   "t": 1817.5,
+   "fen": "rn1q1rk1/ppp2pp1/3pbn1p/4p3/2P1P3/2NPPN2/PP2B1PP/R2QK2R w KQ - 1 9",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1825,
+   "fen": "rn1q1rk1/ppp2pp1/3pbn1p/4p3/2P1P3/2NPPN2/PP2B1PP/R2Q1RK1 b - - 2 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1827.5,
+   "fen": "r2q1rk1/pppn1pp1/3pbn1p/4p3/2P1P3/2NPPN2/PP2B1PP/R2Q1RK1 w - - 3 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1834,
+   "fen": "r2q1rk1/pppn1pp1/3pbn1p/4p3/2PPP3/2N1PN2/PP2B1PP/R2Q1RK1 b - - 0 10",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1877,
+   "fen": "r2q1rk1/ppp2pp1/1n1pbn1p/4p3/2PPP3/2N1PN2/PP2B1PP/R2Q1RK1 w - - 1 11",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1880,
+   "fen": "r2q1rk1/ppp2pp1/1n1pbn1p/3Pp3/2P1P3/2N1PN2/PP2B1PP/R2Q1RK1 b - - 0 11",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1881,
+   "fen": "r2q1rk1/pppb1pp1/1n1p1n1p/3Pp3/2P1P3/2N1PN2/PP2B1PP/R2Q1RK1 w - - 1 12",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1886,
+   "fen": "r2q1rk1/pppb1pp1/1n1p1n1p/3Pp3/P1P1P3/2N1PN2/1P2B1PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1887.5,
+   "fen": "r2q1rk1/1ppb1pp1/1n1p1n1p/p2Pp3/P1P1P3/2N1PN2/1P2B1PP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1915,
+   "fen": "r2q1rk1/1ppb1pp1/1n1p1n1p/p2Pp3/P1P1P2N/2N1P3/1P2B1PP/R2Q1RK1 b - - 1 13",
+   "line": [
+    "Nh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1918.5,
+   "fen": "r2q1rk1/1ppb1p2/1n1p1npp/p2Pp3/P1P1P2N/2N1P3/1P2B1PP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "g6"
+   ],
+   "spoken": "g6 is prophylaxis — it takes the f5 square away from White's knight before the attack can even start.",
+   "kind": "main",
+   "teaches": "Spend a quiet pawn move to deny an enemy knight its target outpost."
+  },
+  {
+   "ply": 27,
+   "t": 1931.5,
+   "fen": "r2q1rk1/1ppb1p2/1n1p1npp/p2Pp3/P1P1P2N/2N1P3/1P2B1PP/R3QRK1 b - - 1 14",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1933.5,
+   "fen": "r2q1r2/1ppb1pk1/1n1p1npp/p2Pp3/P1P1P2N/2N1P3/1P2B1PP/R3QRK1 w - - 2 15",
+   "line": [
+    "Kg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1943.5,
+   "fen": "r2q1r2/1ppb1pk1/1n1p1npp/p2Pp3/P1P1P2N/2N1P2P/1P2B1P1/R3QRK1 b - - 0 15",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1945,
+   "fen": "r2q1rn1/1ppb1pk1/1n1p2pp/p2Pp3/P1P1P2N/2N1P2P/1P2B1P1/R3QRK1 w - - 1 16",
+   "line": [
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1963.5,
+   "fen": "r2q1rn1/1ppb1pk1/1n1p2pp/p2Pp3/P1P1P1PN/2N1P2P/1P2B3/R3QRK1 b - - 0 16",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1972.5,
+   "fen": "r4rn1/1ppb1pk1/1n1p2pp/p2Pp1q1/P1P1P1PN/2N1P2P/1P2B3/R3QRK1 w - - 1 17",
+   "line": [
+    "Qg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1975.5,
+   "fen": "r4rn1/1ppb1pk1/1n1p2pp/p2Pp1q1/P1P1P1PN/2N1P1QP/1P2B3/R4RK1 b - - 2 17",
+   "line": [
+    "Qg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1982,
+   "fen": "r4r2/1ppbnpk1/1n1p2pp/p2Pp1q1/P1P1P1PN/2N1P1QP/1P2B3/R4RK1 w - - 3 18",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1992.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pppq1/P1P3PN/1PN1P1QP/4B3/R4RK1 w - - 0 20",
+   "line": [
+    "b3",
+    "f5",
+    "exf5",
+    "gxf5"
+   ],
+   "spoken": "f5 is the thematic break, prising the position open and handing us the g-file for a kingside attack.",
+   "kind": "main",
+   "teaches": "The f5 lever opens lines toward the king in these closed King's-Indian-style structures."
+  },
+  {
+   "ply": 39,
+   "t": 1998.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pppq1/P1P3P1/1PN1PNQP/4B3/R4RK1 b - - 1 20",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 2001.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Ppp2/P1P3P1/1PN1qNQP/4B3/R4RK1 w - - 0 21",
+   "line": [
+    "Qxe3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 2013,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Ppp2/P1P3P1/1PN1qNQP/4BR2/R5K1 b - - 1 21",
+   "line": [
+    "Rf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 2014.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pp3/P1P2pP1/1PN1qNQP/4BR2/R5K1 w - - 0 22",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 2018.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pp3/P1P2pP1/1P2qNQP/4BR2/R2N2K1 b - - 1 22",
+   "line": [
+    "Nd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 2028.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pp3/P1P3P1/1P2qNpP/4BR2/R2N2K1 w - - 0 23",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 2031.5,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2Pp3/P1P3P1/1P2NN1P/4BK2/R7 b - - 0 24",
+   "line": [
+    "Nxe3",
+    "gxf2+",
+    "Kxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 2033,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2P4/P1P1p1P1/1P2NN1P/4BK2/R7 w - - 0 25",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4 rams forward, tearing more lines open toward the white king as the attack gathers force.",
+   "kind": "main"
+  },
+  {
+   "ply": 50,
+   "t": 2039,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2P4/P1P3P1/1P2Np1P/4BK2/6R1 w - - 0 26",
+   "line": [
+    "Rg1",
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 2040,
+   "fen": "r4r2/1ppbn1k1/1n1p3p/p2P4/P1P3P1/1P2NB1P/5K2/6R1 b - - 0 26",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 2041.5,
+   "fen": "r4r2/1ppb2k1/1n1p2np/p2P2P1/P1P5/1P2NB1P/5K2/6R1 b - - 0 27",
+   "line": [
+    "Ng6",
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 2045,
+   "fen": "r4r2/1ppb2k1/1n1p2n1/p2P2Pp/P1P5/1P2NB1P/5K2/6R1 w - - 0 28",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 2049,
+   "fen": "r4r2/1ppb2k1/1n1p2n1/p2P2Pp/P1P5/1P2NBKP/8/6R1 b - - 1 28",
+   "line": [
+    "Kg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 2053,
+   "fen": "r4r2/1ppb2k1/1n1p4/p2Pn1Pp/P1P5/1P2NBKP/8/6R1 w - - 2 29",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 2054.5,
+   "fen": "r4r2/1ppb2k1/1n1p4/p2Pn1Pp/P1P1B3/1P2N1KP/8/6R1 b - - 3 29",
+   "line": [
+    "Be4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 2059,
+   "fen": "4rr2/1ppb2k1/1n1p4/p2Pn1Pp/P1P1B3/1P2N1KP/8/6R1 w - - 4 30",
+   "line": [
+    "Rae8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 2061.5,
+   "fen": "4rr2/1ppb2k1/1n1p4/p2Pn1Pp/P1P1B2K/1P2N2P/8/6R1 b - - 5 30",
+   "line": [
+    "Kh4"
+   ],
+   "spoken": "The king has been chased all the way up to h4 — a monarch this exposed simply gets mated, so drive it down without mercy.",
+   "kind": "main",
+   "teaches": "Once the enemy king is dragged into the open, switch entirely to the hunt."
+  },
+  {
+   "ply": 60,
+   "t": 2065.5,
+   "fen": "4rr2/1ppb2k1/1n1p4/p2P2Pp/P1P1B2K/1P2Nn1P/8/6R1 w - - 6 31",
+   "line": [
+    "Nf3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 2067,
+   "fen": "4r3/1ppb2k1/1n1p4/p2P2Pp/P1P4K/1P2Nr1P/8/6R1 w - - 0 32",
+   "line": [
+    "Bxf3",
+    "Rxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 2076.5,
+   "fen": "4r3/1ppb2k1/1n1p4/p2P2Pp/P1P4K/1P3r1P/8/3N2R1 b - - 1 32",
+   "line": [
+    "Nd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 64,
+   "t": 2080.5,
+   "fen": "4r3/1ppb2k1/1n1p4/p2P2Pp/P1P4K/1P5r/8/3N2R1 w - - 0 33",
+   "line": [
+    "Rxh3#"
+   ],
+   "spoken": "Rxh3 is checkmate — the king-walk to h4 ends exactly where a king-hunt should.",
+   "kind": "main"
+  }
+ ]
+}

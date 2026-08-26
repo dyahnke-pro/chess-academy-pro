@@ -1,0 +1,411 @@
+{
+ "videoId": "ofUcXj4ArHA",
+ "title": "Scotch Gambit (AMAZING Game) | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Scotch Game",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:ofUcXj4ArHA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 20.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 22.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 42.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The consistent recommendation against the Italian bishop is the knight to f6, which invites the sharp Fried Liver — a line you simply must know. And a central pawn thrust is a serious sideline of its own, transposing into the Scotch Gambit that also has to be prepared.",
+   "kind": "plan"
+  },
+  {
+   "ply": 7,
+   "t": 48,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 60.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 66,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/2Bp4/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "In the Scotch Gambit the knight can hop away, but the move you have to know, considered by far the most reputable, is the central strike to d5 — hitting back in the middle rather than retreating passively.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 83.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pP3/2Bp4/5N2/PPP2PPP/RNBQK2R w KQkq d6 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 89,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R w KQkq - 2 7",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Tradition held that the forward knight retreat was practically the only move, but a popular modern alternative is to drop the knight all the way home to d7. It looks like nothing special, yet it neatly covers the pin — the central capture no longer works, since the pawn can be taken or the knight grabbed and the position held with a pawn move.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 164,
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 227.5,
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Don't waste a tempo shooing the bishop — it's likely to capture of its own accord anyway. Develop the bishop to e7, deliberately keeping the c-square free so the pawn can later expand there once the exchanges happen.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 234.5,
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 235.5,
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R w KQkq - 2 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 236.5,
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
+   "line": [
+    "O-O",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 273,
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 b kq - 5 8",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 301.5,
+   "fen": "r1bq1rk1/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 w - - 6 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Note that capturing the advanced pawn fails, because a recapture leaves you pinned. The right way to break the pin isn't the reflexive rook-pawn move but castling — an unpin that also completes development. Solve two problems with one move.",
+   "kind": "plan"
+  },
+  {
+   "ply": 17,
+   "t": 305,
+   "fen": "r1bq1rk1/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 7 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The most oppressive feature of the position is the advanced enemy pawn hanging over everything, cutting the arteries and denying the pieces access to the sixth rank. So the idea is to challenge it directly with f6 and try to remove it at all costs. A knight retreat to reinforce the queenside is the quieter alternative.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 392.5,
+   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 0 10",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 407.5,
+   "fen": "r1bq1rk1/pppnb1pp/2B2p2/3pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 0 10",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 408.5,
+   "fen": "r1bq1rk1/p1pnb1pp/2p2p2/3pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 0 11",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 452.5,
+   "fen": "r1bq1rk1/p1pnb1pp/2p1Pp2/3p4/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 0 11",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 482,
+   "fen": "r1bq1rk1/p1p1b1pp/2p1Pp2/3pn3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 1 12",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The practical decision is to plant the knight on e5 — if the opponent captures twice there, the castled king is stripped of defenders, and with the bishops activated and the f-file thrown open there are real attacking chances. Sometimes the soundest choice is the one that maximises practical trouble for the opponent.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 23,
+   "t": 526,
+   "fen": "r1bq1rk1/p1p1b1pp/2p1Pp2/3pn3/3N4/8/PPPN1PPP/R1BQR1K1 b - - 0 12",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 551,
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppn3/3N4/8/PPPN1PPP/R1BQR1K1 w - - 0 13",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 628,
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 b - - 1 13",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 693,
+   "fen": "r1bq1rk1/p1p1b2p/4Ppp1/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 w - - 0 14",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 722.5,
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 b - - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 727.5,
+   "fen": "r1bq1rk1/p1p1b2p/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 b - - 1 14",
+   "line": [
+    "g6",
+    "Nh6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 747.5,
+   "fen": "r1bq1r2/p1p1b1kp/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 w - - 2 15",
+   "line": [
+    "Kg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 754,
+   "fen": "r1bq1r2/p1p1b1kp/4PppN/2ppn3/8/5N2/PPP2PPP/R1BQR1K1 b - - 3 15",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 755.5,
+   "fen": "r1bq1kr1/p1p1b2p/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 w - - 6 17",
+   "line": [
+    "Rg8",
+    "Nd2",
+    "Kf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 762,
+   "fen": "r1bq1k2/p1p1b1rp/4PppN/2ppn3/8/5N2/PPP2PPP/R1BQR1K1 w - - 8 18",
+   "line": [
+    "Nf3",
+    "Rg7"
+   ],
+   "spoken": "A classic manoeuvre — push the pawn to d4 and follow with the queen to d5. When a square you want for a piece is blocked by your own pawn, advance the pawn to vacate it, and the piece slots into the strong central post it clears.",
+   "kind": "plan"
+  },
+  {
+   "ply": 36,
+   "t": 935,
+   "fen": "r1bq1k2/p1p1bNrp/2n1Ppp1/2pp4/8/5N2/PPP2PPP/R1BQR1K1 w - - 10 19",
+   "line": [
+    "Nf7",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 972.5,
+   "fen": "r1bq4/p1p1bk1p/2n2pp1/2pp4/5B2/5N2/PPP2PPP/R2QR1K1 w - - 0 21",
+   "line": [
+    "Bf4",
+    "Rxf7",
+    "exf7",
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 987,
+   "fen": "r1bq4/p1p1bk1p/2n2pp1/2p5/3p1B2/2P2N2/PP3PPP/R2QR1K1 w - - 0 22",
+   "line": [
+    "c3",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1004,
+   "fen": "r1b5/p1p1bk1p/2n2pp1/2pq4/3P1B2/5N2/PP3PPP/R2QR1K1 w - - 1 23",
+   "line": [
+    "cxd4",
+    "Qd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1097,
+   "fen": "r1b5/p1p1bk1p/2n2pp1/3q4/3p1B2/5N2/PP3PPP/2RQR1K1 w - - 0 24",
+   "line": [
+    "Rc1",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 1128,
+   "fen": "r7/pbp1bk1p/2n2pp1/8/3p1B2/1P3N2/1P3PPP/2R1R1K1 w - - 1 26",
+   "line": [
+    "Qb3",
+    "Qxb3",
+    "axb3",
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 1155.5,
+   "fen": "3r4/pbp1bk1p/2n2pp1/8/2Rp1B2/1P3N2/1P3PPP/4R1K1 w - - 3 27",
+   "line": [
+    "Rc4",
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1182.5,
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 b kq - 5 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1184.5,
+   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 2 10",
+   "line": [
+    "f6",
+    "Re1",
+    "O-O"
+   ],
+   "spoken": "Salvaging a worse position calls for the Magnus method — play one move at a time, posing a fresh problem on every single move and surviving just one more, dragging the opponent's clock down until something finally gives. As long as the last fighting pawn survives, there's still breathing room and still a game.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

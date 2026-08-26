@@ -1,0 +1,522 @@
+{
+ "videoId": "qN8kNz0_c3s",
+ "title": "Mastering the Jobava London ft. Bortnyk | Opening Lab",
+ "openingName": "Jobava London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:qN8kNz0_c3s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 37.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 40,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 44,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "d5",
+    "Bf4"
+   ],
+   "spoken": "This is the Jobava London — d4 and the knight to c3, then the bishop to f4. Same position by either move order.",
+   "kind": "main",
+   "teaches": [
+    "the Jobava London move order"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 213.5,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 214.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 218,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 220.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 222.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 4 5",
+   "line": [
+    "Bf5",
+    "Bc1",
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 225.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 6 6",
+   "line": [
+    "Nb1",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 408,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 7 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 411,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 8",
+   "line": [
+    "Nf6",
+    "Bf4",
+    "e6"
+   ],
+   "spoken": "Against the e6 system, the recommendation is the knight to b5, jumping in to hit the c7-square.",
+   "kind": "main",
+   "teaches": [
+    "Nb5 vs the e6 setup"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 412.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 435.5,
+   "fen": "rnbqk2r/ppp2ppp/4pn2/1N1p4/1b1P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "Black has three ways to defend c7. The most obscure is the bishop check on b4 — which is what most grandmasters choose.",
+   "kind": "main",
+   "teaches": [
+    "the three c7 defences"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 437.5,
+   "fen": "rnbqk2r/ppp2ppp/4pn2/bN1p4/3P1B2/2P5/PP2PPPP/R2QKBNR w KQkq - 1 10",
+   "line": [
+    "c3",
+    "Ba5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 441,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "line": [],
+   "spoken": "The other two are the knight to a6 and the bishop to d6.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 442.5,
+   "fen": "r1bqkb1r/ppp2ppp/n3pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "line": [
+    "Na6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 443.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 444.5,
+   "fen": "rnbqk2r/ppp2ppp/3bpn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The most popular reply on the database is actually the bishop to d6 — and it's the worst of the three, yet the one you'll face most.",
+   "kind": "review",
+   "teaches": [
+    "popular ≠ best"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 447.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 449.5,
+   "fen": "rnbqk2r/ppp2ppp/3bpn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 457,
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 0 10",
+   "line": [
+    "Nxd6+",
+    "cxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 485,
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "line": [
+    "e3"
+   ],
+   "spoken": "After we trade on d6 and Black recaptures, e3 is by far the most common continuation — the line to be ready for.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 488.5,
+   "fen": "rnb1k2r/pp3ppp/1q1ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR w KQkq - 1 11",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 491,
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 492.5,
+   "fen": "rnbq1rk1/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR w KQ - 1 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 503,
+   "fen": "rnbq1rk1/pp3ppp/3ppn2/3p4/3P1B2/4PN2/PPP2PPP/R2QKB1R b KQ - 2 11",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 509.5,
+   "fen": "r1bq1rk1/pp3ppp/2nppn2/3p4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQ - 3 12",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 545.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 547.5,
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 548.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 646,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 3 4",
+   "line": [
+    "Ng8",
+    "Nb1"
+   ],
+   "spoken": "Why play the Jobava at all? The traditional London is rather toothless — it hands you a fine position but you're not really playing to win out of the opening.",
+   "kind": "review",
+   "teaches": [
+    "Jobava plays for the win"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 657.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 5",
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "The Jobava is different — you're swinging for the win right out of the gate, so much so that Black already has outright losing moves available in this position.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 663,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 simply loses — the knight to b5 follows and there's no way to defend c7.",
+   "kind": "review",
+   "teaches": [
+    "Nc6 loses to Nb5"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 664.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 7 6",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 668,
+   "fen": "r1bnkb1r/pppqpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 10 8",
+   "line": [
+    "Qd7",
+    "Nc3",
+    "Nd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 669.5,
+   "fen": "r1bnkb1r/pppqpppp/5n2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 11 8",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": "And the knight to d7 loses the same way, to the knight to b5 — two ready-made trap lines where Black is lost in under ten moves.",
+   "kind": "review",
+   "teaches": [
+    "Nbd7 also loses to Nb5"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 672.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 684,
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "Bf5",
+    "e3"
+   ],
+   "spoken": "Against the bishop to f5 the recipe is e3, then the knight to f3 — a deceptively symmetrical-looking line that Black can lose in just a couple of moves.",
+   "kind": "review",
+   "teaches": [
+    "the Bf5 refutation"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 685.5,
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P1B2/2N1PN2/PPP2PPP/R2QKB1R b KQkq - 1 7",
+   "line": [
+    "e6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 697,
+   "fen": "r2qkb1r/pppn1ppp/4pn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R b KQkq - 3 8",
+   "line": [
+    "Nbd7",
+    "Ne5"
+   ],
+   "spoken": "After the knight to d7 we centralise with the knight to e5, and Black often drifts with a6.",
+   "kind": "review",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 700,
+   "fen": "r2qkb1r/1ppn1ppp/p3pn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQkq - 0 9",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 702,
+   "fen": "r2qkb1r/1ppn1ppp/p3pn2/3pNb2/3P1BP1/2N1P3/PPP2P1P/R2QKB1R b KQkq - 0 9",
+   "line": [
+    "g4"
+   ],
+   "spoken": "And already after g4, Black is borderline lost — this g4-and-h4 trick is ridiculously common in the Jobava, threatening h5 to trap the light-squared bishop and causing immediate catastrophe.",
+   "kind": "review",
+   "teaches": [
+    "the g4-h4 bishop trap"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 707,
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "line": [
+    "Bg6",
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 718.5,
+   "fen": "r2qkb1r/1pp2ppp/p3p1b1/3pP2P/4nBP1/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 12",
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Ne4",
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 725.5,
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 726.5,
+   "fen": "r2qkb1r/1ppn1pp1/p3pnbp/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R w KQkq - 0 11",
+   "line": [
+    "h6"
+   ],
+   "spoken": "If Black instead defends with h6, you take the bishop, wreck his pawn structure, and then go after the weak g6-pawn.",
+   "kind": "review",
+   "teaches": [
+    "ruin the structure, target g6"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 729.5,
+   "fen": "r2qkb1r/1ppn2p1/p3pnpp/3p4/3P1BPP/2N1P3/PPP2P2/R2QKB1R w KQkq - 0 12",
+   "line": [
+    "Nxg6",
+    "fxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 732,
+   "fen": "r2qkb1r/1ppn2p1/p3pnpp/3p4/3P1BPP/2NBP3/PPP2P2/R2QK2R b KQkq - 1 12",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 734.5,
+   "fen": "r2q1b1r/1ppn1kp1/p3pnpp/3p4/3P1BPP/2NBP3/PPP2P2/R2QK2R w KQ - 2 13",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 736.5,
+   "fen": "r2q1b1r/1ppn1kp1/p3pnpp/3p4/3P1BPP/2NBPQ2/PPP2P2/R3K2R b KQ - 3 13",
+   "line": [
+    "Qf3"
+   ],
+   "spoken": "His king has to come out, and then the queen to f3 pins it, with g5 coming next — completely winning straight out of the opening.",
+   "kind": "review",
+   "teaches": [
+    "Qf3 pin and g5 break"
+   ],
+   "reanchor": true
+  }
+ ]
+}

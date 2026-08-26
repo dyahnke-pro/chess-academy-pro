@@ -1,0 +1,142 @@
+{
+ "videoId": "ndNfx0HHcLk",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | Cheater??",
+ "openingName": "Ruy Lopez",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:ndNfx0HHcLk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 892.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 894,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 899,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 926.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 943.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 948,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "The pawn to d6 is the Deferred Steinitz, quietly creating a threat to snap off the central pawn. There are several ways to respond, and the choice reveals how you like to handle a passive opponent."
+  },
+  {
+   "ply": 9,
+   "t": 969.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The way to punish passive play is to strike immediately in the centre and open the position — and in the Ruy Lopez that means the central break to d4, recapturing with the knight. Meet quiet development with a jolt in the middle.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 976,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 981,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 990.5,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 2 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "A moment where players often go wrong — there's no need to grab the knight on c6 straight away. Just keep developing, bringing the knight out; and if the opponent trades in the centre, recapture and swing the queen to a fine central post. Patience over a premature exchange.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 997,
+   "fen": "r2qk2r/pppbbppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1029,
+   "fen": "r2qk2r/pppbbppp/2Bp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "When the moment comes to take, the choice of recapture is a trap for the unwary — standard principle says preserve the bishop in an open position, yet taking with the knight is actually worse, because the opponent recaptures with tempo and forces the bishop to move. The general rule bows to the concrete point.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 1034,
+   "fen": "r2qk2r/p1pbbppp/2pp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": "Look hard at the surviving knight — it has real prospects, eyeing a leap to f5, so prepare that jump without fear of moving the queen. And there's more: with the queen x-raying and the knight pressing a loose enemy pawn, a central push wrecks the opponent's structure, leaving isolated, weak pawns everywhere. Don't trade queens — keep the queen active, pressing the backward pawn, and steer toward an endgame where the guiding question is who owns the passed pawns. Making a passer of your own, and denying the opponent one, is the compass for the whole ending.",
+   "kind": "plan"
+  },
+  {
+   "ply": 3,
+   "t": 1538.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

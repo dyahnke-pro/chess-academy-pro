@@ -1,0 +1,246 @@
+{
+ "videoId": "55gXMP9N5sM",
+ "title": "What's a Tabia? | Grunfeld Theory: Fianchetto System | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Grünfeld Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:55gXMP9N5sM",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 68,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nf3"
+   ],
+   "spoken": "Against the knight to f3, play the same setup — it's so likely to transpose into a d4 opening. It could be an independent King's Indian Attack, but here it transposes."
+  },
+  {
+   "ply": 4,
+   "t": 78,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "We answer with g6."
+  },
+  {
+   "ply": 5,
+   "t": 81,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5NP1/PPP1PP1P/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": "g6 is the gateway to both the Grünfeld and the King's Indian."
+  },
+  {
+   "ply": 6,
+   "t": 89.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PP1P/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 90.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "He chooses the fianchetto setup, and to start we complete our kingside development."
+  },
+  {
+   "ply": 9,
+   "t": 99,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQ1RK1 b - - 4 5",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": "Castle short — and here's the main crossroads. d6 is what a King's Indian player chooses; d5 is the Grünfeld move, and that's what we're playing."
+  },
+  {
+   "ply": 10,
+   "t": 117.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/3P4/5NP1/PPP1PPBP/RNBQ1RK1 w - - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5, reaching a completely symmetrical position."
+  },
+  {
+   "ply": 11,
+   "t": 119,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "line": [
+    "c4"
+   ],
+   "spoken": "He plays the main line, c4 — a very theoretical line, impressive to see at this level. Another major crossroads, with two main moves."
+  },
+  {
+   "ply": 12,
+   "t": 165,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "The top-GM choice is the Slav-style c6, but the more testing line at club level — the one I played against Kramnik — is to take on c4. c6 leads to dull, often symmetric positions that draw at the highest level."
+  },
+  {
+   "ply": 11,
+   "t": 166.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 170,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 174.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 187.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/N4NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+   "line": [
+    "dxc4",
+    "Na3"
+   ],
+   "spoken": "He plays the knight to a3, correctly. Now an instructive idea, hard to find without the theory: we cannot keep the extra pawn — b5 drops it, and clinging with the bishop to e6 runs into the knight to g5, when Bd5 is met by e4 and you've given up the centre without even keeping the pawn. The pawn is condemned — so use it to inflict maximum damage on White's structure."
+  },
+  {
+   "ply": 14,
+   "t": 263,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/3P4/N1p2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Since we're losing the pawn anyway, give it up on our own terms — the pawn to c3, forcing White to make a weakness."
+  },
+  {
+   "ply": 15,
+   "t": 269,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": "It does solidify his centre a little — but the pawn on c3 is now backward, and he's left with an isolated a-pawn. And we mustn't fall asleep: that would let him prepare e4."
+  },
+  {
+   "ply": 16,
+   "t": 290.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c5"
+   ],
+   "spoken": "So counterstrike with the classic Grünfeld move c5, grabbing our share of the centre — reaching a tabia, a position with five or six viable continuations. The old main line is the bishop to g5, against which Black sacrifices a pawn; and if White plays it unprincipled, the knight comes to c6, piling on d4."
+  },
+  {
+   "ply": 13,
+   "t": 350,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/N4NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+   "line": [],
+   "spoken": "You can play c5 before c3 — but then be careful not to let his fianchetto bishop become too active.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 380,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c3",
+    "bxc3",
+    "c5"
+   ],
+   "spoken": "A key point: it's actually good for us that his knight stays on f3, because it cancels out the fianchetto bishop. And here's the Grünfeld principle — you almost never mind giving up a pawn; activity is sacred. Against a capture we have the queen to a5, forking two of his pawns, or the knight to e4, double-attacking c3 — and we don't mind a queen trade if it hands us the d-file.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 440.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 b - - 1 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook to e1 — popular these days, preparing e4. But e4 is double-edged: it grabs the centre, yet it leaves the d4-pawn vulnerable and invites our light bishop to g4, pressuring the knight and therefore d4. So sometimes you want to encourage the centre grab, not prevent it."
+  },
+  {
+   "ply": 18,
+   "t": 501.5,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 w - - 2 10",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "An instructive mistake here would be the bishop to f5 — premature, since it leaves the b7-pawn undefended, and White has queen b3 or the knight to e5. Instead we simply develop, the knight to c6."
+  },
+  {
+   "ply": 19,
+   "t": 507.5,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PP1P/R1BQRBK1 b - - 3 10",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 509,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 w - - 2 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 512,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 b - - 0 10",
+   "line": [
+    "h3"
+   ],
+   "spoken": "We encourage h3, which stops our bishop reaching g4. The bishop's second-best square is f5 — it prevents e4, and later the bishop can head to e4 to neutralise White's most active piece. But beware the well-known trick: after the bishop to f5, White has d5, and if the knight takes, e4 forks the two minor pieces — though c3 then hangs and it gets wildly complicated, possibly three pawns for the piece. The bishop to f5 isn't forced; the queen to a5 is another strong try, hitting the knight and c3 and vacating d8 for the rook.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 631,
+   "fen": "r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "The queen to a5 — the more conservative choice, dodging the bishop-f5, d5 complications and asking White a pointed question: how will you defend c3? And notice — the queen x-rays the rook on e1. If White plays the queen to b3, a deflection appears: cxd4, cxd4, the knight takes on d4 pulling the f3-knight away, then a capture on e1 with check. The check is essential, so the queen can evacuate. Any move that leaves that rook with only one defender invites a deflection along the diagonal."
+  },
+  {
+   "ply": 21,
+   "t": 723.5,
+   "fen": "r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/PB2PPB1/R2QR1K1 b - - 2 11",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "Watch his knight on a3 — the bishop to d2 would blunder it, so his best, perhaps only, move is the bishop to b2. We keep pressing the centre with the rook to d8 — and I'm starting to sense the queen to a5 might actually be an inaccuracy, which would be very instructive, given how tempting the move is."
+  },
+  {
+   "ply": 22,
+   "t": 766.5,
+   "fen": "r1br2k1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/PB2PPB1/R2QR1K1 w - - 3 12",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "The queen to a5 may indeed be a mistake, because the bishop to b2 solidifies his centre and makes d4 harder to pressure. But we're in too deep — the rook to d8, played automatically. We're not afraid of the knight to c4; we'd simply drop the queen back to a6 or b5. A classic Grünfeld battle over the centre: we try to make White's centre collapse, he tries to expand it and cover every base."
+  }
+ ]
+}

@@ -1,0 +1,303 @@
+{
+ "videoId": "-9fPYlSEkJ0",
+ "title": "Master Class | Philosophy of Fianchetto | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Queen’s Pawn Game",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:-9fPYlSEkJ0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "The plan with black is solid, positional chess, and nothing is more solid than a Queen's-Gambit structure — meet the pawn on d4 with d5 and build from there.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 17,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/6P1/PPP1PP1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "g3"
+   ],
+   "spoken": "White fianchettoes with g3, steering the bishop to the long diagonal. It isn't a dangerous line and there's nothing special to answer it with — the recipe is simply to develop the pieces to good squares.",
+   "kind": "main",
+   "teaches": "Against a quiet fianchetto, just develop soundly rather than reaching for a refutation."
+  },
+  {
+   "ply": 4,
+   "t": 37,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/6P1/PPP1PP1P/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Nf6 continues the plain development plan, guarding d5 and readying the rest of the army. Think of it as a war: pieces left on their home squares win nothing, they have to be marched to active posts before any attack is possible.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 43.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/6PB/PPP1PP1P/RNBQK1NR b KQkq - 2 3",
+   "line": [
+    "Bh3"
+   ],
+   "spoken": "Bh3 offers to trade the fianchettoed bishop off, and it illustrates the whole drawback of that setup — the bishop leaves home only to swap itself, and the holes it was covering stay behind.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 63,
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P4/6Pb/PPP1PP1P/RNBQK1NR w KQkq - 0 4",
+   "line": [
+    "Bxh3"
+   ],
+   "spoken": "Accepting is right: taking the bishop hands White weak light squares around his king that the traded bishop was supposed to guard.",
+   "kind": "main",
+   "teaches": "Trade off a fianchettoed bishop and the color-complex it defended turns permanently weak."
+  },
+  {
+   "ply": 7,
+   "t": 67.5,
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P4/6PN/PPP1PP1P/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "Nxh3"
+   ],
+   "spoken": "A very favorable swap. White has nothing in the centre and now an awkwardly placed knight on h3 — and note it well, that knight is undefended, so ideas that hit it become real resources later.",
+   "kind": "main",
+   "teaches": "Log every undefended enemy piece the moment it appears; it seeds forks and tempo-gaining moves."
+  },
+  {
+   "ply": 8,
+   "t": 103,
+   "fen": "rn1qkb1r/pp2pppp/5n2/2pp4/3P4/6PN/PPP1PP1P/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": "There's no reason not to stake a claim of our own with c5 — almost a Queen's Gambit with colors reversed, prodding the d4-pawn to declare itself.",
+   "kind": "plan",
+   "plans": "If White takes on c5, recapture and take over the centre exactly as White does in the Queen's Gambit Accepted."
+  },
+  {
+   "ply": 9,
+   "t": 128.5,
+   "fen": "rn1qkb1r/pp2pppp/5n2/2pp4/3P4/4B1PN/PPP1PP1P/RN1QK2R b KQkq - 1 5",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Be3 is clumsy — it props up the centre pawn but ties the bishop to its defense, and White still isn't generating anything.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 155,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/2pp4/3P4/4B1PN/PPP1PP1P/RN1QK2R w KQkq - 2 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Taking on d4 would only help White centralize his bishop, so refuse the trade and develop the knight to c6, keeping the pressure and again inviting him to release the tension by taking on c5.",
+   "kind": "main",
+   "teaches": "Don't resolve a central tension when the recapture activates your opponent's worst piece."
+  },
+  {
+   "ply": 11,
+   "t": 160.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/2pp4/3P4/2P1B1PN/PP2PP1P/RN1QK2R b KQkq - 0 6",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 shores up the centre but is another slow move — White keeps developing incoherently while our pieces flow out naturally.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 183,
+   "fen": "r2qkb1r/pp3ppp/2n1pn2/2pp4/3P4/2P1B1PN/PP2PP1P/RN1QK2R w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e5 is available to prise the centre open, but the solid choice is e6 — keep the centre closed on purpose and outplay him in the quieter structure.",
+   "kind": "main",
+   "teaches": "You don't have to open the position just because you can; choose the structure you understand best."
+  },
+  {
+   "ply": 13,
+   "t": 189,
+   "fen": "r2qkb1r/pp3ppp/2n1pn2/2Pp4/8/2P1B1PN/PP2PP1P/RN1QK2R b KQkq - 0 7",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "White takes on c5 — which was the real point of Be3, tying himself to that pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 221.5,
+   "fen": "r2qkb1r/pp3ppp/2n1p3/2Pp4/6n1/2P1B1PN/PP2PP1P/RN1QK2R w KQkq - 1 8",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "Ng4 is the move: it hits the bishop and threatens to wreck White's structure, and its second point is that if the bishop steps away, we take on c5 and regain the pawn in fine shape.",
+   "kind": "main",
+   "teaches": "A knight leap that attacks a defender AND unpins the recapture does two jobs at once."
+  },
+  {
+   "ply": 15,
+   "t": 239,
+   "fen": "r2qkb1r/pp3ppp/2n1p3/2Pp2B1/6n1/2P3PN/PP2PP1P/RN1QK2R b KQkq - 2 8",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White answers with Bg5. In these structures with a pawn on c5, White also has the pawn break b4 as a resource to remember.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 251,
+   "fen": "r2qkb1r/pp4pp/2n1pp2/2Pp2B1/6n1/2P3PN/PP2PP1P/RN1QK2R w KQkq - 0 9",
+   "line": [
+    "f6"
+   ],
+   "spoken": "f6 kicks the bishop and gains the crucial tempo. Never play f6 — except exactly when it comes with a threat like this.",
+   "kind": "main",
+   "teaches": "f6 is fine when it hits a piece with tempo; it's bad when it only weakens your own king."
+  },
+  {
+   "ply": 17,
+   "t": 262,
+   "fen": "r2qkb1r/pp4pp/2n1pp2/2Pp4/5Bn1/2P3PN/PP2PP1P/RN1QK2R b KQkq - 1 9",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The point of moving with tempo is that when the bishop is forced to shift, we can take on c5 immediately. e5 is tempting here but held back on purpose.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 306.5,
+   "fen": "r2qk2r/pp4pp/2n1pp2/2bp4/5Bn1/2P3PN/PP2PP1P/RN1QK2R w KQkq - 0 10",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": "The drawback of e5 is that it would weaken the light squares f5 and e6 and undermine the d5-pawn — so in the name of solidity we take on c5 instead, keeping the centre firm and the light squares covered.",
+   "kind": "main",
+   "teaches": "Weigh the squares a pawn push abandons before you play it, not after."
+  },
+  {
+   "ply": 19,
+   "t": 322,
+   "fen": "r2qk2r/pp4pp/2n1pp2/2bp4/1P3Bn1/2P3PN/P3PP1P/RN1QK2R b KQkq - 0 10",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 326.5,
+   "fen": "r2qk2r/pp4pp/1bn1pp2/3p4/1P3Bn1/2P3PN/P3PP1P/RN1QK2R w KQkq - 1 11",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": "b4 attacks the bishop; keep it on the strong diagonal with Bb6 rather than let White chase it to a worse square.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 334,
+   "fen": "r2qk2r/pp4pp/1bn1pp2/1P1p4/5Bn1/2P3PN/P3PP1P/RN1QK2R b KQkq - 0 11",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 350,
+   "fen": "r2qk2r/pp4pp/1b2pp2/1P1pn3/5Bn1/2P3PN/P3PP1P/RN1QK2R w KQkq - 1 12",
+   "line": [
+    "Nce5"
+   ],
+   "spoken": "Keep the knight near the centre with the reroute rather than the rim — linked knights are healthy, and from here the knight can later swing to c4.",
+   "kind": "main",
+   "teaches": "Knights belong toward the centre and love to be linked; the rim starves them of squares."
+  },
+  {
+   "ply": 23,
+   "t": 378,
+   "fen": "r2qk2r/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P3PP1P/R2QK2R b KQkq - 2 12",
+   "line": [
+    "Na3"
+   ],
+   "spoken": "By shoving the b-pawn White only manufactures weaknesses — his own pawn is now backward, and he's developing without any coherent plan while his position starts to crack.",
+   "kind": "main",
+   "teaches": "Wing pawn lunges without development leave backward pawns and holes behind them."
+  },
+  {
+   "ply": 24,
+   "t": 390,
+   "fen": "r2q1rk1/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P3PP1P/R2QK2R w KQ - 3 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 393.5,
+   "fen": "r2q1rk1/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P3PP1P/R2Q1RK1 b - - 4 13",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Now think in terms of targets. White's knights sit miserably on the rim, and there are two clear plans — one on the queenside, one on the kingside.",
+   "kind": "plan"
+  },
+  {
+   "ply": 26,
+   "t": 423.5,
+   "fen": "2rq1rk1/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P3PP1P/R2Q1RK1 w - - 5 14",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "The biggest queenside target is the pawn on c3, so rook to c8 takes the semi-open file. If he defends with a rook, that rook is nailed to the pawn — the weakness ties his pieces down, which matters more than the pawn itself, because he can't reallocate his forces while we can.",
+   "kind": "plan",
+   "teaches": "A weak pawn's value is often the defenders it pins in place, not the material."
+  },
+  {
+   "ply": 27,
+   "t": 470,
+   "fen": "2rq1rk1/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P2QPP1P/R4RK1 b - - 6 14",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The kingside target is the h3-knight. A maneuver as old as the hills — bring the queen to h5 — gathers the pieces on that wing, attacks the knight, and builds real mating potential.",
+   "kind": "plan",
+   "plans": "Swing the queen to h5 to pile onto the h3-knight and open a kingside attack."
+  },
+  {
+   "ply": 29,
+   "t": 529.5,
+   "fen": "2r1qrk1/pp4pp/1b2pp2/1P1pn3/5Bn1/N1P3PN/P2QPP1P/2R2RK1 b - - 8 15",
+   "line": [
+    "Qe8",
+    "Rac1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 532,
+   "fen": "2r2rk1/pp4pp/1b2pp2/1P1pn2q/5Bn1/N1P3PN/P2QPP1P/2R2RK1 w - - 9 16",
+   "line": [
+    "Qh5"
+   ],
+   "spoken": "Qh5 completes the plan and White has essentially one move, Kg2, to prop up the knight. Look at the bishop on f4 — its retreat is blocked by the queen, and the knight on e5 eyes the c4 jump to hit the queen before a central break, though for now the knight on a3 is contesting that very c4 square.",
+   "kind": "main",
+   "teaches": "Before committing to a jump like Nc4, check which enemy piece already guards the landing square."
+  }
+ ]
+}

@@ -1,0 +1,282 @@
+{
+ "videoId": "oF7Rh6qXj1A",
+ "title": "Owen's Defense | The Sensei Speedrun | GM Naro",
+ "openingName": "Owen's Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:oF7Rh6qXj1A",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 17,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 18.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 33.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "This is Owen's Defence — and whatever system you choose, the one constant is that the central pawn must be defended. The simplest way is the knight to c3, doing exactly that while developing.",
+   "kind": "plan"
+  },
+  {
+   "ply": 6,
+   "t": 35.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 53.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 55,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 2 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 63,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 4 6",
+   "line": [
+    "Bf1",
+    "Bf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 65.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 6 7",
+   "line": [
+    "Bd3",
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 71.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 7 7",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The subtle choice is to develop the knight to e2 rather than its natural square, in order to connect the knights — so that if one is traded for the other, the pawn structure stays intact. The real concern isn't the trade; it's the central pawn turning into a weakness.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 75.5,
+   "fen": "rn1qk2r/pbppnppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 8 8",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 76.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 10 9",
+   "line": [
+    "Ng1",
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 80.5,
+   "fen": "rn1qk2r/pbppnppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 12 10",
+   "line": [
+    "Ne2",
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 100,
+   "fen": "rn1qk2r/pbppnppp/1p2p3/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 10",
+   "line": [
+    "a3"
+   ],
+   "spoken": "A rook-pawn to a3 forces the opponent to capture, handing over the bishop pair — and two bishops are an asset well worth the little tempo. Put the question and collect the pieces.",
+   "kind": "plan"
+  },
+  {
+   "ply": 21,
+   "t": 106,
+   "fen": "rn1qk2r/pbppnppp/1p2p3/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 11",
+   "line": [
+    "Bxc3+",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 107,
+   "fen": "rn1qk2r/pbp1nppp/1p1pp3/8/3PP3/P1NB4/1PP2PPP/R1BQK2R w KQkq - 0 12",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 110.5,
+   "fen": "rn1qk2r/pbp1nppp/1p1pp3/8/3PP3/P1NB4/1PP2PPP/R1BQ1RK1 b kq - 1 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 112,
+   "fen": "r2qk2r/pbpnnppp/1p1pp3/8/3PP3/P1NB4/1PP2PPP/R1BQ1RK1 w kq - 2 13",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Once the opponent castles, don't reflexively lunge the bishop, which would allow a knight to interpose and shove it back. Instead swing the queen to g4 — anticipating a kingside attack, that probing move is remarkably hard to meet. Then apply whole-board awareness: after forcing the enemy queen back, notice a pawn on the far wing left undefended, and pile onto it with a knight that can't be chased off — a classic idea in cramped positions where the defender simply can't marshal a defence in time. A pawn up, take the foot off the gas and make general improving moves — a rook to the open file, preparing a lift, and chasing the intruding knight with a pawn. And keep looking for checks and for the drawback of every enemy pawn push, since advancing a pawn weakens a diagonal a bishop check can exploit. The one caution learned the hard way: don't get so intoxicated by combinations that you start playing unobjectively — the cleanest mate is often the quiet rook infiltration, not the flashiest try.",
+   "kind": "plan"
+  },
+  {
+   "ply": 5,
+   "t": 600.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 602.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "e6",
+    "Bd3",
+    "Bb4",
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 611.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 5 6",
+   "line": [
+    "Bf8",
+    "Ng1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 613,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/3PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 6 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 616.5,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/3PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 7 7",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 621,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/3PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 623,
+   "fen": "rn1qkb1r/pbpn1ppp/1p2p3/3pP3/3P4/2NB4/PPP1NPPP/R1BQK2R w KQkq - 1 9",
+   "line": [
+    "e5",
+    "Nfd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 631,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [],
+   "spoken": "For the theory record, the bishop pin here is an inaccuracy, because it walks straight into the whole plan — the more flexible route is to develop the knight and strike in the centre, reaching a French-like structure with counterplay to come.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 633.5,
+   "fen": "rn1qk2r/pbppnppp/1p2p3/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "Ne7",
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 635.5,
+   "fen": "rn1qk2r/pbp1nppp/1p1pp3/8/3PP3/P1NB4/1PP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "d6",
+    "O-O",
+    "Bxc3",
+    "Nxc3"
+   ],
+   "spoken": "The underrated concept threading the whole game is using the queen — out to g4 or b3 — to poke and prod at weaknesses from a distance. The dream is to provoke a kingside pawn move that weakens the dark squares and opens the door for the bishop to invade. Patience: castle, then set the bait rather than grabbing at it, identify the drawback, and improve.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

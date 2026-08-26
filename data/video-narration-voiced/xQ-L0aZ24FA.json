@@ -1,0 +1,237 @@
+{
+ "videoId": "xQ-L0aZ24FA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2220",
+ "openingName": "English Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:xQ-L0aZ24FA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 18,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "c4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 23.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 26.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 29.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 30.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 32,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 34,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 37.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R b KQkq - 2 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 42.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Against this slightly offbeat English setup, just develop and identify the target — the d4 square is weak, and the whole plan revolves around planting a knight there. A weak square is an invitation to occupy it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 47.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 63.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/4p3/1bP1P1b1/2NB1N2/PP1P1PPP/R1BQ1RK1 w kq - 2 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The route to that square begins with the bishop pin to g4, tying down the knight that guards it. Set up the occupation before playing it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 66.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/4p3/1bP1P1b1/P1NB1N2/1P1P1PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "a3"
+   ],
+   "spoken": "Crucially, don't rush to trade the bishop for the knight — keep that capture in your pocket as an option, to be played only when the moment is exactly right. Holding a threat in reserve is often stronger than executing it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 68.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2b1p3/2P1P1b1/P1NB1N2/1P1P1PPP/R1BQ1RK1 w kq - 1 8",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 73.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2bNp3/2P1P1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 b kq - 2 8",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 95,
+   "fen": "r2qk2r/ppp2ppp/2np4/2bnp3/2P1P1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "First eliminate the annoying enemy knight, then plant your own on d4 to shatter the kingside pawn structure. And there's a bonus — removing the knight from f6 opens up a powerful pawn break in the future.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 103.5,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/3nP1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "cxd5",
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 110,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/3nP1b1/P4N2/1P1PBPPP/R1BQ1RK1 b kq - 2 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Here's a fine judgement call — normally you'd take the knight and keep your own established in the centre, but because the coming pawn break is so strong, take the bishop instead. Then castle and ram the f-pawn through, piling pressure on the pinned knight, exploiting the kingside weaknesses the opponent created to stop it.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 20,
+   "t": 128.5,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/4P1b1/P4N2/1P1PnPPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Nxe2+"
+   ],
+   "spoken": "Before launching the sacrifice, crack open the centre — a pawn break there is essential, because while the opponent's pawns hold the middle it's hard to get anything going. Unpin the king, connect the rooks with a queen move that keeps the f-rook home for the break, and prepare the pawn advances. Once the enemy queen strays from the defence, sacrifice a piece to blow the king open, trusting the two rooks and queen to be more than enough force.",
+   "kind": "plan"
+  },
+  {
+   "ply": 7,
+   "t": 377,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 382.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 397,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1N3/2P1P3/2N5/PP1P1PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "For the theory record, the recurring pattern — whenever there's a knight on c6 and a bishop on c5, look for the central capture and pawn fork winning material. It's the same idea from the sister line, and it's precisely why the bishop pin is considered the best move here.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 398.5,
+   "fen": "r1bqk2r/pppp1ppp/5n2/2b1n3/2PPP3/2N5/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "Nxe5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 405,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 406.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R w KQkq - 3 6",
+   "line": [
+    "Bd3",
+    "Bb4"
+   ],
+   "spoken": "The reasoning behind taking the bishop rather than the knight — the pawn break's whole benefit is intensifying the pressure on the pinned knight, so it's vital to keep that piece pinned in place, and to castle so the rook can recapture on the break square and stack even more pressure. Every choice served that one plan.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

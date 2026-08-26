@@ -1,0 +1,605 @@
+{
+ "videoId": "5EzQZ6y0shc",
+ "title": "Stonewall & Kings Indian Masterclass | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "openingName": "King’s Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:5EzQZ6y0shc",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1012.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "spoken": "The King's Indian is theoretically demanding because White has a huge spread of systems, all of roughly equal value — so don't just learn the classical main line and assume you're covered.",
+   "kind": "main",
+   "teaches": "Against a broad opening, prepare across every system, not only the one with 'main line' in its name."
+  },
+  {
+   "ply": 4,
+   "t": 1014,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1020.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The setup is the same against everything: g6, Bg7, d6, castle, and let White declare which system he's chosen.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 1023.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Bg7",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1024.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1027,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
+   "line": [
+    "Be2",
+    "O-O",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1030,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1032,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1033,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1035,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Bg7",
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1045.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": "The heavyweight tries are the Fianchetto — often the engine's top pick — the Sämisch, and the Four Pawns Attack, where the difference is simply how far White shoves his king-file pawn.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1053.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 5 5",
+   "line": [
+    "Bh6",
+    "Ng1",
+    "Bg7",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1058.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 7 6",
+   "line": [
+    "Bf8",
+    "Nb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1060.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 9 7",
+   "line": [
+    "Bg7",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1063,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 8",
+   "line": [
+    "d6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1066,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR b KQ - 2 9",
+   "line": [
+    "O-O",
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1068.5,
+   "fen": "rnbqk2r/pppppp1p/5npb/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 3 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1070,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [
+    "d6",
+    "e4",
+    "Bg7",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1077,
+   "fen": "rnbq1kr1/ppp1ppbp/3p1np1/8/2PPP3/2N2N1P/PP3PP1/R1BQKB1R b KQ - 2 8",
+   "line": [
+    "Kf8",
+    "h3",
+    "Rg8",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1086.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP2P/2N5/PP3PP1/R1BQKBNR b KQ - 0 10",
+   "line": [
+    "Ke8",
+    "Ng1",
+    "Rh8",
+    "h4"
+   ],
+   "spoken": "Then the modern h3 and h4 systems, unheard of a few years ago and now genuinely dangerous — the King's Indian keeps growing.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1094,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [],
+   "spoken": "But as a newer player you won't meet the razor-sharp theory; you'll meet moves like the one in this game — which means you have to be prepared conceptually, not just memorize lines, so an early e5 doesn't make you panic.",
+   "kind": "main",
+   "teaches": "Conceptual understanding beats memorized theory when the opponent leaves the book early.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1117.5,
+   "fen": "rnbq1kr1/ppp1ppbp/3p1np1/4P3/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQ - 2 8",
+   "line": [
+    "Kf8",
+    "e5",
+    "Rg8",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1137,
+   "fen": "rnbq1kr1/ppp1ppbp/5np1/4p3/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQ - 0 9",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "e5 looks like White is challenging the centre, but really it just opens the position for Black's better-placed pieces.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1139,
+   "fen": "rnbq1kr1/ppp1ppbp/5np1/4P3/2P5/2N2N2/PP3PPP/R1BQKB1R b KQ - 0 9",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1141.5,
+   "fen": "rnbq1kr1/ppp1ppbp/5np1/4p3/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1142.5,
+   "fen": "rnbq1kr1/ppp1ppbp/5np1/4N3/2PP4/2N5/PP3PPP/R1BQKB1R b KQ - 0 9",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The principled reply is Nxe5 — e5 was simply a bad move, and now White is in real trouble.",
+   "kind": "branch",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1179,
+   "fen": "rnbq1kr1/pp2ppbp/5np1/2p1N3/2PP4/2N5/PP3PPP/R1BQKB1R w KQ - 0 10",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black has two pawn breaks in the King's Indian, e5 and c5, and here c5 is the one — it leaves the knight on e5 desperately vulnerable.",
+   "kind": "main",
+   "teaches": "Choose the King's-Indian break that turns the opponent's stranded piece into a target.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1185,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1189,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 8",
+   "line": [
+    "e5",
+    "Be2",
+    "O-O",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1192,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1193,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 8",
+   "line": [
+    "c5",
+    "Be2",
+    "O-O",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1207,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1212.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/4p3/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQ - 1 8",
+   "line": [
+    "O-O",
+    "e5",
+    "dxe5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1216.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p1N3/2PP4/2N5/PP3PPP/R1BQKB1R b KQ - 0 9",
+   "line": [
+    "c5",
+    "Nxe5"
+   ],
+   "spoken": "If White answers c5 with d5, don't grab with Nxd5 — White counter-sacrifices with the desperado Nxf7 and holds. Play e6 instead, challenging the d5-pawn, and White, undeveloped, is simply lost.",
+   "kind": "branch",
+   "teaches": "Meet a central pawn wedge by undermining it with a pawn, not by grabbing it into a desperado.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1231.5,
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2PnN3/2P5/2N5/PP3PPP/R1BQKB1R b KQ - 0 10",
+   "line": [
+    "Nd5",
+    "dxc5"
+   ],
+   "spoken": "Deep in these lines the key resource is a quiet e5, pinning whichever piece recaptured and winning material — and two pieces for a rook, so often misjudged, favors the side with the two pieces in almost every middlegame.",
+   "kind": "branch",
+   "teaches": "Two minor pieces usually outweigh a rook in the middlegame; don't fear giving up the exchange for them.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1470,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p1N3/2PP4/2N5/PP3PPP/R1BQKB1R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1480.5,
+   "fen": "rnb2rk1/ppq1ppbp/5np1/2P1N3/2P5/2N5/PP3PPP/R1BQKB1R b KQ - 0 10",
+   "line": [
+    "Qc7",
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1488,
+   "fen": "rn3rk1/ppq1ppbp/5np1/2P2b2/2P5/2NN4/PP3PPP/R1BQKB1R b KQ - 2 11",
+   "line": [
+    "Bf5",
+    "Nd3"
+   ],
+   "spoken": "Back in the game: Bf5 develops with tempo and the rook heads for d8. Look at the gulf in development — White is already drifting into trouble.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 1494.5,
+   "fen": "rn3rk1/ppq1ppbp/5np1/2P2b2/2P2B2/2NN4/PP3PPP/R2QKB1R b KQ - 6 13",
+   "line": [
+    "Qf4",
+    "Bd2",
+    "Qc7",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1496.5,
+   "fen": "rnq2rk1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP3PPP/R2QKB1R w KQ - 7 14",
+   "line": [
+    "Qc8"
+   ],
+   "spoken": "White's tempo move Bf4 is no bother; Qc8 keeps everything coordinated.",
+   "kind": "main"
+  },
+  {
+   "ply": 27,
+   "t": 1500,
+   "fen": "rnq2rk1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2QK2R b KQ - 8 14",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1501.5,
+   "fen": "rnqr2k1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2QK2R w KQ - 9 15",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "Rd8 loads the d-file. It may not look like White is in danger yet, but the pieces tell the story.",
+   "kind": "plan",
+   "plans": "Pile on the d-file and fix White's pieces in place."
+  },
+  {
+   "ply": 29,
+   "t": 1505,
+   "fen": "rnqr2k1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2Q1RK1 b - - 10 15",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1507,
+   "fen": "r1qr2k1/pp2ppbp/2n2np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2Q1RK1 w - - 11 16",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Nc6 and White is essentially lost. The knight on d3 is a sitting duck — pinned to the queen down the d-file — and we control every important central square, so it can't escape.",
+   "kind": "main",
+   "teaches": "A piece pinned on an open file to the queen, with no escape squares, is as good as lost."
+  },
+  {
+   "ply": 31,
+   "t": 1537,
+   "fen": "r1qr2k1/pp2ppbp/2n2np1/2P2b2/2P2B2/2NN3P/PP2BPP1/R2Q1RK1 b - - 0 16",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Even after h3 there are several threats at once; the pin is fatal.",
+   "kind": "main"
+  },
+  {
+   "ply": 33,
+   "t": 1543.5,
+   "fen": "r1qr2k1/pp2ppbp/2n2np1/2P5/2P2B2/2NB3P/PP3PP1/R2Q1RK1 b - - 0 17",
+   "line": [
+    "Bxd3",
+    "Bxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1544.5,
+   "fen": "r1qr2k1/pp2ppbp/5np1/2P5/1nP2B2/2NB3P/PP3PP1/R2Q1RK1 w - - 1 18",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "The clinical execution matters: takes on d3 first, then Nb4 — playing Nb4 immediately lets White answer Nxb4, giving up only queen for rook and piece, which isn't yet decisive.",
+   "kind": "main",
+   "teaches": "Order your winning sequence so the opponent can't bail out into an unfavorable-but-survivable trade."
+  },
+  {
+   "ply": 35,
+   "t": 1569.5,
+   "fen": "r1qr2k1/pp2ppbp/5np1/2PN4/1nP2B2/3B3P/PP3PP1/R2Q1RK1 b - - 2 18",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1571.5,
+   "fen": "r1q3k1/pp2ppbp/6p1/2Pn4/1n3B2/3B3P/PP3PP1/R2Q1RK1 w - - 0 20",
+   "line": [
+    "Rxd5",
+    "cxd5",
+    "Nfxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1575.5,
+   "fen": "r1qr2k1/pp2ppbp/2n2np1/2P2b2/2P2B2/2NN3P/PP2BPP1/R2Q1RK1 b - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1595.5,
+   "fen": "r1qr2k1/pp2ppbp/2n2np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2Q1RK1 w - - 11 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1597.5,
+   "fen": "r1qr2k1/pp3pbp/2n2np1/2P1pb2/2P2B2/2NN3P/PP2BPP1/R2Q1RK1 w - - 0 17",
+   "line": [
+    "h3",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1599,
+   "fen": "r1qr2k1/pp3pbp/2n2np1/2P2bB1/2P1p3/2NN3P/PP2BPP1/R2Q1RK1 w - - 0 18",
+   "line": [
+    "Bg5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1601.5,
+   "fen": "rnqr2k1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2Q1RK1 b - - 10 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1602.5,
+   "fen": "rnqr2k1/pp2ppbp/5np1/2P2b2/2P2B2/2NN4/PP2BPPP/R2QK2R w KQ - 9 15",
+   "line": [],
+   "spoken": "This is the essence of the King's Indian: when the centre opens, Black's pieces are already on unassailable or pawn-protected squares, so they dominate.",
+   "kind": "main",
+   "teaches": "The King's Indian wins by superior piece placement once the centre cracks, not by counting pawns.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1635.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p1N3/2PP4/2N5/PP3PPP/R1BQKB1R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1637.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/4p3/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQ - 1 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1642.5,
+   "fen": "rnb2rk1/ppp1ppbp/5np1/4P3/2P5/2N2N2/PP3PPP/R1BqKB1R w KQ - 0 10",
+   "line": [
+    "Qd7",
+    "dxe5",
+    "Qxd1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1645,
+   "fen": "rnb2rk1/ppp1ppbp/5np1/4P3/2P5/2N2N2/PP3PPP/R1BK1B1R b - - 0 10",
+   "line": [
+    "Kxd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1646.5,
+   "fen": "rnb2rk1/ppp1ppbp/6p1/4P3/2P3n1/2N2N2/PP3PPP/R1BK1B1R w - - 1 11",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "The moral of the whole game — don't hunt stray pawns. Aim for piece-placement superiority; once we secured the position, White's own move handed us the bishop pair and collapse on both fronts.",
+   "kind": "review",
+   "teaches": "Play for improvement and piece superiority; the material follows on its own.",
+   "reanchor": true
+  }
+ ]
+}

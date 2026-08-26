@@ -1,0 +1,129 @@
+{
+ "videoId": "iZyf2oBcR9Q",
+ "title": "Ponziani Opening | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Ponziani Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:iZyf2oBcR9Q",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 15,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 17,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 40.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Against the Ponziani, the thematic counter is to strike in the centre with d5 — the whole point is that the queen's knight can no longer develop to its best square. Most players continue with a routine pawn move, but there's a little-known gambit that not only unsettles the opponent but objectively equalises: developing the bishop, which looks like it hangs the pawn and does, yet it prepares to trade off the opponent's only developed piece and seize a massive lead in development. That lead is compounded because the queen's knight struggles to get out at all, and the plan sets up a discovery — a knight leap into the centre that forces the queen to retreat, after which the trade lands and the kingside develops with tempo. The queen is left awkward and vulnerable, and the whole game becomes a hymn to active piece play: keep the extra central pawn alive as an anchor and outpost, aim a bishop behind it as stored-up potential energy, and pursue the kingside attack with a pawn break, exploiting any hook the opponent hands over. Above all, learn to win in simple fashion — you have to master not sacrificing before you can sacrifice well.",
+   "kind": "plan"
+  },
+  {
+   "ply": 5,
+   "t": 1324,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1328,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1335.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The most popular and best reply is the knight to f6 — and after the central push, the cleanest is to capture, then the advance to e5 leads to complications where, according to theory, the second player is perfectly fine and it's the first who must tread carefully to hold the balance.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1338,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1340,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1341.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight steps into d5, and though the position grows sharp, the assessment holds — the defender stands well, with the burden of accuracy resting on the other side.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1358,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": "A word of practical advice: if you play the double king's-pawn game, study the Ponziani and commit to one line rather than improvising. The recommendation is the central counterstrike — pick a system, learn its ideas, and you'll never be caught out by this offbeat try.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1362,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,521 @@
+{
+ "videoId": "Di-5aO2lddU",
+ "title": "Master Class | Grünfeld Defence | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Grünfeld Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Di-5aO2lddU",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 23,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 30,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 31.5,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The Grünfeld gives White a bajillion tries and none proven to yield an edge, so pick a system that flies under the radar — especially against players still learning the opening.",
+   "kind": "main",
+   "teaches": "Against a heavily-analyzed defense, a sound offbeat system beats fighting the theory head-on."
+  },
+  {
+   "ply": 7,
+   "t": 82,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 85.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "We take, cxd5 Nxd5, and reach for one of the rarest moves on the board.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 109.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "Na4 — the Nadanyan move. It looks crazy, but its whole purpose is to prevent the exchange on c3 that the Grünfeld is built on, and to stop the c5 break, keeping White's centre intact.",
+   "kind": "main",
+   "teaches": "A knight to the rim can be justified if it vetoes the opponent's central break."
+  },
+  {
+   "ply": 10,
+   "t": 116.5,
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3np3/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 128,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 140,
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3np3/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 is the sharp main line — a side move by White is met by a strike in the centre; Black sacrifices a pawn for the initiative.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 145.5,
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3nP3/N7/8/PP2PPPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 158,
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP2PPPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 159.5,
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP1BPPPP/R2QKBNR b KQkq - 2 7",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 161.5,
+   "fen": "rnbqk2r/ppp2p1p/6p1/4P3/Nb6/4n3/PP1BPPPP/R2QKBNR w KQkq - 3 8",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "Ne3 is the point — Black temporarily gives up a knight, but he plans to win it back on a4, since after the coming trades the a4-knight ends up loose.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 185.5,
+   "fen": "rnbqk2r/ppp2p1p/6p1/4P3/Nb6/4P3/PP1BP1PP/R2QKBNR b KQkq - 0 8",
+   "line": [
+    "fxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 188.5,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nb5q/4P3/PP1BP1PP/R2QKBNR w KQkq - 1 9",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "Here Black slips: the move order must be Bxd2 first, then Qh4-check to fork the king and the a4-knight. Checking on h4 first lets us slot in g3.",
+   "kind": "main",
+   "teaches": "In a forcing tactical sequence, the eliminating capture usually must precede the forking check."
+  },
+  {
+   "ply": 17,
+   "t": 207,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nb5q/4P1P1/PP1BP2P/R2QKBNR b KQkq - 0 9",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 209,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N6q/4P1P1/PP1bP2P/R2QKBNR w KQkq - 0 10",
+   "line": [
+    "Bxd2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 217,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N6q/4P1P1/PP1KP2P/R2Q1BNR b kq - 0 10",
+   "line": [
+    "Kxd2"
+   ],
+   "spoken": "And that's the punishment: after Bxd2 and Kxd2, the queen on h4 still guards nothing of ours — our king recaptures and the queen no longer wins the a4-knight, which we keep defended. Parrot a repertoire one move out of order in these lines and you're simply lost.",
+   "kind": "main",
+   "teaches": "Know why each move order in a sharp line is forced; a single transposition can flip the result."
+  },
+  {
+   "ply": 20,
+   "t": 242,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nq6/4P1P1/PP1KP2P/R2Q1BNR w kq - 1 11",
+   "line": [
+    "Qb4+"
+   ],
+   "spoken": "The king in the centre isn't dangerous — it tucks away on c1. But beware: meeting the b4-check with the knight would drop everything to Qxb2-check, so play Kc1.",
+   "kind": "main",
+   "teaches": "Interposing a piece against a check can hang the b2-pawn with a devastating follow-up — check first."
+  },
+  {
+   "ply": 21,
+   "t": 256,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nq6/4P1P1/PP2P2P/R1KQ1BNR b kq - 2 11",
+   "line": [
+    "Kc1"
+   ],
+   "spoken": "No shenanigans — just develop, consolidate, and cash the extra piece. Both kings are unsafe and neither side is developed, so calm accuracy wins.",
+   "kind": "main",
+   "teaches": "When you're up material in a messy position, consolidate first; fireworks only give it back."
+  },
+  {
+   "ply": 22,
+   "t": 322,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/4P1P1/PP2P2P/R1KQ1BNR w kq - 3 12",
+   "line": [
+    "Qe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 329,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/4PNP1/PP2P2P/R1KQ1B1R b kq - 4 12",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 331.5,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N7/4qNP1/PP2P2P/R1KQ1B1R w kq - 0 13",
+   "line": [
+    "Qxe3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 335.5,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N7/4qNP1/PP1QP2P/R1K2B1R b kq - 1 13",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 345.5,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/5NP1/PP1QP2P/R1K2B1R w kq - 2 14",
+   "line": [
+    "Qe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 355,
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/4q3/2N2NP1/PP1QP2P/R1K2B1R b kq - 3 14",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Retreat the knight to c3 — not e3, which would drop both knights to the queen.",
+   "kind": "main",
+   "teaches": "Before a natural blocking move, check it doesn't leave two of your pieces on one enemy line."
+  },
+  {
+   "ply": 28,
+   "t": 356.5,
+   "fen": "rnb1k2r/ppp2p1p/2q3p1/4P3/8/2N2NP1/PP1QP2P/R1K2B1R w kq - 4 15",
+   "line": [
+    "Qc6"
+   ],
+   "spoken": "Two ways to convert: force the queen trade with Qd5, or lean on the development lead. With that lead there's no need to trade — keep the pieces on.",
+   "kind": "main",
+   "teaches": "With a lead in development, don't trade queens; use the pieces while the opponent's are asleep."
+  },
+  {
+   "ply": 29,
+   "t": 393.5,
+   "fen": "rnb1k2r/ppp2p1p/2q3p1/4P3/4P3/2N2NP1/PP1Q3P/R1K2B1R b kq - 0 15",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4 opens the bishop's diagonal, threatens a pin, and goads Black into castling right into the attack.",
+   "kind": "plan",
+   "plans": "Open lines with e4 and lure the king to the kingside."
+  },
+  {
+   "ply": 30,
+   "t": 398,
+   "fen": "rnb2rk1/ppp2p1p/2q3p1/4P3/4P3/2N2NP1/PP1Q3P/R1K2B1R w - - 1 16",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The key insight: Black lacks his Grünfeld bishop, so the dark squares around his king are chronically weak — and that unlocks a pile of thematic attacking ideas.",
+   "kind": "main",
+   "teaches": "A missing fianchetto bishop leaves the dark squares by the king permanently soft; aim your attack there."
+  },
+  {
+   "ply": 31,
+   "t": 420.5,
+   "fen": "rnb2rk1/ppp2p1p/2q3pQ/4P3/4P3/2N2NP1/PP5P/R1K2B1R b - - 2 16",
+   "line": [
+    "Qh6"
+   ],
+   "spoken": "Qh6 with the threat of a crushing Ng5 forces f6 — which in turn weakens the a2-g8 diagonal, so a bishop reaching c4 becomes mate.",
+   "kind": "main",
+   "teaches": "Provoke a defensive pawn move, then attack the new diagonal it just opened."
+  },
+  {
+   "ply": 32,
+   "t": 441,
+   "fen": "rnb2rk1/ppp4p/2q2ppQ/4P3/4P3/2N2NP1/PP5P/R1K2B1R w - - 0 17",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 492,
+   "fen": "rnb2rk1/ppp4p/2q2ppQ/1B2P3/4P3/2N2NP1/PP5P/R1K4R b - - 1 17",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "To land the bishop on c4 we first chase the queen off c6, and Bb5 does it while developing — even if the queen sidesteps, we've simply improved a piece.",
+   "kind": "main",
+   "teaches": "Prefer the queen-chasing move that also develops; it wins either way."
+  },
+  {
+   "ply": 34,
+   "t": 514,
+   "fen": "rnb2rk1/ppp4p/5ppQ/1Bq1P3/4P3/2N2NP1/PP5P/R1K4R w - - 2 18",
+   "line": [
+    "Qc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 545.5,
+   "fen": "rnb2rk1/ppp4p/5PpQ/1Bq5/4P3/2N2NP1/PP5P/R1K4R b - - 0 18",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "Now the queen no longer guards f6, so take there and bring the knight to g5 — the attack the whole plan was aiming for.",
+   "kind": "main"
+  },
+  {
+   "ply": 37,
+   "t": 552,
+   "fen": "rnb3k1/ppp4p/5rpQ/1Bq3N1/4P3/2N3P1/PP5P/R1K4R b - - 1 19",
+   "line": [
+    "Rxf6",
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 561.5,
+   "fen": "rnb3k1/ppp1q2p/5rpQ/1B4N1/4P3/2N3P1/PP5P/R1K4R w - - 2 20",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 574,
+   "fen": "rnb3k1/ppp1q2p/5rpQ/1B1N2N1/4P3/6P1/PP5P/R1K4R b - - 3 20",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Nd5 is simplest — Qc5-check runs into Kb1, which parries every check and leaves unstoppable mating threats.",
+   "kind": "main"
+  },
+  {
+   "ply": 41,
+   "t": 578.5,
+   "fen": "rnb3k1/ppp4p/5rpQ/1BqN2N1/4P3/6P1/PP5P/RK5R b - - 5 21",
+   "line": [
+    "Qc5+",
+    "Kb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 640.5,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 643,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [
+    "cxd5",
+    "Nxd5",
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 701.5,
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP2PPPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "e5",
+    "dxe5",
+    "Bb4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 706.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 713,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2PP3/8/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "Bg7",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 717,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/8/N2PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 721.5,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 723,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 0 8",
+   "line": [
+    "Nc3",
+    "Bf8",
+    "e4",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 725,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR b KQkq - 0 8",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 814.5,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 816.5,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/4P3/PP3PPP/R1BQKBNR b KQkq - 0 8",
+   "line": [
+    "Na4",
+    "Bg7",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 817.5,
+   "fen": "rnbqk2r/ppp1ppbp/1n4p1/8/N2PP3/8/PP3PPP/R1BQKBNR b KQkq - 0 9",
+   "line": [
+    "Nb6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 819.5,
+   "fen": "rnbq1rk1/ppp1ppbp/1n4p1/8/N2PP3/4B3/PP3PPP/R2QKBNR b KQ - 2 10",
+   "line": [
+    "O-O",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 821.5,
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

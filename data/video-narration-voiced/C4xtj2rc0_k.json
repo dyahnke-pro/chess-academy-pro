@@ -1,0 +1,560 @@
+{
+ "videoId": "C4xtj2rc0_k",
+ "title": "Attacking the Kingside! | GM Naroditsky's Top Theory Speedrun | Owen's Defense",
+ "openingName": "Owen’s Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:C4xtj2rc0_k",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 110.5,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 140.5,
+   "fen": "rnbqkbnr/p1pppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Against Owen's b6 we start with d4 — an incredibly effective system that drains the fun out of this offbeat opening.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 142.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 148.5,
+   "fen": "rn1qkbnr/pbpppppp/1p6/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 151.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Nc3 defends e4 naturally, and here's the first fork: the lazy Nf3 sleepwalks into trouble, because Black's whole idea is Bb4, pinning the knight and piling onto the e4-pawn until careless players simply drop it.",
+   "kind": "main",
+   "teaches": "Against ...b6/...Bb4 setups, don't develop on autopilot — the target is the e4 pawn behind the pin."
+  },
+  {
+   "ply": 7,
+   "t": 194,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The antidote is Bd3, shoring up e4 before the pin can bite.",
+   "kind": "main",
+   "teaches": "Pre-reinforce the pawn the coming pin will attack."
+  },
+  {
+   "ply": 8,
+   "t": 196,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 2 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 214,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "After Bb4 comes the crux — Ne2, not a3. It connects the knights, so Bxc3 loses its sting and the b4-bishop is neutered, and we never have to weaken ourselves with f3.",
+   "kind": "main",
+   "teaches": "Ne2 defuses a ...Bb4 pin by connecting the knights, without the concession a3 or f3 would make."
+  },
+  {
+   "ply": 8,
+   "t": 237,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 249.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 4 6",
+   "line": [
+    "Ne2",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 285,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQ1RK1 b kq - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Best of all, we escape the pin by simply castling — more flexible than a3, since the b4-bishop is harmless, and if Black trades on c3 himself we've saved the a3 tempo. Look how compact this is: e4 is solid, e5 is ready, and the bishop on d3 already eyes h7 — the kingside attack is crystallizing.",
+   "kind": "main",
+   "teaches": "You can often step out of a pin by castling instead of spending a pawn move to break it."
+  },
+  {
+   "ply": 12,
+   "t": 333.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2bB4/PPP1NPPP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 341.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2NB4/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "Bxc3 is a positional mistake — handing over the bishop pair for nothing. Now a Bg5 pin bites hard, because there's no dark bishop left to answer it with Be7.",
+   "kind": "main",
+   "teaches": "Giving up the bishop pair unprovoked leaves you unable to neutralize the pins it used to cover."
+  },
+  {
+   "ply": 14,
+   "t": 378.5,
+   "fen": "rn1qk2r/pbpp1pp1/1p2pn1p/8/3PP3/2NB4/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": "Black defends alertly with h6, so we amend the plan — and here we choose the principled, ambitious line rather than a quiet developing move.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 489,
+   "fen": "rn1qk2r/pbpp1pp1/1p2pn1p/4P3/3P4/2NB4/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 looks positionally wrong — it opens the long diagonal and hands Black a knight square on d5 — but its whole worth is tied to the attack that follows.",
+   "kind": "main",
+   "teaches": "A positionally 'bad' pawn push can be strong when it's the first move of a concrete attack."
+  },
+  {
+   "ply": 16,
+   "t": 524,
+   "fen": "rn1qk2r/pbpp1pp1/1p2p2p/3nP3/3P4/2NB4/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The point: with Black's dark-squared bishop gone, the dark squares and g7 are chronically weak, so the queen swings to g4 to hammer g7 — the same motif you see in the French Winawer, where an early ...Bxc3 leaves exactly these holes.",
+   "kind": "main",
+   "teaches": "When the enemy dark bishop is gone, attack the weakened dark squares around g7 with Qg4."
+  },
+  {
+   "ply": 19,
+   "t": 949,
+   "fen": "rn1qk2r/pbpp1p2/1p2p2p/3nP1p1/3P1PQ1/2NB4/PPP3PP/R1B2RK1 b kq - 1 10",
+   "line": [
+    "f4",
+    "g5",
+    "Qg4"
+   ],
+   "spoken": "Black can't castle into Bxh6, and g5 only helps us — that pawn is kindling. Open the f-file with f4 and the kingside catches fire.",
+   "kind": "main",
+   "teaches": "An enemy g5 pawn is fuel: pry the f-file open against it rather than fearing it."
+  },
+  {
+   "ply": 21,
+   "t": 1227.5,
+   "fen": "rn1qk2r/pbpp1p2/1p2p3/3nP1Qp/3P1P2/2NB4/PPP3PP/R1B2RK1 b kq - 0 11",
+   "line": [
+    "h5",
+    "Qxg5"
+   ],
+   "spoken": "Even the endgame after Qxg5 is fine — we win a pawn and gain the f-file with pressure on f7 — but the middlegame attack is what we're really after.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 1228.5,
+   "fen": "rn2k2r/pbpp1p2/1p2p3/3nP1qp/3P1P2/2NB4/PPP3PP/R1B2RK1 w kq - 0 12",
+   "line": [
+    "Qxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1229.5,
+   "fen": "rn2k2r/pbpp1p2/1p2p3/3nP1Pp/3P4/2NB4/PPP3PP/R1B2RK1 b kq - 0 12",
+   "line": [
+    "fxg5"
+   ],
+   "spoken": "The g5-pawn becomes a battering ram: g6 is a huge threat, tearing open the shelter in front of the king.",
+   "kind": "plan",
+   "plans": "Ram g6 to smash the kingside pawn cover."
+  },
+  {
+   "ply": 24,
+   "t": 1233.5,
+   "fen": "rn2k2r/pbp2p2/1p1pp3/3nP1Pp/3P4/2NB4/PPP3PP/R1B2RK1 w kq - 0 13",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black's d6 ignores the real threat, so we press on — there are still plenty of pieces to attack with, and the win is there even in an endgame.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 1262,
+   "fen": "rn2k2r/pbp2p2/1p1pp1P1/3nP2p/3P4/2NB4/PPP3PP/R1B2RK1 b kq - 0 13",
+   "line": [
+    "g6"
+   ],
+   "spoken": "g6 is the intuitive hammer — open the f-file and cash in on Black's undeveloped queenside while it lasts.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 1292.5,
+   "fen": "rn2k2r/pbp5/1p1pp1p1/3nP2p/3P4/2NB4/PPP3PP/R1B2RK1 w kq - 0 14",
+   "line": [
+    "fxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1294.5,
+   "fen": "rn2k2r/pbp5/1p1pp1B1/3nP2p/3P4/2N5/PPP3PP/R1B2RK1 b kq - 0 14",
+   "line": [
+    "Bxg6+"
+   ],
+   "spoken": "After recapturing with Bxg6-check the whole kingside caves in.",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 1303.5,
+   "fen": "rn5r/pbpk4/1p1pp1B1/3nP2p/3P4/2N5/PPP3PP/R1B2RK1 w - - 1 15",
+   "line": [
+    "Kd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1319.5,
+   "fen": "rn5r/pbpk1R2/1p1pp1B1/3nP2p/3P4/2N5/PPP3PP/R1B3K1 b - - 2 15",
+   "line": [
+    "Rf7+"
+   ],
+   "spoken": "Rf7-check drops the rook onto the seventh rank, skewering everything and feeding the attack — a move that simply cannot be bad, so play it without agonizing.",
+   "kind": "main",
+   "teaches": "A rook check that lands on the seventh rank is almost always right — take it on principle."
+  },
+  {
+   "ply": 30,
+   "t": 1347.5,
+   "fen": "rn5r/pbp2R2/1pkpp1B1/3nP2p/3P4/2N5/PPP3PP/R1B3K1 w - - 3 16",
+   "line": [
+    "Kc6"
+   ],
+   "spoken": "Now hunt for mate, but don't get tunnel vision: this is a danger zone where players obsess over checkmate and forget that just winning another pawn or piece wins the game.",
+   "kind": "main",
+   "teaches": "Look for mate, but never forfeit a simple material win chasing a prettier one."
+  },
+  {
+   "ply": 31,
+   "t": 1424,
+   "fen": "rn5r/pbp2R2/1pkpp1B1/3NP2p/3P4/8/PPP3PP/R1B3K1 b - - 0 16",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1431.5,
+   "fen": "rn5r/pbp2R2/1pkpp1B1/3nP2p/3P4/2N5/PPP3PP/R1B3K1 w - - 3 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1447.5,
+   "fen": "rn5r/pbp2R2/1pkpp1B1/3NP2p/3P4/8/PPP3PP/R1B3K1 b - - 0 16",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1450,
+   "fen": "rn5r/pbp2R2/1p1pp1B1/3kP2p/3P4/8/PPP3PP/R1B3K1 w - - 0 17",
+   "line": [
+    "Kxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1458,
+   "fen": "rn5r/pbR5/1p1pp1B1/3kP2p/3P4/8/PPP3PP/R1B3K1 b - - 0 17",
+   "line": [
+    "Rxc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1471.5,
+   "fen": "rn5r/p1R5/bp1pp1B1/3kP2p/3P4/8/PPP3PP/R1B3K1 w - - 1 18",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "Follow the rules — start with a capture. exd6 forces the king to recapture, and the point is the follow-up.",
+   "kind": "main",
+   "teaches": "When in doubt, examine checks and captures first — the simplest forcing move is often best."
+  },
+  {
+   "ply": 35,
+   "t": 1531.5,
+   "fen": "rn5r/p1R5/bp1Pp1B1/3k3p/3P4/8/PPP3PP/R1B3K1 b - - 0 18",
+   "line": [
+    "exd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1568.5,
+   "fen": "rn5r/p1R5/bp1pp1B1/3kP2p/3P4/8/PPP3PP/R1B3K1 w - - 1 18",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1573,
+   "fen": "rn5r/p1R5/bp1kp1B1/7p/3P4/8/PPP3PP/R1B3K1 w - - 0 19",
+   "line": [
+    "exd6",
+    "Kxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1577,
+   "fen": "rn5r/p1R5/bp1pp1B1/3kP2p/3P4/8/PPP3PP/R1B3K1 w - - 1 18",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1578,
+   "fen": "rn5r/p1R5/bp1Pp1B1/3k3p/3P4/8/PPP3PP/R1B3K1 b - - 0 18",
+   "line": [
+    "exd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1579,
+   "fen": "rn5r/p1R5/bp1kp1B1/7p/3P4/8/PPP3PP/R1B3K1 w - - 0 19",
+   "line": [
+    "Kxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1580.5,
+   "fen": "rn5r/p1R5/bp1kp1B1/7p/3P1B2/8/PPP3PP/R5K1 b - - 1 19",
+   "line": [
+    "Bf4+"
+   ],
+   "spoken": "Bf4-check develops the bishop with tempo and defends the rook at the same time, leading straight toward mate.",
+   "kind": "main"
+  },
+  {
+   "ply": 38,
+   "t": 1584.5,
+   "fen": "rn5r/p1R5/bp2p1B1/3k3p/3P1B2/8/PPP3PP/R5K1 w - - 2 20",
+   "line": [
+    "Kd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1629.5,
+   "fen": "rn5r/p1R5/bp2p1B1/3kB2p/3P4/8/PPP3PP/R5K1 b - - 3 20",
+   "line": [
+    "Be5"
+   ],
+   "spoken": "Be5 defends the d4-pawn with tempo and, crucially, strips the king of every escape square — and once the king has no squares, you start hunting mating nets.",
+   "kind": "main",
+   "teaches": "When the enemy king runs out of squares, switch from winning material to building a mating net."
+  },
+  {
+   "ply": 40,
+   "t": 1701,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/8/PPP3PP/R5K1 w - - 4 21",
+   "line": [
+    "Rh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1777.5,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/1P6/P1P3PP/R5K1 b - - 0 21",
+   "line": [
+    "b3"
+   ],
+   "spoken": "The elegant finish is a pawn mate: b3 threatening c4. Even Rxg6 fails, because Re1 removes the last escape square and mate follows — and to be certain of a sacrificial net like this, run through every single legal reply piece by piece; there are fewer than you'd think.",
+   "kind": "main",
+   "teaches": "Verify a forced mate by checking every legal enemy move; it's faster than it sounds and catches freak defenses."
+  },
+  {
+   "ply": 40,
+   "t": 1780,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/8/PPP3PP/R5K1 w - - 4 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1789,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/1P6/P1P3PP/R5K1 b - - 0 21",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1801.5,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/8/PPP3PP/R5K1 w - - 4 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1806,
+   "fen": "rn5r/p1R5/bp2p1B1/3k3p/3P1B2/8/PPP3PP/R5K1 w - - 6 22",
+   "line": [
+    "Bf4",
+    "Rh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1807.5,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/1P6/P1P3PP/R5K1 b - - 0 23",
+   "line": [
+    "Be5",
+    "Rh6",
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1808.5,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/8/PPP3PP/R5K1 w - - 4 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1822,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/1P6/P1P3PP/R5K1 b - - 0 21",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1830.5,
+   "fen": "rn6/p1R5/bp2p1Br/3kB2p/3P4/8/PPP3PP/R5K1 w - - 4 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1838,
+   "fen": "rn6/p1R5/bp2p1r1/3kB2p/3P4/1P6/P1P3PP/R5K1 w - - 0 22",
+   "line": [
+    "b3",
+    "Rxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1840.5,
+   "fen": "rn6/p1R5/bp2p1r1/3kB2p/3P4/1P6/P1P3PP/4R1K1 b - - 1 22",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1934.5,
+   "fen": "r7/p1R5/bpn1p1r1/3kB2p/3P4/1P6/P1P3PP/4R1K1 w - - 2 23",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1937,
+   "fen": "rn6/p1R5/bp2p1r1/3kB2p/3P4/1P6/P1P3PP/4R1K1 b - - 1 22",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1941.5,
+   "fen": "r7/p1R5/bpn1p1r1/3kB2p/3P4/1P6/P1P3PP/4R1K1 w - - 2 23",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1944,
+   "fen": "r7/p2R4/bpn1p1r1/3kB2p/3P4/1P6/P1P3PP/4R1K1 b - - 3 23",
+   "line": [
+    "Rd7#"
+   ],
+   "spoken": ""
+  }
+ ]
+}
