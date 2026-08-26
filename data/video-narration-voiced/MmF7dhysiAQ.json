@@ -2,9 +2,9 @@
  "videoId": "MmF7dhysiAQ",
  "title": "Crushing The Four Pawns Attack!! | The King's Indian | The Sensei Speedrun | GM Naroditsky",
  "openingName": "King's Indian Defense: Four Pawns Attack",
- "studentSide": "white",
+ "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:MmF7dhysiAQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "We take White and open d4; Black plays ...Nf6."
+   "spoken": "d4, the knight to f6 — the King's Indian Defense."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "c4",
     "g6"
    ],
-   "spoken": "We claim space with c4; Black fianchettoes with ...g6."
+   "spoken": "c4, g6 — because I feel like playing it."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "The knight to c3 — very much a King's Indian."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "Black completes the fianchetto with the bishop to g7."
+   "spoken": "The bishop to g7."
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
     "e4",
     "d6"
    ],
-   "spoken": "We build the big centre with e4; Black plays ...d6."
+   "spoken": "e4, d6."
   },
   {
    "ply": 9,
@@ -62,7 +62,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "We play f4 — the Four Pawns Attack."
+   "spoken": "f4 — the Four Pawns Attack, one of the most dangerous and most underrated lines for White; you'll get blown off the board with Black if you don't know virtually all the theory."
   },
   {
    "ply": 10,
@@ -71,7 +71,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black castles."
+   "spoken": "We begin by castling."
   },
   {
    "ply": 11,
@@ -80,7 +80,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "The knight to f3. Historically I've played two moves here — one is the rare line where Black goes e5 anyway."
   },
   {
    "ply": 12,
@@ -89,7 +89,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black strikes with ...e5."
+   "spoken": "e5 — it sounds totally absurd, but it's very possible: an underestimated sideline that throws a lot of players off immediately."
   },
   {
    "ply": 13,
@@ -98,7 +98,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "We take on e5."
+   "spoken": "The f-pawn takes e5."
   },
   {
    "ply": 14,
@@ -107,7 +107,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Black recaptures with the d-pawn."
+   "spoken": "The d-pawn takes e5."
   },
   {
    "ply": 15,
@@ -116,7 +116,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We grab on e5 with the knight."
+   "spoken": "White plays the knight takes e5 — not very advisable. Why? We need to induce weaknesses in White's centre, and a move like the rook to e8 threatens nothing, so —"
   },
   {
    "ply": 16,
@@ -125,7 +125,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black hits back with c5."
+   "spoken": "— we use our pawns: the typical King's Indian move c5. My theoretical knowledge ends here, so now we're on our own. The point of c5 is to force the d4-pawn to move; the knight in the centre is x-rayed by the bishop and vulnerable to the rook to e8 and the knight takes c4, so we must make it undefended at all costs."
   },
   {
    "ply": 17,
@@ -134,7 +134,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We push d5, gaining space."
+   "spoken": "d5 is totally reasonable. A fork in the road: to win the pawn back we can take on e4 — the knight takes c4, the knight takes e4, then a check on h4 forces the knight back and we recapture on e5 with a nice position —"
   },
   {
    "ply": 18,
@@ -143,7 +143,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "Black plays the rook to e8."
+   "spoken": "— or the traditional idea, the rook to e8, throwing the knight off e5 and building immediate pressure down the e-file. Let's play the rook to e8 and develop massive pressure before White castles kingside."
   },
   {
    "ply": 19,
@@ -152,7 +152,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We retreat the knight to f3."
+   "spoken": "The knight to f3."
   },
   {
    "ply": 20,
@@ -161,7 +161,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "Black grabs on e4 with the knight."
+   "spoken": "The knight takes e4."
   },
   {
    "ply": 22,
@@ -171,7 +171,7 @@
     "Nxe4",
     "Rxe4+"
    ],
-   "spoken": "We recapture on e4; Black takes with the rook, check."
+   "spoken": "The knight takes e4, the rook takes e4 with check."
   },
   {
    "ply": 23,
@@ -180,7 +180,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "We develop the bishop to e2."
+   "spoken": "The bishop to e2. We've recaptured on e4. White wants to castle kingside next; if he does, our whole e-file strategy has failed, so we must prevent castling at all costs."
   },
   {
    "ply": 24,
@@ -189,7 +189,7 @@
    "line": [
     "Qe8"
    ],
-   "spoken": "Black plays the queen to e8."
+   "spoken": "We can do it without sacrificing, using our queen: the queen to e8, which is better than e7, where the queen is vulnerable to d6 and to the bishop to g5 with tempo. The queen to e8 prevents castling — if White castles he loses the bishop. His best is probably the king to f2; then we develop the light-squared bishop to g4, and the dark-squared bishop eyes d4."
   },
   {
    "ply": 25,
@@ -198,7 +198,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "We jump the knight to g5."
+   "spoken": "I wouldn't put the bishop on d4 just yet — the knight on f3 could take it — but one idea is the bishop to g4, trading for the knight, then the other bishop to d4, maybe with check if the king lands on f2. The knight to g5 — an ambitious move chasing the rook off the e-file to guarantee castling. Two options: the rook to d4 with tempo then the bishop to g4, or the rook takes c4 exploiting the pin, winning a pawn but allowing castling."
   },
   {
    "ply": 26,
@@ -207,14 +207,16 @@
    "line": [
     "Rd4"
    ],
-   "spoken": "Black lifts the rook to d4."
+   "spoken": "The rook to d4 is the move if you want to go for checkmate; the rook takes c4 is the materialistic option. We're going for the throat in the spirit of the King's Indian, so the rook to d4. Then the queen to b3: if we play the bishop to g4 prematurely, White has the queen to b3 and e3, throwing our queen off e8 — the battle still revolves around preventing castling. The no-frills option is h6, the knight to f3, then the rook back to e4 to re-establish the pin, and only then the bishop to g4 — less calculation than the bishop to g4 at once. The a5-a4-a3 push putting pressure on b2 is standard but a bit slow; our attention stays on the e-file: prevent castling, drive the king out, induce the king to f2, then go for the throat. If White castles the game simply goes on — our structure is sound. Then the bishop to b3 is a bad panic move, because it lets Black get two pieces for a rook, crushing in the middlegame: we take the knight, achieve our dream of the bishop to d4, prevent castling, and stand up big material. Now the bishop to g4; b2 hangs, but we keep hammering down the e-file. We can take on e2 with a fork. Then the queen to b7, and the quiet knight to d7 opens the connection between our queen and rook to defend it — the bishop takes the rook also wins. If White plays the rook to e1, we have the intermezzo the bishop to e3 with check; then the rook takes d4, choosing the rook that gives us a passed pawn and the check on e3 that ends it.",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 602,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent lost his mind. Let's review. This game isn't exactly a loud advertisement for the Four Pawns —",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -223,14 +225,16 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "— but dangerous lines like this are double-edged; you must play them accurately to inflict maximum pain. e5 is a sideline —",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 617,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "— the main move is c5 —",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -239,7 +243,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "— the main move is c5, and if you know King's Indian theory —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -248,7 +253,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "— the main line is d5 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -257,7 +263,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "— Black goes e6, or a Benoni style.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -266,7 +273,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to e2, there's a trade —",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -275,7 +283,8 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "— and you get a Benoni-like position —",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -284,7 +293,8 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "— where White has a big but overextended centre; a lot of theory here.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -293,7 +303,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "There's the knight to d7, the rook, even the immediate b5, which has fallen out of fashion —",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -302,7 +313,8 @@
    "line": [
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "— the idea being that the bishop takes b5 —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -311,7 +323,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "— runs into the very pretty tactic, the knight takes e4 —",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -321,7 +334,8 @@
     "Nxe4",
     "Qa5+"
    ],
-   "spoken": ""
+   "spoken": "— the knight takes e4, the queen to a5 with check; you might say —",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -330,7 +344,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "— the knight back to c3 defends the bishop —",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -339,7 +354,8 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": ""
+   "spoken": "— but no, the bishop takes c3 and the queen takes b5 —",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -349,14 +365,16 @@
     "bxc3",
     "Qxb5"
    ],
-   "spoken": ""
+   "spoken": "— the b-pawn recaptures, the queen takes b5, and Black is much better. A lot of theory I won't delve too deeply into.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 667,
    "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "e5 is one of those lines people don't study with White, as we saw. Here the knight takes e5 is actually a very serious mistake — accepting the so-called sacrifice is a bad idea; the best and only move is d5, where White is better, the theoretical assessment being an edge for White.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -368,7 +386,8 @@
     "fxe5",
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "That doesn't mean you can't play it with Black — many White players struggle. My move here is c5, which solidifies and dries up the centre. And there's the d6-square: the best piece for it is the knight — a blockading square, an idea from Nimzowitsch, because a knight both immobilizes the advanced pawn and, jumping over pieces, keeps pressuring c4 and e4, unlike a queen, which would just stare at the pawn. In a childhood game I instinctively played c6 to get rid of that advanced d-pawn, but it created massive queenside weaknesses and I was crushed. The best move was the knight from f6 to e8, rerouting to d6 — blockading the pawn and enabling the typical King's Indian f5 break to shatter the pawn chain.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -377,14 +396,16 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "In the King's Indian context this isn't all peaches — White is better, and the bishop to g5 is a strong move preventing the knight to e8. c5 isn't the main line; the most popular is the knight from b8 to d7, the bishop to d3, and the engine likes c6 —",
+   "reanchor": true
   },
   {
    "ply": 11,
    "t": 888.5,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
    "line": [],
-   "spoken": ""
+   "spoken": "— opening a pathway for the queen to b6. If you're a King's Indian player this is a line to consider, but you should learn c5 for what to play against the Four Pawns.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -393,7 +414,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "You should learn c5.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -403,7 +425,8 @@
     "d5",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "And a little hint — the best move —",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -412,7 +435,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "— the bishop to e2 —",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -422,7 +446,8 @@
     "exd5",
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "— after the trade on d5 —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -431,7 +456,8 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "— is actually a very rare move, the knight from b8 to d7 — rare, but now what all the top GMs play.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -442,7 +468,8 @@
     "Re8",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "After White castles you play the rook to e8, and if the knight to d2 you push c4, sacking the pawn —",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -451,14 +478,16 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "— to get the c5-square for the knight, and Black gets a very big initiative, throwing the Four Pawns into serious question.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 917,
    "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "So e5, the pawns trade, White plays the knight takes e5, we push c5 to shatter the centre and weaken the knight, then d5, and the rook to e8, which I can now see is the best move. The knight to f3 — the alternative was the knight takes c4, e4, then a check on h4 forcing the knight back and the bishop takes c5, where Black is also clearly better, White struggling with development and tons of weaknesses; but the rook to e8 is even stronger. Funnily, the rook takes c4 is actually an inaccuracy by the engine — a great example of the gulf between engine and human thinking; ninety-nine percent of people would take on e4 automatically, but there's an even stronger move.",
+   "reanchor": true
   }
  ]
 }
