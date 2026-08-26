@@ -25,6 +25,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
+import { computePositionFacts, clauseText } from '../services/positionFacts';
 import {
   HINT_TIER_1_ADDITION,
   HINT_TIER_2_ADDITION,
@@ -304,6 +305,29 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         // position's move.
         setHintState((s) => ({ ...s, resolvedBestMove: { fen, uci: best.bestMoveUci } }));
 
+        // POSITION FACTS — ground the hint in the computed board-truth so the
+        // phrased sentence-or-two is a REAL "what to look at": the standing
+        // must-defend, and how the opponent's best piece leans (the counter).
+        // The hint already IS the best move, so exclude key-moment + student-
+        // leans (they'd restate the move/your-own-piece). Reuses best.analysis.
+        // Only from Tier 2 up: Tier 1 discards the named facts (see grounding
+        // gate below), so don't pay for the perturbation probe there.
+        let hintFacts = '';
+        try {
+          if (nextLevel >= 2 && best.analysis.topLines.length) {
+            const pf = await computePositionFacts({
+              fen,
+              moverColor: fen.split(' ')[1] === 'b' ? 'b' : 'w',
+              studentColor: playerColor === 'white' ? 'w' : 'b',
+              rating: playerRating ?? 1200,
+              analysis: best.analysis,
+              evalBoard: (f) => stockfishEngine.evalBoard(f),
+            });
+            hintFacts = clauseText(pf.clauses, ['key-moment', 'student-leans']).join(' ');
+          }
+        } catch { /* the position-facts grounding is a bonus, never a blocker */ }
+        if (fenRef.current !== fen) { setHintState((s) => ({ ...s, isAnalyzing: false })); return; }
+
         // Build the per-tier framing that goes inside the `ask` text.
         // Post WO-BRAIN-05b the spine assembles the four-source
         // envelope (identity prompt with calibration framing,
@@ -349,10 +373,21 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           bestMoveSan: best.bestMoveSan,
           tier: nextLevel,
         });
+        // Ground the phrasing in the computed board-truth — but ONLY from Tier 2
+        // up. Tier 1 forbids ALL piece names + square coordinates (the honesty
+        // contract: withhold specifics so the student looks), and these clauses
+        // name both — so feeding them at Tier 1 would push the brain to break
+        // its own rule. Tier 2/3 already name the piece / move, so the facts
+        // sharpen the "one tight reason" instead of restating it.
+        const groundingLine =
+          nextLevel >= 2 && hintFacts
+            ? `\nBoard-truth for grounding (weave in ONE that sharpens the reason; do not list; never contradict the move above): ${hintFacts}`
+            : '';
         const askText = [
           tierAddition,
           '',
           tierContextLine,
+          groundingLine,
           '',
           `Also call record_hint_request with these args so this tap lands in memory: [[ACTION:record_hint_request ${recordHintArgs}]]`,
         ].join('\n');
