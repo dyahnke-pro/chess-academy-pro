@@ -1,0 +1,248 @@
+{
+ "videoId": "25w0mYsx_Lk",
+ "title": "Beginner To Master | Chess Speedrun | C3 Vs Modern (Saragossa) | Grandmaster Naroditsky",
+ "openingName": "Modern Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:25w0mYsx_Lk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": "Against the Modern, we want a sound positional line rather than a sharp theoretical race.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 19,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 22.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 26,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 is the quiet, strong choice: the pawns on c3, d4, and e4 lock into a chain so the fianchettoed g7-bishop bites on granite.",
+   "kind": "main",
+   "teaches": "A c3-d4-e4 chain neutralizes the long-diagonal bishop before it ever gets going."
+  },
+  {
+   "ply": 6,
+   "t": 33.5,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 45.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Bd3",
+    "Nf6"
+   ],
+   "spoken": "The bishop tucks into d3, where it defends the e4-pawn while the pawn chain looks after d4 — every unit covers the next.",
+   "kind": "main",
+   "teaches": "Build a self-supporting structure: pawns hold one square, a piece holds the other."
+  },
+  {
+   "ply": 9,
+   "t": 53,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 55,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w - - 6 7",
+   "line": [
+    "Nc6",
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 60,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 7 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "We could play h3 to rule out a pin with Bg4, but Bg5 is the more aggressive continuation, provoking a decision.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 68.5,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 70,
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 74,
+   "fen": "r1bq1rk1/ppp2pb1/2np1npp/4p3/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": "With e5 the game sharpens — the idea is exd4 followed by g5 and g4, chasing the f3-knight off the defense of the d-pawn.",
+   "kind": "main",
+   "plans": "Meet the coming ...g5-g4 by resolving the centre before the knight is kicked."
+  },
+  {
+   "ply": 18,
+   "t": 91,
+   "fen": "r1bq1rk1/ppp2pb1/3p1npp/4n3/4P2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 10",
+   "line": [
+    "dxe5",
+    "Nxe5"
+   ],
+   "spoken": "So we take on e5, keeping the h4-bishop passive rather than letting Black free it with the pawn break.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 93.5,
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11",
+   "line": [
+    "Nxe5",
+    "dxe5"
+   ],
+   "spoken": "After the trades the question is the queen's-knight: Nd2 would drop the d3-bishop to Qxd3, so that square is off-limits.",
+   "kind": "main",
+   "teaches": "Before choosing a developing square, check that it doesn't undefend a piece behind it."
+  },
+  {
+   "ply": 21,
+   "t": 119,
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 b - - 1 11",
+   "line": [
+    "Na3"
+   ],
+   "spoken": "Na3 looks ugly, but it's only a transit stop — the knight is bad on a3 for exactly one move, then it reroutes to its ideal square c4.",
+   "kind": "main",
+   "teaches": "A knight on the rim is fine if the rim is a layover, not a destination."
+  },
+  {
+   "ply": 22,
+   "t": 131.5,
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 w - - 2 12",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 134.5,
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 b - - 3 12",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "Nc4 leans on e5. You might ask why, since the queen guards the pawn — but pressure isn't only about winning material; it ties the defender down.",
+   "kind": "plan",
+   "teaches": "Attacking a defended point still pays: it pins the guard in place."
+  },
+  {
+   "ply": 24,
+   "t": 150,
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 178.5,
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f4"
+   ],
+   "spoken": "f4 is risky and does loosen our king, but the logic is clean: if Black takes, we push e5 and win the pinned f6-knight; if he plays g5, we take the knight with tempo on the queen. Even the Qc5-check has an answer — an interposition that hits the queen — which is exactly the resource f4 was counting on. Remember the three ways to meet a check: capture the checker, move the king, or block.",
+   "kind": "main",
+   "teaches": "The three replies to a check are capture, king-move, and interpose — the block is the one people forget."
+  },
+  {
+   "ply": 26,
+   "t": 240.5,
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 14",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": "Now recapturing with the pawn is tempting because it hits the f6-knight, but a move isn't good just because it makes a threat: Black slides the knight to d7, and the e5-pawn, hit three times, simply falls.",
+   "kind": "main",
+   "teaches": "A move that only creates a threat can still be bad if the threat is easily met and leaves a weakness."
+  },
+  {
+   "ply": 27,
+   "t": 283,
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "So Nxe5 instead — it makes no threat, but it banks the extra pawn cleanly and keeps our structure sound.",
+   "kind": "main",
+   "teaches": "The unflashy recapture that keeps the material and the structure beats the noisy one that gives them back."
+  },
+  {
+   "ply": 28,
+   "t": 284,
+   "fen": "r3qrk1/pbp2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 15",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "Two ideas carry the position. First, sidestep the coming Rd8 pin with Qe2 before it lands — even at the cost of the usual 'defend with the least valuable piece' rule. Second, prepare slowly and attack fast: overprotect the centre first, and once Black's king is loose, look immediately for captures near it — that's how a shot like Nxf7 appears.",
+   "kind": "main",
+   "teaches": "When the enemy king is weak, start your search with captures on its doorstep."
+  },
+  {
+   "ply": 3,
+   "t": 902,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "The takeaway of the whole game: when a committal pawn move like g5 is played, stop and ask which squares it just weakened. g5 concedes f5, and a knight is the default piece to plant on such an outpost.",
+   "kind": "review",
+   "teaches": "After any committal pawn push, name the square it weakened and the piece that belongs there.",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,206 @@
+{
+ "videoId": "gG_NzjqbyYo",
+ "title": "Finding The Hippo Attack Annoying? TRY THIS!! | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Hippopotamus / offbeat setup (punishing plan)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:gG_NzjqbyYo",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 59.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "e3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 62,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d3"
+   ],
+   "spoken": "The opponent trolls with a quiet e3 and d3 — a Hippo-style setup where White fianchettoes both bishops and tucks the knights back toward e2 and d2. It's worth knowing a sustainable way to punish these off-beat systems, because a lot of players either get scared or start stumbling against them.",
+   "kind": "main",
+   "teaches": [
+    "recognising the Hippo setup"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 125.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Since White is handing us the centre, we grab it — the principled e5.",
+   "kind": "main",
+   "teaches": [
+    "occupy the ceded centre"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 133,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/8/P2PP3/1PP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 141,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/P2PP3/1PP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "And we grab more with d5, taking a big share of the middle.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 146.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/P2PP2P/1PP2PP1/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "h3"
+   ],
+   "spoken": "The preferred setup refrains from the knight to c6. Instead c6 builds a solid pawn chain, and the queen's knight reroutes Ruy-Lopez style via d7 and f8 to g6. Against such unambitious play, we have all the time in the world to improve.",
+   "kind": "plan",
+   "teaches": [
+    "the c6 chain and knight reroute"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 205.5,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PP2PP1/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop to d6 complements c6 beautifully — London-style. It defends the e5-pawn while the pawn defends d5, giving us a super-compact, well-placed centre.",
+   "kind": "main",
+   "teaches": [
+    "the London-style pawn triangle"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 209,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/PP1PP2P/2P2PP1/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 251.5,
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3pp3/8/PP1PP2P/2P2PP1/RNBQKBNR w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castle kingside — never queenside here, that's far too adventurous. And note White's h3 is already a slight weakness; if g3 follows, it only creates another target on that wing.",
+   "kind": "plan",
+   "teaches": [
+    "castle kingside, note the h3 weakness"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 305,
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3pp3/8/PP1PP1PP/2P2P2/RNBQKBNR b KQ - 0 6",
+   "line": [
+    "g3"
+   ],
+   "spoken": "Temper your expectations against these setups. I've seen countless games where one side plays an offbeat system and the other charges straight for the throat and loses — White isn't doing anything to lose the game. Be patient, get every piece out, and accept that breaking such a setup down takes time; it can't be done in the opening.",
+   "kind": "plan",
+   "teaches": [
+    "patience against offbeat setups"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 324,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/2P2P2/RNBQKBNR w KQ - 0 7",
+   "line": [
+    "c6"
+   ],
+   "spoken": "A typical queenside idea is to advance the a-pawn to poke and prod — and if White answers b4, we chip in with c5. With a closed centre, don't rule out moving the same pawn twice; there's no hurry.",
+   "kind": "plan",
+   "teaches": [
+    "queenside probing with a4"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 335,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2P2/RN1QKBNR b KQ - 1 7",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 423,
+   "fen": "r1bq1rk1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2P2/RN1QKBNR w KQ - 2 8",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "Leave the light-squared bishop at home for now — a bishop to f5 walks into a g4 or e3-e4 expansion, and a bishop to e6 invites a knight jump to g5. We want to keep that bishop, because a key middlegame plan is pressuring the h3-pawn. So develop the knight to d7 instead.",
+   "kind": "main",
+   "teaches": [
+    "keep the light bishop for the h3 plan"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 429.5,
+   "fen": "r1bq1rk1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2PB1/RN1QK1NR b KQ - 3 8",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 432,
+   "fen": "r1bqr1k1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2PB1/RN1QK1NR w KQ - 4 9",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "The rook to e8 overprotects the e5-pawn — a good move in its own right — while we continue rerouting the knight toward g6.",
+   "kind": "main",
+   "teaches": [
+    "overprotection"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 436,
+   "fen": "r1bqr1k1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BPN1PB1/R2QK1NR b KQ - 5 9",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 441,
+   "fen": "r1bqrnk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/1BPN1PB1/R2QK1NR w KQ - 6 10",
+   "line": [
+    "Nf8"
+   ],
+   "spoken": "If White's queen slides to e2, it signals a flirtation with castling queenside — a near-suicidal plan into our setup. So we play a5, telling the opponent: don't you dare castle into this, because we'll be ready to make mincemeat of that king.",
+   "kind": "plan",
+   "teaches": [
+    "a5 to deter queenside castling"
+   ]
+  }
+ ]
+}

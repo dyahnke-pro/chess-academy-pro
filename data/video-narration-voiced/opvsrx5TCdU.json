@@ -1,0 +1,337 @@
+{
+ "videoId": "opvsrx5TCdU",
+ "title": "Hunting for a Queenside Attack | Owen's Defence | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Owen's Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:opvsrx5TCdU",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 426,
+   "fen": "rnbqkbnr/p1pp1ppp/1p2p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "b6",
+    "e4",
+    "e6"
+   ],
+   "spoken": "Owen's Defence is a second-rate opening — combative, but no matter how White sets up, Black ends up worse for handing over the centre like this.",
+   "kind": "main",
+   "teaches": [
+    "Owen’s cedes the centre"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 436.5,
+   "fen": "rnbqkbnr/p1pp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 438.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [
+    "Bb7",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 444.5,
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Against the bishop on d3, Black's main move is the knight to f6; the bishop to e7 is passive. The active square for that bishop is b4.",
+   "kind": "main",
+   "teaches": [
+    "Bb4 is the critical square"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 446.5,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 451,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 466,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The recommended move is the knight to e2 — and a notation note: you don't need to specify which knight, since the other one is pinned. Its purpose is to connect the knights.",
+   "kind": "main",
+   "teaches": [
+    "Ne2 connects the knights"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 473,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 475.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 485.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 6 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 489,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQ1RK1 b kq - 7 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 503,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2bB4/PPP1NPPP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 504,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2NB4/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "Here's the payoff: with the knight on e2, the bishop capture on c3 is completely harmless — we just recapture with the knight. With a knight on f3 instead, that same capture actually wins a pawn, a very common blunder. And a bigger lesson: don't defend a pawn by pinning. Meeting a threat on e4 with a pin looks clever, but Black plays h6, and after the bishop retreats, g5 breaks the pin and wins the pawn outright — you can't recapture with the knight, so you've made two bishop moves only to swap it for a knight that moved once. The right, and nearly only, way to hold e4 is the queen to e2.",
+   "kind": "plan",
+   "teaches": [
+    "don’t defend a pawn with a pin",
+    "Qe2 holds e4"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 628.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 630.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The whole reason for the knight on e2 rather than f3: with it on f3, Black plays d5 and starts leaning on the knight — an annoying pressure the e2 setup avoids, so after the knight to f6 we simply castle.",
+   "kind": "plan",
+   "teaches": [
+    "Ne2 dodges the d5 pressure"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 635,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQ1RK1 b kq - 7 6",
+   "line": [
+    "Nf6",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 636,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 6 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 637,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 639.5,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Bxc3+",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 644.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 648,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 651.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "f3"
+   ],
+   "spoken": "Why not f3 to stop the shenanigans? You can play it, but f3 is very weakening — it leaves permanent holes around your king.",
+   "kind": "review",
+   "teaches": [
+    "f3 is permanently weakening"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 670,
+   "fen": "rn1qk1nr/pbp2ppp/1p2p3/3p4/1b1PP3/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "And after f3, Black can try to run you off the board with d5, e5 and c5 — in these French-style structures, f3 is usually a bad move.",
+   "kind": "review",
+   "teaches": [
+    "avoid f3 in French structures"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 673,
+   "fen": "rn1qk1nr/pb3ppp/1p2p3/2ppP3/1b1P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "e5",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 681.5,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 683,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 685,
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 5 5",
+   "line": [
+    "Be7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 686,
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 689.5,
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 5 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Now watch the flexibility: earlier I recommended the knight to e2, but the situation has changed — Black's bishop is on e7, not b4 — so we develop to f3 instead. Adapting your development to the position is a vital opening skill.",
+   "kind": "review",
+   "teaches": [
+    "adapt development to the position"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 719,
+   "fen": "rn1qk2r/pbppbppp/1p2pn2/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R w KQkq - 6 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "This is exactly why system players struggle — a London or Torre repeats the same moves and never learns to adapt in the opening. After the knight to f3 and the reply, we play the queen to e2.",
+   "kind": "review",
+   "teaches": [
+    "why system openings limit growth"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 725.5,
+   "fen": "rn1qk2r/pbp1bppp/1p2pn2/3p4/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "O-O",
+    "d5"
+   ],
+   "spoken": "The point of the queen to e2 is that castling instead would allow d5 and a knight jump to e4 — nothing terrible, but easily prevented this way.",
+   "kind": "review",
+   "teaches": [
+    "Qe2 prevents Ne4"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 727,
+   "fen": "rn1qk2r/pbp1bppp/1p2p3/3pP3/3Pn3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 1 8",
+   "line": [
+    "e5",
+    "Ne4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

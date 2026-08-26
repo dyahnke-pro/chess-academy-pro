@@ -1,0 +1,142 @@
+{
+ "videoId": "f8alAsVJRc8",
+ "title": "The Value of Retreating Moves | Sicilian Defense | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:f8alAsVJRc8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 29,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 34,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 51,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 58,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bringing the bishop out to c4 at once is the Italian idea against the Sicilian, and it's innocuous — because the pawn to e6 can slam the door on it. The bishop only makes sense while it can menace f7, so the moment that's shut out, its purpose evaporates."
+  },
+  {
+   "ply": 4,
+   "t": 85,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "There's no need to rush the shutting-out move — nothing is threatened on f7 yet — so develop the knight first, keeping the options open before committing the pawn.",
+   "kind": "plan"
+  },
+  {
+   "ply": 5,
+   "t": 89,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR b KQkq - 0 3",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 114,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Against offbeat play the recipe is to follow principles to the letter — just develop, and there's only so much harm the opponent can do. The knight comes to f6, and the central push is already denied, since that square is guarded — which is exactly why the other knight came out first.",
+   "kind": "plan"
+  },
+  {
+   "ply": 7,
+   "t": 119,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The centre-fork trick is available — capturing in the centre and regaining the piece with a pawn break — but here it's premature and leads to needless complications. A calmer path is better.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 149,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "So play e6 instead, quietly preparing to expand with the central break. The fork trick doesn't vanish — it stays in reserve, ready depending on how the opponent develops.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 159.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/4P3/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "Ba2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 212,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/4P3/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Against a second-rate opening, play principled chess and punish it — the pawn to d5 grabs the centre and takes the fight to the opponent, rather than drifting. Seize the initiative when the opening invites it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 216,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pP4/8/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 217,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 7",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 231.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N2N2/BPPP1PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Priority now is kingside development, since the king is still central and the opponent is signalling a quick castle. But there's a subtlety — they also intend a central push, and sleepwalking into the recapture would leave an isolated queen's pawn, with the opponent controlling the square in front of it and that bishop suddenly justified. Meeting the push yourself is an option, though it too has a real cost, opening that bishop's diagonal.",
+   "kind": "plan"
+  }
+ ]
+}

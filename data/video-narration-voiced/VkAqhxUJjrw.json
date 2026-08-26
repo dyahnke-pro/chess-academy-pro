@@ -1,0 +1,857 @@
+{
+ "videoId": "VkAqhxUJjrw",
+ "title": "Amazing Blitz Match | GM Alex Rustemov Vs GM Daniel Naroditsky",
+ "openingName": "Pirc Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:VkAqhxUJjrw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 305.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 308.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 310.5,
+   "fen": "rnbqkbnr/ppp1pp1p/3p2p1/8/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "g6",
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 311.5,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 313.5,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/4BP2/PPP3PP/RN1QKBNR b KQkq - 2 4",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 314.5,
+   "fen": "rnbqk1nr/pp2ppbp/3p2p1/2p5/3PP3/4BP2/PPP3PP/RN1QKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 318,
+   "fen": "rnbqk1nr/pp2ppbp/3p2p1/8/3pP3/2P1BP2/PP4PP/RN1QKBNR w KQkq - 0 6",
+   "line": [
+    "c3",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 319.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/8/3PP3/4BP2/PP4PP/RN1QKBNR w KQkq - 1 7",
+   "line": [
+    "cxd4",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 321,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/8/3PP3/2N1BP2/PP4PP/R2QKBNR b KQkq - 2 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 323.5,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3PP3/2N1BP2/PP4PP/R2QKBNR w KQkq - 3 8",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The move order has drifted into something unorthodox — but the guiding decision is simply to treat it like a Pirc, leaning on the familiar dark-squared fianchetto and flexible pawn breaks.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 327,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3PP3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 5 9",
+   "line": [
+    "Qd2",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 332.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/1B6/3PP3/2N1BP2/PP1Q2PP/R3K1NR b KQ - 6 9",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 333.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/1B6/3PP3/2N1BP2/PP1Q2PP/R3K1NR w KQ - 7 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 336,
+   "fen": "2rq1rk1/pp1bppbp/2np1np1/1B6/3PP3/2N1BP2/PP1QN1PP/R3K2R w KQ - 9 11",
+   "line": [
+    "Nge2",
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 337.5,
+   "fen": "2rq1rk1/pp1bppbp/3p1np1/nB6/3PP3/2N1BP2/PP1QN1PP/R4RK1 w - - 11 12",
+   "line": [
+    "O-O",
+    "Na5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 340,
+   "fen": "2rq1rk1/pp1bppbp/3p1np1/n7/3PP3/2NBBP2/PP1QN1PP/R4RK1 b - - 12 12",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 343,
+   "fen": "3q1rk1/pp1bppbp/3p1np1/8/2nPP3/2N1BP2/PP1QN1PP/R4RK1 w - - 0 14",
+   "line": [
+    "Rc4",
+    "Bxc4",
+    "Nxc4"
+   ],
+   "spoken": "The point of the exchange sequence is to win the bishop pair — two bishops in an increasingly open position is a lasting asset well worth the small concession.",
+   "kind": "plan"
+  },
+  {
+   "ply": 27,
+   "t": 345.5,
+   "fen": "3q1rk1/pp1bppbp/3p1np1/3P4/2n1P3/2N1BP2/PP1QN1PP/R4RK1 b - - 0 14",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 349.5,
+   "fen": "5rk1/pp1bppbp/3p1np1/q2P4/2n1P3/2N1BP2/PP1QN1PP/R4RK1 w - - 1 15",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 356,
+   "fen": "2r3k1/pp1bppbp/3p1np1/q2P4/2n1P3/2N1BP2/PP1QN1PP/2R2RK1 w - - 3 16",
+   "line": [
+    "Rac1",
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 362,
+   "fen": "2r3k1/pp1bppbp/3p1np1/q2P4/2n1P3/2N1BP2/PPRQN1PP/5RK1 b - - 4 16",
+   "line": [
+    "Rc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 365,
+   "fen": "2r3k1/p2bppbp/3p1np1/qp1P4/2n1P3/2N1BP2/PPRQN1PP/5RK1 w - - 0 17",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 370.5,
+   "fen": "2r3k1/p2bppbp/3p1np1/qp1P4/2n1P3/1PN1BP2/P1RQN1PP/5RK1 b - - 0 17",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 375,
+   "fen": "2r3k1/p1qbppbp/3p1np1/np1P4/4P3/1PN1BP2/P1RQN1PP/2R3K1 w - - 3 19",
+   "line": [
+    "Qc7",
+    "Rfc1",
+    "Na5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 396.5,
+   "fen": "2r3k1/p1qbppb1/3p1np1/np1P3p/3NP3/1PN1BP2/P1RQ2PP/2R3K1 w - - 0 20",
+   "line": [
+    "Nd4",
+    "h5"
+   ],
+   "spoken": "An honest strategic moment — the easy, natural moves are all played, and now the position demands a real plan, a concrete maneuver. This is exactly the hard part, where drifting on autopilot starts to get squeezed positionally.",
+   "kind": "plan"
+  },
+  {
+   "ply": 40,
+   "t": 406.5,
+   "fen": "2r3k1/2qbppb1/p2p1np1/np1P3p/3NP3/1P2BP2/P1RQN1PP/2R3K1 w - - 0 21",
+   "line": [
+    "Nce2",
+    "a6"
+   ],
+   "spoken": "A committal call: the rook-pawn move is undesirable because it leaves the queen nearly boxed in — but it goes in anyway, accepting the awkwardness as the lesser evil under pressure."
+  },
+  {
+   "ply": 44,
+   "t": 408,
+   "fen": "2r3k1/2qbppb1/p2p1np1/1p1P3p/3NP3/1P2BP2/P1RnN1PP/2R3K1 w - - 0 23",
+   "line": [
+    "Qc3",
+    "Nc4",
+    "Qd2",
+    "Nxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 412.5,
+   "fen": "2r3k1/2qbppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P1RBN1PP/2R3K1 b - - 0 23",
+   "line": [
+    "Bxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 414,
+   "fen": "2r3k1/3bppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P1RBN1PP/6K1 b - - 0 24",
+   "line": [
+    "Qxc2",
+    "Rxc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 415.5,
+   "fen": "6k1/3bppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P1rBN1PP/6K1 w - - 0 25",
+   "line": [
+    "Rxc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 417.5,
+   "fen": "2b3k1/4ppb1/p2p1np1/1p1P3p/4P3/1P3P2/P1NBN1PP/6K1 w - - 1 26",
+   "line": [
+    "Nxc2",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 420,
+   "fen": "2b3k1/4ppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P2BN1PP/6K1 b - - 2 26",
+   "line": [
+    "Ncd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 421,
+   "fen": "2b2k2/4ppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P2BN1PP/6K1 w - - 3 27",
+   "line": [
+    "Kf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 426,
+   "fen": "2b1k3/4ppb1/p2p1np1/1p1P3p/3NP3/1P3P2/P2BNKPP/8 w - - 5 28",
+   "line": [
+    "Kf2",
+    "Ke8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 430,
+   "fen": "2b5/3kppb1/p2p1np1/1p1P3p/3NP3/1P2KP2/P2BN1PP/8 w - - 7 29",
+   "line": [
+    "Ke3",
+    "Kd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 432,
+   "fen": "2b5/3kppb1/p2p1np1/1p1P3p/3NP3/1P1K1P2/P2BN1PP/8 b - - 8 29",
+   "line": [
+    "Kd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 433,
+   "fen": "8/1b1kppb1/p2p1np1/1p1P3p/3NP3/1P1K1P2/P2BN1PP/8 w - - 9 30",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 436.5,
+   "fen": "8/1b1kppb1/p2p1np1/1p1P3p/3NP3/1PNK1P2/P2B2PP/8 b - - 10 30",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 439,
+   "fen": "8/1b1k1pb1/p2ppnp1/1p1P3p/3NP3/1PNK1P2/P2B2PP/8 w - - 0 31",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 442,
+   "fen": "8/1b1k2b1/p2ppnp1/1p5p/3NP3/1PNK1P2/P2B2PP/8 w - - 0 32",
+   "line": [
+    "dxe6+",
+    "fxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 446.5,
+   "fen": "8/1b1k2b1/p2ppnp1/1p5p/P2NP3/1PNK1P2/3B2PP/8 b - - 0 32",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 64,
+   "t": 449,
+   "fen": "8/1b1k2b1/p2ppnp1/7p/Pp1NP3/1PNK1P2/3B2PP/8 w - - 0 33",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 459,
+   "fen": "8/1b1k2b1/p2p1np1/4p2p/Pp1NP3/1P1K1P2/3B2PP/3N4 w - - 0 34",
+   "line": [
+    "Nd1",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 464.5,
+   "fen": "8/1b1k2b1/p2p1np1/4p2p/Pp2P3/1P1K1P2/2NB2PP/3N4 b - - 1 34",
+   "line": [
+    "Nc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 68,
+   "t": 465.5,
+   "fen": "8/1b1k2b1/3p1np1/p3p2p/Pp2P3/1P1K1P2/2NB2PP/3N4 w - - 0 35",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 69,
+   "t": 468,
+   "fen": "8/1b1k2b1/3p1np1/p3p2p/Pp2P3/1P1KNP2/2NB2PP/8 b - - 1 35",
+   "line": [
+    "Nde3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 70,
+   "t": 474,
+   "fen": "8/3k2b1/b2p1np1/p3p2p/Pp2P3/1P1KNP2/2NB2PP/8 w - - 2 36",
+   "line": [
+    "Ba6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 72,
+   "t": 476,
+   "fen": "8/3k2b1/b4np1/p2pp2p/PpN1P3/1P1K1P2/2NB2PP/8 w - - 0 37",
+   "line": [
+    "Nc4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 74,
+   "t": 478,
+   "fen": "8/3k2b1/b5p1/p2np2p/PpN5/1P1K1P2/2NB2PP/8 w - - 0 38",
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 75,
+   "t": 485,
+   "fen": "8/3k2b1/b5p1/p2np2p/PpN5/1P1K1PP1/2NB3P/8 b - - 0 38",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 76,
+   "t": 486.5,
+   "fen": "8/3k2b1/bn4p1/p3p2p/PpN5/1P1K1PP1/2NB3P/8 w - - 1 39",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 78,
+   "t": 489,
+   "fen": "8/3k4/bn4pb/p3p2p/PpN5/1P1KNPP1/3B3P/8 w - - 3 40",
+   "line": [
+    "Ne3",
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 79,
+   "t": 494,
+   "fen": "8/3k4/bn4pb/p3p2p/PpN5/1P2NPP1/2KB3P/8 b - - 4 40",
+   "line": [
+    "Kc2"
+   ],
+   "spoken": "In the ending the safe resource is a bishop trade steering into a draw — the practical honesty of recognising when a position no longer offers a winning try, even when you'd rather press.",
+   "kind": "plan"
+  },
+  {
+   "ply": 80,
+   "t": 507.5,
+   "fen": "8/3k4/bn4p1/p3p2p/PpN5/1P2bPP1/2KB3P/8 w - - 0 41",
+   "line": [
+    "Bxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 81,
+   "t": 508.5,
+   "fen": "8/3k4/bn4p1/p3p2p/Pp6/1P2NPP1/2KB3P/8 b - - 0 41",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 82,
+   "t": 512,
+   "fen": "8/3k4/1n4p1/p3p2p/Pp6/1P2NPP1/2KBb2P/8 w - - 1 42",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 83,
+   "t": 514.5,
+   "fen": "8/3k4/1n4p1/p3p2p/Pp3P2/1P2N1P1/2KBb2P/8 b - - 0 42",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 86,
+   "t": 517.5,
+   "fen": "8/8/1n2k1p1/p6p/Pp3P2/1P2N3/2KBb2P/8 w - - 1 44",
+   "line": [
+    "exf4",
+    "gxf4",
+    "Ke6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 87,
+   "t": 519,
+   "fen": "8/8/1n2k1p1/p6p/Pp3P2/1P2N3/2K1b2P/4B3 b - - 2 44",
+   "line": [
+    "Be1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 88,
+   "t": 520.5,
+   "fen": "8/3n4/4k1p1/p6p/Pp3P2/1P2N3/2K1b2P/4B3 w - - 3 45",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 89,
+   "t": 522.5,
+   "fen": "8/3n4/4k1p1/p6p/Pp3P1B/1P2N3/2K1b2P/8 b - - 4 45",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 90,
+   "t": 527,
+   "fen": "8/8/4k1p1/p1n4p/Pp3P1B/1P2N3/2K1b2P/8 w - - 5 46",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 92,
+   "t": 530.5,
+   "fen": "3B4/8/4k1p1/p1n4p/Pp3P2/1P1bN3/2K4P/8 w - - 7 47",
+   "line": [
+    "Bd8",
+    "Bd3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 94,
+   "t": 532.5,
+   "fen": "3B4/1n6/4k1p1/p6p/Pp3P2/1P1bN3/1K5P/8 w - - 9 48",
+   "line": [
+    "Kb2",
+    "Nb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 96,
+   "t": 535.5,
+   "fen": "8/1nBk4/6p1/p6p/Pp3P2/1P1bN3/1K5P/8 w - - 11 49",
+   "line": [
+    "Bc7",
+    "Kd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 98,
+   "t": 538.5,
+   "fen": "8/1n6/1Bk3p1/p6p/Pp3P2/1P1bN3/1K5P/8 w - - 13 50",
+   "line": [
+    "Bb6",
+    "Kc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 100,
+   "t": 540.5,
+   "fen": "8/8/2kn2p1/p6p/Pp1B1P2/1P1bN3/1K5P/8 w - - 15 51",
+   "line": [
+    "Bd4",
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 101,
+   "t": 543,
+   "fen": "8/8/2kn1Bp1/p6p/Pp3P2/1P1bN3/1K5P/8 b - - 16 51",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 102,
+   "t": 545,
+   "fen": "8/8/1k1n1Bp1/p6p/Pp3P2/1P1bN3/1K5P/8 w - - 17 52",
+   "line": [
+    "Kb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 104,
+   "t": 548.5,
+   "fen": "3B4/8/k2n2p1/p6p/Pp3P2/1P1bN3/1K5P/8 w - - 19 53",
+   "line": [
+    "Bd8+",
+    "Ka6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 105,
+   "t": 550,
+   "fen": "3B4/8/k2n2p1/p2N3p/Pp3P2/1P1b4/1K5P/8 b - - 20 53",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 106,
+   "t": 551,
+   "fen": "3B4/8/k2n2p1/p2N3p/Pp2bP2/1P6/1K5P/8 w - - 21 54",
+   "line": [
+    "Be4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 108,
+   "t": 554.5,
+   "fen": "3B4/1kN5/3n2p1/p6p/Pp2bP2/1P6/1K5P/8 w - - 23 55",
+   "line": [
+    "Nc7+",
+    "Kb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 109,
+   "t": 556,
+   "fen": "3B4/1k6/3nN1p1/p6p/Pp2bP2/1P6/1K5P/8 b - - 24 55",
+   "line": [
+    "Ne6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 110,
+   "t": 558,
+   "fen": "3B4/1k6/3nN1p1/p2b3p/Pp3P2/1P6/1K5P/8 w - - 25 56",
+   "line": [
+    "Bd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 114,
+   "t": 565.5,
+   "fen": "3B4/1n6/2k3p1/p2b3p/Pp3P2/1P1N4/1K5P/8 w - - 29 58",
+   "line": [
+    "Nc5+",
+    "Kc6",
+    "Nd3",
+    "Nb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 116,
+   "t": 567,
+   "fen": "3B4/1n6/3k2p1/p2bN2p/Pp3P2/1P6/1K5P/8 w - - 31 59",
+   "line": [
+    "Ne5+",
+    "Kd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 117,
+   "t": 568.5,
+   "fen": "8/1n6/1B1k2p1/p2bN2p/Pp3P2/1P6/1K5P/8 b - - 32 59",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 118,
+   "t": 570,
+   "fen": "8/1n6/1B1k4/p2bN1pp/Pp3P2/1P6/1K5P/8 w - - 0 60",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 119,
+   "t": 587,
+   "fen": "8/1n6/1B1k4/p2b2pp/Pp3P2/1P1N4/1K5P/8 b - - 1 60",
+   "line": [
+    "Nd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 120,
+   "t": 588,
+   "fen": "8/1n6/1B1k4/p2b3p/Pp3Pp1/1P1N4/1K5P/8 w - - 0 61",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 121,
+   "t": 589.5,
+   "fen": "8/1n6/1B1k4/p2b1P1p/Pp4p1/1P1N4/1K5P/8 b - - 0 61",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 122,
+   "t": 590.5,
+   "fen": "8/1n6/1B1k4/p4P1p/Pp2b1p1/1P1N4/1K5P/8 w - - 1 62",
+   "line": [
+    "Be4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 124,
+   "t": 593,
+   "fen": "8/1n6/1B1k4/p4P2/Pp2bNpp/1P6/1K5P/8 w - - 0 63",
+   "line": [
+    "Nf4",
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 125,
+   "t": 594,
+   "fen": "8/1n6/1B1k1P2/p7/Pp2bNpp/1P6/1K5P/8 b - - 0 63",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 126,
+   "t": 599.5,
+   "fen": "8/1n6/1B1k1P2/p7/Pp2bNp1/1P5p/1K5P/8 w - - 0 64",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 128,
+   "t": 606,
+   "fen": "8/1n2kP2/1B6/p7/Pp2bNp1/1P5p/1K5P/8 w - - 1 65",
+   "line": [
+    "f7",
+    "Ke7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 129,
+   "t": 607,
+   "fen": "8/1n2kP2/1B2N3/p7/Pp2b1p1/1P5p/1K5P/8 b - - 2 65",
+   "line": [
+    "Ne6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 130,
+   "t": 608.5,
+   "fen": "8/1n3k2/1B2N3/p7/Pp2b1p1/1P5p/1K5P/8 w - - 0 66",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  }
+ ]
+}

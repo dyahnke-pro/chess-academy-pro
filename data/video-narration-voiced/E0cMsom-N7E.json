@@ -1,0 +1,207 @@
+{
+ "videoId": "E0cMsom-N7E",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2070 Cheater!",
+ "openingName": "King's Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:E0cMsom-N7E",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1181.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1184,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1189.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/6P1/PP2PPBP/RNBQK1NR w KQ - 3 5",
+   "line": [
+    "g3",
+    "Bg7",
+    "Bg2",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1192,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N3P1/PP2PPBP/R1BQK1NR w KQ - 0 6",
+   "line": [
+    "Nc3",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1194,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The developing question in the King's Indian is where this knight belongs — c6 or d7. Bringing it to c6 can backfire at a high level, because it invites an annoying pawn thrust to d5 that gains space and kicks the knight around.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 1220,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R w KQ - 2 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "So the knight goes to d7 instead — the typical choice, prepping the central break e5 while staying perfectly safe. It doesn't get chased, and it clears the path for the pawn.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 1222,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "O-O",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1224,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1232,
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c6"
+   ],
+   "spoken": "c6 does two jobs: it clamps down on the d5 square, and it opens the door to swing the queen out to a5. Small pawn move, two ideas riding on it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 1238,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "h3",
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1241,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1243.5,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PNP3/2N3PP/PP3PB1/R1BQR1K1 b - - 0 11",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1245,
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3PB1/R1BQR1K1 w - - 1 12",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The knight lands on e5, hitting the c4-pawn and leaning on the whole centre. This is the hypermodern bargain — the opponent holds more of the middle, but every one of those pawns is under fire from pieces. The fight will come down to whether that initiative can be beaten back.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 1271,
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 b - - 2 12",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": "Look at the coordination — both knights bearing down on the enemy pawns at once. The pieces are doing the work the pawns usually do."
+  },
+  {
+   "ply": 24,
+   "t": 1276,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 w - - 3 13",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "The rook slides to e8 to pile more pressure on the e-pawn. It also baits a natural-looking f4 push — the kind of move many players fire off automatically, without noticing the drawback it carries.",
+   "kind": "plan"
+  },
+  {
+   "ply": 25,
+   "t": 1288.5,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 b - - 4 13",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "The enemy knight on d4 is a nuisance — the plan is to compel it out of the picture, and the same move can pile onto the e-pawn and develop a piece all at once. Note the trap to avoid: shoving c5 to hit it is a common mistake, because it badly weakens the d5 square. There's a subtler way to do the job.",
+   "kind": "plan"
+  },
+  {
+   "ply": 26,
+   "t": 1343,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 w - - 5 14",
+   "line": [
+    "Qc5"
+   ],
+   "spoken": "The subtle way is the queen to c5, x-raying down onto f2 and threatening to snap the knight off with a fork to follow. Here's the pattern to file away: when the opponent has played g3 but the bishop has abandoned its fianchetto post, the f3 square lights up as a tactical hotspot — a warning bell for your tactical metal detector.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 27,
+   "t": 1416,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/N1PNP3/6PP/PP3P1K/R1BQRB2 b - - 6 14",
+   "line": [
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1418.5,
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/4n3/N1PqP3/6PP/PP3P1K/R1BQRB2 w - - 0 15",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": "The queen collects the knight, and with the fork lurking behind it there's simply no good answer — the position collapses.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 11,
+   "t": 1434,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
+   "line": [],
+   "spoken": "The queen's tour to a5 is a well-worn main line against the fianchetto — from there it immediately eyes the c4-pawn, putting the question to the opponent's centre.",
+   "reanchor": true
+  }
+ ]
+}

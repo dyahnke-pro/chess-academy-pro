@@ -1,0 +1,292 @@
+{
+ "videoId": "UDDLO-WuOmE",
+ "title": "Wait!? Are You Cheating or NOT? | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:UDDLO-WuOmE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 20,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Nc3 is the doorway to the anti-Sicilians — the Grand Prix with f4, the Closed with g3, or a transposition straight back into an Open Sicilian.",
+   "kind": "main",
+   "teaches": "Nc3 keeps every anti-Sicilian and the Open Sicilian in White's back pocket."
+  },
+  {
+   "ply": 4,
+   "t": 86.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "As Accelerated Dragon players we answer Nc6 — though a Najdorf player should avoid it here, since White can move-order you into a system you don't play.",
+   "kind": "main",
+   "teaches": "Match your move-two choice to the Open Sicilian you actually play, or risk being transposed out of your book."
+  },
+  {
+   "ply": 5,
+   "t": 91.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 94.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 5 4",
+   "line": [
+    "Nb8",
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 102.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 6 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 118,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 7 5",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "Bb5 is a faceless anti-Sicilian — it looks like a Rossolimo but is inferior, because d4 is left unguarded: the knight that would defend it never comes to f3.",
+   "kind": "main",
+   "teaches": "Bb5 without a knight developed to f3 concedes d4; that missing guard is the flaw to exploit."
+  },
+  {
+   "ply": 10,
+   "t": 167,
+   "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 8 6",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "The principled reply is Nd4 — the same motif you'd use against a Trompowsky bishop: the knight becomes a monster in the centre and hits the bishop at once.",
+   "kind": "main",
+   "teaches": "Meet a pinning bishop by leaping the knight to d4, gaining a central monster and attacking the bishop."
+  },
+  {
+   "ply": 11,
+   "t": 169,
+   "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 9 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 173.5,
+   "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N5/PPPP1PPP/R1BQK1NR w KQkq - 8 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 180.5,
+   "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 9 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 211.5,
+   "fen": "r1bqkbnr/pp1ppppp/8/1Np5/4P3/5N2/PPPP1PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Nxb5",
+    "Nxb5"
+   ],
+   "spoken": "We swap the knight for the bishop. Now a6 is the human instinct, but it's worth questioning your instincts — the b5-knight isn't dangerous on its own, so d6 or Nf6 hitting the loose e4-pawn are real options too.",
+   "kind": "main",
+   "teaches": "Don't play the automatic pawn-kick reflexively; a stray enemy knight often isn't worth the tempo."
+  },
+  {
+   "ply": 14,
+   "t": 293.5,
+   "fen": "r1bqkbnr/1p1ppppp/p7/1Np5/4P3/5N2/PPPP1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 296.5,
+   "fen": "r1bqkbnr/1p1ppppp/p7/2p5/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 304.5,
+   "fen": "r1bqkbnr/1p2pppp/p2p4/2p5/4P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 306,
+   "fen": "r1bqkbnr/1p2pppp/p2p4/2p5/3PP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 330.5,
+   "fen": "r1bqkbnr/1p2pppp/p2p4/8/3QP3/2N2N2/PPP2PPP/R1B1K2R b KQkq - 0 10",
+   "line": [
+    "cxd4",
+    "Qxd4"
+   ],
+   "spoken": "Even after cxd4 this stays an anti-Sicilian — White has no light-squared bishop, so it's a different animal from a Najdorf. Our one problem is that we're badly behind in development.",
+   "kind": "main",
+   "teaches": "Read the position by what's missing: no light bishop means it's not a real Open Sicilian."
+  },
+  {
+   "ply": 20,
+   "t": 431,
+   "fen": "r1bqkbnr/1p3ppp/p2p4/4p3/3QP3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 0 11",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 433,
+   "fen": "r1bqkbnr/1p3ppp/p2p4/4p3/1Q2P3/2N2N2/PPP2PPP/R1B1K2R b KQkq - 1 11",
+   "line": [
+    "Qb4"
+   ],
+   "spoken": "Nf6 would run into e5, so we head that off — sometimes you accept a small positional concession rather than get crushed while undeveloped.",
+   "kind": "main",
+   "teaches": "Concede a little structurally to prevent a central break that would punish your lack of development."
+  },
+  {
+   "ply": 22,
+   "t": 527,
+   "fen": "r1bqkbnr/1p3pp1/p2p3p/4p3/1Q2P3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 0 12",
+   "line": [
+    "h6"
+   ],
+   "spoken": "h6 stops Bg5 — the Smyslov idea of trading the knight and then planting one on d5. We have to keep a knight available to contest that square.",
+   "kind": "main",
+   "teaches": "Prevent the trade that would surrender d5; contesting the outpost is worth a pawn move."
+  },
+  {
+   "ply": 23,
+   "t": 560.5,
+   "fen": "r1bqkbnr/1p3pp1/p2p3p/4p3/1Q2P3/2N1BN2/PPP2PPP/R3K2R b KQkq - 1 12",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 568.5,
+   "fen": "r1bqkb1r/1p3pp1/p2p1n1p/4p3/1Q2P3/2N1BN2/PPP2PPP/R3K2R w KQkq - 2 13",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Now we finally develop with Nf6; if Bb6, Qd7 is a fine, if slightly awkward, answer, and the queen can reroute to c6 later to free the bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 583.5,
+   "fen": "r1bqkb1r/1p3pp1/pB1p1n1p/4p3/1Q2P3/2N2N2/PPP2PPP/R3K2R b KQkq - 3 13",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 638,
+   "fen": "r1b1kb1r/1p1q1pp1/pB1p1n1p/4p3/1Q2P3/2N2N2/PPP2PPP/R3K2R w KQkq - 4 14",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 643.5,
+   "fen": "r1b1kb1r/1p1q1pp1/pB1p1n1p/4p3/1Q2P3/2N2N2/PPP2PPP/2KR3R b kq - 5 14",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 669.5,
+   "fen": "r1b1kb1r/1p3pp1/pB1pqn1p/4p3/1Q2P3/2N2N2/PPP2PPP/2KR3R w kq - 6 15",
+   "line": [
+    "Qe6"
+   ],
+   "spoken": "Under pressure the queen must go to e6 — the only square that keeps e5 defended, since otherwise Nxe5 crashes in. Conducting an initiative cleanly is one of the hardest skills in chess, and it cuts both ways.",
+   "kind": "main",
+   "teaches": "When defending, find the one square that holds your key point; sustaining an attack is hard even for the attacker."
+  },
+  {
+   "ply": 9,
+   "t": 700,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 7 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 706,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 9 6",
+   "line": [
+    "Nb8",
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 713,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 10 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

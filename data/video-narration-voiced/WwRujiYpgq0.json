@@ -1,0 +1,191 @@
+{
+ "videoId": "WwRujiYpgq0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1630",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:WwRujiYpgq0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 938.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 941,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 959,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The standard way to meet the bishop out to c4 is e6, blunting its diagonal — but develop the knight first, keeping the move order flexible before committing the pawn.",
+   "kind": "plan"
+  },
+  {
+   "ply": 6,
+   "t": 961,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "Nf3",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 963,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 966,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight comes to f6, and this is actually the most accurate move — it hits the centre and sets up a tactical resource that's about to appear.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 970.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 3 5",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 986.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/2p5/2B1n3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 6",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "Here's the cool device — the centre-fork trick: capture on e4, and the follow-up of grabbing the bishop and striking with d5 tears down the opponent's grip on the centre. A theme that recurs across many openings.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 11,
+   "t": 995.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/2p5/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 998,
+   "fen": "r1bqkb1r/pp3ppp/2n1p3/2pp4/2BPn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 999.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/2p5/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1001.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1p3/1Bpp4/3Pn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "d5",
+    "Bb5"
+   ],
+   "spoken": "The point of the trick, in full: the central push to d5 both wipes out the opponent's control of the middle and rounds up their important light-squared bishop — emerging a clean pawn up with the centre in hand.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1016,
+   "fen": "r2qkb1r/pp1b1ppp/2n1p3/1Bpp4/3Pn3/5N2/PPP2PPP/RNBQR1K1 w kq - 2 8",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Now just develop conventionally — start by unpinning with the bishop to d7, untangling before pressing the extra material."
+  },
+  {
+   "ply": 15,
+   "t": 1023,
+   "fen": "r2qkb1r/pp1b1ppp/2n1p3/1Bpp4/3Pn3/2N2N2/PPP2PPP/R1BQR1K1 b kq - 3 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Should the knight be taken? Yes — and don't assume no just because the question is posed. The capture improves the pawn structure, and trades are good when you're the one who's ahead.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 1035.5,
+   "fen": "r2qkb1r/pp1b1ppp/2n1p3/1Bpp4/3P4/2n2N2/PPP2PPP/R1BQR1K1 w kq - 0 9",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1038,
+   "fen": "r2qkb1r/pp1b1ppp/2n1p3/1Bpp4/3P4/2P2N2/P1P2PPP/R1BQR1K1 b kq - 0 9",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1039.5,
+   "fen": "r2qk2r/pp1bbppp/2n1p3/1Bpp4/3P4/2P2N2/P1P2PPP/R1BQR1K1 w kq - 1 10",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Bring out the other bishop even though it looks passive — up a pawn with a huge centre, that's fine. Not every piece has to be conquering the frontier at every moment; solid and ahead beats flashy and even.",
+   "kind": "plan"
+  },
+  {
+   "ply": 19,
+   "t": 1046.5,
+   "fen": "r2qk2r/pp1bbppp/2n1p3/1Bpp4/2PP4/5N2/P1P2PPP/R1BQR1K1 b kq - 0 10",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1083.5,
+   "fen": "r2qk2r/pp1bbppp/4p3/1Bpp4/2Pn4/5N2/P1P2PPP/R1BQR1K1 w kq - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Draw the sting from the centre with a capture on d4 — and take care not to open the e-file before castling. The reason this recapture is best over the others: at the end of the trade sequence a bishop swings to f6, skewering the queen against the rook and winning the exchange.",
+   "kind": "tactic"
+  }
+ ]
+}

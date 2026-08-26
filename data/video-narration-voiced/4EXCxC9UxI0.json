@@ -1,0 +1,227 @@
+{
+ "videoId": "4EXCxC9UxI0",
+ "title": "Baltic Defense | The Sensei Speedrun | GM Naro",
+ "openingName": "Baltic Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:4EXCxC9UxI0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "I want to vary our openings — instead of the Queen's Gambit Declined I've leaned on, let's play the Baltic."
+  },
+  {
+   "ply": 3,
+   "t": 21,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 29.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "The Baltic is the bishop to f5 — the whole point is to develop this bishop OUTSIDE the pawn chain before playing e6. The critical try is queen b3, which develops the queen and hits b7. The key is not to panic: pretend nothing is hanging and just develop rapidly. In the Baltic you throw caution to the wind — you sacrifice the b7-pawn for initiative against the queen, and you bank on quick development and opening the centre early."
+  },
+  {
+   "ply": 3,
+   "t": 736,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 768,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "The correct reply to queen b3 is e5, not taking on c4 — it's like an Albin Counter-Gambit on steroids, and here Black is fine even objectively.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 774,
+   "fen": "rn1qkbnr/ppp2ppp/4p3/3p1b2/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "e6"
+   ],
+   "spoken": "The rationale for the Baltic is simple: you want a Queen's Gambit Declined, but without burying the bishop behind the pawn chain. Positionally it's a very sound idea."
+  },
+  {
+   "ply": 4,
+   "t": 782.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 785,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "The concrete issue is that White can play cxd5.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 790.5,
+   "fen": "rn2kbnr/ppp1pppp/8/3q1b2/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Qxd5",
+    "Nc3"
+   ],
+   "spoken": "And the point is NOT to recapture with the queen — that's just a bad Scandinavian..."
+  },
+  {
+   "ply": 5,
+   "t": 793,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 794.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/RbBQKBNR w KQkq - 0 4",
+   "line": [
+    "Bxb1"
+   ],
+   "spoken": "...the point is to take White's knight first, before it gets a chance to develop...",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 797,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/1RBQKBNR b Kkq - 0 4",
+   "line": [
+    "Rxb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 798.5,
+   "fen": "rn2kbnr/ppp1pppp/8/3q4/3P4/8/PP2PPPP/1RBQKBNR w Kkq - 0 5",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": "...then recapture on d5 with the queen and get the queenside out quickly — the knight to c6, castle queenside, and then e5."
+  },
+  {
+   "ply": 7,
+   "t": 806.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/1RBQKBNR b Kkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 808,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 810.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 818,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "Consider it as an alternative to the Chigorin or the Queen's Gambit — a gambity line you keep in reserve to practise your tactics and mix things up.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 821.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 824,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "After queen b3, taking on c4, queen takes b7, the knight to d7 — the queen to c6 is already a mistake, and White starts going wrong here.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 841,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/2NQ4/PP2PPPP/R1B1KBNR w KQkq - 0 5",
+   "line": [
+    "Nc3",
+    "Nd7",
+    "Qd3",
+    "dxc4"
+   ],
+   "spoken": "The crucial move for White is simply the knight to c3 — then White is much better, because e4 is coming with tempo. Trying to do everything with the queen when nothing else is developed is just a bad strategy.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 849.5,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/8/PP2PPPP/RQB1KBNR w KQkq - 2 7",
+   "line": [
+    "Ne4",
+    "Bxe4",
+    "Qb1",
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 850.5,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pPP3/8/PP3PPP/RQB1KBNR b KQkq - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 852.5,
+   "fen": "1r1qkbnr/pppnpppp/8/5b2/2pPP3/8/PP3PPP/RQB1KBNR w KQk - 1 8",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": "The rook to b8 hits the queen, and White cannot keep the pawn on e4 protected — the queen loses contact with it."
+  },
+  {
+   "ply": 12,
+   "t": 861,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/8/PP2PPPP/RQB1KBNR w KQkq - 2 7",
+   "line": [],
+   "spoken": "The best move was the knight to c3, and it's not too late to revert to the right strategy. The queen to b4 is a serious practical mistake — at every move White more and more urgently needed to develop a piece; the knight to f3 was called for. Instead he kept shuffling the queen, and when he finally developed, it was the wrong piece, leaving the b2-pawn undefended.",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,876 @@
+{
+ "videoId": "pipfrQRET80",
+ "title": "Master Class | Danish Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:pipfrQRET80",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 32,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 35.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "exd4",
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 39.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 40.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 44,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1P3/2p5/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 60.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 63,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1P3/2p5/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 92.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "Recapture the pawn with the knight — the tempting central push has a drawback while the bishop sits on c4, because a counter-thrust to d5 hits that bishop and frees the defender's game. Once the knight recaptures, that push becomes a genuine threat of your own.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 101,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "The entire point of the gambit is a lead in development, and it demands speed — let the opponent castle and consolidate and you're simply a pawn down for nothing. Step on the gas before the king finds shelter.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 115.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 124.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 127,
+   "fen": "rnbqk2r/pppp1ppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 129,
+   "fen": "rnbqk2r/ppp2ppp/5n2/3pP3/1bB5/2N5/PP3PPP/R1BQK1NR w KQkq d6 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "When calculating, always start with the simplest move — if it already leads to a good position, you save time and dodge mistakes. Here the straightforward captures win the queen, and the far-advanced passed pawn becomes a huge endgame asset: it ties down a rook, keeps the enemy king weak, and lets you castle long with check. A pawn like that is worth more than it looks.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 13,
+   "t": 218.5,
+   "fen": "rnbqk2r/ppp2ppp/5P2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR b KQkq - 0 7",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 233.5,
+   "fen": "rnb1k2r/ppp2ppp/5q2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQkq - 0 8",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 278,
+   "fen": "rnb1k2r/ppp2ppp/5q2/3B4/1b6/2N5/PP3PPP/R1BQK1NR b KQkq - 0 8",
+   "line": [
+    "Bxd5"
+   ],
+   "spoken": "The opponent's hope, that recapturing wins the piece back via a fork on the king and rook, fails — the fork is simply parried by interposing the bishop. So the central pawn can be safely collected, and it's just a clean piece to the good.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 16,
+   "t": 302.5,
+   "fen": "rnb1k2r/ppp2ppp/5q2/3B4/8/2b5/PP3PPP/R1BQK1NR w KQkq - 0 9",
+   "line": [
+    "Bxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 303.5,
+   "fen": "rnb1k2r/ppp2ppp/5q2/3B4/8/2P5/P4PPP/R1BQK1NR b KQkq - 0 9",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 306,
+   "fen": "rnb1k2r/ppp2ppp/8/3B4/8/2q5/P4PPP/R1BQK1NR w KQkq - 0 10",
+   "line": [
+    "Qxc3+"
+   ],
+   "spoken": "Here's the crucial follow-up to the interposition — with the e-file open, the queen steps to e2, pinning the enemy king to its queen and forcing the trade that wins. Whenever a file opens toward the kings, always look for a check on the second or seventh rank; it changes everything.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 19,
+   "t": 329,
+   "fen": "rnb1k2r/ppp2ppp/8/3B4/8/2q5/P2B1PPP/R2QK1NR b KQkq - 1 10",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 339,
+   "fen": "rnb1k2r/ppp2ppp/8/3Bq3/8/8/P2BQPPP/R3K1NR b KQkq - 3 11",
+   "line": [
+    "Qe5+",
+    "Qe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 390.5,
+   "fen": "r1b1k2r/pppn1ppp/8/3Bq3/8/8/P2BQPPP/R3K1NR w KQkq - 4 12",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The enemy queen can't move until the king steps off the open file, so you dictate the terms — force the opponent to capture your queen, which lets your king come to the centre, exactly where it belongs in an endgame. Trading on your own terms turns the pin into an advantage.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 437,
+   "fen": "r1b1k2r/pppn1ppp/8/3Bq3/8/5N2/P2BQPPP/R3K2R b KQkq - 5 12",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 552,
+   "fen": "r1b1k2r/pppnqppp/8/3B4/8/5N2/P2BQPPP/R3K2R w KQkq - 6 13",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 555,
+   "fen": "r1b1k2r/pppnQppp/8/3B4/8/5N2/P2B1PPP/R3K2R b KQkq - 0 13",
+   "line": [
+    "Qxe7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 558,
+   "fen": "r1b4r/pppnkppp/8/3B4/8/5N2/P2B1PPP/R3K2R w KQ - 0 14",
+   "line": [
+    "Kxe7"
+   ],
+   "spoken": "A nice concrete question — castle short or long? The answer is long. It may look risky with the queenside pawns gone, but with the queens off and the opponent undeveloped the king is in zero danger, and castling long automatically springs the rook into the game. Far more efficient than a slow rook move.",
+   "kind": "plan"
+  },
+  {
+   "ply": 28,
+   "t": 597,
+   "fen": "r1b4r/ppp1kppp/5n2/3B4/8/5N2/P2B1PPP/2KR3R w - - 2 15",
+   "line": [
+    "O-O-O",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 611.5,
+   "fen": "r1b4r/ppp1kppp/5n2/3B4/1B6/5N2/P4PPP/2KR3R b - - 3 15",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "Before the check, insert the bishop to b4 first — denying the king its escape to f8. Not playing the obvious move immediately, and surveying all the options, is what makes the follow-up so much more efficient.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 30,
+   "t": 631,
+   "fen": "r1bk3r/ppp2ppp/5n2/3B4/1B6/5N2/P4PPP/2KR3R w - - 4 16",
+   "line": [
+    "Kd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 648.5,
+   "fen": "r1bk3r/pBp2ppp/5n2/8/1B6/5N2/P4PPP/2KR3R b - - 0 16",
+   "line": [
+    "Bxb7+"
+   ],
+   "spoken": "It isn't mate — the opponent can always block a check with the bishop — so simply win as much material as possible, snapping off the rook with check. When there's no forced mate, take the practical, decisive material rather than hunting a marginally prettier line.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 32,
+   "t": 660.5,
+   "fen": "r1b1k2r/pBp2ppp/5n2/8/1B6/5N2/P4PPP/2KR3R w - - 1 17",
+   "line": [
+    "Ke8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 663.5,
+   "fen": "r1b1k2r/pBp2ppp/5n2/8/1B6/5N2/P4PPP/2KRR3 b - - 2 17",
+   "line": [
+    "Rhe1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 674,
+   "fen": "r3k2r/pBp2ppp/4bn2/8/1B6/5N2/P4PPP/2KRR3 w - - 3 18",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 685,
+   "fen": "r3k2r/p1p2ppp/2B1bn2/8/1B6/5N2/P4PPP/2KRR3 b - - 4 18",
+   "line": [
+    "Bc6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 695,
+   "fen": "r3k2r/p1pB1ppp/4b3/8/1B6/5N2/P4PPP/2KRR3 b - - 0 19",
+   "line": [
+    "Nd7",
+    "Bxd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 703.5,
+   "fen": "r2k3r/p1p2ppp/4B3/8/1B6/5N2/P4PPP/2KRR3 b - - 0 20",
+   "line": [
+    "Kd8",
+    "Bxe6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 716.5,
+   "fen": "r3k2r/p1p2ppp/4B3/8/1B6/5N2/P4PPP/2KRR3 w - - 1 21",
+   "line": [
+    "Ke8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 718.5,
+   "fen": "r1B1k2r/p1p2ppp/8/8/1B6/5N2/P4PPP/2KRR3 b - - 2 21",
+   "line": [
+    "Bc8#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 720,
+   "fen": "r3k2r/p1p2ppp/4B3/8/1B6/5N2/P4PPP/2KRR3 w - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 721,
+   "fen": "r3k2r/p1p2ppp/8/5B2/1B6/5N2/P4PPP/2KRR3 b - - 2 21",
+   "line": [
+    "Bf5#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 722,
+   "fen": "r3k2r/p1p2ppp/4B3/8/1B6/5N2/P4PPP/2KRR3 w - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 732.5,
+   "fen": "r3k2r/p1pB1ppp/8/8/1B6/5N2/P4PPP/2KRR3 b - - 2 21",
+   "line": [
+    "Bd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 733.5,
+   "fen": "r2k3r/p1pB1ppp/8/8/1B6/5N2/P4PPP/2KRR3 w - - 3 22",
+   "line": [
+    "Kd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 741,
+   "fen": "r2k3r/p1p2ppp/4B3/8/1B6/5N2/P4PPP/2KRR3 b - - 4 22",
+   "line": [
+    "Be6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 742,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 748.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 750.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/Pp3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "cxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 752,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "Bxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 771,
+   "fen": "rnbqkbnr/ppp2ppp/8/3p4/2B1P3/8/PB3PPP/RN1QK1NR w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "For the theory record, the traditional way to equalise against the Danish is the central break d5, handing a pawn back to accelerate development. It's the safest, most reliable route to a level game.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 782.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3B4/4P3/8/PB3PPP/RN1QK1NR b KQkq - 0 6",
+   "line": [
+    "Bxd5"
+   ],
+   "spoken": "After that break, recapture with the bishop, not the pawn — taking with the pawn would leave the bishop looking foolish. Grabbing with the bishop opens a diagonal against it and lands it awkwardly, so the knight develops with tempo, gaining time on the opponent's main attacking piece.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 793.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3B4/4P3/8/PB3PPP/RN1QK1NR w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 811.5,
+   "fen": "rnbqkb1r/ppp2Bpp/5n2/8/4P3/8/PB3PPP/RN1QK1NR b KQkq - 0 7",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 820.5,
+   "fen": "rnbq1b1r/ppp2kpp/5n2/8/4P3/8/PB3PPP/RN1QK1NR w KQ - 0 8",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 823,
+   "fen": "rnbQ1b1r/ppp2kpp/5n2/8/4P3/8/PB3PPP/RN2K1NR b KQ - 0 8",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 828,
+   "fen": "rnbQ3r/ppp2kpp/5n2/2b5/4P3/8/PB3PPP/RN2K1NR w KQ - 1 9",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 850.5,
+   "fen": "rnb4r/ppp2kpp/5n2/8/1b2P3/8/PB1Q1PPP/RN2K1NR w KQ - 3 10",
+   "line": [
+    "Qd2",
+    "Bb4"
+   ],
+   "spoken": "A beautiful defensive idea against the sacrifice — when facing a discovered check, remember you can sometimes use the piece that's already lost to block it and get something back in return. Interposing and then recapturing wins the piece back, reaching an equal opposite-coloured-bishop endgame with drawish tendencies.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 882,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 893,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 894.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1P3/2p5/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 896.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [
+    "Nxc3",
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 908,
+   "fen": "rnbqk2r/pppp1Bpp/5n2/8/1b2P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 912,
+   "fen": "rnbq3r/pppp1kpp/5n2/8/1b2P3/1QN5/PP3PPP/R1B1K1NR b KQ - 1 7",
+   "line": [
+    "Kxf7",
+    "Qb3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 917.5,
+   "fen": "rnbq3r/ppp2kpp/5n2/3p4/1b2P3/1QN5/PP3PPP/R1B1K1NR w KQ - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 919.5,
+   "fen": "rnbq3r/ppp2kpp/5n2/3p4/1Q2P3/2N5/PP3PPP/R1B1K1NR b KQ - 0 8",
+   "line": [
+    "Qxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 920.5,
+   "fen": "r1bq3r/ppp2kpp/2n2n2/3p4/1Q2P3/2N5/PP3PPP/R1B1K1NR w KQ - 1 9",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 930.5,
+   "fen": "rnbqk2r/pppp1Bpp/5n2/8/1b2P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 931.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 934.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/1QN5/PP3PPP/R1B1K1NR b KQkq - 2 6",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": "A vital lesson on move order — reversing the sequence of a line often completely changes its nature and hands the opponent extra defensive resources. The same moves in a different order can turn a winning attack into nothing, so the order is the idea, not just the moves.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 954,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/8/2B1P3/2Q5/PP3PPP/R1B1K1NR w KQ - 1 8",
+   "line": [
+    "Bxc3+",
+    "Qxc3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 962,
+   "fen": "rnbq1rk1/pppp1ppp/5n2/6B1/2B1P3/2Q5/PP3PPP/R3K1NR b KQ - 2 8",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 963,
+   "fen": "rnbq1rk1/pppp1ppp/8/6B1/2B1n3/2Q5/PP3PPP/R3K1NR w KQ - 0 9",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 979.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/1QN5/PP3PPP/R1B1K1NR b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 981,
+   "fen": "rnbqk2r/ppp2ppp/5n2/3pP3/1bB5/2N5/PP3PPP/R1BQK1NR b KQkq - 1 8",
+   "line": [
+    "d6",
+    "e5",
+    "d5",
+    "Qd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 982.5,
+   "fen": "rnbqk2r/pppp1ppp/5n2/8/1bB1P3/1QN5/PP3PPP/R1B1K1NR b KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 984,
+   "fen": "rnb1q2r/ppppkppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQ - 2 8",
+   "line": [
+    "Ke7",
+    "e5",
+    "Qe8",
+    "Qd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1003,
+   "fen": "rnb1q2r/ppp1kppp/3p1n2/4P3/1bB5/2N5/PP2QPPP/R1B1K1NR b KQ - 1 9",
+   "line": [
+    "d6",
+    "Qe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1004,
+   "fen": "rnb1q2r/ppp1kppp/5n2/3pP3/1bB5/2N5/PP2QPPP/R1B1K1NR w KQ - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1006.5,
+   "fen": "rnb1q2r/ppp1kppp/5P2/3p4/1bB5/2N5/PP2QPPP/R1B1K1NR b KQ - 0 10",
+   "line": [
+    "exf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1035.5,
+   "fen": "rnbkq2r/ppp2ppp/5P2/3p4/1bB5/2N5/PP3PPP/R1BKQ1NR b - - 4 12",
+   "line": [
+    "Kd7",
+    "Kd1",
+    "Kd8",
+    "Qe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1037,
+   "fen": "rnb1q2r/ppppkppp/5n2/4P3/1bB5/1QN5/PP3PPP/R1B1K1NR w KQ - 1 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1038,
+   "fen": "rnbkq2r/ppp2ppp/5P2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQ - 1 10",
+   "line": [
+    "Qd1",
+    "d5",
+    "exf6+",
+    "Kd8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1099,
+   "fen": "rnb1q2r/ppppkppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQ - 2 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1103,
+   "fen": "rnb1q2r/ppp2ppp/5k2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQ - 0 10",
+   "line": [
+    "d5",
+    "exf6+",
+    "Kxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1105,
+   "fen": "rnb1q2r/ppp2ppp/5k2/3p4/1bB5/2N5/PP2QPPP/R1B1K1NR b KQ - 1 10",
+   "line": [
+    "Qe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1114.5,
+   "fen": "rnb2q1r/ppp2ppp/5k2/3p4/1bB5/2N5/PP2QPPP/R1B1K1NR w KQ - 2 11",
+   "line": [
+    "Qf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1117.5,
+   "fen": "rnb2q1r/ppp2ppp/5k2/3B4/8/2b5/PP2QPPP/R1B1K1NR w KQ - 0 12",
+   "line": [
+    "Bxd5",
+    "Bxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1130.5,
+   "fen": "rnb1q2r/ppppkppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQ - 2 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1134,
+   "fen": "rnb1q2r/ppp2ppp/5k2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQ - 0 10",
+   "line": [
+    "d5",
+    "exf6+",
+    "Kxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1167.5,
+   "fen": "rnb1q2r/ppppkppp/5n2/4P3/1bB5/2N5/PP3PPP/R1BQK1NR b KQ - 2 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1225.5,
+   "fen": "rnb1q2r/ppp2ppp/5k2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQ - 0 10",
+   "line": [
+    "d5",
+    "exf6+",
+    "Kxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1275,
+   "fen": "rnb1q2r/ppp1kppp/5P2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1276.5,
+   "fen": "rnb1q2r/ppp1kppp/5n2/3pP3/1bB5/2N5/PP3PPP/R1BQK1NR w KQ d6 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1277.5,
+   "fen": "rnb1q2r/ppp2ppp/5k2/3B4/1b6/2N5/PP3PPP/R1BQK1NR w KQ - 0 11",
+   "line": [
+    "exf6+",
+    "Ke6",
+    "Bxd5+",
+    "Kxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1278.5,
+   "fen": "rnb1q2r/ppp2ppp/4kP2/3p4/1bB5/2N5/PP3PPP/R1BQK1NR w KQ - 1 10",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

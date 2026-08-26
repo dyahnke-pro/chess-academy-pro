@@ -1,0 +1,485 @@
+{
+ "videoId": "xp727Z8dXZc",
+ "title": "Master Class | Philidor Defence | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Philidor Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:xp727Z8dXZc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 13,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 15,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 42.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Against the Philidor, apply basic principles — the modest pawn to d6 is passive, closing in the bishop and developing nothing. The logical response is to open the centre with the pawn to d4, punishing the passivity with lines.",
+   "kind": "plan"
+  },
+  {
+   "ply": 6,
+   "t": 48.5,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 89.5,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Passive development leaves the defender short of resources against a quick onslaught — and in the opening, always associate an onslaught with the f7 square, the only accessible weak point. So the bishop swings to c4, aiming straight at it for a fast kill.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 93,
+   "fen": "r1bqkb1r/pppn1ppp/3p1n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 3 5",
+   "line": [
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 101.5,
+   "fen": "r1bqkb1r/pppn1ppp/3p1n2/4p1N1/2BPP3/8/PPP2PPP/RNBQK2R b KQkq - 4 5",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Developing the knight to f6 is a mistake — the knight jump to g5 leaves the defence in real trouble, and a central break wins a pawn outright. It's the Fried Liver pattern, but an even worse version for the defender because they're so passive.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 11,
+   "t": 106.5,
+   "fen": "r1bqkb1r/pppn1ppp/5n2/3Pp1N1/2BP4/8/PPP2PPP/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "d5",
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 115.5,
+   "fen": "r1bqkb1r/ppp2ppp/1n3n2/3Pp1N1/2BP4/8/PPP2PPP/RNBQK2R w KQkq - 1 7",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 135.5,
+   "fen": "r1bqkb1r/ppp2ppp/1n3n2/1B1Pp1N1/3P4/8/PPP2PPP/RNBQK2R b KQkq - 2 7",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 146,
+   "fen": "r2qkb1r/pppb1ppp/1n3n2/1B1Pp1N1/3P4/8/PPP2PPP/RNBQK2R w KQkq - 3 8",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "A check on b5 is the precise move, since the natural block isn't available — and if the bishop interposes, capturing wins a tempo. In a position built on a development lead, every extra tempo is gold.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 15,
+   "t": 147,
+   "fen": "r2qkb1r/pppB1ppp/1n3n2/3Pp1N1/3P4/8/PPP2PPP/RNBQK2R b KQkq - 0 8",
+   "line": [
+    "Bxd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 153.5,
+   "fen": "r3kb1r/pppq1ppp/1n3n2/3Pp1N1/3P4/8/PPP2PPP/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "Qxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 167,
+   "fen": "r3kb1r/pppq1ppp/1n3n2/3PP1N1/8/8/PPP2PPP/RNBQK2R b KQkq - 0 9",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 170.5,
+   "fen": "r3kb1r/pppq1ppp/1n6/3nP1N1/8/8/PPP2PPP/RNBQK2R w KQkq - 0 10",
+   "line": [
+    "Nfxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 172.5,
+   "fen": "r3kb1r/pppq1ppp/1n6/3nP1N1/8/8/PPP2PPP/RNBQ1RK1 b kq - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 186,
+   "fen": "r3kb1r/pppq1pp1/1n6/3nP1Np/8/8/PPP2PPP/RNBQ1RK1 w kq - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "The opponent hasn't castled — and any time your opponent's king is stuck in the centre, the alarm bells for tactics should ring. An uncastled king by definition means a heightened chance of a combination.",
+   "kind": "plan"
+  },
+  {
+   "ply": 21,
+   "t": 224.5,
+   "fen": "r3kb1r/pppq1pp1/1n2P3/3n2Np/8/8/PPP2PPP/RNBQ1RK1 b kq - 0 11",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Here's the common pattern to bank — if the enemy queen lands on the open central file, a rook to e1 wins it. Combining that with the exposed king yields the pawn thrust to e6, which forces a capture, and the recapture keeps the tactic alive because the queen can't take without walking into the rook.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 23,
+   "t": 231,
+   "fen": "r3kb1r/pppq2p1/1n2N3/3n3p/8/8/PPP2PPP/RNBQ1RK1 b kq - 0 12",
+   "line": [
+    "fxe6",
+    "Nxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 256,
+   "fen": "r3kb1r/ppp3p1/1n2q3/3n3p/8/8/PPP2PPP/RNBQ1RK1 w kq - 0 13",
+   "line": [
+    "Qxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 257,
+   "fen": "r3kb1r/ppp3p1/1n2q3/3n3p/8/8/PPP2PPP/RNBQR1K1 b kq - 1 13",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 276.5,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 278.5,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 289,
+   "fen": "r1bqk1nr/pppnbppp/3p4/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 3 5",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "For the theory record, the bishop to e7 is a common trap-move that does stop the knight jump — but after the exchanges the defender is almost lost anyway, because the very same breakthrough pattern reappears.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 298,
+   "fen": "r1bqk1nr/pppnbppp/3p4/4P3/2B1P3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 303.5,
+   "fen": "r1bqk1nr/pppnbppp/8/4p3/2B1P3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 316.5,
+   "fen": "r1bqk2r/pppnbppp/7B/3np3/2B1P3/5N2/PPP2PPP/RN2K2R w KQkq - 0 8",
+   "line": [
+    "Bh6",
+    "Ngf6",
+    "Qd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 318.5,
+   "fen": "r1bqk1nr/pppnbppp/3p4/4P3/2B1P3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 319.5,
+   "fen": "r1bqk1nr/pppnbppp/8/4p3/2B1P3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 322,
+   "fen": "r1bqk1nr/ppp1bppp/8/4n3/2B1P3/8/PPP2PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "Nxe5",
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 332.5,
+   "fen": "r1bqk1nr/ppp1bBpp/8/4n3/4P3/8/PPP2PPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 333.5,
+   "fen": "r1bq2nr/ppp1bkpp/8/4n3/4P3/8/PPP2PPP/RNBQK2R w KQ - 0 8",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 347,
+   "fen": "r1bqk1nr/ppp1bppp/8/4n3/2B1P3/8/PPP2PPP/RNBQK2R w KQkq - 0 7",
+   "line": [],
+   "spoken": "And a vital discipline when carrying a pattern from one position to another — always check that this position is really the same. Here the bishop defends the queen, but there's also a loose pawn under pressure; combining those two facts yields a queen move to h5, a classic fork that's very hard to meet.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 363,
+   "fen": "r1bqk2r/ppp1bp1p/5np1/4Q3/2B1P3/8/PPP2PPP/RNB1K2R w KQkq - 0 9",
+   "line": [
+    "Qd4",
+    "Nf6",
+    "Qxe5",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 364.5,
+   "fen": "r1bqk2r/ppp1bp1p/5npB/4Q3/2B1P3/8/PPP2PPP/RN2K2R b KQkq - 1 9",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 374.5,
+   "fen": "r1bqk1nr/pppnbppp/3p4/4P3/2B1P3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 376,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 378,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "The best practical defence is simply to capture the pawn and accept being slightly worse — less of the centre, but solid. Sometimes admitting a small disadvantage and staying sturdy beats clutching at an unsound alternative.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 380,
+   "fen": "r1bqkb1r/pppn1ppp/3p1n2/8/2BNP3/8/PPP2PPP/RNBQK2R w KQkq - 1 6",
+   "line": [
+    "Nxd4",
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 390,
+   "fen": "r1bqkbnr/pppn1ppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [],
+   "spoken": "A moment to break the development rule — when you can just pile up on a target and it works, do it: bring the queen out to f3, and after the forced defence, an in-between pawn thrust to e6 springs a winning fork. Constantly modulating between applying the principles and knowing when to violate them is what makes chess exhilarating.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 487,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 488.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d6",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 490,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "In the modern treatment of the Philidor the defender captures in the centre first — the best move — and fianchettoes the bishop. It's a fully legitimate, hotly contested line that isn't easy to break, though it demands accuracy from the defender.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 493.5,
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nxd4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 495,
+   "fen": "rnbqkb1r/ppp2p1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "Nc3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 523,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 525.5,
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 528,
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/4P3/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 529.5,
+   "fen": "rnbqkb1r/ppp2ppp/3p4/4P3/4n3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 532,
+   "fen": "rnbqkb1r/ppp2ppp/3p4/4P3/2B1n3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,135 @@
+{
+ "videoId": "Oj04sSCzraE",
+ "title": "Mastering the Maróczy Bind | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Oj04sSCzraE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 23,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 24.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 26.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 28,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 29.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "c4"
+   ],
+   "spoken": "And there it is — the Maróczy Bind, the very thing most people who avoid the Accelerated Dragon are afraid of, and rightly so. It's both a variation and a structure: pawns planted on e4 and c4, both trained on the d5 square. That's the bind — it makes the freeing break to d5, the whole point of the Dragon, virtually impossible, leaving black cramped.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 120.5,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Here's the dangerous, under-the-radar answer: instead of the automatic fianchetto, start with the knight to f6, delaying the bishop. It immediately puts the question to the e4-pawn and hands black real chances to fight for the initiative rather than just sit passively.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 138.5,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "A tactical footnote that makes it sound: if the opponent captures on c6 and pushes to e5 to boot the knight, there's a queen check on a5 that scoops the e-pawn back. The whole idea holds together on concrete tactics.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 12,
+   "t": 153,
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PnP3/2N5/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Now the step that startles the uninitiated — capture on d4, dragging the queen out into the centre. It looks reckless, inviting the knight to be pinned with a menacing central push, but it works out concretely for black.",
+   "kind": "plan"
+  },
+  {
+   "ply": 13,
+   "t": 157.5,
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R b KQkq - 0 7",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 175.5,
+   "fen": "r1bqkb1r/pp2pp1p/3p1np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R w KQkq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "It's important not to fianchetto here, since that would walk into the central push — so insert d6 instead. It frees the bishop and, just as importantly, jams the advance of the enemy e-pawn. If it pushes anyway, it's simply captured; and even if the queens come off at the cost of castling rights, that trade isn't worth a whole pawn to the opponent.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 202.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": "The deeper idea behind grabbing on d4 is a tempo hunt. Once the bishop finally fianchettoes, the centralised queen is staring down its diagonal — so it has to scramble off d4, and while there's no immediate discovered attack, one will exist the moment development completes. Finding a good square for that queen is genuinely awkward — it has precious few in these structures.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

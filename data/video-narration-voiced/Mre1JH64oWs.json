@@ -1,0 +1,227 @@
+{
+ "videoId": "Mre1JH64oWs",
+ "title": "Reverse Hippo Attack | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Queen's Pawn Game",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Mre1JH64oWs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e3",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 27,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 35.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 37.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 61,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The defining feature of this anti-hippo setup is to hold the c6 square for a pawn rather than a knight, and pair it with the bishop on d6. The move order is elastic — c6 then the bishop, or the bishop first, or castle in between; it all transposes.",
+   "kind": "plan"
+  },
+  {
+   "ply": 9,
+   "t": 63,
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 69,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The whole point of c6 is to build a pawn chain, so that when the opponent fianchettoes, the long-diagonal bishop bites on granite — pointing straight into a wall of pawns with nothing to attack.",
+   "kind": "plan"
+  },
+  {
+   "ply": 11,
+   "t": 72.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 84,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR w KQ - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 85.5,
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR b KQ - 2 7",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "Now the knight question: rather than blocking the bishop, the knight is routed the long way — to d7 and then around by f8 to g6 — so the bishop's diagonal stays clear. Reaching g6 just needs one preparatory move first.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 112.5,
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR w KQ - 3 8",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "That preparation is a flexible rook move to e8 — it reinforces the centre and keeps the options open while it's still unclear how the opponent will arrange the kingside. When you don't yet know the plan, make the move that commits to nothing and helps regardless.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 118.5,
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR b KQ - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": "The pawn thrust turns this into a hippo on steroids, and it demands care — the natural knight development to d7 would let the knight get trapped by a further pawn push to g5. The earlier rook move wasn't perfectly accurate against this, so a different route is needed."
+  },
+  {
+   "ply": 16,
+   "t": 153,
+   "fen": "r1bqr1k1/pp3ppp/n1pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR w KQ - 1 9",
+   "line": [
+    "Na6"
+   ],
+   "spoken": "So the knight takes the odd-looking road out to a6, heading back toward the centre via c7 and later e6. A route around the edge beats a developing square that walks into a trap.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 157.5,
+   "fen": "r1bqr1k1/ppn2ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1PB1/R2QK1NR w KQ - 3 10",
+   "line": [
+    "Bg2",
+    "Nc7"
+   ],
+   "spoken": "The plan now unfolds in full: throw in a5 to grab queenside space and discourage the opponent from castling long — and if they do go long, the other knight drops back to d7, which is exactly why that square was kept free. The kingside pawns are no cause for fear. Then a knight comes to the fine central c5 square, unbothered by pawn pokes, and the follow-up c7–e6–f4 lands a knight on prime real estate. A knight planted on f4 almost always breeds a tactic — hunt the loose pieces and a jump to d3 appears, winning a pawn, shattering the queenside pawn cover and forcing the king to move all at once. And the finishing lesson: don't play automatically. The obvious recapture is there, but look for the better move — a quiet bishop to g4 wins the queen outright.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 2,
+   "t": 328.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 331,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 333,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nf6",
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 335.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 343.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 346.5,
+   "fen": "r1bqkbnr/ppp3pp/2n5/3ppp2/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "h3",
+    "f5"
+   ],
+   "spoken": "In a serious game the choice might differ — a knight to c6 and a pawn to f5, an Austrian-Attack picture, treating the whole thing as a reversed Pirc. But staying consistent with the c6-and-bishop-d6 setup is perfectly solid; there's nothing wrong with it.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 357.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": "And a word to cure a common fear: there's a wide gulf between the opponent's pawns arriving on the kingside and any actual checkmate. Beginners see a couple of pawns lunge forward and feel the game is already lost — but converting that advance into a mate is a long, difficult road, and there's ample time to meet it.",
+   "reanchor": true
+  }
+ ]
+}

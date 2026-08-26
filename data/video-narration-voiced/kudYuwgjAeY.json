@@ -1,0 +1,494 @@
+{
+ "videoId": "kudYuwgjAeY",
+ "title": "Master Class | Nimzo-Indian Defence | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Nimzo/Queen's Indian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:kudYuwgjAeY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": "King's Indian or Nimzo-Indian? The Nimzo flies under the radar and is a superb positional choice.",
+   "kind": "main",
+   "teaches": [
+    "Nimzo as a positional weapon"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 37,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Let's play positionally — e6, heading for the Nimzo.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 54,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "One misconception: the Nimzo proper is only the knight to c3 met by the bishop to b4. Against anything else we shift to a Queen's-Indian or Bogo setup. White's e3 is passive but solid — it does box in his own bishop, and the ideal companion here is the Queen's-Indian plan with b6.",
+   "kind": "plan",
+   "teaches": [
+    "when it is really the Nimzo"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 104.5,
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": "Why not check on b4 now? The bishop check is most effective specifically against the knight once it commits to c3; here White just interposes on d2 and we lose the structure-wrecking capture. So b6 instead — d5 transposing into a favourable Queen's Gambit Declined was also fine.",
+   "kind": "main",
+   "teaches": [
+    "save Bb4 for Nc3"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 108.5,
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 111.5,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "We fianchetto the bishop, and note the lovely control it gives us over the e4-square.",
+   "kind": "main",
+   "teaches": [
+    "fianchetto to fight for e4"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 114.5,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 167.5,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Now d5 to stake out the centre — a chance to explain the pawn as an extension of the bishop. It looks like d5 buries our own bishop, and it does restrict it for the moment. But the aim is control of central squares: if we later plant a piece on e4 and recapture with a pawn, the bishop ends up defending that pawn — and we can always take on c4 to reopen the diagonal. No rush; complete development first.",
+   "kind": "plan",
+   "teaches": [
+    "the pawn as an extension of the bishop"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 170,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 212.5,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop belongs on d6 — now both bishops are trained on White's king, so make a mental note to watch for tactics as the game opens.",
+   "kind": "main",
+   "teaches": [
+    "point the bishops at the king"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 222.5,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 225,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 4 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 229,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3P4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 230,
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 240,
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 b - - 1 9",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "We've got very nice central control. White's e4 break isn't a threat — we outnumber it three defenders to two attackers.",
+   "teaches": [
+    "count the central break"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 266.5,
+   "fen": "r2q1rk1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 2 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The queen's knight goes to d7, never c6 — c6 would block our own c-pawn and hem the bishop in further. And a6 is often useful to take the sting out of a knight jump to b5.",
+   "kind": "main",
+   "teaches": [
+    "knight to d7, not c6"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 287,
+   "fen": "r2q1rk1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQR1K1 b - - 3 10",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 317.5,
+   "fen": "r2qr1k1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQR1K1 w - - 4 11",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "Here's the strategic engine of the position. Rather than the passive a6, we answer the knight-to-b5 threat with c5, turning up the temperature in the centre — and if the knight does jump to b5 we simply tuck the bishop back to b8, keeping it on its beautiful diagonal. Recapture with the pawn to preserve our central integrity, and now a d4 break can open that bishop with devastating effect — this is potential energy, the bishop coiled behind its own pawn. The calculation lesson runs through everything that follows: don't cash in too soon. Grabbing on f3 was more complicated than it looked, so keep every piece maximally active and hunt for a real knockout instead. There's a Greek-gift sacrifice in the air — the bishop crashing on h2, the knight to g4, and a queen infiltration exploiting an undefended f2 — and an all-hands-on-deck effort where even the sleepy knight must join. Control the e2-square so the king can never make its dash to safety, and the net closes with a rook to e2 and mate. The theme is converting potential energy into kinetic: often the simplest continuation is strongest because it keeps all your trumps.",
+   "kind": "plan",
+   "teaches": [
+    "the c5 break",
+    "potential energy of the bishop",
+    "don’t cash in too soon",
+    "the Greek-gift sacrifice",
+    "bring every piece into the attack"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 1132,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1137,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "b6",
+    "Be2",
+    "Bb7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1142.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "To recap the theory: the Nimzo-Indian is the knight to c3 answered by the bishop to b4.",
+   "kind": "review",
+   "teaches": [
+    "Nimzo definition"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1144,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1145,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1151,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1152.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White's other main tries are the knight to f3 — where the Queen's Indian answer is b6 — and g3, the Catalan. A trifecta of setups to know.",
+   "kind": "review",
+   "teaches": [
+    "Queen’s Indian and Catalan"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1154.5,
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1156.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1158,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1161,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1177,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1180,
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1185,
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1186,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1187,
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1190.5,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1191.5,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1193,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1194,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1195.5,
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 5 8",
+   "line": [
+    "Bf8",
+    "Nb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1197.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "line": [
+    "Bd6",
+    "Nc3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1198.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/1PN1PN2/P3BPPP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1204.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1205.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3P4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1207,
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1212.5,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1225.5,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1227.5,
+   "fen": "rn1qk2r/pbp2ppp/4pn2/2bp4/8/4PN2/PP2BPPP/RNBQ1RK1 w kq - 0 9",
+   "line": [
+    "c5",
+    "bxc5",
+    "dxc5",
+    "Bxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1229,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

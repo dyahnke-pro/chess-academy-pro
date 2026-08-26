@@ -1,0 +1,511 @@
+{
+ "videoId": "wn7jKtpg2dg",
+ "title": "Beginner To Master | Chess Speedrun | 1420 | Grandmaster Naroditsky",
+ "openingName": "French Defence: Advance",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:wn7jKtpg2dg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1567,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1585.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1587,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1600.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1602,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1618,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": "This is the Advance French, chosen deliberately to practise closed positions — thriving in them is a genuine skill few players are comfortable with. The first job is the modest pawn to c3, building and bracing the pawn chain.",
+   "kind": "plan"
+  },
+  {
+   "ply": 8,
+   "t": 1619.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1645,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The way to understand a closed position is to zero in on what the battle revolves around — here it's the d-pawn at the head of the chain. Whoever controls that fight wins: hold it and you keep a big space advantage and easy development; lose it and the whole structure collapses.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 1648,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1662.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": "Against the pressure on the chain comes an odd-looking rook-pawn move to a3 — and its purpose is to prepare b4, shoving the enemy pawn away and keeping the chain intact. Prophylaxis that also gains space.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 1664.5,
+   "fen": "r1b1kbnr/pp4pp/1qn1pp2/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R w KQkq - 0 7",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1677,
+   "fen": "r1b1kbnr/pp4pp/1qn1pp2/2ppP3/1P1P4/P1P2N2/5PPP/RNBQKB1R b KQkq - 0 7",
+   "line": [
+    "b4"
+   ],
+   "spoken": "Yes, it's two pawn moves and no piece development — but preserving the health of the pawn chain is exactly that important. And it isn't wasted: the queenside expansion also readies a further push to kick a knight, and opens the door to a fianchetto. Several gains from one plan.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 1699,
+   "fen": "r1b1kbnr/pp4pp/1qn1pp2/3pP3/1P1P4/P4N2/5PPP/RNBQKB1R b KQkq - 0 8",
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1719.5,
+   "fen": "r1b1kbnr/1p4pp/pqn1pp2/3pP3/1P1P4/P4N2/5PPP/RNBQKB1R w KQkq - 0 9",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1760.5,
+   "fen": "r1b1kbnr/1p4pp/pqn1pp2/3pP3/1P1P4/P2B1N2/5PPP/RNBQK2R b KQkq - 1 9",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Develop the bishop to d3 — and the square is chosen by seeing a tactic. It looks like the central pawn hangs, but it doesn't: after the exchanges a check springs in on the exposed diagonal, exploiting a standoff to win the queen. Always confirm the pawn is really loose before fearing for it.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 18,
+   "t": 1772,
+   "fen": "r3kbnr/1p1b2pp/pqn1pp2/3pP3/1P1P4/P2B1N2/5PPP/RNBQK2R w KQkq - 2 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1795.5,
+   "fen": "r3kbnr/1p1b2pp/pqn1pp2/3pP3/1P1P4/P2B1N2/5PPP/RNBQ1RK1 b kq - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castle now — the pin-check resource is still available, so the pawn is safe. And notice the deeper point: don't develop the other bishop yet. Make the moves you know you must, wait for the opponent to reveal their plan, and only then place the discretionary pieces. That posturing over who commits first is a genuine grandmaster sub-battle.",
+   "kind": "plan"
+  },
+  {
+   "ply": 20,
+   "t": 1853,
+   "fen": "r3kb1r/1p1bn1pp/pqn1pp2/3pP3/1P1P4/P2B1N2/5PPP/RNBQ1RK1 w kq - 4 11",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1872.5,
+   "fen": "r3kb1r/1p1bn1pp/pqn1pp2/3pP3/1P1P4/P1NB1N2/5PPP/R1BQ1RK1 b kq - 5 11",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Recall the recurring idea — reroute the knight around to c5, targeting the weak enemy pawn. Same weak pawn, same maneuver, just a different transit square; and even the outpost itself is a fine square in its own right.",
+   "kind": "plan"
+  },
+  {
+   "ply": 20,
+   "t": 1927,
+   "fen": "r3kb1r/1p1bn1pp/pqn1pp2/3pP3/1P1P4/P2B1N2/5PPP/RNBQ1RK1 w kq - 4 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1942.5,
+   "fen": "r3kb1r/1p1b2pp/pqn1ppn1/3pP3/1P1P4/P1NB1N2/5PPP/R1BQ1RK1 w kq - 6 12",
+   "line": [
+    "Nc3",
+    "Ng6"
+   ],
+   "spoken": "Don't relieve the tension by capturing — it would hand the opponent an open file aimed at your king and let a pawn occupy the centre. Holding the tension keeps those doors shut.",
+   "kind": "plan"
+  },
+  {
+   "ply": 23,
+   "t": 1977,
+   "fen": "r3kb1r/1p1b2pp/pqn1ppn1/3pP3/1P1P4/P1NB1N2/5PPP/R1BQR1K1 b kq - 7 12",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "Simple chess — defend the key central pawn with the rook and let the opponent be the one to decide whether to capture. Forcing your opponent to make the decision means sometimes you don't have to make it at all.",
+   "kind": "plan"
+  },
+  {
+   "ply": 24,
+   "t": 1986.5,
+   "fen": "r3k2r/1p1bb1pp/pqn1ppn1/3pP3/1P1P4/P1NB1N2/5PPP/R1BQR1K1 w kq - 8 13",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2026.5,
+   "fen": "r3k2r/1p1bb1pp/pqn1ppn1/3pP3/1P1P4/P1NB1N2/1B3PPP/R2QR1K1 b kq - 9 13",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "Now a counter-intuitive developing move — the bishop to b2, seemingly blunted by its own pawns. But you can assign a piece the perfectly legitimate task of supporting others: bad bishops defend good pawns. These pawns are too important to abandon, so one piece is put on guard duty while the rest do the heavy lifting.",
+   "kind": "plan"
+  },
+  {
+   "ply": 26,
+   "t": 2057,
+   "fen": "r3k2r/1p1bb1pp/pqn1pp2/3pP3/1P1P1n2/P1NB1N2/1B3PPP/R2QR1K1 w kq - 10 14",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 2080,
+   "fen": "r3k2r/1p1bb1pp/pqn1pp2/3pP3/1P1P1n2/P1N2N2/1BB2PPP/R2QR1K1 b kq - 11 14",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2131.5,
+   "fen": "2r1k2r/1p1bb1pp/pqn1pp2/3pP3/1P1P1n2/P1N2N2/1BB2PPP/R2QR1K1 w k - 12 15",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2142.5,
+   "fen": "2r1k2r/1p1bb1pp/pqn1pp2/3pP3/1P1P1n2/P1N2N2/1BBQ1PPP/R3R1K1 b k - 13 15",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen steps to d2, coordinating the rooks in a way that also does a second job. And here's a crucial observation — the opponent's light-squared bishop is locked, with no squares at all. A piece with nowhere to go is a piece you can win by attacking it with a pawn.",
+   "kind": "plan"
+  },
+  {
+   "ply": 30,
+   "t": 2174.5,
+   "fen": "2r1k2r/1p1bb1pp/pqn1ppn1/3pP3/1P1P4/P1N2N2/1BBQ1PPP/R3R1K1 w k - 14 16",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2181.5,
+   "fen": "2r1k2r/1p1bb1pp/pqn1ppn1/3NP3/1P1P4/P4N2/1BBQ1PPP/R3R1K1 b k - 0 16",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "So fire up the tactical engine — the recurring cues are a king and queen on one diagonal, or a piece stuck without a square. Here a knight captures on d5 and then a pawn to e6 forces the trapped bishop out. Train yourself to make these qualitative observations and the moves appear on their own.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 32,
+   "t": 2228.5,
+   "fen": "2r1k2r/1p1bb1pp/pqn2pn1/3pP3/1P1P4/P4N2/1BBQ1PPP/R3R1K1 w k - 0 17",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "Why is trading the knight for the bishop a good bargain? Because with that bishop gone the enemy's central pawn is weak, and above all the file toward the king cracks open — the main artery to the enemy king. Once two rooks pour down it, the position simply falls apart.",
+   "kind": "plan"
+  },
+  {
+   "ply": 33,
+   "t": 2233,
+   "fen": "2r1k2r/1p1bb1pp/pqn1Ppn1/3p4/1P1P4/P4N2/1BBQ1PPP/R3R1K1 b k - 0 17",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2244,
+   "fen": "2r1k2r/1p2b1pp/pqn1bpn1/3p4/1P1P4/P4N2/1BBQ1PPP/R3R1K1 w k - 0 18",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 2246,
+   "fen": "2r1k2r/1p2b1pp/pqn1Rpn1/3p4/1P1P4/P4N2/1BBQ1PPP/R5K1 b k - 0 18",
+   "line": [
+    "Rxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 2254,
+   "fen": "2r4r/1p2bkpp/pqn1Rpn1/3p4/1P1P4/P4N2/1BBQ1PPP/R5K1 w - - 1 19",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 2266,
+   "fen": "2r4r/1p2bkpp/pqn1Rpn1/3p4/1P1P4/P4N2/1BBQ1PPP/4R1K1 b - - 2 19",
+   "line": [
+    "Rae1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 2308.5,
+   "fen": "2r1r3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/P4N2/1BBQ1PPP/4R1K1 w - - 3 20",
+   "line": [
+    "Rhe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 2329,
+   "fen": "2r1r3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 b - - 4 20",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 2351.5,
+   "fen": "2rnr3/1p2bkpp/pq2Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 w - - 5 21",
+   "line": [
+    "Nd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 2353,
+   "fen": "2rnr3/1p2bkpp/pR3pn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 b - - 0 21",
+   "line": [
+    "Rxb6"
+   ],
+   "spoken": "The idea underpinning the whole plan is the Rubinstein maneuver — swinging the queen the long way around to a raking diagonal to improve it and prepare a pawn break at the base of the chain. It looks like a waste of moves, and it is possible only because the position is closed, and that's the master principle of closed positions: everything slows down, so maneuvers that take four moves become entirely feasible. The one caveat — preemptively check whether the opponent can blow the position open, or your wandering queen gets caught miles from home.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 39,
+   "t": 2848,
+   "fen": "2r1r3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 b - - 4 20",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 2855.5,
+   "fen": "3rr3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 w - - 5 21",
+   "line": [
+    "Rcd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 2867.5,
+   "fen": "3rr3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PBB2N2/3Q1PPP/4R1K1 b - - 6 21",
+   "line": [
+    "Bc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 2888.5,
+   "fen": "3rr3/1p3kpp/pqn1Rpn1/3p4/1b1P4/PB3N2/3Q1PPP/B3R1K1 b - - 1 22",
+   "line": [
+    "Bxb4",
+    "Ba1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 2889.5,
+   "fen": "3rr3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 w - - 5 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2908,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2918.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c5",
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2920.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2924.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2925.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2949.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2950.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "A subtle structural point — allowing the exchange that hands the opponent a protected passed pawn while leaving you an isolated one still favours you, for three reasons: you control the square in front of that passer and can blockade it with a knight, the opponent's problem bishop stays entombed, and the king is left weak by the very pawn move that opened lines toward it. And remember, chipping at the base of a pawn chain is rarely as effective as striking at its tip.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 3072,
+   "fen": "r1b1kbnr/1p3ppp/1qn1p3/p1ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R b KQkq - 0 8",
+   "line": [
+    "a6",
+    "Bf1",
+    "a5",
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 3076.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,429 @@
+{
+ "videoId": "UXWYC8k7Gas",
+ "title": "Master Class | 900 Elo | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Centre Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:UXWYC8k7Gas",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1167.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1177,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "f6"
+   ],
+   "spoken": "That f-pawn move is one of the very worst available here — the same Damiano-style error that's bad even after a normal knight development. It fatally weakens the king's diagonal."
+  },
+  {
+   "ply": 5,
+   "t": 1204.5,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "Resist the tempting immediate check, which would just be met by a pawn move — capture on e5 first. Order of operations turns a near-loss for the opponent into a lost one.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 9,
+   "t": 1215.5,
+   "fen": "rnbqkbnr/pppp3p/6p1/4Q3/4P3/8/PPP2PPP/RNB1KBNR b KQkq - 0 5",
+   "line": [
+    "g6",
+    "Qd4",
+    "fxe5",
+    "Qxe5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1241.5,
+   "fen": "rnb1kbnr/ppppq2p/6p1/4Q3/4P3/8/PPP2PPP/RNB1KBNR w KQkq - 1 6",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1243,
+   "fen": "rnb1kbnQ/ppppq2p/6p1/8/4P3/8/PPP2PPP/RNB1KBNR b KQq - 0 6",
+   "line": [
+    "Qxh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1245.5,
+   "fen": "rnb1kb1Q/ppppq2p/5np1/8/4P3/8/PPP2PPP/RNB1KBNR w KQq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1271,
+   "fen": "rnb1kb1Q/ppppq2p/5npB/8/4P3/8/PPP2PPP/RN2KBNR b KQq - 2 7",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "The queen has strayed into a trap, and the way to free it is to lean on the fact that it pins a piece — a bishop to h6 exploits the pin and essentially forces the queens off. Use the very pin that looks awkward as the lever that saves the piece.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 14,
+   "t": 1279.5,
+   "fen": "r1b1kb1Q/ppppq2p/2n2npB/8/4P3/8/PPP2PPP/RN2KBNR w KQq - 3 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Don't grab the material in the corner in a hurry — it isn't going anywhere. Cover the intervening check, develop a knight, and shore up the pawn first; the loose piece can be collected at leisure.",
+   "kind": "plan"
+  },
+  {
+   "ply": 15,
+   "t": 1287.5,
+   "fen": "r1b1kb1Q/ppppq2p/2n2npB/8/4P3/2N5/PPP2PPP/R3KBNR b KQq - 4 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1291.5,
+   "fen": "r1b1kb1Q/ppppq2p/5npB/4n3/4P3/2N5/PPP2PPP/R3KBNR w KQq - 5 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1309.5,
+   "fen": "r1b1kb1Q/ppppq2p/5npB/4n3/4P3/2N5/PPP2PPP/2KR1BNR b q - 6 9",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1315.5,
+   "fen": "r1b1kb1Q/ppppqn1p/5npB/8/4P3/2N5/PPP2PPP/2KR1BNR w q - 7 10",
+   "line": [
+    "Nf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1320.5,
+   "fen": "r1b1kQ2/ppppqn1p/5npB/8/4P3/2N5/PPP2PPP/2KR1BNR b q - 0 10",
+   "line": [
+    "Qxf8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1324.5,
+   "fen": "r1b1kB2/pppp1n1p/5np1/8/4P3/2N5/PPP2PPP/2KR1BNR b q - 0 11",
+   "line": [
+    "Qxf8",
+    "Bxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1326,
+   "fen": "r1b2k2/pppp1n1p/5np1/8/4P3/2N5/PPP2PPP/2KR1BNR w - - 0 12",
+   "line": [
+    "Kxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1332,
+   "fen": "r1b2k2/pppp1n1p/5np1/8/4PP2/2N5/PPP3PP/2KR1BNR b - - 0 12",
+   "line": [
+    "f4"
+   ],
+   "spoken": "With a winning material edge, just keep improving — advancing another pawn into the centre and letting the position play itself. No need for anything fancy when you're up a rook."
+  },
+  {
+   "ply": 24,
+   "t": 1334,
+   "fen": "r1b2k2/pppp1n1p/6p1/8/4PPn1/2N5/PPP3PP/2KR1BNR w - - 1 13",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1347.5,
+   "fen": "r1b2k2/pppp1n1p/6p1/8/4PPn1/2N5/PPPR2PP/2K2BNR b - - 2 13",
+   "line": [
+    "Rd2"
+   ],
+   "spoken": "The knight lunge eyes the f2 square, and there are two ways to defend — a rook step or a knight to the edge. Prefer the rook, because you never want a knight consigned to the rim purely to babysit a pawn; the intruder can be shooed away by a pawn later.",
+   "kind": "plan"
+  },
+  {
+   "ply": 26,
+   "t": 1365,
+   "fen": "r1b2k2/pppp3p/3n2p1/8/4PPn1/2N5/PPPR2PP/2K2BNR w - - 3 14",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1369,
+   "fen": "r1b2k2/pppp3p/3n2p1/8/4PPn1/2N2N2/PPPR2PP/2K2B1R b - - 4 14",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "A principle worth repeating: when the opponent has a piece parked in your half, you don't always need to rush to chase it — first understand what it's actually doing. It can be evicted in good time; meanwhile just keep developing.",
+   "kind": "plan"
+  },
+  {
+   "ply": 28,
+   "t": 1380.5,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/8/4PPn1/2N2N2/PPPR2PP/2K2B1R w - - 0 15",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1383.5,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/8/4PPn1/2N2N1P/PPPR2P1/2K2B1R b - - 0 15",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1387.5,
+   "fen": "r1b2k2/p1pp3p/1p1n1np1/4P3/5P2/2N2N1P/PPPR2P1/2K2B1R b - - 0 16",
+   "line": [
+    "Nf6",
+    "e5"
+   ],
+   "spoken": "Now the pawn push to e5 forks the two knights at once, cashing the accumulated advantage into more material.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 32,
+   "t": 1393,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/4P3/4nP2/2N2N1P/PPPR2P1/2K2B1R w - - 1 17",
+   "line": [
+    "Nfe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1405.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/4nP2/2N2N1P/PPPR2P1/2K2B1R b - - 0 17",
+   "line": [
+    "exd6"
+   ],
+   "spoken": "Capture on d6 — the point is that it nets two pieces for a rook, converting the pressure into a clean, decisive material lead.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 34,
+   "t": 1407.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/5P2/2N2N1P/PPPn2P1/2K2B1R w - - 0 18",
+   "line": [
+    "Nxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1408.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/5P2/2N2N1P/PPPK2P1/5B1R b - - 0 18",
+   "line": [
+    "Kxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1411,
+   "fen": "r1b2k2/p2p3p/1p1p2p1/8/5P2/2NB1N1P/PPPK2P1/7R b - - 1 19",
+   "line": [
+    "cxd6",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1417.5,
+   "fen": "r4k2/pb1p3p/1p1p2p1/8/5P2/2NB1N1P/PPPK2P1/4R3 b - - 3 20",
+   "line": [
+    "Bb7",
+    "Re1"
+   ],
+   "spoken": "Notice the discipline even in the endgame — every rook and minor piece gets brought into the game. No coasting; activate the whole army and finish cleanly.",
+   "kind": "plan"
+  },
+  {
+   "ply": 40,
+   "t": 1431,
+   "fen": "r4k2/pb1p4/1p1p2p1/7p/5P2/2NB1N1P/PPPK2P1/4R3 w - - 0 21",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1432.5,
+   "fen": "r4k2/pb1p4/1p1p2B1/7p/5P2/2N2N1P/PPPK2P1/4R3 b - - 0 21",
+   "line": [
+    "Bxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1436,
+   "fen": "r7/pb1p2k1/1p1p2B1/5P1p/8/2N2N1P/PPPK2P1/4R3 b - - 0 22",
+   "line": [
+    "Kg7",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1446,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1447.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1449,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Had the opponent declined the central fight, the better route is a modest d6 — though even that isn't ideal, since it lets the game transpose toward a Philidor, and the queen-trade endgame that can follow costs the defender their castling rights.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1454.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1456.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1459.5,
+   "fen": "rnbk1bnr/ppp2ppp/8/4p3/4P3/8/PPP2PPP/RNB1KBNR w KQ - 0 5",
+   "line": [
+    "dxe5",
+    "dxe5",
+    "Qxd8+",
+    "Kxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1468,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1470,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1476.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1480.5,
+   "fen": "rnbqkbnr/pp1p1ppp/8/2p5/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1482.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1483.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": "And the wider takeaway: choosing sound openings — especially with the first move — practically guarantees good positions every game. That's the case against the idea that opening study should wait until you're strong: reaching good positions repeatedly exposes you to better play and simply wins more games.",
+   "reanchor": true
+  }
+ ]
+}

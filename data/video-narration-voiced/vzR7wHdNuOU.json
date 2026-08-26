@@ -1,0 +1,572 @@
+{
+ "videoId": "vzR7wHdNuOU",
+ "title": "9 Move Scotch!? | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Four Knights Game: Scotch",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:vzR7wHdNuOU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 28.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 33,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 48,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The Four Knights Scotch is ideal for practising the fundamentals of getting every piece out — but it's no beginner's toy: it's popular at the very top and genuinely dangerous for the defender who isn't precise with the theory.",
+   "kind": "plan"
+  },
+  {
+   "ply": 6,
+   "t": 70.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 89,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The bishop to c5 is a well-known inaccuracy, and the way to punish it is to snatch the central pawn without fear. The reply people dread, a bishop sacrifice with check, isn't merely harmless here — it's essentially losing for the defender.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 8,
+   "t": 104,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 106,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 107.5,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "Then the pawn advances to d4, forking the two minor pieces and forcing the opponent to give one up. The correct retreat is the bishop back to d6; the instinctive capture of the pawn is bad, because the queen then skewers the knight and the game can collapse quickly.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 9,
+   "t": 112,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 145.5,
+   "fen": "r1bqk1nr/pppp1ppp/1b6/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": "The bishop retreat to b6 is also poor, because the defender won't even get a pawn back for the fork. A concession that hands over material for nothing is no way to meet the trick."
+  },
+  {
+   "ply": 11,
+   "t": 150,
+   "fen": "r1bqk1nr/pppp1ppp/1b6/4P3/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 155.5,
+   "fen": "r1bqk1nr/ppp2ppp/1b1p4/4P3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 187.5,
+   "fen": "r1bqk1nr/ppp2ppp/1b1p4/4P3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Now a fancy option that lays a trap — whenever there's a standoff between the queens and the kings are still uncastled, and the opponent's pieces are underdeveloped, look for it. The key is that the enemy queen is guarded only by its king. So develop the bishop to c4, and a capture invites a sacrifice on f7 that distracts the king and wins the queen.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 14,
+   "t": 196,
+   "fen": "r1bqk1nr/ppp2ppp/1b6/4p3/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 197.5,
+   "fen": "r1bqk1nr/ppp2Bpp/1b6/4p3/4P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 200.5,
+   "fen": "r1bq2nr/ppp2kpp/1b6/4p3/4P3/2N5/PPP2PPP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 201.5,
+   "fen": "r1bQ2nr/ppp2kpp/1b6/4p3/4P3/2N5/PPP2PPP/R1B1K2R b KQ - 0 9",
+   "line": [
+    "Qxd8"
+   ],
+   "spoken": "And the one detail to verify when running this combination — make sure your own king isn't exposed to an in-between check that turns the tables. Here it's fine, but confirming there's no such resource is exactly the discipline these tactics demand.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 6,
+   "t": 232,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 237.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 240.5,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 248.5,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "For the record, the reason not to fear the central capture — the queen move that seems to fork knight and pawn is easily met by simply dropping the knight back. The fork evaporates against calm defence.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 252,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 253.5,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2NN4/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 262.5,
+   "fen": "r1b1k1nr/pppp1ppp/2n5/2b1N3/4P2q/2N5/PPPP1PPP/R1BQKB1R b KQkq - 4 6",
+   "line": [
+    "Qh4",
+    "Ne5"
+   ],
+   "spoken": "Another scarecrow is an aggressive queen lunge — but a quiet pawn move sends it packing, after which the knight develops and the bishop fianchettoes on the diagonal that pawn move just opened. Don't be spooked; answer it and develop.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 275.5,
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N3P1/PPPP1P1P/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "Qf6",
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 283.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 286,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/4N3/4P3/2N5/PPPP1bPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Bxf2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 290,
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/4P3/2N5/PPPP1KPP/R1BQ1B1R w kq - 0 6",
+   "line": [
+    "Kxf2",
+    "Nxe5"
+   ],
+   "spoken": "The critical refutation try is the bishop sacrifice with check — and the thing to understand is that the king's exposure is only temporary. You castle by hand, stepping the king to safety and bringing the rook to the file. What's permanent, by contrast, is the lasting grip on the centre and the lead in development.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 303,
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 310,
+   "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP3PP/R1BQ1BKR b kq - 2 7",
+   "line": [
+    "Qf6+",
+    "Kg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 313.5,
+   "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2N5/PPP2KPP/R1BQ1B1R w kq - 5 9",
+   "line": [
+    "Qd8",
+    "Kf2",
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 322.5,
+   "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R b kq - 6 9",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 326,
+   "fen": "r1bqk1nr/ppp2ppp/3p2n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R w kq - 0 10",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 345,
+   "fen": "r1bqk1nr/ppp2ppp/3p2n1/8/3PP3/2NB4/PPP2KPP/R1BQ1R2 b kq - 1 10",
+   "line": [
+    "Rf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 346.5,
+   "fen": "r1bqk2r/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 b kq - 3 11",
+   "line": [
+    "Nf6",
+    "Kg1"
+   ],
+   "spoken": "The punchline of that line — not only did the king reach safety by hand, but the newly opened f-file actively favours the attacker. So the sacrifice did a favour, because a bishop pin makes the pressure on the enemy knight instantly unbearable, threatening to shatter the king's cover.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 355,
+   "fen": "r1bq1rk1/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 w - - 4 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 356.5,
+   "fen": "r1bq1rk1/ppp2ppp/3p1nn1/6B1/3PP3/2NB4/PPP3PP/R2Q1RK1 b - - 5 12",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 368.5,
+   "fen": "r1bqr2k/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 w - - 8 14",
+   "line": [
+    "Re8",
+    "Bc1",
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 371.5,
+   "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R b kq - 6 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 374,
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R b kq - 8 10",
+   "line": [
+    "Ne5",
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 375,
+   "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R w kq - 9 11",
+   "line": [
+    "Qf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 376.5,
+   "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP3PP/R1BQ1BKR b kq - 10 11",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 385,
+   "fen": "r1b1k1nr/pppp1ppp/5qn1/8/3PP3/2N5/PPP3PP/R1BQ1BKR w kq - 11 12",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 387.5,
+   "fen": "r1b1k1nr/pppp1ppp/5qn1/3N4/3PP3/8/PPP3PP/R1BQ1BKR b kq - 12 12",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 390.5,
+   "fen": "r1bqk1nr/pppp1ppp/6n1/3N4/3PP3/8/PPP3PP/R1BQ1BKR w kq - 13 13",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 404.5,
+   "fen": "r1bqk1nr/pppp1ppp/6n1/3N4/3PP3/3B4/PPP3PP/R1BQ2KR b kq - 14 13",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 406.5,
+   "fen": "r1bqk1nr/ppp2ppp/3p2n1/3N4/3PP3/3B4/PPP3PP/R1BQ2KR w kq - 0 14",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 410,
+   "fen": "r1bqk1nr/ppp2ppp/3p2n1/3N4/3PP3/3B3P/PPP3P1/R1BQ2KR b kq - 0 14",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 411.5,
+   "fen": "r1bqk1nr/pp3ppp/2pp2n1/3N4/3PP3/3B3P/PPP3P1/R1BQ2KR w kq - 0 15",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 413,
+   "fen": "r1bqk1nr/pp3ppp/2pp2n1/8/3PP3/2NB3P/PPP3P1/R1BQ2KR b kq - 1 15",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 414,
+   "fen": "r1bqk2r/pp3ppp/2pp1nn1/8/3PP3/2NB3P/PPP3P1/R1BQ2KR w kq - 2 16",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 415.5,
+   "fen": "r1bqk2r/pp3ppp/2pp1nn1/8/3PP3/2NB3P/PPP3PK/R1BQ3R b kq - 3 16",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 433.5,
+   "fen": "r1b1k1nr/pppp1ppp/5qn1/3N4/3PP3/8/PPP3PP/R1BQ1BKR b kq - 12 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 442.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 448.5,
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe5",
+    "d4"
+   ],
+   "spoken": "The proper way to meet the pawn fork is the bishop to d6 — and after the exchanges the first player emerges with a central pawn, a slight development lead, and an awkward enemy bishop that a pawn thrust can harass later. A pleasant, risk-free edge.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 451,
+   "fen": "r1bqk1nr/pppp1ppp/3b4/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 453.5,
+   "fen": "r1bqk1nr/pppp1ppp/8/4b3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "dxe5",
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 459,
+   "fen": "r1bqk1nr/pppp1ppp/8/4b3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 473,
+   "fen": "r1bqk1nr/pppp1ppp/8/4b3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 476.5,
+   "fen": "r1bqk1nr/pppp1ppp/3b4/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [],
+   "spoken": "When the enemy king is this weak, the guiding principle is to avoid trading queens — the capture that regains material lets the defender swap the queens off into an endgame, throwing away the whole attack. Keep the queens on and keep the king in the crosshairs.",
+   "kind": "plan",
+   "reanchor": true
+  }
+ ]
+}

@@ -1,0 +1,1339 @@
+{
+ "videoId": "YXz0xSbhY70",
+ "title": "Win the Center, Win the Game!! | Sicilian, Grand Prix | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Sicilian Defence",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:YXz0xSbhY70",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 2253.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "e4",
+    "c5",
+    "Nc3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2281.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2284.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/8/3QP3/2N5/PPP2PPP/R1B1KBNR b KQkq - 0 4",
+   "line": [
+    "cxd4",
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2290,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/3QP3/2N5/PPP2PPP/R1B1KBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "White's d4 tries to punish the missing knight on c6, but Nf6 is a fully sound answer — we analyzed exactly this before.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 2292.5,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/4P3/3Q4/2N5/PPP2PPP/R1B1KBNR b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The critical resource to remember: if White plays e5, Nc6 hits the queen with tempo and Black is completely fine — a Dragon-like position where White is at most a shade better.",
+   "kind": "main",
+   "teaches": "In the g6 Sicilian, meet an early e5 with Nc6, gaining the tempo that equalizes."
+  },
+  {
+   "ply": 10,
+   "t": 2296,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/4P3/3Q4/2N5/PPP2PPP/R1B1KBNR w KQkq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2304.5,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/3QP3/2N5/PPP2PPP/R1B1KBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2311.5,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/3QP3/2N2N2/PPP2PPP/R1B1KB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2314.5,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/3QP3/2N2N2/PPP2PPP/R1B1KB1R w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2321,
+   "fen": "rnbqkb1r/pp1ppp1p/5np1/8/3QP3/2N5/PPP2PPP/R1B1KBNR w KQkq - 5 7",
+   "line": [
+    "Ng1",
+    "Nb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2323,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2327.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2330,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2331.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 3 5",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2339.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2B1PP2/2N2N2/PPPP2PP/R1BQK2R b KQkq - 4 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2359,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2B1PP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Against the Grand Prix with the dangerous old-school Bc4, the engine's steady path is d6 and e6, then castle.",
+   "kind": "main",
+   "teaches": "Meet the Grand Prix Bc4 with a solid d6/e6 setup rather than sharp counterplay."
+  },
+  {
+   "ply": 12,
+   "t": 2368.5,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2B1PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "O-O",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2373.5,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2BPPP2/2N2N2/PPP3PP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White's risky d4 has to be met precisely with cxd4, and the theory runs deep from here.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 2379.5,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/8/2BpPP2/2N2N2/PPP3PP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2383.5,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/1N6/2BpPP2/5N2/PPP3PP/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Nb5",
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2395.5,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/1N6/3pPP2/1B3N2/PPP3PP/R1BQ1RK1 b kq - 3 9",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2402,
+   "fen": "r1bq1rk1/pp2npbp/2npp1p1/8/3NPP2/1B3N2/PPP3PP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "O-O",
+    "Nbxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2407,
+   "fen": "r1bq1rk1/pp2npbp/3pp1p1/n7/3NPP2/1B3N2/PPP3PP/R1BQ1RK1 w - - 1 11",
+   "line": [
+    "Na5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 2419.5,
+   "fen": "r1bq1rk1/pp2npbp/3pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 b - - 2 11",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2433.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "b6"
+   ],
+   "spoken": "Na5 is the engine's top move, and after Be3 the natural b6 keeps things equal.",
+   "kind": "main"
+  },
+  {
+   "ply": 23,
+   "t": 2439,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2453.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2457,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2459.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2463.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/nN6/2P1PP2/1B2BN2/PP4PP/R2Q1RK1 b - - 2 13",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 2490,
+   "fen": "r2q1rk1/p3npbp/bp2p1p1/nN1p4/2P1PP2/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2522.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2523.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2528.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2536.5,
+   "fen": "r2q1rk1/pb2npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The key subtlety — Bb7 rather than Ba6. The point is that after f5 and the exchanges, you justify the bishop by striking the centre with d5; on a6 that same break doesn't work. That's the method of comparison — the way to understand why the engine prefers one square over another.",
+   "kind": "main",
+   "teaches": "Place the bishop where a later central break justifies it; compare candidate squares by the breaks each one supports.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 2540,
+   "fen": "r2q1rk1/pb2npbp/1p1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 2546,
+   "fen": "r2q1rk1/pb2npbp/1p1p2p1/n4P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "exf5",
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2550.5,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2580.5,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1PB1/2PN4/1B3N2/PP4PP/R2Q1RK1 b - - 1 15",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2586,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2588,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2P1P2/3N4/1B2BN2/PP4PP/R2Q1RK1 b - - 0 15",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2592,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/3P1P2/3N4/1n2BN2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [
+    "Nxb3"
+   ],
+   "spoken": "And note why cxd5 would be short-sighted for White: opening the centre favors the side with the better bishops — and here that's Black.",
+   "kind": "main",
+   "teaches": "Only open the centre when your bishops are the better ones; otherwise you're helping the opponent.",
+   "reanchor": true
+  },
+  {
+   "ply": 31,
+   "t": 2600,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/3P1P2/3N4/1P2BN2/1P4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "axb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 2601.5,
+   "fen": "r2q1rk1/pb3pbp/1p4p1/3n1P2/3N4/1P2BN2/1P4PP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 2605,
+   "fen": "r2q1rk1/pb3pbp/1p4p1/3n1PB1/3N4/1P3N2/1P4PP/R2Q1RK1 b - - 1 17",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2607,
+   "fen": "r2q1rk1/pb3pbp/1p3np1/5PB1/3N4/1P3N2/1P4PP/R2Q1RK1 w - - 2 18",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2611,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2612.5,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1PB1/2PN4/1B3N2/PP4PP/R2Q1RK1 b - - 1 15",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2621.5,
+   "fen": "r4rk1/pb2npbp/1p1q2p1/n2p1PB1/2PN4/1B3N2/PP4PP/R2Q1RK1 w - - 2 16",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2626.5,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1PB1/2PN4/1B3N2/PP4PP/R2Q1RK1 b - - 1 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2630.5,
+   "fen": "r2q1rk1/pb2npbp/1p3Pp1/3p2B1/2PN4/1n3N2/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Nxb3",
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2638.5,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/3p1PB1/2PN4/1n3N2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [],
+   "spoken": "One deep principle from the chaos: you almost never give up the dark-squared bishop in the Sicilian, and only ever for something concrete. Bxd4 works solely because the knight on d4 ends up undefended — a specific tactic, never a general trade.",
+   "kind": "branch",
+   "teaches": "Surrender the Sicilian dark bishop only for a concrete tactic, never as a routine exchange.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 2817.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2818.5,
+   "fen": "r2q1rk1/pb2npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2823.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 2830,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 w - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2834,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2842.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 2844.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 2854.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n4p2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 2859.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n4P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2860.5,
+   "fen": "r2q1rk1/p3npbp/bp4p1/n2p1P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2871,
+   "fen": "r2q1rk1/p3npbp/bp4p1/n2p1PN1/2PN4/1B2B3/PP4PP/R2Q1RK1 b - - 1 15",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2881,
+   "fen": "r2q1rk1/pb2npbp/1p4p1/n2p1PN1/2PN4/1B2B3/PP4PP/R2Q1RK1 w - - 2 16",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 2918,
+   "fen": "r2q1rk1/pb2npbp/1p4P1/n5N1/2pN4/1B2B3/PP4PP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "fxg6",
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 2991.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n4P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 b - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2996.5,
+   "fen": "r2q1rk1/p3npbp/bp4P1/n5N1/2pN4/1B2B3/PP4PP/R2Q1RK1 b - - 1 16",
+   "line": [
+    "d5",
+    "fxg6",
+    "dxc4",
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 3003.5,
+   "fen": "r2q1rk1/p3npb1/bp4p1/n5N1/2pN4/1B2B3/PP4PP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "hxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3043.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n4P2/2PN4/1B2BN2/PP4PP/R2Q1RK1 b - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 3045.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 3046.5,
+   "fen": "r2q1rk1/pb2npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 3056,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 w - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 3068,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R3QRK1 b - - 1 12",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 3073.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R3QRK1 w - - 2 13",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 3082,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n7/3NPP2/1B2BN2/PPP2RPP/R3Q1K1 b - - 3 13",
+   "line": [
+    "Rf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3089.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/8/3NPP2/1n2BN2/PPP2RPP/R3Q1K1 w - - 0 14",
+   "line": [
+    "Nxb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3094.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/8/3NPP2/Pn2BN2/1PP2RPP/R3Q1K1 b - - 0 14",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 3187,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 w - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 3188.5,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/2PNPP2/1B2BN2/PP4PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 3191,
+   "fen": "r1bq1rk1/p3npbp/1p1pp1p1/n7/3NPP2/1B2BN2/PPP3PP/R2Q1RK1 w - - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 3197,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "f5",
+    "Ba6",
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3198.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pP2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3206.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/nN2pP2/2P1P3/1B2BN2/PP4PP/R2Q1RK1 b - - 1 14",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3215.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pP2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3235,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 b - - 1 14",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 3239.5,
+   "fen": "r2q1rk1/p3n1bp/bp1p1pp1/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 3241.5,
+   "fen": "r2q1rk1/p3n1bp/bp1pNpp1/n3pPB1/2P1P3/1B3N2/PP4PP/R2Q1RK1 b - - 1 15",
+   "line": [
+    "Ne6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3243.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 b - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 3245.5,
+   "fen": "r2q1rk1/p3npbp/bp1p1Pp1/n5B1/2PpP3/1B3N2/PP4PP/R2Q1RK1 b - - 0 15",
+   "line": [
+    "exd4",
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3270,
+   "fen": "r2q1rk1/p3np1p/bp1p1Bp1/n7/2PpP3/1B3N2/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Bxf6",
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 3275.5,
+   "fen": "r2q1rk1/p3npbp/bp1p1Pp1/n5B1/2PpP3/1B3N2/PP4PP/R2Q1RK1 b - - 0 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3276.5,
+   "fen": "r2q1rkb/p3np1p/bp1p1Pp1/n5B1/2PpP3/1B3N2/PP4PP/R2Q1RK1 w - - 1 16",
+   "line": [
+    "Bh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3277.5,
+   "fen": "r2q1rkb/p3Pp1p/bp1p2p1/n5B1/2PpP3/1B3N2/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "fxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3281.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pP2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 3284,
+   "fen": "r2q1rk1/p3npb1/bp1p2pp/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "Bg5",
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3291,
+   "fen": "r2q1rk1/p3npb1/bp1p3p/n3pPp1/2PNP2B/1B3N2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [
+    "Bh4",
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3315,
+   "fen": "r2q1rk1/p3npb1/bp1p3p/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Bxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 3318,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n3pPp1/2PNP3/1B3N2/PP4PP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "hxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3319,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n3pPN1/2PNP3/1B6/PP4PP/R2Q1RK1 b - - 0 17",
+   "line": [
+    "Nxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3324.5,
+   "fen": "r2q1rk1/p3npb1/bp1p3p/n3pPp1/2PNP2B/1B3N2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3327,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n3pPN1/2PNP3/1B6/PP4PP/R2Q1RK1 b - - 0 17",
+   "line": [
+    "Bxg5",
+    "hxg5",
+    "Nxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3336,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n4PN1/2PpP3/1B6/PP4PP/R2Q1RK1 w - - 0 18",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3360,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n3pPN1/2PNP3/1B6/PP4PP/R2Q1RK1 b - - 0 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3361.5,
+   "fen": "r2q1rk1/p4pb1/bp1p4/n2npPN1/2PNP3/1B6/PP4PP/R2Q1RK1 w - - 1 18",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3371,
+   "fen": "r2q1rk1/p3npb1/bp1p4/n3pPN1/2PNP3/1B6/PP4PP/R2Q1RK1 b - - 0 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3376,
+   "fen": "r2q1rk1/p4pb1/bp1p4/n2npPN1/2PNP3/1B6/PP4PP/R2Q1RK1 w - - 1 18",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 3380,
+   "fen": "r2q1rk1/p4pb1/bp1pN3/n2npPN1/2P1P3/1B6/PP4PP/R2Q1RK1 b - - 2 18",
+   "line": [
+    "Nde6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 3385,
+   "fen": "r2q1rk1/p5b1/bp1pp3/n2npPN1/2P1P3/1B6/PP4PP/R2Q1RK1 w - - 0 19",
+   "line": [
+    "fxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 3386,
+   "fen": "r2q1rk1/p5b1/bp1pN3/n2npP2/2P1P3/1B6/PP4PP/R2Q1RK1 b - - 0 19",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 3390,
+   "fen": "r4rk1/p5b1/bp1pNq2/n2npP2/2P1P3/1B6/PP4PP/R2Q1RK1 w - - 1 20",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3416.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pPB1/2PNP3/1B3N2/PP4PP/R2Q1RK1 b - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 3425.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/n3pP2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 3442.5,
+   "fen": "r2q1rk1/p3npbp/bp1pp1p1/n4P2/2PNP3/1B2BN2/PP4PP/R2Q1RK1 b - - 0 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 3444.5,
+   "fen": "r2q1rk1/p3npbp/bp1p2p1/nN2pP2/2P1P3/1B2BN2/PP4PP/R2Q1RK1 b - - 1 14",
+   "line": [
+    "e5",
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 3446.5,
+   "fen": "r2q1rk1/p3npbp/bp1p4/nN2pp2/2P1P3/1B2BN2/PP4PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "gxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3455.5,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3p3/2P1Pp2/1B2BN2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [
+    "Nxd6",
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3457.5,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3N3/2P1Pp2/1B2B3/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3459.5,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3p3/2P1Pp2/1B2BN2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3463,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3N3/2P1Pp2/1B2B3/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3468.5,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3p3/2P1Pp2/1B2BN2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3470.5,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3p3/2P1Pp2/1B3N2/PP3BPP/R2Q1RK1 b - - 1 16",
+   "line": [
+    "Bf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 3473,
+   "fen": "r4rk1/p1q1npbp/bp1N4/n3p3/2P1Pp2/1B3N2/PP3BPP/R2Q1RK1 w - - 2 17",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3479.5,
+   "fen": "r4rk1/p1q1npbp/bp1N4/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 b - - 3 17",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3483.5,
+   "fen": "r4rk1/p1q1npb1/bp1N3p/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 w - - 0 18",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3486,
+   "fen": "r4rk1/p1q1npbp/bp1N4/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 b - - 3 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3487,
+   "fen": "3r1rk1/p1q1npbp/bp1N4/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 w - - 4 18",
+   "line": [
+    "Rad8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 3496,
+   "fen": "r4rk1/p1q1npbp/bp1N4/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 b - - 3 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3497,
+   "fen": "r4rk1/p1q1npb1/bp1N3p/n3p1N1/2P1Pp2/1B6/PP3BPP/R2Q1RK1 w - - 0 18",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 3498.5,
+   "fen": "r4rk1/p1q1nNb1/bp1N3p/n3p3/2P1Pp2/1B6/PP3BPP/R2Q1RK1 b - - 0 18",
+   "line": [
+    "Ngxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 3501,
+   "fen": "r7/p1q1nkb1/bp5p/n3p3/2P1Pp2/1B6/PP3BPP/R2Q1RK1 w - - 0 20",
+   "line": [
+    "Rxf7",
+    "Nxf7",
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 3514,
+   "fen": "r7/p1q1nkb1/bp5p/n1P1p3/4Pp2/1B6/PP3BPP/R2Q1RK1 b - - 0 20",
+   "line": [
+    "c5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 3516,
+   "fen": "r7/p1q1nkb1/bp5p/2P1p3/4Pp2/1n6/PP3BPP/R2Q1RK1 w - - 0 21",
+   "line": [
+    "Nxb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 3523,
+   "fen": "r7/p1q1k1b1/bp4np/2P1p3/4Pp2/1n6/PP3BPP/R4RK1 w - - 0 23",
+   "line": [
+    "Qd6",
+    "Ng6",
+    "Qe7+",
+    "Kxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 3525,
+   "fen": "r7/p1q1k1b1/bP4np/4p3/4Pp2/1n6/PP3BPP/R4RK1 b - - 0 23",
+   "line": [
+    "cxb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 3526.5,
+   "fen": "r7/2q1k1b1/bp4np/4p3/4Pp2/1n6/PP3BPP/R4RK1 w - - 0 24",
+   "line": [
+    "axb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 3530,
+   "fen": "r7/2q1k1b1/bp4np/4p3/4Pp2/1n6/PP3BPP/R2R2K1 b - - 1 24",
+   "line": [
+    "Rfd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 3546,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3p3/2P1Pp2/1B2BN2/PP4PP/R2Q1RK1 w - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 3547,
+   "fen": "r2q1rk1/p3npbp/bp1N4/n3N3/2P1Pp2/1B2B3/PP4PP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 3550.5,
+   "fen": "r2q1rk1/p3np1p/bp1N4/n3b3/2P1Pp2/1B2B3/PP4PP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 3551.5,
+   "fen": "r4rk1/p3np1p/bp1q4/n3b3/2P1PB2/1B6/PP4PP/R2Q1RK1 w - - 0 18",
+   "line": [
+    "Bxf4",
+    "Qxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 3554.5,
+   "fen": "r3r1k1/p3np1p/bp1B4/n7/2P1P3/1B6/PP4PP/R4RK1 w - - 1 20",
+   "line": [
+    "Qxd6",
+    "Bxd6",
+    "Bxd6",
+    "Rfe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 3556,
+   "fen": "r3r1k1/p3np1p/bp1B4/n7/B1P1P3/8/PP4PP/R4RK1 b - - 2 20",
+   "line": [
+    "Ba4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 3613.5,
+   "fen": "r3r1k1/p3np1p/bp1B4/8/B1n1P3/8/PP4PP/R4RK1 w - - 0 21",
+   "line": [
+    "Nxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 3615.5,
+   "fen": "r3B1k1/p3np1p/bp1B4/8/2n1P3/8/PP4PP/R4RK1 b - - 0 21",
+   "line": [
+    "Bxe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 3616.5,
+   "fen": "r3B1k1/p3np1p/bp1n4/8/4P3/8/PP4PP/R4RK1 w - - 0 22",
+   "line": [
+    "Nxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 4359.5,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 4437.5,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "f4",
+    "Bg7",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 4438.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 3 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 4455,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2B1PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "Bc4",
+    "d6",
+    "O-O",
+    "e6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

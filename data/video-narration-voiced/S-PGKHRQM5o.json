@@ -1,0 +1,220 @@
+{
+ "videoId": "S-PGKHRQM5o",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | OK. Another Cheater!???",
+ "openingName": "Accelerated Dragon",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:S-PGKHRQM5o",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 19,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 24,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 35.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 37,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 43.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/4B3/PPP2PPP/RN1QKB1R w KQkq - 2 6",
+   "line": [
+    "Be3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 49,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 50,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Standard Accelerated Dragon theory — the fianchetto is set and Black is fully mobilized.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 58,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQ - 6 8",
+   "line": [
+    "Bc4",
+    "O-O"
+   ],
+   "spoken": "The move here is simply to castle and complete development before doing anything committal.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 63,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/1BN1B3/PPP2PPP/R2QK2R b KQ - 7 8",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 73.5,
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/p7/3NP3/1BN1B3/PPP2PPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 79,
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/p7/3NP3/1BN1B3/PPP2PPP/R2Q1RK1 b - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "a5 is the point: it grabs queenside space and, more importantly, prepares a4.",
+   "kind": "plan",
+   "plans": "Follow with a4 to harass White's pieces and undermine e4."
+  },
+  {
+   "ply": 18,
+   "t": 102,
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/8/p2NP3/1BN1B3/PPP2PPP/R2Q1RK1 w - - 0 10",
+   "line": [
+    "a4"
+   ],
+   "spoken": "a4 distracts one of the two pieces guarding e4 — and if the resulting trade favors us, we snap off the central e4-pawn in return for our flank pawn.",
+   "kind": "main",
+   "teaches": "Chase away a defender of the enemy centre; swapping a wing pawn for a central pawn is a good bargain."
+  },
+  {
+   "ply": 19,
+   "t": 108,
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/8/N2NP3/1B2B3/PPP2PPP/R2Q1RK1 b - - 0 10",
+   "line": [
+    "Nxa4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 109,
+   "fen": "r1bq1rk1/1p1pppbp/2n3p1/8/N2Nn3/1B2B3/PPP2PPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 114.5,
+   "fen": "r1bq1rk1/1p1pppbp/2n3p1/1N6/N3n3/1B2B3/PPP2PPP/R2Q1RK1 b - - 1 11",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": "The main line runs into Nb5 and Bb6, hitting our queen and rook and handing White the initiative — but in exchange we've pocketed the central pawn, a fair trade.",
+   "kind": "main",
+   "teaches": "Accept a temporary initiative against you when the compensation is a permanent central pawn."
+  },
+  {
+   "ply": 22,
+   "t": 138,
+   "fen": "r1bq1rk1/1p2ppbp/2np2p1/1N6/N3n3/1B2B3/PPP2PPP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 shores up the position; next we round up the offside knight with Nf6 and untangle.",
+   "kind": "plan",
+   "plans": "Reclaim the knight with Nf6 and consolidate the extra centre pawn."
+  },
+  {
+   "ply": 23,
+   "t": 145.5,
+   "fen": "r1bq1rk1/1p2ppbp/2np2p1/1N6/N3n3/1B2BP2/PPP3PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 152.5,
+   "fen": "r1bq1rk1/1p2ppbp/2np1np1/1N6/N7/1B2BP2/PPP3PP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 160.5,
+   "fen": "2bq1rk1/1p2ppbp/rNnp1np1/1N6/8/1B2BP2/PPP3PP/R2Q1RK1 w - - 3 14",
+   "line": [
+    "Nb6",
+    "Ra6"
+   ],
+   "spoken": "First, move the rook out of the attack with Ra6 before anything else — safety before ambition.",
+   "kind": "main"
+  },
+  {
+   "ply": 28,
+   "t": 167,
+   "fen": "2q2rk1/1p2ppbp/r1np1np1/1N6/8/1B2BP2/PPP3PP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "Nxc8",
+    "Qxc8"
+   ],
+   "spoken": "After the trades, occupy the centre with d5, defend it with a rook, reinforce with e6, and reroute the c6-knight via a5 to the fine c4 square.",
+   "kind": "plan",
+   "plans": "Build the centre with d5/e6 and improve the knight toward c4."
+  }
+ ]
+}

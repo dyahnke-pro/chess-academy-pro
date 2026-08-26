@@ -1,0 +1,680 @@
+{
+ "videoId": "vMY6Wr3niUg",
+ "title": "Four Knights Game | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Four Knights Game: Scotch",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:vMY6Wr3niUg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 28.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 30,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 37.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 38.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 46.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "spoken": "This is the Four Knights Scotch — a simpler, less theoretical cousin of the main Scotch, and a fine vehicle for illustrating basic opening principles. The centre has been opened, and now the ideas do the talking rather than memorised theory.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 89.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1b1NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 109,
+   "fen": "r1bqk2r/pppp1ppp/2N2n2/8/1b2P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "The pin puts the centre under real pressure with a threat to win the central pawn, and the natural retreat would just drop a piece. So the first job is to relieve that pressure by trading off the knight, which then lets the central pawn be reinforced.",
+   "kind": "plan"
+  },
+  {
+   "ply": 12,
+   "t": 123,
+   "fen": "r1bqk2r/pppp1ppp/2N2n2/8/4P3/2b5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Bxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 128.5,
+   "fen": "r1bqk2r/pppp1ppp/2N2n2/8/4P3/2P5/P1P2PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": "The opponent doubles the queenside pawns, but in return comes the dark-squared bishop, a valuable piece for the coming middlegame. This opening is a lovely demonstration that doubled, isolated queenside pawns matter far less than people fear.",
+   "kind": "plan"
+  },
+  {
+   "ply": 14,
+   "t": 133.5,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/4P3/2P5/P1P2PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 159,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/4P3/2PB4/P1P2PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Defend the central pawn with the bishop — and yes, it stares blankly at its own pawn for now, but the maxim holds: bad bishops defend good pawns. Later, when the pawn advances, that same bishop becomes an absolute beast. Resist the tempting pin that only ends up looking silly.",
+   "kind": "plan"
+  },
+  {
+   "ply": 16,
+   "t": 176,
+   "fen": "r1bqk2r/p1pp1pp1/2p2n1p/8/4P3/2PB4/P1P2PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 206.5,
+   "fen": "r1bqk2r/p1pp1pp1/2p2n1p/8/4P3/2PB4/P1P2PPP/R1BQ1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The immediate central advance is possible, but the low-key, disciplined choice is to castle first and put the fundamentals in order. Get the house in order before launching anything.",
+   "kind": "plan"
+  },
+  {
+   "ply": 18,
+   "t": 211,
+   "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/8/4P3/2PB4/P1P2PPP/R1BQ1RK1 w - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 225,
+   "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/4P3/8/2PB4/P1P2PPP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 229.5,
+   "fen": "r1bq1rk1/p1pp1pp1/2p4p/3nP3/8/2PB4/P1P2PPP/R1BQ1RK1 w - - 1 11",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "There's a small window — the opponent's bishop is undeveloped, the position is clamped, and pieces are aimed at the king, so put the attacking hat on. Rather than the queen sortie that lets the centre be undermined, the queen to h5 is stronger: it sets up a sacrifice on the weakened square and brings the heaviest piece toward the king. And don't fret over the loose pawn — you're going for mate, so let the opponent waste moves grabbing it.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 22,
+   "t": 386.5,
+   "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/4P2Q/8/2PB4/P1P2PPP/R1B2RK1 w - - 3 12",
+   "line": [
+    "Qh5",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 395.5,
+   "fen": "r1bq1rk1/p1pp1pp1/2p2P1p/7Q/8/2PB4/P1P2PPP/R1B2RK1 b - - 0 12",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 398.5,
+   "fen": "r1b2rk1/p1pp1pp1/2p2q1p/7Q/8/2PB4/P1P2PPP/R1B2RK1 w - - 0 13",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 442,
+   "fen": "r1b2rk1/p1pp1pp1/2p2q1p/7Q/8/2PB4/P1PB1PPP/R4RK1 b - - 1 13",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": "Now the mindset shifts — a piece to the good, simply develop and defend, with no need whatsoever to give back any material. When you're winning, don't complicate; consolidate.",
+   "kind": "plan"
+  },
+  {
+   "ply": 26,
+   "t": 468,
+   "fen": "r1b2rk1/p1p2pp1/2p2q1p/3p3Q/8/2PB4/P1PB1PPP/R4RK1 w - - 0 14",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Convert with natural moves — a rook to the only open file, taking care not to bury one rook behind the other. A vulnerable pawn is no concern while nothing real attacks it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 27,
+   "t": 503.5,
+   "fen": "r1b2rk1/p1p2pp1/2p2q1p/3p3Q/8/2PB4/P1PB1PPP/R3R1K1 b - - 1 14",
+   "line": [
+    "Rfe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 515.5,
+   "fen": "r4rk1/p1pb1pp1/2p2q1p/3p3Q/8/2PB4/P1PB1PPP/R3R1K1 w - - 2 15",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 541,
+   "fen": "r4rk1/p1pb1pp1/2p2q1p/3p3Q/8/2PBR3/P1PB1PPP/R5K1 b - - 3 15",
+   "line": [
+    "Re3"
+   ],
+   "spoken": "And don't rush to trade queens to convert — keeping the queens on doesn't make the win any harder. In fact, up a piece, the cleanest path is often to go straight for mate: lift the rook into the attack and turn the extra material directly into a decisive assault on the king.",
+   "kind": "plan"
+  },
+  {
+   "ply": 30,
+   "t": 562.5,
+   "fen": "4rrk1/p1pb1pp1/2p2q1p/3p3Q/8/2PBR3/P1PB1PPP/R5K1 w - - 4 16",
+   "line": [
+    "Rae8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 575.5,
+   "fen": "4rrk1/p1pb1pp1/2p2q1p/3p3Q/8/2PB2R1/P1PB1PPP/R5K1 b - - 5 16",
+   "line": [
+    "Rg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 601.5,
+   "fen": "5rk1/p1pb1pp1/2p2q1p/3pr2Q/8/2PB2R1/P1PB1PPP/R5K1 w - - 6 17",
+   "line": [
+    "Re5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 613,
+   "fen": "5rk1/p1pb1pp1/2p2q1Q/3pr3/8/2PB2R1/P1PB1PPP/R5K1 b - - 0 17",
+   "line": [
+    "Qxh6"
+   ],
+   "spoken": "Crucially, don't recapture the weak point with the bishop, which would give up the queen — take with the queen instead. It's not a mere trade, because once the queens come off, the pawn shielding the king simply can't be held, and the game is over.",
+   "kind": "tactic"
+  },
+  {
+   "ply": 34,
+   "t": 642.5,
+   "fen": "5rk1/p1pb1pp1/2p4q/3pr3/8/2PB2R1/P1PB1PPP/R5K1 w - - 0 18",
+   "line": [
+    "Qxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 643.5,
+   "fen": "5rk1/p1pb1pp1/2p4B/3pr3/8/2PB2R1/P1P2PPP/R5K1 b - - 0 18",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 651.5,
+   "fen": "5rk1/p1pb1pp1/2p2q1Q/3pr3/8/2PB2R1/P1PB1PPP/R5K1 b - - 0 17",
+   "line": [],
+   "spoken": "A pattern always worth remembering — a pinned pawn cannot move, so whatever that pinned pawn was defending is suddenly hanging. Every rook pin quietly undefends something down the line; keep an eye out for it.",
+   "kind": "tactic",
+   "reanchor": true
+  },
+  {
+   "ply": 35,
+   "t": 666,
+   "fen": "5rk1/p1pb1pp1/2p4B/3pr3/8/2PB2R1/P1P2PPP/R5K1 b - - 0 18",
+   "line": [
+    "Qxh6",
+    "Bxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 689,
+   "fen": "4r1k1/p1pb1pp1/2p4B/3pr3/8/2PB2R1/P1P2PPP/R5K1 w - - 1 19",
+   "line": [
+    "Rfe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 711,
+   "fen": "4r1k1/p1pb1pR1/2p4B/3pr3/8/2PB4/P1P2PPP/R5K1 b - - 0 19",
+   "line": [
+    "Rxg7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 715.5,
+   "fen": "4r2k/p1pb1pR1/2p4B/3pr3/8/2PB4/P1P2PPP/R5K1 w - - 1 20",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": "Making luft doesn't have to be the reflexive rook-pawn move — here a different pawn push serves two purposes at once, both parrying an annoying rook lunge and preparing to anchor a piece. In the endgame especially, if another luft move accomplishes something extra, don't be afraid to play it.",
+   "kind": "plan"
+  },
+  {
+   "ply": 39,
+   "t": 757.5,
+   "fen": "4r2k/p1pb1pR1/2p4B/3pr3/6P1/2PB4/P1P2P1P/R5K1 b - - 0 20",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 777.5,
+   "fen": "4r2k/p1pb1pR1/2p4B/3pr3/8/2PB4/P1P2PPP/R5K1 w - - 1 20",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 780.5,
+   "fen": "4r2k/p1pb1pR1/2p4B/3pr3/6P1/2PB4/P1P2P1P/R5K1 b - - 0 20",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 799.5,
+   "fen": "4r2k/p1pb1pR1/2p1r2B/3p4/6P1/2PB4/P1P2P1P/R5K1 w - - 1 21",
+   "line": [
+    "R5e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 810.5,
+   "fen": "4r2k/p1pb1pR1/2p1r2B/3p2P1/8/2PB4/P1P2P1P/R5K1 b - - 0 21",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 879.5,
+   "fen": "4r2k/p1pb1pR1/2p1r2B/3p4/6P1/2PB4/P1P2P1P/R5K1 w - - 1 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 886,
+   "fen": "4r2k/p1pb1pR1/2p1r2B/3p2P1/8/2PB4/P1P2P1P/R5K1 b - - 0 21",
+   "line": [
+    "g5"
+   ],
+   "spoken": "A formalised idea worth carrying — the diminishing-returns theory. Winning the first piece is enormous, taking the position from equal to winning; a second piece adds less; and each additional pawn after that adds less still. So grab free pawns, yes, but never damage your position to win one more.",
+   "kind": "plan",
+   "reanchor": true
+  },
+  {
+   "ply": 42,
+   "t": 924.5,
+   "fen": "4r2k/p1pb1pR1/2p4B/3pr1P1/8/2PB4/P1P2P1P/R5K1 w - - 1 22",
+   "line": [
+    "Re5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 931,
+   "fen": "4r2k/p1pb1R2/2p4B/3pr1P1/8/2PB4/P1P2P1P/R5K1 b - - 0 22",
+   "line": [
+    "Rxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 953.5,
+   "fen": "4r2k/p1p2R2/2p4B/3pr1P1/8/2PB3b/P1P2P1P/R5K1 w - - 1 23",
+   "line": [
+    "Bh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 955.5,
+   "fen": "4r2k/p1p2RB1/2p5/3pr1P1/8/2PB3b/P1P2P1P/R5K1 b - - 2 23",
+   "line": [
+    "Bg7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 967,
+   "fen": "4r1k1/p1p2R2/2p5/3pB1P1/8/2PB3b/P1P2P1P/R5K1 b - - 0 24",
+   "line": [
+    "Kg8",
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 980,
+   "fen": "4r3/p1p2k2/2p5/3pB1P1/8/2PB3b/P1P2P1P/R5K1 w - - 0 25",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 981,
+   "fen": "4r3/p1p2k2/2p5/3pB1P1/5P2/2PB3b/P1P4P/R5K1 b - - 0 25",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 991,
+   "fen": "8/p1p1rk2/2p5/3pB1P1/5P2/2PB3b/P1P4P/R5K1 w - - 1 26",
+   "line": [
+    "Re7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 992.5,
+   "fen": "8/p1p1rk2/2p3P1/3pB3/5P2/2PB3b/P1P4P/R5K1 b - - 0 26",
+   "line": [
+    "g6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 998.5,
+   "fen": "6k1/p1p1r3/2p3P1/3pB3/5P2/2PB3b/P1P4P/1R4K1 b - - 2 27",
+   "line": [
+    "Kg8",
+    "Rb1"
+   ],
+   "spoken": "And a satisfying finish — the rook that sat out the entire game finally activates down the open file and reaps all the rewards. The piece that waited out the war emerges at the end and takes all the credit.",
+   "kind": "plan"
+  },
+  {
+   "ply": 54,
+   "t": 1015,
+   "fen": "4r1k1/p1p5/2p3P1/3pB3/5P2/2PB3b/P1P4P/1R4K1 w - - 3 28",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1019.5,
+   "fen": "4r1k1/pRp5/2p3P1/3pB3/5P2/2PB3b/P1P4P/6K1 b - - 4 28",
+   "line": [
+    "Rb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1035,
+   "fen": "2r3k1/pRp5/2p3P1/3pB3/5P2/2PB3b/P1P4P/6K1 w - - 5 29",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1043.5,
+   "fen": "2r3k1/pRp5/2p3P1/3pBP2/8/2PB3b/P1P4P/6K1 b - - 0 29",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 1048,
+   "fen": "2r3k1/pRp5/6P1/2ppBP2/8/2PB3b/P1P4P/6K1 w - - 0 30",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 1049.5,
+   "fen": "2r3k1/pRp5/5PP1/2ppB3/8/2PB3b/P1P4P/6K1 b - - 0 30",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1069,
+   "fen": "r1bqk2r/pppp1ppp/2N2n2/8/4P3/2b5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1071,
+   "fen": "r1bqk2r/pppp1ppp/2N2n2/8/1b2P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1074,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1076.5,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1081,
+   "fen": "r1bqk2r/p1p2ppp/2p2n2/3p4/1b2P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1085.5,
+   "fen": "r1bqk2r/p1p2ppp/2p2n2/3P4/1b6/2NB4/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1089,
+   "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+   "line": [
+    "cxd5",
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1090,
+   "fen": "r1bq1rk1/p1p2ppp/5n2/3p2B1/1b6/2NB4/PPP2PPP/R2Q1RK1 b - - 3 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1092,
+   "fen": "r1bq1rk1/p4ppp/2p2n2/3p2B1/1b6/2NB4/PPP2PPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1110.5,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1118,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/4P3/2PB4/P1P2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "Bd3",
+    "Bxc3+",
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1119,
+   "fen": "r1bqk2r/p1pp1pp1/2p2n1p/8/4P3/2PB4/P1P2PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1122,
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/4P3/2PB4/P1P2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
