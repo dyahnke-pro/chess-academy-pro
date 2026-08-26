@@ -1,0 +1,290 @@
+{
+ "videoId": "o12epkA2jeE",
+ "title": "What is The Bowdler Attack? | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defense: Bowdler Attack (2.Bc4)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:o12epkA2jeE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 27.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 35,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 37.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 42,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White plays the Bowdler Attack — the bishop to c4. It's remarkably common below 1600, but genuinely not a good move against the Sicilian.",
+   "kind": "main",
+   "teaches": [
+    "the Bowdler Attack"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 87.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The first step is e6 — it blunts the bishop, leaving it biting on granite, and prepares the freeing d5 break.",
+   "kind": "main",
+   "teaches": [
+    "e6 blunts the c4 bishop"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 135,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 172.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "And remember, the knight to f6 is perfectly safe here — no need to fear e5, which we'd meet with d5 or a knight jump to g4 hitting the pawn.",
+   "kind": "main",
+   "teaches": [
+    "...Nf6 is safe; ...e5 doesn’t scare us"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 207.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 5",
+   "line": [
+    "d3"
+   ],
+   "spoken": "White plays the quiet d3.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 224.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "And we reap the reward of not committing d6 early — d5 in one fell swoop, grabbing the center and solving all our opening problems at once.",
+   "kind": "main",
+   "teaches": [
+    "...d5 in one move solves the opening"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 240,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/1Bpp4/4P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "White pins with the bishop to b5. We have a pleasant choice — force a slightly better endgame with dxe4, or simply keep developing.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 343,
+   "fen": "r1bqk2r/pp2bppp/2n1pn2/1Bpp4/4P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "We choose the fun game — the bishop to e7. No need to force the trade with a6; White may well capture on c6 anyway.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 347.5,
+   "fen": "r1bqk2r/pp2bppp/2n1pn2/1BppN3/4P3/2NP4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "White pounces with the knight to e5, but it's not scary — there's no real horsepower behind the attack.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 400.5,
+   "fen": "r1b1k2r/ppq1bppp/2n1pn2/1BppN3/4P3/2NP4/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "We defend the knight the strategic way — the queen to c7, not the bishop to d7 which would surrender the bishop pair; and if a bishop comes to f4, we unpin by shifting our bishop to d6. One habit to keep with a hanging queen: before moving it, look for an intermezzo like dxe4, and always check the opponent can't reply with a queen-check desperado.",
+   "kind": "main",
+   "teaches": [
+    "Qc7 keeps the bishop pair",
+    "look for the intermezzo before moving a hanging queen"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 407,
+   "fen": "r1bqk2r/pp2bppp/2n1pn2/1BppN3/4P3/2NP4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 714.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 721,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1608,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1609,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1614,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1616.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1618.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 3 5",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1619.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/2p5/2B1n3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 6",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1621.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1623.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/3P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "d3",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1632,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1633,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1635.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "line": [
+    "Nc3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1637.5,
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1642.5,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2ppP3/2B5/2N2N2/PPPP1PPP/R1BQK2R w KQkq d6 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  }
+ ]
+}
