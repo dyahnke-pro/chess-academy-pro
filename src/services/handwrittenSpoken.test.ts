@@ -27,8 +27,13 @@ describe('hand-written spoken forms', () => {
   const bake = read('public/data/corpus-spoken.json') as Record<string, Baked>;
 
   it('has some (guards the guard)', () => {
-    // Every assertion below passes vacuously on an empty file.
-    expect(Object.keys(hand).length).toBeGreaterThan(200);
+    // Every assertion below passes vacuously on an empty file. The hand-written
+    // spoken bake was the REWORD layer for the farmed corpus; on 2026-08-26 the
+    // anchored farmed notes (and their 267 hand-authored forms) were archived to
+    // data/archive/, and voiced — the sole exact-position source now — is already
+    // in spoken form and needs no rewrite. So the file is expected minimal; the
+    // sibling assertions still hold whatever remains to the same gate + bake.
+    expect(Object.keys(hand).length).toBeGreaterThanOrEqual(1);
   });
 
   it('passes the same gate the machine-baked lines pass', () => {
