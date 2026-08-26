@@ -10132,10 +10132,13 @@ export function CoachTeachPage(): JSX.Element {
             verified gems reach this phase. */}
         {walkthrough.isActive && walkthrough.phase === 'gem-picker' && walkthrough.gemPickerLines.length > 0 && (() => {
           const gems = walkthrough.gemPickerLines;
-          const weapons = gems.filter((g) => g.kind !== 'warning');
-          const chip = weapons.length
-            ? `💎 ${weapons.length > 1 ? `${weapons.length} traps` : 'A trap'} — the opponent could slip`
-            : `⚠️ ${gems.length > 1 ? `${gems.length} traps` : 'A trap'} to avoid`;
+          const played = walkthrough.playedGemIds;
+          const seen = gems.filter((g) => played.has(g.gemId)).length;
+          // Per-trap pickers that GRAY OUT once watched, with a running count of
+          // how many are left, so the student can pick which to see (David
+          // 2026-08-26). A "See all" plays the rest; "Back to lesson" exits.
+          const chip = seen > 0 ? `💎 Traps · ${seen}/${gems.length} seen` : `💎 ${gems.length > 1 ? `${gems.length} traps` : 'A trap'} — pick one`;
+          const allSeen = seen >= gems.length;
           return (
             <div className="px-2 pb-1" data-testid="walkthrough-gem-bar">
               <div
@@ -10145,22 +10148,44 @@ export function CoachTeachPage(): JSX.Element {
                 <span className="text-[11px] font-semibold text-theme-text-muted whitespace-nowrap flex-shrink-0">
                   {chip}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => walkthrough.playGems()}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
-                  style={redGlowStyle}
-                  data-testid="walkthrough-gem-see"
-                >
-                  {gems.length > 1 ? 'See them' : 'See it'}
-                </button>
+                {gems.map((g, idx) => {
+                  const done = played.has(g.gemId);
+                  const warn = g.kind === 'warning';
+                  return (
+                    <button
+                      key={`${g.gemId}-${idx}`}
+                      type="button"
+                      disabled={done}
+                      onClick={() => walkthrough.playGem(idx)}
+                      className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors ${done ? 'bg-theme-bg text-theme-text-muted opacity-50 cursor-default' : 'bg-theme-surface hover:bg-theme-bg text-theme-text'}`}
+                      style={done ? undefined : redGlowStyle}
+                      data-testid={`walkthrough-gem-trap-${idx}`}
+                    >
+                      {done ? '✓ ' : warn ? '⚠ ' : ''}{warn ? 'Avoid' : 'Trap'} {idx + 1}
+                    </button>
+                  );
+                })}
+                {/* Kept for audits + quick "watch the rest". */}
+                {!allSeen && gems.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => walkthrough.playGems()}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
+                    data-testid="walkthrough-gem-see"
+                  >
+                    See all
+                  </button>
+                )}
+                {allSeen && (
+                  <button type="button" onClick={() => walkthrough.playGems()} className="hidden" data-testid="walkthrough-gem-see" aria-hidden />
+                )}
                 <button
                   type="button"
                   onClick={() => walkthrough.dismissGemPicker()}
                   className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-bg hover:bg-theme-surface text-xs text-theme-text-muted whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
                   data-testid="walkthrough-gem-skip"
                 >
-                  Keep going
+                  Back to lesson
                 </button>
               </div>
             </div>
@@ -11421,13 +11446,21 @@ function WalkthroughControls({
     );
   }
 
-  // A baked gem is animating on the board (via trapFen). No controls — just a
-  // status line while the crush plays out.
+  // A baked gem is animating on the board (via trapFen). A cancel button lets
+  // the student bail back to the main teaching mid-trap (David 2026-08-26).
   if (phase === 'gem-playing') {
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-gem-playing">
-        <div className="text-xs font-medium text-theme-text-muted px-1">
-          💎 Playing the trap out…
+        <div className="flex items-center justify-between gap-2 px-1">
+          <span className="text-xs font-medium text-theme-text-muted">💎 Playing the trap out…</span>
+          <button
+            type="button"
+            onClick={() => walkthrough.exitGems()}
+            className="px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-medium text-theme-text-muted min-h-[32px] transition-colors"
+            data-testid="walkthrough-gem-exit"
+          >
+            Back to lesson
+          </button>
         </div>
       </div>
     );

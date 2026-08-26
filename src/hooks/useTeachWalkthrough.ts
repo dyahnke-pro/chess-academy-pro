@@ -712,10 +712,18 @@ export interface UseTeachWalkthroughReturn {
    *  Empty when no picker is showing. Each entry is a trap the opponent could
    *  walk into here; tapping "see it" plays them all out. */
   gemPickerLines: BakedGemLine[];
+  /** Ids of traps already watched this picker — the picker grays these out and
+   *  counts how many are left. */
+  playedGemIds: Set<string>;
   /** User tapped "see the trap(s)" — play EVERY offered gem out on the board
    *  (inaccuracy + punish, snapping to the base between each), then snap back
    *  and resume the walkthrough. */
   playGems: () => void;
+  /** Play ONE trap by index, then return to the picker (or the lesson when all
+   *  are watched). */
+  playGem: (index: number) => void;
+  /** Cancel button — leave the traps and return to the main teaching. */
+  exitGems: () => void;
   /** User tapped "keep going" — dismiss the picker and resume the walkthrough
    *  without playing any gem. */
   dismissGemPicker: () => void;
@@ -946,6 +954,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // ref, so `playGems` reads them without a stale closure) the same list.
   const [gemPickerLines, setGemPickerLines] = useState<BakedGemLine[]>([]);
   const gemLinesRef = useRef<BakedGemLine[]>([]);
+  // Which traps the student has already watched — so the picker can gray them
+  // out and show how many are left (David 2026-08-26). Ref mirror so the async
+  // play loop reads the latest set without a stale closure.
+  const [playedGemIds, setPlayedGemIds] = useState<Set<string>>(new Set());
+  const playedGemIdsRef = useRef<Set<string>>(new Set());
 
   // When inside a punish-walkthrough sub-flow, this holds the
   // ORIGINAL opening tree so we can return to it when the lesson
@@ -1177,6 +1190,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             setNarrationHighlights([]);
             gemLinesRef.current = gems;
             setGemPickerLines(gems);
+            playedGemIdsRef.current = new Set();
+            setPlayedGemIds(new Set());
             gemResumeRef.current = (): void => {
               transitionAfter();
             };
@@ -1969,6 +1984,73 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     })();
   }, [resumeAfterGems]);
 
+  /** Play ONE trap (David 2026-08-26: "pickers for each trap … that gray out
+   *  after the coach has played through them"). Marks it watched, then returns
+   *  to the picker to choose another — or, when all are seen, narrates the
+   *  hand-off and heads back to the lesson. */
+  const playGem = useCallback((index: number): void => {
+    const gems = gemLinesRef.current;
+    const gem = gems?.[index];
+    if (!gem) return;
+    const runId = runIdRef.current;
+    const stillCurrent = (): boolean => runIdRef.current === runId;
+    voiceService.stop();
+    setPhase('gem-playing');
+    cancelNarrationRef.current = (): void => {
+      setTrapFen(null);
+      setNarrationArrows([]);
+      setNarrationHighlights([]);
+    };
+    void (async (): Promise<void> => {
+      try {
+        setTrapFen(null);
+        setNarrationArrows([]);
+        setNarrationHighlights([]);
+        await waitInterruptibly(GEM_RESET_PAUSE_MS, stillCurrent);
+        for (const step of gem.steps) {
+          if (!stillCurrent()) return;
+          setTrapFen(step.fen);
+          setNarrationArrows(step.arrows);
+          setNarrationHighlights(step.highlights ?? []);
+          if (step.idea.trim()) {
+            try { await speakWalkthroughText(step.idea, step.shortIdea, stillCurrent); } catch { /* voice never blocks the arc */ }
+          } else {
+            await waitInterruptibly(700, stillCurrent);
+          }
+        }
+        if (!stillCurrent()) return;
+        await waitInterruptibly(GEM_DIGEST_PAUSE_MS, stillCurrent);
+      } catch { /* fall through to bookkeeping */ }
+      if (!stillCurrent()) return;
+      const played = new Set(playedGemIdsRef.current);
+      played.add(gem.gemId);
+      playedGemIdsRef.current = played;
+      setPlayedGemIds(played);
+      setTrapFen(null);
+      setNarrationArrows([]);
+      setNarrationHighlights([]);
+      const remaining = (gemLinesRef.current ?? []).filter((g) => !played.has(g.gemId));
+      // Narrate the END of this trap and the START of the choice — the coach
+      // hands control back instead of silently snapping (David 2026-08-26).
+      if (remaining.length === 0) {
+        try { await speakWalkthroughText("That's every trap here — back to the lesson.", undefined, stillCurrent); } catch { /* voice optional */ }
+        if (stillCurrent()) resumeAfterGems();
+      } else {
+        const more = remaining.length === 1 ? 'one more trap' : `${remaining.length} more traps`;
+        try { await speakWalkthroughText(`That's the trap. There ${remaining.length === 1 ? 'is' : 'are'} ${more} — pick one, or head back to the lesson.`, undefined, stillCurrent); } catch { /* voice optional */ }
+        if (stillCurrent()) setPhase('gem-picker');
+      }
+    })();
+  }, [resumeAfterGems]);
+
+  /** Cancel button — leave the traps and return to the main teaching (David
+   *  2026-08-26). Interrupts any playing detour by bumping the run token. */
+  const exitGems = useCallback((): void => {
+    runIdRef.current += 1;
+    voiceService.stop();
+    resumeAfterGems();
+  }, [resumeAfterGems]);
+
   const dismissGemPicker = useCallback((): void => {
     resumeAfterGems();
   }, [resumeAfterGems]);
@@ -2672,7 +2754,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     acceptTrap,
     skipTrap,
     gemPickerLines,
+    playedGemIds,
     playGems,
+    playGem,
+    exitGems,
     dismissGemPicker,
   };
 }
