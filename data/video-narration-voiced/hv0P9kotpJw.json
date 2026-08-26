@@ -1,0 +1,405 @@
+{
+  "videoId": "hv0P9kotpJw",
+  "title": "Master Class | Ending The Englund Gambit | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Englund Gambit",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:hv0P9kotpJw",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 15.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "d4",
+        "e5"
+      ],
+      "spoken": "Nineteen-eighty-two, the highest rated we've faced by far — let's put my money where my mouth is and go very positional against this guy. d4, and out comes e5, the Englund Gambit."
+    },
+    {
+      "ply": 3,
+      "t": 31,
+      "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "dxe5"
+      ],
+      "spoken": "We obviously accept it — d takes e5. Black's whole idea is to make a mess and hope we don't know the refutation."
+    },
+    {
+      "ply": 5,
+      "t": 34,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/8/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 3",
+      "line": [
+        "Nc6",
+        "Nf3"
+      ],
+      "spoken": "Black plays the knight to c6, hitting the extra pawn, and we simply defend it with the knight to f3."
+    },
+    {
+      "ply": 6,
+      "t": 36.5,
+      "fen": "r1b1kbnr/ppppqppp/2n5/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 3 4",
+      "line": [
+        "Qe7"
+      ],
+      "spoken": "Now there are two main tries. The queen to e7 is the tricky one, and the Englund is one of those openings where if you don't know the antidote you can get into real trouble."
+    },
+    {
+      "ply": 7,
+      "t": 66.5,
+      "fen": "r1b1kbnr/ppppqppp/2n5/4P3/5B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 4 4",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "The so-called trap is to go the bishop to f4 or the bishop to g5 — both essentially transpose into the same overall picture. We go the bishop to f4, defending the pawn and staying developed."
+    },
+    {
+      "ply": 8,
+      "t": 104.5,
+      "fen": "r1b1kbnr/pppp1ppp/2n5/4P3/1q3B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 5 5",
+      "line": [
+        "Qb4+"
+      ],
+      "spoken": "And here's how bad it can look: the queen to b4 with check. Yet if you know the theory, you realize Black is so underdeveloped that all of this activity is going to backfire."
+    },
+    {
+      "ply": 9,
+      "t": 108.5,
+      "fen": "r1b1kbnr/pppp1ppp/2n5/4P3/1q6/5N2/PPPBPPPP/RN1QKB1R b KQkq - 6 5",
+      "line": [
+        "Bd2"
+      ],
+      "spoken": "We block with the bishop to d2, calmly interposing and inviting Black to overreach."
+    },
+    {
+      "ply": 10,
+      "t": 111,
+      "fen": "r1b1kbnr/pppp1ppp/2n5/4P3/8/5N2/PqPBPPPP/RN1QKB1R w KQkq - 0 6",
+      "line": [
+        "Qxb2"
+      ],
+      "spoken": "The queen grabs on b2, attacking the rook in the corner. Now comes the actual trap: the very tempting move is the bishop to c3, thinking, let me attack the queen — but that's exactly what Black wants."
+    },
+    {
+      "ply": 11,
+      "t": 135.5,
+      "fen": "r1b1kbnr/pppp1ppp/2n5/4P3/8/2N2N2/PqPBPPPP/R2QKB1R b KQkq - 1 6",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "Because after the bishop to c3, the bishop swoops into b4, pinning our bishop to the king, and that creates very problematic consequences for us. So we sidestep the whole thing and develop the knight to c3 instead — same square, but no pin, and the queen is still in mortal danger deep in our camp.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 139,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/1b6/2N2N2/PqPBPPPP/R2QKB1R w KQkq - 2 7",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "Black tries the bishop to b4 anyway — this is the famous queen-sacrifice line the strong analysts have looked at."
+    },
+    {
+      "ply": 13,
+      "t": 151,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/1b6/2N2N2/PqPBPPPP/1R1QKB1R b Kkq - 3 7",
+      "line": [
+        "Rb1"
+      ],
+      "spoken": "We answer with the rook to b1, kicking the queen and daring Black to give it up. This is where Black's whole gambit stands or falls."
+    },
+    {
+      "ply": 14,
+      "t": 153,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/1b6/q1N2N2/P1PBPPPP/1R1QKB1R w Kkq - 4 8",
+      "line": [
+        "Qa3"
+      ],
+      "spoken": "The queen to a3 isn't challenging at all. The critical way — the line the theory recommends — is the queen takes c3, a genuine queen sacrifice; I'll show you how that goes after the game, but the point is Black is grabbing pieces to justify parting with the queen.",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 187,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/3NP3/1b6/q4N2/P1PBPPPP/1R1QKB1R b Kkq - 5 8",
+      "line": [
+        "Nd5"
+      ],
+      "spoken": "Excellent move here: the knight to d5, immediately going after the c7-pawn and the bishop on b4. You don't want to dilly-dally — you go straight for the throat."
+    },
+    {
+      "ply": 16,
+      "t": 210.5,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/q2NP3/1b6/5N2/P1PBPPPP/1R1QKB1R w Kkq - 6 9",
+      "line": [
+        "Qa5"
+      ],
+      "spoken": "If Black tries the queen to a5, we just take the bishop — it's attacked, and there's no good way to keep everything defended once we start collecting on b4."
+    },
+    {
+      "ply": 17,
+      "t": 254,
+      "fen": "r1b1k1nr/pppp1ppp/2n5/q3P3/1N6/5N2/P1PBPPPP/1R1QKB1R b Kkq - 0 9",
+      "line": [
+        "Nxb4"
+      ],
+      "spoken": "So the knight takes on b4. Whatever piece ends up sitting on b4 is going to be an issue, because Black would love to play c5 and win it back, so we have to be precise about which piece recaptures."
+    },
+    {
+      "ply": 18,
+      "t": 259.5,
+      "fen": "r1b1k1nr/pppp1ppp/8/q3P3/1n6/5N2/P1PBPPPP/1R1QKB1R w Kkq - 0 10",
+      "line": [
+        "Nxb4"
+      ],
+      "spoken": "Black recaptures — the knight takes on b4. Taking back with the rook instead would have been bad, because our d5-knight was also hanging to the queen; the recapture order matters."
+    },
+    {
+      "ply": 19,
+      "t": 265.5,
+      "fen": "r1b1k1nr/pppp1ppp/8/q3P3/1B6/5N2/P1P1PPPP/1R1QKB1R b Kkq - 0 10",
+      "line": [
+        "Bxb4"
+      ],
+      "spoken": "Now takes takes — and I'd like to recapture with the bishop, taking on b4 to prevent Black from castling and keeping that king stuck in the center."
+    },
+    {
+      "ply": 20,
+      "t": 267.5,
+      "fen": "r1b1k1nr/pppp1ppp/8/4P3/1B6/5N2/q1P1PPPP/1R1QKB1R w Kkq - 0 11",
+      "line": [
+        "Qxa2"
+      ],
+      "spoken": "Black snatches our edge pawn, the queen taking on a2. Now, how do we continue? Very often players get over-creative here or too fancy — you don't need either."
+    },
+    {
+      "ply": 21,
+      "t": 285.5,
+      "fen": "r1b1k1nr/pppp1ppp/8/4P3/1B2P3/5N2/q1P2PPP/1R1QKB1R b Kkq - 0 11",
+      "line": [
+        "e4"
+      ],
+      "spoken": "You simply follow the rules of development: complete your development. We push e4, opening the diagonal so this light-squared bishop can finally come out."
+    },
+    {
+      "ply": 22,
+      "t": 307.5,
+      "fen": "r1b1k2r/pppp1ppp/7n/4P3/1B2P3/5N2/q1P2PPP/1R1QKB1R w Kkq - 1 12",
+      "line": [
+        "Nh6"
+      ],
+      "spoken": "Black will try to dislodge the bishop from that strong diagonal, which is completely understandable — the knight to h6, heading for f5."
+    },
+    {
+      "ply": 23,
+      "t": 386.5,
+      "fen": "r1b1k2r/pppp1ppp/7n/4P3/1B1NP3/8/q1P2PPP/1R1QKB1R b Kkq - 2 12",
+      "line": [
+        "Nd4"
+      ],
+      "spoken": "Some of you are thinking about the knight to g5, but generally speaking I want to orient my pieces toward the center, so I bring the knight to d4 — a beautiful central square, eyeing b5 among other things."
+    },
+    {
+      "ply": 24,
+      "t": 402,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/4P3/1B1NP3/8/q1P2PPP/1R1QKB1R w Kkq - 0 13",
+      "line": [
+        "b6"
+      ],
+      "spoken": "From d4 the knight can jump to b5 and do all sorts of damage; it's not just parked there. Black plays b6, making a little room."
+    },
+    {
+      "ply": 25,
+      "t": 448.5,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/4P3/1B1NP3/8/q1P2PPP/1RQ1KB1R b Kkq - 1 13",
+      "line": [
+        "Qc1"
+      ],
+      "spoken": "Now the point: that queen on a2 needs an escape square, so we think methodically about trapping it — can we cover the b2-square so it has nowhere to run? The queen to c1 starts building that net."
+    },
+    {
+      "ply": 23,
+      "t": 493,
+      "fen": "r1b1k2r/pppp1ppp/7n/4P3/1B1NP3/8/q1P2PPP/1R1QKB1R b Kkq - 2 12",
+      "line": [],
+      "spoken": "Take a moment on the squares you have to cover — a lot of pieces get involved in a queen hunt, and you have to make sure that when you clamp one escape route you're not accidentally opening another.",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 500,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/4P3/1B1NP3/8/q1P2PPP/1RQ1KB1R b Kkq - 1 13",
+      "line": [
+        "b6",
+        "Qc1"
+      ],
+      "spoken": "Replaying it: b6 for Black, the queen to c1 for us, and the mating-net idea against the stranded queen keeps taking shape.",
+      "reanchor": true
+    },
+    {
+      "ply": 26,
+      "t": 502.5,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/4P3/qB1NP3/8/2P2PPP/1RQ1KB1R w Kkq - 2 14",
+      "line": [
+        "Qa4"
+      ],
+      "spoken": "One piece of advice: if you're up a queen in a position like this, don't lose on time trying to force the trap. If you don't win the queen outright, that's no tragedy — you're already winning. Black lunges with the queen to a4, still hunting for air.",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 518.5,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/1B2P3/qB1NP3/8/2P2PPP/1RQ1K2R b Kkq - 3 14",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "Black is trying to escape, but notice the queen has literally no prospects. We have a very simple move, the bishop to b5, calmly sending the queen back and tightening the noose."
+    },
+    {
+      "ply": 29,
+      "t": 541,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/1B2P3/1B1NP3/8/q1P2PPP/R1Q1K2R b Kkq - 5 15",
+      "line": [
+        "Qa2",
+        "Ra1"
+      ],
+      "spoken": "Count the net: it takes one, two, three, four, five pieces to trap a man's queen — and here they all coordinate. Black resigns, but of course we'd have finished by rounding the queen up; the queen to a2, the rook to a1, and it's caught.",
+      "reanchor": true
+    },
+    {
+      "ply": 31,
+      "t": 554.5,
+      "fen": "r1b1k2r/p1pp1ppp/1p5n/1B2P3/qB1NP3/8/2P2PPP/1RQ1K2R b Kkq - 7 16",
+      "line": [
+        "Qa4",
+        "Rb1"
+      ],
+      "spoken": "Same story on the other wing — the queen to a4, the rook back to b1, and the queen simply runs out of squares. The hunt is a matter of technique once every escape is covered.",
+      "reanchor": true
+    },
+    {
+      "ply": 5,
+      "t": 600,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/8/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 3",
+      "line": [],
+      "spoken": "Now let's talk about the Englund itself. If you actually want to play it, relatively speaking it's probably a better idea to handle it with d6 rather than the queen sortie.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 605.5,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
+      "line": [
+        "d6"
+      ],
+      "spoken": "This is one of the ways to play the Englund — d6, trying to pry the extra pawn back. But honestly the Englund is a very bad opening, and even this version leaves Black struggling.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 629,
+      "fen": "r1bqk1nr/ppp2ppp/2nb4/8/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "exd6",
+        "Bxd6"
+      ],
+      "spoken": "After d6, e takes d6 and the bishop recaptures on d6 is okay for Black — at least the structure is normal and Black is only slightly worse rather than in crisis.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 632,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
+      "line": [],
+      "spoken": "But White has a very strong intermediate move here — the bishop to g5 — before resolving the tension on d6.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 633,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/4P1B1/8/5N2/PPP1PPPP/RN1QKB1R b KQkq - 1 4",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": "The point of the bishop to g5 is subtle.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 639.5,
+      "fen": "r1bqk1nr/ppp1bppp/2np4/4P1B1/8/5N2/PPP1PPPP/RN1QKB1R w KQkq - 2 5",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "If Black covers with the bishop to e7, defending along the file,",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 641,
+      "fen": "r1bqk1nr/ppp1Bppp/2np4/4P3/8/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 5",
+      "line": [
+        "Bxe7"
+      ],
+      "spoken": "then you're able to trade the bishops off — the bishop takes on e7.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 642.5,
+      "fen": "r1bqk2r/ppp1nppp/2np4/4P3/8/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 6",
+      "line": [
+        "Ngxe7"
+      ],
+      "spoken": "Black recaptures with the knight from g8, and now notice how the d6-pawn has been softened up.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 645.5,
+      "fen": "r1bqk2r/ppp1nppp/2nP4/8/8/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 6",
+      "line": [
+        "exd6"
+      ],
+      "spoken": "You simply play e takes d6, cashing in on that weakened pawn.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 647.5,
+      "fen": "r1bqk2r/pp2nppp/2np4/8/8/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 7",
+      "line": [
+        "cxd6"
+      ],
+      "spoken": "Black recaptures with c takes d6, and now Black is not only a pawn down but saddled with a fresh weakness.",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 651.5,
+      "fen": "r1bqk2r/pp2nppp/2np4/8/8/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 7",
+      "line": [
+        "e3"
+      ],
+      "spoken": "He's left with an isolated pawn on d6 and zero compensation — as we like to say, White's simply up a pawn with all the compensation. We play e3 and consolidate.",
+      "reanchor": true
+    },
+    {
+      "ply": 6,
+      "t": 688,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
+      "line": [],
+      "spoken": "From here it's intuitive: get the bishop out, get the knight out. The computer evaluates this around plus one-point-seven — a very serious edge for White.",
+      "reanchor": true
+    },
+    {
+      "ply": 2,
+      "t": 1636,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "line": [],
+      "spoken": "And our bishop can always drop back to b3 if needed. In conclusion, I strongly advise against the Englund — it just doesn't hold up.",
+      "reanchor": true
+    }
+  ]
+}
