@@ -460,7 +460,8 @@
    "t": 1120,
    "fen": "1q3rk1/4Bppp/r3b3/pp1np3/B7/1N3P2/PPP2QPP/1K1R3R b - - 0 19",
    "line": [],
-   "spoken": ""
+   "spoken": "The line ran the capture on a4, the bishop taking f8, and the recapture on b3 — where White has a dangerously advanced passer.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -470,7 +471,8 @@
     "Nxe7",
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "The knight to c5. Taking the bishop isn't promising — White takes on a6 and evacuates the knight back through c5. The rook to b6 doesn't trap the bishop, since it escapes by capturing on e6. Better to exploit the knight-and-queen alignment: the queen to a7 or b6 pins the knight, though White bails out with the bishop to b3, so the queen to b6 is a fair fallback. The sharper try is the rook to c6, targeting the c5-knight first, then hitting it again with the queen.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -779,7 +781,8 @@
    "t": 1915.5,
    "fen": "2r3k1/1n3pp1/2q4p/1pN1p3/1P4P1/pPP2P2/K2R1Q1P/8 w - - 3 33",
    "line": [],
-   "spoken": ""
+   "spoken": "I was worried about the knight to e4 — but after the king to a3 and the knight to c5, the queen takes c5, and the queen to a6 with check wins the queen.",
+   "reanchor": true
   },
   {
    "ply": 66,

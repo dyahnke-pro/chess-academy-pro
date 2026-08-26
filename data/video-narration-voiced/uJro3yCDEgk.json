@@ -183,7 +183,8 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "Assuming the recapture on c5 — the bishop to c5 allows the rook to e1 with check, which Black certainly won't want to allow.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -472,7 +473,8 @@
    "t": 687.5,
    "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
    "line": [],
-   "spoken": ""
+   "spoken": "I don't like the bishop to d6, because it blocks the rook — don't play a move just because it comes with a check.",
+   "reanchor": true
   },
   {
    "ply": 53,
@@ -537,7 +539,8 @@
     "c4",
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "We want to push the pawn — and find the move with a bit of tactics, not assuming anything automatically.",
+   "reanchor": true
   },
   {
    "ply": 57,
@@ -607,7 +610,8 @@
    "line": [
     "Rb2+"
    ],
-   "spoken": ""
+   "spoken": "As you push the passer and give away your other pawns, beware the swindle: the opponent grabbing them all, then giving the rook for the passer at the end.",
+   "reanchor": true
   },
   {
    "ply": 65,
@@ -635,7 +639,8 @@
     "Ke3",
     "Rc2"
    ],
-   "spoken": ""
+   "spoken": "The rook to c2 locks our king on the first rank and threatens a ladder mate — which I don't want; so we push the pawn to c7.",
+   "reanchor": true
   },
   {
    "ply": 67,

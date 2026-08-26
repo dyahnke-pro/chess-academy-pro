@@ -292,7 +292,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4. The bishop to f6 will be our move, and starting here keeps flexible options — it also discourages Black's bishop to f6, since the knight to c6 comes in with tempo."
   },
   {
    "ply": 32,
@@ -319,7 +319,8 @@
    "t": 1056.5,
    "fen": "r1b1k2r/1p3ppp/p3pb2/2P5/1PN5/2P1P3/P5PP/R3KB1R w KQ - 3 17",
    "line": [],
-   "spoken": ""
+   "spoken": "Why the king to d2 and not the rook to c1? The usual advice is not to tie your heavy pieces down to a menial task — a perfect illustration.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -328,7 +329,7 @@
    "line": [
     "Kd2"
    ],
-   "spoken": ""
+   "spoken": "So the king to d2 — the rook to c1 would waste our resources. The king may be the most valuable piece, but here it's also the right tool for the job."
   },
   {
    "ply": 34,
@@ -476,7 +477,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Once the knight leaves c4 we can bring the king to c4 and prepare b5 — inching the king closer while Black shuffles waiting moves.",
+   "reanchor": true
   },
   {
    "ply": 49,
@@ -572,7 +574,8 @@
    "line": [
     "Be5"
    ],
-   "spoken": ""
+   "spoken": "We don't allow any activity with g4 — no hurry, Black isn't threatening to take on d6. The king to c4 is interesting; converting this is annoyingly not elementary — the hardest part of the game.",
+   "reanchor": true
   },
   {
    "ply": 57,

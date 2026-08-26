@@ -852,7 +852,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black has excellent queenside counterplay — the pawn to e5 here has been played at a high level.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -1268,7 +1269,8 @@
     "Nc3",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Sacrifice a pawn to open up the centre when you have a big lead in development.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -1325,7 +1327,8 @@
     "Bf8",
     "Bf1"
    ],
-   "spoken": ""
+   "spoken": "A typical Sicilian structure with a damaged queenside — Black is slightly better; here we faced an outright poor move.",
+   "reanchor": true
   },
   {
    "ply": 23,

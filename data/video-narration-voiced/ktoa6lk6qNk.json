@@ -283,7 +283,7 @@
    "line": [
     "Rxe1+"
    ],
-   "spoken": ""
+   "spoken": "We take on e1 with the rook and check first, then wait to see how White recaptures — a knight recapture at least keeps contact with the d5-pawn."
   },
   {
    "ply": 27,
@@ -384,7 +384,8 @@
     "Qd1",
     "Ncb4"
    ],
-   "spoken": ""
+   "spoken": "White's queen drops back to d1 and we plant the knight on b4 — White is stuck, hamstrung by the weak pawn on b2.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -500,7 +501,8 @@
     "Bxd4",
     "axb4"
    ],
-   "spoken": ""
+   "spoken": "After the capture on d4 and the recapture on b4, our bishop looks loose — but it isn't, because the capture on f2 with check saves it.",
+   "reanchor": true
   },
   {
    "ply": 48,
@@ -598,7 +600,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White holds with the bishop to e3. There's nothing wrong with trading everything into a pawn-up endgame; the rook to e8 is tempting, but the capture on d4 leaves an attack I'm not sure is winning — it feels closer to a draw."
   },
   {
    "ply": 58,
@@ -784,7 +786,7 @@
    "line": [
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "White's queen to d6, just staying put. I'm hesitant to lift the rook, since that would hand White something."
   },
   {
    "ply": 72,

@@ -95,7 +95,7 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "White plays the pawn to e3. The ideas in the Torre are very different from the London — don't treat this as a version of the London; from Black's side you need a separate set of ideas."
   },
   {
    "ply": 10,
@@ -464,7 +464,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles kingside.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -567,7 +568,8 @@
    "t": 621,
    "fen": "rnbq1rk1/ppp1ppb1/3p1npp/6B1/3PP3/2P2N2/PP1N1PPP/R2QKB1R w KQ - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "Black played f5, but the engine prefers c6, quietly controlling squares with f5 to follow — Black is completely fine either way.",
+   "reanchor": true
   },
   {
    "ply": 13,

@@ -543,7 +543,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "After the knight to f6, White plays e5 and then the bishop to d3 — reaching the exact position we had in the game.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -1323,7 +1324,8 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We focused on the second main line, ready to sacrifice the d4-pawn after the queen to b6, and the sharp line with g5 where the queen to e2 is a powerful weapon to have up your sleeve. The pawn to g6 is probably Black's best bet for dynamic equality, with the immediate a5 also interesting — but most players meet the bishop to e7, and against kingside castling you answer with the rook to e1.",
+   "reanchor": true
   }
  ]
 }
