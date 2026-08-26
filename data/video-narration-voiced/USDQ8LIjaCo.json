@@ -1,0 +1,111 @@
+{
+ "videoId": "USDQ8LIjaCo",
+ "title": "Mastering Powerful Chess Openings | Acc Grand Prix, Fantasy, Philidor | GM Naroditsky's DYI Speedrun",
+ "openingName": "Caro-Kann Defense: Fantasy Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:USDQ8LIjaCo",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 601.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": "Let's do one more ten-minute game, White. e4 — great, so we get to play a Fantasy variation of the Caro."
+  },
+  {
+   "ply": 3,
+   "t": 602.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4."
+  },
+  {
+   "ply": 4,
+   "t": 612,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5. This hasn't been my only recommendation against the Caro — I've also been advocating e-takes-d5 — but I kind of miss the Fantasy,"
+  },
+  {
+   "ply": 5,
+   "t": 613,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "f3"
+   ],
+   "spoken": "so let's do it, f3."
+  },
+  {
+   "ply": 6,
+   "t": 615.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "d-takes-e4."
+  },
+  {
+   "ply": 7,
+   "t": 617,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": "f-takes-e4. I feel like a lot of people have been demonstrating pretty good theoretical knowledge in the Fantasy,"
+  },
+  {
+   "ply": 8,
+   "t": 620,
+   "fen": "rnbqkbnr/pp2pppp/8/2p5/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": "but not yet at this level; I think people start showing good knowledge around 2200, and below that the Fantasy is still basically a forced win for White."
+  },
+  {
+   "ply": 7,
+   "t": 641.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "c5 tells me our opponent is aware of the general concepts but not aware of the right execution — c5 is not the right way to strike at the centre. The main move here for Black is of course e5, to which we respond with the knight to f3, and that's its own theory. c5 is like an e5, but much worse,",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 647.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2p5/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": "down several tempo, of course."
+  },
+  {
+   "ply": 9,
+   "t": 653.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/4P3/8/PPP3PP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Our response is d5."
+  },
+  {
+   "ply": 10,
+   "t": 655,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/4P3/8/PPP3PP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": "So Black is trying to play this kind of Benoni style, but because he's lacking in development, if we play carefully we can put Black in very serious trouble — though we can also get into serious trouble ourselves if we're not careful. Now, because our f-pawn is gone, we have to look at this position through a very specific lens: we have to remember that the f-pawn is gone, and that bears consequences — so the queen to h4 with check is always in play in these situations. A similar opening where this is a thing is the Four Knights, the a-line — if White plays it, as I'll show you after the game, you always have to watch out for a check on h4, just like last game. So we don't actually need to play c4, which I assume is a lot of people's instinctive response, because Black isn't attacking this pawn — just the knight to f3. And in general, our biggest advantage here as White is not the fact that we have a pawn on d5.",
+   "reanchor": true
+  }
+ ]
+}
