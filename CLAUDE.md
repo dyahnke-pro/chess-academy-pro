@@ -2301,13 +2301,23 @@ one. Concretely, these are all WRONG and have each cost real time:
 
 - holding a finished, green change off `main` "because paying customers";
 - treating a `main` push as a release requiring extra ceremony;
-- citing the 2 paying members as a reason to be cautious about a web deploy.
+- citing the 2 paying members as a reason to be cautious about a web deploy;
+- **holding a RUNTIME change — coach brain, `voiceFacts`, live narration, the
+  play/teach surfaces, Stockfish wiring — off `main` because it "reaches users."
+  It does not.** A runtime change is still just the web deploy. The kind of
+  change (content vs. data vs. runtime vs. coach-voice) does NOT change the blast
+  radius: `main` → the free web app, every time. Wiring computed facts into the
+  live narration pathway is a `main` push like any other — ship it (David
+  2026-08-26, re-locked after a session hesitated to wire Phase 7 "because it
+  reaches paying users").
 
 The standing order is unchanged and means what it says: **work on `main`, push to
 `main`, by default, without asking.** The web deploy is the fast, reversible,
 low-stakes half of this project — that is exactly why it is the default. Caution
 belongs at the App Store submission, which is a different action on a different
-day.
+day. The ONLY thing that reaches paying iOS users is a deliberate TestFlight /
+App Store build you cut when David asks — never a `main` push, whatever it
+touches.
 
 ### 🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").
 
