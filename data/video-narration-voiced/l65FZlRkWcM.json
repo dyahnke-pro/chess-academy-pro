@@ -1,0 +1,454 @@
+{
+ "videoId": "l65FZlRkWcM",
+ "title": "Pirc Defence | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Pirc Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:l65FZlRkWcM",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": "A ten-minute game, and we're climbing — rated sixteen-seventy-three now. Black plays d6, which could be a Pirc or a Caro depending on what follows."
+  },
+  {
+   "ply": 3,
+   "t": 20.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "We grab the full center with d4."
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c6"
+   ],
+   "spoken": "d6 and c6 — this flexible system exists; Black usually follows with the knight to f6 to transpose into some kind of Pirc."
+  },
+  {
+   "ply": 5,
+   "t": 46.5,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Our strategy is no different from usual — the knight to c3, developing and holding the center."
+  },
+  {
+   "ply": 6,
+   "t": 49.5,
+   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "Black plays g6, and now it's a Pirc with an early c6, a perfectly viable continuation."
+  },
+  {
+   "ply": 7,
+   "t": 81.5,
+   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f4"
+   ],
+   "spoken": "How to arrange our pieces? There's no single right answer — the bishop to b3, the bishop to c4 — but I like f4, planning the knight to f3, especially against this early c6."
+  },
+  {
+   "ply": 9,
+   "t": 84,
+   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Bg7",
+    "Nf3"
+   ],
+   "spoken": "Black fianchettoes with the bishop to g7, and we bring the knight to f3, supporting the big center."
+  },
+  {
+   "ply": 10,
+   "t": 88,
+   "fen": "rn1qk1nr/pp2ppbp/2pp2p1/8/3PPPb1/2N2N2/PPP3PP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Black develops the other bishop to g4, pinning our knight on f3 — double-bishop development aiming at our center."
+  },
+  {
+   "ply": 11,
+   "t": 110.5,
+   "fen": "rn1qk1nr/pp2ppbp/2pp2p1/8/3PPPb1/2N1BN2/PPP3PP/R2QKB1R b KQkq - 4 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "We develop with an eye toward defending d4 and that pinned knight — the bishop to e3."
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPPb1/2N1BN2/PPP3PP/R2QKB1R w KQkq - 5 7",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "Black plays the queen to b6, a theoretical thrust hitting b2 and pressuring d4."
+  },
+  {
+   "ply": 13,
+   "t": 125,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPPb1/2N1BN2/PPPQ2PP/R3KB1R b KQkq - 6 7",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The theoretical reply, as far as I remember, is the queen to d2 — now if Black snatches on b2, we're ready to meet it."
+  },
+  {
+   "ply": 15,
+   "t": 130.5,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R b KQkq - 0 8",
+   "line": [
+    "Bxf3",
+    "gxf3"
+   ],
+   "spoken": "Black takes on f3, and we recapture with the g-pawn. Yes, we have doubled pawns, but it's really no big deal — it opens the g-file straight at Black's kingside, which could benefit us."
+  },
+  {
+   "ply": 16,
+   "t": 151.5,
+   "fen": "rn2k2r/pp2ppbp/1qpp1np1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R w KQkq - 1 9",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black develops the knight to f6."
+  },
+  {
+   "ply": 17,
+   "t": 174.5,
+   "fen": "rn2k2r/pp2ppbp/1qpp1np1/8/3PPP2/2N1BP2/PPPQ3P/2KR1B1R b kq - 2 9",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "We castle queenside. Not h4 yet — that's too early, since we don't even know where Black is going to castle."
+  },
+  {
+   "ply": 18,
+   "t": 177,
+   "fen": "rn3rk1/pp2ppbp/1qpp1np1/8/3PPP2/2N1BP2/PPPQ3P/2KR1B1R w - - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Black castles kingside, and now we can start thinking about a kingside attack."
+  },
+  {
+   "ply": 19,
+   "t": 197.5,
+   "fen": "rn3rk1/pp2ppbp/1qpp1np1/5P2/3PP3/2N1BP2/PPPQ3P/2KR1B1R b - - 0 10",
+   "line": [
+    "f5"
+   ],
+   "spoken": "h4 is a great move here, but it's not the only way to shatter Black's king position — we can also use the f-pawn and play f5 first, prying it open so h4 lands even harder later."
+  },
+  {
+   "ply": 20,
+   "t": 201.5,
+   "fen": "rn3rk1/ppq1ppbp/2pp1np1/5P2/3PP3/2N1BP2/PPPQ3P/2KR1B1R w - - 1 11",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "Black plays the queen to c7."
+  },
+  {
+   "ply": 21,
+   "t": 222,
+   "fen": "rn3rk1/ppq1ppbp/2pp1np1/5P2/3PP2P/2N1BP2/PPPQ4/2KR1B1R b - - 0 11",
+   "line": [
+    "h4"
+   ],
+   "spoken": "Now h4, cranking up maximal pressure on the g6-pawn."
+  },
+  {
+   "ply": 22,
+   "t": 226.5,
+   "fen": "rn3rk1/p1q1ppbp/2pp1np1/1p3P2/3PP2P/2N1BP2/PPPQ4/2KR1B1R w - - 0 12",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black seeks counterplay with b5."
+  },
+  {
+   "ply": 23,
+   "t": 228,
+   "fen": "rn3rk1/p1q1ppbp/2pp1np1/1p3P1P/3PP3/2N1BP2/PPPQ4/2KR1B1R b - - 0 12",
+   "line": [
+    "h5"
+   ],
+   "spoken": "We push h5, and notice I'm completely ignoring Black's queenside — his attack there simply isn't fast enough."
+  },
+  {
+   "ply": 24,
+   "t": 231.5,
+   "fen": "rn3rk1/p1q1ppbp/2pp1np1/5P1P/1p1PP3/2N1BP2/PPPQ4/2KR1B1R w - - 0 13",
+   "line": [
+    "b4"
+   ],
+   "spoken": "Black plays b4, poking our knight."
+  },
+  {
+   "ply": 25,
+   "t": 266,
+   "fen": "rn3rk1/p1q1ppbp/2pp1np1/5P1P/1p1PP3/4BP2/PPPQN3/2KR1B1R b - - 1 13",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "Where should the knight go? It doesn't have many squares, but the knight to e2 is ideal — it's rerouting toward f4."
+  },
+  {
+   "ply": 26,
+   "t": 278.5,
+   "fen": "r4rk1/p1qnppbp/2pp1np1/5P1P/1p1PP3/4BP2/PPPQN3/2KR1B1R w - - 2 14",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "Black develops the knight to d7. It temporarily blocks in a bishop, but that's only temporary — pieces will reshuffle."
+  },
+  {
+   "ply": 27,
+   "t": 305.5,
+   "fen": "r4rk1/p1qnppbp/2pp1nP1/5P2/1p1PP3/4BP2/PPPQN3/2KR1B1R b - - 0 14",
+   "line": [
+    "hxg6"
+   ],
+   "spoken": "We take, h takes g6, also eyeing the e6-square that gets weak once the f7-pawn is pried away."
+  },
+  {
+   "ply": 29,
+   "t": 311,
+   "fen": "r4rk1/p1qnp1bp/2pp1nP1/8/1p1PP3/4BP2/PPPQN3/2KR1B1R b - - 0 15",
+   "line": [
+    "fxg6",
+    "fxg6"
+   ],
+   "spoken": "Black recaptures on g6, and we take again with the f-pawn."
+  },
+  {
+   "ply": 31,
+   "t": 316.5,
+   "fen": "r4rk1/p1qnp1b1/2pp1np1/8/1p1PPN2/4BP2/PPPQ4/2KR1B1R b - - 1 16",
+   "line": [
+    "hxg6",
+    "Nf4"
+   ],
+   "spoken": "Black recaptures once more, and the knight completes its journey to f4 — a beautiful, devastating outpost right next to the king."
+  },
+  {
+   "ply": 32,
+   "t": 344.5,
+   "fen": "r4r2/p1qnpkb1/2pp1np1/8/1p1PPN2/4BP2/PPPQ4/2KR1B1R w - - 2 17",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": "Black's king crawls to f7 with literally no squares, and our queen is ready to pour into the attack."
+  },
+  {
+   "ply": 3,
+   "t": 564.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "Stay attentive to all the squares you have access to — it's a simple enough attack, which is exactly why I don't really recommend this line for Black.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 567.5,
+   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "c6",
+    "Nc3",
+    "g6"
+   ],
+   "spoken": "Replaying it: c6, the knight to c3, g6.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 570.5,
+   "fen": "rn1qk1nr/pp2ppbp/2pp2p1/8/3PPPb1/2N2N2/PPP3PP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "f4",
+    "Bg4",
+    "Nf3",
+    "Bg7"
+   ],
+   "spoken": "f4, the bishop to g4, the knight to f3, the bishop to g7 — a legitimate line Black played, but not a very good one.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 572.5,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPPb1/2N1BN2/PPPQ2PP/R3KB1R b KQkq - 6 7",
+   "line": [
+    "Be3",
+    "Qb6",
+    "Qd2"
+   ],
+   "spoken": "The bishop to e3, the queen to b6, the queen to d2.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 585,
+   "fen": "rn2k2r/pp2ppbp/1qpp1np1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R w KQkq - 1 9",
+   "line": [
+    "Bxf3",
+    "gxf3",
+    "Nf6"
+   ],
+   "spoken": "Black took on f3 and developed the knight to f6 — and according to the opening explorer, the knight to f6 here is already inaccurate.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 586,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R b KQkq - 0 8",
+   "line": [],
+   "spoken": "Most people play the knight to d7 instead.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 587,
+   "fen": "r3k1nr/pp1nppbp/1qpp2p1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R w KQkq - 1 9",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The knight to d7 is the main move.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 589.5,
+   "fen": "r3k1nr/pp1nppbp/1qpp2p1/8/3PPP2/2N1BP2/PPPQ3P/2KR1B1R b kq - 2 9",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "And after we castle queenside, ninety-one games continued from here.",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 593,
+   "fen": "r3k1nr/pp1nppbp/2pp2p1/q7/3PPP2/2N1BP2/PPPQ3P/2KR1B1R w kq - 3 10",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "The queen to a5, planning a quick b5-b4 — Black has to get things moving on the queenside, because if he procrastinates you saw what happens to him.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 608.5,
+   "fen": "r3k1nr/pp1nppbp/2pp2p1/q7/3PPP2/2N1BP2/PPPQ3P/1K1R1B1R b kq - 4 10",
+   "line": [
+    "Kb1"
+   ],
+   "spoken": "This whole line is very dubious for Black; our center is monstrous, and we can just play the king to b1 for safety.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 609.5,
+   "fen": "r3k1nr/p2nppbp/2pp2p1/qp6/3PPP2/2N1BP2/PPPQ3P/1K1R1B1R w kq - 0 11",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black plays b5.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 613,
+   "fen": "r3k1nr/p2nppbp/2pp2p1/qp6/3PPP1P/2N1BP2/PPPQ4/1K1R1B1R b kq - 0 11",
+   "line": [
+    "h4"
+   ],
+   "spoken": "And we simply start our own attack with h4. Grabbing on b2 is never a good idea for Black — not outright losing, but very dubious.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 634,
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPPb1/2N1BN2/PPPQ2PP/R3KB1R b KQkq - 6 7",
+   "line": [],
+   "spoken": "The rook wants that open file toward the king, whereas the queen alone is not a very effective attacker, so parking it on b2 to munch a pawn is a mistake.",
+   "reanchor": true
+  },
+  {
+   "ply": 2,
+   "t": 803,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "This could have been an eleven-move game — it just shows how those b2-pawn grabs come back to haunt you.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 909,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "c6"
+   ],
+   "spoken": "d4 and c6 — the win is very straightforward once we land the knight on f4, with too many weak squares and pawns for Black to defend.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 911.5,
+   "fen": "rnbqkbnr/pp2pp1p/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "f4",
+    "g6",
+    "Nc3"
+   ],
+   "spoken": "f4, g6, the knight to c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 914,
+   "fen": "rnbqk1nr/pp2ppbp/2pp2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The bishop to g7. Do you ever play f4 and then e5?",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 918,
+   "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 4 6",
+   "line": [
+    "Nf3",
+    "Nf6"
+   ],
+   "spoken": "The knight to f3, the knight to f6 — normally you wait for Black to commit the knight to f6.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 919.5,
+   "fen": "rnbqk2r/pp2ppbp/2pp1np1/4P3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Then e5 is even a move here, though a little premature — generally you develop your minor pieces first before pushing e5.",
+   "reanchor": true
+  }
+ ]
+}
