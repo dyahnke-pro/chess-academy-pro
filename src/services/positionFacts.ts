@@ -76,7 +76,11 @@ function moverGap12(analysis: PositionFactsInput['analysis'], moverColor: 'w' | 
   const cps = [...(analysis.topLines ?? [])]
     .sort((a, b) => a.rank - b.rank)
     .map((l) => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign);
-  if (cps.length < 2) return cps.length === 1 ? Infinity : 0;
+  // Fewer than 2 lines = the MultiPV fan wasn't run wide enough to judge
+  // decision-leverage. We can't tell a genuine only-move (1 legal move) from a
+  // width-1 analysis without the legal-move count, so claim NO leverage rather
+  // than a false only-move (scanCriticality uses legalCount for the real thing).
+  if (cps.length < 2) return 0;
   return cps[0] - cps[1];
 }
 
