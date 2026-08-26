@@ -60,8 +60,9 @@ threat two moves away; the plan is structure→where-it-leads.
 ## Build phases
 
 - **Phase 0** — this plan doc. `done`
-- **Phase 1** — `fuse-engine` → `PositionFacts` scaffold + **the criticality score first**. Extend per-ply extraction to MultiPV-3 spread, WDL, seldepth, forcing-line, hanging-piece (chess.js SEE-lite). Compute the score + band (quiet / worth-a-think / key-moment / THE moment). **Prove on the Kramnik game: the score spikes on the two blunders and stays dark through the quiet development.** `in progress`
-- **Phase 2** — threat *calculated out* (opponent PV + latent-threat scan) + full PV + refutation branches. `pending`
+- **Phase 1** — `position-facts.mjs`: **the criticality score** from MultiPV-5 spread (volatility), gap#1-#2 (only-move), depth-8-vs-deep disagreement (trap), forcing line + seldepth, loose material (SEE-lite). Score + band (quiet/think/key/CRITICAL). `done` — proven on Kramnik: **CRITICAL exactly on Kramnik's Rfe1 blunder (gap12 291) and on Bxg7/exd5; quiet through the KID development.**
+  - **FINDING (validates the phase order):** the score is BLIND to the "quiet-looking trap" — Black's −290 …Nfd7 blunder scored 16/quiet, because a blunder sits *outside* the top-5, so candidate spread stays low. That class is a **must-defend** position, and must-defend criticality comes from the OPPONENT'S THREAT, not candidate spread → exactly **Phase 2**. Phase 1 catches *only-move/forcing* criticality; Phase 2 catches *must-defend*. Both are needed; the tape proves it.
+- **Phase 2** — threat *calculated out*: give the opponent the move (flipped-FEN null-move, chess.js-guarded), search → their best line = the threat played out; scan the opponent PV for the ply a NEW threat lands (latent). Fold a threat component into the criticality score (must-defend). Re-run Kramnik → …Nfd7 must light up. Then full PV + refutation branches. `next` `in progress`
 - **Phase 3** — perturbation causal why-probe (leave-one-out on supporters) + move-reason classification. `pending`
 - **Phase 4** — complete positional feature vector + structure→plan. `pending`
 - **Phase 5** — Layer-2 ranked-briefing renderer (fact→clause, general's hierarchy, no cap). `pending`
