@@ -4,7 +4,7 @@
  "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:r7W4yl6y29c",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We take White and face the Sicilian."
+   "spoken": "The pawn to e4, c5 — our favorite Alapin Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3 — the Alapin."
+   "spoken": "c3 — the elephant. Let's see how it holds up at a 2000-plus level."
   },
   {
    "ply": 4,
@@ -33,14 +33,15 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black plays ...Nf6, hitting e4."
+   "spoken": "The knight to f6 — one of the two main responses; we haven't faced it as much."
   },
   {
    "ply": 3,
    "t": 27.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "At this level we almost exclusively face the two main responses — the first is d5, which we face a lot —",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -49,7 +50,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "— and the knight to f6, which we haven't faced as much.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -58,7 +60,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We push e5, gaining space and kicking the knight."
+   "spoken": "e5 — a great chance to review the theory of this line and show some new, exciting analysis."
   },
   {
    "ply": 6,
@@ -67,7 +69,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Black hops the knight to d5."
+   "spoken": "After the knight to d5 we're already in the weeds: two fundamentally different ways to play the Alapin. The traditional one is d4 here; Black takes, and White needn't recapture, since the d-pawn taking c3 isn't a threat — the queen x-rays the knight. So the main line is d4, the pawn takes d4, and the knight to f3 is an important inclusion —"
   },
   {
    "ply": 7,
@@ -76,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "— but recently elephant experts embarked on a different, more tactical approach: start with the knight to f3. It often transposes — Black plays the knight to c6, you'd think White must play d4, and after the pawns trade it's the main line. But after the knight to c6 there's a second approach —"
   },
   {
    "ply": 8,
@@ -85,7 +87,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black develops the knight to c6."
+   "spoken": "— which I'd like to introduce. Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board. Do you know the move I'm implying? It may seem natural, but on closer look it may seem a serious positional mistake."
   },
   {
    "ply": 9,
@@ -94,7 +96,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "We develop the bishop to c4, eyeing the d5-knight."
+   "spoken": "The bishop to c4 — bringing it out straight away, hitting the knight on d5 and forcing it back to b6, or Black supports it with e6, a popular but, I think, not very good line."
   },
   {
    "ply": 10,
@@ -103,7 +105,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "Black plays ...Nb6, hitting the bishop."
+   "spoken": "I'm really hoping for e6 — those positions are fun for White — but so are the main lines after the knight to b6, when we drop the bishop back to b3."
   },
   {
    "ply": 11,
@@ -112,7 +114,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We retreat the bishop to b3."
+   "spoken": "The bishop to b3. Why did I say the bishop to c4 may seem a serious positional mistake? Because we're actually encouraging a very scary-looking move —"
   },
   {
    "ply": 12,
@@ -121,14 +123,15 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black plays d5, striking at the centre."
+   "spoken": "— our opponent didn't play it, and that's c4. c4 is scary because after we play d4 later, Black takes en passant and breaks up our chain, seemingly losing our e5-pawn; I'll show the theory."
   },
   {
    "ply": 11,
    "t": 167,
    "fen": "r1bqkb1r/pp1ppppp/1nn5/2p1P3/8/1BP2N2/PP1P1PPP/RNBQK2R b KQkq - 6 6",
    "line": [],
-   "spoken": ""
+   "spoken": "That line, from the new Spindler Chessable course and the elephant bible, has breathed a lot of new life into the opening — we often sacrifice the e5-pawn for rapid-fire play on the queenside and in the centre.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -137,7 +140,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "But d5 is the traditional main line, how people played exclusively 15, 20 years ago; here we mustn't miss the chance to take en passant —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -146,7 +150,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": "We take en passant on d6."
+   "spoken": "— because if we don't, Black gets an ideal setup by bringing the bishop out to g4. So without question we take en passant, keeping the diagonal open for our bishop."
   },
   {
    "ply": 14,
@@ -155,7 +159,7 @@
    "line": [
     "Qxd6"
    ],
-   "spoken": "Black recaptures with the queen."
+   "spoken": "The queen recaptures. We might be attracted to the immediate d4, but that's not the point of this line — the point is to quickly develop and go after the b6-knight."
   },
   {
    "ply": 15,
@@ -164,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "How do we go after the b6-knight? A very important idea that lights the fire on the queenside — but first things first, get the king out of the centre. And realize the bishop to g4 —"
   },
   {
    "ply": 16,
@@ -173,14 +177,15 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black develops the bishop to e6."
+   "spoken": "— is an incredibly common blunder in this position."
   },
   {
    "ply": 15,
    "t": 272,
    "fen": "r1b1kb1r/pp2pppp/1nnq4/2p5/8/1BP2N2/PP1P1PPP/RNBQ1RK1 b kq - 1 8",
    "line": [],
-   "spoken": ""
+   "spoken": "— it walks right into the common tactic, the bishop takes f7 with check; I've won countless games like that, even against other GMs, and after the king takes f7, the classic knight to g5 with check wins the bishop with interest. The bishop to e6 is the main line, and here it gets really interesting: traditionally the main line was the knight to a3, a classic developing move.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -189,7 +194,8 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "The knight to a3 aims directly for b5 — that's what people played all the time. Recently a new idea has taken the elephant by storm.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -198,7 +204,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": "We trade on e6."
+   "spoken": "First we trade bishops on e6, to buy ourselves a couple of tempi —"
   },
   {
    "ply": 18,
@@ -207,7 +213,7 @@
    "line": [
     "Qxe6"
    ],
-   "spoken": "Black recaptures with the queen."
+   "spoken": "— making it difficult for Black to develop his kingside: he'd love to play e6 next, but he has to move the queen away first, and that costs tempi we use to develop rapid play on the queenside."
   },
   {
    "ply": 19,
@@ -216,7 +222,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "We begin a queenside push with a4."
+   "spoken": "The idea, not d4, is to go after the knight on b6 with a4 — universally applied in many positions — shoving the pawn toward a5. It may look like a one-move threat with plenty of retreats, but the point is to push all the way to a6, creating long-term light-square weaknesses; the pawn on a7 becomes a long-term weakness once our pawn reaches a6 and fixes it. If Black plays a5, the knight loses its defender and b5 becomes a gaping weakness for our knight; at the right moment we play d4 and blast the centre. The rook to e1 is tempting, but the queen on e6 is actually a good thing — it hampers Black's development — so the rook to e1 would only help him by forcing the queen back."
   },
   {
    "ply": 20,
@@ -225,7 +231,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "Black plays the queen to d7."
+   "spoken": "The queen to d7 — instructive how tempting moves are often bad here. He abides by the clear strategy of kingside development."
   },
   {
    "ply": 21,
@@ -234,7 +240,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "We push a5, kicking the knight."
+   "spoken": "So no time to waste — we continue the queenside campaign with a5; still theory, the queen to d7 being the main line, and don't worry, we're going to play d4."
   },
   {
    "ply": 22,
@@ -243,7 +249,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Black centralizes the knight on d5."
+   "spoken": "The knight to d5. We need to complete the queenside picture; we do not want to allow Black to play a6 himself, because then our a5-pawn becomes a very serious liability —"
   },
   {
    "ply": 23,
@@ -252,7 +258,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We push a6, cramping the queenside."
+   "spoken": "— a liability because the knight on c6 aims at it. We want to freeze the queenside on our terms, so we throw in a6, inducing b6. The weak light squares may seem inaccessible without a light-squared bishop, but the queen also moves diagonally and will be the vehicle to exploit them. I'm anticipating b6."
   },
   {
    "ply": 24,
@@ -261,7 +267,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Black plays b6."
+   "spoken": "If Black doesn't play b6, we take on b7 and shatter his queenside; if the b-pawn takes a6, same idea, inviting our rook to a super-active square. b6 is played. We must be very accurate — if we fall asleep, Black plays e6 and the bishop to e7 — so we combine queenside play with keeping Black frozen, making it as hard as possible to develop his bishop."
   },
   {
    "ply": 25,
@@ -270,7 +276,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We open the centre with d4."
+   "spoken": "We want Black frozen on the kingside, unable to protect the weak squares and the a7-pawn. It's the perfect, maybe last, opportunity to strike with d4, opening the centre without forcing Black to take. If Black takes on d4 —"
   },
   {
    "ply": 26,
@@ -279,7 +285,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black plays e6."
+   "spoken": "— we recapture with the knight, and if he takes again, with the queen; our queen recapturing on d4 sits centrally, supported by c3, aiming at the g7-pawn, making it hard for the bishop to come out. e6 is on the board — impressive handling. I think the move is the knight to a3... actually c4 is tempting, but it allows the knight to b4, breaking our chain. There's also e5 — I think the move is actually e5, a hard move to explain."
   },
   {
    "ply": 27,
@@ -288,7 +294,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "We jump the knight into e5."
+   "spoken": "e5 — inviting a knight trade and changing the pawn structure from a potential isolated-queen-pawn to a structure where the pawn lords over Black from e5, controlling f6 and d6; Black would love the dark-squared bishop on f6 and f6 for the knight. After the knight trade the d-file opens, and White, more active with better pawns and more space, is better placed to exploit it."
   },
   {
    "ply": 28,
@@ -297,7 +303,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Black takes our knight on e5."
+   "spoken": "There's also a very important idea without which this wouldn't work: after the trade on e5 —"
   },
   {
    "ply": 29,
@@ -306,7 +312,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "We recapture with the pawn."
+   "spoken": "— I'm assuming our opponent plays the bishop to b7. Knowing typical elephant ideas really helps."
   },
   {
    "ply": 30,
@@ -315,14 +321,15 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "Black plays the rook to d8."
+   "spoken": "What's a very typical way to meet the bishop to e7 here? It should be largely automatic —"
   },
   {
    "ply": 29,
    "t": 759.5,
    "fen": "r3kb1r/p2q1ppp/Pp2p3/2pnP3/8/2P5/1P3PPP/RNBQ1RK1 b kq - 0 15",
    "line": [],
-   "spoken": ""
+   "spoken": "— the queen to g4. It's funny we haven't brought our minor pieces out — ultimate modern chess — but Black can't punish it, our king is very safe. The queen to g4 is strong, because after Black castles we bring the bishop out to h6, the crux of why e5 is so strong: the bishop to f6 wouldn't be possible, so Black loses the exchange.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -331,7 +338,8 @@
    "line": [
     "Rd8"
    ],
-   "spoken": ""
+   "spoken": "But that's moot, since Black delays the bishop to b7 and plays the rook to d8. Priorities: don't forget the long-term weakness of the a7-pawn, best exploited by getting the knight to b5, pressuring a7 and keeping the queen at bay. The knight to a3 develops and eyes d6; the bishop to g5 I don't like, since it invites a bishop trade, and our dark-squared bishop is important, headed for h6. We could also preemptively move the queen to f3 or g4 to hamper the bishop to e7, but the queen to g4 walks into h5. So I like the knight to a3.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -340,7 +348,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "We develop the knight to a3."
+   "spoken": "The knight to a3 — the more flexible approach, since we don't know exactly where the queen belongs; we can always play the queen to g4. The knight is ready to drop into b5 the moment the black queen leaves the seventh rank, when the knight to b5 is potentially devastating. That's why we leave the rook on a1 — to support the pawn once we take on a7. b5 stops the knight to b5, but it also adds further strain to the queenside."
   },
   {
    "ply": 32,
@@ -349,7 +357,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black develops the bishop to e7."
+   "spoken": "The bishop to e7 virtually forces our hand — the queen to g4, using it to induce kingside weaknesses. We're starting to squeeze Black: castles, the bishop to h6 loses the exchange; forcing kingside weaknesses gives Black weaknesses on both sides, and we keep pressing toward the knight to b5. Watch the e5-pawn, now without a defender; watch our a6-pawn; watch out for the knight back to c7. Don't get fixated on the knight to b5 — sometimes the knight to c4 and d6 is more worthwhile after the dark-bishop trade — and c4 on demand chases the knight and opens b5, though then the knight drops to c7 and a6 hangs. On my opponent's turn I discuss general ideas — the Kotov, Russian-school approach: calculate concrete variations on your turn, and build conceptual wisdom about the position while your opponent thinks."
   },
   {
    "ply": 34,
@@ -359,7 +367,7 @@
     "Qg4",
     "Bf8"
    ],
-   "spoken": "We swing the queen to g4; Black retreats the bishop to f8."
+   "spoken": "The queen to g4, the bishop back to f8 — a clear sign our opponent is in full backpedal mode. There's a crazy tactical sequence: the rook to d1 pins the queen and threatens c4, but Black drops the knight back to f6, and if we take, our rooks aren't coordinated, so the queen takes d1 is mate; but after the rook to d1, the knight to f6, we trade queens, our back rank is weak so we can't take a7, yet we trade rooks on d8, the knight finally gets into b5, and Black loses a7. The rook to d1 is very juicy, threatening c4 not to win the knight but to force that winning endgame. The bishop to g5 is a second candidate, just as good — only careful of f6, which buys Black a tempo and encourages us to give up the e5-pawn."
   }
  ]
 }
