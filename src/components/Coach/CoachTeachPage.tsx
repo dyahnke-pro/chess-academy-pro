@@ -154,8 +154,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { forkOfferAt } from '../../services/forkNarration';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening, noteSpeaksOnlyPiecesOnBoard } from '../../services/danyaTeachingService';
-import { secondarySupportNotes } from '../../services/secondaryCorpora';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText } from '../../services/danyaTeachingService';
 import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
 import { framedOpponentPlan } from '../../services/opponentVoice';
 import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../services/noteAnchorIntegrity';
@@ -768,20 +767,6 @@ interface TeachSubmitOpts {
   teachIntent?: boolean;
 }
 
-/** A detector PLACEHOLDER, not an opening.
- *
- *  "King's Pawn Game" is what `detectOpening` says before an opening exists,
- *  and its only name tokens are `pawn` and `game`. `notesForOpening` matches on
- *  name-token overlap, so asking it for teaching about a placeholder selects a
- *  note on the strength of the word "pawn" — which is how David heard "This
- *  game is now the King's Pawn Game. Key idea: … Queen d7 then Qh3" after
- *  1.e4 e5 (2026-08-08).
- *
- *  Naming the placeholder is useful. Attaching teaching to it is not, because
- *  there is no opening yet for the teaching to be about. */
-function isGenericOpeningName(name: string): boolean {
-  return /^(?:king's|queen's) pawn (?:game|opening)$|^(?:irregular|uncommon)\b/i.test(name.trim());
-}
 
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
@@ -6446,15 +6431,13 @@ export function CoachTeachPage(): JSX.Element {
         // a game. Piece-truth is the one board test it has to pass, so take
         // the first note that can honestly be said HERE rather than the first
         // note at all.
-        const ideaNote = isGenericOpeningName(det.name)
-          ? undefined
-          : (notesForOpening(det.name, 8).find((n) => noteSpeaksOnlyPiecesOnBoard(n, args.fenAfterReply))
-            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 8 })
-              .find((n) => noteSpeaksOnlyPiecesOnBoard(n, args.fenAfterReply)));
-        const idea = ideaNote ? spokenBeatText(ideaNote) : '';
-        announceLine = (firstResolve
+        // 🔒 No floating opening-level "key idea" on teach (David 2026-08-26:
+        // "make sure I hear no floating notes in the play surfaces"). The idea
+        // note was reached by opening NAME, not by the board — floating. The
+        // opening is still named; the floating idea clause is gone.
+        announceLine = firstResolve
           ? `This game is now the ${det.name}.`
-          : `The line has sharpened into the ${det.name}.`) + (idea ? ` Key idea: ${idea}` : '');
+          : `The line has sharpened into the ${det.name}.`;
         factLines.push(announceLine);
         // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
         // his first move every game. The say-once ref is spent on THIS turn
@@ -6466,7 +6449,7 @@ export function CoachTeachPage(): JSX.Element {
         // swallow it.
         queueSpokenHint(args.fenAfterReply, announceLine, 'opening');
         captureEvent('opening_announced', {
-          surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: idea.length > 0,
+          surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
         });
         void logAppAudit({
           kind: 'coach-narration-spoken',
@@ -8184,22 +8167,17 @@ export function CoachTeachPage(): JSX.Element {
                         // from on the other.
                         // Same piece-truth filter as the instant lane above —
                         // both sites build this sentence, so both owe it.
-                        const ideaNote = isGenericOpeningName(det.name)
-                          ? undefined
-                          : (notesForOpening(det.name, 8).find((n) => noteSpeaksOnlyPiecesOnBoard(n, probe.fen()))
-                            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 8 })
-                              .find((n) => noteSpeaksOnlyPiecesOnBoard(n, probe.fen())));
-                        const idea = ideaNote ? spokenBeatText(ideaNote) : '';
+                        // 🔒 No floating opening-level "key idea" on teach
+                        // (David 2026-08-26): reached by opening NAME, not by
+                        // the board — floating. Opening still named; idea dropped.
                         // SPEAKABLE — on a gate fallback this string IS the
                         // voice (David heard the old "mention the new name in
                         // passing" instruction read aloud, 2026-08-07). The
                         // say-the-name-naturally instruction travels in the
                         // step directive, never here.
-                        const announceLine =
-                          (firstResolve
-                            ? `This game is now the ${det.name}.`
-                            : `The line has sharpened into the ${det.name}.`) +
-                          (idea ? ` Key idea: ${idea}` : '');
+                        const announceLine = firstResolve
+                          ? `This game is now the ${det.name}.`
+                          : `The line has sharpened into the ${det.name}.`;
                         facts.push(announceLine);
                         // Track A speaks this the moment the move lands —
                         // David's 2026-08-07 game had three announcements
@@ -8218,7 +8196,7 @@ export function CoachTeachPage(): JSX.Element {
                           surface: 'coach-teach',
                           name: det.name,
                           first: firstResolve,
-                          has_idea: idea.length > 0,
+                          has_idea: false,
                         });
                         void logAppAudit({
                           kind: 'coach-narration-spoken',

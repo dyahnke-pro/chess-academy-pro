@@ -20,10 +20,9 @@ import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
-import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
-import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove, noteSuitsStudentSide } from './noteAnchorIntegrity';
+import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, noteSuitsStudentSide } from './noteAnchorIntegrity';
 import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
@@ -555,149 +554,19 @@ export function teachingSourceForBoard(
     if (accept(exact, 'position')) return { note: exact, origin: 'position' };
     rejected.add(exact.id);
   }
-  // THE NOTE'S PHASE MUST MATCH THE BOARD'S (2026-08-05). Sampling what this
-  // function actually returned past book came back 14 for 14 `opening-family`,
-  // reciting opening theory at ply 34, 51, 68 — "After c4 c5 Nc3, if Black
-  // plays ...c6" to a student in a middlegame. The family tier answers on
-  // almost any position (the corpus holds thousands of notes per opening), so
-  // it SHADOWED structure transfer and the concept tier completely: neither
-  // could ever be reached, and the middlegame/endgame corpus stayed dark.
-  //
-  // `notePhaseMismatchesBoard` did not catch it — it only rejects an ENDGAME
-  // note on a non-endgame board, so nothing stopped an OPENING note at move 30.
-  // Matching the phase keeps the tier where it is right (an opening's own
-  // middlegame plan is a middlegame note) and lets the board-read tiers answer
-  // where they belong.
-  const boardPhase = phaseOfFen(fen);
-  // 🔒 EVERY TIER IS CHECKED AGAINST THE BOARD, not just the position tier.
-  //
-  // A whole game (2026-08-09) heard, from the family and concept tiers: "After
-  // Qd2, Black has the option of Bg4" with Qd2 illegal; "The move Bh4 is a
-  // strong choice because it keeps the pin" with no Bh4 and no pin; and "The
-  // rook endgame turns on removing both white pawns" in a middlegame with both
-  // bishops and all four rooks on the board. Each was fluent, each was true
-  // somewhere, none was about the board in front of the student.
-  //
-  // These three checks read the note's own words against this position, which
-  // is the only thing that separates the right note from a plausible one (G0 —
-  // fix the package, don't validate the phrasing afterwards).
-  const phaseFits = (note: DanyaNote): boolean =>
-    noteTeachesChessNotItsSource(note)
-    && (!boardPhase || note.phase === 'concept' || note.phase === boardPhase)
-    && notePhaseMatchesBoardWords(note, boardPhase)
-    && noteRecommendsALegalMove(note, fen)
-    && noteDescribesPosition(note, fen)
-    // …and the pieces its SPOKEN form names are on the board. The other four
-    // read `explains`/`teaches`/`plans`; this one reads what gets said, which
-    // is where "the bishop pins the rook" reached a board with no bishop.
-    && noteSpeaksOnlyPiecesOnBoard(note, fen);
-  // GAP TIER — an opening the primary corpus never covers still gets a note in
-  // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
-  //
-  // Ordered BEFORE structure transfer deliberately: transfer borrows a note
-  // from a DIFFERENT opening because the structures rhyme, which is the right
-  // answer when the primary corpus knows this opening and simply has nothing at
-  // this exact position — but a poor one when it has never taught the opening
-  // at all. There, teaching actually about the opening in front of the student
-  // beats a structural analogy. The gate is `primaryHits`: any opening-level
-  // coverage in the primary corpus suppresses the gap tier entirely.
-  //
-  // Most gap-tier notes are opening-keyed rather than position-keyed, so the
-  // opening name is what reaches them. Callers that already know it pass it;
-  // for the rest it is derived here from the move history, so every existing
-  // facts-package call site gains gap coverage without being rewired.
-  // GAP TIER — teaching for an opening the primary corpus never covers (David
-  // 2026-08-01: "I want the notes to be able to cover gaps in any masterclass or
-  // Danya openings we teach"). Selected by opening NAME, so it is teaching about
-  // the OPENING, not about this board — which is exactly what `origin` records.
-  // It used to be returned indistinguishable from an exact-position note, and
-  // every caller then announced it as "Coaching note for THIS position". The
-  // teaching was never the problem; the claim wrapped around it was. Callers
-  // that SPEAK a note about the current move take `origin === 'position'` only;
-  // a facts package may carry this one, labelled.
-  const resolvedOpening = openingName ?? (() => {
-    try { return detectOpening(historySans)?.name ?? null; } catch { return null; }
-  })();
-  // 🔒 OPENING TEACHING BELONGS TO THE OPENING. This tier is reached by opening
-  // NAME, not by position, and it frames what it finds as "A general idea in
-  // this opening" — true and useful while the opening is what the student is
-  // looking at.
-  //
-  // Past that it is the loudest thing in the room and none of it is about the
-  // game. A full 24-ply game (2026-08-09) heard it on nearly every ply: "In
-  // this line of the Petrov" on a board that was never a Petrov; "After Qd2,
-  // Black has the option of Bg4" with no queen on d2; "White can play Rh2";
-  // "The Bogo-Indian demands deep understanding" — and, on move 17, the run's
-  // ONE genuinely false board claim, a bishop on g2 where a pawn stood. It also
-  // shadowed the two tiers that ARE board-checked, so the structure and concept
-  // notes that exist for a middlegame never got a turn.
-  //
-  // The fix is not a better filter on the prose. It is that a tier selected by
-  // name has nothing to say about a position it was never shown: past the
-  // opening, the board-read tiers below answer, and if they have nothing the
-  // honest result is silence.
-  if (boardPhase && boardPhase !== 'opening') {
-    // fall through to the board-read tiers
-  } else {
-    const support = secondarySupportNotes({
-      historySans,
-      openingName: resolvedOpening,
-      maxNotes: 1,
-      // THE ONE TIER WITH NO BOARD TEST, until now. It reaches by NAME, and a
-      // name says nothing about the position — David's prod game, playing a
-      // Sicilian, was taught "After e4 e5, if White plays Bb5+… Black can play
-      // Bd7" (the Spanish) and "White prefers Re1 over d3… Black plays Nh6"
-      // (the Italian), both announced as "a general idea in this opening".
-      // It now has to clear the same truth filter its board-read siblings do.
-      accept: (n) => !noteOpeningConflicts(n.opening, resolvedOpening)
-        && phaseFits(n)
-        && noteClaimsHoldOnBoard(n, fen)
-        && accept(n, 'opening-family'),
-    })[0];
-    if (support) return { note: support, origin: 'opening-family' };
-  }
-  // STRUCTURE TRANSFER is deliberately cross-opening (a note from anywhere whose
-  // structure provably matches this board), so no tag check applies — its
-  // licence to borrow is the proven signature match plus the live-board claim
-  // filter inside `notesForStructure`. It is honest teaching about a DIFFERENT
-  // position, which is why it carries `origin: 'structure'` and must never be
-  // announced as a fact about this board.
-  //
-  // 🔒 NOT IN THE OPENING. Both borrow-tiers below answer "this KIND of
-  // position" — and in the opening there is no kind yet, only a specific line.
-  // Measured on a Vienna Gambit game: plies 2, 3 and 4 borrowed a King's-Indian
-  // pawn-storm note, a Four Knights Scotch note, and a note about a bishop on
-  // e3 that did not exist. Every one was honestly framed ("the same idea shows
-  // up in positions like this") and every one was noise two moves into a game.
-  // Opening teaching is position-specific by nature: if the corpus taught this
-  // line it is in the exact or family tier already, and if it did not, silence
-  // is the honest answer (empty > generic). The other lanes — tactics, threats,
-  // gems, the improving move — still speak on those plies, so this is quieter
-  // corpus, not a quieter coach.
-  if (boardPhase === 'opening') return null;
-  const transferred = notesForStructure(fen).find((n) => phaseFits(n) && accept(n, 'structure'));
-  if (transferred) return { note: transferred, origin: 'structure' };
-  // CONCEPT TIER — last, because it is the least specific: teaching about this
-  // KIND of position rather than this one. It earns its place at the end of the
-  // chain because the alternative here is silence, and a rook endgame where the
-  // corpus knows the technique should not go untaught merely because no note
-  // was authored at this exact FEN.
-  //
-  // The tags come from `boardConcepts`, which reads the board and emits nothing
-  // unless the position plainly shows the idea — so an unremarkable middlegame
-  // still falls through to null rather than collecting a platitude. Code picks
-  // the ideas, the model only phrases the note (G0).
-  const derived = boardConcepts(fen);
-  if (!derived) return null;
-  // Predicate INTO the query — the limit must cap accepted notes, not the pool
-  // they are drawn from. See conceptNotesFor's `accept`.
-  const concept = conceptNotesFor({
-    phase: derived.phase,
-    concepts: derived.concepts,
-    limit: 8,
-    accept: (n) => phaseFits(n) && accept(n, 'concept'),
-  })[0];
-  return concept ? { note: concept, origin: 'concept' } : null;
+  // 🔒 EXACT-POSITION ONLY — the coach tab hears voiced/anchored notes about the
+  // board in front of the student, never a note reached by opening NAME,
+  // STRUCTURE, or CONCEPT (David 2026-08-26: "make sure I hear no floating
+  // notes in the play surfaces — make them stay where they belong"). The
+  // generalized tiers (opening-family / structure / concept) that lived here
+  // are the routes by which a note about a DIFFERENT board reached a play
+  // surface; they are removed from this chokepoint. The floating corpus is
+  // now reached ONLY through the two surfaces it belongs to — tactics
+  // (`tacticNoteForPuzzleThemes`) and endgame (`endgameNoteForLesson`), each
+  // of which calls this first, gets null here, then does its own concept
+  // lookup. `noteAtPosition` is inherently floating-free (a floating note has
+  // no line to FEN-index), so the position tier above can only ever be exact.
+  return null;
 }
 
 /** The note alone, for callers that only need the text and make no claim about
@@ -1031,18 +900,6 @@ export function noteSpeaksOnlyPiecesOnBoard(note: DanyaNote, fen: string): boole
  *  opening — deterministic transfer. Excludes exact-position hits (the FEN
  *  tier owns those) and drops any note making a claim that is false on THIS
  *  board. */
-/** Does everything this note asserts hold on THIS board?
- *
- *  The same pair of checks the structure and concept tiers have always run,
- *  lifted out so the name-matched tier can be held to it too. */
-function noteClaimsHoldOnBoard(n: DanyaNote, fen: string): boolean {
-  try {
-    if (validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, fen).violations.length > 0) return false;
-    return namedPiecesExistOnBoard(n.plans ?? '', fen) && noteSpeaksOnlyPiecesOnBoard(n, fen);
-  } catch {
-    return false;
-  }
-}
 
 export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[] {
   ensureSignatureIndex();
