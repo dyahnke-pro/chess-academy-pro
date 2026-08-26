@@ -1,10 +1,10 @@
 {
   "videoId": "9JUlD51s6zE",
   "title": "Converting a Small Advantage | King’s Indian | The Sensei Speedrun | GM Naroditsky",
-  "openingName": "King's Indian Defense: Samisch Variation",
+  "openingName": "King's Indian Defense: Sämisch Variation",
   "studentSide": "black",
   "voice": "danya-dna",
-  "rewrittenAt": "2026-08-25",
+  "rewrittenAt": "2026-08-26",
   "source": "yt:9JUlD51s6zE",
   "moves": [
     {
@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "We take Black and face d4, replying with the knight to f6."
+      "spoken": "d4, the knight to f6 — we've got to play a King's Indian, since this may be our last game."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "White claims space with c4."
+      "spoken": "c4."
     },
     {
       "ply": 4,
@@ -33,7 +33,7 @@
       "line": [
         "g6"
       ],
-      "spoken": "We start the fianchetto with g6."
+      "spoken": "g6 — the King's Indian, the OG opening I started the speedrun with."
     },
     {
       "ply": 5,
@@ -42,7 +42,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "White develops the knight to c3."
+      "spoken": "The knight to c3 — what I've played my whole life."
     },
     {
       "ply": 6,
@@ -51,7 +51,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "We complete the fianchetto with the bishop to g7."
+      "spoken": "The bishop to g7."
     },
     {
       "ply": 7,
@@ -60,7 +60,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "White builds the big centre with e4."
+      "spoken": "e4 — and we've faced it more from the White side than the Black side in the speedrun."
     },
     {
       "ply": 8,
@@ -69,7 +69,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "We play d6 — a true King's Indian."
+      "spoken": "d6 — it's about time we paid homage to it from the Black side."
     },
     {
       "ply": 9,
@@ -78,7 +78,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "White plays f3 — the Sämisch."
+      "spoken": "f3 — one of my top recommendations for White, the Sämisch, named after Friedrich Sämisch, who developed a lot of systems connected with f3; the Nimzo-Indian f3 is also called the Sämisch. Against it, Black has a gazillion viable continuations."
     },
     {
       "ply": 10,
@@ -87,7 +87,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "Most lines start by castling; it's automatic. White generally plays the bishop to e3, though the knight to e2 also transposes. The point of f3 is twofold — first, to safeguard e4 —"
     },
     {
       "ply": 11,
@@ -96,7 +96,7 @@
       "line": [
         "Nge2"
       ],
-      "spoken": "White develops the knight to e2."
+      "spoken": "— and, in many cases, to prepare the kingside pawn storm with g4; the drawback is you can't use f3 for the knight, so the knight goes to e2. I want to play an old line I grew up on, played prolifically by Kasparov; nothing's inherently wrong with it — Black is worse only if White is incredibly accurate. Nowadays King's Indian players mostly play the Benoni with c5, considered objectively best, or the Panov —"
     },
     {
       "ply": 12,
@@ -105,7 +105,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "We strike with the traditional ...e5 — perfectly viable against the Sämisch."
+      "spoken": "— the Panov with the knight to c6 and a6. But the old move is e5, the traditional way to play the King's Indian; a lot of people think you can't play e5 against the Sämisch — not true at all."
     },
     {
       "ply": 13,
@@ -114,7 +114,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "White takes on e5."
+      "spoken": "e5 is totally viable and frequently slips through the cracks; one drawback is that White has the pawn takes e5 —"
     },
     {
       "ply": 14,
@@ -123,7 +123,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "We recapture on e5."
+      "spoken": "— which takes all the fun out of the game, but you've got to learn to play these types of positions too."
     },
     {
       "ply": 16,
@@ -133,7 +133,7 @@
         "Qxd8",
         "Rxd8"
       ],
-      "spoken": "White trades queens on d8; we recapture with the rook — an Exchange-variation endgame."
+      "spoken": "The queens come off on d8 — an endgame, a version of the Exchange Variation."
     },
     {
       "ply": 17,
@@ -142,7 +142,7 @@
       "line": [
         "Nd5"
       ],
-      "spoken": "White plants the knight on d5 — not as scary as it looks; it only hits c7."
+      "spoken": "The knight to d5. I'll confess I'm not a specialist here — probably my first time. The knight takes d5 isn't forced: White recaptures with the c-pawn, and a pawn on d5 greatly hampers our queenside, controlling c6 and e6; the traditional treatment is the knight to c5, take, then c6 to remove the pawn, but the e2-knight slides to c3, and taking on d5 just replaces the pawn with a bloodthirsty knight. So the knight on d5 isn't that scary — it's attacking c7, which we must defend, and we can't play c6, since the knight jumps into c7 and traps the rook."
     },
     {
       "ply": 18,
@@ -151,7 +151,7 @@
       "line": [
         "Na6"
       ],
-      "spoken": "We develop the knight to a6, the traditional King's Indian square, guarding c7 from the side."
+      "spoken": "In the King's Indian, the queen's knight's traditional developing square is a6, so the knight to a6, protecting the pawn from the side. If the bishop to g5, we must play the rook to d6, getting out of the pin and protecting the f6-knight. Long-term, Black is favored: with pawns on c4 and e4, White has traded off d4 and accepted a gaping weakness there; most central squares are Black's, and once we get the knight off d5, we control d4, d3 and e3 — the whole central complex is weak, currently masked by that imposing d5-knight. Play c6 to chase it, get White to trade on f6, and Black is solidly better."
     },
     {
       "ply": 19,
@@ -160,7 +160,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "White pins with the bishop to g5."
+      "spoken": "Our opponent is correctly taking his time. The bishop to g5, the rook to d6 — a very important resource, otherwise we lose an exchange. Note that sometimes giving up an exchange isn't the end of the world — the knight to c5 doesn't lose on the spot —"
     },
     {
       "ply": 20,
@@ -169,7 +169,7 @@
       "line": [
         "Rd6"
       ],
-      "spoken": "We play ...Rd6 — a vital resource, unpinning and defending the f6-knight."
+      "spoken": "— since after the bishop takes the rook, the knight can jump into e3; but it's all moot, because the rook to d6 is perfectly sufficient. This isn't just heading toward a draw — the resulting endgame is full of life and playable for a Black advantage; White isn't worse if very accurate, but most players relinquish the initiative and fall prey to the plan of grabbing the key central squares."
     },
     {
       "ply": 21,
@@ -178,7 +178,7 @@
       "line": [
         "Nec3"
       ],
-      "spoken": "White reroutes a knight to c3."
+      "spoken": "The knight to c3. The fundamental asymmetry: we haven't pushed our pawn to c5, which is why Black is positionally better."
     },
     {
       "ply": 22,
@@ -187,7 +187,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "We push c6, chasing the d5-knight."
+      "spoken": "c6 — we exploit the reserved possibility of pushing to c6, controlling d5; White can't exercise the same control over the mirrored square, d4, which is why White is often in a lot of trouble. The knight to e7 with check and the knight takes c8 is possible, but our c8-bishop isn't an integral piece — the heavy lifting is done by the a6-knight, which will head for d4 via the knight to c7 or c5 and e6."
     },
     {
       "ply": 24,
@@ -197,7 +197,7 @@
         "Ne7+",
         "Kf8"
       ],
-      "spoken": "White checks with the knight to e7; our king steps to f8."
+      "spoken": "We're not blindly closing our eyes and playing three moves — we'll do other things depending on our opponent. And from an opening-rules perspective, White has spent a gazillion moves with this knight."
     },
     {
       "ply": 26,
@@ -207,7 +207,7 @@
         "Nxc8",
         "Rxc8"
       ],
-      "spoken": "The knight grabs our bishop on c8; we recapture with the rook — White has the bishop pair, but that light bishop is passive."
+      "spoken": "He's taken the bishop and gotten the bishop pair, but his f1-bishop isn't impressive, just staring at the pawn. If White could push c5, that'd be a total game-changer. The knight to b4 has merit — probably our next move if permitted; if I play c5 we take with the knight, which is partly why we put the knight on a6, to prevent c5. White's best, and it's not easy, is the bishop from g5 to e3, restricting the a6-knight and preparing c5, which opens the f1-bishop —"
     },
     {
       "ply": 27,
@@ -216,7 +216,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "White develops the bishop to e2."
+      "spoken": "— because if we don't move the a6-knight away, it gets captured, ruining our structure, and getting the other knight to d4 becomes a cumbersome four-move process. Against all of White's ways to prepare c5, we have an important retreating move to prevent it. The bishop to e2 is the game continuation. The tempting knight to b4 is a bit of a dead end — after the rook to c1 we have the knight to d3 check, but we don't want to trade this knight unless for something on d4. Since White hasn't prepared c5, no rush. An interesting idea, though it fails concretely, is the knight from f6 to d7, covering c5 once more and opening the bishop to support a knight heading for d4."
     },
     {
       "ply": 28,
@@ -225,7 +225,7 @@
       "line": [
         "Nd7"
       ],
-      "spoken": "We play the knight back to d7, covering c5 and freeing both knights to head for d4."
+      "spoken": "Our king's knight was a little awkward where it stood, disrupting our coordination and needing babysitting, so the knight to d7 lends maximum energy to the knights — now both can access d4. A dream would be to trade the dark-squared bishops, making d4 ours forever, but it's not so easy; the bishop to f6 just encourages the bishop to e3, so don't assume your opponent makes the trades you want. And f5 isn't an idea here —"
     },
     {
       "ply": 29,
@@ -234,7 +234,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "White plays g4 — which only weakens the f4-square."
+      "spoken": "— because when you consider f5, always ask who benefits from the position opening: generally not the side controlling the central squares. We want it closed, to single-mindedly focus on that square. g4 accomplishes little, actually weakening f4, so I'm already considering an arrangement with one knight toward f4 and the other toward d4, far in the future. My instinct is the knight to c5; the knight to b4 is significantly sexier now that our other knight is ready to support with the knight to c5, and it might be the most efficient path to d4, since after the rook to c1 the other knight jumps to c5, threatening a fork on d3 and using d3 as a transit point to f4, the square White just weakened."
     },
     {
       "ply": 30,
@@ -243,7 +243,7 @@
       "line": [
         "Nb4"
       ],
-      "spoken": "We jump the knight into b4, a transit square toward d4."
+      "spoken": "There's one complication I can't quite make work, so maybe the mundane knight to c5 — but I'll follow my intuition; g4 can't be wrong. After the rook to c1, the knight to d3 with check — but knights are more valuable than bishops here, since the centre is closed; think of a knight as a Phillips screwdriver getting into the small spaces a bishop can't."
     },
     {
       "ply": 31,
@@ -252,7 +252,7 @@
       "line": [
         "Rc1"
       ],
-      "spoken": "White plays the rook to c1."
+      "spoken": "You're flossing the board a little. He can castle. The point of the knight to b4 isn't the fork — we're not expecting White to miss it — but to use b4 as a transit point toward f4."
     },
     {
       "ply": 32,
@@ -261,7 +261,7 @@
       "line": [
         "Nc5"
       ],
-      "spoken": "We bring the other knight to c5, threatening a fork and eyeing ...Ne6 and d4."
+      "spoken": "Our opponent is disallowed d4. Let's proceed with the knight to c5, threatening a fork again, planning to drop back to e6 and finally get a knight to d4 — the first big step toward winning, though you can't win such positions in three moves; you do it step by step and celebrate the small victories."
     },
     {
       "ply": 33,
@@ -270,7 +270,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "White castles."
+      "spoken": "What makes d4 important? It comes down to square control — a knight in the centre controls eight squares, a knight in the corner only two; a knight reaching d4 just lords over the whole position. The knight to d3 tempts, but after the rook to d1 we'd pin ourselves —"
     },
     {
       "ply": 34,
@@ -279,14 +279,15 @@
       "line": [
         "Ne6"
       ],
-      "spoken": "We drop the knight back to e6 with tempo, hitting the g5-bishop and preparing ...Nd4."
+      "spoken": "— and we couldn't double rooks, since the bishop controls that square. So the knight back to e6, which comes with tempo, attacking the bishop, forcing it off g5, and making possible the future doubling of rooks on the d-file."
     },
     {
       "ply": 29,
       "t": 1013,
       "fen": "2r2k2/pp1n1pbp/n1pr2p1/4p1B1/2P1P1P1/2N2P2/PP2B2P/R3K2R b KQ - 0 15",
       "line": [],
-      "spoken": ""
+      "spoken": "One drawback of how we're playing: after we situate the knight on d4, having moved the other knight away, honestly I think we should have gone the knight to c5 and skipped the knight to b4 — that was impulsive, because the knight on a6 was still preventing c5.",
+      "reanchor": true
     },
     {
       "ply": 30,
@@ -295,14 +296,16 @@
       "line": [
         "Nb4"
       ],
-      "spoken": ""
+      "spoken": "Skipping the knight to b4 would have kept the knight on a6 preventing c5, which opens another front. Why the knight to d4 and not f4? The queens are off, so no king attack, and the knight to f4 blunders to the bishop to c5, given our rook-and-king alignment — so I make a mental note to prevent the bishop to c5 whenever the knight leaves d4. Not b6, which is too slow and brittle, allowing a3 and b4; c5 isn't scary since it blunts the bishop and makes more weaknesses. The harmony in our pieces is great. He plays the rook to d1, and the knight takes a2 almost works — the bishop on e2 is a type-2 undefended piece on a forkable square, so the knight forks — but the bishop takes d4, and even taking the rook first fails, because the bishop to c5 double-attacks and the e2-bishop is still guarded by the c3-knight; White wins a piece. So instead we improve simply with the rook to d8, not c5, which would weaken d5, threatening the knight takes c2 to win the rook. White should move the king up to avoid the knight takes c2 with check. We prevent c5 with the retreating knight to a6 — not a failure, since we've installed a knight on d4; the b4-knight now assumes a defensive role preventing c5, and later heads for f4. The bishop on g7 could do more — to f6, with the idea of a check on h4 to disattach the king and enable the knight-takes-c2 tactics — so the bishop to f6 when the chance comes, though it's already supporting the knight. The bishop to f1 is innocuous. We head for f4 with the knight to c5, then, after b4, the knight to e6; if White plays c5, our rook drops back, and with the knight off a6, b4 and c5 are far less intimidating. An advanced endgame player induces as many weaknesses as possible first — the bishop to f6, though it allows g5, and White might follow g5 with f4 to undermine the d4-knight if the bishop leaves the long diagonal, so I flip-flop; ultimately the knight to c5, the original plan, get it to e6 and sink into f4, the second weak square g4 created. Would White draw with ideal defense? Absolutely, but tension accumulates and the clock dwindles — the art of converting a small advantage. The knight to c5, b4, and we don't play f6 and g5 to bury our own bishop; the bishop on g7 supports the knight, so we don't fear f4. Drop the knight back to e6 supporting d4, unafraid of c5, since the rook drops to d7. The bishop to f6 is even more appetizing now that g5 is stopped, with the idea of the bishop to g5 to trade the dark-squared bishop, White's main defensive piece. He plays b4; we don't care, we let c5 come and play the bishop to f6, shifting the front from the queenside to the centre and kingside. The knight to g3 — I commend the opponent. Our plan installs a knight on f4, but a much bigger achievement is to trade White's best piece, the bishop on e3, leaving him a bad light-squared bishop saddled by weak pawns; and if the bishop takes g5, the knight recaptures, still attacking the backward f3-pawn. This is the blunder: the d-file has been plugged by the d4-knight all game, but keep looking for tactics — we have doubled rooks and White's rook on d1 is defended only once, so the winning tactic is to take the bishop, lure the king onto a vulnerable spot, and play the knight from d4 to c2 with check; if the king goes to e2 to defend the rook, the knight to f4 with check finally lands and wins. The c2-knight controls e1, so the king has to leave the rook's defense — we win the exchange, then trade the other pair of rooks and use our rook to take all of White's second-rank pawns. Only twenty-eight moves. The simplest is the rook to d2 with check, trading a pair, then pick up pawns; the clinical move is, rather than grab the e2-knight, to dislodge the bishop with the rook to c2, and White loses the knight or the bishop, with the e5-pawn defending our knight.",
+      "reanchor": true
     },
     {
       "ply": 4,
       "t": 1843.5,
       "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
       "line": [],
-      "spoken": ""
+      "spoken": "A nice game. We'll largely skip the Sämisch opening theory — do your own research. After e5, the pawn takes e5 is not a testing move at all, a toothless version of the Exchange Variation; the testing line is d5, which leads to the classic King's Indian structure, and I was planning c6 to disrupt and cut into White's centre — not legitimately expecting White to take on c6, since nobody gives away the d5-square.",
+      "reanchor": true
     }
   ]
 }
