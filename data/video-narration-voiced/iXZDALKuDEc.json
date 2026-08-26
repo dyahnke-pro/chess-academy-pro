@@ -1,0 +1,500 @@
+{
+ "videoId": "iXZDALKuDEc",
+ "title": "Master Class | Danish Declined! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:iXZDALKuDEc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 6.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "We're White against a lower-rated opponent, so let's play very aggressively — we still haven't had the chance to unveil a legitimate Danish Gambit. e4, e5."
+  },
+  {
+   "ply": 3,
+   "t": 7.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 — the Danish, offering the center to blow the position open."
+  },
+  {
+   "ply": 4,
+   "t": 12.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Instead of grabbing, he plays the knight to c6. So what do we do here?"
+  },
+  {
+   "ply": 5,
+   "t": 47.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "My favorite move: d takes e5. The short reason is that it clarifies the center — the knight to f3 would just transpose into a Scotch, but I think capturing is best, both to open things up and because the knight that recaptures on e5 will be awkwardly placed."
+  },
+  {
+   "ply": 6,
+   "t": 53,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The knight recaptures on e5, and this knight is really not well placed — it's exposed to a whole series of tempo-gaining attacks."
+  },
+  {
+   "ply": 7,
+   "t": 104.5,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "We develop naturally with the knight to c3, getting a piece out and keeping options open."
+  },
+  {
+   "ply": 8,
+   "t": 110.5,
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black offers a trade with the knight to f6 — a non-committal move; we don't have to decide about trading yet."
+  },
+  {
+   "ply": 9,
+   "t": 146.5,
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4PP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "f4"
+   ],
+   "spoken": "f4 — you give an exoskeleton to your position. When you only develop pieces without supporting pawns, those pieces float; the pawn advance both kicks the e5-knight and gives the center a spine."
+  },
+  {
+   "ply": 11,
+   "t": 158,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/5P2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "Nc6",
+    "e5"
+   ],
+   "spoken": "The knight retreats to c6, and now the advance is associated with a very strong follow-up: e5, chasing the f6-knight back."
+  },
+  {
+   "ply": 12,
+   "t": 182,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 7",
+   "line": [
+    "Ng8"
+   ],
+   "spoken": "He has to go all the way back to g8, losing a ton of tempo, and his position already looks grim."
+  },
+  {
+   "ply": 13,
+   "t": 189.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "We bring the other knight out, the knight to f3, developing with gain of time."
+  },
+  {
+   "ply": 14,
+   "t": 191.5,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "His best try is d6, striking at our advanced e5-pawn."
+  },
+  {
+   "ply": 15,
+   "t": 242.5,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "Here's a tip: once your pieces are out and the opponent's king is stuck, a queen trade doesn't kill your attack — a lot of your attackers aren't the queen. The bishop to b5 pressures the pinned defender and steers toward exactly that."
+  },
+  {
+   "ply": 16,
+   "t": 246.5,
+   "fen": "r2qkbnr/pppb1ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R w KQkq - 2 9",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "A queen trade would have cost him his castling rights and left his king a sitting duck, so instead he plays the bishop to d7, breaking the pin."
+  },
+  {
+   "ply": 18,
+   "t": 259.5,
+   "fen": "r2qkbnr/pppb1ppp/2n5/1B2p3/5P2/2N2N2/PPP3PP/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "O-O",
+    "dxe5"
+   ],
+   "spoken": "We castle — the king still has a nice pawn shell, and the fact that we advanced the f-pawn doesn't spoil it. He replies d takes e5."
+  },
+  {
+   "ply": 19,
+   "t": 265.5,
+   "fen": "r2qkbnr/pppb1ppp/2n5/1B2P3/8/2N2N2/PPP3PP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": "We recapture, f takes e5, and he's done us a big favor by opening the f-file straight at his king."
+  },
+  {
+   "ply": 20,
+   "t": 270,
+   "fen": "r2qk1nr/pppb1ppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1RK1 w kq - 1 11",
+   "line": [
+    "Bc5+"
+   ],
+   "spoken": "Now his king is going to be in real trouble. He gives a check with the bishop to c5."
+  },
+  {
+   "ply": 21,
+   "t": 271,
+   "fen": "r2qk1nr/pppb1ppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1R1K b kq - 2 11",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "We tuck the king to h1, out of the checks and ready to attack."
+  },
+  {
+   "ply": 22,
+   "t": 299.5,
+   "fen": "r2qk2r/pppbnppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1R1K w kq - 3 12",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": "It looks like Black will finish developing before we do — the knight to e7 — but that doesn't matter, because we're about to whip up a very quick attack on that king."
+  },
+  {
+   "ply": 23,
+   "t": 362,
+   "fen": "r2qk2r/pppbnppp/2n5/1Bb1P3/4N3/5N2/PPP3PP/R1BQ1R1K b kq - 4 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "What active moves can we play? The first thing my mind's eye sees is that loose bishop on c5 — so the knight to e4 jumps in, hitting it."
+  },
+  {
+   "ply": 25,
+   "t": 400.5,
+   "fen": "r2qk2r/ppp1nppp/2n5/1BN1Pb2/8/5N2/PPP3PP/R1BQ1R1K b kq - 0 13",
+   "line": [
+    "Bf5",
+    "Nxc5"
+   ],
+   "spoken": "Black slides the bishop to f5, and we take the bishop — the knight captures on c5, winning the bishop pair and staying on top."
+  },
+  {
+   "ply": 26,
+   "t": 415,
+   "fen": "r2qk2r/1pp1nppp/p1n5/1BN1Pb2/8/5N2/PPP3PP/R1BQ1R1K w kq - 0 14",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Black plays a6, poking at our bishop."
+  },
+  {
+   "ply": 27,
+   "t": 431.5,
+   "fen": "r2qk2r/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BQ1R1K b kq - 1 14",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop simply drops back to c4, and we're basically winning."
+  },
+  {
+   "ply": 29,
+   "t": 457.5,
+   "fen": "r3k2r/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BR3K b kq - 0 15",
+   "line": [
+    "Qxd1",
+    "Rxd1"
+   ],
+   "spoken": "He offers the queen trade, queen takes on d1, and we recapture with the rook. This raises a very contentious question — is it good to trade when you're up material?"
+  },
+  {
+   "ply": 30,
+   "t": 464,
+   "fen": "r4rk1/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BR3K w - - 1 16",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Black finally castles into safety."
+  },
+  {
+   "ply": 31,
+   "t": 515,
+   "fen": "r4rk1/1pp1nppp/p1n5/2N1Pb2/2B5/2P2N2/PP4PP/R1BR3K b - - 0 16",
+   "line": [
+    "c3"
+   ],
+   "spoken": "My take: don't feel you HAVE to simplify just because you're ahead. A lot of blunders come from ignoring the other features of the position. We calmly play c3."
+  },
+  {
+   "ply": 32,
+   "t": 518.5,
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1Pb2/2B5/2P2N2/PP4PP/R1BR3K w - - 1 17",
+   "line": [
+    "Rfd8"
+   ],
+   "spoken": "Black brings a rook to d8, contesting the file."
+  },
+  {
+   "ply": 33,
+   "t": 528,
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1PbB1/2B5/2P2N2/PP4PP/R2R3K b - - 2 17",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "Don't go blind to attacking chances just because you're trying to simplify — the bishop to g5 eyes the dark squares."
+  },
+  {
+   "ply": 34,
+   "t": 540.5,
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R2R3K w - - 3 18",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": "Black slips the bishop to c2."
+  },
+  {
+   "ply": 35,
+   "t": 549.5,
+   "fen": "r2R2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R6K b - - 0 18",
+   "line": [
+    "Rxd8+"
+   ],
+   "spoken": "I do have a clean chance to trade rooks, so why not — the rook takes on d8 with check. We give up the d-file, no big deal."
+  },
+  {
+   "ply": 36,
+   "t": 553,
+   "fen": "3r2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R6K w - - 0 19",
+   "line": [
+    "Rxd8"
+   ],
+   "spoken": "Black recaptures on d8."
+  },
+  {
+   "ply": 37,
+   "t": 555,
+   "fen": "3r2k1/1Np1nppp/p1n5/4P1B1/2B5/2P2N2/PPb3PP/R6K b - - 0 19",
+   "line": [
+    "Nxb7"
+   ],
+   "spoken": "It's an endgame and we can snap off another pawn — the knight takes on b7, a free pawn."
+  },
+  {
+   "ply": 39,
+   "t": 561.5,
+   "fen": "6k1/1Np1nppp/p1n5/4P1B1/2B5/2P2N2/PPb3PP/3R3K b - - 0 20",
+   "line": [
+    "Rd1+",
+    "Rxd1"
+   ],
+   "spoken": "Black tries the rook to d1 with check; we trade it off. A word of caution I've shared: don't chase too many extra pawns when you're already up a stack of pieces."
+  },
+  {
+   "ply": 43,
+   "t": 577.5,
+   "fen": "6k1/1Np1npp1/B1n4p/4P1B1/8/2P2N2/PP4PP/3R3K b - - 0 22",
+   "line": [
+    "Bd3",
+    "Bxd3",
+    "h6",
+    "Bxa6"
+   ],
+   "spoken": "But if there are free pawns with no consequences, absolutely take them: the bishop comes to d3, bishops are traded, Black plays h6, and the bishop scoops up on a6 — more material for nothing.",
+   "reanchor": true
+  },
+  {
+   "ply": 47,
+   "t": 578.5,
+   "fen": "6k1/1Np1Bpp1/B1n4p/4P3/8/2P2N2/PP4PP/3R3K b - - 0 24",
+   "line": [
+    "Nc8",
+    "Bf6",
+    "N8e7",
+    "Bxe7"
+   ],
+   "spoken": "Now we simplify: Black shuffles the knight to c8, our bishop comes to f6, the knight reroutes to e7, and the bishop takes on e7, peeling off another defender.",
+   "reanchor": true
+  },
+  {
+   "ply": 48,
+   "t": 582.5,
+   "fen": "6k1/1Np1npp1/B6p/4P3/8/2P2N2/PP4PP/3R3K w - - 0 25",
+   "line": [
+    "Nxe7"
+   ],
+   "spoken": "Black recaptures with the knight on e7.",
+   "reanchor": true
+  },
+  {
+   "ply": 49,
+   "t": 584.5,
+   "fen": "6k1/2p1npp1/B6p/2N1P3/8/2P2N2/PP4PP/3R3K b - - 1 25",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight comes to c5, centralizing and supporting the passed e-pawn."
+  },
+  {
+   "ply": 50,
+   "t": 592.5,
+   "fen": "6k1/2p2pp1/B6p/2N1Pn2/8/2P2N2/PP4PP/3R3K w - - 2 26",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": "Black jumps the knight to f5, trying to blockade."
+  },
+  {
+   "ply": 51,
+   "t": 596.5,
+   "fen": "6k1/2p2pp1/B3P2p/2N2n2/8/2P2N2/PP4PP/3R3K b - - 0 26",
+   "line": [
+    "e6"
+   ],
+   "spoken": "We push the passed pawn to e6 — it's about to become a monster."
+  },
+  {
+   "ply": 52,
+   "t": 619,
+   "fen": "6k1/2p2pp1/B3P2p/2N5/8/2P1nN2/PP4PP/3R3K w - - 1 27",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "Black lunges with the knight to e3. We'll just retreat our bishop and then win this pawn — the game is over, we're up a piece."
+  },
+  {
+   "ply": 53,
+   "t": 640,
+   "fen": "6k1/2p1Ppp1/B6p/2N5/8/2P1nN2/PP4PP/3R3K b - - 0 27",
+   "line": [
+    "e7"
+   ],
+   "spoken": "e7 is correct — the pawn is one step from queening."
+  },
+  {
+   "ply": 54,
+   "t": 681.5,
+   "fen": "6k1/2p1Ppp1/B6p/2N5/6n1/2P2N2/PP4PP/3R3K w - - 1 28",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "Black tries the knight to g4, but there's nothing left; he resigns."
+  },
+  {
+   "ply": 2,
+   "t": 767.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "In the meantime let's analyze — even grandmasters get tunnel vision, and it's a big problem worth talking about.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 771.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Back to the start: d4, and the knight-c6, d-takes-e5 structure again.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 775.5,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc6",
+    "dxe5",
+    "Nxe5"
+   ],
+   "spoken": "Let me respond to the idea that the knight is 'in the center' after it recaptures on e5 — is a central piece automatically good?",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 776.5,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 — and here's the general point: why is it even good for a piece to be central? What is it about the center?",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 821,
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": "The catch is that the weaknesses of the position haven't been defined yet, so sitting on a central square means a bit less here — there's nothing concrete for the knight to grip.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 822,
+   "fen": "r1bqkbnr/ppp2ppp/3p4/3Nn3/4P3/8/PPP2PPP/R1BQKBNR b KQkq - 1 5",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "In this analysis line the knight jumps to d5, showing how a 'central' piece can be poked.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 826.5,
+   "fen": "r1bqkbnr/pp3ppp/2pp4/3Nn3/4P3/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Because your opponent has plenty of resources to kick pieces away — c6 shoves the knight — you learn that centralizing too early backfires.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 833,
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": "So it's more important to develop quickly than to plant your pieces in the center prematurely.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 838.5,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": "And there's another reason to prefer flexible development here.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 840,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "I can play a move like the knight to f3 and essentially offer a trade — and if you trade knights, you've moved that same knight several times, handing me a big development lead.",
+   "reanchor": true
+  }
+ ]
+}
