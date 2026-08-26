@@ -1,0 +1,828 @@
+{
+ "videoId": "CnODsrMCQQg",
+ "title": "Punishing Strategic Blunders & Winning | Austrian Attack, Hippo | GM Naroditsky's DYI Chess Speedrun",
+ "openingName": "Pirc Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:CnODsrMCQQg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 37.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 38.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 41,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 79,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Against these Pirc/hippo 'unnamed' setups the strategy doesn't change — develop naturally, start with Nc3, and go from there.",
+   "kind": "main",
+   "teaches": "Meet an offbeat, passive system with sound natural development, not a special refutation."
+  },
+  {
+   "ply": 6,
+   "t": 83,
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 88,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 96.5,
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "a6"
+   ],
+   "spoken": "Two big questions: c4, which we skip since we aren't d4 players, and f4. I'm usually bearish on f4 unless you can land a knockout in the centre — but here it's objectively strong, so in it goes.",
+   "kind": "main",
+   "teaches": "Only commit to f4 in these structures when you can actually punch through the centre."
+  },
+  {
+   "ply": 7,
+   "t": 116,
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 123,
+   "fen": "rnbqkbnr/1pp2p1p/p2pp1p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 151,
+   "fen": "rnbqkbnr/1pp2p1p/p2pp1p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Don't waste a tempo on a4 to stop b5 — you can let the pawn come. Allowing the queenside expansion is harmless; just keep developing with Nf3.",
+   "kind": "main",
+   "teaches": "A queenside pawn push you can ignore isn't worth a defensive tempo — keep developing."
+  },
+  {
+   "ply": 10,
+   "t": 154.5,
+   "fen": "rnbqk1nr/1pp2pbp/p2pp1p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 155.5,
+   "fen": "rnbqk1nr/1pp2pbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 3 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The light bishop always comes to d3 in this line — the standard Austrian Attack setup, then castle.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 160,
+   "fen": "rnbqk2r/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R w KQkq - 4 7",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 162,
+   "fen": "rnbqk2r/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQ1RK1 b kq - 5 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 165,
+   "fen": "rnbq1rk1/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 6 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 201,
+   "fen": "rnbq1rk1/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1B1QRK1 b - - 7 8",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": "Qe1 is the flexible maneuver — it commits to nothing but eyes the Qh4 swing, exactly as in the Grand Prix Attack.",
+   "kind": "main",
+   "teaches": "Reroute the queen via e1 toward h4 to build a kingside attack without committing early."
+  },
+  {
+   "ply": 16,
+   "t": 206.5,
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/8/3PPP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 8 9",
+   "line": [
+    "Nbc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 228,
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/4P3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Most players reach automatically for Be3; the stronger move is e5. Since the attack will come on the kingside, half-closing the centre helps — and e5 locks Black's g7-bishop out of the game while cashing in on f4.",
+   "kind": "main",
+   "teaches": "Half-close the centre when you plan to attack on a wing, especially to entomb the enemy fianchetto bishop."
+  },
+  {
+   "ply": 18,
+   "t": 237,
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4p3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 244.5,
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/4P3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 252,
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4p3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 254.5,
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4P3/5P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "Recapture with the d-pawn, or we drop material — and now the d-file opens onto Black's cramped queen while f6 becomes a glaring hole.",
+   "kind": "plan",
+   "plans": "Swing a rook to the d-file and aim a knight at f6."
+  },
+  {
+   "ply": 20,
+   "t": 265.5,
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/5P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 1 11",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 275.5,
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/3B1N2/PPP3PP/R1B1QRK1 b - - 2 11",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Ne4 is my favorite kind of move — aggressive and prophylactic at once: it heads for f6 while quietly stopping Nb4. Those double-duty moves are the most annoying to face.",
+   "kind": "main",
+   "teaches": "Prize moves that attack and prevent simultaneously; they give the opponent no counterplay."
+  },
+  {
+   "ply": 22,
+   "t": 300.5,
+   "fen": "r1bq1rk1/1pp2pbp/p3p1p1/4Pn2/3nNP2/3B1N2/PPP3PP/R1B1QRK1 w - - 3 12",
+   "line": [
+    "Ncd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 362,
+   "fen": "r1bq1rk1/1pp2pbp/p3p1p1/4Pn2/3nNP2/2PB1N2/PP4PP/R1B1QRK1 b - - 0 12",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 kicks the knight and covers d4 — but a move that allows a discovery needs concrete checking, so make sure you've counted every knight jump before you play it.",
+   "kind": "main",
+   "teaches": "Before permitting a discovered attack, calculate all of the discovering piece's landing squares."
+  },
+  {
+   "ply": 24,
+   "t": 393.5,
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/2PB1N2/PP4PP/R1B1QRK1 w - - 1 13",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 404,
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/2P2N2/PPB3PP/R1B1QRK1 b - - 2 13",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": "When you push a pawn, watch your loose pieces — bring the bishop back to c2 rather than leave it hanging. There's all the time in the world.",
+   "kind": "main",
+   "teaches": "After a pawn push, re-check whether it left one of your own pieces undefended."
+  },
+  {
+   "ply": 26,
+   "t": 408.5,
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1p1/1p2Pn2/4NP2/2P2N2/PPB3PP/R1B1QRK1 w - - 0 14",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 412.5,
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1p1/1p2Pn2/4NPP1/2P2N2/PPB4P/R1B1QRK1 b - - 0 14",
+   "line": [
+    "g4"
+   ],
+   "spoken": "g4 chases the knight and grabs space. Nobody should worry about pushing pawns in front of the king here — Black is far too passive to ever exploit it.",
+   "kind": "main",
+   "teaches": "Storming pawns in front of your own king is safe when the opponent has no counterplay to answer it."
+  },
+  {
+   "ply": 28,
+   "t": 427.5,
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N2/PPB4P/R1B1QRK1 w - - 1 15",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 431,
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N1P/PPB5/R1B1QRK1 b - - 0 15",
+   "line": [
+    "h3"
+   ],
+   "spoken": "h3 supports the advance, and note Black is weak on c5 too — the position is essentially zugzwang-bound; White is winning on strategy alone.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 454,
+   "fen": "r2q1rk1/1bp2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N1P/PPB5/R1B1QRK1 w - - 1 16",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 509,
+   "fen": "r2q1rk1/1bp2pbp/p1n1pNpn/1p2P3/5PP1/2P2N1P/PPB5/R1B1QRK1 b - - 2 16",
+   "line": [
+    "Nf6+"
+   ],
+   "spoken": "The knockout is all about order: g5 first would hand Black a stronghold on f5, so start with Nf6-check. If Black takes twice, g5 wins the knight; otherwise Qh4 or f5 crashes through.",
+   "kind": "main",
+   "teaches": "In a two-move breakthrough, play the forcing check first so the follow-up pawn push arrives with full effect."
+  },
+  {
+   "ply": 32,
+   "t": 518,
+   "fen": "r2q1rk1/1bp2p1p/p1n1pbpn/1p2P3/5PP1/2P2N1P/PPB5/R1B1QRK1 w - - 0 17",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 523.5,
+   "fen": "r4rk1/1bp2p1p/p1n1pqpn/1p4P1/5P2/2P2N1P/PPB5/R1B1QRK1 b - - 0 18",
+   "line": [
+    "exf6",
+    "Qxf6",
+    "g5"
+   ],
+   "spoken": "Black has to give up the piece — a full extra minor and every dark square, decisive.",
+   "kind": "main"
+  },
+  {
+   "ply": 36,
+   "t": 540.5,
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pn/1p4P1/5P2/2P2N1P/PPB5/R1B1QRK1 w - - 1 19",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 541.5,
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P2N1P/PPB5/R1B1QRK1 b - - 0 19",
+   "line": [
+    "gxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 548,
+   "fen": "r4rk1/1bp2p1p/p1n1p1pP/1pq5/5P2/2P2N1P/PPB5/R1B1QRK1 w - - 1 20",
+   "line": [
+    "Qc5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 549.5,
+   "fen": "r4rk1/1bp2p1p/p1n1p1pP/1pq5/5P2/2P1BN1P/PPB5/R3QRK1 b - - 2 20",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 561.5,
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB5/R3QRK1 w - - 3 21",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 590.5,
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB2Q2/R4RK1 b - - 4 21",
+   "line": [
+    "Qf2"
+   ],
+   "spoken": "Qf2 sets up Bc5 and coordinates the rooks — patient improvement while up material.",
+   "kind": "main"
+  },
+  {
+   "ply": 42,
+   "t": 597,
+   "fen": "r2r2k1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB2Q2/R4RK1 w - - 5 22",
+   "line": [
+    "Rfd8"
+   ],
+   "spoken": "Up a decisive amount there are two winning philosophies: trade into an easy endgame, or use the extra piece to attack. The right answer is a balance — but here, with this dark-square bind, hunting the queen trade with Qh4 would be a crime, prolonging the win forever. Keep attacking.",
+   "kind": "main",
+   "teaches": "Don't trade into an endgame when you have a raging attack; convert with the attack, not against it."
+  },
+  {
+   "ply": 43,
+   "t": 649,
+   "fen": "r2r2k1/1bp1qp1p/p1n1p1pP/1pB5/5P2/2P2N1P/PPB2Q2/R4RK1 b - - 6 22",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "Bc5 politely asks the queen where it intends to live.",
+   "kind": "main"
+  },
+  {
+   "ply": 44,
+   "t": 656.5,
+   "fen": "r2r2k1/1bp2p1p/p1n1pqpP/1pB5/5P2/2P2N1P/PPB2Q2/R4RK1 w - - 7 23",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 660.5,
+   "fen": "r2r2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 b - - 8 23",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Ng5, heading for e4 — the queen starts to feel genuinely uncomfortable with nowhere good to sit.",
+   "kind": "main"
+  },
+  {
+   "ply": 46,
+   "t": 695.5,
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 w - - 9 24",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 699.5,
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/4RRK1 b - - 10 24",
+   "line": [
+    "Rae1"
+   ],
+   "spoken": "No rush when you're winning — enjoy the process and simply bring the last piece into the game.",
+   "kind": "main",
+   "teaches": "With a decisive advantage, activate every piece before forcing matters; there's no need to hurry."
+  },
+  {
+   "ply": 48,
+   "t": 715,
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr2N1/5P2/2P4P/PPB2Q2/4RRK1 w - - 11 25",
+   "line": [
+    "Rd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 721.5,
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 12 25",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 723.5,
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 b - - 16 27",
+   "line": [
+    "Rd6",
+    "Ng5",
+    "Rdd8",
+    "Ra1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 726,
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 20 29",
+   "line": [
+    "Rd7",
+    "Ne4",
+    "Rd5",
+    "Rae1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 733.5,
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 w - - 21 30",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 762,
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/1BP4P/PP3Q2/4RRK1 b - - 22 30",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "The dream is a knight on f6, and the queen guards it — so Bb3 deflects the rook off the d-file, after which Rd1 could trap the queen. Manufacture the threat you can't play directly.",
+   "kind": "main",
+   "teaches": "To reach an outpost the queen defends, first deflect the defender guarding the deflecting move."
+  },
+  {
+   "ply": 60,
+   "t": 769,
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/4RRK1 w - - 23 31",
+   "line": [
+    "Rh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 61,
+   "t": 770.5,
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/3R1RK1 b - - 24 31",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 778.5,
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1q/1BP4P/PP3Q2/3R1RK1 w - - 25 32",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 798,
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1Q/1BP4P/PP6/3R1RK1 b - - 0 32",
+   "line": [
+    "Qxh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 65,
+   "t": 801,
+   "fen": "2r3k1/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 b - - 1 33",
+   "line": [
+    "Rxh4",
+    "Nf6+"
+   ],
+   "spoken": "So we do trade queens — but in service of the attack: Nf6-check keeps the mate rolling, and the rook finishes faster than the queens could have. Trading queens is only wrong when it abandons the attack.",
+   "kind": "main",
+   "teaches": "A queen trade is fine — even best — when it speeds up the mate rather than dissolving your attack."
+  },
+  {
+   "ply": 66,
+   "t": 806,
+   "fen": "2r4k/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 w - - 2 34",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 809,
+   "fen": "2r4k/1bpR1p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/5RK1 b - - 3 34",
+   "line": [
+    "Rd7"
+   ],
+   "spoken": "The rook swings to d7, the knight and bishop pile in, and mate arrives in a couple of moves.",
+   "kind": "main"
+  },
+  {
+   "ply": 69,
+   "t": 815.5,
+   "fen": "2r4k/1bp2R1p/p1n1pNpr/1pB5/5P2/1BP4P/PP6/5RK1 b - - 0 35",
+   "line": [
+    "Rxh6",
+    "Rxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 70,
+   "t": 848,
+   "fen": "2r4k/1bp2R1p/p1n1pNp1/1pB5/5P2/1BP4r/PP6/5RK1 w - - 0 36",
+   "line": [
+    "Rxh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 71,
+   "t": 850,
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P4r/PP6/5RK1 b - - 0 36",
+   "line": [
+    "Bxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 72,
+   "t": 879,
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP6/5RK1 w - - 1 37",
+   "line": [
+    "Rg3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 73,
+   "t": 881,
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP3K2/5R2 b - - 2 37",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 74,
+   "t": 883,
+   "fen": "2r4k/1bp2R1p/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 w - - 3 38",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 75,
+   "t": 889,
+   "fen": "2r4k/1bp4R/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 b - - 0 38",
+   "line": [
+    "Rxh7#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 891,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 894.5,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 897,
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 900.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 902.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 904.5,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 907,
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 922,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 928,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 939.5,
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "g6",
+    "f4",
+    "Bg7",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 942.5,
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 952.5,
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 956,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 957,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 962,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/1p1PPP2/2NB1N2/PPP3PP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 964.5,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/1p1PPP2/3B1N2/PPP1N1PP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 972.5,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 982.5,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 6",
+   "line": [],
+   "spoken": "One honest miss: Black had Nb4, forcing the bishop's surrender. The clean answer is Be4 then back to d3, inducing d5 to lock the centre — an ugly-looking but sound Jobava-London structure, because after the freeing c5, dxc5 and d4 reforms a healthy centre.",
+   "kind": "review",
+   "teaches": "When a knight forks your bishop, sometimes the fix is to close the centre and accept a solid, funny-looking pawn structure.",
+   "reanchor": true
+  }
+ ]
+}
