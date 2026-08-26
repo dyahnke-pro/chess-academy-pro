@@ -1,0 +1,400 @@
+{
+ "videoId": "HVKBVYhxpEY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 720",
+ "openingName": "Pirc Defense (space-and-attack plan)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:HVKBVYhxpEY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1004.5,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1007,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Black plays the Pirc, ceding the center. Played well it's fine, but most players at this level get into trouble fast — so we punish it by strict adherence to opening principles.",
+   "kind": "main",
+   "teaches": [
+    "meet an offbeat opening with principled play"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 1022.5,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1047.5,
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c4"
+   ],
+   "spoken": "We expand the center further with c4, since we're free to grab space here.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 1069.5,
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1083,
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The crucial discipline: don't keep over-expanding with f4 — support the center with pieces instead. The knight to c3 develops and reinforces it.",
+   "kind": "main",
+   "teaches": [
+    "develop to support the center, don’t over-push"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 1089.5,
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1098.5,
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 4 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1104,
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 5 6",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1110.5,
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop goes to d3 — and its purpose is forward-looking: it's aimed at the h7 square once the center opens.",
+   "kind": "main",
+   "teaches": [
+    "place the bishop for the future attack"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 1129.5,
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R w KQ - 7 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1131.5,
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1196,
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2p5/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Everything's developed — now the hard part most players struggle with: converting a space edge into something real. We expand in the center and attack a flank.",
+   "kind": "plan",
+   "teaches": [
+    "transform space into an attack"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 1198.5,
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2P5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1202,
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "dxc5",
+    "e5"
+   ],
+   "spoken": "After clearing the tension, the pawn to e5 springs the bishop on d3 to life, opening its fire toward h7.",
+   "kind": "main",
+   "teaches": [
+    "e5 opens the attacking diagonal"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 1211.5,
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "Black's knight lunges to the rim on h5 — and a knight on the rim is asking to be hunted.",
+   "teaches": [
+    "a rim knight is a target"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 1247.5,
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "g4"
+   ],
+   "spoken": "We trap it with g4. Yes, that's a pawn push in front of our own king — but it's the exception, because it simply wins a knight, and Black has nothing on the kingside to punish it.",
+   "kind": "main",
+   "teaches": [
+    "break the rule when it wins material"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 1273,
+   "fen": "rn1q1rk1/pp1bbppp/4pP2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 11",
+   "line": [
+    "Nf6",
+    "exf6"
+   ],
+   "spoken": "The knight has no escape — forced back to f6, and we take, opening the f-file.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 1274.5,
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 w - - 0 12",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1288.5,
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p3P1/2P5/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 12",
+   "line": [
+    "g5"
+   ],
+   "spoken": "g5 shoves the bishop, and if it grabs on c3 that only trades off a defender of Black's king — fine by us.",
+   "kind": "main",
+   "teaches": [
+    "welcome trades that strip the king’s guards"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 1301,
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2Pb4/2NB1N2/PP3P1P/R1BQ1RK1 w - - 1 13",
+   "line": [
+    "Bd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1302.5,
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2PN4/2NB4/PP3P1P/R1BQ1RK1 b - - 0 13",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1304,
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2Pp4/2NB4/PP3P1P/R1BQ1RK1 w - - 0 14",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "We snap off the bishop — thank you — removing another piece from around Black's king.",
+   "kind": "main"
+  },
+  {
+   "ply": 27,
+   "t": 1311.5,
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 b - - 1 14",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "The knight centralizes on e4, heading for the h5 assault. Not Qh5 yet, though — g6 would just stop it; build first.",
+   "kind": "main",
+   "teaches": [
+    "centralize before committing the queen"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 1513,
+   "fen": "rn1q1rk1/pp3ppp/2b1p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 w - - 2 15",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1517.5,
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1526,
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6",
+   "line": [
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1533,
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1534.5,
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c5",
+    "dxc5",
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1538,
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1540,
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "Ne8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1551.5,
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P3/2P5/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "Bxh7+",
+    "Kxh7"
+   ],
+   "spoken": "A key teaching point — the Greek gift, the bishop sac on h7 followed by the knight check on g5, needs the g5 square free. Here Black's bishop covers g5, so it doesn't work; that coverage is the litmus test for whether the sacrifice is on.",
+   "teaches": [
+    "the Greek gift precondition: g5 must be free"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 1553.5,
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P1N1/2P5/2N5/PP3PPP/R1BQ1RK1 b - - 1 11",
+   "line": [
+    "Ng5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1554.5,
+   "fen": "rn1qnr2/pp1b1ppk/4p3/2p1P1b1/2P5/2N5/PP3PPP/R1BQ1RK1 w - - 0 12",
+   "line": [
+    "Bxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1570,
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "line": [],
+   "spoken": "On batteries — two pieces stacked on a line. With a queen-and-bishop battery you normally lead with the queen, because that's what threatens mate; lead with the bishop only when you need the queen sheltered behind it.",
+   "teaches": [
+    "lead a queen-bishop battery with the queen"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 1614,
+   "fen": "r2qnrk1/pp1bbp1p/2n1p1p1/2p1P3/2P1B3/2NQ1N2/PP3PPP/R1B2RK1 w - - 0 12",
+   "line": [
+    "Be4",
+    "Nc6",
+    "Qd3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1632.5,
+   "fen": "r2q1rk1/pp1bbpnp/2n1p1pB/2p1P3/2P1B3/2NQ1N2/PP3PPP/R4RK1 w - - 2 13",
+   "line": [
+    "Bh6",
+    "Ng7"
+   ],
+   "spoken": ""
+  }
+ ]
+}

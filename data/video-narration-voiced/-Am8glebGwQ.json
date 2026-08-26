@@ -1,0 +1,238 @@
+{
+ "videoId": "-Am8glebGwQ",
+ "title": "",
+ "openingName": "French Defense: Advance Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:-Am8glebGwQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": "We open with the king's pawn and Black declares the French.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 23.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "We take the full center with the d-pawn — the invitation the French always accepts.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black strikes at our center with d5. This is the defining tension of the French: the pawn on e4 has to decide its fate.",
+   "kind": "main",
+   "teaches": [
+    "the French central tension"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 43.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "We choose the Advance — lock the chain and take the space. The pawn on e5 cramps Black's kingside and hands us a long-term spatial edge; the whole game will be about who breaks the chain first.",
+   "kind": "main",
+   "teaches": [
+    "Advance = space + a fixed pawn chain"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 47,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": "Instead of the near-universal c5, Black tries the rare b6, planning to reroute the light-squared bishop to a6 and trade off the French's famously bad bishop before it gets buried behind the chain.",
+   "kind": "branch",
+   "teaches": [
+    "trading the bad French bishop"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 53.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "Worth being clear: almost everyone meets the Advance with c5, hitting the base of the chain. b6 is a comparatively rare sideline.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 58,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": "The whole point of b6 is that bishop-to-a6 trade. Against it there's no reason to hurry — we just develop and let Black spend the tempi.",
+   "teaches": [
+    "answer a slow plan with fast development"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 73.5,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Here's the clever touch: the quiet c3 first. It looks like nothing, but it lays a trap for the immediate a6 trade — and the reason is worth pausing on.",
+   "kind": "main",
+   "teaches": [
+    "prophylaxis before development"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 79,
+   "fen": "rnb1kbnr/p1pq1ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": "Black finds the correct reply, tucking the queen to d7 rather than grabbing the trade at once.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 81,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "This is why the immediate a6 fails: after the bishops come off, the knight recaptures on a6, and then a queen check on a4 skewers the loose knight and simply wins it. So the trade has to be prepared first.",
+   "teaches": [
+    "Qa4 skewer on the a6 knight"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 91,
+   "fen": "rnb1kbnr/p1pq1ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Qd7"
+   ],
+   "spoken": "That's what the queen on d7 is for — it covers the a4-to-e8 diagonal, so once the bishop reaches a6 the Qa4 trick no longer bites and the trade becomes safe.",
+   "teaches": [
+    "guarding the diagonal to enable the trade"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 97.5,
+   "fen": "rnb1kbnr/p1pq1ppp/1p2p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 2 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "We develop the bishop to d3, its best diagonal in the Advance — aimed straight at Black's kingside where our space advantage will tell.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 101.5,
+   "fen": "rn2kbnr/p1pq1ppp/bp2p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 6",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "Black carries out the plan with the bishop to a6, offering to swap off the light-squared bishops.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 118,
+   "fen": "rn2kbnr/p1pq1ppp/bp2p3/3pP3/3P4/2PB4/PP2NPPP/RNBQK2R b KQkq - 4 6",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The key decision — and the move most players get wrong. Not the natural Nf3 but the knight to e2, because it leaves the f-pawn unobstructed. That is the whole strategic key to the Advance: once we castle we want the thematic f4-f5 break to storm the kingside, and a knight on f3 would block it. From here the plan writes itself. Black concedes the light-squared bishops but loses tempi doing it; when he lunges with h5 he only hands us a weak square on g5 that we'd occupy with the dark-squared bishop — and we don't rush h4 ourselves, we wait for Black to push it and then freeze it with h3, since a pawn that comes to h4 becomes a target once our knight reroutes to g3 and later f3. On the queenside we play the advanced-French idea a3 and b4 to force the c-pawn to commit, prying open the c-file to double rooks, with a prophylactic h3 to deny Ng4. Then the classic finish: having won the queenside, we swing the queen to the kingside and play on both wings at once, where Black is most exposed.",
+   "kind": "plan",
+   "teaches": [
+    "Ne2 keeps the f-pawn free for f4",
+    "provoke h4 then fix it with h3",
+    "play on both wings"
+   ],
+   "plans": [
+    "f4-f5 kingside break",
+    "a3-b4 open the c-file",
+    "double on the c-file, then attack the king"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 864,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "A clean conversion — the passed pawn ran home with a square of luft always in reserve for our own king.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 868,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": "To recap the theory: b6 is a viable, well-known French sideline, though the mainstream choice stays c5.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 875.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "Against the normal c5 our intended route was the knight-to-f3 line.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 877,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "c5",
+    "Nf3"
+   ],
+   "spoken": "That's the c5 mainline, meeting it by developing the knight to f3 and supporting the chain.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 881,
+   "fen": "rnbqkbnr/pp3ppp/4p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
+   "line": [
+    "cxd4",
+    "Bd3"
+   ],
+   "spoken": "After the exchange on d4 we recapture with the bishop to d3 and reach the same attacking setup — a line an earlier speedrun already walked through.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 889.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": "The fullest summary: c3 is clever precisely because an immediate a6 drops a piece to Qa4, so Qd7 is the standard reply; then bishop to d3, bishop to a6, knight to e2, all preparing the f4 break with the knight often swinging to g3. And on the h5 idea — don't answer with h4 of your own. If Black shoves the pawn to h4 it becomes a weakness we attack once the knight reaches f3, so it's better to wait and fix it with h3 than to create weaknesses yourself.",
+   "teaches": [
+    "wait-and-fix beats committing your own h-pawn"
+   ],
+   "reanchor": true
+  }
+ ]
+}

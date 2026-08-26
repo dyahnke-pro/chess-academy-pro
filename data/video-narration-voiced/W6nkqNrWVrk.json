@@ -1,0 +1,209 @@
+{
+ "videoId": "W6nkqNrWVrk",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1970",
+ "openingName": "French Defense: Tarrasch / Rubinstein",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:W6nkqNrWVrk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 18.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 21,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "Against the French we play our Tarrasch — the knight to d2.",
+   "kind": "main",
+   "teaches": [
+    "the Tarrasch Nd2"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 24,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Black captures on e4 — the Rubinstein French, a solid but passive choice.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 32,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 33.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 here is inaccurate, because it forces Black to wreck his own pawn structure at once.",
+   "kind": "main",
+   "teaches": [
+    "...Nf6 concedes the structure"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 37,
+   "fen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxf6+",
+    "gxf6"
+   ],
+   "spoken": "After we take with check and he recaptures with the g-pawn, Black's kingside pawns are shattered — doubled and weak.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 42.5,
+   "fen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 45,
+   "fen": "rnbqkb1r/p1p2p1p/1p2pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 60,
+   "fen": "rnbqkb1r/p1p2p1p/1p2pp2/8/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop comes to d3, and the plan is to root out Black's bishop — his only good piece.",
+   "kind": "plan",
+   "teaches": [
+    "target the opponent’s one strong piece"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 62.5,
+   "fen": "rn1qkb1r/pbp2p1p/1p2pp2/8/3P4/3B1N2/PPP2PPP/R1BQK2R w KQkq - 2 8",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The bishop on b7 is that piece. We contest it — but there's a subtlety worth knowing: if we grab with the bishop on a6, after the recapture Black can leave a loose piece that a queen check on a4 forks against king and knight. Beyond that, we're happy to give a pawn for the initiative here: with Black's king stranded in the center and the board wide open, the bishop to f4 keeps the rook-lift avenue open, and we attack down the half-open g-file.",
+   "kind": "plan",
+   "teaches": [
+    "pawn for initiative against a stuck king",
+    "Bf4 keeps the rook lift"
+   ],
+   "plans": [
+    "contest the b7 bishop",
+    "rook lift and g-file attack"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 665.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 671,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "dxe4",
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 673,
+   "fen": "r1bqkbnr/pppn1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The better move was the knight to d7 — it prepares to recapture with the knight and keep the structure whole, instead of conceding it.",
+   "teaches": [
+    "Nd7 to recapture with the knight"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 676.5,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf3",
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 680.5,
+   "fen": "r1bqkb1r/pppn1ppp/4pN2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "Nxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 681.5,
+   "fen": "r1bqkb1r/ppp2ppp/4pn2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 701,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

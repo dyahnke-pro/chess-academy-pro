@@ -1,0 +1,269 @@
+{
+ "videoId": "xeoof3v45mk",
+ "title": "Master Class | Center Game | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Center Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:xeoof3v45mk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "If it ain't broke — we roll out the Danish/Center Game again, opening with d4 against the king-pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 12.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 22,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "He meets it with knight f6, an uncommon and not-great try that counterattacks our e4-pawn — but that knight is about to go wandering into trouble in my position.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 44,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "We snap off e5 first, opening lines.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 46.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "He grabs on e4. Here's the key idea: a knight can be centralized and still deeply vulnerable if no pawns or pieces support it — that's exactly this knight. Don't be reactive: Qe2 lets it drop to c5 and boxes in your bishop, and f3 walks into the Qh4+ then Nxg3 pattern.",
+   "kind": "main",
+   "teaches": [
+    "A centralized knight without support is a target, not a strength",
+    "Don\\u2019t react to a loose knight — find the opponent\\u2019s other weaknesses"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 113,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Instead we ignore the knight and hit the real weak spot: f7. The bishop to c4 pressures f7 and, since the knight is undefended, sets up forks that hit both at once.",
+   "kind": "main",
+   "teaches": [
+    "Target f7 early; combine pressure on it with the loose knight"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 125.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The queen to h4 — a delayed response that forks the knight and swings at the king together. Careful though: the tempting g3 loses, because the queen x-rays our own c4-bishop, so after g3 Nxg3 the queen slides over and wins the undefended bishop.",
+   "kind": "main",
+   "teaches": [
+    "Watch for a discovered attack when your queen and a loose bishop share a line"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 367,
+   "fen": "rn2kb1r/ppp2ppp/4b3/3BP3/4n2q/5Q2/PPP2PPP/RNB1K1NR w KQkq - 1 7",
+   "line": [
+    "Qf3",
+    "d5",
+    "Bxd5",
+    "Be6"
+   ],
+   "spoken": "We reposition the queen to f3, keeping the heat on f7 — a near-mate threat that deters his discoveries and buys us time. When you have a strong card, hold it and play it when it hits hardest.",
+   "kind": "plan",
+   "teaches": [
+    "Exercise restraint — play your strong move when it lands with most force"
+   ],
+   "plans": [
+    "Qf3 keeps pressure on f7",
+    "Bring the queen into the queenside pressure next"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 888,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 890,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 915,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 921.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/4n2q/5P2/PPP3PP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 924,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/7q/5Pn1/PPP4P/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "g3",
+    "Nxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 926,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/8/5PP1/PPP5/RNBQKBNq w Qkq - 0 7",
+   "line": [
+    "hxg3",
+    "Qxh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 931.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 932.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 942,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "On the recap: the point of the bishop to c4 is that it isn't just development — it sets up Qd5 and Qf3. Hold your good moves close and they hit far harder than if you rush them.",
+   "kind": "review",
+   "teaches": [
+    "Develop with a follow-up threat in mind"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 962.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 973,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/6P1/PPP2P1P/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 977,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6n1/PPP2P1P/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "Nxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 979.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6P1/PPP2P2/RNBQK1NR b KQkq - 0 6",
+   "line": [
+    "hxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1043.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6n1/PPP2P1P/RNBQK1NR w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1045.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6P1/PPP4P/RNBQK1NR b KQkq - 0 6",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1048,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1q3/6P1/PPP4P/RNBQK1NR w KQkq - 1 7",
+   "line": [
+    "Qe4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1117.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1136.5,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/8/PPP2QPP/RNB1K1NR b KQkq - 0 6",
+   "line": [
+    "Qd2",
+    "Nxf2",
+    "Qxf2"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,270 @@
+{
+ "videoId": "SziecWG-v0c",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2160",
+ "openingName": "French Defense: Tarrasch Variation (Nd2)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:SziecWG-v0c",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 12,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 17.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "Against the French we play the Tarrasch — the knight to d2 rather than c3. The whole point is that it leaves the c-pawn free to come to c3 and reinforce the center.",
+   "kind": "main",
+   "teaches": [
+    "Nd2 keeps c3 for the pawn chain"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 19.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 22,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "We grab space with e5, an Advance-style pawn chain that Black must attack.",
+   "kind": "main",
+   "teaches": [
+    "the Advance structure"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 23.5,
+   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nfd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 25.5,
+   "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2P5/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "c3",
+    "c5"
+   ],
+   "spoken": "And there's the payoff — c3 buttresses the d4-pawn, the very reason the knight went to d2 instead of c3.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 42.5,
+   "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 1 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop takes its most active diagonal, d3, aimed at the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 44.5,
+   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 2 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 46.5,
+   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 3 7",
+   "line": [
+    "Ngf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 55,
+   "fen": "r1bqkb1r/pp1n2pp/2n1pp2/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "f6"
+   ],
+   "spoken": "Black plays f6 — a famous mistake. It opens the very diagonal our queen wants, the road to h5.",
+   "kind": "main",
+   "teaches": [
+    "...f6 opens the h5 diagonal"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 88.5,
+   "fen": "r1bqkb1r/pp1n2pp/2n1pp2/2ppP1N1/3P4/2PB4/PP1N1PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight to g5 is the key blow — a distracting sacrifice that also attacks e6, so Black can't both meet that threat and stop the queen reaching h5. And he can't castle out of it, because his own bishop blocks the king's escape.",
+   "kind": "main",
+   "teaches": [
+    "a distraction sac to force the queen to h5"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 138,
+   "fen": "r1bqkb1r/pp1n2pp/2n1pp2/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 141,
+   "fen": "r1bqkb1r/pp4pp/1nn1pp2/2ppP1N1/3P4/2PB4/PP1N1PPP/R1BQK2R w KQkq - 2 9",
+   "line": [
+    "Ng5",
+    "Nb6"
+   ],
+   "spoken": "When Black defends e6 but allows the queen to h5, don't rush the tempting knight to f7 — a queen retreat to e8 would pin it. The Russian-school choice is to drop the knight back modestly: his king is wretched, so there's no need to force a win amid the complications. Then complete development — the knight reroutes to d4 exploiting the pin and blockading his passer, the bishop to f4 sets up an x-ray at the king, and the pawn levers b4 and a4 tear open the c- and a-files, where discovered-attack and mating ideas do the rest.",
+   "kind": "plan",
+   "teaches": [
+    "don’t force it — a modest move can be best",
+    "prepare slowly, attack fast"
+   ],
+   "plans": [
+    "Nf3-d4 to blockade and exploit the pin",
+    "b4/a4 to open lines at the king"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 636,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 640.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 641.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The Tarrasch's more popular main line is the knight to c3. The knight to d2 is the practical trade-off — it wins the c3 reinforcement at the cost of blocking the bishop for a move.",
+   "teaches": [
+    "Nd2 vs Nc3 trade-off"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 687.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 692.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/4B3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "Be3",
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 694.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 706.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 709,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PB3/8/PPP2PPP/RNBQK1NR b KQkq - 0 4",
+   "line": [
+    "dxe4",
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 710.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/3PB3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 712.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/3P4/5B2/PPP2PPP/RNBQK1NR b KQkq - 2 5",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 713.5,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/3P4/5B2/PPP2PPP/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 731,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

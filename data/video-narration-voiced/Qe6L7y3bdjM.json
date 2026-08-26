@@ -1,0 +1,268 @@
+{
+ "videoId": "Qe6L7y3bdjM",
+ "title": "Forcing Positional Weaknesses | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defense (vs the Bc4 Italian setup)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Qe6L7y3bdjM",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 35.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 41,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 55.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 59.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White plays the bishop to c4 — popular below master level because players default to their anti-e5 Italian moves. Against this Sicilian setup it's ineffective, and the reason is one word: e6.",
+   "kind": "main",
+   "teaches": [
+    "Bc4 misfires against the Sicilian"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 114.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 completely blunts the c4 bishop and makes it look silly — and a later d5 can come with tempo.",
+   "kind": "main",
+   "teaches": [
+    "e6 neutralizes the bishop"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 117,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 124.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 130.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 197.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "To punish the bishop fully we strike with d5, seizing the center with tempo.",
+   "kind": "main",
+   "teaches": [
+    "d5 with tempo"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 220,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pP4/2B5/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 221,
+   "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/2B5/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 257,
+   "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/8/1BP2N2/PP1P1PPP/RNBQK2R b KQkq - 1 6",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "The light-squared bishop's placement dictates our whole development. We can't lead with the dark bishop — it would drop d5 — so we bring the g8-knight out first.",
+   "kind": "main",
+   "teaches": [
+    "let the key piece decide the move order"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 314,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/1BP2N2/PP1P1PPP/RNBQK2R w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 is natural — the knight to e7 would just block in the dark-squared bishop. Don't rediscover the wheel; put the pieces on normal squares.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 323.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2P5/1B3N2/PP1P1PPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "c4"
+   ],
+   "spoken": "c4 is White's first real error — a weakening move that pretends to fight for the center but only helps us.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 430.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2p5/2p5/1B3N2/PP1P1PPP/RNBQK2R w KQkq - 0 8",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "We take on c4, and though it opens White's bishop, it leaves him with a backward pawn on d2 and an open d-file to lean on — and we get the open-center game the Sicilian wants.",
+   "kind": "main",
+   "teaches": [
+    "open the center; saddle White with a backward d-pawn"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 438.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2p5/2B5/5N2/PP1P1PPP/RNBQK2R b KQkq - 0 8",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 496.5,
+   "fen": "r1bqk2r/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQK2R w KQkq - 1 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop goes to its most active square, d6 — and it's safe, because if White tries to fix the weakness with d4, everything trades and the bishop check on b4 picks up his queen.",
+   "kind": "main",
+   "teaches": [
+    "Bd6 works: the Bb4+ trade-down motif"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 504.5,
+   "fen": "r1bqk2r/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQ1RK1 b kq - 2 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 506,
+   "fen": "r1bq1rk1/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQ1RK1 w - - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 516,
+   "fen": "r1bq1rk1/pp3ppp/2nb1n2/2p5/2B5/3P1N2/PP3PPP/RNBQ1RK1 b - - 0 10",
+   "line": [
+    "d3"
+   ],
+   "spoken": "White plays d3, and now we combine development with prophylaxis.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 557.5,
+   "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/3P1N2/PP3PPP/RNBQ1RK1 w - - 0 11",
+   "line": [
+    "h6"
+   ],
+   "spoken": "h6 stops White's bishop from reaching g5 — quiet, Petrosian-style prophylaxis. And there's no fear of a sac on h6 with White so undeveloped.",
+   "kind": "main",
+   "teaches": [
+    "prophylaxis: deny the bishop g5"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 571.5,
+   "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/2NP1N2/PP3PPP/R1BQ1RK1 b - - 1 11",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 591.5,
+   "fen": "r2q1rk1/pp3pp1/2nb1n1p/2p5/2B3b1/2NP1N2/PP3PPP/R1BQ1RK1 w - - 2 12",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The bishop to g4 pins, and it's especially juicy because the pawn on d3 denies White the Be2 unpin — the pin simply sticks. Now we threaten the knight into d4 or e5, either of which lets us capture on f3 and wreck White's kingside pawns.",
+   "kind": "main",
+   "teaches": [
+    "a pin White can’t break, then Nd4/Ne5 to smash f3"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 596.5,
+   "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/2NP1N2/PP3PPP/R1BQ1RK1 b - - 1 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 602.5,
+   "fen": "r2q1rk1/pp3pp1/2nb1n1p/2p5/2B3b1/2NP1N2/PP3PPP/R1BQ1RK1 w - - 2 12",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

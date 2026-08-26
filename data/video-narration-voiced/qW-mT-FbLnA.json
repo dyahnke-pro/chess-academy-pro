@@ -1,0 +1,546 @@
+{
+ "videoId": "qW-mT-FbLnA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1590",
+ "openingName": "Sicilian Defense: Alapin Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:qW-mT-FbLnA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Back in the ring against a 1580 — and we answer the king-pawn with the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 18.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c3"
+   ],
+   "spoken": "He picks the Alapin, the quiet c3 move. Its whole idea is to build the big center with d4 next. Our job is to preempt that — don't let him roll his pawns to d4 and e4 unchallenged.",
+   "kind": "main",
+   "teaches": [
+    "Alapin: c3 prepares d4",
+    "Preempt central expansion"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 53.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The tempting reply is e5, and it's playable — but pushing that pawn leaves the d5-square permanently soft. I'd rather not gift a hole on a central square, so we strike with d5 instead.",
+   "kind": "main",
+   "teaches": [
+    "Advancing a pawn concedes the square behind it"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 58.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "He answers e5 anyway, still angling to follow with d4 and grab space.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 62.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2p1P3/3p4/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "So we jam the door shut with d4 of our own, wedging a pawn into his position before he can get there first.",
+   "kind": "main",
+   "teaches": [
+    "Contest the center directly with a wedge"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 67,
+   "fen": "rnbqkbnr/pp2pppp/8/4P3/3p4/8/PP1P1PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "spoken": "After the trade our pawn sits wedged deep in his half, cramping him and denying the natural central setup he wanted.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 68,
+   "fen": "rnbqkbnr/pp2pppp/8/4P3/3p4/5N2/PP1P1PPP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 72.5,
+   "fen": "r1bqkbnr/pp2pppp/2n5/4P3/3p4/5N2/PP1P1PPP/RNBQKB1R w KQkq - 2 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 75.5,
+   "fen": "r1bqkbnr/pp2pppp/2n5/1B2P3/3p4/5N2/PP1P1PPP/RNBQK2R b KQkq - 3 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop swings out to b5 to pin our knight. We've met this pin a hundred times — the only question is how we choose to break it.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 92,
+   "fen": "r2qkbnr/pp1bpppp/2n5/1B2P3/3p4/5N2/PP1P1PPP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "We just quietly unpin with the bishop to d7. Not every piece needs to be doing something heroic — a modest developing move that solves the pin is plenty.",
+   "kind": "main",
+   "teaches": [
+    "A quiet unpin is often enough — pieces need not all attack"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 93.5,
+   "fen": "r2qkbnr/pp1bpppp/2n5/1B2P3/3p4/3P1N2/PP3PPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "d3"
+   ],
+   "spoken": "d3 here is a very typical mistake, and it's black to play and win. Two alarms should ring: first, loose pieces lie all around, and loose pieces drop off.",
+   "kind": "main",
+   "teaches": [
+    "Loose pieces drop off"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 124,
+   "fen": "r3kbnr/pp1bpppp/2n5/qB2P3/3p4/3P1N2/PP3PPP/RNBQK2R w KQkq - 1 8",
+   "line": [
+    "Qa5+"
+   ],
+   "spoken": "Second: the moment a pawn moves near the king, look at the diagonal it just opened. The check on a5 does both jobs at once — it rakes that fresh diagonal and forks the loose bishop, winning a piece outright, because our wedge pawn covers c3 so the knight can't block.",
+   "kind": "main",
+   "teaches": [
+    "A pawn move near the king opens diagonals to exploit",
+    "Combine a check with an attack on a loose piece"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 143.5,
+   "fen": "r3kbnr/pp1bpppp/2n5/qB2P3/3p4/3P1N2/PP1B1PPP/RN1QK2R b KQkq - 2 8",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 144.5,
+   "fen": "r3kbnr/pp1bpppp/2n5/1q2P3/3p4/3P1N2/PP1B1PPP/RN1QK2R w KQkq - 0 9",
+   "line": [
+    "Qxb5"
+   ],
+   "spoken": "We scoop up the bishop. A whole piece to the good, and the game is essentially decided.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 147.5,
+   "fen": "r3kbnr/pp1bpppp/2n5/4P3/3p4/3q1N2/PP1B1PPP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "O-O",
+    "Qxd3"
+   ],
+   "spoken": "We grab the central pawn on d3 — though honestly we should have taken on b2, which would have snagged the rook in the corner too. I got greedy for the juicy pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 158.5,
+   "fen": "r3kbnr/pp1bpppp/2n5/4P3/3p4/N2q1N2/PP1B1PPP/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Na3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 179,
+   "fen": "r3kbnr/pp1b1ppp/2n1p3/4P3/3p4/N2q1N2/PP1B1PPP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 183,
+   "fen": "r3kbnr/pp1b1ppp/2n1p3/4P3/3p4/N2q1N2/PP1B1PPP/R3QRK1 b kq - 1 11",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": "Here's the rule I hammer on: when you win a stack of material, don't forget to develop. Get your pieces out and coordinated instead of gorging on more pawns.",
+   "kind": "main",
+   "teaches": [
+    "After winning material, finish developing"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 189,
+   "fen": "r3k1nr/pp1b1ppp/2n1p3/4P3/3p4/b2q1N2/PP1B1PPP/R3QRK1 w kq - 0 12",
+   "line": [
+    "Bxa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 194.5,
+   "fen": "r3k1nr/pp1b1ppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/R3QRK1 b kq - 0 12",
+   "line": [
+    "bxa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 195.5,
+   "fen": "r3k2r/pp1bnppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/R3QRK1 w kq - 1 13",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 203,
+   "fen": "r3k2r/pp1bnppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/1R2QRK1 b kq - 2 13",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 204.5,
+   "fen": "r3k2r/p2bnppp/1pn1p3/4P3/3p4/P2q1N2/P2B1PPP/1R2QRK1 w kq - 0 14",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 212.5,
+   "fen": "r3k2r/p2bnppp/1pn1p3/4P3/1B1p4/P2q1N2/P4PPP/1R2QRK1 b kq - 1 14",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 213.5,
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1n1p4/P2q1N2/P4PPP/1R2QRK1 w kq - 0 15",
+   "line": [
+    "Nxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 218,
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1Q1p4/P2q1N2/P4PPP/1R3RK1 b kq - 0 15",
+   "line": [
+    "Qxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 230,
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1Q1p4/P1q2N2/P4PPP/1R3RK1 w kq - 1 16",
+   "line": [
+    "Qc3"
+   ],
+   "spoken": "Now a lesson on converting. Trades are good when you're up material — but only take them when they fall in your lap. Never wreck your position just to force one.",
+   "kind": "main",
+   "teaches": [
+    "Trade when ahead, but only when it comes for free"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 239.5,
+   "fen": "r3k2r/p2bnppp/1p1Qp3/4P3/3p4/P1q2N2/P4PPP/1R3RK1 b kq - 2 16",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": "His queen lands on d6 and it's actually trappable — Qc5 would hunt it — but there's something even cleaner.",
+   "kind": "main"
+  },
+  {
+   "ply": 32,
+   "t": 252,
+   "fen": "r3k2r/p2b1ppp/1p1Qp3/4Pn2/3p4/P1q2N2/P4PPP/1R3RK1 w kq - 3 17",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": "The knight jumps to f5, hitting the queen and forcing the trade back on our terms. The extra material carries the game.",
+   "kind": "main"
+  },
+  {
+   "ply": 34,
+   "t": 271,
+   "fen": "r3k2r/p2b1ppp/1p2p3/4Pn2/1q1p4/P4N2/P4PPP/1R3RK1 w kq - 0 18",
+   "line": [
+    "Qb4",
+    "Qxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 274,
+   "fen": "r3k2r/p2b1ppp/1p2p3/4Pn2/1R1p4/P4N2/P4PPP/5RK1 b kq - 0 18",
+   "line": [
+    "Rxb4"
+   ],
+   "spoken": "Into the endgame, and the same rules hold: consolidate first. We recapture and keep everything tidy.",
+   "kind": "main",
+   "teaches": [
+    "Consolidate before converting in the endgame"
+   ]
+  },
+  {
+   "ply": 36,
+   "t": 280,
+   "fen": "r3k2r/p4ppp/1pb1p3/4Pn2/1R1p4/P4N2/P4PPP/5RK1 w kq - 1 19",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": "The bishop redeploys to c6, its most active diagonal, doing real work rather than sitting home.",
+   "kind": "main",
+   "teaches": [
+    "Put pieces on their most active squares"
+   ]
+  },
+  {
+   "ply": 38,
+   "t": 283,
+   "fen": "r3k2r/p4ppp/1pb1p3/4P3/1R1n4/P7/P4PPP/5RK1 w kq - 0 20",
+   "line": [
+    "Nxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 285.5,
+   "fen": "r3k2r/p4ppp/1pb1p3/4P3/3R4/P7/P4PPP/5RK1 b kq - 0 20",
+   "line": [
+    "Rxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 301.5,
+   "fen": "r6r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/5RK1 w - - 1 21",
+   "line": [
+    "Ke7"
+   ],
+   "spoken": "King to e7 — in the endgame the king is a fighter. No need to castle; walking it toward the center improves the coordination between our pieces.",
+   "kind": "main",
+   "teaches": [
+    "Centralize the king in the endgame"
+   ]
+  },
+  {
+   "ply": 41,
+   "t": 304.5,
+   "fen": "r6r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/2R3K1 b - - 2 21",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 306,
+   "fen": "2r4r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/2R3K1 w - - 3 22",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 311,
+   "fen": "2r4r/p3kppp/1pb1p3/4P3/2R5/P7/P4PPP/2R3K1 b - - 4 22",
+   "line": [
+    "Rdc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 319,
+   "fen": "2r4r/p2bkppp/1p2p3/4P3/2R5/P7/P4PPP/2R3K1 w - - 5 23",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Careful: dropping the bishop to b7 would run into a nasty rook check on c7. We sidestep to d7 instead, which also forces the rook trade.",
+   "kind": "main",
+   "teaches": [
+    "Check for tactical replies before developing"
+   ]
+  },
+  {
+   "ply": 45,
+   "t": 325,
+   "fen": "2R4r/p2bkppp/1p2p3/4P3/8/P7/P4PPP/2R3K1 b - - 0 23",
+   "line": [
+    "Rxc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 329.5,
+   "fen": "2r5/p3kppp/1p2p3/4P3/8/P7/P4PPP/2R3K1 b - - 1 25",
+   "line": [
+    "Bc6",
+    "R1xc6",
+    "Rxc8",
+    "Rc1"
+   ],
+   "spoken": "Now the textbook conversion: pick a wing, make a passed pawn, and use the extra bishop to keep dislodging his blockading rook until it has to give way — then push the pawn home. And with a winning position, watch for stalemate before you finish.",
+   "kind": "plan",
+   "plans": [
+    "Create a passed pawn and escort it",
+    "Use the extra piece to evict the blockader",
+    "Mind stalemate when overwhelmingly ahead"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 476,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 605.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 607.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 610,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 612,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "exd5",
+    "Qxd5"
+   ],
+   "spoken": "On the recap: after exd5 and the queen recapture, this looks like a Scandinavian — but it's better for us. The difference is the extra c3-pawn: it blocks White's own knight from c3, so he can't develop with tempo by hitting the queen.",
+   "kind": "review",
+   "teaches": [
+    "The c3-pawn denies White the Nc3 tempo on the queen"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 640,
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 643,
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 645.5,
+   "fen": "rnb1kb1r/pp2pppp/5n2/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "There's a real theoretical line with d4 and Nf6 where it's genuinely unclear who stands better — a rich, double-edged position on both sides.",
+   "kind": "review"
+  },
+  {
+   "ply": 10,
+   "t": 647,
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 659.5,
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "The through-line of the game: we wedged the pawn to d4 to stop his French-style plans, and his key slip d3 walked into the fork. And note the counter-idea — a pin cuts both ways; the bishop's own pin can be turned against it with the knight grabbing on e5.",
+   "kind": "review",
+   "teaches": [
+    "A pin works both ways — the pinner can be exploited too"
+   ]
+  }
+ ]
+}

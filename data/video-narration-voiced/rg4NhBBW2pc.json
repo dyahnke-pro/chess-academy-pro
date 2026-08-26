@@ -1,0 +1,134 @@
+{
+ "videoId": "rg4NhBBW2pc",
+ "title": "Master Level Analysis of My Games at US Chess Open!!! | GM Naroditsky",
+ "openingName": "Sicilian Defense: Kan Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:rg4NhBBW2pc",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 52.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3"
+   ],
+   "spoken": "A must-win game against a strong junior. I take the mainline Open Sicilian with the knight to f3, and he steers toward his pet setup.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 54.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "He answers e6 — the flexible move-order that keeps both the Kan and the Taimanov on the table.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 57.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Earlier in the event I met this with c3, the Alapin, and won a nice game — but he'll have spent the break preparing exactly that.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 61.5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 65,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "So I switch it up and open the position with d4, the Open Sicilian, to sidestep his prep.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 68,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "a6"
+   ],
+   "spoken": "After the trades on d4 he plays the Kan with a6, staking out the queenside and denying my pieces the b5-square.",
+   "kind": "main",
+   "teaches": [
+    "Kan: ...a6 controls b5 and prepares queenside expansion"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 70.5,
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/3B4/PPP2PPP/RNBQK2R b KQkq - 1 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "I develop the bishop to d3 — the main line, aiming it straight at his kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 73,
+   "fen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - 2 6",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "He comes out with the bishop to c5, pressuring my centralized knight.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 74.5,
+   "fen": "rnbqk1nr/bp1p1ppp/p3p3/8/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "Nb3",
+    "Ba7"
+   ],
+   "spoken": "I nudge the knight back to b3, and he tucks the bishop onto a7, where it eyes the long diagonal and becomes his best piece.",
+   "kind": "main",
+   "teaches": [
+    "The a7-bishop is Black\\u2019s pride in this structure"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 76,
+   "fen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 8 9",
+   "line": [
+    "Nc5",
+    "Bb6",
+    "Nb3",
+    "Bc5"
+   ],
+   "spoken": "There's a known plan here of Qg4, provoking a kingside weakness before dropping back to e2. White is judged a touch better, but it's rich and double-edged. My idea was Qe2 followed by Be3 to trade off that strong dark-squared bishop — and, going for broke, the engine's wild suggestion of castling queenside.",
+   "kind": "plan",
+   "plans": [
+    "Qg4 to provoke a kingside weakness",
+    "Qe2 and Be3 to neutralize the dark-squared bishop",
+    "Consider long castling for a sharp fight"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 92.5,
+   "fen": "rnbqk1nr/bp1p1ppp/p3p3/8/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 4 7",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

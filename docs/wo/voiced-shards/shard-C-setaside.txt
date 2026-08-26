@@ -1,0 +1,3 @@
+# Shard C — SPARSELY-NARRATED videos SET ASIDE for the new narration technique
+# (banter/blitz/joke/hand-and-brain/commentary-only; not dense-authored here)
+# format: <videoId>  <reason>

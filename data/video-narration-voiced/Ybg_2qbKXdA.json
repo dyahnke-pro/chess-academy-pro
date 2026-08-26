@@ -1,0 +1,329 @@
+{
+ "videoId": "Ybg_2qbKXdA",
+ "title": "What is a Pillsbury Knight?? | Jobava London | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Jobava London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Ybg_2qbKXdA",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1864.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "The Jobava London — the queen's pawn paired with the knight to c3, headed for an early bishop to f4.",
+   "kind": "main",
+   "teaches": [
+    "the Jobava London setup"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 1866,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1868,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Against a likely French player we grab the center with e4 — so if you take up the Jobava, be ready to play the French from the White side too.",
+   "kind": "main",
+   "teaches": [
+    "Jobava can transpose to a French"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1872,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black steers back with d5, the standard Jobava structure.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 1875,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1878.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1879.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1882,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1883.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1887.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1895.5,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "e6",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1898,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1900.5,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1905,
+   "fen": "rnbqk2r/pppp1ppp/4p3/3n4/1b1P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "After a bishop check on b4 and e3, the knight to d5 is Black's cleanest equalizing try — Black gets the two bishops and the option of taking on c3.",
+   "teaches": [
+    "...Nd5 equalizes against the Jobava"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1906.5,
+   "fen": "rnbqk2r/pppp1ppp/4p3/3n4/1b1P1B2/2N1P3/PPP1NPPP/R2QKB1R b KQkq - 2 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1918,
+   "fen": "rnbqk2r/pppp1ppp/4p3/8/1b1P1N2/2N1P3/PPP2PPP/R2QKB1R b KQkq - 0 6",
+   "line": [
+    "Nxf4",
+    "Nxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1927,
+   "fen": "rnbqk2r/pppp1ppp/4p3/3n4/1b1P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1929.5,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "The traditional idea is the knight to b5, to induce ...Na6 — a knight that then has a wretched time rejoining the game. Only then do we return with the knight and play e3 and the bishop to d3.",
+   "teaches": [
+    "Nb5 to provoke a badly-placed ...Na6"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 2031.5,
+   "fen": "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/2N1PN2/PPP2PPP/R2QKB1R w KQkq - 2 6",
+   "line": [
+    "d5",
+    "Nf3",
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2036.5,
+   "fen": "rnbq1rk1/ppp2ppp/3bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R w KQ - 4 7",
+   "line": [
+    "Bd3",
+    "O-O"
+   ],
+   "spoken": "The bishop-on-f4, pawn-on-e5 clamp with the bishop on d3 is a structure to love: easy access to the e5 outpost, and Black's light-squared bishop stays a long-term problem — so White is comfortably better even when the engine calls it equal.",
+   "kind": "main",
+   "teaches": [
+    "the f4/e5 clamp gives White a lasting pull"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 2148,
+   "fen": "rnbq1rk1/pp3pp1/2pbpn1p/3p4/3P1B2/2NBPN2/PPP2PPP/R2Q1KR1 w - - 0 9",
+   "line": [
+    "Kf1",
+    "c6",
+    "Rg1",
+    "h6"
+   ],
+   "spoken": "h6 is a step the wrong way — a hook with no redeeming purpose. g4 can exploit it, using the pawn as a lever toward g5.",
+   "kind": "main",
+   "teaches": [
+    "...h6 creates an exploitable hook"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 2183,
+   "fen": "rnbq1rk1/ppp2ppp/3bpn2/3p4/3P1B2/2NBPN2/PPP2PPP/R2QK2R w KQ - 4 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2188,
+   "fen": "rnbq1rk1/ppp2pp1/3bpn1p/3p4/3P1BP1/2NBPN2/PPP2P1P/R2QK2R w KQ - 0 8",
+   "line": [
+    "g4",
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2197.5,
+   "fen": "rnbq1rk1/ppp2pp1/3bp2p/3p4/3P1Bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 9",
+   "line": [
+    "Rg1",
+    "Nxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2202.5,
+   "fen": "rnbq1rk1/ppp2pp1/4p2p/3p4/3P1bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 11",
+   "line": [
+    "Bg5",
+    "Be5",
+    "Bf4",
+    "Bxf4"
+   ],
+   "spoken": "Black should take the bishop here — moving the knight away instead would allow a capture on h6.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 2209.5,
+   "fen": "rnbq1rk1/ppp2pp1/4p2p/3p4/3P1Pn1/2NB1N2/PPP2P1P/R2QK1R1 b Q - 0 11",
+   "line": [
+    "exf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2213.5,
+   "fen": "rnbq1rk1/ppp2pp1/4pn1p/3pN3/3P1P2/2NB4/PPP2P1P/R2QK1R1 b Q - 2 12",
+   "line": [
+    "Nf6",
+    "Ne5"
+   ],
+   "spoken": "And the Pillsbury Knight arrives on e5 — the dominating central knight this whole system is built to install.",
+   "kind": "main",
+   "teaches": [
+    "the Pillsbury Knight on e5"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 2225,
+   "fen": "rnbq1rk1/ppp2pp1/4p2p/3p4/3P1bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2226.5,
+   "fen": "rnbq1rk1/ppp2pp1/3bp2p/3p4/3P1Bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2228.5,
+   "fen": "rnbq1rk1/ppp2pp1/3bp3/3p3p/3P1Bn1/2NBPN1P/PPP2P2/R2QK1R1 w Q - 0 10",
+   "line": [
+    "h3",
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2238,
+   "fen": "rnbq1rk1/ppp2pp1/3bp2p/3p4/3P1Bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2239.5,
+   "fen": "rnbq1rk1/ppp3p1/3bp2p/3p1p2/3P1Bn1/2NBPN2/PPP2P1P/R2QK1R1 w Q - 0 11",
+   "line": [
+    "Bf5",
+    "f6",
+    "Bd3",
+    "f5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

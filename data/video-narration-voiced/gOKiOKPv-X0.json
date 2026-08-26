@@ -1,0 +1,469 @@
+{
+ "videoId": "gOKiOKPv-X0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1985",
+ "openingName": "Sicilian Defense: Accelerated Dragon (Maroczy Bind)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:gOKiOKPv-X0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 828,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 833.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 838,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 840.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "c4"
+   ],
+   "spoken": "White clamps with the Maroczy Bind — c4 — the most testing system against the Accelerated Dragon, gripping the d5 square.",
+   "kind": "main",
+   "teaches": [
+    "the Maroczy Bind"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 853.5,
+   "fen": "r1bqkbnr/pp2pp1p/2np2p1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "We choose a rarer setup with d6 rather than the usual immediate fianchetto — a slightly dangerous, less-charted system.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 859,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 861,
+   "fen": "r1bqkbnr/pp2pp1p/2np2p1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 862.5,
+   "fen": "r1bqkbnr/pp2pp1p/2np2p1/8/2PNP3/4B3/PP3PPP/RN1QKB1R b KQkq - 1 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 870.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/8/2PNP3/4B3/PP3PPP/RN1QKB1R w KQkq - 2 7",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 883,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP3PPP/R2QKB1R w KQkq - 4 8",
+   "line": [
+    "Nc3",
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 transposes us back into the main line.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 889,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R w KQ - 6 9",
+   "line": [
+    "Be2",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 918.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 b - - 7 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 921.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 w - - 8 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "We develop the bishop to d7.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 927.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/2RQ1RK1 b - - 9 10",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 947.5,
+   "fen": "r2q1rk1/pp1bppbp/3p1np1/8/2PnP3/2N1B3/PP2BPPP/2RQ1RK1 w - - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 951,
+   "fen": "r2q1rk1/pp1bppbp/3p1np1/8/2PBP3/2N5/PP2BPPP/2RQ1RK1 b - - 0 11",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 956.5,
+   "fen": "r2q1rk1/pp2ppbp/2bp1np1/8/2PBP3/2N5/PP2BPPP/2RQ1RK1 w - - 1 12",
+   "line": [
+    "Bc6"
+   ],
+   "spoken": "Then reroute it to c6 — a good, solid square that eyes the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 23,
+   "t": 969.5,
+   "fen": "r2q1rk1/pp2ppbp/2bp1np1/8/2PBP3/2N2P2/PP2B1PP/2RQ1RK1 b - - 0 12",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 970.5,
+   "fen": "r2q1rk1/1p2ppbp/2bp1np1/p7/2PBP3/2N2P2/PP2B1PP/2RQ1RK1 w - - 0 13",
+   "line": [
+    "a5"
+   ],
+   "spoken": "Now the queenside plan: a5 and a4, clamping down so the queen can swing to a5 and start attacking. That's the Accelerated Dragon's formula against the Bind — grab space on the queenside.",
+   "kind": "plan",
+   "teaches": [
+    "the ...a5-a4 queenside clamp"
+   ],
+   "plans": [
+    "a5-a4, then Qa5 to attack"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 982,
+   "fen": "r2q1rk1/1p2ppbp/2bp1np1/p2N4/2PBP3/5P2/PP2B1PP/2RQ1RK1 b - - 1 13",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "White's knight to d5 is a strong move, planting itself on the Bind's key square.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 1001,
+   "fen": "r2q1rk1/1p2ppbp/3p1np1/p2b4/2PBP3/5P2/PP2B1PP/2RQ1RK1 w - - 0 14",
+   "line": [
+    "Bxd5"
+   ],
+   "spoken": "We take it with the bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 27,
+   "t": 1008.5,
+   "fen": "r2q1rk1/1p2ppbp/3p1np1/p2P4/3BP3/5P2/PP2B1PP/2RQ1RK1 b - - 0 14",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "White recaptures on d5. Now the key question — which bishops to trade. We want White's dark-squared bishop gone; his light-squared bishop is the bad one, hemmed in by pawns on its own color.",
+   "kind": "main",
+   "teaches": [
+    "trade off the good bishop, leave him the bad one"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 1029.5,
+   "fen": "r2q1rk1/1p1nppbp/3p2p1/p2P4/3BP3/5P2/PP2B1PP/2RQ1RK1 w - - 1 15",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1055.5,
+   "fen": "r2q1rk1/1p1nppbp/3p2p1/p2P4/3BPP2/8/PP2B1PP/2RQ1RK1 b - - 0 15",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White plays f4, expanding preemptively on the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 31,
+   "t": 1077,
+   "fen": "r2q1rk1/1p1npp1p/3p2p1/p2P4/3QPP2/8/PP2B1PP/2R2RK1 b - - 0 16",
+   "line": [
+    "Bxd4+",
+    "Qxd4"
+   ],
+   "spoken": "We give up the fianchetto bishop with the check on d4 — a real concession, but with so few pieces left he can't get at our king, and this trade was the whole point of the plan.",
+   "kind": "main",
+   "teaches": [
+    "a concession that fits the plan"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 1094,
+   "fen": "r2q1rk1/1p2pp1p/3p2p1/p1nP4/3QPP2/8/PP2B1PP/2R2RK1 w - - 1 17",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1114.5,
+   "fen": "r2q1rk1/1p2pp1p/3p2p1/pBnP4/3QPP2/8/PP4PP/2R2RK1 b - - 2 17",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1116.5,
+   "fen": "r2q1rk1/1p2pp1p/3p2p1/1BnP4/p2QPP2/8/PP4PP/2R2RK1 w - - 0 18",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1121,
+   "fen": "r2q1rk1/1p2pp1p/3p2p1/pBnP4/3QPP2/8/PP4PP/2R2RK1 b - - 2 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1127.5,
+   "fen": "r2q1rk1/1p2pp1p/3p2p1/1BnPP3/p2Q1P2/8/PP4PP/2R2RK1 b - - 0 18",
+   "line": [
+    "a4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1147,
+   "fen": "r4rk1/1p2pp1p/1q1p2p1/1BnPP3/p2Q1P2/8/PP4PP/2R2RK1 w - - 1 19",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1172,
+   "fen": "r4rk1/1p2pp1p/1q1p2p1/2nPP3/p1BQ1P2/8/PP4PP/2R2RK1 b - - 2 19",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1187.5,
+   "fen": "2r2rk1/1p2pp1p/1q1p2p1/2nPP3/p1BQ1P2/8/PP4PP/2R2RK1 w - - 3 20",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1193,
+   "fen": "2r2rk1/1p2pp1p/1q1p2p1/2nPP3/p1BQ1P2/8/PP4PP/2R2R1K b - - 4 20",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1200.5,
+   "fen": "2r2rk1/1p2pp1p/3p2p1/2nPP3/pqBQ1P2/8/PP4PP/2R2R1K w - - 5 21",
+   "line": [
+    "Qb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1226,
+   "fen": "2r2rk1/1p2pp1p/3pP1p1/2nP4/pqBQ1P2/8/PP4PP/2R2R1K b - - 0 21",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1257.5,
+   "fen": "2r2rk1/4pp1p/3pP1p1/1pnP4/pqBQ1P2/8/PP4PP/2R2R1K w - - 0 22",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1275.5,
+   "fen": "2r2rk1/4pp1p/3pP1p1/1pnP4/pqBQ1P2/P7/1P4PP/2R2R1K b - - 0 22",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1289,
+   "fen": "2r2rk1/4pp1p/3pP1p1/1p1P4/pqBQ1P2/Pn6/1P4PP/2R2R1K w - - 1 23",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 1294,
+   "fen": "2r2rk1/4pp1p/3pP1p1/1p1P4/pPBn1P2/8/1P4PP/2R2R1K w - - 0 24",
+   "line": [
+    "axb4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1300.5,
+   "fen": "2r2rk1/4pP1p/3p2p1/1p1P4/pPBn1P2/8/1P4PP/2R2R1K b - - 0 24",
+   "line": [
+    "exf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1303.5,
+   "fen": "2r3k1/4pr1p/3p2p1/1p1P4/pPBn1P2/8/1P4PP/2R2R1K w - - 0 25",
+   "line": [
+    "Rxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 1324.5,
+   "fen": "6k1/4p2p/3p2p1/1p1P4/pP1n1r2/3B4/1P4PP/2R4K w - - 0 27",
+   "line": [
+    "Bd3",
+    "Rxc1",
+    "Rxc1",
+    "Rxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1332,
+   "fen": "6k1/4p2p/3p2p1/1p1P4/pP1n1r2/3B2P1/1P5P/2R4K b - - 0 27",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 1342,
+   "fen": "6k1/4p2p/3p2p1/1p1P4/pP1n4/3B2P1/1P3r1P/2R4K w - - 1 28",
+   "line": [
+    "Rf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1353.5,
+   "fen": "6k1/4p2p/3p2p1/1p1P4/pP1n4/3B2P1/1P3r1P/1R5K b - - 2 28",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1365,
+   "fen": "6k1/4p2p/3p2p1/1p1P4/pP6/3B1nP1/1P3r1P/1R5K w - - 3 29",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  }
+ ]
+}

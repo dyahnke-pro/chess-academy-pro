@@ -1,0 +1,469 @@
+{
+ "videoId": "26ZXZEiudhA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2210",
+ "openingName": "Scandinavian Defense: Qd6 Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:26ZXZEiudhA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "spoken": "Black meets the king's pawn with the Scandinavian, challenging our center at once.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 27.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 31.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 34,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "We develop the knight to c3 with tempo, hitting the queen on d5 and gaining a free move.",
+   "kind": "main",
+   "teaches": [
+    "develop with tempo against the early queen"
+   ]
+  },
+  {
+   "ply": 7,
+   "t": 37.5,
+   "fen": "rnb1kbnr/ppp1pppp/3q4/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Qd6",
+    "d4"
+   ],
+   "spoken": "The queen tucks to d6 — a modern, fully respectable branch of the Scandinavian — and we seize the full center with d4.",
+   "kind": "main",
+   "teaches": [
+    "Qd6 is a legitimate modern line"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 40,
+   "fen": "rnb1kb1r/ppp1pppp/3q1n2/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 49,
+   "fen": "rnb1kb1r/ppp1pppp/3q1n2/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Nothing exotic is needed: we simply develop and control the center, and let Black prove his setup.",
+   "kind": "plan"
+  },
+  {
+   "ply": 10,
+   "t": 55,
+   "fen": "r1b1kb1r/ppp1pppp/2nq1n2/8/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Black leans on the d4-pawn and eyes the pin with the bishop to g4 — the classic pressure we have to answer.",
+   "teaches": [
+    "anticipate the Bg4 pin"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 84,
+   "fen": "r1b1kb1r/ppp1pppp/2nq1n2/8/3P4/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": "So we play the mildly ugly but effective h3, taking the g4-square away from the bishop before the pin can happen.",
+   "kind": "main",
+   "teaches": [
+    "prophylaxis against the pin"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 92.5,
+   "fen": "r1b1kb1r/1pp1pppp/p1nq1n2/8/3P4/2N2N1P/PPP2PP1/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 104,
+   "fen": "r1b1kb1r/1pp1pppp/p1nq1n2/8/2BP4/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Threat handled, we develop actively — the bishop to c4, raking toward f7 and supporting a future d5 break.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 108.5,
+   "fen": "r1b1kb1r/1pp2ppp/p1nqpn2/8/2BP4/2N2N1P/PPP2PP1/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 110,
+   "fen": "r1b1kb1r/1pp2ppp/p1nqpn2/8/2BP4/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 113,
+   "fen": "r1b1k2r/1pp1bppp/p1nqpn2/8/2BP4/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 122,
+   "fen": "r1b1k2r/1pp1bppp/p1nqpn2/6B1/2BP4/2N2N1P/PPP2PP1/R2Q1RK1 b kq - 3 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The bishop to g5 is the active square; parking it on e3 would be a touch too passive here.",
+   "kind": "main",
+   "teaches": [
+    "active vs passive bishop development"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 126,
+   "fen": "r1b2rk1/1pp1bppp/p1nqpn2/6B1/2BP4/2N2N1P/PPP2PP1/R2Q1RK1 w - - 4 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 150.5,
+   "fen": "r1b2rk1/1pp1bppp/p1nqpn2/6B1/P1BP4/2N2N1P/1PP2PP1/R2Q1RK1 b - - 0 10",
+   "line": [
+    "a4"
+   ],
+   "spoken": "More quiet prophylaxis: a4 denies Black the b5 push with tempo and the queenside fianchetto that follows — the kind of preventive move you see constantly at master level.",
+   "kind": "main",
+   "teaches": [
+    "a4 stops b5 before it starts"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 157.5,
+   "fen": "r1br2k1/1pp1bppp/p1nqpn2/6B1/P1BP4/2N2N1P/1PP2PP1/R2Q1RK1 w - - 1 11",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 176,
+   "fen": "r1br2k1/1pp1bppp/p1nqpn2/6B1/P1BP4/5N1P/1PP1NPP1/R2Q1RK1 b - - 2 11",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The idea behind the retreat: reroute the knight to e2, then to g3, which frees us to play c3 and secure d4 permanently. A backward-looking move can be exactly right.",
+   "kind": "plan",
+   "teaches": [
+    "retreats can be good moves"
+   ],
+   "plans": [
+    "Ne2-g3 then c3 to cement d4"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 184,
+   "fen": "r1br2k1/1pp1bppp/p1n1pn2/6B1/PqBP4/5N1P/1PP1NPP1/R2Q1RK1 w - - 3 12",
+   "line": [
+    "Qb4"
+   ],
+   "spoken": "The queen to b4 looks intimidating, but the grab on b2 is simply unthinkable — so there's nothing real behind it.",
+   "teaches": [
+    "a scary-looking sortie with no bite"
+   ]
+  },
+  {
+   "ply": 23,
+   "t": 208.5,
+   "fen": "r1br2k1/1pp1bppp/p1n1pn2/6B1/PqBP4/1P3N1P/2P1NPP1/R2Q1RK1 b - - 0 12",
+   "line": [
+    "b3"
+   ],
+   "spoken": "b3 solves everything at once: no worry about the capture on b2, and if the knight harasses from a5 our bishop just drops to d3 and aims at the king.",
+   "kind": "main"
+  },
+  {
+   "ply": 24,
+   "t": 219.5,
+   "fen": "r1br2k1/1pp1bppp/p1n1p3/3n2B1/PqBP4/1P3N1P/2P1NPP1/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The queen on b4 is stranded in no man's land now; we can trade on e7 or tuck the bishop back to d2, both comfortable.",
+   "teaches": [
+    "strand the enemy queen offside"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 227,
+   "fen": "r1br2k1/1pp1Bppp/p1n1p3/3n4/PqBP4/1P3N1P/2P1NPP1/R2Q1RK1 b - - 0 13",
+   "line": [
+    "Bxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 230,
+   "fen": "r1br2k1/1pp1qppp/p1n1p3/3n4/P1BP4/1P3N1P/2P1NPP1/R2Q1RK1 w - - 0 14",
+   "line": [
+    "Qxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 231,
+   "fen": "r1br2k1/1pp1qppp/p1n1p3/3n4/P1BP4/1P3N1P/2P1NPP1/R2QR1K1 b - - 1 14",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook to e1 x-rays the black queen down the file, quietly discouraging the e5 freeing break.",
+   "kind": "main",
+   "teaches": [
+    "x-ray pressure to prevent a break"
+   ]
+  },
+  {
+   "ply": 29,
+   "t": 239.5,
+   "fen": "r2r2k1/1ppbqppp/p1n1p3/3n4/P1BP4/1P3NNP/2P2PP1/R2QR1K1 b - - 3 15",
+   "line": [
+    "Bd7",
+    "Ng3"
+   ],
+   "spoken": "The knight to g3 completes that x-ray idea, both pieces trained on the e-file.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 243.5,
+   "fen": "r2r2k1/1ppb1ppp/p1n1pq2/3n4/P1BP4/1P3NNP/2P2PP1/R2QR1K1 w - - 4 16",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 256.5,
+   "fen": "r2r2k1/1ppb1ppp/p1n1pq2/3n4/P1BPN3/1P3N1P/2P2PP1/R2QR1K1 b - - 5 16",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "The knight jumps into e4, a superb central post, and White is now clearly the more comfortable side.",
+   "kind": "main"
+  },
+  {
+   "ply": 32,
+   "t": 264,
+   "fen": "r2r2k1/1ppb1ppp/p1n1p2q/3n4/P1BPN3/1P3N1P/2P2PP1/R2QR1K1 w - - 6 17",
+   "line": [
+    "Qh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 270,
+   "fen": "r2r2k1/1ppb1ppp/p1n1p2q/2Nn4/P1BP4/1P3N1P/2P2PP1/R2QR1K1 b - - 7 17",
+   "line": [
+    "Nc5"
+   ],
+   "spoken": "The knight swings to c5 and we begin piling onto the queenside.",
+   "kind": "main"
+  },
+  {
+   "ply": 34,
+   "t": 289,
+   "fen": "r2r2k1/2pb1ppp/ppn1p2q/2Nn4/P1BP4/1P3N1P/2P2PP1/R2QR1K1 w - - 0 18",
+   "line": [
+    "b6"
+   ],
+   "spoken": "b6 shoves the knight but leaves lasting holes on the queenside — weaknesses we intend to make him pay for later.",
+   "teaches": [
+    "provoked pawn moves create targets"
+   ]
+  },
+  {
+   "ply": 35,
+   "t": 305,
+   "fen": "r2r2k1/2pb1ppp/ppn1p2q/3n4/P1BP4/1P1N1N1P/2P2PP1/R2QR1K1 b - - 1 18",
+   "line": [
+    "Nd3"
+   ],
+   "spoken": "Rather than grab anything, we reroute the knight back to d3, heading for e5. It looks mysterious, but it's pure piece-optimization — hunting the best central square for every piece.",
+   "kind": "plan",
+   "teaches": [
+    "maneuver to your best squares before striking"
+   ]
+  },
+  {
+   "ply": 37,
+   "t": 344.5,
+   "fen": "r2r2k1/2pbnppp/pp2p2q/3nN3/P1BP4/1P3N1P/2P2PP1/R2QR1K1 b - - 3 19",
+   "line": [
+    "Nce7",
+    "Nde5"
+   ],
+   "spoken": "The knight settles on e5, the commanding outpost, while keeping the other knight free so the queen can reach the kingside for an attack.",
+   "kind": "main",
+   "teaches": [
+    "the e5 outpost"
+   ]
+  },
+  {
+   "ply": 39,
+   "t": 348,
+   "fen": "r2rb1k1/2p1nppp/pp2p2q/3nN3/P2P4/1P1B1N1P/2P2PP1/R2QR1K1 b - - 5 20",
+   "line": [
+    "Be8",
+    "Bd3"
+   ],
+   "spoken": "The bishop drops to d3, trained once again on Black's king.",
+   "kind": "main"
+  },
+  {
+   "ply": 40,
+   "t": 355.5,
+   "fen": "r2rb1k1/2p1n1pp/pp2pp1q/3nN3/P2P4/1P1B1N1P/2P2PP1/R2QR1K1 w - - 0 21",
+   "line": [
+    "f6"
+   ],
+   "spoken": "f6 only makes Black more passive and, above all, weakens the e6-pawn — the new target.",
+   "teaches": [
+    "f6 concedes e6"
+   ]
+  },
+  {
+   "ply": 41,
+   "t": 369,
+   "fen": "r2rb1k1/2p1n1pp/pp2pp1q/3n4/P2P2N1/1P1B1N1P/2P2PP1/R2QR1K1 b - - 1 21",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "We bring the knight back to g4 with tempo: the e6-pawn is falling and the black queen is running out of squares.",
+   "kind": "main",
+   "teaches": [
+    "retreat with tempo to win the weakness"
+   ]
+  },
+  {
+   "ply": 43,
+   "t": 373,
+   "fen": "r2rb1k1/2p1n1pp/pp2pp2/3n4/P2PRqN1/1P1B1N1P/2P2PP1/R2Q2K1 b - - 3 22",
+   "line": [
+    "Qf4",
+    "Re4"
+   ],
+   "spoken": "The rook swings to e4 to collect the pawn — once e6 goes, the whole position caves.",
+   "kind": "main"
+  },
+  {
+   "ply": 45,
+   "t": 388,
+   "fen": "r2rb1k1/2p1n1pp/pp2R3/3n1p2/P2P1qN1/1P1B1N1P/2P2PP1/R2Q2K1 b - - 0 23",
+   "line": [
+    "f5",
+    "Rxe6"
+   ],
+   "spoken": "The trap springs: the black queen has no squares. A pawn to g3 will hem it in, the rook on e6 covers d6, and the knight guards the rest — so the queen has to be given up for two pieces.",
+   "kind": "main",
+   "teaches": [
+    "net the queen by taking its last squares"
+   ]
+  },
+  {
+   "ply": 47,
+   "t": 426,
+   "fen": "r2rb1k1/2p1n1pp/pp2R3/5p2/P2P1qN1/1PnB1NPP/2P2P2/R2Q2K1 b - - 0 24",
+   "line": [
+    "Nc3",
+    "g3"
+   ],
+   "spoken": "That's why the rook went to e6 — not just to take the pawn but to deny the queen its escape to d6. With both knights loose, we move one with a threat to win material, pin the defender with the bishop to c4, and route the knight via g5 to e6 to crash through on g7.",
+   "kind": "plan",
+   "teaches": [
+    "deny the escape square, then collect"
+   ],
+   "plans": [
+    "Bc4 pin",
+    "Ng5-e6 and take on g7"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 540.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "A clean finish and a resignation — the plan carried from opening to endgame without a single mysterious move.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 544,
+   "fen": "rnb1kbnr/ppp1pppp/3q4/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qxd5",
+    "Nc3",
+    "Qd6"
+   ],
+   "spoken": "To recap: against the popular Qd6 Scandinavian we stop the pin with h3, halt b5 with a4, then reroute the knight to e2 and g3 so c3 can permanently secure d4 — retreats and all. After the trade on e7 the rook to e1 x-rays the queen, the knights improve through g3, e4, c5 and back to d3, and every move simply optimizes a piece.",
+   "reanchor": true
+  }
+ ]
+}

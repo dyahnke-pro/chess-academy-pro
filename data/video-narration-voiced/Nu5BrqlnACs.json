@@ -1,0 +1,245 @@
+{
+ "videoId": "Nu5BrqlnACs",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2140",
+ "openingName": "King's Indian Defense (vs the Torre Attack)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:Nu5BrqlnACs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1352.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1354.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1356.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R b KQkq - 1 3",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White plays the Torre Attack — the bishop to g5, the same spirit as the London but with the bishop on g5 instead of f4.",
+   "kind": "main",
+   "teaches": [
+    "the Torre Attack"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1367,
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1369.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1376,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1377.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White develops the bishop to c4, a slightly unusual choice — normally it goes to d3 or e2 in the Torre.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 1407,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "We keep the King's-Indian character with d6, not d5 — d5 would drift into Grünfeld territory. The beauty of the KID is you barely change your moves for what White does.",
+   "kind": "main",
+   "teaches": [
+    "d6 keeps the KID structure"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1409,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2BP4/2P1PN2/PP3PPP/RN1QK2R b KQ - 0 6",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The KID has two pawn breaks — c5 and e5 — and the whole point of the Torre's bishop on g5 is to discourage e5 with a nasty pin. So we don't rush into it; we finish developing first.",
+   "kind": "plan",
+   "teaches": [
+    "the c5 and e5 breaks; beware the pin on e5"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 1449,
+   "fen": "rnbq1rk1/p1p1ppbp/1p1p1np1/6B1/2BP4/2P1PN2/PP3PPP/RN1QK2R w KQ - 0 7",
+   "line": [
+    "b6"
+   ],
+   "spoken": "We fianchetto the light-squared bishop to b7 rather than g4 — a bishop developed to g4 has no retreat, and h3 would simply trap it.",
+   "kind": "main",
+   "teaches": [
+    "fianchetto to keep the bishop safe"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 1454.5,
+   "fen": "rn1q1rk1/pbp1ppbp/1p1p1np1/6B1/2BP4/2P1PN2/PP1N1PPP/R2QK2R w KQ - 2 8",
+   "line": [
+    "Nbd2",
+    "Bb7"
+   ],
+   "spoken": "The bishop settles on b7, raking down the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 1457,
+   "fen": "rn1q1rk1/pbp1ppbp/1p1p1np1/6B1/P1BP4/2P1PN2/1P1N1PPP/R2QK2R b KQ - 0 8",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1462.5,
+   "fen": "rn1q1rk1/1bp1ppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "a5"
+   ],
+   "spoken": "We meet White's queenside expansion with a5 of our own, freezing his a-pawn.",
+   "kind": "main",
+   "teaches": [
+    "a5 to stop the a4-a5 push"
+   ]
+  },
+  {
+   "ply": 17,
+   "t": 1465.5,
+   "fen": "rn1q1rk1/1bp1ppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2Q1RK1 b - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1466.5,
+   "fen": "r2q1rk1/1bpnppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2Q1RK1 w - - 2 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The knight develops to d7, not c6, so it doesn't block our fianchetto bishop. From here the plan is clear: break the pin with g5 and h5 when needed, pile pieces onto the kingside — the queen to f6 and beyond — and eventually launch the e5 and f5-f4 pawn storm, opening the h-file at White's king and overloading the f3-knight.",
+   "kind": "plan",
+   "teaches": [
+    "Nd7 keeps the bishop’s diagonal open",
+    "accumulate on the kingside, then storm"
+   ],
+   "plans": [
+    "g5/h5 to break the pin",
+    "e5 and f5-f4 kingside attack",
+    "open the h-file, overload the f3-knight"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 1952.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": "The Torre Attack is named for Carlos Torre of Mexico — though the modern move order owes as much to Eugenio Torre of the Philippines, who played it dozens of times decades later. A nice piece of trivia behind a very practical opening.",
+   "teaches": [
+    "the Torre Attack’s namesakes"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1982,
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2066.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "line": [
+    "e3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2067.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2069,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2073.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2075.5,
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p2B1/2BP4/4PN2/PPP2PPP/RN1QK2R w KQ - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

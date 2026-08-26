@@ -1,0 +1,196 @@
+{
+ "videoId": "sqpNZmRg7oc",
+ "title": "Grandmaster Naroditsky | Ruy Lopez & Philidor | Chess History",
+ "openingName": "Scandinavian Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:sqpNZmRg7oc",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1369.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5",
+    "exd5"
+   ],
+   "spoken": "One last game against a 1600 who trots out the Scandinavian, meeting our king-pawn with an immediate central strike.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 1371.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": "He recaptures with the queen, and this is the whole problem with the Scandi: the queen is out early and about to become a target.",
+   "kind": "main",
+   "teaches": [
+    "Scandinavian: the early queen is exposed to tempo"
+   ]
+  },
+  {
+   "ply": 5,
+   "t": 1375,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 is the best move — it develops a piece and gains a free tempo by hitting the queen.",
+   "kind": "main",
+   "teaches": [
+    "Develop with tempo against the exposed queen"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1378,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": "He retreats all the way home to d8, so we've already gained ground for nothing.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 1379.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "We seize the full center with d4 — space and a big development lead, exactly the dream against a passive Scandinavian.",
+   "kind": "main",
+   "teaches": [
+    "Occupy the center when ahead in development"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 1382,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1385,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1388,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "b5"
+   ],
+   "spoken": "He just shuffles pawns with b5, doing nothing for his development. There's no special reply needed — we simply keep bringing pieces out.",
+   "kind": "main",
+   "teaches": [
+    "Answer aimless pawn moves by continuing development"
+   ]
+  },
+  {
+   "ply": 11,
+   "t": 1416.5,
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/3P4/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "So the bishop goes to d3, a simple, natural post aiming at his kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 1419.5,
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/3P4/2NB1N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1429,
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1431.5,
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p6/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1435,
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p2N3/3P4/2NB4/PPP2PPP/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "We centralize the knight on e5, a powerful outpost right in the heart of his camp.",
+   "kind": "main",
+   "teaches": [
+    "A knight on e5 is a dominant central outpost"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 1437.5,
+   "fen": "rn1qkb1r/pb3ppp/2p1pn2/1p2N3/3P4/2NB4/PPP2PPP/R1BQ1RK1 w kq - 2 9",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1439,
+   "fen": "rn1qkb1r/pb3ppp/2p1pn2/1p2N1B1/3P4/2NB4/PPP2PPP/R2Q1RK1 b kq - 3 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "And the bishop develops to g5, pinning his knight. Nothing fancy yet — just getting every piece to a good square, fast, while he flounders.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 1444.5,
+   "fen": "rn1qk2r/pb2bppp/2p1pn2/1p2N1B1/3P4/2NB4/PPP2PPP/R2Q1RK1 w kq - 4 10",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Now the queen swings to f3 to pile on the pressure. I'm deliberately leaving the d4-pawn hanging: he's so underdeveloped that if the queen grabs it, she'll be hunted down and the lost tempo will cost him far more than a pawn.",
+   "kind": "plan",
+   "teaches": [
+    "A development lead is worth more than a pawn"
+   ],
+   "plans": [
+    "Qf3 to build pressure",
+    "Offer d4 as bait — the greedy queen becomes a target"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 1674.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

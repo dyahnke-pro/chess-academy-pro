@@ -1,0 +1,114 @@
+{
+ "videoId": "iwCO5bNiuNw",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1310",
+ "openingName": "Playing a piece down (a discipline lesson)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:iwCO5bNiuNw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 14,
+   "fen": "rnbqk1nr/pppp1ppp/8/4p3/4P3/b4N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Ba3"
+   ],
+   "spoken": "A deliberate handicap experiment — Black jettisons the dark-squared bishop on a3. The point isn't the sacrifice; it's what you do once you're a piece down.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 17,
+   "fen": "rnbqk1nr/pppp1ppp/8/4p3/4P3/P4N2/P1PP1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "bxa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 19,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/4P3/P4N2/P1PP1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 29.5,
+   "fen": "r1bqk1nr/ppp2ppp/2np4/4p3/4P3/P4N2/PBPP1PPP/RN1QKB1R w KQkq - 0 5",
+   "line": [
+    "Bb2",
+    "d6"
+   ],
+   "spoken": "The first and most important lesson when you're down material: do NOT spiral. Players blunder a piece and then, out of a false sense of necessity, throw away rook after rook pretending it was all planned. Instead, keep your remaining pieces, play sound chess, and make your opponent earn the win.",
+   "kind": "main",
+   "teaches": [
+    "don’t compound a blunder — play on soundly"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 34,
+   "fen": "r1bqk1nr/ppp2ppp/2np4/4p3/3PP3/P4N2/PBP2PPP/RN1QKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 37,
+   "fen": "r1bqk1nr/ppp2ppp/2np4/8/3pP3/P4N2/PBP2PPP/RN1QKB1R w KQkq - 0 6",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 40,
+   "fen": "r1bqk1nr/ppp2ppp/2np4/8/3NP3/P7/PBP2PPP/RN1QKB1R b KQkq - 0 6",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 42,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/8/3NP3/P7/PBP2PPP/RN1QKB1R w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 45.5,
+   "fen": "r1bqk2r/p1p2ppp/2pp1n2/8/4P3/P7/PBP2PPP/RN1QKB1R w KQkq - 0 8",
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "spoken": "And a real resource even here — we can tempt White to trade on f6 and recapture with a pawn. The doubled pawns look ugly but are a blessing in disguise: they hand us dark-square control and open lines toward White's slightly loose setup.",
+   "kind": "main",
+   "teaches": [
+    "recapture toward the center for dark-square control"
+   ]
+  }
+ ]
+}

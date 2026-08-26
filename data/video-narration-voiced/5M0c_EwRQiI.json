@@ -1,0 +1,739 @@
+{
+ "videoId": "5M0c_EwRQiI",
+ "title": "UNDEFEATED and Unstoppable | Title Tuesday!! Master Blitz Match | GM Naroditsky",
+ "openingName": "Sicilian Defense: Alapin Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:5M0c_EwRQiI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 721,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Black meets the king-pawn with c5, the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 726,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 727.5,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black develops the knight to f6, immediately poking the e4-pawn and inviting White to commit the centre.",
+   "kind": "main"
+  },
+  {
+   "ply": 7,
+   "t": 749.5,
+   "fen": "rnbqkb1r/pp1ppppp/8/2pnP3/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "e5",
+    "Nd5",
+    "Nc3"
+   ],
+   "spoken": "White takes up the challenge \u2014 e5 chases the knight, it skips to d5, and the knight comes to c3 to question it. This is the sharp Alapin advance, a race between White's space and Black's counter-thrusts.",
+   "kind": "main",
+   "teaches": [
+    "The 2.Nf3 3.e5 Alapin gains space by kicking the f6-knight"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 751.5,
+   "fen": "rnbqkb1r/pp1p1ppp/4p3/2pnP3/4N3/5N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "e6",
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 756,
+   "fen": "rnbqkb1r/pp1p2pp/4p3/2pnPp2/4N3/5N2/PPPP1PPP/R1BQKB1R w KQkq f6 0 6",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Black lashes out with f5, gaining a tempo on the e4-knight but committing the pawns and leaving lasting holes on the light squares around the king.",
+   "kind": "main",
+   "teaches": [
+    "A ...f5 thrust wins a tempo but weakens the king\\u2019s light squares"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 758,
+   "fen": "rnbqkb1r/pp1p2pp/4p3/2p1Pp2/1n6/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 7",
+   "line": [
+    "Nc3",
+    "Nb4"
+   ],
+   "spoken": "The knight drops back to c3, and Black's knight sorties to b4, eyeing the tender c2 and d3 squares.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 761.5,
+   "fen": "rnbqkb1r/pp1p2pp/4p3/2p1Pp2/1n6/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "g3"
+   ],
+   "spoken": "White reaches for the fianchetto with g3 \u2014 the bishop will rake the long light diagonal, exactly where Black just created weaknesses.",
+   "kind": "main",
+   "teaches": [
+    "Fianchetto toward the squares the opponent weakened"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 762.5,
+   "fen": "rnbqkb1r/pp1p2pp/4p3/2p1Pp2/1n6/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 767.5,
+   "fen": "rnbqkb1r/pp1p2pp/4p3/2p1Pp2/1n6/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 773.5,
+   "fen": "rnbqkb1r/pp4pp/4p3/2ppPp2/1n6/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq d6 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black strikes the centre with d5, and the pawn can be taken in passing.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 775.5,
+   "fen": "rnbqkb1r/pp4pp/3Pp3/2p2p2/1n6/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "exd6"
+   ],
+   "spoken": "White captures en passant on d6.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 779,
+   "fen": "rnbqk2r/pp4pp/3bp3/2p2p2/1n6/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 0 9",
+   "line": [
+    "Bxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 780,
+   "fen": "rnbqk2r/pp4pp/3bp3/2p2p2/1n6/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 1 9",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": "After the recapture White completes the fianchetto, the bishop settling on g2 and glaring down the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 782.5,
+   "fen": "rnbq1rk1/pp4pp/3bp3/2p2p2/1n6/2N2NP1/PPPP1PBP/R1BQ1RK1 b - - 3 10",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": "Both sides castle and the middlegame battle lines are drawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 784,
+   "fen": "rnbq1rk1/pp4pp/3b4/2p1pp2/1n6/2N2NP1/PPPP1PBP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Black claims space with e5, building a broad pawn front.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 785,
+   "fen": "rnbq1rk1/pp4pp/3b4/2p1pp2/1n6/2NP1NP1/PPP2PBP/R1BQ1RK1 b - - 0 11",
+   "line": [
+    "d3"
+   ],
+   "spoken": "White keeps it flexible with a small centre on d3, a King's-Indian-in-reverse setup behind the fianchetto.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 791.5,
+   "fen": "r1bq1rk1/pp4pp/2nb4/2p1pp2/1n6/2NP1NP1/PPP2PBP/R1BQ1RK1 w - - 1 12",
+   "line": [
+    "N8c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 792.5,
+   "fen": "r1bq1rk1/pp4pp/2nb4/2p1pp2/1n6/P1NP1NP1/1PP2PBP/R1BQ1RK1 b - - 0 12",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 793.5,
+   "fen": "r1bq1rk1/pp4pp/n1nb4/2p1pp2/8/P1NP1NP1/1PP2PBP/R1BQ1RK1 w - - 1 13",
+   "line": [
+    "Na6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 799,
+   "fen": "r1bq1rk1/pp4pp/n1nb4/2p1pp2/8/P1NP1NP1/1PP2PBP/R1BQR1K1 b - - 2 13",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 803.5,
+   "fen": "r1bq1rk1/ppn3pp/2nb4/2p1pp2/8/P1NP1NP1/1PP2PBP/R1BQR1K1 w - - 3 14",
+   "line": [
+    "Nc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 812.5,
+   "fen": "r1bq1rk1/ppn3pp/2nb4/2p1pp2/8/P1NP2P1/1PPN1PBP/R1BQR1K1 b - - 4 14",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "White reroutes the knight to d2, heading for the fine c4 and e4 squares in front of Black's pawns.",
+   "kind": "main",
+   "teaches": [
+    "Reroute a knight toward the outpost in front of the enemy pawns"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 825.5,
+   "fen": "r2q1rk1/ppn3pp/2nb4/2p1pp2/2P5/P1N3P1/1PP2PBP/R1BQR1K1 b - - 0 16",
+   "line": [
+    "Be6",
+    "Nc4",
+    "Bxc4",
+    "dxc4"
+   ],
+   "spoken": "The light-squared bishops come off, and after the trade White grabs the c4-pawn, opening files toward Black's queenside.",
+   "kind": "main"
+  },
+  {
+   "ply": 32,
+   "t": 826.5,
+   "fen": "r2q1rk1/ppn3pp/2nb4/2p2p2/2P1p3/P1N3P1/1PP2PBP/R1BQR1K1 w - - 0 17",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Black pushes e4, ramming the centre and asking White how to meet the advance.",
+   "kind": "main"
+  },
+  {
+   "ply": 33,
+   "t": 831.5,
+   "fen": "r2q1rk1/ppn3pp/2nb4/2p2p2/2P1p3/P1N2PP1/1PP3BP/R1BQR1K1 b - - 0 17",
+   "line": [
+    "f3"
+   ],
+   "spoken": "White answers f3, levering directly against the e4-pawn to break Black's front open.",
+   "kind": "main",
+   "teaches": [
+    "Lever an advanced enemy pawn with f3 to open lines"
+   ]
+  },
+  {
+   "ply": 34,
+   "t": 838,
+   "fen": "r2q1r1k/ppn3pp/2nb4/2p2p2/2P1p3/P1N2PP1/1PP3BP/R1BQR1K1 w - - 1 18",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 847.5,
+   "fen": "r2q1r1k/ppn3pp/2nb4/2p2p2/2P1P3/P1N3P1/1PP3BP/R1BQR1K1 b - - 0 18",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": "White breaks through on e4 and emerges a pawn up with the freer position \u2014 the engine reads it as a clear edge for White, the sharp opening having gone White's way.",
+   "kind": "main"
+  },
+  {
+   "ply": 37,
+   "t": 849,
+   "fen": "r2q1r1k/ppn3pp/2nb4/2p5/2P1PP2/P1N5/1PP3BP/R1BQR1K1 b - - 0 19",
+   "line": [
+    "f4",
+    "gxf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 851.5,
+   "fen": "r2Q1r1k/ppn3pp/2n5/2p5/2P1Pb2/P1N5/1PP3BP/R1B1R1K1 b - - 0 20",
+   "line": [
+    "Bxf4",
+    "Qxd8"
+   ],
+   "spoken": "A flurry of captures peels the queens off the board, White carrying that healthy edge into the middlegame.",
+   "kind": "main"
+  },
+  {
+   "ply": 40,
+   "t": 853.5,
+   "fen": "3r1r1k/ppn3pp/2n5/2p5/2P1Pb2/P1N5/1PP3BP/R1B1R1K1 w - - 0 21",
+   "line": [
+    "Raxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 855,
+   "fen": "3r3k/ppn3pp/2n5/2pN4/2P1Pr2/P7/1PP3BP/R3R1K1 b - - 1 22",
+   "line": [
+    "Bxf4",
+    "Rxf4",
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 860,
+   "fen": "3r3k/ppn2rpp/2n5/2pN4/2P1P3/P7/1PP3BP/R4RK1 b - - 3 23",
+   "line": [
+    "Rf7",
+    "Rf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 882,
+   "fen": "3r3k/ppn3pp/2n5/2pN4/2P1P3/P7/1PP3BP/5RK1 b - - 0 24",
+   "line": [
+    "Rxf1+",
+    "Rxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 885,
+   "fen": "3r3k/pp4pp/2n1n3/2pN4/2P1P3/P7/1PP3BP/5RK1 w - - 1 25",
+   "line": [
+    "Ne6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 902.5,
+   "fen": "3r3k/pp4pp/2n1n3/2pN4/2P1P3/P1P5/1P4BP/5RK1 b - - 0 25",
+   "line": [
+    "c3"
+   ],
+   "spoken": "White plays c3 to slam the door on the d4-square \u2014 Black's knights are the real problem here, and denying them the central outpost is job one.",
+   "kind": "main",
+   "teaches": [
+    "Deny active knights their central outpost with a pawn"
+   ]
+  },
+  {
+   "ply": 50,
+   "t": 911,
+   "fen": "3r2k1/pp4pp/2n1n3/2pN4/2P1P3/P1P5/1P4BP/5RK1 w - - 1 26",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 917.5,
+   "fen": "3r2k1/pp4pp/2n1n3/2pN4/2P1P2P/P1P5/1P4B1/5RK1 b - - 0 26",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 925,
+   "fen": "3r2k1/pp4p1/2n1n2p/2pN4/2P1P2P/P1P5/1P4B1/5RK1 w - - 0 27",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 926.5,
+   "fen": "4r1k1/pp4p1/2n1n2p/2pN4/2P1P2P/P1P4B/1P6/5RK1 w - - 2 28",
+   "line": [
+    "Bh3",
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 931.5,
+   "fen": "4r1k1/pp4p1/2n1n2p/2pN1B2/2P1P2P/P1P5/1P6/5RK1 b - - 3 28",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 934,
+   "fen": "4r1k1/pp4p1/4n2p/2pNnB2/2P1P2P/PPP5/8/5RK1 b - - 0 29",
+   "line": [
+    "Ne5",
+    "b3"
+   ],
+   "spoken": "Black's knights swarm into the centre, one landing on e5 beside White's on d5 \u2014 active, annoying pieces that keep the defense on its toes.",
+   "kind": "main"
+  },
+  {
+   "ply": 58,
+   "t": 936,
+   "fen": "4r1k1/p5p1/1p2n2p/2pNnB2/2P1P2P/PPP5/8/5RK1 w - - 0 30",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 941.5,
+   "fen": "4r1k1/p5p1/1p2n2p/2pNnB2/2P1P2P/PPP5/8/3R2K1 b - - 1 30",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": "Here the thread slips: the rook to d1 lets the edge evaporate, the engine snapping all the way back to dead level. A single loose move under pressure can hand back everything the opening earned.",
+   "kind": "main",
+   "teaches": [
+    "One careless move can surrender a whole game\\u2019s advantage"
+   ]
+  },
+  {
+   "ply": 60,
+   "t": 948.5,
+   "fen": "4r1k1/p5p1/1p2n2p/2pN1B2/2P1P2P/PPP2n2/8/3R2K1 w - - 2 31",
+   "line": [
+    "Nf3+"
+   ],
+   "spoken": "The knight leaps in with a check on f3, forking into White's camp and grabbing back material.",
+   "kind": "main"
+  },
+  {
+   "ply": 63,
+   "t": 958.5,
+   "fen": "4r1k1/p5p1/1p2n2p/2pN1B2/2P1P2n/PPP3K1/8/3R4 b - - 1 32",
+   "line": [
+    "Kf2",
+    "Nxh4",
+    "Kg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 966,
+   "fen": "4r1k1/p5p1/1p5p/2pN1Pn1/2P5/PPP3K1/8/3R4 w - - 1 34",
+   "line": [
+    "Nxf5+",
+    "exf5",
+    "Ng5"
+   ],
+   "spoken": "The pieces come off in a burst of trades, and the game simplifies toward a sharp minor-piece ending.",
+   "kind": "main"
+  },
+  {
+   "ply": 67,
+   "t": 969,
+   "fen": "4r1k1/p5p1/1p5p/2p2Pn1/2P2N2/PPP3K1/8/3R4 b - - 2 34",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 66,
+   "t": 970,
+   "fen": "4r1k1/p5p1/1p5p/2pN1Pn1/2P5/PPP3K1/8/3R4 w - - 1 34",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 974,
+   "fen": "4r1k1/p5p1/1p5p/2p2Pn1/2P2N2/PPP3K1/8/3R4 b - - 2 34",
+   "line": [
+    "Nf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 69,
+   "t": 980,
+   "fen": "6k1/p5p1/1p5p/2p2Pn1/2P2NK1/PPP1r3/8/3R4 b - - 4 35",
+   "line": [
+    "Re3+",
+    "Kg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 70,
+   "t": 987,
+   "fen": "6k1/p5p1/1p5p/2p2Pn1/2P2NK1/PPr5/8/3R4 w - - 0 36",
+   "line": [
+    "Rxc3"
+   ],
+   "spoken": "Black grabs a loose queenside pawn and edges a pawn ahead \u2014 now it's White defending a knight-and-rook ending, a pawn down but holdable.",
+   "kind": "main",
+   "teaches": [
+    "A pawn-down knight ending is often a fortress if the pieces are active"
+   ]
+  },
+  {
+   "ply": 71,
+   "t": 988,
+   "fen": "3R2k1/p5p1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 b - - 1 36",
+   "line": [
+    "Rd8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 73,
+   "t": 993,
+   "fen": "8/p2R1kp1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 b - - 3 37",
+   "line": [
+    "Kf7",
+    "Rd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 74,
+   "t": 996,
+   "fen": "6k1/p2R2p1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 w - - 4 38",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 75,
+   "t": 1009.5,
+   "fen": "3R2k1/p5p1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 b - - 5 38",
+   "line": [
+    "Rd8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 76,
+   "t": 1010.5,
+   "fen": "3R4/p4kp1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 w - - 6 39",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 77,
+   "t": 1017.5,
+   "fen": "3R4/p4kp1/1p4Np/2p2Pn1/2P3K1/PPr5/8/8 b - - 7 39",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 76,
+   "t": 1019.5,
+   "fen": "3R4/p4kp1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 w - - 6 39",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 77,
+   "t": 1021.5,
+   "fen": "3R4/p4kp1/1p4Np/2p2Pn1/2P3K1/PPr5/8/8 b - - 7 39",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 79,
+   "t": 1028,
+   "fen": "7R/p4kpn/1p4Np/2p2P2/2P3K1/PPr5/8/8 b - - 9 40",
+   "line": [
+    "Nh7",
+    "Rh8"
+   ],
+   "spoken": "The knights and rooks dance through checks and probes; with active pieces and few pawns, White keeps the balance and the position stays a fight.",
+   "kind": "plan",
+   "teaches": [
+    "Activity, not material count, decides these light endings"
+   ],
+   "plans": [
+    "Keep the knight and rook active",
+    "Trade into a drawable pawn-down ending"
+   ]
+  },
+  {
+   "ply": 81,
+   "t": 1035.5,
+   "fen": "7R/p4kp1/1p3nNp/2p2P2/2P2K2/PPr5/8/8 b - - 11 41",
+   "line": [
+    "Nf6+",
+    "Kf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 82,
+   "t": 1040,
+   "fen": "7R/p4kp1/1p4Np/2p2P1n/2P2K2/PPr5/8/8 w - - 12 42",
+   "line": [
+    "Nh5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 83,
+   "t": 1044.5,
+   "fen": "7R/p4kp1/1p4Np/2p2P1n/2P3K1/PPr5/8/8 b - - 13 42",
+   "line": [
+    "Kg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 85,
+   "t": 1048.5,
+   "fen": "7R/p4kp1/1p3nNp/2p2P2/2P2K2/PPr5/8/8 b - - 15 43",
+   "line": [
+    "Nf6+",
+    "Kf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 87,
+   "t": 1050.5,
+   "fen": "7R/p4kp1/1p4Np/2p1KP1n/2P5/PPr5/8/8 b - - 17 44",
+   "line": [
+    "Nh5+",
+    "Ke5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 82,
+   "t": 1053,
+   "fen": "7R/p4kp1/1p4Np/2p2P1n/2P2K2/PPr5/8/8 w - - 12 42",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 83,
+   "t": 1055,
+   "fen": "7R/p4kp1/1p4Np/2p2P1n/2P3K1/PPr5/8/8 b - - 13 42",
+   "line": [
+    "Kg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 84,
+   "t": 1067.5,
+   "fen": "7R/p4kp1/1p3nNp/2p2P2/2P3K1/PPr5/8/8 w - - 14 43",
+   "line": [
+    "Nf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 75,
+   "t": 1068.5,
+   "fen": "3R2k1/p5p1/1p5p/2p2Pn1/2P2NK1/PPr5/8/8 b - - 5 38",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 78,
+   "t": 1071.5,
+   "fen": "3R4/p4npk/1p4Np/2p2P2/2P3K1/PPr5/8/8 w - - 8 40",
+   "line": [
+    "Kh7",
+    "Ng6",
+    "Nf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 1081.5,
+   "fen": "4r1k1/p5p1/1p2n2p/2pNnB2/2P1P2P/PPP5/8/5RK1 w - - 0 30",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1097,
+   "fen": "r2q1r1k/ppn3pp/2nb4/2p5/2P1PP2/P1N5/1PP3BP/R1BQR1K1 b - - 0 19",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

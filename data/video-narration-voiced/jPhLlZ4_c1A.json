@@ -1,0 +1,229 @@
+{
+ "videoId": "jPhLlZ4_c1A",
+ "title": "Master Class | Oh My Cheaters!! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Nimzowitsch-Larsen Attack (1.b3)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:jPhLlZ4_c1A",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 457,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 458,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "The Nimzowitsch-Larsen — b3 and the bishop to b2. It's a hypermodern opening: instead of building our own center, we attack the opponent's from a distance with our pieces.",
+   "kind": "main",
+   "teaches": [
+    "the Nimzo-Larsen fianchetto"
+   ]
+  },
+  {
+   "ply": 4,
+   "t": 461.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 505.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "e3 is the old main line — pure hypermodern, with all our pressure aimed at the enemy center rather than our own.",
+   "kind": "main"
+  },
+  {
+   "ply": 6,
+   "t": 511.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 529.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/8/1P2P3/PBPP1PPP/RN1QK1NR b KQkq - 2 4",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5 hits the knight and threatens to win the e5-pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 545,
+   "fen": "r1b1kb1r/ppppqppp/2n2n2/1B2p3/8/1P2P3/PBPP1PPP/RN1QK1NR w KQkq - 3 5",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The queen to e7 defends, but at a real cost — it makes Black's kingside bishop much harder to develop.",
+   "teaches": [
+    "Qe7 defends but blocks his own development"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 588,
+   "fen": "r1b1kb1r/ppppqppp/2n2n2/1B2p3/8/1P2P3/PBPPNPPP/RN1QK2R b KQkq - 4 5",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The knight goes to e2, not f3 — f3 would invite ...e4 with tempo, and we want to leave that pawn on the operating table. The e2 square also prepares a second plan.",
+   "kind": "main",
+   "teaches": [
+    "Ne2 avoids ...e4 with tempo"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 594,
+   "fen": "r1b1kb1r/1pppqppp/p1n2n2/1B2p3/8/1P2P3/PBPPNPPP/RN1QK2R w KQkq - 0 6",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 598,
+   "fen": "r1b1kb1r/1pp1qppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1QK2R w KQkq - 0 7",
+   "line": [
+    "Bxc6",
+    "dxc6"
+   ],
+   "spoken": "We take the knight. Even though e5 is no longer attacked directly, we can pile straight back onto it — Black is already in trouble just six moves in.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 656.5,
+   "fen": "r1b1kb1r/1pp1qppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1Q1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 666.5,
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1Q1RK1 w kq - 2 8",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 671.5,
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/4p3/5P2/1P2P3/PBPPN1PP/RN1Q1RK1 b kq - 0 8",
+   "line": [
+    "f4"
+   ],
+   "spoken": "The pawn to f4 pries at e5 — d4 would only block in our own bishop and hand Black the ...e4 push.",
+   "kind": "main",
+   "teaches": [
+    "f4, not d4, to open the bishop and hit e5"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 675,
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/8/4pP2/1P2P3/PBPPN1PP/RN1Q1RK1 w kq - 0 9",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Black pushes e4.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 755.5,
+   "fen": "r3kb1r/1ppbqpp1/p1p2n2/7p/4pP2/NP2P3/PBPPN1PP/R2Q1RK1 w kq - 0 10",
+   "line": [
+    "Na3",
+    "h5"
+   ],
+   "spoken": "The knight takes the awkward route — first to a3, the Frankfurt airport, on its way toward the center.",
+   "kind": "main",
+   "teaches": [
+    "reroute via the rim toward the center"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 759,
+   "fen": "r3kb1r/1ppbqpp1/p1p2n2/7p/2N1pP2/1P2P3/PBPPN1PP/R2Q1RK1 b kq - 1 10",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "Then to c4 — ugly, but imagine how good it'll look once it reaches e5. No rush, though: the threat is stronger than its execution.",
+   "kind": "main",
+   "teaches": [
+    "the threat is stronger than the execution"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 762,
+   "fen": "2kr1b1r/1ppbqpp1/p1p2n2/7p/2N1pP2/1P2P3/PBPPN1PP/R2Q1RK1 w - - 2 11",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Black castles long — so we have opposite-side castling, a straight race of attacks.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 811.5,
+   "fen": "2kr1b1r/1ppbqpp1/p1p2n2/7p/P1N1pP2/1P2P3/1BPPN1PP/R2Q1RK1 b - - 0 11",
+   "line": [
+    "a4"
+   ],
+   "spoken": "Our attack starts with a4, heading for b4 and b5 to blast open his queenside pawn cover — and in opposite-side castling you simply have to get on with it.",
+   "kind": "plan",
+   "teaches": [
+    "a4-b4-b5 to crack the castled king"
+   ],
+   "plans": [
+    "a4-b4-b5 pawn storm"
+   ]
+  },
+  {
+   "ply": 22,
+   "t": 819,
+   "fen": "2kr1b1r/1ppbqpp1/p1p5/3n3p/P1N1pP2/1P2P3/1BPPN1PP/R2Q1RK1 w - - 1 12",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 837,
+   "fen": "2kr1b1r/1ppbqpp1/p1p5/3n3p/P1N1pP2/1P2P3/1BPPN1PP/R3QRK1 b - - 2 12",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": ""
+  }
+ ]
+}
