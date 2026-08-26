@@ -1,0 +1,390 @@
+{
+  "videoId": "ltHf6dLgdLo",
+  "title": "Master Class | Will Danish be accepted!? | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Danish Gambit",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:ltHf6dLgdLo",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 12.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "e5"
+      ],
+      "spoken": "Over a thousand this time — let's go. e4, e5."
+    },
+    {
+      "ply": 3,
+      "t": 14.5,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4 — the Danish Gambit. We still haven't managed to get one accepted; nobody seems willing to grab the pawn."
+    },
+    {
+      "ply": 4,
+      "t": 31.5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "Sure enough, Black declines and develops the knight to c6 instead."
+    },
+    {
+      "ply": 5,
+      "t": 70.5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "dxe5"
+      ],
+      "spoken": "I haven't given you much choice — it's not the knight to f3 here, it's d takes e5, clarifying the center."
+    },
+    {
+      "ply": 6,
+      "t": 73,
+      "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "Black recaptures, the knight to e5. It looks like we're letting Black plant a knight in the center, but that knight has no stable home — it'll have to move again."
+    },
+    {
+      "ply": 7,
+      "t": 110,
+      "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "We play an inoffensive developing move, the knight to c3, and see how Black arranges his pieces before we commit to f4."
+    },
+    {
+      "ply": 8,
+      "t": 123.5,
+      "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "Black develops the knight to f6."
+    },
+    {
+      "ply": 9,
+      "t": 155.5,
+      "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4PP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 5",
+      "line": [
+        "f4"
+      ],
+      "spoken": "Now f4 — both knights are stuck in no man's land, so we just push and kick them around."
+    },
+    {
+      "ply": 10,
+      "t": 182,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/4PP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 6",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "The e5-knight has to retreat, and it goes back to c6 — the jump to g4 would be a disaster."
+    },
+    {
+      "ply": 11,
+      "t": 184.5,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/5P2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 6",
+      "line": [
+        "e5"
+      ],
+      "spoken": "e5, and now the f6-knight has only one reasonable square."
+    },
+    {
+      "ply": 12,
+      "t": 196,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 7",
+      "line": [
+        "Ng8"
+      ],
+      "spoken": "It's forced all the way back to g8. We have a big center, a big development lead, and Black's king is slightly loosened."
+    },
+    {
+      "ply": 13,
+      "t": 211.5,
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 7",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "We finish developing with the knight to f3 — no need for anything crazy."
+    },
+    {
+      "ply": 14,
+      "t": 218,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 8",
+      "line": [
+        "d6"
+      ],
+      "spoken": "d6 is exactly what Black should do, challenging our center — and these players are starting to play a bit better."
+    },
+    {
+      "ply": 15,
+      "t": 268,
+      "fen": "r1bqkbnr/ppp2ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 1 8",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "The bishop to c4 is tempting, but the move is the bishop to b5, pinning the knight."
+    },
+    {
+      "ply": 16,
+      "t": 277.5,
+      "fen": "r2qkbnr/pppb1ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R w KQkq - 2 9",
+      "line": [
+        "Bd7"
+      ],
+      "spoken": "Black breaks the pin with the bishop to d7."
+    },
+    {
+      "ply": 17,
+      "t": 285.5,
+      "fen": "r2qkbnr/pppb1ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQ1RK1 b kq - 3 9",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "We don't have to do anything fancy — just castle, and look at that f-file, where the disaster is going to unfold for Black."
+    },
+    {
+      "ply": 19,
+      "t": 302.5,
+      "fen": "r2qkbnr/pppb1ppp/2n5/1B2P3/8/2N2N2/PPP3PP/R1BQ1RK1 b kq - 0 10",
+      "line": [
+        "dxe5",
+        "fxe5"
+      ],
+      "spoken": "Black takes on e5, and we recapture with the f-pawn — no reason to take with the knight and trade off pieces that help Black defend."
+    },
+    {
+      "ply": 20,
+      "t": 328,
+      "fen": "r3kbnr/pppbqppp/2n5/1B2P3/8/2N2N2/PPP3PP/R1BQ1RK1 w kq - 1 11",
+      "line": [
+        "Qe7"
+      ],
+      "spoken": "Black plays the queen to e7, but he's in huge trouble: the e5-pawn cramps him and the open f-file is disastrous."
+    },
+    {
+      "ply": 21,
+      "t": 384.5,
+      "fen": "r3kbnr/pppbqppp/2n5/1B1NP3/8/5N2/PPP3PP/R1BQ1RK1 b kq - 2 11",
+      "line": [
+        "Nd5"
+      ],
+      "spoken": "The knight leaps to d5, threatening the knight to c7 — a devastating fork of the king and rook."
+    },
+    {
+      "ply": 22,
+      "t": 394.5,
+      "fen": "r3kbnr/pppb1ppp/2n5/1BqNP3/8/5N2/PPP3PP/R1BQ1RK1 w kq - 3 12",
+      "line": [
+        "Qc5+"
+      ],
+      "spoken": "Black checks with the queen to c5. Players are much better at spotting a tactical pattern than at calculating it deeply."
+    },
+    {
+      "ply": 23,
+      "t": 400,
+      "fen": "r3kbnr/pppb1ppp/2n5/1BqNP3/8/4BN2/PPP3PP/R2Q1RK1 b kq - 4 12",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "They get attracted to grabbing the bishop — so we block the check with the bishop to e3, hitting the queen."
+    },
+    {
+      "ply": 24,
+      "t": 493.5,
+      "fen": "r3kbnr/pppb1ppp/8/1BqNP3/3n4/4BN2/PPP3PP/R2Q1RK1 w kq - 5 13",
+      "line": [
+        "Nd4"
+      ],
+      "spoken": "He finds the best defense, the knight to d4, trying to unpin himself with tempo."
+    },
+    {
+      "ply": 25,
+      "t": 522,
+      "fen": "r3kbnr/pppB1ppp/8/2qNP3/3n4/4BN2/PPP3PP/R2Q1RK1 b kq - 0 13",
+      "line": [
+        "Bxd7+"
+      ],
+      "spoken": "We take on d7 with the bishop, check."
+    },
+    {
+      "ply": 26,
+      "t": 527,
+      "fen": "r4bnr/pppk1ppp/8/2qNP3/3n4/4BN2/PPP3PP/R2Q1RK1 w - - 0 14",
+      "line": [
+        "Kxd7"
+      ],
+      "spoken": "Black recaptures with the king. There are several options — the queen takes d4, simply up a piece in the endgame."
+    },
+    {
+      "ply": 30,
+      "t": 553.5,
+      "fen": "r4bnr/pppk1ppp/8/2qNP3/3B4/4nN2/PPP3PP/R2Q1RK1 w - - 4 16",
+      "line": [
+        "Bf2",
+        "Nf5",
+        "Bd4",
+        "Ne3"
+      ],
+      "spoken": "But there's a subtlety: from f2 the bishop could get hit by the knight to f5, then the bishop to d4 walks into the knight to e3 unpinning with check — you have to see that trap before it bites.",
+      "reanchor": true
+    },
+    {
+      "ply": 26,
+      "t": 560,
+      "fen": "r4bnr/pppk1ppp/8/2qNP3/3n4/4BN2/PPP3PP/R2Q1RK1 w - - 0 14",
+      "line": [],
+      "spoken": "The key idea: when your opponent's king sits on the same file as your queen, no matter how many pieces are wedged between them, that alignment should always be factored in.",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 573,
+      "fen": "r4bnr/pppk1ppp/8/2q1P3/3n4/2N1BN2/PPP3PP/R2Q1RK1 b - - 1 14",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "The knight drops back to c3 — I love these moves; it keeps our forces trained on that d-file where the king lingers."
+    },
+    {
+      "ply": 28,
+      "t": 604.5,
+      "fen": "3r1bnr/pppk1ppp/8/2q1P3/3n4/2N1BN2/PPP3PP/R2Q1RK1 w - - 2 15",
+      "line": [
+        "Rd8"
+      ],
+      "spoken": "Black brings the rook to d8."
+    },
+    {
+      "ply": 29,
+      "t": 625,
+      "fen": "3r1bnr/pppk1ppp/8/2q1P3/3B4/2N2N2/PPP3PP/R2Q1RK1 b - - 0 15",
+      "line": [
+        "Bxd4"
+      ],
+      "spoken": "We take with the bishop on d4 — and there's something sexy here, because it sets up a discovered check."
+    },
+    {
+      "ply": 30,
+      "t": 633.5,
+      "fen": "3r1bnr/pppk1ppp/2q5/4P3/3B4/2N2N2/PPP3PP/R2Q1RK1 w - - 1 16",
+      "line": [
+        "Qc6"
+      ],
+      "spoken": "Black plays the queen to c6."
+    },
+    {
+      "ply": 31,
+      "t": 662.5,
+      "fen": "3r1bnr/pppk1ppp/2q1P3/8/3B4/2N2N2/PPP3PP/R2Q1RK1 b - - 0 16",
+      "line": [
+        "e6+"
+      ],
+      "spoken": "e6, check — and it's a fork: the pawn hits the king and clears lines all at once, exactly the pattern my brain screams at."
+    },
+    {
+      "ply": 32,
+      "t": 669.5,
+      "fen": "3r1bnr/pppk2pp/2q1p3/8/3B4/2N2N2/PPP3PP/R2Q1RK1 w - - 0 17",
+      "line": [
+        "fxe6"
+      ],
+      "spoken": "Black takes, f takes e6."
+    },
+    {
+      "ply": 33,
+      "t": 670.5,
+      "fen": "3r1bnr/pppk2pp/2q1p3/4N3/3B4/2N5/PPP3PP/R2Q1RK1 b - - 1 17",
+      "line": [
+        "Ne5+"
+      ],
+      "spoken": "The knight to e5, check — a thematic square-clearing shot that forks the king and the queen, and that's the game."
+    },
+    {
+      "ply": 35,
+      "t": 686,
+      "fen": "2kr1bnr/ppp3pp/2N1p3/8/3B4/2N5/PPP3PP/R2Q1RK1 b - - 0 18",
+      "line": [
+        "Kc8",
+        "Nxc6"
+      ],
+      "spoken": "Black steps the king to c8, and the knight captures the queen, taking on c6."
+    },
+    {
+      "ply": 36,
+      "t": 693.5,
+      "fen": "2kr1bnr/p1p3pp/2p1p3/8/3B4/2N5/PPP3PP/R2Q1RK1 w - - 0 19",
+      "line": [
+        "bxc6"
+      ],
+      "spoken": "Black recaptures, b takes c6."
+    },
+    {
+      "ply": 37,
+      "t": 714.5,
+      "fen": "2kr1Rnr/p1p3pp/2p1p3/8/3B4/2N5/PPP3PP/R2Q2K1 b - - 0 19",
+      "line": [
+        "Rxf8"
+      ],
+      "spoken": "Playing precisely, the rook takes on f8, snapping off a piece."
+    },
+    {
+      "ply": 38,
+      "t": 732.5,
+      "fen": "2k2rnr/p1p3pp/2p1p3/8/3B4/2N5/PPP3PP/R2Q2K1 w - - 0 20",
+      "line": [
+        "Rxf8"
+      ],
+      "spoken": "Black recaptures on f8."
+    },
+    {
+      "ply": 39,
+      "t": 734,
+      "fen": "2k2rnr/p1p3Bp/2p1p3/8/8/2N5/PPP3PP/R2Q2K1 b - - 0 20",
+      "line": [
+        "Bxg7"
+      ],
+      "spoken": "The bishop takes on g7 — and now we're going to pick up a rook."
+    },
+    {
+      "ply": 40,
+      "t": 746.5,
+      "fen": "2kr2nr/p1p3Bp/2p1p3/8/8/2N5/PPP3PP/R2Q2K1 w - - 1 21",
+      "line": [
+        "Rd8"
+      ],
+      "spoken": "Black tries to salvage things with the rook to d8."
+    },
+    {
+      "ply": 44,
+      "t": 772,
+      "fen": "3r3r/pkp3Bp/2p1p2n/8/8/2N5/PPP3PP/R5K1 w - - 0 23",
+      "line": [
+        "Qd2",
+        "Kb7",
+        "Qh6",
+        "Nxh6"
+      ],
+      "spoken": "The cleanest finish runs the queen to d2, the king to b7, the queen to h6, and if the knight takes on h6 we simply mop up — it's crushing.",
+      "reanchor": true
+    },
+    {
+      "ply": 45,
+      "t": 773,
+      "fen": "3r3B/pkp4p/2p1p2n/8/8/2N5/PPP3PP/R5K1 b - - 0 23",
+      "line": [
+        "Bxh8"
+      ],
+      "spoken": "The bishop takes on h8, and Black is completely lost; he'll resign."
+    }
+  ]
+}
