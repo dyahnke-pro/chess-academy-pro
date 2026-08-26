@@ -1,10 +1,10 @@
 {
   "videoId": "1671V8LrEwk",
   "title": "The Italian Game | The Sensei Speedrun | Grandmaster Naroditsky",
-  "openingName": "Italian Game: Giuoco Piano",
-  "studentSide": "white",
+  "openingName": "Italian Game",
+  "studentSide": "black",
   "voice": "danya-dna",
-  "rewrittenAt": "2026-08-25",
+  "rewrittenAt": "2026-08-26",
   "source": "yt:1671V8LrEwk",
   "moves": [
     {
@@ -15,7 +15,7 @@
         "e4",
         "e5"
       ],
-      "spoken": "We take White; Black answers our king's pawn with ...e5."
+      "spoken": "The pawn to e4, e5 — traditional, old-school, and we play very solid."
     },
     {
       "ply": 4,
@@ -25,7 +25,7 @@
         "Nf3",
         "Nc6"
       ],
-      "spoken": "We develop the knight to f3; Black defends with ...Nc6."
+      "spoken": "The knight to f3, the knight to c6."
     },
     {
       "ply": 5,
@@ -34,7 +34,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "We play the Italian bishop to c4."
+      "spoken": "The Italian. At this rating there's the knight to f6 and the bishop to c5, the two main moves."
     },
     {
       "ply": 6,
@@ -43,7 +43,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "Black mirrors with ...Bc5 — the Giuoco Piano."
+      "spoken": "The Fried Liver is a little questionable for a beginner without the theory, so my recommendation is to stick with the bishop to c5 — less tricky, easier to learn."
     },
     {
       "ply": 7,
@@ -52,7 +52,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "We prepare the d4 break with c3."
+      "spoken": "c3 is the main move."
     },
     {
       "ply": 8,
@@ -61,7 +61,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "Black develops the knight to f6."
+      "spoken": "We go the knight to f6, and White has d4 or d3 — d3 is what the big guns play."
     },
     {
       "ply": 9,
@@ -70,7 +70,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "We strike with d4."
+      "spoken": "d4 is the old main line, the traditional move —"
     },
     {
       "ply": 10,
@@ -79,7 +79,7 @@
       "line": [
         "exd4"
       ],
-      "spoken": "Black takes on d4."
+      "spoken": "— leading to an extremely theoretical line."
     },
     {
       "ply": 11,
@@ -88,7 +88,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "We recapture on d4."
+      "spoken": "The pawns come off on d4. Now, very importantly, we don't drop our bishop back —"
     },
     {
       "ply": 12,
@@ -97,7 +97,7 @@
       "line": [
         "Bb4+"
       ],
-      "spoken": "Black checks with the bishop to b4."
+      "spoken": "— that would let White dominate the centre; we give the important check on b4, a tempo to either capture the pawn or strike back with d5."
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "We block with the bishop to d2."
+      "spoken": "The bishop to d2. The main continuation isn't the knight takes c4 — that's what we'll play — the main move is the bishop takes d2 with check, the knight recaptures, and d5 striking the centre; that's my game against Sevian from the US Championship, a colorless position. A narrower, more interesting move is the knight takes e4 —"
     },
     {
       "ply": 14,
@@ -115,7 +115,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "Black grabs on e4 with the knight — the main line."
+      "spoken": "— it looks very scary to grab the pawn, but if you know the theory you get away with it; not well known even among people who play the Italian."
     },
     {
       "ply": 15,
@@ -124,7 +124,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We develop the knight to c3, offering the piece."
+      "spoken": "The knight to c3 is already a very bad reaction — it lets us off scot-free and gives us a favorable trade. What should we take?"
     },
     {
       "ply": 17,
@@ -134,7 +134,7 @@
         "Nxd2",
         "Nxd2"
       ],
-      "spoken": "Black trades on d2; we recapture with the knight."
+      "spoken": "Take the bishop, clearly. He pre-moves the knight takes d2, and now another decision: castle to complete development, or take on d4 for another pawn. Much of it is intuitive — quickly look for forks; I don't see anything nasty after the knight takes d4, since White is so passive."
     },
     {
       "ply": 18,
@@ -143,7 +143,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Black castles."
+      "spoken": "But like a good Russian schoolboy, there's nothing wrong with castling; for this speedrun we play conservatively and avoid the need for calculation — we already have one pawn if he defends it."
     },
     {
       "ply": 19,
@@ -152,14 +152,15 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "He didn't defend it —"
     },
     {
       "ply": 18,
       "t": 219,
       "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R w KQ - 1 10",
       "line": [],
-      "spoken": ""
+      "spoken": "— but if he had, we'd have also had a very nasty check on e8.",
+      "reanchor": true
     },
     {
       "ply": 19,
@@ -168,7 +169,8 @@
       "line": [
         "O-O"
       ],
-      "spoken": ""
+      "spoken": "Now that we've castled it's clear —",
+      "reanchor": true
     },
     {
       "ply": 20,
@@ -177,14 +179,15 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "Black snatches on d4 with the knight."
+      "spoken": "The knight takes d4."
     },
     {
       "ply": 19,
       "t": 224.5,
       "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2Q1RK1 b - - 2 10",
       "line": [],
-      "spoken": ""
+      "spoken": "— we can just take this pawn.",
+      "reanchor": true
     },
     {
       "ply": 20,
@@ -193,7 +196,8 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": ""
+      "spoken": "Of course we can take. One thing I'd check — the queen x-rays the knight, so make sure there are no dangerous discovered attacks.",
+      "reanchor": true
     },
     {
       "ply": 21,
@@ -202,7 +206,7 @@
       "line": [
         "a3"
       ],
-      "spoken": "We play a3, hitting the bishop."
+      "spoken": "For instance, if there were a queen here, the knight to e4 would be very nasty, hitting the queen and pressuring the knight. Now we choose our bishop move carefully — a lot of people would play the bishop to c5, but why is that, though totally fine, a little inaccurate?"
     },
     {
       "ply": 22,
@@ -211,7 +215,7 @@
       "line": [
         "Bxc3"
       ],
-      "spoken": "Black takes our knight, capturing on c3."
+      "spoken": "Because of the knight to e4, winning a tempo; the bishop to b6 lets the other knight get to d5 with a lot of activity. Let's take c3 —"
     },
     {
       "ply": 23,
@@ -220,7 +224,7 @@
       "line": [
         "bxc3"
       ],
-      "spoken": "We recapture with the b-pawn."
+      "spoken": "— simplify, up two pawns. Where does the knight go? Doesn't really matter — the knight to c6, e6, or even the counter-attack d5."
     },
     {
       "ply": 24,
@@ -229,7 +233,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "Black retreats the knight to c6."
+      "spoken": "Let's play the simplest, the knight to c6 — no need to spend a lot of time; people overly obsess over basic decisions, spend five minutes, and get into time pressure. Always know which decisions are likely to matter."
     },
     {
       "ply": 25,
@@ -238,7 +242,7 @@
       "line": [
         "Re1"
       ],
-      "spoken": "We play the rook to e1."
+      "spoken": "This is clearly in the less-important category."
     },
     {
       "ply": 26,
@@ -247,7 +251,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "Black strikes with d5."
+      "spoken": "He's given us the chance to go d5, so we'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3."
     },
     {
       "ply": 27,
@@ -256,7 +260,7 @@
       "line": [
         "Bf1"
       ],
-      "spoken": "We retreat the bishop to f1."
+      "spoken": "I like developing the bishop to e6. Not every piece needs to be climbing Mount Everest —"
     },
     {
       "ply": 28,
@@ -265,14 +269,15 @@
       "line": [
         "Be6"
       ],
-      "spoken": "Black develops the bishop to e6."
+      "spoken": "— the bishop defends d5 and f7, doing a perfectly fine job on e6. The bishop to f5 would appeal to more people —"
     },
     {
       "ply": 27,
       "t": 383.5,
       "fen": "r1bq1rk1/ppp2ppp/2n5/3p4/8/P1P5/3N1PPP/R2QRBK1 b - - 1 14",
       "line": [],
-      "spoken": ""
+      "spoken": "— but that bishop would be more vulnerable to moves like the queen to f3; it's a bit aimless on f5, whereas on e6 —",
+      "reanchor": true
     },
     {
       "ply": 28,
@@ -281,7 +286,8 @@
       "line": [
         "Be6"
       ],
-      "spoken": ""
+      "spoken": "— on e6 it's just doing everything at once.",
+      "reanchor": true
     },
     {
       "ply": 29,
@@ -290,7 +296,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We reroute the knight to f3."
+      "spoken": "The knight to f3. Now I'd get this queen off its initial square with the queen to f6 —"
     },
     {
       "ply": 30,
@@ -299,7 +305,7 @@
       "line": [
         "Qf6"
       ],
-      "spoken": "Black plays the queen to f6."
+      "spoken": "— activating it, and bringing the rooks to the centre next is a good idea."
     },
     {
       "ply": 31,
@@ -308,7 +314,7 @@
       "line": [
         "Rb1"
       ],
-      "spoken": "We play the rook to b1."
+      "spoken": "The rook to b1 — the queen takes c3 forces us to calculate; the queen takes it, the rook takes b7 —"
     },
     {
       "ply": 32,
@@ -317,21 +323,23 @@
       "line": [
         "b6"
       ],
-      "spoken": "Black plays b6."
+      "spoken": "— I honestly don't see the need to calculate it. How to defend the pawn? b6 — generally you play it against the rook to b1 to blunt the rook, biting on granite. The drawback: it weakens the light squares and, more specifically, the knight becomes undefended. If your king were on e8, it'd be dangerous, but here the knight has a good spot on a5 to jump to, and later c4."
     },
     {
       "ply": 31,
       "t": 475,
       "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 b - - 5 16",
       "line": [],
-      "spoken": ""
+      "spoken": "The queen to b3 — a cool moment. A lot of you immediately think d4, but remember this knight: after d4, White plays the queen to a4 or b5 hitting the knight on c6, and we might lose the pawn on d4. A much more mature move is the knight to a5, hitting the queen from the side, landing on a defended square, and we can expand on the queenside with c5, eventually aiming at d4 to create a passer. The knight on the rim is fine here for two reasons: it's anchored by the pawn, and it's doing stuff — aiming at c4, controlling queenside squares. The queen takes c3 would allow the rook to c1, and I don't want to give White any activity on the c7 point, so I kick the queen with c6, over a6, because c6 kills two birds — it makes a little pawn chain that takes the burden off the bishop on e6, so now we can play the bishop to f5 and he can't even take on d5. Then take the rook and the pawn — no reason not to; the knight to g5 is easily parried by g6, and don't be afraid of mate-in-one threats just because they're mate-in-one threats. First we get control of the e-file, bringing the other rook to d8 to support the d5-pawn. On making luft: most people think of h6 or h3, but you should also consider g6 or g3, which is often far more efficient — when your opponent has a bishop of the same color as the luft square, h-luft can leave that square controlled, whereas g-luft is safer; here it's moot since White has no pieces. There's a great endgame example: Rosentalis versus McNab — Black is up a pawn with White's weak e4 and e5 pawns and a well-placed rook cutting off the king; the move g5 kills two birds, making luft on g7 and freezing White's kingside so the king gets a path through g6, and that wins. In our game we just push the d-pawn and it's over.",
+      "reanchor": true
     },
     {
       "ply": 13,
       "t": 1101,
       "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
       "line": [],
-      "spoken": ""
+      "spoken": "That's an example of doing two things with one move in the endgame — not exactly the same, but hopefully you see the resemblance.",
+      "reanchor": true
     },
     {
       "ply": 14,
@@ -340,7 +348,8 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": ""
+      "spoken": "In the game, after the knight takes c4 —",
+      "reanchor": true
     },
     {
       "ply": 15,
@@ -349,7 +358,8 @@
       "line": [
         "Bxb4"
       ],
-      "spoken": ""
+      "spoken": "— the main line is the bishop takes b4 —",
+      "reanchor": true
     },
     {
       "ply": 16,
@@ -358,7 +368,8 @@
       "line": [
         "Nxb4"
       ],
-      "spoken": ""
+      "spoken": "— the knight takes b4, and now the bishop takes f7 —",
+      "reanchor": true
     },
     {
       "ply": 17,
@@ -367,7 +378,8 @@
       "line": [
         "Bxf7+"
       ],
-      "spoken": ""
+      "spoken": "— the bishop takes f7 with check —",
+      "reanchor": true
     },
     {
       "ply": 18,
@@ -376,7 +388,8 @@
       "line": [
         "Kxf7"
       ],
-      "spoken": ""
+      "spoken": "— the king takes f7, the queen to b3 with check winning back the knight, and this leads by force —",
+      "reanchor": true
     },
     {
       "ply": 22,
@@ -388,7 +401,8 @@
         "Qxb4+",
         "Qe7"
       ],
-      "spoken": ""
+      "spoken": "— to an endgame: the king to f8, the queen takes b4, the queen to e7, and White has to trade —",
+      "reanchor": true
     },
     {
       "ply": 24,
@@ -398,14 +412,16 @@
         "Qxe7+",
         "Kxe7"
       ],
-      "spoken": ""
+      "spoken": "— because otherwise there's also a discovered check; an equal endgame according to the engines.",
+      "reanchor": true
     },
     {
       "ply": 13,
       "t": 1133,
       "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
       "line": [],
-      "spoken": ""
+      "spoken": "So that's the main line, and the knight takes e4 is a fully fledged alternative to the bishop takes d2. The way he played, giving up the second pawn, the game was pretty much over quickly.",
+      "reanchor": true
     }
   ]
 }
