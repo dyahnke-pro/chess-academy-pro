@@ -1,0 +1,102 @@
+{
+  "videoId": "4e6zHMBUgvg",
+  "title": "Master Class | Colle System | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Colle System",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:4e6zHMBUgvg",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 14.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 2 2",
+      "line": [
+        "Nf3",
+        "Nf6"
+      ],
+      "spoken": "We're Black against the knight to f3. We go the knight to f6."
+    },
+    {
+      "ply": 3,
+      "t": 16.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 0 2",
+      "line": [
+        "d4"
+      ],
+      "spoken": "d4. Let's play"
+    },
+    {
+      "ply": 4,
+      "t": 18.5,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "d5 — I want to play d5."
+    },
+    {
+      "ply": 5,
+      "t": 21,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+      "line": [
+        "e3"
+      ],
+      "spoken": "This is what's called the Colle System — White plays e3, a very peaceful, quiet line."
+    },
+    {
+      "ply": 6,
+      "t": 37.5,
+      "fen": "rn1qkb1r/pppbpppp/5n2/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R w KQkq - 1 4",
+      "line": [
+        "Bd7"
+      ],
+      "spoken": "Black has many ways to respond, but there's one line people don't really talk about — the bishop to d7."
+    },
+    {
+      "ply": 7,
+      "t": 41.5,
+      "fen": "rn1qkb1r/pppbpppp/5n2/3p4/3P4/3BPN2/PPP2PPP/RNBQK2R b KQkq - 2 4",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "Something people don't talk about. I was going to play the bishop to g4 — I guess"
+    },
+    {
+      "ply": 8,
+      "t": 45,
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p4/3P2b1/3BPN2/PPP2PPP/RNBQK2R w KQkq - 3 5",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "we'll just do it now, the bishop to g4. It's not the"
+    },
+    {
+      "ply": 9,
+      "t": 48,
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p4/2PP2b1/3BPN2/PP3PPP/RNBQK2R b KQkq - 0 5",
+      "line": [
+        "c4"
+      ],
+      "spoken": "end of the world — it just lost a tempo. And c4."
+    },
+    {
+      "ply": 10,
+      "t": 52,
+      "fen": "rn1qkb1r/ppp2ppp/4pn2/3p4/2PP2b1/3BPN2/PP3PPP/RNBQK2R w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Let's go e6, basically playing a Queen's Gambit structure, except with the bishop outside the pawn chain. The problem with my loss of a tempo is that it gave him a chance to develop, with the queen coming to b3. Now this b7-pawn is hanging. The move you often want to avoid is b6 — it creates a lot of weaknesses on that side, look at the c6-square and the light squares b6 weakens, and White has the very nasty knight to e5; if that knight reaches e5 we come under real pressure. So logically, since b6 and g5 are a problem, I'll make a move that may look like a blunder: just take the knight on f3. The queen takes b7 is often possible in such positions, but here it's not as good as it looks — after the queen grabs b7, the knight to d7 is the usual move, but we can actually snatch the pawn on g2 with that same bishop, which is why he didn't go for it. Now, we want to have some fun — we don't want to play like a coward. I'm proposing that we sacrifice. What am I noticing? White's king won't be safe on the kingside, and it's very far from castling queenside; and here's the funny thing — if White takes on b7, that does our bidding for us, because if White then castles queenside, the open b-file gives us very nice play. So we pretend there's no threat and develop as normal. In such positions we rarely put the knight on c6, because we want the c5 pawn lever, so we develop the knight to d7 anyway — objectively probably unsound, but I've had a lot of success sacking b7 like this. What should we recapture with? Both pieces make sense: taking with the pawn preserves the structure; taking with the knight keeps the centre looser and more open, which I like — provocative chess, trying to get him to play e4 and weaken the centre. It's a Grünfeld-style approach where we don't occupy the centre with pawns, planning c5 at some point. Do we play g6? We might, but I don't think we need to — we can just get the bishop out to d6. Then e4, which I think is a mistake. Now the most energetic move — not the knight to f4, that blunders the knight — the knight to g4. We're not threatening to capture the bishop, but there's a hidden threat; we want to play as aggressively as possible, because White is extremely underdeveloped, and the way to exploit a development lead is to open the centre. We could play e5, but that gives the queen pressure on f7 — better to play c5. Then a3, and the knight drops back to c6, increasing the pressure on d4; the knight to d4 is coming and it's unstoppable, these knights are pouring out. e4 walked right into what we wanted, and c5 and a3 is also a mistake — this knight wants to be on c6, then on d4. d5 isn't dangerous; the knight to d4, and now the queen has to keep control of c2, so it goes back, and we grab the pawn, weakening his centre even further — this is close to losing for White. The queen to h4 is a move to keep in mind, but it does nothing yet. Taking on d5 makes sense — weaken his centre and open the e-file, and later we can put a rook to e8. If I were White I'd seriously consider not recapturing, but he recaptures. This is an instructive moment: people get tempted to do something immediate, but the best approach is to complete your development — nothing good happens when only one piece is developed; that knight is great, but without the other pieces and a safe king it's hard to do what we want. So the bishop to d6 — this requires patience — then castle, and only then start thinking about concrete actions. Do we defend that knight, or allow White to capture it on d4? The answer is no, we don't need to defend it — let him take it — because this bishop is the only thing standing in the way of us dominating the e-file; if White takes on d4 twice, we simply put a rook to e8, and this knight on d7 can jump to c5 and perhaps to b3 later. We're essentially replacing one advantage with another — transforming your advantage is one of the hardest things to master, because visually you look at the knight and want to preserve it. Now, which piece to activate? The bishop to e5 would block the e-file — no; the rook to c8 allows the knight to e4; so the knight to c5, threatening the knight to b3, and taking the sting out of a potential g4 — the knight is excellently placed on c5 even if we never reach b3. We certainly don't play the knight to b3 now, because that blunders checkmate in one; we don't have many ways to meet that mate threat, but f6 is perfectly acceptable — it blunts the queen and creates a stronghold on e5. The bishop to f8 was possible, but why overload the bishop? The queen to d1, and White's king is basically busted. When you're attacking, take free material that lies by the side of the road, so if the attack fizzles you still have something to fall back on — the bishop is coming back to e5, a great square, so we grab a pawn along the way first. White is defending well and making it hard, but now the material is equal and he has nothing to show for it, and our pieces are beautifully placed. The only piece we haven't activated is the queen — reverse-engineer where it belongs: the queen to b6 isn't as good because of b4; I want the queen on the kingside where everything is abandoned, so the queen to d7, heading for h3. We could also play f5, opening the path to h4 — equally good. King to f1. Before the queen goes to h3, I'll start with the bishop to f4 — you'll understand the idea soon — then the queen to h3, and if I've calculated correctly we're winning. I actually missed one detail and got a bit bamboozled; rather than take the bishop and try to mate, it's better just to restore the material balance and win positionally. Snag another pawn — now we're up a pawn, and Black is still winning pretty handily. One detail: if White ever captures on f6 with the queen, trying to use the pin, we have a trick — we can 'blunder' the f6-pawn and play the queen takes g2, taking the rook with check so the queen is no longer pinned. Then g4, an excellent move — we take it; the rook to c8 was actually bad, there was an insane idea White had there. Then the bishop to d6. We could take and take on e4, but then the queen to b3 wins our bishop — so instead we drop the bishop back to e6 and blockade with the rook to e8, trying to win the pawn; or the bishop to e7, getting it out of the danger zone. I like blockading the passed pawn so nothing can happen with promotion. Then the bishop to c4 — be careful: although it's not possible right now, a move like the queen to d3 would be dangerous, and the queen to a4 is the same concept, because if we move our bishop he pins our queen and wins. So we defend the bishop with the queen and sidestep the pin: the queen to d6 — better than the queen to e7, because now we have the idea of mating him on d1 if the queen ever loses control of that square. The king to f8 is interesting, but the king to h8 is much safer, and the queen to f7 here is a very common blunder that misses the mate. e5 seems to be panic — we take the pawn, up a ton, and it's winning. King to g1. Remember the queen to f7 is a real threat, so the queen has done its job on d6 — we keep the bishop protected and cover f7 with the queen to e7. Then a6, accomplishing our main plan, and White can resign, because the bishop is actually trapped: the bishop to a4, b5, and White loses not only the bishop but the pawn too. A good game, very well played by our opponent, who climbed back",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 1164.5,
+      "fen": "rn1qkb1r/ppp1pppp/5n2/3p4/2PP2b1/3BPN2/PP3PPP/RNBQK2R b KQkq - 0 5",
+      "line": [],
+      "spoken": "from a losing position; I was a little distracted, in my defence. Let's recap a few points. The queen to b3, the bishop takes f3; and here after the queen takes b7 we had the bishop takes g2, attacking the rook — that's why I think he took. The knight takes d5; now probably the best thing for White is to take the pawn, and I'd have played the rook to b8, the queen takes a7, and then c5 to make the centre go boom — this queen is in big trouble; I love these types of positions for Black even when they're unsound. c-takes-d5, the knight to d5, e4 — a big mistake, weakening the centre. Knight before attack: reroute the knight to d4, trade on d5, open the e-file, develop your pieces. Then castle, and around here I made a mistake — the rook to e8 was fine, but after the knight to c3 this move wasn't good, because it commits too early.",
+      "reanchor": true
+    }
+  ]
+}
