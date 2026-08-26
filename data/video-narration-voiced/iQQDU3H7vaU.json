@@ -1,0 +1,451 @@
+{
+ "videoId": "iQQDU3H7vaU",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1670",
+ "openingName": "French/Caro hybrid (Greek Gift attack)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:iQQDU3H7vaU",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 537.5,
+   "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "c6",
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 546.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 588.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/8/3Pp3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nf3",
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 589.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/8/3PN3/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "Black's passive e6-and-c6 hybrid concedes the initiative. We don't change our plan for weird moves — after the exchanges, look how nicely our knights sit.",
+   "kind": "main",
+   "teaches": [
+    "don’t be intimidated by an offbeat setup"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 592,
+   "fen": "rnbqk1nr/pp2bppp/2p1p3/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 601,
+   "fen": "rnbqk1nr/pp2bppp/2p1p3/8/3PN3/3B1N2/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop belongs on d3, not c4 — on c4 it would just bite on granite against Black's pawn wall.",
+   "kind": "main",
+   "teaches": [
+    "Bd3 over Bc4 against this structure"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 604,
+   "fen": "rnbqk2r/pp2bppp/2p1pn2/8/3PN3/3B1N2/PPP2PPP/R1BQK2R w KQkq - 3 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 615,
+   "fen": "rnbqk2r/pp2bppp/2p1pN2/8/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Nxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 618,
+   "fen": "rnbqk2r/pp3ppp/2p1pb2/8/3P4/3B1N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 634.5,
+   "fen": "rnbqk2r/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The key principle — the least-valuable piece does the job. So we defend the center with the pawn to c3, not the bishop, building a solid chain, and Black's dark-squared bishop is left weak.",
+   "kind": "main",
+   "teaches": [
+    "defend with the pawn, not the piece"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 644,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R w KQ - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle, and now a mating idea is in the air.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 673.5,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [
+    "h4"
+   ],
+   "spoken": "The Greek Gift needs the g5 square under control first, and h4 does exactly that — the essential preparatory move.",
+   "kind": "main",
+   "teaches": [
+    "prepare the Greek Gift by covering g5"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 678,
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 682,
+   "fen": "rnbq1rk1/p4ppB/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "line": [
+    "Bxh7+"
+   ],
+   "spoken": "The Greek Gift itself — the bishop takes on h7 with check.",
+   "kind": "main",
+   "teaches": [
+    "the Bxh7+ Greek Gift sacrifice"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 685.5,
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R w KQ - 0 11",
+   "line": [
+    "Kxh7"
+   ],
+   "spoken": "The king is forced to take.",
+   "kind": "main"
+  },
+  {
+   "ply": 21,
+   "t": 687,
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/6N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "line": [
+    "Ng5+"
+   ],
+   "spoken": "The knight arrives on g5 with check.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 704.5,
+   "fen": "rnbq1r2/p4pp1/1pp1pbk1/6N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "line": [
+    "Kg6"
+   ],
+   "spoken": "The king runs to g6 — and here's why h4 mattered: had the king taken the knight, the h-pawn recaptures and rips the h-file wide open for the queen and rook to deliver mate.",
+   "kind": "main",
+   "teaches": [
+    "the h4 pawn opens the h-file after ...Kxg5"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 706,
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/6N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 711,
+   "fen": "rnbq1r2/p4pp1/1pp1pbk1/6N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "line": [
+    "Kg6"
+   ],
+   "spoken": "The net closes — the queen to d3, and Black is lost either way: the king back to h6 walks into mate on h7, the king forward to g4 into mate on f3.",
+   "teaches": [
+    "the Greek Gift mating net"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 763,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 772,
+   "fen": "rnbq1rk1/p4ppB/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "line": [
+    "b6",
+    "Bxh7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 854.5,
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 878.5,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 880,
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 897.5,
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/6N1/3P3P/2PB4/PP3PP1/R1BQK2R b KQ - 1 10",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 902.5,
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 904,
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P2PP/2PB1N2/PP3P2/R1BQK2R b KQ - 0 10",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 906,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 907,
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 970.5,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R w KQ - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 984.5,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1009,
+   "fen": "rnbq1rk1/pp3p1p/2p1pbp1/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1010,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1017,
+   "fen": "rnb2rk1/pp3ppp/2p1pb2/3q4/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 1 10",
+   "line": [
+    "Qd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1022.5,
+   "fen": "rnb2rk1/pp3ppB/2p1pb2/3q4/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "line": [
+    "Bxh7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1024.5,
+   "fen": "rnb2r2/pp3ppk/2p1pb2/3q2N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "line": [
+    "Kxh7",
+    "Ng5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1025.5,
+   "fen": "rnb2rk1/pp3pp1/2p1pb2/3q2N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1073.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1074.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1079.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1086.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1128,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1147.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2PpP3/8/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1149,
+   "fen": "rnbqk1nr/pp3ppp/4p3/2bpP3/8/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1156,
+   "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1169,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1177.5,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  }
+ ]
+}
