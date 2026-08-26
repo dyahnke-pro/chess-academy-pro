@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal, BookOpen } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -213,6 +213,20 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-report"
+        />
+        <SecondaryTile
+          icon={<BookOpen size={28} className="text-sky-400" />}
+          label="Fundamentals"
+          info={
+            "The four ideas every strong move rests on — piece values, control of the center, development, and king safety.\n\nEach principle is read to you in the coach's voice, and where a famous game shows it off (development → Morphy's Opera Game), you can walk that game move by move to see the fundamental win.\n\nThe same principles the coach teaches when you ask it \"teach me the basics\" in chat."
+          }
+          rgb="56, 189, 248"
+          bgClass="bg-sky-500/10"
+          textColorClass="text-sky-400"
+          onClick={goTo('fundamentals', '/coach/fundamentals')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-fundamentals"
         />
         <SecondaryTile
           icon={<Crown size={28} className="text-fuchsia-400" />}
