@@ -1,0 +1,293 @@
+{
+ "videoId": "d9qnuDDwiHQ",
+ "title": "MoistCr1tikal DESTROYS Grandmaster",
+ "openingName": "Sicilian Defense: Open",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:d9qnuDDwiHQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1004.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "You played perfectly — for the home stretch, let's go. e4, c5."
+  },
+  {
+   "ply": 3,
+   "t": 1006,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "This is a Sicilian — the knight to f3."
+  },
+  {
+   "ply": 4,
+   "t": 1007,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6."
+  },
+  {
+   "ply": 5,
+   "t": 1014.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The line I told you to play here is to push d4 next — you want to open it up; it's literally called the Open Sicilian."
+  },
+  {
+   "ply": 7,
+   "t": 1016.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": "c-takes-d4, the knight recaptures on d4."
+  },
+  {
+   "ply": 8,
+   "t": 1017.5,
+   "fen": "r1bqkbnr/pp2pppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Now you don't want to react to this — if he takes your knight, you can simply recapture with the queen, so you can just develop normally."
+  },
+  {
+   "ply": 9,
+   "t": 1025.5,
+   "fen": "r1bqkbnr/pp2pppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3. Now, your bishops — where do they belong?"
+  },
+  {
+   "ply": 10,
+   "t": 1027.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "f4 for one bishop — but you mean the light-squared bishop."
+  },
+  {
+   "ply": 11,
+   "t": 1047.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 4 6",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The dark-squared bishop is more active than f4 — and f4 blunders a fork to e5 — so you can put it on g5."
+  },
+  {
+   "ply": 12,
+   "t": 1050.5,
+   "fen": "r1bqkb1r/pp2pp1p/2np1np1/6B1/3NP3/2N5/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "line": [
+    "g6"
+   ],
+   "spoken": "If he goes e5 — think about his knight on f6; he's actually weakened himself."
+  },
+  {
+   "ply": 13,
+   "t": 1076,
+   "fen": "r1bqkb1r/pp2pp1p/2np1Bp1/8/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 0 7",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "If you take the knight on f6, notice that he has to ruin his entire pawn structure by recapturing with the pawn — so I would."
+  },
+  {
+   "ply": 14,
+   "t": 1079,
+   "fen": "r1bqkb1r/pp3p1p/2np1pp1/8/3NP3/2N5/PPP2PPP/R2QKB1R w KQkq - 0 8",
+   "line": [
+    "exf6"
+   ],
+   "spoken": "Now I would immediately prepare to castle queenside, because you're going to attack him on the kingside, and you want to tuck your king away."
+  },
+  {
+   "ply": 15,
+   "t": 1101,
+   "fen": "r1bqkb1r/pp3p1p/2np1pp1/8/3NP3/2N5/PPPQ1PPP/R3KB1R b KQkq - 1 8",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Your queen is defending the knight, so you want to keep it on the d-file — I'd put it on d2, and prevent Black's ideas."
+  },
+  {
+   "ply": 16,
+   "t": 1117,
+   "fen": "r1b1kb1r/pp3p1p/1qnp1pp1/8/3NP3/2N5/PPPQ1PPP/R3KB1R w KQkq - 2 9",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "Now he's attacking your knight — how can you defend it?"
+  },
+  {
+   "ply": 17,
+   "t": 1142,
+   "fen": "r1b1kb1r/pp3p1p/1qnp1pp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 9",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "Where can you put it? The knight to b3 would be good, because it stops him from taking the pawn on b2 — a low-key move, but a good one."
+  },
+  {
+   "ply": 18,
+   "t": 1153,
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R w KQkq - 4 10",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "And look at his queen on b6 — you can attack that queen in the future, but complete your development first."
+  },
+  {
+   "ply": 19,
+   "t": 1159.5,
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/2KR1B1R b kq - 5 10",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "So now I'm castling queenside, and then to attack the queen it's bringing the knight over to a4."
+  },
+  {
+   "ply": 20,
+   "t": 1166,
+   "fen": "r3kb1r/pp3p1p/1qnp1pp1/8/4P3/1bN5/PPPQ1PPP/2KR1B1R w kq - 0 11",
+   "line": [
+    "Bxb3"
+   ],
+   "spoken": "So he takes this first —"
+  },
+  {
+   "ply": 21,
+   "t": 1176,
+   "fen": "r3kb1r/pp3p1p/1qnp1pp1/8/4P3/1PN5/PP1Q1PPP/2KR1B1R b kq - 0 11",
+   "line": [
+    "cxb3"
+   ],
+   "spoken": "do you take back with the c-pawn? Yes, the c-pawn is good, keeping the a-pawn where it closes up the a-file."
+  },
+  {
+   "ply": 22,
+   "t": 1178,
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1qN5/PP1Q1PPP/2KR1B1R w kq - 0 12",
+   "line": [
+    "Qxb3"
+   ],
+   "spoken": "Whoa — he takes on b3?"
+  },
+  {
+   "ply": 23,
+   "t": 1185,
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1PN5/1P1Q1PPP/2KR1B1R b kq - 0 12",
+   "line": [
+    "axb3"
+   ],
+   "spoken": "That came out of nowhere — a-takes-b3."
+  },
+  {
+   "ply": 24,
+   "t": 1188,
+   "fen": "r3kb1r/pp3p1p/3p1pp1/8/1n2P3/1PN5/1P1Q1PPP/2KR1B1R w kq - 1 13",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "The confidence with which that was played! The knight to b4."
+  },
+  {
+   "ply": 25,
+   "t": 1212,
+   "fen": "r3kb1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R b kq - 2 13",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "But let's not relax — you have some developing to do. The bishop to b5 with check."
+  },
+  {
+   "ply": 26,
+   "t": 1221.5,
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R w - - 3 14",
+   "line": [
+    "Kd8"
+   ],
+   "spoken": "Now you have a fork — let's practice that thing I tortured you with previously: what are the undefended pieces and pawns, and how can you attack two of them at once?"
+  },
+  {
+   "ply": 27,
+   "t": 1249,
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n1QP3/1PN5/1P3PPP/2KR3R b - - 4 14",
+   "line": [
+    "Qd4"
+   ],
+   "spoken": "The undefended pawns: d6 is defended by the bishop, but f6 is completely undefended, and the knight is ready — forks. The queen to d4."
+  },
+  {
+   "ply": 28,
+   "t": 1255,
+   "fen": "r2k1b1r/1p3p1p/3p1pp1/pB6/1n1QP3/1PN5/1P3PPP/2KR3R w - - 0 15",
+   "line": [
+    "a5"
+   ],
+   "spoken": "That was really the mistake he made — but careful, there's a trap hiding under the surface."
+  },
+  {
+   "ply": 29,
+   "t": 1262,
+   "fen": "r2k1b1r/1p3p1p/3p1Qp1/pB6/1n2P3/1PN5/1P3PPP/2KR3R b - - 0 15",
+   "line": [
+    "Qxf6+"
+   ],
+   "spoken": "Now you can take the pawn — the queen takes f6 with check — but if he moves his king out, you actually can't take the rook, and that's the entire point of his variation. What if he covers with the bishop?"
+  },
+  {
+   "ply": 30,
+   "t": 1294,
+   "fen": "r4b1r/1pk2p1p/3p1Qp1/pB6/1n2P3/1PN5/1P3PPP/2KR3R w - - 1 16",
+   "line": [
+    "Kc7"
+   ],
+   "spoken": "The king to c7. So you can't take the rook, because of a check on h6 — so do the next best thing, take the stuff that you can take. He'll probably go the king to b6, and then you have a sexy move: a check on a4 with the knight — and I want you to tell me why we're not blundering the bishop. He might think you blundered it. Then it's checkmate — c4, even sexier than the mate I had in mind, because you dropped the piece back; the knight from the rim is defending b6."
+  },
+  {
+   "ply": 26,
+   "t": 1423.5,
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R w - - 3 14",
+   "line": [],
+   "spoken": "The queen takes b3 made it a little bit easier for you, but everything was pretty straightforward. What do you say we do one last one for the road?",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1425,
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R w KQkq - 4 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1427,
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1bN5/PP1Q1PPP/2KR1B1R w kq - 0 12",
+   "line": [
+    "O-O-O",
+    "Qxb3",
+    "cxb3",
+    "Bxb3"
+   ],
+   "spoken": "Was that queen play an accident, or did he get anything out of it? Zero — he gives up a queen for a pawn; I think it might have been a mis-click, one of those pre-move accidents, but other than that I honestly have no idea what went through his mind. Okay, in this next game — e3, the c-file is opening; maybe he'll play e4 and transpose. This is like a reverse French, and in a position like this, a lot of times what I do is just push e4, closing up the centre — a different type of position, and one of the next steps to improvement.",
+   "reanchor": true
+  }
+ ]
+}
