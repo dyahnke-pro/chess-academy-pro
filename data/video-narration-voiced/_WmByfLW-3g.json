@@ -1,0 +1,247 @@
+{
+ "videoId": "_WmByfLW-3g",
+ "title": "Botez Odds Match | Grandmaster Naroditsky Gambit?!?",
+ "openingName": "Sicilian Defense: Alapin Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:_WmByfLW-3g",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 121,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Black answers with c5, the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 3,
+   "t": 123,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 128,
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "g6",
+    "c3"
+   ],
+   "spoken": "Black fianchettoes with g6, and White replies c3 — the Alapin idea, preparing to seize the centre with d4.",
+   "kind": "main",
+   "teaches": [
+    "c3 prepares d4 against the fianchetto Sicilian"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 130.5,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The bishop comes to g7, glaring down the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 132,
+   "fen": "rnbqk1nr/pp1pppbp/6p1/8/3PP3/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "d4",
+    "cxd4",
+    "cxd4"
+   ],
+   "spoken": "White builds the full centre with d4, and after the trades holds a broad pawn duo.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "fen": "rnbqk1nr/pp2ppbp/6p1/3P4/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 6",
+   "line": [
+    "d5",
+    "exd5"
+   ],
+   "spoken": "Black hits back with d5, but White snaps it off — and pockets a clean pawn in the process.",
+   "kind": "main",
+   "teaches": [
+    "A premature ...d5 can simply drop a pawn to the exd5 break"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 135,
+   "fen": "rnbqk2r/pp2ppbp/5np1/3P4/2BP4/5N2/PP3PPP/RNBQK2R b KQkq - 2 7",
+   "line": [
+    "Nf6",
+    "Bc4"
+   ],
+   "spoken": "Black develops the knight to f6 to chase the extra pawn, and White props it up with the bishop to c4 — the setup White knows and trusts.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 139.5,
+   "fen": "rn1qk2r/pp1bppbp/5np1/3P4/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 3 8",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Black's bishop shuffles to d7, a passive post, and the engine already reads White better than a pawn up: extra material and the freer game.",
+   "kind": "main"
+  },
+  {
+   "ply": 16,
+   "t": 153,
+   "fen": "rn1q1rk1/pp1bppbp/5np1/3P4/2BP4/2N2N2/PP3PPP/R1BQK2R w KQ - 5 9",
+   "line": [
+    "Nc3",
+    "O-O"
+   ],
+   "spoken": "The knight develops to c3, reinforcing the extra d5-pawn, and Black castles.",
+   "kind": "main"
+  },
+  {
+   "ply": 19,
+   "t": 163.5,
+   "fen": "rn1q1rk1/1p1bppbp/p4np1/3P4/3P4/1BN2N2/PP3PPP/R1BQ1RK1 b - - 1 10",
+   "line": [
+    "Bb3",
+    "a6",
+    "O-O"
+   ],
+   "spoken": "White nudges the bishop back to b3 — out of harm's way, still guarding d5 — and castles. Everything is defended and the pawn stands.",
+   "kind": "main",
+   "teaches": [
+    "Retreat the bishop to keep it defending the key pawn"
+   ]
+  },
+  {
+   "ply": 20,
+   "t": 165,
+   "fen": "rn1q1rk1/3bppbp/p4np1/1p1P4/3P4/1BN2N2/PP3PPP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 170.5,
+   "fen": "rn1q1rk1/3bppbp/p4np1/3P4/1p1P4/1B3N2/PP2NPPP/R1BQ1RK1 w - - 0 12",
+   "line": [
+    "Ne2",
+    "b4"
+   ],
+   "spoken": "White begins rerouting the knight from c3 toward the kingside, while Black rolls the queenside pawns forward.",
+   "kind": "main",
+   "teaches": [
+    "Reroute a knight toward the action rather than leave it passive"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 185,
+   "fen": "rn1q1rk1/3bppbp/5np1/p2P4/1p1P1N2/1B3N2/PP3PPP/R1BQ1RK1 w - - 0 13",
+   "line": [
+    "Nf4",
+    "a5"
+   ],
+   "spoken": "The knight reaches f4 — an aggressive square eyeing e6, g6, and the d5 support — as Black keeps pushing on the flank.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 204,
+   "fen": "rn1q1rk1/3bppbp/5np1/p2P4/1pBP1N2/5N2/PP3PPP/R1BQ1RK1 b - - 1 13",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 206,
+   "fen": "rn1q1rk1/3bppbp/5np1/3P4/ppBP1N2/5N2/PP3PPP/R1BQ1RK1 w - - 0 14",
+   "line": [
+    "a4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 211.5,
+   "fen": "rn3rk1/3bppbp/1q3np1/3P4/ppBP1N2/5N2/PP3PPP/R1BQR1K1 w - - 2 15",
+   "line": [
+    "Re1",
+    "Qb6"
+   ],
+   "spoken": "White centralizes the rook to e1, stacking force behind the passed pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 30,
+   "t": 216,
+   "fen": "rn2r1k1/3bppbp/1q3np1/3PN3/ppBP1N2/8/PP3PPP/R1BQR1K1 w - - 4 16",
+   "line": [
+    "Ne5",
+    "Re8"
+   ],
+   "spoken": "And the knight lands on e5 — a monster outpost the pawns can't touch. The evaluation leaps: White is now winning by a clear margin, the whole board bending toward that central knight.",
+   "kind": "plan",
+   "teaches": [
+    "A knight on e5 backed by a passed pawn is a decisive trump"
+   ],
+   "plans": [
+    "Anchor the knight on e5",
+    "Push the passed d-pawn behind it"
+   ]
+  },
+  {
+   "ply": 32,
+   "t": 222,
+   "fen": "rn2r1k1/4ppbp/1q1P1np1/4Nb2/ppBP1N2/8/PP3PPP/R1BQR1K1 w - - 1 17",
+   "line": [
+    "d6",
+    "Bf5"
+   ],
+   "spoken": "The passed pawn drives to d6, splitting Black's camp in two and freezing his pieces — the engine now sees it as good as won.",
+   "kind": "main",
+   "teaches": [
+    "A passed pawn on the sixth cramps and divides the defense"
+   ]
+  },
+  {
+   "ply": 34,
+   "t": 231.5,
+   "fen": "rn2r1k1/5pbp/1q1Ppnp1/4Nb2/ppBP1NP1/8/PP3P1P/R1BQR1K1 w - - 0 18",
+   "line": [
+    "g4",
+    "e6"
+   ],
+   "spoken": "The pawn to g4 attacks the bishop on f5 and simply wins it — with two knights swarming, the tactics all fall White's way.",
+   "kind": "main"
+  },
+  {
+   "ply": 38,
+   "t": 246.5,
+   "fen": "rn2r1k1/5pbp/1q1Pp1p1/5b2/ppBP1NP1/8/PP3P1P/R1BQR1K1 w - - 0 20",
+   "line": [
+    "Nc6",
+    "Nfd7",
+    "Nxb8",
+    "Nxb8"
+   ],
+   "spoken": "The knights crash through, White collects material, and the position is overwhelming.",
+   "kind": "main"
+  }
+ ]
+}

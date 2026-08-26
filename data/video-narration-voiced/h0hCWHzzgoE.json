@@ -1,0 +1,223 @@
+{
+ "videoId": "h0hCWHzzgoE",
+ "title": "A Thrilling GM vs IM Blitz Match + Danya Story Time! | GM Naroditsky",
+ "openingName": "Sicilian Defense: Rossolimo Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:h0hCWHzzgoE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1821.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Black replies c5, the Sicilian.",
+   "kind": "main"
+  },
+  {
+   "ply": 5,
+   "t": 1827,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bb5",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": "White pins with the bishop on b5 against the knight — the Rossolimo, a positional anti-Sicilian that swaps sharp theory for a small, controlled centre. The knight comes to f3 behind it.",
+   "kind": "main",
+   "teaches": [
+    "The Rossolimo (Bb5 vs Nc6) is a positional anti-Sicilian"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 1828,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Black plays e6, building a compact, flexible pawn shell.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 1829.5,
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+   "line": [
+    "O-O",
+    "Nge7"
+   ],
+   "spoken": "White castles, and Black tucks the second knight on e7 — a modest square that keeps the option of rerouting to g6 or d5.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 1830.5,
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "c3"
+   ],
+   "spoken": "c3 — the heart of the Rossolimo plan: prepare d4 and claim the centre without ever committing to the sharp lines.",
+   "kind": "main",
+   "teaches": [
+    "c3 prepares the d4 central break in the Rossolimo"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 1833.5,
+   "fen": "r1bqkb1r/3pnppp/p1n1p3/1pp5/4P3/2P2N2/PPBP1PPP/RNBQ1RK1 b kq - 1 7",
+   "line": [
+    "a6",
+    "Bd3",
+    "b5",
+    "Bc2"
+   ],
+   "spoken": "Black grabs queenside space with a6 and b5, and rather than let the bishop be harassed off the board White nurses it back — first to d3, then c2, keeping it on the long light diagonal aimed at the kingside.",
+   "kind": "main",
+   "teaches": [
+    "Retreat the bishop to preserve it rather than let pawns chase it down"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 1835.5,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1pp5/4P3/2P2N2/PPBP1PPP/RNBQ1RK1 w kq - 2 8",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "Black fianchettoes with the bishop to b7, leaning on the e4-pawn along the long diagonal.",
+   "kind": "main"
+  },
+  {
+   "ply": 15,
+   "t": 1836.5,
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1pp5/4P3/P1P2N2/1PBP1PPP/RNBQ1RK1 b kq - 0 8",
+   "line": [
+    "a3"
+   ],
+   "spoken": "a3 quietly forbids b5-b4, denying Black the tempo and keeping the queenside clamped.",
+   "kind": "main",
+   "teaches": [
+    "a3 takes the b4 break away from Black"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 1846.5,
+   "fen": "r2qkb1r/1b2nppp/p1n1p3/1ppp4/4P3/P1P2N2/1PBP1PPP/RNBQ1RK1 w kq - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Black strikes in the centre with d5, challenging the e4-pawn head-on.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 1858.5,
+   "fen": "r2qkb1r/1b2nppp/p1n1p3/1ppp4/3PP3/P1P2N2/1PB2PPP/RNBQ1RK1 b kq - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White meets it with d4, and the centre locks into full tension.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 1864,
+   "fen": "r2qkb1r/1b2nppp/p1n1p3/1p1p4/3pP3/P1P2N2/1PB2PPP/RNBQ1RK1 w kq - 0 10",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1869,
+   "fen": "r2qkb1r/1b2nppp/p1n1p3/1p1p4/3PP3/P4N2/1PB2PPP/RNBQ1RK1 b kq - 0 10",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1872,
+   "fen": "r2qkb1r/1b2nppp/p1n1p3/1p6/3PB3/P4N2/1P3PPP/RNBQ1RK1 b kq - 0 11",
+   "line": [
+    "dxe4",
+    "Bxe4"
+   ],
+   "spoken": "After the trades White recaptures with the bishop to e4 — beautifully placed, raking down the long diagonal at Black's bishop on b7 and eyeing the kingside.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 1874.5,
+   "fen": "r2qkb1r/1b2nppp/p3p3/np6/3PB3/P4N2/1P3PPP/RNBQ1RK1 w kq - 1 12",
+   "line": [
+    "Na5"
+   ],
+   "spoken": "Black sends the knight to the rim on a5, and the engine's needle jumps White's way: a knight on the edge of the board defends nothing and attacks little.",
+   "kind": "main",
+   "teaches": [
+    "A knight on the rim is offside — it defends nothing and attacks little"
+   ]
+  },
+  {
+   "ply": 24,
+   "t": 1877,
+   "fen": "r2qkb1r/1n2nppp/p3p3/1p6/3P4/P4N2/1P3PPP/RNBQ1RK1 w kq - 0 13",
+   "line": [
+    "Bxb7",
+    "Nxb7"
+   ],
+   "spoken": "White trades the light-squared bishops, and Black is forced to recapture with the knight, leaving it stranded and passive on b7.",
+   "kind": "main",
+   "teaches": [
+    "Trade to leave the opponent\\u2019s piece passive"
+   ]
+  },
+  {
+   "ply": 25,
+   "t": 1879.5,
+   "fen": "r2qkb1r/1n2nppp/p3p3/1p6/3P4/P1N2N2/1P3PPP/R1BQ1RK1 b kq - 1 13",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight develops to c3, hitting the d5-square and joining the fight for the centre.",
+   "kind": "main"
+  },
+  {
+   "ply": 26,
+   "t": 1882,
+   "fen": "r2qkb1r/1n3ppp/p3p3/1p1n4/3P4/P1N2N2/1P3PPP/R1BQ1RK1 w kq - 2 14",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Black centralizes with the knight to d5 — active-looking, but White is already clearly on top, and the engine wants the outpost.",
+   "kind": "main"
+  },
+  {
+   "ply": 27,
+   "t": 1887,
+   "fen": "r2qkb1r/1n3ppp/p3p3/1p1nN3/3P4/P1N5/1P3PPP/R1BQ1RK1 b kq - 3 14",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "White plants the knight on e5 — a dominant central outpost the pawns can't chase away. The engine now reads it near a full pawn for White: the offside a5-b7 detour has left Black a passive game against a commanding centre.",
+   "kind": "plan",
+   "teaches": [
+    "A knight on e5 that can\\u2019t be evicted is a lasting positional trump"
+   ],
+   "plans": [
+    "Anchor the knight on the e5 outpost",
+    "Press the space and the better-placed pieces"
+   ]
+  }
+ ]
+}
