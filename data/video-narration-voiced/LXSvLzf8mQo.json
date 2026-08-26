@@ -1,0 +1,365 @@
+{
+ "videoId": "LXSvLzf8mQo",
+ "title": "PogChamps 3 | MoistCr1TiKaL Training | The Prophet Returns",
+ "openingName": "Italian Game (open-center training)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:LXSvLzf8mQo",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 965.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 970,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 973,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+   "line": [
+    "Nc3",
+    "Nf6",
+    "Bc4"
+   ],
+   "spoken": "A standard Italian — pieces out, bishop on c4 eyeing f7.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 974.5,
+   "fen": "r1bqkb1r/1ppp1pp1/p1n2n1p/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 6",
+   "line": [
+    "a6",
+    "O-O",
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 977,
+   "fen": "r1bqkb1r/1ppp1pp1/p1n2n1p/4p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "When your opponent is shuffling pawns and you're ahead in development, the rule is to open the center — so we strike with d4.",
+   "kind": "main",
+   "teaches": [
+    "open the center when you lead in development"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 980,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 983,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p1Pp3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "Pushing to d5 instead is the mistake: it closes the center, which cancels out your development lead — a closed position lets the lagging side catch up — and it also shuts in your own bishop.",
+   "kind": "main",
+   "teaches": [
+    "a closed center wastes a development lead"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 990,
+   "fen": "rnbqkb1r/2pp1pp1/p4n1p/1p1Pp3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 8",
+   "line": [
+    "Nb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 996,
+   "fen": "rnbqkb1r/2p2pp1/p2p1n1p/1p1Pp3/4P3/1BN2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Bb3",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1012.5,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1014.5,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2P3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "The right idea is to capture — the pawn takes on e5 — keeping the center open where our extra pieces do real work.",
+   "kind": "main",
+   "teaches": [
+    "keep the center open to use your pieces"
+   ]
+  },
+  {
+   "ply": 14,
+   "t": 1016,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/4P3/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1018,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2P1p/8/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1019.5,
+   "fen": "r1b1kb1r/2pp1pp1/p1n2q1p/8/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": "Black recaptures with the queen on f6, and now that exposed queen is a target.",
+   "kind": "main"
+  },
+  {
+   "ply": 17,
+   "t": 1035,
+   "fen": "r1b1kb1r/2pp1pp1/p1n2q1p/3N4/2p1P3/5N2/PPP2PPP/R1BQ1RK1 b kq - 1 9",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "So we develop with tempo — the knight to d5 hits the queen and drives it back while we gain time.",
+   "kind": "main",
+   "teaches": [
+    "develop with tempo against the loose queen"
+   ]
+  },
+  {
+   "ply": 18,
+   "t": 1036,
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/3N4/2p1P3/5N2/PPP2PPP/R1BQ1RK1 w kq - 2 10",
+   "line": [
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1041,
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/3N4/2p1PB2/5N2/PPP2PPP/R2Q1RK1 b kq - 3 10",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The bishop swings to f4, adding to the pressure and eyeing Black's weaknesses.",
+   "kind": "main"
+  },
+  {
+   "ply": 20,
+   "t": 1043,
+   "fen": "r1bqkb1r/2p2pp1/p1np3p/3N4/2p1PB2/5N2/PPP2PPP/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1065.5,
+   "fen": "r1bqkb1r/2p2pp1/p1np3p/3NP3/2p2B2/5N2/PPP2PPP/R2Q1RK1 b kq - 0 11",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Then e5 rips the position open — Black, still undeveloped, is simply busted. Nothing fancy, just principles.",
+   "kind": "main",
+   "teaches": [
+    "principled play beats a passive setup"
+   ]
+  },
+  {
+   "ply": 12,
+   "t": 1077.5,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1079.5,
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Bd5",
+    "Ng4",
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1081,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1082,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1085.5,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1Bn3/4P3/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "Ngxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1087.5,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1089.5,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "h5"
+   ],
+   "spoken": "A trap to know — the fishing pole. With a knight sitting on g4 that you've hit with h3, Black can offer it with h5, hoping you grab it and open the h-file at your king.",
+   "teaches": [
+    "the fishing-pole trap"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1102,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1P1/2N2N2/PPP2PP1/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1103,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N2N2/PPP2PP1/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 1107,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N5/PPP2PPN/R1BQ1RK1 b kq - 1 11",
+   "line": [
+    "Nh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1117,
+   "fen": "r3kb1r/1bpp1pp1/p1n5/1p1BP3/4P1pq/2N5/PPP2PPN/R1BQ1RK1 w kq - 2 12",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The point: if you snatch the knight, Black swings the queen to h4, and the mate threat down the h-file is genuinely hard to meet.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 1136.5,
+   "fen": "r3kb1r/1bpp1pp1/p1n5/1p1BP3/4PBpq/2N5/PPP2PPN/R2Q1RK1 b kq - 3 12",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "There's exactly one defense — the bishop to f4, covering the mating square. Without it, it's checkmate.",
+   "teaches": [
+    "find the only defense to the mate"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 27,
+   "t": 1139,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N2N2/PPP2PP1/R1BQ1RK1 b kq - 7 14",
+   "line": [
+    "Qg5",
+    "Bc1",
+    "Qd8",
+    "Nf3"
+   ],
+   "spoken": "Cleaner still is to avoid the whole thing: the knight to g5 up front, denying the queen its route to h4.",
+   "teaches": [
+    "prophylaxis: deny the attacking route"
+   ],
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1146,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1147,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1150.5,
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "h3",
+    "h5"
+   ],
+   "spoken": ""
+  }
+ ]
+}
