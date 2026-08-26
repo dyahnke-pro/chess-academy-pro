@@ -1,0 +1,275 @@
+{
+  "videoId": "oUhyUlyh1Fs",
+  "title": "Converting Winning Positions | Sicilian Defense | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "Sicilian Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:oUhyUlyh1Fs",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 11.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": "e4, c5 — the Sicilian."
+    },
+    {
+      "ply": 3,
+      "t": 13.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 4,
+      "t": 14.5,
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+      "line": [
+        "d6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 19.5,
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "The bishop to c4 — and it's surprising how many people still play these relatively obscure anti-Sicilians."
+    },
+    {
+      "ply": 6,
+      "t": 32.5,
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "We've faced this many times, and the response is simply to develop — there's nothing special White threatens. The knight to f6."
+    },
+    {
+      "ply": 7,
+      "t": 35.5,
+      "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+      "line": [
+        "d3"
+      ],
+      "spoken": "White props the bishop up with d3."
+    },
+    {
+      "ply": 8,
+      "t": 38.5,
+      "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "We continue developing, the knight to c6."
+    },
+    {
+      "ply": 9,
+      "t": 41.5,
+      "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/2B1P3/2PP1N2/PP3PPP/RNBQK2R b KQkq - 0 5",
+      "line": [
+        "c3"
+      ],
+      "spoken": "White plays c3. Now a very important point — there's a trap lurking here if Black isn't careful."
+    },
+    {
+      "ply": 10,
+      "t": 78.5,
+      "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/2B1P3/2PP1N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+      "line": [
+        "e6"
+      ],
+      "spoken": "You can handle this properly with a fianchetto and g6, but the line I like is e6, preparing to immobilize that c4-bishop."
+    },
+    {
+      "ply": 11,
+      "t": 82.5,
+      "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq - 1 6",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "White castles."
+    },
+    {
+      "ply": 12,
+      "t": 84,
+      "fen": "r1bqk2r/pp2bppp/2nppn2/2p5/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w kq - 2 7",
+      "line": [
+        "Be7"
+      ],
+      "spoken": "We develop the bishop to e7, planning the bishop to b7 and castling — and White will often drop the bishop back to b3, just like in an Italian or a Ruy."
+    },
+    {
+      "ply": 13,
+      "t": 95.5,
+      "fen": "r1bqk2r/pp2bppp/2nppn2/2p5/2B1P3/2PPBN2/PP3PPP/RN1Q1RK1 b kq - 3 7",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "When that happens, we often want to play b5 to gain queenside space. White develops the bishop to e3."
+    },
+    {
+      "ply": 14,
+      "t": 101,
+      "fen": "r1bq1rk1/pp2bppp/2nppn2/2p5/2B1P3/2PPBN2/PP3PPP/RN1Q1RK1 w - - 4 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Let's castle and complete our kingside development."
+    },
+    {
+      "ply": 15,
+      "t": 106,
+      "fen": "r1bq1rk1/pp2bppp/2nppn2/2p5/2B1P3/2PPBN2/PP1N1PPP/R2Q1RK1 b - - 5 8",
+      "line": [
+        "Nbd2"
+      ],
+      "spoken": "White plays the knight to d2. Our light-squared bishop is a little boxed in, true, but it'll find a nice square in time."
+    },
+    {
+      "ply": 16,
+      "t": 136.5,
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/2B1P3/2PPBN2/PP1N1PPP/R2Q1RK1 w - - 0 9",
+      "line": [
+        "d5"
+      ],
+      "spoken": "How to play? There's something macho about d5 in this position — we're not messing around, striking in the center at once."
+    },
+    {
+      "ply": 17,
+      "t": 151,
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pP4/2B5/2PPBN2/PP1N1PPP/R2Q1RK1 b - - 0 9",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "White captures, e takes d5."
+    },
+    {
+      "ply": 18,
+      "t": 174,
+      "fen": "r1bq1rk1/pp2bppp/2n1p3/2pn4/2B5/2PPBN2/PP1N1PPP/R2Q1RK1 w - - 0 10",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "We recapture with the knight on d5 — the plan being b6 and the bishop to b7, keeping contact against White's d3-pawn."
+    },
+    {
+      "ply": 19,
+      "t": 191,
+      "fen": "r1bq1rk1/pp2bppp/2n1p3/2pn4/2B1N3/2PPBN2/PP3PPP/R2Q1RK1 b - - 1 10",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "If White opens with d4 we still go b6. White plays the knight to e4."
+    },
+    {
+      "ply": 20,
+      "t": 194,
+      "fen": "r1bq1rk1/p3bppp/1pn1p3/2pn4/2B1N3/2PPBN2/PP3PPP/R2Q1RK1 w - - 0 11",
+      "line": [
+        "b6"
+      ],
+      "spoken": "b6, for two reasons: it defends the c5-pawn and it prepares to develop the light-squared bishop to b7."
+    },
+    {
+      "ply": 22,
+      "t": 203.5,
+      "fen": "r2q1rk1/pb2bppp/1pn1p3/1Bpn4/4N3/2PPBN2/PP3PPP/R2Q1RK1 w - - 2 12",
+      "line": [
+        "Bb5",
+        "Bb7"
+      ],
+      "spoken": "White pins with the bishop to b5, and we develop the bishop to b7, defending the knight — Black is comfortably better here."
+    },
+    {
+      "ply": 23,
+      "t": 214.5,
+      "fen": "r2q1rk1/pb2bppp/1pn1p3/1Bpn2N1/4N3/2PPB3/PP3PPP/R2Q1RK1 b - - 3 12",
+      "line": [
+        "Nfg5"
+      ],
+      "spoken": "Everything is so compact, every piece coordinating — and here White blunders with the knight to g5, losing on the spot."
+    },
+    {
+      "ply": 24,
+      "t": 229,
+      "fen": "r2q1rk1/pb2bppp/1pn1p3/1Bp3N1/4N3/2PPn3/PP3PPP/R2Q1RK1 w - - 0 13",
+      "line": [
+        "Nxe3"
+      ],
+      "spoken": "We refute it: the knight captures the bishop, taking on e3."
+    },
+    {
+      "ply": 26,
+      "t": 255.5,
+      "fen": "r2q1rk1/pb3ppp/1pn1p3/1Bp3b1/4N3/2PPP3/PP4PP/R2Q1RK1 w - - 0 14",
+      "line": [
+        "fxe3",
+        "Bxg5"
+      ],
+      "spoken": "White recaptures, and we take the knight on g5 — and note the queen to h5 is ineffective because of h6."
+    },
+    {
+      "ply": 27,
+      "t": 278.5,
+      "fen": "r2q1rk1/pb3ppp/1pn1p3/1Bp3N1/8/2PPP3/PP4PP/R2Q1RK1 b - - 0 14",
+      "line": [
+        "Nxg5"
+      ],
+      "spoken": "White takes back, the knight capturing on g5."
+    },
+    {
+      "ply": 28,
+      "t": 281.5,
+      "fen": "r4rk1/pb3ppp/1pn1p3/1Bp3q1/8/2PPP3/PP4PP/R2Q1RK1 w - - 0 15",
+      "line": [
+        "Qxg5"
+      ],
+      "spoken": "The queen takes on g5, and Black is simply up a piece."
+    },
+    {
+      "ply": 29,
+      "t": 285,
+      "fen": "r4rk1/pb3ppp/1pn1p3/1Bp3q1/4P3/2PP4/PP4PP/R2Q1RK1 b - - 0 15",
+      "line": [
+        "e4"
+      ],
+      "spoken": "White lashes out with e4."
+    },
+    {
+      "ply": 30,
+      "t": 295,
+      "fen": "3r1rk1/pb3ppp/1pn1p3/1Bp3q1/4P3/2PP4/PP4PP/R2Q1RK1 w - - 1 16",
+      "line": [
+        "Rad8"
+      ],
+      "spoken": "The rook to d8, getting the last piece into the game and paving the way for the rook to d2."
+    },
+    {
+      "ply": 9,
+      "t": 853.5,
+      "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/2B1P3/2PP1N2/PP3PPP/RNBQK2R b KQkq - 0 5",
+      "line": [],
+      "spoken": "White resigns — but let's rewind to show the trap that this whole line is built to punish.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 856,
+      "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/2B1P1b1/2PP1N2/PP3PPP/RNBQK2R w KQkq - 1 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "The bishop to g4 is a common, well-known mistake — and it's a mistake because of the queen to b3, which hits f7 and a second target at the same time.",
+      "reanchor": true
+    }
+  ]
+}
