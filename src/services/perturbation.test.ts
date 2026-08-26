@@ -10,7 +10,7 @@ function renderTable(map: Record<string, { piece: string; value: number }>): str
   for (let r = 8; r >= 1; r--) {
     const pcs: string[] = [], vals: string[] = [];
     for (let f = 0; f < 8; f++) {
-      const e = map[files[f] + r];
+      const e = map[`${files[f]}${r}`];
       pcs.push(e ? e.piece : '');
       vals.push(e ? (e.value >= 0 ? '+' : '') + e.value.toFixed(2) : '');
     }
