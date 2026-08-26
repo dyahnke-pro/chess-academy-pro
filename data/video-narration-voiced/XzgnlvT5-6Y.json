@@ -1,0 +1,201 @@
+{
+ "videoId": "XzgnlvT5-6Y",
+ "title": "A Grandmaster Plays a Beginner | Chess Mastery Explained",
+ "openingName": "Ruy Lopez",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:XzgnlvT5-6Y",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 126.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": "Playing a slower game is a new experience for me. My opponent opens with e4; I'm going to open with e5, which is"
+  },
+  {
+   "ply": 3,
+   "t": 129.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "my main move, and the most popular chess move — the King's Pawn Game. He goes the knight to f3."
+  },
+  {
+   "ply": 4,
+   "t": 134,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "I'm going to go the knight to c6, just defending the pawn — standard fare."
+  },
+  {
+   "ply": 5,
+   "t": 137.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "He plays the bishop to b5 — the Ruy Lopez opening, also called the Spanish Game — and the idea of this move is that he's indirectly putting pressure on the pawn on e5."
+  },
+  {
+   "ply": 6,
+   "t": 161.5,
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": "You might say this bishop has nothing to do with that pawn — but it does, because the knight on c6 is defending the pawn, and White's bishop is potentially threatening to take that knight. So I'm going to play a6."
+  },
+  {
+   "ply": 7,
+   "t": 167,
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Ba4"
+   ],
+   "spoken": "This might seem to merely invite my fate, because he can take on c6 and then capture my pawn — but after the game I'll talk about why that's not as effective as it might seem."
+  },
+  {
+   "ply": 8,
+   "t": 177,
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "He drops his bishop back correctly, and in turn I will simply develop my knight and pressure his pawn on e4. Now, once again, I'm not really attacking the pawn on e4 — the reason is that I haven't completed my development."
+  },
+  {
+   "ply": 9,
+   "t": 198,
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "When you haven't completed your development, especially your kingside — I haven't developed my bishop, haven't castled — you want to be very careful about grabbing pawns. It's a moot point now, because he's brought his knight out and defended the pawn."
+  },
+  {
+   "ply": 10,
+   "t": 210.5,
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/B3P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "b5"
+   ],
+   "spoken": "I'm a little annoyed by the pressure the bishop is exerting on the knight, so I'm going to go b5 and chase his bishop away."
+  },
+  {
+   "ply": 11,
+   "t": 213,
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/4P3/1BN2N2/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "This will allow me to develop my pieces in a harmonious fashion. A lot of beginners just choose the first square that comes to mind for a piece, not realising that every development square has its strengths and weaknesses. What I'm trying to do"
+  },
+  {
+   "ply": 12,
+   "t": 242,
+   "fen": "r1bqk2r/2pp1ppp/p1n2n2/1pb1p3/4P3/1BN2N2/PPPP1PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "is find the most active development square for each piece. For this bishop, I'm asking where it can develop most actively and control the most central squares — and that square is c5, because it also contests the weakest square on the board, f2, which could be a precursor to a potential attack I could load up with a move like the knight to g4."
+  },
+  {
+   "ply": 13,
+   "t": 274.5,
+   "fen": "r1bqk2r/2pp1ppp/p1n2n2/1pb1p3/4P3/1BN2N2/PPPP1PPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "I anticipate my opponent will just continue his own development by castling — still theory, common fare. He does castle as anticipated. Now I'm looking at this bishop on c8, and where I'd really like it is g4, to pin the knight to the queen — pins are a huge asset. I could also fianchetto, placing one of my bishops on the long diagonal,"
+  },
+  {
+   "ply": 14,
+   "t": 305.5,
+   "fen": "r1bqk2r/2p2ppp/p1np1n2/1pb1p3/4P3/1BN2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "but there it would be blocked by my own knight — I want to open the diagonal, so I prepare to put the bishop on g4, still completely normal. What my opponent could do here is play h3 to stop my bishop from coming to g4 — this is called prophylaxis, an intimidating-sounding term that really just means stopping the threats posed by your opponent."
+  },
+  {
+   "ply": 15,
+   "t": 371,
+   "fen": "r1bqk2r/2p2ppp/p1np1n2/1pb1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "d3"
+   ],
+   "spoken": "He plays d3."
+  },
+  {
+   "ply": 16,
+   "t": 374.5,
+   "fen": "r2qk2r/2p2ppp/p1np1n2/1pb1p3/4P1b1/1BNP1N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "And he does allow my bishop to access this very active development square. Notice how I've positioned all of my pieces on optimal squares — this bishop lining itself up on the king,"
+  },
+  {
+   "ply": 17,
+   "t": 385.5,
+   "fen": "r2qk2r/2p2ppp/p1np1n2/1pb1p3/4P1b1/1BNP1N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": "this bishop pinning the queen. He chases my bishop away. Now, a lot of beginners have a tendency, when they see a capture, to go for it — here I can"
+  },
+  {
+   "ply": 18,
+   "t": 401.5,
+   "fen": "r2qk2r/2p2ppp/p1np1n2/1pb1p2b/4P3/1BNP1N1P/PPP2PP1/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": "capture the knight, but that would defeat the whole purpose of what this bishop is doing, which is essentially immobilising that knight on f3 — so I'm just going to drop the bishop back to h5."
+  },
+  {
+   "ply": 19,
+   "t": 404.5,
+   "fen": "r2qk2r/2p2ppp/p1np1n2/1pb1p1Bb/4P3/1BNP1N1P/PPP2PP1/R2Q1RK1 b kq - 2 10",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "He pins my own knight — he liked that idea. So this is a very interesting situation that's now arisen."
+  },
+  {
+   "ply": 20,
+   "t": 422,
+   "fen": "r2qk2r/2p2pp1/p1np1n1p/1pb1p1Bb/4P3/1BNP1N1P/PPP2PP1/R2Q1RK1 w kq - 0 11",
+   "line": [
+    "h6"
+   ],
+   "spoken": "I'm annoyed by the pin, and I'm sure he's annoyed by his pin too — the question is who can get rid of their pin first, and I think that's going to be me; I'll do the same thing he did and chase his bishop away,"
+  },
+  {
+   "ply": 21,
+   "t": 427,
+   "fen": "r2qk2r/2p2pp1/p1np1n1p/1pb1p2b/4P2B/1BNP1N1P/PPP2PP1/R2Q1RK1 b kq - 1 11",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": "and tempt him into taking my knight. He drops his bishop back."
+  },
+  {
+   "ply": 22,
+   "t": 431,
+   "fen": "r2qk2r/2p2p2/p1np1n1p/1pb1p1pb/4P2B/1BNP1N1P/PPP2PP1/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "g5"
+   ],
+   "spoken": "And here what I'm going to do is just say goodbye to that — I play the move g5, attacking the bishop, which has to drop back to g3. Now you might look at g5 and say, wait, you're pushing pawns out on your kingside, aren't you about to castle short, and won't your king be very weak? The answer to all of those is undoubtedly yes — but after the game I'll unpack why this is in fact justified in many cases; the better you become at chess, the better you become at strategically violating opening principles. He's left his bishop on h4, so I'm just going to grab it — and he hasn't gotten rid of the pin either. What have I gained with this capture? First, a bishop, a pretty big deal; but I've also gained access to the g-file — and when you're thinking about your opponent's king, you want to think about avenues to access it."
+  }
+ ]
+}
