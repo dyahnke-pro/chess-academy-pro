@@ -1,6 +1,6 @@
 // Shared helpers for authoring voiced narrations. See docs/voiced-narration-pipeline.md.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { Chess } from '../../node_modules/chess.js/dist/esm/chess.js';
+import { reconstructSpineFen } from './fen-spine.mjs';
 
 export const BANK = 'data/video-narration';
 export const VOICED = 'data/video-narration-voiced';
@@ -35,19 +35,9 @@ export function build(id, opening, side, A) {
   return out;
 }
 
-/** Reconstruct the real game main line (ply-monotonic, legal). Same logic the
- *  walkthrough + corpus builders use. */
+/** Reconstruct the real game main line (fen-anchored, legal). Delegates to the
+ *  single source of truth in fen-spine.mjs so it can never splice a narrator's
+ *  rewind (the ply-monotonic version this replaced did — see fen-spine.mjs). */
 export function spine(moves) {
-  const g = new Chess(); const out = []; let last = 0;
-  for (const m of moves) {
-    if (typeof m.ply === 'number' && m.ply <= last) continue;
-    const line = Array.isArray(m.line) ? m.line : [];
-    if (!line.length) continue;
-    const snap = g.fen(); const applied = []; let ok = true;
-    for (const s of line) { try { if (!g.move(s)) { ok = false; break; } applied.push(s); } catch { ok = false; break; } }
-    if (!ok) { g.load(snap); continue; }
-    for (const s of applied) out.push(s);
-    if (typeof m.ply === 'number') last = m.ply;
-  }
-  return out;
+  return reconstructSpineFen(moves).spine.map((n) => n.san);
 }

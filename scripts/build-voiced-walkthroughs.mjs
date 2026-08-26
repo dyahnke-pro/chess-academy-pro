@@ -24,6 +24,7 @@
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
+import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
 const OUT = 'src/data/voiced-walkthroughs.json';
@@ -56,34 +57,12 @@ const groups = new Map();
  * moves apply legally from the running position; rewind/analysis beats (ply
  * jumps back, or moves that don't apply) are skipped. */
 function reconstructSpine(moves) {
-  const game = new Chess();
+  // Fen-anchored: never splices a narrator's rewind (see
+  // scripts/voiced-authoring/fen-spine.mjs). Re-derive the cumulative `path`
+  // this builder's trie keys on.
+  const spine = reconstructSpineFen(moves).spine;
   const sansSoFar = [];
-  const spine = [];
-  let lastPly = 0;
-  for (const m of moves) {
-    if (typeof m.ply === 'number' && m.ply <= lastPly) continue; // rewind
-    const line = Array.isArray(m.line) ? m.line : [];
-    if (!line.length) continue;
-    const snapshot = game.fen();
-    const applied = [];
-    let ok = true;
-    for (const s of line) {
-      try { if (!game.move(s)) { ok = false; break; } applied.push(s); } catch { ok = false; break; }
-    }
-    if (!ok) { game.load(snapshot); continue; }
-    for (let i = 0; i < applied.length; i++) {
-      sansSoFar.push(applied[i]);
-      const isLast = i === applied.length - 1;
-      spine.push({
-        san: applied[i],
-        movedBy: sansSoFar.length % 2 === 1 ? 'white' : 'black',
-        path: sansSoFar.join(' '),
-        spoken: isLast ? m.spoken || undefined : undefined,
-        kind: isLast ? m.kind : undefined,
-      });
-    }
-    if (typeof m.ply === 'number') lastPly = m.ply;
-  }
+  for (const n of spine) { sansSoFar.push(n.san); n.path = sansSoFar.join(' '); }
   return spine;
 }
 

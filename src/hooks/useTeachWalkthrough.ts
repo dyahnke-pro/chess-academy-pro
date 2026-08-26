@@ -1285,13 +1285,24 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               narrateAndAdvance([...path, node.children[0].node]);
             }, POST_NARRATION_BUFFER_MS);
           } else {
-            // Fork: surface the picker and WAIT for the student's pick.
-            // NO auto-advance — David hit this three times (2026-07-31,
-            // PostHog-confirmed on the Alapin: "the selections disappeared
-            // before I could pick one"; the old 4s timer barreled down the
-            // main line while he was still reading the tiles). The fork is
-            // a decision point; the student decides. pickFork advances,
+            // Fork: the coach ASKS OUT LOUD which line to walk (David
+            // 2026-08-26: "have the coach ask out loud if the user wants to
+            // walk down this line"), THEN surfaces the picker in the
+            // under-board bar. NO auto-advance — David hit this three times
+            // (2026-07-31, PostHog-confirmed on the Alapin: "the selections
+            // disappeared before I could pick one"; the old 4s timer barreled
+            // down the main line while he was still reading the tiles). The
+            // fork is a decision point; the student decides. pickFork advances,
             // skip advances, pause pauses — nothing advances on a timer.
+            const forkLabels = node.children
+              .map((c) => c.forkSubtitle || c.node.shortIdea || c.node.san || '')
+              .map((s) => s.trim())
+              .filter(Boolean);
+            const forkAsk =
+              forkLabels.length >= 2
+                ? `The line branches here. Want to walk down ${forkLabels[0]}, or ${forkLabels[1]}?`
+                : 'The line branches here — pick the line you want to walk.';
+            void speakWalkthroughText(forkAsk, undefined, isCurrent).catch(() => undefined);
             setPhase('fork');
           }
         };

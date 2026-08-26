@@ -11,15 +11,17 @@
  * its prose was authored + verified against (bank-fidelity), so it can only ever
  * be spoken at that position — the corpus-doctrine contract.
  *
- * Only MAIN-LINE beats are emitted (the ply-monotonic spine), so lineSan always
- * replays to the note's own fen. Analysis/rewind beats are skipped.
+ * Only MAIN-LINE beats are emitted (the fen-anchored spine), so lineSan always
+ * replays to the note's own fen. Analysis/rewind beats are skipped — see
+ * scripts/voiced-authoring/fen-spine.mjs for why the ply-monotonic guard this
+ * once used was insufficient (rewinds that walk a new variation climb past the
+ * old max ply and were spliced in).
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
+import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
 const OUT = 'public/data/voiced-teachings.json';
-const norm = (fen) => fen.split(' ').slice(0, 4).join(' ');
 // The secondary-corpus gate bans the medium/attribution + move-number prefixes.
 const BANNED = /\b(naroditsky|danya|aman|hambleton|chessbrah|in this video|in the video|the streamer|chat|subscribe|this stream|speedrun)\b/i;
 const MOVE_NUM = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;
@@ -36,25 +38,14 @@ let videos = 0, skipped = 0;
 for (const f of files) {
   const j = JSON.parse(readFileSync(`${SRC}/${f}`, 'utf8'));
   const id = j.videoId || f.replace('.json', '');
-  const g = new Chess();
-  const sans = [];
-  let last = 0, used = false;
-  for (const m of j.moves) {
-    if (typeof m.ply === 'number' && m.ply <= last) continue; // rewind/analysis
-    const line = Array.isArray(m.line) ? m.line : [];
-    if (!line.length) continue;
-    const snap = g.fen();
-    const applied = [];
-    let ok = true;
-    for (const s of line) { try { if (!g.move(s)) { ok = false; break; } applied.push(s); } catch { ok = false; break; } }
-    if (!ok) { g.load(snap); continue; }
-    for (const s of applied) sans.push(s);
-    if (typeof m.ply === 'number') last = m.ply;
-    // emit a note at this position when the beat speaks — and only when the
-    // replayed board matches the beat's own recorded fen (board-true guarantee).
+  let used = false;
+  // Fen-anchored main line: each accepted node carries its cumulative lineSan and
+  // the board after it, guaranteed to replay to that node's own recorded fen.
+  const { nodes } = reconstructSpineFen(j.moves);
+  for (const m of nodes) {
+    const sans = m.lineSan;
     const spoken = (m.spoken || '').trim();
     if (!spoken) continue;
-    if (m.fen && norm(g.fen()) !== norm(m.fen)) { skipped++; continue; }
     const text = [spoken, m.teaches || '', m.plans || ''].join(' ');
     if (BANNED.test(text) || MOVE_NUM.test(text)) { skipped++; continue; }
     notes.push({
@@ -80,7 +71,7 @@ for (const f of files) {
 }
 
 const bundle = {
-  generatedAt: '2026-08-24',
+  generatedAt: new Date().toISOString().slice(0, 10),
   videosDistilled: videos,
   noteCount: notes.length,
   notes,
