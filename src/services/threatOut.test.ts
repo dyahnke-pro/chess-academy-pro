@@ -32,6 +32,13 @@ describe('computeMustDefend — the null-move must-defend', () => {
     expect(md.net).toBe(0);
   });
 
+  it('is turn-aware — reads the subject’s hanging piece when the OPPONENT is already to move', () => {
+    // Same Ne5-hangs position but Black (the opponent of subject White) is to move.
+    const md = computeMustDefend('rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5', 'w');
+    expect(md.net).toBe(3);
+    expect(md.pieces[0].square).toBe('e5');
+  });
+
   it('reports the biggest hanging piece first (net = its value)', () => {
     // White queen on d5 undefended, Black to be given the move → …exd5 / …anything wins it.
     // Construct: White Qd5 attacked by Black e6 pawn, undefended.

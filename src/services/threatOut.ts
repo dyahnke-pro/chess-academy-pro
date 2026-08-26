@@ -48,28 +48,39 @@ export function flipSideToMove(fen: string): string | null {
 }
 
 /**
- * The immediate must-defend for `moverColor` at `fen`: what the opponent would
- * win with a free move. Empty (net 0) when nothing hangs — the honest silence
- * the importance gate reads as "nothing threatened".
+ * The immediate must-defend for `subjectColor` at `fen`: what the OTHER side
+ * wins on its next move. Turn-aware, so it is correct whoever is to move — the
+ * subject need not be the side to move (a post-move narration reads the position
+ * with the OPPONENT already to move, and "what does the student have to defend"
+ * is still the honest question there). Empty (net 0) when nothing hangs.
  */
-export function computeMustDefend(fen: string, moverColor: 'w' | 'b'): MustDefend {
-  // If the mover is already in check, there is no free tempo to hand the
-  // opponent — the check dominates and is a separate, more urgent signal. The
-  // flipped board would also be illegal (a side in check but not to move), so
-  // findHangingPieces on it is noise. Return nothing; don't double-count.
-  try { if (new Chess(fen).inCheck()) return { net: 0, pieces: [] }; } catch { return { net: 0, pieces: [] }; }
-  const flipped = flipSideToMove(fen);
-  if (!flipped) return { net: 0, pieces: [] };
+export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDefend {
+  let toMove: 'w' | 'b';
+  try { toMove = new Chess(fen).turn(); } catch { return { net: 0, pieces: [] }; }
+
+  // Ensure the OTHER side is the one to move on the probe board — that is the
+  // board on which `findHangingPieces` reports what the subject must defend.
+  let probeFen = fen;
+  if (toMove === subjectColor) {
+    // Subject to move → hand the opponent the tempo (null-move). If the subject
+    // is in check there is no free tempo to give — the check dominates and is a
+    // separate, more urgent signal; return nothing rather than probe an illegal
+    // flipped board.
+    try { if (new Chess(fen).inCheck()) return { net: 0, pieces: [] }; } catch { return { net: 0, pieces: [] }; }
+    const flipped = flipSideToMove(fen);
+    if (!flipped) return { net: 0, pieces: [] };
+    probeFen = flipped;
+  }
+  // else: the opponent is ALREADY to move — read the position directly.
+
   let hanging: HangingPiece[];
   try {
-    hanging = findHangingPieces(new Chess(flipped));
+    hanging = findHangingPieces(new Chess(probeFen));
   } catch {
     return { net: 0, pieces: [] };
   }
-  // On the flipped board the opponent is to move, so a hanging piece of
-  // `moverColor` is one the mover must defend before the opponent takes it.
   const mine = hanging
-    .filter((h) => h.color === moverColor && h.piece.toLowerCase() !== 'k')
+    .filter((h) => h.color === subjectColor && h.piece.toLowerCase() !== 'k')
     .map((h) => ({ square: h.square, piece: h.piece, value: VALUE[h.piece.toLowerCase()] ?? 0 }))
     .sort((a, b) => b.value - a.value);
   return { net: mine[0]?.value ?? 0, pieces: mine };
