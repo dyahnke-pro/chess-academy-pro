@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Chess } from 'chess.js';
@@ -22,11 +22,11 @@ function fenFor(lineSan: string[]): string {
 }
 
 describe('voiced corpus → position retrieval', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     __setFarmedCorporaCache([{ key: 'voiced', data: bundle as never }]);
     warmSecondaryPositionIndexSync();
-  });
-  afterEach(() => { __setFarmedCorporaCache(undefined); });
+  }, 60_000);
+  afterAll(() => { __setFarmedCorporaCache(undefined); });
 
   it('has real position-keyed notes to deliver', () => {
     const positioned = bundle.notes.filter((n) => n.lineSan.length > 0);
@@ -68,11 +68,11 @@ describe('voiced fires on the play surfaces; floating stays out', () => {
   const anchored = bundle.notes.find((n) => n.lineSan.length >= 5)!;
   const fen = fenFor(anchored.lineSan);
 
-  beforeEach(() => {
+  beforeAll(() => {
     __setFarmedCorporaCache([{ key: 'voiced', data: bundle as never }]);
     warmSecondaryPositionIndexSync();
-  });
-  afterEach(() => { __setFarmedCorporaCache(undefined); });
+  }, 60_000);
+  afterAll(() => { __setFarmedCorporaCache(undefined); });
 
   it('noteAtPosition (review / teach / free-play splice) returns the voiced note', () => {
     expect(noteAtPosition(anchored.lineSan, fen)?.id).toBe(anchored.id);
@@ -99,5 +99,5 @@ describe('voiced fires on the play surfaces; floating stays out', () => {
       expect(src.origin).toBe('position');
       expect(src.note.id).not.toBe('vc-floattest');
     }
-  }, 30_000); // re-warms the (large) voiced index inside the test
+  }, 90_000); // re-warms the (large, 7k+) voiced index inside the test
 });

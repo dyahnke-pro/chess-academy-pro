@@ -689,12 +689,13 @@ export function primaryCoversOpening(openingName: string): boolean {
  *  ancestors only (within 12 plies — a plan taught at move 5 is stale by
  *  move 14; David 2026-07-12 "improve the other limitations"). */
 export function planNoteForPath(historySans: string[], fen?: string): DanyaNote | null {
+  const hasPlan = (n: DanyaNote | null | undefined): boolean => Boolean(n?.plans && n.plans.trim().length > 0);
   if (fen) {
-    const exact = notesForFen(fen).find((n) => n.plans && n.plans.trim().length > 0);
+    const exact = notesForFen(fen).find(hasPlan);
     if (exact) return exact;
   }
   const notes = notesForPrefix(historySans, Infinity, 12);
-  return notes.find((n) => n.plans && n.plans.trim().length > 0) ?? null;
+  return notes.find(hasPlan) ?? null;
 }
 
 /** The TRANSITION teaching for the current game — Danya's opening→middlegame
