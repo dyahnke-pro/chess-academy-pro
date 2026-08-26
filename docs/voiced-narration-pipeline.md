@@ -309,3 +309,52 @@ YouTube video
 ```
 Rebuild all three derived files whenever voiced files change; commit the
 derived JSON + the voiced sources together.
+
+---
+
+## 8. Absorbing a new authoring batch — the rebuild runbook (locked David 2026-08-26)
+
+When a batch of new/edited voiced videos lands on `main` (David says "ping" /
+"more videos inbound"), a session integrates it with **no code changes** — the
+wiring already treats voiced as the sole exact-position corpus. Just rebuild the
+derived files, gate, ship, and refresh the review artifact:
+
+1. **Get onto the latest main** (the authoring shards land there):
+   ```bash
+   git fetch origin main && git checkout -B <branch> origin/main   # or fast-forward your branch
+   ```
+2. **Rebuild the three derived files from the voiced sources** (deterministic,
+   NO LLM, ~seconds):
+   ```bash
+   node scripts/build-voiced-teachings.mjs      # → public/data/voiced-teachings.json  (corpus notes: free-play/review/tactics/read-position)
+   node scripts/build-voiced-walkthroughs.mjs   # → src/data/voiced-walkthroughs.json  (Learn-with-Coach)
+   node scripts/build-voiced-matchups.mjs       # → src/data/voiced-matchups.json      ("X vs Y")
+   ```
+   🔒 **Do NOT regenerate `note-anchors.json` for a voiced-only batch.** The
+   anchor sidecar derives from the FARMED corpora (danya/chessbrah/hangingpawns/
+   saintlouis), which a voiced batch does not touch — regenerating is a wasted
+   step. Only run `derive-note-anchors.mjs` when the farmed corpora themselves
+   change (e.g. a strip). `applyDerivedAnchors` already ignores never-covered
+   corpora (voiced), so a growing voiced corpus never trips the stale-sidecar gate.
+3. **Gate:** `npm run ship-check` → must print `READY TO PUSH`. (Voiced notes are
+   board-truth-verified — expect `narrationAccuracy`/anchor mis-anchor ≈ 0.0%.)
+4. **Commit + push to `main`.** The corpus is large (voiced-teachings.json ≈
+   multi-MB), so **the push can exceed a 2-minute foreground timeout** — run it
+   in the background (or with a longer timeout) and confirm it landed with
+   `git merge-base --is-ancestor HEAD origin/main`. Do NOT re-push blindly on a
+   timeout; check whether it already landed first.
+5. **Verify prod:** the bundle hash advances
+   (`curl -s "https://chess-academy-pro.vercel.app/?cb=$(date +%s)" | grep -oE '/assets/index-[A-Za-z0-9]+\.js'`).
+6. **Refresh the review artifact** so it always shows the full current set:
+   re-extract the voiced notes (group by source video) and republish to the
+   SAME artifact URL (`Coach Narration Audit` — pass its `url` or republish the
+   same file path). The extractor: group `voiced-teachings.json` notes with a
+   `lineSan` by `sources[0]`, emit `{line, spoken, teaches, plans}` per beat.
+
+**Counting "how many of Danya's videos are baked in":** every voiced source
+file id traces to Naroditsky's 439-video bank (`git ls-tree -r --name-only
+09120f6 -- data/video-narration/`). Count = `ls data/video-narration-voiced/
+*.json | wc -l`; cross-ref against the bank ids to confirm they're all his
+(the "set-aside" games — Carlsen–So, Botez lesson — are games he teaches
+*within* his own videos, so they still count as Danya videos). As of
+2026-08-26: **430 of 439 baked** → 7,713 corpus notes across 426 lessons.

@@ -2641,6 +2641,15 @@ The voiced notes ARE corpus notes (position-keyed, `opening:null`, exact-board
 selection) — they feed free-play/review/tactics via `teachingNoteForBoard`, same
 as every other corpus below.
 
+**🔁 Absorbing a new authoring batch ("ping" / "more videos inbound"):** the
+wiring needs NO code changes — voiced is the sole exact-position corpus. The
+step-by-step rebuild runbook (rebuild the 3 derived files, gate, ship to `main`,
+refresh the review artifact; do NOT regen `note-anchors.json` for a voiced-only
+batch; the push is large so background it) is **§8 of
+`docs/voiced-narration-pipeline.md`**. Floating (no-line) farmed notes are fenced
+to the tactics drill + endgame lessons ONLY; every play surface speaks voiced
+(exact-position) or code-computed prose (David 2026-08-26 cleanup).
+
 ### 🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).
 
 The 58,124 farmed notes are the app's teaching. A surface that coaches without
