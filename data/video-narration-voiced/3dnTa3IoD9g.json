@@ -1,0 +1,296 @@
+{
+  "videoId": "3dnTa3IoD9g",
+  "title": "INSANE Double Bishop Sacrifice Analysis!! | US Open Chess Recap | GM Naroditsky | Rounds 6 & 7 Wins",
+  "openingName": "Sicilian Defense: Rossolimo Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:3dnTa3IoD9g",
+  "moves": [
+    {
+      "ply": 4,
+      "t": 89.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "line": [
+        "e4",
+        "c5",
+        "Nf3",
+        "Nc6"
+      ],
+      "spoken": "e4, c5, the knight to f3, the knight to c6."
+    },
+    {
+      "ply": 5,
+      "t": 91,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "The bishop to b5 — the Rossolimo."
+    },
+    {
+      "ply": 6,
+      "t": 92.5,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "line": [
+        "e6"
+      ],
+      "spoken": "He plays e6 —"
+    },
+    {
+      "ply": 5,
+      "t": 93.5,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 95,
+      "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "line": [
+        "g6"
+      ],
+      "spoken": "— and along with g6"
+    },
+    {
+      "ply": 5,
+      "t": 96,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 97,
+      "fen": "r1bqkb1r/pp1ppppp/2n2n2/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "and the knight to f6, these are the three topical responses nowadays."
+    },
+    {
+      "ply": 5,
+      "t": 101,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 102,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "line": [
+        "e6"
+      ],
+      "spoken": "My opponent plays e6,"
+    },
+    {
+      "ply": 7,
+      "t": 103.5,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "we castle short,"
+    },
+    {
+      "ply": 8,
+      "t": 104.5,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+      "line": [
+        "Nge7"
+      ],
+      "spoken": "and Black develops with the knight to e7. Here I go with a recommendation from a well-known one-e4 course of a couple of years back —"
+    },
+    {
+      "ply": 9,
+      "t": 118.5,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 3 5",
+      "line": [
+        "Re1"
+      ],
+      "spoken": "this is where I learned the move. By popularity, the most common move here is the rook to e1, by a large margin, followed by"
+    },
+    {
+      "ply": 8,
+      "t": 122.5,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 5",
+      "line": [],
+      "spoken": "and only in third place, both online and over the board,",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 126.5,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1Bp5/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+      "line": [
+        "d4"
+      ],
+      "spoken": "the move d4, which takes the game into open-Sicilian-flavoured territory,"
+    },
+    {
+      "ply": 11,
+      "t": 134,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+      "line": [
+        "cxd4",
+        "Nxd4"
+      ],
+      "spoken": "where you could argue the bishop is awkwardly placed on b5 — but then so is the knight on e7. c-takes-d4, the knight recaptures."
+    },
+    {
+      "ply": 12,
+      "t": 168.5,
+      "fen": "r1bqkb1r/pp1pnppp/4p3/1B6/3nP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+      "line": [
+        "Nxd4"
+      ],
+      "spoken": "My opponent plays the knight takes d4, which"
+    },
+    {
+      "ply": 11,
+      "t": 172,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+      "line": [],
+      "spoken": "is a pretty natural move, because",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 176,
+      "fen": "r1bqkb1r/pp1pnppp/4p3/1B6/3nP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+      "line": [
+        "Nxd4"
+      ],
+      "spoken": "there's a natural instinct to put the other knight to c6 — but Black is worse"
+    },
+    {
+      "ply": 11,
+      "t": 178.5,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+      "line": [],
+      "spoken": "after that. The best chance for equality is the queen to b6, the",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 183,
+      "fen": "r1b1kb1r/pp1pnppp/1qn1p3/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+      "line": [
+        "Qb6"
+      ],
+      "spoken": "main line, which I won't get into now — it's beyond the scope here. The upshot is that instead he"
+    },
+    {
+      "ply": 11,
+      "t": 186,
+      "fen": "r1bqkb1r/pp1pnppp/2n1p3/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+      "line": [],
+      "spoken": "takes and plays a6. Still a lot of",
+      "reanchor": true
+    },
+    {
+      "ply": 13,
+      "t": 189,
+      "fen": "r1bqkb1r/pp1pnppp/4p3/1B6/3QP3/8/PPP2PPP/RNB2RK1 b kq - 0 7",
+      "line": [
+        "Nxd4",
+        "Qxd4"
+      ],
+      "spoken": "games in the database — the knight takes, the queen recaptures on d4. This is still"
+    },
+    {
+      "ply": 14,
+      "t": 190.5,
+      "fen": "r1bqkb1r/1p1pnppp/p3p3/1B6/3QP3/8/PPP2PPP/RNB2RK1 w kq - 0 8",
+      "line": [
+        "a6"
+      ],
+      "spoken": "pretty well known. And after a6,"
+    },
+    {
+      "ply": 15,
+      "t": 196,
+      "fen": "r1bqkb1r/1p1pnppp/p3p3/8/3QP3/8/PPP1BPPP/RNB2RK1 b kq - 1 8",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "the bishop drops back to e2, and the knight to c6 here — I"
+    },
+    {
+      "ply": 16,
+      "t": 198.5,
+      "fen": "r1bqkb1r/1p1p1ppp/p1n1p3/8/3QP3/8/PPP1BPPP/RNB2RK1 w kq - 2 9",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "actually committed a small inaccuracy myself. The"
+    },
+    {
+      "ply": 17,
+      "t": 205.5,
+      "fen": "r1bqkb1r/1p1p1ppp/p1n1p3/8/4P3/2Q5/PPP1BPPP/RNB2RK1 b kq - 3 9",
+      "line": [
+        "Qc3"
+      ],
+      "spoken": "correct move is the queen to c3 — a weird-looking move, but the point is that you prevent Black from"
+    },
+    {
+      "ply": 18,
+      "t": 216.5,
+      "fen": "r1b1kb1r/1p1p1ppp/p1n1pq2/8/4P3/2Q5/PPP1BPPP/RNB2RK1 w kq - 4 10",
+      "line": [
+        "Qf6"
+      ],
+      "spoken": "solving his problem easily. If Black plays the queen to f6 here, the endgame is just much worse"
+    },
+    {
+      "ply": 20,
+      "t": 219,
+      "fen": "r1b1kb1r/1p1p1p1p/p1n1pp2/8/4P3/8/PPP1BPPP/RNB2RK1 w kq - 0 11",
+      "line": [
+        "Qxf6",
+        "gxf6"
+      ],
+      "spoken": "for Black because of the structure and"
+    },
+    {
+      "ply": 21,
+      "t": 223,
+      "fen": "r1b1kb1r/1p1p1p1p/p1n1pp2/8/4P3/2P5/PP2BPPP/RNB2RK1 b kq - 0 11",
+      "line": [
+        "c3"
+      ],
+      "spoken": "the weak dark squares. White plays c3 here — this is really good for White, about a 0.6 advantage."
+    },
+    {
+      "ply": 17,
+      "t": 226.5,
+      "fen": "r1bqkb1r/1p1p1ppp/p1n1p3/8/4P3/2Q5/PPP1BPPP/RNB2RK1 b kq - 3 9",
+      "line": [],
+      "spoken": "Again, not the interesting part. In the game I played the queen to e3; my logic was to get",
+      "reanchor": true
+    },
+    {
+      "ply": 19,
+      "t": 241,
+      "fen": "r1b1kb1r/1pqp1ppp/p1n1p3/8/4P3/4Q3/PPP1BPPP/RNB2RK1 b kq - 5 10",
+      "line": [
+        "Qc7",
+        "Qe3"
+      ],
+      "spoken": "the queen to g3 and leave the c3-square for the knight — but it's not the best way to maximise the advantage. The queen to c7, the queen to e3."
+    },
+    {
+      "ply": 21,
+      "t": 270.5,
+      "fen": "r1b1kb1r/2qp1ppp/p1n1p3/1p6/4P3/2N1Q3/PPP1BPPP/R1B2RK1 b kq - 1 11",
+      "line": [
+        "b5",
+        "Nc3"
+      ],
+      "spoken": "I don't know why I didn't play c4 — c4 is a more annoying move, because it prevents b5 and gets the central bind. b5, the knight to c3."
+    }
+  ]
+}
