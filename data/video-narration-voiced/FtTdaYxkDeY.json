@@ -1,0 +1,166 @@
+{
+  "videoId": "FtTdaYxkDeY",
+  "title": "Shutting DOWN The Stonewall Attack | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "King's Indian Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:FtTdaYxkDeY",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 13,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "d4 — let's play the knight to f6."
+    },
+    {
+      "ply": 3,
+      "t": 14,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1P2/8/PPP1P1PP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "f4"
+      ],
+      "spoken": "f4 — so this is an attempt at a Stonewall, which has been around a while; White wants to play e3 and c3. There are a couple of things we can do against it: one is d5, controlling the e4-square,"
+    },
+    {
+      "ply": 5,
+      "t": 43,
+      "fen": "rnbqkb1r/pppppp1p/5np1/8/3P1P2/4P3/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "g6",
+        "e3"
+      ],
+      "spoken": "but I don't like playing d5 against the Stonewall. Even if you're not a King's-Indian player, I like the King's-Indian setup against it — you don't have to be a King's-Indian player; White should really meet it with c5, then c-takes and d-takes, to be able to play the King's Indian. So"
+    },
+    {
+      "ply": 6,
+      "t": 50,
+      "fen": "rnbqk2r/ppppppbp/5np1/8/3P1P2/4P3/PPP3PP/RNBQKBNR w KQkq - 1 4",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": "let's make the standard King's-Indian moves — the bishop to g7."
+    },
+    {
+      "ply": 7,
+      "t": 51,
+      "fen": "rnbqk2r/ppppppbp/5np1/8/3P1P2/4PN2/PPP3PP/RNBQKB1R b KQkq - 2 4",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "d6,"
+    },
+    {
+      "ply": 8,
+      "t": 55,
+      "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3P1P2/4PN2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "d6"
+      ],
+      "spoken": "and castle — the order doesn't matter; we'll play d6, though castling first was a little more flexible."
+    },
+    {
+      "ply": 9,
+      "t": 59,
+      "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3P1P2/3BPN2/PPP3PP/RNBQK2R b KQkq - 1 5",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "The bishop to d3. The funny thing is I'm going to allow White to play e4 next, which would be a Pirc up a tempo — I kind of play the Pirc anyway, so I don't mind, and someone who plays d4 and f4 won't be familiar with the Pirc's ideas for White."
+    },
+    {
+      "ply": 10,
+      "t": 76.5,
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3P1P2/3BPN2/PPP3PP/RNBQK2R w KQ - 2 6",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "So we castle — I'm not afraid of e4."
+    },
+    {
+      "ply": 11,
+      "t": 78.5,
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3P1P2/3BPN2/PPP3PP/RNBQ1RK1 b - - 3 6",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "What's the benefit of the pawn on d6 rather than d5? What idea does d6 prepare? You could play c5, but that's not my favourite — c5 can just be met with c3, much like the London. What we need to prepare is e5 — not immediately, we can't yet — we prepare it with the knight to c6. The point is that when we play e5 we"
+    },
+    {
+      "ply": 12,
+      "t": 113,
+      "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3P1P2/3BPN2/PPP3PP/RNBQ1RK1 w - - 4 7",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "cause a much bigger explosion in the centre, because we attack both pawns and threaten a fork — so e5 does a lot more than c5 here. Let's get our knight out."
+    },
+    {
+      "ply": 13,
+      "t": 115,
+      "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3P1P2/2PBPN2/PP4PP/RNBQ1RK1 b - - 0 7",
+      "line": [
+        "c3"
+      ],
+      "spoken": "And now we're ready to play e5. You might look at this and say White has three attackers and only two defenders — but if you calculate further, to win the pawn White has to totally ruin his structure,"
+    },
+    {
+      "ply": 14,
+      "t": 136,
+      "fen": "r1bq1rk1/ppp2pbp/2np1np1/4p3/3P1P2/2PBPN2/PP4PP/RNBQ1RK1 w - - 0 8",
+      "line": [
+        "e5"
+      ],
+      "spoken": "and we'll win the e5-pawn back very easily. I can show this in more detail after the game, but we can safely play e5 without worrying about losing a pawn."
+    },
+    {
+      "ply": 15,
+      "t": 138.5,
+      "fen": "r1bq1rk1/ppp2pbp/2np1np1/4P3/3P4/2PBPN2/PP4PP/RNBQ1RK1 b - - 0 8",
+      "line": [
+        "fxe5"
+      ],
+      "spoken": "f-takes-e5."
+    },
+    {
+      "ply": 16,
+      "t": 139.5,
+      "fen": "r1bq1rk1/ppp2pbp/2n2np1/4p3/3P4/2PBPN2/PP4PP/RNBQ1RK1 w - - 0 9",
+      "line": [
+        "dxe5"
+      ],
+      "spoken": "d-takes-e5."
+    },
+    {
+      "ply": 17,
+      "t": 144,
+      "fen": "r1bq1rk1/ppp2pbp/2n2np1/4p3/3P4/2PBPN2/PP1N2PP/R1BQ1RK1 b - - 1 9",
+      "line": [
+        "Nbd2"
+      ],
+      "spoken": "Our opponent continues to play very fast — the knight to d2. Now we have several options; what's a reasonable follow-up?"
+    },
+    {
+      "ply": 18,
+      "t": 155,
+      "fen": "r1bqr1k1/ppp2pbp/2n2np1/4p3/3P4/2PBPN2/PP1N2PP/R1BQ1RK1 w - - 2 10",
+      "line": [
+        "Re8"
+      ],
+      "spoken": "The rook to e8 is a pretty inoffensive move we can always throw in, reinforcing the threat of e4, and maybe we play e-takes-d later and open the e-file. Actually, first we should develop our bishop — I know some of you think of the bishop to g4, but then h3 chases it away; the alternate way is b6 and the bishop to b7, fianchettoing the other bishop and aiming at the e4-square. This is a pawn sacrifice — let's see if our opponent figures out how to win it. The knight to g5 is an intimidating-looking move, but is it scary? I don't see what it threatens, so we continue developing; probably the bishop to c4, but then we simply defend the pawn with the rook to e7. The knight to d5 would give up f7 potentially, so be careful — always consider what you're opening and closing when you move a knight. g4 is a mistake. Should we take the knight? Yes — we take on g5, because that exposes an attack on the other knight: after the knight takes and the queen takes g5, White has to recapture our knight with his knight, which takes the pressure off the f-pawn; and one step further, the knight takes e4 is a very natural, strong King's-Indian continuation. Am I afraid of the knight taking f7? I calculated it — if he plays it, f5 chases the knight away, and then e4, or the capture on d4 pushing his pieces back. Now, our opponent is contemplating the knight takes f7 — an intermezzo that attacks the queen, and White has two attackers on our knight over on e4, so wherever our queen goes, even to h4, it appears White can capture the knight with the bishop. But I calculated — wait, maybe I miscalculated; we might have to go into an endgame I don't want. He out-calculated me. I was intending the queen to h4, and what I missed is the smothered-mate idea: after the bishop takes c4, the queen to b3 sets up an unstoppable discovered check against the king and a potential smothered mate. So the knight takes e4 was simply a mistake — I underestimated the knight to f7. So after the capture, since the bishop takes e4 is a big mistake because of the queen to b3, is there an alternative? We have to take the bishop with the queen, offering a queen trade; then he takes on e5, basically everything trades, and it's essentially a dead draw — but we'll try to win that endgame. We panic and bite the bullet, because otherwise the bishop takes c4 and he finds the queen to b3 and we're busted. Now I have to prove my mettle by winning an endgame nearly devoid of chances. The queen to f2, leaving our battery intact — I think this just loses. We can play e-takes-d4, but then there might be the knight to h6 with check, a nasty idea that forces a trade; then we pin the knight. We're not threatening the rook takes f7 — some of you might think we are, but then the queen takes f7 with check — what we're threatening is the bishop from b7 to d5, picking off the knight, which I don't think can be defended. I'm disappointed in my play — maybe fianchettoing the bishop was fundamentally too slow. People in the seventeen-, eighteen-hundred range make this kind of mistake often; there's a psychology name for it, like walking to the wrong floor of a building out of habit. Something even better than the bishop to d5: because after the bishop to d5, the rook to e1 gives us something to deal with — we want to attack the knight without allowing the rook to e1, so the queen to d5. That violates my rule of accomplishing tasks with the lowest-value piece, but it's an exception, because the queen is vulnerable to begin with — so we do two things at once, making the queen safer and attacking and winning the knight. This is a lesson in flexibility: players think they must keep attacking no matter what and rule out all queen trades, and they ignore what's actually going on — that I now have this battery and there's no longer any attack; that inflexibility makes you lose objectivity. Let's snag the queen and convert with discipline. What we shouldn't do is the bishop takes e5 — I don't like giving away the dark-squared bishop, because those with a keen tactical eye see that the bishop to h6 could become a problem, with White creating mate threats on f8. So two options: the rook to f8, trading one pair of rooks; and c5, undermining the knight, which is defended by the pawn — the undermining concept is so important. And after the rook to f1, ask how the position has changed and don't lose sight of the whole board: the a2-pawn is now hanging, so after the trade you can safely take on a2 and start grabbing everything on the queenside. The knight to f3 — he brought the knight back himself, a good move. We have a fancy move available, but there are so many good moves I struggle to verbalise — g5 and then g4. The move I'd play in a classical game is c5. You might say the point was to undermine the knight, which we've done — but I want to get rid of the d-pawn so our queen gets more real estate in the centre: d-takes-c5, the queen takes e5, pinning the rook and threatening to double-capture on f3 because of the pin. That d4-pawn holds us back, so get rid of it and open files — the more files open, the easier it is to convert the extra queen. Our dark-squared bishop isn't good and won't be even after the trade, since there'll be a c3-pawn staring at it, but at least it controls the d4-square. I have a great high-level example of an international master who did exactly this against me — instructive on how chess psychology can be used against people, even to defend bad positions. The rook to e1 — time to grab; pinned. I briefly checked the rook to e8 with check, making sure there's nothing after the king to f7 — anytime you abandon the back rank, always check fast. The rook to f1 — b4 is a threat, so we kind of have to take; there's a fancy move, but let's keep it simple and take. After the rook takes f2, I really like the bishop from g7 to e5 idea. The bishop takes h2 — how did I see it? A lot of people passively notice the pin and think, can I attack the rook with the bishop to d4? No, there's a pawn on c3 — and they file it away. I don't stop there: the pin means the king is defending the rook, so it's overloaded, and going after the h2-pawn could be an overloading tactic. The queen takes f2 is also a fork, but just winning the rook is already enough — the point is that high-level players don't just see the tactical phenomenon, they understand how it can be used as a component in a combination. b4 — I saw this; we need to move the queen and defend the bishop, so the queen to e5 or d6; I like the queen to d6, because if the bishop to h6 happens, we can move our bishop back and sacrifice on f8 and keep the bishop; we can also give the queen to g3 with check and win the bishop. Actually the queen to h3 — this is just a fork.",
+      "reanchor": true
+    },
+    {
+      "ply": 3,
+      "t": 961,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1P2/8/PPP1P1PP/RNBQKBNR b KQkq - 0 2",
+      "line": [],
+      "spoken": "Not a good game at all, but it is what it is. I'll be honest, I haven't analysed the Stonewall and how to play against it properly, so playing the King's Indian was improvising. Castle — White could play e4 here and maybe even be better per the engine, but I like it from a Pirc player's perspective, Black being up a tempo, so let's set e4 aside. Castle, the knight to c6 — all good — e5, takes, takes, the knight to d2, and the rook to e8 is normal. In this position I think b6 misses the mark — it's a little too slow, and I just didn't pay enough attention to my f7-pawn. So b6, the knight to g5, and here after the bishop to b7, the knight to d4, the real mistake came — what should we have done instead?",
+      "reanchor": true
+    }
+  ]
+}
