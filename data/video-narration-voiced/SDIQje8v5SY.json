@@ -1,0 +1,711 @@
+{
+  "videoId": "SDIQje8v5SY",
+  "title": "Grandmaster Naroditsky | Chess Speedrun | 2300",
+  "openingName": "Jobava London System",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:SDIQje8v5SY",
+  "moves": [
+    {
+      "ply": 3,
+      "t": 5.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+      "line": [
+        "d4",
+        "d5",
+        "Bf4"
+      ],
+      "spoken": "We're going to play d4 and a London System. d4, d5, the bishop to f4."
+    },
+    {
+      "ply": 4,
+      "t": 8,
+      "fen": "rnbqkbnr/pp2pppp/8/2pp4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "line": [
+        "c5"
+      ],
+      "spoken": "c5."
+    },
+    {
+      "ply": 5,
+      "t": 13,
+      "fen": "rnbqkbnr/pp2pppp/8/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+      "line": [
+        "e3"
+      ],
+      "spoken": "e3 — let's play a couple of Londons."
+    },
+    {
+      "ply": 6,
+      "t": 15,
+      "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "the knight to c6."
+    },
+    {
+      "ply": 7,
+      "t": 32,
+      "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 2 4",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "We're going to play the knight to c3 here and transpose into the Jobava London — I've done that several times now."
+    },
+    {
+      "ply": 8,
+      "t": 42.5,
+      "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3p1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+      "line": [
+        "cxd4"
+      ],
+      "spoken": "c-takes-d4."
+    },
+    {
+      "ply": 9,
+      "t": 46,
+      "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 5",
+      "line": [
+        "exd4"
+      ],
+      "spoken": "e-takes-d4."
+    },
+    {
+      "ply": 10,
+      "t": 48,
+      "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 1 6",
+      "line": [
+        "Bf5"
+      ],
+      "spoken": "You already know the drill — this knight can potentially go to b5, but we don't want the knight to b5 here. Why is the knight to b5 innocuous after the bishop to f5?"
+    },
+    {
+      "ply": 11,
+      "t": 72,
+      "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3P1B2/2N2N2/PPP2PPP/R2QKB1R b KQkq - 2 6",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "He played the bishop to f5 correctly because of a specific move — not the queen to a5, because of c3, but the rook to c8; it's not actually the check that matters. The knight to f3."
+    },
+    {
+      "ply": 12,
+      "t": 74,
+      "fen": "r2qkbnr/pp3ppp/2n1p3/3p1b2/3P1B2/2N2N2/PPP2PPP/R2QKB1R w KQkq - 0 7",
+      "line": [
+        "e6"
+      ],
+      "spoken": "So now we basically want control over this diagonal."
+    },
+    {
+      "ply": 13,
+      "t": 85.5,
+      "fen": "r2qkbnr/pp3ppp/2n1p3/3pNb2/3P1B2/2N5/PPP2PPP/R2QKB1R b KQkq - 1 7",
+      "line": [
+        "Ne5"
+      ],
+      "spoken": "What's blocking the bishop to b5 from being a check? The knight on c6. How do we get rid of it? We slam our knight into e5 — one of the key ideas of the Jobava. Now, this bishop on f5 is actually in more trouble than it appears, and the idea that exploits its hidden vulnerability is g4 and h4. And"
+    },
+    {
+      "ply": 14,
+      "t": 121,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pNb2/3P1B2/2N5/PPP2PPP/R2QKB1R w KQkq - 2 8",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. We're spoiled for choice — let's see how"
+    },
+    {
+      "ply": 15,
+      "t": 127,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pNb2/3P1BP1/2N5/PPP2P1P/R2QKB1R b KQkq - 0 8",
+      "line": [
+        "g4"
+      ],
+      "spoken": "this works, g4. I had a really cool over-the-board game exactly like this where I beat a 2500. There's a lot to unpack, but everybody should see the bishop is being attacked. Black has a complicating intermediate move that seems to offer a solution: the knight takes e5. After the knight takes e5, d-takes-e5, both the knight and the bishop are hanging, but Black plays the knight takes g4 — and at the very end of that line, don't forget the main idea of g5: the bishop to b5 with check is devastating, because there's nothing to block that diagonal, and the king has to move out to e7."
+    },
+    {
+      "ply": 16,
+      "t": 212,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pN3/3PbBP1/2N5/PPP2P1P/R2QKB1R w KQkq - 1 9",
+      "line": [
+        "Be4"
+      ],
+      "spoken": "That's just absolutely devastating — when the king moves out to e7 in the opening, that's generally not a good sign. Now of course we play the typical f3, attacking"
+    },
+    {
+      "ply": 17,
+      "t": 214.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pN3/3PbBP1/2N2P2/PPP4P/R2QKB1R b KQkq - 0 9",
+      "line": [
+        "f3"
+      ],
+      "spoken": "the bishop, forcing it back to g6. I'll show everything after the game."
+    },
+    {
+      "ply": 18,
+      "t": 230,
+      "fen": "r2qkb1r/pp3ppp/2n1pnb1/3pN3/3P1BP1/2N2P2/PPP4P/R2QKB1R w KQkq - 1 10",
+      "line": [
+        "Bg6"
+      ],
+      "spoken": "The bishop to g6, then h4 — that's the bottom line — and here we go, h5."
+    },
+    {
+      "ply": 19,
+      "t": 236.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pnb1/3pN3/3P1BPP/2N2P2/PPP5/R2QKB1R b KQkq - 0 10",
+      "line": [
+        "h4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 20,
+      "t": 238,
+      "fen": "r2qkb1r/pp3pp1/2n1pnb1/3pN2p/3P1BPP/2N2P2/PPP5/R2QKB1R w KQkq - 0 11",
+      "line": [
+        "h5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 22,
+      "t": 241.5,
+      "fen": "r2qkb1r/pp4p1/2n1pnp1/3p3p/3P1BPP/2N2P2/PPP5/R2QKB1R w KQkq - 0 12",
+      "line": [
+        "Nxg6",
+        "fxg6"
+      ],
+      "spoken": "Now we play the knight takes g6. How do we exploit the fact that the g6-pawn is weak?"
+    },
+    {
+      "ply": 23,
+      "t": 265.5,
+      "fen": "r2qkb1r/pp4p1/2n1pnp1/3p3p/3P1BPP/2NB1P2/PPP5/R2QK2R b KQkq - 1 12",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "The bishop to d3 is correct, attacking the pawn — and of course the knight takes d4 is not possible now."
+    },
+    {
+      "ply": 24,
+      "t": 268.5,
+      "fen": "r2q1b1r/pp3kp1/2n1pnp1/3p3p/3P1BPP/2NB1P2/PPP5/R2QK2R w KQ - 2 13",
+      "line": [
+        "Kf7"
+      ],
+      "spoken": "The knight takes d4 isn't really a threat, because the bishop takes g6 with check exposes the attack on the knight. So how do we arrange our pieces here to increase"
+    },
+    {
+      "ply": 25,
+      "t": 298.5,
+      "fen": "r2q1b1r/pp3kp1/2n1pnp1/3p2Pp/3P1B1P/2NB1P2/PPP5/R2QK2R b KQ - 0 13",
+      "line": [
+        "g5"
+      ],
+      "spoken": "the pressure — while not losing sight of the fact that we haven't completed our development? We're going to go g5 here, which isn't an intuitive move — why close down the position?"
+    },
+    {
+      "ply": 26,
+      "t": 304.5,
+      "fen": "r2q1bnr/pp3kp1/2n1p1p1/3p2Pp/3P1B1P/2NB1P2/PPP5/R2QK2R w KQ - 1 14",
+      "line": [
+        "Ng8"
+      ],
+      "spoken": "It may appear White is the one attacking; the reason I'm doing this is to give myself a little time that I'll use to prepare castling long."
+    },
+    {
+      "ply": 27,
+      "t": 314.5,
+      "fen": "r2q1bnr/pp3kp1/2n1p1p1/3p2Pp/3P1B1P/2NB1P2/PPPQ4/R3K2R b KQ - 2 14",
+      "line": [
+        "Qd2"
+      ],
+      "spoken": "So we go the queen to d2 — remember, the knight takes d4 isn't worrisome, I can just ignore that move entirely."
+    },
+    {
+      "ply": 28,
+      "t": 319.5,
+      "fen": "r2q2nr/pp3kp1/2nbp1p1/3p2Pp/3P1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
+      "line": [
+        "Bd6"
+      ],
+      "spoken": "Can I ignore this and castle here, or do we need to deal with it and take the bishop? Yes,"
+    },
+    {
+      "ply": 29,
+      "t": 333,
+      "fen": "r2q2nr/pp3kp1/2nbp1p1/3p2Pp/3P1B1P/2NB1P2/PPPQ4/2KR3R b - - 4 15",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "no — that's why we put the queen on d2. Now we castle long."
+    },
+    {
+      "ply": 30,
+      "t": 334,
+      "fen": "r2q3r/pp2nkp1/2nbp1p1/3p2Pp/3P1B1P/2NB1P2/PPPQ4/2KR3R w - - 5 16",
+      "line": [
+        "Nge7"
+      ],
+      "spoken": "the knight to e7."
+    },
+    {
+      "ply": 31,
+      "t": 335,
+      "fen": "r2q3r/pp2nkp1/2nbp1p1/3p2Pp/3P1B1P/2NB1P2/PPPQ4/2KRR3 b - - 6 16",
+      "line": [
+        "Rhe1"
+      ],
+      "spoken": "We bring the rook into the game — the final piece comes in."
+    },
+    {
+      "ply": 32,
+      "t": 337,
+      "fen": "r2q3r/pp3kp1/2nbp1p1/3p1nPp/3P1B1P/2NB1P2/PPPQ4/2KRR3 w - - 7 17",
+      "line": [
+        "Nf5"
+      ],
+      "spoken": "the knight to f5."
+    },
+    {
+      "ply": 34,
+      "t": 339.5,
+      "fen": "r2q3r/pp3kp1/2nbp3/3p1pPp/3P1B1P/2N2P2/PPPQ4/2KRR3 w - - 0 18",
+      "line": [
+        "Bxf5",
+        "gxf5"
+      ],
+      "spoken": "Let's get rid of the knight, and now a very typical winning move — this move crushes when we have a pawn on g5 and the e6-pawn is"
+    },
+    {
+      "ply": 35,
+      "t": 352.5,
+      "fen": "r2q3r/pp3kp1/2nbp1P1/3p1p1p/3P1B1P/2N2P2/PPPQ4/2KRR3 b - - 0 18",
+      "line": [
+        "g6+"
+      ],
+      "spoken": "weak, very thematic, and this should be automatic to you in many of these positions. Boom goes the dynamite — g6 with check, isolating the king; the king is the second-worst defender after the queen, because it can be easily attacked and a check must be dealt with by definition. If the king tries to cling to the pawn with the king to f6 or e7, your tactical detector should be on high alert."
+    },
+    {
+      "ply": 37,
+      "t": 391,
+      "fen": "r2q2kr/pp4p1/2nbR1P1/3p1p1p/3P1B1P/2N2P2/PPPQ4/2KR4 b - - 0 19",
+      "line": [
+        "Kg8",
+        "Rxe6"
+      ],
+      "spoken": "And the king stepping into the same diagonal as the queen should also catch your attention. Now we play the rook takes e6."
+    },
+    {
+      "ply": 39,
+      "t": 398,
+      "fen": "r2q2kr/pp4p1/2n1R1P1/3p1p1p/3P1Q1P/2N2P2/PPP5/2KR4 b - - 0 20",
+      "line": [
+        "Bxf4",
+        "Qxf4"
+      ],
+      "spoken": "The bishop takes f4, the queen recaptures — this is also something that should alert our metal detectors,"
+    },
+    {
+      "ply": 40,
+      "t": 399.5,
+      "fen": "r2q2k1/pp4p1/2n1R1Pr/3p1p1p/3P1Q1P/2N2P2/PPP5/2KR4 w - - 1 21",
+      "line": [
+        "Rh6"
+      ],
+      "spoken": "because a mate on e8 is actually very likely, and we already have distraction sacrifices that help create the possibility. The rook to h6."
+    },
+    {
+      "ply": 41,
+      "t": 416.5,
+      "fen": "r2q2k1/pp4p1/2n1R1Pr/3p1p1p/3P1Q1P/2N2P2/PPP5/2K1R3 b - - 2 21",
+      "line": [
+        "Rde1"
+      ],
+      "spoken": "The idea is of course to double the rooks."
+    },
+    {
+      "ply": 42,
+      "t": 418.5,
+      "fen": "r4qk1/pp4p1/2n1R1Pr/3p1p1p/3P1Q1P/2N2P2/PPP5/2K1R3 w - - 3 22",
+      "line": [
+        "Qf8"
+      ],
+      "spoken": "Now we don't need to overthink things — all we need to do is simply collect the"
+    },
+    {
+      "ply": 43,
+      "t": 425,
+      "fen": "r4qk1/pp4p1/2n1R1Pr/3N1p1p/3P1Q1P/5P2/PPP5/2K1R3 b - - 0 22",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "harvest, as they say in Russian. Let's take on d5 — no need to do anything outlandish in such a position."
+    },
+    {
+      "ply": 44,
+      "t": 433,
+      "fen": "2r2qk1/pp4p1/2n1R1Pr/3N1p1p/3P1Q1P/5P2/PPP5/2K1R3 w - - 1 23",
+      "line": [
+        "Rc8"
+      ],
+      "spoken": "We simply want to improve our pieces until an opportunity to win presents itself naturally. How do we win this? Play gradually rather than doing anything crazy. Let's think logically: how do we get our rook to e8? The number-one item on the wish list is"
+    },
+    {
+      "ply": 45,
+      "t": 472,
+      "fen": "2r2qk1/ppN3p1/2n1R1Pr/5p1p/3P1Q1P/5P2/PPP5/2K1R3 b - - 2 23",
+      "line": [
+        "Nc7"
+      ],
+      "spoken": "to get a rook to e8, and we know we should employ the least valuable piece for the task. You're making the mistake of employing the queen, but we can employ the knight — the knight to c7 — and the reason this is better than the queen to e3 is that we actually win Black's queen; involving the queen isn't good, because ultimately we'd capture with the queen and offer a queen trade, and we want to win the queen, not trade it. The queen to f5 doesn't work — close, but no. A rook immediately would be insane — he'd just take. g7 with check, and he resigns."
+    },
+    {
+      "ply": 7,
+      "t": 534.5,
+      "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 2 4",
+      "line": [],
+      "spoken": "g7 — why is g7 so good? He takes on g6; people are overestimating it, but g7 with check and he resigns. So, we get a Jobava London — the knight to c3, the bishop to f5. First point: why is the knight to b5",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 537.5,
+      "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3P1B2/2N2N2/PPP2PPP/R2QKB1R b KQkq - 0 6",
+      "line": [
+        "Bf5",
+        "Nf3",
+        "cxd4",
+        "exd4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 10,
+      "t": 539.5,
+      "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3p1B2/2N1PN2/PPP2PPP/R2QKB1R w KQkq - 0 6",
+      "line": [],
+      "spoken": "not dangerous here? Be careful about this move in general. The queen to a5 doesn't actually win the knight — the knight is defended — so when we move the knight out of c3, we can simply play c3, which is a helpful move regardless: it creates a pawn chain and protects the d4-pawn, and the queen over on a5 is kind of offside, like a soccer player.",
+      "reanchor": true
+    },
+    {
+      "ply": 14,
+      "t": 578,
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/3p4/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 8",
+      "line": [
+        "exd4",
+        "Bc8",
+        "Ng1",
+        "e6"
+      ],
+      "spoken": "So the way to actually protect against the knight to c7 is to play the rook to c8, literally to defend the square; and if you compare this to another scenario,",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 579,
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/1N1p4/3P1B2/8/PPP2PPP/R2QKBNR b KQkq - 1 8",
+      "line": [
+        "Nb5"
+      ],
+      "spoken": "the main difference is that the move rook to c8 is not possible — that's why you need to get this bishop out of the way. Black's next move is a6, kicking the knight from b5, and the knight to c7 with check — but two pieces for a rook is not good for the side getting the rook, in a regular middlegame; so this doesn't actually work for White.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 629.5,
+      "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P1B2/2N2N2/PPP2PPP/R2QKB1R w KQkq - 1 7",
+      "line": [],
+      "spoken": "So that's why you want to be careful about the queen to a5. Now, the knight to f3, e6, and the knight to e5 — this is the key idea of the Jobava; without it the whole setup would be",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 640.5,
+      "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3P1B2/2N2N2/PPP2PPP/R2QKB1R b KQkq - 0 6",
+      "line": [],
+      "spoken": "less than perfect. And I actually think e6 is inaccurate — the knight to f6 might be a little more accurate, to leave open the possibility of retreating.",
+      "reanchor": true
+    },
+    {
+      "ply": 12,
+      "t": 642,
+      "fen": "r2qkb1r/pp2pppp/2n2n2/3p1b2/3P1B2/2N2N2/PPP2PPP/R2QKB1R w KQkq - 1 7",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "Just to reiterate: g5, the bishop to e5 — the whole point of the line is that the bishop to b5 with check is a very big threat that drives the king out of e8.",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 675.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pNb2/3P1BP1/2N5/PPP2P1P/R2QKB1R b KQkq - 0 8",
+      "line": [
+        "Ne5",
+        "e6",
+        "g4"
+      ],
+      "spoken": "As a defence, Black could just take and go e6, get the knight out of the centre, and go a6 — it looks a little flimsy, but you quickly develop your kingside; Black is fine, but after the knight to f6, g4, I'm basically playing on both sides of the board. Let's analyse the complications.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 680,
+      "fen": "r2qkb1r/pp3ppp/4pn2/3pnb2/3P1BP1/2N5/PPP2P1P/R2QKB1R w KQkq - 0 9",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "arising after the knight takes e5.",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 683.5,
+      "fen": "r2qkb1r/pp3ppp/4pn2/3pPb2/5BP1/2N5/PPP2P1P/R2QKB1R b KQkq - 0 9",
+      "line": [
+        "dxe5"
+      ],
+      "spoken": "Now let's unpack the situation — as I've advocated many times, don't panic when you see a lot going on; isolate the separate elements.",
+      "reanchor": true
+    },
+    {
+      "ply": 18,
+      "t": 702.5,
+      "fen": "r2qkb1r/pp3ppp/4pn2/3pP3/5Bb1/2N5/PPP2P1P/R2QKB1R w KQkq - 0 10",
+      "line": [
+        "Bxg4"
+      ],
+      "spoken": "The knight is hanging, the bishop is hanging — two pieces are hanging at once. Both can be protected: we can play the bishop takes g4, and White has several ways to win — but you want to be very careful.",
+      "reanchor": true
+    },
+    {
+      "ply": 19,
+      "t": 717.5,
+      "fen": "r2qkb1r/pp3ppp/4pn2/1B1pP3/5Bb1/2N5/PPP2P1P/R2QK2R b KQkq - 1 10",
+      "line": [
+        "Bb5+"
+      ],
+      "spoken": "f3 is the obvious move, but the bishop to b5 is the clever move — with check.",
+      "reanchor": true
+    },
+    {
+      "ply": 20,
+      "t": 721,
+      "fen": "r2qkb1r/pp1n1ppp/4p3/1B1pP3/5Bb1/2N5/PPP2P1P/R2QK2R w KQkq - 2 11",
+      "line": [
+        "Nd7"
+      ],
+      "spoken": "You do have a way to block the check, but it leaves the bishop undefended, and",
+      "reanchor": true
+    },
+    {
+      "ply": 21,
+      "t": 723,
+      "fen": "r2qkb1r/pp1n1ppp/4p3/1B1pP3/5Bb1/2N5/PPP1QP1P/R3K2R b KQkq - 3 11",
+      "line": [
+        "Qe2"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 24,
+      "t": 725.5,
+      "fen": "r2q1b1r/pp2kppp/4pn2/1B1pP3/5Bb1/2N5/PPP2P1P/R2QK2R w KQ - 6 13",
+      "line": [
+        "Ke7",
+        "Qd1",
+        "Nf6"
+      ],
+      "spoken": "the king to e7 is bad — a check wins a second piece.",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 728.5,
+      "fen": "r2q1b1r/pp2kppp/4pP2/1B1p4/5Bb1/2N5/PPP2P1P/R2QK2R b KQ - 0 13",
+      "line": [
+        "exf6+"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 18,
+      "t": 731.5,
+      "fen": "r2qkb1r/pp3ppp/4pn2/3pP3/5Bb1/2N5/PPP2P1P/R2QKB1R w KQkq - 0 10",
+      "line": [],
+      "spoken": "The bishop to b5 is a very strong move: the knight takes g4, of course the bishop to b5, and the simplest is just to kick the knight away. A lot of people think this is checkmate — it's not. Remember there are three ways to deal with a check: move the king, take the checking piece, and block the check — you need to check all three boxes before you assure yourself it's mate. Here box number two isn't checked: you can go f6, and the bishop on f8 is a very important defensive piece, because after the trade it ends its defence of the knight and you're not winning the piece. So instead of doing something drastic, the simplest is the bishop to e2 and castle — do not forget to complete your development, accumulate the pressure. And the queen to d2 poses a hidden threat: if Black plays something like the rook to c8, the battery means another attacker,",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 808.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pNb2/3P1BP1/2N5/PPP2P1P/R2QKB1R b KQkq - 0 8",
+      "line": [],
+      "spoken": "the bishop takes h6 wins a piece — one of several things I can do. So the knight takes e5 doesn't work, the bishop to e4 doesn't really help, f3.",
+      "reanchor": true
+    },
+    {
+      "ply": 16,
+      "t": 812.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pN3/3PbBP1/2N5/PPP2P1P/R2QKB1R w KQkq - 1 9",
+      "line": [
+        "Be4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 17,
+      "t": 813.5,
+      "fen": "r2qkb1r/pp3ppp/2n1pn2/3pN3/3PbBP1/2N2P2/PPP4P/R2QKB1R b KQkq - 0 9",
+      "line": [
+        "f3"
+      ],
+      "spoken": "The bishop to g6, h4 — inducing f3 is, I think, neither good nor bad for Black.",
+      "reanchor": true
+    },
+    {
+      "ply": 19,
+      "t": 815,
+      "fen": "r2qkb1r/pp3ppp/2n1pnb1/3pN3/3P1BPP/2N2P2/PPP5/R2QKB1R b KQkq - 0 10",
+      "line": [
+        "Bg6",
+        "h4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 20,
+      "t": 820,
+      "fen": "r2qkb1r/pp3pp1/2n1pnb1/3pN2p/3P1BPP/2N2P2/PPP5/R2QKB1R w KQkq - 0 11",
+      "line": [
+        "h5"
+      ],
+      "spoken": "Now Black is forced to play the move h5, which allows",
+      "reanchor": true
+    },
+    {
+      "ply": 22,
+      "t": 824,
+      "fen": "r2qkb1r/pp4p1/2n1pnp1/3p3p/3P1BPP/2N2P2/PPP5/R2QKB1R w KQkq - 0 12",
+      "line": [
+        "Nxg6",
+        "fxg6"
+      ],
+      "spoken": "me to ruin Black's pawn structure around the king, and now",
+      "reanchor": true
+    },
+    {
+      "ply": 23,
+      "t": 827.5,
+      "fen": "r2qkb1r/pp4p1/2n1pnp1/3p3p/3P1BPP/2NB1P2/PPP5/R2QK2R b KQkq - 1 12",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "immediately go after Black's pawn with the bishop to d3. Now if the knight takes d4, then",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 830,
+      "fen": "r2qkb1r/pp4p1/4pnB1/3p3p/3n1BPP/2N2P2/PPP5/R2QK2R b KQkq - 0 13",
+      "line": [
+        "Nxd4",
+        "Bxg6+"
+      ],
+      "spoken": "the bishop to g6 wins the knight. So the king to f7 is basically forced.",
+      "reanchor": true
+    },
+    {
+      "ply": 24,
+      "t": 832.5,
+      "fen": "r2qkb1r/pp4p1/4pnp1/3p3p/3n1BPP/2NB1P2/PPP5/R2QK2R w KQkq - 0 13",
+      "line": [],
+      "spoken": "Now, g5 — there's a practical reason why I didn't just go the queen to d2, which does give up a pawn; I didn't want to allow a certain avenue of play. A lot of people suggested the rook to g1, thinking they'd x-ray the pawn, but then h-takes-g4 and the rook takes h4, and Black wins another pawn. So the reason I go g5 is because",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 876.5,
+      "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
+      "line": [
+        "g5",
+        "Kf7",
+        "Qd2",
+        "Ng8"
+      ],
+      "spoken": "I'm temporarily closing up the kingside in order to complete my development without having to worry about stuff happening on the kingside. The knight to g8; now if the knight takes d4, remember White's response here — there are actually several things to do.",
+      "reanchor": true
+    },
+    {
+      "ply": 31,
+      "t": 890,
+      "fen": "r2q1bnr/pp4p1/4p1k1/3p2Pp/3Q1B1P/2N2P2/PPP5/R3K2R b KQ - 0 16",
+      "line": [
+        "Bxg6+",
+        "Kxg6",
+        "Qxd4"
+      ],
+      "spoken": "The bishop to g6 is one move, but what I'd urge people to do, especially at a higher rating,",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 895,
+      "fen": "r2q1b1r/pp3kp1/4pnp1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R b KQ - 2 14",
+      "line": [],
+      "spoken": "is really do not rush to assume that you have to",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 897,
+      "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
+      "line": [
+        "Ng8"
+      ],
+      "spoken": "win the pawn back — consider the move castling long. The fact",
+      "reanchor": true
+    },
+    {
+      "ply": 29,
+      "t": 900,
+      "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/2KR3R b - - 4 15",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "that Black has taken the central pawn can actually benefit White, because White is the one with two pieces on the d-file; these pawns on e6 and d5 may look imposing, but both are sitting ducks, particularly the e-pawn.",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 925,
+      "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
+      "line": [],
+      "spoken": "Look at all of White's pieces clustered together in the centre, whereas Black's pieces are barely developed — so the rook to e1 is going to come with devastating effect. I would actually not force things with the bishop takes g6;",
+      "reanchor": true
+    },
+    {
+      "ply": 29,
+      "t": 926.5,
+      "fen": "r2q1bnr/pp3kp1/4p1B1/3p2Pp/3n1B1P/2N2P2/PPPQ4/R3K2R b KQ - 0 15",
+      "line": [
+        "Bxg6+"
+      ],
+      "spoken": "I think we could get better than that. Questioning your assumptions and not making these knee-jerk moves is an element of chess mastery at a higher level. The knight takes f3 actually does our work for us — we open the f-file, the queen could come to f2, the knight is trapped, and even if it weren't, the bishop to c7 would expose the attack on the queen. Pawns in such positions, when we're aiming for checkmate, can actually hurt us, and sacrificing two or three pawns is something you need to be able to do without a second thought when Black is this undeveloped. My intuition just screams that White is completely winning — Black has not a single piece developed.",
+      "reanchor": true
+    },
+    {
+      "ply": 28,
+      "t": 1007,
+      "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
+      "line": [],
+      "spoken": "Black has literally just one developed piece, a knight — that's it. So the bishop to d6, we castle, again avoiding the knee-jerk reaction — the queen defends the bishop; we want him to take on f4, because then the queen enters the game, dislodges the king from the pawn, and we play the bishop takes g6. The knight to g7 brings the last piece into the game; the knight to f5, of course we take it, and whichever way Black recaptures he opens a fatal avenue: if he takes with the f-pawn, the pawn has lost its supporter — the knight takes d5 — and if g-takes-f5, we push through with g6; if the king takes g6, it's a fork, so the king has to go, and the rook takes e6. Now the queen takes f5 — I understand people think it's going to be checkmate, but remember the three ways to deal with a check; here categories two and three are available.",
+      "reanchor": true
+    }
+  ]
+}
