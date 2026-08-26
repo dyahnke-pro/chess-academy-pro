@@ -1813,6 +1813,63 @@ export function assembleConceptAnswer(concept: ConceptEntry): GroundedAnswer | n
 }
 
 /**
+ * assembleFundamentalsAnswer — "teach me the fundamentals / basics / basic
+ * concepts", "what are pieces worth?", "opening principles". Before this lane
+ * existed, a "teach me basic concepts" ask had NO handler and fell through to
+ * the ungrounded LLM board-readout ("the best move is e4") — David 2026-08-26:
+ * "it couldnt teach me basic fundamentals … all of this needs to be taught
+ * while in the coach tab".
+ *
+ * G0/G3: these are the canonical, public-domain teaching principles (piece
+ * values, control the centre, develop, castle) — established chess pedagogy
+ * (Capablanca's *Chess Fundamentals*, Lasker), NOT a board claim and NOT LLM
+ * invention. The text is authored here and voiced verbatim through voiceFacts;
+ * the model only phrases it. `topic` scopes to one principle; 'general' (the
+ * default) teaches the core four in one tight pass.
+ */
+export type FundamentalsTopic = 'piece-values' | 'development' | 'center' | 'king-safety' | 'general';
+
+const FUNDAMENTALS: Record<Exclude<FundamentalsTopic, 'general'>, { facts: string; source: string }> = {
+  'piece-values': {
+    facts: 'Piece values, the currency of every trade: a pawn is worth 1, a knight and a bishop about 3 each, a rook 5, and the queen 9. The king is priceless — lose it and the game is over. Use these numbers to judge a trade: give up less than you get, and never hand over a rook for a knight without a concrete reason.',
+    source: 'concept:fundamentals-piece-values',
+  },
+  development: {
+    facts: 'Development means getting your pieces into the game. In the opening, bring your knights and bishops off the back rank toward the centre before you start an attack. Two rules keep it clean: do not move the same piece twice before the others are out, and do not bring the queen out early, where the opponent chases it and gains time.',
+    source: 'concept:fundamentals-development',
+  },
+  center: {
+    facts: 'Control the centre — the four squares e4, d4, e5, and d5. A pawn or piece in the centre reaches more of the board and cramps the opponent, while opening lines for your own pieces. That is why the first moves of almost every opening fight over these squares.',
+    source: 'concept:fundamentals-center',
+  },
+  'king-safety': {
+    facts: 'King safety comes first. Castle early to tuck the king into the corner behind a wall of pawns, and connect your rooks. A king caught in the centre while the position opens is the single most common way a game is lost — get it safe before you go hunting.',
+    source: 'concept:fundamentals-king-safety',
+  },
+};
+
+export function assembleFundamentalsAnswer(topic: FundamentalsTopic): GroundedAnswer | null {
+  if (topic !== 'general') {
+    const entry = FUNDAMENTALS[topic];
+    return { facts: entry.facts, bestMoveSan: null, bestMoveFromTo: null, sources: [entry.source] };
+  }
+  // General "teach me the fundamentals" — the core four, most-load-bearing
+  // first (king safety and the centre win more beginner games than anything).
+  const facts = [
+    'The fundamentals every game rests on. First, piece values: a pawn is 1, a knight or bishop about 3, a rook 5, the queen 9 — use them to judge every trade.',
+    'Control the centre — e4, d4, e5, d5 — so your pieces reach more of the board.',
+    'Develop: get your knights and bishops out toward the centre before attacking, and do not move one piece twice or bring the queen out early.',
+    'And castle early to get your king safe behind its pawns — a king stuck in the centre is how most games are lost.',
+  ].join(' ');
+  return {
+    facts,
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: Object.values(FUNDAMENTALS).map((f) => f.source),
+  };
+}
+
+/**
  * assembleProgressAnswer — Phase 6: "am I improving?" / "what should I work
  * on?". The answer is the student's OWN computed history — `detectBadHabits`
  * already analyzed their games and produced human-readable habit descriptions

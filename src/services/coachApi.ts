@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -93,6 +93,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
+import { fundamentalsTopicFromText } from '../coach/questionIntents';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -1213,6 +1214,13 @@ export interface MasterGroundingOptions {
    *  training memory. Needs no board. The interception confirms a real concept
    *  via `detectConceptsInText` and falls through otherwise. */
   conceptQuestion?: boolean;
+  /** true when this turn asks for the FUNDAMENTALS / basics ("teach me the
+   *  fundamentals", "what are pieces worth?", "opening principles"). Voiced from
+   *  the authored public-domain principle set (assembleFundamentalsAnswer) via
+   *  voiceFacts — G0: the model only phrases them, never invents. Needs no
+   *  board; dispatches before the concept lane so a general "principles" ask
+   *  teaches the fundamentals rather than a single glossary token. */
+  fundamentalsQuestion?: boolean;
   /** STEP D Phase 4 (cont) — true when this turn asks how a specific PRO plays
    *  ("how does Naroditsky play this?"). Voiced from `playerGames` (the player's
    *  real game corpus) via assemblePlayerGamesAnswer; gated on `playerGames`
@@ -3809,6 +3817,23 @@ export async function getCoachChatResponse(
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
+        }
+
+        // ── FUNDAMENTALS / BASICS — voice the authored principle set ───────
+        // "teach me the fundamentals / basics / basic concepts", "what are the
+        // pieces worth?", "opening principles". Before this lane a fundamentals
+        // ask had no handler and fell through to the ungrounded board readout
+        // ("the best move is e4" — David 2026-08-26). Runs BEFORE the concept
+        // lane so a general "principles" ask teaches the whole fundamentals set
+        // rather than a single glossary token. G0: authored public-domain
+        // principles, the model only phrases them; no board needed.
+        if (grounding.fundamentalsQuestion) {
+          const userText = lastUserMessage() ?? '';
+          const answer = assembleFundamentalsAnswer(fundamentalsTopicFromText(userText));
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            if (voiced) return voiced;
+          }
         }
 
         // ── CONCEPT / DEFINITION (Phase 5) — voice the BOOK corpus ─────────

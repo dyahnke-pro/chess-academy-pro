@@ -793,6 +793,38 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   return CONCEPT_QUESTION_RE.test(ask) && !CONCEPT_POSITIONAL_CUE_RE.test(ask);
 }
 
+/** A FUNDAMENTALS ask — "teach me the fundamentals / basics / basic concepts",
+ *  "what are the pieces worth?", "opening principles". Before this existed, the
+ *  ask had NO handler: "teach me basic concepts" fell through TEACH_PATTERN +
+ *  the fuzzy opening matcher into the ungrounded LLM board-readout and got
+ *  answered "the best move is e4" (David 2026-08-26: "it couldnt teach me basic
+ *  fundamentals … all of this needs to be taught while in the coach tab").
+ *  Routed via `assembleFundamentalsAnswer` → voiceFacts (G0: authored,
+ *  public-domain principles; the model only phrases them). Dispatches BEFORE the
+ *  concept lane so "what are the principles" teaches the fundamentals set rather
+ *  than a single glossary token. */
+const FUNDAMENTALS_QUESTION_RE =
+  /\b(?:chess\s+)?fundamentals?\b|\bbasic\s+(?:concepts?|principles?|ideas?|strateg(?:y|ies)|chess|stuff|things|moves?)\b|\bthe\s+basics\b|\b(?:teach|learn|explain|show|cover|go\s+over|start\s+with)\b[\s\w']{0,20}\bbasics?\b|\bpiece\s+values?\b|\b(?:pawns?|knights?|bishops?|rooks?|queens?|pieces?)\s+(?:are\s+|is\s+)?worth\b|\bworth\s+(?:of\s+)?(?:a\s+|an\s+|the\s+)?(?:pawn|knight|bishop|rook|queen|piece)s?\b|\bopening\s+principles?\b/i;
+export function isFundamentalsQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // App-surface asks ("what does the basics TAB do") are app-help, not teaching.
+  if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  return FUNDAMENTALS_QUESTION_RE.test(ask);
+}
+
+/** Which fundamental the student asked about, for `assembleFundamentalsAnswer`.
+ *  Defaults to 'general' (the core four in one pass) when unscoped. */
+export function fundamentalsTopicFromText(
+  ask: string | undefined,
+): 'piece-values' | 'development' | 'center' | 'king-safety' | 'general' {
+  const t = (ask ?? '').toLowerCase();
+  if (/\bpiece\s+values?\b|\bworth\b|\bhow\s+(?:much|many\s+points?)\b/.test(t)) return 'piece-values';
+  if (/\bking\s+safety\b|\bcastl/.test(t)) return 'king-safety';
+  if (/\bcent(?:er|re)\b/.test(t)) return 'center';
+  if (/\bdevelop(?:ing|ment|ed)?\b/.test(t)) return 'development';
+  return 'general';
+}
+
 /** A STUDENT-PROGRESS question — "am I improving?", "what should I work on?",
  *  "what are my weaknesses?", "how am I doing?", "my bad habits". The answer is
  *  the student's OWN computed history (their persisted bad-habit profile), so

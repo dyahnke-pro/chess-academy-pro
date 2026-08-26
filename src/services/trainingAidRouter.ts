@@ -96,10 +96,26 @@ const STATS_RE =
 const HOWTO_RE =
   /\b(?:how\s+(?:do|can|should|would)\s+i|how\s+to|what(?:'?s| is)\s+the\s+(?:best\s+)?(?:way|technique|method|plan|idea))\b[\s\S]{0,40}\b(?:win|hold|draw|convert|defend|play|handle|approach|checkmate|mate)\b/i;
 
+/** A TEACHING ask about the student's own weaknesses ("teach me my
+ *  weaknesses", "tell/show/explain my weak spots", "go over my weaknesses")
+ *  is the grounded brain's job to TEACH IN-CHAT (isProgressQuestion →
+ *  assembleWeaknessRecommendation → voiceFacts), NOT a drill hand-off.
+ *  Without this guard "teach me my weaknesses" is framed=true via FRAMING_RE's
+ *  teach/show verbs and gets hijacked into the mistake drill (branch 11),
+ *  routing the student OFF the coach tab instead of teaching them there
+ *  (David 2026-08-26: "it couldnt tell me my weaknesses. it just routed me to
+ *  the tactics page … all of this needs to be taught while in the coach tab").
+ *  A genuine drill imperative ("drill/practice my weaknesses") uses a practice
+ *  verb, not teach/tell/show/explain, so it still routes to the drill. */
+const WEAKNESS_TEACH_RE =
+  /\b(?:teach|tell|show|explain|go\s+over|walk\s+me\s+through|talk\s+me\s+through)\b[\s\S]{0,30}?\b(?:weakness(?:es)?|weak\s+(?:spots?|squares?|areas?|points?)|bad\s+habits?)\b/i;
+
 export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   const raw = text.trim();
   if (!raw) return null;
   const lower = raw.toLowerCase();
+  // A "teach/tell/show me my weaknesses" ask is TAUGHT in-chat by the brain.
+  if (WEAKNESS_TEACH_RE.test(lower)) return null;
   // Diagnosis/recommendation QUESTIONS go to the grounded brain, not a drill.
   if (DIAGNOSIS_RE.test(lower)) return null;
   // Puzzle/tactic STATS questions go to the grounded brain, not a drill.
