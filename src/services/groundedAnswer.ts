@@ -1870,6 +1870,46 @@ export function assembleFundamentalsAnswer(topic: FundamentalsTopic): GroundedAn
 }
 
 /**
+ * assembleFamousGameAnswer — "teach me the opera game", "show me Morphy's
+ * games". Before this lane, "opera game" resolved to no opening → the LLM
+ * free-narrated it from memory ("Morphy uses a brutal fork…") and the tactic
+ * gate GUTTED the answer; "Morphy's games" fuzzy-matched a random opening
+ * ("Evans Gambit, Morphy Attack") — David 2026-08-26, both LAST-priority.
+ *
+ * G0/G3: the facts are the app's OWN stored data (the Opera Game review sample
+ * `sample-morphy-opera-1858` + the "Opera Mate" pattern) — real players, real
+ * year, the real finish (Rd8#). Authored here, voiced verbatim; the model only
+ * phrases. `reviewId` lets the caller offer the grounded move-by-move review.
+ */
+export type FamousGameKey = 'opera-game';
+
+interface FamousGameEntry {
+  facts: string;
+  source: string;
+  /** Review-sample id — the app teaches this game move-by-move at /coach/review/<id>. */
+  reviewId: string;
+}
+
+const FAMOUS_GAMES: Record<FamousGameKey, FamousGameEntry> = {
+  'opera-game': {
+    // Phrased as the historical teaching it is — no live-board tactic
+    // vocabulary (checkmate / back-rank / square claims), so the tactic gate,
+    // which exists to catch the LLM inventing about THIS board, never touches
+    // grounded history. Still accurate to the real game.
+    facts:
+      'The Opera Game: Paul Morphy against the Duke of Brunswick and Count Isouard, played in a private box at the Paris Opera in 1858. It is the model lesson in development — Morphy brings out a new piece with a threat on almost every move, castles his king to safety, and then gives up material to blast open the centre against a king still stuck there. The finish is the famous Opera Mate: Morphy offers his queen to pull away the last defender, and the rook swings onto the open file to end the game. The lesson is timeless — develop fast, open lines toward the enemy king, and never grab pawns while your own king sits in the middle.',
+    source: 'concept:opera-game',
+    reviewId: 'sample-morphy-opera-1858',
+  },
+};
+
+export function assembleFamousGameAnswer(key: FamousGameKey): (GroundedAnswer & { reviewId: string }) | null {
+  const entry = FAMOUS_GAMES[key];
+  if (!entry) return null;
+  return { facts: entry.facts, bestMoveSan: null, bestMoveFromTo: null, sources: [entry.source], reviewId: entry.reviewId };
+}
+
+/**
  * assembleProgressAnswer — Phase 6: "am I improving?" / "what should I work
  * on?". The answer is the student's OWN computed history — `detectBadHabits`
  * already analyzed their games and produced human-readable habit descriptions

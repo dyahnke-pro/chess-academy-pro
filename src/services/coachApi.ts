@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import { lookupTablebase } from './lichessTablebaseService';
@@ -93,7 +93,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText } from '../coach/questionIntents';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -1221,6 +1221,12 @@ export interface MasterGroundingOptions {
    *  board; dispatches before the concept lane so a general "principles" ask
    *  teaches the fundamentals rather than a single glossary token. */
   fundamentalsQuestion?: boolean;
+  /** true when this turn asks for a FAMOUS GAME by name or player ("teach me the
+   *  opera game", "show me Morphy's games"). Voiced from the app's OWN stored
+   *  game data (assembleFamousGameAnswer — the Opera Game review sample), never
+   *  the LLM's memory; dispatches before the concept/board lanes. Fixes the
+   *  gutted-by-the-tactic-gate answer and the Morphy→random-opening fuzzy miss. */
+  famousGameQuestion?: boolean;
   /** STEP D Phase 4 (cont) — true when this turn asks how a specific PRO plays
    *  ("how does Naroditsky play this?"). Voiced from `playerGames` (the player's
    *  real game corpus) via assemblePlayerGamesAnswer; gated on `playerGames`
@@ -3817,6 +3823,21 @@ export async function getCoachChatResponse(
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-profile', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
+        }
+
+        // ── FAMOUS GAME — voice the app's OWN stored game data ─────────────
+        // "teach me the opera game", "show me Morphy's games". The facts are the
+        // Opera Game review sample (real players / year / the Rd8# finish), not
+        // the LLM's memory (which used to get gutted by the tactic gate). No
+        // board needed; runs before the fundamentals/concept lanes.
+        if (grounding.famousGameQuestion) {
+          const userText = lastUserMessage() ?? '';
+          const key = famousGameFromText(userText);
+          const answer = key ? assembleFamousGameAnswer(key) : null;
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            if (voiced) return voiced;
+          }
         }
 
         // ── FUNDAMENTALS / BASICS — voice the authored principle set ───────

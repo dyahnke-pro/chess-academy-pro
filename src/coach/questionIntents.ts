@@ -825,6 +825,32 @@ export function fundamentalsTopicFromText(
   return 'general';
 }
 
+/** A FAMOUS-GAME ask — "teach me the opera game", "show me Morphy's games".
+ *  Before this, "opera game" resolved to no opening so the LLM free-narrated it
+ *  (and the tactic gate gutted the answer), and "Morphy's games" fuzzy-matched
+ *  a random opening ("Evans Gambit, Morphy Attack") — David 2026-08-26. Routed
+ *  via `assembleFamousGameAnswer` → voiceFacts (G0: the app's OWN stored game
+ *  data, the model only phrases). The `morphy` arm requires a "game(s)" noun so
+ *  "the Morphy Defense / Attack / Gambit" (real openings) still route to the
+ *  opening resolver. */
+const FAMOUS_GAME_RE =
+  /\bopera\s+game\b|\bmorphy'?s?\s+games?\b|\bgames?\s+(?:by|of)\s+(?:paul\s+)?morphy\b/i;
+export function isFamousGameQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  return FAMOUS_GAME_RE.test(ask);
+}
+
+/** Which famous game, for `assembleFamousGameAnswer`. The Opera Game is the
+ *  only one the app has real stored data for (its review sample); Morphy's
+ *  famous game IS the Opera Game, so both arms resolve there. Returns null when
+ *  nothing is grounded (caller falls through — empty > invented). */
+export function famousGameFromText(ask: string | undefined): 'opera-game' | null {
+  if (!ask) return null;
+  if (/\bopera\s+game\b|\bmorphy\b/i.test(ask)) return 'opera-game';
+  return null;
+}
+
 /** A STUDENT-PROGRESS question — "am I improving?", "what should I work on?",
  *  "what are my weaknesses?", "how am I doing?", "my bad habits". The answer is
  *  the student's OWN computed history (their persisted bad-habit profile), so

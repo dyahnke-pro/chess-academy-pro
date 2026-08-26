@@ -198,7 +198,7 @@ function pickProvider(_name: ProviderName): Provider {
 import {
   coachSurfaceToRoute,
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
@@ -211,7 +211,7 @@ import {
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
@@ -1149,6 +1149,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const trendQuestionEngage = isImprovementTrendQuestion(askForIntents);
     const conceptQuestionEngage = isConceptQuestion(askForIntents);
     const fundamentalsQuestionEngage = isFundamentalsQuestion(askForIntents);
+    const famousGameQuestionEngage = isFamousGameQuestion(askForIntents);
     const openingProfileQuestionEngage = isOpeningProfileQuestion(askForIntents);
     const statsQuestionEngage = isStatsQuestion(askForIntents);
     const strengthsQuestionEngage = isStrengthsQuestion(askForIntents);
@@ -1298,7 +1299,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || openingExistenceName !== null
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1476,6 +1477,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // board cannot answer.
             conceptQuestion: conceptQuestionEngage && !planQuestionEngage,
             fundamentalsQuestion: fundamentalsQuestionEngage,
+            famousGameQuestion: famousGameQuestionEngage,
             // STEP D Phase 4 (cont) — "how does <pro> play this?" voices the
             // player's REAL games (assemblePlayerGamesAnswer); gated on the
             // playerGames context being present.

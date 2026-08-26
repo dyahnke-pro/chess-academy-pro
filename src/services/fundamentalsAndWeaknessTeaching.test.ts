@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { isFundamentalsQuestion, fundamentalsTopicFromText } from '../coach/questionIntents';
-import { assembleFundamentalsAnswer } from './groundedAnswer';
+import { isFundamentalsQuestion, fundamentalsTopicFromText, isFamousGameQuestion, famousGameFromText } from '../coach/questionIntents';
+import { assembleFundamentalsAnswer, assembleFamousGameAnswer } from './groundedAnswer';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 
 // David 2026-08-26: "it couldnt teach me basic fundamentals … it just routed me
@@ -65,5 +65,45 @@ describe('weakness ask is TAUGHT in-chat, not drilled away', () => {
   it('a genuine drill/practice imperative still routes to the drill', () => {
     expect(matchTrainingAidRoute('drill my weaknesses')?.aid).toBe('mistakes');
     expect(matchTrainingAidRoute('practice my weaknesses')?.aid).toBe('mistakes');
+  });
+});
+
+describe('famous game (Opera Game / Morphy) taught from stored data', () => {
+  it('recognizes the famous-game asks that used to misroute', () => {
+    for (const ask of [
+      'teach me the opera game',
+      'show me the opera game',
+      "show me morphy's games",
+      "morphy's game",
+      'games by paul morphy',
+    ]) {
+      expect(isFamousGameQuestion(ask), ask).toBe(true);
+      expect(famousGameFromText(ask), ask).toBe('opera-game');
+    }
+  });
+
+  it('does NOT capture real openings named after Morphy', () => {
+    // These must still reach the opening resolver, not the famous-game lane.
+    expect(isFamousGameQuestion('teach me the Morphy Defense')).toBe(false);
+    expect(isFamousGameQuestion('teach me the Evans Gambit Morphy Attack')).toBe(false);
+    expect(isFamousGameQuestion('teach me the najdorf')).toBe(false);
+  });
+
+  it('assembles a grounded answer pointing at the real review sample', () => {
+    const ans = assembleFamousGameAnswer('opera-game');
+    expect(ans).not.toBeNull();
+    expect(ans!.facts).toMatch(/Morphy/);
+    expect(ans!.facts).toMatch(/1858/);
+    expect(ans!.reviewId).toBe('sample-morphy-opera-1858');
+    expect(ans!.sources.length).toBeGreaterThan(0);
+  });
+
+  it('the answer carries NO live-board tactic vocabulary (survives the tactic gate)', () => {
+    const facts = assembleFamousGameAnswer('opera-game')!.facts;
+    // The gate strips sentences naming a tactic not on the current board. The
+    // grounded history must not trip it — no checkmate/back-rank/fork/pin/etc.
+    for (const banned of [/\bcheckmate\b/i, /\bback[- ]rank\b/i, /\bfork\b/i, /\bpin\b/i, /\bskewer\b/i, /\bmating\b/i]) {
+      expect(banned.test(facts), `banned tactic word ${banned}`).toBe(false);
+    }
   });
 });
