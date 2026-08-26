@@ -1,0 +1,153 @@
+{
+ "videoId": "d6tZXETpqT0",
+ "title": "What Is The Carlsbad?? | Queens Gambit Declined | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Queen's Gambit Declined: Carlsbad Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:d6tZXETpqT0",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 32,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 67,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "The Carlsbad is defined by this early trade on d5 — instead of the traditional Bg5 main line with the pawn left on c4, we release the tension right away.",
+   "kind": "main",
+   "teaches": [
+    "the Carlsbad = the early cxd5"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 71,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "After Black recaptures we reach the Carlsbad structure: White's e-pawn against Black's c-pawn, with everything else symmetric. That small imbalance is what generates rich positional — and often sharply tactical — middlegame play.",
+   "kind": "main",
+   "teaches": [
+    "the Carlsbad pawn structure"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 91.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "We handle it like a normal Queen's Gambit Declined — the bishop to g5, e3, the standard moves — and let the structure dictate the game later.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 97,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Starting with the queen to c2 stops an annoying bishop to f5. When Black develops to the inaccurate d6 rather than e7, we go for the classic plan: install the Pillsbury Knight on e5, braced by the d4-pawn and a pawn to f4 — a construction many players simply can't handle. If Black challenges it, f5 nets a full minor piece for two pawns, and with our two bishops raking an open board we castle queenside and grind, seizing the only open file.",
+   "kind": "plan",
+   "teaches": [
+    "the Pillsbury Knight plan in the Carlsbad"
+   ],
+   "plans": [
+    "Qc2 to stop ...Bf5",
+    "Ne5 braced by d4 and f4",
+    "f5 to win the bishop, then two bishops vs pawns"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 822.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 824.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Nf6",
+    "cxd5",
+    "e6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 826,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 827,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 834.5,
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The bishop to d6 is a long-known inaccuracy — the main line is the bishop to e7. Then the key choice is the knight to e2 versus f3: e2 leaves the f-pawn free for the f4 push behind the Pillsbury Knight.",
+   "teaches": [
+    "...Be7 is main; Ne2 keeps f4 available"
+   ],
+   "reanchor": true
+  }
+ ]
+}
