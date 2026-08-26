@@ -11233,16 +11233,22 @@ function WalkthroughControls({
   // no-op on narration phases (no matching panel) and on desktop (the
   // panel is already in view). Pure UI — no LLM, no behavior change.
   useEffect(() => {
+    // MOBILE ONLY. On desktop the board + panels are already in view (two-column
+    // layout) and this scroll would shove the top of the board off-screen with
+    // no way to scroll back (David 2026-08-26: "I cannot scroll back up to see
+    // the top of the board"). The comment always claimed "no-op on desktop" —
+    // now it actually is.
+    if (typeof window === 'undefined' || window.innerWidth >= 768) return;
     const id = window.setTimeout(() => {
-      // The hoisted under-board picker bars (fork/trap) sit HIGHER in the DOM
+      // The hoisted under-board picker bars (fork/trap/gem) sit HIGHER in the DOM
       // than the below panels, and querySelector returns the first match in
-      // document order — so listing them means a hoisted phase centers the BAR
-      // (board + picker visible), not the below explanation panel (David
-      // 2026-08-26: the picker must be visible with no scroll).
+      // document order — so listing them means a hoisted phase reveals the BAR
+      // (board + picker visible), not the below explanation panel. `nearest`
+      // (not `center`) so it scrolls the MINIMUM needed and never hides the board.
       const el = document.querySelector(
         '[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-trap-bar"],[data-testid="walkthrough-gem-bar"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
       );
-      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 150);
     return () => window.clearTimeout(id);
   }, [phase]);
@@ -11486,11 +11492,18 @@ function WalkthroughControls({
                 Dive deeper into a line
               </div>
               {forkOptions.map((opt, idx) => {
+                const childSan = opt.node.san ?? '';
+                // Name the branch by its MOVE ("Knight to d7"), never a bare
+                // ordinal (David 2026-08-26: "variation 1/2/3/4" tells the
+                // student nothing). Authored label/subtitle wins if present.
+                const moveName = childSan
+                  ? (() => { const s = sanToSpeech(childSan); return s.charAt(0).toUpperCase() + s.slice(1); })()
+                  : '';
                 const variationName =
                   (opt.forkSubtitle ?? '').split('—')[0].trim() ||
                   opt.label ||
-                  `variation ${idx + 1}`;
-                const childSan = opt.node.san ?? '';
+                  moveName ||
+                  `line ${idx + 1}`;
                 // Walk the branch's straight-line extension chain so
                 // the deep-dive canonical lookup lands on the actual
                 // sub-variation (e.g. "Italian Game: Classical
@@ -11713,10 +11726,14 @@ function WalkthroughControls({
                 {heading}
               </div>
               {opts.map((opt, idx) => {
+                const moveName2 = opt.childSan
+                  ? (() => { const s = sanToSpeech(opt.childSan); return s.charAt(0).toUpperCase() + s.slice(1); })()
+                  : '';
                 const variationName =
                   opt.subtitle.split('—')[0].trim() ||
                   opt.label ||
-                  `variation ${idx + 1}`;
+                  moveName2 ||
+                  `line ${idx + 1}`;
                 const query = buildDeepDiveQuery(
                   tree.openingName,
                   opt.pathSans,

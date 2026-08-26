@@ -19,6 +19,7 @@
 // is recovered in full. Non-reanchor nodes are preferred at each step so the
 // walk follows the actual game rather than a sideline.
 import { Chess } from '../../node_modules/chess.js/dist/esm/chess.js';
+import { depersonalize } from './depersonalize.mjs';
 
 const keyOf = (fen) => fen.split(' ').slice(0, 4).join(' '); // board + turn + castling + ep
 
@@ -48,7 +49,7 @@ export function reconstructSpineFen(moves) {
   const cand = (Array.isArray(moves) ? moves : []).map((m) => ({
     sans: Array.isArray(m.line) ? m.line : [],
     afterFen: typeof m.fen === 'string' ? m.fen : null,
-    spoken: m.spoken,
+    spoken: depersonalize(m.spoken),
     kind: m.kind,
     teaches: m.teaches,
     plans: m.plans,

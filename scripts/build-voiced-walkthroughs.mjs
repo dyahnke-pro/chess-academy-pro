@@ -25,6 +25,7 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
 import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
+import { depersonalize } from './voiced-authoring/depersonalize.mjs';
 
 const SRC = 'data/video-narration-voiced';
 const OUT = 'src/data/voiced-walkthroughs.json';
@@ -74,7 +75,9 @@ for (const f of files) {
   if (spine.length < 2) continue;
   if (!spine.some((n) => n.spoken)) continue; // no narration to show
 
-  const key = j.openingName || 'Unknown';
+  // Depersonalize the opening NAME too — some carry a pro-specific annotation
+  // ("Scandinavian Defense (750 speedrun)") that leaks into the intro/outro.
+  const key = depersonalize(j.openingName || 'Unknown') || 'Unknown';
   if (!groups.has(key)) groups.set(key, { studentSide: j.studentSide || 'white', videos: [] });
   groups.get(key).videos.push({ id, spine });
 }

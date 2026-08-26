@@ -123,13 +123,23 @@ export function narrateContinuationMove(
     arrows.push({ from: to, to: hits[0].square, color: 'green' });
   }
 
-  // Quiet-move observations — only when nothing sharper was true.
+  // Quiet-move observations — only when nothing sharper was true. Prefer a
+  // CONCRETE, board-true reason over the vague "improving the piece" (David
+  // 2026-08-26: "computed voice's narrations are better than improving the
+  // piece"): development off the back rank, pawn space, the square it reaches.
   if (clauses.length === 0) {
+    const backRank = mover === 'w' ? '1' : '8';
+    const fromBackRank = from[1] === backRank;
     if (CENTRE.has(to)) clauses.push('taking central space');
     else if (movedType === 'k') clauses.push('tucking the king to safety');
-    else if (movedType === 'r' && /^[a-h]/.test(to)) clauses.push(`swinging the rook to the ${to[0]}-file`);
-    else if (!isDefended(fenAfter, to as Square, mover)) clauses.push('stepping forward — undefended for the moment');
-    else clauses.push('improving the piece');
+    else if (movedType === 'p') {
+      const crossedHalf = mover === 'w' ? Number(to[1]) >= 4 : Number(to[1]) <= 5;
+      clauses.push(crossedHalf ? `advancing the ${to[0]}-pawn, gaining space` : `nudging the ${to[0]}-pawn forward`);
+    } else if (movedType === 'r' && /^[a-h]/.test(to)) clauses.push(`swinging the rook to the ${to[0]}-file`);
+    else if (fromBackRank && (movedType === 'n' || movedType === 'b')) clauses.push(`developing the ${pieceWord}`);
+    else if (movedType === 'q') clauses.push(`bringing the queen to ${to}`);
+    else if (!isDefended(fenAfter, to as Square, mover)) clauses.push(`stepping the ${pieceWord} to ${to} — undefended for the moment`);
+    else clauses.push(`repositioning the ${pieceWord} to ${to}`);
   }
 
   // The live threat this move creates, if any — the same board-verified
