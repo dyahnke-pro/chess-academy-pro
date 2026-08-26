@@ -1,0 +1,293 @@
+{
+ "videoId": "OMpuTbOzyoc",
+ "title": "Master Class | Smith–Morra Gambit Declined | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense: Smith-Morra Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:OMpuTbOzyoc",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 985.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "c5",
+    "e4"
+   ],
+   "spoken": "This position resembles a Maróczy bind — I've played it a couple of times over the board with Black; Black is solid here but slightly worse. The difference from the Danish is that"
+  },
+  {
+   "ply": 4,
+   "t": 986.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "c-takes-d4."
+  },
+  {
+   "ply": 5,
+   "t": 987.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "Black hasn't moved his e-pawn, he's played the c-pawn instead,"
+  },
+  {
+   "ply": 7,
+   "t": 993.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "dxc3",
+    "Bc4"
+   ],
+   "spoken": "so you don't play the bishop to c4 — that Sicilian-Danish idea is no longer as effective, because Black's central pawns are intact."
+  },
+  {
+   "ply": 5,
+   "t": 1004,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "The Smith-Morra is a classic opening that top players don't play — but nothing is wrong with it, it hasn't been refuted, and even if you don't end up playing it, learning it and understanding its ideas is a great shortcut to getting better at attacking and understanding sacrifices.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1041.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 is another way of declining it — not terrible, but clearly Black is going to be worse."
+  },
+  {
+   "ply": 7,
+   "t": 1044,
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "c-takes-d4 — he's giving us full control of the centre"
+  },
+  {
+   "ply": 8,
+   "t": 1045,
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": "and very nice piece development. Black isn't losing, it's not a disaster, but we have a very pleasant position."
+  },
+  {
+   "ply": 9,
+   "t": 1066.5,
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3."
+  },
+  {
+   "ply": 10,
+   "t": 1067.5,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "the knight to f6."
+  },
+  {
+   "ply": 11,
+   "t": 1069,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 3 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The knight to f3."
+  },
+  {
+   "ply": 12,
+   "t": 1070.5,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "b5"
+   ],
+   "spoken": "b5 is a nice move — I like the way he handled this. In retrospect it might"
+  },
+  {
+   "ply": 10,
+   "t": 1076.5,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": "have made sense to play a4 — I don't love the move, it creates a little hole on b4,",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1078,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/P2PP3/2N5/1P3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "a4"
+   ],
+   "spoken": "but maybe it made sense to prevent b5; that's just one thing to consider."
+  },
+  {
+   "ply": 10,
+   "t": 1087,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "line": [],
+   "spoken": "The knight to f3, b5, the bishop to d3 — we get our bishop out in order to support the e4-pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1089.5,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bd3",
+    "b5",
+    "Nf3"
+   ],
+   "spoken": "The bishop to d3, supporting the e4-pawn."
+  },
+  {
+   "ply": 14,
+   "t": 1095,
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "The bishop to b7. And again, in such positions, on every move you have to start asking yourself the question:"
+  },
+  {
+   "ply": 15,
+   "t": 1103.5,
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p2P3/3P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "do I want to play e5, do I want to strike in the centre? Here the answer is no, because"
+  },
+  {
+   "ply": 17,
+   "t": 1112,
+   "fen": "rn1qkb1r/1b2pppp/p4n2/1p2P3/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "dxe5",
+    "dxe5"
+   ],
+   "spoken": "it doesn't do all that much — d-takes-e5, d-takes-e5 — and whenever you push a central pawn, a square is left"
+  },
+  {
+   "ply": 18,
+   "t": 1115.5,
+   "fen": "rn1qkb1r/1b2pppp/p7/1p1nP3/8/2NB1N2/PP3PPP/R1BQK2R w KQkq - 1 10",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "behind; in this case the square is d5. The knight to d5 — Black is fine, cementing the outpost,"
+  },
+  {
+   "ply": 19,
+   "t": 1124.5,
+   "fen": "rn1qkb1r/1b2pppp/p3P3/1p1n4/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "line": [
+    "e6"
+   ],
+   "spoken": "or e6. White could try something like e6 here, sacrificing the pawn to slow down the development of Black's bishop, but I felt this was a little over"
+  },
+  {
+   "ply": 14,
+   "t": 1134.5,
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8",
+   "line": [],
+   "spoken": "the top — you could definitely look at it on your own with a computer; maybe e5 was in fact the way to punish this.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1143.5,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "line": [],
+   "spoken": "Someone asks what to do after b4 here —",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1144.5,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "b4"
+   ],
+   "spoken": "b4? You go the queen to a4 with check, and this just wins the pawn, because the knight to c6 isn't possible. The queen to a4 with check, the knight to c6 — and White's best move is a classic case of not moving the attacked knight from c3: play d5, easy to calculate — b-takes, d-takes — and you're threatening c7 and the bishop; White is totally crushing."
+  },
+  {
+   "ply": 13,
+   "t": 1188,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "line": [],
+   "spoken": "Pretty simple; but even if you didn't have that move, just moving the knight is fine — this pawn now becomes a very big weakness. The knight to c6 wasn't possible, because if the queen takes c6, just take the knight, that square isn't defended.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 1194.5,
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK1R1 w Qkq - 4 9",
+   "line": [
+    "Nbd7",
+    "Rg1",
+    "Bb7"
+   ],
+   "spoken": "A rook to g1 — we decided to play e6, a good move. Now Black can still play b4 here, and if you have an understanding of the Smith-Morra,"
+  },
+  {
+   "ply": 18,
+   "t": 1216.5,
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10",
+   "line": [
+    "Nb1",
+    "b4"
+   ],
+   "spoken": "it's easier to play these types of positions with White. There are two approaches: a very positional one, a move that will look terrible to most people — just dropping the knight back to b1. What's the logic? As I said earlier, our position is under no immediate duress — we've got the centre, it's well defended, and Black's development is okay but quite passive,"
+  },
+  {
+   "ply": 19,
+   "t": 1245,
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "so we can afford the luxury of rerouting our pieces as we see fit. As many of you indicate, the move b4 creates a hole on c4 — an entire complex of weaknesses surrounding the pawn — and the pawn"
+  },
+  {
+   "ply": 18,
+   "t": 1256.5,
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10",
+   "line": [],
+   "spoken": "itself is quite weak. So everything around the pawn, as well as the pawn, is weak — and that knight on b1, after preliminarily developing the bishop so this move doesn't block it, can get over to c4 or b3, and potentially even to a5. Moving pawns like this on the queenside, unless you have a very compelling reason, can backfire in a very big way.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 1287.5,
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "So the knight to d5 is the tactical approach, the knight to b1 the positional one. The point of the tactical approach: we sacrifice a pawn, and in return we clearly get the e-file — and what's killing Black is that he hasn't developed his kingside, so White can literally just jump on him, and I don't think Black can carry his king out of the centre. So the logical move is the knight to g5, a classic way of attacking, then the queen to h5, converging on Black — this is crushing."
+  },
+  {
+   "ply": 21,
+   "t": 1343,
+   "fen": "r2qkb1r/1b1n1ppp/p2ppn2/3N4/1p1PP3/3B1N2/PP3PPP/R1BQK1R1 b Qkq - 1 11",
+   "line": [
+    "e6",
+    "Nd5"
+   ],
+   "spoken": "Even without analysing anything, this seems totally overwhelming. So you have a positional approach and a tactical approach. As Black I probably wouldn't even take this knight — I'd either play e6 and jettison the pawn, or maybe a5 first to defend it, though that's iffy. A rook to c1, he goes e6, we go a3 to stop b4 — b4 was dangerous, and I just want to eliminate the headache of dealing with it on every move. The bishop to f4, h3, the rook to c1, the rook to e8 — all normal — and now h6; again, when you develop passively you have to be a lot more careful about making these weakening moves. As Black I'd play the rook to e8 here instead, and after that h6 becomes a lot more doable, because, for example, after a random White move like the queen to d2, Black can successfully parry the threat of the bishop takes h6."
+  }
+ ]
+}
