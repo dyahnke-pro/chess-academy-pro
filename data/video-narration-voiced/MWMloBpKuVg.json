@@ -1,0 +1,203 @@
+{
+ "videoId": "MWMloBpKuVg",
+ "title": "Master Class | Nimzowitsch–Larsen Attack | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Nimzowitsch-Larsen Attack",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:MWMloBpKuVg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "spoken": "I'm going to play b3, the Nimzowitsch-Larsen. e5."
+  },
+  {
+   "ply": 3,
+   "t": 17.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": "The bishop to b2."
+  },
+  {
+   "ply": 4,
+   "t": 21,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 — the first moment where there are several possible variations. Today I'll play it traditionally. Does anybody know the traditional main line here?"
+  },
+  {
+   "ply": 5,
+   "t": 42,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "The move is e3 — and as with all hypermodern openings, the point is not to control the centre with pawns, it's to get your pieces out and put immediate pressure on Black's centre."
+  },
+  {
+   "ply": 6,
+   "t": 50,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We got this bishop out to b2 — where does it belong? An obvious question"
+  },
+  {
+   "ply": 7,
+   "t": 57.5,
+   "fen": "r1bqkbnr/ppp2ppp/2n5/1B1pp3/8/1P2P3/PBPP1PPP/RN1QK1NR b KQkq - 1 4",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "with an obvious answer: b5, attacking the knight that defends the e5-pawn."
+  },
+  {
+   "ply": 8,
+   "t": 72.5,
+   "fen": "r1bqk1nr/ppp2ppp/2nb4/1B1pp3/8/1P2P3/PBPP1PPP/RN1QK1NR w KQkq - 2 5",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "Black can get in big trouble here really quickly if he's not super careful — he could just lose a pawn. The bishop to d6 is a pretty famous line that can end very badly. Notice this opens a potential x-ray on the g7-pawn if we ever capture with the bishop — so if the e-pawn moves or disappears, we may win a lot of material by taking on g7. So the knight to f3 looks really good,"
+  },
+  {
+   "ply": 9,
+   "t": 109,
+   "fen": "r1bqk1nr/ppp2ppp/2nb4/1B1pp3/5P2/1P2P3/PBPP2PP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "f4"
+   ],
+   "spoken": "very natural — but Black can actually play f6 and make a pawn chain that makes the e5-pawn very hard to pressure. So we have to use our pawns — this idea occurs in many fianchetto openings: we attack the pawn with our pawn, more immediate pressure than a knight. Black has an unenviable choice: if he takes, after the bishop takes g7 he has a check on h4, but it's not scary, we just move our king and he has no initiative; f6 is considered better but still doesn't solve all his problems — we trade, open the f-file, and the knight to f3 becomes a lot stronger. That's the logic behind f4: you push the pawn out, it's untouchable, and pawns are the best way to pressure other pawns."
+  },
+  {
+   "ply": 10,
+   "t": 174.5,
+   "fen": "r1b1k1nr/ppp2ppp/2nb4/1B1pp3/5P1q/1P2P3/PBPP2PP/RN1QK1NR w KQkq - 1 6",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "The queen to e7 is also possible, but then the knight to f3. The queen to h4 with check,"
+  },
+  {
+   "ply": 11,
+   "t": 177,
+   "fen": "r1b1k1nr/ppp2ppp/2nb4/1B1pp3/5P1q/1P2P1P1/PBPP3P/RN1QK1NR b KQkq - 0 6",
+   "line": [
+    "g3"
+   ],
+   "spoken": "which obviously we block with g3."
+  },
+  {
+   "ply": 12,
+   "t": 180,
+   "fen": "r1b1k1nr/ppp1qppp/2nb4/1B1pp3/5P2/1P2P1P1/PBPP3P/RN1QK1NR w KQkq - 1 7",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The queen to e7 — I think this is actually the best line for White. Now, do we want to take the pawn? Is that premature?"
+  },
+  {
+   "ply": 13,
+   "t": 207,
+   "fen": "r1b1k1nr/ppp1qppp/2nb4/1B1pp3/5P2/1P2PNP1/PBPP3P/RN1QK2R b KQkq - 2 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "It's definitely premature to take — that defeats the whole purpose, which is to pressure the pawn by trading it, and it gives Black a get-out-of-jail-free card. So obviously we just develop, the knight to f3."
+  },
+  {
+   "ply": 14,
+   "t": 216,
+   "fen": "r3k1nr/ppp1qppp/2nb4/1B1pp3/5Pb1/1P2PNP1/PBPP3P/RN1QK2R w KQkq - 3 8",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The bishop to g4, a good move. There are a couple of ways to approach this, but we need to calculate. The first option is to deal with the annoying pin — we can't castle, because e4 becomes a potential problem, and even if Black gives up g7 we don't want to give this knight away — so we can play h3, essentially forcing the bishop to capture the knight, since it would be trapped on h5; the downside is that the knight was pressuring the e5-pawn. What's the second option? Not d3 — he still plays e4; the bishop to e2 is way too passive, and I wouldn't"
+  },
+  {
+   "ply": 16,
+   "t": 289,
+   "fen": "r1b1k1nr/ppp1qppp/2nb4/1B1pp3/5P2/1P2P1P1/PBPP3P/RN1QK1NR w KQkq - 5 9",
+   "line": [
+    "Ng1",
+    "Bc8"
+   ],
+   "spoken": "move this bishop away, it's pressuring the knight. The other move is f-takes-e5. Now, didn't I just say that was a bad move? The situation has changed — it was bad earlier because Black could recapture with the bishop"
+  },
+  {
+   "ply": 18,
+   "t": 295.5,
+   "fen": "r3k1nr/ppp1qppp/2nb4/1B1pp3/5Pb1/1P2PNP1/PBPP3P/RN1QK2R w KQkq - 7 10",
+   "line": [
+    "Nf3",
+    "Bg4"
+   ],
+   "spoken": "and take the sting out of our bishop; here it's a lot more complicated, because after f-takes-e5, the bishop takes e5,"
+  },
+  {
+   "ply": 19,
+   "t": 301.5,
+   "fen": "r3k1nr/ppp1qppp/2nb4/1B1pP3/6b1/1P2PNP1/PBPP3P/RN1QK2R b KQkq - 0 10",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": "we play the bishop takes e5, and he's unable to recapture with the knight — so this carries a lot more weight now that the knight is on f3. Again, just because a move is bad in one position doesn't mean it's bad in another; you have to evaluate and reevaluate captures on every move, because the circumstances may have changed. What should Black do after the bishop takes e5? He should take the knight with the bishop; we respond by taking the bishop, and the queen recaptures — but we've forced him to give away his strongest piece, so White is still slightly better; that's the only move."
+  },
+  {
+   "ply": 20,
+   "t": 386,
+   "fen": "r3k1nr/ppp1qppp/2nb4/1B1pP3/8/1P2PbP1/PBPP3P/RN1QK2R w KQkq - 0 11",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "The bishop takes f3 immediately — really interesting. One of the most important things in chess is not to assume that two different move orders lead to the same conclusion. When you've calculated something and your opponent makes a different first move, always ask whether this gives you any other options — and even if the answer is no, it's worth thinking about. Here, you don't have to take this bishop; you can take the other bishop, not only attacking the queen but, most importantly, opening up the pressure on g7. So let's calculate: the pawn takes the bishop,"
+  },
+  {
+   "ply": 21,
+   "t": 438.5,
+   "fen": "r3k1nr/ppp1qppp/2nP4/1B1p4/8/1P2PbP1/PBPP3P/RN1QK2R b KQkq - 0 11",
+   "line": [
+    "exd6"
+   ],
+   "spoken": "the bishop takes the queen, the pawn takes the queen — and it's in fact a double attack: we're attacking the bishop on d1, and we're threatening that old bishop-takes-g7 idea. But Black has an additional move — the queen to e4 is the most testing, and it may seem White is losing, because Black forks the queen and the rook. Both queens are hanging and the bishop is hanging, so if he takes the pawn we take the bishop,"
+  },
+  {
+   "ply": 22,
+   "t": 503.5,
+   "fen": "r3k1nr/ppp2ppp/2nP4/1B1p4/4q3/1P2PbP1/PBPP3P/RN1QK2R w KQkq - 1 12",
+   "line": [
+    "Qe4"
+   ],
+   "spoken": "if he takes the queen we take his queen; and g7 is also hanging — it's good to keep a mental tab of everything that's hanging. After the queen to e4, there are two approaches: move our queen, the queen to c1 — but I don't like it, he takes the rook, and even though we could take on g7 and recover it, I'm really afraid for our king, since we won't be able to castle short. A lot of you have the right general idea — counterattack his vulnerable queen. What about d3? Pawn moves weaken other pawns, and d3 gets mated after the queen takes e3. We could try the bishop to d3, but"
+  },
+  {
+   "ply": 23,
+   "t": 555.5,
+   "fen": "r3k1nr/ppp2ppp/2nP4/1B1p4/4q3/1PN1PbP1/PBPP3P/R2QK2R b KQkq - 2 12",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "as I said, if possible I don't want to move that bishop away from b5, it's an important bishop. Are there any other pieces that could attack Black's queen? Look around — the knight to c3 is a very important resource, counterattacking the queen: the bishop takes d1, the knight takes e4, and now the bishop is hanging, the knight is hanging, and the g7-pawn is hanging, so we don't even have to recapture the bishop — we take on g7, up the exchange. A nice move, but not hard to find if you know what to look for. We could play the in-between d7, but I'm not sure ruining castling is worth giving up this pawn — in an endgame you might see g7 hanging and the pawn threatening to take on c7, and if the queens trade we'll regret d7 and bringing Black's king closer to the centre. He takes e4 — should we take the bishop? We should play the bishop to g7, although taking the bishop would have been amazing too, two pawns up with two great bishops; but we win the exchange here, because Black won't get anything for that rook. The best he can do is the bishop to f3; we move the rook and take on h8 — the bishop takes c2 isn't scary, it's just a pawn — the bishop takes h8, the bishop to f3. Now, what's the sexy move? Castling. Castling is legal when the rook is attacked — it's only illegal when there's a check; people often assume they can't castle when the rook is attacked, but that's not true, and you should, because it coordinates the rooks and the king is very safe. f6 — Black tries to trap our bishop, and to extricate it we need to be creative. First, a good check — the bishop has done its job, so let's give the check and create pressure against the knight. The king probably goes to g6, because going back would sever the connection of the rook and bishop. Now ask what Black's next move will be: the knight to h6, not to g7 because there's a pawn on d6. The drawback of the knight to h6? If we're losing our bishop anyway, we might as well give it up for a pawn — so we can take on f6. Say it's Black to move: the knight to h6, the bishop takes f6, the king takes f6 — then a rook is pinning the bishop on f3, but the pin isn't effective, because a pawn on e4 guards the bishop and our pawns are too far advanced to attack it. But pawns can be dismantled, so the best move is d3, so that after the knight to h6, the bishop takes f6, the king takes f6, we play d-takes-e4 and the bishop is lost. The bishop to d5 might have been even better — I completely missed that — but this isn't a long line; I saw d3 quickly because of the idea of taking on f6, and d3 follows logically, because you have to dismantle the defender of the bishop to win it. We've succeeded in getting the bishop out of f3, so pounce: take the knight, take the pawn, we've extricated our bishop, we're up the exchange, and the game is essentially over. He resigns; it's resignable.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 960,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "I'll take questions, but I won't fully recap. Was the bishop to f3 a viable response? After you took the queen with the knight, he would have forked your rook, and the knight was undefended — so it would have been a viable defence, but very likely to transpose into the game. One thing I could do here, probably not the best, is even castle in this position — and if he takes the knight, you'll notice it's the exact same position as in the game, so it doesn't really matter whether he takes the knight first or drops the bishop back first, because we're not taking the bishop anyway, we're taking the pawn. The bishop to f3 gives White less of a choice. And on the bishop to d5 over d3 — the bishop to d5, yes, and could he just move the queen instead of going into the queen trade — that's a great question.",
+   "reanchor": true
+  }
+ ]
+}
