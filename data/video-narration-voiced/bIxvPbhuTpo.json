@@ -1,0 +1,419 @@
+{
+ "videoId": "bIxvPbhuTpo",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1900",
+ "openingName": "Sicilian Defense: Alapin Variation (2.c3)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:bIxvPbhuTpo",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 801.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 803.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 806,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 808,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "White plays the Alapin — the pawn to c3 — preparing to build the center with d4.",
+   "kind": "main",
+   "teaches": [
+    "the Alapin c3"
+   ]
+  },
+  {
+   "ply": 6,
+   "t": 830.5,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 834,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2PB1N2/PP1P1PPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop to d3 isn't a great move — it blocks in his own other bishop.",
+   "kind": "main"
+  },
+  {
+   "ply": 8,
+   "t": 842,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/4P3/2PB1N2/PP1P1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "So we grab the center ourselves with d5.",
+   "kind": "main",
+   "teaches": [
+    "contest the center immediately"
+   ]
+  },
+  {
+   "ply": 9,
+   "t": 848,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/2ppP3/8/2PB1N2/PP1P1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "White's e5 attacks our knight.",
+   "kind": "main"
+  },
+  {
+   "ply": 10,
+   "t": 862.5,
+   "fen": "r1bqkb1r/pp2pppp/2n5/2ppP3/6n1/2PB1N2/PP1P1PPP/RNBQK2R w KQkq - 1 6",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "The knight jumps to g4 — dodging forward and going straight after the e5-pawn.",
+   "kind": "main"
+  },
+  {
+   "ply": 11,
+   "t": 867.5,
+   "fen": "r1bqkb1r/pp2pppp/2n5/1BppP3/6n1/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "White pins with the bishop to b5.",
+   "kind": "main"
+  },
+  {
+   "ply": 12,
+   "t": 874,
+   "fen": "r2qkb1r/pp1bpppp/2n5/1BppP3/6n1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 3 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "We unpin with the bishop to d7, freeing the knight to move again.",
+   "kind": "main"
+  },
+  {
+   "ply": 13,
+   "t": 878.5,
+   "fen": "r2qkb1r/pp1bpppp/2n5/1BppP3/3P2n1/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 895.5,
+   "fen": "r2qkb1r/pp1bpppp/8/1Bppn3/3P2n1/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 8",
+   "line": [
+    "Ncxe5"
+   ],
+   "spoken": "Now the tactic: the knight takes on e5, winning the pawn — because the bishop on b5 is hanging and our knight is double-parked, covering both captures at once.",
+   "kind": "main",
+   "teaches": [
+    "the double-parked knight wins the pawn"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 907,
+   "fen": "r2qkb1r/pp1bpppp/8/1Bppn3/3P4/2P5/PP3PPP/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "Nxe5",
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 916,
+   "fen": "r2qkb1r/pp1Bpppp/8/2ppn3/3P4/2P5/PP3PPP/RNBQK2R b KQkq - 0 9",
+   "line": [
+    "Bxd7+"
+   ],
+   "spoken": "After the bishop check on d7 the recapturing knight collects everything, and we come out a clean center pawn up.",
+   "kind": "main"
+  },
+  {
+   "ply": 18,
+   "t": 917,
+   "fen": "r2qkb1r/pp1npppp/8/2pp4/3P4/2P5/PP3PPP/RNBQK2R w KQkq - 0 10",
+   "line": [
+    "Nxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 920,
+   "fen": "r2qkb1r/pp1n1ppp/4p3/2pp4/3P4/2P5/PP3PPP/RNBQ1RK1 w kq - 0 11",
+   "line": [
+    "O-O",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 923,
+   "fen": "r2qkb1r/pp1n1ppp/4p3/2pp4/3P1P2/2P5/PP4PP/RNBQ1RK1 b kq - 0 11",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White tries to pry open the f-file with f4, heading for f5.",
+   "kind": "main"
+  },
+  {
+   "ply": 22,
+   "t": 955.5,
+   "fen": "r2qkb1r/pp1n1p1p/4p1p1/2pp4/3P1P2/2P5/PP4PP/RNBQ1RK1 w kq - 0 12",
+   "line": [
+    "g6"
+   ],
+   "spoken": "g6 takes the sting out of f5 — since pawns capture diagonally, it quietly adds a defender to that square, so any push there just gets taken.",
+   "kind": "main",
+   "teaches": [
+    "pawns defend diagonally: g6 covers f5"
+   ]
+  },
+  {
+   "ply": 23,
+   "t": 973,
+   "fen": "r2qkb1r/pp1n1p1p/4p1p1/2pp4/3P1P2/2P1B3/PP4PP/RN1Q1RK1 b kq - 1 12",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 977,
+   "fen": "r2qkb1r/pp1n1p1p/4p1p1/3p4/2pP1P2/2P1B3/PP4PP/RN1Q1RK1 w kq - 0 13",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 981,
+   "fen": "r2qkb1r/pp1n1p1p/4p1p1/3p4/2pP1P2/2P1B3/PP1N2PP/R2Q1RK1 b kq - 1 13",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 986,
+   "fen": "r2qk2r/pp1n1pbp/4p1p1/3p4/2pP1P2/2P1B3/PP1N2PP/R2Q1RK1 w kq - 2 14",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "We fianchetto the bishop to g7, onto the board's longest diagonal.",
+   "kind": "main",
+   "teaches": [
+    "the fianchetto"
+   ]
+  },
+  {
+   "ply": 28,
+   "t": 1000,
+   "fen": "r2q1rk1/pp1n1pbp/4p1p1/3p4/2pP1P2/2P1BN2/PP4PP/R2Q1RK1 w - - 4 15",
+   "line": [
+    "Nf3",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1006,
+   "fen": "r2q1rk1/pp1n1pbp/4p1p1/3pN3/2pP1P2/2P1B3/PP4PP/R2Q1RK1 b - - 5 15",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1028.5,
+   "fen": "r2q1rk1/pp3pbp/4pnp1/3pN3/2pP1P2/2P1B3/PP4PP/R2Q1RK1 w - - 6 16",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight reroutes to f6, heading for a dream central outpost.",
+   "kind": "main",
+   "teaches": [
+    "maneuver toward the outpost"
+   ]
+  },
+  {
+   "ply": 31,
+   "t": 1034,
+   "fen": "r2q1rk1/pp3pbp/4pnp1/3pN3/2pP1P2/2P5/PP3BPP/R2Q1RK1 b - - 7 16",
+   "line": [
+    "Bf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 1035.5,
+   "fen": "r2q1rk1/pp3pbp/4p1p1/3pN3/2pPnP2/2P5/PP3BPP/R2Q1RK1 w - - 8 17",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1044,
+   "fen": "r2q1rk1/pp3pbp/4p1p1/3pN3/2pPnP2/2P5/PP4PP/R2QBRK1 b - - 9 17",
+   "line": [
+    "Be1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1059,
+   "fen": "r2q1rk1/pp4bp/4ppp1/3pN3/2pPnP2/2P5/PP4PP/R2QBRK1 w - - 0 18",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1070,
+   "fen": "r2q1rk1/pp4bp/4ppp1/3p4/2pPnPN1/2P5/PP4PP/R2QBRK1 b - - 1 18",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1071,
+   "fen": "r2q1rk1/pp4bp/4p1p1/3p1p2/2pPnPN1/2P5/PP4PP/R2QBRK1 w - - 0 19",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1076,
+   "fen": "r2q1rk1/pp4bp/4p1p1/3pNp2/2pPnP2/2P5/PP4PP/R2QBRK1 b - - 1 19",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1078,
+   "fen": "r2q1rk1/pp4bp/4ppp1/3p4/2pPnPN1/2P5/PP4PP/R2QBRK1 b - - 1 18",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1079.5,
+   "fen": "r2q1rk1/pp4bp/4p1p1/3p1p2/2pPnPN1/2P5/PP4PP/R2QBRK1 w - - 0 19",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1083,
+   "fen": "r2q1rk1/pp4bp/4p1p1/3pNp2/2pPnP2/2P5/PP4PP/R2QBRK1 b - - 1 19",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1084.5,
+   "fen": "r2q1rk1/pp5p/4p1p1/3pbp2/2pPnP2/2P5/PP4PP/R2QBRK1 w - - 0 20",
+   "line": [
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1089,
+   "fen": "r2q1rk1/pp5p/4p1p1/3pPp2/2pPn3/2P5/PP4PP/R2QBRK1 b - - 0 20",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 1117,
+   "fen": "r4rk1/pp5p/4p1p1/3pPpq1/2pPn3/2P5/PP4PP/R2QBRK1 w - - 1 21",
+   "line": [
+    "Qg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1254,
+   "fen": "r2qkb1r/pp1n1p1p/4p1p1/3p4/2pP1P2/2P1B3/PP1N2PP/R2Q1RK1 b kq - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1420.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1423.5,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2PB1N2/PP1P1PPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Nf6",
+    "Bd3"
+   ],
+   "spoken": ""
+  }
+ ]
+}
