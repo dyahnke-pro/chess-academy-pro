@@ -44,3 +44,39 @@ one game.
 
 Phase 2's threat-out will add a **third, distinct** signal — *must-defend*
 (the opponent has a concrete threat you have to meet).
+
+## Phase 2 — threat calculated-out (validated 2026-08-26)
+
+**Threat = two parts** (David: "not just immediate but down the road a bit too"):
+- **immediate** = SEE on the flipped position (`looseMaterial(flipSide(fen))`) —
+  what hangs to the opponent's *next* move, no search. Catches the common
+  must-defend the forcing gate misses (attack now, take next).
+- **calculated-out** = give the opponent the move, search at `SF_THREAT_DEPTH`
+  (14), scan all MultiPV lines for the biggest **settled** material net
+  (`lineNet`, no forcing gate); `latentLandsAt` = the ply the piece falls (`@N`).
+- `threat.net = max(immediate, calcNet)`.
+
+**Folded ADDITIVELY, never as a weight-budget competitor.** The first attempt
+reallocated 20% of the weight onto `Tr`, which deflated *every* Phase-1 score
+where threat fired 0 (Rfe1 CRITICAL 74 → key 56). Fixed: keep the Phase-1
+sharpness `base` (unchanged weights), then `score = min(100, base + 25·Tr)` +
+a must-defend floor (`threatNet≥3 → ≥50`). A threat-free game keeps its exact
+Phase-1 scores; a real threat only ever *raises*.
+
+**Validated:**
+- **Kramnik (clean):** keystones intact (Bxf3 72, Bxg7 71, Kxg7 CRITICAL,
+  Rfe1 CRITICAL 70). Threat fired on **real** hanging-queen must-defends —
+  ply 45 `Qd2` (White Q on d4 en prise to …Qxd4, undefended → THREAT+9@1, Kramnik
+  saves it, cpLoss 4) and ply 57 (…Nxd4 wins Q-for-N, +6). Board-verified, not
+  false positives.
+- **Nepo (scramble):** 14 threat firings (was 2 with the forcing-only gate);
+  the blundered-into must-defend moments (cxb4, b5, c5, f3) escalate key→CRITICAL
+  with latent depth (@1 immediate … @7 down-the-road).
+
+**Refutation branches:** after a mistake/blunder, the opponent's punishing PV is
+captured (why it failed, played out) — e.g. …Nfd7's refutation is
+`Bxg7 Kxg7 b4 …`. Every candidate now carries a short PV ("if b4, then Ne5 bxc5…").
+
+**Caveat (do not lose):** the immediate-SEE is 1-ply (defended? subtract one
+recapture), not a full SEE swap-off — adequate for the offline must-defend
+heuristic; the live side would use `positionalRead`'s richer SEE.
