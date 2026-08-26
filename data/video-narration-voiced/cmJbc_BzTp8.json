@@ -1,0 +1,619 @@
+{
+ "videoId": "cmJbc_BzTp8",
+ "title": "Master Class | F6 vs Danish, VERY risky | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Caro-Kann Defense: Advance Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:cmJbc_BzTp8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1017,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": "Another Caro-Kann. e4, c6."
+  },
+  {
+   "ply": 3,
+   "t": 1019.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The knight to f3 this time,"
+  },
+  {
+   "ply": 4,
+   "t": 1022,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": "which doesn't change what we do. d5."
+  },
+  {
+   "ply": 5,
+   "t": 1029,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5 — and because he's played the knight to f3, he's given us the extra option of bringing the bishop out to g4,"
+  },
+  {
+   "ply": 6,
+   "t": 1054,
+   "fen": "rn1qkbnr/pp2pppp/2p5/3pP3/6b1/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "which is generally not possible, because the queen controls that square. Is it worth it? I think so — the bishop to g4 seems like a great improvement, even over the bishop to f5."
+  },
+  {
+   "ply": 7,
+   "t": 1062.5,
+   "fen": "rn1qkbnr/pp2pppp/2p5/3pP3/6b1/5N2/PPPPBPPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop to e2."
+  },
+  {
+   "ply": 8,
+   "t": 1076.5,
+   "fen": "rn1qkbnr/pp3ppp/2p1p3/3pP3/6b1/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "e6 — the fact that he's playing this passively doesn't alter our plan."
+  },
+  {
+   "ply": 9,
+   "t": 1080,
+   "fen": "rn1qkbnr/pp3ppp/2p1p3/3pP3/3P2b1/5N2/PPP1BPPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4. What now? Remember, the knight to d7 is possible but not"
+  },
+  {
+   "ply": 10,
+   "t": 1089.5,
+   "fen": "rn1qkbnr/pp3ppp/4p3/2ppP3/3P2b1/5N2/PPP1BPPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": "strictly necessary — instead we can go c5 and then the knight"
+  },
+  {
+   "ply": 11,
+   "t": 1094,
+   "fen": "rn1qkbnr/pp3ppp/4p3/2ppP3/3P2b1/5N1P/PPP1BPP1/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": "to c6, the optimal way of developing. What's the thematic move now?"
+  },
+  {
+   "ply": 12,
+   "t": 1102,
+   "fen": "rn1qkbnr/pp3ppp/4p3/2ppP3/3P4/5b1P/PPP1BPP1/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "We take — it's time, because we've virtually destroyed his pawn chain, and we could take on d4 immediately,"
+  },
+  {
+   "ply": 13,
+   "t": 1107.5,
+   "fen": "rn1qkbnr/pp3ppp/4p3/2ppP3/3P4/5B1P/PPP2PP1/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "but the classy move is to play the knight to c6, withholding the capture and letting him"
+  },
+  {
+   "ply": 14,
+   "t": 1115.5,
+   "fen": "r2qkbnr/pp3ppp/2n1p3/2ppP3/3P4/5B1P/PPP2PP1/RNBQK2R w KQkq - 1 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "do the taking, trading on our own terms."
+  },
+  {
+   "ply": 15,
+   "t": 1120.5,
+   "fen": "r2qkbnr/pp3ppp/2n1p3/2PpP3/8/5B1P/PPP2PP1/RNBQK2R b KQkq - 0 8",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "d-takes-c5,"
+  },
+  {
+   "ply": 16,
+   "t": 1125,
+   "fen": "r2qk1nr/pp3ppp/2n1p3/2bpP3/8/5B1P/PPP2PP1/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": "and look how our bishop has developed — his e5-pawn is still very weak, and we're going to win it."
+  },
+  {
+   "ply": 17,
+   "t": 1128.5,
+   "fen": "r2qk1nr/pp3ppp/2n1p3/2bpP3/8/5B1P/PPP2PP1/RNBQ1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "In fact he doesn't put up any resistance —"
+  },
+  {
+   "ply": 18,
+   "t": 1129.5,
+   "fen": "r2qk1nr/pp3ppp/4p3/2bpn3/8/5B1P/PPP2PP1/RNBQ1RK1 w kq - 0 10",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "we just take it."
+  },
+  {
+   "ply": 19,
+   "t": 1137,
+   "fen": "r2qk1nr/pp3ppp/4p3/2bpn3/8/7P/PPP1BPP1/RNBQ1RK1 b kq - 1 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop to e2. What do we do now? The queen to a5 was fine,"
+  },
+  {
+   "ply": 20,
+   "t": 1148.5,
+   "fen": "r2qk2r/pp3ppp/4pn2/2bpn3/8/7P/PPP1BPP1/RNBQ1RK1 w kq - 2 11",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "so we don't have to reinvent the wheel — the knight to f6."
+  },
+  {
+   "ply": 21,
+   "t": 1150.5,
+   "fen": "r2qk2r/pp3ppp/4pn2/2bpn3/8/P6P/1PP1BPP1/RNBQ1RK1 b kq - 0 11",
+   "line": [
+    "a3"
+   ],
+   "spoken": "He wants b4, and because we're playing this very positionally,"
+  },
+  {
+   "ply": 22,
+   "t": 1164.5,
+   "fen": "r2q1rk1/pp3ppp/4pn2/2bpn3/8/P6P/1PP1BPP1/RNBQ1RK1 w - - 1 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "we could play a5 here and stop it, but we don't actually need to, because b4 is not dangerous — we can just move our bishop."
+  },
+  {
+   "ply": 23,
+   "t": 1167,
+   "fen": "r2q1rk1/pp3ppp/4pn2/2bpn3/1P6/P6P/2P1BPP1/RNBQ1RK1 b - - 0 12",
+   "line": [
+    "b4"
+   ],
+   "spoken": "And another thing players at this level don't always factor in are squares — I've talked about weak squares. What square does this weaken, and where should our bishop go now?"
+  },
+  {
+   "ply": 24,
+   "t": 1188,
+   "fen": "r2q1rk1/pp3ppp/3bpn2/3pn3/1P6/P6P/2P1BPP1/RNBQ1RK1 w - - 1 13",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "We can put it on d6 or b6, both good — I like d6, look at this juicy square."
+  },
+  {
+   "ply": 25,
+   "t": 1190.5,
+   "fen": "r2q1rk1/pp3ppp/3bpn2/3pn3/1P6/P3B2P/2P1BPP1/RN1Q1RK1 b - - 2 13",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Had he played the bishop to b2, he wouldn't be attacking our knight, and we'd have a more aggressive plan of building a battery. But in the name of positional chess, how do we increase our control of the c4-square? The rook to c8 — but before that, let me improve the queenside: this pawn sticks out like a sore thumb, and when I see this construction I immediately think of undermining."
+  },
+  {
+   "ply": 26,
+   "t": 1234,
+   "fen": "r2q1rk1/1p3ppp/3bpn2/p2pn3/1P6/P3B2P/2P1BPP1/RN1Q1RK1 w - - 0 14",
+   "line": [
+    "a5"
+   ],
+   "spoken": "When you undermine, you try to break down this pawn structure — it's very vulnerable because he hasn't completed his development. He's in a lose-lose spot: if he plays b5, that creates another hole on c5, and his whole position starts to crumble."
+  },
+  {
+   "ply": 27,
+   "t": 1258.5,
+   "fen": "r2q1rk1/1p3ppp/3bpn2/P2pn3/8/P3B2P/2P1BPP1/RN1Q1RK1 b - - 0 14",
+   "line": [
+    "bxa5"
+   ],
+   "spoken": "And if he goes c3, he pays the price for not having developed the knight — his rook is undefended, a-takes-b4, c-takes-b4, the bishop takes b4. He takes, and now we can bring the"
+  },
+  {
+   "ply": 28,
+   "t": 1260.5,
+   "fen": "r4rk1/1p3ppp/3bpn2/q2pn3/8/P3B2P/2P1BPP1/RN1Q1RK1 w - - 0 15",
+   "line": [
+    "Qxa5"
+   ],
+   "spoken": "queen out, and perhaps even bring the other rook to c8, so the a8-rook is now fulfilling a pretty important role."
+  },
+  {
+   "ply": 29,
+   "t": 1270,
+   "fen": "r4rk1/1p3ppp/3bpn2/q2pn3/8/P6P/2PBBPP1/RN1Q1RK1 b - - 1 15",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": "The bishop to d2. Where should our queen go? Every one of these decisions may seem insignificant, but keep your eyes on the prize: we want to increase our hold on c4 and potentially pressure the pawn — so the queen to c7."
+  },
+  {
+   "ply": 31,
+   "t": 1304,
+   "fen": "r4rk1/1pq2ppp/3bpn2/3pn3/8/P1N4P/2PBBPP1/R2Q1RK1 b - - 3 16",
+   "line": [
+    "Qc7",
+    "Nc3"
+   ],
+   "spoken": "I did kind of overlook the knight to c3, which aims for b5 — not an issue, but I didn't realise it comes with tempo, and I really don't want to part with this bishop, because it's the instrument that lets us attack the pawn, the glue guy. The rook to a5 isn't effective, because he still plays the knight to b5, defended by that bishop. So are we busted? No — we take the opposite perspective: instead of physically stopping the knight to b5, take the sting out of it, by moving one of these two pieces so the knight to b5 doesn't act as a soft fork —"
+  },
+  {
+   "ply": 32,
+   "t": 1382,
+   "fen": "r4rk1/1pq2ppp/4pn2/2bpn3/8/P1N4P/2PBBPP1/R2Q1RK1 w - - 4 17",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "preferably without ruining the placement of the pieces, maybe even improving it. The bishop to e7 would worsen the bishop, but the bishop to c5 would not."
+  },
+  {
+   "ply": 34,
+   "t": 1391.5,
+   "fen": "r4rk1/1p3ppp/2q1pn2/1Nbpn3/8/P6P/2PBBPP1/R2Q1RK1 w - - 6 18",
+   "line": [
+    "Nb5",
+    "Qc6"
+   ],
+   "spoken": "The other move I thought of was the queen to e7 or c6 — and you see how effective this thinking is: we just go the queen to c6, we're good, our bishop is still great, and"
+  },
+  {
+   "ply": 35,
+   "t": 1400,
+   "fen": "r4rk1/1p3ppp/2q1pn2/1Nbpn3/P7/7P/2PBBPP1/R2Q1RK1 b - - 0 18",
+   "line": [
+    "a4"
+   ],
+   "spoken": "this knight is now dangling on b5, doing absolutely nothing. He supports it with a4 — and when a move like that is made, I consider its drawbacks: what squares does it no longer control?"
+  },
+  {
+   "ply": 36,
+   "t": 1423,
+   "fen": "r4rk1/1p3ppp/2q1p3/1Nbpn3/P3n3/7P/2PBBPP1/R2Q1RK1 w - - 1 19",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Sorry, I meant that the knight to b5 relinquishes control of certain squares. The knight to e4, centralising."
+  },
+  {
+   "ply": 37,
+   "t": 1438,
+   "fen": "r4rk1/1p3ppp/2q1p3/1Nbpn3/P3n3/4B2P/2P1BPP1/R2Q1RK1 b - - 2 19",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The bishop to e3. I said we don't want to part with our bishop — that was then, this is now, and the"
+  },
+  {
+   "ply": 38,
+   "t": 1454,
+   "fen": "r4rk1/1p3ppp/2q1p3/1N1pn3/P3n3/4b2P/2P1BPP1/R2Q1RK1 w - - 0 20",
+   "line": [
+    "Bxe3"
+   ],
+   "spoken": "circumstances have changed: he's offering us a much better deal — we can ruin his structure, weaken his king, create an isolated pawn, and get rid of his dark-squared bishop. I'm fine with that."
+  },
+  {
+   "ply": 39,
+   "t": 1460.5,
+   "fen": "r4rk1/1p3ppp/2q1p3/1N1pn3/P3n3/4P2P/2P1B1P1/R2Q1RK1 b - - 0 20",
+   "line": [
+    "fxe3"
+   ],
+   "spoken": "f-takes-e3. Some of you might be thinking of moves like the knight to g3 — we don't need to decide that yet, we"
+  },
+  {
+   "ply": 40,
+   "t": 1476.5,
+   "fen": "r4rk1/1p3ppp/2q1p3/1N1pn3/P7/2n1P2P/2P1B1P1/R2Q1RK1 w - - 1 21",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "can make a general improving move: the knight to c3, trading his strongest piece for our strongest — a fantastic move,"
+  },
+  {
+   "ply": 42,
+   "t": 1490.5,
+   "fen": "r4rk1/1p3ppp/4p3/3pn3/P7/2q1P2P/2P1B1P1/R2Q1RK1 w - - 0 22",
+   "line": [
+    "Nxc3",
+    "Qxc3"
+   ],
+   "spoken": "because we've also got the other centralised knight, so he's only got one good piece and we've got a bunch."
+  },
+  {
+   "ply": 43,
+   "t": 1505.5,
+   "fen": "r4rk1/1p3ppp/4p3/3pn3/P3P3/2q4P/2P1B1P1/R2Q1RK1 b - - 0 22",
+   "line": [
+    "e4"
+   ],
+   "spoken": "Is the queen attacking the pawn? No, we're not concerned about it — again, the worst-case-scenario test: even if we allowed him to do everything he wanted, how could he possibly have enough firepower to attack this pawn?"
+  },
+  {
+   "ply": 44,
+   "t": 1519,
+   "fen": "r4rk1/1p3ppp/4p3/4n3/P3p3/2q4P/2P1B1P1/R2Q1RK1 w - - 0 23",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "He's just giving us the pawn. We can go the queen to e3 and take with the pawn — but I like taking with the pawn, because it creates a far-advanced passer and opens the d-file, which we're definitely going to control."
+  },
+  {
+   "ply": 45,
+   "t": 1541.5,
+   "fen": "r4rk1/1p3ppp/4p3/4n3/P3p3/2q4P/2P1B1P1/R1Q2RK1 b - - 1 23",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": "Open files are overrated — I'll talk about that. Which rook do we go to d8 with?"
+  },
+  {
+   "ply": 46,
+   "t": 1562,
+   "fen": "3r1rk1/1p3ppp/4p3/4n3/P3p3/2q4P/2P1B1P1/R1Q2RK1 w - - 2 24",
+   "line": [
+    "Rad8"
+   ],
+   "spoken": "The rook on f8 lends some support to f1, so why risk it? Let's go with the a-rook."
+  },
+  {
+   "ply": 47,
+   "t": 1566,
+   "fen": "3r1rk1/1p3ppp/4p3/4n3/P3p3/R1q4P/2P1B1P1/2Q2RK1 b - - 3 24",
+   "line": [
+    "Ra3"
+   ],
+   "spoken": "Now there's a distinction between things you know are going to happen and things you're doing just to be safe — this is a safety move; probably nothing would have happened if we'd used the f-rook, but I want this rook to supervise, for abundance of caution."
+  },
+  {
+   "ply": 48,
+   "t": 1591,
+   "fen": "3r1rk1/1p3ppp/4p3/4n3/P3p3/R6P/2PqB1P1/2Q2RK1 w - - 4 25",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "He attacks the queen. Where should we go? We can offer a queen trade, but if we're offering one, do it actively — the queen to d2, take our queen, but you'll be making our rook incredibly active. We could also have gone the queen to c5 with check."
+  },
+  {
+   "ply": 49,
+   "t": 1617.5,
+   "fen": "3r1rk1/1p3ppp/4p3/4n3/P3p3/R6P/2PQB1P1/5RK1 b - - 0 25",
+   "line": [
+    "Qxd2"
+   ],
+   "spoken": "It attacks the bishop, and now we need to start thinking about how to improve the position further."
+  },
+  {
+   "ply": 50,
+   "t": 1619,
+   "fen": "5rk1/1p3ppp/4p3/4n3/P3p3/R6P/2PrB1P1/5RK1 w - - 0 26",
+   "line": [
+    "Rxd2"
+   ],
+   "spoken": "the rook takes d2 — we have a bunch of extra pawns, most of them"
+  },
+  {
+   "ply": 51,
+   "t": 1624,
+   "fen": "5rk1/1p3ppp/4p3/1B2n3/P3p3/R6P/2Pr2P1/5RK1 b - - 1 26",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "on the kingside, so we should consider pushing them. We can't push e3, nor do we need to — we could snag a third pawn, but we don't even need to; let's get down to business."
+  },
+  {
+   "ply": 52,
+   "t": 1642,
+   "fen": "5rk1/1p4pp/4p3/1B2np2/P3p3/R6P/2Pr2P1/5RK1 w - - 0 27",
+   "line": [
+    "f5"
+   ],
+   "spoken": "A rook lift is possible, but we can play more directly — we have a bunch of these pawns, and at some point you just start pushing them; look how our knight is right in"
+  },
+  {
+   "ply": 53,
+   "t": 1652.5,
+   "fen": "5rk1/1p4pp/4p3/1B2np2/P3p3/2R4P/2Pr2P1/5RK1 b - - 1 27",
+   "line": [
+    "Rc3"
+   ],
+   "spoken": "the centre, completely dominating over the bishop. f4. Now, you don't just want to put your head down and go crazy willy-nilly — you want to exercise a tremendous degree of caution."
+  },
+  {
+   "ply": 54,
+   "t": 1678,
+   "fen": "5rk1/6pp/1p2p3/1B2np2/P3p3/2R4P/2Pr2P1/5RK1 w - - 0 28",
+   "line": [
+    "b6"
+   ],
+   "spoken": "What is the idea of the rook to c3, where is the rook potentially going? Let's play this without giving him any chances at all — maybe to c5, and I don't want this knight to leave e5. Prophylaxis; these moves drive your opponent crazy."
+  },
+  {
+   "ply": 56,
+   "t": 1694,
+   "fen": "5rk1/2R3pp/1p2p3/1B2n3/P3pp2/7P/2Pr2P1/5RK1 w - - 0 29",
+   "line": [
+    "Rc7",
+    "f4"
+   ],
+   "spoken": "He can go to c7, but that one rook in isolation is going to accomplish nothing —"
+  },
+  {
+   "ply": 57,
+   "t": 1701,
+   "fen": "5rk1/4R1pp/1p2p3/1B2n3/P3pp2/7P/2Pr2P1/5RK1 b - - 1 29",
+   "line": [
+    "Re7"
+   ],
+   "spoken": "what's it even going to threaten? This comes in way too late. What can we do now? We could just keep pushing."
+  },
+  {
+   "ply": 58,
+   "t": 1721.5,
+   "fen": "5rk1/4R1pp/1p2p3/1B2n3/P3p3/5p1P/2Pr2P1/5RK1 w - - 0 30",
+   "line": [
+    "f3"
+   ],
+   "spoken": "And which of these should we keep pushing? You're thinking of defending the pawn, but look how far advanced these are — f3, the game is over, because we're just going to take this pawn; we're actually going for checkmate, not necessarily only promotion."
+  },
+  {
+   "ply": 59,
+   "t": 1736,
+   "fen": "5rk1/6pp/1p2R3/1B2n3/P3p3/5p1P/2Pr2P1/5RK1 b - - 0 30",
+   "line": [
+    "Rxe6"
+   ],
+   "spoken": "He takes — that's a good move."
+  },
+  {
+   "ply": 60,
+   "t": 1738,
+   "fen": "5rk1/6pp/1p2R3/1B2n3/P3p3/5p1P/2P3r1/5RK1 w - - 0 31",
+   "line": [
+    "Rxg2+"
+   ],
+   "spoken": "Now we take, and now we need one final manoeuvre to"
+  },
+  {
+   "ply": 61,
+   "t": 1744,
+   "fen": "5rk1/6pp/1p2R3/1B2n3/P3p3/5p1P/2P3r1/5R1K b - - 1 31",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "win the game. Now, we don't want to move the knight, because if we do, we drop the e4-pawn —"
+  },
+  {
+   "ply": 62,
+   "t": 1756.5,
+   "fen": "6k1/6pp/1p2R3/1B2nr2/P3p3/5p1P/2P3r1/5R1K w - - 2 32",
+   "line": [
+    "Rf5"
+   ],
+   "spoken": "not a disaster. So how do we prevent that? f5, simple, making sure this isn't mate — the king to f7."
+  },
+  {
+   "ply": 63,
+   "t": 1762,
+   "fen": "4R1k1/6pp/1p6/1B2nr2/P3p3/5p1P/2P3r1/5R1K b - - 3 32",
+   "line": [
+    "Re8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 64,
+   "t": 1763,
+   "fen": "4R3/5kpp/1p6/1B2nr2/P3p3/5p1P/2P3r1/5R1K w - - 4 33",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": "And now this rook — we notice that his king is out of squares, so our mating patterns"
+  },
+  {
+   "ply": 66,
+   "t": 1776,
+   "fen": "4R3/3n1kpp/1p6/5r2/P3p3/5p1P/2P3r1/5R1K w - - 0 34",
+   "line": [
+    "Bd7",
+    "Nxd7"
+   ],
+   "spoken": "begin to activate. He blunders and just gives us this — the rook to h5 would have been the idea."
+  },
+  {
+   "ply": 67,
+   "t": 1788.5,
+   "fen": "3R4/3n1kpp/1p6/5r2/P3p3/5p1P/2P3r1/5R1K b - - 1 34",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "The funny thing is, this is a good way to practice the don't-move-the-attacked-piece question — a lot of people have the instinct of moving the knight, but"
+  },
+  {
+   "ply": 68,
+   "t": 1804.5,
+   "fen": "3R4/3n1kpp/1p6/7r/P3p3/5p1P/2P3r1/5R1K w - - 2 35",
+   "line": [
+    "Rh5"
+   ],
+   "spoken": "my instinct is not to move the knight, but to first check whether I can play the rook to h5 anyway — and I can, and it's not hard to calculate: the rook to d7, the king to e6, and mate is unstoppable."
+  },
+  {
+   "ply": 69,
+   "t": 1815,
+   "fen": "8/3R1kpp/1p6/7r/P3p3/5p1P/2P3r1/5R1K b - - 0 35",
+   "line": [
+    "Rxd7+"
+   ],
+   "spoken": "the rook takes d7 with check —"
+  },
+  {
+   "ply": 70,
+   "t": 1816,
+   "fen": "8/3R2pp/1p2k3/7r/P3p3/5p1P/2P3r1/5R1K w - - 1 36",
+   "line": [
+    "Ke6"
+   ],
+   "spoken": "bringing the game closer to the centre, making sure there is no stalemate, because he's got pawn moves at his disposal."
+  },
+  {
+   "ply": 71,
+   "t": 1827.5,
+   "fen": "8/1R4pp/1p2k3/7r/P3p3/5p1P/2P3r1/5R1K b - - 2 36",
+   "line": [
+    "Rb7"
+   ],
+   "spoken": "the rook to b7 — and the game is over."
+  },
+  {
+   "ply": 72,
+   "t": 1828.5,
+   "fen": "8/1R4pp/1p2k3/8/P3p3/5p1r/2P3r1/5R1K w - - 0 37",
+   "line": [
+    "Rxh3#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1832,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [],
+   "spoken": "That was a good opponent, we're getting up there. e4, and all the normal Caro-Kann things — the bishop to g4, c5, the bishop to c5; the first part of the game should be very clear. Then we allow b4 — some players have the extreme of trying to prevent every single threat; sometimes you say b4 is his idea, but I'll allow it, there's no need to stop everything your opponent wants, it can do more harm than good. The bishop to d6, a5 should make sense to everybody, take, the queen to c7 dropping it back — if I'd seen it maybe the queen to b6, but it doesn't matter — the bishop to c5, getting the bishop out of the knight's range, the queen to c6.",
+   "reanchor": true
+  }
+ ]
+}
