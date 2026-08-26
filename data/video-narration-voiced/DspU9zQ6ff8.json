@@ -1,0 +1,876 @@
+{
+  "videoId": "DspU9zQ6ff8",
+  "title": "PogChamps 3 Training | QTCinderella | Pt. 2",
+  "openingName": "Italian Game",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-26",
+  "source": "yt:DspU9zQ6ff8",
+  "moves": [
+    {
+      "ply": 3,
+      "t": 80,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "line": [
+        "e4",
+        "e5",
+        "Nf3"
+      ],
+      "spoken": "Quick review — you play Black, I play White. e4, e5, the knight to f3."
+    },
+    {
+      "ply": 4,
+      "t": 82.5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 84,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "If I go the knight to c3, that's not the move we were just looking at, but I still want you to know it."
+    },
+    {
+      "ply": 6,
+      "t": 89.5,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 7,
+      "t": 90.5,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 95,
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 5",
+      "line": [
+        "Bc5",
+        "d3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 10,
+      "t": 108.5,
+      "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+      "line": [
+        "d6"
+      ],
+      "spoken": "d6 is correct."
+    },
+    {
+      "ply": 11,
+      "t": 110.5,
+      "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R b KQkq - 0 6",
+      "line": [
+        "h3"
+      ],
+      "spoken": "And if I go h3 — when in doubt, develop your pieces: look for the pieces that haven't been developed yet, and find ways to develop them."
+    },
+    {
+      "ply": 12,
+      "t": 128,
+      "fen": "r2qk2r/ppp2ppp/2npbn2/2b1p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R w KQkq - 1 7",
+      "line": [
+        "Be6"
+      ],
+      "spoken": "Look through the pieces you haven't developed and develop them; if only one minor piece is left, that's the one — the bishop to e6."
+    },
+    {
+      "ply": 3,
+      "t": 135,
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 136.5,
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+      "line": [
+        "Nf6",
+        "Nxe5"
+      ],
+      "spoken": "The knight to f6, and if White grabs with the knight takes e5 —"
+    },
+    {
+      "ply": 6,
+      "t": 140,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "the knight to c6."
+    },
+    {
+      "ply": 7,
+      "t": 144,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 2 4",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "If White just ignores you here, we take it —"
+    },
+    {
+      "ply": 8,
+      "t": 147,
+      "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+      "line": [
+        "Nxe5"
+      ],
+      "spoken": "we just take the knight."
+    },
+    {
+      "ply": 6,
+      "t": 149,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+      "line": [],
+      "spoken": "If White drops the knight back, we haven't talked about this yet — I want you to think on your feet.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 150.5,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 4",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "White drops the knight back to f3."
+    },
+    {
+      "ply": 8,
+      "t": 155.5,
+      "fen": "r1bqkb1r/pppp1ppp/2n5/8/4n3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "Nxe4"
+      ],
+      "spoken": "Black to play — the knight takes e4. Very good."
+    },
+    {
+      "ply": 6,
+      "t": 166,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+      "line": [],
+      "spoken": "Now be careful — the queen to e7 is the key move.",
+      "reanchor": true
+    },
+    {
+      "ply": 7,
+      "t": 168.5,
+      "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+      "line": [
+        "Nxc6"
+      ],
+      "spoken": "The knight takes c6, and now you recapture —"
+    },
+    {
+      "ply": 8,
+      "t": 173.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+      "line": [
+        "dxc6"
+      ],
+      "spoken": "you'll never recapture with the f-piece; take with the d-pawn."
+    },
+    {
+      "ply": 9,
+      "t": 178,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 1 5",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "Once again, if White develops the bishop to c4 first,"
+    },
+    {
+      "ply": 10,
+      "t": 185,
+      "fen": "r2qkb1r/ppp2ppp/2p1bn2/8/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 2 6",
+      "line": [
+        "Be6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 194,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 1 5",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 10,
+      "t": 195.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p5/8/2B1n3/8/PPPP1PPP/RNBQK2R w KQkq - 0 6",
+      "line": [
+        "Nxe4"
+      ],
+      "spoken": "The knight takes e4, the queen to e2, we need the queen to e7; and if I play d3 to chase your knight, where does it go to keep pressure on the bishop? And if I castle —",
+      "reanchor": true
+    },
+    {
+      "ply": 9,
+      "t": 272.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 1 5",
+      "line": [],
+      "spoken": "now, how can you both tuck your king away and control that square? That move is possible here.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 273.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 275.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "the knight to c3, which we looked at, and then we'll move on."
+    },
+    {
+      "ply": 10,
+      "t": 289,
+      "fen": "r2qkb1r/ppp2ppp/2p2n2/8/4P1b1/2N5/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "The bishop to g4 — not quite. It's very tempting because it attacks the queen, but the problem is that White can simultaneously develop a piece and prevent you from taking the queen —"
+    },
+    {
+      "ply": 11,
+      "t": 310.5,
+      "fen": "r2qkb1r/ppp2ppp/2p2n2/8/4P1b1/2N5/PPPPBPPP/R1BQK2R b KQkq - 3 6",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "the bishop to e2, exactly. And here's what to be careful about: White wants to take your bishop, and then your entire reason for sacrificing the pawn evaporates."
+    },
+    {
+      "ply": 13,
+      "t": 329.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 5 7",
+      "line": [
+        "Bc8",
+        "Bf1"
+      ],
+      "spoken": "On a broader level, developing that bishop lets White prepare to castle — so it's absolutely crucial to attack the f2-pawn in that window before White castles."
+    },
+    {
+      "ply": 14,
+      "t": 345,
+      "fen": "r1b1kb1r/ppp1qppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 6 8",
+      "line": [
+        "Qe7"
+      ],
+      "spoken": "The queen to e7 — but wait, what about this bishop? Where is it going to go?"
+    },
+    {
+      "ply": 16,
+      "t": 356,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 8 9",
+      "line": [
+        "Nb1",
+        "Qd8"
+      ],
+      "spoken": "Your instinct should be to develop your minor pieces first and foremost; the queen is only"
+    },
+    {
+      "ply": 17,
+      "t": 358.5,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 9 9",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "developed if it's fulfilling a very specific role."
+    },
+    {
+      "ply": 18,
+      "t": 362.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 10 10",
+      "line": [
+        "Bc5"
+      ],
+      "spoken": "Bingo — the bishop to c5."
+    },
+    {
+      "ply": 19,
+      "t": 366.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2NP4/PPP2PPP/R1BQKB1R b KQkq - 0 10",
+      "line": [
+        "d3"
+      ],
+      "spoken": "If d3,"
+    },
+    {
+      "ply": 20,
+      "t": 386.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [
+        "Ng4"
+      ],
+      "spoken": "now I castle — no; instead, look at this f2-pawn: how can you attack it? The knight to g4, threatening the pawn. White's best here is the bishop to e3."
+    },
+    {
+      "ply": 21,
+      "t": 392.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NPB3/PPP2PPP/R2QKB1R b KQkq - 2 11",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "The bishop to e3 — it doesn't allow you to take on f2, it intercepts your bishop, but now you can win the pawn back. How?"
+    },
+    {
+      "ply": 22,
+      "t": 421.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P3/2NPB3/PPP2nPP/R2QKB1R w KQkq - 0 12",
+      "line": [
+        "Nxf2"
+      ],
+      "spoken": "You can win the pawn back, but you have to do it through a trade of minor pieces — if you take this pawn, I simply take your knight,"
+    },
+    {
+      "ply": 23,
+      "t": 423,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P3/2NP4/PPP2BPP/R2QKB1R b KQkq - 0 12",
+      "line": [
+        "Bxf2"
+      ],
+      "spoken": "and you're up a piece."
+    },
+    {
+      "ply": 21,
+      "t": 428.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NPB3/PPP2PPP/R2QKB1R b KQkq - 2 11",
+      "line": [],
+      "spoken": "But instead of taking the pawn, what else can you take with this knight?",
+      "reanchor": true
+    },
+    {
+      "ply": 23,
+      "t": 435.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P3/2NPP3/PPP3PP/R2QKB1R b KQkq - 0 12",
+      "line": [
+        "Nxe3",
+        "fxe3"
+      ],
+      "spoken": "The bishop — the knight takes e3, and after I recapture with the pawn, you"
+    },
+    {
+      "ply": 24,
+      "t": 438.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP3PP/R2QKB1R w KQkq - 0 13",
+      "line": [
+        "Bxe3"
+      ],
+      "spoken": "take with the bishop. Now material is equal — the count of pawns and pieces — but Black is still better. Why? What specific factor makes Black better?"
+    },
+    {
+      "ply": 25,
+      "t": 478,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R b KQkq - 1 13",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "You're closer to castling than White is — that's the key. You have control over these squares, and White can't castle in either direction, it would be illegal. If White plays the bishop to e2 and you castle,"
+    },
+    {
+      "ply": 26,
+      "t": 479,
+      "fen": "r1bq1rk1/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQ - 2 14",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "White literally cannot get his king out of the centre — the king is stranded, and when you open files you'll attack it much more easily."
+    },
+    {
+      "ply": 20,
+      "t": 493,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [],
+      "spoken": "Wait — where were we? We were looking at the bishop to e3.",
+      "reanchor": true
+    },
+    {
+      "ply": 21,
+      "t": 502,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP3P/PPP2PP1/R1BQKB1R b KQkq - 0 11",
+      "line": [
+        "h3"
+      ],
+      "spoken": "If White tries to prevent you from taking the pawn by playing h3,"
+    },
+    {
+      "ply": 20,
+      "t": 504.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 21,
+      "t": 506,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP3P/PPP2PP1/R1BQKB1R b KQkq - 0 11",
+      "line": [
+        "h3"
+      ],
+      "spoken": "h3 allows the fork."
+    },
+    {
+      "ply": 20,
+      "t": 508.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 21,
+      "t": 509.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NPB3/PPP2PPP/R2QKB1R b KQkq - 2 11",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "So, the bishop to e3 —",
+      "reanchor": true
+    },
+    {
+      "ply": 22,
+      "t": 519,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P3/2NPn3/PPP2PPP/R2QKB1R w KQkq - 0 12",
+      "line": [
+        "Nxe3"
+      ],
+      "spoken": "you take with the knight, correct,"
+    },
+    {
+      "ply": 23,
+      "t": 521.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P3/2NPP3/PPP3PP/R2QKB1R b KQkq - 0 12",
+      "line": [
+        "fxe3"
+      ],
+      "spoken": "he takes with the pawn, and you"
+    },
+    {
+      "ply": 24,
+      "t": 522.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP3PP/R2QKB1R w KQkq - 0 13",
+      "line": [
+        "Bxe3"
+      ],
+      "spoken": "take with the bishop; and then he goes here,"
+    },
+    {
+      "ply": 25,
+      "t": 526.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R b KQkq - 1 13",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "hypothetically, the bishop to e2."
+    },
+    {
+      "ply": 26,
+      "t": 532.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [
+        "Qf6"
+      ],
+      "spoken": "The queen to f6 — a very good move."
+    },
+    {
+      "ply": 27,
+      "t": 535.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb1P1/PPP1B2P/R2QK2R b KQkq - 0 14",
+      "line": [
+        "g3"
+      ],
+      "spoken": "g3."
+    },
+    {
+      "ply": 28,
+      "t": 536.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/4P3/2NPb1P1/PPP1Bq1P/R2QK2R w KQkq - 1 15",
+      "line": [
+        "Qf2#"
+      ],
+      "spoken": "The queen to f2 — is that checkmate? It is; a version of scholar's mate."
+    },
+    {
+      "ply": 26,
+      "t": 543.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [],
+      "spoken": "Now White would not allow this checkmate, and it's actually not that easy to avoid — White is so cramped there's really only one way,",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 551,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPbB2/PPP3PP/R2QK2R b KQkq - 3 14",
+      "line": [
+        "Bf3"
+      ],
+      "spoken": "the bishop to f3. Why does it stop the mate? Because if your queen went there, the pawn or the queen would take it — it intercepts the queen's access."
+    },
+    {
+      "ply": 26,
+      "t": 570.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [],
+      "spoken": "Now find an alternate way to defend the f2-square — it won't be a good move, but find it.",
+      "reanchor": true
+    },
+    {
+      "ply": 25,
+      "t": 581,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R b KQkq - 1 13",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 26,
+      "t": 583,
+      "fen": "r2qk2r/ppp2ppp/2p5/8/4P1b1/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 25,
+      "t": 585.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R b KQkq - 1 13",
+      "line": [],
+      "spoken": "Let's say White plays here, and Black plays the queen to f6 —",
+      "reanchor": true
+    },
+    {
+      "ply": 26,
+      "t": 586.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [
+        "Qf6"
+      ],
+      "spoken": "now you're playing White, trying to defend the mate without the bishop to f3."
+    },
+    {
+      "ply": 27,
+      "t": 599,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QKR2 b Qkq - 3 14",
+      "line": [
+        "Rf1"
+      ],
+      "spoken": "The rook to f1 — this move is actually very bad; figure out why. There's a fork in this position that wasn't possible before, because the rook has moved and left something undefended."
+    },
+    {
+      "ply": 28,
+      "t": 680.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/4P2q/2NPb3/PPP1B1PP/R2QKR2 w Qkq - 4 15",
+      "line": [
+        "Qh4+"
+      ],
+      "spoken": "Where should the queen go, since it's being attacked? The queen to h4 with check."
+    },
+    {
+      "ply": 29,
+      "t": 682,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/4P2q/2NPb1P1/PPP1B2P/R2QKR2 b Qkq - 0 15",
+      "line": [
+        "g3"
+      ],
+      "spoken": "You see it — White has to play g3, and now"
+    },
+    {
+      "ply": 30,
+      "t": 690,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/4P3/2NPb1P1/PPP1B2q/R2QKR2 w Qkq - 0 16",
+      "line": [
+        "Qxh2"
+      ],
+      "spoken": "you can take the free pawn on h2 — you win the pawn, threaten more, and White's position is busted."
+    },
+    {
+      "ply": 26,
+      "t": 699.5,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QK2R w KQkq - 2 14",
+      "line": [],
+      "spoken": "That's a fork against the king and the pawn — the rook to f1 left the h2-pawn undefended.",
+      "reanchor": true
+    },
+    {
+      "ply": 27,
+      "t": 701,
+      "fen": "r1b1k2r/ppp2ppp/2p2q2/8/4P3/2NPb3/PPP1B1PP/R2QKR2 b Qkq - 3 14",
+      "line": [
+        "Rf1"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 29,
+      "t": 707,
+      "fen": "r1bqk2r/ppp2ppp/2p5/8/4P3/2NPb3/PPP1B1PP/R2QK2R b Qkq - 5 15",
+      "line": [
+        "Qd8",
+        "Rh1"
+      ],
+      "spoken": "In general, when a pawn or piece stands alone and undefended, it's susceptible to a fork or double attack — so keep track of what's undefended. For another example: if White played the bishop to h5, is it defended? The queen to g5 attacks the pawn and the bishop; better still, you can attack the bishop and the king — and a check must be answered — so after g3 you win the bishop. These undefended pieces are the thing to notice."
+    },
+    {
+      "ply": 21,
+      "t": 827,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NPB3/PPP2PPP/R2QKB1R b KQkq - 2 11",
+      "line": [],
+      "spoken": "So one thing you must observe is the presence of undefended pieces and pawns, which may lead to a fork — that's actually very important.",
+      "reanchor": true
+    },
+    {
+      "ply": 20,
+      "t": 828,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 16,
+      "t": 831,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 8 9",
+      "line": [],
+      "spoken": "Maybe we can look at one final variation — there's a lot to review in this line.",
+      "reanchor": true
+    },
+    {
+      "ply": 17,
+      "t": 848,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 9",
+      "line": [
+        "d3"
+      ],
+      "spoken": "Your response to d3 is going to be the very same one as your response to the knight to c3 — it's the same developing move."
+    },
+    {
+      "ply": 18,
+      "t": 862.5,
+      "fen": "r2qkb1r/ppp2ppp/2p2n2/8/4P1b1/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 10",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "the bishop to g4 — no, that's not the one you were playing against the knight to c3."
+    },
+    {
+      "ply": 17,
+      "t": 865,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 9",
+      "line": [],
+      "spoken": "You have a temptation to make this move because you see you're attacking the queen — but not yet; there's a key piece you haven't developed.",
+      "reanchor": true
+    },
+    {
+      "ply": 10,
+      "t": 884,
+      "fen": "r2qkb1r/ppp2ppp/2p2n2/8/4P1b1/2N5/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+      "line": [],
+      "spoken": "You get excited at the potential of winning the queen, but be careful about making a move simply because it attacks a piece — a move isn't good just because it makes a threat; attacking the queen is only good if it traps the queen.",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 913.5,
+      "fen": "r2qkb1r/ppp2ppp/2p2n2/8/4P1b1/2N5/PPPPBPPP/R1BQK2R b KQkq - 3 6",
+      "line": [
+        "Be2"
+      ],
+      "spoken": "White's best is to bring the bishop down to e2. Why is this a bad development for Black? Because White is ready to trade, and, number two,"
+    },
+    {
+      "ply": 13,
+      "t": 929,
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 5 7",
+      "line": [
+        "Bc8",
+        "Bf1"
+      ],
+      "spoken": "to castle on the next move — that's what you have to avoid. So you play the bishop"
+    },
+    {
+      "ply": 14,
+      "t": 931.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 6 8",
+      "line": [
+        "Bc5"
+      ],
+      "spoken": "to c5. And the last thing I'll show you: what happens if White likes that way of developing and plays"
+    },
+    {
+      "ply": 15,
+      "t": 937.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/2B1P3/2N5/PPPP1PPP/R1BQK2R b KQkq - 7 8",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "the bishop to c4? Here Black has a very cool sequence that also essentially wins the game — you make the exact same move you'd make had White played d3."
+    },
+    {
+      "ply": 14,
+      "t": 975,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 6 8",
+      "line": [],
+      "spoken": "Copy the line: against d3 you would play — remind me —",
+      "reanchor": true
+    },
+    {
+      "ply": 15,
+      "t": 976.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/2B1P3/2N5/PPPP1PPP/R1BQK2R b KQkq - 7 8",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "so you do the exact same thing; he brings the bishop out and you go here,"
+    },
+    {
+      "ply": 16,
+      "t": 979.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/2B1P1n1/2N5/PPPP1PPP/R1BQK2R w KQkq - 8 9",
+      "line": [
+        "Ng4"
+      ],
+      "spoken": "the knight to g4, attacking the f2-pawn. Now compare this position carefully —"
+    },
+    {
+      "ply": 18,
+      "t": 987,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 10 10",
+      "line": [
+        "Bf1",
+        "Nf6"
+      ],
+      "spoken": "look at what additional move White has when the bishop comes out."
+    },
+    {
+      "ply": 20,
+      "t": 989.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
+      "line": [
+        "d3",
+        "Ng4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 18,
+      "t": 991,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 10 10",
+      "line": [],
+      "spoken": "What additional move does White have in the event the bishop comes out?",
+      "reanchor": true
+    },
+    {
+      "ply": 20,
+      "t": 993,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/2B1P1n1/2N5/PPPP1PPP/R1BQK2R w KQkq - 12 11",
+      "line": [
+        "Bc4",
+        "Ng4"
+      ],
+      "spoken": "We just talked about this through the lens of the bishop to e2 — what can White do to defend the pawn? It's an additional move that wasn't present when the bishop stayed on f1 —"
+    },
+    {
+      "ply": 21,
+      "t": 1021.5,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b5/2B1P1n1/2N5/PPPP1PPP/R1BQ1RK1 b kq - 13 11",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "castling. That's the move. But this castle may look safe, and it's actually not: you see this knight and this bishop, and the queen on d8 — where can the queen go to contribute best to the attack? Slam it right into the teeth of White's position; the queen to d6 is the right idea, but there's a much more active square that also attacks h2 and threatens checkmate."
+    },
+    {
+      "ply": 22,
+      "t": 1056,
+      "fen": "r1b1k2r/ppp2ppp/2p5/2b5/2B1P1nq/2N5/PPPP1PPP/R1BQ1RK1 w kq - 14 12",
+      "line": [
+        "Qh4"
+      ],
+      "spoken": "The queen to h4 — absolutely crushing, threatening checkmate. White has only one way to defend against it,"
+    },
+    {
+      "ply": 23,
+      "t": 1071,
+      "fen": "r1b1k2r/ppp2ppp/2p5/2b5/2B1P1nq/2N4P/PPPP1PP1/R1BQ1RK1 b kq - 0 12",
+      "line": [
+        "h3"
+      ],
+      "spoken": "h3, bringing the pawn down — but you're also attacking f2, with three pieces. This line lets you practice the discovered check: take the f2-pawn with a piece such that you set up a discovered check — set it up with the knight, you're not delivering it yet."
+    },
+    {
+      "ply": 24,
+      "t": 1158,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/2B1P1nq/2N4P/PPPP1bP1/R1BQ1RK1 w kq - 0 13",
+      "line": [
+        "Bxf2+"
+      ],
+      "spoken": "The bishop takes f2 with check — but which x-ray are you setting up?"
+    },
+    {
+      "ply": 25,
+      "t": 1164.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/2B1P1nq/2N4P/PPPP1RP1/R1BQ2K1 b kq - 0 13",
+      "line": [
+        "Rxf2"
+      ],
+      "spoken": "He takes,"
+    },
+    {
+      "ply": 26,
+      "t": 1165.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/8/2B1P2q/2N4P/PPPP1nP1/R1BQ2K1 w kq - 0 14",
+      "line": [
+        "Nxf2"
+      ],
+      "spoken": "and you take — is that an x-ray? Not quite."
+    },
+    {
+      "ply": 23,
+      "t": 1172.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/2b5/2B1P1nq/2N4P/PPPP1PP1/R1BQ1RK1 b kq - 0 12",
+      "line": [],
+      "spoken": "An x-ray involves two of your pieces and one of the opponent's: a piece looking at his king through another piece. This bishop is looking at the king — so set up an x-ray; which piece should take the pawn?",
+      "reanchor": true
+    },
+    {
+      "ply": 24,
+      "t": 1200.5,
+      "fen": "r1b1k2r/ppp2ppp/2p5/2b5/2B1P2q/2N4P/PPPP1nP1/R1BQ1RK1 w kq - 0 13",
+      "line": [
+        "Nxf2"
+      ],
+      "spoken": "Take the pawn with the knight — now you not only set up the x-ray, you also attack the queen; the queen has to move, and then this knight moves away with a discovered check, doing the most damage. Because White's king is so weak, eliminate its protection. And here's the hilarious thing — you have a checkmate: another x-ray, another discovered check, and it's a discovered mate if you put the knight on the right square, with the bishop covering the king's escape and the queen delivering the check."
+    },
+    {
+      "ply": 15,
+      "t": 1269.5,
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/2B1P3/2N5/PPPP1PPP/R1BQK2R b KQkq - 7 8",
+      "line": [],
+      "spoken": "And even if that weren't mate, you'd be winning White's queen. That's a good amount for now — we'll review these lines and show a couple more traps next time.",
+      "reanchor": true
+    }
+  ]
+}
