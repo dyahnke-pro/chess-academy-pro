@@ -72,8 +72,11 @@ describe('note selection is position-determined', () => {
   beforeAll(() => {
     // Two of the four corpora are fetched at runtime, so without this the whole
     // suite would pass while exercising a fifth of the data.
+    // Floor proves the full corpus loaded (not the fetched-corpora fifth). Dropped
+    // from 46k after the anchored farmed notes were archived 2026-08-26 (voiced is
+    // now the sole exact-position corpus); the floating corpus is still ~56k.
     const total = loadFullCorpus().reduce((n, c) => n + c.notes, 0);
-    expect(total).toBeGreaterThan(46_000);
+    expect(total).toBeGreaterThan(45_000);
   }, 120_000);
 
   it('never selects a note authored at a different position', () => {

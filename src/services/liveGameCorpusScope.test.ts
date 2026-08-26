@@ -44,19 +44,23 @@ describe('the live-game corpus lane', () => {
     }
   }, 120_000);
 
-  it('the scope guard is what does it — unscoped, the foreign note comes back', () => {
-    // Pins the CAUSE, not just the symptom: same walk, opening name withheld.
-    // If this ever stops finding a foreign note the first assertion has gone
-    // vacuous and is no longer proving anything.
+  it('position-only fence: even UNSCOPED, no foreign-tagged note comes back', () => {
+    // What stops the foreign note is now the FENCE, not the scope tag (David
+    // 2026-08-26): the play-surface read is exact-position only, so the
+    // opening-family / structure / concept tiers that used to borrow a
+    // foreign-tagged note are gone. Voiced notes are `opening:null`, so nothing
+    // reaching this walk is foreign-tagged at all. (Foreign-tagged FLOATING
+    // notes still teach — but only on the tactics drill + endgame lessons.)
     const seen = new Set<string>();
     let sawForeign = false;
     for (const { prefix, fen } of walk(VIENNA_GAMBIT)) {
       const src = teachingSourceForBoard(prefix, fen, null);
       if (!src || seen.has(src.note.id)) continue;
       seen.add(src.note.id);
+      expect(src.origin).toBe('position');
       const tags = (src.note.opening ?? '').toLowerCase();
       if (tags && !tags.includes('vienna') && !tags.includes('king')) sawForeign = true;
     }
-    expect(sawForeign, 'unscoped retrieval no longer reaches a foreign-tagged note').toBe(true);
+    expect(sawForeign, 'a foreign-tagged note reached the play surface').toBe(false);
   }, 120_000);
 });

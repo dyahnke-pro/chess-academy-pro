@@ -81,15 +81,19 @@ describe('note selection is piece-true before the gate ever sees it', () => {
     }
   });
 
-  it('still teaches — the fix must not buy truth with silence', () => {
-    // Over-blocking is its own defect: the corpus knows rook endings, and a
-    // coach that goes quiet over one has lost more than it gained. Priced at
-    // 10/10 boards still answered in `pieceGateCost.report.test.ts`.
-    const answered = BOARDS.filter((fen) => {
+  it('play surface is position-only on arbitrary boards (the fence, not a bug)', () => {
+    // The concept/structure BORROW that used to teach these arbitrary endgames
+    // on a play surface came from the farmed anchored notes, now archived, and
+    // the borrow tiers are removed (David 2026-08-26: no floating notes in the
+    // play surfaces). Silence here is the intended contract — anything the read
+    // does return can only be an exact-position voiced note. The teaching itself
+    // is not lost: the endgame LESSON surface reaches it via the concept tier
+    // (`endgameNoteForLesson`) and the tactics drill via
+    // `tacticNoteForPuzzleThemes`, where the floating corpus belongs.
+    for (const fen of BOARDS) {
       const src = teachingSourceForBoard([], fen, null);
-      return Boolean(src && spokenBeatText(src.note).trim());
-    });
-    expect(answered.length).toBeGreaterThanOrEqual(Math.ceil(BOARDS.length / 2));
+      if (src) expect(src.origin).toBe('position');
+    }
   });
 
   it('asks the question of the spoken text, not of `plans`', () => {

@@ -10,8 +10,13 @@
 // lookup: a hit replaces the generator's LLM spine narration with the baked
 // script — deterministic, the same words every session, zero runtime
 // generation for the covered line (G0: nothing is decided at runtime).
+// 🔒 RETIRED 2026-08-26 (David): the LLM-reworded-from-transcript teach bake is
+// removed from the app. Its narration was board-anchored (spine-verified) but
+// GENERATED — superseded by the hand-authored voiced corpus, which is the sole
+// exact-position narration source now. The dataset is empty so every lookup
+// returns null and callers fall through to the note-led / computed path; the
+// old JSON is archived at data/archive/walkthrough-narrations.json (reversible).
 import { Chess } from 'chess.js';
-import bakedFile from '../data/walkthrough-narrations.json';
 
 interface BakedIdea {
   text: string;
@@ -75,7 +80,7 @@ interface BakedFileShape {
   narrations: Record<string, BakedNarration>;
 }
 
-const DATA = bakedFile as unknown as BakedFileShape;
+const DATA: BakedFileShape = { generatedAt: 'retired-2026-08-26', narrations: {} };
 
 // The runtime resolves an opening to ONE canonical name, and a bake is filed
 // under whatever name it was baked with. Those drift apart constantly: the
