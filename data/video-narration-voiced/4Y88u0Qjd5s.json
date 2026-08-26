@@ -1,0 +1,322 @@
+{
+ "videoId": "4Y88u0Qjd5s",
+ "title": "Hippopotamus Attack | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Hippopotamus System (Black vs the double fianchetto)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:4Y88u0Qjd5s",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/6P1/PPPPPP1P/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "g3",
+    "e5"
+   ],
+   "spoken": "White opens with the flank move g3, so we grab the center at once with e5 — a reverse Modern where we get the big pawn share.",
+   "kind": "main",
+   "teaches": [
+    "answer a flank opening by taking the center"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 17.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P4P1/P1PPPP1P/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "b3"
+   ],
+   "spoken": "White heads for the Hippopotamus, fianchettoing on both wings and conceding the center entirely.",
+   "kind": "main"
+  },
+  {
+   "ply": 4,
+   "t": 23,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/1P4P1/P1PPPP1P/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 26.5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/1P2P1P1/P1PP1P1P/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 61.5,
+   "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/8/1P2P1P1/P1PP1P1P/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c6"
+   ],
+   "spoken": "The key move: c6. It's aimed at the fianchettoed light-squared bishop, disarming it by leaving it to bite on granite against a fixed pawn wall — a London-flavored idea, with the bishop coming to d6 next.",
+   "kind": "main",
+   "teaches": [
+    "blunt the fianchettoed bishop with a pawn wall"
+   ]
+  },
+  {
+   "ply": 8,
+   "t": 68,
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3pp3/8/1P2P1P1/PBPP1P1P/RN1QKBNR w KQkq - 2 5",
+   "line": [
+    "Bb2",
+    "Bd6"
+   ],
+   "spoken": "The bishop to d6 props up the e5-pawn; a later f4 holds no real danger for us here.",
+   "kind": "main"
+  },
+  {
+   "ply": 9,
+   "t": 78,
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3pp3/8/1P2P1P1/PBPP1PBP/RN1QK1NR b KQkq - 3 5",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 81.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2P1P1/PBPP1PBP/RN1QK1NR w KQkq - 4 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 84,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2PNP1/PBPP1PBP/RN1QK2R b KQkq - 5 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White's knight to f3 is already a slight inaccuracy — in the Hippo it belongs on e2, precisely so this doesn't happen.",
+   "teaches": [
+    "the Hippo knight belongs on e2"
+   ]
+  },
+  {
+   "ply": 10,
+   "t": 93.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2P1P1/PBPP1PBP/RN1QK1NR w KQkq - 4 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 97.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2PNP1/PBPP1PBP/RN1QK2R b KQkq - 5 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 101.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3p4/4p3/1P2PNP1/PBPP1PBP/RN1QK2R w KQkq - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": "And here's why: the pawn to e4 clamps the light squares, seizing space the fianchettoed bishop can no longer contest.",
+   "kind": "main",
+   "teaches": [
+    "e4 clamps the light squares"
+   ]
+  },
+  {
+   "ply": 13,
+   "t": 103.5,
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pN3/4p3/1P2P1P1/PBPP1PBP/RN1QK2R b KQkq - 1 7",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "White's knight to e5 is dubious — we're not winning outright, but Black is now solidly the better side.",
+   "kind": "main"
+  },
+  {
+   "ply": 14,
+   "t": 119,
+   "fen": "rnb1k2r/pp2qppp/2pb1n2/3pN3/4p3/1P2P1P1/PBPP1PBP/RN1QK2R w KQkq - 2 8",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "The harmonious answer is the queen to e7 — natural development that leaves the intruding knight with no squares, so White must lash out with f4 or d4, both weakening.",
+   "kind": "main",
+   "teaches": [
+    "improve a piece while trapping his"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 140,
+   "fen": "rnb1k2r/pp2qppp/2pb1n2/3pN3/3Pp3/1P2P1P1/PBP2PBP/RN1QK2R b KQkq d3 0 8",
+   "line": [
+    "d4"
+   ],
+   "spoken": "An instructive moment: we do NOT capture en passant here. Taking would do the dark-squared bishop and the f3-square a real favor — and our pawn on e4 is exactly what clamps f3 shut. The clamp is worth more than the trade.",
+   "kind": "main",
+   "teaches": [
+    "don’t relieve his bad bishop or free f3"
+   ]
+  },
+  {
+   "ply": 16,
+   "t": 168,
+   "fen": "r1b1k2r/pp1nqppp/2pb1n2/3pN3/3Pp3/1P2P1P1/PBP2PBP/RN1QK2R w KQkq - 1 9",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": "The right way to remove the knight is clinical, not the capture on e5 that would hand over our good bishop — the queen's knight comes to d7 to swap it off instead.",
+   "kind": "main",
+   "teaches": [
+    "trade off cleanly, keep your good bishop"
+   ]
+  },
+  {
+   "ply": 15,
+   "t": 169.5,
+   "fen": "rnb1k2r/pp2qppp/2pb1n2/3pN3/3Pp3/1P2P1P1/PBP2PBP/RN1QK2R b KQkq d3 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 173.5,
+   "fen": "r3k2r/pp1bqppp/2pb1n2/3p4/3Pp3/1P2P1P1/PBP2PBP/RN1QK2R w KQkq - 0 10",
+   "line": [
+    "Nbd7",
+    "Nxd7",
+    "Bxd7"
+   ],
+   "spoken": "The knight is gone and we've kept everything that matters — the clamp on f3, the intact pawn chain — and now we turn to the kingside attack.",
+   "kind": "main",
+   "teaches": [
+    "liquidate the intruder, keep the structure"
+   ]
+  },
+  {
+   "ply": 19,
+   "t": 182.5,
+   "fen": "r3k2r/pp1bqppp/2pb1n2/3p4/3Pp3/1P2P1P1/PBP2PBP/RN1Q1RK1 b kq - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 209.5,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p3p/3Pp3/1P2P1P1/PBP2PBP/RN1Q1RK1 w kq - 0 11",
+   "line": [
+    "h5"
+   ],
+   "spoken": "No fear of the uncastled king — we can castle long whenever we like, so we start straight in with h5, going for a quick mate on the thematic g3 hook.",
+   "kind": "plan",
+   "teaches": [
+    "attack with the king in the center when it’s safe"
+   ],
+   "plans": [
+    "h5-h4 to lever open the g3 hook"
+   ]
+  },
+  {
+   "ply": 21,
+   "t": 220,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p3p/3Pp3/1PN1P1P1/PBP2PBP/R2Q1RK1 b kq - 1 11",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 225,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p4/3Pp2p/1PN1P1P1/PBP2PBP/R2Q1RK1 w kq - 0 12",
+   "line": [
+    "h4"
+   ],
+   "spoken": "h4 slams into the hook on g3, prying the kingside open.",
+   "kind": "main"
+  },
+  {
+   "ply": 23,
+   "t": 242,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p4/3Pp2p/1PN1P1P1/PBP2PBP/1R1Q1RK1 b kq - 1 12",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 251.5,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p4/3Pp3/1PN1P1p1/PBP2PBP/1R1Q1RK1 w kq - 0 13",
+   "line": [
+    "hxg3"
+   ],
+   "spoken": "Opening the h-file is a no-brainer — the rook now points straight at White's king.",
+   "kind": "main"
+  },
+  {
+   "ply": 25,
+   "t": 255,
+   "fen": "r3k2r/pp1bqpp1/2pb1n2/3p4/3Pp3/1PN1P1P1/PBP3BP/1R1Q1RK1 b kq - 0 13",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 269,
+   "fen": "r3k2r/pp1bqpp1/2pb4/3p4/3Pp1n1/1PN1P1P1/PBP3BP/1R1Q1RK1 w kq - 1 14",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "With the files open the weaknesses jump out — the e3 and h2 pawns are both falling. The knight to g4 sets up simple, crushing chess.",
+   "kind": "main",
+   "teaches": [
+    "open lines expose the weak pawns"
+   ]
+  },
+  {
+   "ply": 27,
+   "t": 332,
+   "fen": "r3k2r/pp1bqpp1/2pb4/3p4/3Pp1n1/1PN1P1PP/PBP3B1/1R1Q1RK1 b kq - 0 14",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 338,
+   "fen": "r3k2r/pp1bqpp1/2pb4/3p4/3Pp3/1PN1n1PP/PBP3B1/1R1Q1RK1 w kq - 0 15",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": "The precise finish isn't grabbing the rook — it's the knight taking on g2 to rip open the h-file, combining winning material with the mating attack. And never take on f1 while our own rook on h8 sits undefended. The light squares decide it: we have a light-squared bishop and White has none.",
+   "kind": "main",
+   "teaches": [
+    "combine material win with mate",
+    "the missing-bishop color complex"
+   ]
+  },
+  {
+   "ply": 3,
+   "t": 488,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P4P1/P1PPPP1P/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
