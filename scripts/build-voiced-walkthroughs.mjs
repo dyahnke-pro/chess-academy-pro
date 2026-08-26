@@ -78,8 +78,14 @@ for (const f of files) {
   // Depersonalize the opening NAME too — some carry a pro-specific annotation
   // ("Scandinavian Defense (750 speedrun)") that leaks into the intro/outro.
   const key = depersonalize(j.openingName || 'Unknown') || 'Unknown';
-  if (!groups.has(key)) groups.set(key, { studentSide: j.studentSide || 'white', videos: [] });
-  groups.get(key).videos.push({ id, spine });
+  if (!groups.has(key)) groups.set(key, { sideVotes: { white: 0, black: 0 }, videos: [] });
+  const g = groups.get(key);
+  // MAJORITY vote for the student's side — a single mis-tagged video must not
+  // flip the board (David 2026-08-26: "Jobava is being taught from the wrong
+  // color. Should be white." — the FIRST of 12 Jobava videos was tagged black
+  // while 11 were white, and the builder took the first).
+  g.sideVotes[j.studentSide === 'black' ? 'black' : 'white'] += 1;
+  g.videos.push({ id, spine });
 }
 
 /** Trie node -> WalkthroughTree node. */
@@ -151,7 +157,8 @@ function emitTree(openingName, studentSide, videos) {
 }
 
 const out = [];
-for (const [openingName, { studentSide, videos }] of groups) {
+for (const [openingName, { sideVotes, videos }] of groups) {
+  const studentSide = sideVotes.black > sideVotes.white ? 'black' : 'white';
   const tree = emitTree(openingName, studentSide, videos);
   // count narrated nodes
   let narrated = 0, total = 0;

@@ -363,6 +363,9 @@ const BACKUP_WPM = 180;
 const MIN_BACKUP_MS = 3000;
 const MAX_BACKUP_MS = 45_000;
 const POST_NARRATION_BUFFER_MS = 400;
+/** Beat between UNNARRATED moves so each one animates on the board instead of a
+ *  chain collapsing into one jump (David 2026-08-26: "moves don't play out"). */
+const SILENT_MOVE_MS = 900;
 /** Hard ceiling on the fork's comparative bridge. It is spoken BEFORE the
  *  pick advances, so a wedged TTS promise would strand the lesson at the
  *  fork panel — past this the walk advances regardless. Generous enough that
@@ -1450,7 +1453,23 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       if (!idea) {
         // Root / un-narrated node — just transition based on children.
         if (node.children.length === 1) {
-          narrateAndAdvance([...path, node.children[0].node]);
+          // PLAY THE MOVE OUT on the board, then advance after a brief beat —
+          // do NOT recurse instantly, or a chain of unnarrated moves collapses
+          // into one board jump (David 2026-08-26: "moves don't play out, they
+          // are just set up and narration starts"). The root (san === null) has
+          // nothing to show, so it advances immediately.
+          if (node.san === null) {
+            narrateAndAdvance([...path, node.children[0].node]);
+          } else {
+            const t = setTimeout(() => {
+              if (!isCurrent()) return;
+              narrateAndAdvance([...path, node.children[0].node]);
+            }, SILENT_MOVE_MS);
+            advanceTimerRef.current = t;
+            cancelNarrationRef.current = (): void => {
+              if (advanceTimerRef.current) { clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
+            };
+          }
         } else if (node.children.length > 1) {
           // Fork with nothing to read: show the picker and WAIT for the
           // pick (no auto-advance — see the narrated-fork case above).

@@ -22014,7 +22014,7 @@
  {
   "id": "jobava-london-system",
   "openingName": "Jobava London System",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "4Vbr9EQoGd4",
    "6uFhzy3VnXA",
@@ -31401,7 +31401,7 @@
  {
   "id": "caro-kann-defense",
   "openingName": "Caro-Kann Defense",
-  "studentSide": "white",
+  "studentSide": "black",
   "videoIds": [
    "EPS51oKRgpU",
    "fz9td9L2uIo",
@@ -32657,7 +32657,7 @@
  {
   "id": "sicilian-defence",
   "openingName": "Sicilian Defence",
-  "studentSide": "white",
+  "studentSide": "black",
   "videoIds": [
    "B53SGK_SLTk",
    "Fz0_pECE5vo",
@@ -36266,7 +36266,7 @@
  {
   "id": "bishop-s-opening",
   "openingName": "Bishop's Opening",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "MvaAX4pTvYU",
    "mIzJ3LYZvKw"
@@ -38465,7 +38465,7 @@
  {
   "id": "four-knights-game-scotch-variation",
   "openingName": "Four Knights Game: Scotch Variation",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "3XUh57mV8a8",
    "D7sbbap9lIc",
@@ -50522,7 +50522,7 @@
  {
   "id": "london-system",
   "openingName": "London System",
-  "studentSide": "white",
+  "studentSide": "black",
   "videoIds": [
    "FPI9J8_LmJQ",
    "RzfG5SfKRak",
@@ -55472,7 +55472,7 @@
  {
   "id": "nimzowitsch-larsen-attack",
   "openingName": "Nimzowitsch-Larsen Attack",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "-4hTQEnwa7s",
    "MWMloBpKuVg",
@@ -58616,7 +58616,7 @@
  {
   "id": "king-s-indian-attack",
   "openingName": "King's Indian Attack",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "24yObE8SLzY",
    "knRe3EsANdg"
@@ -66109,7 +66109,7 @@
  {
   "id": "king-s-gambit",
   "openingName": "King's Gambit",
-  "studentSide": "white",
+  "studentSide": "black",
   "videoIds": [
    "8QxDmN_BMaU",
    "hBzXn8Kdaao",
@@ -70440,7 +70440,7 @@
  {
   "id": "queen-s-pawn-game",
   "openingName": "Queen’s Pawn Game",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "-9fPYlSEkJ0",
    "NnQmNvrOmCI"
@@ -82172,7 +82172,7 @@
  {
   "id": "nimzowitsch-larsen-attack-1-b3",
   "openingName": "Nimzowitsch-Larsen Attack (1.b3)",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "UN41NRg5Ul4",
    "jPhLlZ4_c1A"
@@ -84682,7 +84682,7 @@
  {
   "id": "slav-defense",
   "openingName": "Slav Defense",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "6-d45BL5GoY",
    "WmCImz1fv5s"
@@ -93922,7 +93922,7 @@
  {
   "id": "nimzo-larsen-attack",
   "openingName": "Nimzo-Larsen Attack",
-  "studentSide": "white",
+  "studentSide": "black",
   "videoIds": [
    "JXcULXtKu1Q",
    "cTvjTP841J4",
@@ -104529,7 +104529,7 @@
  {
   "id": "dutch-defence",
   "openingName": "Dutch Defence",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "Aq2i-dSfFZw",
    "LLidbvIUZ5I"
@@ -111362,7 +111362,7 @@
  {
   "id": "italian-game-two-knights-defence",
   "openingName": "Italian Game: Two Knights Defence",
-  "studentSide": "black",
+  "studentSide": "white",
   "videoIds": [
    "ts8OsKe0taY",
    "ykmGxE9DURo"
