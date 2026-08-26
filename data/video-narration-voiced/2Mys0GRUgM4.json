@@ -1,306 +1,311 @@
 {
-  "videoId": "2Mys0GRUgM4",
-  "title": "Master Class | King's Indian Defence, Sämisch | Chess Speedrun | Grandmaster Naroditsky",
-  "openingName": "King's Indian Defense: Samisch Variation",
-  "studentSide": "white",
-  "voice": "danya-dna",
-  "rewrittenAt": "2026-08-25",
-  "source": "yt:2Mys0GRUgM4",
-  "moves": [
-    {
-      "ply": 2,
-      "t": 9.5,
-      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-      "line": [
-        "d4",
-        "Nf6"
-      ],
-      "spoken": "We take White and open d4; Black replies with the knight to f6."
-    },
-    {
-      "ply": 4,
-      "t": 31,
-      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-      "line": [
-        "c4",
-        "g6"
-      ],
-      "spoken": "We play c4, the main line; Black fianchettoes with g6."
-    },
-    {
-      "ply": 5,
-      "t": 36,
-      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
-      "line": [
-        "Nc3"
-      ],
-      "spoken": "We develop the knight to c3."
-    },
-    {
-      "ply": 6,
-      "t": 37,
-      "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
-      "line": [
-        "Bg7"
-      ],
-      "spoken": "Black completes the fianchetto with the bishop to g7."
-    },
-    {
-      "ply": 7,
-      "t": 39,
-      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
-      "line": [
-        "e4"
-      ],
-      "spoken": "We build the big centre with e4."
-    },
-    {
-      "ply": 8,
-      "t": 40,
-      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
-      "line": [
-        "O-O"
-      ],
-      "spoken": "Black castles."
-    },
-    {
-      "ply": 7,
-      "t": 45.5,
-      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
-      "line": [],
-      "spoken": "Castling is fine here; the e5-punish is known to be bad ever since a famous Fischer win in the sixties. We just play it as a normal King's Indian.",
-      "reanchor": true
-    },
-    {
-      "ply": 8,
-      "t": 49.5,
-      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
-      "line": [
-        "O-O"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 9,
-      "t": 90.5,
-      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQ - 0 5",
-      "line": [
-        "f3"
-      ],
-      "spoken": "We play f3 — the Sämisch: reinforcing e4, preparing a g4 pawn storm, and denying the knight g4."
-    },
-    {
-      "ply": 10,
-      "t": 93.5,
-      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 6",
-      "line": [
-        "d6"
-      ],
-      "spoken": "Black plays d6."
-    },
-    {
-      "ply": 11,
-      "t": 113,
-      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 1 6",
-      "line": [
-        "Be3"
-      ],
-      "spoken": "We develop the bishop to e3."
-    },
-    {
-      "ply": 12,
-      "t": 115.5,
-      "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
-      "line": [
-        "e5"
-      ],
-      "spoken": "Black plays the old main line ...e5."
-    },
-    {
-      "ply": 13,
-      "t": 153.5,
-      "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR b KQ - 0 7",
-      "line": [
-        "d5"
-      ],
-      "spoken": "We close the centre with d5."
-    },
-    {
-      "ply": 14,
-      "t": 156,
-      "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 8",
-      "line": [
-        "c6"
-      ],
-      "spoken": "Black hits the wedge with c6."
-    },
-    {
-      "ply": 15,
-      "t": 167.5,
-      "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR b KQ - 1 8",
-      "line": [
-        "Qd2"
-      ],
-      "spoken": "The queen to d2, preparing to castle long."
-    },
-    {
-      "ply": 16,
-      "t": 172.5,
-      "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 2 9",
-      "line": [
-        "Bd7"
-      ],
-      "spoken": "Black plays the awkward ...Bd7, depriving his own knight of that square."
-    },
-    {
-      "ply": 17,
-      "t": 185.5,
-      "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 3 9",
-      "line": [
-        "O-O-O"
-      ],
-      "spoken": "We castle queenside."
-    },
-    {
-      "ply": 18,
-      "t": 189,
-      "fen": "rn1q1rk1/p2b1pbp/2pp1np1/1p1Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 10",
-      "line": [
-        "b5"
-      ],
-      "spoken": "Black launches ...b5 on the queenside."
-    },
-    {
-      "ply": 19,
-      "t": 221,
-      "fen": "rn1q1rk1/p2b1pbp/2Pp1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 0 10",
-      "line": [
-        "dxc6"
-      ],
-      "spoken": "We take on c6, exposing the weak d6-pawn."
-    },
-    {
-      "ply": 20,
-      "t": 238.5,
-      "fen": "r2q1rk1/p2b1pbp/2np1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 11",
-      "line": [
-        "Nxc6"
-      ],
-      "spoken": "Black recaptures with the knight."
-    },
-    {
-      "ply": 21,
-      "t": 270.5,
-      "fen": "r2q1rk1/p2b1pbp/2np1np1/1N2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR b - - 0 11",
-      "line": [
-        "Nxb5"
-      ],
-      "spoken": "We take on b5 — with the knight, not the pawn, which would only open the c-file for Black."
-    },
-    {
-      "ply": 22,
-      "t": 282,
-      "fen": "r2q1rk1/3b1pbp/2np1np1/pN2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR w - - 0 12",
-      "line": [
-        "a5"
-      ],
-      "spoken": "Black continues with a5, grasping at straws."
-    },
-    {
-      "ply": 23,
-      "t": 301,
-      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/4BP2/PP4PP/2KR1BNR b - - 0 12",
-      "line": [
-        "Qxd6"
-      ],
-      "spoken": "We harvest the loose pawn, the queen swooping into d6 and paralyzing Black."
-    },
-    {
-      "ply": 24,
-      "t": 329.5,
-      "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/4BP2/PP4PP/2KR1BNR w - - 1 13",
-      "line": [
-        "Nb4"
-      ],
-      "spoken": "Black tries ...Nb4, hitting a2."
-    },
-    {
-      "ply": 25,
-      "t": 344.5,
-      "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/P3BP2/1P4PP/2KR1BNR b - - 0 13",
-      "line": [
-        "a3"
-      ],
-      "spoken": "We chase the knight with a3 — with tempo, our king perfectly safe on c1."
-    },
-    {
-      "ply": 26,
-      "t": 391.5,
-      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
-      "line": [
-        "Nc6"
-      ],
-      "spoken": "Black retreats the knight to c6."
-    },
-    {
-      "ply": 27,
-      "t": 393.5,
-      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
-      "line": [
-        "Bg5"
-      ],
-      "spoken": "We pin with the bishop to g5, threatening to win the d7-bishop."
-    },
-    {
-      "ply": 26,
-      "t": 397,
-      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
-      "line": [],
-      "spoken": ""
-    },
-    {
-      "ply": 27,
-      "t": 405,
-      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
-      "line": [
-        "Bg5"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 28,
-      "t": 415,
-      "fen": "2rq1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR w - - 3 15",
-      "line": [
-        "Rc8"
-      ],
-      "spoken": "Black plays the rook to c8."
-    },
-    {
-      "ply": 29,
-      "t": 428.5,
-      "fen": "2rq1rk1/3b1pbp/2nQ1Bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 0 15",
-      "line": [
-        "Bxf6"
-      ],
-      "spoken": "We take on f6 — the whole point of Bg5."
-    },
-    {
-      "ply": 31,
-      "t": 441.5,
-      "fen": "2rq1rk1/2Qb1p1p/2n2bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 1 16",
-      "line": [
-        "Bxf6",
-        "Qc7"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 2,
-      "t": 1108,
-      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-      "line": [],
-      "spoken": ""
-    }
-  ]
+ "videoId": "2Mys0GRUgM4",
+ "title": "Master Class | King's Indian Defence, Sämisch | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "King's Indian Defense: Sämisch Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:2Mys0GRUgM4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 9.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": "d4, the knight to f6 — let's play some positional d4 openings this game."
+  },
+  {
+   "ply": 4,
+   "t": 31,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": "c4 — we could play a London or Trompowsky, but let's play the main line. g6 — either the King's Indian or the Grünfeld."
+  },
+  {
+   "ply": 5,
+   "t": 36,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 — a King's Indian."
+  },
+  {
+   "ply": 6,
+   "t": 37,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The bishop to g7."
+  },
+  {
+   "ply": 7,
+   "t": 39,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "e4 — against the King's Indian."
+  },
+  {
+   "ply": 8,
+   "t": 40,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "He castles."
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": "d6 is generally the move, but castling is fine —",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 49.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "— and e5, which aims to punish Black, is bad, and known to be bad ever since Bobby Fischer won a famous game in that line in the 60s. So play it exactly as a normal King's Indian; the line I recommend around 1700 is the Sämisch, easiest to understand and most dangerous against someone not well-versed.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 90.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQ - 0 5",
+   "line": [
+    "f3"
+   ],
+   "spoken": "Black can get checkmated really easily — so we play f3."
+  },
+  {
+   "ply": 10,
+   "t": 93.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6. The point of f3 is threefold: it reinforces the e4-pawn, it prepares a later pawn storm with g4, and it prevents the knight from coming to g4 —"
+  },
+  {
+   "ply": 11,
+   "t": 113,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 1 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "— which is important, because we now develop the bishop to e3."
+  },
+  {
+   "ply": 12,
+   "t": 115.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5. The ideal Sämisch scenario: close the centre, play the queen to d2, castle long, and checkmate Sicilian-style on the kingside with the bishop to h6, h4, h5, and the pawn takes g6. Black has to stop us in that order, which isn't as easy as it seems. e5 is the old-school main line."
+  },
+  {
+   "ply": 13,
+   "t": 153.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR b KQ - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "We go d5, closing down the centre — the first step."
+  },
+  {
+   "ply": 14,
+   "t": 156,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": "c6 is indeed the correct move."
+  },
+  {
+   "ply": 15,
+   "t": 167.5,
+   "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR b KQ - 1 8",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Now we aim at step two — tuck our king away with the queen to d2. We'll take on c6."
+  },
+  {
+   "ply": 16,
+   "t": 172.5,
+   "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 2 9",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "The bishop to d7 is very awkward — it deprives the knight of its natural developing square; I'm not sure what he's trying to do."
+  },
+  {
+   "ply": 17,
+   "t": 185.5,
+   "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 3 9",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Now obviously we castle long, completing the second stage of our plan."
+  },
+  {
+   "ply": 18,
+   "t": 189,
+   "fen": "rn1q1rk1/p2b1pbp/2pp1np1/1p1Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 10",
+   "line": [
+    "b5"
+   ],
+   "spoken": "b5 — his heart's in the right place, trying to attack the queenside, but the wheels are going to come off. We can play the pawn takes b5, that's fine, but there's an even better version —"
+  },
+  {
+   "ply": 19,
+   "t": 221,
+   "fen": "rn1q1rk1/p2b1pbp/2Pp1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 0 10",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "— the d-pawn takes c6, which exposes a very weak pawn on d6, and we'll take b5 in a very good version. Aren't we opening the centre I said to keep closed? Circumstances have changed — he gave us a pawn, and the great thing about the Sämisch is that it's structurally healthy —"
+  },
+  {
+   "ply": 20,
+   "t": 238.5,
+   "fen": "r2q1rk1/p2b1pbp/2np1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 11",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "— so opening the centre doesn't expose us; we're perfectly developed and our centre is in good hands. What do we take the pawn with? Tricky — a lot of you will be tempted to take with the pawn to carry a threat, but you should take with the knight."
+  },
+  {
+   "ply": 21,
+   "t": 270.5,
+   "fen": "r2q1rk1/p2b1pbp/2np1np1/1N2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR b - - 0 11",
+   "line": [
+    "Nxb5"
+   ],
+   "spoken": "The knight takes b5 — taking with the pawn opens the c-file only he benefits from, and lets him play the knight to d4. This is definitely the best move."
+  },
+  {
+   "ply": 22,
+   "t": 282,
+   "fen": "r2q1rk1/3b1pbp/2np1np1/pN2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR w - - 0 12",
+   "line": [
+    "a5"
+   ],
+   "spoken": "Now we're attacking d6 with three pieces — the rook, the queen, and the knight. a5 — he keeps trying to attack, but he's grasping at straws."
+  },
+  {
+   "ply": 23,
+   "t": 301,
+   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/4BP2/PP4PP/2KR1BNR b - - 0 12",
+   "line": [
+    "Qxd6"
+   ],
+   "spoken": "Time to reap the harvest — take the pawn with the queen, swooping in and paralyzing him; if he moves the bishop, we trade queens, up two pawns. The knight takes d6 was also possible."
+  },
+  {
+   "ply": 24,
+   "t": 329.5,
+   "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/4BP2/PP4PP/2KR1BNR w - - 1 13",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "The knight to b4 is a good try, attacking the a2-pawn — no need to give that pawn away."
+  },
+  {
+   "ply": 25,
+   "t": 344.5,
+   "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/P3BP2/1P4PP/2KR1BNR b - - 0 13",
+   "line": [
+    "a3"
+   ],
+   "spoken": "The simplest is a3, chasing the knight away with tempo; the king to b1 is also good prophylaxis, but a3 comes with tempo. Our king is perfectly safe on c1. After he moves the knight, the bishop to g5 is coming — the bishop on d7 is defended by queen and knight, and the bishop to g5 pins the knight and threatens to win the bishop by taking it."
+  },
+  {
+   "ply": 26,
+   "t": 391.5,
+   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The only way to defend is to move his bishop, which allows the queen trade. The knight to c6 —"
+  },
+  {
+   "ply": 27,
+   "t": 393.5,
+   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "— and the bishop to g5, very reasonable."
+  },
+  {
+   "ply": 26,
+   "t": 397,
+   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
+   "line": [],
+   "spoken": "Against another GM I'd probably develop my knight and bring it to c3 just to beef up kingside security —",
+   "reanchor": true
+  },
+  {
+   "ply": 27,
+   "t": 405,
+   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "— but here we can go in for the kill; I don't mind.",
+   "reanchor": true
+  },
+  {
+   "ply": 28,
+   "t": 415,
+   "fen": "2rq1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR w - - 3 15",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "The rook to c8 — he's not effectively doing anything against our threat."
+  },
+  {
+   "ply": 29,
+   "t": 428.5,
+   "fen": "2rq1rk1/3b1pbp/2nQ1Bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 0 15",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "Why did we play the bishop to g5? To take on f6, and then the bishop on d7 is toast."
+  },
+  {
+   "ply": 31,
+   "t": 441.5,
+   "fen": "2rq1rk1/2Qb1p1p/2n2bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 1 16",
+   "line": [
+    "Bxf6",
+    "Qc7"
+   ],
+   "spoken": "The bishop takes f6 wins a piece, and now he plays the queen to b6. It's a dangerous period — we're still quite undeveloped, our whole kingside is at home, so it's like we won a lottery ticket but we're in a war zone and need to escape before we can cash it in. Identify the threats: the rook to d8, and the bishop to g5 with check disattaching our king from the rook, which would make the rook to d8 a devastating pin. We can't cover d8, but the queen to d2 takes the sting out of both — keep the queen close to the king, don't abandon it. If the knight to d4, we just take it; c4 is well defended. Then the bishop to d3, to stop him opening his bishop with the d3 pawn-sac, and we consolidate. After a check, the king to b1, a move we wanted anyway; then, against an Alekhine's-gun triple on the b-file, the king to a1 is prophylaxis so a rook can come to b1 — a1 over a2, since the queen could later come to b3 with check. Now, it's the Sämisch, so we attack: h5, ripping open the h-file, and the rook to b1; the rook takes b2, we recapture, and the queen takes a3 with check is a paper tiger — the rook to a2 ends it. He tries the rook to b3, and now the king to a2, then a4. We play f4 to lock his bishop, then e5, eyeing a bishop sacrifice on g6 to rip open his king — I've verified he has zero queenside threats, so think concretely, not by how scary it looks. e5 threatens the sac on g6, or f5 as a battering ram to open the king; take on g6, and the queen to f5, or checks on f7 or h7, lead to mate; the bishop to e4 rerouting to d5 also opens the diagonal. Then the queen to d7 with check, and the king hunt begins — don't rush the first check you see, like the rook to f1 with check; map the king's escape, e8-d8-c7, and prevent it. Give a check on h8, the king goes to e7, and now every square is covered — the bishop covers e6, the pawn covers d6, the rook covers the eighth rank — and one more check is checkmate.",
+   "reanchor": true
+  },
+  {
+   "ply": 2,
+   "t": 1108,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [],
+   "spoken": "That wins the game — I saw the mate when we gave the check. The Fischer game went e5, the knight to g8, f4, and Bobby crushed White's pawn chain with d6 and c5, no good for White — so don't play e5 here; play it the same way you would against d6. The bishop to d7 was the first mistake; the way to play this line is a6, preparing b5 — you develop the knight, go b5, the queen to a5 — but White is better played properly.",
+   "reanchor": true
+  }
+ ]
 }
