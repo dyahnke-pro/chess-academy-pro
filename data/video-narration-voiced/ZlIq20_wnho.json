@@ -1,0 +1,299 @@
+{
+ "videoId": "ZlIq20_wnho",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1640",
+ "openingName": "Pirc Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:ZlIq20_wnho",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": "Another Pirc. e4, d6."
+  },
+  {
+   "ply": 4,
+   "t": 17.5,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "c6"
+   ],
+   "spoken": "d4, c6 — it is a line, but we don't"
+  },
+  {
+   "ply": 6,
+   "t": 26,
+   "fen": "rnb1kbnr/ppq1pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nc3",
+    "Qc7"
+   ],
+   "spoken": "have to do anything particularly different from what we normally do. I'm tempted to play the knight to d5, since this guy will probably pre-move — the knight to c3, the queen to c7. How should we continue our development?"
+  },
+  {
+   "ply": 8,
+   "t": 49,
+   "fen": "rnb1kbnr/ppq2ppp/2pp4/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nf3",
+    "e5"
+   ],
+   "spoken": "There are several approaches here — we can choose to occupy more of the centre with f4, but let's play the calm move with the knight to f3. e5."
+  },
+  {
+   "ply": 9,
+   "t": 53.5,
+   "fen": "rnb1kbnr/ppq2ppp/2pp4/4p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 5",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "And now of course we develop this bishop to c4, and we're going to dismantle the hell out of this line."
+  },
+  {
+   "ply": 10,
+   "t": 56.5,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Now the bishop to g4 pins our knight, and by pinning it he's exerting indirect pressure on the d4-pawn. So where should we put this bishop with an eye toward that?"
+  },
+  {
+   "ply": 11,
+   "t": 78.5,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N1BN2/PPP2PPP/R2QK2R b KQkq - 3 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The bishop to f7 doesn't work because of the queen takes f7 — he thinks he's cool, but we're going to show him he's not. This is why you shouldn't be afraid of"
+  },
+  {
+   "ply": 12,
+   "t": 82,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p2b/2BPP3/2N1BN2/PPP2PPP/R2QK2R w KQkq - 4 7",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": "these kinds of players who do all this stuff really fast. Now, here's an interesting question: which side do we castle? We can actually castle queenside — that would be risky — but before we decide, I'm annoyed as hell about this pin: how can we dispose of it without moving the bishop to a passive square? h3 and g4."
+  },
+  {
+   "ply": 13,
+   "t": 124,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p2b/2BPP3/2N1BN1P/PPP2PP1/R2QK2R b KQkq - 0 7",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Now, what would h3 and g4 mean in terms of where we castle? We basically commit to castling queenside — but that's okay, because he's developed so poorly that it's fine for us to telegraph it; he's not going to checkmate us, he doesn't have anything."
+  },
+  {
+   "ply": 14,
+   "t": 130,
+   "fen": "rn2k1nr/ppq1bppp/2pp4/4p2b/2BPP3/2N1BN1P/PPP2PP1/R2QK2R w KQkq - 1 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Let's get rid of the pin."
+  },
+  {
+   "ply": 15,
+   "t": 131,
+   "fen": "rn2k1nr/ppq1bppp/2pp4/4p2b/2BPP1P1/2N1BN1P/PPP2P2/R2QK2R b KQkq - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": "And since we've decided to castle queenside, let's castle queenside — the queen to e2, castle — and then we're going to start attacking on the kingside, even though he's not castled."
+  },
+  {
+   "ply": 16,
+   "t": 144.5,
+   "fen": "rn2k1nr/ppq1bppp/2pp2b1/4p3/2BPP1P1/2N1BN1P/PPP2P2/R2QK2R w KQkq - 1 9",
+   "line": [
+    "Bg6"
+   ],
+   "spoken": "That doesn't matter — it doesn't mean we can't attack on the kingside. The queen to e2, so the rook is the star of the show on the d-file. Do we need to defend this square? I'd say no, probably not — we can just castle, and if he takes, I'll show why that's fine. We're ahead in development, so the immediate association you should make is to open up the centre — so the first step is to open it up a little more so we can better exploit our lead. Now, what should we capture here? This is not an obvious answer at all — there are actually three plausible captures, all with a compelling case. We can take f7, luring the king onto f7, sacrificing our bishop to try to mate him; we can also play e-takes-d7. Let's do it, punish him, get our hands dirty, since his whole queenside is undeveloped."
+  },
+  {
+   "ply": 4,
+   "t": 329,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "This is risky, because it's a whole piece. If you consolidate, the obvious move is e-takes-d6, opening up more of the centre, but there's also a more concrete move, potentially more powerful: e6, to prepare the queen to f7, checkmate — I don't know which is better, but we'll see. The bishop to f6 is a good move, and now we need to find a way to break down his defences, at the core of which is this pawn on d6. g5 is very tempting, but he just goes the bishop to e5, and that doesn't accomplish as much as it seems, because the queen defends f7. So we play the bishop to f4 — the kind of move a lot of people struggle with at any level, because it doesn't carry the pizzazz you associate with attacks, but remember, attacks have to have these glue moves. We've opened up the d-file — and this would be checkmate were it not for the queen, which we can distract with the rook to d8 and then give the checkmate.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 337,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c4"
+   ],
+   "spoken": "Let's dispel the fiction that he doesn't know what he's doing, and dispel one illusion: it's not about how much of the centre you control, it's about the quality of the pawns in the centre.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 361.5,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "By which I mean, you can put a million pawns in the centre and lose half of them — congratulations, you're controlling the centre — but it's more important to occupy a little of the centre and make sure that little bit is",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 368,
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "supported by the pieces. The knight to c3, the queen to c7.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 369,
+   "fen": "rnb1kbnr/ppq1pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 370.5,
+   "fen": "rnb1kbnr/ppq1pppp/2pp4/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The knight to f3, e5 — all very natural development — and now g4, the bishop to g6, the queen to e2 preparing to castle long, castle long, sacrificing the pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 393.5,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "Bg4",
+    "Bc4",
+    "e5"
+   ],
+   "spoken": "Could you have captured on f7 a move sooner? Just to clarify, this is a very typical tactic — when the",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 395,
+   "fen": "rn2kbnr/ppq2Bpp/2pp4/4p3/3PP1b1/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "bishop is undefended,",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 399,
+   "fen": "rn3bnr/ppq2kpp/2pp4/4p3/3PP1b1/2N2N2/PPP2PPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": "the idea is you draw the king out",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 401,
+   "fen": "rn3bnr/ppq2kpp/2pp4/4p1N1/3PP1b1/2N5/PPP2PPP/R1BQK2R b KQ - 1 7",
+   "line": [
+    "Ng5+"
+   ],
+   "spoken": "and go the knight to g5 and the queen takes g4, which is all well and",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 403.5,
+   "fen": "rn2kbnr/ppq2Bpp/2pp4/4p3/3PP1b1/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 6",
+   "line": [],
+   "spoken": "good, but you have to factor in the queen —",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 407.5,
+   "fen": "rn2kbnr/pp3qpp/2pp4/4p3/3PP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "Qxf7"
+   ],
+   "spoken": "so, full-board vision: the queen takes f7, and that doesn't work.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 411,
+   "fen": "rn2kbnr/ppq2ppp/2pp4/4p3/2BPP1b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "line": [],
+   "spoken": "But if the queen were not on f7 — if it were on d8 — this would also not work. Why is that? That's something people",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 429,
+   "fen": "rn1qkbnr/pp3ppp/2pp4/4p3/2BPP1b1/P1N2N2/1PP2PPP/R1BQK2R w KQkq - 1 7",
+   "line": [
+    "a3",
+    "Qd8"
+   ],
+   "spoken": "very often miss or forget about, and you can actually catch some people on this trap. Let's imagine the queen back home: the queen could just take the knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 431.5,
+   "fen": "rn1qkbnr/pp3Bpp/2pp4/4p3/3PP1b1/P1N2N2/1PP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "That's actually crucial.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 434,
+   "fen": "rn3bnr/pp3kpp/2pp4/4p1q1/3PP1b1/P1N5/1PP2PPP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "Kxf7",
+    "Ng5+",
+    "Qxg5"
+   ],
+   "spoken": "The queen simultaneously defends the bishop, and if you count up the pieces, Black is just up a piece, which is bad.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 438,
+   "fen": "rn3bnr/pp3kpp/2pp4/4p1B1/3PP3/P1N5/1PP2PPP/3RK2R b K - 0 10",
+   "line": [
+    "Bxg5",
+    "Bxd1",
+    "Rxd1"
+   ],
+   "spoken": "So that's something to bear in mind as well.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 443,
+   "fen": "rn1qkbnr/pp3ppp/2pp4/4p3/2BPP1b1/P1N2N2/1PP2PPP/R1BQK2R w KQkq - 1 7",
+   "line": [],
+   "spoken": "Fast-forward to the moment of truth. The obvious move here was the queen to f3, but the reason I didn't do it is because of d5 — he closes in the bishop and gets a tempo he can use to at least castle, which doesn't make his king particularly safe but makes it a little harder to reach. The capture some people might be forgetting about is e-takes-d6 — you might look at this and think, whoa, you're allowing Black to take the queen, but look one step further: you take Black's queen, and this pawn — it's not so much that it threatens to take the knight, though that too is a big threat, you actually threaten to promote; Black has to prevent this by moving his knight away, but now you come back and take the bishop, and if you count the material you're up a pawn, which you can then defend with the bishop to f4.",
+   "reanchor": true
+  }
+ ]
+}
