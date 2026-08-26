@@ -1,0 +1,1787 @@
+{
+ "videoId": "zEytN1zSTEE",
+ "title": "Crushing the King's Gambit | GM Naro's Opening Lab",
+ "openingName": "King's Gambit",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:zEytN1zSTEE",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5",
+    "f4"
+   ],
+   "spoken": "Welcome to the Opening Lab — the King's Gambit, the father of all gambits. e4, e5, f4, offering the pawn to seize the center."
+  },
+  {
+   "ply": 4,
+   "t": 128.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "We accept, e takes f4."
+  },
+  {
+   "ply": 5,
+   "t": 144.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3PPp2/8/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The immediate d4 has long been known to be dubious."
+  },
+  {
+   "ply": 6,
+   "t": 151,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/3PPp1q/8/PPP3PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "Because it allows the very natural queen to h4 with check."
+  },
+  {
+   "ply": 7,
+   "t": 160,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/3PPp1q/8/PPP1K1PP/RNBQ1BNR b kq - 2 4",
+   "line": [
+    "Ke2"
+   ],
+   "spoken": "White can't play g3, so the king is forced out to e2 — no fun at all."
+  },
+  {
+   "ply": 3,
+   "t": 164.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "So it quickly became known that White has to prevent that check.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 166,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "e takes f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 167.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White plays the knight to f3 to stop the queen to h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 177,
+   "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "g5"
+   ],
+   "spoken": "The most commonly recommended reply is g5, immediately clinging to the extra pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 193,
+   "fen": "rnbqkbnr/pppp1p1p/8/6p1/3PPp2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "But it plays right into White's hands with d4, requiring a ton of memorization and precision.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 204,
+   "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": "There's the Muzio, where White sacrifices the knight, and there's h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 205,
+   "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp1P/5N2/PPPP2P1/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "h4"
+   ],
+   "spoken": "h4 immediately undermines the pawn chain.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 225.5,
+   "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+   "line": [],
+   "spoken": "In all these cases White is having all the fun, even if Black is objectively better.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 226.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": "The most practical and objectively strong variation is less common than g5 or d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 239,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "It's the Schallopp Defense — the knight to f6, named after a 19th-century master and analyst.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 260.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "White plays e5, kicking the knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 267,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "And the follow-up is to plant the knight on h5, guarding the f4-pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 301.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "Black doesn't get attacked in any line — it's practical even if you forget an exact move.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 311,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3PPp2/8/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "We'll start with d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 313,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/3PPp1q/8/PPP3PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "Black gives the check on h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 314,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/3PPp1q/8/PPP1K1PP/RNBQ1BNR b kq - 2 4",
+   "line": [
+    "Ke2"
+   ],
+   "spoken": "White plays the king to e2.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 317.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/3PPp1q/8/PPP1K1PP/RNBQ1BNR w kq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The best continuation is to strike the center with d5, sacrificing the pawn to develop fast.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 320.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/3P4/3P1p1q/8/PPP1K1PP/RNBQ1BNR b kq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "White takes, e takes d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 322,
+   "fen": "rn2kbnr/ppp2ppp/8/3P4/3P1pbq/8/PPP1K1PP/RNBQ1BNR w kq - 1 6",
+   "line": [
+    "Bg4+"
+   ],
+   "spoken": "The bishop to g4 with check — and note this doesn't win White's queen because of the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 325,
+   "fen": "rn2kbnr/ppp2ppp/8/3P4/3P1pbq/5N2/PPP1K1PP/RNBQ1B1R b kq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White interposes the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 331,
+   "fen": "r3kbnr/pppn1ppp/8/3P4/3P1pbq/5N2/PPP1K1PP/RNBQ1B1R w kq - 3 7",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "Now aim for rapid development to mate the king on e2 — the knight to d7. Notice Black is the one sacrificing a pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 333,
+   "fen": "r3kbnr/pppn1ppp/8/3P4/3P1Bbq/5N2/PPP1K1PP/RN1Q1B1R b kq - 0 7",
+   "line": [
+    "Bxf4"
+   ],
+   "spoken": "If White grabs it, the bishop takes on f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 340.5,
+   "fen": "r3kbnr/pppn1ppp/8/3P4/3P1B1q/5b2/PPP1K1PP/RN1Q1B1R w kq - 0 8",
+   "line": [
+    "Bxf3+"
+   ],
+   "spoken": "The bishop takes on f3 with check — White can't recapture with a pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 345,
+   "fen": "r3kbnr/pppn1ppp/8/3P4/3P1B1q/5K2/PPP3PP/RN1Q1B1R b kq - 0 8",
+   "line": [
+    "Kxf3"
+   ],
+   "spoken": "White has to take with the king.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 350.5,
+   "fen": "r3k1nr/pppn1ppp/3b4/3P4/3P1B1q/5K2/PPP3PP/RN1Q1B1R w kq - 1 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "We avoid the immediate queen to h5 because of g4, and start with the bishop to d6.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 352.5,
+   "fen": "r3k1nr/pppn1ppp/3B4/3P4/3P3q/5K2/PPP3PP/RN1Q1B1R b kq - 0 9",
+   "line": [
+    "Bxd6"
+   ],
+   "spoken": "White takes on d6.",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 355.5,
+   "fen": "r3k1nr/pppn1ppp/3B4/3P3q/3P4/5K2/PPP3PP/RN1Q1B1R w kq - 1 10",
+   "line": [
+    "Qh5+"
+   ],
+   "spoken": "Now the queen to h5 with check — White has to play g4.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 358,
+   "fen": "r3k1nr/pppn1ppp/3B4/3P3q/3P2P1/5K2/PPP4P/RN1Q1B1R b kq - 0 10",
+   "line": [
+    "g4"
+   ],
+   "spoken": "White plays g4.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 359,
+   "fen": "r3k1nr/pppn1ppp/3B4/3q4/3P2P1/5K2/PPP4P/RN1Q1B1R w kq - 0 11",
+   "line": [
+    "Qxd5+"
+   ],
+   "spoken": "The queen travels and takes on d5 with check.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 362,
+   "fen": "r3k1nr/pppn1ppp/3B4/3q4/3P2P1/8/PPP2K1P/RN1Q1B1R b kq - 1 11",
+   "line": [
+    "Kf2"
+   ],
+   "spoken": "After the king to f2, the one thing to remember is not to take the rook.",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 365,
+   "fen": "r3k1nr/pppn1ppp/3B4/8/3P2P1/8/PPP2K1P/RN1Q1B1q w kq - 0 12",
+   "line": [
+    "Qxh1"
+   ],
+   "spoken": "Grabbing the rook on h1 would be bad — after the queen to e2 with check, Black's own king gets exposed and the queen could get trapped.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 372.5,
+   "fen": "r3k1nr/pppn1ppp/3B4/3q4/3P2P1/8/PPP2K1P/RN1Q1B1R b kq - 1 11",
+   "line": [],
+   "spoken": "So instead of the rook,",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 374,
+   "fen": "r3k1nr/pppn1ppp/3q4/8/3P2P1/8/PPP2K1P/RN1Q1B1R w kq - 0 12",
+   "line": [
+    "Qxd6"
+   ],
+   "spoken": "you simply take on d6 with the queen — White is virtually lost, his king never finding safety.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 395.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3PPp2/8/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": "There's not much to know: just castle, get the knight out, maybe throw in c5.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 397,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/3PPp1q/8/PPP1K1PP/RNBQ1BNR w kq - 0 5",
+   "line": [
+    "Qh4+",
+    "Ke2",
+    "d5"
+   ],
+   "spoken": "The check on h4, the king to e2, and d5 is really good for Black.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 400,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "There are a couple of more reputable alternatives to the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 405,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/2N5/PPPP2PP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "One is the knight to c3 — a Vienna line Steinitz was an expert in.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 416.5,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/4Pp1q/2N5/PPPPK1PP/R1BQ1BNR b kq - 3 4",
+   "line": [
+    "Qh4+",
+    "Ke2"
+   ],
+   "spoken": "The check on h4, the king to e2.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 435.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/4Pp1q/2N5/PPPPK1PP/R1BQ1BNR w kq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "White's point is that d5 was thought fine, and Steinitz won many games — but I found a refutation.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 440.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/3N4/4Pp1q/8/PPPPK1PP/R1BQ1BNR b kq - 0 5",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "The knight takes on d5 — it looks like madness to grab that pawn with a knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 445,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/4Pp1q/2N5/PPPPK1PP/R1BQ1BNR w kq - 0 5",
+   "line": [],
+   "spoken": "If White recaptures with the pawn,",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 447.5,
+   "fen": "rn2kbnr/ppp2ppp/8/3P4/5pbq/2N2N2/PPPPK1PP/R1BQ1B1R b kq - 2 6",
+   "line": [
+    "exd5",
+    "Bg4+",
+    "Nf3"
+   ],
+   "spoken": "you do the same as in the d4 line — the bishop to g4, the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 449.5,
+   "fen": "rn2k1nr/ppp2ppp/3b4/3P4/5pbq/2N2N2/PPPPK1PP/R1BQ1B1R w kq - 3 7",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop to d6, get the knight out, and castle.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 453,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/4Pp1q/2N5/PPPPK1PP/R1BQ1BNR w kq - 0 5",
+   "line": [],
+   "spoken": "But what about the knight takes on d5?",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 454,
+   "fen": "rnb1kbnr/ppp2ppp/8/3N4/4Pp1q/8/PPPPK1PP/R1BQ1BNR b kq - 0 5",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "Things get even crazier — the knight takes on d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 457,
+   "fen": "rn2kbnr/ppp2ppp/8/3N4/4Ppbq/8/PPPPK1PP/R1BQ1BNR w kq - 1 6",
+   "line": [
+    "Bg4+"
+   ],
+   "spoken": "The bishop to g4 with check, forcing the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 458,
+   "fen": "rn2kbnr/ppp2ppp/8/3N4/4Ppbq/5N2/PPPPK1PP/R1BQ1B1R b kq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White plays the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 462,
+   "fen": "r3kbnr/ppp2ppp/2n5/3N4/4Ppbq/5N2/PPPPK1PP/R1BQ1B1R w kq - 3 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Now you ignore the threat on c7 and develop the knight to c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 472,
+   "fen": "r3kbnr/ppp2ppp/2n5/3N4/3PPpbq/5N2/PPP1K1PP/R1BQ1B1R b kq - 0 7",
+   "line": [
+    "d4"
+   ],
+   "spoken": "You're threatening the knight to d4 with check, so if White plays d4 you're simply winning.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 474.5,
+   "fen": "2kr1bnr/ppp2ppp/2n5/3N4/3PPpbq/5N2/PPP1K1PP/R1BQ1B1R w - - 1 8",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "After White castles queenside,",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 476.5,
+   "fen": "2kr1bnr/ppp2ppp/2n5/3N4/3PPBbq/5N2/PPP1K1PP/R2Q1B1R b - - 0 8",
+   "line": [
+    "Bxf4"
+   ],
+   "spoken": "the bishop takes on f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 477.5,
+   "fen": "2kr1b1r/ppp2ppp/2n2n2/3N4/3PPBbq/5N2/PPP1K1PP/R2Q1B1R w - - 1 9",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The knight to f6 — this position is an illusion; White only looks good.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 494.5,
+   "fen": "2kr1b1r/ppp2ppp/2n2N2/8/3PPBbq/5N2/PPP1K1PP/R2Q1B1R b - - 0 9",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": "White takes on f6, but his king is in such trouble it all evaporates.",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 496.5,
+   "fen": "2kr1b1r/ppp2ppp/5N2/8/3nPBbq/5N2/PPP1K1PP/R2Q1B1R w - - 0 10",
+   "line": [
+    "Nxd4+"
+   ],
+   "spoken": "The knight takes on d4 with check — White loses everything; you take on f3, win the queen, then recapture the knight.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 504.5,
+   "fen": "2kr1b1r/ppp2ppp/2n2N2/8/3PPBbq/5N2/PPP1K1PP/R2Q1B1R b - - 0 9",
+   "line": [],
+   "spoken": "It's absolutely terrible for White, so he practically has to bail out.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 725.5,
+   "fen": "rnb1kbnr/ppp2ppp/8/3p4/4Pp1q/2N5/PPPPK1PP/R1BQ1BNR w kq - 0 5",
+   "line": [],
+   "spoken": "I'd memorize this whole sequence, because someone might well play into it.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 735,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/2N5/PPPP2PP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": "It's all part of the game. So, the knight to c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 737,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "It's met with the check on h4 and d5. Perhaps the most reputable alternative is the bishop to c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 741.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b KQkq - 1 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "And this is the one move against which you do NOT give the check on h4 — an important detail.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 748.5,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/2B1Pp1q/8/PPPP2PP/RNBQK1NR w KQkq - 2 4",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "Because the check on h4 isn't strong now.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 752,
+   "fen": "rnb1kbnr/pppp1ppp/8/8/2B1Pp1q/8/PPPP2PP/RNBQ1KNR b kq - 3 4",
+   "line": [
+    "Kf1"
+   ],
+   "spoken": "The white king simply steps to f1, and the queen on h4 will get harassed with tempo.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 772,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b kq - 5 5",
+   "line": [
+    "Qd8",
+    "Ke1"
+   ],
+   "spoken": "So the queen retreats to d8 — no point leaving it exposed on h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 773,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/2B1Pp2/8/PPPP2PP/RNBQK1NR w kq - 6 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "We simply develop the knight to c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 777,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/2BPPp2/8/PPP3PP/RNBQK1NR b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Now if White plays d4,",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 779,
+   "fen": "r1b1kbnr/pppp1ppp/2n5/8/2BPPp1q/8/PPP3PP/RNBQK1NR w kq - 1 7",
+   "line": [
+    "Qh4+"
+   ],
+   "spoken": "we give the check on h4.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 780,
+   "fen": "r1b1kbnr/pppp1ppp/2n5/8/2BPPp1q/8/PPP3PP/RNBQ1KNR b kq - 2 7",
+   "line": [
+    "Kf1"
+   ],
+   "spoken": "White plays the king to f1.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 781,
+   "fen": "r1b1kbnr/ppp2ppp/2np4/8/2BPPp1q/8/PPP3PP/RNBQ1KNR w kq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "And then we play d6.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 783,
+   "fen": "r1b1kbnr/ppp2ppp/2np4/8/2BPPp1q/5N2/PPP3PP/RNBQ1K1R b kq - 1 8",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "After the knight to f3,",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 785,
+   "fen": "r3kbnr/ppp2ppp/2np4/8/2BPPpbq/5N2/PPP3PP/RNBQ1K1R w kq - 2 9",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "we can bring the bishop to g4 anyway, pinning the knight to the queen — essentially forcing a queen trade, and d4 has compromised White's center.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 939.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b kq - 5 5",
+   "line": [],
+   "spoken": "White's king is the one saying its prayers — this line is completely innocuous.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 944,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "So against these non-knight-f3 moves you have good answers.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 947,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "After the knight to f3, don't play the check on h4 — I hope you can see why now.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 955.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Now the fun part, the main line — the knight to f6, the Schallopp Defense.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 972.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "White doesn't have to play e5; he can also play the knight to c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 975,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "Let's look at White's tries here.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 980,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1Pp2/5N2/PPPP2PP/RNBQK2R b KQkq - 3 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "A move played over fifteen thousand times is the bishop to c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 982.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/8/2B1np2/5N2/PPPP2PP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "But this simply blunders a pawn — the knight takes on e4.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1024,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B2B2/3P1N2/PPP3PP/RN1QK2R b KQkq - 0 6",
+   "line": [
+    "d3",
+    "Nf6",
+    "Bxf4"
+   ],
+   "spoken": "White has no compensation; after d3, the knight to f6, the bishop takes f4, you play the queen to e7 and you're chilling.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1025,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/2B2B2/3P1N2/PPP3PP/RN1QK2R w KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": "If White castles, you play d5, and after the bishop to b3 you can develop the light-squared bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1059.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2B1Pp2/5N2/PPPP2PP/RNBQK2R b KQkq - 3 4",
+   "line": [],
+   "spoken": "White doesn't even win back the second pawn — virtually resignable; go g5 or just complete development.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1060.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "One more thing about this position.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1062,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "d3"
+   ],
+   "spoken": "White has sometimes played d3 here.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1066,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/3P1N2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The easiest response is just d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1070.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4PB2/3P1N2/PPP3PP/RN1QKB1R b KQkq - 0 5",
+   "line": [
+    "Bxf4"
+   ],
+   "spoken": "Really bad for White after the bishop takes on f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1078.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3p4/4PB2/3P1N2/PPP3PP/RN1QKB1R w KQkq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The best move is to develop the knight to c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1081.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pP3/5B2/3P1N2/PPP3PP/RN1QKB1R b KQkq - 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": "If White plays e5,",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1083,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/5B2/3P1N2/PPP3PP/RN1QKB1R w KQkq - 1 7",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "once again the knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1084.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/8/3PBN2/PPP3PP/RN1QKB1R b KQkq - 2 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "White plays the bishop to e3.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1087,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/4P2n/3p4/3PBN2/PPP3PP/RN1QKB1R w KQkq - 0 8",
+   "line": [
+    "d4"
+   ],
+   "spoken": "You shove d4 in yourself — really bad for White, whose e5-pawn is now weak; next comes the bishop to b4 or c5.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1100,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": "For completeness: d3 met with d5, and if White plays e5,",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1103,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/5p2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "d5",
+    "e5"
+   ],
+   "spoken": "d5, e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1104.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/5p2/3P1N2/PPP3PP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The knight to h5 — you have the main line down a tempo for White.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1113,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/3P1N2/PPP3PP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": "So there's no sense analyzing it further.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1114.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "Now the first of the two real main moves.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1116,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 3 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 — we strike at the center with d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1119.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "This poses another decision: White can take on d5 or push e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1133.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "White pushes e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1135,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1136,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White plays d4 — and one clarification: this is not the same as the pure e5-line.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1159,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": "The point is that in the other move order the pawn should be on d6, not d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1162.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "e5",
+    "Nh5"
+   ],
+   "spoken": "e5, the knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1164,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "After d4, there's no longer the chance to undermine White's center with c4 — so this line is really good for Black.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1625,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": "g5 doesn't substantively change anything.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1628,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "Keep the lines separate: the knight to c3 with d5, versus e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1634.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "e5",
+    "d5",
+    "Nc3",
+    "Nh5"
+   ],
+   "spoken": "So we go the knight to h5 — the first time it lands there.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1650,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The devil's advocate objects to giving White a big center after d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1709.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "But it's an illusion — White can never move the knight from f3 because of the deadly ideas. The knight to c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1714.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/3P1p2/2N2N2/PPP1B1PP/R1BQK2R b KQkq - 2 7",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "The bishop to e2 is possible, and then you go g5.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1716,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP1pn/3P1p2/2N2N2/PPP1B1PP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "g5"
+   ],
+   "spoken": "g5.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1718.5,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP1Nn/3P1p2/2N5/PPP1B1PP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "Nxg5"
+   ],
+   "spoken": "White takes, the knight capturing on g5 — it looks like a tactic.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1720,
+   "fen": "r1b1kb1r/ppp2p1p/2n5/3pP1qB/3P1p2/2N5/PPP3PP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "Qxg5",
+    "Bxh5"
+   ],
+   "spoken": "The queen takes on g5, the bishop takes on h5 — you give the pawn back for quick development.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 1725.5,
+   "fen": "r3kb1r/ppp2p1p/2n1b3/3pP2B/3P1p1q/2N5/PPP3PP/R1BQ1K1R w kq - 3 11",
+   "line": [
+    "Be6",
+    "Kf1",
+    "Qh4"
+   ],
+   "spoken": "The bishop to e6, the king to f1, the queen to h4 — the reason is White's king is now badly compromised.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 1733.5,
+   "fen": "r3kb1r/ppp2p1p/2n1b3/3pP3/3P1p1q/2N2B2/PPP3PP/R1BQ1K1R b kq - 4 11",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": "White plays the bishop to f3 — and if the queen to f3, you can take the weak pawn on d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 1735,
+   "fen": "r3kb1r/ppp2p1p/2n1b3/3pP2B/3P1p1q/2N5/PPP3PP/R1BQ1K1R b kq - 8 13",
+   "line": [
+    "Qh5",
+    "Bg4",
+    "Qh4",
+    "Bh5"
+   ],
+   "spoken": "The queen to h5, the bishop to g4, the queen to h4, the bishop to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 29,
+   "t": 1743.5,
+   "fen": "2kr1b1r/ppp4p/2n1bp2/3NP3/3P1p1q/5B2/PPP3PP/R1BQ1K1R b - - 0 15",
+   "line": [
+    "O-O-O",
+    "Bf3",
+    "f6",
+    "Nxd5"
+   ],
+   "spoken": "You castle queenside, and after the bishop to f3, f6, the knight takes d5, castles.",
+   "reanchor": true
+  },
+  {
+   "ply": 31,
+   "t": 1746,
+   "fen": "2kr1b1r/ppp4p/2n1b3/3Np3/2PP1p1q/5B2/PP4PP/R1BQ1K1R b - - 0 16",
+   "line": [
+    "fxe5",
+    "c4"
+   ],
+   "spoken": "f takes e5, c4 — White's position is on the verge of collapse.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1807.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 1 7",
+   "line": [],
+   "spoken": "Just make sure you understand why these positions are so overwhelming.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1817.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n5/3pP2n/3P1p2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 2 7",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The only other move I looked at is the bishop to d3.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1819.5,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP1pn/3P1p2/2NB1N2/PPP3PP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "g5"
+   ],
+   "spoken": "And once again you go g5; if White castles you push the pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 1823,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP2n/3P1pp1/2NB1N2/PPP3PP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "O-O",
+    "g4"
+   ],
+   "spoken": "White castles, and you push all the way to g4 — the bishop on d3 has stopped guarding d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1829.5,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP2n/3P1pp1/2NB4/PPP3PP/R1BQNRK1 b kq - 1 9",
+   "line": [
+    "Ne1"
+   ],
+   "spoken": "If the knight retreats to e1,",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 1831,
+   "fen": "r1bqkb1r/ppp2p1p/8/3pP2n/3n1pp1/2NB4/PPP3PP/R1BQNRK1 w kq - 0 10",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "the knight takes on d4 is absolutely crushing.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 1833.5,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP2n/3P1pp1/2NB1N2/PPP3PP/R1BQ1RK1 w kq - 0 9",
+   "line": [],
+   "spoken": "Even after h4, you play g4, the knight to g5, and simply take the pawn on d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1847,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [],
+   "spoken": "Now you're two pawns up with all the advantages — none of these moves are dangerous.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1854.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq d6 0 5",
+   "line": [],
+   "spoken": "There's nothing appealing for White here.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 1856.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "And that brings us to the main move, e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1857.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "e5, the knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1859.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1862,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/3P1p2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "And virtually everybody plays d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1864,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": "John Shaw, a Scottish grandmaster, wrote a great book on the King's Gambit, and I consulted it.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1881.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPPB1PP/RNBQK2R b KQkq - 2 5",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Shaw's recommendation runs the bishop to e2.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1920,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/5p2/5N2/PPPPB1PP/RNBQK2R w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1924.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/5p2/5N2/PPPPB1PP/RNBQ1RK1 b kq - 4 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1925.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/5p2/5N2/PPPPB1PP/RNBQK2R w KQkq - 3 6",
+   "line": [],
+   "spoken": "If White plays d4, we go with the immediate d6.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1927,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/3P1p2/5N2/PPP1B1PP/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White plays d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1928,
+   "fen": "r1bqkb1r/ppp2ppp/2np4/4P2n/3P1p2/5N2/PPP1B1PP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": "d6 — this transposes, since White has nothing better than to castle.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1932.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/3P1p2/5N2/PPP1B1PP/RNBQK2R b KQkq - 0 6",
+   "line": [],
+   "spoken": "White has nothing better than to castle.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1936,
+   "fen": "r1bqkb1r/ppp2ppp/2np4/4P2n/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 b kq - 1 7",
+   "line": [
+    "d6",
+    "O-O"
+   ],
+   "spoken": "So if White castles we go d6; if White plays e takes d6 our knight has an easy retreat to f6.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1945.5,
+   "fen": "r1bqkb1r/ppp2p1p/2np2p1/4P2n/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 w kq - 0 8",
+   "line": [
+    "g6"
+   ],
+   "spoken": "So after d4 we go g6 — sometimes g5, sometimes g6.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1949,
+   "fen": "r1bqkb1r/ppp2ppp/2np4/4P2n/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 b kq - 1 7",
+   "line": [],
+   "spoken": "Why not g5?",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1951,
+   "fen": "r1bqkb1r/ppp2p1p/2np4/4P1pn/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 w kq - 0 8",
+   "line": [
+    "g5"
+   ],
+   "spoken": "The reason g5 is bad here is the move d5 — Shaw's point.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1954,
+   "fen": "r1bqkb1r/ppp2p1p/2np4/3PP1pn/5p2/5N2/PPP1B1PP/RNBQ1RK1 b kq - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": "d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 1960,
+   "fen": "r1bqkb1r/ppp2p1p/3p4/3PN1pn/5p2/8/PPP1B1PP/RNBQ1RK1 b kq - 0 9",
+   "line": [
+    "Nxe5",
+    "Nxe5"
+   ],
+   "spoken": "The knight takes on e5 obviously loses a piece, and White's pawns cause damage if they reach e6.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 1962,
+   "fen": "r1bqkb1r/ppp2p1p/2np4/3PP1pn/5p2/5N2/PPP1B1PP/RNBQ1RK1 b kq - 0 8",
+   "line": [],
+   "spoken": "So g5 is problematic.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 1965,
+   "fen": "r1bqkb1r/ppp2p1p/2np4/4P1pn/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 w kq - 0 8",
+   "line": [],
+   "spoken": "So we go g6, which takes the sting out of the line.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2068,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": "White is down a pawn, clearly worse, and would need to play accurately for fourteen moves.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 2069.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/3P1p2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 — you'll see this more frequently.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 2077.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/5N2/PPP3PP/RNBQKB1R w KQkq d6 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": "I vacillated on d5 versus d6; Duda recommends d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 2078.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/2PP1p2/5N2/PP4PP/RNBQKB1R b KQkq - 0 6",
+   "line": [
+    "c4"
+   ],
+   "spoken": "But I couldn't find anything satisfactory after c4, which is why I settled on d6 — it also forces White to find only-moves.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 2124,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/3pP1pn/2PP1p2/3B1N2/PP4PP/RNBQ1RK1 b kq - 1 8",
+   "line": [
+    "Nc6",
+    "Bd3",
+    "g5",
+    "O-O"
+   ],
+   "spoken": "The knight to c6, the bishop to d3, g5, castles — we've gained a tempo, so c4 is totally harmless.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 2126,
+   "fen": "r1bqkb1r/ppp2p1p/2n5/4P1pn/2BP1p2/5N2/PP4PP/RNBQ1RK1 b kq - 0 9",
+   "line": [
+    "dxc4",
+    "Bxc4"
+   ],
+   "spoken": "d takes c4, the bishop recaptures.",
+   "reanchor": true
+  },
+  {
+   "ply": 18,
+   "t": 2128.5,
+   "fen": "r1bqkbr1/ppp2p1p/2n5/4P1pn/2BP1p2/5N2/PP4PP/RNBQ1RK1 w q - 1 10",
+   "line": [
+    "Rg8"
+   ],
+   "spoken": "Now a cool move — the rook to g8.",
+   "reanchor": true
+  },
+  {
+   "ply": 19,
+   "t": 2132,
+   "fen": "r1bqkbr1/ppp2p1p/2n5/3PP1pn/2B2p2/5N2/PP4PP/RNBQ1RK1 b q - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "What about d5? It looks scary but it isn't.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 2134,
+   "fen": "r1bqkbr1/ppp2p1p/2n5/3PP2n/2B2pp1/5N2/PP4PP/RNBQ1RK1 w q - 0 11",
+   "line": [
+    "g4"
+   ],
+   "spoken": "We go g4, counterstriking on the kingside — chaotic-looking, but White is completely lost.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 2145,
+   "fen": "r1bqkbr1/ppp2p1p/2P5/4P2n/2B2pp1/5N2/PP4PP/RNBQ1RK1 b q - 0 11",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "If White plays d takes c6, trade queens.",
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 2147.5,
+   "fen": "r1b1kbr1/ppp2p1p/2P5/4P2n/2B2p2/5p2/PP4PP/RNBR2K1 w q - 0 13",
+   "line": [
+    "Qxd1",
+    "Rxd1",
+    "gxf3"
+   ],
+   "spoken": "The queens come off, we take on f3 — already a pawn up, and the attack on White's king is devastating.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 2914,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": "The knight to f6 and you're better. That concludes the Schallopp — a quick overview.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 2927,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf3",
+    "Nf6"
+   ],
+   "spoken": "The knight to f3, the knight to f6 — check on h4 against d4 and the knight to c3, but not against the bishop to c4.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 2965.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "This move traces back to the late 1500s — chess history.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2966.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The knight to h5, which the old masters didn't even consider.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 2970,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": "They mostly looked at the knight to e4 and then it getting tossed around.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2975,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nh5"
+   ],
+   "spoken": "The knight to h5.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 2976.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5pP1/5N2/PPPP3P/RNBQKB1R b KQkq g3 0 5",
+   "line": [
+    "g4"
+   ],
+   "spoken": "They mentioned that after g4 Black is on the ropes.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 2978.5,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/8/5Np1/PPPP3P/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": "f takes g3 — one of the coolest details.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 2980,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5pP1/5N2/PPPP3P/RNBQKB1R b KQkq g3 0 5",
+   "line": [],
+   "spoken": "A little more history here.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 2981,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": "The author of 'The Classical Era of Modern Chess' traces the very first written chess books.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 3001,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5pP1/5N2/PPPP3P/RNBQKB1R b KQkq g3 0 5",
+   "line": [
+    "g4"
+   ],
+   "spoken": "g4.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 3004,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/8/5Np1/PPPP3P/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "fxg3"
+   ],
+   "spoken": "f takes g3 — Lopez made mention of it.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 3006,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5pP1/5N2/PPPP3P/RNBQKB1R b KQkq g3 0 5",
+   "line": [],
+   "spoken": "g4 would have trapped the knight were it not for a resource.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 3009,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P2n/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": "Damiano didn't like this line either.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 3011.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [],
+   "spoken": "Neither did Polerio, an Italian master writing around the same time.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 3019,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",
+   "line": [],
+   "spoken": "Schallopp was only the third or fourth player to actually try this over the board.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 3045.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "He was among the first to play the knight to f6 and put it on h5 — and he codified the whole system.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 3053.5,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nc3",
+    "d5"
+   ],
+   "spoken": "After the knight to c3 we strike with d5 — remember the key detail.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 3056.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 1 6",
+   "line": [
+    "e5",
+    "Nh5"
+   ],
+   "spoken": "After e5, the knight to h5, d4,",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 3057.5,
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP2n/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "we simply develop, because White doesn't have the c4 break.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 3062,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": "We also looked at e takes d5, where you cling to the pawn and castle.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 3073,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 3 4",
+   "line": [],
+   "spoken": "If White's king is particularly weak you can castle queenside; and finally the main line, e5, the knight to h5, d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 3110.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "The queen to e2, d takes c5 — even with best play White ends up slightly worse. A long but rewarding video.",
+   "reanchor": true
+  }
+ ]
+}
