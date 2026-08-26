@@ -4,7 +4,7 @@
  "openingName": "Four Knights Game: Glek System",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
+ "rewrittenAt": "2026-08-26",
  "source": "yt:MMELgpZ4CeQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We take White; Black answers our king's pawn with ...e5."
+   "spoken": "White again — the pawn to e4, e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "The knight to f3."
   },
   {
    "ply": 4,
@@ -33,14 +33,15 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black develops the knight to c6."
+   "spoken": "The knight to c6 — finally, more main lines."
   },
   {
    "ply": 3,
    "t": 112.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Early in the speedrun we faced a lot of Philidors, but past 1300, 1400 —",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -49,7 +50,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "— we'll get a lot more Glek systems, and I can delve deeper into the intricacies.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -58,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "The knight to c3 —"
   },
   {
    "ply": 7,
@@ -68,7 +70,7 @@
     "Nf6",
     "g3"
    ],
-   "spoken": "Black develops ...Nf6; we start the Glek fianchetto with g3."
+   "spoken": "— the knight to f6, g3 — a main-line Glek."
   },
   {
    "ply": 8,
@@ -77,7 +79,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Black develops the bishop to c5."
+   "spoken": "The bishop to c5, the bishop to g2 — we've faced this before."
   },
   {
    "ply": 9,
@@ -86,7 +88,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "We complete the fianchetto with the bishop to g2."
+   "spoken": "The bishop to g2."
   },
   {
    "ply": 10,
@@ -95,7 +97,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6."
+   "spoken": "Black plays correctly with d6. The Glek is my central recommendation for this speedrun."
   },
   {
    "ply": 11,
@@ -104,7 +106,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "We play d3."
+   "spoken": "The move order isn't essential here — you can start by castling or by playing d3, virtually interchangeable. I'll play d3."
   },
   {
    "ply": 12,
@@ -113,7 +115,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black develops the bishop to e6."
+   "spoken": "Our opponent plays the bishop to e6 —"
   },
   {
    "ply": 13,
@@ -122,7 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "— which doesn't really impact what we do; we castle."
   },
   {
    "ply": 14,
@@ -131,7 +133,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "Black plays the queen to d7."
+   "spoken": "The queen to d7. This particular system isn't very common at the top —"
   },
   {
    "ply": 17,
@@ -142,7 +144,8 @@
     "Qd8",
     "Kh1"
    ],
-   "spoken": "We play the rook to e1; Black shuffles the queen to d8; we tuck the king to h1."
+   "spoken": "— where people generally castle kingside. The rook to e1, the queen to d8, the king to h1.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -151,7 +154,8 @@
    "line": [
     "Bc8"
    ],
-   "spoken": "Black retreats the bishop to c8."
+   "spoken": "The bishop back to c8 — both sides castle kingside, and we get a more positional battle.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -163,7 +167,8 @@
     "Kg1",
     "Qd7"
    ],
-   "spoken": "We reposition the rook to f1; Black replays ...Be6; we step the king back to g1; and Black returns the queen to d7."
+   "spoken": "This may seem scary to less experienced Glek players — you might imagine Black playing the bishop to h3, running the h-pawn down the board, castling queenside, and checkmating us. But there are many ways to fight this, and Black's position has more holes than it looks. The knight to a4 should always be on your radar as long as Black hasn't pushed the a-pawn — that's why top players play a5 or a6. But here I don't love the knight to a4: it does nothing against the bishop to h3, and if we trade on c5 Black clamps down on d4. The knight to g5 I also dislike, because of the bishop to g4, and f3 would be illegal.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -172,7 +177,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We pin the knight with the bishop to g5."
+   "spoken": "The knight to g5 with the bishop to g4 just fails concretely, since Black plays h6 and we've achieved nothing. The move I like, which may surprise you, is the bishop to g5 — largely a positional move."
   },
   {
    "ply": 24,
@@ -181,7 +186,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "Black plays ...Bh3, offering to trade our fianchettoed bishop."
+   "spoken": "Our opponent walks right into it, playing the bishop to h3 against everything."
   },
   {
    "ply": 25,
@@ -190,7 +195,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "We take on f6."
+   "spoken": "What's the point of the bishop to g5? Very simple — we want the bishop takes f6 —"
   },
   {
    "ply": 26,
@@ -199,7 +204,7 @@
    "line": [
     "gxf6"
    ],
-   "spoken": "Black recaptures with the g-pawn, wrecking his kingside."
+   "spoken": "— completely hamstringing Black's ability to generate any kingside pawn play. Things get much worse — Black is borderline losing."
   },
   {
    "ply": 27,
@@ -208,7 +213,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "We plant the knight on d5."
+   "spoken": "Notice the king and queen sit on forkable squares, so the move is automatic — the knight to d5 — and suddenly Black is in huge trouble."
   },
   {
    "ply": 28,
@@ -217,7 +222,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles queenside."
+   "spoken": "Black castles queenside, still playing instantly, but that doesn't make his moves any better."
   },
   {
    "ply": 29,
@@ -226,7 +231,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": "The knight grabs on f6."
+   "spoken": "We could take on h3 and on f6, but that makes no sense — just start by taking on f6, a free pawn."
   },
   {
    "ply": 30,
@@ -235,7 +240,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": "Black plays the queen to e6."
+   "spoken": "The queen to e6, the only move. Now we pause: is there a forced win, or do we just drop the knight back to d5 and stabilize? The knight to g5 is bad — the queen takes f6, and after the check the king steps away, leaving that knight awkward. The other option is the bishop takes h3, the queen takes h3, then the knight to g5, nearly trapping the queen with only h6 — but I don't see a clear follow-up, since both knights hang."
   },
   {
    "ply": 31,
@@ -244,7 +249,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "We return the knight to d5."
+   "spoken": "I've emphasized the power of a simple move: when a line is very messy, consider avoiding it with a simple alternative — the knight back to d5."
   },
   {
    "ply": 32,
@@ -253,7 +258,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Black plays h5."
+   "spoken": "Our opponent completely ignores all the threats we've been creating —"
   },
   {
    "ply": 33,
@@ -262,14 +267,15 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "We jump the knight to g5."
+   "spoken": "— and walks right into the knight to g5. It worked like a charm, and Black resigns."
   },
   {
    "ply": 9,
    "t": 412.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 2 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Pretty simple. Funnily, I've never analyzed the bishop to b6 —",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -280,7 +286,8 @@
     "d3",
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "— so I can't guarantee I reacted correctly; I'll check it with an engine.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -289,14 +296,16 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "But you see the power of the Glek — it's not an opening you play for a long middlegame; you can score a lot of miniatures if Black doesn't react appropriately.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 421,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "That's no coincidence. Let me plug it into the database and see what insights we can generate.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -306,7 +315,8 @@
     "Bc5",
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "Fast-forwarding through all the theoretical moves —",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -315,7 +325,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— in this position short castling is actually a mistake. Who can tell me why?",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -324,7 +335,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "This is one of the things that makes the Glek fun: Black makes common-sense developing moves and is just much worse after the knight takes e5 — the centre fork trick —",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -334,7 +346,8 @@
     "Nxe5",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "— fitting perfectly: the knight takes e5, d4 —",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -343,7 +356,8 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "— the bishop to d6 —",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -353,7 +367,8 @@
     "dxe5",
     "Bxe5"
    ],
-   "spoken": ""
+   "spoken": "— d5, the bishop to e5, and White doesn't stop there; let me double-check the move order.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -362,7 +377,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "You start by castling kingside, and if Black plays d6 here —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -371,7 +387,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "— d6 —",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -380,14 +397,16 @@
    "line": [
     "Ne2"
    ],
-   "spoken": ""
+   "spoken": "— then you have the very powerful knight to e2, and Black has no good way to defend against the threat of f4.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 512,
    "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQK2R w KQ - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "One thing I've emphasized here —",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -396,7 +415,8 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "— you don't want to play f4 in this position, because it allows —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -405,7 +425,8 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes c3 with check —",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -414,7 +435,8 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "— the b-pawn recaptures, and you want to avoid the scenario where your dark-squared bishop is stuck behind the f-pawn.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -423,14 +445,16 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "The e-pawn is also very weak here, and Black can play the rook to e8 —",
+   "reanchor": true
   },
   {
    "ply": 19,
    "t": 527,
    "fen": "r1bq1rk1/pppp1ppp/5n2/8/4PP2/2P3P1/P1P3BP/R1BQK2R b KQ - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "— or even the knight takes e4 —",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -439,14 +463,16 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "— a simple tactic, and White's position collapses.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 532.5,
    "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQK2R w KQ - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "So the priority here is to castle —",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -455,7 +481,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "— now you're not as worried about —",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -464,7 +491,8 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "— the bishop takes c3 —",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -473,7 +501,8 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "— the b-pawn recaptures; this is a very different situation with the king already castled.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -482,7 +511,8 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "The king is already castled, which means —",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -491,21 +521,24 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "— you have the move the rook to e1, and we're not too afraid of slightly damaging our queenside pawns, because we have a lot of assets in return — the bishop pair and a good centre; White is slightly better.",
+   "reanchor": true
   },
   {
    "ply": 18,
    "t": 557.5,
    "fen": "r1bq1rk1/pppp1ppp/5n2/8/4P3/2b3P1/PPP2PBP/R1BQ1RK1 w - - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "So in the game Black played d6, we played d3, and the bishop to b6 is already not a great move —",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 560.5,
    "fen": "r1bq1rk1/pppp1ppp/5n2/2b1n3/4P3/2N3P1/PPPP1PBP/R1BQK2R w KQ - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "— the computer suggests the knight to a4 straight away, and if the queen to d7, the knight to g5; after the bishop to g4 we start by snagging the bishop on c5, also hitting the queen; then f3 is possible — habitual if you're a King's Indian player — the bishop to h5, and the best move is the knight to h3. I mention the King's Indian because we get a very similar sequence there, for example in the Gligoric system, a main-line King's Indian, starting with the knight to f3.",
+   "reanchor": true
   }
  ]
 }
