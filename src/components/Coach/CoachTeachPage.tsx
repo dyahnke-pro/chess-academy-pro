@@ -10007,6 +10007,14 @@ export function CoachTeachPage(): JSX.Element {
                     p.setupMoves.length >= childPath.length &&
                     childPath.every((m, i) => p.setupMoves[i] === m),
                 );
+                // Name the branch by its actual move ("Bishop to f4"), never a
+                // bare ordinal — "Variation 1 / 2" tells the student nothing
+                // (David 2026-08-26). Prefer an authored label, else the move.
+                const moveName = opt.node.san ? sanToSpeech(opt.node.san) : '';
+                const forkLabel =
+                  opt.label ||
+                  (moveName ? moveName.charAt(0).toUpperCase() + moveName.slice(1) : '') ||
+                  `Line ${idx + 1}`;
                 return (
                   <button
                     key={`forkbar-${opt.label ?? idx}-${idx}`}
@@ -10014,7 +10022,7 @@ export function CoachTeachPage(): JSX.Element {
                     className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
                     data-testid={`walkthrough-fork-option-${idx}`}
                   >
-                    <span className="truncate max-w-[9rem]">{opt.label ?? `Option ${idx + 1}`}</span>
+                    <span className="truncate max-w-[9rem]">{forkLabel}</span>
                     {hasRealTrap && (
                       <span className="text-[10px] font-medium text-red-400 flex-shrink-0">⚠ trap</span>
                     )}
@@ -10058,6 +10066,48 @@ export function CoachTeachPage(): JSX.Element {
           </div>
         )}
 
+
+        {/* Gem/trap picker hoisted to the under-board bar (David 2026-08-26:
+            "still can't see the picker... I want it where the player bar is").
+            The See/Keep-going decision sits here, visible with no scroll; the
+            trap-detail list stays in the controls below. Only real, engine-
+            verified gems reach this phase. */}
+        {walkthrough.isActive && walkthrough.phase === 'gem-picker' && walkthrough.gemPickerLines.length > 0 && (() => {
+          const gems = walkthrough.gemPickerLines;
+          const weapons = gems.filter((g) => g.kind !== 'warning');
+          const chip = weapons.length
+            ? `💎 ${weapons.length > 1 ? `${weapons.length} traps` : 'A trap'} — the opponent could slip`
+            : `⚠️ ${gems.length > 1 ? `${gems.length} traps` : 'A trap'} to avoid`;
+          return (
+            <div className="px-2 pb-1" data-testid="walkthrough-gem-bar">
+              <div
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg overflow-x-auto"
+                style={purpleGlowStyle}
+              >
+                <span className="text-[11px] font-semibold text-theme-text-muted whitespace-nowrap flex-shrink-0">
+                  {chip}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => walkthrough.playGems()}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-surface hover:bg-theme-bg text-xs font-semibold text-theme-text whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
+                  style={redGlowStyle}
+                  data-testid="walkthrough-gem-see"
+                >
+                  {gems.length > 1 ? 'See them' : 'See it'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => walkthrough.dismissGemPicker()}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-theme-bg hover:bg-theme-surface text-xs text-theme-text-muted whitespace-nowrap flex-shrink-0 min-h-[36px] transition-colors"
+                  data-testid="walkthrough-gem-skip"
+                >
+                  Keep going
+                </button>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* The "why did you play that?" card is GONE (2026-08-05). Learn
             teaches by talking through the game, not by stopping it to ask.
@@ -11132,7 +11182,7 @@ function WalkthroughControls({
       // (board + picker visible), not the below explanation panel (David
       // 2026-08-26: the picker must be visible with no scroll).
       const el = document.querySelector(
-        '[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-trap-bar"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
+        '[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-trap-bar"],[data-testid="walkthrough-gem-bar"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-stage-menu"],[data-testid="walkthrough-choose-mode"],[data-testid="walkthrough-trap-prompt"],[data-testid="walkthrough-quiz-panel"],[data-testid="walkthrough-drill-picker"],[data-testid="walkthrough-punish-picker"]',
       );
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 150);
@@ -11332,39 +11382,20 @@ function WalkthroughControls({
         : weapons.length
           ? `${weapons.length > 1 ? `${weapons.length} traps here` : 'A trap here'} — your opponent could slip`
           : `${warnings.length > 1 ? `${warnings.length} traps to avoid` : 'A trap to avoid'} — your opponent has a trick`;
-    // BUTTONS FIRST, then the (bounded, scrollable) trap list — so the actions
-    // are always reachable even in the non-scrolling board column (David
-    // 2026-08-23: "i cant scroll down to see the selections"). The whole panel
-    // also caps its height and scrolls internally as a backstop.
+    // The See/Keep-going ACTIONS now live in the under-board gem bar (David
+    // 2026-08-26) so they're visible with no scroll. This controls-area block
+    // keeps only the trap-detail list as context — no duplicate action buttons
+    // (a second walkthrough-gem-see testid would break audits + confuse taps).
     return (
       <div
         className="px-3 pb-3 space-y-2 max-h-[42vh] overflow-y-auto"
         data-testid="walkthrough-gem-picker"
       >
         <div className="text-xs font-medium text-theme-text-muted px-1">
-          {weapons.length ? '💎' : '⚠️'} {headline}. See how it plays out?
+          {weapons.length ? '💎' : '⚠️'} {headline}. Pick above to see how it plays out.
         </div>
-        <button
-          onClick={() => walkthrough.playGems()}
-          className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[48px] transition-colors"
-          style={redGlowStyle}
-          data-testid="walkthrough-gem-see"
-        >
-          <span className="text-sm font-semibold text-theme-text">
-            {gems.length > 1 ? 'See them' : 'See it'}
-          </span>
-          <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-        </button>
-        <button
-          onClick={() => walkthrough.dismissGemPicker()}
-          className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left"
-          data-testid="walkthrough-gem-skip"
-        >
-          <span className="text-sm text-theme-text">Keep going with the walkthrough</span>
-          <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
-        </button>
         {gems.length > 0 && (
-          <div className="max-h-24 overflow-y-auto space-y-1 pt-0.5">
+          <div className="max-h-40 overflow-y-auto space-y-1 pt-0.5">
             {gems.map((g, idx) => (
               <div
                 key={`${g.gemId}-${idx}`}

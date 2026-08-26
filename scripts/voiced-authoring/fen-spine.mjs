@@ -22,6 +22,21 @@ import { Chess } from '../../node_modules/chess.js/dist/esm/chess.js';
 
 const keyOf = (fen) => fen.split(' ').slice(0, 4).join(' '); // board + turn + castling + ep
 
+// A piece on its OWN colour's original starting square. A narrator's rewind /
+// "what-if I retreat" analysis (Qd2→Qd1, Nf3→Ng1, …Bg7→…Bf8, Nc3→Nb1, …Ng8,
+// Bf4→Bc1) marches a developed piece back HOME — something a real opening line
+// never does. Fen-anchoring can't catch it because a retreat is a perfectly
+// legal continuation of the running board; this is the extra signal that does.
+const START = {
+  w: { a1: 'r', b1: 'n', c1: 'b', d1: 'q', e1: 'k', f1: 'b', g1: 'n', h1: 'r' },
+  b: { a8: 'r', b8: 'n', c8: 'b', d8: 'q', e8: 'k', f8: 'b', g8: 'n', h8: 'r' },
+};
+// Only in the OPENING (first ~24 plies) — a move-60 endgame knight maneuver
+// (Nf3-g1-e2) legitimately touches g1 and must NOT be rejected.
+const OPENING_PLIES = 24;
+const isRetreatToStart = (mv, plyIndex) =>
+  plyIndex < OPENING_PLIES && !mv.captured && START[mv.color]?.[mv.to] === mv.piece;
+
 /**
  * @returns {{ spine: Array<{san,movedBy,spoken?,kind?,teaches?,plans?}>,
  *             nodes: Array<{ply,lineSan:string[],fenAfter:string,spoken?,teaches?,plans?,kind?}> }}
@@ -60,7 +75,14 @@ export function reconstructSpineFen(moves) {
         const applied = [];
         let ok = true;
         for (const s of n.sans) {
-          try { if (!g.move(s)) { ok = false; break; } applied.push(s); } catch { ok = false; break; }
+          try {
+            const mv = g.move(s);
+            if (!mv) { ok = false; break; }
+            // Reject the whole node the instant it retreats a piece home in the
+            // opening — that's narrator analysis, not the game (see isRetreatToStart).
+            if (isRetreatToStart(mv, spine.length + applied.length)) { ok = false; break; }
+            applied.push(s);
+          } catch { ok = false; break; }
         }
         if (ok && keyOf(g.fen()) === keyOf(n.afterFen)) {
           for (let k = 0; k < applied.length; k++) {

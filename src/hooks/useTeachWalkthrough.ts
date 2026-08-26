@@ -1294,8 +1294,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
             // down the main line while he was still reading the tiles). The
             // fork is a decision point; the student decides. pickFork advances,
             // skip advances, pause pauses — nothing advances on a timer.
+            // Name each branch by its MOVE ("bishop to f4"), never the long
+            // forkSubtitle sentence — the spoken prompt "walk down bishop to
+            // f4, or knight to c3?" is clear; "...or Against a strong opponent,
+            // reach for something you're comfortable in — the Jobava London..."
+            // is a rambling mess (David 2026-08-26).
             const forkLabels = node.children
-              .map((c) => c.forkSubtitle || c.node.shortIdea || c.node.san || '')
+              .map((c) => (c.node.san ? sanToFriendly(c.node.san) : ''))
               .map((s) => s.trim())
               .filter(Boolean);
             const forkAsk =
