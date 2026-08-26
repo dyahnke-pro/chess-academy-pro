@@ -87,9 +87,16 @@ threat two moves away; the plan is structure→where-it-leads.
 `groundedAnswer.ts` / `voiceFacts` + the play/teach surfaces + the "key moment —
 don't rush" event) is the separate, WITH-David pass — NOT started here.
 - **Phase 7 — live wiring (IN PROGRESS, David greenlit 2026-08-26).** The runtime stack is built + tested: `criticality.ts` (score) · `narrationImportance.ts` (speak/rank verdict) · `threatOut.ts` (must-defend, turn-aware) · `perturbation.ts` (leans-on) · `positionFacts.ts` (composer → kind-tagged DNA clauses, both sides: student decision + opponent intent + how to undermine their piece). Reconciled with `scanCriticality`/`findHangingPieces`/`parseEvalTable`/`criticalityThresholds` — no second criticality, no duplicated detection. `clauseText(items, exclude)` lets each surface emit only what its existing lanes don't cover.
-  - **Wired:** Learn (`CoachTeachPage.handleStudentMove`) — excludes `must-defend` (tactics lane covers it).
-  - **Remaining:** review, read-position, hints, matchup/Watch, tactics, Play phase-narration — same `clauseText` pattern.
-  - **Audit:** ALL surfaces at the end (David's call), then land on `main`.
+  - **Wired (all on `main`):**
+    - Learn — `CoachTeachPage.handleStudentMove` (excludes `must-defend`; the tactics lane already covers it).
+    - Read-this-position — `usePositionNarration` (excludes `must-defend`; injected into `additionalContext`).
+    - Phase-transition narration — `usePhaseNarration` (excludes `key-moment`+`convert`; appended to `transitionSentence`, and it now breaks the silence gate so a concrete fact speaks even with no ritual/lookahead).
+    - Play-live — `useLiveCoach` via `groundedMoveFeedback`'s `extraFacts` seam (excludes `must-defend`+`key-moment` — pure-play surface).
+    - Hints — `useHintSystem`, Tier 2/3 only (Tier 1's honesty contract bans piece/square names, so the named clauses are withheld and the perturbation probe is not paid for; excludes `key-moment`+`student-leans`).
+  - **Deliberately NOT wired (honest no-yes-man call, not a gap):**
+    - **Tactics drill** — silent by contract (Narration Voice Rule #8: "Drill positions stay silent") and already corpus-covered via `tacticNoteForPuzzleThemes`. A live voice supply here would break the rule OR duplicate the note. Teaching stays WRITTEN-only.
+    - **Matchup / Watch** — pre-baked Tier-1 narration (`bakedNarrationFor` / voiced corpus). PositionFacts is a *live* Tier-3 fact-supply; it has no job where the prose is already authored + gated offline.
+  - **Audit:** post-deploy 3-instrument run on the touched surfaces (in progress).
 
 ## Decisions log
 
