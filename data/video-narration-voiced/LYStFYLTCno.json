@@ -1,0 +1,281 @@
+{
+ "videoId": "LYStFYLTCno",
+ "title": "CRUSHING Bc4 with e6 | Sicilian: Grand Prix | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Sicilian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-26",
+ "source": "yt:LYStFYLTCno",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 26.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "I'm in the mood for a Sicilian — e4, c5."
+  },
+  {
+   "ply": 3,
+   "t": 30.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 — of course not a first-rate move; there's nothing inherently wrong with it, and White can follow up in a variety of ways, like the knight to f3 or c3."
+  },
+  {
+   "ply": 4,
+   "t": 54,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "You don't want to commit to a setup too early, so I don't love g6 this early — you want a development move that gives maximum flexibility, and in my view that's the knight to c6, the most open-ended."
+  },
+  {
+   "ply": 5,
+   "t": 57.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1PP2/8/PPPP2PP/RNBQK1NR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": "f4, transposing into some strange Grand Prix attack, with the bishop having been committed a little too early to c4. So how can"
+  },
+  {
+   "ply": 6,
+   "t": 78.5,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1PP2/8/PPPP2PP/RNBQK1NR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": "we exploit the premature development of White's bishop to c4? We play e6 — an idea we'd quite possibly play even if the bishop weren't on c4."
+  },
+  {
+   "ply": 7,
+   "t": 80,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1PP2/5N2/PPPP2PP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The knight to f3."
+  },
+  {
+   "ply": 8,
+   "t": 85.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2B1PP2/5N2/PPPP2PP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "And we go d5 with tempo — so the bishop looks really, really dumb here."
+  },
+  {
+   "ply": 10,
+   "t": 91,
+   "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/2B2P2/5N2/PPPP2PP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "exd5",
+    "exd5"
+   ],
+   "spoken": "e-takes-d5, e-takes-d5."
+  },
+  {
+   "ply": 11,
+   "t": 94,
+   "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/5P2/1B3N2/PPPP2PP/RNBQK2R b KQkq - 1 6",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "And the bishop to b3. A lot of you would be very tempted to play b5 here — but the problem is that White has ways to defend: you're not going to trap the bishop, because White can play c3 or a3, and I'm not a huge fan of overplaying the queenside like that. It's a lot more important to get your kingside pieces out than to try to trap the bishop and play for gimmicks."
+  },
+  {
+   "ply": 12,
+   "t": 131,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/5P2/1B3N2/PPPP2PP/RNBQK2R w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "So as unsexy as this move may seem, I like the idea of just developing — the knight to f6."
+  },
+  {
+   "ply": 13,
+   "t": 134,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/5P2/1B3N2/PPPP2PP/RNBQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Now we have a slightly sexier way of developing. Some of you know the rook to e1 is an idea for White, so you could get the bishop out to e7 first, so the rook to e1 isn't a check, and then castle. But to play very ambitiously — remember that just because a move isn't effective in one position doesn't mean you shouldn't consider it in another. When White pushes the f-pawn, one of its main weaknesses is that it creates"
+  },
+  {
+   "ply": 14,
+   "t": 186.5,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/3p4/2p2P2/1B3N2/PPPP2PP/RNBQ1RK1 w kq - 0 8",
+   "line": [
+    "c4"
+   ],
+   "spoken": "vulnerability down the a7-g1 diagonal. So how do I exploit that? I can't play the bishop to c5 with check, but I can play c4, and you might think the intention"
+  },
+  {
+   "ply": 15,
+   "t": 192,
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/3p4/B1p2P2/5N2/PPPP2PP/RNBQ1RK1 b kq - 1 8",
+   "line": [
+    "Ba4"
+   ],
+   "spoken": "is then to get the bishop out to c5 with check — but let's not hurry. You could also play the queen to b6 with check; both moves are fun, but there's a tactic if you take the queen-to-b6 idea"
+  },
+  {
+   "ply": 16,
+   "t": 218,
+   "fen": "r1bqkb1r/p4ppp/2n2n2/1p1p4/B1p2P2/5N2/PPPP2PP/RNBQ1RK1 w kq - 0 9",
+   "line": [
+    "b5"
+   ],
+   "spoken": "and apply it in a much more dangerous way. This is an amazing tactic — you don't start with the queen to b6, you start with b5, and the idea is that after the bishop takes b5, you fork the bishop and the king with the queen to b6 with check. I didn't even see"
+  },
+  {
+   "ply": 17,
+   "t": 233,
+   "fen": "r1bqkb1r/p4ppp/2n2n2/1p1pN3/B1p2P2/8/PPPP2PP/RNBQ1RK1 b kq - 1 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "this initially — when our opponent castled, at first I saw c4 with the bishop-to-c5 idea, but this is amazing. And now, if you want to take it to the next level, how should we deal with the knight to e5?"
+  },
+  {
+   "ply": 18,
+   "t": 250.5,
+   "fen": "r1bqkb1r/p4ppp/2n2n2/3pN3/p1p2P2/8/PPPP2PP/RNBQ1RK1 w kq - 0 10",
+   "line": [
+    "bxa4"
+   ],
+   "spoken": "This is really cool — we can give the queen to b6 with check and then take on a4; but if you really want to rub it in your opponent's face, we can just take on a4."
+  },
+  {
+   "ply": 20,
+   "t": 254.5,
+   "fen": "r1b1kb1r/p4ppp/1qN2n2/3p4/p1p2P2/8/PPPP2PP/RNBQ1RK1 w kq - 1 11",
+   "line": [
+    "Nxc6",
+    "Qb6+"
+   ],
+   "spoken": "The knight takes c6, and the queen to b6 with check first — using the same tactic to pick off the knight."
+  },
+  {
+   "ply": 21,
+   "t": 260,
+   "fen": "r1b1kb1r/p4ppp/1q3n2/3p4/p1pN1P2/8/PPPP2PP/RNBQ1RK1 b kq - 2 11",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 261,
+   "fen": "r1b1kb1r/p4ppp/5n2/3p4/p1pq1P2/8/PPPP2PP/RNBQ1RK1 w kq - 0 12",
+   "line": [
+    "Qxd4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 264.5,
+   "fen": "r1b1kb1r/p4ppp/5n2/3p4/p1pq1P2/8/PPPP2PP/RNBQ1R1K b kq - 1 12",
+   "line": [
+    "Kh1"
+   ],
+   "spoken": "It's important in such a position not to rest on your laurels — a lot of people win a piece and then get very disoriented. There are essentially two ways to think here: one is to play it very safe, just get your bishop out and castle, and there's nothing wrong with that; but if you want to play for maximum, consider a move like the knight to e4 — the knight to g4 is also very interesting, and then the bishop to c5, with ideas of developing a smothered mate."
+  },
+  {
+   "ply": 24,
+   "t": 313,
+   "fen": "r1b1kb1r/p4ppp/8/3p4/p1pqnP2/8/PPPP2PP/RNBQ1R1K w kq - 2 13",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Between the knight to e4 and the knight to g4, I like the knight to e4 more, because it also closes the e-file, so White can't defend the f2-square with check — he can still defend f2 with his queen, but not with check — and this arrangement creates all sorts of tactical concepts. The bishop to g4 is an interesting idea: the bishop to g4, the queen takes g4, and we're very close to the queen to g1 with check, and if the rook takes g1 there's mate on f2 — but after the bishop to g4, the queen to g4, the queen to g1, there's the king takes. So you set it up: h5 to prepare the bishop to g4, or, more elegantly, the bishop to c5, which also prepares the bishop to g4 — and I think we win precisely that way. He plays h3 — a good move — but now we can take it to the next level: since we haven't castled yet, we can use that to our advantage with h5, and now the bishop to g4 is a threat, because after h-takes-g4 you recapture with the h-pawn, which is a check against the king, essentially checkmate. And there we go, the bishop to g4 — a total beatdown; that's why you need an opening repertoire at this rating. The queen to e3 is a nice move I honestly didn't see, but let's decline the draw; our instinct here should be to simplify. The moment he played h3, you should have noted that the g3-square is now a weakness — so in your mind, if the queen ever moves away from f3, there's a fork on g3. Combining that observation with this position, the simplest is just to take the queen and then deliver a nice little fork on g3 — we'll be up a rook, and the rest is really easy.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 477.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "line": [],
+   "spoken": "That was a nice game — short, but quite instructive. The bishop to c4 is already very dubious.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 481.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6,",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 483,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1PP2/8/PPPP2PP/RNBQK1NR b KQkq - 0 3",
+   "line": [
+    "f4"
+   ],
+   "spoken": "and if White wants to play this line,",
+   "reanchor": true
+  },
+  {
+   "ply": 2,
+   "t": 485,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "all you have to do",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 486,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "is play the knight to c3 first, and then play a Grand Prix attack.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 501,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1PP2/2N5/PPPP2PP/R1BQK1NR b KQkq - 1 4",
+   "line": [
+    "Nc6",
+    "f4",
+    "e6",
+    "Bc4"
+   ],
+   "spoken": "Because once this happens, the bishop just looks incredibly stupid on c4. To make it work, White should probably have gone the knight to c3 here, which would have limited the damage, since then d5 is still impossible; but here Black is",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 512.5,
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/2p5/2B1PP2/2N5/PPPP2PP/R1BQK1NR w KQkq - 0 5",
+   "line": [
+    "a6"
+   ],
+   "spoken": "pretty spoiled for choice — we could play a6 to prepare b5, for example, which seems like a good approach; the bishop is just very misplaced. The knight to f3, d5, trade.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 524,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": "What if they go e5? Then there's a tactic with the bishop on c4 and a queen on h4, so e5 isn't even possible. But don't think of the point of our play as trapping the bishop — we're not trying to trap it, we're trying to gain control of the centre; the point of e6 and d5 isn't that I'm seriously flirting with trapping his bishop, it's that we're gaining control of the centre. Our opponent should have gone b5, where the bishop is at least doing something; the setup I recommend is to get the bishop out to d6, let White castle, and then continue.",
+   "reanchor": true
+  }
+ ]
+}
