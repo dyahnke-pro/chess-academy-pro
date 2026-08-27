@@ -152,6 +152,43 @@ describe('useTeachWalkthrough', () => {
     expect(result.current.pathSans).toEqual(['e4', 'e5']);
   });
 
+  it('speaks a COMPUTED board-true why on a played move the corpus left silent', async () => {
+    // Voiced (Tier 1) leads; where it is silent on a played move, the hook
+    // computes a board-true reason so a beginner never hits a silent board
+    // jump (David 2026-08-27: "no silent moves, ever"; "the majority will
+    // come from compute"). Here 1.e4 has an EMPTY idea — the fill must fire.
+    const SILENT_TREE: WalkthroughTree = {
+      openingName: 'Silent',
+      eco: 'Z00',
+      intro: '',
+      outro: '',
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: [
+          {
+            node: {
+              san: 'e4',
+              movedBy: 'white',
+              idea: '', // corpus silent → computed fill must speak
+              children: [],
+            },
+          },
+        ],
+      },
+    };
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(SILENT_TREE));
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 5000 });
+    const spoken = (voiceService.speakForced as ReturnType<typeof vi.fn>).mock.calls
+      .map((c) => String(c[0]))
+      .join(' | ');
+    // The computed why names the real squares the e4-pawn now stakes out —
+    // NOT a generic template (David banned "eyeing key squares" filler).
+    expect(spoken).toMatch(/pawn to e4 stakes out d5 and f5/i);
+  }, 15000);
+
   it('stop returns to idle and clears the tree', async () => {
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => result.current.start(SMOKE_TREE));

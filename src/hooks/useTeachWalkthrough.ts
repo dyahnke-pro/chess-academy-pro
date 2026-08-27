@@ -41,6 +41,7 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
+import { computeMoveWhy } from '../services/moveWhy';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,
@@ -1449,7 +1450,18 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       }
 
       // ── Path 2: single-block narration on `idea` ─────────────
-      const idea = node.idea.trim();
+      // Voiced (Tier 1) leads. Where the corpus is silent on a played move,
+      // COMPUTE a board-true "why" so a beginner hears a reason on every ply,
+      // never a silent board jump (David 2026-08-27: "teach the why behind each
+      // move… no silent moves, ever"; "the majority will come from compute").
+      // The root (san === null) and any move the board offers nothing concrete
+      // for stay silent — silence beats filler.
+      let idea = node.idea.trim();
+      if (!idea && node.san) {
+        const pathSans = path.filter((n) => n.san !== null).map((n) => n.san as string);
+        const fenBefore = fenForPath(pathSans.slice(0, -1), treeRef.current?.startFen);
+        idea = computeMoveWhy(fenBefore, node.san);
+      }
       if (!idea) {
         // Root / un-narrated node — just transition based on children.
         if (node.children.length === 1) {
