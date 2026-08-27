@@ -644,9 +644,11 @@ async function generateFromAnnotations(
       pvMoves = pvMoves.slice(0, uciMax);
     }
 
-    // Tactical quality gate — same filter as the imported-game path.
-    const tacticType = detectTacticType(fen, bestMove);
-    if (tacticType === 'tactical_sequence') continue;
+    // Tactical quality gate — same filter as the imported-game path. The
+    // tactical_sequence skip is DEFERRED to after playerMove/classification are
+    // known, so the Phase 4 position-transformation exception can run.
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove);
+    let transformation: TransformationResult | null = null;
 
     // Cap solution length at 6 ply for clean, focused drills.
     if (pvMoves.length > 6) {
@@ -671,6 +673,18 @@ async function generateFromAnnotations(
 
     // Skip if deeper analysis confirms the player's move was actually best
     if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
+
+    // Deferred tactical gate + Phase 4 positional exception: a non-tactical
+    // miss is kept only when it's a clear position-transformation error at
+    // mistake level or worse; tacticType=null buckets it as a positional
+    // weakness.
+    if (tacticType === 'tactical_sequence') {
+      transformation = (classification === 'mistake' || classification === 'blunder')
+        ? detectPositionTransformation(fen, playerMove, bestMove)
+        : null;
+      if (!transformation) continue;
+      tacticType = null;
+    }
 
     // Compute eval before from annotation context (player perspective)
     let evalBeforeFromPlayer: number | null = null;
@@ -722,7 +736,9 @@ async function generateFromAnnotations(
       sourceGameId: gameId,
       sourceMode,
       playerColor,
-      promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
+      promptText: tacticType
+        ? `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`
+        : (transformation ? transformationPrompt(transformation) : PROMPT_TEXT[classification]),
       narration,
       createdAt: now,
       opponentName: gameContext.opponentName,
