@@ -170,6 +170,53 @@ student's half (the weighing); the opponent's half was stubs. The complete model
   their intent → your best reply → what you did → the gap. A complete teaching
   unit, retrospective register, every piece already computable.
 
+### 4.0c LIVE PLAY (your own game) — narrate THEM, let YOU find the move (David 2026-08-27, locked)
+
+The student's-move contract on their OWN live game (distinct from teaching/Watch,
+where the full weighing is spoken, and review, which is retrospective):
+
+- **Narrate the OPPONENT's intent; let the user find their own move.** Think WITH
+  them from the opponent's side — never move their pieces. The "guide-don't-tell"
+  variant of the student's move = the opponent's side surfaced.
+- **Help them calculate longer forcing lines** — when a forcing sequence is on,
+  walk it out (the PV), don't stop at one move.
+- **The POST-MOVE GRADE is the ALWAYS-SAFE live narration (David 2026-08-27:
+  "safe to always narrate when there is something to say").** It's reactive — you
+  already moved, nothing to spoil — so it fires on every move that has something
+  worth saying (gated by the importance gate + a nameable reason; routine
+  recapture / only-move / quiet developer → silence). Spoken by NAME of the
+  thing, never centipawns: "clean — develops and hits e5" / "careful, you walked
+  into the fork" / "that hung the bishop." This is the **move-reason classifier**
+  (hung-piece / ignored-threat / walked-into-tactic / missed-forcing-win /
+  lost-the-thread / only-move / defends-threat / wins-material / best / solid —
+  ported from the validated offline `position-facts.mjs`); it IS the post-move
+  grade. When the reason is a slip, follow with the recovery line, calculated
+  with them.
+
+**THE PREVENTION LAYER — the latent-danger warning (the highest-value signal we
+named, from David's real loss).** The heartbreak class: a GOOD plan with a hidden
+GEOMETRIC cost. David's chess.com game — even endgame, he forced a trade to make
+a passed pawn (a favorable position transformation) but the trade quietly lined
+his own KING and BISHOP on a rook's file → pinned → lost the bishop. The plan was
+right; he was watching the passer, not his own back yard.
+
+- **The signal: LATENT tactical vulnerability — a pin/fork/skewer *in waiting*.**
+  Not `detectTactics` (tactics that EXIST now) but "what tactic does the opponent
+  GET if a defender leaves or a line opens" — a **perturbation-style probe on the
+  student's own geometry** (two of your pieces aligned, a more valuable one
+  behind, an enemy line-piece that could exploit it). NEW detector; the
+  highest-value thing named 2026-08-27.
+- **Spoken prophylactically, guide-don't-tell:** "your king and bishop share that
+  file — mind it before you open the line." An arrow on the ALIGNMENT (the
+  danger), not "don't trade." Surfaced as the opponent's dormant resource.
+- **Non-blocking WARNING, not the removed picker** — a voice beat at a key moment
+  the student can heed or ignore; it never stops their hand. Prevents the
+  heartbreak without becoming the annoying interruption David killed.
+- **Don't cry wolf** — flag only a genuinely exploitable alignment tied to a
+  committal move (a trade/line-open), not every king on a diagonal.
+- Ties to: position-transformation (the favorable-trade dimension), the opponent's
+  intent, the criticality/deep-dive timing window (fires at key moments).
+
 ### 4b-tiers. WHERE the voice is actually flat (grounded — the good voice is walled off)
 
 Four production tiers of voice, discovered by tracing `voiceFacts` callers:
