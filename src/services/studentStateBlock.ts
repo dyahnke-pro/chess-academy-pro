@@ -18,6 +18,7 @@
  * move history.
  */
 import type { ChatMessage, MoveClassification } from '../types';
+import type { TiltVerdict } from './tiltSignal';
 
 export interface StudentStateInput {
   /** Recent moves, newest last. Used to detect a streak or blunder. */
@@ -32,6 +33,9 @@ export interface StudentStateInput {
   turn?: 'student' | 'coach' | 'neither';
   /** Current route/context the student is on. */
   contextLabel?: string;
+  /** A cross-session behavioral read (`tiltSignal.detectTilt`) — a rough day
+   *  across sessions, not just this one. Shapes tone, never chess content. */
+  tilt?: TiltVerdict;
 }
 
 /** Words / phrases that suggest the student is frustrated or stuck.
@@ -129,6 +133,16 @@ export function buildStudentStateBlock(input: StudentStateInput): string {
 
   if (input.contextLabel) {
     parts.push(`Context: ${input.contextLabel}.`);
+  }
+
+  // Cross-session behavioral read — a rough stretch spanning sessions. Labelled
+  // as a heuristic; shapes tone, invents nothing.
+  if (input.tilt && input.tilt.level !== 'none') {
+    if (input.tilt.level === 'strong') {
+      parts.push(`Cross-session read (heuristic): ${input.tilt.reason}. Keep it LIGHT and low-pressure — pick something winnable first and rebuild a little confidence before piling on corrections. Do not over-teach right now.`);
+    } else {
+      parts.push(`Cross-session read (heuristic): ${input.tilt.reason}. Be encouraging and start with something they can get right.`);
+    }
   }
 
   if (parts.length === 0) return '';

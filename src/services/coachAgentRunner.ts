@@ -30,6 +30,7 @@ import {
 import { AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, WALKTHROUGH_PROMISE_CONTRACT } from './coachPrompts';
 import { extractAndRememberNotes, buildCoachMemoryBlock } from './coachMemoryService';
 import { buildStudentStateBlock } from './studentStateBlock';
+import { getRecentTiltVerdict } from './tiltSignal';
 import { buildGroundingBlock } from './coachContextEnricher';
 import { recordAudit } from './narrationAuditor';
 import { logAppAudit } from './appAuditor';
@@ -221,9 +222,13 @@ export async function runAgentTurn(
   const previousUserMs = userMessages.length >= 2
     ? userMessages[userMessages.length - 2].timestamp
     : undefined;
+  // Cross-session behavioral read (Phase 6) — a rough day across sessions, so
+  // the coach can keep it light. A bonus tone hint; never blocks the reply.
+  const tilt = await getRecentTiltVerdict();
   const studentStateBlock = buildStudentStateBlock({
     recentChat: history,
     lastUserInteractionMs: previousUserMs,
+    tilt,
   });
 
   const additions = [AGENT_ACTION_GRAMMAR, COACH_CONVERSATION_RULES, WALKTHROUGH_PROMISE_CONTRACT, snapshotText];

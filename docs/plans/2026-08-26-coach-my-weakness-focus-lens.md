@@ -625,8 +625,12 @@ SHOULD HAVE BEEN DONE ALREADY."**
   The in-place drill now escalates its spoken feedback as wrong tries pile up on
   a puzzle (try-again → concrete nudge → ease up + offer the exit), a real
   behavioral read; `studentStateBlock` also recognizes explicit "this is hard" /
-  "give up" cues (on top of its existing move-trend + sentiment signals). STILL
-  PENDING: hint-mash / rage-quit / cross-session tilt telemetry and mic signals.
+  "give up" cues (on top of its existing move-trend + sentiment signals).
+  Cross-session tilt: `DONE 2026-08-27` — `tiltSignal.detectTilt` reads the last
+  ~4 training sessions (early-bail = rage-quit proxy + a two-session accuracy
+  slump) and injects a labelled behavioral tone note into `studentStateBlock`
+  (wired in `coachAgentRunner`), so the coach keeps it light on a rough stretch.
+  6 tests. STILL PENDING: hint-mash telemetry and mic signals (device-only).
 - **Phase 7 — The curriculum arc.** `DONE 2026-08-27`. `coachThread` (cross-
   session weakness memory) wired into the drill callback, AND the full PERSISTENT
   curriculum object shipped: new `coachCurriculum` Dexie store (schema v34,
