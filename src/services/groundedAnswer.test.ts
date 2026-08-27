@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -1255,6 +1255,40 @@ describe('trainingAreaFromText — recommend-a-focused-game area detection (Davi
   });
   it('a bare "game" never mis-hits as an area', () => {
     expect(trainingAreaFromText('how do I get better at the game')).toBeNull();
+  });
+});
+
+describe('notationQuestionSan — pull the move out of "what does Bxe7 mean" (David 2026-08-27)', () => {
+  it('extracts a piece capture, including a beginner lowercase piece letter', () => {
+    expect(notationQuestionSan('what does Bxe7 mean?')).toBe('Bxe7');
+    expect(notationQuestionSan('what is bxe7')).toBe('Bxe7');
+    expect(notationQuestionSan("what's Nf3?")).toBe('Nf3');
+  });
+  it('extracts castling and pawn moves', () => {
+    expect(notationQuestionSan('what does O-O mean')).toBe('O-O');
+    expect(notationQuestionSan('what does e4 do')).toBe('e4');
+    expect(notationQuestionSan('what does exd5 mean')).toBe('exd5');
+  });
+  it('returns null when there is no "what …" question or no move token', () => {
+    expect(notationQuestionSan('play Bxe7')).toBeNull();       // not a question
+    expect(notationQuestionSan('what should I do here?')).toBeNull(); // no move
+    expect(notationQuestionSan(null)).toBeNull();
+  });
+});
+
+describe('explainSanNotation — plain-English decode for a beginner (G0)', () => {
+  it('names the captured piece when the move is legal on the FEN', () => {
+    // A real position where Bg5xe7 captures a knight on e7 (Bxe7 legal).
+    const fen = 'r1bqk2r/ppppnppp/2n5/2b1p1B1/2B1P3/2N2N2/PPPP1PPP/R2QK2R w KQkq - 0 6';
+    const out = explainSanNotation('Bxe7', fen);
+    expect(out).toBe('"Bxe7" is chess notation — it means the bishop takes the knight on e7.');
+  });
+  it('decodes the notation itself when no FEN / not legal there', () => {
+    expect(explainSanNotation('Bxe7', null)).toBe('"Bxe7" is chess notation — it means the bishop takes on e7.');
+    expect(explainSanNotation('Nf3', null)).toBe('"Nf3" is chess notation — it means the knight moves to f3.');
+    expect(explainSanNotation('e4', null)).toBe('"e4" is chess notation — it means the pawn moves to e4.');
+    expect(explainSanNotation('exd5', null)).toBe('"exd5" is chess notation — it means the e-pawn captures on d5.');
+    expect(explainSanNotation('O-O', null)).toMatch(/castle kingside/i);
   });
 });
 

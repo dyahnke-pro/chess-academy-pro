@@ -1968,6 +1968,94 @@ export function weaknessTopicFromText(text: string | undefined | null): Weakness
   return null;
 }
 
+// ─── Notation help: "what does Bxe7 mean?" ───────────────────────────────────
+// A ~900 beginner (PostHog 2026-08-27, Rivertoe85) repeatedly asked "what does
+// Bxe7 mean", "what is bxe7", "I don't understand your language" — the coach
+// answers in SAN he can't read. This decodes the notation in plain English,
+// deterministically (chess.js names the captured piece when the FEN is known).
+
+const NOTATION_PIECE_WORD: Record<string, string> = {
+  p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
+};
+
+/** Pull the SAN token out of a "what does <SAN> mean / do?" question, or null.
+ *  Recognizes piece moves (Bxe7, Nf3, Qxd8+), pawn moves/captures (e4, exd5),
+ *  castling (O-O, O-O-O), and promotions (e8=Q). Case-tolerant on the piece
+ *  letter a beginner may lower-case ("bxe7"). */
+export function notationQuestionSan(text: string | null | undefined): string | null {
+  if (!text) return null;
+  // Must be ASKING what a move means/does — not just any message with a SAN.
+  if (!/\bwhat(?:'?s| is| does| do)\b/i.test(text) && !/\bwhat\s+means\b/i.test(text)) return null;
+  // Match piece moves (case-insensitive so a beginner's "bxe7"/"nf3" is caught),
+  // castling, pawn moves/captures, and promotions.
+  const SAN = /\b(O-O-O|O-O|[KQRBNkqrbn][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?[+#]?)\b/;
+  const m = text.match(SAN);
+  if (!m) return null;
+  return normalizeBeginnerSan(m[0]);
+}
+
+/** Normalize a beginner-typed move token: upper-case a lowercased piece letter
+ *  ("bxe7" → "Bxe7", "nf3" → "Nf3"), EXCEPT when the token is a real pawn
+ *  capture ("bxc3" — b and c are adjacent files, so it's the b-pawn taking on
+ *  c3, not a bishop). Pawn pushes ("e4") and file-captures ("exd5") pass
+ *  through unchanged. */
+function normalizeBeginnerSan(tok: string): string {
+  const m = tok.match(/^([bnrqkBNRQK])([a-h]?[1-8]?)(x?)([a-h])([1-8])(=[QRBN])?([+#]?)$/);
+  if (!m) return tok;
+  const [, lead, disamb, x, destFile, destRank, promo, chk] = m;
+  const isPawnCapture =
+    x === 'x' && !disamb && /[a-h]/.test(lead) &&
+    Math.abs(lead.toLowerCase().charCodeAt(0) - destFile.charCodeAt(0)) === 1;
+  if (isPawnCapture) return tok; // genuine pawn capture like bxc3 — leave as-is
+  return `${lead.toUpperCase()}${disamb}${x}${destFile}${destRank}${promo ?? ''}${chk ?? ''}`;
+}
+
+/** Decode a SAN move into a plain-English explanation for a beginner. Uses the
+ *  live FEN (when legal there) to name the captured piece; otherwise decodes
+ *  the notation itself. Written form (squares un-spaced) — voiceFacts +
+ *  sanitizeForTTS speak the coordinate. Never invents — pure decode (G0). */
+export function explainSanNotation(sanRaw: string, fen: string | null | undefined): string | null {
+  if (!sanRaw) return null;
+  let s = sanRaw.trim().replace(/[!?]+$/, '');
+  let suffix = '';
+  if (s.endsWith('#')) { suffix = ', delivering checkmate'; s = s.slice(0, -1); }
+  else if (s.endsWith('+')) { suffix = ', giving check'; s = s.slice(0, -1); }
+
+  const wrap = (body: string): string => `"${sanRaw.trim()}" is chess notation — it means ${body}${suffix}.`;
+  if (s === 'O-O' || s === '0-0') return wrap('castle kingside');
+  if (s === 'O-O-O' || s === '0-0-0') return wrap('castle queenside');
+
+  let promo = '';
+  const pm = s.match(/=([QRBN])$/);
+  if (pm) { promo = `, promoting to a ${NOTATION_PIECE_WORD[pm[1].toLowerCase()]}`; s = s.replace(/=([QRBN])$/, ''); }
+
+  const takes = s.includes('x');
+  const dest = s.slice(-2);
+  if (!/^[a-h][1-8]$/.test(dest)) return null;
+  const pieceLetter = s[0];
+  const isPiece = /[KQRBN]/.test(pieceLetter);
+
+  // Name the captured piece when the move is legal on the live board.
+  let capturedWord: string | null = null;
+  if (fen && takes) {
+    try {
+      const mv = new Chess(fen).move(sanRaw.trim());
+      if (mv?.captured) capturedWord = NOTATION_PIECE_WORD[mv.captured] ?? null;
+    } catch { /* not legal here — decode the notation alone */ }
+  }
+  const target = capturedWord ? `the ${capturedWord} on ${dest}` : (takes ? `on ${dest}` : dest);
+
+  if (isPiece) {
+    const word = NOTATION_PIECE_WORD[pieceLetter.toLowerCase()];
+    return wrap(`the ${word} ${takes ? `takes ${target}` : `moves to ${dest}`}${promo}`);
+  }
+  // Pawn move. "exd5" → "the e-pawn captures …"; "e4" → "the pawn moves to e4".
+  if (takes) {
+    return wrap(`the ${pieceLetter}-pawn captures ${target}${promo}`);
+  }
+  return wrap(`the pawn moves to ${dest}${promo}`);
+}
+
 // ─── Train-toward-a-goal: recommend a focused game + remember the point ──────
 // David 2026-08-27: "the coach should recommend playing a game against it to
 // help fix the middlegame … then remember that is the point of the game and

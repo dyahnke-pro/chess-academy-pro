@@ -63,7 +63,9 @@ is no "let's play a game to fix your middlegame → I'll remember that's the goa
 ## Phasing (each phase = one small push to `main`, tests + audit)
 
 - [x] **P1 — `trainingFocus` memory** (`coachMemoryStore` + test). FOUNDATION. (f70804f)
-- [ ] **P2 — Notation-help assembler** (A2) — lowest risk, pure beginner win.
+- [x] **P2 — Notation-help assembler** (A2) — "what does Bxe7 mean?" → plain
+      English (`notationQuestionSan` + `explainSanNotation`, chess.js names the
+      captured piece), wired into both coachApi fall-throughs. 8 tests.
 - [ ] **P3 — Conversational routing fix** (A1).
 - [x] **P4 — Recommend-a-game intent + set focus** (B6) — the core of David's ask.
       "improve my `<area>`" → recommend a focused game, set `trainingFocus`,

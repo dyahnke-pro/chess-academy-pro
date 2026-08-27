@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -4668,6 +4668,22 @@ export async function getCoachChatResponse(
     // getCoachChatResponse; with it gone, groundCoachReply/runAnswerGates are
     // fully redundant and deleted.
     if (hasChessContentSignal(originalQuery)) {
+      // NOTATION HELP — a beginner asking "what does Bxe7 mean?" (David
+      // 2026-08-27, Rivertoe85: "what does Bxe7 mean", "I don't understand your
+      // language"). Decode the move in plain English before the position
+      // default (which would ignore the question). Computed — G0.
+      const notationSan = notationQuestionSan(originalQuery);
+      if (notationSan) {
+        const explained = explainSanNotation(notationSan, grounding.currentFen ?? null);
+        if (explained) {
+          const voiced = await voiceFacts(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
+          if (voiced) {
+            emitGroundingCoverage('notation-help', surface, sessionId, { question: originalQuery.slice(0, 100) });
+            if (onStream) onStream(voiced);
+            return voiced;
+          }
+        }
+      }
       // A chess question no assembler caught. Compute the position default when
       // the surface threaded engine data; otherwise serve the honest stock line.
       const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
@@ -4732,6 +4748,21 @@ export async function getCoachChatResponse(
     }
     return '';
   })();
+  // NOTATION HELP on the grounded fall-through too (David 2026-08-27) — a
+  // "what does Bxe7 mean?" that arrived with grounding context still deflected
+  // to the position default. Decode it first. Computed — G0.
+  const fallthroughNotationSan = notationQuestionSan(originalQuery);
+  if (grounding && fallthroughNotationSan) {
+    const explained = explainSanNotation(fallthroughNotationSan, grounding.currentFen ?? null);
+    if (explained) {
+      const voiced = await voiceFacts(explained, { studentMessage: originalQuery, providerConfig: config, intent: 'notation', preferRaw: true });
+      if (voiced) {
+        emitGroundingCoverage('notation-help', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+        if (onStream) onStream(voiced);
+        return voiced;
+      }
+    }
+  }
   const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
   if (grounded) {
     emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
