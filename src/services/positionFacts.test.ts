@@ -66,6 +66,27 @@ describe('computePositionFacts — the composer', () => {
   });
 });
 
+describe('the latent-danger prevention clause (fires through positionFacts)', () => {
+  it('warns when the student\'s own bishop is pinned to the king — even in a quiet spot', async () => {
+    // White (student) to move, move 14. Bishop e5 lined in front of Ke1 down the
+    // e-file, Black rook on e8. Flat/quiet analysis — the warning fires anyway.
+    const r = await computePositionFacts({
+      fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
+    });
+    expect(r.latentDanger).not.toBeNull();
+    const texts = clauseText(r.clauses);
+    expect(texts.some((t) => /bishop on e5.*king.*file|share that file/i.test(t))).toBe(true);
+    expect(r.clauses.some((c) => c.kind === 'latent-danger')).toBe(true);
+  });
+
+  it('does not warn when it is the opponent\'s move (not the student\'s concern)', async () => {
+    const r = await computePositionFacts({
+      fen: '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat,
+    });
+    expect(r.latentDanger).toBeNull();
+  });
+});
+
 describe('clauseText', () => {
   it('drops kinds a surface already covers (no walk-over)', async () => {
     const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: flat });

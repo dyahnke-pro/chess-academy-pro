@@ -457,6 +457,33 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > `detectTactics`) to `threadCallbackFor`, starting with play + the mistake drill.
 > This is the foundation primitive (tested), not a live wire yet.
 
+> **SLICE 3 LANDED (2026-08-27, built independently while David put the kid to
+> bed): the student's-move computed foundation.**
+> - `src/services/moveReason.ts` — the POST-MOVE GRADE classifier (hung-piece /
+>   walked-into-tactic / ignored-threat / missed-forcing-win / lost-the-thread /
+>   only-move / defends-threat / wins-material / best / solid), ported from the
+>   validated offline classifier; + `isFaultReason` / `reasonWeaknessTag` (the
+>   auto-log-to-My-Mistakes tag) / `gradeWorthSpeaking` ("something to say") /
+>   `moveReasonClause` (spoken by name, not centipawns). 13 tests. **Classifier
+>   built + tested; the SPOKEN wiring into Learn is deferred** — the grade needs
+>   the after-move eval (cpLoss), which `handleStudentMove` deliberately defers
+>   (6s, off the narration-timing critical path) and `evaluatePlayerMove` returns
+>   void. Wiring the spoken grade means hooking that deferred eval and speaking
+>   without landing after the opponent already replied — a careful timing
+>   integration, NOT a blind 1am edit on the revenue path. Auto-log already
+>   exists via `discussion.evaluatePlayerMove` (idea #3 free).
+> - `src/services/latentDanger.ts` — the PREVENTION layer (pin/skewer in waiting
+>   on your own king/queen; David's heartbreak case). Pure chess.js geometry, no
+>   engine. `detectLatentDanger` + `latentDangerClause` (guide-don't-tell: names
+>   the alignment + the line, never a move). 7 tests. **WIRED + LIVE**: fires
+>   through `positionFacts` as the `latent-danger` clause (rank 80) on
+>   student-to-move, out of the opening, even in a quiet spot — reaching every
+>   surface `positionFacts` feeds. v1 catches STANDING alignments; the "your
+>   trade CREATES the pin" variant (his exact case) needs candidate-move analysis
+>   — next enhancement.
+> NEXT: the spoken post-move-grade wiring (careful eval-timing), the opponent-
+> intent contingency, and the Learn deliberation surfacing.
+
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the
   proven offline `position-facts.mjs` / `render-briefing.mjs` into runtime

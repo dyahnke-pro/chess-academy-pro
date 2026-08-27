@@ -20,6 +20,7 @@ import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
+import { detectLatentDanger, latentDangerClause, type LatentDanger } from './latentDanger';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -60,12 +61,15 @@ export interface PositionFactsResult {
   /** The weighing — the top candidates + why each falls short (the discussion).
    *  Null when it's not the student's move or there's nothing to weigh. */
   deliberation: Deliberation | null;
+  /** A pin/skewer in waiting on the student's own king/queen (the prevention
+   *  layer). Null when the geometry isn't there. */
+  latentDanger: LatentDanger | null;
   /** Board-true clauses, most-important-first, each TAGGED by kind so a surface
    *  can emit only what its existing lanes don't already cover (no walk-over). */
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'deliberation' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+export type ClauseKind = 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
 export interface ClauseItem { kind: ClauseKind; rank: number; text: string; }
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
@@ -152,9 +156,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? buildDeliberation({ analysis, fenBefore: fen, moverColor })
     : null;
 
+  // The prevention layer — a pin/skewer in waiting on the student's own king or
+  // queen (the heartbreak class). Pure board geometry, no engine. Prophylactic,
+  // so it's the student's concern on their move, out of the opening.
+  const latentDanger = (!openingPhase && studentToMove)
+    ? detectLatentDanger(fen, studentColor)
+    : null;
+
   return {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation }),
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger,
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger }),
   };
 }
 
@@ -172,9 +183,12 @@ function buildClauses(a: {
   studentToMove: boolean;
   openingPhase: boolean;
   deliberation: Deliberation | null;
+  latentDanger: LatentDanger | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation } = a;
-  if (!importance.speak) return [];
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger } = a;
+  // A latent danger to your own king is worth a word even in an otherwise quiet
+  // spot — it does not need the importance gate to have fired.
+  if (!importance.speak && !latentDanger) return [];
   const ranked: ClauseItem[] = [];
 
   // THE WEIGHING LEADS (David 2026-08-26, the keystone) — narrate the choice, not
@@ -184,6 +198,14 @@ function buildClauses(a: {
   if (deliberation?.isRealChoice) {
     const text = deliberationFacts(deliberation);
     if (text) ranked.push({ kind: 'deliberation', rank: 95, text });
+  }
+
+  // The prevention layer — a pin/skewer in waiting on your own king/queen. High
+  // rank (a king exposure is worth catching), guide-don't-tell: it names the
+  // alignment and the line, never a move. (Gated to student-to-move, out of the
+  // opening, at computePositionFacts.)
+  if (latentDanger) {
+    ranked.push({ kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger) });
   }
 
   // Incoming fire — the opponent's standing threat against the student (their
