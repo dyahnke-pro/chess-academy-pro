@@ -529,6 +529,7 @@ async function analyzeGameWithStockfish(
       attempts: 0,
       successes: 0,
       tacticType,
+      positionalMotif: transformation ? transformation.kind : null,
     });
   }
 
@@ -754,6 +755,7 @@ async function generateFromAnnotations(
       attempts: 0,
       successes: 0,
       tacticType,
+      positionalMotif: transformation ? transformation.kind : null,
     });
   }
 

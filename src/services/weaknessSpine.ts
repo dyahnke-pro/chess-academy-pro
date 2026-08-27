@@ -83,6 +83,16 @@ function posKey(fen: string, san?: string): string {
  *  "when unsure, don't guess"). We cluster by tactic motif when the
  *  detector gave one, else by game phase. */
 function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
+  // Position-transformation (trade) errors are their own POSITIONAL weakness
+  // (Phase 4), not a generic phase cluster.
+  if (p.positionalMotif) {
+    return {
+      bucket: 'positional',
+      clusterId: `analysis:transform:${p.positionalMotif}`,
+      label: p.positionalMotif === 'unfavorable-trade' ? 'Unfavorable trades' : 'Missed favorable trades',
+      themes: [],
+    };
+  }
   if (p.tacticType) {
     return {
       bucket: 'tactical',

@@ -86,6 +86,11 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** Positional-transformation motif (Phase 4) when the mistake is a trade
+   *  error rather than a tactic — buckets it as its own "Unfavorable trades" /
+   *  "Missed favorable trades" weakness instead of a generic phase bucket.
+   *  Absent for tactical / other mistakes. */
+  positionalMotif?: 'unfavorable-trade' | 'missed-favorable-trade' | null;
   /** Last solve-attempt duration in ms. Populated by gradeMistakePuzzle
    *  from the board's elapsedMs timer. Drives /weaknesses aggregation:
    *  "slow on skewers" / "fast on forks". Always recorded regardless

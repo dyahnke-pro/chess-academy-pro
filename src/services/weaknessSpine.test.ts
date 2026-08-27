@@ -120,6 +120,18 @@ describe('aggregateMistakePuzzles', () => {
     expect(out[0].sources).toEqual(['analysis']);
   });
 
+  it('clusters position-transformation (trade) mistakes as their own weakness', () => {
+    const rows: MistakePuzzle[] = [
+      buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'Bxc6', tacticType: null, positionalMotif: 'unfavorable-trade', status: 'unsolved' }),
+      buildMistakePuzzle({ fen: FEN_B, playerMoveSan: 'Nxe5', tacticType: null, positionalMotif: 'unfavorable-trade', status: 'unsolved' }),
+    ];
+    const out = aggregateMistakePuzzles(rows);
+    expect(out).toHaveLength(1);
+    expect(out[0].tag).toBe('analysis:transform:unfavorable-trade');
+    expect(out[0].label).toBe('Unfavorable trades');
+    expect(out[0].bucket).toBe('positional');
+  });
+
   it('clusters non-tactic mistakes by game phase', () => {
     const rows: MistakePuzzle[] = [
       buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'h3', tacticType: null, gamePhase: 'opening' }),

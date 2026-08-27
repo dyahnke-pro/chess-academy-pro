@@ -289,6 +289,14 @@ const PHASE_LABELS: Record<string, string> = {
 };
 
 function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
+  // Position-transformation (trade) errors get their own weakness bucket
+  // (Phase 4), not a generic phase bucket.
+  if (mp.positionalMotif) {
+    return {
+      key: `transform:${mp.positionalMotif}`,
+      label: mp.positionalMotif === 'unfavorable-trade' ? 'Unfavorable trades' : 'Missed favorable trades',
+    };
+  }
   if (mp.tacticType) {
     return { key: `tactic:${mp.tacticType}`, label: TACTIC_LABELS[mp.tacticType] ?? mp.tacticType };
   }
