@@ -113,6 +113,35 @@ export interface FreeTierRecord {
   updatedAt: number;
 }
 
+/** One step of the coach's data-driven curriculum arc (Phase 7). A weakness the
+ *  coach is sequencing toward "drilled shut". */
+export interface CurriculumItem {
+  /** Weakness tag (identity, from the weakness spine). */
+  tag: string;
+  /** Human label ("Forks", "Rook endgames"). */
+  label: string;
+  /** puzzles.json theme ids for the pattern (may be empty for non-tactical). */
+  patternThemes: string[];
+  /** active = drilling now; queued = next up; mastered = drilled shut (history). */
+  status: 'active' | 'queued' | 'mastered';
+  /** Unix ms the step entered the arc. */
+  addedAt: number;
+  /** Unix ms it closed (status === 'mastered'). */
+  masteredAt?: number;
+}
+
+/** The persistent, single-row curriculum arc (Phase 7, David 2026-08-26): the
+ *  coach picks your top weaknesses, sequences them, and advances to the next
+ *  when one is drilled shut — carried across sessions. Keyed by a fixed id. */
+export interface CoachCurriculumRecord {
+  /** Fixed single-row key ('active'). */
+  id: string;
+  /** Ordered arc: the active step first, then queued, plus mastered history. */
+  items: CurriculumItem[];
+  /** Unix ms of the last reconcile/write. */
+  updatedAt: number;
+}
+
 class ChessAcademyDB extends Dexie {
   puzzles!: EntityTable<PuzzleRecord, 'id'>;
   openings!: EntityTable<OpeningRecord, 'id'>;
@@ -137,6 +166,7 @@ class ChessAcademyDB extends Dexie {
   misconceptionTags!: EntityTable<MisconceptionTagRecord, 'id'>;
   masterPlayCache!: EntityTable<MasterPlayCacheRecord, 'fen'>;
   freeTier!: EntityTable<FreeTierRecord, 'id'>;
+  coachCurriculum!: EntityTable<CoachCurriculumRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -877,6 +907,11 @@ class ChessAcademyDB extends Dexie {
         if (!('cloudEnabled' in prefs)) prefs.cloudEnabled = true;
       });
     });
+
+    // v34 — the persistent curriculum arc (Phase 7, David 2026-08-26). Additive
+    // single-row store, built lazily by coachCurriculumService; no migration of
+    // existing data (same shape as the v32 freeTier addition).
+    this.version(34).stores({ coachCurriculum: 'id' });
   }
 }
 

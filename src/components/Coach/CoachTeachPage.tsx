@@ -89,6 +89,7 @@ import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
+import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -2096,6 +2097,10 @@ export function CoachTeachPage(): JSX.Element {
     const adv = advanceMistakeDrill(solved.progress);
     if (adv.done) {
       activeDrillRef.current = null;
+      // A weakness may have been drilled shut this session → advance the
+      // persistent curriculum arc (Phase 7). Non-blocking; the next session's
+      // opener picks up where this left off.
+      void syncCoachCurriculum();
       // "Drilled shut" — the loop's closing bookend (David 2026-08-26 slogan:
       // LEARN · PLAY · IDENTIFY WEAKNESSES · DRILL THEM SHUT). "For today"
       // because SRS brings the reps back until they genuinely test out.
@@ -9291,9 +9296,16 @@ export function CoachTeachPage(): JSX.Element {
             // Recency-aware: name the pattern as showing up LATELY + offer to
             // drill it shut (David 2026-08-26 evidence-first loop).
             if (!spokeCall && !userInteractedRef.current) {
-              const planLine = isRecent
+              let planLine = isRecent
                 ? `I've been watching your recent games — ${topLabel} keeps coming up, and right now it's the pattern costing you the most. Say "drill my weaknesses" and we'll drill it shut.`
                 : `One thing to keep in the back of your mind today: ${topLabel}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
+              // Append the curriculum ARC when it sequences more than one
+              // weakness (Phase 7: "close X, then Y") — the persistent plan the
+              // coach carries across sessions.
+              try {
+                const arc = curriculumArcLine(await getCoachCurriculum());
+                if (arc && arc.includes('then')) planLine = `${planLine} ${arc}`;
+              } catch { /* the arc is a bonus */ }
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
                 .then(() => voiceService.speakForced(planLine))
