@@ -121,6 +121,55 @@ All four are computed (G0 intact): the weighing is the fan; the temptation is
 warmth the register already allows. Nothing invented — deliberation *spoken*, not
 manufactured.
 
+### 4.0b THE OPPONENT'S SIDE — the other half of the discussion (David 2026-08-27, locked)
+
+"Part of the discussion is knowing what your opponent wants." We built the
+student's half (the weighing); the opponent's half was stubs. The complete model:
+
+- **The opponent's turn = YOUR contingent plan, branched.** Follow how Danya
+  actually talks: on the opponent's move he's planning HIS move and how he'll
+  react to each reply — "if he takes, I recapture and I'm better; if he retreats,
+  I grab the centre." The opponent's wants are INPUTS to your plan, not the
+  subject. Branching (not predicting) is **robust to our throttled engine** — you
+  enumerate the replies that matter, so whatever it plays, you already heard the
+  plan. A 2-ply read from the fan: opponent's top 1–2 replies → your best answer
+  to each (gate to 1–2 or it explodes into noise).
+- **Narrate their IDEAL plan, not what the weak engine will actually play**
+  (David's call, the better one). "He wants Ng5, hitting f7." Teaching the ideal
+  has a higher ceiling than narrating a throttled engine's actual threat — AND
+  the **gap between the ideal and what it actually plays BECOMES the lesson.**
+  When the engine under-plays it: not "the coach was wrong" — "he had Ng5 and
+  didn't take it; now look what that gives you." The miss is the hook.
+- **Take advantage SUBTLY — point with the board, don't tell** (the guided-find-
+  the-move pattern already locked): name the idea, lead the eye with an
+  arrow/highlight on the key square, withhold the move, let them find it. Honesty
+  contract intact.
+- **Guardrail — don't cry wolf.** Flag "take advantage" ONLY on a REAL inaccuracy
+  (actual eval gift) WITH a concrete follow-up. A fine second-best that gave up
+  nothing → note he went a quieter way and move on. Both computed from the fan:
+  their ideal = the top line; the gift = the opponent move's cpLoss; the
+  punishment = your best move at the new position (lead-the-eye arrow).
+- **THE TIMING — the deep-dive IS the window (David 2026-08-27, the keystone of
+  the opponent side).** The engine only dives ~12 ply AT KEY MOMENTS — criticality
+  is what triggers the deep search. So the narration window opens exactly when the
+  position is sharp and stays shut when it's quiet (shallow → instant move →
+  silence). **The window and the importance gate are ONE mechanism** — no separate
+  throttle. Chicken-and-egg resolved: Stockfish streams its read, so by depth 6–8
+  (a fraction of a second) we have the opponent's idea; the coach speaks that EARLY
+  read while the deep search confirms the exact line — how a strong player actually
+  thinks (see it, then calculate). **Hold the opponent's move until the narration
+  finishes** (David): reuse the voice-promise gate (walkthrough auto-advance's
+  mechanism) on the opponent-move trigger. The hold is NOT fake delay — the engine
+  genuinely dives during it, so the pause IS the think time, filled with the idea;
+  the move lands when the voice promise resolves (the move's been ready a beat).
+  **Skippable** (tap to continue) so a held move is never lag; rare (key-moments
+  only) so it's drama, not delay.
+- **Review version (full information — the cleanest home).** No prediction, no
+  timing hack: "he played c5 — he wanted the open Sicilian fight; the response was
+  d4, hitting the centre — you played Nf3 and let him equalize." Opponent's move →
+  their intent → your best reply → what you did → the gap. A complete teaching
+  unit, retrospective register, every piece already computable.
+
 ### 4b-tiers. WHERE the voice is actually flat (grounded — the good voice is walled off)
 
 Four production tiers of voice, discovered by tracing `voiceFacts` callers:
