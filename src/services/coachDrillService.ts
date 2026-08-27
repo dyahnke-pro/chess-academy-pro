@@ -26,7 +26,8 @@
 import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
-import type { MistakePuzzle } from '../types';
+import type { MistakePuzzle, TacticType } from '../types';
+import { themesForTactic } from './weaknessSpine';
 
 interface RawPuzzle {
   id: string;
@@ -57,6 +58,12 @@ export interface CoachDrill {
   /** Source puzzle id + rating (for audits / SRS). */
   puzzleId: string;
   rating: number;
+  /** A fresh pattern rep appended AFTER the student's own flubbed instances,
+   *  to cement the pattern rather than only re-testing their exact positions
+   *  (Phase 3, David 2026-08-26 "evidence-first, then drill the pattern"). Not
+   *  one of the student's mistakes — the surface can frame it as "now a fresh
+   *  one to lock it in". */
+  isCementRep?: boolean;
 }
 
 /** Maps a training-aid slug to the Lichess puzzle themes that define it.
@@ -387,9 +394,11 @@ export async function hasImportedGames(): Promise<boolean> {
  * falls back to `pickCoachDrill`).
  */
 export async function buildMistakeDrillQueue(
-  options: { today?: string } = {},
+  options: { today?: string; cementReps?: number; rating?: number } = {},
 ): Promise<MistakeDrillTheme[]> {
   const today = options.today ?? new Date().toISOString().split('T')[0];
+  const cementReps = Math.max(0, options.cementReps ?? 0);
+  const cementRating = options.rating ?? 1200;
   let mistakes: MistakePuzzle[] = [];
   try {
     mistakes = await db.mistakePuzzles.toArray();
@@ -414,7 +423,33 @@ export async function buildMistakeDrillQueue(
     const drills = ordered
       .map(mistakePuzzleToDrill)
       .filter((d): d is CoachDrill => d !== null);
-    if (drills.length > 0) themes.push({ key, label: b.label, count: drills.length, drills });
+    if (drills.length === 0) continue;
+    // `count` is the evidence — how many of the STUDENT'S OWN games hit this
+    // weakness — so it must be fixed before any cement rep is appended (a fresh
+    // pattern rep is not another instance of their mistake). Drives ordering.
+    const ownCount = drills.length;
+    // CEMENT THE PATTERN (Phase 3): after the student re-solves their own
+    // flubbed positions in a TACTIC theme, append fresh reps of that same
+    // Lichess pattern from puzzles.json — so they drill the idea, not only their
+    // exact positions. Only tactic buckets map cleanly to a themed pool; phase /
+    // transform buckets have none, so they get no cement rep (empty > guessed).
+    if (cementReps > 0 && key.startsWith('tactic:')) {
+      const theme = themesForTactic(key.slice('tactic:'.length) as TacticType)[0];
+      if (theme) {
+        const seenIds = new Set(drills.map((d) => d.puzzleId));
+        const seenFens = new Set(drills.map((d) => d.setupFen));
+        let added = 0;
+        for (let s = 0; added < cementReps && s < cementReps + 6; s += 1) {
+          const fresh = pickCoachDrill(`puzzle:${theme}`, { rating: cementRating, seed: 1009 + s });
+          if (!fresh || seenIds.has(fresh.puzzleId) || seenFens.has(fresh.setupFen)) continue;
+          seenIds.add(fresh.puzzleId);
+          seenFens.add(fresh.setupFen);
+          drills.push({ ...fresh, label: b.label, isCementRep: true });
+          added += 1;
+        }
+      }
+    }
+    themes.push({ key, label: b.label, count: ownCount, drills });
   }
   // Most common weakness first; stable tie-break by label so the order is
   // deterministic across reloads.

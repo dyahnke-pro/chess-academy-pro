@@ -111,6 +111,38 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
     ]);
     expect(await buildMistakeDrillQueue({ today: '2026-07-03' })).toEqual([]);
   });
+
+  it('cements the pattern: appends a fresh themed rep AFTER the student\'s own instances', async () => {
+    await db.mistakePuzzles.bulkPut([FORK_A, FORK_B]);
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: 1500 });
+    const fork = queue.find((t) => t.key === 'tactic:fork');
+    expect(fork).toBeTruthy();
+    // `count` stays the EVIDENCE — the student's own instances — never inflated
+    // by the appended pattern rep.
+    expect(fork?.count).toBe(2);
+    // Exactly one fresh rep, appended LAST, flagged; the own instances lead and
+    // are not flagged.
+    const cement = fork?.drills.filter((d) => d.isCementRep) ?? [];
+    expect(cement.length).toBe(1);
+    expect(fork?.drills[fork.drills.length - 1].isCementRep).toBe(true);
+    expect(fork?.drills[0].isCementRep).toBeFalsy();
+    // The cement rep is a DIFFERENT position than the student's own.
+    expect(cement[0].setupFen).not.toBe(FORK_A.fen);
+    expect(cement[0].setupFen).not.toBe(FORK_B.fen);
+  });
+
+  it('default (no cementReps) appends nothing — behavior unchanged', async () => {
+    await db.mistakePuzzles.bulkPut([FORK_A, FORK_B]);
+    const queue = await buildMistakeDrillQueue();
+    const fork = queue.find((t) => t.key === 'tactic:fork');
+    expect(fork?.drills.every((d) => !d.isCementRep)).toBe(true);
+  });
+
+  it('never cements a non-tactic (phase / transform) bucket — no themed pool', async () => {
+    await db.mistakePuzzles.bulkPut([END_A]);
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: 1500 });
+    for (const t of queue) expect(t.drills.every((d) => !d.isCementRep)).toBe(true);
+  });
 });
 
 describe('hasImportedGames — real uploads vs seeded samples', () => {

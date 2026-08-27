@@ -2058,7 +2058,10 @@ export function CoachTeachPage(): JSX.Element {
    *  drilling it. Returns false when the user has no mistakes yet, so the
    *  caller can fall back to a single DB-sourced drill. */
   const startMistakeDrills = useCallback(async (): Promise<boolean> => {
-    const queue = await buildMistakeDrillQueue();
+    // Evidence-first, THEN cement: after the student re-solves their own flubbed
+    // positions in each theme, one fresh rep of that pattern is appended so they
+    // drill the idea, not just their exact positions (Phase 3).
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200 });
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
       // CROSS-SESSION THREAD (arc Phase 7, David 2026-08-26: "carry this

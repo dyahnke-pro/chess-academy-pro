@@ -600,9 +600,14 @@ SHOULD HAVE BEEN DONE ALREADY."**
 - **Phase 3 — Evidence-first + tactics tab scoped to the weakness.** `PARTIAL
   2026-08-27` (e0e8e84). Evidence-first is inherent (`startMistakeDrills` drills
   the student's OWN flubbed positions), and the completion now speaks the
-  "<weakness> drilled shut for today" closing bookend. STILL PENDING: appending
-  fresh `puzzleThemes` reps after the student's own instances (queue-builder
-  change in `coachDrillService`), and the `MyMistakesPage` evidence panel.
+  "<weakness> drilled shut for today" closing bookend. Fresh-rep append:
+  `DONE 2026-08-27` — `buildMistakeDrillQueue({ cementReps })` appends one fresh
+  themed rep (`pickCoachDrill('puzzle:<lichessTheme>')`, deduped) AFTER the
+  student's own instances in each TACTIC theme, flagged `isCementRep`; `count`
+  stays the evidence (own instances only). Wired at the Learn entry
+  (`startMistakeDrills`, cementReps: 1). 3 tests. STILL PENDING: the
+  `MyMistakesPage` evidence panel (the browser already lists every instance;
+  the pending piece is a weakness-grouped summary header).
 - **Phase 4 — Fix the under-feeding.** `MOSTLY DONE 2026-08-27`. New board-true
   `positionTransformation.ts` detector (unfavorable / declined even trades)
   wired into BOTH game-analysis capture paths (imported-game + annotation) in
