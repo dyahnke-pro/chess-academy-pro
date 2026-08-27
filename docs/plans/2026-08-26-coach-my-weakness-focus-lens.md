@@ -590,22 +590,27 @@ SHOULD HAVE BEEN DONE ALREADY."**
   `voiceFacts` (`coachApi.ts`), the 5 wired surfaces + review + the light
   grounding builder (`questionIntents.buildQuestionGrounding`) + the My Mistake
   drill (replace its `voiceService.speak` template). `pending`
-- **Phase 2 — Coach initiates the loop.** The recency-weighted opening prompt
-  ("name an opening, or reduce your X from the last 3 games") → evidence-first My
-  Mistake loop → "drilled shut." Files: coach-tab entry prompt (`CoachHomePage` /
-  `SmartSearchBar` / `CoachChatPage` greeting), `getUnifiedWeaknessProfile`
-  (recency-filter `lastSeenAt`), `startMistakeDrills`. `pending`
-- **Phase 3 — Evidence-first + tactics tab scoped to the weakness.** Show YOUR
-  instances (`positions[]`) as proof, then fresh `puzzleThemes` reps. Say
-  "drilled shut" at closure. Files: `MyMistakesPage`, `getPuzzlesByTheme`,
-  `weaknessSpine`. `pending`
+- **Phase 2 — Coach initiates the loop.** `DONE 2026-08-27` (e0e8e84). The
+  `/coach/teach` session opener now leads with the RECENCY-weighted weakness
+  (`getUnifiedWeaknessProfile` `lastSeenAt`, ~3-week window), speaks the
+  evidence-first line ("been showing up in your recent games… drill it shut"),
+  and offers a "Drill my weaknesses" chip that starts the in-place
+  `startMistakeDrills` (no reroute). Falls back to the stored severity pick +
+  topic nudge when the spine is empty. NB: "recent games" is a lastSeenAt time
+  window, not a literal 3-game index (the aggregated profile has no per-game id).
+- **Phase 3 — Evidence-first + tactics tab scoped to the weakness.** `PARTIAL
+  2026-08-27` (e0e8e84). Evidence-first is inherent (`startMistakeDrills` drills
+  the student's OWN flubbed positions), and the completion now speaks the
+  "<weakness> drilled shut for today" closing bookend. STILL PENDING: appending
+  fresh `puzzleThemes` reps after the student's own instances (queue-builder
+  change in `coachDrillService`), and the `MyMistakesPage` evidence panel.
 - **Phase 4 — Fix the under-feeding.** Count positional misconceptions; capture
   positional misses incl. position-transformation. Files: `autoAnalyzeGame`
   (`counted:false`), `mistakePuzzleService` (tactical gate), a new
   position-transformation detector. `pending`
-- **Phase 5 — Review depth.** Turning-point "what it hinged on" via
-  `positionFacts` in the retrospective register (`reviewTurningPoint` /
-  `CoachGameReview`). `pending`
+- **Phase 5 — Review depth.** `DONE 2026-08-27`. `reviewHinge.computeTurningPointHinge`
+  (retrospective register) is wired into `CoachGameReview`'s turning-point reveal
+  (~L1134). Turning-point "what it hinged on" speaks the past-tense hinge.
 - **Phase 6 — Conversation + frustration heuristics.** Behavioral frustration
   signals (repeated wrong / hint-mash / rage-quit / tilt / "this is hard") →
   the coach adapts tone + eases/pushes. Files: chat + mic + memory stores,
