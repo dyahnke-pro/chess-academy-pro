@@ -25,6 +25,12 @@ const DEFAULT_MAX = 3;
 /** A gap (cp, mover POV) past which an alternative is "clearly worse", not just
  *  "a touch less precise". */
 const CLEARLY_WORSE_CP = 150;
+/** Below this gap (cp) an alternative is a coin-flip, not a fork in the road.
+ *  On a quiet opening spine EVERY reasonable move sits inside this band, so
+ *  weighing them out loud is filler ("X is playable, but not as precise") — the
+ *  exact banned register. `meaningfulAlternatives` drops these; a position with
+ *  nothing past the band weighs to '' (silence, which the voice rules allow). */
+const MEANINGFUL_DELTA_CP = 40;
 
 export type Shortfall = 'drops-material' | 'clearly-worse' | 'less-precise';
 
@@ -90,8 +96,13 @@ export function buildDeliberation(input: {
   fenBefore: string;
   moverColor: 'w' | 'b';
   maxCandidates?: number;
+  /** The move the surface is committed to (the DB-canonical TAUGHT move on a
+   *  walkthrough). Dropped from the alternatives so the weighing never lists
+   *  the move being played as a weaker option — which reads as a
+   *  self-contradiction on the board (G3). */
+  excludeSan?: string;
 }): Deliberation | null {
-  const { fenBefore, moverColor } = input;
+  const { fenBefore, moverColor, excludeSan } = input;
   const sign = moverColor === 'w' ? 1 : -1;
   const max = input.maxCandidates ?? DEFAULT_MAX;
 
@@ -112,7 +123,7 @@ export function buildDeliberation(input: {
   const alternatives: Candidate[] = [];
   for (const l of lines.slice(1, max)) {
     const san = uciToSan(fenBefore, l.moves[0]);
-    if (!san || san === bestSan) continue;
+    if (!san || san === bestSan || san === excludeSan) continue;
     const evalCp = moverEval(l);
     const deltaCp = Math.max(0, bestEval - evalCp);
     const drop = dropsAfter(fenBefore, l.moves[0], moverColor);
@@ -149,15 +160,31 @@ export function deliberationFacts(d: Deliberation): string {
   return `${weigh.join(' ')} The move is ${d.best.san}.`;
 }
 
+/** The alternatives that are a real fork in the road — they drop material or
+ *  sit a meaningful gap below the best. Coin-flip moves (inside
+ *  `MEANINGFUL_DELTA_CP`) are dropped: on a quiet opening spine every reasonable
+ *  move is one, and weighing them is filler. */
+export function meaningfulAlternatives(d: Deliberation): Candidate[] {
+  return d.alternatives.filter(
+    (a) => a.shortfall === 'drops-material' || a.deltaCp >= MEANINGFUL_DELTA_CP,
+  );
+}
+
 /**
  * The weighing WITHOUT the "the move is X" conclusion. Safe to splice into a
  * TAUGHT line (the Watch walkthrough), where the conclusion is the DB-canonical
  * taught move — NOT necessarily the engine's best. Emitting the tempting
  * alternatives + why each falls short teaches the discussion without ever
- * contradicting the board (which would break G3). '' when there's nothing to
- * weigh.
+ * contradicting the board (which would break G3).
+ *
+ * Only MEANINGFUL alternatives are spoken (a genuine fork — drops material or a
+ * real gap). A quiet position where every move is a coin-flip weighs to '' —
+ * silence, which the voice rules allow, instead of "X is playable, but not as
+ * precise" filler on every equal opening move.
  */
 export function deliberationAlternativesFacts(d: Deliberation): string {
   if (!d.isRealChoice) return '';
-  return d.alternatives.map(shortfallText).join(' ');
+  const meaningful = meaningfulAlternatives(d);
+  if (meaningful.length === 0) return '';
+  return meaningful.map(shortfallText).join(' ');
 }

@@ -2249,7 +2249,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       try {
         const analysis = await stockfishEngine.analyzeWithBudget(preFen, 12, 1200);
         if (!analysis?.topLines?.length) continue;
-        const d = buildDeliberation({ analysis, fenBefore: preFen, moverColor: studentChar });
+        // excludeSan = the taught move at this ply — never weigh it as a weaker
+        // alternative against itself (self-contradiction on the board, G3).
+        const d = buildDeliberation({ analysis, fenBefore: preFen, moverColor: studentChar, excludeSan: positions[i].san });
         if (d) {
           const facts = deliberationAlternativesFacts(d);
           if (facts) deliberationByPly[i] = facts;

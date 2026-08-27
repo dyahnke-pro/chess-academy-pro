@@ -45,12 +45,29 @@ describe('buildDeliberation — the weighing from the fan', () => {
     expect(d.alternatives.length).toBe(2); // best + 2 alternatives = 3 candidates
   });
 
-  it('alternatives-only facts drop the conclusion (safe for a taught line)', () => {
+  it('alternatives-only facts drop the conclusion AND the coin-flip, keep the real fork', () => {
     const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w' })!;
     const facts = deliberationAlternativesFacts(d);
-    expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./);
-    expect(facts).toMatch(/d3 is playable, but not as precise\./);
+    expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./); // the real fork speaks
+    expect(facts).not.toMatch(/d3/); // the ~20cp coin-flip is filler — dropped, not weighed
     expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
+  });
+
+  it('drops the taught move from the weighing (excludeSan — no self-contradiction)', () => {
+    // The DB-canonical taught move here is d3 — it must NEVER be listed as a
+    // weaker alternative against itself.
+    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w', excludeSan: 'd3' })!;
+    expect(d.alternatives.map((a) => a.san)).not.toContain('d3');
+    expect(deliberationAlternativesFacts(d)).not.toMatch(/d3/);
+  });
+
+  it('stays SILENT on a quiet position — coin-flip alternatives are filler, not a fork', () => {
+    // Three near-equal moves (all within MEANINGFUL_DELTA_CP) = a quiet opening.
+    // The weighing must be '' (silence), never "X is playable, but not as precise".
+    const quiet = { topLines: [line(1, 30, 'e1g1'), line(2, 20, 'd2d3'), line(3, 15, 'a2a3')] };
+    const d = buildDeliberation({ analysis: quiet, fenBefore: FEN, moverColor: 'w' })!;
+    expect(d.isRealChoice).toBe(true); // there ARE alternatives...
+    expect(deliberationAlternativesFacts(d)).toBe(''); // ...but none worth weighing
   });
 
   it('is NOT a real choice when the fan has one line (forced / only-move)', () => {
