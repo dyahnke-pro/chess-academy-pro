@@ -88,6 +88,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
+import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -2055,7 +2056,17 @@ export function CoachTeachPage(): JSX.Element {
     const queue = await buildMistakeDrillQueue();
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
-      startCoachDrill(queue[0].drills[0], progress, `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`);
+      // CROSS-SESSION THREAD (arc Phase 7, David 2026-08-26: "carry this
+      // discussion across TIME and surfaces"). When the weakness we're about to
+      // drill is the same one the coach has been tracking, call back to it —
+      // once per session (the ledger spans surfaces), never a nag.
+      let lead = `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`;
+      try {
+        const thread = await getActiveCoachingThread();
+        const callback = threadCallbackFor(thread, thread ? [thread.tag] : []);
+        if (callback) lead = `${callback} We'll drill it on the board — get these right over a few days and they'll test out.`;
+      } catch { /* the callback is a bonus */ }
+      startCoachDrill(queue[0].drills[0], progress, lead);
       return true;
     }
     // Nothing due. Two cases (David 2026-07-03):
@@ -2190,6 +2201,10 @@ export function CoachTeachPage(): JSX.Element {
       if (drill) startCoachDrill(drill);
     })();
   }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills]);
+
+  // Fresh coaching session → clear the say-once cross-session thread ledger so
+  // the "we've been working on X" callback can fire once this session (Phase 7).
+  useEffect(() => { resetThreadCallbacks(); }, []);
 
   /** Notify the user when a background-generated stage finishes
    *  loading. Pushes a coach chat message + refreshes the
