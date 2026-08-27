@@ -2079,10 +2079,13 @@ export function CoachTeachPage(): JSX.Element {
     const adv = advanceMistakeDrill(solved.progress);
     if (adv.done) {
       activeDrillRef.current = null;
+      // "Drilled shut" — the loop's closing bookend (David 2026-08-26 slogan:
+      // LEARN · PLAY · IDENTIFY WEAKNESSES · DRILL THEM SHUT). "For today"
+      // because SRS brings the reps back until they genuinely test out.
       coachDrillSay(
         adv.completedLabel
-          ? `That's your due ${adv.completedLabel} — and every weakness due today. Solve them right across a few days and they'll test out for good.`
-          : "That's every mistake due today. Solve them right across a few days and they'll test out for good.",
+          ? `That's ${adv.completedLabel} drilled shut for today — and every weakness due. Keep solving them right over a few days and they'll test out for good.`
+          : "That's every mistake due today, drilled shut. Keep solving them right over a few days and they'll test out for good.",
       );
       return;
     }
@@ -2090,7 +2093,7 @@ export function CoachTeachPage(): JSX.Element {
     loadDrillOntoBoard(adv.next.drill, adv.next.progress);
     coachDrillSay(
       adv.themeCompleted
-        ? `Nice — that's your due ${adv.completedLabel} for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
+        ? `Nice — ${adv.completedLabel} drilled shut for today. On to ${adv.nextLabel}. ${adv.next.drill.prompt}`
         : `Good. ${adv.next.drill.prompt}`,
     );
   }, [coachDrillSay, loadDrillOntoBoard]);
