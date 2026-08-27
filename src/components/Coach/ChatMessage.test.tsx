@@ -68,16 +68,16 @@ describe('ChatMessage — grounded action picker', () => {
     expect(navigateMock).toHaveBeenCalledWith(route);
   });
 
-  it('routes an unscoped weakness_drill to the game-sourced weakness overview', () => {
+  it('drills an unscoped weakness_drill IN the coach tab (no reroute to tactics)', () => {
     renderMessage(baseMessage({ metadata: { actions: [{ type: 'weakness_drill', id: 'all' }] } }));
     fireEvent.click(screen.getByTestId('action-weakness_drill'));
-    expect(navigateMock).toHaveBeenCalledWith('/tactics/weakness-themes');
+    expect(navigateMock).toHaveBeenCalledWith('/coach/teach?drill=mistakes');
   });
 
-  it('routes a scoped weakness_drill to the adaptive surface with the forced theme', () => {
+  it('drills a scoped weakness_drill IN the coach tab, carrying the motif hint', () => {
     renderMessage(baseMessage({ metadata: { actions: [{ type: 'weakness_drill', id: 'fork' }] } }));
     fireEvent.click(screen.getByTestId('action-weakness_drill'));
-    expect(navigateMock).toHaveBeenCalledWith('/tactics/adaptive', { state: { forcedWeakThemes: ['fork'] } });
+    expect(navigateMock).toHaveBeenCalledWith('/coach/teach?drill=mistakes&theme=fork');
   });
 
   // Dead-wire guard (David 2026-07-04): every chip must land on a REAL route.

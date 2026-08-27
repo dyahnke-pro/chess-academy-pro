@@ -131,13 +131,17 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         void navigate('/tactics/mistakes');
         break;
       case 'weakness_drill':
-        // Scoped to a specific motif → the adaptive surface auto-starts that
-        // exact theme (it consumes forcedWeakThemes, WeaknessThemesPage does
-        // not). Unscoped → the game-sourced weakness overview to pick from.
+        // Drill the student's mistakes IN the coach tab, on the board — never a
+        // reroute to the tactics tab (David 2026-08-27: "coach is supposed to
+        // drill mistakes within the coach tab and not rerouting"). /coach/teach
+        // consumes ?drill=mistakes → startMistakeDrills, which builds the ranked
+        // queue (most-common weakness first, adaptive until it tests out). This
+        // also sidesteps the WeaknessThemesPage entirely. A scoped motif rides
+        // along as a hint; the in-place queue still leads with the top weakness.
         if (action.id && action.id !== 'all') {
-          void navigate('/tactics/adaptive', { state: { forcedWeakThemes: [action.id] } });
+          void navigate(`/coach/teach?drill=mistakes&theme=${encodeURIComponent(action.id)}`);
         } else {
-          void navigate('/tactics/weakness-themes');
+          void navigate('/coach/teach?drill=mistakes');
         }
         break;
       case 'endgame_training':
