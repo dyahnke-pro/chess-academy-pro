@@ -1322,8 +1322,15 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               .map((c) => (c.node.san ? sanToFriendly(c.node.san) : ''))
               .map((s) => s.trim())
               .filter(Boolean);
-            const forkAsk =
-              forkLabels.length >= 2
+            // Phase 2/3 (David 2026-08-26): a branch earns the "see the trap"
+            // framing ONLY when it maps to a real engine-verified punish — a
+            // fork child that carries baked gems (mined or the engine-only
+            // finder, both gated at the crush tiers). No gem → the plain "walk
+            // X or Y?" prompt, so we never call a routine variation a trap.
+            const hasTrapBranch = node.children.some((c) => (c.node.gems?.length ?? 0) > 0);
+            const forkAsk = hasTrapBranch
+              ? `The line branches here — and one of these lines has a trap waiting. Want to walk the main line, or see the trap?`
+              : forkLabels.length >= 2
                 ? `The line branches here. Want to walk down ${forkLabels[0]}, or ${forkLabels[1]}?`
                 : 'The line branches here — pick the line you want to walk.';
             void speakWalkthroughText(forkAsk, undefined, isCurrent).catch(() => undefined);

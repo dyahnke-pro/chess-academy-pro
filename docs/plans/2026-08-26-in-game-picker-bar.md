@@ -60,6 +60,12 @@ French didn't look like a real trap.
 - Verify on a real fork position that the bar shows under the board with no scroll.
 
 ## Status
-- Phase 1: in progress.
-- Phase 2: pending.
-- Phase 3: pending (starts with the KIA-vs-French trap audit).
+- Phase 1: DONE — the under-board picker bar (fork/trap/gem hoisted after
+  PlayerInfoBar) is landed in `CoachTeachPage.tsx`.
+- Phase 2/3: DONE 2026-08-27. The fork voice speaks "…one of these lines has a
+  trap waiting — walk the main line, or see the trap?" ONLY when a fork child
+  carries a baked, engine-verified gem (mined or the engine-only finder); no gem
+  → the plain "walk X or Y?" prompt. The verified-gem gate makes Phase 3
+  self-correcting: a fork with no real trap (e.g. a plain KIA-vs-French variation)
+  can never get the trap framing, so there is no false "see the trap" to drop.
+  Test: useTeachWalkthrough.test.tsx "a fork whose branch carries a verified gem".

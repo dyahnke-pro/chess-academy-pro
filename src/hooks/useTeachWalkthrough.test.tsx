@@ -189,6 +189,29 @@ describe('useTeachWalkthrough', () => {
     expect(spoken).toMatch(/pawn to e4 stakes out d5 and f5/i);
   }, 15000);
 
+  it('a fork whose branch carries a verified gem offers "see the trap" (Phase 2/3)', async () => {
+    const gem = {
+      gemId: 'g1', kind: 'weapon', title: 't', inaccuracy: 'Nc3', baseFen: 'x',
+      steps: [{ san: 'Nc3', fen: 'y', idea: 'i', shortIdea: 's', arrows: [] }],
+    } as unknown as BakedGemLine;
+    const TRAP_FORK: WalkthroughTree = {
+      openingName: 'TrapFork', eco: 'Z00', intro: '', outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [
+        { node: { san: 'e4', movedBy: 'white', idea: 'one', children: [
+          { node: { san: 'e5', movedBy: 'black', idea: 'two', children: [
+            { node: { san: 'Nc3', movedBy: 'white', idea: 'trap branch', gems: [gem], children: [] } },
+            { node: { san: 'Nf3', movedBy: 'white', idea: 'main branch', children: [] } },
+          ] } },
+        ] } },
+      ] },
+    } as WalkthroughTree;
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(TRAP_FORK));
+    await waitFor(() => expect(result.current.phase).toBe('fork'), { timeout: 6000 });
+    const spoken = (voiceService.speakForced as ReturnType<typeof vi.fn>).mock.calls.map((c) => String(c[0])).join(' | ');
+    expect(spoken).toMatch(/has a trap waiting|see the trap/i);
+  }, 15000);
+
   it('stop returns to idle and clears the tree', async () => {
     const { result } = renderHook(() => useTeachWalkthrough());
     act(() => result.current.start(SMOKE_TREE));
