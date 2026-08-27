@@ -1,51 +1,91 @@
-# PLAN — Baked gem picker in "teach me X" (Learn with Coach)
+# PLAN — Coach answers a beginner + trains toward a goal (2026-08-27)
 
-David 2026-08-23: bake gem teaching into the "teach me X opening" walkthrough as an
-**interactive picker detour**, not a spoken aside.
+Owner: David. Triggered by real native-iOS user `466e36fc` (Rivertoe85, ~900,
+paying trial, daily-active). PostHog showed his coach experience is broken in
+two ways: (1) the coach can't answer his plain-English questions, and (2) there
+is no "let's play a game to fix your middlegame → I'll remember that's the goal
+→ here's your middlegame feedback" loop.
 
-## The behavior (locked with David)
-- At a walkthrough position where a punish-gem is available (opponent to move, a slip
-  would let the student punish), the walkthrough **pauses** and shows a **picker**:
-  the trap(s) + a Continue button. (pause-and-wait, not an optional tile.)
-- Tap "see it" → **one tap plays ALL** available gems: for each gem, snap to the base
-  position, play the inaccuracy + punish sequence out on the board with narration, a
-  **brief digest pause** at the end, then snap back to base. After the last gem, snap
-  back and **resume** the normal walkthrough.
-- Narration + arrows come from the **opening-tab source** (`gemToPlayableLine`) — gems
-  are premade. If NO premade gem exists at a position, construct one with the **finder**
-  (`tacticalRead`/`playOutPunish`) — phase 2.
+## Verified findings (from PostHog + live prod audit)
 
-## Architecture
-Detour mechanism = clone of `acceptTrap` (`useTeachWalkthrough.ts:1707-1824`): drive the
-`trapFen` board override through the sequence, `speakWalkthroughText` awaited per ply,
-`setTrapFen(null)` to snap back, parked transition (`deferredTransitionRef`) to resume.
+- `audit-coach-beginner-questions-prod.mjs` (run against live main 2026-08-27):
+  5 of 6 beginner question shapes fail —
+  - "Why did they move their queen?" → generic best-move readout (ignores Q)
+  - "Do you understand me?" → best-move readout (conversational MISROUTED)
+  - "What does Bxe7 mean?" → glossary for *fork* (wrong; never explains notation)
+  - "Was my knight to d5 good?" → help menu (not move-quality)
+  - "Doesn't that mess up the structure?" → canned "I can't verify that precisely"
+  - "How do I improve my middlegame?" → ✔ real weakness-profile answer
+- Root cause: coach only has grounded assemblers for a fixed set (best-move /
+  plan / hanging / tactics / openings / weakness-profile). Everything else falls
+  to `serveGroundedPositionDefault` (ignores the question) or
+  `STOCK_GROUNDING_FALLBACK`. **G0 is NOT the blocker** — the failing shapes are
+  all answerable from computed data; the assemblers just don't exist / misroute.
+- Memory build (curriculum arc, `coachCurriculumService`, Dexie v34) IS on main,
+  but it sequences WEAKNESS TAGS from analyzed games and advances on drills. It
+  has NO per-game "focus goal" and is empty for a 0-analyzed-games user. The
+  right pattern to mirror is `coachMemoryStore.intendedOpening` (a persistent
+  cross-session commitment stored in the `meta` JSON blob — additive, no Dexie
+  bump).
 
-### Files / phases
-1. `types/walkthroughTree.ts` — `WalkthroughTreeNode.gems?: BakedGemLine[]` + `BakedGemLine`/`BakedGemStep`. [done]
-2. `services/gemCrushLines.ts` — `buildGemDetour(gem)` (slice `gemToPlayableLine` to [inaccuracy..]) + `gemsForPosition(pathSans, studentSide)`. 
-3. `services/openingGenerator.ts` — `attachBakedGems(node, pathSans, spliced, studentSide)` at spine + branch + extension nodes; bump `WALKTHROUGH_GEN_REV`. [rev bumped]
-4. `hooks/useTeachWalkthrough.ts` — `'gem-picker'` + `'gem-playing'` phases, `pickGem()` detour player, skip live `computeWatchGemAside` when `node.gems`. 
-5. `components/Coach/CoachTeachPage.tsx` — gem-picker panel (mirror fork panel).
-6. Tests: `buildGemDetour` + `attachBakedGems`; runtime picker if feasible.
-7. Phase 2 — finder fallback (runtime engine construction when no premade gem).
+## The two jobs
 
-## Locked contracts (from runtime map)
-- Voice-promise gated; NO fallback timer racing speak. NO auto-advance on the picker (fork rule).
-- Every continuation re-checks `isCurrent()` / run token; register `cancelNarrationRef` that clears `trapFen`+arrows.
-- Baked gem vs live overlay must not double-teach: live `computeWatchGemAside` skips when `node.gems?.length`.
+### A. Beginner Q&A assemblers (fix the deflection) — G0-safe, computed
+1. **Conversational routing** — a non-chess/meta question ("do you understand
+   me", "you there") must reach the conversational lane, never the best-move
+   default. Bug in the chess-signal gate / assembler precedence.
+2. **Notation help** — "what does `Bxe7` mean?" → parse the SAN with chess.js
+   against the live FEN → "the bishop takes the pawn on e7." Deterministic.
+3. **Move-quality** — "was my knight to d5 good?" → move classification (eval
+   delta + label; the machinery exists in the review path). Route to it.
+4. **Opponent-move why** — "why did they move their queen there?" → explain the
+   opponent's LAST move from the board (`describeMoveInfluence` /
+   `detectNewThreat` / threat computers). Computed.
 
-## Status
-- [x] scrapped the first (spoken-aside) approach
-- [x] data model (BakedGemLine/BakedGemStep on the node) + generator baking (attachBakedGems)
-- [x] runtime picker (`gem-picker`/`gem-playing` phases, playGems/dismissGemPicker, trapFen detour + snap-back + resume)
-- [x] UI panel (walkthrough-gem-picker / -see / -skip)
-- [x] tests: buildGemDetour/gemsForPosition/attachBakedGems + runtime picker fires/plays/resumes
-- [ ] ship-check + push main + 3-instrument audit
-- [x] phase 2: finder fallback (runtime engine construction when no premade gem) — DONE
-      2026-08-27 (David "do 2"). `gemFinder.findGemsForLine` now falls back to an ENGINE-ONLY
-      slip scan when the explorer is silent: `engineOnlySlips` reads the multi-PV fan for the
-      opponent's top inaccuracies, and `verifySlip` is held to the STRICTER confirmed tier
-      (≥ +1.0 `WEAPON_CP`), never the +0.5 positional edge — the answer to "what legitimizes a
-      runtime gem without human frequency": a decisive, engine-verified refutation, or nothing.
-      Capped (`MAX_ENGINE_ONLY_POSITIONS = 6`) so the speculative scan stays cheap. 2 tests
-      (fires at the confirmed tier; rejects a merely-inferior +0.7 slip).
+### B. Train-toward-a-goal loop (the "memory build" David wants)
+5. **`trainingFocus` memory** — new field on `coachMemoryStore` mirroring
+   `intendedOpening`: `{ area, reason, setAt, capturedFromSurface, gameId? }`,
+   `area ∈ {opening, middlegame, endgame, tactics, calculation, king-safety,
+   time-management}`. Actions `setTrainingFocus` / `clearTrainingFocus`.
+   Additive to the `coachMemory.v1` JSON blob — no schema migration.
+6. **Recommend-a-game intent** — "how do I improve my `<area>`?" → the coach
+   recommends playing a focused game AND sets `trainingFocus(area)`; returns a
+   `play_focused_game` action offer carrying the area. Generalize to every area,
+   not just middlegame.
+7. **Play honors the focus** — `/coach/play` reads `trainingFocus`, records the
+   game's goal on the game, and (optionally) biases phase narration toward that
+   phase.
+8. **Phase-scoped feedback** — post-game review, when a `trainingFocus` is set,
+   LEADS with feedback scoped to that phase/area (the phase's plans + the
+   mistakes classified into that phase via `classifyPhase`). Clears the focus
+   (or advances it) when addressed.
+
+## Phasing (each phase = one small push to `main`, tests + audit)
+
+- [ ] **P1 — `trainingFocus` memory** (`coachMemoryStore` + test). FOUNDATION.
+- [ ] **P2 — Notation-help assembler** (A2) — lowest risk, pure beginner win.
+- [ ] **P3 — Conversational routing fix** (A1).
+- [ ] **P4 — Recommend-a-game intent + set focus** (B6) — the core of David's ask.
+- [ ] **P5 — Move-quality assembler** (A3).
+- [ ] **P6 — Opponent-move why assembler** (A4).
+- [ ] **P7 — Phase-scoped post-game feedback from `trainingFocus`** (B7/B8).
+- [ ] Extend `audit-coach-beginner-questions-prod.mjs` assertions as each lands;
+      run the 3-instrument prod audit after each deploy (G1).
+
+## Decisions log
+- 2026-08-27 (David): fix all four assemblers + build the recommend-game→
+  remember-goal→phase-feedback loop, generalized to all areas. G0 stays intact —
+  every answer computed in code, phrased via `voiceFacts`.
+
+## Sequencing logic
+Memory first (P1) — everything in B hangs off it. Then the two safest, highest-
+value assemblers (notation, routing) that immediately help the beginner. Then
+the recommend-game intent (P4), which needs P1. Move-quality / opponent-why /
+phase-feedback follow. Each independently shippable and reversible on `main`.
+
+## Next-session pickup
+Start at the first unchecked box. Every new assembler routes through `voiceFacts`
+(never a free-LLM chess answer); every computed fact comes from chess.js / the
+engine / the review facet computers. Run `npm run ship-check` then the prod
+audit. Hot file: `src/services/coachApi.ts` (multiple sessions) — rebase before
+each push.

@@ -82,6 +82,36 @@ export interface CoachMessage {
     | null;
 }
 
+/** The AREA the student is currently training toward. Set when the coach
+ *  recommends "let's play a game to fix your <area>" (or the student asks to
+ *  work on it), so the coach REMEMBERS the point of the game across the session
+ *  and scopes its post-game feedback to that phase (David 2026-08-27: "the
+ *  coach should recommend playing a game to help fix the middlegame … then
+ *  remember that is the point of the game and give feedback based off the
+ *  middlegame play"). Persists like `intendedOpening` (cross-session, in the
+ *  coachMemory.v1 blob) until addressed or explicitly cleared. */
+export type TrainingArea =
+  | 'opening'
+  | 'middlegame'
+  | 'endgame'
+  | 'tactics'
+  | 'calculation'
+  | 'king-safety'
+  | 'time-management';
+
+export interface TrainingFocus {
+  area: TrainingArea;
+  /** Human label for prose ("your middlegame", "your endgame technique"). */
+  label: string;
+  /** Why it's set — the student's own words or the weakness that prompted it. */
+  reason: string;
+  setAt: number;
+  capturedFromSurface: string;
+  /** The game this focus is being worked in, once one starts. Lets post-game
+   *  review know THIS game was played toward the focus. */
+  gameId?: string;
+}
+
 /** Schema-only — not populated in this WO. */
 export interface CoachPreferences {
   likes: string[];
@@ -178,6 +208,10 @@ export interface RolodexUserOrder {
 
 interface CoachMemoryState {
   intendedOpening: IntendedOpening | null;
+  /** The area the student is training toward this session (see TrainingFocus).
+   *  Persists until addressed or cleared, so the coach remembers the goal of a
+   *  recommended game and scopes feedback to it. */
+  trainingFocus: TrainingFocus | null;
   conversationHistory: CoachMessage[];
   preferences: CoachPreferences;
   hintRequests: HintRequestRecord[];
@@ -232,6 +266,18 @@ interface CoachMemoryActions {
     next: Omit<IntendedOpening, 'setAt'> & { setAt?: number },
   ) => void;
   clearIntendedOpening: (reason: IntentClearReason) => void;
+  /** Set the training focus (the point of the recommended game). Overwrites any
+   *  prior focus. `setAt` auto-stamped. */
+  setTrainingFocus: (
+    next: Omit<TrainingFocus, 'setAt'> & { setAt?: number },
+  ) => void;
+  /** Attach the game the focus is being worked in (called when a focused game
+   *  starts) so post-game review knows THIS game was played toward the focus.
+   *  No-op when no focus is set. */
+  setTrainingFocusGame: (gameId: string) => void;
+  /** Clear the training focus — addressed (post-game feedback given) or the
+   *  student moved on. */
+  clearTrainingFocus: (reason: 'addressed' | 'user-moved-on' | 'replaced') => void;
   /** Snapshot a FEN to memory so the student can resume from this
    *  exact position later. `label` is optional human context
    *  ("Vienna Gambit, move 7"). Overwrites any prior save. */
@@ -292,6 +338,7 @@ const CONVERSATION_HISTORY_MAX = 200;
 
 const DEFAULT_STATE: CoachMemoryState = {
   intendedOpening: null,
+  trainingFocus: null,
   conversationHistory: [],
   preferences: { likes: [], dislikes: [], style: null },
   hintRequests: [],
@@ -341,6 +388,47 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         category: 'subsystem',
         source: 'useCoachMemoryStore.clearIntendedOpening',
         summary: `cleared ${prev.name} reason=${reason}`,
+        details: JSON.stringify({ prev, reason }),
+      });
+      schedulePersist(get);
+    },
+
+    setTrainingFocus: (next) => {
+      const withTs: TrainingFocus = {
+        area: next.area,
+        label: next.label,
+        reason: next.reason,
+        capturedFromSurface: next.capturedFromSurface,
+        setAt: next.setAt ?? Date.now(),
+        ...(next.gameId ? { gameId: next.gameId } : {}),
+      };
+      set({ trainingFocus: withTs });
+      void logAppAudit({
+        kind: 'coach-memory-intent-set',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.setTrainingFocus',
+        summary: `focus=${withTs.area} from=${withTs.capturedFromSurface}`,
+        details: JSON.stringify(withTs),
+      });
+      schedulePersist(get);
+    },
+
+    setTrainingFocusGame: (gameId) => {
+      const prev = get().trainingFocus;
+      if (!prev || prev.gameId === gameId) return; // no focus, or already tagged
+      set({ trainingFocus: { ...prev, gameId } });
+      schedulePersist(get);
+    },
+
+    clearTrainingFocus: (reason) => {
+      const prev = get().trainingFocus;
+      if (!prev) return;
+      set({ trainingFocus: null });
+      void logAppAudit({
+        kind: 'coach-memory-intent-cleared',
+        category: 'subsystem',
+        source: 'useCoachMemoryStore.clearTrainingFocus',
+        summary: `cleared focus=${prev.area} reason=${reason}`,
         details: JSON.stringify({ prev, reason }),
       });
       schedulePersist(get);
@@ -554,6 +642,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
       if (restored) {
         set({
           intendedOpening: restored.intendedOpening,
+          trainingFocus: restored.trainingFocus ?? null,
           conversationHistory: restored.conversationHistory ?? [],
           preferences: restored.preferences ?? DEFAULT_STATE.preferences,
           hintRequests: restored.hintRequests ?? [],
@@ -582,6 +671,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
 
 interface PersistedShape {
   intendedOpening: IntendedOpening | null;
+  trainingFocus: TrainingFocus | null;
   conversationHistory: CoachMessage[];
   preferences: CoachPreferences;
   hintRequests: HintRequestRecord[];
@@ -608,6 +698,7 @@ function schedulePersist(get: () => CoachMemoryState): void {
 async function writePersisted(state: CoachMemoryState): Promise<void> {
   const payload: PersistedShape = {
     intendedOpening: state.intendedOpening,
+    trainingFocus: state.trainingFocus,
     conversationHistory: state.conversationHistory,
     preferences: state.preferences,
     hintRequests: state.hintRequests,

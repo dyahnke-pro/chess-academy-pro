@@ -70,6 +70,55 @@ describe('useCoachMemoryStore.clearIntendedOpening', () => {
   });
 });
 
+describe('useCoachMemoryStore.trainingFocus (the point-of-the-game memory)', () => {
+  it('sets a focus with an auto-stamped setAt and no gameId until a game starts', () => {
+    useCoachMemoryStore.getState().setTrainingFocus({
+      area: 'middlegame',
+      label: 'your middlegame',
+      reason: 'asked how to improve the middlegame',
+      capturedFromSurface: 'chat-home',
+    });
+    const f = useCoachMemoryStore.getState().trainingFocus;
+    expect(f?.area).toBe('middlegame');
+    expect(f?.label).toBe('your middlegame');
+    expect(typeof f?.setAt).toBe('number');
+    expect(f?.gameId).toBeUndefined();
+  });
+
+  it('attaches the game the focus is worked in, and is a no-op with no focus', () => {
+    // No focus yet → attaching a game does nothing.
+    useCoachMemoryStore.getState().setTrainingFocusGame('game-1');
+    expect(useCoachMemoryStore.getState().trainingFocus).toBeNull();
+    // With a focus, the game is tagged.
+    useCoachMemoryStore.getState().setTrainingFocus({
+      area: 'endgame', label: 'your endgame technique', reason: 'r', capturedFromSurface: 's',
+    });
+    useCoachMemoryStore.getState().setTrainingFocusGame('game-42');
+    expect(useCoachMemoryStore.getState().trainingFocus?.gameId).toBe('game-42');
+  });
+
+  it('clears the focus when addressed', () => {
+    useCoachMemoryStore.getState().setTrainingFocus({
+      area: 'tactics', label: 'your tactics', reason: 'r', capturedFromSurface: 's',
+    });
+    useCoachMemoryStore.getState().clearTrainingFocus('addressed');
+    expect(useCoachMemoryStore.getState().trainingFocus).toBeNull();
+  });
+
+  it('roundtrips the focus through Dexie via hydrate (persists across sessions)', async () => {
+    useCoachMemoryStore.getState().setTrainingFocus({
+      area: 'middlegame', label: 'your middlegame', reason: 'improve mg', capturedFromSurface: 'chat-home', gameId: 'g9',
+    });
+    await __flushCoachMemoryPersistForTests();
+    __resetCoachMemoryStoreForTests();
+    useCoachMemoryStore.setState({ hydrated: false });
+    await useCoachMemoryStore.getState().hydrate();
+    const restored = useCoachMemoryStore.getState().trainingFocus;
+    expect(restored?.area).toBe('middlegame');
+    expect(restored?.gameId).toBe('g9');
+  });
+});
+
 describe('useCoachMemoryStore persistence', () => {
   it('roundtrips intent through Dexie via hydrate', async () => {
     useCoachMemoryStore.getState().setIntendedOpening({
