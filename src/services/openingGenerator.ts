@@ -55,6 +55,8 @@ import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
+import { stockfishEngine } from './stockfishEngine';
+import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
@@ -378,7 +380,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-24-gem-warnings';
+const WALKTHROUGH_GEN_REV = '2026-08-27-tier3-discussion';
 
 export async function getCachedOpening(
   name: string,
@@ -2226,6 +2228,36 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
   const plyNoteText: Array<string | null> = positions.map(() => null);
+  // TIER-3 DISCUSSION VOICE — the weighing, for a taught line (David 2026-08-27:
+  // "build it"). On the student's OWN spine moves that fall through to Tier 3 (no
+  // corpus note, no authored prose), splice the tempting-alternatives weighing
+  // ("you'd love Nxe5, but that drops the knight") so the computed narration
+  // reaches his level. CRITICAL: only `deliberationAlternativesFacts` — it DROPS
+  // the "the move is X" conclusion, so it never contradicts the DB-canonical
+  // taught move (which may not be the engine's best) — G3 intact. Computed
+  // board-truth from the fan (G0), so it is NOT re-graded against a single FEN
+  // (the alternatives describe hypothetical lines). Fail-safe: any engine miss →
+  // no splice, generation continues. Bounded: student plies in the first 16 only,
+  // so the added engine time on a (cached, one-time) generation stays modest.
+  const deliberationByPly: Record<number, string> = {};
+  const studentChar: 'w' | 'b' = studentSide === 'white' ? 'w' : 'b';
+  const DELIB_PLY_CAP = 16;
+  try {
+    for (let i = 0; i < positions.length && i < DELIB_PLY_CAP; i += 1) {
+      if (positions[i].movedBy !== studentSide) continue; // only the student's own choices
+      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+      try {
+        const analysis = await stockfishEngine.analyzeWithBudget(preFen, 12, 1200);
+        if (!analysis?.topLines?.length) continue;
+        const d = buildDeliberation({ analysis, fenBefore: preFen, moverColor: studentChar });
+        if (d) {
+          const facts = deliberationAlternativesFacts(d);
+          if (facts) deliberationByPly[i] = facts;
+        }
+      } catch { /* skip this ply — the discussion voice is a bonus */ }
+    }
+  } catch { /* skip the whole pre-pass — never block generation */ }
+
   // PASS 1 — assemble each ply's raw material.
   //
   // THE NOTE LEADS (David 2026-08-04: "corpus notes are primary for teach me x
@@ -2293,6 +2325,12 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         // that dropped it.
         authoredRefused.push({ ply: i, variation: authored.variationName, text: authored.text.slice(0, 160) });
       }
+      // TIER 3 — no note, no authored prose. Splice the computed weighing (the
+      // tempting alternatives) when we have it for this student ply. Even a
+      // silent generated idea now speaks the discussion; the taught move stays
+      // the conclusion (the weighing carries no "the move is X").
+      const delib = deliberationByPly[i];
+      if (delib) return fallback ? `${fallback} ${delib}` : delib;
       return fallback;
     } catch {
       /* the corpus is a bonus, never a blocker */

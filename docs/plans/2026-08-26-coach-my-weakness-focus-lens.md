@@ -530,7 +530,22 @@ SHOULD HAVE BEEN DONE ALREADY."**
 >   here") with a highlight on the opportunity square (guide-don't-tell, no move
 >   named), riding the existing `queueSpokenHint` package. `opponent_gap_nudged`
 >   audit.
-> - **§2 — walkthrough Tier-3: COST-GATED, deliberately NOT triggered overnight.**
+> - **§2 — walkthrough Tier-3: BUILT + ACTIVATED (David 2026-08-27: "build it").**
+>   The landmine first: the student's-move deliberation concludes "the move is
+>   [engine-best]", which would contradict a taught line when the DB-canonical
+>   move isn't the engine's top pick (breaks G3). Fixed with
+>   `deliberationAlternativesFacts` — the tempting-alternatives weighing with the
+>   conclusion DROPPED, so the taught move always stands. Wired into
+>   `generateOpeningFromDbNarration`: a fail-safe async pre-pass reads Stockfish
+>   for the student's own spine moves (first 16 plies, bounded) and, on Tier-3
+>   plies (no note, no authored prose), splices the weighing ("you'd love Nxe5,
+>   but that drops the knight"). Computed board-truth (G0), not re-graded (the
+>   alternatives are hypothetical lines). ANY engine miss → no splice, generation
+>   unbroken (verified: the 64-test generator suite passes with the test-env
+>   worker absent). `WALKTHROUGH_GEN_REV` bumped to `2026-08-27-tier3-discussion`
+>   → lessons regenerate lazily with the discussion voice (the TTS bill David
+>   authorized). NOTE for reference:
+
 >   The generator (`generateOpeningFromDbNarration`) runs NO Stockfish per beat —
 >   it's a single cached LLM narration call, `WALKTHROUGH_GEN_REV`-gated. Adding
 >   the discussion voice to the pure Watch auto-play needs either a gen-rev bump

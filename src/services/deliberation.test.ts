@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildDeliberation, deliberationFacts } from './deliberation';
+import { buildDeliberation, deliberationFacts, deliberationAlternativesFacts } from './deliberation';
 
 // Italian, White to move after 1.e4 e5 2.Nf3 Nc6 3.Bc4. A real choice: castle
 // (best), Nxe5?? (drops the knight — Nc6xe5), d3 (playable, less precise).
@@ -43,6 +43,14 @@ describe('buildDeliberation — the weighing from the fan', () => {
     const wide = { topLines: [line(1, 30, 'e1g1'), line(2, 20, 'd2d3'), line(3, 10, 'd2d4'), line(4, 5, 'b1c3'), line(5, 0, 'h2h3')] };
     const d = buildDeliberation({ analysis: wide, fenBefore: FEN, moverColor: 'w', maxCandidates: 3 })!;
     expect(d.alternatives.length).toBe(2); // best + 2 alternatives = 3 candidates
+  });
+
+  it('alternatives-only facts drop the conclusion (safe for a taught line)', () => {
+    const d = buildDeliberation({ analysis, fenBefore: FEN, moverColor: 'w' })!;
+    const facts = deliberationAlternativesFacts(d);
+    expect(facts).toMatch(/Nxe5\? That drops the knight on e5\./);
+    expect(facts).toMatch(/d3 is playable, but not as precise\./);
+    expect(facts).not.toMatch(/The move is/); // no conclusion — the taught move stands
   });
 
   it('is NOT a real choice when the fan has one line (forced / only-move)', () => {

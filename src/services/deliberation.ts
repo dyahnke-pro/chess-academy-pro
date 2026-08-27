@@ -148,3 +148,16 @@ export function deliberationFacts(d: Deliberation): string {
   const weigh = d.alternatives.map(shortfallText);
   return `${weigh.join(' ')} The move is ${d.best.san}.`;
 }
+
+/**
+ * The weighing WITHOUT the "the move is X" conclusion. Safe to splice into a
+ * TAUGHT line (the Watch walkthrough), where the conclusion is the DB-canonical
+ * taught move — NOT necessarily the engine's best. Emitting the tempting
+ * alternatives + why each falls short teaches the discussion without ever
+ * contradicting the board (which would break G3). '' when there's nothing to
+ * weigh.
+ */
+export function deliberationAlternativesFacts(d: Deliberation): string {
+  if (!d.isRealChoice) return '';
+  return d.alternatives.map(shortfallText).join(' ');
+}
