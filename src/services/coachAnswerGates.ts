@@ -71,7 +71,7 @@ export function isSpokenSentenceGrounded(
     // Drop the sentence when it asserts an out-of-vocabulary tactic (kept:
     // negation/avoidance phrasing — see stripUngroundedTacticSentences).
     if (tactics) {
-      const t = stripUngroundedTacticSentences(sentence, tactics);
+      const t = stripUngroundedTacticSentences(sentence, tactics, undefined, fen);
       if (t.dropped.length > 0) {
         void logAppAudit({
           kind: 'claim-validator-trip',

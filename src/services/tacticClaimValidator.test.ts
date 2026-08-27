@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { validateTacticClaims, stripUngroundedTacticSentences } from './tacticClaimValidator';
+import { detectTactics } from './tacticsDetector';
 import type { TacticsLiveContext } from '../coach/types';
 
 const EMPTY_CTX: TacticsLiveContext = {
@@ -175,6 +177,53 @@ describe('licensedFacts — code-computed facts license their own tactic vocabul
     const skewer = stripUngroundedTacticSentences(
       'This skewers the king and rook.', EMPTY_CTX, 'It forks two pieces.');
     expect(skewer.dropped.length).toBe(1);
+  });
+});
+
+describe('board-rescue — a TRUE tactic the thin context missed is kept (PostHog 2026-08 inGameAsk)', () => {
+  // Italian after 9.O-O: the Black bishop on c5 pins White's f2 pawn to the
+  // g1 king — a real pin ON THE BOARD. In-game chat builds the bounded context
+  // with a null engine analysis (iOS engine timeouts, PostHog voice failures),
+  // so this opponent-side pin is NOT in the bounded vocabulary and the coach's
+  // correct answer used to be deleted — the top `inGameAsk` grounding trip,
+  // tied to the beta feedback "I cannot ask the AI questions and get a tailored
+  // response." The board is the truth (G3): verify the claim against it.
+  const trapP9 = (() => {
+    const c = new Chess();
+    for (const s of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'O-O']) c.move(s);
+    return c.fen();
+  })();
+
+  it('precondition: chess.js sees the pin on c5–f2 on the board', () => {
+    const pin = detectTactics(trapP9).tactics.find(
+      (t) => t.type === 'pin' && t.involvedSquares.includes('c5') && t.involvedSquares.includes('f2'));
+    expect(pin).toBeTruthy();
+  });
+
+  it('DROPS the pin claim with no FEN (strict) but KEEPS it once the board proves it', () => {
+    const text = 'Careful — the bishop on c5 pins your pawn on f2 to the king on g1.';
+    const strict = stripUngroundedTacticSentences(text, EMPTY_CTX);
+    expect(strict.dropped).toHaveLength(1);
+    const rescued = stripUngroundedTacticSentences(text, EMPTY_CTX, undefined, trapP9);
+    expect(rescued.dropped).toHaveLength(0);
+    expect(rescued.clean).toContain('pins your pawn on f2');
+  });
+
+  it('does NOT rescue a fabricated tactic whose named square carries no such tactic', () => {
+    // h5 holds no pin on this board — a hallucinated square is still dropped.
+    const rescued = stripUngroundedTacticSentences('There is a pin on h5 winning the rook.', EMPTY_CTX, undefined, trapP9);
+    expect(rescued.dropped).toHaveLength(1);
+  });
+
+  it('stays strict when the sentence names no square (no geometry to anchor)', () => {
+    const rescued = stripUngroundedTacticSentences('There is a pin somewhere you can exploit.', EMPTY_CTX, undefined, trapP9);
+    expect(rescued.dropped).toHaveLength(1);
+  });
+
+  it('does NOT rescue the WRONG tactic type on a real square (fork claim on a pinned square)', () => {
+    // c5 is in a real PIN, but there is no FORK there — a fork claim is dropped.
+    const rescued = stripUngroundedTacticSentences('The bishop on c5 forks the king and rook.', EMPTY_CTX, undefined, trapP9);
+    expect(rescued.dropped).toHaveLength(1);
   });
 });
 

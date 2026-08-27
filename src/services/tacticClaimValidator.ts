@@ -18,6 +18,7 @@
  * NEVER mutates the response. Pure read-only G3 instrument.
  */
 import type { TacticsLiveContext } from '../coach/types';
+import { detectTactics } from './tacticsDetector';
 
 /** Canonical tactic vocabulary the brain is allowed to name. Each
  *  entry maps response-text regex matches → the tactic-type key
@@ -114,6 +115,46 @@ export interface ValidationResult {
 const TACTIC_NEGATION_GUARD =
   /\b(no|not|n't|never|without|avoid(?:s|ing|ed)?|prevent(?:s|ing|ed)?|stop(?:s|ping|ped)?|isn't|aren't|wasn't|weren't|nothing|neither)\b/i;
 
+/** Squares (a1..h8) a prose sentence names, lower-cased. Used to anchor a
+ *  board-rescue to the geometry the sentence actually points at. */
+function squaresNamedInProse(prose: string): Set<string> {
+  const out = new Set<string>();
+  for (const m of prose.matchAll(/\b([a-h][1-8])\b/gi)) out.add(m[1].toLowerCase());
+  return out;
+}
+
+/** THE BOARD IS THE TRUTH (G3). The bounded `TacticsLiveContext` is a
+ *  token-budget SUMMARY, and on a cold / timed-out engine — routine on iOS,
+ *  where `buildTacticsLiveContext` is handed a null analysis so threats +
+ *  opportunities come back EMPTY — it collapses to the student's own immediate
+ *  tactics. A coach answer that correctly names the OPPONENT's pin, or a PV
+ *  fork the thin context dropped, then reads as "out-of-vocabulary" and gets
+ *  deleted, gutting the reply. That was the top in-game grounding trip in
+ *  PostHog (2026-08: `inGameAsk` out-of-vocab pin/fork, tied to the beta
+ *  feedback "I cannot ask the AI questions and get a tailored response").
+ *
+ *  So before dropping an out-of-vocab tactic sentence, verify it against the
+ *  ACTUAL board: if chess.js (`detectTactics`, engine-free, cached) finds a
+ *  tactic of the SAME type touching a square the sentence names, the claim is
+ *  grounded by construction — keep it. This only RESCUES true claims: a
+ *  fabricated tactic whose named square carries no such tactic on the board is
+ *  not rescued, and piece-on-square falsehoods are already dropped upstream by
+ *  `validateBoardClaims`. A sentence that names no square stays strict (no
+ *  geometry to anchor). `detectTactics` types match the vocabulary keys
+ *  exactly (fork/pin/skewer/mate_threat/back_rank/trapped_piece/discovery/
+ *  removal_of_guard/overload); `hanging` is checked against hanging pieces. */
+function tacticTypeVerifiedOnBoard(fen: string, type: string, prose: string): boolean {
+  try {
+    const named = squaresNamedInProse(prose);
+    if (named.size === 0) return false;
+    const { tactics, hangingPieces } = detectTactics(fen);
+    if (type === 'hanging') return hangingPieces.some((h) => named.has(h.square));
+    return tactics.some((t) => t.type === type && t.involvedSquares.some((sq) => named.has(sq)));
+  } catch {
+    return false;
+  }
+}
+
 /** Split into sentence units, protecting tool markers ([BOARD:...],
  *  [[ACTION:...]], [VOICE:...]) so a split never severs a tag. */
 function splitProtectingMarkers(text: string): { sentences: string[]; restore: (s: string) => string } {
@@ -151,6 +192,12 @@ export function stripUngroundedTacticSentences(
    *  "It forks the knight on a4 and the bishop on c4" (his b5 really did)
    *  because the bounded live context happened not to carry the fork. */
   licensedFacts?: string,
+  /** The live FEN, when the caller has it (streaming spoken gate, in-game
+   *  chat final-text gate). Enables the board-rescue in
+   *  `tacticTypeVerifiedOnBoard`: an out-of-vocab pin/fork the thin bounded
+   *  context missed is KEPT when chess.js proves it on the board. Omitted →
+   *  strict bounded-vocabulary behavior, unchanged. */
+  fen?: string | null,
 ): { clean: string; dropped: string[] } {
   if (!context) return { clean: text, dropped: [] };
   const dropped: string[] = [];
@@ -178,7 +225,11 @@ export function stripUngroundedTacticSentences(
         return !!entry && entry.patterns.some((p) => p.test(licensedLower));
       };
       const outOfVocab = violations.filter((v) =>
-        v.reason === 'not-in-vocabulary' && !typeLicensed(v.type));
+        v.reason === 'not-in-vocabulary'
+        && !typeLicensed(v.type)
+        // Board-rescue: keep a claim the live board actually proves (G3 — the
+        // board outranks the token-budget context summary).
+        && !(fen ? tacticTypeVerifiedOnBoard(fen, v.type, prose) : false));
       // A DEFINITION is not a board claim. "The knight is the classic forker,
       // leaping over defenders to hit king and queen together" teaches what a
       // fork IS — it names no square and points at nothing live, so grading it

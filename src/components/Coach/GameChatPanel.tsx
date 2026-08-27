@@ -275,7 +275,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       // avoidance phrasing is kept; a real listed tactic is never touched.
       let spoken = trimmed;
       try {
-        const tac = stripUngroundedTacticSentences(spoken, currentTacticsRef.current);
+        const tac = stripUngroundedTacticSentences(spoken, currentTacticsRef.current, undefined, getLiveFen?.() ?? null);
         if (tac.dropped.length > 0) spoken = tac.clean;
       } catch { /* never silence the voice on a validator fault */ }
       if (!spoken.trim()) return;
@@ -1059,7 +1059,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             // buildFedTacticsContext (line ~727) populates the ref, which would
             // silently no-op this enforcing strip and let a fork/pin through to
             // the bubble (David 2026-07-04 PostHog sweep).
-            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current ?? gameChatTactics);
+            const tac = stripUngroundedTacticSentences(assistantText, currentTacticsRef.current ?? gameChatTactics, undefined, fenNow);
             if (tac.dropped.length > 0) assistantText = tac.clean || assistantText;
           } catch { /* keep the sanitized text on a validator fault */ }
           // G3 enforcement on in-game chat replies. Bounded vocabulary
