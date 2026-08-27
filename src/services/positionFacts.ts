@@ -39,6 +39,12 @@ export interface PositionFactsInput {
   analysis: Pick<StockfishAnalysis, 'topLines' | 'evaluation' | 'isMate' | 'mateIn' | 'seldepth' | 'depth' | 'wdl'>;
   /** Realized swing (cp cost, mover-POV) of a move JUST played, if grading one. */
   cpLossCp?: number | null;
+  /** The eval (white-POV cp) at the PREVIOUS position, when the caller tracks it.
+   *  Enables the STATUS band-change clause — the general's opening read ("you've
+   *  taken the better side" / "you've slipped to worse") — which fires ONLY when
+   *  the assessment crosses a band, never every ply. Omit → no status clause
+   *  (surfaces that don't track a prior eval are unchanged). */
+  prevEvalCpWhitePov?: number | null;
   /** A declared teaching beat here (opening name / plan / keystone). */
   teachingBeat?: boolean;
   /** Material hanging to the MOVER right now (they can grab it) — the criticality
@@ -76,7 +82,39 @@ export interface PositionFactsResult {
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+
+/** STATUS bands from the student's POV (cp). The general's opening read. */
+type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
+const STATUS_RANK: Record<StatusBand, number> = { lost: 0, worse: 1, level: 2, better: 3, winning: 4 };
+function statusBand(studentCp: number): StatusBand {
+  if (studentCp >= 300) return 'winning';
+  if (studentCp >= 90) return 'better';
+  if (studentCp > -90) return 'level';
+  if (studentCp > -300) return 'worse';
+  return 'lost';
+}
+
+/**
+ * The STATUS band-change line (student-POV, DNA-terse, directional), or '' when
+ * the assessment did not cross a band. Speaks only on a real change — the
+ * "say-once standing fact" done right, so it's the general's opening read, never
+ * a per-ply "you're better" drumbeat.
+ */
+export function statusBandChange(studentCp: number, prevStudentCp: number): string {
+  const cur = statusBand(studentCp);
+  const prev = statusBand(prevStudentCp);
+  if (cur === prev) return '';
+  const improved = STATUS_RANK[cur] > STATUS_RANK[prev];
+  if (improved) {
+    if (cur === 'winning') return `You're winning this now — technique from here.`;
+    if (cur === 'better') return `You've taken the better side of this.`;
+    return `You've clawed it back to level.`;
+  }
+  if (cur === 'lost') return `This has slipped away — make it as hard as you can.`;
+  if (cur === 'worse') return `You've drifted to the worse side here.`;
+  return `The edge is gone — it's level again.`;
+}
 export interface ClauseItem { kind: ClauseKind; rank: number; text: string; }
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
@@ -181,9 +219,17 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? buildOpponentIntent({ analysis, fen })
     : null;
 
+  // STATUS band-change — the general's opening read, only when the caller tracks
+  // a prior eval AND the assessment crossed a band (out of the opening, where
+  // evals swing on book). The one standing fact that leads the briefing.
+  const sSign = studentColor === 'w' ? 1 : -1;
+  const statusText = (!openingPhase && input.prevEvalCpWhitePov != null)
+    ? statusBandChange(evalCpWhitePov * sSign, input.prevEvalCpWhitePov * sSign)
+    : '';
+
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText }),
   };
 }
 
@@ -204,12 +250,18 @@ function buildClauses(a: {
   latentDanger: LatentDanger | null;
   tradeDanger: TradeDanger | null;
   opponentIntent: OpponentIntent | null;
+  statusText: string;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent } = a;
-  // A latent danger to your own king is worth a word even in an otherwise quiet
-  // spot — it does not need the importance gate to have fired.
-  if (!importance.speak && !latentDanger && !tradeDanger) return [];
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText } = a;
+  // A latent danger to your own king — or a STATUS band-change — is worth a word
+  // even in an otherwise quiet spot; neither needs the importance gate to fire.
+  if (!importance.speak && !latentDanger && !tradeDanger && !statusText) return [];
   const ranked: ClauseItem[] = [];
+
+  // THE STATUS LINE LEADS the briefing (the general's opening read) — highest
+  // rank, above the weighing. Only present on a real band-change out of the
+  // opening (gated at computePositionFacts).
+  if (statusText) ranked.push({ kind: 'status', rank: 96, text: statusText });
 
   // THE WEIGHING LEADS (David 2026-08-26, the keystone) — narrate the choice, not
   // just the winner: the tempting alternatives + why each falls short, then the

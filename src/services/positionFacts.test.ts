@@ -1,5 +1,20 @@
 import { describe, it, expect, vi } from 'vitest';
-import { computePositionFacts, clauseText } from './positionFacts';
+import { computePositionFacts, clauseText, statusBandChange } from './positionFacts';
+
+describe('statusBandChange — the general STATUS line', () => {
+  it('speaks a directional line when the assessment crosses a band', () => {
+    expect(statusBandChange(120, 0)).toMatch(/better side/i);      // level → better
+    expect(statusBandChange(400, 120)).toMatch(/winning/i);        // better → winning
+    expect(statusBandChange(-150, 0)).toMatch(/worse side/i);      // level → worse
+    expect(statusBandChange(0, 150)).toMatch(/edge is gone/i);     // better → level
+    expect(statusBandChange(-400, -100)).toMatch(/slipped away/i); // worse → lost
+  });
+  it('is silent when the band did not change (no per-ply drumbeat)', () => {
+    expect(statusBandChange(120, 100)).toBe('');   // both "better"
+    expect(statusBandChange(10, -20)).toBe('');    // both "level"
+    expect(statusBandChange(500, 350)).toBe('');   // both "winning"
+  });
+});
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
 const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 420, draw: 400, loss: 180 } };

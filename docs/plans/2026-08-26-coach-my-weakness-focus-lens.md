@@ -578,18 +578,16 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > wiring, review.
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
-  everywhere (§4).** Port the missing general's-briefing components from the
-  proven offline `position-facts.mjs` / `render-briefing.mjs` into runtime
-  `positionFacts.ts` (STATUS band-change, threat-calculated-out + `landsAt` +
-  latent, MOVE+WHY with move-reason class, teach-both, refutation-played-out,
-  candidate PVs, play-the-line-out, structure→plan, PV-trajectory, say-once
-  standing facts, corpus-note-leads). Then route EVERY spoken narration through
-  `voiceFacts` with this package — mandatory, no more optional. Ship in slices
-  (one briefing component at a time, each gated + audited), NOT one mega-change.
-  Files: `positionFacts.ts` (+ new sibling computers ported from the mjs),
-  `voiceFacts` (`coachApi.ts`), the 5 wired surfaces + review + the light
-  grounding builder (`questionIntents.buildQuestionGrounding`) + the My Mistake
-  drill (replace its `voiceService.speak` template). `pending`
+  everywhere (§4).** `IN PROGRESS (slices landing) 2026-08-27`. Runtime
+  `positionFacts.ts` already emits 8 briefing clauses (deliberation / latent-
+  danger / must-defend / key-moment / opponent-intent / student-leans /
+  opponent-leans / convert), wired to 5 surfaces. **SLICE 1 landed:** STATUS
+  band-change — the general's opening read ("you've taken the better side" /
+  "you've slipped to worse"), directional, say-once (only on a real band cross),
+  wired into `useLiveCoach` (Play, descriptive-only). REMAINING slices (each
+  gated + audited, NOT one mega-change): threat `landsAt` detail, MOVE+WHY move-
+  reason clause, structure→plan, PV-trajectory, refutation-played-out, and the
+  "mandatory at every narration everywhere" routing. Genuinely multi-session.
 - **Phase 2 — Coach initiates the loop.** `DONE 2026-08-27` (e0e8e84). The
   `/coach/teach` session opener now leads with the RECENCY-weighted weakness
   (`getUnifiedWeaknessProfile` `lastSeenAt`, ~3-week window), speaks the

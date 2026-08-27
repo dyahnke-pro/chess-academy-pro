@@ -224,6 +224,10 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               rating: useAppStore.getState().activeProfile?.currentRating ?? 1200,
               analysis: cached,
               evalBoard: (f) => stockfishEngine.evalBoard(f),
+              // Prior eval (student-POV cp → white-POV) so the STATUS band-change
+              // line fires only when the assessment actually crossed a band —
+              // descriptive commentary, which Play allows (Phase 1 slice).
+              prevEvalCpWhitePov: playerColor === 'white' ? ctx.studentEvalBefore : -ctx.studentEvalBefore,
             });
             const cl = clauseText(pf.clauses, ['must-defend', 'key-moment']);
             if (cl.length) liveExtraFacts = cl.join(' ');
