@@ -117,5 +117,43 @@ export function reconstructSpineFen(moves) {
       if (advanced) break;
     }
   }
-  return { spine, nodes };
+
+  // ── THE REWIND ASIDES (David 2026-08-27) ────────────────────────────────
+  // The beats the main-line walk COULDN'T use — a narrator's rewind /
+  // "why this move and not that one" / recap. They carry the deepest teaching
+  // (the WHY), and the old builder discarded them. Recover each: anchor it to
+  // the spine ply it branches FROM (its from-board == a spine node's board), so
+  // the walkthrough can speak it as an inline aside at that position. `spineFens`
+  // = the board after each accepted spine ply; index -1 = the start position.
+  const spineFens = [];
+  {
+    const gg = new Chess();
+    for (const s of spine) { try { gg.move(s.san); } catch { /* keep going */ } spineFens.push(gg.fen()); }
+  }
+  const froms = [{ idx: -1, fen: new Chess().fen() }, ...spineFens.map((fen, idx) => ({ idx, fen }))];
+  const asides = [];
+  for (let i = 0; i < cand.length; i++) {
+    if (used[i]) continue;
+    const n = cand[i];
+    if (!n.spoken || !n.sans.length) continue;
+    for (const from of froms) {
+      const gg = new Chess();
+      try { gg.load(from.fen); } catch { continue; }
+      let ok = true;
+      // Capture the from→to of every move the aside MENTIONS. The aside is
+      // spoken WITHOUT playing the line out, so the board must arrow the moves
+      // it names (David 2026-08-27, the G6 lead-the-eye rule) — the student
+      // sees "knight to c3" as an arrow, never hunts for it.
+      const arrows = [];
+      for (const s of n.sans) {
+        try { const mv = gg.move(s); if (!mv) { ok = false; break; } arrows.push({ from: mv.from, to: mv.to, san: mv.san }); }
+        catch { ok = false; break; }
+      }
+      if (ok && keyOf(gg.fen()) === keyOf(n.afterFen)) {
+        asides.push({ afterSpineIndex: from.idx, spoken: n.spoken, arrows, teaches: n.teaches || undefined, kind: n.kind || undefined });
+        break;
+      }
+    }
+  }
+  return { spine, nodes, asides };
 }

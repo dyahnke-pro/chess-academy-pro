@@ -71,6 +71,22 @@ export interface WalkthroughTreeNode {
    *  narration + arrows are the SAME the opening tab uses (`gemToPlayableLine`).
    *  G0/G3: the moves + prose are code-computed; the model decides nothing. */
   gems?: BakedGemLine[];
+  /** REWIND ASIDES (David 2026-08-27): the narrator's "why this move and not
+   *  that one" teaching — spoken INLINE at this position AFTER `idea`, without
+   *  playing the alternative out on the board. Each carries the arrows for the
+   *  moves it MENTIONS (the G6 lead-the-eye rule: an alternative named in prose
+   *  must be arrowed, never left for the student to hunt). Recovered from the
+   *  voiced videos' rewind/analysis beats, which the old builder discarded. */
+  asides?: WalkthroughAside[];
+}
+
+/** One rewind aside — a "why not X" teaching spoken at a position, with arrows
+ *  for the mentioned move(s) drawn (not played out). */
+export interface WalkthroughAside {
+  idea: string;
+  shortIdea?: string;
+  /** from→to of each move the aside NAMES — arrowed while it's spoken. */
+  arrows: { from: string; to: string }[];
 }
 
 /** One played-out ply of a baked gem detour. `fen` is the position AFTER this

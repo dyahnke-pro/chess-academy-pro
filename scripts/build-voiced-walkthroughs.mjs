@@ -61,9 +61,18 @@ function reconstructSpine(moves) {
   // Fen-anchored: never splices a narrator's rewind (see
   // scripts/voiced-authoring/fen-spine.mjs). Re-derive the cumulative `path`
   // this builder's trie keys on.
-  const spine = reconstructSpineFen(moves).spine;
+  const { spine, asides } = reconstructSpineFen(moves);
   const sansSoFar = [];
   for (const n of spine) { sansSoFar.push(n.san); n.path = sansSoFar.join(' '); }
+  // Attach the rewind ASIDES (the "why this, not that" teaching the main-line
+  // walk couldn't play out) to the spine node they branch FROM, so the
+  // walkthrough speaks them inline with the mentioned-move arrows (David
+  // 2026-08-27). afterSpineIndex -1 (branches from the start) → the first ply.
+  for (const a of (asides || [])) {
+    const ti = a.afterSpineIndex < 0 ? 0 : a.afterSpineIndex;
+    if (ti >= spine.length) continue;
+    (spine[ti].asides ||= []).push({ spoken: a.spoken, arrows: a.arrows, kind: a.kind });
+  }
   return spine;
 }
 
@@ -105,10 +114,17 @@ function emitTree(openingName, studentSide, videos) {
           children: new Map(),
           spoken: undefined,
           kind: undefined,
+          asides: [],
         });
       }
       const node = cur.children.get(san);
       if (step.spoken && !node.spoken) { node.spoken = step.spoken; node.kind = step.kind; }
+      // Merge the rewind asides for this position (dedup by spoken text so two
+      // videos covering the same line don't double a "why not X" beat).
+      if (step.asides && step.asides.length) {
+        const seen = new Set(node.asides.map((x) => x.spoken));
+        for (const a of step.asides) { if (a.spoken && !seen.has(a.spoken)) { node.asides.push(a); seen.add(a.spoken); } }
+      }
       cur = node;
     }
   }
@@ -116,7 +132,7 @@ function emitTree(openingName, studentSide, videos) {
   // Prune tails that carry no narration downstream (keep the tree tight — end a
   // branch at its last narrated node so we never trail into silent filler).
   function lastNarratedDepth(node) {
-    let deepest = node.spoken ? 0 : -1;
+    let deepest = (node.spoken || (node.asides && node.asides.length)) ? 0 : -1;
     for (const ch of node.children.values()) {
       const d = lastNarratedDepth(ch);
       if (d >= 0 && d + 1 > deepest) deepest = d + 1;
@@ -143,6 +159,15 @@ function emitTree(openingName, studentSide, videos) {
     };
     const short = toShort(idea);
     if (short) out.shortIdea = short;
+    // The rewind asides — the "why this, not that" teaching, spoken inline at
+    // this position with the mentioned-move arrows (never played out).
+    if (node.asides && node.asides.length) {
+      out.asides = node.asides.map((a) => ({
+        idea: a.spoken,
+        shortIdea: toShort(a.spoken),
+        arrows: (a.arrows || []).map((ar) => ({ from: ar.from, to: ar.to })),
+      }));
+    }
     return out;
   }
 

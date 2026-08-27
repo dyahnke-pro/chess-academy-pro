@@ -26,7 +26,16 @@ const OUT = 'src/data/voiced-matchups.json';
  *  scripts/voiced-authoring/fen-spine.mjs). Same return shape the tree merge
  *  expects: one {san, movedBy, spoken?, kind?} per ply. */
 function reconstructSpine(moves) {
-  return reconstructSpineFen(moves).spine;
+  // Carry the rewind ASIDES ("why this, not that", spoken inline with arrows —
+  // David 2026-08-27) onto the spine node they branch from, same as the
+  // walkthrough builder.
+  const { spine, asides } = reconstructSpineFen(moves);
+  for (const a of (asides || [])) {
+    const ti = a.afterSpineIndex < 0 ? 0 : a.afterSpineIndex;
+    if (ti >= spine.length) continue;
+    (spine[ti].asides ||= []).push({ spoken: a.spoken, arrows: a.arrows, kind: a.kind });
+  }
+  return spine;
 }
 const whiteSans = (spine) => spine.filter((_, i) => i % 2 === 0).map((n) => n.san);
 const blackSans = (spine) => spine.filter((_, i) => i % 2 === 1).map((n) => n.san);
@@ -131,15 +140,19 @@ function buildTree(name, videos) {
   for (const v of videos) {
     let cur = root;
     for (const step of v.spine) {
-      if (!cur.children.has(step.san)) cur.children.set(step.san, { san: step.san, movedBy: step.movedBy, children: new Map(), spoken: undefined });
+      if (!cur.children.has(step.san)) cur.children.set(step.san, { san: step.san, movedBy: step.movedBy, children: new Map(), spoken: undefined, asides: [] });
       const node = cur.children.get(step.san);
       if (step.spoken && !node.spoken) node.spoken = step.spoken;
+      if (step.asides && step.asides.length) {
+        const seen = new Set(node.asides.map((x) => x.spoken));
+        for (const a of step.asides) { if (a.spoken && !seen.has(a.spoken)) { node.asides.push(a); seen.add(a.spoken); } }
+      }
       cur = node;
     }
   }
-  function lastNarrated(n) { let d = n.spoken ? 0 : -1; for (const c of n.children.values()) { const x = lastNarrated(c); if (x >= 0 && x + 1 > d) d = x + 1; } return d; }
+  function lastNarrated(n) { let d = (n.spoken || (n.asides && n.asides.length)) ? 0 : -1; for (const c of n.children.values()) { const x = lastNarrated(c); if (x >= 0 && x + 1 > d) d = x + 1; } return d; }
   (function prune(n) { for (const [san, c] of [...n.children]) { if (lastNarrated(c) < 0) n.children.delete(san); else prune(c); } })(root);
-  function toWt(n) { const children = [...n.children.values()].map((c) => ({ node: toWt(c) })); const idea = n.spoken || ''; const out = { san: n.san, movedBy: n.movedBy, idea, children }; const s = toShort(idea); if (s) out.shortIdea = s; return out; }
+  function toWt(n) { const children = [...n.children.values()].map((c) => ({ node: toWt(c) })); const idea = n.spoken || ''; const out = { san: n.san, movedBy: n.movedBy, idea, children }; const s = toShort(idea); if (s) out.shortIdea = s; if (n.asides && n.asides.length) out.asides = n.asides.map((a) => ({ idea: a.spoken, shortIdea: toShort(a.spoken), arrows: (a.arrows || []).map((ar) => ({ from: ar.from, to: ar.to })) })); return out; }
   return { openingName: name, eco: '', intro: `Let's walk through ${name} — White plays the ${name.split(' vs ')[0]}, Black answers with the ${name.split(' vs ')[1]}. Watch how they meet.`, outro: `That's how ${name} plays out.`, root: toWt(root) };
 }
 const out = [];

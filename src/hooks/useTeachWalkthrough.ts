@@ -1497,20 +1497,39 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         }
       };
 
-      // Backup safety timer.
-      const backupMs = clampBackupMs(idea);
+      // The rewind ASIDES — the "why this, not that" teaching, spoken AFTER the
+      // move's idea, at this position, with the mentioned-move arrows drawn but
+      // the alternative NEVER played out (David 2026-08-27, G6 lead-the-eye).
+      const asides = node.asides ?? [];
+      const speakAsidesInline = async (): Promise<void> => {
+        for (const a of asides) {
+          if (!isCurrent()) return;
+          // Draw the arrows for the moves the aside NAMES — never advance the board.
+          setNarrationArrows((a.arrows ?? []).map((ar) => ({ from: ar.from, to: ar.to })));
+          setNarrationHighlights([]);
+          try {
+            await speakWalkthroughText(a.idea, a.shortIdea, isCurrent);
+          } catch { /* keep going — the backup timer is the net */ }
+        }
+        if (isCurrent()) { setNarrationArrows([]); setNarrationHighlights([]); }
+      };
+
+      // Backup safety timer — sized to cover the idea AND every aside so it
+      // never advances mid-aside.
+      const backupMs = clampBackupMs([idea, ...asides.map((a) => a.idea)].join(' '));
       const backupTimer = setTimeout(() => {
         if (settled) return;
         settle();
       }, backupMs);
       advanceTimerRef.current = backupTimer;
 
-      // Primary gate: voice completion.
+      // Primary gate: voice completion → then the asides → then advance.
       speakWalkthroughText(
         pickRegister(idea, node.ideaFlipped),
         pickRegister(node.shortIdea ?? '', node.shortIdeaFlipped) || node.shortIdea,
         isCurrent,
       )
+        .then(() => speakAsidesInline())
         .then(() => {
           if (settled) return;
           settle();

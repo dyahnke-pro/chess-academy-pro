@@ -14,6 +14,25 @@ can build more pairings. Every path and command below is real and current.
 
 ---
 
+## 🔒 THE NARRATION TIERS (David 2026-08-27, LOCKED)
+
+- **TIER 1 = the voiced video narrations** — `data/video-narration-voiced/<id>.json`,
+  each beat `{ply, t, fen, line, spoken}`: our-words DNA, keyed to the EXACT
+  position (FEN) + video timestamp. These are the real teaching and they lead
+  EVERYWHERE they exist. (The old `walkthrough-narrations.json` / `bakedNarrationFor`
+  generic bake was NOT a real tier — it pinned a generic line to a position;
+  deleted 2026-08-24, correctly.)
+- **REWIND ASIDES are Tier-1 teaching too** — the narrator's "why this move, not
+  that one" / recap beats (ply rewinds, `reanchor`). The build used to DISCARD
+  them; now `reconstructSpineFen` returns them as `asides`, anchored by from-FEN
+  to the spine ply they branch from, and the walkthrough speaks each inline AFTER
+  the move's idea WITH the mentioned-move arrows drawn (never played out — the G6
+  lead-the-eye rule). ~1,147 recovered across 142 openings.
+- **COMPUTED fills every ply Tier 1 does not cover** — voiced first where it
+  exists; a board-true computed "why" (DB move + structure→plan + positionFacts)
+  fills the rest. The majority of narration comes from compute. **No silent
+  moves, ever.** (The computed-fill wiring is the next build after asides.)
+
 ## 0. The data that already exists (don't rebuild it)
 
 ### The bank — `data/video-narration/<videoId>.json` (438 Naroditsky videos)
