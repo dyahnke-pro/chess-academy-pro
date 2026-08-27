@@ -393,6 +393,33 @@ export async function hasImportedGames(): Promise<boolean> {
  * until SRS schedules it. Returns [] when nothing is due (the caller
  * falls back to `pickCoachDrill`).
  */
+/** One recurring-weakness row for the evidence header — the student's OWN
+ *  instances of a pattern, most common first. */
+export interface WeaknessSummaryRow {
+  key: string;
+  label: string;
+  count: number;
+}
+
+/**
+ * Group a set of mistake puzzles by the SAME weakness buckets the drill queue
+ * uses (`bucketOf`), counting the student's live instances — the evidence that
+ * a pattern keeps recurring ("Forks ×5"). Mastered ("drilled shut") instances
+ * are excluded: the header shows what's still open, not a trophy case. Pure, so
+ * the surface can render it without a service round-trip.
+ */
+export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryRow[] {
+  const rows = new Map<string, WeaknessSummaryRow>();
+  for (const mp of mistakes) {
+    if (mp.status === 'mastered') continue;
+    const { key, label } = bucketOf(mp);
+    const row = rows.get(key) ?? { key, label, count: 0 };
+    row.count += 1;
+    rows.set(key, row);
+  }
+  return [...rows.values()].sort((a, z) => (z.count - a.count) || a.label.localeCompare(z.label));
+}
+
 export async function buildMistakeDrillQueue(
   options: { today?: string; cementReps?: number; rating?: number } = {},
 ): Promise<MistakeDrillTheme[]> {

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { buildMistakeDrillQueue, mistakePuzzleToDrill, hasImportedGames } from './coachDrillService';
+import { buildMistakeDrillQueue, mistakePuzzleToDrill, hasImportedGames, summarizeWeaknesses } from './coachDrillService';
 import type { MistakePuzzle, GameRecord } from '../types';
 
 /** Build a valid-enough MistakePuzzle for the fields the drill code
@@ -142,6 +142,24 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
     await db.mistakePuzzles.bulkPut([END_A]);
     const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: 1500 });
     for (const t of queue) expect(t.drills.every((d) => !d.isCementRep)).toBe(true);
+  });
+});
+
+describe('summarizeWeaknesses — the evidence header, most common first', () => {
+  it('groups by weakness bucket, counts live instances, excludes mastered', () => {
+    const rows = summarizeWeaknesses([
+      FORK_A, FORK_B,
+      mk({ id: 'p-back', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'back_rank' }),
+      mk({ id: 'p-mastered', fen: FORK_A.fen, moves: 'g1f3', tacticType: 'fork', status: 'mastered' }),
+    ]);
+    // Forks (2 live) before back-rank (1); the mastered fork is excluded.
+    expect(rows[0]).toMatchObject({ key: 'tactic:fork', count: 2 });
+    expect(rows.find((r) => r.key === 'tactic:back_rank')?.count).toBe(1);
+    expect(rows.reduce((n, r) => n + r.count, 0)).toBe(3);
+  });
+
+  it('returns [] for no mistakes', () => {
+    expect(summarizeWeaknesses([])).toEqual([]);
   });
 });
 

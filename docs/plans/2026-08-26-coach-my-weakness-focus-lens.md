@@ -605,9 +605,10 @@ SHOULD HAVE BEEN DONE ALREADY."**
   themed rep (`pickCoachDrill('puzzle:<lichessTheme>')`, deduped) AFTER the
   student's own instances in each TACTIC theme, flagged `isCementRep`; `count`
   stays the evidence (own instances only). Wired at the Learn entry
-  (`startMistakeDrills`, cementReps: 1). 3 tests. STILL PENDING: the
-  `MyMistakesPage` evidence panel (the browser already lists every instance;
-  the pending piece is a weakness-grouped summary header).
+  (`startMistakeDrills`, cementReps: 1). 3 tests. Evidence header: `DONE
+  2026-08-27` — `summarizeWeaknesses` (same `bucketOf` as the drill, mastered
+  excluded) renders a tap-to-filter chip strip atop `MyMistakesPage` ("Forks
+  ×5 · Hanging pieces ×3"). Phase 3 COMPLETE.
 - **Phase 4 — Fix the under-feeding.** `MOSTLY DONE 2026-08-27`. New board-true
   `positionTransformation.ts` detector (unfavorable / declined even trades)
   wired into BOTH game-analysis capture paths (imported-game + annotation) in

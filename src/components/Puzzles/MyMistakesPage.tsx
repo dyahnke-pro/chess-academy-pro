@@ -14,6 +14,7 @@ import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, Refre
 import { logAppAudit } from '../../services/appAuditor';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
+import { summarizeWeaknesses } from '../../services/coachDrillService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -153,6 +154,11 @@ export function MyMistakesPage(): JSX.Element {
   // Only inaccuracy/mistake/blunder/miss that EXIST in the data are offered —
   // the generation threshold means inaccuracy/miss are usually absent, and a
   // filter that can never match reads as "missing data" (David 2026-07-14).
+  // The EVIDENCE header (Phase 3, David 2026-08-26 "show the student's OWN
+  // instances as proof"): their recurring weaknesses, most common first, from
+  // the SAME buckets the drill queue uses. Tapping one filters the list to it.
+  const weaknessRows = useMemo(() => summarizeWeaknesses(puzzles).slice(0, 6), [puzzles]);
+
   const availableClassifications = useMemo(() => {
     const set = new Set<MistakeClassification>();
     for (const p of puzzles) {
@@ -294,6 +300,33 @@ export function MyMistakesPage(): JSX.Element {
           ]}
         />
       </div>
+
+      {/* Evidence header — the student's recurring weaknesses as proof. Tap a
+          chip to filter the list to that pattern (reuses the tactic-label
+          search match). Hidden until there are at least two distinct patterns
+          worth contrasting. */}
+      {weaknessRows.length >= 2 && (
+        <div className="mb-4" data-testid="weakness-evidence-header">
+          <p className="text-xs text-theme-text-muted mb-1.5">Your recurring weaknesses — proof they keep costing you:</p>
+          <div className="flex flex-wrap gap-2">
+            {weaknessRows.map((w) => (
+              <button
+                key={w.key}
+                onClick={() => setSearchQuery((q) => (norm(q) === norm(w.label) ? '' : w.label))}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                  norm(searchQuery) === norm(w.label)
+                    ? 'bg-theme-accent/20 border-theme-accent/50 text-theme-accent'
+                    : 'bg-theme-surface border-theme-border text-theme-text hover:border-theme-accent/40'
+                }`}
+                data-testid={`weakness-chip-${w.key}`}
+              >
+                <span>{w.label}</span>
+                <span className="text-theme-text-muted">×{w.count}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Analysis progress */}
       {analyzing && analysisProgress && (
