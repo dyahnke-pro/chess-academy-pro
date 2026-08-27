@@ -21,6 +21,7 @@ import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
+import { detectKingExposure, kingExposureClause, type KingExposure } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlan } from './boardPlan';
 
@@ -213,6 +214,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const tradeDanger = (!openingPhase && studentToMove)
     ? detectTradeCreatesPin(fen, studentColor)
     : null;
+  // §9 king-safety — a castled king with a broken shelter AND real attackers on
+  // it. Both conditions, so it never fires on a harmlessly-nicked shield.
+  const kingExposure = (!openingPhase && studentToMove)
+    ? detectKingExposure(fen, studentColor)
+    : null;
 
   // What the OPPONENT wants — named, branched (their idea + your reply, straight
   // from the PVs). Only when they're on move, out of the opening.
@@ -237,7 +243,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp: evalCpWhitePov * sSign, kingExposure }),
   };
 }
 
@@ -260,11 +266,14 @@ function buildClauses(a: {
   opponentIntent: OpponentIntent | null;
   statusText: string;
   structureText: string;
+  /** Student-POV eval (cp) at this position. Gates the prophylaxis clause. */
+  studentEvalCp: number;
+  kingExposure: KingExposure | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp, kingExposure } = a;
   // A latent danger to your own king — or a STATUS band-change — is worth a word
   // even in an otherwise quiet spot; neither needs the importance gate to fire.
-  if (!importance.speak && !latentDanger && !tradeDanger && !statusText) return [];
+  if (!importance.speak && !latentDanger && !tradeDanger && !statusText && !kingExposure) return [];
   const ranked: ClauseItem[] = [];
 
   // THE STATUS LINE LEADS the briefing (the general's opening read) — highest
@@ -290,13 +299,33 @@ function buildClauses(a: {
     ranked.push({ kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger) });
   }
 
+  // §9 king-safety — an exposed castled king under real fire. Ranks just below
+  // the pin/skewer warnings: a drafty king is a standing danger, not a routine
+  // plan. Uses the 'latent-danger' kind (same prophylactic family).
+  if (kingExposure) {
+    ranked.push({ kind: 'latent-danger', rank: 78, text: kingExposureClause(kingExposure) });
+  }
+
   // Incoming fire — the opponent's standing threat against the student (their
   // intent, and the student's must-defend). Board-true, named. This is the ONE
   // fact that speaks in the opening: a genuinely dropped piece is worth saying
   // even on move two.
   if (mustDefend.net >= 3 && mustDefend.pieces[0]) {
     const p = mustDefend.pieces[0];
-    ranked.push({ kind: 'must-defend', rank: 75, text: `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.` });
+    // PROPHYLAXIS FRAMING (§9 "ignored threat / prophylaxis"): the material fact
+    // is the same standing threat, but when the student is clearly WINNING the
+    // teaching shifts from "you must survive" to "don't let them punch back in"
+    // — the beginner leak of pressing your own plan while up material. Board-true
+    // (the threat is the null-move probe's, the advantage is the eval); only the
+    // framing changes, so it never invents a threat that isn't there.
+    const winning = studentToMove && studentEvalCp >= 200;
+    ranked.push({
+      kind: 'must-defend',
+      rank: 75,
+      text: winning
+        ? `You're on top — don't let them punch back: they're threatening the ${PNAME[p.piece.toLowerCase()]} on ${p.square}, so shore that up before you press.`
+        : `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.`,
+    });
   }
   // In the opening, nothing but a real hanging threat speaks — no "critical
   // moment" / "knife-edge" / "best piece, trade it off" narration on move one.

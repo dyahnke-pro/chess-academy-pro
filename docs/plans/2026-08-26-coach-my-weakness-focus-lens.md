@@ -647,8 +647,16 @@ SHOULD HAVE BEEN DONE ALREADY."**
   (speak + info card + best-move arrow, G6) and `CoachGamePage` (speak + inject
   the computed message into game chat). `MistakePuzzleBoard`'s Why was already
   grounded (`explainPuzzleMoveGrounded`) — verified, unchanged. 3 service tests.
-  STILL PENDING: the §9 depth signals (missed-plan, king-safety trajectory,
-  initiative/tempo) — each its own computed clause + gate.
+  §9 depth signals — IN PROGRESS `2026-08-27`: two shipped, both board-true /
+  firing / gated (never overstated): (1) PROPHYLAXIS — the standing net≥3 threat
+  reframes to "don't let them punch back" when the student is winning-but-
+  contested (`positionFacts`); (2) KING-SAFETY — `kingSafety.detectKingExposure`
+  fires only on a castled king with ≥2 shelter pawns gone AND real enemy
+  bishop/rook/queen bearing on the zone (silent on a harmlessly-nicked shield).
+  STILL PENDING: missed-PLAN (played move's plan vs the PV's — needs a
+  comparative two-line read) and king-safety TRAJECTORY / tempo (need game
+  history) — each a dedicated detector, not a quick clause; deferred rather than
+  faked.
 
 Each phase (and each Phase-1 slice) ships to `main` on its own (contained,
 gated, audited per the touched surface). G1 post-deploy audit after each.

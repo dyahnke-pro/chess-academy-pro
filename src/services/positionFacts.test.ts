@@ -34,6 +34,25 @@ describe('computePositionFacts — the composer', () => {
     expect(r.clauses[0].text).toMatch(/threatening to win the knight on e5/);
   });
 
+  it('speaks the king-safety clause when a castled king is exposed under fire (§9)', async () => {
+    // Broken kingside shelter (f2/g2 gone), Black queen h4 + rook g8 on it; past
+    // the opening so §9 fires.
+    const r = await computePositionFacts({ fen: '5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 20', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const ke = r.clauses.find((c) => /king's cover is thin/i.test(c.text));
+    expect(ke).toBeTruthy();
+  });
+
+  it('reframes the SAME threat as prophylaxis when the student is clearly winning (§9)', async () => {
+    // Same hanging-knight board, but the student is up big and on move — the
+    // teaching shifts from "you must survive" to "don't let them punch back".
+    const winning = { ...flat, topLines: [line(1, 260), line(2, 240), line(3, 220)], evaluation: 260, wdl: { win: 600, draw: 260, loss: 140 } };
+    const r = await computePositionFacts({ fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5', moverColor: 'w', studentColor: 'w', analysis: winning });
+    expect(r.mustDefend.net).toBe(3);
+    const md = r.clauses.find((c) => c.kind === 'must-defend');
+    expect(md?.text).toMatch(/don't let them punch back/);
+    expect(md?.text).toMatch(/knight on e5/); // still board-true — names the real piece
+  });
+
   it('frames the decision as the OPPONENT’s intent when the opponent is on move', async () => {
     // Opponent (White) is to move in a sharp MIDDLEGAME position; student is Black.
     const sharp = { ...flat, topLines: [line(1, 300), line(2, 20), line(3, 10)], evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 } };
