@@ -34,6 +34,26 @@ describe('submitFeedback', () => {
     // details carry the reply-to + build id for actionability
     expect(arg.details).toContain('fan@example.com');
     expect(arg.details).toContain('abc123+1');
+    // AND the reply-to is forwarded as a first-class field so analytics can
+    // mirror it durably to PostHog (details is NOT forwarded) — the difference
+    // between "we can respond" and losing the address (David 2026-08-27).
+    expect(arg.feedbackEmail).toBe('fan@example.com');
+  });
+
+  it('forwards feedbackEmail/feedbackRating only when provided (so PostHog can carry the reply-to)', async () => {
+    await submitFeedback({
+      message: 'ping me back', category: 'quick', source: 'QuickFeedbackButton',
+      contactEmail: '  reply@me.com  ', rating: 5,
+    });
+    const withEmail = vi.mocked(logAppAudit).mock.calls[0][0];
+    expect(withEmail.feedbackEmail).toBe('reply@me.com'); // trimmed
+    expect(withEmail.feedbackRating).toBe(5);
+
+    vi.clearAllMocks();
+    await submitFeedback({ message: 'anon', category: 'quick', source: 'QuickFeedbackButton' });
+    const noEmail = vi.mocked(logAppAudit).mock.calls[0][0];
+    expect(noEmail.feedbackEmail).toBeUndefined();
+    expect(noEmail.feedbackRating).toBeUndefined();
   });
 
   it('records the rating when provided and marks it absent when not', async () => {

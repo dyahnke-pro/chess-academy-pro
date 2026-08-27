@@ -889,6 +889,16 @@ export interface AuditEntry {
    *  `ask_text` / `answer_text`. */
   askText?: string;
   answerText?: string;
+  /** In-app feedback reply-to + rating (QuickFeedbackButton / FeedbackForm).
+   *  The user OPTIONALLY typed their email asking for a reply. Before this was
+   *  forwarded, the address lived ONLY in the ephemeral audit-stream (wiped on
+   *  deploy) and a mailto draft — so a native-iOS user who literally asked for
+   *  a reply could never get one, because durable analytics never captured it
+   *  (David 2026-08-27). Forwarded by `analytics.buildEventProps` as
+   *  `feedback_email` / `feedback_rating` on the `feedback_submitted` event so
+   *  the reply-to is retrievable from PostHog. Set ONLY on feedback entries. */
+  feedbackEmail?: string;
+  feedbackRating?: number | null;
 }
 
 /** Build identifier injected at vite-build time. Falls back to

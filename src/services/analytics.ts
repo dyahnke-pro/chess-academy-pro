@@ -255,6 +255,13 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // answer can run long but never near this.
   if (entry.askText) props.ask_text = entry.askText.slice(0, 4000);
   if (entry.answerText) props.answer_text = entry.answerText.slice(0, 4000);
+  // Feedback reply-to + rating (David 2026-08-27). The user optionally typed an
+  // email asking for a reply; forwarding it durably (only on feedback events,
+  // only when provided) is the difference between "we can respond" and losing
+  // the address to the wiped-on-deploy audit-stream. Bounded; never truncated
+  // to an invalid address in practice (emails are far under 200 chars).
+  if (entry.feedbackEmail) props.feedback_email = entry.feedbackEmail.slice(0, 200);
+  if (typeof entry.feedbackRating === 'number') props.feedback_rating = entry.feedbackRating;
   return props;
 }
 

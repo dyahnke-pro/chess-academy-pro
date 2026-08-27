@@ -213,6 +213,23 @@ describe('buildEventProps — lean, safe payloads', () => {
     expect(props.answer_text).toBe(answer);
   });
 
+  it('forwards the feedback reply-to + rating durably (so we can respond)', () => {
+    // David 2026-08-27: a native-iOS user typed an email asking for a reply,
+    // but only summary/details reached us and details isn't forwarded — so the
+    // address was lost. These fields carry it to PostHog on feedback events.
+    const props = buildEventProps(
+      entry({ kind: 'feedback-submitted', feedbackEmail: 'reply@me.com', feedbackRating: 4 }),
+    );
+    expect(props.feedback_email).toBe('reply@me.com');
+    expect(props.feedback_rating).toBe(4);
+  });
+
+  it('omits feedback_email / feedback_rating when the user gave neither', () => {
+    const props = buildEventProps(entry({ kind: 'feedback-submitted' }));
+    expect(props).not.toHaveProperty('feedback_email');
+    expect(props).not.toHaveProperty('feedback_rating');
+  });
+
   it('bounds ask_text / answer_text at 4000 chars', () => {
     const props = buildEventProps(
       entry({ kind: 'coach-brain-answered', askText: 'a'.repeat(9000), answerText: 'b'.repeat(9000) }),

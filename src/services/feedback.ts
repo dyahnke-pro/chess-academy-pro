@@ -58,6 +58,12 @@ export async function submitFeedback(input: FeedbackInput): Promise<boolean> {
       // Explicit route: the route the user was ON when they opened QuickFeedback
       // (logAppAudit now accepts an override, else auto-derives from location).
       route: input.route,
+      // Durably forward the reply-to + rating to PostHog (David 2026-08-27).
+      // Without this the address the user typed to GET a reply survived only in
+      // the ephemeral audit-stream + a mailto draft — so we could never respond.
+      // Still lands in `details` below for the audit-stream/mail draft too.
+      feedbackEmail: input.contactEmail?.trim() || undefined,
+      feedbackRating: typeof input.rating === 'number' ? input.rating : undefined,
       details: [
         `CATEGORY: ${input.category}`,
         ratingLine,
