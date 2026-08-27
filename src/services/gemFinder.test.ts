@@ -95,6 +95,39 @@ describe('findGemsForLine (mocked engine/explorer)', () => {
     for (const s of gem.steps) expect(b.move(s.san)).toBeTruthy();
   });
 
+  it('engine-only fallback: teaches a decisive refutation when the explorer is SILENT', async () => {
+    const baseFen = fenAfter(['e4']); // black (opponent) to move, no human sample
+    (lookupAmateurPlay as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({
+      fen: baseFen, totalGames: 0, source: 'none', moves: [],
+    });
+    analyzeMock()
+      // 1) engineOnlySlips: black's best (…e5, ~even) + a slip (…f6, white much better).
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'e7e5', isMate: false, mateIn: null, depth: 12,
+        topLines: [ { rank: 1, evaluation: 20, moves: ['e7e5'], mate: null }, { rank: 2, evaluation: 160, moves: ['f7f6'], mate: null } ] })
+      // 2) verifySlip base eval (student ~even before the slip)
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 20, moves: ['g1f3'], mate: null }] })
+      // 3) verifySlip after-slip eval — DECISIVE (≥ +1.0 confirmed tier), PV = the punish
+      .mockResolvedValueOnce({ evaluation: 300, bestMove: 'd2d4', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 300, moves: ['d2d4'], mate: null }] });
+
+    const found = await findGemsForLine([{ fen: baseFen, opponentToMove: true }], 'white', 5000);
+    const key = baseFen.split(' ').slice(0, 4).join(' ');
+    expect(found.get(key)?.length).toBe(1);
+    expect(found.get(key)![0].inaccuracy).toBe('f6');
+  });
+
+  it('engine-only fallback: REJECTS a merely-inferior slip that only reaches the +0.5 edge (no frequency → confirmed tier only)', async () => {
+    const baseFen = fenAfter(['e4']);
+    (lookupAmateurPlay as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({ fen: baseFen, totalGames: 0, source: 'none', moves: [] });
+    analyzeMock()
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'e7e5', isMate: false, mateIn: null, depth: 12,
+        topLines: [ { rank: 1, evaluation: 20, moves: ['e7e5'], mate: null }, { rank: 2, evaluation: 160, moves: ['f7f6'], mate: null } ] })
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 20, moves: ['g1f3'], mate: null }] })
+      // after-slip only +0.7 — clears the explorer +0.5 tier but NOT the +1.0 confirmed bar the engine-only path demands.
+      .mockResolvedValueOnce({ evaluation: 70, bestMove: 'd2d4', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 70, moves: ['d2d4'], mate: null }] });
+    const found = await findGemsForLine([{ fen: baseFen, opponentToMove: true }], 'white', 5000);
+    expect(found.size).toBe(0);
+  });
+
   it('rejects a slip whose punish is not a real jump', async () => {
     const baseFen = fenAfter(['e4']);
     (lookupAmateurPlay as unknown as ReturnType<typeof vi.fn>).mockResolvedValue({

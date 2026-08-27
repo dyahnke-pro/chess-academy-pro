@@ -41,6 +41,11 @@ Detour mechanism = clone of `acceptTrap` (`useTeachWalkthrough.ts:1707-1824`): d
 - [x] UI panel (walkthrough-gem-picker / -see / -skip)
 - [x] tests: buildGemDetour/gemsForPosition/attachBakedGems + runtime picker fires/plays/resumes
 - [ ] ship-check + push main + 3-instrument audit
-- [ ] phase 2: finder fallback (runtime engine construction when no premade gem) — has an open
-      design question (what legitimizes a runtime gem without the amateur-explorer frequency the
-      premade gems are mined from); put to David before building.
+- [x] phase 2: finder fallback (runtime engine construction when no premade gem) — DONE
+      2026-08-27 (David "do 2"). `gemFinder.findGemsForLine` now falls back to an ENGINE-ONLY
+      slip scan when the explorer is silent: `engineOnlySlips` reads the multi-PV fan for the
+      opponent's top inaccuracies, and `verifySlip` is held to the STRICTER confirmed tier
+      (≥ +1.0 `WEAPON_CP`), never the +0.5 positional edge — the answer to "what legitimizes a
+      runtime gem without human frequency": a decisive, engine-verified refutation, or nothing.
+      Capped (`MAX_ENGINE_ONLY_POSITIONS = 6`) so the speculative scan stays cheap. 2 tests
+      (fires at the confirmed tier; rejects a merely-inferior +0.7 slip).

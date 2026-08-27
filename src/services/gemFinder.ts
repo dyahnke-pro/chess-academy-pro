@@ -51,6 +51,14 @@ const ANALYZE_DEPTH = 12;
 const ANALYZE_BUDGET_MS = 350; // per analysis — a hard time box, not depth
 const MAX_CANDIDATES = 2; // top-N human moves to test per position
 const MAX_POSITIONS = 12; // scan the first N opponent positions (spine-first)
+// Engine-only fallback (David 2026-08-27 "do 2"): when the explorer is SILENT at
+// a position we still teach a gem — but only from the engine's own refutation,
+// held to the STRICTER confirmed tier (≥ +1.0), never the +0.5 positional edge,
+// since there's no human-frequency evidence that the slip is natural. A losing
+// move that gets decisively punished is always worth knowing; a merely-inferior
+// one without a human sample is not.
+const MAX_ENGINE_ONLY_POSITIONS = 6; // cap the speculative (no-explorer) scan
+const ENGINE_SLIP_DROP = 60; // an opponent top-fan move ≥ 0.6 worse than best = a slip
 const PV_PLIES = 8; // punish continuation taken from the engine PV
 const YIELD_MS = 250; // hand the CPU back between engine calls
 const DEFAULT_BUDGET_MS = 15_000; // overall wall-clock ceiling per opening
@@ -118,6 +126,7 @@ async function verifySlip(
   baseFen: string,
   slipSan: string,
   studentIsWhite: boolean,
+  minEdge: number = EDGE_CP,
 ): Promise<BakedGemLine | null> {
   // Baseline: how the student stands BEFORE the slip. If they're already
   // winning, there's no trap worth teaching here. Time-boxed (never depth-
@@ -154,7 +163,7 @@ async function verifySlip(
   }
   const E1 = studentIsWhite ? after.evaluation : -after.evaluation;
   // Must reach a real edge AND the slip must have COST that edge.
-  if (E1 < EDGE_CP || E1 - E0 < JUMP_CP) return null;
+  if (E1 < minEdge || E1 - E0 < JUMP_CP) return null;
 
   // The punish line is the engine's own PV from after the slip — no second
   // multi-second play-out. Replay it UCI→SAN and keep the first few plies.
@@ -204,6 +213,7 @@ export async function findGemsForLine(
   const seen = new Set<string>();
   const deadline = Date.now() + budgetMs;
   let scanned = 0;
+  let engineOnlyScanned = 0;
   for (const pos of positions) {
     if (Date.now() > deadline || scanned >= MAX_POSITIONS) break;
     if (!pos.opponentToMove) continue;
@@ -214,23 +224,66 @@ export async function findGemsForLine(
     try {
       amateur = await lookupAmateurPlay(pos.fen);
     } catch {
-      continue;
+      amateur = null;
     }
-    if (amateur.source === 'none' || amateur.moves.length === 0) continue;
-    const total = amateur.totalGames || 0;
-    if (total < MIN_GAMES_AT_POS) continue;
-    scanned += 1;
-    const candidates = amateur.moves
-      .filter((m) => m.games / Math.max(1, total) >= FREQ_FLOOR)
-      .slice(0, MAX_CANDIDATES);
+    const total = amateur?.totalGames ?? 0;
+    const explorerHasData = !!amateur && amateur.source !== 'none' && amateur.moves.length > 0 && total >= MIN_GAMES_AT_POS;
+
+    // Candidate slips + the edge floor they must clear. Explorer-backed: the
+    // human moves at the frequency floor, held to the usual +0.5 tier. Engine-
+    // only fallback: the engine's top-fan inaccuracies, held to the stricter
+    // +1.0 confirmed tier (no frequency evidence → decisive punish or nothing).
+    let candidateSans: string[];
+    let minEdge: number;
+    if (explorerHasData) {
+      candidateSans = amateur.moves
+        .filter((m) => m.games / Math.max(1, total) >= FREQ_FLOOR)
+        .slice(0, MAX_CANDIDATES)
+        .map((m) => m.san);
+      minEdge = EDGE_CP;
+      scanned += 1;
+    } else {
+      if (engineOnlyScanned >= MAX_ENGINE_ONLY_POSITIONS) continue;
+      candidateSans = (await engineOnlySlips(pos.fen)).slice(0, MAX_CANDIDATES);
+      if (candidateSans.length === 0) continue;
+      minEdge = WEAPON_CP;
+      engineOnlyScanned += 1;
+      scanned += 1;
+    }
+
     const detours: BakedGemLine[] = [];
-    for (const cand of candidates) {
+    for (const cand of candidateSans) {
       if (Date.now() > deadline) break;
       await sleep(YIELD_MS); // hand the CPU back to the UI/voice before each engine burst
-      const d = await verifySlip(pos.fen, cand.san, studentIsWhite);
+      const d = await verifySlip(pos.fen, cand, studentIsWhite, minEdge);
       if (d) detours.push(d);
     }
     if (detours.length > 0) out.set(key, detours);
+  }
+  return out;
+}
+
+/** Engine-only candidate slips at a position (opponent to move): the top-fan
+ *  alternatives that are meaningfully WORSE for the opponent than their best.
+ *  Used only when the explorer has no human sample. Pure engine (G0/G3). */
+async function engineOnlySlips(fen: string): Promise<string[]> {
+  let a;
+  try { a = await stockfishEngine.analyzeWithBudget(fen, ANALYZE_DEPTH, ANALYZE_BUDGET_MS); } catch { return []; }
+  const lines = a.topLines ?? [];
+  if (lines.length < 2) return []; // no alternative to the best move → nothing to test
+  const oppSign = fen.split(' ')[1] === 'w' ? 1 : -1; // opponent-POV = white-POV × sign
+  const bestOpp = (lines[0]?.evaluation ?? 0) * oppSign;
+  const out: string[] = [];
+  for (const ln of lines.slice(1)) {
+    const oppEval = (ln.evaluation ?? 0) * oppSign;
+    if (bestOpp - oppEval < ENGINE_SLIP_DROP) continue; // not a real inaccuracy
+    const uci = ln.moves?.[0];
+    if (typeof uci !== 'string' || uci.length < 4) continue;
+    try {
+      const b = new Chess(fen);
+      const mv = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), ...(uci.length > 4 ? { promotion: uci[4] } : {}) });
+      if (mv) out.push(mv.san);
+    } catch { /* skip an unreplayable line */ }
   }
   return out;
 }
