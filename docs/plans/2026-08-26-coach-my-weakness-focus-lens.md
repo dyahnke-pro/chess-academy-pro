@@ -347,6 +347,20 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > stateful narration (callback/through-line); route the coaching-you surfaces off
 > `preferRaw`/sterile into the Danya register (§4b-tiers).
 
+> **SLICE 2 FOUNDATION LANDED (2026-08-26): carry the discussion across TIME +
+> surfaces.** David: "can we carry this discussion past the playing surface? …
+> across time and surfaces." `src/services/coachThread.ts` — the weakness spine
+> IS the app's long-term memory; `getActiveCoachingThread()` reads its top row as
+> the persistent thread, and `threadCallbackFor(thread, detectedTags)` produces an
+> EARNED, say-once-per-session callback when a position TOUCHES the thread
+> ("this is the removal-of-guard we've been working on — 4 games running"). 11
+> tests green. HONEST SCOPE: pattern-tag RECOGNITION, not episodic recollection;
+> rare/earned so it never nags; the thread must advance as a pattern drills shut.
+> **NOT yet wired to a surface** — the next slice has each surface resolve the
+> thread on mount + supply the position's detected tags (`boardConcepts` /
+> `detectTactics`) to `threadCallbackFor`, starting with play + the mistake drill.
+> This is the foundation primitive (tested), not a live wire yet.
+
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the
   proven offline `position-facts.mjs` / `render-briefing.mjs` into runtime
