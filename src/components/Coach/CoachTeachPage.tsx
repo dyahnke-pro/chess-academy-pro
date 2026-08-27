@@ -87,7 +87,7 @@ import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGem
 import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
-import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
+import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import type {
@@ -2104,11 +2104,25 @@ export function CoachTeachPage(): JSX.Element {
       // "Drilled shut" — the loop's closing bookend (David 2026-08-26 slogan:
       // LEARN · PLAY · IDENTIFY WEAKNESSES · DRILL THEM SHUT). "For today"
       // because SRS brings the reps back until they genuinely test out.
-      coachDrillSay(
-        adv.completedLabel
-          ? `That's ${adv.completedLabel} drilled shut for today — and every weakness due. Keep solving them right over a few days and they'll test out for good.`
-          : "That's every mistake due today, drilled shut. Keep solving them right over a few days and they'll test out for good.",
-      );
+      const shutMsg = adv.completedLabel
+        ? `That's ${adv.completedLabel} drilled shut for today — and every weakness due.`
+        : "That's every mistake due today, drilled shut.";
+      // FRESH REPS (Phase 3): the queue is finished, so cement the top pattern
+      // with ONE fresh tactical rep from puzzles.json — the tested pickCoachDrill
+      // path (no SRS surgery) — so you drill the PATTERN, not just your own
+      // instances. Only when the top weakness maps cleanly to a puzzle theme.
+      const topKey = solved.progress.queue[0]?.key ?? '';
+      const theme = topKey.startsWith('tactic:')
+        ? themesForTactic(topKey.slice('tactic:'.length) as Parameters<typeof themesForTactic>[0])[0]
+        : undefined;
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const freshRep = theme ? pickCoachDrill(`puzzle:${theme}`, { rating }) : null;
+      if (freshRep) {
+        coachDrillSay(`${shutMsg} Let's cement it with a fresh one.`);
+        startCoachDrill(freshRep);
+      } else {
+        coachDrillSay(`${shutMsg} Keep solving them right over a few days and they'll test out for good.`);
+      }
       return;
     }
     if (!adv.next) { activeDrillRef.current = null; return; }

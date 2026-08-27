@@ -114,7 +114,7 @@ function tacticLabel(t: TacticType): string {
 /** Map our snake_case TacticType to puzzles.json (Lichess) camelCase theme
  *  ids so the tag's drill can pull matching tactical reps. Unmapped motifs
  *  return [] (no themed pool) rather than a guessed theme. */
-function themesForTactic(t: TacticType): string[] {
+export function themesForTactic(t: TacticType): string[] {
   const map: Partial<Record<TacticType, string[]>> = {
     fork: ['fork'], pin: ['pin'], skewer: ['skewer'], hanging_piece: ['hangingPiece'],
     discovered_attack: ['discoveredAttack'], double_check: ['doubleCheck'],
