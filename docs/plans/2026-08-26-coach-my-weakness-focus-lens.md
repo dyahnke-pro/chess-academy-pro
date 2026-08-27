@@ -657,10 +657,14 @@ SHOULD HAVE BEEN DONE ALREADY."**
   fires on an UNCASTLED central king + a crackable central pawn tension + an enemy
   rook/queen aimed down the king's file — the "castle now" moment; speaks IN the
   opening (move ≥6), silent on a locked centre / no aligned heavy / already castled.
-  STILL PENDING: missed-PLAN (played move's plan vs the PV's — needs a
-  comparative two-line read) and king-safety TRAJECTORY / tempo (need game
-  history) — each a dedicated detector, not a quick clause; deferred rather than
-  faked.
+  (4) MISSED-PLAN (`movePlan.ts`, `2026-08-27`) — on a real fault,
+  `missedPlanClause` compares the plan-class of the played move vs the engine's
+  best and names the idea the position called for, for the two highest-confidence
+  beginner cases only: castle-the-king and strike-the-centre. Board-true, tightly
+  gated (silent unless the best move is unmistakably one of those two and the
+  played move isn't), wired into `gradePlayedMove`. §9 signals COMPLETE (4/4).
+  Only king-safety TRAJECTORY / tempo remain — they need game history, a
+  review-surface concern, not an in-position clause.
 
 Each phase (and each Phase-1 slice) ships to `main` on its own (contained,
 gated, audited per the touched surface). G1 post-deploy audit after each.

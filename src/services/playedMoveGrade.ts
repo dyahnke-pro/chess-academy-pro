@@ -20,6 +20,7 @@ import {
 } from './moveReason';
 import { computeMustDefend } from './threatOut';
 import { findHangingPieces } from './tacticClassifier';
+import { missedPlanClause } from './movePlan';
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -99,9 +100,19 @@ export function gradePlayedMove(input: {
     forceNetBest: 0, capture, seeNow, refuteNet: 0,
   });
   const worthSpeaking = gradeWorthSpeaking(reason);
+  let clause = worthSpeaking ? moveReasonClause(reason, { hung }) : '';
+  // §9 missed-PLAN: on a real fault, if the engine's plan and the played move's
+  // plan clearly diverge (castle-the-king / strike-the-centre), name the idea the
+  // position called for — the whole idea was wrong, not just the square. Board-
+  // true; '' unless it's one of the two high-confidence cases.
+  if (worthSpeaking && isFaultReason(reason)) {
+    const bestUci = analysisBefore.bestMove || lines[0].moves[0];
+    const plan = missedPlanClause(fenBefore, playedUci, bestUci);
+    if (plan) clause = clause ? `${clause} ${plan}` : plan;
+  }
   return {
     reason,
-    clause: worthSpeaking ? moveReasonClause(reason, { hung }) : '',
+    clause,
     cpLossCp,
     worthSpeaking,
     fault: isFaultReason(reason),
