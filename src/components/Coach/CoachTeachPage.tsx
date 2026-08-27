@@ -241,6 +241,8 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
 import { gradePlayedMove } from '../../services/playedMoveGrade';
+import { buildOpponentIntent } from '../../services/opponentIntent';
+import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
@@ -7342,6 +7344,29 @@ export function CoachTeachPage(): JSX.Element {
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
                     }
+                    // TAKE-ADVANTAGE-OF-THE-GAP (David 2026-08-27): the throttled
+                    // opponent under-played its ideal and handed you a gift.
+                    // Compare their ACTUAL reply to their ideal (from midTurnRead,
+                    // their fan at move.fen) using this post-reply read; subtle,
+                    // guide-don't-tell — highlight the opportunity square, name no
+                    // move. Gated to a real gift + concrete follow-up (no cry-wolf).
+                    try {
+                      const oppFan = await midTurnRead;
+                      if (oppFan?.topLines?.length) {
+                        const oppIntent = buildOpponentIntent({ analysis: oppFan, fen: move.fen });
+                        const gap = detectOpponentGap({
+                          opponentIntent: oppIntent,
+                          opponentPlayedUci: `${m.from}${m.to}${m.promotion ?? ''}`,
+                          analysisAfter: studentBest,
+                          studentColor: playerColor === 'white' ? 'w' : 'b',
+                        });
+                        if (gap) {
+                          const nudge = gradeNarrationText(opponentGapClause(gap), probe.fen(), 'CoachTeachPage.opponentGap')?.trim();
+                          if (nudge) queueSpokenHint(probe.fen(), nudge, 'computed', [gap.toSquare]);
+                          captureEvent('opponent_gap_nudged', { surface: 'coach-teach', gain_cp: Math.round(gap.gainCp) });
+                        }
+                      }
+                    } catch { /* the gap nudge is a bonus, never a blocker */ }
                     // NAME THE STRUCTURE the moment it crystallises — his closing
                     // lesson ("catalogue the typical structures and their plans").
                     // Reliable say-once (structureSaidRef), NOT the rate-fair

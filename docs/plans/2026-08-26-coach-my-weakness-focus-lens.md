@@ -521,8 +521,32 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > reply-narration flow (thread the pre-move `opponentIntent` + the post-reply
 > analysis, speak the nudge + draw the arrow). Careful daytime slice, not a blind
 > overnight edit on the reply path.
-> NEXT down the list: wire opponentGap (reply-flow), the walkthrough Tier-3
-> wiring, review.
+> **SLICE 8 LANDED (2026-08-27): the three remaining sections (built in order).**
+> - **§1 — opponentGap WIRED into the reply flow.** In `CoachTeachPage`'s async
+>   reply block, after the opponent's reply resolves: build their ideal from
+>   `midTurnRead` (their fan at `move.fen`), compare to what they actually played
+>   using the post-reply read (`studentBest`) via `detectOpponentGap`, and on a
+>   real gift queue the subtle nudge ("he let you off — there's a chance right
+>   here") with a highlight on the opportunity square (guide-don't-tell, no move
+>   named), riding the existing `queueSpokenHint` package. `opponent_gap_nudged`
+>   audit.
+> - **§2 — walkthrough Tier-3: COST-GATED, deliberately NOT triggered overnight.**
+>   The generator (`generateOpeningFromDbNarration`) runs NO Stockfish per beat —
+>   it's a single cached LLM narration call, `WALKTHROUGH_GEN_REV`-gated. Adding
+>   the discussion voice to the pure Watch auto-play needs either a gen-rev bump
+>   (re-synthesizes every lesson — a real TTS bill, David's locked cost rule) or a
+>   per-beat engine read that adds latency to Watch. Neither is a safe blind
+>   overnight move. AND the interactive "teach me X" path (the student PLAYING the
+>   line) already carries the discussion voice via the live `positionFacts`
+>   wiring — only the auto-play Watch is behind the cost gate. **Needs David's
+>   explicit go to bump gen-rev.**
+> - **§3 — review turning-point "what it hinged on" WIRED.** `reviewHinge.ts`
+>   (`computeTurningPointHinge`) — the RETROSPECTIVE register (locked-distinct):
+>   the load-bearing piece (perturbation) or a standing threat (null-move), from
+>   the turning-point FEN + a static eval (no topLines — works with review's
+>   per-ply data), phrased past-tense ("the position was leaning on your knight —
+>   that's what the moment turned on"). Wired into `CoachGameReview`: computed
+>   async when the turning point is set, appended to the reveal. 3 tests.
 
 > **SLICE 7 LANDED (2026-08-27): v2 latent-danger — the trade that CREATES the
 > pin (David's exact loss), WIRED + LIVE.** `latentDanger.ts:detectTradeCreatesPin`

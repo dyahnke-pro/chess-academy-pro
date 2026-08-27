@@ -47,6 +47,7 @@ import { pauseBatchAnalysis, resumeBatchAnalysis } from '../../services/gameAnal
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
+import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { captureEvent } from '../../services/analytics';
@@ -735,6 +736,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // end: "where do you think this game turned?" Candidates + answer are
   // computed from the eval record (reviewTurningPoint.ts).
   const [turningQ, setTurningQ] = useState<TurningPointQuestion | null>(null);
+  /** The retrospective "what it hinged on" line, computed async when the turning
+   *  point is set (Phase 5); appended to the reveal. */
+  const turningHingeRef = useRef<string>('');
   const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
   const turningAskedRef = useRef(false);
   // Preview-then-commit for the turning-point chips (David 2026-07-19: "chips
@@ -1123,6 +1127,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningQ(q);
     captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });
     void reviewSay(q.question).catch(() => undefined);
+    // Phase 5 — compute "what it hinged on" for the answer's position, in the
+    // retrospective register, while the student decides. Appended to the reveal.
+    turningHingeRef.current = '';
+    if (q.answer.fenBefore) {
+      void computeTurningPointHinge({
+        fenBefore: q.answer.fenBefore,
+        studentColor: playerColor === 'white' ? 'w' : 'b',
+        evalBoard: (f) => stockfishEngine.evalBoard(f),
+      }).then((h) => { turningHingeRef.current = h; }).catch(() => undefined);
+    }
   }, [walkPlayback.currentPly, walkNarration, moves.length]);
 
   const handleTurningPick = useCallback((ply: number): void => {
@@ -1135,8 +1149,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const reprise = themeSpokenRef.current && themeRef.current
       ? ` It fits the thread of the game — ${themeRef.current.reprise}.`
       : '';
-    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}${reprise}`;
-    captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply });
+    const hinge = turningHingeRef.current ? ` ${turningHingeRef.current}` : '';
+    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}${hinge}${reprise}`;
+    captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply, hinged: !!turningHingeRef.current });
     setTurningQ(null);
     setTurningReveal({ correct, text });
     // Decisive-beat prosody spike (#25): the payoff line lifts only when
