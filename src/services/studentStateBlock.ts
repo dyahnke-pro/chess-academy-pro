@@ -41,6 +41,9 @@ const FRUSTRATION_CUES = [
   'ugh', 'damn', 'wtf', 'why did i', 'i always', "i can't", "i can never",
   'hate this', 'hate that', 'stuck', 'no idea', 'lost again', 'blundered',
   'stupid move', 'dumb', 'terrible', 'awful', 'frustrated',
+  // Phase 6 (David 2026-08-26): explicit difficulty / giving-up cues.
+  'this is hard', 'too hard', 'so hard', 'give up', 'giving up', "i'm done",
+  'this is impossible', 'makes no sense',
 ];
 
 /** Words that suggest confidence / flow state. */

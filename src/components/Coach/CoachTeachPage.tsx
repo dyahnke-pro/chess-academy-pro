@@ -1271,6 +1271,12 @@ export function CoachTeachPage(): JSX.Element {
     graded: boolean;
     /** ms epoch when this puzzle was loaded, for the SRS solve-time. */
     startedAt: number;
+    /** Consecutive wrong tries on THIS puzzle — the behavioral frustration
+     *  signal (David 2026-08-26 Phase 6). Escalates the spoken feedback from
+     *  "try again" → a nudge → easing up + offering the way out, instead of
+     *  repeating the same line while the student grinds. Reset on a fresh
+     *  puzzle and on a correct move. */
+    wrongCount: number;
   } | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
@@ -1984,7 +1990,7 @@ export function CoachTeachPage(): JSX.Element {
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
     gameRef.current.loadFen(drill.setupFen);
     liveFenRef.current = drill.setupFen;
-    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now() };
+    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0 };
     setArrows([]);
     setHighlights([]);
   }, []);
@@ -2117,10 +2123,22 @@ export function CoachTeachPage(): JSX.Element {
       liveFenRef.current = gameRef.current.fen;
       setArrows([]);
       setHighlights([]);
-      coachDrillSay("That's not the strongest here — take another look and try again.");
+      // Behavioral frustration heuristic (Phase 6): escalate to a warmer,
+      // easing register as wrong tries pile up, instead of repeating one line
+      // while the student grinds. First → try again; second → a concrete,
+      // no-rush nudge; third+ → ease up and offer the way out (no shame).
+      cur.wrongCount += 1;
+      const nudge =
+        cur.wrongCount >= 3
+          ? "This one's a stubborn rep — happens to everyone. Tap Hint to see the idea, or say “next” to move on and we'll bring it back later."
+          : cur.wrongCount === 2
+            ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
+            : "That's not the strongest here — take another look and try again.";
+      coachDrillSay(nudge);
       return true;
     }
     liveFenRef.current = move.fen;
+    cur.wrongCount = 0; // correct move → the frustration streak resets
     const step = cur.step + 1;
     if (step >= cur.drill.solutionSan.length) {
       // Student played the final move of the line → solved.
