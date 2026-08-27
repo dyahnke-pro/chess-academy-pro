@@ -23,6 +23,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../se
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
+import { computeWhyBestMove } from '../../services/whyBestMove';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../services/engineDeltaLines';
@@ -94,11 +95,38 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // the best move is best. We open the coach chat with an auto-sent question so
   // the SAME grounded coach (explainBestMoveGrounded + master-play + tactics)
   // answers it — fuller than the hint's one-liner. Cleared once sent.
+  // Kept for the chat panel's initialPrompt slot; the Why button no longer
+  // auto-sends a generic question — it speaks the COMPUTED answer instead. The
+  // user can still open chat and type a follow-up.
   const [whyPrompt, setWhyPrompt] = useState<string | null>(null);
-  const askWhy = useCallback((): void => {
-    setWhyPrompt("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.");
-    setChatOpen(true);
-  }, []);
+  // The COMPUTED "why" answer (Phase 8, David 2026-08-26): the strongest move's
+  // concrete point + the position briefing, composed in code (G0) and SPOKEN in
+  // the house register — not a generic question handed to the model. The tap is
+  // an explicit user request, so it reads aloud through the verbosity bypass
+  // (G5's sanctioned read-aloud exemption), same class as "Read this position".
+  const [whyCard, setWhyCard] = useState<string | null>(null);
+  const [whyLoading, setWhyLoading] = useState(false);
+  const askWhy = useCallback(async (): Promise<void> => {
+    if (whyLoading) return;
+    setWhyLoading(true);
+    const fen = game.fen;
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating });
+      // Lead the eye to the move we NAME but don't play out (G6).
+      const uci = analysis.bestMove;
+      if (why && uci && uci.length >= 4) {
+        setChatArrows([{ startSquare: uci.slice(0, 2), endSquare: uci.slice(2, 4), color: 'cyan' }]);
+      }
+      const answer = why || 'No single best move stands out here — the position is roughly balanced.';
+      setWhyCard(answer);
+      void voiceService.speakReadAloud(answer);
+    } catch {
+      setWhyCard(null);
+    } finally {
+      setWhyLoading(false);
+    }
+  }, [game.fen, playerColor, playerRating, whyLoading]);
   const [chatArrows, setChatArrows] = useState<BoardArrow[]>([]);
   const [chatHighlights, setChatHighlights] = useState<BoardHighlight[]>([]);
   // Gem-crush arrows for the Play rung (David 2026-07-24: "It should also be on
@@ -1035,7 +1063,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
                     2026-06-19), distinct from the Hint's quick reason. */}
                 <button
                   type="button"
-                  onClick={askWhy}
+                  onClick={() => { void askWhy(); }}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-cyan-400 border border-cyan-500/40 hover:bg-cyan-500/10 transition-colors active:scale-95"
                   data-testid="why-button"
                   aria-label="Why is the best move best?"
@@ -1075,6 +1103,19 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           variant="warning"
         />
       </div>
+
+      {/* The COMPUTED "Why?" answer — best-move point + position briefing, in
+          the house voice (Phase 8). Board-true, spoken on tap. */}
+      {whyCard !== null && (
+        <div className="px-4 pb-safe-4 min-h-[60px]" data-testid="why-answer-card">
+          <ExplanationCard
+            text={whyCard}
+            visible
+            onDismiss={() => { setWhyCard(null); setChatArrows([]); }}
+            variant="info"
+          />
+        </div>
+      )}
 
       {/* Discussion Practice — "why did you play that?" + the coach teach */}
       <DiscussionPracticePanel

@@ -134,6 +134,7 @@ import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/voiceService';
+import { computeWhyBestMove } from '../../services/whyBestMove';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
@@ -4212,6 +4213,28 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // exactly: 1 ply if the student's move is the most recent (no
   // coach reply yet), 2 plies if the coach has already replied
   // (coach reply + student move). Coach's earlier moves stay put.
+  // The "Why?" button (Phase 8): answer with the COMPUTED package — the
+  // strongest move's concrete point + the position briefing, composed in code
+  // (G0) and both SPOKEN (explicit-tap read-aloud, G5 bypass) and injected as
+  // the coach's message. No generic question handed to the model.
+  const whyLoadingRef = useRef(false);
+  const askWhy = useCallback(async (): Promise<void> => {
+    if (whyLoadingRef.current) return;
+    whyLoadingRef.current = true;
+    const fen = game.fen;
+    try {
+      const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating });
+      const answer = why || 'No single best move stands out here — the position is roughly balanced.';
+      gameChatRef.current?.injectAssistantMessage(answer);
+      void voiceService.speakReadAloud(answer);
+    } catch {
+      gameChatRef.current?.ask("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.");
+    } finally {
+      whyLoadingRef.current = false;
+    }
+  }, [game.fen, playerColor, playerRating]);
+
   const handleTakeback = useCallback(() => {
     const moves = gameState.moves;
     if (moves.length === 0) return;
@@ -5090,7 +5113,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   other explains why." */}
               <button
                 type="button"
-                onClick={() => gameChatRef.current?.ask("What's the strongest move for me in this exact position, and why is it the best? Explain the key idea and why the natural alternatives are worse.")}
+                onClick={() => { void askWhy(); }}
                 disabled={isCoachThinking}
                 className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg border-2 border-cyan-500/40 text-sm font-medium text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200"
                 data-testid="why-button"

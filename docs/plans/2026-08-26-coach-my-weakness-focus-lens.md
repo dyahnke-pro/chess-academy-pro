@@ -629,8 +629,16 @@ SHOULD HAVE BEEN DONE ALREADY."**
   sessions). Wired: the drill-completion advances the arc; the opener speaks the
   plan ("close out X, then move to Y"). 9 pure-logic tests; v34 opens clean.
   Residual (honest, §8): derived from mistakes, not a human's forward intuition.
-- **Phase 8 (end) — Why button + depth additions.** Verify/repair the Why button
-  + route computed voice; add the §9 depth signals. `pending`
+- **Phase 8 (end) — Why button + depth additions.** Why button: `DONE 2026-08-27`.
+  New `computeWhyBestMove` (G0) composes the strongest move's concrete point
+  (`explainBestMoveGrounded`) + the position briefing (`computePositionFacts`
+  clauses) and both surfaces now answer with THAT — spoken via the explicit-tap
+  read-aloud bypass (G5) — instead of a generic model prompt: `OpeningPlayMode`
+  (speak + info card + best-move arrow, G6) and `CoachGamePage` (speak + inject
+  the computed message into game chat). `MistakePuzzleBoard`'s Why was already
+  grounded (`explainPuzzleMoveGrounded`) — verified, unchanged. 3 service tests.
+  STILL PENDING: the §9 depth signals (missed-plan, king-safety trajectory,
+  initiative/tempo) — each its own computed clause + gate.
 
 Each phase (and each Phase-1 slice) ships to `main` on its own (contained,
 gated, audited per the touched surface). G1 post-deploy audit after each.
