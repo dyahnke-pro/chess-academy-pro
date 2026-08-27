@@ -496,6 +496,23 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > reply gives the short grade room to land first. 4 grade tests + 51 service
 > tests green. Auto-log to My Mistakes already rides `evaluatePlayerMove`.
 
+> **SLICE 5 LANDED (2026-08-27): the OPPONENT-INTENT, named + branched.**
+> `src/services/opponentIntent.ts` — what the opponent WANTS, read straight from
+> the fan's PVs: `moves[0]` is their idea, `moves[1]` is your reply (no extra
+> search — the opponent's fan already carries your answer at ply 2).
+> `buildOpponentIntent` returns the top 1–2 plans; `opponentIntentFacts` has a
+> `revealReply` switch — teaching plays the branch out ("strongest is Re1 —
+> you'll want a6 ready; if instead Bg5, then h6"), the student's own game names
+> the opponent's idea and WITHHOLDS your reply (guide-don't-tell). Wired into
+> `positionFacts`: the opponent-intent clause now prefers the CONCRETE named move
+> (revealReply:false) over the old generic "knife-edge" text, gated by the
+> importance gate (fires only when the moment earned voice), on the opponent's
+> move out of the opening. Robust to the throttled engine (we narrate the IDEAL;
+> the gap is the lesson). 6 opponent-intent + 11 positionFacts tests green.
+> NEXT down the list: the take-advantage-of-the-gap (grade the opponent's actual
+> move vs their ideal → subtle board nudge), v2 latent-danger (trade-creates-pin),
+> the walkthrough Tier-3 wiring, review.
+
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the
   proven offline `position-facts.mjs` / `render-briefing.mjs` into runtime

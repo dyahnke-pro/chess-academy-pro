@@ -66,6 +66,28 @@ describe('computePositionFacts — the composer', () => {
   });
 });
 
+describe('the concrete opponent-intent clause (fires through positionFacts)', () => {
+  const lineM = (rank: number, evaluation: number, moves: string[]) => ({ rank, evaluation, moves, mate: null });
+  it('names the opponent\'s move (guide-don\'t-tell: withholds your reply) when they\'re on move', async () => {
+    // White (the opponent) to move, sharp (only-move) so importance speaks; the
+    // fan names Re1 with ...a6, Bg5 with ...h6. Student is Black.
+    const sharp = {
+      ...flat,
+      topLines: [lineM(1, 300, ['f1e1', 'a7a6']), lineM(2, 20, ['c1g5', 'h7h6'])],
+      evaluation: 300, wdl: { win: 500, draw: 400, loss: 100 },
+    };
+    const r = await computePositionFacts({
+      fen: 'r1bq1rk1/pppp1ppp/2n2n2/4p3/1bB1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 14',
+      moverColor: 'w', studentColor: 'b', analysis: sharp,
+    });
+    expect(r.opponentIntent).not.toBeNull();
+    expect(r.opponentIntent!.plans[0]).toMatchObject({ opponentMove: 'Re1', studentReply: 'a6' });
+    const oi = r.clauses.find((c) => c.kind === 'opponent-intent')!;
+    expect(oi.text).toMatch(/opponent's Re1/);
+    expect(oi.text).not.toMatch(/\ba6\b/); // reply withheld on your own game
+  });
+});
+
 describe('the latent-danger prevention clause (fires through positionFacts)', () => {
   it('warns when the student\'s own bishop is pinned to the king — even in a quiet spot', async () => {
     // White (student) to move, move 14. Bishop e5 lined in front of Ke1 down the

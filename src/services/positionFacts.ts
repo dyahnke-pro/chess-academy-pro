@@ -21,6 +21,7 @@ import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 import { detectLatentDanger, latentDangerClause, type LatentDanger } from './latentDanger';
+import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -64,6 +65,9 @@ export interface PositionFactsResult {
   /** A pin/skewer in waiting on the student's own king/queen (the prevention
    *  layer). Null when the geometry isn't there. */
   latentDanger: LatentDanger | null;
+  /** What the opponent wants — named + branched, when they're on move. Null on
+   *  the student's own move / in the opening. */
+  opponentIntent: OpponentIntent | null;
   /** Board-true clauses, most-important-first, each TAGGED by kind so a surface
    *  can emit only what its existing lanes don't already cover (no walk-over). */
   clauses: ClauseItem[];
@@ -163,9 +167,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? detectLatentDanger(fen, studentColor)
     : null;
 
+  // What the OPPONENT wants — named, branched (their idea + your reply, straight
+  // from the PVs). Only when they're on move, out of the opening.
+  const opponentIntent = (!openingPhase && !studentToMove)
+    ? buildOpponentIntent({ analysis, fen })
+    : null;
+
   return {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger }),
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, opponentIntent,
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, opponentIntent }),
   };
 }
 
@@ -184,8 +194,9 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
+  opponentIntent: OpponentIntent | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, opponentIntent } = a;
   // A latent danger to your own king is worth a word even in an otherwise quiet
   // spot — it does not need the importance gate to have fired.
   if (!importance.speak && !latentDanger) return [];
@@ -226,9 +237,16 @@ function buildClauses(a: {
     else if (importance.tier === 'critical') ranked.push({ kind: 'key-moment', rank: 65, text: `This is a critical moment — the choice here is the one that decides it.` });
   } else {
     // The opponent is on move → explain their intent, not a "slow down" to the
-    // student who isn't choosing anything right now.
-    if (importance.tier === 'only-move') ranked.push({ kind: 'opponent-intent', rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
-    else if (importance.tier === 'critical') ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
+    // student who isn't choosing anything right now. Prefer the CONCRETE named
+    // intent from the fan (guide-don't-tell: their idea, your reply withheld);
+    // fall back to the generic sharpness line when there's no concrete move.
+    if (opponentIntent) {
+      ranked.push({ kind: 'opponent-intent', rank: 55, text: opponentIntentFacts(opponentIntent, { revealReply: false }) });
+    } else if (importance.tier === 'only-move') {
+      ranked.push({ kind: 'opponent-intent', rank: 55, text: `The opponent is on a knife-edge here — only one move keeps them in it.` });
+    } else if (importance.tier === 'critical') {
+      ranked.push({ kind: 'opponent-intent', rank: 50, text: `This is where the opponent has to find something — the position is sharp for them.` });
+    }
   }
   // The campaign — the student's asset, and the opponent's (with the counter).
   if (leansOn) ranked.push({ kind: 'student-leans', rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
