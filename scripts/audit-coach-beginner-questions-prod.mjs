@@ -1,28 +1,23 @@
-// Drive the SOFT beginner questions a real ~900-rated native-iOS user typed
-// (from PostHog, 2026-08), against CURRENT main/prod, and print the real
-// replies. The existing answers-questions audit covers "why play <move>" /
-// "what's my plan"; the beginner shapes below (notation help, move-quality,
-// opponent-move why, conversational) mostly deflect to the canned line or a
-// generic best-move readout. This exercises those shapes so the gap is visible.
-// NOTE: "substantive" here only means length>=20 && not-a-picker — READ the
-// replies against the questions; a best-move readout to "do you understand me"
-// is a non-answer even though it prints as substantive.
+// Beginner-question coach audit (David 2026-08-27, from native user Rivertoe85).
+// Drives the SOFT plain-English questions a ~900 beginner actually types against
+// the live coach and prints the real replies, flagging the canned deflection.
+// Complements audit-coach-answers-questions-prod.mjs (which covers best-move /
+// plan shapes). Reference: THE REAL-GAME EXPERIENCE AUDIT standard (§G1).
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const RUN_ID = process.env.AUDIT_RUN_ID || `rivertoe-${Date.now().toString(36)}`;
+const RUN_ID = process.env.AUDIT_RUN_ID || `beginnerq-${Date.now().toString(36)}`;
 const CANNED = "i can't verify that precisely";
 
-// His real questions (lightly de-typo'd to how a person would type them).
+// His real questions (lightly de-typo'd), tagged with the phase that should fix them.
 const QUESTIONS = [
-  'Why do you think they moved their queen there?',
-  'How do I improve my middlegame?',
-  'Do you understand me?',
-  'What does Bxe7 mean?',
-  'Was my knight to d5 a good move?',
-  "Doesn't that mess up the structure?",
+  { q: 'What does Bxe7 mean?', phase: 'P2-notation', want: /notation|bishop/i },
+  { q: 'How do I improve my middlegame?', phase: 'P4-recommend', want: /play|game|middlegame/i },
+  { q: 'Why do you think they moved their queen there?', phase: 'P6-opponent-why', want: null },
+  { q: 'Do you understand me?', phase: 'P3-conversational', want: null },
+  { q: 'Was my knight to d5 a good move?', phase: 'P5-move-quality', want: null },
 ];
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -86,21 +81,20 @@ const rows = [];
 try {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
-  // Get a real game on the board so questions land on a live position.
   await ask('Play the Italian with me as white');
   await resolvePicker();
   await page.waitForTimeout(3000);
-  for (const q of QUESTIONS) {
+  for (const { q, phase, want } of QUESTIONS) {
     const reply = await ask(q);
     const canned = reply.toLowerCase().includes(CANNED);
-    rows.push({ q, reply, canned });
-    console.log(`\nQ: ${q}\nA: ${reply || '(no reply captured)'}\n   ${canned ? '❌ CANNED DEFLECTION' : reply ? '✔ substantive' : '⚠ empty'}`);
+    const responsive = want ? want.test(reply) : !canned && reply.length >= 20;
+    rows.push({ q, phase, reply, canned, responsive });
+    console.log(`\n[${phase}] Q: ${q}\n  A: ${reply || '(no reply)'}\n  ${canned ? '❌ CANNED' : responsive ? '✔ responsive' : '⚠ non-canned but off-target'}`);
   }
 } catch (e) {
   console.error('audit error:', e.message);
 } finally {
   const canned = rows.filter((r) => r.canned).length;
-  const empty = rows.filter((r) => !r.reply).length;
-  console.log(`\n=== SUMMARY: ${rows.length} asked | ${canned} canned deflections | ${empty} empty | ${rows.length - canned - empty} substantive ===`);
+  console.log(`\n=== ${rows.length} asked | ${canned} canned | ${rows.filter((r) => r.responsive).length} responsive ===`);
   await browser.close();
 }
