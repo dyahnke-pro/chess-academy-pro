@@ -17,10 +17,22 @@
  * walkthroughs. G0/G3: moves from real games (chess.js-legal), prose is the DNA note.
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { Chess } from '../node_modules/chess.js/dist/esm/chess.js';
 import { reconstructSpineFen } from './voiced-authoring/fen-spine.mjs';
 
 const SRC = 'data/video-narration-voiced';
 const OUT = 'src/data/voiced-matchups.json';
+
+// A global EXACT-POSITION note index (board+turn+castling+ep → spoken), built
+// from EVERY voiced video. A matchup line that transposes into a position some
+// OTHER video already voiced can then speak that authored note instead of
+// falling back to the runtime computed fill — raising the voiced share with zero
+// new authoring, and still board-true (same exact FEN, not a name/structure
+// rhyme; David 2026-08-02 "stay scoped to the position"). Populated as a side
+// effect of reconstructSpine over all files, so it's complete before buildTree.
+const posKey = (fen) => fen.split(' ').slice(0, 4).join(' ');
+const FEN_NOTES = new Map();
+const spliceStats = {};
 
 /** Fen-anchored legal main line — never splices a narrator's rewind (see
  *  scripts/voiced-authoring/fen-spine.mjs). Same return shape the tree merge
@@ -29,11 +41,26 @@ function reconstructSpine(moves) {
   // Carry the rewind ASIDES ("why this, not that", spoken inline with arrows —
   // David 2026-08-27) onto the spine node they branch from, same as the
   // walkthrough builder.
-  const { spine, asides } = reconstructSpineFen(moves);
+  const { spine, nodes, asides } = reconstructSpineFen(moves);
   for (const a of (asides || [])) {
     const ti = a.afterSpineIndex < 0 ? 0 : a.afterSpineIndex;
     if (ti >= spine.length) continue;
     (spine[ti].asides ||= []).push({ spoken: a.spoken, arrows: a.arrows, kind: a.kind });
+  }
+  // Attach the after-move FEN to each spine node (for the cross-corpus splice)
+  // and index every voiced spine position into FEN_NOTES.
+  const g = new Chess();
+  for (const n of spine) {
+    try { g.move(n.san); } catch { break; }
+    n.fen = g.fen();
+    if (n.spoken) { const k = posKey(n.fen); if (!FEN_NOTES.has(k)) FEN_NOTES.set(k, n.spoken); }
+  }
+  // Also index the fuller node list (includes fen-consistent reanchors the spine
+  // dropped) so transpositions have the widest authored pool to match.
+  for (const nd of (nodes || [])) {
+    if (nd.spoken && typeof nd.fenAfter === 'string') {
+      const k = posKey(nd.fenAfter); if (!FEN_NOTES.has(k)) FEN_NOTES.set(k, nd.spoken);
+    }
   }
   return spine;
 }
@@ -140,8 +167,9 @@ function buildTree(name, videos) {
   for (const v of videos) {
     let cur = root;
     for (const step of v.spine) {
-      if (!cur.children.has(step.san)) cur.children.set(step.san, { san: step.san, movedBy: step.movedBy, children: new Map(), spoken: undefined, asides: [] });
+      if (!cur.children.has(step.san)) cur.children.set(step.san, { san: step.san, movedBy: step.movedBy, children: new Map(), spoken: undefined, asides: [], fen: step.fen });
       const node = cur.children.get(step.san);
+      if (!node.fen && step.fen) node.fen = step.fen;
       if (step.spoken && !node.spoken) node.spoken = step.spoken;
       if (step.asides && step.asides.length) {
         const seen = new Set(node.asides.map((x) => x.spoken));
@@ -150,6 +178,21 @@ function buildTree(name, videos) {
       cur = node;
     }
   }
+  // CROSS-CORPUS SPLICE: a matchup ply the pairing's own videos left silent, but
+  // whose EXACT position another voiced video narrated, speaks that authored note
+  // (voiced > computed fill). Board-true — same board+turn+castling+ep. Skip a
+  // note already spoken on the path so a transposition doesn't echo it.
+  spliceStats.candidates ||= 0; spliceStats.filled ||= 0;
+  (function splice(n, spokenOnPath) {
+    for (const c of n.children.values()) {
+      if (!c.spoken) {
+        spliceStats.candidates += 1;
+        const note = c.fen ? FEN_NOTES.get(posKey(c.fen)) : undefined;
+        if (note && !spokenOnPath.has(note)) { c.spoken = note; spliceStats.filled += 1; }
+      }
+      splice(c, c.spoken ? new Set([...spokenOnPath, c.spoken]) : spokenOnPath);
+    }
+  })(root, new Set());
   function lastNarrated(n) { let d = (n.spoken || (n.asides && n.asides.length)) ? 0 : -1; for (const c of n.children.values()) { const x = lastNarrated(c); if (x >= 0 && x + 1 > d) d = x + 1; } return d; }
   (function prune(n) { for (const [san, c] of [...n.children]) { if (lastNarrated(c) < 0) n.children.delete(san); else prune(c); } })(root);
   function toWt(n) { const children = [...n.children.values()].map((c) => ({ node: toWt(c) })); const idea = n.spoken || ''; const out = { san: n.san, movedBy: n.movedBy, idea, children }; const s = toShort(idea); if (s) out.shortIdea = s; if (n.asides && n.asides.length) out.asides = n.asides.map((a) => ({ idea: a.spoken, shortIdea: toShort(a.spoken), arrows: (a.arrows || []).map((ar) => ({ from: ar.from, to: ar.to })) })); return out; }
@@ -166,3 +209,4 @@ for (const [key, g] of ent) {
 out.sort((a, b) => b.narratedNodes - a.narratedNodes);
 writeFileSync(OUT, JSON.stringify(out, null, 1));
 console.log(`\nwrote ${out.length} matchup walkthroughs -> ${OUT}`);
+console.log(`cross-corpus splice: filled ${spliceStats.filled || 0}/${spliceStats.candidates || 0} silent plies from ${FEN_NOTES.size} indexed voiced positions`);
