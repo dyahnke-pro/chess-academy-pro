@@ -509,9 +509,20 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > importance gate (fires only when the moment earned voice), on the opponent's
 > move out of the opening. Robust to the throttled engine (we narrate the IDEAL;
 > the gap is the lesson). 6 opponent-intent + 11 positionFacts tests green.
-> NEXT down the list: the take-advantage-of-the-gap (grade the opponent's actual
-> move vs their ideal → subtle board nudge), v2 latent-danger (trade-creates-pin),
-> the walkthrough Tier-3 wiring, review.
+> **SLICE 6 BUILT (2026-08-27): the take-advantage-of-the-gap primitive.**
+> `src/services/opponentGap.ts` — when the throttled opponent under-plays its
+> ideal and hands the student a real gift, flag it (`detectOpponentGap`): compares
+> the eval after their ACTUAL move to what their IDEAL would have left (both
+> student-POV, reusing `opponentIntent.plans[0].evalCp` + the post-move analysis —
+> no new search), requires a ≥120cp swing AND a concrete best follow-up, and mutes
+> in an already-won game (no cry-wolf). `opponentGapClause` is the subtle nudge —
+> names NO move; the caller draws the lead-the-eye arrow from `toSquare`. 6 tests.
+> **Primitive built + tested; NOT wired** — the wire lives in the delicate async
+> reply-narration flow (thread the pre-move `opponentIntent` + the post-reply
+> analysis, speak the nudge + draw the arrow). Careful daytime slice, not a blind
+> overnight edit on the reply path.
+> NEXT down the list: wire opponentGap (reply-flow), v2 latent-danger
+> (trade-creates-pin), the walkthrough Tier-3 wiring, review.
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the
