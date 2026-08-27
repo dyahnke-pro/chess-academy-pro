@@ -1984,8 +1984,10 @@ const NOTATION_PIECE_WORD: Record<string, string> = {
  *  letter a beginner may lower-case ("bxe7"). */
 export function notationQuestionSan(text: string | null | undefined): string | null {
   if (!text) return null;
-  // Must be ASKING what a move means/does — not just any message with a SAN.
-  if (!/\bwhat(?:'?s| is| does| do)\b/i.test(text) && !/\bwhat\s+means\b/i.test(text)) return null;
+  // Must be asking what a move MEANS (notation), not its strategic purpose:
+  // "what does Bxe7 mean" / "what is bxe7" / "what's Nf3" — but NOT "what does
+  // e4 do" (that wants the idea; the move-purpose lane owns it).
+  if (!/\bmean(?:s|ing)?\b|\bstands?\s+for\b/i.test(text) && !/\bwhat(?:'?s| is)\s/i.test(text)) return null;
   // Match piece moves (case-insensitive so a beginner's "bxe7"/"nf3" is caught),
   // castling, pawn moves/captures, and promotions.
   const SAN = /\b(O-O-O|O-O|[KQRBNkqrbn][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?[+#]?)\b/;

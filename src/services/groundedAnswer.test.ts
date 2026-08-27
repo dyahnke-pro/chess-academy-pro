@@ -1266,12 +1266,13 @@ describe('notationQuestionSan — pull the move out of "what does Bxe7 mean" (Da
   });
   it('extracts castling and pawn moves', () => {
     expect(notationQuestionSan('what does O-O mean')).toBe('O-O');
-    expect(notationQuestionSan('what does e4 do')).toBe('e4');
+    expect(notationQuestionSan('what is e4')).toBe('e4');
     expect(notationQuestionSan('what does exd5 mean')).toBe('exd5');
   });
-  it('returns null when there is no "what …" question or no move token', () => {
+  it('returns null when there is no meaning-question or no move token', () => {
     expect(notationQuestionSan('play Bxe7')).toBeNull();       // not a question
     expect(notationQuestionSan('what should I do here?')).toBeNull(); // no move
+    expect(notationQuestionSan('what does e4 do?')).toBeNull(); // asks purpose, not notation
     expect(notationQuestionSan(null)).toBeNull();
   });
 });

@@ -2789,6 +2789,29 @@ export async function getCoachChatResponse(
   let masterPlayContext: MasterPlayContext | undefined;
   let groundingEngaged = false;
   if (grounding && grounding.internalAsk !== true) {
+    // NOTATION HELP FIRST (David 2026-08-27) — "what does Bxe7 mean?" must decode
+    // the move, not get eaten by the concept/glossary assembler (which answered
+    // Bxe7 with a fork definition — prod audit 2026-08-27). Only fires on an
+    // ACTUAL move token in a meaning-question; plain concept asks ("what does a
+    // fork mean") carry no SAN and fall straight through. Computed — G0.
+    const earlyUserMsg = (() => {
+      for (let i = messages.length - 1; i >= 0; i -= 1) {
+        if (messages[i].role === 'user') return messages[i].content;
+      }
+      return undefined;
+    })();
+    const earlyNotationSan = notationQuestionSan(earlyUserMsg);
+    if (earlyNotationSan) {
+      const explained = explainSanNotation(earlyNotationSan, grounding.currentFen ?? null);
+      if (explained) {
+        const voiced = await voiceFacts(explained, { studentMessage: earlyUserMsg, providerConfig: config, intent: 'notation', preferRaw: true });
+        if (voiced) {
+          emitGroundingCoverage('notation-help', grounding.surface ?? 'unknown', grounding.sessionId, { question: (earlyUserMsg ?? '').slice(0, 100), path: 'early' });
+          if (onStream) onStream(voiced);
+          return voiced;
+        }
+      }
+    }
     const intentFired =
       grounding.forceEngage === true ||
       detectMoveQuestionIntent(messages) ||
