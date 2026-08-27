@@ -20,6 +20,7 @@ import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
 import { QuickFeedbackButton } from '../Feedback/QuickFeedbackButton';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
+import { cancelBackgroundAnalysis } from '../../services/gameAnalysisService';
 
 interface NavItem {
   to: string;
@@ -207,6 +208,16 @@ export function AppLayout(): JSX.Element {
         >
           <span className="animate-spin inline-block w-3 h-3 border-2 border-current border-t-transparent rounded-full" />
           <span>Analyzing games{bgAnalysisProgress ? ` — ${bgAnalysisProgress}` : '...'}</span>
+          <button
+            type="button"
+            onClick={() => cancelBackgroundAnalysis()}
+            className="ml-auto px-2 py-0.5 rounded font-semibold border border-current/40 hover:opacity-80 active:opacity-60"
+            style={{ background: 'color-mix(in srgb, var(--color-bg) 18%, transparent)' }}
+            data-testid="bg-analysis-stop"
+            aria-label="Stop analyzing games"
+          >
+            Stop
+          </button>
         </div>
       )}
 

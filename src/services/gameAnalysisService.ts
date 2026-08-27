@@ -59,8 +59,23 @@ function resolveWorkerPoolSize(): number {
 }
 const WORKER_POOL_SIZE = resolveWorkerPoolSize();
 
-// Abort signal for background suspension
+// Abort signal for background suspension (tab hidden → pause + auto-resume).
 let _abortAnalysis = false;
+// USER cancel — distinct from the suspension abort so the run does NOT
+// auto-restart when the tab is visible (the finally block resumes only a
+// suspension abort). Set by the "Stop analyzing" banner control.
+let _userCancelled = false;
+
+/** Stop the in-flight background game analysis at the next game boundary and do
+ *  NOT auto-restart (the user asked to stop). The current game finishes; every
+ *  game already analyzed keeps its insights (they're written per-game). */
+export function cancelBackgroundAnalysis(): void {
+  if (!_backgroundRunning) return;
+  _userCancelled = true;
+  _abortAnalysis = true;
+  // Immediate UI feedback — hide the banner now; the loop unwinds shortly.
+  useAppStore.getState().setBackgroundAnalysis(false, null);
+}
 
 // Review-priority pause (David 2026-07-19: opening a review sat on
 // "Preparing your review…" forever behind a 707-game bulk analysis — the
@@ -1106,6 +1121,7 @@ let _backgroundRunning = false;
 export function runBackgroundAnalysis(): void {
   if (_backgroundRunning) return;
   _backgroundRunning = true;
+  _userCancelled = false; // a fresh run clears any prior user cancel
 
   const store = useAppStore.getState();
   store.setBackgroundAnalysis(true, 'Starting analysis...');
@@ -1125,8 +1141,9 @@ export function runBackgroundAnalysis(): void {
       _backgroundRunning = false;
       useAppStore.getState().setBackgroundAnalysis(false, null);
 
-      // If aborted due to backgrounding, auto-restart when app returns
-      if (_abortAnalysis) {
+      // If aborted due to backgrounding, auto-restart when app returns — but
+      // NOT when the user explicitly cancelled (that must stay stopped).
+      if (_abortAnalysis && !_userCancelled) {
         // App may already be visible again by the time we reach .finally()
         if (document.visibilityState === 'visible') {
           _abortAnalysis = false;
