@@ -62,6 +62,8 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
+import trapClassifications from '../data/trap-line-classifications.json';
+const TRAP_KINDS = (trapClassifications as { classifications: Record<string, string> }).classifications;
 import { lookupTablebase } from './lichessTablebaseService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
@@ -3117,7 +3119,19 @@ export async function getCoachChatResponse(
                 .filter(isSurfaceableGem)
                 .map((g) => `after ${g.inaccuracy}, punish with ${g.punish}`);
             const trapNames = (o: OpeningRecord): string[] => {
-              const named = (o.trapLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
+              // A trapLine is offered as a "weapon you can spring" ONLY if the
+              // engine backs it as a decisive trap (David 2026-08-27). A pro-rep
+              // trap the Stockfish triage downgraded to a positional 'theme' or a
+              // non-decisive 'mistake' is NOT a springable weapon — drop it here
+              // (it still teaches via its softer chip). Masterclass traps carry no
+              // entry in this file, so they are unaffected.
+              const downgraded = (n: string): boolean => {
+                const k = TRAP_KINDS[`${o.id}::${n}`];
+                return k === 'theme' || k === 'mistake';
+              };
+              const named = (o.trapLines ?? [])
+                .map((v) => v.name)
+                .filter((n): n is string => !!n && n.trim().length > 0 && !downgraded(n));
               const curated = named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
               return [...curated, ...gemTrapNames(o)];
             };

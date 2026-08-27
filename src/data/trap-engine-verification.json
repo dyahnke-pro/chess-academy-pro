@@ -1,0 +1,351 @@
+{
+  "_meta": {
+    "purpose": "Stockfish verdict per pro-rep trap/warning line — the gate reads this so no unbacked trap is offered as a weapon. Regenerate with scripts/audit-traps-stockfish.mjs + scripts/triage-traps.mjs.",
+    "depth": 22,
+    "generated": "audit-reports/traps-stockfish-2026-08-27T23-01-47-183Z"
+  },
+  "verification": {
+    "pro-naroditsky-caro-kann::h3 hands Black the bishop pair (KIA Bg4 line)": {
+      "role": "trap",
+      "cp": -27,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-caro-kann::dxe4 → Qxd1+ exposes White's king (d3 line)": {
+      "role": "trap",
+      "cp": -28,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-caro-kann::Bd3 voluntary trade in the Exchange Caro": {
+      "role": "trap",
+      "cp": 3,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-caro-kann::The …Bg4 Pin When White Develops Nf3 Early": {
+      "role": "trap",
+      "cp": 200,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::Nc3 Queen-Tempo (2…Nc6 Line)": {
+      "role": "trap",
+      "cp": 54,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::Bc4-Gambit + exf7+ (Nc6 block fails, 62 games incl. Hans Niemann 3161)": {
+      "role": "trap",
+      "cp": 20,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::d5-Open cxd4 → Nb5 Outpost (17 games incl. Sam Shankland 2934)": {
+      "role": "trap",
+      "cp": 30,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::Bxf7+ → e6+ → Kg8 Walk-In (10 games incl. ShadowKing71 3122)": {
+      "role": "trap",
+      "cp": 150,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::Bxf7+ King-Hunt — …Kg6 forced mate (Nh4+/d4+/Nf5+/Qxg5#, engine-verified)": {
+      "role": "trap",
+      "cp": 100000,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alapin::...Bg4 Pin Reflex in Nc6 line (7 games)": {
+      "role": "trap",
+      "cp": 48,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-najdorf::Nc3 after ...e5 lets us trade with tempo": {
+      "role": "trap",
+      "cp": 264,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-najdorf::...Ng4 trades for the dark-square bishop": {
+      "role": "trap",
+      "cp": 10,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-najdorf::Bb5 in deep English Attack (queen-trade trap)": {
+      "role": "trap",
+      "cp": 9,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-najdorf::Be3+Nd5 lets Black trade with ...Bxd5": {
+      "role": "trap",
+      "cp": -17,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kid::Mar del Plata Nh5-Nf4-Nxd4 conversion (30 games)": {
+      "role": "trap",
+      "cp": -45,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kid::Bf5 + Ne4 wins bishop pair (Fianchetto, GM Bok victim)": {
+      "role": "trap",
+      "cp": -36,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kid::Qxd8 trade hands Black the better endgame (Firouzja victim)": {
+      "role": "trap",
+      "cp": 0,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alekhine::fxe5 in Anti-Vienna f4 line (top-GM victim)": {
+      "role": "trap",
+      "cp": 7,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alekhine::Bb5 in Anti-Vienna lets ...Nd4 fork": {
+      "role": "trap",
+      "cp": -26,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-alekhine::Bc4 + Nd7 in Modern Alekhine": {
+      "role": "trap",
+      "cp": -42,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kia::O-O lets us crash through with exf6 (Anti-Grünfeld)": {
+      "role": "trap",
+      "cp": 380,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kia::d6 + e5 trade hands us the better endgame": {
+      "role": "trap",
+      "cp": -4,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kia::Be7 vs Bg5 pin in QGD-style structure": {
+      "role": "trap",
+      "cp": 10,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kia::Be7 vs Bg5 pin (top-GM victim)": {
+      "role": "trap",
+      "cp": 13,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-kia::Nb6 vs c5 cramping (Anti-Alekhine setup)": {
+      "role": "trap",
+      "cp": 103,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-rossolimo::Nge7 walks into Bxc6 doubled-pawns": {
+      "role": "trap",
+      "cp": -1,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-rossolimo::...a6 in Moscow Bb5+ Nd7 line": {
+      "role": "trap",
+      "cp": 0,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-rossolimo::Nge7 in the early b3 Rossolimo": {
+      "role": "trap",
+      "cp": -12,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-rossolimo::cxd4 lets us recapture with the queen": {
+      "role": "trap",
+      "cp": 10,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-rossolimo::...a6 walks into Bg5 + Bxf6 (Open Sicilian)": {
+      "role": "trap",
+      "cp": 21,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-jobava-london::Nf6 lets Nxf6+ wreck Black's kingside (Firouzja 3x!)": {
+      "role": "trap",
+      "cp": 69,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-jobava-london::Nd7 lets us trade both knights favorably": {
+      "role": "trap",
+      "cp": 33,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-jobava-london::...e6 after Bf5 lets f3+g4 kingside storm": {
+      "role": "trap",
+      "cp": -17,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-jobava-london::Bg5 + dxe4 + Bxf6 doubles Black's pawns": {
+      "role": "trap",
+      "cp": 40,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-jobava-london::Bd6 voluntary trade hands us c-file pressure": {
+      "role": "trap",
+      "cp": -14,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-ruy-lopez::Nf6 in Ba4 line walks into Bxc6 doubled-pawns (Wesley So victim)": {
+      "role": "trap",
+      "cp": 0,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-ruy-lopez::Nd6 in Berlin Defense (top-GM victim)": {
+      "role": "trap",
+      "cp": 13,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-ruy-lopez::Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)": {
+      "role": "trap",
+      "cp": 22,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-ruy-lopez::Bc5 in d3 Berlin (beat a 2990)": {
+      "role": "trap",
+      "cp": 30,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-ruy-lopez::d6 in Steinitz lets Bxc6+ + d4 dominate": {
+      "role": "trap",
+      "cp": 6,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-fantasy-caro::O-O in Anti-Winawer line (Nihal Sarin victim 2x)": {
+      "role": "trap",
+      "cp": 8,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-naroditsky-fantasy-caro::Bc5 in Italian-style Fantasy (Parhamov victim)": {
+      "role": "trap",
+      "cp": 165,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-ericrosen-stafford::Légal's Mate Trap (6.Bg5??)": {
+      "role": "trap",
+      "cp": 100000,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-ericrosen-qgd::Elephant Trap": {
+      "role": "trap",
+      "cp": 337,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-ericrosen-budapest::Kieninger Trap": {
+      "role": "trap",
+      "cp": 100000,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-open-sicilian::Najdorf Greed — …Nxe4 Drops a Piece": {
+      "role": "trap",
+      "cp": 354,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-sicilian::Siberian Trap (vs the Smith-Morra)": {
+      "role": "trap",
+      "cp": 333,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-sicilian::...Nxe4 drops the queen": {
+      "role": "warning",
+      "cp": -307,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-1e5::Fishing Pole Trap": {
+      "role": "trap",
+      "cp": 100000,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-1e5::Retreating ...Nf6 hands White the centre": {
+      "role": "warning",
+      "cp": -167,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-nimzo::Elephant Trap (QGD)": {
+      "role": "trap",
+      "cp": 337,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-nimzo::...Nxe4 loses material": {
+      "role": "warning",
+      "cp": -304,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-kid::...Nxe4 drops a piece": {
+      "role": "warning",
+      "cp": -397,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-caro-kann::The Smothered Mate — …Ngf6??": {
+      "role": "warning",
+      "cp": -100000,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-modern::Never grab e4 — …Nxe4??": {
+      "role": "warning",
+      "cp": -373,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-closed-sicilian::Premature Nd5?? drops a piece": {
+      "role": "warning",
+      "cp": -466,
+      "kind": null,
+      "status": "keep"
+    },
+    "pro-carlsen-kings-gambit::Bishop's Gambit — don't block with g3??": {
+      "role": "warning",
+      "cp": -533,
+      "kind": null,
+      "status": "keep"
+    }
+  }
+}

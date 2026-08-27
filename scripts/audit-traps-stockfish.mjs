@@ -30,15 +30,19 @@ import { spawn } from 'node:child_process';
 import { Chess } from 'chess.js';
 
 const STOCKFISH = '/usr/games/stockfish';
-const DEPTH = 16;
-const CONCURRENCY = 4;
+const DEPTH = Number(process.env.TRAP_AUDIT_DEPTH ?? 16);
+const CONCURRENCY = Number(process.env.TRAP_AUDIT_CONCURRENCY ?? 4);
 const STAMP = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/traps-stockfish-${STAMP}`;
 
 const THRESHOLDS = {
   trap:    { minCp: 200, allowMate: true,  expectedDir: 'student-winning' },
   mistake: { minCp: 50,  allowMate: true,  expectedDir: 'student-better' },
-  theme:   { minCp: 0,   allowMate: true,  expectedDir: 'not-losing' },
+  // A theme is a long-term POSITIONAL plan (bishop pair, c-file, kingside storm),
+  // so the engine's material-weighted eval legitimately reads near-equal — it is
+  // gated at "not CLEARLY losing" (≥ −50cp), not "winning". Below that the triage
+  // removes it rather than calling it a theme (scripts/triage-traps.mjs).
+  theme:   { minCp: -50, allowMate: true,  expectedDir: 'not-clearly-losing' },
   warning: { maxCp: -100, allowMate: false, expectedDir: 'student-losing' },
 };
 
@@ -146,6 +150,16 @@ function parsePgnToFinalFen(pgn, setupFen) {
 function collectEntries() {
   const entries = [];
 
+  // sidecar classifications (trap kind: trap/mistake/theme) — bare-string values
+  // keyed "<id>::<name>". Load ONCE, used by BOTH the pro-rep loop (below) and
+  // the repertoire loop (further down). The pro-rep loop previously read a
+  // non-existent `t.kind`, so every pro-rep 'theme' was audited at trap-tier and
+  // kept showing BROKEN — fixed 2026-08-27.
+  let classifications = {};
+  try {
+    classifications = JSON.parse(readFileSync('src/data/trap-line-classifications.json', 'utf-8')).classifications ?? {};
+  } catch {}
+
   // pro-repertoires
   const pro = JSON.parse(readFileSync('src/data/pro-repertoires.json', 'utf-8'));
   for (const op of pro.openings ?? []) {
@@ -156,7 +170,7 @@ function collectEntries() {
         openingName: op.name,
         studentColor: op.color,
         role: 'trap',
-        kind: t.kind ?? null,
+        kind: classifications[`${op.id}::${t.name}`] ?? null,
         name: t.name,
         pgn: t.pgn,
         setupFen: t.setupFen,
@@ -180,11 +194,6 @@ function collectEntries() {
   // repertoire
   const rep = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
   const repArr = Array.isArray(rep) ? rep : Object.values(rep);
-  // sidecar classifications (trap kind: trap/mistake/theme)
-  let classifications = {};
-  try {
-    classifications = JSON.parse(readFileSync('src/data/trap-line-classifications.json', 'utf-8'));
-  } catch {}
   for (const op of repArr) {
     for (const t of op.trapLines ?? []) {
       const key = `${op.id}::${t.name}`;
@@ -194,7 +203,7 @@ function collectEntries() {
         openingName: op.name,
         studentColor: op.color,
         role: 'trap',
-        kind: classifications[key]?.kind ?? null,
+        kind: classifications[key] ?? null,
         name: t.name,
         pgn: t.pgn,
         setupFen: t.setupFen,
