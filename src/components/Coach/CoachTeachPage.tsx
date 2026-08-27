@@ -87,6 +87,7 @@ import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGem
 import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
+import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -9188,27 +9189,60 @@ export function CoachTeachPage(): JSX.Element {
         // strength; running hot → invest in the weakness; steady → keep
         // building the home opening. The call is an OFFER (a chip): whatever
         // the student types instead always wins (sovereignty).
-        void getStoredWeaknessProfile()
-          .then(async (profile) => {
+        void getUnifiedWeaknessProfile()
+          .then(async (unified) => {
             // The student may have started (typed an ask, gotten a line
             // picker) while these reads resolved — NOTHING here may run
             // then: the unguarded nudge upgrade was REPLACING the line
             // picker's chips before David could tap one (2026-07-31).
             if (userInteractedRef.current) return;
-            const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
-            const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
-            if (nudge) {
-              setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
+            // RECENCY-WEIGHTED pick (David 2026-08-26: "reduce your X mistake
+            // THAT I HAVE SEEN IN THE LAST 3 GAMES" — lead with what's costing
+            // them LATELY, not their all-time worst). Prefer an OPEN weakness
+            // seen in the recent window; among those, the most severe. The
+            // unified spine carries `lastSeenAt` (a timestamp — the aggregated
+            // profile has no per-game index, so "recent games" is a time
+            // window, not a literal 3-game count). Fall back to the stored
+            // profile's severity pick when the spine is empty.
+            const now = Date.now();
+            const RECENT_MS = 21 * 24 * 60 * 60 * 1000; // ~3 weeks of play
+            const open = unified.filter((w) => w.openCount > 0);
+            const recentOpen = open.filter((w) => now - w.lastSeenAt <= RECENT_MS);
+            const spinePick = (recentOpen.length ? recentOpen : open)
+              .slice().sort((a, b) => b.severity - a.severity)[0] ?? unified[0] ?? null;
+
+            let topLabel: string | null = spinePick?.label ?? null;
+            let topCategory: string | undefined;
+            let isRecent = !!spinePick && now - spinePick.lastSeenAt <= RECENT_MS;
+            if (!topLabel) {
+              const profile = await getStoredWeaknessProfile();
+              const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
+              topLabel = top?.label ?? null;
+              topCategory = top?.category;
+              isRecent = false;
             }
+            if (userInteractedRef.current || !topLabel) return;
+
+            // Evidence-first HANDOFF: a chip that STARTS the in-place mistake
+            // drill (routes through the training-aid router → startMistakeDrills,
+            // the ranked queue that leads with this very weakness). No reroute
+            // to the tactics tab. When we only have the stored profile (no
+            // recent evidence), fall back to the topic nudge.
+            const drillChip = 'Drill my weaknesses';
+            const leadChip = isRecent
+              ? drillChip
+              : (weaknessNudgeFromItem(topCategory, topLabel) ?? drillChip);
+            setCoachChoices([leadChip, ...generic.filter((q) => q !== leadChip)].slice(0, 4));
+
             let spokeCall = false;
             try {
               const { computeCoachsCall } = await import('../../services/coachsCall');
-              const call = await computeCoachsCall(top?.label ?? null);
+              const call = await computeCoachsCall(topLabel);
               if (call && !userInteractedRef.current) {
                 // Label VERBATIM per David 2026-07-18 — the weakness label is
                 // a proper noun phrase; never lowercase-splice it.
                 spokeCall = true;
-                const chip = call.prescription === 'weakness' && nudge ? nudge : call.chip;
+                const chip = call.prescription === 'weakness' ? leadChip : call.chip;
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: call.line, timestamp: Date.now() }]);
                 setCoachChoices((prev) => [chip, ...(prev ?? generic).filter((q) => q !== chip)].slice(0, 4));
                 speechChainRef.current = speechChainRef.current
@@ -9218,15 +9252,19 @@ export function CoachTeachPage(): JSX.Element {
             } catch { /* the call is a bonus — fall through to the opener */ }
             // SESSION OPENER (David 2026-07-11 bookends) — the fallback when
             // the coach's call had nothing to say but a weakness exists.
-            if (!spokeCall && top && !userInteractedRef.current) {
-              const planLine = `One thing to keep in the back of your mind today: ${top.label}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
+            // Recency-aware: name the pattern as showing up LATELY + offer to
+            // drill it shut (David 2026-08-26 evidence-first loop).
+            if (!spokeCall && !userInteractedRef.current) {
+              const planLine = isRecent
+                ? `I've been watching your recent games — ${topLabel} keeps coming up, and right now it's the pattern costing you the most. Say "drill my weaknesses" and we'll drill it shut.`
+                : `One thing to keep in the back of your mind today: ${topLabel}. That's the pattern that's been costing you the most, and I'll be watching for it.`;
               setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
                 .then(() => voiceService.speakForced(planLine))
                 .catch(() => undefined);
             }
           })
-          .catch(() => { /* stored-profile read failed — generic chips stand */ });
+          .catch(() => { /* weakness-profile read failed — generic chips stand */ });
       }
       useCoachMemoryStore.getState().appendConversationMessage({
         surface: 'chat-teach',
