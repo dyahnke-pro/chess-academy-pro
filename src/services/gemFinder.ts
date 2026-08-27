@@ -236,7 +236,9 @@ export async function findGemsForLine(
     let candidateSans: string[];
     let minEdge: number;
     if (explorerHasData) {
-      candidateSans = amateur.moves
+      // `explorerHasData` already implies `amateur` is non-null, but that
+      // narrowing doesn't flow from a separate const — guard directly.
+      candidateSans = (amateur?.moves ?? [])
         .filter((m) => m.games / Math.max(1, total) >= FREQ_FLOOR)
         .slice(0, MAX_CANDIDATES)
         .map((m) => m.san);
