@@ -604,20 +604,30 @@ SHOULD HAVE BEEN DONE ALREADY."**
   "<weakness> drilled shut for today" closing bookend. STILL PENDING: appending
   fresh `puzzleThemes` reps after the student's own instances (queue-builder
   change in `coachDrillService`), and the `MyMistakesPage` evidence panel.
-- **Phase 4 — Fix the under-feeding.** Count positional misconceptions; capture
-  positional misses incl. position-transformation. Files: `autoAnalyzeGame`
-  (`counted:false`), `mistakePuzzleService` (tactical gate), a new
-  position-transformation detector. `pending`
+- **Phase 4 — Fix the under-feeding.** `PARTIAL 2026-08-27`. New board-true
+  `positionTransformation.ts` detector (unfavorable / declined even trades) is
+  wired into the IMPORTED-game capture gate in `mistakePuzzleService` — a
+  non-tactical miss that was dropped is now kept when it's a clear
+  transformation error at mistake level+. STILL PENDING: the annotation-based
+  (`analyzeCoachGame`) + single-puzzle capture paths (same gate, needs the
+  gate moved past their local var defs), a dedicated "Unfavorable trades"
+  weakness BUCKET (currently phase-bucketed via tacticType=null to avoid a
+  TacticType union change), and broader positional-misconception counting.
 - **Phase 5 — Review depth.** `DONE 2026-08-27`. `reviewHinge.computeTurningPointHinge`
   (retrospective register) is wired into `CoachGameReview`'s turning-point reveal
   (~L1134). Turning-point "what it hinged on" speaks the past-tense hinge.
-- **Phase 6 — Conversation + frustration heuristics.** Behavioral frustration
-  signals (repeated wrong / hint-mash / rage-quit / tilt / "this is hard") →
-  the coach adapts tone + eases/pushes. Files: chat + mic + memory stores,
-  `discussionPractice`, drill-attempt telemetry. `pending`
-- **Phase 7 — The curriculum arc.** The persistent curriculum object (§8).
-  Files: a new `coachCurriculum` service + Dexie store, `weaknessSpine`,
-  training plan. `pending`
+- **Phase 6 — Conversation + frustration heuristics.** `PARTIAL 2026-08-27`.
+  The in-place drill now escalates its spoken feedback as wrong tries pile up on
+  a puzzle (try-again → concrete nudge → ease up + offer the exit), a real
+  behavioral read; `studentStateBlock` also recognizes explicit "this is hard" /
+  "give up" cues (on top of its existing move-trend + sentiment signals). STILL
+  PENDING: hint-mash / rage-quit / cross-session tilt telemetry and mic signals.
+- **Phase 7 — The curriculum arc.** `PARTIAL 2026-08-27`. `coachThread` (the
+  cross-session weakness memory) is now wired: the drill calls back to the
+  weakness the coach has been tracking, once per session. STILL PENDING: the
+  full PERSISTENT curriculum object — a new `coachCurriculum` Dexie store +
+  service + a multi-week plan (deferred: a new store needs a version bump +
+  upgrade fn + on-device migration verification, not a safe unattended push).
 - **Phase 8 (end) — Why button + depth additions.** Verify/repair the Why button
   + route computed voice; add the §9 depth signals. `pending`
 
