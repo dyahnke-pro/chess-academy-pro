@@ -647,12 +647,16 @@ SHOULD HAVE BEEN DONE ALREADY."**
   (speak + info card + best-move arrow, G6) and `CoachGamePage` (speak + inject
   the computed message into game chat). `MistakePuzzleBoard`'s Why was already
   grounded (`explainPuzzleMoveGrounded`) — verified, unchanged. 3 service tests.
-  §9 depth signals — IN PROGRESS `2026-08-27`: two shipped, both board-true /
+  §9 depth signals — IN PROGRESS `2026-08-27`: three shipped, all board-true /
   firing / gated (never overstated): (1) PROPHYLAXIS — the standing net≥3 threat
   reframes to "don't let them punch back" when the student is winning-but-
-  contested (`positionFacts`); (2) KING-SAFETY — `kingSafety.detectKingExposure`
+  contested (`positionFacts`); (2) KING-SAFETY (castled) — `detectKingExposure`
   fires only on a castled king with ≥2 shelter pawns gone AND real enemy
-  bishop/rook/queen bearing on the zone (silent on a harmlessly-nicked shield).
+  bishop/rook/queen bearing on the zone (silent on a harmlessly-nicked shield);
+  (3) KING-SAFETY (delayed castling, David 2026-08-27) — `detectCentralKingDanger`
+  fires on an UNCASTLED central king + a crackable central pawn tension + an enemy
+  rook/queen aimed down the king's file — the "castle now" moment; speaks IN the
+  opening (move ≥6), silent on a locked centre / no aligned heavy / already castled.
   STILL PENDING: missed-PLAN (played move's plan vs the PV's — needs a
   comparative two-line read) and king-safety TRAJECTORY / tempo (need game
   history) — each a dedicated detector, not a quick clause; deferred rather than

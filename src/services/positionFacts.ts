@@ -21,7 +21,7 @@ import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
-import { detectKingExposure, kingExposureClause, type KingExposure } from './kingSafety';
+import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlan } from './boardPlan';
 
@@ -219,6 +219,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const kingExposure = (!openingPhase && studentToMove)
     ? detectKingExposure(fen, studentColor)
     : null;
+  // §9 delayed-castling — an uncastled central king with a crackable centre AND
+  // an enemy heavy aimed down its file. Allowed to speak IN the opening (this is
+  // exactly the move 6–12 "castle now" lesson), past the first developing moves.
+  const centralKingDanger = (studentToMove && fullmove >= 6)
+    ? detectCentralKingDanger(fen, studentColor)
+    : null;
 
   // What the OPPONENT wants — named, branched (their idea + your reply, straight
   // from the PVs). Only when they're on move, out of the opening.
@@ -243,7 +249,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
 
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp: evalCpWhitePov * sSign, kingExposure }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
   };
 }
 
@@ -269,11 +275,12 @@ function buildClauses(a: {
   /** Student-POV eval (cp) at this position. Gates the prophylaxis clause. */
   studentEvalCp: number;
   kingExposure: KingExposure | null;
+  centralKingDanger: CentralKingDanger | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp, kingExposure } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp, kingExposure, centralKingDanger } = a;
   // A latent danger to your own king — or a STATUS band-change — is worth a word
   // even in an otherwise quiet spot; neither needs the importance gate to fire.
-  if (!importance.speak && !latentDanger && !tradeDanger && !statusText && !kingExposure) return [];
+  if (!importance.speak && !latentDanger && !tradeDanger && !statusText && !kingExposure && !centralKingDanger) return [];
   const ranked: ClauseItem[] = [];
 
   // THE STATUS LINE LEADS the briefing (the general's opening read) — highest
@@ -327,8 +334,14 @@ function buildClauses(a: {
         : `They're threatening to win the ${PNAME[p.piece.toLowerCase()]} on ${p.square} — that has to be met first.`,
     });
   }
-  // In the opening, nothing but a real hanging threat speaks — no "critical
-  // moment" / "knife-edge" / "best piece, trade it off" narration on move one.
+  // §9 delayed-castling — speaks IN the opening too (the "castle now" moment),
+  // ranked just under a live hanging threat. Its gate (central king + tension +
+  // aligned enemy heavy) is tight enough to stay off calm development.
+  if (centralKingDanger) {
+    ranked.push({ kind: 'latent-danger', rank: 74, text: centralKingDangerClause(centralKingDanger) });
+  }
+  // In the opening, nothing but a real hanging threat / castle-now speaks — no
+  // "critical moment" / "knife-edge" / "best piece, trade it off" on move one.
   if (openingPhase) return ranked;
 
   // Decision leverage — framed by whose move it is.
