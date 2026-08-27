@@ -513,6 +513,25 @@ gated, audited per the touched surface). G1 post-deploy audit after each.
   total cp of the detected moments.
 - NOT fake empathy — frustration is a behavioral heuristic, labeled as such.
 
+## 12.5 Review section (NEXT after the Learn build — David 2026-08-27)
+
+David: "use the post-game review of Danya's videos to help with game review — make
+review sound, look, and feel like his." Notes so it's not lost:
+- **SOURCE = his POST-GAME-REVIEW videos specifically** (a distinct genre from
+  speedrun / live-teaching), pulled via the existing yt-dlp voiced-narration
+  pipeline (`docs/voiced-narration-pipeline.md`).
+- **REGISTER IS DISTINCT + LOCKED (2026-07-19):** the retrospective review
+  register ≠ in-game/Watch. Do NOT copy the student's-move live model into review.
+  The review register ALREADY exists in `voiceFacts` (distilled from his
+  transcripts, `docs/naroditsky-voice-register.md`); the video pull deepens it.
+- **FEEL/LOOK = the review WALK as an ARC** (`CoachGameReview`): open with the
+  shape of the game, walk the turning points in order, slow at each, the
+  counterfactual, land the verdict — carried by the facet computers
+  (`reviewTurningPoint`, `gameThemeClassifier`, move-reason) + `positionFacts`
+  (the "what it hinged on" — Phase 5).
+- Build AFTER the Learn student's-move model. "It will sound a lot like this
+  surface" (David) — same fact-computers, retrospective register.
+
 ## 13. Decisions log
 
 - **2026-08-26** The "custom lesson" IS the My Mistake engine surfaced + scaled,
