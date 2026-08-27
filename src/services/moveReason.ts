@@ -97,11 +97,11 @@ export function reasonWeaknessTag(r: MoveReason): string | null {
 }
 
 /** Whether this grade is worth speaking at all — "something to say" (David
- *  2026-08-27). A routine `solid` move in a calm spot says nothing; a fault, an
- *  only-move found, a clean best, or a real material win does. (`book` is an
- *  input label, never a classifier output — book moves grade as best/solid.) */
+ *  2026-08-27). The two ROUTINE outcomes (`solid`, a plain `best` in a calm
+ *  spot) say nothing; a fault, an only-move found, a threat met, a real material
+ *  win, or mate does. (`book` is an input label, never a classifier output.) */
 export function gradeWorthSpeaking(r: MoveReason): boolean {
-  return r !== 'solid';
+  return r !== 'solid' && r !== 'best';
 }
 
 /** Compute the SEE net of material the MOVER left hanging after their move — the

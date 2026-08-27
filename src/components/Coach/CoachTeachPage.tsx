@@ -240,6 +240,7 @@ import type { LiveState, TacticsLiveContext } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { computePositionFacts, clauseText } from '../../services/positionFacts';
+import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
@@ -7126,6 +7127,30 @@ export function CoachTeachPage(): JSX.Element {
       const bookDet = detectOpening(move.history);
       studentMoveInBook = !!bookDet && bookDet.plyCount >= move.history.length;
     } catch { /* book check is a bonus; default stays not-in-book */ }
+    // POST-MOVE GRADE — the coach reacts to the move you JUST played, by NAME of
+    // the thing (David 2026-08-27: "safe to always narrate when there is
+    // something to say"). Graded cheaply from the paid-for fan at fenBefore
+    // (`gradePlayedMove` returns null when the move is outside the fan — the
+    // deferred faucet above still logs it). Book moves grade as best/solid and
+    // stay silent. Spoken immediately as the reaction; the coach's reply rides a
+    // ~1-2s think-pad after, so the short grade lands first. Verbosity-aware via
+    // voiceService.speak; the grade is a bonus, never a blocker.
+    try {
+      if (preStudentRead && !studentMoveInBook) {
+        const grade = gradePlayedMove({
+          fenBefore,
+          playedUci: `${move.from}${move.to}${move.promotion ?? ''}`,
+          fenAfter: move.fen,
+          analysisBefore: preStudentRead,
+          studentColor: playerColor === 'white' ? 'w' : 'b',
+        });
+        if (grade?.worthSpeaking && grade.clause) {
+          setMessages((prev) => [...prev, { id: `grade-${Date.now()}`, role: 'assistant', content: grade.clause, timestamp: Date.now() }]);
+          void voiceService.speak(grade.clause);
+          captureEvent('post_move_grade_spoken', { surface: 'coach-teach', reason: grade.reason, cp_loss: Math.round(grade.cpLossCp), fault: grade.fault });
+        }
+      }
+    } catch { /* the grade is a bonus, never a blocker */ }
     setTimeout(() => {
       void discussion.evaluatePlayerMove({
         fenBefore,

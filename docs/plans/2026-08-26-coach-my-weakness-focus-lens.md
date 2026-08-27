@@ -481,8 +481,20 @@ SHOULD HAVE BEEN DONE ALREADY."**
 >   surface `positionFacts` feeds. v1 catches STANDING alignments; the "your
 >   trade CREATES the pin" variant (his exact case) needs candidate-move analysis
 >   — next enhancement.
-> NEXT: the spoken post-move-grade wiring (careful eval-timing), the opponent-
-> intent contingency, and the Learn deliberation surfacing.
+> NEXT: the opponent-intent contingency, and the Learn deliberation surfacing.
+
+> **SLICE 4 LANDED (2026-08-27): the SPOKEN post-move grade, wired into Learn.**
+> The timing was solved without a fresh search: `src/services/playedMoveGrade.ts`
+> grades the played move from the paid-for `fenBefore` fan — when the move is one
+> of the MultiPV candidates, cpLoss falls straight out (no new search, no timing
+> hack); a move outside the fan returns null and stays with the deferred faucet.
+> Wired into `CoachTeachPage.handleStudentMove`: on a worth-speaking grade
+> (faults + only-move/defends-threat/wins-material/mate; routine solid/best stay
+> silent) and not a book move, the coach reacts immediately — "careful, that hung
+> the bishop on c5" — via `voiceService.speak` (verbosity-aware), a chat bubble,
+> and a `post_move_grade_spoken` audit. The ~1-2s think-pad before the coach's
+> reply gives the short grade room to land first. 4 grade tests + 51 service
+> tests green. Auto-log to My Mistakes already rides `evaluatePlayerMove`.
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the

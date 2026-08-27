@@ -49,11 +49,12 @@ describe('the post-move-grade helpers', () => {
     expect(isFaultReason('best')).toBe(false);
     expect(reasonWeaknessTag('best')).toBeNull();
   });
-  it('a routine solid move is not worth speaking; faults + finds + clean bests are', () => {
+  it('routine solid/plain-best moves are not worth speaking; faults + finds are', () => {
     expect(gradeWorthSpeaking('solid')).toBe(false);
-    expect(gradeWorthSpeaking('best')).toBe(true);
+    expect(gradeWorthSpeaking('best')).toBe(false);
     expect(gradeWorthSpeaking('hung-piece')).toBe(true);
     expect(gradeWorthSpeaking('only-move')).toBe(true);
+    expect(gradeWorthSpeaking('wins-material')).toBe(true);
   });
   it('names the pattern (not the SAN) and the hung piece when known', () => {
     expect(moveReasonClause('walked-into-tactic', { named: 'a knight fork' })).toMatch(/walked into a knight fork/);
