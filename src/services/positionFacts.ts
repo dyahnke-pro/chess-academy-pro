@@ -22,6 +22,7 @@ import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
 import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
+import { structurePlan } from './boardPlan';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -82,7 +83,7 @@ export interface PositionFactsResult {
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'convert';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'structure-plan' | 'convert';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -227,9 +228,16 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? statusBandChange(evalCpWhitePov * sSign, input.prevEvalCpWhitePov * sSign)
     : '';
 
+  // STRUCTURE→PLAN — the campaign line, from a CLEAR pawn structure (passed pawn
+  // / IQP). Board-true, textbook, conservative (null when ambiguous). Only when
+  // the moment already earns voice, so it rides notable beats, not every ply.
+  const structureText = (!openingPhase && importance.speak)
+    ? (structurePlan(fen, studentColor) ?? '')
+    : '';
+
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText }),
   };
 }
 
@@ -251,8 +259,9 @@ function buildClauses(a: {
   tradeDanger: TradeDanger | null;
   opponentIntent: OpponentIntent | null;
   statusText: string;
+  structureText: string;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText } = a;
   // A latent danger to your own king — or a STATUS band-change — is worth a word
   // even in an otherwise quiet spot; neither needs the importance gate to fire.
   if (!importance.speak && !latentDanger && !tradeDanger && !statusText) return [];
@@ -313,6 +322,8 @@ function buildClauses(a: {
   // The campaign — the student's asset, and the opponent's (with the counter).
   if (leansOn) ranked.push({ kind: 'student-leans', rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
   if (opponentLeansOn) ranked.push({ kind: 'opponent-leans', rank: 45, text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.` });
+  // The campaign's structural plan — the textbook idea the pawn structure sets.
+  if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
   // Convert-mode — decided game, one beat.
   if (importance.tier === 'convert') ranked.push({ kind: 'convert', rank: 20, text: `This is technique now — convert it cleanly, no heroics.` });
 
