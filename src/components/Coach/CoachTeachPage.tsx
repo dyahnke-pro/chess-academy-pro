@@ -1279,6 +1279,10 @@ export function CoachTeachPage(): JSX.Element {
      *  repeating the same line while the student grinds. Reset on a fresh
      *  puzzle and on a correct move. */
     wrongCount: number;
+    /** The student leaned on Hint for this puzzle (Phase 6 hint-reliance).
+     *  Combined with wrongCount it's a stronger frustration read — a student who
+     *  took the hint AND still misses is struggling, so the coach eases sooner. */
+    hintUsed: boolean;
   } | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
@@ -1992,7 +1996,7 @@ export function CoachTeachPage(): JSX.Element {
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
     gameRef.current.loadFen(drill.setupFen);
     liveFenRef.current = drill.setupFen;
-    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0 };
+    activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0, hintUsed: false };
     setArrows([]);
     setHighlights([]);
   }, []);
@@ -2158,8 +2162,11 @@ export function CoachTeachPage(): JSX.Element {
       // while the student grinds. First → try again; second → a concrete,
       // no-rush nudge; third+ → ease up and offer the way out (no shame).
       cur.wrongCount += 1;
+      // A student who already leaned on Hint AND is still missing is more
+      // frustrated → reach the "ease up + offer the way out" register sooner.
+      const easeUp = cur.wrongCount >= 3 || (cur.hintUsed && cur.wrongCount >= 2);
       const nudge =
-        cur.wrongCount >= 3
+        easeUp
           ? "This one's a stubborn rep — happens to everyone. Tap Hint to see the idea, or say “next” to move on and we'll bring it back later."
           : cur.wrongCount === 2
             ? 'Still not it — no rush. Look for the most forcing move first: checks, captures, then threats.'
@@ -9498,6 +9505,9 @@ export function CoachTeachPage(): JSX.Element {
     // With the question cards gone (2026-08-05) Hint has ONE job again: the
     // engine's best move on the live board.
     const fen = liveFenRef.current;
+    // Hint-reliance signal (Phase 6): note that the student leaned on Hint for
+    // the active drill, so the wrong-answer feedback eases sooner.
+    if (activeDrillRef.current) activeDrillRef.current.hintUsed = true;
     setHintBusy(true);
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 15);
