@@ -1968,6 +1968,66 @@ export function weaknessTopicFromText(text: string | undefined | null): Weakness
   return null;
 }
 
+// ─── Train-toward-a-goal: recommend a focused game + remember the point ──────
+// David 2026-08-27: "the coach should recommend playing a game against it to
+// help fix the middlegame … then remember that is the point of the game and
+// give feedback based off the middlegame play." These are the PURE, computed
+// pieces (G0 — voiceFacts phrases them); the caller sets the trainingFocus
+// memory + the play_focused_game action offer.
+
+/** The area a "help me get better at X" request names. Mirrors the
+ *  coachMemoryStore TrainingArea (type-only import keeps this a leaf). */
+import type { TrainingArea } from '../stores/coachMemoryStore';
+
+const TRAINING_AREA_LABEL: Record<TrainingArea, string> = {
+  opening: 'your opening play',
+  middlegame: 'your middlegame',
+  endgame: 'your endgame technique',
+  tactics: 'your tactics',
+  calculation: 'your calculation',
+  'king-safety': 'your king safety',
+  'time-management': 'your time management',
+};
+
+export function trainingAreaLabel(area: TrainingArea): string {
+  return TRAINING_AREA_LABEL[area];
+}
+
+/** Detect the AREA a "how do I improve my X / get better at X / work on my X"
+ *  question names, for the recommend-a-focused-game flow. Returns null when no
+ *  area is named (the caller keeps the generic weakness recommendation). */
+export function trainingAreaFromText(text: string | null | undefined): TrainingArea | null {
+  if (!text) return null;
+  const t = text.toLowerCase();
+  // Middlegame first (the motivating case); "endgame"/"opening" are checked so a
+  // bare "game" never mis-hits, and phase words win over the tactics catch-all.
+  if (/\bmiddle[\s-]?games?\b/.test(t)) return 'middlegame';
+  if (/\bend[\s-]?games?\b|\bendings?\b|\brook\s+ending|\bpawn\s+ending/.test(t)) return 'endgame';
+  if (/\bopening|\brepertoire\b/.test(t)) return 'opening';
+  if (/\bcalculat|\bvisuali[sz]|\bread\s+ahead|\bcount\s+moves\b/.test(t)) return 'calculation';
+  if (/\bking\s+safety|\bgetting\s+mated|\bking\s+gets\s+(?:caught|mated)|\bstop\s+getting\s+checkmated/.test(t)) return 'king-safety';
+  if (/\btime\s+manage|\btime\s+trouble|\bflag(?:ging|ged)?\b|\brun(?:ning|s)?\s+out\s+of\s+time\b/.test(t)) return 'time-management';
+  if (/\btactic(?:s|al)?\b|\bcombination|\bforks?\b|\bpins?\b|\bskewer/.test(t)) return 'tactics';
+  return null;
+}
+
+/** The computed recommendation to play a focused game to fix `area`, in the
+ *  house voice's fact form (G0 — voiceFacts phrases it). */
+export function assembleTrainingRecommendation(area: TrainingArea): { facts: string; label: string } {
+  const label = TRAINING_AREA_LABEL[area];
+  // A phase reads naturally as "the middlegame"; a skill reads as "your tactics".
+  const focusPhrase =
+    area === 'middlegame' || area === 'endgame' || area === 'opening'
+      ? `the ${area}`
+      : label;
+  return {
+    label,
+    facts:
+      `The fastest way to sharpen ${label} is to play a full game against me with that as the goal. `
+      + `Play one now — I'll watch ${focusPhrase} closely, coach it as it happens, and then break down how ${label} went afterward.`,
+  };
+}
+
 /** The minimal shape `assembleWeaknessRecommendation` reads — a structural
  *  subset of `UnifiedWeakness` (weaknessSpine) so the assembler stays a pure
  *  leaf that imports no service. The caller computes the ranked profile

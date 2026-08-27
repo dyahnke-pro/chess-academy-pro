@@ -67,6 +67,9 @@ function ActionButton({ action, onClick }: {
     weakness_drill: 'Drill my weaknesses',
     endgame_training: 'Train endgames',
     review_games: 'Review my games',
+    // Recommend-a-focused-game: the coach set a trainingFocus (the point of the
+    // game) and offers to play one now (David 2026-08-27).
+    play_focused_game: "Play a game — I'll coach it",
   };
 
   return (
@@ -149,6 +152,13 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         break;
       case 'review_games':
         void navigate('/coach/review');
+        break;
+      case 'play_focused_game':
+        // The coach already stored the trainingFocus (the point of the game);
+        // the play surface reads it to tag the game + scope its feedback. Carry
+        // the area in the query so the surface can pick it up immediately
+        // (David 2026-08-27). id = the TrainingArea.
+        void navigate(action.id ? `/coach/play?focus=${encodeURIComponent(action.id)}` : '/coach/play');
         break;
     }
   };

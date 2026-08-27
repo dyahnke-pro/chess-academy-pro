@@ -62,10 +62,15 @@ is no "let's play a game to fix your middlegame → I'll remember that's the goa
 
 ## Phasing (each phase = one small push to `main`, tests + audit)
 
-- [ ] **P1 — `trainingFocus` memory** (`coachMemoryStore` + test). FOUNDATION.
+- [x] **P1 — `trainingFocus` memory** (`coachMemoryStore` + test). FOUNDATION. (f70804f)
 - [ ] **P2 — Notation-help assembler** (A2) — lowest risk, pure beginner win.
 - [ ] **P3 — Conversational routing fix** (A1).
-- [ ] **P4 — Recommend-a-game intent + set focus** (B6) — the core of David's ask.
+- [x] **P4 — Recommend-a-game intent + set focus** (B6) — the core of David's ask.
+      "improve my `<area>`" → recommend a focused game, set `trainingFocus`,
+      offer a `play_focused_game` chip → `/coach/play?focus=<area>`. Pure
+      detection + recommendation in `groundedAnswer` (12 tests); wired in the
+      progress handler; chip in `ChatMessage`. STILL OWED: P7 (play tags the
+      game via `setTrainingFocusGame` + review scopes feedback to the focus).
 - [ ] **P5 — Move-quality assembler** (A3).
 - [ ] **P6 — Opponent-move why assembler** (A4).
 - [ ] **P7 — Phase-scoped post-game feedback from `trainingFocus`** (B7/B8).

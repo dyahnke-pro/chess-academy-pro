@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -1230,5 +1230,45 @@ describe('weakness-tab coverage extensions (David 2026-07-13)', () => {
       bestAgainst: [{ name: 'the Caro-Kann', winRate: 72, games: 25 }],
     });
     expect(a!.facts).toMatch(/strongest against the Caro-Kann \(72% over 25 games\)/);
+  });
+});
+
+describe('trainingAreaFromText — recommend-a-focused-game area detection (David 2026-08-27)', () => {
+  it('detects the middlegame in the motivating phrasings', () => {
+    expect(trainingAreaFromText('how do I improve my middlegame?')).toBe('middlegame');
+    expect(trainingAreaFromText('help me get better at the middle game')).toBe('middlegame');
+    expect(trainingAreaFromText('I want to work on my middlegame')).toBe('middlegame');
+  });
+  it('detects the other areas', () => {
+    expect(trainingAreaFromText('how do I improve my endgame technique')).toBe('endgame');
+    expect(trainingAreaFromText('help with my opening repertoire')).toBe('opening');
+    expect(trainingAreaFromText('I keep losing on calculation')).toBe('calculation');
+    expect(trainingAreaFromText('my king keeps getting mated')).toBe('king-safety');
+    expect(trainingAreaFromText('I always run out of time')).toBe('time-management');
+    expect(trainingAreaFromText('get better at tactics')).toBe('tactics');
+  });
+  it('returns null when no area is named (keeps the generic weakness answer)', () => {
+    expect(trainingAreaFromText('how do I improve?')).toBeNull();
+    expect(trainingAreaFromText('what should I train?')).toBeNull();
+    expect(trainingAreaFromText('')).toBeNull();
+    expect(trainingAreaFromText(null)).toBeNull();
+  });
+  it('a bare "game" never mis-hits as an area', () => {
+    expect(trainingAreaFromText('how do I get better at the game')).toBeNull();
+  });
+});
+
+describe('assembleTrainingRecommendation — computed recommend-a-game prose (G0)', () => {
+  it('recommends a focused game and names the area both ways', () => {
+    const r = assembleTrainingRecommendation('middlegame');
+    expect(r.label).toBe('your middlegame');
+    expect(r.facts).toMatch(/play a full game/i);
+    expect(r.facts).toMatch(/the middlegame/);
+    expect(r.facts).toMatch(/break down how your middlegame went/i);
+  });
+  it('reads a skill area naturally ("your tactics", not "the tactics")', () => {
+    const r = assembleTrainingRecommendation('tactics');
+    expect(r.facts).toMatch(/sharpen your tactics/i);
+    expect(r.facts).not.toMatch(/the tactics closely/);
   });
 });

@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -96,6 +96,7 @@ import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { fundamentalsTopicFromText, famousGameFromText } from '../coach/questionIntents';
+import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
 // when the audit-stream is configured, letting the Playwright audit drive
@@ -3754,6 +3755,31 @@ export async function getCoachChatResponse(
             // get their top weaknesses. This is what turns "what should I
             // train?" into a real, grounded recommendation naming their own
             // numbers — not just generic bad habits.
+            // ── RECOMMEND A FOCUSED GAME + REMEMBER THE POINT (David 2026-08-27) ──
+            // When the student asks to improve a specific AREA ("how do I get
+            // better at my middlegame?"), don't just read back weakness stats —
+            // recommend playing a game with that as the goal, and PERSIST the
+            // focus so the play surface + post-game review scope their feedback
+            // to it. Computed recommendation (G0 — voiceFacts phrases it); the
+            // trainingFocus memory is what makes the coach "remember the point of
+            // the game" across the session.
+            const trainingArea = trainingAreaFromText(lastUserMessage());
+            if (trainingArea) {
+              const rec = assembleTrainingRecommendation(trainingArea);
+              try {
+                useCoachMemoryStore.getState().setTrainingFocus({
+                  area: trainingArea,
+                  label: rec.label,
+                  reason: (lastUserMessage() ?? '').slice(0, 160),
+                  capturedFromSurface: grounding.surface ?? 'coach-chat',
+                });
+              } catch { /* memory is best-effort — never block the answer */ }
+              const voicedRec = await voiceFacts(rec.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+              if (voicedRec) {
+                lastCoachActionOffer = [{ type: 'play_focused_game', id: trainingArea }];
+                return voicedRec;
+              }
+            }
             const topic = weaknessTopicFromText(lastUserMessage());
             const unified = await getUnifiedWeaknessProfile();
             let answer =
