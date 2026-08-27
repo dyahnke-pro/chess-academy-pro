@@ -15,6 +15,8 @@
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0c.
 
+import { Chess } from 'chess.js';
+
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const FILES = 'abcdefgh';
 
@@ -131,6 +133,57 @@ export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): Latent
 }
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+export interface TradeDanger extends LatentDanger {
+  /** The student's capture that CREATES the danger (from → to). */
+  tradeFrom: string;
+  tradeTo: string;
+}
+
+/**
+ * v2 (David's exact chess.com loss): a trade that CREATES a pin. Plays each of
+ * the student's capturing moves and flags the one whose resulting position newly
+ * lines up their king/queen for a pin that WASN'T there before. Pure chess.js
+ * geometry, no engine. Returns the highest-value such trade, or null.
+ *
+ * v2a scope: the capture directly creates the alignment (1 ply). The
+ * recapture-creates-it case (2 ply) is a later refinement.
+ */
+export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): TradeDanger | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  if (chess.turn() !== studentColor) return null; // only on the student's move
+  const before = detectLatentDanger(fen, studentColor);
+  const beforeKey = before ? `${before.frontSquare}-${before.backSquare}-${before.enemySquare}` : '';
+
+  let best: TradeDanger | null = null;
+  let captures: ReturnType<Chess['moves']>;
+  try { captures = chess.moves({ verbose: true }).filter((m) => (m as { captured?: string }).captured); }
+  catch { return null; }
+
+  for (const m of captures as Array<{ from: string; to: string }>) {
+    let after: LatentDanger | null;
+    try {
+      const c = new Chess(fen);
+      c.move({ from: m.from, to: m.to });
+      after = detectLatentDanger(c.fen(), studentColor);
+    } catch { continue; }
+    if (!after) continue;
+    const afterKey = `${after.frontSquare}-${after.backSquare}-${after.enemySquare}`;
+    if (afterKey === beforeKey) continue;                 // not newly created by this trade
+    const score = VAL[after.frontPiece] ?? 0;
+    const bestScore = best ? (VAL[best.frontPiece] ?? 0) : -1;
+    if (score > bestScore) best = { ...after, tradeFrom: m.from, tradeTo: m.to };
+  }
+  return best;
+}
+
+/** The v2 warning — a trade that opens a pin. Guide-don't-tell: names the
+ *  alignment, never says "don't trade". */
+export function tradeDangerClause(d: TradeDanger): string {
+  const front = `${PNAME[d.frontPiece]} on ${d.frontSquare}`;
+  return `before you trade on ${d.tradeTo}: that lines your ${front} up with your ${PNAME[d.backPiece]} on the ${d.line} — a pin.`;
+}
 
 /** The prophylactic warning — guide-don't-tell: name the alignment and the line,
  *  never a move. Terse. */

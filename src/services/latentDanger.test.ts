@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectLatentDanger, latentDangerClause } from './latentDanger';
+import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause } from './latentDanger';
 
 describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)', () => {
   it('flags a bishop lined up in front of its own king on a rook file', () => {
@@ -53,5 +53,36 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
     // Names the square (lead-the-eye) but NEVER a move to play (no capture / no
     // piece-to-square SAN) — guide-don't-tell.
     expect(line).not.toMatch(/[NBRQK]x?[a-h][1-8]|x[a-h][1-8]/);
+  });
+});
+
+describe('detectTradeCreatesPin — v2, the trade that CREATES the pin (David\'s loss)', () => {
+  // White Ke1, Bd4, Black Re8 + Ne5 (the trade bait), Kg8. Before: no alignment
+  // (the knight shields the file). Bxe5 puts the bishop in front of its own king
+  // on the open e-file with the rook behind — a pin the TRADE creates.
+  const FEN = '4r1k1/8/8/4n3/3B4/8/8/4K3 w - - 0 1';
+
+  it('flags the capturing trade that newly lines up king + bishop for a pin', () => {
+    expect(detectLatentDanger(FEN, 'w')).toBeNull(); // no standing danger before
+    const t = detectTradeCreatesPin(FEN, 'w')!;
+    expect(t).not.toBeNull();
+    expect(t).toMatchObject({ tradeFrom: 'd4', tradeTo: 'e5', frontPiece: 'b', backPiece: 'k', line: 'file' });
+  });
+
+  it('renders a warning that names the trade square + alignment, never "don\'t trade"', () => {
+    const t = detectTradeCreatesPin(FEN, 'w')!;
+    const line = tradeDangerClause(t);
+    expect(line).toMatch(/before you trade on e5/);
+    expect(line).toMatch(/bishop on e5.*king.*file/);
+    expect(line).not.toMatch(/don't trade/i);
+  });
+
+  it('returns null when no capture creates a pin', () => {
+    // A quiet position with a capture available that does not align the king.
+    expect(detectTradeCreatesPin('6k1/8/8/3n4/3B4/8/8/6K1 w - - 0 1', 'w')).toBeNull();
+  });
+
+  it('returns null when it is not the student\'s move', () => {
+    expect(detectTradeCreatesPin(FEN, 'b')).toBeNull();
   });
 });

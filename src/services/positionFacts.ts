@@ -20,7 +20,7 @@ import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationFacts, type Deliberation } from './deliberation';
-import { detectLatentDanger, latentDangerClause, type LatentDanger } from './latentDanger';
+import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause, type LatentDanger, type TradeDanger } from './latentDanger';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -65,6 +65,9 @@ export interface PositionFactsResult {
   /** A pin/skewer in waiting on the student's own king/queen (the prevention
    *  layer). Null when the geometry isn't there. */
   latentDanger: LatentDanger | null;
+  /** A TRADE the student could make that would CREATE a pin on their own
+   *  king/queen (v2). Null when no capture creates one. */
+  tradeDanger: TradeDanger | null;
   /** What the opponent wants — named + branched, when they're on move. Null on
    *  the student's own move / in the opening. */
   opponentIntent: OpponentIntent | null;
@@ -166,6 +169,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const latentDanger = (!openingPhase && studentToMove)
     ? detectLatentDanger(fen, studentColor)
     : null;
+  // v2 — a TRADE that would CREATE a pin on your own king/queen (the more
+  // actionable warning: "before you trade on X…").
+  const tradeDanger = (!openingPhase && studentToMove)
+    ? detectTradeCreatesPin(fen, studentColor)
+    : null;
 
   // What the OPPONENT wants — named, branched (their idea + your reply, straight
   // from the PVs). Only when they're on move, out of the opening.
@@ -174,8 +182,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
 
   return {
-    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, opponentIntent }),
+    importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent }),
   };
 }
 
@@ -194,12 +202,13 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
+  tradeDanger: TradeDanger | null;
   opponentIntent: OpponentIntent | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, opponentIntent } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent } = a;
   // A latent danger to your own king is worth a word even in an otherwise quiet
   // spot — it does not need the importance gate to have fired.
-  if (!importance.speak && !latentDanger) return [];
+  if (!importance.speak && !latentDanger && !tradeDanger) return [];
   const ranked: ClauseItem[] = [];
 
   // THE WEIGHING LEADS (David 2026-08-26, the keystone) — narrate the choice, not
@@ -211,11 +220,12 @@ function buildClauses(a: {
     if (text) ranked.push({ kind: 'deliberation', rank: 95, text });
   }
 
-  // The prevention layer — a pin/skewer in waiting on your own king/queen. High
-  // rank (a king exposure is worth catching), guide-don't-tell: it names the
-  // alignment and the line, never a move. (Gated to student-to-move, out of the
-  // opening, at computePositionFacts.)
-  if (latentDanger) {
+  // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.
+  // Prefer the actionable TRADE warning ("before you trade on X…") when present;
+  // otherwise the standing-alignment warning. Only one, never both.
+  if (tradeDanger) {
+    ranked.push({ kind: 'latent-danger', rank: 82, text: tradeDangerClause(tradeDanger) });
+  } else if (latentDanger) {
     ranked.push({ kind: 'latent-danger', rank: 80, text: latentDangerClause(latentDanger) });
   }
 

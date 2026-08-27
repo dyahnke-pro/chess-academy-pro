@@ -521,8 +521,22 @@ SHOULD HAVE BEEN DONE ALREADY."**
 > reply-narration flow (thread the pre-move `opponentIntent` + the post-reply
 > analysis, speak the nudge + draw the arrow). Careful daytime slice, not a blind
 > overnight edit on the reply path.
-> NEXT down the list: wire opponentGap (reply-flow), v2 latent-danger
-> (trade-creates-pin), the walkthrough Tier-3 wiring, review.
+> NEXT down the list: wire opponentGap (reply-flow), the walkthrough Tier-3
+> wiring, review.
+
+> **SLICE 7 LANDED (2026-08-27): v2 latent-danger — the trade that CREATES the
+> pin (David's exact loss), WIRED + LIVE.** `latentDanger.ts:detectTradeCreatesPin`
+> — plays each of the student's capturing moves and flags the one whose result
+> newly lines up their king/queen for a pin that wasn't there before (pure
+> chess.js geometry, no engine). `tradeDangerClause` = the guide-don't-tell
+> warning ("before you trade on e5: that lines your bishop up with your king on
+> the file — a pin"), never "don't trade". Wired into `positionFacts`: prefers
+> the actionable trade-warning (rank 82) over the standing-alignment one (80) —
+> only one fires. 11 latentDanger + 12 positionFacts tests green. v2a scope: the
+> capture directly creates the alignment (1 ply); the recapture-creates-it case
+> (2 ply) is a later refinement.
+> NEXT down the list: wire opponentGap (reply-flow), the walkthrough Tier-3
+> wiring, review.
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** Port the missing general's-briefing components from the

@@ -107,6 +107,18 @@ describe('the latent-danger prevention clause (fires through positionFacts)', ()
     });
     expect(r.latentDanger).toBeNull();
   });
+
+  it('warns about a TRADE that would create a pin (v2), preferring it over the standing warning', async () => {
+    // White to move: Bxe5 would line the bishop up in front of its own king on
+    // the open e-file with the black rook — a pin the trade creates.
+    const r = await computePositionFacts({
+      fen: '4r1k1/8/8/4n3/3B4/8/8/4K3 w - - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat,
+    });
+    expect(r.tradeDanger).not.toBeNull();
+    expect(r.tradeDanger).toMatchObject({ tradeTo: 'e5', frontPiece: 'b', backPiece: 'k' });
+    const clause = r.clauses.find((c) => c.kind === 'latent-danger')!;
+    expect(clause.text).toMatch(/before you trade on e5/);
+  });
 });
 
 describe('clauseText', () => {
