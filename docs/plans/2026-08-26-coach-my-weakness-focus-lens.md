@@ -579,15 +579,16 @@ SHOULD HAVE BEEN DONE ALREADY."**
 
 - **Phase 1 — Close the runtime voice gap + make the full package mandatory
   everywhere (§4).** `IN PROGRESS (slices landing) 2026-08-27`. Runtime
-  `positionFacts.ts` already emits 8 briefing clauses (deliberation / latent-
-  danger / must-defend / key-moment / opponent-intent / student-leans /
-  opponent-leans / convert), wired to 5 surfaces. **SLICE 1 landed:** STATUS
-  band-change — the general's opening read ("you've taken the better side" /
-  "you've slipped to worse"), directional, say-once (only on a real band cross),
-  wired into `useLiveCoach` (Play, descriptive-only). REMAINING slices (each
-  gated + audited, NOT one mega-change): threat `landsAt` detail, MOVE+WHY move-
-  reason clause, structure→plan, PV-trajectory, refutation-played-out, and the
-  "mandatory at every narration everywhere" routing. Genuinely multi-session.
+  `positionFacts.ts` now emits 10 briefing clauses. **SLICE 1:** STATUS
+  band-change — the general's opening read, directional, say-once (only on a
+  real band cross), wired into `useLiveCoach`. **SLICE 2:** structure→plan
+  (`boardPlan.structurePlan` on `describeStructure`) — the textbook campaign
+  plan for a CLEAR structure (passed pawn / IQP), board-true + conservative,
+  flows to every clause-reading surface. REMAINING slices need an engine search
+  or after-search in the LIVE narration path (threat `landsAt` via null-move
+  search, refutation-played-out, PV-trajectory) — deferred as genuine multi-
+  session work (not a safe blind unattended port), plus MOVE+WHY (already
+  delivered via `playedMoveGrade`) and the "mandatory everywhere" routing sweep.
 - **Phase 2 — Coach initiates the loop.** `DONE 2026-08-27` (e0e8e84). The
   `/coach/teach` session opener now leads with the RECENCY-weighted weakness
   (`getUnifiedWeaknessProfile` `lastSeenAt`, ~3-week window), speaks the
