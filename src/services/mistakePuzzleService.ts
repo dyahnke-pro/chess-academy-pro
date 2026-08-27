@@ -6,6 +6,12 @@ import { generateMistakeNarration } from './mistakeNarration';
 import { voiceMistakeNarration } from './mistakeNarrationVoice';
 import { detectTacticType } from './missedTacticService';
 import { tacticTypeLabel } from './tacticAlertService';
+import type { TacticType } from '../types';
+import {
+  detectPositionTransformation,
+  transformationPrompt,
+  type TransformationResult,
+} from './positionTransformation';
 import { getOpeningNameByEco } from './openingDetectionService';
 import { useAppStore } from '../stores/appStore';
 import type {
@@ -421,14 +427,25 @@ async function analyzeGameWithStockfish(
     if (bestMove === playerMove || bestMoveSan === playerMoveSan) continue;
 
     // ─── Tactical quality gate ──────────────────────────────────────
-    // Only create puzzles for positions with a CONCRETE tactical motif
-    // (fork, pin, skewer, discovered attack, back-rank, removing the
-    // guard, promotion, checkmate pattern). Skip generic
-    // 'tactical_sequence' and untyped positional misses — those make
-    // bland "find the slightly better move" drills, not the kind of
-    // sharp tactical training the user wants.
-    const tacticType = detectTacticType(fen, bestMove);
-    if (tacticType === 'tactical_sequence') continue;
+    // Create puzzles for positions with a CONCRETE tactical motif (fork,
+    // pin, skewer, discovered attack, back-rank, removing the guard,
+    // promotion, checkmate pattern). Generic 'tactical_sequence' misses are
+    // normally dropped — bland "find the slightly better move" drills.
+    // EXCEPTION (Phase 4, David 2026-08-26 "position transformation is
+    // huge"): keep such a miss when it's a clear POSITION-TRANSFORMATION
+    // error — a bad or declined even trade — at mistake level or worse. High
+    // precision (the detector returns null unless the shape is clearly a
+    // trade), so the queue is not flooded. tacticType=null → the spine
+    // buckets it as a positional (phase) weakness.
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove);
+    let transformation: TransformationResult | null = null;
+    if (tacticType === 'tactical_sequence') {
+      transformation = (classification === 'mistake' || classification === 'blunder')
+        ? detectPositionTransformation(fen, playerMove, bestMove)
+        : null;
+      if (!transformation) continue;
+      tacticType = null;
+    }
 
     // Cap solution length at 6 ply (3 full moves). Longer sequences
     // are too complex to learn from as a drill.
@@ -494,7 +511,9 @@ async function analyzeGameWithStockfish(
       sourceGameId: gameId,
       sourceMode,
       playerColor,
-      promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
+      promptText: tacticType
+        ? `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`
+        : (transformation ? transformationPrompt(transformation) : PROMPT_TEXT[classification]),
       narration,
       createdAt: now,
       opponentName: gameContext.opponentName,
