@@ -832,6 +832,19 @@ describe('weaknessAnalyzer', () => {
       expect(forkTheme!.avgCentipawnLoss).toBe(250);
     });
 
+    it('stays bounded on a large mistake set (no per-mistake board scan freeze)', () => {
+      // Regression: detectTactics(mp.fen) ran synchronously for EVERY mistake,
+      // freezing the tab (Page Unresponsive) on a large set. Classified
+      // mistakes must skip the scan entirely; the whole thing must complete
+      // fast. 3000 classified mistakes here — a full re-scan would take seconds.
+      const many: MistakePuzzle[] = Array.from({ length: 3000 }, (_, i) =>
+        buildMistakePuzzle({ id: `big-${i}`, tacticType: 'fork', cpLoss: 150 }));
+      const t0 = Date.now();
+      const themes = detectWeaknessThemes(many);
+      expect(Date.now() - t0).toBeLessThan(500); // classified → no scan → instant
+      expect(themes.find((t) => t.theme === 'Forks')!.frequency).toBe(3000);
+    });
+
     it('groups mistakes by game phase', () => {
       const mistakes: MistakePuzzle[] = [
         buildMistakePuzzle({ id: 'm1', gamePhase: 'opening', tacticType: null, cpLoss: 100 }),

@@ -1247,6 +1247,18 @@ export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[]
     }
   }
 
+  // detectTactics is a full per-position board scan (Chess construction +
+  // fork/pin/skewer/mate finders). Running it synchronously for EVERY mistake
+  // froze the tab hard enough to trip Chrome's "Page Unresponsive" on a large
+  // mistake set (David 2026-08-27). Two guards keep the loop bounded:
+  //   • a mistake that already carries a `tacticType` was classified at capture
+  //     — its motif is known, so the redundant FEN re-scan is skipped entirely;
+  //   • unclassified mistakes get the scan, but only up to a hard cap (the
+  //     theme distribution is well-sampled long before then). Beyond the cap we
+  //     rank on the classified motifs alone.
+  const MAX_FEN_SCANS = 250;
+  let fenScans = 0;
+
   for (const mp of mistakes) {
     // 1. Classify by tactic type if available
     if (mp.tacticType) {
@@ -1257,19 +1269,20 @@ export function detectWeaknessThemes(mistakes: MistakePuzzle[]): WeaknessTheme[]
         mp.fen,
         mp.cpLoss,
       );
-    }
-
-    // 2. Detect tactics from FEN using the deterministic detector
-    const detected = detectTactics(mp.fen);
-    for (const tactic of detected.tactics) {
-      const tacticKey = `tactic:${tactic.type}`;
-      if (!themeMap.has(tacticKey)) {
-        const label = TACTIC_THEME_LABELS[tactic.type] ?? tactic.type;
-        addToTheme(tacticKey, `Missed ${label.toLowerCase()} patterns`, mp.fen, mp.cpLoss);
+    } else if (fenScans < MAX_FEN_SCANS) {
+      // 2. Unclassified only — detect tactics from the FEN (bounded, cached).
+      fenScans += 1;
+      const detected = detectTactics(mp.fen);
+      for (const tactic of detected.tactics) {
+        const tacticKey = `tactic:${tactic.type}`;
+        if (!themeMap.has(tacticKey)) {
+          const label = TACTIC_THEME_LABELS[tactic.type] ?? tactic.type;
+          addToTheme(tacticKey, `Missed ${label.toLowerCase()} patterns`, mp.fen, mp.cpLoss);
+        }
       }
-    }
-    if (detected.hangingPieces.length > 0) {
-      addToTheme('hanging_pieces', 'Left pieces undefended', mp.fen, mp.cpLoss);
+      if (detected.hangingPieces.length > 0) {
+        addToTheme('hanging_pieces', 'Left pieces undefended', mp.fen, mp.cpLoss);
+      }
     }
 
     // 3. Classify by game phase
