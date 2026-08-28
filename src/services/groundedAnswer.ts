@@ -1993,6 +1993,15 @@ export function notationQuestionSan(text: string | null | undefined): string | n
   const SAN = /\b(O-O-O|O-O|[KQRBNkqrbn][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h](?:x[a-h])?[1-8](?:=[QRBN])?[+#]?)\b/;
   const m = text.match(SAN);
   if (!m) return null;
+  // A square that's a LOCATION reference — "my bishop ON c4", "the knight AT
+  // e5", "aiming AT f7", the pawn moving TO d5 — is NOT a notation query; the
+  // user is pointing at a square inside a board question, not asking what the
+  // token means. Without this, "What is my bishop on c4 aiming at?" mis-fires as
+  // "'c4' is chess notation — the pawn moves to c4" (a board-false answer, since
+  // a bishop sits on c4). David 2026-08-28 audit. The genuine notation form
+  // ("what is Bxe7", "what does c4 mean") has no location word before the token.
+  const before = text.slice(0, m.index ?? text.indexOf(m[0]));
+  if (/\b(?:on|at|to|from|onto|upon|near|toward|towards)\s+$/i.test(before)) return null;
   return normalizeBeginnerSan(m[0]);
 }
 

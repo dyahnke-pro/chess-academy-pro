@@ -1275,6 +1275,17 @@ describe('notationQuestionSan — pull the move out of "what does Bxe7 mean" (Da
     expect(notationQuestionSan('what does e4 do?')).toBeNull(); // asks purpose, not notation
     expect(notationQuestionSan(null)).toBeNull();
   });
+  it('does NOT fire when the square is a LOCATION reference, not notation (David 2026-08-28 audit)', () => {
+    // "What is my bishop ON c4 aiming at?" mis-fired as "'c4' is chess notation
+    // — the pawn moves to c4" (board-false: a bishop is on c4). A square after
+    // on/at/to/from is a board location, not a notation query.
+    expect(notationQuestionSan('What is my bishop on c4 aiming at?')).toBeNull();
+    expect(notationQuestionSan('what is the knight at e5 doing')).toBeNull();
+    expect(notationQuestionSan('what is my rook aiming at on d1')).toBeNull();
+    // The genuine notation form still works — no location word before the token.
+    expect(notationQuestionSan('what is Bxe7')).toBe('Bxe7');
+    expect(notationQuestionSan('what does c4 mean')).toBe('c4');
+  });
 });
 
 describe('explainSanNotation — plain-English decode for a beginner (G0)', () => {
