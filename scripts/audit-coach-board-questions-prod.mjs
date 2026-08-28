@@ -85,13 +85,15 @@ async function ask(question) {
   await box.fill('');
   await box.pressSequentially(question, { delay: 8 });
   await box.press('Enter');
-  // Wait for a new bubble to appear (up to 90s cold), then for it to stop growing.
+  // Wait for a new bubble to appear (up to 90s cold), then for it to stop
+  // growing. Strip the leading "C" coach avatar badge that shares the bubble.
+  const clean = (t) => t.replace(/^C\s+/, '').trim();
   let last = '';
   for (let i = 0; i < 90; i++) {
     await page.waitForTimeout(1000);
     const n = await bubbles().count();
     if (n > n0) {
-      const t = (await bubbles().last().innerText().catch(() => '')).trim();
+      const t = clean(await bubbles().last().innerText().catch(() => ''));
       if (t && t === last && t.length >= 12) return t;      // stabilized
       last = t;
     }
@@ -103,27 +105,25 @@ const rows = [];
 try {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
-  await ask('Play the Italian with me as white');
+  // Establish a real position the way the reference audit does (no board
+  // clicks — those broke the walkthrough and left the coach idle). "Teach me
+  // the Italian" puts a live opening position on the board to ask about.
+  const setup = await ask('Play the Italian with me as white');
   await resolvePicker();
-  // Make a few real moves so questions land on a live middlegame, not move 1.
-  for (const [from, to] of [['e2', 'e4'], ['g1', 'f3'], ['f1', 'c4'], ['e1', 'g1']]) {
-    try {
-      await page.locator(`[data-square="${from}"]`).click({ timeout: 4000 });
-      await page.locator(`[data-square="${to}"]`).click({ timeout: 4000 });
-      await page.waitForTimeout(2500);
-    } catch { /* board may auto-play; keep going */ }
-  }
+  console.log(`[setup] Italian → ${setup.slice(0, 80)}`);
+  const IDLE = /name an?y? opening|what are we working on|back at the board/i;
   for (const q of QUESTIONS) {
     const reply = await ask(q);
     const canned = reply.toLowerCase().includes(CANNED);
-    const empty = !reply || reply.length < 12;
+    const idle = IDLE.test(reply);
+    const empty = !reply || reply.length < 12 || idle;
     // "off-target" heuristic: a best-move readout served to a NON-best-move
     // question (the classic "ignored the question" failure).
     const bestReadout = /the best move is|stakes out the centre|clearly better|slightly better/i.test(reply);
     const askedBest = /best move|forcing|should i play|what.*move/i.test(q);
     const offTarget = bestReadout && !askedBest;
-    rows.push({ q, reply, canned, empty, offTarget });
-    const tag = canned ? '❌ CANNED' : empty ? '⚠ EMPTY' : offTarget ? '⚠ OFF-TARGET (best-move readout)' : '✔';
+    rows.push({ q, reply, canned, empty, offTarget, idle });
+    const tag = canned ? '❌ CANNED' : idle ? '⚠ IDLE (no game context)' : empty ? '⚠ EMPTY' : offTarget ? '⚠ OFF-TARGET (best-move readout)' : '✔';
     console.log(`\nQ: ${q}\n  A: ${reply || '(none)'}\n  ${tag}`);
   }
 } catch (e) {
