@@ -57,15 +57,49 @@ export function detectTilt(recentSessionsNewestFirst: SessionRecord[]): TiltVerd
   return NONE;
 }
 
+// A game-level RAGE-QUIT read (colour-free): a coach game that ended in a
+// resignation / abandonment in very few moves is disengagement, whoever
+// resigned. A cluster of them is a strong tilt signal the session read misses.
+const BAIL_MAX_PLIES = 16;
+interface GameLike { pgn?: string; termination?: string; source?: string }
+
+function plyCount(pgn: string): number {
+  // Strip move numbers + result, count SAN tokens. Cheap and good enough.
+  return (pgn || '')
+    .replace(/\d+\.(\.\.)?/g, ' ')
+    .replace(/(1-0|0-1|1\/2-1\/2|\*)\s*$/, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter((t) => /[a-hKQRBNO]/.test(t)).length;
+}
+
+/** Tilt from recent coach games (newest first) — a short-abandon streak. Pure. */
+export function detectGameTilt(recentGamesNewestFirst: GameLike[]): TiltVerdict {
+  const games = recentGamesNewestFirst.filter((g) => (g.source ?? 'coach') === 'coach').slice(0, 6);
+  const bails = games.filter((g) => /resign|abandon|abort/i.test(g.termination ?? '') && plyCount(g.pgn ?? '') < BAIL_MAX_PLIES);
+  if (bails.length >= 2) return { level: 'strong', reason: 'a couple of recent games ended in a quick resignation' };
+  if (bails.length === 1 && games.length >= 1 && /abandon|abort/i.test(games[0].termination ?? '') && plyCount(games[0].pgn ?? '') < BAIL_MAX_PLIES) {
+    return { level: 'mild', reason: 'the last game was cut short' };
+  }
+  return NONE;
+}
+
+const RANK: Record<TiltVerdict['level'], number> = { none: 0, mild: 1, strong: 2 };
+
 /**
- * Read the last few training sessions from Dexie and return the tilt verdict.
- * Degrades to `none` on any read error (the tone hint is a bonus, never a
- * blocker).
+ * Read the last few training sessions AND recent coach games from Dexie and
+ * return the strongest tilt verdict. Degrades to `none` on any read error (the
+ * tone hint is a bonus, never a blocker).
  */
 export async function getRecentTiltVerdict(): Promise<TiltVerdict> {
   try {
-    const recent = await db.sessions.orderBy('date').reverse().limit(4).toArray();
-    return detectTilt(recent);
+    const [sessions, games] = await Promise.all([
+      db.sessions.orderBy('date').reverse().limit(4).toArray(),
+      db.games.orderBy('date').reverse().limit(6).toArray().catch(() => []),
+    ]);
+    const s = detectTilt(sessions);
+    const g = detectGameTilt(games as GameLike[]);
+    return RANK[g.level] > RANK[s.level] ? g : s;
   } catch {
     return NONE;
   }
