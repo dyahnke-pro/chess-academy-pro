@@ -9577,7 +9577,11 @@ export function CoachTeachPage(): JSX.Element {
         if (!continuationRef.current) return; // cancelled
         if (local.isGameOver()) break;
         const fenAtMove = local.fen();
-        const uci = await stockfishEngine.getBestMove(local.fen(), 400).catch(() => '');
+        // The "watch it play out" demo must look like GOOD chess — a 400ms read
+        // blundered a whole queen in a normal KIA (David 2026-08-28, prod walk).
+        // The play-out is voice-gated (~4s/move), so a stronger read is free and
+        // keeps both sides sensible instead of showing a garbage game.
+        const uci = await stockfishEngine.getBestMove(local.fen(), 1500).catch(() => '');
         if (!continuationRef.current) return;
         if (!uci || uci.length < 4) break;
         const from = uci.slice(0, 2);
