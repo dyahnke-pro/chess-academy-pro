@@ -28,7 +28,7 @@
  */
 import { Chess } from 'chess.js';
 import { logAppAudit } from '../services/appAuditor';
-import { parsePiecePurpose } from '../services/groundedAnswer';
+import { pureBoardAspect } from '../services/boardQuestionRouter';
 import { buildEnginePlan, buildCandidateEval, buildAlternativesContext } from '../services/enginePlanContext';
 import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
@@ -1229,13 +1229,15 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // surfaces, and no new engine call on the two that already thread it.
     const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents);
     const hintRequestEngage = isHintRequest(askForIntents);
-    // "What is my bishop on c4 aiming at?" — a PIECE-PURPOSE ask. It has no
-    // best-move/positional lane, so it fell to the best-move default and got
-    // answered about a DIFFERENT piece (David 2026-08-28: "answered with best
-    // move and said knight c3 not bishop"). Detect it here so coachApi's
-    // piece-purpose lane answers from the board, and SUPPRESS the best-move +
-    // positional lanes so they don't win the dispatch first.
-    const piecePurposeEngage = parsePiecePurpose(askForIntents) !== null;
+    // GROUNDED BOARD QUESTION — sort the ask by what it POINTS AT (piece / square
+    // / move / side / aspect) and answer from chess.js facts, not the best-move
+    // default (David 2026-08-28: board questions were deflecting — "answered with
+    // best move and said knight c3 not bishop"). A PURE aspect (piece-purpose,
+    // square-control, piece-safety, hanging, threats, king-safety, material,
+    // move-purpose) is answered by coachApi's board dispatcher; detecting it here
+    // engages grounding and SUPPRESSES best-move + positional so the board answer
+    // wins. Engine aspects (best-move/eval/plan/…) keep their existing lanes.
+    const groundedBoardEngage = pureBoardAspect(askForIntents) !== null;
     // A PLAN ABOUT ANOTHER POSITION IS NOT A PLAN. Surfaces hand one over and
     // this used to take it on trust — `if (!resolvedEnginePlan)` short-circuits
     // the rebuild, so a plan computed several moves ago flowed straight into
@@ -1354,8 +1356,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // the best-move branch and set the flag so coachApi dispatches
             // the curated recommendation (David 2026-07-15 live screenshot).
             counterRepertoireQuestion: counterRepertoireQuestionEngage,
-            piecePurpose: piecePurposeEngage,
-            bestMoveQuestion: bestMoveQuestionEngage && !candidateMoveEngage && !counterRepertoireQuestionEngage && !piecePurposeEngage,
+            groundedBoardQuestion: groundedBoardEngage,
+            bestMoveQuestion: bestMoveQuestionEngage && !candidateMoveEngage && !counterRepertoireQuestionEngage && !groundedBoardEngage,
             // A hint ask reuses the best-move engine read but WITHHOLDS the
             // square (honesty contract; 2026-08-13 audit — "give me a hint"
             // was handing over the full answer).
@@ -1365,7 +1367,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // surfaces ever set it, so on Learn the ask fell to the best-move
             // default and a FALSE premise was never corrected (proof run
             // proof-msrqv0s8). Threaded here, every spine surface gets it.
-            positionalTopic: piecePurposeEngage ? undefined : (positionalTopic(askForIntents) ?? undefined),
+            positionalTopic: groundedBoardEngage ? undefined : (positionalTopic(askForIntents) ?? undefined),
             // The CLEAN student text (injected blocks stripped) — the
             // false-premise check must see exactly what the student typed;
             // lastUserMessage() on wrapped surfaces sees the envelope.

@@ -13,8 +13,11 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { Chess } from 'chess.js';
-import type { Square, PieceSymbol } from 'chess.js';
+import type { Square, PieceSymbol, Move } from 'chess.js';
 import { seeGain } from './positionReadingService';
+import { detectKingExposure, kingExposureClause } from './kingSafety';
+import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
+import type { QuestionAspect } from '../data/boardQuestionBuckets';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -147,6 +150,352 @@ function xrayThrough(
   return null;
 }
 
+// ── THE GROUNDED BOARD-QUESTION DISPATCHER (David 2026-08-28) ─────────────────
+//
+// The router (boardQuestionRouter) sorts an ask by what it POINTS AT; this maps
+// each PURE aspect (answerable from chess.js alone) to its computer and returns
+// the grounded facts. The engine aspects (best-move / eval / plan / …) keep their
+// existing coachApi lanes. Returns null when no pure aspect answered → the caller
+// falls through to those lanes. No LLM decides anything (G0).
+function dispatchPureAspect(
+  aspect: QuestionAspect,
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  // The aspect already encodes the side (opponent-threats vs my-threats,
+  // king-safety-mine vs -theirs), so no separate side arg is needed.
+  switch (aspect) {
+    case 'piece-purpose': return assemblePiecePurposeAnswer(fen, ask, studentColor);
+    case 'square-control':
+    case 'square-safety':
+    case 'square-occupant': return assembleSquareControlAnswer(fen, ask, studentColor);
+    case 'piece-safety': return assemblePieceSafetyAnswer(fen, ask, studentColor);
+    case 'hanging':
+    case 'loose': return assembleHangingAnswer(fen, ask, studentColor);
+    case 'opponent-threats': return assembleThreatAnswer(fen, ask, studentColor, 'opponent');
+    case 'my-threats': return assembleThreatAnswer(fen, ask, studentColor, 'me');
+    case 'king-safety-mine':
+    case 'king-lines': return assembleKingSafetyAnswer(fen, studentColor, 'me');
+    case 'king-safety-theirs': return assembleKingSafetyAnswer(fen, studentColor, 'opponent');
+    case 'material': return assembleMaterialAnswer(fen, studentColor);
+    case 'move-purpose': return assembleMovePurposeAnswer(fen, ask, studentColor);
+    default: return null;
+  }
+}
+
+/** Answer any PURE board question from grounded facts, or null when none of the
+ *  ask's aspects are pure (→ the engine lanes handle it). Also returns the aspect
+ *  it answered, for the weakness-signal logger (Phase 2). */
+export function answerBoardQuestion(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): { answer: GroundedAnswer; aspect: QuestionAspect } | null {
+  const focus = extractQuestionFocus(ask);
+  if (!focus) return null;
+  for (const aspect of focus.aspects) {
+    if (!PURE_BOARD_ASPECTS.has(aspect)) continue;
+    const answer = dispatchPureAspect(aspect, fen, ask, studentColor);
+    if (answer) return { answer, aspect };
+  }
+  return null;
+}
+
+// ── MATERIAL — "am I up material?" ───────────────────────────────────────────
+export function assembleMaterialAnswer(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  let w = 0; let b = 0;
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.type === 'k') continue;
+      const v = REVIEW_PIECE_VALUE[cell.type] ?? 0;
+      if (cell.color === 'w') w += v; else b += v;
+    }
+  }
+  const me = studentColor === 'white' ? 'w' : 'b';
+  const mine = me === 'w' ? w : b;
+  const theirs = me === 'w' ? b : w;
+  const diff = mine - theirs;
+  const facts = diff === 0
+    ? `Material is even — ${mine} points each.`
+    : diff > 0
+      ? `You're up ${diff} point${diff === 1 ? '' : 's'} of material (${mine} to ${theirs}).`
+      : `You're down ${-diff} point${-diff === 1 ? '' : 's'} of material (${mine} to ${theirs}).`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── HANGING / LOOSE — "is anything hanging?" / "can I win material?" ──────────
+export function assembleHangingAnswer(fen: string, ask: string | null | undefined, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const t = (ask ?? '').toLowerCase();
+  const scanTheirs = /\b(their|his|her|opponent|black'?s|white'?s|win\s+material|can\s+i\s+(?:win|take|grab)|free\s+material)\b/.test(t);
+  const victimColor = scanTheirs ? them : me;
+  const loose: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+      let g = 0;
+      try { g = seeGain(chess, cell.square); } catch { g = 0; }
+      if (g > 0) loose.push({ sq: cell.square, type: cell.type, g });
+    }
+  }
+  loose.sort((a, b) => b.g - a.g);
+  if (loose.length === 0) {
+    return {
+      facts: scanTheirs
+        ? `Nothing of theirs is hanging — there's no free material to grab right now.`
+        : `Nothing of yours is hanging — your pieces are all defended.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+  const named = loose.slice(0, 3).map((l) => `the ${REVIEW_PIECE_NAME[l.type]} on ${l.sq}`);
+  const pts = `${loose[0].g} point${loose[0].g === 1 ? '' : 's'}`;
+  const facts = scanTheirs
+    ? `Yes — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
+    : `Careful — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── PIECE SAFETY — "is my knight on d5 safe?" ────────────────────────────────
+export function assemblePieceSafetyAnswer(fen: string, ask: string | null | undefined, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  const t = (ask ?? '').toLowerCase();
+  const pm = /\b(pawn|knight|bishop|rook|queen|king)\b/.exec(t);
+  if (!pm) return null;
+  const type = PIECE_WORD_TO_SYM[pm[1]];
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const sqM = /\b(?:on|at)\s+([a-h][1-8])\b/.exec(t);
+  let sq: Square | null = null;
+  if (sqM) {
+    const p = chess.get(sqM[1] as Square);
+    if (p && p.type === type && p.color === me) sq = sqM[1] as Square;
+  }
+  if (!sq) {
+    for (const row of chess.board()) {
+      for (const cell of row) {
+        if (cell && cell.type === type && cell.color === me) { sq = cell.square; break; }
+      }
+      if (sq) break;
+    }
+  }
+  const name = REVIEW_PIECE_NAME[type];
+  if (!sq) {
+    return { facts: `You don't have a ${name}${sqM ? ` on ${sqM[1]}` : ''} here.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  let attackers: Square[] = [];
+  try { attackers = chess.attackers(sq, them).filter((s) => chess.get(s)); } catch { attackers = []; }
+  if (attackers.length === 0) {
+    return { facts: `Your ${name} on ${sq} is safe — nothing of theirs attacks it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  const named = attackers
+    .map((s) => ({ s, type: chess.get(s)?.type ?? 'p' }))
+    .sort((a, b) => (REVIEW_PIECE_VALUE[a.type] ?? 0) - (REVIEW_PIECE_VALUE[b.type] ?? 0))
+    .map((x) => `the ${REVIEW_PIECE_NAME[x.type]} on ${x.s}`);
+  let g = 0;
+  try { g = seeGain(chess, sq); } catch { g = 0; }
+  if (g > 0) {
+    return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and it drops about ${g} point${g === 1 ? '' : 's'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  return { facts: `Your ${name} on ${sq} holds — ${named.join(' and ')} ${attackers.length > 1 ? 'eye' : 'eyes'} it, but it's defended enough that taking loses for them.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── OPPONENT / MY THREATS — "what is my opponent threatening?" ───────────────
+export function assembleThreatAnswer(fen: string, ask: string | null | undefined, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  // "my threats" → what I can win off THEM; else → what THEY can win off ME.
+  const victimColor: 'w' | 'b' = side === 'me' ? them : me;
+  const isOpp = side !== 'me';
+  const wins: Array<{ sq: Square; type: PieceSymbol; g: number }> = [];
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+      let g = 0;
+      try { g = seeGain(chess, cell.square); } catch { g = 0; }
+      if (g > 0) wins.push({ sq: cell.square, type: cell.type, g });
+    }
+  }
+  wins.sort((a, b) => b.g - a.g);
+  const inCheck = chess.inCheck();
+  if (wins.length === 0 && !inCheck) {
+    return {
+      facts: isOpp
+        ? `Nothing forcing — they have no immediate threat; none of your pieces are hanging.`
+        : `No immediate threat for you — nothing of theirs is hanging right now.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+  const named = wins.slice(0, 2).map((w) => `the ${REVIEW_PIECE_NAME[w.type]} on ${w.sq}`);
+  const winPart = wins.length > 0
+    ? (isOpp
+        ? `they're eyeing ${named.join(' and ')} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'} if you don't cover it`
+        : `you can win ${named.join(' and ')} — about ${wins[0].g} point${wins[0].g === 1 ? '' : 's'}`)
+    : '';
+  const checkPart = inCheck ? `your king is in check` : '';
+  const facts = [checkPart, winPart].filter(Boolean).join(', and ') + '.';
+  return { facts: facts.charAt(0).toUpperCase() + facts.slice(1), bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── KING SAFETY — "is my king safe?" ────────────────────────────────────────
+export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const target: 'w' | 'b' = side === 'opponent' ? them : me;
+  const whose = side === 'opponent' ? 'their' : 'your';
+  const exposure = detectKingExposure(fen, target);
+  if (!exposure) {
+    return { facts: `${whose === 'your' ? 'Your' : 'Their'} king looks safe — no open lines or attackers on it right now.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  const clause = kingExposureClause(exposure);
+  const lead = whose === 'your' ? 'Your king' : 'Their king';
+  // kingExposureClause is written third-person; front it with the right owner.
+  const facts = clause ? `${lead}: ${clause}` : `${lead} is reasonably safe.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── MOVE PURPOSE — "what does d5 do?" ────────────────────────────────────────
+export function assembleMovePurposeAnswer(fen: string, ask: string | null | undefined, _studentColor: 'white' | 'black'): GroundedAnswer | null {
+  const m = /\b([KQRBN][a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|O-O-O|O-O|[a-h][1-8](?:=[QRBN])?[+#]?)\b/.exec(ask ?? '');
+  if (!m) return null;
+  const san = normalizeBeginnerSan(m[1]);
+  let before: Chess;
+  let applied: Move | null = null;
+  try {
+    before = new Chess(fen);
+    applied = new Chess(fen).move(san);
+  } catch { return null; }
+  if (!applied) {
+    return { facts: `${san} isn't legal in this position.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  const moverColor: 'white' | 'black' = before.turn() === 'w' ? 'white' : 'black';
+  const geom = describeMoveGeometry(fen, applied.san, moverColor);
+  const clauses: string[] = [];
+  if (applied.captured) clauses.push(`captures the ${REVIEW_PIECE_NAME[applied.captured]} on ${applied.to}`);
+  if (geom) clauses.push(geom);
+  if (applied.san.includes('#')) clauses.push('delivers checkmate');
+  else if (applied.san.includes('+')) clauses.push('gives check');
+  if (clauses.length === 0) {
+    // Quiet move: describe what it now controls from the landed square.
+    const after = new Chess(applied.after ?? fen);
+    const me: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+    const central = squaresAttackedBy(after, applied.to, me).filter((s) => !after.get(s) && CENTRAL_SQ.has(s));
+    clauses.push(central.length > 0 ? `develops toward the centre, covering ${central.slice(0, 3).join(', ')}` : `is a quiet developing move`);
+  }
+  const body = clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0];
+  return { facts: `${san} ${body}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── SQUARE CONTROL — "who controls e5?" / "is d5 safe for my knight?" ─────────
+//
+// David 2026-08-28: these fell to the best-move handler because no lane owned
+// them. Board-true from chess.js: who attacks the square (both sides), and — for
+// a "safe" ask — the static exchange if the student's piece stood there.
+
+/** The square a control/safety ask is about + which mode, or null. */
+export function parseSquareQuery(
+  ask: string | null | undefined,
+): { square: Square; mode: 'control' | 'safe'; piece: PieceSymbol | null } | null {
+  if (!ask) return null;
+  const t = ask.toLowerCase();
+  // A bare square token that is NOT part of a SAN (so "Nf3"/"exd5" don't match).
+  const sqM = /(?<![a-z0-9])([a-h][1-8])(?![a-z0-9])/i.exec(t.replace(/\b[nbrqk][a-h]?[1-8]?x?[a-h][1-8]\b/gi, ' '));
+  if (!sqM) return null;
+  const square = sqM[1] as Square;
+  const pm = /\b(pawn|knight|bishop|rook|queen|king)\b/.exec(t);
+  const piece = pm ? PIECE_WORD_TO_SYM[pm[1]] : null;
+  if (/\b(safe|safely|survive|surviving|hang|hangs?|protected|defended|land|sit|park|place|put|jump|outpost)\b/.test(t)
+    && /\b(is|would|can|will|could|does)\b/.test(t)) {
+    return { square, mode: 'safe', piece };
+  }
+  if (/\b(who|which\s+side)\b/.test(t) && /\b(control|controls|owns?|contest|contests|has|hold|holds|fight|attack|attacks|cover|covers|dominat)\w*\b/.test(t)) {
+    return { square, mode: 'control', piece };
+  }
+  return null;
+}
+
+/** Grounded "who controls e5 / is d5 safe" — chess.js attackers + a static
+ *  exchange for the safety verdict. Returns null when not a square query. */
+export function assembleSquareControlAnswer(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  const q = parseSquareQuery(ask);
+  if (!q) return null;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const nameList = (sqs: Square[]): string[] =>
+    sqs.flatMap((sq) => { const p = chess.get(sq); return p ? [{ sq, type: p.type }] : []; })
+      .sort((a, b) => (REVIEW_PIECE_VALUE[a.type] ?? 0) - (REVIEW_PIECE_VALUE[b.type] ?? 0))
+      .map((x) => `the ${REVIEW_PIECE_NAME[x.type]} on ${x.sq}`);
+  let myAtt: Square[]; let theirAtt: Square[];
+  try {
+    myAtt = chess.attackers(q.square, me).filter((s) => chess.get(s));
+    theirAtt = chess.attackers(q.square, them).filter((s) => chess.get(s));
+  } catch { return null; }
+  const occupant = chess.get(q.square);
+  const occNote = occupant
+    ? ` (${occupant.color === me ? 'your' : 'their'} ${REVIEW_PIECE_NAME[occupant.type]} sits there)`
+    : '';
+
+  if (q.mode === 'control') {
+    const mine = nameList(myAtt);
+    const theirs = nameList(theirAtt);
+    const minePart = mine.length ? `you cover ${q.square} with ${mine.join(' and ')}` : `you don't cover ${q.square}`;
+    const theirPart = theirs.length ? `they hit it with ${theirs.join(' and ')}` : `they don't contest it`;
+    let verdict: string;
+    if (myAtt.length === 0 && theirAtt.length === 0) verdict = `neither side controls ${q.square} right now`;
+    else if (myAtt.length > theirAtt.length) verdict = `so ${q.square} is yours`;
+    else if (myAtt.length < theirAtt.length) verdict = `so they control ${q.square}`;
+    else verdict = `so ${q.square} is contested`;
+    return {
+      facts: `On ${q.square}${occNote}: ${minePart}, and ${theirPart} — ${verdict}.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+
+  // SAFE mode — would the student's piece survive on the square?
+  const placedType: PieceSymbol = (occupant && occupant.color === me ? occupant.type : (q.piece ?? 'n'));
+  if (theirAtt.length === 0) {
+    return {
+      facts: `${q.square} is safe — nothing of theirs attacks it, so your ${REVIEW_PIECE_NAME[placedType]} would sit there untouched.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+  // Static exchange with the student's piece on the square.
+  let oppGain = 0;
+  try {
+    const probe = new Chess(fen);
+    if (!occupant) probe.put({ type: placedType, color: me }, q.square);
+    else if (occupant.color !== me) { probe.remove(q.square); probe.put({ type: placedType, color: me }, q.square); }
+    oppGain = seeGain(probe, q.square); // material THEY net capturing on the square
+  } catch { oppGain = 0; }
+  const theirs = nameList(theirAtt);
+  const mine = nameList(myAtt);
+  const defPart = mine.length ? `you defend it with ${mine.join(' and ')}` : `you don't defend it`;
+  if (oppGain > 0) {
+    return {
+      facts: `${q.square} is NOT safe — ${theirs.join(' and ')} ${theirAtt.length > 1 ? 'attack' : 'attacks'} it and ${defPart}, so a ${REVIEW_PIECE_NAME[placedType]} there drops about ${oppGain} point${oppGain === 1 ? '' : 's'}.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+  return {
+    facts: `${q.square} holds up — ${theirs.join(' and ')} ${theirAtt.length > 1 ? 'eye' : 'eyes'} it, but ${defPart}, so your ${REVIEW_PIECE_NAME[placedType]} is safe there.`,
+    bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+  };
+}
+
 /** Grounded "what does this piece do / aim at" — board-true, no engine, no LLM
  *  deciding. Returns null when the ask is not a piece-purpose question. */
 export function assemblePiecePurposeAnswer(
@@ -187,9 +536,7 @@ export function assemblePiecePurposeAnswer(
   const scopeOf = (sq: Square) => {
     const attacked = squaresAttackedBy(chess, sq, me);
     const targets = attacked
-      .map((t) => ({ sq: t, p: chess.get(t) }))
-      .filter((x) => x.p && x.p.color === them)
-      .map((x) => ({ sq: x.sq, type: x.p!.type }))
+      .flatMap((t) => { const p = chess.get(t); return p && p.color === them ? [{ sq: t, type: p.type }] : []; })
       .sort((a, b) => (REVIEW_PIECE_VALUE[b.type] ?? 0) - (REVIEW_PIECE_VALUE[a.type] ?? 0));
     const controlledCentral = attacked.filter((t) => !chess.get(t) && CENTRAL_SQ.has(t));
     return { sq, attacked, targets, controlledCentral, xray: xrayThrough(chess, sq, them) };

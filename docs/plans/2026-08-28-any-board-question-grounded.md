@@ -75,6 +75,61 @@ CODE, hand to `voiceFacts` to SPEAK. Guarantees no board question hits path 4.
 - Catch-all: a test that a board question with no specific lane still returns a
   grounded, board-true answer and NEVER a raw-LLM fallback.
 
+## REVISED ARCHITECTURE (David 2026-08-28) — sort by board ENTITY, not phrasing; feed the weakness report
+
+A flat bucket-list re-creates the 40-regex gap problem one layer up. Instead:
+
+**Classify by what the question POINTS AT, derived from the deterministic breakdown
+of a chess position.** Every component a position decomposes into = something a
+user can ask = a bucket. ≈50 aspect-buckets across 10 components (`src/data/
+boardQuestionBuckets.ts` is the source-of-truth catalog, mirroring
+`misconceptionTags.ts`):
+
+1. position (7): eval✓, wdl, phase, criticality, material, space, basics
+2. side (6): my-plan✓, opponent-plan, my-threats, opponent-threats, initiative, development
+3. square (4): control, safety, weakness/hole, occupant
+4. piece (4): purpose✓, safety/hanging, activity, role
+5. move (8): best✓, eval✓, purpose, consequence/PV, why-best✓, why-failed✓, legal/captures/checks, comparison✓
+6. pawns (5): passed, weak, breaks, majorities, structure✓(partial)
+7. king (5): mine, theirs, lines/attackers, checks, in-check/escapes
+8. tactics (6): hanging, motifs✓(partial), trapped, mate-threat, loose, overload
+9. endgame (2): result✓, technique
+10. opening (3): name✓, master-play✓, plans
+
+The 50 collapse to ~25 computer functions (one attackers/defenders engine serves
+square-control + piece-safety + hanging + king-attackers).
+
+**Router = focus extractor, multi-label, scoped catch-all:**
+- `extractQuestionFocus(ask)` → `{squares[], pieces[], moves[], side, aspects[]}`.
+  Phrasing-proof: "who owns e5 / is e5 mine / can I hold e5" all → `{square:e5,
+  aspect:square-control|square-safety}`.
+- Multi-label — an ask can fire several aspects; the answer composes them (mirrors
+  the DNA composer, not one-error-one-bucket).
+- Catch-all is SCOPED: unknown aspect but named entities → run the position
+  computers scoped to those entities. Worst case = a focused read of exactly what
+  they pointed at. NEVER a wrong best-move, never the free LLM.
+
+**Every question feeds the weakness report (David 2026-08-28):**
+- A question = an "I can't see this myself" signal — a purer weakness cue than an
+  error. Each classified question logs `{component, aspect, answerSeverity,
+  phase, ts}` to a Dexie question-signal store.
+- Weight by the GROUNDED ANSWER's severity, not the topic: "is my knight safe?"
+  → computer says NO → strong board-vision signal; says "obviously yes" → ~0.
+- Gold = intersection with move-errors: ask about X AND err on X = confirmed blind
+  spot, ranked first. Decay when they stop asking (reuse the misconception decay).
+- The catalog's `weaknessTheme` column maps aspect → theme (board-vision /
+  threat-awareness / king-safety / pawn-structure / planning / calculation /
+  piece-activity / endgame / opening / evaluation). The weakness spine takes the
+  question-signals as a SECOND input into the same profile → same report + drills.
+
+**Build order (foundation first, unlocks the most at once):**
+1. `boardQuestionBuckets.ts` — the 50-aspect catalog (component/theme/computer/needsEngine).
+2. `boardQuestionRouter.ts` — `extractQuestionFocus` + `classifyBoardQuestion`.
+3. shared attackers/defenders engine → square-control✓ + piece-safety + hanging + king-attackers.
+4. `answerBoardQuestion(fen, ask, studentColor)` dispatcher (+ the logger hook w/ answerSeverity).
+5. wire coachService (engage + suppress best-move) → coachApi dispatch.
+6. Phase 2: Dexie question-signal store + weakness-spine integration + report/drill wiring.
+
 ## Status / next-session pickup
 - Shipped to `main` today: perspective app-wide, mistake cpLoss+book, why-it-failed
   geometry (review+play), live-alert board-truth, hint plain-language+arrows,
