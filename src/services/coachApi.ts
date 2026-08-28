@@ -2673,6 +2673,22 @@ function emitCoachLlmCallAudit(opts: { grounded: boolean; intent: string; surfac
   });
 }
 
+/** The coach spine's provider path (deepseek/anthropic) sends ONE composite user
+ *  message built by `formatEnvelopeAsUserMessage`: the [Memory] block (which
+ *  includes the RECENT CONVERSATION) and [Live] block, then `[Ask]\n<the actual
+ *  question>`. Intent scanners here (notation decode, move-question detection,
+ *  originalQuery / openings match) MUST read ONLY the current question, never the
+ *  memory block — otherwise a prior turn's text (e.g. an earlier "what does Bxe7
+ *  mean?") is re-matched on every later turn and the coach repeats that answer
+ *  forever with no LLM call (the 2026-08-28 "stuck on Bxe7" bug). Return the text
+ *  after the LAST `[Ask]` marker; raw single messages from other callers (no
+ *  marker) pass through unchanged. */
+export function currentAskFromContent(content: string): string {
+  const idx = content.lastIndexOf('[Ask]');
+  if (idx === -1) return content;
+  return content.slice(idx + '[Ask]'.length).replace(/^\r?\n/, '').trim();
+}
+
 export async function getCoachChatResponse(
   messages: { role: 'user' | 'assistant'; content: string }[],
   systemPromptAddition: string,
@@ -2802,7 +2818,7 @@ export async function getCoachChatResponse(
     // fork mean") carry no SAN and fall straight through. Computed — G0.
     const earlyUserMsg = (() => {
       for (let i = messages.length - 1; i >= 0; i -= 1) {
-        if (messages[i].role === 'user') return messages[i].content;
+        if (messages[i].role === 'user') return currentAskFromContent(messages[i].content);
       }
       return undefined;
     })();
@@ -2882,7 +2898,7 @@ export async function getCoachChatResponse(
         // Helper: the latest user message, for voiceFacts context.
         const lastUserMessage = (): string | undefined => {
           for (let i = messages.length - 1; i >= 0; i -= 1) {
-            if (messages[i].role === 'user') return messages[i].content;
+            if (messages[i].role === 'user') return currentAskFromContent(messages[i].content);
           }
           return undefined;
         };
@@ -4470,7 +4486,7 @@ export async function getCoachChatResponse(
         // engages — cheap (in-memory DB scan) and additive.
         const lastUserContent = (() => {
           for (let i = messages.length - 1; i >= 0; i -= 1) {
-            if (messages[i].role === 'user') return messages[i].content;
+            if (messages[i].role === 'user') return currentAskFromContent(messages[i].content);
           }
           return '';
         })();
@@ -4681,7 +4697,7 @@ export async function getCoachChatResponse(
     const sessionId = grounding.sessionId;
     const originalQuery = (() => {
       for (let i = messages.length - 1; i >= 0; i -= 1) {
-        if (messages[i].role === 'user') return messages[i].content;
+        if (messages[i].role === 'user') return currentAskFromContent(messages[i].content);
       }
       return '';
     })();
@@ -4773,7 +4789,7 @@ export async function getCoachChatResponse(
   const { surface, sessionId } = grounding ?? { surface: 'unknown', sessionId: undefined };
   const originalQuery = (() => {
     for (let i = messages.length - 1; i >= 0; i -= 1) {
-      if (messages[i].role === 'user') return messages[i].content;
+      if (messages[i].role === 'user') return currentAskFromContent(messages[i].content);
     }
     return '';
   })();
