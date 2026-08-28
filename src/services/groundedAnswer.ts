@@ -58,6 +58,176 @@ function evalPhrase(evalCp: number | null | undefined, mateIn: number | null | u
   return `${who} is winning (about ${mag.toFixed(1)} points)`;
 }
 
+// ── PIECE PURPOSE — "what is my bishop on c4 aiming at?" (David 2026-08-28) ────
+//
+// The coach had NO lane for "what does this piece do / aim at", so the question
+// fell through to the best-move handler and answered about a DIFFERENT piece
+// ("the best move is Nc3") — asked about a bishop, told about a knight. This
+// reads the ACTUAL board and says what the named piece truly hits: its enemy
+// targets, the central squares it controls, and the piece it x-rays through a
+// single blocker. Pure chess.js (G0/G3) — every square named is verified.
+
+const FILES = 'abcdefgh';
+const RANKS = '12345678';
+const CENTRAL_SQ = new Set(['c4', 'd4', 'e4', 'f4', 'c5', 'd5', 'e5', 'f5', 'd3', 'e3', 'd6', 'e6']);
+const PIECE_WORD_TO_SYM: Record<string, PieceSymbol> = {
+  pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
+};
+const BISHOP_DIRS = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
+const ROOK_DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+/** The piece + optional square a "what is my X aiming at" question is about, or
+ *  null when the ask is not a piece-purpose question (so it never hijacks a
+ *  best-move / assessment ask). */
+export function parsePiecePurpose(
+  ask: string | null | undefined,
+): { piece: PieceSymbol; square: Square | null } | null {
+  if (!ask) return null;
+  const t = ask.toLowerCase();
+  if (!/\bwhat\b|\bwhere\b|\bwhich\s+squares?\b/.test(t)) return null;
+  const pm = /\b(pawn|knight|bishop|rook|queen|king)\b/.exec(t);
+  if (!pm) return null;
+  // A PURPOSE verb — not "is my bishop good/bad" (that's a positional-quality
+  // ask that assemblePositionalAnswer owns).
+  const PURPOSE =
+    /\b(aim(?:ing|s)?|attack(?:ing|s)?|threaten(?:ing|s)?|threat|doing|does|cover(?:ing|s)?|eye(?:ing|s)?|control(?:ling|s)?|hit(?:ting|s)?|target(?:ing|s)?|point(?:ing|s)?|see(?:ing|s)?|guard(?:ing|s)?|rake(?:s|ing)?|defend(?:ing|s)?|protect(?:ing|s)?)\b/;
+  if (!PURPOSE.test(t)) return null;
+  const piece = PIECE_WORD_TO_SYM[pm[1]];
+  const sqM =
+    /\b(?:on|at|from)\s+([a-h][1-8])\b/.exec(t) ??
+    new RegExp(`${pm[1]}\\s+(?:is\\s+)?(?:on\\s+|at\\s+)?([a-h][1-8])\\b`).exec(t);
+  return { piece, square: sqM ? (sqM[1] as Square) : null };
+}
+
+/** Every square a piece on `sq` attacks (occupied or empty) — chess.js honours
+ *  blockers, so this is the piece's true reach. */
+function squaresAttackedBy(chess: Chess, sq: Square, color: 'w' | 'b'): Square[] {
+  const out: Square[] = [];
+  for (const f of FILES) {
+    for (const r of RANKS) {
+      const t = `${f}${r}` as Square;
+      if (t === sq) continue;
+      try { if (chess.attackers(t, color).includes(sq)) out.push(t); } catch { /* skip */ }
+    }
+  }
+  return out;
+}
+
+/** The enemy piece a slider on `sq` x-rays through exactly ONE blocker (the
+ *  pin/skewer geometry), or null. */
+function xrayThrough(
+  chess: Chess,
+  sq: Square,
+  them: 'w' | 'b',
+): { type: PieceSymbol; sq: Square; through: Square } | null {
+  const piece = chess.get(sq);
+  if (!piece || (piece.type !== 'b' && piece.type !== 'r' && piece.type !== 'q')) return null;
+  const dirs = piece.type === 'b' ? BISHOP_DIRS : piece.type === 'r' ? ROOK_DIRS : [...BISHOP_DIRS, ...ROOK_DIRS];
+  const fi = FILES.indexOf(sq[0]);
+  const ri = RANKS.indexOf(sq[1]);
+  for (const [df, dr] of dirs) {
+    let f = fi + df;
+    let r = ri + dr;
+    let blocker: { type: PieceSymbol; sq: Square } | null = null;
+    while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+      const t = `${FILES[f]}${RANKS[r]}` as Square;
+      const p = chess.get(t);
+      if (p) {
+        if (!blocker) {
+          if (p.color !== them) break;         // our own piece blocks — no x-ray past it
+          blocker = { type: p.type, sq: t };    // first piece is an enemy — look behind it
+        } else {
+          if (p.color === them) return { type: p.type, sq: t, through: blocker.sq };
+          break;                                 // second piece is ours — not an x-ray on the enemy
+        }
+      }
+      f += df; r += dr;
+    }
+  }
+  return null;
+}
+
+/** Grounded "what does this piece do / aim at" — board-true, no engine, no LLM
+ *  deciding. Returns null when the ask is not a piece-purpose question. */
+export function assemblePiecePurposeAnswer(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  const parsed = parsePiecePurpose(ask);
+  if (!parsed) return null;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+  const pieceName = REVIEW_PIECE_NAME[parsed.piece];
+
+  // Locate the piece — the named square, else the student's piece(s) of that type.
+  const candidates: Square[] = [];
+  if (parsed.square) {
+    const p = chess.get(parsed.square);
+    if (p && p.type === parsed.piece && p.color === me) candidates.push(parsed.square);
+  } else {
+    for (const row of chess.board()) {
+      for (const cell of row) {
+        if (cell && cell.type === parsed.piece && cell.color === me) candidates.push(cell.square);
+      }
+    }
+  }
+  if (candidates.length === 0) {
+    // Don't invent — say plainly it isn't there (board-true).
+    const where = parsed.square ? ` on ${parsed.square}` : '';
+    return {
+      facts: `You don't have a ${pieceName}${where} in this position.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+    };
+  }
+
+  // Score each candidate by activity; describe the most active one.
+  const scopeOf = (sq: Square) => {
+    const attacked = squaresAttackedBy(chess, sq, me);
+    const targets = attacked
+      .map((t) => ({ sq: t, p: chess.get(t) }))
+      .filter((x) => x.p && x.p.color === them)
+      .map((x) => ({ sq: x.sq, type: x.p!.type }))
+      .sort((a, b) => (REVIEW_PIECE_VALUE[b.type] ?? 0) - (REVIEW_PIECE_VALUE[a.type] ?? 0));
+    const controlledCentral = attacked.filter((t) => !chess.get(t) && CENTRAL_SQ.has(t));
+    return { sq, attacked, targets, controlledCentral, xray: xrayThrough(chess, sq, them) };
+  };
+  const scopes = candidates.map(scopeOf).sort((a, b) =>
+    (b.targets.length * 100 + (b.xray ? 50 : 0) + b.controlledCentral.length) -
+    (a.targets.length * 100 + (a.xray ? 50 : 0) + a.controlledCentral.length),
+  );
+  const s = scopes[0];
+
+  const clauses: string[] = [];
+  if (s.targets.length > 0) {
+    const named = s.targets.slice(0, 2).map((t) => `the ${REVIEW_PIECE_NAME[t.type]} on ${t.sq}`);
+    clauses.push(`attacks ${named.join(' and ')}`);
+  }
+  if (s.xray) {
+    clauses.push(`x-rays the ${REVIEW_PIECE_NAME[s.xray.type]} on ${s.xray.sq} behind the piece on ${s.xray.through}`);
+  }
+  if (s.controlledCentral.length > 0) {
+    clauses.push(`controls ${s.controlledCentral.slice(0, 3).join(', ')}`);
+  }
+  if (clauses.length === 0) {
+    const quiet = s.attacked.filter((t) => !chess.get(t));
+    clauses.push(quiet.length > 0
+      ? `isn't hitting anything active — it just covers ${quiet.slice(0, 3).join(', ')}`
+      : `has no scope here — it's hemmed in`);
+  }
+
+  // Join with commas + a trailing "and" before the last clause when there are 2+.
+  const body = clauses.length > 1
+    ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}`
+    : clauses[0];
+  return {
+    facts: `Your ${pieceName} on ${s.sq} ${body}.`,
+    bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+  };
+}
+
 /**
  * assemblePositionAssessment — "who's winning?", "how do I stand here?",
  * "what's the eval?", "is this good for me?". The fact source is Stockfish's

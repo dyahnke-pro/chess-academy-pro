@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, assemblePiecePurposeAnswer } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -1277,6 +1277,11 @@ export interface MasterGroundingOptions {
    *  (the eval-only assemblePositionAssessment can't answer these). Needs the
    *  currentFen. */
   positionalTopic?: 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+  /** Piece-purpose ask — "what is my bishop on c4 aiming at?". Answered from the
+   *  BOARD (assemblePiecePurposeAnswer — what the named piece actually hits),
+   *  dispatched BEFORE bestMoveQuestion so it never deflects to a best move
+   *  about a different piece (David 2026-08-28). */
+  piecePurpose?: boolean;
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
@@ -2892,6 +2897,7 @@ export async function getCoachChatResponse(
       grounding.appHelpQuestion === true ||
       grounding.timeTroubleQuestion === true ||
       grounding.lastGameQuestion === true ||
+      grounding.piecePurpose === true ||
       grounding.positionalTopic !== undefined;
     if (intentFired) {
       try {
@@ -4229,6 +4235,21 @@ export async function getCoachChatResponse(
                 return hint;
               }
             } catch { /* malformed uci/fen — fall through to the normal lanes */ }
+          }
+        }
+
+        // ── PIECE PURPOSE — "what is my bishop on c4 aiming at / attacking /
+        // doing?" Answered from the BOARD (what the named piece actually hits +
+        // the piece it x-rays), NOT a best move about a different piece (David
+        // 2026-08-28). Runs before bestMoveQuestion so the piece question wins.
+        if (grounding.piecePurpose && grounding.currentFen) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assemblePiecePurposeAnswer(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'piece-purpose', preferRaw: true });
+            if (voiced) return voiced;
           }
         }
 
