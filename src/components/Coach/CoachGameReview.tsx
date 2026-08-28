@@ -688,7 +688,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // The hook's callbacks are stable (memoized); destructure them so the
   // walk-forward + resume callbacks don't churn on every render (the hook
   // returns a fresh object each render). `phase` is the one live value.
-  const { phase: faucetPhase, raiseSlipPrompt: raiseFaucet, reset: resetFaucet } = reviewFaucet;
+  // raiseSlipPrompt intentionally NOT destructured — the "why'd you play that?"
+  // picker is stripped from review (David 2026-08-28). resetFaucet + phase stay
+  // for the dormant panel wiring (never raised, so never shown).
+  const { phase: faucetPhase, reset: resetFaucet } = reviewFaucet;
 
   // FIND-THE-SHOT (review questions, David 2026-07-11). When the mistake the
   // walk is pausing on MISSED A WINNING SHOT (the student was clearly better
@@ -886,49 +889,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           void reviewSay(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
           return; // pause the walk; resumes from the shot card
         }
-        // §5 WALK-THE-BETTER-LINE: after you answer the picker, the coach plays
-        // the engine's better line OUT on the board with the why per move
-        // (Danya's #1 habit). The line is the real engine PV (computePvLine,
-        // G0) — captured here, played out in resumeAfterFaucet. Only when a
-        // genuine distinct best move exists.
-        pendingBetterLineRef.current = seg.bestMoveUci && seg.bestMoveSan !== seg.san
-          ? { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, playedSan: seg.san, bestSan: seg.bestMoveSan ?? null }
-          : null;
-        // SHOW THE MOVE FIRST, let it land, THEN ask "why'd you play that?" — the
-        // board was paused at fenBefore (before the flagged move), so the student
-        // was asked about a move they hadn't been shown yet (David 2026-07-19:
-        // "the card appears before I make my move… I haven't seen it yet"), and
-        // it slammed up with no time to absorb ("give the student time to absorb
-        // the move"). So: push the played move onto the board (no spoiler),
-        // speak a NEUTRAL orienting beat (reveals nothing about quality — the
-        // grounded diagnosis stays post-commit, honesty contract), give a beat to
-        // absorb, THEN raise the picker. resumeAfterFaucet clears the FEN.
-        setWalkExplorationFen(seg.fenAfter);
-        setWalkExplorationSan(seg.san);
-        playMoveSound(seg.san);
-        const faucetArgs = {
-          fenBefore: seg.fenBefore,
-          fenAfter: seg.fenAfter,
-          playedSan: seg.san,
-          bestSan: seg.bestMoveSan ?? undefined,
-          cpLoss: cpLoss > 0 ? cpLoss : 0,
-          shouldCount: true, // a deliberate review of your own game → it counts
-          gamePhase: classifyPhase(seg.fenBefore, nextPly),
-          moveNumber: seg.moveNumber,
-          openingName: openingName ?? undefined,
-          studentRating: playerRating ?? undefined,
-        };
-        void (async () => {
-          try { await reviewSay('Here’s the move you played. Take a look.'); } catch { /* voice off */ }
-          await new Promise((r) => setTimeout(r, 900)); // a beat to absorb the move
-          if (!walkMountedRef.current) return;
-          raiseFaucet(faucetArgs);
-        })();
-        return; // pause the walk; resumes when the student answers + dismisses
+        // WHY-PICKER STRIPPED (David 2026-08-28: "strip out why questions, make
+        // walk best line a button"). Post-game review no longer interrupts a
+        // plain mistake with the "why'd you play that?" faucet, and no longer
+        // AUTO-plays the engine's better line afterwards. The move's own
+        // classification badge (inaccuracy / mistake / blunder) stands; the
+        // student taps "Show me" to walk the engine's line ON DEMAND
+        // (runShowMePlayout). Just advance the walk — no interrupt.
+        walkPlayback.goForward();
+        return;
       }
     }
     walkPlayback.goForward();
-  }, [readingGate, faucetPhase, resetFaucet, raiseFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
+  }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
