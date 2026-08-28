@@ -41,7 +41,7 @@ import { buildDrillWrongTeaching, buildDrillBetterLine, buildDrillThreatSpot, bu
 import { computeWatchGemAside } from '../services/gemCrushLines';
 import { playOutPunish, advantageAlreadyShown } from '../services/punishPlayout';
 import { computeThreatDelta, computeRouteDelta, type DeltaAside } from '../services/engineDeltaLines';
-import { computeMoveWhyDetail } from '../services/moveWhy';
+import { computeMoveWhyDetail, squaresNamedIn } from '../services/moveWhy';
 import {
   isStartablePunishLesson,
   isValidConceptsQuestion,
@@ -1464,17 +1464,21 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // The root (san === null) and any move the board offers nothing concrete
       // for stay silent — silence beats filler.
       let idea = node.idea.trim();
-      // Squares the COMPUTED fill names — highlighted as it speaks so the eye
-      // lands on them (lead-the-eye, David 2026-08-28: "no key squares
-      // highlighted when talking about them"). Empty for voiced/authored ideas
-      // (those carry their own arrows/highlights).
-      let computedFillSquares: string[] = [];
+      // Squares the narration NAMES — highlighted as it speaks so the eye lands
+      // on them (lead-the-eye, David 2026-08-28: "no key squares highlighted
+      // when talking about them"; "weakening d4 should have drawn a highlight").
+      // For the computed fill we have the exact squares; for a VOICED idea we
+      // pull them from the prose. Only when the node has no authored segment
+      // markers of its own (Path 1 handles those).
+      let narrationSquares: string[] = [];
       if (!idea && node.san) {
         const pathSans = path.filter((n) => n.san !== null).map((n) => n.san as string);
         const fenBefore = fenForPath(pathSans.slice(0, -1), treeRef.current?.startFen);
         const detail = computeMoveWhyDetail(fenBefore, node.san);
         idea = detail.text;
-        computedFillSquares = detail.squares;
+        narrationSquares = detail.squares;
+      } else if (idea) {
+        narrationSquares = squaresNamedIn(idea);
       }
       if (!idea) {
         // Root / un-narrated node — just transition based on children.
@@ -1549,11 +1553,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       }, backupMs);
       advanceTimerRef.current = backupTimer;
 
-      // Lead the eye: highlight the squares the COMPUTED fill names (yellow key
-      // squares) so the student looks where the words point. Authored/voiced
-      // ideas carry their own markers and set none here.
-      if (computedFillSquares.length > 0) {
-        setNarrationHighlights(computedFillSquares.map((square) => ({ square, color: 'yellow' })));
+      // Lead the eye: highlight the squares the narration names (yellow key
+      // squares) so the student looks where the words point — voiced or computed.
+      if (narrationSquares.length > 0) {
+        setNarrationHighlights(narrationSquares.map((square) => ({ square, color: 'yellow' })));
       }
 
       // Primary gate: voice completion → then the asides → then advance.
