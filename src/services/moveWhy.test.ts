@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeMoveWhy } from './moveWhy';
+import { computeMoveWhy, computeMoveWhyDetail } from './moveWhy';
 
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -40,5 +40,23 @@ describe('computeMoveWhy — board-true, specific, no filler', () => {
   it('returns empty on illegal / unparseable input (silence over guessing)', () => {
     expect(computeMoveWhy(START, 'Zz9')).toBe('');
     expect(computeMoveWhy('', 'e4')).toBe('');
+  });
+});
+
+describe('computeMoveWhyDetail — returns the squares it names (lead-the-eye)', () => {
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+  it('a developing knight returns its destination + the central squares it covers', () => {
+    const d = computeMoveWhyDetail(START, 'Nf3');
+    expect(d.text).toMatch(/covering/);
+    expect(d.squares).toContain('f3');   // where it moved
+    expect(d.squares).toEqual(expect.arrayContaining(['e5', 'd4'])); // squares it names
+  });
+  it('a pawn stake returns the squares it stakes out', () => {
+    const d = computeMoveWhyDetail(START, 'e4');
+    expect(d.squares).toContain('e4');
+    expect(d.squares).toEqual(expect.arrayContaining(['d5', 'f5']));
+  });
+  it('empty result carries no squares', () => {
+    expect(computeMoveWhyDetail(START, 'Zz9').squares).toEqual([]);
   });
 });

@@ -140,8 +140,14 @@ export async function planTeachingVisit(
   let recap: string | null = null;
   if (visits.length > 0) {
     const last = visits[visits.length - 1];
+    // A takeaway is only usable in the recap if it's a SHORT summary — not a
+    // raw walkthrough intro (which starts "Let's walk through …" and reads as
+    // "Last time we covered Let's walk through …", the 2026-08-28 prod bug David
+    // caught). Anything long or intro-shaped falls back to the clean layer label.
+    const usableTakeaway = (t: string | null | undefined): string | null =>
+      (t && t.length <= 70 && !/^\s*(let'?s walk through|we (open|start)|today)/i.test(t)) ? t : null;
     const covered = visits.length === 1
-      ? (last.takeaway || describeLayer(last.layer))
+      ? (usableTakeaway(last.takeaway) || describeLayer(last.layer))
       : `${describeLayer(visits[0].layer)}${visits.length > 2 ? `, ${visits.slice(1, -1).map((v) => describeLayer(v.layer)).join(', ')},` : ''} and ${describeLayer(last.layer)}`;
     recap = `Last time we covered ${covered}. Today we add ${todayLabel}.`;
   }

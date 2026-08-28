@@ -67,35 +67,45 @@ function isFianchetto(type: string, to: Sq): boolean {
   return type === 'b' && ['g2', 'b2', 'g7', 'b7'].includes(to);
 }
 
+export interface MoveWhy {
+  /** The spoken reason, or '' when nothing concrete. */
+  text: string;
+  /** The board squares the reason NAMES — highlighted so the eye lands on them
+   *  as the words are spoken (the lead-the-eye rule, David 2026-08-28). Includes
+   *  the move's destination when the reason is about the piece that just moved. */
+  squares: string[];
+}
+
 /**
- * A board-true one-line reason for `san` from `fenBefore`, or '' when the
- * position offers nothing concrete (silence beats filler). Pure chess.js.
+ * A board-true reason for `san` from `fenBefore` WITH the squares it names, or
+ * an empty result when the position offers nothing concrete. Pure chess.js.
  */
-export function computeMoveWhy(fenBefore: string, san: string): string {
+export function computeMoveWhyDetail(fenBefore: string, san: string): MoveWhy {
+  const none: MoveWhy = { text: '', squares: [] };
   let before: Chess; let move: ReturnType<Chess['move']>;
   try {
     before = new Chess(fenBefore);
     move = before.move(san);
-    if (!move) return '';
-  } catch { return ''; }
+    if (!move) return none;
+  } catch { return none; }
   const after = before; // `before` now holds the post-move position
   const { piece, to, color } = move;
   const name = PNAME[piece] ?? 'piece';
 
   // Castling — king safety, the clearest beginner "why".
   if (move.san === 'O-O' || move.san === 'O-O-O') {
-    return `Castling gets the king to safety and brings the rook toward the centre.`;
+    return { text: `Castling gets the king to safety and brings the rook toward the centre.`, squares: [to] };
   }
 
   // A capture — say what it takes.
   if (move.captured) {
     const took = PNAME[move.captured] ?? 'piece';
-    return `Takes the ${took} on ${to}.`;
+    return { text: `Takes the ${took} on ${to}.`, squares: [to] };
   }
 
   // A check — the most forcing thing on the board.
   if (move.san.endsWith('+') || move.san.endsWith('#')) {
-    return `Checks the king from ${to}, forcing a reply.`;
+    return { text: `Checks the king from ${to}, forcing a reply.`, squares: [to] };
   }
 
   const targets = attackSquares(after, to, piece, color);
@@ -104,35 +114,42 @@ export function computeMoveWhy(fenBefore: string, san: string): string {
   if (isFianchetto(piece, to)) {
     const central = targets.filter((s) => CENTER.has(s));
     return central.length
-      ? `The bishop takes the long diagonal, bearing down on ${central.join(' and ')}.`
-      : `The bishop takes the long diagonal — the bedrock of this setup.`;
+      ? { text: `The bishop takes the long diagonal, bearing down on ${central.join(' and ')}.`, squares: [to, ...central] }
+      : { text: `The bishop takes the long diagonal — the bedrock of this setup.`, squares: [to] };
   }
 
   // Attacks an enemy piece → name it (the concrete threat).
   const hit = attackedEnemy(after, targets, color);
   if (hit) {
-    return `The ${name} to ${to} goes after the ${PNAME[hit.piece]} on ${hit.square}.`;
+    return { text: `The ${name} to ${to} goes after the ${PNAME[hit.piece]} on ${hit.square}.`, squares: [to, hit.square] };
   }
 
   // A developing minor piece or pawn that grips real central squares → name them.
   if (piece === 'n' || piece === 'b') {
-    const central = targets.filter((s) => BIG_CENTER.has(s));
-    if (central.length) return `The ${name} to ${to} develops, covering ${central.slice(0, 2).join(' and ')}.`;
-    return `The ${name} to ${to} comes into the game.`;
+    const central = targets.filter((s) => BIG_CENTER.has(s)).slice(0, 2);
+    if (central.length) return { text: `The ${name} to ${to} develops, covering ${central.join(' and ')}.`, squares: [to, ...central] };
+    return { text: `The ${name} to ${to} comes into the game.`, squares: [to] };
   }
   if (piece === 'p') {
     const guards = targets.filter((s) => BIG_CENTER.has(s));
-    if (guards.length) return `The pawn to ${to} stakes out ${guards.join(' and ')}.`;
-    return '';
+    if (guards.length) return { text: `The pawn to ${to} stakes out ${guards.join(' and ')}.`, squares: [to, ...guards] };
+    return none;
   }
   if (piece === 'r') {
-    // A rook lift / file — say the file it now owns if it's open-ish.
-    return `The rook swings to ${to}, eyeing the file.`;
+    return { text: `The rook swings to ${to}, eyeing the file.`, squares: [to] };
   }
   if (piece === 'q') {
-    const central = targets.filter((s) => BIG_CENTER.has(s));
-    if (central.length) return `The queen to ${to} eyes ${central.slice(0, 2).join(' and ')}.`;
-    return '';
+    const central = targets.filter((s) => BIG_CENTER.has(s)).slice(0, 2);
+    if (central.length) return { text: `The queen to ${to} eyes ${central.join(' and ')}.`, squares: [to, ...central] };
+    return none;
   }
-  return '';
+  return none;
+}
+
+/**
+ * A board-true one-line reason for `san` from `fenBefore`, or '' when the
+ * position offers nothing concrete (silence beats filler). Pure chess.js.
+ */
+export function computeMoveWhy(fenBefore: string, san: string): string {
+  return computeMoveWhyDetail(fenBefore, san).text;
 }
