@@ -12,7 +12,8 @@ import {
   transformationPrompt,
   type TransformationResult,
 } from './positionTransformation';
-import { getOpeningNameByEco } from './openingDetectionService';
+import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
+import { capEval } from './accuracyService';
 import { useAppStore } from '../stores/appStore';
 import type {
   MistakePuzzle,
@@ -69,6 +70,10 @@ async function resolveGameContext(
 // means the user missed a full piece-level opportunity — a real
 // tactical shot worth drilling.
 const CP_LOSS_THRESHOLD = 150;
+// A book move drops below this and it's opening eval-noise (skip); at or above
+// it's a genuine blunder that surfaces even in a named line (2.Qh5). Matches
+// the local classifyCpLoss blunder band.
+const BOOK_BLUNDER_CP = 300;
 const MASTERY_REPETITIONS = 3;
 const PV_EXTENSION_DEPTH = 14;
 const BATCH_GAME_LIMIT = 100;
@@ -366,12 +371,22 @@ async function analyzeGameWithStockfish(
     const evalAfter = evals[fenAfterIdx];
     if (evalBefore === null || evalAfter === null) continue;
 
-    // Both evals are from White's perspective
+    // Both evals are from White's perspective. Clamp through capEval so a
+    // mate score (±30000) can't inflate the stored cpLoss the insights
+    // screen averages (David 2026-08-28: "make sure the mistakes are accurate").
     const cpLoss = playerColor === 'white'
-      ? evalBefore - evalAfter
-      : evalAfter - evalBefore;
+      ? capEval(evalBefore) - capEval(evalAfter)
+      : capEval(evalAfter) - capEval(evalBefore);
 
     if (cpLoss < CP_LOSS_THRESHOLD) continue;
+
+    // BOOK-move exemption (David 2026-08-28: "Move 1 or 2 shouldn't be auto
+    // marked as mistakes … don't just code to never show an error in the
+    // first 2 moves"). A theory move isn't flagged for opening eval-NOISE —
+    // but a genuine BLUNDER still surfaces even in a "named" line (2.Qh5,
+    // the Wayward Queen, is in the DB yet drops ~400cp). So skip book moves
+    // only below the blunder magnitude; the principled gate, not a ply cutoff.
+    if (cpLoss < BOOK_BLUNDER_CP && isBookLine(moves.slice(0, moveIdx + 1))) continue;
 
     const moveNumber = Math.floor(moveIdx / 2) + 1;
     const classification = classifyCpLoss(cpLoss);
@@ -596,15 +611,18 @@ async function generateFromAnnotations(
       }
 
       if (prevEval !== null) {
-        // Both evals are White-POV centipawns. The `* 100` that used
-        // to live here compensated for the legacy pawn-unit storage
-        // in gameAnalysisService — that storage was switched to
-        // centipawns when `bestMoveEval` was added, so the raw
-        // difference IS the cpLoss now.
+        // Both evals are White-POV centipawns, clamped through capEval so a
+        // mate score (±30000) can't inflate the stored cpLoss (David
+        // 2026-08-28). The `* 100` that used to live here compensated for
+        // the legacy pawn-unit storage in gameAnalysisService — that storage
+        // was switched to centipawns when `bestMoveEval` was added, so the
+        // raw difference IS the cpLoss now.
+        const prev = capEval(prevEval);
+        const cur = capEval(annotation.evaluation);
         if (playerColor === 'white') {
-          cpLoss = Math.round(Math.max(0, prevEval - annotation.evaluation));
+          cpLoss = Math.round(Math.max(0, prev - cur));
         } else {
-          cpLoss = Math.round(Math.max(0, annotation.evaluation - prevEval));
+          cpLoss = Math.round(Math.max(0, cur - prev));
         }
       }
     }

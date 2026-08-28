@@ -107,7 +107,7 @@ import {
   MATE_EVAL_THRESHOLD, MATE_EVAL_VALUE, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP,
   INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
-import { winPercent } from './accuracyService';
+import { winPercent, capEval } from './accuracyService';
 
 /**
  * True when the engine's deep best-move (UCI) for `fenBefore` is the very move
@@ -537,16 +537,33 @@ async function analyzeGameOnWorker(
     const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
     if (!moveIsBook) stillBook = false;
 
-    if (moveIsBook) {
-      classification = 'book'; // theory — never an inaccuracy/mistake/blunder
-    } else if (evalBefore !== null && evalAfter !== null) {
+    if (evalBefore !== null && evalAfter !== null) {
+      // cpLoss is clamped through capEval so a mate score (±30000) can't
+      // inflate the stored/aggregated centipawn-loss (David 2026-08-28:
+      // "make sure the mistakes are accurate" — a single mate-conversion
+      // was blowing up avgCpLoss). RAW evals still go to classifyCpLoss so
+      // it keeps detecting the mate for brilliant/blunder grading.
       const cpLoss = isWhiteMove
-        ? evalBefore - evalAfter
-        : evalAfter - evalBefore;
-      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
-      if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
-        mistakeIndices.push(moveIdx);
+        ? capEval(evalBefore) - capEval(evalAfter)
+        : capEval(evalAfter) - capEval(evalBefore);
+      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
+      // BOOK exemption (David 2026-08-28: "Move 1 or 2 shouldn't be auto
+      // marked as mistakes … don't just code to never show an error in the
+      // first 2 moves"). A theory move is not flagged for opening eval-NOISE
+      // (inaccuracy / mistake magnitude) — but a genuine BLUNDER still
+      // surfaces even in a "named" line: 2.Qh5 (Wayward Queen) is in the DB
+      // yet drops 400cp, and the student should see that. So book downgrades
+      // everything below a blunder; blunder/brilliant/great grade normally.
+      if (moveIsBook && (graded === 'good' || graded === 'inaccuracy' || graded === 'mistake')) {
+        classification = 'book';
+      } else {
+        classification = graded;
+        if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
+          mistakeIndices.push(moveIdx);
+        }
       }
+    } else if (moveIsBook) {
+      classification = 'book'; // theory move, evals unavailable — still not a mistake
     }
 
     annotations.push({
@@ -679,26 +696,36 @@ async function analyzeGamePositions(
     const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
     if (!moveIsBook) stillBook = false;
 
-    if (moveIsBook) {
-      classification = 'book'; // theory — never an inaccuracy/mistake/blunder
-    } else if (evalBefore !== null && evalAfter !== null) {
+    if (evalBefore !== null && evalAfter !== null) {
+      // Clamp through capEval so a mate score can't inflate stored cpLoss
+      // (see the matching note in the first annotation loop). RAW evals
+      // still drive classifyCpLoss's mate/brilliant/blunder detection.
       const cpLoss = isWhiteMove
-        ? evalBefore - evalAfter
-        : evalAfter - evalBefore;
+        ? capEval(evalBefore) - capEval(evalAfter)
+        : capEval(evalAfter) - capEval(evalBefore);
 
-      classification = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
+      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
 
-      if (cpLoss >= INACCURACY_CP && classification !== 'brilliant' && classification !== 'great' && classification !== 'good') {
-        try {
-          const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
-          bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
-            ? null
-            : bestAnalysis.bestMove;
-          refinedBestMoveEval = bestAnalysis.evaluation;
-        } catch {
-          // Leave bestMove null + keep the shallow bestMoveEval below
+      // BOOK exemption — theory suppresses opening eval-noise but a genuine
+      // blunder still surfaces even in a named line (see the first loop's note).
+      if (moveIsBook && (graded === 'good' || graded === 'inaccuracy' || graded === 'mistake')) {
+        classification = 'book';
+      } else {
+        classification = graded;
+        if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
+          try {
+            const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
+            bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
+              ? null
+              : bestAnalysis.bestMove;
+            refinedBestMoveEval = bestAnalysis.evaluation;
+          } catch {
+            // Leave bestMove null + keep the shallow bestMoveEval below
+          }
         }
       }
+    } else if (moveIsBook) {
+      classification = 'book'; // theory move, evals unavailable — still not a mistake
     }
 
     annotations.push({
