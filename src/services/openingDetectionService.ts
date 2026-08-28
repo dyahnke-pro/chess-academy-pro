@@ -789,6 +789,30 @@ export function findOpeningByPgnPrefix(
   return { canonicalName: best.name, eco: best.eco };
 }
 
+/** True when `moves` is STILL INSIDE opening book — the played sequence equals a
+ *  known opening line or a known line CONTINUES it (i.e. some DB entry's PGN is
+ *  exactly the sequence, or starts with the sequence + a further move). Distinct
+ *  from `findOpeningByPgnPrefix`, which asks "does a known opening prefix these
+ *  moves?" (true for the whole game once you're in an opening). This asks "is the
+ *  line I've played so far a prefix of a real theory line?" — which flips to
+ *  false the moment you leave book.
+ *
+ *  Used by move-quality analysis so a BOOK opening move is never graded an
+ *  inaccuracy/mistake on shallow opening eval-noise — how chess.com/lichess mark
+ *  theory moves "book", not errors (David 2026-08-28: "move 1 or 2 shouldn't be
+ *  auto marked as mistakes… check the mistake guidelines, don't just code to
+ *  never show an error in the first 2 moves"). This is principled: it's book iff
+ *  real theory continues it, at ANY depth — not a move-number cutoff. */
+export function isBookLine(moves: readonly string[]): boolean {
+  if (moves.length === 0) return true; // the starting position is book
+  const target = moves.join(' ');
+  const withSpace = target + ' ';
+  for (const e of openingsData) {
+    if (e.pgn === target || e.pgn.startsWith(withSpace)) return true;
+  }
+  return false;
+}
+
 /** Backward-compatible thin wrapper. Existing callers want just the
  *  PGN moves; new code should prefer resolveOpeningEntry to also get
  *  the canonical name (so cache + gen key on the canonical entry,

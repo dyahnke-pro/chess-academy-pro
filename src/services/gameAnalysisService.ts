@@ -4,6 +4,7 @@ import { db } from '../db/schema';
 import { stockfishEngine, resolveWorkerUrl } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
+import { isBookLine } from './openingDetectionService';
 import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { detectBadHabitsFromGame } from './coachFeatureService';
 import { classifyTacticsFromGame } from './tacticClassifierService';
@@ -518,6 +519,10 @@ async function analyzeGameOnWorker(
   // Build annotations + collect best-move lookups for mistakes
   const annotations: MoveAnnotation[] = [];
   const mistakeIndices: number[] = [];
+  // BOOK-move exemption (David 2026-08-28): a theory move is never an error.
+  // Flips false the moment the played line leaves book; short-circuits the DB
+  // scan for the rest of the game.
+  let stillBook = true;
 
   for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
     const isWhiteMove = moveIdx % 2 === 0;
@@ -529,7 +534,12 @@ async function analyzeGameOnWorker(
 
     let classification: MoveClassification = 'good';
 
-    if (evalBefore !== null && evalAfter !== null) {
+    const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
+    if (!moveIsBook) stillBook = false;
+
+    if (moveIsBook) {
+      classification = 'book'; // theory — never an inaccuracy/mistake/blunder
+    } else if (evalBefore !== null && evalAfter !== null) {
       const cpLoss = isWhiteMove
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
@@ -649,6 +659,8 @@ async function analyzeGamePositions(
   }
 
   const annotations: MoveAnnotation[] = [];
+  // BOOK-move exemption (David 2026-08-28): theory moves are never errors.
+  let stillBook = true;
   for (let moveIdx = 0; moveIdx < moves.length; moveIdx++) {
     const isWhiteMove = moveIdx % 2 === 0;
     const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
@@ -664,7 +676,12 @@ async function analyzeGamePositions(
     // pre-move eval (see annotation push below).
     let refinedBestMoveEval: number | null = null;
 
-    if (evalBefore !== null && evalAfter !== null) {
+    const moveIsBook = stillBook && isBookLine(moves.slice(0, moveIdx + 1));
+    if (!moveIsBook) stillBook = false;
+
+    if (moveIsBook) {
+      classification = 'book'; // theory — never an inaccuracy/mistake/blunder
+    } else if (evalBefore !== null && evalAfter !== null) {
       const cpLoss = isWhiteMove
         ? evalBefore - evalAfter
         : evalAfter - evalBefore;
