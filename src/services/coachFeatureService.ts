@@ -1396,6 +1396,19 @@ export function buildReviewSegments(
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
+    // WHY THE STUDENT'S OWN MOVE FAILED — the companion to "why the best move is
+    // best". Names the concrete refutation of what they ACTUALLY played: the
+    // swap-off that loses material, the own piece they abandoned, the in-between
+    // check (whyItFailed — pure chess.js geometry, no engine, no LLM). All
+    // geometry, spoken to everyone (David 2026-08-28: "wire geometry into
+    // review … all geometry spoken, even for beginners"). Student moves only.
+    {
+      const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
+      if (narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
+        const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
+        if (failed) narration = `${narration} ${failed.line}`;
+      }
+    }
     // THE LASTING CONCESSION (David 2026-07-21, IMG_4571: "What serious
     // positional concessions have been made? What are the ramifications of this
     // move?"). Name the structural damage the flagged move caused — computed

@@ -30,6 +30,7 @@
 import { Chess } from 'chess.js';
 import { groundedMoveFeedback, voiceFacts } from './coachApi';
 import { explainBestMoveGrounded, assembleMovePurpose } from './groundedAnswer';
+import { whyItFailed } from './whyItFailed';
 import { logAppAudit } from './appAuditor';
 import type { TacticsLiveContext, CoachPersonality, IntensityLevel } from '../coach/types';
 import type { ChatMessage, CoachVerbosity, MoveClassification } from '../types';
@@ -220,8 +221,15 @@ async function getGroundedCommentary(
       const moverColor: 'white' | 'black' = mover === 'w' ? 'white' : 'black';
       const facts = explainBestMoveGrounded(fenBefore, last.san, input.bestMoveUci, moverColor);
       if (facts) {
-        const voiced = await voiceFacts(facts, { intent: 'move-commentary', warm: true });
-        const out = voiced ?? facts;
+        // Enrich with WHY THE PLAYED MOVE FAILED — the concrete refutation of
+        // what they did (the swap-off that loses, the own piece they abandoned,
+        // the in-between check). Pure chess.js geometry, no engine, no LLM
+        // (whyItFailed self-gates: silent on a sound move). All geometry, spoken
+        // to everyone (David 2026-08-28). voiceFacts still phrases it (G0).
+        const failed = whyItFailed({ fenBefore, playedSan: last.san, studentColor: moverColor });
+        const enriched = failed ? `${facts} ${failed.line}` : facts;
+        const voiced = await voiceFacts(enriched, { intent: 'move-commentary', warm: true });
+        const out = voiced ?? enriched;
         if (onStream && out) onStream(out);
         return out;
       }

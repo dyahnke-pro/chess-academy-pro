@@ -94,6 +94,43 @@ describe('answered by a tactic', () => {
   });
 });
 
+describe('lost the piece it moved', () => {
+  it('names the piece that takes a hung move — quantified by the swap-off', () => {
+    // White queen d1 steps to d2, straight into the c3-pawn. The king on e1
+    // recaptures the pawn, but a queen for a pawn is a catastrophe — the swap-off
+    // is why, not "d2 looks unsafe".
+    const fen = '4k3/8/8/8/8/2p5/8/3QK3 w - - 0 1';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Qd2', studentColor: 'white' });
+    expect(out, 'said nothing about hanging the queen').not.toBeNull();
+    expect(out!.kind).toBe('lost-the-piece');
+    expect(out!.line).toContain('d2');
+    // The piece it names as the taker must really attack d2 on the real board.
+    const board = new Chess(fen);
+    board.move('Qd2');
+    expect(board.attackers('d2', 'b')).toContain(out!.squares[1]);
+  });
+});
+
+describe('abandoned a defender', () => {
+  it('names the own piece that falls once its only guard moves away', () => {
+    // The bishop on c4 is the only thing holding the d5-pawn. Ba6 leaves the
+    // c4-d5 diagonal entirely (Bb3 would keep guarding d5 through the empty c4),
+    // and the d8-rook collects — David's "removes a guard from another square".
+    const fen = '3rk3/8/8/3P4/2B5/8/8/4K3 w - - 0 1';
+    const out = whyItFailed({ fenBefore: fen, playedSan: 'Ba6', studentColor: 'white' });
+    expect(out, 'said nothing about abandoning the pawn').not.toBeNull();
+    expect(out!.kind).toBe('abandoned-defender');
+    expect(out!.line).toContain('d5');
+    // The abandoned square really is one the moved piece used to defend, and the
+    // named attacker really hits it now.
+    const before = new Chess(fen);
+    expect(before.attackers('d5', 'w'), 'c4 was not actually guarding d5').toContain('c4');
+    const board = new Chess(fen);
+    board.move('Bb3');
+    expect(board.attackers(out!.squares[0] as never, 'b')).toContain(out!.squares[1]);
+  });
+});
+
 describe('silence is the common answer', () => {
   it('says nothing about a quiet developing move', () => {
     const fen = before(['e4', 'e5']);

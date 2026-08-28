@@ -38,7 +38,12 @@ export interface WhyItFailed {
   line: string;
   /** Squares worth marking: the target, then the piece that refutes it. */
   squares: string[];
-  kind: 'held-by-defender' | 'answered-by-tactic';
+  kind:
+    | 'held-by-defender'    // the capture loses the exchange after recaptures
+    | 'answered-by-tactic'  // an in-between check hits the attacker
+    | 'lost-the-piece'      // the moved piece itself is taken for too little
+    | 'abandoned-defender'  // moving it undefended one of your own pieces
+    | 'walks-into-fork';    // the move let a reply hit two of your pieces
 }
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -59,6 +64,59 @@ function attackedFrom(board: Chess, from: Square, mover: Color): Square[] {
     }
   }
   return hits;
+}
+
+/** Same position, but forced to `side` to move (en-passant cleared) — lets the
+ *  swap-off ask "if I captured here" even when it is really the other side's
+ *  turn. Static-exchange only; the mover's own king is safe (they just moved). */
+function withTurn(fen: string, side: Color): string {
+  const p = fen.split(' ');
+  if (p.length < 6) return fen;
+  p[1] = side;
+  p[3] = '-';
+  return p.join(' ');
+}
+
+/**
+ * SIGNED static-exchange value on `sq` for the side to move — the material it
+ * nets by INITIATING a capture there with best play (least-valuable-attacker
+ * each time; the RECAPTURER may stand pat, so the deeper recursion floors at 0,
+ * but the initiating value itself is returned signed so a losing capture reads
+ * negative). Board-only, no engine: every capture is a legal chess.js move, so
+ * pins and X-rays are handled for free (a pinned piece can't recapture; a
+ * discovered attacker joins once the piece in front of it moves).
+ */
+function seeInitiate(board: Chess, sq: Square): number {
+  const side = board.turn();
+  const victim = board.get(sq);
+  if (!victim || victim.color === side) return 0;
+  let lva: Square | null = null;
+  let lvaVal = Infinity;
+  for (const a of board.attackers(sq, side)) {
+    const p = board.get(a);
+    if (!p || a === sq) continue;
+    const v = VALUE[p.type] ?? 0;
+    if (v < lvaVal) { lvaVal = v; lva = a; }
+  }
+  if (!lva) return 0;
+  const next = new Chess(board.fen());
+  let m: Move | null = null;
+  try { m = next.move({ from: lva, to: sq, promotion: 'q' }); } catch { return 0; }
+  if (!m) return 0; // pinned / illegal — the attacker can't actually take
+  return (VALUE[victim.type] ?? 0) - Math.max(0, seeInitiate(next, sq));
+}
+
+/** Material the side to move actually WINS by capturing on `sq` (floored — it
+ *  won't start a losing capture). Use for "can the opponent win my piece here". */
+function seeGain(board: Chess, sq: Square): number {
+  return Math.max(0, seeInitiate(board, sq));
+}
+
+/** Net for the student of a move that landed on `sq` capturing `capturedType`,
+ *  after the opponent's best swap-off. Negative = the move loses material. */
+function captureNet(after: Chess, sq: Square, capturedType: string | null): number {
+  const grabbed = capturedType ? (VALUE[capturedType] ?? 0) : 0;
+  return grabbed - seeGain(after, sq);
 }
 
 /**
@@ -89,9 +147,82 @@ export function whyItFailed(args: {
     return null;
   }
 
-  // What the move NEWLY hits. A piece the student was already attacking before
-  // they moved is not the idea behind this move, and claiming it was would put
-  // a reason in their mouth they never had.
+  // The least-valuable enemy piece attacking `sq` — the one that leads a capture
+  // there (and, when the point is "your piece falls", the one that takes it).
+  const leastValuableAttackerOf = (board: Chess, sq: Square): { sq: Square; type: string } | null => {
+    let best: { sq: Square; type: string } | null = null;
+    let bestVal = Infinity;
+    for (const a of board.attackers(sq, them)) {
+      const p = board.get(a);
+      if (!p || a === sq) continue;
+      const v = VALUE[p.type] ?? 0;
+      if (v < bestVal) { bestVal = v; best = { sq: a, type: p.type }; }
+    }
+    return best;
+  };
+
+  // ── THE MOVE LOSES THE PIECE IT MOVED (or the capture is a losing trade) ──
+  //
+  // Play the position forward one swap-off on the square the piece landed on.
+  // If the student comes out behind, that IS why the move failed — quantified,
+  // not hand-waved. Two phrasings from the same geometry: a capture that trades
+  // down (held-by-defender — name the recapturer) vs a piece simply left
+  // hanging (lost-the-piece). The upstream caller only asks about moves already
+  // graded as errors, so naming the loss is the lesson, not an over-claim.
+  const netOnLanding = captureNet(after, mv.to, mv.captured ?? null);
+  if (netOnLanding < 0) {
+    const recap = leastValuableAttackerOf(after, mv.to);
+    if (recap) {
+      const down = Math.abs(netOnLanding);
+      const pts = down === 1 ? '1 point' : `${down} points`;
+      if (mv.captured) {
+        return {
+          kind: 'held-by-defender',
+          squares: [mv.to, recap.sq],
+          line: `That took the ${NAME[mv.captured]} on ${mv.to}, but the ${NAME[recap.type]} on ${recap.sq} takes back and you come out ${pts} down.`,
+        };
+      }
+      return {
+        kind: 'lost-the-piece',
+        squares: [mv.to, recap.sq],
+        line: `That left your ${NAME[mv.piece]} on ${mv.to} hanging — the ${NAME[recap.type]} on ${recap.sq} just takes it.`,
+      };
+    }
+  }
+
+  // ── ABANDONED A DEFENDER (moving the piece undefended one of your own) ────
+  //
+  // David 2026-08-28: "removes a guard from another square." The moved piece was
+  // the ONLY thing holding one of your other pieces together — once it leaves,
+  // the opponent wins that piece by a swap-off that wasn't there a move ago. The
+  // causal link is proven, not guessed: mv.from was among the piece's defenders
+  // before, and the swap-off there is now losing for you.
+  let worstAbandon: { sq: Square; type: string; attacker: { sq: Square; type: string } } | null = null;
+  for (const row of after.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== me || cell.type === 'k' || cell.square === mv.to) continue;
+      let defendedByMover = false;
+      try { defendedByMover = before.attackers(cell.square, me).includes(mv.from); } catch { /* skip */ }
+      if (!defendedByMover) continue;
+      if (seeGain(after, cell.square) <= 0) continue; // opponent can't actually win it
+      const attacker = leastValuableAttackerOf(after, cell.square);
+      if (!attacker) continue;
+      if (!worstAbandon || (VALUE[cell.type] ?? 0) > (VALUE[worstAbandon.type] ?? 0)) {
+        worstAbandon = { sq: cell.square, type: cell.type, attacker };
+      }
+    }
+  }
+  if (worstAbandon) {
+    return {
+      kind: 'abandoned-defender',
+      squares: [worstAbandon.sq, worstAbandon.attacker.sq],
+      line: `Your ${NAME[mv.piece]} was the only thing guarding the ${NAME[worstAbandon.type]} on ${worstAbandon.sq} — once it left, the ${NAME[worstAbandon.attacker.type]} on ${worstAbandon.attacker.sq} takes it.`,
+    };
+  }
+
+  // The rest of the geometry keys off what the move NEWLY hits. A piece the
+  // student was already attacking is not the idea behind this move, so claiming
+  // it was would put a reason in their mouth they never had.
   let newTargets: Square[];
   try {
     const hitNow = attackedFrom(after, mv.to, me);
@@ -111,8 +242,6 @@ export function whyItFailed(args: {
   const target = targets[0];
   if (!target) return null;
 
-  const targetValue = VALUE[target.piece.type] ?? 0;
-  const moverValue = VALUE[mv.piece] ?? 0;
   let guards: Square[];
   try {
     guards = after.attackers(target.sq, them).filter((sq) => sq !== target.sq);
@@ -120,22 +249,21 @@ export function whyItFailed(args: {
     return null;
   }
 
-  // ── HELD BY A DEFENDER ──────────────────────────────────────────────────
+  // ── THE THREAT ISN'T REAL — CAPTURING THE TARGET LOSES ────────────────────
   //
-  // Guarded, and the attacker is worth more than the target: the capture is a
-  // losing trade, so the "threat" never existed. Only claimed when the value
-  // comparison makes it unambiguous — a guarded EQUAL trade is a real option a
-  // student may well want, and calling that a failure would be wrong.
-  if (guards.length > 0 && moverValue > targetValue) {
-    const guard = guards
-      .map((sq) => ({ sq, piece: after.get(sq) }))
-      .flatMap((g) => (g.piece ? [{ sq: g.sq, piece: g.piece }] : []))
-      .sort((a, b) => (VALUE[a.piece.type] ?? 0) - (VALUE[b.piece.type] ?? 0))[0];
+  // The move eyes a defended piece, but the swap-off on that square is losing
+  // for you, so the "threat" never existed. Deeper than "it's defended": it's
+  // proven by the exchange (student forced to move so the capture can be
+  // simulated), and it names the guard that makes it a bad trade.
+  let studentBoard: Chess | null = null;
+  try { studentBoard = new Chess(withTurn(after.fen(), me)); } catch { studentBoard = null; }
+  if (guards.length > 0 && studentBoard && seeInitiate(studentBoard, target.sq) < 0) {
+    const guard = leastValuableAttackerOf(after, target.sq);
     if (guard) {
       return {
         kind: 'held-by-defender',
         squares: [target.sq, guard.sq],
-        line: `That hit the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.piece.type]} on ${guard.sq} is holding it — taking there just trades your ${NAME[mv.piece]} for less.`,
+        line: `That eyed the ${NAME[target.piece.type]} on ${target.sq}, but the ${NAME[guard.type]} on ${guard.sq} holds it — taking there just loses the exchange.`,
       };
     }
   }
@@ -145,11 +273,9 @@ export function whyItFailed(args: {
   // Nothing guards it, so it reads as free — and it is the OPPONENT's move.
   // A reply that gives check AND attacks the piece that did the attacking wins
   // the tempo the whole idea depended on: the check must be answered, and the
-  // attacker is gone before it ever collects.
-  //
-  // Every part of that is checked here rather than asserted: the reply is a
-  // legal move from chess.js, it really gives check, and the attacked square
-  // really is the one the student's piece stands on.
+  // attacker is gone before it ever collects. Every part is checked here, not
+  // asserted: the reply is a legal chess.js move, it really gives check, and
+  // the attacked square really is the one the student's piece stands on.
   if (guards.length === 0) {
     for (const reply of after.moves({ verbose: true })) {
       const probe = new Chess(after.fen());
