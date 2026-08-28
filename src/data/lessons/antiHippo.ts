@@ -46,7 +46,7 @@ export const ANTI_HIPPO_LESSON: LessonScript = {
       arrows: [A('f8', 'g6')],
       highlights: [H('a5', SOFT), H('g6', SOFT), H('e5', KEY)] }),
     b({ id: 'ahp-5', moves: 'e3 e5 d3 d5 b3 Bd6 Bb2 Ne7 g3 O-O Bg2 c6 h3 Nd7 Ne2 Re8 Nd2 Nf8 a3 a5 c3 Nfg6 O-O h5 c4 h4',
-      say: "White castles — and NOW the punishment begins, because now there's an address. The h-pawn marches: h5, then h4, prying directly at the g3-pawn in front of White's king. Here's the trap inside the plan: if White ever captures that pawn, the knight recaptures on h4, hits the g2-bishop, and both knights pour into the light squares — the engine calls that position winning for Black, more than four pawns' worth. So White must let the pawn stand, and the file stays loaded. Notice the c4 stab doesn't worry us either — the e7-knight was covering d5 all along.",
+      say: "White castles — and NOW the punishment begins, because now there's an address. The h-pawn marches: h5, then h4, prying directly at the g3-pawn in front of White's king. Here's the trap inside the plan: if White ever captures that pawn, the knight recaptures on h4, hits the g2-bishop, and both knights pour into the light squares — the engine calls that position winning for Black, more than four pawns' worth. So White must let the pawn stand, and the file stays loaded. Notice the c4 stab doesn't worry you either — the e7-knight was covering d5 all along.",
       sayShort: "h5, h4 — pry at the king's cover.",
       arrows: [A('e7', 'd5')],
       highlights: [H('h4', SOFT), H('g3', RED)] }),

@@ -27,10 +27,10 @@ const NF6_NXF6_GXF6: LessonScript = {
   openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Nf6 lets Nxf6+ wreck Black\'s kingside (Firouzja 3x!)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'job-f6-setup', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4', highlights: [H('e4', SOFT)],
-      say: "After Nc3 e6 e4 dxe4 Nxe4, our knight sits centralised. Black needs to challenge it carefully. The natural ...Nf6 is the wrong move — it walks straight into Nxf6+.",
+      say: "After Nc3 e6 e4 dxe4 Nxe4, your knight sits centralised. Black needs to challenge it carefully. The natural ...Nf6 is the wrong move — it walks straight into Nxf6+.",
       sayShort: 'Nxe4 — centralised.' }),
     b({ id: 'job-f6-blunder', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4 Nf6', highlights: [H('f6', ATK)],
-      say: "...Nf6?? — Black attacks the e4-knight, but the trade is in our favour. 29 opponents made this move including FIROUZJA THREE TIMES (3020, 3016, 2997). The Nxf6+ wreck-the-kingside response.",
+      say: "...Nf6?? — Black attacks the e4-knight, but the trade is in your favour. 29 opponents made this move including FIROUZJA THREE TIMES (3020, 3016, 2997). The Nxf6+ wreck-the-kingside response.",
       sayShort: '...Nf6 — walk into Nxf6+.' }),
     b({ id: 'job-f6-trade', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4 Nf6 Nxf6+ gxf6', highlights: [H('f6', KEY)],
       say: "Nxf6+ ...gxf6! Black's only good recapture is the g-pawn (exf6 closes Black's bishop diagonal). Now Black has doubled f-pawns + a structurally damaged kingside + can't castle short safely.",
@@ -43,7 +43,7 @@ const NF6_NXF6_GXF6: LessonScript = {
 
 // TRAP 2: 18g — Nd7 same theme but different recapture
 const ND7_KNIGHT_TRADE: LessonScript = {
-  openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Nd7 lets us trade both knights favorably', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Nd7 lets you trade both knights favorably', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'job-nd7-setup', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4', highlights: [H('e4', SOFT)],
       say: "Same start as Trap 1. After Nxe4, Black needs to develop without provoking unfavorable trades. The ...Nd7 is the slow-developer's mistake.",
@@ -52,7 +52,7 @@ const ND7_KNIGHT_TRADE: LessonScript = {
       say: "...Nd7 — Black develops without addressing the central knight. 18 opponents played this including penguingm1 (2908) and hansen (2955). White's setup just keeps adding pressure.",
       sayShort: '...Nd7 — passive.' }),
     b({ id: 'job-nd7-develop', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6', highlights: [H('f6', KEY)],
-      say: "Nf3 ...Ngf6 Nxf6+ ...Nxf6 — when Black finally develops the knight to f6, we trade with check. Black recaptures with the OTHER knight (not the g-pawn) keeping structure but losing the more flexible knight.",
+      say: "Nf3 ...Ngf6 Nxf6+ ...Nxf6 — when Black finally develops the knight to f6, you trade with check. Black recaptures with the OTHER knight (not the g-pawn) keeping structure but losing the more flexible knight.",
       sayShort: 'Nxf6+ — knight trade.' }),
     b({ id: 'job-nd7-cash', moves: 'd4 d5 Nc3 e6 e4 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6 g3', highlights: [H('g3', KEY)],
       say: "g3 — White completes the fianchetto setup with Bg2 coming. Black's pieces are passively placed AND White has the bishop pair + better development. Slow squeeze.",
@@ -65,7 +65,7 @@ const BF5_E6_F3_STORM: LessonScript = {
   openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: ...e6 after Bf5 lets f3+g4 kingside storm', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'job-bf5-setup', moves: 'd4 d5 Nc3 Nf6 Bf4 Bf5 e3', highlights: [H('e3', SOFT)],
-      say: "Slav-style Jobava: after ...Nf6 ...Bf5, we play e3 keeping options open. Black must choose between active development (...c6 + ...e6) or quieter setups. The ...e6 here invites a kingside storm.",
+      say: "Slav-style Jobava: after ...Nf6 ...Bf5, you play e3 keeping options open. Black must choose between active development (...c6 + ...e6) or quieter setups. The ...e6 here invites a kingside storm.",
       sayShort: 'e3 — wait.' }),
     b({ id: 'job-bf5-blunder', moves: 'd4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6', highlights: [H('e6', ATK)],
       say: "...e6 — Black supports d5 but commits the kingside structure. 15 opponents played this including wonderfultime at 3221! The f3 + g4 storm setup is the punishment.",
@@ -100,7 +100,7 @@ const BG5_DXE4_BXF6: LessonScript = {
 
 // TRAP 5: 13g — Bd6 + Bxd6 trade in Bf4 + e6 setup (Firouzja 3169 victim)
 const BD6_VOLUNTARY_TRADE: LessonScript = {
-  openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Bd6 voluntary trade hands us c-file pressure', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-jobava-london', title: 'Weapon: Bd6 voluntary trade hands you c-file pressure', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'job-bd6-setup', moves: 'd4 d5 Nc3 e6 Bf4 Nf6 e3', highlights: [H('f4', SOFT)],
       say: "Classical Jobava + French-style ...e6. Black needs to find active development. The ...Bd6 offering bishop trade is the natural move — but the structural consequences favor White.",
@@ -109,7 +109,7 @@ const BD6_VOLUNTARY_TRADE: LessonScript = {
       say: "...Bd6 — offering the bishop trade. 13 opponents played this including Firouzja2003 (3169) and penguingm1 (3081). The Bxd6 cxd6 sequence damages Black's structure.",
       sayShort: '...Bd6 — trade offered.' }),
     b({ id: 'job-bd6-develop', moves: 'd4 d5 Nc3 e6 Bf4 Nf6 e3 Bd6 Bd3 O-O Nf3 c5', highlights: [H('c5', SOFT)],
-      say: "Bd3 ...O-O Nf3 ...c5 — develop calmly, eventually Black plays ...c5 to challenge the centre. Now we take the bishop trade on our terms.",
+      say: "Bd3 ...O-O Nf3 ...c5 — develop calmly, eventually Black plays ...c5 to challenge the centre. Now you take the bishop trade on your terms.",
       sayShort: 'Nf3 ...c5.' }),
     b({ id: 'job-bd6-cash', moves: 'd4 d5 Nc3 e6 Bf4 Nf6 e3 Bd6 Bd3 O-O Nf3 c5 Bxd6', highlights: [H('d6', KEY)],
       say: "Bxd6! — taking the trade at the right moment. Black recaptures with the queen or pawn (Qxd6 or cxd6) — either way White gets the open c-file or the structural target. Kingside attack with Qe2 + Ne5 + f4 follows.",
@@ -120,10 +120,10 @@ const BD6_VOLUNTARY_TRADE: LessonScript = {
 interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
   { name: 'Nf6 lets Nxf6+ wreck Black\'s kingside (Firouzja 3x!)', lesson: NF6_NXF6_GXF6 },
-  { name: 'Nd7 lets us trade both knights favorably', lesson: ND7_KNIGHT_TRADE },
+  { name: 'Nd7 lets you trade both knights favorably', lesson: ND7_KNIGHT_TRADE },
   { name: '...e6 after Bf5 lets f3+g4 kingside storm', lesson: BF5_E6_F3_STORM },
   { name: 'Bg5 + dxe4 + Bxf6 doubles Black\'s pawns', lesson: BG5_DXE4_BXF6 },
-  { name: 'Bd6 voluntary trade hands us c-file pressure', lesson: BD6_VOLUNTARY_TRADE },
+  { name: 'Bd6 voluntary trade hands you c-file pressure', lesson: BD6_VOLUNTARY_TRADE },
 ];
 
 export function getProNaroditskyJobavaTrapLesson(name: string): LessonScript | null {

@@ -15,11 +15,11 @@ const VS_NC3: LessonScript = {
   beats: [
     b({ id: 'nc3', moves: 'e4 d5 exd5 Nf6 Nc3 Nxd5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }],
-      say: "If White defends the pawn with Nc3, we just take it — …Nxd5 — reaching a comfortable, symmetrical-feeling position a tempo up on a Caro-Kann-style structure. The knight on d5 is well-placed and Black has no problems.",
+      say: "If White defends the pawn with Nc3, you just take it — …Nxd5 — reaching a comfortable, symmetrical-feeling position a tempo up on a Caro-Kann-style structure. The knight on d5 is well-placed and Black has no problems.",
       sayShort: '…Nxd5 — take it, easy game.' }),
     b({ id: 'g6', moves: 'e4 d5 exd5 Nf6 Nc3 Nxd5 Nf3 g6 Bc4 Nb6 Bb3',
       arrows: [A('f8', 'g7')], highlights: [{ square: 'b6', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "We fianchetto with …g6 and, when White's bishop comes to c4 eyeing f7, tuck the knight back to b6 to hit it. After Bb3 we have a sound, flexible setup with the dragon-style bishop coming to g7.",
+      say: "You fianchetto with …g6 and, when White's bishop comes to c4 eyeing f7, tuck the knight back to b6 to hit it. After Bb3 you have a sound, flexible setup with the dragon-style bishop coming to g7.",
       sayShort: '…g6, …Nb6 — fianchetto, hit Bc4.' }),
     b({ id: 'oo', moves: 'e4 d5 exd5 Nf6 Nc3 Nxd5 Nf3 g6 Bc4 Nb6 Bb3 Bg7 O-O O-O',
       arrows: [A('g7', 'b2')], highlights: [{ square: 'g7', color: KEY }],

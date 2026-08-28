@@ -29,7 +29,7 @@ export const BELGRADE_GAMBIT_LESSON: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'bg-1', moves: 'e4 e5 Nf3 Nc6 Nc3 Nf6 d4',
-      say: "Four knights on the board, and then the strike: pawn to d4, hitting e5 and demanding an answer. This is the Four Knights Scotch — solid, classical, and about to turn very sharp. Across 158 games in our grandmaster corpus, the line you're about to learn scores nearly 71 percent — not because it's objectively winning, but because almost nobody on the other side has ever faced it.",
+      say: "Four knights on the board, and then the strike: pawn to d4, hitting e5 and demanding an answer. This is the Four Knights Scotch — solid, classical, and about to turn very sharp. Across 158 games in your grandmaster corpus, the line you're about to learn scores nearly 71 percent — not because it's objectively winning, but because almost nobody on the other side has ever faced it.",
       sayShort: "Four knights, then d4 — strike.",
       highlights: [H('d4', SOFT), H('e5', RED)] }),
     b({ id: 'bg-2', moves: 'e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5',

@@ -1,8 +1,8 @@
 /**
- * THE TRAP MENU — turning the gems we already own into pickable chips.
+ * THE TRAP MENU — turning the gems you already own into pickable chips.
  *
- * David 2026-08-16: "So let's get the coach teaching gems we already have.
- * Place them in pickers into the chat like we do for other things. Once one gem
+ * David 2026-08-16: "So let's get the coach teaching gems you already have.
+ * Place them in pickers into the chat like you do for other things. Once one gem
  * is taught have the coach ask if they want to continue down the [list]. Again
  * present the pickers. Make sure they are labeled well enough to identify each
  * one individually."

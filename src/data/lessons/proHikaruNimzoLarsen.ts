@@ -42,14 +42,14 @@ export const PRO_HIKARU_NIMZO_LARSEN_LESSON: LessonScript = {
       moves: 'b3 e5 Bb2',
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'b2', color: KEY }, { square: 'e5', color: SOFT }],
-      say: "Black grabs the centre with e5, and this repertoire fianchettoes — Bb2. This is hypermodern chess: instead of fighting for the centre with pawns, we let Black build it, then lean on it from afar. The b2-bishop already eyes e5 and the long road to g7.",
+      say: "Black grabs the centre with e5, and this repertoire fianchettoes — Bb2. This is hypermodern chess: instead of fighting for the centre with pawns, you let Black build it, then lean on it from afar. The b2-bishop already eyes e5 and the long road to g7.",
       sayShort: 'Bb2 — lean on e5 from afar.',
     }),
     b({
       id: 'e3',
       moves: 'b3 e5 Bb2 Nc6 e3',
       highlights: [{ square: 'e3', color: SOFT }],
-      say: "Nc6 defends e5, and we play e3 — a small move with a big idea. It opens the f1-bishop and, crucially, keeps the option of f4 to strike at e5 later. The position stays flexible; this repertoire loves that opponents have no booked-up lines here.",
+      say: "Nc6 defends e5, and you play e3 — a small move with a big idea. It opens the f1-bishop and, crucially, keeps the option of f4 to strike at e5 later. The position stays flexible; this repertoire loves that opponents have no booked-up lines here.",
       sayShort: 'e3 — flexible, keep f4 in reserve.',
     }),
     b({
@@ -73,7 +73,7 @@ export const PRO_HIKARU_NIMZO_LARSEN_LESSON: LessonScript = {
       moves: 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4',
       arrows: [{ from: 'c2', to: 'c4', color: VIS }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "The knight jumps to a5 and we drop the bishop back to e2; after a6, the c4 thrust grabs space and clamps the d5-square. The position is taking the shape of a reversed Sicilian where White has an extra tempo — exactly the comfortable edge this repertoire is after.",
+      say: "The knight jumps to a5 and you drop the bishop back to e2; after a6, the c4 thrust grabs space and clamps the d5-square. The position is taking the shape of a reversed Sicilian where White has an extra tempo — exactly the comfortable edge this repertoire is after.",
       sayShort: 'c4 — grab space, clamp d5.',
     }),
     b({
@@ -97,7 +97,7 @@ export const PRO_HIKARU_NIMZO_LARSEN_LESSON: LessonScript = {
       moves: 'b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8',
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
-      say: "Black trades on d4 and we recapture — exd4 — and there it is: the centre is open, White has a mobile d4-pawn, and the b2-bishop now rakes an unobstructed diagonal straight at Black's king. Black tucks a rook to e8 to contest the file.",
+      say: "Black trades on d4 and you recapture — exd4 — and there it is: the centre is open, White has a mobile d4-pawn, and the b2-bishop now rakes an unobstructed diagonal straight at Black's king. Black tucks a rook to e8 to contest the file.",
       sayShort: 'exd4 — the diagonal is unleashed.',
     }),
     b({

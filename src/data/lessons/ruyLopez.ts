@@ -29,7 +29,7 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'open',
       moves: ['e4', 'e5'],
       highlights: [{ square: 'e4', color: KEY }, { square: 'e5', color: KEY }],
-      say: "Welcome. Today we study the oldest opening still played at the very top — the Ruy Lopez, written down by a Spanish priest in 1561. Forget memorizing moves. By the end of this you'll understand the one idea the whole opening is built on. It starts simply: e4 against e5. Equal. Now watch White turn that equality into a question Black has to answer for the next forty moves.",
+      say: "Welcome. Today you study the oldest opening still played at the very top — the Ruy Lopez, written down by a Spanish priest in 1561. Forget memorizing moves. By the end of this you'll understand the one idea the whole opening is built on. It starts simply: e4 against e5. Equal. Now watch White turn that equality into a question Black has to answer for the next forty moves.",
       sayShort: "The Ruy — a four-century question: who controls e5?",
     },
     {

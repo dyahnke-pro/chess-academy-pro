@@ -30,7 +30,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5',
       highlights: [{ square: 'e5', color: KEY }],
       say:
-        "Against the French, this repertoire plays the Advance — e5, grabbing space and locking Black's light-squared bishop inside the pawn chain. But this is the sharp version: we're going to offer a pawn for a kingside attack.",
+        "Against the French, this repertoire plays the Advance — e5, grabbing space and locking Black's light-squared bishop inside the pawn chain. But this is the sharp version: you're going to offer a pawn for a kingside attack.",
       sayShort: "e5 — the Advance.",
     }),
     b({
@@ -38,7 +38,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3',
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "Black hits the base of our chain with c5; we prop d4 up with c3 and develop the knight to f3. Standard Advance so far — Black piles on d4, we hold it. For now.",
+        "Black hits the base of your chain with c5; you prop d4 up with c3 and develop the knight to f3. Standard Advance so far — Black piles on d4, you hold it. For now.",
       sayShort: "c3 — prop up d4.",
     }),
     b({
@@ -47,7 +47,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'h7', color: SOFT }],
       say:
-        "Black plays Qb6, hitting d4 a third time. And here's the gambit: Bd3! We simply ignore the d4-pawn and develop the bishop toward h7. We're inviting Black to spend three moves winning a pawn while we build an attack. That's the Milner-Barry — a pawn for a roaring initiative.",
+        "Black plays Qb6, hitting d4 a third time. And here's the gambit: Bd3! You simply ignore the d4-pawn and develop the bishop toward h7. You're inviting Black to spend three moves winning a pawn while you build an attack. That's the Milner-Barry — a pawn for a roaring initiative.",
       sayShort: "Bd3 — offer the d4-pawn.",
     }),
     b({
@@ -55,7 +55,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O',
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Black opens the c-file and develops the bishop; we castle, getting the king safe before the fireworks. The d4-pawn is hanging — and we're happily letting it hang.",
+        "Black opens the c-file and develops the bishop; you castle, getting the king safe before the fireworks. The d4-pawn is hanging — and you're happily letting it hang.",
       sayShort: "O-O — king safe, pawn dangling.",
     }),
     b({
@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4',
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "Black takes the bait: he wins the d4-pawn, and his queen lands on d4 in the centre. He's a clean pawn up. But look at his position — almost nothing developed, the queen sitting exposed in the middle of the board, the king still in the centre. We've traded a pawn for a massive head start.",
+        "Black takes the bait: he wins the d4-pawn, and his queen lands on d4 in the centre. He's a clean pawn up. But look at his position — almost nothing developed, the queen sitting exposed in the middle of the board, the king still in the centre. You've traded a pawn for a massive head start.",
       sayShort: "Qxd4 — Black grabs the pawn.",
     }),
     b({
@@ -72,7 +72,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       arrows: [{ from: 'c3', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "Nc3 — out comes the last minor piece, eyeing the d5-pawn and the b5-square, and gaining time as Black's loose centre comes under fire. Every move we make develops with purpose; every move Black makes just tries to survive.",
+        "Nc3 — out comes the last minor piece, eyeing the d5-pawn and the b5-square, and gaining time as Black's loose centre comes under fire. Every move you make develops with purpose; every move Black makes just tries to survive.",
       sayShort: "Nc3 — develop, eye d5 and b5.",
     }),
     b({
@@ -80,7 +80,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1',
       highlights: [{ square: 'e2', color: SOFT }, { square: 'h1', color: SOFT }],
       say:
-        "Black covers b5 with a6 and develops the knight; we lift the queen to e2, connecting the rooks and eyeing the kingside, then tuck the king on h1. That last move is prophylaxis — getting off the g1-a7 diagonal before we throw the f-pawn forward. The opening hands off here, and the storm plan picks up.",
+        "Black covers b5 with a6 and develops the knight; you lift the queen to e2, connecting the rooks and eyeing the kingside, then tuck the king on h1. That last move is prophylaxis — getting off the g1-a7 diagonal before you throw the f-pawn forward. The opening hands off here, and the storm plan picks up.",
       sayShort: "Qe2, Kh1 — set up the storm.",
     }),
     b({
@@ -89,7 +89,7 @@ export const PRO_GOTHAMCHESS_MILNER_BARRY_LESSON: LessonScript = {
       arrows: [{ from: 'f4', to: 'f5', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Black grabs the open c-file; we launch the attack — f4, loading the f5-break. f5 will smash open the f-file and the diagonal toward Black's king, which is still stuck in the centre. We're a pawn down and completely fine with it: the bishop on d3 aims at h7, the queen and rook swing over, and the whole army crashes in.",
+        "Black grabs the open c-file; you launch the attack — f4, loading the f5-break. f5 will smash open the f-file and the diagonal toward Black's king, which is still stuck in the centre. You're a pawn down and completely fine with it: the bishop on d3 aims at h7, the queen and rook swing over, and the whole army crashes in.",
       sayShort: "f4 — the storm rolls.",
     }),
     b({

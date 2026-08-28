@@ -4,7 +4,7 @@ import type { LessonScript } from '../../types';
 // arrows are GREEN (vision / threat / intent), highlights are YELLOW
 // (key square the narration is calling out) and SOFT BLUE (secondary
 // context). The orange move-squares are painted automatically by the
-// LessonPlayer; we don't author them as highlights here.
+// LessonPlayer; you don't author them as highlights here.
 const ATK = 'rgba(40,185,95,0.92)';
 const VIS = 'rgba(40,185,95,0.92)';
 const INTENT = 'rgba(40,185,95,0.92)';
@@ -38,7 +38,7 @@ export const VIENNA_GAME_LESSON: LessonScript = {
       id: 'open',
       moves: ['e4', 'e5'],
       highlights: [{ square: 'e4', color: KEY }, { square: 'e5', color: KEY }],
-      say: "Welcome. Today we study the opening forged in the Viennese chess clubs of the 1860s — the chosen weapon of Steinitz, the first world champion, and a favorite at the great nineteenth-century tournaments. The Vienna begins the way every classical fight begins: e4 against e5, two pawns staring at each other. The question isn't who controls e5 yet. The question is which knight White develops first — and that single decision is what makes the Vienna different from everything else.",
+      say: "Welcome. Today you study the opening forged in the Viennese chess clubs of the 1860s — the chosen weapon of Steinitz, the first world champion, and a favorite at the great nineteenth-century tournaments. The Vienna begins the way every classical fight begins: e4 against e5, two pawns staring at each other. The question isn't who controls e5 yet. The question is which knight White develops first — and that single decision is what makes the Vienna different from everything else.",
       sayShort: '…e5 — the Vienna turns on the knight choice.',
     },
     {

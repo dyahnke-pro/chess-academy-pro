@@ -30,16 +30,16 @@ const OO_ANTI_WINAWER_NIHAL: LessonScript = {
   openingId: 'pro-naroditsky-fantasy-caro', title: 'Weapon: O-O in Anti-Winawer line (Nihal Sarin victim 2x)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'fan-nihal-setup', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6', highlights: [H('a6', SOFT)],
-      say: "Deep in the Fantasy Caro with Black's French/Winawer-style ...Bb4 + ...Bxc3+. White has the bishop pair via the doubled c-pawns. Black needs to challenge our development carefully — but Nihal Sarin played the natural O-O TWICE in different games and lost both times.",
+      say: "Deep in the Fantasy Caro with Black's French/Winawer-style ...Bb4 + ...Bxc3+. White has the bishop pair via the doubled c-pawns. Black needs to challenge your development carefully — but Nihal Sarin played the natural O-O TWICE in different games and lost both times.",
       sayShort: '...Ba6 — challenges Bd3.' }),
     b({ id: 'fan-nihal-blunder', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6 O-O', highlights: [H('g1', ATK)],
-      say: "...O-O?? — Nihal Sarin's exact move TWICE at 3170 and 3204 ratings. Black castles into a kingside structure that we can directly attack with our centre + bishop pair + open f-file.",
+      say: "...O-O?? — Nihal Sarin's exact move TWICE at 3170 and 3204 ratings. Black castles into a kingside structure that you can directly attack with your centre + bishop pair + open f-file.",
       sayShort: '...O-O — Nihal\'s mistake.' }),
     b({ id: 'fan-nihal-bxd3', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6 O-O Bxd3', highlights: [H('d3', KEY)],
       say: "...Bxd3 — Black trades the light-square bishops. The trade looks fine for Black (simplifying) but actually fixes the structural problems for White.",
       sayShort: '...Bxd3 — bishop trade.' }),
     b({ id: 'fan-nihal-cash', moves: 'e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6 O-O Bxd3 Qxd3 O-O e5', highlights: [H('e5', KEY)],
-      say: "Qxd3 ...O-O e5! — Queen recaptures, Black castles, and we push e5! The central push gains space AND cramps Black's pieces. With the doubled c-pawns + central control + queen on the kingside diagonal, White has a clear positional advantage. Nihal couldn't hold either game.",
+      say: "Qxd3 ...O-O e5! — Queen recaptures, Black castles, and you push e5! The central push gains space AND cramps Black's pieces. With the doubled c-pawns + central control + queen on the kingside diagonal, White has a clear positional advantage. Nihal couldn't hold either game.",
       sayShort: 'e5 — central squeeze.' }),
   ],
 };
@@ -77,7 +77,7 @@ const BE7_DEEP_FANTASY: LessonScript = {
       say: "Nxd4 — White recaptures the central pawn. Now White has the central knight outpost, the bishop pair, and full development against Black's passive position.",
       sayShort: 'Nxd4 — central + active.' }),
     b({ id: 'fan-be7-cash', moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Be7 Nxd4 O-O Nc3', highlights: [H('c3', KEY)],
-      say: "...O-O Nc3 — Black castles, we develop the queen knight. White has reached a textbook Fantasy middlegame position: central knight on d4, bishop pair, opened files, classical setup. Conversion is standard positional play.",
+      say: "...O-O Nc3 — Black castles, you develop the queen knight. White has reached a textbook Fantasy middlegame position: central knight on d4, bishop pair, opened files, classical setup. Conversion is standard positional play.",
       sayShort: 'Nc3 — textbook middlegame.' }),
   ],
 };

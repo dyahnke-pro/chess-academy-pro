@@ -29,7 +29,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       id: 'open',
       moves: 'd4 d5 Nf3 Nf6',
       say:
-        "The London — This repertoire's bread-and-butter with d4. The beauty of it: we play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
+        "The London — This repertoire's bread-and-butter with d4. The beauty of it: you play almost the same setup whatever Black does. d4, Nf3, and the pieces come out on autopilot. Black mirrors with d5 and Nf6.",
       sayShort: 'd4 Nf3 — the London setup.',
     }),
     b({
@@ -37,7 +37,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5',
       highlights: [{ square: 'f4', color: KEY }],
       say:
-        "Bf4 — the move that names the system. We develop the dark-squared bishop OUTSIDE the pawn chain before locking it in with e3. That's the whole point of the London: this bishop never gets buried. Black hits the centre with c5.",
+        "Bf4 — the move that names the system. You develop the dark-squared bishop OUTSIDE the pawn chain before locking it in with e3. That's the whole point of the London: this bishop never gets buried. Black hits the centre with c5.",
       sayShort: 'Bf4 — the bishop comes out.',
     }),
     b({
@@ -45,14 +45,14 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6',
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "e3 — solid, builds the little pyramid behind the bishop. Now d4 is rock-solid and our light-squared bishop has the f1-a6 diagonal to come out. Black develops the knight to c6, leaning on d4.",
+        "e3 — solid, builds the little pyramid behind the bishop. Now d4 is rock-solid and your light-squared bishop has the f1-a6 diagonal to come out. Black develops the knight to c6, leaning on d4.",
       sayShort: 'e3 — the solid pyramid.',
     }),
     b({
       id: 'nbd2',
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6',
       say:
-        "Nbd2 — the knight finds its home, ready to reroute to e5 or support an e-pawn push later. Black plays e6, shutting in his own light-squared bishop. Already we have the better minor pieces.",
+        "Nbd2 — the knight finds its home, ready to reroute to e5 or support an e-pawn push later. Black plays e6, shutting in his own light-squared bishop. Already you have the better minor pieces.",
       sayShort: 'Nbd2 — flexible development.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6',
       highlights: [{ square: 'd4', color: SOFT }, { square: 'f4', color: KEY }],
       say:
-        "c3 — buttressing d4 so the centre never cracks. Black offers a trade with Bd6, challenging our prized bishop on f4. We won't oblige.",
+        "c3 — buttressing d4 so the centre never cracks. Black offers a trade with Bd6, challenging your prized bishop on f4. You won't oblige.",
       sayShort: 'c3 — hold the centre.',
     }),
     b({
@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O',
       highlights: [{ square: 'g3', color: KEY }],
       say:
-        "Bg3 — we sidestep the trade and keep the bishop alive on the b8-h2 diagonal, still aimed at the kingside. Trading our good bishop is exactly what Black wants; we don't give him the satisfaction. Black castles.",
+        "Bg3 — you sidestep the trade and keep the bishop alive on the b8-h2 diagonal, still aimed at the kingside. Trading your good bishop is exactly what Black wants; you don't give him the satisfaction. Black castles.",
       sayShort: 'Bg3 — keep the good bishop.',
     }),
     b({
@@ -85,7 +85,7 @@ export const PRO_GOTHAMCHESS_LONDON_LESSON: LessonScript = {
       moves: 'd4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7',
       highlights: [{ square: 'e5', color: SOFT }],
       say:
-        "We castle, Black completes with Bb7, and the London setup is finished — and we've reached the middlegame fully developed, kings safe, both bishops aimed at the kingside. From a position this harmonious, White just plays chess from a position of strength.",
+        "You castle, Black completes with Bb7, and the London setup is finished — and you've reached the middlegame fully developed, kings safe, both bishops aimed at the kingside. From a position this harmonious, White just plays chess from a position of strength.",
       sayShort: 'O-O — the setup is complete.',
     }),
     b({

@@ -15,7 +15,7 @@ const VS_ADVANCE: LessonScript = {
   beats: [
     b({ id: 'e5', moves: 'e4 e6 d4 d5 e5 c5',
       arrows: [], highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: KEY }],
-      say: "Against the Advance, White grabs space with e5 and locks the centre — so we immediately strike the base of the chain with …c5. The whole Advance French is a fight over the d4-pawn; we attack it from move three.",
+      say: "Against the Advance, White grabs space with e5 and locks the centre — so you immediately strike the base of the chain with …c5. The whole Advance French is a fight over the d4-pawn; you attack it from move three.",
       sayShort: '…c5 — hit the chain at d4.' }),
     b({ id: 'qb6', moves: 'e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6',
       arrows: [A('b6', 'd4')], highlights: [{ square: 'b6', color: KEY }, { square: 'd4', color: KEY }],
@@ -34,7 +34,7 @@ const VS_TARRASCH: LessonScript = {
   beats: [
     b({ id: 'nd2', moves: 'e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7',
       highlights: [{ square: 'd2', color: SOFT }, { square: 'd7', color: KEY }],
-      say: "The Tarrasch (Nd2) avoids the …Bb4 pin. We play the classical …Nf6 and, after e5, retreat …Nfd7 — ready to undermine the centre. The knight on d2 is more passive than on c3, which gives us an easy target structure.",
+      say: "The Tarrasch (Nd2) avoids the …Bb4 pin. You play the classical …Nf6 and, after e5, retreat …Nfd7 — ready to undermine the centre. The knight on d2 is more passive than on c3, which gives you an easy target structure.",
       sayShort: '…Nf6, …Nfd7 — classical Tarrasch.' }),
     b({ id: 'c5', moves: 'e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6',
       arrows: [], highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: KEY }],
@@ -53,11 +53,11 @@ const VS_EXCHANGE: LessonScript = {
   beats: [
     b({ id: 'exd5', moves: 'e4 e6 d4 d5 exd5 exd5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }],
-      say: "The Exchange French is White's bid for a quiet draw — symmetrical pawns after exd5 exd5. We are happy: the position opens up our normally-cramped pieces, and with accurate, active development Black has full equality and can play for more.",
+      say: "The Exchange French is White's bid for a quiet draw — symmetrical pawns after exd5 exd5. You are happy: the position opens up your normally-cramped pieces, and with accurate, active development Black has full equality and can play for more.",
       sayShort: '…exd5 — symmetrical, play for more.' }),
     b({ id: 'bd6', moves: 'e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6',
       arrows: [], highlights: [{ square: 'd6', color: KEY }],
-      say: "We mirror White's development but aim for activity: …Nf6 and …Bd6, placing the bishop on its best diagonal toward h2. The trick in the Exchange is to NOT be symmetrical for too long — grab a useful square or tempo before White does.",
+      say: "You mirror White's development but aim for activity: …Nf6 and …Bd6, placing the bishop on its best diagonal toward h2. The trick in the Exchange is to NOT be symmetrical for too long — grab a useful square or tempo before White does.",
       sayShort: '…Bd6 — active bishop, break symmetry.' }),
     b({ id: 'oo', moves: 'e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O',
       arrows: [A('c8', 'g4'), A('b8', 'c6')], highlights: [{ square: 'd5', color: KEY }],

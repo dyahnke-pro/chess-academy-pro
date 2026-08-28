@@ -22,15 +22,15 @@ const QA5: LessonScript = {
   beats: [
     b({ id: 'qa5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5',
       arrows: [{ from: 'd5', to: 'a5', color: VIS }], highlights: [{ square: 'a5', color: KEY }, { square: 'c3', color: SOFT }],
-      say: "The main-line Scandinavian. We grab the centre back with the queen, and when the knight develops with tempo we glide to a5 — not running, but working: from a5 the queen eyes the c3-knight and the open diagonal. Easy, forcing, hard to get wrong.",
+      say: "The main-line Scandinavian. You grab the centre back with the queen, and when the knight develops with tempo you glide to a5 — not running, but working: from a5 the queen eyes the c3-knight and the open diagonal. Easy, forcing, hard to get wrong.",
       sayShort: 'Qa5 — retreat with purpose.' }),
     b({ id: 'bf5', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4',
       arrows: [{ from: 'c8', to: 'f5', color: VIS }], highlights: [{ square: 'f5', color: KEY }, { square: 'b4', color: SOFT }],
-      say: "We develop everything to its best square: the bishop OUTSIDE the chain on f5, …e6, …c6 for the queen's safety, and …Bb4 leaning on the c3-knight. Every developing move also makes a small threat. This is the Scandinavian's hidden efficiency.",
+      say: "You develop everything to its best square: the bishop OUTSIDE the chain on f5, …e6, …c6 for the queen's safety, and …Bb4 leaning on the c3-knight. Every developing move also makes a small threat. This is the Scandinavian's hidden efficiency.",
       sayShort: 'Bf5 + Bb4 — develop with threats.' }),
     b({ id: 'mg-castle', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7',
       arrows: [{ from: 'b7', to: 'b5', color: VIS }], highlights: [{ square: 'c1', color: SOFT }, { square: 'b5', color: KEY }],
-      say: "White castles queenside; we finish with …Nbd7. Here's the middlegame: White's king is on the queenside, our queen and bishop already aim at it, and our pawns are loaded — …b5, …b4 to pry it open. We're slightly worse on the engine, but we're the side with the easy moves and the attack. Trade a sliver of structure for clarity and initiative.",
+      say: "White castles queenside; you finish with …Nbd7. Here's the middlegame: White's king is on the queenside, your queen and bishop already aim at it, and your pawns are loaded — …b5, …b4 to pry it open. You're slightly worse on the engine, but you're the side with the easy moves and the attack. Trade a sliver of structure for clarity and initiative.",
       sayShort: '…b5/…b4 — open the king.' }),
   ],
 };
@@ -41,15 +41,15 @@ const NF6: LessonScript = {
   beats: [
     b({ id: 'nf6', moves: 'e4 d5 exd5 Nf6',
       arrows: [{ from: 'g8', to: 'f6', color: VIS }], highlights: [{ square: 'f6', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "The modern Scandinavian — instead of recapturing with the queen, we develop …Nf6, planning to win the d5-pawn back with a piece. This keeps the queen home and leads to a fluid, fianchetto-style game where Black is solid and active.",
+      say: "The modern Scandinavian — instead of recapturing with the queen, you develop …Nf6, planning to win the d5-pawn back with a piece. This keeps the queen home and leads to a fluid, fianchetto-style game where Black is solid and active.",
       sayShort: 'Nf6 — regain d5 with a piece.' }),
     b({ id: 'fianchetto', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6',
       arrows: [{ from: 'f8', to: 'g7', color: VIS }], highlights: [{ square: 'g7', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "We round up the pawn, get nudged to b6, and then fianchetto — …g6 and …Bg7 — aiming the bishop straight down the long diagonal at White's big centre. With …Nc6 added, we're pressuring the d4-pawn from two directions. We invited the big centre so we could attack it.",
+      say: "You round up the pawn, get nudged to b6, and then fianchetto — …g6 and …Bg7 — aiming the bishop straight down the long diagonal at White's big centre. With …Nc6 added, you're pressuring the d4-pawn from two directions. You invited the big centre so you could attack it.",
       sayShort: 'Bg7 + …Nc6 — pressure d4.' }),
     b({ id: 'mg-e5', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6 O-O e5',
       arrows: [{ from: 'e7', to: 'e5', color: VIS }], highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "We castle and strike with …e5, challenging the centre head-on. Here's the middlegame: a Grünfeld-style position where our fianchetto bishop and active knights hammer White's centre. The plan is …exd4 to open lines, or piling onto d4. We've traded a tiny structural concession for free, active development — a comfortable, fully-playable game.",
+      say: "You castle and strike with …e5, challenging the centre head-on. Here's the middlegame: a Grünfeld-style position where your fianchetto bishop and active knights hammer White's centre. The plan is …exd4 to open lines, or piling onto d4. You've traded a tiny structural concession for free, active development — a comfortable, fully-playable game.",
       sayShort: '…e5 — challenge the centre.' }),
   ],
 };
@@ -64,7 +64,7 @@ const PORTUGUESE: LessonScript = {
       moves: 'e4 d5 exd5 Nf6 d4 Bg4',
       highlights: [{ square: 'g4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "The Portuguese: instead of recapturing on d5 at once, the bishop leaps to g4 first — development before material. Two hundred and six of his corpus games run through this junction. White holds an extra pawn for now; we hold every active square on the board.",
+        "The Portuguese: instead of recapturing on d5 at once, the bishop leaps to g4 first — development before material. Two hundred and six of his corpus games run through this junction. White holds an extra pawn for now; you hold every active square on the board.",
       sayShort: 'Bg4 — development before material.',
     }),
     b({
@@ -72,7 +72,7 @@ const PORTUGUESE: LessonScript = {
       moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5',
       highlights: [{ square: 'e2', color: SOFT }, { square: 'd5', color: KEY }],
       say:
-        "White breaks the stare with Be2 and we trade at once — the light-squared bishop's whole career condensed into four useful moves. Then the queen takes the pawn back from the centre of the board. Material level, and count the development: our queen and knight are out; White's queen was dragged to e2 by the recapture.",
+        "White breaks the stare with Be2 and you trade at once — the light-squared bishop's whole career condensed into four useful moves. Then the queen takes the pawn back from the centre of the board. Material level, and count the development: your queen and knight are out; White's queen was dragged to e2 by the recapture.",
       sayShort: 'Trade, then Qxd5 — pawn home.',
     }),
     b({
@@ -80,7 +80,7 @@ const PORTUGUESE: LessonScript = {
       moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 Be3 O-O-O',
       highlights: [{ square: 'c8', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Knight out, knight out, and castle LONG — by move seven our king is safe, the rook stares at d4 through our own queen, and every Black piece has a job. This is the Portuguese sales pitch delivered: a fair fight from move two, with the sharper player holding the ideas. The middlegame plans pick up from exactly here.",
+        "Knight out, knight out, and castle LONG — by move seven your king is safe, the rook stares at d4 through your own queen, and every Black piece has a job. This is the Portuguese sales pitch delivered: a fair fight from move two, with the sharper player holding the ideas. The middlegame plans pick up from exactly here.",
       sayShort: 'O-O-O by move seven. Fair fight.',
     }),
   ],
@@ -129,7 +129,7 @@ const VS_BB5: LessonScript = {
       moves: 'e4 d5 exd5 Nf6 Bb5+ Nbd7',
       highlights: [{ square: 'd7', color: KEY }, { square: 'b5', color: SOFT }],
       say:
-        "The check on b5 is White's tidiest sideline, and the answer costs nothing: block with the queen's knight, a developing move we wanted anyway. His corpus record from here is perfect — five games, five wins.",
+        "The check on b5 is White's tidiest sideline, and the answer costs nothing: block with the queen's knight, a developing move you wanted anyway. His corpus record from here is perfect — five games, five wins.",
       sayShort: 'Nbd7 — block with development.',
     }),
     b({
@@ -146,7 +146,7 @@ const VS_BB5: LessonScript = {
       arrows: [{ from: 'b7', to: 'd5', color: VIS }],
       highlights: [{ square: 'b7', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Bb7 — and the long diagonal lights up, starting with the d5-pawn White has been babysitting since move two. The pawn falls next, the knight recaptures with tempo, and the a-file trades leave our queen stacked behind this very bishop. One diagonal, the whole game's story. The middlegame plan plays it out.",
+        "Bb7 — and the long diagonal lights up, starting with the d5-pawn White has been babysitting since move two. The pawn falls next, the knight recaptures with tempo, and the a-file trades leave your queen stacked behind this very bishop. One diagonal, the whole game's story. The middlegame plan plays it out.",
       sayShort: 'Bb7 — the diagonal lights up.',
     }),
   ],

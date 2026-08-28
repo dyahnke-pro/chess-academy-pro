@@ -33,7 +33,7 @@ const D3: LessonScript = {
       arrows: [{ from: 'd2', to: 'd3', color: VIS }],
       highlights: [{ square: 'd3', color: KEY }, { square: 'g4', color: SOFT }],
       say:
-        "The textbook refutation. We accept the gambit knight, and after …dxc6 play the modest d3 — NOT d4 — keeping the centre closed and the extra pawn permanent. Then the humble Be2, covering the g4-square so Black gets no pin or sacrifice. Every Stafford trap relies on open lines and loose pieces; these little moves slam the shop shut.",
+        "The textbook refutation. You accept the gambit knight, and after …dxc6 play the modest d3 — NOT d4 — keeping the centre closed and the extra pawn permanent. Then the humble Be2, covering the g4-square so Black gets no pin or sacrifice. Every Stafford trap relies on open lines and loose pieces; these little moves slam the shop shut.",
       sayShort: 'd3 + Be2 — the quiet wall.',
     }),
     b({
@@ -42,7 +42,7 @@ const D3: LessonScript = {
       arrows: [{ from: 'c2', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Out of real ideas, Black lunges with h5, hoping to stir up a kingside attack. It's a sign the gambit has failed — he's throwing wing pawns because his pieces have no targets. We answer in the centre with c3, preparing d4 to bury his whole attack under our pawns.",
+        "Out of real ideas, Black lunges with h5, hoping to stir up a kingside attack. It's a sign the gambit has failed — he's throwing wing pawns because his pieces have no targets. You answer in the centre with c3, preparing d4 to bury his whole attack under your pawns.",
       sayShort: 'c3 — prepare d4.',
     }),
     b({
@@ -51,7 +51,7 @@ const D3: LessonScript = {
       arrows: [{ from: 'd3', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Black throws the knight to g4; we ignore the noise and play d4, striking the c5-bishop and seizing the full centre. Here's the middlegame: a clean extra pawn, a commanding centre, and Black's attack fizzling into nothing. The engine calls White close to winning. The most feared gambit on the internet — turned into a free pawn.",
+        "Black throws the knight to g4; you ignore the noise and play d4, striking the c5-bishop and seizing the full centre. Here's the middlegame: a clean extra pawn, a commanding centre, and Black's attack fizzling into nothing. The engine calls White close to winning. The most feared gambit on the internet — turned into a free pawn.",
       sayShort: 'd4 — centre + extra pawn, winning.',
     }),
   ],
@@ -72,7 +72,7 @@ const E5: LessonScript = {
       arrows: [{ from: 'e4', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'f6', color: SOFT }],
       say:
-        "The aggressive alternative: instead of the quiet d3, we push e5, kicking the f6-knight forward with tempo and grabbing space. We're still a clean pawn up — now we add a cramping pawn on e5 to the bargain.",
+        "The aggressive alternative: instead of the quiet d3, you push e5, kicking the f6-knight forward with tempo and grabbing space. You're still a clean pawn up — now you add a cramping pawn on e5 to the bargain.",
       sayShort: 'e5 — kick the knight, grab space.',
     }),
     b({
@@ -81,7 +81,7 @@ const E5: LessonScript = {
       arrows: [{ from: 'd2', to: 'd3', color: VIS }],
       highlights: [{ square: 'e4', color: SOFT }, { square: 'c5', color: SOFT }],
       say:
-        "The knight jumps to e4, its only active square; we calmly kick it with d3. It retreats to c5, and we develop the bishop to e3, challenging it again. Notice the theme: we never let Black's pieces settle on a good square, and we never give back the pawn.",
+        "The knight jumps to e4, its only active square; you calmly kick it with d3. It retreats to c5, and you develop the bishop to e3, challenging it again. Notice the theme: you never let Black's pieces settle on a good square, and you never give back the pawn.",
       sayShort: 'd3 — kick the knight again.',
     }),
     b({
@@ -89,7 +89,7 @@ const E5: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Black's knight shuffles to e6 and we develop the last piece with Nd2. Here's the middlegame: we're a clean pawn up, the e5-pawn cramps Black, and his pieces have been chased around with no compensation in sight. The engine confirms White is clearly better. Develop, castle, and convert the extra pawn — the Stafford simply doesn't work against this.",
+        "Black's knight shuffles to e6 and you develop the last piece with Nd2. Here's the middlegame: you're a clean pawn up, the e5-pawn cramps Black, and his pieces have been chased around with no compensation in sight. The engine confirms White is clearly better. Develop, castle, and convert the extra pawn — the Stafford simply doesn't work against this.",
       sayShort: 'Nd2 — develop, convert the pawn.',
     }),
   ],

@@ -36,7 +36,7 @@ export const ANTI_PIRC_BATTERY_LESSON: LessonScript = {
   orientation: 'white',
   beats: [
     b({ id: 'apb-1', moves: 'e4 d6 d4 Nf6 Nc3 g6',
-      say: "The Pirc invites you to take the whole centre, planning to chip at it from a fianchetto. Across 793 games in our grandmaster corpus this position scores 68 percent for White — but only if you know what the setup actually wants. So take the centre: both pawns forward, knight to c3. Black develops the knight, tucks the bishop toward g7, and waits for you to overextend. You won't.",
+      say: "The Pirc invites you to take the whole centre, planning to chip at it from a fianchetto. Across 793 games in your grandmaster corpus this position scores 68 percent for White — but only if you know what the setup actually wants. So take the centre: both pawns forward, knight to c3. Black develops the knight, tucks the bishop toward g7, and waits for you to overextend. You won't.",
       sayShort: "Take the centre — e4, d4, Nc3.",
       highlights: [H('e4', SOFT), H('d4', SOFT), H('g7', KEY)] }),
     b({ id: 'apb-2', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3',
@@ -50,7 +50,7 @@ export const ANTI_PIRC_BATTERY_LESSON: LessonScript = {
       arrows: [A('e3', 'h6')],
       highlights: [H('d2', SOFT), H('h6', KEY), H('g7', RED)] }),
     b({ id: 'apb-4', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3 O-O Qd2 Nc6 d5',
-      say: "The knight comes to c6 to lean on d4 — and this is the moment the whole system pivots on. The pawn goes to d5, hitting the knight and gaining space. In our corpus this exact punch is the most common continuation once Black castles and commits that knight — and the engine confirms it: White is nearly a pawn better already. The knight has one good square to run to, and it's backwards.",
+      say: "The knight comes to c6 to lean on d4 — and this is the moment the whole system pivots on. The pawn goes to d5, hitting the knight and gaining space. In your corpus this exact punch is the most common continuation once Black castles and commits that knight — and the engine confirms it: White is nearly a pawn better already. The knight has one good square to run to, and it's backwards.",
       sayShort: "d5 — punch the knight, grab space.",
       highlights: [H('d5', SOFT), H('c6', RED)] }),
     b({ id: 'apb-5', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be3 O-O Qd2 Nc6 d5 Nb8 Bh6',

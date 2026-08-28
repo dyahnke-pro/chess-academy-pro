@@ -52,7 +52,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 c6 Nc3 d5',
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "Two Knights — This repertoire's biggest Caro variation, 743 games faced as Black. White's Nc3 sidesteps the d4 mainlines and bets on a piece game. Our reply is automatic: d5 in 676 of 743 games at this position. The principle: when White plays a system, we still strike in the centre.",
+        "Two Knights — This repertoire's biggest Caro variation, 743 games faced as Black. White's Nc3 sidesteps the d4 mainlines and bets on a piece game. Your reply is automatic: d5 in 676 of 743 games at this position. The principle: when White plays a system, you still strike in the centre.",
       sayShort: 'd5 — claim the centre, the 92% pick.',
     }),
     b({
@@ -68,7 +68,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 c6 Nc3 d5 Nf3 dxe4',
       highlights: [{ square: 'e4', color: KEY }],
       say:
-        "dxe4 — 320 of 376 games here (85%). The capture forces White's hand and clears the centre. The alternative Bg4 (33 games) pins early; we'll see Bg4 ideas later in this game anyway, but the dxe4 line gives us the cleanest structure.",
+        "dxe4 — 320 of 376 games here (85%). The capture forces White's hand and clears the centre. The alternative Bg4 (33 games) pins early; you'll see Bg4 ideas later in this game anyway, but the dxe4 line gives you the cleanest structure.",
       sayShort: 'dxe4 — 85% pick, clear the centre.',
     }),
     b({
@@ -77,7 +77,7 @@ const TWO_KNIGHTS: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Nxe4 from White is forced (the pawn must be recovered). Then Nf6 — 309 of our 320 games at this position. The knight hits the e4-knight with tempo, forcing White to decide: Qe2 supporting, Ng3 retreating, or Nxf6+ trading. All three appear in the games.",
+        "Nxe4 from White is forced (the pawn must be recovered). Then Nf6 — 309 of your 320 games at this position. The knight hits the e4-knight with tempo, forcing White to decide: Qe2 supporting, Ng3 retreating, or Nxf6+ trading. All three appear in the games.",
       sayShort: 'Nf6 — hit the e4-knight with tempo.',
     }),
     b({
@@ -86,7 +86,7 @@ const TWO_KNIGHTS: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'e2', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Qe2 — White's main attempt, 193 of 309 games at this position. The queen backs the knight and threatens to recapture if we trade. This repertoire's framing on this kind of position (per the Gordima-summarised speedrun principle): the queen on e2 looks active but commits early — our quiet reply punishes the commitment.",
+        "Qe2 — White's main attempt, 193 of 309 games at this position. The queen backs the knight and threatens to recapture if you trade. This repertoire's framing on this kind of position (per the Gordima-summarised speedrun principle): the queen on e2 looks active but commits early — your quiet reply punishes the commitment.",
       sayShort: 'Qe2 — White backs the knight.',
     }),
     b({
@@ -104,7 +104,7 @@ const TWO_KNIGHTS: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: ATK }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "Bc4 from White (114 of 156 games) — the bishop activates pointing at f7 as usual. Our Nf6 brings the knight to its natural square. Both pieces now stare at White's centre. The position is calm but tactical resources are everywhere.",
+        "Bc4 from White (114 of 156 games) — the bishop activates pointing at f7 as usual. Your Nf6 brings the knight to its natural square. Both pieces now stare at White's centre. The position is calm but tactical resources are everywhere.",
       sayShort: 'Nf6 — both knights on natural squares.',
     }),
     b({
@@ -112,7 +112,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5 e6 Qe2 b5 Bb3 Qc7',
       highlights: [{ square: 'b5', color: KEY }, { square: 'c7', color: KEY }],
       say:
-        "Ne5 from White (85 games), then we tuck with e6 (boring f7 forever), Qe2 from White, and now our key middlegame setup: b5 kicking the bishop to b3 + Qc7 coordinating. This sequence appears in 67 of the games. Twenty plies in, we're equal with the bishop pair coming and White's pieces having nowhere to go.",
+        "Ne5 from White (85 games), then you tuck with e6 (boring f7 forever), Qe2 from White, and now your key middlegame setup: b5 kicking the bishop to b3 + Qc7 coordinating. This sequence appears in 67 of the games. Twenty plies in, you're equal with the bishop pair coming and White's pieces having nowhere to go.",
       sayShort: 'b5 + Qc7 — Caro middlegame setup.',
     }),
     // ============ MIDDLEGAME (1 beat) ============
@@ -121,7 +121,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5 e6 Qe2 b5 Bb3 Qc7 d4 Bd6 O-O O-O',
       highlights: [{ square: 'd6', color: KEY }, { square: 'a5', color: SOFT }, { square: 'c5', color: SOFT }],
       say:
-        "Move 12-13: d4 + Bd6 — and the middlegame plan from the actual games reveals itself. After we castle, 3 of 5 deepest games play …a5 (queenside push). 4 of 5 play …c5 (central break). The pattern: queenside expansion FIRST, central break SECOND. This is the middlegame template — and it directly creates the queenside pawn majority that wins the endgame.",
+        "Move 12-13: d4 + Bd6 — and the middlegame plan from the actual games reveals itself. After you castle, 3 of 5 deepest games play …a5 (queenside push). 4 of 5 play …c5 (central break). The pattern: queenside expansion FIRST, central break SECOND. This is the middlegame template — and it directly creates the queenside pawn majority that wins the endgame.",
       sayShort: 'Plan: …a5 then …c5 — queenside + centre.',
     }),
     // ============ ENDGAME (1 beat) ============
@@ -154,7 +154,7 @@ const KIA: LessonScript = {
       moves: 'e4 c6 Nf3 d5',
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "KIA setup — 628 of the Caro games against this Nf3 + d3 system. This repertoire's principle (sourced from the Gordima-distilled blitz repertoire): when White plays a system, we still strike with d5. Make White declare. Don't drift.",
+        "KIA setup — 628 of the Caro games against this Nf3 + d3 system. This repertoire's principle (sourced from the Gordima-distilled blitz repertoire): when White plays a system, you still strike with d5. Make White declare. Don't drift.",
       sayShort: 'd5 — make White declare.',
     }),
     b({
@@ -162,7 +162,7 @@ const KIA: LessonScript = {
       moves: 'e4 c6 Nf3 d5 d3',
       highlights: [{ square: 'd3', color: KEY }],
       say:
-        "d3 — the KIA signature. White isn't going to fight for the centre; they're going to build a system: g3, Bg2, Nbd2, e4 push much later. Our job is to extract the maximum from this slow setup. We have the lead in development; we just need to keep it.",
+        "d3 — the KIA signature. White isn't going to fight for the centre; they're going to build a system: g3, Bg2, Nbd2, e4 push much later. Your job is to extract the maximum from this slow setup. You have the lead in development; you just need to keep it.",
       sayShort: 'd3 — system play from White.',
     }),
     b({
@@ -171,7 +171,7 @@ const KIA: LessonScript = {
       arrows: [{ from: 'c7', to: 'e5', color: VIS }],
       highlights: [{ square: 'c7', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Qc7 — the discreet preemptive move. The queen on c7 quietly discourages e5 (any e5 push hits our queen with tempo, which costs White an attacker later). Small move, big restraint. The whole Caro-Kann is famous for this queen placement.",
+        "Qc7 — the discreet preemptive move. The queen on c7 quietly discourages e5 (any e5 push hits your queen with tempo, which costs White an attacker later). Small move, big restraint. The whole Caro-Kann is famous for this queen placement.",
       sayShort: 'Qc7 — discreetly stop e5.',
     }),
     b({
@@ -188,7 +188,7 @@ const KIA: LessonScript = {
       arrows: [{ from: 'e5', to: 'h2', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "dxe4, dxe4 (forced — White's e-pawn was hanging), and now the key move: e5. We grab the central space ourselves. Our queen on c7 was perfectly placed. The diagonal from c7 toward h2 is now alive. White's KIA never got off the ground.",
+        "dxe4, dxe4 (forced — White's e-pawn was hanging), and now the key move: e5. You grab the central space yourself. Your queen on c7 was perfectly placed. The diagonal from c7 toward h2 is now alive. White's KIA never got off the ground.",
       sayShort: '…e5 — grab space, queen alive.',
     }),
     b({
@@ -197,8 +197,8 @@ const KIA: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: ATK }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "Bc4 from White, finally activating. It looks aggressive aiming at f7, but f7 is already defended by the king and we have an extra tempo. The position is equal-with-the-initiative for us.",
-      sayShort: 'Bc4 — too late, we have the initiative.',
+        "Bc4 from White, finally activating. It looks aggressive aiming at f7, but f7 is already defended by the king and you have an extra tempo. The position is equal-with-the-initiative for you.",
+      sayShort: 'Bc4 — too late, you have the initiative.',
     }),
     // ============ MIDDLEGAME ============
     b({
@@ -206,7 +206,7 @@ const KIA: LessonScript = {
       moves: 'e4 c6 Nf3 d5 d3 Qc7 Nc3 dxe4 dxe4 e5 Bc4 b5 Bb3 h6 a4 b4 Ne2',
       highlights: [{ square: 'b5', color: KEY }, { square: 'h6', color: SOFT }],
       say:
-        "Middlegame from the actual games at this position: b5 expanding queenside (claiming b5 forever), h6 making luft for the king and freezing kingside committal moves from White, then a4 from White (forced — must do something), b4 from us, and now White's pieces have nowhere to go. The pattern from 6 of the games at this depth: queenside crawl + kingside containment + slow simplification.",
+        "Middlegame from the actual games at this position: b5 expanding queenside (claiming b5 forever), h6 making luft for the king and freezing kingside committal moves from White, then a4 from White (forced — must do something), b4 from you, and now White's pieces have nowhere to go. The pattern from 6 of the games at this depth: queenside crawl + kingside containment + slow simplification.",
       sayShort: 'b5/h6/b4 — queenside crawl + kingside lock.',
     }),
     // ============ ENDGAME ============
@@ -240,7 +240,7 @@ const EXCHANGE: LessonScript = {
       highlights: [{ square: 'd5', color: KEY }],
       say:
         "Exchange Variation — White trades centre pawns, settling for a symmetrical structure where their slightly easier development might give an edge. 353 of the games. He scores 59% here — not as high as Two Knights or Fantasy, but solid. The principle (per the speedrun framing): a symmetrical position is only equal if both sides develop equally. Develop one tempo faster.",
-      sayShort: 'cxd5 — symmetrical; we develop faster.',
+      sayShort: 'cxd5 — symmetrical; you develop faster.',
     }),
     b({
       id: 'ex-bd3',
@@ -248,7 +248,7 @@ const EXCHANGE: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'd3', color: KEY }],
       say:
-        "Bd3 — the textbook Exchange setup. White develops the bishop to its 'best' diagonal, aiming at h7. The problem: it's just one piece, no immediate threats, and our reply commits a piece more usefully.",
+        "Bd3 — the textbook Exchange setup. White develops the bishop to its 'best' diagonal, aiming at h7. The problem: it's just one piece, no immediate threats, and your reply commits a piece more usefully.",
       sayShort: 'Bd3 — White develops, no threat yet.',
     }),
     b({
@@ -265,7 +265,7 @@ const EXCHANGE: LessonScript = {
       moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3',
       highlights: [{ square: 'c3', color: KEY }],
       say:
-        "c3 from White — preparing nothing in particular, just a waiting move that overprotects d4. The slow build continues. We answer with the move the Exchange begs for.",
+        "c3 from White — preparing nothing in particular, just a waiting move that overprotects d4. The slow build continues. You answer with the move the Exchange begs for.",
       sayShort: 'c3 — White waits.',
     }),
     b({
@@ -283,7 +283,7 @@ const EXCHANGE: LessonScript = {
       arrows: [{ from: 'b3', to: 'b7', color: ATK }],
       highlights: [{ square: 'b3', color: KEY }, { square: 'b7', color: KEY }],
       say:
-        "Qb3 — White's only real try. The queen attacks b7 and pressures the queenside. The threat is real (we'd lose a pawn) but the defence is trivial.",
+        "Qb3 — White's only real try. The queen attacks b7 and pressures the queenside. The threat is real (you'd lose a pawn) but the defence is trivial.",
       sayShort: 'Qb3 — White attacks b7.',
     }),
     b({
@@ -292,7 +292,7 @@ const EXCHANGE: LessonScript = {
       arrows: [{ from: 'c7', to: 'b7', color: VIS }],
       highlights: [{ square: 'c7', color: KEY }],
       say:
-        "Qc7 — covers b7 casually, prepares queenside development. We've now developed three pieces (Nf6 + Bg4 + Qc7), White has developed two (Bd3 + Qb3) and a pawn (c3). Our development edge is real. The opening is over; we're better.",
+        "Qc7 — covers b7 casually, prepares queenside development. You've now developed three pieces (Nf6 + Bg4 + Qc7), White has developed two (Bd3 + Qb3) and a pawn (c3). Your development edge is real. The opening is over; you're better.",
       sayShort: 'Qc7 — covers b7, lead in development.',
     }),
     // ============ MIDDLEGAME ============
@@ -301,7 +301,7 @@ const EXCHANGE: LessonScript = {
       moves: 'e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3 Bg4 Qb3 Qc7 h3 Bh5',
       highlights: [{ square: 'h5', color: KEY }],
       say:
-        "Middlegame plan from the games: White typically plays h3 challenging our bishop, and the standard retreat is Bh5 — keeping the diagonal alive for now. From here our typical maneuvering is …e6, …Nbd7, …Bd6, castle, and a slow grind on the open c-file. His pattern across these games: the bishop pair if the Bg4 ever trades for a knight, and we win the endgame through structural advantage.",
+        "Middlegame plan from the games: White typically plays h3 challenging your bishop, and the standard retreat is Bh5 — keeping the diagonal alive for now. From here your typical maneuvering is …e6, …Nbd7, …Bd6, castle, and a slow grind on the open c-file. His pattern across these games: the bishop pair if the Bg4 ever trades for a knight, and you win the endgame through structural advantage.",
       sayShort: 'Bh5 — keep the diagonal alive.',
     }),
     // ============ ENDGAME ============
@@ -336,7 +336,7 @@ const CLASSICAL: LessonScript = {
       moves: 'e4 c6 d4 d5 Nc3 dxe4',
       highlights: [{ square: 'e4', color: KEY }],
       say:
-        "Classical Caro-Kann — White plays Nc3 supporting the e4-pawn. We take with dxe4, forcing the recapture and trading off the central tension. This repertoire scores 62% across the 235 games at this position — a respectable mainline win-rate.",
+        "Classical Caro-Kann — White plays Nc3 supporting the e4-pawn. You take with dxe4, forcing the recapture and trading off the central tension. This repertoire scores 62% across the 235 games at this position — a respectable mainline win-rate.",
       sayShort: 'dxe4 — force the recapture.',
     }),
     b({
@@ -345,7 +345,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Nxe4 (forced), and now the key move: Nf6 — the Tartakower Variation. The knight challenges the e4-knight directly. White has TWO responses: Nxf6+ doubling our pawns (the topic of this lesson), or Ng3 retreating. The Tartakower with the doubled f-pawns is what 80%+ of the games take.",
+        "Nxe4 (forced), and now the key move: Nf6 — the Tartakower Variation. The knight challenges the e4-knight directly. White has TWO responses: Nxf6+ doubling your pawns (the topic of this lesson), or Ng3 retreating. The Tartakower with the doubled f-pawns is what 80%+ of the games take.",
       sayShort: 'Nf6 — Tartakower, dare the trade.',
     }),
     b({
@@ -353,7 +353,7 @@ const CLASSICAL: LessonScript = {
       moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6',
       highlights: [{ square: 'f6', color: KEY }, { square: 'e8', color: SOFT }],
       say:
-        "Nxf6+, and we recapture with exf6 — accepting the doubled f-pawns. Per this repertoire's framing on this exact position: the doubled f-pawns aren't a weakness, they're the structural cost of getting the half-open e-file, the central control, and a free e8 for our rook. Trade looks-like-bad for structurally-better.",
+        "Nxf6+, and you recapture with exf6 — accepting the doubled f-pawns. Per this repertoire's framing on this exact position: the doubled f-pawns aren't a weakness, they're the structural cost of getting the half-open e-file, the central control, and a free e8 for your rook. Trade looks-like-bad for structurally-better.",
       sayShort: 'exf6 — accept the doubled pawns.',
     }),
     b({
@@ -362,7 +362,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'd6', to: 'h2', color: VIS }],
       highlights: [{ square: 'd6', color: KEY }],
       say:
-        "c3 from White, then Bd6 from us. This repertoire calls this 'a very natural developing move' — and in one of the Tartakower games he repeats that phrase THREE TIMES to drive the point home. The bishop on d6 covers h2 indirectly, holds the dark squares, prepares castling, and looks innocent but is doing four jobs at once. The 'natural developing move' framing is characteristic.",
+        "c3 from White, then Bd6 from you. This repertoire calls this 'a very natural developing move' — and in one of the Tartakower games he repeats that phrase THREE TIMES to drive the point home. The bishop on d6 covers h2 indirectly, holds the dark squares, prepares castling, and looks innocent but is doing four jobs at once. The 'natural developing move' framing is characteristic.",
       sayShort: 'Bd6 — a very natural developing move.',
     }),
     b({
@@ -371,7 +371,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: ATK }, { from: 'c2', to: 'h7', color: ATK }],
       highlights: [{ square: 'h7', color: SOFT }],
       say:
-        "Bd3 + Qc2 — White builds the classic battery aiming at h7. It looks dangerous but our setup defends it: the Bd6 covers indirect mate-threats, and we've already castled. The position is solid; what's left is the counter.",
+        "Bd3 + Qc2 — White builds the classic battery aiming at h7. It looks dangerous but your setup defends it: the Bd6 covers indirect mate-threats, and you've already castled. The position is solid; what's left is the counter.",
       sayShort: 'Bd3 + Qc2 — White builds the battery.',
     }),
     b({
@@ -380,7 +380,7 @@ const CLASSICAL: LessonScript = {
       arrows: [{ from: 'e8', to: 'e2', color: ATK }],
       highlights: [{ square: 'e8', color: KEY }],
       say:
-        "Re8+ — and here's why the doubled f-pawns were worth it. Our rook leaps to the half-open e-file with check, harassing White's pieces. White must respond (Ne2 is the standard — passive, exactly where we wanted them).",
+        "Re8+ — and here's why the doubled f-pawns were worth it. Your rook leaps to the half-open e-file with check, harassing White's pieces. White must respond (Ne2 is the standard — passive, exactly where you wanted them).",
       sayShort: 'Re8+ — file check.',
     }),
     b({
@@ -388,7 +388,7 @@ const CLASSICAL: LessonScript = {
       moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2',
       highlights: [{ square: 'e2', color: KEY }],
       say:
-        "Ne2 — White's knight comes out passively, blocking the check. Now this repertoire's per-game commentary (per TheChessLobster's summary): the knight on e2 is BAD. It doesn't do anything useful, and it's a target for our coming maneuvering. We've already won the opening.",
+        "Ne2 — White's knight comes out passively, blocking the check. Now this repertoire's per-game commentary (per TheChessLobster's summary): the knight on e2 is BAD. It doesn't do anything useful, and it's a target for your coming maneuvering. You've already won the opening.",
       sayShort: 'Ne2 — passive, target.',
     }),
     b({
@@ -396,7 +396,7 @@ const CLASSICAL: LessonScript = {
       moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5',
       highlights: [{ square: 'h5', color: KEY }, { square: 'h4', color: SOFT }],
       say:
-        "h5 — freezing White's intended h-pawn push (h4 would have started a kingside expansion). Our move says: NO. Now White has to play chess. The opening is OVER, and we have a tangible edge: better piece coordination, control of the only open file, and structural soundness despite the doubled pawns.",
+        "h5 — freezing White's intended h-pawn push (h4 would have started a kingside expansion). Your move says: NO. Now White has to play chess. The opening is OVER, and you have a tangible edge: better piece coordination, control of the only open file, and structural soundness despite the doubled pawns.",
       sayShort: 'h5 — freeze the kingside.',
     }),
     // ============ MIDDLEGAME ============
@@ -440,7 +440,7 @@ const FANTASY: LessonScript = {
       moves: 'e4 c6 d4 d5 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Fantasy Variation. 189 games, 75% score — This repertoire's BEST score across any Caro variation as Black. f3 from White is the move he himself plays as White against the Caro (per the speedrun framing, it produces 'wild positions'). Today we're refuting it. Don't be intimidated. f3 is a slow move that doesn't develop, weakens the e1-h4 diagonal, and offers us the centre on a plate.",
+        "Fantasy Variation. 189 games, 75% score — This repertoire's BEST score across any Caro variation as Black. f3 from White is the move he himself plays as White against the Caro (per the speedrun framing, it produces 'wild positions'). Today you're refuting it. Don't be intimidated. f3 is a slow move that doesn't develop, weakens the e1-h4 diagonal, and offers you the centre on a plate.",
       sayShort: 'f3 — slow, weakening, refutable.',
     }),
     b({
@@ -457,7 +457,7 @@ const FANTASY: LessonScript = {
       arrows: [{ from: 'f1', to: 'a6', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "fxe4 — White recaptures, opening the f-file. Now the structural cost of f3 is visible: White's king is exposed (the f2-square is weakening); the e4-pawn is isolated and on an open file; we have the lead in development.",
+        "fxe4 — White recaptures, opening the f-file. Now the structural cost of f3 is visible: White's king is exposed (the f2-square is weakening); the e4-pawn is isolated and on an open file; you have the lead in development.",
       sayShort: 'fxe4 — White structure cracked.',
     }),
     b({
@@ -466,7 +466,7 @@ const FANTASY: LessonScript = {
       arrows: [{ from: 'e5', to: 'd4', color: ATK }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: KEY }],
       say:
-        "e5 — the central counter. Hit the d4-pawn directly. White must decide: push d5 locking the position (giving us a juicy e5-outpost), or trade with dxe5 (accepting that the f3 + fxe4 sequence wasted two tempi). Either way we're better — and the score data confirms it.",
+        "e5 — the central counter. Hit the d4-pawn directly. White must decide: push d5 locking the position (giving you a juicy e5-outpost), or trade with dxe5 (accepting that the f3 + fxe4 sequence wasted two tempi). Either way you're better — and the score data confirms it.",
       sayShort: 'e5 — counter the centre.',
     }),
     b({
@@ -474,8 +474,8 @@ const FANTASY: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 d5',
       highlights: [{ square: 'd5', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "d5 — White locks the position. Our e5-pawn is now safe and the d5-pawn is OUR outpost target. White's pieces have committed too early; ours haven't.",
-      sayShort: 'd5 — locked centre, our outpost.',
+        "d5 — White locks the position. Your e5-pawn is now safe and the d5-pawn is Your outpost target. White's pieces have committed too early; yours haven't.",
+      sayShort: 'd5 — locked centre, your outpost.',
     }),
     b({
       id: 'fan-bc5',
@@ -493,7 +493,7 @@ const FANTASY: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'c5', color: KEY }, { square: 'f6', color: KEY }],
       say:
-        "Middlegame: White finally develops Nf3, and our Nf6 attacks e4 with tempo. The position is sharply tactical and we have piece coordination. His games here are often short (60-80 plies) — the Fantasy collapses quickly when refuted.",
+        "Middlegame: White finally develops Nf3, and your Nf6 attacks e4 with tempo. The position is sharply tactical and you have piece coordination. His games here are often short (60-80 plies) — the Fantasy collapses quickly when refuted.",
       sayShort: 'Nf6 — develop, hit e4.',
     }),
     // ============ ENDGAME ============
@@ -509,14 +509,14 @@ const FANTASY: LessonScript = {
       id: 'fan-castle',
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 d5 Bc5 Nf3 Nf6 Nc3 O-O Bg5',
       highlights: [{ square: 'c3', color: SOFT }, { square: 'g5', color: ATK }],
-      say: "Nc3 ...O-O Bg5 — White develops the queen knight, Black castles into the kingside attack zone, we pin the f6-knight. The structural plan from here: central control on the d5-e5 squares + kingside attack via Bg5 + Qd2 + O-O-O. KEY SQUARE: f6 (where the pin lands and tactical pressure converges).",
+      say: "Nc3 ...O-O Bg5 — White develops the queen knight, Black castles into the kingside attack zone, you pin the f6-knight. The structural plan from here: central control on the d5-e5 squares + kingside attack via Bg5 + Qd2 + O-O-O. KEY SQUARE: f6 (where the pin lands and tactical pressure converges).",
       sayShort: 'Bg5 — pin + kingside attack queued.',
     }),
     b({
       id: 'fan-middlegame',
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 d5 Bc5 Nf3 Nf6 Nc3 O-O Bg5 h6 Bxf6 Qxf6',
       highlights: [{ square: 'f6', color: KEY }],
-      say: "...h6 Bxf6 ...Qxf6 — Black asks the bishop, we trade (giving up the bishop pair but wrecking Black's pawn structure — Qxf6 vs gxf6, both bad). The middlegame is now defined: White's bishop pair (well, single bishop) vs the doubled pawns, opposite-side castling race. CONVERSION PLAN: Qd2 + O-O-O + g4-g5 kingside storm.",
+      say: "...h6 Bxf6 ...Qxf6 — Black asks the bishop, you trade (giving up the bishop pair but wrecking Black's pawn structure — Qxf6 vs gxf6, both bad). The middlegame is now defined: White's bishop pair (well, single bishop) vs the doubled pawns, opposite-side castling race. CONVERSION PLAN: Qd2 + O-O-O + g4-g5 kingside storm.",
       sayShort: 'Bxf6 — convert via structural target.',
     }),
   ],
@@ -540,7 +540,7 @@ const MODERN: LessonScript = {
       arrows: [{ from: 'g7', to: 'a1', color: VIS }],
       highlights: [{ square: 'g7', color: KEY }, { square: 'a1', color: SOFT }],
       say:
-        "Modern Defense transposition — 185 games, 68% score. Sometimes against a d4 player who wasn't expecting the Caro, we fianchetto. The c6-pawn already played turns into a SUPPORT move for the …d5 push and the dark-squared bishop dominates the long diagonal. This repertoire has a separate Modern Defense repertoire too; this transposition lets us pick which structure to use.",
+        "Modern Defense transposition — 185 games, 68% score. Sometimes against a d4 player who wasn't expecting the Caro, you fianchetto. The c6-pawn already played turns into a SUPPORT move for the …d5 push and the dark-squared bishop dominates the long diagonal. This repertoire has a separate Modern Defense repertoire too; this transposition lets you pick which structure to use.",
       sayShort: 'g6 — fianchetto, hybrid structure.',
     }),
     b({
@@ -548,7 +548,7 @@ const MODERN: LessonScript = {
       moves: 'e4 c6 d4 g6 Nc3',
       highlights: [{ square: 'c3', color: KEY }],
       say:
-        "Nc3 from White — the only sensible move. We develop classically and prepare …d5. The c6-pawn is doing double duty: support for the future d5 push, AND defends b5 against any Bb5+ ideas.",
+        "Nc3 from White — the only sensible move. You develop classically and prepare …d5. The c6-pawn is doing double duty: support for the future d5 push, AND defends b5 against any Bb5+ ideas.",
       sayShort: 'Nc3 — White develops normally.',
     }),
     b({
@@ -557,7 +557,7 @@ const MODERN: LessonScript = {
       arrows: [{ from: 'g7', to: 'a1', color: VIS }],
       highlights: [{ square: 'g7', color: KEY }],
       say:
-        "Bg7 — the bishop on the long diagonal. This is our most important piece in this variation: it dominates the queenside, supports the future …d5 break, defends our king, and creates tactical threats along the a1-h8 diagonal whenever lines open.",
+        "Bg7 — the bishop on the long diagonal. This is your most important piece in this variation: it dominates the queenside, supports the future …d5 break, defends your king, and creates tactical threats along the a1-h8 diagonal whenever lines open.",
       sayShort: 'Bg7 — the king of the diagonal.',
     }),
     b({
@@ -574,7 +574,7 @@ const MODERN: LessonScript = {
       arrows: [{ from: 'd5', to: 'e4', color: ATK }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'c6', color: KEY }],
       say:
-        "d5 — the Caro idea reasserts itself with the fianchetto setup behind it. The c6-d5-g7 pawn-and-bishop structure is one of the most solid in chess: pawn chain holding the centre, Bg7 dominating the long diagonal, our king tucked behind a single move from castling.",
+        "d5 — the Caro idea reasserts itself with the fianchetto setup behind it. The c6-d5-g7 pawn-and-bishop structure is one of the most solid in chess: pawn chain holding the centre, Bg7 dominating the long diagonal, your king tucked behind a single move from castling.",
       sayShort: 'd5 — c6 backs it, structure locked.',
     }),
     b({
@@ -582,7 +582,7 @@ const MODERN: LessonScript = {
       moves: 'e4 c6 d4 g6 Nc3 Bg7 Nf3 d5 h3',
       highlights: [{ square: 'h3', color: KEY }],
       say:
-        "h3 — White's preventive move (stopping …Bg4 ideas and giving the king-knight an escape from a future …Ng4). Slow, but the Modern Defense IS slow chess. We continue developing.",
+        "h3 — White's preventive move (stopping …Bg4 ideas and giving the king-knight an escape from a future …Ng4). Slow, but the Modern Defense IS slow chess. You continue developing.",
       sayShort: 'h3 — preventive.',
     }),
     b({
@@ -591,7 +591,7 @@ const MODERN: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: ATK }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f6', color: KEY }],
       say:
-        "dxe4, Nxe4, Nf6 — the trade-and-develop sequence. By move 6 we've traded a pawn and developed three pieces (Bg7, Nf6, and the implicit Nc3-development pressure on the queenside).",
+        "dxe4, Nxe4, Nf6 — the trade-and-develop sequence. By move 6 you've traded a pawn and developed three pieces (Bg7, Nf6, and the implicit Nc3-development pressure on the queenside).",
       sayShort: 'dxe4 + Nf6 — trade and develop.',
     }),
     // ============ MIDDLEGAME ============
@@ -600,7 +600,7 @@ const MODERN: LessonScript = {
       moves: 'e4 c6 d4 g6 Nc3 Bg7 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6',
       highlights: [{ square: 'f6', color: KEY }, { square: 'g7', color: SOFT }],
       say:
-        "Middlegame: White trades knights with Nxf6+, we recapture with exf6 (better than gxf6 — keeps the Bg7's diagonal intact). The doubled f-pawns are familiar from the Classical variation; same idea, same plan. The position is balanced with our bishop pair active.",
+        "Middlegame: White trades knights with Nxf6+, you recapture with exf6 (better than gxf6 — keeps the Bg7's diagonal intact). The doubled f-pawns are familiar from the Classical variation; same idea, same plan. The position is balanced with your bishop pair active.",
       sayShort: 'exf6 — keep the Bg7 diagonal.',
     }),
     // ============ ENDGAME ============
@@ -632,21 +632,21 @@ const ADVANCE_C5: LessonScript = {
       id: 'adv-c5-open',
       moves: 'e4 c6 d4 d5 e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "e5 — White's Advance Variation, locking the centre and cramping our kingside. The pawn on e5 looks threatening but it's also vulnerable: our coming ...c5 break + ...Nc6 + piece pressure will destabilise the whole chain.",
+      say: "e5 — White's Advance Variation, locking the centre and cramping your kingside. The pawn on e5 looks threatening but it's also vulnerable: your coming ...c5 break + ...Nc6 + piece pressure will destabilise the whole chain.",
       sayShort: 'e5 — Advance, prepare to undermine.',
     }),
     b({
       id: 'adv-c5-strike',
       moves: 'e4 c6 d4 d5 e5 c5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "...c5! The immediate counter-strike. This is the modern way to handle the Advance — we challenge d4 directly instead of the slow ...Bf5 setup. The pawn break opens the c-file AND creates tactical motifs against d4.",
+      say: "...c5! The immediate counter-strike. This is the modern way to handle the Advance — you challenge d4 directly instead of the slow ...Bf5 setup. The pawn break opens the c-file AND creates tactical motifs against d4.",
       sayShort: '...c5 — counter d4 immediately.',
     }),
     b({
       id: 'adv-c5-trade',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6',
       highlights: [{ square: 'e6', color: KEY }],
-      say: "dxc5 ...e6 — White takes the c-pawn, Black calmly plays ...e6 preparing recapture. We're temporarily down a pawn but White's c5-pawn is loose AND we have the open e-file coming.",
+      say: "dxc5 ...e6 — White takes the c-pawn, Black calmly plays ...e6 preparing recapture. You're temporarily down a pawn but White's c5-pawn is loose AND you have the open e-file coming.",
       sayShort: '...e6 — calm preparation.',
     }),
     b({
@@ -667,7 +667,7 @@ const ADVANCE_C5: LessonScript = {
       id: 'adv-c5-knight-reroute',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6',
       highlights: [{ square: 'g6', color: KEY }, { square: 'f4', color: SOFT }],
-      say: "...Nge7 Nbd2 ...Ng6! The signature Advance Caro reroute — the knight goes Nge7-Ng6 instead of the natural ...Nf6 (which would block our queen). From g6 the knight pressures e5 and prepares jumps to f4 outpost square.",
+      say: "...Nge7 Nbd2 ...Ng6! The signature Advance Caro reroute — the knight goes Nge7-Ng6 instead of the natural ...Nf6 (which would block your queen). From g6 the knight pressures e5 and prepares jumps to f4 outpost square.",
       sayShort: '...Ng6 — knight prizes square.',
     }),
     b({
@@ -725,7 +725,7 @@ const ADVANCE_BF5: LessonScript = {
       id: 'adv-bf5-nc6',
       moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nc6 O-O',
       highlights: [{ square: 'g1', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "...Nc6 O-O — Black develops the queen knight, we castle. Both sides committing to the classical structure. KEY SQUARE: d4 (under pressure from ...c5, ...Nc6, ...cxd4 in some lines). The pawn-break tension is now defined.",
+      say: "...Nc6 O-O — Black develops the queen knight, you castle. Both sides committing to the classical structure. KEY SQUARE: d4 (under pressure from ...c5, ...Nc6, ...cxd4 in some lines). The pawn-break tension is now defined.",
       sayShort: 'O-O — central tension set.',
     }),
     b({
@@ -755,7 +755,7 @@ const PANOV: LessonScript = {
       id: 'panov-open',
       moves: 'e4 c6 d4 d5 exd5 cxd5 c4',
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "Panov-Botvinnik Attack: c4 challenges our d5-pawn directly. White accepts an Isolated Queen's Pawn structure in exchange for active piece play — this is the most aggressive way to play against the Caro-Kann.",
+      say: "Panov-Botvinnik Attack: c4 challenges your d5-pawn directly. White accepts an Isolated Queen's Pawn structure in exchange for active piece play — this is the most aggressive way to play against the Caro-Kann.",
       sayShort: 'c4 — Panov IQP fight.',
     }),
     b({

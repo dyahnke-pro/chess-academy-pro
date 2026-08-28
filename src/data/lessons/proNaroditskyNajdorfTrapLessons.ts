@@ -29,7 +29,7 @@ const SRC = [
 
 // TRAP 1: 18 games — Nc3 after early ...e5 lets Black trade and develop with tempo (Firouzja victim)
 const NC3_E5_TRADE: LessonScript = {
-  openingId: 'pro-naroditsky-najdorf', title: 'Weapon: Nc3 after ...e5 lets us trade with tempo', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-najdorf', title: 'Weapon: Nc3 after ...e5 lets you trade with tempo', minutes: 3, orientation: 'black', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'naj-nc3-setup', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 e5', highlights: [H('e5', KEY), H('d4', SOFT)],
       say: "After the Open Sicilian central trades, Black plays an early ...e5 — challenging the centralized knight before completing development. The correct response from White is Nb3 (retreat with tempo) or even sacrifices. The wrong move is Nc3 — and 18 opponents played it.",
@@ -124,7 +124,7 @@ const BE3_ND5_TRADE: LessonScript = {
 
 interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
-  { name: 'Nc3 after ...e5 lets us trade with tempo', lesson: NC3_E5_TRADE },
+  { name: 'Nc3 after ...e5 lets you trade with tempo', lesson: NC3_E5_TRADE },
   { name: 'Bxf6 trade in the English Attack race', lesson: BXF6_ENGLISH_RACE },
   { name: '...Ng4 trades for the dark-square bishop', lesson: NG4_BE3_TRADE },
   { name: 'Bb5 in deep English Attack (queen-trade trap)', lesson: BB5_DEEP_ENGLISH },

@@ -42,7 +42,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4',
       highlights: [{ square: 'd4', color: KEY }, { square: 'e4', color: KEY }, { square: 'f1', color: SOFT }],
       say:
-        "Black takes on e4; we recapture with the f-pawn. Now look at the centre — pawns on d4 and e4, a broad wall — and the f-file has swung open behind our rook. That half-open f-file aimed at f7 is the whole soul of the Fantasy.",
+        "Black takes on e4; you recapture with the f-pawn. Now look at the centre — pawns on d4 and e4, a broad wall — and the f-file has swung open behind your rook. That half-open f-file aimed at f7 is the whole soul of the Fantasy.",
       sayShort: 'fxe4 — open the f-file.',
     }),
     b({
@@ -51,7 +51,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'e5', to: 'd4', color: VIS }],
       highlights: [{ square: 'e5', color: SOFT }, { square: 'd4', color: KEY }],
       say:
-        "Black strikes back with e5, hitting our d4-pawn and trying to break the centre open before we get organised. The position sharpens in an instant — and this is exactly where this repertoire wants the fight.",
+        "Black strikes back with e5, hitting your d4-pawn and trying to break the centre open before you get organised. The position sharpens in an instant — and this is exactly where this repertoire wants the fight.",
       sayShort: 'e5 — Black hits d4.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'e5', color: VIS }],
       highlights: [{ square: 'd4', color: SOFT }],
       say:
-        "We develop the knight to f3, attacking the e5-pawn. Black answers by grabbing the pawn on d4 instead of defending — and now he's a pawn up. We're going to let him keep it.",
+        "You develop the knight to f3, attacking the e5-pawn. Black answers by grabbing the pawn on d4 instead of defending — and now he's a pawn up. You're going to let him keep it.",
       sayShort: 'Nf3 — develop and pressure e5.',
     }),
     b({
@@ -69,7 +69,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: VIS }],
       highlights: [{ square: 'f7', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Here's the gambit: Bc4. We don't bother recapturing on d4 — we slam the bishop onto the long light diagonal, aimed straight at f7, the weakest square in Black's whole position. A single pawn, traded for a lead in development and a real target.",
+        "Here's the gambit: Bc4. You don't bother recapturing on d4 — you slam the bishop onto the long light diagonal, aimed straight at f7, the weakest square in Black's whole position. A single pawn, traded for a lead in development and a real target.",
       sayShort: 'Bc4 — the gambit, eye f7.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O',
       highlights: [{ square: 'e4', color: SOFT }, { square: 'g1', color: SOFT }],
       say:
-        "Black develops Nf6, attacking our e4-pawn; we simply castle. Yes, e4 is loose — but if Black stops to grab it, his knight wanders off and f7 is even more exposed. King safety first, then the attack.",
+        "Black develops Nf6, attacking your e4-pawn; you simply castle. Yes, e4 is loose — but if Black stops to grab it, his knight wanders off and f7 is even more exposed. King safety first, then the attack.",
       sayShort: 'O-O — king safe, attack next.',
     }),
     b({
@@ -85,7 +85,7 @@ export const PRO_GOTHAMCHESS_FANTASY_CARO_LESSON: LessonScript = {
       moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5',
       highlights: [{ square: 'c5', color: SOFT }, { square: 'f7', color: KEY }],
       say:
-        "Black develops the bishop to c5 and gets ready to castle. We've reached the middlegame a pawn down — and completely on top. The engine confirms it: White is clearly better here, because the development lead and the pressure on f7 are worth far more than the pawn Black spent three moves collecting.",
+        "Black develops the bishop to c5 and gets ready to castle. You've reached the middlegame a pawn down — and completely on top. The engine confirms it: White is clearly better here, because the development lead and the pressure on f7 are worth far more than the pawn Black spent three moves collecting.",
       sayShort: 'Bc5 — into a winning gambit.',
     }),
     b({

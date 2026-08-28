@@ -15,15 +15,15 @@ const TWO_KNIGHTS: LessonScript = {
   beats: [
     b({ id: 'nf6', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3',
       arrows: [A('c4', 'f7')], highlights: [{ square: 'd3', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "Against the Two Knights we keep it positional with d3 — sidestepping the wild Fried Liver and Traxler complications. Solid development and a quiet centre suit a player who wants understanding over memorised forcing lines.",
+      say: "Against the Two Knights you keep it positional with d3 — sidestepping the wild Fried Liver and Traxler complications. Solid development and a quiet centre suit a player who wants understanding over memorised forcing lines.",
       sayShort: 'd3 — the calm Two Knights.' }),
     b({ id: 'oo', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3',
       arrows: [], highlights: [{ square: 'c3', color: KEY }],
-      say: "We castle, play Re1 and c3 — transposing into the familiar Pianissimo structure. Same plans, same ideas: a small centre, the Nbd2-f1-g3 reroute, and a slow squeeze. One structure to understand for the whole Italian.",
+      say: "You castle, play Re1 and c3 — transposing into the familiar Pianissimo structure. Same plans, same ideas: a small centre, the Nbd2-f1-g3 reroute, and a slow squeeze. One structure to understand for the whole Italian.",
       sayShort: 'c3 — back to the Pianissimo.' }),
     b({ id: 'plan', moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb5 a6',
       arrows: [], highlights: [{ square: 'b5', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "When Black chases the bishop with …Na5, we drop back to b5 and keep the tension. The plan stays the same — reroute the queen's knight kingside, prepare d4, and probe. Black's …Na5 sidelines a piece on the rim, which we exploit with central play.",
+      say: "When Black chases the bishop with …Na5, you drop back to b5 and keep the tension. The plan stays the same — reroute the queen's knight kingside, prepare d4, and probe. Black's …Na5 sidelines a piece on the rim, which you exploit with central play.",
       sayShort: 'Bb5 — keep tension, play on.' }),
   ],
 };
@@ -34,7 +34,7 @@ const HUNGARIAN: LessonScript = {
   beats: [
     b({ id: 'be7', moves: 'e4 e5 Nf3 Nc6 Bc4 Be7 d3 Nf6 O-O O-O',
       highlights: [{ square: 'e7', color: SOFT }, { square: 'd3', color: KEY }],
-      say: "The Hungarian Defense (…Be7) is passive but solid — Black avoids the …Bc5 tension. We develop comfortably with d3 and castle, enjoying a free hand to expand against a cramped opponent.",
+      say: "The Hungarian Defense (…Be7) is passive but solid — Black avoids the …Bc5 tension. You develop comfortably with d3 and castle, enjoying a free hand to expand against a cramped opponent.",
       sayShort: 'd3, O-O — free development.' }),
     b({ id: 'build', moves: 'e4 e5 Nf3 Nc6 Bc4 Be7 d3 Nf6 O-O O-O Re1 d6 c3 Na5 Bb5 a6',
       arrows: [], highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],

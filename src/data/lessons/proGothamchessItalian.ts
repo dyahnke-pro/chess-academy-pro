@@ -32,7 +32,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6',
       highlights: [{ square: 'e5', color: SOFT }],
       say:
-        "The Italian — This repertoire's classical answer to e4 e5. We develop the knight to f3, hitting e5, and Black defends with Nc6. Old, principled chess: pieces out fast, aim everything at f7.",
+        "The Italian — This repertoire's classical answer to e4 e5. You develop the knight to f3, hitting e5, and Black defends with Nc6. Old, principled chess: pieces out fast, aim everything at f7.",
       sayShort: 'Nf3 Nc6 — the open game.',
     }),
     b({
@@ -41,7 +41,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: VIS }],
       highlights: [{ square: 'f7', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "Bc4 — the Italian bishop, pointed straight at f7, the soft spot in Black's camp. Black mirrors with Bc5, eyeing our f2. Symmetrical and sharp; whoever breaks the centre first sets the terms.",
+        "Bc4 — the Italian bishop, pointed straight at f7, the soft spot in Black's camp. Black mirrors with Bc5, eyeing your f2. Symmetrical and sharp; whoever breaks the centre first sets the terms.",
       sayShort: 'Bc4 — aim at f7.',
     }),
     b({
@@ -49,7 +49,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6',
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "c3 — quiet, but loaded. It builds a pawn-duo idea: next move we want d4, hitting the centre with full force. Black develops the knight to f6, eyeing our e4-pawn.",
+        "c3 — quiet, but loaded. It builds a pawn-duo idea: next move you want d4, hitting the centre with full force. Black develops the knight to f6, eyeing your e4-pawn.",
       sayShort: 'c3 — preparing d4.',
     }),
     b({
@@ -57,7 +57,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4',
       highlights: [{ square: 'd4', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "d4 — the break. We strike the centre while Black's pieces are committed. This is the whole reason we played c3. Open the position when you're the better-developed side.",
+        "d4 — the break. You strike the centre while Black's pieces are committed. This is the whole reason you played c3. Open the position when you're the better-developed side.",
       sayShort: 'd4 — the central break.',
     }),
     b({
@@ -65,7 +65,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4',
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Black takes, we recapture with the c-pawn. Now we have the big d4-pawn and a powerful centre, with the bishop on c4 and the knight on f3 already trained on Black's king.",
+        "Black takes, you recapture with the c-pawn. Now you have the big d4-pawn and a powerful centre, with the bishop on c4 and the knight on f3 already trained on Black's king.",
       sayShort: 'cxd4 — the big centre.',
     }),
     b({
@@ -73,7 +73,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2',
       highlights: [{ square: 'd2', color: SOFT }],
       say:
-        "Black checks with Bb4 and trades the dark bishops on d2; we recapture with the queen's knight, bringing it into the game on d2 — heading for b3 or f3. The trade hasn't helped Black; we're still the more active side.",
+        "Black checks with Bb4 and trades the dark bishops on d2; you recapture with the queen's knight, bringing it into the game on d2 — heading for b3 or f3. The trade hasn't helped Black; you're still the more active side.",
       sayShort: 'Nbxd2 — develop through the trade.',
     }),
     b({
@@ -81,7 +81,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5',
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "Black strikes back with d5, the freeing break — challenging our centre and our bishop at the same time. The right answer is to take, accepting an isolated d-pawn in return for fast, active piece play.",
+        "Black strikes back with d5, the freeing break — challenging your centre and your bishop at the same time. The right answer is to take, accepting an isolated d-pawn in return for fast, active piece play.",
       sayShort: 'd5 — Black breaks back.',
     }),
     b({
@@ -90,7 +90,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       arrows: [{ from: 'c4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "exd5, and Black recaptures with the knight on d5. Now the bishop on c4 bears straight down that diagonal at the knight and the f7-square behind it. We have the isolated d4-pawn, but in return: open lines, the dark bishops already traded off, and the more active army aimed at Black's king.",
+        "exd5, and Black recaptures with the knight on d5. Now the bishop on c4 bears straight down that diagonal at the knight and the f7-square behind it. You have the isolated d4-pawn, but in return: open lines, the dark bishops already traded off, and the more active army aimed at Black's king.",
       sayShort: 'exd5 — the IQP arises.',
     }),
     b({
@@ -98,7 +98,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O',
       highlights: [{ square: 'd4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Both kings tuck away and we've reached the middlegame — the classic Isolated-Queen-Pawn position. This is the heart of the lesson. The d4-pawn looks weak, but it's a spearhead: it controls c5 and e5, the perfect outposts, and it can lunge to d5 at the right moment to blow the position open. White plays for the attack; Black plays to blockade and trade.",
+        "Both kings tuck away and you've reached the middlegame — the classic Isolated-Queen-Pawn position. This is the heart of the lesson. The d4-pawn looks weak, but it's a spearhead: it controls c5 and e5, the perfect outposts, and it can lunge to d5 at the right moment to blow the position open. White plays for the attack; Black plays to blockade and trade.",
       sayShort: 'O-O O-O — the IQP middlegame.',
     }),
     b({

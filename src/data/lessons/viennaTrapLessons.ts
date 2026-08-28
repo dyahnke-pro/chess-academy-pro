@@ -11,7 +11,7 @@ import type {
 // the threat, show the slip, walk the punishment move-by-move with the
 // WHY of each move, show the safe alternative, tie back to the opening's
 // identity). The Vienna's arsenal IS its identity (David 2026-05-21:
-// "lots of traps/weapons") — so we don't cap to the Ruy's 5-trap cadence.
+// "lots of traps/weapons") — so you don't cap to the Ruy's 5-trap cadence.
 //
 // Slate: 7 weapons + 1 warning, distributed across the 4 variation tabs.
 //
@@ -149,7 +149,7 @@ const HAMPPE_ALLGAIER: LessonScript = {
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','h4','g4','Ng5'],
       arrows: [A('g5', 'f7', ATK), A('g5', 'h7', ATK)],
       highlights: [H('g5', KEY), H('f7', KEY)],
-      say: "Here we are at the launchpad. Black has accepted the Vienna Gambit with exf4, held the gambit pawn with g5, and now after h4 g4 Ng5 the knight leaps to g5 deep in Black's territory, eyeing the f7-square AND the h7-pawn at once. Black thinks the knight is trapped, but in this position it has work to do. The most famous sacrifice in the Vienna's entire history is coming.",
+      say: "Here you are at the launchpad. Black has accepted the Vienna Gambit with exf4, held the gambit pawn with g5, and now after h4 g4 Ng5 the knight leaps to g5 deep in Black's territory, eyeing the f7-square AND the h7-pawn at once. Black thinks the knight is trapped, but in this position it has work to do. The most famous sacrifice in the Vienna's entire history is coming.",
       sayShort: "Ng5 — the launchpad; the knight isn't trapped.",
     },
     {

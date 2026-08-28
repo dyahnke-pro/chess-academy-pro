@@ -3,7 +3,7 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // Lead-the-eye colour language (playbook §5a): arrows GREEN (vision /
 // threat / intent), highlights YELLOW (key square called out in narration)
 // and SOFT BLUE (secondary context). Move squares are auto-painted orange
-// by the LessonPlayer — we don't author those.
+// by the LessonPlayer — you don't author those.
 const ATK = 'rgba(40,185,95,0.92)';
 const INTENT = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
@@ -122,7 +122,7 @@ const VS_NC6: LessonScript = {
       sayShort: "Nc6 — meet it with Bc4 or f4.",
       highlights: [H('c6', KEY), H('e5', SOFT)] }),
     b({ id: 'nc6-2', moves: 'e4 e5 Nc3 Nc6 f4',
-      say: "We take the furious path. f4 — exactly the same lever Lasker described, the side-thrust to lure the e5-pawn away. But against Nc6 the consequences are completely different from the Nf6 Gambit: the c6-knight is on e5's defender's square, so taking …exf4 doesn't expose the knight on e4 the way it does in the Nf6 line. Black almost always accepts the pawn — and that acceptance is the doorway to the Vienna's greatest historical attacks.",
+      say: "You take the furious path. f4 — exactly the same lever Lasker described, the side-thrust to lure the e5-pawn away. But against Nc6 the consequences are completely different from the Nf6 Gambit: the c6-knight is on e5's defender's square, so taking …exf4 doesn't expose the knight on e4 the way it does in the Nf6 line. Black almost always accepts the pawn — and that acceptance is the doorway to the Vienna's greatest historical attacks.",
       sayShort: "f4 vs …Nc6 — door to the brilliancies.",
       highlights: [H('f4', KEY)] }),
     b({ id: 'nc6-3', moves: 'e4 e5 Nc3 Nc6 f4 exf4',

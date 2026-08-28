@@ -41,7 +41,7 @@ const ADVANCE: LessonScript = {
       sayShort: "…cxd4, reroute the knight via e7 to f5.",
       highlights: [H('d4', SOFT), H('e7', KEY), H('c6', SOFT), H('f5', SOFT)] }),
     b({ id: 'adv4', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 cxd4 Nxd4 Ne7 Nd2 Nbc6 N2f3 Be4',
-      say: "Both knights come out, and the bishop steps to e4 — dead-centre, the single best home it could find. We don't put it here just to 'rake a diagonal'; we put it here because e4 commands the b1-h7 diagonal, the exact artery any attack on White's king will travel down once he castles short. And White can't chase it off without loosening his own position. This is the bishop the French player only dreams of — Black got it OUTSIDE the pawn chain back on move three, and now the whole game is built around it.",
+      say: "Both knights come out, and the bishop steps to e4 — dead-centre, the single best home it could find. You don't put it here just to 'rake a diagonal'; you put it here because e4 commands the b1-h7 diagonal, the exact artery any attack on White's king will travel down once he castles short. And White can't chase it off without loosening his own position. This is the bishop the French player only dreams of — Black got it OUTSIDE the pawn chain back on move three, and now the whole game is built around it.",
       sayShort: "…Be4 — owns the b1-h7 artery to White's king.",
       highlights: [H('e4', KEY)] }),
     b({ id: 'adv5', moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 cxd4 Nxd4 Ne7 Nd2 Nbc6 N2f3 Be4 O-O Ng6',

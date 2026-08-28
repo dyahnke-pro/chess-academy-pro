@@ -32,7 +32,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'c1', to: 'f4', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }],
       say:
-        "The London System — and the star is the bishop on f4, developed OUTSIDE the pawn chain before we play e3. That's the whole idea: never bury this bishop. We set up the same solid structure against almost anything, here against Black's …d5 and …c5.",
+        "The London System — and the star is the bishop on f4, developed OUTSIDE the pawn chain before you play e3. That's the whole idea: never bury this bishop. You set up the same solid structure against almost anything, here against Black's …d5 and …c5.",
       sayShort: 'Bf4 — the London bishop out.',
     }),
     b({
@@ -41,7 +41,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'f4', to: 'g3', color: VIS }],
       highlights: [{ square: 'g3', color: KEY }],
       say:
-        "Black tries to trade off our prized bishop with Bd6; we sidestep to g3, keeping it alive and still pointing at Black's kingside. c3 props up our centre. Patience — we don't give up the good bishop for free.",
+        "Black tries to trade off your prized bishop with Bd6; you sidestep to g3, keeping it alive and still pointing at Black's kingside. c3 props up your centre. Patience — you don't give up the good bishop for free.",
       sayShort: 'Bg3 — preserve the bishop.',
     }),
     b({
@@ -50,7 +50,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'h2', to: 'g3', color: VIS }],
       highlights: [{ square: 'h1', color: KEY }],
       say:
-        "After more development, Black finally trades on g3; we recapture with the h-pawn — and this is the key London idea. hxg3 opens the h-file for our rook, points it straight at Black's king, and the doubled g-pawns actually reinforce our control of f4 and the centre. A 'damaged' structure that's pure attacking fuel.",
+        "After more development, Black finally trades on g3; you recapture with the h-pawn — and this is the key London idea. hxg3 opens the h-file for your rook, points it straight at Black's king, and the doubled g-pawns actually reinforce your control of f4 and the centre. A 'damaged' structure that's pure attacking fuel.",
       sayShort: 'hxg3 — open the h-file.',
     }),
     b({
@@ -59,7 +59,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'e3', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We trade on c5 to give Black hanging pawns on c5 and d5, then strike the centre with e4. Now Black has two pawns to babysit and an open position against our better-placed pieces. The quiet London has turned into a real initiative.",
+        "You trade on c5 to give Black hanging pawns on c5 and d5, then strike the centre with e4. Now Black has two pawns to babysit and an open position against your better-placed pieces. The quiet London has turned into a real initiative.",
       sayShort: 'e4 — hit the hanging pawns.',
     }),
     b({
@@ -68,7 +68,7 @@ const STANDARD: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'h7', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Here's the middlegame. We have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie his pieces down. This is why this repertoire's London is a winning machine, not a drawing one.",
+        "Here's the middlegame. You have the half-open h-file aimed at the king, the bishop on d3 trained on h7, central pressure on Black's hanging c5- and d5-pawns, and rooks swinging to the open files. The plan is simple and brutal: build on the kingside while Black's loose pawns tie his pieces down. This is why this repertoire's London is a winning machine, not a drawing one.",
       sayShort: 'h-file + Bd3 — attack the king.',
     }),
   ],
@@ -89,7 +89,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'd1', to: 'd2', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd2', color: SOFT }],
       say:
-        "Against a King's-Indian fianchetto, this repertoire DROPS the quiet London and goes for blood. Nc3 and Qd2 — not e3 and Be2. The queen on d2 lines up with the bishop, and the whole battery is pointed at one square: h6. We're hunting Black's most important piece.",
+        "Against a King's-Indian fianchetto, this repertoire DROPS the quiet London and goes for blood. Nc3 and Qd2 — not e3 and Be2. The queen on d2 lines up with the bishop, and the whole battery is pointed at one square: h6. You're hunting Black's most important piece.",
       sayShort: 'Qd2 — load the h6 battery.',
     }),
     b({
@@ -98,7 +98,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'f4', to: 'h6', color: VIS }],
       highlights: [{ square: 'h6', color: KEY }, { square: 'g7', color: SOFT }],
       say:
-        "Black castles; we play Bh6! — offering to trade off the fianchettoed bishop on g7. That bishop is the HEART of every King's-Indian: it guards the dark squares around the king and rakes the long diagonal. Trade it, and Black's kingside is full of holes forever.",
+        "Black castles; you play Bh6! — offering to trade off the fianchettoed bishop on g7. That bishop is the HEART of every King's-Indian: it guards the dark squares around the king and rakes the long diagonal. Trade it, and Black's kingside is full of holes forever.",
       sayShort: 'Bh6 — trade the KID bishop.',
     }),
     b({
@@ -107,7 +107,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'd2', to: 'h6', color: VIS }],
       highlights: [{ square: 'h6', color: KEY }, { square: 'g7', color: SOFT }],
       say:
-        "Black takes, and our queen lands on h6 — right on the doorstep of his king. The dark squares around g7 are now permanently weak with no bishop to guard them. We've achieved the dream: queen near the king, defender removed, all before the middlegame even starts.",
+        "Black takes, and your queen lands on h6 — right on the doorstep of his king. The dark squares around g7 are now permanently weak with no bishop to guard them. You've achieved the dream: queen near the king, defender removed, all before the middlegame even starts.",
       sayShort: 'Qxh6 — queen at the king\'s door.',
     }),
     b({
@@ -116,7 +116,7 @@ const VS_KID: LessonScript = {
       arrows: [{ from: 'h2', to: 'h4', color: VIS }],
       highlights: [{ square: 'c1', color: SOFT }, { square: 'h4', color: KEY }],
       say:
-        "Black hits back in the centre with c5; we castle LONG. And there it is — opposite-side castling, which means a pure pawn-storm race. Our king is safe on the queenside while we throw h4-h5 and g4 at Black's weakened kingside. With the g7-bishop already gone, our attack is faster and deadlier. This is the London nobody warns you about.",
+        "Black hits back in the centre with c5; you castle LONG. And there it is — opposite-side castling, which means a pure pawn-storm race. Your king is safe on the queenside while you throw h4-h5 and g4 at Black's weakened kingside. With the g7-bishop already gone, your attack is faster and deadlier. This is the London nobody warns you about.",
       sayShort: 'O-O-O — storm with h4-h5.',
     }),
   ],
@@ -137,7 +137,7 @@ const JOBAVA: LessonScript = {
       arrows: [{ from: 'b1', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'f4', color: SOFT }],
       say:
-        "The Jobava twist: we develop the knight to c3 instead of the sleepy d2-square, blending London structure with sharper ideas. The bishop still comes to f4, but now the knight is more active and ready to jump into Black's position.",
+        "The Jobava twist: you develop the knight to c3 instead of the sleepy d2-square, blending London structure with sharper ideas. The bishop still comes to f4, but now the knight is more active and ready to jump into Black's position.",
       sayShort: 'Nc3 — the aggressive knight.',
     }),
     b({
@@ -146,7 +146,7 @@ const JOBAVA: LessonScript = {
       arrows: [{ from: 'f4', to: 'd6', color: VIS }],
       highlights: [{ square: 'd6', color: SOFT }],
       say:
-        "Both sides develop and castle. When Black challenges with Bd6, here we DO trade — Bxd6, pulling Black's queen to d6 where it'll soon be a target. The point isn't to hoard the bishop this time; it's to gain time on the queen with our next move.",
+        "Both sides develop and castle. When Black challenges with Bd6, here you DO trade — Bxd6, pulling Black's queen to d6 where it'll soon be a target. The point isn't to hoard the bishop this time; it's to gain time on the queen with your next move.",
       sayShort: 'Bxd6 — drag the queen out.',
     }),
     b({
@@ -164,7 +164,7 @@ const JOBAVA: LessonScript = {
       arrows: [{ from: 'a4', to: 'c5', color: VIS }],
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "Black trades on d4 and castles; we recapture and reach the middlegame with central space and a knight bound for c5. The plan: plant the knight on the c5-outpost where it can't be kicked by a pawn, use the d4-pawn for space, and pressure Black's slightly loose queenside. It's a small, comfortable pull from a system that takes ten seconds to set up. That's this repertoire's value bet.",
+        "Black trades on d4 and castles; you recapture and reach the middlegame with central space and a knight bound for c5. The plan: plant the knight on the c5-outpost where it can't be kicked by a pawn, use the d4-pawn for space, and pressure Black's slightly loose queenside. It's a small, comfortable pull from a system that takes ten seconds to set up. That's this repertoire's value bet.",
       sayShort: 'Nc5 outpost + central space.',
     }),
   ],
@@ -184,7 +184,7 @@ const C6_BF4: LessonScript = {
       moves: 'd4 d5 Bf4 c6 e3 Nf6 Nf3',
       highlights: [{ square: 'f4', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "The direct London order — bishop to f4 before the knight — and Black answers Slav-style with c6, propping d5 and keeping everything solid. Thirty-nine of his corpus games start this way. We complete the triangle with e3 and bring the knight out: no confrontation yet, just the setup we know.",
+        "The direct London order — bishop to f4 before the knight — and Black answers Slav-style with c6, propping d5 and keeping everything solid. Thirty-nine of his corpus games start this way. You complete the triangle with e3 and bring the knight out: no confrontation yet, just the setup you know.",
       sayShort: 'Bf4 first — c6 props d5.',
     }),
     b({
@@ -193,7 +193,7 @@ const C6_BF4: LessonScript = {
       arrows: [{ from: 'c4', to: 'f7', color: VIS }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Black mirrors us — his bishop escapes to f5 before the pawn chain closes. So we change the structure: c4 challenges d5, and when Black releases with the capture, our f1-bishop recaptures and lands on the diagonal that looks at f7. Both sides have their bishops outside the chains; ours has the better view.",
+        "Black mirrors you — his bishop escapes to f5 before the pawn chain closes. So you change the structure: c4 challenges d5, and when Black releases with the capture, your f1-bishop recaptures and lands on the diagonal that looks at f7. Both sides have their bishops outside the chains; yours has the better view.",
       sayShort: 'c4 — challenge, recapture, eye f7.',
     }),
     b({
@@ -201,7 +201,7 @@ const C6_BF4: LessonScript = {
       moves: 'd4 d5 Bf4 c6 e3 Nf6 Nf3 Bf5 c4 Nbd7 Nc3 dxc4 Bxc4 e6 O-O',
       highlights: [{ square: 'g1', color: KEY }, { square: 'e6', color: SOFT }],
       say:
-        "Black closes the door with e6 and we castle. Take stock: our whole army is out or one move from it, the centre is ours to expand, and Black's f5-bishop — pretty as it looks — left the b7-pawn and the queenside light squares to fend for themselves. The middlegame plan picks up right here, where Black starts asking our bishops questions they're happy to answer.",
+        "Black closes the door with e6 and you castle. Take stock: your whole army is out or one move from it, the centre is yours to expand, and Black's f5-bishop — pretty as it looks — left the b7-pawn and the queenside light squares to fend for themselves. The middlegame plan picks up right here, where Black starts asking your bishops questions they're happy to answer.",
       sayShort: 'Castle — the setup is complete.',
     }),
   ],

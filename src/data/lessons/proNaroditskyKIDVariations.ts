@@ -46,37 +46,37 @@ const CLASSICAL_MAINLINE: LessonScript = {
     b({
       id: 'cm-kid-setup', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6',
       highlights: [{ square: 'g7', color: KEY }, { square: 'd6', color: SOFT }],
-      say: "The universal King's Indian setup. We let White build the broad c4-d4-e4 centre and answer with the fianchetto: g6, Bg7. The Bg7 is the most important piece on the board — every plan we have for the next 30 moves keeps this bishop alive and aimed down the long diagonal.",
+      say: "The universal King's Indian setup. You let White build the broad c4-d4-e4 centre and answer with the fianchetto: g6, Bg7. The Bg7 is the most important piece on the board — every plan you have for the next 30 moves keeps this bishop alive and aimed down the long diagonal.",
       sayShort: 'KID setup — Bg7 is everything.',
     }),
     b({
       id: 'cm-castle', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O',
       highlights: [{ square: 'g8', color: KEY }, { square: 'f3', color: SOFT }],
-      say: "White develops Nf3 and we castle short. The king tucks in behind the fianchetto where our most important piece is also our king's roof — the same square that defends g7 also defends the king. Now we're ready for the central strike that defines the opening.",
+      say: "White develops Nf3 and you castle short. The king tucks in behind the fianchetto where your most important piece is also your king's roof — the same square that defends g7 also defends the king. Now you're ready for the central strike that defines the opening.",
       sayShort: 'O-O — king safe behind Bg7.',
     }),
     b({
       id: 'cm-e5-strike', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Be2 — White's Classical setup. And now e5! This is the KID's defining moment. We challenge the centre directly and force White to decide: trade with dxe5, push d5 locking the position, or castle and keep tension. Every KID middlegame is shaped by White's answer to this question.",
+      say: "Be2 — White's Classical setup. And now e5! This is the KID's defining moment. You challenge the centre directly and force White to decide: trade with dxe5, push d5 locking the position, or castle and keep tension. Every KID middlegame is shaped by White's answer to this question.",
       sayShort: '…e5 — the KID strike.',
     }),
     b({
       id: 'cm-oo-exd4', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4',
       highlights: [{ square: 'd4', color: KEY }],
-      say: "White castles and we trade …exd4. This is the Mar del Plata mainline — Black opens the position and accepts a centralised White knight on d4 in exchange for piece activity and a clear plan. The d-file opens for our rook lift coming next.",
+      say: "White castles and you trade …exd4. This is the Mar del Plata mainline — Black opens the position and accepts a centralised White knight on d4 in exchange for piece activity and a clear plan. The d-file opens for your rook lift coming next.",
       sayShort: '…exd4 — open the position.',
     }),
     b({
       id: 'cm-rook-lift', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8',
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Nxd4 Re8 — and now we have the Mar del Plata. The rook lifts to e8 hitting the e4-pawn with tempo, forcing White into the prophylactic f3 setup. From here the game becomes a race: Black's kingside attack versus White's queenside expansion.",
+      say: "Nxd4 Re8 — and now you have the Mar del Plata. The rook lifts to e8 hitting the e4-pawn with tempo, forcing White into the prophylactic f3 setup. From here the game becomes a race: Black's kingside attack versus White's queenside expansion.",
       sayShort: '…Re8 — hit e4 with tempo.',
     }),
     b({
       id: 'cm-f3-nc6', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6',
       highlights: [{ square: 'f3', color: KEY }, { square: 'c6', color: SOFT }],
-      say: "White's f3 defends the e4-pawn and supports the centre — but f3 also blocks the natural Bg5 / Bg4 development squares for the bishop, and weakens the diagonal toward the king. Our …Nc6 hits the d4-knight and prepares the kingside knight reroute.",
+      say: "White's f3 defends the e4-pawn and supports the centre — but f3 also blocks the natural Bg5 / Bg4 development squares for the bishop, and weakens the diagonal toward the king. Your …Nc6 hits the d4-knight and prepares the kingside knight reroute.",
       sayShort: 'f3 …Nc6 — prep the reroute.',
     }),
     b({
@@ -94,25 +94,25 @@ const CLASSICAL_MAINLINE: LessonScript = {
     b({
       id: 'cm-trade-down', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4',
       highlights: [{ square: 'd4', color: KEY }],
-      say: "Bxf4 trades White's dark-square bishop for our knight, and we recapture …Nxd4 grabbing the centralised White knight. We've come out of the trades with structural gains: we removed White's best dark-square attacker AND won a piece battle on d4.",
+      say: "Bxf4 trades White's dark-square bishop for your knight, and you recapture …Nxd4 grabbing the centralised White knight. You've come out of the trades with structural gains: you removed White's best dark-square attacker AND won a piece battle on d4.",
       sayShort: '…Nxd4 — win the central trade.',
     }),
     b({
       id: 'cm-c5-break', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Bd3 develops the second bishop and we play …c5 — securing the knight outpost AND clamping White's queenside expansion. The Mar del Plata's central knight is now permanently anchored on d4 and Black has equal piece activity with the bishop pair coming back into the game.",
+      say: "Bd3 develops the second bishop and you play …c5 — securing the knight outpost AND clamping White's queenside expansion. The Mar del Plata's central knight is now permanently anchored on d4 and Black has equal piece activity with the bishop pair coming back into the game.",
       sayShort: '…c5 — secure the outpost.',
     }),
     b({
       id: 'cm-bishop-trade', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5 Bh6 Be6',
       highlights: [{ square: 'h6', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "White offers the dark-square bishop trade with Bh6, hoping to remove our most important piece. We don't object — but we delay by developing …Be6 first, getting the light-square bishop active. The trade is coming, but on our terms with both bishops developed.",
+      say: "White offers the dark-square bishop trade with Bh6, hoping to remove your most important piece. You don't object — but you delay by developing …Be6 first, getting the light-square bishop active. The trade is coming, but on your terms with both bishops developed.",
       sayShort: '…Be6 — develop before the trade.',
     }),
     b({
       id: 'cm-endgame-transition', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5 Bh6 Be6 Bxg7 Kxg7',
       highlights: [{ square: 'g7', color: KEY }],
-      say: "Bxg7 Kxg7 — the bishop trade happens and the king recaptures. We've reached the transition from middlegame to endgame: open centre, active pieces, knight outpost on d4. The R+minor+P endgame ends 26.4% of decisive Classical games and Black's structure consistently outperforms here.",
+      say: "Bxg7 Kxg7 — the bishop trade happens and the king recaptures. You've reached the transition from middlegame to endgame: open centre, active pieces, knight outpost on d4. The R+minor+P endgame ends 26.4% of decisive Classical games and Black's structure consistently outperforms here.",
       sayShort: '…Kxg7 — endgame transition.',
     }),
   ],
@@ -134,13 +134,13 @@ const FIANCHETTO: LessonScript = {
     b({
       id: 'fia-open', moves: 'd4 Nf6 c4 g6 g3',
       highlights: [{ square: 'g3', color: KEY }],
-      say: "g3 — White refuses the classical c4-d4-e4 centre and prepares a mirror fianchetto with Bg2. This is the most positional KID treatment. White's bishop on g2 will neutralise our Bg7's long diagonal, so we need a different middlegame plan than the Mar del Plata kingside storm.",
+      say: "g3 — White refuses the classical c4-d4-e4 centre and prepares a mirror fianchetto with Bg2. This is the most positional KID treatment. White's bishop on g2 will neutralise your Bg7's long diagonal, so you need a different middlegame plan than the Mar del Plata kingside storm.",
       sayShort: 'g3 — mirror fianchetto.',
     }),
     b({
       id: 'fia-bg7', moves: 'd4 Nf6 c4 g6 g3 Bg7 Bg2 O-O',
       highlights: [{ square: 'g2', color: SOFT }, { square: 'g8', color: KEY }],
-      say: "Bg7 Bg2 O-O — both sides complete the fianchetto and we castle. The position is symmetric on the kingside, which means the centre and queenside will decide the game. The Yugoslav plan begins next: Nbd7 supporting e5 and preparing the Qa5 / b5 queenside expansion.",
+      say: "Bg7 Bg2 O-O — both sides complete the fianchetto and you castle. The position is symmetric on the kingside, which means the centre and queenside will decide the game. The Yugoslav plan begins next: Nbd7 supporting e5 and preparing the Qa5 / b5 queenside expansion.",
       sayShort: 'O-O — castle, plan brewing.',
     }),
     b({
@@ -158,7 +158,7 @@ const FIANCHETTO: LessonScript = {
     b({
       id: 'fia-c6', moves: 'd4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6',
       highlights: [{ square: 'c6', color: KEY }],
-      say: "e4 …c6 — White claims the centre with e4, but the c4-e4 pawn duo has a problem: the d5-square needs defending. Our …c6 supports d5 forever and prepares the queenside expansion …Qa5 + …b5. 42% pick at this ply.",
+      say: "e4 …c6 — White claims the centre with e4, but the c4-e4 pawn duo has a problem: the d5-square needs defending. Your …c6 supports d5 forever and prepares the queenside expansion …Qa5 + …b5. 42% pick at this ply.",
       sayShort: '…c6 — support d5, prep queenside.',
     }),
     b({
@@ -170,13 +170,13 @@ const FIANCHETTO: LessonScript = {
     b({
       id: 'fia-exd4', moves: 'd4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4',
       highlights: [{ square: 'd4', color: KEY }],
-      say: "Be3 …exd4 — White completes development and Black opens the central files. 27% pick at ply 20. The exchange opens the e-file for our rook and removes White's central pawn duo, leaving an unbalanced position where our queenside plan is in full motion.",
+      say: "Be3 …exd4 — White completes development and Black opens the central files. 27% pick at ply 20. The exchange opens the e-file for your rook and removes White's central pawn duo, leaving an unbalanced position where your queenside plan is in full motion.",
       sayShort: '…exd4 — open the centre.',
     }),
     b({
       id: 'fia-rook-lift', moves: 'd4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8',
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Nxd4 …Re8 — the rook lift hits the e4-pawn. We've reached the Fianchetto middlegame: queen active on a5, knights on d7/f6, rook on e8. Be straight about the verdict — White's extra central space gives a real pull and the engine has Black clearly worse here, so this is the fighting KID, taken for its winning chances, not an equaliser; the queenside plan is what converts, cashing out in the R+min+P endgame in 29.4% of decisive games.",
+      say: "Nxd4 …Re8 — the rook lift hits the e4-pawn. You've reached the Fianchetto middlegame: queen active on a5, knights on d7/f6, rook on e8. Be straight about the verdict — White's extra central space gives a real pull and the engine has Black clearly worse here, so this is the fighting KID, taken for its winning chances, not an equaliser; the queenside plan is what converts, cashing out in the R+min+P endgame in 29.4% of decisive games.",
       sayShort: '…Re8 — fighting KID, clearly worse but sharp.',
     }),
   ],
@@ -198,25 +198,25 @@ const ANTI_KID_NF3: LessonScript = {
     b({
       id: 'akn-open', moves: 'd4 Nf6 c4 g6 Nf3',
       highlights: [{ square: 'f3', color: KEY }],
-      say: "Nf3 before Nc3 — White's flexible move order, refusing to commit the c-knight yet. The point is to keep options open for an Anti-Grünfeld or a Fianchetto setup. We don't change our plan: Bg7, d6, castle, then react to whatever centre White builds.",
+      say: "Nf3 before Nc3 — White's flexible move order, refusing to commit the c-knight yet. The point is to keep options open for an Anti-Grünfeld or a Fianchetto setup. You don't change your plan: Bg7, d6, castle, then react to whatever centre White builds.",
       sayShort: 'Nf3 — flexible move order.',
     }),
     b({
       id: 'akn-fianchetto', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6',
       highlights: [{ square: 'g2', color: SOFT }, { square: 'g7', color: KEY }],
-      say: "Bg7 g3 O-O Bg2 d6 — White commits to the Fianchetto and we transpose into the same structure as the g3 mainline, just with a different move order. The same Yugoslav plan applies: …Nbd7 + …e5 + …c6 + …Qa5 + …b5.",
+      say: "Bg7 g3 O-O Bg2 d6 — White commits to the Fianchetto and you transpose into the same structure as the g3 mainline, just with a different move order. The same Yugoslav plan applies: …Nbd7 + …e5 + …c6 + …Qa5 + …b5.",
       sayShort: 'Bg2 …d6 — transpose to Fianchetto.',
     }),
     b({
       id: 'akn-castle', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7',
       highlights: [{ square: 'g1', color: SOFT }, { square: 'd7', color: KEY }],
-      say: "O-O …Nbd7 — both kings castled, we develop the knight to d7. This is the standard Yugoslav developing scheme, exactly mirroring the Fianchetto Variation's setup. The position is the same; the move order is the only difference.",
+      say: "O-O …Nbd7 — both kings castled, you develop the knight to d7. This is the standard Yugoslav developing scheme, exactly mirroring the Fianchetto Variation's setup. The position is the same; the move order is the only difference.",
       sayShort: '…Nbd7 — Yugoslav setup.',
     }),
     b({
       id: 'akn-e5-strike', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5',
       highlights: [{ square: 'e5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Nc3 …e5 — White finally develops the queen knight and we strike the centre. 54% pick at this ply. The Anti-KID line has now fully transposed into the Fianchetto Yugoslav, and Black gets the same central counter-attack as in the g3 mainline.",
+      say: "Nc3 …e5 — White finally develops the queen knight and you strike the centre. 54% pick at this ply. The Anti-KID line has now fully transposed into the Fianchetto Yugoslav, and Black gets the same central counter-attack as in the g3 mainline.",
       sayShort: '…e5 — central strike.',
     }),
     b({
@@ -234,13 +234,13 @@ const ANTI_KID_NF3: LessonScript = {
     b({
       id: 'akn-exd4', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qa5 Re1 exd4',
       highlights: [{ square: 'd4', color: KEY }],
-      say: "Re1 …exd4 — White's rook lift to e1 supports the centre, we open the position with …exd4. The e-file is now half-open in our favour, and the position resolves toward the same middlegame structure as the Fianchetto mainline.",
+      say: "Re1 …exd4 — White's rook lift to e1 supports the centre, you open the position with …exd4. The e-file is now half-open in your favour, and the position resolves toward the same middlegame structure as the Fianchetto mainline.",
       sayShort: '…exd4 — open the file.',
     }),
     b({
       id: 'akn-middlegame', moves: 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qa5 Re1 exd4 Nxd4 Re8',
       highlights: [{ square: 'e8', color: KEY }],
-      say: "Nxd4 …Re8 — the rook lift hits e4 and we have the full Yugoslav middlegame. Same structure as the Fianchetto: active queen, coordinated knights, rook on e-file, bishop pair preserved. The R+min+P endgame converts 23.3% of decisive games.",
+      say: "Nxd4 …Re8 — the rook lift hits e4 and you have the full Yugoslav middlegame. Same structure as the Fianchetto: active queen, coordinated knights, rook on e-file, bishop pair preserved. The R+min+P endgame converts 23.3% of decisive games.",
       sayShort: '…Re8 — middlegame set.',
     }),
   ],
@@ -262,13 +262,13 @@ const MAKOGONOV: LessonScript = {
     b({
       id: 'mak-open', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3',
       highlights: [{ square: 'h3', color: KEY }, { square: 'g4', color: SOFT }, { square: 'h5', color: SOFT }],
-      say: "h3 — Makogonov's Variation. White denies the …Ng4 attack on a future Nf3-knight AND prepares an eventual g4 expansion. The prophylaxis comes at a cost: White spends a tempo on an edge pawn, which buys us time to set up our own structure.",
+      say: "h3 — Makogonov's Variation. White denies the …Ng4 attack on a future Nf3-knight AND prepares an eventual g4 expansion. The prophylaxis comes at a cost: White spends a tempo on an edge pawn, which buys you time to set up your own structure.",
       sayShort: 'h3 — prophylactic move.',
     }),
     b({
       id: 'mak-oo-c6', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6',
       highlights: [{ square: 'c6', color: KEY }],
-      say: "O-O Be3 …c6 — we castle, White develops Be3, and Black plays the c6 setup. The …c6 supports d5 and prepares the Nbd7-Nc5 reroute. Against Makogonov we can't rely on the classical Mar del Plata Nh5-Nf4 plan as our first option, so the c6 setup becomes our default.",
+      say: "O-O Be3 …c6 — you castle, White develops Be3, and Black plays the c6 setup. The …c6 supports d5 and prepares the Nbd7-Nc5 reroute. Against Makogonov you can't rely on the classical Mar del Plata Nh5-Nf4 plan as your first option, so the c6 setup becomes your default.",
       sayShort: '…c6 — solid setup.',
     }),
     b({
@@ -286,19 +286,19 @@ const MAKOGONOV: LessonScript = {
     b({
       id: 'mak-d5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3 Na6 Be2 e5 d5 Nh5',
       highlights: [{ square: 'd5', color: SOFT }, { square: 'h5', color: KEY }],
-      say: "d5 …Nh5! — White closes the centre AND we get the kingside reroute anyway. 18% pick at ply 18. The h3 stops …Ng4 from Nf3 but doesn't prevent …Nh5 from f6 directly. The Mar del Plata kingside attack pattern is back on the table.",
+      say: "d5 …Nh5! — White closes the centre AND you get the kingside reroute anyway. 18% pick at ply 18. The h3 stops …Ng4 from Nf3 but doesn't prevent …Nh5 from f6 directly. The Mar del Plata kingside attack pattern is back on the table.",
       sayShort: '…Nh5 — reroute still possible.',
     }),
     b({
       id: 'mak-castle', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3 Na6 Be2 e5 d5 Nh5 O-O Nf4',
       highlights: [{ square: 'f4', color: KEY }, { square: 'e2', color: SOFT }],
-      say: "O-O …Nf4 — White castles, our knight lands on the prize square. From f4 it hits the Be2 and pressures the kingside, the same theme as the Classical Mar del Plata. The position has transformed into a known good middlegame for Black.",
+      say: "O-O …Nf4 — White castles, your knight lands on the prize square. From f4 it hits the Be2 and pressures the kingside, the same theme as the Classical Mar del Plata. The position has transformed into a known good middlegame for Black.",
       sayShort: '…Nf4 — prize square.',
     }),
     b({
       id: 'mak-c6-break', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3 Na6 Be2 e5 d5 Nh5 O-O Nf4 Re1 Nxe2+ Rxe2 c5',
       highlights: [{ square: 'c5', color: KEY }],
-      say: "Re1 …Nxe2+ Rxe2 …c5 — we trade the knight for the bishop AND secure the queenside outpost. 21% pick at ply 20. White's structure is now compromised: the rook is awkwardly placed on e2, our pieces have clean squares, and the c5 wedge prepares the …f5 break.",
+      say: "Re1 …Nxe2+ Rxe2 …c5 — you trade the knight for the bishop AND secure the queenside outpost. 21% pick at ply 20. White's structure is now compromised: the rook is awkwardly placed on e2, your pieces have clean squares, and the c5 wedge prepares the …f5 break.",
       sayShort: '…c5 — secure the queenside.',
     }),
     b({
@@ -326,7 +326,7 @@ const SAEMISCH: LessonScript = {
     b({
       id: 'sae-open', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'g4', color: SOFT }, { square: 'h5', color: SOFT }],
-      say: "f3 — the Sämisch Variation. White denies …Ng4 AND …Nh5 (the f3-pawn covers BOTH squares) AND prepares Be3 + Qd2 + O-O-O for a kingside pawn storm against our king. We can't fight on the kingside here, so the entire game shifts to the queenside.",
+      say: "f3 — the Sämisch Variation. White denies …Ng4 AND …Nh5 (the f3-pawn covers BOTH squares) AND prepares Be3 + Qd2 + O-O-O for a kingside pawn storm against your king. You can't fight on the kingside here, so the entire game shifts to the queenside.",
       sayShort: 'f3 — Sämisch attack setup.',
     }),
     b({
@@ -338,37 +338,37 @@ const SAEMISCH: LessonScript = {
     b({
       id: 'sae-c5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5',
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Qd2 …c5 — Black hits the centre directly. 17% pick at this ply. The …c5 challenges d4 while White is still developing for the storm. If White takes (dxc5), we get a passed d-pawn AND the position simplifies before the attack reaches us.",
+      say: "Qd2 …c5 — Black hits the centre directly. 17% pick at this ply. The …c5 challenges d4 while White is still developing for the storm. If White takes (dxc5), you get a passed d-pawn AND the position simplifies before the attack reaches you.",
       sayShort: '…c5 — counter the centre.',
     }),
     b({
       id: 'sae-nge2', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6',
       highlights: [{ square: 'e2', color: SOFT }, { square: 'c6', color: KEY }],
-      say: "Nge2 …Nc6 — White completes the Sämisch setup (Nge2 keeps the c1-h6 diagonal open for the bishop) and we develop the knight hitting d4. The position is balanced: White prepares the storm, Black prepares the counter-attack.",
+      say: "Nge2 …Nc6 — White completes the Sämisch setup (Nge2 keeps the c1-h6 diagonal open for the bishop) and you develop the knight hitting d4. The position is balanced: White prepares the storm, Black prepares the counter-attack.",
       sayShort: '…Nc6 — hit d4.',
     }),
     b({
       id: 'sae-rd1', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4',
       highlights: [{ square: 'd1', color: SOFT }, { square: 'd4', color: KEY }],
-      say: "Rd1 …cxd4 Nxd4 — trade sequence begins. White's rook lift to d1 supports the d-file, we trade on d4, and the central tension resolves with simplification. Each trade reduces White's attacking material before O-O-O is even possible.",
+      say: "Rd1 …cxd4 Nxd4 — trade sequence begins. White's rook lift to d1 supports the d-file, you trade on d4, and the central tension resolves with simplification. Each trade reduces White's attacking material before O-O-O is even possible.",
       sayShort: 'cxd4 Nxd4 — simplify.',
     }),
     b({
       id: 'sae-na5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4 Nxd4 Bxd4 Be6',
       highlights: [{ square: 'a5', color: SOFT }, { square: 'e6', color: KEY }],
-      say: "…Nxd4 Bxd4 …Be6 — both knights trade off, White's dark-square bishop recaptures, and we develop the light-square bishop to e6 hitting c4. The Sämisch attacking position has been gutted: White doesn't have the pieces left to launch a real kingside storm.",
+      say: "…Nxd4 Bxd4 …Be6 — both knights trade off, White's dark-square bishop recaptures, and you develop the light-square bishop to e6 hitting c4. The Sämisch attacking position has been gutted: White doesn't have the pieces left to launch a real kingside storm.",
       sayShort: '…Be6 — bishop on c4-pressure diagonal.',
     }),
     b({
       id: 'sae-rook-coordinate', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4 Nxd4 Bxd4 Be6 b3 Rc8',
       highlights: [{ square: 'c8', color: KEY }],
-      say: "b3 …Rc8 — White defends c4 with the b-pawn and we lift the rook to the c-file. The c-file becomes Black's main artery for active play, hitting c4 with two pieces and preparing more queenside pressure.",
+      say: "b3 …Rc8 — White defends c4 with the b-pawn and you lift the rook to the c-file. The c-file becomes Black's main artery for active play, hitting c4 with two pieces and preparing more queenside pressure.",
       sayShort: '…Rc8 — load the c-file.',
     }),
     b({
       id: 'sae-endgame', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4 Nxd4 Bxd4 Be6 b3 Rc8 Be2 Qa5 O-O Nd7 Bxg7 Kxg7',
       highlights: [{ square: 'g7', color: KEY }],
-      say: "Be2 …Qa5 O-O …Nd7 Bxg7 …Kxg7 — the final trade lands: White's dark-square bishop comes off, our king recaptures. We've reached the R+min+P endgame structure (29.7% of decisive Sämisch games) with a defused White attack and a coordinated black queenside.",
+      say: "Be2 …Qa5 O-O …Nd7 Bxg7 …Kxg7 — the final trade lands: White's dark-square bishop comes off, your king recaptures. You've reached the R+min+P endgame structure (29.7% of decisive Sämisch games) with a defused White attack and a coordinated black queenside.",
       sayShort: '…Kxg7 — endgame transition.',
     }),
   ],
@@ -414,13 +414,13 @@ const PETROSIAN_NGE2: LessonScript = {
     b({
       id: 'pet-cxd6', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6',
       highlights: [{ square: 'd6', color: KEY }],
-      say: "cxd6 …exd6 — White takes the c5-d6 trade. The pawn structure now favours Black: open e-file for our rook, central pawn on d6 supported by the c6-pawn, and the bishop on g7 has a clean diagonal toward the queenside.",
+      say: "cxd6 …exd6 — White takes the c5-d6 trade. The pawn structure now favours Black: open e-file for your rook, central pawn on d6 supported by the c6-pawn, and the bishop on g7 has a clean diagonal toward the queenside.",
       sayShort: '…exd6 — open the e-file.',
     }),
     b({
       id: 'pet-rook-lift', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6 Nf4 Re8',
       highlights: [{ square: 'e8', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "Nf4 …Re8 — 16% pick. White redirects the knight to f4 (the prize square for him), we lift the rook to e8 hitting the e4-pawn with tempo. The same structural theme as the Mar del Plata: hit e4, force White to react.",
+      say: "Nf4 …Re8 — 16% pick. White redirects the knight to f4 (the prize square for him), you lift the rook to e8 hitting the e4-pawn with tempo. The same structural theme as the Mar del Plata: hit e4, force White to react.",
       sayShort: '…Re8 — hit e4.',
     }),
     b({
@@ -432,7 +432,7 @@ const PETROSIAN_NGE2: LessonScript = {
     b({
       id: 'pet-nd5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6 Nf4 Re8 Be2 b4 Na4 Nd5',
       highlights: [{ square: 'd5', color: KEY }],
-      say: "Na4 …Nd5 — White's knight retreats to the rim, ours lands centrally. The position resolves into a Black middlegame with active pieces, queenside space, and the R+min+P endgame conversion (28.4% of decisive Petrosian games).",
+      say: "Na4 …Nd5 — White's knight retreats to the rim, yours lands centrally. The position resolves into a Black middlegame with active pieces, queenside space, and the R+min+P endgame conversion (28.4% of decisive Petrosian games).",
       sayShort: '…Nd5 — central outpost.',
     }),
   ],
@@ -454,7 +454,7 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-open', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4',
       highlights: [{ square: 'f4', color: KEY }, { square: 'c4', color: SOFT }, { square: 'd4', color: SOFT }, { square: 'e4', color: SOFT }],
-      say: "f4 — the Four Pawns Attack. White's most ambitious setup: c4-d4-e4-f4 forming a giant pawn front. The structure is impressive but vulnerable — every pawn forward is one fewer piece defending it. Our job is to undermine.",
+      say: "f4 — the Four Pawns Attack. White's most ambitious setup: c4-d4-e4-f4 forming a giant pawn front. The structure is impressive but vulnerable — every pawn forward is one fewer piece defending it. Your job is to undermine.",
       sayShort: 'f4 — Four Pawns front.',
     }),
     b({
@@ -466,7 +466,7 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-fxe5', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5',
       highlights: [{ square: 'e5', color: KEY }],
-      say: "fxe5 …dxe5 — the pawn trade simplifies the position. White's pawn front is broken, the e-file opens, and our pieces get central squares to work with. The Four Pawns has lost its main asset.",
+      say: "fxe5 …dxe5 — the pawn trade simplifies the position. White's pawn front is broken, the e-file opens, and your pieces get central squares to work with. The Four Pawns has lost its main asset.",
       sayShort: 'fxe5 …dxe5 — chain broken.',
     }),
     b({
@@ -484,7 +484,7 @@ const FOUR_PAWNS: LessonScript = {
     b({
       id: 'fp-nd6', moves: 'd4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8 O-O Nd6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'c4', color: SOFT }, { square: 'e4', color: SOFT }],
-      say: "O-O …Nd6 — White castles, our knight lands. From d6 the knight pressures the c4 and e4 pawns simultaneously, and the c4-c5-d5-e4 pawn chain becomes a target. The Four Pawns's apparent space advantage is now a structural weakness.",
+      say: "O-O …Nd6 — White castles, your knight lands. From d6 the knight pressures the c4 and e4 pawns simultaneously, and the c4-c5-d5-e4 pawn chain becomes a target. The Four Pawns's apparent space advantage is now a structural weakness.",
       sayShort: '…Nd6 — outpost the prize square.',
     }),
     b({

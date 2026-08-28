@@ -2082,9 +2082,9 @@ function defaultIntroText(params: {
     ? (framedIntro.owned ? ` in the ${framedIntro.label}` : ` against the ${framedIntro.label}`)
     : '';
   const momentBit = params.mistakeCount > 0
-    ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — let's walk through them together.`
-    : ` Clean play throughout — let's walk it and pull out what worked.`;
-  return `Let's review your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${momentBit}`;
+    ? ` You had ${params.mistakeCount === 1 ? 'one moment' : `${params.mistakeCount} moments`} worth a second look — here's each one.`
+    : ` Clean play throughout — here's what worked.`;
+  return `Here's your game${openingBit} — you had ${colorWord} and it ended in ${resultPhrase}.${momentBit}`;
 }
 
 /**

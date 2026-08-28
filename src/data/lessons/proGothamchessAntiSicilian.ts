@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "Against the Sicilian, this repertoire refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. We train the bishop on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands us in a position WE understand better than our opponent.",
+        "Against the Sicilian, this repertoire refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. You train the bishop on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands you in a position You understand better than your opponent.",
       sayShort: 'Bb5 — the Rossolimo.',
     }),
     b({
@@ -41,7 +41,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O',
       highlights: [{ square: 'g1', color: SOFT }],
       say:
-        "Black plays the solid e6; we just castle. No rush to grab on c6 yet — we get the king tucked away first and keep our options open. Calm, healthy chess: the Sicilian player is the one who has to figure out what's going on.",
+        "Black plays the solid e6; you just castle. No rush to grab on c6 yet — you get the king tucked away first and keep your options open. Calm, healthy chess: the Sicilian player is the one who has to figure out what's going on.",
       sayShort: 'O-O — king safe first.',
     }),
     b({
@@ -49,7 +49,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       moves: 'e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1',
       highlights: [{ square: 'e1', color: SOFT }],
       say:
-        "Black develops the knight to e7, sidestepping the doubled pawns that Bxc6 would cause; we lift the rook to e1, backing up the e4-pawn and getting ready to open the centre. Every move has a quiet purpose.",
+        "Black develops the knight to e7, sidestepping the doubled pawns that Bxc6 would cause; you lift the rook to e1, backing up the e4-pawn and getting ready to open the centre. Every move has a quiet purpose.",
       sayShort: 'Re1 — support the centre.',
     }),
     b({
@@ -58,7 +58,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'f1', color: VIS }],
       highlights: [{ square: 'f1', color: KEY }],
       say:
-        "Black questions the bishop with a6; we retreat — but all the way to f1, NOT trading on c6. Why keep it? Because this bishop is a long-term asset, and from f1 it'll come back to life the moment the centre opens. Patience over a cheap trade.",
+        "Black questions the bishop with a6; you retreat — but all the way to f1, NOT trading on c6. Why keep it? Because this bishop is a long-term asset, and from f1 it'll come back to life the moment the centre opens. Patience over a cheap trade.",
       sayShort: 'Bf1 — keep the bishop.',
     }),
     b({
@@ -67,7 +67,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd7', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "Black goes for the freeing break, d5; we take, exd5, and after the recapture the centre starts to open. This is exactly what we were waiting for — open lines favour the better-coordinated side, and that's us.",
+        "Black goes for the freeing break, d5; you take, exd5, and after the recapture the centre starts to open. This is exactly what you were waiting for — open lines favour the better-coordinated side, and that's you.",
       sayShort: 'exd5 — crack the centre open.',
     }),
     b({
@@ -76,8 +76,8 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd2', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Now d4 — we strike in the centre ourselves, challenging Black's c5-pawn and blasting the position open. With our rook already on e1 and our king safe, opening lines is pure profit for us.",
-      sayShort: 'd4 — open it on our terms.',
+        "Now d4 — you strike in the centre yourself, challenging Black's c5-pawn and blasting the position open. With your rook already on e1 and your king safe, opening lines is pure profit for you.",
+      sayShort: 'd4 — open it on your terms.',
     }),
     b({
       id: 'mg-qxd4',
@@ -85,7 +85,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "The pieces come off on d4 and our queen recaptures, landing dead-centre. Step back and count the pluses: a safe king, a queen dominating the middle, the bishop on f1 about to re-emerge on a great diagonal, and a structurally healthier position. It's a small edge — but it's the kind of clean, riskless pull this repertoire grinds into a full point. No theory, just a better game.",
+        "The pieces come off on d4 and your queen recaptures, landing dead-centre. Step back and count the pluses: a safe king, a queen dominating the middle, the bishop on f1 about to re-emerge on a great diagonal, and a structurally healthier position. It's a small edge — but it's the kind of clean, riskless pull this repertoire grinds into a full point. No theory, just a better game.",
       sayShort: 'Qxd4 — a clean, lasting edge.',
     }),
   ],

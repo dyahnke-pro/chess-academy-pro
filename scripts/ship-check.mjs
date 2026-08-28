@@ -204,6 +204,7 @@ const GATE_TESTS = [
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',
   'src/data/modelGames-orientation.test.ts',
+  'src/data/perspectiveVoice.test.ts',         // ONE perspective: student=you/your, opponent=they/their, never we/our (David 2026-08-28)
   'src/data/lessons/openingWiring.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/data/middlegamePlanThemes.test.ts',

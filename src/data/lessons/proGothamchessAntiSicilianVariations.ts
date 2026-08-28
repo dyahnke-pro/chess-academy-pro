@@ -31,7 +31,7 @@ const E6: LessonScript = {
       arrows: [{ from: 'b5', to: 'f1', color: VIS }],
       highlights: [{ square: 'f1', color: KEY }],
       say:
-        "The flagship Rossolimo. Black plays …e6 and …Nge7, sidestepping the doubled pawns that Bxc6 would cause; we castle, drop the rook to e1, and when questioned, retreat the bishop all the way to f1 — NOT trading. We keep this bishop as a long-term asset for when the centre opens.",
+        "The flagship Rossolimo. Black plays …e6 and …Nge7, sidestepping the doubled pawns that Bxc6 would cause; you castle, drop the rook to e1, and when questioned, retreat the bishop all the way to f1 — NOT trading. You keep this bishop as a long-term asset for when the centre opens.",
       sayShort: 'Bf1 — keep the bishop.',
     }),
     b({
@@ -40,8 +40,8 @@ const E6: LessonScript = {
       arrows: [{ from: 'd2', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Black goes for the freeing break d5; we take and then strike with d4 ourselves, blasting the centre open. With our rook already on e1 and our king safe, opening lines is pure profit — the better-coordinated side always wins the opened position, and that's us.",
-      sayShort: 'd4 — open it on our terms.',
+        "Black goes for the freeing break d5; you take and then strike with d4 yourself, blasting the centre open. With your rook already on e1 and your king safe, opening lines is pure profit — the better-coordinated side always wins the opened position, and that's you.",
+      sayShort: 'd4 — open it on your terms.',
     }),
     b({
       id: 'mg-qxd4',
@@ -49,7 +49,7 @@ const E6: LessonScript = {
       arrows: [{ from: 'd4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "The pieces come off on d4 and our queen recaptures, dominating the centre. Here's the middlegame: a safe king, a centralised queen, the bishop on f1 about to re-emerge on a great diagonal, and a healthier structure. It's a small, riskless pull — and against a Sicilian player who wanted chaos, a quiet, better game is exactly the win this repertoire hunts.",
+        "The pieces come off on d4 and your queen recaptures, dominating the centre. Here's the middlegame: a safe king, a centralised queen, the bishop on f1 about to re-emerge on a great diagonal, and a healthier structure. It's a small, riskless pull — and against a Sicilian player who wanted chaos, a quiet, better game is exactly the win this repertoire hunts.",
       sayShort: 'Qxd4 — a clean central pull.',
     }),
   ],
@@ -69,7 +69,7 @@ const G6: LessonScript = {
       moves: 'e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5',
       highlights: [{ square: 'g7', color: SOFT }, { square: 'e5', color: SOFT }],
       say:
-        "Against the fianchetto, the Rossolimo gets concrete. Black puts the bishop on g7 and clamps the centre with …e5. That bishop on g7 is Black's pride and joy — so our plan targets the support it relies on, the knight on c6.",
+        "Against the fianchetto, the Rossolimo gets concrete. Black puts the bishop on g7 and clamps the centre with …e5. That bishop on g7 is Black's pride and joy — so your plan targets the support it relies on, the knight on c6.",
       sayShort: '…g6/…e5 — the fianchetto clamp.',
     }),
     b({
@@ -78,7 +78,7 @@ const G6: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c6', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Bxc6! Here we DO trade, and after …dxc6 Black is left with doubled c-pawns. He gets the two bishops in return — but in this closed, blocked centre those bishops have nothing to do, while his pawn weaknesses are permanent. We're trading flash for substance.",
+        "Bxc6! Here you DO trade, and after …dxc6 Black is left with doubled c-pawns. He gets the two bishops in return — but in this closed, blocked centre those bishops have nothing to do, while his pawn weaknesses are permanent. You're trading flash for substance.",
       sayShort: 'Bxc6 — saddle Black with doubled pawns.',
     }),
     b({
@@ -87,7 +87,7 @@ const G6: LessonScript = {
       arrows: [{ from: 'f3', to: 'd2', color: SOFT }],
       highlights: [{ square: 'c5', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We play the solid d3, and here's the middlegame plan. Route the knight via d2 to c4, where it eyes the weak dark squares and Black's loose pawns; control the d5-square; and grind against the doubled c-pawns. The position is closed, so Black's bishops stay quiet while we slowly improve. A pure positional squeeze.",
+        "You play the solid d3, and here's the middlegame plan. Route the knight via d2 to c4, where it eyes the weak dark squares and Black's loose pawns; control the d5-square; and grind against the doubled c-pawns. The position is closed, so Black's bishops stay quiet while you slowly improve. A pure positional squeeze.",
       sayShort: 'Nd2-c4 — target the weak pawns.',
     }),
   ],
@@ -108,7 +108,7 @@ const CARLSEN: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c6', color: KEY }],
       say:
-        "Top grandmasters popularised this — trade on c6 IMMEDIATELY, before Black is set up. After …bxc6 Black has the two bishops, but also a clump of doubled c-pawns and a half-open structure for us to play against. We're going for a slow positional squeeze.",
+        "Top grandmasters popularised this — trade on c6 IMMEDIATELY, before Black is set up. After …bxc6 Black has the two bishops, but also a clump of doubled c-pawns and a half-open structure for you to play against. You're going for a slow positional squeeze.",
       sayShort: 'Bxc6 — the early trade.',
     }),
     b({
@@ -117,7 +117,7 @@ const CARLSEN: LessonScript = {
       arrows: [{ from: 'e4', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We support the centre with d3, and when Black plays …d5, we lock it with e5! Now the centre is fixed, Black's light-squared bishop is hemmed in behind the …e6/…d5 chain, and we have a space advantage on the kingside. The pawn structure does the work.",
+        "You support the centre with d3, and when Black plays …d5, you lock it with e5! Now the centre is fixed, Black's light-squared bishop is hemmed in behind the …e6/…d5 chain, and you have a space advantage on the kingside. The pawn structure does the work.",
       sayShort: 'e5 — fix the centre, gain space.',
     }),
     b({
@@ -126,7 +126,7 @@ const CARLSEN: LessonScript = {
       arrows: [{ from: 'b2', to: 'g7', color: VIS }],
       highlights: [{ square: 'b2', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Black reroutes the knight to g6 to nibble at e5; we fianchetto with b3 and Bb2, aiming the bishop down the long dark diagonal. Here's the middlegame: the e5-space clamp, the Bb2 raking toward Black's kingside, and the doubled c-pawns as a permanent target. We castle and slowly improve. It's the positional recipe — a tiny, riskless edge ground into a full point.",
+        "Black reroutes the knight to g6 to nibble at e5; you fianchetto with b3 and Bb2, aiming the bishop down the long dark diagonal. Here's the middlegame: the e5-space clamp, the Bb2 raking toward Black's kingside, and the doubled c-pawns as a permanent target. You castle and slowly improve. It's the positional recipe — a tiny, riskless edge ground into a full point.",
       sayShort: 'Bb2 — clamp, then squeeze.',
     }),
   ],

@@ -3376,7 +3376,7 @@
    "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "wrongMove": "Bf5",
    "correctMove": "c5",
-   "explanation": "After e5 the textbook reflex everyone knows is Bf5 — get the bishop out before the chain locks. But we're playing this repertoire's line, where c5 strikes the centre at d4 BEFORE developing the bishop. The principle: when your opponent grabs space on the flank, hit them in the centre. Bf5 just lets White play h4-h5 / g4 chasing the bishop around for the next ten moves; c5 forces White to clarify and our score with it is 64%.",
+   "explanation": "After e5 the textbook reflex everyone knows is Bf5 — get the bishop out before the chain locks. But you're playing this repertoire's line, where c5 strikes the centre at d4 BEFORE developing the bishop. The principle: when your opponent grabs space on the flank, hit them in the centre. Bf5 just lets White play h4-h5 / g4 chasing the bishop around for the next ten moves; c5 forces White to clarify and your score with it is 64%.",
    "shortNarration": "Wrong: …Bf5. Right: …c5 — Botvinnik-Carls.",
    "sources": [
     "book:caro-kann",
@@ -3387,7 +3387,7 @@
    "fen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4",
    "wrongMove": "Qa5+",
    "correctMove": "e6",
-   "explanation": "After dxc5 White's grabbed the pawn and instinct says win it back — Qa5+ checks AND threatens c5. But after Nc3, the queen has to retreat empty-handed and we've burned two moves of development. The right move is e6: it unlocks our c8-bishop's diagonal (the famously locked Caro bishop), prepares Bxc5 next move with the full bishop diagonal alive, and the c5-pawn isn't actually defended yet — we'll recapture cleanly. Patience wins the pawn back AND develops a piece; the shortcut just loses time.",
+   "explanation": "After dxc5 White's grabbed the pawn and instinct says win it back — Qa5+ checks AND threatens c5. But after Nc3, the queen has to retreat empty-handed and you've burned two moves of development. The right move is e6: it unlocks your c8-bishop's diagonal (the famously locked Caro bishop), prepares Bxc5 next move with the full bishop diagonal alive, and the c5-pawn isn't actually defended yet — you'll recapture cleanly. Patience wins the pawn back AND develops a piece; the shortcut just loses time.",
    "shortNarration": "Wrong: …Qa5+ check. Right: …e6 first.",
    "sources": [
     "book:caro-kann",
@@ -3398,7 +3398,7 @@
    "fen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
    "wrongMove": "Nf6",
    "correctMove": "Nge7",
-   "explanation": "Reflex says Nf6 — develop the knight to its 'normal' square. Look at the board: the e5-pawn already CONTROLS f6. The knight on f6 has no good squares to go to and is just blocking our own king's view of the kingside. Nge7 is the canonical this repertoire reroute: from e7 the knight has two beautiful jumps — f5 hitting the centre, or g6 pressuring e5 and prepping a kingside attack. The 'normal' move is the wrong one here.",
+   "explanation": "Reflex says Nf6 — develop the knight to its 'normal' square. Look at the board: the e5-pawn already CONTROLS f6. The knight on f6 has no good squares to go to and is just blocking your own king's view of the kingside. Nge7 is the canonical this repertoire reroute: from e7 the knight has two beautiful jumps — f5 hitting the centre, or g6 pressuring e5 and prepping a kingside attack. The 'normal' move is the wrong one here.",
    "shortNarration": "Wrong: …Nf6 (e5 blocks). Right: …Nge7.",
    "sources": [
     "book:caro-kann",
@@ -3497,7 +3497,7 @@
    "fen": "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
    "wrongMove": "Bd3",
    "correctMove": "Be2",
-   "explanation": "After …e6 in the Advance Caro-Kann, the eager Bd3? offers the bishop trade with Bxf5 — but the trade actually helps Black! Black recaptures with ...Bxd3 Qxd3 and Black's Bf5 (problem bishop) is exchanged for our active piece. The correct move is Be2 keeping the bishop pair AND continuing classical development. Don't trade bishops voluntarily in this structure.",
+   "explanation": "After …e6 in the Advance Caro-Kann, the eager Bd3? offers the bishop trade with Bxf5 — but the trade actually helps Black! Black recaptures with ...Bxd3 Qxd3 and Black's Bf5 (problem bishop) is exchanged for your active piece. The correct move is Be2 keeping the bishop pair AND continuing classical development. Don't trade bishops voluntarily in this structure.",
    "shortNarration": "Be2 — keep bishops on",
    "sources": [
     "https://www.chess.com/openings/Caro-Kann-Defense"
@@ -3564,7 +3564,7 @@
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
    "wrongMove": "Nbd7",
    "correctMove": "e5",
-   "explanation": "After Be2 the natural move is …e5! striking the centre immediately — the move that defines the KID. Playing …Nbd7 first delays the central strike and lets White complete development with Be3 + O-O, blunting our middlegame plans. The Mar del Plata mainline starts with e5 right now.",
+   "explanation": "After Be2 the natural move is …e5! striking the centre immediately — the move that defines the KID. Playing …Nbd7 first delays the central strike and lets White complete development with Be3 + O-O, blunting your middlegame plans. The Mar del Plata mainline starts with e5 right now.",
    "shortNarration": "...e5 — strike the centre now",
    "sources": [
     "https://www.chess.com/openings/Kings-Indian-Defense"
@@ -3818,7 +3818,7 @@
    "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4",
    "wrongMove": "a6",
    "correctMove": "Ngf6",
-   "explanation": "After O-O with the Nd7 blockade setup, the careless …a6? attacks the bishop too early — the bishop just retreats to Bd3 and we've wasted a tempo. The correct move is …Ngf6 completing development first; the bishop retreat will come naturally later (and the …a6 push can wait until it's actually useful, like preparing ...b5).",
+   "explanation": "After O-O with the Nd7 blockade setup, the careless …a6? attacks the bishop too early — the bishop just retreats to Bd3 and you've wasted a tempo. The correct move is …Ngf6 completing development first; the bishop retreat will come naturally later (and the …a6 push can wait until it's actually useful, like preparing ...b5).",
    "shortNarration": "...Ngf6 — develop, then kick",
    "sources": [
     "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
@@ -3840,7 +3840,7 @@
    "fen": "rnbqkb1r/pppppppp/8/3nP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "wrongMove": "Nb6",
    "correctMove": "d6",
-   "explanation": "After d4 the natural-looking …Nb6 retreats too early — White answers c4 chasing the knight to a4 with serious cramping. The correct move is …d6 hitting the e5 pawn and forcing White to declare. After exd6 we recapture; after Nf3 we get classical Modern Alekhine development.",
+   "explanation": "After d4 the natural-looking …Nb6 retreats too early — White answers c4 chasing the knight to a4 with serious cramping. The correct move is …d6 hitting the e5 pawn and forcing White to declare. After exd6 you recapture; after Nf3 you get classical Modern Alekhine development.",
    "shortNarration": "...d6 — hit the wedge first",
    "sources": [
     "https://www.chess.com/openings/Alekhines-Defense"
@@ -3850,7 +3850,7 @@
    "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
    "wrongMove": "dxe5",
    "correctMove": "Nb6",
-   "explanation": "After Nf3, the immediate …dxe5? grabs the wedge pawn but loses the knight's outpost: Nxe5 with active piece play for White and our knight on d5 is loose. The correct move is …Nb6 — preventive retreat that prevents c4 chases AND prepares ...Bf5 + ...Nc6 classical development. The Modern Alekhine runs through ...Nb6, not early ...dxe5.",
+   "explanation": "After Nf3, the immediate …dxe5? grabs the wedge pawn but loses the knight's outpost: Nxe5 with active piece play for White and your knight on d5 is loose. The correct move is …Nb6 — preventive retreat that prevents c4 chases AND prepares ...Bf5 + ...Nc6 classical development. The Modern Alekhine runs through ...Nb6, not early ...dxe5.",
    "shortNarration": "...Nb6 — preemptive retreat",
    "sources": [
     "https://www.chess.com/openings/Alekhines-Defense"
@@ -4037,7 +4037,7 @@
    "fen": "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
    "wrongMove": "Bg3",
    "correctMove": "Bxd6",
-   "explanation": "After …Bd6 offering the trade, the cautious Bg3? keeps the bishop but locks it out of the kingside attack. The correct move is Bxd6 accepting — the doubled d-pawns Black gets AND the half-open c-file for our rook AND the kingside attack with Bd3 + Qe2 + Ne5 all favour White. Trading is the whole point of the Bf4 setup; declining wastes the system's main asset.",
+   "explanation": "After …Bd6 offering the trade, the cautious Bg3? keeps the bishop but locks it out of the kingside attack. The correct move is Bxd6 accepting — the doubled d-pawns Black gets AND the half-open c-file for your rook AND the kingside attack with Bd3 + Qe2 + Ne5 all favour White. Trading is the whole point of the Bf4 setup; declining wastes the system's main asset.",
    "shortNarration": "Bxd6 — accept the trade",
    "sources": [
     "https://www.chess.com/openings/Jobava-London-System"
@@ -7039,7 +7039,7 @@
    "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
    "wrongMove": "Bxc6",
    "correctMove": "Ba4",
-   "explanation": "Taking on c6 too early (the Exchange) is playable but throws away the Ruy's main asset — the long-term pin pressure on e5. In the main line we keep the bishop with Ba4, maintaining the tension and the slow build-up that makes the Ruy so dangerous. Only trade on c6 when you have a concrete structural reason.",
+   "explanation": "Taking on c6 too early (the Exchange) is playable but throws away the Ruy's main asset — the long-term pin pressure on e5. In the main line you keep the bishop with Ba4, maintaining the tension and the slow build-up that makes the Ruy so dangerous. Only trade on c6 when you have a concrete structural reason.",
    "shortNarration": "Keep the bishop with Ba4.",
    "sources": [
     "https://api.chess.com/pub/player/samayraina/games/archives",

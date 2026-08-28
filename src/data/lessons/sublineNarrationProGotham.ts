@@ -146,7 +146,7 @@ export const SUBLINE_NARRATION_PRO_GOTHAM: Record<string, SublineNarration> = {
   // ── GothamChess London (student WHITE) — Jobava/aggressive plans ────────────
   'pro-gothamchess-london::1::d6@9': {
     intro: {
-      say: "d6 — Black sets up a King's-Indian wall against our London. This is where the aggressive plan pays off: Bh6 offers to trade off Black's fianchettoed bishop, stripping the dark squares around the king, and with the queen already on d2 you castle long and storm the kingside. Do not drift into a slow, harmless London here — go for the throat.",
+      say: "d6 — Black sets up a King's-Indian wall against your London. This is where the aggressive plan pays off: Bh6 offers to trade off Black's fianchettoed bishop, stripping the dark squares around the king, and with the queen already on d2 you castle long and storm the kingside. Do not drift into a slow, harmless London here — go for the throat.",
       sayShort: 'd6 — trade on h6, then storm.',
     },
     sources: ['concept:pos-king-safety', 'https://www.chess.com/openings/London-System'],

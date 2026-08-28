@@ -15,11 +15,11 @@ export const PRO_SAMAYRAINA_FRENCH_WHITE_LESSON: LessonScript = {
   beats: [
     b({ id: 'exd5', moves: 'e4 e6 d4 d5 exd5 exd5',
       arrows: [], highlights: [{ square: 'd5', color: KEY }, { square: 'e6', color: SOFT }],
-      say: "Against the French we play the Exchange — exd5. It is the practical club choice: no memorising the sharp Winawer or the locked Advance chains. The position opens up and, crucially, it frees Black's bad light-squared bishop too, so we must play for activity, not just symmetry.",
+      say: "Against the French you play the Exchange — exd5. It is the practical club choice: no memorising the sharp Winawer or the locked Advance chains. The position opens up and, crucially, it frees Black's bad light-squared bishop too, so you must play for activity, not just symmetry.",
       sayShort: 'exd5 — open, practical French.' }),
     b({ id: 'bd3', moves: 'e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O',
       arrows: [A('f1', 'd3')], highlights: [{ square: 'd3', color: KEY }, { square: 'h7', color: SOFT }],
-      say: "We develop the bishop actively to d3, eyeing h7, mirror Black's …Bd6, and castle. The structure is symmetrical, so the edge comes from being first to the good squares and creating a tiny imbalance — exactly the kind of game where a prepared player out-plays a club opponent.",
+      say: "You develop the bishop actively to d3, eyeing h7, mirror Black's …Bd6, and castle. The structure is symmetrical, so the edge comes from being first to the good squares and creating a tiny imbalance — exactly the kind of game where a prepared player out-plays a club opponent.",
       sayShort: 'Bd3, O-O — active development.' }),
     b({ id: 'plan', moves: 'e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O Re1 Bg4 c3 Nbd7',
       arrows: [A('c1', 'g5')], highlights: [{ square: 'e1', color: KEY }, { square: 'd5', color: SOFT }],

@@ -26,7 +26,7 @@
    {
     "name": "Giuoco Piano: Main Line with Nc3",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 bxc3 d5 Bd3 O-O",
-    "explanation": "Welcome to the main battleground of the Giuoco Piano — we gambit the c3-pawn for a big lead in development and the two bishops. When …d5 hits our c4-bishop, play the precise retreat Bd3 (NOT the greedy Ba3, which just hangs the bishop to …dxc4). On d3 it eyes the e4-knight and h7. Yes, Black's a pawn up after …O-O — but our bishops, the half-open b-file and the development lead give us real, lasting pressure. (The full piece sac is the Møller — that's its own line.)",
+    "explanation": "Welcome to the main battleground of the Giuoco Piano — you gambit the c3-pawn for a big lead in development and the two bishops. When …d5 hits your c4-bishop, play the precise retreat Bd3 (NOT the greedy Ba3, which just hangs the bishop to …dxc4). On d3 it eyes the e4-knight and h7. Yes, Black's a pawn up after …O-O — but your bishops, the half-open b-file and the development lead give you real, lasting pressure. (The full piece sac is the Møller — that's its own line.)",
     "frequency": "very common",
     "deviationMove": 8
    },
@@ -388,7 +388,7 @@
    {
     "name": "Stanley Variation",
     "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4",
-    "explanation": "Treat this as our Italian-Vienna hybrid: bishop to c4, a solid d3 and Nf3, and we keep d4 in our back pocket for the right moment. Both of us castle short and Black gets active — …Bc5, …d6, then …Bg4 to pin our f3-knight. We're not chasing fireworks here; the harmonious set-up just hands us a small, nagging pull."
+    "explanation": "Treat this as your Italian-Vienna hybrid: bishop to c4, a solid d3 and Nf3, and you keep d4 in your back pocket for the right moment. Both of you castle short and Black gets active — …Bc5, …d6, then …Bg4 to pin your f3-knight. You're not chasing fireworks here; the harmonious set-up just hands you a small, nagging pull."
    },
    {
     "name": "Vienna vs 2...Nc6",
@@ -409,7 +409,7 @@
    {
     "name": "Paulsen Attack",
     "pgn": "e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3",
-    "explanation": "This is the modern grandmaster's Vienna: we fianchetto with g3 and Bg2 instead of throwing the gambit. Knight to e2, castle, hang on to our e4-pawn and that long diagonal. Black settles in with …Bc5, …d6, …Nc6 and …a6. Low on theory, high on flexibility — we just build slowly and play good chess.",
+    "explanation": "This is the modern grandmaster's Vienna: you fianchetto with g3 and Bg2 instead of throwing the gambit. Knight to e2, castle, hang on to your e4-pawn and that long diagonal. Black settles in with …Bc5, …d6, …Nc6 and …a6. Low on theory, high on flexibility — you just build slowly and play good chess.",
     "keyIdeas": [
      "The fianchettoed Bg2 rakes the long light diagonal — screened by e4 until the centre opens, then decisive.",
      "The Nc3-Nge2 setup keeps both knights flexible — Nge2 can reroute via f4 (attacking) or g3 (supporting).",
@@ -477,7 +477,7 @@
    {
     "name": "King's Gambit Declined",
     "pgn": "e4 e5 f4 Bc5 Nf3 d6 c3 Nf6 d4 exd4 cxd4 Bb6 Nc3 O-O e5 dxe5 fxe5 Nd5 Bg5 Nxc3 bxc3 Qd5",
-    "explanation": "Black politely declines with 2…Bc5, planting the bishop on a7-g1 and keeping the …Qh4+ check in reserve. Instead of the f4-f5 plan, we build the centre with c3 and d4. After …d6, …Nf6 and our d4 break the position opens, e5 grabs space, and we get a sharp, open middlegame where our centre and development outweigh Black's tidy pieces."
+    "explanation": "Black politely declines with 2…Bc5, planting the bishop on a7-g1 and keeping the …Qh4+ check in reserve. Instead of the f4-f5 plan, you build the centre with c3 and d4. After …d6, …Nf6 and your d4 break the position opens, e5 grabs space, and you get a sharp, open middlegame where your centre and development outweigh Black's tidy pieces."
    },
    {
     "name": "Kieseritzky Gambit",
@@ -645,7 +645,7 @@
    {
     "name": "Najdorf: English Attack (6.Be3 Main Line)",
     "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 Nbd7 O-O-O b5 g4 b4 Na4",
-    "explanation": "This is the scariest thing we throw at the Najdorf. We castle queenside and storm the kingside with g4-g5, while Black races at our king with …b5-b4. It's a pure pawn-storm sprint — whoever lands first wins. When …b4 pokes our c3-knight, we swing it to the rim with Na4, eyeing the b6- and c5-outposts while both attacks come crashing in."
+    "explanation": "This is the scariest thing you throw at the Najdorf. You castle queenside and storm the kingside with g4-g5, while Black races at your king with …b5-b4. It's a pure pawn-storm sprint — whoever lands first wins. When …b4 pokes your c3-knight, you swing it to the rim with Na4, eyeing the b6- and c5-outposts while both attacks come crashing in."
    },
    {
     "name": "Najdorf: Classical (6.Be2 with ...e5)",
@@ -843,7 +843,7 @@
    {
     "name": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
     "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 N1c3 a6 Na3 b5 Nd5 Nf6 c4 b4 Nc2",
-    "explanation": "The Kalashnikov is the Sveshnikov's cousin — we play …e5 before …Nf6 and dodge the Bg5 pin entirely. After 5.Nb5 d6 and Nd5 we develop with …Nf6 and meet c4 with …b4, trading pieces. From there we play for the d4-square and the dark squares — same spirit as the Sveshnikov, just a move-order that keeps a few extra options in our pocket."
+    "explanation": "The Kalashnikov is the Sveshnikov's cousin — you play …e5 before …Nf6 and dodge the Bg5 pin entirely. After 5.Nb5 d6 and Nd5 you develop with …Nf6 and meet c4 with …b4, trading pieces. From there you play for the d4-square and the dark squares — same spirit as the Sveshnikov, just a move-order that keeps a few extra options in your pocket."
    },
    {
     "name": "Sveshnikov: ...Rb8 Expansion Plan",
@@ -1065,7 +1065,7 @@
    {
     "name": "Two Knights Variation",
     "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 Be2 Nf6 O-O Nbd7 d4 dxe4 Nxe4 Nxe4 Qxe4 Nf6 Qd3 Be7 c4 O-O",
-    "explanation": "In the Two Knights we just develop naturally with Nc3 and Nf3 and invite …Bg4. After …Bg4 h3 Bxf3 Qxf3 we pick up the two bishops, while Black stays rock-solid with …e6, …Nf6 and …Nbd7. We round out with Be2, castle, d4 and c4; the exchanges on e4 leave us a comfortable, slightly easier game with the bishop pair — and Black very, very solid. Patience is the watchword.",
+    "explanation": "In the Two Knights you just develop naturally with Nc3 and Nf3 and invite …Bg4. After …Bg4 h3 Bxf3 Qxf3 you pick up the two bishops, while Black stays rock-solid with …e6, …Nf6 and …Nbd7. You round out with Be2, castle, d4 and c4; the exchanges on e4 leave you a comfortable, slightly easier game with the bishop pair — and Black very, very solid. Patience is the watchword.",
     "shortExplanation": "Two Knights: ...Bg4 pin, ...Bxf3 trade. Master line ends with Qh4-Re1; Black centralizes ...Nd5."
    },
    {
@@ -1272,7 +1272,7 @@
    {
     "name": "Qd6 Tiviakov Variation",
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6",
-    "explanation": "Tiviakov's …Qd6 keeps the queen home and central, sidestepping the heavy …Qa5 theory. White goes for a g3 fianchetto, and we get busy: …Bg4 to lean on the f3-knight, …Nc6, quick development, and we happily trade the light bishops on f3. What's left is a balanced, manoeuvring game where our solid structure equalises with no fuss.",
+    "explanation": "Tiviakov's …Qd6 keeps the queen home and central, sidestepping the heavy …Qa5 theory. White goes for a g3 fianchetto, and you get busy: …Bg4 to lean on the f3-knight, …Nc6, quick development, and you happily trade the light bishops on f3. What's left is a balanced, manoeuvring game where your solid structure equalises with no fuss.",
     "shortExplanation": "Tiviakov ...Qd6 setup. ...a6 prepares ...b5; ...Bf5 + ...e6 + flexible structure; Ne5 is critical test."
    },
    {
@@ -1290,7 +1290,7 @@
    {
     "name": "Qa5 with Bd2 Main Line",
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4 Be2 Bxe2 Ngxe2 Nc6 O-O O-O-O Ne4 Qf5 Nxf6 gxf6 c3 Rg8",
-    "explanation": "When White plays the quiet Bd2, we trade light bishops with …Bg4 and …Bxe2, bring the knight to c6 and castle long. When White jumps Ne4 we hold with …Qf5, and after the knights come off on f6 we recapture …gxf6 — opening the g-file for our rook. A sound, double-edged middlegame with chances for both of us.",
+    "explanation": "When White plays the quiet Bd2, you trade light bishops with …Bg4 and …Bxe2, bring the knight to c6 and castle long. When White jumps Ne4 you hold with …Qf5, and after the knights come off on f6 you recapture …gxf6 — opening the g-file for your rook. A sound, double-edged middlegame with chances for both of you.",
     "shortExplanation": "Bd2 line: ...Bb4 pin, opposite-side castle, ...Qc7 centralizes; Ne5 is White's critical test."
    }
   ],
@@ -1342,7 +1342,7 @@
    {
     "name": "Two Pawns Attack",
     "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Nf3 Bg7 Be3 O-O Be2 Nc6 O-O Bg4 b3 e5",
-    "explanation": "A calmer cousin of the Four Pawns — White builds with c4 and d4 but skips the committal f4. We recapture …cxd6, opening the c-file, and go modern: …g6, …Bg7, castle, then …Nc6 and …Bg4 to lean on d4 before striking with …e5. That half-open c-file and the bishop on g7 give us sound, dynamic counterplay.",
+    "explanation": "A calmer cousin of the Four Pawns — White builds with c4 and d4 but skips the committal f4. You recapture …cxd6, opening the c-file, and go modern: …g6, …Bg7, castle, then …Nc6 and …Bg4 to lean on d4 before striking with …e5. That half-open c-file and the bishop on g7 give you sound, dynamic counterplay.",
     "shortExplanation": "Restrained two-pawn center. ...Bf5-Nc6 hits d4, then ...d5-Nc4 break wins the bishop pair."
    },
    {
@@ -1614,17 +1614,17 @@
    {
     "name": "London vs King's Indian",
     "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 h3 c5 Be2 Qb6 Qc1 O-O O-O Nc6 c3 Be6 Nbd2 cxd4 exd4 Rac8 Re1 Rfe8 Be3",
-    "explanation": "Against a King's-Indian set-up (…g6, …Bg7, …d6) we build our London and keep things compact — Bf4, e3, Nf3, h3, Be2, castle, c3, Nbd2. Black grabs space with …c5 and pokes b2/d4 with …Qb6; we hold the centre, answer …cxd4 with exd4, and reroute the bishop to e3. The result is balanced, but our solid structure means we're never worse and always a touch better."
+    "explanation": "Against a King's-Indian set-up (…g6, …Bg7, …d6) you build your London and keep things compact — Bf4, e3, Nf3, h3, Be2, castle, c3, Nbd2. Black grabs space with …c5 and pokes b2/d4 with …Qb6; you hold the centre, answer …cxd4 with exd4, and reroute the bishop to e3. The result is balanced, but your solid structure means you're never worse and always a touch better."
    },
    {
     "name": "Jobava London",
     "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 Nb5 Na6 e3 Be7 Nf3 O-O h4 c6 Nc3 Qb6 a3 c5 Ne5 Bd7 Rh3",
-    "explanation": "This is the punchy, modern London — Nc3 and Bf4, eyeing e5 and b5. We can leap Nb5 to jab at c7 and d6 and really make a nuisance of ourselves. Black holds with …d5, …e6, …Be7; after Nb5 …Na6 we expand with h4 and pieces while Black plays …c6 and …c5. Sharper and far more forcing than the quiet London — we're going for the throat."
+    "explanation": "This is the punchy, modern London — Nc3 and Bf4, eyeing e5 and b5. You can leap Nb5 to jab at c7 and d6 and really make a nuisance of yourself. Black holds with …d5, …e6, …Be7; after Nb5 …Na6 you expand with h4 and pieces while Black plays …c6 and …c5. Sharper and far more forcing than the quiet London — you're going for the throat."
    },
    {
     "name": "London vs Grunfeld Setup",
     "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 d5 Be2 O-O O-O c5 c3 Nc6 Nbd2 Nd7",
-    "explanation": "When Black sets up Grünfeld-style with …g6 and …d5, we just complete our London — Bf4, e3, Nf3, Be2, O-O, c3, Nbd2 — and stay solid before we commit. That rock of a pawn chain and easy development hand us a small, durable edge; our breaks (e3-e4 later, or a queenside push) come once Black shows his hand with …c5 and …Nc6."
+    "explanation": "When Black sets up Grünfeld-style with …g6 and …d5, you just complete your London — Bf4, e3, Nf3, Be2, O-O, c3, Nbd2 — and stay solid before you commit. That rock of a pawn chain and easy development hand you a small, durable edge; your breaks (e3-e4 later, or a queenside push) come once Black shows his hand with …c5 and …Nc6."
    },
    {
     "name": "London vs Dutch",
@@ -1764,7 +1764,7 @@
    {
     "name": "Vaganian Gambit 2...Ne4 3.Bf4 c5",
     "pgn": "d4 Nf6 Bg5 Ne4 Bf4 c5 d5 Qb6 Bc1 e6 f3 Nf6 e4 exd5",
-    "explanation": "Our Vaganian Gambit shows up when Black meets 3.Bf4 with 3…c5. We push d5 and offer the b2-pawn. Here Black declines the poison — the queen drops back, we tuck the bishop to c1 — and we build with f3 and e4, that d5-wedge handing us a comfy space edge. (If Black does grab b2, it gets sharp fast; declining is the solid main road.)"
+    "explanation": "Your Vaganian Gambit shows up when Black meets 3.Bf4 with 3…c5. You push d5 and offer the b2-pawn. Here Black declines the poison — the queen drops back, you tuck the bishop to c1 — and you build with f3 and e4, that d5-wedge handing you a comfy space edge. (If Black does grab b2, it gets sharp fast; declining is the solid main road.)"
    },
    {
     "name": "2...Ne4 3.Bf4 c5 4.f3 Sideline",
@@ -2008,7 +2008,7 @@
    {
     "name": "Botvinnik Variation Deep",
     "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 exf6 Bb7 g3 c5 d5 Qb6 Bg2 O-O-O O-O b4 Na4 Qa6",
-    "explanation": "Buckle up — the deep Botvinnik is the sharpest forced ground in all of chess, born of our thematic knight sac on g5. The material is murky and dynamic (no exchange given — every rook stays on); our trumps as Black are the queenside pawn majority and the bishop pair, while White leans on the f6-wedge and a raging initiative. Only wade in here with deep, memorised prep."
+    "explanation": "Buckle up — the deep Botvinnik is the sharpest forced ground in all of chess, born of your thematic knight sac on g5. The material is murky and dynamic (no exchange given — every rook stays on); your trumps as Black are the queenside pawn majority and the bishop pair, while White leans on the f6-wedge and a raging initiative. Only wade in here with deep, memorised prep."
    },
    {
     "name": "Anti-Meran Bd3 Line",
@@ -2181,7 +2181,7 @@
    {
     "name": "Saemisch Variation (4.a3)",
     "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 e4 Ne8 O-O Ba6 f4",
-    "explanation": "The Sämisch (4.a3) forces …Bxc3+ straight away — we hand over the bishop pair but saddle White with doubled c-pawns for the rest of the game. From there it's a strategic fight: White builds the big centre with e4 and f4, while we blockade with …Ne8 (rerouting the knight toward d6 and the kingside) and swing the bishop out with …Ba6 to lean on the c4-square and those weak doubled pawns. This was Fischer's favourite weapon against the Nimzo.",
+    "explanation": "The Sämisch (4.a3) forces …Bxc3+ straight away — you hand over the bishop pair but saddle White with doubled c-pawns for the rest of the game. From there it's a strategic fight: White builds the big centre with e4 and f4, while you blockade with …Ne8 (rerouting the knight toward d6 and the kingside) and swing the bishop out with …Ba6 to lean on the c4-square and those weak doubled pawns. This was Fischer's favourite weapon against the Nimzo.",
     "frequency": "common",
     "deviationMove": 4
    },
@@ -2444,7 +2444,7 @@
    {
     "name": "King Walk Variation",
     "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 Nf3 Bg7 g3 O-O Kg2 Nbd7 a4 Qa5 Re1 Rfb8",
-    "explanation": "We walk our king to safety the old-fashioned way, f1-g2, then Re1 and a4 to nail down that extra pawn. Black does what Benko players do — …Qa5 and …Rfb8, piling the heavy pieces on the half-open a- and b-files against our queenside. That pressure is his compensation; our job is to stay calm and convert the pawn."
+    "explanation": "You walk your king to safety the old-fashioned way, f1-g2, then Re1 and a4 to nail down that extra pawn. Black does what Benko players do — …Qa5 and …Rfb8, piling the heavy pieces on the half-open a- and b-files against your queenside. That pressure is his compensation; your job is to stay calm and convert the pawn."
    },
    {
     "name": "Benko Declined: Nf3 System",
@@ -2736,7 +2736,7 @@
    {
     "name": "Mikenas Attack",
     "pgn": "c4 e6 Nc3 Nf6 e4 d5 e5 d4 exf6 dxc3 bxc3 Qxf6 Nf3 e5 Bd3 Na6 O-O Bd6 Bc2 Bg4 d4 Bxf3",
-    "explanation": "Our sharpest swing in the English — 3.e4, grabbing the centre. When Black plays …d5 we punch e5, kicking the f6-knight. After the forced …d4 exf6 dxc3 bxc3 Qxf6 we take on doubled c-pawns, but look what we get: a development lead and the two bishops. Black hits back with …e5 and …Na6/…Bd6/…Bg4. Double-edged — our activity and bishops against his cleaner pawns."
+    "explanation": "Your sharpest swing in the English — 3.e4, grabbing the centre. When Black plays …d5 you punch e5, kicking the f6-knight. After the forced …d4 exf6 dxc3 bxc3 Qxf6 you take on doubled c-pawns, but look what you get: a development lead and the two bishops. Black hits back with …e5 and …Na6/…Bd6/…Bg4. Double-edged — your activity and bishops against his cleaner pawns."
    },
    {
     "name": "Bremen System",
@@ -2778,7 +2778,7 @@
    {
     "name": "Reti: KIA Setup g3 Bg2 d3 e4",
     "pgn": "Nf3 d5 g3 c6 Bg2 Bg4 O-O Nd7 d3 Ngf6 Nbd2 e5 e4 dxe4 dxe4 Bc5 h3 Bh5 Qe1 O-O",
-    "explanation": "We steer the Réti into a King's Indian Attack — g3, Bg2, d3, and then the e4 break. Here's the thing to know: after …dxe4 dxe4 our own pawn sits on the bishop's long diagonal, so don't expect the Bg2 to run wild. Our play comes from the central space and swinging the queen over with Qe1-g3 or h4 toward Black's king. It works against almost anything Black tries."
+    "explanation": "You steer the Réti into a King's Indian Attack — g3, Bg2, d3, and then the e4 break. Here's the thing to know: after …dxe4 dxe4 your own pawn sits on the bishop's long diagonal, so don't expect the Bg2 to run wild. Your play comes from the central space and swinging the queen over with Qe1-g3 or h4 toward Black's king. It works against almost anything Black tries."
    },
    {
     "name": "Reti: Advance c4 d4",
@@ -2788,7 +2788,7 @@
    {
     "name": "Reti: Accepted dxc4 Bxc4",
     "pgn": "Nf3 d5 c4 dxc4 e3 Nf6 Bxc4 e6 O-O c5 d4 a6 dxc5 Bxc5 Qe2 O-O",
-    "explanation": "Black grabs our c4-pawn, but we just take it straight back with Bxc4 and get rapid development and open lines for free. After dxc5 the d-file becomes a highway for our rooks, and our bishop on c4 keeps staring down the a2-g8 diagonal at f7. We're playing for the initiative — Black has to be careful not to fall behind in coordination."
+    "explanation": "Black grabs your c4-pawn, but you just take it straight back with Bxc4 and get rapid development and open lines for free. After dxc5 the d-file becomes a highway for your rooks, and your bishop on c4 keeps staring down the a2-g8 diagonal at f7. You're playing for the initiative — Black has to be careful not to fall behind in coordination."
    },
    {
     "name": "Reti: LSB Fianchetto",
@@ -2803,7 +2803,7 @@
    {
     "name": "Reti: Reti Gambit",
     "pgn": "Nf3 d5 c4 d4 e3 Nc6 exd4 Nxd4 Nxd4 Qxd4 Nc3 e5 d3 Bc5 Be3",
-    "explanation": "We provoke …d4 with c4 and then chip at it with e3 — a gambit feel. After exd4 Nxd4 Nxd4 Qxd4, that black queen is sitting in the centre, and we hit it with Nc3, gaining a tempo. Then …e5 d3 …Bc5 and we finish developing with Be3, hitting the bishop. Our activity and development lead are well worth any structural concession."
+    "explanation": "You provoke …d4 with c4 and then chip at it with e3 — a gambit feel. After exd4 Nxd4 Nxd4 Qxd4, that black queen is sitting in the centre, and you hit it with Nc3, gaining a tempo. Then …e5 d3 …Bc5 and you finish developing with Be3, hitting the bishop. Your activity and development lead are well worth any structural concession."
    },
    {
     "name": "Reti: Anti-Slav",
@@ -2990,7 +2990,7 @@
    {
     "name": "Two Knights: Traxler Counterattack",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kxf2 Nxe4+ Kg1 Qh4 g3 Nxg3 hxg3 Qxg3+",
-    "explanation": "The Traxler is the boldest answer to 4.Ng5 — we ignore the threat to f7 and dare White to take it. After the greedy 5.Nxf7 we crash in with …Bxf2+! 6.Kxf2 Nxe4+, dragging the king into the open: …Qh4, …Nxg3, …Qxg3+ and the initiative just rolls. It's a razor — our development lead and that exposed king are the payment for the material. Know it cold before you fire it."
+    "explanation": "The Traxler is the boldest answer to 4.Ng5 — you ignore the threat to f7 and dare White to take it. After the greedy 5.Nxf7 you crash in with …Bxf2+! 6.Kxf2 Nxe4+, dragging the king into the open: …Qh4, …Nxg3, …Qxg3+ and the initiative just rolls. It's a razor — your development lead and that exposed king are the payment for the material. Know it cold before you fire it."
    },
    {
     "name": "Two Knights: Max Lange Attack",

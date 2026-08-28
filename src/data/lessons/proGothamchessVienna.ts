@@ -30,7 +30,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3',
       highlights: [{ square: 'c3', color: SOFT }],
       say:
-        "The Vienna — e4 e5 Nc3. It looks like a quiet developing move, but it's the doorway to one of this repertoire's favourite gambits. We develop the knight and keep the f-pawn free to come crashing forward.",
+        "The Vienna — e4 e5 Nc3. It looks like a quiet developing move, but it's the doorway to one of this repertoire's favourite gambits. You develop the knight and keep the f-pawn free to come crashing forward.",
       sayShort: 'Nc3 — the Vienna doorway.',
     }),
     b({
@@ -38,7 +38,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4',
       highlights: [{ square: 'f4', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "f4 — the Vienna Gambit. We hurl the f-pawn at e5, opening the f-file toward Black's king before he's anywhere near ready. This is the move that makes the Vienna dangerous: a pawn offered for a roaring initiative.",
+        "f4 — the Vienna Gambit. You hurl the f-pawn at e5, opening the f-file toward Black's king before he's anywhere near ready. This is the move that makes the Vienna dangerous: a pawn offered for a roaring initiative.",
       sayShort: 'f4 — the gambit punch.',
     }),
     b({
@@ -46,7 +46,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4 d5',
       highlights: [{ square: 'd5', color: SOFT }],
       say:
-        "Black's correct reply is d5, counter-striking in the centre rather than grabbing the pawn. Good defence — but now we get to show the point of the whole line.",
+        "Black's correct reply is d5, counter-striking in the centre rather than grabbing the pawn. Good defence — but now you get to show the point of the whole line.",
       sayShort: 'd5 — Black counter-strikes.',
     }),
     b({
@@ -54,7 +54,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4',
       highlights: [{ square: 'e5', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "fxe5 takes toward the centre and chases the f6-knight, which jumps to e4 grabbing a pawn. Don't panic about the material — we have a forcing sequence that turns the tables.",
+        "fxe5 takes toward the centre and chases the f6-knight, which jumps to e4 grabbing a pawn. Don't panic about the material — you have a forcing sequence that turns the tables.",
       sayShort: 'fxe5 — chase the knight.',
     }),
     b({
@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the open f-file toward f7 at the same time. Black has to react, and every way he does leaves us with the initiative.",
+        "Qf3 — the heart of the line. The queen hits the e4-knight and leans down the open f-file toward f7 at the same time. Black has to react, and every way he does leaves you with the initiative.",
       sayShort: 'Qf3 — hit the knight and f7.',
     }),
     b({
@@ -71,7 +71,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'b1', color: SOFT }],
       say:
-        "Black trades the knight on c3; we recapture with the b-pawn. This is no concession — it opens the b-file for our rook and builds a broad pawn-mass on c3 and d-file. The half-open b-file is about to matter a lot.",
+        "Black trades the knight on c3; you recapture with the b-pawn. This is no concession — it opens the b-file for your rook and builds a broad pawn-mass on c3 and d-file. The half-open b-file is about to matter a lot.",
       sayShort: 'bxc3 — open the b-file.',
     }),
     b({
@@ -80,7 +80,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'g3', to: 'g7', color: VIS }],
       highlights: [{ square: 'g7', color: KEY }],
       say:
-        "Black grabs space with c5; we reroute the queen to g3, where it eyes g7 and supports the e5-pawn, then develop the knight to f3. Our whole army is swinging toward Black's kingside while he's still sorting out his pieces.",
+        "Black grabs space with c5; you reroute the queen to g3, where it eyes g7 and supports the e5-pawn, then develop the knight to f3. Your whole army is swinging toward Black's kingside while he's still sorting out his pieces.",
       sayShort: 'Qg3 — swing toward g7.',
     }),
     b({
@@ -89,7 +89,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'b1', to: 'b7', color: VIS }],
       highlights: [{ square: 'b7', color: KEY }],
       say:
-        "Black develops with Be6; we plant the rook on b1, the half-open file, pressing straight down on b7. This is where the opening hands off to the middlegame — and the plan picks up from this exact position.",
+        "Black develops with Be6; you plant the rook on b1, the half-open file, pressing straight down on b7. This is where the opening hands off to the middlegame — and the plan picks up from this exact position.",
       sayShort: 'Rb1 — press the b-file.',
     }),
     b({
@@ -98,7 +98,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c6', color: KEY }],
       say:
-        "Black connects with Qd7; we pin the c6-knight with Bb5 — tying down the defender of d4 and e5 and adding another attacker to the queenside pile-up. Notice the pattern: every piece we move adds to the pressure.",
+        "Black connects with Qd7; you pin the c6-knight with Bb5 — tying down the defender of d4 and e5 and adding another attacker to the queenside pile-up. Notice the pattern: every piece you move adds to the pressure.",
       sayShort: 'Bb5 — pin the knight.',
     }),
     b({
@@ -106,8 +106,8 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1 Qd7 Bb5 O-O-O O-O',
       highlights: [{ square: 'c8', color: SOFT }, { square: 'g1', color: SOFT }],
       say:
-        "Black castles long, straight into the teeth of our b-file rook; we castle short, tucking our king to safety. Opposite-side castling — and that means a race. The good news: our attack is already rolling and his has barely started.",
-      sayShort: 'opposite castling — a race we lead.',
+        "Black castles long, straight into the teeth of your b-file rook; you castle short, tucking your king to safety. Opposite-side castling — and that means a race. The good news: your attack is already rolling and his has barely started.",
+      sayShort: 'opposite castling — a race you lead.',
     }),
     b({
       id: 'mg-d4',
@@ -115,7 +115,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'c5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "And the centre erupts: d4. We strike at c5, open lines toward Black's king on c8, and bring the whole army to life — the rook on b1, the bishop on b5, the queen on g3. This is the Vienna Gambit's dream: a pawn invested back at the start, repaid now with a winning attack. From here, you're the one playing for mate.",
+        "And the centre erupts: d4. You strike at c5, open lines toward Black's king on c8, and bring the whole army to life — the rook on b1, the bishop on b5, the queen on g3. This is the Vienna Gambit's dream: a pawn invested back at the start, repaid now with a winning attack. From here, you're the one playing for mate.",
       sayShort: 'd4 — the centre erupts.',
     }),
   ],

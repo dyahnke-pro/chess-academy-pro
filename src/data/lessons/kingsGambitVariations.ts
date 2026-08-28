@@ -92,7 +92,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
         id: 'centre',
         moves: ['e4', 'e5', 'f4', 'exf4', 'Nf3', 'd6', 'd4', 'g5'],
         highlights: [{ square: 'd4', color: KEY }, { square: 'g5', color: SOFT }],
-        say: "White answers the most natural way — d4 — seizing the centre while Black plays the move his last turn prepared: g5, finally clamping down on f4. We have the familiar King's Gambit tension: Black a pawn up with a kingside chain, White with the bigger centre and the development lead. Now White goes to work on that chain.",
+        say: "White answers the most natural way — d4 — seizing the centre while Black plays the move his last turn prepared: g5, finally clamping down on f4. You have the familiar King's Gambit tension: Black a pawn up with a kingside chain, White with the bigger centre and the development lead. Now White goes to work on that chain.",
         sayShort: 'd4 …g5 — centre versus the held pawn.',
       },
       {

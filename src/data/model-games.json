@@ -3189,7 +3189,7 @@
       {
         "moveNumber": 7,
         "color": "black",
-        "annotation": "End of opening, start of plan. White has just castled; Naroditsky's …Nge7 closes the book on the spine. Look at the structure: our c6-d5-e6 chain holds the centre, the Bc5 is active, and the Nge7-Ng6 reroute is teed up.",
+        "annotation": "End of opening, start of plan. White has just castled; Naroditsky's …Nge7 closes the book on the spine. Look at the structure: your c6-d5-e6 chain holds the centre, the Bc5 is active, and the Nge7-Ng6 reroute is teed up.",
         "concept": "Opening → Middlegame Transition"
       },
       {
@@ -3238,7 +3238,7 @@
     "overview": "Naroditsky vs Arambai (3196), 2021. The Exchange Variation in 104 plies. Naroditsky plays the …Bg4 pin, gets White to trade with h3 (doubling pawns), and converts a tiny structural edge to a winning endgame. The bishop pair plus a healthier pawn structure was all he needed.",
     "criticalMoments": [],
     "middlegameTheme": "The …Bg4 Pin and Long-Term Structural Compensation",
-    "lessonSummary": "Why we ALWAYS pin in the Exchange. Doubled f-pawns for White is a tiny advantage on move 7 and a decisive one on move 70.",
+    "lessonSummary": "Why you ALWAYS pin in the Exchange. Doubled f-pawns for White is a tiny advantage on move 7 and a decisive one on move 70.",
     "variation": "Exchange Variation (exd5)"
   },
   {
@@ -3276,7 +3276,7 @@
     "overview": "Naroditsky vs 0gZPanda (3231), 2023. The Fantasy Variation refuted in clean style. After f3 dxe4 fxe4 e5 the centre opens and White's whole concept collapses in 70 plies. The game shows what David Howell once called 'the punishment for over-ambition' — when White spends a tempo on f3, Black just plays the natural moves and is already better.",
     "criticalMoments": [],
     "middlegameTheme": "Punishing the Wasted Tempo of 3.f3",
-    "lessonSummary": "The Fantasy is the highest-score line we have (75% in the data) for a reason. Open the centre, develop, win.",
+    "lessonSummary": "The Fantasy is the highest-score line you have (75% in the data) for a reason. Open the centre, develop, win.",
     "variation": "Fantasy Variation (f3)"
   },
   {
@@ -3424,7 +3424,7 @@
     "overview": "Naroditsky's Fantasy Variation against Nihal Sarin (3204) — a clean kingside attack with the doubled-pawn bishop pair handling everything classical theory says shouldn't work. Demonstrates the e5 push at the right moment and the diagonal attack once Black's c8-bishop stays locked.",
     "criticalMoments": [],
     "middlegameTheme": "Centre Build + Bishop Pair Attack",
-    "lessonSummary": "The Fantasy isn't bluff — when Black plays the standard French-style setup, our bishop pair and big centre add up to a real attacking middlegame. This game shows the conversion."
+    "lessonSummary": "The Fantasy isn't bluff — when Black plays the standard French-style setup, your bishop pair and big centre add up to a real attacking middlegame. This game shows the conversion."
   },
   {
     "id": "mg-pro-gothamchess-london-0",
@@ -3810,7 +3810,7 @@
     "pgn": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8 Nb3 Qc7 Qe2 Ne5 Rad1 a5 a4 Be6 Nd2 Nh5 g4 Nf6 f4 Nexg4 hxg4 Nxg4 Bf3 h5 Kh1 Qe7 Bg1 Qh4+ Kg2 Ne5 f5 gxf5 Bf2 Qg5+ Kh1 f4 Rg1 Bg4 Bd4 Qh4+ Qh2 Nxf3",
     "sourceUrl": "https://www.chess.com/game/live/6376359999",
     "studentSide": "black",
-    "overview": "Naroditsky vs FloatyPotato (2936), 58-ply KID Fianchetto. White's mirror fianchetto with Bg2 neutralises our long diagonal, so the game decides on the queenside — watch the …Qa5 + …b5 + …b4 Yugoslav expansion. The c4-pawn becomes the target and the structural pressure converts in the R+min+P endgame.",
+    "overview": "Naroditsky vs FloatyPotato (2936), 58-ply KID Fianchetto. White's mirror fianchetto with Bg2 neutralises your long diagonal, so the game decides on the queenside — watch the …Qa5 + …b5 + …b4 Yugoslav expansion. The c4-pawn becomes the target and the structural pressure converts in the R+min+P endgame.",
     "variation": "Fianchetto Variation (g3)"
   },
   {
@@ -3826,7 +3826,7 @@
     "pgn": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8 Re1 Ne5 Nb3 Qc7 c5 dxc5 Bxc5 Rd8 Qe2 Be6 Red1 Bc4 Qe3 Nd3 Rd2 Nxc5 Nxc5 b6 Nb3 Nd7 f4 Bxb3 axb3 Nc5 Ne2 Rxd2",
     "sourceUrl": "https://www.chess.com/game/live/44335799087",
     "studentSide": "black",
-    "overview": "Naroditsky vs alexrustemov (2884), 48-ply KID Fianchetto. White's mirror fianchetto with Bg2 neutralises our long diagonal, so the game decides on the queenside — watch the …Qa5 + …b5 + …b4 Yugoslav expansion. The c4-pawn becomes the target and the structural pressure converts in the R+min+P endgame.",
+    "overview": "Naroditsky vs alexrustemov (2884), 48-ply KID Fianchetto. White's mirror fianchetto with Bg2 neutralises your long diagonal, so the game decides on the queenside — watch the …Qa5 + …b5 + …b4 Yugoslav expansion. The c4-pawn becomes the target and the structural pressure converts in the R+min+P endgame.",
     "variation": "Fianchetto Variation (g3)"
   },
   {
@@ -11700,7 +11700,7 @@
     "blackElo": 2847,
     "result": "1-0",
     "year": 2021,
-    "event": "Aimchess US Rapid Prelim",
+    "event": "Aimchess You Rapid Prelim",
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6 Bc4 e6 g4 Bg6 h4 Nbd7 Nxd7 Nxd7 h5 Be4 O-O Bd5 Nxd5 cxd5 Bd3 Bd6 Qf3 O-O-O Be3 g6 h6 Rhf8 a3 f5 c4 e5 b4 Qc7 c5 Be7 Bb5 e4 Qh3 f4 Bd2 Bg5 c6 Nf6 cxb7+ Qxb7 Rac1+ Kb8 Bc6 Qe7 Rc5 e3 fxe3 fxe3 Be1 Ne4 Qh2+ Kc8 Bd7+ Kxd7 Rc7+ Ke6 Qe5#",
     "overview": "Firouzja checkmates the World Champion straight out of the anti-Scandinavian. He meets 3...Qa5 with the aggressive Ne5 and a rolling g4-h4-h5 kingside pawn storm, then after Carlsen's ...f5/...e5 counter he crashes through: c5-c6 rips open the queenside, and a king-hunt with cxb7+, Rc1+, Bd7+ and Rc7+ drives the black king into the open before Qe5# ends it. The model for punishing the Scandinavian — grab space, storm the king, and attack."
   },

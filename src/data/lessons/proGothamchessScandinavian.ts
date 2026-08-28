@@ -34,7 +34,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd8', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "The Scandinavian — e4 d5, challenging the centre on move one. After White takes, we recapture with the queen, Qxd5. Yes, the queen comes out early; the old rule says don't. But this repertoire loves this because everything Black plays from here is natural, forcing, and easy to remember.",
+        "The Scandinavian — e4 d5, challenging the centre on move one. After White takes, you recapture with the queen, Qxd5. Yes, the queen comes out early; the old rule says don't. But this repertoire loves this because everything Black plays from here is natural, forcing, and easy to remember.",
       sayShort: 'Qxd5 — grab the centre back.',
     }),
     b({
@@ -43,7 +43,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd5', to: 'a5', color: VIS }],
       highlights: [{ square: 'a5', color: KEY }, { square: 'c3', color: SOFT }],
       say:
-        "White develops Nc3 with tempo, hitting our queen; we glide back to a5. And look — the queen isn't just running, it's working: from a5 it eyes the knight on c3 and the open a5-e1 diagonal. White gained a developing move; we gained a perfectly placed queen.",
+        "White develops Nc3 with tempo, hitting your queen; you glide back to a5. And look — the queen isn't just running, it's working: from a5 it eyes the knight on c3 and the open a5-e1 diagonal. White gained a developing move; you gained a perfectly placed queen.",
       sayShort: 'Qa5 — retreat with purpose.',
     }),
     b({
@@ -51,7 +51,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6',
       highlights: [{ square: 'f6', color: SOFT }],
       say:
-        "White takes the big centre with d4; we develop the knight to f6, hitting nothing yet but getting ready to castle and to pile pressure on the centre. Simple, sound, no thinking required.",
+        "White takes the big centre with d4; you develop the knight to f6, hitting nothing yet but getting ready to castle and to pile pressure on the centre. Simple, sound, no thinking required.",
       sayShort: 'Nf6 — develop toward castling.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'c8', to: 'f5', color: VIS }],
       highlights: [{ square: 'f5', color: KEY }],
       say:
-        "White develops Nf3; we play the key move, Bf5 — the light-squared bishop comes out of the chain BEFORE we play e6. Same golden rule as the Caro: never let this bishop get trapped behind its own pawns. Out it goes, active and free.",
+        "White develops Nf3; you play the key move, Bf5 — the light-squared bishop comes out of the chain BEFORE you play e6. Same golden rule as the Caro: never let this bishop get trapped behind its own pawns. Out it goes, active and free.",
       sayShort: 'Bf5 — bishop out first.',
     }),
     b({
@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6',
       highlights: [{ square: 'e6', color: KEY }],
       say:
-        "White develops the bishop to c4, aiming at f7; we play e6, shoring up the light squares and opening the way for our dark-squared bishop. With the f5-bishop already developed, e6 costs us nothing — there's no bad piece left to bury.",
+        "White develops the bishop to c4, aiming at f7; you play e6, shoring up the light squares and opening the way for your dark-squared bishop. With the f5-bishop already developed, e6 costs you nothing — there's no bad piece left to bury.",
       sayShort: 'e6 — solid, no bad bishop.',
     }),
     b({
@@ -76,7 +76,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6',
       highlights: [{ square: 'c6', color: SOFT }, { square: 'a5', color: SOFT }],
       say:
-        "White develops the bishop to d2, breaking the pressure on c3 and preparing to castle long; we play c6, a useful little move that gives our queen the c7-square if it's ever kicked and prepares a future b5 pawn push.",
+        "White develops the bishop to d2, breaking the pressure on c3 and preparing to castle long; you play c6, a useful little move that gives your queen the c7-square if it's ever kicked and prepares a future b5 pawn push.",
       sayShort: 'c6 — support the queenside plan.',
     }),
     b({
@@ -85,7 +85,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b4', to: 'c3', color: VIS }],
       highlights: [{ square: 'b4', color: KEY }, { square: 'c3', color: SOFT }],
       say:
-        "White lifts the queen to e2; we develop the dark-squared bishop to b4, leaning hard on the c3-knight. The threat is real: take on c3 and shatter White's queenside pawns. Every piece we develop also makes a threat — that's the Scandinavian's hidden efficiency.",
+        "White lifts the queen to e2; you develop the dark-squared bishop to b4, leaning hard on the c3-knight. The threat is real: take on c3 and shatter White's queenside pawns. Every piece you develop also makes a threat — that's the Scandinavian's hidden efficiency.",
       sayShort: 'Bb4 — lean on c3.',
     }),
     b({
@@ -94,7 +94,7 @@ export const PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b7', to: 'b5', color: VIS }],
       highlights: [{ square: 'c1', color: SOFT }, { square: 'b5', color: KEY }],
       say:
-        "White castles queenside; we complete development with Nbd7. There's the whole plan in one snapshot: White's king is on the queenside, our queen and bishop already point straight at it, and our pawns are loaded to roll — b5, b4, prying the king open. We're slightly worse on paper, but we're the side with the easy moves and the attack. That's the Scandinavian: trade a sliver of structure for clarity and initiative.",
+        "White castles queenside; you complete development with Nbd7. There's the whole plan in one snapshot: White's king is on the queenside, your queen and bishop already point straight at it, and your pawns are loaded to roll — b5, b4, prying the king open. You're slightly worse on paper, but you're the side with the easy moves and the attack. That's the Scandinavian: trade a sliver of structure for clarity and initiative.",
       sayShort: '…b5/…b4 — open the king.',
     }),
   ],

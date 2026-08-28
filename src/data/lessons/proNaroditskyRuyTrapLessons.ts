@@ -32,10 +32,10 @@ const NF6_BXC6_DOUBLED: LessonScript = {
       say: "After Ba4 in the Ruy Lopez Closed system, Black's choice is critical. The classical move is ...Nf6 (Morphy Defense) — but in this specific move order, 106 opponents played it and lost the Bxc6 trade race. Largest Ruy trap pattern by far.",
       sayShort: 'Ba4 — set the trap.' }),
     b({ id: 'ruy-nf6-blunder', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6', highlights: [H('f6', ATK)],
-      say: "...Nf6 — the standard move. But our exchange variation timing is sharper. 106 opponents including GM Wesley So (2787), Coldplace (2833), and GM_dmitrij (2878) walked into the Bxc6 + doubled pawns trap.",
+      say: "...Nf6 — the standard move. But your exchange variation timing is sharper. 106 opponents including GM Wesley So (2787), Coldplace (2833), and GM_dmitrij (2878) walked into the Bxc6 + doubled pawns trap.",
       sayShort: '...Nf6 — standard but trapped.' }),
     b({ id: 'ruy-nf6-castle', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7', highlights: [H('g1', SOFT)],
-      say: "O-O ...Be7 — White castles, Black develops. Now we strike.",
+      say: "O-O ...Be7 — White castles, Black develops. Now you strike.",
       sayShort: 'O-O ...Be7.' }),
     b({ id: 'ruy-nf6-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Bxc6 dxc6 d3', highlights: [H('c6', KEY)],
       say: "Bxc6! ...dxc6 d3 — White trades the bishop voluntarily (Exchange Ruy timing), giving Black doubled c-pawns. The structural advantage compounds over the next 30 moves: White has the better pawn structure, the bishop pair, and the better endgame. 106 wins from here.",
@@ -57,14 +57,14 @@ const ND6_BERLIN_HIKARU: LessonScript = {
       say: "Bxc6 ...dxc6 dxe5 — the standard Berlin sequence but here Black's knight on d6 is loose. Now the queen trade favors White.",
       sayShort: 'dxe5 — Berlin endgame.' }),
     b({ id: 'ruy-nd6-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+', highlights: [H('d8', ATK)],
-      say: "...Nf5 Qxd8+! — Black tries to activate the knight, but we force the queen trade. Black recaptures with the king (Kxd8) — the king on d8 is permanently exposed AND we have the structural Berlin endgame edge. A top GM lost this exact way.",
+      say: "...Nf5 Qxd8+! — Black tries to activate the knight, but you force the queen trade. Black recaptures with the king (Kxd8) — the king on d8 is permanently exposed AND you have the structural Berlin endgame edge. A top GM lost this exact way.",
       sayShort: 'Qxd8+ — Berlin endgame won.' }),
   ],
 };
 
 // TRAP 3: 30g — Open Ruy Nc5 lets Bxc6 + Nxe5 win the pawn (Firouzja victim)
 const NC5_OPEN_RUY_PAWN: LessonScript = {
-  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
+  openingId: 'pro-naroditsky-ruy-lopez', title: 'Weapon: Nc5 in Open Ruy lets you win the e5-pawn (Firouzja victim)', minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({ id: 'ruy-nc5-setup', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 Re1', highlights: [H('e1', SOFT)],
       say: "Open Ruy with Re1 setup (the Tarrasch Trap setup). Black must move the knight from e4 to a safe square. The wrong move is Nc5.",
@@ -73,10 +73,10 @@ const NC5_OPEN_RUY_PAWN: LessonScript = {
       say: "...Nc5 — Black tries to retreat actively, but the bishop is loose. 30 opponents made this move including Firouzja2003 (3070), Shant_Sargsyan (3016), and Jospem (3000).",
       sayShort: '...Nc5 — loose knight.' }),
     b({ id: 'ruy-nc5-bxc6', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 Re1 Nc5 Bxc6 dxc6 Nxe5', highlights: [H('e5', KEY)],
-      say: "Bxc6 ...dxc6 Nxe5! — We trade the bishop AND grab the e5-pawn. The knight on e5 is well-supported AND Black has no compensation for the pawn.",
+      say: "Bxc6 ...dxc6 Nxe5! — You trade the bishop AND grab the e5-pawn. The knight on e5 is well-supported AND Black has no compensation for the pawn.",
       sayShort: 'Nxe5 — win the pawn.' }),
     b({ id: 'ruy-nc5-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 Re1 Nc5 Bxc6 dxc6 Nxe5 Be7 d4', highlights: [H('d4', KEY)],
-      say: "...Be7 d4 — Black develops, we expand the centre. White is up a clear pawn AND has a stable, well-coordinated position. Conversion is straightforward.",
+      say: "...Be7 d4 — Black develops, you expand the centre. White is up a clear pawn AND has a stable, well-coordinated position. Conversion is straightforward.",
       sayShort: 'd4 — central + pawn up.' }),
   ],
 };
@@ -92,7 +92,7 @@ const BC5_D3_HIKARU: LessonScript = {
       say: "...Bc5 — active development. 22 opponents played this including a 2990-rated GM, MichaelRoiz (2710), and Robert_Chessmood (2733).",
       sayShort: '...Bc5 — A top grandmaster\'s move.' }),
     b({ id: 'ruy-bc5d3-trade', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Bg4', highlights: [H('g4', KEY)],
-      say: "Bxc6 ...dxc6 Nbd2 ...Bg4! Black trades the bishop pair voluntarily by playing ...Bg4 pinning our knight. But the pin doesn't actually win material because of h3.",
+      say: "Bxc6 ...dxc6 Nbd2 ...Bg4! Black trades the bishop pair voluntarily by playing ...Bg4 pinning your knight. But the pin doesn't actually win material because of h3.",
       sayShort: '...Bg4 — pin attempt.' }),
     b({ id: 'ruy-bc5d3-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Bg4 h3', highlights: [H('h3', KEY)],
       say: "h3 — White breaks the pin. Black must trade (Bxf3 Nxf3) and now White has the bishop pair, doubled c-pawns for Black, and a clear positional edge. A 2990-rated GM lost this game.",
@@ -114,7 +114,7 @@ const D6_STEINITZ_BXC6: LessonScript = {
       say: "Bxc6+ ...bxc6 — White trades the bishop with check. Black is FORCED to recapture with the b-pawn (cxc6 is impossible). Now Black has doubled c-pawns AND a half-open b-file pointing toward his queenside.",
       sayShort: 'Bxc6+ ...bxc6 — doubled b-pawns.' }),
     b({ id: 'ruy-d6-cash', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 Bxc6+ bxc6 d4 f6 O-O', highlights: [H('g1', SOFT), H('c6', KEY)],
-      say: "d4 ...f6 O-O — White expands the centre, Black plays the awkward ...f6 to support e5, we castle. The structural edge converts: Black's pawns are awful, White's pieces have clean squares.",
+      say: "d4 ...f6 O-O — White expands the centre, Black plays the awkward ...f6 to support e5, you castle. The structural edge converts: Black's pawns are awful, White's pieces have clean squares.",
       sayShort: 'O-O — structural conversion.' }),
   ],
 };
@@ -123,7 +123,7 @@ interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
   { name: 'Nf6 in Ba4 line walks into Bxc6 doubled-pawns (Wesley So victim)', lesson: NF6_BXC6_DOUBLED },
   { name: 'Nd6 in Berlin Defense (top-GM victim)', lesson: ND6_BERLIN_HIKARU },
-  { name: 'Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)', lesson: NC5_OPEN_RUY_PAWN },
+  { name: 'Nc5 in Open Ruy lets you win the e5-pawn (Firouzja victim)', lesson: NC5_OPEN_RUY_PAWN },
   { name: 'Bc5 in d3 Berlin (beat a 2990)', lesson: BC5_D3_HIKARU },
   { name: 'd6 in Steinitz lets Bxc6+ + d4 dominate', lesson: D6_STEINITZ_BXC6 },
 ];

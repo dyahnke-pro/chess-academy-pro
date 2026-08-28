@@ -31,7 +31,7 @@ const MAIN: LessonScript = {
       arrows: [{ from: 'e4', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'f6', color: SOFT }],
       say:
-        "The Ponziani's main line. After c3 and d4, Black takes on d4 — but instead of recapturing, we push e5! kicking the f6-knight with tempo. Win the tempo before you win the pawn back: that's the Ponziani's bite. Most opponents have never faced it.",
+        "The Ponziani's main line. After c3 and d4, Black takes on d4 — but instead of recapturing, you push e5! kicking the f6-knight with tempo. Win the tempo before you win the pawn back: that's the Ponziani's bite. Most opponents have never faced it.",
       sayShort: 'e5 — kick the knight first.',
     }),
     b({
@@ -40,7 +40,7 @@ const MAIN: LessonScript = {
       arrows: [{ from: 'd1', to: 'b3', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'b7', color: SOFT }],
       say:
-        "The knight jumps to d5; we hit it with Qb3, attacking the knight and leaning on b7 at the same time. Black retreats to b6, and now we recapture — cxd4 — and there it is: a big e5-and-d4 pawn duo dominating the centre, with the b6-knight offside.",
+        "The knight jumps to d5; you hit it with Qb3, attacking the knight and leaning on b7 at the same time. Black retreats to b6, and now you recapture — cxd4 — and there it is: a big e5-and-d4 pawn duo dominating the centre, with the b6-knight offside.",
       sayShort: 'Qb3 then cxd4 — the big centre.',
     }),
     b({
@@ -49,7 +49,7 @@ const MAIN: LessonScript = {
       arrows: [{ from: 'f1', to: 'c6', color: VIS }],
       highlights: [{ square: 'c6', color: KEY }],
       say:
-        "Black challenges with d6; we pin the c6-knight with Bb5. Here's the middlegame plan: take on c6 to give Black doubled, weak queenside pawns, then play on the big e5-d4 centre and those permanent targets. Castle, bring the rooks to the c- and d-files, and grind. The Ponziani is offbeat — but the resulting position is pure, clean pressure.",
+        "Black challenges with d6; you pin the c6-knight with Bb5. Here's the middlegame plan: take on c6 to give Black doubled, weak queenside pawns, then play on the big e5-d4 centre and those permanent targets. Castle, bring the rooks to the c- and d-files, and grind. The Ponziani is offbeat — but the resulting position is pure, clean pressure.",
       sayShort: 'Bb5 — pin, then double the pawns.',
     }),
   ],
@@ -70,7 +70,7 @@ const D5_COUNTER: LessonScript = {
       arrows: [{ from: 'd1', to: 'a4', color: VIS }],
       highlights: [{ square: 'a4', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "Black hits the centre at once with d5 — the principled challenge. Our answer is the clever Qa4, pinning the c6-knight to Black's king down the diagonal and adding a defender to the e4-pawn. One move that both attacks and defends.",
+        "Black hits the centre at once with d5 — the principled challenge. Your answer is the clever Qa4, pinning the c6-knight to Black's king down the diagonal and adding a defender to the e4-pawn. One move that both attacks and defends.",
       sayShort: 'Qa4 — pin the c6-knight.',
     }),
     b({
@@ -79,7 +79,7 @@ const D5_COUNTER: LessonScript = {
       arrows: [{ from: 'f3', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "We cash in: Nxe5 wins the e5-pawn, and after Black develops we trade on c6, leaving Black with doubled, damaged queenside pawns. We're a clean pawn up. Black gets some development and open lines in return — this is a sharp, double-edged fight, not a free lunch.",
+        "You cash in: Nxe5 wins the e5-pawn, and after Black develops you trade on c6, leaving Black with doubled, damaged queenside pawns. You're a clean pawn up. Black gets some development and open lines in return — this is a sharp, double-edged fight, not a free lunch.",
       sayShort: 'Nxe5 — a pawn up, but sharp.',
     }),
     b({
@@ -87,7 +87,7 @@ const D5_COUNTER: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2',
       highlights: [{ square: 'd3', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "Now the key phase: consolidation. We play the solid d3 to anchor e4, develop the bishop to e2, and bring the knight to d2 to untangle. Black has activity for the pawn, so we don't get greedy — we just complete development, blunt his initiative, and emerge a pawn up in the middlegame. Hold the line, and the extra pawn tells in the long run.",
+        "Now the key phase: consolidation. You play the solid d3 to anchor e4, develop the bishop to e2, and bring the knight to d2 to untangle. Black has activity for the pawn, so you don't get greedy — you just complete development, blunt his initiative, and emerge a pawn up in the middlegame. Hold the line, and the extra pawn tells in the long run.",
       sayShort: 'd3, Be2, Nd2 — consolidate the pawn.',
     }),
   ],
@@ -112,7 +112,7 @@ const NXE4: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2',
       highlights: [{ square: 'e2', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "Black throws the desperado: bishop takes f2 with check, and our king steps to e2 — yes, forward, on move seven, on purpose. This is the moment that decides who knows the line: the king is fine, the c6-pawn is monstrous, and every check Black owns has already been spent.",
+        "Black throws the desperado: bishop takes f2 with check, and your king steps to e2 — yes, forward, on move seven, on purpose. This is the moment that decides who knows the line: the king is fine, the c6-pawn is monstrous, and every check Black owns has already been spent.",
       sayShort: 'Ke2 — forward, on purpose.',
     }),
     b({
@@ -120,7 +120,7 @@ const NXE4: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 Bb6 Qd5 Nf2 Rg1 O-O cxb7 Bxb7 Qxb7',
       highlights: [{ square: 'b7', color: KEY }, { square: 'f2', color: SOFT }],
       say:
-        "The map unrolls: Qd5 forks knight and board, the rook slides to g1 keeping the trapped f2-knight sealed, the c6-pawn eats b7, and the queen finishes the tour by taking the bishop that recaptured. Count the wreckage — material level, our king walked, Black's knight stranded on f2. The engine calls it dead even; the corpus says the prepared side collects. The middlegame plan continues from this exact madness.",
+        "The map unrolls: Qd5 forks knight and board, the rook slides to g1 keeping the trapped f2-knight sealed, the c6-pawn eats b7, and the queen finishes the tour by taking the bishop that recaptured. Count the wreckage — material level, your king walked, Black's knight stranded on f2. The engine calls it dead even; the corpus says the prepared side collects. The middlegame plan continues from this exact madness.",
       sayShort: 'Qxb7 — the map complete.',
     }),
   ],

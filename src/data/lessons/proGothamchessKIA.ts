@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
       arrows: [{ from: 'g2', to: 'b7', color: VIS }],
       highlights: [{ square: 'g2', color: KEY }],
       say:
-        "The King's Indian Attack — and the beauty of it is in the name: it's a SYSTEM. Nf3, g3, Bg2. We play almost the exact same setup no matter what Black does, so we never get caught in someone's preparation. The bishop on g2 rakes the long diagonal, and the whole kingside is being quietly armed.",
+        "The King's Indian Attack — and the beauty of it is in the name: it's a SYSTEM. Nf3, g3, Bg2. You play almost the exact same setup no matter what Black does, so you never get caught in someone's preparation. The bishop on g2 rakes the long diagonal, and the whole kingside is being quietly armed.",
       sayShort: 'Bg2 — the system fianchetto.',
     }),
     b({
@@ -41,7 +41,7 @@ export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
       moves: 'Nf3 d5 g3 c5 Bg2 Nc6 O-O e6',
       highlights: [{ square: 'g1', color: SOFT }],
       say:
-        "Black builds a sturdy French-style centre with …e6; we castle. There's no early skirmish here — both sides just develop. The KIA is a slow burn: we get our pieces home, and THEN we light the fire on the kingside.",
+        "Black builds a sturdy French-style centre with …e6; you castle. There's no early skirmish here — both sides just develop. The KIA is a slow burn: you get your pieces home, and THEN you light the fire on the kingside.",
       sayShort: 'O-O — calm development.',
     }),
     b({
@@ -59,7 +59,7 @@ export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Now the system shows its teeth: e4. We confront Black's centre and stake our claim to the kingside. The fight lines up exactly the way the KIA wants — Black will expand on the queenside, and we throw everything at his king.",
+        "Now the system shows its teeth: e4. You confront Black's centre and stake your claim to the kingside. The fight lines up exactly the way the KIA wants — Black will expand on the queenside, and you throw everything at his king.",
       sayShort: 'e4 — stake the kingside.',
     }),
     b({
@@ -68,7 +68,7 @@ export const PRO_GOTHAMCHESS_KIA_LESSON: LessonScript = {
       arrows: [{ from: 'f1', to: 'e1', color: VIS }],
       highlights: [{ square: 'e1', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "Black castles right into the storm; we lift the rook to e1, backing the e-pawn and clearing f1 for the knight. Everything is now in place. The next move on our minds is e5 — gaining space and kicking the f6-knight away from defending its king.",
+        "Black castles right into the storm; you lift the rook to e1, backing the e-pawn and clearing f1 for the knight. Everything is now in place. The next move on your minds is e5 — gaining space and kicking the f6-knight away from defending its king.",
       sayShort: 'Re1 — prime the e5 push.',
     }),
     b({

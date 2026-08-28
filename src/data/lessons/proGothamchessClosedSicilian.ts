@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }, { square: 'b5', color: KEY }],
       say:
-        "Another way this repertoire dodges Open Sicilian theory: Nc3, the Closed Sicilian move order. We develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — we steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
+        "Another way this repertoire dodges Open Sicilian theory: Nc3, the Closed Sicilian move order. You develop the knight first, then bring the bishop to b5 to lean on the c6-knight. The message is the same as the Rossolimo — you steer the game into calm, understandable waters and make Black solve real problems with no memorised lines to lean on.",
       sayShort: 'Bb5 — pressure c6.',
     }),
     b({
@@ -42,7 +42,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'f3', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Black leaps the knight into d4, attacking our bishop and trying to muddy things; we calmly develop Nf3, attacking that very knight right back. We don't panic at the centralised knight — we just question it and let Black decide what to do with it.",
+        "Black leaps the knight into d4, attacking your bishop and trying to muddy things; you calmly develop Nf3, attacking that very knight right back. You don't panic at the centralised knight — you just question it and let Black decide what to do with it.",
       sayShort: 'Nf3 — challenge the d4-knight.',
     }),
     b({
@@ -51,7 +51,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }],
       say:
-        "Black trades his knight for our bishop on b5; we recapture with the other knight, get kicked by a6, and retreat to c3. Yes, Black has the two bishops now — but in this closed, slow position they have nothing to bite on, and we've gained time and kept a grip on the centre.",
+        "Black trades his knight for your bishop on b5; you recapture with the other knight, get kicked by a6, and retreat to c3. Yes, Black has the two bishops now — but in this closed, slow position they have nothing to bite on, and you've gained time and kept a grip on the centre.",
       sayShort: 'Nc3 — regroup, hold the centre.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd2', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Black plays d6 to build a small centre; we strike first with d4, challenging the c5-pawn and grabbing space in the middle. Opening the centre when we're the more developed side is always the right instinct.",
+        "Black plays d6 to build a small centre; you strike first with d4, challenging the c5-pawn and grabbing space in the middle. Opening the centre when you're the more developed side is always the right instinct.",
       sayShort: 'd4 — seize the centre.',
     }),
     b({
@@ -69,7 +69,7 @@ export const PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'g7', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "We recapture on d4 with the queen, planting it in the centre with a glance down toward g7. Here's the honest middlegame assessment: it's a SMALL edge. We have more space and the better-placed pieces; Black has the bishop pair but no targets for it yet. We castle, develop the dark-squared bishop, and squeeze. No fireworks — just a comfortable, riskless pull, which against a Sicilian player who wanted chaos is exactly the win this repertoire is after.",
+        "You recapture on d4 with the queen, planting it in the centre with a glance down toward g7. Here's the honest middlegame assessment: it's a SMALL edge. You have more space and the better-placed pieces; Black has the bishop pair but no targets for it yet. You castle, develop the dark-squared bishop, and squeeze. No fireworks — just a comfortable, riskless pull, which against a Sicilian player who wanted chaos is exactly the win this repertoire is after.",
       sayShort: 'Qxd4 — a small, riskless pull.',
     }),
   ],

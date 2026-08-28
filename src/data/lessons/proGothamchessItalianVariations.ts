@@ -32,7 +32,7 @@ const GIUOCO: LessonScript = {
       arrows: [{ from: 'c2', to: 'c3', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "The Giuoco Piano — the 'Quiet Game' that's anything but. Bishops out to c4 and c5, then c3, and the whole point of that little pawn move is to build a big centre with d4 next. Black develops Nf6, hitting our e4-pawn. Now we strike.",
+        "The Giuoco Piano — the 'Quiet Game' that's anything but. Bishops out to c4 and c5, then c3, and the whole point of that little pawn move is to build a big centre with d4 next. Black develops Nf6, hitting your e4-pawn. Now you strike.",
       sayShort: 'c3 — prepare the d4 break.',
     }),
     b({
@@ -41,7 +41,7 @@ const GIUOCO: LessonScript = {
       arrows: [{ from: 'd2', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "d4 — we blast the centre open. After the trades on d4, we recapture with the c-pawn and stand with a proud pawn on d4 and a bishop raking toward f7. Black throws in Bb4-check to disrupt us, but that just helps us complete development.",
+        "d4 — you blast the centre open. After the trades on d4, you recapture with the c-pawn and stand with a proud pawn on d4 and a bishop raking toward f7. Black throws in Bb4-check to disrupt you, but that just helps you complete development.",
       sayShort: 'd4 — open the centre.',
     }),
     b({
@@ -49,7 +49,7 @@ const GIUOCO: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5',
       highlights: [{ square: 'd4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We block the check with Bd2, trade the dark-squared bishops, and recapture with the knight. Black hits the centre with d5; we take, and after the recapture we're left with an isolated pawn on d4. That isolated pawn isn't a weakness here — it's an engine of attack.",
+        "You block the check with Bd2, trade the dark-squared bishops, and recapture with the knight. Black hits the centre with d5; you take, and after the recapture you're left with an isolated pawn on d4. That isolated pawn isn't a weakness here — it's an engine of attack.",
       sayShort: 'the IQP appears on d4.',
     }),
     b({
@@ -57,7 +57,7 @@ const GIUOCO: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O',
       highlights: [{ square: 'g1', color: SOFT }, { square: 'd4', color: KEY }],
       say:
-        "Both sides castle, and here's the classic Isolated Queen's Pawn middlegame. The d4-pawn gives us space and, more importantly, the e5- and c5-outposts and a half-open e-file. Our pieces get active squares; Black has to blockade. In the IQP, the side WITH the pawn attacks — and that's us.",
+        "Both sides castle, and here's the classic Isolated Queen's Pawn middlegame. The d4-pawn gives you space and, more importantly, the e5- and c5-outposts and a half-open e-file. Your pieces get active squares; Black has to blockade. In the IQP, the side WITH the pawn attacks — and that's you.",
       sayShort: 'O-O — the IQP middlegame.',
     }),
     b({
@@ -86,7 +86,7 @@ const SLOW: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6',
       highlights: [{ square: 'd3', color: KEY }],
       say:
-        "When you don't want the IQP fireworks, there's the calm d3 — the Giuoco Pianissimo, the 'very quiet game.' We build the Italian formation behind a closed centre, castle, and settle in for a long maneuvering battle. No early contact; just slowly improving every piece.",
+        "When you don't want the IQP fireworks, there's the calm d3 — the Giuoco Pianissimo, the 'very quiet game.' You build the Italian formation behind a closed centre, castle, and settle in for a long maneuvering battle. No early contact; just slowly improving every piece.",
       sayShort: 'd3 — the quiet build.',
     }),
     b({
@@ -95,7 +95,7 @@ const SLOW: LessonScript = {
       arrows: [{ from: 'a2', to: 'a4', color: VIS }],
       highlights: [{ square: 'c3', color: SOFT }, { square: 'a4', color: KEY }],
       say:
-        "c3 prepares a future d4 break; a4 grabs queenside space and stops Black's …b5 from kicking our bishop. Black tucks the bishop back to a7, keeping it on the strong a7-g1 diagonal. Both sides are jockeying for the better version of the same structure.",
+        "c3 prepares a future d4 break; a4 grabs queenside space and stops Black's …b5 from kicking your bishop. Black tucks the bishop back to a7, keeping it on the strong a7-g1 diagonal. Both sides are jockeying for the better version of the same structure.",
       sayShort: 'a4 — stop …b5, gain space.',
     }),
     b({
@@ -104,7 +104,7 @@ const SLOW: LessonScript = {
       arrows: [{ from: 'd2', to: 'f1', color: SOFT }],
       highlights: [{ square: 'd2', color: KEY }],
       say:
-        "Re1 supports the centre; Nbd2 begins the signature maneuver — the knight heads for f1 and then g3 or e3, joining the kingside. Black challenges our good bishop with Be6. This is pure positional chess: whoever improves their pieces to better squares wins the day.",
+        "Re1 supports the centre; Nbd2 begins the signature maneuver — the knight heads for f1 and then g3 or e3, joining the kingside. Black challenges your good bishop with Be6. This is pure positional chess: whoever improves their pieces to better squares wins the day.",
       sayShort: 'Nbd2 — reroute toward g3.',
     }),
     b({
@@ -134,7 +134,7 @@ const EVANS: LessonScript = {
       arrows: [{ from: 'b2', to: 'b4', color: VIS }],
       highlights: [{ square: 'b4', color: KEY }],
       say:
-        "Captain Evans's 1820 invention — still terrifying 200 years later. b4! We throw a pawn at the bishop. After Black takes, c3 hits the bishop AGAIN with tempo and prepares the big centre. We're spending a pawn to buy two free moves and a pawn duo. That's the Evans bargain.",
+        "Captain Evans's 1820 invention — still terrifying 200 years later. b4! You throw a pawn at the bishop. After Black takes, c3 hits the bishop AGAIN with tempo and prepares the big centre. You're spending a pawn to buy two free moves and a pawn duo. That's the Evans bargain.",
       sayShort: 'b4 — the gambit punch.',
     }),
     b({
@@ -143,7 +143,7 @@ const EVANS: LessonScript = {
       arrows: [{ from: 'c3', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'e4', color: KEY }],
       say:
-        "d4 — and there's the dividend. We castle for safety and recapture with the c-pawn, planting a monster e4-d4 pawn centre. Yes, we're down a pawn. But look at that centre and our development lead: Black is cramped and underdeveloped, exactly the Evans dream.",
+        "d4 — and there's the dividend. You castle for safety and recapture with the c-pawn, planting a monster e4-d4 pawn centre. Yes, you're down a pawn. But look at that centre and your development lead: Black is cramped and underdeveloped, exactly the Evans dream.",
       sayShort: 'cxd4 — the big centre.',
     }),
     b({
@@ -152,7 +152,7 @@ const EVANS: LessonScript = {
       arrows: [{ from: 'g4', to: 'f3', color: SOFT }],
       highlights: [{ square: 'b6', color: SOFT }, { square: 'f3', color: SOFT }],
       say:
-        "Black retreats the bishop to b6, where it bites on our d4-pawn, and develops Bg4 to pin our knight. We bring the last knight to c3, completing development and eyeing the d5-square. Every piece we own is in the game; Black is still untangling.",
+        "Black retreats the bishop to b6, where it bites on your d4-pawn, and develops Bg4 to pin your knight. You bring the last knight to c3, completing development and eyeing the d5-square. Every piece you own is in the game; Black is still untangling.",
       sayShort: 'Nc3 — finish developing.',
     }),
     b({
@@ -161,7 +161,7 @@ const EVANS: LessonScript = {
       arrows: [{ from: 'e4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'f7', color: KEY }],
       say:
-        "Here's the Evans middlegame. We have a roaring centre and a development lead for one pawn. The plan: push d5 to gain space and open lines, swing the queen and rooks toward Black's king, and target the eternal weak spot, f7. The bishop on c4 already stares at it. A pawn is nothing when you get to play for mate — and that's what the Evans hands you.",
+        "Here's the Evans middlegame. You have a roaring centre and a development lead for one pawn. The plan: push d5 to gain space and open lines, swing the queen and rooks toward Black's king, and target the eternal weak spot, f7. The bishop on c4 already stares at it. A pawn is nothing when you get to play for mate — and that's what the Evans hands you.",
       sayShort: 'd5 and pile onto f7.',
     }),
   ],
@@ -177,7 +177,7 @@ const TWO_KNIGHTS: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5',
       highlights: [{ square: 'g1', color: KEY }, { square: 'f6', color: SOFT }],
       say:
-        "The Two Knights order — Black develops the king's knight before the bishop, daring us into sharp theory. His corpus answer declines the dare: castle first, and let Black transpose back into Italian shapes. Seven of his games run this exact path, and the calm move keeps every option warm.",
+        "The Two Knights order — Black develops the king's knight before the bishop, daring you into sharp theory. His corpus answer declines the dare: castle first, and let Black transpose back into Italian shapes. Seven of his games run this exact path, and the calm move keeps every option warm.",
       sayShort: 'O-O — decline the dare.',
     }),
     b({
@@ -194,7 +194,7 @@ const TWO_KNIGHTS: LessonScript = {
       arrows: [{ from: 'g5', to: 'd8', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }, { square: 'g5', color: SOFT }],
       say:
-        "Now the point of the whole sequence: Bg5 stares through f6 at the queen, and f4 levers at e5 with our rook already waiting behind the file. Black's extra central knight watches while our initiative arrives first. Dead level by the engine — and every forcing option in the position wears white. The middlegame plan opens the file from here.",
+        "Now the point of the whole sequence: Bg5 stares through f6 at the queen, and f4 levers at e5 with your rook already waiting behind the file. Black's extra central knight watches while your initiative arrives first. Dead level by the engine — and every forcing option in the position wears white. The middlegame plan opens the file from here.",
       sayShort: 'Bg5 and f4 — the initiative arrives.',
     }),
   ],

@@ -35,7 +35,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       arrows: [{ from: 'c6', to: 'e5', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }],
       say:
-        "The Stafford Gambit. After we grab the e5-pawn, Black plays Nc6 — offering a whole knight. It's a trap-laden gambit that has won thousands of online games, because the player who accepts it usually has no idea what's coming. This repertoire's message: there's nothing to fear if you know the refutation.",
+        "The Stafford Gambit. After you grab the e5-pawn, Black plays Nc6 — offering a whole knight. It's a trap-laden gambit that has won thousands of online games, because the player who accepts it usually has no idea what's coming. This repertoire's message: there's nothing to fear if you know the refutation.",
       sayShort: 'Nc6 — the knight offer.',
     }),
     b({
@@ -43,7 +43,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6',
       highlights: [{ square: 'c6', color: SOFT }],
       say:
-        "We take the knight — Nxc6 — and after …dxc6 Black has opened lines and traded a pawn for fast development and tricks. He's down a pawn. The whole gambit rides on us getting greedy or careless next. We won't.",
+        "You take the knight — Nxc6 — and after …dxc6 Black has opened lines and traded a pawn for fast development and tricks. He's down a pawn. The whole gambit rides on you getting greedy or careless next. You won't.",
       sayShort: 'Nxc6 — accept, a pawn up.',
     }),
     b({
@@ -60,7 +60,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2',
       highlights: [{ square: 'e2', color: SOFT }, { square: 'g4', color: SOFT }],
       say:
-        "Black develops the bishop to c5, aiming at f2. We answer with the humble Be2 — and notice WHERE: e2, not c4 or d3, so it covers the g4-square and leaves Black no juicy pin or sacrifice. This repertoire's refutation is a wall of unglamorous, perfect little moves.",
+        "Black develops the bishop to c5, aiming at f2. You answer with the humble Be2 — and notice WHERE: e2, not c4 or d3, so it covers the g4-square and leaves Black no juicy pin or sacrifice. This repertoire's refutation is a wall of unglamorous, perfect little moves.",
       sayShort: 'Be2 — cover g4, no targets.',
     }),
     b({
@@ -77,7 +77,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       arrows: [{ from: 'c3', to: 'd4', color: VIS }],
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "And here's the answer — c3, preparing d4. We're going to expand in the centre, kick the bishop on c5, and bury Black's whole attack under our own pawns. When the centre is yours, a wing attack with no pieces behind it just bounces off.",
+        "And here's the answer — c3, preparing d4. You're going to expand in the centre, kick the bishop on c5, and bury Black's whole attack under your own pawns. When the centre is yours, a wing attack with no pieces behind it just bounces off.",
       sayShort: 'c3 — prepare d4.',
     }),
     b({
@@ -86,7 +86,7 @@ export const PRO_GOTHAMCHESS_STAFFORD_REFUTE_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'c5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'c5', color: SOFT }],
       say:
-        "Black throws the knight to g4; we ignore the noise and play d4, striking the bishop on c5 and seizing the full centre. The knight on g4 hits nothing useful, the bishop has to retreat, and we've reached the middlegame a clean pawn up with a commanding position. The engine calls White close to winning.",
+        "Black throws the knight to g4; you ignore the noise and play d4, striking the bishop on c5 and seizing the full centre. The knight on g4 hits nothing useful, the bishop has to retreat, and you've reached the middlegame a clean pawn up with a commanding position. The engine calls White close to winning.",
       sayShort: 'd4 — take the centre, a pawn up.',
     }),
     b({

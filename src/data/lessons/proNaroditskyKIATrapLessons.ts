@@ -38,13 +38,13 @@ const SRC = [
 // TRAP 1: 48 games — O-O after e5 wedge (Anti-Grünfeld setup)
 const OO_ANTI_GRUNFELD: LessonScript = {
   openingId: 'pro-naroditsky-kia',
-  title: 'Weapon: O-O lets us crash through with exf6 (Anti-Grünfeld)',
+  title: 'Weapon: O-O lets you crash through with exf6 (Anti-Grünfeld)',
   minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({
       id: 'kia-og-setup', moves: 'Nf3 Nf6 g3 g6 e4 Bg7 e5',
       highlights: [H('e5', ATK), H('f6', SOFT)],
-      say: "Anti-Grünfeld setup: after Nf3 ...Nf6 g3 ...g6 e4 ...Bg7 we play e5! attacking the knight on f6. The pawn wedge is the trap — Black has to move the knight cleanly or pay the price.",
+      say: "Anti-Grünfeld setup: after Nf3 ...Nf6 g3 ...g6 e4 ...Bg7 you play e5! attacking the knight on f6. The pawn wedge is the trap — Black has to move the knight cleanly or pay the price.",
       sayShort: 'e5 — attack the knight.',
     }),
     b({
@@ -68,10 +68,10 @@ const OO_ANTI_GRUNFELD: LessonScript = {
   ],
 };
 
-// TRAP 2: 31 games — d6 then e5 trade lets us swap queens favorably
+// TRAP 2: 31 games — d6 then e5 trade lets you swap queens favorably
 const D6_E5_QUEEN_TRADE: LessonScript = {
   openingId: 'pro-naroditsky-kia',
-  title: 'Weapon: d6 + e5 trade hands us the better endgame',
+  title: 'Weapon: d6 + e5 trade hands you the better endgame',
   minutes: 3, orientation: 'white', kind: 'trap', sources: SRC,
   beats: [
     b({
@@ -89,13 +89,13 @@ const D6_E5_QUEEN_TRADE: LessonScript = {
     b({
       id: 'kia-d6-strike', moves: 'Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 d6 Be2 e5 dxe5 dxe5',
       highlights: [H('e5', KEY), H('d8', ATK)],
-      say: "Be2 ...e5 dxe5 ...dxe5 — Black plays the central break, we trade pawns, and now the d-file is open with both queens on it. The trade looks balanced but Black's queen is loose AND her recapture options are limited.",
+      say: "Be2 ...e5 dxe5 ...dxe5 — Black plays the central break, you trade pawns, and now the d-file is open with both queens on it. The trade looks balanced but Black's queen is loose AND her recapture options are limited.",
       sayShort: 'dxe5 ...dxe5 — open d-file.',
     }),
     b({
       id: 'kia-d6-trade', moves: 'Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 d6 Be2 e5 dxe5 dxe5 Qxd8',
       highlights: [H('d8', ATK)],
-      say: "Qxd8! — we trade queens directly. Black MUST recapture with the rook (Rxd8) — the king can't take and the f-rook isn't there. The resulting R+B+N endgame favors White: better pawn structure, more active pieces, and Black's …Bg7 has no targets.",
+      say: "Qxd8! — you trade queens directly. Black MUST recapture with the rook (Rxd8) — the king can't take and the f-rook isn't there. The resulting R+B+N endgame favors White: better pawn structure, more active pieces, and Black's …Bg7 has no targets.",
       sayShort: 'Qxd8 — force the endgame.',
     }),
   ],
@@ -110,7 +110,7 @@ const BE7_QGD_PIN: LessonScript = {
     b({
       id: 'kia-be7-setup', moves: 'Nf3 Nf6 d4 d5 c4 e6 Nc3',
       highlights: [H('c3', SOFT), H('d4', KEY)],
-      say: "Queen's Gambit transposition: after Nf3 ...Nf6 d4 ...d5 c4 ...e6 Nc3 we have the QGD structure. The critical decision for Black is which bishop to develop first. The Be7 move IS the textbook play but the timing matters.",
+      say: "Queen's Gambit transposition: after Nf3 ...Nf6 d4 ...d5 c4 ...e6 Nc3 you have the QGD structure. The critical decision for Black is which bishop to develop first. The Be7 move IS the textbook play but the timing matters.",
       sayShort: 'Nc3 — QGD structure.',
     }),
     b({
@@ -176,7 +176,7 @@ const NB6_ANTI_ALEKHINE: LessonScript = {
     b({
       id: 'kia-nb6-setup', moves: 'Nf3 g6 e4 Nf6 e5 Nd5 c4',
       highlights: [H('c4', KEY), H('d5', ATK)],
-      say: "Anti-Alekhine setup. After Black's hyper-modern ...g6 + ...Nf6 + ...Nd5, we play c4 chasing the knight to b6. The retreat Nb6 looks safe but it lets White play c5 cramping Black's queenside permanently.",
+      say: "Anti-Alekhine setup. After Black's hyper-modern ...g6 + ...Nf6 + ...Nd5, you play c4 chasing the knight to b6. The retreat Nb6 looks safe but it lets White play c5 cramping Black's queenside permanently.",
       sayShort: 'c4 — chase the knight.',
     }),
     b({
@@ -194,7 +194,7 @@ const NB6_ANTI_ALEKHINE: LessonScript = {
     b({
       id: 'kia-nb6-cash', moves: 'Nf3 g6 e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 Nc3 c6 Nxd5',
       highlights: [H('d5', KEY)],
-      say: "...Nd5 Nc3 ...c6 Nxd5 — Black's knight retreats again, we develop and trade the central knight. Black's structure is now a mess: c5-pawn cramps, c6 fixes the d6/d5 weakness, no good piece placement. The conversion is structural — Black is just permanently worse.",
+      say: "...Nd5 Nc3 ...c6 Nxd5 — Black's knight retreats again, you develop and trade the central knight. Black's structure is now a mess: c5-pawn cramps, c6 fixes the d6/d5 weakness, no good piece placement. The conversion is structural — Black is just permanently worse.",
       sayShort: 'Nxd5 — convert structural edge.',
     }),
   ],
@@ -202,8 +202,8 @@ const NB6_ANTI_ALEKHINE: LessonScript = {
 
 interface TrapEntry { name: string; lesson: LessonScript; }
 const TRAPS: TrapEntry[] = [
-  { name: 'O-O lets us crash through with exf6 (Anti-Grünfeld)', lesson: OO_ANTI_GRUNFELD },
-  { name: 'd6 + e5 trade hands us the better endgame', lesson: D6_E5_QUEEN_TRADE },
+  { name: 'O-O lets you crash through with exf6 (Anti-Grünfeld)', lesson: OO_ANTI_GRUNFELD },
+  { name: 'd6 + e5 trade hands you the better endgame', lesson: D6_E5_QUEEN_TRADE },
   { name: 'Be7 vs Bg5 pin in QGD-style structure', lesson: BE7_QGD_PIN },
   { name: 'Be7 vs Bg5 pin (top-GM victim)', lesson: BE7_HIKARU_PIN },
   { name: 'Nb6 vs c5 cramping (Anti-Alekhine setup)', lesson: NB6_ANTI_ALEKHINE },

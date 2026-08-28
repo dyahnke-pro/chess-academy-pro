@@ -778,12 +778,12 @@ export function buildLessonReferenceBlock(text: string | undefined | null): stri
 }
 
 /** Resolve a free-text "teach me X" ask to the most specific masterclass
- *  lesson we hold: a named-subline hit (VARIATION_KEYWORDS) first, then the
- *  opening's MAIN lesson. Sub-variation asks that we have NO variation
+ *  lesson you hold: a named-subline hit (VARIATION_KEYWORDS) first, then the
+ *  opening's MAIN lesson. Sub-variation asks that you have NO variation
  *  lesson for return null — the main lesson must never hijack a focused
  *  variation request (the Tier-1 capture bug, build 00aadcd). Used by the
  *  Learn-with-Coach walkthrough's masterclass tier (David 2026-07-30:
- *  "we teach from our masterclasses"). */
+ *  "you teach from your masterclasses"). */
 const QUERY_STOPWORDS = new Set(['the', 'a', 'an', 'of']);
 const queryTokens = (s: string): string[] =>
   s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w && !QUERY_STOPWORDS.has(w));

@@ -31,7 +31,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6',
       highlights: [{ square: 'c4', color: SOFT }],
       say:
-        "The English — c4. A flank opening, but this repertoire plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — we're going to grab the whole centre and play for a kingside attack.",
+        "The English — c4. A flank opening, but this repertoire plays it with a punch. Black heads for a King's-Indian set-up with g6, planning to fianchetto. Fine — you're going to grab the whole centre and play for a kingside attack.",
       sayShort: 'c4 — the flank opening.',
     }),
     b({
@@ -39,7 +39,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6',
       highlights: [{ square: 'e4', color: KEY }],
       say:
-        "e4 — the Botvinnik idea. We seize the big centre with pawns on c4 and e4. This turns the quiet English into a proper space-grabbing system. Black plays d6, settling into a King's-Indian shell.",
+        "e4 — the Botvinnik idea. You seize the big centre with pawns on c4 and e4. This turns the quiet English into a proper space-grabbing system. Black plays d6, settling into a King's-Indian shell.",
       sayShort: 'e4 — grab the big centre.',
     }),
     b({
@@ -47,7 +47,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7',
       highlights: [{ square: 'd4', color: KEY }, { square: 'e4', color: KEY }],
       say:
-        "d4 — now we have the full c4-d4-e4 pawn wall, a commanding centre. Black fianchettoes the bishop to g7, eyeing the long diagonal. We have the space; he has the counterpunch. The fight is about who breaks where.",
+        "d4 — now you have the full c4-d4-e4 pawn wall, a commanding centre. Black fianchettoes the bishop to g7, eyeing the long diagonal. You have the space; he has the counterpunch. The fight is about who breaks where.",
       sayShort: 'd4 — the full centre wall.',
     }),
     b({
@@ -55,7 +55,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5',
       highlights: [{ square: 'e5', color: KEY }],
       say:
-        "We develop calmly — Be2 and Be3 — and castle is coming. Black strikes the centre with e5, the standard King's-Indian break, hitting our d4-pawn. This is the critical moment: how we meet …e5 decides the whole character of the game.",
+        "You develop calmly — Be2 and Be3 — and castle is coming. Black strikes the centre with e5, the standard King's-Indian break, hitting your d4-pawn. This is the critical moment: how you meet …e5 decides the whole character of the game.",
       sayShort: "e5 — Black's KID break.",
     }),
     b({
@@ -63,7 +63,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5',
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
       say:
-        "d5 — we lock the centre. With the pawns frozen on d5-d6 and e4-e5, neither side can break through the middle. And that's the whole point: in a closed centre, the game is decided on the WINGS. Black will push on the queenside; we storm the kingside. We're aiming straight at his king.",
+        "d5 — you lock the centre. With the pawns frozen on d5-d6 and e4-e5, neither side can break through the middle. And that's the whole point: in a closed centre, the game is decided on the WINGS. Black will push on the queenside; you storm the kingside. You're aiming straight at his king.",
       sayShort: 'd5 — lock the centre, play the wings.',
     }),
     b({
@@ -72,7 +72,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       arrows: [{ from: 'g4', to: 'g5', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'g5', color: SOFT }],
       say:
-        "Black grabs queenside space with a5; we answer on the other wing — g4! The kingside pawn storm is on. Because the centre is locked, this is completely safe: there's no central counter, so we just roll the pawns at Black's king.",
+        "Black grabs queenside space with a5; you answer on the other wing — g4! The kingside pawn storm is on. Because the centre is locked, this is completely safe: there's no central counter, so you just roll the pawns at Black's king.",
       sayShort: 'g4 — the kingside storm.',
     }),
     b({
@@ -81,7 +81,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       arrows: [{ from: 'h4', to: 'h5', color: VIS }],
       highlights: [{ square: 'h4', color: KEY }],
       say:
-        "Black reroutes the knight to a6, heading for c5; we keep storming with h4. The plan is brutally simple: g4, h4, then g5 and h5 to rip open the g- and h-files in front of Black's king. The fianchettoed king is about to lose its pawn cover.",
+        "Black reroutes the knight to a6, heading for c5; you keep storming with h4. The plan is brutally simple: g4, h4, then g5 and h5 to rip open the g- and h-files in front of Black's king. The fianchettoed king is about to lose its pawn cover.",
       sayShort: 'h4 — keep the pawns rolling.',
     }),
     b({
@@ -89,7 +89,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6 h4 Nc5 f3',
       highlights: [{ square: 'f3', color: KEY }, { square: 'g5', color: SOFT }],
       say:
-        "Black posts the knight on c5; we play f3 — propping up the g4-pawn and preparing g5 without allowing any …Ng4 nonsense. Everything is set for the breakthrough. This is the Botvinnik English in full flow: a locked centre and a one-sided kingside avalanche.",
+        "Black posts the knight on c5; you play f3 — propping up the g4-pawn and preparing g5 without allowing any …Ng4 nonsense. Everything is set for the breakthrough. This is the Botvinnik English in full flow: a locked centre and a one-sided kingside avalanche.",
       sayShort: 'f3 — prepare the g5 break.',
     }),
     b({
@@ -97,7 +97,7 @@ export const PRO_GOTHAMCHESS_ENGLISH_LESSON: LessonScript = {
       moves: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6 h4 Nc5 f3',
       highlights: [{ square: 'g5', color: KEY }, { square: 'h5', color: KEY }],
       say:
-        "Here's the middlegame in one picture. The centre is bolted shut, so it's a race of wings — and ours runs straight at the king. Push g5 and h5 to crack open the kingside, lift a rook to g1 or h1, and pour everything in. Black's queenside play is slower and aimed at our well-defended flank. White attacks the king; that's the faster race, and it's why this is this repertoire's English.",
+        "Here's the middlegame in one picture. The centre is bolted shut, so it's a race of wings — and yours runs straight at the king. Push g5 and h5 to crack open the kingside, lift a rook to g1 or h1, and pour everything in. Black's queenside play is slower and aimed at your well-defended flank. White attacks the king; that's the faster race, and it's why this is this repertoire's English.",
       sayShort: 'g5/h5 — crack the king open.',
     }),
   ],

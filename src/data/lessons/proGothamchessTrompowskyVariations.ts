@@ -35,7 +35,7 @@ const MAIN_E6: LessonScript = {
       arrows: [{ from: 'h4', to: 'd8', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'd8', color: SOFT }],
       say:
-        "This repertoire's #1 most-played Trompowsky — 1,823 games. Against …e6 we develop Nd2 and, when Black puts the question with h6, keep the bishop alive on h4. Because e6 vacated the e7-square, the bishop on h4 now pins the f6-knight to the queen down the long diagonal. The knight is glued in place.",
+        "This repertoire's #1 most-played Trompowsky — 1,823 games. Against …e6 you develop Nd2 and, when Black puts the question with h6, keep the bishop alive on h4. Because e6 vacated the e7-square, the bishop on h4 now pins the f6-knight to the queen down the long diagonal. The knight is glued in place.",
       sayShort: 'Bh4 — pin f6 to the queen.',
     }),
     b({
@@ -44,7 +44,7 @@ const MAIN_E6: LessonScript = {
       arrows: [{ from: 'd3', to: 'h7', color: VIS }],
       highlights: [{ square: 'h7', color: SOFT }],
       say:
-        "Black builds the centre and breaks the pin with Be7; we develop calmly — e3, Bd3 aiming at h7, c3 buttressing d4 — and Black castles. We've reached a quiet maneuvering middlegame. But don't be fooled by the calm: a storm is coming.",
+        "Black builds the centre and breaks the pin with Be7; you develop calmly — e3, Bd3 aiming at h7, c3 buttressing d4 — and Black castles. You've reached a quiet maneuvering middlegame. But don't be fooled by the calm: a storm is coming.",
       sayShort: 'Bd3, c3 — into the middlegame.',
     }),
     b({
@@ -53,7 +53,7 @@ const MAIN_E6: LessonScript = {
       arrows: [{ from: 'f2', to: 'f4', color: VIS }],
       highlights: [{ square: 'f4', color: KEY }, { square: 'f6', color: SOFT }],
       say:
-        "Here's the middlegame plan, and it's the Trompowsky's hidden teeth. We play Bxf6 to trade our dark-squared bishop for the knight, then roll the f-pawn forward with f4 and f5, prying open lines toward Black's king. We're not playing for the bishop pair — we give a bishop AWAY — we're playing for a direct kingside pawn storm. The quietest opening on the board becomes an attack.",
+        "Here's the middlegame plan, and it's the Trompowsky's hidden teeth. You play Bxf6 to trade your dark-squared bishop for the knight, then roll the f-pawn forward with f4 and f5, prying open lines toward Black's king. You're not playing for the bishop pair — you give a bishop AWAY — you're playing for a direct kingside pawn storm. The quietest opening on the board becomes an attack.",
       sayShort: 'Bxf6 then f4-f5 — storm the king.',
     }),
   ],
@@ -74,7 +74,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'h2', to: 'h4', color: VIS }],
       highlights: [{ square: 'h4', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "Black's sharpest try — Ne4, jumping at our bishop. We don't retreat; we play the wild h4! It defends the g5-bishop and prepares to open the h-file. When Black hits the centre with c5, we slam the door with d5, grabbing space and keeping the position as messy as possible. This is a knife fight, and this repertoire lives for it.",
+        "Black's sharpest try — Ne4, jumping at your bishop. You don't retreat; you play the wild h4! It defends the g5-bishop and prepares to open the h-file. When Black hits the centre with c5, you slam the door with d5, grabbing space and keeping the position as messy as possible. This is a knife fight, and this repertoire lives for it.",
       sayShort: 'h4 + d5 — keep it sharp.',
     }),
     b({
@@ -83,7 +83,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'h1', to: 'h8', color: VIS }],
       highlights: [{ square: 'h1', color: KEY }],
       say:
-        "Black grabs the bishop on g5; we recapture with the h-pawn — hxg5 — and now the h-file is wide open with our rook already sitting behind it, staring down at Black's king that can never safely castle kingside. The bishop we 'lost' bought us an open attacking file.",
+        "Black grabs the bishop on g5; you recapture with the h-pawn — hxg5 — and now the h-file is wide open with your rook already sitting behind it, staring down at Black's king that can never safely castle kingside. The bishop you 'lost' bought you an open attacking file.",
       sayShort: 'hxg5 — rip open the h-file.',
     }),
     b({
@@ -92,7 +92,7 @@ const VAGANIAN: LessonScript = {
       arrows: [{ from: 'e2', to: 'e4', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: KEY }, { square: 'b2', color: SOFT }],
       say:
-        "Black greedily snatches the b2-pawn with his queen; we don't care — we develop and build a giant d5-e4 pawn centre with the open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while our whole army points at his king. Pure Trompowsky chaos, and we're winning it.",
+        "Black greedily snatches the b2-pawn with his queen; you don't care — you develop and build a giant d5-e4 pawn centre with the open h-file aimed at the king. The engine confirms White is clearly better here, around plus-two: the lead in development and the attack are worth far more than the pawn. Black's queen is stranded on b2 while your whole army points at his king. Pure Trompowsky chaos, and you're winning it.",
       sayShort: 'e4 — big centre, winning attack.',
     }),
   ],
@@ -113,7 +113,7 @@ const D5_SYSTEM: LessonScript = {
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }],
       say:
-        "Black answers solidly with d5 and c5, building a Slav-like structure. We keep it simple: e3 and c3, a rock for our centre, with the bishop on g5 still leaning on the f6-knight. No fireworks here — just a healthy, slightly-better position to outplay from.",
+        "Black answers solidly with d5 and c5, building a Slav-like structure. You keep it simple: e3 and c3, a rock for your centre, with the bishop on g5 still leaning on the f6-knight. No fireworks here — just a healthy, slightly-better position to outplay from.",
       sayShort: 'e3, c3 — solid centre.',
     }),
     b({
@@ -122,7 +122,7 @@ const D5_SYSTEM: LessonScript = {
       arrows: [{ from: 'd1', to: 'b3', color: VIS }],
       highlights: [{ square: 'b3', color: KEY }, { square: 'b6', color: SOFT }],
       say:
-        "Black tries to stir things up with Qb6, eyeing our b2-pawn and the d4-point. We answer with Qb3 — calmly defending b2 and facing his queen down. We're even offering a queen trade, which would dissolve all of Black's activity and leave us a pleasant, riskless endgame.",
+        "Black tries to stir things up with Qb6, eyeing your b2-pawn and the d4-point. You answer with Qb3 — calmly defending b2 and facing his queen down. You're even offering a queen trade, which would dissolve all of Black's activity and leave you a pleasant, riskless endgame.",
       sayShort: 'Qb3 — neutralise the queen.',
     }),
     b({
@@ -131,7 +131,7 @@ const D5_SYSTEM: LessonScript = {
       arrows: [{ from: 'b3', to: 'b6', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "Here's the middlegame: a solid, Slav-like structure where we've taken the sting out of Black's only active idea. If queens come off on b6, we head to a comfortable endgame; if they stay on, we finish developing with Bd3 and Ngf3 and play on the slightly better structure. It's the unglamorous, high-percentage Trompowsky — no risk, steady pressure.",
+        "Here's the middlegame: a solid, Slav-like structure where you've taken the sting out of Black's only active idea. If queens come off on b6, you head to a comfortable endgame; if they stay on, you finish developing with Bd3 and Ngf3 and play on the slightly better structure. It's the unglamorous, high-percentage Trompowsky — no risk, steady pressure.",
       sayShort: 'trade or build — steady edge.',
     }),
   ],
@@ -152,7 +152,7 @@ const G6_FIANCHETTO: LessonScript = {
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'f6', color: KEY }, { square: 'f7', color: SOFT }],
       say:
-        "When Black fianchettoes with g6, we strike immediately — Bxf6, trading our bishop for the knight to damage Black's structure. Here Black recaptures with the e-pawn, leaving doubled f-pawns on f6 and f7 and a half-open e-file. We've given up a bishop, but we've handed Black a permanent structural weakness.",
+        "When Black fianchettoes with g6, you strike immediately — Bxf6, trading your bishop for the knight to damage Black's structure. Here Black recaptures with the e-pawn, leaving doubled f-pawns on f6 and f7 and a half-open e-file. You've given up a bishop, but you've handed Black a permanent structural weakness.",
       sayShort: 'Bxf6 — double the pawns.',
     }),
     b({
@@ -161,7 +161,7 @@ const G6_FIANCHETTO: LessonScript = {
       arrows: [{ from: 'f1', to: 'g2', color: VIS }],
       highlights: [{ square: 'g2', color: KEY }, { square: 'd5', color: SOFT }],
       say:
-        "We set up our own fianchetto — g3 and Bg2 — pointing the bishop at the long light diagonal and the centre. Black has the two bishops as compensation, but his doubled f-pawns can never advance cleanly, and the light squares around them are ours to occupy.",
+        "You set up your own fianchetto — g3 and Bg2 — pointing the bishop at the long light diagonal and the centre. Black has the two bishops as compensation, but his doubled f-pawns can never advance cleanly, and the light squares around them are yours to occupy.",
       sayShort: 'Bg2 — eye the light squares.',
     }),
     b({
@@ -170,7 +170,7 @@ const G6_FIANCHETTO: LessonScript = {
       arrows: [{ from: 'g2', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }, { square: 'f5', color: SOFT }],
       say:
-        "Here's the middlegame. The story is structure versus bishops: we develop with Ne2 and castle, blockade the light squares with a knight on d5 or f4, and grind against Black's crippled pawns. Black will try to open the position for his bishops; we keep it controlled and play on the lasting weakness. A clean, strategic edge from move three.",
+        "Here's the middlegame. The story is structure versus bishops: you develop with Ne2 and castle, blockade the light squares with a knight on d5 or f4, and grind against Black's crippled pawns. Black will try to open the position for his bishops; you keep it controlled and play on the lasting weakness. A clean, strategic edge from move three.",
       sayShort: 'blockade d5/f4 — grind the pawns.',
     }),
   ],

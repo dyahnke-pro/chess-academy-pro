@@ -60,7 +60,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       moves: 'e4 c5 Nf3 d6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'e5', color: SOFT }],
       say:
-        "White develops the knight to f3 and Black plays d6 — quiet, flexible, and doing real work. The d6-pawn takes the e5-square away from White's pieces, so no knight or pawn can land there and cramp us. It also opens the door for the queen's bishop later. This is the flexible Sicilian: Black keeps every plan on the table and commits to nothing yet.",
+        "White develops the knight to f3 and Black plays d6 — quiet, flexible, and doing real work. The d6-pawn takes the e5-square away from White's pieces, so no knight or pawn can land there and cramp you. It also opens the door for the queen's bishop later. This is the flexible Sicilian: Black keeps every plan on the table and commits to nothing yet.",
       sayShort: 'd6 — deny e5, keep it flexible.',
     }),
     b({
@@ -69,7 +69,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       arrows: [{ from: 'd4', to: 'e6', color: VIS }, { from: 'd4', to: 'f5', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }],
       say:
-        "White strikes with d4, we take, and White recaptures with the knight — the Open Sicilian. This is the crucial signpost: the Dragodorf is our answer WHENEVER White enters the Open Sicilian like this, and against every setup White tries here — the fianchetto, the Classical, the h3 lines, the English Attack. If instead White dodges with an anti-Sicilian that never plays d4 — the Alapin c3, the Rossolimo Bb5, the Grand Prix — there is no Open Sicilian and we reach for those separate systems, not this one. Here White has committed to d4, so the Dragodorf is on. The knight on d4 eyes e6 and f5; we have the half-open c-file and a queenside majority.",
+        "White strikes with d4, you take, and White recaptures with the knight — the Open Sicilian. This is the crucial signpost: the Dragodorf is your answer WHENEVER White enters the Open Sicilian like this, and against every setup White tries here — the fianchetto, the Classical, the h3 lines, the English Attack. If instead White dodges with an anti-Sicilian that never plays d4 — the Alapin c3, the Rossolimo Bb5, the Grand Prix — there is no Open Sicilian and you reach for those separate systems, not this one. Here White has committed to d4, so the Dragodorf is on. The knight on d4 eyes e6 and f5; you have the half-open c-file and a queenside majority.",
       sayShort: 'Nxd4 — Open Sicilian: Dragodorf is on.',
     }),
     b({
@@ -78,15 +78,15 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       arrows: [{ from: 'f6', to: 'e4', color: VIS }],
       highlights: [{ square: 'a6', color: KEY }, { square: 'b5', color: SOFT }],
       say:
-        "Nf6 pokes at e4 and forces White to defend it with Nc3. Then comes the move that names half the Sicilian: a6. It looks modest, but it's pure prophylaxis — it denies the b5-square to White's pieces, so no knight or bishop can jump in and harass us there, and it quietly prepares our own b5, the pawn lever that unrolls the whole queenside. This is the Najdorf crossroads, and here the repertoire takes a turn.",
-      sayShort: 'a6 — deny b5, prepare our own.',
+        "Nf6 pokes at e4 and forces White to defend it with Nc3. Then comes the move that names half the Sicilian: a6. It looks modest, but it's pure prophylaxis — it denies the b5-square to White's pieces, so no knight or bishop can jump in and harass you there, and it quietly prepares your own b5, the pawn lever that unrolls the whole queenside. This is the Najdorf crossroads, and here the repertoire takes a turn.",
+      sayShort: 'a6 — deny b5, prepare your own.',
     }),
     b({
       id: 'g3-fianchetto',
       moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3',
       highlights: [{ square: 'g3', color: KEY }, { square: 'g2', color: SOFT }, { square: 'd5', color: SOFT }],
       say:
-        "Instead of the sharpest tries, White reaches for g3 — the calm fianchetto. The idea is honest and dangerous in its own way: park the bishop on g2, aim it down the long light-squared diagonal at our centre and queenside, castle, and sidestep the tons of Najdorf theory. Against a well-prepared opponent this is a smart practical choice. So we meet a system with a system of our own.",
+        "Instead of the sharpest tries, White reaches for g3 — the calm fianchetto. The idea is honest and dangerous in its own way: park the bishop on g2, aim it down the long light-squared diagonal at your centre and queenside, castle, and sidestep the tons of Najdorf theory. Against a well-prepared opponent this is a smart practical choice. So you meet a system with a system of your own.",
       sayShort: 'g3 — White sidesteps into the fianchetto.',
     }),
     b({
@@ -94,7 +94,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 g6',
       highlights: [{ square: 'g6', color: KEY }, { square: 'g7', color: SOFT }],
       say:
-        "Here is the whole point — g6. We already committed to a6 like the Najdorf; now we add g6 like the Dragon. That is the Dragodorf: one hybrid setup that borrows the best of both. From the Najdorf we keep a6 and the b5 expansion; from the Dragon we take the bishop to g7, where it will rake the long dark diagonal. Two famous plans fused into one, and it catches a lot of players who only prepared for one or the other.",
+        "Here is the whole point — g6. You already committed to a6 like the Najdorf; now you add g6 like the Dragon. That is the Dragodorf: one hybrid setup that borrows the best of both. From the Najdorf you keep a6 and the b5 expansion; from the Dragon you take the bishop to g7, where it will rake the long dark diagonal. Two famous plans fused into one, and it catches a lot of players who only prepared for one or the other.",
       sayShort: 'g6 — Najdorf a6 meets Dragon g6.',
     }),
     b({
@@ -102,7 +102,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 g6 Bg2 Bg7',
       highlights: [{ square: 'g7', color: KEY }, { square: 'g2', color: SOFT }, { square: 'd4', color: SOFT }],
       say:
-        "Both bishops take their fianchetto squares and stare at each other down the long diagonal. Our g7-bishop is the soul of this whole setup. Right now the knight on f6 stands in front of it, so its power is masked — but the moment that knight steps aside, or we break with e5 or e6 and d5, the bishop breathes fire straight at White's centre and queenside. Everything we do is about opening lines for that bishop.",
+        "Both bishops take their fianchetto squares and stare at each other down the long diagonal. Your g7-bishop is the soul of this whole setup. Right now the knight on f6 stands in front of it, so its power is masked — but the moment that knight steps aside, or you break with e5 or e6 and d5, the bishop breathes fire straight at White's centre and queenside. Everything you do is about opening lines for that bishop.",
       sayShort: 'Bg7 — the masked dragon bishop.',
     }),
     b({
@@ -119,7 +119,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       arrows: [{ from: 'c6', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'c8', color: SOFT }],
       say:
-        "White plays h3 to deny our pieces the g4-square, and we finish developing with Nc6, immediately questioning the proud knight on d4. We've reached a healthy middlegame — the engine calls it near-level, a comfortable third of a pawn, which for Black in the Sicilian is exactly the fair fight we came for. Every piece has a job and the position is full of play.",
+        "White plays h3 to deny your pieces the g4-square, and you finish developing with Nc6, immediately questioning the proud knight on d4. You've reached a healthy middlegame — the engine calls it near-level, a comfortable third of a pawn, which for Black in the Sicilian is exactly the fair fight you came for. Every piece has a job and the position is full of play.",
       sayShort: 'Nc6 — hit d4, the middlegame is set.',
     }),
     b({
@@ -128,7 +128,7 @@ export const PRO_NARODITSKY_DRAGODORF_LESSON: LessonScript = {
       arrows: [{ from: 'c6', to: 'd4', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'c8', color: KEY }, { square: 'd4', color: SOFT }],
       say:
-        "So what do we actually do here? Three ideas, all pointing the same way. First, b5 — the Najdorf lever — gaining queenside space and giving the g7-bishop a clear runway. Second, the rook swings to c8, seizing the half-open c-file and lining up on White's knight and the c3-square. And third, the Dragon inheritance: if the chance comes, a rook sacrifice on c3 shatters White's queenside pawns and hands the g7-bishop a wide-open diagonal to the enemy king. Space, the c-file, and the long diagonal — that is the Dragodorf's plan in one breath.",
+        "So what do you actually do here? Three ideas, all pointing the same way. First, b5 — the Najdorf lever — gaining queenside space and giving the g7-bishop a clear runway. Second, the rook swings to c8, seizing the half-open c-file and lining up on White's knight and the c3-square. And third, the Dragon inheritance: if the chance comes, a rook sacrifice on c3 shatters White's queenside pawns and hands the g7-bishop a wide-open diagonal to the enemy king. Space, the c-file, and the long diagonal — that is the Dragodorf's plan in one breath.",
       sayShort: 'Plan: b5, Rc8, and the long diagonal.',
     }),
   ],

@@ -2522,6 +2522,20 @@ Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/wa
 
 ### Narration Voice Rules (IMPORTANT)
 
+### 🔒🔒 ONE PERSPECTIVE ACROSS THE WHOLE APP — student = "you/your", opponent = "they/their", NEVER "we/our" (David 2026-08-28, LOCKED: "We should always have the coach narrate the same perspective across app." → "'They/their' for opponent speech. Because we do narrate their moves as well." → "Then yes. Lock in and make changes across entire app.").
+
+The coach spoke a different perspective on different tabs — sometimes "we/our", sometimes "you", sometimes by color — and a live tester couldn't tell whose piece a sentence meant. ONE standard, everywhere:
+
+- **The student's OWN side is "you / your."** "your knight eyes d5", "you take on e5", "your king is safe."
+- **The opponent is "they / their."** The coach DOES narrate the opponent's moves, so the opponent needs a pronoun — it's "they/their", never "your opponent's" every time and never a bare color mid-flow. "they answer …e6", "their bishop pins your knight."
+- **"we / our / us" is BANNED** — it is the ambiguity source (whose piece?). This is the hard, gated rule.
+- **Two exceptions, both unambiguous:**
+  1. **Coach-plays-you live game** (`/coach/teach` guided play, "narrate while we play"): the opponent IS the coach speaking, so it says **"I / my"** for its own pieces (you can't call yourself "they"). Still "you/your" for the student; still never "we/our".
+  2. **Pure spectator model game** (the student plays neither side — a matchup demo of two other players): use **White / Black**, since neither side is "you".
+- **This reconciles with the two-register rule (2026-07-19):** review is retrospective ("you played X, they slipped"), in-game/watch is present-tense ("you push e5, they answer …e6") — they differ in TENSE, not in who "you" is. "You" is always the student in both.
+
+Enforcement: (1) the generation prompts (SYSTEM_PROMPT voice rules in `coachPrompts.ts`, the `/coach/teach` play block in `envelope.ts`, `openingGenerator.ts`, the review recap) carry the rule; (2) `src/data/perspectiveVoice.test.ts` is the gate — scans shipped narration (voiced-matchups, plans, common-mistakes, model-games, pro-repertoires, repertoire, all lesson beats) and FAILS on any we/our/us; baseline is EMPTY (the 2026-08-28 migration cleared all 8,197 occurrences) and only shrinks. EXCLUDED from the gate + migration: the public-domain book corpus (`chess-concepts.json`, `opening-book-pages.json`, `library/*`) — those are verbatim quotes (Capablanca's "we" is his), never the coach's voice. When you author NEW narration, write it to this standard; do not add to the baseline.
+
 ### 🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").
 
 The Naroditsky house voice (below) is ONE style, but it speaks in TWO registers
