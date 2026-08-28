@@ -70,6 +70,8 @@ function ActionButton({ action, onClick }: {
     // Recommend-a-focused-game: the coach set a trainingFocus (the point of the
     // game) and offers to play one now (David 2026-08-27).
     play_focused_game: "Play a game — I'll coach it",
+    // Games-less profile answer → import + analyze (David 2026-08-28).
+    import_games: 'Import & analyze my games',
   };
 
   return (
@@ -152,6 +154,12 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         break;
       case 'review_games':
         void navigate('/coach/review');
+        break;
+      case 'import_games':
+        // A games-less profile question → send the student to import + analyze
+        // their real games (David 2026-08-28: tell them to upload, don't just
+        // say "you haven't played enough").
+        void navigate('/games/import');
         break;
       case 'play_focused_game':
         // The coach already stored the trainingFocus (the point of the game);

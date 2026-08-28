@@ -1578,6 +1578,12 @@ const STOCK_GROUNDING_FALLBACK =
   "I can't verify that precisely from grounded data right now. " +
   "Ask me for the best move, the plan, or what's hanging, and I'll ground the answer for you.";
 
+/** The action chip a games-less "profile" answer offers — take the student to
+ *  import + analyze their games (David 2026-08-28: "coach should tell the user
+ *  to upload and analyze games, not 'you haven't played enough'"). Handled in
+ *  ChatMessage → /games/import. */
+const IMPORT_ANALYZE_OFFER: CoachActionOffer = { type: 'import_games', id: 'connect' };
+
 /** Dead-end rescue (David 2026-07-17): when a coach turn is about to serve the
  *  honest stock fallback because no assembler caught it, first check whether the
  *  student simply NAMED an opening we can teach but the surface never resolved —
@@ -3014,9 +3020,9 @@ export async function getCoachChatResponse(
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
               if (voiced) return voiced;
             }
-            const noDataFact = "You haven't played enough analyzed games yet for me to spot your strengths. Play a few more and I'll show you what you do well.";
+            const noDataFact = "Import your games and I'll show you what you do well. Connect your chess.com or lichess account — once your games are in and analyzed, I'll pull out your real strengths.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'strengths', preferRaw: true });
-            if (voicedNoData) return voicedNoData;
+            if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
         }
 
@@ -3038,9 +3044,9 @@ export async function getCoachChatResponse(
               const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
               if (voiced) return voiced;
             }
-            const noDataFact = "You haven't imported or played any games yet, so I don't have a record for you. Play or import some games and I'll track your rating and win rate.";
+            const noDataFact = "Import your games and I'll track your rating and win rate. Connect your chess.com or lichess account and I'll keep your record for you.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'stats', preferRaw: true });
-            if (voicedNoData) return voicedNoData;
+            if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through */ }
         }
 
@@ -3524,7 +3530,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't played enough games yet for me to spot the holes in your repertoire. Play or import a few more and I'll show you what you leave unprepared and what to learn next.";
+            const noDataFact = "Import your games and I'll spot the holes in your repertoire. Connect your chess.com or lichess account and I'll show you what you leave unprepared and what to learn next.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'repertoire-gap', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -3578,7 +3584,7 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
-            const noDataFact = "You haven't played enough games yet for me to track your streaks and time-control form. Play a few more and I'll show you where you're steadiest.";
+            const noDataFact = "Import your games and I'll track your form. Connect your chess.com or lichess account and I'll show you your streaks and where you're steadiest.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'consistency', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through */ }
@@ -3651,7 +3657,7 @@ export async function getCoachChatResponse(
               inversion: cm ? { preferredColor: cm.preferredColor, otherColor: cm.otherColor, inversionPoints: cm.inversionPoints } : null,
             });
             if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'by-color' }]; return v; } }
-            const nd = await voiceFacts("You haven't played enough games with each colour yet for me to compare. Play a few more and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
+            const nd = await voiceFacts("Import your games and I'll compare your colours. Connect your chess.com or lichess account and I'll tell you which side you're stronger with.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'color', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -3669,7 +3675,7 @@ export async function getCoachChatResponse(
               nemesis: ovr.lowestLostTo ? { name: ovr.lowestLostTo.name, elo: ovr.lowestLostTo.elo } : null,
             });
             if (answer) { const v = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'review_games', id: 'best' }]; return v; } }
-            const nd = await voiceFacts("You haven't played enough analyzed games yet for me to pull out your records. Play a few and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
+            const nd = await voiceFacts("Import your games and I'll pull out your records. Connect your chess.com or lichess account and I'll track your best games and fastest wins.", { studentMessage: lastUserMessage(), providerConfig: config, intent: 'records', preferRaw: true });
             if (nd) return nd;
           } catch { /* fall through */ }
         }
@@ -3830,9 +3836,9 @@ export async function getCoachChatResponse(
             // the board and produces a non-answer — G0).  This is the documented
             // contract from assembleProgressAnswer's docstring: "caller takes the
             // one fallback — e.g. 'play a few games and I'll spot patterns'".
-            const noDataFact = "You haven't played enough games or puzzles yet for me to identify patterns in your play. Play a few more and I'll analyze your weaknesses.";
+            const noDataFact = "Import your games and I'll analyze your weaknesses. Connect your chess.com or lichess account, or paste a game — once your games are in and analyzed, I'll show you the patterns in your play and drill them with you.";
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
-            if (voicedNoData) return voicedNoData;
+            if (voicedNoData) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoData; }
           } catch { /* fall through to legacy path */ }
         }
 
