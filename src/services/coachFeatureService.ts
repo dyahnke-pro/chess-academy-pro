@@ -223,8 +223,23 @@ export interface NarrativeMoveData {
  *  analysis is empty. The UI surfaces this verbatim — do not prettify. */
 export const NARRATIVE_SUMMARY_NO_DATA = 'I need a moment to analyze this game. Tap Full Review for complete analysis.';
 
+/** FEN-before-each-ply from the game PGN, so a recap can convert the engine's
+ *  best-move UCI into clean SAN (David 2026-08-28: the recap printed raw UCI
+ *  like "g6f4" / "h7h6" — bare notation TTS reads as gibberish). Index i aligns
+ *  with moveData[i]: both are one-per-ply from the SAME game. Empty on a PGN
+ *  that won't parse — callers fall back to the UCI string. */
+function fenBeforeByPly(pgn: string): string[] {
+  const out: string[] = [];
+  try {
+    const c = new Chess();
+    c.loadPgn(pgn);
+    for (const mv of c.history({ verbose: true })) out.push(mv.before);
+  } catch { /* recap falls back to UCI if the PGN won't parse */ }
+  return out;
+}
+
 export async function generateNarrativeSummary(
-  _pgn: string,
+  pgn: string,
   playerColor: string,
   openingName: string | null,
   result: string,
@@ -277,8 +292,10 @@ export async function generateNarrativeSummary(
   let mistakeCount = 0;
   let inaccuracyCount = 0;
   const keyMoments: string[] = [];
+  const fenBefore = fenBeforeByPly(pgn);
   let prevEvalCp: number | null = 0;
-  for (const m of moveData) {
+  for (let i = 0; i < moveData.length; i++) {
+    const m = moveData[i];
     const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
     const isStudent = !m.isCoachMove && moverColor === studentColorWB;
     if (isStudent && m.classification === 'blunder') blunderCount++;
@@ -289,8 +306,10 @@ export async function generateNarrativeSummary(
       const swing = prevEvalCp !== null && m.evaluation !== null
         ? ` (the evaluation moved from ${(prevEvalCp / 100).toFixed(1)} to ${(m.evaluation / 100).toFixed(1)})`
         : '';
+      // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
+      const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
       keyMoments.push(
-        `On move ${fullMove}, ${m.san} was a ${m.classification}${m.bestMove ? `; the engine preferred ${m.bestMove}` : ''}${swing}.`,
+        `On move ${fullMove}, ${m.san} was a ${m.classification}${bestSan ? `; the engine preferred ${bestSan}` : ''}${swing}.`,
       );
     }
     prevEvalCp = m.evaluation;
@@ -351,7 +370,7 @@ export interface ReviewNarrationSegments {
 }
 
 export async function generateReviewNarrationSegments(
-  _pgn: string,
+  pgn: string,
   playerColor: string,
   openingName: string | null,
   result: string,
@@ -370,7 +389,10 @@ export async function generateReviewNarrationSegments(
   let mistakes = 0;
   let inaccuracies = 0;
   const keyMoments: string[] = [];
-  for (const m of moveData ?? []) {
+  const md = moveData ?? [];
+  const fenBefore = fenBeforeByPly(pgn);
+  for (let i = 0; i < md.length; i++) {
+    const m = md[i];
     const moverColor: 'White' | 'Black' = m.moveNumber % 2 === 1 ? 'White' : 'Black';
     // Only the STUDENT's own errors are the review's subject (a coach/opponent
     // slip isn't the student's lesson). Compare against the STUDENT's color —
@@ -379,7 +401,9 @@ export async function generateReviewNarrationSegments(
     if (m.isCoachMove || moverColor !== studentColorWB) continue;
     if (m.classification === 'blunder') {
       blunders += 1;
-      keyMoments.push(`move ${Math.ceil(m.moveNumber / 2)} ${m.san} (a blunder${m.bestMove ? `; the engine preferred ${m.bestMove}` : ''})`);
+      // Convert the engine's best-move UCI → clean SAN (never speak raw UCI).
+      const bestSan = m.bestMove ? (uciToSanAt(m.bestMove, fenBefore[i] ?? '') ?? m.bestMove) : null;
+      keyMoments.push(`move ${Math.ceil(m.moveNumber / 2)} ${m.san} (a blunder${bestSan ? `; the engine preferred ${bestSan}` : ''})`);
     } else if (m.classification === 'mistake') {
       mistakes += 1;
     } else if (m.classification === 'inaccuracy') {
