@@ -582,13 +582,35 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           return;
         }
 
-        const text = response.trim();
+        let text = response.trim();
         const arrows: BoardArrow[] = [];
         if (nextLevel === 3 && best.bestMoveUci) {
           const { from, to } = uciToSquares(best.bestMoveUci);
           if (isLegalMove(fen, from, to)) {
             arrows.push({ startSquare: from, endSquare: to, color: TIER3_ARROW_COLOR });
           }
+        }
+
+        // NEVER surface a bare-SAN line in the hint bubble (David 2026-08-27
+        // audit: the hint showed "Be3 Ng4" as raw notation, no plain-language
+        // board-pointing). If the brain leaked the move(s) as SAN instead of
+        // prose, replace with a code-computed, TIER-APPROPRIATE plain pointer
+        // (G0 — the move naming is computed, not the LLM's to decide). Tier 3
+        // reveals the move (it also draws the arrow); lower tiers stay
+        // progressive and name only the piece, never the destination.
+        const bareSan = /^(?:(?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|O-O(?:-O)?)[\s,.]*){1,5}$/;
+        if (!text || bareSan.test(text)) {
+          try {
+            const { from, to } = uciToSquares(best.bestMoveUci);
+            const c = new Chess(fen);
+            const sq = c.get(from as Parameters<typeof c.get>[0]);
+            const piece = sq ? pieceNameFromSymbol(sq.type) : 'piece';
+            text = nextLevel >= 3
+              ? `Your ${piece} to ${to} — that's the move.`
+              : nextLevel === 2
+                ? `Look at your ${piece} on ${from}.`
+                : 'There’s a strong move here — look at your most active piece.';
+          } catch { text = text || 'There’s a strong move here.'; }
         }
 
         // Streaming TTS already happened in the spine `onChunk` above

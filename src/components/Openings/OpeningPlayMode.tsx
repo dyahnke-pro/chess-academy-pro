@@ -12,6 +12,7 @@ import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { BoardControls } from '../Board/BoardControls';
 import { HintButton } from '../Coach/HintButton';
+import { dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
 import { ResignButton } from '../Coach/ResignButton';
 import { ExplanationCard } from './ExplanationCard';
@@ -1009,7 +1010,14 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
             highlightSquares={computerLastMove}
             showLastMoveHighlight={settings.highlightLastMove}
             moveQualityFlash={moveFlash}
-            arrows={chatArrows.length > 0 ? chatArrows : (hintState.arrows.length > 0 ? hintState.arrows : (gemArrows.length > 0 ? gemArrows : undefined))}
+            arrows={(() => {
+              // The hint's lead-the-eye arrow must ALWAYS show when a hint is
+              // active — not be masked by a prior chat's arrows (David 2026-08-27
+              // audit: hint showed no arrows). Merge + dedupe by square-pair so
+              // react-chessboard never gets a duplicate key.
+              const a = dedupeArrowsBySquarePair([...hintState.arrows, ...chatArrows, ...gemArrows]);
+              return a.length > 0 ? a : undefined;
+            })()}
             annotationHighlights={chatHighlights.length > 0 ? chatHighlights : undefined}
             ghostMove={hintState.ghostMove}
           />
