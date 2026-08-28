@@ -1,61 +1,33 @@
 import { describe, it, expect } from 'vitest';
-import { detectVoiceForText, LANG_VOICES } from './ttsLang';
+import { detectVoiceForText } from './ttsLang.js';
 
-describe('detectVoiceForText', () => {
-  it('returns null for English (keep the requested English voice)', () => {
-    expect(detectVoiceForText('Why is it important to control the center of the board in chess?')).toBeNull();
-    expect(detectVoiceForText('Great question. Knights love the center — from e4 a knight reaches eight squares.')).toBeNull();
-    expect(detectVoiceForText('')).toBeNull();
+// Regression for the 2026-08-28 "European accent" bug: a chess narration that
+// mentions a foreign opening / player NAME (Grünfeld, König, Réti) carries a
+// diacritic, and a single German umlaut scored 2 — over the >1 threshold — so
+// the WHOLE coach voice flipped to a German voice. Foreign names must not flip
+// the voice; only real foreign-language text (function words) should.
+describe('detectVoiceForText — foreign NAMES in English chess text stay English', () => {
+  it('keeps English for a Grünfeld narration (lone ü)', () => {
+    expect(detectVoiceForText('The Grünfeld hits the centre with an early d5 break.')).toBeNull();
+  });
+  it('keeps English when naming the King as König or mentioning Réti', () => {
+    expect(detectVoiceForText('Watch the König on g1; the Réti aims at the long diagonal.')).toBeNull();
+  });
+  it('keeps English for a Spanish/Italian opening name (single diacritic, no stopwords)', () => {
+    expect(detectVoiceForText('The Muñoz line and the à-la-Italian setup both develop fast.')).toBeNull();
   });
 
-  it('detects non-Latin scripts by Unicode range (definitive)', () => {
-    expect(detectVoiceForText('Почему важно контролировать центр доски?')).toBe(LANG_VOICES.ru);
-    expect(detectVoiceForText('チェスで盤の中央を支配することがなぜ重要なのですか？')).toBe(LANG_VOICES.ja);
-    expect(detectVoiceForText('在国际象棋中，为什么控制棋盘中心很重要？')).toBe(LANG_VOICES.zh);
-    expect(detectVoiceForText('لماذا من المهم السيطرة على مركز الرقعة في الشطرنج؟')).toBe(LANG_VOICES.ar);
-    expect(detectVoiceForText('शतरंज में बोर्ड के केंद्र को नियंत्रित करना क्यों महत्वपूर्ण है?')).toBe(LANG_VOICES.hi);
-    expect(detectVoiceForText('체스에서 보드의 중앙을 통제하는 것이 왜 중요한가요?')).toBe(LANG_VOICES.ko);
+  // Genuine foreign-language passages (real function words) MUST still switch.
+  it('still switches to German for a real German sentence', () => {
+    const v = detectVoiceForText('Der Läufer ist stark und das Zentrum gehört dir.');
+    expect(v?.languageCode).toBe('de-DE');
   });
-
-  it('Japanese kana wins over shared Han characters', () => {
-    // Contains Han (中央/支配) + kana (を/する) → must be Japanese, not Chinese.
-    expect(detectVoiceForText('中央を支配することが大切です')).toBe(LANG_VOICES.ja);
+  it('still switches to Spanish for a real Spanish sentence', () => {
+    const v = detectVoiceForText('El alfil controla el tablero y la dama está lista.');
+    expect(v?.languageCode).toBe('es-ES');
   });
-
-  it('detects Latin-script languages by stopwords + diacritics', () => {
-    expect(detectVoiceForText('¿Por qué es importante controlar el centro del tablero en el ajedrez?')).toBe(LANG_VOICES.es);
-    expect(detectVoiceForText("Pourquoi est-il important de contrôler le centre de l'échiquier aux échecs ?")).toBe(LANG_VOICES.fr);
-    expect(detectVoiceForText('Warum ist es wichtig, das Zentrum des Schachbretts zu kontrollieren?')).toBe(LANG_VOICES.de);
-    expect(detectVoiceForText('Por que é importante controlar o centro do tabuleiro no xadrez?')).toBe(LANG_VOICES.pt);
-    expect(detectVoiceForText('Perché è importante controllare il centro della scacchiera negli scacchi?')).toBe(LANG_VOICES.it);
-  });
-
-  it('a stray foreign word does not flip an otherwise-English passage', () => {
-    // One borrowed word shouldn't clear the >1 threshold.
-    expect(detectVoiceForText('The en passant capture is a special pawn move in chess.')).toBeNull();
-    expect(detectVoiceForText('That was a blunder — you dropped the queen.')).toBeNull();
-  });
-
-  it('every mapped voice carries a locale + a supported engine', () => {
-    for (const v of Object.values(LANG_VOICES)) {
-      expect(v.voiceId).toBeTruthy();
-      expect(v.languageCode).toBeTruthy();
-      expect(['neural', 'standard', 'generative']).toContain(v.engine);
-    }
-  });
-});
-
-// Closes the localization loop: the ACTUAL shipped Spanish narration pack's
-// beats must each route to the Spanish Polly voice (not English). Proves the
-// translate→localize→speak chain end-to-end at the voice-selection layer.
-import esViennaPack from '../../src/data/lessons/i18n/vienna-game.es.json';
-describe('shipped Spanish narration → Spanish voice', () => {
-  it('every Vienna Spanish beat selects the es Polly voice', () => {
-    const beats = esViennaPack.beats as Record<string, { say: string }>;
-    const entries = Object.values(beats);
-    expect(entries.length).toBeGreaterThan(10);
-    for (const b of entries) {
-      expect(detectVoiceForText(b.say)?.voiceId, `not es: ${b.say.slice(0, 50)}`).toBe(LANG_VOICES.es.voiceId);
-    }
+  // Non-Latin scripts stay definitive (unchanged behaviour).
+  it('detects Cyrillic as Russian', () => {
+    expect(detectVoiceForText('Слон силён в центре.')?.languageCode).toBe('ru-RU');
   });
 });

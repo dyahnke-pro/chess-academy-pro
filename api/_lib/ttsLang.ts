@@ -70,43 +70,59 @@ export function detectVoiceForText(text: string): LangVoice | null {
   // ── Latin-script heuristic (es/fr/de/pt/it), English = safe fallback ─────
   const lower = ' ' + text.toLowerCase() + ' ';
   const score: Record<string, number> = { es: 0, fr: 0, de: 0, pt: 0, it: 0, nl: 0, pl: 0, tr: 0 };
-  const bump = (lang: keyof typeof score, re: RegExp, weight = 1): void => {
+  // Track FUNCTION-WORD (stopword) evidence separately from diacritics. A lone
+  // diacritic in an English chess narration is almost always a foreign proper
+  // NAME (Grünfeld, König, Réti, a player's surname) — NOT a foreign-language
+  // passage — and must never flip the voice (David 2026-08-28: a single German
+  // umlaut was switching the whole coach to a German voice = "European accent").
+  // So the diacritic-scored languages (es/fr/de/pt/it) also require ≥1 stopword.
+  const stop: Record<string, number> = { es: 0, fr: 0, de: 0, pt: 0, it: 0, nl: 0, pl: 0, tr: 0 };
+  const bumpDia = (lang: keyof typeof score, re: RegExp, weight = 1): void => {
     const m = lower.match(re);
     if (m) score[lang] += m.length * weight;
   };
+  const bumpStop = (lang: keyof typeof score, re: RegExp): void => {
+    const m = lower.match(re);
+    if (m) { score[lang] += m.length; stop[lang] += m.length; }
+  };
 
-  // Distinctive diacritics / punctuation (strong signals)
-  bump('es', /ñ|¿|¡/g, 3);
-  bump('pt', /ã|õ/g, 3);
-  bump('de', /ß|ä|ö|ü/g, 2);
-  bump('fr', /ç|œ|â|ê|î|ô|û/g, 2);
-  bump('it', /à|ò|ù/g, 1);
+  // Distinctive diacritics / punctuation (strong signals, but foreign NAMES
+  // carry them too — gated on stopword corroboration below for es/fr/de/pt/it).
+  bumpDia('es', /ñ|¿|¡/g, 3);
+  bumpDia('pt', /ã|õ/g, 3);
+  bumpDia('de', /ß|ä|ö|ü/g, 2);
+  bumpDia('fr', /ç|œ|â|ê|î|ô|û/g, 2);
+  bumpDia('it', /à|ò|ù/g, 1);
   // Polish and Turkish carry letters that exist in no other language the app
   // speaks, so they are as definitive as a non-Latin script.
-  bump('pl', /ł|ą|ę|ż|ź|ś|ć/g, 3);
-  bump('tr', /ğ|ı|ş/g, 3);
+  bumpDia('pl', /ł|ą|ę|ż|ź|ś|ć/g, 3);
+  bumpDia('tr', /ğ|ı|ş/g, 3);
 
   // Distinctive stopwords (spaced so they can't match inside a longer word).
   // Chosen to avoid English homographs (no "die", no "a", no "is").
-  bump('es', / (el|la|los|las|que|por|para|como|una|está|porque|qué|del|tablero|ajedrez|piezas) /g);
-  bump('fr', / (le|les|des|une|est|pour|vous|que|qui|dans|avec|pourquoi|échecs|pièces|contrôler|au) /g);
-  bump('de', / (der|das|und|ist|nicht|eine|wie|warum|über|mehr|kann|figuren|zentrum|schach|des) /g);
-  bump('pt', / (você|não|para|porque|como|uma|está|peças|tabuleiro|xadrez|mais|é|no) /g);
-  bump('it', / (perché|gli|che|non|una|per|con|come|più|scacchi|pezzi|centro|della|è) /g);
+  bumpStop('es', / (el|la|los|las|que|por|para|como|una|está|porque|qué|del|tablero|ajedrez|piezas) /g);
+  bumpStop('fr', / (le|les|des|une|est|pour|vous|que|qui|dans|avec|pourquoi|échecs|pièces|contrôler|au) /g);
+  bumpStop('de', / (der|das|und|ist|nicht|eine|wie|warum|über|mehr|kann|figuren|zentrum|schach|des) /g);
+  bumpStop('pt', / (você|não|para|porque|como|uma|está|peças|tabuleiro|xadrez|mais|é|no) /g);
+  bumpStop('it', / (perché|gli|che|non|una|per|con|come|più|scacchi|pezzi|centro|della|è) /g);
   // Dutch has no letter of its own, so it rests entirely on function words —
   // chosen to have no English homograph at all ("het", "een", "niet", "naar"),
   // plus the chess nouns that appear in almost every spoken line.
-  bump('nl', / (het|een|niet|zijn|maar|ook|naar|wordt|deze|jouw|uw|zwart|wit|stuk|zet|koning|loper|paard|toren|dame) /g);
-  bump('pl', / (się|nie|jest|że|dla|przez|jak|ten|szachy|pion|goniec|skoczek|wieża|hetman|król) /g);
-  bump('tr', / (bir|ve|için|bu|ile|değil|nasıl|neden|satranç|piyon|fil|at|kale|vezir|şah) /g);
+  bumpStop('nl', / (het|een|niet|zijn|maar|ook|naar|wordt|deze|jouw|uw|zwart|wit|stuk|zet|koning|loper|paard|toren|dame) /g);
+  bumpStop('pl', / (się|nie|jest|że|dla|przez|jak|ten|szachy|pion|goniec|skoczek|wieża|hetman|król) /g);
+  bumpStop('tr', / (bir|ve|için|bu|ile|değil|nasıl|neden|satranç|piyon|fil|at|kale|vezir|şah) /g);
 
+  // The diacritic-only languages must show real function-word evidence to win —
+  // a lone accented NAME in an otherwise-English line stays English. Polish and
+  // Turkish (definitive letters) and Dutch (function-word-only) are exempt.
+  const NEEDS_STOPWORD = new Set(['es', 'fr', 'de', 'pt', 'it']);
   let best: string | null = null;
   let bestScore = 1; // require > 1 so a stray word never flips English
   for (const [lang, s] of Object.entries(score)) {
-    if (s > bestScore) {
-      bestScore = s;
-      best = lang;
-    }
+    if (s <= bestScore) continue;
+    if (NEEDS_STOPWORD.has(lang) && stop[lang] === 0) continue; // lone foreign name — keep English
+    bestScore = s;
+    best = lang;
   }
   return best ? LANG_VOICES[best] : null;
 }
