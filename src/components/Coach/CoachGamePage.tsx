@@ -2806,11 +2806,36 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             const threatMove = threat.line[threatMoveIdx] ?? '';
             const isOppMove = threatMoveIdx % 2 === 1;
             const lowerDesc = threat.pattern.description.charAt(0).toLowerCase() + threat.pattern.description.slice(1);
+            // BOARD-TRUTH GATE on the live tactic alert (David 2026-08-27 audit:
+            // the alert said "king on g2" when the king was g1→f1 and never on
+            // g2). The pattern description is generated from the FUTURE position
+            // where the tactic exists, so validate it against THAT position
+            // (result.fen + the threat line played out), through the same
+            // board-claim validator the walkthrough uses. If a square is
+            // hallucinated, drop the description and speak a move-only warning —
+            // still useful, never board-false.
+            let descGrounded = true;
+            try {
+              const probe = new Chess(result.fen);
+              for (let k = 0; k <= threatMoveIdx; k++) {
+                const step = threat.line[k];
+                if (!step) break;
+                probe.move(step);
+              }
+              descGrounded = isSpokenSentenceGrounded(
+                threat.pattern.description,
+                probe.fen(),
+                'CoachGamePage.tacticAlert',
+              );
+            } catch { descGrounded = true; }
             const warning = isOppMove && threatMove
-              ? `Watch out — if I play ${threatMove}, ${lowerDesc}.`
+              ? (descGrounded ? `Watch out — if I play ${threatMove}, ${lowerDesc}.` : `Watch out — I might play ${threatMove} here.`)
               : threatMove
-                ? `Watch out — ${threatMove} from you would let ${lowerDesc}.`
-                : `Watch out — ${threat.pattern.description}.`;
+                ? (descGrounded ? `Watch out — ${threatMove} from you would let ${lowerDesc}.` : `Careful — ${threatMove} looks risky here.`)
+                : (descGrounded ? `Watch out — ${threat.pattern.description}.` : '');
+            // Nothing board-true left to say (no setup move + hallucinated
+            // description) — stay silent rather than speak a false square.
+            if (warning) {
             gameChatRef.current?.injectAssistantMessage(warning);
             const tacticVerbosity = resolveVerbosity(useAppStore.getState().activeProfile);
             if (tacticVerbosity !== 'off') {
@@ -2851,6 +2876,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               void voiceService.speakForced(warning).catch((err: unknown) => {
                 console.warn('[tactic-alert] TTS failed:', err);
               });
+            }
             }
           }
         }
