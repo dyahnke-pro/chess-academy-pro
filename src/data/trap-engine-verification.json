@@ -65,7 +65,7 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-najdorf::Nc3 after ...e5 lets us trade with tempo": {
+    "pro-naroditsky-najdorf::Nc3 after ...e5 lets you trade with tempo": {
       "role": "trap",
       "cp": 264,
       "kind": null,
@@ -125,13 +125,13 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-kia::O-O lets us crash through with exf6 (Anti-Grünfeld)": {
+    "pro-naroditsky-kia::O-O lets you crash through with exf6 (Anti-Grünfeld)": {
       "role": "trap",
       "cp": 380,
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-kia::d6 + e5 trade hands us the better endgame": {
+    "pro-naroditsky-kia::d6 + e5 trade hands you the better endgame": {
       "role": "trap",
       "cp": -4,
       "kind": null,
@@ -173,7 +173,7 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-rossolimo::cxd4 lets us recapture with the queen": {
+    "pro-naroditsky-rossolimo::cxd4 lets you recapture with the queen": {
       "role": "trap",
       "cp": 10,
       "kind": null,
@@ -191,7 +191,7 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-jobava-london::Nd7 lets us trade both knights favorably": {
+    "pro-naroditsky-jobava-london::Nd7 lets you trade both knights favorably": {
       "role": "trap",
       "cp": 33,
       "kind": null,
@@ -209,7 +209,7 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-jobava-london::Bd6 voluntary trade hands us c-file pressure": {
+    "pro-naroditsky-jobava-london::Bd6 voluntary trade hands you c-file pressure": {
       "role": "trap",
       "cp": -14,
       "kind": null,
@@ -227,7 +227,7 @@
       "kind": null,
       "status": "keep"
     },
-    "pro-naroditsky-ruy-lopez::Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)": {
+    "pro-naroditsky-ruy-lopez::Nc5 in Open Ruy lets you win the e5-pawn (Firouzja victim)": {
       "role": "trap",
       "cp": 22,
       "kind": null,
