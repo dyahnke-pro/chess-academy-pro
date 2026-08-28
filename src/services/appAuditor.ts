@@ -34,6 +34,8 @@ const APP_AUDIT_LOG_MAX_ENTRIES = 300;
 export type AuditCategory = 'narration' | 'runtime' | 'subsystem' | 'app';
 
 export type AuditKind =
+  // Grounded board-question router (coachApi.boardQuestion) — the aspect answered
+  | 'coach-grounded-answer'
   // Pro Games rewatch surface (/coach/pro-games)
   | 'pro-game-rewatch-opened'
   // Narration (from narrationAuditor)

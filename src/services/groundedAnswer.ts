@@ -307,7 +307,7 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
 }
 
 // ── OPPONENT / MY THREATS — "what is my opponent threatening?" ───────────────
-export function assembleThreatAnswer(fen: string, ask: string | null | undefined, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
+export function assembleThreatAnswer(fen: string, _ask: string | null | undefined, studentColor: 'white' | 'black', side: 'me' | 'opponent' | 'neutral'): GroundedAnswer | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
