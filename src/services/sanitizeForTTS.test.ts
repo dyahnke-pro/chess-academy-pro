@@ -174,6 +174,24 @@ describe('sanitizeForTTS', () => {
       // "a B" via AFTER_CONTEXT + "Q to d8" via ISOLATED → both expanded
       expect(sanitizeForTTS('Trade a B for Q to d8')).toBe('Trade a bishop for queen to d8');
     });
+    it('expands lowercase piece-letter shorthand ("b supports")', () => {
+      // Regression: LEAK_DETECTOR_RE is case-insensitive (has /i) but
+      // ISOLATED_PIECE_LETTER_RE was uppercase-only — lowercase piece
+      // letters followed by an action word survived sanitizeForTTS.
+      expect(sanitizeForTTS('b supports the centre')).toBe('bishop supports the centre');
+      expect(detectSanitizerLeak(sanitizeForTTS('b supports the centre'))).toBe(false);
+    });
+    it('expands lowercase "q attacks" action-word pattern', () => {
+      expect(sanitizeForTTS('q attacks the bishop')).toBe('queen attacks the bishop');
+      expect(detectSanitizerLeak(sanitizeForTTS('q attacks the bishop'))).toBe(false);
+    });
+    it('expands lowercase "r on e8" isolated pattern', () => {
+      expect(sanitizeForTTS('r on e8 controls the file')).toBe('rook on e8 controls the file');
+      expect(detectSanitizerLeak(sanitizeForTTS('r on e8 controls the file'))).toBe(false);
+    });
+    it('expands lowercase bracketed "p(f3)" adjacent-square pattern', () => {
+      expect(sanitizeForTTS('the p(f3) is hanging')).toContain('pawn on f3');
+    });
   });
 
   describe('directive markup strip — defense-in-depth (audit 6459def+)', () => {
