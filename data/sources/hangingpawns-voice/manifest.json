@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-10T11:34:57.601Z",
+  "updatedAt": "2026-08-31T18:32:11.687Z",
   "videos": [
     {
       "id": "UQlQjco7Mc8",
@@ -2700,6 +2700,36 @@
       "id": "GTo-FC9guYY",
       "title": "1...e5 Repertoire for Black (against the Spanish, Italian, Scotch, Vienna, King's Gambit...)",
       "playlist": "1-e4-opening-theory"
+    },
+    {
+      "id": "kluMMOEQ35k",
+      "title": "Sicilian Wing Gambit (2.b4)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "D22HH4UYZAg",
+      "title": "Sicilian Snyder Variation (2.b3)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "snhyG5FKKlk",
+      "title": "Sicilian Nimzowitsch Variation (2...Nf6)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "muhZ5o0qNsc",
+      "title": "Sicilian O'Kelly Variation (2...a6)",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "4HRicoI7kxo",
+      "title": "Mongoose Sicilian?",
+      "playlist": "complete-chess-openings"
+    },
+    {
+      "id": "mhskDZEIF7U",
+      "title": "The Chameleon Sicilian",
+      "playlist": "complete-chess-openings"
     }
   ]
 }
