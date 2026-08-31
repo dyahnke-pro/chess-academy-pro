@@ -380,8 +380,8 @@ export function App(): JSX.Element {
         // seedDatabase is single-flight guarded so the strict-mode
         // double-invoke + re-renders can't race the bulkPut writes.
         void seedDatabase().catch((e: unknown) => console.error('[seed] failed:', e));
-        void seedVerifiedLibraryNote();
-        void seedPuzzles();
+        void seedVerifiedLibraryNote().catch((e: unknown) => console.error('[seed-verified-library] failed:', e));
+        void seedPuzzles().catch((e: unknown) => console.error('[seed-puzzles] failed:', e));
 
         // Warm the Stockfish WASM engine shortly after boot (David 2026-06-17)
         // so it's READY before the user reaches a coach question. The cold
