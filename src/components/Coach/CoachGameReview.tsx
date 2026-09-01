@@ -26,7 +26,7 @@ import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { useSettings } from '../../hooks/useSettings';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
-import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
+import { getPhaseBreakdown, classifyPhase, phaseScopedReviewSummary, isPhaseFocus } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { buildGuidedFindChallenge, buildHoldChallenge, judgeGuidedFindAttempt, GUIDED_FIND_MIN_EVAL_CP, type GuidedFindChallenge } from '../../services/guidedFindTheMove';
@@ -384,6 +384,18 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     () => detectMissedTactics(moves, playerColor),
     [moves, playerColor],
   );
+
+  // PHASE-SCOPED REVIEW (Batch C, David 2026-09-01) — when the student declared
+  // a training focus on a PHASE, lead the review with how that phase went in THIS
+  // game (grounded in the phase breakdown numbers; G0). Null when there's no
+  // phase focus or the game never reached that phase. Dismissible.
+  const trainingFocus = useCoachMemoryStore((s) => s.trainingFocus);
+  const phaseFocusSummary = useMemo(
+    () => (isPhaseFocus(trainingFocus?.area) ? phaseScopedReviewSummary(phaseBreakdown, trainingFocus.area) : null),
+    [trainingFocus?.area, phaseBreakdown],
+  );
+  const [phaseFocusDismissed, setPhaseFocusDismissed] = useState(false);
+  useEffect(() => { setPhaseFocusDismissed(false); }, [props.gameId]);
 
   const missCount = useMemo(() => detectMisses(moves, playerColor), [moves, playerColor]);
 
@@ -3661,6 +3673,27 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 short (2-3 lines); keeping it here guarantees the student reads
                 the WHY without scrolling, and frees the middle for Ask + the
                 move list. */}
+            {/* PHASE-SCOPED FOCUS (Batch C) — how the student's training-focus
+                phase went in this game, led by the grounded phase numbers. */}
+            {phaseFocusSummary && !phaseFocusDismissed && (
+              <div className="px-3 pt-2" data-testid="review-phase-focus-card">
+                <div
+                  className="rounded-xl border border-indigo-500/40 px-3 py-2 flex items-start gap-2"
+                  style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(99,102,241,0.3))' }}
+                >
+                  <p className="text-xs leading-relaxed flex-1" style={{ color: 'var(--color-text)' }}>
+                    {phaseFocusSummary.facts}
+                  </p>
+                  <button
+                    type="button"
+                    data-testid="review-phase-focus-dismiss"
+                    onClick={() => setPhaseFocusDismissed(true)}
+                    className="text-xs opacity-60 hover:opacity-100 shrink-0"
+                    aria-label="Dismiss focus summary"
+                  >✕</button>
+                </div>
+              </div>
+            )}
             <div className="px-3 pt-1 pb-2 border-t border-theme-border">
               <div
                 className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 max-h-[4.5rem] overflow-y-auto"

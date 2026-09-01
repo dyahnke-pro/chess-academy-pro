@@ -101,6 +101,7 @@ import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest } from '../coach/questionIntents';
+import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -1790,6 +1791,22 @@ function emitGroundingCoverage(
     summary: `lane=${lane} surface=${surface}`,
     details: JSON.stringify({ lane, surface, sessionId, ...(extra ?? {}) }),
   });
+}
+
+/** Batch D (David 2026-09-01) — OBSERVE-ONLY. At a deflection (the fast-path
+ *  gave up), record what the signal-extractor's candidate map WOULD have
+ *  suggested for this phrasing, alongside the deflection log. Changes no routing;
+ *  it grows the data that says which phrasings actually miss, so the future live
+ *  re-route is a targeted flip, not a speculative dispatch rewrite. */
+function signalHint(
+  query: string | undefined,
+  grounding: { currentFen?: string | null; moveHistory?: readonly unknown[] } | null | undefined,
+): Record<string, unknown> {
+  try {
+    const boardPresent = !!(grounding?.currentFen || (grounding?.moveHistory?.length ?? 0) > 0);
+    const c = topCandidateLane(query ?? '', { boardPresent });
+    return c ? { signalLane: c.lane, signalScore: c.score } : { signalLane: 'none' };
+  } catch { return { signalLane: 'error' }; }
 }
 
 /**
@@ -5166,7 +5183,7 @@ export async function getCoachChatResponse(
       // the surface threaded engine data; otherwise serve the honest stock line.
       const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
       if (grounded) {
-        emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100) });
+        emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
         if (onStream) onStream(grounded);
         return grounded;
       }
@@ -5176,7 +5193,7 @@ export async function getCoachChatResponse(
         if (onStream) onStream(openingPicker);
         return openingPicker;
       }
-      emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler', question: originalQuery.slice(0, 100) });
+      emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'chess-signal-no-assembler', question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
       if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
       return STOCK_GROUNDING_FALLBACK;
     }
@@ -5211,7 +5228,7 @@ export async function getCoachChatResponse(
     // leaked "the best move is e4…" onto a thank-you — the exact contract the
     // banter audit catches. So no position readout on a no-chess-signal turn:
     // serve the warm stock line. The model's ramble is discarded, as it should be.
-    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
+    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
   }
@@ -5265,13 +5282,13 @@ export async function getCoachChatResponse(
       if (onStream) onStream(cleaned);
       return cleaned;
     }
-    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'grounded-banter-fully-stripped', question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'grounded-banter-fully-stripped', question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
   }
   const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
   if (grounded) {
-    emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
     if (onStream) onStream(grounded);
     return grounded;
   }
@@ -5281,7 +5298,7 @@ export async function getCoachChatResponse(
     if (onStream) onStream(openingPicker);
     return openingPicker;
   }
-  emitGroundingCoverage('safe-default-stock', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+  emitGroundingCoverage('safe-default-stock', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
   if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
   return STOCK_GROUNDING_FALLBACK;
 }

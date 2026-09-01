@@ -158,6 +158,69 @@ function harmonicMean(values: number[]): number {
   return values.length / reciprocalSum;
 }
 
+const PHASE_THE: Record<GamePhase, string> = {
+  opening: 'the opening',
+  middlegame: 'the middlegame',
+  endgame: 'the endgame',
+};
+
+/**
+ * PHASE-SCOPED REVIEW SUMMARY (Batch C, David 2026-09-01: "filter the post-game
+ * review to the phase the student's trainingFocus flags, so a review zooms to
+ * where they actually lose").
+ *
+ * When the student has declared a training focus on a PHASE, the review leads
+ * with how THAT phase went in this game — grounded entirely in the already-
+ * computed `getPhaseBreakdown` numbers (accuracy + mistake count per phase).
+ * G0: states the student's real figures; the LLM only phrases them (or preferRaw
+ * speaks the computed prose). Returns null when the focus phase never occurred
+ * in this game (empty > invented) so the review falls back to its normal open.
+ *
+ * It ELEVATES the focus phase (leads + contrasts) rather than HIDING the other
+ * phases — a hung rook in the endgame is still worth teaching even on a
+ * middlegame-focus day; the zoom is emphasis, not blindness.
+ */
+export function phaseScopedReviewSummary(
+  breakdown: PhaseAccuracy[],
+  focusArea: GamePhase,
+): { facts: string; focusPhase: GamePhase; focusMistakes: number; wasWorstPhase: boolean } | null {
+  const focus = breakdown.find((b) => b.phase === focusArea);
+  if (!focus || focus.moveCount === 0) return null; // this game never reached the focus phase
+  const others = breakdown.filter((b) => b.phase !== focusArea && b.moveCount > 0);
+  const the = PHASE_THE[focusArea];
+  const acc = Math.round(focus.accuracy);
+  const m = focus.mistakes;
+  const slip = m === 0 ? 'no slips' : `${m} slip${m === 1 ? '' : 's'}`;
+
+  // Was the focus phase the student's WORST this game? (Most mistakes, ties
+  // broken by lower accuracy.) That decides the framing — "this is where it
+  // turned" vs "this one actually held up; the trouble was elsewhere".
+  const worst = [...breakdown].filter((b) => b.moveCount > 0)
+    .sort((a, b) => b.mistakes - a.mistakes || a.accuracy - b.accuracy)[0];
+  const wasWorstPhase = worst?.phase === focusArea && (focus.mistakes > 0);
+
+  let facts: string;
+  if (wasWorstPhase) {
+    facts = `You're working on ${the}, and this game turned there — ${slip} at ${acc}% accuracy, your leakiest phase here.`;
+  } else if (others.length > 0) {
+    // Name where it actually went wrong, honestly, so the focus isn't oversold.
+    const otherWorst = [...others].sort((a, b) => b.mistakes - a.mistakes || a.accuracy - b.accuracy)[0];
+    if (otherWorst && otherWorst.mistakes > focus.mistakes) {
+      facts = `You're working on ${the}, and it mostly held here — ${slip} at ${acc}%. The trouble this game was ${PHASE_THE[otherWorst.phase]} (${otherWorst.mistakes} slip${otherWorst.mistakes === 1 ? '' : 's'}), so watch that too.`;
+    } else {
+      facts = `You're working on ${the}: ${slip} here at ${acc}% accuracy. Let's see how it played out.`;
+    }
+  } else {
+    facts = `You're working on ${the}: ${slip} here at ${acc}% accuracy. Let's see how it played out.`;
+  }
+  return { facts, focusPhase: focusArea, focusMistakes: m, wasWorstPhase };
+}
+
+/** True when a training-focus area maps to a game PHASE the review can scope to. */
+export function isPhaseFocus(area: string | null | undefined): area is GamePhase {
+  return area === 'opening' || area === 'middlegame' || area === 'endgame';
+}
+
 /** THE middlegame → endgame test, shared by every surface that needs one.
  *
  *  Lived privately in `phaseTransitionDetector` until 2026-08-05, while
