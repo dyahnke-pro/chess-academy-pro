@@ -4724,7 +4724,12 @@ export async function getCoachChatResponse(
         // (≤7 pieces). lookupTablebase returns null off-tablebase (>7 pieces /
         // proxy miss) → fall through to the engine-eval path. The verdict is
         // voiced from the STUDENT's perspective; the LLM decides nothing.
-        if (grounding.endgameQuestion && grounding.currentFen) {
+        // An endgame-WEAKNESS question ("what endgame am I weakest at?") also
+        // trips endgameQuestion, but it asks about the student's mistake HISTORY,
+        // not the current board's verdict — so it must not be answered "we're not
+        // in an endgame yet" off the live piece count (contract audit 2026-09-01).
+        // Defer to the dedicated endgame-weakness lane just below.
+        if (grounding.endgameQuestion && !grounding.endgameWeaknessQuestion && grounding.currentFen) {
           // "Can I hold this ending?" asked in the OPENING got a best-move
           // readout (full-app sweep, run allq-mss8dkto). With most of the
           // army still on the board the honest answer is that it isn't an
