@@ -8,17 +8,43 @@
  * error states).
  */
 import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { Chess } from 'chess.js';
 import { getEndgameLessonById } from '../../services/endgameLessonsService';
 import { EndgameTablebaseTrainer } from './EndgameTablebaseTrainer';
 
 export function EndgameTrainerPage(): JSX.Element {
   const { lessonId } = useParams<{ lessonId: string }>();
+  const [params] = useSearchParams();
   const navigate = useNavigate();
-  const lesson = useMemo(() => (lessonId ? getEndgameLessonById(lessonId) : null), [lessonId]);
+
+  // CUSTOM position (David 2026-09-01: "make custom endgame training for the
+  // user") — the coach launches the trainer on the student's OWN flubbed endgame
+  // via `?fen=`. Validated with chess.js; an illegal FEN falls back to the lesson.
+  const customFen = useMemo(() => {
+    const f = params.get('fen');
+    if (!f) return null;
+    try { new Chess(f); return f; } catch { return null; }
+  }, [params]);
+  const customTitle = params.get('title') || 'Endgame Training';
+
+  const lesson = useMemo(() => (lessonId && lessonId !== 'custom' ? getEndgameLessonById(lessonId) : null), [lessonId]);
   const playable = useMemo(() => lesson?.positions.find((p) => p.fen) ?? null, [lesson]);
 
   const exit = () => navigate('/coach/teach');
+
+  if (customFen) {
+    return (
+      <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
+        <EndgameTablebaseTrainer
+          fen={customFen}
+          studentColor={customFen.split(' ')[1] === 'b' ? 'black' : 'white'}
+          title={customTitle}
+          onExit={exit}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">

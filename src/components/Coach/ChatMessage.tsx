@@ -159,8 +159,15 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         break;
       case 'endgame_trainer':
         // Interactive tablebase trainer for a specific ending (Batch B) — Watch,
-        // then play it out with the coach correcting mistakes.
-        void navigate(`/coach/endgame-trainer/${encodeURIComponent(action.id)}`);
+        // then play it out with the coach correcting mistakes. A `custom:<fen>`
+        // id drills the student's OWN flubbed endgame position (David 2026-09-01:
+        // "make custom endgame training for the user"); else a named lesson id.
+        if (action.id.startsWith('custom:')) {
+          const fen = action.id.slice('custom:'.length);
+          void navigate(`/coach/endgame-trainer/custom?fen=${encodeURIComponent(fen)}`);
+        } else {
+          void navigate(`/coach/endgame-trainer/${encodeURIComponent(action.id)}`);
+        }
         break;
       case 'review_games':
         void navigate('/coach/review');
