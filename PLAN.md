@@ -1,5 +1,11 @@
 # PLAN — Coach answers a beginner + trains toward a goal (2026-08-27)
 
+> **Related:** more TODOs recovered from the "Not what i see" session (game-
+> analysis stall, sacrifice-soundness `computer:null`, mistake-puzzle best
+> moves, hint-wrong-piece, puzzle play-out, the weakness-meta→coach "what am I
+> weak at" loop) live in
+> `docs/plans/2026-09-01-recovered-todos-not-what-i-see.md`.
+
 Owner: David. Triggered by real native-iOS user `466e36fc` (Rivertoe85, ~900,
 paying trial, daily-active). PostHog showed his coach experience is broken in
 two ways: (1) the coach can't answer his plain-English questions, and (2) there
