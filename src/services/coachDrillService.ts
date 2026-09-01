@@ -27,8 +27,7 @@ import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
-import { themesForTactic } from './weaknessSpine';
-import { classifyEndgameType, endgameTypeInfo } from './endgameProfileService';
+import { themesForTactic, bucketForMistake } from './weaknessSpine';
 
 interface RawPuzzle {
   id: string;
@@ -270,55 +269,15 @@ export interface MistakeDrillTheme {
   drills: CoachDrill[];
 }
 
-const TACTIC_LABELS: Record<string, string> = {
-  fork: 'Forks',
-  pin: 'Pins',
-  skewer: 'Skewers',
-  discovered_attack: 'Discovered attacks',
-  back_rank: 'Back-rank tactics',
-  hanging_piece: 'Hanging pieces',
-  promotion: 'Promotions',
-  deflection: 'Deflections',
-  overloaded_piece: 'Overloaded pieces',
-  trapped_piece: 'Trapped pieces',
-  clearance: 'Clearance',
-  interference: 'Interference',
-  zwischenzug: 'Zwischenzug',
-  x_ray: 'X-ray tactics',
-  double_check: 'Double checks',
-  removing_the_guard: 'Removing the guard',
-  tactical_sequence: 'Tactical sequences',
-};
-
-const PHASE_LABELS: Record<string, string> = {
-  opening: 'Opening',
-  middlegame: 'Middlegame',
-  endgame: 'Endgame',
-};
-
+// The drill BUCKET is the weakness-spine cluster with the `analysis:` prefix
+// stripped (the motif key `buildMistakeDrillQueue` matches on). DELEGATE to
+// bucketForMistake so a motif-scoped "drill it" always targets the SAME cluster
+// the weakness profile / lifecycle / briefing named — including the Batch A
+// missed-threat / structure-damage / endgame-type refinements. One classifier,
+// no drift (they used to be two hand-synced copies).
 function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
-  // Position-transformation (trade) errors get their own weakness bucket
-  // (Phase 4), not a generic phase bucket.
-  if (mp.positionalMotif) {
-    return {
-      key: `transform:${mp.positionalMotif}`,
-      label: mp.positionalMotif === 'unfavorable-trade' ? 'Unfavorable trades' : 'Missed favorable trades',
-    };
-  }
-  if (mp.tacticType) {
-    return { key: `tactic:${mp.tacticType}`, label: TACTIC_LABELS[mp.tacticType] ?? mp.tacticType };
-  }
-  // Endgame mistakes drill by ENDING TYPE (David 2026-09-01) so a motif-scoped
-  // "drill it" targets rook endings / K+P specifically — matches the weakness
-  // spine's clusterId (analysis: prefix stripped for the drill key).
-  if (mp.gamePhase === 'endgame') {
-    const type = classifyEndgameType(mp.fen);
-    if (type !== 'other') {
-      const label = endgameTypeInfo(type).label;
-      return { key: `endgame-type:${type}`, label: label.charAt(0).toUpperCase() + label.slice(1) };
-    }
-  }
-  return { key: `phase:${mp.gamePhase}`, label: PHASE_LABELS[mp.gamePhase] ?? 'Tactics' };
+  const { clusterId, label } = bucketForMistake(mp);
+  return { key: clusterId.replace(/^analysis:/, ''), label };
 }
 
 /** Convert one mistake puzzle to a solve-on-the-board drill. Unlike the

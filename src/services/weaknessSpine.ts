@@ -17,10 +17,13 @@
 // Training Plan reads the unified list; the Weaknesses page folds the
 // misconception half in via weaknessAnalyzer.analyzeMisconceptions.
 
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
 import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } from './conversionDetector';
-import { classifyEndgameType, endgameTypeInfo } from './endgameProfileService';
+import { classifyEndgameType, endgameTypeInfo, type EndgameType } from './endgameProfileService';
+import { computeMustDefend } from './threatOut';
+import { describeStructure } from './boardStructure';
 import { getAddressedConversions } from './conversionProgress';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
@@ -78,6 +81,76 @@ function posKey(fen: string, san?: string): string {
   return `${core}|${san ?? ''}`;
 }
 
+const MISSED_THREAT_TAG = 'analysis:missed-threat';
+const STRUCTURE_DAMAGE_TAG = 'analysis:structure-damage';
+/** The opponent's null-move net (points) that marks a REAL standing threat the
+ *  student was on move to answer. 3 = a minor piece; below that is noise. */
+const MISSED_THREAT_MIN_NET = 3;
+
+const colorChar = (c: 'white' | 'black'): 'w' | 'b' => (c === 'white' ? 'w' : 'b');
+
+// The two board probes are pure functions of (fen, playedSan); bucketForMistake
+// runs on every mistake across several hot paths (unified profile, lifecycle,
+// drill queue), so memoize the expensive board work per position+move.
+const _threatMemo = new Map<string, boolean>();
+const _structMemo = new Map<string, boolean>();
+
+/** A1 — MISSED OPPONENT THREAT / prophylaxis (David 2026-09-01 Batch A). In the
+ *  position the student was ON MOVE to answer, the OPPONENT already had a
+ *  standing threat to win >= a minor (threatOut null-move probe, SEE-verified) —
+ *  so this slip is "you didn't see what they were threatening", NOT "your move
+ *  hung a piece". Only fires when the student is genuinely the side to move. */
+function mistakeMissedThreat(p: MistakePuzzle): boolean {
+  const key = `${p.fen}|${p.playerMoveSan ?? ''}`;
+  const memo = _threatMemo.get(key);
+  if (memo !== undefined) return memo;
+  let hit = false;
+  try {
+    const stm = new Chess(p.fen).turn();
+    if (stm === colorChar(p.playerColor)) hit = computeMustDefend(p.fen, stm).net >= MISSED_THREAT_MIN_NET;
+  } catch { hit = false; }
+  _threatMemo.set(key, hit);
+  return hit;
+}
+
+/** A3 — SELF-INFLICTED STRUCTURE DAMAGE (David 2026-09-01 Batch A). The
+ *  student's PLAYED move worsened their OWN pawn structure — a new isolated pawn
+ *  or a fresh doubled file (boardStructure, pure geometry). It's a mistake
+ *  puzzle, so the engine already judged there was no compensation. */
+function mistakeStructureDamage(p: MistakePuzzle): boolean {
+  const key = `${p.fen}|${p.playerMoveSan ?? ''}`;
+  const memo = _structMemo.get(key);
+  if (memo !== undefined) return memo;
+  let hit = false;
+  try {
+    if (p.playerMoveSan) {
+      const c = colorChar(p.playerColor);
+      const before = describeStructure(p.fen);
+      const g = new Chess(p.fen);
+      g.move(p.playerMoveSan);
+      const after = describeStructure(g.fen());
+      if (before && after) {
+        const badness = (s: NonNullable<ReturnType<typeof describeStructure>>): number =>
+          s.pawns.isolatedPawns[c].length + s.pawns.doubledFiles[c].length;
+        hit = badness(after) > badness(before);
+      }
+    }
+  } catch { hit = false; }
+  _structMemo.set(key, hit);
+  return hit;
+}
+
+/** Refine an untagged opening/middlegame mistake (no tactic/transform motif)
+ *  into a specific weakness when a board probe names one — a missed opponent
+ *  threat, or self-inflicted structure damage — instead of the vague "mistakes
+ *  in the middlegame". Threat first (more urgent), then structure. Null when
+ *  neither fires (keeps the generic phase label). Board-verified, conservative. */
+function refineNonTacticalMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } | null {
+  if (mistakeMissedThreat(p)) return { bucket: 'general', clusterId: MISSED_THREAT_TAG, label: 'Missed opponent threats', themes: [] };
+  if (mistakeStructureDamage(p)) return { bucket: 'positional', clusterId: STRUCTURE_DAMAGE_TAG, label: 'Self-inflicted pawn weaknesses', themes: [] };
+  return null;
+}
+
 /** Coarse, HONEST mapping from a mistakePuzzle to a weakness bucket. We do
  *  NOT force-fit Analyze mistakes into specific misconception tags (that
  *  would be guessing which thinking-error caused the slip — see CLAUDE.md
@@ -103,7 +176,11 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
     };
   }
   const phase: MistakeGamePhase = p.gamePhase;
-  if (phase === 'opening') return { bucket: 'opening', clusterId: 'analysis:phase:opening', label: 'Mistakes in the opening', themes: [] };
+  if (phase === 'opening') {
+    // Refine before the generic label — a missed threat / structure damage in
+    // the opening is still that, and more teachable than "mistakes in the opening".
+    return refineNonTacticalMistake(p) ?? { bucket: 'opening', clusterId: 'analysis:phase:opening', label: 'Mistakes in the opening', themes: [] };
+  }
   if (phase === 'endgame') {
     // TYPE the ending (David 2026-09-01: "which endgame the user is weakest at")
     // so the whole weakness system — unified profile, lifecycle, briefing, drills
@@ -116,7 +193,9 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
     }
     return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [] };
   }
-  return { bucket: 'general', clusterId: 'analysis:phase:middlegame', label: 'Mistakes in the middlegame', themes: [] };
+  // Middlegame — the vaguest, most common bucket. Refine into a missed threat /
+  // structure damage when a board probe names one; else the generic label.
+  return refineNonTacticalMistake(p) ?? { bucket: 'general', clusterId: 'analysis:phase:middlegame', label: 'Mistakes in the middlegame', themes: [] };
 }
 
 /** Plain-English plural label for a tactic motif. */
@@ -283,24 +362,43 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
-export function aggregateConversionFailures(failures: ConversionFailure[]): UnifiedWeakness[] {
+export function aggregateConversionFailures(failures: ConversionFailure[], games: GameRecord[] = []): UnifiedWeakness[] {
   if (failures.length === 0) return [];
-  const lastSeenAt = failures.reduce((m, f) => Math.max(m, f.date ? Date.parse(f.date) || 0 : 0), 0);
-  const avgPeak = Math.round(failures.reduce((s, f) => s + f.peakCp, 0) / failures.length);
-  return [{
-    key: CONVERSION_TAG,
-    tag: CONVERSION_TAG,
-    label: 'Letting winning positions slip',
-    bucket: 'general',
-    openCount: failures.length,
-    total: failures.length,
-    severity: Math.min(95, failures.length * 12 + Math.round(avgPeak / 60)),
-    sources: ['analysis'],
-    puzzleThemes: [],
-    positions: failures.slice(0, 8).map((f) => ({ fen: f.fen, openingId: f.openingName ?? undefined })),
-    lastSeenAt,
-    fen: failures[0]?.fen, // the most-recent blown win — drill this one
-  }];
+  const toRow = (key: string, label: string, rows: ConversionFailure[]): UnifiedWeakness => {
+    const lastSeenAt = rows.reduce((m, f) => Math.max(m, f.date ? Date.parse(f.date) || 0 : 0), 0);
+    const avgPeak = Math.round(rows.reduce((s, f) => s + f.peakCp, 0) / rows.length);
+    return {
+      key, tag: key, label, bucket: 'general',
+      openCount: rows.length, total: rows.length,
+      severity: Math.min(95, rows.length * 12 + Math.round(avgPeak / 60)),
+      sources: ['analysis'], puzzleThemes: [],
+      positions: rows.slice(0, 8).map((f) => ({ fen: f.fen, openingId: f.openingName ?? undefined })),
+      lastSeenAt,
+      fen: rows[0]?.fen, // the most-recent blown win — drill this one
+    };
+  };
+  // A2 — SPLIT BY ENDING TYPE (David 2026-09-01 Batch A): a thrown win in a rook
+  // ending is a nameable, drillable weakness ("converting rook endings") that
+  // routes to the endgame lesson — distinct from a general middlegame collapse.
+  // Classify at the game's FINAL position (where the conversion actually failed);
+  // failures with no classifiable ending fold into the flat conversion row.
+  const gameById = new Map(games.map((g) => [g.id, g]));
+  const byType = new Map<EndgameType, ConversionFailure[]>();
+  const generic: ConversionFailure[] = [];
+  for (const f of failures) {
+    let type: EndgameType = 'other';
+    const g = gameById.get(f.gameId);
+    if (g?.pgn) { try { const c = new Chess(); c.loadPgn(g.pgn); type = classifyEndgameType(c.fen()); } catch { type = 'other'; } }
+    if (type !== 'other') { const arr = byType.get(type) ?? []; arr.push(f); byType.set(type, arr); }
+    else generic.push(f);
+  }
+  const out: UnifiedWeakness[] = [];
+  for (const [type, rows] of byType) {
+    const label = endgameTypeInfo(type).label;
+    out.push(toRow(`analysis:conversion-endgame:${type}`, `Converting ${label}`, rows));
+  }
+  if (generic.length > 0) out.push(toRow(CONVERSION_TAG, 'Letting winning positions slip', generic));
+  return out;
 }
 
 /** CAPTURE GAP (Part III, David 2026-09-01: "if you see us missing something,
@@ -488,7 +586,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateMistakePuzzles(mistakes, coachKeys),
     ...aggregateClassifiedTactics(tactics),
     ...aggregateOpeningWeakSpots(weakSpots),
-    ...aggregateConversionFailures(conversions),
+    ...aggregateConversionFailures(conversions, games),
     ...aggregateBoardVision(heatmap),
     ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes)),
     ...aggregateStrongerOpponentErrors(mistakes, games, {

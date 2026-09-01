@@ -7,6 +7,7 @@ import {
   aggregateOpeningWeakSpots,
   aggregateClassifiedTactics,
   aggregateConversionFailures,
+  bucketForMistake,
   aggregateBoardVision,
   aggregateTimeTrouble,
   aggregateStrongerOpponentErrors,
@@ -287,12 +288,15 @@ describe('getUnifiedWeaknessProfile', () => {
   it('surfaces a conversion failure, then drops it once addressed (loop close)', async () => {
     const { addAddressedConversion } = await import('./conversionProgress');
     await db.games.add(analyzedConversionGame('conv-g1'));
-    const conv = (await getUnifiedWeaknessProfile()).find((p) => p.tag === 'analysis:conversion');
+    // A2 (David 2026-09-01): a conversion failure whose game reached an ending is
+    // split into `analysis:conversion-endgame:<type>`; a middlegame collapse stays
+    // the flat `analysis:conversion`. Match the family so either is accepted.
+    const conv = (await getUnifiedWeaknessProfile()).find((p) => p.tag.startsWith('analysis:conversion'));
     expect(conv).toBeDefined();
     expect(conv?.fen).toBeTruthy();
     await addAddressedConversion(conv!.fen!);
     const after = (await getUnifiedWeaknessProfile()).map((p) => p.tag);
-    expect(after).not.toContain('analysis:conversion');
+    expect(after.some((t) => t.startsWith('analysis:conversion'))).toBe(false);
   });
 
   it('surfaces a time-trouble blunder from a clocked game', async () => {
@@ -334,5 +338,75 @@ describe('getUnifiedWeaknessProfile', () => {
 
   it('returns empty when there are no mistakes anywhere', async () => {
     expect(await getUnifiedWeaknessProfile()).toEqual([]);
+  });
+});
+
+// ── Batch A capture gaps (David 2026-09-01) — board-verified refinements ──────
+describe('Batch A weakness captures', () => {
+  it('A1: a middlegame mistake under a standing opponent threat → missed-threat', () => {
+    // White to move, black pawn d6 threatens ...dxe5 winning the undefended Ne5.
+    const p = buildMistakePuzzle({
+      fen: 'rnbqkb1r/ppp2ppp/3p4/4N3/8/8/PPPP1PPP/RNBQKB1R w KQkq - 0 1',
+      playerMoveSan: 'a3', // does NOT address the threat
+      playerColor: 'white', gamePhase: 'middlegame', tacticType: null, positionalMotif: null,
+    });
+    expect(bucketForMistake(p).clusterId).toBe('analysis:missed-threat');
+  });
+
+  it('A3: a move that doubles your own pawns without compensation → structure-damage', () => {
+    // dxc5 leaves White with doubled c-pawns (c2 + c5); no >=3 threat, so it is
+    // structure damage, not a missed threat.
+    const p = buildMistakePuzzle({
+      fen: 'rnbqkbnr/pp1ppppp/8/2p5/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1',
+      playerMoveSan: 'dxc5',
+      playerColor: 'white', gamePhase: 'middlegame', tacticType: null, positionalMotif: null,
+    });
+    expect(bucketForMistake(p).clusterId).toBe('analysis:structure-damage');
+  });
+
+  it('A1 outranks A3, and a tactic tag still wins over both', () => {
+    const tactic = buildMistakePuzzle({ tacticType: 'fork', gamePhase: 'middlegame' });
+    expect(bucketForMistake(tactic).clusterId).toBe('analysis:tactic:fork');
+  });
+
+  it('A2: a conversion failure whose game reached a rook ending → conversion-endgame:rook', () => {
+    const failure: ConversionFailure = {
+      gameId: 'rg', fen: '8/5pk1/8/8/8/8/5PK1/R6r w - - 0 40', peakCp: 450, finalCp: 0,
+      result: 'draw', playerColor: 'white', openingName: null, date: '2026-01-01', peakMoveNumber: 40,
+    };
+    const game = buildGameRecord({ id: 'rg', pgn: '[FEN "8/5pk1/8/8/8/8/5PK1/R6r w - - 0 40"]\n\n*' });
+    const rows = aggregateConversionFailures([failure], [game]);
+    // R+P vs R+P classifies as 'rook-pawn' (rooks AND pawns) — the accurate type.
+    expect(rows[0]?.tag).toBe('analysis:conversion-endgame:rook-pawn');
+    expect(rows[0]?.label).toMatch(/rook/i);
+  });
+
+  it('A4 wiring: seeded missed-threat mistakes surface in the unified profile, and the concept resolves', async () => {
+    const { conceptForCluster } = await import('./weaknessConceptMap');
+    for (let i = 0; i < 4; i++) {
+      await db.mistakePuzzles.add(buildMistakePuzzle({
+        id: `mt-${i}`, sourceGameId: `mt-g${i}`,
+        fen: 'rnbqkb1r/ppp2ppp/3p4/4N3/8/8/PPPP1PPP/RNBQKB1R w KQkq - 0 1',
+        playerMoveSan: 'a3', playerColor: 'white', gamePhase: 'middlegame',
+        tacticType: null, positionalMotif: null, classification: 'blunder', status: 'unsolved',
+      }));
+    }
+    const profile = await getUnifiedWeaknessProfile();
+    const row = profile.find((p) => p.tag === 'analysis:missed-threat');
+    expect(row).toBeDefined();
+    expect(row?.label).toBe('Missed opponent threats');
+    expect(row?.openCount).toBe(4);
+    // The briefing rolls the cluster up to a teachable concept — prophylaxis.
+    const concept = conceptForCluster('analysis:missed-threat', row!.bucket);
+    expect(concept?.conceptName).toMatch(/prophyla/i);
+  });
+
+  it('A2: a conversion failure with no game (no ending) stays the flat conversion row', () => {
+    const failure: ConversionFailure = {
+      gameId: 'x', fen: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1',
+      peakCp: 300, finalCp: 0, result: 'loss', playerColor: 'white', openingName: null, date: null, peakMoveNumber: 20,
+    };
+    const rows = aggregateConversionFailures([failure], []);
+    expect(rows[0]?.tag).toBe('analysis:conversion');
   });
 });

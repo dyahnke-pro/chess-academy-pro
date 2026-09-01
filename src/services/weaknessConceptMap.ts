@@ -50,6 +50,14 @@ const PHASE_CONCEPTS: Record<string, WeaknessConcept> = {
   endgame: { behavior: 'you lose the thread in endgames — technique and king activity', conceptQuery: 'endgame king activity passed pawn opposition technique', conceptName: 'endgame technique' },
 };
 
+// Batch A cross-cutting captures (missed threats, structure damage, endgame
+// conversion) — each grounds on the classical principle behind the pattern.
+const CAPTURE_CONCEPTS: Record<'missedThreat' | 'structureDamage' | 'conversionEndgame', WeaknessConcept> = {
+  missedThreat: { behavior: "you overlook what your opponent is threatening — you plan your own move without first asking what they want", conceptQuery: 'prophylaxis prevent opponent threat what does opponent want defense before attack', conceptName: 'prophylactic thinking' },
+  structureDamage: { behavior: 'you damage your own pawn structure — creating isolated or doubled pawns without compensation', conceptQuery: 'pawn structure weakness isolated doubled pawns backward pawn', conceptName: 'pawn structure' },
+  conversionEndgame: { behavior: "you let won endings slip — you don't convert the material advantage with clean technique", conceptQuery: 'endgame technique convert winning advantage king activity opposition passed pawn', conceptName: 'endgame conversion technique' },
+};
+
 const BUCKET_FALLBACK: Partial<Record<MisconceptionBucket, WeaknessConcept>> = {
   tactical: { behavior: 'you miss tactics — the forcing shot on the board', conceptQuery: 'tactics combination forcing move calculation', conceptName: 'tactical alertness' },
   positional: { behavior: 'you misjudge positional trades and structure', conceptQuery: 'positional pawn structure weak square piece activity', conceptName: 'positional judgment' },
@@ -67,5 +75,9 @@ export function conceptForCluster(clusterId: string, bucket: MisconceptionBucket
   if (transform && TRANSFORM_CONCEPTS[transform[1]]) return TRANSFORM_CONCEPTS[transform[1]];
   const phase = /^analysis:phase:(.+)$/.exec(clusterId);
   if (phase && PHASE_CONCEPTS[phase[1]]) return PHASE_CONCEPTS[phase[1]];
+  // Batch A captures (David 2026-09-01) — roll each up to its teachable idea.
+  if (clusterId === 'analysis:missed-threat') return CAPTURE_CONCEPTS.missedThreat;
+  if (clusterId === 'analysis:structure-damage') return CAPTURE_CONCEPTS.structureDamage;
+  if (/^analysis:conversion-endgame:/.test(clusterId)) return CAPTURE_CONCEPTS.conversionEndgame;
   return BUCKET_FALLBACK[bucket] ?? null;
 }

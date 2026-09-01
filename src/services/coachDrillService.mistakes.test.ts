@@ -58,9 +58,11 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
     await db.mistakePuzzles.bulkAdd([END_A, FORK_A, FORK_B]);
     const queue = await buildMistakeDrillQueue();
     expect(queue.length).toBe(2);
-    // Forks (2) outrank Endgame (1).
+    // Forks (2) outrank Endgame (1). The drill label now delegates to the
+    // weakness spine's bucketForMistake (David 2026-09-01) so drills and the
+    // weakness profile speak one label — "Missed forks", not a separate "Forks".
     expect(queue[0].key).toBe('tactic:fork');
-    expect(queue[0].label).toBe('Forks');
+    expect(queue[0].label).toBe('Missed forks');
     expect(queue[0].count).toBe(2);
     // Endgame mistakes bucket by ENDING TYPE now (David 2026-09-01).
     expect(queue[1].key).toBe('endgame-type:king-pawn');
