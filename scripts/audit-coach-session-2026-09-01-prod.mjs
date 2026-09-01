@@ -134,17 +134,37 @@ try {
   await dismissGates(); await dismissGates();
 
   // ── LIVE GAME so board-anchored lanes have real move history ──────────────
+  // The opponent-move lane requires REAL move history; the click-based move can
+  // flake (Watch/narration mode swallows the click), so play, VERIFY a move
+  // landed (e2 emptied), and retry the whole start-and-move once if it didn't.
+  const playMoves = async () => {
+    let landed = false;
+    for (const [from, to] of [['e2', 'e4'], ['g1', 'f3']]) {
+      try {
+        await page.locator(`[data-square="${from}"]`).click({ timeout: 4000 });
+        await page.locator(`[data-square="${to}"]`).click({ timeout: 4000 });
+        await page.waitForTimeout(3500);
+      } catch { /* narration mode */ }
+    }
+    // e2 empty (no white pawn piece on it) ⇒ e4 registered ⇒ opponent has replied.
+    try {
+      const e2Piece = await page.locator('[data-square="e2"] [data-piece]').count();
+      landed = e2Piece === 0;
+    } catch { landed = false; }
+    return landed;
+  };
   await ask('Play the Italian with me as white');
   await resolvePicker();
   await page.waitForTimeout(4000);
-  let lastMove = null;
-  for (const [from, to] of [['e2', 'e4'], ['g1', 'f3']]) {
-    try {
-      await page.locator(`[data-square="${from}"]`).click({ timeout: 4000 });
-      await page.locator(`[data-square="${to}"]`).click({ timeout: 4000 });
-      await page.waitForTimeout(3500); lastMove = to;
-    } catch { /* narration mode */ }
+  let moved = await playMoves();
+  if (!moved) {
+    // Re-enter play and try once more — a flaked start leaves no move history.
+    await ask('Play the Italian with me as white');
+    await resolvePicker();
+    await page.waitForTimeout(4000);
+    moved = await playMoves();
   }
+  record('setup: live game has real move history (opponent replied)', moved, moved ? 'moves landed' : 'board never left the start position');
 
   // ── CONTRACT 1: name-this-opening names a REAL opening (not a deflection) ──
   {

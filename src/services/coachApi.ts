@@ -3907,7 +3907,16 @@ export async function getCoachChatResponse(
         // so this call is cycle-free — coachFeatureService imports coachApi, so
         // the detector can't live there). voiceFacts the facts; fall through to
         // the legacy path when there's NO bad-habit data.
-        if (grounding.progressQuestion) {
+        // An endgame-WEAKNESS question ("what endgame am I weakest at?") also
+        // reads as a progress question, but it has a dedicated lane below
+        // (grounding.endgameWeaknessQuestion → getEndgameWeaknessProfile) that
+        // names the weakest ENDING TYPE + offers the tablebase trainer. Defer to
+        // it here, or the generic progress/training-recommendation path steals
+        // the turn with "play a full game to sharpen your endgame" (contract
+        // audit 2026-09-01). trainingRequestKind already returns null for these;
+        // this progress block reads trainingAreaFromText directly, so it needs
+        // its own guard.
+        if (grounding.progressQuestion && !grounding.endgameWeaknessQuestion) {
           try {
             // RICHEST source first: the unified, ranked weakness profile
             // (tactics / openings / phase-of-loss / conversion / board-vision),
@@ -5187,6 +5196,25 @@ export async function getCoachChatResponse(
         return voiced;
       }
     }
+  }
+  // BANTER on a grounded turn (contract audit 2026-09-01): grounding engages
+  // whenever the board carries master data — and the STARTING position always
+  // does — so a pure thank-you/greeting on a fresh board reaches this
+  // fall-through and used to get a "the best move is e4…" position readout.
+  // A turn with NO chess signal is banter, not an open-ended chess question:
+  // serve the constrained conversational reply (chess forbidden + swept),
+  // never the position default. Mirrors the ungrounded chess-signal seal above.
+  if (grounding && !hasChessContentSignal(originalQuery)) {
+    const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
+    const cleaned = stripChessyStraySentences(convoResponse);
+    if (cleaned) {
+      emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough-banter' });
+      if (onStream) onStream(cleaned);
+      return cleaned;
+    }
+    emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'grounded-banter-fully-stripped', question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
+    return STOCK_GROUNDING_FALLBACK;
   }
   const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
   if (grounded) {
