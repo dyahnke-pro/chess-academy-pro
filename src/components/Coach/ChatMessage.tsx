@@ -66,6 +66,7 @@ function ActionButton({ action, onClick }: {
     train_mistakes: 'Drill my mistakes',
     weakness_drill: 'Drill my weaknesses',
     endgame_training: 'Train endgames',
+    endgame_trainer: 'Play this ending',
     review_games: 'Review my games',
     // Recommend-a-focused-game: the coach set a trainingFocus (the point of the
     // game) and offers to play one now (David 2026-08-27).
@@ -155,6 +156,11 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         break;
       case 'endgame_training':
         void navigate('/coach/endgame');
+        break;
+      case 'endgame_trainer':
+        // Interactive tablebase trainer for a specific ending (Batch B) — Watch,
+        // then play it out with the coach correcting mistakes.
+        void navigate(`/coach/endgame-trainer/${encodeURIComponent(action.id)}`);
         break;
       case 'review_games':
         void navigate('/coach/review');

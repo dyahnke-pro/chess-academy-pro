@@ -741,7 +741,21 @@ export function isEndgameQuestion(ask: string | undefined): boolean {
   // student over time, NOT "is THIS endgame winning" — the bare "endgame" token
   // would misroute it to the live tablebase (matrix pass 11, 2026-07-10).
   if (/\bi\s+(?:always|keep|usually|constantly|often|tend\s+to)\s+(?:los|blunder|struggl|mess|screw)/i.test(ask)) return false;
-  return ENDGAME_QUESTION_RE.test(ask);
+  return ENDGAME_QUESTION_RE.test(ask) || isEndgamePlayRequest(ask);
+}
+
+/** "Play / practise / train / let me try the <ending> with me" — the INTERACTIVE
+ *  endgame-trainer request (Batch B, David 2026-09-01: "allows the user to play …
+ *  and correct"). Distinct from the EXPLAIN ask ("what's the Lucena") — this
+ *  launches the tablebase trainer. Requires a play verb AND an endgame cue so a
+ *  generic "play with me" (opening play) never routes here. */
+const ENDGAME_PLAY_RE = anyOf([
+  String.raw`\b(?:play|practi[sc]e|train|drill|let\s+me\s+try|i\s+want\s+to\s+try|test\s+me\s+on|quiz\s+me\s+on)\b[\s\S]{0,40}\b(?:end(?:game|ing)s?|lucena|philidor|vancura|opposition|rook\s+end|king\s+and\s+pawn|k\s*\+\s*p|k\s*\+\s*r|pawn\s+end|queen\s+vs\s+rook)\b`,
+  String.raw`\b(?:lucena|philidor|vancura|opposition|rook\s+end(?:game|ing)|king\s+and\s+pawn\s+end(?:game|ing)|pawn\s+end(?:game|ing))\b[\s\S]{0,30}\b(?:with\s+me|let\s+me\s+play|let\s+me\s+try|drill|practi[sc]e)\b`,
+]);
+export function isEndgamePlayRequest(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return ENDGAME_PLAY_RE.test(ask);
 }
 
 /** A PRO-GAME question — "how does Naroditsky play this?", "show me his games

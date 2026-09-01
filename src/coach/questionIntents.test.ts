@@ -8,6 +8,7 @@ import {
   isPositionAssessmentQuestion,
   isMasterPlayQuestion,
   isEndgameQuestion,
+  isEndgamePlayRequest,
   isPlayerGamesQuestion,
   isConceptQuestion,
   isProgressQuestion,
@@ -534,6 +535,26 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
 
     it('briefing yields to the pressing lane on "work on first"', () => {
       expect(isWeaknessBriefingQuestion('what should I work on first')).toBe(false);
+    });
+  });
+
+  describe('isEndgamePlayRequest (Batch B, 2026-09-01)', () => {
+    it.each([
+      'play the Lucena with me',
+      'let me try the rook ending',
+      'practice king and pawn endgame with me',
+      'drill the opposition with me',
+      'train me on the Philidor',
+      'let me play the pawn endgame',
+    ])('matches "%s"', (q) => expect(isEndgamePlayRequest(q)).toBe(true));
+    it.each([
+      "what's the Lucena position",    // explain, not play
+      'play the Italian with me',      // opening play
+      'how do I hold a rook ending',   // technique question
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isEndgamePlayRequest(q)).toBe(false));
+    it('a play request is still an endgame question (routes to the endgame lane)', () => {
+      expect(isEndgameQuestion('play the Lucena with me')).toBe(true);
     });
   });
 

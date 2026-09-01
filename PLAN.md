@@ -55,18 +55,24 @@ self-contained, and testable — the exact pattern of `aggregateStrongerOpponent
 Gate for A: `weaknessSpine.test` rows + a lifecycle test + the prod new-lanes
 audit extended with a seeded fixture (`loadFixtureIntoIDB`).
 
-## 🅑 Batch B — endgame Level-2 (P-V.2): generative tablebase walk
-David: *"build the concept in so coach can make its own endgame teachings."*
-Level 1 (technique text) shipped in Phase 1. Level 2 = the coach **plays the
-line out** move-by-move.
-- [ ] B1. On a requested ending (canonical FEN from the matched lesson, or the
-      student's own ending), walk the **Syzygy tablebase** line and narrate the
-      technique it is *reading* — perfect ≤7 pieces; >7 = engine, HONESTLY
-      labeled. Same inversion as `generateOpeningFromDbNarration`: tablebase is
-      the truth, the LLM only phrases per move.
-- [ ] B2. Lead-the-eye arrows/highlights per move (the masterclass standard).
-- [ ] B3. Gate: a tablebase-walk unit test (moves are tablebase-optimal) + the
-      narration-accuracy contract on the spoken text.
+## 🅑 Batch B — endgame Level-2 (P-V.2): INTERACTIVE tablebase trainer  ✅ BUILT (2026-09-01)
+David: *"not just walks out but allows the user to play and explains the why
+behind any mistakes and allows for the user to correct."* Watch → Play → Correct.
+- [x] B1. `endgameTablebaseService` — the TRUTH engine: `tablebaseMoves` (per-move
+      WDL/DTZ), `bestEndgameMove`, `gradeEndgameMove` (optimal / slower /
+      threw-win / threw-draw + grounded why), `buildTablebaseWalk` (perfect line
+      + notes). G0/G3: tablebase decides, chess.js validates, LLM out of the loop.
+      Gate: `endgameTablebaseService.test.ts` (6).
+- [x] B2. `EndgameTablebaseTrainer` — Watch (perfect walk + arrows + notes) →
+      Play (user plays, tablebase replies optimally) → Correct (on a real
+      mistake: revert to the decision, speak the grounded WHY, "Show me" plays
+      the best move). `EndgameTrainerPage` + route `/coach/endgame-trainer/:id`
+      (loading/not-found/no-position states). Gate: `EndgameTrainerPage.test.tsx`.
+- [x] B3. Coach launch — "play the Lucena with me" (`isEndgamePlayRequest`) →
+      `endgame_trainer` action offer → the "Play this ending" chip mounts the
+      trainer. Boardless endgame asks now engage grounding (OR-gate add).
+- [ ] B4. (follow-up) lead-the-eye per-move highlights beyond the move arrow;
+      a prod interactive audit driving a mistake → correction on the live build.
 
 ## 🅒 Batch C — P-VI P7: phase-scoped post-game review
 - [ ] C1. Filter the post-game review to the phase the student's `trainingFocus`

@@ -99,7 +99,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest } from '../coach/questionIntents';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -4731,18 +4731,30 @@ export async function getCoachChatResponse(
         // have no lesson for → honest decline (never invent). G0: authored,
         // FEN-verified content; voiceFacts phrases it.
         if (grounding.endgameQuestion) {
-          const lesson = matchEndgameLesson(lastUserMessage() ?? grounding.cleanAsk ?? '');
+          const endAsk = lastUserMessage() ?? grounding.cleanAsk ?? '';
+          const lesson = matchEndgameLesson(endAsk);
           if (lesson) {
+            // INTERACTIVE (Batch B): "play/practise the <ending> with me" launches
+            // the tablebase trainer (Watch → Play → correct) rather than reading
+            // the technique. Needs a playable position on the lesson.
+            const playable = lesson.positions.find((p) => p.fen);
+            if (isEndgamePlayRequest(endAsk) && playable) {
+              lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }];
+              const intro = `Let's play out the ${lesson.name}. I'll walk it once, then you take over — I'll stop you if you go wrong and we'll fix it together.`;
+              const voiced = await voiceFacts(intro, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
+              if (voiced) return voiced;
+              return intro;
+            }
             const answer = assembleEndgameTechniqueAnswer({
               name: lesson.name,
               rule: lesson.narration.rule,
               why: lesson.narration.why,
               history: lesson.narration.history ?? null,
               tip: lesson.narration.tip ?? null,
-              fen: lesson.positions[0]?.fen ?? null,
+              fen: playable?.fen ?? null,
             });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: endAsk, providerConfig: config, intent: 'endgame', preferRaw: true });
               if (voiced) return voiced;
             }
           }
