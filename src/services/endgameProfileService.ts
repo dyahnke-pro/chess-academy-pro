@@ -17,6 +17,8 @@
  * and fall back to the named lesson when the position is out of tablebase range.
  */
 
+import { Chess } from 'chess.js';
+
 export type EndgameType = 'king-pawn' | 'rook-pawn' | 'rook' | 'minor-piece' | 'queen' | 'other';
 
 interface Material { P: number; N: number; B: number; R: number; Q: number; }
@@ -80,6 +82,74 @@ export function endgameTypeInfo(type: EndgameType): EndgameTypeInfo {
 /** Piece count — the trainer needs ≤7 to drill the student's OWN position. */
 export function endgameTablebaseReady(fen: string): boolean {
   return fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length <= 7;
+}
+
+// ── CONCEPT NAMING (David 2026-09-01: "which patterns/concepts they need help
+// identifying within the endgame") — the trainer names the TECHNIQUE the best
+// move demonstrates when the student errs, so a correction teaches the concept,
+// not just "you threw the win". Pure chess.js geometry (G0): opposition for
+// king-and-pawn, rook-activity for rook endings, else the type's core idea. */
+
+/** Both kings in DIRECT opposition (same file or rank, exactly one empty square
+ *  between) in the given position — the side NOT to move holds it. */
+function kingsInDirectOpposition(fen: string): boolean {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return false; }
+  let wk: { f: number; r: number } | null = null;
+  let bk: { f: number; r: number } | null = null;
+  for (const row of c.board()) {
+    for (const cell of row) {
+      if (!cell || cell.type !== 'k') continue;
+      const f = cell.square.charCodeAt(0) - 97;
+      const r = Number(cell.square[1]);
+      if (cell.color === 'w') wk = { f, r }; else bk = { f, r };
+    }
+  }
+  if (!wk || !bk) return false;
+  const df = Math.abs(wk.f - bk.f);
+  const dr = Math.abs(wk.r - bk.r);
+  // Direct opposition: 2 squares apart on a file OR a rank (one empty between).
+  return (df === 0 && dr === 2) || (dr === 0 && df === 2);
+}
+
+/**
+ * endgameMistakeConcept — name the technique the BEST move demonstrates, so the
+ * trainer's correction identifies the concept the student missed. Returns null
+ * when nothing clean applies (then the trainer speaks the WDL why alone). G0:
+ * computed from the best move + board, never invented.
+ */
+export function endgameMistakeConcept(fenBefore: string, bestUci: string): string | null {
+  // Only fire on a real ending — the material classifier alone would call a full
+  // board with queens a "queen ending". A plausible endgame is few pieces.
+  if (fenBefore.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 10) return null;
+  const type = classifyEndgameType(fenBefore);
+  let c: Chess;
+  let mv;
+  try {
+    c = new Chess(fenBefore);
+    mv = c.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci.length > 4 ? bestUci[4] : undefined });
+  } catch { return null; }
+  if (!mv) return null;
+
+  if (type === 'king-pawn') {
+    if (mv.piece === 'k' && kingsInDirectOpposition(c.fen())) {
+      return 'The key is the opposition — the best move takes it, so their king can\'t make progress.';
+    }
+    return 'King-and-pawn endings come down to the opposition and the key squares in front of the pawn.';
+  }
+  if (type === 'rook' || type === 'rook-pawn') {
+    if (mv.piece === 'r') {
+      return 'In rook endings activity is everything — the rook belongs behind the passed pawn, keeping it active.';
+    }
+    return 'Rook endings are about activity — get the rook behind the passed pawn and keep the king in the fight.';
+  }
+  if (type === 'minor-piece') {
+    return 'Watch the drawing tricks — wrong-corner rook pawns and opposite-coloured bishops hold more than they look.';
+  }
+  if (type === 'queen') {
+    return 'Queen endings hinge on checks and the safety of your own king — cover the perpetual before you push.';
+  }
+  return null;
 }
 
 // ── ENDGAME WEAKNESS PROFILE — "which endgame am I weakest at" (loop tie-in) ──

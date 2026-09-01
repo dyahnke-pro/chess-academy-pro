@@ -78,7 +78,21 @@ behind any mistakes and allows for the user to correct."* Watch → Play → Cor
       ≤7-piece flubbed position) + `isEndgameWeaknessQuestion` + a coach lane that
       names the weakest type, teaches the concept from the corpus, and offers the
       trainer on the student's OWN position (`custom:<fen>`) or the named lesson.
-- [ ] B5. (follow-up) lead-the-eye per-move highlights; a prod interactive audit
+- [x] B5. TIED IN EVERYWHERE (David 2026-09-01: "make sure this is all tied in
+      together … if any other weaknesses need to be tied in, now is the time"):
+      • endgame mistakes now bucket by ending TYPE at the source
+        (`bucketForMistake` + `coachDrillService.bucketOf`), so the unified
+        profile, lifecycle, briefing AND motif-drills all speak the specific
+        ending (rook / K+P / …), not a flat "endgame".
+      • the trainer's correction NAMES THE CONCEPT (`endgameMistakeConcept` —
+        opposition for K+P, rook-activity for rook endings, etc.), so a mistake
+        teaches the pattern, not just "you threw the win".
+      • the weakness BRIEFING now also names the cross-cutting captures
+        (thrown wins, time trouble, board vision, opening weak-spots,
+        vs-stronger) — the complete picture, not just tactical motifs.
+      • the /weaknesses tab endgame cards get a "Play it out" button → the
+        tablebase trainer on the student's OWN flubbed position.
+- [ ] B6. (follow-up) lead-the-eye per-move highlights; a prod interactive audit
       driving a mistake → correction on the live build.
 
 ## 🅒 Batch C — P-VI P7: phase-scoped post-game review

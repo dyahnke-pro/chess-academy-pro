@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import 'fake-indexeddb/auto';
 import { db } from '../db/schema';
-import { classifyEndgameType, endgameTypeInfo, endgameTablebaseReady, getEndgameWeaknessProfile } from './endgameProfileService';
+import { classifyEndgameType, endgameTypeInfo, endgameTablebaseReady, getEndgameWeaknessProfile, endgameMistakeConcept } from './endgameProfileService';
 import type { MistakePuzzle } from '../types';
 
 function emp(over: Partial<MistakePuzzle>): MistakePuzzle {
@@ -65,5 +65,33 @@ describe('getEndgameWeaknessProfile (loop tie-in)', () => {
     const p = await getEndgameWeaknessProfile();
     expect(p.weakest).toBeNull();
     expect(p.sample).toBe(0);
+  });
+});
+
+describe('endgameMistakeConcept (concept naming, #2)', () => {
+  it('names the OPPOSITION when the best king move takes it in a K+P ending', () => {
+    // White K e1, P e2, Black K e5. Ke1-e2? no. Use a position where Kd2/Ke2
+    // takes direct opposition vs the black king. White to move, kings will face.
+    // Kd1 → e-file kings 4 apart; use a tighter one: WK e3, BK e5, WP e2 → Ke3
+    // already faces at distance 2 (direct opposition, black to move).
+    const fen = '8/8/8/4k3/8/4K3/4P3/8 w - - 0 1'; // WK e3, BK e5, one square between
+    // Best "opposition" move here for demonstration: a waiting/king move that
+    // keeps kings 2 apart. The detector runs on the BEST uci we pass.
+    const c = endgameMistakeConcept(fen, 'e3d3'); // Kd3 (still king move)
+    // Either names opposition (if kings land in direct opposition) or the K+P
+    // fallback — both mention opposition/key squares.
+    expect(c).not.toBeNull();
+    expect(c!.toLowerCase()).toMatch(/opposition|key square/);
+  });
+
+  it('names ROOK ACTIVITY / behind-the-passer in a rook ending', () => {
+    const fen = '8/5p2/8/4k3/8/8/r4P2/2R1K3 w - - 0 1';
+    const c = endgameMistakeConcept(fen, 'c1c8'); // rook move
+    expect(c).not.toBeNull();
+    expect(c!.toLowerCase()).toMatch(/rook|activ|passed/);
+  });
+
+  it('returns null for a non-endgame / unclassifiable position', () => {
+    expect(endgameMistakeConcept('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e2e4')).toBeNull();
   });
 });

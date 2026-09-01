@@ -20,6 +20,7 @@
 import { db } from '../db/schema';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
 import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } from './conversionDetector';
+import { classifyEndgameType, endgameTypeInfo } from './endgameProfileService';
 import { getAddressedConversions } from './conversionProgress';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
@@ -103,7 +104,18 @@ export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucke
   }
   const phase: MistakeGamePhase = p.gamePhase;
   if (phase === 'opening') return { bucket: 'opening', clusterId: 'analysis:phase:opening', label: 'Mistakes in the opening', themes: [] };
-  if (phase === 'endgame') return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [] };
+  if (phase === 'endgame') {
+    // TYPE the ending (David 2026-09-01: "which endgame the user is weakest at")
+    // so the whole weakness system — unified profile, lifecycle, briefing, drills
+    // — speaks the specific ending (rook, K+P, …) instead of a flat "endgame".
+    // Unclassifiable positions keep the generic bucket (empty > wrong label).
+    const type = classifyEndgameType(p.fen);
+    if (type !== 'other') {
+      const label = endgameTypeInfo(type).label;
+      return { bucket: 'endgame', clusterId: `analysis:endgame-type:${type}`, label: label.charAt(0).toUpperCase() + label.slice(1), themes: [] };
+    }
+    return { bucket: 'endgame', clusterId: 'analysis:phase:endgame', label: 'Mistakes in the endgame', themes: [] };
+  }
   return { bucket: 'general', clusterId: 'analysis:phase:middlegame', label: 'Mistakes in the middlegame', themes: [] };
 }
 

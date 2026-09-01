@@ -28,6 +28,7 @@ import puzzlesData from '../data/puzzles.json';
 import { db } from '../db/schema';
 import type { MistakePuzzle, TacticType } from '../types';
 import { themesForTactic } from './weaknessSpine';
+import { classifyEndgameType, endgameTypeInfo } from './endgameProfileService';
 
 interface RawPuzzle {
   id: string;
@@ -306,6 +307,16 @@ function bucketOf(mp: MistakePuzzle): { key: string; label: string } {
   }
   if (mp.tacticType) {
     return { key: `tactic:${mp.tacticType}`, label: TACTIC_LABELS[mp.tacticType] ?? mp.tacticType };
+  }
+  // Endgame mistakes drill by ENDING TYPE (David 2026-09-01) so a motif-scoped
+  // "drill it" targets rook endings / K+P specifically — matches the weakness
+  // spine's clusterId (analysis: prefix stripped for the drill key).
+  if (mp.gamePhase === 'endgame') {
+    const type = classifyEndgameType(mp.fen);
+    if (type !== 'other') {
+      const label = endgameTypeInfo(type).label;
+      return { key: `endgame-type:${type}`, label: label.charAt(0).toUpperCase() + label.slice(1) };
+    }
   }
   return { key: `phase:${mp.gamePhase}`, label: PHASE_LABELS[mp.gamePhase] ?? 'Tactics' };
 }

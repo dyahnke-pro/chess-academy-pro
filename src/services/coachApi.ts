@@ -3396,6 +3396,20 @@ export async function getCoachChatResponse(
                     : `${facts} The pattern underneath it: ${concept.behavior}.`;
                 }
               }
+              // TIE IN THE CROSS-CUTTING CAPTURES (David 2026-09-01: "if any other
+              // weaknesses need to be tied in, now is the time"). The lifecycle
+              // sees only mistake-puzzle clusters; the unified profile also holds
+              // thrown wins, time trouble, board vision, opening weak-spots and
+              // errors-vs-stronger. On a full briefing, name the top ones so the
+              // picture is complete, not just the tactical/phase motifs.
+              if (grounding.weaknessBriefingQuestion) {
+                try {
+                  const unified = await getUnifiedWeaknessProfile();
+                  const CROSS = /^analysis:(conversion|timetrouble|boardvision|weakspot|vs-stronger)/;
+                  const others = unified.filter((w) => CROSS.test(w.tag) && w.openCount > 0).slice(0, 2).map((w) => w.label.toLowerCase());
+                  if (others.length > 0) facts += ` Also on my radar: ${others.join(', ')}.`;
+                } catch { /* the core briefing still stands */ }
+              }
               const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'weakness-lifecycle', preferRaw: true });
               if (voiced) {
                 // "drill it" → scope to the most-pressing motif when we have one,

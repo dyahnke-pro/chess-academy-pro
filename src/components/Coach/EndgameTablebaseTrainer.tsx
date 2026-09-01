@@ -29,6 +29,7 @@ import {
   type EndgameWalkStep,
   type EndgameMoveGrade,
 } from '../../services/endgameTablebaseService';
+import { endgameMistakeConcept } from '../../services/endgameProfileService';
 
 interface EndgameTablebaseTrainerProps {
   /** Start position (≤7 pieces). */
@@ -154,14 +155,17 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
     const grade: EndgameMoveGrade | null = await gradeEndgameMove(before, uci);
 
     if (grade && grade.isMistake) {
-      // CORRECT: revert to the decision, explain WHY, let them retry.
+      // CORRECT: revert to the decision, explain WHY + name the CONCEPT the best
+      // move demonstrates (opposition / rook activity / …), let them retry.
       try { chessRef.current.load(before); } catch { /* stays */ }
       setBoardFen(before);
       setBoardKey((k) => k + 1);
       setHighlight(null);
-      setFeedback({ text: grade.why, correctable: true });
+      const concept = endgameMistakeConcept(before, grade.bestUci);
+      const text = concept ? `${grade.why} ${concept}` : grade.why;
+      setFeedback({ text, correctable: true });
       setStatus('Not that one — take it back and try again.');
-      say(grade.why);
+      say(text);
       return;
     }
 

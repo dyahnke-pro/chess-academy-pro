@@ -62,7 +62,8 @@ describe('buildMistakeDrillQueue — sourced from user mistakes, most common fir
     expect(queue[0].key).toBe('tactic:fork');
     expect(queue[0].label).toBe('Forks');
     expect(queue[0].count).toBe(2);
-    expect(queue[1].key).toBe('phase:endgame');
+    // Endgame mistakes bucket by ENDING TYPE now (David 2026-09-01).
+    expect(queue[1].key).toBe('endgame-type:king-pawn');
     expect(queue[1].count).toBe(1);
   });
 

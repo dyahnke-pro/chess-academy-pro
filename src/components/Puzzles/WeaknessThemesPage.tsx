@@ -1,6 +1,7 @@
 import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { classifyEndgameType, endgameTablebaseReady } from '../../services/endgameProfileService';
 import { ArrowLeft, Target, Crosshair, Shuffle, ChevronRight, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
@@ -273,18 +274,37 @@ export function WeaknessThemesPage(): JSX.Element {
                             </span>
                           </div>
                         </div>
-                        <button
-                          onClick={() => void startDrill(theme.theme)}
-                          className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
-                          style={{
-                            background: 'var(--color-accent)',
-                            color: 'var(--color-bg)',
-                          }}
-                          data-testid={`drill-btn-${index}`}
-                        >
-                          Practice
-                          <ChevronRight size={16} />
-                        </button>
+                        <div className="flex flex-col gap-1 items-end">
+                          {(() => {
+                            // ENDGAME → the tablebase trainer on the student's OWN
+                            // flubbed position (David 2026-09-01: custom endgame
+                            // training from the weakness). Shown only when a sample
+                            // is a tablebase-ready ending.
+                            const egFen = theme.sampleFens.find((f) => endgameTablebaseReady(f) && classifyEndgameType(f) !== 'other');
+                            if (!egFen) return null;
+                            return (
+                              <button
+                                onClick={() => void navigate(`/coach/endgame-trainer/custom?fen=${encodeURIComponent(egFen)}`)}
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border-2 border-blue-500/40 text-blue-500 hover:opacity-80"
+                                data-testid={`endgame-trainer-btn-${index}`}
+                              >
+                                Play it out
+                              </button>
+                            );
+                          })()}
+                          <button
+                            onClick={() => void startDrill(theme.theme)}
+                            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-80"
+                            style={{
+                              background: 'var(--color-accent)',
+                              color: 'var(--color-bg)',
+                            }}
+                            data-testid={`drill-btn-${index}`}
+                          >
+                            Practice
+                            <ChevronRight size={16} />
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   );

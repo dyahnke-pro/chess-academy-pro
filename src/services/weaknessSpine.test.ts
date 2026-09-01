@@ -168,14 +168,15 @@ describe('aggregateMistakePuzzles', () => {
     expect(out[0].bucket).toBe('positional');
   });
 
-  it('clusters non-tactic mistakes by game phase', () => {
+  it('clusters non-tactic mistakes by game phase, and endgames by ending TYPE', () => {
     const rows: MistakePuzzle[] = [
       buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'h3', tacticType: null, gamePhase: 'opening' }),
-      buildMistakePuzzle({ fen: FEN_B, playerMoveSan: 'a4', tacticType: null, gamePhase: 'endgame' }),
+      // A real king-and-pawn ending → typed cluster (David 2026-09-01).
+      buildMistakePuzzle({ fen: '8/8/8/4k3/8/8/4P3/4K3 w - - 0 1', playerMoveSan: 'Kd2', tacticType: null, gamePhase: 'endgame' }),
     ];
     const out = aggregateMistakePuzzles(rows);
     const tags = out.map((o) => o.tag).sort();
-    expect(tags).toEqual(['analysis:phase:endgame', 'analysis:phase:opening']);
+    expect(tags).toEqual(['analysis:endgame-type:king-pawn', 'analysis:phase:opening']);
   });
 
   it('excludes positions already represented in the coach pipeline', () => {
