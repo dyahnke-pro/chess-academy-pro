@@ -3679,27 +3679,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 short (2-3 lines); keeping it here guarantees the student reads
                 the WHY without scrolling, and frees the middle for Ask + the
                 move list. */}
-            {/* PHASE-SCOPED FOCUS (Batch C) — how the student's training-focus
-                phase went in this game, led by the grounded phase numbers. */}
-            {phaseFocusSummary && !phaseFocusDismissed && (
-              <div className="px-3 pt-2" data-testid="review-phase-focus-card">
-                <div
-                  className="rounded-xl border border-indigo-500/40 px-3 py-2 flex items-start gap-2"
-                  style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(99,102,241,0.3))' }}
-                >
-                  <p className="text-xs leading-relaxed flex-1" style={{ color: 'var(--color-text)' }}>
-                    {phaseFocusSummary.facts}
-                  </p>
-                  <button
-                    type="button"
-                    data-testid="review-phase-focus-dismiss"
-                    onClick={() => setPhaseFocusDismissed(true)}
-                    className="text-xs opacity-60 hover:opacity-100 shrink-0"
-                    aria-label="Dismiss focus summary"
-                  >✕</button>
-                </div>
-              </div>
-            )}
             <div className="px-3 pt-1 pb-2 border-t border-theme-border">
               <div
                 className="rounded-xl backdrop-blur-md border border-emerald-500/30 px-3 py-2 max-h-[4.5rem] overflow-y-auto"
@@ -4312,6 +4291,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const walkReady = !!walkNarration && walkNarration.segments.length > 0;
     return (
       <div className="flex flex-col items-center justify-center w-full h-full overflow-y-auto" data-testid="coach-game-review">
+        {/* PHASE-SCOPED FOCUS (Batch C) — when the student declared a training
+            focus on a phase, lead the recap with how THAT phase went in this
+            game (grounded phase numbers). Shown immediately, above the summary,
+            so the review opens on the student's stated goal. Dismissible. */}
+        {phaseFocusSummary && !phaseFocusDismissed && (
+          <div className="w-full max-w-md px-3 pt-3" data-testid="review-phase-focus-card">
+            <div
+              className="rounded-xl border border-indigo-500/40 px-3 py-2 flex items-start gap-2"
+              style={{ background: 'color-mix(in srgb, var(--color-bg) 85%, rgba(99,102,241,0.3))' }}
+            >
+              <p className="text-xs leading-relaxed flex-1" style={{ color: 'var(--color-text)' }}>
+                {phaseFocusSummary.facts}
+              </p>
+              <button
+                type="button"
+                data-testid="review-phase-focus-dismiss"
+                onClick={() => setPhaseFocusDismissed(true)}
+                className="text-xs opacity-60 hover:opacity-100 shrink-0"
+                aria-label="Dismiss focus summary"
+              >✕</button>
+            </div>
+          </div>
+        )}
         <ReviewSummaryCard
           result={result}
           playerColor={playerColor}
