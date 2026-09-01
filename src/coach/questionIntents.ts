@@ -2055,6 +2055,10 @@ export function trainingRequestKind(ask: string | undefined): TrainingKind | nul
   // their grounded lanes. Their own detectors own those asks; a real drill
   // imperative fires none of them.
   if (isTimeTroubleQuestion(ask) || isTransferGapQuestion(ask) || isPuzzleStatsQuestion(ask)) return null;
+  // "what endgame am I weakest at" is a WEAKNESS question, not a drill request —
+  // it must reach getEndgameWeaknessProfile, not a "play a game" imperative
+  // (prod contract audit 2026-09-01: it was hijacked here). Its own lane owns it.
+  if (isEndgameWeaknessQuestion(ask)) return null;
   const m = TRAINING_REQUEST_RE.exec(ask);
   if (!m) return null;
   const t = m[1].toLowerCase();

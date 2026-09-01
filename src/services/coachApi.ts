@@ -5140,17 +5140,15 @@ export async function getCoachChatResponse(
       if (onStream) onStream(cleaned);
       return cleaned;
     }
-    // SELF-HEAL (P-I.3): a banter turn whose reply was FULLY stripped means the
-    // model tried to talk chess — so this was a chess turn the banter classifier
-    // misrouted. Rather than a dumb stock deflection, serve the computed grounded
-    // default (engine best move / assessment) when the surface threaded board
-    // data. Logged distinctly so the deflection backlog can see the misroute.
-    const healed = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
-    if (healed) {
-      emitGroundingCoverage('self-heal-position', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
-      if (onStream) onStream(healed);
-      return healed;
-    }
+    // A fully-stripped conversational reply is NOT a misrouted chess turn — a
+    // real chess signal in the user's message was already caught by the
+    // hasChessContentSignal seal above and never reaches here. Reaching this
+    // point means the USER's turn had no chess signal (genuine banter: "thanks
+    // so much coach") and the MODEL rambled into chess prose that the strip
+    // erased. Serving a grounded position default here (the old P-I.3 self-heal)
+    // leaked "the best move is e4…" onto a thank-you — the exact contract the
+    // banter audit catches. So no position readout on a no-chess-signal turn:
+    // serve the warm stock line. The model's ramble is discarded, as it should be.
     emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
