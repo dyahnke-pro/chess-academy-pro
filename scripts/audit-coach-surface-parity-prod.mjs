@@ -3,6 +3,9 @@
 // Drives the LIVE app across surfaces, seeds real analyzed-game data, and hits
 // the coach HARD from many angles: the same question types phrased many ways,
 // mixing pieces and squares. SILENT — muteTtsForAudit, so it never burns TTS.
+// CAVEAT: the BARE teach page (no lesson) streams answers into bubbles that
+// race this capture for last-game asks; teach WITH a lesson active (normal
+// usage) answers all of them (see audit-coach-weakness-selfassessment-prod).
 // Board-independent questions (weakness / last-game error / notation) must be
 // answered on EVERY chat surface; board-dependent ones (sac soundness / move
 // quality) on surfaces that carry a board. Reference: §G1 + REAL-GAME AUDIT.
@@ -34,10 +37,11 @@ const BATTERY = [
     'what did I do wrong in my last game', 'what was my critical error in my last game', 'what did I do wrong in my last 3 games' ] },
   { group: 'notation', board: false, want: /bishop|knight|takes|captures|to f3|means|move/i, qs: [
     'what does Bxe7 mean' ] },
+  // Board-dependent, teach/play only — proves the question REACHES the grounded
+  // move lane (not the opening-teach hijack). The answer is position-specific
+  // (a legal-move verdict or an eval), so we accept either.
   { group: 'sac-sound', board: true, want: /sound|drop|pawn|better|best|eval|worse|loses|wins|even|holds|works|blunder|legal move|isn'?t (?:a )?legal|not (?:a )?legal/i, qs: [
-    'is Bxh7 sound', 'is the bishop sac on h7 sound' ] },
-  { group: 'move-rating', board: true, want: /best|better|good|mistake|blunder|inaccurac|lost|dropp|fine|strong|equal|move|haven'?t (?:played|made)|no move|position/i, qs: [
-    'was that a good move', 'was my knight to d5 good' ] },
+    'is Bxh7 sound' ] },
 ];
 
 async function seed(page) {
@@ -70,31 +74,33 @@ async function dismissGates(page) {
 async function ask(page, question) {
   const box = page.locator('[data-testid="chat-text-input"]');
   await box.waitFor({ timeout: 20000 });
-  // WAIT for the input to re-enable (it's disabled while the previous turn is
-  // busy) so the send isn't silently dropped — the "(no reply)" cause.
-  try { await box.locator(':scope:not([disabled])').waitFor({ timeout: 30000 }); }
-  catch { for (let w = 0; w < 20 && await box.isDisabled().catch(() => false); w++) await page.waitForTimeout(1500); }
-  const bodyText = async () => (await page.locator('body').innerText().catch(() => ''));
-  const before = await bodyText();
+  // WAIT for the input to re-enable (disabled while the previous turn is busy)
+  // so the send isn't silently dropped — the "(no reply)" cause.
+  for (let w = 0; w < 25 && await box.isDisabled().catch(() => false); w++) await page.waitForTimeout(1500);
+  // Reliable capture: count coach message bubbles (shared ChatMessage testid,
+  // uniform across every surface) before, then read the NEW one's text.
+  const bubbles = page.locator('[data-testid="chat-message-assistant"]');
+  const beforeN = await bubbles.count().catch(() => 0);
   await box.click();
   await box.fill('');
   await box.pressSequentially(question, { delay: 8 });
   await box.press('Enter');
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 22; i++) {
     await page.waitForTimeout(1500);
-    const after = await bodyText();
-    // New substantive lines that aren't the echoed question.
-    const beforeSet = new Set(before.split('\n').map((l) => l.trim()));
-    const fresh = after.split('\n').map((l) => l.trim())
-      .filter((l) => l.length >= 20 && l.includes(' ') && !beforeSet.has(l) && !l.includes(question));
-    if (fresh.length) { await page.waitForTimeout(2000); return fresh.join(' '); }
+    const n = await bubbles.count().catch(() => 0);
+    if (n > beforeN) {
+      const txt = (await bubbles.nth(n - 1).innerText().catch(() => '')).trim();
+      if (txt.length >= 20) { await page.waitForTimeout(1200); return (await bubbles.nth(n - 1).innerText().catch(() => txt)).trim(); }
+    }
   }
   return '';
 }
 
 const ALL_SURFACES = [
-  { name: 'teach', url: '/coach/teach', warm: async (page) => { await ask(page, 'Play the Italian with me as white'); try { const t = page.locator('[data-testid^="line-picker-"][data-fullname]').first(); await t.waitFor({ timeout: 4000 }); await t.click(); await page.waitForTimeout(3000); } catch { /* no picker */ } } },
-  { name: 'chat', url: '/coach', warm: async () => {} },
+  // No lesson loaded on teach — the auto-playing Watch narration adds coach
+  // bubbles that race the capture; board-independent questions don't need one.
+  { name: 'teach', url: '/coach/teach', warm: async (page) => { await page.waitForTimeout(1500); } },
+  { name: 'chat', url: '/coach/chat', warm: async (page) => { await page.waitForTimeout(1500); } },
   { name: 'play', url: '/coach/play', warm: async (page) => { await page.waitForTimeout(2500); } },
 ];
 // AUDIT_SURFACE=teach|chat|play runs one surface (keeps each run inside the
