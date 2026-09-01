@@ -95,14 +95,14 @@ behind any mistakes and allows for the user to correct."* Watch → Play → Cor
 - [ ] B6. (follow-up) lead-the-eye per-move highlights; a prod interactive audit
       driving a mistake → correction on the live build.
 
-## 🅒 Batch C — P-VI P7: phase-scoped post-game review
-- [ ] C1. Filter the post-game review to the phase the student's `trainingFocus`
+## 🅒 Batch C — P-VI P7: phase-scoped post-game review  ✅ SHIPPED (2026-09-01, prod-audited)
+- [x] C1. Filter the post-game review to the phase the student's `trainingFocus`
       flags (opening / middlegame / endgame), so a review zooms to where they
       actually lose. Reuses the existing review engine + the phase tags already
       on mistake puzzles.
 
-## 🅓 Batch D — the universal signal-extractor pipeline (P-I.1/2)  — DATA-GATED, rides ALONE
-- [ ] D1. A pure signal-extractor (SAN? square? self-ref? time-ref? wh-word?
+## 🅓 Batch D — the universal signal-extractor pipeline (P-I.1/2)  ✅ SHIPPED OBSERVE-ONLY (2026-09-01)
+- [x] D1. A pure signal-extractor (SAN? square? self-ref? time-ref? wh-word?
       comparison? board present?) + a candidate-map dispatch that WRAPS the
       existing regex fast-path (never rips it out).
 - **Why it's last and gated:** the whack-a-mole is already handled in substance
