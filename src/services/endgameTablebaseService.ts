@@ -85,17 +85,19 @@ export async function tablebaseMoves(fen: string): Promise<TablebaseMovesResult 
       moves?: Array<{ uci?: string; san?: string; category?: TablebaseCategory; dtz?: number | null; dtm?: number | null; checkmate?: boolean; stalemate?: boolean }>;
     };
     if (!json.category || !Array.isArray(json.moves)) return null;
-    const moves: TablebaseMove[] = json.moves
-      .filter((m): m is Required<Pick<typeof m, 'uci' | 'category'>> & typeof m => !!m.uci && !!m.category)
-      .map((m) => ({
-        uci: m.uci as string,
-        san: m.san ?? m.uci as string,
-        category: m.category as TablebaseCategory,
+    const moves: TablebaseMove[] = [];
+    for (const m of json.moves) {
+      if (!m.uci || !m.category) continue;
+      moves.push({
+        uci: m.uci,
+        san: m.san ?? m.uci,
+        category: m.category,
         dtz: m.dtz ?? null,
         dtm: m.dtm ?? null,
         checkmate: !!m.checkmate,
         stalemate: !!m.stalemate,
-      }));
+      });
+    }
     return { category: json.category, moves };
   } catch {
     return null;
@@ -203,7 +205,7 @@ function bestMovePoint(fen: string, best: TablebaseMove): string | null {
     const mv = c.move({ from: best.uci.slice(0, 2), to: best.uci.slice(2, 4), promotion: best.uci.length > 4 ? best.uci[4] : undefined });
     if (!mv) return null;
     if (mv.san.includes('#')) return 'is checkmate';
-    if (mv.flags.includes('p')) return 'queens the pawn';
+    if (mv.promotion) return 'queens the pawn';
     if (mv.captured) return `takes on ${mv.to}`;
     if (mv.san.includes('+')) return 'checks the king';
     if (mv.piece === 'k') return `walks the king to ${mv.to}`;

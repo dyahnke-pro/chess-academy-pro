@@ -68,6 +68,7 @@ import { lookupTablebase } from './lichessTablebaseService';
 import { matchEndgameLesson } from './endgameLessonsService';
 import { getWeaknessLifecycle } from './weaknessLifecycle';
 import { conceptForCluster } from './weaknessConceptMap';
+import { getEndgameWeaknessProfile } from './endgameProfileService';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
 import { detectOpeningTranspositional } from './openingDetectionService';
@@ -1294,6 +1295,10 @@ export interface MasterGroundingOptions {
   /** Weakness BRIEFING (Part III) — the full prioritized picture. Voiced from
    *  getWeaknessLifecycle → assembleWeaknessBriefingAnswer. */
   weaknessBriefingQuestion?: boolean;
+  /** Endgame WEAKNESS (loop tie-in, 2026-09-01) — "what endgame am I weakest at /
+   *  train my endgame weakness". Voiced from getEndgameWeaknessProfile; names the
+   *  weakest ending type + concept and offers a custom tablebase trainer. */
+  endgameWeaknessQuestion?: boolean;
   /** General strategy/theory (P-II.1, 2026-09-01) — "how do I play against an
    *  isolated queen pawn / attack a castled king". Voiced from a free-text
    *  corpus search (searchTheoryPassage → assembleTheoryAnswer); the search
@@ -2945,6 +2950,7 @@ export async function getCoachChatResponse(
       grounding.opponentMoveQuestion === true ||
       grounding.weaknessLifecycleKind !== undefined ||
       grounding.weaknessBriefingQuestion === true ||
+      grounding.endgameWeaknessQuestion === true ||
       grounding.groundedBoardQuestion === true ||
       grounding.positionalTopic !== undefined;
     if (intentFired) {
@@ -4730,6 +4736,36 @@ export async function getCoachChatResponse(
         // no board verdict to give. matchEndgameLesson returns null for an ask we
         // have no lesson for → honest decline (never invent). G0: authored,
         // FEN-verified content; voiceFacts phrases it.
+        // ── ENDGAME WEAKNESS (loop tie-in) — "what endgame am I weakest at /
+        // train my endgame weakness". Reads the student's endgame mistakes,
+        // names the weakest ending TYPE + teaches the concept, and offers a
+        // CUSTOM trainer on their own flubbed position (≤7 pieces) or the
+        // matching named lesson. G0: type computed from material, concept from
+        // the corpus, the trainer from the tablebase. Runs before the technique
+        // lane so the weakness ask isn't answered as a generic "how to".
+        if (grounding.endgameWeaknessQuestion) {
+          try {
+            const prof = await getEndgameWeaknessProfile();
+            if (prof.weakest) {
+              const w = prof.weakest;
+              let facts = `Your weakest ending is ${w.label} — ${w.count} slip${w.count === 1 ? '' : 's'} there, the worst dropping about ${Math.round(w.worstCpLoss / 100)} point${Math.round(w.worstCpLoss / 100) === 1 ? '' : 's'}.`;
+              const hit = searchTheoryPassage(w.conceptQuery);
+              const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
+              if (lesson) facts += ` The idea to lock in: ${lesson.facts}`;
+              // Offer the trainer — the student's OWN position when tablebase-
+              // ready, else the matching named lesson.
+              if (w.ownFen) { facts += ` Let's drill it on one of your own positions.`; lastCoachActionOffer = [{ type: 'endgame_trainer', id: `custom:${w.ownFen}` }]; }
+              else if (w.lessonId) { facts += ` Let's drill the technique.`; lastCoachActionOffer = [{ type: 'endgame_trainer', id: w.lessonId }]; }
+              const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              if (voiced) return voiced;
+            } else {
+              const none = `I don't have enough of your endgames analyzed yet to pinpoint the type you struggle with. Play or import a few games that reach an endgame and I'll show you exactly which ending to drill.`;
+              const voiced = await voiceFacts(none, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              if (voiced) return voiced;
+            }
+          } catch { /* fall through to the technique lane */ }
+        }
+
         if (grounding.endgameQuestion) {
           const endAsk = lastUserMessage() ?? grounding.cleanAsk ?? '';
           const lesson = matchEndgameLesson(endAsk);

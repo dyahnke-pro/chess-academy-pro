@@ -31,7 +31,7 @@ export function EndgameTrainerPage(): JSX.Element {
   const lesson = useMemo(() => (lessonId && lessonId !== 'custom' ? getEndgameLessonById(lessonId) : null), [lessonId]);
   const playable = useMemo(() => lesson?.positions.find((p) => p.fen) ?? null, [lesson]);
 
-  const exit = () => navigate('/coach/teach');
+  const exit = (): void => { void navigate('/coach/teach'); };
 
   if (customFen) {
     return (

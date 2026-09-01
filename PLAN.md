@@ -71,8 +71,15 @@ behind any mistakes and allows for the user to correct."* Watch → Play → Cor
 - [x] B3. Coach launch — "play the Lucena with me" (`isEndgamePlayRequest`) →
       `endgame_trainer` action offer → the "Play this ending" chip mounts the
       trainer. Boardless endgame asks now engage grounding (OR-gate add).
-- [ ] B4. (follow-up) lead-the-eye per-move highlights beyond the move arrow;
-      a prod interactive audit driving a mistake → correction on the live build.
+- [x] B4. LOOP TIE-IN (David 2026-09-01: "coach can see which endgame the user is
+      weakest at … and make custom endgame training") — `endgameProfileService`
+      (`classifyEndgameType`, `getEndgameWeaknessProfile` ranks the student's
+      endgame mistakes by ending TYPE, seeds a custom drill from their own
+      ≤7-piece flubbed position) + `isEndgameWeaknessQuestion` + a coach lane that
+      names the weakest type, teaches the concept from the corpus, and offers the
+      trainer on the student's OWN position (`custom:<fen>`) or the named lesson.
+- [ ] B5. (follow-up) lead-the-eye per-move highlights; a prod interactive audit
+      driving a mistake → correction on the live build.
 
 ## 🅒 Batch C — P-VI P7: phase-scoped post-game review
 - [ ] C1. Filter the post-game review to the phase the student's `trainingFocus`

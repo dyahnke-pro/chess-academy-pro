@@ -758,6 +758,25 @@ export function isEndgamePlayRequest(ask: string | undefined): boolean {
   return ENDGAME_PLAY_RE.test(ask);
 }
 
+/** "What endgame am I WEAKEST at / which endings do I struggle with / train my
+ *  endgame weakness" — the STUDENT'S endgame-weakness profile (loop tie-in,
+ *  David 2026-09-01: "the coach can see which endgame the user is weakest at …
+ *  and make custom endgame training"). Reads the student's endgame mistakes,
+ *  names the weakest TYPE + concept, offers a custom trainer. Distinct from
+ *  isEndgamePlayRequest (play a NAMED ending) and the technique/verdict asks. */
+const ENDGAME_WEAKNESS_RE = anyOf([
+  String.raw`\bwhat\s+(?:kind\s+of\s+)?end(?:game|ing)s?\b[\s\S]{0,30}\b(?:am\s+i\s+(?:worst|weakest|bad)|do\s+i\s+(?:struggle|lose|blunder|fail|mess)|should\s+i\s+(?:work|train|practi[sc]e|study|improve))\b`,
+  String.raw`\b(?:which|what)\s+end(?:game|ing)s?\s+(?:am\s+i|do\s+i)\b`,
+  String.raw`\b(?:my|the)\s+(?:worst|weakest)\s+end(?:game|ing)s?\b`,
+  String.raw`\btrain\s+(?:my\s+)?end(?:game|ing)s?\s+(?:weakness|weaknesses|mistakes?)\b`,
+  String.raw`\b(?:help\s+me\s+with|work\s+on|fix)\s+my\s+end(?:game|ing)s?\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+end(?:game|ing)\s+weakness\b`,
+]);
+export function isEndgameWeaknessQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return ENDGAME_WEAKNESS_RE.test(ask);
+}
+
 /** A PRO-GAME question — "how does Naroditsky play this?", "show me his games
  *  here", "what does the pro do in this line?". Phase 4: the answer is the
  *  player's REAL game corpus (pro-game-references → LivePlayerGamesContext),
@@ -2439,6 +2458,10 @@ export function buildQuestionGrounding(
     // move (candidate lane) and self-review, so it's disjoint from the move
     // lanes above (P-IV.1).
     opponentMoveQuestion: isOpponentMoveQuestion(a),
+    // "what endgame am I weakest at / train my endgame weakness" — the endgame
+    // weakness profile + custom trainer (loop tie-in). Suppressed when it's a
+    // NAMED play request (that launches the named trainer directly).
+    endgameWeaknessQuestion: isEndgameWeaknessQuestion(a) && !isEndgamePlayRequest(a),
     // General strategy/how-to ("how do I play against an IQP") → corpus theory
     // search. Suppressed when the concept or fundamentals lanes already own it,
     // so it's the fallback theory net, not a competitor (P-II.1).

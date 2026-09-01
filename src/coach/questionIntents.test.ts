@@ -9,6 +9,7 @@ import {
   isMasterPlayQuestion,
   isEndgameQuestion,
   isEndgamePlayRequest,
+  isEndgameWeaknessQuestion,
   isPlayerGamesQuestion,
   isConceptQuestion,
   isProgressQuestion,
@@ -556,6 +557,24 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
     it('a play request is still an endgame question (routes to the endgame lane)', () => {
       expect(isEndgameQuestion('play the Lucena with me')).toBe(true);
     });
+  });
+
+  describe('isEndgameWeaknessQuestion (loop tie-in, 2026-09-01)', () => {
+    it.each([
+      'what endgame am I weakest at',
+      'which endings do I struggle with',
+      'what endgame should I work on',
+      'train my endgame weakness',
+      "what's my endgame weakness",
+      'help me with my endgames',
+      'what endings do I lose',
+    ])('matches "%s"', (q) => expect(isEndgameWeaknessQuestion(q)).toBe(true));
+    it.each([
+      "what's the Lucena position",   // technique
+      'play the Lucena with me',      // named play request
+      'how do I win a rook ending',   // technique how-to
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isEndgameWeaknessQuestion(q)).toBe(false));
   });
 
   describe('isTheoryQuestion (P-II.1, 2026-09-01)', () => {
