@@ -85,7 +85,36 @@ is no "let's play a game to fix your middlegame → I'll remember that's the goa
 - [ ] Extend `audit-coach-beginner-questions-prod.mjs` assertions as each lands;
       run the 3-instrument prod audit after each deploy (G1).
 
+## Recovered-session TODOs — ALL must be done (David 2026-09-01, "do #6 FIRST")
+Recovered from the "Not what i see" session (full detail:
+`docs/plans/2026-09-01-recovered-todos-not-what-i-see.md`). David 2026-09-01:
+*"All of those need to be done as well… I want 6 to be done first."*
+
+- [ ] **R6 — 🔴 DO FIRST — weakness-meta → coach "what am I weak at" loop.**
+      Generic, no-area self-assessment questions ("what am I weak at", "what
+      should I work on", "help me get better", "assess me") → the coach answers
+      from the user's OWN computed mistake portfolio (the weaknesses-tab meta-
+      data that already exists but the coach doesn't read), then offers the
+      play-out self-assessment loop (play a ~1000 common position, analyze the
+      user's moves WITHOUT calling them wrong, recap best moves + why, ask "most
+      people play here because they see X — is that what you saw?", capture into
+      the portfolio even if unanswered). G0: compute in code, phrase via
+      `voiceFacts`.
+- [ ] **R1 — game-analysis stall.** Per-game timeout in `gameAnalysisService`
+      (mobile Stockfish stall; loop won't advance past e.g. 1/629). Data source
+      for the whole portfolio — unblocks R6's fuel.
+- [ ] **R2 — "is Bxh7 sound?" engine leg.** Board-question router's engine
+      aspect is still `computer: null`; wire the engine move-consequence answer.
+- [ ] **R3 — mistake-puzzle best moves.** Check `bestMoveEqualsPlayed`/PV
+      derivation + whether 2026-08-28 cpLoss/book changes skewed it.
+- [ ] **R5 — hint names wrong piece.** Ground the hint's piece to the actual
+      solution move (shares root with R3).
+- [ ] **R4 — puzzle play-out ("keep playing").** Computer plays opponent replies
+      from the puzzle end position; reuse the coach/opening play loop.
+
 ## Decisions log
+- 2026-09-01 (David): ALL recovered TODOs (R1–R6) are in scope. **R6 first.**
+  Land everything on `main`.
 - 2026-08-27 (David): fix all four assemblers + build the recommend-game→
   remember-goal→phase-feedback loop, generalized to all areas. G0 stays intact —
   every answer computed in code, phrased via `voiceFacts`.
