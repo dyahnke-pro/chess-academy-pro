@@ -46,20 +46,29 @@ const GAMES = [
   },
 ].map((g) => ({ ...g, createdAt: now }));
 
-async function seedGames(page, games) {
-  return page.evaluate((rows) => new Promise((resolve, reject) => {
+// One extracted mistake puzzle on the MOST-RECENT game (r6-seed-1, dated
+// 2026-08-30) so getLastGameErrors reports a real critical error (Nd5, move 22).
+const PUZZLES = [{
+  id: 'r6-mp-1', sourceGameId: 'r6-seed-1', classification: 'blunder', cpLoss: 320,
+  playerMoveSan: 'Nd5', bestMoveSan: 'Bxf7+', moveNumber: 22, gamePhase: 'middlegame',
+  playerColor: 'white', fen: '8/8/8/8/8/8/8/8 w - - 0 1', createdAt: now,
+}];
+
+async function seedStores(page, games, puzzles) {
+  return page.evaluate(({ games, puzzles }) => new Promise((resolve, reject) => {
     const open = indexedDB.open('ChessAcademyDB');
     open.onerror = () => reject(new Error('open failed'));
     open.onsuccess = () => {
       const dbh = open.result;
-      if (!dbh.objectStoreNames.contains('games')) { dbh.close(); return resolve({ ok: false, reason: 'no games store' }); }
-      const tx = dbh.transaction('games', 'readwrite');
-      const store = tx.objectStore('games');
-      for (const r of rows) store.put(r);
-      tx.oncomplete = () => { dbh.close(); resolve({ ok: true, wrote: rows.length }); };
+      const want = ['games', 'mistakePuzzles'].filter((s) => dbh.objectStoreNames.contains(s));
+      if (!want.includes('games')) { dbh.close(); return resolve({ ok: false, reason: 'no games store' }); }
+      const tx = dbh.transaction(want, 'readwrite');
+      for (const g of games) tx.objectStore('games').put(g);
+      if (want.includes('mistakePuzzles')) for (const p of puzzles) tx.objectStore('mistakePuzzles').put(p);
+      tx.oncomplete = () => { dbh.close(); resolve({ ok: true, games: games.length, puzzles: want.includes('mistakePuzzles') ? puzzles.length : 0 }); };
       tx.onerror = () => { dbh.close(); reject(new Error('tx failed: ' + (tx.error && tx.error.message))); };
     };
-  }), games);
+  }), { games, puzzles });
 }
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -124,12 +133,13 @@ const rows = [];
 try {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
-  const seed = await seedGames(page, GAMES);
-  console.log(`[seed] ${seed.ok ? `${seed.wrote} games written` : `FAILED (${seed.reason})`}`);
+  const seed = await seedStores(page, GAMES, PUZZLES);
+  console.log(`[seed] ${seed.ok ? `${seed.games} games + ${seed.puzzles} mistake puzzles written` : `FAILED (${seed.reason})`}`);
   if (!seed.ok) throw new Error('seed failed — cannot audit R6');
   await ask('Play the Italian with me as white');
   await resolvePicker();
   await page.waitForTimeout(3000);
+  // Aggregate self-assessment: real answer, not deflection, names a signal.
   for (const q of QUESTIONS) {
     const reply = await ask(q);
     const deflected = DEFLECTION.test(reply);
@@ -137,6 +147,15 @@ try {
     const pass = !deflected && real;
     rows.push({ q, reply, deflected, real, pass });
     console.log(`\nQ: ${q}\n  A: ${reply || '(no reply)'}\n  ${pass ? '✔ real assessment' : deflected ? '❌ DEFLECTED (import-games)' : '⚠ non-deflection but no weakness signal'}`);
+  }
+  // Last-game ERROR: must name the seeded critical move (Nd5 / move 22), not deflect.
+  for (const q of ['What did I do wrong in my last game?', 'What was my critical error?']) {
+    const reply = await ask(q);
+    const deflected = DEFLECTION.test(reply);
+    const namesError = /\bNd5\b|move\s+22|critical\s+error|blunder/i.test(reply);
+    const pass = !deflected && namesError;
+    rows.push({ q, reply, deflected, real: namesError, pass });
+    console.log(`\nQ: ${q}\n  A: ${reply || '(no reply)'}\n  ${pass ? '✔ names the last-game error' : deflected ? '❌ DEFLECTED' : '⚠ no critical-error detail'}`);
   }
 } catch (e) {
   console.error('audit error:', e.message);

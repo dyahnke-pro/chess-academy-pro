@@ -3070,6 +3070,56 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
   return { facts: rate + phase + thrown + missed + collapse + costly + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
+/** The most-recent game's critical error — a structural subset of
+ *  gameInsightsService.LastGameErrors. */
+export interface LastGameErrorLike {
+  outcome: 'win' | 'loss' | 'draw';
+  opponent: string | null;
+  opening: string | null;
+  /** false = the game has no analysis yet → we can't pinpoint the error. */
+  analyzed: boolean;
+  worst: { san: string; moveNumber: number; classification: string; bestMoveSan: string | null; cpLoss: number; phase: string } | null;
+  errorCount: { blunders: number; mistakes: number; inaccuracies: number };
+}
+
+/**
+ * assembleLastGameMistakeAnswer — "what did I do wrong in my last game / what
+ * was my critical error?" asked with NO game loaded. Names the last game's
+ * single worst move (from its own extracted mistake puzzles: the played SAN, the
+ * better SAN, the centipawns dropped) with opening + result context. When the
+ * game isn't analyzed yet, says so and points at analysis (the honest answer,
+ * not a deflection — and the hook the R1 fix pays off). All computed
+ * (getLastGameErrors); the LLM invents no move or number. Never null — a last
+ * game always yields SOME truthful answer (its error, "clean game", or "not
+ * analyzed"). G0.
+ */
+export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAnswer | null {
+  const ctx = `your last game${d.opponent ? ` against ${d.opponent}` : ''}${d.opening ? ` in the ${d.opening}` : ''}`;
+  if (!d.analyzed) {
+    return {
+      facts: `I can't pinpoint the critical error in ${ctx} yet — that game hasn't been analyzed. Analyze it and I'll show you the exact move it turned on and the move that was better.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  if (!d.worst) {
+    const inacc = d.errorCount.inaccuracies > 0
+      ? ` Just ${d.errorCount.inaccuracies} minor inaccurac${d.errorCount.inaccuracies === 1 ? 'y' : 'ies'} — nothing serious.`
+      : '';
+    return {
+      facts: `No blunders or mistakes were flagged in ${ctx} — a clean game by the analysis.${inacc}`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} pawns` : '';
+  const better = d.worst.bestMoveSan ? ` ${d.worst.bestMoveSan} was the move instead.` : '';
+  const serious = d.errorCount.blunders + d.errorCount.mistakes;
+  const more = serious > 1
+    ? ` That game had ${d.errorCount.blunders} blunder${d.errorCount.blunders === 1 ? '' : 's'} and ${d.errorCount.mistakes} mistake${d.errorCount.mistakes === 1 ? '' : 's'} in all.`
+    : '';
+  const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes and I'll turn it into a puzzle.`;
+  return { facts, bestMoveSan: d.worst.bestMoveSan, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
 /** Errors split by how the game stood when they happened. */
 export interface ErrorsBySituationLike {
   winning: number;

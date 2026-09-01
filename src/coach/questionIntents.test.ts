@@ -21,6 +21,7 @@ import {
   opensTrapsSystemAsk,
   isReviewDueQuestion,
   isMistakesQuestion,
+  isLastGameMistakeQuestion,
   isTacticsProfileQuestion,
   isPhaseQuestion,
   isRepertoireGapQuestion,
@@ -422,6 +423,35 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
     ])('matches "%s"', (q) => expect(isMistakesQuestion(q)).toBe(true));
     it.each(["what's my rating", 'teach me the Sicilian', 'is there a tactic here', 'what is a fork', 'hi coach'])(
       'does NOT match: %s', (q) => expect(isMistakesQuestion(q)).toBe(false));
+  });
+
+  describe('isLastGameMistakeQuestion (R6, David 2026-09-01 — last-game error, no game loaded)', () => {
+    it.each([
+      'what did I do wrong in my last game',
+      'what was my critical error in my last game',
+      'what was my critical error',
+      'what was my biggest mistake',
+      'what did I do wrong',
+      'where did I go wrong',
+      'what was the worst move in my last game',
+      'what did I mess up in my previous game',
+      'what was my turning point mistake',
+      'where did I go wrong in my recent game',
+    ])('matches "%s"', (q) => expect(isLastGameMistakeQuestion(q)).toBe(true));
+    it.each([
+      'what did I do wrong here',            // live board → board lane
+      'what was my mistake in this game',    // in-context this-game lane
+      'what was my mistake in this position',// live board
+      'review my last game',                 // walkthrough action
+      'go over my last game',                // walkthrough action
+      'did I win my last game',              // result → isLastGameQuestion
+      'what mistakes do I keep making',      // aggregate → isMistakesQuestion
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isLastGameMistakeQuestion(q)).toBe(false));
+    // The last-game-error ask must NOT also fire the aggregate lanes.
+    it('is excluded from the aggregate mistakes lane', () => {
+      expect(isMistakesQuestion('what was my critical error in my last game')).toBe(false);
+    });
   });
 
   describe('isErrorsBySituationQuestion (David 2026-07-13)', () => {

@@ -988,6 +988,10 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   // ask and served the patterns empty-state on prod (proof run qafn-msrv28zv,
   // 2026-08-13). Same opt-out isMistakesQuestion already carries.
   if (!ask || isGameMistakeQuestion(ask)) return false;
+  // A LAST-GAME error ask ("what did I do wrong in my last game", "what was my
+  // critical error") is about one game — the last-game-error lane owns it, not
+  // the aggregate weakness profile.
+  if (isLastGameMistakeQuestion(ask)) return false;
   // "what's the Weaknesses TAB for?" is an app-help ask about a surface, not
   // a request for the habit profile — same guard the concept lane carries
   // (varied sweep, run allq-mss55zxn: the tab question got the patterns
@@ -1394,6 +1398,9 @@ export function isMistakesQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // Game-scoped asks belong to the reviewed game, not the habit profile.
   if (isGameMistakeQuestion(ask)) return false;
+  // A LAST-GAME error ask ("what did I do wrong in my last game") is about that
+  // one game, not the aggregate habit profile — the last-game lane owns it.
+  if (isLastGameMistakeQuestion(ask)) return false;
   return MISTAKES_QUESTION_RE.test(ask);
 }
 
@@ -2103,6 +2110,35 @@ export function isLastGameQuestion(ask: string | undefined): boolean {
   return LAST_GAME_RE.some((re) => re.test(ask));
 }
 
+// ── LAST-GAME ERROR — "what did I do wrong in my last game / what was my
+// critical error?" asked in CHAT with no game loaded (David 2026-09-01: the
+// coach must answer every user-error question). Distinct from isGameMistake
+// Question (which needs "this/that/the game" IN CONTEXT) and from isLastGame
+// Question (which is the RESULT, not the error). Answered from the most-recent
+// analyzed game's own worst move via assembleLastGameMistakeAnswer.
+const LAST_GAME_MISTAKE_RE = anyOf([
+  // error word ↔ last/recent/previous/that game, in either order
+  String.raw`\b(?:wrong|mistake|blunder|error|slip|misplay|went\s+wrong|mess(?:ed)?\s+up|screw(?:ed)?\s+up|lost|threw)\b[\s\S]{0,40}\b(?:last|latest|recent|previous|that)\s+game\b`,
+  String.raw`\b(?:last|latest|recent|previous|that)\s+game\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|misplay|critical|worst\s+move|turning\s+point|go\s+wrong|went\s+wrong|mess(?:ed)?\s+up)\b`,
+  // "what was my critical / biggest / worst error/mistake" — implies the last
+  // game when nothing else is in context.
+  String.raw`\bwhat\s+(?:was|were)\s+(?:my\s+|the\s+)?(?:critical|biggest|worst|main|costliest|key|deciding|turning[\s-]?point)\s+(?:error|mistake|blunder|move|slip|moment)\b`,
+  // bare "what did I do wrong / where did I go wrong" — last game, no board.
+  String.raw`\bwhat\s+did\s+i\s+do\s+wrong\b`,
+  String.raw`\bwhere\s+did\s+i\s+go\s+wrong\b`,
+  String.raw`\bwhat\s+was\s+my\s+(?:critical|key|deciding|turning)\s+(?:error|mistake|moment|point|move)\b`,
+]);
+export function isLastGameMistakeQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // An IN-CONTEXT "this game" ask belongs to the loaded-game lane (it has the
+  // reviewed game's worst moment threaded). A live-board "here / this position /
+  // this move" belongs to the board lanes. Defer both.
+  if (/\bthis\s+game\b|\b(?:in|on|from)\s+this\b|\bhere\b|\bthis\s+(?:position|move|line)\b/i.test(ask)) return false;
+  // A review ACTION ("go over my last game") is the walkthrough, not this query.
+  if (/\b(?:review|walk\s+(?:me\s+)?through|go\s+(?:over|through)|run\s+(?:me\s+)?through|narrate|recap|replay)\b/i.test(ask)) return false;
+  return LAST_GAME_MISTAKE_RE.test(ask);
+}
+
 /**
  * buildQuestionGrounding — the SHARED grounding builder so the coach's
  * grounded-data brain fires IDENTICALLY on every talking surface (David
@@ -2214,6 +2250,7 @@ export function buildQuestionGrounding(
     appHelpQuestion: isAppHelpQuestion(a),
     timeTroubleQuestion: isTimeTroubleQuestion(a),
     lastGameQuestion: isLastGameQuestion(a),
+    lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     positionalTopic: positionalTopic(a) ?? undefined,
   };
 }

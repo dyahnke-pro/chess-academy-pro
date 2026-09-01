@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -380,6 +380,45 @@ describe('assembleMistakesAnswer — Wave 1 "where do I go wrong" (+ suggestion)
   });
   it('returns null with no analyzed games', () => {
     expect(assembleMistakesAnswer({ ...base, totalGames: 0 })).toBeNull();
+  });
+});
+
+describe('assembleLastGameMistakeAnswer — R6 last-game critical error (David 2026-09-01)', () => {
+  const base = {
+    outcome: 'loss' as const, opponent: 'Rival', opening: 'Caro-Kann', analyzed: true,
+    worst: { san: 'Nd5', moveNumber: 22, classification: 'blunder', bestMoveSan: 'Bxf7', cpLoss: 320, phase: 'middlegame' },
+    errorCount: { blunders: 2, mistakes: 1, inaccuracies: 3 },
+  };
+  it('names the critical move, the better move, the drop, and the game context', () => {
+    const a = assembleLastGameMistakeAnswer(base);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/critical error in your last game against Rival in the Caro-Kann was Nd5 on move 22/);
+    expect(a!.facts).toMatch(/a blunder in the middlegame, dropping about 3\.2 pawns/);
+    expect(a!.facts).toMatch(/Bxf7 was the move instead/);
+    expect(a!.facts).toMatch(/2 blunders and 1 mistake in all/);
+    expect(a!.bestMoveSan).toBe('Bxf7');
+    expect(a!.sources).toContain('data:your-games');
+  });
+  it('tells the student to analyze when the last game has no analysis (the R1 hook)', () => {
+    const a = assembleLastGameMistakeAnswer({ ...base, analyzed: false, worst: null });
+    expect(a!.facts).toMatch(/hasn't been analyzed/i);
+    expect(a!.facts).toMatch(/Analyze it/i);
+    expect(a!.bestMoveSan).toBeNull();
+  });
+  it('reports a clean game when analyzed with no blunder or mistake', () => {
+    const a = assembleLastGameMistakeAnswer({ ...base, worst: null, errorCount: { blunders: 0, mistakes: 0, inaccuracies: 2 } });
+    expect(a!.facts).toMatch(/clean game by the analysis/);
+    expect(a!.facts).toMatch(/2 minor inaccuracies/);
+  });
+  it('omits the better-move clause and drop when absent', () => {
+    const a = assembleLastGameMistakeAnswer({
+      ...base, opponent: null, opening: null,
+      worst: { san: 'Ke2', moveNumber: 14, classification: 'mistake', bestMoveSan: null, cpLoss: 0, phase: 'opening' },
+      errorCount: { blunders: 0, mistakes: 1, inaccuracies: 0 },
+    });
+    expect(a!.facts).toMatch(/critical error in your last game was Ke2 on move 14 — a mistake in the opening\./);
+    expect(a!.facts).not.toMatch(/dropping about/);
+    expect(a!.facts).not.toMatch(/was the move instead/);
   });
 });
 

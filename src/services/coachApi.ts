@@ -72,10 +72,10 @@ import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getPlayerStyleProfile } from './gameInsightsService';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getPlayerStyleProfile } from './gameInsightsService';
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
@@ -1271,6 +1271,10 @@ export interface MasterGroundingOptions {
   /** Data-capture (2026-07-10) — "did I win my last game / what was the result".
    *  Voiced from the most-recent game record via assembleLastGameAnswer. No board. */
   lastGameQuestion?: boolean;
+  /** Last-game ERROR (R6, 2026-09-01) — "what did I do wrong in my last game /
+   *  what was my critical error?" asked in chat with no game loaded. Voiced from
+   *  getLastGameErrors → assembleLastGameMistakeAnswer. No board. */
+  lastGameMistakeQuestion?: boolean;
   /** Answer-correctness (2026-07-10) — a positional-FEATURE ask (centre /
    *  material / development / structure / king / piece quality). Routes to
    *  assemblePositionalAnswer, which computes the STATIC feature from the FEN
@@ -2898,6 +2902,7 @@ export async function getCoachChatResponse(
       grounding.appHelpQuestion === true ||
       grounding.timeTroubleQuestion === true ||
       grounding.lastGameQuestion === true ||
+      grounding.lastGameMistakeQuestion === true ||
       grounding.groundedBoardQuestion === true ||
       grounding.positionalTopic !== undefined;
     if (intentFired) {
@@ -4401,6 +4406,31 @@ export async function getCoachChatResponse(
           const voicedClean = await voiceFacts(clean, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
           if (voicedClean) return voicedClean;
           return clean;
+        }
+
+        // ── LAST-GAME ERROR (R6, David 2026-09-01) — "what did I do wrong in my
+        // last game / what was my critical error?" asked in CHAT with NO game
+        // loaded (no reviewWorstMoment, no gameSans threaded). Pull the most-
+        // recent analyzed game's OWN worst move and name it — the coach must
+        // answer every user-error question, not deflect. When that game isn't
+        // analyzed yet the assembler says so and points at analysis (the R1
+        // dependency). G0 — getLastGameErrors computes; voiceFacts phrases.
+        if (grounding.lastGameMistakeQuestion && !grounding.reviewWorstMoment && !(grounding.gameSans && grounding.gameSans.length > 0)) {
+          try {
+            const errs = await getLastGameErrors();
+            if (errs) {
+              const answer = assembleLastGameMistakeAnswer(errs);
+              if (answer) {
+                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                if (voiced) { if (errs.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return voiced; }
+              }
+            } else {
+              // No games at all → the honest import line, not a deflection.
+              const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
+              const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+              if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
+            }
+          } catch { /* fall through */ }
         }
 
         // ── TACTICS / DANGER (Phase 2) — voice the engine's computed tactics ──

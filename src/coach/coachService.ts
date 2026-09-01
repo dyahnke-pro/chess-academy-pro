@@ -208,7 +208,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, openingExistenceQuery,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, openingExistenceQuery,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -216,7 +216,7 @@ export {
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
-  isMistakesQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isMistakesQuestion, isLastGameMistakeQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
@@ -1184,6 +1184,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const appHelpQuestionEngage = isAppHelpQuestion(askForIntents);
     const timeTroubleQuestionEngage = isTimeTroubleQuestion(askForIntents);
     const lastGameQuestionEngage = isLastGameQuestion(askForIntents);
+    const lastGameMistakeQuestionEngage = isLastGameMistakeQuestion(askForIntents);
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
@@ -1309,7 +1310,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || openingExistenceName !== null
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1513,6 +1514,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             appHelpQuestion: appHelpQuestionEngage,
             timeTroubleQuestion: timeTroubleQuestionEngage,
             lastGameQuestion: lastGameQuestionEngage,
+            lastGameMistakeQuestion: lastGameMistakeQuestionEngage,
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
             // Composed-prompt surfaces: coachApi skips the grounded-intent

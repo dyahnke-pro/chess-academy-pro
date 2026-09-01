@@ -848,6 +848,48 @@ export async function getLastGameResult(): Promise<LastGameLike | null> {
   return { outcome, playerColor, opponent, opening, endReason: terminationPhrase(game.termination), movesPlayed };
 }
 
+/** The critical ERROR of the student's most-recent game — for "what did I do
+ *  wrong in my last game / what was my critical error?" asked in chat with NO
+ *  game loaded in context. Pulls the most-recent player game, then its OWN
+ *  extracted mistake puzzles (canonical, board-verified: playerMoveSan +
+ *  bestMoveSan + cpLoss) and reports its worst blunder/mistake. `analyzed` is
+ *  false when the game carries no annotations yet — the coach then tells the
+ *  student to analyze it (this is the R1 dependency surfacing at the coach).
+ *  G0: every field computed; the assembler only phrases. */
+export interface LastGameErrors {
+  outcome: 'win' | 'loss' | 'draw';
+  opponent: string | null;
+  opening: string | null;
+  analyzed: boolean;
+  worst: { san: string; moveNumber: number; classification: string; bestMoveSan: string | null; cpLoss: number; phase: string } | null;
+  errorCount: { blunders: number; mistakes: number; inaccuracies: number };
+}
+
+export async function getLastGameErrors(): Promise<LastGameErrors | null> {
+  const pg = await getPlayerGames();
+  if (pg.length === 0) return null;
+  const sorted = [...pg].sort((a, b) => (b.game.date ?? '').localeCompare(a.game.date ?? ''));
+  const { game, playerColor } = sorted[0];
+  const outcome: 'win' | 'loss' | 'draw' = isWin(game, playerColor) ? 'win' : isLoss(game, playerColor) ? 'loss' : 'draw';
+  const opponent = (playerColor === 'white' ? game.black : game.white) || null;
+  const opening = game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null;
+  const analyzed = !!game.annotations && game.annotations.length > 0;
+
+  const puzzles = (await db.mistakePuzzles.where('sourceGameId').equals(game.id).toArray());
+  const errorCount = {
+    blunders: puzzles.filter((p) => p.classification === 'blunder').length,
+    mistakes: puzzles.filter((p) => p.classification === 'mistake').length,
+    inaccuracies: puzzles.filter((p) => p.classification === 'inaccuracy').length,
+  };
+  const worstP = puzzles
+    .filter((p) => p.classification === 'blunder' || p.classification === 'mistake')
+    .sort((a, b) => b.cpLoss - a.cpLoss)[0] ?? null;
+  const worst = worstP
+    ? { san: worstP.playerMoveSan, moveNumber: worstP.moveNumber, classification: worstP.classification, bestMoveSan: worstP.bestMoveSan || null, cpLoss: worstP.cpLoss, phase: worstP.gamePhase }
+    : null;
+  return { outcome, opponent, opening, analyzed, worst, errorCount };
+}
+
 /** Map a raw platform termination string to a human phrase for the coach. */
 function terminationPhrase(t: string | undefined): string | null {
   if (!t) return null;
