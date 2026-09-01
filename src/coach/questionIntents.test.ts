@@ -1051,6 +1051,21 @@ describe('isCandidateMoveQuestion / extractCandidateSan (Bug 2, David 2026-07-10
     expect(extractCandidateSan('is Rxe7+ any good')).toBe('Rxe7+');
   });
 
+  // R2 (David 2026-09-01, his real words): "if a bishop sac on h7 was sound".
+  // Plain-English sac/capture must resolve to a piece-qualified SAN so
+  // buildCandidateEval can play it (chess.js resolves the capture from piece +
+  // square even without the 'x').
+  it('extracts a plain-English sac / capture as a piece-qualified move', () => {
+    expect(extractCandidateSan('is the bishop sac on h7 sound')).toBe('Bh7');
+    expect(extractCandidateSan('does the knight sac on f7 work')).toBe('Nf7');
+    expect(extractCandidateSan('was the bishop takes on h7 a mistake')).toBe('Bh7');
+    expect(extractCandidateSan('knight captures on e5')).toBe('Ne5');
+  });
+  it('routes plain-English sac questions to the candidate lane', () => {
+    expect(isCandidateMoveQuestion('is the bishop sac on h7 sound')).toBe(true);
+    expect(isCandidateMoveQuestion('does the knight sac on f7 work')).toBe(true);
+  });
+
   it('does not grab a plain word as a move', () => {
     expect(extractCandidateSan('is the Najdorf ok')).toBeNull();
     expect(extractCandidateSan('what about the endgame')).toBeNull();

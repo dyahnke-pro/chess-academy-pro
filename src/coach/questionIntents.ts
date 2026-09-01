@@ -408,7 +408,12 @@ export function extractCandidateSan(ask: string | undefined): string | null {
   const WORD_PIECE: Record<string, string> = {
     knight: 'N', night: 'N', bishop: 'B', rook: 'R', queen: 'Q', king: 'K', pawn: '',
   };
-  const spoken = /\b(knight|night|bishop|rook|queen|king|pawn)\s*(?:to\s*|takes\s*|x\s*)?([a-h])\s*([1-8])\b/i.exec(ask);
+  // Verb between the piece and the square: "to", "takes/take (on)", "captures
+  // (on)", "sac/sacrifice(s) (on)", "x", or a bare "on" — so "bishop sac on h7"
+  // and "knight takes on e5" resolve, not just "knight to d5" (David's real
+  // words 2026-08-30: "if a bishop sac on h7 was sound"). chess.js resolves the
+  // capture from the piece + square even without the 'x'.
+  const spoken = /\b(knight|night|bishop|rook|queen|king|pawn)\s*(?:to\s+|takes?\s+(?:on\s+)?|captures?\s+(?:on\s+)?|sac(?:rifice|rifices|s)?\s+(?:on\s+)?|x\s*|on\s+)?([a-h])\s*([1-8])\b/i.exec(ask);
   if (spoken) {
     const letter = WORD_PIECE[spoken[1].toLowerCase()] ?? '';
     return `${letter}${spoken[2].toLowerCase()}${spoken[3]}`;
@@ -443,6 +448,11 @@ const CANDIDATE_MOVE_RE = anyOf([
   String.raw`\bis\s+it\s+(?:ok(?:ay)?|fine|safe|good|playable|alright)\s+to\s+(?:play|castle)\b`,
   String.raw`\bwould\s+[A-Za-z0-9+#=-]{2,6}\s+(?:be\s+)?(?:ok(?:ay)?|fine|work|playable|good|sound|safe)\b`,
   String.raw`\bdoes\s+[A-Za-z0-9+#=-]{2,6}\s+(?:work|hold|lose|win|blunder)\b`,
+  // PLAIN-ENGLISH sac/capture — "is the bishop sac on h7 sound", "does the
+  // knight sac on f7 work", "is sacrificing my bishop on h7 good" (David's real
+  // phrasing 2026-08-30). extractCandidateSan resolves the piece+square to SAN.
+  String.raw`\b(?:is|would|does|was)\b[\s\S]{0,25}\b(?:knight|night|bishop|rook|queen|pawn)\s+(?:sac(?:rifice|rifices|s)?|capture|takes?)\b[\s\S]{0,20}\b(?:sound|good|work|works|winning|safe|playable|correct|ok(?:ay)?|fine|a\s+(?:good|sound|winning)\s+(?:idea|move|sac(?:rifice)?))\b`,
+  String.raw`\bis\s+(?:it\s+)?(?:sac(?:rificing)?|sound|safe|good|worth\s+it)\s+to\s+sac(?:rifice)?\b`,
   // Castling named in words — "is castling ok", "would castling long be ok",
   // "should I castle here". extractCandidateSan maps it to O-O / O-O-O.
   String.raw`\b(?:is|would|can|could|should)\b[\s\S]{0,20}\bcastl(?:e|ing)\b`,

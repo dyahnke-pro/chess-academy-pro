@@ -123,8 +123,15 @@ Recovered from the "Not what i see" session (full detail:
       advances. Tests: `gameAnalysisService.wedge.test.ts` (4). ON-DEVICE caveat:
       real iOS worker-death recycling is device-only — confirm on David's phone
       (headless/jsdom can't reproduce iOS worker death).
-- [ ] **R2 — "is Bxh7 sound?" engine leg.** Board-question router's engine
-      aspect is still `computer: null`; wire the engine move-consequence answer.
+- [x] **R2 — "is a bishop sac on h7 sound?" (David 2026-09-01).** The engine leg
+      was ALREADY wired (`buildCandidateEval` plays the move + evals the after-
+      position via Stockfish → `assembleCandidateMoveAnswer`) and works for SAN
+      ("is Bxh7 sound"). The real gap was David's plain-English phrasing: "bishop
+      sac on h7" parsed to just the square. Fixed `extractCandidateSan`'s spoken-
+      move regex to accept sac/capture/takes/on verbs, and added a sac-phrasing
+      pattern to the candidate intent (chess.js resolves the capture from
+      piece+square without the 'x'). Needs a live board FEN (correct — you ask
+      this looking at a position). Tests in questionIntents.test.ts.
 - [ ] **R3 — mistake-puzzle best moves.** Check `bestMoveEqualsPlayed`/PV
       derivation + whether 2026-08-28 cpLoss/book changes skewed it.
 - [ ] **R5 — hint names wrong piece.** Ground the hint's piece to the actual
