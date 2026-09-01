@@ -23,7 +23,7 @@ log. Never a 50-file mega-push on the live paying app.
 
 ---
 
-## 🅐 Batch A — the 3 remaining weakness capture gaps  (do FIRST: highest value, lowest risk)
+## 🅐 Batch A — the 3 remaining weakness capture gaps  ✅ SHIPPED (2026-09-01, prod-audited 4/4)
 David: *"if you see us missing something, PLEASE ADD."* Each is a new detector
 feeding the SAME weakness spine (`getUnifiedWeaknessProfile`), so each is small,
 self-contained, and testable — the exact pattern of `aggregateStrongerOpponentErrors`.
@@ -36,20 +36,20 @@ self-contained, and testable — the exact pattern of `aggregateStrongerOpponent
       raise `isTheoryQuestion` precedence for "against <structure>". Gate:
       extend `audit-coach-new-lanes-prod.mjs` to assert the IQP answer is the
       CORPUS teaching, not a record miss.
-- [ ] **A1. missed-opponent-threat / prophylaxis** — the loose-piece heart: we
+- [x] **A1. missed-opponent-threat / prophylaxis** — the loose-piece heart: we
       capture *your* hang, not "you missed *their* threat." A per-ply threat
       probe (null-move / `detectTactics` from the opponent's side) over stored
       analyzed games → `aggregateMissedThreats` → a UnifiedWeakness row +
       concept ("prophylaxis / ask what they want"). Board-verified; empty when
       thin.
-- [ ] **A2. endgame-type conversion split** — thrown wins ARE captured
+- [x] **A2. endgame-type conversion split** — thrown wins ARE captured
       (`aggregateConversionFailures`); add the ENDING-TYPE classification
       (R+P / K+P / minor-piece) at the point the game reached the ending, so
       "you lose rook endings" is nameable and routes to the P-V.1 endgame lesson.
-- [ ] **A3. self-inflicted structure damage** — a pawn-structure delta detector
+- [x] **A3. self-inflicted structure damage** — a pawn-structure delta detector
       (doubled / isolated / backward you created without compensation) over
       analyzed games → `aggregateStructureDamage` + concept (pawn structure).
-- [ ] **A4. wire the new captures into the lifecycle + briefing** so they show in
+- [x] **A4. wire the new captures into the lifecycle + briefing** so they show in
       "what's my biggest weakness" and the drill chip scopes to them.
 
 Gate for A: `weaknessSpine.test` rows + a lifecycle test + the prod new-lanes
