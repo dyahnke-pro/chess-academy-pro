@@ -1623,6 +1623,21 @@ const STOCK_GROUNDING_FALLBACK =
  *  ChatMessage → /games/import. */
 const IMPORT_ANALYZE_OFFER: CoachActionOffer = { type: 'import_games', id: 'connect' };
 
+/** The VERBAL "upload your games" reminder (David 2026-09-01: "coach reminding
+ *  users to upload their lichess and chess.com games! My users are not doing
+ *  this! If user asks about weaknesses and has non analyzed or uploaded we need
+ *  to verbally tell them to do this."). Computed (G0) — states a true instruction,
+ *  names BOTH platforms + where to do it, and scopes to what they asked. Two
+ *  cases: nothing imported at all vs imported-but-unanalyzed (both fixed on the
+ *  Import page). Paired with IMPORT_ANALYZE_OFFER so the chat also shows the chip. */
+export function uploadGamesReminder(topic: string, overview: { totalGames: number; analyzedGameCount: number }): string {
+  if (overview.totalGames > 0) {
+    const n = overview.totalGames;
+    return `You've imported ${n} game${n === 1 ? '' : 's'}, but none are analyzed yet — so I can't read ${topic} until they are. Open Games then Import, run the analysis, and I'll show you exactly what to work on.`;
+  }
+  return `I can't read ${topic} yet — none of your real games are in here, and that's where I find your patterns. Import your Lichess or Chess.com games from Games then Import (just your username), and I'll break down exactly what to drill.`;
+}
+
 /** Headline capabilities for the general "what can you help with" overview
  *  (David 2026-09-01). Each is a REAL app feature (grounded in
  *  APP_ROUTES_MANIFEST.featuresAvailable), stated concisely — the coach names
@@ -3372,6 +3387,39 @@ export async function getCoachChatResponse(
         // the assembler only phrases. Runs BEFORE the generic mistakes lane so
         // the time-framed ask gets the trend, not a static breakdown. Offers a
         // motif-scoped "drill it" chip (P-III.3).
+        // ── UPLOAD-YOUR-GAMES REMINDER (David 2026-09-01) — a weakness /
+        // assessment question the coach CANNOT answer without analyzed games.
+        // Rather than each lane's vague "play a few more", VERBALLY tell the
+        // student to import + analyze their Lichess / Chess.com games, with the
+        // import chip. Fires before every weakness lane so the reminder is
+        // identical however they phrase it. Scoped to analyzedGameCount === 0 so
+        // students who DO have analyzed games still get their real read; a
+        // training-AREA how-to ("how do I improve my endgames") keeps its own
+        // still-useful "play a focused game" recommendation and is excluded.
+        {
+          const weaknessAsk =
+            grounding.weaknessBriefingQuestion || !!grounding.weaknessLifecycleKind ||
+            grounding.mistakesQuestion || grounding.endgameWeaknessQuestion ||
+            grounding.skillRadarQuestion || grounding.trendQuestion ||
+            (grounding.progressQuestion && !trainingAreaFromText(lastUserMessage()));
+          if (weaknessAsk) {
+            try {
+              const overview = await getOverviewInsights();
+              if (overview.analyzedGameCount === 0) {
+                const topic = grounding.endgameWeaknessQuestion ? 'your endgame weaknesses'
+                  : grounding.trendQuestion ? "whether you're improving"
+                  : grounding.skillRadarQuestion ? 'your skill breakdown'
+                  : grounding.mistakesQuestion ? 'the mistakes you make'
+                  : 'your weaknesses';
+                lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
+                const msg = uploadGamesReminder(topic, overview);
+                const voiced = await voiceFacts(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                return voiced ?? msg;
+              }
+            } catch { /* read failed — fall through to the lanes' own fallbacks */ }
+          }
+        }
+
         if (grounding.weaknessLifecycleKind || grounding.weaknessBriefingQuestion) {
           try {
             const lc = await getWeaknessLifecycle();
