@@ -143,6 +143,13 @@ describe('isProgressQuestion (weakness / improvement — the thesaurus bug)', ()
     // diagnose
     'diagnose my chess',
     'assess my game',
+    // bare self-assessment (R6, David 2026-09-01) — must reach the profile
+    'assess me',
+    'size me up',
+    'where do I stand',
+    'rate my chess',
+    'critique my game',
+    'grade my play',
     // informal self-predicates + opening-weakness (2026-07-04 adversarial audit)
     'i suck at endgames',
     'i suck at tactics what do i do',

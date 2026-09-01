@@ -971,6 +971,13 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\b(?:` + WEAK_PRED + String.raw`|struggl(?:e|ing))\s+(?:at|in|on|with)\s+(?:my\s+)?(?:tactics?|tactical|openings?|repertoire|endgames?|endings?|middlegames?|calculation|positional|strategy|defen[cs]e|attack(?:ing)?|conversion|time\s+management|blunders?|forks?|pins?|skewers?|back[\s-]?rank|king\s+safety|pawn\s+structures?)\b`,
   // ── explicit "diagnose my chess" ──
   String.raw`\b(?:diagnose|analy[sz]e|assess|evaluate)\s+my\s+(?:chess|game|play|weakness\w*)\b`,
+  // bare self-assessment — "assess me", "size me up", "where do I stand",
+  // "rate/critique my chess" (David 2026-09-01: generic "assess me" must reach
+  // the weakness profile, not fall through to a board readout).
+  String.raw`\b(?:assess|evaluate|critique|size\s+up|rate)\s+me\b`,
+  String.raw`\bsize\s+me\s+up\b`,
+  String.raw`\bwhere\s+do\s+i\s+stand\b`,
+  String.raw`\b(?:rate|critique|grade)\s+my\s+(?:chess|game|play)\b`,
   // "what parts/areas of my game are weak" — a plural-parts weakness diagnosis.
   String.raw`\bwhat\s+(?:parts?|areas?|aspects?|bits?|elements?)\s+of\s+my\s+(?:game|play|chess)\s+(?:are|is)\s+(?:` + WEAK_PRED + String.raw`|lacking|off|shaky)\b`,
 ]);

@@ -3854,6 +3854,40 @@ export async function getCoachChatResponse(
                 return voiced;
               }
             }
+            // ── FEED THE WEAKNESSES-TAB META-DATA TO THE COACH (R6, David
+            // 2026-09-01) ── When the ranked misconception profile AND the
+            // bad-habit profile are both empty but the student HAS analyzed
+            // games, the tab still shows a real assessment computed from the
+            // game annotations (leakiest phase, blunder rate, thrown-won games,
+            // missed shots, late collapses). The generic "what am I weak at"
+            // lane never read it — it deflected to "import your games" even
+            // though the tab was full. Reuse the SAME assembler the dedicated
+            // mistakes lane uses (assembleMistakesAnswer over getMistakeInsights
+            // + getOverviewInsights) so the coach answers from the student's own
+            // numbers. G0 — every figure computed upstream; voiceFacts phrases.
+            {
+              const [mi, ov] = await Promise.all([getMistakeInsights(), getOverviewInsights()]);
+              const worstPhase = [...mi.errorsByPhase].sort((a, b) => b.errors - a.errors)[0] ?? null;
+              const top = mi.costliestMistakes[0] ?? null;
+              const insightAnswer = assembleMistakesAnswer({
+                totalGames: mi.totalGames,
+                blundersPerGame: ov.avgBlundersPerGame,
+                mistakesPerGame: ov.avgMistakesPerGame,
+                avgCpLoss: mi.avgCpLoss,
+                worstPhase: worstPhase ? { phase: worstPhase.phase, errors: worstPhase.errors } : null,
+                thrownWins: mi.thrownWins,
+                missedWins: mi.missedWins,
+                lateGameCollapses: mi.lateGameCollapses,
+                costliest: top ? { san: top.san, cpLoss: top.cpLoss, opponentName: top.opponentName, openingName: top.openingName } : null,
+              });
+              if (insightAnswer) {
+                const voicedInsight = await voiceFacts(insightAnswer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                if (voicedInsight) {
+                  lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+                  return voicedInsight;
+                }
+              }
+            }
             // No bad-habit data yet — voice a computed "not enough data" fallback
             // instead of falling through to the legacy LLM path (which talks about
             // the board and produces a non-answer — G0).  This is the documented
