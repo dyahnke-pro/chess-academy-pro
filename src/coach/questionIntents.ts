@@ -1980,6 +1980,15 @@ export function recordVsTarget(ask: string | undefined): string | null {
   if (!m) return null;
   const t = m[1].trim().replace(/\s+/g, ' ').replace(/[?.!]+$/, '').trim();
   if (t.length < 2) return null;
+  // "how do I play against an ISOLATED QUEEN PAWN / the bishop pair / a weak
+  // square" is a THEORY question, not a win/loss record against an opponent or
+  // opening (A0, David 2026-09-01: the theory lane was swallowed by this one).
+  // A structural/concept target belongs to isTheoryQuestion — return null so it
+  // routes there.
+  if (/\b(?:isolated|backward|passed|doubled|hanging|isolani|iqp|weak|strong|outpost|open|closed|majority|minority|fianchetto(?:ed)?|opposite[-\s]?colou?red)\b/i.test(t)
+    || /\b(?:pawn\s+structure|bishop\s+pair|weak\s+square|weak\s+colou?r|colou?r\s+complex|pawn\s+chain|space\s+advantage|initiative)\b/i.test(t)) {
+    return null;
+  }
   // "how do I do vs that player" → "that player": keep the raw target (it just
   // won't resolve to an opening OR a real opponent → no-data), but drop a
   // bare pronoun/filler with no name so it doesn't fire on nothing.

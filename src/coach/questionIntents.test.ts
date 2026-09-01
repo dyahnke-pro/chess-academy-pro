@@ -594,6 +594,19 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
       'how do I play the Sicilian',          // named opening → profile
       'hi coach',
     ])('does NOT match: %s', (q) => expect(isTheoryQuestion(q)).toBe(false));
+
+    // A0 (2026-09-01): a STRUCTURE ask must reach theory, not the win/loss
+    // record-vs lane (which used to swallow it → "no games against 'an isolated
+    // queen pawn' logged").
+    it.each([
+      'how do I play against an isolated queen pawn',
+      'how do I play against the bishop pair',
+      'how do I play against a weak square',
+      'how do I play against hanging pawns',
+    ])('structure ask "%s" is theory, NOT a record-vs target', (q) => {
+      expect(isTheoryQuestion(q)).toBe(true);
+      expect(recordVsTarget(q)).toBeNull();
+    });
   });
 
   describe('isErrorsBySituationQuestion (David 2026-07-13)', () => {
