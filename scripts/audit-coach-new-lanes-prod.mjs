@@ -132,6 +132,7 @@ try {
     { q: 'what can you help with?', name: 'capabilities overview', ok: (t) => /teach|drill|review|opening|weak|tactic|endgame|play|help/i.test(t) },
     { q: "what's the Lucena position?", name: 'endgame technique (Lucena)', ok: (t) => /rook|pawn|king|bridge|promot|win|shelter/i.test(t) },
     { q: "what's my biggest weakness?", name: 'weakness lifecycle/briefing', ok: (t) => /weak|mistak|blunder|drill|games|pattern|work on|analyz/i.test(t) },
+    { q: 'what endgame am I weakest at?', name: 'endgame-weakness profile', ok: (t) => /endgame|ending|rook|pawn|king|games|analyz|drill/i.test(t) },
   ];
 
   for (const c of cases) {
@@ -139,6 +140,32 @@ try {
     record(`${c.name}: gets a grounded answer`, isAnswer(a) && c.ok(a), a ? `"${a.replace(/\s+/g, ' ').slice(0, 160)}"` : 'no reply in 45s');
     record(`${c.name}: not the canned deflection`, isAnswer(a) && !a.includes(CANNED), a.includes(CANNED) ? 'served the canned line' : 'grounded');
   }
+
+  // ── ENDGAME TRAINER LAUNCH (Batch B) — "play the Lucena with me" offers the
+  // "Play this ending" chip → the tablebase trainer mounts + Watch works.
+  const introEndgame = (await ask('play the Lucena with me')).toLowerCase();
+  record('endgame play request: gets a launch intro', isAnswer(introEndgame) && /play|walk|lucena|ending|take over/i.test(introEndgame), introEndgame ? `"${introEndgame.slice(0, 140)}"` : 'no reply');
+  // The chip is rendered by ChatMessage as action-endgame_trainer.
+  let chip = page.locator('[data-testid="action-endgame_trainer"]').first();
+  const chipShown = await chip.isVisible().catch(() => false);
+  record('endgame play request: offers the "Play this ending" chip', chipShown, chipShown ? 'chip present' : 'no chip');
+  if (chipShown) {
+    await chip.click().catch(() => {});
+    const trainer = page.locator('[data-testid="endgame-tablebase-trainer"]');
+    const mounted = await trainer.waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+    record('endgame trainer mounts from the chip', mounted, mounted ? 'trainer mounted' : 'did not mount');
+    if (mounted) {
+      const watch = page.locator('[data-testid="endgame-trainer-watch"]');
+      const canWatch = await watch.isVisible().catch(() => false);
+      record('endgame trainer shows the Watch control (tablebase reachable)', canWatch, canWatch ? 'Watch ready' : 'no Watch button (tablebase miss?)');
+    }
+  }
+
+  // Direct route mount — the standalone page loads the lesson trainer.
+  await page.goto(`${BASE}/coach/endgame-trainer/lucena-position`, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+  await dismissGates();
+  const directMount = await page.locator('[data-testid="endgame-tablebase-trainer"], [data-testid="endgame-trainer-notfound"], [data-testid="endgame-trainer-noposition"]').first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+  record('endgame-trainer route mounts standalone', directMount, directMount ? 'route renders' : 'route blank');
 } catch (err) {
   record('audit ran without throwing', false, String(err).slice(0, 200));
 } finally {
