@@ -143,7 +143,11 @@ export function ChatMessage({ message, isStreaming, onPickChoice }: ChatMessageP
         // queue (most-common weakness first, adaptive until it tests out). This
         // also sidesteps the WeaknessThemesPage entirely. A scoped motif rides
         // along as a hint; the in-place queue still leads with the top weakness.
-        if (action.id && action.id !== 'all') {
+        // A `game:<id>` id scopes the drill to THAT game's mistakes (David
+        // 2026-09-01: the coach named that game's critical error → drill it now).
+        if (action.id && action.id.startsWith('game:')) {
+          void navigate(`/coach/teach?drill=mistakes&game=${encodeURIComponent(action.id.slice('game:'.length))}`);
+        } else if (action.id && action.id !== 'all') {
           void navigate(`/coach/teach?drill=mistakes&theme=${encodeURIComponent(action.id)}`);
         } else {
           void navigate('/coach/teach?drill=mistakes');

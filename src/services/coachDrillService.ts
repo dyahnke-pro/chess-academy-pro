@@ -421,7 +421,7 @@ export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryR
 }
 
 export async function buildMistakeDrillQueue(
-  options: { today?: string; cementReps?: number; rating?: number } = {},
+  options: { today?: string; cementReps?: number; rating?: number; gameId?: string } = {},
 ): Promise<MistakeDrillTheme[]> {
   const today = options.today ?? new Date().toISOString().split('T')[0];
   const cementReps = Math.max(0, options.cementReps ?? 0);
@@ -432,8 +432,16 @@ export async function buildMistakeDrillQueue(
   } catch {
     return [];
   }
-  // SRS gate: skip mastered ("tested out") and not-yet-due mistakes.
-  mistakes = mistakes.filter((mp) => mp.status !== 'mastered' && mp.srsDueDate <= today);
+  if (options.gameId) {
+    // GAME-SCOPED drill (David 2026-09-01: "set up the associated drills") — the
+    // coach just named THIS game's critical error, so drill this game's mistakes
+    // NOW regardless of SRS due date (the student asked for them). Still skip
+    // mastered ones.
+    mistakes = mistakes.filter((mp) => mp.sourceGameId === options.gameId && mp.status !== 'mastered');
+  } else {
+    // SRS gate: skip mastered ("tested out") and not-yet-due mistakes.
+    mistakes = mistakes.filter((mp) => mp.status !== 'mastered' && mp.srsDueDate <= today);
+  }
   if (mistakes.length === 0) return [];
 
   const buckets = new Map<string, { label: string; items: MistakePuzzle[] }>();

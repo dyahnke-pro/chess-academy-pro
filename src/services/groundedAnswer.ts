@@ -3073,6 +3073,8 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
 /** The most-recent game's critical error — a structural subset of
  *  gameInsightsService.LastGameErrors. */
 export interface LastGameErrorLike {
+  /** 0 = the last game, 1 = the game before it, … ("last game +n"). */
+  gameOffset?: number;
   outcome: 'win' | 'loss' | 'draw';
   opponent: string | null;
   opening: string | null;
@@ -3080,6 +3082,14 @@ export interface LastGameErrorLike {
   analyzed: boolean;
   worst: { san: string; moveNumber: number; classification: string; bestMoveSan: string | null; cpLoss: number; phase: string } | null;
   errorCount: { blunders: number; mistakes: number; inaccuracies: number };
+}
+
+/** "your last game" / "the game before last" / "3 games back" from the offset. */
+function gameOffsetPhrase(offset: number | undefined): string {
+  const n = offset ?? 0;
+  if (n <= 0) return 'your last game';
+  if (n === 1) return 'the game before last';
+  return `${n} games back`;
 }
 
 /**
@@ -3094,7 +3104,7 @@ export interface LastGameErrorLike {
  * analyzed"). G0.
  */
 export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAnswer | null {
-  const ctx = `your last game${d.opponent ? ` against ${d.opponent}` : ''}${d.opening ? ` in the ${d.opening}` : ''}`;
+  const ctx = `${gameOffsetPhrase(d.gameOffset)}${d.opponent ? ` against ${d.opponent}` : ''}${d.opening ? ` in the ${d.opening}` : ''}`;
   if (!d.analyzed) {
     return {
       facts: `I can't pinpoint the critical error in ${ctx} yet — that game hasn't been analyzed. Analyze it and I'll show you the exact move it turned on and the move that was better.`,
@@ -3118,6 +3128,41 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
     : '';
   const facts = `The critical error in ${ctx} was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${drop}.${better}${more} Ask to drill your mistakes and I'll turn it into a puzzle.`;
   return { facts, bestMoveSan: d.worst.bestMoveSan, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** The last-N-games error span — a structural subset of
+ *  gameInsightsService.RecentGamesErrors. */
+export interface RecentGamesErrorLike {
+  gamesChecked: number;
+  blunders: number;
+  mistakes: number;
+  worst: { san: string; moveNumber: number; classification: string; bestMoveSan: string | null; cpLoss: number; phase: string; opponent: string | null; opening: string | null } | null;
+}
+
+/**
+ * assembleRecentGamesMistakeAnswer — "what did I do wrong in my last 3 games?"
+ * Totals the serious errors across the span and names the single worst slip
+ * (the played move, the better move, which game). All computed; the model only
+ * phrases. Returns null with no games checked.
+ */
+export function assembleRecentGamesMistakeAnswer(d: RecentGamesErrorLike): GroundedAnswer | null {
+  if (d.gamesChecked <= 0) return null;
+  const total = d.blunders + d.mistakes;
+  if (total === 0) {
+    return {
+      facts: `Across your last ${d.gamesChecked} game${d.gamesChecked === 1 ? '' : 's'}, nothing was flagged as a blunder or mistake — clean games by the analysis.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  const tally = `Across your last ${d.gamesChecked} games you made ${d.blunders} blunder${d.blunders === 1 ? '' : 's'} and ${d.mistakes} mistake${d.mistakes === 1 ? '' : 's'}.`;
+  let worstLine = '';
+  if (d.worst) {
+    const where = `${d.worst.opponent ? ` against ${d.worst.opponent}` : ''}${d.worst.opening ? ` in the ${d.worst.opening}` : ''}`;
+    const better = d.worst.bestMoveSan ? ` ${d.worst.bestMoveSan} was the move.` : '';
+    const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} pawns` : '';
+    worstLine = ` The worst was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${where}${drop}.${better}`;
+  }
+  return { facts: `${tally}${worstLine} Ask to drill your mistakes and I'll queue them up.`, bestMoveSan: d.worst?.bestMoveSan ?? null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** Errors split by how the game stood when they happened. */

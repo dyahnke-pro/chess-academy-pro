@@ -139,6 +139,53 @@ describe('mistakePuzzleService', () => {
       expect(mistake?.narration.intro).toBeTruthy();
     });
 
+    // R3/R5 (David 2026-09-01) — the drill validates the student's move against
+    // moves[0], while the shown best move + the hint's PIECE come from
+    // bestMoveSan; a divergence produced "think about your knight" on a pawn-move
+    // solution. Every generated puzzle's moves[0] MUST equal its bestMove.
+    it('keeps moves[0] consistent with bestMove (hint piece = solution piece)', async () => {
+      const game = buildGameRecord({
+        id: 'coach-game-consistency', pgn: TEST_PGN, white: 'TestPlayer', black: 'Stockfish Bot',
+        source: 'coach', annotations: buildAnnotations(), result: '0-1',
+      });
+      await db.games.add(game);
+      await generateMistakePuzzlesFromGame('coach-game-consistency');
+      const puzzles = await db.mistakePuzzles.toArray();
+      expect(puzzles.length).toBeGreaterThan(0);
+      for (const p of puzzles) {
+        expect(p.moves.split(' ')[0]).toBe(p.bestMove);
+      }
+    });
+
+    it('rebuilds the solution from bestMove when the fresh PV starts elsewhere', async () => {
+      // Force the divergence: annotation's committed best move (f1b5 for the Ng5
+      // blunder) but a fresh search whose PV starts on a DIFFERENT move. The
+      // guard must make moves[0] === the committed bestMove, not the stray PV
+      // head. Restore the default impl after (beforeEach does not reset mocks).
+      const { stockfishEngine } = await import('./stockfishEngine');
+      const fn = vi.mocked(stockfishEngine.analyzePosition);
+      const savedDefault = { bestMove: 'e2e4', evaluation: 50, isMate: false, mateIn: null, depth: 18, topLines: [] };
+      fn.mockResolvedValue({
+        bestMove: 'g1f3', evaluation: 30, isMate: false, mateIn: null, depth: 18,
+        topLines: [{ moves: ['g1f3', 'b8c6', 'f1b5'] }],
+      } as never);
+      try {
+        const game = buildGameRecord({
+          id: 'coach-game-divergence', pgn: TEST_PGN, white: 'TestPlayer', black: 'Stockfish Bot',
+          source: 'coach', annotations: buildAnnotations(), result: '0-1',
+        });
+        await db.games.add(game);
+        await generateMistakePuzzlesFromGame('coach-game-divergence');
+        const blunder = (await db.mistakePuzzles.toArray()).find((p) => p.classification === 'blunder');
+        expect(blunder).toBeDefined();
+        // annotation bestMove f1b5 wins over the stray PV head g1f3.
+        expect(blunder!.bestMove).toBe('f1b5');
+        expect(blunder!.moves.split(' ')[0]).toBe('f1b5');
+      } finally {
+        fn.mockResolvedValue(savedDefault as never);
+      }
+    });
+
     it('is idempotent — no duplicates on second call', async () => {
       const game = buildGameRecord({
         id: 'coach-game-2',

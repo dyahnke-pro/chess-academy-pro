@@ -857,6 +857,10 @@ export async function getLastGameResult(): Promise<LastGameLike | null> {
  *  student to analyze it (this is the R1 dependency surfacing at the coach).
  *  G0: every field computed; the assembler only phrases. */
 export interface LastGameErrors {
+  /** The game record id — lets the coach set up a drill scoped to THIS game. */
+  gameId: string;
+  /** 0 = most recent; N = N games back (David 2026-09-01 "last game +n"). */
+  gameOffset: number;
   outcome: 'win' | 'loss' | 'draw';
   opponent: string | null;
   opening: string | null;
@@ -865,11 +869,15 @@ export interface LastGameErrors {
   errorCount: { blunders: number; mistakes: number; inaccuracies: number };
 }
 
-export async function getLastGameErrors(): Promise<LastGameErrors | null> {
+/** The critical error of the student's Nth-most-recent game. `offset` 0 = the
+ *  last game, 1 = the game before it, and so on ("last game +n"). Clamps into
+ *  range. */
+export async function getLastGameErrors(offset = 0): Promise<LastGameErrors | null> {
   const pg = await getPlayerGames();
   if (pg.length === 0) return null;
   const sorted = [...pg].sort((a, b) => (b.game.date ?? '').localeCompare(a.game.date ?? ''));
-  const { game, playerColor } = sorted[0];
+  const idx = Math.min(Math.max(0, Math.floor(offset)), sorted.length - 1);
+  const { game, playerColor } = sorted[idx];
   const outcome: 'win' | 'loss' | 'draw' = isWin(game, playerColor) ? 'win' : isLoss(game, playerColor) ? 'loss' : 'draw';
   const opponent = (playerColor === 'white' ? game.black : game.white) || null;
   const opening = game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null;
@@ -887,7 +895,45 @@ export async function getLastGameErrors(): Promise<LastGameErrors | null> {
   const worst = worstP
     ? { san: worstP.playerMoveSan, moveNumber: worstP.moveNumber, classification: worstP.classification, bestMoveSan: worstP.bestMoveSan || null, cpLoss: worstP.cpLoss, phase: worstP.gamePhase }
     : null;
-  return { outcome, opponent, opening, analyzed, worst, errorCount };
+  return { gameId: game.id, gameOffset: idx, outcome, opponent, opening, analyzed, worst, errorCount };
+}
+
+export interface RecentGamesErrors {
+  gamesChecked: number;
+  blunders: number;
+  mistakes: number;
+  /** The single worst slip across the span, with the game it came from. */
+  worst: (LastGameErrors['worst'] & { gameId: string; opponent: string | null; opening: string | null }) | null;
+}
+
+/** Errors across the student's last `n` games ("what did I do wrong in my last
+ *  3 games"). Aggregates the per-game mistake puzzles and surfaces the single
+ *  worst slip + totals. */
+export async function getRecentGamesErrors(n: number): Promise<RecentGamesErrors | null> {
+  const pg = await getPlayerGames();
+  if (pg.length === 0) return null;
+  const sorted = [...pg]
+    .sort((a, b) => (b.game.date ?? '').localeCompare(a.game.date ?? ''))
+    .slice(0, Math.max(1, Math.floor(n)));
+  let blunders = 0; let mistakes = 0;
+  let worst: RecentGamesErrors['worst'] = null;
+  for (const { game, playerColor } of sorted) {
+    const puzzles = await db.mistakePuzzles.where('sourceGameId').equals(game.id).toArray();
+    blunders += puzzles.filter((p) => p.classification === 'blunder').length;
+    mistakes += puzzles.filter((p) => p.classification === 'mistake').length;
+    const top = puzzles
+      .filter((p) => p.classification === 'blunder' || p.classification === 'mistake')
+      .sort((a, b) => b.cpLoss - a.cpLoss)[0];
+    if (top && (!worst || top.cpLoss > worst.cpLoss)) {
+      worst = {
+        san: top.playerMoveSan, moveNumber: top.moveNumber, classification: top.classification,
+        bestMoveSan: top.bestMoveSan || null, cpLoss: top.cpLoss, phase: top.gamePhase,
+        gameId: game.id, opponent: (playerColor === 'white' ? game.black : game.white) || null,
+        opening: game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null,
+      };
+    }
+  }
+  return { gamesChecked: sorted.length, blunders, mistakes, worst };
 }
 
 /** Map a raw platform termination string to a human phrase for the coach. */

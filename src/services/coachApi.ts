@@ -72,10 +72,10 @@ import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
 import { getWeakSpotsForOpening } from './weakSpotService';
 import type { OpeningRecord } from '../types';
-import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getPlayerStyleProfile } from './gameInsightsService';
+import { getOverviewInsights, getMistakeInsights, getTacticInsights, getOpeningInsights, getTimeTroubleProfile, getLastGameResult, getLastGameErrors, getRecentGamesErrors, getPlayerStyleProfile } from './gameInsightsService';
 import { matchOpponentOpening } from './counterRepertoireService';
 import { getMisconceptionProfile } from './misconceptionService';
-import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
+import { assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, type OpeningTrapsSideLike, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleTrendAnswer, assembleTimeTroubleAnswer, assembleLastGameAnswer } from './groundedAnswer';
 import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
@@ -4420,22 +4420,54 @@ export async function getCoachChatResponse(
         // "what did I do wrong / what was my critical error" defers to the board
         // when a line is loaded (it means the current position there) and only
         // reaches this lane in plain chat with no line.
-        const explicitLastGame = /\b(?:last|latest|recent|previous)\s+game\b/i.test(lastUserMessage() ?? '');
+        const lgMsg = (lastUserMessage() ?? '').toLowerCase();
+        const explicitLastGame = /\b(?:last|latest|recent|previous)\s+games?\b|\bgames?\s+(?:ago|back)\b|\bbefore\s+last\b/i.test(lgMsg);
         if (grounding.lastGameMistakeQuestion && !grounding.reviewWorstMoment
             && (explicitLastGame || !(grounding.gameSans && grounding.gameSans.length > 0))) {
           try {
-            const errs = await getLastGameErrors();
-            if (errs) {
-              const answer = assembleLastGameMistakeAnswer(errs);
-              if (answer) {
-                const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
-                if (voiced) { if (errs.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return voiced; }
+            // last game +n (David 2026-09-01): parse a COUNT (the last N games)
+            // or an OFFSET (a game N-back) from the question.
+            const wordNum: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5, couple: 2, few: 3, several: 3 };
+            const numFrom = (s: string): number | null => { const n = /^\d+$/.test(s) ? parseInt(s, 10) : wordNum[s]; return typeof n === 'number' ? n : null; };
+            const countM = /\b(?:last|past|recent)\s+(\d+|couple|few|several)\s+games\b/.exec(lgMsg);
+            const recentAll = /\b(?:my\s+)?recent\s+games\b/.test(lgMsg);
+            let offset = 0;
+            const agoM = /\b(\d+|two|three|four|five)\s+games?\s+(?:ago|back)\b/.exec(lgMsg);
+            if (agoM) offset = numFrom(agoM[1]) ?? 0;
+            else if (/\bgame\s+before\s+(?:my\s+)?last\b|\bsecond[\s-]?to[\s-]?last\b|\bsecond\s+last\b|\bpenultimate\b|\bprevious[\s-]?but[\s-]?one\b/.test(lgMsg)) offset = 1;
+            else if (/\b(?:third|3rd)[\s-]?(?:to[\s-]?)?last\b/.test(lgMsg)) offset = 2;
+
+            if (countM || recentAll) {
+              // SPAN — "what did I do wrong in my last 3 games / recent games".
+              const n = countM ? (numFrom(countM[1]) ?? 3) : 3;
+              const recent = await getRecentGamesErrors(n);
+              if (recent) {
+                const answer = assembleRecentGamesMistakeAnswer(recent);
+                if (answer) {
+                  const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                  if (voiced) { if (recent.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: `game:${recent.worst.gameId}` }]; return voiced; }
+                }
+              } else {
+                const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
+                const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
               }
             } else {
-              // No games at all → the honest import line, not a deflection.
-              const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
-              const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
-              if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
+              // SINGLE game (the last, or N-back). The drill chip is scoped to
+              // THAT game's mistakes (David 2026-09-01: set up the associated drill).
+              const errs = await getLastGameErrors(offset);
+              if (errs) {
+                const answer = assembleLastGameMistakeAnswer(errs);
+                if (answer) {
+                  const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                  if (voiced) { if (errs.worst) lastCoachActionOffer = [{ type: 'weakness_drill', id: `game:${errs.gameId}` }]; return voiced; }
+                }
+              } else {
+                // No games at all → the honest import line, not a deflection.
+                const noGames = "I don't have any of your games yet. Import from chess.com or lichess, or paste a game, and I'll pinpoint exactly where each one turned.";
+                const voicedNoGames = await voiceFacts(noGames, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+                if (voicedNoGames) { lastCoachActionOffer = [IMPORT_ANALYZE_OFFER]; return voicedNoGames; }
+              }
             }
           } catch { /* fall through */ }
         }

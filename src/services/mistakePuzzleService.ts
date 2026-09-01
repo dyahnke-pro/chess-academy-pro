@@ -407,6 +407,18 @@ async function analyzeGameWithStockfish(
     }
     if (!bestMove) continue;
 
+    // 🔒 SOLUTION INTEGRITY (R3/R5, David 2026-09-01) — the drill validates the
+    // student's move against moves[0], while the "best move was X" text and the
+    // HINT'S PIECE are derived from bestMoveSan. So moves[0] and bestMove MUST be
+    // the same move. Stockfish's committed `bestmove` is the answer; if the
+    // captured PV starts with a DIFFERENT move (a stale multipv / info line),
+    // rebuild the line from bestmove so the solution, the shown best move, and
+    // the hint's piece all agree. This is the "think about your knight" hint on
+    // a pawn-move solution David reported. No-op when they already match.
+    if (pvMoves.length === 0 || pvMoves[0] !== bestMove) {
+      pvMoves = [bestMove];
+    }
+
     // Extend PV to the rating-banded UCI range (player-moves
     // mapped to UCI half-moves; see pvBandForRating).
     if (pvMoves.length < uciMin) {
@@ -653,6 +665,19 @@ async function generateFromAnnotations(
     }
 
     if (!bestMove) continue;
+
+    // 🔒 SOLUTION INTEGRITY (R3/R5, David 2026-09-01) — the drill validates the
+    // student's move against moves[0], while the "best move was X" text and the
+    // HINT'S PIECE come from bestMoveSan. So moves[0] and bestMove MUST be the
+    // same move. The bestMove here is the mistake annotation's committed
+    // depth-18 answer; the PV comes from a SEPARATE fresh search that can start
+    // on a different move (a stale multipv / info line) — which is exactly the
+    // "think about your knight" hint on a pawn-move solution David reported.
+    // Rebuild the line from bestmove so the solution, the shown best move, and
+    // the hint's piece all agree. No-op when they already match.
+    if (pvMoves.length === 0 || pvMoves[0] !== bestMove) {
+      pvMoves = [bestMove];
+    }
 
     // Extend PV to the rating-banded UCI range (player-moves
     // mapped to UCI half-moves; see pvBandForRating).

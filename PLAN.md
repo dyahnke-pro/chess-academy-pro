@@ -132,12 +132,30 @@ Recovered from the "Not what i see" session (full detail:
       pattern to the candidate intent (chess.js resolves the capture from
       piece+square without the 'x'). Needs a live board FEN (correct — you ask
       this looking at a position). Tests in questionIntents.test.ts.
-- [ ] **R3 — mistake-puzzle best moves.** Check `bestMoveEqualsPlayed`/PV
-      derivation + whether 2026-08-28 cpLoss/book changes skewed it.
-- [ ] **R5 — hint names wrong piece.** Ground the hint's piece to the actual
-      solution move (shares root with R3).
-- [ ] **R4 — puzzle play-out ("keep playing").** Computer plays opponent replies
-      from the puzzle end position; reuse the coach/opening play loop.
+- [x] **R3 + R5 — mistake-puzzle best move + wrong-piece hint (David 2026-09-01).**
+      Shared root: the drill validates the student's move against `moves[0]` (the
+      PV) while the shown best move + the hint's PIECE come from `bestMoveSan`
+      (the `bestmove` UCI). When Stockfish's committed bestmove and the captured
+      PV's first move diverged, the hint named the wrong piece ("think about your
+      knight" on a pawn solution). Fix: guard in BOTH generation paths in
+      `mistakePuzzleService` — if `pvMoves[0] !== bestMove`, rebuild the line from
+      bestmove, so solution, shown best move, and hint piece all agree. Tests in
+      mistakePuzzleService.test.ts (invariant + forced-divergence).
+- [x] **R4 — puzzle play-out ("keep playing", David 2026-09-01).** After a
+      mistake puzzle is solved, a "Keep playing this position →" button
+      (`MistakePuzzleBoard` new `freeplay` state) lets the student play it out;
+      the computer answers each move via the coach play loop (`getCoachMove` /
+      `resolveConfig`, rating-matched). Game-over + thinking states shown.
+- [x] **Associated drills (David 2026-09-01).** The coach's last-game-error
+      answer now offers a drill chip SCOPED to that game (`weakness_drill` id
+      `game:<id>` → `/coach/teach?drill=mistakes&game=<id>`);
+      `buildMistakeDrillQueue({ gameId })` drills that game's mistakes now,
+      regardless of SRS due date.
+- [x] **"last game +n" (David 2026-09-01).** `getLastGameErrors(offset)` +
+      `getRecentGamesErrors(n)` + intent/lane parsing: "2 games ago", "the game
+      before last", "my last 3 games", "recent games" all answered
+      (`assembleLastGameMistakeAnswer` phrases the offset;
+      `assembleRecentGamesMistakeAnswer` totals the span + names the worst slip).
 
 ## Decisions log
 - 2026-09-01 (David): ALL recovered TODOs (R1–R6) are in scope. **R6 first.**

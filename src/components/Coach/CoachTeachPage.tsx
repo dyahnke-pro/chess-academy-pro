@@ -2057,11 +2057,17 @@ export function CoachTeachPage(): JSX.Element {
   /** Load the user's mistake queue (most-common weakness first) and start
    *  drilling it. Returns false when the user has no mistakes yet, so the
    *  caller can fall back to a single DB-sourced drill. */
-  const startMistakeDrills = useCallback(async (): Promise<boolean> => {
+  const startMistakeDrills = useCallback(async (gameId?: string): Promise<boolean> => {
     // Evidence-first, THEN cement: after the student re-solves their own flubbed
     // positions in each theme, one fresh rep of that pattern is appended so they
-    // drill the idea, not just their exact positions (Phase 3).
-    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200 });
+    // drill the idea, not just their exact positions (Phase 3). A `gameId` scopes
+    // the queue to ONE game's mistakes (David 2026-09-01: the coach named that
+    // game's critical error → set up its drill).
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId });
+    if (queue.length === 0 && gameId) {
+      coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
+      return true;
+    }
     if (queue.length > 0) {
       const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
       // CROSS-SESSION THREAD (arc Phase 7, David 2026-08-26: "carry this
@@ -2214,17 +2220,20 @@ export function CoachTeachPage(): JSX.Element {
     if (drillParamHandledRef.current) return;
     const drillAid = searchParams.get('drill');
     if (!drillAid) return;
+    const drillGameId = searchParams.get('game') ?? undefined;
     drillParamHandledRef.current = true;
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.delete('drill');
+      next.delete('game');
       return next;
     }, { replace: true });
     if (!isDrillableAid(drillAid)) return;
     void (async () => {
       // Prefer the user's own mistakes (most common first, adaptive);
-      // fall back to a single DB-sourced drill for a new user.
-      if (await startMistakeDrills()) return;
+      // fall back to a single DB-sourced drill for a new user. A `game` param
+      // scopes the queue to that one game's mistakes.
+      if (await startMistakeDrills(drillGameId)) return;
       const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
       const drill = pickCoachDrill(drillAid, { rating });
       if (drill) startCoachDrill(drill);

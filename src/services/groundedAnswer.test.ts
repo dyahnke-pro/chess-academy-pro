@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -419,6 +419,30 @@ describe('assembleLastGameMistakeAnswer — R6 last-game critical error (David 2
     expect(a!.facts).toMatch(/critical error in your last game was Ke2 on move 14 — a mistake in the opening\./);
     expect(a!.facts).not.toMatch(/dropping about/);
     expect(a!.facts).not.toMatch(/was the move instead/);
+  });
+  // last game +n (David 2026-09-01) — the offset changes the game phrase.
+  it('phrases the offset — "the game before last" / "N games back"', () => {
+    expect(assembleLastGameMistakeAnswer({ ...base, gameOffset: 1 })!.facts).toMatch(/the game before last against Rival/);
+    expect(assembleLastGameMistakeAnswer({ ...base, gameOffset: 3 })!.facts).toMatch(/3 games back against Rival/);
+    expect(assembleLastGameMistakeAnswer({ ...base, gameOffset: 0 })!.facts).toMatch(/your last game/);
+  });
+});
+
+describe('assembleRecentGamesMistakeAnswer — last N games (R6, David 2026-09-01)', () => {
+  it('totals the span and names the single worst slip', () => {
+    const a = assembleRecentGamesMistakeAnswer({
+      gamesChecked: 3, blunders: 2, mistakes: 4,
+      worst: { san: 'Qxd4', moveNumber: 19, classification: 'blunder', bestMoveSan: 'Nf3', cpLoss: 450, phase: 'middlegame', opponent: 'Rook', opening: 'Sicilian' },
+    });
+    expect(a!.facts).toMatch(/Across your last 3 games you made 2 blunders and 4 mistakes/);
+    expect(a!.facts).toMatch(/worst was Qxd4 on move 19 — a blunder in the middlegame against Rook in the Sicilian, dropping about 4\.5 pawns\. Nf3 was the move/);
+  });
+  it('reports clean games when the span has no serious errors', () => {
+    const a = assembleRecentGamesMistakeAnswer({ gamesChecked: 5, blunders: 0, mistakes: 0, worst: null });
+    expect(a!.facts).toMatch(/Across your last 5 games, nothing was flagged/);
+  });
+  it('returns null with no games checked', () => {
+    expect(assembleRecentGamesMistakeAnswer({ gamesChecked: 0, blunders: 0, mistakes: 0, worst: null })).toBeNull();
   });
 });
 

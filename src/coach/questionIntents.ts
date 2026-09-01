@@ -2134,8 +2134,16 @@ export function isLastGameQuestion(ask: string | undefined): boolean {
 // analyzed game's own worst move via assembleLastGameMistakeAnswer.
 const LAST_GAME_MISTAKE_RE = anyOf([
   // error word ↔ last/recent/previous/that game, in either order
-  String.raw`\b(?:wrong|mistake|blunder|error|slip|misplay|went\s+wrong|mess(?:ed)?\s+up|screw(?:ed)?\s+up|lost|threw)\b[\s\S]{0,40}\b(?:last|latest|recent|previous|that)\s+game\b`,
-  String.raw`\b(?:last|latest|recent|previous|that)\s+game\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|misplay|critical|worst\s+move|turning\s+point|go\s+wrong|went\s+wrong|mess(?:ed)?\s+up)\b`,
+  String.raw`\b(?:wrong|mistake|blunder|error|slip|misplay|went\s+wrong|mess(?:ed)?\s+up|screw(?:ed)?\s+up|lost|threw)\b[\s\S]{0,40}\b(?:last|latest|recent|previous|that)\s+games?\b`,
+  String.raw`\b(?:last|latest|recent|previous|that)\s+games?\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|misplay|critical|worst\s+move|turning\s+point|go\s+wrong|went\s+wrong|mess(?:ed)?\s+up)\b`,
+  // last game +n (David 2026-09-01) — a game N-back or a span of recent games:
+  // "2 games ago", "the game before last", "my last 3 games", "recent games".
+  String.raw`\b(?:wrong|mistake|blunder|error|slip|critical|go\s+wrong|went\s+wrong|mess(?:ed)?\s+up)\b[\s\S]{0,40}\b(?:\d+|two|three|four|five)\s+games?\s+(?:ago|back)\b`,
+  String.raw`\b(?:\d+|two|three|four|five)\s+games?\s+(?:ago|back)\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|critical)\b`,
+  String.raw`\b(?:wrong|mistake|blunder|error|slip|critical|go\s+wrong|went\s+wrong)\b[\s\S]{0,40}\b(?:game\s+before\s+(?:my\s+)?last|second[\s-]?to[\s-]?last\s+game|penultimate\s+game)\b`,
+  String.raw`\b(?:game\s+before\s+(?:my\s+)?last|second[\s-]?to[\s-]?last\s+game|penultimate\s+game)\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|critical)\b`,
+  String.raw`\b(?:wrong|mistake|blunder|error|slip|critical|go\s+wrong|went\s+wrong|mess(?:ed)?\s+up)\b[\s\S]{0,40}\b(?:last|past|recent)\s+(?:\d+|couple|few|several)\s+games\b`,
+  String.raw`\b(?:last|past|recent)\s+(?:\d+|couple|few|several)\s+games\b[\s\S]{0,40}\b(?:wrong|mistake|blunder|error|slip|critical|go\s+wrong|went\s+wrong)\b`,
   // "what was my critical / biggest / worst error/mistake" — implies the last
   // game when nothing else is in context.
   String.raw`\bwhat\s+(?:was|were)\s+(?:my\s+|the\s+)?(?:critical|biggest|worst|main|costliest|key|deciding|turning[\s-]?point)\s+(?:error|mistake|blunder|move|slip|moment)\b`,

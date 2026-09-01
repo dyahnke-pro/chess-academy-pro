@@ -437,6 +437,12 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
       'what did I mess up in my previous game',
       'what was my turning point mistake',
       'where did I go wrong in my recent game',
+      // last game +n (David 2026-09-01)
+      'what did I do wrong 2 games ago',
+      'what was my mistake in the game before last',
+      'what did I do wrong in my last 3 games',
+      'what went wrong in my recent games',
+      'what was my blunder three games back',
     ])('matches "%s"', (q) => expect(isLastGameMistakeQuestion(q)).toBe(true));
     it.each([
       'what did I do wrong here',            // live board → board lane

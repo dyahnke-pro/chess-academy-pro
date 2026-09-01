@@ -6,6 +6,7 @@ import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
+import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
@@ -19,7 +20,7 @@ import type { CoachingTier } from '../../services/tacticAlertService';
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { MistakePuzzle, MistakeClassification } from '../../types';
 
-type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect';
+type PuzzleState = 'loading' | 'replay' | 'playing' | 'correct' | 'incorrect' | 'freeplay';
 
 /** Number of half-moves (plies) before the mistake to replay */
 const REPLAY_CONTEXT_PLIES = 8;
@@ -710,6 +711,37 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
   }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext]);
 
+  // ── KEEP PLAYING (R4, David 2026-09-01) — after the puzzle is solved, let the
+  // student play the position out; the computer answers each move. Reuses the
+  // coach play loop (getCoachMove / resolveConfig) at a rating-matched strength.
+  const [freeplayThinking, setFreeplayThinking] = useState(false);
+  const startFreeplay = useCallback((): void => {
+    try { chessRef.current.load(fen); } catch { /* stays at current */ }
+    setLastMoveHighlight(null);
+    setState('freeplay');
+    setBoardKey((k) => k + 1);
+  }, [fen]);
+
+  const playFreeplayReply = useCallback(async (): Promise<void> => {
+    if (chessRef.current.isGameOver()) return;
+    setFreeplayThinking(true);
+    try {
+      const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+      const reply = await getCoachMove(chessRef.current.fen(), resolveConfig('medium', rating));
+      if (reply?.from && reply.to) {
+        try {
+          const m = chessRef.current.move({ from: reply.from, to: reply.to, promotion: reply.promotion });
+          setFen(chessRef.current.fen());
+          setBoardKey((k) => k + 1);
+          setLastMoveHighlight({ from: reply.from, to: reply.to });
+          playMoveSound(m.san);
+        } catch { /* illegal reply — leave the board to the student */ }
+      }
+    } catch { /* engine unavailable — the student can keep moving */ } finally {
+      setFreeplayThinking(false);
+    }
+  }, [activeProfile, playMoveSound]);
+
   const handleChessBoardMove = useCallback((moveResult: MoveResult): void => {
     // Apply the move to our chess ref but do NOT call setFen() here —
     // handleMove will update FEN after validation, avoiding a temporary
@@ -719,8 +751,14 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     } catch {
       // Move already applied or invalid
     }
+    if (state === 'freeplay') {
+      // The student's move is on the ref + board; answer it with the engine.
+      setFen(chessRef.current.fen());
+      void playFreeplayReply();
+      return;
+    }
     handleMove(moveResult);
-  }, [handleMove]);
+  }, [handleMove, state, playFreeplayReply]);
 
   return (
     <div className="space-y-3" data-testid="mistake-puzzle-board">
@@ -869,7 +907,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           initialFen={fen}
           key={boardKey}
           orientation={puzzle.playerColor}
-          interactive={state === 'playing'}
+          interactive={state === 'playing' || (state === 'freeplay' && !freeplayThinking)}
           showFlipButton
           showUndoButton={false}
           showResetButton={false}
@@ -879,6 +917,19 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           ghostMove={hintState.ghostMove}
         />
       </div>
+
+      {/* Keep-playing status (R4) */}
+      {state === 'freeplay' && (
+        <div className="flex items-center justify-between gap-2 text-sm" data-testid="puzzle-freeplay-status">
+          <span className="text-theme-text-muted">
+            {chessRef.current.isGameOver()
+              ? 'Game over.'
+              : freeplayThinking
+                ? 'Computer is thinking…'
+                : 'Your move — play it out.'}
+          </span>
+        </div>
+      )}
 
       {/* Why button — explains the concept behind the best move */}
       {(state === 'playing' || state === 'correct') && (
@@ -946,6 +997,17 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
               Correct!{isMultiMove ? ` You found all ${Math.ceil(totalMoves / 2)} moves.` : ` The best move was ${puzzle.bestMoveSan}.`}
             </span>
           </div>
+
+          {/* Keep playing (R4) — play the solved position out; the computer
+              answers each move. Reuses the coach play loop. */}
+          <button
+            type="button"
+            onClick={startFreeplay}
+            className="w-full px-3 py-2 rounded-lg bg-theme-surface hover:bg-theme-border text-sm text-theme-text border border-theme-border transition-colors"
+            data-testid="puzzle-keep-playing"
+          >
+            Keep playing this position →
+          </button>
 
           {/* Coach chat — ask follow-up questions about the position
               without leaving the puzzle. Sends FEN + best move + tactic
