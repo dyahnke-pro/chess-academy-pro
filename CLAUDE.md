@@ -1859,6 +1859,59 @@ is my app doing." Still exclude `audit_run_id`-tagged / `$browser_type
 = 'bot'` rows same as always; the platform filter is in ADDITION to that,
 not instead of it.
 
+**🔒🔒 THE NATIVE-USER IDENTIFICATION RECIPE + FEATURE-USAGE BREAKDOWN — run
+this whenever David asks "who are my users / what are they using / how often"
+(David 2026-09-01, LOCKED: "I always want to know what they are using and how
+often. Break down highest to lowest and lock that in for other sessions when I
+ask.").** The clean discriminator is the `distribution` event property — do NOT
+attribute David's own use by geography (that failed on 2026-09-01: three App
+Store devices in Lake Butler/Queens FL were wrongly tagged as David off geo,
+while his real device sat un-excluded):
+
+- `properties.distribution = 'testflight'` → **David** (he installs via
+  TestFlight; there is exactly ONE testflight native device — id `eb8cc1c1…`,
+  iOS, cities LA / Yorkville / Chicago / Stone Mountain). Exclude it. Filtering
+  to `distribution = 'appstore'` excludes him automatically — prefer that over a
+  device-id list (the id can change on reinstall).
+- `properties.distribution = 'appstore'` → **real public users.** This IS the
+  native userbase.
+- `distribution = 'appstore'` AND `properties.$geoip_city_name = 'Cupertino'` →
+  **Apple App Review team** (short one-session bursts during review), NOT users.
+  Exclude from the real-user count, but say how many there were.
+- David's Mac use is the **web** app (Yorkville, IL) — platform `web`/`pwa`, so
+  it never touches the native count. macOS-native rows (`$os = 'Mac OS X'`, os
+  version `10.15.7`) are Apple-Silicon Macs running the iOS app (reviewers) or
+  stray sessions — not a representative iOS user.
+
+So the canonical **real-native-user WHERE** is:
+`properties.platform='native' AND properties.distribution='appstore' AND
+coalesce(properties.$geoip_city_name,'')!='Cupertino' AND
+coalesce(properties.audit_run_id,'')='' AND coalesce(properties.$browser_type,'')
+!='bot' AND coalesce(properties.device_id,'')!=''`. As of 2026-09-01 that's ~41
+real users (~36 active/30d), vs 65 appstore devices before removing the 24
+Cupertino reviewers. NB `device_id`, `distribution`, `platform`,
+`$geoip_city_name`, `audit_run_id` are all EVENT PROPERTIES (`properties.*`) on
+the `events` table — `device_id` is NOT a top-level column.
+
+**The feature-usage breakdown** (what they use + how often, highest→lowest):
+`GROUP BY` a `multiIf` that maps the app's events into user-facing surfaces —
+Coach chat/Q&A (`coach_question_asked`/`coach_answer`/`discussion_*`), Game
+review (`review_*`), Play vs coach (`phase_transition_*`/`plan_selected`/
+`threat_check_*`/`lookahead_plan_offered`/`fork_talk_*`), Openings/lessons
+(`opening_*`/`lesson_completed`/`free_opening_claimed`), Tactics/puzzles
+(`puzzle_solved`/`srs_session_started`/`analysis_practice_*`/`pattern_school_*`),
+Voice narration (`voice_spoken`/`coach_narration_*`/`*_alert_spoken`/
+`engine_read_spoken`), Import games (`games_imported`), Paywall/billing
+(`paywall_*`/`checkout_started`/`trial_started`/`restore_completed`), Feedback
+(`feedback_submitted`), App open/nav (`app_opened`/`app_session_started`/
+`page_viewed`/`strength_calibrated`) — then
+`SELECT feature, count(DISTINCT device) AS users, count() AS actions,
+round(count()/count(DISTINCT device),1) AS actions_per_user … ORDER BY users
+DESC, actions DESC`. Rank by `users` (adoption) — that's "what they're using";
+`actions_per_user` is "how often." Drop the `(other)` bucket ($autocapture/$set/
+ota_*/stockfish/storage/grounding telemetry) from the report — it's not a
+feature.
+
 **🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
 2026-07-18: "PostHog access is granted through a different manner … don't
 use the api key").** The session has the PostHog MCP server connected
