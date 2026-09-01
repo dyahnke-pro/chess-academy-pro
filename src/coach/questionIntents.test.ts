@@ -875,6 +875,13 @@ describe('isMoveRatingQuestion (David 2026-07-04: rate the move just played)', (
     'was my move correct',
     'was my move sound',
     'was that a strong move',
+    // plain-English named move (R6, David 2026-09-01 — beginner phrasing)
+    'was my knight to d5 a good move',
+    'was my knight to d5 good',
+    'was the bishop to c4 a mistake',
+    'was my pawn to e5 bad',
+    'was moving my knight to d5 a mistake',
+    'was playing my queen to h5 good',
   ])('matches: %s', (q) => expect(isMoveRatingQuestion(q)).toBe(true));
 
   it.each([

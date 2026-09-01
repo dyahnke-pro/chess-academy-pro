@@ -1852,6 +1852,12 @@ const MOVE_RATING_RE = anyOf([
   String.raw`\bdid\s+i\s+(?:just\s+)?(?:blunder|hang\s+(?:something|a\s+\w+)|mess\s+up|screw\s+up|goof|err|drop\s+(?:something|a\s+\w+))\b`,
   // "was e4 the right call / a mistake" — a NAMED move as the subject.
   String.raw`\bwas\s+[A-Za-z]{1,2}[1-8x][A-Za-z0-9=+#-]*\s+(?:the\s+|a\s+|an\s+)?(?:right|best|good|bad|correct|a\s+mistake|a\s+blunder|the\s+right\s+call)\b`,
+  // PLAIN-ENGLISH named move — "was my knight to d5 (a) good (move) / a mistake"
+  // (a beginner names the piece + square, not SAN). Routes to the same last-move
+  // rating lane (David 2026-09-01: answer every user-error question).
+  String.raw`\bwas\s+(?:my\s+|the\s+)?(?:king|queen|rook|bishop|knight|pawn)\s+(?:to\s+|takes\s+|takes\s+on\s+|x)?[a-h][1-8]\b[\s\S]{0,18}\b(?:good|bad|great|strong|weak|sound|solid|best|right|correct|blunder|mistake|inaccuracy|error|ok(?:ay)?)\b`,
+  // "was moving my knight to d5 good / a mistake"
+  String.raw`\bwas\s+(?:moving|playing|pushing|developing)\s+(?:my\s+|the\s+)?(?:king|queen|rook|bishop|knight|pawn)\b[\s\S]{0,20}\b(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok(?:ay)?)\b`,
   // "why did I play that / why is my move bad" — asks to rate the last move.
   String.raw`\bwhy\s+(?:did\s+i\s+play|is\s+my\s+move|was\s+(?:that|my\s+move))\b`,
 ]);

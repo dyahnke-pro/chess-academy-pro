@@ -90,16 +90,29 @@ Recovered from the "Not what i see" session (full detail:
 `docs/plans/2026-09-01-recovered-todos-not-what-i-see.md`). David 2026-09-01:
 *"All of those need to be done as well… I want 6 to be done first."*
 
-- [ ] **R6 — 🔴 DO FIRST — weakness-meta → coach "what am I weak at" loop.**
-      Generic, no-area self-assessment questions ("what am I weak at", "what
-      should I work on", "help me get better", "assess me") → the coach answers
-      from the user's OWN computed mistake portfolio (the weaknesses-tab meta-
-      data that already exists but the coach doesn't read), then offers the
-      play-out self-assessment loop (play a ~1000 common position, analyze the
-      user's moves WITHOUT calling them wrong, recap best moves + why, ask "most
-      people play here because they see X — is that what you saw?", capture into
-      the portfolio even if unanswered). G0: compute in code, phrase via
-      `voiceFacts`.
+- [x] **R6 — coach answers ALL user-error questions (David 2026-09-01; play-out
+      loop DROPPED).** Shipped + 3-instrument prod-verified
+      (`audit-coach-weakness-selfassessment-prod.mjs`, 5/5). Three classes now
+      answered from computed data (G0), no deflection:
+      - **Aggregate self-assessment** ("what am I weak at / assess me / what
+        should I work on") → answers from the weaknesses-tab meta-data
+        (`getMistakeInsights` via `assembleMistakesAnswer`) when the ranked
+        misconception profile is empty; `isProgressQuestion` widened for bare
+        "assess me / size me up / where do I stand".
+      - **Last-game error** ("what did I do wrong in my last game / what was my
+        critical error") → new `isLastGameMistakeQuestion` +
+        `getLastGameErrors` + `assembleLastGameMistakeAnswer` names the worst
+        move, the better move, the drop, and the game context. Fires even on a
+        board surface for an explicit "my last game"; when the game isn't
+        analyzed it says so (the R1 hook).
+      - **Per-move quality** ("was my knight to d5 good / a mistake") — broadened
+        `isMoveRatingQuestion` to the beginner plain-English/named-move phrasing
+        → existing `assembleMoveRatingAnswer` (rates the LAST played move).
+      Play-out self-assessment loop dropped: once games analyze (R1) + the coach
+      answers these, it's moot (David's call).
+      REMAINING nuance (not blocking): plain-English move-rating rates the LAST
+      move only — naming an EARLIER move isn't located in history yet (a deeper
+      P5 build if David wants it).
 - [ ] **R1 — game-analysis stall.** Per-game timeout in `gameAnalysisService`
       (mobile Stockfish stall; loop won't advance past e.g. 1/629). Data source
       for the whole portfolio — unblocks R6's fuel.
