@@ -9,6 +9,7 @@ import {
   aggregateConversionFailures,
   aggregateBoardVision,
   aggregateTimeTrouble,
+  aggregateStrongerOpponentErrors,
 } from './weaknessSpine';
 import type { SquareHeatmapEntry } from './findSquareService';
 import type { TimeTroubleHit } from './timeTroubleDetector';
@@ -104,6 +105,41 @@ beforeEach(reset);
 
 const FEN_A = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
 const FEN_B = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+
+describe('aggregateStrongerOpponentErrors (capture gap, Part III)', () => {
+  const strongerGame = (id: string) => buildGameRecord({ id, source: 'coach', white: 'David', black: 'Rival', whiteElo: 1200, blackElo: 1500 });
+  const evenGame = (id: string) => buildGameRecord({ id, source: 'coach', white: 'David', black: 'Peer', whiteElo: 1200, blackElo: 1210 });
+
+  it('surfaces a vs-stronger weakness when the pattern is real and elevated', () => {
+    const mistakes: MistakePuzzle[] = [];
+    // 5 blunders across 2 games vs stronger opponents (rate 2.5/game).
+    for (let i = 0; i < 5; i++) mistakes.push(buildMistakePuzzle({ sourceGameId: i < 3 ? 'sg1' : 'sg2', playerColor: 'white', classification: 'blunder', status: 'unsolved', cpLoss: 300 }));
+    // 1 error across 1 even game (rate 1/game) → stronger rate is elevated.
+    mistakes.push(buildMistakePuzzle({ sourceGameId: 'eg1', playerColor: 'white', classification: 'mistake', status: 'unsolved', cpLoss: 150 }));
+    const games = [strongerGame('sg1'), strongerGame('sg2'), evenGame('eg1')];
+    const out = aggregateStrongerOpponentErrors(mistakes, games, {});
+    expect(out).toHaveLength(1);
+    expect(out[0].tag).toBe('analysis:vs-stronger');
+    expect(out[0].openCount).toBeGreaterThan(0);
+  });
+
+  it('stays empty when the sample is thin', () => {
+    const mistakes = [buildMistakePuzzle({ sourceGameId: 'sg1', playerColor: 'white', classification: 'blunder', status: 'unsolved' })];
+    expect(aggregateStrongerOpponentErrors(mistakes, [strongerGame('sg1')], {})).toHaveLength(0);
+  });
+
+  it('stays empty when errors are NOT elevated vs stronger players', () => {
+    const mistakes: MistakePuzzle[] = [];
+    for (let i = 0; i < 4; i++) mistakes.push(buildMistakePuzzle({ sourceGameId: `sg${i}`, playerColor: 'white', classification: 'blunder', status: 'unsolved' }));
+    for (let i = 0; i < 8; i++) mistakes.push(buildMistakePuzzle({ sourceGameId: `eg${i}`, playerColor: 'white', classification: 'blunder', status: 'unsolved' }));
+    const games = [
+      ...Array.from({ length: 4 }, (_, i) => strongerGame(`sg${i}`)),
+      ...Array.from({ length: 8 }, (_, i) => evenGame(`eg${i}`)),
+    ];
+    // 1/game vs stronger, 1/game vs even → not elevated.
+    expect(aggregateStrongerOpponentErrors(mistakes, games, {})).toHaveLength(0);
+  });
+});
 
 describe('aggregateMistakePuzzles', () => {
   it('clusters tactic-typed mistakes by motif with a puzzle theme', () => {

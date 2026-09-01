@@ -19,13 +19,13 @@
 
 import { db } from '../db/schema';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
-import { detectConversionFailures, type ConversionFailure } from './conversionDetector';
+import { detectConversionFailures, resolvePlayerColor, type ConversionFailure } from './conversionDetector';
 import { getAddressedConversions } from './conversionProgress';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
 import { useAppStore } from '../stores/appStore';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
-import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType } from '../types';
+import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
 
 /** A weak spot not re-drilled within this window is "open" again. */
 const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
@@ -82,7 +82,7 @@ function posKey(fen: string, san?: string): string {
  *  would be guessing which thinking-error caused the slip — see CLAUDE.md
  *  "when unsure, don't guess"). We cluster by tactic motif when the
  *  detector gave one, else by game phase. */
-function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
+export function bucketForMistake(p: MistakePuzzle): { bucket: MisconceptionBucket; clusterId: string; label: string; themes: string[] } {
   // Position-transformation (trade) errors are their own POSITIONAL weakness
   // (Phase 4), not a generic phase cluster.
   if (p.positionalMotif) {
@@ -291,6 +291,59 @@ export function aggregateConversionFailures(failures: ConversionFailure[]): Unif
   }];
 }
 
+/** CAPTURE GAP (Part III, David 2026-09-01: "if you see us missing something,
+ *  PLEASE ADD"). Errors made specifically against STRONGER opponents — the
+ *  "you tense up against higher-rated players" pattern the other captures miss.
+ *  Cross-refs each mistake to its game's Elos (via resolvePlayerColor) and only
+ *  surfaces when the vs-stronger error rate is notably ELEVATED over the
+ *  vs-equal/weaker rate AND there's something open to drill. Honest floor —
+ *  empty when the sample is thin or the pattern isn't real. */
+export function aggregateStrongerOpponentErrors(
+  mistakes: MistakePuzzle[],
+  games: GameRecord[],
+  names: { lichessUsername?: string; chessComUsername?: string },
+  now: number = Date.now(),
+): UnifiedWeakness[] {
+  const gameById = new Map(games.map((g) => [g.id, g]));
+  const vsStronger: MistakePuzzle[] = [];
+  const strongerGames = new Set<string>();
+  let otherErrors = 0;
+  const otherGames = new Set<string>();
+  for (const p of mistakes) {
+    if (p.classification === 'inaccuracy') continue;
+    const g = gameById.get(p.sourceGameId);
+    if (!g) continue;
+    const color = resolvePlayerColor(g, names) ?? p.playerColor;
+    const myElo = color === 'white' ? g.whiteElo : g.blackElo;
+    const oppElo = color === 'white' ? g.blackElo : g.whiteElo;
+    if (myElo == null || oppElo == null) continue;
+    if (oppElo - myElo >= 100) { vsStronger.push(p); strongerGames.add(g.id); }
+    else { otherErrors += 1; otherGames.add(g.id); }
+  }
+  if (vsStronger.length < 4) return [];
+  const open = vsStronger.filter((p) => p.status === 'unsolved').length;
+  if (open === 0) return []; // nothing to act on → don't surface
+  const strongerRate = vsStronger.length / Math.max(1, strongerGames.size);
+  const otherRate = otherErrors / Math.max(1, otherGames.size);
+  // Must be NOTABLY elevated (30%+) or there's no distinct pattern to name.
+  if (strongerRate <= otherRate * 1.3) return [];
+  const worstCp = Math.max(...vsStronger.map((p) => p.cpLoss));
+  const lastSeenAt = vsStronger.reduce((m, p) => Math.max(m, Date.parse(p.gameDate ?? p.createdAt) || 0), 0) || now;
+  return [{
+    key: 'analysis:vs-stronger',
+    tag: 'analysis:vs-stronger',
+    label: 'Errors against stronger opponents',
+    bucket: 'general',
+    openCount: open,
+    total: vsStronger.length,
+    severity: Math.min(90, vsStronger.length * 6 + Math.round(worstCp / 30)),
+    sources: ['analysis'],
+    puzzleThemes: [],
+    positions: vsStronger.slice(0, 8).map((p) => ({ fen: p.fen, playedSan: p.playerMoveSan, bestSan: p.bestMoveSan, openingId: p.openingName ?? undefined })),
+    lastSeenAt,
+  }];
+}
+
 /** Roll up blunders made in time trouble into one weakness, routed to timed
  *  practice. Sourced from the per-ply clock now captured on clocked games. */
 export function aggregateTimeTrouble(hits: TimeTroubleHit[]): UnifiedWeakness[] {
@@ -426,6 +479,10 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateConversionFailures(conversions),
     ...aggregateBoardVision(heatmap),
     ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes)),
+    ...aggregateStrongerOpponentErrors(mistakes, games, {
+      lichessUsername: prefs?.lichessUsername,
+      chessComUsername: prefs?.chessComUsername,
+    }),
   ]);
 
   const merged = [...coachRows, ...analysisRows];

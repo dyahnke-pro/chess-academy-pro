@@ -394,6 +394,71 @@ export function assembleMovePurposeAnswer(fen: string, ask: string | null | unde
   return { facts: `${san} ${body}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
+// ── OPPONENT'S LAST MOVE — "why did they play that?" (P-IV.1) ─────────────────
+//
+// David: the coach must answer the opponent's move, not just the student's. G0:
+// every clause is chess.js geometry on the move actually played + the standing
+// threat it created — never the LLM guessing intent. SELF-GATES: returns null
+// unless the last move in history was genuinely the OPPONENT's (the student is
+// now to move), so the data decides this lane, not a phrasing match.
+export function assembleOpponentMoveAnswer(opts: {
+  /** Position AFTER the opponent moved (student to move). */
+  fen: string;
+  /** Full SAN history; the last entry is the move we explain. */
+  moveHistory: string[] | undefined;
+  studentColor: 'white' | 'black';
+}): GroundedAnswer | null {
+  const { fen, moveHistory, studentColor } = opts;
+  if (!moveHistory || moveHistory.length === 0) return null;
+
+  let after: Chess;
+  try { after = new Chess(fen); } catch { return null; }
+  // Whoever is to move now did NOT make the last move. It must be the opponent's
+  // move for this lane to apply (self-gate).
+  const toMove: 'white' | 'black' = after.turn() === 'w' ? 'white' : 'black';
+  if (toMove !== studentColor) return null; // student is not to move → not their turn to ask this
+  const opponentColor: 'white' | 'black' = studentColor === 'white' ? 'black' : 'white';
+
+  // Reconstruct the position BEFORE the opponent's move by replaying all but the
+  // last SAN. chess.js is the truth; a bad history → don't ground.
+  const lastSan = moveHistory[moveHistory.length - 1];
+  let before: Chess;
+  try {
+    before = new Chess();
+    for (let i = 0; i < moveHistory.length - 1; i++) {
+      const mv = before.move(moveHistory[i]);
+      if (!mv) return null;
+    }
+  } catch { return null; }
+  // The reconstructed board must match the side-to-move that produced `fen`.
+  const beforeMover: 'white' | 'black' = before.turn() === 'w' ? 'white' : 'black';
+  if (beforeMover !== opponentColor) return null;
+
+  let played: Move | null = null;
+  try { played = new Chess(before.fen()).move(lastSan); } catch { return null; }
+  if (!played) return null;
+
+  // What the move DID — geometry on the board, opponent as mover.
+  const clauses: string[] = [];
+  if (played.captured) clauses.push(`captured your ${REVIEW_PIECE_NAME[played.captured]} on ${played.to}`);
+  const geom = describeMoveGeometry(before.fen(), played.san, opponentColor);
+  if (geom) clauses.push(geom.replace(/^attacks\b/, 'attacks').replace(/\byour king\b/, 'your king'));
+  else {
+    const quiet = quietPurposePhrase(before.fen(), played.san, opponentColor);
+    if (quiet) clauses.push(quiet);
+  }
+
+  // What it now THREATENS against you — the standing threat in the live position.
+  const threat = assembleThreatAnswer(fen, null, studentColor, 'opponent');
+  const threatText = threat && !/no immediate threat|nothing forcing/i.test(threat.facts) ? threat.facts : null;
+
+  const didPart = clauses.length > 0
+    ? `They played ${played.san} — it ${clauses.length > 1 ? `${clauses.slice(0, -1).join(', ')} and ${clauses[clauses.length - 1]}` : clauses[0]}.`
+    : `They played ${played.san} — a quiet move with no immediate tactical point.`;
+  const facts = threatText ? `${didPart} ${threatText}` : didPart;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
 // ── SQUARE CONTROL — "who controls e5?" / "is d5 safe for my knight?" ─────────
 //
 // David 2026-08-28: these fell to the best-move handler because no lane owned
@@ -760,6 +825,25 @@ export function assembleAppHelpAnswer(opts: {
   const description = opts.description?.trim();
   if (!title || !description) return null;
   return { facts: `${title}: ${description}`, bestMoveSan: null, bestMoveFromTo: null, sources: ['app:routes'] };
+}
+
+/**
+ * assembleCapabilitiesOverview — the grounded answer to a GENERAL "what can you
+ * help with / what do you do?" (David 2026-09-01). The caller hands in the
+ * headline capabilities (a curated subset of APP_ROUTES_MANIFEST), so this is a
+ * pure leaf that invents nothing — the coach names the app's REAL features, not
+ * a free-LLM guess about what it might do. Returns null with no entries. G0.
+ */
+export function assembleCapabilitiesOverview(
+  entries: ReadonlyArray<{ title: string; blurb: string }>,
+): GroundedAnswer | null {
+  const clean = entries.filter((e) => e.title?.trim() && e.blurb?.trim()).slice(0, 6);
+  if (clean.length === 0) return null;
+  const lines = clean.map((e) => `${e.title} — ${e.blurb.trim()}`);
+  const facts =
+    `Here's what I can do with you: ${lines.join('; ')}. ` +
+    `Ask me anything — where you're going wrong, what to work on, whether a move is sound, how to play an opening or an endgame — and I'll pull it from your games and the engine.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['app:routes'] };
 }
 
 /**
@@ -2308,6 +2392,60 @@ export function assembleEndgameAnswer(opts: {
  * fallback (caller falls through). Takes the first 2 sentences of the passage
  * so the voiced answer stays concise + grounded in the actual text.
  */
+// ── ENDGAME TECHNIQUE (P-V.1) — teach a named endgame technique from the
+// hand-authored lesson catalog. The rule + why + history are curator-authored,
+// FEN-verified content (G0/G3 — the model only phrases them). Distinct from the
+// tablebase verdict (a LIVE ≤7-piece board): this answers a general "how do I
+// win/hold X" with no board, or where the tablebase missed. The canonical FEN is
+// carried through so a later step can walk the line (P-V.2).
+export function assembleEndgameTechniqueAnswer(opts: {
+  name: string;
+  rule: string;
+  why: string;
+  history?: string | null;
+  tip?: string | null;
+  fen?: string | null;
+}): GroundedAnswer | null {
+  const rule = opts.rule?.trim();
+  const why = opts.why?.trim();
+  if (!rule) return null;
+  // Keep it tight: the rule, then the first 2 sentences of the mechanism.
+  const whyShort = why ? why.split(/(?<=[.!?])\s+/).slice(0, 2).join(' ').trim() : '';
+  const parts = [`${cap(opts.name)}: ${rule}`];
+  if (whyShort) parts.push(whyShort);
+  if (opts.history?.trim()) parts.push(opts.history.trim());
+  if (opts.tip?.trim()) parts.push(opts.tip.trim());
+  return {
+    facts: parts.join(' '),
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: ['endgame:lesson'],
+  };
+}
+
+// ── THEORY (P-II.1) — a general strategy/how-to answer from a corpus passage.
+// The passage is public-domain book prose (Capablanca/Lasker); voiceFacts
+// phrases it. Distinct from assembleConceptAnswer (single known glossary token)
+// — this takes the best free-text corpus match for an open strategy ask.
+export function assembleTheoryAnswer(hit: {
+  conceptName: string;
+  conceptId: string;
+  passage: { text: string; bookSlug?: string };
+}): GroundedAnswer | null {
+  const raw = hit.passage.text?.trim();
+  if (!raw) return null;
+  // First 2-3 sentences keep it tight; the model may compress further.
+  const trimmed = raw.split(/(?<=[.!?])\s+/).slice(0, 3).join(' ').trim();
+  if (!trimmed) return null;
+  const source = hit.passage.bookSlug ? `book:${hit.passage.bookSlug}` : `concept:${hit.conceptId}`;
+  return {
+    facts: `${cap(hit.conceptName)}: ${trimmed}`,
+    bestMoveSan: null,
+    bestMoveFromTo: null,
+    sources: [source],
+  };
+}
+
 export function assembleConceptAnswer(concept: ConceptEntry): GroundedAnswer | null {
   const passage = concept.passages?.[0];
   let definition: string | null = null;
@@ -3020,6 +3158,24 @@ function pawns(cp: number): string { return (Math.abs(cp) / 100).toFixed(1); }
 // ═══ WAVE 1 — the "where do I go wrong" cluster (David 2026-07-04): voice the
 // weakness-tab numbers the coach never spoke, each ending in a suggestion. ═══
 
+/**
+ * assembleOpeningNameAnswer — "what opening is this?" The caller runs
+ * detectOpening on the live move history (the DB trie — G3 canonical) and hands
+ * the name in; this just voices it. Returns null when nothing is detected (too
+ * few moves / off-book), so the caller can say so honestly. G0.
+ */
+export function assembleOpeningNameAnswer(opts: {
+  name: string | null;
+  eco?: string | null;
+  plies?: number;
+}): GroundedAnswer | null {
+  const name = opts.name?.trim();
+  if (!name) return null;
+  const eco = opts.eco?.trim();
+  const facts = `This is the ${name}${eco ? ` (ECO ${eco})` : ''}.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:openings'] };
+}
+
 /** The student's mistake profile — a structural subset of getMistakeInsights +
  *  getOverviewInsights, handed to `assembleMistakesAnswer`. */
 export interface MistakesLike {
@@ -3068,6 +3224,97 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
       ? ` Focus your training on the ${phaseWord(m.worstPhase.phase)}, and drill your saved mistake puzzles from there.`
       : ' Drill your saved mistake puzzles to turn these into second nature.';
   return { facts: rate + phase + thrown + missed + collapse + costly + suggest, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+// ── WEAKNESS LIFECYCLE + BRIEFING (Part III, P-III.1 / P-III.4) ─────────────
+// The A+ weakness read: what the student has FIXED, what PERSISTS, what's NEW,
+// and the single most-pressing item — all computed in weaknessLifecycle.ts from
+// board-verified mistake records. These assemblers only phrase the counts.
+// Structural param types (no service import) keep this a leaf.
+
+export interface LifecycleEntryLike {
+  label: string;
+  total: number;
+  recentCount: number;
+  olderCount: number;
+  trend: 'improving' | 'worsening' | 'flat';
+}
+export interface WeaknessLifecycleLike {
+  fixed: LifecycleEntryLike[];
+  persistent: LifecycleEntryLike[];
+  emerging: LifecycleEntryLike[];
+  mostPressing: LifecycleEntryLike | null;
+  gamesConsidered: number;
+  sampleFloorMet: boolean;
+}
+
+/** The one prioritized picture (P-III.4): most-pressing + persistent + what's
+ *  been cleaned up, with a drill nudge. Grounded — every count computed. */
+export function assembleWeaknessBriefingAnswer(lc: WeaknessLifecycleLike): GroundedAnswer | null {
+  if (!lc.sampleFloorMet) {
+    return {
+      facts: `I don't have enough of your games analyzed yet to read your weakness trends — I've only got ${lc.gamesConsidered} game${lc.gamesConsidered === 1 ? '' : 's'} to go on. Import and analyze a few more and I'll break down what's improving, what's sticking, and what to drill first.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  const parts: string[] = [];
+  if (lc.mostPressing) {
+    parts.push(`The one to work on first is ${lc.mostPressing.label.toLowerCase()} — ${lc.mostPressing.recentCount} recent slip${lc.mostPressing.recentCount === 1 ? '' : 's'}.`);
+  }
+  const persist = lc.persistent.slice(0, 3).map((e) => e.label.toLowerCase());
+  if (persist.length > 0) {
+    parts.push(`Persistent across your games: ${persist.join(', ')}.`);
+  }
+  const emerge = lc.emerging.slice(0, 2).map((e) => e.label.toLowerCase());
+  if (emerge.length > 0) {
+    parts.push(`Newer: ${emerge.join(', ')}.`);
+  }
+  const fixed = lc.fixed.slice(0, 3).map((e) => e.label.toLowerCase());
+  if (fixed.length > 0) {
+    parts.push(`You've cleaned up ${fixed.join(', ')} — they used to show up and don't anymore. Nice.`);
+  }
+  if (parts.length === 0) return null;
+  parts.push('Say "drill it" and I\'ll build a set from your most-pressing pattern.');
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+}
+
+/** A specific lifecycle ask — 'fixed' (what have I fixed / gotten better at),
+ *  'persistent' (what do I keep doing wrong over time), or 'pressing' (my
+ *  biggest weakness). Honest sample floor. */
+export function assembleWeaknessLifecycleAnswer(
+  kind: 'fixed' | 'persistent' | 'pressing',
+  lc: WeaknessLifecycleLike,
+): GroundedAnswer | null {
+  if (!lc.sampleFloorMet) {
+    return {
+      facts: `I need more of your games analyzed before I can speak to that trend — only ${lc.gamesConsidered} so far. Import a few more and I'll have a real read.`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
+    };
+  }
+  if (kind === 'fixed') {
+    if (lc.fixed.length === 0) {
+      return { facts: `Nothing has fully dropped off yet — your recurring patterns are all still showing up in recent games. Keep drilling and they'll start clearing.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    }
+    const named = lc.fixed.slice(0, 4).map((e) => e.label.toLowerCase());
+    return { facts: `You've cleaned these up — they used to appear and are gone from your recent games: ${named.join(', ')}. That's real progress you made yourself.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+  if (kind === 'persistent') {
+    if (lc.persistent.length === 0) {
+      return { facts: `Nothing is dragging across your whole history — your recent errors are mostly newer patterns, not old habits. Ask me what's most pressing and I'll point you at it.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+    }
+    const named = lc.persistent.slice(0, 4).map((e) => {
+      const arrow = e.trend === 'improving' ? ' (easing off)' : e.trend === 'worsening' ? ' (getting worse)' : '';
+      return `${e.label.toLowerCase()}${arrow}`;
+    });
+    return { facts: `These keep showing up across your games: ${named.join(', ')}. Those are the habits to break — say "drill it" and I'll build a set.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+  // pressing
+  if (!lc.mostPressing) {
+    return { facts: `No clear standout right now — nothing recent is jumping out as your biggest leak. Ask for the full breakdown and I'll lay out the picture.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
+  }
+  const mp = lc.mostPressing;
+  const trend = mp.trend === 'worsening' ? ' and it\'s been getting worse lately' : mp.trend === 'improving' ? ' though it\'s easing off' : '';
+  return { facts: `Your most pressing weakness is ${mp.label.toLowerCase()} — ${mp.recentCount} recent slip${mp.recentCount === 1 ? '' : 's'}${trend}. Say "drill it" and I'll build a set from exactly those positions.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'] };
 }
 
 /** The most-recent game's critical error — a structural subset of

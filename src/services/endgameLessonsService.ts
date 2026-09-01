@@ -69,3 +69,65 @@ export function getEndgameLessonById(id: string): EndgameLesson | null {
   }
   return null;
 }
+
+// ── ENDGAME-TECHNIQUE MATCHER (P-V.1, 2026-09-01) ───────────────────────────
+//
+// A general endgame-technique ask with no live board — "what's the Lucena",
+// "how do I hold a Philidor rook ending", "how do I win king and pawn vs king",
+// "how do I use the opposition" — routes here. It matches the ask to one of the
+// 27 hand-authored lessons by name + alias keywords, so the coach TEACHES the
+// technique from authored, board-verified content (G0/G3: the lesson prose is
+// curator-authored; the model only phrases it). Returns null when nothing
+// matches (honest decline — never invent an endgame lesson we don't have).
+const ENDGAME_ALIASES: Record<string, string[]> = {
+  'lucena-position': ['lucena', 'building a bridge', 'build a bridge', 'rook and pawn win', 'winning rook ending'],
+  'philidor-rook-ending': ['philidor defen', 'philidor rook', 'defend the draw', 'hold the rook ending', 'third rank defen', 'draw a rook ending', 'hold a rook end'],
+  'philidor-position': ['philidor position'],
+  'active-rook': ['active rook', 'rook activity'],
+  'vancura-position': ['vancura', 'rook pawn draw'],
+  'cutting-off-the-king': ['cut off the king', 'cutting off the king', 'cut the king off'],
+  'opposition': ['opposition', 'take the opposition', 'gain the opposition'],
+  'distant-opposition': ['distant opposition', 'long range opposition'],
+  'key-squares': ['key square'],
+  'rule-of-the-square': ['rule of the square', 'square of the pawn', 'catch the pawn', 'pawn race'],
+  'outflanking': ['outflank'],
+  'breakthrough': ['breakthrough', 'pawn breakthrough'],
+  'triangulation': ['triangulat', 'lose a tempo', 'waiting move', 'zugzwang the king'],
+  'wrong-rook-pawn-bishop': ['wrong rook pawn', 'wrong bishop', 'rook pawn and bishop draw', 'wrong coloured bishop'],
+  'opposite-color-bishops': ['opposite color bishop', 'opposite colour bishop', 'ocb', 'opposite-coloured bishop'],
+  'queen-vs-rook-fortress': ['queen vs rook', 'queen versus rook', 'q vs r', 'defend queen vs rook'],
+  'k-vs-kp-opposition-draw': ['king and pawn vs king', 'k+p vs k', 'k and p vs k', 'pawn vs king', 'hold king and pawn'],
+  'stalemate-stalking': ['stalemate', 'stalemate trick', 'stalemate resource'],
+  'perpetual-check': ['perpetual check', 'perpetual', 'save with checks'],
+  'insufficient-material': ['insufficient material', 'not enough material', 'no mate possible'],
+  'activate-the-king': ['activate the king', 'king activity', 'centralize the king', 'centralise the king', 'march the king'],
+  'push-passed-pawns': ['push passed pawn', 'passed pawn', 'promote a pawn', 'queen a pawn'],
+  'attack-weak-pawns': ['attack weak pawn', 'weak pawn', 'target a pawn'],
+  'two-weaknesses': ['two weaknesses', 'principle of two weaknesses', 'second front'],
+  'do-not-rush': ["don't rush", 'do not rush', 'take your time', 'no need to hurry'],
+  'rooks-behind-passed-pawns': ['rook behind the passed pawn', 'rook behind passed pawn', 'rook behind the pawn', 'tarrasch rule'],
+  'trade-when-ahead': ['trade when ahead', 'trade pieces when ahead', 'simplify when ahead', 'trade pawns when behind'],
+};
+
+/** Best-matching endgame lesson for a free-text technique ask, or null. Scores
+ *  by alias hits (strong) + lesson-name-token overlap; requires a real match so
+ *  a vague "how do I win the endgame" returns null and the caller falls back to
+ *  the general principle set / honest decline. */
+export function matchEndgameLesson(text: string): EndgameLesson | null {
+  const t = (text ?? '').toLowerCase();
+  if (!t.trim()) return null;
+  const nameStop = new Set(['the', 'of', 'and', 'a', 'vs', 'with', 'your', 'position', 'defensive', 'building', 'bridge']);
+  let best: { lesson: EndgameLesson; score: number } | null = null;
+  for (const lesson of getAllEndgameLessons()) {
+    let score = 0;
+    for (const alias of ENDGAME_ALIASES[lesson.id] ?? []) {
+      if (t.includes(alias)) score += 5;
+    }
+    for (const tok of lesson.name.toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/)) {
+      if (tok.length >= 4 && !nameStop.has(tok) && new RegExp(`\\b${tok}`).test(t)) score += 1;
+    }
+    if (score > (best?.score ?? 0)) best = { lesson, score };
+  }
+  if (!best || best.score < 2) return null;
+  return best.lesson;
+}

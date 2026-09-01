@@ -190,6 +190,73 @@ export function getBestOpeningPassage(name: string): BookPassage | null {
   return list[0] ?? null;
 }
 
+// ── THEORY SEARCH (P-II.1, 2026-09-01) ──────────────────────────────────────
+//
+// A general STRATEGY / how-to ask ("how do I play against an isolated queen
+// pawn", "how do I attack a castled king", "when should I trade queens") may not
+// name a single tagged concept phrase, so detectConceptsInText finds nothing and
+// the concept lane falls through to the ungrounded LLM — the exact whack-a-mole
+// we're killing. This scores every concept passage by keyword overlap with the
+// query and returns the best match, so a theory ask grounds in the book corpus
+// (Capablanca / Lasker) instead of the model's memory. G0/G3: the passage TEXT
+// is public-domain book prose; the model only phrases it downstream.
+
+const THEORY_STOPWORDS = new Set([
+  'the', 'a', 'an', 'and', 'or', 'but', 'of', 'to', 'in', 'on', 'for', 'with',
+  'is', 'are', 'was', 'were', 'be', 'do', 'does', 'did', 'how', 'what', 'when',
+  'where', 'why', 'which', 'who', 'i', 'me', 'my', 'we', 'you', 'your', 'it',
+  'this', 'that', 'these', 'those', 'should', 'would', 'could', 'can', 'will',
+  'about', 'against', 'best', 'way', 'play', 'played', 'playing', 'get', 'got',
+  'have', 'has', 'if', 'then', 'so', 'up', 'out', 'at', 'as', 'by', 'from',
+  'chess', 'game', 'move', 'moves', 'position', 'positions',
+]);
+
+function theoryTokens(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z\s-]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length >= 3 && !THEORY_STOPWORDS.has(t));
+}
+
+export interface TheoryHit {
+  passage: BookPassage;
+  conceptId: string;
+  conceptName: string;
+  score: number;
+}
+
+/** Best-matching concept passage for a free-text theory/strategy query, or
+ *  null when nothing scores above the floor. Scores by how many query keywords
+ *  appear in the passage text + concept name/phrases; requires a real overlap so
+ *  a vague ask returns null (honest decline) rather than a random passage. */
+export function searchTheoryPassage(text: string): TheoryHit | null {
+  const q = theoryTokens(text);
+  if (q.length === 0) return null;
+  const qset = new Set(q);
+  let best: TheoryHit | null = null;
+  for (const c of DATA.concepts) {
+    if (c.passages.length === 0) continue;
+    // Concept name + phrases are a strong signal — a hit there is worth more.
+    const nameTokens = new Set(theoryTokens(`${c.name} ${c.phrases.join(' ')}`));
+    let nameOverlap = 0;
+    for (const t of qset) if (nameTokens.has(t)) nameOverlap += 1;
+    for (const p of c.passages) {
+      const ptext = p.text.toLowerCase();
+      let bodyOverlap = 0;
+      for (const t of qset) if (ptext.includes(t)) bodyOverlap += 1;
+      const score = nameOverlap * 3 + bodyOverlap;
+      if (score > (best?.score ?? 0)) {
+        best = { passage: p, conceptId: c.id, conceptName: c.name, score };
+      }
+    }
+  }
+  // Floor: need at least a name-token match OR two body keywords — otherwise the
+  // ask isn't really about anything the corpus teaches (honest decline).
+  if (!best || best.score < 2) return null;
+  return best;
+}
+
 /** Detect conceptIds named in arbitrary text via the concept phrase
  *  vocabulary. Used to surface relevant concept passages alongside the
  *  opening passage, e.g. if a coach prompt mentions "isolated pawn"

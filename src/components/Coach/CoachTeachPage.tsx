@@ -266,7 +266,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -2057,15 +2057,20 @@ export function CoachTeachPage(): JSX.Element {
   /** Load the user's mistake queue (most-common weakness first) and start
    *  drilling it. Returns false when the user has no mistakes yet, so the
    *  caller can fall back to a single DB-sourced drill. */
-  const startMistakeDrills = useCallback(async (gameId?: string): Promise<boolean> => {
+  const startMistakeDrills = useCallback(async (gameId?: string, motif?: string): Promise<boolean> => {
     // Evidence-first, THEN cement: after the student re-solves their own flubbed
     // positions in each theme, one fresh rep of that pattern is appended so they
     // drill the idea, not just their exact positions (Phase 3). A `gameId` scopes
     // the queue to ONE game's mistakes (David 2026-09-01: the coach named that
-    // game's critical error → set up its drill).
-    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId });
+    // game's critical error → set up its drill). A `motif` scopes it to ONE
+    // weakness pattern (P-III.3 — "drill it" on a named weakness cluster).
+    const queue = await buildMistakeDrillQueue({ cementReps: 1, rating: activeProfile?.currentRating ?? 1200, gameId, motif });
     if (queue.length === 0 && gameId) {
       coachDrillSay("That game had no blunders or mistakes to drill — a clean one by the analysis.");
+      return true;
+    }
+    if (queue.length === 0 && motif) {
+      coachDrillSay("Nothing to drill in that pattern right now — you've cleared what I had saved for it.");
       return true;
     }
     if (queue.length > 0) {
@@ -2221,19 +2226,22 @@ export function CoachTeachPage(): JSX.Element {
     const drillAid = searchParams.get('drill');
     if (!drillAid) return;
     const drillGameId = searchParams.get('game') ?? undefined;
+    const drillMotif = searchParams.get('theme') ?? undefined;
     drillParamHandledRef.current = true;
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       next.delete('drill');
       next.delete('game');
+      next.delete('theme');
       return next;
     }, { replace: true });
     if (!isDrillableAid(drillAid)) return;
     void (async () => {
       // Prefer the user's own mistakes (most common first, adaptive);
       // fall back to a single DB-sourced drill for a new user. A `game` param
-      // scopes the queue to that one game's mistakes.
-      if (await startMistakeDrills(drillGameId)) return;
+      // scopes the queue to that one game's mistakes; a `theme` param scopes it
+      // to one weakness motif (P-III.3).
+      if (await startMistakeDrills(drillGameId, drillMotif)) return;
       const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
       const drill = pickCoachDrill(drillAid, { rating });
       if (drill) startCoachDrill(drill);
@@ -3771,7 +3779,13 @@ export function CoachTeachPage(): JSX.Element {
         isStrengthsQuestion(requestedName) ||
         isMistakesQuestion(requestedName) ||
         isBestMoveQuestion(requestedName) ||
-        isTacticsQuestion(requestedName)
+        isTacticsQuestion(requestedName) ||
+        // New grounded lanes (2026-09-01) — every coach surface answers these,
+        // so a Teach ask must reach the spine, not the opening-teach hijack.
+        isOpponentMoveQuestion(requestedName) ||
+        isNameOpeningQuestion(requestedName) ||
+        isTheoryQuestion(requestedName) ||
+        isEndgameQuestion(requestedName)
       )) {
         requestedName = null;
       }

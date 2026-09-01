@@ -421,7 +421,7 @@ export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryR
 }
 
 export async function buildMistakeDrillQueue(
-  options: { today?: string; cementReps?: number; rating?: number; gameId?: string } = {},
+  options: { today?: string; cementReps?: number; rating?: number; gameId?: string; motif?: string } = {},
 ): Promise<MistakeDrillTheme[]> {
   const today = options.today ?? new Date().toISOString().split('T')[0];
   const cementReps = Math.max(0, options.cementReps ?? 0);
@@ -438,6 +438,14 @@ export async function buildMistakeDrillQueue(
     // NOW regardless of SRS due date (the student asked for them). Still skip
     // mastered ones.
     mistakes = mistakes.filter((mp) => mp.sourceGameId === options.gameId && mp.status !== 'mastered');
+  } else if (options.motif) {
+    // MOTIF-SCOPED drill (P-III.3, David 2026-09-01: "drill what is needed") — the
+    // coach named a specific weakness pattern (e.g. "tactic:fork"); drill exactly
+    // that cluster NOW, ignoring the SRS due date. `motif` is the bucketOf key
+    // (the weaknessSpine clusterId with any `analysis:` prefix stripped). Still
+    // skip mastered ones.
+    const motif = options.motif.replace(/^analysis:/, '');
+    mistakes = mistakes.filter((mp) => bucketOf(mp).key === motif && mp.status !== 'mastered');
   } else {
     // SRS gate: skip mastered ("tested out") and not-yet-due mistakes.
     mistakes = mistakes.filter((mp) => mp.status !== 'mastered' && mp.srsDueDate <= today);

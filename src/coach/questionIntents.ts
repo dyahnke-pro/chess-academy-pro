@@ -369,6 +369,29 @@ export function isWhyBestMoveQuestion(ask: string | undefined): boolean {
   return WHY_THIS_MOVE_RE.test(ask) && !extractCandidateSan(ask);
 }
 
+/** "Why did THEY play that / what did the opponent just do / why that move" —
+ *  the student asks about the OPPONENT'S last move (P-IV.1). Routed to
+ *  assembleOpponentMoveAnswer, which self-gates on the position (only applies
+ *  when the opponent genuinely moved last). Excludes a NAMED move (that goes to
+ *  the candidate lane) and self-review "why did I…" asks. */
+const OPPONENT_MOVE_RE = anyOf([
+  // "why did they / he / she / my opponent play|move|do that|this|those"
+  String.raw`\bwhy\s+(?:did|does|is|are|would|has)\s+(?:they|he|she|the\s+opponent|my\s+opponent|opponent|the\s+computer|the\s+bot)\b[\s\S]{0,24}\b(?:play|played|mov(?:e|ed|ing)|do|did|go(?:ing)?|put|develop)\b`,
+  // "what did they / the opponent just play|do"
+  String.raw`\bwhat\s+(?:did|is|are|was)\s+(?:they|he|she|the\s+opponent|my\s+opponent|opponent|the\s+computer|the\s+bot)\b[\s\S]{0,24}\b(?:play|played|do(?:ing)?|did|threat|up\s+to)\b`,
+  // bare "why that move / what's the point of that move" (opponent implied)
+  String.raw`\b(?:why|what'?s?\s+the\s+(?:point|idea|purpose)\s+(?:of|behind))\s+(?:that|this|their|the\s+last)\s+move\b`,
+]);
+
+export function isOpponentMoveQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Self-review ("why did I play that") is not the opponent lane.
+  if (/\bwhy\s+(?:did|do|does)\s+(?:i|we|my)\b/i.test(ask) && !/\b(?:they|opponent|he|she|computer|bot)\b/i.test(ask)) return false;
+  // A named move goes to the candidate/soundness lane, not here.
+  if (extractCandidateSan(ask)) return false;
+  return OPPONENT_MOVE_RE.test(ask);
+}
+
 /** SAN-shaped token — the move the student NAMED ("is Qf3 ok", "what about
  *  Nf3", "can I play exd5"). Piece moves (Qf3, Nbd7, Rxe7+), pawn moves (e4,
  *  exd5, a8=Q), castling (O-O / 0-0-0). Case-INSENSITIVE (`i` flag) so lowercase
@@ -838,6 +861,90 @@ export function fundamentalsTopicFromText(
   if (/\bcent(?:er|re)\b/.test(t)) return 'center';
   if (/\bdevelop(?:ing|ment|ed)?\b/.test(t)) return 'development';
   return 'general';
+}
+
+/** A GENERAL STRATEGY / THEORY ask — "how do I play against an isolated queen
+ *  pawn", "how do I attack a castled king", "when should I trade queens", "what's
+ *  the plan with the bishop pair". Not a single glossary token (that's the
+ *  concept lane), not the fundamentals set, not a NAMED opening (that's opening
+ *  profile), not a LIVE-board cue (that's the board lanes). Routed to a corpus
+ *  free-text search (searchTheoryPassage) → assembleTheoryAnswer → voiceFacts
+ *  (P-II.1, 2026-09-01). The corpus-search floor is the real gate: an ask that
+ *  matches nothing in the book corpus returns null and falls through. */
+// "play" only counts in the STRATEGY sense (play against/with/into a structure),
+// so "how do I play the Sicilian" stays an opening ask, not a theory search.
+const THEORY_QUESTION_RE = anyOf([
+  String.raw`\bhow\s+(?:do|should|can|would|does\s+one|to)\s+(?:i|we|you|one)?\s*play\s+(?:against|with|into|around|versus|vs\b)`,
+  String.raw`\bhow\s+(?:do|should|can|would|does\s+one|to)\s+(?:i|we|you|one)?\s*(?:handle|deal|cope|attack|defend|convert|exploit|use|meet|counter|approach|treat|break|target|neutrali[sz]e|fight|beat|stop|punish|prevent)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:plan|idea|strategy|approach|point|best\s+way)\b`,
+  String.raw`\bwhen\s+(?:do|should|can|to)\s+(?:i|we|you|one)?\s*(?:trade|exchange|attack|push|castle|sacrifice|swap|advance|open|close|defend|simplify)\b`,
+  String.raw`\bhow\s+to\s+(?:handle|deal|attack|defend|convert|exploit|use|meet|counter|approach|beat|target|break|stop)\b`,
+]);
+
+export function isTheoryQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // App-surface, self-stat, live-board and improvement asks are other lanes.
+  if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  if (/\b(?:here|this\s+position|on\s+the\s+board|right\s+now|in\s+this\s+(?:position|game)|my\s+position)\b/i.test(ask)) return false;
+  if (/\bhow\s+(?:do|can)\s+i\s+(?:improve|get\s+better|rank\s+up|climb|gain\s+rating)\b/i.test(ask)) return false;
+  // A NAMED opening → opening profile ("how do I play the Sicilian").
+  if (openingExistenceQuery(ask)) return false;
+  return THEORY_QUESTION_RE.test(ask);
+}
+
+// ── WEAKNESS LIFECYCLE + BRIEFING (Part III, 2026-09-01) ────────────────────
+//
+// The A+ weakness read over the archive timeline. `weaknessLifecycleKind`
+// separates the three time-framed asks; `isWeaknessBriefingQuestion` is the
+// full prioritized picture. Both route to weaknessLifecycle + the briefing/
+// lifecycle assemblers — distinct from the generic mistakes/misconceptions
+// lanes (those are "now", these carry the FIXED/PERSISTENT/NEW dimension).
+
+const WEAKNESS_FIXED_RE = anyOf([
+  String.raw`\bwhat\s+(?:have|did)\s+i\s+(?:fix|fixed|improv\w*|clean\w*\s+up|stop\w*|overcome|conquer\w*|beat\w*)\b`,
+  String.raw`\bwhat(?:'?s| have i)?\s+(?:got\w*\s+better|improv\w*)\s+(?:at|on)\b`,
+  String.raw`\bwhat\s+(?:did|do)\s+i\s+used?\s+to\s+(?:struggle|be\s+bad|mess|blunder|get\s+wrong)\b`,
+  String.raw`\bwhat\s+weakness(?:es)?\s+(?:have\s+i\s+)?(?:fixed|beaten|overcome|cleared)\b`,
+  String.raw`\bwhat\s+am\s+i\s+no\s+longer\s+(?:bad|weak|struggling)\b`,
+]);
+const WEAKNESS_PERSISTENT_RE = anyOf([
+  String.raw`\bwhat\s+(?:do\s+)?i\s+(?:keep|always|still|constantly|repeatedly)\s+(?:get\w*\s+wrong|mess\w*\s+up|blunder\w*|do\w*\s+wrong|screw\w*\s+up|struggl\w*\s+with)\b`,
+  String.raw`\bwhat(?:'?s| are)?\s+my\s+(?:recurring|persistent|ongoing|long[-\s]?standing|chronic)\s+(?:weakness\w*|mistake\w*|problem\w*|habit\w*)\b`,
+  String.raw`\bwhat\s+(?:bad\s+)?habits?\s+(?:do\s+i\s+)?(?:keep|still)\b`,
+  String.raw`\bwhat\s+am\s+i\s+still\s+(?:struggling|bad|weak)\b`,
+]);
+const WEAKNESS_PRESSING_RE = anyOf([
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:biggest|worst|main|number\s*one|#?1|most\s+(?:pressing|important|glaring|serious|critical))\s+(?:weakness|problem|issue|leak|flaw)\b`,
+  String.raw`\bwhat\s+should\s+i\s+(?:work\s+on|fix|improve|focus\s+on)\s+(?:first|most|next)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+(?:hurting|costing|killing)\s+me\s+(?:the\s+)?most\b`,
+  String.raw`\bwhere\s+am\s+i\s+(?:weakest|losing\s+the\s+most|leaking\s+the\s+most)\b`,
+  String.raw`\bwhat(?:'?s| is)?\s+my\s+(?:top|number\s*one)\s+priority\b`,
+]);
+
+/** Which time-framed lifecycle ask this is, or null. */
+export function weaknessLifecycleKind(ask: string | undefined): 'fixed' | 'persistent' | 'pressing' | null {
+  if (!ask) return null;
+  if (WEAKNESS_FIXED_RE.test(ask)) return 'fixed';
+  if (WEAKNESS_PRESSING_RE.test(ask)) return 'pressing';
+  if (WEAKNESS_PERSISTENT_RE.test(ask)) return 'persistent';
+  return null;
+}
+export function isWeaknessLifecycleQuestion(ask: string | undefined): boolean {
+  return weaknessLifecycleKind(ask) !== null;
+}
+
+const WEAKNESS_BRIEFING_RE = anyOf([
+  String.raw`\b(?:break\s+down|breakdown\s+of|rundown\s+of|overview\s+of|summar\w+\s+of)\s+my\s+weakness\w*\b`,
+  String.raw`\b(?:what\s+are|list|show\s+me|give\s+me)\s+(?:all\s+)?my\s+weakness\w*\b`,
+  String.raw`\bmy\s+(?:full|overall|complete)\s+weakness\s+(?:picture|breakdown|profile|read|report)\b`,
+  String.raw`\bwhat\s+should\s+i\s+(?:work\s+on|train|study)\b(?!\s+(?:first|most|next))`,
+  String.raw`\bwhere\s+(?:am\s+i\s+losing\s+points|do\s+i\s+lose\s+points)\b`,
+]);
+export function isWeaknessBriefingQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // A pressing "work on FIRST" is the lifecycle-pressing lane, not the briefing.
+  if (weaknessLifecycleKind(ask) === 'pressing') return false;
+  return WEAKNESS_BRIEFING_RE.test(ask);
 }
 
 /** A FAMOUS-GAME ask — "teach me the opera game", "show me Morphy's games".
@@ -2059,11 +2166,41 @@ const APP_HELP_RE: ReadonlyArray<RegExp> = [
   /\bhow\s+(?:does|do|can|should)\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   /\bwhat\s+can\s+i\s+do\s+(?:in|on|with|here)\b/i,
   /\bwhat\s+can\s+(?:you|the\s+coach|this\s+app)\s+do\b/i,
+  // General capability ask (David 2026-09-01): "what can you help with / help me
+  // with", "what do you do", "what are you for", "how can you help (me)", "what
+  // should I ask you". Answered from the app manifest (grounded overview), never
+  // the LLM inventing features.
+  /\bwhat\s+can\s+(?:you|the\s+coach|this\s+app)\s+help\s+(?:me\s+)?(?:with|do)\b/i,
+  /\bwhat\s+do\s+you\s+(?:do|help\s+with|offer)\b/i,
+  /\bhow\s+can\s+(?:you|the\s+coach)\s+help\s+(?:me\b|out\b)?/i,
+  /\bwhat\s+(?:are\s+you|is\s+this\s+app)\s+(?:for|good\s+for|capable\s+of)\b/i,
+  /\bwhat\s+should\s+i\s+ask\s+you\b/i,
+  /\bwhat\s+kinds?\s+of\s+(?:questions|things)\s+can\s+i\s+ask\b/i,
   /\bexplain\b[\w'\s-]{0,30}?\b(?:tab|page|screen|section|trainer|feature)\b/i,
   // "how / best way to use this app (to improve)" — app-usage guidance (pass 9).
   /\b(?:how|best\s+way|what(?:'?s| is)\s+the\s+best\s+way)\s+(?:should\s+i\s+|to\s+|do\s+i\s+)?use\s+(?:this\s+|the\s+)?app\b/i,
   /\bhow\s+do\s+i\s+(?:get\s+the\s+most\s+out\s+of|make\s+the\s+most\s+of)\s+(?:this\s+|the\s+)?app\b/i,
 ];
+
+/** "What opening is this / am I playing / is this called?" — identify the
+ *  opening from the live board's move history (David 2026-09-01). Answered by
+ *  detectOpening (the DB trie), voiced. Guarded against "what opening should I
+ *  play/learn" (a recommendation) and "what's my BEST opening" (opening-profile). */
+const NAME_OPENING_RE: ReadonlyArray<RegExp> = [
+  /\bwhat\s+opening\s+(?:is\s+this|are\s+we\s+(?:in|playing)|am\s+i\s+(?:in|playing)|is\s+(?:this|it)|(?:did|are)\s+we\s+(?:just\s+)?(?:play|playing))\b/i,
+  /\bwhat(?:'?s| is)\s+(?:this|the)\s+opening\s+(?:called|named)?\b/i,
+  /\bwhich\s+opening\s+(?:is\s+this|are\s+we\s+(?:in|playing)|am\s+i\s+(?:in|playing))\b/i,
+  /\bwhat\s+(?:line|variation|opening)\s+(?:is\s+this|are\s+we\s+in)\b/i,
+  /\bname\s+(?:this|the)\s+opening\b/i,
+  /\bwhat\s+am\s+i\s+playing\s+(?:here|right\s+now)\b/i,
+];
+export function isNameOpeningQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // A recommendation ("what opening should I play/learn") is not an identify ask.
+  if (/\b(?:should|could|would|to)\s+(?:i|we)\s+(?:play|learn|study|pick|choose)\b/i.test(ask)) return false;
+  if (/\b(?:best|strongest|favou?rite|worst|weakest)\b/i.test(ask)) return false; // opening-profile
+  return NAME_OPENING_RE.some((re) => re.test(ask));
+}
 
 export function isAppHelpQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
@@ -2231,7 +2368,9 @@ export function buildQuestionGrounding(
     openingProfileQuestion: isOpeningProfileQuestion(a),
     openingProfileKind: openingProfileKind(a),
     statsQuestion: isStatsQuestion(a),
-    strengthsQuestion: isStrengthsQuestion(a),
+    // "what have I gotten better at" reads as strengths too — the lifecycle
+    // FIXED lane owns it (it's a time-framed weakness read, not a static skill).
+    strengthsQuestion: isStrengthsQuestion(a) && weaknessLifecycleKind(a) !== 'fixed',
     openingAccuracyQuestion: isOpeningAccuracyQuestion(a),
     openingTrapsQuestion: isOpeningTrapsQuestion(a),
     openingTrapsSystemAsk: opensTrapsSystemAsk(a),
@@ -2240,7 +2379,7 @@ export function buildQuestionGrounding(
     // asks — "when do I blunder (winning/losing)" and "what thinking errors do
     // I keep making" — so those reach their own blocks instead of the generic
     // error breakdown (David 2026-07-13).
-    mistakesQuestion: isMistakesQuestion(a) && !isErrorsBySituationQuestion(a) && !isMisconceptionsQuestion(a),
+    mistakesQuestion: isMistakesQuestion(a) && !isErrorsBySituationQuestion(a) && !isMisconceptionsQuestion(a) && !isWeaknessLifecycleQuestion(a) && !isWeaknessBriefingQuestion(a),
     tacticsProfileQuestion: isTacticsProfileQuestion(a),
     phaseQuestion: isPhaseQuestion(a),
     // Suppressed on a counter-repertoire ask ("what should I play against the
@@ -2281,6 +2420,20 @@ export function buildQuestionGrounding(
     timeTroubleQuestion: isTimeTroubleQuestion(a),
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
+    nameOpeningQuestion: isNameOpeningQuestion(a),
+    // "why did THEY play that" — the opponent's last move. Excludes a named
+    // move (candidate lane) and self-review, so it's disjoint from the move
+    // lanes above (P-IV.1).
+    opponentMoveQuestion: isOpponentMoveQuestion(a),
+    // General strategy/how-to ("how do I play against an IQP") → corpus theory
+    // search. Suppressed when the concept or fundamentals lanes already own it,
+    // so it's the fallback theory net, not a competitor (P-II.1).
+    theoryQuestion: isTheoryQuestion(a) && !isConceptQuestion(a) && !isFundamentalsQuestion(a),
+    // Weakness LIFECYCLE / BRIEFING (Part III) — the archive-timeline read.
+    // Take precedence over the generic mistakes/misconceptions/strengths lanes
+    // (handled by suppressing those below).
+    weaknessLifecycleKind: weaknessLifecycleKind(a) ?? undefined,
+    weaknessBriefingQuestion: isWeaknessBriefingQuestion(a),
     positionalTopic: positionalTopic(a) ?? undefined,
   };
 }

@@ -208,7 +208,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, openingExistenceQuery,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -216,7 +216,7 @@ export {
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
-  isMistakesQuestion, isLastGameMistakeQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isMistakesQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
@@ -1158,6 +1158,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const openingTrapsQuestionEngage = isOpeningTrapsQuestion(askForIntents);
     const reviewDueQuestionEngage = isReviewDueQuestion(askForIntents);
     const mistakesQuestionEngage = isMistakesQuestion(askForIntents);
+    const weaknessLifecycleKindEngage = weaknessLifecycleKind(askForIntents);
+    const weaknessBriefingQuestionEngage = isWeaknessBriefingQuestion(askForIntents);
     const tacticsProfileQuestionEngage = isTacticsProfileQuestion(askForIntents);
     const phaseQuestionEngage = isPhaseQuestion(askForIntents);
     const repertoireGapQuestionEngage = isRepertoireGapQuestion(askForIntents);
@@ -1185,6 +1187,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const timeTroubleQuestionEngage = isTimeTroubleQuestion(askForIntents);
     const lastGameQuestionEngage = isLastGameQuestion(askForIntents);
     const lastGameMistakeQuestionEngage = isLastGameMistakeQuestion(askForIntents);
+    const nameOpeningQuestionEngage = isNameOpeningQuestion(askForIntents);
+    const opponentMoveQuestionEngage = isOpponentMoveQuestion(askForIntents);
+    const theoryQuestionEngage = isTheoryQuestion(askForIntents) && !conceptQuestionEngage && !fundamentalsQuestionEngage;
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
@@ -1310,7 +1315,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || openingExistenceName !== null
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1450,6 +1455,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             openingTrapsSystemAsk: opensTrapsSystemAsk(askForIntents),
             reviewDueQuestion: reviewDueQuestionEngage,
             mistakesQuestion: mistakesQuestionEngage,
+            weaknessLifecycleKind: weaknessLifecycleKindEngage ?? undefined,
+            weaknessBriefingQuestion: weaknessBriefingQuestionEngage,
             tacticsProfileQuestion: tacticsProfileQuestionEngage,
             phaseQuestion: phaseQuestionEngage,
             repertoireGapQuestion: repertoireGapQuestionEngage,
@@ -1515,6 +1522,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             timeTroubleQuestion: timeTroubleQuestionEngage,
             lastGameQuestion: lastGameQuestionEngage,
             lastGameMistakeQuestion: lastGameMistakeQuestionEngage,
+            nameOpeningQuestion: nameOpeningQuestionEngage,
+            opponentMoveQuestion: opponentMoveQuestionEngage,
+            theoryQuestion: theoryQuestionEngage,
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
             // Composed-prompt surfaces: coachApi skips the grounded-intent

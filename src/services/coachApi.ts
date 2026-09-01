@@ -59,14 +59,18 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
 const TRAP_KINDS = (trapClassifications as { classifications: Record<string, string> }).classifications;
 import { lookupTablebase } from './lichessTablebaseService';
+import { matchEndgameLesson } from './endgameLessonsService';
+import { getWeaknessLifecycle } from './weaknessLifecycle';
+import { conceptForCluster } from './weaknessConceptMap';
 import { detectBadHabits } from './badHabitDetector';
 import { getUnifiedWeaknessProfile } from './weaknessSpine';
+import { detectOpeningTranspositional } from './openingDetectionService';
 import { getStrongestOpenings, getMostPlayedOpenings, getWeakestOpenings, getOpeningById } from './openingService';
 import { fuzzyMatchOpening } from './openingFuzzyMatcher';
 import { containmentCheck, containmentAudit } from './voiceContainment';
@@ -80,7 +84,7 @@ import { computeLastMoveRating } from './moveRating';
 import { getDueCount, getEnrolledOpenings, getSrsDueOpenings, getTotalEnrolled } from './srsOpeningService';
 import { criticalMomentsAccuracy, streaks, timeControlPerformance, comebackWins, winShapeStats, colorProficiencyMismatch, personalRecords, tacticTransferGap, recordVsOpening, recordVsOpponent, phaseStrengthOverTime, activityHeatmap, tacticTypeBreadth, brilliantConcentration } from './analyticsService';
 import { getPuzzleStats } from './puzzleService';
-import { detectConceptsInText, getConcept, resolveOpeningIdFromName } from './chessConceptService';
+import { detectConceptsInText, getConcept, resolveOpeningIdFromName, searchTheoryPassage } from './chessConceptService';
 import { getCachedAmateurPlay } from './amateurPlayCache';
 // claimValidator import removed — the grounded path no longer free-composes,
 // so there are no claims to validate (David 2026-07-09).
@@ -1275,6 +1279,26 @@ export interface MasterGroundingOptions {
    *  what was my critical error?" asked in chat with no game loaded. Voiced from
    *  getLastGameErrors → assembleLastGameMistakeAnswer. No board. */
   lastGameMistakeQuestion?: boolean;
+  /** Name-this-opening (P-IV.2, 2026-09-01) — "what opening is this?" Detected
+   *  from the live move history via detectOpening → assembleOpeningNameAnswer. */
+  nameOpeningQuestion?: boolean;
+  /** Opponent's last move (P-IV.1, 2026-09-01) — "why did they play that?"
+   *  Voiced from assembleOpponentMoveAnswer over moveHistory + the live FEN;
+   *  self-gates to the position where the opponent genuinely moved last. */
+  opponentMoveQuestion?: boolean;
+  /** Weakness LIFECYCLE (Part III, 2026-09-01) — "what have I fixed" (fixed) /
+   *  "what do I keep getting wrong" (persistent) / "what's my biggest weakness"
+   *  (pressing). Voiced from getWeaknessLifecycle → assembleWeaknessLifecycle
+   *  Answer. No board. */
+  weaknessLifecycleKind?: 'fixed' | 'persistent' | 'pressing';
+  /** Weakness BRIEFING (Part III) — the full prioritized picture. Voiced from
+   *  getWeaknessLifecycle → assembleWeaknessBriefingAnswer. */
+  weaknessBriefingQuestion?: boolean;
+  /** General strategy/theory (P-II.1, 2026-09-01) — "how do I play against an
+   *  isolated queen pawn / attack a castled king". Voiced from a free-text
+   *  corpus search (searchTheoryPassage → assembleTheoryAnswer); the search
+   *  floor is the gate, so an off-corpus ask falls through. */
+  theoryQuestion?: boolean;
   /** Answer-correctness (2026-07-10) — a positional-FEATURE ask (centre /
    *  material / development / structure / king / piece quality). Routes to
    *  assemblePositionalAnswer, which computes the STATIC feature from the FEN
@@ -1593,6 +1617,19 @@ const STOCK_GROUNDING_FALLBACK =
  *  to upload and analyze games, not 'you haven't played enough'"). Handled in
  *  ChatMessage → /games/import. */
 const IMPORT_ANALYZE_OFFER: CoachActionOffer = { type: 'import_games', id: 'connect' };
+
+/** Headline capabilities for the general "what can you help with" overview
+ *  (David 2026-09-01). Each is a REAL app feature (grounded in
+ *  APP_ROUTES_MANIFEST.featuresAvailable), stated concisely — the coach names
+ *  what it actually does, never an invented feature. */
+const CAPABILITY_HEADLINES: ReadonlyArray<{ title: string; blurb: string }> = [
+  { title: 'Spot your weaknesses', blurb: 'I read your analyzed games and tell you exactly where you go wrong — the phase, the pattern, your recurring mistakes' },
+  { title: 'Review any game', blurb: 'I walk your last game move by move and pinpoint the critical error and the better move' },
+  { title: 'Drill your mistakes', blurb: 'I turn your own blunders into puzzles and drill them until they test out' },
+  { title: 'Teach openings', blurb: 'I teach any opening move by move, then let you practice and play it against me' },
+  { title: 'Play a coached game', blurb: 'I play you at your level and coach the position as we go' },
+  { title: 'Answer the position', blurb: "I ground every answer — is a move sound, what's the plan, what's hanging, whose better — in the engine and your games" },
+];
 
 /** Dead-end rescue (David 2026-07-17): when a coach turn is about to serve the
  *  honest stock fallback because no assembler caught it, first check whether the
@@ -2894,6 +2931,7 @@ export async function getCoachChatResponse(
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
       grounding.conceptQuestion === true ||
+      grounding.theoryQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
       grounding.positionAssessmentQuestion === true ||
@@ -2903,6 +2941,10 @@ export async function getCoachChatResponse(
       grounding.timeTroubleQuestion === true ||
       grounding.lastGameQuestion === true ||
       grounding.lastGameMistakeQuestion === true ||
+      grounding.nameOpeningQuestion === true ||
+      grounding.opponentMoveQuestion === true ||
+      grounding.weaknessLifecycleKind !== undefined ||
+      grounding.weaknessBriefingQuestion === true ||
       grounding.groundedBoardQuestion === true ||
       grounding.positionalTopic !== undefined;
     if (intentFired) {
@@ -3315,6 +3357,49 @@ export async function getCoachChatResponse(
             const voicedNoData = await voiceFacts(noDataFact, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'review-due', preferRaw: true });
             if (voicedNoData) return voicedNoData;
           } catch { /* fall through to legacy path */ }
+        }
+
+        // ── WEAKNESS LIFECYCLE + BRIEFING (Part III) — the archive-timeline
+        // read: what the student FIXED (used-to, gone — incl. self-fixed before
+        // the app), what PERSISTS, what's NEW, and the single most-pressing item.
+        // Computed in weaknessLifecycle.ts from board-verified mistake records;
+        // the assembler only phrases. Runs BEFORE the generic mistakes lane so
+        // the time-framed ask gets the trend, not a static breakdown. Offers a
+        // motif-scoped "drill it" chip (P-III.3).
+        if (grounding.weaknessLifecycleKind || grounding.weaknessBriefingQuestion) {
+          try {
+            const lc = await getWeaknessLifecycle();
+            const answer = grounding.weaknessBriefingQuestion
+              ? assembleWeaknessBriefingAnswer(lc)
+              : assembleWeaknessLifecycleAnswer(grounding.weaknessLifecycleKind ?? 'pressing', lc);
+            if (answer) {
+              // MOTIF → BEHAVIOR → CONCEPT (P-III.2). Roll the most-pressing
+              // weakness up to a teachable concept and ground the teaching in the
+              // book corpus, so the coach teaches the IDEA behind the pattern, not
+              // just the count. The concept text is public-domain corpus prose
+              // (searchTheoryPassage) — G0/G3, the map only names WHICH concept.
+              let facts = answer.facts;
+              const wantsConcept = grounding.weaknessLifecycleKind === 'pressing' || grounding.weaknessBriefingQuestion;
+              if (wantsConcept && lc.sampleFloorMet && lc.mostPressing) {
+                const concept = conceptForCluster(lc.mostPressing.clusterId, lc.mostPressing.bucket);
+                if (concept) {
+                  const hit = searchTheoryPassage(concept.conceptQuery);
+                  const lesson = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
+                  facts = lesson
+                    ? `${facts} The pattern underneath it: ${concept.behavior}. ${lesson.facts}`
+                    : `${facts} The pattern underneath it: ${concept.behavior}.`;
+                }
+              }
+              const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'weakness-lifecycle', preferRaw: true });
+              if (voiced) {
+                // "drill it" → scope to the most-pressing motif when we have one,
+                // else the general weakness queue.
+                const motif = lc.mostPressing?.clusterId?.replace(/^analysis:/, '');
+                lastCoachActionOffer = [{ type: 'weakness_drill', id: motif ?? 'all' }];
+                return voiced;
+              }
+            }
+          } catch { /* fall through to the generic mistakes lane */ }
         }
 
         // ── MISTAKES (Wave 1) — "what mistakes do I make / how often do I
@@ -4015,6 +4100,23 @@ export async function getCoachChatResponse(
           }
         }
 
+        // ── THEORY (P-II.1) — a general strategy/how-to ask that named no single
+        // glossary token. Free-text corpus search finds the best-matching book
+        // passage (Capablanca/Lasker); the search floor is the gate, so an
+        // off-corpus ask returns null and falls through. voiceFacts phrases the
+        // public-domain prose (G0/G3 — the model never invents theory).
+        if (grounding.theoryQuestion) {
+          const userText = lastUserMessage() ?? '';
+          const hit = searchTheoryPassage(userText);
+          if (hit) {
+            const answer = assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              if (voiced) return voiced;
+            }
+          }
+        }
+
         // ── HOW WE TEACH (F11 pedagogy) — voice the app's OWN teaching
         // structure: the WLPP grammar + the curated LessonScript for the
         // opening (minutes, beat count, authored idea cues). No board, no
@@ -4067,6 +4169,25 @@ export async function getCoachChatResponse(
         // WHICH route the question names (matchRouteByTopic, no nav verb needed)
         // and the assembler voices the app's own copy. No board, no master-play;
         // falls through when no curated route is named (never fabricates).
+        // NAME-THIS-OPENING (P-IV.2) — identify the opening from the live move
+        // history via the DB trie (G3 canonical), voiced. Falls through when too
+        // few moves / off-book (the answer says so honestly).
+        if (grounding.nameOpeningQuestion) {
+          try {
+            const sans = (grounding.moveHistory && grounding.moveHistory.length > 0)
+              ? grounding.moveHistory
+              : (grounding.gameSans ?? []);
+            const detected = sans.length > 0 ? detectOpeningTranspositional([...sans]) : null;
+            const answer = detected
+              ? assembleOpeningNameAnswer({ name: detected.name, eco: detected.eco, plies: detected.plyCount })
+              : null;
+            const facts = answer?.facts
+              ?? "I can't name the opening yet — play a few more moves and I'll tell you exactly which line you're in.";
+            const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'name-opening', preferRaw: true });
+            if (voiced) return voiced;
+          } catch { /* fall through */ }
+        }
+
         if (grounding.appHelpQuestion) {
           try {
             const topic = matchRouteByTopic(lastUserMessage() ?? '');
@@ -4077,6 +4198,14 @@ export async function getCoachChatResponse(
                 const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
                 if (voiced) return voiced;
               }
+            }
+            // GENERAL "what can you help with" — no specific page named. Voice a
+            // grounded overview of the app's headline capabilities from the
+            // manifest (David 2026-09-01), never a free-LLM guess about features.
+            const overview = assembleCapabilitiesOverview(CAPABILITY_HEADLINES);
+            if (overview) {
+              const voiced = await voiceFacts(overview.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'app-help', preferRaw: true });
+              if (voiced) { lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return voiced; }
             }
           } catch { /* fall through */ }
         }
@@ -4190,6 +4319,27 @@ export async function getCoachChatResponse(
                 ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
                 : voiced;
             }
+          }
+        }
+
+        // OPPONENT'S LAST MOVE — "why did they play that?" (P-IV.1). Explains
+        // the opponent's move from chess.js geometry + the standing threat it
+        // created. SELF-GATES on the position (assembleOpponentMoveAnswer
+        // returns null unless the opponent genuinely moved last), so a mis-fire
+        // of the intent falls through to the other board lanes. G0: all facts
+        // from chess.js, voiceFacts phrases.
+        if (grounding.opponentMoveQuestion && grounding.currentFen && grounding.moveHistory && grounding.moveHistory.length > 0) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assembleOpponentMoveAnswer({
+            fen: grounding.currentFen,
+            moveHistory: [...grounding.moveHistory],
+            studentColor: sc,
+          });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
+            if (voiced) return voiced;
           }
         }
 
@@ -4572,6 +4722,32 @@ export async function getCoachChatResponse(
           } catch { /* tablebase unreachable — fall through to engine eval */ }
         }
 
+        // ── ENDGAME TECHNIQUE (P-V.1) — a GENERAL "how do I win/hold X" ask with
+        // no live board (or where the tablebase missed): teach the named
+        // technique from the hand-authored lesson catalog (Lucena, Philidor,
+        // opposition, rook-behind-passed-pawn, …). Runs AFTER the tablebase block
+        // (which returns on a live ≤7-piece hit), so it only fires when there is
+        // no board verdict to give. matchEndgameLesson returns null for an ask we
+        // have no lesson for → honest decline (never invent). G0: authored,
+        // FEN-verified content; voiceFacts phrases it.
+        if (grounding.endgameQuestion) {
+          const lesson = matchEndgameLesson(lastUserMessage() ?? grounding.cleanAsk ?? '');
+          if (lesson) {
+            const answer = assembleEndgameTechniqueAnswer({
+              name: lesson.name,
+              rule: lesson.narration.rule,
+              why: lesson.narration.why,
+              history: lesson.narration.history ?? null,
+              tip: lesson.narration.tip ?? null,
+              fen: lesson.positions[0]?.fen ?? null,
+            });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+              if (voiced) return voiced;
+            }
+          }
+        }
+
         // ── POSITIONAL FEATURE (answer-correctness 2026-07-10) — "who controls
         // the centre / how many pieces / is my structure sound / is my king
         // exposed / is my bishop bad?" These need the STATIC feature computed
@@ -4901,6 +5077,17 @@ export async function getCoachChatResponse(
       emitGroundingCoverage(cleaned === convoResponse.trim() ? 'conversational' : 'conversational-stripped', surface, sessionId, { question: originalQuery.slice(0, 100) });
       if (onStream) onStream(cleaned);
       return cleaned;
+    }
+    // SELF-HEAL (P-I.3): a banter turn whose reply was FULLY stripped means the
+    // model tried to talk chess — so this was a chess turn the banter classifier
+    // misrouted. Rather than a dumb stock deflection, serve the computed grounded
+    // default (engine best move / assessment) when the surface threaded board
+    // data. Logged distinctly so the deflection backlog can see the misroute.
+    const healed = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
+    if (healed) {
+      emitGroundingCoverage('self-heal-position', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
+      if (onStream) onStream(healed);
+      return healed;
     }
     emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'conversational-fully-stripped', question: originalQuery.slice(0, 100) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);

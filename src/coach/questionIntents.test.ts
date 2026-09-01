@@ -22,6 +22,11 @@ import {
   isReviewDueQuestion,
   isMistakesQuestion,
   isLastGameMistakeQuestion,
+  isNameOpeningQuestion,
+  isOpponentMoveQuestion,
+  isTheoryQuestion,
+  weaknessLifecycleKind,
+  isWeaknessBriefingQuestion,
   isTacticsProfileQuestion,
   isPhaseQuestion,
   isRepertoireGapQuestion,
@@ -464,6 +469,91 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
       expect(isStatsQuestion('what did I do wrong in my last 3 games')).toBe(false);
       expect(isRecordsQuestion('what did I do wrong in my last 3 games')).toBe(false);
     });
+  });
+
+  describe('isNameOpeningQuestion (P-IV.2, 2026-09-01)', () => {
+    it.each([
+      'what opening is this',
+      'what opening am I playing',
+      'which opening is this',
+      'what is this opening called',
+      'name this opening',
+      'what opening did we just play',
+    ])('matches "%s"', (q) => expect(isNameOpeningQuestion(q)).toBe(true));
+    it.each([
+      'what opening should I play',          // recommendation
+      'how do I play the Sicilian',          // profile
+      'teach me an opening',                 // action
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isNameOpeningQuestion(q)).toBe(false));
+  });
+
+  describe('isOpponentMoveQuestion (P-IV.1, 2026-09-01)', () => {
+    it.each([
+      'why did they play that',
+      'why did the opponent play that',
+      'why did my opponent move there',
+      'what did they just do',
+      'what is the opponent up to',
+      'why that move',
+      "what's the point of that move",
+      'what did the computer play',
+    ])('matches "%s"', (q) => expect(isOpponentMoveQuestion(q)).toBe(true));
+    it.each([
+      'why did I play that',                 // self-review
+      'is Nf3 a good move',                  // named move → candidate lane
+      'why is Nf3 best',                     // engine reasoning
+      'what should I play',                  // best move
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isOpponentMoveQuestion(q)).toBe(false));
+  });
+
+  describe('weakness lifecycle + briefing (Part III, 2026-09-01)', () => {
+    it.each([
+      ['what have I fixed', 'fixed'],
+      ['what did I used to struggle with', 'fixed'],
+      ['what have I gotten better at', 'fixed'],
+      ['what do I keep getting wrong', 'persistent'],
+      ['what are my recurring mistakes', 'persistent'],
+      ['what bad habits do I keep', 'persistent'],
+      ["what's my biggest weakness", 'pressing'],
+      ['what should I work on first', 'pressing'],
+      ["what's hurting me the most", 'pressing'],
+      ['where am I weakest', 'pressing'],
+    ])('%s → %s', (q, kind) => expect(weaknessLifecycleKind(q)).toBe(kind));
+
+    it.each(['hi coach', "what's my rating", 'teach me the Sicilian'])(
+      'no lifecycle kind: %s', (q) => expect(weaknessLifecycleKind(q)).toBeNull());
+
+    it.each([
+      'break down my weaknesses',
+      'what are my weaknesses',
+      'show me my weaknesses',
+      'where do I lose points',
+    ])('briefing matches "%s"', (q) => expect(isWeaknessBriefingQuestion(q)).toBe(true));
+
+    it('briefing yields to the pressing lane on "work on first"', () => {
+      expect(isWeaknessBriefingQuestion('what should I work on first')).toBe(false);
+    });
+  });
+
+  describe('isTheoryQuestion (P-II.1, 2026-09-01)', () => {
+    it.each([
+      'how do I play against an isolated queen pawn',
+      'how do I attack a castled king',
+      'when should I trade queens',
+      "what's the plan with the bishop pair",
+      'how to exploit a weak square',
+      'how do I convert a space advantage',
+      "what's the best way to attack the king",
+    ])('matches "%s"', (q) => expect(isTheoryQuestion(q)).toBe(true));
+    it.each([
+      'how do I improve',                    // progress/training
+      'how do I use the tactics tab',        // app-help
+      'what should I play here',             // live board
+      'how do I play the Sicilian',          // named opening → profile
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isTheoryQuestion(q)).toBe(false));
   });
 
   describe('isErrorsBySituationQuestion (David 2026-07-13)', () => {
