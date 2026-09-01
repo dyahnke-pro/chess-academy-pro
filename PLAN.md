@@ -113,9 +113,16 @@ Recovered from the "Not what i see" session (full detail:
       REMAINING nuance (not blocking): plain-English move-rating rates the LAST
       move only — naming an EARLIER move isn't located in history yet (a deeper
       P5 build if David wants it).
-- [ ] **R1 — game-analysis stall.** Per-game timeout in `gameAnalysisService`
-      (mobile Stockfish stall; loop won't advance past e.g. 1/629). Data source
-      for the whole portfolio — unblocks R6's fuel.
+- [x] **R1 — game-analysis stall (David 2026-09-01, the second fix).** Root
+      cause: when iOS kills a pool worker (memory pressure) it stops answering,
+      so EVERY position then waits the full ~9s reject — a 40-move game becomes
+      ~6 min of dead waits and the next game reuses the same dead worker ("stuck
+      at 1/629"). Fix: `analyzeGameOnWorker` bails with `WorkerWedgedError` after
+      3 CONSECUTIVE position timeouts (a live engine never does); the batch loop
+      destroys + respawns that worker, leaves the game for the next sweep, and
+      advances. Tests: `gameAnalysisService.wedge.test.ts` (4). ON-DEVICE caveat:
+      real iOS worker-death recycling is device-only — confirm on David's phone
+      (headless/jsdom can't reproduce iOS worker death).
 - [ ] **R2 — "is Bxh7 sound?" engine leg.** Board-question router's engine
       aspect is still `computer: null`; wire the engine move-consequence answer.
 - [ ] **R3 — mistake-puzzle best moves.** Check `bestMoveEqualsPlayed`/PV

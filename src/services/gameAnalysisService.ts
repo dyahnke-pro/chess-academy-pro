@@ -406,6 +406,21 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
  *  position eats the whole wait. */
 const REVIEW_POSITION_BUDGET_MS = 5_000;
 
+/** Consecutive position timeouts on ONE worker that mean it's wedged/dead (a
+ *  live engine never times out this many in a row) — the batch then recycles it
+ *  instead of grinding every remaining position through the reject. */
+const WORKER_WEDGE_LIMIT = 3;
+
+/** Thrown by analyzeGameOnWorker when its worker is wedged; the batch loop
+ *  catches it, destroys + respawns the worker, and moves on (the game is left
+ *  un-analyzed for the next sweep). */
+export class WorkerWedgedError extends Error {
+  constructor(gameId: string) {
+    super(`Stockfish worker wedged during analysis of game ${gameId}`);
+    this.name = 'WorkerWedgedError';
+  }
+}
+
 /**
  * Evaluate every position of one game ACROSS a pool of workers.
  *
@@ -479,7 +494,7 @@ async function evaluateFensPooled(
  * Analyze a single game with a dedicated worker.
  * Evaluates every position sequentially on this worker, then classifies each move.
  */
-async function analyzeGameOnWorker(
+export async function analyzeGameOnWorker(
   game: GameRecord,
   worker: DedicatedWorker,
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
@@ -503,16 +518,32 @@ async function analyzeGameOnWorker(
   // re-analysable rather than being frozen shallow behind a depth-16 claim.
   const evals: (number | null)[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
+  // 🔒 WEDGED-WORKER GUARD (R1, David 2026-09-01 — "analysis stalls at 1/629,
+  // Stop works but the loop doesn't advance"). A live engine ALWAYS resolves a
+  // position inside its budget; a position REJECT means it blew the budget+4s.
+  // When iOS kills a worker (memory pressure) it stops posting messages, so
+  // EVERY remaining position then waits the full ~9s reject — a 40-move game
+  // becomes ~6 min of dead waits and the batch looks frozen. Three straight
+  // timeouts is a dead worker, not a hard position: bail so the caller RECYCLES
+  // the worker instead of grinding the whole game (and every game after it, on
+  // the same dead worker) through the timeout.
+  let consecutiveTimeouts = 0;
   for (const fen of fens) {
     if (_abortAnalysis) return null;
     try {
       const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, REVIEW_POSITION_BUDGET_MS);
       evals.push(result.evaluation);
+      consecutiveTimeouts = 0;
       if (Number.isFinite(result.depth) && result.depth > 0) {
         achievedDepth = Math.min(achievedDepth, result.depth);
       }
-    } catch {
+    } catch (e) {
       evals.push(null);
+      if (e instanceof Error && /timed out/i.test(e.message)) {
+        if (++consecutiveTimeouts >= WORKER_WEDGE_LIMIT) throw new WorkerWedgedError(game.id);
+      } else {
+        consecutiveTimeouts = 0;
+      }
     }
   }
 
@@ -1001,7 +1032,8 @@ export async function analyzeAllGames(
       // Parallel: each worker grabs the next game from the queue
       let nextGameIdx = 0;
 
-      const processNextGame = async (worker: DedicatedWorker): Promise<void> => {
+      const processNextGame = async (initialWorker: DedicatedWorker): Promise<void> => {
+        let worker = initialWorker;
         while (nextGameIdx < games.length && !_abortAnalysis) {
           await waitWhilePaused(); // a review's single-game analysis owns the CPU
           if (_abortAnalysis) break;
@@ -1015,7 +1047,30 @@ export async function analyzeAllGames(
             phase: 'analyzing',
           });
 
-          const worked = await analyzeGameOnWorker(game, worker);
+          let worked: { annotations: MoveAnnotation[]; achievedDepth: number } | null = null;
+          try {
+            worked = await analyzeGameOnWorker(game, worker);
+          } catch (e) {
+            if (e instanceof WorkerWedgedError) {
+              // Dead worker → respawn a fresh one so it stops poisoning every
+              // subsequent game with full-timeout waits. Leave THIS game
+              // un-analyzed (not stamped fullyAnalyzed) so the next sweep retries
+              // it; advance the counter so the batch keeps moving (the "stuck at
+              // 1/629" fix). If respawn fails, drop this worker from the pool —
+              // the other workers carry the batch.
+              console.warn(`[GameAnalysis] worker wedged on ${game.id}; recycling`);
+              try { worker.destroy(); } catch { /* already dead */ }
+              try {
+                worker = await spawnDedicatedWorker(nextGameIdx);
+              } catch {
+                completed++;
+                break;
+              }
+              completed++;
+              continue;
+            }
+            throw e;
+          }
           if (worked && worked.annotations.length > 0) {
             // Stamp what the search REACHED, not what it was asked for — the
             // same correction the review path got. A game analysed shallow on
@@ -1031,6 +1086,9 @@ export async function analyzeAllGames(
           }
           completed++;
         }
+        // A recycled worker isn't in the tracked `workers[]`, so the outer
+        // cleanup won't reach it — destroy it here when this lane is done.
+        if (worker !== initialWorker) { try { worker.destroy(); } catch { /* already dead */ } }
       };
 
       await Promise.all(workers.map((w) => processNextGame(w)));
