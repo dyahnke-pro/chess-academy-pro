@@ -149,7 +149,7 @@ try {
     console.log(`\nQ: ${q}\n  A: ${reply || '(no reply)'}\n  ${pass ? '✔ real assessment' : deflected ? '❌ DEFLECTED (import-games)' : '⚠ non-deflection but no weakness signal'}`);
   }
   // Last-game ERROR: must name the seeded critical move (Nd5 / move 22), not deflect.
-  for (const q of ['What did I do wrong in my last game?', 'What was my critical error?']) {
+  for (const q of ['What did I do wrong in my last game?', 'What was my critical error in my last game?']) {
     const reply = await ask(q);
     const deflected = DEFLECTION.test(reply);
     const namesError = /\bNd5\b|move\s+22|critical\s+error|blunder/i.test(reply);

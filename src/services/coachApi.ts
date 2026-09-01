@@ -4415,7 +4415,14 @@ export async function getCoachChatResponse(
         // answer every user-error question, not deflect. When that game isn't
         // analyzed yet the assembler says so and points at analysis (the R1
         // dependency). G0 — getLastGameErrors computes; voiceFacts phrases.
-        if (grounding.lastGameMistakeQuestion && !grounding.reviewWorstMoment && !(grounding.gameSans && grounding.gameSans.length > 0)) {
+        // An EXPLICIT "…my last game" ask is about the HISTORICAL game, so it
+        // fires even on a board surface (teach/play always has gameSans). A BARE
+        // "what did I do wrong / what was my critical error" defers to the board
+        // when a line is loaded (it means the current position there) and only
+        // reaches this lane in plain chat with no line.
+        const explicitLastGame = /\b(?:last|latest|recent|previous)\s+game\b/i.test(lastUserMessage() ?? '');
+        if (grounding.lastGameMistakeQuestion && !grounding.reviewWorstMoment
+            && (explicitLastGame || !(grounding.gameSans && grounding.gameSans.length > 0))) {
           try {
             const errs = await getLastGameErrors();
             if (errs) {
