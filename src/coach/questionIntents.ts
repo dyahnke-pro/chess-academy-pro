@@ -1148,6 +1148,10 @@ const STATS_QUESTION_RE = anyOf([
   String.raw`^\s*(?:my\s+)?rating\s*\??\s*$`,   // bare terse "rating?" / "my rating"
 ]);
 export function isStatsQuestion(ask: string | undefined): boolean {
+  // A last-game ERROR ask ("what did I do wrong in my last 3 games") mentions a
+  // game count but is about mistakes, not the win/loss record — the last-game
+  // lane owns it (David 2026-09-01 parity audit: it was answered as a record).
+  if (ask && isLastGameMistakeQuestion(ask)) return false;
   return !!ask && STATS_QUESTION_RE.test(ask);
 }
 
@@ -1797,6 +1801,8 @@ const RECORDS_QUESTION_RE = anyOf([
   String.raw`\bwho\s+(?:have\s+i|do\s+i)\s+(?:beaten|lost\s+to)\s+(?:the\s+)?most\b`,
 ]);
 export function isRecordsQuestion(ask: string | undefined): boolean {
+  // A last-game ERROR ask is about mistakes, not the win/loss record.
+  if (ask && isLastGameMistakeQuestion(ask)) return false;
   return !!ask && RECORDS_QUESTION_RE.test(ask);
 }
 

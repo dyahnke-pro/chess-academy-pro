@@ -458,6 +458,12 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
     it('is excluded from the aggregate mistakes lane', () => {
       expect(isMistakesQuestion('what was my critical error in my last game')).toBe(false);
     });
+    // Parity precedence (David 2026-09-01): "last 3 games" + "wrong" is an ERROR
+    // ask, not a win/loss record — it must not be swallowed by stats/records.
+    it('is excluded from the stats and records lanes', () => {
+      expect(isStatsQuestion('what did I do wrong in my last 3 games')).toBe(false);
+      expect(isRecordsQuestion('what did I do wrong in my last 3 games')).toBe(false);
+    });
   });
 
   describe('isErrorsBySituationQuestion (David 2026-07-13)', () => {

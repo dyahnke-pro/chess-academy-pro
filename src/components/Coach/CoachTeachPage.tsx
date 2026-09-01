@@ -266,7 +266,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3752,6 +3752,27 @@ export function CoachTeachPage(): JSX.Element {
       // here sends the ask down to the spine, where the counter-repertoire
       // lane answers from curated data.
       if (requestedName && isCounterRepertoireQuestion(requestedName)) {
+        requestedName = null;
+      }
+      // 🔒 A COACH QUESTION IS NEVER AN OPENING NAME — SURFACE PARITY (David
+      // 2026-09-01 parity audit). "was my knight to d5 good", "is the bishop sac
+      // on h7 sound", "what did I do wrong in my last 3 games", "assess me" fit
+      // the bare-name tier (short, no "?") and rode the fuzzy matcher into a
+      // bogus "let's walk through <opening>" (it found "Alapin" from "d5",
+      // "Bishop's Opening" from "bishop"). Clear the capture so these reach the
+      // spine (coachService.ask), where the move-rating / candidate-move /
+      // last-game-error / weakness lanes answer them — the coach answers the
+      // same questions here as on every other surface.
+      if (requestedName && (
+        isMoveRatingQuestion(requestedName) ||
+        isCandidateMoveQuestion(requestedName) ||
+        isLastGameMistakeQuestion(requestedName) ||
+        isProgressQuestion(requestedName) ||
+        isStrengthsQuestion(requestedName) ||
+        isMistakesQuestion(requestedName) ||
+        isBestMoveQuestion(requestedName) ||
+        isTacticsQuestion(requestedName)
+      )) {
         requestedName = null;
       }
       // "HOW DO YOU TEACH the Caro-Kann?" is a question about METHOD, not a
