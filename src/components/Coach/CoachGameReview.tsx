@@ -389,6 +389,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // a training focus on a PHASE, lead the review with how that phase went in THIS
   // game (grounded in the phase breakdown numbers; G0). Null when there's no
   // phase focus or the game never reached that phase. Dismissible.
+  // Hydrate the coach memory (trainingFocus is persisted to db.meta) — the
+  // review can be opened cold on its own URL, where nothing else had triggered
+  // the hydrate, so the phase-scoped focus would otherwise read null (Batch C).
+  const memoryHydrated = useCoachMemoryStore((s) => s.hydrated);
+  const hydrateMemory = useCoachMemoryStore((s) => s.hydrate);
+  useEffect(() => { if (!memoryHydrated) void hydrateMemory(); }, [memoryHydrated, hydrateMemory]);
   const trainingFocus = useCoachMemoryStore((s) => s.trainingFocus);
   const phaseFocusSummary = useMemo(
     () => (isPhaseFocus(trainingFocus?.area) ? phaseScopedReviewSummary(phaseBreakdown, trainingFocus.area) : null),
