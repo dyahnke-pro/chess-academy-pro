@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk, recordVsTarget, isRecordVsQuestion, isMateQuestion } from './questionIntents';
+import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk, recordVsTarget, isRecordVsQuestion, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from './questionIntents';
 import { matchEndgameLesson } from '../services/endgameLessonsService';
 import { detectConceptsInText } from '../services/chessConceptService';
 
@@ -104,6 +104,41 @@ describe('battery routing regressions', () => {
     });
     it('does not fire on ordinary board asks', () => {
       for (const q of ['what is the best move?', 'is this winning?', 'who is better here']) expect(isMateQuestion(q), q).toBe(false);
+    });
+    it('also recognizes fastest/quickest-win phrasings', () => {
+      for (const q of ['what is the fastest win?', 'quickest way to mate?', 'how fast can I mate?']) expect(isMateQuestion(q), q).toBe(true);
+    });
+  });
+
+  describe('board-verdict intents route to the COMPUTER, not the generic default', () => {
+    // Hand-driven prod audit (David 2026-09-02): on a KQ-vs-K board EVERY board
+    // question ("is this a draw?", "whose turn?", "mate in how many?", "what
+    // colour am I?") returned the SAME "best move Qd6, White winning" readout.
+    // Each now has its own detector so computeLiveBoardVerdict answers it.
+    it('isWhoseTurnQuestion fires on side-to-move asks only', () => {
+      for (const q of ['whose turn is it?', "who's to move?", 'is it my move?', 'am I to move?', 'whose move']) {
+        expect(isWhoseTurnQuestion(q), q).toBe(true);
+      }
+      for (const q of ['what is the best move?', 'is this winning?', 'how am I improving?']) {
+        expect(isWhoseTurnQuestion(q), q).toBe(false);
+      }
+    });
+    it('isLiveColorQuestion fires on live-identity asks (not proficiency)', () => {
+      for (const q of ['what colour am I playing?', 'what color am I?', 'which side am I on?', 'am I white or black?', 'do I have white?']) {
+        expect(isLiveColorQuestion(q), q).toBe(true);
+      }
+      // proficiency phrasing is isColorQuestion's job, not the live-identity one
+      for (const q of ['am I better as white or black?', 'is this winning?']) {
+        expect(isLiveColorQuestion(q), q).toBe(false);
+      }
+    });
+    it('isDrawQuestion fires on draw / stalemate asks', () => {
+      for (const q of ['is this a draw?', 'is it drawn?', 'is there a stalemate risk?', 'can I still draw?', 'is this heading for a draw?']) {
+        expect(isDrawQuestion(q), q).toBe(true);
+      }
+      for (const q of ['what is the best move?', 'is this winning?', 'whose turn is it?']) {
+        expect(isDrawQuestion(q), q).toBe(false);
+      }
     });
   });
 

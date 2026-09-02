@@ -100,7 +100,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from '../coach/questionIntents';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
@@ -2069,6 +2069,88 @@ async function serveGroundedPositionDefault(
     if (voiced) return voiced;
   }
   return null;
+}
+
+/**
+ * computeLiveBoardVerdict — the INTENT-SPECIFIC computed answers that the
+ * generic position default (best move + eval) gets FLATLY WRONG. On a KQ-vs-K
+ * board the default readout answered "is this a draw?" / "whose turn is it?" /
+ * "how many moves to mate?" / "what colour am I?" all with the SAME
+ * "the best move is Qd6, White is winning" line (hand-driven prod audit,
+ * David 2026-09-02). Each of these has an EXACT computed answer:
+ *   - whose turn        → the FEN's side-to-move field
+ *   - live colour       → studentColor (or the side to move)
+ *   - mate distance     → syzygy tablebase DTM (≤7 pieces), else engine mate/eval
+ *   - draw / stalemate  → tablebase verdict (≤7), else engine eval
+ * All spoken via preferRaw — COMPUTED, never the LLM (G0). Returns null when the
+ * question isn't one of these OR the data can't decide, so the caller falls
+ * through to the generic position default unchanged.
+ */
+async function computeLiveBoardVerdict(
+  question: string,
+  grounding: MasterGroundingOptions,
+  config: ProviderConfig | null,
+): Promise<string | null> {
+  const fen = grounding.currentFen;
+  if (!fen) return null;
+  const stm: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const sc: 'white' | 'black' = grounding.studentColor ?? stm;
+  const voice = (facts: string, intent: string): Promise<string | null> =>
+    voiceFacts(facts, { studentMessage: question, providerConfig: config, intent, preferRaw: true }).then((v) => v ?? facts);
+
+  if (isWhoseTurnQuestion(question)) {
+    const yours = sc === stm;
+    return voice(`It's ${stm === 'white' ? 'White' : 'Black'} to move${yours ? " — your turn." : " — their turn."}`, 'whose-turn');
+  }
+  if (isLiveColorQuestion(question)) {
+    return voice(`You're playing ${sc === 'white' ? 'White' : 'Black'}.`, 'live-color');
+  }
+
+  const mateQ = isMateQuestion(question);
+  const drawQ = isDrawQuestion(question);
+  if (!mateQ && !drawQ) return null;
+
+  // Exact ≤7-piece verdict first (syzygy). Off-tablebase it returns null.
+  try {
+    const tb = await lookupTablebase(fen);
+    if (tb) {
+      const studentWinning =
+        (tb.whiteRelativeResult === 'white-wins' && sc === 'white') ||
+        (tb.whiteRelativeResult === 'black-wins' && sc === 'black');
+      // Stalemate-risk on a WON ending — the one way to throw it.
+      if (drawQ && /stalemate/i.test(question) && studentWinning) {
+        return await voice(
+          "It's a won endgame, so the only way to throw it is stalemate — always leave the enemy king a legal square unless you're giving check, and march your own king up to help force the mate.",
+          'stalemate-caution',
+        );
+      }
+      const ans = assembleEndgameAnswer({ result: tb, studentColor: sc });
+      if (ans) return await voice(ans.facts, mateQ ? 'endgame' : 'draw');
+    }
+  } catch { /* tablebase unreachable — fall to the threaded engine data */ }
+
+  // Off-tablebase: decide from the threaded engine eval / mate (white-POV →
+  // student-POV). No engine data → null → generic position default speaks.
+  const evalCp = typeof grounding.engineEvalCp === 'number' ? grounding.engineEvalCp : null;
+  const mateIn = typeof grounding.engineMateIn === 'number' ? grounding.engineMateIn : null;
+  const scEvalCp = evalCp === null ? null : (sc === 'black' ? -evalCp : evalCp);
+  const scMateIn = mateIn === null ? null : (sc === 'black' ? -mateIn : mateIn);
+  const pawns = scEvalCp === null ? '' : (Math.abs(scEvalCp) / 100).toFixed(1);
+
+  if (mateQ) {
+    if (scMateIn !== null && scMateIn > 0) return voice(`Yes — there's a forced mate in ${scMateIn}.`, 'mate');
+    if (scMateIn !== null && scMateIn < 0) return voice(`No — you're the one facing mate (in ${Math.abs(scMateIn)}); focus on defending.`, 'mate');
+    if (scEvalCp !== null && scEvalCp >= 300) return voice(`No forced mate yet, but you're clearly winning (about ${pawns} points) — convert the material first and the mate will come.`, 'mate');
+    if (scEvalCp !== null && scEvalCp <= -300) return voice(`No — you're not mating anyone here; you're worse (about ${pawns} points down).`, 'mate');
+    return voice("No forced mate here — it isn't that kind of position yet.", 'mate');
+  }
+
+  // drawQ
+  if (scMateIn !== null) return voice(scMateIn > 0 ? 'No — you have a forced mate, not a draw.' : 'No — this is lost, not drawn; make it as hard as you can.', 'draw');
+  if (scEvalCp !== null && scEvalCp >= 250) return voice(`No — you're clearly winning here (about ${pawns} points), not drawing.`, 'draw');
+  if (scEvalCp !== null && scEvalCp <= -250) return voice(`No — you're clearly worse (about ${pawns} points down); you'd need your opponent to slip to draw.`, 'draw');
+  if (scEvalCp !== null && Math.abs(scEvalCp) <= 60) return voice('Roughly balanced — with accurate play from both sides this could well be a draw.', 'draw');
+  return null; // unclear middlegame — let the position default speak.
 }
 
 /**
@@ -5312,7 +5394,25 @@ export async function getCoachChatResponse(
       grounding.convertingQuestion === true ||
       grounding.colorQuestion === true
     );
-    if (hasChessContentSignal(originalQuery) || deterministicBoardQuestion) {
+    if (
+      hasChessContentSignal(originalQuery) ||
+      deterministicBoardQuestion ||
+      isWhoseTurnQuestion(originalQuery) ||
+      isLiveColorQuestion(originalQuery) ||
+      isDrawQuestion(originalQuery) ||
+      isMateQuestion(originalQuery)
+    ) {
+      // INTENT-SPECIFIC BOARD VERDICT — the generic position default (best move
+      // + eval) answers "is this a draw? / whose turn? / mate in how many? /
+      // what colour am I?" all with the SAME best-move readout (hand-driven prod
+      // audit, David 2026-09-02). Each has an EXACT computed answer; compute it
+      // FIRST, then fall through to the position default for the rest. G0.
+      const verdict = await computeLiveBoardVerdict(originalQuery, grounding, config);
+      if (verdict) {
+        emitGroundingCoverage('board-verdict', surface, sessionId, { question: originalQuery.slice(0, 100) });
+        if (onStream) onStream(verdict);
+        return verdict;
+      }
       // NOTATION HELP — a beginner asking "what does Bxe7 mean?" (David
       // 2026-08-27, Rivertoe85: "what does Bxe7 mean", "I don't understand your
       // language"). Decode the move in plain English before the position

@@ -581,7 +581,34 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
  *  to the tactic scan, so a middlegame mate-combination ask is unaffected. */
 export function isMateQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
-  return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king)\b/i.test(ask);
+  return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king|(?:fastest|quickest)\s+(?:way\s+to\s+)?(?:mate|checkmate|win)|how\s+(?:fast|quickly|soon)\s+can\s+i\s+(?:mate|win))\b/i.test(ask);
+}
+
+/** LIVE side-to-move — "whose turn is it?", "who's to move?", "is it my move?".
+ *  Answered from the FEN's side-to-move field alone (G0, computed). Distinct
+ *  from any over-time / proficiency question — this is about THIS board. */
+const WHOSE_TURN_RE =
+  /\b(?:whose\s+(?:turn|move|go)\s+is\s+it|who(?:'?s| is)\s+(?:turn\s+is\s+it|to\s+(?:move|play|go))|is\s+it\s+my\s+(?:turn|move|go)|am\s+i\s+to\s+(?:move|play)|whose\s+(?:turn|move|go)\b|my\s+(?:move|turn)\s+or\s+(?:theirs|yours|his|hers)|which\s+side\s+(?:is\s+)?to\s+move)\b/i;
+export function isWhoseTurnQuestion(ask: string | undefined): boolean {
+  return !!ask && WHOSE_TURN_RE.test(ask);
+}
+
+/** LIVE colour identity — "what colour am I playing?", "which side am I on?",
+ *  "am I white or black?" (on a live board). Answered from studentColor / the
+ *  FEN. Distinct from isColorQuestion (proficiency: "am I BETTER as white"). */
+const LIVE_COLOR_RE =
+  /\b(?:what\s+colou?r\s+(?:am\s+i|do\s+i)(?:\s+playing|\s+have)?|which\s+colou?r\s+am\s+i(?:\s+playing)?|which\s+side\s+am\s+i\s+(?:on|playing)|am\s+i\s+(?:playing\s+)?(?:white|black)(?:\s+or\s+(?:white|black))?|do\s+i\s+have\s+(?:the\s+)?(?:white|black)|which\s+pieces\s+(?:am\s+i\s+playing|do\s+i\s+have))\b/i;
+export function isLiveColorQuestion(ask: string | undefined): boolean {
+  return !!ask && LIVE_COLOR_RE.test(ask);
+}
+
+/** DRAW / stalemate verdict — "is this a draw?", "is it drawn?", "stalemate
+ *  risk?", "can I still draw?". Answered from the tablebase (≤7 pieces) or the
+ *  engine eval, never the LLM (G0). */
+const DRAW_QUESTION_RE =
+  /\b(?:is\s+(?:this|it|that|the\s+position)\s+(?:a\s+)?(?:draw|drawn|dead\s+draw|theoretical\s+draw)|is\s+(?:this|it)\s+drawn|can\s+(?:i|we)\s+(?:still\s+)?(?:draw|hold\s+(?:a|the)\s+draw)|(?:heading|headed)\s+(?:for|to|towards?)\s+a\s+draw|will\s+(?:this|it)\s+be\s+a\s+draw|stalemate|is\s+there\s+(?:a\s+)?draw|drawish)\b/i;
+export function isDrawQuestion(ask: string | undefined): boolean {
+  return !!ask && DRAW_QUESTION_RE.test(ask);
 }
 
 /** A POSITION-ASSESSMENT question — "who's winning?", "how do I stand here?",
