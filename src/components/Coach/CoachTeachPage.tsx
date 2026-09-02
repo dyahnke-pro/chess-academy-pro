@@ -266,7 +266,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3714,6 +3714,13 @@ export function CoachTeachPage(): JSX.Element {
       } else if (
         workingInput.length <= 60 &&
         !workingInput.includes('?') &&
+        // The length cap alone let real QUESTIONS through as opening names: a
+        // user's "Did I have any good moves" (25 chars, no question mark) was
+        // routed into the pipeline and burned a fresh ~60s LLM generation
+        // (opening-cache-miss, prod 2026-09-02). This is the rest of the
+        // discriminator the comment below already claims — a verb / trailing
+        // punctuation — which was described but never implemented.
+        !looksLikeQuestionNotAnOpeningName(workingInput) &&
         // A walkthrough control word ("start", "go", "stop", "new
         // lesson", …) is NEVER an opening name — keep it out of the
         // fuzzy matcher so it can't surface a bogus "did you mean

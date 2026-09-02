@@ -2575,3 +2575,32 @@ export function buildQuestionGrounding(
     positionalTopic: positionalTopic(a) ?? undefined,
   };
 }
+
+/** IS THIS A QUESTION RATHER THAN A BARE OPENING NAME?
+ *
+ *  CoachTeachPage routes short bare input ("The Vienna", "Pirc defense") into
+ *  the full opening pipeline — registry, then cache, then a ~60s LLM
+ *  generation. Its guard was length <= 60 and no "?", while its own comment
+ *  claimed sentences were excluded because they "usually have a verb, > 60
+ *  chars, or end with ?/." — two of those three were never implemented.
+ *
+ *  So a real user's "Did I have any good moves" (25 chars, no question mark)
+ *  was taken as an OPENING NAME and burned a fresh generation on it
+ *  (opening-cache-miss, prod, 2026-09-02).
+ *
+ *  An opening name is a noun phrase. No opening in the Lichess DB begins with
+ *  an interrogative or an auxiliary verb, so a leading one is an unambiguous
+ *  "this is a question" signal — and a trailing "." or "!" is the rest of the
+ *  punctuation clause the guard never applied. Deliberately narrow: it rejects
+ *  sentence SHAPES, never content, so "Danish Gambit" and "King's Indian
+ *  Defense: Mar del Plata" are untouched. */
+const QUESTION_OPENER_RE =
+  /^\s*(?:did|do|does|is|are|was|were|am|can|could|should|would|will|has|have|had|why|what|what'?s|how|who|when|where|which|tell|explain|show|give|help|find)\b/i;
+
+export function looksLikeQuestionNotAnOpeningName(input: string | undefined): boolean {
+  if (!input) return false;
+  const t = input.trim();
+  if (!t) return false;
+  if (/[?.!]$/.test(t)) return true;
+  return QUESTION_OPENER_RE.test(t);
+}
