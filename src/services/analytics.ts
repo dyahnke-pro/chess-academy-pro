@@ -255,6 +255,22 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // answer can run long but never near this.
   if (entry.askText) props.ask_text = entry.askText.slice(0, 4000);
   if (entry.answerText) props.answer_text = entry.answerText.slice(0, 4000);
+  // GATE-TRIP DIAGNOSTICS (2026-09-02 audit). A grounding-gate trip writes WHAT
+  // was ungrounded into `details` — the invented squares/concepts — and that is
+  // the whole diagnostic value of the event. `details` is deliberately dropped
+  // here to keep payloads small, so the kid-lane trips arrived in PostHog as
+  // "introduced 1 chess term(s)" with `details: null`: we could see the model
+  // invented something in kid mode, and not what. Un-sizeable, and kid
+  // hallucination is a P0 by contract.
+  //
+  // This is the same lesson the exception path already learned (see the
+  // `sanitizer-leak` note in captureException below): the summary alone made a
+  // real defect unreproducible once the audit-stream buffer rotated. Scoped to
+  // the gate kinds so the payload-size rationale still holds everywhere else,
+  // and bounded tightly — the payload is a short JSON array of terms.
+  if (entry.details && (entry.kind === 'claim-validator-trip' || entry.kind === 'sanitizer-leak')) {
+    props.details = entry.details.slice(0, 500);
+  }
   // Feedback reply-to + rating (David 2026-08-27). The user optionally typed an
   // email asking for a reply; forwarding it durably (only on feedback events,
   // only when provided) is the difference between "we can respond" and losing

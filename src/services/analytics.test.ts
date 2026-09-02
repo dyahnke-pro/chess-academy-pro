@@ -182,6 +182,31 @@ describe('buildEventProps — lean, safe payloads', () => {
     expect(props).not.toHaveProperty('details');
   });
 
+  // 2026-09-02 audit: the kid-lane grounding trips reached PostHog as
+  // "introduced 1 chess term(s)" with details:null, so we could see that the
+  // model invented something in KID mode and not what it invented. The terms
+  // are the entire diagnostic value of the event, and kid hallucination is a
+  // P0 by contract — un-sizeable is not good enough.
+  it('forwards `details` for gate-trip kinds — the invented terms ARE the finding', () => {
+    const terms = JSON.stringify({ task: 'kid_puzzle_gen', introduced: ['f7', 'fork'] });
+    const props = buildEventProps(entry({ kind: 'claim-validator-trip', details: terms }));
+    expect(props.details).toBe(terms);
+    const leak = buildEventProps(entry({ kind: 'sanitizer-leak', details: 'Nf3 survived' }));
+    expect(leak.details).toBe('Nf3 survived');
+  });
+
+  it('still drops `details` for every OTHER kind — the payload-size rule holds', () => {
+    for (const kind of ['lesson-completed', 'route-changed', 'voice-speak-invoked'] as const) {
+      const props = buildEventProps(entry({ kind, details: 'x'.repeat(5000) }));
+      expect(props, `${kind} must not carry details`).not.toHaveProperty('details');
+    }
+  });
+
+  it('bounds gate-trip details at 500 chars', () => {
+    const props = buildEventProps(entry({ kind: 'claim-validator-trip', details: 'd'.repeat(5000) }));
+    expect((props.details as string).length).toBe(500);
+  });
+
   it('truncates oversized summary/context to 200 chars', () => {
     const props = buildEventProps(entry({ summary: 's'.repeat(400), context: 'c'.repeat(400) }));
     expect((props.summary as string).length).toBe(200);
