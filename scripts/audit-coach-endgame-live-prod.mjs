@@ -18,18 +18,49 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID || `eglive-${Date.now().toString(36)}`;
 
-// ≤7-piece positions with unambiguous tablebase verdicts.
-const CASES = [
-  { name: 'KQ vs K (white winning)', fen: '4k3/8/8/8/8/8/4Q3/4K3 w - - 0 1',
-    qs: ['how do I win this?', 'is this winning?'],
-    want: /win|winning|mate|queen|checkmate|force the king|edge of the board/, notWant: /draw|equal|dead\s*level|small edge|about 0\.5|can'?t win|insufficient/ },
-  { name: 'KR vs K (white winning)', fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1',
-    qs: ['who is better here?', 'how do I win this?'],
-    want: /win|winning|mate|rook|checkmate|box.*king|drive the king/, notWant: /draw|equal|dead\s*level|small edge|about 0\.5|insufficient/ },
-  { name: 'KB vs K (dead draw, insufficient)', fen: '4k3/8/8/8/8/8/5B2/4K3 w - - 0 1',
-    qs: ['is this a draw?', 'can I win this?'],
-    want: /draw|insufficient|can'?t win|cannot win|not enough|no mate|impossible to mate/, notWant: /you'?re winning|white is winning|forced mate|you win/ },
+// ≤7-piece positions with unambiguous tablebase verdicts. WIN cases must read
+// as winning (never draw/equal/generic-eval); DRAW cases must read as a draw
+// (never winning). The pool is large; each RUN takes 20 DISTINCT questions,
+// rotated by AUDIT_BATCH so a restart-after-fix draws 20 brand-new ones
+// (David 2026-09-02: "all different questions ... start over with 20 new").
+const BATCH = Number(process.env.AUDIT_BATCH || 0);
+const WIN_RE = /win|winning|won|mate|checkmate|queen|rook|promot|force|convert|technical|you'?re winning|white is winning/;
+const WIN_NOT = /\bdraw|equal|dead\s*level|small edge|about 0\.5|can'?t win|cannot win|insufficient|not enough|hold the draw/;
+const DRAW_RE = /draw|insufficient|can'?t win|cannot win|not enough|no mate|impossible to mate|hold|drawn|dead\s*level/;
+const DRAW_NOT = /you'?re winning|white is winning|forced mate|you win|it'?s a win|winning for you/;
+
+// 24 distinct WIN phrasings, 24 distinct DRAW phrasings (48 pool → each run
+// takes 10+10=20 fresh via the batch offset; 2 full non-overlapping batches).
+const WIN_QS = [
+  'how do I win this?', 'is this winning?', 'is this position won?', 'am I winning?',
+  'is there a forced win?', 'can white win this?', 'is it a technical win?', 'how do I convert this?',
+  "what's the result with best play?", 'is this lost for black?', 'can I force mate here?', 'is this a theoretical win?',
+  'should I be winning this?', 'is the win straightforward?', 'do I have a forced mate?', 'is black busted here?',
+  'is this resignable for black?', 'can I bring this home?', 'is there a clean win?', 'how many moves to mate?',
+  'is this trivially winning?', 'is the game over for black?', 'is white just winning?', 'can I mate the king?',
 ];
+const DRAW_QS = [
+  'is this a draw?', 'can I win this?', 'will this be a draw?', 'is this a dead draw?',
+  'can I force a win here?', 'is a draw the best I can get?', 'is this drawable?', 'can black hold this?',
+  'is there any way to win?', 'is this a theoretical draw?', 'do I have enough to win?', 'is the draw unavoidable?',
+  'can I make progress here?', 'is this a book draw?', 'am I able to promote?', 'is there enough material to mate?',
+  'should this end in a draw?', 'can black defend this?', 'is this position saveable for black?', 'is a win possible at all?',
+  'is it a fortress?', 'can I break through?', 'is this hopeless to win?', 'will best play draw?',
+];
+const WIN_POS = [
+  { name: 'KQ vs K', fen: '4k3/8/8/8/8/8/4Q3/4K3 w - - 0 1' },
+  { name: 'KR vs K', fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1' },
+  { name: 'K+P vs K (king ahead)', fen: '4k3/8/4K3/4P3/8/8/8/8 w - - 0 1' },
+];
+const DRAW_POS = [
+  { name: 'KB vs K (insufficient)', fen: '4k3/8/8/8/8/8/5B2/4K3 w - - 0 1' },
+  { name: 'KN vs K (insufficient)', fen: '4k3/8/8/8/8/8/5N2/4K3 w - - 0 1' },
+  { name: 'K+rook-pawn vs K (corner draw)', fen: '7k/8/6K1/7P/8/8/8/8 w - - 0 1' },
+];
+const pick = (arr, n, off) => { const out = []; for (let i = 0; i < n; i++) out.push(arr[(off * n + i) % arr.length]); return out; };
+const CASES = [];
+pick(WIN_QS, 10, BATCH).forEach((q, i) => { const p = WIN_POS[i % WIN_POS.length]; CASES.push({ name: `${p.name} (win)`, fen: p.fen, q, want: WIN_RE, notWant: WIN_NOT }); });
+pick(DRAW_QS, 10, BATCH).forEach((q, i) => { const p = DRAW_POS[i % DRAW_POS.length]; CASES.push({ name: `${p.name} (draw)`, fen: p.fen, q, want: DRAW_RE, notWant: DRAW_NOT }); });
 
 const results = [];
 const rec = (name, q, pass, detail) => { results.push({ name, q, pass, detail }); console.log(`${pass ? '✅' : '❌'} [${name}] ${q} — "${detail.slice(0, 90)}"`); };
@@ -75,23 +106,30 @@ async function loadCase(fen) {
   await page.waitForTimeout(1500);
   await openChat();
 }
+// The app's own transient-timeout UI under rapid fire is a LOAD artifact, not a
+// wrong verdict (CLAUDE.md load-vs-break) — retry, don't score it.
+const TRANSIENT = /coach is taking too long|try again in a moment|taking longer than expected|please try again/;
 async function ask(fen, q) {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try { await loadCase(fen); const a = (await askOnce(q)).toLowerCase(); if (a.length > 12) return a; }
-    catch { /* reload + retry */ }
+  let last = '';
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      await loadCase(fen);
+      last = (await askOnce(q)).toLowerCase();
+      if (last.length > 12 && !TRANSIENT.test(last)) return last;
+      if (TRANSIENT.test(last)) await page.waitForTimeout(4000);
+    } catch { /* reload + retry */ }
   }
-  return '';
+  return last;
 }
 
 try {
+  console.log(`Batch ${BATCH}: ${CASES.length} distinct questions\n`);
   for (const c of CASES) {
-    for (const q of c.qs) {
-      const a = await ask(c.fen, q);
-      const notOk = c.notWant.test(a);
-      const wantOk = c.want.test(a);
-      const generic = /small edge|about 0\.5 of a point|worth nursing/.test(a); // the non-tablebase eval tell
-      rec(c.name, q, a.length > 12 && wantOk && !notOk && !generic, a || '(empty)');
-    }
+    const a = await ask(c.fen, c.q);
+    const notOk = c.notWant.test(a);
+    const wantOk = c.want.test(a);
+    const generic = /small edge|about 0\.5 of a point|worth nursing/.test(a); // the non-tablebase eval tell
+    rec(c.name, c.q, a.length > 12 && wantOk && !notOk && !generic, a || '(empty)');
   }
 } catch (err) {
   rec('HARNESS', 'ran', false, String(err).slice(0, 200));
