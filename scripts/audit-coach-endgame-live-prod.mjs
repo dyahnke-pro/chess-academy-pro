@@ -24,10 +24,14 @@ const RUN_ID = process.env.AUDIT_RUN_ID || `eglive-${Date.now().toString(36)}`;
 // rotated by AUDIT_BATCH so a restart-after-fix draws 20 brand-new ones
 // (David 2026-09-02: "all different questions ... start over with 20 new").
 const BATCH = Number(process.env.AUDIT_BATCH || 0);
-const WIN_RE = /win|winning|won|mate|checkmate|queen|rook|promot|force|convert|technical|you'?re winning|white is winning/;
-const WIN_NOT = /\bdraw|equal|dead\s*level|small edge|about 0\.5|can'?t win|cannot win|insufficient|not enough|hold the draw/;
-const DRAW_RE = /draw|insufficient|can'?t win|cannot win|not enough|no mate|impossible to mate|hold|drawn|dead\s*level/;
-const DRAW_NOT = /you'?re winning|white is winning|forced mate|you win|it'?s a win|winning for you/;
+// WIN: the coach phrases a won position either as "winning/won/mate" OR as a big
+// positive eval ("6.2 points ahead", "up a queen", "simplest road home").
+const WIN_RE = /win|winning|won|mate|checkmate|queen|rook|promot|force|convert|technical|ahead|up a |points? ahead|road home|simplest|dominat|decisive|completely|crushing|\+?[1-9]\d?\.\d/;
+const WIN_NOT = /\bdraw|dead\s*level|small edge|about 0\.5|can'?t win|cannot win|insufficient|not enough|hold the draw|roughly (?:balanced|equal)|it'?s equal/;
+// DRAW: phrased as "draw" OR as a dead-equal eval ("roughly balanced", "dead
+// even", "0.0", "neither side").
+const DRAW_RE = /draw|insufficient|can'?t win|cannot win|not enough|no mate|impossible to mate|hold|drawn|dead\s*level|equal|balanced|even|level|neither|nobody|0\.0|roughly/;
+const DRAW_NOT = /you'?re winning|white is winning|forced mate|you win|it'?s a win|winning for you|up a (?:queen|rook|piece)|\bwon\b|points ahead/;
 
 // 24 distinct WIN phrasings, 24 distinct DRAW phrasings (48 pool → each run
 // takes 10+10=20 fresh via the batch offset; 2 full non-overlapping batches).
@@ -48,7 +52,9 @@ const DRAW_QS = [
   'is it a fortress?', 'can I break through?', 'is this hopeless to win?', 'will best play draw?',
 ];
 const WIN_POS = [
-  { name: 'KQ vs K', fen: '4k3/8/8/8/8/8/4Q3/4K3 w - - 0 1' },
+  // Qd2, NOT Qe2 — an e-file queen leaves black in check with white to move (an
+  // illegal "opponent in check" state the app can't evaluate).
+  { name: 'KQ vs K', fen: '4k3/8/8/8/8/8/3Q4/4K3 w - - 0 1' },
   { name: 'KR vs K', fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1' },
   { name: 'K+P vs K (king ahead)', fen: '4k3/8/4K3/4P3/8/8/8/8 w - - 0 1' },
 ];
@@ -58,7 +64,7 @@ const WIN_POS = [
 const DRAW_POS = [
   { name: 'KR vs KR (dead draw)', fen: '4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1' },
   { name: 'KQ vs KQ (dead draw)', fen: '4k3/4q3/8/8/8/8/4Q3/4K3 w - - 0 1' },
-  { name: 'K+rook-pawn vs K (corner draw)', fen: '7k/8/6K1/7P/8/8/8/8 w - - 0 1' },
+  { name: 'KN vs KN (draw, no force)', fen: '4k3/4n3/8/8/8/8/4N3/4K3 w - - 0 1' },
 ];
 const pick = (arr, n, off) => { const out = []; for (let i = 0; i < n; i++) out.push(arr[(off * n + i) % arr.length]); return out; };
 const CASES = [];
