@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk } from './questionIntents';
+import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk, recordVsTarget, isRecordVsQuestion } from './questionIntents';
 import { matchEndgameLesson } from '../services/endgameLessonsService';
 import { detectConceptsInText } from '../services/chessConceptService';
 
@@ -73,6 +73,22 @@ describe('battery routing regressions', () => {
       expect(typedMoveListInAsk('e4 c5 Nf3')).toBe(true);
       expect(typedMoveListInAsk('what is a good bishop')).toBe(false);
       expect(typedMoveListInAsk('how do I play the sicilian')).toBe(false);
+    });
+  });
+
+  describe('"best play" is a verdict phrase, not an opponent', () => {
+    // "what's the result with best play?" on an endgame board answered "no games
+    // against 'best play' logged" — the record-vs lane captured the chess phrase
+    // after "with" as an opponent (endgame-live audit 2026-09-02).
+    it('rejects play-quality phrases as opponents', () => {
+      for (const q of ["what's the result with best play?", 'what is the result with perfect play', 'how do I do against optimal play', 'what happens with best moves', 'result with the engine']) {
+        expect(recordVsTarget(q), q).toBeNull();
+        expect(isRecordVsQuestion(q), q).toBe(false);
+      }
+    });
+    it('still resolves a real opponent / opening', () => {
+      expect(recordVsTarget('what is my record against magnus')).toBe('magnus');
+      expect(recordVsTarget('how do I do vs the london')).toBe('london');
     });
   });
 

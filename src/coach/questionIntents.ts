@@ -1980,7 +1980,11 @@ const RECORD_VS_OPP_RE = new RegExp(
   'i',
 );
 /** Trailing/leading filler that isn't part of a real opening/opponent name. */
-const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control|knights?|bishops?|rooks?|pawns?|queens?|kings?|pieces?)$/i;
+// "…with best play", "…against perfect play" — an objective-verdict phrase
+// (the tablebase/engine answer), NOT an opponent named "best play". Without
+// this the record-vs lane answered "no games against 'best play' logged"
+// (endgame-live audit 2026-09-02).
+const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control|knights?|bishops?|rooks?|pawns?|queens?|kings?|pieces?|(?:best|perfect|optimal|accurate|correct|precise|god'?s?|theoretical|engine|computer)\s+(?:play|moves?|chess)|best\s+moves?|both\s+sides|engine|computer|tablebase)$/i;
 export function recordVsTarget(ask: string | undefined): string | null {
   if (!ask) return null;
   // "am I better as WHITE or Black?" and "how did MY MOST RECENT GAME go?"

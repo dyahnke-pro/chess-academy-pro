@@ -27,7 +27,9 @@ const BATCH = Number(process.env.AUDIT_BATCH || 0);
 // WIN: the coach phrases a won position either as "winning/won/mate" OR as a big
 // positive eval ("6.2 points ahead", "up a queen", "simplest road home").
 const WIN_RE = /win|winning|won|mate|checkmate|queen|rook|promot|force|convert|technical|ahead|up a |points? ahead|road home|simplest|dominat|decisive|completely|crushing|\+?[1-9]\d?\.\d/;
-const WIN_NOT = /\bdraw|dead\s*level|small edge|about 0\.5|can'?t win|cannot win|insufficient|not enough|hold the draw|roughly (?:balanced|equal)|it'?s equal/;
+// A WIN answer often says "it's NOT a draw" — match only AFFIRMATIVE draw/equal
+// claims so a negation doesn't trip the exclusion.
+const WIN_NOT = /it'?s (?:a )?draw|this is (?:a )?draw|theoretical draw|dead\s*(?:draw|even|level)|roughly (?:balanced|equal)|small edge|about 0\.5|hold the draw|\bit'?s equal\b/;
 // DRAW: phrased as "draw" OR as a dead-equal eval ("roughly balanced", "dead
 // even", "0.0", "neither side").
 const DRAW_RE = /draw|insufficient|can'?t win|cannot win|not enough|no mate|impossible to mate|hold|drawn|dead\s*level|equal|balanced|even|level|neither|nobody|0\.0|roughly/;
