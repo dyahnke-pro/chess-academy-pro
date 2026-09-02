@@ -3078,6 +3078,24 @@ export async function getCoachChatResponse(
         }
       }
     }
+    // DETERMINISTIC BOARD VERDICT — whose-turn / live-colour / mate-distance /
+    // draw|stalemate each have an EXACT computed answer (FEN side-to-move +
+    // studentColor + engine eval/mate + syzygy tablebase). They must be answered
+    // by the COMPUTER, never the LLM brain (G0; David 2026-09-02, emphatic: "All
+    // deterministic questions MUST route through the computer, NOT the LLM"). It
+    // runs HERE — before the `intentFired` gate and the whole agentic/LLM path —
+    // because NONE of these set a legacy intent flag, so `intentFired` was false
+    // and they fell straight to the brain: a hand-driven KQ-vs-K prod audit got
+    // 26 `coach-llm-call`s across 20 board questions, every one answered with the
+    // same "the best move is Qd6, White is winning" readout. computeLiveBoardVerdict
+    // self-gates (null unless the ask is one of these four AND the data decides),
+    // so a miss falls through unchanged.
+    const boardVerdict = await computeLiveBoardVerdict(earlyUserMsg ?? '', grounding, config);
+    if (boardVerdict) {
+      emitGroundingCoverage('board-verdict', grounding.surface ?? 'unknown', grounding.sessionId, { question: (earlyUserMsg ?? '').slice(0, 100), path: 'early' });
+      if (onStream) onStream(boardVerdict);
+      return boardVerdict;
+    }
     const intentFired =
       grounding.forceEngage === true ||
       detectMoveQuestionIntent(messages) ||
