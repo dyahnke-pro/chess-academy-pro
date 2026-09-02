@@ -385,13 +385,28 @@ export function App(): JSX.Element {
         void seedPuzzles();
 
         // Warm the Stockfish WASM engine shortly after boot (David 2026-06-17)
-        // so it's READY before the user reaches a coach question. The cold
-        // WASM init (~5-9s) is the only real first-question latency, and the
-        // coach hands the LLM the engine's best move / eval — a warm engine =
-        // no cold wait when the student first asks. Deferred ~2.5s so it never
-        // competes with first paint or the critical seed; idempotent +
-        // fire-and-forget (never blocks boot, NEVER an LLM call).
-        setTimeout(() => { void stockfishEngine.initialize().catch(() => undefined); }, 2500);
+        // so it's READY before the user reaches a coach question. Deferred ~2.5s
+        // so it never competes with first paint or the critical seed; idempotent
+        // + fire-and-forget (never blocks boot, NEVER an LLM call).
+        //
+        // 🔒 `initialize()` ALONE IS NOT ENOUGH — it loads the worker but the
+        // FIRST `analyzeWithBudget` still pays the cold search cost, and the WASM
+        // init itself can run up to ~45s which `analyzeWithBudget` AWAITS. The
+        // hand-driven prod audit (David 2026-09-02) proved it: on /coach/play the
+        // FIRST coach question took ~21s (cold Stockfish) and blew the 15s client
+        // cap → "Coach is taking too long", while Q2/Q3 hit `stockfish-cache-hit`
+        // and answered in <200ms. Every coach turn runs a tactics-context
+        // analysis, so the first question of a session ate the whole cold-start.
+        // Fix: after init, run ONE real budgeted analysis so the ENTIRE analysis
+        // path (worker + first `go` + hash alloc) is warm at boot — any first
+        // coach question is then fast regardless of its position.
+        const STOCKFISH_WARM_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+        setTimeout(() => {
+          void stockfishEngine
+            .initialize()
+            .then(() => stockfishEngine.analyzeWithBudget(STOCKFISH_WARM_FEN, 12, 1500))
+            .catch(() => undefined);
+        }, 2500);
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
         // deferred 30s after boot so it never competes with the user's

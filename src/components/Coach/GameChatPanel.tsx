@@ -934,7 +934,13 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               traceId,
             },
           ),
-            15_000,
+            // 25s, not 15s: a COLD first coach turn runs a Stockfish analysis
+            // whose cold-start can push the whole turn to ~21s (hand-driven prod
+            // audit, David 2026-09-02); the answer WAS arriving, the 15s cap just
+            // cut it off → false "taking too long". The boot warm (App.tsx) fixes
+            // the common case; this margin catches the turn asked before the warm
+            // finishes. Kept finite so a genuinely stuck turn still surfaces.
+            25_000,
             'coach-turn-ask',
           );
           if (!askResult.ok) {
@@ -1274,7 +1280,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             traceId,
           },
         ),
-          15_000,
+          25_000,
           'coach-turn-ask',
         );
         if (!drawerAskResult.ok) {
