@@ -1,1 +1,1 @@
-build requested 2026-08-24T01:35:01Z — 3.8 URGENT crash hotfix (stop video-dump boot OOM); 3.7 is READY_FOR_SALE so next version is 3.8
+build requested 2026-09-02T23:30:52Z — INTERNAL only. Verifies the iOS WASM crash fix on a real device: the analysis worker pool no longer hardcodes stockfish-18-lite-single.js (276 traps in 4 min on /games/import), plus the ios-native runtime-stall demote. Both are proven under mocked iOS conditions only — a real WKWebView has never executed either. Not for Apple until the device confirms.
