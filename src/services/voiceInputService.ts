@@ -96,6 +96,33 @@ const REPLY_START_WAIT_MS = 15_000;
 const PLAYBACK_IDLE_CONFIRM_MS = 900;
 const REPLY_FINISH_MAX_MS = 120_000;
 
+/** TURN-TAKING RE-ARM RETRY (David 2026-09-01: "the microphone is broken").
+ *  The live prod failure was a re-arm throwing "Microphone is already in use
+ *  by another application." — iOS's AVAudioSessionErrorCodeIsBusy while the
+ *  record route is STILL being released after the coach's reply TTS. It is
+ *  TRANSIENT (the route frees within a beat), yet the old code treated ANY
+ *  throw as terminal: a single collision killed the whole conversation and
+ *  dropped the mic button mid-back-and-forth. So a re-arm that hits a
+ *  transient audio-session error now stops the plugin, waits a growing beat,
+ *  and retries before giving up. Non-transient errors (permission, missing
+ *  plugin) still fail fast — no pointless spin. */
+const NATIVE_REARM_MAX_ATTEMPTS = 3;
+/** Base backoff between re-arm retries; grows per attempt (400 / 800 / 1200ms)
+ *  so a stubborn route gets progressively longer to release. */
+const NATIVE_REARM_BACKOFF_MS = 400;
+
+/** iOS audio-session contention on a mic (re)start is TRANSIENT — the record
+ *  route iOS is still releasing after TTS playback throws
+ *  "Microphone is already in use by another application." /
+ *  AVAudioSessionErrorCodeIsBusy (561017449) / cannot-activate. Retryable,
+ *  unlike a permission denial or a missing plugin. Drives the decision to try
+ *  the re-arm again instead of killing the conversation. */
+export function isTransientAudioSessionError(message: string): boolean {
+  return /already in use|in use by another|is busy|cannot activate|session activation|activation failed|561017449|560557684/i.test(
+    message,
+  );
+}
+
 /** Minimum average confidence to accept a transcript. Web Speech
  *  reports 0-1; below this the audio was noisy or the speech wasn't
  *  clearly directed at the mic. 0.55 is a balance — catches most
@@ -382,6 +409,14 @@ class VoiceInputService {
     this.userStopped = false;
     this.restartAttempts = 0;
 
+    // LEAVE-THE-APP = MIC OFF (David 2026-09-01, NON-NEGOTIABLE). Attach the
+    // foreground/background listeners for EVERY path BEFORE we start — the mic
+    // must never stay hot when the user switches tabs, minimizes, backgrounds
+    // the PWA/native app, or navigates away. Previously these were wired only
+    // on the web branch below, so the NATIVE app left the mic live on
+    // background. Now both paths get them (+ a Capacitor app-state listener).
+    this.attachLifecycleListeners();
+
     // Native app (iOS/Android WKWebView): use the Capacitor speech plugin —
     // the browser Web Speech API is unavailable there. The flow is async; we
     // start it and optimistically report success (errors surface via
@@ -395,15 +430,18 @@ class VoiceInputService {
     const SpeechRecognitionClass = this.getSpeechRecognitionClass();
     if (SpeechRecognitionClass == null) {
       this.audit('mic-start-failed', 'SpeechRecognition constructor missing despite isSupported', caps);
+      this.detachLifecycleListeners();
       return false;
     }
 
-    // Listen for the browser/PWA telling us the app is leaving the
-    // foreground. `visibilitychange` fires on tab switch or window
-    // minimize; `pagehide` is the reliable signal on iOS when the
-    // user backgrounds the PWA, closes the tab, or navigates away.
-    // Stop listening so the mic isn't left hot in the background.
-    this.attachLifecycleListeners();
+    // Prime the voiceService handle so the web onresult echo guard can
+    // synchronously ask "is the coach speaking right now?" (David 2026-09-01:
+    // on the web the continuous recognizer heard the coach's OWN TTS through
+    // the speakers, transcribed it, and fed it back — the coach talking to
+    // itself + cutting itself off. The NATIVE path already gates on isPlaying;
+    // the web path never did). Fire-and-forget: the coach isn't speaking at
+    // the instant the user taps the mic, so the brief import window is safe.
+    this.primeVoiceServiceRef();
 
     const started = this.createAndStart(SpeechRecognitionClass);
     this.listening = started;
@@ -430,6 +468,7 @@ class VoiceInputService {
       this.nativeLatest = '';
       void this.stopNative();
       if (pending) this.dispatchFinal(pending);
+      this.detachLifecycleListeners();
       this.endHandler?.();
       return;
     }
@@ -547,7 +586,42 @@ class VoiceInputService {
         void this.restartNativeSession();
         return;
       }
-      await this.nativeSR.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
+      // Re-arm with a bounded retry. iOS can still be releasing the record
+      // route from the just-finished reply TTS, so start() throws the
+      // TRANSIENT "Microphone is already in use by another application."
+      // (AVAudioSessionErrorCodeIsBusy). That was the live prod break: the old
+      // single-shot start() gave up on the first collision and killed the
+      // whole conversation. Now a transient error stops the plugin (releasing
+      // any half-open session), waits a growing beat, and retries; only a real
+      // failure (permission / missing plugin) or exhausted attempts gives up.
+      let started = false;
+      let lastErr: unknown = null;
+      for (let attempt = 0; attempt < NATIVE_REARM_MAX_ATTEMPTS && !started; attempt++) {
+        if (aborted() || this.nativeListening) return;
+        try {
+          await this.nativeSR.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
+          started = true;
+        } catch (e) {
+          lastErr = e;
+          const msg = (e as Error)?.message ?? String(e);
+          if (!isTransientAudioSessionError(msg)) break; // real failure — don't spin
+          this.audit('mic-error', `native re-arm attempt ${attempt + 1}/${NATIVE_REARM_MAX_ATTEMPTS} transient: ${msg}`);
+          // Release any half-open record session the plugin left behind, then
+          // give iOS a growing beat (400/800/1200ms) to free the input route.
+          try {
+            const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
+            await SpeechRecognition.stop().catch(() => { /* already stopped */ });
+          } catch { /* plugin gone — nothing to release */ }
+          await new Promise((r) => setTimeout(r, NATIVE_REARM_BACKOFF_MS * (attempt + 1)));
+        }
+      }
+      if (!started) {
+        this.nativeListening = false;
+        this.nativeContinuous = false;
+        this.audit('mic-start-failed', `native re-arm threw: ${(lastErr as Error)?.message ?? lastErr}`);
+        this.endHandler?.();
+        return;
+      }
       this.nativeListening = true;
       this.audit('mic-started', 'native mic re-armed (turn-taking: reply finished)');
     } catch (e) {
@@ -762,6 +836,17 @@ class VoiceInputService {
     return this.listening || this.nativeListening;
   }
 
+  /** Lazily cache the voiceService handle for the web echo guard. Idempotent;
+   *  fire-and-forget (the ref is read synchronously in onresult, but the coach
+   *  is never speaking at the instant the mic starts, so the import window is
+   *  harmless). Mirrors the caching the native path does inside startNative. */
+  private primeVoiceServiceRef(): void {
+    if (this.voiceServiceRef) return;
+    void import('./voiceService')
+      .then((m) => { this.voiceServiceRef = m.voiceService; })
+      .catch(() => { /* echo guard degrades to off — no worse than before */ });
+  }
+
   private getSpeechRecognitionClass(): SpeechRecognitionConstructor | null {
     const win = window as unknown as Record<string, unknown>;
     const klass = (win.SpeechRecognition ?? win.webkitSpeechRecognition) as
@@ -783,6 +868,17 @@ class VoiceInputService {
     this.finalDispatched = false;
 
     this.recognition.onresult = (event: SpeechRecognitionEvent) => {
+      // ECHO GUARD (web): the recognizer stays hot while the coach speaks its
+      // reply, so on desktop it captures the coach's OWN voice through the
+      // speakers → transcribes it → feeds it back (the coach talking to itself,
+      // and onSpeechStart cutting the coach off mid-word). While the device is
+      // producing sound, DISREGARD everything the mic hears — it's the coach,
+      // not the student (David 2026-09-01). Same guard the native path applies.
+      // The user talks after the coach finishes (half-duplex, matching native).
+      if (this.voiceServiceRef?.isPlaying()) {
+        this.latestInterim = '';
+        return;
+      }
       let interimText = '';
       let finalText = '';
       let finalConfidence = 0;
@@ -885,6 +981,16 @@ class VoiceInputService {
       // The RAW error string is the single most useful diagnostic for a dead
       // mic on an unfamiliar device — capture it ALWAYS, before any branching.
       this.audit('mic-error', `recognition error: ${err}`, { error: err, ...this.capabilitySnapshot() });
+      // TERMINAL web errors are also mirrored to PostHog via `mic-start-failed`
+      // (David 2026-09-01: a blocked-mic on desktop Chrome fired
+      // `permission-denied` but `mic-error` isn't mirrored, so web mic failures
+      // were INVISIBLE in durable analytics — "check PostHog" came up empty).
+      // Only the terminal reasons below emit it; benign 'no-speech'/'aborted'
+      // stay audit-stream-only so PostHog isn't spammed with normal pauses.
+      const TERMINAL = new Set(['not-allowed', 'service-not-allowed', 'audio-capture', 'network', 'language-not-supported']);
+      if (TERMINAL.has(err)) {
+        this.audit('mic-start-failed', `web recognition terminal error: ${err}`, { error: err, ...this.capabilitySnapshot() });
+      }
       // Permission denial is terminal — no point retrying, the user has to
       // re-grant. `service-not-allowed` on iOS specifically means Dictation /
       // Siri is disabled (Settings → General → Keyboard → Enable Dictation).
@@ -928,6 +1034,10 @@ class VoiceInputService {
   private visibilityListener: (() => void) | null = null;
   private pageHideListener: (() => void) | null = null;
   private deviceChangeListener: (() => void) | null = null;
+  /** Capacitor App plugin listener handle (native only) — the robust
+   *  background signal on iOS/Android, where `visibilitychange` can be
+   *  unreliable. Removed on detach. */
+  private appStateListenerHandle: { remove: () => void | Promise<void> } | null = null;
 
   private attachLifecycleListeners(): void {
     if (typeof document === 'undefined') return;
@@ -973,6 +1083,21 @@ class VoiceInputService {
     // `beforeunload` doesn't. Add both for best coverage.
     window.addEventListener('pagehide', this.pageHideListener);
     window.addEventListener('beforeunload', this.pageHideListener);
+    // NATIVE background signal (David 2026-09-01, NON-NEGOTIABLE mic-off): on
+    // iOS/Android `visibilitychange` doesn't always fire when the Capacitor app
+    // is backgrounded, so also listen to the App plugin's appStateChange and
+    // cut the mic the instant the app loses focus. Lazy import so web builds
+    // don't pull @capacitor/app; guarded to native so the browser never adds it.
+    if (this.isNativePlatform()) {
+      void import('@capacitor/app')
+        .then(({ App }) =>
+          App.addListener('appStateChange', ({ isActive }: { isActive: boolean }) => {
+            if (!isActive) this.stopListening();
+          }),
+        )
+        .then((handle) => { this.appStateListenerHandle = handle; })
+        .catch(() => { /* plugin unavailable — visibilitychange/pagehide still cover it */ });
+    }
     // navigator.mediaDevices types as non-null in TS lib but can be
     // undefined on older browsers / insecure contexts / file://.
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -996,6 +1121,10 @@ class VoiceInputService {
     if (this.deviceChangeListener && typeof navigator !== 'undefined' && navigator.mediaDevices) {
       navigator.mediaDevices.removeEventListener('devicechange', this.deviceChangeListener);
       this.deviceChangeListener = null;
+    }
+    if (this.appStateListenerHandle) {
+      void this.appStateListenerHandle.remove();
+      this.appStateListenerHandle = null;
     }
   }
 

@@ -38,7 +38,7 @@ vi.mock('./voiceService', () => ({
   },
 }));
 
-import { voiceInputService } from './voiceInputService';
+import { voiceInputService, isTransientAudioSessionError } from './voiceInputService';
 
 function emitPartial(text: string): void {
   (pluginListeners.get('partialResults') as ((d: { matches: string[] }) => void) | undefined)?.({ matches: [text] });
@@ -133,6 +133,67 @@ describe('voiceInputService — turn-taking conversation mode (native)', () => {
     un();
   });
 
+  it('re-arm survives a transient "already in use" — retries instead of killing the conversation', async () => {
+    // The live prod break (David 2026-09-01): after the reply's TTS, iOS is
+    // still releasing the record route, so the re-arm start() throws
+    // "Microphone is already in use by another application." The old code gave
+    // up on the first collision and dropped the mic mid-conversation. Now it
+    // stops the plugin, backs off, and retries — one transient must NOT end it.
+    const onEnd = vi.fn();
+    const un = await startConversation({ onEnd, onResult: vi.fn() });
+    pluginStart.mockClear();
+    pluginStop.mockClear();
+    // First re-arm attempt throws the transient busy error; the retry succeeds.
+    pluginStart.mockRejectedValueOnce(
+      new Error('Microphone is already in use by another application.'),
+    );
+
+    emitPartial('keep the conversation going');
+    await vi.advanceTimersByTimeAsync(2100); // submit + teardown
+    await flushAsync();
+    emitStopped(); // → re-arm cycle starts (voice off, so it falls through Phase A)
+    await flushAsync();
+    // Reach the first start() attempt (Phase A 15s + idle confirm + settle).
+    await vi.advanceTimersByTimeAsync(17_500);
+    await flushAsync();
+    // First attempt threw transient → plugin stopped, backoff (400ms), retry.
+    await vi.advanceTimersByTimeAsync(1000);
+    await flushAsync();
+
+    expect(pluginStart.mock.calls.length).toBeGreaterThanOrEqual(2);
+    expect(pluginStop).toHaveBeenCalled(); // released the half-open session before retry
+    expect(voiceInputService.isListening()).toBe(true);
+    expect(voiceInputService.isConversationActive()).toBe(true);
+    expect(onEnd).not.toHaveBeenCalled(); // conversation NOT killed by the collision
+    un();
+  });
+
+  it('re-arm gives up on a NON-transient error (does not spin)', async () => {
+    // A permission/plugin failure is terminal — retrying is pointless. The
+    // re-arm must fail fast and end the conversation (one start() attempt).
+    const onEnd = vi.fn();
+    const un = await startConversation({ onEnd, onResult: vi.fn() });
+    pluginStart.mockClear();
+    pluginStart.mockRejectedValue(new Error('User denied speech recognition'));
+
+    emitPartial('does this end');
+    await vi.advanceTimersByTimeAsync(2100);
+    await flushAsync();
+    emitStopped();
+    await flushAsync();
+    await vi.advanceTimersByTimeAsync(17_500);
+    await flushAsync();
+    await vi.advanceTimersByTimeAsync(2000);
+    await flushAsync();
+
+    expect(pluginStart).toHaveBeenCalledTimes(1); // no retry on a terminal error
+    expect(voiceInputService.isConversationActive()).toBe(false);
+    expect(onEnd).toHaveBeenCalled();
+    pluginStart.mockReset();
+    pluginStart.mockImplementation(async () => undefined);
+    un();
+  });
+
   it('re-arms even when the reply never speaks (voice off) after the start-wait window', async () => {
     const un = await startConversation({ onResult: vi.fn() });
     pluginStart.mockClear();
@@ -190,5 +251,33 @@ describe('voiceInputService — turn-taking conversation mode (native)', () => {
     await vi.advanceTimersByTimeAsync(300);
     await p;
     expect(pluginStop).not.toHaveBeenCalled();
+  });
+});
+
+describe('isTransientAudioSessionError', () => {
+  it('classifies iOS record-route contention as transient (retryable)', () => {
+    for (const msg of [
+      'Microphone is already in use by another application.',
+      'The microphone is in use by another app',
+      'AVAudioSession is busy',
+      'Cannot activate audio session',
+      'Session activation failed',
+      'Error 561017449', // AVAudioSessionErrorCodeIsBusy
+      'code 560557684',
+    ]) {
+      expect(isTransientAudioSessionError(msg)).toBe(true);
+    }
+  });
+
+  it('does NOT classify permission / plugin failures as transient', () => {
+    for (const msg of [
+      'User denied speech recognition',
+      '"SpeechRecognition" plugin is not implemented on ios',
+      'permission denied',
+      'not authorized',
+      '',
+    ]) {
+      expect(isTransientAudioSessionError(msg)).toBe(false);
+    }
   });
 });

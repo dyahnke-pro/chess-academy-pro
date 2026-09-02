@@ -47,7 +47,16 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [listening, setListening] = useState(false);
-  const [voiceUnsupported, setVoiceUnsupported] = useState(false);
+  // Inline voice-error chip. Holds the ACTUAL, actionable reason — not a
+  // blanket "not supported" (David 2026-09-01: on desktop Chrome a BLOCKED
+  // mic fired `permission-denied` but the UI said "isn't supported in this
+  // browser", which is both wrong — the browser supports it — and
+  // unactionable). null = no error shown.
+  const [voiceError, setVoiceError] = useState<string | null>(null);
+  const showVoiceError = useCallback((msg: string, ms = 4000): void => {
+    setVoiceError(msg);
+    setTimeout(() => setVoiceError(null), ms);
+  }, []);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   /** Holds the current voice-input unsubscriber so we can drop it
@@ -148,8 +157,7 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
   // sends" experience.
   const handleMicToggle = useCallback(() => {
     if (!voiceInputService.isSupported()) {
-      setVoiceUnsupported(true);
-      setTimeout(() => setVoiceUnsupported(false), 2500);
+      showVoiceError("Voice input isn't supported in this browser. Try Chrome, or the iOS app.", 2500);
       return;
     }
     if (listening) {
@@ -377,12 +385,20 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       // conversation tempo: no talking over the student.
       onSpeechStart: () => voiceService.stop(),
       // Surface hard errors so the mic never looks mysteriously
-      // dead. Reuses the existing voiceUnsupported inline chip UX
-      // — overloads it with a transient error message.
+      // dead. Shows a reason-specific, actionable message in the inline
+      // chip (blocked mic / unreachable service / dropped connection).
       onError: (reason) => {
         setListening(false);
-        setVoiceUnsupported(true);
-        setTimeout(() => setVoiceUnsupported(false), 4000);
+        // Reason-specific + actionable. The old blanket "isn't supported"
+        // misdiagnosed a blocked mic / network drop as a browser-capability
+        // problem, leaving the user with nothing to do.
+        const msg =
+          reason === 'permission-denied'
+            ? 'Microphone blocked. Allow mic access for this site (the 🎤 in your browser’s address bar), then tap again.'
+            : reason === 'unavailable'
+              ? 'Couldn’t reach the speech service. Check your connection, or use the iOS app for voice.'
+              : 'Mic dropped the connection. Tap to try again.';
+        showVoiceError(msg);
         console.warn('[SmartSearchBar] mic error:', reason);
       },
     });
@@ -641,13 +657,13 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
           </button>
         </div>
       </div>
-      {voiceUnsupported && (
+      {voiceError && (
         <div
-          className="absolute left-0 right-0 mt-1 text-[10px] text-center"
+          className="absolute left-0 right-0 top-full mt-1 px-3 text-[10px] text-center leading-tight"
           style={{ color: 'rgb(239, 68, 68)' }}
           data-testid="search-mic-unsupported"
         >
-          Voice input isn't supported in this browser.
+          {voiceError}
         </div>
       )}
 

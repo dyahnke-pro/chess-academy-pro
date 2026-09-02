@@ -164,6 +164,38 @@ describe('voiceInputService', () => {
 
       expect(onFinal).toHaveBeenCalledWith('how do I castle');
     });
+
+    it('ECHO GUARD: drops results while the coach is speaking, then hears the user again', () => {
+      voiceInputService.stopListening();
+      const onInterim = vi.fn();
+      const onFinal = vi.fn();
+      voiceInputService.onResult(onFinal);
+      voiceInputService.startListening({ onInterim });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const svc = voiceInputService as any;
+      const rec = svc.recognition as { onresult: ((event: unknown) => void) | null };
+      const fireFinal = (text: string): void =>
+        rec.onresult?.({
+          resultIndex: 0,
+          results: [
+            { isFinal: true, length: 1, item: () => ({ transcript: text, confidence: 0.95 }), 0: { transcript: text, confidence: 0.95 } },
+          ],
+        });
+
+      // Coach is speaking → whatever the mic hears is the DEVICE's own TTS, not
+      // the student. It must be dropped (no dispatch, no interim), so the coach
+      // never transcribes itself.
+      svc.voiceServiceRef = { isPlaying: () => true, stop: () => {} };
+      fireFinal('the knight is the born forker');
+      expect(onFinal).not.toHaveBeenCalled();
+      expect(onInterim).not.toHaveBeenCalled();
+
+      // Coach finished → the real user utterance is heard normally.
+      svc.voiceServiceRef = { isPlaying: () => false, stop: () => {} };
+      fireFinal('what should I play here');
+      expect(onFinal).toHaveBeenCalledWith('what should I play here');
+    });
   });
 
   describe('auto-finalize on silence and onend', () => {
