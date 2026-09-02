@@ -60,7 +60,12 @@ console.log(`\nDRIVING: ${BASE}${PATH}\n${'='.repeat(60)}`);
 await page.goto(`${BASE}${PATH}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
 await dismissGates();
 await openChatIfPlay();
-await page.waitForTimeout(1500);
+// A real user opens the app and plays after a moment — by then the boot warms
+// (Stockfish + LLM ping) have completed. AUDIT_STARTWAIT models that; set it to
+// 0 to test the impatient "asks immediately" case.
+const STARTWAIT = Number(process.env.AUDIT_STARTWAIT || 1500);
+if (STARTWAIT > 1500) console.log(`(waiting ${STARTWAIT/1000}s for boot warms to complete, like a real user)`);
+await page.waitForTimeout(STARTWAIT);
 
 for (const q of QS) {
   let r = await askOnce(q);

@@ -934,13 +934,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
               traceId,
             },
           ),
-            // 25s, not 15s: a COLD first coach turn runs a Stockfish analysis
-            // whose cold-start can push the whole turn to ~21s (hand-driven prod
-            // audit, David 2026-09-02); the answer WAS arriving, the 15s cap just
-            // cut it off → false "taking too long". The boot warm (App.tsx) fixes
-            // the common case; this margin catches the turn asked before the warm
-            // finishes. Kept finite so a genuinely stuck turn still surfaces.
-            25_000,
+            // 32s, not the old 15s. The hand-driven prod audit (David 2026-09-02)
+            // proved the FIRST coach turn of a cold session is ~20-22s (DeepSeek
+            // edge + connection cold-start; Stockfish is warmed at boot). The
+            // answer WAS arriving — the 15s cap just cut it off → false "taking
+            // too long". Boot warms (App.tsx: Stockfish + a 1-token LLM ping) make
+            // the cold path rare; this cap gives a single cold attempt room to
+            // complete and stream. Kept finite so a genuinely stuck turn surfaces.
+            32_000,
             'coach-turn-ask',
           );
           if (!askResult.ok) {
@@ -1280,7 +1281,9 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             traceId,
           },
         ),
-          25_000,
+          // 32s — drawer path, same cold-first-turn reasoning as the in-game
+          // site above (hand-driven prod audit, David 2026-09-02).
+          32_000,
           'coach-turn-ask',
         );
         if (!drawerAskResult.ok) {

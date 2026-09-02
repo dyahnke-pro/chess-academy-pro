@@ -26,13 +26,14 @@ import type {
 } from '../types';
 import { formatEnvelopeAsSystemPrompt, formatEnvelopeAsUserMessage } from '../envelope';
 
-// 15s, not 30s: the live coach-turn client cap is 25s (GameChatPanel), so a 30s
-// provider timeout meant the client ALWAYS gave up before the cold attempt even
-// timed out — the warm retry could never land in time. At 15s a cold first
-// attempt fails fast and the warm retry (edge now warm) completes well inside
-// the 25s cap. Deep single-shot tasks (analysis/reports) aren't on this live
-// path (hand-driven prod audit, David 2026-09-02).
-const PROVIDER_TIMEOUT_MS = 15_000;
+// 30s. A shorter value BACKFIRES on the interactive turn: the hand-driven prod
+// audit (David 2026-09-02) showed a cold DeepSeek first call answers in ~20-22s,
+// but a 15s timeout KILLED attempt 1 before the edge finished warming, so the
+// retry restarted cold and STACKED (15s + ~20s = ~35s). Keeping 30s lets the
+// single cold attempt complete (~22s) with no retry; the raised client cap
+// (GameChatPanel, 32s) then shows it. The retry stays as the recovery for a
+// genuinely stuck attempt, not a latency multiplier on every cold start.
+const PROVIDER_TIMEOUT_MS = 30_000;
 const DEFAULT_MAX_TOKENS = 2000;
 
 function buildResponse(raw: string): ProviderResponse {
