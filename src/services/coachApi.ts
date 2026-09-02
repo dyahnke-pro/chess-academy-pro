@@ -2016,7 +2016,8 @@ async function serveGroundedPositionDefault(
    *  the fact bundle so the warm voice can acknowledge it truthfully. */
   voice?: { warm?: boolean; extraFacts?: string; computedOnly?: boolean },
 ): Promise<string | null> {
-  const warm = voice?.warm === true;
+  // `voice.warm` is intentionally ignored here: a deterministic readout is
+  // ALWAYS spoken via preferRaw (chokepoint enforcement, David 2026-09-02).
   const computedOnly = voice?.computedOnly === true;
   const prefix = voice?.extraFacts ? `${voice.extraFacts.trim()}\n` : '';
   const fen = grounding.currentFen ?? null;
