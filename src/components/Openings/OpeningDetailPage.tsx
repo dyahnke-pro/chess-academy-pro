@@ -218,6 +218,7 @@ import {
   isWeaponRungComplete,
   isLineUnlockedAll,
   areWeaponsUnlocked,
+  hasDrilledOpening,
   nextRung,
   lockHint,
   RUNG_LABEL,
@@ -257,6 +258,17 @@ import {
   Lock,
   Check,
 } from 'lucide-react';
+
+/** ViewModes where the student is ACTIVELY DRILLING (playing moves): Learn,
+ *  Practice, Play and every prefixed flavour (variation-, trap-, warning-,
+ *  named-trap-, gem-, pitfall-, subline-, middlegame-). Watch/walkthrough
+ *  modes, model games and the detail page are NOT drills — they stay free to
+ *  sample on every opening (David 2026-09-02). */
+const ACTIVE_DRILL_MODE = /(?:^|-)(?:learn|practice|play)$/;
+/** Legacy trap/warning TRAINING modes are drills too — the student plays the
+ *  line — they just carry no rung suffix, so match them explicitly or they'd be
+ *  a hole in the wall (drill any opening's traps free). */
+const ACTIVE_DRILL_EXTRA: ReadonlySet<string> = new Set(['train-traps', 'train-warnings']);
 
 type ViewMode =
   | 'detail'
@@ -346,6 +358,10 @@ export function OpeningDetailPage(): JSX.Element {
   // Two-tap guard for the expert-pass unlock: spending a 1-of-1 lifetime pass
   // shouldn't die to a misclick, so the first tap arms, the second commits.
   const [confirmingUnlock, setConfirmingUnlock] = useState(false);
+  // Set the moment this opening becomes the student's ONE free pick, so the
+  // page can say so inline. Not a pop-up (David 2026-09-02: no pop-ups but the
+  // AI one) — just a quiet line so the claim is never a silent surprise.
+  const [justClaimedFree, setJustClaimedFree] = useState(false);
   const weaponUnlockPasses = useAppStore((s) => s.activeProfile?.weaponUnlockPasses);
   const recordWeaponUnlockPass = useAppStore((s) => s.recordWeaponUnlockPass);
   // Which variation tab is selected (-1 = main line). Drives the
@@ -729,29 +745,44 @@ export function OpeningDetailPage(): JSX.Element {
     return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
-  // A "deep dive" = any WLPP / study mode past the free browse + model-games
-  // view. Watching model games ('model-game') and browsing ('detail') are free
-  // and never spend the free-opening pick.
-  const isDeepDive = viewMode !== 'detail' && viewMode !== 'model-game';
+  // Watch is FREE TO SAMPLE on every opening; an ACTIVE DRILL (Learn /
+  // Practice / Play) is what commits a student to one. Browsing ('detail'),
+  // model games and every Watch/walkthrough mode never spend the free pick and
+  // never hit the wall.
+  const isActiveDrill = ACTIVE_DRILL_MODE.test(viewMode) || ACTIVE_DRILL_EXTRA.has(viewMode);
 
-  // Claim the ONE free opening on the first deep dive into an eligible
-  // masterclass opening (idempotent; only when nothing is claimed yet).
+  // Has the student actually DRILLED this opening — completed a Learn,
+  // Practice or Play rung on the main line, a variation, or a weapon? Read off
+  // the persisted record so EVERY completion path counts without each call
+  // site remembering to claim. Watch completions deliberately do NOT count.
+  const hasDrilledThisOpening = useMemo(
+    (): boolean => (opening ? hasDrilledOpening(opening) : false),
+    [opening],
+  );
+
+  // Claim the ONE free opening the first time the student COMPLETES a drill
+  // here (idempotent; only when nothing is claimed yet). David 2026-09-02: a
+  // TAP can no longer be the signal — with the whole course unlocked up front a
+  // curious tap would burn their pick, so the claim waits for real commitment.
   useEffect(() => {
     if (!gateEnabled || isPro || !freeTierHydrated) return;
-    if (!isDeepDive) return;
     if (!id || !isEligibleFreeOpening(id)) return;
     if (freeTierRow.freeOpeningId != null) {
-      // A different opening is already the free pick — this deep dive is the
-      // second-opening wall (the upgrade-pressure moment).
-      if (freeTierRow.freeOpeningId !== id) {
+      // A different opening already holds the pick — an active drill here is
+      // the second-opening wall (the upgrade-pressure moment).
+      if (isActiveDrill && freeTierRow.freeOpeningId !== id) {
         trackSecondOpeningWalled(id, freeTierRow.freeOpeningId);
       }
       return; // one pick already claimed
     }
+    if (!hasDrilledThisOpening) return;
     void claimFreeOpening(id).then((result) => {
-      if (result === 'ok') trackFreeOpeningClaimed(id);
+      if (result === 'ok') {
+        trackFreeOpeningClaimed(id);
+        setJustClaimedFree(true);
+      }
     });
-  }, [gateEnabled, isPro, freeTierHydrated, isDeepDive, id, freeTierRow.freeOpeningId, claimFreeOpening]);
+  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow.freeOpeningId, claimFreeOpening]);
 
   if (loading) {
     return (
@@ -769,11 +800,13 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Freemium deep-dive wall: a non-Pro user gets ONE opening's full WLPP (all
-  // its variations, gems, traps, plans). A deep dive into a DIFFERENT
-  // masterclass opening (a second pick) shows the paywall here; the browse page
-  // + model games above stayed open. Dormant unless the gate is live + non-Pro.
-  if (isDeepDive && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow)) {
+  // Freemium DRILL wall: a non-Pro user gets ONE opening's full WLPP (all its
+  // variations, gems, traps, plans). An active DRILL (Learn/Practice/Play) on a
+  // DIFFERENT masterclass opening — a second pick — shows the paywall here.
+  // Browsing, model games and WATCH stay open on every opening, so a student
+  // can sample the whole library and only commits when they drill. Dormant
+  // unless the gate is live + non-Pro.
+  if (isActiveDrill && gateEnabled && !isPro && freeTierHydrated && id && !canViewOpening(id, freeTierRow)) {
     return <PaywallPage feature="opening" />;
   }
 
@@ -1818,7 +1851,7 @@ export function OpeningDetailPage(): JSX.Element {
             { label: 'Play', body: 'Play it out against the coach, locked to this opening. Real reps against resistance.' },
             { label: 'Weapons', body: 'The common mistakes your opponent actually makes here — and exactly how to punish them. Watch the crush, then Learn / Practice / Play it like any line.' },
             { label: 'Ask the coach', body: 'Stuck on a move? Ask anytime — the coach knows which line you are studying.' },
-            { label: 'The climb', body: 'Watch → Learn → Practice → Play. Each rung makes the opening more yours. Do them in order.' },
+            { label: 'The climb', body: 'Watch → Learn → Practice → Play. All four are open from the start — but doing them in order is what makes the opening stick.' },
           ]}
         />
         <button
@@ -1849,6 +1882,29 @@ export function OpeningDetailPage(): JSX.Element {
         </button>
         <MasteryRing percent={mastery} size={48} />
       </div>
+
+      {/* Quiet confirmation that this opening just became the student's ONE
+          free pick. Inline + dismissible — never a pop-up (David 2026-09-02).
+          The claim now fires on a completed DRILL, so this is the moment they
+          committed; saying it plainly beats a silent lock-in. */}
+      {justClaimedFree && (
+        <div
+          className="flex items-start gap-2 mb-4 px-3 py-2 rounded-xl border border-green-500/30 bg-green-500/10"
+          data-testid="free-opening-claimed-note"
+        >
+          <Check size={16} className="text-green-500 mt-0.5 shrink-0" />
+          <p className="flex-1 text-xs text-theme-text">
+            <span className="font-semibold">{subjectName}</span> is now your free opening — the whole course is yours.
+          </p>
+          <button
+            onClick={() => setJustClaimedFree(false)}
+            className="text-xs text-theme-text-muted hover:text-theme-text shrink-0"
+            data-testid="free-opening-claimed-dismiss"
+          >
+            Got it
+          </button>
+        </div>
+      )}
 
       {/* Line stats */}
       {totalLines > 0 && (

@@ -5,6 +5,7 @@ import {
   isRungComplete,
   isRungUnlocked,
   areWeaponsUnlocked,
+  hasDrilledOpening,
   nextRung,
   lockHint,
   unlockBudgetFor,
@@ -69,6 +70,35 @@ describe('wlppLadder', () => {
     // ...but both lines are accessible.
     expect(isRungUnlocked(o, MAIN_LINE_INDEX, 'learn')).toBe(true);
     expect(isRungUnlocked(o, 0, 'learn')).toBe(true);
+  });
+
+  // hasDrilledOpening is the freemium "you chose this opening" signal (David
+  // 2026-09-02). Watching is free to sample across every opening; the pick
+  // locks only once the student COMPLETES an active drill here.
+  it('hasDrilledOpening: false for a fresh opening', () => {
+    expect(hasDrilledOpening(rec({}))).toBe(false);
+  });
+
+  it('hasDrilledOpening: WATCH completions do NOT count (watching is free)', () => {
+    expect(hasDrilledOpening(rec({ linesDiscovered: [MAIN_LINE_INDEX, 0, 3] }))).toBe(false);
+  });
+
+  it('hasDrilledOpening: a completed Learn / Practice / Play counts', () => {
+    expect(hasDrilledOpening(rec({ linesLearned: [0] }))).toBe(true);
+    expect(hasDrilledOpening(rec({ linesPerfected: [MAIN_LINE_INDEX] }))).toBe(true);
+    expect(hasDrilledOpening(rec({ linesPlayed: [2] }))).toBe(true);
+  });
+
+  it('hasDrilledOpening: a drilled WEAPON counts, a watched one does not', () => {
+    expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': ['watch'] } }))).toBe(false);
+    expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': ['watch', 'learn'] } }))).toBe(true);
+    expect(hasDrilledOpening(rec({ weaponRungs: { 'trap-a': ['practice'] } }))).toBe(true);
+  });
+
+  it('hasDrilledOpening: empty arrays / empty weaponRungs are not a drill', () => {
+    expect(hasDrilledOpening(rec({ linesLearned: [], linesPlayed: [] }))).toBe(false);
+    expect(hasDrilledOpening(rec({ weaponRungs: {} }))).toBe(false);
+    expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': [] } }))).toBe(false);
   });
 
   it('lockHint reads "Complete X to unlock Y"', () => {

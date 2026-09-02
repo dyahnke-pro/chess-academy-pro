@@ -1,10 +1,11 @@
 import type { OpeningRecord } from '../types';
 
-// The WLPP unlock ladder (TODO 3b). Each rung unlocks the next:
-//   Watch → Learn → Practice → Play → (Weapons).
-// Forward-lock only: completed rungs stay re-openable; later rungs are locked
-// until the prior is done. A per-line "unlock all" escape frees every rung.
-// The main line is tracked under MAIN_LINE_INDEX.
+// The WLPP rungs: Watch → Learn → Practice → Play → (Weapons).
+// The forward-lock ladder is RETIRED (David 2026-09-02): every rung, variation
+// and weapon is unlocked up front so a student can go straight to Play.
+// Completion is still tracked per line — it drives checkmarks, progress, the
+// "next rung" nudge, and `hasDrilledOpening` (the freemium claim signal) — it
+// just no longer GATES access. The main line is tracked under MAIN_LINE_INDEX.
 
 export const MAIN_LINE_INDEX = -1;
 
@@ -60,6 +61,24 @@ export function isRungUnlocked(_opening: OpeningRecord, _line: number, _rung: Ru
  *  course (rungs, variations, weapons) is accessible on open. */
 export function areWeaponsUnlocked(_opening: OpeningRecord, _line: number): boolean {
   return true;
+}
+
+/** Has the student actually DRILLED this opening — completed a Learn, Practice
+ *  or Play rung on the main line, ANY variation, or any weapon (trap/gem)?
+ *
+ *  WATCH COMPLETIONS DELIBERATELY DO NOT COUNT. David 2026-09-02: with the whole
+ *  course unlocked up front, watching is free to sample across every opening and
+ *  a mere tap can't be the commitment signal — the student "chooses" an opening
+ *  the moment they finish actively drilling a line in it. This is the predicate
+ *  the freemium one-free-opening claim fires on. */
+export function hasDrilledOpening(opening: OpeningRecord): boolean {
+  const any = (a: number[] | undefined): boolean => Array.isArray(a) && a.length > 0;
+  if (any(opening.linesLearned) || any(opening.linesPerfected) || any(opening.linesPlayed)) {
+    return true;
+  }
+  return Object.values(opening.weaponRungs ?? {}).some((rungs) =>
+    (rungs ?? []).some((r) => r === 'learn' || r === 'practice' || r === 'play'),
+  );
 }
 
 /** The next rung the user should do (first incomplete one), or null if the

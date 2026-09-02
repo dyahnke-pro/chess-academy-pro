@@ -62,6 +62,19 @@ fine; auto-pop is not.
 - **P5 — Gates + audits. `in progress`.** ladder + celebration tests green,
   typecheck green; ship-check running; prod 3-instrument audit after push.
 
+- **P6 — Free-opening claim moved to active-drill completion. `done`.** Unlocking
+  the course broke the old trigger (claim on first deep-dive TAP would burn the
+  pick on a curious tap). New rule, chosen by David 2026-09-02 (option 1):
+  **Watch + model games are FREE TO SAMPLE on every opening; the pick locks on the
+  first COMPLETED active drill (Learn / Practice / Play — main line, variation, or
+  weapon).** Implemented as the pure `hasDrilledOpening(opening)` predicate in
+  `wlppLadder.ts` (reads persisted completion state, so every completion path
+  counts without each call site claiming) + an `isActiveDrill` viewMode test
+  (`ACTIVE_DRILL_MODE` regex + the suffix-less `train-traps`/`train-warnings`).
+  The paywall moved from "any deep dive" to "an active drill" on a non-picked
+  opening. Added a quiet inline claim confirmation (dismissible, not a pop-up).
+  Tests: 5 new `hasDrilledOpening` cases.
+
 ## Follow-up polish (not blocking)
 - `OpeningDetailPage` ladder-guidance block (~1933-1958) + the weapons-locked card
   (~2085) + the two "expert pass / unlock all" buttons are now REDUNDANT (nothing
