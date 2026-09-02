@@ -4307,9 +4307,24 @@ export async function getCoachChatResponse(
         // few moves / off-book (the answer says so honestly).
         if (grounding.nameOpeningQuestion) {
           try {
-            const sans = (grounding.moveHistory && grounding.moveHistory.length > 0)
+            let sans = (grounding.moveHistory && grounding.moveHistory.length > 0)
               ? grounding.moveHistory
               : (grounding.gameSans ?? []);
+            // No moves on the board? The user may have TYPED the line — "what
+            // opening is 1.e4 e5 2.Nf3 Nc6 3.Bb5?". Parse it with chess.js
+            // (loadPgn accepts a bare move text) so every SAN is real + legal
+            // (G3), then name from those. Never recall the opening from memory.
+            if (sans.length === 0) {
+              const typed = lastUserMessage() ?? '';
+              if (/[a-h][1-8]/i.test(typed)) {
+                try {
+                  const probe = new Chess();
+                  probe.loadPgn(typed.replace(/\?/g, ' '));
+                  const hist = probe.history();
+                  if (hist.length > 0) sans = hist;
+                } catch { /* not a parseable move list */ }
+              }
+            }
             const detected = sans.length > 0 ? detectOpeningTranspositional([...sans]) : null;
             const answer = detected
               ? assembleOpeningNameAnswer({ name: detected.name, eco: detected.eco, plies: detected.plyCount })
@@ -4903,7 +4918,14 @@ export async function getCoachChatResponse(
           } catch { /* fall through to the technique lane */ }
         }
 
-        if (grounding.endgameQuestion) {
+        // A NAMED endgame technique reaches here two ways: as an endgameQuestion,
+        // or as a conceptQuestion the concept-corpus lane (above) had no passage
+        // for and let fall through ("rule of the square", "triangulation", "key
+        // squares" — battery 2026-09-02). matchEndgameLesson returns null for any
+        // non-endgame concept, so gating on conceptQuestion too can only route a
+        // genuine named technique to the board-verified catalog instead of the
+        // position-default fall-through — never steal an ordinary concept.
+        if (grounding.endgameQuestion || grounding.conceptQuestion) {
           const endAsk = lastUserMessage() ?? grounding.cleanAsk ?? '';
           const lesson = matchEndgameLesson(endAsk);
           if (lesson) {

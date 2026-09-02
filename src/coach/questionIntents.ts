@@ -183,7 +183,11 @@ const BEST_MOVE_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+the\s+(?:right|correct|winning|strongest)\s+(?:move|continuation)\b`,
   String.raw`\bhow\s+should\s+(?:i|we)\s+(?:continue|respond|recapture)\b`,
   String.raw`\bwhat(?:'?s| is)?\s+the\s+move\b`,
-  String.raw`\bis\s+(?:this|that|it|[A-Za-z0-9+#=-]{1,6})\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable|right|strong|a\s+(?:good|sound|strong)\s+move)\b`,
+  // "is <SAN> best/sound/good…" — the move token MUST look like a SAN (contain a
+  // rank digit) or be castling, so the article in "is A good bishop vs a bad
+  // bishop" / "is a good plan" no longer matches [token]{1,6} and hijacks a pure
+  // concept question into the best-move lane (battery 2026-09-02).
+  String.raw`\bis\s+(?:this|that|it|O-O(?:-O)?|[A-Za-z0-9+#=x-]*[1-8][A-Za-z0-9+#=x-]*)\s+(?:the\s+)?(?:best|sound|good|winning|correct|playable|right|strong|a\s+(?:good|sound|strong)\s+move)\b`,
   String.raw`\bshould\s+i\s+(?:play|go\s+for|take|capture|push|trade|castle|move|advance|develop|simplify|trade\s+(?:down|off)|keep\s+pieces\s+on|exchange)\b`,
   String.raw`\bcandidate\s+moves?\b`,
   String.raw`\bwhat\s+(?:do|should)\s+i\s+do\s+(?:here|now|in\s+this)\b`,
@@ -2257,12 +2261,27 @@ const NAME_OPENING_RE: ReadonlyArray<RegExp> = [
   /\bname\s+(?:this|the)\s+opening\b/i,
   /\bwhat\s+am\s+i\s+playing\s+(?:here|right\s+now)\b/i,
 ];
+/** A typed move sequence inside the ask — "1.e4 e5 2.Nf3 Nc6", "1. d4 d5 2. c4",
+ *  or a bare run "e4 c5 Nf3". Lets "what opening is <moves>" / "what do you call
+ *  <moves>" name the line from the TYPED moves (chess.js-validated in the handler,
+ *  G3) instead of falling through to the best-move lane on the live board. */
+const TYPED_MOVE_LIST_RE = /(?:\b\d+\.\s*)?[NBRQKO][a-h1-8x+#=O-]*[1-8O][\s,]+|(?:\b\d+\.\s*)?[a-h]x?[a-h]?[1-8][\s,]+[NBRQKOa-h]/i;
+export function typedMoveListInAsk(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // Needs at least a "1." style move number OR two move-shaped tokens in a row.
+  return /\b\d+\.\s*[NBRQKO]?[a-h]/i.test(ask) || TYPED_MOVE_LIST_RE.test(ask);
+}
 export function isNameOpeningQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // A recommendation ("what opening should I play/learn") is not an identify ask.
   if (/\b(?:should|could|would|to)\s+(?:i|we)\s+(?:play|learn|study|pick|choose)\b/i.test(ask)) return false;
   if (/\b(?:best|strongest|favou?rite|worst|weakest)\b/i.test(ask)) return false; // opening-profile
-  return NAME_OPENING_RE.some((re) => re.test(ask));
+  if (NAME_OPENING_RE.some((re) => re.test(ask))) return true;
+  // "what opening is 1.e4 e5…" / "what do you call 1.d4 d5…" / "which opening is
+  // e4 c5" — an identify ask that carries the moves in the text.
+  if (/\b(?:what|which)\s+opening\s+is\b/i.test(ask) && typedMoveListInAsk(ask)) return true;
+  if (/\bwhat\s+do\s+you\s+call\b/i.test(ask) && typedMoveListInAsk(ask)) return true;
+  return false;
 }
 
 export function isAppHelpQuestion(ask: string | undefined): boolean {

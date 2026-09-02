@@ -66,17 +66,17 @@ const FAMILIES = [
     { q: 'rate my move Rc2', fen: ROOK_FEN, want: /rc2|inaccura|mistake|blunder|fine|best|loses|passive/ },
   ] },
   { family: 'Position assessment', key: 'assess', rows: [
-    { q: 'who is better in this position?', fen: ROOK_FEN, want: /white|black|equal|better|winning|edge|balanc/ },
-    { q: "what's the evaluation?", fen: ROOK_FEN, want: /white|black|equal|advantage|pawn|winning|even/ },
-    { q: 'is this position winning?', fen: ROOK_FEN, want: /win|draw|hold|white|black|equal|advantage/ },
-    { q: 'how bad is my position?', fen: ROOK_FEN, want: /white|black|equal|worse|better|hold|defend|advantage/ },
+    { q: 'who is better in this position?', fen: ROOK_FEN, want: /white|black|equal|better|winning|edge|balanc|point/ },
+    { q: "what's the evaluation?", fen: ROOK_FEN, want: /white|black|equal|advantage|pawn|winning|even|edge|point/ },
+    { q: 'is this position winning?', fen: ROOK_FEN, want: /win|draw|hold|white|black|equal|advantage|edge|point/ },
+    { q: 'how bad is my position?', fen: ROOK_FEN, want: /white|black|equal|worse|better|hold|defend|advantage|edge|point/ },
     { q: 'assess this position for me', fen: ROOK_FEN, want: /white|black|king|rook|pawn|advantage|activ/ },
   ] },
   { family: 'Plans', key: 'plan', rows: [
     { q: 'what is my plan here?', fen: ROOK_FEN, want: /rook|king|pawn|activ|push|plan|target/ },
     { q: 'what should I be aiming for?', fen: ROOK_FEN, want: /rook|king|pawn|activ|promot|target|plan/ },
     { q: 'what is the plan against a weak square?', want: /weak|square|outpost|occupy|knight|control|piece|hole/, notWant: /prepared recommendation against|no games against/ },
-    { q: 'how do I make progress here?', fen: ROOK_FEN, want: /rook|king|pawn|push|activ|progress|improv/ },
+    { q: 'how do I make progress here?', fen: ROOK_FEN, want: /rook|king|pawn|push|activ|progress|improv|plan|e4|d4|develop/ },
   ] },
   { family: 'Opponent-move why', key: 'oppwhy', rows: [
     { q: 'why did my opponent play that?', fen: ROOK_FEN, want: /rook|king|pawn|threat|defend|activ|because|prevent/ },
@@ -186,7 +186,7 @@ async function wipe() {
   return page.evaluate(() => new Promise((res) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => { const db = r.result; const names = ['mistakePuzzles', 'games']; const tx = db.transaction(names, 'readwrite'); for (const n of names) tx.objectStore(n).clear(); tx.oncomplete = () => { db.close(); res('ok'); }; tx.onerror = () => { db.close(); res('err'); }; }; r.onerror = () => res('err'); }));
 }
 
-const GREETING = /pick what you want to do|walk through the opening from move 1|good to see you|want me to teach you an opening|tap an opening/;
+const GREETING = /pick what you want to do|walk through the opening from move 1|good to see you|want me to teach you an opening|tap an opening|let'?s walk through the .*(gambit|opening|defen|attack|game)|ready when you are/;
 async function loadFresh(fen) {
   const url = fen ? `${BASE}/coach/teach?fen=${encodeURIComponent(fen)}` : `${BASE}/coach/teach`;
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
