@@ -23,7 +23,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '3.9'
+          APP_VERSION: '4.0'
           PREVIEW_LOCALE: en-US
           PREVIEW_TYPE: IPHONE_67
           PREVIEW_DIR: fastlane/screenshots/en-US

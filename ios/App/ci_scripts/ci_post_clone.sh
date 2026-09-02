@@ -143,7 +143,7 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # crash hotfix that stops the eager "video-dump" teaching-corpus loads from
 # OOM-crashing the app at boot (desktop tabs + iOS WKWebView Jetsam). Built from
 # current main.
-IOS_MARKETING_VERSION="3.9"
+IOS_MARKETING_VERSION="4.0"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
