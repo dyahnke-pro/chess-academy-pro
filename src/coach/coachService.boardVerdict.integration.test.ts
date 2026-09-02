@@ -45,9 +45,9 @@ function liveState() {
   };
 }
 
-async function ask(q: string): Promise<string> {
+async function ask(q: string, over: Partial<ReturnType<typeof liveState>> = {}): Promise<string> {
   const ans = await coachService.ask(
-    { surface: 'game-chat', ask: q, liveState: liveState() },
+    { surface: 'game-chat', ask: q, liveState: { ...liveState(), ...over } },
     { skipActionRouter: true, maxToolRoundTrips: 3 },
   );
   return ans.text.toLowerCase();
@@ -80,5 +80,60 @@ describe('play surface: board-verdict questions answered by the computer', () =>
     expect(r).not.toContain('llm_was_called');
     expect(r).not.toMatch(/the best move is/);
     expect(r).toMatch(/mate in \d+|win for you/);
+  });
+});
+
+/**
+ * ENGINE DOWN — the questions that never needed an engine must still be
+ * answered. Every case above runs with a healthy engine (fen + engineBestMoveUci
+ * + evalCp all present), which is why this whole class shipped uncovered.
+ *
+ * Reproduced 2026-09-02 from a report that an engine-crash run collapsed
+ * EVERYTHING — including "whose turn is it?" — to the stock refusal. Two
+ * independent single-points-of-failure on the FEN, each of which reproduces a
+ * different half of the symptom on its own:
+ *
+ *   1. coachService's autoGrounding gate reads "is there a FEN, OR did one of
+ *      these intents fire", and the four board-verdict intents were never in
+ *      the list. No FEN → no grounding object at all → a free LLM turn on a
+ *      chess question (G0 violation).
+ *   2. computeLiveBoardVerdict opened with `if (!fen) return null`, so even with
+ *      grounding engaged it declined, fell past the position default, and
+ *      served the stock "I can't verify that precisely" — the reported symptom,
+ *      verbatim.
+ *
+ * The side to move and the student's colour are carried on `liveState` and were
+ * always available; the computed path simply never received them. A question
+ * answerable without a board must not depend on one.
+ */
+describe('play surface: engine down / no board threaded', () => {
+  it('"whose turn is it?" is answered with NO fen — not refused, not improvised', async () => {
+    const r = await ask('whose turn is it?', { fen: undefined });
+    expect(r).not.toContain('llm_was_called');
+    expect(r).not.toMatch(/can.t verify/);
+    expect(r).toMatch(/white to move|your turn/);
+  });
+
+  it('"what colour am I playing?" is answered with NO fen', async () => {
+    const r = await ask('what color am I playing?', { fen: undefined });
+    expect(r).not.toContain('llm_was_called');
+    expect(r).not.toMatch(/can.t verify/);
+    expect(r).toMatch(/playing white/);
+  });
+
+  it('board questions survive a DEAD engine when the fen is present', async () => {
+    // The engine crash itself must not take down board-truth answers: these
+    // read chess.js and the threaded side, never a search.
+    const dead = { engineBestMoveUci: undefined, evalCp: undefined };
+    expect(await ask('whose turn is it?', dead)).toMatch(/white to move|your turn/);
+    expect(await ask('what color am I playing?', dead)).toMatch(/playing white/);
+  });
+
+  it('a board question that GENUINELY needs the board declines honestly, never improvises', async () => {
+    // Mate/draw cannot be answered without a position. The contract is that the
+    // coach says so through the computed lane — it must never hand the question
+    // to the model to invent an answer for.
+    const r = await ask('how many moves until mate?', { fen: undefined, engineBestMoveUci: undefined, evalCp: undefined });
+    expect(r).not.toContain('llm_was_called');
   });
 });

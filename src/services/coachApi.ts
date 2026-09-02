@@ -1342,6 +1342,12 @@ export interface MasterGroundingOptions {
   /** Which side the STUDENT plays — so the tactics answer warns about THEIR
    *  hanging pieces. Falls back to side-to-move when absent. */
   studentColor?: 'white' | 'black';
+  /** Side to move, as the SURFACE already knows it — independent of `currentFen`.
+   *  The surface has carried this on `liveState` all along (the envelope reads
+   *  it), but the COMPUTED answer path never received it, so "whose turn is it?"
+   *  was derived from the FEN alone and had no answer without one. That made a
+   *  question needing no board depend on the board. */
+  whoseTurn?: 'white' | 'black';
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -2099,19 +2105,36 @@ async function computeLiveBoardVerdict(
     source: 'coachApi.computeLiveBoardVerdict',
     summary: `entered q="${(question ?? '').slice(0, 60)}" fen=${fen ? 'present' : 'MISSING'} turn=${isWhoseTurnQuestion(question)} color=${isLiveColorQuestion(question)} draw=${isDrawQuestion(question)} mate=${isMateQuestion(question)}`,
   });
-  if (!fen) return null;
-  const stm: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
-  const sc: 'white' | 'black' = grounding.studentColor ?? stm;
+  // THE FEN IS NOT A PRECONDITION FOR EVERY BOARD QUESTION. This used to open
+  // with `if (!fen) return null`, so a missing FEN took down intents whose
+  // answer was already sitting in `liveState` — "whose turn is it?" and "what
+  // colour am I?" need a side, not a board. With the FEN gone they fell through
+  // this lane, past the position default (which really does need engine data),
+  // to the terminal stock refusal / a free LLM turn: one missing input degraded
+  // EVERY intent to the same non-answer, including the ones that never touched
+  // the engine. Found reproducing an engine-crash run (2026-09-02) — repro test
+  // case B, which failed with `llm_was_called` before this.
+  //
+  // So: derive from the FEN when there is one, from what the surface already
+  // told us when there isn't, and only decline when neither knows. The
+  // board-dependent intents (mate / draw / tablebase) still require the FEN —
+  // their bail moved below, where it belongs.
+  const stm: 'white' | 'black' | null =
+    fen ? (fen.split(' ')[1] === 'b' ? 'black' : 'white') : (grounding.whoseTurn ?? null);
+  const sc: 'white' | 'black' | null = grounding.studentColor ?? stm;
   const voice = (facts: string, intent: string): Promise<string | null> =>
     voiceFacts(facts, { studentMessage: question, providerConfig: config, intent, preferRaw: true }).then((v) => v ?? facts);
 
-  if (isWhoseTurnQuestion(question)) {
+  if (isWhoseTurnQuestion(question) && stm) {
     const yours = sc === stm;
     return voice(`It's ${stm === 'white' ? 'White' : 'Black'} to move${yours ? " — your turn." : " — their turn."}`, 'whose-turn');
   }
-  if (isLiveColorQuestion(question)) {
+  if (isLiveColorQuestion(question) && sc) {
     return voice(`You're playing ${sc === 'white' ? 'White' : 'Black'}.`, 'live-color');
   }
+
+  // Everything past here reads the BOARD, so a FEN is genuinely required.
+  if (!fen || !sc) return null;
 
   const mateQ = isMateQuestion(question);
   const drawQ = isDrawQuestion(question);
