@@ -52,9 +52,12 @@ const WIN_POS = [
   { name: 'KR vs K', fen: '4k3/8/8/8/8/8/8/R3K3 w - - 0 1' },
   { name: 'K+P vs K (king ahead)', fen: '4k3/8/4K3/4P3/8/8/8/8 w - - 0 1' },
 ];
+// NON-game-over theoretical draws (insufficient-material FENs auto-finalize the
+// play surface to a game-over screen — CoachGamePage:2125 — so KB/KN vs K can't
+// be driven through live chat; use live drawn positions instead).
 const DRAW_POS = [
-  { name: 'KB vs K (insufficient)', fen: '4k3/8/8/8/8/8/5B2/4K3 w - - 0 1' },
-  { name: 'KN vs K (insufficient)', fen: '4k3/8/8/8/8/8/5N2/4K3 w - - 0 1' },
+  { name: 'KR vs KR (dead draw)', fen: '4k3/4r3/8/8/8/8/4R3/4K3 w - - 0 1' },
+  { name: 'KQ vs KQ (dead draw)', fen: '4k3/4q3/8/8/8/8/4Q3/4K3 w - - 0 1' },
   { name: 'K+rook-pawn vs K (corner draw)', fen: '7k/8/6K1/7P/8/8/8/8 w - - 0 1' },
 ];
 const pick = (arr, n, off) => { const out = []; for (let i = 0; i < n; i++) out.push(arr[(off * n + i) % arr.length]); return out; };
