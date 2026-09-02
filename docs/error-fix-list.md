@@ -86,11 +86,22 @@ but it is NOT evidence of a widespread user problem.
 
 ## NOT a bug — do not chase
 
-- **`voice_fallover` "→ Web Speech" is a warmup/cooldown LOG, not robotic playback.** Verified 2026-09-02: every actually-spoken narration used `voiceService.speakCloud` (cloud voice); there is **no** Web-Speech tier in `voice_spoken`/`coach_narration_spoken` sources. David never heard robotic, and neither did real users. 660 of the 736 were the Lake Butler dev device. Don't "fix" the voice tier based on this event.
+- **`voice_fallover` "→ Web Speech" is a warmup/cooldown LOG, not robotic playback.** Verified 2026-09-02: every actually-spoken narration used `voiceService.speakCloud` (cloud voice); there is **no** Web-Speech tier in `voice_spoken`/`coach_narration_spoken` sources. David never heard robotic, and neither did real users. Most volume was the single heaviest real user (Lake Butler). Don't "fix" the voice tier based on this event.
 - **`audit_kind`** is the app's own `logAppAudit` telemetry taxonomy, not an error/automation marker.
 
 ---
 
 ## Sizing note (read before you prioritize)
 
-Real users **barely use the coach chat** (Learn 7 users, Play 6, Review 4; ~6 total coach exchanges among real users). Most coach-chat error volume (E4/E5/E9/E10/E11) came from the Lake Butler DEV device — the bugs are real, but their *current user impact* is small. The two errors that actually hit a lot of real users are **E1 (OTA download)** and **E2 (engine WASM crash/timeout)** — start there.
+**Corrected 2026-09-02:** the heavy "Lake Butler" device is a **real user** (David
+confirmed — it wrote genuine feedback), not a dev device as an earlier pass
+assumed. So the coach-chat errors (E4/E5/E9/E10/E11) it hit — the "can't verify"
+wall, the "I don't understand your language" loop, the "White/Black" perspective,
+the raw fact-dump — are **real-user experience from your single most-engaged
+user**, not testing noise. Do not down-rank them.
+
+By adoption most real users lean on **openings, game import, and the
+weakness/tactics loop**; fewer reach the coach chat — but the ones who do hit the
+E4/E5 problems hard. **Highest real-user blast radius: E1 (OTA download, ~47% of
+users) and E2 (engine WASM crash/timeout).** Start there, then E4/E5 for the
+coach experience.

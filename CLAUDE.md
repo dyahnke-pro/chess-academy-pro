@@ -1960,23 +1960,36 @@ session; the recipe above already excludes them, but know WHY:
    build (and the OTA builds everyone gets) — every build_id on their device is
    ALSO on many other devices. A dev/audit device constantly installs fresh
    builds, so it carries **PRIVATE build_ids that appear on no other device**.
-   The rule:
+   The rule (⚠️ NOT sufficient alone — see the correction below):
    - Compute, per build_id, `count(DISTINCT device_id)`. A build seen on exactly
      ONE device is **private**.
-   - A device with **≥2 private builds = dev/audit → EXCLUDE** (2026-09-02: the
-     Lake Butler power-user iPhone had 7 private builds across 12 total; a
-     Yorkville device had 3 — both David/CC, not users).
-   - A device with **exactly 1 private build = borderline** (could be a real user
-     who happened to be first onto a fresh OTA) — flag it, don't silently drop;
-     it's the count's ± swing.
+   - Many private builds LEANS dev/audit, but is NOT proof.
    - 0 private builds = real user.
-   Applying this took the count from a wrong "39 real users" (which had swallowed
-   the Lake Butler dev device as a "power user") down to **35 real** (32 active/30d).
-   The Lake Butler device alone was ~99% of all coach-chat volume and the 660
-   voice-fallovers — so ANY analysis of "what users do / what breaks for users"
-   MUST strip the private-build devices FIRST, or it's just reporting David's own
-   testing back to him (this session did exactly that, three times, before the
-   build_id fix).
+
+   🔴 **CORRECTION (David 2026-09-02, ground truth): private builds FALSE-POSITIVE
+   the heaviest real user.** The Lake Butler iPhone had 7 private builds and I
+   excluded it as dev/audit — WRONG. David confirmed it is a REAL USER (it wrote
+   genuine confused-learner feedback: "I have a hard time understanding if they
+   are talking about me or the opponent"). Why the heuristic broke: during a
+   stretch of frequent OTA pushes, the single most-active real user DOWNLOADS EACH
+   NEW OTA BUILD FIRST, before it propagates to anyone else — so that one heavy
+   user accumulates private build_ids purely by being fastest, not by being a dev
+   device. So:
+   - **NEVER exclude a device on private-builds ALONE.** Corroborate with a HUMAN
+     signal first: did it write genuine free-text feedback? make/attempt a
+     purchase (`checkout_started`/`restore_completed`)? show organic exploration?
+     If yes → REAL USER, keep it, no matter how many private builds.
+   - Private builds only flag a device as *suspect* — worth a look, never an
+     auto-exclude.
+   - **The ONLY reliable exclusion is David's own device_id list.** He knows which
+     devices are his/CC. Known so far: `eb8cc1c1…` (his TestFlight). ASK him to
+     confirm suspect device_ids rather than trusting the heuristic; lock the
+     confirmed ids as an explicit exclusion list.
+   Net count after the correction: **37 real users** (34 active/30d) — Lake Butler
+   back IN; only the two Yorkville devices (`cd0d0525…`, `baabb7eb…`, no feedback,
+   David's city) still out pending his confirmation (37 vs 39). And because Lake
+   Butler is a real user, its coach-chat volume and the errors it hit ARE
+   real-user experience, not testing — do not dismiss them.
 
 The canonical **real-native-user WHERE** therefore gains a build_id clause: after
 the `properties.*` filters above, also exclude every `device_id` that has ≥2
