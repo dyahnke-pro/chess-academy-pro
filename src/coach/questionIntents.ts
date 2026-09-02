@@ -2043,7 +2043,7 @@ export function isMoveRatingQuestion(ask: string | undefined): boolean {
 export type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
 const TRAIN_VERB = String.raw`(?:set\s*up|start|begin|give\s+me|do|run|open|launch|train|practi[sc]e|drill|work\s+on|improve|sharpen|hone|review|analy[sz]e)`;
 const TRAINING_REQUEST_RE = new RegExp(
-  String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?|mates?|forks?|pins?|skewers?|back[\s-]?rank|discovered|combinations?)\b`,
+  String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|missed\s+threats?|threats?|prophylaxis|structure|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?|mates?|forks?|pins?|skewers?|back[\s-]?rank|discovered|combinations?)\b`,
   'i',
 );
 export function trainingRequestKind(ask: string | undefined): TrainingKind | null {
@@ -2066,6 +2066,9 @@ export function trainingRequestKind(ask: string | undefined): TrainingKind | nul
   if (/tactic|mate|fork|pin|skewer|back.?rank|discover|combination/.test(t)) return 'tactics';
   if (/endgame|ending/.test(t)) return 'endgame';
   if (/mistake|blunder/.test(t)) return 'mistakes';
+  // Batch A weakness families — "drill my missed threats / structure" is a
+  // weakness drill, not a live-board threat readout (David 2026-09-02 nit).
+  if (/threat|prophylax|structure/.test(t)) return 'weakness';
   if (/weak/.test(t)) return 'weakness';
   if (/opening|repertoire/.test(t)) return 'opening';
   if (/review|my\s+games?/.test(t)) return 'review';

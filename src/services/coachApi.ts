@@ -1809,6 +1809,45 @@ function signalHint(
   } catch { return { signalLane: 'error' }; }
 }
 
+/** Batch D LIVE FLIP (David 2026-09-02, "get D done") — the candidate-map
+ *  dispatch, fired ONLY at a deflection (the regex fast-path already gave up).
+ *  For a confident, unambiguous candidate it re-routes to that lane's SAME pure
+ *  assembler the regex lane uses; the assembler self-gates (null → today's
+ *  deflection is served instead). Safe by construction: it can't regress a
+ *  working regex route (it only runs where none matched), and a plausibly-right
+ *  answer beats the stock deflection it replaces. Scoped to the three assemblers
+ *  that are pure + self-gating (theory / endgame / weakness); everything else
+ *  stays observe-only via signalHint until the deflection log earns its mapping. */
+async function signalReroute(
+  query: string | undefined,
+  grounding: { currentFen?: string | null; moveHistory?: readonly unknown[] } | null | undefined,
+  config: ProviderConfig | null,
+): Promise<{ text: string; lane: string } | null> {
+  const boardPresent = !!(grounding?.currentFen || (grounding?.moveHistory?.length ?? 0) > 0);
+  const top = topCandidateLane(query ?? '', { boardPresent });
+  if (!top || top.score < 4) return null; // confident candidates only
+  const q = query ?? '';
+  try {
+    if (top.lane === 'theory') {
+      const hit = searchTheoryPassage(q);
+      const ans = hit ? assembleTheoryAnswer({ conceptName: hit.conceptName, conceptId: hit.conceptId, passage: hit.passage }) : null;
+      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'theory', preferRaw: true }); if (v) return { text: v, lane: 'theory' }; }
+    } else if (top.lane === 'endgame') {
+      const lesson = matchEndgameLesson(q);
+      if (lesson) {
+        const playable = lesson.positions.find((p) => p.fen);
+        const ans = assembleEndgameTechniqueAnswer({ name: lesson.name, rule: lesson.narration.rule, why: lesson.narration.why, history: lesson.narration.history ?? null, tip: lesson.narration.tip ?? null, fen: playable?.fen ?? null });
+        if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'endgame', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'endgame_trainer', id: lesson.id }]; return { text: v, lane: 'endgame' }; } }
+      }
+    } else if (top.lane === 'weakness') {
+      const unified = await getUnifiedWeaknessProfile();
+      const ans = assembleWeaknessRecommendation(unified, { topic: null });
+      if (ans) { const v = await voiceFacts(ans.facts, { studentMessage: q, providerConfig: config, intent: 'progress', preferRaw: true }); if (v) { lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }]; return { text: v, lane: 'weakness' }; } }
+    }
+  } catch { return null; }
+  return null;
+}
+
 /**
  * groundedMoveFeedback — the PUBLIC root-cause move-feedback primitive
  * (David 2026-07-09: "no bandaids, root cause fixes only").
@@ -5179,8 +5218,18 @@ export async function getCoachChatResponse(
           }
         }
       }
-      // A chess question no assembler caught. Compute the position default when
-      // the surface threaded engine data; otherwise serve the honest stock line.
+      // A chess question no assembler caught. Batch D live flip: try the
+      // signal-map re-route (theory / endgame / weakness) before the generic
+      // position default — a confident off-phrasing the regex missed gets its
+      // real lane answer instead of a board readout. Self-gating.
+      const reroute = await signalReroute(originalQuery, grounding, config);
+      if (reroute) {
+        emitGroundingCoverage(`signal-reroute:${reroute.lane}`, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'chess-signal-seal' });
+        if (onStream) onStream(reroute.text);
+        return reroute.text;
+      }
+      // Compute the position default when the surface threaded engine data;
+      // otherwise serve the honest stock line.
       const grounded = await serveGroundedPositionDefault(grounding, config, originalQuery || undefined);
       if (grounded) {
         emitGroundingCoverage('safe-default-position', surface, sessionId, { question: originalQuery.slice(0, 100), ...signalHint(originalQuery, grounding) });
@@ -5285,6 +5334,13 @@ export async function getCoachChatResponse(
     emitGroundingCoverage('safe-default-stock', surface, sessionId, { reason: 'grounded-banter-fully-stripped', question: originalQuery.slice(0, 100), path: 'grounded-fallthrough', ...signalHint(originalQuery, grounding) });
     if (onStream) onStream(STOCK_GROUNDING_FALLBACK);
     return STOCK_GROUNDING_FALLBACK;
+  }
+  // Batch D live flip — signal-map re-route before the generic position default.
+  const fallthroughReroute = grounding ? await signalReroute(originalQuery, grounding, config) : null;
+  if (fallthroughReroute) {
+    emitGroundingCoverage(`signal-reroute:${fallthroughReroute.lane}`, surface, sessionId, { question: originalQuery.slice(0, 100), path: 'grounded-fallthrough' });
+    if (onStream) onStream(fallthroughReroute.text);
+    return fallthroughReroute.text;
   }
   const grounded = grounding ? await serveGroundedPositionDefault(grounding, config, originalQuery || undefined) : null;
   if (grounded) {
