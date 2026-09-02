@@ -329,6 +329,29 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
   }
 }
 
+/** Warm the DeepSeek LLM proxy at boot with a 1-token completion, so the FIRST
+ *  real coach turn doesn't pay the edge/connection cold-start. The hand-driven
+ *  prod audit (David 2026-09-02) showed the first coach question hit
+ *  `coach-brain-deepseek-timeout` → provider retry → ~37s (Stockfish was already
+ *  warm; the LLM edge was the cold leg), while every later turn answered in
+ *  <200ms. Fire-and-forget and fully swallowed on error — the real turn still
+ *  has the timeout+retry+fallback chain; this just pre-pays the cold-start off
+ *  the critical path. Never blocks boot; never an interactive-quality call. */
+export async function warmCoachProvider(): Promise<void> {
+  try {
+    const cfg = await getProviderConfig();
+    if (!cfg) return;
+    await callDeepSeek(
+      cfg.apiKey,
+      normalizeDeepSeekModel(DEEPSEEK_MODEL_MAP.chat_response),
+      [{ role: 'user', content: 'hi' }],
+      1,
+      () => { /* discard — warm only */ },
+      'chat_response',
+    );
+  } catch { /* boot warm is best-effort */ }
+}
+
 /** Pin the provider for a single call. With Anthropic removed there is
  *  only DeepSeek — a stray 'anthropic' pin (a bug) is coerced and logged
  *  so it can never dead-end a surface again. */

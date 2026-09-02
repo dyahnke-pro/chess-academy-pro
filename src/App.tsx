@@ -15,6 +15,7 @@ import { getSharedAudioContext } from './services/audioContextManager';
 import { speechService } from './services/speechService';
 import { voiceService } from './services/voiceService';
 import { stockfishEngine } from './services/stockfishEngine';
+import { warmCoachProvider } from './services/coachApi';
 import { db } from './db/schema';
 import { installGlobalErrorHooks, installConsoleBackdoor, logAppAudit, loadAuditStreamConfig } from './services/appAuditor';
 import { initAnalytics, identifyUser, setUserProperties, registerSuperProperties } from './services/analytics';
@@ -407,6 +408,14 @@ export function App(): JSX.Element {
             .then(() => stockfishEngine.analyzeWithBudget(STOCKFISH_WARM_FEN, 12, 1500))
             .catch(() => undefined);
         }, 2500);
+
+        // Warm the DeepSeek LLM proxy too (David 2026-09-02). The hand-driven
+        // prod audit proved the LLM edge — not Stockfish — was the dominant cold
+        // leg: the first coach turn hit coach-brain-deepseek-timeout → retry →
+        // ~37s, later turns <200ms. A 1-token completion at boot pre-pays that
+        // edge cold-start off the critical path. Deferred ~3s so it never
+        // competes with first paint or the Stockfish warm; fire-and-forget.
+        setTimeout(() => { void warmCoachProvider().catch(() => undefined); }, 3000);
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
         // deferred 30s after boot so it never competes with the user's

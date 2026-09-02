@@ -26,7 +26,13 @@ import type {
 } from '../types';
 import { formatEnvelopeAsSystemPrompt, formatEnvelopeAsUserMessage } from '../envelope';
 
-const PROVIDER_TIMEOUT_MS = 30_000;
+// 15s, not 30s: the live coach-turn client cap is 25s (GameChatPanel), so a 30s
+// provider timeout meant the client ALWAYS gave up before the cold attempt even
+// timed out — the warm retry could never land in time. At 15s a cold first
+// attempt fails fast and the warm retry (edge now warm) completes well inside
+// the 25s cap. Deep single-shot tasks (analysis/reports) aren't on this live
+// path (hand-driven prod audit, David 2026-09-02).
+const PROVIDER_TIMEOUT_MS = 15_000;
 const DEFAULT_MAX_TOKENS = 2000;
 
 function buildResponse(raw: string): ProviderResponse {
