@@ -47,7 +47,20 @@ async function ask(q) {
   for (let i = 0; i < 30; i++) { await page.waitForTimeout(1500); if (fresh(await lines()).some(SUB)) { await page.waitForTimeout(1800); return fresh(await lines()).filter(SUB).join(' '); } }
   return '';
 }
-async function fresh() { await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 }); await dismissGates(); await dismissGates(); }
+async function fresh() { await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 }); await dismissGates(); await dismissGates(); await page.waitForTimeout(1500); }
+// A fresh teach load transiently shows the intent-picker/greeting; a question
+// typed into that state is absorbed. Reload + retry until the reply is a real
+// answer, not the picker prompt.
+const GREETING = /pick what you want to do|walk through the opening from move 1|good to see you|want me to teach you an opening|tap an opening/;
+async function askFresh(q) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await fresh();
+    const a = (await ask(q)).toLowerCase();
+    if (a && !GREETING.test(a)) return a;
+  }
+  await fresh();
+  return (await ask(q)).toLowerCase();
+}
 const notDeflect = (a) => a.length >= 20 && !/i can'?t verify that precisely|hit a snag/.test(a);
 
 try {
@@ -55,30 +68,25 @@ try {
   const rows = seedRows(); await seed(rows, gamesFor(rows));
 
   // ── FIX 1: theory-vs-structure — DIFFERENT structural targets (not "IQP") ──
-  await fresh();
-  const t1 = (await ask('how do I play against the bishop pair?')).toLowerCase();
+  const t1 = await askFresh('how do I play against the bishop pair?');
   record('FIX1 theory (bishop pair): concept, not counter-rep miss', notDeflect(t1) && !/prepared recommendation against|no games against/.test(t1) && /(bishop|pair|two bishops|diagonal|trade|open|piece|square)/.test(t1), `"${t1.slice(0, 90)}"`);
-  const t2 = (await ask('how should I deal with doubled pawns?')).toLowerCase();
+  const t2 = await askFresh('how should I deal with doubled pawns?');
   record('FIX1 theory (doubled pawns): concept, not counter-rep miss', notDeflect(t2) && !/prepared recommendation against|no games against/.test(t2) && /(doubled|pawn|structure|file|weak|target|open)/.test(t2), `"${t2.slice(0, 90)}"`);
-  await fresh();
-  const t3 = (await ask('what is the plan against a weak square?')).toLowerCase();
+  const t3 = await askFresh('what is the plan against a weak square?');
   record('FIX1 theory (weak square): concept, not counter-rep miss', notDeflect(t3) && !/prepared recommendation against|no games against/.test(t3) && /(weak|square|outpost|occupy|knight|control|piece|hole)/.test(t3), `"${t3.slice(0, 90)}"`);
 
   // ── FIX 2: endgame technique — DIFFERENT phrasings (not "rook and pawn") ──
-  await fresh();
-  const e1 = (await ask('how do I hold a Philidor rook ending?')).toLowerCase();
+  const e1 = await askFresh('how do I hold a Philidor rook ending?');
   record('FIX2 endgame (Philidor): technique, not "not an endgame yet"/training', notDeflect(e1) && !/not in an endgame yet|training it is/.test(e1) && /(rook|third rank|defen|draw|hold|king|pawn)/.test(e1), `"${e1.slice(0, 90)}"`);
-  const e2 = (await ask('teach me the Lucena position')).toLowerCase();
+  const e2 = await askFresh('teach me the Lucena position');
   record('FIX2 endgame (Lucena): technique, not "not an endgame yet"/training', notDeflect(e2) && !/not in an endgame yet|training it is/.test(e2) && /(lucena|bridge|rook|pawn|promot|win|king)/.test(e2), `"${e2.slice(0, 90)}"`);
-  await fresh();
-  const e3 = (await ask('how do I win king and pawn versus king?')).toLowerCase();
+  const e3 = await askFresh('how do I win king and pawn versus king?');
   record('FIX2 endgame (K+P vs K): technique, not "not an endgame yet"/training', notDeflect(e3) && !/not in an endgame yet|training it is/.test(e3) && /(opposition|key square|king|pawn|promot|win|zugzwang)/.test(e3), `"${e3.slice(0, 90)}"`);
 
   // ── FIX 3: drill nit — DIFFERENT drill phrasings (not "drill my missed threats")
-  await fresh();
-  const d1 = (await ask('train my missed threats')).toLowerCase();
+  const d1 = await askFresh('train my missed threats');
   record('FIX3 drill (train missed threats): a drill, not a live-threat readout', notDeflect(d1) && !/no immediate threat|nothing of theirs is hanging/.test(d1) && /(drill|train|pattern|weak|threat|position|puzzle|tap to start)/.test(d1), `"${d1.slice(0, 90)}"`);
-  const d2 = (await ask('drill my structure weaknesses')).toLowerCase();
+  const d2 = await askFresh('drill my structure weaknesses');
   record('FIX3 drill (structure weaknesses): a drill, not a live-threat readout', notDeflect(d2) && !/no immediate threat|nothing of theirs is hanging/.test(d2) && /(drill|train|pattern|weak|structure|position|puzzle|tap to start)/.test(d2), `"${d2.slice(0, 90)}"`);
 } catch (err) {
   record('audit ran without throwing', false, String(err).slice(0, 250));
