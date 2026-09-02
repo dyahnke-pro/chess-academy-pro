@@ -7,6 +7,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { degrade, describeDegradations } from './audit-lib/degrade.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const KQVK = '4k3/8/8/8/8/8/3Q4/4K3 w - - 0 1';
@@ -51,10 +52,15 @@ await p.route('**/api/audit-stream**', async (route) => {
 // DETERMINISTIC DEAD ENGINE: block the Stockfish worker scripts so the engine
 // can NEVER init. This reproduces the collapse condition on demand (instead of
 // waiting for the intermittent sandbox WASM crash) so we can read the mechanism.
+// Dependency failure is now a shared axis (audit-lib/degrade.mjs), not an
+// inline one-off. KILL_ENGINE=1 is kept as the established entry point;
+// DEGRADE=engine,llm,tablebase,... reaches the rest without editing this file.
 const KILL_ENGINE = process.env.KILL_ENGINE === '1';
-if (KILL_ENGINE) {
-  await p.route('**/stockfish/**', async (route) => { await route.abort(); });
-}
+const degraded = await degrade(p, [
+  ...(KILL_ENGINE ? ['engine'] : []),
+  ...(process.env.DEGRADE ? process.env.DEGRADE.split(',') : []),
+]);
+console.log(describeDegradations(degraded));
 
 const errs = [];
 p.on('pageerror', (e) => errs.push('pageerror: ' + String(e).slice(0, 160)));
