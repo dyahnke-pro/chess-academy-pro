@@ -1981,15 +1981,25 @@ session; the recipe above already excludes them, but know WHY:
      If yes → REAL USER, keep it, no matter how many private builds.
    - Private builds only flag a device as *suspect* — worth a look, never an
      auto-exclude.
-   - **The ONLY reliable exclusion is David's own device_id list.** He knows which
-     devices are his/CC. Known so far: `eb8cc1c1…` (his TestFlight). ASK him to
-     confirm suspect device_ids rather than trusting the heuristic; lock the
-     confirmed ids as an explicit exclusion list.
-   Net count after the correction: **37 real users** (34 active/30d) — Lake Butler
-   back IN; only the two Yorkville devices (`cd0d0525…`, `baabb7eb…`, no feedback,
-   David's city) still out pending his confirmation (37 vs 39). And because Lake
-   Butler is a real user, its coach-chat volume and the errors it hit ARE
-   real-user experience, not testing — do not dismiss them.
+   - **The ONLY reliable exclusion is David's own device_id list** (confirmed by
+     him, below), NOT a heuristic. When a new suspect device appears, ASK him.
+
+   **🔒 DAVID'S OWN DEVICES — the confirmed exclusion list (David 2026-09-02).**
+   David lives in **Yorkville, IL**; that is his home geo (his TestFlight phone
+   also travels LA / Chicago / Stone Mountain). Exclude these native device_ids as
+   David/CC, NOT users:
+   - `eb8cc1c1-f377-4e31-94ff-d404a7ce31ae` — his TestFlight iPhone (`distribution
+     ='testflight'` already sheds it)
+   - `cd0d0525-259e-4443-93ec-39d98595894f` — Yorkville, his phone or computer
+   - `baabb7eb-7da2-46d9-984e-a130e43c7290` — Yorkville, his phone or computer
+   - (web) `e97b1a19-…` Yorkville macOS = his Mac on the web app — already shed by
+     `platform='native'`.
+   **NOT David — a REAL USER, do not exclude:** `4589387b-…` (the heavy "Lake
+   Butler / Naaldwijk / Jacksonville" iPhone) — feedback-confirmed real user, and
+   the most engaged one. Its coach-chat volume + errors ARE real-user experience.
+   Net confirmed count: **37 real native users** (34 active/30d). Prefer this
+   explicit id list over the build_id heuristic; refresh it by asking David when
+   a new heavy/suspect device shows up.
 
 The canonical **real-native-user WHERE** therefore gains a build_id clause: after
 the `properties.*` filters above, also exclude every `device_id` that has ≥2
