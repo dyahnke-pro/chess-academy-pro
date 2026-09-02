@@ -375,6 +375,19 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       // One owner for "which engine build runs on this device". The pool is a
       // second consumer of that decision, not a place to re-guess it.
       const resolved = resolveWorkerUrl();
+      // NAME THE BUILD THE POOL SPAWNS. The pool is the only Stockfish consumer
+      // that spawned workers WITHOUT recording which build it chose, so when
+      // `stockfish-18-lite-single.js` crash-stormed a device on 2026-09-02 (276
+      // WASM traps in 4 minutes) there was no variant event to attribute it to —
+      // every `stockfish_variant` in the window said `ios-native` from the
+      // singleton, and the crashing loader was invisible. One log per pool
+      // worker makes the next occurrence self-identifying.
+      void logAppAudit({
+        kind: 'stockfish-variant-resolved',
+        category: 'subsystem',
+        source: 'gameAnalysisService.spawnDedicatedWorker',
+        summary: `pool worker ${index} variant=${resolved.variant} url=${resolved.url} reason=${resolved.reason}`,
+      });
       const worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
 
       worker.onerror = () => {

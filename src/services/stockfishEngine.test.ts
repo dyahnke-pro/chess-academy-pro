@@ -6,17 +6,53 @@ import type { StockfishAnalysis } from '../types';
 // match what the REAL @capacitor/core returns in the vitest env, so every
 // existing test is behavior-preserved; the native-iOS routing tests flip
 // `capacitorState.platform = 'ios'` to exercise the UA-independent iOS path.
-const capacitorState = vi.hoisted(() => ({ platform: 'web' as string, native: false }));
+const capacitorState = vi.hoisted(() => ({
+  platform: 'web' as string,
+  native: false,
+  pluginAvailable: false,
+}));
 vi.mock('@capacitor/core', () => ({
   Capacitor: {
     getPlatform: (): string => capacitorState.platform,
     isNativePlatform: (): boolean => capacitorState.native,
-    isPluginAvailable: (): boolean => false,
+    isPluginAvailable: (): boolean => capacitorState.pluginAvailable,
   },
   // capacitor-stockfish-native calls registerPlugin at import — stub it so the
   // module graph loads (returns an inert proxy; the native path is gated off by
   // isPluginAvailable() === false above).
   registerPlugin: (): Record<string, never> => ({}),
+}));
+
+// Controllable stub for the native iOS Stockfish plugin (the `ios-native`
+// variant's transport). Inert by default — `capacitorState.pluginAvailable`
+// is false, so the engine never picks ios-native — and driven directly by the
+// runtime-stall regression test below, which needs a native engine that INITS
+// cleanly and then goes silent.
+const nativeState = vi.hoisted(() => ({
+  emit: null as ((line: string) => void) | null,
+  cmds: [] as string[],
+  starts: 0,
+  exits: 0,
+}));
+vi.mock('capacitor-stockfish-native', () => ({
+  StockfishNative: {
+    addListener: (_event: string, cb: (data: { line: string }) => void) => {
+      nativeState.emit = (line: string): void => cb({ line });
+      return Promise.resolve({ remove: (): Promise<void> => Promise.resolve() });
+    },
+    start: (): Promise<void> => {
+      nativeState.starts += 1;
+      return Promise.resolve();
+    },
+    cmd: ({ cmd }: { cmd: string }): Promise<void> => {
+      nativeState.cmds.push(cmd);
+      return Promise.resolve();
+    },
+    exit: (): Promise<void> => {
+      nativeState.exits += 1;
+      return Promise.resolve();
+    },
+  },
 }));
 
 // ---------------------------------------------------------------------------
@@ -87,11 +123,19 @@ function createMockWorker(): MockWorkerHandle {
 
 let mockWorker: MockWorkerHandle;
 let workerConstructorCallCount: number;
+/** Every URL `new Worker(...)` was called with, in order — lets a test prove
+ *  WHICH engine bundle a fallback actually routed to. */
+let workerConstructorUrls: string[];
 
 // Stub the global Worker as a class that can be called with `new`
 beforeEach(() => {
   mockWorker = createMockWorker();
   workerConstructorCallCount = 0;
+  workerConstructorUrls = [];
+  nativeState.emit = null;
+  nativeState.cmds.length = 0;
+  nativeState.starts = 0;
+  nativeState.exits = 0;
   // The engine populates a module-level FEN cache on bestmove. Clear
   // it between tests so a previous test's analysis result doesn't
   // short-circuit the worker dispatch under test.
@@ -110,8 +154,9 @@ beforeEach(() => {
     'Worker',
     // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     class MockWorkerClass {
-      constructor() {
+      constructor(url?: string | URL) {
         workerConstructorCallCount++;
+        workerConstructorUrls.push(String(url ?? ''));
         // Return the shared mock instance instead of `this`
         return mockWorker.instance as unknown as MockWorkerClass;
       }
@@ -693,6 +738,72 @@ describe('StockfishEngine', () => {
       expect(mockWorker.instance.terminate).toHaveBeenCalled();
       vi.useRealTimers();
     });
+
+    // -----------------------------------------------------------------------
+    // ios-native RUNTIME stall → demote to asm.js (David 2026-09-02).
+    //
+    // The native plugin has TWO ways to fail and only one was covered. The
+    // INIT-failure path (`demoteNativeToAsm`) sets `_nativeFallbackAttempted`,
+    // so the next init falls to asm. But a native engine that inits CLEANLY
+    // (uciok + readyok) and then never returns bestmove went down
+    // `recoverStuckAnalysis`, whose demote was guarded to `multi` — the
+    // transport was torn down and `tryStart` immediately re-picked
+    // `ios-native`: reset → stall → reset, forever, with a dead eval bar.
+    // Observed on David's iPhone 2026-09-02 (two resets, two re-picks, zero
+    // progress, 276 crash rows). The contract: after a runtime stall the
+    // engine must come back on the bulletproof asm.js build, NOT on itself.
+    // -----------------------------------------------------------------------
+    it('demotes ios-native to asm.js after a RUNTIME stall (never re-picks itself)', async () => {
+      capacitorState.platform = 'ios';
+      capacitorState.native = true;
+      capacitorState.pluginAvailable = true;
+      vi.stubGlobal('window', { crossOriginIsolated: false });
+      vi.stubGlobal('navigator', { userAgent: IOS_UA, maxTouchPoints: 5, hardwareConcurrency: 4 });
+      try {
+        const { stockfishEngine } = await getEngine();
+
+        // 1. The native engine inits CLEANLY — the case the init-failure
+        //    demote never sees. No global Worker is constructed for it; the
+        //    plugin transport stands in for one.
+        const init = stockfishEngine.initialize();
+        await vi.waitFor(() => {
+          expect(nativeState.emit).toBeTruthy();
+          expect(nativeState.cmds).toContain('uci');
+        });
+        nativeState.emit?.('uciok');
+        await vi.waitFor(() => {
+          expect(nativeState.cmds).toContain('isready');
+        });
+        nativeState.emit?.('readyok');
+        await init;
+        expect(stockfishEngine.status).toBe('ready');
+        expect(workerConstructorCallCount).toBe(0);
+
+        // 2. It then goes SILENT on `go` — alive enough to have handshaked,
+        //    dead for search. Drive past the 30s stuck-analysis backstop.
+        vi.useFakeTimers();
+        const stuck = stockfishEngine.analyzePosition(STARTING_FEN, 18);
+        const expectation = expect(stuck).rejects.toThrow(/analysis aborted/);
+        await vi.advanceTimersByTimeAsync(0);
+        await vi.advanceTimersByTimeAsync(31_000);
+        await expectation;
+        vi.useRealTimers();
+
+        // 3. The next analysis must come back on asm.js, NOT on ios-native.
+        //    A real Worker constructed with the asm bundle is the proof; a
+        //    re-pick of ios-native would construct no Worker at all (and stall
+        //    again, which is exactly the loop this fixes).
+        scheduleAnalysisResponse();
+        completeInit();
+        const analysis = await stockfishEngine.analyzePosition(STARTING_FEN, 18);
+        expect(analysis.bestMove).toBeTruthy();
+        expect(workerConstructorUrls).toContain('/stockfish/stockfish-asm.js');
+      } finally {
+        capacitorState.platform = 'web';
+        capacitorState.native = false;
+        capacitorState.pluginAvailable = false;
+      }
+    });
   });
 
   // -----------------------------------------------------------------------
@@ -1249,14 +1360,20 @@ describe('StockfishEngine', () => {
 // ---------------------------------------------------------------------------
 
 describe('resolveWorkerUrl', () => {
-  it('returns single-threaded variant when window is undefined (SSR / no-window)', async () => {
+  // The no-window branch can't sniff the platform, so it must NEVER guess the
+  // SIMD WASM single build — that is the one build that `call_indirect`-traps on
+  // iOS WebKit (the 2026-09-02 crash storm: 276 traps from
+  // stockfish-18-lite-single.js in 4 minutes). asm.js runs everywhere; a slower
+  // working engine beats a crashing one.
+  it('returns the asm.js build when window is undefined (never guess the crashing WASM single build)', async () => {
     vi.stubGlobal('window', undefined);
     vi.resetModules();
     const { resolveWorkerUrl } = await import('./stockfishEngine');
     const result = resolveWorkerUrl();
-    expect(result.variant).toBe('single');
-    expect(result.url).toBe('/stockfish/stockfish-18-lite-single.js');
-    expect(result.reason).toBe('no-window');
+    expect(result.variant).toBe('asm');
+    expect(result.url).toBe('/stockfish/stockfish-asm.js');
+    expect(result.url).not.toBe('/stockfish/stockfish-18-lite-single.js');
+    expect(result.reason).toContain('no-window');
   });
 
   it('returns multi-threaded variant when crossOriginIsolated and SharedArrayBuffer are both available', async () => {

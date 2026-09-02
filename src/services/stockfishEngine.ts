@@ -183,7 +183,13 @@ export function wasmSimdSupported(): boolean {
 
 export function resolveWorkerUrl(): ResolvedWorker {
   if (typeof window === 'undefined') {
-    return { url: STOCKFISH_ST_URL, variant: 'single', reason: 'no-window', workerType: 'classic' };
+    // Default to the BULLETPROOF asm.js build, never the SIMD WASM single build.
+    // This branch can't sniff the platform (no `window`), and the single build is
+    // the one that `call_indirect`-traps on iOS WebKit — so guessing it here is
+    // guessing the one build that can hard-crash. asm.js runs everywhere; a
+    // slower working engine beats a crashing one (the same principle the iOS and
+    // no-SIMD branches below already apply).
+    return { url: STOCKFISH_IOS_ASM_URL, variant: 'asm', reason: 'no-window — asm.js (never guess the WASM single build)', workerType: 'classic' };
   }
   const isolated =
     (window as { crossOriginIsolated?: boolean }).crossOriginIsolated === true;
@@ -1187,6 +1193,24 @@ class StockfishEngine {
         category: 'subsystem',
         source: 'stockfishEngine.recoverStuckAnalysis',
         summary: `multi stalled at runtime (${reason}); demoted to single for the session + persisted`,
+      });
+    }
+    // Same disease, other variant: `ios-native` that INITS fine (uciok) and then
+    // never returns bestmove. Only the INIT-failure path (demoteNativeToAsm) set
+    // `_nativeFallbackAttempted`, so a RUNTIME stall tore the transport down and
+    // `tryStart` immediately re-picked `ios-native` — an endless
+    // reset → stall → reset loop with a dead eval bar. Observed on David's
+    // iPhone 2026-09-02 04:34:10 and 04:34:41 (two resets, two re-picks, zero
+    // progress). The demote above was guarded to `multi` because "iOS is already
+    // asm" — that stopped being true when the native plugin variant landed.
+    // Demote for the SESSION so the next init falls to the bulletproof asm build.
+    if (this.workerVariant === 'ios-native' && !this._nativeFallbackAttempted) {
+      this._nativeFallbackAttempted = true;
+      void logAppAudit({
+        kind: 'stockfish-variant-fallback',
+        category: 'subsystem',
+        source: 'stockfishEngine.recoverStuckAnalysis',
+        summary: `ios-native stalled at runtime (${reason}); demoted to asm.js for the session`,
       });
     }
     void logAppAudit({

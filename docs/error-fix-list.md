@@ -20,14 +20,51 @@ but it is NOT evidence of a widespread user problem.
 - **Impact:** nearly half of real users hit a failed OTA bundle download. Flaky update pipeline; worst case a user is stuck on a stale bundle.
 - **Where to look:** the OTA update service (search `ota_download_failed` emitter, the OTA boot/download path, `ota_*` events). Check bundle host/CDN reachability on cellular, size/timeout, retry/backoff.
 
-### E2. Stockfish WASM engine crashes / times out on some iOS devices 🔴
-- **Evidence (real user, Garanhuras, one session):**
-  - `RuntimeError: call_indirect to a signature that does not match` ×**136**
-  - `RuntimeError: Unreachable code should not be executed`, `Out of bounds call_indirect`
-  - `Stockfish initialization timed out after 45s — worker never signaled`
-  - `no bestmove in 12000ms — variant=ios-native depth=18` (many, multiple devices, incl. today)
-- **Impact:** the engine behind eval / best-move / analysis crashes hard or hangs on specific iOS devices; the 136-crash user had one session and never returned (app likely unusable for them).
-- **Where to look:** `src/services/stockfishEngine.ts`, the `ios-native` variant + its WASM build/threading, the variant-fallback chain (`stockfish_variant_fallback`). Identify the failing device/iOS (pull `$os_version` + `$device` for the crash device) and confirm the WASM build runs there; tighten the init/per-move timeout + fallback to the asm/single-thread variant.
+### E2. Stockfish WASM engine crashes on iOS — ROOT-CAUSED. Fixed on `main`; the SHIPPED App Store build is still exposed 🔴
+- **Status (verified 2026-09-02 against PostHog, by `build_id`):** the code defect is
+  FIXED on `main` since `5b9e89e` (2026-08-27). The remaining user exposure is the
+  **App Store binary itself**, which predates that fix — the cure is a release, not
+  another code change.
+- **Trap counts by build, last 21 days (only two builds ever produced one):**
+
+  | build_id | commit date | devices on it | WASM traps |
+  |---|---|---|---|
+  | `c02ae379+1785908588417` | 2026-08-05 (the shipped App Store build) | 9 | **141** |
+  | `d2d10d0+1787937613509` | 2026-08-28 (post-fix) | 11 | **0** |
+  | `fe6e81ed+1788313493313` | not in the repo — David's private build | 1 | **276** |
+
+- **Root cause (identified, not guessed):** the game-analysis **worker pool**
+  (`gameAnalysisService.spawnDedicatedWorker`) hardcoded
+  `/stockfish/stockfish-18-lite-single.js` — the SIMD WASM build that
+  `call_indirect`-traps on iOS WebKit, and the exact file `resolveWorkerUrl()`
+  routes iOS away from. The singleton engine was never the crasher: every
+  `stockfish_variant` event on both crashing devices reads
+  `variant=ios-native` (a native ARM binary — it cannot throw a WASM error).
+  The pool logged NOTHING, which is why the loader stayed invisible.
+- **The evidence that pins it:** the 276-trap storm sits on
+  `capacitor://…/games/import`, in the 16 minutes immediately after
+  `games_imported` — the pool's window, with no other app event in it. And
+  `c02ae379` is the 2026-08-05 commit, i.e. before the pool adopted
+  `resolveWorkerUrl()` on 08-27.
+- **Fixed on `main` (2026-08-27, `5b9e89e`):** the pool now asks
+  `resolveWorkerUrl()` instead of naming a build. One owner for "which engine
+  runs on this device."
+- **Hardened 2026-09-02 (this session):**
+  - `recoverStuckAnalysis` now demotes **`ios-native`** on a RUNTIME stall. It
+    only demoted `multi`, so a native engine that handshaked fine and then
+    never returned bestmove was torn down and immediately re-picked itself —
+    reset → stall → reset with a dead eval bar (David's device, 04:34:10 and
+    04:34:41). Regression test: `stockfishEngine.test.ts` "demotes ios-native
+    to asm.js after a RUNTIME stall".
+  - `resolveWorkerUrl()`'s `no-window` branch returned `single` — it guessed the
+    one build that can hard-crash. Now asm.js.
+  - The pool logs `stockfish-variant-resolved` per worker, so the next
+    occurrence names its own loader in one query.
+- **Still owed:** an App Store release to retire `c02ae379` from the 9 devices
+  still on it. Until then those users keep hitting it on game import.
+- **NOT a main defect:** `fe6e81ed` is not a commit in this repo — David's
+  2026-09-02 build was cut from a branch that never landed, so it carries the
+  pre-08-27 pool. Don't treat its 276 traps as evidence about `main`.
 
 ---
 
@@ -103,5 +140,6 @@ user**, not testing noise. Do not down-rank them.
 By adoption most real users lean on **openings, game import, and the
 weakness/tactics loop**; fewer reach the coach chat — but the ones who do hit the
 E4/E5 problems hard. **Highest real-user blast radius: E1 (OTA download, ~47% of
-users) and E2 (engine WASM crash/timeout).** Start there, then E4/E5 for the
-coach experience.
+users) and E2 — and E2's code fix is already on `main`, so what it needs is an
+App Store release, not engineering. Start with E1, then E4/E5 for the coach
+experience.
