@@ -63,22 +63,25 @@ export function areWeaponsUnlocked(_opening: OpeningRecord, _line: number): bool
   return true;
 }
 
-/** Has the student actually DRILLED this opening — completed a Learn, Practice
- *  or Play rung on the main line, ANY variation, or any weapon (trap/gem)?
+/** Has the student COMMITTED to this opening? This is the predicate the
+ *  freemium one-free-opening claim fires on (David 2026-09-02).
  *
- *  WATCH COMPLETIONS DELIBERATELY DO NOT COUNT. David 2026-09-02: with the whole
- *  course unlocked up front, watching is free to sample across every opening and
- *  a mere tap can't be the commitment signal — the student "chooses" an opening
- *  the moment they finish actively drilling a line in it. This is the predicate
- *  the freemium one-free-opening claim fires on. */
+ *  Two ways to commit:
+ *   1. Completing an active drill on a LINE — Learn, Practice or Play, on the
+ *      main line or any variation. A completed line WATCH does NOT count:
+ *      watching is the shop window, free to sample across every opening.
+ *   2. Completing ANY rung of a WEAPON (punish gem / named trap) — including its
+ *      Watch. The gems tab is the specialized payoff content, not the front
+ *      door: opening the weapons section and finishing a gem is a deliberate
+ *      "I'm working this opening" (David 2026-09-02: "completion of the gem tab
+ *      should also count as chosen opening"). That asymmetry with the main-line
+ *      Watch is intentional. */
 export function hasDrilledOpening(opening: OpeningRecord): boolean {
   const any = (a: number[] | undefined): boolean => Array.isArray(a) && a.length > 0;
   if (any(opening.linesLearned) || any(opening.linesPerfected) || any(opening.linesPlayed)) {
     return true;
   }
-  return Object.values(opening.weaponRungs ?? {}).some((rungs) =>
-    (rungs ?? []).some((r) => r === 'learn' || r === 'practice' || r === 'play'),
-  );
+  return Object.values(opening.weaponRungs ?? {}).some((rungs) => (rungs ?? []).length > 0);
 }
 
 /** The next rung the user should do (first incomplete one), or null if the

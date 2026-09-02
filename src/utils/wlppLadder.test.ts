@@ -89,10 +89,14 @@ describe('wlppLadder', () => {
     expect(hasDrilledOpening(rec({ linesPlayed: [2] }))).toBe(true);
   });
 
-  it('hasDrilledOpening: a drilled WEAPON counts, a watched one does not', () => {
-    expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': ['watch'] } }))).toBe(false);
+  // The gems/weapons tab is payoff content, not the front door — finishing ANY
+  // of its rungs (Watch included) is a commitment, unlike a main-line Watch.
+  it('hasDrilledOpening: ANY weapon rung counts, including a gem WATCH', () => {
+    expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': ['watch'] } }))).toBe(true);
     expect(hasDrilledOpening(rec({ weaponRungs: { 'gem-1': ['watch', 'learn'] } }))).toBe(true);
     expect(hasDrilledOpening(rec({ weaponRungs: { 'trap-a': ['practice'] } }))).toBe(true);
+    // ...but a main-LINE watch still does not.
+    expect(hasDrilledOpening(rec({ linesDiscovered: [0] }))).toBe(false);
   });
 
   it('hasDrilledOpening: empty arrays / empty weaponRungs are not a drill', () => {

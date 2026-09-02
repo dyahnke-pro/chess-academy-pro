@@ -74,6 +74,14 @@ fine; auto-pop is not.
   The paywall moved from "any deep dive" to "an active drill" on a non-picked
   opening. Added a quiet inline claim confirmation (dismissible, not a pop-up).
   Tests: 5 new `hasDrilledOpening` cases.
+  **Amended (David 2026-09-02): "completion of the gem tab should also count as
+  chosen opening."** So ANY weapon (punish gem / named trap) rung completion —
+  including its WATCH — now commits, while a main-LINE watch still does not. The
+  asymmetry is deliberate: the main Watch is the shop window (free to sample),
+  the gems tab is the specialized payoff content, so finishing a gem is a real
+  "I'm working this opening". Verified both gem-watch writes fire on COMPLETION
+  (`onComplete`, and `onAdvanceToLearn` when they tap Learn at the end) — never
+  on merely opening a gem.
 
 ## Follow-up polish (not blocking)
 - `OpeningDetailPage` ladder-guidance block (~1933-1958) + the weapons-locked card
