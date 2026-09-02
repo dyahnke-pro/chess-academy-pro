@@ -11,12 +11,20 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const KQVK = '4k3/8/8/8/8/8/3Q4/4K3 w - - 0 1';
 const START_PATH = `/coach/play?fen=${encodeURIComponent(KQVK)}`;
+// One phrasing per registry entry in src/coach/boardQuestions.ts. `assessment`
+// was added 2026-09-02 after the dead-engine probe found "am I winning?" being
+// captured by the OPENING-NAME PICKER ("I don't have that exact opening mapped
+// — did you mean one of these?") with positionAssessmentQuestion already true.
+// Two phrasings for it on purpose: one that hit the picker and one that hit the
+// stock refusal — different failure modes, both must be gone.
 const QUESTIONS = [
   "what's the best move?",
   'whose turn is it?',
   'what color am I?',
   'is this a draw?',
   'how many moves until mate?',
+  'am I winning?',
+  "who's better here?",
 ];
 
 const events = [];
