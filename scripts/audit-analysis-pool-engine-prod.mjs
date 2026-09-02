@@ -17,6 +17,9 @@
  * This audit drives the REAL path — seed unanalyzed games, push the REAL
  * "Analyze games" button, let the genuine pool spawn — and asserts:
  *
+ *   SF0  the pool actually SPAWNED (harness precondition, read off the pool's
+ *        own pre-existing console line — so a missing variant row is never
+ *        confused with an empty batch)
  *   SF1  the pool NAMES the build it spawns (the observability fix; before
  *        2026-09-02 this check could not pass at all)
  *   SF2  the pool resolves the SAME build the singleton did — one owner for
@@ -101,10 +104,17 @@ async function main() {
 
   const wasmTraps = [];
   const pageErrors = [];
+  /** The pool's OWN console line ("N workers ready — analyzing M games"), which
+   *  predates the audit-logging fix. It is the harness's proof that the pool
+   *  actually SPAWNED, independent of the thing under test — so a missing
+   *  variant row can never be confused with "there was no work to do".
+   *  CLAUDE.md: ask whether the HARNESS reached the surface first. */
+  const poolConsole = [];
   const WASM_TRAP = /call_indirect|Unreachable code should not be executed|Invalid opcode 0xfd|out of bounds call_indirect/i;
   page.on('console', (msg) => {
     const t = msg.text();
     if (WASM_TRAP.test(t)) wasmTraps.push(t.slice(0, 200));
+    if (/\[GameAnalysis\].*workers ready/.test(t)) poolConsole.push(t.slice(0, 200));
   });
   page.on('pageerror', (err) => {
     const t = String(err?.message ?? err);
@@ -122,6 +132,18 @@ async function main() {
       await page.locator('[data-testid="skill-band-intermediate"]').click();
       await bubble.waitFor({ state: 'detached', timeout: 15_000 });
     } catch { /* no bubble — fine */ }
+
+    // The AI-consent modal is the ONE sanctioned pop-up (CLAUDE.md) and it is a
+    // full-screen overlay: it SWALLOWS the first click on any surface. A
+    // `force: true` click here dispatches into the overlay and the audit reports
+    // a pass for a no-op — which is how the first run of this script "clicked"
+    // the analyze button and started nothing. Dismiss it, never force past it.
+    try {
+      const consent = page.locator('[data-testid="ai-consent-modal"]');
+      await consent.waitFor({ state: 'visible', timeout: 8000 });
+      await page.locator('[data-testid="ai-consent-allow"]').click();
+      await consent.waitFor({ state: 'detached', timeout: 10_000 });
+    } catch { /* no consent modal — fine */ }
 
     // ── Seed UNANALYZED games so the batch has real work ──────────────────
     // Unanalyzed = no `annotations`, which is what `gameNeedsAnalysis` reads.
@@ -163,13 +185,24 @@ async function main() {
       if (await help.isVisible({ timeout: 2500 })) await page.keyboard.press('Escape');
     } catch { /* no help modal */ }
 
+    // Click the REAL button, and ASSERT it was in a state that does something.
+    // The button disables itself when it sees no work ("All games analyzed"),
+    // so a click on it is a no-op — the seed not landing must fail loudly here
+    // rather than surface later as a phantom product finding.
     const cta = page.locator('[data-testid="analyze-games-cta"]').first();
     try {
       await cta.waitFor({ state: 'visible', timeout: 20_000 });
-      await cta.click({ force: true });
-      record('analyze-cta', 'pass', 'clicked the real "Analyze games" button on /settings');
+      const label = (await cta.innerText()).replace(/\s+/g, ' ').trim();
+      const disabled = await cta.isDisabled();
+      if (disabled || !/Analyze\s+\d+\s+game/i.test(label)) {
+        record('analyze-cta', 'fail',
+          `button is not in a work state — text="${label}" disabled=${disabled}; the seeded games did not reach gameNeedsAnalysis (HARNESS miss)`);
+      } else {
+        await cta.click();   // NO force — an intercepted click must throw, not no-op
+        record('analyze-cta', 'pass', `clicked the real button ("${label}")`);
+      }
     } catch (err) {
-      record('analyze-cta', 'fail', `analyze-games-cta never became clickable: ${String(err).slice(0, 120)}`);
+      record('analyze-cta', 'fail', `analyze-games-cta never became clickable: ${String(err).slice(0, 160)}`);
     }
 
     // ── Let the pool spawn + run ──────────────────────────────────────────
@@ -185,10 +218,18 @@ async function main() {
     const poolRows = rows.filter((r) => /spawnDedicatedWorker/.test(r.source));
     const engineRows = rows.filter((r) => /stockfishEngine\.initialize/.test(r.source));
 
+    // SF0 — PRECONDITION: did the pool actually spawn? Without this, "no
+    // variant row" is ambiguous between the defect and an empty batch, and a
+    // harness miss would be reported as a product finding.
+    record('SF0 pool-spawned', poolConsole.length > 0 ? 'pass' : 'fail',
+      poolConsole.length > 0
+        ? poolConsole[0]
+        : 'the batch never reported workers ready — HARNESS miss (seed rejected / batch not started), not a product finding. Fix the audit before reading SF1/SF2.');
+
     // SF1 — the pool names the build it spawns.
     record(
       'SF1 pool-names-its-build',
-      poolRows.length > 0 ? 'pass' : 'fail',
+      poolRows.length > 0 ? 'pass' : poolConsole.length === 0 ? 'skip' : 'fail',
       poolRows.length > 0
         ? `${poolRows.length} pool worker(s) logged: ${[...new Set(poolRows.map((r) => variantOf(r.summary)))].join(', ')}`
         : 'the analysis pool spawned but logged NO variant row — the loader is invisible again',
@@ -198,7 +239,7 @@ async function main() {
     const poolVariants = [...new Set(poolRows.map((r) => variantOf(r.summary)).filter(Boolean))];
     const engineVariants = [...new Set(engineRows.map((r) => variantOf(r.summary)).filter(Boolean))];
     if (poolRows.length === 0 || engineRows.length === 0) {
-      record('SF2 pool-agrees-with-engine', 'fail',
+      record('SF2 pool-agrees-with-engine', poolConsole.length === 0 ? 'skip' : 'fail',
         `cannot compare — pool rows=${poolRows.length}, engine rows=${engineRows.length}`);
     } else {
       const agree = poolVariants.every((v) => engineVariants.includes(v));
