@@ -1742,7 +1742,18 @@ export function buildOpeningSuggestionReply(query: string): string | null {
  *  line, tactic, opening theory, "what masters/pros play"). If the student's
  *  message is actually a chess question, it must defer, not answer. */
 const NO_CHESS_CONTENT_ADDENDUM =
-  '\n\n═══ GROUNDING (non-negotiable) ═══\n' +
+  '\n\n═══ VOICE (the one coach register) ═══\n' +
+  // DNA register through GENERAL SPEAK too (David 2026-09-02: "tie the dna
+  // outline into general speak to maintain consistency"). Every computed
+  // answer is already spoken in this register; a greeting/thanks/meta reply
+  // must match it so the coach sounds like ONE person, not a chatbot bolted to
+  // an engine. This mirrors resolveWarmRegister's live "sitting next to you"
+  // register (docs/naroditsky-voice-register.md).
+  'Speak in the clear, warm-but-rigorous register of a great instructor sitting ' +
+  'next to the student: concept-first, plain-spoken, one clipped spark of warmth ' +
+  '("clean", "there it is") — never gushing, never corporate, never a wall of ' +
+  'text. Facts first, then the point.\n' +
+  '═══ GROUNDING (non-negotiable) ═══\n' +
   'This is a conversational turn. You may be warm and brief, but you must NOT ' +
   'state any chess content — no move, square, evaluation, opening line, tactic, ' +
   'trap, plan, or claim about what masters/pros/engines play. Those are computed ' +
@@ -2023,7 +2034,12 @@ async function serveGroundedPositionDefault(
     const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
-      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm });
+      // DETERMINISTIC → COMPUTER, never the LLM (David 2026-09-02, chokepoint
+      // enforcement): the best-move/eval is a computed fact, so it is ALWAYS
+      // spoken via preferRaw. `warm` no longer opens a door to the phrasing
+      // model for a deterministic readout — the DNA register lives in the
+      // computed prose + the general-speak prompt, not a per-answer LLM call.
+      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: true });
       if (voiced) {
         return answer.bestMoveFromTo
           ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -2041,14 +2057,14 @@ async function serveGroundedPositionDefault(
   });
   if (assess) {
     if (computedOnly && assess.facts.trim()) return `${prefix}${assess.facts}`.trim();
-    const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: !warm, warm });
+    const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: true });
     if (voiced) return voiced;
   }
   // Nothing engine/tactic-backed, but a COMPUTED moment cue can still stand on
   // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
   // dropping the interjection.
   if (prefix.trim()) {
-    const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, intent: 'safe-default-moment', preferRaw: !warm, warm });
+    const voiced = await voiceFacts(prefix.trim(), { studentMessage, providerConfig: config, intent: 'safe-default-moment', preferRaw: true });
     if (voiced) return voiced;
   }
   return null;

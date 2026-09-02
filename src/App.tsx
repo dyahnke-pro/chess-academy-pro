@@ -417,6 +417,22 @@ export function App(): JSX.Element {
         // competes with first paint or the Stockfish warm; fire-and-forget.
         setTimeout(() => { void warmCoachProvider().catch(() => undefined); }, 3000);
 
+        // Warm the OTHER two serverless proxies the FIRST coach turn hits — the
+        // syzygy TABLEBASE and the masters/amateur EXPLORER (David 2026-09-02).
+        // The hand-driven audit showed the first endgame question took ~32s while
+        // it computer-served (no LLM): it was these proxies cold-starting and
+        // STACKING on turn one (turns 2+ were instant, warm). Pre-pay both off
+        // the critical path. Fire-and-forget; a warm-ping failure is harmless.
+        setTimeout(() => {
+          const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+          void import('./services/lichessTablebaseService')
+            .then((m) => m.lookupTablebase('8/8/8/4k3/8/8/4K3/6R1 w - - 0 1'))
+            .catch(() => undefined);
+          void fetch(`/api/lichess-explorer?source=masters&fen=${encodeURIComponent(startFen)}`)
+            .then((r) => r.text())
+            .catch(() => undefined);
+        }, 3500);
+
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
         // deferred 30s after boot so it never competes with the user's
         // first action (especially the /coach/teach kickoff which
