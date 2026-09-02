@@ -4833,7 +4833,12 @@ export async function getCoachChatResponse(
         // not the current board's verdict — so it must not be answered "we're not
         // in an endgame yet" off the live piece count (contract audit 2026-09-01).
         // Defer to the dedicated endgame-weakness lane just below.
-        if (grounding.endgameQuestion && !grounding.endgameWeaknessQuestion && grounding.currentFen) {
+        // A GENERAL technique question ("how do I win a rook and pawn endgame?")
+        // matches a named endgame LESSON — teach it, don't answer from the LIVE
+        // board's piece count ("we're not in an endgame yet"). Defer to the
+        // technique lane below (David 2026-09-02 varied audit). "Can I hold THIS
+        // ending?" (no lesson match) still uses the board.
+        if (grounding.endgameQuestion && !grounding.endgameWeaknessQuestion && grounding.currentFen && !matchEndgameLesson(lastUserMessage() ?? grounding.cleanAsk ?? '')) {
           // "Can I hold this ending?" asked in the OPENING got a best-move
           // readout (full-app sweep, run allq-mss8dkto). With most of the
           // army still on the board the honest answer is that it isn't an

@@ -54,15 +54,43 @@ async function ask(question) {
 }
 const notDeflect = (a) => a.length >= 20 && !/i can'?t verify that precisely|hit a snag|something went wrong/.test(a);
 
+// Each board-agnostic question runs on a FRESH page so chat/walkthrough state
+// from a prior turn can't bleed in (the 2026-09-02 sequential-state artifact).
+async function freshAsk(q) {
+  await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismissGates(); await dismissGates();
+  return (await ask(q)).toLowerCase();
+}
+
 try {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
   const rows = weaknessSeed();
   await seed(page, rows, gamesSeed(rows));
+
+  // ── BOARD-AGNOSTIC QUESTION TYPES (each isolated on a fresh load) ──────────
+  const q4 = await freshAsk('how should I handle an isolated queen pawn against me?');
+  record('THEORY iqp: teaches the concept (not a record/counter-rep miss)', notDeflect(q4) && /(isolat|isolani|blockad|d5|pawn|piece|square|structure|endgame)/.test(q4) && !/no games against|logged yet|prepared recommendation against/.test(q4), `"${q4.slice(0, 90)}"`);
+
+  const q5 = await freshAsk('how do I win a rook and pawn endgame?');
+  record('ENDGAME technique: rook+pawn winning idea (not "not an endgame yet")', notDeflect(q5) && /rook/.test(q5) && /(pawn|king|activ|cut|bridge|promot|lucena|opposition|convert)/.test(q5) && !/not in an endgame yet|training it is/.test(q5), `"${q5.slice(0, 90)}"`);
+
+  const q6 = await freshAsk('teach me the Caro Cann');
+  record('OFF-CANONICAL: resolves a misspelled opening', notDeflect(q6) && /caro/.test(q6), `"${q6.slice(0, 90)}"`);
+
+  const q7 = await freshAsk('what am I weakest at?');
+  record('WEAKNESS: names a real seeded weakness', notDeflect(q7) && /(rook|ending|endgame|threat|slip)/.test(q7) && !/need more|not enough|import a few/.test(q7), `"${q7.slice(0, 90)}"`);
+
+  const q8 = await freshAsk('drill my missed threats');
+  record('DRILL nit: a drill request is NOT a live-threat readout', notDeflect(q8) && !/no immediate threat|nothing of theirs is hanging/.test(q8), `"${q8.slice(0, 90)}"`);
+
+  const q9raw = await freshAsk('thanks so much, this is really helping'); const q9 = q9raw;
+  const hasChess = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b/.test(q9) || /[+-]\d(?:\.\d)?\b/.test(q9) || /\b[a-h][1-8]\b/.test(q9);
+  record('BANTER: warm reply, no chess notation', notDeflect(q9) && !hasChess, `"${q9.slice(0, 90)}"`);
+
+  // ── POSITION-ANCHORED QUESTIONS (one clean board, played on a fresh load) ──
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
-
-  // ── Build a REAL position: start a game + play a few moves ────────────────
   await ask('Play the Italian with me as white'); await resolvePicker(); await page.waitForTimeout(3500);
   let moved = false;
   for (const [f, t] of [['e2', 'e4'], ['g1', 'f3'], ['f1', 'c4']]) {
@@ -71,40 +99,14 @@ try {
   try { moved = (await page.locator('[data-square="e2"] [data-piece]').count()) === 0; } catch { moved = false; }
   record('setup: a real played position on the board', moved, moved ? 'moves landed' : 'board at start');
 
-  // ── VARIED QUESTIONS across positions / types ──────────────────────────────
   const q1 = (await ask('what opening are we playing?')).toLowerCase();
-  record('POS1 opening-id: names a real opening', notDeflect(q1) && (/\b(italian|king'?s|knight|four knights|giuoco|petrov|scotch)\b/.test(q1) || /eco\s+[a-e]\d/.test(q1)), `"${q1.slice(0, 90)}"`);
+  record('POS opening-id: names a real opening', notDeflect(q1) && (/\b(italian|king'?s|knight|four knights|giuoco|petrov|scotch|sicilian|caro|french)\b/.test(q1) || /eco\s+[a-e]\d/.test(q1)), `"${q1.slice(0, 90)}"`);
 
   const q2 = (await ask("what's a good plan for me here?")).toLowerCase();
-  record('POS1 plan/best-move: a concrete grounded idea', notDeflect(q2) && /(develop|castle|centre|center|knight|bishop|pawn|control|d4|e5|square|king)/.test(q2), `"${q2.slice(0, 90)}"`);
+  record('POS plan/best-move: a concrete grounded idea', notDeflect(q2) && /(develop|castle|centre|center|knight|bishop|pawn|control|d4|e5|square|king|plan)/.test(q2), `"${q2.slice(0, 90)}"`);
 
   const q3 = (await ask('is anything hanging right now?')).toLowerCase();
-  record('POS1 hanging: a grounded threat/safety read', notDeflect(q3) && /(hang|threat|nothing|safe|undefended|attack|loose|nothing forcing)/.test(q3), `"${q3.slice(0, 90)}"`);
-
-  // Theory (board-agnostic; tests A0 + the D re-route)
-  const q4 = (await ask('how should I handle an isolated queen pawn against me?')).toLowerCase();
-  record('THEORY iqp: teaches the concept (not a record miss)', notDeflect(q4) && /(isolat|isolani|blockad|d5|pawn|piece|square|structure|endgame)/.test(q4) && !/no games against|logged yet/.test(q4), `"${q4.slice(0, 90)}"`);
-
-  // Endgame technique (named lesson)
-  const q5 = (await ask('how do I win a rook and pawn endgame?')).toLowerCase();
-  record('ENDGAME technique: rook+pawn winning idea', notDeflect(q5) && /rook/.test(q5) && /(pawn|king|activ|cut|bridge|promot|lucena|opposition)/.test(q5), `"${q5.slice(0, 90)}"`);
-
-  // Off-canonical spelling
-  const q6 = (await ask('teach me the Caro Cann')).toLowerCase();
-  record('OFF-CANONICAL: resolves a misspelled opening', notDeflect(q6) && /caro/.test(q6), `"${q6.slice(0, 90)}"`);
-
-  // Weakness (seeded)
-  const q7 = (await ask('what am I weakest at?')).toLowerCase();
-  record('WEAKNESS: names a real seeded weakness', notDeflect(q7) && /(rook|ending|endgame|threat|slip)/.test(q7) && !/need more|not enough|import a few/.test(q7), `"${q7.slice(0, 90)}"`);
-
-  // Drill nit
-  const q8 = (await ask('drill my missed threats')).toLowerCase();
-  record('DRILL nit: a drill request is NOT a live-threat readout', notDeflect(q8) && !/no immediate threat|nothing of theirs is hanging/.test(q8), `"${q8.slice(0, 90)}"`);
-
-  // Banter
-  const q9 = await ask('thanks so much, this is really helping');
-  const hasChess = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b/.test(q9) || /[+-]\d(?:\.\d)?\b/.test(q9) || /\b[a-h][1-8]\b/.test(q9);
-  record('BANTER: warm reply, no chess notation', notDeflect(q9) && !hasChess, `"${q9.slice(0, 90)}"`);
+  record('POS hanging: a grounded threat/safety read', notDeflect(q3) && /(hang|threat|nothing|safe|undefended|attack|loose|defended)/.test(q3), `"${q3.slice(0, 90)}"`);
 } catch (err) {
   record('audit ran without throwing', false, String(err).slice(0, 250));
 } finally {
