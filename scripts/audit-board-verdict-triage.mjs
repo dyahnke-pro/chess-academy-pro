@@ -40,6 +40,14 @@ await p.route('**/api/audit-stream**', async (route) => {
   await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
 });
 
+// DETERMINISTIC DEAD ENGINE: block the Stockfish worker scripts so the engine
+// can NEVER init. This reproduces the collapse condition on demand (instead of
+// waiting for the intermittent sandbox WASM crash) so we can read the mechanism.
+const KILL_ENGINE = process.env.KILL_ENGINE === '1';
+if (KILL_ENGINE) {
+  await p.route('**/stockfish/**', async (route) => { await route.abort(); });
+}
+
 const errs = [];
 p.on('pageerror', (e) => errs.push('pageerror: ' + String(e).slice(0, 160)));
 p.on('console', (m) => { if (m.type() === 'error') errs.push('console: ' + m.text().slice(0, 160)); });
@@ -60,23 +68,12 @@ function drain(kind) {
 }
 
 try {
-  // Stockfish's WASM worker crashes intermittently in the sandbox ("worker
-  // never signaled"). That is a sandbox artifact, not the thing under test, so
-  // reload until the engine actually warms — otherwise every answer collapses to
-  // the engine-down fallback and accuracy can't be read.
-  let engineUp = false;
-  for (let attempt = 0; attempt < 4 && !engineUp; attempt++) {
-    events.length = 0;
-    await p.goto(`${BASE}${START_PATH}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await dismiss(); await dismiss();
-    for (let i = 0; i < 24; i++) {
-      await p.waitForTimeout(2000);
-      if (events.some((e) => e && e.kind === 'stockfish-cache-hit')) { engineUp = true; break; }
-      if (events.some((e) => e && e.kind === 'stockfish-error')) break; // crashed — reload
-    }
-    console.log(`[warm] attempt ${attempt + 1}: engineUp=${engineUp}`);
+  await p.goto(`${BASE}${START_PATH}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismiss(); await dismiss();
+  if (!KILL_ENGINE) {
+    for (let i = 0; i < 20; i++) { await p.waitForTimeout(2000); if (events.some((e) => e && e.kind === 'stockfish-cache-hit')) break; }
   }
-  if (!engineUp) { console.log('[warm] ABORT — Stockfish never warmed after 4 attempts (sandbox WASM crash); cannot evaluate accuracy this run.'); }
+  console.log(`[engine] KILL_ENGINE=${KILL_ENGINE} cache-hit-seen=${events.some((e) => e && e.kind === 'stockfish-cache-hit')}`);
 
   // How many chat inputs are on the page (the drawer duplicate David flagged)?
   await p.waitForTimeout(3000);
@@ -95,41 +92,26 @@ try {
   if (!(await box.count())) box = allInputs.first();
   await box.waitFor({ timeout: 15000 });
 
-  const GROUND_TRUTH = {
-    "what's the best move?": 'a winning move (KQvK: tablebase-optimal is Qd5; any queen move that keeps the win is acceptable)',
-    'whose turn is it?': 'White to move',
-    'what color am I?': 'White',
-    'is this a draw?': 'NO — win for White',
-    'how many moves until mate?': 'mate in 15 (dtm=15)',
-  };
-  const results = [];
   for (const q of QUESTIONS) {
     const before = events.length;
-    const bubblesBefore = await p.locator('[data-testid="chat-message-assistant"]').count();
     await box.click();
     await box.pressSequentially(q, { delay: 10 });
     await box.press('Enter');
-    // Wait for a NEW assistant bubble, then wait for its text to STABILIZE
-    // (streaming done) — capture the FULL untruncated text.
-    let full = '', stableCount = 0, prev = '';
-    for (let i = 0; i < 40; i++) {
+    // Wait until this question's coach answer lands in chat memory (reliable).
+    for (let i = 0; i < 30; i++) {
       await p.waitForTimeout(1500);
-      const msgs = p.locator('[data-testid="chat-message-assistant"]');
-      const c = await msgs.count();
-      if (c <= bubblesBefore) continue;
-      const t = (await msgs.nth(c - 1).innerText()).replace(/^C\s*/, '').replace(/\n+/g, ' ').trim();
-      if (t.length < 4) continue;
-      if (t === prev) { stableCount++; if (stableCount >= 2) { full = t; break; } }
-      else { stableCount = 0; prev = t; full = t; }
+      if (events.slice(before).some((e) => e && e.kind === 'coach-memory-conversation-appended' && /\/coach:/.test(String(e.summary)))) break;
     }
-    results.push({ q, full, truth: GROUND_TRUTH[q] });
-    void before;
-  }
-  console.log(`\n===== ACCURACY EVALUATION (full answers vs ground truth) =====`);
-  for (const r of results) {
-    console.log(`\nQ: ${r.q}`);
-    console.log(`  TRUTH:  ${r.truth}`);
-    console.log(`  ANSWER: ${r.full || '(no answer captured)'}`);
+    const slice = events.slice(before);
+    const enteredBV = slice.filter((e) => e && e.kind === 'board-verdict-debug' && /entered/.test(String(e.summary))).map((e) => e.summary);
+    const coverage = slice.filter((e) => e && e.kind === 'coach-grounding-coverage' && /board-verdict/.test(String(e.summary))).length;
+    const answered = slice.filter((e) => e && e.kind === 'coach-brain-answered').map((e) => e.summary);
+    const coachText = slice.filter((e) => e && e.kind === 'coach-memory-conversation-appended' && /\/coach:/.test(String(e.summary))).map((e) => String(e.summary));
+    console.log(`\n=== Q: "${q}" ===`);
+    console.log(`  computeLiveBoardVerdict entered: ${enteredBV.length ? 'YES — ' + enteredBV[0].replace(/^entered /, '') : 'NO'}`);
+    console.log(`  early-return fired (coverage board-verdict): ${coverage > 0 ? 'YES' : 'NO — reached seal'}`);
+    console.log(`  coach-brain-answered: ${answered.join(' | ') || '(none)'}`);
+    console.log(`  coach text rendered:  ${coachText.join(' | ') || '(none)'}`);
   }
 
   console.log(`\n[page errors] ${errs.length ? errs.join('\n  ') : 'none'}`);
