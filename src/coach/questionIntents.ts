@@ -1858,6 +1858,15 @@ export function isAccuracyQuestion(ask: string | undefined): boolean {
 const CONSISTENCY_QUESTION_RE = anyOf([
   String.raw`\b(?:am\s+i\s+on|what(?:'?s| is)?\s+my)\s+(?:a\s+)?(?:win(?:ning)?\s+)?streak\b`,
   String.raw`\bwin\s+streak\b`,
+  // LENGTH and SUPERLATIVE streak phrasings. The two patterns above only ever
+  // matched the PRESENT-TENSE ask ("am I on a streak", "what's my streak") and
+  // the literal words "win streak" — so "how long is my best streak?" fired no
+  // intent at all and returned the stock line (questionMatrix STOCK-GAP,
+  // records lane). A streak question is a streak question whether it asks
+  // whether one is running, how long it ran, or what the record is.
+  String.raw`\bhow\s+(?:long|many)\s+(?:\w+\s+){0,3}streak\b`,
+  String.raw`\b(?:best|longest|biggest|highest|current)\s+(?:win(?:ning)?\s+|losing\s+)?streak\b`,
+  String.raw`\bstreak\s+(?:record|length)\b`,
   String.raw`\bhow\s+consistent\s+am\s+i\b`,
   String.raw`\bwhat\s+time\s+control\s+am\s+i\s+(?:best|worst)\s+at\b`,
   String.raw`\bam\s+i\s+better\s+at\s+(?:blitz|bullet|rapid|classical)\b`,

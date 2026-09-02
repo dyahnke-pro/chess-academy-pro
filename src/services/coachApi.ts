@@ -1796,6 +1796,51 @@ export function hasChessContentSignal(text: string): boolean {
   return CHESS_VOCAB_RE.test(text);
 }
 
+/** IS THIS TURN ABOUT THE BOARD? — ONE decision, used by BOTH places that make it.
+ *
+ *  Two branches ask this question: the ungrounded chess-signal seal, and the
+ *  grounded fall-through's banter check. They were written five weeks apart and
+ *  drifted: the seal learned (2026-09-02) that a board question often carries NO
+ *  chess vocabulary — "is this winning?", "what's my plan?" — while the banter
+ *  branch (2026-09-01) still asked `hasChessContentSignal` alone. So the same
+ *  turn read as a BOARD question on one path and as BANTER on the other, and the
+ *  banter path hands it to the model to answer freely.
+ *
+ *  `forceEngage` is included because it is a caller stating outright that this
+ *  turn needs grounding — the one thing banter can never be. Without it, a
+ *  force-engaged "tell me about this" was answered by the model with a free
+ *  'Sure.', which is exactly the hole the 2026-07-09 RIP guard exists to close.
+ *
+ *  Keep this as the single source: if a new kind of board question appears, it
+ *  is added HERE and both paths learn it at once. */
+export function isBoardQuestionTurn(
+  query: string,
+  g: Pick<MasterGroundingOptions,
+    'currentFen' | 'cleanAsk' | 'forceEngage' | 'positionAssessmentQuestion' | 'endgameQuestion'
+    | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion'
+    | 'alternativesQuestion' | 'moveRatingQuestion' | 'opponentMoveQuestion'
+    | 'convertingQuestion' | 'colorQuestion'>,
+): boolean {
+  if (g.forceEngage === true) return true;
+  if (hasChessContentSignal(query)) return true;
+  const ask = g.cleanAsk ?? query;
+  if (isWhoseTurnQuestion(ask) || isLiveColorQuestion(ask) || isDrawQuestion(ask) || isMateQuestion(ask)) return true;
+  // A deterministic board question — needs a live board plus a board intent.
+  return Boolean(g.currentFen) && (
+    g.positionAssessmentQuestion === true ||
+    g.endgameQuestion === true ||
+    g.bestMoveQuestion === true ||
+    g.whyBestMoveQuestion === true ||
+    g.planQuestion === true ||
+    g.candidateMoveQuestion === true ||
+    g.alternativesQuestion === true ||
+    g.moveRatingQuestion === true ||
+    g.opponentMoveQuestion === true ||
+    g.convertingQuestion === true ||
+    g.colorQuestion === true
+  );
+}
+
 /** Sweep any sentence that strayed into chess content out of a conversational
  *  reply. Belt-and-suspenders for the non-chess lane: `validateClaims` is a
  *  no-op without a grounding context (casual chat), so this is the guard that
@@ -5442,28 +5487,12 @@ export async function getCoachChatResponse(
     // any board-verdict intent routes to the computed default below; when no
     // engine data is threaded, serveGroundedPositionDefault returns null and the
     // flow falls through exactly as before (no LLM chess invention added).
-    const deterministicBoardQuestion = Boolean(grounding.currentFen) && (
-      grounding.positionAssessmentQuestion === true ||
-      grounding.endgameQuestion === true ||
-      grounding.bestMoveQuestion === true ||
-      grounding.whyBestMoveQuestion === true ||
-      grounding.planQuestion === true ||
-      grounding.candidateMoveQuestion === true ||
-      grounding.alternativesQuestion === true ||
-      grounding.moveRatingQuestion === true ||
-      grounding.opponentMoveQuestion === true ||
-      grounding.convertingQuestion === true ||
-      grounding.colorQuestion === true
-    );
     const sealVerdictAsk = grounding.cleanAsk ?? originalQuery;
-    if (
-      hasChessContentSignal(originalQuery) ||
-      deterministicBoardQuestion ||
-      isWhoseTurnQuestion(sealVerdictAsk) ||
-      isLiveColorQuestion(sealVerdictAsk) ||
-      isDrawQuestion(sealVerdictAsk) ||
-      isMateQuestion(sealVerdictAsk)
-    ) {
+    // Asks the SHARED question (isBoardQuestionTurn) — this used to be an
+    // inline copy, and the grounded fall-through below carried a DIFFERENT
+    // copy that never learned about vocabulary-free board questions. One
+    // decision now, so they cannot drift apart again.
+    if (isBoardQuestionTurn(originalQuery, grounding)) {
       // INTENT-SPECIFIC BOARD VERDICT — the generic position default (best move
       // + eval) answers "is this a draw? / whose turn? / mate in how many? /
       // what colour am I?" all with the SAME best-move readout (hand-driven prod
@@ -5598,7 +5627,7 @@ export async function getCoachChatResponse(
   // A turn with NO chess signal is banter, not an open-ended chess question:
   // serve the constrained conversational reply (chess forbidden + swept),
   // never the position default. Mirrors the ungrounded chess-signal seal above.
-  if (grounding && !hasChessContentSignal(originalQuery)) {
+  if (grounding && !isBoardQuestionTurn(originalQuery, grounding)) {
     const convoResponse = await callOnce(buildSystemPromptFor(NO_CHESS_CONTENT_ADDENDUM), false);
     const cleaned = stripChessyStraySentences(convoResponse);
     if (cleaned) {

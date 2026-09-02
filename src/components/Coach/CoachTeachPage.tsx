@@ -266,7 +266,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3793,7 +3793,16 @@ export function CoachTeachPage(): JSX.Element {
       // request to start the lesson — TEACH_PATTERN's "teach" verb captured it
       // and popped the line picker (2026-08-13 all-questions audit). Clear the
       // capture so the ask reaches the spine's teaching-method lane.
-      if (requestedName && /^how\s+(?:do|would|will|does)\s+(?:you|the\s+coach|this\s+app|the\s+app)\s+teach\b/i.test(workingInput)) {
+      // Uses the SHARED detector, not a private regex. The copy that lived here
+      // was a strict SUBSET of TEACHING_METHOD_RE — it required a modal and only
+      // the verb "teach", so "how CAN you teach X", "how you teach the French"
+      // (no modal) and "walk me through how you teach X" all slipped past and
+      // still popped the line picker. Two copies of one question also drift:
+      // this one was widened with `this app`/`the app` while the source-pin test
+      // guarding it still described the old alternation, so the test went red on
+      // an IMPROVEMENT. `isTeachingMethodQuestion` already excludes "teach me X"
+      // (a real lesson request), which is exactly the carve-out this needs.
+      if (requestedName && isTeachingMethodQuestion(workingInput)) {
         requestedName = null;
       }
       // "walk me through the ENGINE LINE" is an engine-reasoning ask, not an

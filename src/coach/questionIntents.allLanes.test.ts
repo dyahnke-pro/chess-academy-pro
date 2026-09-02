@@ -52,7 +52,29 @@ describe('teach-surface hijack guards (source pins)', () => {
     expect(TEACH).toContain("'/coach/review', 'Opening your games for review.'");
     expect(TEACH).toContain("'/tactics', 'Heading to Tactics.'");
   });
-  it('"how do you teach X" clears the teach-command capture', () => {
-    expect(TEACH).toMatch(/how\\s\+\(\?:do\|would\|will\|does\)\\s\+\(\?:you\|the\\s\+coach\)\\s\+teach/);
+  // BEHAVIOUR, not source text. This used to pin the literal characters of the
+  // page's private regex — so widening that regex (an improvement) turned the
+  // test red while the guard was strictly better. The page now delegates to the
+  // shared detector, so assert the thing that actually matters: the detector
+  // fires for this family, including the phrasings the private copy missed, and
+  // still stands down for a real "teach me X" lesson request.
+  it('"how do you teach X" and its family are METHOD questions, not lesson requests', () => {
+    for (const q of [
+      'how do you teach the Caro-Kann?',
+      'how would you teach the French?',
+      'how can you teach the Sicilian?',       // private copy missed: no `can`
+      'how you teach the French',              // private copy missed: no modal
+      'walk me through how you teach the Pirc', // private copy missed: not anchored
+      'how does the app teach openings?',
+    ]) {
+      expect(isTeachingMethodQuestion(q), `method detector dead for "${q}"`).toBe(true);
+    }
+    // A real lesson request must NOT be cleared — that carve-out is the reason
+    // the page can delegate here at all.
+    expect(isTeachingMethodQuestion('teach me the Caro-Kann')).toBe(false);
+  });
+
+  it('the page delegates to the shared detector instead of a private regex', () => {
+    expect(TEACH).toContain('isTeachingMethodQuestion(workingInput)');
   });
 });

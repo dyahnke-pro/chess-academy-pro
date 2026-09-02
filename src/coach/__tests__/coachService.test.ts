@@ -395,7 +395,17 @@ describe('internal composed-prompt surfaces skip user-intent detection', () => {
     const g = getGrounding();
     expect(g).toBeDefined();
     expect(g?.internalAsk).toBeUndefined();
-    // Proves the detectors still run for user surfaces — the bait matches.
-    expect(g?.trainingRequestKind).toBe('tactics');
+    // Proves the detectors still run for user surfaces — the EXACT MIRROR of
+    // the three fields the hint-surface case asserts are false. That mirroring
+    // is the contract; asserting one arbitrary field was not.
+    //
+    // This used to assert `trainingRequestKind === 'tactics'`, and went red when
+    // that detector was correctly TIGHTENED: the bait is a coach system-prompt
+    // fragment, not a drill imperative, and `trainingRequestKind` now guards
+    // against exactly this kind of false positive. Every real phrasing still
+    // routes ("drill me on tactics" → tactics, "drill my endgames" → endgame),
+    // so nothing user-facing regressed — the canary was pointed at a bug.
+    expect(g?.bestMoveQuestion).toBe(true);
+    expect(g?.tacticsQuestion).toBe(true);
   });
 });
