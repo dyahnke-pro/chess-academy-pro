@@ -60,15 +60,23 @@ function drain(kind) {
 }
 
 try {
-  await p.goto(`${BASE}${START_PATH}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
-  await dismiss(); await dismiss();
-  // Warm Stockfish on the seeded position before asking (mirror a real user who
-  // has been looking at the board): wait for a cache-hit or up to 40s.
-  for (let i = 0; i < 20; i++) {
-    await p.waitForTimeout(2000);
-    if (events.some((e) => e && e.kind === 'stockfish-cache-hit')) break;
+  // Stockfish's WASM worker crashes intermittently in the sandbox ("worker
+  // never signaled"). That is a sandbox artifact, not the thing under test, so
+  // reload until the engine actually warms — otherwise every answer collapses to
+  // the engine-down fallback and accuracy can't be read.
+  let engineUp = false;
+  for (let attempt = 0; attempt < 4 && !engineUp; attempt++) {
+    events.length = 0;
+    await p.goto(`${BASE}${START_PATH}`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await dismiss(); await dismiss();
+    for (let i = 0; i < 24; i++) {
+      await p.waitForTimeout(2000);
+      if (events.some((e) => e && e.kind === 'stockfish-cache-hit')) { engineUp = true; break; }
+      if (events.some((e) => e && e.kind === 'stockfish-error')) break; // crashed — reload
+    }
+    console.log(`[warm] attempt ${attempt + 1}: engineUp=${engineUp}`);
   }
-  console.log(`[warm] stockfish-cache-hit seen: ${events.some((e) => e && e.kind === 'stockfish-cache-hit')}`);
+  if (!engineUp) { console.log('[warm] ABORT — Stockfish never warmed after 4 attempts (sandbox WASM crash); cannot evaluate accuracy this run.'); }
 
   // How many chat inputs are on the page (the drawer duplicate David flagged)?
   await p.waitForTimeout(3000);
@@ -87,25 +95,41 @@ try {
   if (!(await box.count())) box = allInputs.first();
   await box.waitFor({ timeout: 15000 });
 
+  const GROUND_TRUTH = {
+    "what's the best move?": 'a winning move (KQvK: tablebase-optimal is Qd5; any queen move that keeps the win is acceptable)',
+    'whose turn is it?': 'White to move',
+    'what color am I?': 'White',
+    'is this a draw?': 'NO — win for White',
+    'how many moves until mate?': 'mate in 15 (dtm=15)',
+  };
+  const results = [];
   for (const q of QUESTIONS) {
     const before = events.length;
+    const bubblesBefore = await p.locator('[data-testid="chat-message-assistant"]').count();
     await box.click();
     await box.pressSequentially(q, { delay: 10 });
     await box.press('Enter');
-    // Wait until THIS question's coach answer is appended to chat memory
-    // (the app's own record of what it rendered) — reliable, unlike DOM reads.
-    for (let i = 0; i < 24; i++) {
+    // Wait for a NEW assistant bubble, then wait for its text to STABILIZE
+    // (streaming done) — capture the FULL untruncated text.
+    let full = '', stableCount = 0, prev = '';
+    for (let i = 0; i < 40; i++) {
       await p.waitForTimeout(1500);
-      const coachAfter = events.slice(before).filter((e) => e && e.kind === 'coach-memory-conversation-appended' && /\/coach:/.test(String(e.summary)));
-      if (coachAfter.length) break;
+      const msgs = p.locator('[data-testid="chat-message-assistant"]');
+      const c = await msgs.count();
+      if (c <= bubblesBefore) continue;
+      const t = (await msgs.nth(c - 1).innerText()).replace(/^C\s*/, '').replace(/\n+/g, ' ').trim();
+      if (t.length < 4) continue;
+      if (t === prev) { stableCount++; if (stableCount >= 2) { full = t; break; } }
+      else { stableCount = 0; prev = t; full = t; }
     }
+    results.push({ q, full, truth: GROUND_TRUTH[q] });
+    void before;
   }
-  // Interleave the recorded user asks + coach answers — the exact Q→A the app rendered.
-  console.log(`\n===== RECORDED CHAT (user asks + coach answers, in order) =====`);
-  for (const e of events) {
-    if (!e || e.kind !== 'coach-memory-conversation-appended') continue;
-    const s = String(e.summary ?? '');
-    if (/chat-in-game\/(user|coach):/.test(s)) console.log(`  ${s.slice(0, 200)}`);
+  console.log(`\n===== ACCURACY EVALUATION (full answers vs ground truth) =====`);
+  for (const r of results) {
+    console.log(`\nQ: ${r.q}`);
+    console.log(`  TRUTH:  ${r.truth}`);
+    console.log(`  ANSWER: ${r.full || '(no answer captured)'}`);
   }
 
   console.log(`\n[page errors] ${errs.length ? errs.join('\n  ') : 'none'}`);
