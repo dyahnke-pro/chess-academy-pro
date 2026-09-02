@@ -323,6 +323,47 @@ describe('voiceInputService', () => {
       rec2.onend?.();
       expect(onEnd).toHaveBeenCalledTimes(1);
     });
+
+    it('LEAVE THE APP = MIC OFF: stops listening when the page is hidden (David 2026-09-01, non-negotiable)', () => {
+      voiceInputService.stopListening();
+      const onEnd = vi.fn();
+      const started = voiceInputService.startListening({ onEnd });
+      expect(started).toBe(true);
+      expect(voiceInputService.isListening()).toBe(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as { onend: (() => void) | null };
+
+      // Simulate the user leaving the app: the browser/PWA fires
+      // `visibilitychange` with the document hidden (tab switch, minimize,
+      // background). The mic must not stay hot.
+      Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+
+      // The mic is off (the non-negotiable): the service reports not listening
+      // and will not auto-restart (userStopped set by stopListening).
+      expect(voiceInputService.isListening()).toBe(false);
+      // The browser's onend then propagates to the caller's onEnd (UI sync).
+      rec.onend?.();
+      expect(onEnd).toHaveBeenCalled();
+
+      // Restore for other tests.
+      Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true });
+    });
+
+    it('LEAVE THE APP = MIC OFF: stops on pagehide (close/navigate away)', () => {
+      voiceInputService.stopListening();
+      const onEnd = vi.fn();
+      voiceInputService.startListening({ onEnd });
+      expect(voiceInputService.isListening()).toBe(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- white-box test
+      const rec = (voiceInputService as any).recognition as { onend: (() => void) | null };
+
+      window.dispatchEvent(new Event('pagehide'));
+
+      expect(voiceInputService.isListening()).toBe(false);
+      rec.onend?.();
+      expect(onEnd).toHaveBeenCalled();
+    });
   });
 });
 
