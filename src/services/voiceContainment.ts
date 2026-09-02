@@ -84,11 +84,39 @@ export function introducedChessTerms(facts: string, out: string): string[] {
   return violations;
 }
 
+/** CHESS PROSE IS FULL OF PERIODS THAT ARE NOT SENTENCE ENDS. A move number
+ *  ("12. Nf3"), a black-move ellipsis ("12... Nf3") and a numbered list marker
+ *  all read as terminator + whitespace + capital, so the raw count inflated
+ *  roughly 2x on exactly the register this gate polices — and asymmetrically,
+ *  because the COMPUTED facts avoid move-number prefixes (G9.4 bans them from
+ *  narration) while the model's warm output does not. The output was therefore
+ *  measured against a budget derived from un-inflated facts.
+ *
+ *  Real prod consequence: `sentence-budget` trips on review turns (26 > 7*2+2,
+ *  18 > 1*2+2), each one discarding the house voice and serving the raw
+ *  computed prose instead. The budget was then loosened TWICE — facts+2, then
+ *  facts*2+2 — to compensate, on numbers this counter had inflated on both
+ *  occasions, and it still tripped. Fixing the measurement is the actual fix;
+ *  the threshold above is now calibrated on bad data and wants re-tuning
+ *  against real post-fix numbers.
+ *
+ *  Both patterns are deliberately narrow. The move-number strip requires a SAN
+ *  token after it, so a sentence genuinely ending in a digit ("you were up 3.
+ *  Then he blundered.") still counts as two. The ordinal strip only fires at
+ *  the start of a line, where a list marker lives. */
+const MOVE_NUMBER_PREFIX =
+  /\b\d{1,3}\.{1,3}(?=\s*(?:O-O(?:-O)?|[NBRQK][a-h]?[1-8]?x?[a-h][1-8]|[a-h](?:x[a-h])?[1-8]))/g;
+const LEADING_LIST_ORDINAL = /(^|\n)[ \t]*\d{1,3}\.(?=\s)/g;
+
 /** Sentence count — split on terminal punctuation, ignore empties. Decimal
  *  points inside numbers ("2.5 pawns") must not split: only count terminators
- *  followed by whitespace+capital / end of string. */
+ *  followed by whitespace+capital / end of string. Move numbers and list
+ *  ordinals are neutralised first (see above). */
 export function sentenceCount(text: string): number {
-  const t = text.trim();
+  const t = text
+    .replace(MOVE_NUMBER_PREFIX, ' ')
+    .replace(LEADING_LIST_ORDINAL, '$1 ')
+    .trim();
   if (!t) return 0;
   const matches = t.match(/[.!?]+(?=\s+[A-ZÀ-Þ"'(]|\s*$)/g);
   // A text with no terminal punctuation is one sentence.

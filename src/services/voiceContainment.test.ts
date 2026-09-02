@@ -167,3 +167,61 @@ describe("David's 2026-08-06 iPhone session — every turn false-tripped", () =>
     expect(sentenceBudgetExceeded(facts, out)).toBe(true);
   });
 });
+
+/**
+ * SENTENCE COUNTING ON CHESS PROSE (2026-09-02 audit).
+ *
+ * Real prod trips: `sentence-budget: 26 > 7*2+2` and `18 > 1*2+2` on review
+ * turns, each discarding the house voice for raw computed prose. The output was
+ * not rambling — the counter was reading every "12. Nf3" as a sentence end, so
+ * warm output inflated ~2x against a budget derived from computed facts that
+ * carry no move numbers (G9.4 bans them from narration). The budget had already
+ * been loosened twice to compensate, on numbers this counter inflated both
+ * times, and it still tripped.
+ */
+describe('sentenceCount — periods that are not sentence ends', () => {
+  it('plain prose is unaffected', () => {
+    expect(sentenceCount('You were better here. The knight was loose. Then it slipped.')).toBe(3);
+  });
+
+  it('move numbers do not end sentences', () => {
+    // 3 sentences; the raw counter read 6.
+    expect(sentenceCount('After 12. Nf3 Black is fine. But 14. Qd2 was the mistake. Then 15. Bf6 lost material.')).toBe(3);
+  });
+
+  it('black-move ellipses do not end sentences', () => {
+    expect(sentenceCount('He answered 12... Nc6 and the tension held.')).toBe(1);
+  });
+
+  it('castling move numbers do not end sentences', () => {
+    expect(sentenceCount('Then 9. O-O tucked the king away safely.')).toBe(1);
+  });
+
+  it('a numbered list counts its items, not its markers', () => {
+    expect(sentenceCount('1. Develop fast.\n2. Castle early.\n3. Connect rooks.')).toBe(3);
+  });
+
+  // The strips are deliberately narrow. These prove they do not over-reach.
+  it('a sentence genuinely ending in a digit still counts as two', () => {
+    // No SAN after the number, so the move-number strip must NOT fire.
+    expect(sentenceCount('You were up 3. Then he blundered.')).toBe(2);
+  });
+
+  it('decimal evals still do not split', () => {
+    expect(sentenceCount('You were up 1.5 pawns. That is winning.')).toBe(2);
+  });
+
+  it('the budget stops firing on warm chess prose it should never have caught', () => {
+    // A PV playback: one computed fact, warm phrasing that names the moves.
+    // Pre-fix this counted 7 against a budget of 1*2+2=4 and was rejected.
+    const facts = 'The best line was Nf3, Nc6, Bb5.';
+    const warm = 'The engine wants 12. Nf3 here, developing with tempo. Black replies 12... Nc6 to hold the centre. Then 13. Bb5 pins the knight.';
+    expect(sentenceBudgetExceeded(facts, warm)).toBe(false);
+  });
+
+  it('a PATHOLOGICAL ramble still trips — the gate is not defanged', () => {
+    const facts = 'You are winning.';
+    const ramble = Array.from({ length: 12 }, (_, i) => `Point number ${i} about the position.`).join(' ');
+    expect(sentenceBudgetExceeded(facts, ramble)).toBe(true);
+  });
+});
