@@ -346,7 +346,6 @@ export async function warmCoachProvider(): Promise<void> {
       normalizeDeepSeekModel(DEEPSEEK_MODEL_MAP.chat_response),
       [{ role: 'user', content: 'hi' }],
       1,
-      () => { /* discard — warm only */ },
       'chat_response',
     );
   } catch { /* boot warm is best-effort */ }
