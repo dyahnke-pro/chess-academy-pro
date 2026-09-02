@@ -60,6 +60,13 @@ but it is NOT evidence of a widespread user problem.
     one build that can hard-crash. Now asm.js.
   - The pool logs `stockfish-variant-resolved` per worker, so the next
     occurrence names its own loader in one query.
+- **Verified on prod 2026-09-02** (`index-DcvEbljs`, 8/8 green,
+  `scripts/audit-analysis-pool-engine-prod.mjs`): the pool spawns, names its
+  build, and matches the singleton — `pool worker 0 variant=multi
+  url=/stockfish/stockfish-18-lite.js` now reaches the live audit-stream, so
+  the next occurrence names its own loader in one query. The same audit run
+  against the PRE-deploy bundle failed SF1/SF2 with the pool spawning and
+  logging nothing — real before/after, not a vacuous green.
 - **Still owed:** an App Store release to retire `c02ae379` from the 9 devices
   still on it. Until then those users keep hitting it on game import.
 - **NOT a main defect:** `fe6e81ed` is not a commit in this repo — David's
