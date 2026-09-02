@@ -26,8 +26,18 @@ ship-check `READY TO PUSH` on the latest tree.
 2. **Web "mic red but not hearing me talk" (desktop Chrome):** likely tangled with the echo loop (coach heard itself → recognizer state corrupted / onSpeechStart cut things off). The **echo guard should resolve it** — David needs to **re-test on his unblocked Chrome against the new deploy** to confirm. If it persists, investigate the `crossOriginIsolated`/COEP `require-corp` tension with `webkitSpeechRecognition` (set for Stockfish SharedArrayBuffer) — but note recognition WAS producing results (it transcribed the coach), so COEP is probably NOT hard-blocking it.
 3. **Web echo guard:** unit-tested, not live-verified (needs real mic + TTS). Confirm on unblocked Chrome.
 
-## Separate bug found (NOT mic — flagged for later)
-- **Prod audit stream is DEAD** — 0 events / 24h. The app's baked `AUDIT_STREAM_SECRET` no longer matches prod's rotated secret, so every post 401s and streaming self-disables (the exact rotation failure in CLAUDE.md's AUDIT-STREAM SECRET lesson). This is why "check the audit stream" kept coming up empty this session. Fix: re-sync the baked/profile secret to the current Vercel `AUDIT_STREAM_SECRET`.
+## Audit stream — was NOT dead (my bug), now improved
+- **CORRECTION:** the "dead stream" claim was a **parsing bug on my side** — the
+  endpoint returns events under the **`entries`** key; my pull scripts read
+  `events` → always 0. The stream is healthy (verified 1000 live events + a
+  round-trip POST→GET). Pull with `d["entries"]`; secret via
+  `npx vercel env pull … --environment=production`.
+- **Real gap fixed:** the redis buffer held only the newest **1000** entries =
+  ~**1.8 min** under heavy voice load, so sparse `mic-*` input events rotated
+  out before a pull could catch them. Bumped `ltrim` cap to **5000** (~9 min)
+  in `api/audit-stream.ts`. Still pull promptly after a mic tap. Future win:
+  stop STREAMING the high-frequency noise (`voice-speak-invoked` throttled
+  dupes, `san-to-speech`, `stockfish-cache-*`) so the window covers longer.
 
 ## Next-session pickup
 - If David asks: cut the TestFlight build (`daily-deploy.yml`, `external=false`) so iOS gets the crash/re-arm/mic-off fixes; then run the 3-instrument audit on `/coach/play` voice.

@@ -99,7 +99,15 @@ async function writeRedis(entry: AuditStreamEntry): Promise<boolean> {
     const { Redis } = await import('@upstash/redis');
     const redis = new Redis(cfg);
     await redis.rpush('audit-stream', JSON.stringify(entry));
-    await redis.ltrim('audit-stream', -1000, -1);
+    // Retain the newest 5000 (was 1000). During heavy voice use the app emits
+    // ~1000 events in under 2 MINUTES (voice-speak-invoked / san-to-speech /
+    // stockfish-cache-* dominate), so a 1000-cap rotated SPARSE, high-value
+    // events (mic-* input, errors) out of the buffer before a diagnostic pull
+    // could catch them — the exact gap that hid the mic pipeline on
+    // 2026-09-01. 5000 ≈ a ~9-minute window under that load, long enough to
+    // catch a mic tap → pull. Upstash bills per command (not per element), so a
+    // longer list costs the same rpush/ltrim; only the (rare) full read grows.
+    await redis.ltrim('audit-stream', -5000, -1);
     await redis.expire('audit-stream', 86_400);
     return true;
   } catch {
