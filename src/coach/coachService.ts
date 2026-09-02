@@ -223,6 +223,7 @@ export {
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
 };
 export type { TrainingKind } from './questionIntents';
+import { isStructuralConceptTarget } from './questionIntents';
 
 export interface CoachServiceOptions {
   /** Override the active provider. Useful for tests. */
@@ -1168,7 +1169,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // against the Pirc?"); must ENGAGE the grounded path even with no FEN or
     // the standalone chat answers it with an ungrounded LLM invention
     // (the 2026-07-15 localhost audit caught exactly that: "Bayonet Attack").
-    const counterRepertoireQuestionEngage = isCounterRepertoireQuestion(askForIntents);
+    // A structural/concept "against X" (isolated queen pawn, bishop pair, weak
+    // square) is a THEORY question, never counter-repertoire (David 2026-09-02
+    // varied audit: it got "no prepared recommendation against that opening").
+    const counterRepertoireQuestionEngage = isCounterRepertoireQuestion(askForIntents) && !isStructuralConceptTarget(askForIntents);
     const accuracyQuestionEngage = isAccuracyQuestion(askForIntents);
     const consistencyQuestionEngage = isConsistencyQuestion(askForIntents);
     const convertingQuestionEngage = isConvertingQuestion(askForIntents);

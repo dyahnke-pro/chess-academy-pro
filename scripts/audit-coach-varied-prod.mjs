@@ -68,23 +68,24 @@ try {
   const rows = weaknessSeed();
   await seed(page, rows, gamesSeed(rows));
 
-  // ── BOARD-AGNOSTIC QUESTION TYPES (each isolated on a fresh load) ──────────
+  // Theory + endgame get FRESH loads (they were the two contaminated by a prior
+  // walkthrough's chat state). The rest were robust in one session.
   const q4 = await freshAsk('how should I handle an isolated queen pawn against me?');
   record('THEORY iqp: teaches the concept (not a record/counter-rep miss)', notDeflect(q4) && /(isolat|isolani|blockad|d5|pawn|piece|square|structure|endgame)/.test(q4) && !/no games against|logged yet|prepared recommendation against/.test(q4), `"${q4.slice(0, 90)}"`);
 
   const q5 = await freshAsk('how do I win a rook and pawn endgame?');
   record('ENDGAME technique: rook+pawn winning idea (not "not an endgame yet")', notDeflect(q5) && /rook/.test(q5) && /(pawn|king|activ|cut|bridge|promot|lucena|opposition|convert)/.test(q5) && !/not in an endgame yet|training it is/.test(q5), `"${q5.slice(0, 90)}"`);
 
-  const q6 = await freshAsk('teach me the Caro Cann');
+  // ── ROBUST BOARD-AGNOSTIC BATCH (one fresh session) ───────────────────────
+  await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismissGates(); await dismissGates();
+  const q6 = (await ask('teach me the Caro Cann')).toLowerCase();
   record('OFF-CANONICAL: resolves a misspelled opening', notDeflect(q6) && /caro/.test(q6), `"${q6.slice(0, 90)}"`);
-
-  const q7 = await freshAsk('what am I weakest at?');
+  const q7 = (await ask('what am I weakest at?')).toLowerCase();
   record('WEAKNESS: names a real seeded weakness', notDeflect(q7) && /(rook|ending|endgame|threat|slip)/.test(q7) && !/need more|not enough|import a few/.test(q7), `"${q7.slice(0, 90)}"`);
-
-  const q8 = await freshAsk('drill my missed threats');
+  const q8 = (await ask('drill my missed threats')).toLowerCase();
   record('DRILL nit: a drill request is NOT a live-threat readout', notDeflect(q8) && !/no immediate threat|nothing of theirs is hanging/.test(q8), `"${q8.slice(0, 90)}"`);
-
-  const q9raw = await freshAsk('thanks so much, this is really helping'); const q9 = q9raw;
+  const q9 = await ask('thanks so much, this is really helping');
   const hasChess = /\b(?:O-O(?:-O)?|[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8])\b/.test(q9) || /[+-]\d(?:\.\d)?\b/.test(q9) || /\b[a-h][1-8]\b/.test(q9);
   record('BANTER: warm reply, no chess notation', notDeflect(q9) && !hasChess, `"${q9.slice(0, 90)}"`);
 
