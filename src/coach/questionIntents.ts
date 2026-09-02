@@ -572,6 +572,18 @@ export function isTacticsQuestion(ask: string | undefined): boolean {
   return TACTICS_QUESTION_RE.test(ask);
 }
 
+/** A MATE-DISTANCE / forced-mate query — "can I force mate", "do I have a forced
+ *  mate", "how many moves to mate", "mate the king", "is there a forced mate". On
+ *  a ≤7-piece board this has an EXACT answer from the syzygy tablebase (the mate
+ *  distance); the live-tactics scan only sees mate-in-one and otherwise reports
+ *  "quiet position" (endgame-live audit 2026-09-02). The caller consults the
+ *  tablebase for these before the tactics all-clear; off-tablebase it falls back
+ *  to the tactic scan, so a middlegame mate-combination ask is unaffected. */
+export function isMateQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return /\b(?:force\s+(?:a\s+)?(?:mate|checkmate)|forced\s+(?:mate|checkmate|win\s+by\s+mate)|mate\s+in\s+(?:how\s+many|\d)|how\s+(?:many\s+moves?|long)\s+(?:to|until|before)\s+(?:i\s+)?(?:force\s+)?(?:mate|checkmate)|moves?\s+to\s+(?:force\s+)?(?:mate|checkmate)|can\s+i\s+(?:force\s+)?(?:deliver\s+)?(?:mate|checkmate)|is\s+there\s+(?:a\s+)?(?:forced\s+)?(?:mate|checkmate)|mate\s+the\s+(?:lone\s+)?king)\b/i.test(ask);
+}
+
 /** A POSITION-ASSESSMENT question — "who's winning?", "how do I stand here?",
  *  "what's the eval?", "is this good/bad for me?", "what's going on in this
  *  position?". Phase 1 (the "who's winning / eval" row): answered from Stockfish

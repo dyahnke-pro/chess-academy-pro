@@ -180,6 +180,11 @@ const pick = (arr, n, off) => { const out = []; for (let i = 0; i < n; i++) out.
 
 try {
   await loadFresh();
+  // Warm prod (a fresh deploy cold-starts the serverless coach + LLM provider →
+  // the first requests time out; a deploy artifact, not a routing bug).
+  console.log('warming prod…');
+  for (let w = 0; w < 2; w++) { try { await ask('what can you help me with?'); } catch { /* ignore */ } }
+  console.log('warmed.\n');
   let seeded = false;
   for (const fam of FAMILIES) {
     if (ONLY && fam.key !== ONLY) continue;

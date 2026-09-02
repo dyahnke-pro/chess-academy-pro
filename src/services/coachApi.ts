@@ -100,7 +100,7 @@ import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punis
 import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
-import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest } from '../coach/questionIntents';
+import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion } from '../coach/questionIntents';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
@@ -4783,6 +4783,28 @@ export async function getCoachChatResponse(
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
             if (voiced) return voiced;
+          }
+          // A MATE query ("can I force mate", "how many moves to mate") has an
+          // EXACT answer on a ≤7-piece board — the syzygy tablebase mate distance
+          // — that the live-tactic scan can't see (it only finds mate-in-one, so
+          // KQ-vs-K reads as a "quiet position"). Consult the tablebase before the
+          // all-clear; off-tablebase (>7 pieces) it returns null and a middlegame
+          // mate-combination ask falls through to the quiet-board answer unchanged
+          // (endgame-live audit 2026-09-02).
+          if (isMateQuestion(lastUserMessage() ?? '') && grounding.currentFen) {
+            try {
+              const tb = await lookupTablebase(grounding.currentFen);
+              if (tb) {
+                const scMate: 'white' | 'black' =
+                  grounding.studentColor ??
+                  (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
+                const mateAns = assembleEndgameAnswer({ result: tb, studentColor: scMate });
+                if (mateAns) {
+                  const voicedMate = await voiceFacts(mateAns.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+                  if (voicedMate) return voicedMate;
+                }
+              }
+            } catch { /* tablebase unreachable — fall through to the all-clear */ }
           }
           // A QUIET board is still an answer to a THREAT question. The
           // assembler returns null when nothing concrete exists, and the old

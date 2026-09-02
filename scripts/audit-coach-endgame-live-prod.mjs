@@ -135,6 +135,13 @@ async function ask(fen, q) {
 
 try {
   console.log(`Batch ${BATCH}: ${CASES.length} distinct questions\n`);
+  // Warm prod: a fresh deploy cold-starts the serverless coach + the LLM
+  // provider, so the first several requests time out ("coach is taking too
+  // long") — a deploy artifact, not a routing bug. Fire 2 throwaway asks to
+  // warm the path before scoring anything (endgame-live batch 1 cold-start).
+  console.log('warming prod…');
+  for (let w = 0; w < 2; w++) { try { await ask(WIN_POS[0].fen, 'is this winning?'); } catch { /* ignore */ } }
+  console.log('warmed.\n');
   for (const c of CASES) {
     const a = await ask(c.fen, c.q);
     const notOk = c.notWant.test(a);

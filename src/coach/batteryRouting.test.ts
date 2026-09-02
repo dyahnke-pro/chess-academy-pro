@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk, recordVsTarget, isRecordVsQuestion } from './questionIntents';
+import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk, recordVsTarget, isRecordVsQuestion, isMateQuestion } from './questionIntents';
 import { matchEndgameLesson } from '../services/endgameLessonsService';
 import { detectConceptsInText } from '../services/chessConceptService';
 
@@ -89,6 +89,21 @@ describe('battery routing regressions', () => {
     it('still resolves a real opponent / opening', () => {
       expect(recordVsTarget('what is my record against magnus')).toBe('magnus');
       expect(recordVsTarget('how do I do vs the london')).toBe('london');
+    });
+  });
+
+  describe('mate-distance queries are recognized (tablebase, not the tactic scan)', () => {
+    // "can I force mate / how many moves to mate" on a KQ-vs-K board got the
+    // live-tactic scan ("nothing is hanging, quiet position") because they set
+    // only isTacticsQuestion; the tablebase knows the exact mate distance
+    // (endgame-live audit 2026-09-02, batch 1).
+    it('recognizes forced-mate / mate-distance phrasings', () => {
+      for (const q of ['can I force mate here?', 'do I have a forced mate?', 'how many moves to mate?', 'can I mate the king?', 'is there a forced mate?', 'mate in how many?']) {
+        expect(isMateQuestion(q), q).toBe(true);
+      }
+    });
+    it('does not fire on ordinary board asks', () => {
+      for (const q of ['what is the best move?', 'is this winning?', 'who is better here']) expect(isMateQuestion(q), q).toBe(false);
     });
   });
 
