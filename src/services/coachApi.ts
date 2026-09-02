@@ -101,6 +101,7 @@ import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from '../coach/questionIntents';
+import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 
@@ -1824,12 +1825,13 @@ export function isBoardQuestionTurn(
   if (g.forceEngage === true) return true;
   if (hasChessContentSignal(query)) return true;
   const ask = g.cleanAsk ?? query;
-  if (isWhoseTurnQuestion(ask) || isLiveColorQuestion(ask) || isDrawQuestion(ask) || isMateQuestion(ask)) return true;
-  // A deterministic board question — needs a live board plus a board intent.
+  // The registry answers "is this one of the deterministic board questions?"
+  // — this used to be an inline restatement of that list.
+  if (isAnyBoardQuestion(ask)) return true;
+  // Board intents that are NOT registry entries (they have their own
+  // assemblers, not a board-verdict answer) still make the turn a board turn.
   return Boolean(g.currentFen) && (
-    g.positionAssessmentQuestion === true ||
     g.endgameQuestion === true ||
-    g.bestMoveQuestion === true ||
     g.whyBestMoveQuestion === true ||
     g.planQuestion === true ||
     g.candidateMoveQuestion === true ||
@@ -2181,8 +2183,13 @@ async function computeLiveBoardVerdict(
   // Everything past here reads the BOARD, so a FEN is genuinely required.
   if (!fen || !sc) return null;
 
-  const mateQ = isMateQuestion(question);
-  const drawQ = isDrawQuestion(question);
+  // ONE dispatch, off the registry — not four independent detector calls that
+  // each site could disagree about. `kind` is null for anything that is not a
+  // deterministic board question, and this function returns null for those.
+  const kind = detectBoardQuestion(question);
+  const mateQ = kind === 'mate';
+  const drawQ = kind === 'draw';
+  const assessQ = kind === 'assessment';
   // A BEST-MOVE ask also belongs here on a tablebase-covered position. It used
   // to bail one line below, before the tablebase was ever consulted, so with a
   // dead engine the coach refused "what's the best move?" on the SAME position
@@ -2194,8 +2201,8 @@ async function computeLiveBoardVerdict(
   // On ≤7 pieces the tablebase is PERFECT play, so it outranks the engine here
   // rather than merely covering for it — the DB is canon (G3), and a healthy
   // engine offering a slower win (Qd6) is worse than the exact answer (Qd5).
-  const bestMoveQ = grounding.bestMoveQuestion === true;
-  if (!mateQ && !drawQ && !bestMoveQ) return null;
+  const bestMoveQ = kind === 'best-move';
+  if (!mateQ && !drawQ && !bestMoveQ && !assessQ) return null;
 
   // Exact ≤7-piece verdict first (syzygy). Off-tablebase it returns null.
   try {
@@ -2224,10 +2231,33 @@ async function computeLiveBoardVerdict(
             : `By the tablebase this endgame is lost with best play; ${tb.bestMove.san} is the most stubborn try.`;
         return await voice(facts, 'endgame-best-move');
       }
+      // ASSESSMENT reads the same verdict. It used to be answered only by
+      // assemblePositionAssessment, whose inputs are engine-only (evalCp /
+      // mateIn / tactics) — so on a dead engine "who's better here?" refused
+      // while "is this a draw?" answered from the tablebase ON THE SAME BOARD.
+      // Its `needs` were wrong, not its lane.
       const ans = assembleEndgameAnswer({ result: tb, studentColor: sc });
-      if (ans) return await voice(ans.facts, mateQ ? 'endgame' : 'draw');
+      if (ans) return await voice(ans.facts, mateQ ? 'endgame' : assessQ ? 'assessment' : 'draw');
     }
   } catch { /* tablebase unreachable — fall to the threaded engine data */ }
+
+  // Off the tablebase, ASSESSMENT still has an exact computed answer whenever
+  // the engine threaded data — the same assembler the position default uses.
+  // Answering it HERE (at the early interception) rather than downstream is
+  // what stops the fuzzy opening-name picker preempting it: "am I winning?"
+  // came back "I don't have that exact opening mapped — did you mean one of
+  // these?" with positionAssessmentQuestion ALREADY true. Nothing read the flag
+  // in time; a whitelist could not have caught that, only dispatching early.
+  if (assessQ) {
+    const assess = assemblePositionAssessment({
+      evalCp: grounding.engineEvalCp,
+      mateIn: grounding.engineMateIn,
+      tactics: grounding.tactics,
+      studentColor: sc,
+    });
+    if (assess) return await voice(assess.facts, 'assessment');
+    return null; // no board data at all — the honest refusal downstream.
+  }
 
   // A best-move ask off the tablebase has no computed answer HERE — the engine
   // path owns it. Returning null hands it back rather than guessing.

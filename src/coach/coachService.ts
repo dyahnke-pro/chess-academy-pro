@@ -209,8 +209,8 @@ import {
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
   isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
-  isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion, isMateQuestion,
 } from './questionIntents';
+import { isAnyBoardQuestion } from './boardQuestions';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
   isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
@@ -1327,9 +1327,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const autoGrounding =
       options.grounding ??
       // BOARD-VERDICT INTENTS ENGAGE GROUNDING WITHOUT A BOARD. This gate reads
-      // "is there a FEN, OR did one of these intents fire" — and the four
+      // "is there a FEN, OR did one of these intents fire" — and the
       // board-verdict intents were never added to the list, so they rode
-      // entirely on the FEN. Lose it (an engine-crash run, a surface that
+      // entirely on the FEN. It now asks the REGISTRY rather than naming them
+      // here, so a new board question engages grounding without anyone
+      // remembering to extend this line (boardQuestions.ts). Lose it (an engine-crash run, a surface that
       // hasn't threaded liveState yet) and "whose turn is it?" produced NO
       // grounding object at all, which means no computed answer, no gate, and a
       // free LLM turn on a chess question — a G0 violation, and the same shape
@@ -1337,7 +1339,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isWhoseTurnQuestion(askForIntents) || isLiveColorQuestion(askForIntents) || isDrawQuestion(askForIntents) || isMateQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
