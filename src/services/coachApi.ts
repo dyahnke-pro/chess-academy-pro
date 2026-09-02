@@ -5272,7 +5272,30 @@ export async function getCoachChatResponse(
     // — honest teaching, no free-compose. This was the LAST free-chess path in
     // getCoachChatResponse; with it gone, groundCoachReply/runAnswerGates are
     // fully redundant and deleted.
-    if (hasChessContentSignal(originalQuery)) {
+    // A deterministic BOARD question — "is this winning?", "can I mate the
+    // king?", "what's my plan?", "who's better?" — often carries NO explicit
+    // chess vocab (no SAN / square / piece), so `hasChessContentSignal` misses
+    // it and it fell to the general LLM brain: a deterministic answer PHRASED by
+    // the model (slow, ~20-32s cold) instead of COMPUTED and spoken via
+    // preferRaw (instant). David 2026-09-02, emphatic: "All deterministic
+    // questions MUST route through the computer, NOT the LLM." A live board plus
+    // any board-verdict intent routes to the computed default below; when no
+    // engine data is threaded, serveGroundedPositionDefault returns null and the
+    // flow falls through exactly as before (no LLM chess invention added).
+    const deterministicBoardQuestion = Boolean(grounding.currentFen) && (
+      grounding.positionAssessmentQuestion === true ||
+      grounding.endgameQuestion === true ||
+      grounding.bestMoveQuestion === true ||
+      grounding.whyBestMoveQuestion === true ||
+      grounding.planQuestion === true ||
+      grounding.candidateMoveQuestion === true ||
+      grounding.alternativesQuestion === true ||
+      grounding.moveRatingQuestion === true ||
+      grounding.opponentMoveQuestion === true ||
+      grounding.convertingQuestion === true ||
+      grounding.colorQuestion === true
+    );
+    if (hasChessContentSignal(originalQuery) || deterministicBoardQuestion) {
       // NOTATION HELP — a beginner asking "what does Bxe7 mean?" (David
       // 2026-08-27, Rivertoe85: "what does Bxe7 mean", "I don't understand your
       // language"). Decode the move in plain English before the position
