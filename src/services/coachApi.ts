@@ -2092,6 +2092,13 @@ async function computeLiveBoardVerdict(
   config: ProviderConfig | null,
 ): Promise<string | null> {
   const fen = grounding.currentFen;
+  // TEMP DEBUG (David 2026-09-02 board-verdict prod triage) — remove after.
+  void logAppAudit({
+    kind: 'board-verdict-debug',
+    category: 'subsystem',
+    source: 'coachApi.computeLiveBoardVerdict',
+    summary: `entered q="${(question ?? '').slice(0, 60)}" fen=${fen ? 'present' : 'MISSING'} turn=${isWhoseTurnQuestion(question)} color=${isLiveColorQuestion(question)} draw=${isDrawQuestion(question)} mate=${isMateQuestion(question)}`,
+  });
   if (!fen) return null;
   const stm: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
   const sc: 'white' | 'black' = grounding.studentColor ?? stm;
@@ -3054,6 +3061,13 @@ export async function getCoachChatResponse(
   // without the user seeing a half-bad answer first.
   let masterPlayContext: MasterPlayContext | undefined;
   let groundingEngaged = false;
+  // TEMP DEBUG (David 2026-09-02 board-verdict prod triage) — remove after.
+  void logAppAudit({
+    kind: 'board-verdict-debug',
+    category: 'subsystem',
+    source: 'coachApi.groundingBlock',
+    summary: `block-gate grounding=${grounding ? 'present' : 'MISSING'} internalAsk=${grounding?.internalAsk === true} cleanAsk="${(grounding?.cleanAsk ?? '(none)').slice(0, 60)}" fen=${grounding?.currentFen ? 'present' : 'MISSING'} surface=${grounding?.surface ?? '?'}`,
+  });
   if (grounding && grounding.internalAsk !== true) {
     // NOTATION HELP FIRST (David 2026-08-27) — "what does Bxe7 mean?" must decode
     // the move, not get eaten by the concept/glossary assembler (which answered
@@ -3090,9 +3104,15 @@ export async function getCoachChatResponse(
     // same "the best move is Qd6, White is winning" readout. computeLiveBoardVerdict
     // self-gates (null unless the ask is one of these four AND the data decides),
     // so a miss falls through unchanged.
-    const boardVerdict = await computeLiveBoardVerdict(earlyUserMsg ?? '', grounding, config);
+    // Use grounding.cleanAsk — the surface's raw question — NOT the extracted
+    // message: on surfaces whose envelope carries no [Ask] marker (the play
+    // surface), currentAskFromContent returns the whole composed envelope, so
+    // the precise draw/turn/colour detectors miss and the ask fell to the LLM
+    // (the KQ-vs-K collapse persisted after the first fix — prod audit).
+    const boardVerdictAsk = grounding.cleanAsk ?? earlyUserMsg ?? '';
+    const boardVerdict = await computeLiveBoardVerdict(boardVerdictAsk, grounding, config);
     if (boardVerdict) {
-      emitGroundingCoverage('board-verdict', grounding.surface ?? 'unknown', grounding.sessionId, { question: (earlyUserMsg ?? '').slice(0, 100), path: 'early' });
+      emitGroundingCoverage('board-verdict', grounding.surface ?? 'unknown', grounding.sessionId, { question: boardVerdictAsk.slice(0, 100), path: 'early' });
       if (onStream) onStream(boardVerdict);
       return boardVerdict;
     }
@@ -5412,22 +5432,25 @@ export async function getCoachChatResponse(
       grounding.convertingQuestion === true ||
       grounding.colorQuestion === true
     );
+    const sealVerdictAsk = grounding.cleanAsk ?? originalQuery;
     if (
       hasChessContentSignal(originalQuery) ||
       deterministicBoardQuestion ||
-      isWhoseTurnQuestion(originalQuery) ||
-      isLiveColorQuestion(originalQuery) ||
-      isDrawQuestion(originalQuery) ||
-      isMateQuestion(originalQuery)
+      isWhoseTurnQuestion(sealVerdictAsk) ||
+      isLiveColorQuestion(sealVerdictAsk) ||
+      isDrawQuestion(sealVerdictAsk) ||
+      isMateQuestion(sealVerdictAsk)
     ) {
       // INTENT-SPECIFIC BOARD VERDICT — the generic position default (best move
       // + eval) answers "is this a draw? / whose turn? / mate in how many? /
       // what colour am I?" all with the SAME best-move readout (hand-driven prod
       // audit, David 2026-09-02). Each has an EXACT computed answer; compute it
       // FIRST, then fall through to the position default for the rest. G0.
-      const verdict = await computeLiveBoardVerdict(originalQuery, grounding, config);
+      // (The early interception above catches these on most paths; this is the
+      // backstop for any flow that reaches the seal.)
+      const verdict = await computeLiveBoardVerdict(sealVerdictAsk, grounding, config);
       if (verdict) {
-        emitGroundingCoverage('board-verdict', surface, sessionId, { question: originalQuery.slice(0, 100) });
+        emitGroundingCoverage('board-verdict', surface, sessionId, { question: sealVerdictAsk.slice(0, 100) });
         if (onStream) onStream(verdict);
         return verdict;
       }
