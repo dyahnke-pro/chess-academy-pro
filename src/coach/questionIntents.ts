@@ -914,6 +914,16 @@ const THEORY_QUESTION_RE = anyOf([
   String.raw`\bhow\s+to\s+(?:handle|deal|attack|defend|convert|exploit|use|meet|counter|approach|beat|target|break|stop)\b`,
 ]);
 
+/** A STRUCTURAL / CONCEPT target ("against an isolated queen pawn / the bishop
+ *  pair / a weak square") — belongs to the THEORY lane, never the win-loss record
+ *  or the counter-repertoire lane (both treat their target as a named opponent /
+ *  opening). Shared by recordVsTarget's guard and the counterRepertoire gate
+ *  (A0, David 2026-09-01/02: the theory lane kept getting swallowed). */
+const STRUCTURAL_CONCEPT_RE = /\b(?:isolated|backward|passed|doubled|hanging|isolani|iqp|outpost|fianchetto(?:ed)?|opposite[-\s]?colou?red)\b|\b(?:pawn\s+structure|bishop\s+pair|weak\s+square|weak\s+colou?r|colou?r\s+complex|pawn\s+chain|space\s+advantage|minority\s+attack)\b/i;
+export function isStructuralConceptTarget(ask: string | undefined): boolean {
+  return !!ask && STRUCTURAL_CONCEPT_RE.test(ask);
+}
+
 export function isTheoryQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // App-surface, self-stat, live-board and improvement asks are other lanes.
@@ -2041,7 +2051,11 @@ export function isMoveRatingQuestion(ask: string | undefined): boolean {
  *  up calculation training when asked… pull from real user games"). Null when
  *  it isn't a training request. */
 export type TrainingKind = 'calculation' | 'tactics' | 'endgame' | 'mistakes' | 'weakness' | 'opening' | 'review';
-const TRAIN_VERB = String.raw`(?:set\s*up|start|begin|give\s+me|do|run|open|launch|train|practi[sc]e|drill|work\s+on|improve|sharpen|hone|review|analy[sz]e)`;
+// NB: no bare "do" — it matches the AUXILIARY in "how DO I win a rook endgame",
+// mis-routing every "how do I <verb> <topic>" question into training (David
+// 2026-09-02 varied audit: "how do I win a rook and pawn endgame" → training
+// instead of the technique lesson). Imperatives use start/set up/give me/train/…
+const TRAIN_VERB = String.raw`(?:set\s*up|start|begin|give\s+me|run|open|launch|train|practi[sc]e|drill|work\s+on|improve|sharpen|hone|review|analy[sz]e)`;
 const TRAINING_REQUEST_RE = new RegExp(
   String.raw`\b${TRAIN_VERB}\b[\s\S]*?\b(calculation|calculating|calculate|visuali[sz]ation|tactics?|tactical|endgames?|endings?|mistakes?|blunders?|weakness(?:es)?|weak\s+spots?|missed\s+threats?|threats?|prophylaxis|structure|openings?|opening\s+theory|repertoire|game\s+review|my\s+games?|mates?|forks?|pins?|skewers?|back[\s-]?rank|discovered|combinations?)\b`,
   'i',
@@ -2407,7 +2421,7 @@ export function buildQuestionGrounding(
     // A counter-repertoire ask ("what should I play against the Pirc") is a
     // RECOMMENDATION question — it must never be hijacked into a best-move
     // position eval (David 2026-07-15, live screenshot: "e4, +0.6").
-    counterRepertoireQuestion: isCounterRepertoireQuestion(a),
+    counterRepertoireQuestion: isCounterRepertoireQuestion(a) && !isStructuralConceptTarget(a),
     bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a),
     whyBestMoveQuestion: isWhyBestMoveQuestion(a),
     openingExistenceName: openingExistenceQuery(a) ?? undefined,

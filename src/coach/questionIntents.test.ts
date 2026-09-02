@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isAppHelpQuestion, isWhyBestMoveQuestion } from './questionIntents';
+import { isAppHelpQuestion, isWhyBestMoveQuestion, isStructuralConceptTarget } from './questionIntents';
 import {
   isAlternativesQuestion,
   isPlanQuestion,
@@ -1283,5 +1283,33 @@ describe('why-is-X-better reaches the why lane', () => {
     // "why is my position better" into an engine-line walk when the student
     // asked for an assessment.
     expect(isWhyBestMoveQuestion('Why is my position better?')).toBe(false);
+  });
+});
+
+// David 2026-09-02 varied-audit routing fixes.
+describe('varied-audit routing guards', () => {
+  it('a structural/concept "against X" is theory, NOT counter-repertoire', () => {
+    for (const q of [
+      'how should I handle an isolated queen pawn against me?',
+      'how do I play against the bishop pair?',
+      'what is the plan against a weak square?',
+      'how do I deal with doubled pawns',
+    ]) {
+      expect(isStructuralConceptTarget(q), q).toBe(true);
+    }
+    // A named opening is NOT a structural target (so the guard leaves it for the
+    // counter-repertoire lane).
+    expect(isStructuralConceptTarget('how do I play against the Sicilian?')).toBe(false);
+  });
+
+  it('"how do I win a rook endgame" is a technique question, not a training request', () => {
+    // The auxiliary "do" no longer trips TRAIN_VERB.
+    expect(trainingRequestKind('how do I win a rook and pawn endgame?')).toBeNull();
+    expect(trainingRequestKind('how do I hold a rook ending')).toBeNull();
+    expect(trainingRequestKind('how do I stop forks')).toBeNull();
+    // Real imperatives still route to training.
+    expect(trainingRequestKind('set up endgame training')).toBe('endgame');
+    expect(trainingRequestKind('drill my tactics')).toBe('tactics');
+    expect(trainingRequestKind('train my mistakes')).toBe('mistakes');
   });
 });
