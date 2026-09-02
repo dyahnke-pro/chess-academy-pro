@@ -4553,6 +4553,7 @@ After every `git push origin main`:
    | settings toggles | `scripts/audit-settings-behavior.mjs` |
    | first-run strength calibration (boot rating + skill bubble) | `scripts/audit-strength-calibration.mjs` |
    | boot storage persistence / Dexie durability / `device_id` | `scripts/audit-storage-persistence.mjs` (asserts `requestPersistentStorage()` runs once before the first Dexie write + `device_id` survives a reload; run it on ANY change to the boot path, `storageQuota.ts`, `deviceIdentity.ts`, or Dexie schema) |
+   | ANY new or edited `scripts/audit-*.mjs` | `node scripts/audit-vacuity-check.mjs --changed` — a negative control that points the audit at a blank app and FAILS it for still printing PASS. "The audit reported green having verified nothing" is the most expensive failure mode in this repo; this is the only instrument that measures it. |
    | Cross-surface UI scaffolding | run multiple of the above |
 
    Every script in `scripts/audit-*.mjs` targets the live prod URL

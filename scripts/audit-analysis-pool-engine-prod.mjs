@@ -189,7 +189,33 @@ async function main() {
     // The button disables itself when it sees no work ("All games analyzed"),
     // so a click on it is a no-op — the seed not landing must fail loudly here
     // rather than surface later as a phantom product finding.
+    let ctaClicked = false;
+    // WAIT FOR THE SEED TO REACH THE BUTTON'S COUNT. The count is read once on
+    // mount (a single Dexie scan keyed off bgRunning), so a boot that races the
+    // seeded write leaves the button reading "All games analyzed" and the click
+    // is a no-op — which this audit then correctly reports as a HARNESS miss,
+    // but a harness that misses intermittently is a broken instrument, not a
+    // careful one. Poll for the work state, reloading once, before touching it.
     const cta = page.locator('[data-testid="analyze-games-cta"]').first();
+    const WORK_STATE = /Analyze\s+\d+\s+game/i;
+    let sawWorkState = false;
+    for (let attempt = 0; attempt < 3 && !sawWorkState; attempt++) {
+      try {
+        await cta.waitFor({ state: 'visible', timeout: 20_000 });
+        for (let i = 0; i < 10; i++) {
+          if (WORK_STATE.test((await cta.innerText()).replace(/\s+/g, ' '))) { sawWorkState = true; break; }
+          await page.waitForTimeout(1500);
+        }
+      } catch { /* button not up yet */ }
+      if (!sawWorkState && attempt < 2) {
+        await page.goto(`${BASE_URL}/settings`, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+        try {
+          const help = page.locator('[data-testid="page-help-modal"]');
+          if (await help.isVisible({ timeout: 2000 })) await page.keyboard.press('Escape');
+        } catch { /* none */ }
+      }
+    }
+
     try {
       await cta.waitFor({ state: 'visible', timeout: 20_000 });
       const label = (await cta.innerText()).replace(/\s+/g, ' ').trim();
@@ -199,6 +225,7 @@ async function main() {
           `button is not in a work state — text="${label}" disabled=${disabled}; the seeded games did not reach gameNeedsAnalysis (HARNESS miss)`);
       } else {
         await cta.click();   // NO force — an intercepted click must throw, not no-op
+        ctaClicked = true;
         record('analyze-cta', 'pass', `clicked the real button ("${label}")`);
       }
     } catch (err) {
@@ -206,8 +233,17 @@ async function main() {
     }
 
     // ── Let the pool spawn + run ──────────────────────────────────────────
-    console.log(`[audit] waiting up to ${POOL_WAIT_MS / 1000}s for the worker pool…`);
-    const deadline = Date.now() + POOL_WAIT_MS;
+    // FAIL FAST WHEN THE TRIGGER NEVER FIRED. Waiting 90s for a pool that was
+    // never started is a guaranteed timeout dressed as patience — found by
+    // `audit-vacuity-check`, which ran this audit against a blank app and got
+    // no verdict at all inside its budget. A real outage would have hung CI the
+    // same way instead of reporting. There is nothing to wait for; say so.
+    const deadline = Date.now() + (ctaClicked ? POOL_WAIT_MS : 0);
+    if (!ctaClicked) {
+      console.log('[audit] analyze never started — skipping the pool wait (nothing to observe)');
+    } else {
+      console.log(`[audit] waiting up to ${POOL_WAIT_MS / 1000}s for the worker pool…`);
+    }
     let rows = [];
     while (Date.now() < deadline) {
       rows = await readVariantRows(page);
