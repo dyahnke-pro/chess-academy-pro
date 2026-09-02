@@ -1916,7 +1916,7 @@ property (`/coach/teach`, `/coach/play`, `/coach/review`, …), not by event —
 `/coach/teach` has no unique event of its own and vanishes into the voice/coach
 buckets otherwise.
 
-**🔒🔒 THE FOUR CONTAMINATION TRAPS — verified 2026-09-02, do NOT re-learn them
+**🔒🔒 THE FIVE CONTAMINATION TRAPS — verified 2026-09-02, do NOT re-learn them
 the hard way (David, after a full paranoia pass).** Every one of these bit this
 session; the recipe above already excludes them, but know WHY:
 
@@ -1939,19 +1939,68 @@ session; the recipe above already excludes them, but know WHY:
    an odd egress. This session nearly flagged a genuine-looking session as a bot
    on null-geo alone; the UA is the discriminator, geography never is.
 4. **App Store installs are ANONYMOUS — no email/name ever attaches.** So David's
-   own use can only be separated by `distribution` (`testflight` = him). If he
-   ever runs the PUBLIC App Store build, that device is indistinguishable from a
-   real user (the heavy "Lake Butler" iPhone, ~15k events, is exactly this
-   ambiguity — a real power user UNLESS David confirms he runs the public build).
-   Never assert a specific appstore device is or isn't David from geography;
-   ask him, or leave the caveat explicit.
+   own use can only be separated by `distribution` (`testflight` = him) PLUS the
+   build_id rule below. Never assert a specific appstore device is or isn't David
+   from geography — geography is worthless here (David's own dev device geoips to
+   Lake Butler FL / Naaldwijk NL, nowhere near his Yorkville web use).
+
+5. **🔥 THE BIG ONE — CC's REAL-PLAY / SIMULATOR AUDIT LOOKS EXACTLY LIKE A REAL
+   NATIVE USER. `build_id` is the ONLY thing that separates them.** Trap #1 says
+   CC audits are web+tagged — that is only true of the Playwright/web audits. CC
+   ALSO runs a **native real-play audit and the iOS app simulator**, which drive
+   the actual Capacitor app, so they report `platform='native'`, `is_native=true`,
+   `native_platform='ios'`, `$device_type='Mobile'`, a real `iPhone` model, a
+   normal iOS UA (`Mobile/15E148`), `distribution='appstore'`, and **NO
+   `audit_run_id`, NO HeadlessChrome.** Every native-ness flag is IDENTICAL to a
+   real user — tested 2026-09-02, dev/audit and real devices were indistinguishable
+   on `is_native`/`native_platform`/`is_standalone`/model. David's "native vs
+   not-native" hunch does NOT work; that split only removes web/pwa, which
+   `platform='native'` already did.
+   **What DOES work: `build_id`.** A real user runs the shared App Store release
+   build (and the OTA builds everyone gets) — every build_id on their device is
+   ALSO on many other devices. A dev/audit device constantly installs fresh
+   builds, so it carries **PRIVATE build_ids that appear on no other device**.
+   The rule:
+   - Compute, per build_id, `count(DISTINCT device_id)`. A build seen on exactly
+     ONE device is **private**.
+   - A device with **≥2 private builds = dev/audit → EXCLUDE** (2026-09-02: the
+     Lake Butler power-user iPhone had 7 private builds across 12 total; a
+     Yorkville device had 3 — both David/CC, not users).
+   - A device with **exactly 1 private build = borderline** (could be a real user
+     who happened to be first onto a fresh OTA) — flag it, don't silently drop;
+     it's the count's ± swing.
+   - 0 private builds = real user.
+   Applying this took the count from a wrong "39 real users" (which had swallowed
+   the Lake Butler dev device as a "power user") down to **35 real** (32 active/30d).
+   The Lake Butler device alone was ~99% of all coach-chat volume and the 660
+   voice-fallovers — so ANY analysis of "what users do / what breaks for users"
+   MUST strip the private-build devices FIRST, or it's just reporting David's own
+   testing back to him (this session did exactly that, three times, before the
+   build_id fix).
+
+The canonical **real-native-user WHERE** therefore gains a build_id clause: after
+the `properties.*` filters above, also exclude every `device_id` that has ≥2
+build_ids seen on no other device. SQL pattern:
+```sql
+WITH bd AS (SELECT properties.build_id AS b, count(DISTINCT properties.device_id) AS devs
+            FROM events WHERE <native-user filters> AND coalesce(properties.build_id,'')!='' GROUP BY b)
+-- a device is dev/audit if it has >=2 builds b with bd.devs = 1
+```
 
 Web vs native is a hard `platform` split (`web`/`pwa` vs `native`) — the free
-Vercel web app (~219 devices, permanently unlocked) and every audit live in
+Vercel web app (~219 devices, permanently unlocked) and every WEB audit live in
 `web`, entirely separate from the native count. macOS-native rows (`$os='Mac OS
 X'`, `$device_type='Desktop'`) are Apple-Silicon Macs running the iOS app
 (reviewers or David), not representative iOS customers — report them separately
 from the Mobile count.
+
+**THE ORDER OF OPERATIONS (do this every time, before ANY per-user analysis):**
+(1) `platform='native'` + `distribution='appstore'` (drops web, pwa, David's
+TestFlight); (2) drop Cupertino (Apple review); (3) drop `audit_run_id` + Headless
+(web audits); (4) drop `$device_type='Desktop'` for the Mobile count; (5) **drop
+≥2-private-build devices (CC native real-play/simulator + David's dev iPhones).**
+Only what survives all five is a real user. Skipping step 5 reports testing as
+usage.
 
 **🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
 2026-07-18: "PostHog access is granted through a different manner … don't
