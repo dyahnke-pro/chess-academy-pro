@@ -1910,7 +1910,48 @@ round(count()/count(DISTINCT device),1) AS actions_per_user … ORDER BY users
 DESC, actions DESC`. Rank by `users` (adoption) — that's "what they're using";
 `actions_per_user` is "how often." Drop the `(other)` bucket ($autocapture/$set/
 ota_*/stockfish/storage/grounding telemetry) from the report — it's not a
-feature.
+feature. For a **surface-level** cut (which SCREENS they use — Learn with Coach,
+Play, Review, Openings, Tactics) break `page_viewed` down by its `route`
+property (`/coach/teach`, `/coach/play`, `/coach/review`, …), not by event —
+`/coach/teach` has no unique event of its own and vanishes into the voice/coach
+buckets otherwise.
+
+**🔒🔒 THE FOUR CONTAMINATION TRAPS — verified 2026-09-02, do NOT re-learn them
+the hard way (David, after a full paranoia pass).** Every one of these bit this
+session; the recipe above already excludes them, but know WHY:
+
+1. **Claude Code audits are 100% WEB, never native — and they ARE tagged.** Every
+   `audit_run_id`-tagged event is `platform='web'` (e.g. a live run `varied-mtjdmwpw`
+   auditing `/coach/teach` on prod). The Playwright/CC audits drive
+   `chess-academy-pro.vercel.app`, so they can't reach the App Store build. The
+   native cohort had ZERO audit events. So `platform='native'` already sheds all
+   audits; `audit_run_id=''` is belt-and-suspenders.
+2. **`audit_kind` is NOT an automation marker — it's the app's OWN telemetry
+   taxonomy** (`logAppAudit` — values `voice-speak-invoked`, `route-changed`,
+   `coach-brain-answered`, `stockfish-variant-resolved`…). It sits on ~72% of
+   real human events. NEVER exclude on `audit_kind` — you'd delete your real
+   users. Only `audit_run_id` means "this was an automated run."
+3. **HeadlessChrome is the definitive bot UA; null-geo / Linux / Chrome ALONE is
+   NOT.** A live session showing `Linux x86_64 … HeadlessChrome/141` with no
+   geoip is a CC audit bot — exclude `$raw_user_agent LIKE '%HeadlessChrome%'`
+   (and `%AuditCoachPlayBot%`) on WEB analysis. But do NOT treat null-geo or
+   Linux by themselves as a bot signal — they can be a real user behind a VPN or
+   an odd egress. This session nearly flagged a genuine-looking session as a bot
+   on null-geo alone; the UA is the discriminator, geography never is.
+4. **App Store installs are ANONYMOUS — no email/name ever attaches.** So David's
+   own use can only be separated by `distribution` (`testflight` = him). If he
+   ever runs the PUBLIC App Store build, that device is indistinguishable from a
+   real user (the heavy "Lake Butler" iPhone, ~15k events, is exactly this
+   ambiguity — a real power user UNLESS David confirms he runs the public build).
+   Never assert a specific appstore device is or isn't David from geography;
+   ask him, or leave the caveat explicit.
+
+Web vs native is a hard `platform` split (`web`/`pwa` vs `native`) — the free
+Vercel web app (~219 devices, permanently unlocked) and every audit live in
+`web`, entirely separate from the native count. macOS-native rows (`$os='Mac OS
+X'`, `$device_type='Desktop'`) are Apple-Silicon Macs running the iOS app
+(reviewers or David), not representative iOS customers — report them separately
+from the Mobile count.
 
 **🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
 2026-07-18: "PostHog access is granted through a different manner … don't
