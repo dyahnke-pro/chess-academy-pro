@@ -113,7 +113,7 @@ const FAMILIES = [
     { q: 'what am I worst at?', want: /weak|mistake|tactic|endgame|blunder|drill|pattern|upload|import/ },
     { q: 'where am I leaking rating?', want: /weak|mistake|tactic|endgame|blunder|drill|pattern|upload|import/ },
     { q: 'what endgame am I weakest at?', want: /endgame|rook|pawn|convert|weak|drill|upload|import/ },
-    { q: 'what are my strengths?', want: /strength|good|strong|tactic|endgame|opening|solid|upload|import/ },
+    { q: 'what are my strengths?', want: /strength|good|strong|tactic|endgame|opening|solid|upload|import|win rate|do well|zero blunder|clean/ },
     { q: 'am I improving on my weaknesses?', want: /improv|weak|better|trend|drill|still|progress|upload|import/ },
   ] },
   { family: 'Mistakes & review', key: 'mistakes', rows: [

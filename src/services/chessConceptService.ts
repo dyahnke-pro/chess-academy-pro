@@ -267,7 +267,11 @@ export function detectConceptsInText(text: string): string[] {
   for (const c of DATA.concepts) {
     for (const phrase of c.phrases) {
       const escaped = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp(`\\b${escaped}\\b`, 'i');
+      // Tolerate a plural on the phrase's last word — "how do skewerS / forkS
+      // work" detected no concept and fell to the live-board scan instead of
+      // teaching the motif (battery 2026-09-02). Optional trailing e?s matches
+      // skewer→skewers, fork→forks, back rank→back ranks; the \b still anchors.
+      const re = new RegExp(`\\b${escaped}(?:e?s)?\\b`, 'i');
       if (re.test(lo)) {
         hits.push(c.id);
         break;

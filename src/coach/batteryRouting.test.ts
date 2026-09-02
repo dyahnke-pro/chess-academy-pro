@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { isBestMoveQuestion, isNameOpeningQuestion, typedMoveListInAsk } from './questionIntents';
 import { matchEndgameLesson } from '../services/endgameLessonsService';
+import { detectConceptsInText } from '../services/chessConceptService';
 
 /**
  * Routing regressions caught by the coach capability battery (David 2026-09-02:
@@ -72,6 +73,18 @@ describe('battery routing regressions', () => {
       expect(typedMoveListInAsk('e4 c5 Nf3')).toBe(true);
       expect(typedMoveListInAsk('what is a good bishop')).toBe(false);
       expect(typedMoveListInAsk('how do I play the sicilian')).toBe(false);
+    });
+  });
+
+  describe('concept detection tolerates plurals ("how do skewers work")', () => {
+    // \bskewer\b did not match "skewerS", so a plural tactic-concept ask detected
+    // nothing and fell to the live-board scan ("nothing is hanging") instead of
+    // teaching the motif. detectConceptsInText now allows a trailing e?s.
+    it('detects the motif whether singular or plural', () => {
+      expect(detectConceptsInText('how do skewers work?')).toContain('tac-skewer');
+      expect(detectConceptsInText('what is a skewer?')).toContain('tac-skewer');
+      expect(detectConceptsInText('how do forks work')).toContain('tac-fork');
+      expect(detectConceptsInText('what is a fork')).toContain('tac-fork');
     });
   });
 });
