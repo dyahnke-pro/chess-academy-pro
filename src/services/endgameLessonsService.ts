@@ -114,7 +114,10 @@ const ENDGAME_ALIASES: Record<string, string[]> = {
  *  a vague "how do I win the endgame" returns null and the caller falls back to
  *  the general principle set / honest decline. */
 export function matchEndgameLesson(text: string): EndgameLesson | null {
-  const t = (text ?? '').toLowerCase();
+  // Normalize separator words so aliases written with "vs" also match "versus" /
+  // "v." (David 2026-09-02: "how do I win king and pawn VERSUS king" missed the
+  // 'king and pawn vs king' alias and fell through to the live-board lane).
+  const t = (text ?? '').toLowerCase().replace(/\bversus\b/g, 'vs').replace(/\bv\.?\s/g, 'vs ');
   if (!t.trim()) return null;
   const nameStop = new Set(['the', 'of', 'and', 'a', 'vs', 'with', 'your', 'position', 'defensive', 'building', 'bridge']);
   let best: { lesson: EndgameLesson; score: number } | null = null;

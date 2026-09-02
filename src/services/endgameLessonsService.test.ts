@@ -7,6 +7,7 @@ import {
   getDrawingPatterns,
   getRookEndings,
   getEndgameLessonById,
+  matchEndgameLesson,
 } from './endgameLessonsService';
 import type { EndgameLesson } from '../types/endgameLesson';
 
@@ -168,6 +169,23 @@ describe('endgameLessonsService', () => {
 
     it('returns null for unknown ID', () => {
       expect(getEndgameLessonById('not-a-real-lesson-xyz')).toBeNull();
+    });
+  });
+
+  describe('matchEndgameLesson — separator normalization (David 2026-09-02)', () => {
+    it('matches "versus" the same as "vs"', () => {
+      const vs = matchEndgameLesson('how do I win king and pawn vs king?');
+      const versus = matchEndgameLesson('how do I win king and pawn versus king?');
+      expect(vs).not.toBeNull();
+      expect(versus).not.toBeNull();
+      expect(versus?.id).toBe(vs?.id);
+    });
+    it('still matches named techniques directly', () => {
+      expect(matchEndgameLesson('teach me the Lucena position')?.id).toBe('lucena-position');
+      expect(matchEndgameLesson('how do I hold a Philidor rook ending')?.id).toBe('philidor-rook-ending');
+    });
+    it('returns null for a non-endgame ask', () => {
+      expect(matchEndgameLesson('what opening should I play')).toBeNull();
     });
   });
 });

@@ -49,21 +49,38 @@ function buildSeed() {
   return rows;
 }
 
-async function seedWeaknesses(page, rows) {
-  return page.evaluate((rows) => new Promise((resolve) => {
+// The weakness lanes require analyzedGameCount > 0 (else the upload-reminder
+// correctly preempts them). The mistakePuzzles are DERIVED from analyzed games,
+// so seed one analyzed player game per sourceGameId — this DECOUPLES the weakness
+// contracts from the flaky live-played game (which only name-opening / opponent-
+// move genuinely need). black='Stockfish Bot' → white player, no username;
+// annotations + fullyAnalyzed + analysisDepth make it count as analyzed.
+function buildGamesSeed(rows) {
+  return [...new Set(rows.map((r) => r.sourceGameId))].map((id, i) => ({
+    id, source: 'import', isMasterGame: false, result: '1-0',
+    white: 'AuditPlayer', black: 'Stockfish Bot', whiteElo: 1500, blackElo: 1500,
+    pgn: '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6', date: '2026-01-01', playedAt: `2026-01-0${(i % 8) + 1}T00:00:00.000Z`,
+    annotations: [{ moveNumber: 1, color: 'white', evaluation: 20, bestMove: 'e4', bestMoveSan: 'e4', bestMoveEval: 20, classification: 'book' }],
+    fullyAnalyzed: true, analysisDepth: 20, openingId: null, coachAnalysis: null,
+  }));
+}
+
+async function seedWeaknesses(page, rows, games) {
+  return page.evaluate(({ rows, games }) => new Promise((resolve) => {
     let req;
     try { req = indexedDB.open('ChessAcademyDB'); } catch { return resolve({ ok: false, reason: 'open-threw' }); }
     req.onerror = () => resolve({ ok: false, reason: 'open-error' });
     req.onsuccess = () => {
       const db = req.result;
-      if (!db.objectStoreNames.contains('mistakePuzzles')) { db.close(); return resolve({ ok: false, reason: 'no-store' }); }
-      const tx = db.transaction('mistakePuzzles', 'readwrite');
-      const store = tx.objectStore('mistakePuzzles');
-      for (const r of rows) store.put(r);
-      tx.oncomplete = () => { db.close(); resolve({ ok: true, wrote: rows.length }); };
+      const need = ['mistakePuzzles', 'games'].filter((s) => !db.objectStoreNames.contains(s));
+      if (need.length) { db.close(); return resolve({ ok: false, reason: `no-store:${need.join(',')}` }); }
+      const tx = db.transaction(['mistakePuzzles', 'games'], 'readwrite');
+      for (const r of rows) tx.objectStore('mistakePuzzles').put(r);
+      for (const g of games) tx.objectStore('games').put(g);
+      tx.oncomplete = () => { db.close(); resolve({ ok: true, wrote: rows.length, games: games.length }); };
       tx.onerror = () => { db.close(); resolve({ ok: false, reason: 'tx-error' }); };
     };
-  }), rows);
+  }), { rows, games });
 }
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -128,8 +145,9 @@ try {
   // ── SETUP: load, seed the weakness corpus, reload so the app reads it ──────
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
-  const seed = await seedWeaknesses(page, buildSeed());
-  record('seed: wrote a real weakness corpus to IndexedDB', seed.ok, seed.ok ? `${seed.wrote} mistake puzzles` : `seed failed (${seed.reason})`);
+  const seedRows = buildSeed();
+  const seed = await seedWeaknesses(page, seedRows, buildGamesSeed(seedRows));
+  record('seed: wrote a real weakness corpus to IndexedDB', seed.ok, seed.ok ? `${seed.wrote} mistake puzzles / ${seed.games} analyzed games` : `seed failed (${seed.reason})`);
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismissGates(); await dismissGates();
 
@@ -153,15 +171,14 @@ try {
     } catch { landed = false; }
     return landed;
   };
-  await ask('Play the Italian with me as white');
-  await resolvePicker();
-  await page.waitForTimeout(4000);
-  let moved = await playMoves();
-  if (!moved) {
-    // Re-enter play and try once more — a flaked start leaves no move history.
+  // name-opening + opponent-move genuinely need live move history, and the
+  // click-to-move can flake (Watch/narration mode swallows the click), so start
+  // + play + verify, retrying the WHOLE start-and-move up to 3 times.
+  let moved = false;
+  for (let attempt = 0; attempt < 3 && !moved; attempt++) {
     await ask('Play the Italian with me as white');
     await resolvePicker();
-    await page.waitForTimeout(4000);
+    await page.waitForTimeout(4500);
     moved = await playMoves();
   }
   record('setup: live game has real move history (opponent replied)', moved, moved ? 'moves landed' : 'board never left the start position');

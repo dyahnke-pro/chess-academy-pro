@@ -1218,7 +1218,12 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     //
     // The intent already knows. Build the plan whenever the student asked for
     // one, on the same time-boxed, best-effort terms.
-    const planQuestionEngage = isPlanQuestion(askForIntents);
+    // ROOT CAUSE (David 2026-09-02): a STRUCTURAL/CONCEPT target ("what's the plan
+    // against a weak square / the bishop pair / an isolated pawn") is a THEORY
+    // question, not a live-BOARD plan — so every board/opening lane that could
+    // steal it must yield to theory. counterRepertoire already does; the plan
+    // lane is the same disease. (record-vs is guarded inside its own resolver.)
+    const planQuestionEngage = isPlanQuestion(askForIntents) && !isStructuralConceptTarget(askForIntents);
     // ── AND THE BEST-MOVE QUESTION, WHICH 6 OF 8 SURFACES COULD NOT ANSWER ──
     //
     // 🔒 GROUNDING BELONGS TO THE COACH, NOT TO WHICHEVER SURFACE REMEMBERED
