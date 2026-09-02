@@ -70,6 +70,12 @@ function arrowsToBoard(
   }));
 }
 
+// How long the "Line Mastered!" celebration lingers before it auto-advances
+// (David 2026-09-02: "the app celebrates automatically"). Matches the existing
+// celebrate-then-advance cadence (CheckpointQuiz uses 2000ms). The buttons stay
+// visible during this window as a manual skip/override.
+const CELEBRATE_ADVANCE_MS = 1800;
+
 export function PlayableLinePlayer({
   line,
   boardOrientation,
@@ -117,6 +123,16 @@ export function PlayableLinePlayer({
   const onCompleteRef = useRef(onComplete);
   useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
 
+  // Navigation refs for the auto-advance below — ref'd (like onComplete) so a
+  // parent that passes a fresh inline callback each render can't reset the
+  // celebrate timer and strand the user on the completion screen.
+  const onContinuePlayingRef = useRef(onContinuePlaying);
+  const onExitRef = useRef(onExit);
+  useEffect(() => {
+    onContinuePlayingRef.current = onContinuePlaying;
+    onExitRef.current = onExit;
+  }, [onContinuePlaying, onExit]);
+
   // A WLPP rung in progress must survive a deploy: hold the service-worker
   // update reload (index.html controllerchange handler) until unmount.
   useEffect(() => acquireSwReloadHold(), []);
@@ -131,6 +147,19 @@ export function PlayableLinePlayer({
     // A mastered line is a genuine "win" — feed the review-prompt gate.
     void recordPositiveMoment('line-mastered');
   }, [playCelebration]);
+
+  // Celebrate, then auto-advance (David 2026-09-02). The completion write
+  // (onComplete → markRungComplete) already fired in finishLine(); this effect
+  // ONLY navigates, so it never touches the write path or the exactly-once
+  // guard. Continue Playing wins when offered, else fall back to Done (exit).
+  // The completion screen + buttons stay up during the window as a manual skip.
+  useEffect(() => {
+    if (!memoryComplete) return;
+    const t = setTimeout(() => {
+      (onContinuePlayingRef.current ?? onExitRef.current)();
+    }, CELEBRATE_ADVANCE_MS);
+    return () => clearTimeout(t);
+  }, [memoryComplete]);
 
   // Chess instance for memory phase move validation + position tracking
   const chessRef = useRef<Chess>(new Chess(line.fen));

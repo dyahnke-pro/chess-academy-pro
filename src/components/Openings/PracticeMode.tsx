@@ -56,6 +56,11 @@ interface MoveInfo {
   to: string;
 }
 
+// How long a perfect-run celebration lingers before it auto-advances (David
+// 2026-09-02: "the app celebrates automatically"). Only a clean pass auto-exits;
+// an imperfect run keeps the screen so the user can tap Again.
+const CELEBRATE_ADVANCE_MS = 1800;
+
 export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, onComplete, onExit }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
@@ -253,6 +258,19 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
     }
   }, [currentMoveIndex, expectedMoves.length, lineComplete, totalMistakes, hintUsed, opening.id, isVariation, variationIndex, variation, opening.name, playCelebration, onComplete]);
 
+  // Celebrate, then auto-advance on a clean pass (David 2026-09-02). onComplete
+  // already fired above; this ONLY navigates. A perfect run auto-exits after the
+  // celebration; an imperfect run leaves the screen up so Again stays tappable.
+  const onExitRef = useRef(onExit);
+  useEffect(() => { onExitRef.current = onExit; }, [onExit]);
+  useEffect(() => {
+    if (!lineComplete) return;
+    const perfect = totalMistakes === 0 && !hintUsed;
+    if (!perfect) return;
+    const t = setTimeout(() => onExitRef.current(), CELEBRATE_ADVANCE_MS);
+    return () => clearTimeout(t);
+  }, [lineComplete, totalMistakes, hintUsed]);
+
   // Handle player move
   const handleMove = useCallback(
     (result: MoveResult): void => {
@@ -416,7 +434,7 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
                 <h2 className="text-2xl font-extrabold tracking-wide text-yellow-500" data-testid="practice-success">
                   SUCCESS! 100%
                 </h2>
-                <p className="text-sm font-semibold text-theme-text mt-1">{title} — Play unlocked!</p>
+                <p className="text-sm font-semibold text-theme-text mt-1">{title} — perfect run!</p>
               </>
             ) : (
               <>
@@ -429,8 +447,8 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
           {!perfect && (
             <p className="text-sm text-amber-500 text-center font-medium" data-testid="practice-not-perfect">
               {totalMistakes > 0
-                ? `${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}${hintUsed ? ' + a hint' : ''} — reach 100% (no mistakes, no hints) to unlock Play. Try again!`
-                : 'You used a hint — reach 100% with no hints to unlock Play. Try again!'}
+                ? `${totalMistakes} mistake${totalMistakes !== 1 ? 's' : ''}${hintUsed ? ' + a hint' : ''} — try again for a clean 100%.`
+                : 'You used a hint — try again with no hints for a clean 100%.'}
             </p>
           )}
 

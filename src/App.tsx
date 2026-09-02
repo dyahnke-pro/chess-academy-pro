@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
-import { calibrateStrength, applyStrength, SKILL_BANDS } from './services/strengthCalibrationService';
+import { calibrateStrength } from './services/strengthCalibrationService';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
 import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
@@ -321,23 +321,17 @@ export function App(): JSX.Element {
         // spend synchronously. Dormant unless the gate is live + non-Pro.
         void useFreeTierStore.getState().hydrate();
 
-        // Establish baseline strength so difficulty is adaptive from the
-        // first session. Imported games are the source of truth; with no
-        // import signal the first-run skill picker supplies the band.
-        // Both write currentRating AND puzzleRating (they used to diverge).
-        // Profiles predating calibration lack `strengthCalibrated`, so the
-        // existing beta cohort gets calibrated on next boot too.
+        // Difficulty is FULLY ADAPTIVE — no calibration step, no forced rating
+        // seed (David 2026-09-02: "remove strength calibration → go fully
+        // adaptive"). When the player has IMPORTED games, calibrateStrength
+        // still silently applies their REAL rating (the honest signal). With no
+        // import we write NOTHING: the opponent plays the shared default
+        // (studentPlayingRating → 1200) and difficulty tunes from real signals
+        // (imports + puzzle results) rather than a guessed band. No pop-up, no
+        // picker, no seed.
         try {
           const { result, profile: calibrated } = await calibrateStrength(profile);
-          if (result.needsPicker) {
-            // First-run skill-picker bubble REMOVED (David 2026-08-22: kill the
-            // pop-ups that greet a fresh download — "make it free and open").
-            // Seed a sensible default (Intermediate) so difficulty stays
-            // adaptive from move one; the user retunes it any time in Settings.
-            // No blocking bubble.
-            const seeded = await applyStrength(profile, SKILL_BANDS[2].rating);
-            setActiveProfile(seeded);
-          } else if (calibrated !== profile) {
+          if (!result.needsPicker && calibrated !== profile) {
             setActiveProfile(calibrated);
           }
         } catch (e) {

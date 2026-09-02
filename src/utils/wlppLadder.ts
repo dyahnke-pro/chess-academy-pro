@@ -44,19 +44,22 @@ export function isWeaponRungComplete(opening: OpeningRecord, weaponKey: string, 
   return !!opening.weaponRungs?.[weaponKey]?.includes(rung);
 }
 
-/** Is a rung unlocked (playable)? Watch is always open; each later rung needs
- *  the prior one complete. The "unlock all" escape opens everything. */
-export function isRungUnlocked(opening: OpeningRecord, line: number, rung: Rung): boolean {
-  if (isLineUnlockedAll(opening, line)) return true;
-  const i = RUNGS.indexOf(rung);
-  if (i === 0) return true;
-  return isRungComplete(opening, line, RUNGS[i - 1]);
+/** Is a rung unlocked (playable)? ALWAYS — the whole course is open up front.
+ *  David 2026-09-02 ("too many clicks to get to playing"): unlock every rung
+ *  immediately so a user can jump straight to Play without climbing
+ *  Watch→Learn→Practice first. The forward-lock ladder is retired; completion is
+ *  still tracked (isRungComplete) to light checkmarks/progress, but it no longer
+ *  GATES access. `opening`/`line`/`rung` stay in the signature so the ~2 call
+ *  sites are untouched. */
+export function isRungUnlocked(_opening: OpeningRecord, _line: number, _rung: Rung): boolean {
+  return true;
 }
 
-/** Are the line's WEAPONS (gems + traps) unlocked? Gated on completing Play
- *  (David: "lock the gems until play has been completed"), or unlock-all. */
-export function areWeaponsUnlocked(opening: OpeningRecord, line: number): boolean {
-  return isLineUnlockedAll(opening, line) || isRungComplete(opening, line, 'play');
+/** Are the line's WEAPONS (gems + traps) unlocked? ALWAYS — same directive as
+ *  isRungUnlocked. Weapons no longer wait for Play to be completed; the whole
+ *  course (rungs, variations, weapons) is accessible on open. */
+export function areWeaponsUnlocked(_opening: OpeningRecord, _line: number): boolean {
+  return true;
 }
 
 /** The next rung the user should do (first incomplete one), or null if the
