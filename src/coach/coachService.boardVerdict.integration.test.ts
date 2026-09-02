@@ -17,7 +17,11 @@ function installMocks(): void {
   vi.spyOn(globalThis, 'fetch').mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
     if (url.includes('/api/lichess-tablebase')) {
-      return new Response(JSON.stringify({ category: 'win', dtm: 15, dtz: 15, checkmate: false, stalemate: false, insufficient_material: false }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      // `moves` is upstream's best-first list — the tablebase-OPTIMAL move.
+      // Note Qd5 (dtm-optimal) differs from the engine's d2d6 threaded in
+      // liveState, which is what makes the "tablebase outranks the engine"
+      // assertion below meaningful rather than a tautology.
+      return new Response(JSON.stringify({ category: 'win', dtm: 15, dtz: 15, checkmate: false, stalemate: false, insufficient_material: false, moves: [{ uci: 'd2d5', san: 'Qd5' }, { uci: 'd2d6', san: 'Qd6' }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
     if (url.includes('/api/llm/')) {
       const body = (() => { try { return typeof init?.body === 'string' ? init.body : ''; } catch { return ''; } })();
@@ -127,6 +131,26 @@ describe('play surface: engine down / no board threaded', () => {
     const dead = { engineBestMoveUci: undefined, evalCp: undefined };
     expect(await ask('whose turn is it?', dead)).toMatch(/white to move|your turn/);
     expect(await ask('what color am I playing?', dead)).toMatch(/playing white/);
+  });
+
+  it('"what is the best move?" is answered from the TABLEBASE with the engine dead', async () => {
+    // The gap the dead-engine prod triage found: four of five board questions
+    // answered with Stockfish blocked, and best-move alone stocked out — on the
+    // very position the coach had just called "mate in 15", from a response that
+    // carries the optimal move. A ≤7-piece position never needs the engine.
+    const r = await ask("what's the best move?", { engineBestMoveUci: undefined, evalCp: undefined });
+    expect(r).not.toContain('llm_was_called');
+    expect(r).not.toMatch(/can.t verify/);
+    expect(r).toContain('qd5');
+  });
+
+  it('the tablebase OUTRANKS a healthy engine on a covered position', async () => {
+    // Not just a fallback. On ≤7 pieces the tablebase is perfect play, so the
+    // engine's slower win (d2d6, threaded in liveState) must lose to the
+    // dtm-optimal Qd5. The DB is canon (G3).
+    const r = await ask("what's the best move?");
+    expect(r).toContain('qd5');
+    expect(r).not.toMatch(/\bqd6\b/);
   });
 
   it('a board question that GENUINELY needs the board declines honestly, never improvises', async () => {

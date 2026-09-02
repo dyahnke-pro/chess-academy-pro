@@ -1,7 +1,19 @@
 /**
  * coachApi.boardVerdict.integration.test
  * ---------------------------------------
- * END-TO-END proof that the deterministic board-verdict questions —
+ * SCOPE (corrected 2026-09-02): this is a LAYER test of `getCoachChatResponse`,
+ * NOT end-to-end. It hands in a hand-built grounding object and so bypasses
+ * `coachService.ask` — the real translation layer that decides whether grounding
+ * is even built and what lands in it. It can therefore pass while the surface
+ * fails, which is exactly how the whose-turn collapse shipped: the bug lived in
+ * the autoGrounding gate, upstream of everything asserted here.
+ *
+ * Keep it — isolating this layer is genuinely useful — but the REAL-PATH
+ * coverage lives in `src/coach/coachService.boardVerdict.integration.test.ts`,
+ * which drives `coachService.ask` and covers the engine-down cases. Any new
+ * board-verdict contract goes THERE first; this file is the narrower companion.
+ *
+ * Proves that the deterministic board-verdict questions —
  * "is this a draw?", "whose turn is it?", "what colour am I?", "how many moves
  * to mate?" — are answered by the COMPUTER (computeLiveBoardVerdict), NOT by the
  * generic best-move position default and NOT by the LLM (G0; David 2026-09-02).

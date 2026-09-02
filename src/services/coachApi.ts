@@ -2183,7 +2183,19 @@ async function computeLiveBoardVerdict(
 
   const mateQ = isMateQuestion(question);
   const drawQ = isDrawQuestion(question);
-  if (!mateQ && !drawQ) return null;
+  // A BEST-MOVE ask also belongs here on a tablebase-covered position. It used
+  // to bail one line below, before the tablebase was ever consulted, so with a
+  // dead engine the coach refused "what's the best move?" on the SAME position
+  // it had just answered "mate in 15" for — from the same response, which
+  // carries the optimal move in `moves[0]`. Verified on prod with the engine
+  // deterministically blocked (audit-board-verdict-triage, KILL_ENGINE=1):
+  // four of five board questions answered, best-move alone stocked out.
+  //
+  // On ≤7 pieces the tablebase is PERFECT play, so it outranks the engine here
+  // rather than merely covering for it — the DB is canon (G3), and a healthy
+  // engine offering a slower win (Qd6) is worse than the exact answer (Qd5).
+  const bestMoveQ = grounding.bestMoveQuestion === true;
+  if (!mateQ && !drawQ && !bestMoveQ) return null;
 
   // Exact ≤7-piece verdict first (syzygy). Off-tablebase it returns null.
   try {
@@ -2199,10 +2211,27 @@ async function computeLiveBoardVerdict(
           'stalemate-caution',
         );
       }
+      if (bestMoveQ && tb.bestMove) {
+        // The position-level dtm is already student-agnostic here (it is the
+        // side-to-move's distance), and `sc === stm` on a best-move ask because
+        // the student is the one to move. Using it avoids re-deriving the sign
+        // from the move entry, whose dtm is the OPPONENT's after the reply.
+        const mateIn = typeof tb.dtm === 'number' && tb.dtm > 0 ? tb.dtm : null;
+        const facts = studentWinning
+          ? `By the tablebase, ${tb.bestMove.san} is the move${mateIn ? ` — it forces mate in ${mateIn}` : ' — it holds the win'}.`
+          : tb.whiteRelativeResult === 'draw'
+            ? `By the tablebase this endgame is drawn, and ${tb.bestMove.san} is the move that holds it.`
+            : `By the tablebase this endgame is lost with best play; ${tb.bestMove.san} is the most stubborn try.`;
+        return await voice(facts, 'endgame-best-move');
+      }
       const ans = assembleEndgameAnswer({ result: tb, studentColor: sc });
       if (ans) return await voice(ans.facts, mateQ ? 'endgame' : 'draw');
     }
   } catch { /* tablebase unreachable — fall to the threaded engine data */ }
+
+  // A best-move ask off the tablebase has no computed answer HERE — the engine
+  // path owns it. Returning null hands it back rather than guessing.
+  if (bestMoveQ && !mateQ && !drawQ) return null;
 
   // Off-tablebase: decide from the threaded engine eval / mate (white-POV →
   // student-POV). No engine data → null → generic position default speaks.

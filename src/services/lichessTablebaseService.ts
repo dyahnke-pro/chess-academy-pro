@@ -48,6 +48,13 @@ export interface TablebaseLookupResult {
   checkmate: boolean;
   stalemate: boolean;
   insufficientMaterial: boolean;
+  /** The TABLEBASE-OPTIMAL move, upstream's first entry (it sorts best-first).
+   *  On a covered position this is perfect play — strictly better than any
+   *  engine search — so a "what's the best move?" ask should read it here and
+   *  never depend on Stockfish being alive. We dropped it before, which is why
+   *  a dead engine refused the question on a position we had the exact answer
+   *  for while happily answering "mate in 15" from the same response. */
+  bestMove: { uci: string; san: string } | null;
 }
 
 /** Count pieces in a FEN's first field. Used to short-circuit
@@ -106,6 +113,7 @@ export async function lookupTablebase(fen: string): Promise<TablebaseLookupResul
       checkmate?: boolean;
       stalemate?: boolean;
       insufficient_material?: boolean;
+      moves?: Array<{ uci?: string; san?: string }>;
     };
     if (!json.category) return null;
     return {
@@ -116,6 +124,10 @@ export async function lookupTablebase(fen: string): Promise<TablebaseLookupResul
       checkmate: !!json.checkmate,
       stalemate: !!json.stalemate,
       insufficientMaterial: !!json.insufficient_material,
+      bestMove: (() => {
+        const m = json.moves?.[0];
+        return m?.uci && m.san ? { uci: m.uci, san: m.san } : null;
+      })(),
     };
   } catch {
     return null;
