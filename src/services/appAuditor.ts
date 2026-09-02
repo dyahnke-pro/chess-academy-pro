@@ -36,6 +36,10 @@ export type AuditCategory = 'narration' | 'runtime' | 'subsystem' | 'app';
 export type AuditKind =
   // Grounded board-question router (coachApi.boardQuestion) — the aspect answered
   | 'coach-grounded-answer'
+  // Temporary board-verdict prod triage logging (coachApi). Added here because
+  // the emitting commit (0746efb) shipped without widening this union, which
+  // broke `typecheck` on main for every session.
+  | 'board-verdict-debug'
   // Pro Games rewatch surface (/coach/pro-games)
   | 'pro-game-rewatch-opened'
   // Narration (from narrationAuditor)

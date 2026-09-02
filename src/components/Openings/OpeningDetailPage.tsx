@@ -1538,6 +1538,16 @@ export function OpeningDetailPage(): JSX.Element {
   const ladderLine = isVariation ? selectedTabIndex : MAIN_LINE_INDEX;
   const ladderUnlockedAll = isLineUnlockedAll(opening, ladderLine);
   const weaponsUnlocked = areWeaponsUnlocked(opening, ladderLine);
+  // The one-free-opening heads-up. Shown ONLY where the decision is actually
+  // made (under the rungs), ONLY while it's still true, and ONLY when the gate
+  // is live — so it can never nag. Deliberately SILENT and gift-framed: David
+  // 2026-09-02 floated a coach voice line on entry; a spoken mechanic would
+  // repeat on every opening, fire while they're still browsing (killing the
+  // free-sampling we just built), and break the "never reference the interface"
+  // narration rule. A quiet line at the point of choice does the same job.
+  const showFreePickHint =
+    gateEnabled && !isPro && freeTierHydrated && !!id &&
+    isEligibleFreeOpening(id) && freeTierRow.freeOpeningId == null;
   const ladderNext = nextRung(opening, ladderLine);
   // "I already know this" expert pass — a lifetime budget of ONE per color
   // (one White opening + one Black opening). Spending it unlocks the WHOLE
@@ -1986,6 +1996,14 @@ export function OpeningDetailPage(): JSX.Element {
                 );
               })}
             </div>
+            {showFreePickHint && (
+              <p
+                className="text-xs text-emerald-400/90 mt-2 px-0.5"
+                data-testid="free-pick-hint"
+              >
+                Finish a lesson here and this whole course is yours, free.
+              </p>
+            )}
             {/* Ladder guidance + unlock-all escape */}
             <div className="flex items-center justify-between mt-2 px-0.5">
               <span className="text-xs text-theme-text-muted" data-testid="ladder-hint">
