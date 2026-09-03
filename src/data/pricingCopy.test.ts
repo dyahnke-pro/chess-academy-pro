@@ -53,6 +53,34 @@ describe('prices live in one file', () => {
     expect(TRIAL_DAYS).toBeGreaterThan(0);
   });
 
+  // 🚨 THE GATE ABOVE WAS NOT ENOUGH, AND HERE IS THE PROOF. It guarded the two
+  // legal pages and nothing else, so when the tiers moved on 2026-08-24 it stayed
+  // green while the price was ALSO written into two places it never looked at:
+  // the App Store description generator, and the store-listing copy doc. The
+  // public product page told visitors "$7.99/month or $79.99/year" — double the
+  // real price — for ten days. A price may not be written into prose ANYWHERE
+  // that disagrees with the one file.
+  it('the store-listing copy doc quotes the real prices', () => {
+    const doc = readFileSync(resolve(__dirname, '../../docs/store-listing-copy.md'), 'utf8');
+    const found = [...new Set(doc.match(/\$\d+\.\d{2}/g) ?? [])];
+    const allowed = new Set([PRICE_MONTHLY, PRICE_YEARLY]);
+    const wrong = found.filter((f) => !allowed.has(f));
+    expect(wrong, `store-listing-copy.md quotes price(s) that are not the live tiers: ${wrong.join(', ')}`).toEqual([]);
+    // Guard the guard: if the doc ever stops quoting a price, this test would
+    // pass by checking nothing.
+    expect(found.length, 'no prices found in store-listing-copy.md — did it move?').toBeGreaterThan(0);
+  });
+
+  it('the App Store description generator does not hardcode a price', () => {
+    const src = readFileSync(resolve(__dirname, '../../scripts/ci/asc-listing-fix.mjs'), 'utf8');
+    const code = src.split('\n').filter((l) => !/^\s*(?:\/\/|\*|\/\*)/.test(l)).join('\n');
+    const literals = code.match(/\$\d+\.\d{2}/g) ?? [];
+    expect(literals, `asc-listing-fix.mjs hardcodes price(s): ${literals.join(', ')}`).toEqual([]);
+    // It must actually READ the constants, not just avoid mentioning a number.
+    expect(code).toContain('PRICE_MONTHLY');
+    expect(code).toContain('PRICE_YEARLY');
+  });
+
   it('the yearly plan is cheaper than twelve months, or it is not a yearly plan', () => {
     // Catches the transposition that would otherwise reach the Terms page:
     // at $4.99/mo a $59.99 "saving" is not one.

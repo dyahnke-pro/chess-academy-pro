@@ -93,31 +93,98 @@ async function all(path) {
 
 // Parse Apple's tab-separated report body and sum the metric columns we care
 // about, so the log carries an at-a-glance headline without a spreadsheet.
+// Summarise one report TSV.
+//
+// 🚨 THIS USED TO GUESS. The previous version carried a hardcoded WANT list of
+// 11 column names ('Impressions', 'Total Downloads', …) and matched them by
+// exact string equality. Apple's real headers are none of those, so the match
+// set came back EMPTY for every report — and an empty match printed the tidy
+// line "(no recognised metric columns)" rather than failing. The job went green
+// weekly for months, downloaded 11 files, and extracted zero numbers from any
+// of them, including the App Store Discovery and Engagement report that holds
+// the only answer to "are people finding this app through search".
+//
+// So it no longer guesses. It reads the header, classifies each column from the
+// DATA, and sums every metric under its real name — correct whatever Apple calls
+// its columns, and impossible to satisfy by matching nothing. `metricCount: 0`
+// is now reported as a defect by the caller instead of as a result.
+
+/** Headers that name a dimension (what the row is ABOUT), never a measurement. */
+const DIMENSION_RE = /date|territory|source|page|platform|device|version|type|name|identifier|\bids?\b|campaign|channel|region|language|storefront|pre-?order|app_?apple|group|title|category|subscription|state|reason|status/i;
+
+function classifyColumns(header, rows) {
+  const dims = []; const metrics = [];
+  header.forEach((h, i) => {
+    const vals = rows.map((r) => r[i]).filter((v) => v !== undefined && v !== '');
+    // All-numeric is necessary but NOT sufficient: "App Version" is 4.0 and
+    // would sum to something meaningless. The name decides those.
+    const allNumeric = vals.length > 0 && vals.every((v) => Number.isFinite(Number(v)));
+    if (!allNumeric || DIMENSION_RE.test(h)) dims.push({ h, i });
+    else metrics.push({ h, i });
+  });
+  return { dims, metrics };
+}
+
 function summariseTsv(name, text) {
   const lines = text.split(/\r?\n/).filter((l) => l.length);
-  if (lines.length < 2) return { name, rows: 0 };
+  if (lines.length < 2) return { name, rows: 0, header: [], sums: {}, metricCount: 0, breakdowns: {} };
   const header = lines[0].split('\t');
-  const idx = (needle) => header.findIndex((h) => h.toLowerCase() === needle.toLowerCase());
-  const dateCol = idx('Date');
+  const rows = lines.slice(1).map((l) => l.split('\t'));
+  const { dims, metrics } = classifyColumns(header, rows);
+
   const sums = {};
-  const WANT = ['Impressions', 'Impressions Unique Device', 'Product Page Views',
-    'Product Page Views Unique Device', 'Total Downloads', 'First Time Downloads',
-    'Redownloads', 'Units', 'Installs', 'Proceeds', 'Sales'];
-  const cols = WANT.map((w) => ({ w, i: idx(w) })).filter((c) => c.i >= 0);
+  for (const m of metrics) {
+    let t = 0;
+    for (const r of rows) { const n = Number(r[m.i]); if (Number.isFinite(n)) t += n; }
+    sums[m.h] = t;
+  }
+
+  const dateCol = dims.find((d) => /^date$/i.test(d.h)) ?? dims.find((d) => /date/i.test(d.h));
   let minDate = null; let maxDate = null;
-  for (let r = 1; r < lines.length; r++) {
-    const cells = lines[r].split('\t');
-    if (dateCol >= 0) {
-      const d = cells[dateCol];
-      if (d && (!minDate || d < minDate)) minDate = d;
-      if (d && (!maxDate || d > maxDate)) maxDate = d;
-    }
-    for (const c of cols) {
-      const n = Number(cells[c.i]);
-      if (Number.isFinite(n)) sums[c.w] = (sums[c.w] || 0) + n;
+  if (dateCol) {
+    for (const r of rows) {
+      const d = r[dateCol.i];
+      if (!d) continue;
+      if (!minDate || d < minDate) minDate = d;
+      if (!maxDate || d > maxDate) maxDate = d;
     }
   }
-  return { name, rows: lines.length - 1, dateRange: minDate && maxDate ? `${minDate} … ${maxDate}` : null, sums };
+
+  // THE POINT OF THE WHOLE REPORT: not the total, but the split. "1,400
+  // impressions" does not tell you whether anyone found you by SEARCHING. The
+  // per-dimension breakdown does, so carry it rather than only the sum.
+  const breakdowns = {};
+  const primary = metrics[0];
+  if (primary) {
+    for (const d of dims) {
+      if (/date/i.test(d.h)) continue;
+      const by = {};
+      for (const r of rows) {
+        const k = r[d.i];
+        if (!k) continue;
+        const n = Number(r[primary.i]);
+        by[k] = (by[k] || 0) + (Number.isFinite(n) ? n : 0);
+      }
+      const keys = Object.keys(by);
+      // A dimension with one value says nothing; one with a value per row is an id.
+      if (keys.length > 1 && keys.length < rows.length) {
+        breakdowns[d.h] = Object.fromEntries(
+          Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 12),
+        );
+      }
+    }
+  }
+
+  return {
+    name,
+    rows: rows.length,
+    header,
+    dateRange: minDate && maxDate ? `${minDate} … ${maxDate}` : null,
+    sums,
+    metricCount: metrics.length,
+    metricOf: primary?.h ?? null,
+    breakdowns,
+  };
 }
 
 async function main() {
@@ -198,6 +265,7 @@ async function main() {
   }
 
   // 5. Headline.
+  const blind = [];
   console.log('\n══════════ APP ANALYTICS SUMMARY ══════════');
   if (summaries.length === 0) {
     console.log('Reports are registered but no downloadable data is ready yet. Re-run in ~24-48h.');
@@ -205,12 +273,29 @@ async function main() {
     for (const s of summaries) {
       const metrics = Object.entries(s.sums || {}).filter(([, v]) => v > 0);
       console.log(`\n${s.name}  [${s.dateRange || 'n/a'}]`);
-      if (metrics.length === 0) { console.log('  (no recognised metric columns)'); continue; }
+      if (s.rows === 0) { console.log('  (empty report — no rows)'); continue; }
+      if (s.metricCount === 0) {
+        // Not a tidy note any more. Zero metric columns out of a non-empty file
+        // means the parser failed, and printing the real header is what lets the
+        // next person fix it in one look instead of guessing again.
+        blind.push(s.name);
+        console.log(`  ⚠️  PARSED NO METRIC COLUMNS from ${s.rows} row(s) — header was: ${s.header.join(' | ')}`);
+        continue;
+      }
       for (const [k, v] of metrics) console.log(`  ${k}: ${Math.round(v).toLocaleString()}`);
+      for (const [dim, by] of Object.entries(s.breakdowns || {})) {
+        const parts = Object.entries(by).map(([k, v]) => `${k}=${Math.round(v).toLocaleString()}`);
+        console.log(`    ${s.metricOf} by ${dim}: ${parts.join(', ')}`);
+      }
     }
   }
   console.log(`\n════════════════════════════════════════`);
   console.log(`downloaded ${downloaded} segment file(s) → ${OUT_DIR}/`);
+  if (blind.length) {
+    // A report we downloaded and could not read is a hole in the measurement,
+    // so say so where CI shows it. This is the condition that hid for months.
+    console.log(`::warning::parsed no metrics from ${blind.length} report(s): ${blind.join(', ')} — see the headers printed above`);
+  }
   writeFileSync(join(OUT_DIR, 'summary.json'), JSON.stringify({ app: app.id, accessType: ACCESS_TYPE, granularity: GRANULARITY, summaries }, null, 2));
 }
 

@@ -13,6 +13,7 @@
 //   APPLY ("1" to PATCH; otherwise dry-run prints the diff).
 
 import { createPrivateKey, sign as cryptoSign } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 const ASC = 'https://api.appstoreconnect.apple.com';
 const KEY_ID = req('ASC_KEY_ID');
@@ -25,14 +26,40 @@ const PRIVACY_URL = 'https://chess-academy-pro.vercel.app/privacy';
 // Apple's standard EULA (used when no custom EULA is supplied in ASC).
 const EULA_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const MARKER = '— SUBSCRIPTION —';
-const BLOCK = [
+
+// 🚨 THE PRICE IS NOT WRITTEN HERE. It was, and that is how the live App Store
+// product page came to state "$7.99/month or $79.99/year" for ten days after
+// Apple started charging $3.99/$34.99 — a price misstatement on the public
+// listing, quoting visitors DOUBLE the real cost before they ever installed.
+//
+// The tiers moved on 2026-08-24. Three separate places described that price:
+// src/data/pricing.ts (the in-app Terms + Support pages), this script (the
+// store description), and docs/store-listing-copy.md. One was changed. This
+// reads src/data/pricing.ts so there is exactly one number to change, and the
+// ASC price script gates THAT constant against what Apple actually charges.
+function livePrices() {
+  const src = readFileSync(new URL('../../src/data/pricing.ts', import.meta.url), 'utf8');
+  const grab = (name) => {
+    const m = src.match(new RegExp(`export const ${name}\\s*=\\s*'(\\$\\d+\\.\\d{2})'`));
+    if (!m) throw new Error(`could not parse ${name} from src/data/pricing.ts`);
+    return m[1];
+  };
+  const trial = readFileSync(new URL('../../src/data/pricing.ts', import.meta.url), 'utf8')
+    .match(/export const TRIAL_DAYS\s*=\s*(\d+)/);
+  if (!trial) throw new Error('could not parse TRIAL_DAYS from src/data/pricing.ts');
+  return { monthly: grab('PRICE_MONTHLY'), yearly: grab('PRICE_YEARLY'), trialDays: Number(trial[1]) };
+}
+
+const PRICES = livePrices();
+
+const buildBlock = ({ monthly, yearly, trialDays }) => [
   '',
   '',
   MARKER,
   'Chess Academy Pro requires an auto-renewing Pro subscription to unlock its',
   'features — the AI coach, guided opening masterclasses, tactics training, full',
-  'Stockfish game analysis, and the weaknesses trainer. Start with a 7-day free',
-  'trial, then $7.99/month or $79.99/year.',
+  `Stockfish game analysis, and the weaknesses trainer. Start with a ${trialDays}-day free`,
+  `trial, then ${monthly}/month or ${yearly}/year.`,
   '',
   'Payment is charged to your Apple ID at confirmation of purchase. Your',
   'subscription automatically renews unless canceled at least 24 hours before the',
@@ -43,6 +70,14 @@ const BLOCK = [
   `Privacy Policy: ${PRIVACY_URL}`,
   `Terms of Use (EULA): ${EULA_URL}`,
 ].join('\n');
+
+const BLOCK = buildBlock(PRICES);
+
+// Spelling corrections applied to the MARKETING copy above the block. Strictly
+// spelling — the wording is David's, and a script does not rewrite his pitch.
+// "anylizes" has been the first word of the first line of the public product
+// page, on an app whose entire promise is that it analyses your games.
+const SPELLING = [[/\banylizes\b/g, 'analyzes']];
 
 function req(n) { const v = process.env[n]; if (!v) throw new Error(`Missing env ${n}`); return v; }
 function loadKey() { let p = req('ASC_KEY_P8'); if (!p.includes('BEGIN')) p = Buffer.from(p, 'base64').toString('utf8'); return createPrivateKey({ key: p, format: 'pem' }); }
@@ -95,12 +130,42 @@ async function main() {
 
   const current = enUS.attributes?.description || '';
 
-  if (current.includes(MARKER)) {
-    console.log('✅ description already carries the SUBSCRIPTION + legal-links block — nothing to do.');
-    return;
+  // RECONCILE, DON'T APPEND-ONCE. This used to return "nothing to do" the moment
+  // it saw the marker, which meant it could never correct the block it had
+  // itself written — so when the price changed, the stale block stayed on the
+  // live listing forever. Split the description at the marker and rebuild the
+  // block from the current prices every run.
+  const at = current.indexOf(MARKER);
+  let head = at >= 0 ? current.slice(0, at).replace(/\s+$/, '') : current;
+  const existingBlock = at >= 0 ? current.slice(at) : null;
+
+  // Spelling pass over the marketing copy (never the generated block).
+  const headBefore = head;
+  for (const [re, to] of SPELLING) head = head.replace(re, to);
+  if (head !== headBefore) {
+    console.log('\n✏️  spelling corrections applied to the marketing copy:');
+    for (const [re, to] of SPELLING) {
+      const hits = headBefore.match(re);
+      if (hits) console.log(`   "${hits[0]}" → "${to}" (${hits.length}×)`);
+    }
   }
 
-  const next = current + BLOCK;
+  const next = head + BLOCK;
+
+  if (at >= 0) {
+    const blockSame = existingBlock.trim() === BLOCK.trim();
+    const headSame = head === headBefore;
+    console.log(`\nsubscription block: ${blockSame ? 'up to date' : 'STALE — will be replaced'}`);
+    if (!blockSame) {
+      const oldPrices = [...existingBlock.matchAll(/\$\d+\.\d{2}/g)].map((m) => m[0]);
+      console.log(`   live listing states: ${oldPrices.join(', ') || '(no price found)'}`);
+      console.log(`   pricing.ts states:   ${PRICES.monthly}, ${PRICES.yearly}`);
+    }
+    if (blockSame && headSame) {
+      console.log('✅ description is already correct — nothing to do.');
+      return;
+    }
+  }
   if (next.length > 4000) {
     console.log(`⚠️  new description is ${next.length} chars (>4000 limit). Trim marketing copy first.`);
   }
