@@ -212,6 +212,12 @@ const GATE_TESTS = [
   // looks perfect while billing is dead.
   'src/services/billingUnconfigured.test.ts',
   'src/services/openingNameResolution.test.ts',
+  // 🔒 HUB COPY vs SURFACE CONTRACT (2026-09-03) — the Play tile advertised
+  // "Coach narrates each move" while /coach/play is a PURE PLAYING SURFACE that
+  // stays silent until asked. A user reads the tile, plays, hears near-silence,
+  // and concludes the coach is broken — the deliberate design reads as a defect.
+  // Nothing else goes red when shipped copy contradicts shipped behaviour.
+  'src/components/Coach/coachHubCopy.test.ts',
   'api/_lib/ttsLangContent.test.ts',
   'api/_lib/ttsLang.test.ts',
   'api/ota/manifest.test.ts',

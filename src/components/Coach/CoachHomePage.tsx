@@ -132,7 +132,7 @@ export function CoachHomePage(): JSX.Element {
         <PrimaryTile
           icon={<GraduationCap size={40} className="text-cyan-400" />}
           label="Learn with Coach"
-          subtitle="Guided lessons — pick a topic and dive in."
+          subtitle="It talks you through a real game — the ideas, the threats, the plan, as they happen."
           info={
             "Ask the coach to teach you something. Defaults to an animated walkthrough when you say \"teach me [opening]\", but you can also:\n\n• Walk through an opening — moves animate with voice-over\n• Set up specific positions — coach explains the idea\n• Play it out as a game — you take a side, coach plays the other\n• Quiz me on the moves — coach tests recall\n\nJust ask in plain language."
           }
@@ -147,8 +147,8 @@ export function CoachHomePage(): JSX.Element {
         <PrimaryTile
           icon={<Swords size={40} className="text-emerald-400" />}
           label="Play with Coach"
-          subtitle="Real game vs the engine. Coach narrates each move and helps when you're stuck."
-          info="Play a full game against Stockfish (difficulty matches your rating). The coach narrates your moves, calls out tactics you missed, walks you through phase transitions, and offers a hint ladder when you're stuck. Post-game, opens a review walk."
+          subtitle="A real game vs the engine. The coach stays quiet unless you ask — then answers about the exact position."
+          info="Play a full game against Stockfish, at a difficulty matched to your rating.\n\nThis is a PLAYING surface, so the coach does not commentate over it. It speaks only when the phase turns (opening → middlegame → endgame), and otherwise waits for you: ask about the position and it answers about that exact board, and there is a hint ladder when you are stuck.\n\nThe full diagnosis comes after the game, in the review walk — every mistake taught, every better move played out."
           rgb="52, 211, 153"
           bgClass="bg-emerald-500/10"
           textColorClass="text-emerald-400"
