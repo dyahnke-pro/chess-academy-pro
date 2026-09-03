@@ -1,1 +1,21 @@
-build requested 2026-09-02T23:44:56Z — 4.0 App Store release. 3.9 is READY_FOR_SALE so builds under it are rejected. Carries the iOS WASM crash fix (analysis pool no longer hardcodes stockfish-18-lite-single.js — 276 traps in 4 min on /games/import), the ios-native runtime-stall demote, the board-question registry, best-move via tablebase, bare-name routing, and the review-voice counter fix.
+build requested 2026-09-03T21:40:00Z — 4.0.1, a METADATA release.
+
+4.0 is READY_FOR_SALE, and Apple locks a live version's metadata, so the only
+way to correct the store listing is a new version. This one carries no feature
+work; it exists to fix what the product page says.
+
+  · PRICE. The listing has stated the OLD monthly and yearly prices since the
+    tiers changed on 2026-08-24 — roughly double what Apple actually charges.
+    Anyone reading the page before installing was quoted twice the real cost.
+    (Billing was never wrong; the paywall reads priceString from StoreKit.)
+  · SPELLING. The first line of the description read "a chess coach that
+    anylizes your games" — a misspelling of the one word the app is about, on
+    the line that is all most people read.
+  · SUBTITLE. Was EMPTY, 0/30 chars, for the life of the app. Now "Opening
+    Trainer & Game Review" — a third of the indexed search surface, and the
+    line under the app name in every search result.
+  · KEYWORDS. Rebuilt: the old field was full at 100/100 while spending ~30
+    characters on words already carried by the app NAME and the subtitle.
+
+Also ships the walkthrough auto-start, the promoted next-step button, and the
+first working store-review prompt (it had never once fired).

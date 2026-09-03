@@ -22,7 +22,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '4.0'
+          APP_VERSION: '4.0.1'
           COPYRIGHT: 2026 David Yahnke
           PRIMARY_CATEGORY: GAMES
           PRIMARY_SUBCAT: GAMES_BOARD
