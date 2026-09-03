@@ -136,13 +136,23 @@ async function main() {
   // CATEGORIES — read-only here. The SECONDARY category is a free, additive
   // discovery surface (an app can be browsed in two), and this app had only a
   // primary set while every comparable chess-teaching app carries both.
-  const infos = await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`, null, { soft: true });
+  //
+  // ⚠️  ASK FOR THE CATEGORIES EXPLICITLY. Without `include`, appInfos comes back
+  // with EMPTY relationship objects and this printed "primaryCategory=(none)"
+  // for an app the public store plainly lists under Games — a false finding
+  // produced by the reporting, not the data. Reading a relationship you did not
+  // request is the same class of mistake as the metric columns that were never
+  // matched: the query returns nothing and the nothing gets reported as fact.
+  const infos = await api('GET', `/v1/apps/${app.id}/appInfos?limit=10&include=primaryCategory,secondaryCategory`, null, { soft: true });
   if (!infos.__error) {
     for (const inf of infos.data || []) {
       const rel = inf.relationships || {};
-      const pri = rel.primaryCategory?.data?.id ?? '(none)';
-      const sec = rel.secondaryCategory?.data?.id ?? '(none)';
-      console.log(`appInfo ${inf.attributes?.appStoreState ?? '?'}: primaryCategory=${pri} secondaryCategory=${sec}`);
+      const pri = rel.primaryCategory?.data?.id ?? null;
+      const sec = rel.secondaryCategory?.data?.id ?? null;
+      // Report "not returned" distinctly from "genuinely unset" — conflating
+      // the two is what produced the false reading.
+      const show = (v) => (v === null ? '(not returned by the API)' : v);
+      console.log(`appInfo ${inf.attributes?.appStoreState ?? '?'}: primaryCategory=${show(pri)} secondaryCategory=${show(sec)}`);
     }
   }
 

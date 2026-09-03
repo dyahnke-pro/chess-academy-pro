@@ -9,6 +9,7 @@ import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { ArrowLeft, Loader2, CheckCircle, TrendingUp, Brain, ExternalLink } from 'lucide-react';
 import type { PlatformStats, UserProfile } from '../../types';
+import { captureEvent } from '../../services/analytics';
 
 type Platform = 'lichess' | 'chesscom';
 
@@ -97,8 +98,40 @@ export function ImportPage(): JSX.Element {
     }
   }, [tokenEncrypted, tokenIv]);
 
+  /** Classify a failure WITHOUT shipping the message verbatim — an import error
+   *  can echo the username back, and that is the user's identity on another
+   *  service. The bucket is what the funnel needs; the message is not. */
+  const errorClass = (err: unknown): string => {
+    const m = (err instanceof Error ? err.message : String(err ?? '')).toLowerCase();
+    if (/404|not found|no such user|unknown user/.test(m)) return 'user-not-found';
+    if (/429|rate limit|too many/.test(m)) return 'rate-limited';
+    if (/network|fetch|timeout|econn|offline/.test(m)) return 'network';
+    if (/401|403|unauthor|forbidden|token/.test(m)) return 'auth';
+    if (/no games|empty|0 games/.test(m)) return 'no-games';
+    return 'other';
+  };
+
   const handleImport = async (): Promise<void> => {
-    if (!username.trim()) return;
+    // 🚨 THE FUNNEL WAS UNMEASURABLE HERE. 32 native users reached this screen
+    // and 6 finished an import — an 81% drop on the one step the whole product
+    // is built around — and NOTHING was emitted on the way down. A failed
+    // import called setError and stopped, so there was no way to tell an empty
+    // box from a typo'd username from a rate limit from an outage. These three
+    // events make the drop diagnosable instead of merely visible.
+    if (!username.trim()) {
+      captureEvent('import_blocked', { platform, reason: 'empty-username' });
+      return;
+    }
+    captureEvent('import_started', {
+      platform,
+      // Whether we could prefill tells us if the user had to remember and type
+      // their handle on another service — the likeliest place to lose them.
+      username_prefilled: Boolean(
+        platform === 'chesscom'
+          ? activeProfile?.preferences.chessComUsername
+          : activeProfile?.preferences.lichessUsername,
+      ),
+    });
     setImporting(true);
     setProgressCount(0);
     setProgressStatus('Starting import...');
@@ -113,6 +146,7 @@ export function ImportPage(): JSX.Element {
         : await importChessComGames(username, handleProgress);
 
       setGameResult(count);
+      captureEvent('import_succeeded', { platform, game_count: count });
 
       // Import stats
       setProgressStatus('Fetching player stats...');
@@ -151,6 +185,7 @@ export function ImportPage(): JSX.Element {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Import failed');
+      captureEvent('import_failed', { platform, error_class: errorClass(err) });
     } finally {
       setImporting(false);
       setProgressStatus('');
