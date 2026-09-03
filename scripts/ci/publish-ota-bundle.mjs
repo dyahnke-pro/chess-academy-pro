@@ -230,14 +230,29 @@ const trimmedHistory = Object.fromEntries(
     .slice(0, HISTORY_CAP),
 );
 
+// CARRY THE ROLLOUT MODE FORWARD. If an operator flipped delta to 'on' (or back
+// to 'off' during an incident) with ota-set-delta-mode.mjs, the next publish
+// must not silently reset it — a deploy that quietly re-narrows a rollout is
+// indistinguishable from the rollout breaking. OTA_DELTA_MODE sets it
+// explicitly at publish time; otherwise inherit, defaulting to canary.
+const VALID_DELTA = new Set(['off', 'canary', 'on']);
+const requestedDelta = (process.env.OTA_DELTA_MODE ?? '').trim().toLowerCase();
+const delta = VALID_DELTA.has(requestedDelta)
+  ? requestedDelta
+  : VALID_DELTA.has(current?.delta) ? current.delta : 'canary';
+
 const pointer = {
   version,
   url,
   ordinal,
   manifestUrl: manifestBlob.url,
   history: trimmedHistory,
+  // A pin is a deliberate, temporary act tied to one bad bundle; publishing a
+  // NEW bundle is the thing that resolves it, so it does not carry forward.
   pin: null,
+  delta,
 };
+console.log(`[ota] delta mode: ${delta}${requestedDelta ? ' (from OTA_DELTA_MODE)' : current?.delta ? ' (inherited)' : ' (default)'}`);
 
 try {
   await redis.set('ota:latest', pointer);

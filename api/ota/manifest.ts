@@ -74,18 +74,38 @@ interface OtaLatest {
   /** Deliberate rollback: serve this exact version and skip the forward-only
    *  guard. Set by hand in the pointer when an OTA needs pulling back. */
   pin?: string | null;
+  /** Delta rollout, carried in the POINTER rather than the environment so it
+   *  can be changed WITHOUT a redeploy — see `deltaMode`. */
+  delta?: DeltaMode;
 }
 
 /** Delta rollout: 'off' = always whole-zip, 'canary' = delta only for the
  *  devices listed in OTA_DELTA_DEVICES, 'on' = everyone. Starts at canary
  *  because the delta path cannot be proven from CI — only on a real device —
- *  and a broken delta means a device silently stops updating. Recovery is a
- *  single env change, no deploy. */
+ *  and a broken delta means a device silently stops updating. */
 type DeltaMode = 'off' | 'canary' | 'on';
 
-function deltaMode(): DeltaMode {
-  const raw = (process.env.OTA_DELTA ?? 'canary').trim().toLowerCase();
-  return raw === 'off' || raw === 'on' ? raw : 'canary';
+function asDeltaMode(raw: string | undefined): DeltaMode | null {
+  const v = (raw ?? '').trim().toLowerCase();
+  return v === 'off' || v === 'on' || v === 'canary' ? v : null;
+}
+
+/**
+ * THE ROLLOUT SWITCH LIVES IN THE POINTER, NOT THE ENVIRONMENT.
+ *
+ * A Vercel env var only takes effect on the NEXT deployment, so "if delta
+ * misbehaves, flip the env var back" would have meant a redeploy — while every
+ * device on the delta path stayed broken for the length of a build. The pointer
+ * is plain data, read on every check, so writing one field to it
+ * (`scripts/ci/ota-set-delta-mode.mjs`) takes effect on the very next update
+ * check with nothing to deploy. That is what makes shipping this behind a
+ * canary honest rather than a phrase in a comment.
+ *
+ * The env var stays as an operator override that outranks the pointer, for the
+ * case where the pointer itself is what you distrust.
+ */
+function deltaMode(pointer: OtaLatest | null): DeltaMode {
+  return asDeltaMode(process.env.OTA_DELTA) ?? asDeltaMode(pointer?.delta) ?? 'canary';
 }
 
 /** David's own devices (per CLAUDE.md's confirmed list) — the canary cohort. */
@@ -103,8 +123,8 @@ function canaryDevices(): Set<string> {
   return new Set(fromEnv.length > 0 ? fromEnv : DEFAULT_CANARY_DEVICES);
 }
 
-function deltaAllowed(deviceId: string): boolean {
-  const mode = deltaMode();
+function deltaAllowed(deviceId: string, pointer: OtaLatest | null): boolean {
+  const mode = deltaMode(pointer);
   if (mode === 'on') return true;
   if (mode === 'off') return false;
   return deviceId !== '' && canaryDevices().has(deviceId);
@@ -313,7 +333,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const payload: Record<string, unknown> = { version: targetVersion, url: targetUrl };
   if (latest.checksum) payload.checksum = latest.checksum;
 
-  if (latest.manifestUrl && !pinned && deltaAllowed(deviceId)) {
+  if (latest.manifestUrl && !pinned && deltaAllowed(deviceId, latest)) {
     const manifest = await readManifest(latest.manifestUrl);
     if (manifest) {
       payload.manifest = manifest;

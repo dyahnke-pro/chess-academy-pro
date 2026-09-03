@@ -187,6 +187,46 @@ describe('OTA update check', () => {
     expect(out.body.url).toContain('ff5ed1a2.zip');
   });
 
+
+  // ── The rollout switch lives in the POINTER, not the environment ─────────
+  // A Vercel env var only applies to the NEXT deployment, so an env-only switch
+  // would have meant "back it out with a redeploy" while every device on the
+  // delta path stayed broken for the length of a build.
+  it('reads the rollout mode from the pointer, with no env var set', async () => {
+    const out = await check(
+      { version_name: 'd2d10d06', device_id: 'anyone-at-all' },
+      pointer({ delta: 'on' }),
+    );
+    expect(out.body.manifest).toEqual(MANIFEST);
+  });
+
+  it("a pointer set to 'off' stops deltas even for a canary device", async () => {
+    process.env.OTA_DELTA_DEVICES = 'canary-device';
+    const out = await check(
+      { version_name: 'd2d10d06', device_id: 'canary-device' },
+      pointer({ delta: 'off' }),
+    );
+    expect(out.body.manifest).toBeUndefined();
+    expect(out.body.url).toContain('ff5ed1a2.zip');
+  });
+
+  it('the env var outranks the pointer, for when the pointer is what you distrust', async () => {
+    process.env.OTA_DELTA = 'off';
+    const out = await check(
+      { version_name: 'd2d10d06', device_id: 'anyone-at-all' },
+      pointer({ delta: 'on' }),
+    );
+    expect(out.body.manifest).toBeUndefined();
+  });
+
+  it('defaults to canary when neither the pointer nor the env says otherwise', async () => {
+    const out = await check(
+      { version_name: 'd2d10d06', device_id: 'anyone-at-all' },
+      pointer({ delta: undefined }),
+    );
+    expect(out.body.manifest).toBeUndefined();
+  });
+
   // ── Redis / Blob divergence ──────────────────────────────────────────────
   it('prefers whichever store holds the NEWER pointer, not Redis by default', async () => {
     // Redis is reachable but STALE (the publisher's Redis write is allowed to
