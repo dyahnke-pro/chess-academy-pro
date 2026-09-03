@@ -10,7 +10,10 @@ on:
       subtitle:
         description: 'App Store subtitle (<=30 chars). Leave blank to only REPORT the current one.'
         required: false
-        default: ''
+        # The field was EMPTY (0/30) until 2026-09-03. Defaulted so a run with
+        # apply=1 sets it rather than silently leaving a third of the indexed
+        # surface blank again.
+        default: 'Opening Trainer & Game Review'
 
 jobs:
   listing-fix:
@@ -28,6 +31,11 @@ jobs:
           APP_BUNDLE_ID: com.chessacademy.pro
           APP_VERSION: '4.0'
           APPLY: ${{ github.event.inputs.apply }}
-          KEYWORDS: 'openings,coach,tactics,puzzles,trainer,training,strategy,endgame,lessons,analysis,gambit,learn,study'
+          # Finalized 2026-09-03 — see docs/store-listing-copy.md for the
+          # rationale. Drops `coach` (already in the app NAME) and
+          # `trainer`/`training` (now carried by the subtitle), which were ~30
+          # characters buying nothing, and spends them on stockfish/checkmate/
+          # analysis, which appeared in no field before.
+          KEYWORDS: 'tactics,puzzles,endgame,strategy,lessons,analysis,gambit,learn,study,stockfish,checkmate,openings'
           SUBTITLE: ${{ github.event.inputs.subtitle }}
         run: node scripts/ci/asc-listing-fix.mjs

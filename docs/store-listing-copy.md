@@ -152,47 +152,81 @@ Chess Academy Pro: AI Coach
 *(27 chars)*
 
 ### Subtitle (≤30 chars) — carries the keywords the NAME doesn't
-```
-Trainer for openings & tactics
-```
-*(30 chars). Rationale: the app NAME already gives Apple the tokens
-`chess` + `ai` + `coach`, so "ai chess coach" is covered there. The subtitle's
-job is to add NEW high-value tokens — `trainer`, `openings`, `tactics` — which
-combine with `chess` from the name to rank you for "chess trainer", "chess
-openings", and "chess tactics". Apple builds search phrases by combining tokens
-ACROSS name + subtitle + keyword field, so you don't need the literal phrase in
-one field.*
 
-Alternate (if you want the literal phrase visible to humans):
+🔒 FINAL (David 2026-09-03). Applied via the `SUBTITLE` input on the
+"ASC listing fix" workflow; requires an EDITABLE version (4.0 is READY_FOR_SALE,
+so this lands with 4.0.1).
+
 ```
-AI chess coach & trainer
+Opening Trainer & Game Review
 ```
-*(24 chars — reads great, but "chess"/"coach" duplicate the name, wasting a
-little of your limited keyword budget. Pick this only if you value the human-
-facing line over squeezing out max keyword coverage.)*
+*(29 chars.)*
+
+**IT WAS EMPTY UNTIL NOW — 0/30 chars.** That was found on 2026-09-03 by
+teaching the listing script to report it; no run had ever printed the field, so
+nobody could see that the subtitle designed here had never been applied. It is a
+third of the indexed surface (Apple builds search phrases by combining tokens
+across name + subtitle + keyword field) AND the line under the app name in every
+search result, so an empty one costs ranking and conversion at once.
+
+**Why not the literal "Chess Trainer" David asked for.** The app NAME already
+gives Apple `chess`; writing it again spends 6 of 30 characters re-buying a word
+we own. Tokens combine ACROSS fields, so `chess` (name) + `trainer` (subtitle)
+ranks for "chess trainer" without the word appearing here. The subtitle also
+adds `opening`, `game` and `review` — and unlike a bare category label it says
+what the app actually does, which matters more than tokens on the rows where we
+already appear (#12 "ai chess coach", #17 "chess coach", #22 "chess academy").
 
 ### Promotional text (≤170 chars — editable any time, no review)
-```
-Stop guessing what to study. Your AI coach watches your games, finds your weaknesses, and trains you on exactly what you need — out loud, move by move. Free for 7 days.
-```
-*(168 chars)*
 
-> Promo text shows above the description and you can change it anytime WITHOUT
-> a review — use it for the current hook / seasonal angle. The line above leads
-> with the pain ("guessing what to study") + the unique mechanism + the free
-> trial as risk-reversal.
+🔒 LIVE as of 2026-09-03. This is the ONLY listing field that changes without a
+build or an App Review, so it carries the current hook and can be swapped in
+minutes.
+
+```
+Random puzzles don't fix your game. This coach reads your own games, finds the mistake you keep repeating, and trains it out of you — out loud, move by move.
+```
+*(157 chars.)*
+
+It leads with the competitor's shape ("random puzzles") to name the thing the
+buyer already knows is not working, then the mechanism that is different — it
+reads YOUR games — then the delivery that nothing else does, out loud, move by
+move.
+
+**Deliberately NO price.** The description still states the OLD monthly price
+(roughly double the real one) until 4.0.1 lands
+(see the SUBSCRIPTION block, generated from src/data/pricing.ts). Two different
+prices on one product page is worse than one stale one, so the price hook waits
+until the description is corrected.
 
 ### Keyword field (≤100 chars — comma-separated, NO spaces, no repeats from name/subtitle)
+
+🔒 FINAL (David 2026-09-03). Set via `KEYWORDS` in the "ASC listing fix"
+workflow; lands with 4.0.1 alongside the subtitle.
+
 ```
-puzzles,endgame,study,learn,grandmaster,stockfish,analysis,strategy,lessons,checkmate,review,improve
+tactics,puzzles,endgame,strategy,lessons,analysis,gambit,learn,study,stockfish,checkmate,openings
 ```
-*(100 chars. `chess`/`ai`/`coach` come from the name; `trainer`/`openings`/`tactics`
-come from the subtitle — so they're DROPPED here to avoid wasting the budget on
-duplicates. Apple indexes name + subtitle + this field together, so the full
-token set you rank for is: chess, ai, coach, trainer, openings, tactics, puzzles,
-endgame, study, learn, grandmaster, stockfish, analysis, strategy, lessons,
-checkmate, review, improve — covering "chess trainer", "ai chess coach", "chess
-openings", "chess tactics", "chess puzzles", "learn chess", "chess analysis".)*
+*(97 chars.)*
+
+**What changed and why.** The previous field was full at 100/100 and still spent
+roughly 30 characters on duplicates: `coach` repeats the app NAME, and
+`trainer` + `training` are now carried by the subtitle. Removing them bought
+room for `stockfish`, `checkmate` and `analysis`, which appeared nowhere before.
+
+Full indexed token set across all three fields: chess, academy, pro, ai, coach
+(name) · opening, trainer, game, review (subtitle) · tactics, puzzles, endgame,
+strategy, lessons, analysis, gambit, learn, study, stockfish, checkmate,
+openings (this field).
+
+🚨 **DO NOT EXPECT THIS TO MOVE THE RANKINGS ON ITS OWN.** Measured 2026-09-03:
+the OLD keyword field already contained `openings`, `tactics`, `learn` and
+`trainer`, and the app was still absent from the top 100 for every one of those
+phrases — while ranking #1 for its own name. That result kills the keyword
+theory rather than supporting it. The binding constraint is 5 ratings against
+competitors holding 2,045 / 5,893 / 12,674 / 26,810. This field is worth fixing
+because it is free and was provably wasteful, not because tokens are what is
+holding the app back.
 
 ### Hook line (the first line — make-or-break; it's all most people read before "more")
 
