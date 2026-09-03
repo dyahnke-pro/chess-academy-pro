@@ -24,7 +24,6 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BOARD_DEMO_ANIMATION_MS } from '../../hooks/useBoardTheme';
-import { recordPositiveMoment } from '../../services/reviewPromptService';
 import type { PlayableMiddlegameLine, AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
 
@@ -144,8 +143,11 @@ export function PlayableLinePlayer({
     // acknowledgment ("Excellent!" etc. are banned) and Practice stays silent.
     playCelebration();
     onCompleteRef.current();
-    // A mastered line is a genuine "win" — feed the review-prompt gate.
-    void recordPositiveMoment('line-mastered');
+    // The win is recorded by markRungComplete / markWeaponRungComplete, which
+    // every onComplete here routes through. Recording it a second time from the
+    // player double-counted the same win and, worse, counted a REPLAY of a line
+    // already finished — the markers gate on first-time completion, this did
+    // not. One win, one place.
   }, [playCelebration]);
 
   // Celebrate, then auto-advance (David 2026-09-02). The completion write

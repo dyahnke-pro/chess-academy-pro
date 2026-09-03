@@ -115,6 +115,37 @@ async function main() {
   // are already indexed from the app NAME, so we spend the 100 chars on the
   // complementary terms Apple combines with the name. Set via the KEYWORDS env;
   // PATCH only when APPLY=1. `soft` so a review-locked field never crashes the run.
+  // SUBTITLE — 30 chars, indexed for search exactly like the keyword field, and
+  // the second-heaviest ranking input after the app NAME. It was invisible to
+  // every run of this script, so nobody could tell whether the subtitle the
+  // listing doc designed was ever actually applied. Report it always; set it
+  // only when SUBTITLE is provided AND APPLY=1.
+  const SUBTITLE = process.env.SUBTITLE || '';
+  console.log(`\nsubtitle now:  "${enUS.attributes?.subtitle || '(empty)'}" (${(enUS.attributes?.subtitle || '').length}/30 chars)`);
+  if (SUBTITLE) {
+    console.log(`subtitle next: "${SUBTITLE}" (${SUBTITLE.length}/30 chars)`);
+    if (SUBTITLE.length > 30) console.log('⚠️  subtitle exceeds 30 chars — Apple will reject.');
+    if (APPLY && SUBTITLE.length <= 30) {
+      const sr = await api('PATCH', `/v1/appStoreVersionLocalizations/${enUS.id}`, {
+        data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { subtitle: SUBTITLE } },
+      }, { soft: true });
+      console.log(sr.__error ? `⚠️  subtitle PATCH failed: ${sr.__error} ${String(sr.__body).slice(0, 300)}` : '✅ subtitle updated');
+    }
+  }
+
+  // CATEGORIES — read-only here. The SECONDARY category is a free, additive
+  // discovery surface (an app can be browsed in two), and this app had only a
+  // primary set while every comparable chess-teaching app carries both.
+  const infos = await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`, null, { soft: true });
+  if (!infos.__error) {
+    for (const inf of infos.data || []) {
+      const rel = inf.relationships || {};
+      const pri = rel.primaryCategory?.data?.id ?? '(none)';
+      const sec = rel.secondaryCategory?.data?.id ?? '(none)';
+      console.log(`appInfo ${inf.attributes?.appStoreState ?? '?'}: primaryCategory=${pri} secondaryCategory=${sec}`);
+    }
+  }
+
   const KEYWORDS = process.env.KEYWORDS || '';
   if (KEYWORDS) {
     console.log(`\nkeywords now:  "${enUS.attributes?.keywords || '(empty)'}"`);

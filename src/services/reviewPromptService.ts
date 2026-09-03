@@ -20,9 +20,27 @@ import { logAppAudit } from './appAuditor';
  */
 const META_KEY = 'review-prompt.v1';
 
-/** Positive moments required before the soft prompt appears. Low so it lands
- *  early — before a user has time to hit the rough edges (David's call). */
-export const POSITIVE_MOMENTS_THRESHOLD = 3;
+/** Positive moments required before the soft prompt appears.
+ *
+ *  🚨 WAS 3, AND AT 3 IT NEVER FIRED ONCE. Measured 2026-09-03 across 90 days of
+ *  real App Store users: the `review-prompt-shown` audit had ZERO occurrences,
+ *  against a control showing 15 other audit kinds with thousands of events. The
+ *  cause was arithmetic, not plumbing — of 67 native devices, 64 had never
+ *  finished a single WLPP rung and not one device had ever finished two. A gate
+ *  needing three wins sat above a population whose maximum was one.
+ *
+ *  So it is 1: the first genuine win asks. Three things make that safe rather
+ *  than pushy — the ask is the SOFT in-app gate, not the store dialog (an
+ *  unhappy user is routed to private feedback and never reaches the public
+ *  rating); Apple rate-limits the native dialog regardless (~3×/year); and we
+ *  ask once per device and never nag again.
+ *
+ *  Be clear-eyed about the ceiling: at 1, this would have prompted THREE users
+ *  in 90 days. The binding constraint is that almost nobody finishes anything —
+ *  32 of 39 users had a single ~4-minute session, and 26 of the 32 who opened
+ *  the game importer never completed an import. Lowering this threshold
+ *  harvests a nearly empty funnel; it does not fill it. */
+export const POSITIVE_MOMENTS_THRESHOLD = 1;
 
 export interface ReviewPromptState {
   /** Count of positive moments recorded so far. */

@@ -7,6 +7,10 @@ on:
         description: 'Set to "1" to PATCH the live description (otherwise dry-run)'
         required: false
         default: ''
+      subtitle:
+        description: 'App Store subtitle (<=30 chars). Leave blank to only REPORT the current one.'
+        required: false
+        default: ''
 
 jobs:
   listing-fix:
@@ -25,4 +29,5 @@ jobs:
           APP_VERSION: '4.0'
           APPLY: ${{ github.event.inputs.apply }}
           KEYWORDS: 'openings,coach,tactics,puzzles,trainer,training,strategy,endgame,lessons,analysis,gambit,learn,study'
+          SUBTITLE: ${{ github.event.inputs.subtitle }}
         run: node scripts/ci/asc-listing-fix.mjs

@@ -6,6 +6,7 @@ import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import { buildVariationTabs } from './variationTabs';
 import { enrollOpeningLine } from './srsOpeningService';
 import { captureEvent } from './analytics';
+import { recordPositiveMoment } from './reviewPromptService';
 import openingManifests from '../data/opening-manifests.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import gambitData from '../data/gambits.json';
@@ -474,6 +475,16 @@ export async function markRungComplete(
   // signal autocapture can't produce. Feeds the opening-lesson usage +
   // Watch→Learn→Practice→Play drop-off funnel.
   captureEvent('lesson_completed', { opening_id: id, rung, variation_index: variationIndex });
+
+  // Finishing a rung of an opening IS a win (David 2026-09-03: "a win could be
+  // finishing an opening walkthrough"). Gated on `patch` being non-empty, so it
+  // only counts the FIRST time a line reaches this rung — replaying a Watch you
+  // have already finished is not a new win and must not farm the prompt.
+  //
+  // This is the single place every WLPP completion passes through, which is why
+  // it is wired here rather than at the six call sites: no path can be missed,
+  // and none can double-count.
+  if (Object.keys(patch).length) void recordPositiveMoment(`opening-${rung}`);
 }
 
 /** Marks a WLPP rung complete for a WEAPON (named trap / punish gem / warning,
@@ -502,6 +513,10 @@ export async function markWeaponRungComplete(
     await db.openings.update(id, { weaponRungs: map });
   }
   captureEvent('weapon_rung_completed', { opening_id: id, weapon_key: weaponKey, rung });
+
+  // Same rule as markRungComplete: a trap/gem rung finished for the FIRST time
+  // is a win; re-running one you already cleared is not.
+  if (changed) void recordPositiveMoment(`weapon-${rung}`);
 }
 
 /** Per-line "I already know this" escape — unlocks every rung + the weapons
