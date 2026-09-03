@@ -29,7 +29,7 @@
 import { Capacitor } from '@capacitor/core';
 import { CapacitorUpdater } from '@capgo/capacitor-updater';
 import { logAppAudit, type AuditKind } from './appAuditor';
-import { captureEvent } from './analytics';
+import { captureEvent, isAnalyticsEnabled } from './analytics';
 
 let started = false;
 
@@ -98,9 +98,42 @@ export async function startOtaObserver(): Promise<void> {
     captureEvent(event, { ...base, ...props });
   };
 
+  /**
+   * The boot snapshot is the ONE per-launch signal that says which bundle the
+   * device actually booted — and it was being thrown away. `initAnalytics` runs
+   * from an App effect that waits on the profile, whereas this observer starts
+   * in main.tsx before React mounts; `captureEvent` only queues once init is in
+   * flight and otherwise DROPS. Measured 2026-09-03: `ota_boot` reached 6
+   * devices while `ota_app_ready` — which fires later, after init — reached 56.
+   *
+   * So hold the snapshot until analytics is up, then send it. Bounded, because
+   * a user who opted out never enables it and this must not leak a timer: the
+   * audit-stream half above is already recorded either way.
+   */
+  const emitWhenAnalyticsReady = (
+    kind: AuditKind,
+    event: string,
+    summary: string,
+  ): void => {
+    void logAppAudit({ kind, category: 'subsystem', source: 'otaObserver', summary });
+    if (isAnalyticsEnabled()) {
+      captureEvent(event, base);
+      return;
+    }
+    const startedAt = Date.now();
+    const timer = setInterval(() => {
+      if (isAnalyticsEnabled()) {
+        clearInterval(timer);
+        captureEvent(event, base);
+      } else if (Date.now() - startedAt > 30_000) {
+        clearInterval(timer);
+      }
+    }, 500);
+  };
+
   // The decisive per-launch signal: which bundle the device booted, and whether
   // it is the builtin or a downloaded OTA bundle (status).
-  emit(
+  emitWhenAnalyticsReady(
     'ota-boot',
     'ota_boot',
     `OTA boot — running=${running} (status=${runningStatus}) builtin=${builtin} native=${nativeVersion}`,

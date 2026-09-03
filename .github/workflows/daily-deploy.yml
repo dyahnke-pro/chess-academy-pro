@@ -160,27 +160,13 @@ jobs:
           echo "shipped=true" >> "$GITHUB_OUTPUT"
           echo "## Web deploy 🚀 $url" >> "$GITHUB_STEP_SUMMARY"
 
-      # Publish the just-built web bundle as a self-hosted OTA update (David
-      # 2026-07-03; RE-ENABLED 2026-07-17 after the 07-11 disable — "put it back
-      # on") so devices on an autoUpdate:true build pick up content/JS changes on
-      # next open — no TestFlight round-trip. NON-FATAL: OTA is an enhancement; a
-      # hiccup must not red the deploy or block the iOS build. `vercel build`
-      # above left dist/ in place and `vercel pull` wrote the project env
-      # (BLOB_READ_WRITE_TOKEN + KV creds) to .vercel/.env.production.local.
-      # Gated on the web deploy having ACTUALLY shipped: if the step above stood
-      # down because main moved, this dist/ is the superseded commit's, and
-      # pushing it as an OTA would roll every auto-updating device back to the
-      # code production just stopped serving.
-      - name: Publish OTA bundle
-        if: steps.gate.outputs.run == 'true' && steps.changed.outputs.ship == 'true' && steps.webdeploy.outputs.shipped == 'true'
-        continue-on-error: true
-        run: |
-          set -a
-          [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
-          set +a
-          if [ ! -d dist ]; then npm run build; fi
-          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short=8 HEAD)" \
-            || echo "::warning::OTA bundle publish failed (non-fatal) — testers stay on their current bundle."
+      # OTA publishing moved to its OWN workflow (.github/workflows/ota-publish.yml)
+      # on 2026-09-03. It used to live here, which meant the bundle pointer could
+      # only advance once a day and behind two gates — every other push to main
+      # shipped the web and published nothing, leaving the pointer weeks stale.
+      # One owner now, running on every main push, with a forward-only guard in
+      # the publisher. Do NOT re-add a publish step here: two publishers racing is
+      # exactly how a superseded dist reached devices.
 
       # --- iOS: build once (per-push auto-builds are off) then distribute -----
       # Per-push Xcode Cloud builds are disabled (the workflow's branch trigger

@@ -183,6 +183,16 @@ const GATE_TESTS = [
   // prescribe a piece the student doesn't have or phase-blind technique.
   // Locative claims were gated; prescriptive grammar is now gated too.
   'src/services/planPrescriptions.test.ts',
+  // 🔒 OTA UPDATE CONTRACT (2026-09-03) — the reply shape of /api/ota/manifest
+  // IS the update mechanism for every native device, and both of its failure
+  // modes are INVISIBLE from the app: a no-op without `kind:'up_to_date'` makes
+  // the plugin log a phantom downloadFailed (72 of 127 recorded "failures" were
+  // ours), and equality-only version comparison lets a stale pointer roll
+  // devices BACKWARD onto an older bundle — which is how devices ended up
+  // stranded on the Aug-5 build carrying the iOS WASM crash. Nothing in the UI
+  // goes red when this breaks; only this does.
+  'api/ota/manifest.test.ts',
+  'src/services/otaObserver.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',

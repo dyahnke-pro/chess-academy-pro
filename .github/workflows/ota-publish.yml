@@ -1,0 +1,100 @@
+name: Publish OTA bundle
+
+# Ships the web bundle to native users on every main push.
+#
+# WHY THIS EXISTS (2026-09-03): the OTA pointer could only advance inside
+# `daily-deploy.yml`, which runs once a day AND behind two gates. Every other
+# push to main deployed the web via Vercel's git integration and published no
+# bundle at all — so the pointer routinely sat weeks behind main while the app
+# looked like it was shipping. Combined with the missing forward-only guard,
+# that is how devices were served an Aug-5 bundle on Aug 31.
+#
+# Its own concurrency group, deliberately NOT shared with post-deploy-audit:
+# a shared group cancels in-flight runs (CLAUDE.md records a 73-minute loop
+# audit killed exactly that way). cancel-in-progress is false so a queued
+# publish is never dropped; if two land out of order the publisher's
+# forward-only guard rejects the older one, which is the correct outcome.
+#
+# The publish itself is safe to repeat: file blobs are content-addressed, and
+# the pointer is written last.
+
+on:
+  push:
+    branches: [main]
+    # Nothing here can change the shipped bundle.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/**'
+      - 'ios-patches/**'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Bypass the forward-only guard (deliberate rollback)'
+        required: false
+        default: 'false'
+
+concurrency:
+  group: ota-publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The publisher reads the commit timestamp for the monotonic ordinal.
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Build + publish
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          OTA_PUBLISH_FORCE: ${{ github.event.inputs.force == 'true' && '1' || '0' }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN not set — cannot read the project env."
+            exit 1
+          fi
+          npm ci
+          npm install -g vercel@latest
+
+          # 🚨 BUILD THROUGH VERCEL, NOT `npm run build`.
+          # The client bundle bakes VITE_* values at BUILD time — the PostHog
+          # write key, the provider keys (vite.config.ts). A plain `npm run build`
+          # on a runner has none of them, so it would produce a bundle with
+          # analytics dead and the coach unable to reach a provider, and then ship
+          # THAT to every native device as an OTA. `vercel pull` writes the
+          # project env and `vercel build --prod` consumes it, leaving dist/ in
+          # place — the same path daily-deploy has always used.
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
+
+          # The publisher's own credentials (BLOB_READ_WRITE_TOKEN + Upstash KV)
+          # come from the same pulled env — no OTA credential is a repo secret.
+          set -a
+          [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
+          set +a
+
+          test -d dist || { echo "::error::vercel build produced no dist/"; exit 1; }
+          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short=8 HEAD)"
+
+      # Post-check, deliberately NON-FATAL: several of its assertions read the
+      # LIVE /api/ota/manifest endpoint, which Vercel's git integration deploys
+      # on its own schedule — so right after a publish it may still be serving
+      # the previous endpoint build and fail for a reason unrelated to this
+      # publish. Loud, not red: a job that goes red on every run gets ignored,
+      # and an ignored check is the same as no check.
+      - name: Verify the published bundle serves correctly
+        continue-on-error: true
+        run: |
+          node scripts/audit-ota.mjs || echo "::warning::audit-ota reported failures — see the log. If they are endpoint-contract checks, re-run once the web deploy for this commit is live."

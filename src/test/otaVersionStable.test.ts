@@ -14,8 +14,17 @@
 //
 // Three sites minted it and they run on different machines:
 //   · ios/App/ci_scripts/ci_post_clone.sh  (Xcode Cloud — the BUILTIN stamp)
-//   · .github/workflows/daily-deploy.yml   (the runner — the PUBLISHED bundle)
+//   · .github/workflows/ota-publish.yml    (the runner — the PUBLISHED bundle)
 //   · scripts/ci/publish-ota-bundle.mjs    (its fallback)
+//
+// 2026-09-03: the publish step MOVED out of daily-deploy.yml into its own
+// ota-publish.yml (one publisher, every push — it used to advance the pointer
+// once a day behind two gates, leaving it weeks stale). The minter list follows
+// it; a gate pointed at the file that no longer mints is a gate that passes
+// vacuously. NB the length drift explains only the MINORITY of the recorded
+// failures — the running == updateTo rows with an equal 8-char string on both
+// sides were a different defect entirely (a no-op reply with no `kind`, which
+// the plugin classifies as "failed"); see api/ota/manifest.test.ts.
 //
 // The device compares version STRINGS. A length difference reads as "update
 // available" for the bundle it is already running — the PostHog rows include
@@ -25,7 +34,7 @@
 //
 // Any ONE site drifting breaks the comparison, so this gates all three.
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const ROOT = resolve(__dirname, '../..');
@@ -42,7 +51,7 @@ const code = (rel: string): string => read(rel)
 
 const MINTERS = [
   'ios/App/ci_scripts/ci_post_clone.sh',
-  '.github/workflows/daily-deploy.yml',
+  '.github/workflows/ota-publish.yml',
   'scripts/ci/publish-ota-bundle.mjs',
 ];
 
@@ -62,11 +71,22 @@ describe('the OTA bundle version is length-stable across machines', () => {
     expect(lengths.size, `sites disagree on abbreviation length: ${[...lengths].join(', ')}`).toBe(1);
   });
 
+  it('exactly ONE workflow publishes the bundle', () => {
+    // Two publishers race, and the one that finishes last wins regardless of
+    // which commit is newer — that is how a superseded dist reached devices.
+    // The forward-only ordinal makes a race survivable; it does not make a
+    // second publisher a good idea.
+    const workflows = readdirSync(resolve(ROOT, '.github/workflows'))
+      .filter((f) => f.endsWith('.yml'))
+      .filter((f) => code(`.github/workflows/${f}`).includes('publish-ota-bundle.mjs'));
+    expect(workflows, `publishers: ${workflows.join(', ')}`).toEqual(['ota-publish.yml']);
+  });
+
   it('the builtin stamp and the published bundle agree on the command', () => {
     // Both halves of the comparison must derive the version the same way. If
     // one ever switches to a tag, a date, or the full SHA, the other has to
     // follow in the same commit or every device sees a phantom update.
     expect(code('ios/App/ci_scripts/ci_post_clone.sh')).toContain('rev-parse --short=8');
-    expect(code('.github/workflows/daily-deploy.yml')).toContain('rev-parse --short=8');
+    expect(code('.github/workflows/ota-publish.yml')).toContain('rev-parse --short=8');
   });
 });

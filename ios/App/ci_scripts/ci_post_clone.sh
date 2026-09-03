@@ -49,6 +49,29 @@ npm run build
 export OTA_BUNDLE_VERSION="$(git -C "$CI_PRIMARY_REPOSITORY_PATH" rev-parse --short=8 HEAD)"
 echo "OTA_BUNDLE_VERSION=$OTA_BUNDLE_VERSION"
 
+# VERIFY THE STAMP. capacitor.config.ts reads `process.env.OTA_BUNDLE_VERSION ||
+# undefined`, so an empty value silently falls through and Capgo labels the
+# builtin bundle with the NATIVE app version instead. A real device in the
+# 2026-09-03 telemetry reports `builtin: "1.0"` from exactly that: it can never
+# match a published SHA, so it is offered an update forever and re-downloads the
+# whole bundle on every launch. Silent misconfiguration is what this build has
+# been bitten by repeatedly (the mic usage strings, the app icon) — make it red.
+if [ -z "$OTA_BUNDLE_VERSION" ]; then
+  echo "ci_post_clone: FATAL — OTA_BUNDLE_VERSION is empty."
+  echo "  The shipped bundle would be stamped with the native app version, and the"
+  echo "  device would re-download the full OTA bundle on every single launch."
+  exit 1
+fi
+case "$OTA_BUNDLE_VERSION" in
+  [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]) ;;
+  *)
+    echo "ci_post_clone: FATAL — OTA_BUNDLE_VERSION='$OTA_BUNDLE_VERSION' is not an 8-char short SHA."
+    echo "  The publisher pins --short=8; both sides must agree or the device sees a"
+    echo "  permanent phantom update for the commit it is already running."
+    exit 1
+    ;;
+esac
+
 npx cap add ios
 npx cap sync ios
 

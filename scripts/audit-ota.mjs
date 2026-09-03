@@ -14,6 +14,17 @@
  *         breaks every apply)
  *     5. Blob pointer mirror matches the manifest (Redis/Blob agree)
  *     6. version scheme looks like the git short SHA the iOS build stamps
+ *     7. the no-op reply carries kind:'up_to_date'  (WITHOUT it the plugin
+ *        classifies the response "failed" and fires a PHANTOM downloadFailed —
+ *        that was 72 of 127 recorded "failures" before 2026-09-03)
+ *     8. a 7-char legacy version is recognised as the SAME bundle as its
+ *        8-char publish (or those devices update forever, in a loop)
+ *     9. the pointer carries a monotonic `ordinal` + `history` (forward-only:
+ *        a pointer without them cannot stop a rollback, and a rollback is what
+ *        stranded devices on the Aug-5 bundle carrying the WASM crash)
+ *    10. the delta manifest is served to a canary device, and its per-file
+ *        SHA-256 hashes ACTUALLY match the bytes at their download_url — the
+ *        one check that proves the delta contract rather than assuming it
  *
  *   DEVICE (the real answer — reads the telemetry src/services/otaObserver.ts
  *   emits): on-device the observer fires `ota_boot` (running vs builtin bundle)
@@ -149,6 +160,109 @@ async function main() {
   if (published) {
     const looksSha = /^[0-9a-f]{7,12}$/.test(published.version);
     record('published version looks like a git short SHA', looksSha ? true : 'warn', looksSha ? published.version : `"${published.version}" — confirm it matches ci_post_clone.sh OTA_BUNDLE_VERSION`);
+  }
+
+  // 7. 🔒 THE PHANTOM-FAILURE REGRESSION. The plugin maps a MISSING `kind` to
+  //    "failed" (CapacitorUpdaterPlugin.swift normalizedUpdateResponseKind),
+  //    then fires downloadFailed + a failure stat on EVERY no-op check. If this
+  //    check ever goes red again, the OTA failure rate in PostHog is fiction.
+  if (published) {
+    try {
+      const { json } = await getJson(MANIFEST, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ version_name: published.version }),
+      });
+      const ok = json && json.kind === 'up_to_date';
+      record(
+        "no-op reply carries kind:'up_to_date' (no phantom downloadFailed)",
+        !!ok,
+        ok ? "kind='up_to_date'" : `kind=${json ? JSON.stringify(json.kind) : 'n/a'} — the plugin will record this no-op as a FAILURE`,
+      );
+    } catch (e) {
+      record("no-op reply carries kind:'up_to_date' (no phantom downloadFailed)", false, String(e));
+    }
+  }
+
+  // 8. Legacy 7-char builtin vs 8-char publish must collapse to one bundle.
+  if (published && /^[0-9a-f]{8}$/.test(published.version)) {
+    try {
+      const short = published.version.slice(0, 7);
+      const { json } = await getJson(MANIFEST, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ version_name: short }),
+      });
+      const ok = json && (!json.url || json.url === '');
+      record(
+        '7-char legacy version recognised as the same bundle',
+        !!ok,
+        ok ? `${short} == ${published.version}` : `offered an update to ${json && json.version} — legacy devices will re-download forever`,
+      );
+    } catch (e) {
+      record('7-char legacy version recognised as the same bundle', false, String(e));
+    }
+  }
+
+  // 9. Forward-only needs an ordinal + history on the pointer, or it degrades
+  //    to the pre-2026-09-03 behaviour that rolled devices backward.
+  let pointer = null;
+  try {
+    const { res, json } = await getJson(`${BLOB_POINTER}?cb=${Date.now()}`);
+    pointer = res.ok ? json : null;
+    const ok = pointer && typeof pointer.ordinal === 'number' && pointer.ordinal > 0;
+    record(
+      'pointer carries a monotonic ordinal (forward-only guard armed)',
+      ok ? true : 'warn',
+      ok ? `ordinal=${pointer.ordinal} history=${Object.keys(pointer.history || {}).length} versions` : 'no ordinal — pointer predates the forward-only guard; publish once to arm it',
+    );
+  } catch (e) {
+    record('pointer carries a monotonic ordinal (forward-only guard armed)', 'warn', String(e));
+  }
+
+  // 10. 🔒 THE DELTA CONTRACT, PROVEN NOT ASSUMED. Ask as a canary device, then
+  //     actually download one manifest file and hash it. The plugin compares
+  //     SHA-256 hex of the raw bytes (CryptoCipher.calcChecksum); if our hashes
+  //     disagree by even one file the device re-downloads that file forever, or
+  //     the whole update fails — silently, as a downloadFailed.
+  if (pointer && pointer.manifestUrl) {
+    const canary = process.env.OTA_AUDIT_CANARY_DEVICE || 'eb8cc1c1-f377-4e31-94ff-d404a7ce31ae';
+    try {
+      const { json } = await getJson(MANIFEST, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ version_name: 'audit-old-0000000', device_id: canary }),
+      });
+      const entries = json && Array.isArray(json.manifest) ? json.manifest : null;
+      record(
+        'delta manifest served to a canary device',
+        entries ? true : 'warn',
+        entries ? `${entries.length} files` : 'no manifest in the reply (OTA_DELTA=off, or the device is not in the canary list)',
+      );
+
+      if (entries && entries.length > 0) {
+        const { createHash } = await import('node:crypto');
+        // Verify the SMALLEST entry so the check stays fast; a hash mismatch is
+        // systematic (same algorithm for every file), so one file proves it.
+        let worst = null;
+        const sample = entries.find((e) => /\.(html|json|txt|css)$/.test(e.file_name)) || entries[0];
+        const r = await fetch(sample.download_url, { cache: 'no-store' });
+        if (!r.ok) {
+          worst = `download_url ${r.status} for ${sample.file_name}`;
+        } else {
+          const buf = Buffer.from(await r.arrayBuffer());
+          const got = createHash('sha256').update(buf).digest('hex');
+          if (got !== sample.file_hash) worst = `${sample.file_name}: manifest says ${sample.file_hash.slice(0, 12)}…, bytes hash to ${got.slice(0, 12)}…`;
+        }
+        record(
+          'delta file hashes match the bytes served (SHA-256)',
+          worst === null,
+          worst === null ? `verified ${sample.file_name} (${entries.length} files in manifest)` : worst,
+        );
+      }
+    } catch (e) {
+      record('delta manifest served to a canary device', 'warn', String(e));
+    }
   }
 
   // ── DEVICE HALF (honest blind-spot report until a build with the observer ships)

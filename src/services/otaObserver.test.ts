@@ -25,10 +25,12 @@ vi.mock('@capgo/capacitor-updater', () => ({
   },
 }));
 
+let analyticsReady = true;
 vi.mock('./analytics', () => ({
   captureEvent: (name: string, props?: Record<string, unknown>) => {
     captured.push({ name, props });
   },
+  isAnalyticsEnabled: () => analyticsReady,
 }));
 
 vi.mock('./appAuditor', () => ({
@@ -44,6 +46,7 @@ async function freshObserver() {
 }
 
 beforeEach(() => {
+  analyticsReady = true;
   captured.length = 0;
   audits.length = 0;
   listeners.length = 0;
@@ -95,5 +98,46 @@ describe('otaObserver', () => {
     const first = listeners.length;
     await start();
     expect(listeners.length).toBe(first);
+  });
+
+  // THE REGRESSION THIS GUARDS: `startOtaObserver` runs from main.tsx before
+  // React mounts, but `initAnalytics` runs from an App effect that waits on the
+  // profile — so the boot snapshot was captured while `captureEvent` still
+  // DROPS. Measured on prod 2026-09-03: ota_boot reached 6 devices, ota_app_ready
+  // (which fires later, after init) reached 56. The snapshot is the only signal
+  // that says which bundle the device actually booted, so losing it is losing
+  // the answer to "did the OTA land?".
+  it('still sends the boot snapshot when analytics initialises late', async () => {
+    vi.useFakeTimers();
+    analyticsReady = false;
+    try {
+      const start = await freshObserver();
+      await start();
+      expect(captured.find((c) => c.name === 'ota_boot')).toBeUndefined();
+
+      analyticsReady = true;
+      await vi.advanceTimersByTimeAsync(600);
+
+      const boot = captured.find((c) => c.name === 'ota_boot');
+      expect(boot).toBeDefined();
+      expect(boot?.props?.running).toBeDefined();
+      expect(boot?.props?.builtin).toBeDefined();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('gives up on the boot snapshot rather than leaking a timer forever', async () => {
+    vi.useFakeTimers();
+    analyticsReady = false;
+    try {
+      const start = await freshObserver();
+      await start();
+      await vi.advanceTimersByTimeAsync(31_000);
+      expect(vi.getTimerCount()).toBe(0);
+      expect(captured.find((c) => c.name === 'ota_boot')).toBeUndefined();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
