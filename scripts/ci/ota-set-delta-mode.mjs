@@ -57,22 +57,39 @@ const redisUrl = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_U
 const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 if (!blobToken) { console.error('❌ BLOB_READ_WRITE_TOKEN not set'); process.exit(1); }
 
+// 🔒 BOTH STORES OR NEITHER. The endpoint ranks Redis and Blob by ordinal and
+// breaks a TIE in Redis's favour — and a mode flip does not change the ordinal.
+// So a Blob-only write leaves the old mode winning on every check: the tool
+// prints success, the pointer visibly changes, and NOTHING happens. That is the
+// silent-no-op-reporting-success failure mode, in the one tool whose entire job
+// is backing out an incident. Refuse rather than lie.
+if (!redisUrl || !redisToken) {
+  console.error('❌ Redis creds absent (UPSTASH_REDIS_REST_* / KV_REST_API_*).');
+  console.error('   A Blob-only write would NOT take effect: the endpoint breaks an');
+  console.error('   ordinal tie in favour of Redis, and a mode flip leaves the ordinal');
+  console.error('   unchanged — so the old mode would keep winning while this reported');
+  console.error('   success. In CI these come from `vercel pull`; locally, pull them');
+  console.error('   from the Vercel project env with VERCEL_TOKEN.');
+  process.exit(1);
+}
+
 const before = pointer.delta ?? '(unset)';
 const next = { ...pointer, delta: arg };
 
 // Redis first, Blob last — the same order publish-ota-bundle.mjs uses, and the
 // endpoint prefers whichever holds the higher ordinal, so a half-completed
 // write can never serve an older bundle.
-if (redisUrl && redisToken) {
-  try {
-    const { Redis } = await import('@upstash/redis');
-    await new Redis({ url: redisUrl, token: redisToken }).set('ota:latest', next);
-    console.log('[ota] Redis pointer updated');
-  } catch (err) {
-    console.warn(`[ota] Redis update FAILED (${err instanceof Error ? err.message : err}) — Blob mirror still updates`);
-  }
-} else {
-  console.warn('[ota] Redis creds absent — updating the Blob mirror only');
+try {
+  const { Redis } = await import('@upstash/redis');
+  await new Redis({ url: redisUrl, token: redisToken }).set('ota:latest', next);
+  console.log('[ota] Redis pointer updated');
+} catch (err) {
+  // Same reasoning as the guard above: a Blob-only write is ineffective, so a
+  // failed Redis write must stop the run rather than half-apply the change.
+  console.error(`❌ Redis update FAILED (${err instanceof Error ? err.message : err}).`);
+  console.error('   Aborting BEFORE the Blob write: a Blob-only change would not take');
+  console.error('   effect, and leaving the two stores disagreeing is worse than no change.');
+  process.exit(1);
 }
 
 const { put } = await import('@vercel/blob');
