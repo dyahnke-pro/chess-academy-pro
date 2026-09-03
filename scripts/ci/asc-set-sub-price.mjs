@@ -31,11 +31,26 @@
 //   APP_STORE_CONNECT_API_KEY_ID
 //   APP_STORE_CONNECT_API_ISSUER_ID
 // Optional env:
+// 🔒 IT IS ALSO THE DRIFT DETECTOR FOR src/data/pricing.ts. The tiers moved on
+// 2026-08-24 and nobody updated the repo, so for ten days the Terms of Service
+// told customers $7.99 while Apple billed them $3.99 — with every test green,
+// because a gate comparing those constants to EACH OTHER cannot see that they
+// stopped describing the store. Nothing in a vitest run can: the answer is
+// behind credentials that only exist here.
+//
+// So this script, which already has to read the live price, now also reads
+// src/data/pricing.ts and FAILS on disagreement. In a dry run it compares
+// against what Apple charges today; under APPLY it compares against the price
+// just written, and fails AFTER the write with the remaining task named. A red
+// job that says "the store moved, the repo did not" is the point — a warning
+// is what got ignored last time.
+//
 //   APPLY=1        actually create the prices (default: dry run)
 //   PRESERVE=1     keep existing subscribers on their current price
 //   TERRITORY      base territory to price from (default USA)
 //   MONTHLY_USD / YEARLY_USD   target prices (default 3.99 / 34.99)
 import crypto from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 const APP = '6776418777';
 const TERRITORY = process.env.TERRITORY || 'USA';
@@ -84,6 +99,33 @@ async function api(method, path, body) {
 }
 const fail = (msg) => { console.error(`::error::${msg}`); process.exit(1); };
 
+// Parse src/data/pricing.ts rather than importing it — this is a .mjs run by
+// bare node, and the constants are plain string literals. Returns null per
+// field if the shape is not what we expect, which is itself reported: a
+// silently-unparsed file would make the drift check pass by doing nothing.
+function repoPrices() {
+  const path = new URL('../../src/data/pricing.ts', import.meta.url);
+  let src;
+  try { src = readFileSync(path, 'utf8'); }
+  catch (e) { return { error: `cannot read src/data/pricing.ts: ${e.message}` }; }
+  const grab = (name) => {
+    const m = src.match(new RegExp(`export const ${name}\\s*=\\s*'\\$(\\d+\\.\\d{2})'`));
+    return m ? Number(m[1]) : null;
+  };
+  const monthly = grab('PRICE_MONTHLY');
+  const yearly = grab('PRICE_YEARLY');
+  if (monthly === null || yearly === null) {
+    return { error: 'could not parse PRICE_MONTHLY / PRICE_YEARLY out of src/data/pricing.ts — did the shape change?' };
+  }
+  return { monthly, yearly };
+}
+
+/** productId → the constant in pricing.ts that must describe it. */
+const REPO_FIELD = {
+  chess_academy_pro_monthly: 'monthly',
+  chess_academy_pro_yearly: 'yearly',
+};
+
 const main = async () => {
   console.log(APPLY ? '⚠️  APPLY=1 — this WILL change live prices' : '🔍 DRY RUN — nothing will be written (set APPLY=1 to commit)');
   console.log(`territory=${TERRITORY} · existing subscribers: ${PRESERVE ? 'KEPT on current price' : 'MIGRATED to the new price'}\n`);
@@ -101,6 +143,8 @@ const main = async () => {
   console.log(`found ${subs.length} subscription(s): ${subs.map((s) => s.attributes.productId).join(', ')}\n`);
 
   let planned = 0;
+  /** productId → the price that is true once this run finishes. */
+  const effective = {};
   for (const [productId, usd] of Object.entries(TARGETS)) {
     const sub = subs.find((s) => s.attributes.productId === productId);
     if (!sub) { console.log(`⏭  ${productId} — not found on this app, skipping`); continue; }
@@ -145,7 +189,15 @@ const main = async () => {
     }
     console.log(`   price point ${match.id} = ${match.attributes.customerPrice} ${TERRITORY}`);
 
-    if (!APPLY) { planned += 1; console.log('   (dry run — not created)\n'); continue; }
+    if (!APPLY) {
+      planned += 1;
+      // In a dry run nothing changes, so the price the repo must describe is
+      // the one Apple charges right now — not the target we were asked about.
+      const live = Number(curPoint?.attributes?.customerPrice);
+      if (Number.isFinite(live)) effective[productId] = live;
+      console.log('   (dry run — not created)\n');
+      continue;
+    }
 
     const res = await api('POST', '/v1/subscriptionPrices', {
       data: {
@@ -159,12 +211,46 @@ const main = async () => {
     });
     if (res.status >= 400) fail(`${productId}: create price ${res.status} ${JSON.stringify(res.j).slice(0, 400)}`);
     console.log(`   ✅ created price ${res.j?.data?.id}\n`);
+    effective[productId] = usd;
     planned += 1;
   }
 
   console.log(APPLY
     ? `done — ${planned} price(s) written. Verify in App Store Connect before announcing.`
     : `dry run complete — ${planned} price(s) would be written. Re-run with APPLY=1 to commit.`);
+
+  // ── DRIFT CHECK ────────────────────────────────────────────────────────────
+  // The store is the source of truth; src/data/pricing.ts only describes it, on
+  // the Terms of Service and Support pages. Disagreement means those pages are
+  // quoting customers a price they are not charged.
+  const repo = repoPrices();
+  if (repo.error) fail(repo.error);
+
+  const drift = [];
+  for (const [productId, live] of Object.entries(effective)) {
+    const field = REPO_FIELD[productId];
+    if (!field) continue;                      // a product the prose never quotes
+    if (repo[field] !== live) drift.push({ productId, field, live, repo: repo[field] });
+  }
+
+  if (!Object.keys(effective).length) {
+    // Nothing was resolved, so the check verified nothing. Say that rather than
+    // reporting a pass — a drift detector that silently checks zero products is
+    // how the drift survived in the first place.
+    fail('no prices were resolved, so the pricing.ts drift check verified NOTHING');
+  }
+
+  console.log(`\npricing.ts: monthly $${repo.monthly.toFixed(2)} · yearly $${repo.yearly.toFixed(2)} — checked against ${Object.keys(effective).length} live product(s)`);
+
+  if (drift.length) {
+    for (const d of drift) {
+      console.error(`::error::${d.productId}: the store ${APPLY ? 'is now' : 'charges'} $${d.live.toFixed(2)} but src/data/pricing.ts says $${d.repo.toFixed(2)} — the Terms of Service and Support pages are quoting a price customers are not charged`);
+    }
+    fail(APPLY
+      ? `prices WERE written successfully — the remaining task is to set ${drift.map((d) => `PRICE_${d.field.toUpperCase()} = '$${d.live.toFixed(2)}'`).join(' and ')} in src/data/pricing.ts and ship it`
+      : `src/data/pricing.ts disagrees with the live store on ${drift.length} product(s)`);
+  }
+  console.log('✅ src/data/pricing.ts matches the live store prices');
 };
 
 main().catch((e) => fail(String(e?.stack || e).slice(0, 500)));
