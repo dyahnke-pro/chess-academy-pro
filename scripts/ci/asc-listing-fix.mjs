@@ -101,6 +101,32 @@ async function api(method, path, body, { soft = false } = {}) {
 async function main() {
   const app = (await api('GET', `/v1/apps?filter[bundleId]=${encodeURIComponent(BUNDLE_ID)}&limit=1`)).data[0];
   if (!app) throw new Error(`No app ${BUNDLE_ID}`);
+  // 🚨 REPORT-ONLY WORK GOES FIRST, ABOVE ANYTHING THAT CAN THROW. This block
+  // originally sat after the app-version lookup, so its first real run — against
+  // APP_VERSION=4.0.1, before that version existed in ASC — died on "No iOS
+  // version 4.0.1" and took the IAP report down with it. The subscriptions have
+  // nothing to do with the app version; there was no reason for one to gate the
+  // other, and a diagnostic that only works when everything else already works
+  // is not much of a diagnostic.
+  //
+  // IN-APP PURCHASE DISPLAY NAMES — Apple INDEXES these for search, and almost
+  // nobody sets them deliberately, so a subscription called "Monthly" is free
+  // indexed text thrown away. Read-only here: report what is live so the waste
+  // is visible, the same way the empty subtitle only became fixable once this
+  // script started printing it.
+  const groups = await api('GET', `/v1/apps/${app.id}/subscriptionGroups?limit=20`, null, { soft: true });
+  if (!groups.__error) {
+    for (const g of groups.data || []) {
+      const subs = await api('GET', `/v1/subscriptionGroups/${g.id}/subscriptions?limit=20&fields[subscriptions]=productId,name`, null, { soft: true });
+      if (subs.__error) continue;
+      for (const sub of subs.data || []) {
+        const locs = await api('GET', `/v1/subscriptions/${sub.id}/subscriptionLocalizations?limit=20`, null, { soft: true });
+        const en = locs.__error ? null : (locs.data || []).find((l) => l.attributes?.locale === 'en-US');
+        console.log(`IAP ${sub.attributes?.productId}: displayName="${en?.attributes?.name ?? '(none)'}" (${(en?.attributes?.name ?? '').length} chars)`);
+      }
+    }
+  }
+
   const versions = (await api('GET', `/v1/apps/${app.id}/appStoreVersions?filter[platform]=IOS&limit=20`)).data;
   const version = versions.find((v) => v.attributes?.versionString === VERSION);
   if (!version) throw new Error(`No iOS version ${VERSION}`);
@@ -166,24 +192,6 @@ async function main() {
         data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { keywords: KEYWORDS } },
       }, { soft: true });
       console.log(kr.__error ? `⚠️  keywords PATCH failed: ${kr.__error} ${String(kr.__body).slice(0, 300)}` : '✅ keywords updated');
-    }
-  }
-
-  // IN-APP PURCHASE DISPLAY NAMES — Apple INDEXES these for search, and almost
-  // nobody sets them deliberately, so a subscription called "Monthly" is free
-  // indexed text thrown away. Read-only here: report what is live so the waste
-  // is visible, the same way the empty subtitle only became fixable once this
-  // script started printing it.
-  const groups = await api('GET', `/v1/apps/${app.id}/subscriptionGroups?limit=20`, null, { soft: true });
-  if (!groups.__error) {
-    for (const g of groups.data || []) {
-      const subs = await api('GET', `/v1/subscriptionGroups/${g.id}/subscriptions?limit=20&fields[subscriptions]=productId,name`, null, { soft: true });
-      if (subs.__error) continue;
-      for (const sub of subs.data || []) {
-        const locs = await api('GET', `/v1/subscriptions/${sub.id}/subscriptionLocalizations?limit=20`, null, { soft: true });
-        const en = locs.__error ? null : (locs.data || []).find((l) => l.attributes?.locale === 'en-US');
-        console.log(`IAP ${sub.attributes?.productId}: displayName="${en?.attributes?.name ?? '(none)'}" (${(en?.attributes?.name ?? '').length} chars)`);
-      }
     }
   }
 
