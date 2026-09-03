@@ -1941,8 +1941,25 @@ session; the recipe above already excludes them, but know WHY:
 4. **App Store installs are ANONYMOUS — no email/name ever attaches.** So David's
    own use can only be separated by `distribution` (`testflight` = him) PLUS the
    build_id rule below. Never assert a specific appstore device is or isn't David
-   from geography — geography is worthless here (David's own dev device geoips to
-   Lake Butler FL / Naaldwijk NL, nowhere near his Yorkville web use).
+   from geography — geography is worthless here in BOTH directions: his TestFlight
+   phone has reported from LA / Chicago / Stone Mountain as well as Yorkville, so
+   a non-Yorkville hit does not mean "not David", and a Yorkville hit is only ever
+   corroboration, never proof.
+
+   🔴 **CORRECTED 2026-09-03. This rule used to justify itself with "David's own
+   dev device geoips to Lake Butler FL / Naaldwijk NL". THAT IS FALSE and it
+   contradicted the confirmed list further down this same section.** Lake Butler /
+   Naaldwijk / Jacksonville is device `4589387b-575c-4a74-b647-5bfa0cabc58b` — an
+   App Store install, first seen 2026-08-22, 12,577 events and FOUR written
+   feedback submissions. It is the most engaged REAL USER the app has, and David
+   confirmed it as such on 2026-09-02. The claim was residue from the
+   private-build_ids false positive: a session wrongly excluded that user as a dev
+   device, wrote this line, was corrected — and the correction was appended
+   without the wrong line being deleted, so the file asserted both.
+   The cost was not theoretical: on 2026-09-03 a session read this line aloud to
+   David and told him he was his own best user. **When you correct a rule, DELETE
+   the claim you are replacing — an appended correction leaves a contradiction
+   that the next reader can pick either side of.**
 
 5. **🔥 THE BIG ONE — CC's REAL-PLAY / SIMULATOR AUDIT LOOKS EXACTLY LIKE A REAL
    NATIVE USER. `build_id` is the ONLY thing that separates them.** Trap #1 says
