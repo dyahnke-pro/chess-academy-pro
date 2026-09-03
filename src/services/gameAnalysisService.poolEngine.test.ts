@@ -43,7 +43,6 @@ beforeEach(async () => {
   workerUrls.length = 0;
   vi.stubGlobal(
     'Worker',
-    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
     class MockWorker {
       constructor(url?: string | URL) {
         workerUrls.push(String(url ?? ''));
