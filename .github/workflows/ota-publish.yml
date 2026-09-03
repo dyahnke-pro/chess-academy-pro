@@ -69,21 +69,6 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           OTA_PUBLISH_FORCE: ${{ github.event.inputs.force == 'true' && '1' || '0' }}
-          # 🔒 NATIVE-ONLY BUILD FLAGS. The OTA bundle replaces the web root on a
-          # NATIVE device, so it must be built with the NATIVE environment — not
-          # the web one. Both are absent from Vercel deliberately: the web app is
-          # free and unwalled on purpose (VITE_PAYWALL_ENABLED there would wall
-          # the beta testers), and the RevenueCat key has never been on Vercel at
-          # all. Building from the web env therefore handed native devices a
-          # bundle with the paywall OFF and billing DEAD — no purchase, no
-          # restore, no subscription recognised — from the first OTA that landed
-          # (2026-07-28) until this change.
-          #
-          # Confirmed rather than assumed: 9 native devices have fired
-          # `free_opening_claimed`, which only happens when the gate is live, so
-          # VITE_PAYWALL_ENABLED really is true on the store build.
-          VITE_REVENUECAT_IOS_KEY: ${{ secrets.VITE_REVENUECAT_IOS_KEY }}
-          VITE_PAYWALL_ENABLED: 'true'
         run: |
           if [ -z "$VERCEL_TOKEN" ]; then
             echo "::error::VERCEL_TOKEN not set — cannot read the project env."
@@ -92,57 +77,42 @@ jobs:
           npm ci
           npm install -g vercel@latest
 
-          # 🚨 THE BUNDLE'S VITE_* VALUES ARE BAKED AT BUILD TIME — get them right.
-          # `vercel pull` fetches the project env (PostHog write key, provider
-          # keys, and the publisher's own Blob + KV credentials). A bare
-          # `npm run build` without it ships analytics dead and the coach with no
-          # provider key.
+          # The bundle's VITE_* values are baked at BUILD time and come from TWO
+          # places: the committed `.env.production` (which carries
+          # VITE_REVENUECAT_IOS_KEY and VITE_PAYWALL_ENABLED — vite's loadEnv
+          # reads it for a production build) and the pulled Vercel project env
+          # (PostHog key, provider keys, plus the publisher's Blob + KV creds).
           #
-          # But `vercel build --prod` is ALSO wrong here, and that was the defect:
-          # it consumes the WEB env, which deliberately has no paywall flag and no
-          # RevenueCat key, and then overwrites the native values below. So: pull
-          # the env, source it, let the native flags win, and build directly.
+          # 🔥 DO NOT "HELPFULLY" EXPORT VITE_* VARS HERE. On 2026-09-03 this step
+          # set VITE_REVENUECAT_IOS_KEY from a GitHub secret that did not exist.
+          # The empty string won over `.env.production`, and the bundle published
+          # to every device had NO RevenueCat key — the exact defect the change
+          # claimed to fix. An env var you inject unconditionally is an env var
+          # you inject as empty when its source is missing.
           vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
 
-          # A WRONG key is worse than none — hard fail.
-          # An sk_ key is RevenueCat's SECRET server key. vite inlines VITE_* into
-          # the client bundle, and that bundle is published to a PUBLIC blob URL,
-          # cached immutable. Substituting it would publish the secret.
-          case "${VITE_REVENUECAT_IOS_KEY:-}" in
-            ''|appl_*) ;;
-            *)
-              echo "::error::VITE_REVENUECAT_IOS_KEY must be the PUBLIC appl_ SDK key."
-              echo "  A non-appl_ value (e.g. the sk_ server key on Vercel) would be"
-              echo "  inlined into a bundle published at a PUBLIC URL. Refusing."
-              exit 1
-              ;;
-          esac
-
-          # A MISSING key is loud, but must NOT block the publish. The bundle
-          # already live has no key either, so refusing to publish would stop
-          # crash fixes reaching users without fixing billing for anyone — a
-          # strictly worse trade. Ship the fixes, make the gap impossible to miss,
-          # and let the on-device detector (billingUnconfiguredNative) measure it.
-          if [ -z "${VITE_REVENUECAT_IOS_KEY:-}" ]; then
-            echo "::error::No VITE_REVENUECAT_IOS_KEY secret — this bundle ships with billing DEAD on native (no purchase, no restore, no subscription). Add the PUBLIC appl_ key from RevenueCat -> Project Settings -> API Keys -> Apple App Store as a repository secret."
-            echo "## ⚠️ OTA published WITHOUT a RevenueCat key — billing is dead on every native device that applies it" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "## ✅ OTA built with the native RevenueCat key — billing intact" >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-          # `vercel build` consumes the PULLED web env and would overwrite the two
-          # flags above, which is the whole defect. Build directly instead: source
-          # the pulled env first (VITE_POSTHOG_*, Blob + KV creds), then let the
-          # native flags win.
           set -a
           [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
           set +a
-          export VITE_REVENUECAT_IOS_KEY VITE_PAYWALL_ENABLED
-          npm run build
 
-          # The publisher's credentials (BLOB_READ_WRITE_TOKEN + Upstash KV) came
-          # from the same pulled env, sourced above.
           test -d dist || { echo "::error::the build produced no dist/"; exit 1; }
+
+          # 🔒 CHECK THE ARTIFACT, NOT THE ENVIRONMENT. Reasoning about which env
+          # var reaches the bundle is exactly what went wrong; grepping the built
+          # JS is the only claim that cannot be wrong. A bundle without the
+          # RevenueCat key silently kills purchase, restore and subscription
+          # recognition on every native device that applies it, and nothing in
+          # the app looks broken — so this must block the publish.
+          if ! grep -rlq 'appl_' dist/assets 2>/dev/null; then
+            echo "::error::Built bundle has NO RevenueCat appl_ key — publishing it would kill billing on every native device. Refusing."
+            exit 1
+          fi
+          if ! grep -rlq 'phc_' dist/assets 2>/dev/null; then
+            echo "::error::Built bundle has no PostHog key — analytics would go dark. Refusing."
+            exit 1
+          fi
+          echo "[ota] artifact verified: RevenueCat + PostHog keys present in dist/" 
           node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short=8 HEAD)"
 
       # Post-check, deliberately NON-FATAL: several of its assertions read the
