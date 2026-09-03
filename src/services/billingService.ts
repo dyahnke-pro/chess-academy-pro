@@ -31,6 +31,7 @@ import {
   trackPurchaseCancelled,
   trackRestore,
   trackRestoreFailed,
+  trackBillingUnconfiguredNative,
 } from './billingAnalytics';
 
 /** The single RevenueCat entitlement identifier the whole app gates on.
@@ -132,6 +133,35 @@ export async function initBilling(appUserId?: string): Promise<void> {
   if (!key) {
     // Keyless build / web: app stays fully usable; the wall can't engage.
     store.setEntitlement({ isPro: true, source: 'unconfigured' });
+    // 🔒 ON NATIVE THIS IS NOT NORMAL — SAY SO. Web is keyless by design, but a
+    // native device with no key has billing switched OFF: no purchase, no
+    // restore, no subscription recognised. It fails OPEN, so nothing looks
+    // broken to the user and nothing looked broken to us either — this branch
+    // returned in silence, and a dead revenue path was indistinguishable from a
+    // quiet week.
+    //
+    // It is reachable in normal operation: the OTA bundle is built from the WEB
+    // environment (`vercel build --prod` in ota-publish.yml), which carries no
+    // VITE_REVENUECAT_IOS_KEY, so every native device that applies an OTA loses
+    // billing until the next store install. The event carries the running
+    // BUNDLE because that is the discriminator — builtin has the key, OTA does
+    // not.
+    if (Capacitor.isNativePlatform()) {
+      let bundle = 'unknown';
+      try {
+        const { CapacitorUpdater } = await import('@capgo/capacitor-updater');
+        bundle = (await CapacitorUpdater.current())?.bundle?.version ?? 'unknown';
+      } catch {
+        /* plugin absent — the platform string alone still identifies the case */
+      }
+      const platform = Capacitor.getPlatform();
+      logBilling(
+        'billing-error',
+        'billingService.initBilling',
+        `NO RevenueCat key on native (${platform}, bundle=${bundle}) — purchases, restore and subscription status are all unavailable`,
+      );
+      trackBillingUnconfiguredNative(platform, bundle);
+    }
     return;
   }
 

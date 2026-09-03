@@ -49,6 +49,12 @@ export const BILLING_EVENT = {
   freePuzzleLimitReached: 'free_puzzle_limit_reached',
   /** BOTH free coach buckets (7 lessons + 50 chat turns) were just emptied. */
   freeCoachLimitReached: 'free_coach_limit_reached',
+  /** A NATIVE device booted with no RevenueCat key — billing is dead on it:
+   *  no purchase, no restore, no subscription recognised. Not an error path
+   *  and not a user-visible failure (entitlement fails OPEN, so the app stays
+   *  fully usable) — which is exactly why it needs its own event. Web is
+   *  keyless BY DESIGN and never reports this. */
+  billingUnconfiguredNative: 'billing_unconfigured_native',
   /** The one free masterclass opening was just claimed (first deep dive). */
   freeOpeningClaimed: 'free_opening_claimed',
   /** A deep dive into a SECOND opening was blocked (upgrade-pressure moment). */
@@ -231,6 +237,25 @@ export function trackFreePuzzleLimitReached(): void {
  *  walls from here on. `via` names which bucket's spend triggered it. */
 export function trackFreeCoachLimitReached(via: 'lesson' | 'chat_turn'): void {
   captureEvent(BILLING_EVENT.freeCoachLimitReached, { via });
+}
+
+/**
+ * Report a NATIVE boot with no billing key.
+ *
+ * WHY THIS EXISTS (2026-09-03): `initBilling` returns silently when
+ * `resolvePlatformKey()` finds nothing — it marks the user Pro (fails open, so
+ * nobody is locked out) and says nothing at all. That silence is the problem:
+ * the OTA bundle is built from the WEB environment, which has no
+ * VITE_REVENUECAT_IOS_KEY, so every native device running an OTA bundle has
+ * billing switched off — no purchases, no restores, subscriptions invisible —
+ * and it emitted ZERO telemetry. A revenue path can be dead for weeks and look
+ * exactly like a quiet week.
+ *
+ * `bundle` is the running web-bundle version, because that is the variable that
+ * decides it: the shipped builtin has the key, an OTA bundle does not.
+ */
+export function trackBillingUnconfiguredNative(platform: string, bundle: string): void {
+  captureEvent(BILLING_EVENT.billingUnconfiguredNative, { native_platform: platform, bundle });
 }
 
 /** The one free masterclass opening was just claimed (activation milestone). */

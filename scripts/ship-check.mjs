@@ -204,6 +204,13 @@ const GATE_TESTS = [
   // says "Traxler Counterattack" — so two CORRECT extra words turned a working
   // match into null. Nothing else goes red when a name silently resolves to the
   // wrong opening; the student just gets taught something they never asked for.
+  // 🔒 THE REVENUE PATH REPORTS ITS OWN DEATH (2026-09-03). initBilling fails
+  // OPEN with no key — correct, nobody gets locked out — but on NATIVE that
+  // means no purchase, no restore, no subscription, and it used to return in
+  // silence. The OTA bundle is built from the WEB env, which has no RevenueCat
+  // key, so every OTA device hits it. Nothing else can go red for this: the app
+  // looks perfect while billing is dead.
+  'src/services/billingUnconfigured.test.ts',
   'src/services/openingNameResolution.test.ts',
   'api/_lib/ttsLangContent.test.ts',
   'api/_lib/ttsLang.test.ts',
