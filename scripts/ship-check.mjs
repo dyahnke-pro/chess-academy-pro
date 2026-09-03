@@ -198,6 +198,13 @@ const GATE_TESTS = [
   // the stopword lists). Both fixes were verified against hand-picked strings,
   // and neither would have caught the other. This runs the real detector over
   // the real shipped prose and requires silence.
+  // 🔒 OPENING NAME RESOLUTION (2026-09-03) — David asked for the "traxler
+  // counter gambit", the coach agreed by name, then taught the DANISH GAMBIT.
+  // The resolver required every query token to match a shipped name, and the DB
+  // says "Traxler Counterattack" — so two CORRECT extra words turned a working
+  // match into null. Nothing else goes red when a name silently resolves to the
+  // wrong opening; the student just gets taught something they never asked for.
+  'src/services/openingNameResolution.test.ts',
   'api/_lib/ttsLangContent.test.ts',
   'api/_lib/ttsLang.test.ts',
   'api/ota/manifest.test.ts',

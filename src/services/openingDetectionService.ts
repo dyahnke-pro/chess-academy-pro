@@ -392,6 +392,13 @@ const RESOLVER_MIN_FUZZY_LEN = 4;
  *  that DO exist in the DB. Pre-flight aliases the input before
  *  attempting match against the DB. */
 const NAME_ALIASES: Record<string, string> = {
+  // The Traxler's other real name. The DB carries neither token ("wilkes" and
+  // "barre" appear in ZERO shipped names), so no amount of matching can reach
+  // it — an alias is the only route. Both spellings are in common use.
+  'wilkes-barre': 'Italian Game: Two Knights Defense, Traxler Counterattack',
+  'wilkes barre': 'Italian Game: Two Knights Defense, Traxler Counterattack',
+  'wilkes-barre variation': 'Italian Game: Two Knights Defense, Traxler Counterattack',
+  'wilkes barre variation': 'Italian Game: Two Knights Defense, Traxler Counterattack',
   // 2026-07-31 sweep — asks that resolved to the WRONG opening (or to
   // nothing) in the tier-coverage probe. Each maps to the real DB row.
   'jobava london': 'Rapport-Jobava System',
@@ -723,8 +730,116 @@ export function resolveOpeningEntry(
   // 4. Token-set match — word-order-insensitive. "Najdorf Sicilian"
   //    matches "Sicilian Defense: Najdorf Variation".
   const tokenMatches = entries.filter((e) => tokensMatchTarget(aliased, e.name));
-  if (tokenMatches.length === 0) return null;
-  return emit(pick(tokenMatches));
+  if (tokenMatches.length > 0) return emit(pick(tokenMatches));
+
+  // 5. RARE-TOKEN match — the one distinctive word carries the query.
+  //
+  // David 2026-09-03: he asked for the "traxler counter gambit" and the coach
+  // said "Ready to start the traxler counter gambit", then taught him the
+  // DANISH GAMBIT. Tier 4 requires EVERY query token to appear in the name, and
+  // the DB calls it "Traxler Counterattack" — so `counter` (0 entries in the
+  // whole DB) and `gambit` could never match, and a query naming its opening
+  // unmistakably resolved to null. Bare "traxler" worked; adding two CORRECT
+  // words broke it, which is exactly backwards.
+  //
+  // Token frequency across the 3,654 shipped names says which word is the
+  // evidence: `traxler` 5, `counterattack` 22, `najdorf` 28 — against `gambit`
+  // 1,207 and `variation` 2,019. A proper noun identifies an opening; a
+  // category word identifies nothing. So when every stricter tier has failed,
+  // resolve on the RAREST token the query carries, and only when it is rare
+  // enough to be a name rather than a category. `gambit` alone still resolves
+  // to nothing, which is the property that keeps this tier safe.
+  const rare = rarestQueryToken(aliased, entries);
+  if (!rare) return null;
+  const rareMatches = entries.filter((e) =>
+    new Set(normalizeNameForMatch(e.name).split(' ')).has(rare.token),
+  );
+  if (rareMatches.length === 0) return null;
+  // 🔒 THE RARE TOKEN MUST NAME ONE OPENING FAMILY, OR WE DO NOT GUESS.
+  // `traxler` appears only under "Italian Game: Two Knights Defense" — it names
+  // one thing, so the query is unambiguous. `gunderam` is scattered across the
+  // Caro-Kann, the Semi-Slav, the Blackmar-Diemer and the King's Pawn Game; a
+  // rare name shared by unrelated openings identifies none of them, and picking
+  // one would repeat the very failure this tier exists to fix — handing the
+  // student an opening they did not ask for. Ambiguous resolves to null, and
+  // the caller asks.
+  const families = new Set(rareMatches.map((e) => familyOf(e.name)));
+  if (families.size > 1) return null;
+  // Among them, prefer the entry corroborated by the MOST other query tokens —
+  // but count only tokens that are THEMSELVES rare. Counting generic ones
+  // reintroduces the same disease one level down: with `gambit` allowed to
+  // corroborate, "traxler counter gambit" picked the "Trencianske-Teplice
+  // Gambit" sub-line over the parent Counterattack, because that name happens
+  // to contain the word. A category word must not steer the pick any more than
+  // it may make the match. Rare tokens still do their job: "najdorf poisoned
+  // pawn" prefers the Poisoned Pawn line over the bare Najdorf.
+  const df = docFreq(entries);
+  const qTokens = new Set(
+    normalizeNameForMatch(aliased)
+      .split(' ')
+      .filter((t) => t.length >= 3 && (df.get(t) ?? 0) > 0 && (df.get(t) ?? 0) <= RARE_TOKEN_MAX_ENTRIES),
+  );
+  let bestCorroboration = -1;
+  for (const e of rareMatches) {
+    const tTokens = new Set(normalizeNameForMatch(e.name).split(' '));
+    let hits = 0;
+    for (const t of qTokens) if (tTokens.has(t)) hits += 1;
+    if (hits > bestCorroboration) bestCorroboration = hits;
+  }
+  const corroborated = rareMatches.filter((e) => {
+    const tTokens = new Set(normalizeNameForMatch(e.name).split(' '));
+    let hits = 0;
+    for (const t of qTokens) if (tTokens.has(t)) hits += 1;
+    return hits === bestCorroboration;
+  });
+  return emit(pick(corroborated));
+}
+
+/** The opening family a shipped name belongs to — the part before the first
+ *  colon ("Italian Game: Two Knights Defense, Traxler Counterattack" → "Italian
+ *  Game"), or the whole name when it has none. */
+function familyOf(name: string): string {
+  const norm = normalizeNameForMatch(name);
+  const colon = name.indexOf(':');
+  return colon === -1 ? norm : normalizeNameForMatch(name.slice(0, colon));
+}
+
+/** How many shipped names may contain a token before it is a CATEGORY rather
+ *  than a name. `traxler` 5, `liver` 2, `poisoned` 11, `counterattack` 22 and
+ *  `najdorf` 28 are names; `gambit` 1,207, `variation` 2,019 and `defense`
+ *  2,348 are not. 40 sits in the empty space between the two populations. */
+const RARE_TOKEN_MAX_ENTRIES = 40;
+
+/** Document frequency of every token across the teachable names, built once. */
+let tokenDocFreq: Map<string, number> | null = null;
+function docFreq(entries: OpeningEntry[]): Map<string, number> {
+  if (tokenDocFreq) return tokenDocFreq;
+  const df = new Map<string, number>();
+  for (const e of entries) {
+    for (const t of new Set(normalizeNameForMatch(e.name).split(' '))) {
+      df.set(t, (df.get(t) ?? 0) + 1);
+    }
+  }
+  tokenDocFreq = df;
+  return df;
+}
+
+/** The most distinctive token the query carries, or null when it carries none
+ *  rare enough to identify an opening on its own. */
+function rarestQueryToken(
+  query: string,
+  entries: OpeningEntry[],
+): { token: string; df: number } | null {
+  const df = docFreq(entries);
+  let best: { token: string; df: number } | null = null;
+  for (const t of normalizeNameForMatch(query).split(' ')) {
+    if (t.length < 3 || RESOLVER_STOPWORDS.has(t)) continue;
+    const n = df.get(t);
+    // df 0 = a word the DB never uses ("counter", "wilkes"): no evidence.
+    if (!n || n > RARE_TOKEN_MAX_ENTRIES) continue;
+    if (!best || n < best.df) best = { token: t, df: n };
+  }
+  return best;
 }
 
 /** The family-DEFINING move prefix for an opening query — the SHORTEST DB entry
