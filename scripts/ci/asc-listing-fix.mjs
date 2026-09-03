@@ -169,6 +169,24 @@ async function main() {
     }
   }
 
+  // IN-APP PURCHASE DISPLAY NAMES — Apple INDEXES these for search, and almost
+  // nobody sets them deliberately, so a subscription called "Monthly" is free
+  // indexed text thrown away. Read-only here: report what is live so the waste
+  // is visible, the same way the empty subtitle only became fixable once this
+  // script started printing it.
+  const groups = await api('GET', `/v1/apps/${app.id}/subscriptionGroups?limit=20`, null, { soft: true });
+  if (!groups.__error) {
+    for (const g of groups.data || []) {
+      const subs = await api('GET', `/v1/subscriptionGroups/${g.id}/subscriptions?limit=20&fields[subscriptions]=productId,name`, null, { soft: true });
+      if (subs.__error) continue;
+      for (const sub of subs.data || []) {
+        const locs = await api('GET', `/v1/subscriptions/${sub.id}/subscriptionLocalizations?limit=20`, null, { soft: true });
+        const en = locs.__error ? null : (locs.data || []).find((l) => l.attributes?.locale === 'en-US');
+        console.log(`IAP ${sub.attributes?.productId}: displayName="${en?.attributes?.name ?? '(none)'}" (${(en?.attributes?.name ?? '').length} chars)`);
+      }
+    }
+  }
+
   const current = enUS.attributes?.description || '';
 
   // RECONCILE, DON'T APPEND-ONCE. This used to return "nothing to do" the moment
