@@ -27,7 +27,13 @@ describe('audit scripts can reach prod from the sandbox', () => {
   const driving = readdirSync(SCRIPTS)
     .filter((f) => f.startsWith('audit-') && f.endsWith('.mjs'))
     .map((f) => ({ name: f, src: readFileSync(resolve(SCRIPTS, f), 'utf8') }))
-    .filter((f) => f.src.includes('chromium.launch'));
+    // `chromium.launch(` with the paren, not the bare string: audit-vacuity-check
+    // MENTIONS 'chromium.launch' inside a filter (it greps the other audits to
+    // find the browser-driving ones) but launches nothing itself. Matching the
+    // bare string classified the meta-audit as a browser audit and demanded a
+    // Chromium resolver and a TTS mute it has no use for. A detector that can be
+    // tripped by a quoted mention will keep finding harnesses, not audits.
+    .filter((f) => f.src.includes('chromium.launch('));
 
   it('there are browser-driving audits to check (guards the guard)', () => {
     expect(driving.length).toBeGreaterThan(100);
