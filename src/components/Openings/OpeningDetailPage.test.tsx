@@ -309,6 +309,12 @@ describe('OpeningDetailPage', () => {
   });
 
   it('selecting a variation tab then Learn enters variation learn mode', async () => {
+    // Watch already finished (MAIN_LINE_INDEX = -1), i.e. a RETURNING student.
+    // The detail page auto-starts the main-line walkthrough for anyone who has
+    // not watched it yet, so a first-time fixture never renders these controls —
+    // and, worse, races them. This test is about the detail page itself, so it
+    // states the state it needs instead of depending on that timing.
+    mockGetOpeningById.mockResolvedValue({ ...testOpening, linesDiscovered: [-1, 0] });
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByTestId('variation-tab-0')).toBeInTheDocument();
@@ -368,6 +374,12 @@ describe('OpeningDetailPage', () => {
     });
 
     it('changes aria-label to "Pause reading" while reading', async () => {
+    // Watch already finished (MAIN_LINE_INDEX = -1), i.e. a RETURNING student.
+      // The detail page auto-starts the main-line walkthrough for anyone who has
+      // not watched it yet, so a first-time fixture never renders these controls —
+      // and, worse, races them. This test is about the detail page itself, so it
+      // states the state it needs instead of depending on that timing.
+      mockGetOpeningById.mockResolvedValue({ ...testOpening, linesDiscovered: [-1, 0] });
       renderWithRoute();
       await waitFor(() => {
         expect(screen.getByTestId('listenable-overview-play')).toBeInTheDocument();

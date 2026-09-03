@@ -433,6 +433,40 @@ export function OpeningDetailPage(): JSX.Element {
     void loadOpening();
   }, [loadOpening]);
 
+  // AUTO-START THE WALKTHROUGH (David 2026-09-03: "after someone clicked on the
+  // Ruy Lopez it just auto starts the first main line walkthrough. No
+  // selecting.").
+  //
+  // The measurement behind it: 64 of 67 native App Store users have never
+  // finished a single WLPP rung, and 32 of 39 spent one ~4-minute session in the
+  // app. They are not bouncing at the door — they reach the openings list and
+  // the detail page and then choose nothing. Removing the choice is the fix.
+  //
+  // Three conditions, each load-bearing:
+  //   · Watch not already complete — a returning student goes straight to the
+  //     detail page so they can pick Learn or Practice, and never has to sit
+  //     through or skip a replay. (Replays do not count as wins either.)
+  //   · A curated LessonScript exists — without one the Watch hands off to the
+  //     coach, and auto-launching someone into a handoff they did not ask for is
+  //     worse than the page they expected.
+  //   · Fires once per mount, guarded by a ref, so re-renders and the reload
+  //     after markRungComplete cannot bounce them back in.
+  const autoStartedRef = useRef(false);
+  useEffect(() => {
+    if (autoStartedRef.current) return;
+    if (!opening || viewMode !== 'detail') return;
+    // A DEEP LINK IS AN EXPLICIT REQUEST — never override it. `?line=marshall`
+    // means the student (or a training-plan link) asked for that variation, and
+    // auto-playing the MAIN line over the top of it answers a question nobody
+    // asked. Caught by the existing deep-link test, which is exactly the kind of
+    // intent this shortcut could quietly trample.
+    if (searchParams.get('line')) return;
+    if (!hasLessonScript(opening.id)) return;
+    if (isRungComplete(opening, MAIN_LINE_INDEX, 'watch')) return;
+    autoStartedRef.current = true;
+    setViewMode('walkthrough');
+  }, [opening, viewMode, searchParams]);
+
   // SRS enrollment state — refreshed every time the opening loads
   // so toggling from another tab eventually reconciles.
   useEffect(() => {
@@ -818,7 +852,16 @@ export function OpeningDetailPage(): JSX.Element {
         <LessonPlayer
           script={lesson}
           onExit={handleExit}
-          onComplete={() => { void markRungComplete(opening.id, MAIN_LINE_INDEX, 'watch').then(() => loadOpening()); }}
+          onComplete={() => {
+            // Bounce back to the opening page when the walkthrough finishes
+            // (David 2026-09-03: "when done bounce to the main Ruy page"). The
+            // reload lands first so the page they return to already shows Watch
+            // ticked and Learn promoted to the primary action — the next step is
+            // waiting for them rather than needing to be found.
+            void markRungComplete(opening.id, MAIN_LINE_INDEX, 'watch')
+              .then(() => loadOpening())
+              .then(() => setViewMode('detail'));
+          }}
           onContinueToNext={() => setViewMode('learn')}
         />
       );
@@ -1967,34 +2010,63 @@ export function OpeningDetailPage(): JSX.Element {
             base: 'bg-theme-surface border border-theme-border text-theme-text hover:bg-theme-border',
             onClick: launchPlay },
         ];
+        // ONE BIG BRIGHT PRIMARY, THE REST SECONDARY (David 2026-09-03: "Big
+        // primary. If they have completed watch then learn becomes the big
+        // primary button. Also make it brighter.").
+        //
+        // The primary is whichever rung comes NEXT, so it moves down the ladder
+        // as the student progresses: Watch → Learn → Practice → Play. Four
+        // equally-weighted buttons asked people to choose, and the data says
+        // choosing is exactly where they stop — 64 of 67 users never finished a
+        // single rung. This points at one obvious next action instead.
+        //
+        // `ladderNext` is the existing source of truth for that (it already
+        // drives the "Next: …" hint below), so the button and the hint cannot
+        // disagree. If the ladder is complete there is no primary and all four
+        // render as equals — nothing is "next" any more.
+        const primaryRung = ladderNext;
+        const primary = rungs.find((r) => r.rung === primaryRung);
+        const secondary = rungs.filter((r) => r.rung !== primaryRung);
+        const renderRung = (r: typeof rungs[number], isPrimary: boolean): JSX.Element => {
+          const unlocked = isRungUnlocked(opening, ladderLine, r.rung);
+          const complete = isRungComplete(opening, ladderLine, r.rung);
+          return (
+            <button
+              key={r.rung}
+              onClick={unlocked ? r.onClick : undefined}
+              disabled={!unlocked}
+              title={unlocked ? undefined : lockHint(r.rung)}
+              className={`relative flex items-center justify-center gap-2 rounded-xl font-semibold transition-all opening-action-glow ${r.glow} ${
+                isPrimary ? 'w-full py-5 text-base' : 'flex-col gap-1 py-3 text-xs'
+              } ${
+                unlocked
+                  ? isPrimary
+                    // Brighter than the old accent fill: a saturated gradient with
+                    // a ring and a lift, so it reads as THE action on the page
+                    // rather than one of four tiles.
+                    ? 'bg-gradient-to-r from-theme-accent to-theme-accent/80 text-white ring-2 ring-theme-accent/60 shadow-lg shadow-theme-accent/30 hover:brightness-110'
+                    : r.base
+                  : 'bg-theme-surface border border-theme-border text-theme-text-muted opacity-40 cursor-not-allowed'
+              }`}
+              data-testid={r.testid}
+              data-locked={!unlocked}
+              data-primary={isPrimary || undefined}
+            >
+              {unlocked ? r.icon : <Lock size={18} />}
+              {isPrimary ? `${r.label} this line` : r.label}
+              {complete && (
+                <span className="absolute top-1 right-1 text-emerald-400" data-testid={`rung-done-${r.rung}`}>
+                  <Check size={12} strokeWidth={3} />
+                </span>
+              )}
+            </button>
+          );
+        };
         return (
           <div className="mb-6">
-            <div className="grid grid-cols-4 gap-1.5">
-              {rungs.map((r) => {
-                const unlocked = isRungUnlocked(opening, ladderLine, r.rung);
-                const complete = isRungComplete(opening, ladderLine, r.rung);
-                return (
-                  <button
-                    key={r.rung}
-                    onClick={unlocked ? r.onClick : undefined}
-                    disabled={!unlocked}
-                    title={unlocked ? undefined : lockHint(r.rung)}
-                    className={`relative flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold text-xs transition-all opening-action-glow ${r.glow} ${
-                      unlocked ? r.base : 'bg-theme-surface border border-theme-border text-theme-text-muted opacity-40 cursor-not-allowed'
-                    }`}
-                    data-testid={r.testid}
-                    data-locked={!unlocked}
-                  >
-                    {unlocked ? r.icon : <Lock size={18} />}
-                    {r.label}
-                    {complete && (
-                      <span className="absolute top-1 right-1 text-emerald-400" data-testid={`rung-done-${r.rung}`}>
-                        <Check size={12} strokeWidth={3} />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+            {primary && <div className="mb-2">{renderRung(primary, true)}</div>}
+            <div className={`grid gap-1.5 ${primary ? 'grid-cols-3' : 'grid-cols-4'}`}>
+              {(primary ? secondary : rungs).map((r) => renderRung(r, false))}
             </div>
             {showFreePickHint && (
               <p

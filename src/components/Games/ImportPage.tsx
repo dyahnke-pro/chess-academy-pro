@@ -102,7 +102,8 @@ export function ImportPage(): JSX.Element {
    *  can echo the username back, and that is the user's identity on another
    *  service. The bucket is what the funnel needs; the message is not. */
   const errorClass = (err: unknown): string => {
-    const m = (err instanceof Error ? err.message : String(err ?? '')).toLowerCase();
+    const m = (err instanceof Error ? err.message : '').toLowerCase();
+    if (!m) return 'other';
     if (/404|not found|no such user|unknown user/.test(m)) return 'user-not-found';
     if (/429|rate limit|too many/.test(m)) return 'rate-limited';
     if (/network|fetch|timeout|econn|offline/.test(m)) return 'network';
