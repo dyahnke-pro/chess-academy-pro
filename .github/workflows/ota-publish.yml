@@ -21,12 +21,21 @@ name: Publish OTA bundle
 on:
   push:
     branches: [main]
-    # Nothing here can change the shipped bundle.
+    # Nothing here can change the shipped bundle, and publishing one that is
+    # byte-identical except for its version string is not free: every device is
+    # then offered an update and re-downloads the changed chunks (~8 MB) for a
+    # change that cannot affect what they run. `dist/` comes from vite, so only
+    # src/, public/, index.html and the build config feed it — server functions
+    # under api/, the CI scripts, and the native project do not.
     paths-ignore:
       - '**/*.md'
       - 'docs/**'
       - '.github/**'
       - 'ios-patches/**'
+      - 'ios/**'
+      - 'scripts/**'
+      - 'api/**'
+      - 'e2e/**'
   workflow_dispatch:
     inputs:
       force:
