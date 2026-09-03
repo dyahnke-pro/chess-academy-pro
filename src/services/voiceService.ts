@@ -193,15 +193,31 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   // prosody tags by engine design). Changes the cache key, correctly: a
   // spiked clip is a different clip.
   const prosodyParam = prosody ? `&prosody=${prosody}` : '';
-  // CACHE GENERATION (v=2, David 2026-08-07: he heard "the old Polly voice"
-  // on some lines and the new Google voice on others in ONE session). Clips
-  // are CDN-cached ~forever per URL, so everything cached before the
-  // 2026-08-04 Google migration is still POLLY AUDIO. Bumping the key
-  // retires every pre-migration clip at once; each line re-synthesizes on
-  // Google the first time it's played again (pay-as-played, Google's
-  // perpetual free tier). ONE deliberate bump — do not bump casually; every
-  // bump re-bills the whole active corpus (the gen-rev cost rule).
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=2`;
+  // CACHE GENERATION.
+  //
+  // v=2 (David 2026-08-07): he heard "the old Polly voice" on some lines and
+  // the new Google voice on others in ONE session. Clips are CDN-cached
+  // ~forever per URL, so everything cached before the 2026-08-04 Google
+  // migration was still POLLY AUDIO.
+  //
+  // v=3 (David 2026-09-03): "still hearing a european accent … under the
+  // opening tab". `/api/tts` picks the voice by DETECTING the passage's
+  // language, and the detector was flipping plain English prose to a foreign
+  // voice — Turkish `at` (horse) matching "aimed AT g7 … the queen AT f7",
+  // Portuguese `no` matching "NO weak piece and NO weak squares", and a
+  // Croatian surname (Vuković) matching Polish on its `ć`. 75 shipped passages,
+  // most of the openings tab among them.
+  //
+  // Fixing the detector is NOT enough on its own: the wrong-accent audio is
+  // already cached under this URL, and the detected language is not part of the
+  // key — so the CDN would keep serving the Turkish clip and the fix would be
+  // inaudible on exactly the passages he already played. The key has to change.
+  //
+  // Cost shape, so this is not mistaken for a spike: nothing re-synthesises up
+  // front. Each line is re-billed once, the first time it is actually played
+  // again — pay-as-played, proportional to real listening rather than to corpus
+  // size. Still: ONE deliberate bump, never a casual one (the gen-rev cost rule).
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=3`;
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */

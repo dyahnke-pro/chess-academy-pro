@@ -191,6 +191,15 @@ const GATE_TESTS = [
   // devices BACKWARD onto an older bundle — which is how devices ended up
   // stranded on the Aug-5 build carrying the iOS WASM crash. Nothing in the UI
   // goes red when this breaks; only this does.
+  // 🔒 THE SPOKEN VOICE (2026-09-03) — /api/tts picks the voice by DETECTING the
+  // passage's language, so a false positive reads a whole English passage in a
+  // foreign accent. Reported twice from two different causes (a lone umlaut in a
+  // NAME; then plain English words — Turkish `at`, Portuguese `no` — sitting in
+  // the stopword lists). Both fixes were verified against hand-picked strings,
+  // and neither would have caught the other. This runs the real detector over
+  // the real shipped prose and requires silence.
+  'api/_lib/ttsLangContent.test.ts',
+  'api/_lib/ttsLang.test.ts',
   'api/ota/manifest.test.ts',
   'src/services/otaObserver.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',

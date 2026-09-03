@@ -77,13 +77,23 @@ export function detectVoiceForText(text: string): LangVoice | null {
   // umlaut was switching the whole coach to a German voice = "European accent").
   // So the diacritic-scored languages (es/fr/de/pt/it) also require ≥1 stopword.
   const stop: Record<string, number> = { es: 0, fr: 0, de: 0, pt: 0, it: 0, nl: 0, pl: 0, tr: 0 };
+  // DISTINCT stopwords, not occurrences. One English homograph repeated is not
+  // evidence of a foreign language; several DIFFERENT function words is.
+  const distinct: Record<string, Set<string>> = {
+    es: new Set(), fr: new Set(), de: new Set(), pt: new Set(),
+    it: new Set(), nl: new Set(), pl: new Set(), tr: new Set(),
+  };
   const bumpDia = (lang: keyof typeof score, re: RegExp, weight = 1): void => {
     const m = lower.match(re);
     if (m) score[lang] += m.length * weight;
   };
   const bumpStop = (lang: keyof typeof score, re: RegExp): void => {
     const m = lower.match(re);
-    if (m) { score[lang] += m.length; stop[lang] += m.length; }
+    if (m) {
+      score[lang] += m.length;
+      stop[lang] += m.length;
+      for (const w of m) distinct[lang].add(w.trim());
+    }
   };
 
   // Distinctive diacritics / punctuation (strong signals, but foreign NAMES
@@ -93,8 +103,13 @@ export function detectVoiceForText(text: string): LangVoice | null {
   bumpDia('de', /ß|ä|ö|ü/g, 2);
   bumpDia('fr', /ç|œ|â|ê|î|ô|û/g, 2);
   bumpDia('it', /à|ò|ù/g, 1);
-  // Polish and Turkish carry letters that exist in no other language the app
-  // speaks, so they are as definitive as a non-Latin script.
+  // Polish and Turkish letters. These were once treated as DEFINITIVE — as
+  // good as a non-Latin script — and that was wrong twice over. `ć` is Croatian
+  // and Serbian too ("Named after Vladimir Vuković, the Croatian master…" was
+  // being read in a Polish voice), `ş` is also Romanian, `ı` also Azerbaijani.
+  // And more basically: a diacritic in an English sentence is nearly always a
+  // foreign NAME, which is the exact failure this file was already fixed for
+  // once. They score, they no longer exempt.
   bumpDia('pl', /ł|ą|ę|ż|ź|ś|ć/g, 3);
   bumpDia('tr', /ğ|ı|ş/g, 3);
 
@@ -103,24 +118,42 @@ export function detectVoiceForText(text: string): LangVoice | null {
   bumpStop('es', / (el|la|los|las|que|por|para|como|una|está|porque|qué|del|tablero|ajedrez|piezas) /g);
   bumpStop('fr', / (le|les|des|une|est|pour|vous|que|qui|dans|avec|pourquoi|échecs|pièces|contrôler|au) /g);
   bumpStop('de', / (der|das|und|ist|nicht|eine|wie|warum|über|mehr|kann|figuren|zentrum|schach|des) /g);
-  bumpStop('pt', / (você|não|para|porque|como|uma|está|peças|tabuleiro|xadrez|mais|é|no) /g);
-  bumpStop('it', / (perché|gli|che|non|una|per|con|come|più|scacchi|pezzi|centro|della|è) /g);
+  bumpStop('pt', / (você|não|porque|uma|está|peças|tabuleiro|xadrez|mais) /g);
+  bumpStop('it', / (perché|gli|che|non|una|più|scacchi|pezzi|della) /g);
   // Dutch has no letter of its own, so it rests entirely on function words —
   // chosen to have no English homograph at all ("het", "een", "niet", "naar"),
   // plus the chess nouns that appear in almost every spoken line.
-  bumpStop('nl', / (het|een|niet|zijn|maar|ook|naar|wordt|deze|jouw|uw|zwart|wit|stuk|zet|koning|loper|paard|toren|dame) /g);
-  bumpStop('pl', / (się|nie|jest|że|dla|przez|jak|ten|szachy|pion|goniec|skoczek|wieża|hetman|król) /g);
-  bumpStop('tr', / (bir|ve|için|bu|ile|değil|nasıl|neden|satranç|piyon|fil|at|kale|vezir|şah) /g);
+  bumpStop('nl', / (het|een|niet|zijn|maar|ook|naar|wordt|deze|jouw|zwart|koning|loper|paard|toren) /g);
+  bumpStop('pl', / (się|nie|jest|że|dla|przez|szachy|goniec|skoczek|wieża|hetman|król) /g);
+  bumpStop('tr', / (bir|için|değil|nasıl|neden|satranç|piyon|vezir|şah) /g);
 
-  // The diacritic-only languages must show real function-word evidence to win —
-  // a lone accented NAME in an otherwise-English line stays English. Polish and
-  // Turkish (definitive letters) and Dutch (function-word-only) are exempt.
-  const NEEDS_STOPWORD = new Set(['es', 'fr', 'de', 'pt', 'it']);
+  // 🔒 TWO DISTINCT FUNCTION WORDS, OR THE LANGUAGE'S OWN LETTERS.
+  //
+  // The 2026-08-28 pass required ≥1 stopword so a lone accented NAME could not
+  // flip the voice. It was not enough, because the stopword lists still held
+  // plain English words — Turkish `at` (horse), Portuguese `no`, Italian
+  // `come`, Polish `ten`. Ordinary chess narration says "aimed AT g7 … the
+  // queen AT f7" or "NO weak piece and NO weak squares", and two hits cleared
+  // the bar: 75 shipped English passages, most of the openings tab among them,
+  // were spoken in a Turkish voice. (David 2026-09-03, second report of the
+  // same symptom: "still hearing a european accent … under the opening tab".)
+  //
+  // The homographs are gone from the lists, but removing words is whack-a-mole
+  // — the structural rule is what holds. A real foreign sentence uses SEVERAL
+  // DIFFERENT function words; an English passage repeating one homograph does
+  // not. So count DISTINCT stopwords, never occurrences.
+  //
+  // NO LANGUAGE WINS ON LETTERS ALONE — not even Polish or Turkish, which used
+  // to be exempt on the theory that their letters are unique to them. They are
+  // not, and a lone accented letter in English prose is a NAME far more often
+  // than it is a foreign passage. Diacritics raise confidence; only function
+  // words establish that the passage is actually in the language.
+  const MIN_DISTINCT_STOPWORDS = 2;
   let best: string | null = null;
   let bestScore = 1; // require > 1 so a stray word never flips English
   for (const [lang, s] of Object.entries(score)) {
     if (s <= bestScore) continue;
-    if (NEEDS_STOPWORD.has(lang) && stop[lang] === 0) continue; // lone foreign name — keep English
+    if (distinct[lang].size < MIN_DISTINCT_STOPWORDS) continue;
     bestScore = s;
     best = lang;
   }
