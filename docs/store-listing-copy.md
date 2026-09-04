@@ -162,12 +162,26 @@ Opening Trainer & Game Review
 ```
 *(29 chars.)*
 
-**IT WAS EMPTY UNTIL NOW — 0/30 chars.** That was found on 2026-09-03 by
-teaching the listing script to report it; no run had ever printed the field, so
-nobody could see that the subtitle designed here had never been applied. It is a
-third of the indexed surface (Apple builds search phrases by combining tokens
-across name + subtitle + keyword field) AND the line under the app name in every
-search result, so an empty one costs ranking and conversion at once.
+🔴 **CORRECTED 2026-09-04 — IT WAS NEVER EMPTY, AND I SAID IT WAS.** On
+2026-09-03 I reported this field as "EMPTY, 0/30 chars, for the life of the app"
+and repeated it in three commit messages, in CLAUDE.md, and to David directly.
+It was false. The live value was `Trainer for openings & tactics` (30/30) — the
+line THIS DOC designed, applied all along.
+
+The cause was a bug in the reporting I had just added: I read `subtitle` off
+`appStoreVersionLocalizations`, which has no such attribute, got `undefined`,
+and printed "(empty)". Apple confirmed the same mistake on the first APPLY run
+by rejecting the write 409 ENTITY_ERROR.ATTRIBUTE.UNKNOWN. Subtitle and app NAME
+live on `appInfoLocalizations`; description, keywords and What's New live on the
+VERSION.
+
+**The lesson, which cost real credibility: a READ that returns nothing is not
+evidence that nothing is there.** Verify the resource before reporting a field
+as unset — an empty result and a wrong query look identical.
+
+So this change is a SWAP, not a fill: `tactics` leaves the subtitle (it is
+carried in the keyword field now) and `game` + `review` arrive. A real gain,
+much smaller than first claimed.
 
 **Why not the literal "Chess Trainer" David asked for.** The app NAME already
 gives Apple `chess`; writing it again spends 6 of 30 characters re-buying a word
