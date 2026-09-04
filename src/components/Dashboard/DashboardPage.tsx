@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2, Baby } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { TableOfContents } from './TableOfContents';
@@ -18,6 +18,14 @@ import { resolveRepRoute } from '../../services/repRouting';
 
 interface SectionItem {
   label: string;
+  /** What this section actually does, in the user's terms. Four unlabelled
+   *  squares asked people to guess; 64 of 67 native users never finished
+   *  anything, and guessing is a step they were stopping at. */
+  description: string;
+  /** Which step of the training loop this IS. The page already tells the user
+   *  the loop is "Learn it → play it → find the holes → drill them shut" — this
+   *  puts that on the buttons so the words and the tiles agree. */
+  loopStep?: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   route: string;
   color: string;
@@ -25,9 +33,17 @@ interface SectionItem {
   rgb: string;
 }
 
+// ORDERED BY THE LOOP THE PAGE ITSELF DESCRIBES. The order-of-operations card a
+// few lines above says: "Learn it → play it → find the holes → drill them shut.
+// The four sections below are the steps of that one cycle." The tiles did not
+// follow it — Tactics sat third and Weaknesses fourth, so the page contradicted
+// its own instructions. Weaknesses IS "find the holes" and Tactics IS "drill
+// them shut", so they swap.
 const SECTIONS: SectionItem[] = [
   {
     label: 'Openings',
+    description: 'Masterclasses for the lines you actually play — watch, learn, practise, then play them.',
+    loopStep: 'Learn it',
     icon: BookOpen,
     route: '/openings',
     color: 'text-cyan-400',
@@ -36,6 +52,8 @@ const SECTIONS: SectionItem[] = [
   },
   {
     label: 'Coach',
+    description: 'Play a game it talks you through, or one where it stays quiet until you ask.',
+    loopStep: 'Play it',
     icon: GraduationCap,
     route: '/coach/home',
     color: 'text-rose-400',
@@ -43,22 +61,41 @@ const SECTIONS: SectionItem[] = [
     rgb: '251, 113, 133',
   },
   {
-    label: 'Tactics',
-    icon: Target,
-    route: '/tactics',
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/10',
-    rgb: '52, 211, 153',
-  },
-  {
     label: 'Weaknesses',
+    description: 'The mistakes your own games keep repeating, grouped so the pattern is visible.',
+    loopStep: 'Find the holes',
     icon: AlertTriangle,
     route: '/weaknesses',
     color: 'text-violet-400',
     bgColor: 'bg-violet-500/10',
     rgb: '139, 92, 246',
   },
+  {
+    label: 'Tactics',
+    description: 'Puzzles built from your own blunders, plus a bank of thousands more.',
+    loopStep: 'Drill them shut',
+    icon: Target,
+    route: '/tactics',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-500/10',
+    rgb: '52, 211, 153',
+  },
 ];
+
+/** Kids mode sits BELOW the loop, deliberately without a loop step — it is a
+ *  separate app for a young player, not a stage of the adult training cycle.
+ *  It had no entry point on the home screen at all (only the desktop sidebar,
+ *  which the mobile nav trims away), so on a phone it was unreachable from here
+ *  — and ZERO native users have ever opened /kid in 60 days. */
+const KIDS_SECTION: SectionItem = {
+  label: 'Kids Mode',
+  description: 'A simpler board for young players, one piece at a time.',
+  icon: Baby,
+  route: '/kid',
+  color: 'text-orange-400',
+  bgColor: 'bg-orange-500/10',
+  rgb: '251, 146, 60',
+};
 
 /** Live loop-state strip (David 2026-05-25): the Dashboard is the status
  *  board for the one training loop, not just static tiles. Pulls today's
@@ -236,17 +273,33 @@ export function DashboardPage(): JSX.Element {
       {/* "The Philosophy of A General" (our book) now lives in The Coaches
           Library (Coach › The Coaches Library), so its dashboard tile is gone. */}
 
-      {/* Section grid — uniform cards, order matches sidebar */}
-      <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">
-        {SECTIONS.map((section) => {
+      {/* STACKED BARS, NOT A GRID OF SQUARES (David 2026-09-03: "four main
+          squares to be thin bars stacked in order... with the kids section
+          added at the bottom").
+
+          The squares carried a one-word label and nothing else, so the home
+          screen asked a new user to guess what "Tactics" or "Weaknesses" meant
+          and pick one. That guess is a step people were stopping at: 32 of 39
+          native users had a single ~4-minute session and 64 of 67 never
+          finished anything. A full-width row fits the label, a sentence saying
+          what it does, and the loop step it belongs to — so the page reads as
+          one ordered path rather than four unexplained doors.
+
+          NOTE FOR THE NEXT SESSION: this deliberately DEPARTS from the
+          "2-column grid of big tap targets" house rule in CLAUDE.md. That rule
+          says hub pages must match the Dashboard — so the Dashboard changing IS
+          the rule changing, and CLAUDE.md has been updated to match. */}
+      <div className="flex flex-col gap-2 flex-1 content-center max-w-lg mx-auto w-full">
+        {[...SECTIONS, KIDS_SECTION].map((section) => {
           const Icon = section.icon;
           const shadow = scaledShadow(section.rgb, gB);
           const shadowHover = scaledShadow(section.rgb, Math.min(200, gB * 1.4));
+          const isKids = section.route === KIDS_SECTION.route;
           return (
             <button
               key={section.route}
               onClick={() => void navigate(section.route)}
-              className={`${section.bgColor} rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-200 aspect-square`}
+              className={`${section.bgColor} rounded-2xl flex items-center gap-3 px-4 py-3.5 text-left transition-all duration-200 w-full ${isKids ? 'mt-2' : ''}`}
               style={{
                 borderTop: `1px solid rgba(${section.rgb}, ${Math.min(1, 0.1 * gS)})`,
                 borderRight: `1px solid rgba(${section.rgb}, ${Math.min(1, 0.1 * gS)})`,
@@ -272,8 +325,21 @@ export function DashboardPage(): JSX.Element {
               }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              <Icon size={40} className={section.color} />
-              <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{section.label}</span>
+              <Icon size={28} className={`${section.color} shrink-0`} />
+              <span className="flex flex-col min-w-0 flex-1">
+                <span className="flex items-baseline gap-2">
+                  <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{section.label}</span>
+                  {section.loopStep && (
+                    <span className={`text-[10px] font-semibold uppercase tracking-wide ${section.color} opacity-70`}>
+                      {section.loopStep}
+                    </span>
+                  )}
+                </span>
+                <span className="text-xs leading-snug" style={{ color: 'var(--color-text-muted)' }}>
+                  {section.description}
+                </span>
+              </span>
+              <ChevronRight size={18} className="shrink-0 opacity-40" style={{ color: 'var(--color-text-muted)' }} />
             </button>
           );
         })}
