@@ -142,20 +142,41 @@ async function main() {
   // complementary terms Apple combines with the name. Set via the KEYWORDS env;
   // PATCH only when APPLY=1. `soft` so a review-locked field never crashes the run.
   // SUBTITLE — 30 chars, indexed for search exactly like the keyword field, and
-  // the second-heaviest ranking input after the app NAME. It was invisible to
-  // every run of this script, so nobody could tell whether the subtitle the
-  // listing doc designed was ever actually applied. Report it always; set it
-  // only when SUBTITLE is provided AND APPLY=1.
+  // the second-heaviest ranking input after the app NAME.
+  //
+  // 🚨 IT LIVES ON `appInfoLocalizations`, NOT `appStoreVersionLocalizations`.
+  // The first APPLY run patched the version localization and Apple rejected it
+  // 409 ENTITY_ERROR.ATTRIBUTE.UNKNOWN: "'subtitle' is not an attribute on the
+  // resource 'appStoreVersionLocalizations'". Subtitle and app NAME hang off the
+  // APP INFO (they describe the app, not a specific version), while description
+  // / keywords / What's New hang off the VERSION. Two different resources, and
+  // the dry run could not catch the difference because it only ever READ.
   const SUBTITLE = process.env.SUBTITLE || '';
-  console.log(`\nsubtitle now:  "${enUS.attributes?.subtitle || '(empty)'}" (${(enUS.attributes?.subtitle || '').length}/30 chars)`);
-  if (SUBTITLE) {
-    console.log(`subtitle next: "${SUBTITLE}" (${SUBTITLE.length}/30 chars)`);
-    if (SUBTITLE.length > 30) console.log('⚠️  subtitle exceeds 30 chars — Apple will reject.');
-    if (APPLY && SUBTITLE.length <= 30) {
-      const sr = await api('PATCH', `/v1/appStoreVersionLocalizations/${enUS.id}`, {
-        data: { type: 'appStoreVersionLocalizations', id: enUS.id, attributes: { subtitle: SUBTITLE } },
-      }, { soft: true });
-      console.log(sr.__error ? `⚠️  subtitle PATCH failed: ${sr.__error} ${String(sr.__body).slice(0, 300)}` : '✅ subtitle updated');
+  const appInfos = await api('GET', `/v1/apps/${app.id}/appInfos?limit=10`, null, { soft: true });
+  // Patch the EDITABLE app info — the READY_FOR_SALE one is frozen, exactly like
+  // the live version's metadata.
+  const editableInfo = appInfos.__error
+    ? null
+    : (appInfos.data || []).find((i) => i.attributes?.appStoreState !== 'READY_FOR_SALE')
+      ?? (appInfos.data || [])[0];
+  if (editableInfo) {
+    const infoLocs = await api('GET', `/v1/appInfos/${editableInfo.id}/appInfoLocalizations?limit=50`, null, { soft: true });
+    const enInfo = infoLocs.__error ? null : (infoLocs.data || []).find((l) => l.attributes?.locale === 'en-US');
+    if (enInfo) {
+      const cur = enInfo.attributes?.subtitle || '';
+      console.log(`\nsubtitle now:  "${cur || '(empty)'}" (${cur.length}/30 chars)`);
+      if (SUBTITLE) {
+        console.log(`subtitle next: "${SUBTITLE}" (${SUBTITLE.length}/30 chars)`);
+        if (SUBTITLE.length > 30) console.log('⚠️  subtitle exceeds 30 chars — Apple will reject.');
+        if (APPLY && SUBTITLE.length <= 30) {
+          const sr = await api('PATCH', `/v1/appInfoLocalizations/${enInfo.id}`, {
+            data: { type: 'appInfoLocalizations', id: enInfo.id, attributes: { subtitle: SUBTITLE } },
+          }, { soft: true });
+          console.log(sr.__error ? `⚠️  subtitle PATCH failed: ${sr.__error} ${String(sr.__body).slice(0, 300)}` : '✅ subtitle updated');
+        }
+      }
+    } else {
+      console.log('\n⚠️  no en-US appInfoLocalization — cannot read or set the subtitle');
     }
   }
 
