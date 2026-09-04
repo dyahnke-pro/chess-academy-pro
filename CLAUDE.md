@@ -2650,9 +2650,33 @@ src/
 **All hub/landing pages must match the Dashboard pattern.** This means:
 - Centered title at top
 - `SmartSearchBar` below title (on all non-playing pages)
-- **2-column grid** of big tap targets: `grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full`
+- 🔄 **THE DASHBOARD ITSELF IS NOW STACKED FULL-WIDTH BARS, NOT A GRID OF
+  SQUARES (David 2026-09-03: "adjust the four main squares to be thin bars
+  stacked in order? With the kids section added at the bottom").** This rule
+  defines hub pages BY the Dashboard, so the Dashboard changing IS the rule
+  changing — the grid spec below is retained for the OTHER hubs that still use
+  it, but the home screen is the new reference and a hub being redesigned should
+  follow the bars.
+  Why: a square carries a one-word label and nothing else, so the home screen
+  asked a new user to guess what "Tactics" or "Weaknesses" meant and choose. That
+  guess was a step people stopped at — 32 of 39 native users had a single
+  ~4-minute session and 64 of 67 never finished anything. A full-width row fits
+  the label, a sentence saying what the section DOES, and the loop step it
+  belongs to: `flex flex-col gap-2`, each row `flex items-center gap-3 px-4
+  py-3.5 rounded-2xl` with a 28px icon, a two-line text block, and a trailing
+  chevron.
+  Two things the bars carry that the squares could not: the sections are ordered
+  to match the loop the page already prints above them ("Learn it → play it →
+  find the holes → drill them shut" = Openings → Coach → Weaknesses → Tactics;
+  the squares ran Tactics third and contradicted their own instructions), and
+  Kids Mode has a home-screen entry at last — it sat below the four, gapped, with
+  no loop step, because `MOBILE_NAV_ITEMS = NAV_ITEMS.slice(0, 5)` trims Kids
+  Mode and Settings off the phone nav, so on a phone `/kid` was unreachable from
+  the home screen entirely. Zero native users had opened it in 60 days.
+- **2-column grid** of big tap targets (still correct for the non-Dashboard
+  hubs): `grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full`
 - Each section button: `border-2 rounded-2xl`, tinted bg (`bg-{color}-500/10`), tinted border (`border-{color}-500/30`), centered icon + bold label
-- First item spans 2 columns (`col-span-2 py-10`), rest are `aspect-square`
+- On a GRID hub, first item spans 2 columns (`col-span-2 py-10`), rest are `aspect-square`
 - Each section owns a color (Tailwind opacity classes, not CSS variables)
 - Container: `flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6`
   (the `pb-[calc(...)]` reserves room for the fixed mobile bottom nav
