@@ -33,7 +33,7 @@ vi.mock('@capacitor/core', () => ({
     isPluginAvailable: vi.fn(),
   },
   registerPlugin: () => ({}),
-  WebPlugin: class {},
+  WebPlugin: function WebPlugin() { /* export must exist; never constructed */ },
 }));
 
 import { Capacitor } from '@capacitor/core';
@@ -69,9 +69,9 @@ describe('analysis worker pool — engine choice per platform', () => {
     expect(t).toBeLessThanOrEqual(2);
   });
 
-  it('still pools on iOS when the native plugin is absent (mobile web / PWA)', async () => {
+  it('still pools on iOS when the native plugin is absent (mobile web / PWA)', () => {
     // No plugin => the singleton is asm.js too, so a pool is a genuine win.
-    const t = await poolSizeFor({ native: false, platform: 'ios', plugin: false, cores: 6 });
+    const t = poolSizeFor({ native: false, platform: 'ios', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
   });
 
