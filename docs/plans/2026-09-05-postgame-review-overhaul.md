@@ -306,3 +306,31 @@ contract holds (every square named is on the board).
 
 ## Status
 PLAN ONLY — David 2026-09-05: "Do not build yet." Nothing committed.
+
+## F. Game card: WIN / LOSS, not "1-0" (David 2026-09-05)
+
+"currently reads 0-1 or 1-0 but the order changes based on color of pieces.
+Remove the 1-0 and replace with green win or red loss."
+
+- `ReviewGameCard.tsx:119` prints the raw `{result}`; its `didYouWin`
+  (`:169-181`) returns `null` for every IMPORTED game because it never
+  consults the user's identity — so the icon is the neutral glyph and the
+  text is a colour-relative score the student has to decode.
+- The correct resolver already exists, module-private, in
+  `CoachReviewSessionPage.tsx` (`inferPlayerColor(game, identity)` ≈ `:50-90`:
+  coach-game side detection, then exact match on chess.com / lichess handle /
+  profile name, then substring fallback). Lift it into a service
+  (`src/services/playerIdentity.ts`, `resolvePlayerColor`), use it from BOTH
+  the session page and the card. No second heuristic.
+- Card renders a badge from `(result, playerColor)`:
+  **WIN** (green: `bg-emerald-500/15 text-emerald-400`), **LOSS** (red:
+  `bg-red-500/15 text-red-400`), **DRAW** (neutral), and a muted `?` only
+  when the identity genuinely can't be resolved (no handle set) — never a
+  silent wrong colour. The `1-0`/`0-1` string is GONE from the card.
+- Same resolver fixes `pickOpponent` (`:162-167`): show the OPPONENT's name
+  ("vs KaiserlicheHoheit"), not the "white – black" pair.
+- `ReviewSummaryCard.tsx:61-66` already derives win/loss from
+  `(result, playerColor)` — reuse its shape, don't fork it.
+- Gate: `ReviewGameCard.test.tsx` — imported game as Black with `0-1` →
+  WIN badge; as White with `0-1` → LOSS; draw → DRAW; unknown identity → `?`.
+  Ships in phase 4 (UI pass) — it's ~40 lines.
