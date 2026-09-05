@@ -123,8 +123,11 @@ export function hangingNetForMover(fenAfter: string, moverColor: 'w' | 'b'): num
  * fork", "the pin") so the clause names the PATTERN, not the SAN (Narration Voice
  * Rule). `piece`/`square` name the hung piece when known. Terse — never padded.
  */
-export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: { piece: string; square: string } }): string {
+export function moveReasonClause(r: MoveReason, ctx?: { named?: string; hung?: { piece: string; square: string }; fundamental?: string }): string {
   const pattern = ctx?.named;
+  // A positional slip with an ATTRIBUTED fundamental speaks the fundamental —
+  // the same verdict the review gives for the same move (one coach).
+  if (r === 'lost-the-thread' && ctx?.fundamental) return ctx.fundamental;
   const hung = ctx?.hung ? `${PNAME[ctx.hung.piece.toLowerCase()] ?? 'piece'} on ${ctx.hung.square}` : 'piece';
   switch (r) {
     case 'mate': return `there's a forced mate on the board.`;

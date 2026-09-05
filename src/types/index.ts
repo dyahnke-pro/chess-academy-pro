@@ -616,6 +616,10 @@ export interface MoveAnnotation {
   bestMoveEval: number | null;
   classification: MoveClassification;
   comment: string | null;
+  /** Engine lines (UCI) persisted by the review's deep dive at a flagged ply:
+   *  the punishment after the played move and the continuation after the best
+   *  move. Corroboration for the fundamentals attributor — never its gate. */
+  pv?: { afterPlayed: string[]; afterBest: string[] };
 }
 
 export type GameSource = 'lichess' | 'chesscom' | 'master' | 'import' | 'coach';
@@ -1237,6 +1241,8 @@ export interface CoachGameMove {
   commentary: string;
   evaluation: number | null;
   classification: MoveClassification | null;
+  /** Persisted engine lines from the annotation (see MoveAnnotation.pv). */
+  pv?: { afterPlayed: string[]; afterBest: string[] };
   expanded: boolean;
   bestMove: string | null;
   bestMoveEval: number | null;

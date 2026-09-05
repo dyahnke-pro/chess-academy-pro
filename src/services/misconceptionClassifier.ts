@@ -14,6 +14,8 @@
 // import-time auto-analysis. All three call captureMisconception → here.
 
 import { Chess, type Color } from 'chess.js';
+import { attributePrinciples } from './principleAttribution';
+import { renderFundamentalVerdict } from './principleVoice';
 import { detectTactics } from './tacticsDetector';
 
 export interface ClassifyMisconceptionInput {
@@ -31,6 +33,11 @@ export interface ClassifyMisconceptionInput {
    *  API compatibility (the live faucet still collects it), but the
    *  deterministic classifier reads the board, not the reason. */
   userReason?: string;
+  /** Every SAN up to AND INCLUDING the played move. When present (with
+   *  `bestSan`), the fundamentals ATTRIBUTOR runs first and its proven
+   *  fundamental is the tag — the cheap type-based checks below are the
+   *  fallback (David 2026-09-05: one coach, one memory). */
+  historySans?: string[];
 }
 
 export interface MisconceptionClassification {
@@ -221,6 +228,19 @@ function classifyMisconceptionImpl(
     return { tag: 'other', customLabel: phaseLabel(phase), coachNote: '' };
   }
   const fenAfter = chess.fen();
+
+  // (0) THE ATTRIBUTED FUNDAMENTAL — proven on the board (pattern + available
+  // punishment + counterfactual), when the caller can supply the history.
+  if (input.historySans && input.historySans.length > 0 && input.bestSan) {
+    const attrs = attributePrinciples({ historySans: input.historySans, bestSan: input.bestSan, classification: 'mistake' });
+    if (attrs.length > 0) {
+      return {
+        tag: attrs[0].tag,
+        coachNote: renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set() }),
+      };
+    }
+  }
+
   const det = detectTactics(fenAfter);
 
   // (a) HUNG MATERIAL — the move leaves one of your own pieces attacked and

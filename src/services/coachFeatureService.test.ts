@@ -323,6 +323,48 @@ describe('coachFeatureService', () => {
       expect(segments.every((s) => s.narration === null)).toBe(true);
     });
 
+    it('THE FUNDAMENTAL LEADS the flagged beat; the rest is evidence; the better move comes last (David 2026-09-05)', () => {
+      // The Alapin fixture: Black's 6...Nb6 (ply 12) — same piece for the third
+      // time, space on d5 conceded, a tempo handed over. Best 6...e6.
+      const sans = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6', 'Nf3'];
+      const chess = new Chess();
+      const inputs = sans.map((san, i) => {
+        chess.move(san);
+        const isBlack = i % 2 === 1;
+        return move({
+          ply: i + 1, san, fenAfter: chess.fen(), isCoachMove: !isBlack,
+          classification: i === 11 ? 'mistake' : 'book',
+          preMoveEval: i === 11 ? -20 : 0, evaluation: i === 11 ? 90 : 0,
+          bestMove: i === 11 ? 'e7e6' : null,
+        });
+      });
+      const segments = buildReviewSegments(inputs, 'black', 'Sicilian Defense: Alapin Variation');
+      const seg = segments[11];
+      expect(seg.fundamentals?.map((f) => f.id)).toEqual(expect.arrayContaining(['same-piece-twice', 'tempo-handed', 'space-conceded']));
+      const text = seg.narration ?? '';
+      // 1. The fundamental is the FIRST sentence.
+      const firstSentence = text.split(/(?<=[.!?])\s/)[0];
+      expect(firstSentence).toMatch(/same knight|tempo|d5|space/i);
+      // 2. The better move is stated LAST, as the resolution.
+      expect(text.lastIndexOf('e6')).toBeGreaterThan(text.indexOf('d5'));
+      expect(text).toMatch(/The move was e6\./);
+      // 3. No "we/our" anywhere (one perspective).
+      expect(text).not.toMatch(/\b(we|our|us)\b/i);
+      // 4. Nothing attaches to the opponent's or to book moves.
+      expect(segments.filter((x) => x.fundamentals?.length).map((x) => x.ply)).toEqual([12]);
+    });
+
+    it('fundamentals are spoken RAW — identical text on two builds of the same inputs', () => {
+      const sans = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6'];
+      const mk = () => {
+        const c = new Chess();
+        return sans.map((san, i) => { c.move(san); return move({ ply: i + 1, san, fenAfter: c.fen(), isCoachMove: i % 2 === 0, classification: i === 11 ? 'mistake' : 'book', bestMove: i === 11 ? 'e7e6' : null, preMoveEval: 0, evaluation: i === 11 ? 90 : 0 }); });
+      };
+      const a = buildReviewSegments(mk(), 'black', null)[11].narration;
+      const b = buildReviewSegments(mk(), 'black', null)[11].narration;
+      expect(a).toBe(b);
+    });
+
     it('names the variation as it takes shape (A2 — grounded via detectOpening)', () => {
       // A Najdorf: the walk should announce the line once it's identifiable.
       const sans = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'];
@@ -554,7 +596,7 @@ describe('coachFeatureService', () => {
       expect(assess?.narration).toMatch(/d5 is isolated/i);
       // Fires at most once.
       expect(segments.filter((s) => s.narrationSource === 'assessment')).toHaveLength(1);
-    });
+    }, 20_000); // a 24-ply full-cascade build sits at the default 5s limit on a loaded sandbox
 
     it('say-once ledger: a standing observation is never restated verbatim (David 2026-07-23)', () => {
       // The Opera Game — Black's king is stuck in the centre and the d-file

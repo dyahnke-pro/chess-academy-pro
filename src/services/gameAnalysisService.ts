@@ -206,6 +206,15 @@ import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type E
  * this 2026-06-11 ("the opponent slipped but the better move it named was the
  * move the opponent played").
  */
+/** Does the stored best move (UCI or SAN) denote the same move as `uci`? */
+function bestMoveEqualsUci(fen: string, stored: string, uci: string): boolean {
+  if (stored === uci) return true;
+  try {
+    const c = new Chess(fen);
+    const m = c.move(/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(stored) ? { from: stored.slice(0, 2), to: stored.slice(2, 4), promotion: stored[4] } : stored);
+    return !!m && `${m.from}${m.to}${m.promotion ?? ''}` === uci;
+  } catch { return false; }
+}
 function bestMoveEqualsPlayed(
   fenBefore: string,
   playedSan: string,
@@ -1220,6 +1229,10 @@ async function analyzeGamePositions(
    *  ran the whole REVIEW_POSITION_BUDGET_MS every time (David 2026-09-05:
    *  "very long initial analysis"). */
   const deepBest: (string | null)[] = fens.map(() => null);
+  /** The engine's principal variation (UCI) at each re-searched ply — persisted
+   *  on flagged annotations so the fundamentals attributor can corroborate its
+   *  board-proved verdict with the line the engine actually plays. */
+  const deepPv: string[][] = fens.map(() => []);
   const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
@@ -1284,6 +1297,7 @@ async function analyzeGamePositions(
         const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
         deep[i] = a.evaluation;
         deepBest[i] = a.bestMove || null;
+        deepPv[i] = a.topLines?.[0]?.moves?.slice(0, 8) ?? (a.bestMove ? [a.bestMove] : []);
         searched++;
         if (Number.isFinite(a.depth) && a.depth > 0) {
           depthAt[i] = Math.max(depthAt[i], a.depth);
@@ -1370,6 +1384,13 @@ async function analyzeGamePositions(
       classification = 'book'; // theory move, evals unavailable — still not a mistake
     }
 
+    // Persist the engine lines at a flagged ply: the punishment after the
+    // played move (the dive at fens[moveIdx+1]) and the continuation after the
+    // best move (the dive at fens[moveIdx], minus its first move).
+    const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+    const pvAfterPlayed = deepPv[moveIdx + 1] ?? [];
+    const pvAtBefore = deepPv[moveIdx] ?? [];
+    const pvAfterBest = bestMove && pvAtBefore[0] && bestMoveEqualsUci(fens[moveIdx], bestMove, pvAtBefore[0]) ? pvAtBefore.slice(1) : [];
     annotations.push({
       moveNumber,
       color,
@@ -1383,6 +1404,7 @@ async function analyzeGamePositions(
         : (evalBefore !== null ? evalBefore : null),
       classification,
       comment: null,
+      ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
     });
   }
 

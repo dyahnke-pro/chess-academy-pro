@@ -157,6 +157,7 @@ export function adaptGameRecord(
       // time we read here the field is reliably populated.
       bestMoveEval: annot?.bestMoveEval ?? null,
       preMoveEval: prevEval,
+      ...(annot?.pv ? { pv: annot.pv } : {}),
     });
     prevEval = evaluation;
   }

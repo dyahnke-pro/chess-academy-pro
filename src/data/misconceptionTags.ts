@@ -77,6 +77,23 @@ export const MISCONCEPTION_TAGS = [
     drill: { kind: 'opening-line' },
   },
 
+  {
+    id: 'tempo-handed',
+    label: 'Handed over a tempo',
+    bucket: 'opening',
+    blurb: "Your move let the opponent develop or push with an attack, so you had to move again instead of building.",
+    coachCue: 'After the move, the opponent has a safe developing move or pawn advance that attacks a piece with tempo; the best move left no such kick.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'space-conceded',
+    label: 'Gave up space in the centre',
+    bucket: 'opening',
+    blurb: "You stepped a piece off a central square and the opponent could push a pawn onto it for free.",
+    coachCue: 'A piece retreated from the centre box and a safe central pawn advance onto or past that square became available; the best move kept it covered.',
+    drill: { kind: 'principle' },
+  },
+
   // ── TACTICAL ─────────────────────────────────────────────────────
   {
     id: 'hung-material',
@@ -150,6 +167,23 @@ export const MISCONCEPTION_TAGS = [
     bucket: 'positional',
     blurb: "You traded a good piece for a worse one, or relieved the opponent's cramped position.",
     coachCue: "Exchanged a strong, active piece for a passive one (or traded into the opponent's preferred structure / freed their game) when keeping the tension or avoiding the trade was clearly better.",
+    drill: { kind: 'principle' },
+  },
+
+  {
+    id: 'overextended-pawn',
+    label: 'Overextended a pawn',
+    bucket: 'positional',
+    blurb: "You pushed a pawn past its support and it became a target.",
+    coachCue: 'A pawn advanced to the fifth rank or beyond with no pawn behind it on a neighbouring file, and the opponent can attack or win it soundly.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'bad-trade-material',
+    label: 'Wrong trade for the material situation',
+    bucket: 'positional',
+    blurb: "Ahead you should trade pieces; behind you should keep them — this trade went the wrong way.",
+    coachCue: 'Material lead of two points or more and the best move was a piece trade the played move avoided, or a deficit of two or more and the played move traded pieces the best move kept.',
     drill: { kind: 'principle' },
   },
 

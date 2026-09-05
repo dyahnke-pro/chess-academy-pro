@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 // Import-time auto-analysis — the third faucet (David 2026-05-21: "tie
 // game analysis in without needing a full review"). Given the blunders a
 // game's Stockfish scan already found, classify each into a closed-set
@@ -29,6 +30,9 @@ export interface BlunderForAnalysis {
   cpLoss?: number;
   gamePhase?: 'opening' | 'middlegame' | 'endgame';
   moveNumber?: number;
+  /** Every SAN up to and including the played move — lets the classifier run
+   *  the fundamentals attributor (the same one the review speaks). */
+  historySans?: string[];
 }
 
 export interface AutoAnalyzeOptions {
@@ -73,6 +77,7 @@ export async function autoAnalyzeBlunders(
         bestSan: b.bestSan,
         evalSummary: cpToWords(b.cpLoss),
         gamePhase: b.gamePhase,
+        ...(b.historySans ? { historySans: b.historySans } : {}),
         // No userReason — this is passive analysis.
       },
       source: 'auto-analysis',
@@ -129,6 +134,10 @@ export async function autoAnalyzeGameMisconceptions(
   if (!playerColor) return empty;
   const fens = replayPgnToFens(game.pgn);
   if (fens.length < 2) return empty;
+  // SAN history for the fundamentals attributor (fens[i] is the position
+  // BEFORE move i, so the history through move i is sans[0..i]).
+  let sans: string[] = [];
+  try { const c = new Chess(); c.loadPgn(game.pgn); sans = c.history(); } catch { sans = []; }
 
   const blunders: BlunderForAnalysis[] = [];
   for (const ann of annotations) {
@@ -163,6 +172,7 @@ export async function autoAnalyzeGameMisconceptions(
       cpLoss: measuredCpLoss(ann) ?? (ann.classification === 'blunder' ? 350 : 175),
       gamePhase: classifyPhase(fen, ann.moveNumber),
       moveNumber: ann.moveNumber,
+      ...(sans.length > fenIndex ? { historySans: sans.slice(0, fenIndex + 1) } : {}),
     });
   }
   if (blunders.length === 0) return empty;

@@ -22,6 +22,8 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'neglected-development': 'The device: new move, new piece — while a minor piece still sleeps at home, its move comes before any pawn push or repeat.',
   'king-stuck-center': 'The device: castle before you open the centre — count the open central files, and if there is even one, the king moves first.',
   'greedy-pawn-grab': 'The device: price every pawn in time — a pawn is worth about three moves, so if taking it costs you three moves of development, you paid full price for nothing.',
+  'tempo-handed': 'The device: before every move, ask what they get to do with the free move it gives them — if the answer is "develop with an attack," the move is not free.',
+  'space-conceded': 'The device: a piece that stands in the centre holds a square — before it steps back, name who takes that square next, and whether a pawn can plant itself there for nothing.',
   // ── tactical ──
   'hung-material': 'The device: after you choose a move, run every capture the reply can make — every check, every take, before your hand commits.',
   'missed-tactic': 'The device: checks, captures, threats — in that order, every single move. The shot only stays invisible when the list never runs.',
@@ -33,6 +35,8 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'created-pawn-weakness': 'The device: pawns never move backward — before every pawn push, name the square it gives up forever, and decide if the trade is worth it.',
   'misplaced-piece': 'The device: improve your worst piece — find the one doing the least, and give it a job before you start anything else.',
   'bad-trade': 'The device: trade your worst piece for their best, never the reverse — before any exchange, ask which side of the trade improves.',
+  'overextended-pawn': 'The device: a pawn advances only as far as its neighbours can follow — before the push, find the pawn that will stand behind it, and if there is none, the push waits.',
+  'bad-trade-material': 'The device: count the material before you trade — ahead, every piece off the board brings the win closer; behind, every piece off the board takes your chances with it.',
   // ── endgame ──
   'passive-king-endgame': 'The device: queens off, king on — the moment the endgame starts, the king walks toward the centre and works like a piece.',
   'mistimed-pawn-break': 'The device: prepare the break before you play it — every piece on its best square first, and only then the pawn goes.',

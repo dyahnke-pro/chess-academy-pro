@@ -21,7 +21,7 @@ import type { ReviewMoveInput, ReviewNarration } from './coachFeatureService';
 
 /** Bump whenever the narration ENGINE changes what it would say for the same
  *  inputs (a new facet, a reordered cascade, a template change). */
-export const REVIEW_NARRATION_REV = 1;
+export const REVIEW_NARRATION_REV = 2;
 
 export interface ReviewNarrationCacheEntry {
   rev: number;
@@ -51,7 +51,7 @@ export interface ReviewNarrationKeyInput {
 /** The narration is a function of exactly these inputs. */
 export function reviewNarrationCacheKey(input: ReviewNarrationKeyInput): string {
   const plies = input.moves.map((m) =>
-    [m.san, m.classification ?? '', m.evaluation ?? '', m.preMoveEval ?? '', m.bestMove ?? ''].join(':'),
+    [m.san, m.classification ?? '', m.evaluation ?? '', m.preMoveEval ?? '', m.bestMove ?? '', m.pv ? m.pv.afterPlayed.join('') + '/' + m.pv.afterBest.join('') : ''].join(':'),
   ).join('|');
   const meta = [
     REVIEW_NARRATION_REV, input.playerColor, input.openingName ?? '', input.result,

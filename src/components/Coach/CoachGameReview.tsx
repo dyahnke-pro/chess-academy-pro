@@ -494,6 +494,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       preMoveEval: m.preMoveEval,
       bestMove: m.bestMove,
       fenAfter: m.fen,
+      ...(m.pv ? { pv: m.pv } : {}),
     })),
     [moves],
   );
