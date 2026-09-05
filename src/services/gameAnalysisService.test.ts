@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames, gameNeedsAnalysis, ANALYSIS_DEPTH } from './gameAnalysisService';
+import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames, gameNeedsAnalysis, ANALYSIS_DEPTH, ANALYSIS_PACKAGE_SIZE } from './gameAnalysisService';
 import { buildGameRecord, buildUserProfile } from '../test/factories';
 import { useAppStore } from '../stores/appStore';
 import type { StockfishAnalysis } from '../types';
@@ -253,6 +253,35 @@ describe('gameAnalysisService', () => {
       const result = await analyzeAllGames();
       expect(result).toBe(0);
       expect(mockAnalyzePosition).not.toHaveBeenCalled();
+    });
+
+    it('analyzes at most one package (ANALYSIS_PACKAGE_SIZE) then stops, newest-first', async () => {
+      // David 2026-09-05: a full library never finished in one run. A batch
+      // caps at ANALYSIS_PACKAGE_SIZE newest games and stops; the rest are left
+      // for the next tap. Seed one-more-than-a-package so the boundary is real.
+      const total = ANALYSIS_PACKAGE_SIZE + 5;
+      for (let i = 0; i < total; i++) {
+        // Zero-padded month/day so lexical date order == chronological; i=0 is
+        // the OLDEST, so ids g-000..g-004 are the 5 that must be left behind.
+        const yyyy = 2024 + Math.floor(i / 300);
+        const day = String((i % 28) + 1).padStart(2, '0');
+        const mon = String((i % 12) + 1).padStart(2, '0');
+        await db.games.add(buildGameRecord({
+          id: `g-${String(i).padStart(3, '0')}`,
+          date: `${yyyy}-${mon}-${day}T00:00:${String(i % 60).padStart(2, '0')}Z`,
+          pgn: '1. e4 e5 1/2-1/2',
+          annotations: null,
+          isMasterGame: false,
+        }));
+      }
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(25, 'e2e4'));
+
+      const analyzed = await analyzeAllGames();
+      expect(analyzed).toBe(ANALYSIS_PACKAGE_SIZE);
+
+      // Exactly the remainder is still waiting for the next invocation.
+      const stillNeeding = await countGamesNeedingAnalysis();
+      expect(stillNeeding).toBe(total - ANALYSIS_PACKAGE_SIZE);
     });
   });
 

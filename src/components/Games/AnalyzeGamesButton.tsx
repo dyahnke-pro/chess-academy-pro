@@ -26,7 +26,7 @@
 import { useEffect, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { db } from '../../db/schema';
-import { gameNeedsAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
+import { ANALYSIS_PACKAGE_SIZE, gameNeedsAnalysis, runBackgroundAnalysis } from '../../services/gameAnalysisService';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -94,12 +94,21 @@ export function AnalyzeGamesButton({
     return null;
   }
 
+  // Idle label. Analysis runs in packages of ANALYSIS_PACKAGE_SIZE and stops,
+  // so when more than one package is waiting, say "Analyze 50 of 831 games" —
+  // the user learns each tap clears the next 50 and can watch the total fall.
+  const count = unanalyzedCount ?? 0;
+  const verb = label ?? 'Analyze';
+  const idleText = count > ANALYSIS_PACKAGE_SIZE
+    ? `${verb} ${ANALYSIS_PACKAGE_SIZE} of ${count} games`
+    : `${verb} ${count} game${count === 1 ? '' : 's'}`.trim();
+
   const buttonText = isAnalyzing
     ? bgProgress
       ? `Analyzing ${bgProgress}`
       : 'Analyzing…'
     : hasWork
-      ? `${label ?? 'Analyze'} ${unanalyzedCount ?? ''} game${unanalyzedCount === 1 ? '' : 's'}`.trim()
+      ? idleText
       : 'All games analyzed';
 
   const disabled = isAnalyzing || (!hasWork && variant === 'primary');

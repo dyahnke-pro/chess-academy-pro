@@ -1000,11 +1000,25 @@ export async function analyzeRecentGames(
 }
 
 /**
- * Batch-analyze all imported/played games that lack annotations.
- * Spins up WORKER_POOL_SIZE dedicated Stockfish workers, each analyzing
- * a different game simultaneously for true parallel throughput.
- * Falls back to the singleton engine if worker creation fails.
- * After all games are analyzed, recomputes the weakness profile.
+ * How many games a single batch invocation analyzes before stopping.
+ *
+ * David 2026-09-05: a full library (his was 831 games) never finished in one
+ * run on the phone — it either ground for hours or got interrupted by an iOS
+ * suspend before the end. We analyze in bounded PACKAGES of 50 newest-first
+ * and then STOP. Each analyzed game persists as it finishes and is filtered
+ * out of the next `gameNeedsAnalysis` scan, so the next tap of the Analyze
+ * Games button picks up the next 50 with no cursor to track. Bounded work,
+ * visible completion, user-controlled cadence.
+ */
+export const ANALYSIS_PACKAGE_SIZE = 50;
+
+/**
+ * Batch-analyze up to ANALYSIS_PACKAGE_SIZE imported/played games that lack
+ * annotations (newest-first). Spins up WORKER_POOL_SIZE dedicated Stockfish
+ * workers, each analyzing a different game simultaneously for true parallel
+ * throughput. Falls back to the singleton engine if worker creation fails.
+ * After the package is analyzed, recomputes the weakness profile. Returns the
+ * number of games actually analyzed in this package (≤ ANALYSIS_PACKAGE_SIZE).
  */
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
@@ -1013,12 +1027,13 @@ export async function analyzeAllGames(
     .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
     .toArray();
 
-  // Analyze newest games first (reverse chronological)
+  // Newest games first (reverse chronological), then cap to one package. The
+  // remainder is left un-annotated and picked up by the next invocation.
   const games = allGames.sort((a, b) => {
     const dateA = a.date ? new Date(a.date).getTime() : 0;
     const dateB = b.date ? new Date(b.date).getTime() : 0;
     return dateB - dateA;
-  });
+  }).slice(0, ANALYSIS_PACKAGE_SIZE);
 
   if (games.length === 0) {
     await recomputeWeaknessFromGames();
