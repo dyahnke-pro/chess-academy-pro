@@ -113,13 +113,23 @@ function resolveWorkerPoolSize(): number {
     // it is fixed by ANALYSIS_PACKAGE_SIZE (50 games/tap), not by removing the
     // one engine path that actually finishes.
     //
-    // 🔒 THE CAP WAS NEVER REACHED ON A REAL iPHONE (David 2026-09-05, "how many
-    // bots?"). `hardwareConcurrency` is hidden on iOS, so the old
-    // `|| 4` fallback made this `4 - 2 = 2` workers on every phone — the "3"
-    // above was a desktop-only number. Assume a 6-core phone when the count is
-    // hidden and cap at PHONE_POOL_CAP (4): one engine per spare core.
+    // 🔒 DO NOT SUBTRACT A RESERVE FROM A NUMBER THAT IS ALREADY ONE (David
+    // 2026-09-05, "still seems slow" — and the device's own warm log said
+    // `2/2 pool workers warm`, not 4/4).
+    //
+    // This read `Math.min(PHONE_POOL_CAP, cores - 2)` on the theory that iOS
+    // HIDES `hardwareConcurrency`, so the fallback would supply 6 and the -2
+    // reserve would leave 4. iOS does NOT hide it. David's iPhone REPORTS 4 —
+    // and 4 is already a conservative figure Apple publishes for a 6-core part
+    // (2 performance + 4 efficiency). Subtracting another 2 from the capped
+    // number left a 2-worker pool: the exact width the change was meant to
+    // double, shipped as a no-op and only visible in the warm-up audit line.
+    //
+    // min(cap, reported) puts 4 engines on 6 real cores, so the headroom the
+    // subtraction was protecting still exists — it is Apple's reserve now
+    // instead of a second one stacked on top of it.
     const cores = reportedCores ?? PHONE_ASSUMED_CORES;
-    return Math.max(1, Math.min(PHONE_POOL_CAP, cores - 2));
+    return Math.max(1, Math.min(PHONE_POOL_CAP, cores));
   }
   // Desktop web: keep it quick but don't hog every core.
   const cores = reportedCores ?? 4;

@@ -72,11 +72,18 @@ describe('analysis worker pool — engine choice per platform', () => {
     expect(t).toBeLessThanOrEqual(4);
   });
 
-  it('assumes a 6-core phone when iOS HIDES hardwareConcurrency → 4 workers, not 2', () => {
-    // iOS Safari / WKWebView never expose the core count. The old `|| 4`
-    // fallback silently made every iPhone a 2-worker pool (David 2026-09-05,
-    // "how many bots can we add?"). Hidden count on a phone = 6 cores assumed,
-    // two kept for UI/voice/singleton → 4 engines.
+  it('gives a REPORTING iPhone the full pool — 4 is already Apple\'s conservative figure', () => {
+    // 🚨 THE NO-OP THAT SHIPPED (David 2026-09-05, "still seems slow"; the
+    // device's warm-up audit said `2/2 pool workers warm`). A real iPhone
+    // reports hardwareConcurrency = 4 for a 6-core part. Subtracting a 2-core
+    // reserve from that already-conservative number halved the pool to 2 — the
+    // very width the change existed to double. Never stack our reserve on top
+    // of Apple's.
+    const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 4 });
+    expect(t).toBe(4);
+  });
+
+  it('assumes a 6-core phone if a WebView ever DOES hide the count', () => {
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: undefined });
     expect(t).toBe(4);
   });
