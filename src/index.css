@@ -35,12 +35,39 @@ main .overflow-y-auto {
   box-sizing: border-box;
 }
 
+/* 🔒 THE SAFE-AREA INSETS ARE COUNTED EXACTLY ONCE (David 2026-09-05: "still
+   doesn't scroll down and still don't have more room at top").
+
+   `html` pads by the insets, and `body`/`#root` asked for `100dvh` while
+   AppLayout's root asked for `h-dvh`. But 100dvh is the WHOLE screen — it
+   already spans the notch and the home indicator. Padding a full-screen-tall
+   box by the insets makes it taller than the screen by inset-top +
+   inset-bottom (~93px on a Dynamic Island iPhone), so the DOCUMENT scrolls and
+   the page scroller ends ~93px BELOW the viewport. Both of David's symptoms —
+   no headroom at the top (the document scrolls the padding away, taking the app
+   header with it) and an unreachable bottom — are that one miscount. The
+   earlier `min-h-0` sweep could never have fixed it: min-h-0 lets a flex child
+   shrink to its container, and the containers were themselves too tall.
+
+   The insets are read ONCE into variables here so padding and height can never
+   drift apart, and so the geometry is TESTABLE: a headless browser has no notch
+   (every env() is 0px), making the bug invisible by default — overriding
+   --sat/--sab is the only way to reproduce a real device.
+   Gate: scripts/audit-safe-area-layout.mjs */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  /* The viewport MINUS what html's padding below already consumes. */
+  --app-height: calc(100dvh - var(--sat) - var(--sab));
+}
+
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   /* Safe area support for iPhone notch / home indicator */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: var(--sat) var(--sar) var(--sab) var(--sal);
 }
 
 body {
@@ -51,15 +78,21 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100dvh;
+  min-height: var(--app-height);
   /* Enable momentum scrolling on iOS for overflow containers */
   -webkit-overflow-scrolling: touch;
 }
 
 #root {
-  min-height: 100dvh;
+  /* height, not min-height alone: the app must fill the screen and STOP there,
+     so every page scrolls inside its own scroller rather than growing the
+     document. A bare min-height lets one over-tall child push the document past
+     the viewport again — the exact bug above. */
+  height: var(--app-height);
+  min-height: var(--app-height);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ─── Scrollbar styling ───────────────────────────────────────────────────── */

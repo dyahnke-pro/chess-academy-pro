@@ -164,3 +164,19 @@ scripts/audit-pitfalls-prod.mjs — post-deploy audit for opening pitfalls (comm
 | `scripts/danya-corpus/tier-coverage.mts` | DATA PROBE (no browser) — for each opening ask, which TIER the runtime serves it from (1 masterclass / 2 baked / 3 computed) plus side, spine, branches. Run it BEFORE a bake session to target exactly the Tier-3 gaps: `npx tsx scripts/danya-corpus/tier-coverage.mts "<ask>" …` |
 | `scripts/danya-corpus/batch-bake.mjs` | BATCH BAKE driver — maps each gap opening to its dedicated videos by manifest title, pulls missing transcripts, runs narrate-from-video per target, prints a BAKED/FAILED/NO_VIDEOS summary. `DEEPSEEK_KEY=… node scripts/danya-corpus/batch-bake.mjs [--only "<ask>"]` |
 | `scripts/audit-coach-all-questions-prod.mjs` | THE ALL-QUESTIONS AUDIT (David 2026-08-13: "Ask every question the coach should be able to answer") — iterates ALL 55 capabilities of `scripts/audit-lib/coach-question-matrix.mjs` (39 Q&A lanes + 16 actions) LIVE on prod, one real ask per capability, each reply graded CONTRACT-vs-OBSERVED: a data answer or the lane's own honest empty-state passes; the stock fall-through, greeting, or picker hijack fails; navigation/settings actions grade by post-state. Sections reload /coach/teach so a stage started by one ask can't swallow the next. Muted + audit_run_id stamped. `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY node scripts/audit-coach-all-questions-prod.mjs` |
+
+## `audit-safe-area-layout`
+Proves the iOS safe-area insets are counted exactly ONCE. `html` pads by the
+insets, so anything inside it asking for `100dvh` / `h-dvh` re-adds them and
+makes the document taller than the screen — the document then scrolls (dragging
+the app header out of view) and every page scroller ends ~93px below the
+viewport with its last rows unreachable. A headless browser has no notch, so the
+bug is invisible by default: the audit overrides `--sat`/`--sab` after mount and
+REFUSES to report unless it has verified the simulation applied. Run on any
+change to `index.css` root sizing, `AppLayout`, or `KidLayout`.
+
+```
+node scripts/audit-safe-area-layout.mjs                 # localhost:5173
+AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app AUDIT_SANDBOX=1 \
+  AUDIT_PROXY=$HTTPS_PROXY node scripts/audit-safe-area-layout.mjs
+```

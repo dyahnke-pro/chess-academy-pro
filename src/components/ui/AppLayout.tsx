@@ -200,7 +200,13 @@ export function AppLayout(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col h-dvh min-h-dvh overflow-hidden"
+      // h-full, NOT h-dvh: this sits INSIDE #root, which already fills the
+      // viewport minus the safe-area insets html pads by. Asking for the whole
+      // screen here re-adds those insets and pushes the layout — and every page
+      // scroller inside it — off the bottom of the screen, which is exactly the
+      // "can't scroll to the end" David reported (measured: this box ended 59px
+      // below the viewport on a Dynamic Island iPhone). Fill the parent.
+      className="flex flex-col h-full min-h-0 overflow-hidden"
       style={{ background: 'var(--color-bg)' }}
       data-testid="app-layout"
       data-profile-loaded={activeProfile ? 'true' : 'false'}

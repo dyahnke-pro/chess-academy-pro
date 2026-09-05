@@ -52,7 +52,8 @@ export function KidLayout(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col min-h-dvh text-xl md:text-2xl leading-relaxed tracking-wide"
+      // min-h-full, not min-h-dvh — same safe-area double-count as AppLayout.
+      className="flex flex-col min-h-full text-xl md:text-2xl leading-relaxed tracking-wide"
       style={{ background: 'var(--color-bg)' }}
       data-testid="kid-layout"
     >
