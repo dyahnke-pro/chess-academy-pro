@@ -123,7 +123,7 @@ function SkillPicker({ onPick, onBack: _onBack }: SkillPickerProps): JSX.Element
     };
   }, [skills]);
   return (
-    <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
+    <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
       <div className="text-center">
         <h2 className="text-base font-semibold text-theme-text">Calculation</h2>
         <p className="text-xs text-theme-text-muted mt-1">
@@ -186,7 +186,7 @@ interface RationaleScreenProps {
 
 function RationaleScreen({ skill, onStart, onBack }: RationaleScreenProps): JSX.Element {
   return (
-    <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
+    <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
@@ -528,7 +528,7 @@ function DrillSummary({
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full"
+      className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full"
       style={{ color: 'var(--color-text)' }}
     >
       <div className="flex items-center justify-between">

@@ -77,7 +77,7 @@ export function KidPiecePage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-3 p-4 flex-1 overflow-y-auto pb-6"
+      className="flex flex-col gap-3 p-4 flex-1 min-h-0 overflow-y-auto pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid={`kid-piece-${piece}`}
     >

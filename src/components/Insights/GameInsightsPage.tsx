@@ -73,7 +73,6 @@ export function GameInsightsPage(): JSX.Element {
   // Collapse the title + search above the stats row once the content list is
   // scrolled, giving the list more screen (David 2026-06-19). The stats row and
   // tabs stay pinned. Hysteresis (collapse > 24px, expand < 8px) avoids flicker.
-  const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
   const [overview, setOverview] = useState<OverviewInsights | null>(null);
   const [openings, setOpenings] = useState<OpeningInsights | null>(null);
@@ -192,24 +191,25 @@ export function GameInsightsPage(): JSX.Element {
 
   return (
     <motion.div
-      className="flex flex-col h-full"
+      className="flex flex-col h-full min-h-0 overflow-y-auto overscroll-contain"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       data-testid="game-insights-page"
     >
-      {/* Fixed header — top padding clears the iOS status bar / Dynamic
+      {/* ONE scroller for the whole page (David 2026-09-05: "the top 1/3 of the
+          page is stationary, the selections do not move to the top — remove that
+          function"). The header used to be a fixed block above a nested list
+          scroller with a collapse-on-scroll animation; now it sits in the scroll
+          flow and simply scrolls away, which is also what makes the page feel
+          smooth on iOS (no nested scroller, no animated reflow mid-scroll).
+          Top padding clears the iOS status bar / Dynamic
           Island (AppLayout's <main> adds no safe-area-top, so the page
           owns it). max() keeps the desktop ≥20px while expanding to the
           notch inset on device — fixes the title cramming under the
           status bar David reported on the Weaknesses tab. */}
       <div className="px-5 pt-[max(1.25rem,calc(env(safe-area-inset-top,0px)+0.5rem))] pb-0 shrink-0">
-        {/* Collapsible top — title row + search. Hidden once the list scrolls
-            so the stats row + tabs (below, always shown) sit at the top and the
-            content gets more height (David 2026-06-19). */}
-        <div
-          className={`overflow-hidden transition-all duration-300 ease-out ${headerCollapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[520px] opacity-100'}`}
-          aria-hidden={headerCollapsed}
-        >
+        {/* Title row + search — plain flow, scrolls with the page. */}
+        <div>
         {/* Title row */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -357,14 +357,8 @@ export function GameInsightsPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Scrollable content */}
-      <div
-        className="flex-1 overflow-y-auto px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
-        onScroll={(e) => {
-          const top = e.currentTarget.scrollTop;
-          setHeaderCollapsed((prev) => (prev ? top >= 8 : top > 24));
-        }}
-      >
+      {/* Content — in the page's single scroll flow (no nested scroller). */}
+      <div className="px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
         {loading && gameDataTab && (
           <div className="flex items-center justify-center p-12" data-testid="insights-loading">
             <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>

@@ -915,7 +915,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
 
   // ─── Game screen ──────────────────────────────────────────────────────────
   return (
-    <div className="relative flex flex-col flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="opening-play-mode">
+    <div className="relative flex flex-col flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="opening-play-mode">
       {/* Header — wraps on narrow phones so the controls (esp. the coach
           Chat toggle) are never clipped off the right edge by the surface's
           `overflow-hidden`. The left title truncates to yield space; when

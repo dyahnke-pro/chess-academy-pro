@@ -151,7 +151,7 @@ export function PatternSchoolPage(): JSX.Element {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="pattern-school-page">
+    <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6" data-testid="pattern-school-page">
       <div className="max-w-lg mx-auto w-full flex flex-col gap-4">
         <div className="flex items-center gap-3">
           <button

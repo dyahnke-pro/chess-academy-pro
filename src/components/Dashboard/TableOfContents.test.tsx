@@ -23,11 +23,23 @@ describe('TableOfContents', () => {
     expect(screen.queryByTestId('toc-panel')).not.toBeInTheDocument();
   });
 
+  it('keeps the /academy doctrine reachable inside the Library section', () => {
+    // The Philosophy of a General moved from its own section into The Coaches
+    // Library; a home-screen reorg must never orphan a route.
+    render(<TableOfContents />);
+    fireEvent.click(screen.getByTestId('toc-toggle'));
+    fireEvent.click(screen.getByTestId('toc-section-library'));
+    expect(screen.getByTestId('toc-item-the-philosophy-of-a-general')).toBeInTheDocument();
+  });
+
   it('expands the panel and shows every main tab when the bar is tapped', () => {
     render(<TableOfContents />);
     fireEvent.click(screen.getByTestId('toc-toggle'));
     expect(screen.getByTestId('toc-panel')).toBeInTheDocument();
-    for (const key of ['openings', 'coach', 'tactics', 'weaknesses', 'academy', 'kids', 'settings']) {
+    // 'academy' became the 'library' section ("The Coaches Library") when the
+    // home screen moved to stacked bars; the /academy page is now an ITEM inside
+    // it — covered by the test below.
+    for (const key of ['openings', 'coach', 'tactics', 'weaknesses', 'library', 'kids', 'settings']) {
       expect(screen.getByTestId(`toc-section-${key}`)).toBeInTheDocument();
     }
   });

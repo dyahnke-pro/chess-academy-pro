@@ -477,7 +477,7 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
 
   // ─── Board screen ──────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="practice-mode">
+    <div className="flex flex-col flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-0" data-testid="practice-mode">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
         <div className="flex items-center gap-3">

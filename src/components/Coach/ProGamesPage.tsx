@@ -117,7 +117,7 @@ export function ProGamesPage(): JSX.Element {
   // ── Watching a game: the ModelGameViewer owns the whole screen ──────────
   if (watching) {
     return (
-      <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
+      <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
         <ModelGameViewer
           game={referenceToViewerGame(watching)}
           boardOrientation={watching.studentSide}
@@ -135,7 +135,7 @@ export function ProGamesPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+      className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       data-testid="pro-games-page"
     >
       <div className="relative mt-2">

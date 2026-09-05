@@ -1,5 +1,6 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { usePullToRefresh } from '../../hooks/usePullToRefresh';
 import {
   LayoutDashboard,
   BookOpen,
@@ -136,6 +137,12 @@ export function AppLayout(): JSX.Element {
   const bgAnalysisRunning = useAppStore((s) => s.backgroundAnalysisRunning);
   const bgAnalysisProgress = useAppStore((s) => s.backgroundAnalysisProgress);
   const location = useLocation();
+  // Native-style pull-to-refresh on the page wrapper (David 2026-09-05). Each
+  // page is its own scroller, so the hook finds the scroller under the touch
+  // and arms only at scrollTop 0; a release past the threshold hard-reloads,
+  // which also applies any deferred SW/OTA bundle swap.
+  const mainRef = useRef<HTMLElement>(null);
+  const pull = usePullToRefresh(mainRef);
 
   // Emit a route-changed audit on every URL change so a session can
   // reconstruct navigation flow from the audit log alone — joins with
@@ -389,7 +396,25 @@ export function AppLayout(): JSX.Element {
         </nav>
 
         {/* Main content */}
-        <main className="flex flex-1 flex-col min-h-0 overflow-hidden">
+        <main ref={mainRef} className="relative flex flex-1 flex-col min-h-0 overflow-hidden">
+          {(pull.pullDistance > 0 || pull.refreshing) && (
+            <div
+              className="pointer-events-none absolute left-0 right-0 top-0 z-40 flex justify-center"
+              style={{
+                transform: `translateY(${Math.max(0, pull.pullDistance - 40)}px)`,
+                opacity: Math.min(1, pull.pullDistance / 40),
+              }}
+              data-testid="pull-to-refresh-indicator"
+              aria-live="polite"
+            >
+              <span
+                className="mt-2 rounded-full border px-3 py-1 text-xs font-medium shadow"
+                style={{ background: 'var(--color-bg)', color: 'var(--color-text-muted)', borderColor: 'var(--color-border, rgba(128,128,128,0.35))' }}
+              >
+                {pull.refreshing ? 'Refreshing…' : pull.ready ? 'Release to refresh' : 'Pull to refresh'}
+              </span>
+            </div>
+          )}
           <Outlet />
         </main>
       </div>

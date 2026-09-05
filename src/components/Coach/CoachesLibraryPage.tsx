@@ -287,7 +287,7 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
   if (showContents) {
     return (
       <div
-        className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+        className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
         style={{ color: 'var(--color-text)' }}
         data-testid="library-contents"
       >
@@ -338,7 +338,7 @@ function LibraryBookReader({ book, onBack, initialPage = 0 }: { book: LibraryBoo
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+      className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="library-book-reader"
     >
@@ -484,7 +484,7 @@ export function CoachesLibraryPage(): JSX.Element {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
+      className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6"
       style={{ color: 'var(--color-text)' }}
       data-testid="coaches-library-page"
     >

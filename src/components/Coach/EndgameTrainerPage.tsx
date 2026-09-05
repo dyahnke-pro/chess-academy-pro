@@ -35,7 +35,7 @@ export function EndgameTrainerPage(): JSX.Element {
 
   if (customFen) {
     return (
-      <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
+      <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
         <EndgameTablebaseTrainer
           fen={customFen}
           studentColor={customFen.split(' ')[1] === 'b' ? 'black' : 'white'}
@@ -47,7 +47,7 @@ export function EndgameTrainerPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 flex-1 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
+    <div className="flex flex-col gap-4 p-4 flex-1 min-h-0 overflow-y-auto pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-lg mx-auto w-full">
       {!lesson ? (
         <div className="text-center text-theme-text-muted py-12" data-testid="endgame-trainer-notfound">
           <p className="font-bold text-theme-text mb-1">That ending isn't in the catalog.</p>

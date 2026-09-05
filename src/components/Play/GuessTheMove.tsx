@@ -226,7 +226,7 @@ export function GuessTheMove({ onExit }: GuessTheMoveProps): JSX.Element {
     const missCount = results.filter((r) => r.grade === 'miss').length;
 
     return (
-      <div className="flex-1 overflow-y-auto p-4 md:p-6" data-testid="guess-complete">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-6" data-testid="guess-complete">
         <div className="max-w-md mx-auto space-y-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-500/20 mb-4">
