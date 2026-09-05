@@ -69,6 +69,24 @@ describe('WLPP primary action', () => {
     expect(SRC).toContain('data-primary');
   });
 
+  it('numbers the four loop steps and leaves Kids Mode unnumbered', () => {
+    const dash = readFileSync(resolve(__dirname, '../Dashboard/DashboardPage.tsx'), 'utf8');
+    // The four loop sections carry step 1-4, rendered large in place of the
+    // icon. Kids Mode is NOT part of the loop and must stay a picture.
+    for (const n of [1, 2, 3, 4]) expect(dash).toContain(`step: ${n},`);
+    const kids = dash.slice(dash.indexOf('const KIDS_SECTION'));
+    expect(kids.slice(0, 400)).not.toContain('step:');
+  });
+
+  it('the home tiles do not absorb the column and cut off the page', () => {
+    const dash = readFileSync(resolve(__dirname, '../Dashboard/DashboardPage.tsx'), 'utf8');
+    const bars = dash.slice(dash.indexOf('{[...SECTIONS, KIDS_SECTION]') - 400, dash.indexOf('{[...SECTIONS, KIDS_SECTION]'));
+    // `flex-1 content-center` belonged to the square grid; with five full-height
+    // bars it swallowed the column and pushed the Table of Contents out of the
+    // scroll area entirely.
+    expect(bars).not.toContain('flex-1 content-center');
+  });
+
   it('keeps the other rungs visible rather than hiding the ladder', () => {
     // Focus, without losing the sense of what the opening contains.
     expect(SRC).toContain("primary ? 'grid-cols-3' : 'grid-cols-4'");

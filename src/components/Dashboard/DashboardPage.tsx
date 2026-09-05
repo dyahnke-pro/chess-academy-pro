@@ -18,6 +18,12 @@ import { resolveRepRoute } from '../../services/repRouting';
 
 interface SectionItem {
   label: string;
+  /** 1-4 for the loop steps, rendered LARGE in place of the icon (David
+   *  2026-09-05: "replace symbols with large 1,2,3,4 numbers. Do not number
+   *  kids."). A numeral says "this is step two of four" in a way a mortarboard
+   *  glyph cannot — the order IS the instruction on this screen. Kids Mode has
+   *  no step because it is not part of the loop, so it keeps its icon. */
+  step?: number;
   /** What this section actually does, in the user's terms. Four unlabelled
    *  squares asked people to guess; 64 of 67 native users never finished
    *  anything, and guessing is a step they were stopping at. */
@@ -42,6 +48,7 @@ interface SectionItem {
 const SECTIONS: SectionItem[] = [
   {
     label: 'Openings',
+    step: 1,
     description: 'Masterclasses for the lines you actually play — watch, learn, practise, then play them.',
     loopStep: 'Learn it',
     icon: BookOpen,
@@ -52,6 +59,7 @@ const SECTIONS: SectionItem[] = [
   },
   {
     label: 'Coach',
+    step: 2,
     description: 'Play a game it talks you through, or one where it stays quiet until you ask.',
     loopStep: 'Play it',
     icon: GraduationCap,
@@ -62,6 +70,7 @@ const SECTIONS: SectionItem[] = [
   },
   {
     label: 'Weaknesses',
+    step: 3,
     description: 'The mistakes your own games keep repeating, grouped so the pattern is visible.',
     loopStep: 'Find the holes',
     icon: AlertTriangle,
@@ -72,6 +81,7 @@ const SECTIONS: SectionItem[] = [
   },
   {
     label: 'Tactics',
+    step: 4,
     description: 'Puzzles built from your own blunders, plus a bank of thousands more.',
     loopStep: 'Drill them shut',
     icon: Target,
@@ -289,7 +299,13 @@ export function DashboardPage(): JSX.Element {
           "2-column grid of big tap targets" house rule in CLAUDE.md. That rule
           says hub pages must match the Dashboard — so the Dashboard changing IS
           the rule changing, and CLAUDE.md has been updated to match. */}
-      <div className="flex flex-col gap-2 flex-1 content-center max-w-lg mx-auto w-full">
+      {/* No `flex-1 content-center` here. Those came from the square-grid
+          layout, where the tiles were meant to sit centred in the leftover
+          space. With five FULL-HEIGHT bars the growing flex child absorbed the
+          column and pushed the Table of Contents below the scrollable area —
+          David 2026-09-05: "cannot scroll down all the way". Natural height,
+          normal scroll. */}
+      <div className="flex flex-col gap-2 max-w-lg mx-auto w-full">
         {[...SECTIONS, KIDS_SECTION].map((section) => {
           const Icon = section.icon;
           const shadow = scaledShadow(section.rgb, gB);
@@ -325,7 +341,16 @@ export function DashboardPage(): JSX.Element {
               }}
               data-testid={`section-${section.label.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              <Icon size={28} className={`${section.color} shrink-0`} />
+              {section.step ? (
+                <span
+                  className={`${section.color} shrink-0 w-8 text-center text-3xl font-black leading-none tabular-nums`}
+                  aria-hidden="true"
+                >
+                  {section.step}
+                </span>
+              ) : (
+                <Icon size={28} className={`${section.color} shrink-0`} />
+              )}
               <span className="flex flex-col min-w-0 flex-1">
                 <span className="flex items-baseline gap-2">
                   <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{section.label}</span>
