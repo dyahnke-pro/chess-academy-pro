@@ -52,6 +52,12 @@ permissions:
 
 jobs:
   publish:
+    # HOLD-BACK SWITCH (David 2026-09-05: "No OTA for this one in case we need
+    # to drop back to 3"). A push whose HEAD commit message carries `[skip ota]`
+    # deploys the web app as usual but publishes NO bundle, so native devices
+    # stay on the previous OTA until a later push (or a manual dispatch) ships
+    # one. Use it for a change you want to soak on the web first.
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip ota]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

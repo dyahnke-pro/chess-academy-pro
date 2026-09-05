@@ -231,6 +231,25 @@ async function main() {
     return 'back on /weaknesses';
   });
 
+  // Recent games at the TOP of the overview (David 2026-09-05: "I don't see a
+  // list of most recent games under the main page of weaknesses — needs to be
+  // somewhere more visible"). The sample games seeded above make the strip
+  // render; it must show real cards and a See-all into the full list. Reads
+  // REAL DOM — fails on an empty library, so it cannot pass vacuously.
+  await scenario('recent-games-strip-visible-with-cards', async () => {
+    const strip = page.locator('[data-testid="recent-games-strip"]');
+    await strip.waitFor({ timeout: 20_000 });
+    const cards = await strip.locator('[data-testid="enhanced-game-card"]').count();
+    if (cards < 1) throw new Error('recent-games strip rendered with zero game cards');
+    const overview = page.locator('[data-testid="overview-tab"]');
+    const stripBox = await strip.boundingBox();
+    const overviewBox = await overview.boundingBox();
+    if (!stripBox || !overviewBox) throw new Error('strip/overview not laid out');
+    if (stripBox.y > overviewBox.y) throw new Error('recent games are BELOW the overview — must sit at the top');
+    await page.locator('[data-testid="recent-games-see-all"]').waitFor({ timeout: 5_000 });
+    return `${cards} recent game card(s) above the overview + See-all`;
+  });
+
   await scenario('seed-synthetic-mistake', async () => {
     await page.evaluate(async () => {
       const now = new Date().toISOString();
