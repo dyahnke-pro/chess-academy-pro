@@ -69,8 +69,11 @@ function resolveWorkerPoolSize(): number {
   let isMobileWeb = false;
   try { isMobileWeb = isIosSafari(); } catch { /* partial mock without the export */ }
   if (isNative || isMobileWeb) {
-    // 🔒 PHONE (native iOS/Android + mobile-web iOS): the 2-worker asm.js pool.
-    // Capped so the UI + voice always keep cores. Never more than 2.
+    // 🔒 PHONE (native iOS/Android + mobile-web iOS): a 3-worker asm.js pool.
+    // Capped so the UI + voice always keep cores (a 6-core iPhone keeps 3 free).
+    // Raised 2→3 on David's call (2026-09-05, "still too slow") once the wedge
+    // was proven to be the 8s spawn gate, NOT memory — heap sat at ~7% of cap
+    // with 3 workers on the web test. Never more than 3.
     //
     // WHY THE POOL STAYS ON iOS — and why e1534fc's "no pool on iOS" was WRONG
     // (David 2026-09-05, "still stuck at 1"; confirmed in PostHog).
@@ -94,7 +97,7 @@ function resolveWorkerPoolSize(): number {
     // asm engines grinding 831 games = hot phone" — is a BATCH-SIZE problem, and
     // it is fixed by ANALYSIS_PACKAGE_SIZE (50 games/tap), not by removing the
     // one engine path that actually finishes.
-    return Math.max(1, Math.min(2, cores - 2));
+    return Math.max(1, Math.min(3, cores - 2));
   }
   // Desktop web: keep it quick but don't hog every core.
   return Math.max(2, Math.min(6, cores - 1));
@@ -505,6 +508,25 @@ const REVIEW_POSITION_BUDGET_MS = 5_000;
  *  slow asm build, which is exactly where it must. */
 const BATCH_POSITION_BUDGET_MS = 800;
 
+/** How many leading positions the BULK sweep may skip evaluating: the index of
+ *  the first move that leaves the opening book (= `moves.length` if the whole
+ *  game is theory).
+ *
+ *  Indexing: fens[i] is the position BEFORE move i, so move i's cpLoss needs
+ *  evals[i] and evals[i+1]. Book moves 0..K-1 classify `book` without evals, but
+ *  the first NON-book move K needs fens[K] — its "before" position — evaluated.
+ *  Skipping exactly fens[0..K-1] keeps that intact. (David 2026-09-05: the
+ *  theory plies are ~25-40% of a game's engine time spent on a known answer.)
+ *  Tradeoff, accepted: a genuine blunder inside a DB-book line is no longer
+ *  re-graded by the engine in the bulk sweep — it reads `book`. The REVIEW of an
+ *  opened game still evaluates every ply and keeps that catch. */
+function firstNonBookPly(moves: readonly string[]): number {
+  for (let i = 0; i < moves.length; i++) {
+    if (!isBookLine(moves.slice(0, i + 1))) return i;
+  }
+  return moves.length;
+}
+
 /** Consecutive position timeouts on ONE worker that mean it's wedged/dead (a
  *  live engine never times out this many in a row) — the batch then recycles it
  *  instead of grinding every remaining position through the reject. */
@@ -630,8 +652,17 @@ export async function analyzeGameOnWorker(
   // the worker instead of grinding the whole game (and every game after it, on
   // the same dead worker) through the timeout.
   let consecutiveTimeouts = 0;
-  for (const fen of fens) {
+  // Skip the engine on opening-BOOK positions (David 2026-09-05, "still too
+  // slow"): the first ~10-16 plies are theory and classify as `book` anyway, so
+  // evaluating them is ~25-40% of a game's engine time spent on a known answer.
+  // We stop skipping at the first NON-book move's "before" position (fens[K]),
+  // which it needs for its cpLoss — see firstNonBookPly. A skipped position
+  // pushes null, and a null eval pair on a book move classifies `book` below.
+  const skipBook = firstNonBookPly(moves);
+  for (let i = 0; i < fens.length; i++) {
     if (_abortAnalysis) return null;
+    if (i < skipBook) { evals.push(null); continue; }
+    const fen = fens[i];
     try {
       const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, BATCH_POSITION_BUDGET_MS);
       evals.push(result.evaluation);
@@ -800,14 +831,20 @@ async function analyzeGamePositions(
   // stopped hardcoding a build iOS can't run.
   let evals: (number | null)[];
   let achievedDepth = Number.POSITIVE_INFINITY;
-  const pooled = await evaluateFensPooled(fens, onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
+  // BULK callers skip the engine on opening-book positions (see firstNonBookPly
+  // + the note in analyzeGameOnWorker). The REVIEW passes no budget and keeps
+  // every ply, so its eval-curve graph has no opening gap.
+  const skipBook = positionBudgetMs ? firstNonBookPly(moves) : 0;
+  const pooled = await evaluateFensPooled(fens.slice(skipBook), onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
   if (pooled) {
-    evals = pooled.evals;
+    evals = [...new Array<number | null>(skipBook).fill(null), ...pooled.evals];
     achievedDepth = pooled.achievedDepth;
   } else {
     evals = [];
-    for (const fen of fens) {
+    for (let i = 0; i < fens.length; i++) {
       onPosition?.(evals.length + 1, fens.length);
+      if (i < skipBook) { evals.push(null); continue; }
+      const fen = fens[i];
       try {
         // Bulk callers cap the singleton too — the fast native engine otherwise
         // runs depth 16 uncapped. analyzeWithBudget force-stops at the budget

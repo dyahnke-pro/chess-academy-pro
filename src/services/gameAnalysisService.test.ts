@@ -140,13 +140,12 @@ describe('gameAnalysisService', () => {
       });
       await db.games.add(game);
 
-      // Mock Stockfish to return evals for each position (5 positions for 4 half-moves + start)
-      mockAnalyzePosition
-        .mockResolvedValueOnce(mockAnalysis(30, 'e2e4'))   // start
-        .mockResolvedValueOnce(mockAnalysis(25, 'e7e5'))   // after e4
-        .mockResolvedValueOnce(mockAnalysis(30, 'g1f3'))   // after e5
-        .mockResolvedValueOnce(mockAnalysis(20, 'b8c6'))   // after Nf3
-        .mockResolvedValueOnce(mockAnalysis(25, 'd2d4'));  // after Nc6
+      // One resolved value for every call, NOT a per-position `Once` chain: the
+      // bulk sweep skips engine evals on opening-book plies (firstNonBookPly),
+      // so it makes FEWER calls than positions — a `Once` chain sized to the
+      // position count leaves unconsumed values that leak into the next test
+      // (clearAllMocks drains call history, not the Once queue).
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(30, 'e2e4'));
 
       const result = await analyzeAllGames();
       expect(result).toBe(1);

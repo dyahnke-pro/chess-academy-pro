@@ -1,4 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
+
+// These tests are about worker TIMEOUTS, not opening theory. The bulk sweep now
+// skips engine evals on opening-book plies (firstNonBookPly) — and the fixture
+// below is the Ruy Lopez Morphy line, all eight plies book — so without this
+// the sweep would evaluate a single position and a 3-in-a-row wedge could never
+// form. Partial mock: keep every other export, make nothing count as book.
+vi.mock('./openingDetectionService', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./openingDetectionService')>()),
+  isBookLine: () => false,
+}));
+
 import { analyzeGameOnWorker, WorkerWedgedError } from './gameAnalysisService';
 import { buildGameRecord } from '../test/factories';
 
