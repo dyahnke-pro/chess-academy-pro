@@ -426,3 +426,63 @@ Remove the 1-0 and replace with green win or red loss."
    question: keep it on the non-fundamentals lines.
 10. **After "Show me" the walk stays paused** (only Play restarts, per rule).
     The ⏯ "Paused" state (item 1) is what makes this read as intended.
+
+## H. Fundamentals are available EVERYWHERE the app narrates from computed facts (David 2026-09-05: "make sure that's the case")
+
+**Design: ONE attributor, plugged into the SHARED calculators — never a
+per-surface copy.** `src/services/principleAttribution.ts` →
+`attributePrinciples(...)` (E.2b/2c) is the only implementation.
+`principleDetector.ts` (the 5 opening rules) becomes an internal input of it;
+`thinkAloud.ts`, the only current caller, switches to the attributor so
+`/coach/teach` think-aloud and the review can never disagree.
+
+**Four plug points — every consumer below gets fundamentals through one of
+them, with no new call sites:**
+1. `positionFacts.computePositionFacts` — new clause lane `fundamental`
+   (rank 90: below `status`/`deliberation`, above every danger lane) for the
+   just-played student move. Consumers already call `clauseText(pf.clauses,
+   exclude)`; none may `exclude` this lane.
+2. `moveReason.classifyMoveReason` — the `'lost-the-thread'` catch-all
+   (`moveReason.ts:74`) resolves to the attributed fundamental when one
+   attaches; `moveReasonClause` renders it; `reasonWeaknessTag` emits it.
+3. `reviewFullData.computeMoveFacets` — the `[principle]` facet (E.1) →
+   `buildReviewSegments` (E.3 ordering).
+4. `misconceptionClassifier.classifyMisconception` — consults the attributor
+   FIRST (the cheap type-based `neglected-development` at `:292` becomes the
+   fallback), so `captureMisconception` → weakness spine → drills carry the
+   real fundamental, not an approximation.
+
+**Consumer matrix (verified 2026-09-05 by grep — the full set):**
+
+| Surface | Reaches it via | What it speaks |
+|---|---|---|
+| Post-game review walk (`coachFeatureService`) | plug 3 | fundamental-first beat (E.3) + recap aggregate (G.4) |
+| Learn `/coach/teach` running commentary (`useLiveCoach`) | plug 1 | the fundamental on a flagged student move, DNA register |
+| Learn think-aloud (`thinkAloud` → `CoachTeachPage`, `danyaTeachingService`) | attributor direct (replaces `principleDetector`) | same words as review, never a second opinion |
+| Learn move grade (`playedMoveGrade` → `CoachTeachPage`) | plug 2 | reason clause names the fundamental |
+| Learn hints (`useHintSystem`) | plug 1 | hint withholds the square, may name the fundamental to avoid |
+| "Read this position" (`usePositionNarration`) | plug 1 | last-move fundamental in the read |
+| Play `/coach/play` — phase transitions ONLY (`usePhaseNarration`) | plug 1 | the "couple of mistakes made" mention names their fundamentals; Play otherwise stays SILENT per contract |
+| Play blunder card (`detectSlip` → `CoachGamePage`) | plug 2 | the card's one-line why = the fundamental |
+| Opening Play rung (`OpeningPlayMode` via `whyBestMove`) | plug 1 | same as Learn grade |
+| Coach chat "why was that bad?" (`whyBestMove` ← `coachApi` / `coachService` / `questionIntents`) | plug 1 | grounded answer leads with the fundamental |
+| My Mistakes / drill narration (`mistakePuzzleService` → `mistakeNarration` + `mistakeNarrationVoice`) | plug 3 (same facet) | the drill's "what you neglected" line |
+| Import-time capture (`autoAnalyzeGame` → `captureMisconception`) | plug 4 | the weakness spine tag is the attributed fundamental |
+| Discussion practice (`useDiscussionPractice`) | plug 4 | bucket + device from the attributed tag |
+
+**Excluded by contract:** every `/kid/*` surface (grep: zero kid files touch
+any of these calculators today — keep it that way). Pure spectator model
+games / Watch-Learn lesson beats (no student move to grade).
+
+**Determinism across surfaces:** the attributor's PV inputs come from the
+same fixed-depth search everywhere (`ATTRIBUTION_DEPTH`), cached per FEN in
+`stockfishFenCache`, so Learn, Play's card, and the later review say the SAME
+fundamental for the SAME move. Persisted attribution on the annotation (E.2c)
+is the source once a game is saved; live surfaces compute it once and hand it
+forward — never recompute with a different budget.
+
+**Gate — a wire that does not fire is not a wire:** `principleAttribution.
+surfaces.test.ts` feeds the fixture move (`6...Nb6` from the Alapin) through
+EACH row above and asserts the fundamental text comes OUT of that surface's
+narration output (not that the import exists). One test per row; a new
+consumer of any plug point must add a row.
