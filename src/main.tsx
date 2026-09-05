@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorUpdater } from '@capgo/capacitor-updater';
-import { startOtaObserver } from './services/otaObserver';
+import { startOtaObserver, installStagedBundleOnLaunch } from './services/otaObserver';
 import './index.css';
 import { App } from './App';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
@@ -87,6 +87,13 @@ async function killServiceWorkerOnNative(): Promise<void> {
   mountApp();
   // Commit the (possibly OTA-applied) bundle now that it has booted.
   signalOtaReady();
+  // THEN apply any bundle that was downloaded but never installed — a
+  // force-close skips the background→foreground the updater waits for, so
+  // without this a staged update can sit `pending` forever (David 2026-09-05,
+  // "OTA still not working!"). Must run AFTER the commit above so the current
+  // bundle's auto-revert window can't misfire. `set()` reloads the app if it
+  // finds one; a cold launch has nothing to lose.
+  void installStagedBundleOnLaunch();
   // Make the OTA lifecycle observable (David 2026-07-24 "hasn't worked once").
   // Telemetry only — snapshots the running bundle + traces the update journey
   // so the audit tool can find the real failure instead of guessing.

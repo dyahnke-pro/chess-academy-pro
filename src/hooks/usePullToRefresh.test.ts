@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
-import { usePullToRefresh, PULL_TO_REFRESH_THRESHOLD_PX } from './usePullToRefresh';
+import { usePullToRefresh, PULL_TO_REFRESH_THRESHOLD_PX, PULL_DEAD_ZONE_PX } from './usePullToRefresh';
 
 // Pull-to-refresh on the AppLayout wrapper (David 2026-09-05). The gesture must
 // fire ONLY for a real top-of-page pull: at scrollTop 0, not on a board or a
@@ -16,8 +16,9 @@ function pull(target: Element, from: number, to: number): void {
   fireEvent.touchEnd(target, { changedTouches: [{ clientY: to, clientX: 100 }] });
 }
 
-/** Raw drag distance that lands past the threshold after the hook's 0.6 easing. */
-const FAR_ENOUGH = Math.ceil(PULL_TO_REFRESH_THRESHOLD_PX / 0.6) + 20;
+/** Raw drag distance that lands past the threshold after the dead-zone and
+ *  the hook's 0.6 easing. */
+const FAR_ENOUGH = PULL_DEAD_ZONE_PX + Math.ceil(PULL_TO_REFRESH_THRESHOLD_PX / 0.6) + 20;
 
 beforeEach(() => {
   container = document.createElement('div');
@@ -39,6 +40,24 @@ describe('usePullToRefresh', () => {
     renderHook(() => usePullToRefresh({ current: container }, onRefresh));
     act(() => pull(container, 100, 130));
     expect(onRefresh).not.toHaveBeenCalled();
+  });
+
+  it('does NOT refresh on a medium pull that would have fired at the old, twitchy threshold', () => {
+    // David 2026-09-05: "pulling is too sensitive … more headroom". ~150px of
+    // finger travel was a refresh before; it must be a no-op now.
+    const onRefresh = vi.fn();
+    renderHook(() => usePullToRefresh({ current: container }, onRefresh));
+    act(() => pull(container, 100, 250));
+    expect(onRefresh).not.toHaveBeenCalled();
+  });
+
+  it('ignores the first PULL_DEAD_ZONE_PX of travel entirely (no spinner on a scroll bounce)', () => {
+    const { result } = renderHook(() => usePullToRefresh({ current: container }, vi.fn()));
+    act(() => {
+      fireEvent.touchStart(container, { touches: [{ clientY: 100, clientX: 100 }] });
+      fireEvent.touchMove(container, { touches: [{ clientY: 100 + PULL_DEAD_ZONE_PX - 1, clientX: 100 }] });
+    });
+    expect(result.current.pullDistance).toBe(0);
   });
 
   it('does NOT arm when the page is already scrolled (that is a normal scroll)', () => {
@@ -73,11 +92,11 @@ describe('usePullToRefresh', () => {
     const { result } = renderHook(() => usePullToRefresh({ current: container }, onRefresh));
     act(() => {
       fireEvent.touchStart(container, { touches: [{ clientY: 100, clientX: 100 }] });
-      fireEvent.touchMove(container, { touches: [{ clientY: 150, clientX: 100 }] });
+      fireEvent.touchMove(container, { touches: [{ clientY: 100 + PULL_DEAD_ZONE_PX + 50, clientX: 100 }] });
     });
     expect(result.current.pullDistance).toBeGreaterThan(0);
     expect(result.current.ready).toBe(false);
-    act(() => { fireEvent.touchEnd(container, { changedTouches: [{ clientY: 150, clientX: 100 }] }); });
+    act(() => { fireEvent.touchEnd(container, { changedTouches: [{ clientY: 100 + PULL_DEAD_ZONE_PX + 50, clientX: 100 }] }); });
     expect(result.current.pullDistance).toBe(0);
     expect(onRefresh).not.toHaveBeenCalled();
   });

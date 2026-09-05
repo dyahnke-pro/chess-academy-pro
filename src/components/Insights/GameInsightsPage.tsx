@@ -191,11 +191,17 @@ export function GameInsightsPage(): JSX.Element {
 
   return (
     <motion.div
-      className="flex flex-col h-full min-h-0 overflow-y-auto overscroll-contain"
+      className="flex flex-col h-full min-h-0"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       data-testid="game-insights-page"
     >
+    {/* The scroller is a PLAIN div, not the motion wrapper: framer's opacity
+        animation leaves a transform/opacity layer on the element, and a
+        scroller that is also an animated layer repaints on every frame on
+        iOS — that is the choppiness. Native overscroll (no overscroll-contain)
+        so the bottom bounces like the rest of the OS. */}
+    <div className="flex-1 min-h-0 overflow-y-auto" data-testid="game-insights-scroller">
       {/* ONE scroller for the whole page (David 2026-09-05: "the top 1/3 of the
           page is stationary, the selections do not move to the top — remove that
           function"). The header used to be a fixed block above a nested list
@@ -384,6 +390,7 @@ export function GameInsightsPage(): JSX.Element {
         {tab === 'patterns' && <PatternsTab />}
         {tab === 'misconceptions' && <MisconceptionsTab />}
       </div>
+    </div>
     </motion.div>
   );
 }

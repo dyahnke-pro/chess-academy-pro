@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
 
-/** Pull-down distance (px) at which releasing triggers a refresh. */
-export const PULL_TO_REFRESH_THRESHOLD_PX = 80;
+/** Eased pull travel (px) at which releasing triggers a refresh. With the 0.6
+ *  easing below and the dead-zone, this is ~220px of finger travel — deliberately
+ *  generous (David 2026-09-05: "pulling is too sensitive … more headroom to
+ *  trigger the refresh"). */
+export const PULL_TO_REFRESH_THRESHOLD_PX = 120;
+/** Raw finger travel ignored before the pull counts at all, so an ordinary
+ *  top-of-page scroll bounce never shows the spinner. */
+export const PULL_DEAD_ZONE_PX = 20;
 /** Visual travel cap so the indicator never runs away on a long drag. */
-const PULL_MAX_PX = 120;
+const PULL_MAX_PX = 160;
 
 /** Surfaces where a downward drag is a MOVE, not a pull. A touch that starts
  *  inside any of these never arms the refresh. */
@@ -96,7 +102,7 @@ export function usePullToRefresh(
       const scroller = scrollerRef.current;
       // The content took the scroll (user pulled up after all) — stand down.
       if (scroller && scroller.scrollTop > 0) { reset(); return; }
-      const dy = e.touches[0].clientY - startYRef.current;
+      const dy = e.touches[0].clientY - startYRef.current - PULL_DEAD_ZONE_PX;
       if (dy <= 0) { distanceRef.current = 0; setPullDistance(0); return; }
       // Ease the travel so the indicator feels tethered, not 1:1.
       const eased = Math.min(PULL_MAX_PX, dy * 0.6);

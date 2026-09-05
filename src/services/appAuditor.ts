@@ -290,6 +290,9 @@ export type AuditKind =
   // set → app-ready) and where it breaks (download/update-failed, or set with
   // no following app-ready = the auto-revert).
   | 'ota-boot'
+  /** A downloaded-but-unapplied OTA bundle was applied at cold launch (or the
+   *  attempt was skipped) — see otaObserver.installStagedBundleOnLaunch. */
+  | 'ota-launch-install'
   | 'ota-update-available'
   | 'ota-download-complete'
   | 'ota-download-failed'

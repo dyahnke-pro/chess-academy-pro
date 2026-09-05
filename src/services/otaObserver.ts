@@ -200,3 +200,75 @@ export async function startOtaObserver(): Promise<void> {
     });
   });
 }
+
+/**
+ * Apply a downloaded-but-unapplied OTA bundle at COLD LAUNCH.
+ *
+ * David 2026-09-05 ("OTA still not working!", twice). The updater's autoUpdate
+ * flow downloads a newer bundle and then installs it on the NEXT
+ * background→foreground. A force-close is not a background: it relaunches the
+ * CURRENT bundle, and the downloaded one sits in `list()` as `pending` — for
+ * hours, or forever for a user who only ever force-closes. On David's device
+ * the stream showed exactly that: `download complete → 9d514942`, `appReady …
+ * update downloaded, will install next background`, then a relaunch booting
+ * the OLD bundle again. "Do the bundle on launch."
+ *
+ * So, at boot: find the newest `pending` bundle and `set()` it — `set` applies
+ * AND reloads. Ordering matters: call this AFTER `notifyAppReady()` has
+ * committed the current bundle, so its auto-revert window cannot misfire on a
+ * bundle we are deliberately leaving. Safe against boot loops: a bundle that
+ * fails its own ready-check is marked `error`, never `pending`, so it is never a
+ * candidate again. Never used the plugin's "install immediately on download"
+ * mode — that reloads mid-session and would kill a running analysis sweep; a
+ * cold launch has nothing to lose.
+ *
+ * Returns true when a bundle was applied (the app is about to reload).
+ */
+export async function installStagedBundleOnLaunch(): Promise<boolean> {
+  let isNative = false;
+  try {
+    isNative = Capacitor.isNativePlatform();
+  } catch {
+    return false;
+  }
+  if (!isNative) return false;
+
+  const source = 'otaObserver.installStagedBundleOnLaunch';
+  try {
+    const [cur, listed, bi] = await Promise.all([
+      CapacitorUpdater.current(),
+      CapacitorUpdater.list(),
+      CapacitorUpdater.getBuiltinVersion().catch(() => ({ version: '' })),
+    ]);
+    const currentVersion = cur?.bundle?.version ?? '';
+    const currentId = cur?.bundle?.id ?? '';
+    const builtinVersion = bi?.version ?? '';
+
+    const pending = (listed?.bundles ?? [])
+      .filter((b) => b.status === 'pending')
+      .filter((b) => b.id !== currentId && b.version !== currentVersion && b.version !== builtinVersion)
+      .sort((a, b) => (Date.parse(b.downloaded) || 0) - (Date.parse(a.downloaded) || 0));
+    const target = pending[0];
+    if (!target) return false;
+
+    void logAppAudit({
+      kind: 'ota-launch-install',
+      category: 'subsystem',
+      source,
+      summary: `staged bundle found at launch → applying ${target.version} (running ${currentVersion || 'unknown'})`,
+    });
+    if (isAnalyticsEnabled()) {
+      captureEvent('ota_launch_install', { from: currentVersion, to: target.version, toId: target.id });
+    }
+    await CapacitorUpdater.set({ id: target.id }); // applies + reloads the app
+    return true;
+  } catch (err) {
+    void logAppAudit({
+      kind: 'ota-launch-install',
+      category: 'subsystem',
+      source,
+      summary: `launch install skipped: ${err instanceof Error ? err.message : String(err)}`,
+    });
+    return false;
+  }
+}

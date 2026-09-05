@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { usePullToRefresh } from '../../hooks/usePullToRefresh';
+import { usePullToRefresh, PULL_TO_REFRESH_THRESHOLD_PX } from '../../hooks/usePullToRefresh';
 import {
   LayoutDashboard,
   BookOpen,
@@ -398,20 +398,49 @@ export function AppLayout(): JSX.Element {
         {/* Main content */}
         <main ref={mainRef} className="relative flex flex-1 flex-col min-h-0 overflow-hidden">
           {(pull.pullDistance > 0 || pull.refreshing) && (
+            /* iOS-style pull spinner (David 2026-09-05: "the circle you see on
+               an iPhone, not a written notification"). The ring fills with the
+               pull and rotates with it; once past the threshold — or while the
+               reload is in flight — it spins. No text. */
             <div
               className="pointer-events-none absolute left-0 right-0 top-0 z-40 flex justify-center"
               style={{
-                transform: `translateY(${Math.max(0, pull.pullDistance - 40)}px)`,
+                transform: `translateY(${Math.max(0, pull.pullDistance - 44)}px)`,
                 opacity: Math.min(1, pull.pullDistance / 40),
               }}
               data-testid="pull-to-refresh-indicator"
               aria-live="polite"
+              aria-label={pull.refreshing ? 'Refreshing' : pull.ready ? 'Release to refresh' : 'Pull to refresh'}
             >
               <span
-                className="mt-2 rounded-full border px-3 py-1 text-xs font-medium shadow"
-                style={{ background: 'var(--color-bg)', color: 'var(--color-text-muted)', borderColor: 'var(--color-border, rgba(128,128,128,0.35))' }}
+                className="mt-3 flex h-8 w-8 items-center justify-center rounded-full shadow-md"
+                style={{ background: 'var(--color-bg)' }}
               >
-                {pull.refreshing ? 'Refreshing…' : pull.ready ? 'Release to refresh' : 'Pull to refresh'}
+                <svg
+                  viewBox="0 0 24 24"
+                  className={`h-5 w-5 ${pull.ready || pull.refreshing ? 'animate-spin' : ''}`}
+                  style={
+                    pull.ready || pull.refreshing
+                      ? undefined
+                      : { transform: `rotate(${(pull.pullDistance / PULL_TO_REFRESH_THRESHOLD_PX) * 270}deg)` }
+                  }
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="12" cy="12" r="9" fill="none" strokeWidth="2.5" strokeLinecap="round"
+                    style={{ stroke: 'var(--color-text-muted)', opacity: 0.25 }}
+                  />
+                  <circle
+                    cx="12" cy="12" r="9" fill="none" strokeWidth="2.5" strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 9}
+                    strokeDashoffset={
+                      pull.ready || pull.refreshing
+                        ? 2 * Math.PI * 9 * 0.7
+                        : 2 * Math.PI * 9 * (1 - Math.min(1, pull.pullDistance / PULL_TO_REFRESH_THRESHOLD_PX))
+                    }
+                    style={{ stroke: 'var(--color-accent, var(--color-text))' }}
+                  />
+                </svg>
               </span>
             </div>
           )}

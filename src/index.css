@@ -17,6 +17,19 @@
   --color-warning: #e0a030;
 }
 
+/* ─── Page scrollers ──────────────────────────────────────────────────────── */
+/* Every page is its own scroller inside AppLayout's overflow-hidden <main>.
+   Promote each one to its own compositor layer so iOS scrolls it on the
+   compositor thread instead of repainting the page every frame (David
+   2026-09-05: "scrolling to bottom of page is still VERY choppy"). No
+   transform here on purpose — a transform would turn the scroller into the
+   containing block for any position:fixed child (modals, the bottom nav). */
+main .overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  overflow-anchor: none;
+}
+
 /* ─── Base ────────────────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
