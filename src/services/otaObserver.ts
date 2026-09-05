@@ -58,27 +58,26 @@ export async function startOtaObserver(): Promise<void> {
   if (!isNative) return;
   started = true;
 
-  // Snapshot: what is this device ACTUALLY running right now?
+  // 🚨 THE SNAPSHOT USED TO RUN *BEFORE* THE LISTENERS, AND IT COST US THE
+  // DIAGNOSIS. `autoUpdate: true` makes the plugin check for an update at
+  // native launch — so `updateAvailable` / `noNeedUpdate` / `downloadComplete`
+  // can all fire while this function is still awaiting `current()` and
+  // `getBuiltinVersion()`. Those events land with nothing attached and are gone.
+  //
+  // On 2026-09-05 that produced launches showing ONLY `ota_boot`, which I read
+  // as "the device never checked for an update" and told David so — twice. It
+  // was not evidence of that at all; it was evidence of this race. An observer
+  // whose whole job is to say what the updater did must be listening BEFORE the
+  // updater does anything.
+  //
+  // So: attach first, snapshot second. `base` starts empty and is filled in by
+  // the time any human reads the event; the listener payloads (`to`, `toStatus`)
+  // are what actually matter and they are never lost.
   let running = 'unknown';
   let runningId = 'unknown';
   let runningStatus = 'unknown';
   let nativeVersion = 'unknown';
   let builtin = 'unknown';
-  try {
-    const cur = await CapacitorUpdater.current();
-    running = cur?.bundle?.version ?? 'unknown';
-    runningId = cur?.bundle?.id ?? 'unknown';
-    runningStatus = cur?.bundle?.status ?? 'unknown';
-    nativeVersion = cur?.native ?? 'unknown';
-  } catch {
-    /* plugin absent / web */
-  }
-  try {
-    const bi = await CapacitorUpdater.getBuiltinVersion();
-    builtin = bi?.version ?? 'unknown';
-  } catch {
-    /* older plugin without getBuiltinVersion */
-  }
 
   const base: Record<string, unknown> = {
     running,
@@ -131,13 +130,30 @@ export async function startOtaObserver(): Promise<void> {
     }, 500);
   };
 
-  // The decisive per-launch signal: which bundle the device booted, and whether
-  // it is the builtin or a downloaded OTA bundle (status).
-  emitWhenAnalyticsReady(
-    'ota-boot',
-    'ota_boot',
-    `OTA boot — running=${running} (status=${runningStatus}) builtin=${builtin} native=${nativeVersion}`,
-  );
+  // Snapshot + boot signal come AFTER every listener is attached (see above).
+  const snapshot = async (): Promise<void> => {
+    try {
+      const cur = await CapacitorUpdater.current();
+      running = cur?.bundle?.version ?? 'unknown';
+      runningId = cur?.bundle?.id ?? 'unknown';
+      runningStatus = cur?.bundle?.status ?? 'unknown';
+      nativeVersion = cur?.native ?? 'unknown';
+    } catch { /* plugin absent / web */ }
+    try {
+      const bi = await CapacitorUpdater.getBuiltinVersion();
+      builtin = bi?.version ?? 'unknown';
+    } catch { /* older plugin without getBuiltinVersion */ }
+    base.running = running;
+    base.runningId = runningId;
+    base.runningStatus = runningStatus;
+    base.nativeVersion = nativeVersion;
+    base.builtin = builtin;
+    emitWhenAnalyticsReady(
+      'ota-boot',
+      'ota_boot',
+      `OTA boot — running=${running} (status=${runningStatus}) builtin=${builtin} native=${nativeVersion}`,
+    );
+  };
 
   const add = async (
     name: string,
@@ -199,4 +215,8 @@ export async function startOtaObserver(): Promise<void> {
       commitStatus: ev?.status ?? nb.status,
     });
   });
+
+  // Every listener is attached; NOW read the current bundle and emit the boot
+  // snapshot. Deliberately last — see the note above the snapshot definition.
+  await snapshot();
 }
