@@ -166,7 +166,24 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # crash hotfix that stops the eager "video-dump" teaching-corpus loads from
 # OOM-crashing the app at boot (desktop tabs + iOS WKWebView Jetsam). Built from
 # current main.
-IOS_MARKETING_VERSION="4.0.1"
+# BUMP 4.0.1 → 4.0.2 (David 2026-09-05): Apple closed the 4.0.1 train between
+# build 187 (19:56, archived fine) and build 188 (20:32) — 4.0.1 was approved in
+# that window, and an approved version stops accepting builds. Runs #188 and
+# #189 were dead on arrival; the emailed rejection names it exactly:
+#   ITMS-90186 "the train version '4.0.1' is closed for new build submissions"
+#   ITMS-90062 "must contain a higher version than the previously approved 4.0.1"
+# That is the NINTH time this line has gone stale the same way (2.8, 3.0, 3.1,
+# 3.2, 3.3, 3.4, 3.5, 3.6/3.7, now 4.0.1). Nine identical incidents is not a
+# stale constant, it is a missing preflight: the version is a hardcoded string
+# that Apple can invalidate at any moment WITHOUT the repo changing, and the
+# failure only surfaces ~9 minutes into an archive. The durable fix is to ask
+# App Store Connect for the open train BEFORE triggering Xcode Cloud (the ASC
+# credentials are already in the workflow, and scripts/ci/create-asc-version.mjs
+# already knows how to query versions) — bumping this string again is the ninth
+# symptom fix, not a cure. 4.0.2 carries the analysis split: sweep as a shallow
+# draft, deep dive moved into the review, 4-worker phone pool, per-FEN eval
+# cache, recent games on Weaknesses.
+IOS_MARKETING_VERSION="4.0.2"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
