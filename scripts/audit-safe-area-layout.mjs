@@ -115,14 +115,22 @@ async function main() {
       window.scrollTo(0, 500);
       out.docScrolledBy = Math.round(window.scrollY);
       window.scrollTo(0, 0);
+      // The scroller must not CHAIN its overscroll to the document: that
+      // hand-off at the end of a list is the stutter at the bottom of a page.
+      if (scroller) {
+        const ob = getComputedStyle(scroller).overscrollBehaviorY;
+        out.overscrollY = ob;
+        out.containsOverscroll = ob === 'contain' || ob === 'none';
+      }
       return out;
     });
 
     const ok = m.docOverflowPx <= 1 && m.docScrolledBy === 0
-      && m.overflowing.length === 0 && m.reachedBottom && m.lastRowClearsNav;
+      && m.overflowing.length === 0 && m.reachedBottom && m.lastRowClearsNav
+      && m.containsOverscroll;
     results.push({ route, ok, ...m });
     console.log(`${ok ? '✓' : '✗'} ${route}  docOverflow=${m.docOverflowPx}px docScrolled=${m.docScrolledBy}px `
-      + `reachedBottom=${m.reachedBottom} lastRow="${m.lastRowText}" clearsNav=${m.lastRowClearsNav}`);
+      + `reachedBottom=${m.reachedBottom} overscrollY=${m.overscrollY} lastRow="${m.lastRowText}" clearsNav=${m.lastRowClearsNav}`);
     for (const o of m.overflowing) console.log(`    OVERFLOWS VIEWPORT: ${o}`);
   }
 

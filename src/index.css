@@ -19,15 +19,29 @@
 
 /* ─── Page scrollers ──────────────────────────────────────────────────────── */
 /* Every page is its own scroller inside AppLayout's overflow-hidden <main>.
-   Promote each one to its own compositor layer so iOS scrolls it on the
-   compositor thread instead of repainting the page every frame (David
-   2026-09-05: "scrolling to bottom of page is still VERY choppy"). No
-   transform here on purpose — a transform would turn the scroller into the
-   containing block for any position:fixed child (modals, the bottom nav). */
+   The ONE thing that measurably helps here is refusing to chain the scroll:
+   when a list hits its end, iOS hands the leftover momentum to the ancestor
+   chain, and that hand-off is the lurch David reported at the bottom of a page
+   ("it also stutters at the bottom"). `contain` keeps the native rubber-band
+   INSIDE the scroller — the bounce he asked for — while refusing to pass the
+   momentum on.
+
+   🔒 WHAT WAS HERE BEFORE, AND WHY IT WENT (David 2026-09-05). This rule used
+   to also set three properties in the name of smoothness; two of them were
+   plausibly making it worse and none was measured:
+     · `-webkit-overflow-scrolling: touch` — legacy iOS<13. Momentum is the
+       default in modern WebKit; the property is a no-op at best.
+     · `will-change: scroll-position` — a compositor hint the spec explicitly
+       says to use sparingly. Applied blanket to EVERY scroller in the app, it
+       is the overuse that warning is about, and it costs memory per layer.
+     · `overflow-anchor: none` — actively DISABLES scroll anchoring, the
+       browser's own protection against the view jumping when content above
+       resizes. These pages resolve charts and insight strips late, so turning
+       it off invites exactly the jump it exists to prevent. Cargo-culted in
+       with no rationale; anchoring is back on.
+   Add nothing back here without a measurement showing it helps. */
 main .overflow-y-auto {
-  -webkit-overflow-scrolling: touch;
-  will-change: scroll-position;
-  overflow-anchor: none;
+  overscroll-behavior-y: contain;
 }
 
 /* ─── Base ────────────────────────────────────────────────────────────────── */
@@ -79,8 +93,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: var(--app-height);
-  /* Enable momentum scrolling on iOS for overflow containers */
-  -webkit-overflow-scrolling: touch;
+  /* The document itself must never scroll or bounce — pages scroll inside their
+     own scrollers. This is the backstop for the safe-area miscount above: even
+     if some future child overflows, the page cannot be dragged out of place. */
+  overscroll-behavior: none;
 }
 
 #root {
