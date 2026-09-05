@@ -628,8 +628,10 @@ function resetAnalysisPool(): void {
  *  position eats the whole wait. */
 const REVIEW_POSITION_BUDGET_MS = 5_000;
 
-/** Per-position budget for the BULK background sweep — deliberately far smaller
- *  than the review's 5s.
+/** Per-position budget for the sweep's BEST-MOVE refinement — the only deep
+ *  search the sweep still runs, and only on the handful of moves it graded a
+ *  mistake or worse (the drills need a solution move). The eval curve itself
+ *  runs at BATCH_SHALLOW_BUDGET_MS.
  *
  *  David 2026-09-05, on the native app: analysis "stuck at 1 for 4 minutes."
  *  The audit stream proved the workers were ALIVE (no wedge-respawn in 200s),
@@ -649,17 +651,50 @@ const REVIEW_POSITION_BUDGET_MS = 5_000;
  *  slow asm build, which is exactly where it must. */
 const BATCH_POSITION_BUDGET_MS = 800;
 
-/** TWO-PASS DEPTH for the bulk sweep (David 2026-09-05, "how does chess.com
- *  analyze so fast?" → item 2). Pass 1 walks every non-book ply SHALLOW; pass 2
- *  re-searches at ANALYSIS_DEPTH only the plies around a swing the shallow
- *  curve exposed. Quiet moves — most of a game — never pay the deep budget, and
- *  the moves that decide the classification get the full depth. */
+/** 🔒 THE SWEEP IS A DRAFT; THE REVIEW IS THE ANALYSIS (David 2026-09-05:
+ *  "decrease the depth for the batch and then dive deeper on the key moments
+ *  once a single game is selected to be reviewed by the user — this is burning
+ *  way too much battery and taking way too long").
+ *
+ *  The sweep's job is to find WHICH games and WHICH moments deserve a look. It
+ *  walks every non-book ply ONCE, shallow, and stops. It does not re-search the
+ *  swings it finds: on an amateur game the eval swings constantly, so a deep
+ *  second pass was most of the sweep's runtime and all of its battery — spent
+ *  producing precision for games the user may never open.
+ *
+ *  The deep search moved to where a person is actually waiting for it and has
+ *  asked for it: the REVIEW of one selected game (see REVIEW_DEEP_DEPTH). */
 const BATCH_SHALLOW_DEPTH = 10;
 const BATCH_SHALLOW_BUDGET_MS = 250;
+
+/** Depth the REVIEW re-searches its key moments at — deeper than the old
+ *  all-plies pass (ANALYSIS_DEPTH), because it now runs on ~10 positions
+ *  instead of ~66. Fewer moments, harder look. */
+const REVIEW_DEEP_DEPTH = BEST_MOVE_DEPTH;
+
+/** Smallest cpLoss the SWEEP will call a slip.
+ *
+ *  A depth-10 eval carries roughly 30-50cp of search noise — the same size as
+ *  INACCURACY_CP itself. So an "inaccuracy" read off two shallow evals is
+ *  indistinguishable from the noise, and flagging it fills My Mistakes and the
+ *  weakness profile with moves that were fine. The sweep therefore commits only
+ *  to mistake-and-worse, which is well clear of its own noise floor. Real
+ *  inaccuracies are surfaced by the review, which re-searches every moment that
+ *  moved the eval at all (TWO_PASS_SWING_CP) at REVIEW_DEEP_DEPTH.
+ *
+ *  Lowering the sweep's depth without raising this floor would have been the
+ *  quiet way to make the app FASTER and WRONGER. */
+const BATCH_GRADE_FLOOR_CP = MISTAKE_CP;
 /** Swing between adjacent SHALLOW evals that earns a deep re-search.
  *  INACCURACY_CP is the smallest swing that changes a classification, so a
  *  smaller one cannot change the verdict and stays shallow. */
 export const TWO_PASS_SWING_CP = INACCURACY_CP;
+
+/** NB this is now the REVIEW's key-moment selector (the sweep no longer runs a
+ *  second pass). Because the threshold is INACCURACY_CP — the smallest swing
+ *  that can change a classification — every ply the review could grade as
+ *  anything other than `good` is re-searched deep. A quiet ply left shallow can
+ *  only ever grade `good`, so the review's verdicts are all deep verdicts. */
 
 /**
  * Indices (into `shallow`, i.e. FEN indices) to re-search deep: BOTH ends of any
@@ -741,6 +776,9 @@ async function evaluateFensPooled(
   /** Per-position movetime for the pool workers. Review keeps the 5s default;
    *  the bulk sweep passes BATCH_POSITION_BUDGET_MS. */
   budgetMs: number = REVIEW_POSITION_BUDGET_MS,
+  /** Search depth for this pass. The sweep and the review's curve pass run
+   *  shallow; only the review's key-moment dive runs deep. */
+  depth: number = ANALYSIS_DEPTH,
 ): Promise<{ evals: (number | null)[]; achievedDepth: number } | null> {
   const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
   let workers: DedicatedWorker[] = [];
@@ -762,7 +800,7 @@ async function evaluateFensPooled(
       next += 1;
       if (i >= fens.length) return;
       try {
-        const a = await w.analyzePosition(fens[i], ANALYSIS_DEPTH, budgetMs);
+        const a = await w.analyzePosition(fens[i], depth, budgetMs);
         evals[i] = a.evaluation;
         if (Number.isFinite(a.depth) && a.depth > 0) achievedDepth = Math.min(achievedDepth, a.depth);
       } catch {
@@ -780,7 +818,7 @@ async function evaluateFensPooled(
   }
   return {
     evals,
-    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, depth) : 0,
   };
 }
 
@@ -854,55 +892,30 @@ export async function analyzeGameOnWorker(
   const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
   const toStore: EvalToStore[] = [];
 
-  // ── PASS 1: shallow curve over every non-book ply.
-  const shallow: (number | null)[] = fens.map(() => null);
-  const deep: (number | null)[] = fens.map(() => null);
+  // ── THE SWEEP'S ONE PASS. Shallow, every non-book ply, then done. There is
+  // deliberately no second pass here: see BATCH_SHALLOW_DEPTH.
+  const evals: (number | null)[] = fens.map(() => null);
   const depthAt: number[] = fens.map(() => 0);
   for (let i = skipBook; i < fens.length; i++) {
     if (_abortAnalysis) return null;
     const hit = cached.get(i);
-    if (hit) {
-      shallow[i] = hit.evaluation;
-      depthAt[i] = hit.depth;
-      if (hit.depth >= ANALYSIS_DEPTH) deep[i] = hit.evaluation;
-      continue;
-    }
+    if (hit) { evals[i] = hit.evaluation; depthAt[i] = hit.depth; continue; }
     const r = await search(i, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS);
     if (!r) continue;
-    shallow[i] = r.evaluation;
+    evals[i] = r.evaluation;
     depthAt[i] = r.depth;
     if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
   }
 
-  // ── PASS 2: deep re-search ONLY where the shallow curve moved.
-  for (const i of selectCriticalPlies(shallow, skipBook)) {
-    if (_abortAnalysis) return null;
-    if (deep[i] !== null) continue; // cached deep hit
-    const r = await search(i, ANALYSIS_DEPTH, BATCH_POSITION_BUDGET_MS);
-    if (!r) continue;
-    deep[i] = r.evaluation;
-    if (Number.isFinite(r.depth) && r.depth > 0) {
-      depthAt[i] = Math.max(depthAt[i], r.depth);
-      toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
-    }
-  }
-
-  // The game is STAMPED with the shallowest depth any evaluated ply reached.
-  // Quiet plies stay shallow BY DESIGN, so the stamp reads shallow and
-  // `gameNeedsAnalysis({ depthUpgrade: true })` re-deepens the whole game when it
-  // is next opened on a fast engine — the review evaluates every ply anyway.
+  // Stamped with the depth the sweep actually reached — which is BELOW
+  // ANALYSIS_DEPTH by design. That is the mechanism that makes the deep dive
+  // happen: `gameNeedsAnalysis({ depthUpgrade: true })` sees a shallow stamp and
+  // re-analyses the game when it is OPENED, and that re-analysis is the review's
+  // deep pass. The sweep is a draft that says so in the record.
   let achievedDepth = Number.POSITIVE_INFINITY;
   for (let i = skipBook; i < fens.length; i++) {
-    if (shallow[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
+    if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
   }
-
-  // PAIR-CONSISTENT grading: a move is graded from two evals of the SAME depth —
-  // the deep pair when both its ends were re-searched, the shallow pair
-  // otherwise. Mixing a depth-16 "before" with a depth-10 "after" would read
-  // the depth noise (~30-50cp) as an inaccuracy on a quiet move.
-  const bothDeep = (i: number): boolean => deep[i] !== null && deep[i + 1] !== null;
-  const evalBeforeAt = (i: number): number | null => (bothDeep(i) ? deep[i] : shallow[i]);
-  const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : shallow[i + 1]);
 
   // Build annotations + collect best-move lookups for mistakes
   const annotations: MoveAnnotation[] = [];
@@ -917,8 +930,8 @@ export async function analyzeGameOnWorker(
     const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
     const moveNumber = Math.floor(moveIdx / 2) + 1;
 
-    const evalBefore = evalBeforeAt(moveIdx);
-    const evalAfter = evalAfterAt(moveIdx);
+    const evalBefore = evals[moveIdx];
+    const evalAfter = evals[moveIdx + 1];
 
     let classification: MoveClassification = 'good';
 
@@ -942,11 +955,16 @@ export async function analyzeGameOnWorker(
       // surfaces even in a "named" line: 2.Qh5 (Wayward Queen) is in the DB
       // yet drops 400cp, and the student should see that. So book downgrades
       // everything below a blunder; blunder/brilliant/great grade normally.
+      // SHALLOW-NOISE FLOOR — see BATCH_GRADE_FLOOR_CP. A slip smaller than the
+      // sweep's own search noise is not a finding, it IS the noise.
+      const belowShallowFloor = graded === 'inaccuracy' && cpLoss < BATCH_GRADE_FLOOR_CP;
       if (moveIsBook && (graded === 'good' || graded === 'inaccuracy' || graded === 'mistake')) {
         classification = 'book';
+      } else if (belowShallowFloor) {
+        classification = 'good';
       } else {
         classification = graded;
-        if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
+        if (cpLoss >= BATCH_GRADE_FLOOR_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
           mistakeIndices.push(moveIdx);
         }
       }
@@ -1065,46 +1083,70 @@ async function analyzeGamePositions(
   // on desktop); the sequential singleton below is the fallback for any device
   // where the pool can't spawn — which is what every device did until the pool
   // stopped hardcoding a build iOS can't run.
-  const evals: (number | null)[] = fens.map(() => null);
-  let achievedDepth = Number.POSITIVE_INFINITY;
+  // 🔒 THE REVIEW IS WHERE THE DEEP SEARCH LIVES NOW (David 2026-09-05: "dive
+  // deeper on the key moments once a single game is selected to be reviewed").
+  //
+  // The old review searched ALL ~66 plies at ANALYSIS_DEPTH with a 5s budget
+  // each: 216 seconds measured on David's iPhone, of which the overwhelming
+  // majority went on proving that quiet moves were quiet. PostHog said 11 of his
+  // 14 reviews were abandoned before they finished.
+  //
+  // Now it walks the curve CHEAPLY — and mostly for free, because the sweep
+  // already cached those very positions — then re-searches only the moments that
+  // moved the eval, at REVIEW_DEEP_DEPTH, which is DEEPER than the old pass. Ten
+  // positions get a harder look than sixty-six used to get.
+  const isReview = positionBudgetMs === undefined;
   // BULK callers skip the engine on opening-book positions (see firstNonBookPly
-  // + the note in analyzeGameOnWorker). The REVIEW passes no budget and keeps
-  // every ply, so its eval-curve graph has no opening gap.
-  const skipBook = positionBudgetMs ? firstNonBookPly(moves) : 0;
-  // EVAL CACHE (positionEvalCache.ts): positions this device already scored AT
-  // FULL DEPTH are served, not re-searched; only the rest go to the engine. The
-  // depth floor keeps a shallow batch eval out of the review's curve.
-  const cached = await lookupPositionEvals(fens, ANALYSIS_DEPTH);
+  // + the note in analyzeGameOnWorker). The REVIEW keeps every ply, so its
+  // eval-curve graph has no opening gap.
+  const skipBook = isReview ? 0 : firstNonBookPly(moves);
+  const curveBudgetMs = positionBudgetMs ?? BATCH_SHALLOW_BUDGET_MS;
+
+  /** The cheap curve: one eval per ply. */
+  const evals: (number | null)[] = fens.map(() => null);
+  /** Deep re-searches, by ply. Null where the curve value still stands. */
+  const deep: (number | null)[] = fens.map(() => null);
+  const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
-  cached.forEach((hit, i) => { if (i >= skipBook) evals[i] = hit.evaluation; });
+  let achievedDepth = Number.POSITIVE_INFINITY;
+
+  // ── CURVE PASS (cache-first). A position the sweep already scored costs
+  // nothing here, which is why the review of a swept game starts near-instantly.
+  const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
+  cached.forEach((hit, i) => {
+    if (i < skipBook) return;
+    evals[i] = hit.evaluation;
+    depthAt[i] = hit.depth;
+    if (hit.depth >= REVIEW_DEEP_DEPTH) deep[i] = hit.evaluation;
+  });
   const pendingIdx: number[] = [];
-  for (let i = skipBook; i < fens.length; i++) if (!cached.has(i)) pendingIdx.push(i);
+  for (let i = skipBook; i < fens.length; i++) if (evals[i] === null) pendingIdx.push(i);
 
   const pooled = pendingIdx.length === 0
-    ? { evals: [] as (number | null)[], achievedDepth: ANALYSIS_DEPTH }
-    : await evaluateFensPooled(pendingIdx.map((i) => fens[i]), onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
+    ? { evals: [] as (number | null)[], achievedDepth: BATCH_SHALLOW_DEPTH }
+    : await evaluateFensPooled(pendingIdx.map((i) => fens[i]), onPosition, curveBudgetMs, BATCH_SHALLOW_DEPTH);
   if (pooled) {
     pendingIdx.forEach((i, k) => {
       const e = pooled.evals[k] ?? null;
       evals[i] = e;
-      if (e !== null && pooled.achievedDepth > 0) toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth });
+      if (e !== null && pooled.achievedDepth > 0) {
+        depthAt[i] = pooled.achievedDepth;
+        toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth });
+      }
     });
-    achievedDepth = pooled.achievedDepth;
   } else {
     for (let i = 0; i < fens.length; i++) {
       onPosition?.(i + 1, fens.length);
       if (i < skipBook || evals[i] !== null) continue;
       const fen = fens[i];
       try {
-        // Bulk callers cap the singleton too — the fast native engine otherwise
-        // runs depth 16 uncapped. analyzeWithBudget force-stops at the budget
-        // and recovers a dead worker, so the sweep can neither crawl nor hang.
-        const analysis: StockfishAnalysis = positionBudgetMs
-          ? await stockfishEngine.analyzeWithBudget(fen, ANALYSIS_DEPTH, positionBudgetMs)
-          : await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
+        // Budgeted on BOTH paths now — the fast native engine otherwise runs the
+        // curve pass uncapped. analyzeWithBudget force-stops at the budget and
+        // recovers a dead worker, so neither path can crawl or hang.
+        const analysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(fen, BATCH_SHALLOW_DEPTH, curveBudgetMs);
         evals[i] = analysis.evaluation;
         if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
-          achievedDepth = Math.min(achievedDepth, analysis.depth);
+          depthAt[i] = analysis.depth;
           toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth });
         }
       } catch {
@@ -1112,6 +1154,42 @@ async function analyzeGamePositions(
       }
     }
   }
+
+  // ── THE DEEP DIVE (review only): every moment the curve says could matter.
+  // selectCriticalPlies picks BOTH ends of each swing, so a graded pair is
+  // always two evals of the SAME depth — mixing a deep "before" with a shallow
+  // "after" would read the depth difference itself as an inaccuracy.
+  let deepDiveComplete = false;
+  if (isReview) {
+    const keyPlies = selectCriticalPlies(evals, skipBook);
+    let searched = 0;
+    for (const i of keyPlies) {
+      if (deep[i] !== null) { searched++; continue; }
+      onPosition?.(fens.length, fens.length);
+      try {
+        const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+        deep[i] = a.evaluation;
+        searched++;
+        if (Number.isFinite(a.depth) && a.depth > 0) {
+          depthAt[i] = Math.max(depthAt[i], a.depth);
+          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth });
+        }
+      } catch {
+        // Keep the curve value for this ply — a lost deep search costs
+        // precision on one move, never the review.
+      }
+    }
+    deepDiveComplete = searched === keyPlies.length;
+  }
+
+  for (let i = skipBook; i < fens.length; i++) {
+    if (evals[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
+  }
+
+  // PAIR-CONSISTENT grading (see the deep-dive note above).
+  const bothDeep = (i: number): boolean => deep[i] !== null && deep[i + 1] !== null;
+  const evalBeforeAt = (i: number): number | null => (bothDeep(i) ? deep[i] : evals[i]);
+  const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : evals[i + 1]);
 
   const annotations: MoveAnnotation[] = [];
   // BOOK-move exemption (David 2026-08-28): theory moves are never errors.
@@ -1121,8 +1199,8 @@ async function analyzeGamePositions(
     const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
     const moveNumber = Math.floor(moveIdx / 2) + 1;
 
-    const evalBefore = evals[moveIdx];
-    const evalAfter = evals[moveIdx + 1];
+    const evalBefore = evalBeforeAt(moveIdx);
+    const evalAfter = evalAfterAt(moveIdx);
 
     let classification: MoveClassification = 'good';
     let bestMove: string | null = null;
@@ -1152,9 +1230,8 @@ async function analyzeGamePositions(
         classification = graded;
         if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
           try {
-            const bestAnalysis: StockfishAnalysis = positionBudgetMs
-              ? await stockfishEngine.analyzeWithBudget(fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs)
-              : await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
+            const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(
+              fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
             bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
               ? null
               : bestAnalysis.bestMove;
@@ -1191,9 +1268,17 @@ async function analyzeGamePositions(
 
   return {
     annotations,
+    // WHAT THIS RUN COMMITS TO, which is not the same as the shallowest search
+    // it ran. A completed review re-searched every moment that could change a
+    // verdict at REVIEW_DEEP_DEPTH, so it claims ANALYSIS_DEPTH and
+    // `gameNeedsAnalysis` leaves it alone — stamping the quiet plies' shallow
+    // depth instead would re-run the whole analysis on every re-open. The sweep
+    // claims only its shallow pass, which is what schedules the deep dive.
     // A game where every position threw measured nothing, so it claims nothing —
     // 0 reads as stale, which is exactly right.
-    achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+    achievedDepth: deepDiveComplete
+      ? ANALYSIS_DEPTH
+      : (Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0),
   };
 }
 
@@ -1339,7 +1424,7 @@ export async function analyzeRecentGames(
       label: `Analyzing game ${i + 1} of ${batch.length}…`,
     });
     try {
-      const result = await analyzeGamePositions(game, undefined, BATCH_POSITION_BUDGET_MS);
+      const result = await analyzeGamePositions(game, undefined, BATCH_SHALLOW_BUDGET_MS);
       if (result && result.annotations.length > 0) {
         await db.games.update(game.id, {
           annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
@@ -1545,7 +1630,7 @@ export async function analyzeAllGames(
           phase: 'analyzing',
         });
 
-        const result = await analyzeGamePositions(game, undefined, BATCH_POSITION_BUDGET_MS);
+        const result = await analyzeGamePositions(game, undefined, BATCH_SHALLOW_BUDGET_MS);
         if (result && result.annotations.length > 0) {
           await db.games.update(game.id, {
             annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
@@ -1718,4 +1803,5 @@ export function runBackgroundAnalysis(): void {
 export const __testables = {
   evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
   resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
+  REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP,
 };

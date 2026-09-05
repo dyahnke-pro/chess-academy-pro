@@ -409,11 +409,15 @@ export function App(): JSX.Element {
         // critical path, instead of in front of the first Analyze tap or review.
         // Only when the library has games (a fresh install spawns nothing); the
         // pool then stays alive for the session (gameAnalysisService warm pool).
+        // Gated on there being WORK, not merely games. Warming four asm.js
+        // engines is itself ~45s of compile per worker; doing that on a library
+        // that is fully analysed spends battery to prepare for a tap that has
+        // nothing to do (David 2026-09-05: "this is burning way too much
+        // battery"). countGamesNeedingAnalysis is a Dexie filter, not an engine
+        // call, so asking is free.
         setTimeout(() => {
-          void db.games.filter((g) => !g.isMasterGame).count()
-            .then((n) => (n > 0
-              ? import('./services/gameAnalysisService').then((m) => m.warmAnalysisPool())
-              : 0))
+          void import('./services/gameAnalysisService')
+            .then(async (m) => (await m.countGamesNeedingAnalysis() > 0 ? m.warmAnalysisPool() : 0))
             .catch(() => undefined);
         }, 8000);
 

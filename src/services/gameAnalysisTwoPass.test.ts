@@ -8,62 +8,102 @@ vi.mock('./openingDetectionService', async (importOriginal) => ({
   isBookLine: () => false,
 }));
 
+/** Singleton-engine calls the REVIEW makes (jsdom has no Worker, so the pool
+ *  declines and the review takes the singleton path — the same code either way). */
+const singletonCalls: { fen: string; depth: number }[] = [];
+vi.mock('./stockfishEngine', () => {
+  const answer = (fen: string, depth: number): Promise<unknown> => {
+    singletonCalls.push({ fen, depth });
+    return Promise.resolve({
+      evaluation: CURVE[FENS.indexOf(fen)] ?? 0,
+      bestMove: 'd2d4', isMate: false, mateIn: null, depth, topLines: [], nodesPerSecond: 1,
+    });
+  };
+  return {
+    stockfishEngine: {
+      initialize: vi.fn(() => Promise.resolve()),
+      analyzePosition: vi.fn(answer),
+      analyzeWithBudget: vi.fn(answer),
+    },
+    isIosSafari: () => false,
+    resolveWorkerUrl: () => ({ url: '/stockfish/stockfish-asm.js', variant: 'asm', reason: 'test', workerType: 'classic' }),
+  };
+});
+
+import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import {
   analyzeGameOnWorker,
-  replayPgnToFens,
+  analyzeSingleGame,
   selectCriticalPlies,
   ANALYSIS_DEPTH,
   BEST_MOVE_DEPTH,
   TWO_PASS_SWING_CP,
   __testables,
 } from './gameAnalysisService';
-import { MATE_EVAL_VALUE } from './engineConstants';
+import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
 import { buildGameRecord } from '../test/factories';
 
-// TWO-PASS DEPTH + EVAL CACHE (David 2026-09-05, "how does chess.com analyze so
-// fast?" → "two and three please"). The bulk sweep now walks every ply SHALLOW
-// and re-searches DEEP only around a swing; a position the device already
-// scored is served from the cache instead of the engine. Pinned here: which
-// plies get which depth, that quiet plies never pay the deep budget, that the
-// grade is computed from a same-depth pair, and that a second pass over the
-// same game costs zero engine calls.
+// 🔒 THE SWEEP IS A DRAFT; THE REVIEW IS THE ANALYSIS (David 2026-09-05:
+// "decrease the depth for the batch and dive deeper on key moments once a single
+// game is selected to be reviewed — this is burning way too much battery and
+// taking way too long").
+//
+// Pinned here, because each is a way the split could silently rot:
+//   - the SWEEP runs ONE shallow pass and never a deep one (the battery bill);
+//   - the sweep does not claim slips smaller than its own search noise (the
+//     honesty cost of running shallow — "faster and wronger" is not the trade);
+//   - the sweep STAMPS itself shallow, which is what schedules the deep dive;
+//   - the REVIEW deep-searches the key moments and only those;
+//   - a reviewed game is not re-analysed on every re-open.
 
 const PGN = '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 1-0';
-const GAME = buildGameRecord({ pgn: PGN });
-const { fens } = replayPgnToFens(PGN);
-const { BATCH_SHALLOW_DEPTH } = __testables;
 
-/** Shallow curve: level, then White's 3.Bb5 (move idx 4: fens[4] → fens[5]) drops 320cp. */
+/** FENs of the fixture, computed here so the engine mocks (hoisted above every
+ *  import) can answer per position without importing the service. */
+const FENS: string[] = (() => {
+  const c = new Chess();
+  c.loadPgn(PGN);
+  const v = c.history({ verbose: true });
+  return [v[0].before, ...v.map((m) => m.after)];
+})();
+
+/** Level, then White's 3.Bb5 (move idx 4: fens[4] → fens[5]) drops 320cp. */
 const CURVE = [20, 20, 20, 20, 20, -300, -300, -300, -300];
+
+const GAME = buildGameRecord({ pgn: PGN });
+const { BATCH_SHALLOW_DEPTH, REVIEW_DEEP_DEPTH, BATCH_GRADE_FLOOR_CP } = __testables;
 
 interface Call { fen: string; depth: number }
 
-/** Fake worker that answers the scripted curve and records (fen, depth) per call. */
-function scriptedWorker(calls: Call[]) {
+/** Fake pool worker that answers a scripted curve and records (fen, depth). */
+function scriptedWorker(calls: Call[], curve: readonly number[] = CURVE) {
   return {
     analyzePosition: vi.fn((fen: string, depth: number) => {
       calls.push({ fen, depth });
-      const idx = fens.indexOf(fen);
-      return Promise.resolve({ evaluation: CURVE[idx] ?? 0, bestMove: 'd2d4', depth });
+      return Promise.resolve({ evaluation: curve[FENS.indexOf(fen)] ?? 0, bestMove: 'd2d4', depth });
     }),
     destroy: vi.fn(),
   } as never;
 }
 
 beforeEach(async () => {
+  singletonCalls.length = 0;
   await db.delete();
   await db.open();
 });
 
-describe('selectCriticalPlies', () => {
+describe('selectCriticalPlies — the review\'s key-moment selector', () => {
   it('picks BOTH ends of every pair whose swing reaches the threshold', () => {
     expect(selectCriticalPlies(CURVE)).toEqual([4, 5]);
   });
 
-  it('ignores swings below INACCURACY_CP (they cannot change a verdict)', () => {
-    const quiet = [0, TWO_PASS_SWING_CP - 1, 0, -(TWO_PASS_SWING_CP - 1), 0];
-    expect(selectCriticalPlies(quiet)).toEqual([]);
+  it('threshold is INACCURACY_CP, so every ply that could grade worse than `good` is deepened', () => {
+    // This is what makes the review's verdicts all DEEP verdicts: a ply left
+    // shallow swung less than the smallest grade-changing amount.
+    expect(TWO_PASS_SWING_CP).toBe(INACCURACY_CP);
+    expect(selectCriticalPlies([0, INACCURACY_CP, 0])).toEqual([0, 1, 2]);
+    expect(selectCriticalPlies([0, INACCURACY_CP - 1, 0])).toEqual([]);
   });
 
   it('always deepens around a mate score', () => {
@@ -71,73 +111,106 @@ describe('selectCriticalPlies', () => {
   });
 
   it('skips pairs with a missing eval and honors the `from` offset', () => {
-    // A pair with a missing eval is skipped (never guessed); the level pairs are quiet.
     expect(selectCriticalPlies([null, 500, 500, 500], 0)).toEqual([]);
-    // `from` excludes the pair (0,1) even though it swings.
     expect(selectCriticalPlies([0, 500, 0, 0], 1)).toEqual([1, 2]);
   });
 });
 
-describe('analyzeGameOnWorker — two-pass depth', () => {
-  it('walks every ply shallow, deepens ONLY the swing pair, refines only the mistake', async () => {
+describe('the SWEEP runs one shallow pass', () => {
+  it('evaluates every ply shallow and NEVER runs a deep re-search', async () => {
     const calls: Call[] = [];
     const result = await analyzeGameOnWorker(GAME, scriptedWorker(calls));
     expect(result).not.toBeNull();
 
-    const shallowFens = calls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH).map((c) => fens.indexOf(c.fen)).sort((a, b) => a - b);
-    const deepFens = calls.filter((c) => c.depth === ANALYSIS_DEPTH).map((c) => fens.indexOf(c.fen)).sort((a, b) => a - b);
-    const bestFens = calls.filter((c) => c.depth === BEST_MOVE_DEPTH).map((c) => fens.indexOf(c.fen));
+    const shallow = calls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH);
+    const deep = calls.filter((c) => c.depth === ANALYSIS_DEPTH);
+    const best = calls.filter((c) => c.depth === BEST_MOVE_DEPTH).map((c) => FENS.indexOf(c.fen));
 
-    expect(shallowFens).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
-    // The deep budget is spent on the two ends of the swing and nowhere else.
-    expect(deepFens).toEqual([4, 5]);
-    // Best-move refinement only for the move that lost material (idx 4).
-    expect(bestFens).toEqual([4]);
-    // 9 shallow + 2 deep + 1 refine — a quiet ply never costs a deep search.
-    expect(calls).toHaveLength(12);
+    expect(shallow).toHaveLength(FENS.length);
+    // THE BATTERY BILL. A second deep pass over the swings was most of the
+    // sweep's runtime on an amateur game, where the eval swings constantly.
+    expect(deep, 'the sweep must not deep-search — that is the review\'s job').toHaveLength(0);
+    // The one exception: the mistake's best move, which the drills need.
+    expect(best).toEqual([4]);
+    expect(calls).toHaveLength(FENS.length + 1);
   });
 
-  it('grades the swing as a blunder from the deep pair and every quiet move as good', async () => {
+  it('still catches the blunder, graded off the shallow curve', async () => {
     const result = await analyzeGameOnWorker(GAME, scriptedWorker([]));
     const cls = result!.annotations.map((a) => a.classification);
     expect(cls[4]).toBe('blunder');
     cls.forEach((c, i) => { if (i !== 4) expect(c, `move ${i}`).toBe('good'); });
-    // The blunder carries its refined best move; quiet moves carry none.
     expect(result!.annotations[4].bestMove).toBe('d2d4');
-    expect(result!.annotations[0].bestMove).toBeNull();
   });
 
-  it('stamps the game with the SHALLOW depth so a fast engine re-deepens it later', async () => {
+  it('does NOT claim a slip smaller than its own search noise', async () => {
+    // A depth-10 eval carries ~30-50cp of noise — the size of INACCURACY_CP
+    // itself. Flagging that would fill My Mistakes with moves that were fine.
+    // Faster AND wronger is not the trade; the review surfaces the real ones.
+    const nearNoise = BATCH_GRADE_FLOOR_CP - 20;
+    expect(nearNoise).toBeGreaterThanOrEqual(INACCURACY_CP); // would have been flagged before
+    const calls: Call[] = [];
+    const curve = [20, 20, 20, 20, 20, 20 - nearNoise, 20 - nearNoise, 20 - nearNoise, 20 - nearNoise];
+    const result = await analyzeGameOnWorker(GAME, scriptedWorker(calls, curve));
+    expect(result!.annotations[4].classification).toBe('good');
+    // …and it costs no best-move search either.
+    expect(calls.filter((c) => c.depth === BEST_MOVE_DEPTH)).toHaveLength(0);
+  });
+
+  it('stamps itself SHALLOW — the record says "draft", which is what schedules the deep dive', async () => {
     const result = await analyzeGameOnWorker(GAME, scriptedWorker([]));
-    // Quiet plies stay shallow by design; the stamp must not claim deep.
     expect(result!.achievedDepth).toBe(BATCH_SHALLOW_DEPTH);
+    expect(result!.achievedDepth).toBeLessThan(ANALYSIS_DEPTH); // ⇒ gameNeedsAnalysis re-analyses on open
   });
 
   it('EVAL CACHE: a second sweep of the same positions costs ZERO engine calls', async () => {
     const first: Call[] = [];
     await analyzeGameOnWorker(GAME, scriptedWorker(first));
     expect(first.length).toBeGreaterThan(0);
-    // Every eval the first sweep computed — shallow, deep, and the refined best
-    // move — is now cached at the depth it reached.
-    expect(await db.positionEvals.count()).toBe(fens.length);
+    expect(await db.positionEvals.count()).toBe(FENS.length);
 
     const second: Call[] = [];
     const result = await analyzeGameOnWorker(GAME, scriptedWorker(second));
     expect(second, 'a cached position must not be re-searched').toHaveLength(0);
-    // …and the cached run grades identically.
     expect(result!.annotations[4].classification).toBe('blunder');
     expect(result!.annotations[4].bestMove).toBe('d2d4');
   });
+});
 
-  it('a cached SHALLOW eval does not stand in for the deep pass', async () => {
-    // Prime the cache at shallow depth only (as a prior sweep on a slow phone would).
-    await db.positionEvals.bulkPut(fens.map((fen, i) => ({
-      fen: fen.split(' ').slice(0, 4).join(' '), evaluation: CURVE[i], depth: BATCH_SHALLOW_DEPTH, bestMove: null, updatedAt: 1,
-    })));
-    const calls: Call[] = [];
-    await analyzeGameOnWorker(GAME, scriptedWorker(calls));
-    // No shallow calls (all cached) — but the swing pair is still searched deep.
-    expect(calls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH)).toHaveLength(0);
-    expect(calls.filter((c) => c.depth === ANALYSIS_DEPTH).map((c) => fens.indexOf(c.fen)).sort()).toEqual([4, 5]);
+describe('the REVIEW deep-dives the key moments', () => {
+  async function reviewFixture(): Promise<void> {
+    await db.games.put(buildGameRecord({ id: 'g-review', pgn: PGN, annotations: [], fullyAnalyzed: false }));
+  }
+
+  it('walks the curve shallow, then re-searches ONLY the swing at REVIEW_DEEP_DEPTH', async () => {
+    await reviewFixture();
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns).not.toBeNull();
+
+    const curve = singletonCalls.filter((c) => c.depth === BATCH_SHALLOW_DEPTH);
+    const dive = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH).map((c) => FENS.indexOf(c.fen));
+
+    expect(curve.length).toBe(FENS.length);
+    // The old review ran ALL of these deep at 5s each — 216s on David's iPhone.
+    expect(dive).toEqual(expect.arrayContaining([4, 5]));
+    expect(dive.length).toBeLessThan(FENS.length);
+    expect(anns![4].classification).toBe('blunder');
+  });
+
+  it('searches DEEPER than the pass it replaced — fewer moments, harder look', () => {
+    expect(REVIEW_DEEP_DEPTH).toBeGreaterThan(ANALYSIS_DEPTH);
+  });
+
+  it('a completed review is NOT re-analysed on the next open', async () => {
+    await reviewFixture();
+    await analyzeSingleGame('g-review');
+    const saved = await db.games.get('g-review');
+    // Stamping the quiet plies' shallow depth here would re-run the whole
+    // analysis every time the user re-opened the game.
+    expect(saved?.analysisDepth).toBe(ANALYSIS_DEPTH);
+
+    singletonCalls.length = 0;
+    await analyzeSingleGame('g-review');
+    expect(singletonCalls, 'a reviewed game must not be re-analysed').toHaveLength(0);
   });
 });
