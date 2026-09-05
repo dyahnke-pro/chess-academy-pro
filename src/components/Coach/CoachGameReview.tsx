@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
+import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { buildVoicePackage } from '../../services/voicePackage';
@@ -621,9 +621,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // totalPlies is the authoritative ceiling — nav walks every move the
   // student played, even when the LLM narrated only a subset
   // (WO-REVIEW-02a-FIX).
+  // AUTO-ADVANCE routes through the SAME forward handler the button uses, so
+  // every planned stop (find-the-shot / trap / turning point) still fires on
+  // an auto tick. handleWalkForward is declared below the hook — a ref bridges
+  // the order.
+  const handleWalkForwardRef = useRef<() => void>(() => undefined);
   const walkPlayback = useReviewPlayback({
     narration: walkNarration,
     totalPlies: moves.length,
+    onAutoAdvance: () => handleWalkForwardRef.current(),
     // ship-5: scope hint callouts to this specific game.
     gameId: props.gameId,
     // Deep-link: /coach/review/:id?move=N → the page hands us a
@@ -955,6 +961,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     walkPlayback.goForward();
   }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
+  handleWalkForwardRef.current = handleWalkForward;
+  /** A user's forward tap / key: pauses auto-play (only Play restarts it),
+   *  then steps through the same card ladder. */
+  const handleWalkForwardManual = useCallback((): void => {
+    walkPlayback.pause('forward-tap');
+    handleWalkForward();
+  }, [walkPlayback, handleWalkForward]);
+  /** ⏭ = the next KEY MOMENT (the student's next flagged move), not the end of
+   *  the game — an 80-move auto-walk needs a way past the quiet stretches
+   *  (G.7). Keeps auto-play running from where it lands. */
+  const nextKeyMomentPly = useMemo<number | null>(() => {
+    const segs = walkNarration?.segments ?? [];
+    const hit = segs.find((sg) => sg.ply > walkPlayback.currentPly && sg.playerColor === playerColor
+      && (sg.classification === 'inaccuracy' || sg.classification === 'mistake' || sg.classification === 'blunder' || sg.classification === 'miss'));
+    return hit ? hit.ply : null;
+  }, [walkNarration, walkPlayback.currentPly, playerColor]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -2935,7 +2957,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           walkPlayback.goBack();
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
-          handleWalkForward();
+          handleWalkForwardManual();
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play();
         }
         return;
       }
@@ -2950,7 +2975,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback, handleWalkForward]);
+  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback, handleWalkForwardManual]);
 
   // ship-4: handleMoveClick / handleBoardMove / handleBackToReview
   // removed alongside the analysis-phase what-if board. Walk-phase
@@ -3605,8 +3630,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               >
                 <ChevronLeft size={24} style={{ color: 'var(--color-text)' }} />
               </button>
+              {/* ⏯ PLAY / PAUSE — the walk plays itself (David 2026-09-05):
+                  each ply's narration, a short pause, then the next move.
+                  Sits BETWEEN the arrows. Any user intervention (a piece moved
+                  on the board, Back, a Forward tap, a jump) pauses it, and ONLY
+                  this button restarts it. The "Paused" state is visible so a
+                  stop is never unexplained (G.1). */}
               <button
-                onClick={handleWalkForward}
+                onClick={() => { if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play(); }}
+                className="w-[52px] h-[52px] rounded-xl border-2 flex items-center justify-center transition-transform active:scale-[0.96]"
+                style={{
+                  borderColor: 'var(--color-accent)',
+                  backgroundColor: walkPlayback.isAutoPlaying ? 'color-mix(in srgb, var(--color-accent) 15%, transparent)' : undefined,
+                }}
+                aria-label={walkPlayback.isAutoPlaying ? 'Pause auto-play' : 'Play — walk the game automatically'}
+                aria-pressed={walkPlayback.isAutoPlaying}
+                data-testid="review-play-pause-btn"
+                data-state={walkPlayback.isAutoPlaying ? 'playing' : 'paused'}
+              >
+                {walkPlayback.isAutoPlaying
+                  ? <Pause size={22} style={{ color: 'var(--color-accent)' }} />
+                  : <Play size={22} style={{ color: 'var(--color-accent)' }} />}
+              </button>
+              <button
+                onClick={handleWalkForwardManual}
                 className="w-[52px] h-[52px] rounded-xl border-2 disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
                 style={{
@@ -3618,14 +3665,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <ChevronRight size={24} style={{ color: 'var(--color-accent)' }} />
               </button>
               <button
-                onClick={walkPlayback.goToEnd}
+                onClick={() => {
+                  if (nextKeyMomentPly !== null) walkPlayback.jumpToPly(nextKeyMomentPly, { keepAuto: true });
+                  else walkPlayback.goToEnd();
+                }}
                 className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
-                aria-label="Jump to end"
+                aria-label={nextKeyMomentPly !== null ? 'Next key moment' : 'Jump to end'}
+                data-testid="review-next-key-btn"
               >
                 <SkipForward size={22} style={{ color: 'var(--color-text)' }} />
               </button>
             </div>
+            {!walkPlayback.isAutoPlaying && walkPlayback.currentPly > 0 && walkPlayback.currentPly < lastPly && (
+              <div className="text-center text-[11px] text-theme-text-muted -mt-1 pb-1" data-testid="review-paused-label">
+                Paused — tap ▶ to keep walking
+              </div>
+            )}
 
             {/* Secondary controls row: pause/play + Ask (inline, small) */}
             <div className="flex items-center justify-center gap-2 pb-2">
@@ -4378,6 +4434,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             });
             setWalkStarted(true);
             props.onWalkStarted?.();
+            // The walk plays itself from the Start tap (David 2026-09-05).
+            walkPlayback.play();
           }}
           walkReady={walkReady}
           onPlayAgain={onPlayAgain}
