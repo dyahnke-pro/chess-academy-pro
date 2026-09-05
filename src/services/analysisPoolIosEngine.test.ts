@@ -1,27 +1,32 @@
-// On a native iOS app the batch analysis pool must NOT spawn.
+// The batch-analysis pool MUST stay on on native iOS (2 asm.js workers).
 //
-// 🚨 WHAT THIS COSTS WHEN IT REGRESSES (David 2026-09-05: "my games are not
-// analyzing", phone hot, progress stuck on 1 of 831).
+// 🚨 WHAT THIS COSTS WHEN IT REGRESSES (David 2026-09-05: "still stuck at 1").
 //
-// `spawnDedicatedWorker` resolves its engine through `resolveWorkerUrl()`,
-// which pins iOS to the ASM.JS build, and then calls `new Worker(url)`. The
-// native ARM Stockfish plugin is not a Worker, so the pool could never reach
-// it. Both instruments said the same thing on one run of his device:
+// e1534fc returned a pool size of 0 on native iOS so the batch would fall back
+// to the native ARM singleton, reasoning the singleton is "vastly faster" than
+// the asm.js pool. It never verified the singleton COMPLETES a batch — and it
+// does not. With no pool, `analyzeGamePositions` drives every position of every
+// game through the native singleton in a tight sequential loop, and one
+// `analyzePosition` never resolves: the sweep wedges on game 1.
 //
-//     stockfishEngine.initialize     variant=ios-native   ← fast
-//     spawnDedicatedWorker worker 0  variant=asm          ← slowest we ship
-//     spawnDedicatedWorker worker 1  variant=asm
-//     analyze kickoff — 831 unanalyzed
+// The differential is unambiguous in PostHog, straight off David's device:
 //
-// Zero uncaught errors. It was not crashing, it was grinding — two asm.js
-// engines on 831 games while the "vastly faster" native engine sat idle.
+//   WORKED  (bundles 261efbd / b2c3f7f — misconception + weakness output flowing):
+//     gameAnalysisService.spawnDedicatedWorker  worker 0/1  variant=asm   (/weaknesses)
+//   BROKE   (bundle 561d741d = e1534fc — ZERO analysis output all day):
+//     stockfishEngine.initialize  variant=ios-native   ← and NO pool workers at all
+//
+// The asm.js build is the app's DELIBERATE safe iOS engine (the WASM/multi
+// builds are the ones that crash-storm — see resolveWorkerUrl). The pool spawns
+// isolated Worker engines and does not wedge. e1534fc's real complaint — "2 asm
+// engines grinding 831 games = hot phone" — is a batch-SIZE problem, fixed by
+// ANALYSIS_PACKAGE_SIZE (50 games per tap), not by deleting the one engine path
+// that actually finishes. So: keep the pool, bound the work.
 //
 // 🚨 AND WHY A UNIT TEST RATHER THAN THE AUDIT. `audit-analysis-pool-engine-prod`
-// exists for precisely this defect — its SF2 asserts the pool resolves the SAME
-// build as the singleton. It passes 8/8 and is STRUCTURALLY BLIND here: it
-// drives desktop Chromium, where both resolve to `multi` and agree. The
-// divergence only exists on iOS, which that audit never visits. A green audit
-// was not evidence, so the check has to live where the platform can be faked.
+// drives desktop Chromium, where every build resolves to `multi` and agrees — it
+// is structurally blind to the iOS-only divergence and passed 8/8 while iOS was
+// broken. The check has to live where the platform can be faked.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // vi.mock is hoisted above every const, so the spies are created INSIDE the
@@ -56,26 +61,28 @@ beforeEach(() => { vi.clearAllMocks(); });
 afterEach(() => { vi.unstubAllGlobals(); });
 
 describe('analysis worker pool — engine choice per platform', () => {
-  it('does NOT spawn a pool on native iOS with the Stockfish plugin', () => {
+  it('KEEPS the asm.js pool on native iOS with the Stockfish plugin', () => {
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 6 });
-    // 0 => both callers fall back to the singleton, which on iOS is the native
-    // ARM engine. Any positive number here is asm.js workers coming back.
-    expect(t).toBe(0);
+    // 1-2 asm.js Worker engines — the path that actually completes a batch.
+    // 0 here is the e1534fc regression: it routes batch to the native singleton,
+    // which wedges on game 1 ("stuck at 1"). The 50-game package cap, not a dead
+    // pool, is what keeps the phone cool.
+    expect(t).toBeGreaterThan(0);
+    expect(t).toBeLessThanOrEqual(2);
   });
 
-  it('still pools on native Android, where the singleton is the JS engine', () => {
+  it('pools on native Android too, capped for UI + voice', () => {
     const t = poolSizeFor({ native: true, platform: 'android', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
     expect(t).toBeLessThanOrEqual(2);
   });
 
-  it('still pools on iOS when the native plugin is absent (mobile web / PWA)', () => {
-    // No plugin => the singleton is asm.js too, so a pool is a genuine win.
+  it('pools on iOS mobile web / PWA (no native plugin)', () => {
     const t = poolSizeFor({ native: false, platform: 'ios', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
   });
 
-  it('still pools on desktop web', () => {
+  it('pools wider on desktop web', () => {
     const t = poolSizeFor({ native: false, platform: 'web', plugin: false, cores: 8 });
     expect(t).toBeGreaterThan(1);
   });
