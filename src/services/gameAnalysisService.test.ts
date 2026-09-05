@@ -7,17 +7,23 @@ import type { StockfishAnalysis } from '../types';
 
 // ─── Mocks ──────────────────────────────────────────────────────────────────
 
-vi.mock('./stockfishEngine', () => ({
-  stockfishEngine: {
-    initialize: vi.fn(),
-    analyzePosition: vi.fn(),
-  },
-  // resolveWorkerPoolSize() calls isIosSafari() at module load; the pool build
-  // resolver is called when a worker spawns. jsdom is not iOS and has no Worker,
-  // so both are inert here (the tests take the sequential singleton fallback).
-  isIosSafari: vi.fn(() => false),
-  resolveWorkerUrl: vi.fn(() => ({ url: '/stockfish/stockfish-asm.js', variant: 'asm', reason: 'test' })),
-}));
+vi.mock('./stockfishEngine', () => {
+  const analyzePosition = vi.fn();
+  return {
+    stockfishEngine: {
+      initialize: vi.fn(),
+      analyzePosition,
+      // The bulk sweep caps the singleton through analyzeWithBudget. Same engine,
+      // same answer — delegate so every existing eval assertion still holds.
+      analyzeWithBudget: vi.fn((fen: string, depth: number) => analyzePosition(fen, depth)),
+    },
+    // resolveWorkerPoolSize() calls isIosSafari() at module load; the pool build
+    // resolver is called when a worker spawns. jsdom is not iOS and has no Worker,
+    // so both are inert here (the tests take the sequential singleton fallback).
+    isIosSafari: vi.fn(() => false),
+    resolveWorkerUrl: vi.fn(() => ({ url: '/stockfish/stockfish-asm.js', variant: 'asm', reason: 'test' })),
+  };
+});
 
 vi.mock('./weaknessAnalyzer', () => ({
   computeWeaknessProfile: vi.fn(),

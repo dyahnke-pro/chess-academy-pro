@@ -541,6 +541,9 @@ export class WorkerWedgedError extends Error {
 async function evaluateFensPooled(
   fens: string[],
   onPosition?: (current: number, total: number) => void,
+  /** Per-position movetime for the pool workers. Review keeps the 5s default;
+   *  the bulk sweep passes BATCH_POSITION_BUDGET_MS. */
+  budgetMs: number = REVIEW_POSITION_BUDGET_MS,
 ): Promise<{ evals: (number | null)[]; achievedDepth: number } | null> {
   const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
   let workers: DedicatedWorker[] = [];
@@ -565,7 +568,7 @@ async function evaluateFensPooled(
       next += 1;
       if (i >= fens.length) return;
       try {
-        const a = await w.analyzePosition(fens[i], ANALYSIS_DEPTH, REVIEW_POSITION_BUDGET_MS);
+        const a = await w.analyzePosition(fens[i], ANALYSIS_DEPTH, budgetMs);
         evals[i] = a.evaluation;
         if (Number.isFinite(a.depth) && a.depth > 0) achievedDepth = Math.min(achievedDepth, a.depth);
       } catch {
@@ -753,6 +756,13 @@ export async function analyzeGameOnWorker(
 async function analyzeGamePositions(
   game: GameRecord,
   onPosition?: (current: number, total: number) => void,
+  /** Per-position time cap for BULK callers. When set, BOTH the pool pass and
+   *  the sequential singleton fallback are budgeted (via analyzeWithBudget) —
+   *  the native ios-native singleton has no SEARCH_BUDGET_MS entry, so without
+   *  this it runs an uncapped depth-16 search (~1.5s/position, ~60s a game;
+   *  David 2026-09-05: "4 games in 4 minutes — too slow"). The review path
+   *  (analyzeSingleGame) leaves it undefined and keeps full depth. */
+  positionBudgetMs?: number,
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
@@ -790,7 +800,7 @@ async function analyzeGamePositions(
   // stopped hardcoding a build iOS can't run.
   let evals: (number | null)[];
   let achievedDepth = Number.POSITIVE_INFINITY;
-  const pooled = await evaluateFensPooled(fens, onPosition);
+  const pooled = await evaluateFensPooled(fens, onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
   if (pooled) {
     evals = pooled.evals;
     achievedDepth = pooled.achievedDepth;
@@ -799,7 +809,12 @@ async function analyzeGamePositions(
     for (const fen of fens) {
       onPosition?.(evals.length + 1, fens.length);
       try {
-        const analysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
+        // Bulk callers cap the singleton too — the fast native engine otherwise
+        // runs depth 16 uncapped. analyzeWithBudget force-stops at the budget
+        // and recovers a dead worker, so the sweep can neither crawl nor hang.
+        const analysis: StockfishAnalysis = positionBudgetMs
+          ? await stockfishEngine.analyzeWithBudget(fen, ANALYSIS_DEPTH, positionBudgetMs)
+          : await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
         evals.push(analysis.evaluation);
         if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
           achievedDepth = Math.min(achievedDepth, analysis.depth);
@@ -849,7 +864,9 @@ async function analyzeGamePositions(
         classification = graded;
         if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
           try {
-            const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
+            const bestAnalysis: StockfishAnalysis = positionBudgetMs
+              ? await stockfishEngine.analyzeWithBudget(fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs)
+              : await stockfishEngine.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
             bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
               ? null
               : bestAnalysis.bestMove;
@@ -1029,7 +1046,7 @@ export async function analyzeRecentGames(
       label: `Analyzing game ${i + 1} of ${batch.length}…`,
     });
     try {
-      const result = await analyzeGamePositions(game);
+      const result = await analyzeGamePositions(game, undefined, BATCH_POSITION_BUDGET_MS);
       if (result && result.annotations.length > 0) {
         await db.games.update(game.id, {
           annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
@@ -1236,7 +1253,7 @@ export async function analyzeAllGames(
           phase: 'analyzing',
         });
 
-        const result = await analyzeGamePositions(game);
+        const result = await analyzeGamePositions(game, undefined, BATCH_POSITION_BUDGET_MS);
         if (result && result.annotations.length > 0) {
           await db.games.update(game.id, {
             annotations: result.annotations, fullyAnalyzed: true, analysisDepth: result.achievedDepth,
