@@ -1,10 +1,15 @@
-# 🔒 BUILD ONLY main — deploy previews are OFF (David's 2026-08-06 alert: 75%
-# of the 300 monthly credits burned in ONE day; every branch push was building
-# a preview on top of a production build per merge). Audits run against the
-# LIVE prod URL; previews serve nobody. Netlify semantics: ignore-command
-# exit 0 = SKIP the build, non-zero = build.
+# 🔒 NETLIFY IS DISABLED — NEVER BUILD (David 2026-09-05: "Disable netlify!"
+# after 50% of the 300 monthly credits burned by the 5th; even main-only
+# builds, one per merge across parallel sessions, were the drain). The ignore
+# command returns exit 0 UNCONDITIONALLY → every build is SKIPPED, so Netlify
+# consumes no credits. The LAST successful deploy stays live, so the 301
+# redirect below KEEPS funneling the mirror's visitors to the real Vercel app
+# — we lose nothing by never rebuilding. Netlify semantics: ignore-command
+# exit 0 = SKIP the build, non-zero = build. For a HARD kill (also stops the
+# redirect), stop/lock builds or delete the site in the Netlify dashboard —
+# that needs the UI, not this file.
 [build]
-  ignore = "test \"$BRANCH\" != \"main\""
+  ignore = "exit 0"
   command = "npx vite build"
   publish = "dist"
 
