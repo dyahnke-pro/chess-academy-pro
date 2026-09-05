@@ -12,6 +12,11 @@ vi.mock('./stockfishEngine', () => ({
     initialize: vi.fn(),
     analyzePosition: vi.fn(),
   },
+  // resolveWorkerPoolSize() calls isIosSafari() at module load; the pool build
+  // resolver is called when a worker spawns. jsdom is not iOS and has no Worker,
+  // so both are inert here (the tests take the sequential singleton fallback).
+  isIosSafari: vi.fn(() => false),
+  resolveWorkerUrl: vi.fn(() => ({ url: '/stockfish/stockfish-asm.js', variant: 'asm', reason: 'test' })),
 }));
 
 vi.mock('./weaknessAnalyzer', () => ({

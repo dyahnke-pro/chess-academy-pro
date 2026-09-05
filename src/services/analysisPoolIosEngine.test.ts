@@ -77,9 +77,13 @@ describe('analysis worker pool — engine choice per platform', () => {
     expect(t).toBeLessThanOrEqual(2);
   });
 
-  it('pools on iOS mobile web / PWA (no native plugin)', () => {
+  it('CAPS the pool on iOS mobile web / PWA — a phone is a phone, even in Safari', () => {
+    // isNativePlatform() is false in Safari, so this used to fall into the
+    // desktop branch and get up to 6 asm.js engines on an iPhone → OOM/wedge
+    // (David 2026-09-05, testing on iPhone Safari). Must cap like the app does.
     const t = poolSizeFor({ native: false, platform: 'ios', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
+    expect(t).toBeLessThanOrEqual(2);
   });
 
   it('pools wider on desktop web', () => {

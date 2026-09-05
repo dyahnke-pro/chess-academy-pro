@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { stockfishEngine, resolveWorkerUrl } from './stockfishEngine';
+import { stockfishEngine, resolveWorkerUrl, isIosSafari } from './stockfishEngine';
 import { computeWeaknessProfile } from './weaknessAnalyzer';
 import { generateMistakePuzzlesFromGame } from './mistakePuzzleService';
 import { isBookLine } from './openingDetectionService';
@@ -51,9 +51,22 @@ function resolveWorkerPoolSize(): number {
   const cores = (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
   let isNative = false;
   try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
-  if (isNative) {
-    // 🔒 PHONE (iOS + Android): keep the 2-worker asm.js pool. Capped so the UI
-    // + voice always keep cores. Never more than 2.
+  // A PHONE is a phone whether it's the native app OR mobile-web Safari.
+  // `isNativePlatform()` is FALSE in Safari, so mobile-web iOS was falling into
+  // the desktop branch below and getting a pool of up to 6 asm.js engines —
+  // each a heavy ~1.6MB module with its own WASM/asm heap. On an iPhone that
+  // OOMs / thrashes, and the workers wedge and respawn without ever finishing a
+  // game (David 2026-09-05, testing on iPhone Safari: `/weaknesses` spawned a
+  // 3-worker asm pool that respawned with zero completions). `isIosSafari()`
+  // catches the mobile-web iOS that `isNativePlatform()` misses.
+  // Guarded so a partial test mock of './stockfishEngine' that omits
+  // isIosSafari can't throw at module load (WORKER_POOL_SIZE is a top-level
+  // const). In real code the import is always a function, so behavior is
+  // unchanged; a mock without it simply reads as "not mobile web".
+  const isMobileWeb = typeof isIosSafari === 'function' && isIosSafari();
+  if (isNative || isMobileWeb) {
+    // 🔒 PHONE (native iOS/Android + mobile-web iOS): the 2-worker asm.js pool.
+    // Capped so the UI + voice always keep cores. Never more than 2.
     //
     // WHY THE POOL STAYS ON iOS — and why e1534fc's "no pool on iOS" was WRONG
     // (David 2026-09-05, "still stuck at 1"; confirmed in PostHog).

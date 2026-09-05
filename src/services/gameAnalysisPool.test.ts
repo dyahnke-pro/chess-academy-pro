@@ -93,6 +93,7 @@ describe('the review evaluates its positions in parallel', () => {
     // spawn THAT, not the WASM single that traps on WebKit.
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     const { __testables } = await import('./gameAnalysisService');
@@ -113,6 +114,7 @@ describe('the review evaluates its positions in parallel', () => {
     // the review is judged against somebody else's position.
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     const fens = Array.from({ length: 25 }, (_, i) => `${i}/8/8/8/8/8/8/K6k w - - 0 1`);
@@ -134,6 +136,7 @@ describe('the review evaluates its positions in parallel', () => {
     // game as a whole did not reach full depth, and must stay re-analysable.
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     const fens = ['a/8/8/8/8/8/8/K6k w - - 0 1', 'b/8/8/8/8/8/8/K6k w - - 0 1', 'c/8/8/8/8/8/8/K6k w - - 0 1'];
@@ -147,6 +150,7 @@ describe('the review evaluates its positions in parallel', () => {
   it('reports progress once per position, never more', async () => {
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     const fens = Array.from({ length: 12 }, (_, i) => `${i}/8/8/8/8/8/8/K6k w - - 0 1`);
@@ -165,6 +169,7 @@ describe('the review evaluates its positions in parallel', () => {
     // No pool must never mean no review — the sequential singleton still runs.
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     workersNeverReady = true;
@@ -196,6 +201,7 @@ describe('the review evaluates its positions in parallel', () => {
     vi.stubGlobal('Worker', RecordingWorker);
     vi.doMock('./stockfishEngine', () => ({
       stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+      isIosSafari: () => false,
       resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
     }));
     const { __testables } = await import('./gameAnalysisService');

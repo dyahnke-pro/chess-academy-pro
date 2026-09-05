@@ -120,7 +120,7 @@ export interface ResolvedWorker {
  *  When detected, route to lila-stockfish-web's sf16-7 instead.
  *  Capacitor on iOS reports user agent containing "iPhone" /
  *  "iPad" too — same crash applies; same path applies. */
-function isIosSafari(): boolean {
+export function isIosSafari(): boolean {
   // Capacitor native iOS is AUTHORITATIVE and UA-independent — check it first.
   // The WKWebView intermittently reports the FROZEN desktop-Safari UA
   // ("Macintosh; Intel Mac OS X 10_15_7", maxTouchPoints 0), which slips past
