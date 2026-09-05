@@ -70,6 +70,24 @@ export interface MasterPlayCacheRecord {
   v: number;
 }
 
+/** Per-position Stockfish eval cache (positionEvalCache.ts). The same FEN
+ *  recurs across a player's games — every game in a repertoire shares its
+ *  first 10-20 plies, and transpositions repeat middlegames — so an eval the
+ *  engine already reached is served from here instead of re-searched.
+ *  Depth-monotonic: a row is only ever REPLACED by a deeper search. */
+export interface PositionEvalRecord {
+  /** Normalized 4-field FEN (placement, side, castling, ep) — primary key. */
+  fen: string;
+  /** Centipawns, White POV — the unit every analysis consumer is calibrated for. */
+  evaluation: number;
+  /** Search depth the engine REACHED for this eval. */
+  depth: number;
+  /** Engine best move (UCI) when a best-move search ran here; null otherwise. */
+  bestMove: string | null;
+  /** Unix ms of the write — index for oldest-first pruning. */
+  updatedAt: number;
+}
+
 /** Free-tier usage ledger for the metered soft paywall (freeTierService).
  *  A SINGLE row keyed 'singleton' tracks what a non-Pro user has spent of
  *  their free allowance: the lifetime 20-puzzle bucket, the one free opening
@@ -167,6 +185,7 @@ class ChessAcademyDB extends Dexie {
   masterPlayCache!: EntityTable<MasterPlayCacheRecord, 'fen'>;
   freeTier!: EntityTable<FreeTierRecord, 'id'>;
   coachCurriculum!: EntityTable<CoachCurriculumRecord, 'id'>;
+  positionEvals!: EntityTable<PositionEvalRecord, 'fen'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -912,6 +931,10 @@ class ChessAcademyDB extends Dexie {
     // single-row store, built lazily by coachCurriculumService; no migration of
     // existing data (same shape as the v32 freeTier addition).
     this.version(34).stores({ coachCurriculum: 'id' });
+
+    // v35 — per-FEN Stockfish eval cache (David 2026-09-05, "how does chess.com
+    // analyze so fast" → item 3, the eval cache). Additive store, no migration.
+    this.version(35).stores({ positionEvals: 'fen, updatedAt' });
   }
 }
 

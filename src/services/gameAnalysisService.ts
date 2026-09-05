@@ -31,7 +31,7 @@ export interface BatchAnalysisProgress {
 // `analysisDepth` on each game; `gameNeedsAnalysis` re-analyzes anything below
 // it, so existing depth-12 games refresh to the deeper number once.
 export const ANALYSIS_DEPTH = 16;
-const BEST_MOVE_DEPTH = 18;
+export const BEST_MOVE_DEPTH = 18;
 // BLUNDER_CP / MISTAKE_CP / INACCURACY_CP moved to `engineConstants` (imported
 // below). They were duplicated in `moveRating` with DIFFERENT numbers, so the
 // same Stockfish delta produced a different word in the review than in the
@@ -47,8 +47,23 @@ const BEST_MOVE_DEPTH = 18;
  * importing a big game library (David 2026-06-06: "the APP is frozen", web is
  * fine). Cap hard on native so the UI always keeps a couple of cores free.
  */
+/** Cores assumed for a PHONE when the browser hides the count. iOS Safari and
+ *  the Capacitor WKWebView do NOT expose `navigator.hardwareConcurrency`
+ *  (fingerprinting policy), so it reads `undefined` on every iPhone. Every
+ *  iPhone since the 6s has 6 cores (2 performance + 4 efficiency). */
+const PHONE_ASSUMED_CORES = 6;
+/** Hard cap on phone pool width. One asm.js engine per core, minus two cores
+ *  kept free for the UI thread, voice playback and the coach's singleton
+ *  engine. Memory is NOT the limit (~45MB per asm worker); a 5th engine
+ *  time-slices with the others and thermally throttles ALL of them — the
+ *  "hot phone" of the e1534fc era. (David 2026-09-05: "how many bots can we
+ *  add?" — four.) */
+const PHONE_POOL_CAP = 4;
+
 function resolveWorkerPoolSize(): number {
-  const cores = (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+  const reportedCores = typeof navigator !== 'undefined' && navigator.hardwareConcurrency > 0
+    ? navigator.hardwareConcurrency
+    : undefined;
   let isNative = false;
   try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
   // A PHONE is a phone whether it's the native app OR mobile-web Safari.
@@ -69,11 +84,11 @@ function resolveWorkerPoolSize(): number {
   let isMobileWeb = false;
   try { isMobileWeb = isIosSafari(); } catch { /* partial mock without the export */ }
   if (isNative || isMobileWeb) {
-    // 🔒 PHONE (native iOS/Android + mobile-web iOS): a 3-worker asm.js pool.
-    // Capped so the UI + voice always keep cores (a 6-core iPhone keeps 3 free).
-    // Raised 2→3 on David's call (2026-09-05, "still too slow") once the wedge
-    // was proven to be the 8s spawn gate, NOT memory — heap sat at ~7% of cap
-    // with 3 workers on the web test. Never more than 3.
+    // 🔒 PHONE (native iOS/Android + mobile-web iOS): a 4-worker asm.js pool.
+    // Capped so the UI + voice always keep cores (a 6-core iPhone keeps 2 free).
+    // Raised on David's call (2026-09-05, "still too slow") once the wedge was
+    // proven to be the 8s spawn gate, NOT memory — heap sat at ~7% of cap on
+    // the web test. Never more than PHONE_POOL_CAP.
     //
     // WHY THE POOL STAYS ON iOS — and why e1534fc's "no pool on iOS" was WRONG
     // (David 2026-09-05, "still stuck at 1"; confirmed in PostHog).
@@ -97,9 +112,17 @@ function resolveWorkerPoolSize(): number {
     // asm engines grinding 831 games = hot phone" — is a BATCH-SIZE problem, and
     // it is fixed by ANALYSIS_PACKAGE_SIZE (50 games/tap), not by removing the
     // one engine path that actually finishes.
-    return Math.max(1, Math.min(3, cores - 2));
+    //
+    // 🔒 THE CAP WAS NEVER REACHED ON A REAL iPHONE (David 2026-09-05, "how many
+    // bots?"). `hardwareConcurrency` is hidden on iOS, so the old
+    // `|| 4` fallback made this `4 - 2 = 2` workers on every phone — the "3"
+    // above was a desktop-only number. Assume a 6-core phone when the count is
+    // hidden and cap at PHONE_POOL_CAP (4): one engine per spare core.
+    const cores = reportedCores ?? PHONE_ASSUMED_CORES;
+    return Math.max(1, Math.min(PHONE_POOL_CAP, cores - 2));
   }
   // Desktop web: keep it quick but don't hog every core.
+  const cores = reportedCores ?? 4;
   return Math.max(2, Math.min(6, cores - 1));
 }
 
@@ -153,6 +176,7 @@ import {
   INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { winPercent, capEval } from './accuracyService';
+import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
 /**
  * True when the engine's deep best-move (UCI) for `fenBefore` is the very move
@@ -369,6 +393,31 @@ class DedicatedWorker {
     });
   }
 
+  /** Liveness probe for a WARM worker: `isready` → `readyok` within `timeoutMs`.
+   *  A worker iOS killed while the app sat in the background never answers. */
+  ping(timeoutMs: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      let settled = false;
+      const handler = (event: MessageEvent<unknown>): void => {
+        if (event.data === 'readyok') finish(true);
+      };
+      const finish = (ok: boolean): void => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        this.worker.removeEventListener('message', handler);
+        resolve(ok);
+      };
+      const timer = setTimeout(() => finish(false), timeoutMs);
+      try {
+        this.worker.addEventListener('message', handler);
+        this.worker.postMessage('isready');
+      } catch {
+        finish(false);
+      }
+    });
+  }
+
   destroy(): void {
     try {
       this.worker.postMessage('stop');
@@ -482,6 +531,98 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
   });
 }
 
+// ─── Warm pool ──────────────────────────────────────────────────────────────
+//
+// 🔒 THE POOL IS WARMED AT LAUNCH AND KEPT ALIVE BETWEEN RUNS (David 2026-09-05:
+// "get those parallel computers warming up at app launch"). The asm.js build a
+// phone runs cold-compiles ~1.58MB PER WORKER (~45s) — and every sweep and every
+// review used to pay that from cold, then TERMINATE the workers at the end so
+// the next tap paid it again. Now App.tsx warms the pool a few seconds after
+// boot (when the library has games), and every consumer ACQUIRES from the warm
+// set and RELEASES back to it. A worker only dies when it wedges or fails a
+// liveness ping.
+//
+// Memory is not the cost that matters: ~45MB per resident asm worker, against a
+// 45s blank progress bar in front of every Analyze tap.
+
+/** How long a warm worker gets to answer `isready` before it is presumed dead. */
+const WARM_PING_TIMEOUT_MS = 1_500;
+let _warmPool: DedicatedWorker[] = [];
+let _warmPromise: Promise<void> | null = null;
+
+function resolvedVariantName(): string {
+  try { return resolveWorkerUrl().variant; } catch { return 'unknown'; }
+}
+
+/**
+ * Spawn the full pool ahead of any demand and park it warm. Idempotent and
+ * single-flight; a spawn failure leaves whatever came up. Returns the warm
+ * count. Safe to call anywhere — a no-op where `Worker` does not exist.
+ */
+export async function warmAnalysisPool(): Promise<number> {
+  if (typeof Worker === 'undefined') return 0;
+  if (_warmPool.length > 0) return _warmPool.length;
+  if (_warmPromise) { await _warmPromise; return _warmPool.length; }
+  const started = Date.now();
+  const run = (async (): Promise<void> => {
+    const results = await Promise.allSettled(
+      Array.from({ length: WORKER_POOL_SIZE }, (_, i) => spawnDedicatedWorker(i)),
+    );
+    const spawned: DedicatedWorker[] = [];
+    for (const r of results) if (r.status === 'fulfilled') spawned.push(r.value);
+    _warmPool.push(...spawned);
+    void logAppAudit({
+      kind: 'analysis-pool-warmed',
+      category: 'subsystem',
+      source: 'gameAnalysisService.warmAnalysisPool',
+      summary: `${spawned.length}/${WORKER_POOL_SIZE} pool workers warm (variant=${resolvedVariantName()}) in ${Date.now() - started}ms`,
+    });
+  })();
+  _warmPromise = run;
+  try { await run; } finally { _warmPromise = null; }
+  return _warmPool.length;
+}
+
+/**
+ * Take up to `size` LIVE workers: warm ones first (liveness-pinged; a dead one is
+ * dropped), then fresh spawns for any shortfall. Throws only when NO worker at
+ * all could be had — callers then take the singleton fallback exactly as before.
+ */
+async function acquirePool(size: number): Promise<DedicatedWorker[]> {
+  if (_warmPromise) { try { await _warmPromise; } catch { /* spawn below */ } }
+  const taken = _warmPool.splice(0, size);
+  const alive: DedicatedWorker[] = [];
+  if (taken.length > 0) {
+    const pings = await Promise.all(taken.map((w) => w.ping(WARM_PING_TIMEOUT_MS)));
+    taken.forEach((w, i) => { if (pings[i]) alive.push(w); else w.destroy(); });
+  }
+  const shortfall = size - alive.length;
+  if (shortfall > 0) {
+    const results = await Promise.allSettled(
+      Array.from({ length: shortfall }, (_, i) => spawnDedicatedWorker(alive.length + i)),
+    );
+    for (const r of results) if (r.status === 'fulfilled') alive.push(r.value);
+    if (alive.length === 0) throw new Error('no analysis pool worker could be spawned');
+  }
+  return alive;
+}
+
+/** Hand workers back to the warm set for the next run; surplus past the pool
+ *  width is destroyed. */
+function releasePool(workers: readonly DedicatedWorker[]): void {
+  for (const w of workers) {
+    if (_warmPool.length < WORKER_POOL_SIZE && !_warmPool.includes(w)) _warmPool.push(w);
+    else w.destroy();
+  }
+}
+
+/** Test hook — destroy every warm worker so a test starts cold. */
+function resetAnalysisPool(): void {
+  for (const w of _warmPool) w.destroy();
+  _warmPool = [];
+  _warmPromise = null;
+}
+
 /** Per-position search budget for the REVIEW's eval curve, mirroring the
  *  singleton's variant budgets. A slow engine must be capped or a single deep
  *  position eats the whole wait. */
@@ -507,6 +648,40 @@ const REVIEW_POSITION_BUDGET_MS = 5_000;
  *  desktop engine still reaches depth 16 well under it — this only bites the
  *  slow asm build, which is exactly where it must. */
 const BATCH_POSITION_BUDGET_MS = 800;
+
+/** TWO-PASS DEPTH for the bulk sweep (David 2026-09-05, "how does chess.com
+ *  analyze so fast?" → item 2). Pass 1 walks every non-book ply SHALLOW; pass 2
+ *  re-searches at ANALYSIS_DEPTH only the plies around a swing the shallow
+ *  curve exposed. Quiet moves — most of a game — never pay the deep budget, and
+ *  the moves that decide the classification get the full depth. */
+const BATCH_SHALLOW_DEPTH = 10;
+const BATCH_SHALLOW_BUDGET_MS = 250;
+/** Swing between adjacent SHALLOW evals that earns a deep re-search.
+ *  INACCURACY_CP is the smallest swing that changes a classification, so a
+ *  smaller one cannot change the verdict and stays shallow. */
+export const TWO_PASS_SWING_CP = INACCURACY_CP;
+
+/**
+ * Indices (into `shallow`, i.e. FEN indices) to re-search deep: BOTH ends of any
+ * adjacent pair whose swing reaches TWO_PASS_SWING_CP, or that touches a mate
+ * score. Both ends, so the deep grade is computed from two evals of the SAME
+ * depth. Pure; exported for the gate.
+ */
+export function selectCriticalPlies(shallow: readonly (number | null)[], from = 0): number[] {
+  const picked = new Set<number>();
+  for (let i = Math.max(0, from); i < shallow.length - 1; i++) {
+    const a = shallow[i];
+    const b = shallow[i + 1];
+    if (a === null || b === null) continue;
+    const swing = Math.abs(capEval(a) - capEval(b));
+    const mateish = Math.abs(a) >= MATE_EVAL_THRESHOLD || Math.abs(b) >= MATE_EVAL_THRESHOLD;
+    if (swing >= TWO_PASS_SWING_CP || mateish) {
+      picked.add(i);
+      picked.add(i + 1);
+    }
+  }
+  return [...picked].sort((x, y) => x - y);
+}
 
 /** How many leading positions the BULK sweep may skip evaluating: the index of
  *  the first move that leaves the opening book (= `moves.length` if the whole
@@ -570,12 +745,9 @@ async function evaluateFensPooled(
   const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
   let workers: DedicatedWorker[] = [];
   try {
-    workers = await Promise.all(
-      Array.from({ length: size }, (_, i) => spawnDedicatedWorker(i)),
-    );
+    workers = await acquirePool(size);
   } catch {
     // Pool unavailable on this device — the singleton path still works.
-    workers.forEach((w) => w.destroy());
     return null;
   }
 
@@ -604,7 +776,7 @@ async function evaluateFensPooled(
   try {
     await Promise.all(workers.map((w) => run(w)));
   } finally {
-    workers.forEach((w) => w.destroy());
+    releasePool(workers); // stay warm for the next review / sweep
   }
   return {
     evals,
@@ -640,8 +812,6 @@ export async function analyzeGameOnWorker(
   // With a budget the search returns the depth it reached instead of throwing,
   // and the caller stamps THAT — so a game analysed on a slow engine stays
   // re-analysable rather than being frozen shallow behind a depth-16 claim.
-  const evals: (number | null)[] = [];
-  let achievedDepth = Number.POSITIVE_INFINITY;
   // 🔒 WEDGED-WORKER GUARD (R1, David 2026-09-01 — "analysis stalls at 1/629,
   // Stop works but the loop doesn't advance"). A live engine ALWAYS resolves a
   // position inside its budget; a position REJECT means it blew the budget+4s.
@@ -652,33 +822,87 @@ export async function analyzeGameOnWorker(
   // the worker instead of grinding the whole game (and every game after it, on
   // the same dead worker) through the timeout.
   let consecutiveTimeouts = 0;
-  // Skip the engine on opening-BOOK positions (David 2026-09-05, "still too
-  // slow"): the first ~10-16 plies are theory and classify as `book` anyway, so
-  // evaluating them is ~25-40% of a game's engine time spent on a known answer.
-  // We stop skipping at the first NON-book move's "before" position (fens[K]),
-  // which it needs for its cpLoss — see firstNonBookPly. A skipped position
-  // pushes null, and a null eval pair on a book move classifies `book` below.
-  const skipBook = firstNonBookPly(moves);
-  for (let i = 0; i < fens.length; i++) {
-    if (_abortAnalysis) return null;
-    if (i < skipBook) { evals.push(null); continue; }
-    const fen = fens[i];
+  const search = async (
+    i: number,
+    depth: number,
+    budgetMs: number,
+  ): Promise<{ evaluation: number; bestMove: string; depth: number } | null> => {
     try {
-      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, BATCH_POSITION_BUDGET_MS);
-      evals.push(result.evaluation);
+      const r = await worker.analyzePosition(fens[i], depth, budgetMs);
       consecutiveTimeouts = 0;
-      if (Number.isFinite(result.depth) && result.depth > 0) {
-        achievedDepth = Math.min(achievedDepth, result.depth);
-      }
+      return r;
     } catch (e) {
-      evals.push(null);
       if (e instanceof Error && /timed out/i.test(e.message)) {
         if (++consecutiveTimeouts >= WORKER_WEDGE_LIMIT) throw new WorkerWedgedError(game.id);
       } else {
         consecutiveTimeouts = 0;
       }
+      return null;
+    }
+  };
+
+  // Skip the engine on opening-BOOK positions (David 2026-09-05, "still too
+  // slow"): the first ~10-16 plies are theory and classify as `book` anyway, so
+  // evaluating them is ~25-40% of a game's engine time spent on a known answer.
+  // We stop skipping at the first NON-book move's "before" position (fens[K]),
+  // which it needs for its cpLoss — see firstNonBookPly. A skipped position
+  // stays null, and a null eval pair on a book move classifies `book` below.
+  const skipBook = firstNonBookPly(moves);
+
+  // ── EVAL CACHE: a position this device already scored is not re-searched. A
+  // cached DEEP eval satisfies both passes at once. (positionEvalCache.ts)
+  const cached = await lookupPositionEvals(fens, BATCH_SHALLOW_DEPTH);
+  const toStore: EvalToStore[] = [];
+
+  // ── PASS 1: shallow curve over every non-book ply.
+  const shallow: (number | null)[] = fens.map(() => null);
+  const deep: (number | null)[] = fens.map(() => null);
+  const depthAt: number[] = fens.map(() => 0);
+  for (let i = skipBook; i < fens.length; i++) {
+    if (_abortAnalysis) return null;
+    const hit = cached.get(i);
+    if (hit) {
+      shallow[i] = hit.evaluation;
+      depthAt[i] = hit.depth;
+      if (hit.depth >= ANALYSIS_DEPTH) deep[i] = hit.evaluation;
+      continue;
+    }
+    const r = await search(i, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS);
+    if (!r) continue;
+    shallow[i] = r.evaluation;
+    depthAt[i] = r.depth;
+    if (Number.isFinite(r.depth) && r.depth > 0) toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
+  }
+
+  // ── PASS 2: deep re-search ONLY where the shallow curve moved.
+  for (const i of selectCriticalPlies(shallow, skipBook)) {
+    if (_abortAnalysis) return null;
+    if (deep[i] !== null) continue; // cached deep hit
+    const r = await search(i, ANALYSIS_DEPTH, BATCH_POSITION_BUDGET_MS);
+    if (!r) continue;
+    deep[i] = r.evaluation;
+    if (Number.isFinite(r.depth) && r.depth > 0) {
+      depthAt[i] = Math.max(depthAt[i], r.depth);
+      toStore.push({ fen: fens[i], evaluation: r.evaluation, depth: r.depth });
     }
   }
+
+  // The game is STAMPED with the shallowest depth any evaluated ply reached.
+  // Quiet plies stay shallow BY DESIGN, so the stamp reads shallow and
+  // `gameNeedsAnalysis({ depthUpgrade: true })` re-deepens the whole game when it
+  // is next opened on a fast engine — the review evaluates every ply anyway.
+  let achievedDepth = Number.POSITIVE_INFINITY;
+  for (let i = skipBook; i < fens.length; i++) {
+    if (shallow[i] !== null && depthAt[i] > 0) achievedDepth = Math.min(achievedDepth, depthAt[i]);
+  }
+
+  // PAIR-CONSISTENT grading: a move is graded from two evals of the SAME depth —
+  // the deep pair when both its ends were re-searched, the shallow pair
+  // otherwise. Mixing a depth-16 "before" with a depth-10 "after" would read
+  // the depth noise (~30-50cp) as an inaccuracy on a quiet move.
+  const bothDeep = (i: number): boolean => deep[i] !== null && deep[i + 1] !== null;
+  const evalBeforeAt = (i: number): number | null => (bothDeep(i) ? deep[i] : shallow[i]);
+  const evalAfterAt = (i: number): number | null => (bothDeep(i) ? deep[i + 1] : shallow[i + 1]);
 
   // Build annotations + collect best-move lookups for mistakes
   const annotations: MoveAnnotation[] = [];
@@ -693,8 +917,8 @@ export async function analyzeGameOnWorker(
     const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
     const moveNumber = Math.floor(moveIdx / 2) + 1;
 
-    const evalBefore = evals[moveIdx];
-    const evalAfter = evals[moveIdx + 1];
+    const evalBefore = evalBeforeAt(moveIdx);
+    const evalAfter = evalAfterAt(moveIdx);
 
     let classification: MoveClassification = 'good';
 
@@ -755,6 +979,13 @@ export async function analyzeGameOnWorker(
   // Get best moves + refined evals for mistakes (deeper analysis)
   for (const moveIdx of mistakeIndices) {
     if (_abortAnalysis) return null;
+    // A cached best-move search at this position is as good as running one.
+    const hit = cached.get(moveIdx);
+    if (hit?.bestMove && hit.depth >= BEST_MOVE_DEPTH) {
+      annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], hit.bestMove) ? null : hit.bestMove;
+      annotations[moveIdx].bestMoveEval = hit.evaluation;
+      continue;
+    }
     try {
       // Budgeted like the eval pass — this is the BULK sweep. An uncapped
       // depth-18 search here costs up to the ~10s hard reject PER MISTAKE on the
@@ -770,10 +1001,15 @@ export async function analyzeGameOnWorker(
       // math (detectMisses / detectMissedTactics) on the most reliable
       // number available for the moves where it actually matters.
       annotations[moveIdx].bestMoveEval = result.evaluation;
+      if (Number.isFinite(result.depth) && result.depth > 0) {
+        toStore.push({ fen: fens[moveIdx], evaluation: result.evaluation, depth: result.depth, bestMove: result.bestMove });
+      }
     } catch {
       // Leave bestMove null + keep the shallow bestMoveEval
     }
   }
+
+  if (toStore.length > 0) await storePositionEvals(toStore);
 
   return {
     annotations,
@@ -829,21 +1065,35 @@ async function analyzeGamePositions(
   // on desktop); the sequential singleton below is the fallback for any device
   // where the pool can't spawn — which is what every device did until the pool
   // stopped hardcoding a build iOS can't run.
-  let evals: (number | null)[];
+  const evals: (number | null)[] = fens.map(() => null);
   let achievedDepth = Number.POSITIVE_INFINITY;
   // BULK callers skip the engine on opening-book positions (see firstNonBookPly
   // + the note in analyzeGameOnWorker). The REVIEW passes no budget and keeps
   // every ply, so its eval-curve graph has no opening gap.
   const skipBook = positionBudgetMs ? firstNonBookPly(moves) : 0;
-  const pooled = await evaluateFensPooled(fens.slice(skipBook), onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
+  // EVAL CACHE (positionEvalCache.ts): positions this device already scored AT
+  // FULL DEPTH are served, not re-searched; only the rest go to the engine. The
+  // depth floor keeps a shallow batch eval out of the review's curve.
+  const cached = await lookupPositionEvals(fens, ANALYSIS_DEPTH);
+  const toStore: EvalToStore[] = [];
+  cached.forEach((hit, i) => { if (i >= skipBook) evals[i] = hit.evaluation; });
+  const pendingIdx: number[] = [];
+  for (let i = skipBook; i < fens.length; i++) if (!cached.has(i)) pendingIdx.push(i);
+
+  const pooled = pendingIdx.length === 0
+    ? { evals: [] as (number | null)[], achievedDepth: ANALYSIS_DEPTH }
+    : await evaluateFensPooled(pendingIdx.map((i) => fens[i]), onPosition, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
   if (pooled) {
-    evals = [...new Array<number | null>(skipBook).fill(null), ...pooled.evals];
+    pendingIdx.forEach((i, k) => {
+      const e = pooled.evals[k] ?? null;
+      evals[i] = e;
+      if (e !== null && pooled.achievedDepth > 0) toStore.push({ fen: fens[i], evaluation: e, depth: pooled.achievedDepth });
+    });
     achievedDepth = pooled.achievedDepth;
   } else {
-    evals = [];
     for (let i = 0; i < fens.length; i++) {
-      onPosition?.(evals.length + 1, fens.length);
-      if (i < skipBook) { evals.push(null); continue; }
+      onPosition?.(i + 1, fens.length);
+      if (i < skipBook || evals[i] !== null) continue;
       const fen = fens[i];
       try {
         // Bulk callers cap the singleton too — the fast native engine otherwise
@@ -852,12 +1102,13 @@ async function analyzeGamePositions(
         const analysis: StockfishAnalysis = positionBudgetMs
           ? await stockfishEngine.analyzeWithBudget(fen, ANALYSIS_DEPTH, positionBudgetMs)
           : await stockfishEngine.analyzePosition(fen, ANALYSIS_DEPTH);
-        evals.push(analysis.evaluation);
+        evals[i] = analysis.evaluation;
         if (Number.isFinite(analysis.depth) && analysis.depth > 0) {
           achievedDepth = Math.min(achievedDepth, analysis.depth);
+          toStore.push({ fen, evaluation: analysis.evaluation, depth: analysis.depth });
         }
       } catch {
-        evals.push(null);
+        evals[i] = null;
       }
     }
   }
@@ -908,6 +1159,9 @@ async function analyzeGamePositions(
               ? null
               : bestAnalysis.bestMove;
             refinedBestMoveEval = bestAnalysis.evaluation;
+            if (Number.isFinite(bestAnalysis.depth) && bestAnalysis.depth > 0) {
+              toStore.push({ fen: fens[moveIdx], evaluation: bestAnalysis.evaluation, depth: bestAnalysis.depth, bestMove: bestAnalysis.bestMove });
+            }
           } catch {
             // Leave bestMove null + keep the shallow bestMoveEval below
           }
@@ -932,6 +1186,8 @@ async function analyzeGamePositions(
       comment: null,
     });
   }
+
+  if (toStore.length > 0) await storePositionEvals(toStore);
 
   return {
     annotations,
@@ -1151,12 +1407,12 @@ export async function analyzeAllGames(
 
   // Try to spawn dedicated workers
   const workers: DedicatedWorker[] = [];
+  // Every worker alive at the end goes back to the warm pool — including a
+  // recycled replacement for one that wedged.
+  const live = new Set<DedicatedWorker>();
   try {
-    const spawnPromises: Promise<DedicatedWorker>[] = [];
-    for (let i = 0; i < WORKER_POOL_SIZE; i++) {
-      spawnPromises.push(spawnDedicatedWorker(i));
-    }
-    workers.push(...await Promise.all(spawnPromises));
+    workers.push(...await acquirePool(WORKER_POOL_SIZE));
+    workers.forEach((w) => live.add(w));
     console.log(`[GameAnalysis] ${workers.length} workers ready — analyzing ${games.length} games`);
   } catch {
     console.warn('[GameAnalysis] Worker pool failed, falling back to single engine');
@@ -1243,9 +1499,11 @@ export async function analyzeAllGames(
               // 1/629" fix). If respawn fails, drop this worker from the pool —
               // the other workers carry the batch.
               console.warn(`[GameAnalysis] worker wedged on ${game.id}; recycling`);
+              live.delete(worker);
               try { worker.destroy(); } catch { /* already dead */ }
               try {
                 worker = await spawnDedicatedWorker(nextGameIdx);
+                live.add(worker);
               } catch {
                 completed++;
                 break;
@@ -1270,9 +1528,6 @@ export async function analyzeAllGames(
           }
           completed++;
         }
-        // A recycled worker isn't in the tracked `workers[]`, so the outer
-        // cleanup won't reach it — destroy it here when this lane is done.
-        if (worker !== initialWorker) { try { worker.destroy(); } catch { /* already dead */ } }
       };
 
       await Promise.all(workers.map((w) => processNextGame(w)));
@@ -1303,7 +1558,7 @@ export async function analyzeAllGames(
     }
   } finally {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
-    workers.forEach((w) => w.destroy());
+    releasePool([...live]); // stay warm for the next package
   }
 
   onProgress?.({
@@ -1318,6 +1573,8 @@ export async function analyzeAllGames(
   // above) — so even a run interrupted partway through has produced puzzles for
   // every game it did analyze. Just refresh the aggregate weakness profile.
   await recomputeWeaknessFromGames();
+  // Keep the per-FEN eval cache bounded (oldest-first) — cheap count, rare trim.
+  void prunePositionEvalCache();
 
   onProgress?.({
     currentGame: games.length,
@@ -1458,4 +1715,7 @@ export function runBackgroundAnalysis(): void {
  *  build rather than naming one, and that a work queue still returns each eval
  *  against the position it belongs to — is exactly what needs a gate.
  *  See `gameAnalysisPool.test.ts`. */
-export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize };
+export const __testables = {
+  evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
+  resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
+};

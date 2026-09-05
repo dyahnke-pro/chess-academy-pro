@@ -34,13 +34,20 @@ let scriptFor: (fen: string) => { cp: number; depth: number };
 /** Set to make every worker fail to signal ready (the no-pool case). */
 let workersNeverReady = false;
 
+/** Every fake spawned this test — so a test can kill one (`dead = true`). */
+const instances: FakeStockfishWorker[] = [];
+let terminated = 0;
+
 class FakeStockfishWorker {
   private listeners: ((e: MessageEvent<string>) => void)[] = [];
   private fen = '';
   onerror: (() => void) | null = null;
+  /** A worker iOS killed while backgrounded: posts nothing, ever. */
+  dead = false;
 
   constructor(url: string) {
     spawnedUrls.push(url);
+    instances.push(this);
   }
 
   addEventListener(_t: string, fn: (e: MessageEvent<string>) => void): void { this.listeners.push(fn); }
@@ -53,6 +60,7 @@ class FakeStockfishWorker {
   }
 
   postMessage(msg: string): void {
+    if (this.dead) return;
     if (msg === 'isready') {
       if (workersNeverReady) return;
       setTimeout(() => this.emit('readyok'), 0);
@@ -74,12 +82,14 @@ class FakeStockfishWorker {
     }
   }
 
-  terminate(): void { /* no-op */ }
+  terminate(): void { terminated += 1; }
 }
 
 describe('the review evaluates its positions in parallel', () => {
   beforeEach(() => {
     spawnedUrls.length = 0;
+    instances.length = 0;
+    terminated = 0;
     workersNeverReady = false;
     scriptFor = () => ({ cp: 0, depth: 16 });
     vi.stubGlobal('Worker', FakeStockfishWorker);
@@ -242,5 +252,84 @@ describe('the review evaluates its positions in parallel', () => {
     const { __testables } = await import('./gameAnalysisService');
     expect(__testables.ASM_POOL_SPAWN_TIMEOUT_MS).toBeGreaterThanOrEqual(40_000);
     expect(__testables.ASM_POOL_SPAWN_TIMEOUT_MS).toBeGreaterThan(__testables.POOL_SPAWN_TIMEOUT_MS);
+  }, 30_000);
+});
+
+// ─── The WARM pool (David 2026-09-05: "get those parallel computers warming up
+// at app launch"). On a phone each asm.js worker cold-compiles ~45s; paying that
+// in front of every Analyze tap — and then TERMINATING the workers at the end so
+// the next tap paid it again — was most of the wait. The pool is now spawned at
+// boot and kept alive between runs.
+describe('the analysis pool is warmed at launch and kept alive', () => {
+  const ENGINE_MOCK = () => ({
+    stockfishEngine: { initialize: vi.fn(), analyzePosition: vi.fn() },
+    isIosSafari: () => false,
+    resolveWorkerUrl: () => ({ url: IOS_ASM_URL, variant: 'asm', reason: 'iOS', workerType: 'classic' }),
+  });
+
+  beforeEach(() => {
+    spawnedUrls.length = 0;
+    instances.length = 0;
+    terminated = 0;
+    workersNeverReady = false;
+    scriptFor = () => ({ cp: 0, depth: 16 });
+    vi.stubGlobal('Worker', FakeStockfishWorker);
+  });
+  afterEach(() => { vi.unstubAllGlobals(); vi.resetModules(); });
+
+  it('warmAnalysisPool spawns the whole pool up front, and a review then spawns NOTHING new', async () => {
+    vi.doMock('./stockfishEngine', ENGINE_MOCK);
+    const { warmAnalysisPool, __testables } = await import('./gameAnalysisService');
+    const warm = await warmAnalysisPool();
+    expect(warm).toBe(__testables.WORKER_POOL_SIZE);
+    expect(spawnedUrls).toHaveLength(__testables.WORKER_POOL_SIZE);
+    // Idempotent — a second warm is free.
+    expect(await warmAnalysisPool()).toBe(warm);
+    expect(spawnedUrls).toHaveLength(__testables.WORKER_POOL_SIZE);
+
+    const fens = ['8/8/8/8/8/8/8/K6k w - - 0 1', '8/8/8/8/8/8/8/K6k b - - 0 1', '7k/8/8/8/8/8/8/K7 w - - 0 1'];
+    const out = await __testables.evaluateFensPooled(fens);
+    expect(out).not.toBeNull();
+    expect(out!.evals.every((e) => e !== null)).toBe(true);
+    // The review ran on the WARM workers — no new Worker was constructed.
+    expect(spawnedUrls).toHaveLength(__testables.WORKER_POOL_SIZE);
+  }, 30_000);
+
+  it('keeps the workers alive after a run so the next one is instant (no terminate, no respawn)', async () => {
+    vi.doMock('./stockfishEngine', ENGINE_MOCK);
+    const { __testables } = await import('./gameAnalysisService');
+    const fens = ['8/8/8/8/8/8/8/K6k w - - 0 1', '8/8/8/8/8/8/8/K6k b - - 0 1'];
+    await __testables.evaluateFensPooled(fens);
+    const afterFirst = spawnedUrls.length;
+    expect(afterFirst).toBeGreaterThan(0);
+    expect(terminated, 'the pool used to terminate every worker at the end of a run').toBe(0);
+
+    await __testables.evaluateFensPooled(fens);
+    expect(spawnedUrls.length, 'second run must reuse the warm workers').toBe(afterFirst);
+    expect(terminated).toBe(0);
+  }, 30_000);
+
+  it('drops a warm worker that stopped answering and replaces it, without losing a single eval', async () => {
+    vi.doMock('./stockfishEngine', ENGINE_MOCK);
+    const { warmAnalysisPool, __testables } = await import('./gameAnalysisService');
+    await warmAnalysisPool();
+    const warmCount = spawnedUrls.length;
+    // iOS killed one while the app was backgrounded: it never answers again.
+    instances[0].dead = true;
+
+    const fens = ['8/8/8/8/8/8/8/K6k w - - 0 1', '8/8/8/8/8/8/8/K6k b - - 0 1', '7k/8/8/8/8/8/8/K7 w - - 0 1'];
+    const out = await __testables.evaluateFensPooled(fens);
+    expect(out).not.toBeNull();
+    expect(out!.evals.every((e) => e !== null), 'a dead worker must not null out its positions').toBe(true);
+    expect(terminated, 'the dead worker is destroyed').toBeGreaterThanOrEqual(1);
+    expect(spawnedUrls.length, 'exactly one replacement spawned').toBe(warmCount + 1);
+  }, 30_000);
+
+  it('resetAnalysisPool (test hook) destroys every warm worker', async () => {
+    vi.doMock('./stockfishEngine', ENGINE_MOCK);
+    const { warmAnalysisPool, __testables } = await import('./gameAnalysisService');
+    const n = await warmAnalysisPool();
+    __testables.resetAnalysisPool();
+    expect(terminated).toBe(n);
   }, 30_000);
 });

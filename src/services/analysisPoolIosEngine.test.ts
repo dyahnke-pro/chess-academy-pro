@@ -1,4 +1,4 @@
-// The batch-analysis pool MUST stay on on native iOS (2 asm.js workers).
+// The batch-analysis pool MUST stay on on native iOS (up to 4 asm.js workers).
 //
 // 🚨 WHAT THIS COSTS WHEN IT REGRESSES (David 2026-09-05: "still stuck at 1").
 //
@@ -49,10 +49,11 @@ const capacitor = vi.mocked(Capacitor);
 const { resolveWorkerPoolSize } = __testables;
 
 /** Ask the real decision function what pool size a given device gets. */
-function poolSizeFor(opts: { native: boolean; platform: string; plugin: boolean; cores: number }): number {
+function poolSizeFor(opts: { native: boolean; platform: string; plugin: boolean; cores: number | undefined }): number {
   capacitor.isNativePlatform.mockReturnValue(opts.native);
   capacitor.getPlatform.mockReturnValue(opts.platform);
   capacitor.isPluginAvailable.mockReturnValue(opts.plugin);
+  // `undefined` = the browser HIDES the count (every iOS WebView does).
   vi.stubGlobal('navigator', { hardwareConcurrency: opts.cores });
   return resolveWorkerPoolSize();
 }
@@ -68,13 +69,27 @@ describe('analysis worker pool — engine choice per platform', () => {
     // which wedges on game 1 ("stuck at 1"). The 50-game package cap, not a dead
     // pool, is what keeps the phone cool.
     expect(t).toBeGreaterThan(0);
-    expect(t).toBeLessThanOrEqual(3);
+    expect(t).toBeLessThanOrEqual(4);
+  });
+
+  it('assumes a 6-core phone when iOS HIDES hardwareConcurrency → 4 workers, not 2', () => {
+    // iOS Safari / WKWebView never expose the core count. The old `|| 4`
+    // fallback silently made every iPhone a 2-worker pool (David 2026-09-05,
+    // "how many bots can we add?"). Hidden count on a phone = 6 cores assumed,
+    // two kept for UI/voice/singleton → 4 engines.
+    const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: undefined });
+    expect(t).toBe(4);
+  });
+
+  it('never exceeds 4 on a phone, however many cores it reports', () => {
+    const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 10 });
+    expect(t).toBe(4);
   });
 
   it('pools on native Android too, capped for UI + voice', () => {
     const t = poolSizeFor({ native: true, platform: 'android', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
-    expect(t).toBeLessThanOrEqual(3);
+    expect(t).toBeLessThanOrEqual(4);
   });
 
   it('CAPS the pool on iOS mobile web / PWA — a phone is a phone, even in Safari', () => {
@@ -83,7 +98,7 @@ describe('analysis worker pool — engine choice per platform', () => {
     // (David 2026-09-05, testing on iPhone Safari). Must cap like the app does.
     const t = poolSizeFor({ native: false, platform: 'ios', plugin: false, cores: 6 });
     expect(t).toBeGreaterThan(0);
-    expect(t).toBeLessThanOrEqual(3);
+    expect(t).toBeLessThanOrEqual(4);
   });
 
   it('pools wider on desktop web', () => {

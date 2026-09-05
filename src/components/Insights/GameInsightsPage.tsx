@@ -17,6 +17,7 @@ import { routeChatIntent } from '../../services/coachSessionRouter';
 import { logAppAudit } from '../../services/appAuditor';
 import { OverviewTab } from './OverviewTab';
 import { ShareableInsightsStrip } from './ShareableInsightsStrip';
+import { RecentGamesStrip } from './RecentGamesStrip';
 import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
@@ -375,6 +376,12 @@ export function GameInsightsPage(): JSX.Element {
             {/* Shareable "Your Chess, In A Nutshell" cards — the
                 launch-critical growth surface. Hidden when the user
                 has too few games for honest insights. */}
+            {/* The player's most recent games, first thing on the page (David
+                2026-09-05: "I don't see a list of most recent games under the
+                main page of weaknesses. That needs to be somewhere more
+                visible!"). Re-reads when the library or the analysis state
+                changes so accuracy fills in as the sweep lands. */}
+            <RecentGamesStrip refreshKey={`${totalGames}-${String(bgAnalysisRunning)}`} />
             <ShareableInsightsStrip />
             <OverviewTab
               data={overview}

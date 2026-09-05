@@ -403,6 +403,20 @@ export function App(): JSX.Element {
             .catch(() => undefined);
         }, 2500);
 
+        // Warm the BATCH-analysis worker pool too (David 2026-09-05: "get those
+        // parallel computers warming up at app launch"). On a phone the pool is
+        // asm.js and each worker cold-compiles ~45s — paid here, off the
+        // critical path, instead of in front of the first Analyze tap or review.
+        // Only when the library has games (a fresh install spawns nothing); the
+        // pool then stays alive for the session (gameAnalysisService warm pool).
+        setTimeout(() => {
+          void db.games.filter((g) => !g.isMasterGame).count()
+            .then((n) => (n > 0
+              ? import('./services/gameAnalysisService').then((m) => m.warmAnalysisPool())
+              : 0))
+            .catch(() => undefined);
+        }, 8000);
+
         // Warm the DeepSeek LLM proxy too (David 2026-09-02). The hand-driven
         // prod audit proved the LLM edge — not Stockfish — was the dominant cold
         // leg: the first coach turn hit coach-brain-deepseek-timeout → retry →
