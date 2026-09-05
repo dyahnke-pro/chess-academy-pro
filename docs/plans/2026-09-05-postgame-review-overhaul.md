@@ -232,14 +232,24 @@ principle clause is `prematureBreakWhy` (`reviewFullData.ts:80`).
    off the REST of the walk too (raw templates everywhere) or stays on the
    non-fundamentals lines.
 
-3. **The principle LEADS the mistake beat** in the capped cascade
-   (`coachFeatureService.ts:1373-1580`) — ahead of the tactical `whyItFailed`
-   when the engine found no tactic (`lost-the-thread`); after it when there was
-   one (the hanging piece outranks the principle). Computed clause list →
-   `voiceReviewLines` phrases it. Target register for the fixture ply: "Three
-   fundamentals in one move: the knight's third trip while both bishops sleep,
-   it steps off d5, and White's d4–d5 arrives with tempo — space and time in one
-   go. …e6 kept it planted."
+3. **THE FUNDAMENTAL IS STATED FIRST; everything else is supporting evidence
+   (David 2026-09-05: "I want the fundamental flaw stated first and then the
+   other computer narration following it as supporting evidence").** Reorder
+   the capped cascade (`coachFeatureService.ts:1373-1580`) into fixed template
+   slots whenever ≥1 fundamental attributes:
+   1. **Verdict = the fundamental(s)** (≤3, ranked by eval share).
+   2. **Evidence, fixed order:** the PV punishment (moves from `evidence`), the
+      refutation / tactic (`whyItFailed`, `[tactic]`, `[loose]`), the eval
+      swing, the lasting concession (`describeConcessions`).
+   3. **The better move + its why** (`explainBestMoveGrounded`).
+   Tactical faults are fundamentals too — a hanging piece is "loose pieces
+   drop off", an ignored threat is "answer the threat first" — so the
+   fundamental leads on EVERY flagged move that has one and the tactic is its
+   evidence. Only a flagged move with NO attributable fundamental falls back
+   to today's order. Raw-spoken, deterministic (2c). Fixture rendering:
+   "Third move of the same knight while both bishops sleep — and it steps off
+   d5. d4–d5 arrives with tempo and a4–a5 hits the knight again; the eval
+   swings a pawn. …e6 kept it planted and d5 closed."
 4. **Feed the loop:** the principle → misconception tag → `captureMisconception`
    → weakness spine + `principle` drill kind, so a repeated fundamental becomes
    a drill. `tempo-handed`/`space-conceded` need tags + devices (fork Q3) or fold
