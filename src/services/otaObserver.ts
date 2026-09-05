@@ -224,6 +224,10 @@ export async function startOtaObserver(): Promise<void> {
  *
  * Returns true when a bundle was applied (the app is about to reload).
  */
+/** Same endpoint the plugin is pointed at (capacitor.config.ts
+ *  CapacitorUpdater.updateUrl). It owns the forward-only ordinal. */
+const OTA_MANIFEST_URL = 'https://chess-academy-pro.vercel.app/api/ota/manifest';
+
 export async function installStagedBundleOnLaunch(): Promise<boolean> {
   let isNative = false;
   try {
@@ -246,10 +250,53 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
 
     const pending = (listed?.bundles ?? [])
       .filter((b) => b.status === 'pending')
-      .filter((b) => b.id !== currentId && b.version !== currentVersion && b.version !== builtinVersion)
-      .sort((a, b) => (Date.parse(b.downloaded) || 0) - (Date.parse(a.downloaded) || 0));
-    const target = pending[0];
-    if (!target) return false;
+      .filter((b) => b.id !== currentId && b.version !== currentVersion && b.version !== builtinVersion);
+    if (pending.length === 0) return false;
+
+    // 🔒 FORWARD-ONLY, AND THE SERVER IS THE ONLY THING THAT KNOWS WHICH WAY
+    // THAT IS (David 2026-09-05 — caught on his own device).
+    //
+    // This used to take the most recently DOWNLOADED pending bundle. Download
+    // time is not version order: a bundle fetched while the pointer briefly
+    // served it, then left pending, is applied on a later launch OVER a newer
+    // bundle. His device did exactly that — booted d5c1b818, then rolled BACK to
+    // its ancestor 6215607a three times. That is the rollback hazard
+    // api/ota/manifest's ordinal exists to prevent, reintroduced here from the
+    // client side, and it is how devices were once stranded on a build carrying
+    // a crash.
+    //
+    // Bundle versions are git short SHAs, so nothing on-device can order them.
+    // The manifest CAN: it holds a monotonic ordinal and refuses to hand back
+    // anything at or below what the device already runs. So ask it what this
+    // device should be running and install ONLY that — inheriting the server's
+    // forward-only guarantee instead of inventing a weaker one here. If the
+    // manifest is unreachable or says up-to-date, we apply NOTHING: staying put
+    // is always safe, going backwards is not.
+    let advertised = '';
+    try {
+      const res = await fetch(
+        `${OTA_MANIFEST_URL}?version=${encodeURIComponent(currentVersion || '0.0.0')}`
+        + `&platform=${encodeURIComponent(Capacitor.getPlatform())}`,
+        { cache: 'no-store' },
+      );
+      if (res.ok) {
+        const body = (await res.json()) as { kind?: string; version?: string };
+        if (body.kind !== 'up_to_date' && typeof body.version === 'string') advertised = body.version;
+      }
+    } catch { /* offline / unreachable — fall through and apply nothing */ }
+
+    const target = advertised ? pending.find((b) => b.version === advertised) : undefined;
+    if (!target) {
+      void logAppAudit({
+        kind: 'ota-launch-install',
+        category: 'subsystem',
+        source,
+        summary: `${pending.length} staged bundle(s) held back — none matches what the server advertises`
+          + ` (advertised=${advertised || 'none/up-to-date'}, running=${currentVersion || 'unknown'},`
+          + ` staged=${pending.map((b) => b.version).join(',')})`,
+      });
+      return false;
+    }
 
     void logAppAudit({
       kind: 'ota-launch-install',
