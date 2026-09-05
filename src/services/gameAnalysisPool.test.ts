@@ -174,11 +174,19 @@ describe('the review evaluates its positions in parallel', () => {
     }));
     workersNeverReady = true;
     vi.useFakeTimers();
-    const { __testables } = await import('./gameAnalysisService');
-    const pending = __testables.evaluateFensPooled(['8/8/8/8/8/8/8/K6k w - - 0 1']);
-    await vi.advanceTimersByTimeAsync(__testables.POOL_SPAWN_TIMEOUT_MS + 100);
-    await expect(pending).resolves.toBeNull();
-    vi.useRealTimers();
+    try {
+      const { __testables } = await import('./gameAnalysisService');
+      const pending = __testables.evaluateFensPooled(['8/8/8/8/8/8/8/K6k w - - 0 1']);
+      // The mock resolves the asm build, which (correctly) gets its full
+      // cold-compile budget before the pool gives up — advance past THAT, not
+      // the short WASM gate. Fake timers make the 45s instant.
+      await vi.advanceTimersByTimeAsync(__testables.ASM_POOL_SPAWN_TIMEOUT_MS + 100);
+      await expect(pending).resolves.toBeNull();
+    } finally {
+      // Always restore — a failure here with fake timers left on freezes every
+      // later test's fake worker (their readyok/bestmove ride on setTimeout).
+      vi.useRealTimers();
+    }
   }, 30_000);
 
   it('the BATCH path budgets its search too, so a slow build cannot null out a library', async () => {
@@ -220,5 +228,19 @@ describe('the review evaluates its positions in parallel', () => {
     // was every iPhone.
     const { __testables } = await import('./gameAnalysisService');
     expect(__testables.POOL_SPAWN_TIMEOUT_MS).toBeLessThanOrEqual(10_000);
+  }, 30_000);
+
+  it('but gives the asm.js build its FULL cold-compile budget to reach readyok', async () => {
+    // 🚨 THE 2026-09-05 REGRESSION (David: "still spinning on 1/50"). The short
+    // gate above is right for fast WASM builds, but asm.js must cold-compile
+    // 1.58MB before it can say `readyok` — up to ~45s on a phone. Under the 8s
+    // gate the asm pool NEVER became ready: every spawn timed out, the pool
+    // "failed" (console-only), and the sweep fell to the sequential singleton
+    // that wedges (native) or grinds at 5s/position (web). Both = stuck at 1.
+    // asm must wait the engine's full init budget; failing fast into a broken
+    // fallback is not a fast path, it is the bug.
+    const { __testables } = await import('./gameAnalysisService');
+    expect(__testables.ASM_POOL_SPAWN_TIMEOUT_MS).toBeGreaterThanOrEqual(40_000);
+    expect(__testables.ASM_POOL_SPAWN_TIMEOUT_MS).toBeGreaterThan(__testables.POOL_SPAWN_TIMEOUT_MS);
   }, 30_000);
 });

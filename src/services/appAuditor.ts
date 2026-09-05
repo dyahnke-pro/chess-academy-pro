@@ -273,6 +273,10 @@ export type AuditKind =
   // re-spawned the single-threaded bundle. Capped at one attempt
   // per session. (WO-STOCKFISH-RUNTIME-FALLBACK).
   | 'stockfish-variant-fallback'
+  /** The batch-analysis worker pool failed to spawn and fell back to the
+   *  sequential singleton — the "stuck at 1" path. Was console-only until
+   *  2026-09-05, which hid the asm spawn-timeout regression from every audit. */
+  | 'analysis-pool-fallback'
   // Stockfish analysis stalled — the `go` command was sent but no
   // bestmove came back within the watchdog window. The dominant
   // symptom of a dead eval bar on iOS, where the lila/sf16-7 bridge

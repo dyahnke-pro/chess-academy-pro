@@ -393,11 +393,28 @@ class DedicatedWorker {
  *  coming; take the fallback and start analysing. */
 const POOL_SPAWN_TIMEOUT_MS = 8_000;
 
+/** Spawn wait for the asm.js build SPECIFICALLY — the engine's full init budget.
+ *
+ *  🚨 THE REGRESSION THAT BROKE BATCH ANALYSIS ON EVERY iPHONE (David 2026-09-05,
+ *  "still spinning on 1/50"; "≤30s a game before it broke"). The 8s wait above
+ *  is right for the fast WASM builds, but the asm.js bundle the pool spawns on
+ *  iOS must cold-compile 1.58MB before it can say `readyok` — up to ~45s on a
+ *  phone (stockfishEngine.INIT_TIMEOUT_MS exists for exactly this). So under an
+ *  8s gate the asm pool NEVER became ready: every spawn timed out, the pool
+ *  "failed", and the sweep fell back to the sequential singleton — which on
+ *  native is `ios-native` (wedges on a batch) and on web is asm at the 5s review
+ *  budget (~3 min/game). Both read as "stuck at 1." The fallback was only a
+ *  console.warn, so the audit stream showed nothing but silent workers.
+ *
+ *  Before the Sep-2 rewrite the pool waited long enough for asm to compile, the
+ *  workers came up, and the sweep ran in parallel at ≤30s/game. Waiting for asm
+ *  is the fix because the fallback is strictly worse than the wait. */
+const ASM_POOL_SPAWN_TIMEOUT_MS = 45_000;
+
 function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(() => {
-      reject(new Error(`Worker ${index} init timed out`));
-    }, POOL_SPAWN_TIMEOUT_MS);
+    // Armed AFTER the build is resolved (below) so the wait can be variant-aware.
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     try {
       // 🔒 ASK THE ENGINE WHICH BUILD RUNS HERE — DO NOT HARDCODE ONE.
@@ -417,6 +434,12 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       // One owner for "which engine build runs on this device". The pool is a
       // second consumer of that decision, not a place to re-guess it.
       const resolved = resolveWorkerUrl();
+      // asm.js cold-compiles ~1.58MB before `readyok` — give it the engine's
+      // full init budget. Fast WASM builds keep the short gate.
+      const spawnTimeoutMs = resolved.variant === 'asm' ? ASM_POOL_SPAWN_TIMEOUT_MS : POOL_SPAWN_TIMEOUT_MS;
+      timeoutId = setTimeout(() => {
+        reject(new Error(`Worker ${index} init timed out after ${spawnTimeoutMs}ms (variant=${resolved.variant})`));
+      }, spawnTimeoutMs);
       // NAME THE BUILD THE POOL SPAWNS. The pool is the only Stockfish consumer
       // that spawned workers WITHOUT recording which build it chose, so when
       // `stockfish-18-lite-single.js` crash-stormed a device on 2026-09-02 (276
@@ -1083,6 +1106,17 @@ export async function analyzeAllGames(
     console.log(`[GameAnalysis] ${workers.length} workers ready — analyzing ${games.length} games`);
   } catch {
     console.warn('[GameAnalysis] Worker pool failed, falling back to single engine');
+    // AUDIT IT. This fallback was console-only, so when the asm pool timed out on
+    // every iPhone (2026-09-05) the audit stream showed workers spawning and then
+    // nothing — the single most important fact about the run was invisible. The
+    // sequential singleton it falls to is slow (web asm) or wedges (native), so a
+    // pool failure IS the "stuck at 1" symptom and must be self-identifying.
+    void logAppAudit({
+      kind: 'analysis-pool-fallback',
+      category: 'subsystem',
+      source: 'gameAnalysisService.analyzeAllGames',
+      summary: `worker pool failed to spawn — falling back to the SEQUENTIAL singleton for ${games.length} games (this is the "stuck at 1" path)`,
+    });
     workers.forEach((w) => w.destroy());
     workers.length = 0;
   }
@@ -1370,4 +1404,4 @@ export function runBackgroundAnalysis(): void {
  *  build rather than naming one, and that a work queue still returns each eval
  *  against the position it belongs to — is exactly what needs a gate.
  *  See `gameAnalysisPool.test.ts`. */
-export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize };
+export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize };
