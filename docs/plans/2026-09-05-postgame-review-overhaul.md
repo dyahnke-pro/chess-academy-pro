@@ -290,18 +290,51 @@ contract holds (every square named is on the board).
 
 ---
 
-## Sequencing (each phase = one commit, one deploy at the end per the cap rule)
-1. **E** first — pure services + tests, no UI; the fixture game drives it.
-2. **A** — the tier key + non-blocking deepen + narration persistence.
-3. **C** — auto-advance (one pacer, shared with B and D).
-4. **B + D** — button-only playout, free board, explore narration (same file).
-5. Audit: clone `scripts/audit-review-real-game.mjs` → seed the Alapin PGN
-   UNANALYZED, `muteTtsForAudit`, 3 instruments; assert: walk starts < 30s on a
-   cold game, re-open is instant (no `review-analyze-spinner`), ply 12 narration
-   names the fundamentals, walk auto-advances and pauses on a board drag,
-   explored move gets a spoken line, "Show me" speaks per ply. Plus
+## Sequencing (locked 2026-09-05; each phase = one commit, one deploy at the end)
+1. **A** — analysis: tier key, non-blocking deepen, narration persistence,
+   in-game + lichess evals. What David feels on the phone; independent of
+   the rest.
+2. **E** — the full fundamentals set (below) as pure services + attribution
+   + tests on the fixture game; deterministic DNA-register templates.
+3. **C** — auto-advance + ⏯ control (one pacer, shared with B and D).
+4. **B + D + G** — button-only narrated playout, free board, explore
+   narration, the complaint-hardening items.
+5. **F** — game card.
+6. Audit: clone `scripts/audit-review-real-game.mjs` → seed the Alapin PGN
+   UNANALYZED, `muteTtsForAudit`, 3 instruments; assert: walk starts < 30s on
+   a cold game, re-open is instant (no `review-analyze-spinner`), ply 12
+   narration leads with the fundamentals, walk auto-advances and pauses on a
+   completed board move only, explored move gets a spoken line, "Show me"
+   speaks per ply, recap aggregates fundamentals. Plus
    `audit-vacuity-check.mjs --changed`. Then `ship-check`, push `main`, prod
    audit. iOS build only when David asks.
+
+### E — THE FULL FUNDAMENTALS SET (David 2026-09-05: "All fundamentals are in
+scope. The more we have the more accurate we can be.")
+Every row is an attributor per E.2b (pattern + punishment-in-PV +
+counterfactual), deterministic per E.2c, with a tag + device + fixture test.
+Rows marked NEW need a detector; the rest need wiring into the review.
+
+Opening: same-piece-twice · tempo-handed (NEW) · space-conceded (NEW) ·
+neglected-development · early-queen-sortie · king-left-in-centre ·
+greedy/wing-pawn-grab-uncastled · early-edge-pawns · knights-before-bishops ·
+buried-own-bishop · premature-centre-break · knight-to-the-rim (NEW).
+
+Middlegame: loose-piece (LPDO) · ignored-threat · passive-when-forcing-existed
+(checks-captures-threats) · weakened-king-shield (NEW) · created-pawn-weakness
+· overextended-pawn (NEW) · traded-active-for-passive / gave-bishop-pair (NEW)
+· wrong-trade-for-material-situation (NEW: ahead → trade pieces, behind →
+trade pawns) · worst-piece-unimproved · rook-ignored-open-file (NEW).
+
+Endgame: passive-king (NEW detector, tag exists) · mistimed-pawn-break (NEW
+detector, tag exists) · rook-in-front-of-passed-pawn / Tarrasch (NEW).
+
+Tags: add `tempo-handed`, `space-conceded`, `overextended-pawn`,
+`bad-trade-material` (+ devices in `principles.ts`); the rest map onto the
+existing `misconceptionTags.ts` set. Cap per ply stays 3, ranked by the eval
+share the PV punishment explains; PV-verified rows outrank co-occurrence-only
+rows (rim knight, knights-before-bishops, rook/open-file) which speak only
+when nothing PV-verified attached.
 
 ## Decisions (David 2026-09-05)
 - **Pause tiers:** 0.5s after unflagged plies, 1.5s after flagged plies. LOCKED.
