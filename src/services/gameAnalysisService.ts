@@ -31,6 +31,12 @@ export interface BatchAnalysisProgress {
 // `analysisDepth` on each game; `gameNeedsAnalysis` re-analyzes anything below
 // it, so existing depth-12 games refresh to the deeper number once.
 export const ANALYSIS_DEPTH = 16;
+/** Depth for the BEST MOVE on a slip — deliberately deeper than any eval depth
+ *  and the ONE place the extra plies are load-bearing. This move becomes the
+ *  SOLUTION to a mistake drill the student is graded against, so a shallow
+ *  answer does not read as a slightly-off eval, it teaches the wrong move. Every
+ *  other consumer wants a verdict, which is settled far shallower (see
+ *  REVIEW_DEEP_DEPTH). Do not alias the two together again. */
 export const BEST_MOVE_DEPTH = 18;
 // BLUNDER_CP / MISTAKE_CP / INACCURACY_CP moved to `engineConstants` (imported
 // below). They were duplicated in `moveRating` with DIFFERENT numbers, so the
@@ -700,10 +706,28 @@ const BATCH_SHALLOW_BUDGET_MS = 200;
  *  typical review at well under a minute. */
 const REVIEW_MAX_DEEP_PLIES = 12;
 
-/** Depth the REVIEW re-searches its key moments at — deeper than the old
- *  all-plies pass (ANALYSIS_DEPTH), because it now runs on ~10 positions
- *  instead of ~66. Fewer moments, harder look. */
-const REVIEW_DEEP_DEPTH = BEST_MOVE_DEPTH;
+/** Depth the REVIEW re-searches its key moments at.
+ *
+ *  🔒 THIS MUST BE A DEPTH THE ENGINE CAN ACTUALLY REACH INSIDE THE BUDGET
+ *  (David 2026-09-05: "isn't depth 18 too deep? what function requires that?").
+ *  It was `BEST_MOVE_DEPTH` (18) on the reasoning that ~10 positions can afford
+ *  more depth each than ~66 could. That reasoning was about budget and ignored
+ *  REACHABILITY, which is the property that actually governs cost here.
+ *
+ *  `go depth N movetime B` stops at whichever limit lands first. When N is
+ *  unreachable the depth limit NEVER lands, so every search runs the full
+ *  movetime — there is no early return, ever. On the asm.js build a phone runs,
+ *  depth 18 is unreachable in 3s, so asking for it turned all twelve key moments
+ *  into guaranteed full-budget searches. Asking for a depth the engine reaches
+ *  lets a quiet position finish in a few hundred ms and hand its budget back.
+ *  A high ceiling buys no depth on a slow engine; it only removes every chance
+ *  to stop early.
+ *
+ *  14 also loses nothing that matters: the classification thresholds are the
+ *  consumer here, and a depth-14 → depth-18 eval moves ~10cp while the smallest
+ *  verdict-changing swing is INACCURACY_CP (50). The verdict is settled well
+ *  before 18. */
+const REVIEW_DEEP_DEPTH = 14;
 
 /** Smallest cpLoss the SWEEP will call a slip.
  *

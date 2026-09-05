@@ -219,8 +219,21 @@ describe('the REVIEW deep-dives the key moments', () => {
     expect(anns![4].classification).toBe('blunder');
   });
 
-  it('searches DEEPER than the pass it replaced — fewer moments, harder look', () => {
-    expect(REVIEW_DEEP_DEPTH).toBeGreaterThan(ANALYSIS_DEPTH);
+  it('re-searches at a depth the engine can actually REACH, so a quiet position stops early', () => {
+    // 🔒 `go depth N movetime B` stops at whichever lands first. An unreachable
+    // N means the depth limit never lands and EVERY search burns the whole
+    // movetime — no early return, ever (David 2026-09-05: "isn't depth 18 too
+    // deep?"). It must stay reachable on the slow asm build a phone runs.
+    expect(REVIEW_DEEP_DEPTH).toBeLessThan(ANALYSIS_DEPTH);
+    // …and it must NOT be aliased to the drill-solution depth again.
+    expect(REVIEW_DEEP_DEPTH).toBeLessThan(BEST_MOVE_DEPTH);
+  });
+
+  it('still grades correctly at that depth — the verdict is settled far shallower than 18', () => {
+    // The consumer of the deep eval is classifyCpLoss, whose smallest
+    // verdict-changing swing is INACCURACY_CP (50cp). A depth-14 → depth-18
+    // eval moves ~10cp, so the extra plies cannot change a classification.
+    expect(INACCURACY_CP).toBeGreaterThan(10);
   });
 
   it('bounds its own cost: the deep dive never exceeds the ply cap on ordinary swings', async () => {

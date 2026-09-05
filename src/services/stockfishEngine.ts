@@ -500,6 +500,29 @@ class StockfishEngine {
   // streaming info) apart from a dead one (silent) before tearing it down.
   // Reset when a new worker is spawned.
   private _lastMessageAt = 0;
+  /** True when the page went hidden at any point during the CURRENT pending
+   *  analysis. A suspended WebView stops executing the worker AND the page's
+   *  own timers, so on resume every watchdog fires at once and a perfectly
+   *  healthy engine is indistinguishable from a dead one — see the guard in
+   *  recoverStuckAnalysis. Reset when a new analysis is armed. */
+  private _hiddenDuringPending = false;
+  /** One suspend-forgiveness per pending analysis, so a genuinely dead engine
+   *  still recovers on the second window instead of being re-armed forever. */
+  private _suspendReArmed = false;
+  private _visibilityHooked = false;
+
+  /** Watch for the page being backgrounded so a suspension can be told apart
+   *  from an engine fault. Idempotent; no-op outside a browser. */
+  private hookVisibility(): void {
+    if (this._visibilityHooked) return;
+    if (typeof document === 'undefined') return;
+    this._visibilityHooked = true;
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && this.pending) {
+        this._hiddenDuringPending = true;
+      }
+    });
+  }
   private worker: Worker | null = null;
   private isReady = false;
   private pending: PendingAnalysis | null = null;
@@ -1147,6 +1170,39 @@ class StockfishEngine {
    *  the UI (David 2026-06-16). No-ops if `pending` already settled. */
   private recoverStuckAnalysis(reason: string): void {
     if (!this.pending) return;
+    // 🔒 A BACKGROUNDED PAGE IS NOT A DEAD ENGINE (David 2026-09-05).
+    //
+    // iOS suspends the WebView when the app leaves the foreground: the worker
+    // stops executing AND the page's own timers stop, so on resume every
+    // watchdog fires at once and a healthy engine looks like it never answered.
+    // Tearing down here is bad enough on its own (it throws away a warm engine,
+    // and on asm the replacement costs a 45s cold compile) — but the real damage
+    // is below: an `ios-native` teardown DEMOTES to asm.js for the whole
+    // SESSION. So one app-switch while the coach was thinking permanently drops
+    // the user onto the slowest engine we ship, for every coach answer, review
+    // and sweep until they relaunch. Observed on David's device: a runtime stall
+    // demoted ios-native mid-session, and the very next dispatch stalled again
+    // on the cold asm engine it had been demoted to.
+    //
+    // If the page was hidden during this analysis the timeout proves nothing:
+    // forgive it ONCE and re-arm a full window. A genuinely dead engine simply
+    // fails the second window and recovers exactly as before.
+    if (this._hiddenDuringPending && !this._suspendReArmed) {
+      this._suspendReArmed = true;
+      this._hiddenDuringPending = false;
+      const held = this.pending;
+      if (held.hardTimeout) clearTimeout(held.hardTimeout);
+      held.hardTimeout = setTimeout(() => {
+        if (this.pending === held) this.recoverStuckAnalysis(`${reason} (after suspend re-arm)`);
+      }, ANALYSIS_HARD_TIMEOUT_MS);
+      void logAppAudit({
+        kind: 'stockfish-analysis-stalled',
+        category: 'subsystem',
+        source: 'stockfishEngine.recoverStuckAnalysis',
+        summary: `${reason} — page was BACKGROUNDED during this analysis; not an engine fault. Re-armed once (variant=${this.workerVariant ?? '?'})`,
+      });
+      return;
+    }
     // asm/iOS LIVENESS GUARD — do NOT tear down a slow-but-alive worker.
     // The asm.js build streams `info` lines during search and is slow to
     // honor `stop` on iOS WebKit; if it emitted a message within the
@@ -1418,6 +1474,11 @@ class StockfishEngine {
       // bestmove-never). If the worker died silently this is the only thing
       // that settles the promise — without it the coach hangs forever
       // (David 2026-06-16 freeze). Cleared on bestmove in handleMessage.
+      // Fresh analysis → fresh suspension bookkeeping.
+      this.hookVisibility();
+      this._hiddenDuringPending = typeof document !== 'undefined' && document.visibilityState === 'hidden';
+      this._suspendReArmed = false;
+
       const watchedPending = this.pending;
       this.pending.hardTimeout = setTimeout(() => {
         if (this.pending === watchedPending) {
