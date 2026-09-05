@@ -1,6 +1,8 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import type { MoveAnnotation, MoveClassification } from '../types';
+import { isBookLine } from './openingDetectionService';
+import { INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
 
 // ─── Opening Detection ──────────────────────────────────────────────────────
 
@@ -118,6 +120,75 @@ export function detectBlunders(pgn: string): MoveAnnotation[] | null {
   }
 
   return annotations.length > 0 ? annotations : null;
+}
+
+/** Depth stamped on a game whose eval curve came from the PGN's own
+ *  `[%eval]` comments (lichess server analysis). Deliberately BELOW
+ *  `ANALYSIS_DEPTH` so the review still deep-dives the key moments on open —
+ *  the server gives us the curve but never the BEST MOVE, and the walk's
+ *  "Show me" arrows need one. The dive fills it in (in the background, see
+ *  CoachReviewSessionPage) while the curve itself stays server-grade. */
+export const EVAL_COMMENT_ANALYSIS_DEPTH = 12;
+
+/** Clamp a comment eval so a mate score (±10000) can't blow up cpLoss. */
+function clampCp(cp: number): number {
+  return Math.max(-1000, Math.min(1000, cp));
+}
+
+/**
+ * FULL per-ply annotations from a PGN's `[%eval]` comments — the whole eval
+ * curve, not just the blunders (`detectBlunders`). Lichess writes one eval
+ * after EVERY move when the user ran server analysis, at a depth deeper than
+ * the phone will ever reach, so a game that carries them needs NO local
+ * eval pass at all (David 2026-09-05: "prevent any need for preview
+ * analysis"). Returns null when the comments do not cover every ply — a
+ * partial curve would grade the uncovered plies as `good` and lie.
+ *
+ * Classification mirrors the review's thresholds (INACCURACY / MISTAKE /
+ * BLUNDER) with the same book exemption: a theory move is never flagged for
+ * opening noise, but a genuine blunder surfaces even in a named line.
+ * `bestMove` is unknown here (the comments don't carry it) — the review's
+ * deep dive supplies it for flagged plies.
+ */
+export function annotationsFromEvalComments(pgn: string): MoveAnnotation[] | null {
+  const evals = parseEvalComments(pgn);
+  const moves = extractMovesFromPgn(pgn);
+  if (moves.length === 0 || evals.length < moves.length) return null;
+  if (evals.some((e) => e.cp === null)) return null;
+
+  const annotations: MoveAnnotation[] = [];
+  let stillBook = true;
+  for (let i = 0; i < moves.length; i++) {
+    const isWhiteMove = i % 2 === 0;
+    const color: 'white' | 'black' = isWhiteMove ? 'white' : 'black';
+    // evals[i] is the eval AFTER move i; the start position has no comment.
+    const evalBefore = i === 0 ? 0 : (evals[i - 1].cp as number);
+    const evalAfter = evals[i].cp as number;
+    const cpLoss = isWhiteMove
+      ? clampCp(evalBefore) - clampCp(evalAfter)
+      : clampCp(evalAfter) - clampCp(evalBefore);
+
+    const moveIsBook = stillBook && isBookLine(moves.slice(0, i + 1));
+    if (!moveIsBook) stillBook = false;
+
+    let classification: MoveClassification = 'good';
+    if (cpLoss >= BLUNDER_CP) classification = 'blunder';
+    else if (cpLoss >= MISTAKE_CP) classification = 'mistake';
+    else if (cpLoss >= INACCURACY_CP) classification = 'inaccuracy';
+    if (moveIsBook && classification !== 'blunder') classification = 'book';
+
+    annotations.push({
+      moveNumber: Math.floor(i / 2) + 1,
+      color,
+      san: moves[i],
+      evaluation: evalAfter,
+      bestMove: null,
+      bestMoveEval: evalBefore,
+      classification,
+      comment: null,
+    });
+  }
+  return annotations;
 }
 
 function classifyDrop(dropCp: number): MoveClassification {

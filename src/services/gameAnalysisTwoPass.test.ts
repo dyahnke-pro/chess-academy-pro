@@ -243,6 +243,22 @@ describe('the REVIEW deep-dives the key moments', () => {
     expect(dive.length).toBeLessThanOrEqual(__testables.REVIEW_MAX_DEEP_PLIES);
   });
 
+  it('REUSES the deep dive\'s best move — no second full-budget search per flagged ply (David 2026-09-05)', async () => {
+    // The dive already searched the flagged ply's "before" position at
+    // REVIEW_DEEP_DEPTH and got a best move. Running ANOTHER search at
+    // BEST_MOVE_DEPTH for the same position bought nothing on the phone (18 is
+    // unreachable there, so it always burned the whole budget) and doubled the
+    // review's wall-clock on every flagged ply.
+    await reviewFixture();
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns![4].classification).toBe('blunder');
+    // The best move is filled in…
+    expect(anns![4].bestMove).toBeTruthy();
+    // …WITHOUT a BEST_MOVE_DEPTH search at that ply.
+    const bestMoveSearches = singletonCalls.filter((c) => c.depth === BEST_MOVE_DEPTH);
+    expect(bestMoveSearches, 'a second deep search ran at the flagged ply').toHaveLength(0);
+  });
+
   it('a completed review is NOT re-analysed on the next open', async () => {
     await reviewFixture();
     await analyzeSingleGame('g-review');

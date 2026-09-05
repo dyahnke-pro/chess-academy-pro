@@ -15,7 +15,7 @@
  * post-game review path (after a finished coach game) get the same
  * Stockfish-grounded, [VOICE: ...]-marker pedagogy automatically.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { Chess } from 'chess.js';
@@ -237,6 +237,12 @@ export function CoachReviewSessionPage(): JSX.Element {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzeProgress, setAnalyzeProgress] = useState<string | null>(null);
+  /** A background deepen is running (the review is already on screen). */
+  const [deepening, setDeepening] = useState(false);
+  /** Bumped when a background deepen lands BEFORE the walk started, so the
+   *  review remounts on the deeper annotations. */
+  const [analysisRev, setAnalysisRev] = useState(0);
+  const walkStartedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -267,14 +273,51 @@ export function CoachReviewSessionPage(): JSX.Element {
           summary: `loaded game id=${rec.id} source=${rec.source} moves=${rec.annotations?.length ?? 0}`,
           details: JSON.stringify({ gameId, source: rec.source, fullyAnalyzed: rec.fullyAnalyzed }),
         });
-        // Block rendering until analysis is complete so the user
-        // never sees the partial "0% accuracy" intermediate state. For
-        // pre-analyzed games (samples + previously-reviewed games)
-        // gameNeedsAnalysis() returns false and we render
-        // immediately. For fresh imports we silently run Stockfish,
-        // then render — and the autoStartReview path fires the
-        // walkthrough straight away on first paint.
-        if (gameNeedsAnalysis(rec)) {
+        // 🔒 NEVER BLOCK ON ANALYSIS THE GAME ALREADY HAS (David 2026-09-05:
+        // "very long initial analysis … use the pre analysis from after
+        // import"). The sweep, a coach game, or a lichess import already wrote
+        // a usable eval curve; the only thing the review adds on open is the
+        // key-moment deep dive. So: annotations present → render NOW and
+        // deepen in the BACKGROUND (a small pill says so). The result lands
+        // only if the walk has not started — once the student is walking,
+        // the review is frozen and the deeper pass waits for the next open
+        // (never rewrite the walk under them). The blocking spinner survives
+        // ONLY for a game with no usable annotations at all.
+        const usable = Array.isArray(rec.annotations) && rec.annotations.length > 0
+          && rec.annotations[0].bestMoveEval !== undefined;
+        if (usable && gameNeedsAnalysis(rec)) {
+          setGame(rec);
+          setDeepening(true);
+          const started = rec;
+          void analyzeSingleGame(started.id).then(async () => {
+            if (cancelled) return;
+            const refreshed = await db.games.get(started.id);
+            if (cancelled || !refreshed) return;
+            if (walkStartedRef.current) {
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachReviewSessionPage.deepen',
+                summary: `deepen landed after walk start — held for next open (game ${started.id})`,
+                details: JSON.stringify({ gameId: started.id, analysisDepth: refreshed.analysisDepth }),
+              });
+              return;
+            }
+            setGame(refreshed);
+            setAnalysisRev((r) => r + 1);
+          }).catch((err: unknown) => {
+            if (cancelled) return;
+            void logAppAudit({
+              kind: 'stockfish-error',
+              category: 'subsystem',
+              source: 'CoachReviewSessionPage.deepen',
+              summary: `background deepen failed: ${err instanceof Error ? err.message : String(err)}`,
+              details: JSON.stringify({ gameId: started.id }),
+            });
+          }).finally(() => {
+            if (!cancelled) setDeepening(false);
+          });
+        } else if (gameNeedsAnalysis(rec)) {
           setAnalyzing(true);
           try {
             await analyzeSingleGame(rec.id, (phase) => {
@@ -377,7 +420,16 @@ export function CoachReviewSessionPage(): JSX.Element {
   }
 
   return (
-    <div className="flex flex-col md:flex-row flex-1 min-h-0">
+    <div className="relative flex flex-col md:flex-row flex-1 min-h-0">
+      {deepening && (
+        <div
+          data-testid="review-deepening-pill"
+          className="absolute top-2 right-2 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 text-[11px] font-medium pointer-events-none"
+        >
+          <Loader2 size={12} className="animate-spin" />
+          Sharpening analysis…
+        </div>
+      )}
       {/* `autoStartReview` was previously passed here, forcing
           `reviewPhase` to initialize to `'analysis'`. That made
           sense in the old design where analysis was the dominant
@@ -402,7 +454,8 @@ export function CoachReviewSessionPage(): JSX.Element {
         // a different deep-linked ply on the same game (e.g. moving
         // from one costliest-mistake row to another) so
         // `initialMoveIndex` re-applies on mount.
-        key={`${gameId}:${initialMoveIndex}`}
+        key={`${gameId}:${initialMoveIndex}:${analysisRev}`}
+        onWalkStarted={() => { walkStartedRef.current = true; }}
         // ship-5: forward gameId so `useReviewPlayback` can scope hint
         // callouts to this specific game (no cross-game leakage via
         // useCoachMemoryStore.hintRequests).

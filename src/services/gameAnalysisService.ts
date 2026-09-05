@@ -1212,6 +1212,14 @@ async function analyzeGamePositions(
   const evals: (number | null)[] = fens.map(() => null);
   /** Deep re-searches, by ply. Null where the curve value still stands. */
   const deep: (number | null)[] = fens.map(() => null);
+  /** Best move the deep dive found at each re-searched ply (UCI). The dive
+   *  already ran a REVIEW_DEEP_DEPTH search at every flagged ply's "before"
+   *  position, so the best-move refinement below can reuse it instead of
+   *  spending a SECOND full-budget search per flagged ply — on the asm.js
+   *  build that second search never reached BEST_MOVE_DEPTH anyway, so it
+   *  ran the whole REVIEW_POSITION_BUDGET_MS every time (David 2026-09-05:
+   *  "very long initial analysis"). */
+  const deepBest: (string | null)[] = fens.map(() => null);
   const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
@@ -1275,10 +1283,11 @@ async function analyzeGamePositions(
       try {
         const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
         deep[i] = a.evaluation;
+        deepBest[i] = a.bestMove || null;
         searched++;
         if (Number.isFinite(a.depth) && a.depth > 0) {
           depthAt[i] = Math.max(depthAt[i], a.depth);
-          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth });
+          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
         }
       } catch {
         // Keep the curve value for this ply — a lost deep search costs
@@ -1335,7 +1344,14 @@ async function analyzeGamePositions(
       } else {
         classification = graded;
         if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
-          try {
+          const reused = deepBest[moveIdx];
+          if (reused) {
+            // The dive already searched this exact position deep — the move it
+            // found IS the refinement. Same engine, same depth the verdict was
+            // settled at; a second search here bought nothing but wall-clock.
+            bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
+            refinedBestMoveEval = evalBefore;
+          } else try {
             const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(
               fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
             bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)

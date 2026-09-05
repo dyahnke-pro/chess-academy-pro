@@ -81,6 +81,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
+import { reviewNarrationCacheKey, getCachedReviewNarration, storeReviewNarration } from '../../services/reviewNarrationCache';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType } from '../../types';
@@ -125,6 +126,10 @@ interface CoachGameReviewProps {
    *  so hint callouts are scoped to THIS game and don't leak across
    *  reviews via the global `useCoachMemoryStore` (ship-5). */
   gameId?: string;
+  /** Fires when the student taps Start and the walk begins. The session page
+   *  uses it to FREEZE the review: a background deepen that lands after this
+   *  is held for the next open instead of rewriting the walk mid-stride. */
+  onWalkStarted?: () => void;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -505,23 +510,52 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (walkNarration !== null || isLoadingWalk) return;
     if (reviewMoveInputs.length === 0) return;
     setIsLoadingWalk(true);
-    void generateReviewNarration({
-      moves: reviewMoveInputs,
-      playerColor,
-      openingName,
-      result,
-      playerRating,
-      // Tied to the unified Settings → Coach → Coach Narration dial.
-      // Silent skips the intro LLM call entirely; Brief caps it at
-      // ~80 tokens; Full uses the legacy 200-token allowance. Resolved
-      // fresh per mount so a Settings change between reviews takes
-      // effect on the next open.
-      coachNarration: resolveCoachNarration(useAppStore.getState().activeProfile?.preferences),
-      // UNCAPPED diagnostic mode (David 2026-07-20): speak EVERY computed facet on
-      // EVERY move + the future-position projections. Opt-in via ?uncapped=1 or
-      // localStorage reviewUncapped=1 (the audit + David toggle it) — production
-      // review stays capped.
-      uncapped: isReviewUncapped(),
+    // Tied to the unified Settings → Coach → Coach Narration dial.
+    // Silent skips the intro LLM call entirely; Brief caps it at
+    // ~80 tokens; Full uses the legacy 200-token allowance. Resolved
+    // fresh per mount so a Settings change between reviews takes
+    // effect on the next open.
+    const coachNarration = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
+    // UNCAPPED diagnostic mode (David 2026-07-20): speak EVERY computed facet on
+    // EVERY move + the future-position projections. Opt-in via ?uncapped=1 or
+    // localStorage reviewUncapped=1 (the audit + David toggle it) — production
+    // review stays capped.
+    const uncapped = isReviewUncapped();
+    const cacheGameId = props.gameId ?? null;
+    const cacheKey = reviewNarrationCacheKey({
+      moves: reviewMoveInputs, playerColor, openingName, result, playerRating, coachNarration, uncapped,
+    });
+    // PERSISTED NARRATION (David 2026-09-05: "I clicked on that game again and
+    // it restarted all over"). The walk is a pure function of the annotations
+    // + settings, so a cached one under the same key IS the narration — no
+    // facet recompute, no house-voice pass. A deepened annotation changes the
+    // key and regenerates.
+    const cached = cacheGameId ? getCachedReviewNarration(cacheGameId, cacheKey) : Promise.resolve(null);
+    void cached.then((hit) => {
+      if (hit) {
+        void logAppAudit({
+          kind: 'review-walk-skipped',
+          category: 'subsystem',
+          source: 'CoachGameReview.walkNarration',
+          summary: `walk narration served from cache (${hit.segments.length} segments)`,
+          details: JSON.stringify({ cacheHit: true, key: cacheKey, segmentCount: hit.segments.length }),
+        });
+        return hit;
+      }
+      return generateReviewNarration({
+        moves: reviewMoveInputs,
+        playerColor,
+        openingName,
+        result,
+        playerRating,
+        coachNarration,
+        uncapped,
+      }).then((narration) => {
+        if (narration && narration.segments.length > 0 && cacheGameId) {
+          void storeReviewNarration(cacheGameId, cacheKey, narration);
+        }
+        return narration;
+      });
     }).then((narration) => {
       // Audit-driven (review walk #4): bail if the component
       // unmounted mid-call (user navigated away). React-level
@@ -4342,6 +4376,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               }),
             });
             setWalkStarted(true);
+            props.onWalkStarted?.();
           }}
           walkReady={walkReady}
           onPlayAgain={onPlayAgain}

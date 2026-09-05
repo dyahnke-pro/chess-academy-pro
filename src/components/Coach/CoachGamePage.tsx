@@ -11,6 +11,7 @@ import { usePracticePosition } from '../../hooks/usePracticePosition';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useLiveCoach } from '../../hooks/useLiveCoach';
 import { useCoachTips } from '../../hooks/useCoachTips';
+import { movesToAnnotations, LIVE_ANALYSIS_DEPTH } from '../../services/coachGameAnnotations';
 import type { TacticLineData } from '../../hooks/useCoachTips';
 import { ChessBoard } from '../Board/ChessBoard';
 import { VoiceChatMic } from '../Board/VoiceChatMic';
@@ -137,7 +138,7 @@ import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/vo
 import { computeWhyBestMove } from '../../services/whyBestMove';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
-  CoachDifficulty, MoveClassification, MoveAnnotation,
+  CoachDifficulty,
   StockfishAnalysis, GameAnalysisSummary, GameRecord, AnalysisLine,
   GameResult, BoardArrow, BoardHighlight, BoardAnnotationCommand,
   ChatMessage,
@@ -181,25 +182,6 @@ function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
       type,
     };
   });
-}
-
-function movesToAnnotations(moves: CoachGameMove[], playerColor: 'white' | 'black'): MoveAnnotation[] {
-  return moves
-    .filter((m): m is CoachGameMove & { classification: MoveClassification } =>
-      !m.isCoachMove && m.classification !== null)
-    .map((m) => ({
-      moveNumber: Math.ceil(m.moveNumber / 2),
-      color: playerColor,
-      san: m.san,
-      // Both values are already centipawns (White POV) from the live
-      // CoachGamePage classifier — pass through unchanged so the review
-      // surface's swing math matches the live game's classifier output.
-      evaluation: m.evaluation,
-      bestMove: m.bestMove,
-      bestMoveEval: m.bestMoveEval,
-      classification: m.classification,
-      comment: m.commentary || null,
-    }));
 }
 
 function buildAnalysisSummary(
@@ -1978,6 +1960,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       blackElo: playerColor === 'black' ? playerRating : targetStrength,
       source: 'coach' as const,
       annotations,
+      // The live game IS the analysis (David 2026-09-05): every ply was scored
+      // at LIVE_ANALYSIS_DEPTH as it was played, so the sweep must leave this
+      // record alone and the review opens on it without a spinner.
+      fullyAnalyzed: true,
+      analysisDepth: LIVE_ANALYSIS_DEPTH,
       coachAnalysis: JSON.stringify(summary),
       isMasterGame: false,
       openingId: detectedOpening?.name ?? null,

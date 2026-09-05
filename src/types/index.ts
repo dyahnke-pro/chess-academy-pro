@@ -687,6 +687,16 @@ export interface GameRecord {
    *  increment. Parallel to annotations. Seeds the time-trouble detector.
    *  Undefined for untimed games. */
   clockRemainingMs?: number[];
+  /** Persisted walk narration (reviewNarrationCache). Keyed on the
+   *  annotations + settings + narration revision, so re-opening a reviewed
+   *  game is instant and a deepened annotation invalidates it. Opaque here —
+   *  the cache module owns the shape. */
+  reviewNarration?: {
+    rev: number;
+    key: string;
+    narration: unknown;
+    savedAt: number;
+  };
 }
 
 // ─── Flashcards ──────────────────────────────────────────────────────────────
