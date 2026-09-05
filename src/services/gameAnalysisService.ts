@@ -821,6 +821,29 @@ const WORKER_WEDGE_LIMIT = 3;
 /** Thrown by analyzeGameOnWorker when its worker is wedged; the batch loop
  *  catches it, destroys + respawns the worker, and moves on (the game is left
  *  un-analyzed for the next sweep). */
+/** What one game's analysis actually cost. Emitted per game so a sweep's speed
+ *  is MEASURED rather than inferred.
+ *
+ *  🔒 WHY THIS EXISTS (David 2026-09-05, "add the audit tools"). The sweep
+ *  audited nothing per game, so after a real run on his phone the only way to
+ *  estimate throughput was to count `misconception-captured` side effects and
+ *  read the gaps between them — which undercounts, because a game with no
+ *  misconception finishes completely invisibly. That inference said ~10 games;
+ *  he had actually analysed 13. A speed fix whose effect can only be guessed at
+ *  cannot be verified, tuned, or defended. */
+export interface GameAnalysisStats {
+  /** Positions in the game (fens). */
+  plies: number;
+  /** Positions served from the per-FEN eval cache — no engine time spent. */
+  fromCache: number;
+  /** Positions the engine actually searched. */
+  searched: number;
+  /** Leading positions skipped as opening book. */
+  skippedBook: number;
+  /** Slips that earned a deep best-move search (the drill solutions). */
+  refined: number;
+}
+
 export class WorkerWedgedError extends Error {
   constructor(gameId: string) {
     super(`Stockfish worker wedged during analysis of game ${gameId}`);
@@ -907,7 +930,7 @@ async function evaluateFensPooled(
 export async function analyzeGameOnWorker(
   game: GameRecord,
   worker: DedicatedWorker,
-): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
+): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number; stats: GameAnalysisStats } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
 
@@ -1108,6 +1131,13 @@ export async function analyzeGameOnWorker(
   return {
     annotations,
     achievedDepth: Number.isFinite(achievedDepth) ? Math.min(achievedDepth, ANALYSIS_DEPTH) : 0,
+    stats: {
+      plies: fens.length,
+      fromCache: cached.size,
+      searched: Math.max(0, fens.length - skipBook - cached.size),
+      skippedBook: skipBook,
+      refined: mistakeIndices.length,
+    },
   };
 }
 
@@ -1380,6 +1410,7 @@ export async function analyzeSingleGame(
   // stops competing for the engine/CPU, and surface real per-move progress
   // (a minutes-long spinner with no counter reads as a hang).
   pauseBatchAnalysis();
+  const reviewStartedAt = Date.now();
   try {
     onProgress?.('Analyzing positions with Stockfish…');
     const result = await analyzeGamePositions(game, (current, total) => {
@@ -1392,6 +1423,16 @@ export async function analyzeSingleGame(
     // analysed on a slow engine is re-deepened next time it is opened on a fast
     // one. See the note in `analyzeGamePositions`.
     await db.games.update(gameId, { annotations, fullyAnalyzed: true, analysisDepth: achievedDepth });
+
+    // The OTHER half of the split (see BATCH_SHALLOW_DEPTH): the review is the
+    // surface with a person watching a progress bar, and it was the one measured
+    // at 216s before the rework. Measure it directly rather than by feel.
+    void logAppAudit({
+      kind: 'analysis-review-done',
+      category: 'subsystem',
+      source: 'gameAnalysisService.analyzeSingleGame',
+      summary: `review of ${game.white} vs ${game.black} in ${((Date.now() - reviewStartedAt) / 1000).toFixed(1)}s — ${annotations.length} moves, depth=${achievedDepth}`,
+    });
 
     return annotations;
   } finally {
@@ -1594,6 +1635,7 @@ export async function analyzeAllGames(
 
   let analyzed = 0;
   let completed = 0;
+  const sweepStartedAt = Date.now();
   const analyzedGameIds: string[] = [];
 
   // Per-game insight generation — runs INLINE as each game finishes analysis,
@@ -1648,7 +1690,8 @@ export async function analyzeAllGames(
             phase: 'analyzing',
           });
 
-          let worked: { annotations: MoveAnnotation[]; achievedDepth: number } | null = null;
+          let worked: { annotations: MoveAnnotation[]; achievedDepth: number; stats: GameAnalysisStats } | null = null;
+          const gameStartedAt = Date.now();
           try {
             worked = await analyzeGameOnWorker(game, worker);
           } catch (e) {
@@ -1683,6 +1726,16 @@ export async function analyzeAllGames(
             });
             analyzedGameIds.push(game.id);
             analyzed++;
+            // MEASURE the sweep (see GameAnalysisStats). One line per game, so
+            // throughput, cache effectiveness and reached depth are all readable
+            // straight off the audit stream instead of inferred from side effects.
+            const st = worked.stats;
+            void logAppAudit({
+              kind: 'analysis-game-done',
+              category: 'subsystem',
+              source: 'gameAnalysisService.analyzeAllGames',
+              summary: `game ${analyzed}/${games.length} in ${Date.now() - gameStartedAt}ms — ${st.plies} plies (${st.searched} searched, ${st.fromCache} cached, ${st.skippedBook} book), ${st.refined} refined, depth=${worked.achievedDepth}`,
+            });
             // Generate this game's mistakes NOW — don't wait for the whole
             // batch to finish (it often never does on a big library).
             await generateInsightsForGame(game.id, game.source, worked.annotations);
@@ -1720,6 +1773,19 @@ export async function analyzeAllGames(
   } finally {
     document.removeEventListener('visibilitychange', handleVisibilityChange);
     releasePool([...live]); // stay warm for the next package
+    // Run-level summary. Emitted in `finally` ON PURPOSE so a sweep the user
+    // STOPS is measured too — David stopped his 2026-09-05 run at 13 of 50, and
+    // without this the run's own record simply ended mid-air.
+    const sweepMs = Date.now() - sweepStartedAt;
+    const stopped = _abortAnalysis || _userCancelled;
+    void logAppAudit({
+      kind: 'analysis-sweep-summary',
+      category: 'subsystem',
+      source: 'gameAnalysisService.analyzeAllGames',
+      summary: `${stopped ? 'STOPPED' : 'finished'} after ${analyzed}/${games.length} games in ${(sweepMs / 1000).toFixed(1)}s`
+        + (analyzed > 0 ? ` — ${(sweepMs / analyzed / 1000).toFixed(1)}s/game` : '')
+        + ` (${workers.length} workers, ${WORKER_POOL_SIZE} configured)`,
+    });
   }
 
   onProgress?.({

@@ -278,6 +278,9 @@ export type AuditKind =
    *  2026-09-05, which hid the asm spawn-timeout regression from every audit. */
   | 'analysis-pool-fallback'
   | 'analysis-pool-warmed'
+  | 'analysis-game-done'
+  | 'analysis-sweep-summary'
+  | 'analysis-review-done'
   // Stockfish analysis stalled — the `go` command was sent but no
   // bestmove came back within the watchdog window. The dominant
   // symptom of a dead eval bar on iOS, where the lila/sf16-7 bridge
