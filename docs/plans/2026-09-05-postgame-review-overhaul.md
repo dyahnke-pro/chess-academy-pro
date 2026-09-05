@@ -358,3 +358,38 @@ Remove the 1-0 and replace with green win or red loss."
 - Gate: `ReviewGameCard.test.tsx` — imported game as Black with `0-1` →
   WIN badge; as White with `0-1` → LOSS; draw → DRAW; unknown identity → `?`.
   Ships in phase 4 (UI pass) — it's ~40 lines.
+
+## G. Top-down user-complaint hardening (David 2026-09-05: "I like your suggestions", minus the rating-scaled cap)
+
+1. **Only a COMPLETED move pauses auto-advance** — never a tap, never a
+   touch-scroll across the board (phones scroll the page through the board).
+   The ⏯ control visibly flips to a "Paused" state so every stop is explained.
+2. **Exploration is unmistakable:** a persistent "Exploring — Resume game"
+   banner while `walkExplorationFen !== null`; Forward/Back EXIT exploration
+   and step the REAL game (never the sideline).
+3. **Exploration replies with the engine's best move at fixed depth** — not
+   the rating-matched `resolveConfig('medium', 1500)` opponent. Truth, not a
+   sparring partner; same fixed-depth rule as §E.2c.
+4. **Fundamentals don't nag, they ACCUMULATE.** First occurrence in full;
+   repeats in a shortened DNA stem ("the same piece again — …"). The
+   end-of-game recap AGGREGATES attributed fundamentals into the headline
+   weakness ("three of your five mistakes handed over tempo") — computed
+   counts, deterministic, feeds the weakness spine + drill queue. Highest-
+   value item in this section.
+5. **The summary FREEZES during the walk.** Background deepen never shifts
+   accuracy % / counts mid-walk; it applies at walk end or next open. If the
+   deepen UN-flags a ply, its persisted attribution is invalidated (inputs
+   changed → recompute on the final-tier evals; determinism is per-input).
+6. **No unexplained `?` on cards:** when identity can't be resolved, a
+   one-time hint on the review list — "Set your chess.com / lichess username
+   in Settings to see results."
+7. **⏭ = next key moment**, not end-of-game; `KeyMomentNav` becomes a
+   first-class control so an 80-move auto-walk can skip quiet stretches.
+8. ~~Rating-scaled fundamentals cap~~ — REJECTED by David. Up to 3 attach at
+   every rating.
+9. **Voice:** the fundamentals line is authored IN the DNA register as
+   deterministic templates (rotated stems) and spoken raw; the rest of the
+   walk keeps its existing DNA warm pass. Resolves the "warm pass scope"
+   question: keep it on the non-fundamentals lines.
+10. **After "Show me" the walk stays paused** (only Play restarts, per rule).
+    The ⏯ "Paused" state (item 1) is what makes this read as intended.
