@@ -486,3 +486,79 @@ surfaces.test.ts` feeds the fixture move (`6...Nb6` from the Alapin) through
 EACH row above and asserts the fundamental text comes OUT of that surface's
 narration output (not that the import exists). One test per row; a new
 consumer of any plug point must add a row.
+
+## I. ONE COACH — one brain, one memory, one voice, across every tab (David 2026-09-05: "The same exact computer/coach was what I wanted originally; that way memory is more persistent across the app. Right now it feels like 8 different coaches instead of one.")
+
+### The disease, named (verified by grep 2026-09-05)
+- **Many brains:** the review grades a move with `computeMoveFacets`
+  (`reviewFullData.ts`); Learn/Play/hints/read-position grade it with
+  `computePositionFacts`; the Play card with `slipDetector`; My Mistakes with
+  `mistakeNarration`; think-aloud with `principleDetector`. Same move, five
+  calculators, five answers.
+- **Many caches, none persistent:** `stockfishCache` (LRU `fen::depth`,
+  page-lifetime) AND `stockfishFenCache` (a second LRU, hook-side) AND
+  `useReviewEngineLines` (memory-only MultiPV) AND `masterPlayCache` /
+  `amateurPlayCache` / `sharedOpeningCache`. A position evaluated in Learn is
+  re-evaluated in Review and again in Tactics; every tab starts cold.
+- **Many memories:** `weaknessSpine`, `misconceptionTags` +
+  `discussionPractice` capture, `badHabitDetector`, `mistakePuzzles`. Review
+  learns something about the student that Learn never hears.
+- **Many voices:** `voiceFacts` (DNA), `voiceReviewLines` (review bundle),
+  `reviewSay` / raw templates, per-surface say-once ledgers that don't share.
+  The coach repeats itself across tabs because no tab knows what another said.
+
+### The contract: ONE coach kernel, every tab is a VIEW of it
+1. **One brain — `coachKernel.facts`.** Every calculator lives behind a single
+   API: `factsForPosition(fen)`, `factsForMove(fenBefore, san)`,
+   `factsForGame(gameId)`. `computeMoveFacets` and `computePositionFacts`
+   MERGE into it (the review's facet inventory + the ranked-briefing lanes are
+   two renderings of one fact set, not two fact sets). `slipDetector`,
+   `mistakeNarration`, `principleDetector`/attribution, `whyItFailed`,
+   `explainBestMoveGrounded`, threat/criticality/tactics detectors are its
+   internal organs. §H's four plug points are the first cut of this API.
+2. **One cache — persistent, shared by every tab and every session.**
+   Dexie store `computedFacts` keyed `fen::depth::FACTS_REV` (engine eval +
+   PV + facts + attribution), memory LRU in front (`stockfishCache` becomes
+   that LRU; `stockfishFenCache` and `useReviewEngineLines`' private map are
+   DELETED). Per-game results persist on the game (`annotations[i].facts`,
+   `reviewNarration`, §A). Fixed depth everywhere (E.2c) so a cache hit from
+   Learn is byte-identical to what Review would have computed. A position the
+   student saw in Learn is already known when it appears in Review or in a
+   drill. Bounded (LRU-evict in Dexie by `lastUsed`, cap ~20k rows).
+3. **One memory — `coachMemory`.** A single read/write API over the weakness
+   spine as the ONLY student record: fundamentals aggregates (G.4),
+   misconception tags, mistake puzzles, bad habits, opening repertoire
+   progress, and a **said-ledger** (what the coach has already told this
+   student, keyed by concept + game + surface). Every surface reads it at
+   mount and writes through it. Consequence: Learn's commentary knows the
+   fundamental Review found last night ("tempo again — third game running");
+   Play's phase narration names the student's recurring weakness; Tactics
+   picks drills from the same spine; the coach never re-teaches on tab B what
+   it taught on tab A. `weaknessConceptMap`/`badHabitDetector` vocabularies
+   fold into the spine's tag set.
+4. **One voice — `voiceFacts` is the only chokepoint.** `voiceReviewLines`
+   becomes a `mode` of it (bundle phrasing), `reviewSay` is a thin speak
+   wrapper, raw DNA-register templates go through the same `preferRaw` door.
+   One DNA register, one say-once ledger (in `coachMemory`), one perspective
+   rule. G0 holds by construction: every surface hands the kernel's facts to
+   the same voicer.
+5. **One identity of "the coach" in the UI:** same name, same avatar, same
+   register on every tab — the student should never be able to tell which
+   tab they're on from how the coach talks.
+
+### Migration — incremental, surface by surface, never a rewrite
+This build (the review overhaul) LAYS the kernel: the shared attributor (§E/H),
+the persistent facts cache + tier key (§A), the fundamentals aggregate in the
+spine (§G.4), and the review as the FIRST view rebased on it. Then, one pass
+per surface, each swaps its private calculator/cache/memory for the kernel
+and adds its row to the wire-fires gate (§H): Learn commentary → Play card +
+phase narration → hints/read-position → My Mistakes/Tactics drills →
+Openings Play rung → coach chat → Weaknesses page. Each pass deletes the
+private copy it replaces (VERIFY-DEAD-BEFORE-DELETE rule). Kids stay
+excluded. Done = one calculator, one cache, one memory, one voice, and the
+`coachKernel.consistency.test.ts` gate: the fixture move evaluated on ANY
+surface returns the identical facts object, attribution, and spoken line.
+
+**Pushback, stated once:** "same exact computer" must not mean one giant
+module — it means one API + one persistent store. The organs stay separate
+files; what's forbidden is a surface owning its own brain, cache, or memory.
