@@ -208,6 +208,30 @@ principle clause is `prematureBreakWhy` (`reviewFullData.ts:80`).
    same-piece-twice + space-conceded + tempo-handed; `3...Nd5` attaches
    nothing (not flagged); `11...Nd5` attaches nothing (engine-best).
 
+2c. **DETERMINISTIC, END TO END (David 2026-09-05, emphatic: "This all needs
+   to be deterministic!!").**
+   - `attributePrinciples` is a pure function of (fenBefore, history, played,
+     best, pvPlayed, pvBest). No model in the loop.
+   - The two PVs it consumes are searched at a FIXED DEPTH (`go depth N`, no
+     `movetime`) so a slow phone and a fast desktop get the same line. Pin
+     `ATTRIBUTION_DEPTH` (start 14; the fixture must hold at it) and record it
+     on the result.
+   - Computed ONCE and PERSISTED on the annotation
+     (`annotations[i].principles: PrincipleAttribution[]` + `attributionDepth`)
+     alongside §A's persistence — never recomputed on re-open, never differs
+     between opens.
+   - The fundamentals beat is rendered from code templates and spoken RAW
+     (`voiceFacts` `preferRaw` path) — NO `voiceReviewLines` rephrase on this
+     line. Same words every time; every square/move in them is from
+     `evidence`. Template variety comes from deterministic stem rotation keyed
+     on ply index (Narration Voice Rule 9), not from a model.
+   - Gate: `principleAttribution.test.ts` runs the fixture twice and asserts
+     byte-identical output; `reviewNarrationFidelity` extended so a warmed
+     line may never ADD or DROP a fundamental.
+   OPEN (asked 2026-09-05): whether the `voiceReviewLines` warm pass is pulled
+   off the REST of the walk too (raw templates everywhere) or stays on the
+   non-fundamentals lines.
+
 3. **The principle LEADS the mistake beat** in the capped cascade
    (`coachFeatureService.ts:1373-1580`) — ahead of the tactical `whyItFailed`
    when the engine found no tactic (`lost-the-thread`); after it when there was
