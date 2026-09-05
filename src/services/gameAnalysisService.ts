@@ -626,7 +626,7 @@ function resetAnalysisPool(): void {
 /** Per-position search budget for the REVIEW's eval curve, mirroring the
  *  singleton's variant budgets. A slow engine must be capped or a single deep
  *  position eats the whole wait. */
-const REVIEW_POSITION_BUDGET_MS = 5_000;
+const REVIEW_POSITION_BUDGET_MS = 3_000;
 
 /** Per-position budget for the sweep's BEST-MOVE refinement — the only deep
  *  search the sweep still runs, and only on the handful of moves it graded a
@@ -664,8 +664,31 @@ const BATCH_POSITION_BUDGET_MS = 800;
  *
  *  The deep search moved to where a person is actually waiting for it and has
  *  asked for it: the REVIEW of one selected game (see REVIEW_DEEP_DEPTH). */
-const BATCH_SHALLOW_DEPTH = 10;
-const BATCH_SHALLOW_BUDGET_MS = 250;
+/** 🔒 THE BUDGET IS THE DIAL, NOT THE DEPTH. We send `go depth N movetime B`
+ *  and the engine stops at whichever lands first. On the asm.js build a phone
+ *  runs, a middlegame position rarely reaches depth 12 inside 200ms — the clock
+ *  wins — so the DEPTH ceiling mostly binds on DESKTOP, where the engine gets
+ *  there in a fraction of the budget. Raising the ceiling 10 → 12 therefore
+ *  costs the phone nothing and buys desktop a better curve for free, while the
+ *  200ms is what actually governs the phone's battery. Tune the budget when the
+ *  sweep costs too much; tune the depth when the curve is too coarse. */
+const BATCH_SHALLOW_DEPTH = 12;
+const BATCH_SHALLOW_BUDGET_MS = 200;
+
+/** Ceiling on how many plies ONE review re-searches deep.
+ *
+ *  Without it the review's cost is set by how NOISY the shallow curve is rather
+ *  than by how interesting the game is: the selector deepens any swing ≥
+ *  TWO_PASS_SWING_CP (50cp), and a depth-12 eval still carries a few tens of
+ *  centipawns of search noise, so a swingy game can nominate thirty-odd plies
+ *  and quietly put the slowness back into the review. Ranking by swing size and
+ *  stopping at the cap spends the deep budget on the biggest moments first.
+ *
+ *  Findings are never dropped to fit: a swing that is already mistake-sized (or
+ *  touches a mate score) is deepened whatever the count — the cap only rations
+ *  the ambiguous small ones. 12 plies × REVIEW_POSITION_BUDGET_MS bounds a
+ *  typical review at well under a minute. */
+const REVIEW_MAX_DEEP_PLIES = 12;
 
 /** Depth the REVIEW re-searches its key moments at — deeper than the old
  *  all-plies pass (ANALYSIS_DEPTH), because it now runs on ~10 positions
@@ -702,8 +725,14 @@ export const TWO_PASS_SWING_CP = INACCURACY_CP;
  * score. Both ends, so the deep grade is computed from two evals of the SAME
  * depth. Pure; exported for the gate.
  */
-export function selectCriticalPlies(shallow: readonly (number | null)[], from = 0): number[] {
-  const picked = new Set<number>();
+export function selectCriticalPlies(
+  shallow: readonly (number | null)[],
+  from = 0,
+  /** Ply budget. Omitted = take every qualifying pair (the sweep's old
+   *  behaviour, and what the gates assert). See REVIEW_MAX_DEEP_PLIES. */
+  maxPlies?: number,
+): number[] {
+  const pairs: { i: number; swing: number; certain: boolean }[] = [];
   for (let i = Math.max(0, from); i < shallow.length - 1; i++) {
     const a = shallow[i];
     const b = shallow[i + 1];
@@ -711,8 +740,21 @@ export function selectCriticalPlies(shallow: readonly (number | null)[], from = 
     const swing = Math.abs(capEval(a) - capEval(b));
     const mateish = Math.abs(a) >= MATE_EVAL_THRESHOLD || Math.abs(b) >= MATE_EVAL_THRESHOLD;
     if (swing >= TWO_PASS_SWING_CP || mateish) {
-      picked.add(i);
-      picked.add(i + 1);
+      // "Certain" = already big enough to be a finding rather than curve noise,
+      // so it is deepened even when the cap is spent.
+      pairs.push({ i, swing, certain: mateish || swing >= MISTAKE_CP });
+    }
+  }
+
+  const picked = new Set<number>();
+  const take = (p: { i: number }): void => { picked.add(p.i); picked.add(p.i + 1); };
+  if (maxPlies === undefined) {
+    pairs.forEach(take);
+  } else {
+    pairs.filter((p) => p.certain).forEach(take);
+    for (const p of pairs.filter((p) => !p.certain).sort((x, y) => y.swing - x.swing)) {
+      if (picked.size >= maxPlies) break;
+      take(p);
     }
   }
   return [...picked].sort((x, y) => x - y);
@@ -1161,7 +1203,7 @@ async function analyzeGamePositions(
   // "after" would read the depth difference itself as an inaccuracy.
   let deepDiveComplete = false;
   if (isReview) {
-    const keyPlies = selectCriticalPlies(evals, skipBook);
+    const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
     let searched = 0;
     for (const i of keyPlies) {
       if (deep[i] !== null) { searched++; continue; }
@@ -1803,5 +1845,5 @@ export function runBackgroundAnalysis(): void {
 export const __testables = {
   evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, ASM_POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize,
   resetAnalysisPool, WARM_PING_TIMEOUT_MS, BATCH_SHALLOW_DEPTH, BATCH_SHALLOW_BUDGET_MS, BATCH_POSITION_BUDGET_MS,
-  REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP,
+  REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS, BATCH_GRADE_FLOOR_CP, REVIEW_MAX_DEEP_PLIES,
 };

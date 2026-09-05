@@ -114,6 +114,28 @@ describe('selectCriticalPlies — the review\'s key-moment selector', () => {
     expect(selectCriticalPlies([null, 500, 500, 500], 0)).toEqual([]);
     expect(selectCriticalPlies([0, 500, 0, 0], 1)).toEqual([1, 2]);
   });
+
+  it('caps the review at a ply budget, spending it on the BIGGEST swings first', () => {
+    // Without a cap the review's cost is set by how noisy the curve is, not by
+    // how interesting the game is — a swingy game nominates thirty-odd plies and
+    // puts the slowness back into the review.
+    const noisy = [0, 60, 0, 70, 0, 90, 0, 65, 0, 55, 0];  // ten ~noise-sized swings
+    expect(selectCriticalPlies(noisy, 0).length).toBeGreaterThan(6);
+    const capped = selectCriticalPlies(noisy, 0, 6);
+    expect(capped.length).toBeLessThanOrEqual(6);
+    // The 90cp swing (plies 5-6) is the biggest, so it is in; the 55cp is out.
+    expect(capped).toContain(5);
+    expect(capped).toContain(6);
+    expect(capped).not.toContain(9);
+  });
+
+  it('never drops a real finding to fit the cap — only the ambiguous small ones are rationed', () => {
+    // Four mistake-sized swings with a 2-ply budget: all four are still deepened.
+    const findings = [0, 400, 0, 400, 0, 400, 0, 400, 0];
+    const capped = selectCriticalPlies(findings, 0, 2);
+    expect(capped.length).toBeGreaterThan(2);
+    expect(capped).toEqual(selectCriticalPlies(findings, 0));
+  });
 });
 
 describe('the SWEEP runs one shallow pass', () => {
@@ -144,7 +166,7 @@ describe('the SWEEP runs one shallow pass', () => {
   });
 
   it('does NOT claim a slip smaller than its own search noise', async () => {
-    // A depth-10 eval carries ~30-50cp of noise — the size of INACCURACY_CP
+    // A shallow eval carries a few tens of cp of search noise — the size of INACCURACY_CP
     // itself. Flagging that would fill My Mistakes with moves that were fine.
     // Faster AND wronger is not the trade; the review surfaces the real ones.
     const nearNoise = BATCH_GRADE_FLOOR_CP - 20;
@@ -199,6 +221,13 @@ describe('the REVIEW deep-dives the key moments', () => {
 
   it('searches DEEPER than the pass it replaced — fewer moments, harder look', () => {
     expect(REVIEW_DEEP_DEPTH).toBeGreaterThan(ANALYSIS_DEPTH);
+  });
+
+  it('bounds its own cost: the deep dive never exceeds the ply cap on ordinary swings', async () => {
+    await reviewFixture();
+    await analyzeSingleGame('g-review');
+    const dive = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH);
+    expect(dive.length).toBeLessThanOrEqual(__testables.REVIEW_MAX_DEEP_PLIES);
   });
 
   it('a completed review is NOT re-analysed on the next open', async () => {
