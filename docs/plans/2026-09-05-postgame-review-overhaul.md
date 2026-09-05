@@ -252,9 +252,9 @@ principle clause is `prematureBreakWhy` (`reviewFullData.ts:80`).
    - Gate: `principleAttribution.test.ts` runs the fixture twice and asserts
      byte-identical output; `reviewNarrationFidelity` extended so a warmed
      line may never ADD or DROP a fundamental.
-   OPEN (asked 2026-09-05): whether the `voiceReviewLines` warm pass is pulled
-   off the REST of the walk too (raw templates everywhere) or stays on the
-   non-fundamentals lines.
+   RESOLVED (David 2026-09-05, "all narrations pass through DNA"): the warm
+   pass STAYS on the non-fundamentals lines; the fundamentals line is DNA-
+   register templates spoken raw (see G.9).
 
 3. **THE FUNDAMENTAL IS STATED FIRST; everything else is supporting evidence
    (David 2026-09-05: "I want the fundamental flaw stated first and then the
