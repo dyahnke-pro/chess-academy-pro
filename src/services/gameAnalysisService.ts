@@ -59,11 +59,15 @@ function resolveWorkerPoolSize(): number {
   // game (David 2026-09-05, testing on iPhone Safari: `/weaknesses` spawned a
   // 3-worker asm pool that respawned with zero completions). `isIosSafari()`
   // catches the mobile-web iOS that `isNativePlatform()` misses.
-  // Guarded so a partial test mock of './stockfishEngine' that omits
-  // isIosSafari can't throw at module load (WORKER_POOL_SIZE is a top-level
-  // const). In real code the import is always a function, so behavior is
-  // unchanged; a mock without it simply reads as "not mobile web".
-  const isMobileWeb = typeof isIosSafari === 'function' && isIosSafari();
+  // try/catch, like Capacitor.isNativePlatform() above: WORKER_POOL_SIZE is a
+  // top-level const, so this runs at module load. A partial test mock of
+  // './stockfishEngine' that omits isIosSafari makes vitest THROW on the access
+  // (its mock proxy rejects undefined exports rather than returning undefined),
+  // which a `typeof` guard cannot prevent — the throw is on the binding access.
+  // In real code the import is always present, so behavior is unchanged; a mock
+  // without it simply reads as "not mobile web".
+  let isMobileWeb = false;
+  try { isMobileWeb = isIosSafari(); } catch { /* partial mock without the export */ }
   if (isNative || isMobileWeb) {
     // 🔒 PHONE (native iOS/Android + mobile-web iOS): the 2-worker asm.js pool.
     // Capped so the UI + voice always keep cores. Never more than 2.
@@ -457,6 +461,27 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
  *  position eats the whole wait. */
 const REVIEW_POSITION_BUDGET_MS = 5_000;
 
+/** Per-position budget for the BULK background sweep — deliberately far smaller
+ *  than the review's 5s.
+ *
+ *  David 2026-09-05, on the native app: analysis "stuck at 1 for 4 minutes."
+ *  The audit stream proved the workers were ALIVE (no wedge-respawn in 200s),
+ *  just slow: at depth 16 with the 5s review budget, one ~40-move game on the
+ *  iOS asm.js engine takes ~3 minutes, so the counter never leaves game 1 in a
+ *  normal foreground window. It "used to be ≤30s" because the budget/depth were
+ *  lower before they were raised for review accuracy — a change that quietly
+ *  broke the bulk sweep on phones.
+ *
+ *  The bulk sweep does not need review depth: a game analysed shallow on a phone
+ *  is stamped with the depth it REACHED (achievedDepth < ANALYSIS_DEPTH), so
+ *  `gameNeedsAnalysis` re-picks it for a deeper pass whenever it is next opened
+ *  on a faster engine (desktop). Fast-and-re-deepenable beats
+ *  correct-but-never-finishes. 800ms keeps a typical 30-40 move game under ~30s
+ *  and makes the counter visibly advance. `movetime` is a CEILING, so a fast
+ *  desktop engine still reaches depth 16 well under it — this only bites the
+ *  slow asm build, which is exactly where it must. */
+const BATCH_POSITION_BUDGET_MS = 800;
+
 /** Consecutive position timeouts on ONE worker that mean it's wedged/dead (a
  *  live engine never times out this many in a row) — the batch then recycles it
  *  instead of grinding every remaining position through the reject. */
@@ -582,7 +607,7 @@ export async function analyzeGameOnWorker(
   for (const fen of fens) {
     if (_abortAnalysis) return null;
     try {
-      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      const result = await worker.analyzePosition(fen, ANALYSIS_DEPTH, BATCH_POSITION_BUDGET_MS);
       evals.push(result.evaluation);
       consecutiveTimeouts = 0;
       if (Number.isFinite(result.depth) && result.depth > 0) {
@@ -674,7 +699,12 @@ export async function analyzeGameOnWorker(
   for (const moveIdx of mistakeIndices) {
     if (_abortAnalysis) return null;
     try {
-      const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH);
+      // Budgeted like the eval pass — this is the BULK sweep. An uncapped
+      // depth-18 search here costs up to the ~10s hard reject PER MISTAKE on the
+      // asm build, which is the other half of the "3 minutes a game" slowdown
+      // (David 2026-09-05). The refined best move is re-deepened with the game
+      // when it's next opened on a fast engine, same as the eval curve.
+      const result = await worker.analyzePosition(fens[moveIdx], BEST_MOVE_DEPTH, BATCH_POSITION_BUDGET_MS);
       annotations[moveIdx].bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], result.bestMove)
         ? null
         : result.bestMove;
