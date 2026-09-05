@@ -52,12 +52,53 @@ function resolveWorkerPoolSize(): number {
   let isNative = false;
   try { isNative = Capacitor.isNativePlatform(); } catch { /* web */ }
   if (isNative) {
-    // Phone: never more than 2, always leave cores for the UI + voice.
+    // 🚨 iOS NATIVE: NO POOL AT ALL. Return 0 so both pool users fall back to
+    // the SINGLETON, and on iOS the singleton is the native ARM Stockfish
+    // plugin — which `stockfishEngine.isNativeIosStockfishAvailable` documents
+    // as "vastly faster" than the JS engine.
+    //
+    // WHAT THIS FIXES (David 2026-09-05, "my games are not analyzing", phone
+    // hot, progress stuck on 1 of 831). `spawnDedicatedWorker` resolves its
+    // build through `resolveWorkerUrl()`, which pins iOS to the ASM.JS build —
+    // the slowest engine we ship — and then does `new Worker(url)`. The native
+    // plugin is not a Worker, so the pool could never reach it. The result, off
+    // his device in PostHog and the audit stream on the same run:
+    //
+    //     stockfishEngine.initialize        variant=ios-native   ← fast
+    //     spawnDedicatedWorker  worker 0    variant=asm          ← slowest
+    //     spawnDedicatedWorker  worker 1    variant=asm
+    //     analyze kickoff — 831 unanalyzed
+    //
+    // Two asm.js engines grinding 831 games, while the fast engine sat idle two
+    // lines away. Nothing crashed — there were zero uncaught errors — it simply
+    // could not finish, and pegged the CPU trying.
+    //
+    // Why 0 rather than pooling the native engine: `StockfishNative.start()` /
+    // `.cmd()` drive ONE global engine process, and the singleton already holds
+    // it. A second native transport would interleave UCI commands into the same
+    // engine. Falling back to the singleton is the path both callers already
+    // take when a pool cannot spawn, and it is documented as always working.
+    if (isNativeIosStockfish()) return 0;
+    // Non-iOS phone (Android): keep the JS pool, capped so the UI + voice keep
+    // cores. Never more than 2.
     return Math.max(1, Math.min(2, cores - 2));
   }
   // Desktop web: keep it quick but don't hog every core.
   return Math.max(2, Math.min(6, cores - 1));
 }
+/** True on a native iOS app with the Stockfish plugin present — the one case
+ *  where the singleton is a native ARM engine and the pool's asm.js workers are
+ *  strictly worse than not pooling at all. */
+function isNativeIosStockfish(): boolean {
+  try {
+    return Capacitor.isNativePlatform()
+      && Capacitor.getPlatform() === 'ios'
+      && Capacitor.isPluginAvailable('StockfishNative');
+  } catch {
+    return false;
+  }
+}
+
 const WORKER_POOL_SIZE = resolveWorkerPoolSize();
 
 // Abort signal for background suspension (tab hidden → pause + auto-resume).
@@ -456,6 +497,11 @@ async function evaluateFensPooled(
   fens: string[],
   onPosition?: (current: number, total: number) => void,
 ): Promise<{ evals: (number | null)[]; achievedDepth: number } | null> {
+  // No pool on this device (iOS native — see resolveWorkerPoolSize). Returning
+  // null is the documented "caller falls back to the sequential singleton"
+  // path; `Math.max(1, …)` below would otherwise force a pool of 1 asm.js
+  // worker and defeat the whole point.
+  if (WORKER_POOL_SIZE < 1) return null;
   const size = Math.max(1, Math.min(WORKER_POOL_SIZE, fens.length));
   let workers: DedicatedWorker[] = [];
   try {
@@ -1287,4 +1333,4 @@ export function runBackgroundAnalysis(): void {
  *  build rather than naming one, and that a work queue still returns each eval
  *  against the position it belongs to — is exactly what needs a gate.
  *  See `gameAnalysisPool.test.ts`. */
-export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS };
+export const __testables = { evaluateFensPooled, POOL_SPAWN_TIMEOUT_MS, WORKER_POOL_SIZE, resolveWorkerPoolSize };
