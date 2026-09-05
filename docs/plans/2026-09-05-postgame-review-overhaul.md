@@ -174,6 +174,40 @@ principle clause is `prematureBreakWhy` (`reviewFullData.ts:80`).
      (`misconceptionClassifier.ts:292`), `king-stuck-center` (`:261`),
      `greedy-pawn-grab` (`:252`), blocks-own-bishop (`boardDelta.ts` BLOCKS),
      `prematureBreakWhy` (already there). Cap 3 principles per ply.
+2b. **ATTRIBUTION, not detection (David 2026-09-05: "make sure the calculator
+   is able to associate the error to the fundamental, like I did in my
+   example").** A fundamental attaches to a flagged move ONLY when all three
+   computed conditions hold — `attributePrinciples(fenBefore, playedSan,
+   bestSan, pvAfterPlayed, pvAfterBest)`:
+   1. **Pattern** — the played move exhibits it (board + move history).
+   2. **Punishment in the PV** — the refutation line after the played move is
+      the kind the fundamental predicts:
+      - tempo-handed: an opponent PV move attacks with gain (develops / pushes
+        a centre pawn) AND the student's PV reply is non-developing (retreat,
+        same piece again, defensive pawn).
+      - space-conceded: a centre pawn advances to rank 5 (own-side view) onto
+        or over the square the piece left.
+      - same-piece-twice / neglected-development: developed-minor count for
+        the student at the END of the played-PV is lower than at the end of
+        the best-PV (a real tempo deficit, not a rule recital).
+      - king-safety family: PV contains checks / attacks landing on the
+        student's king zone.
+      - loose piece: PV captures it.
+      - buried bishop: the bishop still has ≤1 legal move at PV end.
+   3. **Counterfactual** — the best-move PV does NOT contain that punishment
+      (after `6...e6`, `d5` is gone). Both PVs already exist per flagged ply
+      because the better-line walk (§B) computes them → zero extra engine
+      cost.
+   Output `PrincipleAttribution { principle, evidence: { patternSquares,
+   pvMoves, counterfactualClean } }`; narration names ONLY squares/moves from
+   `evidence` (narrationAccuracy holds by construction). A pattern that is
+   present but never punished in the PV (rim knight nobody kicks,
+   knights-before-bishops with no development gap) stays SILENT. Ranking when
+   >3 attach: by the eval share the PV punishment explains (material > tempo
+   count > space squares). Fixture assertion: `6...Nb6` attaches exactly
+   same-piece-twice + space-conceded + tempo-handed; `3...Nd5` attaches
+   nothing (not flagged); `11...Nd5` attaches nothing (engine-best).
+
 3. **The principle LEADS the mistake beat** in the capped cascade
    (`coachFeatureService.ts:1373-1580`) — ahead of the tactical `whyItFailed`
    when the engine found no tactic (`lost-the-thread`); after it when there was
