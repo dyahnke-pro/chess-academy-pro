@@ -102,10 +102,46 @@ async function main() {
     return result;
   }
 
+  /** Roll up + exit. Also called EARLY when the page never mounts: every later
+   *  scenario would only burn its own timeout against a surface that is not
+   *  there, and a run that takes minutes to say "down" hangs CI instead of
+   *  reporting (audit-vacuity-check flagged exactly that, 2026-09-05). */
+  async function finish() {
+    const failures = scenarios.filter((s) => !s.ok);
+    const report = {
+      base: BASE_URL,
+      durationMs: scenarios.reduce((acc, s) => acc + s.durationMs, 0),
+      consoleErrors,
+      pageErrors,
+      scenarios,
+      summary: {
+        total: scenarios.length,
+        passed: scenarios.length - failures.length,
+        failed: failures.length,
+      },
+    };
+
+    await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2));
+    console.log(`\n[weaknesses] summary:`);
+    console.log(`  passed:         ${report.summary.passed}/${report.summary.total}`);
+    console.log(`  failed:         ${failures.length}`);
+    console.log(`  console.errors: ${consoleErrors.length}`);
+    console.log(`  pageerrors:     ${pageErrors.length}`);
+    if (failures.length > 0) {
+      console.log(`\nFAILURES:`);
+      for (const f of failures) {
+        console.log(`  ✗ ${f.name}: ${f.detail}`);
+      }
+    }
+
+    await browser.close();
+    process.exit(failures.length > 0 ? 1 : 0);
+  }
+
   // ───────────────────────────────────────────────────────────────
   // Boot
   // ───────────────────────────────────────────────────────────────
-  await scenario('boot-weaknesses', async () => {
+  const boot = await scenario('boot-weaknesses', async () => {
     // First page-load cold-start on Vercel can take 30-45s for a
     // fresh Production deploy as the function instance warms up
     // and the bundle parses. Subsequent SPA navigations are <2s
@@ -122,6 +158,10 @@ async function main() {
     }
     return 'page mounted';
   });
+  if (!boot.ok) {
+    console.log('[weaknesses] the page never mounted — aborting; nothing below can be verified against a surface that is not there');
+    await finish();
+  }
 
   // ───────────────────────────────────────────────────────────────
   // Header controls present
@@ -372,37 +412,7 @@ async function main() {
   });
 
   // ───────────────────────────────────────────────────────────────
-  // Roll up
-  // ───────────────────────────────────────────────────────────────
-  const failures = scenarios.filter((s) => !s.ok);
-  const report = {
-    base: BASE_URL,
-    durationMs: scenarios.reduce((acc, s) => acc + s.durationMs, 0),
-    consoleErrors,
-    pageErrors,
-    scenarios,
-    summary: {
-      total: scenarios.length,
-      passed: scenarios.length - failures.length,
-      failed: failures.length,
-    },
-  };
-
-  await writeFile(join(OUT_DIR, 'report.json'), JSON.stringify(report, null, 2));
-  console.log(`\n[weaknesses] summary:`);
-  console.log(`  passed:         ${report.summary.passed}/${report.summary.total}`);
-  console.log(`  failed:         ${failures.length}`);
-  console.log(`  console.errors: ${consoleErrors.length}`);
-  console.log(`  pageerrors:     ${pageErrors.length}`);
-  if (failures.length > 0) {
-    console.log(`\nFAILURES:`);
-    for (const f of failures) {
-      console.log(`  ✗ ${f.name}: ${f.detail}`);
-    }
-  }
-
-  await browser.close();
-  process.exit(failures.length > 0 ? 1 : 0);
+  await finish();
 }
 
 main().catch((err) => {
