@@ -72,6 +72,30 @@ The review rejects it through one gate, `gameNeedsAnalysis`
 6. Sweep for the same pattern: `AnalyzeGamesButton`, `GameInsightsPage`,
    `GameViewer` all route through `gameNeedsAnalysis` — verify none regress.
 
+7. **In-game analysis IS the review's analysis for coach games (David
+   2026-09-05: "can we also use in game analysis to prevent any need for
+   preview analysis?").** `/coach/play` already analyses every student ply at
+   depth 10 before+after (`CoachGamePage.tsx:3058-3059`) and saves
+   `annotations` (eval / bestMove / bestMoveEval / classification) at game end
+   via `movesToAnnotations` (`:1963-2002`). Today the review discards it
+   (depth 10 < 16). With the tier key (A.4) it opens with ZERO analysis. Close
+   two gaps: (a) coach plies are filtered out (`:189` `!m.isCoachMove`) — keep
+   them, the review narrates opponent moves too (the eval already exists from
+   the same live call); (b) 🚨 TRAP: the coach's CHOSEN move is rating-
+   throttled (`coachPlaySession.resolveConfig`) — the stored `bestMove` must
+   come from the honest `analyzePosition` result, NEVER from the coach-move
+   picker. Stamp `analysisTier: 'live'` + per-ply depth; flagged plies deepen
+   in the background per A.3 like any other game.
+8. **Lichess imports carry server evals — use them.** `[%eval]` comments are
+   already parsed (`gameImportUtils.ts:70-130`, `parseEvalComments`) but only
+   to flag blunders at import. Build full `annotations` from them (eval per
+   ply → cpLoss → classification via the same thresholds; `bestMove` absent →
+   the background deepen fills it for flagged plies only). Tier `'lichess'`.
+   Zero local analysis for any game the user analysed on lichess. Chess.com's
+   API ships no evals → those games take the background batch sweep, never a
+   blocking pass. Net: no surface ever blocks on analysis; the ONLY local
+   crunch left is the background sweep on chess.com imports.
+
 Pushback on the framing: "use the pre-analysis to help" undersells it — the
 pre-analysis IS the review's data; the fix is to stop distrusting it and to move
 deepening off the critical path. Trade-off to accept: on a never-swept game the
