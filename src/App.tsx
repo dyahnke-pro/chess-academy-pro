@@ -24,6 +24,8 @@ import { requestPersistentStorage } from './services/storageQuota';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
 import { OtaUpdateBanner } from './components/ui/OtaUpdateBanner';
+import { ReferralPanel } from './components/Referral/ReferralPanel';
+import { ensureSyncedCredits } from './services/referralService';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
@@ -143,6 +145,11 @@ export function App(): JSX.Element {
     if (useAiConsentStore.getState().promptOpen) return;
     void useAiConsentStore.getState().requestConsent();
   }, [activeProfile]);
+
+  // Mirror any earned referral/review credits from the server into the local
+  // free-tier ledger on boot, so a credit earned on another device (a recruit
+  // qualifying) shows up here. Cheap, best-effort, no-op on web.
+  useEffect(() => { void ensureSyncedCredits(); }, []);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {
@@ -687,6 +694,7 @@ export function App(): JSX.Element {
       <ReviewPrompt />
     </BrowserRouter>
     <OtaUpdateBanner />
+    <ReferralPanel />
     </>
   );
 }

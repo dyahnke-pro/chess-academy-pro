@@ -69,4 +69,9 @@ genuinely needs a server); client syncs `credits` → ledger `earnedOpeningCredi
 (credits/allowance), `NotificationBell`/`ReferralPanel` render. ship-check green,
 push to main (web). Native carries it in the next iOS build.
 
-## Status: in progress
+## Status: shipped 2026-09-06 (web). Native carries it in the next iOS build.
+
+No-auth note: the referral API is intentionally unauthenticated — every action
+is capped at ONE credit per device and can only ever GIFT a credit (qualify also
+credits the code owner), so there is no drain/grief vector. The freemium gate is
+already local-Dexie-trust; this adds no new trust surface.

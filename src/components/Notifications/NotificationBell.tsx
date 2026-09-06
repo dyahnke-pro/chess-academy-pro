@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bell, X, MessageSquarePlus, Send, ArrowLeft, Megaphone } from 'lucide-react';
+import { Bell, X, MessageSquarePlus, Send, ArrowLeft, Megaphone, Gift } from 'lucide-react';
 import {
   fetchInbox,
   getLastSeenId,
@@ -137,6 +137,11 @@ export function NotificationBell(): JSX.Element {
 
   const sendFeedback = useCallback(() => {
     window.dispatchEvent(new CustomEvent('open-feedback'));
+    setOpen(false);
+  }, []);
+
+  const inviteFriend = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('open-referral'));
     setOpen(false);
   }, []);
 
@@ -319,6 +324,9 @@ export function NotificationBell(): JSX.Element {
                   </div>
                   <button type="button" onClick={sendFeedback} data-testid="notification-send-feedback" className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-theme-accent py-2 text-sm font-semibold text-theme-accent hover:opacity-80">
                     <MessageSquarePlus size={16} /> Send feedback
+                  </button>
+                  <button type="button" onClick={inviteFriend} data-testid="notification-invite-friend" className="flex w-full items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold text-theme-accent hover:opacity-80">
+                    <Gift size={16} /> Invite a friend — get a free class
                   </button>
                 </div>
               )}

@@ -52,6 +52,8 @@ const INITIAL_ROW: FreeTierRecord = {
   id: 'singleton',
   puzzlesSolved: 0,
   freeOpeningId: null,
+  freeOpeningIds: [],
+  earnedOpeningCredits: 0,
   kidFirstAccessAt: null,
   coachLessonsUsed: 0,
   coachChatTurnsUsed: 0,
@@ -98,3 +100,10 @@ export const useFreeTierStore = create<FreeTierState>((set) => ({
     set({ row });
   },
 }));
+
+// Referral / review rewards write earned credits straight to the Dexie ledger
+// (referralService), bypassing the store's own actions. Re-hydrate the mirror
+// when that happens so an extra free-opening slot shows up without a reload.
+if (typeof window !== 'undefined') {
+  window.addEventListener('free-tier-updated', () => { void useFreeTierStore.getState().hydrate(); });
+}

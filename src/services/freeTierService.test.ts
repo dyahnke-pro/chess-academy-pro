@@ -13,6 +13,11 @@ import {
   hasPuzzlesLeft,
   canViewOpening,
   claimFreeOpening,
+  grantOpeningCredits,
+  syncOpeningCredits,
+  openingAllowance,
+  openingSlotsRemaining,
+  hasFreeOpeningRoom,
   kidWindowActive,
   kidDaysLeft,
   stampKidAccess,
@@ -99,6 +104,58 @@ describe('free opening claim', () => {
     const r = await claimFreeOpening('not-a-real-opening-id');
     expect(r.result).toBe('not-eligible');
     expect(r.row.freeOpeningId).toBeNull();
+  });
+});
+
+describe('earned opening credits (referral / review rewards)', () => {
+  it('base allowance is 1; each credit raises it by one', () => {
+    expect(openingAllowance({ earnedOpeningCredits: 0 })).toBe(1);
+    expect(openingAllowance({ earnedOpeningCredits: 2 })).toBe(3);
+    expect(openingAllowance({ earnedOpeningCredits: undefined })).toBe(1);
+  });
+
+  it('a credit lets the user claim a SECOND opening for free', async () => {
+    await claimFreeOpening('italian-game');
+    // Without a credit, a second opening is walled.
+    let row = await loadFreeTier();
+    expect(canViewOpening('caro-kann', row)).toBe(false);
+    expect(hasFreeOpeningRoom(row)).toBe(false);
+
+    // Earn a credit → a slot opens.
+    row = await grantOpeningCredits(1);
+    expect(row.earnedOpeningCredits).toBe(1);
+    expect(openingSlotsRemaining(row)).toBe(1);
+    expect(hasFreeOpeningRoom(row)).toBe(true);
+    expect(canViewOpening('caro-kann', row)).toBe(true);
+
+    const second = await claimFreeOpening('caro-kann');
+    expect(second.result).toBe('ok');
+    // Both are now claimed and viewable; a THIRD is walled again.
+    row = await loadFreeTier();
+    expect(canViewOpening('italian-game', row)).toBe(true);
+    expect(canViewOpening('caro-kann', row)).toBe(true);
+    expect(canViewOpening('vienna-game', row)).toBe(false);
+    expect(hasFreeOpeningRoom(row)).toBe(false);
+  });
+
+  it('syncOpeningCredits is max-wins — a stale lower server value never lowers credits', async () => {
+    await grantOpeningCredits(2);
+    await syncOpeningCredits(1); // stale/lower
+    expect((await loadFreeTier()).earnedOpeningCredits).toBe(2);
+    await syncOpeningCredits(3); // higher wins
+    expect((await loadFreeTier()).earnedOpeningCredits).toBe(3);
+  });
+
+  it('a row persisted with only the legacy freeOpeningId backfills the claimed set', async () => {
+    await db.freeTier.put({
+      id: 'singleton', puzzlesSolved: 0, freeOpeningId: 'italian-game',
+      kidFirstAccessAt: null, coachLessonsUsed: 0, coachChatTurnsUsed: 0,
+      coachSpendUsd: 0, coachUnlockSeenAt: null, updatedAt: 1,
+    });
+    const row = await loadFreeTier();
+    expect(row.freeOpeningIds).toEqual(['italian-game']);
+    expect(canViewOpening('italian-game', row)).toBe(true);
+    expect(canViewOpening('caro-kann', row)).toBe(false);
   });
 });
 
