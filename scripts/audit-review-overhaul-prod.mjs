@@ -129,6 +129,15 @@ const run = async () => {
   add('CARD win-not-0-1', cardUp && badge === 'WIN' && outcome === 'win' && !/\b0-1\b/.test(cardText) && /vs KaiserlicheHoheit/.test(cardText),
     cardUp ? `badge="${badge}" outcome=${outcome} text="${cardText.slice(0, 70)}"` : 'card never rendered');
 
+  // No card = nothing to open. Fail NOW rather than wait out the 300s analysis
+  // window on a surface that never rendered (the vacuity negative control must
+  // see a verdict, not a hang).
+  if (!cardUp) {
+    add('OPEN first-open-analyses', false, 'the seeded game never appeared in the review list — nothing to open');
+    log('\n===== VERDICT: ❌ FAILS STANDARD (surface unreachable) =====');
+    await listener.stop(); await browser.close(); process.exit(1);
+  }
+
   // ── OPEN (A) — first open runs the genuine pipeline; time it ────────────
   const t0 = Date.now();
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
