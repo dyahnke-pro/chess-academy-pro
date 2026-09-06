@@ -234,6 +234,30 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       ];
       return s[v % s.length];
     }
+    case 'passed-pawn-neglected': {
+      const s = [
+        `Passed pawns must be pushed: your pawn on ${f.pawn} is passed and ${f.better} runs it — every move it waits, they build a blockade in front of it.`,
+        `A passer is a rocket — ${f.better} launches the pawn on ${f.pawn}; leave it home and their pieces wall it in for free.`,
+        `Push the passer: ${f.better} was the move, sending the pawn on ${f.pawn} down the board while the road is still open.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'lost-the-opposition': {
+      const s = [
+        `Take the opposition: ${f.better} steps your king square-to-square with theirs and forces them to give way — the played move hands that back.`,
+        `King-and-pawn endings turn on the opposition — ${f.better} seizes it; step aside and their king walks through instead.`,
+        `Whoever has to move gives ground: ${f.better} keeps your king in the opposition, and this surrenders it.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'passive-rook-endgame': {
+      const s = [
+        `An active rook is worth a pawn: ${f.better} swings yours to ${f.square} on the seventh, cutting their king and raking the pawns — the played move leaves it passive.`,
+        `Rooks belong on the seventh — ${f.better} lands yours on ${f.square}; a passive rook just watches the ending go by.`,
+        `The seventh rank is the rook's home in the endgame: ${f.better} takes it on ${f.square} while there's still something to attack.`,
+      ];
+      return s[v % s.length];
+    }
   }
 }
 
@@ -268,6 +292,9 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'passive-king-endgame': return `The king still isn't walking in.`;
     case 'mistimed-pawn-break': return `Another mistimed push, on ${f.pawn}.`;
     case 'rook-in-front-of-passer': return `The rook in front of the passer again.`;
+    case 'passed-pawn-neglected': return `The passer on ${f.pawn} still isn't running.`;
+    case 'lost-the-opposition': return `The opposition given up again — ${f.better}.`;
+    case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
   }
 }
 
@@ -327,6 +354,9 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'passive-king-endgame': 'kept the king passive in the endgame',
   'mistimed-pawn-break': 'mistimed a pawn break',
   'rook-in-front-of-passer': 'put the rook in front of the passed pawn',
+  'passed-pawn-neglected': 'left a passed pawn unpushed',
+  'lost-the-opposition': 'gave up the opposition',
+  'passive-rook-endgame': 'kept the rook passive',
 };
 
 /**

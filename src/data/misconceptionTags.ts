@@ -212,6 +212,22 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'In a clearly winning position, played a careless or hasty move that surrenders much of the advantage (declined a clean simplification, allowed counterplay).',
     drill: { kind: 'endgame' },
   },
+  {
+    id: 'passed-pawn-neglected',
+    label: 'Left the passed pawn sitting',
+    bucket: 'endgame',
+    blurb: "A passed pawn is a rocket — it has to be pushed.",
+    coachCue: 'In an endgame, the best move advanced a passed pawn (or made/defended one) and the played move left it home to be blockaded.',
+    drill: { kind: 'endgame', puzzleThemes: ['passedPawn', 'advancedPawn', 'promotion'] },
+  },
+  {
+    id: 'passive-rook',
+    label: 'Left the rook passive',
+    bucket: 'endgame',
+    blurb: "A rook wants the seventh rank and open lines, not a passive post.",
+    coachCue: 'In an endgame, the best move swung a rook to the seventh rank (an active rook) and the played move left it passive.',
+    drill: { kind: 'endgame' },
+  },
 
   // ── GENERAL ──────────────────────────────────────────────────────
   {

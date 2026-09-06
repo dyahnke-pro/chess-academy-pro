@@ -40,6 +40,7 @@ export const FUNDAMENTAL_IDS = [
   'wrong-trade-for-material', 'worst-piece-unimproved', 'rook-ignored-open-file',
   // endgame
   'passive-king-endgame', 'mistimed-pawn-break', 'rook-in-front-of-passer',
+  'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -70,6 +71,9 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'passive-king-endgame': 'passive-king-endgame',
   'mistimed-pawn-break': 'mistimed-pawn-break',
   'rook-in-front-of-passer': 'misplaced-piece',
+  'passed-pawn-neglected': 'passed-pawn-neglected',
+  'lost-the-opposition': 'passive-king-endgame',
+  'passive-rook-endgame': 'passive-rook',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -78,6 +82,7 @@ const CO_OCCURRENCE: ReadonlySet<FundamentalId> = new Set<FundamentalId>([
   'knights-before-bishops', 'knight-to-the-rim', 'rook-ignored-open-file',
   'worst-piece-unimproved', 'traded-active-for-passive', 'wrong-trade-for-material',
   'passive-king-endgame', 'rook-in-front-of-passer', 'buried-own-bishop',
+  'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
 ]);
 
 export interface PrincipleEvidence {
@@ -156,6 +161,22 @@ function queensOff(chess: Chess): boolean { return pieces(chess, 'w', 'q').lengt
 function isEndgame(chess: Chess): boolean {
   const nonPawn = (c: Color) => pieces(chess, c).filter((p) => p.type !== 'p' && p.type !== 'k').reduce((s, p) => s + VAL[p.type], 0);
   return queensOff(chess) || (nonPawn('w') + nonPawn('b')) <= 14;
+}
+/** True when `mover` has just moved into the opposition: the kings face off
+ *  with one square between (same file, rank, or diagonal) and it is the OPPONENT
+ *  to move — so they must give way. Called on the position right after mover's
+ *  move (opponent to move). */
+function holdsOpposition(afterMoverMove: Chess, mover: Color): boolean {
+  const mk = kingSquare(afterMoverMove, mover);
+  const ok = kingSquare(afterMoverMove, other(mover));
+  if (!mk || !ok) return false;
+  const df = Math.abs(fileIdx(mk) - fileIdx(ok));
+  const dr = Math.abs(rankNum(mk) - rankNum(ok));
+  return (df === 0 && dr === 2) || (dr === 0 && df === 2) || (df === 2 && dr === 2);
+}
+/** Every piece of `color` is a king or a pawn (a pure king-and-pawn ending). */
+function onlyKingAndPawns(chess: Chess, color: Color): boolean {
+  return pieces(chess, color).every((p) => p.type === 'p' || p.type === 'k');
 }
 
 /** A position with `color` to move regardless of whose turn it really is
@@ -720,6 +741,39 @@ const DETECTORS: Detector[] = [
       if (ahead && bestBehind) return att('rook-in-front-of-passer', 1, { squares: [last.to, p.square, best.to], moves: [best.san], pvMoves: [] }, { rook: last.to, pawn: p.square, better: best.san });
     }
     return null;
+  },
+  // 26. Passed pawns must be pushed — the best move advances a passed pawn; the
+  // played move leaves it home, where the opponent gets time to blockade it.
+  // Positional (co-occurrence): the cost is the stall, so it speaks only when no
+  // concrete-punishment fundamental attached.
+  (c) => {
+    const { last, best, mover } = c;
+    if (!c.endgame || best.piece !== 'p' || best.captured) return null;
+    if (!isPassed(c.before, best.from, mover)) return null;         // PATTERN: best pushes a passer
+    if (last.piece === 'p' && last.from === best.from) return null; // COUNTERFACTUAL: played didn't push it
+    return att('passed-pawn-neglected', 1, { squares: [best.from, best.to], moves: [best.san], pvMoves: [] }, { pawn: best.from, better: best.san });
+  },
+  // 27. Take the opposition — in a king-and-pawn ending the best move seizes the
+  // opposition with the king; the played move surrenders it. Positional.
+  (c) => {
+    const { best, mover } = c;
+    if (!c.endgame || best.piece !== 'k') return null;
+    if (!onlyKingAndPawns(c.before, 'w') || !onlyKingAndPawns(c.before, 'b')) return null;
+    // best holds the opposition; the played move does not (and did not already)
+    if (!holdsOpposition(c.afterBest, mover) || holdsOpposition(c.after, mover)) return null;
+    const bk = kingSquare(c.before, mover);
+    return att('lost-the-opposition', 1, { squares: bk ? [bk, best.to] : [best.to], moves: [best.san], pvMoves: [] }, { better: best.san });
+  },
+  // 28. An active rook belongs on the seventh — the best move swings a rook to
+  // the mover's seventh rank where it lands safely; the played move leaves it
+  // passive. Positional. (Open-file activity is rook-ignored-open-file, #22.)
+  (c) => {
+    const { last, best, mover } = c;
+    if (!c.endgame || best.piece !== 'r') return null;
+    if (relRank(best.to, mover) !== 7) return null;                 // the seventh from the mover's side
+    if (!landsSafely(c.before, best)) return null;
+    if (last.piece === 'r' && relRank(last.to, mover) === 7) return null; // played already went to the seventh
+    return att('passive-rook-endgame', 1, { squares: [best.from, best.to], moves: [best.san], pvMoves: [] }, { square: best.to, better: best.san });
   },
 ];
 
