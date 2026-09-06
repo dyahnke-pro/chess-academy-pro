@@ -153,13 +153,20 @@ not attributions.
 4. Waves 2-3 detectors, then their tab cards. Wave 4 last.
 5. Extend the audit each wave; post-deploy 3-instrument audit after each `main` push.
 
-## Decisions for David
-- **7 rollup sections** (vs the 4 pillars) — OK, or keep 4 and nest?
-- **New tags vs reuse:** the table reuses existing tags wherever the fault already has one;
-  it proposes 5 NEW tags (`passed-pawn-neglected`, `passive-rook`, `pawn-majority`,
-  `pawn-chain-target`, `strategic-target`). Approve the new-tag list, or force-reuse?
-- **Drill honesty:** positional fundamentals drill from the student's OWN games (no Lichess
-  theme). Acceptable, or do you want curated position sets authored for them?
+## Decisions log (David, 2026-09-06 — all three RESOLVED)
+- **Tab structure → 7 phase sections** (NOT the 4 nested pillars): Opening play · The
+  center · Development & activity · King safety · Pawn structure · Tactics & threats ·
+  Endgame technique. Every `FundamentalId` rolls up under exactly one via
+  `FUNDAMENTAL_PILLAR`. Phase C builds this.
+- **The 5 new tags APPROVED** (`passed-pawn-neglected`, `passive-rook`, `pawn-majority`,
+  `pawn-chain-target`, `strategic-target`) — added to `misconceptionTags.ts` +
+  `misconceptionClassifier`; the rest of the table still reuses existing tags.
+- **Positional drills = the student's OWN flagged positions** (`mistakePuzzles`), produced
+  automatically when the detector fires. NO curated position sets authored this pass
+  (accepted tradeoff: a brand-new user with no games has nothing to drill for a positional
+  fundamental until they play — the themed/tactical fundamentals still drill from
+  `puzzles.json` from day one). Revisit curated sets only if day-one coverage becomes a
+  complaint.
 
 ## Open questions
 - `left-book-early` needs a book-membership check in the opening phase — reuse the
