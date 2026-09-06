@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Bell, X, MessageSquarePlus } from 'lucide-react';
 import {
   fetchAnnouncements,
@@ -80,7 +81,7 @@ export function NotificationBell(): JSX.Element {
         )}
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-16"
           onClick={() => setOpen(false)}
@@ -142,7 +143,8 @@ export function NotificationBell(): JSX.Element {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );

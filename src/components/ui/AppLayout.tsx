@@ -19,6 +19,7 @@ import { InstallPrompt } from './InstallPrompt';
 import { OfflineBanner } from './OfflineBanner';
 import { GlobalCoachDrawer } from '../Coach/GlobalCoachDrawer';
 import { QuickFeedbackButton } from '../Feedback/QuickFeedbackButton';
+import { NotificationBell } from '../Notifications/NotificationBell';
 import { logAppAudit } from '../../services/appAuditor';
 import { voiceService } from '../../services/voiceService';
 import { cancelBackgroundAnalysis } from '../../services/gameAnalysisService';
@@ -259,6 +260,7 @@ export function AppLayout(): JSX.Element {
         </div>
         <div className="flex items-center gap-2">
           <QuickFeedbackButton />
+          {location.pathname === '/' && <NotificationBell />}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg"
