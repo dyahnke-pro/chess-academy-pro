@@ -2,6 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { db } from '../db/schema';
 import { useReviewPromptStore } from '../stores/reviewPromptStore';
 import { logAppAudit } from './appAuditor';
+import { reportQualifyingUse, grantReviewReward } from './referralService';
 
 /**
  * reviewPromptService — the brain behind the two-step App Store review prompt.
@@ -80,6 +81,12 @@ async function saveState(state: ReviewPromptState): Promise<void> {
  * accumulated and we haven't asked yet, it arms the soft prompt.
  */
 export async function recordPositiveMoment(source: string): Promise<void> {
+  // A genuine win is the "actually used the app" signal that qualifies a
+  // referral (David 2026-09-06: reward unlocks on real use, not on install).
+  // Idempotent + co-located with the existing win instrumentation. Runs
+  // regardless of the review-prompt state below.
+  void reportQualifyingUse();
+
   const state = await loadState();
   if (state.asked || state.rated) return; // ask once; don't nag
 
@@ -108,6 +115,10 @@ export async function handlePositiveResponse(): Promise<void> {
   state.rated = true;
   await saveState(state);
   void logAppAudit({ kind: 'review-prompt-positive', category: 'app', source: 'reviewPromptService', summary: 'requested store review' });
+  // Reward the happy-path tap-through with a free opening (David 2026-09-06).
+  // Apple never tells us the star count, so we reward the intent — server
+  // guards it to once per device.
+  void grantReviewReward();
   await requestStoreReview();
 }
 

@@ -101,6 +101,26 @@ describe('computePositionFacts — the composer', () => {
     expect(evalBoard).toHaveBeenCalled();
   });
 
+  it('emits the FUNDAMENTAL clause (the plan the best move serves) in the ranked briefing', async () => {
+    // David 2026-09-06: tie the fundamentals into the main computer voice. A
+    // teaching beat on the student's move → the best move (Rf1-d1, taking the
+    // open d-file) surfaces as a woven, fundamental-first plan clause. The clause
+    // teaches the IDEA, never the SAN, so it never hands over the move.
+    const lineWithMoves = { rank: 1, evaluation: 20, moves: ['f1d1'], mate: null };
+    const analysis = { ...flat, topLines: [lineWithMoves, line(2, 15), line(3, 10)] };
+    const r = await computePositionFacts({
+      fen: 'r4rk1/pp3ppp/2n1bn2/2b5/8/2N1BN2/PP3PPP/R4RK1 w - - 0 14',
+      moverColor: 'w', studentColor: 'w', analysis, teachingBeat: true,
+    });
+    const fund = r.clauses.find((c) => c.kind === 'fundamental');
+    expect(fund).toBeTruthy();
+    expect(fund!.text).toMatch(/open d-file/);
+    expect(fund!.text).not.toMatch(/Rd1|f1d1/); // teaches the idea, never the SAN
+    // clauseText carries it in rank order, and a surface can exclude it by kind.
+    expect(clauseText(r.clauses)).toContain(fund!.text);
+    expect(clauseText(r.clauses, ['fundamental'])).not.toContain(fund!.text);
+  });
+
   it('goes quiet in a DECIDED game — a swing there is not important', async () => {
     const decided = { ...flat, topLines: [line(1, 800), line(2, 780), line(3, 760)], evaluation: 800, wdl: { win: 980, draw: 18, loss: 2 } };
     const r = await computePositionFacts({ fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2', moverColor: 'b', studentColor: 'b', analysis: decided, cpLossCp: 300 });

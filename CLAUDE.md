@@ -252,7 +252,7 @@ AUDIT_SANDBOX=1 node scripts/audit-<surface>.mjs`) — that is the
 deploy-pipeline-verifying audit, not just a code check. A localhost
 run validates the CODE but NOT the deploy (wrong bundle aliased, env
 scoped wrong, CDN serving stale). So: ALWAYS verify the prod bundle
-hash advanced past your push first (`curl -s https://chess-academy-pro.vercel.app/?cb=$(date +%s) | grep -oE '/assets/index-[A-Za-z0-9]+\.js'`
+hash advanced past your push first (`curl -s https://chess-academy-pro.vercel.app/?cb=$(date +%s) | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js'`
 with a cache-buster), THEN run the audit against prod. localhost is the
 FALLBACK for when prod is genuinely unreachable/stale (e.g. the Vercel
 100-build/day cap is blocking the deploy) — say so explicitly and
@@ -1431,7 +1431,7 @@ git commit -m "feat(pro-rep): <opening> at full G9.1 depth"
 git push origin HEAD:main
 
 # Wait for Vercel (~30s; watch the bundle hash change)
-curl -sS https://chess-academy-pro.vercel.app/ | grep -oE '/assets/index-[A-Za-z0-9]+\.js'
+curl -sS https://chess-academy-pro.vercel.app/ | grep -oE '/assets/index-[A-Za-z0-9_-]+\.js'
 
 # Run the 3-instrument audit
 AUDIT_SANDBOX=1 node scripts/audit-pro-naroditsky-prod.mjs
@@ -4560,7 +4560,7 @@ After every `git push origin main`:
    deploy is still "Building", wait. Don't audit a stale bundle.
 2. **Confirm the live bundle is the one you just shipped.**
    `curl -s https://chess-academy-pro.vercel.app/ | grep -oE
-   '/assets/index-[A-Za-z0-9]+\.js' | head -1` — the hash should
+   '/assets/index-[A-Za-z0-9_-]+\.js' | head -1` — the hash should
    change after each push. If it doesn't, the alias hasn't moved.
 3. **Pull the audit stream** (lightweight sanity check). Empty
    pulls are fine; what you're checking for is the endpoint

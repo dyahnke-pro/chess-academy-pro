@@ -17,10 +17,10 @@ vi.mock('./CoachGameReview', () => ({
 
 /** Deferred analyzeSingleGame so the test controls when the deepen lands. */
 let resolveDeepen: (() => void) | null = null;
-const analyzeSingleGame = vi.fn(() => new Promise<null>((res) => { resolveDeepen = () => res(null); }));
+const analyzeSingleGame = vi.fn((..._args: unknown[]) => new Promise<null>((res) => { resolveDeepen = () => res(null); }));
 vi.mock('../../services/gameAnalysisService', async (importOriginal) => ({
   ...(await importOriginal<typeof import('../../services/gameAnalysisService')>()),
-  analyzeSingleGame: (id: string) => analyzeSingleGame(id),
+  analyzeSingleGame: (id: string, _onProgress?: unknown, opts?: unknown) => (opts ? analyzeSingleGame(id, opts) : analyzeSingleGame(id)),
 }));
 vi.mock('../../services/appAuditor', () => ({ logAppAudit: vi.fn(() => Promise.resolve()) }));
 
@@ -85,12 +85,25 @@ describe('CoachReviewSessionPage — never block on analysis the game already ha
     expect(screen.getByTestId('mock-review').textContent).toBe(before);
   });
 
-  it('still blocks (spinner) for a game with NO usable annotations', async () => {
+  it('COLD open: the spinner covers the SWEEP only, then the deep dive runs behind the open review', async () => {
     await db.games.put(buildGameRecord({ id: 'g-raw', pgn: PGN, annotations: null, fullyAnalyzed: false, isMasterGame: false }));
     renderPage('g-raw');
-    await waitFor(() => expect(analyzeSingleGame).toHaveBeenCalledWith('g-raw'));
+    // First call = the sweep (sweepOnly) — the spinner is up, no review yet.
+    await waitFor(() => expect(analyzeSingleGame).toHaveBeenCalledWith('g-raw', { sweepOnly: true }));
     expect(screen.getByTestId('review-analyze-spinner')).toBeInTheDocument();
     expect(screen.queryByTestId('mock-review')).toBeNull();
+    // The sweep lands: a shallow curve stamped at sweep depth.
+    await db.games.update('g-raw', { annotations: SWEPT, fullyAnalyzed: true, analysisDepth: 12 });
+    const finishSweep = resolveDeepen; resolveDeepen = null;
+    await act(async () => { finishSweep?.(); });
+    // The review is on screen, and the key-moment dive is running BEHIND it.
+    await waitFor(() => expect(screen.getByTestId('mock-review')).toBeInTheDocument());
+    expect(screen.queryByTestId('review-analyze-spinner')).toBeNull();
+    await waitFor(() => expect(screen.getByTestId('review-deepening-pill')).toBeInTheDocument());
+    expect(analyzeSingleGame).toHaveBeenCalledTimes(2);
+    expect(analyzeSingleGame).toHaveBeenLastCalledWith('g-raw');
+    await act(async () => { resolveDeepen?.(); });
+    await waitFor(() => expect(screen.queryByTestId('review-deepening-pill')).toBeNull());
   });
 
   it('does not deepen at all when the game is already at review depth', async () => {

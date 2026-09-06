@@ -74,6 +74,8 @@ const DEFAULT_ROW: FreeTierRecord = {
   id: SINGLETON_ID,
   puzzlesSolved: 0,
   freeOpeningId: null,
+  freeOpeningIds: [],
+  earnedOpeningCredits: 0,
   kidFirstAccessAt: null,
   coachLessonsUsed: 0,
   coachChatTurnsUsed: 0,
@@ -90,10 +92,27 @@ const DEFAULT_ROW: FreeTierRecord = {
 export async function loadFreeTier(): Promise<FreeTierRecord> {
   try {
     const row = await db.freeTier.get(SINGLETON_ID);
-    return row ? { ...DEFAULT_ROW, ...row } : { ...DEFAULT_ROW };
+    return row ? normalizeRow({ ...DEFAULT_ROW, ...row }) : { ...DEFAULT_ROW };
   } catch {
     return { ...DEFAULT_ROW };
   }
+}
+
+/** Reconcile the legacy single `freeOpeningId` with the new `freeOpeningIds`
+ *  set so a row persisted before the set existed backfills correctly (the
+ *  DEFAULT_ROW merge alone would leave the set empty while the legacy id held a
+ *  claim). Idempotent — pure. */
+function normalizeRow(row: FreeTierRecord): FreeTierRecord {
+  const ids = Array.isArray(row.freeOpeningIds) ? row.freeOpeningIds.filter(Boolean) : [];
+  const set = new Set(ids);
+  if (row.freeOpeningId && !set.has(row.freeOpeningId)) set.add(row.freeOpeningId);
+  const merged = [...set];
+  return {
+    ...row,
+    freeOpeningIds: merged,
+    freeOpeningId: row.freeOpeningId ?? merged[0] ?? null,
+    earnedOpeningCredits: Math.max(0, row.earnedOpeningCredits ?? 0),
+  };
 }
 
 async function patch(next: Partial<FreeTierRecord>): Promise<FreeTierRecord> {
@@ -208,25 +227,71 @@ export type ClaimResult =
  * side effect — the gate uses this to decide, then persists via
  * `claimFreeOpening` in an effect.
  */
-export function canViewOpening(
-  openingId: string,
-  state: Pick<FreeTierRecord, 'freeOpeningId'>,
-): boolean {
-  if (!isEligibleFreeOpening(openingId)) return false;
-  return state.freeOpeningId == null || state.freeOpeningId === openingId;
+type OpeningSlotState = Pick<FreeTierRecord, 'freeOpeningId' | 'freeOpeningIds' | 'earnedOpeningCredits'>;
+
+/** The set of openings the user has claimed for free (legacy id folded in). Pure. */
+function claimedOpenings(state: OpeningSlotState): string[] {
+  const ids = Array.isArray(state.freeOpeningIds) ? state.freeOpeningIds.filter(Boolean) : [];
+  const set = new Set(ids);
+  if (state.freeOpeningId) set.add(state.freeOpeningId);
+  return [...set];
 }
 
-/** Claim `openingId` as THE one free opening (idempotent). Persists on first
- *  claim; returns the outcome + resulting row. */
+/** Total free-opening slots: the base 1 plus every earned reward credit. Pure. */
+export function openingAllowance(state: Pick<FreeTierRecord, 'earnedOpeningCredits'>): number {
+  return 1 + Math.max(0, state.earnedOpeningCredits ?? 0);
+}
+
+/** Free-opening slots still available to claim (never negative). Pure. */
+export function openingSlotsRemaining(state: OpeningSlotState): number {
+  return Math.max(0, openingAllowance(state) - claimedOpenings(state).length);
+}
+
+/** True when the user could still claim ANOTHER eligible opening for free
+ *  (a slot is open). Drives the "this one's free" badge. Pure. */
+export function hasFreeOpeningRoom(state: OpeningSlotState): boolean {
+  return openingSlotsRemaining(state) > 0;
+}
+
+export function canViewOpening(openingId: string, state: OpeningSlotState): boolean {
+  if (!isEligibleFreeOpening(openingId)) return false;
+  const claimed = claimedOpenings(state);
+  return claimed.includes(openingId) || claimed.length < openingAllowance(state);
+}
+
+/** Claim `openingId` as one of the free openings (idempotent). Persists on
+ *  first claim if a slot is open; returns the outcome + resulting row. */
 export async function claimFreeOpening(
   openingId: string,
 ): Promise<{ result: ClaimResult; row: FreeTierRecord }> {
   const cur = await loadFreeTier();
   if (!isEligibleFreeOpening(openingId)) return { result: 'not-eligible', row: cur };
-  if (cur.freeOpeningId === openingId) return { result: 'already-claimed-this', row: cur };
-  if (cur.freeOpeningId != null) return { result: 'denied-other', row: cur };
-  const row = await patch({ freeOpeningId: openingId });
+  const claimed = claimedOpenings(cur);
+  if (claimed.includes(openingId)) return { result: 'already-claimed-this', row: cur };
+  if (claimed.length >= openingAllowance(cur)) return { result: 'denied-other', row: cur };
+  const nextIds = [...claimed, openingId];
+  const row = await patch({ freeOpeningIds: nextIds, freeOpeningId: nextIds[0] });
   return { result: 'ok', row };
+}
+
+/** Grant `n` extra free-opening credits (referral qualified / review tap-through,
+ *  David 2026-09-06). Raises the allowance so the user can claim another opening.
+ *  Returns the resulting row. `n` clamps to >= 0. */
+export async function grantOpeningCredits(n: number): Promise<FreeTierRecord> {
+  const add = Math.max(0, Math.floor(n));
+  if (add === 0) return loadFreeTier();
+  const cur = await loadFreeTier();
+  return patch({ earnedOpeningCredits: Math.max(0, cur.earnedOpeningCredits ?? 0) + add });
+}
+
+/** Set earned credits to at least `n` (server-truth sync, max-wins so a local
+ *  value is never lowered by a stale fetch). Returns the resulting row. */
+export async function syncOpeningCredits(n: number): Promise<FreeTierRecord> {
+  const target = Math.max(0, Math.floor(n));
+  const cur = await loadFreeTier();
+  const have = Math.max(0, cur.earnedOpeningCredits ?? 0);
+  if (target <= have) return cur;
+  return patch({ earnedOpeningCredits: target });
 }
 
 /**

@@ -102,8 +102,19 @@ export interface FreeTierRecord {
   /** Count of puzzles solved against the free lifetime bucket. */
   puzzlesSolved: number;
   /** The masterclass opening id the user claimed as their one free opening,
-   *  or null before they've opened any eligible opening. */
+   *  or null before they've opened any eligible opening. Legacy single-slot
+   *  field; kept in sync with `freeOpeningIds[0]` for old readers. */
   freeOpeningId: string | null;
+  /** The full set of masterclass openings the user has claimed for free. The
+   *  base allowance is 1; each earned reward credit (referral / review, see
+   *  earnedOpeningCredits) raises it. Backfills from `freeOpeningId` for rows
+   *  that predate this field (loadFreeTier). */
+  freeOpeningIds?: string[];
+  /** Extra free-opening slots earned beyond the base 1 — granted when a
+   *  referral qualifies or the user taps through the happy-path review prompt
+   *  (David 2026-09-06). Server (api/referrals) is the source of truth for the
+   *  cross-device referral count; this mirrors it. Backfills to 0. */
+  earnedOpeningCredits?: number;
   /** Unix ms of the FIRST kid-section access, or null if never entered.
    *  Starts the 7-day free kid window. */
   kidFirstAccessAt: number | null;

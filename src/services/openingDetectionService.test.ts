@@ -252,14 +252,21 @@ describe('openingDetectionService', () => {
   });
 
   describe('terminal-short filter (≤8 plies + no DB extension)', () => {
-    it('hides Gunderam Gambit from name resolution (4-ply terminal)', () => {
-      // 'King's Pawn Game: Gunderam Gambit' is a 4-ply terminal
-      // entry — a useless namesake-only walkthrough. Production
-      // audit (build 2fcec7e+) showed the walkthrough ending after
-      // 4 plies because the DB has no continuation. Filter must
-      // hide it from name resolution so the user can't land on it.
-      const result = resolveOpeningEntry("King's Pawn Game: Gunderam Gambit");
-      expect(result).toBeNull();
+    it('an EXACT terminal name RESOLVES (to be deepened); a FUZZY/partial one stays hidden (David 2026-09-06)', () => {
+      // 'King's Pawn Game: Gunderam Gambit' is a 4-ply terminal with no DB
+      // continuation. The old rule HID it from name resolution entirely — but
+      // that let an exact terminal name fall through to the rare-token tier and
+      // resolve to an UNRELATED opening (the Panov→Sicilian bug). Under the
+      // amateur-DB doctrine a thin opening is DEEPENED at teach time, not hidden:
+      // an exact literal name must return THAT opening (its short seed). The
+      // filter still keeps the stub out of FUZZY/partial resolution + line
+      // pickers so nobody LANDS on it by accident.
+      const exact = resolveOpeningEntry("King's Pawn Game: Gunderam Gambit");
+      expect(exact).not.toBeNull();
+      expect(exact?.canonicalName).toBe("King's Pawn Game: Gunderam Gambit");
+      // A partial query stays WITHIN the Gunderam family — never cross-matches an
+      // unrelated opening (the invariant the Panov→Sicilian bug violated).
+      expect(resolveOpeningEntry('Gunderam')?.canonicalName ?? '').toContain('Gunderam');
     });
 
     it('keeps short non-terminal entries (Vienna Game at 3 plies)', () => {

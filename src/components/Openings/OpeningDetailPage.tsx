@@ -16,7 +16,7 @@ import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { useEntitlement } from '../../hooks/useEntitlement';
 import { useFreeTierStore } from '../../stores/freeTierStore';
-import { canViewOpening, isEligibleFreeOpening } from '../../services/freeTierService';
+import { canViewOpening, isEligibleFreeOpening, hasFreeOpeningRoom } from '../../services/freeTierService';
 import {
   trackFreeOpeningClaimed,
   trackSecondOpeningWalled,
@@ -801,13 +801,12 @@ export function OpeningDetailPage(): JSX.Element {
   useEffect(() => {
     if (!gateEnabled || isPro || !freeTierHydrated) return;
     if (!id || !isEligibleFreeOpening(id)) return;
-    if (freeTierRow.freeOpeningId != null) {
-      // A different opening already holds the pick — an active drill here is
-      // the second-opening wall (the upgrade-pressure moment).
-      if (isActiveDrill && freeTierRow.freeOpeningId !== id) {
-        trackSecondOpeningWalled(id, freeTierRow.freeOpeningId);
-      }
-      return; // one pick already claimed
+    // canViewOpening honors the earned-credit allowance (base 1 + referral /
+    // review credits), so a walled opening is one with NO free slot left AND
+    // not already claimed. An active drill there is the upgrade-pressure moment.
+    if (!canViewOpening(id, freeTierRow)) {
+      if (isActiveDrill) trackSecondOpeningWalled(id, freeTierRow.freeOpeningId ?? '');
+      return;
     }
     if (!hasDrilledThisOpening) return;
     void claimFreeOpening(id).then((result) => {
@@ -816,7 +815,7 @@ export function OpeningDetailPage(): JSX.Element {
         setJustClaimedFree(true);
       }
     });
-  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow.freeOpeningId, claimFreeOpening]);
+  }, [gateEnabled, isPro, freeTierHydrated, isActiveDrill, hasDrilledThisOpening, id, freeTierRow, claimFreeOpening]);
 
   if (loading) {
     return (
@@ -1590,7 +1589,7 @@ export function OpeningDetailPage(): JSX.Element {
   // narration rule. A quiet line at the point of choice does the same job.
   const showFreePickHint =
     gateEnabled && !isPro && freeTierHydrated && !!id &&
-    isEligibleFreeOpening(id) && freeTierRow.freeOpeningId == null;
+    isEligibleFreeOpening(id) && hasFreeOpeningRoom(freeTierRow) && canViewOpening(id, freeTierRow);
   const ladderNext = nextRung(opening, ladderLine);
   // "I already know this" expert pass — a lifetime budget of ONE per color
   // (one White opening + one Black opening). Spending it unlocks the WHOLE

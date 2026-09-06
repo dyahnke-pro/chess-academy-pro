@@ -26,7 +26,8 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
-import { explainBestMoveGrounded } from '../services/groundedAnswer';
+import { explainBestMoveGrounded, describeMoveGeometry } from '../services/groundedAnswer';
+import { strategicWhyLed } from '../services/moveFundamentals';
 import {
   getCachedStockfish,
   setCachedStockfish,
@@ -333,7 +334,6 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         // brain — they intentionally withhold the move, which it does fine.
         if (nextLevel === 3) {
           const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
-          const why = explainBestMoveGrounded(fen, null, best.bestMoveUci, moverColor);
           const { from: bmFrom, to: bmTo } = uciToSquares(best.bestMoveUci);
           let movePhrase = 'This is the move';
           try {
@@ -343,10 +343,18 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             const isCapture = best.bestMoveSan.includes('x') || !!cc.get(bmTo as Parameters<typeof cc.get>[0]);
             movePhrase = isCapture ? `Your ${piece} takes on ${bmTo}` : `Your ${piece} to ${bmTo}`;
           } catch { /* fall back to the generic phrase */ }
-          // `why` already ends in a period; strip it so the appended one
-          // doesn't produce a stray "…e5.." (caught by the prod hint audit).
+          // THE WHY — fundamental first, then the concrete point (David 2026-09-06).
+          // The move is already named in `movePhrase`, so use the LED (verb-first)
+          // clauses that never restate it: a concrete tactic if there is one
+          // (fork / pin / mate / wins material — the strongest reason), else the
+          // ranked strategic fundamental(s) the move serves (development / king
+          // safety / outpost / center / open file / king activity / passer). All
+          // board-computed (G0/G3) — the coach voices it, never decides it.
+          const geom = describeMoveGeometry(fen, best.bestMoveSan, moverColor);
+          const tacticLed = geom && !geom.startsWith('attacks') ? geom : null;
+          const why = tacticLed ?? strategicWhyLed(fen, best.bestMoveSan, moverColor);
           const whyClean = why ? why.trim().replace(/[.!?]+$/, '') : '';
-          const tier3Text = whyClean ? `${movePhrase} — ${whyClean}.` : `${movePhrase} — that's the move.`;
+          const tier3Text = whyClean ? `${movePhrase} — ${whyClean}.` : `${movePhrase} — that's the strongest move here.`;
 
           // Record the tap directly (BRAIN-05b moved this into the brain's tool;
           // Tier 3 no longer calls the brain, so record it here — same escalate-

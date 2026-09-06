@@ -213,6 +213,16 @@ async function main() {
     // The Tier-3 cap is ~40 words / 2 sentences; allow headroom for LLM
     // variance but FAIL on the 650-char / 6-sentence regression class.
     if (wc > 70) throw new Error(`hint too long: ${wc} words / ${sc} sentences (cap is ~40w/2s) :: "${measured.slice(0, 160)}"`);
+    // HARD: a move with NO WHY is not the product (David 2026-09-06: "that's
+    // where this app stands out — we explain why"). The 2026-09-06 prod run
+    // came back 6/6 GREEN on "Your pawn to c3 — that's the strongest move
+    // here." — the bare fallback that fires when the fundamental computer
+    // found nothing. Length/grounding checks can't see that; this can.
+    // Truth, not text-presence: the clause after the dash must be a real
+    // reason, never the fallback stub.
+    if (/[—-]\s*that'?s the (?:strongest move here|move)\b/i.test(measured)) {
+      throw new Error(`hint named the move but gave NO WHY (bare fallback) :: "${measured.slice(0, 160)}"`);
+    }
     return detail;
   });
 

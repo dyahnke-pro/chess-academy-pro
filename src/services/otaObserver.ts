@@ -163,6 +163,10 @@ export async function startOtaObserver(): Promise<void> {
       to: nb.version,
       toId: nb.id,
     });
+    // A newer bundle is staged (autoUpdate:'onlyDownload' never auto-applies it).
+    // Tell the UI so the non-blocking OtaUpdateBanner can offer "Restart now";
+    // otherwise it swaps in silently at the next cold launch. Never reloads here.
+    try { window.dispatchEvent(new CustomEvent('ota-update-staged', { detail: { version: nb.version } })); } catch { /* no window */ }
   });
   await add('downloadFailed', (s) => {
     const v = (s as { version?: string })?.version;

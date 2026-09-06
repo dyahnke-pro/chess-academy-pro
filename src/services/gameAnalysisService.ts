@@ -364,7 +364,7 @@ class DedicatedWorker {
     fen: string,
     depth: number,
     budgetMs?: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number }> {
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
@@ -373,6 +373,7 @@ class DedicatedWorker {
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
       let lastDepth = 0;
+      let lastPv: string[] = [];
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
@@ -394,6 +395,8 @@ class DedicatedWorker {
               ? (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE)
               : scoreValue;
           }
+          const pvMatch = / pv (.+)$/.exec(data);
+          if (pvMatch) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
         }
 
         const bmMatch = /^bestmove (\S+)/.exec(data);
@@ -401,7 +404,7 @@ class DedicatedWorker {
           clearTimeout(timeoutId);
           this.worker.removeEventListener('message', handler);
           const flip = blackToMove ? -1 : 1;
-          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth });
+          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth, pv: lastPv });
         }
       };
 
@@ -648,10 +651,16 @@ function resetAnalysisPool(): void {
   _warmPromise = null;
 }
 
-/** Per-position search budget for the REVIEW's eval curve, mirroring the
- *  singleton's variant budgets. A slow engine must be capped or a single deep
- *  position eats the whole wait. */
-const REVIEW_POSITION_BUDGET_MS = 3_000;
+/** Per-position search budget for the REVIEW's key-moment re-search.
+ *
+ *  8s, not 3s (David 2026-09-06: "Set it."). The review re-searches at most
+ *  REVIEW_MAX_DEEP_PLIES (12) key plies at REVIEW_DEEP_DEPTH (16), and since
+ *  the non-blocking open that pass runs BEHIND an already-open review, so its
+ *  ceiling (12 × 8s ≈ 96s, and only when every key ply is slow) is not time
+ *  the student waits for. What 3s bought was the wrong verdict: in-browser
+ *  Stockfish stopped near depth 13 and graded 6...Nb6 (52cp at d14, 128cp at
+ *  d16) a good move. A quiet position still stops the moment depth 16 lands. */
+const REVIEW_POSITION_BUDGET_MS = 8_000;
 
 /** Per-position budget for the sweep's BEST-MOVE refinement — the only deep
  *  search the sweep still runs, and only on the handful of moves it graded a
@@ -713,7 +722,14 @@ const BATCH_SHALLOW_BUDGET_MS = 200;
  *  touches a mate score) is deepened whatever the count — the cap only rations
  *  the ambiguous small ones. 12 plies × REVIEW_POSITION_BUDGET_MS bounds a
  *  typical review at well under a minute. */
-const REVIEW_MAX_DEEP_PLIES = 12;
+const REVIEW_MAX_DEEP_PLIES = 24;
+/* 24, not 12 (David's Alapin, audit 2026-09-06): the fixture's 6...Nb6 pair
+ * swung 51cp shallow and was NEVER re-searched in five prod runs — not for
+ * want of depth or budget, but because the game's later blunders (3.6-point
+ * swings) filled all six pair slots first and the cap dropped the borderline
+ * pair every time. Twelve pairs holds a game's certain swings AND its
+ * borderline ones. The cost is bounded (24 × REVIEW_POSITION_BUDGET_MS) and,
+ * since the sweep-then-deepen open below, runs behind an open review. */
 
 /** Depth the REVIEW re-searches its key moments at.
  *
@@ -1177,6 +1193,11 @@ async function analyzeGamePositions(
    *  David 2026-09-05: "4 games in 4 minutes — too slow"). The review path
    *  (analyzeSingleGame) leaves it undefined and keeps full depth. */
   positionBudgetMs?: number,
+  /** Review's COLD open: walk the full curve (every ply, no opening gap) but
+   *  skip the key-moment deep dive so the student is on the board in sweep
+   *  time; the dive then runs behind the open review (CoachReviewSessionPage
+   *  deepens because the stamped depth is shallow). */
+  opts: { sweepOnly?: boolean } = {},
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
@@ -1301,26 +1322,44 @@ async function analyzeGamePositions(
   // always two evals of the SAME depth — mixing a deep "before" with a shallow
   // "after" would read the depth difference itself as an inaccuracy.
   let deepDiveComplete = false;
-  if (isReview) {
+  if (isReview && !opts.sweepOnly) {
     const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
+    // The dive runs BEHIND an open review now, so it must not sit on the
+    // SINGLETON engine — that is the engine every live ask uses (the explore
+    // reply, Show-me, the hint), and a 24-ply × 8s dive queued in front of it
+    // made the explored move's reply wait minutes and wedged a worker restart
+    // (prod audit 2026-09-06: "Stockfish initialization timed out after 45s").
+    // Take ONE dedicated pool worker; the singleton stays free. Fall back to
+    // the singleton only when no worker can be had at all.
+    let diveWorker: DedicatedWorker | null = null;
+    try { diveWorker = (await acquirePool(1))[0] ?? null; } catch { diveWorker = null; }
+    const search = async (fen: string): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+      if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
+    };
     let searched = 0;
-    for (const i of keyPlies) {
-      if (deep[i] !== null) { searched++; continue; }
-      onPosition?.(fens.length, fens.length);
-      try {
-        const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
-        deep[i] = a.evaluation;
-        deepBest[i] = a.bestMove || null;
-        deepPv[i] = a.topLines?.[0]?.moves?.slice(0, 8) ?? (a.bestMove ? [a.bestMove] : []);
-        searched++;
-        if (Number.isFinite(a.depth) && a.depth > 0) {
-          depthAt[i] = Math.max(depthAt[i], a.depth);
-          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
+    try {
+      for (const i of keyPlies) {
+        if (deep[i] !== null) { searched++; continue; }
+        onPosition?.(fens.length, fens.length);
+        try {
+          const a = await search(fens[i]);
+          deep[i] = a.evaluation;
+          deepBest[i] = a.bestMove || null;
+          deepPv[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
+          searched++;
+          if (Number.isFinite(a.depth) && a.depth > 0) {
+            depthAt[i] = Math.max(depthAt[i], a.depth);
+            toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
+          }
+        } catch {
+          // Keep the curve value for this ply — a lost deep search costs
+          // precision on one move, never the review.
         }
-      } catch {
-        // Keep the curve value for this ply — a lost deep search costs
-        // precision on one move, never the review.
       }
+    } finally {
+      if (diveWorker) releasePool([diveWorker]);
     }
     deepDiveComplete = searched === keyPlies.length;
   }
@@ -1446,9 +1485,27 @@ async function analyzeGamePositions(
  * Analyze a single game and store the results. Returns existing annotations
  * if the game is already fully analyzed, otherwise runs Stockfish analysis.
  */
+/** One analysis per game at a time. A review reopened while its background
+ *  dive is still running used to start a SECOND dive for the same game (two
+ *  full searches racing on the engine); the second caller now joins the first. */
+const _singleGameInFlight = new Map<string, Promise<MoveAnnotation[] | null>>();
+
 export async function analyzeSingleGame(
   gameId: string,
   onProgress?: (phase: string) => void,
+  opts: { sweepOnly?: boolean } = {},
+): Promise<MoveAnnotation[] | null> {
+  const inFlight = _singleGameInFlight.get(gameId);
+  if (inFlight) return inFlight;
+  const run = analyzeSingleGameUncoalesced(gameId, onProgress, opts);
+  _singleGameInFlight.set(gameId, run);
+  try { return await run; } finally { _singleGameInFlight.delete(gameId); }
+}
+
+async function analyzeSingleGameUncoalesced(
+  gameId: string,
+  onProgress?: (phase: string) => void,
+  opts: { sweepOnly?: boolean } = {},
 ): Promise<MoveAnnotation[] | null> {
   const game = await db.games.get(gameId);
   if (!game) return null;
@@ -1467,7 +1524,7 @@ export async function analyzeSingleGame(
     onProgress?.('Analyzing positions with Stockfish…');
     const result = await analyzeGamePositions(game, (current, total) => {
       onProgress?.(`Analyzing move ${current} of ${total}…`);
-    });
+    }, undefined, opts);
     if (!result) return null;
     const { annotations, achievedDepth } = result;
 
