@@ -40,6 +40,7 @@ import {
   stripDisprovenSentences,
 } from '../services/boardClaimValidator';
 import { stripUngroundedTacticSentences } from '../services/tacticClaimValidator';
+import { explainBestMoveGrounded } from '../services/groundedAnswer';
 import {
   getCachedStockfish,
   setCachedStockfish,
@@ -452,6 +453,70 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           }),
           fen,
         });
+
+        // ── TIER 3 = THE ANSWER: computed in code, never the brain (David
+        // 2026-09-06: "just do the standard green arrow and name the fucking
+        // move… throw a why in there too if you can").
+        //
+        // The hint ALREADY knows the move (Stockfish) and the WHY is board-
+        // provable (explainBestMoveGrounded — wins the piece / forks / check /
+        // the quiet purpose). Routing that through the chat brain was the bug:
+        // `hint` is an internalAsk surface, so getCoachChatResponse skips the
+        // move-stating assembler and the fall-through re-describes the position
+        // WITHOUT the move — or serves the "I can't verify" stock line (PostHog:
+        // both returning users' hint taps, 2026-09). So Tier 3 states the move +
+        // a grounded why deterministically, draws the green arrow, records the
+        // tap directly (the brain's record_hint_request tool is bypassed here),
+        // and never calls the LLM. Tiers 1/2 (progressive WHY/WHICH) keep the
+        // brain — they intentionally withhold the move, which it does fine.
+        if (nextLevel === 3) {
+          const moverColor: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+          const why = explainBestMoveGrounded(fen, null, best.bestMoveUci, moverColor);
+          const { from: bmFrom, to: bmTo } = uciToSquares(best.bestMoveUci);
+          let movePhrase = 'This is the move';
+          try {
+            const cc = new Chess(fen);
+            const sq = cc.get(bmFrom as Parameters<typeof cc.get>[0]);
+            const piece = sq ? pieceNameFromSymbol(sq.type) : 'piece';
+            const isCapture = best.bestMoveSan.includes('x') || !!cc.get(bmTo as Parameters<typeof cc.get>[0]);
+            movePhrase = isCapture ? `Your ${piece} takes on ${bmTo}` : `Your ${piece} to ${bmTo}`;
+          } catch { /* fall back to the generic phrase */ }
+          const tier3Text = why ? `${movePhrase} — ${why}.` : `${movePhrase} — that's the move.`;
+
+          // Record the tap directly (BRAIN-05b moved this into the brain's tool;
+          // Tier 3 no longer calls the brain, so record it here — same escalate-
+          // on-same-FEN store method the tool used).
+          try {
+            useCoachMemoryStore.getState().recordHintRequest({
+              gameId: gameId ?? '',
+              moveNumber: moveNumber ?? 0,
+              ply: ply ?? 0,
+              fen,
+              bestMoveUci: best.bestMoveUci,
+              bestMoveSan: best.bestMoveSan,
+              tier: 3,
+            });
+          } catch { /* memory write is best-effort */ }
+
+          const arrows: BoardArrow[] = [];
+          const { from, to } = uciToSquares(best.bestMoveUci);
+          if (isLegalMove(fen, from, to)) {
+            arrows.push({ startSquare: from, endSquare: to, color: TIER3_ARROW_COLOR });
+          }
+
+          voiceService.stop();
+          void voiceService.speakForced(tier3Text).catch(() => undefined);
+
+          if (fenRef.current !== fen) { setHintState((s) => ({ ...s, isAnalyzing: false })); return; }
+          setHintState((s) => ({
+            ...s,
+            nudgeText: tier3Text,
+            arrows,
+            ghostMove: null,
+            isAnalyzing: false,
+          }));
+          return;
+        }
 
         // Stream chunks straight into sentence-buffered TTS so the
         // student hears the hint as the brain produces it. Tag-strip

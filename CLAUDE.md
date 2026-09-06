@@ -1693,6 +1693,17 @@ voice — recalibrate immediately.
 
 ## ⏰ Standing notes
 
+**🔒🔒 CHECK FOR A MESSAGE FROM DAVID WHENEVER YOU'RE WAITING — ALL SESSIONS
+(David 2026-09-06, LOCKED: "If you're sitting and waiting for something, at
+least check to see if I have sent you a message. Lock that in for ALL
+SESSIONS!").** Any time you're idle or blocked on something slow — a background
+command (ship-check, a push, a build), a long PostHog/audit pull, a Vercel
+deploy, ANY wait — call `ReadNotifications` to see if David has queued a message
+before continuing or ending the turn. He should never have to interrupt to get
+your attention; if you're waiting anyway, you have the spare cycles to check.
+Do this proactively, on every wait, not just when a system notice says
+notifications are pending.
+
 **🔒 THIS ENVIRONMENT HAS FULL INTERNET, VERCEL, AND PRODUCTION ACCESS
 (David 2026-06-01).** Stop treating network/prod reach as a limitation —
 the session can hit the open internet, the Vercel API/CLI, and the live

@@ -158,9 +158,13 @@ afterEach(() => {
 // is legal and Tier 3 can render the arrow.
 const FEN_AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-describe('useHintSystem — one tap reveals the full answer', () => {
-  it('first tap sends HINT_TIER_3_ADDITION, sets level 3, and renders the move arrow', async () => {
-    spineResponses.push('Nf3 develops the knight and fights for the center.');
+describe('useHintSystem — Tier 3 answers deterministically (David 2026-09-06)', () => {
+  it('names the move + draws the arrow + speaks — WITHOUT calling the brain', async () => {
+    // The Tier-3 answer is computed in code (Stockfish move + green arrow +
+    // grounded why), never routed through the chat brain. The bug it fixes:
+    // `hint` is an internalAsk surface, so getCoachChatResponse dropped the
+    // move and served the "I can't verify" stock line (PostHog: both returning
+    // users' hint taps got no move, 2026-09).
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -176,19 +180,51 @@ describe('useHintSystem — one tap reveals the full answer', () => {
       result.current.requestHint();
     });
 
-    await waitFor(() => expect(spineCalls.length).toBe(1));
-    expect(spineCalls[0].surface).toBe('hint');
-    expect(spineCalls[0].maxToolRoundTrips).toBe(2);
-    expect(spineCalls[0].fen).toBe(FEN_AFTER_E4);
-    // One tap jumps straight to the full-answer tier.
-    expect(spineCalls[0].ask).toContain(HINT_TIER_3_ADDITION);
-    await waitFor(() => expect(result.current.hintState.level).toBe(3));
+    // Wait for the async answer to land (nudgeText is set by the Tier-3 branch,
+    // not synchronously with the level bump).
+    await waitFor(() => expect(result.current.hintState.nudgeText).toBeTruthy());
+    expect(result.current.hintState.level).toBe(3);
+    // The brain is NEVER called for the answer tier.
+    expect(spineCalls.length).toBe(0);
+    // The move is NAMED (piece + destination) — g1f3 = knight to f3.
+    expect(result.current.hintState.nudgeText!.toLowerCase()).toContain('knight');
+    expect(result.current.hintState.nudgeText).toContain('f3');
     // The move arrow is revealed immediately on the first press.
     expect(result.current.hintState.arrows).toHaveLength(1);
     expect(result.current.hintState.arrows[0].startSquare).toBe('g1');
     expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
-    // Sentence-streamed via Polly as the first sentence (chunk-driven).
+    // The computed line is spoken (not the brain's stream).
     expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
+  });
+
+  it('includes the grounded WHY when the board proves one (David: "we explain why")', async () => {
+    // A knight that can capture an undefended queen — explainBestMoveGrounded
+    // must surface the concrete win. knownMove bypasses the engine mock so the
+    // move is fixed and the why is computed from the real position.
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: '7k/8/2q5/4N3/8/8/8/K7 w - - 0 1',
+        playerColor: 'white',
+        enabled: true,
+        knownMove: { from: 'e5', to: 'c6', san: 'Nxc6' },
+        gameId: 'g-why',
+        moveNumber: 1,
+        ply: 1,
+      }),
+    );
+
+    act(() => { result.current.requestHint(); });
+
+    await waitFor(() => expect(result.current.hintState.nudgeText).toBeTruthy());
+    expect(result.current.hintState.level).toBe(3);
+    expect(spineCalls.length).toBe(0);
+    const text = result.current.hintState.nudgeText ?? '';
+    // Move named…
+    expect(text).toContain('c6');
+    // …and the WHY is the concrete material win.
+    expect(text.toLowerCase()).toContain('queen');
+    // Arrow on the winning move.
+    expect(result.current.hintState.arrows[0]).toMatchObject({ startSquare: 'e5', endSquare: 'c6' });
   });
 
   it('ADAPTIVE: an advanced player starts on the WHY rung (tier 1, no arrow) and climbs on repeat taps', async () => {
@@ -219,16 +255,18 @@ describe('useHintSystem — one tap reveals the full answer', () => {
 
   it('feeds the brain a code-computed tactics context so the hint can NAME the tactic', async () => {
     // The root fix for "tactics alert fired but the hint didn't say what the
-    // tactic was" (David 2026-06-22): the hint now hands the brain a real
+    // tactic was" (David 2026-06-22): the hint hands the brain a real
     // TacticsLiveContext (immediate tactics + hanging pieces + board facts),
     // instead of nothing — which left the tactic gate stripping the mention
-    // as "out-of-vocab (no tactics context)".
-    spineResponses.push('Nf3 develops and eyes the e5-square.');
+    // as "out-of-vocab (no tactics context)". Tier 3 no longer calls the brain
+    // (2026-09-06), so this contract lives on the WHY/WHICH tiers — use an
+    // advanced rating so the first tap is a brain-driven tier 1.
+    spineResponses.push('Your worst-placed piece wants a more active square.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
         playerColor: 'black',
-        playerRating: 1400,
+        playerRating: 2000,
         enabled: true,
       }),
     );
@@ -242,7 +280,7 @@ describe('useHintSystem — one tap reveals the full answer', () => {
     expect(Array.isArray(tactics?.immediate)).toBe(true);
   });
 
-  it('records the request to coach memory at tier 3 via the brain-emitted tool call', async () => {
+  it('records the request to coach memory at tier 3 (directly, no brain)', async () => {
     spineResponses.push('Nf3 is the move.');
     const { result } = renderHook(() =>
       useHintSystem({
@@ -290,7 +328,8 @@ describe('useHintSystem — one tap reveals the full answer', () => {
     act(() => { result.current.requestHint(); });
     act(() => { result.current.requestHint(); });
     expect(result.current.hintState.level).toBe(3);
-    expect(spineCalls.length).toBe(1);
+    // Tier 3 is computed in code — the brain was never called.
+    expect(spineCalls.length).toBe(0);
   });
 });
 
