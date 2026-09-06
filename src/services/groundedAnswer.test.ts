@@ -1151,6 +1151,26 @@ describe('assembleCandidateMoveAnswer — evaluate the NAMED move', () => {
     const a = assembleCandidateMoveAnswer({ fen: START, candidateSan: 'a3', bestMoveUci: 'e2e4', bestEvalCp: 30, candidateEvalCp: 22, masterFreqPct: 8 });
     expect(a?.facts).toMatch(/8%/);
   });
+
+  // SAC SOUNDNESS (David 2026-09-06: "The coach has not been able to answer if a
+  // sac has been sound"). A Greek-gift shape where Bxh7+ offers the bishop; the
+  // verdict is sound/speculative/unsound by the engine eval of best play AFTER.
+  const GREEK = 'r1bq1rk1/ppp2ppp/2n2n2/4p3/3P4/2NB1N2/PPP2PPP/R2QK2R w KQ - 0 1';
+  it('calls a material-offering sac SOUND when the eval holds up', () => {
+    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 60, candidateEvalCp: 50 });
+    expect(a?.facts).toMatch(/sound/i);
+    expect(a?.facts).not.toMatch(/unsound/i);
+    expect(a?.facts).toMatch(/Bxh7/);
+  });
+  it('calls the sac UNSOUND when the attack does not cover the material', () => {
+    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -260 });
+    expect(a?.facts).toMatch(/unsound/i);
+    expect(a?.facts).toMatch(/down a piece|just down/i);
+  });
+  it('calls the sac SPECULATIVE in the middle band', () => {
+    const a = assembleCandidateMoveAnswer({ fen: GREEK, candidateSan: 'Bxh7+', bestMoveUci: 'd3e2', bestEvalCp: 40, candidateEvalCp: -80 });
+    expect(a?.facts).toMatch(/speculative/i);
+  });
 });
 
 describe('assemblePlayerGamesAnswer — honest empty for a NAMED player (Bug 1)', () => {

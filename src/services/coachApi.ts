@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -1151,6 +1151,12 @@ export interface MasterGroundingOptions {
    *  hanging?", "what's the threat?", "fork here?"). The answer is COMPUTED
    *  from `tactics` (assembleTacticsAnswer) and voiced via voiceFacts. */
   tacticsQuestion?: boolean;
+  /** ATTACK-ASSESSMENT question ("do I have an attack lined up?", "is my
+   *  kingside attack good?") — answered by counting attackers vs defenders on
+   *  the enemy king zone (assembleAttackAssessment over `currentFen`). Voiced via
+   *  voiceFacts; dispatched before tactics so an attack ask isn't answered as a
+   *  generic tactic scan (David 2026-09-06). */
+  attackQuestion?: boolean;
   /** A HINT ask ("give me a hint") — reuses the engine best-move read but the
    *  answer names the PIECE and the goal and WITHHOLDS the square (honesty
    *  contract; 2026-08-13 audit: hints were handing over the full answer). */
@@ -1880,7 +1886,7 @@ export function isBoardQuestionTurn(
     'currentFen' | 'cleanAsk' | 'forceEngage' | 'positionAssessmentQuestion' | 'endgameQuestion'
     | 'bestMoveQuestion' | 'whyBestMoveQuestion' | 'planQuestion' | 'candidateMoveQuestion'
     | 'alternativesQuestion' | 'moveRatingQuestion' | 'opponentMoveQuestion'
-    | 'convertingQuestion' | 'colorQuestion'>,
+    | 'convertingQuestion' | 'colorQuestion' | 'attackQuestion'>,
 ): boolean {
   if (g.forceEngage === true) return true;
   if (hasChessContentSignal(query)) return true;
@@ -1899,7 +1905,8 @@ export function isBoardQuestionTurn(
     g.moveRatingQuestion === true ||
     g.opponentMoveQuestion === true ||
     g.convertingQuestion === true ||
-    g.colorQuestion === true
+    g.colorQuestion === true ||
+    g.attackQuestion === true
   );
 }
 
@@ -5173,6 +5180,22 @@ export async function getCoachChatResponse(
               }
             }
           } catch { /* fall through */ }
+        }
+
+        // ── ATTACK ASSESSMENT (David 2026-09-06) — "do I have an attack lined
+        // up?", "is my kingside attack good?". Count the student's attackers vs
+        // the defenders on the enemy king zone (assembleAttackAssessment, pure
+        // chess.js). Dispatched BEFORE tactics so an attack ASSESSMENT isn't
+        // answered as a "can I win a piece" scan. Voiced via voiceFacts (G0).
+        if (grounding.attackQuestion && grounding.currentFen) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assembleAttackAssessment(grounding.currentFen, sc);
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'attack-assessment', preferRaw: true });
+            if (voiced) return voiced;
+          }
         }
 
         // ── TACTICS / DANGER (Phase 2) — voice the engine's computed tactics ──

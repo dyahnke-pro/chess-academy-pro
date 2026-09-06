@@ -6,6 +6,8 @@ import { useHintSystem } from '../../hooks/useHintSystem';
 import { useSettings } from '../../hooks/useSettings';
 import { voiceService } from '../../services/voiceService';
 import { explainPuzzleMoveGrounded } from '../../services/coachApi';
+import { coachService } from '../../coach/coachService';
+import type { LiveState } from '../../coach/types';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
@@ -551,16 +553,44 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     setChatReply('');
     voiceService.stop();
     try {
-      // GROUNDED (G0): the student's question is answered by phrasing the
-      // code-computed facts about the best move through the voiceFacts
-      // chokepoint — never the LLM free-narrating the board.
-      const reply = await explainPuzzleMoveGrounded({
+      // The student's question runs through the FULL grounded coach spine over
+      // the puzzle position (David 2026-09-06: coach facts must persist on EVERY
+      // tab, tactics included). So "is this sac sound?" / "do I have an attack?"
+      // get the real board answer here, not just the puzzle's best-move readout.
+      // The puzzle solution IS the engine best move, so thread it as the engine
+      // read; the student is the side to move. Everything stays G0 — the spine
+      // computes the facts and voiceFacts phrases them.
+      const stm: 'white' | 'black' = puzzle.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+      const liveState: LiveState = {
+        surface: 'standalone-chat',
         fen: puzzle.fen,
-        bestMoveUci: puzzle.bestMove,
-        bestMoveSan: puzzle.bestMoveSan,
-        playedSan: puzzle.playerMoveSan,
-        studentMessage: question,
-      });
+        engineBestMoveUci: puzzle.bestMove,
+        whoseTurn: stm,
+        studentColor: stm,
+        currentRoute: '/tactics',
+        userJustDid: question,
+      };
+      let reply = '';
+      try {
+        const answer = await coachService.ask(
+          { surface: 'standalone-chat', ask: question, liveState },
+          { maxToolRoundTrips: 1 },
+        );
+        reply = (answer.text ?? '').replace(/\s*\[BOARD:[^\]]*\]/g, '').trim();
+      } catch {
+        reply = '';
+      }
+      // Fall back to the puzzle's best-move explanation when the spine has
+      // nothing to say (offline / empty), so the chat never dead-ends.
+      if (!reply) {
+        reply = await explainPuzzleMoveGrounded({
+          fen: puzzle.fen,
+          bestMoveUci: puzzle.bestMove,
+          bestMoveSan: puzzle.bestMoveSan,
+          playedSan: puzzle.playerMoveSan,
+          studentMessage: question,
+        });
+      }
       setChatReply(reply);
       void voiceService.speakGrounded(reply, puzzle.fen);
       setChatInput('');

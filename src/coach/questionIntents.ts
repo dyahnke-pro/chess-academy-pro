@@ -159,6 +159,31 @@ export function isPlanQuestion(ask: string | undefined): boolean {
   return PLAN_QUESTION_RE.test(ask);
 }
 
+/** An ATTACK-ASSESSMENT question — "do I have an attack lined up?", "is my
+ *  kingside attack good?", "is there a real attack here?", "do I have enough for
+ *  an attack?" (David 2026-09-06: "if an attack on the king side is good. Or if
+ *  I have a valid attack lined up"). Answered by `assembleAttackAssessment`,
+ *  which counts attackers vs defenders on the enemy king zone. DISTINCT from the
+ *  tactics scan ("can I win a piece") and the plan lane — this ASSESSES an
+ *  attack, so it is dispatched before both. Requires the word "attack"/"attacking"
+ *  in an assessment shape, so it never grabs "attack the d5 pawn" move-hunting. */
+const ATTACK_ASSESSMENT_RE = anyOf([
+  String.raw`\bdo\s+i\s+have\s+(?:a\s+|an\s+|any\s+|enough\s+for\s+(?:a|an)\s+|the\s+)?(?:real\s+|valid\s+|good\s+|genuine\s+|strong\s+|winning\s+)?attack\b`,
+  String.raw`\bis\s+there\s+(?:a\s+|an\s+|any\s+)?(?:real\s+|valid\s+|good\s+|genuine\s+|strong\s+|winning\s+)?(?:king\s?side\s+|queen\s?side\s+)?attack\b`,
+  String.raw`\battack\s+lined\s+up\b`,
+  String.raw`\bis\s+(?:my|the|there\s+a|a)\s+(?:king\s?side|queen\s?side|kingside|central|flank)?\s*attack\s+(?:good|real|sound|worth\s+it|working|strong|going\s+anywhere|there|valid|winning|enough)\b`,
+  String.raw`\bis\s+(?:a|my|the)\s+(?:king\s?side|queen\s?side)\s+attack\s+(?:good|worth|sound|real)\b`,
+  String.raw`\b(?:is|are)\s+(?:my|the)\s+attack(?:ing\s+chances?)?\s+(?:real|sound|good|worth\s+it|enough)\b`,
+  String.raw`\bhave\s+enough\s+(?:pieces?\s+)?for\s+(?:an?\s+)?attack\b`,
+  String.raw`\benough\s+attackers?\b`,
+  String.raw`\bcan\s+i\s+mount\s+an\s+attack\b`,
+  String.raw`\bis\s+my\s+attack\s+sound\b`,
+]);
+export function isAttackAssessmentQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return ATTACK_ASSESSMENT_RE.test(ask);
+}
+
 /** A BEST-MOVE / SOUNDNESS question — "what's the best move here?", "is
  *  this sound?", "does White only have one good move?". Answering it
  *  HONESTLY means naming the engine's best move AND the short line that

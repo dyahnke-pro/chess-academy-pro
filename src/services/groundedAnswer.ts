@@ -776,6 +776,82 @@ export function assemblePositionAssessment(opts: {
   return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources };
 }
 
+/** The enemy king's square + its on-board neighbours — where an attack lands. */
+function kingZoneSquares(kingSq: string): Square[] {
+  const f = kingSq.charCodeAt(0) - 97;
+  const r = Number(kingSq[1]);
+  const out: Square[] = [];
+  for (let df = -1; df <= 1; df += 1) {
+    for (let dr = -1; dr <= 1; dr += 1) {
+      const nf = f + df;
+      const nr = r + dr;
+      if (nf < 0 || nf > 7 || nr < 1 || nr > 8) continue;
+      out.push(`${String.fromCharCode(97 + nf)}${nr}` as Square);
+    }
+  }
+  return out;
+}
+
+/**
+ * assembleAttackAssessment — the GROUNDED answer to "do I have an attack lined
+ * up?" / "is my kingside attack good?" (David 2026-09-06: "if an attack on the
+ * king side is good. Or if I have a valid attack lined up"). Counts the
+ * student's pieces bearing on the ENEMY king zone against the pieces defending
+ * it — the literal "count attackers against defenders" device (principles.ts) —
+ * plus the enemy king's shelter/centre exposure. Everything chess.js-computed
+ * (G0); the LLM only phrases the counts. Returns null on an unparseable FEN.
+ */
+export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const them: 'w' | 'b' = me === 'w' ? 'b' : 'w';
+
+  let ek: Square | null = null;
+  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === them) ek = cell.square;
+  if (!ek) return null;
+
+  const zone = kingZoneSquares(ek);
+  const attackerSet = new Set<string>();
+  const defenderSet = new Set<string>();
+  for (const sq of zone) {
+    try {
+      for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k') attackerSet.add(a); }
+      for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k') defenderSet.add(d); }
+    } catch { /* skip a bad square */ }
+  }
+  const attackers = attackerSet.size;
+  const defenders = defenderSet.size;
+  const defWord = `${defenders} defender${defenders === 1 ? '' : 's'}`;
+  const atkWord = `${attackers} piece${attackers === 1 ? '' : 's'}`;
+
+  let verdict: string;
+  if (attackers === 0) {
+    verdict = `No attack lined up right now — none of your pieces bear on their king yet. Build one up before you go for it.`;
+  } else if (attackers >= 3 && attackers > defenders) {
+    verdict = `You have a real attack: ${atkWord} bearing on their king against ${defWord}. The attackers outnumber the defenders — press it.`;
+  } else if (attackers >= 2 && attackers >= defenders) {
+    verdict = `The makings of an attack — ${atkWord} aimed at their king, ${defWord} back. It's close; bring one more attacker over before you commit material.`;
+  } else {
+    verdict = `Not a real attack yet — ${atkWord} against ${defWord}. Their king has enough cover, so improve your pieces first rather than throwing them forward.`;
+  }
+
+  const parts = [verdict];
+  // The enemy king's own exposure — a broken castled shelter, or still uncastled
+  // in the centre — is the other half of "is the attack worth it".
+  const exp = detectKingExposure(fen, them);
+  const ekFile = ek.charCodeAt(0) - 97;
+  const ekRank = Number(ek[1]);
+  const uncastledCentre = ekFile >= 2 && ekFile <= 5 && (ekRank === (them === 'w' ? 1 : 8) || ekRank === (them === 'w' ? 2 : 7));
+  if (exp && exp.missingShield >= 2) {
+    parts.push(`Their shelter is cracked — ${exp.missingShield} of the three pawns in front of the king are gone.`);
+  } else if (uncastledCentre) {
+    parts.push(`Their king is still in the centre on ${ek} — a real target if you can open lines.`);
+  }
+
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'] };
+}
+
 /**
  * assembleSettingsAnswer — the DATA half of settings (F17): "is voice on?",
  * "what's my narration level?", "what are my settings?". Reads the user's
@@ -1011,6 +1087,22 @@ export function assembleMoveEvalAnswer(opts: {
   };
 }
 
+/** The material a move OFFERS on its landing square — SEE says the enemy can win
+ *  the moved piece there for ≥2 points, i.e. it's a sacrifice. Returns the point
+ *  value offered, or null when the move loses nothing (not a sac). Pure chess.js
+ *  + SEE (`seeGain` > 0 = the enemy wins material by capturing on that square). */
+function sacrificeOffer(fen: string, candSan: string): number | null {
+  try {
+    const c = new Chess(fen);
+    const mv = c.move(candSan);
+    if (!mv) return null;
+    const gain = seeGain(c, mv.to);
+    return gain >= 2 ? gain : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * assembleCandidateMoveAnswer — the GROUNDED answer to "is <move> ok / can I
  * play <move> / what about <move>" (David 2026-07-10: "Coach needs to evaluate
@@ -1112,6 +1204,34 @@ export function assembleCandidateMoveAnswer(opts: {
     const parts = [`${candNorm} loses — it walks into mate in ${Math.abs(opts.candidateMateIn)}.`];
     if (bestSan) parts.push(`Play ${bestSan} instead.`);
     return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+  }
+
+  // ── IS THE SACRIFICE SOUND? (David 2026-09-06: "The coach has not been able to
+  // answer if a sac has been sound.") When the named move OFFERS material — the
+  // moved piece can be won on its landing square (SEE) — the honest answer is
+  // sound / speculative / unsound, judged by the engine eval of best play AFTER
+  // the sac (mover POV), not a bare cp-loss grade. All computed (G0).
+  const sacOffer = sacrificeOffer(fen, candNorm);
+  if (sacOffer !== null) {
+    const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
+    const give = sacOffer >= 5 ? 'the exchange or more' : sacOffer >= 3 ? 'a piece' : 'a pawn';
+    const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover);
+    let verdict: string | null = null;
+    if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
+      verdict = `${candNorm} is a sound sacrifice — it forces mate in ${opts.candidateMateIn}.`;
+    } else if (stmEval !== null && stmEval >= -30) {
+      verdict = `${candNorm} is sound — you give up ${give}, but the compensation is real${after ? `: after the best defence ${after}` : ''}.`;
+    } else if (stmEval !== null && stmEval >= -150) {
+      verdict = `${candNorm} is speculative — after the best defence the attack doesn't quite cover ${give}${bestSan ? `; ${bestSan} keeps it simpler` : ''}.`;
+    } else if (stmEval !== null) {
+      verdict = `${candNorm} is unsound — the attack doesn't work: after the best defence you're just down ${give}${after ? ` (${after})` : ''}${bestSan ? `. Play ${bestSan} instead` : ''}.`;
+    }
+    if (verdict) {
+      const parts = [verdict];
+      if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+      if (freqText) parts.push(freqText);
+      return { facts: parts.join(' '), bestMoveSan: bestSan, bestMoveFromTo: bestFromTo, sources };
+    }
   }
 
   // Compute the cp-loss vs best (both mover-POV). Absent evals → a bounded,
