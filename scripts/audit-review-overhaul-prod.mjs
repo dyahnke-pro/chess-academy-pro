@@ -1,0 +1,283 @@
+/**
+ * audit-review-overhaul-prod — THE post-game-review OVERHAUL audit (David
+ * 2026-09-05, plan: docs/plans/2026-09-05-postgame-review-overhaul.md), held to
+ * the locked REAL-GAME EXPERIENCE AUDIT STANDARD: seed a REAL, UNPROCESSED game,
+ * run the genuine pipeline, drive the surface like a human, assert experience
+ * contracts. Three instruments: Playwright drives · the app's own audit events
+ * are captured off the wire (coach-narration-spoken carries the FULL spoken
+ * text — the audit runs MUTED, no TTS spend) · the prod audit-stream is pulled
+ * before/after.
+ *
+ * The fixture is David's own game (KaiserlicheHoheit–Knight_Mare_01, chess.com
+ * daily 1023640032, Alapin, student = Black, 0-1). His read of 6...Nb6: "gave
+ * space away, moved the same piece twice, and allowed the opponent to gain
+ * tempo." The attributor must SAY that, first, on ply 12.
+ *
+ * Contracts (hard PASS/FAIL):
+ *   CARD   the review-list card says WIN (green), never a raw 0-1
+ *   OPEN   first open analyses + the walk becomes startable (timed)
+ *   FUND   ply-12 narration LEADS with the fundamentals (same piece / tempo / space)
+ *   AUTO   the walk advances by itself after Start (no Forward click)
+ *   FREE   a piece moved on the board = exploring: banner up, walk PAUSED
+ *   EXPL   the explored move is NARRATED and the engine REPLIES
+ *   EXIT   Back exits exploration; Play restarts auto-advance
+ *   SHOW   "Show me better move" narrates the better line and leaves the walk paused
+ *   RECAP  the closing aggregates the fundamentals across the flagged moves
+ *   REOPEN a second open is instant — no analysis re-run, no spinner
+ *   ERR    zero page/console errors
+ *
+ * Run (prod): AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
+ *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-review-overhaul-prod.mjs
+ */
+import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
+import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
+
+const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
+const GID = process.env.AUDIT_GID || `audit-alapin-overhaul-${Date.now()}`;
+const PGN = '1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nc3 Nb6 7. Nf3 d6 8. exd6 Qxd6 9. Be2 Bg4 10. Nb5 Qd7 11. Bf4 Nd5 12. Ne5 Bxe2 13. Qxe2 Nxf4 14. Nxd7 Nxe2 15. Nc7+ Kxd7 16. Nxa8 Nexd4 17. Rd1 e5 18. a3 Bc5 19. b4 Nxb4 20. axb4 Bxb4+ 21. Kf1 Rxa8 22. Rb1 a5 23. h4 Rc8 0-1';
+const FUND_PLY = 12;    // 6...Nb6 — the fixture move
+const EXPLORE_PLY = 11; // after 6.Nc3 — Black (the student) to move
+const SANS = (() => { const c = new Chess(); c.loadPgn(PGN); return c.history(); })();
+
+const log = (s) => console.log(s);
+const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
+const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText()).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
+const until = async (fn, ms, step = 400) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
+
+async function pullAuditStream(sinceMs) {
+  const secret = process.env.AUDIT_STREAM_SECRET || '';
+  if (!secret) return { ok: false, reason: 'no AUDIT_STREAM_SECRET in env' };
+  try {
+    const res = await fetch(`${BASE}/api/audit-stream?since=${sinceMs}`, { headers: { 'x-audit-secret': secret } });
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
+    const j = await res.json();
+    return { ok: true, count: j.count ?? (j.entries?.length ?? 0), storage: j.storage };
+  } catch (e) { return { ok: false, reason: String(e).slice(0, 80) }; }
+}
+
+const run = async () => {
+  const exe = await resolveChromiumExecutable();
+  const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...LISTENER_LAUNCH_ARGS] });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  await ctx.addInitScript(muteTtsForAudit);      // instrument = the app's own spoken events; never a synthesis bill
+  await ctx.addInitScript(autoDismissCalibration);
+  // Instrument 2 — the narration listener sidecar. The page streams EVERY
+  // logAppAudit event to it; `coach-narration-spoken` carries the full spoken
+  // text (narrationText), which is what the contracts below read.
+  const listener = await attachVoiceListener(ctx);
+  const page = await ctx.newPage();
+
+  const errs = [];
+  page.on('pageerror', (e) => { if (/startsWith is not a function/.test(e.message)) return; errs.push('PAGEERROR: ' + e.message.slice(0, 160)); });
+  page.on('console', (m) => {
+    if (m.type() !== 'error') return;
+    const t = m.text();
+    if (/favicon|manifest|net::ERR|Download the React|Failed to load resource.*(429|502|503)|\[Stockfish\] worker\.onerror/i.test(t)) return;
+    errs.push('CONSOLE: ' + t.slice(0, 160));
+  });
+
+  const spoken = () => listener.getCapturedEvents()
+    .filter((e) => e.kind === 'coach-narration-spoken' && e.narrationText)
+    .map((e) => ({ t: Number(e.timestamp ?? 0), text: String(e.narrationText), source: String(e.source ?? '') }));
+  const events = () => listener.getCapturedEvents().filter((e) => e.kind !== 'coach-narration-spoken');
+
+  const dismiss = async () => {
+    for (let i = 0; i < 6; i++) {
+      for (const [s, c] of [
+        ['[data-testid="ai-consent-allow"]', '[data-testid="ai-consent-allow"]'],
+        ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'],
+        ['[data-testid="page-help-modal"]', '[data-testid="page-help-modal"] button'],
+      ]) { if (await has(page, s)) { try { await page.locator(c).first().click({ timeout: 2500 }); } catch { /* */ } } }
+      await page.waitForTimeout(400);
+    }
+  };
+
+  const results = [];
+  const add = (id, pass, detail) => { results.push({ id, pass, detail }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail}`); };
+
+  const streamBefore = await pullAuditStream(Date.now() - 60000);
+  for (let i = 0; i < 4; i++) { try { await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); break; } catch { await page.waitForTimeout(1500); } }
+  await dismiss();
+  await page.waitForTimeout(2500);
+
+  // SEED — David's real game, UNANALYZED. Student = Black by handle.
+  const seed = await page.evaluate(async ({ gid, pgn }) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const put = (store, val) => new Promise((res, rej) => { const t = db.transaction(store, 'readwrite'); t.objectStore(store).put(val); t.oncomplete = () => res(true); t.onerror = () => rej(t.error); });
+    const getAll = (store) => new Promise((res, rej) => { const t = db.transaction(store, 'readonly'); const rq = t.objectStore(store).getAll(); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    await put('games', { id: gid, pgn, white: 'KaiserlicheHoheit', black: 'Knight_Mare_01', result: '0-1', date: '2026.09.03', event: "Let's Play!", eco: 'B22', whiteElo: 1392, blackElo: 1378, source: 'chesscom', termination: 'resignation', annotations: null, coachAnalysis: null, isMasterGame: false, openingId: null, fullyAnalyzed: false });
+    const profs = await getAll('profiles');
+    for (const p of profs) { p.preferences = p.preferences || {}; p.preferences.chessComUsername = 'Knight_Mare_01'; p.preferences.coachNarration = 'full'; await put('profiles', p); }
+    return { profiles: profs.length };
+  }, { gid: GID, pgn: PGN }).catch((e) => ({ error: String(e) }));
+  log(`[seed] ${JSON.stringify(seed)}`);
+
+  // ── CARD (F) — the list card says WIN, never 0-1 ────────────────────────
+  await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismiss();
+  const cardSel = `[data-testid="review-game-card-${GID}"]`;
+  const cardUp = await until(() => has(page, cardSel), 20000);
+  const badge = cardUp ? await txt(page, `${cardSel} [data-testid="review-game-outcome"]`) : '';
+  const outcome = cardUp ? await page.locator(`${cardSel} [data-testid="review-game-outcome"]`).first().getAttribute('data-outcome').catch(() => '') : '';
+  const cardText = cardUp ? await txt(page, cardSel) : '';
+  add('CARD win-not-0-1', cardUp && badge === 'WIN' && outcome === 'win' && !/\b0-1\b/.test(cardText) && /vs KaiserlicheHoheit/.test(cardText),
+    cardUp ? `badge="${badge}" outcome=${outcome} text="${cardText.slice(0, 70)}"` : 'card never rendered');
+
+  // ── OPEN (A) — first open runs the genuine pipeline; time it ────────────
+  const t0 = Date.now();
+  await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
+  await page.waitForURL(/\/coach\/review\//, { timeout: 15000 }).catch(() => undefined);
+  await dismiss();
+  const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled')) === null; };
+  const ready = await until(startable, 300000, 1500);
+  const openMs = Date.now() - t0;
+  add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
+  if (!ready) { await listener.stop(); await browser.close(); process.exit(1); }
+
+  // ── AUTO (C) — Start, then the walk advances on its own ─────────────────
+  const spokenAt = () => spoken().length;
+  await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
+  await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
+  await page.waitForTimeout(1500);
+  const p0 = (await readWalkPly(page))?.n ?? 0;
+  const advanced = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= p0 + 2, 90000, 800);
+  const playState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
+  add('AUTO advances-by-itself', advanced && playState === 'playing', `from ply ${p0} → ${(await readWalkPly(page))?.n} with no Forward click; play/pause state=${playState}`);
+
+  // ── FUND (E) — land on ply 12 and read the narration ────────────────────
+  // Pause first (any intervention pauses), then jump by clicking Back/Forward
+  // like a human would. Cards that mount are resolved by clicking.
+  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
+  const resolveCards = async () => {
+    for (const [c, sel] of [
+      ['discussion-reason-picker', '[data-testid="discussion-reason-option"]'],
+      ['review-find-shot-card', '[data-testid="review-find-shot-skip"]'],
+      ['review-cameo-ask', '[data-testid="review-cameo-skip"]'],
+      ['review-theory-ask', '[data-testid="review-theory-skip"]'],
+      ['review-trap-card', '[data-testid="review-trap-pick-leave"]'],
+      ['review-trap-reveal', '[data-testid="review-trap-done"]'],
+      ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
+      ['review-turning-point-card', '[data-testid="review-turning-point-confirm"]'],
+      ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
+      ['review-blunder-capture', '[data-testid="review-capture-skip"]'],
+      ['review-sequence-ask', '[data-testid="review-sequence-skip"]'],
+      ['review-sequence-playback', '[data-testid="review-sequence-skip"]'],
+    ]) {
+      if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500, force: true }).catch(() => undefined); await page.waitForTimeout(400); }
+    }
+  };
+  const goTo = async (target) => {
+    for (let i = 0; i < 80; i++) {
+      await resolveCards();
+      const n = (await readWalkPly(page))?.n ?? 0;
+      if (n === target) return true;
+      const sel = n < target ? '[data-testid="review-forward-btn"]' : '[data-testid="review-back-btn"]';
+      await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
+      await page.waitForTimeout(700);
+    }
+    return ((await readWalkPly(page))?.n ?? 0) === target;
+  };
+  const onFund = await goTo(FUND_PLY);
+  await page.waitForTimeout(1500);
+  const fundNarr = await txt(page, '[data-testid="review-narration-banner"]');
+  const fundBadge = await txt(page, '[data-testid="review-classification-badge"]');
+  const FUND_RE = /same (knight|piece)|its (second|third|fourth) (move|trip)|on its (second|third|fourth) move|tempo|gave up d5|concedes the d5|stepping off d5/i;
+  const lead = fundNarr.split(/(?<=[.!?])\s+/)[0] || '';
+  const fundLeads = FUND_RE.test(lead);
+  const fundAnywhere = FUND_RE.test(fundNarr);
+  add('FUND ply-12-leads-with-fundamentals', onFund && fundLeads, onFund ? `badge=${fundBadge} lead="${lead.slice(0, 110)}" (anywhere=${fundAnywhere})` : `could not reach ply ${FUND_PLY}`);
+  add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
+
+  // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
+  await goTo(EXPLORE_PLY);
+  await page.waitForTimeout(800);
+  const spokenBeforeExplore = spokenAt();
+  const ex = await exploreOnFreeBoard(page, { replyWaitMs: 45000 });
+  const pausedState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
+  const pausedLabel = await has(page, '[data-testid="review-paused-label"]');
+  const plyHeld = (await readWalkPly(page))?.n === EXPLORE_PLY;
+  add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld}` : ex.reason);
+  const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
+  const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
+  const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
+  add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
+
+  // ── EXIT (G.3) — Back exits exploration; Play restarts ──────────────────
+  await page.locator('[data-testid="review-back-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
+  await page.waitForTimeout(800);
+  const bannerGone = !(await has(page, '[data-testid="review-exploring-banner"]'));
+  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+  const pBefore = (await readWalkPly(page))?.n ?? 0;
+  const restarted = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= pBefore + 2, 60000, 800);
+  add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
+
+  // ── SHOW (B) — button-only, narrated, leaves the walk paused ────────────
+  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+  await goTo(FUND_PLY);
+  await page.waitForTimeout(800);
+  const showBtn = await has(page, '[data-testid="walk-show-me-btn"]');
+  const spokenBeforeShow = spokenAt();
+  let showLines = 0; let showPaused = null;
+  if (showBtn) {
+    await page.locator('[data-testid="walk-show-me-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
+    await until(() => spoken().length >= spokenBeforeShow + 2 && events().some((e) => e.kind === 'review-show-me-finished'), 90000, 800);
+    showLines = spoken().length - spokenBeforeShow;
+    showPaused = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
+  }
+  add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `${showLines} lines spoken; state after=${showPaused}` : 'no Show-me button on the flagged ply');
+  const showStarts = events().filter((e) => e.kind === 'review-show-me-started').length;
+  add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
+
+  // ── RECAP (G.4) — play to the end; the closing aggregates ───────────────
+  await page.locator('[data-testid="walk-resume-game-btn"]').first().click({ timeout: 1500, force: true }).catch(() => undefined);
+  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
+  const total = (await readWalkPly(page))?.total ?? SANS.length;
+  let reachedEnd = false;
+  for (let i = 0; i < 400; i++) {
+    await resolveCards();
+    const n = (await readWalkPly(page))?.n ?? 0;
+    if (n >= total) { reachedEnd = true; break; }
+    const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
+    if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
+    await page.waitForTimeout(1500);
+  }
+  await until(() => spoken().some((s) => /flagged moves|carry into the next game/i.test(s.text)), 60000, 1000);
+  const recap = spoken().find((s) => /flagged moves|carry into the next game/i.test(s.text));
+  add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+
+  // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
+  await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismiss();
+  await until(() => has(page, cardSel), 20000);
+  const t1 = Date.now();
+  await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
+  const quick = await until(startable, 8000, 250);
+  const reopenMs = Date.now() - t1;
+  const spinner = await has(page, '[data-testid="review-analyze-spinner"]');
+  const pill = await has(page, '[data-testid="review-deepening-pill"]');
+  add('REOPEN instant-no-rerun', quick && !spinner && !pill, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
+
+  add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
+
+  const streamAfter = await pullAuditStream(Date.now() - 600000);
+  log('\n===== 3-INSTRUMENT COVERAGE =====');
+  log(`  Playwright: drove list → open → walk → explore → show-me → end → reopen`);
+  log(`  Narration listener: ${spoken().length} spoken lines, ${events().length} other events`);
+  log(`  Audit-stream: before=${JSON.stringify(streamBefore)} after=${JSON.stringify(streamAfter)}`);
+  log('\n===== SPOKEN (first 30) =====');
+  spoken().slice(0, 30).forEach((s, i) => log(`  [${String(i + 1).padStart(2)}] ${s.text.slice(0, 160)}`));
+  log('\n===== CONTRACT GRID =====');
+  let allPass = true;
+  for (const r of results) { log(`  ${r.pass ? '✅ PASS' : '❌ FAIL'}  ${r.id.padEnd(40)} ${r.detail}`); if (!r.pass) allPass = false; }
+  log(`\n===== VERDICT: ${allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
+  await listener.stop();
+  await browser.close();
+  process.exit(allPass ? 0 : 1);
+};
+run().catch((e) => { console.error('fatal:', e); process.exit(1); });

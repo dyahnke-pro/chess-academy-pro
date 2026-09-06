@@ -751,10 +751,24 @@ const REVIEW_DEEP_DEPTH = 14;
  *  Lowering the sweep's depth without raising this floor would have been the
  *  quiet way to make the app FASTER and WRONGER. */
 const BATCH_GRADE_FLOOR_CP = MISTAKE_CP;
-/** Swing between adjacent SHALLOW evals that earns a deep re-search.
- *  INACCURACY_CP is the smallest swing that changes a classification, so a
- *  smaller one cannot change the verdict and stays shallow. */
+/** Swing between adjacent SHALLOW evals that is CERTAINLY worth a deep look. */
 export const TWO_PASS_SWING_CP = INACCURACY_CP;
+/** Swing between adjacent SHALLOW evals that earns a deep re-search at all.
+ *
+ *  This sits BELOW the smallest verdict-changing swing on purpose. The old
+ *  reasoning — "INACCURACY_CP is the smallest swing that changes a
+ *  classification, so a smaller one cannot change the verdict" — is true of
+ *  the DEEP eval and false of the SHALLOW one it was applied to: the sweep's
+ *  own note above puts 30-50cp of search noise on a depth-10 read, so a real
+ *  52cp inaccuracy routinely shows up as ~37cp shallow and was never looked at
+ *  again. David's fixture (2026-09-05, Alapin 6...Nb6): native Stockfish reads
+ *  it at 37cp (d10), 54 (d12), 52 (d14), 126 (d16) — the review called it GOOD
+ *  because the shallow read fell under the bar and the deep pass never ran.
+ *  Candidacy must clear the verdict threshold MINUS the noise, or the deep
+ *  pass only ever confirms what the shallow one already knew. The cap
+ *  (REVIEW_MAX_DEEP_PLIES) still bounds the cost; the ranking still spends it
+ *  on the biggest swings first. */
+export const DEEP_DIVE_CANDIDATE_CP = Math.round(INACCURACY_CP / 2);
 
 /** NB this is now the REVIEW's key-moment selector (the sweep no longer runs a
  *  second pass). Because the threshold is INACCURACY_CP — the smallest swing
@@ -782,7 +796,7 @@ export function selectCriticalPlies(
     if (a === null || b === null) continue;
     const swing = Math.abs(capEval(a) - capEval(b));
     const mateish = Math.abs(a) >= MATE_EVAL_THRESHOLD || Math.abs(b) >= MATE_EVAL_THRESHOLD;
-    if (swing >= TWO_PASS_SWING_CP || mateish) {
+    if (swing >= DEEP_DIVE_CANDIDATE_CP || mateish) {
       // "Certain" = already big enough to be a finding rather than curve noise,
       // so it is deepened even when the cap is spent.
       pairs.push({ i, swing, certain: mateish || swing >= MISTAKE_CP });

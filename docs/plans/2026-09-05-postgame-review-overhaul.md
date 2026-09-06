@@ -362,7 +362,34 @@ when nothing PV-verified attached.
 - Auto-advance starts ON when the walk starts (`start-walk-btn`).
 
 ## Status
-PLAN ONLY — David 2026-09-05: "Do not build yet." Nothing committed.
+BUILT 2026-09-06 (David: "Build" → "One big push at end"). Landed as one push
+to `main`, five local commits:
+- **A** `dccc0d9` — open from existing analysis (non-blocking), deepen in the
+  background with a "Sharpening analysis…" pill that never re-mounts the walk
+  once started, deep-dive best moves + PVs reused (no second BEST_MOVE search),
+  narration persisted on `games.reviewNarration` (REV 2), coach-play evals
+  (`coachGameAnnotations`) + lichess/chess.com `[%eval]` comments
+  (`annotationsFromEvalComments`) stamp the game analyzed on import. The tier
+  key came from main's two-pass build (`deepDiveComplete → analysisDepth`).
+- **E** `1216997` — `principleAttribution.ts` (25 fundamentals, attributed on
+  the board: pattern + available/sound punishment + counterfactual, PV
+  corroborates only, subsumption, cap 3) + `principleVoice.ts` (deterministic
+  DNA-register verdicts, short repeat stems, aggregate recap) wired FIRST into
+  `buildReviewSegments`, the uncapped facet list, the misconception classifier,
+  auto-analysis and `moveReason`. Fundamentals-led lines skip the warm pass.
+- **C** `d50c491` — `useReviewPlayback` voice-gated auto-advance (0.5s / 1.5s
+  flagged), ⏯ between the arrows, any intervention pauses, only Play restarts,
+  ⏭ = next key moment, visible Paused state.
+- **B+D+G** `ac02c78` — free board on every ply (Explore button gone), explored
+  move narrated in the walk's format + engine-best reply, banner + Back/Forward
+  exit, "Show me better move" button-only + narrated + paused after.
+- **F** `17d23a9` — `playerIdentity.resolvePlayerColor` (one resolver, three
+  private copies deleted), card badge WIN / LOSS / DRAW / `?` + Settings hint.
+- Audit: `scripts/audit-review-overhaul-prod.mjs` (3-instrument, muted) + the
+  four legacy review audits moved to the free-board contract via
+  `scripts/audit-lib/review-explore.mjs`.
+- **H / I** remain the follow-on migration (surface by surface); the kernel
+  pieces this build lays are the shared calculators + `voiceReviewLines`.
 
 ## F. Game card: WIN / LOSS, not "1-0" (David 2026-09-05)
 

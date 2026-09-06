@@ -39,6 +39,7 @@ import {
   ANALYSIS_DEPTH,
   BEST_MOVE_DEPTH,
   TWO_PASS_SWING_CP,
+  DEEP_DIVE_CANDIDATE_CP,
   __testables,
 } from './gameAnalysisService';
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
@@ -98,12 +99,16 @@ describe('selectCriticalPlies — the review\'s key-moment selector', () => {
     expect(selectCriticalPlies(CURVE)).toEqual([4, 5]);
   });
 
-  it('threshold is INACCURACY_CP, so every ply that could grade worse than `good` is deepened', () => {
-    // This is what makes the review's verdicts all DEEP verdicts: a ply left
-    // shallow swung less than the smallest grade-changing amount.
+  it('candidacy sits BELOW the verdict threshold by the shallow noise margin, so a real inaccuracy hidden in a ~37cp shallow read still gets its deep look', () => {
+    // The deep verdict is what decides the grade; the shallow read only
+    // nominates. A depth-10 eval carries 30-50cp of noise (the sweep's own
+    // note), so nominating only swings >= INACCURACY_CP let David's Alapin
+    // 6...Nb6 (37cp shallow, 52cp at depth 14) read GOOD forever.
     expect(TWO_PASS_SWING_CP).toBe(INACCURACY_CP);
+    expect(DEEP_DIVE_CANDIDATE_CP).toBe(INACCURACY_CP / 2);
     expect(selectCriticalPlies([0, INACCURACY_CP, 0])).toEqual([0, 1, 2]);
-    expect(selectCriticalPlies([0, INACCURACY_CP - 1, 0])).toEqual([]);
+    expect(selectCriticalPlies([0, 37, 0])).toEqual([0, 1, 2]);
+    expect(selectCriticalPlies([0, DEEP_DIVE_CANDIDATE_CP - 1, 0])).toEqual([]);
   });
 
   it('always deepens around a mate score', () => {

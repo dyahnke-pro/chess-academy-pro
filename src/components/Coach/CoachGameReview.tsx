@@ -1492,7 +1492,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!alive()) return;
     let moverIsWhite = true;
     try { moverIsWhite = new Chess(args.fenBefore).turn() === 'w'; } catch { /* keep */ }
-    const isStudentMove = moverIsWhite === (playerColor === 'white');
     const clamp = (cp: number): number => Math.max(-1000, Math.min(1000, cp));
     let classification: MoveClassification | null = null;
     let bestUci: string | null = null;
@@ -1548,8 +1547,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       details: JSON.stringify({ san: args.san, classification, bestUci, spoken: text }),
     });
     if (text) { try { await reviewSay(text); } catch { /* voice off */ } }
-    if (!alive() || !args.replyAllowed || !isStudentMove || !after) return;
-    // THE ENGINE'S REPLY — its best move at the same fixed depth.
+    if (!alive() || !args.replyAllowed || !after) return;
+    // THE ENGINE'S REPLY — its best move at the same fixed depth, for whichever
+    // side is to move: the student exploring their own alternative gets the
+    // opponent's best answer; the student trying the OPPONENT's alternative
+    // ("what if they had played d5?") gets their own side's best reply.
+
     try {
       const probe = new Chess(args.fenAfter);
       if (probe.isGameOver()) return;
