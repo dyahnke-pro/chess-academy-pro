@@ -292,6 +292,7 @@ const run = async () => {
   const victimVal = [];
   for (const san of SANS) { const mv = rc.move(san); victimVal.push(mv?.captured ? PIECE_VAL[mv.captured] : null); }
   for (const [n, { narr }] of plyNarr) {
+    if (n > SANS.length) continue; // the closing (lastPly + 1) has no board of its own
     const pos = new Chess(); for (let k = 0; k < n; k++) pos.move(SANS[k]);
     let scan = narr.replace(/\([^)]*\)/g, ' ');
     const cut = scan.search(PROJ); if (cut >= 0) scan = scan.slice(0, cut);
