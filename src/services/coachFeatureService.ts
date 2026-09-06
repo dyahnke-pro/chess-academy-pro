@@ -1263,6 +1263,11 @@ export function buildReviewSegments(
           pvAfterBest: m.pv?.afterBest?.length && bestMoveSan
             ? pvUciToSan(new Chess(fenPair.fenBefore).move(bestMoveSan) ? (() => { const c = new Chess(fenPair.fenBefore); c.move(bestMoveSan); return c.fen(); })() : fenPair.fenBefore, m.pv.afterBest)
             : undefined,
+          // Persisted engine eval, normalised to the MOVER's POV (stored white-POV)
+          // — powers the eval/PV-gated detectors (overvalued attack, poisoned
+          // pawn, botched conversion). Absent on games analysed before the fix.
+          evalBefore: typeof m.preMoveEval === 'number' ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : undefined,
+          evalAfterPlayed: typeof m.evaluation === 'number' ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : undefined,
         })
       : [];
     const fundamentalLed = fundamentals.length > 0;

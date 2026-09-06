@@ -31,6 +31,42 @@ Read `docs/APP_MAP.md` §5 (the review→fundamentals→weakness→drill pipelin
   their detectors land — a tag no detector produces is dead. Follow-up: thread an optional
   `evalBefore` into `AttributionInput` to unlock the two orphan-tag fills.
 
+## ⭐ EXPANDED SCOPE (David 2026-09-06, after Wave 1/2 shipped)
+
+**A. Build the deferred detectors with eval/PV, tie buckets properly, ADD new buckets.**
+Thread `evalBefore`/`evalAfterPlayed` (mover-POV cp) + `leftBook` into `AttributionInput`
+(all present at the review caller `coachFeatureService:1258` — `preMoveEval`, `evaluation`,
+`bestMoveEval`, `pv`). New detectors: `overvalued-attack` (replay `pvAfterPlayed` — mover
+still down ≥2, no mate → the sac is refuted), `botched-conversion` (evalBefore ≥ +200 →
+evalAfterPlayed < +100), `capture-toward-centre` (geometry + eval-confirmed + PV why),
+`poisoned-pawn` (trapped-queen lookahead), `left-book-early` (book flag). Determinism holds
+because eval/PV are persisted at the fixed review depth; these fire review-path only (live
+classifier passes no eval → silent, correct). **Buckets:** map to the existing
+misconception tag where the error already has one (`overvalued-attack`, `botched-conversion`,
+`left-book-early` are existing orphan tags; `space-conceded`/`greedy-pawn-grab` reused); ADD
+a NEW tag for any genuinely-new error type that has no home.
+
+**B. ⭐ THE COACH ANSWERS EVERY COMPUTED FACT — ON EVERY TAB (David, emphatic: "I do NOT
+want only review to have this info. ALL coach functions need to persist across every tab —
+tactics, play, learn, review, ALL OF THEM").** The coach today can't answer "is this sac
+sound?", "is a kingside attack good here?", "do I have a valid attack lined up?" and the
+like. The design is **compute once, voice everywhere (G0):** the SAME fact-computer that the
+review detector uses is exposed as a `groundedAnswer` assembler + a `questionIntents`
+classifier, so the coach chat answers it live from the current FEN + persisted/available
+eval+PV on ANY surface. Facts to expose (each backed by a shared computer):
+- sac soundness (is the material given back / does the attack pay) — shared with
+  `overvalued-attack`;
+- kingside/queenside attack quality (attackers vs defenders on the king, open lines) —
+  shared with the attack detectors;
+- "do I have an attack lined up" (a real threat/battery/target computed by
+  `tacticsDetector` + the king-attack computer);
+- and one per computed fact the attributor already produces (each fundamental's verdict
+  should be answerable on demand: "was that the opposition?", "is my rook passive?", …).
+Wire: shared `src/services/*` fact-computer → `groundedAnswer.assemble*` → `voiceFacts`
+(preferRaw) → new `questionIntents.is*Question` → dispatched in `coachService`/`getCoachChatResponse`.
+Audit that each fact answers from tactics + play + learn + review (a wire that doesn't fire
+isn't a wire). This is tracked as its own task; it is the larger half of the remaining work.
+
 ## The three deliverables
 - **A.** Add the D-rules to the fundamentals computer as new detectors + integrate
   the whole way through (tag → misconception → weakness → drill → review voice).

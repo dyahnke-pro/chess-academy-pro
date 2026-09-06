@@ -266,6 +266,38 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       ];
       return s[v % s.length];
     }
+    case 'overvalued-attack': {
+      const s = [
+        `The attack was overvalued: ${f.move} commits material, but the engine shows the defence holding and coming out ahead — count the attackers before you invest.`,
+        `That sacrifice doesn't land — after ${f.move} they consolidate and keep the extra material; the attack needed more pieces than you had on it.`,
+        `You threw ${f.move} at the king before the attack was real — the defender untangles and you're just down material.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'poisoned-pawn': {
+      const s = [
+        `That pawn was poisoned: your ${f.piece} takes on ${f.square} and then gets trapped — the engine wins it straight back, and it cost you far more than a pawn.`,
+        `A pawn grab with the ${f.piece} that ends badly — chased down after ${f.square}, it's snared for more than it took.`,
+        `Don't reach for that pawn: the ${f.piece} on ${f.square} is hunted and lost, and the pawn was never worth the piece.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'capture-toward-centre': {
+      const s = [
+        `Recapture direction: taking toward the centre is the usual rule, but here ${f.better} was better — it opens the ${f.file}-file for your rook, and ${f.played} kept it closed.`,
+        `Normally you capture toward the centre, yet this is the exception — ${f.better} clears the ${f.file}-file for a rook; ${f.played} leaves the file blocked.`,
+        `The other capture was the one: ${f.better} opens the ${f.file}-file for your rook, worth more than the central pawn ${f.played} gained.`,
+      ];
+      return s[v % s.length];
+    }
+    case 'botched-conversion': {
+      const s = [
+        `You had it won and rushed — this move throws about ${f.drop} pawns of a winning edge away; ${f.better} keeps it simple and holds the advantage.`,
+        `Convert with patience: you were clearly winning and this hands most of it back — ${f.better} was the calm move.`,
+        `A won position needs care, not haste — this drops roughly ${f.drop} pawns of your lead; ${f.better} stays on track.`,
+      ];
+      return s[v % s.length];
+    }
   }
 }
 
@@ -304,6 +336,10 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'lost-the-opposition': return `The opposition given up again — ${f.better}.`;
     case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
     case 'kept-bad-bishop': return `The bad bishop on ${f.bishop} still buried — ${f.better}.`;
+    case 'overvalued-attack': return `The attack overvalued again — ${f.move} doesn't hold up.`;
+    case 'poisoned-pawn': return `Another poisoned pawn — the ${f.piece} on ${f.square} is snared.`;
+    case 'capture-toward-centre': return `The recapture again — ${f.better} opens the ${f.file}-file.`;
+    case 'botched-conversion': return `Rushing the win again — ${f.better} was calmer.`;
   }
 }
 
@@ -367,6 +403,10 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'lost-the-opposition': 'gave up the opposition',
   'passive-rook-endgame': 'kept the rook passive',
   'kept-bad-bishop': 'kept a bad bishop',
+  'overvalued-attack': 'overvalued the attack',
+  'poisoned-pawn': 'took a poisoned pawn',
+  'capture-toward-centre': 'recaptured the wrong way',
+  'botched-conversion': 'rushed a winning position',
 };
 
 /**

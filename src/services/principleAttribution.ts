@@ -42,6 +42,8 @@ export const FUNDAMENTAL_IDS = [
   // endgame
   'passive-king-endgame', 'mistimed-pawn-break', 'rook-in-front-of-passer',
   'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
+  // eval/PV-gated — need the persisted review eval + PV (silent on the live path)
+  'overvalued-attack', 'poisoned-pawn', 'capture-toward-centre', 'botched-conversion',
 ] as const;
 export type FundamentalId = (typeof FUNDAMENTAL_IDS)[number];
 
@@ -76,6 +78,10 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'passed-pawn-neglected': 'passed-pawn-neglected',
   'lost-the-opposition': 'passive-king-endgame',
   'passive-rook-endgame': 'passive-rook',
+  'overvalued-attack': 'overvalued-attack',
+  'poisoned-pawn': 'poisoned-pawn',
+  'capture-toward-centre': 'capture-toward-centre',
+  'botched-conversion': 'botched-conversion',
 };
 
 /** Rows whose "punishment" is a positional cost rather than a concrete move
@@ -86,6 +92,10 @@ const CO_OCCURRENCE: ReadonlySet<FundamentalId> = new Set<FundamentalId>([
   'passive-king-endgame', 'rook-in-front-of-passer', 'buried-own-bishop',
   'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
   'kept-bad-bishop',
+  // eval-only findings — no concrete opponent punishment move on the board, so
+  // they speak only when nothing move-verified attached (overvalued-attack and
+  // poisoned-pawn ARE move-verified via the PV, so they are NOT here).
+  'capture-toward-centre', 'botched-conversion',
 ]);
 
 export interface PrincipleEvidence {
@@ -120,6 +130,12 @@ export interface AttributionInput {
   /** Persisted engine lines (SAN), optional corroboration. */
   pvAfterPlayed?: readonly string[];
   pvAfterBest?: readonly string[];
+  /** Persisted engine eval BEFORE the played move, MOVER POV in centipawns
+   *  (positive = mover better). From the review's fixed-depth analysis — present
+   *  only on the review path, so eval-gated detectors stay silent live. */
+  evalBefore?: number;
+  /** Persisted engine eval AFTER the played move, MOVER POV in centipawns. */
+  evalAfterPlayed?: number;
 }
 
 export const ATTRIBUTION_MAX = 3;
@@ -350,6 +366,36 @@ function pvWinsMaterial(chess: Chess, pv: readonly string[] | undefined, mover: 
   if (n === 0) return false;
   return (material(c, mover) - material(c, other(mover))) - before >= 2 || c.isCheckmate();
 }
+/** Replaying `pv` from `after` (opponent to move), does the `grabber`-owned piece
+ *  that stands on `startSq` get CAPTURED by the opponent — following it as it
+ *  flees? Proves a grab was poisoned: you win the pawn, lose the piece. */
+function grabberCaptured(after: Chess, startSq: Square, grabber: Color, pv: readonly string[] | undefined): boolean {
+  if (!pv || pv.length === 0) return false;
+  const c = new Chess(after.fen());
+  let sq: string = startSq;
+  for (const raw of pv.slice(0, 6)) {
+    let m: Move;
+    try { m = c.move(raw.replace(/[?!]+$/, '')); } catch { return false; }
+    if (m.color === grabber) { if (m.from === sq) sq = m.to; }   // the grabber fled
+    else if (m.to === sq) return true;                          // the opponent took it
+  }
+  return false;
+}
+/** The file `best` (a pawn capture AWAY from the centre) opens for a `mover` rook
+ *  or queen: the pawn vacates its file, that file had a mover pawn before and
+ *  none after, and a mover rook/queen stands on it. The concrete "opens a lane
+ *  for the rook" (David 2026-09-06). Returns the file letter, or null. */
+function openedRookLane(before: Chess, best: Move, mover: Color): string | null {
+  const after = appliedVerbose(before, best);
+  if (!after) return null;
+  const f = fileIdx(best.from);
+  if (pieces(after, mover, 'p').some((p) => fileIdx(p.square) === f)) return null;    // still a mover pawn there
+  if (!pieces(before, mover, 'p').some((p) => fileIdx(p.square) === f)) return null;  // wasn't the capture that opened it
+  if (!pieces(after, mover).some((p) => (p.type === 'r' || p.type === 'q') && fileIdx(p.square) === f)) return null;
+  return String.fromCharCode(97 + f);
+}
+/** File-distance from the centre seam (files d/e). Lower = more central. */
+function centreBias(sq: string): number { return Math.abs(fileIdx(sq) - 3.5); }
 
 // ─── the attributor ─────────────────────────────────────────────────────────
 
@@ -358,6 +404,9 @@ interface Ctx {
   mover: Color; opp: Color; last: Move; best: Move;
   history: Move[]; plyIndex: number; opening: boolean; endgame: boolean;
   pvP?: readonly string[]; pvB?: readonly string[];
+  /** Persisted engine eval before/after the played move, MOVER POV (cp).
+   *  Present on the review path only — eval-gated detectors stay silent live. */
+  evalBefore?: number; evalAfterPlayed?: number;
 }
 
 type Detector = (c: Ctx) => Omit<PrincipleAttribution, 'tag' | 'coOccurrence'> | null;
@@ -796,6 +845,62 @@ const DETECTORS: Detector[] = [
     }
     return null;
   },
+  // 30. Overvalued the attack / unsound sacrifice (eval + PV, David 2026-09-06:
+  // "Especially overvaluing the attack. Or a bad sacrifice. We can use the PV").
+  // PATTERN: from a not-lost position, an aggressive commitment — a forcing move,
+  // or the moved piece is OFFERED (hangs on its square). PUNISHMENT: the played
+  // line lets the OPPONENT come out materially ahead (PV, no mover mate), and the
+  // eval confirms it crashed to clearly losing. COUNTERFACTUAL: the best move
+  // does not hand that material over. Move-verified (the PV is the punishment).
+  (c) => {
+    const { last, opp, evalBefore: eb, evalAfterPlayed: ea } = c;
+    if (eb === undefined || ea === undefined) return null;
+    if (eb < -120) return null;                              // was not already lost
+    if (ea > -150) return null;                              // now clearly losing
+    const offered = hangsBy(c.after, last.to) > 0;
+    if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
+    if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;    // the opponent wins material back
+    if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null; // best doesn't
+    return att('overvalued-attack', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { move: last.san });
+  },
+  // 31. Poisoned pawn (eval + PV) — a PIECE grabs a pawn and gets trapped: the PV
+  // wins the material back with interest AND the grabbing piece is the one that
+  // pays (followed as it flees, it is captured). COUNTERFACTUAL: the best move
+  // doesn't lose material. Move-verified. Subsumes the generic greedy grab / hang.
+  (c) => {
+    const { last, opp } = c;
+    if (last.captured !== 'p' || last.piece === 'p' || last.piece === 'k') return null;
+    if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;
+    if (!grabberCaptured(c.after, last.to, last.color, c.pvP)) return null;
+    if (c.pvB && pvWinsMaterial(c.afterBest, c.pvB, opp)) return null;
+    return att('poisoned-pawn', 4, { squares: [last.to], moves: [], pvMoves: (c.pvP ?? []).slice(0, 4) }, { piece: PNAME[last.piece], square: last.to });
+  },
+  // 32. Recaptured the wrong way (eval-gated, David 2026-09-06: "capturing with
+  // the B or G pawn was best because it opens a lane for the rook"). PATTERN: a
+  // pawn recapture TOWARD the centre (the textbook rule) when the OTHER pawn could
+  // also recapture. COUNTERFACTUAL: the best move IS that other recapture, AWAY
+  // from the centre. WHY: the away-capture opens a file for a mover rook/queen —
+  // require it (else the exception is a subtlety we can't name → skip). Positional.
+  (c) => {
+    const { last, best, mover } = c;
+    if (last.piece !== 'p' || !last.captured) return null;
+    if (best.piece !== 'p' || best.to !== last.to || best.from === last.from || !best.captured) return null;
+    if (centreBias(last.to) >= centreBias(last.from)) return null;   // played captured TOWARD the centre
+    if (centreBias(best.to) < centreBias(best.from)) return null;    // best captured AWAY
+    const lane = openedRookLane(c.before, best, mover);
+    if (!lane) return null;
+    return att('capture-toward-centre', 2, { squares: [last.to, best.from], moves: [best.san], pvMoves: pvHas(c.pvB, (s) => /^[RQ]/.test(s)) }, { played: last.san, better: best.san, file: lane });
+  },
+  // 33. Rushed a winning position (eval, David 2026-09-06). Clearly winning before
+  // (≥ +2.0), only marginal or worse after — most of the advantage thrown. The
+  // best move keeps it. Positional/co-occurrence: a concrete fundamental (a hung
+  // piece, a missed tactic) tells the same botch better when one fired.
+  (c) => {
+    const { best, evalBefore: eb, evalAfterPlayed: ea } = c;
+    if (eb === undefined || ea === undefined) return null;
+    if (eb < 200 || ea >= 100) return null;
+    return att('botched-conversion', 2, { squares: [best.to], moves: [best.san], pvMoves: [] }, { drop: Math.round((eb - ea) / 100), better: best.san });
+  },
 ];
 
 function isFlagged(classification: string | null): boolean {
@@ -847,6 +952,7 @@ export function attributePrinciples(input: AttributionInput): PrincipleAttributi
     before, after, afterBest, mover, opp: other(mover), last, best, history,
     plyIndex: input.historySans.length, opening: input.historySans.length <= OPENING_PLIES,
     endgame: isEndgame(before), pvP: input.pvAfterPlayed, pvB: input.pvAfterBest,
+    evalBefore: input.evalBefore, evalAfterPlayed: input.evalAfterPlayed,
   };
   const found: PrincipleAttribution[] = [];
   for (const d of DETECTORS) {
@@ -864,6 +970,10 @@ export function attributePrinciples(input: AttributionInput): PrincipleAttributi
   if (ids.has('early-queen-sortie')) { subsumed.add('tempo-handed'); subsumed.add('neglected-development'); }
   if (ids.has('loose-piece')) subsumed.add('greedy-pawn-grab');
   if (ids.has('ignored-threat')) subsumed.add('loose-piece');
+  // The trapped grab IS the greedy grab and the hung piece; the failed attack IS
+  // the piece it hung — the eval/PV finding tells the fuller story.
+  if (ids.has('poisoned-pawn')) { subsumed.add('greedy-pawn-grab'); subsumed.add('loose-piece'); }
+  if (ids.has('overvalued-attack')) subsumed.add('loose-piece');
   const kept = found.filter((f) => !subsumed.has(f.id));
   const verified = kept.filter((f) => !f.coOccurrence);
   const pool = verified.length > 0 ? verified : kept.slice(0, 1);

@@ -135,6 +135,14 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'Sacrificed material or threw pieces at the king when the attack is unsound — the engine shows the defender consolidating and emerging better.',
     drill: { kind: 'tactic', puzzleThemes: ['sacrifice', 'attackingF2F7', 'kingsideAttack'] },
   },
+  {
+    id: 'poisoned-pawn',
+    label: 'Took a poisoned pawn',
+    bucket: 'tactical',
+    blurb: "You grabbed a pawn and the capturing piece got trapped or chased down.",
+    coachCue: 'Captured a pawn (often with the queen) and the piece is then trapped or harried, losing more material or far more time than the pawn was worth — the engine wins the material straight back.',
+    drill: { kind: 'tactic', puzzleThemes: ['trappedPiece', 'hangingPiece'] },
+  },
 
   // ── POSITIONAL ───────────────────────────────────────────────────
   {
@@ -176,6 +184,14 @@ export const MISCONCEPTION_TAGS = [
     bucket: 'positional',
     blurb: "You pushed a pawn past its support and it became a target.",
     coachCue: 'A pawn advanced to the fifth rank or beyond with no pawn behind it on a neighbouring file, and the opponent can attack or win it soundly.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'capture-toward-centre',
+    label: 'Recaptured the wrong way',
+    bucket: 'positional',
+    blurb: "You recaptured toward the centre by rote when the other pawn was better here.",
+    coachCue: 'Faced a choice of pawn recapture and took toward the centre by the general rule, but the other recapture was concretely better — it opens a file for a rook or another positional gain — and the engine confirms the played capture was worse.',
     drill: { kind: 'principle' },
   },
   {

@@ -30,6 +30,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'calculation-depth': 'The device: calculate to a quiet position, not to a good feeling — follow every forcing reply until the captures and checks run out.',
   'missed-opponents-threat': "The device: their move first — before your plan, ask what the last move wants to do to you, and answer that before anything else.",
   'overvalued-attack': 'The device: count attackers against defenders before you sacrifice — if the defenders arrive faster than your reserves, the attack is a loan you cannot repay.',
+  'poisoned-pawn': 'The device: before you grab a pawn with a piece, find its way home — if every retreat is cut off or chased, the pawn is bait and the piece is the price.',
   // ── positional ──
   'weakened-king-safety': 'The device: the pawns in front of your king move only for a concrete, named reason — every push opens a door that never closes again.',
   'created-pawn-weakness': 'The device: pawns never move backward — before every pawn push, name the square it gives up forever, and decide if the trade is worth it.',
@@ -37,6 +38,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'bad-trade': 'The device: trade your worst piece for their best, never the reverse — before any exchange, ask which side of the trade improves.',
   'overextended-pawn': 'The device: a pawn advances only as far as its neighbours can follow — before the push, find the pawn that will stand behind it, and if there is none, the push waits.',
   'bad-trade-material': 'The device: count the material before you trade — ahead, every piece off the board brings the win closer; behind, every piece off the board takes your chances with it.',
+  'capture-toward-centre': 'The device: capture toward the centre is a default, not a law — before you recapture, check what the other pawn opens; a file cleared for your rook can be worth more than the central pawn.',
   // ── endgame ──
   'passive-king-endgame': 'The device: queens off, king on — the moment the endgame starts, the king walks toward the centre and works like a piece.',
   'mistimed-pawn-break': 'The device: prepare the break before you play it — every piece on its best square first, and only then the pawn goes.',
