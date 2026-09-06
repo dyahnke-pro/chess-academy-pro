@@ -260,7 +260,7 @@ export function AppLayout(): JSX.Element {
         </div>
         <div className="flex items-center gap-2">
           <QuickFeedbackButton />
-          {location.pathname === '/' && <NotificationBell />}
+          <NotificationBell />
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg"
@@ -390,8 +390,9 @@ export function AppLayout(): JSX.Element {
           </div>
 
           <div className="px-2 border-t pt-3 mt-3" style={{ borderColor: 'var(--color-border)' }}>
-            <div className="px-3 pb-2">
+            <div className="flex items-center gap-2 px-3 pb-2">
               <QuickFeedbackButton />
+              <NotificationBell />
             </div>
             <ThemeToggle />
             {activeProfile && (
