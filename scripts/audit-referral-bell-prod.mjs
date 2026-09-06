@@ -9,6 +9,9 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+// This audit drives the UI but has NO TTS instrument, so mute synthesis (G1:
+// audits never spend TTS money — a browser-driving audit MUST mute or intercept).
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const results = [];
@@ -32,6 +35,7 @@ const browser = await chromium.launch({ executablePath: await resolveChromiumExe
 // and it renders the mobile HEADER bell (the desktop sidebar bell is hidden).
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 await ctx.addInitScript(autoDismissCalibration);
+await ctx.addInitScript(muteTtsForAudit);
 const page = await ctx.newPage();
 page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
 page.on('console', (m) => { if (m.type() === 'error') { const t = m.text(); if (!/favicon|manifest|Failed to load resource|net::ERR/.test(t)) errors.push(`console: ${t}`); } });
