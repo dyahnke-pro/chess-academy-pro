@@ -517,7 +517,14 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       // asm.js cold-compiles ~1.58MB before `readyok` — give it the engine's
       // full init budget. Fast WASM builds keep the short gate.
       const spawnTimeoutMs = resolved.variant === 'asm' ? ASM_POOL_SPAWN_TIMEOUT_MS : POOL_SPAWN_TIMEOUT_MS;
+      // A spawn that times out (or errors) must TERMINATE its Worker, not just
+      // reject: the engine keeps compiling and allocating in the background,
+      // the pool spawns a replacement, and every retry leaks another resident
+      // Stockfish. On a loaded box that compounded to a 12 GB renderer while
+      // the JS heap sat at 230 MB (prod audit 2026-09-06).
+      let worker: Worker | null = null;
       timeoutId = setTimeout(() => {
+        try { worker?.terminate(); } catch { /* already gone */ }
         reject(new Error(`Worker ${index} init timed out after ${spawnTimeoutMs}ms (variant=${resolved.variant})`));
       }, spawnTimeoutMs);
       // NAME THE BUILD THE POOL SPAWNS. The pool is the only Stockfish consumer
@@ -533,25 +540,27 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
         source: 'gameAnalysisService.spawnDedicatedWorker',
         summary: `pool worker ${index} variant=${resolved.variant} url=${resolved.url} reason=${resolved.reason}`,
       });
-      const worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
+      worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
+      const w = worker;
 
-      worker.onerror = () => {
+      w.onerror = () => {
         clearTimeout(timeoutId);
+        try { w.terminate(); } catch { /* already gone */ }
         reject(new Error(`Worker ${index} failed to load`));
       };
 
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           clearTimeout(timeoutId);
-          worker.removeEventListener('message', readyHandler);
-          worker.postMessage('setoption name MultiPV value 1');
-          resolve(new DedicatedWorker(worker));
+          w.removeEventListener('message', readyHandler);
+          w.postMessage('setoption name MultiPV value 1');
+          resolve(new DedicatedWorker(w));
         }
       };
 
-      worker.addEventListener('message', readyHandler);
-      worker.postMessage('uci');
-      worker.postMessage('isready');
+      w.addEventListener('message', readyHandler);
+      w.postMessage('uci');
+      w.postMessage('isready');
     } catch {
       clearTimeout(timeoutId);
       reject(new Error(`Worker ${index} spawn failed`));

@@ -101,7 +101,19 @@ const run = async () => {
   };
 
   const results = [];
-  const add = (id, pass, detail) => { results.push({ id, pass, detail }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail}`); };
+  // Worker-target census at every phase boundary: 128 DedicatedWorker threads
+  // were found in the wedged renderer (2026-09-06) — the count tells WHEN they
+  // pile up, which names the spawner.
+  const cdp0 = await ctx.newCDPSession(page).catch(() => null);
+  const workerCount = async () => {
+    if (!cdp0) return '?';
+    const r = await Promise.race([cdp0.send('Target.getTargets'), new Promise((res) => setTimeout(() => res(null), 4000))]).catch(() => null);
+    if (!r) return '?';
+    const ws = r.targetInfos.filter((t) => t.type === 'worker');
+    const by = {}; for (const w of ws) { const k = (w.url || '?').split('/').pop().split('?')[0]; by[k] = (by[k] ?? 0) + 1; }
+    return `${ws.length} ${JSON.stringify(by)}`;
+  };
+  const add = async (id, pass, detail) => { const w = await workerCount(); results.push({ id, pass, detail: `${detail} [workers=${w}]` }); log(`  ${pass ? '✅' : '❌'} ${id}: ${detail} [workers=${w}]`); };
 
   const streamBefore = await pullAuditStream(Date.now() - 60000);
   for (let i = 0; i < 4; i++) { try { await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 60000 }); break; } catch { await page.waitForTimeout(1500); } }
@@ -129,14 +141,14 @@ const run = async () => {
   const badge = cardUp ? await txt(page, `${cardSel} [data-testid="review-game-outcome"]`) : '';
   const outcome = cardUp ? await page.locator(`${cardSel} [data-testid="review-game-outcome"]`).first().getAttribute('data-outcome').catch(() => '') : '';
   const cardText = cardUp ? await txt(page, cardSel) : '';
-  add('CARD win-not-0-1', cardUp && badge === 'WIN' && outcome === 'win' && !/\b0-1\b/.test(cardText) && /vs KaiserlicheHoheit/.test(cardText),
+  await add('CARD win-not-0-1', cardUp && badge === 'WIN' && outcome === 'win' && !/\b0-1\b/.test(cardText) && /vs KaiserlicheHoheit/.test(cardText),
     cardUp ? `badge="${badge}" outcome=${outcome} text="${cardText.slice(0, 70)}"` : 'card never rendered');
 
   // No card = nothing to open. Fail NOW rather than wait out the 300s analysis
   // window on a surface that never rendered (the vacuity negative control must
   // see a verdict, not a hang).
   if (!cardUp) {
-    add('OPEN first-open-analyses', false, 'the seeded game never appeared in the review list — nothing to open');
+    await add('OPEN first-open-analyses', false, 'the seeded game never appeared in the review list — nothing to open');
     log('\n===== VERDICT: ❌ FAILS STANDARD (surface unreachable) =====');
     await listener.stop(); await browser.close(); process.exit(1);
   }
@@ -149,7 +161,7 @@ const run = async () => {
   const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled', { timeout: 3000 }).catch(() => 'x')) === null; };
   const ready = await until(startable, 300000, 1500);
   const openMs = Date.now() - t0;
-  add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
+  await add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
   // ENGINE TRUTH for the fixture move — what the app's own engine wrote for
   // 6...Nb6 (and its neighbours). This is the line to read when FUND fails:
   // the fundamentals attach only to a ply the engine graded worse than good.
@@ -172,7 +184,7 @@ const run = async () => {
   const p0 = (await readWalkPly(page))?.n ?? 0;
   const advanced = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= p0 + 2, 90000, 800);
   const playState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
-  add('AUTO advances-by-itself', advanced && playState === 'playing', `from ply ${p0} → ${(await readWalkPly(page))?.n} with no Forward click; play/pause state=${playState}`);
+  await add('AUTO advances-by-itself', advanced && playState === 'playing', `from ply ${p0} → ${(await readWalkPly(page))?.n} with no Forward click; play/pause state=${playState}`);
 
   // ── FUND (E) — land on ply 12 and read the narration ────────────────────
   // Pause first (any intervention pauses), then jump by clicking Back/Forward
@@ -228,8 +240,8 @@ const run = async () => {
   // d14 = "good" under the 5% band, 128cp at d16). The product contract — a
   // flagged ply LEADS with its fundamental — is FUNDLEAD below.
   log(`  ${flagged ? '✅' : '⚠️ '} FUND fixture-ply-graded (info): 6...Nb6 badge=${fundBadge || 'none'} — engine truth at the app's budget, see [engine] rows`);
-  add('FUND fixture-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
-  add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
+  await add('FUND fixture-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
+  await add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
 
   // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
   await goTo(EXPLORE_PLY);
@@ -239,11 +251,11 @@ const run = async () => {
   const pausedState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   const pausedLabel = await has(page, '[data-testid="review-paused-label"]');
   const plyHeld = (await readWalkPly(page))?.n === EXPLORE_PLY;
-  add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld}` : ex.reason);
+  await add('FREE piece-move-is-exploring', ex.ok && pausedState === 'paused' && plyHeld, ex.ok ? `played ${ex.san}; banner=${ex.banner}; paused=${pausedState}; pausedLabel=${pausedLabel}; ply held=${plyHeld}` : ex.reason);
   const exploreSpoke = await until(() => spoken().length > spokenBeforeExplore, 45000, 500);
   const exploreLine = exploreSpoke ? spoken().slice(spokenBeforeExplore).map((s) => s.text).join(' | ') : '';
   const exploredEvent = events().some((e) => e.kind === 'review-walk-explored');
-  add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
+  await add('EXPL explored-move-narrated+engine-reply', ex.ok && exploreSpoke && ex.reply && exploredEvent, `spoke="${exploreLine.slice(0, 140)}" engineReply=${ex.reply} auditEvent=${exploredEvent}`);
 
   // ── EXIT (G.3) — Back exits exploration; Play restarts ──────────────────
   await page.locator('[data-testid="review-back-btn"]').first().click({ timeout: 2000, force: true }).catch(() => undefined);
@@ -252,7 +264,7 @@ const run = async () => {
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
   const pBefore = (await readWalkPly(page))?.n ?? 0;
   const restarted = await until(async () => ((await readWalkPly(page))?.n ?? 0) >= pBefore + 2, 60000, 800);
-  add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
+  await add('EXIT back-exits-play-restarts', bannerGone && restarted, `banner gone=${bannerGone}; Play resumed advance=${restarted} (from ply ${pBefore})`);
 
   // ── RECAP (G.4) — play to the end; the closing aggregates ───────────────
   await page.locator('[data-testid="walk-resume-game-btn"]').first().click({ timeout: 1500, force: true }).catch(() => undefined);
@@ -281,7 +293,7 @@ const run = async () => {
   const RECAP_RE = /of your \w+ flagged move|carry into the next game|The pattern: you \w/i;
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
-  add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+  await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
   // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
   // that ply (present-tense text only; a projected line is about a future board).
   const PIECE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
@@ -320,9 +332,9 @@ const run = async () => {
       }
     }
   }
-  add('ACC board-accuracy', accFails.length === 0, accFails.length ? accFails.slice(0, 3).join(' | ') : `no false piece-on-square claims across ${plyNarr.size} narrated plies`);
-  add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
-  add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
+  await add('ACC board-accuracy', accFails.length === 0, accFails.length ? accFails.slice(0, 3).join(' | ') : `no false piece-on-square claims across ${plyNarr.size} narrated plies`);
+  await add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
+  await add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
 
   // FUNDLEAD — across the walk, every flagged STUDENT ply the auto-advance
   // passed leads with a fundamentals verdict when one attached; at least one
@@ -330,7 +342,7 @@ const run = async () => {
   // the attributor is not wired into the live narration).
   const leads = [...flaggedLeads.entries()];
   const withFund = leads.filter(([, v]) => FUND_RE.test(v.lead));
-  add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', leads.length > 0 && withFund.length > 0,
+  await add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', leads.length > 0 && withFund.length > 0,
     `${withFund.length}/${leads.length} flagged student plies lead with a fundamental` + (leads.length ? ` — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}` : ''));
 
   // ── SHOW (B) — button-only, narrated, leaves the walk paused ────────────
@@ -350,9 +362,9 @@ const run = async () => {
     showLines = spoken().length - spokenBeforeShow;
     showPaused = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
   }
-  add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on flagged ply ${showPly}`);
+  await add('SHOW better-move-narrated-then-paused', showBtn && showLines >= 2 && showPaused === 'paused', showBtn ? `ply ${showPly}: ${showLines} lines spoken; state after=${showPaused}` : `no Show-me button on flagged ply ${showPly}`);
   const showStarts = events().filter((e) => e.kind === 'review-show-me-started').length;
-  add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
+  await add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
 
   // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
   // Let the background dive finish BEFORE leaving (a human reads the recap
@@ -371,7 +383,7 @@ const run = async () => {
   const reopenMs = Date.now() - t1;
   const spinner = await has(page, '[data-testid="review-analyze-spinner"]');
   const pill = await has(page, '[data-testid="review-deepening-pill"]');
-  add('REOPEN instant-no-rerun', quick && !spinner && !pill, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
+  await add('REOPEN instant-no-rerun', quick && !spinner && !pill, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
   // The key-moment dive ran BEHIND the first open (cold open = sweep only) and
   // was frozen out of that walk; this open carries it. Let a still-running dive
   // finish, then read the fixture ply's grade + lead line — David's own
@@ -400,7 +412,8 @@ const run = async () => {
     log(`  [profile ${tag}] ${total} samples`);
     [...self.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12).forEach(([k, v]) => log(`    ${(100 * v / total).toFixed(1).padStart(5)}%  ${k}`));
   };
-  log(`  [heap] before start-walk: ${await heapMB()}MB`);
+  const workers = async () => { if (!cdp) return -1; const r = await cdp.send('Target.getTargets').catch(() => null); return r ? r.targetInfos.filter((t) => t.type === 'worker' || t.type === 'shared_worker').length : -1; };
+  log(`  [heap] before start-walk: ${await heapMB()}MB workers=${await workers()}`);
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
   await page.waitForTimeout(1200);
@@ -412,15 +425,15 @@ const run = async () => {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const h = await heapMB();
-    if (i % 4 === 0 || h > 1500) log(`  [heap] reopened walk ply=${n}: ${h}MB`);
+    if (i % 4 === 0 || h > 1500) log(`  [heap] reopened walk ply=${n}: ${h}MB workers=${await workers()}`);
     if (h > 2500 || h === -1) { blown = true; log(`  [heap] BLOW-UP at ply ${n} (${h}MB) — dumping profile`); await dumpProfile('blow-up'); break; }
     if (n === FUND_PLY) { onFund2 = true; break; }
     const sel = n < FUND_PLY ? '[data-testid="review-forward-btn"]' : '[data-testid="review-back-btn"]';
     await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
     await page.waitForTimeout(700);
   }
-  if (blown) { add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
-  else { await dumpProfile('reopened-walk'); add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${FUND_PLY}`); }
+  if (blown) { await add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
+  else { await dumpProfile('reopened-walk'); await add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${FUND_PLY}`); }
   await settle();
   // The banner fills once this ply's line is generated; give it a beat.
   await until(async () => (await txt(page, '[data-testid="review-narration-banner"]')).length > 0, 60000, 1000);
@@ -428,10 +441,10 @@ const run = async () => {
   const fundNarr2 = await txt(page, '[data-testid="review-narration-banner"]');
   const lead2 = fundNarr2.split(/(?<=[.!?])\s+/)[0] || '';
   const flagged2 = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge2);
-  add('FUND fixture-ply-graded-after-dive', onFund2 && flagged2, `6...Nb6 badge=${fundBadge2 || 'none'} (${annots2.row})`);
-  add('FUND fixture-ply-leads-with-fundamentals-after-dive', onFund2 && flagged2 && FUND_RE.test(lead2), `lead="${lead2.slice(0, 120)}"`);
+  await add('FUND fixture-ply-graded-after-dive', onFund2 && flagged2, `6...Nb6 badge=${fundBadge2 || 'none'} (${annots2.row})`);
+  await add('FUND fixture-ply-leads-with-fundamentals-after-dive', onFund2 && flagged2 && FUND_RE.test(lead2), `lead="${lead2.slice(0, 120)}"`);
 
-  add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
+  await add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 
   const streamAfter = await pullAuditStream(Date.now() - 600000);
   log('\n===== 3-INSTRUMENT COVERAGE =====');
