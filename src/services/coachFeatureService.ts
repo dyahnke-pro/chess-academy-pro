@@ -2871,9 +2871,12 @@ export function narrationMoverFaithful(warmed: string, moverIsStudent: boolean):
   if (moverIsStudent) {
     return !/^(your opponent|their (move|pawn|knight|bishop|rook|queen|king)\b|they )/i.test(head);
   }
-  // Opponent ply: "You <verb>" reattributes; "Your <piece>…" (a threat read on
-  // the student's piece) and "You're / You've / You had" (a state) do not.
-  return !/^you (grab|take|capture|play|push|develop|castle|plant|bring|move|trade|win|sacrifice|open|drop|hang|leave|give|put|slide|swing|throw|strike|stake|claim|recapture|pin|fork|attack|clamp|lock|line|train|step|advance|retreat|go|come|get|make|find|miss|blunder|slip)\b/i.test(head);
+  // Opponent ply: "You <action verb>" reattributes the move. Not an enumerated
+  // verb list (the model found "seize" the moment "grab" was blocked) — ANY
+  // "You <word>" is rejected except the state/modal forms that describe the
+  // student's situation rather than a move: "You're", "You've", "You had",
+  // "You need", "You can"… "Your <piece>…" (a threat read) is not "You ".
+  return !/^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head);
 }
 
 const SPELLED_NUM: Record<string, string> = {

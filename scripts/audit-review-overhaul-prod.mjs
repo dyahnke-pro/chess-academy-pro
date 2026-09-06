@@ -294,7 +294,7 @@ const run = async () => {
     // "You <verb>"; a student ply must not open "Your opponent" / "They".
     const head = narr.replace(/^["'“‘\s]+/, '').slice(0, 40);
     const studentPly = n % 2 === 0;
-    if (!studentPly && /^you (grab|take|capture|play|push|develop|castle|plant|bring|move|trade|win|sacrifice|open|strike|stake|claim|recapture|attack|clamp|lock)\b/i.test(head)) seatFails.push(`ply ${n} (opponent): "${head}"`);
+    if (!studentPly && /^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head)) seatFails.push(`ply ${n} (opponent): "${head}"`);
     if (studentPly && /^(your opponent|they )/i.test(head)) seatFails.push(`ply ${n} (you): "${head}"`);
     // NOTRADEWIN — a capture immediately recaptured on the same square at equal
     // value is an even trade: it must not read as profit / material won.

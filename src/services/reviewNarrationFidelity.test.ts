@@ -243,6 +243,8 @@ describe('narrationMoverFaithful (the warm pass may not move a ply to the other 
   it('rejects an OPPONENT ply warmed into "You grab the center" (audit 2026-09-06, 1.e4 by the opponent)', () => {
     expect(narrationMoverFaithful('You grab the center here, and that\'s really the whole point.', false)).toBe(false);
     expect(narrationMoverFaithful('"You plant yourself right in the center here."', false)).toBe(false);
+    // Not a verb list: the model found "seize" the moment "grab" was blocked.
+    expect(narrationMoverFaithful('You seize the center here, and that\'s what sets everything in motion.', false)).toBe(false);
   });
   it('accepts an opponent ply that reads the threat on YOUR piece, or a state', () => {
     expect(narrationMoverFaithful('Your knight on d5 is sitting loose — their next move collects it.', false)).toBe(true);
