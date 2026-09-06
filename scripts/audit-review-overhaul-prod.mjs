@@ -138,6 +138,18 @@ const run = async () => {
   const ready = await until(startable, 300000, 1500);
   const openMs = Date.now() - t0;
   add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
+  // ENGINE TRUTH for the fixture move — what the app's own engine wrote for
+  // 6...Nb6 (and its neighbours). This is the line to read when FUND fails:
+  // the fundamentals attach only to a ply the engine graded worse than good.
+  const annots = await page.evaluate(async (gid) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const rows = (g?.annotations ?? []).filter((a) => a.moveNumber >= 5 && a.moveNumber <= 7).map((a) => `${a.moveNumber}${a.color === 'black' ? '...' : '.'}${a.san} ${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove}`);
+    return { depth: g?.analysisDepth, fully: g?.fullyAnalyzed, rows };
+  }, GID).catch((e) => ({ error: String(e) }));
+  log(`  [engine] depth=${annots.depth} fullyAnalyzed=${annots.fully}`);
+  (annots.rows ?? []).forEach((r) => log(`  [engine] ${r}`));
   if (!ready) { await listener.stop(); await browser.close(); process.exit(1); }
 
   // ── AUTO (C) — Start, then the walk advances on its own ─────────────────
@@ -183,8 +195,11 @@ const run = async () => {
     }
     return ((await readWalkPly(page))?.n ?? 0) === target;
   };
+  // Cards mount a beat AFTER a ply lands (cameo / theory asks); a human reads
+  // them and taps. Settle, then resolve whatever appeared, twice.
+  const settle = async () => { for (let i = 0; i < 3; i++) { await page.waitForTimeout(900); await resolveCards(); } };
   const onFund = await goTo(FUND_PLY);
-  await page.waitForTimeout(1500);
+  await settle();
   const fundNarr = await txt(page, '[data-testid="review-narration-banner"]');
   const fundBadge = await txt(page, '[data-testid="review-classification-badge"]');
   const FUND_RE = /same (knight|piece)|its (second|third|fourth) (move|trip)|on its (second|third|fourth) move|tempo|gave up d5|concedes the d5|stepping off d5/i;
@@ -196,7 +211,7 @@ const run = async () => {
 
   // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
   await goTo(EXPLORE_PLY);
-  await page.waitForTimeout(800);
+  await settle();
   const spokenBeforeExplore = spokenAt();
   const ex = await exploreOnFreeBoard(page, { replyWaitMs: 45000 });
   const pausedState = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
@@ -220,7 +235,7 @@ const run = async () => {
   // ── SHOW (B) — button-only, narrated, leaves the walk paused ────────────
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
   await goTo(FUND_PLY);
-  await page.waitForTimeout(800);
+  await settle();
   const showBtn = await has(page, '[data-testid="walk-show-me-btn"]');
   const spokenBeforeShow = spokenAt();
   let showLines = 0; let showPaused = null;

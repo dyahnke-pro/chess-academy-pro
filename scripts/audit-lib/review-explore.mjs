@@ -88,5 +88,11 @@ export async function exploreOnFreeBoard(page, { replyWaitMs = 25000 } = {}) {
       await page.waitForTimeout(500);
     }
   }
-  return { ok: moved && banner, san: pick.san, banner, moved, reply, ply: ply.n, reason: moved ? (banner ? '' : 'moved but no exploring banner') : 'board did not change after click-move' };
+  let blockers = [];
+  if (!moved) {
+    blockers = await page.evaluate(() => Array.from(document.querySelectorAll('[data-testid^="review-"],[data-testid^="discussion-"]'))
+      .filter((e) => e.offsetParent !== null && !/^review-(narration-banner|nav-controls|back-btn|forward-btn|play-pause-btn|next-key-btn|paused-label|classification-badge|scroll-middle|story-watch-btn)$/.test(e.getAttribute('data-testid') ?? ''))
+      .map((e) => e.getAttribute('data-testid'))).catch(() => []);
+  }
+  return { ok: moved && banner, san: pick.san, banner, moved, reply, ply: ply.n, blockers, reason: moved ? (banner ? '' : 'moved but no exploring banner') : `board did not change after click-move ${pick.san} (${pick.from}→${pick.to}); visible overlays=[${blockers.join(',')}]` };
 }
