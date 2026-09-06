@@ -55,7 +55,11 @@ function memStore(): Store {
 
 async function redisStore(cfg: { url: string; token: string }): Promise<Store> {
   const { Redis } = await import('@upstash/redis');
-  const redis = new Redis(cfg);
+  // automaticDeserialization:false — otherwise Upstash JSON-parses values on
+  // read, so a stored JSON string (the claim record) comes back as an OBJECT
+  // and our JSON.parse then chokes on "[object Object]". With it off, get()
+  // always returns the raw string, matching the in-memory store contract.
+  const redis = new Redis({ ...cfg, automaticDeserialization: false });
   return {
     async get(k) { const v = await redis.get<string>(k); return v == null ? null : String(v); },
     async set(k, v) { await redis.set(k, v); },
