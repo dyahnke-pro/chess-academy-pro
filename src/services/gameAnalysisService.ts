@@ -719,7 +719,14 @@ const BATCH_SHALLOW_BUDGET_MS = 200;
  *  touches a mate score) is deepened whatever the count — the cap only rations
  *  the ambiguous small ones. 12 plies × REVIEW_POSITION_BUDGET_MS bounds a
  *  typical review at well under a minute. */
-const REVIEW_MAX_DEEP_PLIES = 12;
+const REVIEW_MAX_DEEP_PLIES = 24;
+/* 24, not 12 (David's Alapin, audit 2026-09-06): the fixture's 6...Nb6 pair
+ * swung 51cp shallow and was NEVER re-searched in five prod runs — not for
+ * want of depth or budget, but because the game's later blunders (3.6-point
+ * swings) filled all six pair slots first and the cap dropped the borderline
+ * pair every time. Twelve pairs holds a game's certain swings AND its
+ * borderline ones. The cost is bounded (24 × REVIEW_POSITION_BUDGET_MS) and,
+ * since the sweep-then-deepen open below, runs behind an open review. */
 
 /** Depth the REVIEW re-searches its key moments at.
  *
@@ -1183,6 +1190,11 @@ async function analyzeGamePositions(
    *  David 2026-09-05: "4 games in 4 minutes — too slow"). The review path
    *  (analyzeSingleGame) leaves it undefined and keeps full depth. */
   positionBudgetMs?: number,
+  /** Review's COLD open: walk the full curve (every ply, no opening gap) but
+   *  skip the key-moment deep dive so the student is on the board in sweep
+   *  time; the dive then runs behind the open review (CoachReviewSessionPage
+   *  deepens because the stamped depth is shallow). */
+  opts: { sweepOnly?: boolean } = {},
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
@@ -1307,7 +1319,7 @@ async function analyzeGamePositions(
   // always two evals of the SAME depth — mixing a deep "before" with a shallow
   // "after" would read the depth difference itself as an inaccuracy.
   let deepDiveComplete = false;
-  if (isReview) {
+  if (isReview && !opts.sweepOnly) {
     const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
     let searched = 0;
     for (const i of keyPlies) {
@@ -1455,6 +1467,7 @@ async function analyzeGamePositions(
 export async function analyzeSingleGame(
   gameId: string,
   onProgress?: (phase: string) => void,
+  opts: { sweepOnly?: boolean } = {},
 ): Promise<MoveAnnotation[] | null> {
   const game = await db.games.get(gameId);
   if (!game) return null;
@@ -1473,7 +1486,7 @@ export async function analyzeSingleGame(
     onProgress?.('Analyzing positions with Stockfish…');
     const result = await analyzeGamePositions(game, (current, total) => {
       onProgress?.(`Analyzing move ${current} of ${total}…`);
-    });
+    }, undefined, opts);
     if (!result) return null;
     const { annotations, achievedDepth } = result;
 

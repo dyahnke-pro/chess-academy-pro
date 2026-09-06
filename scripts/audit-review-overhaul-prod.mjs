@@ -361,7 +361,32 @@ const run = async () => {
   const reopenMs = Date.now() - t1;
   const spinner = await has(page, '[data-testid="review-analyze-spinner"]');
   const pill = await has(page, '[data-testid="review-deepening-pill"]');
-  add('REOPEN instant-no-rerun', quick && !spinner && !pill, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
+  add('REOPEN instant-no-rerun', quick && !spinner, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
+  // The key-moment dive ran BEHIND the first open (cold open = sweep only) and
+  // was frozen out of that walk; this open carries it. Let a still-running dive
+  // finish, then read the fixture ply's grade + lead line — David's own
+  // example: 6...Nb6 must be flagged and led by its fundamentals.
+  await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 240000, 2000);
+  const annots2 = await page.evaluate(async (gid) => {
+    const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+    const db = await open();
+    const g = await new Promise((res, rej) => { const t = db.transaction('games', 'readonly'); const rq = t.objectStore('games').get(gid); rq.onsuccess = () => res(rq.result); rq.onerror = () => rej(rq.error); });
+    const a = (g?.annotations ?? []).find((x) => x.moveNumber === 6 && x.color === 'black');
+    return { depth: g?.analysisDepth, row: a ? `${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove}` : 'none' };
+  }, GID).catch((e) => ({ error: String(e) }));
+  log(`  [engine after dive] depth=${annots2.depth} 6...Nb6 ${annots2.row}`);
+  await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
+  await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
+  await page.waitForTimeout(1200);
+  await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
+  const onFund2 = await goTo(FUND_PLY);
+  await settle();
+  const fundBadge2 = await txt(page, '[data-testid="review-classification-badge"]');
+  const fundNarr2 = await txt(page, '[data-testid="review-narration-banner"]');
+  const lead2 = fundNarr2.split(/(?<=[.!?])\s+/)[0] || '';
+  const flagged2 = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge2);
+  add('FUND fixture-ply-graded-after-dive', onFund2 && flagged2, `6...Nb6 badge=${fundBadge2 || 'none'} (${annots2.row})`);
+  add('FUND fixture-ply-leads-with-fundamentals-after-dive', onFund2 && flagged2 && FUND_RE.test(lead2), `lead="${lead2.slice(0, 120)}"`);
 
   add('ERR no-errors', errs.length === 0, errs.length ? errs.slice(0, 3).join(' | ') : 'none');
 

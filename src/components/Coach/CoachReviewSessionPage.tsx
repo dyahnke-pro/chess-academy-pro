@@ -247,10 +247,11 @@ export function CoachReviewSessionPage(): JSX.Element {
         // ONLY for a game with no usable annotations at all.
         const usable = Array.isArray(rec.annotations) && rec.annotations.length > 0
           && rec.annotations[0].bestMoveEval !== undefined;
-        if (usable && gameNeedsAnalysis(rec)) {
-          setGame(rec);
+        /** Key-moment deep dive BEHIND the open review: the pill says so, and
+         *  the result lands only if the walk has not started. Shared by the
+         *  swept-game open and the cold open (after its sweep). */
+        const deepenBehind = (started: GameRecord): void => {
           setDeepening(true);
-          const started = rec;
           void analyzeSingleGame(started.id).then(async () => {
             if (cancelled) return;
             const refreshed = await db.games.get(started.id);
@@ -279,16 +280,26 @@ export function CoachReviewSessionPage(): JSX.Element {
           }).finally(() => {
             if (!cancelled) setDeepening(false);
           });
+        };
+        if (usable && gameNeedsAnalysis(rec)) {
+          setGame(rec);
+          deepenBehind(rec);
         } else if (gameNeedsAnalysis(rec)) {
+          // COLD open (no usable curve at all): the spinner covers the SWEEP
+          // only — every ply at the sweep depth, which is what the walk needs
+          // to render — then the key-moment deep dive runs behind the open
+          // review exactly like a swept game's (David 2026-09-06: the dive
+          // grew to 24 plies × 8s; that is never the student's wait).
           setAnalyzing(true);
           try {
             await analyzeSingleGame(rec.id, (phase) => {
               if (!cancelled) setAnalyzeProgress(phase);
-            });
+            }, { sweepOnly: true });
             if (cancelled) return;
             const refreshed = await db.games.get(rec.id);
             if (cancelled) return;
             setGame(refreshed ?? rec);
+            if (refreshed && gameNeedsAnalysis(refreshed)) deepenBehind(refreshed);
           } catch (err) {
             if (cancelled) return;
             void logAppAudit({
