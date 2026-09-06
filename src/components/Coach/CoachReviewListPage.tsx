@@ -9,6 +9,8 @@ import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { logAppAudit } from '../../services/appAuditor';
 import { seedReviewSamplesIfNeeded } from '../../services/reviewSampleGames';
 import { PageHelp } from '../Layout/PageHelp';
+import { useAppStore } from '../../stores/appStore';
+import { resolvePlayerColor, type PlayerIdentity } from '../../services/playerIdentity';
 
 type SourceFilter = 'all' | GameSource;
 
@@ -24,6 +26,15 @@ export function CoachReviewListPage(): JSX.Element {
   const [games, setGames] = useState<GameRecord[] | null>(null);
   const [filter, setFilter] = useState<SourceFilter>('all');
   const [error, setError] = useState<string | null>(null);
+  const { activeProfile } = useAppStore();
+  const identity = useMemo<PlayerIdentity>(
+    () => ({
+      profileName: activeProfile?.name,
+      chessComUsername: activeProfile?.preferences.chessComUsername,
+      lichessUsername: activeProfile?.preferences.lichessUsername,
+    }),
+    [activeProfile?.name, activeProfile?.preferences.chessComUsername, activeProfile?.preferences.lichessUsername],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -61,6 +72,13 @@ export function CoachReviewListPage(): JSX.Element {
     if (filter === 'all') return games;
     return games.filter((g) => g.source === filter);
   }, [games, filter]);
+
+  // G.6: an imported game whose side we cannot resolve shows a `?` badge.
+  // Say WHY once, at the top, instead of leaving the user to guess.
+  const unresolvedCount = useMemo(
+    () => (filtered ?? []).filter((g) => resolvePlayerColor(g, identity) === null).length,
+    [filtered, identity],
+  );
 
   return (
     <div
@@ -143,6 +161,15 @@ export function CoachReviewListPage(): JSX.Element {
 
       {/* List */}
       <div className="flex flex-col gap-2 max-w-lg mx-auto w-full">
+        {unresolvedCount > 0 && (
+          <button
+            onClick={() => { void navigate('/settings'); }}
+            className="text-left text-xs text-theme-text-muted px-3 py-2 rounded-lg border border-theme-border/60 bg-theme-surface hover:text-theme-text"
+            data-testid="review-identity-hint"
+          >
+            {unresolvedCount === 1 ? '1 game' : `${unresolvedCount} games`} can't tell which side you played, so the result shows <span className="font-bold">?</span>. Set your chess.com / lichess username in Settings to see WIN / LOSS.
+          </button>
+        )}
         {error && (
           <div className="p-4 rounded-xl border border-red-500/40 bg-red-500/10 text-red-300 text-sm">
             Couldn't load your games: {error}
@@ -182,6 +209,7 @@ export function CoachReviewListPage(): JSX.Element {
             <ReviewGameCard
               key={g.id}
               game={g}
+              identity={identity}
               onClick={() => { void navigate(
                 `/coach/review/${encodeURIComponent(g.id)}`,
                 { state: { from: '/coach/review' } },

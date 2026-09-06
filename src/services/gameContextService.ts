@@ -12,6 +12,7 @@
  * block appended to the coach's system prompt.
  */
 import { db } from '../db/schema';
+import { resolvePlayerColor } from './playerIdentity';
 import { getRepertoireOpenings } from './openingService';
 import type { GameRecord, GameSource } from '../types';
 
@@ -102,7 +103,7 @@ export async function fetchRelevantGames(
   if (top.length === 0) return { games: [], promptBlock: '' };
 
   const games: RelevantGameExample[] = top.map(({ game, reason }) => {
-    const playerColor = inferPlayerColor(game, username);
+    const playerColor = resolvePlayerColor(game, { profileName: username }) ?? 'white';
     return {
       gameId: game.id,
       opponent: playerColor === 'white' ? game.black : game.white,
@@ -246,21 +247,6 @@ function scoreGameMatch(
   }
 
   return { score, reason: reasons.join(', ') };
-}
-
-function inferPlayerColor(
-  game: GameRecord,
-  lowerUsername: string,
-): 'white' | 'black' {
-  if (lowerUsername) {
-    if (game.white.toLowerCase() === lowerUsername) return 'white';
-    if (game.black.toLowerCase() === lowerUsername) return 'black';
-  }
-  // Fallback: chesscom / lichess imports default to "the user is the
-  // side not named as an AI or engine". Without a username we can
-  // only guess — default to white, which matches the historical
-  // default in coachChatService.getRecentGamesSummary.
-  return 'white';
 }
 
 function computeResult(

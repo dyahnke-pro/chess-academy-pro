@@ -1,9 +1,15 @@
 import { useMemo } from 'react';
-import { Trophy, Skull, Equal, Globe, Bot, Calendar } from 'lucide-react';
+import { Trophy, Skull, Equal, Globe, Bot, Calendar, HelpCircle } from 'lucide-react';
 import type { GameRecord } from '../../types';
 import { classifyGameStyle, summarizeMoveQuality } from '../../services/gameStyleClassifier';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import { useSettings } from '../../hooks/useSettings';
+import {
+  resolvePlayerColor,
+  resolveGameOutcome,
+  opponentName,
+  type PlayerIdentity,
+} from '../../services/playerIdentity';
 
 interface ReviewGameCardProps {
   game: GameRecord;
@@ -12,7 +18,19 @@ interface ReviewGameCardProps {
    *  games so the user can see them but knows the coach can't review
    *  them deeply yet. */
   unanalyzed?: boolean;
+  /** Who the student is (chess.com / lichess handle, app profile name).
+   *  Resolves which side they played so the card can say WIN or LOSS
+   *  instead of a raw `1-0` whose meaning flips with the colour. */
+  identity?: PlayerIdentity;
 }
+
+const OUTCOME_BADGE: Record<'win' | 'loss' | 'draw' | 'unknown' | 'ongoing', { label: string; cls: string }> = {
+  win: { label: 'WIN', cls: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40' },
+  loss: { label: 'LOSS', cls: 'bg-red-500/15 text-red-400 border-red-500/40' },
+  draw: { label: 'DRAW', cls: 'bg-theme-border/30 text-theme-text-muted border-theme-border/50' },
+  ongoing: { label: 'IN PLAY', cls: 'bg-theme-border/30 text-theme-text-muted border-theme-border/50' },
+  unknown: { label: '?', cls: 'bg-theme-border/30 text-theme-text-muted border-theme-border/50' },
+};
 
 function formatRelativeDate(iso: string): string {
   const t = new Date(iso).getTime();
@@ -42,7 +60,7 @@ function sourceLabel(source: GameRecord['source']): string {
   return 'imported';
 }
 
-export function ReviewGameCard({ game, onClick }: ReviewGameCardProps): JSX.Element {
+export function ReviewGameCard({ game, onClick, identity }: ReviewGameCardProps): JSX.Element {
   const { settings } = useSettings();
   const b = settings.glowBrightness;
   const s = b / 100;
@@ -61,10 +79,17 @@ export function ReviewGameCard({ game, onClick }: ReviewGameCardProps): JSX.Elem
   const borderSubtle = `rgba(${neon.rgb}, ${Math.min(1, 0.1 * s)})`;
   const borderSubtleHov = `rgba(${neon.rgb}, ${Math.min(1, 0.2 * s)})`;
 
+  const playerColor = useMemo(() => resolvePlayerColor(game, identity ?? {}), [game, identity]);
+  const outcome = playerColor ? resolveGameOutcome(game, playerColor) : null;
+  const badgeKey: keyof typeof OUTCOME_BADGE =
+    playerColor === null ? 'unknown' : outcome === null ? 'ongoing' : outcome;
+  const badge = OUTCOME_BADGE[badgeKey];
   const opponentLabel =
-    game.source === 'coach' ? 'Coach' : pickOpponent(game);
-  const result = game.result;
-  const youWon = didYouWin(game);
+    game.source === 'coach' ? 'Coach' : playerColor ? opponentName(game, playerColor) : pickOpponent(game);
+  const badgeTitle =
+    badgeKey === 'unknown'
+      ? 'Could not tell which side you played — set your chess.com / lichess username in Settings'
+      : `You played ${playerColor} · ${game.result}`;
 
   return (
     <div
@@ -106,9 +131,10 @@ export function ReviewGameCard({ game, onClick }: ReviewGameCardProps): JSX.Elem
       <div className="flex items-center gap-3">
         {/* Result icon */}
         <div className={`shrink-0 w-9 h-9 rounded-lg ${neon.tagBg} flex items-center justify-center`}>
-          {youWon === true && <Trophy size={18} className={neon.tagText} />}
-          {youWon === false && <Skull size={18} className="text-red-400" />}
-          {youWon === null && <Equal size={18} className={neon.tagText} />}
+          {outcome === 'win' && <Trophy size={18} className="text-emerald-400" />}
+          {outcome === 'loss' && <Skull size={18} className="text-red-400" />}
+          {outcome === 'draw' && <Equal size={18} className={neon.tagText} />}
+          {(outcome === null) && <HelpCircle size={18} className="text-theme-text-muted" />}
         </div>
 
         <div className="flex-1 min-w-0">
@@ -116,7 +142,14 @@ export function ReviewGameCard({ game, onClick }: ReviewGameCardProps): JSX.Elem
             <span className="text-sm font-semibold text-theme-text truncate">
               vs {opponentLabel}
             </span>
-            <span className={`text-[11px] font-mono ${neon.ecoBadge}`}>{result}</span>
+            <span
+              className={`inline-block px-1.5 py-0.5 text-[10px] font-bold tracking-wider rounded border ${badge.cls}`}
+              title={badgeTitle}
+              data-testid="review-game-outcome"
+              data-outcome={badgeKey}
+            >
+              {badge.label}
+            </span>
           </div>
 
           <div className="flex items-center flex-wrap gap-1.5 mt-1">
@@ -160,23 +193,7 @@ export function ReviewGameCard({ game, onClick }: ReviewGameCardProps): JSX.Elem
 }
 
 function pickOpponent(game: GameRecord): string {
-  // If we know the user's name we'd subtract it; for now show the
-  // pair so the card is informative even when "you" is ambiguous.
+  // Identity unresolved: show the pair so the card is still informative.
   if (game.white && game.black) return `${game.white} – ${game.black}`;
   return game.white || game.black || 'Unknown';
-}
-
-function didYouWin(game: GameRecord): boolean | null {
-  // Best-effort: coach games store the user as one side; for imports
-  // we don't know without a username preference. Return null when
-  // ambiguous so the result icon is the neutral "draw" glyph.
-  if (game.result === '1/2-1/2') return null;
-  if (game.source === 'coach') {
-    // Coach games: the player is white if `game.white` is the user
-    // alias (we don't have it here for sure). Fall back to color
-    // inference from typical schema.
-    if (game.result === '1-0') return true;
-    if (game.result === '0-1') return false;
-  }
-  return null;
 }

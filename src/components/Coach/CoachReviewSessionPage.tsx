@@ -25,6 +25,7 @@ import { gameNeedsAnalysis, analyzeSingleGame } from '../../services/gameAnalysi
 import { ensureSampleGameSeeded } from '../../services/reviewSampleGames';
 import { detectOpeningTranspositional } from '../../services/openingDetectionService';
 import { useAppStore } from '../../stores/appStore';
+import { resolvePlayerColor } from '../../services/playerIdentity';
 import { logAppAudit } from '../../services/appAuditor';
 import type {
   GameRecord,
@@ -47,46 +48,6 @@ interface AdaptedReviewProps {
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-
-function inferPlayerColor(
-  game: GameRecord,
-  identity: { profileName?: string; chessComUsername?: string; lichessUsername?: string },
-): 'white' | 'black' {
-  if (game.source === 'coach') {
-    if (game.black.toLowerCase().includes('coach') || game.black.toLowerCase().includes('bot')) {
-      return 'white';
-    }
-    if (game.white.toLowerCase().includes('coach') || game.white.toLowerCase().includes('bot')) {
-      return 'black';
-    }
-  }
-  // Imports use the platform username, NOT the app profile name.
-  // The previous version only checked profileName which silently
-  // misclassified every imported game where the app name ≠ the
-  // platform handle — board rendered from White's POV regardless of
-  // which side the student actually played. Reported by David
-  // (his app name is "David", chess.com handle is different).
-  // Now check ALL three identity sources, exact match first
-  // (handles "user (1200)" display names without false positives).
-  const candidates: string[] = [];
-  if (identity.chessComUsername) candidates.push(identity.chessComUsername.toLowerCase());
-  if (identity.lichessUsername) candidates.push(identity.lichessUsername.toLowerCase());
-  if (identity.profileName) candidates.push(identity.profileName.toLowerCase());
-  const whiteName = game.white.toLowerCase();
-  const blackName = game.black.toLowerCase();
-  for (const c of candidates) {
-    if (whiteName === c) return 'white';
-    if (blackName === c) return 'black';
-  }
-  // Loose-substring fallback for display names with embedded
-  // ratings or tags. Less precise than exact match but catches
-  // import sources that decorate the username.
-  for (const c of candidates) {
-    if (whiteName.includes(c)) return 'white';
-    if (blackName.includes(c)) return 'black';
-  }
-  return 'white';
-}
 
 function annotationFor(
   annotations: MoveAnnotation[] | null,
@@ -359,11 +320,14 @@ export function CoachReviewSessionPage(): JSX.Element {
   }, [gameId]);
 
   const playerColor = useMemo(
-    () => (game ? inferPlayerColor(game, {
+    // Board orientation needs a side even when the identity is unresolved;
+    // White is the historical default. The card's WIN/LOSS badge does NOT
+    // inherit this default — it shows `?` instead (playerIdentity.ts).
+    () => (game ? (resolvePlayerColor(game, {
       profileName: activeProfile?.name,
       chessComUsername: activeProfile?.preferences.chessComUsername,
       lichessUsername: activeProfile?.preferences.lichessUsername,
-    }) : 'white'),
+    }) ?? 'white') : 'white'),
     [
       game,
       activeProfile?.name,
