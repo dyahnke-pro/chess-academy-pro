@@ -44,12 +44,20 @@ export async function getLastSeenId(): Promise<string | null> {
 }
 
 /** Mark everything up to (and including) the newest message as seen. */
+/** Notify every mounted bell (the app now renders one per header/sidebar) that
+ *  the seen-marker moved, so they all clear the red dot together — not just the
+ *  instance the user tapped. */
+function announceSeen(): void {
+  try { window.dispatchEvent(new CustomEvent('messages-seen')); } catch { /* no window */ }
+}
+
 export async function markAllSeen(latestId: string): Promise<void> {
   try {
     await db.meta.put({ key: LAST_SEEN_KEY, value: latestId });
   } catch {
     /* best-effort — the red dot reappearing is harmless */
   }
+  announceSeen();
 }
 
 /** Pure: is the newest message unseen? Drives the red dot. */
@@ -120,6 +128,7 @@ export async function getLastSeenThreadTs(): Promise<number> {
 }
 export async function markThreadSeen(ts: number): Promise<void> {
   try { await db.meta.put({ key: LAST_SEEN_THREAD_KEY, value: String(ts) }); } catch { /* best-effort */ }
+  announceSeen();
 }
 
 // ── Admin (David only) ──────────────────────────────────────────────────────

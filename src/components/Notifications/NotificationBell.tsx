@@ -106,6 +106,17 @@ export function NotificationBell(): JSX.Element {
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, [open, admin, adminView, loadInbox]);
 
+  // Every bell instance (header + sidebar) clears together when ANY of them
+  // marks messages seen — re-read the shared markers from Dexie on the event.
+  useEffect(() => {
+    const sync = (): void => {
+      void getLastSeenId().then(setLastSeenId);
+      void getLastSeenThreadTs().then(setLastSeenThreadTs);
+    };
+    window.addEventListener('messages-seen', sync);
+    return () => window.removeEventListener('messages-seen', sync);
+  }, []);
+
   const unread = hasUnread(broadcasts, lastSeenId) || hasUnreadThread(thread, lastSeenThreadTs);
 
   const openPanel = useCallback(() => {
