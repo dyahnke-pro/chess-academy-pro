@@ -148,11 +148,9 @@ export function computeMoveFundamentals(
   moverColor: 'white' | 'black',
 ): MoveFundamental[] {
   const mover: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
-  let before: Chess;
   let after: Chess;
   let mv: ReturnType<Chess['move']>;
   try {
-    before = new Chess(fenBefore);
     after = new Chess(fenBefore);
     mv = after.move(moveSan);
   } catch { return []; }
@@ -161,7 +159,7 @@ export function computeMoveFundamentals(
   // Recapture-safety: never dress a piece that HANGS on its landing square as a
   // positional gain (a rook that "eyes the center" but drops to a queen is not a
   // merit). Castling / passed-pawn pushes clear this trivially.
-  if (seeGain(after, mv.to as Square) > 0) return [];
+  if (seeGain(after, mv.to) > 0) return [];
 
   const moveNumber = Number(fenBefore.split(' ')[5]) || 1;
   const phase = classifyPhase(fenBefore, moveNumber);
@@ -277,8 +275,11 @@ export function computeMoveFundamentals(
     }
   }
 
-  // ── PASSED PAWN — push a passer; passed pawns must be pushed.
-  if (mv.piece === 'p' && isPassedPawn(after, mv.to, mover)) {
+  // ── PASSED PAWN — push a passer; passed pawns must be pushed. Only once the
+  //    passer is actually ADVANCED (past its own half) — a first nudge from the
+  //    2nd/3rd rank while rooks are still on isn't yet the "push the passer"
+  //    moment, and calling it one is noise.
+  if (mv.piece === 'p' && relRank(mv.to, mover) >= 4 && isPassedPawn(after, mv.to, mover)) {
     out.push({
       id: 'passed-pawn',
       weight: phase === 'endgame' ? 84 : 62,
