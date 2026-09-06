@@ -648,10 +648,16 @@ function resetAnalysisPool(): void {
   _warmPromise = null;
 }
 
-/** Per-position search budget for the REVIEW's eval curve, mirroring the
- *  singleton's variant budgets. A slow engine must be capped or a single deep
- *  position eats the whole wait. */
-const REVIEW_POSITION_BUDGET_MS = 3_000;
+/** Per-position search budget for the REVIEW's key-moment re-search.
+ *
+ *  8s, not 3s (David 2026-09-06: "Set it."). The review re-searches at most
+ *  REVIEW_MAX_DEEP_PLIES (12) key plies at REVIEW_DEEP_DEPTH (16), and since
+ *  the non-blocking open that pass runs BEHIND an already-open review, so its
+ *  ceiling (12 × 8s ≈ 96s, and only when every key ply is slow) is not time
+ *  the student waits for. What 3s bought was the wrong verdict: in-browser
+ *  Stockfish stopped near depth 13 and graded 6...Nb6 (52cp at d14, 128cp at
+ *  d16) a good move. A quiet position still stops the moment depth 16 lands. */
+const REVIEW_POSITION_BUDGET_MS = 8_000;
 
 /** Per-position budget for the sweep's BEST-MOVE refinement — the only deep
  *  search the sweep still runs, and only on the handful of moves it graded a
