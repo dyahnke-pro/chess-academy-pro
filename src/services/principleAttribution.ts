@@ -38,6 +38,7 @@ export const FUNDAMENTAL_IDS = [
   'loose-piece', 'ignored-threat', 'passive-when-forcing-existed', 'weakened-king-shield',
   'created-pawn-weakness', 'overextended-pawn', 'traded-active-for-passive',
   'wrong-trade-for-material', 'worst-piece-unimproved', 'rook-ignored-open-file',
+  'kept-bad-bishop',
   // endgame
   'passive-king-endgame', 'mistimed-pawn-break', 'rook-in-front-of-passer',
   'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
@@ -68,6 +69,7 @@ export const FUNDAMENTAL_TAG: Record<FundamentalId, MisconceptionTagId> = {
   'wrong-trade-for-material': 'bad-trade-material',
   'worst-piece-unimproved': 'misplaced-piece',
   'rook-ignored-open-file': 'misplaced-piece',
+  'kept-bad-bishop': 'misplaced-piece',
   'passive-king-endgame': 'passive-king-endgame',
   'mistimed-pawn-break': 'mistimed-pawn-break',
   'rook-in-front-of-passer': 'misplaced-piece',
@@ -83,6 +85,7 @@ const CO_OCCURRENCE: ReadonlySet<FundamentalId> = new Set<FundamentalId>([
   'worst-piece-unimproved', 'traded-active-for-passive', 'wrong-trade-for-material',
   'passive-king-endgame', 'rook-in-front-of-passer', 'buried-own-bishop',
   'passed-pawn-neglected', 'lost-the-opposition', 'passive-rook-endgame',
+  'kept-bad-bishop',
 ]);
 
 export interface PrincipleEvidence {
@@ -178,6 +181,8 @@ function holdsOpposition(afterMoverMove: Chess, mover: Color): boolean {
 function onlyKingAndPawns(chess: Chess, color: Color): boolean {
   return pieces(chess, color).every((p) => p.type === 'p' || p.type === 'k');
 }
+/** 0 = dark square, 1 = light square (parity of file+rank). */
+function squareColor(sq: string): number { return (fileIdx(sq) + rankNum(sq)) % 2; }
 
 /** A position with `color` to move regardless of whose turn it really is
  *  (null-move view). Castling/ep are preserved; ep cleared for safety. */
@@ -774,6 +779,22 @@ const DETECTORS: Detector[] = [
     if (!landsSafely(c.before, best)) return null;
     if (last.piece === 'r' && relRank(last.to, mover) === 7) return null; // played already went to the seventh
     return att('passive-rook-endgame', 1, { squares: [best.from, best.to], moves: [best.san], pvMoves: [] }, { square: best.to, better: best.san });
+  },
+  // 29. Trade off the bad bishop — the mover's bishop is hemmed in by its own
+  // pawns fixed on its colour (a board fact), and the best move frees or trades
+  // it; the played move leaves it buried. Positional (co-occurrence).
+  (c) => {
+    const { last, best, mover } = c;
+    if (c.opening) return null;
+    if (best.piece !== 'b') return null;
+    for (const b of pieces(c.before, mover, 'b')) {
+      if (best.from !== b.square || last.from === b.square) continue;
+      const onColour = pieces(c.before, mover, 'p').filter((p) => squareColor(p.square) === squareColor(b.square)).length;
+      if (onColour < 4) continue;                            // ≥4 own pawns on the bishop's colour = a bad bishop
+      if (pieceMobility(c.before, b.square, mover) > 3) continue;
+      return att('kept-bad-bishop', 1, { squares: [b.square, best.to], moves: [best.san], pvMoves: [] }, { bishop: b.square, pawns: onColour, better: best.san });
+    }
+    return null;
   },
 ];
 

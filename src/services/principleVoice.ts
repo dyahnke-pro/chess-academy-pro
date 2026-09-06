@@ -258,6 +258,14 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       ];
       return s[v % s.length];
     }
+    case 'kept-bad-bishop': {
+      const s = [
+        `Trade the bad bishop: yours on ${f.bishop} is shut in behind ${f.pawns} of your own pawns on its colour — ${f.better} frees or swaps it, and this leaves it buried.`,
+        `A bishop hemmed in by its own pawns is barely a piece — ${f.better} gets the one on ${f.bishop} into the game.`,
+        `Your worst piece is the bishop on ${f.bishop}, boxed in by pawns on its colour; ${f.better} improves it before anything else.`,
+      ];
+      return s[v % s.length];
+    }
   }
 }
 
@@ -295,6 +303,7 @@ function shortVerdict(a: PrincipleAttribution): string {
     case 'passed-pawn-neglected': return `The passer on ${f.pawn} still isn't running.`;
     case 'lost-the-opposition': return `The opposition given up again — ${f.better}.`;
     case 'passive-rook-endgame': return `The rook still passive — ${f.better} takes the seventh.`;
+    case 'kept-bad-bishop': return `The bad bishop on ${f.bishop} still buried — ${f.better}.`;
   }
 }
 
@@ -357,6 +366,7 @@ const RECAP_NOUN: Record<FundamentalId, string> = {
   'passed-pawn-neglected': 'left a passed pawn unpushed',
   'lost-the-opposition': 'gave up the opposition',
   'passive-rook-endgame': 'kept the rook passive',
+  'kept-bad-bishop': 'kept a bad bishop',
 };
 
 /**

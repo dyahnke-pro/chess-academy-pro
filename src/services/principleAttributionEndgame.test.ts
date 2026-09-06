@@ -20,6 +20,11 @@ const FIXTURES: { id: FundamentalId; best: string; hist: string[] }[] = [
     hist: ['e3', 'h5', 'Qxh5', 'Rxh5', 'Ne2', 'Rc5', 'Rg1', 'Rxc2', 'b3', 'b5', 'Nf4', 'Rc4', 'bxc4', 'bxc4', 'Nh5', 'd6', 'Nxg7+', 'Kd7', 'Bxc4', 'Bxg7', 'Bxf7', 'Bxa1', 'h3', 'c5', 'Kd1', 'a5', 'Bxg8', 'Qxg8', 'Bb2', 'Qxa2', 'Na3', 'Qxa3', 'Bxa1', 'Qxa1+', 'Ke2', 'Qxg1', 'Kd3', 'Qxg2', 'h4', 'Qg7', 'f3', 'e6', 'e4', 'Qe7', 'Kc3', 'Qxh4', 'e5', 'Qf2', 'exd6', 'Qg1', 'Kb2', 'Kxd6', 'Ka3', 'Ke5', 'd3', 'Qg3', 'd4+', 'cxd4', 'Kb2', 'Qxf3', 'Kb1', 'Ra6', 'Ka2', 'Qf7', 'Kb1', 'Qf6', 'Kb2', 'Qf3', 'Ka1', 'Qh5', 'Ka2', 'Qg5', 'Kb1', 'Qg7', 'Ka1', 'a4', 'Kb1', 'Ra7', 'Ka1', 'Kf4', 'Kb1', 'Ke5', 'Ka2', 'a3', 'Kb3', 'Nc6', 'Ka2', 'Ra4', 'Kb3', 'Qd7', 'Kxa4', 'a2', 'Kb3', 'a1=R', 'Kc4', 'Qf7', 'Kb3', 'Re1', 'Ka4', 'Rf1', 'Kb5', 'Rc1', 'Ka4', 'Qa7+', 'Kb5', 'Ra1', 'Kxc6', 'Qb6+', 'Kxb6', 'Bd7'],
   },
   {
+    id: 'kept-bad-bishop',
+    best: 'Bg7',
+    hist: ['b3', 'Na6', 'h4', 'b6', 'e3', 'g6', 'd3', 'Nb4', 'e4', 'Nd5', 'Ke2', 'Nb4', 'Bd2', 'd6', 'Bxb4', 'f5', 'Bxd6', 'exd6', 'exf5', 'Qxh4', 'f3', 'gxf5', 'g3', 'Qxh1', 'Ke3', 'Rb8'],
+  },
+  {
     id: 'lost-the-opposition',
     best: 'Kb4',
     hist: ['g4', 'Nc6', 'e3', 'Ne5', 'Ba6', 'Nxg4', 'Bxb7', 'Nxh2', 'Qf3', 'Nxf3+', 'Bxf3', 'Ba6', 'Rxh7', 'Rxh7', 'Bxa8', 'Qxa8', 'f4', 'Rh1', 'Kf2', 'e5', 'c3', 'exf4', 'exf4', 'Rxg1', 'Kxg1', 'g6', 'Kf2', 'Ke7', 'Kg3', 'Bc4', 'Kg4', 'Bxa2', 'Rxa2', 'Kd8', 'Rxa7', 'Qxa7', 'd3', 'Nf6+', 'Kf3', 'Ba3', 'Nxa3', 'Qxa3', 'bxa3', 'c5', 'Kg2', 'Nd5', 'Be3', 'Nxe3+', 'Kh2', 'f5', 'd4', 'cxd4', 'cxd4', 'Ng4+', 'Kh3', 'd5', 'Kg2', 'Ne5', 'Kf2', 'Ke8', 'Kg2', 'Nc4', 'Kf1', 'Nxa3', 'Kg2', 'Nb1', 'Kg1', 'Kd7', 'Kh2', 'Kc6', 'Kg3', 'Kc7', 'Kf2', 'Kc6', 'Kf1', 'Kb5', 'Kf2', 'Nd2', 'Ke1', 'g5', 'Kxd2', 'Ka6'],
