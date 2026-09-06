@@ -23,6 +23,7 @@ import { applyInternalFromUrl, resolveDeviceIdentity, getDeviceId } from './serv
 import { requestPersistentStorage } from './services/storageQuota';
 import { emitAppBootAudit } from './services/appBootAudit';
 import { AppLayout } from './components/ui/AppLayout';
+import { OtaUpdateBanner } from './components/ui/OtaUpdateBanner';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
@@ -685,6 +686,7 @@ export function App(): JSX.Element {
           from any surface that recorded the win. */}
       <ReviewPrompt />
     </BrowserRouter>
+    <OtaUpdateBanner />
     </>
   );
 }

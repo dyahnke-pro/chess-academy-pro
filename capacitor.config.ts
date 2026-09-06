@@ -41,16 +41,20 @@ const config: CapacitorConfig = {
     // `appReadyTimeout` (see src/main.tsx) — a bad OTA bundle can't brick a
     // tester; worst case they stay on the last good bundle.
     CapacitorUpdater: {
-      // 🔓 OTA RE-ENABLED (David 2026-07-17: "put it back on"). Reverses the
-      // 2026-07-11 disable. autoUpdate:true → the plugin polls the manifest on
-      // launch and applies a newer published web bundle, so content / JS / coach
-      // fixes reach testers on next open WITHOUT a TestFlight round-trip. The CI
-      // publish step (daily-deploy.yml → publish-ota-bundle.mjs) repopulates the
-      // manifest pointer. NB: this flag is compiled into the native build, so it
-      // only takes effect once testers install a build cut AFTER this change —
-      // the currently-installed autoUpdate:false apps cannot be turned back on
-      // server-side. The notifyAppReady auto-revert safety above still applies.
-      autoUpdate: true,
+      // 🔓 OTA RE-ENABLED (David 2026-07-17). CI (daily-deploy.yml →
+      // publish-ota-bundle.mjs) repopulates the manifest pointer.
+      //
+      // 🔒 'onlyDownload' — NEVER kick a user mid-session (David 2026-09-06:
+      // "OTA must NOT kick users mid-session"). autoUpdate:true applied a fresh
+      // bundle on the next background→foreground resume — which reloads the
+      // webview WHILE someone is mid-game/lesson. 'onlyDownload' keeps the
+      // automatic DOWNLOAD but never auto-applies: the bundle sits `pending` and
+      // is swapped in ONLY at a cold launch by installStagedBundleOnLaunch
+      // (nothing to interrupt), or immediately if the user taps "Restart now" on
+      // the non-blocking OtaUpdateBanner. Compiled into the native build, so it
+      // takes effect once testers install a build cut AFTER this change. The
+      // notifyAppReady auto-revert safety above still applies.
+      autoUpdate: 'onlyDownload',
       version: process.env.OTA_BUNDLE_VERSION || undefined,
       updateUrl: 'https://chess-academy-pro.vercel.app/api/ota/manifest',
       directUpdate: false,
