@@ -23,6 +23,7 @@
  * Style drift is the main risk; that's why we anchor on a sample.
  */
 import { Chess, type Move } from 'chess.js';
+import { buildExplorerTeachLine } from './explorerTeachLine';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
@@ -380,7 +381,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-27-tier3-discussion';
+const WALKTHROUGH_GEN_REV = '2026-09-06-explorer-deepen-thin-openings';
 
 export async function getCachedOpening(
   name: string,
@@ -1749,7 +1750,7 @@ async function generateOpeningFromDbNarration(
   const spineResolution = resolveTeachSpine(entry.canonicalName, entry.moves, {
     extendToMiddlegame: pace !== 'tour',
   });
-  const spineMoves = spineResolution.spineMoves;
+  let spineMoves = spineResolution.spineMoves;
   const rawBranches: ForkBranch[] = spineResolution.branches;
   if (spineResolution.extendedToMiddlegame) {
     void logAppAudit({
@@ -1758,6 +1759,54 @@ async function generateOpeningFromDbNarration(
       source: 'openingGenerator.generateOpeningFromDbNarration',
       summary: `spine extended to middlegame for "${entry.canonicalName}" (${spineMoves.length} plies) — forks did not carry the main line past the opening`,
     });
+  }
+
+  // ── AMATEUR/MASTERS EXPLORER DEEPENING (David 2026-09-06: "the fix for
+  // missing coach openings is to ask the amateur database into coach teach X
+  // opening… whichever one uses it the most… best grounded G0 opening data").
+  // A terminal-short opening with NO sibling branches (the Traxler, the Scandi
+  // Panov) can't be carried to a middlegame from the curated DB, so
+  // resolveTeachSpine leaves a stub — the coach teaches five moves, or (the
+  // 809b388 bug) name-matches onto a wrong opening. Walk the Lichess explorer
+  // from the spine terminus and append the REAL most-played continuation:
+  // masters first (sound theory), amateur when masters is thin (nobody plays
+  // the Traxler at the top). G0/G3 — real games, chess.js-legal, engine-free
+  // soundness by practical score. Full mode only; only when the curated DB gave
+  // us nothing to extend (no forks) AND the line is still short.
+  if (
+    pace !== 'tour' &&
+    !spineResolution.extendedToMiddlegame &&
+    rawBranches.length === 0 &&
+    spineMoves.length < 12
+  ) {
+    try {
+      const seed = new Chess();
+      let seedOk = true;
+      for (const s of spineMoves) {
+        try {
+          seed.move(stripSanAnnotations(s));
+        } catch {
+          seedOk = false;
+          break;
+        }
+      }
+      if (seedOk) {
+        const ext = await buildExplorerTeachLine(seed.fen(), { maxPlies: 14 - spineMoves.length });
+        if (ext.sans.length > 0) {
+          spineMoves = [...spineMoves, ...ext.sans];
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'openingGenerator.generateOpeningFromDbNarration',
+            summary:
+              `explorer-deepened "${entry.canonicalName}" +${ext.sans.length} plies ` +
+              `(${ext.segments.map((g) => g.source).join(',')}) — thin curated line extended from the explorer`,
+          });
+        }
+      }
+    } catch {
+      /* explorer unreachable — teach the short line as before */
+    }
   }
 
   // 1. Replay the PGN, collect each move's SAN + post-move FEN.

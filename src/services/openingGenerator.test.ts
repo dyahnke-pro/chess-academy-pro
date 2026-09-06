@@ -4,7 +4,15 @@
  * level and not covered here; this file locks in the surgical helpers
  * that are pure functions of the parsed tree.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+// David 2026-09-06: generateOpening now deepens a thin/missing opening by walking
+// the Lichess explorer. Stub it to a no-op here so these generator tests stay
+// deterministic + offline (the deepening logic is covered by
+// explorerTeachLine.test.ts).
+vi.mock('./explorerTeachLine', () => ({
+  buildExplorerTeachLine: vi.fn(async (fen: string) => ({ sans: [], segments: [], endFen: fen })),
+}));
 import {
   repairForkLabels,
   repairConceptsStage,
@@ -912,8 +920,11 @@ describe('generateOpening entryOverride (option B — teach non-built short line
   // moves via entryOverride bypasses resolution and builds the walkthrough
   // straight from the DB record's PGN (G3-safe — the moves aren't the LLM's).
   it('builds a tree from the override when name resolution returns nothing', async () => {
+    // David 2026-09-06: a terminal-short opening is no longer refused — the DB
+    // resolves it and the (mocked-here) explorer deepening extends the thin line,
+    // so the SAME teach flow teaches it to a middlegame. It now resolves by name.
     const viaName = await generateOpening('Scandinavian Defense: Panov Transfer', { mode: 'learn' });
-    expect(viaName.ok, 'name resolution should fail for the terminal-short line').toBe(false);
+    expect(viaName.ok).toBe(true);
 
     const viaOverride = await generateOpening('Scandinavian Defense: Panov Transfer', {
       mode: 'learn',
