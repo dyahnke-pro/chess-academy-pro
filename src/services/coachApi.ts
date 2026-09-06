@@ -1668,6 +1668,57 @@ export function uploadGamesReminder(topic: string, overview: { totalGames: numbe
   return `I can't read ${topic} yet — none of your real games are in here, and that's where I find your patterns. Import your Lichess or Chess.com games from Games then Import (just your username), and I'll break down exactly what to drill.`;
 }
 
+/** Is this turn a question answered from the student's OWN game history? — the
+ *  intent set the upload-your-games gate fires on when no games are analyzed
+ *  (David 2026-09-06: "ANY question about personal game data, when we have no
+ *  data uploaded, should prompt the upload-and-analyze reply").
+ *
+ *  DELIBERATELY EXCLUDED (they need no game history, so gating them would nag a
+ *  games-less user who asked something answerable):
+ *    • Board / concept / theory / training-command intents — best move, plan,
+ *      "what's a fork", "teach me the London", "set up calculation training".
+ *      Their flags are simply absent below.
+ *    • statsQuestion — it also matches a bare "what's my rating?", answerable
+ *      from strength-calibration with zero games; its own lane serves the rating
+ *      when present and the upload reply otherwise, so it self-handles.
+ *    • reviewDue (SRS cards), openingTraps / counterRepertoire (theory),
+ *      puzzleStats (trainer, not games) — not game-history.
+ *
+ *  Exported so the gate's routing is unit-tested directly, not just the message. */
+export function personalGameDataQuestion(
+  g: MasterGroundingOptions,
+  ask: string | undefined,
+): boolean {
+  return (
+    g.openingProfileQuestion === true ||
+    g.openingAccuracyQuestion === true ||
+    g.strengthsQuestion === true ||
+    g.tacticsProfileQuestion === true ||
+    g.phaseQuestion === true ||
+    g.repertoireGapQuestion === true ||
+    g.accuracyQuestion === true ||
+    g.consistencyQuestion === true ||
+    g.convertingQuestion === true ||
+    g.errorsBySituationQuestion === true ||
+    g.misconceptionsQuestion === true ||
+    g.recordsQuestion === true ||
+    g.colorQuestion === true ||
+    g.transferGapQuestion === true ||
+    g.timeTroubleQuestion === true ||
+    g.gameMistakeQuestion === true ||
+    g.mistakesQuestion === true ||
+    g.lastGameQuestion === true ||
+    g.lastGameMistakeQuestion === true ||
+    g.endgameWeaknessQuestion === true ||
+    g.weaknessBriefingQuestion === true ||
+    g.weaknessLifecycleKind !== undefined ||
+    g.skillRadarQuestion === true ||
+    g.trendQuestion === true ||
+    (g.recordVsTarget !== undefined && g.recordVsTarget.length > 0) ||
+    (g.progressQuestion === true && !trainingAreaFromText(ask))
+  );
+}
+
 /** Headline capabilities for the general "what can you help with" overview
  *  (David 2026-09-01). Each is a REAL app feature (grounded in
  *  APP_ROUTES_MANIFEST.featuresAvailable), stated concisely — the coach names
@@ -3319,6 +3370,65 @@ export async function getCoachChatResponse(
           }
           return undefined;
         };
+
+        // ── UPLOAD-YOUR-GAMES GATE (David 2026-09-06: "ANY question about
+        // personal game data, WHEN WE HAVE NO DATA UPLOADED, should prompt the
+        // upload-and-analyze reply"). ONE chokepoint in front of every
+        // personal-history assembler so the answer is identical however the
+        // student phrases it and no lane can drift. The opening-profile lane HAD
+        // drifted — it told a games-less user to "drill a few opening lines"
+        // instead of "upload your games" (the Port Harcourt user's "what's my
+        // best opening?", PostHog 2026-09-03). Scoped to analyzedGameCount === 0,
+        // so a student WITH games always gets their real read.
+        //
+        // Excluded on purpose:
+        //   • BOARD / CONCEPT / THEORY / TRAINING-COMMAND intents — they need no
+        //     game history (best move, plan, "what's a fork", "teach me the
+        //     London", "set up calculation training"), so their own flags are
+        //     absent from the predicate below.
+        //   • statsQuestion — it ALSO matches a bare "what's my rating?", which
+        //     is answerable from strength-calibration with zero games; its own
+        //     lane (below) already serves the rating when present and the upload
+        //     reply otherwise, so gating it here would nag for a rating already
+        //     known.
+        // If getOverviewInsights throws, we fall through to each lane's own
+        // no-data path (unchanged) — graceful, never a hard fail.
+        {
+          const personalGameDataAsk = personalGameDataQuestion(grounding, lastUserMessage());
+          if (personalGameDataAsk) {
+            try {
+              const overview = await getOverviewInsights();
+              if (overview.analyzedGameCount === 0) {
+                const topic =
+                  grounding.openingProfileQuestion
+                    ? (grounding.openingProfileKind === 'weakest' ? 'your weakest opening'
+                      : grounding.openingProfileKind === 'favorite' ? 'your most-played opening'
+                      : 'your strongest opening')
+                  : grounding.openingAccuracyQuestion ? 'how accurately you play your openings'
+                  : grounding.strengthsQuestion ? 'your strengths'
+                  : grounding.tacticsProfileQuestion ? 'your tactical patterns'
+                  : grounding.repertoireGapQuestion ? 'the gaps in your repertoire'
+                  : grounding.accuracyQuestion ? 'your accuracy'
+                  : grounding.consistencyQuestion ? 'how consistent your play is'
+                  : grounding.convertingQuestion ? 'how you convert winning positions'
+                  : grounding.errorsBySituationQuestion ? 'when you blunder most'
+                  : grounding.colorQuestion ? 'whether you play better as White or Black'
+                  : grounding.transferGapQuestion ? 'whether your tactics carry into your games'
+                  : grounding.timeTroubleQuestion ? 'your time trouble'
+                  : grounding.phaseQuestion ? 'which phase of the game costs you most'
+                  : grounding.endgameWeaknessQuestion ? 'your endgame weaknesses'
+                  : grounding.trendQuestion ? "whether you're improving"
+                  : grounding.skillRadarQuestion ? 'your skill breakdown'
+                  : grounding.recordsQuestion || (grounding.recordVsTarget?.length ?? 0) > 0 ? 'your record'
+                  : 'the mistakes you make';
+                lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
+                const msg = uploadGamesReminder(topic, overview);
+                const voiced = await voiceFacts(msg, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'progress', preferRaw: true });
+                return voiced ?? msg;
+              }
+            } catch { /* read failed — fall through to each lane's own no-data path */ }
+          }
+        }
 
         // ── RECORD VS OPENING / OPPONENT — "how do I do against the Sicilian? /
         // what's my record vs <name>?" (David 2026-07-04, the last three
