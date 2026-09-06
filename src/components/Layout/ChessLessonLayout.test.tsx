@@ -50,12 +50,18 @@ describe('ChessLessonLayout', () => {
     expect(root.className).not.toMatch(/safe-area-inset-bottom/);
   });
 
-  it('caps the board height responsively to leave room for controls', () => {
+  it('caps the board size with a clip-proof width-driven square', () => {
     render(<ChessLessonLayout board={<div>B</div>} controls={<div>C</div>} />);
     const boardSlot = screen.getByTestId('chess-lesson-board');
-    // The cap must be present so very tall viewports (or short ones) don't push
-    // controls off-screen
-    expect(boardSlot.className).toMatch(/max-h-\[min\(60vh,440px\)\]/);
+    // react-chessboard v5's grid is width:100%/height:100%/overflow:hidden with
+    // aspect-ratio:1 squares — a HEIGHT cap makes it CLIP its bottom ranks
+    // instead of shrinking (the endgame Drawn-tab break). The board slot must
+    // therefore be an aspect-locked square capped by WIDTH (so height is bounded
+    // too — controls stay above the fold — without ever clipping).
+    expect(boardSlot.className).toMatch(/aspect-square/);
+    expect(boardSlot.className).toMatch(/max-w-\[min\(100%,60vh\)\]/);
+    // A raw max-h cap on the slot is the regression this guards against.
+    expect(boardSlot.className).not.toMatch(/max-h-/);
   });
 
   it('renders the optional belowBoard slot when given', () => {
