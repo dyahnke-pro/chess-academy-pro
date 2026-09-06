@@ -33,12 +33,24 @@ interface NavItem {
   activeBg: string;
 }
 
+/* 🔒 THIS ORDER MIRRORS THE HOME SCREEN (David 2026-09-05: "adjust the tabs at
+   bottom of screen to match the order of the Home Screen").
+
+   The home screen numbers its sections 1-4 and prints the loop they belong to —
+   "Learn it → play it → find the holes → drill them shut" — so Openings, Coach,
+   Weaknesses, Tactics is a sequence the user is being taught, not an arbitrary
+   list. The nav used to run Tactics before Weaknesses, which contradicted the
+   numbered steps the same user had just read. Keep the two in step: reordering
+   the home screen means reordering here.
+
+   MOBILE_NAV_ITEMS takes the first five, so this order also decides the phone
+   tabs — Home plus the four numbered sections, in their numbered order. */
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Home', icon: LayoutDashboard, glowColor: 'rgba(250, 204, 21, 0.6)', iconColor: 'rgb(250, 204, 21)', activeText: 'text-yellow-400', activeBg: 'bg-yellow-500/10' },
   { to: '/openings', label: 'Openings', icon: BookOpen, glowColor: 'rgba(6, 182, 212, 0.6)', iconColor: 'rgb(6, 182, 212)', activeText: 'text-cyan-400', activeBg: 'bg-cyan-500/10' },
   { to: '/coach/home', label: 'Coach', icon: GraduationCap, glowColor: 'rgba(251, 113, 133, 0.6)', iconColor: 'rgb(251, 113, 133)', activeText: 'text-rose-400', activeBg: 'bg-rose-500/10' },
-  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', iconColor: 'rgb(52, 211, 153)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
   { to: '/weaknesses', label: 'Weaknesses', icon: AlertTriangle, glowColor: 'rgba(139, 92, 246, 0.6)', iconColor: 'rgb(139, 92, 246)', activeText: 'text-violet-400', activeBg: 'bg-violet-500/10' },
+  { to: '/tactics', label: 'Tactics', icon: Target, glowColor: 'rgba(52, 211, 153, 0.6)', iconColor: 'rgb(52, 211, 153)', activeText: 'text-emerald-400', activeBg: 'bg-emerald-500/10' },
   { to: '/kid', label: 'Kids Mode', icon: Baby, glowColor: 'rgba(251, 146, 60, 0.6)', iconColor: 'rgb(251, 146, 60)', activeText: 'text-orange-400', activeBg: 'bg-orange-500/10' },
   { to: '/settings', label: 'Settings', icon: Settings, glowColor: 'rgba(148, 163, 184, 0.5)', iconColor: 'rgb(148, 163, 184)', activeText: 'text-slate-400', activeBg: 'bg-slate-500/10' },
 ];
