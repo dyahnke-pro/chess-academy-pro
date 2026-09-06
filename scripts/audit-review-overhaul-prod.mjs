@@ -362,11 +362,14 @@ const run = async () => {
   await until(() => has(page, cardSel), 20000);
   const t1 = Date.now();
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
-  const quick = await until(startable, 8000, 250);
+  // The dive rewrote the annotations, so this open regenerates the walk's
+  // narration (the cache key changed) — seconds, not the minute of analysis.
+  // The contract is NO analysis spinner and no second dive, not zero work.
+  const quick = await until(startable, 25000, 250);
   const reopenMs = Date.now() - t1;
   const spinner = await has(page, '[data-testid="review-analyze-spinner"]');
   const pill = await has(page, '[data-testid="review-deepening-pill"]');
-  add('REOPEN instant-no-rerun', quick && !spinner, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
+  add('REOPEN instant-no-rerun', quick && !spinner && !pill, `startable in ${(reopenMs / 1000).toFixed(1)}s; spinner=${spinner}; deepening pill=${pill}`);
   // The key-moment dive ran BEHIND the first open (cold open = sweep only) and
   // was frozen out of that walk; this open carries it. Let a still-running dive
   // finish, then read the fixture ply's grade + lead line — David's own
@@ -386,6 +389,8 @@ const run = async () => {
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
   const onFund2 = await goTo(FUND_PLY);
   await settle();
+  // The banner fills once this ply's line is generated; give it a beat.
+  await until(async () => (await txt(page, '[data-testid="review-narration-banner"]')).length > 0, 60000, 1000);
   const fundBadge2 = await txt(page, '[data-testid="review-classification-badge"]');
   const fundNarr2 = await txt(page, '[data-testid="review-narration-banner"]');
   const lead2 = fundNarr2.split(/(?<=[.!?])\s+/)[0] || '';
