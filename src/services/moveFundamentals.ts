@@ -225,6 +225,24 @@ export function computeMoveFundamentals(
       imperative: `stake out the center and grab space with the pawn to ${mv.to}`,
       squares: [mv.to],
     });
+  } else if (mv.piece === 'p' && relRank(mv.to, mover) <= 3) {
+    // SUPPORT the center — a quiet pawn move in your own half (c3 / e3 / d3)
+    // whose pawn now GUARDS a core central square, preparing the push (2.c3 in
+    // the French guards d4). Caught live by the prod hint audit 2026-09-06: the
+    // coach had no why for c3 and fell to the bare "that's the strongest move".
+    // A wing pawn (a3 guards only b4) never qualifies — b4 is not the center.
+    const guards = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s)).slice(0, 2);
+    if (guards.length > 0) {
+      const g = guards.join(' and ');
+      out.push({
+        id: 'center',
+        weight: 55,
+        led: `supports the center, guarding ${g}`,
+        selfContained: `supports the center with the pawn to ${mv.to}, guarding ${g}`,
+        imperative: `support the center — the pawn to ${mv.to} guards ${g}`,
+        squares: [mv.to, ...guards],
+      });
+    }
   } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
     const eyes = eyesCenter(after, mv.to, mover).filter((s) => CORE_CENTER.includes(s)).slice(0, 2);
     if (eyes.length >= 2) {

@@ -64,6 +64,24 @@ describe('central pawn advance stakes out the center', () => {
   });
 });
 
+describe('a quiet pawn move that SUPPORTS the center has a why (prod hint audit 2026-09-06)', () => {
+  // 1.e4 e6 — the engine gave 2.c3. The hint fell to the bare "that's the
+  // strongest move here" because nothing modelled a pawn GUARDING the center.
+  const FRENCH = 'rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  it('c3 supports the center by guarding d4', () => {
+    const funds = computeMoveFundamentals(FRENCH, 'c3', 'white');
+    expect(funds[0].id).toBe('center');
+    expect(funds[0].squares).toEqual(['c3', 'd4']);
+    expect(strategicWhyLed(FRENCH, 'c3', 'white')).toBe('supports the center, guarding d4');
+  });
+  it('e3 from the start guards d4 (f4 is extended center, not core — filtered out)', () => {
+    expect(strategicWhyLed(START, 'e3', 'white')).toBe('supports the center, guarding d4');
+  });
+  it('a wing pawn (a3 guards only b4) is NOT center support — keeps the a3 contract null', () => {
+    expect(strategicWhyLed(START, 'a3', 'white')).toBeNull();
+  });
+});
+
 describe('endgame fundamentals', () => {
   it('a king step toward the center = king-activity', () => {
     const fen = '7k/8/8/8/8/8/8/4K3 w - - 0 40';
