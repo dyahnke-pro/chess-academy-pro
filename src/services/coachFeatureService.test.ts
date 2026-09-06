@@ -43,8 +43,10 @@ describe('explainBestMoveGrounded — GROUNDED best-move explanation (no LLM, ch
     // Quiet position, best move Nf3 neither captures nor checks — but it DOES
     // fight for the centre. The review must still say WHY it's best, grounded in
     // board geometry (the central squares it now eyes), never generic filler.
+    // Fundamental-first (David 2026-09-06): the WHY leads with the fundamental
+    // the move serves (development + center), not the mechanical "eyeing d4/e5".
     const r = explainBestMoveGrounded('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', 'g1f3', 'white');
-    expect(r).toBe('It develops the knight to f3, eyeing d4 and e5.');
+    expect(r).toBe('It develops the knight into the game, fighting for the center on d4 and e5.');
   });
 
   it('never claims a "win" on an even recapture (exchange, not a free piece)', () => {

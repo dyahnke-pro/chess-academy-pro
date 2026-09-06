@@ -15,6 +15,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import { seeGain } from './positionReadingService';
+import { strategicWhySelfContained } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
@@ -1677,6 +1678,17 @@ export function quietPurposePhrase(
   san: string,
   moverColor: 'white' | 'black',
 ): string | null {
+  // FUNDAMENTAL-FIRST (David 2026-09-06: "the fundamental computer needs to be
+  // added to all coach surfaces… fundamental first then the rest of teaching").
+  // The positive fundamental the move serves — development / king-safety /
+  // outpost / center / open-file / king-activity / passed-pawn — ranked, woven,
+  // and stated two-deep when two are equally important. This is the shared leaf
+  // EVERY coach surface reaches through (explainBestMoveGrounded + the hint +
+  // the Why? button + review + play commentary), so upgrading it here lifts them
+  // all at once. Falls through to the original per-case reads below only for the
+  // handful of quiet purposes the computer doesn't model.
+  const fundamental = strategicWhySelfContained(fenBefore, san, moverColor);
+  if (fundamental) return fundamental;
   try {
     const b = new Chess(fenBefore);
     const mv = b.move(san);
