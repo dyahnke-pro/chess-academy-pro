@@ -2860,6 +2860,22 @@ export function narrationSeatFaithful(
   }
 }
 
+/** The warm pass may not move a move from one seat to the other. The raw line
+ *  names the mover ("You capture…" / "Your opponent stakes…"); a rephrase that
+ *  opens an OPPONENT ply with "You <verb>" (or a STUDENT ply with "Your
+ *  opponent" / "They") has reattributed the move, whatever the prompt said
+ *  (audit 2026-09-06: 1.e4 by the opponent warmed to "You grab the center").
+ *  Pure text — no board needed, the seat is a fact of the ply. */
+export function narrationMoverFaithful(warmed: string, moverIsStudent: boolean): boolean {
+  const head = warmed.replace(/^["'“‘\s]+/, '').slice(0, 40);
+  if (moverIsStudent) {
+    return !/^(your opponent|their (move|pawn|knight|bishop|rook|queen|king)\b|they )/i.test(head);
+  }
+  // Opponent ply: "You <verb>" reattributes; "Your <piece>…" (a threat read on
+  // the student's piece) and "You're / You've / You had" (a state) do not.
+  return !/^you (grab|take|capture|play|push|develop|castle|plant|bring|move|trade|win|sacrifice|open|drop|hang|leave|give|put|slide|swing|throw|strike|stake|claim|recapture|pin|fork|attack|clamp|lock|line|train|step|advance|retreat|go|come|get|make|find|miss|blunder|slip)\b/i.test(head);
+}
+
 const SPELLED_NUM: Record<string, string> = {
   zero: '0', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
   seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
@@ -3334,6 +3350,7 @@ export async function generateReviewNarration(params: {
           if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
             && narrationBoardAccurate(w, s.fenAfter)
             && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
+            && narrationMoverFaithful(w, s.playerColor === playerColor)
             && narrationNumbersFaithful(det, w)
             // COVERAGE — the LLM never chooses which facts to state: a warm
             // that dropped a facet (any bundle whose square/SAN anchors all

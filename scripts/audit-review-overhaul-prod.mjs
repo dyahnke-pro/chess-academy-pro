@@ -248,12 +248,17 @@ const run = async () => {
   const total = (await readWalkPly(page))?.total ?? SANS.length;
   let reachedEnd = false;
   const flaggedLeads = new Map(); // ply → { badge, lead }
+  const plyNarr = new Map();      // ply → { badge, narr } — every ply the walk showed
   for (let i = 0; i < 400; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const b = await txt(page, '[data-testid="review-classification-badge"]');
-    if (n % 2 === 0 && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
+    if (n > 0 && !plyNarr.has(n)) {
       const nt = await txt(page, '[data-testid="review-narration-banner"]');
+      if (nt) plyNarr.set(n, { badge: b, narr: nt });
+    }
+    if (n % 2 === 0 && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
+      const nt = plyNarr.get(n)?.narr ?? '';
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
@@ -265,6 +270,47 @@ const run = async () => {
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
   add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+  // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
+  // that ply (present-tense text only; a projected line is about a future board).
+  const PIECE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+  const PROJ = /(?:it runs|the line runs|the plan runs|it goes|it continues|their idea runs|Here's how)/i;
+  const accFails = [];
+  const seatFails = [];
+  const tradeFails = [];
+  const PIECE_VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  const rc = new Chess();
+  const victimVal = [];
+  for (const san of SANS) { const mv = rc.move(san); victimVal.push(mv?.captured ? PIECE_VAL[mv.captured] : null); }
+  for (const [n, { narr }] of plyNarr) {
+    const pos = new Chess(); for (let k = 0; k < n; k++) pos.move(SANS[k]);
+    let scan = narr.replace(/\([^)]*\)/g, ' ');
+    const cut = scan.search(PROJ); if (cut >= 0) scan = scan.slice(0, cut);
+    const re = /\b(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi; let m;
+    while ((m = re.exec(scan)) !== null) {
+      const cell = pos.get(m[2].toLowerCase());
+      if (!cell || cell.type !== PIECE[m[1].toLowerCase()]) accFails.push(`ply ${n}: "${m[1]} on ${m[2]}" but board has ${cell ? cell.type : 'empty'}`);
+    }
+    // SEAT — the student is Black (even plies). An opponent ply must not open
+    // "You <verb>"; a student ply must not open "Your opponent" / "They".
+    const head = narr.replace(/^["'“‘\s]+/, '').slice(0, 40);
+    const studentPly = n % 2 === 0;
+    if (!studentPly && /^you (grab|take|capture|play|push|develop|castle|plant|bring|move|trade|win|sacrifice|open|strike|stake|claim|recapture|attack|clamp|lock)\b/i.test(head)) seatFails.push(`ply ${n} (opponent): "${head}"`);
+    if (studentPly && /^(your opponent|they )/i.test(head)) seatFails.push(`ply ${n} (you): "${head}"`);
+    // NOTRADEWIN — a capture immediately recaptured on the same square at equal
+    // value is an even trade: it must not read as profit / material won.
+    const i = n - 1;
+    if (i + 1 < SANS.length && SANS[i].includes('x') && SANS[i + 1].includes('x')) {
+      const to = (x) => x.replace(/[+#]/g, '').slice(-2);
+      if (to(SANS[i]) === to(SANS[i + 1]) && victimVal[i] !== null && victimVal[i] === victimVal[i + 1]
+        && /clean profit|material in the bag|wins? material|nets? (a|the|\d)|without giving up anything|free pawn|a real price/i.test(scan)) {
+        tradeFails.push(`ply ${n} ${SANS[i]}: "${narr.slice(0, 70)}"`);
+      }
+    }
+  }
+  add('ACC board-accuracy', accFails.length === 0, accFails.length ? accFails.slice(0, 3).join(' | ') : `no false piece-on-square claims across ${plyNarr.size} narrated plies`);
+  add('SEAT mover-never-reattributed', seatFails.length === 0, seatFails.length ? seatFails.slice(0, 3).join(' | ') : `every narrated ply keeps its seat (${plyNarr.size} plies)`);
+  add('NOTRADEWIN even-trade-not-profit', tradeFails.length === 0, tradeFails.length ? tradeFails.slice(0, 3).join(' | ') : 'no even trade narrated as material won');
+
   // FUNDLEAD — across the walk, every flagged STUDENT ply the auto-advance
   // passed leads with a fundamentals verdict when one attached; at least one
   // must have (a game with a flagged move and no fundamental anywhere means

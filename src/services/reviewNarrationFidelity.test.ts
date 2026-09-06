@@ -3,7 +3,7 @@
 // e6" for the OPPONENT's queen) and a fact-number drift ("two more" for a
 // 3-point knight). Board accuracy alone passes both — these guards close it.
 import { describe, it, expect } from 'vitest';
-import { narrationSeatFaithful, narrationNumbersFaithful } from './coachFeatureService';
+import { narrationSeatFaithful, narrationNumbersFaithful, narrationMoverFaithful } from './coachFeatureService';
 import { royalDefenderTarget } from './reviewTeachingPoints';
 import { seatPieceReferences } from './groundedAnswer';
 import { Chess } from 'chess.js';
@@ -236,5 +236,22 @@ describe('opponent-threat teaching — identify, recognize, prevent (David 2026-
     const p = describeThreatPrevention(fenAfter, t!, 'd4', 'b');
     expect(p).toMatch(/hitting the bishop on c5/);
     expect(p).toMatch(/holding the whole thing together/);
+  });
+});
+
+describe('narrationMoverFaithful (the warm pass may not move a ply to the other seat)', () => {
+  it('rejects an OPPONENT ply warmed into "You grab the center" (audit 2026-09-06, 1.e4 by the opponent)', () => {
+    expect(narrationMoverFaithful('You grab the center here, and that\'s really the whole point.', false)).toBe(false);
+    expect(narrationMoverFaithful('"You plant yourself right in the center here."', false)).toBe(false);
+  });
+  it('accepts an opponent ply that reads the threat on YOUR piece, or a state', () => {
+    expect(narrationMoverFaithful('Your knight on d5 is sitting loose — their next move collects it.', false)).toBe(true);
+    expect(narrationMoverFaithful('Your opponent stakes a claim in the center.', false)).toBe(true);
+    expect(narrationMoverFaithful("You're a pawn down now, and they have the c-file.", false)).toBe(true);
+  });
+  it('rejects a STUDENT ply warmed into the opponent\'s seat', () => {
+    expect(narrationMoverFaithful('Your opponent takes the pawn and opens the c-file.', true)).toBe(false);
+    expect(narrationMoverFaithful('They strike in the centre with d4.', true)).toBe(false);
+    expect(narrationMoverFaithful('You take the pawn — an even trade, nothing won.', true)).toBe(true);
   });
 });
