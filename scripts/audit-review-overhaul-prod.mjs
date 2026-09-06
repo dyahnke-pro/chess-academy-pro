@@ -353,6 +353,10 @@ const run = async () => {
   add('SHOW never-auto-played', showStarts === (showBtn ? 1 : 0), `${showStarts} show-me start(s) — must equal the one tap`);
 
   // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
+  // Let the background dive finish BEFORE leaving (a human reads the recap
+  // while the pill spins); reopening mid-dive would only measure the dive.
+  const diveDone = await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 300000, 2000);
+  log(`  [dive] background deep dive finished before reopen: ${diveDone}`);
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss();
   await until(() => has(page, cardSel), 20000);
@@ -367,7 +371,7 @@ const run = async () => {
   // was frozen out of that walk; this open carries it. Let a still-running dive
   // finish, then read the fixture ply's grade + lead line — David's own
   // example: 6...Nb6 must be flagged and led by its fundamentals.
-  await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 240000, 2000);
+  await until(async () => !(await has(page, '[data-testid="review-deepening-pill"]')), 120000, 2000);
   const annots2 = await page.evaluate(async (gid) => {
     const open = () => new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
     const db = await open();

@@ -364,7 +364,7 @@ class DedicatedWorker {
     fen: string,
     depth: number,
     budgetMs?: number,
-  ): Promise<{ evaluation: number; bestMove: string; depth: number }> {
+  ): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> {
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         reject(new Error('Analysis timed out'));
@@ -373,6 +373,7 @@ class DedicatedWorker {
       const blackToMove = fen.split(' ')[1] === 'b';
       let lastEval = 0;
       let lastDepth = 0;
+      let lastPv: string[] = [];
 
       const handler = (event: MessageEvent<string>): void => {
         const data = event.data;
@@ -394,6 +395,8 @@ class DedicatedWorker {
               ? (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE)
               : scoreValue;
           }
+          const pvMatch = / pv (.+)$/.exec(data);
+          if (pvMatch) lastPv = pvMatch[1].trim().split(/\s+/).slice(0, 8);
         }
 
         const bmMatch = /^bestmove (\S+)/.exec(data);
@@ -401,7 +404,7 @@ class DedicatedWorker {
           clearTimeout(timeoutId);
           this.worker.removeEventListener('message', handler);
           const flip = blackToMove ? -1 : 1;
-          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth });
+          resolve({ evaluation: lastEval * flip, bestMove: bmMatch[1], depth: lastDepth, pv: lastPv });
         }
       };
 
@@ -1321,24 +1324,42 @@ async function analyzeGamePositions(
   let deepDiveComplete = false;
   if (isReview && !opts.sweepOnly) {
     const keyPlies = selectCriticalPlies(evals, skipBook, REVIEW_MAX_DEEP_PLIES);
+    // The dive runs BEHIND an open review now, so it must not sit on the
+    // SINGLETON engine — that is the engine every live ask uses (the explore
+    // reply, Show-me, the hint), and a 24-ply × 8s dive queued in front of it
+    // made the explored move's reply wait minutes and wedged a worker restart
+    // (prod audit 2026-09-06: "Stockfish initialization timed out after 45s").
+    // Take ONE dedicated pool worker; the singleton stays free. Fall back to
+    // the singleton only when no worker can be had at all.
+    let diveWorker: DedicatedWorker | null = null;
+    try { diveWorker = (await acquirePool(1))[0] ?? null; } catch { diveWorker = null; }
+    const search = async (fen: string): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
+      if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
+      return { evaluation: a.evaluation, bestMove: a.bestMove, depth: a.depth, pv: a.topLines?.[0]?.moves?.slice(0, 8) ?? [] };
+    };
     let searched = 0;
-    for (const i of keyPlies) {
-      if (deep[i] !== null) { searched++; continue; }
-      onPosition?.(fens.length, fens.length);
-      try {
-        const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
-        deep[i] = a.evaluation;
-        deepBest[i] = a.bestMove || null;
-        deepPv[i] = a.topLines?.[0]?.moves?.slice(0, 8) ?? (a.bestMove ? [a.bestMove] : []);
-        searched++;
-        if (Number.isFinite(a.depth) && a.depth > 0) {
-          depthAt[i] = Math.max(depthAt[i], a.depth);
-          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
+    try {
+      for (const i of keyPlies) {
+        if (deep[i] !== null) { searched++; continue; }
+        onPosition?.(fens.length, fens.length);
+        try {
+          const a = await search(fens[i]);
+          deep[i] = a.evaluation;
+          deepBest[i] = a.bestMove || null;
+          deepPv[i] = a.pv.length ? a.pv : (a.bestMove ? [a.bestMove] : []);
+          searched++;
+          if (Number.isFinite(a.depth) && a.depth > 0) {
+            depthAt[i] = Math.max(depthAt[i], a.depth);
+            toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
+          }
+        } catch {
+          // Keep the curve value for this ply — a lost deep search costs
+          // precision on one move, never the review.
         }
-      } catch {
-        // Keep the curve value for this ply — a lost deep search costs
-        // precision on one move, never the review.
       }
+    } finally {
+      if (diveWorker) releasePool([diveWorker]);
     }
     deepDiveComplete = searched === keyPlies.length;
   }
@@ -1464,7 +1485,24 @@ async function analyzeGamePositions(
  * Analyze a single game and store the results. Returns existing annotations
  * if the game is already fully analyzed, otherwise runs Stockfish analysis.
  */
+/** One analysis per game at a time. A review reopened while its background
+ *  dive is still running used to start a SECOND dive for the same game (two
+ *  full searches racing on the engine); the second caller now joins the first. */
+const _singleGameInFlight = new Map<string, Promise<MoveAnnotation[] | null>>();
+
 export async function analyzeSingleGame(
+  gameId: string,
+  onProgress?: (phase: string) => void,
+  opts: { sweepOnly?: boolean } = {},
+): Promise<MoveAnnotation[] | null> {
+  const inFlight = _singleGameInFlight.get(gameId);
+  if (inFlight) return inFlight;
+  const run = analyzeSingleGameUncoalesced(gameId, onProgress, opts);
+  _singleGameInFlight.set(gameId, run);
+  try { return await run; } finally { _singleGameInFlight.delete(gameId); }
+}
+
+async function analyzeSingleGameUncoalesced(
   gameId: string,
   onProgress?: (phase: string) => void,
   opts: { sweepOnly?: boolean } = {},
