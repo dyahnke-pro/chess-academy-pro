@@ -26,7 +26,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
-import { explainBestMoveGrounded, describeMoveGeometry } from '../services/groundedAnswer';
+import { describeMoveGeometry } from '../services/groundedAnswer';
 import { strategicWhyLed } from '../services/moveFundamentals';
 import {
   getCachedStockfish,

@@ -643,7 +643,7 @@ export function resolveOpeningEntry(
   // name (no shipped name is SAN-shaped today, but that is not a guarantee).
   // Checked against the FULL DB (not the teachable-filtered pool) so a
   // terminal-short exact name is never SAN-mangled on its way to the exact tier.
-  if (!(openingsData as OpeningEntry[]).some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
+  if (!(openingsData).some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
     const stripped = rawTrimmed.replace(NAMED_SAN, (san) => { namedSans.push(canonicalizeSan(san)); return ' '; });
     if (namedSans.length > 0) {
       const remainder = stripped.replace(/\s+/g, ' ').trim().replace(TRAILING_CONNECTORS, '').trim();
@@ -670,7 +670,7 @@ export function resolveOpeningEntry(
   // deepening in openingGenerator (David 2026-09-06). Only for a pure-name query
   // (no SAN carried); a name+move query keeps the existing SAN-refinement path.
   if (namedSans.length === 0) {
-    const exactAll = (openingsData as OpeningEntry[]).filter(
+    const exactAll = (openingsData).filter(
       (e) => normalizeNameForMatch(e.name) === queryNorm,
     );
     if (exactAll.length > 0) {
