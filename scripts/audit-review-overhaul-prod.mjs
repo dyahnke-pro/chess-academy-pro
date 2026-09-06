@@ -202,11 +202,17 @@ const run = async () => {
   await settle();
   const fundNarr = await txt(page, '[data-testid="review-narration-banner"]');
   const fundBadge = await txt(page, '[data-testid="review-classification-badge"]');
-  const FUND_RE = /same (knight|piece)|its (second|third|fourth) (move|trip)|on its (second|third|fourth) move|tempo|gave up d5|concedes the d5|stepping off d5/i;
+  // The DNA-register verdict stems (principleVoice.ts) + the cost sentence.
+  // The DNA-register verdict stems from principleVoice.ts — the fundamentals
+  // line, not the generic threat read ("your knight is sitting loose" is the
+  // threat detector, and must NOT satisfy this).
+  const FUND_RE = /same (knight|bishop|rook|queen|piece) (for the|again|moves)|its (second|third|fourth|fifth) (move|trip)|on its (second|third|fourth|fifth) move|hands them a tempo|tempo lost|the cost is time|another tempo handed|gave up [a-h][1-8]|concedes the [a-h][1-8] square|space handed over|space given up|development first|pieces before pawns|develops nothing while|queen came out too early|early queen sortie|queen before the pieces|castling was there|castle first|uncastled one move too long|pawn grab with the pieces|^greedy:|edge pawn this early|edge pawns wait|both bishops are committed|knights before bishops|bishops declared their squares|buries your own bishop|a centre break|open the centre only when|knight on the rim is dim|knights belong in the centre|loose pieces drop off|their threat first|answer the threat before|checks, captures, threats|a forcing win was on the board|always run the forcing moves|loosens the shelter|pawns in front of the king move only|creates a lasting weakness|pawns don't move backwards|a structural cost|advanced past its support|too far, too soon|trades your active|trade your worst piece|an exchange that improves them|ahead in material — trade|every piece off the board|ahead means simplify|behind in material|when you're down, keep the pieces|behind means complicate|improve your worst piece/i;
   const lead = fundNarr.split(/(?<=[.!?])\s+/)[0] || '';
-  const fundLeads = FUND_RE.test(lead);
-  const fundAnywhere = FUND_RE.test(fundNarr);
-  add('FUND ply-12-leads-with-fundamentals', onFund && fundLeads, onFund ? `badge=${fundBadge} lead="${lead.slice(0, 110)}" (anywhere=${fundAnywhere})` : `could not reach ply ${FUND_PLY}`);
+  const flagged = /INACCUR|MISTAKE|BLUNDER/i.test(fundBadge);
+  // The fixture ply: WHEN the engine flags it, the narration must LEAD with the
+  // fundamentals. Whether it flags it is engine truth, printed above ([engine]).
+  add('FUND fixture-ply-graded', onFund && flagged, onFund ? `6...Nb6 badge=${fundBadge || 'none'} (engine truth — see [engine] rows)` : `could not reach ply ${FUND_PLY}`);
+  add('FUND fixture-ply-leads-with-fundamentals', onFund && (!flagged || FUND_RE.test(lead)), onFund ? `lead="${lead.slice(0, 120)}"` : 'unreached');
   add('FUND no-we-our', !/\b(we|our|us)\b/i.test(fundNarr), /\b(we|our|us)\b/i.test(fundNarr) ? `perspective leak: "${fundNarr.slice(0, 80)}"` : 'you/your + they/their only');
 
   // ── FREE + EXPL (D) — the student tries THEIR OWN alternative on the free board
@@ -254,9 +260,15 @@ const run = async () => {
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined);
   const total = (await readWalkPly(page))?.total ?? SANS.length;
   let reachedEnd = false;
+  const flaggedLeads = new Map(); // ply → { badge, lead }
   for (let i = 0; i < 400; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
+    const b = await txt(page, '[data-testid="review-classification-badge"]');
+    if (n % 2 === 0 && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
+      const nt = await txt(page, '[data-testid="review-narration-banner"]');
+      flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
+    }
     if (n >= total) { reachedEnd = true; break; }
     const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
     if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
@@ -265,6 +277,14 @@ const run = async () => {
   await until(() => spoken().some((s) => /flagged moves|carry into the next game/i.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => /flagged moves|carry into the next game/i.test(s.text));
   add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+  // FUNDLEAD — across the walk, every flagged STUDENT ply the auto-advance
+  // passed leads with a fundamentals verdict when one attached; at least one
+  // must have (a game with a flagged move and no fundamental anywhere means
+  // the attributor is not wired into the live narration).
+  const leads = [...flaggedLeads.entries()];
+  const withFund = leads.filter(([, v]) => FUND_RE.test(v.lead));
+  add('FUNDLEAD flagged-student-plies-lead-with-fundamentals', leads.length > 0 && withFund.length > 0,
+    `${withFund.length}/${leads.length} flagged student plies lead with a fundamental` + (leads.length ? ` — ${leads.map(([p, v]) => `ply ${p} ${v.badge}: "${v.lead.slice(0, 60)}"`).join(' | ')}` : ''));
 
   // ── REOPEN (A) — instant, no re-analysis ────────────────────────────────
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });

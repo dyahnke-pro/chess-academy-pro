@@ -3410,7 +3410,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   Narration is PINNED above the scroll middle, so a full-width
                   board no longer hides the coach's why (the old 2026-06-27/07-10
                   complaint the vh cap was solving). */}
-              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative">
+              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative" data-testid="review-walk-board">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or

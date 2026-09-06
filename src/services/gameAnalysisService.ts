@@ -717,26 +717,26 @@ const REVIEW_MAX_DEEP_PLIES = 12;
 
 /** Depth the REVIEW re-searches its key moments at.
  *
- *  🔒 THIS MUST BE A DEPTH THE ENGINE CAN ACTUALLY REACH INSIDE THE BUDGET
- *  (David 2026-09-05: "isn't depth 18 too deep? what function requires that?").
- *  It was `BEST_MOVE_DEPTH` (18) on the reasoning that ~10 positions can afford
- *  more depth each than ~66 could. That reasoning was about budget and ignored
- *  REACHABILITY, which is the property that actually governs cost here.
+ *  `go depth N movetime B` stops at whichever limit lands first, so N is a
+ *  CEILING and REVIEW_POSITION_BUDGET_MS is the cost bound: a quiet position
+ *  that reaches N early hands its budget back, and a position that cannot
+ *  reach N in B stops at B with whatever depth it got. Twelve key plies × B
+ *  bounds the deep pass either way — and since 2026-09-06 that pass runs in
+ *  the BACKGROUND behind an already-open review (CoachReviewSessionPage
+ *  deepening), so it is no longer time the student waits for.
  *
- *  `go depth N movetime B` stops at whichever limit lands first. When N is
- *  unreachable the depth limit NEVER lands, so every search runs the full
- *  movetime — there is no early return, ever. On the asm.js build a phone runs,
- *  depth 18 is unreachable in 3s, so asking for it turned all twelve key moments
- *  into guaranteed full-budget searches. Asking for a depth the engine reaches
- *  lets a quiet position finish in a few hundred ms and hand its budget back.
- *  A high ceiling buys no depth on a slow engine; it only removes every chance
- *  to stop early.
- *
- *  14 also loses nothing that matters: the classification thresholds are the
- *  consumer here, and a depth-14 → depth-18 eval moves ~10cp while the smallest
- *  verdict-changing swing is INACCURACY_CP (50). The verdict is settled well
- *  before 18. */
-const REVIEW_DEEP_DEPTH = 14;
+ *  Why 16 and not 14 (David's Alapin fixture, 6...Nb6, native Stockfish):
+ *    d14 → 52cp   (4.6% expected points: "good" under the 5% band)
+ *    d16 → 128cp  (mistake)
+ *    d18 → 98cp, d20 → 78cp, d22 → 69cp  (a clear inaccuracy, stably)
+ *  The 2026-09-05 note that "a depth-14 → depth-18 eval moves ~10cp" is true
+ *  of quiet positions and false of exactly the ones a review exists for: the
+ *  verdict on the student's own key mistake FLIPPED between 14 and 16 and
+ *  stayed flagged at every depth after. 14 was the one depth that graded it
+ *  a good move. 16 = ANALYSIS_DEPTH, so a completed deep pass honestly earns
+ *  the ANALYSIS_DEPTH stamp it already claims. Still below BEST_MOVE_DEPTH
+ *  (18): the review is not the drill-solution search. */
+const REVIEW_DEEP_DEPTH = 16;
 
 /** Smallest cpLoss the SWEEP will call a slip.
  *

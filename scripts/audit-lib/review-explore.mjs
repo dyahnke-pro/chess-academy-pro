@@ -10,14 +10,24 @@
 // reconstructed FEN — the chosen move never needs them.
 import { Chess } from 'chess.js';
 
+/** The WALK board only. The citation previews render their own [data-square]
+ *  mini-boards further down the page; reading the whole document mixed their
+ *  pieces into the position (a "knight on b6" from a preview at a later ply). */
+const BOARD = '[data-testid="review-walk-board"]';
+const cellsIn = () => {
+  const root = document.querySelector('[data-testid="review-walk-board"]') ?? document;
+  return Array.from(root.querySelectorAll('[data-square]'));
+};
+
 export async function readBoardPosition(page) {
-  const cells = await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('[data-square]')).map((c) => ({
+  const cells = await page.evaluate((cellsSrc) => {
+    const cellsIn = new Function(`return (${cellsSrc})()`);
+    return cellsIn().map((c) => ({
       sq: c.getAttribute('data-square'),
       piece: c.querySelector('[data-piece]')?.getAttribute('data-piece') ?? null,
     }));
-  }).catch(() => []);
-  if (cells.length < 64) return null;
+  }, cellsIn.toString()).catch(() => []);
+  if (cells.length !== 64) return null;
   const map = new Map();
   for (const c of cells) if (c.piece && /^[wb][PNBRQK]$/.test(c.piece)) map.set(c.sq, c.piece);
   const rows = [];
@@ -43,8 +53,10 @@ export async function readWalkPly(page) {
 }
 
 export async function boardSignature(page) {
-  return page.evaluate(() => Array.from(document.querySelectorAll('[data-square]'))
-    .map((c) => `${c.getAttribute('data-square')}:${c.querySelector('[data-piece]')?.getAttribute('data-piece') ?? '-'}`).join('|')).catch(() => null);
+  return page.evaluate((cellsSrc) => {
+    const cellsIn = new Function(`return (${cellsSrc})()`);
+    return cellsIn().map((c) => `${c.getAttribute('data-square')}:${c.querySelector('[data-piece]')?.getAttribute('data-piece') ?? '-'}`).join('|');
+  }, cellsIn.toString()).catch(() => null);
 }
 
 /**
@@ -69,9 +81,10 @@ export async function exploreOnFreeBoard(page, { replyWaitMs = 25000 } = {}) {
   const pick = moves.find((m) => m.piece === 'n' || m.piece === 'b') ?? moves.find((m) => m.piece === 'p') ?? moves[0];
   if (!pick) return { ok: false, reason: 'no quiet legal move found for the side to move' };
   const before = await boardSignature(page);
-  await page.locator(`[data-square="${pick.from}"]`).first().click({ force: true }).catch(() => undefined);
+  const cell = (sq) => page.locator(`${BOARD} [data-square="${sq}"], [data-square="${sq}"]`).first();
+  await cell(pick.from).click({ force: true }).catch(() => undefined);
   await page.waitForTimeout(200);
-  await page.locator(`[data-square="${pick.to}"]`).first().click({ force: true }).catch(() => undefined);
+  await cell(pick.to).click({ force: true }).catch(() => undefined);
   let banner = false;
   for (let i = 0; i < 20 && !banner; i++) {
     banner = (await page.locator('[data-testid="review-exploring-banner"]').count()) > 0;

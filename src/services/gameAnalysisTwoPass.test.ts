@@ -229,15 +229,20 @@ describe('the REVIEW deep-dives the key moments', () => {
     // N means the depth limit never lands and EVERY search burns the whole
     // movetime — no early return, ever (David 2026-09-05: "isn't depth 18 too
     // deep?"). It must stay reachable on the slow asm build a phone runs.
-    expect(REVIEW_DEEP_DEPTH).toBeLessThan(ANALYSIS_DEPTH);
+    // A completed deep pass stamps ANALYSIS_DEPTH, so the review depth must
+    // actually earn that stamp — equal, never above it.
+    expect(REVIEW_DEEP_DEPTH).toBe(ANALYSIS_DEPTH);
     // …and it must NOT be aliased to the drill-solution depth again.
     expect(REVIEW_DEEP_DEPTH).toBeLessThan(BEST_MOVE_DEPTH);
   });
 
-  it('still grades correctly at that depth — the verdict is settled far shallower than 18', () => {
-    // The consumer of the deep eval is classifyCpLoss, whose smallest
-    // verdict-changing swing is INACCURACY_CP (50cp). A depth-14 → depth-18
-    // eval moves ~10cp, so the extra plies cannot change a classification.
+  it('is deep enough to grade the fixture mistake (the verdict on 6...Nb6 flips between depth 14 and 16)', () => {
+    // Native Stockfish on David's Alapin: d14 52cp (4.6%, "good"), d16 128cp,
+    // d18 98, d20 78, d22 69 — flagged at every depth from 16 up. A depth that
+    // grades the student's own key mistake as good is the wrong depth,
+    // whatever it saves on quiet positions (which still stop early under the
+    // movetime budget).
+    expect(REVIEW_DEEP_DEPTH).toBeGreaterThanOrEqual(16);
     expect(INACCURACY_CP).toBeGreaterThan(10);
   });
 
