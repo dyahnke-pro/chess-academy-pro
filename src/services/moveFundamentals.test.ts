@@ -10,7 +10,7 @@ import {
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 function fund(id: MoveFundamental['id'], weight: number): MoveFundamental {
-  return { id, weight, led: id, selfContained: id, squares: [] };
+  return { id, weight, led: id, selfContained: id, imperative: id, squares: [] };
 }
 
 describe('computeMoveFundamentals — development leads a quiet developing move', () => {

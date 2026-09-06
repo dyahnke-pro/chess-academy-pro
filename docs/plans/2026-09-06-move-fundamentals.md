@@ -56,4 +56,21 @@ Two clause forms: **led** (verb-first, for appending after an already-named move
   expectation updated to the new fundamental-first phrasing (living-audit rule).
 - ship-check content gates + the prod hint audit.
 
-Status: in progress.
+## Tied into the MAIN COMPUTER VOICE (David 2026-09-06: "tie the fundamentals into the main computer voice; DNA runs through all")
+
+- The best-move answer (`assembleMoveEvalAnswer`) and the Why? button
+  (`whyBestMove`) compose `explainBestMoveGrounded` → route through `voiceFacts`
+  (preferRaw, DNA register). Since `explainBestMoveGrounded` now leads with the
+  fundamental, the main computer voice already speaks it.
+- The PositionFacts **ranked DNA briefing** carries a new first-class
+  `fundamental` clause (rank 38, above `structure-plan`): the imperative plan the
+  student's best move serves, woven + fundamental-first, teaching the IDEA and
+  never the SAN (no answer leak on a live board). Fires on the student's move,
+  out of the opening, when the moment earns voice or a teaching beat is declared.
+  It flows through `clauseText` to every briefing consumer — live coach, phase
+  narration, read-this-position, teach, the Why? button — and through `voiceFacts`,
+  which carries the DNA register across both the computed prose (preferRaw) and
+  the phrasing model. DNA runs through both layers.
+
+Status: done — moveFundamentals (13) + positionFacts fundamental clause (1) +
+why-phrase suite (154) + briefing consumers (39) + lesson gates (4,467) green.

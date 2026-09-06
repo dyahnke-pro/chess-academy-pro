@@ -40,6 +40,10 @@ export interface MoveFundamental {
   /** Self-contained clause that names the piece ("develops the knight into the
    *  game…") — for standalone use where the move was not already spoken. */
   selfContained: string;
+  /** Imperative plan clause ("develop into the game and fight for the center…")
+   *  — for the ranked briefing ("The plan here: …"). Never names the SAN, so it
+   *  teaches the idea without handing over the move on a live board. */
+  imperative: string;
   /** Board squares the clause references (arrows / highlights). */
   squares: string[];
 }
@@ -173,6 +177,7 @@ export function computeMoveFundamentals(
       weight: phase === 'endgame' ? 45 : 92,
       led: 'castles your king into safety and swings the rook toward the center',
       selfContained: 'castling gets your king to safety and brings the rook toward the center',
+      imperative: 'castle your king to safety and bring the rook toward the center',
       squares: [kingTo, rookTo],
     });
   }
@@ -185,6 +190,7 @@ export function computeMoveFundamentals(
       weight: 84,
       led: `lands on the ${mv.to} outpost, a square no pawn can ever kick it from`,
       selfContained: `plants the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
+      imperative: `plant the ${name} on the ${mv.to} outpost, where no pawn can challenge it`,
       squares: [mv.to],
     });
   }
@@ -204,6 +210,7 @@ export function computeMoveFundamentals(
       weight,
       led: `develops into the game${centerTail}`,
       selfContained: `develops the ${name} into the game${centerTail}`,
+      imperative: `develop into the game${centerTail}`,
       squares: [mv.to, ...eyes],
     });
   }
@@ -217,6 +224,7 @@ export function computeMoveFundamentals(
       weight: 66,
       led: `stakes out the center and grabs space`,
       selfContained: `stakes out the center with the pawn to ${mv.to}`,
+      imperative: `stake out the center and grab space with the pawn to ${mv.to}`,
       squares: [mv.to],
     });
   } else if (mv.piece !== 'p' && mv.piece !== 'k' && rankOf(mv.from) !== homeRank && !out.some((f) => f.id === 'development' || f.id === 'outpost')) {
@@ -227,6 +235,7 @@ export function computeMoveFundamentals(
         weight: 52,
         led: `takes aim at the center, hitting ${eyes.join(' and ')}`,
         selfContained: `repositions the ${PIECE_NAME[mv.piece]} to take aim at ${eyes.join(' and ')}`,
+        imperative: `take aim at the center, hitting ${eyes.join(' and ')}`,
         squares: [mv.to, ...eyes],
       });
     }
@@ -244,6 +253,7 @@ export function computeMoveFundamentals(
         weight: phase === 'endgame' ? 60 : 72,
         led: `takes the ${openness} ${fileName}, where the ${name} belongs`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
+        imperative: `take the ${openness} ${fileName}, where the ${name} belongs`,
         squares: [mv.to],
       });
     }
@@ -261,6 +271,7 @@ export function computeMoveFundamentals(
         weight: 88,
         led: `marches your king toward the center, where it fights in the endgame`,
         selfContained: `activates the king toward the center, a fighting piece in the endgame`,
+        imperative: `march your king toward the center — in the endgame it is a fighting piece`,
         squares: [mv.to],
       });
     }
@@ -273,6 +284,7 @@ export function computeMoveFundamentals(
       weight: phase === 'endgame' ? 84 : 62,
       led: `pushes your passed pawn — passed pawns must be pushed`,
       selfContained: `pushes the passed pawn to ${mv.to} — passed pawns must be pushed`,
+      imperative: `push your passed pawn — passed pawns must be pushed`,
       squares: [mv.to],
     });
   }
@@ -303,11 +315,11 @@ function renderStrategic(
   fenBefore: string,
   moveSan: string,
   moverColor: 'white' | 'black',
-  form: 'led' | 'selfContained',
+  form: 'led' | 'selfContained' | 'imperative',
 ): string | null {
   const lead = pickLeadingFundamentals(computeMoveFundamentals(fenBefore, moveSan, moverColor));
   if (lead.length === 0) return null;
-  return lead.map((f) => (form === 'led' ? f.led : f.selfContained)).join(', and ');
+  return lead.map((f) => f[form]).join(', and ');
 }
 
 /** The LED positional clause (verb-first) — for a surface that has ALREADY named
@@ -328,4 +340,15 @@ export function strategicWhySelfContained(
   moverColor: 'white' | 'black',
 ): string | null {
   return renderStrategic(fenBefore, moveSan, moverColor, 'selfContained');
+}
+
+/** The IMPERATIVE plan clause (never names the SAN) — for the ranked DNA briefing
+ *  ("The plan here: {this}"). Teaches the idea without handing over the move on a
+ *  live board. Null when the move has no fundamental worth naming. */
+export function strategicWhyImperative(
+  fenBefore: string,
+  moveSan: string,
+  moverColor: 'white' | 'black',
+): string | null {
+  return renderStrategic(fenBefore, moveSan, moverColor, 'imperative');
 }

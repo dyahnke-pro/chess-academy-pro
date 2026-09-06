@@ -15,6 +15,8 @@
 //  • Perturbation (expensive) runs ONLY when importance says the moment matters.
 import type { StockfishAnalysis } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
+import { Chess } from 'chess.js';
+import { strategicWhyImperative } from './moveFundamentals';
 import { computeImportance, type ImportanceVerdict } from './narrationImportance';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, type MustDefend } from './threatOut';
@@ -84,7 +86,7 @@ export interface PositionFactsResult {
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'structure-plan' | 'convert';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -247,9 +249,35 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     ? (structurePlan(fen, studentColor) ?? '')
     : '';
 
+  // FUNDAMENTAL — the teaching idea the STUDENT's best move serves (development /
+  // king safety / outpost / center / open file / king activity / passed pawn),
+  // ranked + woven, fundamental-first (David 2026-09-06: "tie the fundamentals
+  // into the main computer voice; DNA runs through all"). It teaches the IDEA in
+  // the imperative, NEVER the SAN, so it never hands over the move on a live
+  // board. Fires only on the student's move, out of the opening, when the moment
+  // already earns voice or the caller flagged a teaching beat — so it rides the
+  // notable moments, never every quiet ply.
+  let fundamentalText = '';
+  const bestUci = analysis.topLines?.[0]?.moves?.[0] ?? null;
+  if (studentToMove && !openingPhase && (importance.speak || input.teachingBeat)
+    && bestUci && bestUci.length >= 4) {
+    try {
+      const probe = new Chess(fen);
+      const bm = probe.move({
+        from: bestUci.slice(0, 2),
+        to: bestUci.slice(2, 4),
+        promotion: bestUci.length > 4 ? bestUci[4] : undefined,
+      });
+      if (bm) {
+        const idea = strategicWhyImperative(fen, bm.san, moverColor === 'w' ? 'white' : 'black');
+        if (idea) fundamentalText = `The plan here: ${idea}.`;
+      }
+    } catch { /* no fundamental → stay silent */ }
+  }
+
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
+    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
   };
 }
 
@@ -272,12 +300,13 @@ function buildClauses(a: {
   opponentIntent: OpponentIntent | null;
   statusText: string;
   structureText: string;
+  fundamentalText: string;
   /** Student-POV eval (cp) at this position. Gates the prophylaxis clause. */
   studentEvalCp: number;
   kingExposure: KingExposure | null;
   centralKingDanger: CentralKingDanger | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, studentEvalCp, kingExposure, centralKingDanger } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger } = a;
   // A latent danger to your own king — or a STATUS band-change — is worth a word
   // even in an otherwise quiet spot; neither needs the importance gate to fire.
   if (!importance.speak && !latentDanger && !tradeDanger && !statusText && !kingExposure && !centralKingDanger) return [];
@@ -364,6 +393,9 @@ function buildClauses(a: {
   // The campaign — the student's asset, and the opponent's (with the counter).
   if (leansOn) ranked.push({ kind: 'student-leans', rank: 40, text: `Your ${leansOn.piece} on ${leansOn.square} is doing the work — it leans on the ${leansOn.leansOn.piece} on ${leansOn.leansOn.square}, so keep that support in place.` });
   if (opponentLeansOn) ranked.push({ kind: 'opponent-leans', rank: 45, text: `Their ${opponentLeansOn.piece} on ${opponentLeansOn.square} is their best piece — but it leans on the ${opponentLeansOn.leansOn.piece} on ${opponentLeansOn.leansOn.square}; take that away and it's ordinary.` });
+  // The FUNDAMENTAL the student's best move serves — the teaching idea, ranked
+  // just above the structural plan (it is the concrete plan for THIS move).
+  if (fundamentalText) ranked.push({ kind: 'fundamental', rank: 38, text: fundamentalText });
   // The campaign's structural plan — the textbook idea the pawn structure sets.
   if (structureText) ranked.push({ kind: 'structure-plan', rank: 35, text: structureText });
   // Convert-mode — decided game, one beat.
