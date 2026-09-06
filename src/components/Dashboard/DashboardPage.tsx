@@ -6,6 +6,7 @@ import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2, Baby } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
+import { NotificationBell } from '../Notifications/NotificationBell';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
@@ -237,6 +238,9 @@ export function DashboardPage(): JSX.Element {
           Chess Academy Pro
         </h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <NotificationBell />
+        </div>
+        <div className="absolute left-0 top-1/2 -translate-y-1/2">
           <PageHelp
             helpId="dashboard"
             suppressAutoOpen={activeProfile?.strengthCalibrated === false}

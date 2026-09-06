@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { MessageSquarePlus, X, Send, Loader2, Check } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { submitFeedback } from '../../services/feedback';
@@ -40,6 +40,14 @@ export function QuickFeedbackButton(): JSX.Element {
   const panelRef = useRef<HTMLDivElement>(null);
 
   const openPanel = useCallback(() => setOpen(true), []);
+
+  // The home-screen NotificationBell's "Send feedback" button opens this
+  // composer via a window event (David 2026-09-06) — reuse the one feedback UI.
+  useEffect(() => {
+    const handler = (): void => setOpen(true);
+    window.addEventListener('open-feedback', handler);
+    return () => window.removeEventListener('open-feedback', handler);
+  }, []);
   const closePanel = useCallback(() => {
     setOpen(false);
     // Reset state after animation
