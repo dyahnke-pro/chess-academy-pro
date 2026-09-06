@@ -30,6 +30,7 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-review-overhaul-prod.mjs
  */
 import { chromium } from 'playwright';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
@@ -378,6 +379,12 @@ const run = async () => {
   let allPass = true;
   for (const r of results) { log(`  ${r.pass ? '✅ PASS' : '❌ FAIL'}  ${r.id.padEnd(40)} ${r.detail}`); if (!r.pass) allPass = false; }
   log(`\n===== VERDICT: ${allPass ? '✅ MEETS STANDARD' : '❌ FAILS STANDARD'} =====`);
+  try {
+    const dir = `audit-reports/review-overhaul-${new Date().toISOString().replace(/[:.]/g, '-')}`;
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(`${dir}/report.json`, JSON.stringify({ base: BASE, gid: GID, verdict: allPass ? 'MEETS STANDARD' : 'FAILS STANDARD', results, engine: annots, spoken: all.map((x) => x.text), plies: [...plyNarr.entries()].map(([ply, v]) => ({ ply, ...v })), streamBefore, streamAfter, errors: errs }, null, 2));
+    log(`report: ${dir}/report.json`);
+  } catch (e) { log(`(report not written: ${String(e).slice(0, 80)})`); }
   await listener.stop();
   await browser.close();
   process.exit(allPass ? 0 : 1);
