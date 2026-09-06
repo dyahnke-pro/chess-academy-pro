@@ -73,3 +73,24 @@ Open items from the PostHog trace of this week's 7 native App Store users.
 - Hint = one tap → move + green arrow + grounded why (LLM removed from the hint).
 - Error #1 — teach games saved with `[SetUp]/[FEN]` header so review can replay.
 - Home-screen developer-message bell.
+
+## Status update 2026-09-06 (batch fixes)
+- **Scandi Panov — FIXED (77e55c8).** Not a stale test: getOpeningMoves was
+  teaching a SICILIAN for the Scandinavian Panov (exact name filtered out as
+  terminal-short → fell to the rare-token tier → matched "Sicilian … Panov
+  Variation" on the shared token "panov"). Fix: an EXACT literal name now wins
+  against the FULL DB before the fuzzy tiers; the short seed is deepened by the
+  amateur DB. Whole class fixed. 101 resolution tests green.
+- **#3 OTA mid-session kick — FIXED (fcbaeee).** autoUpdate → 'onlyDownload'
+  (download, never auto-apply) + installStagedBundleOnLaunch (cold-launch swap) +
+  the OtaUpdateBanner ("Restart now / Not now"). Compiled flag → lands in the
+  NEXT iOS build.
+- **#2 takeback freeze — STILL OPEN, needs on-device repro.** Read the code:
+  makeComputerMove already has abortController + isCancelled() guards, and a
+  takeback changes game.fen/turn which re-runs the effect and aborts the in-flight
+  move — so the stale-write race is already handled. The freeze cause is NOT an
+  obvious missing guard; pinning it needs the live Amar-game repro (likely engine-
+  worker saturation on the "why" analysis, or a takeback-during-pending-reply
+  half-move mismatch). NOT shipping a speculative async change to the paying-
+  customer play surface before a build.
+- **#7 kid-lane tripwire — deferred (benign, audit-only).**
