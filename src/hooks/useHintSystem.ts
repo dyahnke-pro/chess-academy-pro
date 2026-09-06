@@ -25,21 +25,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../services/stockfishEngine';
-import { computePositionFacts, clauseText } from '../services/positionFacts';
-import {
-  HINT_TIER_1_ADDITION,
-  HINT_TIER_2_ADDITION,
-  HINT_TIER_3_ADDITION,
-} from '../services/coachPrompts';
-import { coachService } from '../coach/coachService';
-import type { LiveState } from '../coach/types';
-import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
-import {
-  validateBoardClaims,
-  stripDisprovenSentences,
-} from '../services/boardClaimValidator';
-import { stripUngroundedTacticSentences } from '../services/tacticClaimValidator';
 import { explainBestMoveGrounded } from '../services/groundedAnswer';
 import {
   getCachedStockfish,
@@ -53,11 +39,6 @@ import type {
   GhostMoveData,
   StockfishAnalysis,
 } from '../types';
-
-/** Strip the brain's `[BOARD:...]` and `[[ACTION:...]]` tags from any
- *  spoken / displayed text — never read action tags out loud, never
- *  show them to the user in the hint nudge. */
-const TAG_STRIP_RE = /\[BOARD:[^\]]*\]|\[\[ACTION:[^\]]*\]\]/gi;
 
 export interface UseHintSystemConfig {
   fen: string;
