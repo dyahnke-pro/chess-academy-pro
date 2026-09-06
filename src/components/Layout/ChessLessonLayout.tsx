@@ -76,11 +76,20 @@ export function ChessLessonLayout({
           requiring the user to scroll the lesson content. */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="mx-auto flex w-full max-w-[440px] flex-col items-stretch px-4 pt-2">
-          {/* Board slot. The board itself (e.g. react-chessboard) handles its
-              own aspect ratio; we cap the wrapper height so the controls
-              never get pushed below the fold on short viewports. */}
+          {/* Board slot. react-chessboard v5 renders its grid as
+              `width:100%; height:100%; overflow:hidden` with aspect-ratio:1
+              squares — so it is WIDTH-driven for square size but its BOX is
+              height-driven by this parent. If we cap the parent's HEIGHT
+              (the old `max-h-[min(60vh,440px)]`), a viewport where that cap
+              falls below the board's width makes the grid CLIP its bottom
+              ranks instead of shrinking (the endgame-tab break David hit on
+              iOS: only ranks 1-4 rendered). The robust fix is a
+              width-driven, aspect-locked square: cap the WIDTH at 60vh so the
+              square's HEIGHT is capped too (controls stay above the fold on
+              short phones — the original intent), never clip. `shrink-0`
+              stops a flex column from squeezing it. */}
           <div
-            className="w-full self-center max-h-[min(60vh,440px)]"
+            className="w-full self-center mx-auto shrink-0 aspect-square max-w-[min(100%,60vh)]"
             data-testid="chess-lesson-board"
           >
             {board}

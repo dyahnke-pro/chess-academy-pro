@@ -41,6 +41,8 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'passive-king-endgame': 'The device: queens off, king on — the moment the endgame starts, the king walks toward the centre and works like a piece.',
   'mistimed-pawn-break': 'The device: prepare the break before you play it — every piece on its best square first, and only then the pawn goes.',
   'botched-conversion': 'The device: winning positions are won slowly — trade pieces, keep pawns, and take away the last counter-chance before you cash in.',
+  'passed-pawn-neglected': 'The device: passed pawns are made to be pushed — every move it waits, they build a blockade in front of it, so run it while the road is open.',
+  'passive-rook': 'The device: put your rook where it works — the seventh rank or an open file, behind a passed pawn, never sitting passive in front of one.',
   // ── general ──
   'no-plan': 'The device: name the target before you touch a piece — if the move serves no plan you can say in one sentence, it is not your move.',
 };

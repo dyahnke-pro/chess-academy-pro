@@ -1,116 +1,57 @@
-# PLAN — Fewer clicks to play: strip pop-ups, unlock course up front, auto-celebrate
+# PLAN — Endgame tab UI unification (branch `claude/endgame-tab-ui-dz33s8`)
 
-**Owner directive (David 2026-09-02):** "There are too many clicks to get to
-playing. Stop all pop-ups except the AI one. The app celebrates automatically.
-No more how-to-use-this-tab pop-ups." Locked decisions from the clarifying pass:
+David 2026-09-06: "Need to make these tabs match the standard of the rest of
+the app. Board layout, coach narrations, all of it. Going for total
+unification here." Sent a screenshot of the Drawn tab with a **clipped board**
+(only ranks 1-4, one bishop, rest cut off).
 
-1. **Path to play → UNLOCK WHOLE COURSE UP FRONT.** Opening a course exposes every
-   rung (Watch/Learn/Practice/Play) + every variation tab + weapons/gems
-   immediately. No laddered gating (Watch-before-Learn-before-Practice-before-Play)
-   before a user can Play. The freemium paywall is SEPARATE and unchanged
-   (`canViewOpening` — one free opening, walled on the second).
-2. **Strength calibration → REMOVED, fully adaptive.** No first-run calibration
-   bubble, no starting-rating step. Difficulty adapts purely from play. (Confirm an
-   adaptive path exists; if difficulty needs a seed, default silently — no prompt.)
-3. **Celebrations → CELEBRATE THEN AUTO-ADVANCE.** Keep the completion moment
-   (Line Mastered! etc.) but remove the required Continue/Next tap — it plays and
-   auto-advances. Must still fire `markRungComplete` exactly once (incl. when the
-   opponent plays the last auto-move).
-4. **PageHelp ("how to use this tab") → passive.** Never auto-pop; keep a
-   tap-to-open "?" affordance the user can choose.
-5. **CoachUnlockAnnouncement ("coach is free to try") → no auto-pop.**
-6. **AiConsentModal → KEEP unchanged** (the one allowed pop-up).
+Decisions (David, this session):
+- **One unified push** — board + hub shell + narrations land together on `main`.
+- **Narration: full house voice, WATCH + PLAY only** (drop Learn/Practice framing).
+- **Hub: full standard app shell** — centered title + SmartSearchBar + standard
+  card layout; drop the horizontal tab strip.
 
-## The rule of thumb
-"Stop all pop-ups except the AI one" = **no overlay auto-opens except
-`AiConsentModal`.** Audit every auto-opening modal/bubble/announcement and
-suppress auto-open for all but AI consent. Passive (tap-to-open) affordances are
-fine; auto-pop is not.
+## Root-cause findings
 
-## Pushback already raised (and settled)
-- Pop-ups are surface friction; the WLPP ladder is the structural click-tax to
-  Play. David chose to unlock the whole course up front (removes the structural
-  barrier), not just strip pop-ups. Shipping that intent.
-- Pedagogy note (non-blocking): unlocking Play up front lets a user play a line
-  they haven't Watched. Accepted — the goal is fast-to-play; Watch/Learn remain
-  available, just not mandatory.
+1. **Board clip (the screenshot).** react-chessboard v5 renders its grid as
+   `width:100%; height:100%; overflow:hidden` with `aspect-ratio:1` squares
+   (node_modules/react-chessboard/dist/index.esm.js:4741). So the grid is
+   WIDTH-driven for square size but its box is HEIGHT-driven by the parent —
+   any ancestor that hands it a definite height SHORTER than the board width
+   makes it CLIP the bottom ranks instead of shrinking. `ChessLessonLayout`'s
+   board slot uses `max-h-[min(60vh,440px)]` on a shrinkable flex item with no
+   width lock (src/components/Layout/ChessLessonLayout.tsx:82-87). On David's
+   iOS webview the slot resolves shorter than the board width → clip. Repro in
+   Chromium shows the board overflowing/short depending on viewport; the fix is
+   a **width-driven aspect-locked square** (`width:min(100%,<cap>); aspect-ratio:1`,
+   `shrink-0`) that can NEVER clip.
+2. **Perspective already clean** — endgame data uses you/your/they, zero
+   we/our/us. Voice work is additive (Watch demo + lead-the-eye), not repair.
 
-## Phases
-- **P1 — Kill auto-pops. ALREADY DONE in the codebase (found by recon).** The
-  only first-run auto-pop is `AiConsentModal` (App.tsx:630, KEEP). Calibration
-  bubble + CoachUnlockAnnouncement are unmounted dead code; PageHelp already has
-  auto-open removed and is a passive "?" button (page-help-btn). `done` (⚠️ the
-  live App Store build predates these ~Aug-22 removals — needs a fresh iOS build).
-- **P2 — Remove calibration → adaptive. `done` (partial, safe cut).** App.tsx no
-  longer seeds a forced Intermediate(1300) rating on first run; imported-games
-  calibration still applies the real rating; no-import users default to the shared
-  1200 and tune from imports/puzzle results. Removed unused `applyStrength`/
-  `SKILL_BANDS` import. FOLLOW-UP: to make the *starting opponent* self-tune from
-  coach-game results (true no-import adaptation), wire the `coach-games`
-  `getPlayerRatingEstimate` into `currentRating` — deferred (touches the
-  `studentPlayingRating` difficulty contract + its gates; do it carefully).
-- **P3 — Unlock course up front. `done`.** `wlppLadder.ts` `isRungUnlocked` +
-  `areWeaponsUnlocked` → always `true`. Every rung/variation/weapon open on load;
-  `markRungComplete` write path + `canViewOpening` paywall untouched (both verified
-  independent). Tests updated (`wlppLadder.test.ts`).
-- **P4 — Auto-advance celebrations. `done`.** `PlayableLinePlayer` ("Line
-  Mastered!") + `PracticeMode` (perfect run) celebrate then auto-advance after
-  ~1.8s; buttons stay as a manual skip. `onComplete`/`markRungComplete` already
-  fired in `finishLine()`/completion effect BEFORE the screen, so the exactly-once
-  invariant is intact (opponent-last-move + replay tests still green). Fixed stale
-  PracticeMode copy that claimed "Play unlocked!" / "reach 100% to unlock Play".
-- **P5 — Gates + audits. `in progress`.** ladder + celebration tests green,
-  typecheck green; ship-check running; prod 3-instrument audit after push.
+## Phases (all in the one push)
 
-- **P6 — Free-opening claim moved to active-drill completion. `done`.** Unlocking
-  the course broke the old trigger (claim on first deep-dive TAP would burn the
-  pick on a curious tap). New rule, chosen by David 2026-09-02 (option 1):
-  **Watch + model games are FREE TO SAMPLE on every opening; the pick locks on the
-  first COMPLETED active drill (Learn / Practice / Play — main line, variation, or
-  weapon).** Implemented as the pure `hasDrilledOpening(opening)` predicate in
-  `wlppLadder.ts` (reads persisted completion state, so every completion path
-  counts without each call site claiming) + an `isActiveDrill` viewMode test
-  (`ACTIVE_DRILL_MODE` regex + the suffix-less `train-traps`/`train-warnings`).
-  The paywall moved from "any deep dive" to "an active drill" on a non-picked
-  opening. Added a quiet inline claim confirmation (dismissible, not a pop-up).
-  Tests: 5 new `hasDrilledOpening` cases.
-  **Amended (David 2026-09-02): "completion of the gem tab should also count as
-  chosen opening."** So ANY weapon (punish gem / named trap) rung completion —
-  including its WATCH — now commits, while a main-LINE watch still does not. The
-  asymmetry is deliberate: the main Watch is the shop window (free to sample),
-  the gems tab is the specialized payoff content, so finishing a gem is a real
-  "I'm working this opening". Verified both gem-watch writes fire on COMPLETION
-  (`onComplete`, and `onAdvanceToLearn` when they tap Learn at the end) — never
-  on merely opening a gem.
+- [ ] **P1 — Board layout, clip-proof + app-standard.** Make `ChessLessonLayout`'s
+  board slot a width-driven aspect-locked square (benefits every lesson surface,
+  fixes the live break). Verify square + full pieces across viewport heights.
+- [ ] **P2 — Endgame hub → standard shell.** CoachEndgamePage landing: centered
+  title + SmartSearchBar + standard card layout matching Tactics/Dashboard.
+  Replace the horizontal tab strip. Keep every category reachable.
+- [ ] **P3 — Watch + Play (full voice).** EndgameLessonTab lesson view offers
+  **Watch** (coach auto-plays the position's existing `solution` line move-by-move,
+  house-voice narration per move computed board-true, lead-the-eye arrows/highlights)
+  and **Play** (student plays — today's keystone flow). Applied uniformly across
+  ALL endgame categories via the shared tab (no half-build). Voice = house
+  standard (you/they, concept-first, the position teaches; G0/G3 — code computes,
+  never invents moves).
+- [ ] **P4 — Gates + audit.** ship-check green; extend/author the endgame audit;
+  3-instrument prod audit after the push.
 
-## Follow-up polish (not blocking)
-- `OpeningDetailPage` ladder-guidance block (~1933-1958) + the weapons-locked card
-  (~2085) + the two "expert pass / unlock all" buttons are now REDUNDANT (nothing
-  is locked). Harmless (lock icons/cards never render), but the "I already know
-  this — use expert pass" button is pointless UX. Remove in a focused pass
-  (watch the unused-var cascade: `handleUnlockAll`, `unlockBudget`,
-  `confirmingUnlock`, `colorLabel`, the expert-pass budget helpers).
-- Delete dead components `StrengthCalibrationBubble` + `CoachUnlockAnnouncement`
-  (+ tests) — orphaned, safe to remove.
-
-## Touchpoints (from scout recon)
-- Ladder gate: `src/utils/wlppLadder.ts` `isRungUnlocked` (49) / `areWeaponsUnlocked`
-  (58). Write path: `openingService.ts` `markRungComplete` (444). Render:
-  `OpeningDetailPage.tsx` 1904-1958 (rungs), 2085-2172 (weapons).
-- Pop-ups: all in `App.tsx` (`AiConsentModal` 630 keep; calibration boot 329-345).
-  `PageHelp.tsx` passive already. `StrengthCalibrationBubble`/`CoachUnlockAnnouncement`
-  unmounted.
-- Rating: `studentPlayingRating` (coachGameEngine.ts) → currentRating??puzzleRating??1200,
-  contract-gated. `calibrateStrength` (strengthCalibrationService.ts) applies
-  imported-games rating. `getPlayerRatingEstimate` (playerRatingService.ts) is the
-  adaptive estimate (imports + coach-games ELO ≥5).
-- Celebrations: `PlayableLinePlayer.tsx` finishLine 123 + memoryComplete screen 669;
-  `PracticeMode.tsx` completion effect 229 + screen 403.
-
-## Decisions log
-- 2026-09-02: unlock-whole-course / fully-adaptive / celebrate-then-auto-advance /
-  passive-PageHelp / keep-AI-consent — David, via clarifying questions.
+## Notes / guardrails
+- G3: solution moves come from the data (chess.js-validated) — Watch never
+  invents a move.
+- Board primitive stays ConsistentChessboard.
+- Deploy: straight to `main` per policy (session is on a branch per harness — land it).
 
 ## Next-session pickup
-Read this file. If phases are unstarted, begin at P1. The scout recon fills the
-Touchpoints section; build strictly from real file:line, not memory.
+Board fix (P1) first; hub (P2); Watch/Play (P3). Reference maps for the standard
+hub shell + WLPP Watch player were pulled via an Explore agent this session.
