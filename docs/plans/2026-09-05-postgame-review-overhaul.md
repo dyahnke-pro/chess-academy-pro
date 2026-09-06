@@ -388,6 +388,22 @@ to `main`, five local commits:
 - Audit: `scripts/audit-review-overhaul-prod.mjs` (3-instrument, muted) + the
   four legacy review audits moved to the free-board contract via
   `scripts/audit-lib/review-explore.mjs`.
+- Found by the audit's spoken-transcript read (2026-09-06), fixed in-build:
+  (1) an even trade read "wins material" — a piece that had merely MOVED onto
+  the square was treated as a recapture and skipped SEE (`computePlyFacts`);
+  (2) the warm pass reattributed the opponent's 1.e4 to "You grab the
+  center" despite the prompt — `narrationMoverFaithful` keeps the raw line
+  (any "You <verb>" on an opponent ply, state forms excepted; a verb list
+  was gamed within one run); (3) the review's deep pass nominated only
+  shallow swings ≥ 50cp, so a 52cp inaccuracy that read 37cp shallow stayed
+  GOOD — candidacy is now ≥ 25cp and the key-ply depth is 16 (fixture
+  6...Nb6: 52cp at d14 = 4.6% "good", 128cp at d16, 70-100 at d18-22).
+  OPEN for David: in-browser Stockfish does not reach depth 16 inside the
+  3s per-ply budget in the sandbox, so 6...Nb6 still grades good there;
+  raising `REVIEW_POSITION_BUDGET_MS` for the ≤12 key plies (background)
+  is the lever.
+- Audit runs 5/6/7 on localhost: 14/14 → 17/17 → 17/17 (ACC / SEAT /
+  NOTRADEWIN added between runs). Prod run follows the `main` push.
 - **H / I** remain the follow-on migration (surface by surface); the kernel
   pieces this build lays are the shared calculators + `voiceReviewLines`.
 
