@@ -8,27 +8,50 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return { ...actual, useNavigate: () => mockNavigate };
 });
+// SmartSearchBar pulls in the coach/search stack; the tab test only cares that
+// it's mounted in the standard hub slot.
+vi.mock('../Search/SmartSearchBar', () => ({ SmartSearchBar: () => <div data-testid="smart-search-bar" /> }));
 
-// The Fundamentals track (Phase 2) — David 2026-08-26. A wire that does not
-// fire is not a wire: prove the four principles render, the example-game walk
-// hands off to the real review, and principles without a game hide the walk.
+// The Fundamentals track, rebuilt to the app hub standard (David 2026-09-06):
+// seven phase sections, each with Listen (grounded read-aloud) + Drill (a themed
+// puzzle set, or the student's own mistakes). A wire that does not fire is not a
+// wire — prove the sections render, Listen/Drill exist, and Drill routes right.
+const SECTION_IDS = ['opening-play', 'center', 'development', 'king-safety', 'pawn-structure', 'tactics-threats', 'endgame-technique'];
+
 describe('FundamentalsPage', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders all four fundamental cards', () => {
+  it('renders the standard hub shell — centered title + SmartSearchBar', () => {
     render(<FundamentalsPage />);
     expect(screen.getByTestId('fundamentals-page')).toBeInTheDocument();
-    for (const topic of ['piece-values', 'center', 'development', 'king-safety']) {
-      expect(screen.getByTestId(`fundamental-card-${topic}`)).toBeInTheDocument();
-      expect(screen.getByTestId(`fundamental-listen-${topic}`)).toBeInTheDocument();
+    expect(screen.getByTestId('smart-search-bar')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Fundamentals' })).toBeInTheDocument();
+  });
+
+  it('renders all seven phase sections, each with Listen and Drill', () => {
+    render(<FundamentalsPage />);
+    for (const id of SECTION_IDS) {
+      expect(screen.getByTestId(`fundamental-section-${id}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`fundamental-listen-${id}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`fundamental-drill-${id}`)).toBeInTheDocument();
     }
+  });
+
+  it('a themed section drills real puzzles; a positional section drills own mistakes', () => {
+    render(<FundamentalsPage />);
+    fireEvent.click(screen.getByTestId('fundamental-drill-endgame-technique'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics/drill', {
+      state: { filterThemes: ['endgame', 'rookEndgame', 'pawnEndgame', 'bishopEndgame', 'knightEndgame'] },
+    });
+    fireEvent.click(screen.getByTestId('fundamental-drill-opening-play'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics/mistakes');
   });
 
   it('shows the Opera Game walk on development, hides it where no game exists', () => {
     render(<FundamentalsPage />);
     expect(screen.getByTestId('fundamental-walk-development')).toBeInTheDocument();
-    expect(screen.queryByTestId('fundamental-walk-piece-values')).not.toBeInTheDocument();
     expect(screen.queryByTestId('fundamental-walk-king-safety')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('fundamental-walk-pawn-structure')).not.toBeInTheDocument();
   });
 
   it('walking the game hands off to the real annotated review sample', () => {
@@ -37,8 +60,8 @@ describe('FundamentalsPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/coach/review/sample-morphy-opera-1858');
   });
 
-  it('teaches the real principle text (piece values names the numbers)', () => {
+  it('teaches real grounded principle text (the centre section names the centre)', () => {
     render(<FundamentalsPage />);
-    expect(screen.getByTestId('fundamental-card-piece-values').textContent).toMatch(/rook/i);
+    expect(screen.getByTestId('fundamental-section-center').textContent).toMatch(/cent(er|re)/i);
   });
 });

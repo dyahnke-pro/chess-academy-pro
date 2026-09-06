@@ -11,6 +11,26 @@ we do NOT pre-filter D rules for "spam." **Plan only. No fixes.**
 Read `docs/APP_MAP.md` §5 (the review→fundamentals→weakness→drill pipeline) and
 §11 (the tab) first — this plan is built on that map.
 
+## BUILD STATUS (2026-09-06)
+- **Wave 1 (endgame) — DONE + tested:** `passed-pawn-neglected`, `lost-the-opposition`,
+  `passive-rook-endgame` (detectors + voice + tags + devices + real-game fixtures).
+- **Wave 2 (middlegame) — DONE + tested:** `kept-bad-bishop`.
+- **Phase B — DONE:** the tab's Drill button routes themed sections to `/tactics/drill`
+  (`filterThemes` falls through to raw Lichess tags) and positional sections to
+  `/tactics/mistakes` (own flagged positions). No new resolver service needed.
+- **Phase C — DONE + tested:** `FundamentalsPage` rebuilt to the app hub standard
+  (centered title + SmartSearchBar + 7 phase-section cards), each with Listen
+  (grounded read-aloud) + Drill + the Opera-Game walk where a game exists.
+- **DEFERRED (honest — "no false narrations / don't overstate the why"):** the detectors
+  whose *why* isn't board-provable without more inputs — `overvalued-attack`,
+  `botched-conversion` (need the pre-move eval threaded into `AttributionInput`),
+  `left-book-early` (needs the opening-book DB in the pure attributor), and the
+  infer-the-why cases `poisoned-pawn` (needs a trapped-queen lookahead),
+  `wrong-chain-target`, `captured-from-centre`, `blocked-c-pawn`. The 3 approved-but-unused
+  new tags (`pawn-majority`, `pawn-chain-target`, `strategic-target`) are NOT added until
+  their detectors land — a tag no detector produces is dead. Follow-up: thread an optional
+  `evalBefore` into `AttributionInput` to unlock the two orphan-tag fills.
+
 ## The three deliverables
 - **A.** Add the D-rules to the fundamentals computer as new detectors + integrate
   the whole way through (tag → misconception → weakness → drill → review voice).
