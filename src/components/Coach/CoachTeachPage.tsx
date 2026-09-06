@@ -9474,7 +9474,12 @@ export function CoachTeachPage(): JSX.Element {
     // duplication that stamped a puzzle rating on a played game.
     const rating = studentPlayingRating(activeProfile);
     const gameId = `teach-${Date.now()}`;
-    const pgn = game.history.join(' ');
+    // Use the chess.js PGN (carries the [SetUp]/[FEN] header when the game began
+    // from a non-standard position the board was loadFen'd to) — NOT a headerless
+    // history.join, which chess.loadPgn can't replay from move 1, so the review's
+    // adaptGameRecord returned null and showed "could not replay this game"
+    // (PostHog 2026-09-03, Port Harcourt ×2).
+    const pgn = game.pgn;
     const openingId = walkthrough.tree?.openingName ?? null;
     void (async () => {
       try {

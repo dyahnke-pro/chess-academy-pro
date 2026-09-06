@@ -53,6 +53,13 @@ export interface UseChessGameReturn {
   // Move history
   lastMove: { from: string; to: string } | null;
   history: string[];
+  /** Full PGN from chess.js, INCLUDING the `[SetUp]/[FEN]` header when the game
+   *  began from a non-standard position (a walkthrough leaf/drill the board was
+   *  `loadFen`'d to). Persist THIS, not `history.join(' ')` — a headerless
+   *  bare-SAN PGN of a non-standard start fails `chess.loadPgn` from move 1, so
+   *  the review's `adaptGameRecord` returned null ("could not replay this game"
+   *  — PostHog 2026-09). */
+  pgn: string;
 
   // Board interaction state (WO-02 spec)
   selectedSquare: string | null;
@@ -360,6 +367,7 @@ export function useChessGame(
   return useMemo(() => ({
     fen,
     position: fen,
+    pgn: chess.pgn(),
     getFen,
     turn,
     inCheck,

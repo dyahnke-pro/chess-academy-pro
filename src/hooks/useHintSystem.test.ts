@@ -227,15 +227,15 @@ describe('useHintSystem — Tier 3 answers deterministically (David 2026-09-06)'
     expect(result.current.hintState.arrows[0]).toMatchObject({ startSquare: 'e5', endSquare: 'c6' });
   });
 
-  it('ADAPTIVE: an advanced player starts on the WHY rung (tier 1, no arrow) and climbs on repeat taps', async () => {
-    // David 2026-07-03: adaptive hints. A strong player calculates first —
-    // first tap is the WHY (tier 1, no move/arrow), not the answer.
-    spineResponses.push('Your worst-placed piece is the one to activate; find the square that fights for the center.');
+  it('an advanced player also gets the answer on one tap — no tiers, no brain', async () => {
+    // David 2026-09-06 ("Fuck that system! Push once get answer"): the adaptive
+    // WHY/WHICH rungs are gone. Every rating gets the full answer immediately,
+    // computed in code — the LLM is never called for a hint.
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
         playerColor: 'black',
-        playerRating: 2000, // advanced → tier 1 first tap
+        playerRating: 2000,
         enabled: true,
         gameId: 'g-adv',
         moveNumber: 1,
@@ -244,40 +244,10 @@ describe('useHintSystem — Tier 3 answers deterministically (David 2026-09-06)'
     );
 
     act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(spineCalls.length).toBe(1));
-    // First tap = WHY tier, not the answer tier.
-    expect(spineCalls[0].ask).toContain(HINT_TIER_1_ADDITION);
-    expect(spineCalls[0].ask).not.toContain(HINT_TIER_3_ADDITION);
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
-    // No answer arrow at tier 1 — they have to find the move.
-    expect(result.current.hintState.arrows).toHaveLength(0);
-  });
-
-  it('feeds the brain a code-computed tactics context so the hint can NAME the tactic', async () => {
-    // The root fix for "tactics alert fired but the hint didn't say what the
-    // tactic was" (David 2026-06-22): the hint hands the brain a real
-    // TacticsLiveContext (immediate tactics + hanging pieces + board facts),
-    // instead of nothing — which left the tactic gate stripping the mention
-    // as "out-of-vocab (no tactics context)". Tier 3 no longer calls the brain
-    // (2026-09-06), so this contract lives on the WHY/WHICH tiers — use an
-    // advanced rating so the first tap is a brain-driven tier 1.
-    spineResponses.push('Your worst-placed piece wants a more active square.');
-    const { result } = renderHook(() =>
-      useHintSystem({
-        fen: FEN_AFTER_E4,
-        playerColor: 'black',
-        playerRating: 2000,
-        enabled: true,
-      }),
-    );
-    act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(spineCalls.length).toBe(1));
-    const tactics = spineCalls[0].tactics as { boardFacts?: unknown; immediate?: unknown[] } | undefined;
-    expect(tactics).toBeDefined();
-    // Board facts are derived from the FEN alone, so they're always present
-    // even when the engine is unavailable — the context is never empty/missing.
-    expect(tactics?.boardFacts).toBeDefined();
-    expect(Array.isArray(tactics?.immediate)).toBe(true);
+    await waitFor(() => expect(result.current.hintState.nudgeText).toBeTruthy());
+    expect(result.current.hintState.level).toBe(3);
+    expect(spineCalls.length).toBe(0);
+    expect(result.current.hintState.arrows).toHaveLength(1);
   });
 
   it('records the request to coach memory at tier 3 (directly, no brain)', async () => {

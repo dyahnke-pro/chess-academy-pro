@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { adaptGameRecord } from './CoachReviewSessionPage';
 import { replayPgnToFens } from '../../services/gameAnalysisService';
 import type { GameRecord } from '../../types';
@@ -48,5 +49,33 @@ describe('review of a two-knights-odds game (custom [SetUp] FEN)', () => {
     expect(fens.length).toBe(11); // start + one per ply
     // The first FEN is the ODDS start (no knights), not the standard board.
     expect(fens[0]).toContain('R1BQKB1R');
+  });
+});
+
+// Error #1 (David 2026-09-06): a Learn game the board was loadFen'd to a deep
+// position, then played out, was persisted as `history.join(' ')` — headerless
+// bare SANs. From the STANDARD start those moves are illegal, so the review's
+// chess.loadPgn threw and adaptGameRecord returned null ("could not replay this
+// game" — Port Harcourt ×2). The fix persists `game.pgn` (chess.js), which
+// carries the [SetUp]/[FEN] header. This locks the difference.
+describe('teach game played out from a non-standard start', () => {
+  // Ruy Lopez after 1.e4 e5 2.Nf3 Nc6 3.Bb5 — the kind of deep position a
+  // walkthrough leaf hands the free-play board.
+  const LEAF = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+
+  it('game.pgn (with FEN header) adapts; the old headerless history.join does NOT', () => {
+    const c = new Chess(LEAF);
+    for (const m of ['a6', 'Ba4', 'Nf6', 'O-O', 'Be7']) c.move(m);
+
+    const withHeader = c.pgn();               // what game.pgn now returns — has [SetUp]/[FEN]
+    const headerless = c.history().join(' '); // the old bug: bare SANs, no header
+
+    expect(withHeader).toContain('[FEN');
+    // The fix: review can replay it.
+    const adapted = adaptGameRecord(makeGame(withHeader), 'black');
+    expect(adapted).not.toBeNull();
+    expect(adapted!.moves.length).toBeGreaterThan(0);
+    // The bug it replaces: headerless bare-SAN of a non-standard start → null.
+    expect(adaptGameRecord(makeGame(headerless), 'black')).toBeNull();
   });
 });

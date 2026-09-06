@@ -47,8 +47,6 @@ import {
 } from './stockfishFenCache';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import { logAppAudit } from '../services/appAuditor';
-import { useAppStore } from '../stores/appStore';
-import { hintStartTier } from '../services/skillScaling';
 import type {
   HintLevel,
   BoardArrow,
@@ -260,25 +258,17 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
     if (!enabled) return;
     if (levelRef.current >= 3) return;
 
-    // Adaptive hints (David 2026-07-03: "I'm ok with adaptive hints" —
-    // supersedes the 2026-05-26 blanket "answer on first press"). Weaker
-    // players still get the answer on the first tap; stronger players start on
-    // the WHY (1) / WHICH (2) rung and CLIMB toward the answer on repeat taps,
-    // so they calculate before it's handed to them. The start rung is set by
-    // rating + tactics skill; every subsequent tap advances one rung to 3.
-    const tacticsSkill = useAppStore.getState().activeProfile?.skillRadar?.tactics;
-    const startTier = hintStartTier(playerRating ?? 1200, tacticsSkill);
-    const nextLevel = (levelRef.current === 0
-      ? startTier
-      : Math.min(3, levelRef.current + 1)) as 1 | 2 | 3;
+    // ONE TAP = THE ANSWER (David 2026-09-06: "Fuck that system! Push once get
+    // answer. With the why." — supersedes the 2026-07-03 adaptive tiers AND the
+    // 2026-05-26 progressive rungs). Every hint tap goes straight to the full
+    // answer: the move + green arrow + the grounded why, all computed in code.
+    // No WHY/WHICH rungs, no LLM.
+    // Typed 1|2|3 (not `3 as const`) so the legacy tier-1/2 code below stays
+    // type-valid; the value is always 3 — one tap, the answer.
+    const nextLevel: 1 | 2 | 3 = 3;
     levelRef.current = nextLevel;
-    // Bump the tier synchronously so the UI reflects the user's click
-    // immediately. The brain call below populates nudgeText / arrows
-    // when it returns; until then the tier is "active but loading."
-    // isAnalyzing is intentionally NOT set here — HintButton has
-    // disabled={hintState.isAnalyzing}, so setting it synchronously
-    // would block any back-to-back click before the next render. It
-    // flips one microtask later inside the async IIFE.
+    // Bump the level synchronously so the button reflects the tap immediately;
+    // the async block below fills nudgeText / arrows a microtask later.
     setHintState((s) => ({
       ...s,
       level: nextLevel,
@@ -637,7 +627,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             kind: 'llm-error',
             category: 'subsystem',
             source: 'useHintSystem',
-            summary: `tier ${nextLevel} spine call failed`,
+            summary: `hint spine call failed`,
             details: msg,
           });
         }
