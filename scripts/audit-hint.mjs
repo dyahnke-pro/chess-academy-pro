@@ -102,6 +102,13 @@ async function main() {
   await page.goto(`${BASE_URL}/?cb=${Date.now()}`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
 
   async function clearOverlays() {
+    // Coach surfaces gate behind the AI-consent modal — must be accepted or
+    // every downstream click is intercepted (CLAUDE.md coach-audit note).
+    const consent = page.locator('[data-testid="ai-consent-modal"]');
+    if (await consent.count()) {
+      await page.locator('[data-testid="ai-consent-allow"]').first().click({ timeout: 4000 }).catch(() => undefined);
+      await consent.waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+    }
     const calib = page.locator('[data-testid="strength-calibration-bubble"]');
     if (await calib.count()) {
       await page.locator('[data-testid="skill-band-intermediate"]').first().click({ timeout: 4000 })
@@ -121,6 +128,7 @@ async function main() {
   });
 
   await record('navigate to /coach/play', async () => {
+    await clearOverlays();
     await page.getByRole('link', { name: 'Coach' }).first().click();
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15000 });
     await clearOverlays();

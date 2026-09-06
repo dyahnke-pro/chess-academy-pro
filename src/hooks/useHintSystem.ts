@@ -362,7 +362,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
             const isCapture = best.bestMoveSan.includes('x') || !!cc.get(bmTo as Parameters<typeof cc.get>[0]);
             movePhrase = isCapture ? `Your ${piece} takes on ${bmTo}` : `Your ${piece} to ${bmTo}`;
           } catch { /* fall back to the generic phrase */ }
-          const tier3Text = why ? `${movePhrase} — ${why}.` : `${movePhrase} — that's the move.`;
+          // `why` already ends in a period; strip it so the appended one
+          // doesn't produce a stray "…e5.." (caught by the prod hint audit).
+          const whyClean = why ? why.trim().replace(/[.!?]+$/, '') : '';
+          const tier3Text = whyClean ? `${movePhrase} — ${whyClean}.` : `${movePhrase} — that's the move.`;
 
           // Record the tap directly (BRAIN-05b moved this into the brain's tool;
           // Tier 3 no longer calls the brain, so record it here — same escalate-
