@@ -28,8 +28,18 @@ describe('coach teach-rescue for terminal-short openings', () => {
     expect(expandOpeningAbbrev('scandinavian')).toBe('scandinavian');
   });
 
-  it('the filtered resolver returns null for the Scandi Panov (the bug)', () => {
-    expect(getOpeningMoves('Scandinavian Defense: Panov Transfer')).toBeNull();
+  it('resolves the REAL Scandinavian Panov by EXACT name — never the fuzzy "panov" Sicilian (David 2026-09-06)', () => {
+    // The exact DB name is a real 6-ply entry (1.e4 d5 2.exd5 Nf6 3.c4 c6) that
+    // the terminal-short filter hides from the FUZZY tiers. Before the fix it
+    // fell through to the rare-token tier and matched "Sicilian Defense: Dragon
+    // Variation, Yugoslav Attack, Panov Variation" on the shared token "panov" —
+    // teaching a Sicilian (e4 c5) for a Scandinavian. An exact name must win.
+    const moves = getOpeningMoves('Scandinavian Defense: Panov Transfer');
+    expect(moves).not.toBeNull();
+    expect(moves!.slice(0, 4)).toEqual(['e4', 'd5', 'exd5', 'Nf6']); // Scandinavian, NOT the Sicilian e4 c5
+    // The bare abbreviation has no exact match; "panov" alone can't corroborate a
+    // Sicilian (no "scandi" token), so it stays null and routes via the
+    // searchOpenings rescue below.
     expect(getOpeningMoves('Scandi panov')).toBeNull();
   });
 

@@ -641,7 +641,9 @@ export function resolveOpeningEntry(
   let trimmed = rawTrimmed;
   // An exact DB name wins outright — never dismantle a query that already IS a
   // name (no shipped name is SAN-shaped today, but that is not a guarantee).
-  if (!entries.some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
+  // Checked against the FULL DB (not the teachable-filtered pool) so a
+  // terminal-short exact name is never SAN-mangled on its way to the exact tier.
+  if (!(openingsData as OpeningEntry[]).some((e) => normalizeNameForMatch(e.name) === normalizeNameForMatch(rawTrimmed))) {
     const stripped = rawTrimmed.replace(NAMED_SAN, (san) => { namedSans.push(canonicalizeSan(san)); return ' '; });
     if (namedSans.length > 0) {
       const remainder = stripped.replace(/\s+/g, ' ').trim().replace(TRAILING_CONNECTORS, '').trim();
@@ -655,6 +657,30 @@ export function resolveOpeningEntry(
   // Sicilian Defense: Najdorf Variation, etc.). Case-insensitive.
   const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
   const queryNorm = normalizeNameForMatch(aliased);
+
+  // EXACT NAME MATCH against the FULL DB (not the teachable-filtered pool). A
+  // user who types an opening's literal name must get THAT opening even when it
+  // is terminal-short: the filter exists to keep namesake junk out of the FUZZY
+  // tiers below, NEVER to redirect an exact request. Without this,
+  // "Scandinavian Defense: Panov Transfer" (a real 6-ply entry, filtered out)
+  // fell through to the rare-token tier and resolved to "Sicilian Defense:
+  // Dragon Variation, Yugoslav Attack, Panov Variation" — teaching a Sicilian
+  // for a Scandinavian on the shared token "panov" (the Traxler→Danish bug
+  // class). The short line is then extended to a middlegame by the amateur-DB
+  // deepening in openingGenerator (David 2026-09-06). Only for a pure-name query
+  // (no SAN carried); a name+move query keeps the existing SAN-refinement path.
+  if (namedSans.length === 0) {
+    const exactAll = (openingsData as OpeningEntry[]).filter(
+      (e) => normalizeNameForMatch(e.name) === queryNorm,
+    );
+    if (exactAll.length > 0) {
+      const best = exactAll.reduce((a, b) => {
+        if (a.name.length !== b.name.length) return a.name.length < b.name.length ? a : b;
+        return a.pgn.length > b.pgn.length ? a : b;
+      });
+      return { canonicalName: best.name, eco: best.eco, moves: best.pgn.split(/\s+/).filter(Boolean) };
+    }
+  }
 
   function pick(matches: OpeningEntry[]): OpeningEntry {
     // Tie-break: prefer entries whose NAME exactly equals the query
