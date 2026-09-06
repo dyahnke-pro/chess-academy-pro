@@ -3,7 +3,7 @@
 //   2. "teach me the opera game"   → grounded Opera/Morphy answer, NOT gutted.
 //   3. "show me morphy's games"    → the Opera Game, NOT a fuzzy Evans-Gambit picker.
 //   4. "teach me my weaknesses"    → an in-chat answer, not yanked to a drill.
-//   5. /coach/fundamentals         → the 4 principle cards + the Opera walk.
+//   5. /coach/fundamentals         → the 7 phase sections + Listen/Drill + Opera walk.
 // TTS is muted (G1: audits never spend TTS money).
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -92,13 +92,26 @@ try {
   await dismiss();
   {
     await p.locator('[data-testid="fundamentals-page"]').waitFor({ timeout: 20000 });
-    const cards = [];
-    for (const t of ['piece-values', 'center', 'development', 'king-safety']) {
-      cards.push(await p.locator(`[data-testid="fundamental-card-${t}"]`).count());
+    // Standard hub shell: SmartSearchBar mounted.
+    const search = await p.locator('[data-testid="fundamentals-page"] input').count();
+    // The 7 phase sections, each with Listen + Drill.
+    const SECTIONS = ['opening-play', 'center', 'development', 'king-safety', 'pawn-structure', 'tactics-threats', 'endgame-technique'];
+    const sec = [], listen = [], drill = [];
+    for (const t of SECTIONS) {
+      sec.push(await p.locator(`[data-testid="fundamental-section-${t}"]`).count());
+      listen.push(await p.locator(`[data-testid="fundamental-listen-${t}"]`).count());
+      drill.push(await p.locator(`[data-testid="fundamental-drill-${t}"]`).count());
     }
-    const allCards = cards.every((c) => c > 0);
+    const all = (a) => a.every((c) => c > 0);
     const walk = await p.locator('[data-testid="fundamental-walk-development"]').count();
-    rec('fundamentals track renders 4 cards + opera walk', allCards && walk > 0, `cards=${cards.join(',')} walk=${walk}`);
+    rec('fundamentals hub: 7 sections + Listen + Drill + search + opera walk',
+      all(sec) && all(listen) && all(drill) && search > 0 && walk > 0,
+      `sec=${sec.join('')} listen=${listen.join('')} drill=${drill.join('')} search=${search} walk=${walk}`);
+    // Drill hands off to a real puzzle drill (themed section → /tactics/drill).
+    await p.locator('[data-testid="fundamental-drill-endgame-technique"]').click();
+    await p.waitForTimeout(1500);
+    const url = p.url();
+    rec('fundamentals drill routes to the puzzle drill', /\/tactics\/drill/.test(url), `url=${url}`);
   }
 } catch (e) {
   rec('run', false, 'ERROR ' + String(e).slice(0, 160));
