@@ -47,7 +47,9 @@ const SANS = (() => { const c = new Chess(); c.loadPgn(PGN); return c.history();
 
 const log = (s) => console.log(s);
 const has = async (p, sel) => { try { return (await p.locator(sel).count()) > 0; } catch { return false; } };
-const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText()).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
+// Every read is short-fused: on a starved box a default 30s innerText wait
+// inside an 80-iteration nav loop turned a slow page into a 3-hour "hang".
+const txt = async (p, sel) => { try { const l = p.locator(sel).first(); return (await l.count()) ? (await l.innerText({ timeout: 3000 })).replace(/\s+/g, ' ').trim() : ''; } catch { return ''; } };
 const until = async (fn, ms, step = 400) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return true; await new Promise((r) => setTimeout(r, step)); } return false; };
 
 async function pullAuditStream(sinceMs) {
@@ -144,7 +146,7 @@ const run = async () => {
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
   await page.waitForURL(/\/coach\/review\//, { timeout: 15000 }).catch(() => undefined);
   await dismiss();
-  const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled')) === null; };
+  const startable = async () => { const b = page.locator('[data-testid="start-walk-btn"]').first(); return (await b.count()) > 0 && (await b.getAttribute('disabled', { timeout: 3000 }).catch(() => 'x')) === null; };
   const ready = await until(startable, 300000, 1500);
   const openMs = Date.now() - t0;
   add('OPEN first-open-analyses', ready, ready ? `walk startable in ${(openMs / 1000).toFixed(1)}s` : 'analysis never settled (300s)');
@@ -272,7 +274,7 @@ const run = async () => {
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
-    const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state').catch(() => null);
+    const st = await page.locator('[data-testid="review-play-pause-btn"]').first().getAttribute('data-state', { timeout: 3000 }).catch(() => null);
     if (st === 'paused') { await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 2000 }).catch(() => undefined); }
     await page.waitForTimeout(1500);
   }
