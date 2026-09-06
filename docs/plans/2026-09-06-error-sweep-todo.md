@@ -42,6 +42,32 @@ Open items from the PostHog trace of this week's 7 native App Store users.
   user's feedback, shown back in the bell panel. Needs a per-device thread id +
   a replies channel (anonymous App Store users). Design before building.
 
+## Sweep outcomes (2026-09-06 full-auto pass)
+- **Scandi Panov:** root-caused to another workstream's resolver change
+  (`809b388 fix(openings): traxler...`) — `resolveOpeningEntry` now teaches the
+  terminal-short Panov. NOT guess-fixed: needs the resolver owner's intent (is
+  Panov Transfer supposed to be teachable now, or did the terminal-short filter
+  regress and leak many namesake-only entries?). Decide before flipping the test.
+- **#2:** phantom "interrupted by new request" eval errors → FIXED (benign
+  reclassify, `OpeningPlayMode.tsx`). Takeback-freeze half: takeback is gated
+  ONLY by `moveHistory>=2` (not an analysis flag), so the click was live but
+  swallowed while the coach-move computation churned on the masters-miss Amar
+  game — needs a live repro to fix safely. STILL OPEN.
+- **#3 + #4 (OTA):** FLAGGED FOR DAVID. Mid-session kick = capgo autoUpdate
+  applying on background→foreground resume (`capacitor.config.ts` autoUpdate:true,
+  directUpdate:false). Fix = split capgo download-vs-apply (autoUpdate:false +
+  manual stage + `installStagedBundleOnLaunch` for cold-boot swap + a
+  "Restart / Not now" banner). It's compiled into the native build (can't
+  web-ship) and stranding devices is the documented failure mode — needs a
+  deliberate build + sign-off, NOT a full-auto change.
+- **#5:** FIXED — `walkthrough-fork-picked` own audit kind (no more false
+  `coach_tool_callback_rejected` on successful forks).
+- **#6:** FIXED — `isNearMissToolName` counts prefix AND suffix; `reword`↔`rewind`
+  accepted.
+- **#7:** audit-only containment tripwire on the not-yet-inverted kid lane;
+  never alters the reply; spelled-out chess words are allowed in kid mode, so
+  almost certainly benign. Real fix = the deferred kid-lane grounding inversion.
+
 ## Shipped this session (branch)
 - Upload-games gate for all no-data personal questions.
 - Hint = one tap → move + green arrow + grounded why (LLM removed from the hint).
