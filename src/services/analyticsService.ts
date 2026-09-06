@@ -27,6 +27,7 @@
 import { Chess } from 'chess.js';
 import { getAppAuditLog, type AuditEntry, type AuditKind } from './appAuditor';
 import { db } from '../db/schema';
+import { resolvePlayerColor, isEngineName } from './playerIdentity';
 import { getOverviewInsights, getOpeningInsights } from './gameInsightsService';
 import { getOpeningNameByEco, openingFamilyMoves } from './openingDetectionService';
 import { detectTacticType } from './missedTacticService';
@@ -537,18 +538,6 @@ export const ANALYTICS_WINDOWS = {
 // /weaknesses tabs under-collect. Each function is shape-stable
 // (returns null when there isn't enough data, never throws).
 
-const AI_NAMES = new Set(['AI Coach', 'Stockfish Bot']);
-
-function inferPlayerColor(g: GameRecord, username: string | null): 'white' | 'black' | null {
-  if (AI_NAMES.has(g.white)) return 'black';
-  if (AI_NAMES.has(g.black)) return 'white';
-  if (!username) return null;
-  const lc = username.toLowerCase();
-  if (g.white.toLowerCase() === lc) return 'white';
-  if (g.black.toLowerCase() === lc) return 'black';
-  return null;
-}
-
 function isWin(g: GameRecord, c: 'white' | 'black'): boolean {
   return (c === 'white' && g.result === '1-0') || (c === 'black' && g.result === '0-1');
 }
@@ -559,7 +548,7 @@ async function loadPlayerGames(): Promise<{ game: GameRecord; color: 'white' | '
   const all = await db.games.filter((g) => !g.isMasterGame && g.result !== '*').toArray();
   const out: { game: GameRecord; color: 'white' | 'black' }[] = [];
   for (const g of all) {
-    const c = inferPlayerColor(g, username);
+    const c = resolvePlayerColor(g, { profileName: username });
     if (c) out.push({ game: g, color: c });
   }
   return out;
@@ -1266,7 +1255,7 @@ export async function recordVsOpponent(query: string): Promise<OpponentVsRecord 
   const matched: { game: GameRecord; color: 'white' | 'black'; opp: string; elo: number | null }[] = [];
   for (const { game, color } of playerGames) {
     const opp = color === 'white' ? game.black : game.white;
-    if (AI_NAMES.has(opp)) continue;
+    if (isEngineName(opp)) continue;
     const oppLc = opp.toLowerCase();
     if (oppLc.includes(q) || q.includes(oppLc)) {
       matched.push({ game, color, opp, elo: color === 'white' ? game.blackElo : game.whiteElo });

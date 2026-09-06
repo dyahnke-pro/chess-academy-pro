@@ -328,3 +328,132 @@ describe('useReviewPlayback', () => {
     expect(result.current.narrationState).toBe('idle');
   });
 });
+
+// ── AUTO-ADVANCE (David 2026-09-05: "have the walkthrough play itself … waits
+// for the narrations to finish, maybe 0.5 second pause, then auto progress") ──
+describe('useReviewPlayback — auto-advance', () => {
+  const narr = () => makeNarration({
+    intro: 'Intro.',
+    segments: [
+      makeSegment({ ply: 1, narration: 'First move, fine.' }),
+      makeSegment({ ply: 2, narration: 'A slip here.', classification: 'mistake' }),
+      makeSegment({ ply: 3, narration: null }),
+      makeSegment({ ply: 4, narration: 'Last.' }),
+    ],
+  });
+
+  it('is OFF until play() — the intro speaks but the walk does not move on its own', async () => {
+    vi.useFakeTimers();
+    try {
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4 }));
+      expect(result.current.isAutoPlaying).toBe(false);
+      expect(speakRecords).toHaveLength(1); // the intro
+      await act(async () => { speakRecords[0].resolve(); });
+      await act(async () => { vi.advanceTimersByTime(5000); });
+      expect(result.current.currentPly).toBe(0);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('after play(): narration resolves → 0.5s pause → the parent forward handler fires', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      await act(async () => { speakRecords[0].resolve(); });
+      await act(async () => { result.current.play(); });
+      expect(result.current.isAutoPlaying).toBe(true);
+      // play() re-speaks the current ply (the intro); it resolves…
+      const intro = speakRecords[speakRecords.length - 1];
+      await act(async () => { intro.resolve(); });
+      // …not yet (the pause is still running)…
+      await act(async () => { vi.advanceTimersByTime(400); });
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+      // …and at 500ms the walk advances through the parent's forward.
+      await act(async () => { vi.advanceTimersByTime(150); });
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('holds 1.5s after a FLAGGED ply so the arrow is seen, 0.8s on a silent ply', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      await act(async () => { speakRecords[0].resolve(); });
+      await act(async () => { result.current.play(); });
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); });
+      await act(async () => { vi.advanceTimersByTime(500); });
+      // Simulate the parent stepping to ply 2 (the mistake) with auto still on.
+      await act(async () => { result.current.goForward(); result.current.goForward(); });
+      expect(result.current.currentPly).toBe(2);
+      onAutoAdvance.mockClear();
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); });
+      await act(async () => { vi.advanceTimersByTime(1400); });
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+      await act(async () => { vi.advanceTimersByTime(150); });
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+      // Silent ply 3: nothing to speak → a fixed hold, then advance.
+      onAutoAdvance.mockClear();
+      await act(async () => { result.current.goForward(); });
+      expect(result.current.currentPly).toBe(3);
+      await act(async () => { vi.advanceTimersByTime(700); });
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+      await act(async () => { vi.advanceTimersByTime(150); });
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('a user intervention PAUSES it, and only play() restarts it', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      await act(async () => { speakRecords[0].resolve(); });
+      await act(async () => { result.current.play(); });
+      await act(async () => { result.current.goForward(); });
+      // Back = the student stepping in.
+      await act(async () => { result.current.goBack(); });
+      expect(result.current.isAutoPlaying).toBe(false);
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); vi.advanceTimersByTime(5000); });
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+      // A manual forward tap keeps it paused (single step); a jump too.
+      await act(async () => { result.current.goForward({ manual: true }); });
+      expect(result.current.isAutoPlaying).toBe(false);
+      await act(async () => { result.current.jumpToPly(1); });
+      expect(result.current.isAutoPlaying).toBe(false);
+      // A next-key-moment skip keeps it playing.
+      await act(async () => { result.current.play(); });
+      await act(async () => { result.current.jumpToPly(2, { keepAuto: true }); });
+      expect(result.current.isAutoPlaying).toBe(true);
+      // Pause stops the voice mid-sentence.
+      const before = stopCount;
+      await act(async () => { result.current.pause(); });
+      expect(result.current.isAutoPlaying).toBe(false);
+      expect(stopCount).toBeGreaterThan(before);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('stops at the end of the game — never advances past the closing', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = makeNarration({ segments: [makeSegment({ ply: 1, narration: 'Only.' })], closing: 'Done.' });
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 1, onAutoAdvance }));
+      await act(async () => { speakRecords[0].resolve(); });
+      await act(async () => { result.current.play(); });
+      await act(async () => { result.current.goForward(); });
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); vi.advanceTimersByTime(600); });
+      // Parent would step to the closing (ply 2 = lastPly+1):
+      await act(async () => { result.current.goForward(); });
+      expect(result.current.currentPly).toBe(2);
+      onAutoAdvance.mockClear();
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); vi.advanceTimersByTime(5000); });
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+      expect(result.current.isAutoPlaying).toBe(false);
+    } finally { vi.useRealTimers(); }
+  });
+});

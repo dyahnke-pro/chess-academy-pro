@@ -18,6 +18,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { exploreOnFreeBoard } from './audit-lib/review-explore.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -161,7 +162,13 @@ async function main() {
 
   // ── show-me / explore / missed-tactics (appear contextually) ──
   record('show-me-btn', await clickReq('[data-testid="walk-show-me-btn"]') || await visible('[data-testid="walk-show-me-btn"]'), 'show-me present/tapped');
-  record('explore-toggle', await clickReq('[data-testid="walk-explore-toggle-btn"]') || await visible('[data-testid="walk-explore-toggle-btn"]'), 'explore present/tapped');
+  // FREE BOARD (David 2026-09-05): the Explore button is gone — a piece moved on
+  // the board IS exploring. Drive it like a human: click a legal move, expect the
+  // exploring banner + an engine reply.
+  {
+    const ex = await exploreOnFreeBoard(page);
+    record('free-board-explore', ex.ok, ex.ok ? `played ${ex.san} at ply ${ex.ply}; banner=${ex.banner} engineReply=${ex.reply}` : ex.reason);
+  }
   record('missed-tactics', await visible('[data-testid="walk-missed-tactics"]'), 'missed-tactics section present');
 
   // ── end-of-walk affordances ──

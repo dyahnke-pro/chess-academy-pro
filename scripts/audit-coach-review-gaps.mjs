@@ -66,6 +66,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { exploreOnFreeBoard } from './audit-lib/review-explore.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -642,40 +643,23 @@ async function main() {
       // flow). Tap "Explore this position" → board flips to fenBefore so the
       // suggested piece is legal; drop the green-arrow move; assert an engine
       // reply animates (a second setWalkExplorationFen tick from getCoachMove).
+      // FREE BOARD (David 2026-09-05): no Explore button — the board is live on
+      // every ply, a moved piece IS exploring, and the engine answers with its
+      // best move. Re-find a flagged ply (so the contract is exercised where the
+      // old toggle used to live), click a legal move, expect banner + reply.
       let exploreReply = false;
       const reFound = await reFindShowMePly(fwd);
-      if (reFound && (await visible('[data-testid="walk-explore-toggle-btn"]'))) {
-        await page.locator('[data-testid="walk-explore-toggle-btn"]').click({ force: true }).catch(() => undefined);
-        await page.waitForTimeout(600);
-        // Read the green arrow's from/to off the rendered arrow markers, then
-        // tap from-square → to-square on the board.
-        const arrow = await page.evaluate(() => {
-          // react-chessboard keys arrows by start/end; the review board passes
-          // a single green arrow {startSquare,endSquare}. Fall back to scanning
-          // data-square cells if the arrow DOM isn't queryable.
-          const el = document.querySelector('[data-testid*="arrow"], svg [class*="arrow"]');
-          void el;
-          return null;
-        });
-        void arrow;
-        const playedExplore = await dropBestArrowMove();
-        if (playedExplore) {
-          const afterStudent = await boardSignature();
-          // The onMove handler fires getCoachMove(medium,1500) and swaps the
-          // exploration FEN to the post-reply position → another board change.
-          exploreReply = await until(async () => {
-            const sig = await boardSignature();
-            return sig && sig !== afterStudent;
-          }, 25_000, 500);
-        }
+      if (reFound) {
+        const ex = await exploreOnFreeBoard(page);
+        exploreReply = ex.ok && ex.reply;
         mark('gap3-explore-stockfish-reply', {
           pass: exploreReply,
           detail: exploreReply
-            ? 'explored the missed move and a Stockfish reply animated'
-            : (playedExplore ? 'student move played but no engine reply animated' : 'could not drop the suggested arrow move'),
+            ? `explored ${ex.san} at ply ${ex.ply} on the free board and a Stockfish reply animated`
+            : (ex.ok ? 'student move played (banner up) but no engine reply animated' : ex.reason),
         });
       } else {
-        notTested('gap3-explore-stockfish-reply', 'could not re-reach an Explore-capable ply after the show-me flow');
+        notTested('gap3-explore-stockfish-reply', 'could not re-reach a flagged ply after the show-me flow');
       }
       step('gap3-explore', 'explore + engine reply', { exploreReply });
     }
@@ -862,45 +846,6 @@ async function main() {
 
     // Drop the green-arrow best move on the board: read the arrow's from/to,
     // then click from-square → to-square. Falls back to false if unreadable.
-    async function dropBestArrowMove() {
-      const fromTo = await page.evaluate(() => {
-        // The review board renders the suggested move as a single green arrow
-        // (#22c55e). react-chessboard draws arrows as <svg> lines inside the
-        // board; we can't always read squares off the SVG, so prefer the
-        // app's own arrow source if exposed. As a robust fallback, the
-        // classification badge ply has a known mapping we can't see here, so
-        // we return null and let the caller try a board-square heuristic.
-        return null;
-      });
-      void fromTo;
-      // Heuristic fallback: the explore board is at seg.fenBefore with the
-      // suggested move legal. We can't compute the move squares purely from the
-      // DOM, so attempt the documented Morphy mistake squares when on a known
-      // ply. This keeps the EXECUTION assertion honest: if we cannot perform a
-      // real drop, we report failure rather than a false pass.
-      // Known arrow plies for Morphy: move 3 Black Bg4 (best exd4: e5xd4 → from
-      // e5 to d4), move 9 Black b5 (best Qc7: d8 to c7).
-      const candidates = [
-        ['e5', 'd4'],
-        ['d8', 'c7'],
-        ['e4', 'd5'],
-      ];
-      for (const [from, to] of candidates) {
-        const fromCell = page.locator(`[data-square="${from}"]`).first();
-        const toCell = page.locator(`[data-square="${to}"]`).first();
-        if (!(await fromCell.isVisible().catch(() => false))) continue;
-        if (!(await toCell.isVisible().catch(() => false))) continue;
-        const before = await boardSignature();
-        await fromCell.click({ force: true }).catch(() => undefined);
-        await page.waitForTimeout(150);
-        await toCell.click({ force: true }).catch(() => undefined);
-        await page.waitForTimeout(500);
-        const after = await boardSignature();
-        if (after && after !== before) return true;
-      }
-      return false;
-    }
-
     async function reFindShowMePly(fwd) {
       // Walk back to start, then forward to the first Show-me/Explore ply.
       const start = page.locator('[data-testid="review-back-btn"]');
@@ -910,12 +855,12 @@ async function main() {
         await page.waitForTimeout(120);
       }
       for (let i = 0; i < 40; i++) {
-        if (await visible('[data-testid="walk-explore-toggle-btn"]')) return true;
+        if (await visible('[data-testid="walk-show-me-btn"]')) return true;
         if ((await fwd.count()) === 0 || (await fwd.isDisabled().catch(() => true))) break;
         await fwd.click({ force: true }).catch(() => undefined);
         await page.waitForTimeout(400);
       }
-      return await visible('[data-testid="walk-explore-toggle-btn"]');
+      return await visible('[data-testid="walk-show-me-btn"]');
     }
   } catch (e) {
     fatal = String(e?.stack ?? e?.message ?? e);

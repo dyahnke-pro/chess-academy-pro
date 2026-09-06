@@ -194,7 +194,13 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
   let materialGained = 0;
   if (mv.captured && toSquare) {
     const capturedVal = PIECE_POINTS[mv.captured] ?? 0;
-    if (prev && prev.square === toSquare) {
+    // A RECAPTURE only when the previous ply actually CAPTURED there. A piece
+    // that merely MOVED to this square last ply and is now taken must go
+    // through the static exchange like any fresh capture — treating it as a
+    // "recapture" netted face value minus 0 and bypassed SEE, so an even
+    // trade (4.d4 cxd4 5.cxd4) read "you capture the pawn, win material"
+    // (David's Alapin, audit 2026-09-06).
+    if (prev && prev.square === toSquare && prev.capturedValue > 0) {
       materialGained = capturedVal - prev.capturedValue;
     } else {
       try { materialGained = seeGain(new Chess(fenBefore), toSquare as Square); }

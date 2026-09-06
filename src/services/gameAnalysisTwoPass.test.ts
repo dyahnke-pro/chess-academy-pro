@@ -39,6 +39,7 @@ import {
   ANALYSIS_DEPTH,
   BEST_MOVE_DEPTH,
   TWO_PASS_SWING_CP,
+  DEEP_DIVE_CANDIDATE_CP,
   __testables,
 } from './gameAnalysisService';
 import { MATE_EVAL_VALUE, INACCURACY_CP } from './engineConstants';
@@ -98,12 +99,16 @@ describe('selectCriticalPlies — the review\'s key-moment selector', () => {
     expect(selectCriticalPlies(CURVE)).toEqual([4, 5]);
   });
 
-  it('threshold is INACCURACY_CP, so every ply that could grade worse than `good` is deepened', () => {
-    // This is what makes the review's verdicts all DEEP verdicts: a ply left
-    // shallow swung less than the smallest grade-changing amount.
+  it('candidacy sits BELOW the verdict threshold by the shallow noise margin, so a real inaccuracy hidden in a ~37cp shallow read still gets its deep look', () => {
+    // The deep verdict is what decides the grade; the shallow read only
+    // nominates. A depth-10 eval carries 30-50cp of noise (the sweep's own
+    // note), so nominating only swings >= INACCURACY_CP let David's Alapin
+    // 6...Nb6 (37cp shallow, 52cp at depth 14) read GOOD forever.
     expect(TWO_PASS_SWING_CP).toBe(INACCURACY_CP);
+    expect(DEEP_DIVE_CANDIDATE_CP).toBe(INACCURACY_CP / 2);
     expect(selectCriticalPlies([0, INACCURACY_CP, 0])).toEqual([0, 1, 2]);
-    expect(selectCriticalPlies([0, INACCURACY_CP - 1, 0])).toEqual([]);
+    expect(selectCriticalPlies([0, 37, 0])).toEqual([0, 1, 2]);
+    expect(selectCriticalPlies([0, DEEP_DIVE_CANDIDATE_CP - 1, 0])).toEqual([]);
   });
 
   it('always deepens around a mate score', () => {
@@ -224,15 +229,20 @@ describe('the REVIEW deep-dives the key moments', () => {
     // N means the depth limit never lands and EVERY search burns the whole
     // movetime — no early return, ever (David 2026-09-05: "isn't depth 18 too
     // deep?"). It must stay reachable on the slow asm build a phone runs.
-    expect(REVIEW_DEEP_DEPTH).toBeLessThan(ANALYSIS_DEPTH);
+    // A completed deep pass stamps ANALYSIS_DEPTH, so the review depth must
+    // actually earn that stamp — equal, never above it.
+    expect(REVIEW_DEEP_DEPTH).toBe(ANALYSIS_DEPTH);
     // …and it must NOT be aliased to the drill-solution depth again.
     expect(REVIEW_DEEP_DEPTH).toBeLessThan(BEST_MOVE_DEPTH);
   });
 
-  it('still grades correctly at that depth — the verdict is settled far shallower than 18', () => {
-    // The consumer of the deep eval is classifyCpLoss, whose smallest
-    // verdict-changing swing is INACCURACY_CP (50cp). A depth-14 → depth-18
-    // eval moves ~10cp, so the extra plies cannot change a classification.
+  it('is deep enough to grade the fixture mistake (the verdict on 6...Nb6 flips between depth 14 and 16)', () => {
+    // Native Stockfish on David's Alapin: d14 52cp (4.6%, "good"), d16 128cp,
+    // d18 98, d20 78, d22 69 — flagged at every depth from 16 up. A depth that
+    // grades the student's own key mistake as good is the wrong depth,
+    // whatever it saves on quiet positions (which still stop early under the
+    // movetime budget).
+    expect(REVIEW_DEEP_DEPTH).toBeGreaterThanOrEqual(16);
     expect(INACCURACY_CP).toBeGreaterThan(10);
   });
 
@@ -241,6 +251,22 @@ describe('the REVIEW deep-dives the key moments', () => {
     await analyzeSingleGame('g-review');
     const dive = singletonCalls.filter((c) => c.depth === REVIEW_DEEP_DEPTH);
     expect(dive.length).toBeLessThanOrEqual(__testables.REVIEW_MAX_DEEP_PLIES);
+  });
+
+  it('REUSES the deep dive\'s best move — no second full-budget search per flagged ply (David 2026-09-05)', async () => {
+    // The dive already searched the flagged ply's "before" position at
+    // REVIEW_DEEP_DEPTH and got a best move. Running ANOTHER search at
+    // BEST_MOVE_DEPTH for the same position bought nothing on the phone (18 is
+    // unreachable there, so it always burned the whole budget) and doubled the
+    // review's wall-clock on every flagged ply.
+    await reviewFixture();
+    const anns = await analyzeSingleGame('g-review');
+    expect(anns![4].classification).toBe('blunder');
+    // The best move is filled in…
+    expect(anns![4].bestMove).toBeTruthy();
+    // …WITHOUT a BEST_MOVE_DEPTH search at that ply.
+    const bestMoveSearches = singletonCalls.filter((c) => c.depth === BEST_MOVE_DEPTH);
+    expect(bestMoveSearches, 'a second deep search ran at the flagged ply').toHaveLength(0);
   });
 
   it('a completed review is NOT re-analysed on the next open', async () => {

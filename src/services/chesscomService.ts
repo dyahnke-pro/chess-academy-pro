@@ -1,6 +1,6 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats, TimeControlStats } from '../types';
-import { detectOpening, detectBlunders, extractClockMs } from './gameImportUtils';
+import { detectOpening, detectBlunders, extractClockMs, annotationsFromEvalComments, EVAL_COMMENT_ANALYSIS_DEPTH } from './gameImportUtils';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 import { runBackgroundAnalysis } from './gameAnalysisService';
 
@@ -170,7 +170,16 @@ export async function importChessComGames(
             record.openingId = await detectOpening(record.pgn);
           }
           if (record.pgn) {
-            record.annotations = detectBlunders(record.pgn);
+            // A PGN that carries a server eval on EVERY ply is already analysed —
+            // file the full curve and skip the local sweep (David 2026-09-05).
+            const full = annotationsFromEvalComments(record.pgn);
+            if (full) {
+              record.annotations = full;
+              record.fullyAnalyzed = true;
+              record.analysisDepth = EVAL_COMMENT_ANALYSIS_DEPTH;
+            } else {
+              record.annotations = detectBlunders(record.pgn);
+            }
           }
 
           await db.games.put(record);

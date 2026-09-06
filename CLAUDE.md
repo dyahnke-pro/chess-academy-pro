@@ -4575,6 +4575,7 @@ After every `git push origin main`:
    | If you changed… | Run |
    |---|---|
    | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs` |
+   | `/coach/review/*` — the 2026-09-05 overhaul contracts (non-blocking open + instant reopen, fundamentals-FIRST narration, auto-advance + ⏯, free board / narrated exploration, button-only Show-me, recap, WIN/LOSS card) | `scripts/audit-review-overhaul-prod.mjs` (3-instrument, MUTED; seeds David's Alapin unanalyzed). The Explore button is GONE — any review audit that clicks `walk-explore-toggle-btn` is stale; drive the free board through `scripts/audit-lib/review-explore.mjs` |
    | `/coach/play` | `scripts/audit-coach-play.mjs` (event-contract smoke) **+ the FULL-GAME STANDARD below for any substantive coach/play/review change** |
    | `/coach/play` + `/coach` review — full games | `scripts/audit-coach-full-games.mjs` via the `full-game-audit.yml` workflow (🔒 THE FULL-GAME AUDIT STANDARD — see locked section below the matrix) |
    | batch game analysis / the Stockfish worker pool (`gameAnalysisService`, `stockfishEngine`, `resolveWorkerUrl`) | `scripts/audit-analysis-pool-engine-prod.mjs` (the pool names its engine build + it matches the singleton's + no WASM trap — the surface that crash-stormed iOS invisibly) |

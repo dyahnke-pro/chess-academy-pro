@@ -35,6 +35,14 @@ export interface UseReviewPlaybackArgs {
    *  first paint and survives the narration reset. Clamped to the game
    *  length. */
   initialPly?: number;
+  /** AUTO-ADVANCE (David 2026-09-05: "have the walkthrough play itself … a
+   *  nice slow steady pace that waits for the narrations to finish, maybe 0.5
+   *  second pause once they finish, then auto progress to the next move").
+   *  Called when the pause after a ply's narration elapses and auto-play is
+   *  on. The parent routes it through its forward handler so every planned
+   *  stop (find-the-shot, trap, turning point) still fires. When omitted the
+   *  hook steps the ply itself. */
+  onAutoAdvance?: () => void;
 }
 
 export interface UseReviewPlaybackResult {
@@ -47,15 +55,31 @@ export interface UseReviewPlaybackResult {
   /** Visible subtitle: intro at ply 0, segment narration otherwise, or
    *  closing when reached. Null when idle with nothing to show. */
   currentText: string | null;
-  goForward: () => void;
+  /** Advance one ply. `manual: true` is a user tap — it PAUSES auto-play
+   *  (only Play restarts it). The default keeps auto-play running: it is the
+   *  walk's own forward (a card resolving, the auto-advance tick). */
+  goForward: (opts?: { manual?: boolean }) => void;
   goBack: () => void;
   goToStart: () => void;
   goToEnd: () => void;
   /** Jump to an arbitrary ply. speaks=true plays the matching segment's
    *  narration (if any); speaks=false advances the board silently (used
-   *  when back-navigation shouldn't re-speak). */
-  jumpToPly: (ply: number, opts?: { speak?: boolean }) => void;
+   *  when back-navigation shouldn't re-speak). A jump is a user
+   *  intervention and pauses auto-play unless `keepAuto` is set (the
+   *  next-key-moment skip keeps playing from where it lands). */
+  jumpToPly: (ply: number, opts?: { speak?: boolean; keepAuto?: boolean }) => void;
   togglePausePlay: () => void;
+  /** Auto-play is on: after each ply's narration + a short pause the walk
+   *  advances itself. */
+  isAutoPlaying: boolean;
+  /** Start (or resume) auto-play. Re-speaks the current ply if it is not
+   *  already speaking, then continues. The ONLY way auto-play restarts after
+   *  a user intervention (David 2026-09-05). */
+  play: () => void;
+  /** Stop auto-play (and the voice). Fired by Pause, and by every user
+   *  intervention: Back, a manual Forward, a jump, a piece moved on the
+   *  board. */
+  pause: (reason?: string) => void;
   /** Re-speak the current segment / intro from the top. */
   replay: () => void;
   /** WO-HINT-REDESIGN-01: plies (1-indexed) that had hint requests in
@@ -78,8 +102,27 @@ export interface UseReviewPlaybackResult {
  * pre-generated strings, so a single speakForced() per segment is
  * enough.
  */
+/** Pause after a ply's narration finishes before the walk advances. */
+export const AUTO_ADVANCE_PAUSE_MS = 500;
+/** Longer hold after a FLAGGED ply so the eye lands on the arrow first. */
+export const AUTO_ADVANCE_PAUSE_FLAGGED_MS = 1500;
+/** Hold on a silent ply (nothing to narrate) — matches the useStrictNarration floor. */
+export const AUTO_ADVANCE_SILENT_HOLD_MS = 800;
+/** With voice OFF the hold is reading time: words at this pace, floored. */
+const AUTO_READING_WPM = 180;
+const AUTO_READING_MIN_MS = 1500;
+
 export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybackResult {
-  const { narration, totalPlies, gameId, onPlyChange, initialPly } = args;
+  const { narration, totalPlies, gameId, onPlyChange, initialPly, onAutoAdvance } = args;
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  /** Live mirror of isAutoPlaying for the speak-resolution callback. */
+  const autoRef = useRef(false);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onAutoAdvanceRef = useRef(onAutoAdvance);
+  useEffect(() => { onAutoAdvanceRef.current = onAutoAdvance; }, [onAutoAdvance]);
+  const clearAdvanceTimer = useCallback((): void => {
+    if (advanceTimerRef.current !== null) { clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
+  }, []);
   const [currentPly, setCurrentPly] = useState(0);
   // Live mirror of currentPly for callbacks whose dep list intentionally
   // EXCLUDES currentPly (commitPly stays stable so goForward/goBack don't churn
@@ -144,6 +187,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     return () => {
       activeTokenRef.current += 1;
       voiceService.stop();
+      if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current);
     };
   }, []);
 
@@ -202,12 +246,57 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   // `review-playback-step 6→7` paired with
   // `review-narration-spoken ply 6: d3 — solid…` — the text was
   // ply 7's d3 narration but the audit summary said ply 6.
+  /** Schedule the auto-advance for `ply` once its narration is done. The
+   *  timer is token-guarded: any navigation (which bumps the token) or a
+   *  pause cancels it, so an advance can never fire under a user who moved. */
+  const scheduleAdvance = useCallback((ply: number, delayMs: number, token: number): void => {
+    clearAdvanceTimer();
+    if (!autoRef.current) return;
+    if (ply > lastPly) { // the closing — the walk is over, nothing to advance to
+      autoRef.current = false;
+      setIsAutoPlaying(false);
+      return;
+    }
+    advanceTimerRef.current = setTimeout(() => {
+      advanceTimerRef.current = null;
+      if (!autoRef.current || token !== activeTokenRef.current) return;
+      if (currentPlyRef.current !== ply) return; // the user moved meanwhile
+      void logAppAudit({
+        kind: 'review-playback-step',
+        category: 'subsystem',
+        source: 'useReviewPlayback.autoAdvance',
+        summary: `auto-advance from ply ${ply} after ${delayMs}ms`,
+        details: JSON.stringify({ fromPly: ply, delayMs }),
+      });
+      if (onAutoAdvanceRef.current) onAutoAdvanceRef.current();
+      else advanceRef.current(ply + 1);
+    }, delayMs);
+  }, [clearAdvanceTimer, lastPly]);
+  /** The hook's own step, used when no parent forward handler is wired. */
+  const advanceRef = useRef<(ply: number) => void>(() => undefined);
+
+  /** How long to hold after `ply` before auto-advancing: longer on a flagged
+   *  ply so the arrow is seen, a reading-time hold when the voice is off. */
+  const holdAfter = useCallback((ply: number, text: string | null, spoken: boolean): number => {
+    const seg = segments.find((s) => s.ply === ply);
+    const flagged = seg?.classification === 'inaccuracy' || seg?.classification === 'mistake'
+      || seg?.classification === 'blunder' || seg?.classification === 'miss';
+    if (!text || !text.trim()) return AUTO_ADVANCE_SILENT_HOLD_MS;
+    if (!spoken) {
+      const words = text.trim().split(/\s+/).length;
+      return Math.max(AUTO_READING_MIN_MS, Math.round((words / AUTO_READING_WPM) * 60_000));
+    }
+    return flagged ? AUTO_ADVANCE_PAUSE_FLAGGED_MS : AUTO_ADVANCE_PAUSE_MS;
+  }, [segments]);
+
   const speakCurrent = useCallback((ply: number, text: string | null): void => {
     activeTokenRef.current += 1;
     const token = activeTokenRef.current;
     voiceService.stop();
+    clearAdvanceTimer();
     if (!text || !text.trim()) {
       setNarrationState('idle');
+      scheduleAdvance(ply, holdAfter(ply, text, false), token);
       return;
     }
     // Settings → Coach → "Review Voice Narration" governs EVERY spoken line
@@ -219,6 +308,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     const voiceOn = useAppStore.getState().activeProfile?.preferences.coachReviewVoice ?? true;
     if (!voiceOn) {
       setNarrationState('idle');
+      scheduleAdvance(ply, holdAfter(ply, text, false), token);
       return;
     }
     setNarrationState('speaking');
@@ -231,13 +321,19 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     });
     voiceService.speakForced(text).then(
       () => {
-        if (token === activeTokenRef.current) setNarrationState('idle');
+        if (token !== activeTokenRef.current) return;
+        setNarrationState('idle');
+        // VOICE-PROMISE RESOLUTION IS THE ONLY ADVANCE TRIGGER (the app's
+        // strict-narration contract): the pause starts when the speech ends.
+        scheduleAdvance(ply, holdAfter(ply, text, true), token);
       },
       () => {
-        if (token === activeTokenRef.current) setNarrationState('idle');
+        if (token !== activeTokenRef.current) return;
+        setNarrationState('idle');
+        scheduleAdvance(ply, holdAfter(ply, text, true), token);
       },
     );
-  }, []);
+  }, [clearAdvanceTimer, holdAfter, scheduleAdvance]);
 
   // Speak the intro once the narration arrives. Subsequent ply changes
   // fire from the nav actions below — we don't re-speak on every ply
@@ -258,6 +354,9 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   const commitPly = useCallback((ply: number, opts: { speak: boolean; navSource?: string }): void => {
     const bounded = Math.max(0, Math.min(ply, lastPly + 1));
     const fromPly = currentPlyRef.current;
+    // Mirror synchronously — two taps inside one render tick must step twice,
+    // and the auto-advance timer compares against the LIVE ply.
+    currentPlyRef.current = bounded;
     setCurrentPly(bounded);
     onPlyChange?.(bounded);
     // (`review-nav` used to fire here too, saying "target ply N" — every field
@@ -312,26 +411,71 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     speakCurrent(bounded, text);
   }, [lastPly, narration, onPlyChange, segments, speakCurrent]);
 
-  const goForward = useCallback(() => {
-    commitPly(currentPly + 1, { speak: true, navSource: 'goForward' });
-  }, [commitPly, currentPly]);
+  const pause = useCallback((reason = 'pause'): void => {
+    const wasOn = autoRef.current;
+    autoRef.current = false;
+    clearAdvanceTimer();
+    setIsAutoPlaying(false);
+    if (wasOn) {
+      void logAppAudit({
+        kind: 'review-playback-step',
+        category: 'subsystem',
+        source: 'useReviewPlayback.pause',
+        summary: `auto-play paused (${reason}) at ply ${currentPlyRef.current}`,
+        details: JSON.stringify({ reason, ply: currentPlyRef.current }),
+      });
+    }
+    if (reason === 'pause') {
+      // The Pause button also stops the voice mid-sentence; a navigation
+      // pause lets commitPly own the voice.
+      activeTokenRef.current += 1;
+      voiceService.stop();
+      setNarrationState('paused');
+    }
+  }, [clearAdvanceTimer]);
+
+  const goForward = useCallback((opts?: { manual?: boolean }) => {
+    if (opts?.manual) pause('forward-tap');
+    commitPly(currentPlyRef.current + 1, { speak: true, navSource: opts?.manual ? 'goForward' : 'goForward-auto' });
+  }, [commitPly, pause]);
+  useEffect(() => { advanceRef.current = (ply: number) => commitPly(ply, { speak: true, navSource: 'auto' }); }, [commitPly]);
 
   const goBack = useCallback(() => {
+    pause('back');
     commitPly(currentPly - 1, { speak: false, navSource: 'goBack' });
-  }, [commitPly, currentPly]);
+  }, [commitPly, currentPly, pause]);
 
   const goToStart = useCallback(() => {
+    pause('start');
     commitPly(0, { speak: true, navSource: 'goToStart' });
-  }, [commitPly]);
+  }, [commitPly, pause]);
 
   const goToEnd = useCallback(() => {
+    pause('end');
     commitPly(lastPly, { speak: true, navSource: 'goToEnd' });
-  }, [commitPly, lastPly]);
+  }, [commitPly, lastPly, pause]);
 
-  const jumpToPly = useCallback((ply: number, opts?: { speak?: boolean }) => {
+  const jumpToPly = useCallback((ply: number, opts?: { speak?: boolean; keepAuto?: boolean }) => {
     const speak = opts?.speak ?? true;
+    if (!opts?.keepAuto) pause('jump');
     commitPly(ply, { speak, navSource: 'jumpToPly' });
-  }, [commitPly]);
+  }, [commitPly, pause]);
+
+  const play = useCallback((): void => {
+    if (autoRef.current) return;
+    autoRef.current = true;
+    setIsAutoPlaying(true);
+    void logAppAudit({
+      kind: 'review-playback-step',
+      category: 'subsystem',
+      source: 'useReviewPlayback.play',
+      summary: `auto-play started at ply ${currentPlyRef.current}`,
+      details: JSON.stringify({ ply: currentPlyRef.current }),
+    });
+    // Not mid-sentence → (re)speak the current ply so the chain starts here;
+    // mid-sentence → the resolution handler picks the chain up.
+    if (narrationState !== 'speaking') speakCurrent(currentPlyRef.current, currentText);
+  }, [narrationState, speakCurrent, currentText]);
 
   const togglePausePlay = useCallback(() => {
     if (narrationState === 'speaking') {
@@ -376,5 +520,8 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     togglePausePlay,
     replay,
     hintPlies,
+    isAutoPlaying,
+    play,
+    pause,
   };
 }

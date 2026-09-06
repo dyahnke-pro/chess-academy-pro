@@ -211,6 +211,18 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     expect(plyFactsForMove(fb, 'Qxf3', prev, true)).toBeNull();
   });
 
+  it('a piece that just MOVED to the square is not a "recapture" — the even trade goes through SEE and claims nothing', () => {
+    // David's Alapin: 4.d4 cxd4 5.cxd4. The d4 pawn arrived last ply (no capture);
+    // 4...cxd4 is a fresh capture of a defended pawn — an even trade, not a win.
+    // Before the fix, prev={square:'d4', capturedValue:0} made it a "recapture"
+    // netting 1 − 0 and the walk spoke "You capture the pawn, win material."
+    const fb = fenBefore(['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4']);
+    const prev = { square: 'd4', capturedValue: 0 }; // 4.d4 landed here, captured nothing
+    const clause = plyFactsClause(fb, 'cxd4', prev) ?? '';
+    expect(clause).not.toMatch(/wins? material|wins \d+ point/i);
+    expect(plyFactsForMove(fb, 'cxd4', prev, true)).toBeNull();
+  });
+
   it('a real hanging capture DOES win material', () => {
     // White knight on e5 hangs; Black's d6 pawn takes it for free.
     const fb = 'rnbqkbnr/ppp2ppp/3p4/4N3/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 1';

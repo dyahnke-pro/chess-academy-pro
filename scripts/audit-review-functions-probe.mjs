@@ -10,6 +10,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { exploreOnFreeBoard } from './audit-lib/review-explore.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const GID = 'functions-probe-iqp';
@@ -90,33 +91,30 @@ const run = async () => {
     add('engine-lines-panel', panel && panelTxt.length > 10, panel ? `panel text: "${panelTxt.slice(0, 60)}…"` : 'panel never opened');
   } else add('engine-lines-panel', false, 'toggle not found');
 
-  // ── EXPLORE + SHOW-ME: walk to a flagged ply (buttons mount there).
-  let sawExplore = false; let sawShowMe = false;
-  for (let i = 0; i < 40 && !(sawExplore && sawShowMe); i++) {
-    if (await has(page, '[data-testid="walk-explore-toggle-btn"]')) sawExplore = true;
-    if (await has(page, '[data-testid="walk-show-me-btn"]')) sawShowMe = true;
-    if (sawExplore && sawShowMe) break;
+  // ── FREE BOARD + SHOW-ME. The Explore toggle is GONE (David 2026-09-05): the
+  // board is interactive on every ply and a moved piece IS exploring. Show-me
+  // still mounts only on a flagged ply — walk forward until it appears.
+  let sawShowMe = false;
+  for (let i = 0; i < 40 && !sawShowMe; i++) {
+    if (await has(page, '[data-testid="walk-show-me-btn"]')) { sawShowMe = true; break; }
     // resolve any picker quickly so the walk keeps moving
     if (await has(page, '[data-testid="discussion-reason-option"]')) { await page.locator('[data-testid="discussion-reason-option"]').first().click({ timeout: 1500 }).catch(() => {}); for (let d = 0; d < 20; d++) { const x = page.locator('[data-testid="explanation-card"] button[aria-label="Dismiss"]').first(); if (await x.count()) { await x.click({ timeout: 1500 }).catch(() => {}); break; } await page.waitForTimeout(600); } await page.waitForTimeout(2000); }
     for (const sel of ['[data-testid="review-find-shot-skip"]', '[data-testid="review-cameo-skip"]', '[data-testid="review-rewind-decline"]', '[data-testid="review-trap-pick-leave"]', '[data-testid="review-trap-done"]']) { if (await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500 }).catch(() => {}); await page.waitForTimeout(400); } }
     await fwd.click({ force: true }).catch(() => {});
     await page.waitForTimeout(650);
   }
-  if (sawExplore) {
-    await page.locator('[data-testid="walk-explore-toggle-btn"]').first().click({ timeout: 2000 }).catch(() => {});
-    await page.waitForTimeout(800);
-    // CONTRACT: tapping Explore HIDES the toggle and puts the interactive board
-    // on the pre-move FEN — no button is visible until the student plays a move
-    // ("Resume game" mounts only after a move lands). Post-state proof =
-    // the toggle disappeared; then a ply-nav resets explore mode (the
-    // per-ply-change effect) and the walk keeps working.
-    const exploreActive = !(await has(page, '[data-testid="walk-explore-toggle-btn"]'));
+  {
+    // CONTRACT: no Explore button anywhere; a click-move on the live board mounts
+    // the exploring banner and the engine answers. Then a ply-nav (Back) exits
+    // exploration and the walk keeps working.
+    const ex = await exploreOnFreeBoard(page);
     await page.locator('[data-testid="review-back-btn"]').first().click({ force: true }).catch(() => {});
     await page.waitForTimeout(500);
+    const bannerGone = !(await has(page, '[data-testid="review-exploring-banner"]'));
     await fwd.click({ force: true }).catch(() => {});
     await page.waitForTimeout(500);
-    add('explore-position', exploreActive, exploreActive ? 'explore mode entered (toggle hid, board interactive); nav reset it' : 'toggle still visible after click — explore never engaged');
-  } else add('explore-position', false, 'never surfaced on a flagged ply');
+    add('explore-position', ex.ok && bannerGone, ex.ok ? `free board: played ${ex.san} at ply ${ex.ply} (banner=${ex.banner}, engineReply=${ex.reply}); Back exited exploration=${bannerGone}` : ex.reason);
+  }
   if (sawShowMe) {
     if (await has(page, '[data-testid="walk-show-me-btn"]')) {
       await page.locator('[data-testid="walk-show-me-btn"]').first().click({ timeout: 2000 }).catch(() => {});

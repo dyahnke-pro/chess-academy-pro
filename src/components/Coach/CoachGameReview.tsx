@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair } from 'lucide-react';
+import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { buildVoicePackage } from '../../services/voicePackage';
@@ -13,7 +13,6 @@ const REVIEW_MULTIPV = 8;
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
@@ -43,7 +42,7 @@ import { buildMisconceptionCallback } from '../../services/misconceptionCallback
 import { principleFor } from '../../data/principles';
 import { buildPrincipleQuiz, quizVerdictLine, type PrincipleQuiz } from '../../services/principleQuiz';
 import { findTheoryDeparture, walkBookLine, type TheoryDeparture, type BookLinePly } from '../../services/theoryDeparture';
-import { pauseBatchAnalysis, resumeBatchAnalysis } from '../../services/gameAnalysisService';
+import { pauseBatchAnalysis, resumeBatchAnalysis, classifyCpLoss } from '../../services/gameAnalysisService';
 import { classifyGameTheme, type GameThemeResult } from '../../services/gameThemeClassifier';
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
@@ -56,6 +55,7 @@ import {
   generateNarrativeSummary,
   generateReviewNarration,
   buildReviewCitations,
+  buildReviewSegments,
   frameOpeningForStudent,
 } from '../../services/coachFeatureService';
 import type {
@@ -81,9 +81,10 @@ import { logAppAudit } from '../../services/appAuditor';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { db } from '../../db/schema';
+import { reviewNarrationCacheKey, getCachedReviewNarration, storeReviewNarration } from '../../services/reviewNarrationCache';
 import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
-import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType } from '../../types';
+import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
 /** UNCAPPED / DEEP-DETAIL review: opt-in via the "Deep Review Detail" Settings
  *  toggle (David 2026-07-21: "we have a toggle switch — at least we should"),
@@ -125,6 +126,10 @@ interface CoachGameReviewProps {
    *  so hint callouts are scoped to THIS game and don't leak across
    *  reviews via the global `useCoachMemoryStore` (ship-5). */
   gameId?: string;
+  /** Fires when the student taps Start and the walk begins. The session page
+   *  uses it to FREEZE the review: a background deepen that lands after this
+   *  is held for the next open instead of rewriting the walk mid-stride. */
+  onWalkStarted?: () => void;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -308,12 +313,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ply's line re-playing. Declared here (above handleWalkForward) so the nav
   // handler can cancel a running playout on any forward tap.
   const spokenLineTokenRef = useRef(0);
-  const playedSpokenLineRef = useRef<Set<number>>(new Set());
-  // Opt-in toggle: when on at an arrow-bearing ply, the board
-  // displays `seg.fenBefore` (so the missed move is playable)
-  // instead of the canonical `seg.fenAfter`. Resets when the
-  // student steps to a different ply.
-  const [walkExploreToggleOn, setWalkExploreToggleOn] = useState<boolean>(false);
+  // THE BOARD IS FREE (David 2026-09-05: "I wasn't able to move piece freely.
+  // Let's unlock that and remove the 'explore this position' button. If the
+  // user chooses to move a piece at any time that is them choosing to explore
+  // the position."). No opt-in toggle: any piece moved on a quiet board IS
+  // exploring. The SANs the student has played from the current ply, so the
+  // narration of each explored move sees the whole line (game + exploration).
+  const walkExploreSansRef = useRef<string[]>([]);
+  const exploreTokenRef = useRef(0);
   // "Show me" playout: when active, Stockfish auto-plays the
   // punishment line from `seg.fenAfter` so the student can SEE
   // why their move was a mistake/blunder. Each engine ply updates
@@ -489,6 +496,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       preMoveEval: m.preMoveEval,
       bestMove: m.bestMove,
       fenAfter: m.fen,
+      ...(m.pv ? { pv: m.pv } : {}),
     })),
     [moves],
   );
@@ -505,23 +513,52 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (walkNarration !== null || isLoadingWalk) return;
     if (reviewMoveInputs.length === 0) return;
     setIsLoadingWalk(true);
-    void generateReviewNarration({
-      moves: reviewMoveInputs,
-      playerColor,
-      openingName,
-      result,
-      playerRating,
-      // Tied to the unified Settings → Coach → Coach Narration dial.
-      // Silent skips the intro LLM call entirely; Brief caps it at
-      // ~80 tokens; Full uses the legacy 200-token allowance. Resolved
-      // fresh per mount so a Settings change between reviews takes
-      // effect on the next open.
-      coachNarration: resolveCoachNarration(useAppStore.getState().activeProfile?.preferences),
-      // UNCAPPED diagnostic mode (David 2026-07-20): speak EVERY computed facet on
-      // EVERY move + the future-position projections. Opt-in via ?uncapped=1 or
-      // localStorage reviewUncapped=1 (the audit + David toggle it) — production
-      // review stays capped.
-      uncapped: isReviewUncapped(),
+    // Tied to the unified Settings → Coach → Coach Narration dial.
+    // Silent skips the intro LLM call entirely; Brief caps it at
+    // ~80 tokens; Full uses the legacy 200-token allowance. Resolved
+    // fresh per mount so a Settings change between reviews takes
+    // effect on the next open.
+    const coachNarration = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
+    // UNCAPPED diagnostic mode (David 2026-07-20): speak EVERY computed facet on
+    // EVERY move + the future-position projections. Opt-in via ?uncapped=1 or
+    // localStorage reviewUncapped=1 (the audit + David toggle it) — production
+    // review stays capped.
+    const uncapped = isReviewUncapped();
+    const cacheGameId = props.gameId ?? null;
+    const cacheKey = reviewNarrationCacheKey({
+      moves: reviewMoveInputs, playerColor, openingName, result, playerRating, coachNarration, uncapped,
+    });
+    // PERSISTED NARRATION (David 2026-09-05: "I clicked on that game again and
+    // it restarted all over"). The walk is a pure function of the annotations
+    // + settings, so a cached one under the same key IS the narration — no
+    // facet recompute, no house-voice pass. A deepened annotation changes the
+    // key and regenerates.
+    const cached = cacheGameId ? getCachedReviewNarration(cacheGameId, cacheKey) : Promise.resolve(null);
+    void cached.then((hit) => {
+      if (hit) {
+        void logAppAudit({
+          kind: 'review-walk-skipped',
+          category: 'subsystem',
+          source: 'CoachGameReview.walkNarration',
+          summary: `walk narration served from cache (${hit.segments.length} segments)`,
+          details: JSON.stringify({ cacheHit: true, key: cacheKey, segmentCount: hit.segments.length }),
+        });
+        return hit;
+      }
+      return generateReviewNarration({
+        moves: reviewMoveInputs,
+        playerColor,
+        openingName,
+        result,
+        playerRating,
+        coachNarration,
+        uncapped,
+      }).then((narration) => {
+        if (narration && narration.segments.length > 0 && cacheGameId) {
+          void storeReviewNarration(cacheGameId, cacheKey, narration);
+        }
+        return narration;
+      });
     }).then((narration) => {
       // Audit-driven (review walk #4): bail if the component
       // unmounted mid-call (user navigated away). React-level
@@ -586,9 +623,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // totalPlies is the authoritative ceiling — nav walks every move the
   // student played, even when the LLM narrated only a subset
   // (WO-REVIEW-02a-FIX).
+  // AUTO-ADVANCE routes through the SAME forward handler the button uses, so
+  // every planned stop (find-the-shot / trap / turning point) still fires on
+  // an auto tick. handleWalkForward is declared below the hook — a ref bridges
+  // the order.
+  const handleWalkForwardRef = useRef<() => void>(() => undefined);
   const walkPlayback = useReviewPlayback({
     narration: walkNarration,
     totalPlies: moves.length,
+    onAutoAdvance: () => handleWalkForwardRef.current(),
     // ship-5: scope hint callouts to this specific game.
     gameId: props.gameId,
     // Deep-link: /coach/review/:id?move=N → the page hands us a
@@ -920,6 +963,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     }
     walkPlayback.goForward();
   }, [readingGate, faucetPhase, resetFaucet, readingQuizOn, walkPlayback, walkNarration, playerColor, openingName, playerRating, shotState, shotReveal, turningQ, trapQ, rewindOffer, questionPlan, moves, moverIsStudent]);
+  handleWalkForwardRef.current = handleWalkForward;
+  /** A user's forward tap / key: pauses auto-play (only Play restarts it),
+   *  then steps through the same card ladder. */
+  const handleWalkForwardManual = useCallback((): void => {
+    walkPlayback.pause('forward-tap');
+    handleWalkForward();
+  }, [walkPlayback, handleWalkForward]);
+  /** ⏭ = the next KEY MOMENT (the student's next flagged move), not the end of
+   *  the game — an 80-move auto-walk needs a way past the quiet stretches
+   *  (G.7). Keeps auto-play running from where it lands. */
+  const nextKeyMomentPly = useMemo<number | null>(() => {
+    const segs = walkNarration?.segments ?? [];
+    const hit = segs.find((sg) => sg.ply > walkPlayback.currentPly && sg.playerColor === playerColor
+      && (sg.classification === 'inaccuracy' || sg.classification === 'mistake' || sg.classification === 'blunder' || sg.classification === 'miss'));
+    return hit ? hit.ply : null;
+  }, [walkNarration, walkPlayback.currentPly, playerColor]);
 
   // Advance the walk once the faucet is done (answered + reveal dismissed, or
   // skipped) — the "resume" side of the pause above.
@@ -1398,6 +1457,120 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationArrows(null);
     onDone();
   }, [playMoveSound]);
+
+  /**
+   * Narrate a move the student EXPLORED on the board (David 2026-09-05:
+   * "Narration/computer does need to fire on those moves" → "use the same
+   * format as we already have"). The move is graded by the engine at a FIXED
+   * depth (the budget only bounds the wait) and run through the SAME segment
+   * builder the walk uses — so a flagged exploration leads with its
+   * fundamental exactly like a game move would, and a good one gets the
+   * walk's own merit teaching. The engine then answers with its BEST move
+   * (truth at fixed depth — not a rating-matched sparring partner, G.3), which
+   * is narrated the way the walk narrates an opponent move. Every line is
+   * computed; nothing is invented (G0).
+   */
+  const narrateExploredMove = useCallback(async (args: {
+    history: string[];
+    fenBefore: string;
+    fenAfter: string;
+    san: string;
+    replyAllowed: boolean;
+  }): Promise<void> => {
+    const EXPLORE_DEPTH = 12;
+    const EXPLORE_BUDGET_MS = 2500;
+    const token = ++exploreTokenRef.current;
+    const alive = (): boolean => token === exploreTokenRef.current && walkMountedRef.current;
+    let before: StockfishAnalysis | null = null;
+    let after: StockfishAnalysis | null = null;
+    try {
+      [before, after] = await Promise.all([
+        stockfishEngine.analyzeWithBudget(args.fenBefore, EXPLORE_DEPTH, EXPLORE_BUDGET_MS),
+        stockfishEngine.analyzeWithBudget(args.fenAfter, EXPLORE_DEPTH, EXPLORE_BUDGET_MS),
+      ]);
+    } catch { before = null; after = null; }
+    if (!alive()) return;
+    let moverIsWhite = true;
+    try { moverIsWhite = new Chess(args.fenBefore).turn() === 'w'; } catch { /* keep */ }
+    const clamp = (cp: number): number => Math.max(-1000, Math.min(1000, cp));
+    let classification: MoveClassification | null = null;
+    let bestUci: string | null = null;
+    if (before && after) {
+      const cpLoss = moverIsWhite
+        ? clamp(before.evaluation) - clamp(after.evaluation)
+        : clamp(after.evaluation) - clamp(before.evaluation);
+      classification = classifyCpLoss(cpLoss, before.evaluation, after.evaluation, moverIsWhite, args.san.includes('#'));
+      try {
+        const bp = new Chess(args.fenBefore).move({ from: before.bestMove.slice(0, 2), to: before.bestMove.slice(2, 4), promotion: before.bestMove.length > 4 ? before.bestMove[4] : undefined });
+        bestUci = bp && bp.san !== args.san ? before.bestMove : null;
+      } catch { bestUci = null; }
+    }
+    // The SAME segment builder the walk uses, over the whole line (game +
+    // exploration), so opening naming, say-once and the fundamentals all see
+    // the real history. Only the LAST segment (this move) is spoken.
+    const inputs: ReviewMoveInput[] = [];
+    try {
+      const c = new Chess();
+      let prevEval: number | null = null;
+      for (let i = 0; i < args.history.length; i++) {
+        const sanI = args.history[i];
+        const mv = c.move(sanI);
+        if (!mv) break;
+        const isLast = i === args.history.length - 1;
+        const gameMove = i < moves.length && moves[i]?.san === sanI ? moves[i] : null;
+        const isCoach = mv.color === 'w' ? playerColor !== 'white' : playerColor !== 'black';
+        inputs.push({
+          ply: i + 1,
+          san: mv.san,
+          isCoachMove: isCoach,
+          classification: isLast ? classification : (gameMove?.classification ?? null),
+          evaluation: isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null),
+          preMoveEval: isLast ? (before?.evaluation ?? null) : prevEval,
+          bestMove: isLast ? bestUci : (gameMove?.bestMove ?? null),
+          fenAfter: c.fen(),
+        });
+        prevEval = isLast ? (after?.evaluation ?? null) : (gameMove?.evaluation ?? null);
+      }
+    } catch { /* an unreplayable line narrates nothing */ }
+    if (inputs.length === 0 || !alive()) return;
+    let text: string | null = null;
+    try {
+      const segs = buildReviewSegments(inputs, playerColor, openingName);
+      text = segs[segs.length - 1]?.narration ?? null;
+    } catch { text = null; }
+    void logAppAudit({
+      kind: 'review-walk-explored',
+      category: 'subsystem',
+      source: 'CoachGameReview.narrateExploredMove',
+      summary: `${args.san} (${classification ?? 'ungraded'}) → ${text ? text.slice(0, 60) : 'silent'}`,
+      fen: args.fenAfter,
+      details: JSON.stringify({ san: args.san, classification, bestUci, spoken: text }),
+    });
+    if (text) { try { await reviewSay(text); } catch { /* voice off */ } }
+    if (!alive() || !args.replyAllowed || !after) return;
+    // THE ENGINE'S REPLY — its best move at the same fixed depth, for whichever
+    // side is to move: the student exploring their own alternative gets the
+    // opponent's best answer; the student trying the OPPONENT's alternative
+    // ("what if they had played d5?") gets their own side's best reply.
+
+    try {
+      const probe = new Chess(args.fenAfter);
+      if (probe.isGameOver()) return;
+      const reply = probe.move({ from: after.bestMove.slice(0, 2), to: after.bestMove.slice(2, 4), promotion: after.bestMove.length > 4 ? after.bestMove[4] : undefined });
+      if (!reply || !alive()) return;
+      const replyFen = probe.fen();
+      setWalkExplorationFen(replyFen);
+      setWalkExplorationSan(reply.san);
+      setWalkExplorationArrows([{ startSquare: reply.from, endSquare: reply.to, color: '#ef4444' }]);
+      walkExploreSansRef.current = [...walkExploreSansRef.current, reply.san];
+      playMoveSound(reply.san);
+      // Narrate their move the way the walk narrates an opponent move (a
+      // threat call-out when there is one; silence when unremarkable).
+      await narrateExploredMoveRef.current({ history: [...args.history, reply.san], fenBefore: args.fenAfter, fenAfter: replyFen, san: reply.san, replyAllowed: false });
+    } catch { /* engine unreachable — the student's move stands */ }
+  }, [moves, playerColor, openingName, playMoveSound, reviewSay]);
+  const narrateExploredMoveRef = useRef(narrateExploredMove);
+  narrateExploredMoveRef.current = narrateExploredMove;
 
   // Play the OPENING THEORY LECTURE — the masters-DB tour of the mainline,
   // sidelines, best moves, and where the game left theory. Each beat sits the
@@ -1950,7 +2123,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // any nav-away). Skips plies a picker/faucet owned (quizzedPliesRef) — the §5
   // walkout already plays that better line there, and every other interactive card
   // owns its own board.
-  useEffect(() => { playedSpokenLineRef.current = new Set(); }, [props.gameId]);
   // Play a spoken line OUT on the exploration board — green lead-the-eye arrow +
   // SAN per move, then snap back. Shared by the auto-playout (waits for the
   // segment's own narration to finish first) and the "Walk the line" button
@@ -2003,38 +2175,29 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);
   }, [playMoveSound]);
-  // AUTO-PLAYOUT — the delta shows itself when the walk lands on a plain
-  // (non-card) ply whose narration named a projected line.
-  useEffect(() => {
-    const ply = walkPlayback.currentPly;
-    const seg = walkPlayback.currentSegment;
-    const arrows = seg?.spokenLineArrows;
-    if (!arrows || arrows.length < 2) return;
-    if (ply <= 0 || ply > moves.length) return;
-    if (playedSpokenLineRef.current.has(ply)) return;
-    // Any interactive card / gate owns the board — never fight it. The §5 walkout
-    // already plays the better line on picker plies (quizzedPliesRef).
-    if (
-      readingGate || faucetPhase !== 'idle' || shotState || shotReveal ||
-      turningQ || trapQ || rewindOffer ||
-      seqStateRef.current || cameoStateRef.current || theoryStateRef.current ||
-      quizzedPliesRef.current.has(ply)
-    ) return;
-    playedSpokenLineRef.current.add(ply);
-    void walkSpokenLine(arrows, ply, { waitForVoice: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- fires on ply landing; card refs read live.
-  }, [walkPlayback.currentPly, walkPlayback.currentSegment, moves.length, walkSpokenLine]);
+  // (The delta line no longer plays ITSELF on ply landing — "Walk the line" is
+  // a button now, like "Show me": David 2026-09-05, "plays out automatically
+  // (I want it by button only)".)
 
   // Reset the explore-toggle on every ply change. Each arrow-bearing
   // ply has its OWN suggested-move-vs-played-move discussion, so the
   // student should opt in fresh on each one. Keeps the canonical
   // playback path animating cleanly when they just press Next.
   useEffect(() => {
-    setWalkExploreToggleOn(false);
-    // Show-me playout is also ply-anchored — if the student nav's
-    // away mid-playout we cancel it. The async loop checks this
-    // flag every iteration and bails when it flips false.
+    // Show-me playout is ply-anchored — if the student nav's away
+    // mid-playout we cancel it (the narrated walk checks its token).
     setWalkShowMeActive(false);
+    betterLineTokenRef.current += 1;
+    // Forward/Back EXIT an exploration and step the REAL game (G.2): an
+    // exploration anchored on another ply is cleared here.
+    if (walkExplorationPlyRef.current !== null && walkExplorationPlyRef.current !== walkPlayback.currentPly) {
+      exploreTokenRef.current += 1;
+      walkExploreSansRef.current = [];
+      walkExplorationPlyRef.current = null;
+      setWalkExplorationFen(null);
+      setWalkExplorationSan(null);
+      setWalkExplorationArrows(null);
+    }
   }, [walkPlayback.currentPly]);
 
   // WO-REVIEW-02b — Engine lines panel. Off by default. Analyzes every
@@ -2556,7 +2719,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           bestMoveSan: segForAsk.bestMoveSan,
         }
       : undefined;
-    const fenForQ = move?.fen ?? STARTING_FEN;
+    // While exploring, ground the question on the EXPLORED position (G.2).
+    const fenForQ = walkExplorationFen ?? move?.fen ?? STARTING_FEN;
     // The reviewed game's WORST student moment — grounds "what was the
     // biggest mistake in this game?" in the GAME's own stored analysis
     // instead of the habit profile (2026-08-13 proof run).
@@ -2900,7 +3064,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           walkPlayback.goBack();
         } else if (e.key === 'ArrowRight') {
           e.preventDefault();
-          handleWalkForward();
+          handleWalkForwardManual();
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play();
         }
         return;
       }
@@ -2915,7 +3082,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback, handleWalkForward]);
+  }, [reviewState.mode, navigateMove, walkUiActive, walkPlayback, handleWalkForwardManual]);
 
   // ship-4: handleMoveClick / handleBoardMove / handleBackToReview
   // removed alongside the analysis-phase what-if board. Walk-phase
@@ -3000,7 +3167,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       //
       // At inaccuracy / mistake / blunder plies WITH a known better
       // move, we ALSO expose a separate "Explore this position"
-      // affordance (via `walkExploreToggleOn` below) that swaps the
+      // affordance (any piece moved on the free board) that swaps the
       // board to `seg.fenBefore` so the suggested missed move is
       // actually playable. This swap is OPT-IN — by default the
       // walk uses fenAfter so stepping Next ↔ Prev animates as a
@@ -3013,7 +3180,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       );
       const hasArrow = showBest && !!seg && !!seg.bestMoveUci && seg.bestMoveUci.length >= 4;
       const displayFen = seg
-        ? (walkExploreToggleOn && hasArrow ? seg.fenBefore : seg.fenAfter)
+        ? seg.fenAfter
         : walkPlayback.currentPly > 0
           ? moves[walkPlayback.currentPly - 1]?.fen ?? STARTING_FEN
           : STARTING_FEN;
@@ -3059,13 +3226,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // We gate explicitly off `walkShowMeActive` even though it
       // sets `walkExplorationFen` on the first tick (which would
       // otherwise flip this true via the second clause below).
-      const walkBoardInteractive = walkShowMeActive || seqState?.stage === 'playback' || cameoState !== null || theoryState?.stage === 'playback'
-        ? false // playback (and the cameo) drives the board — no mid-animation drags
-        : theoryState?.stage === 'ask' || // theory quiz: the board IS the answer input
-          seqState?.stage === 'ask' || // sequence: the board IS the answer input
-          shotState !== null || // find-the-shot: the board IS the answer input
-          (walkExploreToggleOn && hasArrow && walkExplorationFen === null) ||
-          walkExplorationFen !== null;
+      // THE BOARD IS FREE on every ply (David 2026-09-05). Only a playout that
+      // drives the board itself (show-me / sequence / cameo / theory) locks it —
+      // no mid-animation drags. Everywhere else a piece moved = exploring.
+      const walkBoardInteractive = !(walkShowMeActive || seqState?.stage === 'playback' || cameoState !== null || theoryState?.stage === 'playback');
       // During a find-the-shot the board MUST sit on the shot's own position
       // (the pre-move FEN where the better move is legal) — otherwise it shows
       // the position AFTER the played move and the answer can't be played at
@@ -3100,9 +3264,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       // not a teaching moment. If we later want narration on each ply
       // it goes through voiceService.speak() with the same density
       // gating the rest of the review uses.
+      // "SHOW ME" — button-only, and NARRATED (David 2026-09-05: "The show
+      // 'better move' walkthrough plays out automatically (I want it by button
+      // only)"). Runs the engine's better line from the position BEFORE the
+      // flagged move with a computed why per ply, paced on the voice, and a
+      // computed verdict at the end (playBetterLineOut). Auto-play pauses for
+      // it; only Play restarts the walk afterwards.
       const runShowMePlayout = async (): Promise<void> => {
-        if (!seg || !hasArrow) return;
+        if (!seg || !hasArrow || !seg.bestMoveUci) return;
         if (walkShowMeActive) return;
+        walkPlayback.pause('show-me');
         setWalkShowMeActive(true);
         const startedAtPly = walkPlayback.currentPly;
         walkExplorationPlyRef.current = startedAtPly;
@@ -3110,92 +3281,26 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           kind: 'review-show-me-started',
           category: 'subsystem',
           source: 'CoachGameReview.runShowMePlayout',
-          summary: `ply ${startedAtPly} show-me playout begin (${seg.classification})`,
-          fen: seg.fenAfter,
-          details: JSON.stringify({
-            ply: startedAtPly,
-            classification: seg.classification,
-            playedSan: seg.san,
-            bestMoveUci: seg.bestMoveUci ?? null,
-          }),
+          summary: `ply ${startedAtPly} show-me (narrated better line) begin (${seg.classification})`,
+          fen: seg.fenBefore,
+          details: JSON.stringify({ ply: startedAtPly, classification: seg.classification, playedSan: seg.san, bestMoveUci: seg.bestMoveUci }),
         });
-        // Start from the position BEFORE the move and play the BEST move first —
-        // the move the student SHOULD have played — then let Stockfish continue
-        // the good line. (Previously this started from `seg.fenAfter` and played
-        // the punishment of the move they DID play.)
-        let currentFen = seg.fenBefore;
-        let pliesPlayed = 0;
-        const MAX_PLIES = 4;
-        // Surface the pre-move position first so the best move animates from it.
-        setWalkExplorationFen(currentFen);
+        setWalkExplorationFen(seg.fenBefore);
         setWalkExplorationSan(null);
-        const bestUci = seg.bestMoveUci;
-        if (bestUci && bestUci.length >= 4) {
-          await new Promise((r) => setTimeout(r, 350));
-          const bestProbe = new Chess(currentFen);
-          const bestApplied = bestProbe.move({
-            from: bestUci.slice(0, 2),
-            to: bestUci.slice(2, 4),
-            promotion: bestUci.length > 4 ? bestUci.slice(4, 5) : undefined,
-          });
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js returns null for an illegal move at runtime
-          if (bestApplied && walkMountedRef.current && walkShowMeActiveRef.current) {
-            currentFen = bestProbe.fen();
-            setWalkExplorationFen(currentFen);
-            playMoveSound(bestApplied.san);
-            pliesPlayed++;
-            await new Promise((r) => setTimeout(r, 600));
-          }
-        }
-        try {
-          while (pliesPlayed < MAX_PLIES && walkMountedRef.current) {
-            const probe = new Chess(currentFen);
-            if (probe.isGameOver()) break;
-            const config = resolveConfig('hard', playerRating);
-            let coachMove;
-            try {
-              coachMove = await getCoachMove(currentFen, config);
-            } catch {
-              break; // Stockfish unreachable — bail silently
-            }
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ref can flip during the await above
-            if (!walkMountedRef.current) break;
-            // Re-check the active flag AFTER the await — the student
-            // may have hit Resume or navigated away while Stockfish
-            // was thinking. Without this guard the loop overwrites
-            // their fresh state with a stale engine ply.
-            // We read the latest state via a ref to dodge the
-            // closure-staleness — see walkShowMeActiveRef below.
-            if (!walkShowMeActiveRef.current) break;
-            const applied = probe.move({
-              from: coachMove.from,
-              to: coachMove.to,
-              promotion: coachMove.promotion,
+        await playBetterLineOut(
+          { fenBefore: seg.fenBefore, bestUci: seg.bestMoveUci, bestSan: seg.bestMoveSan },
+          () => {
+            if (walkMountedRef.current) setWalkShowMeActive(false);
+            walkExplorationPlyRef.current = null;
+            void logAppAudit({
+              kind: 'review-show-me-finished',
+              category: 'subsystem',
+              source: 'CoachGameReview.runShowMePlayout',
+              summary: `ply ${startedAtPly} show-me finished`,
+              details: JSON.stringify({ startedAtPly }),
             });
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- chess.js types claim non-null but returns null for illegal moves at runtime
-            if (!applied) break;
-            currentFen = probe.fen();
-            setWalkExplorationFen(currentFen);
-            playMoveSound(applied.san);
-            pliesPlayed++;
-            if (probe.isCheckmate()) break;
-            // Standard board cadence: 200ms slide + 600ms beat so the
-            // student's eye catches each move before the next fires.
-            await new Promise((r) => setTimeout(r, 600));
-          }
-        } finally {
-          if (walkMountedRef.current) setWalkShowMeActive(false);
-          void logAppAudit({
-            kind: 'review-show-me-finished',
-            category: 'subsystem',
-            source: 'CoachGameReview.runShowMePlayout',
-            summary: `ply ${startedAtPly} show-me played ${pliesPlayed} plies`,
-            details: JSON.stringify({
-              startedAtPly,
-              pliesPlayed,
-            }),
-          });
-        }
+          },
+        );
       };
 
       // WO-REVIEW-02b — Engine lines panel helpers.
@@ -3305,7 +3410,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   Narration is PINNED above the scroll middle, so a full-width
                   board no longer hides the coach's why (the old 2026-06-27/07-10
                   complaint the vh cap was solving). */}
-              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative">
+              <div className="w-full max-w-[68vh] mx-auto md:max-w-[420px] relative" data-testid="review-walk-board">
                 <ChessBoard
                   // Re-key on exploration toggle so the underlying chess
                   // instance resets cleanly when the user enters or
@@ -3399,14 +3504,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       setShotState(null); // board drifted — never judge the wrong position
                     }
                   } : walkBoardInteractive ? (moveResult) => {
-                    // Student played a piece while a better-move arrow
-                    // was showing → record their exploration. We capture
-                    // the post-move FEN + SAN and surface a "Resume game"
-                    // button. Audit emit so the unified panel shows the
-                    // exploration trail.
+                    // A piece moved on a quiet board = the student exploring
+                    // (David 2026-09-05). Auto-play pauses (only Play restarts
+                    // it); the move is narrated in the walk's own format; the
+                    // engine answers with its best move at a fixed depth.
+                    walkPlayback.pause('board-move');
+                    const fromFen = walkExplorationFen ?? displayFen;
                     setWalkExplorationFen(moveResult.fen);
                     setWalkExplorationSan(moveResult.san);
+                    setWalkExplorationArrows(null);
                     walkExplorationPlyRef.current = walkPlayback.currentPly;
+                    walkExploreSansRef.current = [...walkExploreSansRef.current, moveResult.san];
                     playMoveSound(moveResult.san);
                     void logAppAudit({
                       kind: 'review-walk-explored',
@@ -3417,38 +3525,19 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       details: JSON.stringify({
                         ply: walkPlayback.currentPly,
                         playedSan: moveResult.san,
+                        exploredLine: walkExploreSansRef.current,
                         suggestedUci: seg?.bestMoveUci ?? null,
                         classification: seg?.classification ?? null,
                       }),
                     });
-                    // Engine reply — David's review-audit feedback:
-                    // "I could only move my piece on the board and the
-                    // opponent did not make a move after I did." Fire
-                    // Stockfish at medium strength (~1500 ELO) so the
-                    // exploration feels like a continuation rather than
-                    // a frozen one-move analysis.
-                    void (async () => {
-                      try {
-                        const config = resolveConfig('medium', 1500);
-                        const reply = await getCoachMove(moveResult.fen, config);
-                        // Apply on a local chess.js, get the post-reply
-                        // FEN, then swap walkExplorationFen so the board
-                        // animates the opponent's slide.
-                        const probe = new Chess(moveResult.fen);
-                        const applied = probe.move({
-                          from: reply.from,
-                          to: reply.to,
-                          promotion: reply.promotion,
-                        });
-                        if (!applied || !walkMountedRef.current) return;
-                        setWalkExplorationFen(probe.fen());
-                        playMoveSound(applied.san);
-                      } catch {
-                        // Stockfish unreachable / engine error — stay
-                        // on the student's exploration FEN. The Resume
-                        // button still lets them snap back.
-                      }
-                    })();
+                    const gameSans = moves.slice(0, walkPlayback.currentPly).map((mv) => mv.san);
+                    void narrateExploredMove({
+                      history: [...gameSans, ...walkExploreSansRef.current],
+                      fenBefore: fromFen,
+                      fenAfter: moveResult.fen,
+                      san: moveResult.san,
+                      replyAllowed: true,
+                    });
                   } : undefined}
                 />
                 {badge && (
@@ -3460,6 +3549,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     data-testid="review-classification-badge"
                   >
                     {CLASSIFICATION_STYLES[badge as keyof typeof CLASSIFICATION_STYLES].label}
+                  </div>
+                )}
+                {/* EXPLORING banner (G.2) — an exploration is unmistakable: the
+                    student sees they have left the game line and how to get back. */}
+                {walkExplorationFen && !walkShowMeActive && (
+                  <div
+                    className="absolute top-1 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wide pointer-events-none text-white bg-emerald-600/90 shadow"
+                    data-testid="review-exploring-banner"
+                  >
+                    Exploring — your line
                   </div>
                 )}
                 {/* Resume-game button — appears whenever the student
@@ -3485,8 +3584,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       // loop reads walkShowMeActiveRef every iteration
                       // and bails when it flips false.
                       setWalkShowMeActive(false);
+                      betterLineTokenRef.current += 1;
+                      exploreTokenRef.current += 1;
+                      walkExploreSansRef.current = [];
                       setWalkExplorationFen(null);
                       setWalkExplorationSan(null);
+                      setWalkExplorationArrows(null);
                       walkExplorationPlyRef.current = null;
                     }}
                     className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
@@ -3502,32 +3605,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                     Resume game
                   </button>
                 )}
-                {/* Pre-exploration action row at the bottom of the
-                    board on inaccuracy/mistake/blunder plies. Two CTAs:
-                    - "Explore this position" — flips the board to
-                      `seg.fenBefore` so the student can play the
-                      missed move themselves (existing behavior).
-                    - "Show me" — Stockfish auto-plays the punishment
-                      line from `seg.fenAfter` so the student sees
-                      WHY their move was bad. Silent v1, standard
-                      board cadence, capped at 4 plies / game-over.
-                    Both hidden once exploration or playout starts;
-                    the Resume button takes over. */}
-                {hasArrow && walkExplorationFen === null && !walkExploreToggleOn && !walkShowMeActive && (
+                {/* "Show me" on inaccuracy/mistake/blunder plies — the narrated
+                    better line, on demand (button only). The old "Explore this
+                    position" button is gone: the board is free, any piece moved
+                    is exploring (David 2026-09-05). */}
+                {hasArrow && walkExplorationFen === null && !walkShowMeActive && (
                   <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                    <button
-                      onClick={() => setWalkExploreToggleOn(true)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
-                      style={{
-                        background: '#22c55e',
-                        color: 'white',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                      }}
-                      data-testid="walk-explore-toggle-btn"
-                      aria-label="Try the missed move yourself"
-                    >
-                      Explore this position
-                    </button>
                     <button
                       onClick={() => { void runShowMePlayout(); }}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg"
@@ -3537,9 +3620,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                         boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
                       }}
                       data-testid="walk-show-me-btn"
-                      aria-label="Show me the punishment line"
+                      aria-label="Show me the better line"
                     >
-                      Show me
+                      Show me better move
                     </button>
                   </div>
                 )}
@@ -3570,8 +3653,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               >
                 <ChevronLeft size={24} style={{ color: 'var(--color-text)' }} />
               </button>
+              {/* ⏯ PLAY / PAUSE — the walk plays itself (David 2026-09-05):
+                  each ply's narration, a short pause, then the next move.
+                  Sits BETWEEN the arrows. Any user intervention (a piece moved
+                  on the board, Back, a Forward tap, a jump) pauses it, and ONLY
+                  this button restarts it. The "Paused" state is visible so a
+                  stop is never unexplained (G.1). */}
               <button
-                onClick={handleWalkForward}
+                onClick={() => { if (walkPlayback.isAutoPlaying) walkPlayback.pause(); else walkPlayback.play(); }}
+                className="w-[52px] h-[52px] rounded-xl border-2 flex items-center justify-center transition-transform active:scale-[0.96]"
+                style={{
+                  borderColor: 'var(--color-accent)',
+                  backgroundColor: walkPlayback.isAutoPlaying ? 'color-mix(in srgb, var(--color-accent) 15%, transparent)' : undefined,
+                }}
+                aria-label={walkPlayback.isAutoPlaying ? 'Pause auto-play' : 'Play — walk the game automatically'}
+                aria-pressed={walkPlayback.isAutoPlaying}
+                data-testid="review-play-pause-btn"
+                data-state={walkPlayback.isAutoPlaying ? 'playing' : 'paused'}
+              >
+                {walkPlayback.isAutoPlaying
+                  ? <Pause size={22} style={{ color: 'var(--color-accent)' }} />
+                  : <Play size={22} style={{ color: 'var(--color-accent)' }} />}
+              </button>
+              <button
+                onClick={handleWalkForwardManual}
                 className="w-[52px] h-[52px] rounded-xl border-2 disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
                 style={{
@@ -3583,14 +3688,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <ChevronRight size={24} style={{ color: 'var(--color-accent)' }} />
               </button>
               <button
-                onClick={walkPlayback.goToEnd}
+                onClick={() => {
+                  if (nextKeyMomentPly !== null) walkPlayback.jumpToPly(nextKeyMomentPly, { keepAuto: true });
+                  else walkPlayback.goToEnd();
+                }}
                 className="w-[52px] h-[52px] rounded-xl border border-theme-border hover:bg-theme-surface disabled:opacity-30 flex items-center justify-center transition-transform active:scale-[0.96]"
                 disabled={walkPlayback.currentPly >= lastPly}
-                aria-label="Jump to end"
+                aria-label={nextKeyMomentPly !== null ? 'Next key moment' : 'Jump to end'}
+                data-testid="review-next-key-btn"
               >
                 <SkipForward size={22} style={{ color: 'var(--color-text)' }} />
               </button>
             </div>
+            {!walkPlayback.isAutoPlaying && walkPlayback.currentPly > 0 && walkPlayback.currentPly < lastPly && (
+              <div className="text-center text-[11px] text-theme-text-muted -mt-1 pb-1" data-testid="review-paused-label">
+                Paused — tap ▶ to keep walking
+              </div>
+            )}
 
             {/* Secondary controls row: pause/play + Ask (inline, small) */}
             <div className="flex items-center justify-center gap-2 pb-2">
@@ -4342,6 +4456,9 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               }),
             });
             setWalkStarted(true);
+            props.onWalkStarted?.();
+            // The walk plays itself from the Start tap (David 2026-09-05).
+            walkPlayback.play();
           }}
           walkReady={walkReady}
           onPlayAgain={onPlayAgain}

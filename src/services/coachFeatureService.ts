@@ -34,6 +34,8 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 // LLM call (those are deterministic via `buildReviewSegments`).
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
+import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
+import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 
@@ -492,6 +494,10 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** The fundamentals this (student, flagged) move neglected — attributed on
+   *  the board (principleAttribution), spoken FIRST in `narration`, and
+   *  aggregated into the closing. Undefined when nothing attached. */
+  fundamentals?: PrincipleAttribution[];
   /** Which builder produced `narration` — 'flag' | 'opening-plan' |
    *  'orientation' | 'per-move' | 'conversion' | 'endgame' | 'opponent'. Null
    *  when silent. Surfaced to PostHog per ply so a review session is queryable
@@ -555,6 +561,8 @@ export interface ReviewMoveInput {
   preMoveEval: number | null;
   bestMove: string | null;
   fenAfter: string;
+  /** Persisted engine lines (UCI) for a flagged ply — corroboration only. */
+  pv?: { afterPlayed: string[]; afterBest: string[] };
 }
 
 // `parseSegmentsJson` + `buildPerMoveBlock` deleted in ship-3 — both
@@ -1053,6 +1061,8 @@ export function buildReviewSegments(
     : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
+  /** Fundamentals already spoken in full this game — repeats get the short stem. */
+  const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const segments: ReviewMoveSegment[] = [];
   // §7: the endgame phase is announced once per game (the first quiet student
   // move that's in a readable endgame), not on every endgame ply.
@@ -1240,11 +1250,28 @@ export function buildReviewSegments(
     // "<played move> was stronger" (David 2026-06-11).
     const stripGlyphs = (s: string): string => s.replace(/[+#!?]+$/, '');
     const bestMoveSan = rawBestSan && stripGlyphs(rawBestSan) !== stripGlyphs(m.san) ? rawBestSan : null;
+    // THE FUNDAMENTAL THIS MOVE NEGLECTED (David 2026-09-05) — attributed on
+    // the board, pure and deterministic, only for the STUDENT's flagged moves.
+    // Persisted engine lines corroborate the spoken evidence when present.
+    const isStudentForAttr = playerColor ? moverColor === playerColor : !m.isCoachMove;
+    const fundamentals: PrincipleAttribution[] = isStudentForAttr
+      ? attributePrinciples({
+          historySans: sansForRun.slice(0, m.ply),
+          bestSan: bestMoveSan,
+          classification: m.classification,
+          pvAfterPlayed: m.pv?.afterPlayed?.length ? pvUciToSan(fenPair.fenAfter, m.pv.afterPlayed) : undefined,
+          pvAfterBest: m.pv?.afterBest?.length && bestMoveSan
+            ? pvUciToSan(new Chess(fenPair.fenBefore).move(bestMoveSan) ? (() => { const c = new Chess(fenPair.fenBefore); c.move(bestMoveSan); return c.fen(); })() : fenPair.fenBefore, m.pv.afterBest)
+            : undefined,
+        })
+      : [];
+    const fundamentalLed = fundamentals.length > 0;
     // UNCAPPED diagnostic branch — emit EVERY computed facet on EVERY move (David
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
     if (uncapped) {
       const facets = computeMoveFacets({
+        fundamentals,
         fenBefore: fenPair.fenBefore,
         fenAfter: fenPair.fenAfter,
         san: m.san,
@@ -1359,6 +1386,7 @@ export function buildReviewSegments(
         bestMoveUci: m.bestMove,
         narration: kept.length ? kept.join(' ') : null,
         narrationSource: kept.length ? 'per-move' : null,
+        ...(fundamentals.length ? { fundamentals } : {}),
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);
@@ -1388,11 +1416,35 @@ export function buildReviewSegments(
       playedSan: m.san,
       moverColor,
     });
+    // 🔒 THE FUNDAMENTAL LEADS; EVERYTHING ELSE IS EVIDENCE (David 2026-09-05:
+    // "the fundamental flaw stated first and then the other computer narration
+    // following it as supporting evidence"). Fixed slots, spoken raw (no warm
+    // pass on this line — see generateReviewNarration): verdict → the engine
+    // line that corroborates it → the concrete refutation → the lasting
+    // concession → the eval cost → the better move and why. Deterministic:
+    // same board, same words, every open.
+    if (fundamentalLed) {
+      const verdict = renderFundamentalVerdict(fundamentals, { ply: m.ply, seen: seenFundamentals });
+      const pvEvidence = renderPvEvidence(fundamentals);
+      const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
+      const concession = describeConcessions(fenPair.fenBefore, m.san, true);
+      const swingCp = m.preMoveEval != null && m.evaluation != null
+        && Math.abs(m.preMoveEval) < 15000 && Math.abs(m.evaluation) < 15000
+        ? Math.abs(m.preMoveEval - m.evaluation) : null;
+      const cost = swingCp != null && swingCp >= 50
+        ? `That cost about ${(swingCp / 100).toFixed(1)} points.`
+        : null;
+      const why = bestMoveSan ? explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor) : null;
+      const better = bestMoveSan ? `The move was ${bestMoveSan}.${why ? ` ${why}` : ''}` : null;
+      narration = [verdict, pvEvidence, failed?.line ?? null, concession, cost, better]
+        .filter((x): x is string => !!x && x.trim().length > 0)
+        .join(' ');
+    }
     // Append the GROUNDED "why the best move is best" clause — chess.js
     // board truth only, never LLM-guessed (David 2026-06-05). Only on the
     // student's flagged errors, only when there's a genuine distinct best
     // move, and only when a board fact is provable.
-    if (narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
+    if (!fundamentalLed && narration && bestMoveSan && !m.isCoachMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy' || m.classification === 'miss')) {
       const why = explainBestMoveGrounded(fenPair.fenBefore, m.san, m.bestMove, moverColor);
       if (why) narration = `${narration} ${why}`;
     }
@@ -1404,7 +1456,7 @@ export function buildReviewSegments(
     // review … all geometry spoken, even for beginners"). Student moves only.
     {
       const isStudentMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
-      if (narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
+      if (!fundamentalLed && narration && isStudentMove && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
         const failed = whyItFailed({ fenBefore: fenPair.fenBefore, playedSan: m.san, studentColor: moverColor });
         if (failed) narration = `${narration} ${failed.line}`;
       }
@@ -1414,7 +1466,7 @@ export function buildReviewSegments(
     // move?"). Name the structural damage the flagged move caused — computed
     // diff (king shield thinned, passer granted, structure splintered). Both
     // sides: your concession is the lesson, theirs is the target.
-    if (narration && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
+    if (!fundamentalLed && narration && (m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'inaccuracy')) {
       const concession = describeConcessions(fenPair.fenBefore, m.san, playerColor ? moverColor === playerColor : !m.isCoachMove);
       if (concession) narration = `${narration} ${concession}`;
     }
@@ -2048,6 +2100,7 @@ export function buildReviewSegments(
       bestMoveUci: m.bestMove,
       narration,
       narrationSource,
+      ...(fundamentals.length ? { fundamentals } : {}),
       // Plan-idea arrows take the slot when present; else the threat arrows
       // (they rarely coincide — a plan beat fires on a quiet move, a threat on a
       // tactical one) so the danger/attack is SHOWN, not just spoken.
@@ -2807,6 +2860,25 @@ export function narrationSeatFaithful(
   }
 }
 
+/** The warm pass may not move a move from one seat to the other. The raw line
+ *  names the mover ("You capture…" / "Your opponent stakes…"); a rephrase that
+ *  opens an OPPONENT ply with "You <verb>" (or a STUDENT ply with "Your
+ *  opponent" / "They") has reattributed the move, whatever the prompt said
+ *  (audit 2026-09-06: 1.e4 by the opponent warmed to "You grab the center").
+ *  Pure text — no board needed, the seat is a fact of the ply. */
+export function narrationMoverFaithful(warmed: string, moverIsStudent: boolean): boolean {
+  const head = warmed.replace(/^["'“‘\s]+/, '').slice(0, 40);
+  if (moverIsStudent) {
+    return !/^(your opponent|their (move|pawn|knight|bishop|rook|queen|king)\b|they )/i.test(head);
+  }
+  // Opponent ply: "You <action verb>" reattributes the move. Not an enumerated
+  // verb list (the model found "seize" the moment "grab" was blocked) — ANY
+  // "You <word>" is rejected except the state/modal forms that describe the
+  // student's situation rather than a move: "You're", "You've", "You had",
+  // "You need", "You can"… "Your <piece>…" (a threat read) is not "You ".
+  return !/^you\s+(?!(?:'re|'ve|'ll|'d|are|were|have|had|has|need|want|can|could|must|should|may|might|will|would|know|see|feel|get|keep|hold|sit|stand|remain|stay)\b)[a-z]/i.test(head);
+}
+
 const SPELLED_NUM: Record<string, string> = {
   zero: '0', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6',
   seven: '7', eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12',
@@ -3239,8 +3311,11 @@ export async function generateReviewNarration(params: {
       // teachings need to tie into and complement the narration build, not stand
       // alone"). The load-bearing words are protected below (revert if dropped),
       // so we no longer exempt the showcase beats up front.
+      // A fundamentals-led line is DNA-register template text spoken RAW —
+      // deterministic by contract (David 2026-09-05); the warm pass stays on
+      // the other lines.
       const toVoice = segments
-        .filter((s) => s.narration && s.narration.trim().length > 0)
+        .filter((s) => s.narration && s.narration.trim().length > 0 && !(s.fundamentals && s.fundamentals.length > 0))
         .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
       if (toVoice.length > 0) {
         const warmed = await raceTimeout(
@@ -3278,6 +3353,7 @@ export async function generateReviewNarration(params: {
           if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
             && narrationBoardAccurate(w, s.fenAfter)
             && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
+            && narrationMoverFaithful(w, s.playerColor === playerColor)
             && narrationNumbersFaithful(det, w)
             // COVERAGE — the LLM never chooses which facts to state: a warm
             // that dropped a facet (any bundle whose square/SAN anchors all
@@ -3316,7 +3392,14 @@ export async function generateReviewNarration(params: {
   // THROUGH-LINE (future-analysis teaching #3) — the one theme that ran through
   // the whole game, named as the closing. Board-true; null when nothing recurs.
   const throughLineWB: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
-  const closing = computeThroughLine(fenChain.map((f) => f.fenAfter), throughLineWB);
+  const throughLine = computeThroughLine(fenChain.map((f) => f.fenAfter), throughLineWB);
+  // THE FUNDAMENTALS AGGREGATE (G.4) — "three of your five flagged moves handed
+  // over a tempo": the actual lesson, computed from the per-move attributions,
+  // spoken raw at the last ply ahead of the through-line.
+  const studentSegs = segments.filter((s) => s.playerColor === playerColor);
+  const flaggedCount = studentSegs.filter((s) => s.classification === 'inaccuracy' || s.classification === 'mistake' || s.classification === 'blunder' || s.classification === 'miss').length;
+  const recap = renderFundamentalsRecap(studentSegs.map((s) => s.fundamentals ?? []), flaggedCount);
+  const closing = recap ? (throughLine ? `${recap} ${throughLine}` : recap) : throughLine;
 
   return { intro, segments, closing };
 }

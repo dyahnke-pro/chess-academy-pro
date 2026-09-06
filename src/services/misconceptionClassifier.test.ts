@@ -166,3 +166,23 @@ describe('classifyMisconception — expanded coverage', () => {
     expect(r!.tag).toBe('other');
   });
 });
+
+describe('classifyMisconception — the attributed fundamental is the tag when the history is supplied (one coach)', () => {
+  it('6...Nb6 in the Alapin files under the SAME fundamental the review speaks', async () => {
+    const historySans = ['e4', 'c5', 'c3', 'Nf6', 'e5', 'Nd5', 'd4', 'cxd4', 'cxd4', 'Nc6', 'Nc3', 'Nb6'];
+    const r = await classifyMisconception({
+      fen: 'r1bqkb1r/pp1ppppp/2n5/3nP3/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6',
+      playedSan: 'Nb6', bestSan: 'e6', gamePhase: 'opening', historySans,
+    });
+    expect(r?.tag).toMatch(/^(tempo-handed|neglected-development|space-conceded)$/);
+    expect(r?.coachNote).toMatch(/tempo|knight|d5/i);
+  });
+  it('falls back to the board-only checks when no fundamental can be proved', async () => {
+    const r = await classifyMisconception({
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
+      playedSan: 'Ke2', bestSan: 'Nf3', gamePhase: 'opening', historySans: ['e4', 'e5', 'Ke2'],
+    });
+    expect(r).not.toBeNull();
+    expect(typeof r?.tag).toBe('string');
+  });
+});

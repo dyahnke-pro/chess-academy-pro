@@ -8,6 +8,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { exploreOnFreeBoard } from './audit-lib/review-explore.mjs';
 
 const URL = 'https://chess-academy-pro.vercel.app';
 const grid = [];
@@ -149,7 +150,7 @@ for (const id of GAMES) {
     try { await tap('flip-button', 3000); rec('FS6 flip', true, true, 'clicked'); } catch (e) { rec('FS6 flip', false, false, String(e).slice(0, 30)); }
     if (await has('review-engine-lines-toggle')) { await tap('review-engine-lines-toggle', 3000); rec('FS9 engine-lines', true, await has('review-engine-lines-panel', 1500), 'panel?'); } else rec('FS9 engine-lines', false, false, 'no toggle');
     if (await has('walk-narration-toggle-btn')) { await tap('walk-narration-toggle-btn', 3000); rec('FS10 replay-narration', true, true, 'clicked'); } else rec('FS10 replay-narration', false, false, 'absent');
-    if (await has('walk-explore-toggle-btn')) { try { await tap('walk-explore-toggle-btn', 3000); } catch {} }
+    { const ex = await exploreOnFreeBoard(p); rec('FS23 free-board-explore', true, ex.ok, ex.ok ? `played ${ex.san}, banner=${ex.banner}, reply=${ex.reply}` : ex.reason.slice(0, 40)); }
     const exploreBtn = (await p.locator('[data-testid^="walk-explore-btn-"]').count()) > 0;
     if (exploreBtn) { try { await p.locator('[data-testid^="walk-explore-btn-"]').first().click({ timeout: 4000, force: true }); await p.waitForTimeout(2500); rec('FS24 explore-line', true, true, 'clicked'); } catch (e) { rec('FS24 explore-line', true, false, String(e).slice(0, 40)); } }
     else rec('FS24 explore-line', false, false, 'no explore btn');

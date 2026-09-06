@@ -206,6 +206,15 @@ import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type E
  * this 2026-06-11 ("the opponent slipped but the better move it named was the
  * move the opponent played").
  */
+/** Does the stored best move (UCI or SAN) denote the same move as `uci`? */
+function bestMoveEqualsUci(fen: string, stored: string, uci: string): boolean {
+  if (stored === uci) return true;
+  try {
+    const c = new Chess(fen);
+    const m = c.move(/^[a-h][1-8][a-h][1-8][qrbn]?$/.test(stored) ? { from: stored.slice(0, 2), to: stored.slice(2, 4), promotion: stored[4] } : stored);
+    return !!m && `${m.from}${m.to}${m.promotion ?? ''}` === uci;
+  } catch { return false; }
+}
 function bestMoveEqualsPlayed(
   fenBefore: string,
   playedSan: string,
@@ -708,26 +717,26 @@ const REVIEW_MAX_DEEP_PLIES = 12;
 
 /** Depth the REVIEW re-searches its key moments at.
  *
- *  🔒 THIS MUST BE A DEPTH THE ENGINE CAN ACTUALLY REACH INSIDE THE BUDGET
- *  (David 2026-09-05: "isn't depth 18 too deep? what function requires that?").
- *  It was `BEST_MOVE_DEPTH` (18) on the reasoning that ~10 positions can afford
- *  more depth each than ~66 could. That reasoning was about budget and ignored
- *  REACHABILITY, which is the property that actually governs cost here.
+ *  `go depth N movetime B` stops at whichever limit lands first, so N is a
+ *  CEILING and REVIEW_POSITION_BUDGET_MS is the cost bound: a quiet position
+ *  that reaches N early hands its budget back, and a position that cannot
+ *  reach N in B stops at B with whatever depth it got. Twelve key plies × B
+ *  bounds the deep pass either way — and since 2026-09-06 that pass runs in
+ *  the BACKGROUND behind an already-open review (CoachReviewSessionPage
+ *  deepening), so it is no longer time the student waits for.
  *
- *  `go depth N movetime B` stops at whichever limit lands first. When N is
- *  unreachable the depth limit NEVER lands, so every search runs the full
- *  movetime — there is no early return, ever. On the asm.js build a phone runs,
- *  depth 18 is unreachable in 3s, so asking for it turned all twelve key moments
- *  into guaranteed full-budget searches. Asking for a depth the engine reaches
- *  lets a quiet position finish in a few hundred ms and hand its budget back.
- *  A high ceiling buys no depth on a slow engine; it only removes every chance
- *  to stop early.
- *
- *  14 also loses nothing that matters: the classification thresholds are the
- *  consumer here, and a depth-14 → depth-18 eval moves ~10cp while the smallest
- *  verdict-changing swing is INACCURACY_CP (50). The verdict is settled well
- *  before 18. */
-const REVIEW_DEEP_DEPTH = 14;
+ *  Why 16 and not 14 (David's Alapin fixture, 6...Nb6, native Stockfish):
+ *    d14 → 52cp   (4.6% expected points: "good" under the 5% band)
+ *    d16 → 128cp  (mistake)
+ *    d18 → 98cp, d20 → 78cp, d22 → 69cp  (a clear inaccuracy, stably)
+ *  The 2026-09-05 note that "a depth-14 → depth-18 eval moves ~10cp" is true
+ *  of quiet positions and false of exactly the ones a review exists for: the
+ *  verdict on the student's own key mistake FLIPPED between 14 and 16 and
+ *  stayed flagged at every depth after. 14 was the one depth that graded it
+ *  a good move. 16 = ANALYSIS_DEPTH, so a completed deep pass honestly earns
+ *  the ANALYSIS_DEPTH stamp it already claims. Still below BEST_MOVE_DEPTH
+ *  (18): the review is not the drill-solution search. */
+const REVIEW_DEEP_DEPTH = 16;
 
 /** Smallest cpLoss the SWEEP will call a slip.
  *
@@ -742,10 +751,24 @@ const REVIEW_DEEP_DEPTH = 14;
  *  Lowering the sweep's depth without raising this floor would have been the
  *  quiet way to make the app FASTER and WRONGER. */
 const BATCH_GRADE_FLOOR_CP = MISTAKE_CP;
-/** Swing between adjacent SHALLOW evals that earns a deep re-search.
- *  INACCURACY_CP is the smallest swing that changes a classification, so a
- *  smaller one cannot change the verdict and stays shallow. */
+/** Swing between adjacent SHALLOW evals that is CERTAINLY worth a deep look. */
 export const TWO_PASS_SWING_CP = INACCURACY_CP;
+/** Swing between adjacent SHALLOW evals that earns a deep re-search at all.
+ *
+ *  This sits BELOW the smallest verdict-changing swing on purpose. The old
+ *  reasoning — "INACCURACY_CP is the smallest swing that changes a
+ *  classification, so a smaller one cannot change the verdict" — is true of
+ *  the DEEP eval and false of the SHALLOW one it was applied to: the sweep's
+ *  own note above puts 30-50cp of search noise on a depth-10 read, so a real
+ *  52cp inaccuracy routinely shows up as ~37cp shallow and was never looked at
+ *  again. David's fixture (2026-09-05, Alapin 6...Nb6): native Stockfish reads
+ *  it at 37cp (d10), 54 (d12), 52 (d14), 126 (d16) — the review called it GOOD
+ *  because the shallow read fell under the bar and the deep pass never ran.
+ *  Candidacy must clear the verdict threshold MINUS the noise, or the deep
+ *  pass only ever confirms what the shallow one already knew. The cap
+ *  (REVIEW_MAX_DEEP_PLIES) still bounds the cost; the ranking still spends it
+ *  on the biggest swings first. */
+export const DEEP_DIVE_CANDIDATE_CP = Math.round(INACCURACY_CP / 2);
 
 /** NB this is now the REVIEW's key-moment selector (the sweep no longer runs a
  *  second pass). Because the threshold is INACCURACY_CP — the smallest swing
@@ -773,7 +796,7 @@ export function selectCriticalPlies(
     if (a === null || b === null) continue;
     const swing = Math.abs(capEval(a) - capEval(b));
     const mateish = Math.abs(a) >= MATE_EVAL_THRESHOLD || Math.abs(b) >= MATE_EVAL_THRESHOLD;
-    if (swing >= TWO_PASS_SWING_CP || mateish) {
+    if (swing >= DEEP_DIVE_CANDIDATE_CP || mateish) {
       // "Certain" = already big enough to be a finding rather than curve noise,
       // so it is deepened even when the cap is spent.
       pairs.push({ i, swing, certain: mateish || swing >= MISTAKE_CP });
@@ -1212,6 +1235,18 @@ async function analyzeGamePositions(
   const evals: (number | null)[] = fens.map(() => null);
   /** Deep re-searches, by ply. Null where the curve value still stands. */
   const deep: (number | null)[] = fens.map(() => null);
+  /** Best move the deep dive found at each re-searched ply (UCI). The dive
+   *  already ran a REVIEW_DEEP_DEPTH search at every flagged ply's "before"
+   *  position, so the best-move refinement below can reuse it instead of
+   *  spending a SECOND full-budget search per flagged ply — on the asm.js
+   *  build that second search never reached BEST_MOVE_DEPTH anyway, so it
+   *  ran the whole REVIEW_POSITION_BUDGET_MS every time (David 2026-09-05:
+   *  "very long initial analysis"). */
+  const deepBest: (string | null)[] = fens.map(() => null);
+  /** The engine's principal variation (UCI) at each re-searched ply — persisted
+   *  on flagged annotations so the fundamentals attributor can corroborate its
+   *  board-proved verdict with the line the engine actually plays. */
+  const deepPv: string[][] = fens.map(() => []);
   const depthAt: number[] = fens.map(() => 0);
   const toStore: EvalToStore[] = [];
   let achievedDepth = Number.POSITIVE_INFINITY;
@@ -1275,10 +1310,12 @@ async function analyzeGamePositions(
       try {
         const a = await stockfishEngine.analyzeWithBudget(fens[i], REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
         deep[i] = a.evaluation;
+        deepBest[i] = a.bestMove || null;
+        deepPv[i] = a.topLines?.[0]?.moves?.slice(0, 8) ?? (a.bestMove ? [a.bestMove] : []);
         searched++;
         if (Number.isFinite(a.depth) && a.depth > 0) {
           depthAt[i] = Math.max(depthAt[i], a.depth);
-          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth });
+          toStore.push({ fen: fens[i], evaluation: a.evaluation, depth: a.depth, bestMove: a.bestMove || null });
         }
       } catch {
         // Keep the curve value for this ply — a lost deep search costs
@@ -1335,7 +1372,14 @@ async function analyzeGamePositions(
       } else {
         classification = graded;
         if (cpLoss >= INACCURACY_CP && graded !== 'brilliant' && graded !== 'great' && graded !== 'good') {
-          try {
+          const reused = deepBest[moveIdx];
+          if (reused) {
+            // The dive already searched this exact position deep — the move it
+            // found IS the refinement. Same engine, same depth the verdict was
+            // settled at; a second search here bought nothing but wall-clock.
+            bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], reused) ? null : reused;
+            refinedBestMoveEval = evalBefore;
+          } else try {
             const bestAnalysis: StockfishAnalysis = await stockfishEngine.analyzeWithBudget(
               fens[moveIdx], BEST_MOVE_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS);
             bestMove = bestMoveEqualsPlayed(fens[moveIdx], moves[moveIdx], bestAnalysis.bestMove)
@@ -1354,6 +1398,13 @@ async function analyzeGamePositions(
       classification = 'book'; // theory move, evals unavailable — still not a mistake
     }
 
+    // Persist the engine lines at a flagged ply: the punishment after the
+    // played move (the dive at fens[moveIdx+1]) and the continuation after the
+    // best move (the dive at fens[moveIdx], minus its first move).
+    const flaggedHere = classification === 'inaccuracy' || classification === 'mistake' || classification === 'blunder';
+    const pvAfterPlayed = deepPv[moveIdx + 1] ?? [];
+    const pvAtBefore = deepPv[moveIdx] ?? [];
+    const pvAfterBest = bestMove && pvAtBefore[0] && bestMoveEqualsUci(fens[moveIdx], bestMove, pvAtBefore[0]) ? pvAtBefore.slice(1) : [];
     annotations.push({
       moveNumber,
       color,
@@ -1367,6 +1418,7 @@ async function analyzeGamePositions(
         : (evalBefore !== null ? evalBefore : null),
       classification,
       comment: null,
+      ...(flaggedHere && (pvAfterPlayed.length || pvAfterBest.length) ? { pv: { afterPlayed: pvAfterPlayed, afterBest: pvAfterBest } } : {}),
     });
   }
 

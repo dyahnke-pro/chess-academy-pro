@@ -28,6 +28,8 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { detectOpening } from './openingDetectionService';
 import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, worstPlacedFriendlyPiece, passedPawnPush, deriveNextPlans, findTrappedPiece } from './reviewTeachingPoints';
+import type { PrincipleAttribution } from './principleAttribution';
+import { renderFundamentalVerdict } from './principleVoice';
 
 interface Located { type: string; color: Color; square: string; }
 
@@ -133,6 +135,9 @@ export interface MoveFactContext {
   allSans: string[];
   /** 1-based ply where a forced mating run begins (from detectForcedMatingSequence), or null. */
   forcedRunStartPly: number | null;
+  /** The fundamentals the (student, flagged) move neglected — attributed on the
+   *  board by principleAttribution; the `[principle]` facet speaks them. */
+  fundamentals?: PrincipleAttribution[];
 }
 
 const PIECE_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -240,6 +245,12 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     // great move as "a great move from you" (the White student). Mirror the [move]
     // facet's "You:" / "Your opponent:" tag so attribution is never guessed.
     facets.push(`[quality] ${subj}: ${lowerFirst(cap(ctx.classification))} move${swingBit}${betterBit}.`);
+  }
+  // ── 2a. THE FUNDAMENTAL NEGLECTED (David 2026-09-05) — the attributed rule
+  // the flagged move crossed, proven on the board; stated as its own facet so
+  // the uncapped inventory carries it and the capped cascade can lead with it.
+  if (ctx.fundamentals && ctx.fundamentals.length > 0) {
+    facets.push(`[principle] ${renderFundamentalVerdict(ctx.fundamentals, { ply, seen: new Set() })}`);
   }
 
   // ── 2b. EVAL ATTRIBUTION — when the bar visibly moves on an UNFLAGGED ply,
