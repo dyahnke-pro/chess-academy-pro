@@ -53,6 +53,7 @@ import {
   isPlayerGamesQuestion,
   isEndgameQuestion,
   isPositionAssessmentQuestion,
+  isAttackAssessmentQuestion,
 } from './questionIntents';
 
 type Detector = (ask: string | undefined) => boolean;
@@ -394,6 +395,21 @@ const LIVE_MATRIX: { vertical: string; detector: Detector; asks: string[] }[] = 
       'am I winning here?',
       'what is the evaluation of this position?',
       'is this position good for me?',
+    ],
+  },
+  {
+    // David 2026-09-06: users ask "is my attack good / do I have an attack" many
+    // ways — the assessment counts attackers vs defenders on the enemy king.
+    vertical: 'attack assessment (this position)',
+    detector: isAttackAssessmentQuestion,
+    asks: [
+      'do I have an attack here?',
+      'is my kingside attack any good?',
+      'have I got a real attack going?',
+      'do I have enough for an attack?',
+      'can I launch an attack on the king?',
+      'is there a real attack in this position?',
+      'is a kingside attack worth it here?',
     ],
   },
   {

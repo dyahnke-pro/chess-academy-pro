@@ -167,17 +167,30 @@ export function isPlanQuestion(ask: string | undefined): boolean {
  *  tactics scan ("can I win a piece") and the plan lane — this ASSESSES an
  *  attack, so it is dispatched before both. Requires the word "attack"/"attacking"
  *  in an assessment shape, so it never grabs "attack the d5 pawn" move-hunting. */
+// Soundness words the assessment shape can end on ("is my attack GOOD / real /
+// worth it …"), with an optional "any"/"even" qualifier so "any good" matches.
+const ATK_VERDICT = String.raw`(?:any\s+|even\s+)?(?:good|real|sound|worth(?:\s+(?:it|going\s+for|the\s+risk))?|working|work|strong|going\s+(?:anywhere|through)|there|valid|winning|enough|legit|serious|dangerous|for\s+real)`;
+const ATK_ADJ = String.raw`(?:real\s+|valid\s+|good\s+|genuine\s+|strong\s+|winning\s+|serious\s+|proper\s+|decent\s+)?`;
+const ATK_SIDE = String.raw`(?:king\s?side\s+|queen\s?side\s+|central\s+|flank\s+)?`;
 const ATTACK_ASSESSMENT_RE = anyOf([
-  String.raw`\bdo\s+i\s+have\s+(?:a\s+|an\s+|any\s+|enough\s+for\s+(?:a|an)\s+|the\s+)?(?:real\s+|valid\s+|good\s+|genuine\s+|strong\s+|winning\s+)?attack\b`,
-  String.raw`\bis\s+there\s+(?:a\s+|an\s+|any\s+)?(?:real\s+|valid\s+|good\s+|genuine\s+|strong\s+|winning\s+)?(?:king\s?side\s+|queen\s?side\s+)?attack\b`,
-  String.raw`\battack\s+lined\s+up\b`,
-  String.raw`\bis\s+(?:my|the|there\s+a|a)\s+(?:king\s?side|queen\s?side|kingside|central|flank)?\s*attack\s+(?:good|real|sound|worth\s+it|working|strong|going\s+anywhere|there|valid|winning|enough)\b`,
-  String.raw`\bis\s+(?:a|my|the)\s+(?:king\s?side|queen\s?side)\s+attack\s+(?:good|worth|sound|real)\b`,
-  String.raw`\b(?:is|are)\s+(?:my|the)\s+attack(?:ing\s+chances?)?\s+(?:real|sound|good|worth\s+it|enough)\b`,
-  String.raw`\bhave\s+enough\s+(?:pieces?\s+)?for\s+(?:an?\s+)?attack\b`,
+  // "do I have / have I got (a real / kingside) attack …" (+ "enough for an attack")
+  String.raw`\b(?:do\s+i\s+have|have\s+i\s+got|i\s+have)\s+(?:a\s+|an\s+|any\s+|enough\s+(?:pieces?\s+)?for\s+(?:a|an)\s+|the\s+)?${ATK_ADJ}${ATK_SIDE}attack\b`,
+  // "is there a (real / kingside) attack …"
+  String.raw`\bis\s+there\s+(?:a\s+|an\s+|any\s+)?${ATK_ADJ}${ATK_SIDE}attack\b`,
+  String.raw`\b${ATK_SIDE}attack\s+lined\s+up\b`,
+  // "is my / the (kingside) attack GOOD / real / worth it / going anywhere …"
+  String.raw`\bis\s+(?:my|the|there\s+a|a)\s+${ATK_SIDE}attack\s+${ATK_VERDICT}\b`,
+  // "is/are my attack(ing chances) real / sound / enough …"
+  String.raw`\b(?:is|are)\s+(?:my|the)\s+attack(?:ing\s+chances?)?\s+${ATK_VERDICT}\b`,
+  // "do I have enough (pieces / attackers) to attack …"
+  String.raw`\bhave\s+enough\s+(?:pieces?\s+|attackers?\s+)?(?:for\s+(?:an?\s+)?attack|to\s+attack)\b`,
   String.raw`\benough\s+attackers?\b`,
-  String.raw`\bcan\s+i\s+mount\s+an\s+attack\b`,
-  String.raw`\bis\s+my\s+attack\s+sound\b`,
+  // "can I mount / launch / build / go for an attack …"
+  String.raw`\bcan\s+i\s+(?:mount|launch|start|build|go\s+for|drum\s+up|whip\s+up)\s+(?:an?\s+)?attack\b`,
+  // "is (a) kingside attack good / worth it here …" (bare, no possessive)
+  String.raw`\bis\s+(?:a\s+|an\s+)?(?:king\s?side|queen\s?side|central|flank)\s+attack\s+${ATK_VERDICT}\b`,
+  // NB "should I attack…" (plan lane) and "do I have the initiative" (position-
+  // assessment lane) are deliberately NOT here — they own those asks already.
 ]);
 export function isAttackAssessmentQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
