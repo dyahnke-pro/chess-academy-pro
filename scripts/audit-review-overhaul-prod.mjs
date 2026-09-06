@@ -385,11 +385,42 @@ const run = async () => {
     return { depth: g?.analysisDepth, row: a ? `${a.classification} eval=${a.evaluation} bestEval=${a.bestMoveEval} best=${a.bestMove}` : 'none' };
   }, GID).catch((e) => ({ error: String(e) }));
   log(`  [engine after dive] depth=${annots2.depth} 6...Nb6 ${annots2.row}`);
+  // DIAGNOSTIC (2026-09-06): two prod runs saw the renderer climb to 12 GB at
+  // this exact step. Sample the JS heap through the reopened walk and profile
+  // it; on a blow-up, stop and name the hot functions instead of hanging.
+  const heapMB = async () => Promise.race([page.evaluate(() => Math.round((performance.memory?.usedJSHeapSize ?? 0) / 1048576)), new Promise((r) => setTimeout(() => r(-1), 4000))]).catch(() => -1);
+  const cdp = await ctx.newCDPSession(page).catch(() => null);
+  if (cdp) { await cdp.send('Profiler.enable').catch(() => undefined); await cdp.send('Profiler.setSamplingInterval', { interval: 2000 }).catch(() => undefined); await cdp.send('Profiler.start').catch(() => undefined); }
+  const dumpProfile = async (tag) => {
+    if (!cdp) return;
+    const { profile } = await cdp.send('Profiler.stop').catch(() => ({ profile: null }));
+    if (!profile) return;
+    const self = new Map(); const nodes = new Map(profile.nodes.map((n) => [n.id, n])); const total = profile.samples.length;
+    for (const id of profile.samples) { const n = nodes.get(id); const k = `${n.callFrame.functionName || '(anon)'} ${(n.callFrame.url || '').split('/').slice(-1)[0]}:${n.callFrame.lineNumber}`; self.set(k, (self.get(k) ?? 0) + 1); }
+    log(`  [profile ${tag}] ${total} samples`);
+    [...self.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12).forEach(([k, v]) => log(`    ${(100 * v / total).toFixed(1).padStart(5)}%  ${k}`));
+  };
+  log(`  [heap] before start-walk: ${await heapMB()}MB`);
   await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
   await page.locator('[data-testid="coach-game-review-walk"]').first().waitFor({ timeout: 20000 }).catch(() => undefined);
   await page.waitForTimeout(1200);
+  log(`  [heap] walk mounted: ${await heapMB()}MB`);
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
-  const onFund2 = await goTo(FUND_PLY);
+  let blown = false;
+  let onFund2 = false;
+  for (let i = 0; i < 40 && !blown; i++) {
+    await resolveCards();
+    const n = (await readWalkPly(page))?.n ?? 0;
+    const h = await heapMB();
+    if (i % 4 === 0 || h > 1500) log(`  [heap] reopened walk ply=${n}: ${h}MB`);
+    if (h > 2500 || h === -1) { blown = true; log(`  [heap] BLOW-UP at ply ${n} (${h}MB) — dumping profile`); await dumpProfile('blow-up'); break; }
+    if (n === FUND_PLY) { onFund2 = true; break; }
+    const sel = n < FUND_PLY ? '[data-testid="review-forward-btn"]' : '[data-testid="review-back-btn"]';
+    await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
+    await page.waitForTimeout(700);
+  }
+  if (blown) { add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
+  else { await dumpProfile('reopened-walk'); add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${FUND_PLY}`); }
   await settle();
   // The banner fills once this ply's line is generated; give it a beat.
   await until(async () => (await txt(page, '[data-testid="review-narration-banner"]')).length > 0, 60000, 1000);
