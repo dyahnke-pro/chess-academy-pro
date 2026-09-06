@@ -1766,12 +1766,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       if (childIndex < 0 || childIndex >= node.children.length) return;
       const choice = node.children[childIndex];
       void logAppAudit({
-        kind: 'coach-tool-callback-rejected',
+        kind: 'walkthrough-fork-picked',
         category: 'subsystem',
         source: 'useTeachWalkthrough.pickFork',
-        // Reusing this kind opportunistically — there's no
-        // dedicated walkthrough-fork-picked audit yet. The summary
-        // distinguishes it.
         summary: `walkthrough fork picked: ${choice.label ?? '(unlabeled)'}`,
       });
       // COMPARATIVE BRIDGE (David 2026-07-31: "narration that explains

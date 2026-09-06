@@ -42,6 +42,11 @@ export type AuditKind =
   | 'board-verdict-debug'
   // Pro Games rewatch surface (/coach/pro-games)
   | 'pro-game-rewatch-opened'
+  // A student picked a walkthrough fork (Learn deep-dive) — a NORMAL action.
+  // Unmapped in AUDIT_EVENT_MAP on purpose (audit-stream log only, no PostHog
+  // event): it used to borrow 'coach-tool-callback-rejected', so successful
+  // forks showed up as rejections in the error data (David 2026-09-06).
+  | 'walkthrough-fork-picked'
   // Narration (from narrationAuditor)
   | 'piece-on-square'
   | 'hanging-piece'

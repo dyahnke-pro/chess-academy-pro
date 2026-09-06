@@ -327,9 +327,13 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         }
       } catch (err) {
         const msg = (err as Error)?.message ?? String(err);
-        if (/PrefetchDropped|dropped/i.test(msg)) {
-          // Expected when the opponent-move analyzePosition is in flight;
-          // a subsequent FEN change will re-fire this effect.
+        if (/PrefetchDropped|dropped|interrupted by new request/i.test(msg)) {
+          // Expected when a newer analyzePosition superseded this one (fast
+          // moves, or the opponent-move eval in flight) — the engine rejects the
+          // stale request with "Analysis interrupted by new request", and the
+          // newer analysis (or the next FEN change) produces the eval. This is
+          // NOT an error; logging it as one produced 6 phantom
+          // opening_play_eval_error events on one fast game (PostHog 2026-09-03).
           void logAppAudit({
             kind: 'opening-play-eval-prefetch-dropped',
             category: 'subsystem',

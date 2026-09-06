@@ -815,15 +815,24 @@ function buildSystemPromptWithVerbosity(base: string, verbosity: CoachVerbosity,
  *  this guards against accepting something wildly different all the same. */
 export function isNearMissToolName(got: string, want: string): boolean {
   if (!got || !want) return false;
-  const shared = (() => {
-    let i = 0;
-    while (i < got.length && i < want.length && got[i] === want[i]) i += 1;
-    return i;
-  })();
-  // Require most of the name to match and both tails to be short.
-  return shared >= Math.floor(want.length * 0.7)
-    && got.length - shared <= 6
-    && want.length - shared <= 6;
+  // Shared PREFIX.
+  let p = 0;
+  while (p < got.length && p < want.length && got[p] === want[p]) p += 1;
+  // Shared SUFFIX, not overlapping the matched prefix in either string.
+  let s = 0;
+  while (
+    s < got.length - p && s < want.length - p &&
+    got[got.length - 1 - s] === want[want.length - 1 - s]
+  ) s += 1;
+  const shared = p + s;
+  const maxLen = Math.max(got.length, want.length);
+  // Accept when the vast majority of the longer name matches from BOTH ends —
+  // catches a mid-word typo the prefix-only check missed: "rewind" for "reword"
+  // shares "rew" + the whole "d_walkthrough_narration" tail; only "or"/"in"
+  // differ (David's device log 2026-09-03 threw away a good generation over it).
+  // `tool_choice` forces ONE function, so a mangled name is a typo of that call,
+  // never a different tool.
+  return shared >= Math.floor(maxLen * 0.7) && (maxLen - shared) <= 6;
 }
 
 export async function callDeepseekWithTool(
