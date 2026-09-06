@@ -15,6 +15,21 @@ Read `docs/APP_MAP.md` §5 (the review→fundamentals→weakness→drill pipelin
 - **Wave 1 (endgame) — DONE + tested:** `passed-pawn-neglected`, `lost-the-opposition`,
   `passive-rook-endgame` (detectors + voice + tags + devices + real-game fixtures).
 - **Wave 2 (middlegame) — DONE + tested:** `kept-bad-bishop`.
+- **Wave 3 (eval/PV — the deferred detectors) — DONE + tested:** threaded
+  `evalBefore`/`evalAfterPlayed` (mover-POV) into `AttributionInput`+`Ctx`+the review
+  caller; built `overvalued-attack` (PV shows the sac refuted, opp wins material back),
+  `poisoned-pawn` (NEW tag; the grabbing piece is captured in the PV), `capture-toward-centre`
+  (NEW tag; recaptured toward the centre when the away-recapture opens a rook lane —
+  board-provable, fires live too), `botched-conversion` (winning eval thrown back to
+  near-equal). Voice (full/short/recap) + devices + real-legal-game fixtures for each;
+  the eval-gated three stay silent without the persisted eval/PV.
+  `left-book-early` REMAINS DEFERRED (needs a clean book-departure flag from the theory
+  lecture in the pure attributor — punted per "when unsure, skip").
+- **Expanded-scope B (coach answers every fact, every tab) — DONE + tested:** sac
+  soundness (candidate lane reframed sound/speculative/unsound by eval), attack assessment
+  (new `assembleAttackAssessment` + `isAttackAssessmentQuestion` counting attackers vs
+  defenders on the enemy king), and the Puzzles "Ask the coach" bar rewired through the
+  grounded spine so tactics-tab questions get real board answers.
 - **Phase B — DONE:** the tab's Drill button routes themed sections to `/tactics/drill`
   (`filterThemes` falls through to raw Lichess tags) and positional sections to
   `/tactics/mistakes` (own flagged positions). No new resolver service needed.
