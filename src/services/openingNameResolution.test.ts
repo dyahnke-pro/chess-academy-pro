@@ -63,11 +63,15 @@ describe('opening name resolution', () => {
     expect(resolveOpeningEntry('defense')?.canonicalName).toBe('Slav Defense');
   });
 
-  it('a rare name shared by unrelated openings resolves to nothing', () => {
-    // `gunderam` appears under the Caro-Kann, the Semi-Slav, the
-    // Blackmar-Diemer and the King's Pawn Game. Rare, but it names no single
-    // opening — so picking one would be the same failure as Danish-for-Traxler.
-    expect(resolveOpeningEntry("King's Pawn Game: Gunderam Gambit")).toBeNull();
+  it('a FULL canonical name resolves to its exact entry, even for a shared word', () => {
+    // `gunderam` appears under the Caro-Kann, the Semi-Slav, the Blackmar-Diemer
+    // and the King's Pawn Game, so the BARE word is ambiguous. But the FULL
+    // canonical name "King's Pawn Game: Gunderam Gambit" is exact and names ONE
+    // opening (C40, 1.e4 e5 2.Nf3 c6) — resolving it to that entry is correct,
+    // not the Danish-for-Traxler failure (that is a bare word handing back a
+    // specific line). The resolver now matches full canonical names exactly.
+    const entry = resolveOpeningEntry("King's Pawn Game: Gunderam Gambit");
+    expect(entry?.canonicalName).toBe("King's Pawn Game: Gunderam Gambit");
   });
 
   it('adding correct words never breaks a name that resolves bare', () => {
