@@ -60,13 +60,19 @@ export function reviewNarrationCacheKey(input: ReviewNarrationKeyInput): string 
   return `${REVIEW_NARRATION_REV}:${hash(meta)}:${hash(plies)}`;
 }
 
+function isReviewNarration(v: unknown): v is ReviewNarration {
+  if (typeof v !== 'object' || v === null) return false;
+  const o = v as Record<string, unknown>;
+  return Array.isArray(o.segments) && 'intro' in o && 'closing' in o;
+}
+
 /** Cached narration for this game under this key, or null. Fail-open. */
 export async function getCachedReviewNarration(gameId: string, key: string): Promise<ReviewNarration | null> {
   try {
     const rec = await db.games.get(gameId);
     const entry = rec?.reviewNarration;
     if (!entry || entry.rev !== REVIEW_NARRATION_REV || entry.key !== key) return null;
-    if (!entry.narration || !Array.isArray(entry.narration.segments)) return null;
+    if (!isReviewNarration(entry.narration)) return null;
     return entry.narration;
   } catch {
     return null;
