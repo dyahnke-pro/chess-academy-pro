@@ -1,4 +1,6 @@
 /**
+ * @vitest-environment-options { "url": "https://chess-academy-pro.vercel.app/" }
+ *
  * OFFLINE FULL-GAME NARRATION HARNESS (David 2026-07-23: "improve efficiency"
  * + "I want to see an entire game's narration").
  *
@@ -83,9 +85,12 @@ vi.mock('./stockfishEngine', () => ({
   },
 }));
 
-// Read the RAW deterministic facts — the warmer is a no-op here.
+// Read the RAW deterministic facts — the warmer is a no-op here. Set
+// HARNESS_REAL_VOICE=1 to run the ACTUAL house-voice pass (real LLM) so the
+// printout is exactly what ships to the user, not the pre-voiced computed facts.
 vi.mock('./coachApi', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./coachApi')>();
+  if (process.env.HARNESS_REAL_VOICE === '1') return actual;
   return { ...actual, voiceFacts: vi.fn(async () => ''), voiceReviewLines: vi.fn(async () => []) };
 });
 

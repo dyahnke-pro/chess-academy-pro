@@ -29,7 +29,7 @@ import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
-import { voiceFacts } from './coachApi';
+import { voiceFacts, voiceReviewLines } from './coachApi';
 // Post-game review narration is now GROUNDED (David 2026-07-09): the intro,
 // closing, and recap are COMPUTED from the engine annotations and phrased by
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
@@ -984,12 +984,15 @@ const OPENING_PLAN_MAX_PLY = 14;
  *  shape enough for the majorities to be real. */
 const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
 
-/** Best-effort budget for the review's intro/closing FRAMING warm pass (see
- *  `raceTimeout`) — the narrative arc is free-speak, so it still phrases through
- *  the model. On timeout the walk ships the deterministic, still-grounded
- *  templates rather than hanging "Preparing…". The per-move/per-line BOARD
- *  narration is computed DNA spoken raw (no warm pass, David 2026-09-07). */
+/** Best-effort budgets for the review's two LLM warming passes (see
+ *  `raceTimeout`). The COMPUTER computes and RANKS every board fact
+ *  (`buildReviewMoveBriefing`, most-important-first via the eval PV + delta —
+ *  chess judgment, G0); the LLM only VOICES the ranked package in the house
+ *  register, deciding nothing (David 2026-09-07: "Make sure the llm gets the
+ *  computer facts"). On timeout the walk ships the deterministic, still-grounded
+ *  templates rather than hanging "Preparing…". Worst case ≈ 55s to ready. */
 const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
+const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
 // Stockfish projection budget — bounds the ONE prep await that was try/catch-only
 // so a wedged engine worker can never leave the walk stuck on "Preparing…".
 const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
@@ -1262,6 +1265,10 @@ export function buildReviewSegments(
       return buildReviewMoveBriefing({
         fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap,
         moverIsStudent, studentSwingCp: swingCp, criticalMoment: critical,
+        // The eval verdict + why (why the position is what it is) and the delta
+        // (how this move moved it) — the reasons David wants to hear.
+        evalAfterWhiteCp: m.evaluation, evalBeforeWhiteCp: m.preMoveEval,
+        studentColorWB: studentColorWB ?? undefined,
       });
     };
     const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
@@ -3162,7 +3169,7 @@ export async function generateReviewNarration(params: {
    *  fact is ever compressed away regardless of what the model does. */
   uncapped?: boolean;
 }): Promise<ReviewNarration> {
-  const { moves, playerColor, openingName, result, coachNarration, uncapped } = params;
+  const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
 
   // Reconstruct FENs via chess.js so the UI can rewind cleanly.
   const fenChain = buildFenChain(moves);
@@ -3285,30 +3292,82 @@ export async function generateReviewNarration(params: {
     }
   }
 
-  // BOARD narration is COMPUTED DNA, spoken RAW — the review walk no longer
-  // warms its per-move/per-line segments through the LLM (David 2026-09-07:
-  // "the dna in the llm is only used for free speak, not chess/board related
-  // narrations… no llm call for board specific questions"). Every segment
-  // already holds house-voice prose written in code — buildReviewMoveTeaching
-  // for the moves, narrateDnaLine for the projected lines — so it ships as-is:
-  // one consistent register across the whole walk, zero model, zero latency,
-  // and no warm-reject fallback to a robotic template (the disease behind the
-  // "only says wins material" projection lines). The review's intro / closing /
-  // recap FRAMING stays free-speak (voiceFacts, review register) — that's the
-  // narrative arc, not per-move board narration.
-
-  // UNCAPPED: any line whose warming was REJECTED (a heavy sac/projection bundle
-  // where the rephrase dropped the "sacrifice" canary or tripped board-accuracy)
-  // still holds the diagnostic [tag] prefixes, which read badly aloud. Strip the
-  // tags so every spoken line is clean prose that still carries all the data
-  // (David 2026-07-20: the 3 heaviest moves showed raw brackets).
-  if (uncapped) {
-    for (const s of segments) {
-      if (s.narration && s.narration.includes('[')) {
-        // Tags can carry DIGITS ([rook7]) — the old [a-z-]+ class missed those
-        // and leaked "[rook7]" into the spoken line (preview audit, 2026-07-22).
-        s.narration = s.narration.replace(/\[[a-z0-9-]+\]\s*/g, '').replace(/\s{2,}/g, ' ').trim();
+  // HOUSE-VOICE PASS — the COMPUTER computed and RANKED every board fact above
+  // (`buildReviewMoveBriefing`: all important aspects of the move, ordered
+  // most-important-first by the eval PV + delta, the "this was the moment" line
+  // leading when the decision mattered — chess judgment, G0). Now the LLM VOICES
+  // that ranked package in the house teaching register — it decides NOTHING, it
+  // only phrases what code handed it (David 2026-09-07: "Make sure the llm gets
+  // the computer facts" — reconciled with "compute all the facts, order them in
+  // level of importance… state all important aspects of each move"). One batched
+  // call through the ONE grounding chokepoint; every warmed line is checked
+  // against the ply's own board (board-accuracy / seat / mover / numbers /
+  // covers-facets) so a phrasing that dropped or invented a fact is REJECTED and
+  // the computed template ships verbatim. Best-effort at prep; skipped on silent.
+  // Never a regression. The review's intro / closing / recap FRAMING is warmed
+  // separately (free-speak narrative arc). The seat-stamp above (MINE/YOURS) has
+  // already handed the house voice the computed possessive on every reference.
+  if (coachNarration !== 'silent') {
+    try {
+      // A fundamentals-led line is DNA-register template text spoken RAW —
+      // deterministic by contract (David 2026-09-05); the warm pass stays on the
+      // other lines.
+      const toVoice = segments
+        .filter((s) => s.narration && s.narration.trim().length > 0 && !(s.fundamentals && s.fundamentals.length > 0))
+        .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
+      if (toVoice.length > 0) {
+        const warmed = await raceTimeout(
+          voiceReviewLines(toVoice, { studentRating: playerRating, coverAll: uncapped }),
+          REVIEW_HOUSE_VOICE_TIMEOUT_MS,
+          new Map<number, string>(),
+        );
+        // No spoken line may repeat verbatim across the walk (audit R10) — a
+        // duplicate keeps the deterministic template, which carries the ply's own
+        // move so it stays distinct.
+        const spokenLines = new Set<string>();
+        for (const s of segments) {
+          const w = warmed.get(s.ply);
+          if (!w || !s.narration) { if (s.narration) spokenLines.add(s.narration.trim().toLowerCase()); continue; }
+          const det = s.narration;
+          const isRepeat = spokenLines.has(w.trim().toLowerCase());
+          // Accept the warmed (house-voiced) line ONLY if it (a) is board-accurate
+          // AND (b) KEEPS every load-bearing word the fact carried — a mate line
+          // must still say "mate/checkmate", a sacrifice "sacrifice", the
+          // projection FRAME must not flip seats — else the deterministic template
+          // ships verbatim so a canary can never be flattened away.
+          const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
+          const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
+          const keepsPunishFrame = !/how it gets punished/i.test(det)
+            || !/you (can still |could |)(punish|take advantage)/i.test(w);
+          const keepsAdvantageFrame = !/how you take advantage/i.test(det)
+            || !/(gets|you get) punished/i.test(w);
+          if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
+            && narrationBoardAccurate(w, s.fenAfter)
+            && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
+            && narrationMoverFaithful(w, s.playerColor === playerColor)
+            && narrationNumbersFaithful(det, w)
+            // COVERAGE — the LLM never chooses which facts to state: a warm that
+            // dropped a facet (any bundle whose square/SAN anchors all vanished)
+            // is rejected and the full deterministic text ships.
+            && narrationCoversFacets(det, w)) s.narration = w;
+          spokenLines.add(s.narration.trim().toLowerCase());
+        }
       }
+    } catch { /* keep the deterministic templates */ }
+  }
+
+  // STRIP DIAGNOSTIC [tags] from EVERY spoken line — ALWAYS, not just uncapped
+  // (David 2026-09-07 full-game read: the house voice ECHOED a "[converting]"
+  // register tag it saw in its own instructions into a capped-mode endgame line).
+  // Two sources: a REJECTED uncapped warm keeps its [tag]-prefixed template, and
+  // the warmer can leak a bracket it was told about. A bracket never belongs in a
+  // spoken line, so scrub it in both modes — the strip preserves all the prose,
+  // it only removes the [token] and its trailing space.
+  for (const s of segments) {
+    if (s.narration && s.narration.includes('[')) {
+      // Tags can carry DIGITS ([rook7]) — the old [a-z-]+ class missed those
+      // and leaked "[rook7]" into the spoken line (preview audit, 2026-07-22).
+      s.narration = s.narration.replace(/\[[a-z0-9-]+\]\s*/gi, '').replace(/\s{2,}/g, ' ').trim();
     }
   }
 

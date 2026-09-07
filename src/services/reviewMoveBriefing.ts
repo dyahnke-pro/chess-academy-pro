@@ -72,6 +72,93 @@ function newNamedTactic(fenBefore: string, fenAfter: string, toSquare: string | 
   }
 }
 
+const MAT_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Net material (student − opponent, points) on the board. */
+function materialNet(fen: string, studentWB: 'w' | 'b'): number {
+  try {
+    let net = 0;
+    for (const row of new Chess(fen).board()) for (const sq of row) if (sq) net += (sq.color === studentWB ? 1 : -1) * (MAT_VAL[sq.type] ?? 0);
+    return net;
+  } catch { return 0; }
+}
+function materialWord(pts: number): string {
+  if (pts >= 8) return 'a queen';
+  if (pts >= 5) return 'a rook';
+  if (pts >= 3) return 'a piece';
+  if (pts === 2) return 'the exchange';
+  return 'a pawn';
+}
+/** Signed eval band (student POV): 0 balanced, ±1 touch, ±2 clear, ±3 decisive. */
+function evalBand(studentPovCp: number): number {
+  const a = Math.abs(studentPovCp);
+  const b = a < 50 ? 0 : a < 150 ? 1 : a < 300 ? 2 : 3;
+  return studentPovCp < 0 ? -b : b;
+}
+function evalVerdict(studentPovCp: number): string {
+  switch (evalBand(studentPovCp)) {
+    case 0: return 'roughly balanced';
+    case 1: return "you're a touch better";
+    case 2: return "you're clearly better";
+    case 3: return "you're winning";
+    case -1: return "you're a touch worse";
+    case -2: return "you're clearly worse";
+    default: return "you're in trouble";
+  }
+}
+/** The board-true imbalances that EXPLAIN the eval sign — material, king safety,
+ *  pawn structure — ordered by magnitude, filtered to the eval's side (David
+ *  2026-09-07: "why does Stockfish call it balanced / tipping"). */
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b'): string[] {
+  const oppWB: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
+  const s = describeStructure(fen);
+  const cands: { text: string; mag: number; sign: number }[] = [];
+  const net = materialNet(fen, studentWB);
+  if (net >= 1) cands.push({ text: `you're up ${materialWord(net)}`, mag: net, sign: 1 });
+  else if (net <= -1) cands.push({ text: `you're down ${materialWord(-net)}`, mag: -net, sign: -1 });
+  if (s) {
+    const kd = s.kings.shieldPawns[studentWB] - s.kings.shieldPawns[oppWB];
+    if (kd >= 2) cands.push({ text: 'their king is the more exposed', mag: 1.8, sign: 1 });
+    else if (kd <= -2) cands.push({ text: 'your king is the more exposed', mag: 1.8, sign: -1 });
+    if (s.pawns.passedPawns[studentWB].length) cands.push({ text: `you have a passed pawn on ${s.pawns.passedPawns[studentWB][0]}`, mag: 1.2, sign: 1 });
+    if (s.pawns.passedPawns[oppWB].length) cands.push({ text: `they have a passed pawn on ${s.pawns.passedPawns[oppWB][0]}`, mag: 1.2, sign: -1 });
+    if (s.pawns.isolatedPawns[oppWB].length) cands.push({ text: "they're left with an isolated pawn", mag: 0.7, sign: 1 });
+    if (s.pawns.isolatedPawns[studentWB].length) cands.push({ text: "you're left with an isolated pawn", mag: 0.7, sign: -1 });
+  }
+  if (Math.abs(studentPovCp) < 50) {
+    // Balanced: the WHY is the TENSION — a plus offset by a minus. A lone
+    // one-sided imbalance would contradict "balanced" (other factors must
+    // compensate), so say nothing rather than mislead.
+    const plus = cands.find((c) => c.sign > 0);
+    const minus = cands.find((c) => c.sign < 0);
+    if (plus && minus) return [plus.text, minus.text];
+    if (cands.length === 0) return ['the material is level and neither king is in danger'];
+    return [];
+  }
+  const sign = studentPovCp > 0 ? 1 : -1;
+  const matching = cands.filter((c) => c.sign === sign).sort((a, b) => b.mag - a.mag);
+  return matching.length === 0
+    ? [sign > 0 ? 'your pieces are the more active' : 'their pieces are the more active']
+    : matching.map((c) => c.text).slice(0, 2);
+}
+/** The eval VERDICT + WHY as a lead sentence. */
+function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b'): string {
+  const why = evalWhy(fen, studentPovCp, studentWB);
+  const verdict = evalVerdict(studentPovCp);
+  const V = verdict.charAt(0).toUpperCase() + verdict.slice(1);
+  return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
+}
+/** The DELTA — how this move moved the eval (student POV cp swing). Null when it
+ *  barely moved (a quiet move keeps its silence rather than "held the balance"
+ *  every ply). */
+function deltaTailClause(swing: number): string | null {
+  if (Math.abs(swing) < 40) return null;
+  return swing >= 150 ? 'It swung the game your way.'
+    : swing >= 40 ? 'It nudged the balance your way.'
+    : swing > -150 ? 'It gave a little ground.'
+    : 'It let a real edge slip.';
+}
+
 export interface ReviewMoveBriefingInput {
   fenBefore: string;
   san: string;
@@ -96,6 +183,15 @@ export interface ReviewMoveBriefingInput {
    *  teaching voice ("This is the critical moment"). Only the criticality lead
    *  phrasing changes; the computed facts are identical. Default 'review'. */
   register?: 'review' | 'teach';
+  /** Engine eval AFTER the move, WHITE-POV centipawns. Enables the eval VERDICT
+   *  + WHY (the imbalance that explains the number) — David 2026-09-07: "I want
+   *  to hear the reasons for the eval… why balanced, why tipping." */
+  evalAfterWhiteCp?: number | null;
+  /** Engine eval BEFORE the move, WHITE-POV cp. Enables the band-change gate so
+   *  the eval verdict is stated when it becomes NEWS, not every quiet ply. */
+  evalBeforeWhiteCp?: number | null;
+  /** The mover/student side, for POV. Required for the eval verdict + why. */
+  studentColorWB?: 'w' | 'b';
 }
 
 /**
@@ -189,26 +285,44 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
     if (concept) aspects.push({ text: toClause(concept), weight: 25 });
   }
 
-  if (aspects.length === 0) return null;
-
-  // RANK — the eval swing lifts every aspect's weight when the move mattered
-  // (David: order by the eval drop). A big swing (either way) makes the move's
-  // aspects the loud part of the walk; a quiet move stays low.
-  const swing = Math.abs(input.studentSwingCp ?? 0);
-  const lift = swing >= 300 ? 12 : swing >= 150 ? 8 : swing >= 60 ? 4 : 0;
-  const ranked = aspects
+  // RANK the move-mechanic aspects (the eval swing lifts them when the move
+  // mattered) — these become the "You play X, …" clause.
+  const swingAbs = Math.abs(input.studentSwingCp ?? 0);
+  const lift = swingAbs >= 300 ? 12 : swingAbs >= 150 ? 8 : swingAbs >= 60 ? 4 : 0;
+  const rankedMechanics = aspects
     .map((a) => ({ ...a, score: a.weight + (a.keystone ? lift : Math.round(lift / 2)) }))
-    .sort((a, b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((a) => a.text);
+  const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san) : '';
 
-  // State the top aspects (up to 3), most-important-first, in the review register.
-  const top = ranked.slice(0, 3).map((a) => a.text);
-  const briefing = joinReview(top, moverIsStudent, mv.san);
-  // The criticality line LEADS, then the computed facts (David 2026-09-07). In
-  // review it's retrospective ("this was the moment"); teach phrases it
-  // present-tense ("this is the critical moment").
-  if (!input.criticalMoment) return briefing;
-  const lead = input.register === 'teach' ? 'This is the critical moment.' : 'This was the moment to slow down.';
-  return `${lead} ${briefing}`;
+  // EVAL REASONING — the assessment (WHY the position is what it is) + the DELTA
+  // (how THIS move moved it). The most important facts, so they lead / close the
+  // package (David 2026-09-07). Gated so a run of quiet, stable moves states the
+  // verdict once — on a band change or a real swing — not as a mantra every ply.
+  let evalLead = '';
+  let deltaTail = '';
+  if (input.evalAfterWhiteCp != null && input.studentColorWB) {
+    const povAfter = input.studentColorWB === 'w' ? input.evalAfterWhiteCp : -input.evalAfterWhiteCp;
+    const povBefore = input.evalBeforeWhiteCp != null
+      ? (input.studentColorWB === 'w' ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
+      : null;
+    const swing = input.studentSwingCp ?? (povBefore != null ? povAfter - povBefore : 0);
+    const bandChanged = povBefore != null && evalBand(povAfter) !== evalBand(povBefore);
+    if (bandChanged || Math.abs(swing) >= 40) {
+      evalLead = explainEval(fenAfter, povAfter, input.studentColorWB);
+      deltaTail = deltaTailClause(swing) ?? '';
+    }
+  }
+
+  // The criticality "this is the moment" line leads (David 2026-09-07: "say that
+  // phrase first"). Then, most-important-first: eval assessment → the move and
+  // what it did → the delta verdict. This ORDERED package is what the LLM voices.
+  const criticalityLead = input.criticalMoment
+    ? (input.register === 'teach' ? 'This is the critical moment.' : 'This was the moment to slow down.')
+    : '';
+  const composed = [criticalityLead, evalLead, moveClause, deltaTail].filter(Boolean).join(' ');
+  return composed.length ? composed : null;
 }
 
 function cleanSan(san: string): string {

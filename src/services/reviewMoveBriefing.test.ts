@@ -64,15 +64,26 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     expect(buildReviewMoveBriefing({ fenBefore: 'bad', san: 'Nf3' })).toBeNull();
   });
 
+  it('states the eval VERDICT + WHY when the assessment is news, and the delta', () => {
+    // A winning capture that swings the eval: expect the verdict + why + delta.
+    const out = buildReviewMoveBriefing({
+      fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true,
+      studentSwingCp: 300, evalAfterWhiteCp: 320, evalBeforeWhiteCp: 20, studentColorWB: 'w',
+    });
+    expect(out).toMatch(/winning|better/i);   // an eval verdict is present
+    expect(out).toMatch(/up a|piece|pawn/i);  // a WHY (material) is present
+    expect(out).toMatch(/winning the knight/); // the move mechanic still there
+  });
+
   it('PRINT: sample briefings', () => {
-    const samples: Array<[string, string, boolean, number, boolean]> = [
-      ['r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6', 'Ndb5', true, 40, false],
-      ['rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3', 'Bg5', true, 20, false],
-      [HANGING_KNIGHT, 'Qxd4', true, 300, true],
-      ['rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2', 'Nf3', true, 5, false],
+    const samples: Array<[string, string, boolean, number, boolean, number, number]> = [
+      ['r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6', 'Ndb5', true, 40, false, 30, 10],
+      ['rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3', 'Bg5', true, 20, false, 25, 15],
+      [HANGING_KNIGHT, 'Qxd4', true, 300, true, 320, 20],
+      ['rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2', 'Nf3', true, 5, false, 30, 28],
     ];
-    for (const [fen, san, isStudent, swing, crit] of samples) {
-      const out = buildReviewMoveBriefing({ fenBefore: fen, san, moverIsStudent: isStudent, studentSwingCp: swing, criticalMoment: crit });
+    for (const [fen, san, isStudent, swing, crit, evA, evB] of samples) {
+      const out = buildReviewMoveBriefing({ fenBefore: fen, san, moverIsStudent: isStudent, studentSwingCp: swing, criticalMoment: crit, evalAfterWhiteCp: evA, evalBeforeWhiteCp: evB, studentColorWB: 'w' });
       console.log(`  ${san}: ${out}`);
     }
     expect(true).toBe(true);

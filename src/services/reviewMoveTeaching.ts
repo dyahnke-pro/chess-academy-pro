@@ -179,8 +179,21 @@ export function buildReviewMoveTeaching(
   // the queen on d8 — pressure they have to answer"). A purely developing move
   // (no target) keeps its fight-for-the-center line. The facts were always
   // computed (pieceEyes); this only reorders which one leads.
-  const minorAttacksPiece = (mv.piece === 'n' || mv.piece === 'b')
-    && pieceEyes(chess, mv.to, mv.piece, mv.color).enemies.some((e) => e.type !== 'k');
+  // The MOVED piece's board vision, and the one REAL threat it makes (if any).
+  // A "real threat" is a WINNABLE enemy piece — one that hangs (undefended) or
+  // is worth more than the attacker (win the exchange). Attacking a DEFENDED
+  // equal/lesser piece is NOT "pressure they have to answer" (David 2026-07-19:
+  // don't overstate the why; 2026-09-07: that false "pressure" on a defended
+  // knight/pawn was a fail). Computed once, reused below.
+  const moverEyes = pieceEyes(chess, mv.to, mv.piece, mv.color);
+  const enemyColor: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
+  const attackerVal = PIECE_VAL[mv.piece] ?? 0;
+  const winnableTarget = moverEyes.enemies
+    .filter((e) => e.type !== 'k')
+    .filter((e) => chess.attackers(e.sq as Sq, enemyColor).length === 0 || (PIECE_VAL[e.type] ?? 0) > attackerVal)
+    .sort((a, b) => (PIECE_VAL[b.type] ?? 0) - (PIECE_VAL[a.type] ?? 0))[0] ?? null;
+  // A minor only skips its developing gloss when it makes a REAL threat.
+  const minorAttacksPiece = (mv.piece === 'n' || mv.piece === 'b') && winnableTarget !== null;
 
   // Minor-piece development — carry what the picture doesn't: the squares it
   // now bears on. Never "develops the knight" (restates the move).
@@ -265,16 +278,16 @@ export function buildReviewMoveTeaching(
   //    the file it seizes, the squares it controls, or the king's journey. It
   //    NEVER returns null and never falls back to a generic "quiet development"
   //    tag — the whole point of the 2026-07-25 rebuild.
-  const eyes = pieceEyes(chess, mv.to, mv.piece, mv.color);
+  const eyes = moverEyes;
   // (a) A check forces a reply — the student keeps the initiative for a move.
   if (mv.san.includes('+') && !mv.san.includes('#')) {
     return 'The check forces their king to react — you set the tempo and keep the initiative for a move.';
   }
-  // (b) The move attacks an enemy piece (not the king) — the strongest point.
-  const realTargets = eyes.enemies.filter((e) => e.type !== 'k');
-  if (realTargets.length) {
-    const tgt = [...realTargets].sort((a, b) => PIECE_VAL[b.type] - PIECE_VAL[a.type])[0];
-    return `The ${PIECE_NOUN[mv.piece]} trains on the ${PIECE_NOUN[tgt.type]} on ${tgt.sq} — pressure they have to answer.`;
+  // (b) The move makes a REAL threat — attacks a WINNABLE enemy piece (hangs, or
+  // wins the exchange). A defended equal/lesser piece is NOT "pressure" (the
+  // 2026-09-07 fail: false "pressure" on a defended knight/pawn).
+  if (winnableTarget) {
+    return `The ${PIECE_NOUN[mv.piece]} trains on the ${PIECE_NOUN[winnableTarget.type]} on ${winnableTarget.sq} — pressure they have to answer.`;
   }
   // (c) A rook or queen seizing a file.
   if (mv.piece === 'r' || mv.piece === 'q') {
