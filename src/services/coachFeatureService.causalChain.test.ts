@@ -43,6 +43,14 @@ describe('buildReviewSegments — causal chain is wired into the review walk', (
     expect(nxe4!.narration ?? '').toMatch(/early queen on f3 left the bishop on g5 loose/i);
   });
 
+  it('the Nxe4 segment carries lead-the-eye arrows (attackers → g5)', () => {
+    const segs = buildReviewSegments(buildMoves(), 'black', null, false, 900);
+    const nxe4 = segs.find((s) => s.san === 'Nxe4');
+    const arrows = nxe4!.planArrows ?? [];
+    const toG5 = arrows.filter((a) => a.endSquare === 'g5').map((a) => a.startSquare).sort();
+    expect(toG5).toEqual(['e4', 'e7']);
+  });
+
   it('non-tactic moves do NOT get a causal-chain lead', () => {
     const segs = buildReviewSegments(buildMoves(), 'black', null, false, 900);
     const d6 = segs.find((s) => s.san === 'd6');

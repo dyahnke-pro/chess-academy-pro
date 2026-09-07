@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildCausalChain } from './causalChain';
+import { buildCausalChain, causalChainArrows, causalChainHighlights, causalChainMistakeTags } from './causalChain';
 
 // David's real chess.com game (2026-09-07). The acceptance fixture: the whole
 // point of the feature is that THIS produces the cross-move causal chain.
@@ -70,6 +70,42 @@ describe('buildCausalChain — David\'s game (acceptance)', () => {
 
   it('every edge carries a board proof string', () => {
     for (const e of chain!.edges) expect(e.proof.length).toBeGreaterThan(0);
+  });
+
+  it('links each cause node back to its FUNDAMENTAL (the drill spine)', () => {
+    const byKind = Object.fromEntries(chain!.nodes.map((n) => [n.kind, n]));
+    expect(byKind['premature-piece'].fundamentalId).toBe('early-queen-sortie');
+    expect(byKind['premature-piece'].tag).toBe('neglected-development');
+    expect(byKind['loose-piece'].fundamentalId).toBe('loose-piece');
+    expect(byKind['loose-piece'].tag).toBe('hung-material');
+    expect(byKind['displaced-defender'].tag).toBe('misplaced-piece');
+    // the winning tactic is NOT a mistake — no fundamental/tag
+    expect(byKind['discovered-attack'].fundamentalId).toBeNull();
+    expect(byKind['discovered-attack'].tag).toBeUndefined();
+  });
+
+  it('emits board-proven lead-the-eye arrows on the discovery (attackers → g5)', () => {
+    const arrows = causalChainArrows(chain!);
+    const gs = arrows.filter((a) => a.to === 'g5').map((a) => a.from).sort();
+    expect(gs).toEqual(['e4', 'e7']);           // the knight and the unveiled bishop
+    for (const a of arrows) expect(a.color).toBe('green');
+  });
+
+  it('highlights the key squares — f3/e2 as cause, g5 the loose target in red', () => {
+    const hl = causalChainHighlights(chain!);
+    const map = Object.fromEntries(hl.map((h) => [h.square, h.color]));
+    expect(map['f3']).toBe('yellow');           // the blocked developing square
+    expect(map['e2']).toBe('blue');             // where the knight actually is
+    expect(map['g5']).toBe('red');              // the loose target wins the priority
+  });
+
+  it('feeds the drill spine only for the side that ERRED', () => {
+    // Student is Black (won) → no mistake tags to file.
+    expect(causalChainMistakeTags(chain!, 'b')).toEqual([]);
+    // If the student were White (made the early queen) → the buckets to drill.
+    expect(causalChainMistakeTags(chain!, 'w').sort()).toEqual(
+      ['hung-material', 'misplaced-piece', 'neglected-development'],
+    );
   });
 });
 

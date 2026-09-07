@@ -37,7 +37,7 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
-import { buildCausalChain } from './causalChain';
+import { buildCausalChain, causalChainArrows } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -1324,12 +1324,19 @@ export function buildReviewSegments(
     // PROVABLE, per the silent-on-unprovable rule); runs for either side (the
     // cause is often the OPPONENT's early queen enabling the student's tactic).
     let causalLead: string | null = null;
+    // Lead-the-eye arrows for the chain (David 2026-09-07: "add lead the eye
+    // arrows"), on the tactic-move frame where every chain piece stands. Ride the
+    // segment's planArrows slot (the sanctioned lead-the-eye channel).
+    let causalArrows: ReviewMoveSegment['planArrows'];
     if (studentColorWB !== null) {
       try {
         const chain = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
         if (chain) {
           const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
           if (lines.length) causalLead = lines.join(' ');
+          const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
+          const arr = causalChainArrows(chain);
+          if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
         }
       } catch { causalLead = null; }
     }
@@ -1455,6 +1462,7 @@ export function buildReviewSegments(
         bestMoveUci: m.bestMove,
         narration: uncappedParts.length ? uncappedParts.join(' ') : null,
         narrationSource: uncappedParts.length ? 'per-move' : null,
+        ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
       });
       try {
@@ -2241,7 +2249,11 @@ export function buildReviewSegments(
       // Plan-idea arrows take the slot when present; else the threat arrows
       // (they rarely coincide — a plan beat fires on a quiet move, a threat on a
       // tactical one) so the danger/attack is SHOWN, not just spoken.
-      ...((planArrows && planArrows.length) ? { planArrows } : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
+      // The causal chain leads the beat, so its lead-the-eye arrows take the slot
+      // on the tactic move; else the plan / threat arrows as before.
+      ...((causalArrows && causalArrows.length) ? { planArrows: causalArrows }
+        : (planArrows && planArrows.length) ? { planArrows }
+        : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
       ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
     });

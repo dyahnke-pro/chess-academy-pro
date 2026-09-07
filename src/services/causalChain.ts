@@ -24,8 +24,17 @@
  * whichever colour the board shows.
  */
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
+import type { FundamentalId } from './principleAttribution';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 // ─── types ──────────────────────────────────────────────────────────────────
+
+/** Board-marker colours the app's parseBoardTags accepts. green = a vision /
+ *  attack sight-line, yellow = a key square the narration names, red = the loose
+ *  target / danger, blue = context (where a piece actually is). */
+export type MarkerColor = 'green' | 'yellow' | 'red' | 'blue';
+export interface CausalArrow { from: Square; to: Square; color: MarkerColor; }
+export interface CausalHighlight { square: Square; color: MarkerColor; }
 
 export type CausalRelation =
   /** A occupies the natural developing square another friendly piece needed. */
@@ -56,6 +65,20 @@ export interface CausalNode {
   squares: Square[];
   /** Structured, board-true facts the renderer slots into prose. Never phrasing. */
   data: Record<string, string | number>;
+  /** The fundamental this node relates back to (David 2026-09-07: "link to the
+   *  fundamentals and relate them back to the chain") — the SAME id the
+   *  attribution/drill spine uses, so a chained mistake feeds My Mistakes. Null
+   *  for the beneficiary's winning tactic (that's not a mistake). */
+  fundamentalId?: FundamentalId | null;
+  /** The misconception/weakness bucket the node files under (for the drill
+   *  spine). Present only on the cause nodes (the mistakes), never the tactic. */
+  tag?: MisconceptionTagId;
+  /** Lead-the-eye arrows for this node — every `from` is a real piece on the
+   *  focus board, board-proven (David 2026-09-07: "add lead the eye arrows"). */
+  arrows: CausalArrow[];
+  /** Key squares to highlight as this node's sentence is spoken. Every square is
+   *  real on the focus board. */
+  highlights: CausalHighlight[];
 }
 
 export interface CausalEdge {
@@ -300,17 +323,30 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   // Is it a DISCOVERY (a second attacker unveiled) or a direct hit?
   const unveiler = discoveryUnveiled(before, after, focus, loose.target);
 
-  // Terminal node — the tactic that collected the loose piece.
+  // An arrow only when its `from` really holds a piece on the focus board.
+  const arrowIf = (from: Square, to: Square, color: MarkerColor): CausalArrow[] =>
+    after.get(from) ? [{ from, to, color }] : [];
+
+  // Terminal node — the tactic that collected the loose piece. The attack arrows
+  // lead the eye: the unveiled piece and the moved piece both bearing on the
+  // loose target (the discovered double attack), the target itself in red. No
+  // fundamental/tag — this is the beneficiary's WINNING move, not a mistake.
   const tacticNode: CausalNode = unveiler
     ? {
         kind: 'discovered-attack', ply: focusPly, color: mover,
         squares: [focus.from, focus.to, unveiler, loose.target],
         data: { move: focus.san, unveiler, target: loose.target, targetPiece: PIECE_NOUN[loose.type], from: focus.from, to: focus.to },
+        fundamentalId: null,
+        arrows: [...arrowIf(unveiler, loose.target, 'green'), ...arrowIf(focus.to, loose.target, 'green')],
+        highlights: [{ square: loose.target, color: 'red' }],
       }
     : {
         kind: 'won-loose-piece', ply: focusPly, color: mover,
         squares: [focus.to, loose.target],
         data: { move: focus.san, target: loose.target, targetPiece: PIECE_NOUN[loose.type], to: focus.to },
+        fundamentalId: null,
+        arrows: arrowIf(focus.to, loose.target, 'green'),
+        highlights: [{ square: loose.target, color: 'red' }],
       };
 
   // 2. WHY was the target loose? A missing natural defender (displaced by a
@@ -323,14 +359,23 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
     return null;
   }
 
-  // The loose-piece node.
+  // The loose-piece node — the target in red, with a green arrow from every
+  // attacker bearing on it (board-true: the attackers come straight from the FEN).
   const looseNode: CausalNode = {
     kind: 'loose-piece', ply: null, color: enemy,
     squares: [loose.target],
     data: { square: loose.target, piece: PIECE_NOUN[loose.type] },
+    fundamentalId: 'loose-piece',
+    tag: 'hung-material',
+    arrows: after.attackers(loose.target, mover).map((sq) => ({ from: sq, to: loose.target, color: 'green' as const })),
+    highlights: [{ square: loose.target, color: 'red' }],
   };
 
-  // The displaced-defender node.
+  // The displaced-defender node. Highlights lead the eye: where the knight ACTUALLY
+  // is (blue), the square it SHOULD hold (yellow), and the target it would guard
+  // from there (yellow). No arrow for the missing defence — a knight-jump arrow
+  // from f3 would read as "the queen on f3 guards g5" (it doesn't); the highlight
+  // pair + the spoken "a knight on f3 would guard g5" carries it honestly.
   const displacedNode: CausalNode = {
     kind: 'displaced-defender', ply: null, color: enemy,
     squares: [missing.knightSquare, missing.idealSquare, loose.target],
@@ -338,6 +383,13 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
       knightSquare: missing.knightSquare, idealSquare: missing.idealSquare,
       target: loose.target, targetPiece: PIECE_NOUN[loose.type],
     },
+    tag: 'misplaced-piece',
+    arrows: [],
+    highlights: [
+      { square: missing.knightSquare, color: 'blue' },
+      { square: missing.idealSquare, color: 'yellow' },
+      { square: loose.target, color: 'yellow' },
+    ],
   };
 
   // 3. WHY is the defender displaced? A friendly blocker occupies its natural
@@ -357,12 +409,19 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
       kind: 'premature-piece', ply: arrival.ply, color: enemy,
       squares: [missing.idealSquare],
       data: { piece: PIECE_NOUN[arrival.move.piece], square: missing.idealSquare, move: arrival.move.san },
+      fundamentalId: 'early-queen-sortie',
+      tag: 'neglected-development',
+      arrows: [],
+      highlights: [{ square: missing.idealSquare, color: 'yellow' }],
     });
   } else if (arrival) {
     nodes.push({
       kind: 'blocked-square', ply: arrival.ply, color: enemy,
       squares: [missing.idealSquare],
       data: { square: missing.idealSquare, blocker: PIECE_NOUN[missing.blocker] },
+      tag: 'misplaced-piece',
+      arrows: [],
+      highlights: [{ square: missing.idealSquare, color: 'yellow' }],
     });
   }
   // ROOT → displaced-defender (only when a root exists).
@@ -392,4 +451,46 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   if (nodes.length < 2 || edges.length !== nodes.length - 1) return null;
 
   return { nodes, edges, beneficiary: mover, focusPly };
+}
+
+// ─── consumer helpers ───────────────────────────────────────────────────────
+
+/** Every lead-the-eye arrow across the chain, deduped, for ONE board frame (the
+ *  focus position — where all the chain's pieces stand). Feeds the review
+ *  segment's planArrows / a lesson beat's arrows. */
+export function causalChainArrows(chain: CausalChain): CausalArrow[] {
+  const seen = new Set<string>();
+  const out: CausalArrow[] = [];
+  for (const n of chain.nodes) for (const a of n.arrows) {
+    const k = `${a.from}-${a.to}`;
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(a);
+  }
+  return out;
+}
+
+const HL_PRIORITY: Record<MarkerColor, number> = { red: 3, yellow: 2, green: 1, blue: 0 };
+/** Every key-square highlight across the chain, deduped — the highest-priority
+ *  colour wins per square (red danger beats a yellow key square beats blue
+ *  context), so the loose target reads red even where an earlier node marked it. */
+export function causalChainHighlights(chain: CausalChain): CausalHighlight[] {
+  const best = new Map<Square, MarkerColor>();
+  for (const n of chain.nodes) for (const h of n.highlights) {
+    const cur = best.get(h.square);
+    if (!cur || HL_PRIORITY[h.color] > HL_PRIORITY[cur]) best.set(h.square, h.color);
+  }
+  return [...best.entries()].map(([square, color]) => ({ square, color }));
+}
+
+/** The misconception buckets the STUDENT's cause-nodes file under — the drill
+ *  spine feed so a chained mistake becomes a My-Mistakes drill (David 2026-09-07:
+ *  "relate them back… feed the fundamentals"). Empty when the student is the
+ *  beneficiary (their own tactic isn't a mistake). Deduped, cause-nodes only. */
+export function causalChainMistakeTags(chain: CausalChain, studentColor: Color): MisconceptionTagId[] {
+  const out = new Set<MisconceptionTagId>();
+  for (const n of chain.nodes) {
+    if (n.color === studentColor && n.tag) out.add(n.tag);
+  }
+  return [...out];
 }
