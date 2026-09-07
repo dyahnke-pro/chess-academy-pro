@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
+import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';
@@ -471,8 +472,44 @@ describe('coachFeatureService', () => {
       ]);
       const seg = segments[2];
       expect(seg.narration).not.toBeNull();
-      // Generic version still mentions the classification family
+      // Generic version still mentions the classification family. (No masters DB
+      // loaded here → the book-move override is inert, so the flagged read stands.)
       expect(seg.narration?.toLowerCase()).toMatch(/inaccuracy|more precise/);
+    });
+
+    it('reads a flagged move that is established THEORY as book, with the honest eval (David 2026-09-07)', () => {
+      // The Traxler's signature move 4...Bc5 is a real gambit — 130 master games
+      // — that the engine flags as dubious. It must read as BOOK (named line +
+      // honest number), NOT "you slipped, X was better". Master-game mass is the
+      // theory gate (not raw isBookLine, which calls the Bongcloud "book"), so a
+      // masters DB with mass behind Bc5 must be loaded for the override to fire.
+      const c = new Chess();
+      for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5']) c.move(m);
+      const keyOf = (fen: string): string => fen.split(/\s+/).slice(0, 4).join(' ');
+      __setLocalDbForTests({ positions: { [keyOf(c.fen())]: [{ san: 'd5', games: 3320 }, { san: 'Bc5', games: 130 }] } } as never);
+      try {
+        const segments = buildReviewSegments([
+          move({ ply: 1, san: 'e4', classification: 'book' }),
+          move({ ply: 2, san: 'e5', classification: 'book', isCoachMove: true }),
+          move({ ply: 3, san: 'Nf3', classification: 'book' }),
+          move({ ply: 4, san: 'Nc6', classification: 'book', isCoachMove: true }),
+          move({ ply: 5, san: 'Bc4', classification: 'book' }),
+          move({ ply: 6, san: 'Nf6', classification: 'book', isCoachMove: true }),
+          move({ ply: 7, san: 'Ng5', classification: 'good' }),
+          // Student (Black) plays the Traxler Bc5, engine flags it a mistake and
+          // the position is ~+1.2 for White (evaluation is WHITE-POV cp).
+          move({ ply: 8, san: 'Bc5', classification: 'mistake', isCoachMove: true, preMoveEval: 20, evaluation: 120 }),
+        ], 'black', 'Italian Game: Two Knights Defense, Traxler Counterattack');
+        const bc5 = segments[7];
+        expect(bc5.narration).not.toBeNull();
+        const t = bc5.narration as string;
+        // Reads as book/theory, names the honest eval, and is NOT a "you slipped" scold.
+        expect(t.toLowerCase()).toMatch(/\bbook\b|theory/);
+        expect(t.toLowerCase()).toMatch(/engine/);
+        expect(t).not.toMatch(/was the move|was stronger|real concession/i);
+      } finally {
+        __resetLocalDbForTests();
+      }
     });
 
     it('reconstructs fenBefore / fenAfter per ply via chess.js', () => {

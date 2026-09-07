@@ -108,13 +108,20 @@ describe.runIf(HARNESS_ON)('offline full-game narration harness', () => {
     type ReviewMoveInput = import('./coachFeatureService').ReviewMoveInput;
 
     // Load HIS corpus so buildOpeningMoveDetail can ground the opening moves
-    // (prod loads it over the network; here we inject it from disk). Masters DB
-    // is the prod fallback — not loaded here.
+    // (prod loads it over the network; here we inject it from disk).
     try {
       const { __setHisPlayDbForTests } = await import('./hisPlayLookup');
       const { readFileSync } = await import('node:fs');
       __setHisPlayDbForTests(JSON.parse(readFileSync('public/data/danya-play-db.json', 'utf8')));
     } catch { /* opening detail falls through to piece-activity */ }
+    // Load the masters DB so the book-move-honest-eval override can check
+    // master-game mass (prod calls ensureMastersDbLoaded before the walk; here we
+    // inject from disk). Without it, mastersMovesSync is null → no book reframe.
+    try {
+      const { __setLocalDbForTests } = await import('./masterPlayLookup');
+      const { readFileSync } = await import('node:fs');
+      __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
+    } catch { /* book reframe falls through to the flagged read */ }
 
     // Replay → SAN + FEN chain.
     const chess = new Chess();

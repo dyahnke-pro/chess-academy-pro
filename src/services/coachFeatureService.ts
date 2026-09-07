@@ -13,7 +13,7 @@ import { detectConcept } from './reviewConcepts';
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
-import { ensureMastersDbLoaded } from './masterPlayLookup';
+import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening } from './openingDetectionService';
 import { resolveCuratedOpeningIdeas } from './reviewOpeningTheory';
@@ -1534,6 +1534,49 @@ export function buildReviewSegments(
     }
     // Track WHICH builder produced the narration (surfaced to PostHog per ply).
     let narrationSource: ReviewMoveSegment['narrationSource'] = narration ? 'flag' : null;
+    // 📖 BOOK MOVE, HONEST EVAL (David 2026-09-07, his Traxler: "Read it as a
+    // book move but be honest of the evaluation"). A flagged minor slip that is
+    // established THEORY — the exact move is played in real master games at this
+    // position — is NOT a slip the student found; it's the named gambit/main
+    // line. So OVERRIDE the "you slipped, X was better" flag text with the book
+    // framing, and STILL state the engine's honest number. The theory signal is
+    // MASTER-GAME MASS (mastersMovesSync ≥ 40 games for THIS move), not raw
+    // isBookLine — the Lichess DB carries junk namesakes (it calls the Bongcloud
+    // "book"), so name-matching alone over-fires; master mass keeps the real
+    // Traxler (130 games) and drops the Bongcloud (0). Only inaccuracy/mistake in
+    // the opening phase (a genuine blunder past book stays flagged). Grounded:
+    // the name is detectOpening, the mass is the masters DB, the eval is the
+    // persisted engine number (G0/G3). Masters DB is loaded before the walk
+    // (ensureMastersDbLoaded); if it isn't, mastersMovesSync is null → no reframe.
+    {
+      const isStudentSideMove = playerColor ? moverColor === playerColor : !m.isCoachMove;
+      const mastersHere = isStudentSideMove
+        && (m.classification === 'inaccuracy' || m.classification === 'mistake')
+        && m.ply <= OPENING_TEACH_MAX_PLY
+        ? mastersMovesSync(fenPair.fenBefore) : null;
+      const moveMasterGames = mastersHere?.find((mm) => mm.san === m.san)?.games ?? 0;
+      const isStudentBookMove = moveMasterGames >= 40;
+      if (isStudentBookMove) {
+        const bookName = detectOpening(sansForRun.slice(0, m.ply))?.name ?? openingName ?? null;
+        const nameClause = bookName ? `the ${bookName}` : 'a known theory line';
+        // Student-POV eval AFTER the move; a positive OPPONENT edge = the honest
+        // "the engine doesn't fully trust this" number, stated in the FAVORED
+        // side's name (never "we/our").
+        const stPov = (m.evaluation != null && studentColorWB)
+          ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
+        const oppEdge = stPov != null ? -stPov / 100 : null;
+        const favored = studentColorWB === 'w' ? 'Black' : 'White';
+        let honest: string;
+        if (oppEdge != null && oppEdge >= 0.5) {
+          const alt = bestMoveSan ? ` the engine would rather have ${bestMoveSan}, which keeps it closer to level` : ' the engine prefers the quieter route';
+          honest = `Be honest about the eval, though: this is a gambit the engine doesn't fully trust — it reads about ${oppEdge.toFixed(1)} in ${favored}'s favor here, and ${alt}. You're trading the safe edge for a sharp, less-charted fight — a fair bet, not a blunder.`;
+        } else {
+          honest = `The engine calls it roughly level here — a sound theory choice.`;
+        }
+        narration = `${m.san} is book — ${nameClause}. ${honest}`;
+        narrationSource = 'per-move';
+      }
+    }
     // 🎯 SOUND SACRIFICE — the single most important thing to say about the move,
     // so it OVERRIDES the generic merit / itinerary / plan beats (David 2026-07-20
     // Opera nitpick: the knight sac was narrated as "a reroute", the queen sac as
