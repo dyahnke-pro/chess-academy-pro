@@ -194,6 +194,43 @@ already does. Extend the fact set where the review needs the move's OWN
 ramifications (defense/parry, blocked lines, self-weakness, tempo, battery/
 discovery, allows-counter) that positionFacts' position-read doesn't yet cover.
 
+## Decision 6 (David, 2026-09-07): teach fork = (A); shared Tier-3 cache = yes
+
+Q: where did the phenomenal Amar teach narration come from? A: runtime LLM
+generation (`generateOpeningFromDbNarration`, `openingGenerator.ts`) — the model
+WRITES the per-move prose, grounded in the Lichess DB moves + injected book
+corpus + farmed notes; arrows from notes (G0); gated by `narrationAccuracy`;
+cached per-DEVICE in Dexie `cachedOpenings` (NOT shared).
+
+TEACH FORK → **(A)**: keep the grounded-LLM teach GENERATION as teach's normal
+voice (it's gen-time, cached, gated, G0 — the model phrases, code decides
+moves/arrows; NOT the runtime LLM removed elsewhere). Wire the computed
+aspect-briefing (present-tense register) as the FLOOR — used when the LLM gen
+refuses / a thin template fallback would fire (`buildFallbackTreeFromDb` empty
+`idea`, the per-move template fallback) — so teach is phenomenal normally and
+NEVER drops to thin generic. = INCREMENT 3 (teach half).
+
+LLM-REMOVAL AUDIT (David asked "did we remove LLM where it should stay?"):
+NO. All 5 removals are board-narration runtime (move-commentary, move-purpose,
+review walk, teach-CHAT move-narration, mistake intro). KEPT: teach GENERATION,
+review intro/closing/recap, whole-game review text, opening read-aloud, content
+authoring, kid. Two to eyeball on device: teach-chat move-narration + mistake
+intro (teaching-heaviest of the five).
+
+INCREMENT 4 (David: "Do it") — SHARED TIER-3 CACHE. Promote generated Tier-3
+opening walkthroughs from per-device to shared-for-all, like baked:
+- Generate OFFLINE (build script, `generateOpeningFromDbNarration` per opening).
+- Gate through `narrationAccuracy` before ship (the advantage over a runtime
+  first-user-shares cache, which ships an ungated gen to everyone + reuses the
+  capped Upstash/Blob infra).
+- Store as static JSON in `public/data/walkthroughs/<id>.json`, lazy-fetch +
+  CDN-cache at runtime (NOT bundled — mirrors the farmed corpus). Reconciler
+  loads/prunes into Dexie on boot (G8).
+- SCOPE decision: start with the top-taught openings from PostHog (covers ~all
+  real traffic), expand over time — not all 3,000+ at once.
+Result: one canonical, reviewed, zero-runtime-LLM version for every user; kills
+per-user regeneration cost + first-ask latency; consistent quality.
+
 ## Status
 - [x] dnaLineNarrator + tests
 - [x] wire review render + #4b tail

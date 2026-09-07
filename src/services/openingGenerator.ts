@@ -50,6 +50,7 @@ import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -2599,7 +2600,9 @@ function buildFallbackTreeFromDb(
   // entry's PGN is malformed (extremely rare — the DB is curated),
   // bail out and let the caller fall through.
   const c = new Chess();
+  const fensBefore: string[] = [];
   for (const san of entry.moves) {
+    fensBefore.push(c.fen());
     try {
       c.move(stripSanAnnotations(san));
     } catch {
@@ -2607,15 +2610,22 @@ function buildFallbackTreeFromDb(
     }
   }
   const studentSide = inferStudentSideFromName(entry.canonicalName);
-  // Build a chain of nodes from leaf back to root. Each node carries
-  // a template idea referencing the SAN — short but readable, far
-  // better than "e4" alone.
+  // Build a chain of nodes from leaf back to root. THE COMPUTED TEACH FLOOR
+  // (David 2026-09-07, fork A): even when the LLM gen failed and we fall back to
+  // the DB line, each node states the move's ranked ramifications in the
+  // present-tense teach register (buildReviewMoveBriefing) instead of an empty
+  // idea — board-true, no LLM. So teach never drops to thin generic.
   type ChildWrap = { node: WalkthroughTreeNode };
   let nextChildren: ChildWrap[] = [];
   for (let i = entry.moves.length - 1; i >= 0; i -= 1) {
     const san = entry.moves[i];
     const movedBy: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
-    const idea = '';
+    const idea = buildReviewMoveBriefing({
+      fenBefore: fensBefore[i],
+      san: stripSanAnnotations(san),
+      moverIsStudent: movedBy === studentSide,
+      register: 'teach',
+    }) ?? '';
     const node: WalkthroughTreeNode = {
       san,
       movedBy,

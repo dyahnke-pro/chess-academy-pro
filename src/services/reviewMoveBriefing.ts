@@ -91,6 +91,11 @@ export interface ReviewMoveBriefingInput {
    *  then the computed facts"). The caller computes it (criticality scan /
    *  classification / swing). */
   criticalMoment?: boolean;
+  /** REGISTER (David 2026-09-07 two-register rule): 'review' is retrospective
+   *  ("This was the moment to slow down"); 'teach' is the present-tense in-game
+   *  teaching voice ("This is the critical moment"). Only the criticality lead
+   *  phrasing changes; the computed facts are identical. Default 'review'. */
+  register?: 'review' | 'teach';
 }
 
 /**
@@ -199,9 +204,11 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const top = ranked.slice(0, 3).map((a) => a.text);
   const briefing = joinReview(top, moverIsStudent, mv.san);
   // The criticality line LEADS, then the computed facts (David 2026-09-07). In
-  // review it's retrospective ("this was the moment"); the live surfaces phrase
-  // it present-tense ("slow down — this is the moment").
-  return input.criticalMoment ? `This was the moment to slow down. ${briefing}` : briefing;
+  // review it's retrospective ("this was the moment"); teach phrases it
+  // present-tense ("this is the critical moment").
+  if (!input.criticalMoment) return briefing;
+  const lead = input.register === 'teach' ? 'This is the critical moment.' : 'This was the moment to slow down.';
+  return `${lead} ${briefing}`;
 }
 
 function cleanSan(san: string): string {

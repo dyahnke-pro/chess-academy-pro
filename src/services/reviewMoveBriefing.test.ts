@@ -29,6 +29,15 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     expect(out).toMatch(/winning the knight/); // facts still follow
   });
 
+  it('teach register phrases the criticality lead present-tense', () => {
+    const review = buildReviewMoveBriefing({ fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'review' });
+    const teach = buildReviewMoveBriefing({ fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true, criticalMoment: true, register: 'teach' });
+    expect(review).toMatch(/^This was the moment to slow down\./);
+    expect(teach).toMatch(/^This is the critical moment\./);
+    // same computed facts either way
+    expect(teach).toMatch(/winning the knight/);
+  });
+
   it('uses the locked perspective — "you" for the student, "they" for the opponent', () => {
     const yours = buildReviewMoveBriefing({ fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: true });
     const theirs = buildReviewMoveBriefing({ fenBefore: HANGING_KNIGHT, san: 'Qxd4', moverIsStudent: false });
@@ -64,7 +73,6 @@ describe('buildReviewMoveBriefing — total board awareness, ranked', () => {
     ];
     for (const [fen, san, isStudent, swing, crit] of samples) {
       const out = buildReviewMoveBriefing({ fenBefore: fen, san, moverIsStudent: isStudent, studentSwingCp: swing, criticalMoment: crit });
-      // eslint-disable-next-line no-console
       console.log(`  ${san}: ${out}`);
     }
     expect(true).toBe(true);
