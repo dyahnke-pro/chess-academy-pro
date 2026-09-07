@@ -24,7 +24,7 @@ const GAME = buildGameRecord({ pgn: '1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Ba4 Nf6 1-0' }
 
 /** A fake DedicatedWorker: `analyzePosition` runs the supplied per-call script. */
 function fakeWorker(script: () => Promise<{ evaluation: number; bestMove: string; depth: number }>) {
-  return { analyzePosition: vi.fn(script), destroy: vi.fn() } as never;
+  return { analyzePosition: vi.fn(script), destroy: vi.fn(), newGame: vi.fn() } as never;
 }
 
 const timeout = () => Promise.reject(new Error('Analysis timed out'));

@@ -85,6 +85,7 @@ function scriptedWorker(calls: Call[], curve: readonly number[] = CURVE) {
       return Promise.resolve({ evaluation: curve[FENS.indexOf(fen)] ?? 0, bestMove: 'd2d4', depth });
     }),
     destroy: vi.fn(),
+    newGame: vi.fn(),
   } as never;
 }
 
@@ -92,6 +93,21 @@ beforeEach(async () => {
   singletonCalls.length = 0;
   await db.delete();
   await db.open();
+});
+
+describe('the pool clears the hash ONCE per game, never per position', () => {
+  it('analyzeGameOnWorker sends newGame() exactly once and no ucinewgame per ply', async () => {
+    // On the multi-thread build every `ucinewgame` clears the hash with a fresh
+    // std::thread per search thread — a new pthread Worker each when the idle
+    // pool is empty. The 2026-09-07 census found 101 such workers behind three
+    // engines. The singleton learned this on 2026-07-03; the pool had not.
+    const calls: Call[] = [];
+    const w = scriptedWorker(calls);
+    await analyzeGameOnWorker(GAME, w);
+    const fake = w as unknown as { newGame: ReturnType<typeof vi.fn> };
+    expect(fake.newGame).toHaveBeenCalledTimes(1);
+    expect(calls.length).toBeGreaterThan(1); // many positions, one hash clear
+  });
 });
 
 describe('selectCriticalPlies — the review\'s key-moment selector', () => {

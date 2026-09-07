@@ -86,7 +86,12 @@ const run = async () => {
     if (m.type() !== 'error') return;
     const t = m.text();
     if (/favicon|manifest|net::ERR|Download the React|Failed to load resource.*(429|502|503)|\[Stockfish\] worker\.onerror/i.test(t)) return;
-    errs.push('CONSOLE: ' + t.slice(0, 160));
+    // A failed resource load names its URL in the console message's location,
+    // not its text — record it, or a 500 from an unrelated endpoint reads as
+    // this surface's defect (three bare "status of 500" lines, 2026-09-07).
+    const loc = m.location?.() ?? m.location;
+    const url = loc && typeof loc === 'object' && loc.url ? ` @ ${String(loc.url).replace(/^https?:\/\/[^/]+/, '')}` : '';
+    errs.push('CONSOLE: ' + t.slice(0, 160) + url);
   });
 
   const spoken = () => listener.getCapturedEvents()
