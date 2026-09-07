@@ -134,6 +134,36 @@ if (chain) {
   }
 }
 
+// ── PATTERN 2: removed-defender (real game — knight_mare_01 vs alex_kokhno) ───
+// …Qxh4 grabbed a pawn but that queen was the only guard on b7; Qxb7 wins the
+// bishop. Read every narration for accuracy on the post-Qxb7 board.
+{
+  const P2 = ['e4', 'b6', 'd4', 'Bb7', 'Nc3', 'e6', 'Nf3', 'Bb4', 'Bd3', 'Ne7', 'Bd2', 'c5', 'a3', 'Bxc3', 'Bxc3', 'cxd4', 'Bxd4', 'Nbc6', 'Bc3', 'O-O', 'O-O', 'd5', 'Qe2', 'Ng6', 'Bd2', 'dxe4', 'Qxe4', 'Qe7', 'h4', 'Nce5', 'Bb4', 'Nxf3+', 'Qxf3', 'Qxh4', 'Qxb7'];
+  const chain2 = buildCausalChain({ historySans: P2 });
+  ok(chain2 !== null, 'pattern 2 fires on the real removed-defender game');
+  if (chain2) {
+    const fen2 = fenAtEnd(P2);
+    const allowed2 = new Set<string>(chain2.nodes.flatMap((n) => n.squares as string[]));
+    console.log(`\n══════════ PATTERN 2 — removed-defender (real game) ══════════`);
+    console.log(`Focus (after Qxb7): ${fen2}`);
+    console.log(`Chain: ${chain2.nodes.map((n) => n.kind).join(' → ')}`);
+    for (const reg of ['review', 'learn'] as CausalRegister[]) {
+      for (const [sc, plabel] of [['w', 'student=White (won)'], ['b', 'student=Black (erred)']] as Array<['b' | 'w', string]>) {
+        for (const [tlabel, rating] of [['beginner', 900], ['advanced', 2200]] as Array<[string, number]>) {
+          const lines = renderCausalChain(chain2, { register: reg, studentColor: sc, rating });
+          console.log(`\n── ${reg.toUpperCase()} · ${plabel} · ${tlabel} ──`);
+          ok(lines.length > 0, `p2 ${reg}/${sc}/${tlabel} produced narration`);
+          for (const line of lines) {
+            const before = failures;
+            auditSentence(line, fen2, allowed2);
+            console.log(`    ${failures === before ? '✓' : '✗'} ${line}`);
+          }
+        }
+      }
+    }
+  }
+}
+
 // ── NEGATIVES: silent on unprovable / no chain ───────────────────────────────
 console.log('\n── SILENT-ON-UNPROVABLE (must return null) ──');
 const negatives: Array<[string, string[]]> = [

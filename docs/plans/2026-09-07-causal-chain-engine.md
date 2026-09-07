@@ -124,6 +124,37 @@ Wiring (consumers, each with a "note comes OUT" test):
 - **P6 (follow-on) — feed `causalChainMistakeTags` into the mistake-puzzle /
   weakness pipeline** so a chained loss becomes a My-Mistakes drill. ⏳
 
+## The PATTERN LIBRARY (David 2026-09-07: "moves do not exist in isolation")
+
+Validating pattern 1 on David's 930 real chess.com games proved the engine fired
+on 0 of them (the airtight premature-queen→discovery shape is rare) AND exposed 3
+false-causality bugs a single fixture never showed. The gap is BREADTH: the coach
+needs a LIBRARY of board-proven cause→effect patterns, each gated + validated on
+real games so it never overstates. `buildCausalChain` now dispatches over them.
+
+- **Pattern 1 — premature queen → displaced knight → loose piece → DISCOVERY.**
+  ✅ Airtight; the fixture case. Requires a genuine discovered double attack.
+- **Pattern 2 — the opponent removed the ONLY guard → you won the piece.** ✅ The
+  most common cross-move "why" at club level. Board-proven with SEE. Gated by the
+  **counterfactual** (a legal move existed that kept the piece safe → the
+  abandonment was a real CHOICE; else forced → silent). Validated on 50 recent
+  games: 4 genuine, forced Kxh2 correctly dropped, all board-accurate. Regression
+  tests from the real games.
+- **Pattern 3 — free choice → FORCED sequence → loss (trace-back).** ⏳ David's
+  refinement 2026-09-07: a forced move should be INCLUDED as a consequence link
+  when the chain roots at the last NON-FORCING move (the real decision). Discipline
+  to gate it (or it reopens the false-causality hole): walk back through the
+  forcing moves to the last real choice, PROVE the counterfactual there (a
+  different free move avoids the loss), anchor blame + the drill tag on that free
+  choice only; if every line from there still loses → silent. NOT yet built.
+- **Future patterns** (each same rigor): fork/double-attack, pin-and-win,
+  overloaded defender, back-rank, trapped piece, discovered attack (general, not
+  queen-specialized). Add one at a time, validate on the 930-game corpus, read
+  every firing narration for accuracy, regression-test the real games.
+
+**The validation tool** is the 930-game scan (`knight_mare_01` chess.com history)
++ the narration-accuracy reader — reused for every new pattern.
+
 ## Decisions log
 
 - 2026-09-07 — chain depth = rating-scaled (David). unprovable link = silent

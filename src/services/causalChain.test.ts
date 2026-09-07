@@ -147,3 +147,34 @@ describe('buildCausalChain — negatives (silent on unprovable / no chain)', () 
     expect(buildCausalChain({ historySans: pawnBlock })).toBeNull();
   });
 });
+
+describe('buildCausalChain — PATTERN 2: the opponent removed the only guard', () => {
+  // knight_mare_01 vs alex_kokhno (real game, exact SANs, sliced to Qxb7). …Qxh4
+  // grabbed a pawn but that queen was the ONLY thing guarding b7 — Qxb7 wins the
+  // bishop.
+  const REMOVED_GUARD = ['e4', 'b6', 'd4', 'Bb7', 'Nc3', 'e6', 'Nf3', 'Bb4', 'Bd3', 'Ne7', 'Bd2', 'c5', 'a3', 'Bxc3', 'Bxc3', 'cxd4', 'Bxd4', 'Nbc6', 'Bc3', 'O-O', 'O-O', 'd5', 'Qe2', 'Ng6', 'Bd2', 'dxe4', 'Qxe4', 'Qe7', 'h4', 'Nce5', 'Bb4', 'Nxf3+', 'Qxf3', 'Qxh4', 'Qxb7'];
+
+  it('fires: defender-removed → won-loose-piece', () => {
+    const chain = buildCausalChain({ historySans: REMOVED_GUARD });
+    expect(chain).not.toBeNull();
+    expect(chain!.nodes.map((n) => n.kind)).toEqual(['defender-removed', 'won-loose-piece']);
+    expect(chain!.nodes[0].data.move).toBe('Qxh4');       // the guard that walked away
+    expect(chain!.nodes[0].data.target).toBe('b7');
+    expect(chain!.nodes[1].data.targetPiece).toBe('bishop');
+    expect(chain!.beneficiary).toBe('w');
+  });
+
+  it('the cause node carries the loose-piece fundamental (feeds the drill spine)', () => {
+    const chain = buildCausalChain({ historySans: REMOVED_GUARD })!;
+    expect(chain.nodes[0].fundamentalId).toBe('loose-piece');
+    expect(chain.nodes[0].tag).toBe('hung-material');
+  });
+
+  it('stays SILENT when the guard move was FORCED (not a choice)', () => {
+    // knight_mare_01 game: …gxh2+ CHECKS, forcing Kxh2 — the king had no choice, so
+    // blaming it for "abandoning f1" would overstate the why. No saving move → null.
+    const forced = ['d4', 'd5', 'Bf4', 'Bf5', 'e3', 'Na6', 'Nf3', 'c6', 'Nbd2', 'Nc7', 'Nh4', 'e6', 'Nxf5', 'exf5', 'Bd3', 'Bb4', 'c3', 'Bd6', 'Bxd6', 'Qxd6', 'Bxf5', 'Nf6', 'Qc2', 'g6', 'Bd3', 'Qe7', 'c4', 'Rd8', 'O-O', 'O-O', 'c5', 'Ne6', 'f4', 'Ng4', 'Rf3', 'Rde8', 'f5', 'Ng5', 'Rg3', 'Nxe3', 'Qc1', 'h5', 'fxg6', 'fxg6', 'Bxg6', 'h4', 'Rxg5', 'Qxg5', 'g3', 'Qxg6', 'Qc3', 'hxg3', 'Nf1', 'gxh2+', 'Kxh2', 'Nxf1+'];
+    // focus = Nxf1+ (the winning capture); the guard move Kxh2 just before it was forced.
+    expect(buildCausalChain({ historySans: forced, focusPly: 56 })).toBeNull();
+  });
+});

@@ -26,6 +26,7 @@
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
+import { seeGain } from './positionReadingService';
 
 // ─── types ──────────────────────────────────────────────────────────────────
 
@@ -53,7 +54,8 @@ export type CausalNodeKind =
   | 'displaced-defender'// the guard developed to a square that doesn't defend
   | 'loose-piece'       // the target has no defender
   | 'discovered-attack' // the tactic: a move unveils a second attacker
-  | 'won-loose-piece';  // the tactic: a direct capture/attack collects a loose piece
+  | 'won-loose-piece'   // the tactic: a direct capture collects a loose piece
+  | 'defender-removed'; // a cause: the opponent moved the only guard off a piece
 
 export interface CausalNode {
   kind: CausalNodeKind;
@@ -139,6 +141,26 @@ function homeMinors(chess: Chess, color: Color): number {
   return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && home.includes(p.square)).length;
 }
 function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().split(' ')[5] ?? '1', 10) || 1; }
+
+/** Counterfactual: at `prev` (the OPPONENT to move), does a legal move exist that
+ *  keeps the piece of `victimType` on `s` safe — either by moving that piece to a
+ *  safe square, or by any move that leaves it on `s` no longer winnable (adding a
+ *  defender / removing the attacker)? If so, abandoning the guard was a genuine
+ *  CHOICE; if not, the loss was unavoidable (a forced move is not the cause). */
+function targetWasSavable(prev: Chess, s: Square, enemy: Color, victimType: PieceSymbol): boolean {
+  let moves: Move[];
+  try { moves = prev.moves({ verbose: true }) as Move[]; } catch { return false; }
+  for (const m of moves) {
+    const c = new Chess(prev.fen());
+    try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
+    // (a) the victim moved to safety
+    if (m.from === s && m.piece === victimType && seeGain(c, m.to) <= 0) return true;
+    // (b) the victim stayed on s and is no longer winnable (defended / attacker gone)
+    const p = c.get(s);
+    if (p && p.color === enemy && p.type === victimType && seeGain(c, s) <= 0) return true;
+  }
+  return false;
+}
 
 /** Squares from which a KNIGHT would attack (defend) `target`. */
 function knightSquaresHitting(target: Square): Square[] {
@@ -310,15 +332,14 @@ function wasPrematureQueen(boardBefore: Chess, move: Move): boolean {
   return true;
 }
 
-// ─── the builder ────────────────────────────────────────────────────────────
+// ─── the builders (one per board-proven pattern) ────────────────────────────
 
 /**
- * Build the maximal board-proven causal chain that explains the focus move.
- * Returns null when the focus is not a tactic on a loose piece, or when no
- * cross-move cause can be proven (fewer than one causal link) — then the flat
- * ranked list stands, per the silent-on-unprovable rule.
+ * PATTERN 1 — premature queen → displaced knight → loose piece → DISCOVERED
+ * attack. The airtight case from David's game. Returns null unless every link is
+ * board-proven (silent-on-unprovable).
  */
-export function buildCausalChain(input: CausalChainInput): CausalChain | null {
+function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain | null {
   const { historySans } = input;
   const focusPly = input.focusPly ?? historySans.length;
   if (focusPly < 1 || focusPly > historySans.length) return null;
@@ -477,6 +498,102 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   if (nodes.length < 2 || edges.length !== nodes.length - 1) return null;
 
   return { nodes, edges, beneficiary: mover, focusPly };
+}
+
+/**
+ * PATTERN 2 — the opponent moved the ONLY guard off a piece, and it was won.
+ * The most common cross-move "why" at club level: "their last move pulled the
+ * knight off c6 — the only thing guarding the bishop — so you took it." Board-
+ * proven with SEE: the piece was safe before the opponent's move, the opponent's
+ * move removed a defender of it, and it is now winnable and gets captured.
+ * Silent unless every link holds.
+ */
+function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null {
+  const { historySans } = input;
+  const focusPly = input.focusPly ?? historySans.length;
+  if (focusPly < 3 || focusPly > historySans.length) return null; // need an opponent move before
+
+  const afterR = replay(historySans, focusPly);
+  const beforeR = replay(historySans, focusPly - 1);  // after the opponent's move, before focus
+  const prevR = replay(historySans, focusPly - 2);    // before the opponent's move
+  if (!afterR || !beforeR || !prevR) return null;
+  const focus = afterR.moves[afterR.moves.length - 1];
+  const oppMove = beforeR.moves[beforeR.moves.length - 1];
+  if (!focus || !oppMove) return null;
+  const mover = focus.color;
+  const enemy = other(mover);
+  if (oppMove.color !== enemy) return null;
+
+  // The focus move CAPTURES a real piece (≥ minor) that is winnable — a genuine
+  // material grab, not an equal trade.
+  if (!focus.captured) return null;
+  const s = focus.to;
+  const victimType = beforeR.chess.get(s)?.type;
+  if (!victimType || victimType === 'k' || VAL[victimType] < 3) return null;
+  if (seeGain(beforeR.chess, s) < 2) return null;   // capturing it wins material NOW
+  // …and the capturer SITS SAFELY afterwards — else it's a trade in a flurry, not
+  // a won piece (the single-square SEE win must survive the recapture).
+  if (seeGain(afterR.chess, s) > 0) return null;
+
+  // It was SAFE before the opponent's move: the SAME enemy piece stood on s and
+  // was not winnable then. (Excludes recaptures — if the opponent had just
+  // captured on s, prevR's s held a MOVER piece, not this enemy victim.)
+  const prevPiece = prevR.chess.get(s);
+  if (!prevPiece || prevPiece.color !== enemy || prevPiece.type !== victimType) return null;
+  if (seeGain(prevR.chess, s) > 0) return null;     // already hanging before → not the opponent's doing
+
+  // The opponent's move MOVED one of s's own defenders away (abandonment). The
+  // guard was defending s before and no longer is, and the opponent moved it.
+  const defendersBefore = new Set(prevR.chess.attackers(s, enemy));
+  const defendersNow = new Set(beforeR.chess.attackers(s, enemy));
+  const guardLeft = defendersBefore.has(oppMove.from as never) && !defendersNow.has(oppMove.from as never);
+  if (!guardLeft) return null;                       // the opponent's move is not what removed the guard
+  const guardType = prevPiece && prevR.chess.get(oppMove.from)?.type;
+  if (!guardType) return null;
+
+  // 🔒 IT MUST HAVE BEEN A CHOICE, NOT A FORCED MOVE (David 2026-09-07). The true
+  // counterfactual — the same discipline principleAttribution uses: was there a
+  // legal move that would have kept the piece safe? If yes, abandoning the guard
+  // was a real decision → the lesson stands. If NO move saved it, the loss was
+  // unavoidable and blaming this move overstates the why → silence. This is
+  // stronger than a crude "was in check" proxy (an in-check player with a saving
+  // block still made a choice; a player whose only legal move drops it did not).
+  if (!targetWasSavable(prevR.chess, s, enemy, victimType)) return null;
+
+  const causeNode: CausalNode = {
+    kind: 'defender-removed', ply: focusPly - 1, color: enemy,
+    squares: [oppMove.from, s],
+    data: { move: oppMove.san, guardPiece: PIECE_NOUN[guardType], from: oppMove.from, target: s, targetPiece: PIECE_NOUN[victimType] },
+    fundamentalId: 'loose-piece',
+    tag: 'hung-material',
+    arrows: [],
+    highlights: [{ square: oppMove.from, color: 'yellow' }, { square: s, color: 'red' }],
+  };
+  const tacticNode: CausalNode = {
+    kind: 'won-loose-piece', ply: focusPly, color: mover,
+    squares: [focus.to, s],
+    data: { move: focus.san, target: s, targetPiece: PIECE_NOUN[victimType], to: focus.to },
+    fundamentalId: null,
+    arrows: [],
+    highlights: [{ square: s, color: 'red' }],
+  };
+  return {
+    nodes: [causeNode, tacticNode],
+    edges: [{ relation: 'removes-defender', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${seeGain(beforeR.chess, s)})` }],
+    beneficiary: mover,
+    focusPly,
+  };
+}
+
+/**
+ * The public entry — try each board-proven pattern in priority order, return the
+ * first that fires. Silent (null) when none does; the flat ranked list stands.
+ * David 2026-09-07: "moves do not exist in isolation" — the library grows one
+ * board-proven, game-validated pattern at a time.
+ */
+export function buildCausalChain(input: CausalChainInput): CausalChain | null {
+  return buildPrematureQueenDiscoveryChain(input)
+    ?? buildRemovedDefenderChain(input);
 }
 
 // ─── consumer helpers ───────────────────────────────────────────────────────

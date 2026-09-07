@@ -93,13 +93,27 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
         : `That's the hook: the knight jumps to ${to}, and leaving ${from} uncovers the piece on ${unv} — a discovered double attack on the ${tp} on ${tsq}, and it wins.`;
     }
     case 'won-loose-piece': {
-      const to = String(node.data.to);
       const tp = String(node.data.targetPiece);
       const tsq = String(node.data.target);
       const who = subjCap(node.color, student);
+      // Frame-safe: the capture is DONE, so tsq now holds the capturer — never
+      // claim "the <piece> on <sq>" here. Name the piece won + the square taken.
       return register === 'review'
-        ? `${who} landed on ${to} and hit the loose ${tp} on ${tsq} — nothing was guarding it, so it dropped.`
-        : `The ${tp} on ${tsq} is loose, so ${to} collects it.`;
+        ? `${who} won the ${tp} — the capture on ${tsq} came for free, with nothing left guarding it.`
+        : `Nothing guards the ${tp} now — taking on ${tsq} wins it.`;
+    }
+    case 'defender-removed': {
+      const gp = String(node.data.guardPiece);
+      const from = String(node.data.from);
+      const tp = String(node.data.targetPiece);
+      const tsq = String(node.data.target);
+      const P = cap(poss(node.color, student));
+      // Frame-safe: on the post-capture board tsq holds the capturer, so never
+      // say "the <tp> on tsq". Name the guard leaving + the square it guarded.
+      void tp;
+      return register === 'review'
+        ? `${P} ${node.data.move} pulled the ${gp} off ${from} — the only piece guarding ${tsq}.`
+        : `${P} ${gp} leaves ${from}, the only guard on ${tsq}.`;
     }
     default:
       void i;
@@ -113,6 +127,11 @@ function tightLine(chain: CausalChain, student: Color): string {
   const root = chain.nodes[0];
   const loose = chain.nodes.find((n) => n.kind === 'loose-piece');
   const tactic = chain.nodes[chain.nodes.length - 1];
+  // Removed-defender chain (2 nodes) — its own tight one-liner.
+  if (root.kind === 'defender-removed') {
+    const who = tactic.color === student ? 'you' : 'they';
+    return `${cap(poss(root.color, student))} ${String(root.data.move)} left ${String(root.data.target)} unguarded — ${who} won the ${String(root.data.targetPiece)}.`;
+  }
   const rp = poss(root.color, student);
   const rootPhrase = root.kind === 'premature-piece'
     ? `${cap(rp)} early ${String(root.data.piece)} on ${String(root.data.square)}`
