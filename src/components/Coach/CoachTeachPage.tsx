@@ -183,6 +183,7 @@ import { planMarks } from '../../services/planMarks';
 import { backwardLook } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import type { FundamentalId } from '../../services/principleAttribution';
+import { FUNDAMENTAL_LABEL } from '../../services/fundamentalsCatalog';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
@@ -2256,6 +2257,33 @@ export function CoachTeachPage(): JSX.Element {
       if (drill) startCoachDrill(drill);
     })();
   }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills]);
+
+  // Hand-off from the Fundamentals scorecard: `/coach/teach?learnFundamental=<id>`
+  // opens the per-fundamental teaching lesson ON THE SPOT in the classroom, with
+  // NO redirect (David 2026-09-07: "if user asks coach to teach fundamentals it
+  // should open a teaching session on the spot in the classroom"). We submit it
+  // as a normal chat turn so it flows through the coach spine → the fundamental-
+  // lesson intent → assembleFundamentalLessonAnswer → voiceFacts (DNA register),
+  // exactly as typing the question would. Runs once, then strips the param.
+  const learnFundamentalHandledRef = useRef(false);
+  useEffect(() => {
+    if (learnFundamentalHandledRef.current) return;
+    const fid = searchParams.get('learnFundamental');
+    if (!fid) return;
+    learnFundamentalHandledRef.current = true;
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete('learnFundamental');
+      return next;
+    }, { replace: true });
+    const label = (FUNDAMENTAL_LABEL as Record<string, string>)[fid];
+    if (!label) return; // unknown id — ignore rather than guess
+    // A tick, so handleSubmitRef is bound and the kickoff has settled.
+    const t = setTimeout(() => {
+      void handleSubmitRef.current?.(`Teach me the ${label.toLowerCase()} fundamental.`);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchParams, setSearchParams]);
 
   // Fresh coaching session → clear the say-once cross-session thread ledger so
   // the "we've been working on X" callback can fire once this session (Phase 7).

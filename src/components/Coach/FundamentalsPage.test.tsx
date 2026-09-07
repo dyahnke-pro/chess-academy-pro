@@ -102,4 +102,10 @@ describe('FundamentalsPage — the scorecard', () => {
     fireEvent.click(screen.getByTestId('fundamental-item-drill-capture-toward-centre'));
     expect(mockNavigate).toHaveBeenCalledWith('/tactics/mistakes');
   });
+
+  it('per-fundamental Learn opens the teaching lesson IN the classroom (David 2026-09-07)', async () => {
+    render(<FundamentalsPage />);
+    fireEvent.click(await screen.findByTestId('fundamental-item-learn-poisoned-pawn'));
+    expect(mockNavigate).toHaveBeenCalledWith('/coach/teach?learnFundamental=poisoned-pawn');
+  });
 });

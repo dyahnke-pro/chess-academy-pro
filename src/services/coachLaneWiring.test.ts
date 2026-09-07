@@ -76,8 +76,15 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
 
   it('the student backward look is queued at the rank the model gives it', () => {
     // The 4th argument is the point: the square travels WITH the sentence, so
-    // the board can be drawn from what the package kept.
-    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, look\.line, look\.kind,/);
+    // the board can be drawn from what the package kept. Build #3 (David
+    // 2026-09-07) LEADS the line with the neglected fundamental when one
+    // attributes (`const line = fundamental ? … : look.line`), so the queued
+    // text is now `line`, not `look.line` directly — same rank, same square.
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, line, look\.kind,/);
+    // …and the fundamental verdict is what leads that line.
+    expect(TEACH).toMatch(/const line = fundamental \? `\$\{fundamental\.verdict\} \$\{look\.line\}` : look\.line/);
+    // A fundamental with NO material drawback still speaks, on its own.
+    expect(TEACH).toMatch(/queueSpokenHint\(fenAfterReply, fundamental\.verdict, 'drawback', \[\]\)/);
   });
 
   it('the borrowed tier is queued WITH the plan, so the yield rule can see both', () => {

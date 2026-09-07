@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { isFundamentalsQuestion, fundamentalsTopicFromText, isFamousGameQuestion, famousGameFromText } from '../coach/questionIntents';
-import { assembleFundamentalsAnswer, assembleFamousGameAnswer } from './groundedAnswer';
+import { isFundamentalsQuestion, fundamentalsTopicFromText, isFamousGameQuestion, famousGameFromText, isFundamentalLessonQuestion } from '../coach/questionIntents';
+import { assembleFundamentalsAnswer, assembleFamousGameAnswer, assembleFundamentalLessonAnswer } from './groundedAnswer';
+import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
+import { FUNDAMENTAL_IDS } from './principleAttribution';
 import { matchTrainingAidRoute } from './trainingAidRouter';
 
 // David 2026-08-26: "it couldnt teach me basic fundamentals … it just routed me
@@ -68,6 +70,39 @@ describe('fundamentals teaching handler', () => {
     expect(assembleFundamentalsAnswer('development')!.facts).toMatch(/opera game/i);
     expect(assembleFundamentalsAnswer('piece-values')!.exampleReviewId).toBeUndefined();
     expect(assembleFundamentalsAnswer('king-safety')!.exampleReviewId).toBeUndefined();
+  });
+});
+
+describe('per-fundamental lesson is TAUGHT in-chat (David 2026-09-07)', () => {
+  it('fires only on a teaching frame + a specific fundamental', () => {
+    expect(isFundamentalLessonQuestion('teach me not moving the same piece twice')).toBe(true);
+    expect(isFundamentalLessonQuestion('why are poisoned pawns bad')).toBe(true);
+    expect(isFundamentalLessonQuestion('explain the opposition')).toBe(true);
+    // A bare mention on a live board is NOT a lesson request.
+    expect(isFundamentalLessonQuestion('my passed pawn is strong here')).toBe(false);
+    // A board-assessment question stays with the board lane, not the lesson.
+    expect(isFundamentalLessonQuestion('is my attack sound')).toBe(false);
+    // The generic "teach me the fundamentals" is the core-four lane, not this.
+    expect(isFundamentalLessonQuestion('teach me the fundamentals')).toBe(false);
+    // App-surface asks stay app-help.
+    expect(isFundamentalLessonQuestion('what does the fundamentals tab do')).toBe(false);
+  });
+
+  it('does not collide with the core-four fundamentals lane', () => {
+    // The generic lane and the specific lane are mutually exclusive on intent.
+    expect(isFundamentalsQuestion('teach me not moving the same piece twice')).toBe(false);
+    expect(isFundamentalLessonQuestion('teach me the fundamentals')).toBe(false);
+  });
+
+  it('assembles a grounded, sourced lesson for every fundamental (a wire that fires)', () => {
+    for (const id of FUNDAMENTAL_IDS) {
+      const ans = assembleFundamentalLessonAnswer(id);
+      expect(ans, id).not.toBeNull();
+      expect(ans!.facts).toBe(FUNDAMENTAL_LESSON[id].facts);
+      expect(ans!.facts.length).toBeGreaterThan(180);
+      expect(ans!.sources.length).toBeGreaterThan(0);
+      expect(ans!.bestMoveSan, 'a lesson names no board move').toBeNull();
+    }
   });
 });
 

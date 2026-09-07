@@ -24,6 +24,8 @@ import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
+import type { FundamentalId } from './principleAttribution';
+import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -2643,6 +2645,21 @@ const FUNDAMENTALS_EXAMPLE_REVIEW: Partial<Record<FundamentalsTopic, string>> = 
   development: 'sample-morphy-opera-1858',
   general: 'sample-morphy-opera-1858',
 };
+
+/**
+ * assembleFundamentalLessonAnswer — the deep "Learn THIS fundamental" lesson for
+ * one specific FundamentalId (David 2026-09-07: a per-fundamental Learn lesson,
+ * delivered in the classroom without redirecting). Finer than the 4-topic
+ * `assembleFundamentalsAnswer`: it teaches the exact fundamental the student's
+ * moves are graded against. G0/G3 — the text is authored classical principle
+ * (fundamentalLessons.ts), voiced verbatim through voiceFacts in the DNA
+ * register; the model only phrases it.
+ */
+export function assembleFundamentalLessonAnswer(id: FundamentalId): GroundedAnswer | null {
+  const lesson = FUNDAMENTAL_LESSON[id];
+  if (!lesson) return null;
+  return { facts: lesson.facts, bestMoveSan: null, bestMoveFromTo: null, sources: lesson.sources };
+}
 
 export function assembleFundamentalsAnswer(
   topic: FundamentalsTopic,

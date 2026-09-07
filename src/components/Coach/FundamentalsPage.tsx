@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square, Clapperboard, Target, ArrowLeft, Volume2 } from 'lucide-react';
+import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square, Clapperboard, Target, ArrowLeft, Volume2, GraduationCap } from 'lucide-react';
 import { PageHelp } from '../Layout/PageHelp';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import { assembleFundamentalsAnswer, type FundamentalsTopic } from '../../services/groundedAnswer';
+import { FUNDAMENTAL_LESSON } from '../../data/fundamentalLessons';
 import type { FundamentalId } from '../../services/principleAttribution';
 import {
   FUNDAMENTAL_LABEL, fundamentalDevice, fundamentalDrill, fundamentalsBySection,
@@ -89,10 +90,12 @@ export function FundamentalsPage(): JSX.Element {
   }, []);
 
   // Read-aloud units: one per SECTION (its prose) + one per FUNDAMENTAL (its
-  // device), all through the sanctioned read-aloud path (bypasses verbosity, G5).
+  // FULL teaching lesson), all through the sanctioned read-aloud path (bypasses
+  // verbosity, G5). Listening to a fundamental reads its whole lesson, not just
+  // the one-line device shown as the summary.
   const sectionUnits: ProseUnit[] = SECTIONS.map((s) => ({ id: s.id, text: proseFor(s) }));
   const fundUnits: ProseUnit[] = SECTIONS.flatMap((s) =>
-    fundamentalsBySection(s.id).map((fid) => ({ id: fundUnitId(fid), text: fundamentalDevice(fid) })));
+    fundamentalsBySection(s.id).map((fid) => ({ id: fundUnitId(fid), text: FUNDAMENTAL_LESSON[fid].facts })));
   const reader = useProseReader([...sectionUnits, ...fundUnits]);
 
   const startDrill = (section: Section): void => {
@@ -106,6 +109,11 @@ export function FundamentalsPage(): JSX.Element {
     const d = fundamentalDrill(id);
     if (d.kind === 'themes') void navigate('/tactics/drill', { state: { filterThemes: d.themes } });
     else void navigate('/tactics/mistakes');
+  };
+  // Open the per-fundamental teaching lesson ON THE SPOT in the classroom — the
+  // coach delivers it inline (no redirect once there); David 2026-09-07.
+  const learnFundamentalInClassroom = (id: FundamentalId): void => {
+    void navigate(`/coach/teach?learnFundamental=${encodeURIComponent(id)}`);
   };
 
   return (
@@ -229,6 +237,15 @@ export function FundamentalsPage(): JSX.Element {
                           data-testid={`fundamental-item-listen-${fid}`}
                         >
                           {itemReading ? <Square size={13} /> : <Volume2 size={13} />}
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Learn with the coach: ${FUNDAMENTAL_LABEL[fid]}`}
+                          onClick={() => learnFundamentalInClassroom(fid)}
+                          className={`p-1.5 rounded-lg border ${s.borderClass} ${s.textClass} hover:opacity-80`}
+                          data-testid={`fundamental-item-learn-${fid}`}
+                        >
+                          <GraduationCap size={13} />
                         </button>
                         <button
                           type="button"

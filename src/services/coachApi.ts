@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -101,6 +101,7 @@ import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import { fundamentalsTopicFromText, famousGameFromText, isEndgamePlayRequest, isMateQuestion, isWhoseTurnQuestion, isLiveColorQuestion, isDrawQuestion } from '../coach/questionIntents';
+import { resolveTaughtFundamental } from '../data/fundamentalLessons';
 import { detectBoardQuestion, isAnyBoardQuestion } from '../coach/boardQuestions';
 import { topCandidateLane } from '../coach/querySignals';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
@@ -1268,6 +1269,13 @@ export interface MasterGroundingOptions {
    *  board; dispatches before the concept lane so a general "principles" ask
    *  teaches the fundamentals rather than a single glossary token. */
   fundamentalsQuestion?: boolean;
+  /** true when this turn asks to LEARN ONE SPECIFIC fundamental of the 33 the
+   *  computer grades moves against ("teach me not moving the same piece twice",
+   *  "why are poisoned pawns bad", "explain the opposition"). Voiced from the
+   *  authored per-fundamental lesson (assembleFundamentalLessonAnswer) via
+   *  voiceFacts — delivered on the spot in the classroom, no redirect (David
+   *  2026-09-07). Dispatches BEFORE the core-four fundamentals lane (finer). */
+  fundamentalLessonQuestion?: boolean;
   /** true when this turn asks for a FAMOUS GAME by name or player ("teach me the
    *  opera game", "show me Morphy's games"). Voiced from the app's OWN stored
    *  game data (assembleFamousGameAnswer — the Opera Game review sample), never
@@ -3360,6 +3368,7 @@ export async function getCoachChatResponse(
       grounding.transferGapQuestion === true ||
       grounding.skillRadarQuestion === true ||
       grounding.conceptQuestion === true ||
+      grounding.fundamentalLessonQuestion === true ||
       grounding.theoryQuestion === true ||
       grounding.playerGamesQuestion === true ||
       grounding.endgameQuestion === true ||
@@ -4613,6 +4622,29 @@ export async function getCoachChatResponse(
         // lane so a general "principles" ask teaches the whole fundamentals set
         // rather than a single glossary token. G0: authored public-domain
         // principles, the model only phrases them; no board needed.
+        // ── LEARN ONE SPECIFIC FUNDAMENTAL (David 2026-09-07) ──────────────
+        // "teach me not moving the same piece twice", "why are poisoned pawns
+        // bad", "explain the opposition". The deep, per-fundamental lesson
+        // (finer than the core-four lane below), delivered on the spot in the
+        // classroom — no redirect. G0: authored classical principle voiced
+        // verbatim through voiceFacts (DNA register); the model only phrases.
+        // Runs BEFORE the core-four fundamentals lane, and before concept/theory.
+        if (grounding.fundamentalLessonQuestion) {
+          const userText = lastUserMessage() ?? '';
+          const fid = resolveTaughtFundamental(userText);
+          const answer = fid ? assembleFundamentalLessonAnswer(fid) : null;
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            if (voiced) {
+              // Offer a drill so the lesson lands in practice — the student's own
+              // ranked mistakes (top weakness first), a universally valid next
+              // step after any fundamentals lesson.
+              lastCoachActionOffer = [{ type: 'weakness_drill', id: 'all' }];
+              return voiced;
+            }
+          }
+        }
+
         if (grounding.fundamentalsQuestion) {
           const userText = lastUserMessage() ?? '';
           const answer = assembleFundamentalsAnswer(fundamentalsTopicFromText(userText));

@@ -199,7 +199,7 @@ function pickProvider(_name: ProviderName): Provider {
 import {
   coachSurfaceToRoute,
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
@@ -213,7 +213,7 @@ import {
 import { isAnyBoardQuestion } from './boardQuestions';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion, isAttackAssessmentQuestion,
-  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFamousGameQuestion,
+  isMasterPlayQuestion, isEndgameQuestion, isEndgamePlayRequest, isEndgameWeaknessQuestion, isPlayerGamesQuestion, isConceptQuestion, isFundamentalsQuestion, isFundamentalLessonQuestion, isFamousGameQuestion,
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
@@ -1152,6 +1152,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const trendQuestionEngage = isImprovementTrendQuestion(askForIntents);
     const conceptQuestionEngage = isConceptQuestion(askForIntents);
     const fundamentalsQuestionEngage = isFundamentalsQuestion(askForIntents);
+    // "teach me THIS fundamental" — a specific one of the 33 (finer than the
+    // core-four fundamentals lane). Delivered in the classroom without a
+    // redirect (David 2026-09-07). No board needed — it is authored teaching.
+    const fundamentalLessonQuestionEngage = isFundamentalLessonQuestion(askForIntents);
     const famousGameQuestionEngage = isFamousGameQuestion(askForIntents);
     const openingProfileQuestionEngage = isOpeningProfileQuestion(askForIntents);
     const statsQuestionEngage = isStatsQuestion(askForIntents);
@@ -1195,7 +1199,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const lastGameMistakeQuestionEngage = isLastGameMistakeQuestion(askForIntents);
     const nameOpeningQuestionEngage = isNameOpeningQuestion(askForIntents);
     const opponentMoveQuestionEngage = isOpponentMoveQuestion(askForIntents);
-    const theoryQuestionEngage = isTheoryQuestion(askForIntents) && !conceptQuestionEngage && !fundamentalsQuestionEngage;
+    const theoryQuestionEngage = isTheoryQuestion(askForIntents) && !conceptQuestionEngage && !fundamentalsQuestionEngage && !fundamentalLessonQuestionEngage;
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
@@ -1339,7 +1343,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
@@ -1530,6 +1534,9 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // board cannot answer.
             conceptQuestion: conceptQuestionEngage && !planQuestionEngage,
             fundamentalsQuestion: fundamentalsQuestionEngage,
+            // The specific-fundamental lesson (assembleFundamentalLessonAnswer),
+            // dispatched before the core-four fundamentals lane in coachApi.
+            fundamentalLessonQuestion: fundamentalLessonQuestionEngage,
             famousGameQuestion: famousGameQuestionEngage,
             // STEP D Phase 4 (cont) — "how does <pro> play this?" voices the
             // player's REAL games (assemblePlayerGamesAnswer); gated on the

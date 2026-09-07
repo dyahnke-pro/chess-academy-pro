@@ -7,6 +7,10 @@
  * coachService re-exports everything here for back-compat.
  */
 
+// The only import: a PURE data resolver (fundamentalLessons imports nothing but a
+// type), so the "no heavy imports" contract holds — regex intent detection only.
+import { resolveTaughtFundamental } from '../data/fundamentalLessons';
+
 /** Map the spine's `CoachSurface` enum to a route path the audit
  *  stream + claim-validator audits can attribute against. Used by
  *  the auto-grounding hook to label which surface generated each
@@ -962,6 +966,24 @@ export function isFundamentalsQuestion(ask: string | undefined): boolean {
   // the game", "of playing") stays generic (David 2026-08-26 self-audit).
   if (/\b(?:basics?|fundamentals?|principles?)\s+(?:of|in|for|behind)\s+(?!chess\b|the\s+game\b|playing\b|good\s+chess\b)/i.test(ask)) return false;
   return FUNDAMENTALS_QUESTION_RE.test(ask);
+}
+
+/** A "teach me THIS fundamental" ask — names one specific fundamental the
+ *  computer grades moves against ("teach me not moving the same piece twice",
+ *  "why are poisoned pawns bad", "explain the opposition"). Finer than
+ *  `isFundamentalsQuestion` (the core four); routed to
+ *  `assembleFundamentalLessonAnswer` so the deep lesson is delivered in the
+ *  classroom without redirecting (David 2026-09-07). Requires BOTH a teaching
+ *  frame AND a specific fundamental — a bare mention on a live board ("my passed
+ *  pawn is strong") must not deliver a lesson, and a board question ("is my
+ *  attack sound") stays with the board-assessment lane. */
+const FUND_LESSON_FRAME =
+  /\b(?:teach|learn|explain|show\s+me|cover|go\s+over|help\s+me\s+(?:with|understand)|what\s+(?:is|are|does)|what'?s|why\s+(?:is|are|do|does)|why'?s|how\s+do\s+i\s+(?:stop|avoid|fix|not)|when\s+(?:should|do|to)|tell\s+me\s+about)\b/i;
+export function isFundamentalLessonQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  // App-surface asks ("what does the fundamentals TAB do") are app-help.
+  if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  return FUND_LESSON_FRAME.test(ask) && resolveTaughtFundamental(ask) !== null;
 }
 
 /** Which fundamental the student asked about, for `assembleFundamentalsAnswer`.
