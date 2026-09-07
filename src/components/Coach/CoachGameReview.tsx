@@ -314,6 +314,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // ply's line re-playing. Declared here (above handleWalkForward) so the nav
   // handler can cancel a running playout on any forward tap.
   const spokenLineTokenRef = useRef(0);
+  // AUTO lead-the-eye arrows for a spoken future line (David 2026-09-07: "I just
+  // want the arrows to appear as the moves are spoken" — without moving the
+  // pieces). A token supersedes an in-flight reveal on any ply change.
+  const autoLineArrowTokenRef = useRef(0);
   // THE BOARD IS FREE (David 2026-09-05: "I wasn't able to move piece freely.
   // Let's unlock that and remove the 'explore this position' button. If the
   // user chooses to move a piece at any time that is them choosing to explore
@@ -2357,6 +2361,44 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   }
   const [theoryState, setTheoryState] = useState<TheoryState | null>(null);
   useEffect(() => { theoryStateRef.current = theoryState; }, [theoryState]);
+
+  // AUTO LEAD-THE-EYE ARROWS for a spoken future line (David 2026-09-07: "I just
+  // want the arrows to appear as the moves are spoken" — WITHOUT moving the
+  // pieces). When the walk lands on a segment whose narration talks out a
+  // projected line, reveal a green arrow per move CUMULATIVELY on a cadence, on
+  // the STATIC board — `walkExplorationFen` stays null, so the pieces never
+  // move (the piece-playout is the opt-in "Walk the line" button). Guarded so a
+  // walkout or an open card owns the board instead; ply-token-guarded and torn
+  // down on ply change. The board render already suppresses arrows while a
+  // find-the-shot card is open (honesty), so this never leaks an answer.
+  // (Placed after the card-state declarations so the dependency array is out of
+  // their temporal dead zone.)
+  useEffect(() => {
+    if (walkExplorationFen !== null || walkShowMeActive) return; // a walkout owns the board
+    if (shotState || seqState || cameoState || theoryState) return; // a card owns the board
+    const arrows = walkPlayback.currentSegment?.spokenLineArrows;
+    const token = ++autoLineArrowTokenRef.current;
+    // Clear any prior ply's auto-arrows so a line never bleeds across plies.
+    setWalkExplorationArrows(null);
+    // Only a real multi-move LINE earns the sequence reveal; a single move is
+    // already shown by the best-move arrow.
+    if (!arrows || arrows.length < 2) return;
+    const anchor = walkPlayback.currentPly;
+    const painted: Array<{ startSquare: string; endSquare: string; color: string }> = [];
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    arrows.forEach((a, i) => {
+      if (!a.uci || a.uci.length < 4) return;
+      timers.push(setTimeout(() => {
+        if (autoLineArrowTokenRef.current !== token
+          || !walkMountedRef.current
+          || walkPlyRef.current !== anchor) return;
+        painted.push({ startSquare: a.uci.slice(0, 2), endSquare: a.uci.slice(2, 4), color: '#22c55e' });
+        setWalkExplorationArrows([...painted]);
+      }, 700 + i * 1000)); // start after the line's lead-in, one per ~second
+    });
+    return () => { for (const t of timers) clearTimeout(t); };
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkExplorationFen, walkShowMeActive, shotState, seqState, cameoState, theoryState]);
+
   const theoryFoundRef = useRef<{ dep: TheoryDeparture; bookLine: BookLinePly[] } | null>(null);
   const theoryScanDoneRef = useRef(false);
   const theoryShownRef = useRef(false);
@@ -3774,10 +3816,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 <MessageCircle size={12} />
                 Ask
               </button>
-              {/* WALK THE LINE — replay the projected line the coach mentioned on
-                  THIS ply (the delta) with a lead-the-eye arrow per move (David
-                  2026-07-24: "Or even a button that walks the line."). Auto-plays
-                  once on landing; this button lets the student re-walk on demand. */}
+              {/* WALK THE LINE — PLAY OUT the projected line on the board (pieces
+                  move) with a lead-the-eye arrow per move (David 2026-07-24: "Or
+                  even a button that walks the line."). Opt-in: the lead-the-eye
+                  ARROWS now appear automatically as the coach speaks the line
+                  (David 2026-09-07), WITHOUT moving pieces; this button is the
+                  explicit "play it out" that does move them. */}
               {walkPlayback.currentSegment?.spokenLineArrows
                 && walkPlayback.currentSegment.spokenLineArrows.length >= 2 && (
                 <button
