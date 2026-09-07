@@ -1627,16 +1627,36 @@ class StockfishEngine {
   ): Promise<string> {
     await this.initialize();
 
-    return new Promise((resolve) => {
+    return new Promise<string>((resolve, reject) => {
+      // 🔒 THE ENGINE MUST NEVER HANG (David 2026-09-07 freeze report).
+      //
+      // getBestMove used to be a bare promise that resolved ONLY on a `bestmove`
+      // line — so a dead / hung worker (the iOS WebKit Web Worker death this file
+      // documents throughout: memory / backgrounding, transient, any variant)
+      // left it PENDING FOREVER. Unlike `analyzePosition`, this path registers no
+      // `this.pending`, so the 30s `hardTimeout` → `recoverStuckAnalysis` backstop
+      // never covered it. Every play surface that awaits it — `getCoachMove`
+      // (OpeningPlayMode / endgame playout) — then froze: no coach move, board
+      // locked, "can't move any pieces". The watchdog below closes that at the
+      // SOURCE, so all callers are protected at once.
+      const workerAtCall = this.worker;
+      let settled = false;
+      // Holder (not a bare `let`) so `handler` and the watchdog can reference the
+      // timer id despite being defined before it is armed — a genuine forward ref.
+      const timers: { watchdog?: ReturnType<typeof setTimeout> } = {};
+
       const handler = (event: MessageEvent<string>): void => {
         const match = /^bestmove (\S+)/.exec(event.data);
         if (match) {
-          this.worker?.removeEventListener('message', handler);
+          if (settled) return;
+          settled = true;
+          if (timers.watchdog) clearTimeout(timers.watchdog);
+          workerAtCall?.removeEventListener('message', handler);
           resolve(match[1]);
         }
       };
 
-      this.worker?.addEventListener('message', handler);
+      workerAtCall?.addEventListener('message', handler);
       // Set EVERY call: the worker is a singleton and options persist, so a
       // previous adaptive game must not leak strength into this one. Both
       // mechanisms are written every time — including the OFF state — so
@@ -1653,6 +1673,20 @@ class StockfishEngine {
       }
       this.send(`position fen ${fen}`);
       this.send(`go movetime ${moveTimeMs}`);
+
+      // The `go movetime` above bounds the SEARCH server-side, so a LIVE worker
+      // of any variant returns `bestmove` by ~moveTimeMs plus message-delivery
+      // latency. A timeout past that generous grace therefore means the worker is
+      // DEAD, not slow — so tear it down (`forceRestart` respawns a fresh one on
+      // the next call) and reject, letting the caller fall back instead of hang.
+      const timeoutMs = Math.max(moveTimeMs + 5_000, 8_000);
+      timers.watchdog = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        workerAtCall?.removeEventListener('message', handler);
+        this.forceRestart(`getBestMove: no bestmove in ${timeoutMs}ms`);
+        reject(new Error(`getBestMove timed out after ${timeoutMs}ms`));
+      }, timeoutMs);
     });
   }
 
