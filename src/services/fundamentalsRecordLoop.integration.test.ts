@@ -80,9 +80,13 @@ describe('fundamentals record→drill loop — the whole chain fires (no mocks)'
     const res = await autoAnalyzeBlunders(blunders, { learned: true, sourceGameId: 'game-1' });
     expect(res.logged).toBeGreaterThanOrEqual(1);
 
-    // 3) the tag actually landed in the weakness store.
+    // 3) the tag actually landed in the weakness store — WITH the specific
+    //    fundamentalId, so the per-fundamental scorecard can count it (not just
+    //    the coarser tag/bucket).
     const rows = await db.misconceptionTags.toArray();
-    expect(rows.some((r) => r.tag === 'poisoned-pawn')).toBe(true);
+    const row = rows.find((r) => r.tag === 'poisoned-pawn');
+    expect(row).toBeTruthy();
+    expect(row!.fundamentalId).toBe('poisoned-pawn');
 
     // 4) it reads back through the unified weakness profile WITH its drill themes.
     const profile = await getUnifiedWeaknessProfile();

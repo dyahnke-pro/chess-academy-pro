@@ -53,6 +53,10 @@ export interface ClassifyMisconceptionInput {
 export interface MisconceptionClassification {
   /** Closed-set tag id (always a real id from misconceptionTags). */
   tag: string;
+  /** The SPECIFIC fundamental the attributor proved (a FundamentalId), when it
+   *  fired — finer than `tag` (several fundamentals share one tag). Powers the
+   *  per-fundamental scorecard. Absent when the tag came from a board heuristic. */
+  fundamentalId?: string;
   /** Free-text error label — present only when tag === 'other'. */
   customLabel?: string;
   /** One-line spoken-safe teaching note: names a square, a piece, or a
@@ -254,6 +258,7 @@ function classifyMisconceptionImpl(
     if (attrs.length > 0) {
       return {
         tag: attrs[0].tag,
+        fundamentalId: attrs[0].id,
         coachNote: renderFundamentalVerdict(attrs.slice(0, 1), { ply: input.historySans.length, seen: new Set() }),
       };
     }

@@ -1431,6 +1431,11 @@ export interface MisconceptionTagRecord {
   id: string;
   /** Closed-set id from MISCONCEPTION_TAGS (incl. 'other'). */
   tag: string;
+  /** The specific fundamental the attributor proved (a FundamentalId), when the
+   *  slip was attributed — finer than `tag` (several fundamentals share a tag).
+   *  Non-indexed, optional; absent on board-heuristic tags + pre-existing rows.
+   *  Powers the per-fundamental scorecard (David 2026-09-07). */
+  fundamentalId?: string;
   /** Free-text error label, present only when tag === 'other'. */
   customLabel?: string;
   source: MisconceptionSource;

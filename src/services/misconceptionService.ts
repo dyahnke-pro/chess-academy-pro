@@ -61,6 +61,9 @@ export interface LogMisconceptionInput {
   tag: string;
   source: MisconceptionSource;
   fen: string;
+  /** The specific fundamental the attributor proved (FundamentalId), when known
+   *  — finer than `tag`, for the per-fundamental scorecard. */
+  fundamentalId?: string;
   customLabel?: string;
   playedSan?: string;
   bestSan?: string;
@@ -91,6 +94,7 @@ export async function logMisconception(
   const record: MisconceptionTagRecord = {
     id: newId(),
     tag: input.tag,
+    fundamentalId: input.fundamentalId,
     customLabel: input.tag === 'other' ? input.customLabel?.trim() : undefined,
     source: input.source,
     createdAt: Date.now(),

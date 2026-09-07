@@ -261,6 +261,7 @@ export async function captureMisconception(
   // the LLM call; we're keeping the result we already paid for.)
   const record = await logMisconception({
     tag: classification.tag,
+    fundamentalId: classification.fundamentalId,
     customLabel: classification.customLabel,
     source: args.source,
     fen: args.context.fen,
