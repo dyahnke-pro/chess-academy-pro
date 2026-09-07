@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
+import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import { mentionedMoveArrows } from '../../services/mentionedMoveArrows';
 import { logAppAudit } from '../../services/appAuditor';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -166,6 +167,11 @@ export function PlayableLinePlayer({
   // Chess instance for memory phase move validation + position tracking
   const chessRef = useRef<Chess>(new Chess(line.fen));
   const [memoryFen, setMemoryFen] = useState(line.fen);
+
+  // Publish the on-screen board so the opening coach chat answers about THIS
+  // position (David 2026-09-07). Cleared on unmount so a stale FEN can't leak.
+  useEffect(() => { useCoachBoardStore.getState().setFen(memoryFen, 'wlpp-learn'); }, [memoryFen]);
+  useEffect(() => () => { useCoachBoardStore.getState().setFen(null); }, []);
 
   // Runtime continuity tripwire (David 2026-06-02: "continuity errors are
   // important"). A read-only validation pass over the line on mount/change —

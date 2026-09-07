@@ -10,6 +10,7 @@ import { useSettings } from '../../hooks/useSettings';
 import { leadEyeSquareStyle } from '../../hooks/useBoardTheme';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 import { useLocalizedBeats } from '../../services/narrationI18n';
+import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { LessonScript, LessonBeat } from '../../types';
 
 interface LessonPlayerProps {
@@ -72,6 +73,11 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const [displayFen, setDisplayFen] = useState(() => fenForMoves([]));
   const [trailArrows, setTrailArrows] = useState<BoardArrow[]>([]);
   const [settled, setSettled] = useState(true);
+
+  // Publish the on-screen board so the opening coach chat can answer about THIS
+  // position (David 2026-09-07). Cleared on unmount so a stale FEN can't leak.
+  useEffect(() => { useCoachBoardStore.getState().setFen(displayFen, 'wlpp-watch'); }, [displayFen]);
+  useEffect(() => () => { useCoachBoardStore.getState().setFen(null); }, []);
 
   // Init at -1 (NOT 0) so the first beat's prevMoves is [] and its opening
   // moves play out ONE AT A TIME from the start — David 2026-06-26: "add in

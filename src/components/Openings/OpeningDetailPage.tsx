@@ -234,6 +234,7 @@ import {
 } from '../../services/srsOpeningService';
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
+import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import {
   ArrowLeft,
@@ -432,6 +433,16 @@ export function OpeningDetailPage(): JSX.Element {
   useEffect(() => {
     void loadOpening();
   }, [loadOpening]);
+
+  // The opening page owns the shared coach-board CONTEXT: which side the student
+  // plays (so the coach maps "you"). The WLPP rungs publish the live FEN into the
+  // same store; the coach chat reads both — so a question is answered about the
+  // position on screen (David 2026-09-07). Clear the whole store on page unmount
+  // so a stale FEN can't leak into a later ask on another surface.
+  useEffect(() => {
+    if (opening) useCoachBoardStore.getState().setContext({ studentColor: opening.color === 'black' ? 'black' : 'white', source: 'opening' });
+  }, [opening?.id, opening?.color]);
+  useEffect(() => () => { useCoachBoardStore.getState().clear(); }, []);
 
   // AUTO-START THE WALKTHROUGH (David 2026-09-03: "after someone clicked on the
   // Ruy Lopez it just auto starts the first main line walkthrough. No

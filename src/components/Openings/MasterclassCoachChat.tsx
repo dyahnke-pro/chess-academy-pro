@@ -6,6 +6,8 @@ import { ChatInput } from '../Coach/ChatInput';
 import { dispatchCoachTurn } from '../../coach/dispatchCoachTurn';
 // groundCoachReply import removed — the spine grounds the answer (David 2026-07-09).
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
+import { useCoachBoardStore } from '../../stores/coachBoardStore';
+import { useAppStore } from '../../stores/appStore';
 import { buildCourseScope } from '../../data/lessons';
 import type { ChatMessage as ChatMessageType } from '../../types';
 
@@ -55,16 +57,35 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
           // Ground the question BEFORE the free LLM so the opening-page coach
           // is one coherent unit with Learn/Play (David 2026-07-04): "what am I
           // weak in?" / "what's my strongest opening?" now voice the computed
-          // data via the same assemblers instead of the old free-narration
-          // punt. Board-independent here (no FEN on the course page); the
-          // openingId scopes any opening-context grounding.
-          // Route through the ONE shared spine (identical-capabilities rule).
-          // The course scope rides the spine's per-call system hook
-          // (systemPromptAddition), grounding is auto-built inside ask, and the
-          // agentic tool loop gives the course chat navigate/teach — which the
-          // old flat getCoachChatResponse path could not do.
+          // data via the same assemblers instead of the old free-narration punt.
+          // The course scope rides the spine's per-call system hook, grounding is
+          // auto-built inside ask, and the agentic tool loop gives navigate/teach.
+          //
+          // THE ON-SCREEN BOARD (David 2026-09-07: "anywhere a user can ask about
+          // a board position this needs to be accessible... even the opening tab
+          // in WLPP"). The WLPP rung the student is watching PUBLISHES its live
+          // FEN to the shared coach-board store; read it here so "is this sac
+          // sound?" / "do I have an attack?" are answered about the position on
+          // screen, not just the opening in the abstract. Absent (no rung open) →
+          // the openingId still scopes an opening-context answer, as before.
+          // Prefer the modern WLPP players' published FEN (coachBoardStore);
+          // fall back to the app-wide globalBoardContext where the legacy players
+          // (WalkthroughMode / PracticeMode / DrillMode / OpeningPlayMode) and
+          // every other board surface already publish. One coach, either source.
+          const cb = useCoachBoardStore.getState();
+          const gb = useAppStore.getState().globalBoardContext;
+          const fen = cb.fen ?? gb?.fen ?? null;
+          const studentColor = cb.studentColor
+            ?? (gb?.playerColor === 'white' || gb?.playerColor === 'black' ? gb.playerColor : null);
+          const whoseTurn = fen ? (fen.split(' ')[1] === 'b' ? 'black' : 'white') : undefined;
           const answer = await dispatchCoachTurn(
-            { surface: 'standalone-chat', ask: text, liveState: { surface: 'standalone-chat', userJustDid: text } },
+            { surface: 'standalone-chat', ask: text, liveState: {
+              surface: 'standalone-chat',
+              userJustDid: text,
+              ...(fen ? { fen } : {}),
+              ...(studentColor ? { studentColor } : {}),
+              ...(whoseTurn ? { whoseTurn } : {}),
+            } },
             {
               systemPromptAddition: scope.systemAddition,
               maxToolRoundTrips: 3,
