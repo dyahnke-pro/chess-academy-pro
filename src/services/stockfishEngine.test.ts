@@ -629,6 +629,26 @@ describe('StockfishEngine', () => {
       vi.useRealTimers();
     });
 
+    it('rejects getBestMove (and does not hang) when no bestmove arrives — play-surface freeze fix (David 2026-09-07)', async () => {
+      const { stockfishEngine } = await getEngine();
+      await initEngine(stockfishEngine);
+      scheduleReadyButNoBestmove();
+
+      vi.useFakeTimers();
+      // moveTimeMs 800 → watchdog fires at max(800+5000, 8000) = 8000ms. Before
+      // this fix getBestMove was a bare promise that hung forever on a dead
+      // worker, freezing OpeningPlayMode / endgame playout (getCoachMove).
+      const p = stockfishEngine.getBestMove(STARTING_FEN, 800);
+      const expectation = expect(p).rejects.toThrow(/getBestMove timed out/);
+      await vi.advanceTimersByTimeAsync(0);
+      expect(mockWorker.postMessageCalls).toContain('go movetime 800');
+      await vi.advanceTimersByTimeAsync(8_100);
+      await expectation;
+      // The dead worker was torn down (forceRestart) so the next call respawns.
+      expect(mockWorker.instance.terminate).toHaveBeenCalled();
+      vi.useRealTimers();
+    });
+
     it('recovers fast on the brain budget path (grace) instead of the 30s backstop', async () => {
       const { stockfishEngine } = await getEngine();
       await initEngine(stockfishEngine);

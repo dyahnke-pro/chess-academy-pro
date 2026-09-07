@@ -162,6 +162,24 @@ function parseUci(uci: string): CoachMoveResult {
   };
 }
 
+/** Last-resort move when the engine can't answer (dead / hung worker). The play
+ *  surface must ALWAYS produce a move — a coach turn that never resolves freezes
+ *  the board ("can't move any pieces", David 2026-09-07). A plain legal move
+ *  keeps the game alive; this fires only on engine failure (rare), and the next
+ *  turn gets a freshly respawned worker via `getBestMove`'s `forceRestart`. */
+function fallbackLegalMove(fen: string): CoachMoveResult {
+  const chess = new Chess(fen);
+  const moves = chess.moves({ verbose: true });
+  if (moves.length === 0) return { uci: '', from: '', to: '' };
+  const pick = moves[Math.floor(Math.random() * moves.length)];
+  return {
+    uci: `${pick.from}${pick.to}${pick.promotion ?? ''}`,
+    from: pick.from,
+    to: pick.to,
+    promotion: pick.promotion,
+  };
+}
+
 /**
  * Ask the coach for its next move. In the opening phase we consult the
  * Lichess Opening Explorer so play feels natural (real popular replies
@@ -199,8 +217,15 @@ export async function getCoachMove(
   // `coachGameEngine`: the config has carried `targetElo` all along and the
   // engine was never told it, so Skill Level — which is not Elo — was the only
   // limiter on the Play surface too.
-  const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill, config.targetElo);
-  return parseUci(uci);
+  try {
+    const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill, config.targetElo);
+    if (!uci || uci.length < 4) return fallbackLegalMove(fen);
+    return parseUci(uci);
+  } catch {
+    // Engine hung/died and getBestMove rejected (its watchdog forceRestarted the
+    // worker). Never leave the opponent without a move — the board would freeze.
+    return fallbackLegalMove(fen);
+  }
 }
 
 /**
