@@ -73,15 +73,26 @@ main .overflow-y-auto {
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
+  /* Raise the app toward the top (David 2026-09-07: "the top bar sits a little
+     low — raise it"). We consume only HALF the top inset as padding; the top
+     bar moves up by the other half. This is NOT a change to the scroll fix: the
+     insets are STILL counted exactly once — whatever we don't pad at the top is
+     added back to --app-height below (top-pad + app-height + bottom-pad =
+     100dvh always), so the document still never overflows or scrolls. To move
+     the bar further up, lower the 0.5 factor (0 = flush to the very top, under
+     the Dynamic Island); to restore the full inset, set it to 1. */
+  --sat-pad: calc(var(--sat) * 0.5);
   /* The viewport MINUS what html's padding below already consumes. */
-  --app-height: calc(100dvh - var(--sat) - var(--sab));
+  --app-height: calc(100dvh - var(--sat-pad) - var(--sab));
 }
 
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
-  /* Safe area support for iPhone notch / home indicator */
-  padding: var(--sat) var(--sar) var(--sab) var(--sal);
+  /* Safe area support for iPhone notch / home indicator. Top uses --sat-pad
+     (half the inset) so the app sits higher; the reclaimed half lives in
+     --app-height above, keeping the insets counted exactly once. */
+  padding: var(--sat-pad) var(--sar) var(--sab) var(--sal);
 }
 
 body {

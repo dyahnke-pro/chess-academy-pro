@@ -77,12 +77,18 @@ async function main() {
     await page.waitForTimeout(400);
 
     // PRECONDITION — refuse to report anything unless the notch really applied.
+    // The app raises the bar by padding only HALF the top inset (index.css
+    // --sat-pad, David 2026-09-07), so the applied padding-top is SAT/2, not
+    // SAT. The reclaimed half is added back to --app-height, so the scroll
+    // invariant below (docOverflow ~0, docScrolled 0) is unchanged — that is
+    // what this audit actually guards.
+    const EXPECT_PAD_TOP = SAT * 0.5;
     const applied = await page.evaluate(() => {
       const cs = getComputedStyle(document.documentElement);
       return { sat: cs.getPropertyValue('--sat').trim(), padTop: cs.paddingTop };
     });
-    if (applied.sat !== `${SAT}px` || applied.padTop !== `${SAT}px`) {
-      console.error(`✗ ${route}: HARNESS FAILED — notch not simulated (${JSON.stringify(applied)})`);
+    if (applied.sat !== `${SAT}px` || applied.padTop !== `${EXPECT_PAD_TOP}px`) {
+      console.error(`✗ ${route}: HARNESS FAILED — notch not simulated (${JSON.stringify(applied)}, expected padTop ${EXPECT_PAD_TOP}px)`);
       results.push({ route, ok: false, reason: 'harness: notch not simulated' });
       continue;
     }
