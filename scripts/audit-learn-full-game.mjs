@@ -532,6 +532,48 @@ async function main() {
     console.log(`opening taught      ${taught.length} plies over ${turns} turn(s) on the line — one per turn by design`);
     if (taught.length) console.log(`                    moves ${taught.join(', ')}`);
   }
+  // ── BUILD #3: THE FUNDAMENTAL, NAMED IN LEARN NARRATION (David 2026-09-07) ──
+  //
+  // A flagged move's beat now LEADS with the fundamental it neglected — spoken
+  // RAW (preferRaw, deterministic), so the exact verdict lands in this stream.
+  // We scan for the stable verdict stems the driven (fallible) student tends to
+  // trigger, and report which fundamentals the coach NAMED this game. The
+  // authoritative signal is the analytics event (coach_backward_look /
+  // coach_fundamental_named, each carrying `fundamental`), which is PostHog-
+  // owned like the other captureEvent beats — so a zero here is "not seen in
+  // THIS run", never proof the wire is dead (the deterministic verdicts are
+  // gated build-side by learnFundamentalNarration.test.ts + principleVoice).
+  const FUNDAMENTAL_STEMS = [
+    ['same-piece-twice', /same \w+ (?:for the \w+ time|again|is on its)|a new move wants a new piece|hands the opponent a free turn/i],
+    ['tempo-handed', /hands them a tempo|tempo lost|tempo handed over|the cost is time/i],
+    ['space-conceded', /concedes the \w+ square|space handed over|space given up|gave up \w+: with the piece/i],
+    ['neglected-development', /development first|pieces before pawns|develops nothing while|development again/i],
+    ['early-queen-sortie', /queen came out too early|early queen sortie|queen before the pieces|kicks her off|the early queen again/i],
+    ['king-left-in-centre', /king is still in the centre|castle first|uncastled one move too long|still isn't castled/i],
+    ['greedy-pawn-grab', /was poisoned: taking it|a pawn grab with the pieces|greedy: the|another pawn grab/i],
+    ['loose-piece', /loose pieces drop off|leaves the \w+ on \w+ undefended|hangs after this|loose piece again/i],
+    ['ignored-threat', /their threat first|was already attacked|answer the threat before|their threat again/i],
+    ['passive-when-forcing-existed', /there was a forcing move here|forcing win was on the board|run the forcing moves first/i],
+    ['created-pawn-weakness', /creates a lasting weakness|pawns don't move backward|another weak pawn/i],
+    ['weakened-king-shield', /loosens the shelter|pawns in front of your king move only|airier for it/i],
+    ['knight-to-the-rim', /knight on the rim is dim|on the edge, where it covers|knight on the rim again/i],
+    ['overvalued-attack', /attack was overvalued|that sacrifice doesn't land|attack overvalued again/i],
+    ['poisoned-pawn', /that pawn was poisoned|another poisoned pawn/i],
+  ];
+  const namedFundamentals = {};
+  for (const s of spokenAll) {
+    const text = s.text ?? '';
+    for (const [id, re] of FUNDAMENTAL_STEMS) if (re.test(text)) namedFundamentals[id] = (namedFundamentals[id] ?? 0) + 1;
+  }
+  const namedList = Object.entries(namedFundamentals).sort((a, b) => b[1] - a[1]);
+  console.log(`\nBuild #3 — fundamentals NAMED in narration this game: ${namedList.length}`);
+  for (const [id, n] of namedList) console.log(`   ${String(n).padStart(3)}  ${id}`);
+  if (namedList.length === 0) console.log(`   (none stream-side this run — verify the wire via the PostHog query below)`);
+  console.log(`   authoritative (PostHog): SELECT properties.fundamental, count() FROM events`);
+  console.log(`     WHERE event IN ('coach_backward_look','coach_fundamental_named')`);
+  console.log(`     AND properties.audit_run_id='${RUN_ID}' GROUP BY properties.fundamental`);
+  report.fundamentalsNamed = namedFundamentals;
+
   console.log(`board-checked       ${anchored}/${spokenAll.length} spoken events carried a position to check against`);
   console.log(`FALSE board claims  ${allFalse.length}`);
   console.log(`page errors         ${pageErrors.length}`);

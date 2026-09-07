@@ -37,22 +37,32 @@ async function ask(text) {
   await box.click();
   await box.pressSequentially(text, { delay: 10 });
   await box.press('Enter');
-  // Wait for the answer to APPEAR, then to SETTLE. A coach reply STREAMS in, so
-  // breaking at the first +40 chars returns a half-rendered response and a later
-  // grep misses words that arrive at the end — that was the "morphy → opera"
-  // FALSE RED (2026-09-07): the Opera lane was fine, the harness read the answer
-  // before "opera" had streamed. Poll until two consecutive equal reads after
-  // real growth (≈4s quiet = done), or the budget runs out.
-  let body = '';
-  let last = -1, stable = 0, grew = false;
-  for (let i = 0; i < 45; i++) {
-    await p.waitForTimeout(2000);
-    body = (await p.locator('body').innerText());
-    if (body.length > before + 40) grew = true;
-    if (grew && body.length === last) { if (++stable >= 2) break; } else stable = 0;
-    last = body.length;
+  // DETERMINISTIC end-of-turn: the chat textarea is `disabled` WHILE the coach
+  // composes (disabled={busy}) and re-enabled when the turn finishes. Wait for
+  // that busy→idle cycle, then read. A length heuristic reads a half-STREAMED
+  // reply and greps the wrong text — that was the "morphy → opera" FALSE RED
+  // (2026-09-07): the Opera lane was fine, the harness just read before "opera"
+  // had streamed. `before` kept only so a caller can see growth; the wait no
+  // longer depends on it.
+  void before;
+  const isDisabled = () => p.evaluate(() => !!document.querySelector('[data-testid="chat-text-input"]')?.disabled);
+  try {
+    // turn started (went busy) …
+    await p.waitForFunction(() => document.querySelector('[data-testid="chat-text-input"]')?.disabled === true, { timeout: 8000 });
+    // … turn finished (idle again).
+    await p.waitForFunction(() => document.querySelector('[data-testid="chat-text-input"]')?.disabled === false, { timeout: 150000 });
+  } catch {
+    // Too fast to catch the busy edge (or never disabled) — settle on length.
+    let last = -1, stable = 0;
+    for (let i = 0; i < 30 && !(await isDisabled()); i++) {
+      await p.waitForTimeout(2000);
+      const len = (await p.locator('body').innerText()).length;
+      if (len === last) { if (++stable >= 2) break; } else stable = 0;
+      last = len;
+    }
   }
-  return body.toLowerCase();
+  await p.waitForTimeout(600); // let the final chunk paint
+  return (await p.locator('body').innerText()).toLowerCase();
 }
 
 try {
