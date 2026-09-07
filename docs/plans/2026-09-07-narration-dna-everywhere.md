@@ -146,6 +146,35 @@ generation). These are generation-time + board-gated, not runtime narration —
 converting them to computer-written DNA is a major separate build. Confirm if
 you want that too.
 
+## Decision 5 (David, 2026-09-07): compute ALL facts, rank by importance (PV + eval-drop), state all important aspects
+
+"It should say what it threatens, how it changes the position, the ramifications
+of the move… total board awareness." → "The computer should compute all the
+facts, order them in level of importance using the PV and delta looking at the
+eval drop and state all important aspects of each move." → "Make it do that."
+
+Audit finding: the review per-move narration taps only a SUBSET of the board-
+fact computers (buildReviewMoveTeaching + plyFactsForMove: captures, fork/pin/
+skewer, outpost, passed pawn, open file, shield, material, center, file-seizure,
+luft, king-journey, and now attacked-piece). It does NOT use `positionFacts.ts`
+— the composer that already computes the FULL set (must-defend/incoming threats,
+best-piece leans-on, structure→plan, king exposure, opponent intent,
+deliberation, latent danger, fundamentals) AND ranks them by `computeImportance`
+(criticality gap + realized eval swing + must-defend + teaching beat). tactics-
+Detector also detects battery / discovery / overload that the review ignores.
+
+INCREMENT 1 (this push): threat-first ordering — a minor that attacks an enemy
+piece states the pressure instead of the "bears down on the center" gloss.
+
+INCREMENT 2 (next): wire the review walk through `computePositionFacts` per ply
+— feed it the per-ply Stockfish analysis (already computed for projections), the
+eval delta (cpLoss), and prev eval — so each move's narration is the COMPUTED,
+importance-RANKED briefing of all its important aspects, DNA register, spoken
+raw (no LLM). Ranking uses the PV + eval-drop exactly as `computeImportance`
+already does. Extend the fact set where the review needs the move's OWN
+ramifications (defense/parry, blocked lines, self-weakness, tempo, battery/
+discovery, allows-counter) that positionFacts' position-read doesn't yet cover.
+
 ## Status
 - [x] dnaLineNarrator + tests
 - [x] wire review render + #4b tail

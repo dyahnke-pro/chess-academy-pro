@@ -170,14 +170,26 @@ export function buildReviewMoveTeaching(
     return 'The king is tucked safely away and the rook connects to the center.';
   }
 
+  // A CONCRETE THREAT LEADS over the developing gloss (David 2026-09-07: "it
+  // should say what it threatens… especially move 20 more than move 4"). If the
+  // minor piece now attacks an enemy piece, the "bears down on the center" /
+  // "rakes toward" development line under-states it — so when there's a real
+  // enemy target, skip the developing gloss and fall through to the universal
+  // teacher below, which names the piece under pressure ("the knight trains on
+  // the queen on d8 — pressure they have to answer"). A purely developing move
+  // (no target) keeps its fight-for-the-center line. The facts were always
+  // computed (pieceEyes); this only reorders which one leads.
+  const minorAttacksPiece = (mv.piece === 'n' || mv.piece === 'b')
+    && pieceEyes(chess, mv.to, mv.piece, mv.color).enemies.some((e) => e.type !== 'k');
+
   // Minor-piece development — carry what the picture doesn't: the squares it
   // now bears on. Never "develops the knight" (restates the move).
-  if (mv.piece === 'n') {
+  if (mv.piece === 'n' && !minorAttacksPiece) {
     const targets = knightCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The knight bears down on ${list(targets)}, fighting for the center.`;
     // no central target → fall through to the light developing tag
   }
-  if (mv.piece === 'b') {
+  if (mv.piece === 'b' && !minorAttacksPiece) {
     if (FIANCHETTO.has(mv.to)) return 'The bishop takes aim along the long diagonal.';
     const targets = bishopCentralTargets(chess, mv.to, mv.color);
     if (targets.length) return `The bishop rakes toward ${list(targets)}.`;
