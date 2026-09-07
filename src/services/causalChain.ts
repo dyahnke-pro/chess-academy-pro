@@ -89,6 +89,14 @@ export interface CausalEdge {
   proof: string;
 }
 
+/** How the chain relates to the actual game (David 2026-09-07: "both ways"):
+ *  - 'played'  — it happened on the board.
+ *  - 'missed'  — it was AVAILABLE to the student, who played something else (the
+ *                win they could have had).
+ *  - 'allowed' — the student's move LEFT it available to the opponent (the shot
+ *                they now have; the prophylaxis lesson). */
+export type CausalStance = 'played' | 'missed' | 'allowed';
+
 export interface CausalChain {
   /** Ordered ROOT-CAUSE first → tactic last. nodes[i] --edges[i]--> nodes[i+1]. */
   nodes: CausalNode[];
@@ -97,6 +105,15 @@ export interface CausalChain {
   beneficiary: Color;
   /** 1-based ply of the focus (tactic) move. */
   focusPly: number;
+  /** Played by default; 'missed'/'allowed' for the hypothetical (both-ways) chains. */
+  stance: CausalStance;
+  /** 'missed' — the SAN the student could have played to win it. */
+  missedMove?: string;
+  /** 'missed' — what the student actually played instead. */
+  playedInstead?: string;
+  /** 'allowed' — a SAN the student could have played to AVOID it (prophylaxis).
+   *  Absent when no clean avoiding move was found. */
+  avoidance?: string;
 }
 
 export interface CausalChainInput {
@@ -142,6 +159,17 @@ function homeMinors(chess: Chess, color: Color): number {
 }
 function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().split(' ')[5] ?? '1', 10) || 1; }
 
+/** Cheap gate (no replay): does `victimSide` have a piece (≥ minor) that can be
+ *  profitably captured RIGHT NOW? Used to skip the expensive both-ways lookahead
+ *  on the ~95% of positions where nothing hangs. */
+function hasWinnablePiece(chess: Chess, victimSide: Color): boolean {
+  for (const p of pieces(chess, victimSide)) {
+    if (p.type === 'k' || VAL[p.type] < 3) continue;
+    try { if (seeGain(chess, p.square) >= 2) return true; } catch { /* skip */ }
+  }
+  return false;
+}
+
 /** Counterfactual: at `prev` (the OPPONENT to move), does a legal move exist that
  *  keeps the piece of `victimType` on `s` safe — either by moving that piece to a
  *  safe square, or by any move that leaves it on `s` no longer winnable (adding a
@@ -149,7 +177,7 @@ function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().s
  *  CHOICE; if not, the loss was unavoidable (a forced move is not the cause). */
 function targetWasSavable(prev: Chess, s: Square, enemy: Color, victimType: PieceSymbol): boolean {
   let moves: Move[];
-  try { moves = prev.moves({ verbose: true }) as Move[]; } catch { return false; }
+  try { moves = prev.moves({ verbose: true }); } catch { return false; }
   for (const m of moves) {
     const c = new Chess(prev.fen());
     try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
@@ -497,7 +525,7 @@ function buildPrematureQueenDiscoveryChain(input: CausalChainInput): CausalChain
   // A chain needs at least one causal link across moves; edges === nodes-1.
   if (nodes.length < 2 || edges.length !== nodes.length - 1) return null;
 
-  return { nodes, edges, beneficiary: mover, focusPly };
+  return { nodes, edges, beneficiary: mover, focusPly, stance: 'played' };
 }
 
 /**
@@ -582,6 +610,7 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
     edges: [{ relation: 'removes-defender', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${seeGain(beforeR.chess, s)})` }],
     beneficiary: mover,
     focusPly,
+    stance: 'played',
   };
 }
 
@@ -594,6 +623,105 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
 export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   return buildPrematureQueenDiscoveryChain(input)
     ?? buildRemovedDefenderChain(input);
+}
+
+// ─── both-ways: available (missed / allowed) chains ─────────────────────────
+
+/** The square of the piece the chain's tactic wins (for the avoidance search). */
+function chainTargetSquare(chain: CausalChain): Square | null {
+  for (const n of chain.nodes) {
+    if (n.kind === 'won-loose-piece' || n.kind === 'discovered-attack') return String(n.data.target) as Square;
+    if (n.kind === 'loose-piece') return String(n.data.square) as Square;
+  }
+  return null;
+}
+
+/** Is a chain-tactic AVAILABLE to `side` at the position after `plyBefore` plies?
+ *  Tries each CAPTURING move for `side` as a hypothetical focus (both patterns'
+ *  tactic is a capture) and returns the first that fires a chain, plus its SAN.
+ *  Pure lookahead — nothing is committed to the game. */
+function chainAvailableFor(historySans: readonly string[], plyBefore: number, side: Color): { chain: CausalChain; moveSan: string } | null {
+  const r = replay(historySans, plyBefore);
+  if (!r) return null;
+  if (r.chess.turn() !== side) return null;
+  let moves: Move[];
+  try { moves = r.chess.moves({ verbose: true }); } catch { return null; }
+  const base = historySans.slice(0, plyBefore);
+  for (const m of moves) {
+    if (!m.captured) continue;                 // the tactic move is always a capture
+    // Only a capture of a genuinely WINNABLE piece can be a chain tactic — this
+    // prunes the candidate set to ~1-2 (the hot-path optimisation that keeps the
+    // both-ways lookahead cheap enough to run per move).
+    let g = 0; try { g = seeGain(r.chess, m.to); } catch { g = 0; }
+    if (g < 2) continue;
+    const chain = buildCausalChain({ historySans: [...base, m.san], focusPly: plyBefore + 1 });
+    if (chain) return { chain, moveSan: m.san };
+  }
+  return null;
+}
+
+/**
+ * MISSED (for the user) — at the student's move (studentMovePly), a winning chain
+ * was AVAILABLE to them and they played something else. Returns the chain with
+ * stance 'missed', the move they could have played, and what they played instead.
+ */
+export function findMissedChain(historySans: readonly string[], studentMovePly: number, studentColor: Color): CausalChain | null {
+  if (studentMovePly < 1 || studentMovePly > historySans.length) return null;
+  const before = replay(historySans, studentMovePly - 1);
+  if (!before || before.chess.turn() !== studentColor) return null;   // must be the student's move
+  // Cheap gate: no enemy piece hangs → no missed win to find. Skips the lookahead.
+  if (!hasWinnablePiece(before.chess, other(studentColor))) return null;
+  const avail = chainAvailableFor(historySans, studentMovePly - 1, studentColor);
+  if (!avail) return null;
+  const actualRaw = historySans[studentMovePly - 1];
+  const actual = actualRaw.replace(/[?!]+$/, '');
+  if (avail.moveSan.replace(/[?!]+$/, '') === actual) return null;     // they DID play it → 'played', not missed
+  // Don't call it a "miss" when the student played a CHECK — that is their own
+  // forcing plan (often a mating attack), not an oversight (David 2026-09-07:
+  // "don't overstate the why"). A quiet or equal-trade move that let a free win
+  // slip is a genuine miss; a check is not second-guessed.
+  if (/[+#]/.test(actual)) return null;
+  return { ...avail.chain, stance: 'missed', missedMove: avail.moveSan, playedInstead: historySans[studentMovePly - 1] };
+}
+
+/**
+ * ALLOWED (against the user) — the student's move (studentMovePly) LEFT a chain
+ * available to the opponent. Returns the chain with stance 'allowed' and, when a
+ * clean prophylactic move exists, the avoidance SAN. The cause node is the
+ * student's own move (their colour), so it reads "your move left it".
+ */
+export function findAllowedChain(historySans: readonly string[], studentMovePly: number, studentColor: Color): CausalChain | null {
+  if (studentMovePly < 1 || studentMovePly > historySans.length) return null;
+  const opponent = other(studentColor);
+  // Cheap gate: after the student's move, does a student piece hang? If nothing
+  // is winnable, the opponent has no chain to allow → skip the lookahead.
+  const posAfter = replay(historySans, studentMovePly);
+  if (!posAfter || !hasWinnablePiece(posAfter.chess, studentColor)) return null;
+  const avail = chainAvailableFor(historySans, studentMovePly, opponent);
+  if (!avail) return null;
+  // Avoidance — a legal student move (instead of the one played) after which the
+  // chain's target is no longer winnable by the opponent, and that doesn't itself
+  // hang a piece. Cheap: a single apply + SEE per candidate (no chain rebuild),
+  // and we don't re-run the full lookahead. The target square comes from the
+  // chain itself.
+  let avoidance: string | undefined;
+  const targetSq = chainTargetSquare(avail.chain);
+  const posBefore = replay(historySans, studentMovePly - 1);
+  if (targetSq && posBefore && posBefore.chess.turn() === studentColor) {
+    let moves: Move[] = [];
+    try { moves = posBefore.chess.moves({ verbose: true }); } catch { moves = []; }
+    const played = historySans[studentMovePly - 1].replace(/[?!]+$/, '');
+    for (const m of moves) {
+      if (m.san.replace(/[?!]+$/, '') === played) continue;   // the move they actually played
+      const c = new Chess(posBefore.chess.fen());
+      try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
+      if (seeGain(c, m.to) > 0) continue;                     // don't suggest a move that hangs
+      if (seeGain(c, targetSq) > 0) continue;                 // the target is still winnable → not an avoidance
+      avoidance = m.san;
+      break;
+    }
+  }
+  return { ...avail.chain, stance: 'allowed', ...(avoidance ? { avoidance } : {}) };
 }
 
 // ─── consumer helpers ───────────────────────────────────────────────────────

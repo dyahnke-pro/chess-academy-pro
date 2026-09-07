@@ -155,6 +155,27 @@ real games so it never overstates. `buildCausalChain` now dispatches over them.
 **The validation tool** is the 930-game scan (`knight_mare_01` chess.com history)
 + the narration-accuracy reader — reused for every new pattern.
 
+## BOTH WAYS — played / missed / allowed (David 2026-09-07: "working both ways")
+
+Every pattern now runs in three stances (`CausalChain.stance`), each validated on
+David's real games + read for accuracy in the audit (226 checks):
+- **played** — it happened on the board (buildCausalChain).
+- **missed (for you)** — a winning chain was AVAILABLE and the student played
+  something else → "You could have won the rook on a8 with Qxa8+. You played Qc5
+  instead." (`findMissedChain`). Suppressed when the student played a CHECK (their
+  own forcing plan — not second-guessed).
+- **allowed (against you)** — the student's move LEFT a chain for the opponent →
+  "Your Qxb3 left c6 unguarded — they can win the knight with Bxc6. Rde8 would
+  have avoided it." (`findAllowedChain`, with a board-proven avoidance move).
+
+Wired into review (played → allowed → missed priority on each student move).
+Perf: a cheap hanging-piece gate + winnable-capture prune keep the lookahead
+~0.2s over a full game (finders measured; the 42-ply review-build cost is the
+pipeline, not the finders). Frames: missed → before the move; allowed/played →
+after. Regression tests from the real games; audit reads every stance's narration
+for board accuracy. **Learn live-commentary still speaks the PLAYED chain only;
+extending missed/allowed to the live teach path is a follow-on.**
+
 ## Decisions log
 
 - 2026-09-07 — chain depth = rating-scaled (David). unprovable link = silent

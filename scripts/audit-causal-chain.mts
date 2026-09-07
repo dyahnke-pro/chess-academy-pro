@@ -20,7 +20,7 @@
  * Run:  npx tsx scripts/audit-causal-chain.mts
  */
 import { Chess } from 'chess.js';
-import { buildCausalChain, causalChainArrows, causalChainHighlights, type CausalChain } from '../src/services/causalChain';
+import { buildCausalChain, causalChainArrows, causalChainHighlights, findMissedChain, findAllowedChain, type CausalChain } from '../src/services/causalChain';
 import { renderCausalChain, type CausalRegister } from '../src/services/causalChainVoice';
 
 // David's real chess.com game — the accuracy anchor.
@@ -160,6 +160,44 @@ if (chain) {
           }
         }
       }
+    }
+  }
+}
+
+// ── BOTH WAYS: missed (for you) + allowed (against you) — real games ─────────
+function fenAtPly(sans: string[], ply: number): string {
+  const c = new Chess();
+  for (let i = 0; i < ply; i++) c.move(sans[i]);
+  return c.fen();
+}
+{
+  // MISSED — knight_mare_01 vs jkern1013: Qxa8+ was available, David played Qc5.
+  const MISSED = ['d4', 'd5', 'c4', 'Nf6', 'cxd5', 'Nxd5', 'e4', 'Nb4', 'Qa4+', 'N8c6', 'd5', 'e6', 'dxc6', 'Nxc6', 'Bb5', 'Bb4+', 'Qxb4', 'a5', 'Bxc6+', 'bxc6', 'Qc4', 'Ba6', 'Qxc6+', 'Qd7', 'Qc5'];
+  const mc = findMissedChain(MISSED, 25, 'w');
+  ok(mc !== null, 'MISSED chain fires (Qxa8+ available, played Qc5)');
+  if (mc) {
+    const fen = fenAtPly(MISSED, 24);            // BEFORE the student's move — the shot's frame
+    const allowed = new Set<string>(mc.nodes.flatMap((n) => n.squares as string[]));
+    console.log('\n══════════ MISSED (for the user) — real game ══════════');
+    for (const [tlabel, rating] of [['beginner', 900], ['advanced', 2200]] as Array<[string, number]>) {
+      const lines = renderCausalChain(mc, { register: 'review', studentColor: 'w', rating });
+      console.log(`\n── ${tlabel} ──`);
+      for (const line of lines) { const b = failures; auditSentence(line, fen, allowed); console.log(`    ${failures === b ? '✓' : '✗'} ${line}`); }
+    }
+  }
+  // ALLOWED — arieso vs knight_mare_01: Qxb3 left c6 for Bxc6; Rde8 avoids it.
+  const ALLOWED = ['e4', 'c5', 'f4', 'g6', 'Nf3', 'Bg7', 'Bc4', 'e6', 'O-O', 'Ne7', 'd3', 'O-O', 'Nc3', 'Nbc6', 'Ne2', 'a6', 'c3', 'b5', 'Bb3', 'a5', 'a4', 'Ba6', 'e5', 'bxa4', 'Rxa4', 'Bb5', 'Re4', 'd5', 'exd6', 'Nf5', 'Ng3', 'Nxd6', 'Ree1', 'Qb6', 'Kh1', 'Rad8', 'c4', 'Ba6', 'Ba4', 'Nxc4', 'Qb3', 'Qxb3'];
+  const ac = findAllowedChain(ALLOWED, 42, 'b');
+  ok(ac !== null, 'ALLOWED chain fires (Qxb3 left c6, avoidance Rde8)');
+  ok(!!ac?.avoidance, 'ALLOWED chain carries an avoidance move');
+  if (ac) {
+    const fen = fenAtPly(ALLOWED, 42);           // AFTER the student's move — where the shot stands
+    const allowed = new Set<string>(ac.nodes.flatMap((n) => n.squares as string[]));
+    console.log('\n══════════ ALLOWED (against the user) — real game ══════════');
+    for (const [tlabel, rating] of [['beginner', 900], ['advanced', 2200]] as Array<[string, number]>) {
+      const lines = renderCausalChain(ac, { register: 'review', studentColor: 'b', rating });
+      console.log(`\n── ${tlabel} ──`);
+      for (const line of lines) { const b = failures; auditSentence(line, fen, allowed); console.log(`    ${failures === b ? '✓' : '✗'} ${line}`); }
     }
   }
 }

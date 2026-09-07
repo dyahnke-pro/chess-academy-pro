@@ -37,7 +37,7 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
-import { buildCausalChain, causalChainArrows } from './causalChain';
+import { buildCausalChain, causalChainArrows, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
@@ -1323,20 +1323,30 @@ export function buildReviewSegments(
     // grading each alone. Self-gates (null unless a real cross-move chain is
     // PROVABLE, per the silent-on-unprovable rule); runs for either side (the
     // cause is often the OPPONENT's early queen enabling the student's tactic).
+    // BOTH WAYS (David 2026-09-07): the chain that was PLAYED, the winning chain
+    // the student MISSED (what they could have done), and the chain their move
+    // ALLOWED the opponent (how it could have been avoided). Priority: a tactic
+    // played on this move is the main story; else a shot they allowed the opponent
+    // (prophylaxis); else a win they missed. Arrows only for played/allowed (both
+    // valid on the after-move board the segment shows); the missed frame is the
+    // before-move board, so its narration is retrospective and carries no arrows.
     let causalLead: string | null = null;
-    // Lead-the-eye arrows for the chain (David 2026-09-07: "add lead the eye
-    // arrows"), on the tactic-move frame where every chain piece stands. Ride the
-    // segment's planArrows slot (the sanctioned lead-the-eye channel).
     let causalArrows: ReviewMoveSegment['planArrows'];
     if (studentColorWB !== null) {
       try {
-        const chain = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
+        const isStudentMove = (moverColor === 'white') === (studentColorWB === 'w');
+        const played = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
+        const chain = played
+          ?? (isStudentMove ? findAllowedChain(sansForRun, m.ply, studentColorWB) : null)
+          ?? (isStudentMove ? findMissedChain(sansForRun, m.ply, studentColorWB) : null);
         if (chain) {
           const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
           if (lines.length) causalLead = lines.join(' ');
-          const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
-          const arr = causalChainArrows(chain);
-          if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
+          if (chain.stance === 'played' || chain.stance === 'allowed') {
+            const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
+            const arr = causalChainArrows(chain);
+            if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
+          }
         }
       } catch { causalLead = null; }
     }

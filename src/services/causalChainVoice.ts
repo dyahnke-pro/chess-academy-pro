@@ -46,10 +46,12 @@ function subjCap(color: Color, student: Color): string { return color === studen
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /** One sentence per node, in the chosen register + perspective. Returns '' for a
- *  node the register skips. */
-function sentenceFor(node: CausalNode, i: number, register: CausalRegister, student: Color): string {
+ *  node the register skips. `chain` carries the stance so the TACTIC node can be
+ *  phrased as played / could-have-played (missed) / can-play (allowed). */
+function sentenceFor(node: CausalNode, i: number, register: CausalRegister, student: Color, chain: CausalChain): string {
   const p = poss(node.color, student);
   const P = cap(p);
+  const stance = chain.stance;
   switch (node.kind) {
     case 'premature-piece': {
       const pc = String(node.data.piece);
@@ -86,8 +88,15 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
       const unv = String(node.data.unveiler);
       const tp = String(node.data.targetPiece);
       const tsq = String(node.data.target);
-      // node.color is the beneficiary (the mover). Frame as theirs/yours.
-      const who = subjCap(node.color, student);
+      const who = subjCap(node.color, student);        // beneficiary (the mover)
+      const move = String(node.data.move);
+      if (stance === 'missed') {
+        // Frame = before the shot; the target IS still on tsq (they didn't take it).
+        return `${subjCap(node.color, student)} could have played ${move} — the knight to ${to} uncovers the piece on ${unv}, a discovered double attack that wins the ${tp} on ${tsq}.`;
+      }
+      if (stance === 'allowed') {
+        return `${who} can play ${move} — the knight to ${to} uncovers the piece on ${unv}, a discovered double attack winning the ${tp} on ${tsq}.`;
+      }
       return register === 'review'
         ? `${who} played the knight to ${to}, and vacating ${from} uncovered the piece on ${unv} — a discovered double attack on the ${tp} on ${tsq}. With no guard, it dropped.`
         : `That's the hook: the knight jumps to ${to}, and leaving ${from} uncovers the piece on ${unv} — a discovered double attack on the ${tp} on ${tsq}, and it wins.`;
@@ -96,8 +105,15 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
       const tp = String(node.data.targetPiece);
       const tsq = String(node.data.target);
       const who = subjCap(node.color, student);
-      // Frame-safe: the capture is DONE, so tsq now holds the capturer — never
-      // claim "the <piece> on <sq>" here. Name the piece won + the square taken.
+      const move = String(node.data.move);
+      if (stance === 'missed') {
+        // Frame = before the capture; the target IS still on tsq.
+        return `${who} could have won the ${tp} on ${tsq} with ${move} — nothing was guarding it.`;
+      }
+      if (stance === 'allowed') {
+        return `${who} can win the ${tp} on ${tsq} with ${move} — nothing is guarding it.`;
+      }
+      // Played — frame-safe: tsq now holds the capturer, never "the <piece> on tsq".
       return register === 'review'
         ? `${who} won the ${tp} — the capture on ${tsq} came for free, with nothing left guarding it.`
         : `Nothing guards the ${tp} now — taking on ${tsq} wins it.`;
@@ -123,25 +139,35 @@ function sentenceFor(node: CausalNode, i: number, register: CausalRegister, stud
 
 /** The compressed one-liner for strong players: root cause → the loose target →
  *  the tactic, in a single sentence. Board-true, no fabricated link. */
+function tail(chain: CausalChain): string {
+  if (chain.stance === 'missed' && chain.playedInstead) return ` You played ${chain.playedInstead} instead.`;
+  if (chain.stance === 'allowed' && chain.avoidance) return ` ${chain.avoidance} would have avoided it.`;
+  return '';
+}
+
+/** The compressed one-liner for strong players: root cause → the loose target →
+ *  the tactic, in a single sentence. Board-true, no fabricated link. */
 function tightLine(chain: CausalChain, student: Color): string {
   const root = chain.nodes[0];
   const loose = chain.nodes.find((n) => n.kind === 'loose-piece');
   const tactic = chain.nodes[chain.nodes.length - 1];
+  const who = tactic.color === student ? 'you' : 'they';
+  const canWin = chain.stance === 'missed' ? `${who} had` : chain.stance === 'allowed' ? `${who} can win` : `${who} won`;
   // Removed-defender chain (2 nodes) — its own tight one-liner.
   if (root.kind === 'defender-removed') {
-    const who = tactic.color === student ? 'you' : 'they';
-    return `${cap(poss(root.color, student))} ${String(root.data.move)} left ${String(root.data.target)} unguarded — ${who} won the ${String(root.data.targetPiece)}.`;
+    return `${cap(poss(root.color, student))} ${String(root.data.move)} left ${String(root.data.target)} unguarded — ${canWin} the ${String(root.data.targetPiece)}.${tail(chain)}`;
   }
   const rp = poss(root.color, student);
   const rootPhrase = root.kind === 'premature-piece'
     ? `${cap(rp)} early ${String(root.data.piece)} on ${String(root.data.square)}`
     : `${cap(rp)} ${String(root.data.blocker)} on ${String(root.data.square)}`;
   const loosePhrase = loose ? `the ${String(loose.data.piece)} on ${String(loose.data.square)} loose` : 'a piece loose';
-  const who = tactic.color === student ? 'you' : 'they';
-  const tacticPhrase = tactic.kind === 'discovered-attack'
-    ? `${who} won it with the discovery`
-    : `${who} took it`;
-  return `${rootPhrase} left ${loosePhrase} — ${tacticPhrase}.`;
+  const tacticPhrase = chain.stance === 'played'
+    ? (tactic.kind === 'discovered-attack' ? `${who} won it with the discovery` : `${who} took it`)
+    : chain.stance === 'missed'
+      ? `${who} could have won it with the discovery`
+      : `${who} can win it with the discovery`;
+  return `${rootPhrase} left ${loosePhrase} — ${tacticPhrase}.${tail(chain)}`;
 }
 
 /**
@@ -163,8 +189,10 @@ export function renderCausalChain(chain: CausalChain | null, opts: RenderOptions
 
   const out: string[] = [];
   nodesToSpeak.forEach((n, i) => {
-    const s = sentenceFor(n, i, opts.register, student);
+    const s = sentenceFor(n, i, opts.register, student, chain);
     if (s) out.push(s);
   });
+  const t = tail(chain).trim();
+  if (t) out.push(t);
   return out;
 }

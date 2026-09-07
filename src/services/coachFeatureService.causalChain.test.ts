@@ -57,3 +57,29 @@ describe('buildReviewSegments — causal chain is wired into the review walk', (
     expect(d6?.narration ?? '').not.toMatch(/discovered double attack/i);
   });
 });
+
+describe('buildReviewSegments — BOTH WAYS wired into the walk', () => {
+  function mk(sans: string[]): ReviewMoveInput[] {
+    const c = new Chess(); const out: ReviewMoveInput[] = [];
+    sans.forEach((san, i) => { c.move(san); out.push({ ply: i + 1, san, isCoachMove: false, classification: null, evaluation: null, preMoveEval: null, bestMove: null, fenAfter: c.fen() }); });
+    return out;
+  }
+  it('MISSED: the Qc5 segment says the student could have won with Qxa8+', () => {
+    const MISSED = ['d4', 'd5', 'c4', 'Nf6', 'cxd5', 'Nxd5', 'e4', 'Nb4', 'Qa4+', 'N8c6', 'd5', 'e6', 'dxc6', 'Nxc6', 'Bb5', 'Bb4+', 'Qxb4', 'a5', 'Bxc6+', 'bxc6', 'Qc4', 'Ba6', 'Qxc6+', 'Qd7', 'Qc5'];
+    const segs = buildReviewSegments(mk(MISSED), 'white', null, false, 1378);
+    const seg = segs.find((s) => s.san === 'Qc5');
+    const t = seg?.narration ?? '';
+    expect(t).toMatch(/could have won the rook on a8 with Qxa8\+/i);
+    expect(t).toMatch(/played Qc5 instead/i);
+    expect(t.toLowerCase()).not.toMatch(/\b(we|our|us)\b/);
+  });
+  it('ALLOWED: the Qxb3 segment warns of Bxc6 and gives the avoidance', () => {
+    const ALLOWED = ['e4', 'c5', 'f4', 'g6', 'Nf3', 'Bg7', 'Bc4', 'e6', 'O-O', 'Ne7', 'd3', 'O-O', 'Nc3', 'Nbc6', 'Ne2', 'a6', 'c3', 'b5', 'Bb3', 'a5', 'a4', 'Ba6', 'e5', 'bxa4', 'Rxa4', 'Bb5', 'Re4', 'd5', 'exd6', 'Nf5', 'Ng3', 'Nxd6', 'Ree1', 'Qb6', 'Kh1', 'Rad8', 'c4', 'Ba6', 'Ba4', 'Nxc4', 'Qb3', 'Qxb3'];
+    const segs = buildReviewSegments(mk(ALLOWED), 'black', null, false, 1378);
+    const seg = segs.find((s) => s.san === 'Qxb3');
+    const t = seg?.narration ?? '';
+    expect(t).toMatch(/can win the knight on c6 with Bxc6/i);
+    expect(t).toMatch(/Rde8 would have avoided it/i);
+  }, 30000); // a full 42-ply review build is heavy in the test env; the causal
+             // finders themselves are ~0.2s (measured), the rest is the pipeline.
+});
