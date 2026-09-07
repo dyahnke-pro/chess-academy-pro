@@ -13,7 +13,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Brain, Target, ArrowRight, Clock } from 'lucide-react';
+import { Brain, Target, ArrowRight, Clock, Compass } from 'lucide-react';
 import {
   getMisconceptionProfile,
   type MisconceptionAggregate,
@@ -55,6 +55,23 @@ export function MisconceptionsTab(): JSX.Element {
   const [rows, setRows] = useState<MisconceptionAggregate[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // The full fundamentals MAP (David 2026-09-07: surface the fundamentals in the
+  // weakness report). This tab shows the errors you HAVE made; the scorecard
+  // shows every fundamental + where you stand, so you can study one you haven't
+  // slipped on yet.
+  const fundamentalsLink = (
+    <button
+      type="button"
+      onClick={() => void navigate('/coach/fundamentals')}
+      className="flex items-center justify-center gap-1.5 w-full rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-2 text-xs font-semibold text-sky-300 hover:opacity-80"
+      data-testid="misconceptions-to-fundamentals"
+    >
+      <Compass size={14} />
+      See the full fundamentals map + your status
+      <ArrowRight size={13} />
+    </button>
+  );
+
   useEffect(() => {
     let cancelled = false;
     void getMisconceptionProfile()
@@ -89,10 +106,11 @@ export function MisconceptionsTab(): JSX.Element {
           <Brain size={26} className="text-violet-300" />
         </div>
         <h3 className="text-base font-semibold text-theme-text mb-1">No thinking errors yet</h3>
-        <p className="text-sm text-theme-text-muted max-w-xs">
+        <p className="text-sm text-theme-text-muted max-w-xs mb-4">
           Play a game with the coach or review one of yours. When you slip, I'll ask
           why — and map how you think right here.
         </p>
+        <div className="w-full max-w-xs">{fundamentalsLink}</div>
       </div>
     );
   }
@@ -115,6 +133,8 @@ export function MisconceptionsTab(): JSX.Element {
           <ArrowRight size={13} />
         </button>
       </div>
+
+      {fundamentalsLink}
 
       {rows.map((row) => {
         const style = BUCKET_STYLE[row.bucket] ?? BUCKET_STYLE.uncategorized;

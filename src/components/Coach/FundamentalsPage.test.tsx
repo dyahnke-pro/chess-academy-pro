@@ -65,3 +65,41 @@ describe('FundamentalsPage', () => {
     expect(screen.getByTestId('fundamental-section-center').textContent).toMatch(/cent(er|re)/i);
   });
 });
+
+// The personalized SCORECARD (David 2026-09-07: "make a fundamental tab with all
+// fundamentals listed within it" + per-fundamental status). Prove every
+// fundamental is listed with a status, a real recorded slip shows as a count, and
+// the per-fundamental drill routes right.
+describe('FundamentalsPage — the scorecard', () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
+    const { db } = await import('../../db/schema');
+    await db.misconceptionTags.clear();
+  });
+
+  it('lists every one of the 33 fundamentals, each with a status', async () => {
+    const { FUNDAMENTAL_IDS } = await import('../../services/principleAttribution');
+    render(<FundamentalsPage />);
+    for (const id of FUNDAMENTAL_IDS) {
+      expect(await screen.findByTestId(`fundamental-item-${id}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`fundamental-status-${id}`)).toBeInTheDocument();
+    }
+  });
+
+  it('shows the student\'s own recorded slip count, and "not yet" otherwise', async () => {
+    const { logMisconception } = await import('../../services/misconceptionService');
+    await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
+    render(<FundamentalsPage />);
+    const badge = await screen.findByTestId('fundamental-status-poisoned-pawn');
+    await vi.waitFor(() => expect(badge.textContent).toMatch(/slipped 1/i));
+    expect(screen.getByTestId('fundamental-status-same-piece-twice').textContent).toMatch(/not yet/i);
+  });
+
+  it('per-fundamental Drill routes to the puzzle set (themed) or own mistakes', async () => {
+    render(<FundamentalsPage />);
+    fireEvent.click(await screen.findByTestId('fundamental-item-drill-poisoned-pawn'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics/drill', { state: { filterThemes: expect.arrayContaining(['trappedPiece']) } });
+    fireEvent.click(screen.getByTestId('fundamental-item-drill-capture-toward-centre'));
+    expect(mockNavigate).toHaveBeenCalledWith('/tactics/mistakes');
+  });
+});

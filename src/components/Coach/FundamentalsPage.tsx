@@ -1,26 +1,30 @@
 import { useNavigate } from 'react-router-dom';
-import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square, Clapperboard, Target, ArrowLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Compass, Crosshair, Rocket, Shield, Layers, Swords, Crown, Play, Square, Clapperboard, Target, ArrowLeft, Volume2 } from 'lucide-react';
 import { PageHelp } from '../Layout/PageHelp';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import { assembleFundamentalsAnswer, type FundamentalsTopic } from '../../services/groundedAnswer';
+import type { FundamentalId } from '../../services/principleAttribution';
+import {
+  FUNDAMENTAL_LABEL, fundamentalDevice, fundamentalDrill, fundamentalsBySection,
+  getFundamentalCounts, type FundamentalSectionId, type FundamentalStat,
+} from '../../services/fundamentalsCatalog';
 import type { JSX, ReactNode } from 'react';
 
 /**
- * FundamentalsPage — the walkable Fundamentals track, rebuilt to the app hub
- * standard (David 2026-09-06: "match the standards of the rest of the app" +
- * "add more puzzles to this tab"). The 25 board-provable fundamentals the
- * review computer names (principleAttribution) roll up into SEVEN phase
- * sections here. Each section: authored, grounded prose read aloud through the
- * sanctioned read-aloud path (useProseReader → speakReadAloud, G0/G5) + a Drill
- * button that hands the student real practice — a themed Lichess-puzzle drill
- * where one fits the fundamental, otherwise their OWN flagged positions
- * (/tactics/mistakes), produced automatically once the review computer fires.
+ * FundamentalsPage — the walkable Fundamentals track AND a personalized scorecard
+ * (David 2026-09-06/07: "match the standards of the rest of the app" + "make a
+ * fundamental tab with all fundamentals listed within it" + per-fundamental
+ * status). SEVEN phase sections; under each, EVERY fundamental the review computer
+ * can attribute (principleAttribution) is listed with its coaching device, the
+ * student's own status (slipped N× / not yet, read from the recorded weaknesses
+ * by the specific fundamentalId), a Listen, and a Drill.
  *
  * Grounding (G0): every word of teaching is authored classical principle
  * (Capablanca / Lasker / Tarrasch, public domain) — the four legacy pillars via
- * assembleFundamentalsAnswer, the newer sections inline below — never
- * LLM-invented, never a claim about a specific board.
+ * assembleFundamentalsAnswer, the newer sections + the per-fundamental devices
+ * from the catalog — never LLM-invented, never a claim about a specific board.
  */
 
 // Prose for the sections the legacy 4-pillar `FundamentalsTopic` set does not
@@ -42,7 +46,7 @@ type DrillTarget =
   | { kind: 'mistakes' };                  // the student's own flagged positions
 
 interface Section {
-  id: string;
+  id: FundamentalSectionId;
   title: string;
   blurb: string;
   icon: ReactNode;
@@ -69,13 +73,27 @@ function proseFor(section: Section): string {
   return SECTION_PROSE[section.id] ?? '';
 }
 
+/** A ProseUnit id for a per-fundamental Listen (reads its device aloud). */
+const fundUnitId = (id: FundamentalId): string => `fund:${id}`;
+
 export function FundamentalsPage(): JSX.Element {
   const navigate = useNavigate();
 
-  // One ProseUnit per section — read aloud one at a time (the sanctioned
-  // read-aloud path; bypasses verbosity per G5).
-  const units: ProseUnit[] = SECTIONS.map((s) => ({ id: s.id, text: proseFor(s) }));
-  const reader = useProseReader(units);
+  // The student's own per-fundamental slip counts (from the recorded weaknesses).
+  // A fundamental never slipped on is absent → "not yet".
+  const [counts, setCounts] = useState<Partial<Record<FundamentalId, FundamentalStat>>>({});
+  useEffect(() => {
+    let alive = true;
+    void getFundamentalCounts().then((c) => { if (alive) setCounts(c); });
+    return () => { alive = false; };
+  }, []);
+
+  // Read-aloud units: one per SECTION (its prose) + one per FUNDAMENTAL (its
+  // device), all through the sanctioned read-aloud path (bypasses verbosity, G5).
+  const sectionUnits: ProseUnit[] = SECTIONS.map((s) => ({ id: s.id, text: proseFor(s) }));
+  const fundUnits: ProseUnit[] = SECTIONS.flatMap((s) =>
+    fundamentalsBySection(s.id).map((fid) => ({ id: fundUnitId(fid), text: fundamentalDevice(fid) })));
+  const reader = useProseReader([...sectionUnits, ...fundUnits]);
 
   const startDrill = (section: Section): void => {
     if (section.drill.kind === 'themes') {
@@ -83,6 +101,11 @@ export function FundamentalsPage(): JSX.Element {
     } else {
       void navigate('/tactics/mistakes');
     }
+  };
+  const startFundamentalDrill = (id: FundamentalId): void => {
+    const d = fundamentalDrill(id);
+    if (d.kind === 'themes') void navigate('/tactics/drill', { state: { filterThemes: d.themes } });
+    else void navigate('/tactics/mistakes');
   };
 
   return (
@@ -107,9 +130,9 @@ export function FundamentalsPage(): JSX.Element {
             helpId="fundamentals"
             title="The fundamentals"
             steps={[
-              { label: 'Seven ideas', body: 'The whole game rests on seven ideas — from the opening to the endgame. Each one is a section here.' },
-              { label: 'Hear it', body: 'Tap Listen on any section to have the coach read the principle aloud.' },
-              { label: 'Drill it', body: 'Tap Drill to practise it — a themed puzzle set where one fits, or your own flagged positions from real games.' },
+              { label: 'The whole map', body: 'Every fundamental the coach checks your moves against, grouped into seven phases — from the opening to the endgame.' },
+              { label: 'Your status', body: 'Each one shows how often you have slipped on it, pulled from your own analysed games. "Not yet" means it has never caught you.' },
+              { label: 'Hear it / drill it', body: 'Tap Listen to have the coach read the idea aloud, or Drill to practise it — a themed puzzle set where one fits, or your own flagged positions.' },
             ]}
           />
         </div>
@@ -120,13 +143,14 @@ export function FundamentalsPage(): JSX.Element {
       </div>
 
       <p className="text-sm text-center max-w-lg mx-auto" style={{ color: 'var(--color-text-muted)' }}>
-        The seven ideas every strong move rests on. Listen to one, then drill it.
+        Every fundamental the coach holds your moves to — and how you are doing on each. Listen to one, then drill it.
       </p>
 
       <div className="flex flex-col gap-3 max-w-lg mx-auto w-full">
         {SECTIONS.map((s) => {
           const reviewId = s.topic ? (assembleFundamentalsAnswer(s.topic)?.exampleReviewId ?? null) : null;
           const reading = reader.currentId === s.id && reader.isPlaying;
+          const fundamentals = fundamentalsBySection(s.id);
           return (
             <div
               key={s.id}
@@ -171,6 +195,55 @@ export function FundamentalsPage(): JSX.Element {
                   </button>
                 )}
               </div>
+
+              {/* The scorecard — every fundamental under this phase, with the
+                  student's own status + a Listen + a Drill. */}
+              <ul className="flex flex-col divide-y divide-white/5 border-t border-white/5">
+                {fundamentals.map((fid) => {
+                  const count = counts[fid]?.count ?? 0;
+                  const slipped = count > 0;
+                  const itemReading = reader.currentId === fundUnitId(fid) && reader.isPlaying;
+                  return (
+                    <li key={fid} className="flex items-start justify-between gap-3 pt-2.5" data-testid={`fundamental-item-${fid}`}>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{FUNDAMENTAL_LABEL[fid]}</span>
+                          <span
+                            data-testid={`fundamental-status-${fid}`}
+                            className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${slipped ? 'bg-amber-500/15 text-amber-400' : 'text-theme-text-muted'}`}
+                            style={slipped ? undefined : { color: 'var(--color-text-muted)' }}
+                          >
+                            {slipped ? `slipped ${count}×` : 'not yet'}
+                          </span>
+                        </div>
+                        <p className="text-xs leading-snug mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+                          {fundamentalDevice(fid)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          aria-label={`Listen: ${FUNDAMENTAL_LABEL[fid]}`}
+                          onClick={() => (itemReading ? reader.stop() : reader.playOne(fundUnitId(fid)))}
+                          className={`p-1.5 rounded-lg border ${s.borderClass} ${s.textClass} hover:opacity-80`}
+                          data-testid={`fundamental-item-listen-${fid}`}
+                        >
+                          {itemReading ? <Square size={13} /> : <Volume2 size={13} />}
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Drill: ${FUNDAMENTAL_LABEL[fid]}`}
+                          onClick={() => startFundamentalDrill(fid)}
+                          className={`p-1.5 rounded-lg ${s.bgClass} border ${s.borderClass} ${s.textClass} hover:opacity-80`}
+                          data-testid={`fundamental-item-drill-${fid}`}
+                        >
+                          <Target size={13} />
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           );
         })}
