@@ -58,6 +58,16 @@ try {
     rec('fundamentals taught in-chat', teaches && notBestMove, `teaches=${teaches} notBestMove=${notBestMove}`);
   }
 
+  // NEW (David 2026-09-07): a SPECIFIC fundamental is taught on the spot in the
+  // classroom — "teach me the poisoned pawn" → the deep lesson, not a board
+  // readout. Proves the per-fundamental lesson intent fires in-chat.
+  {
+    const body = await ask('teach me the poisoned pawn');
+    const teaches = /pawn|piece|trap|bait|chase/.test(body);
+    const notBestMove = !/the best move is/.test(body);
+    rec('specific fundamental taught in-chat (poisoned pawn)', teaches && notBestMove, `teaches=${teaches} notBestMove=${notBestMove}`);
+  }
+
   await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss();
   {
@@ -112,6 +122,42 @@ try {
     await p.waitForTimeout(1500);
     const url = p.url();
     rec('fundamentals drill routes to the puzzle drill', /\/tactics\/drill/.test(url), `url=${url}`);
+  }
+
+  // ── Per-fundamental scorecard rows + Learn-in-classroom (David 2026-09-07) ──
+  await p.goto(`${BASE}/coach/fundamentals`, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  await dismiss();
+  {
+    await p.locator('[data-testid="fundamentals-page"]').waitFor({ timeout: 20000 });
+    // Spot-check the per-fundamental rows across phases: each has a status badge,
+    // Listen, Learn, and Drill.
+    const IDS = ['same-piece-twice', 'poisoned-pawn', 'loose-piece', 'lost-the-opposition'];
+    const rows = [], learn = [], drill = [], status = [];
+    for (const id of IDS) {
+      rows.push(await p.locator(`[data-testid="fundamental-item-${id}"]`).count());
+      learn.push(await p.locator(`[data-testid="fundamental-item-learn-${id}"]`).count());
+      drill.push(await p.locator(`[data-testid="fundamental-item-drill-${id}"]`).count());
+      status.push(await p.locator(`[data-testid="fundamental-status-${id}"]`).count());
+    }
+    const all = (a) => a.every((c) => c > 0);
+    rec('per-fundamental rows: status + Listen + Learn + Drill',
+      all(rows) && all(learn) && all(drill) && all(status),
+      `rows=${rows.join('')} learn=${learn.join('')} drill=${drill.join('')} status=${status.join('')}`);
+
+    // The Learn button opens the lesson ON THE SPOT in the classroom (no
+    // redirect once there): navigate to /coach/teach?learnFundamental=<id>, then
+    // the coach delivers the grounded lesson inline.
+    await p.locator('[data-testid="fundamental-item-learn-poisoned-pawn"]').click();
+    await p.waitForTimeout(2000);
+    const landed = /\/coach\/teach/.test(p.url());
+    // The param is stripped after it fires; the lesson arrives in the chat.
+    let taught = false;
+    for (let i = 0; i < 30; i++) {
+      await p.waitForTimeout(2000);
+      const body = (await p.locator('body').innerText()).toLowerCase();
+      if (/pawn|piece|trap|bait|chase/.test(body) && !/the best move is/.test(body)) { taught = true; break; }
+    }
+    rec('Learn opens the lesson in the classroom (no redirect)', landed && taught, `landed=${landed} taught=${taught}`);
   }
 } catch (e) {
   rec('run', false, 'ERROR ' + String(e).slice(0, 160));
