@@ -3244,7 +3244,12 @@ export async function getCoachChatResponse(
       studentMessage: studentMsg,
       providerConfig: config,
       intent: 'move-narration',
-      warm: true,
+      // BOARD narration = computed DNA, spoken raw, no LLM (David 2026-09-07:
+      // computer + DNA to ALL tier-3 narration pathways). The move-narration
+      // facts are computed (G0/G6); preferRaw ships them verbatim. A non-English
+      // student message still routes through the model to TRANSLATE only
+      // (translation is phrasing, not chess content — voiceFacts gates it).
+      preferRaw: true,
     });
     if (voiced) {
       emitGroundingCoverage('move-narration', grounding.surface ?? 'unknown', grounding.sessionId);

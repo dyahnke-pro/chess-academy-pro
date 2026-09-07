@@ -109,6 +109,12 @@ export async function voiceMistakeNarration(
     const phrased = await withTimeout(voiceFacts(facts, {
       directives: REGISTER_DIRECTIVES,
       intent: 'mistake-review',
+      // BOARD narration = computed DNA, spoken raw, no LLM (David 2026-09-07:
+      // computer + DNA to ALL tier-3 narration). The intro is already computed
+      // teaching prose (speakable-facts law); preferRaw ships it verbatim. A
+      // non-English student message still routes through the model to translate
+      // (translation is phrasing, not chess content — voiceFacts handles it).
+      preferRaw: true,
       // The move's LANDING SQUARE must survive: the student is looking at the
       // board it was played on, and a corrupted square (d4→e4) is a chess
       // hallucination the number-fidelity net cannot catch. Preserve the square,

@@ -68,7 +68,11 @@ describe('review — the better-line why on flagged moves', () => {
     expect(text).toMatch(/Why Ng5 was better — the line runs/);
     // …walks the line (the d5 strike and the exd5 capture appear)…
     expect(text).toContain('d5');
-    expect(text).toMatch(/exd5 \(/); // the capture ply carries its computed why
+    // The capture ply carries its computed why in the DNA register — flowing
+    // prose, no robotic parenthetical (David 2026-09-07: "run dna through the
+    // computer"). e.g. "exd5, opens the e-file for the rooks".
+    expect(text).toMatch(/exd5, /);
+    expect(text).not.toContain('exd5 (');
     // …and closes on a student-POV verdict.
     expect(text).toMatch(/— and (you're|it's|the position)/);
   });

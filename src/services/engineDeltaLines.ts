@@ -21,6 +21,7 @@
 import { Chess, type Square } from 'chess.js';
 import { detectNewThreat } from './groundedAnswer';
 import { computePieceRoute } from './forwardTeaching';
+import { narrateDnaLine } from './dnaLineNarrator';
 import type { PvLine } from './pvPlayback';
 import type { NarrationArrow } from '../types/walkthroughTree';
 import type { AnalysisLine } from '../types';
@@ -116,8 +117,11 @@ export function bestLineDeltaFromPv(pv: PvLine | null): DeltaAside | null {
   const to = first.uci.slice(2, 4);
   // Name the next up-to-3 plies so the "line" is heard even though only the key
   // move is drawn (the board is static; later arrows would start on empty
-  // squares). Danya says the line and draws the first move.
-  const line = pv.plies.slice(0, 3).map((p) => cleanSan(p.san)).join(', ');
+  // squares). In the DNA register — the SAME computed voice as the review's
+  // projection lines (David 2026-09-07: ALL narrations follow one pattern, run
+  // through the computer not the LLM) — so each move carries its board-true
+  // "why" instead of a bare SAN chain.
+  const line = narrateDnaLine(pv.plies.slice(0, 3).map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
   const say = `The strongest line here runs ${line}.`;
   const short = `Best: ${cleanSan(first.san)}.`;
   return {

@@ -228,7 +228,12 @@ async function getGroundedCommentary(
         // to everyone (David 2026-08-28). voiceFacts still phrases it (G0).
         const failed = whyItFailed({ fenBefore, playedSan: last.san, studentColor: moverColor });
         const enriched = failed ? `${facts} ${failed.line}` : facts;
-        const voiced = await voiceFacts(enriched, { intent: 'move-commentary', warm: true });
+        // BOARD narration is COMPUTED, spoken RAW — never an LLM call (David
+        // 2026-09-07: "no llm call for board specific questions"; the DNA in the
+        // LLM is only for free speak). The facts are already speakable prose
+        // (explainBestMoveGrounded / whyItFailed write the register), so preferRaw
+        // ships them verbatim — same chokepoint, zero model, zero latency.
+        const voiced = await voiceFacts(enriched, { intent: 'move-commentary', preferRaw: true });
         const out = voiced ?? enriched;
         if (onStream && out) onStream(out);
         return out;
@@ -283,7 +288,9 @@ async function getGroundedCommentary(
     });
     if (purpose) {
       const lead = subject ? `We're in the ${subject}. ` : '';
-      const voiced = await voiceFacts(`${lead}${purpose.facts}`, { intent: 'move-purpose', warm: true });
+      // BOARD narration is COMPUTED, spoken RAW — no LLM (David 2026-09-07).
+      // assembleMovePurpose already writes speakable DNA-register prose.
+      const voiced = await voiceFacts(`${lead}${purpose.facts}`, { intent: 'move-purpose', preferRaw: true });
       const outP = voiced ?? purpose.facts;
       if (onStream && outP) onStream(outP);
       return outP;

@@ -3,7 +3,8 @@ import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
+import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
+import { narrateDnaLine } from './dnaLineNarrator';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
@@ -27,7 +28,7 @@ import { buildOpeningMoveDetail } from './reviewStrategicOrientation';
 import { walkBookLine } from './theoryDeparture';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
-import { voiceFacts, voiceReviewLines } from './coachApi';
+import { voiceFacts } from './coachApi';
 // Post-game review narration is now GROUNDED (David 2026-07-09): the intro,
 // closing, and recap are COMPUTED from the engine annotations and phrased by
 // `voiceFacts` — no coachService.ask / free-LLM prose, no per-move segment
@@ -982,11 +983,12 @@ const OPENING_PLAN_MAX_PLY = 14;
  *  shape enough for the majorities to be real. */
 const MIDDLEGAME_ORIENTATION_MIN_PLY = 16;
 
-/** Best-effort budgets for the review's two LLM warming passes (see
- *  `raceTimeout`). On timeout the walk ships the deterministic, still-grounded
- *  templates rather than hanging "Preparing…". Worst case ≈ 55s to ready. */
+/** Best-effort budget for the review's intro/closing FRAMING warm pass (see
+ *  `raceTimeout`) — the narrative arc is free-speak, so it still phrases through
+ *  the model. On timeout the walk ships the deterministic, still-grounded
+ *  templates rather than hanging "Preparing…". The per-move/per-line BOARD
+ *  narration is computed DNA spoken raw (no warm pass, David 2026-09-07). */
 const REVIEW_INTRO_VOICE_TIMEOUT_MS = 18000;
-const REVIEW_HOUSE_VOICE_TIMEOUT_MS = 38000;
 // Stockfish projection budget — bounds the ONE prep await that was try/catch-only
 // so a wedged engine worker can never leave the walk stuck on "Preparing…".
 const REVIEW_AUGMENT_TIMEOUT_MS = 20000;
@@ -2255,62 +2257,21 @@ async function augmentWithProjections(
     if (studentPovCp > -150) return "you're a bit worse";
     return "you're in trouble";
   };
-  // Normalize a full teaching sentence ("The knight bears down on d4…") into a
-  // clause that flows after "SAN (…)": drop the leading article/subject and the
-  // trailing period, lowercase the lead so it reads "Nf3 (bears down on d4…)".
-  const teachClause = (fenBefore: string, san: string): string | null => {
-    const t = buildReviewMoveTeaching(fenBefore, san);
-    if (!t) return null;
-    let s = t.trim().replace(/\.$/, '');
-    s = s.replace(/^(The|A|An|It|Now)\s+/i, '');
-    return s.charAt(0).toLowerCase() + s.slice(1);
-  };
-  const render = (line: PvLine, rich = false): string => {
-    // NARRATE EVERY MOVE of the projected line (David 2026-07-21: "narrate each
-    // line and explain the why behind each move. The user needs just as much
-    // detail here as every other move, if not more, because this is where the
-    // teaching happens!"). Each ply gets its computed clause — capture, check,
-    // tactic landed, outpost — not a bare SAN chain. The recapture context
-    // threads through so an even queen trade never reads as two nine-point
-    // windfalls (scrutiny 2026-07-21: "Qxd6 captures the queen… then Bxd6
-    // captures the queen for nine points").
-    // RICH mode (David 2026-07-24: "add better narrations behind the delta
-    // lines… explain better what each move does and why it's better") — a QUIET
-    // move that has no tactical fact clause still gets its positional purpose
-    // (develops, seizes the outpost, opens the file) from buildReviewMoveTeaching
-    // instead of reading as a bare SAN. Used on the delta/better-line and the
-    // punishment line, where the teaching lives.
-    const PV_PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-    let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
-    // A PV of quiet developing moves used to read "Rh3 (rook comes into the game
-    // — quiet development…), then Bd7 (bishop comes into the game — quiet
-    // development…), then Be2 (bishop comes into the game…), then Rf6 (rook comes
-    // into the game…)" — the same generic tag glued to four moves (2026-07-25
-    // hand-audit N3). Skip the bare generic dev tag in a PV (a bare SAN reads
-    // cleaner) and never repeat the same gloss twice in one line.
-    const GENERIC_DEV = /quiet development/i;
-    const seenTeach = new Set<string>();
-    const steps = line.plies.map((p) => {
-      const w = plyFactsClause(p.fenBefore, p.san, prev);
-      try {
-        const mv = new Chess(p.fenBefore).move(p.san);
-        prev = mv?.captured
-          ? { square: mv.to, capturedValue: PV_PTS[mv.captured] ?? 0 }
-          : { square: null, capturedValue: 0 };
-      } catch { prev = { square: null, capturedValue: 0 }; }
-      if (w) return `${p.san} (${w})`;
-      if (rich) {
-        const teach = teachClause(p.fenBefore, p.san);
-        if (teach && !GENERIC_DEV.test(teach) && !seenTeach.has(teach)) {
-          seenTeach.add(teach);
-          return `${p.san} (${teach})`;
-        }
-      }
-      return p.san;
-    });
+  // Render the projected line in the DNA register — the SAME voice as the rest
+  // of the walk, written in code, no LLM (David 2026-09-07: "run dna through
+  // the computer NOT the llm"; "only says wins material… those narrations do
+  // not follow the same standard as everything else"). The shared
+  // `narrateDnaLine` merges each move's tactical outcome (a winning capture
+  // NAMES the piece won, never a bare repeated "wins material") with its
+  // board-true positional concept as flowing prose — no `SAN (…, wins
+  // material), then …` template. `rich` is retained for call-site
+  // compatibility; the DNA renderer is always rich. The recapture context is
+  // threaded inside the renderer, so an even trade never reads as a windfall.
+  const render = (line: PvLine, _rich = false): string => {
+    const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
     const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
     const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
-    return `${steps.join(', then ')} — and ${verdictWord(studentPov)}`;
+    return `${clause} — and ${verdictWord(studentPov)}`;
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The
   // delta!" — whenever a projection line is spoken (render() above), the board
@@ -2434,10 +2395,7 @@ async function augmentWithProjections(
       // AGREEMENT — extend the claim with the engine's continuation when it
       // has real follow-up teaching (2+ further plies).
       if (line.plies.length >= 3 && s.narration) {
-        const tail = line.plies.slice(1).map((p) => {
-          const w = plyFactsClause(p.fenBefore, p.san);
-          return w ? `${p.san} (${w})` : p.san;
-        }).join(', then ');
+        const tail = narrateDnaLine(line.plies.slice(1).map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
         s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
         attachLineArrows(s, line, 3); // confirmed threat continuation
       }
@@ -3185,7 +3143,7 @@ export async function generateReviewNarration(params: {
    *  fact is ever compressed away regardless of what the model does. */
   uncapped?: boolean;
 }): Promise<ReviewNarration> {
-  const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
+  const { moves, playerColor, openingName, result, coachNarration, uncapped } = params;
 
   // Reconstruct FENs via chess.js so the UI can rewind cleanly.
   const fenChain = buildFenChain(moves);
@@ -3308,67 +3266,17 @@ export async function generateReviewNarration(params: {
     }
   }
 
-  if (coachNarration !== 'silent') {
-    try {
-      // Warm EVERY narrated segment — including the sacrifice, mate, and the new
-      // teaching beats — so the teaching speaks in the SAME Danya voice as the
-      // rest of the walk, not as bolted-on inserts (David 2026-07-20: "the new
-      // teachings need to tie into and complement the narration build, not stand
-      // alone"). The load-bearing words are protected below (revert if dropped),
-      // so we no longer exempt the showcase beats up front.
-      // A fundamentals-led line is DNA-register template text spoken RAW —
-      // deterministic by contract (David 2026-09-05); the warm pass stays on
-      // the other lines.
-      const toVoice = segments
-        .filter((s) => s.narration && s.narration.trim().length > 0 && !(s.fundamentals && s.fundamentals.length > 0))
-        .map((s) => ({ id: s.ply, fact: s.narration as string, kind: s.narrationSource ?? undefined }));
-      if (toVoice.length > 0) {
-        const warmed = await raceTimeout(
-          voiceReviewLines(toVoice, { studentRating: playerRating, coverAll: uncapped }),
-          REVIEW_HOUSE_VOICE_TIMEOUT_MS,
-          new Map<number, string>(),
-        );
-        // No spoken line may repeat verbatim across the walk (audit R10 — the
-        // model once shipped the identical quiet-ply line 10 plies apart despite
-        // the vary-every-line instruction). A duplicate keeps the deterministic
-        // template instead, which carries the ply's own move so it stays distinct.
-        const spokenLines = new Set<string>();
-        for (const s of segments) {
-          const w = warmed.get(s.ply);
-          if (!w || !s.narration) { if (s.narration) spokenLines.add(s.narration.trim().toLowerCase()); continue; }
-          const det = s.narration;
-          const isRepeat = spokenLines.has(w.trim().toLowerCase());
-          // Accept the warmed (Danya-voiced) line ONLY if it (a) is board-accurate
-          // — no piece attached to a square it doesn't occupy ("the pawn on b5 gets
-          // taken" after a bishop landed there) — AND (b) KEEPS the load-bearing
-          // word the fact carried: a mate line must still say "mate/checkmate", a
-          // sacrifice must still say "sacrifice". Otherwise the deterministic
-          // template ships verbatim so the canary words can never be flattened
-          // away (audit 2026-07-20: the queen sac was once narrated as "a check").
-          const keepsMate = !/\bcheckmate\b/i.test(det) || /\b(checkmate|mate)\b/i.test(w);
-          const keepsSac = !/\bsacrific/i.test(det) || /\bsacrific/i.test(w);
-          // The projection FRAME is a seat fact: the student's own slip reads
-          // "how it gets punished", the opponent's "how you take advantage".
-          // The warm pass once flipped a student mistake into "here's how you
-          // can still punish" (scrutiny 2026-07-21) — board-accurate, seat-wrong.
-          const keepsPunishFrame = !/how it gets punished/i.test(det)
-            || !/you (can still |could |)(punish|take advantage)/i.test(w);
-          const keepsAdvantageFrame = !/how you take advantage/i.test(det)
-            || !/(gets|you get) punished/i.test(w);
-          if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
-            && narrationBoardAccurate(w, s.fenAfter)
-            && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
-            && narrationMoverFaithful(w, s.playerColor === playerColor)
-            && narrationNumbersFaithful(det, w)
-            // COVERAGE — the LLM never chooses which facts to state: a warm
-            // that dropped a facet (any bundle whose square/SAN anchors all
-            // vanished) is rejected and the full deterministic text ships.
-            && narrationCoversFacets(det, w)) s.narration = w;
-          spokenLines.add(s.narration.trim().toLowerCase());
-        }
-      }
-    } catch { /* keep the deterministic templates */ }
-  }
+  // BOARD narration is COMPUTED DNA, spoken RAW — the review walk no longer
+  // warms its per-move/per-line segments through the LLM (David 2026-09-07:
+  // "the dna in the llm is only used for free speak, not chess/board related
+  // narrations… no llm call for board specific questions"). Every segment
+  // already holds house-voice prose written in code — buildReviewMoveTeaching
+  // for the moves, narrateDnaLine for the projected lines — so it ships as-is:
+  // one consistent register across the whole walk, zero model, zero latency,
+  // and no warm-reject fallback to a robotic template (the disease behind the
+  // "only says wins material" projection lines). The review's intro / closing /
+  // recap FRAMING stays free-speak (voiceFacts, review register) — that's the
+  // narrative arc, not per-move board narration.
 
   // UNCAPPED: any line whose warming was REJECTED (a heavy sac/projection bundle
   // where the rephrase dropped the "sacrifice" canary or tripped board-accuracy)
