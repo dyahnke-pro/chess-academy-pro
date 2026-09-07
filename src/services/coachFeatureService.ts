@@ -3387,6 +3387,30 @@ export async function generateReviewNarration(params: {
           REVIEW_HOUSE_VOICE_TIMEOUT_MS,
           new Map<number, string>(),
         );
+        // PROPER-NOUN CORRUPTION GUARD (David 2026-09-07, his Traxler review on
+        // prod: the warm pass voiced "Traxeller structure" for the Traxler). The
+        // fidelity nets guard squares/SANs/numbers/seats but not the opening's
+        // NAME — a name is a fact the LLM must not garble. Take the distinctive
+        // words of the opening name (drop the generic opening vocabulary the model
+        // may legitimately rephrase away), and reject a warmed line that CORRUPTS
+        // one: it contains a near-variant (same first 4 letters, not the exact
+        // word) while the exact word is absent. Pure OMISSION is allowed (a
+        // rephrase may say "this structure" instead of naming it); only a garbled
+        // near-miss is rejected.
+        const GENERIC_OPENING_WORDS = new Set(['game', 'attack', 'defense', 'defence', 'opening', 'variation', 'system', 'gambit', 'line', 'counterattack', 'counter', 'knight', 'knights', 'normal', 'king', 'kings', "king's", 'march', 'two', 'main', 'classical', 'modern']);
+        const nameWords = (openingName ?? '').split(/[\s,:]+/).filter((wd) => wd.length >= 5 && !GENERIC_OPENING_WORDS.has(wd.toLowerCase()));
+        const corruptsName = (det: string, warmed: string): boolean => {
+          for (const nw of nameWords) {
+            if (!det.includes(nw)) continue;            // fact didn't state it → nothing to protect
+            if (warmed.includes(nw)) continue;          // preserved verbatim → fine
+            const stem = nw.slice(0, 4).toLowerCase();
+            // A token in the warmed line that shares the name's first 4 letters but
+            // isn't the exact word = a garbled variant ("Traxeller" vs "Traxler").
+            const garbled = (warmed.match(/[A-Za-z]{4,}/g) ?? []).some((tok) => tok.toLowerCase().startsWith(stem) && tok !== nw);
+            if (garbled) return true;
+          }
+          return false;
+        };
         // No spoken line may repeat verbatim across the walk (audit R10) — a
         // duplicate keeps the deterministic template, which carries the ply's own
         // move so it stays distinct.
@@ -3408,6 +3432,7 @@ export async function generateReviewNarration(params: {
           const keepsAdvantageFrame = !/how you take advantage/i.test(det)
             || !/(gets|you get) punished/i.test(w);
           if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
+            && !corruptsName(det, w)
             && narrationBoardAccurate(w, s.fenAfter)
             && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
             && narrationMoverFaithful(w, s.playerColor === playerColor)

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, type PvEngine } from './pvPlayback';
+import { computePvLine, renderPlyFactLine, pvFactsForVoice, plyFactsForMove, plyFactsClause, tacticWord, type PvEngine } from './pvPlayback';
 import type { StockfishAnalysis } from '../types';
 
 /** Canned engine: maps fen → analysis. Unknown fen → throws (like a dead worker). */
@@ -244,5 +244,22 @@ describe('material truth + tactic agent (David 2026-07-20 Opera nitpick)', () =>
     const fb = fenBefore(OPERA.slice(0, 16)); // up to ...c6, White to play Bg5
     const line = plyFactsForMove(fb, 'Bg5') ?? '';
     expect(line).toMatch(/pin/i);
+  });
+});
+
+describe('tacticWord — no snake_case enum ever reaches the voice (David 2026-09-07)', () => {
+  it('maps every snake_case detector type to English prose', () => {
+    // David heard "landing a mate_threat" in his own prod Traxler review — a
+    // program identifier spoken aloud. Every multi-word enum must become prose.
+    expect(tacticWord('mate_threat')).toBe('mating threat');
+    expect(tacticWord('removal_of_guard')).toBe('removal of the defender');
+    expect(tacticWord('back_rank')).toBe('back-rank threat');
+    expect(tacticWord('trapped_piece')).toBe('piece trap');
+    // Clean single-word types pass through unchanged.
+    expect(tacticWord('fork')).toBe('fork');
+    expect(tacticWord('pin')).toBe('pin');
+    // An UNKNOWN future enum never leaks raw — underscores become spaces.
+    expect(tacticWord('some_new_tactic')).toBe('some new tactic');
+    expect(tacticWord('some_new_tactic')).not.toContain('_');
   });
 });

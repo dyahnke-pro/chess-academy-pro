@@ -26,7 +26,7 @@
  * live path.
  */
 import { Chess } from 'chess.js';
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 
 const PTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -97,7 +97,7 @@ export function dnaMoveClause(
   // below carries it, so the line never reads "wins material" on a swap.
   const bits: string[] = [];
   if (mv.captured && facts.materialGained >= 1) bits.push(`winning the ${facts.captured}`);
-  if (facts.tacticLanded) bits.push(`landing a ${facts.tacticLanded}`);
+  if (facts.tacticLanded) bits.push(`landing a ${tacticWord(facts.tacticLanded)}`);
   if (facts.promotion) bits.push(`promoting to a ${facts.promotion}`);
   if (facts.isCheck) bits.push('with check');
   if (facts.outpostGained) bits.push(`planting an outpost on ${facts.outpostGained}`);

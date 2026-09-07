@@ -43,6 +43,22 @@ export interface PvEngine {
   analyzePosition(fen: string, depth: number): Promise<StockfishAnalysis>;
 }
 
+/** English for a tacticsDetector type. The detector enums are snake_case program
+ *  identifiers ('mate_threat', 'removal_of_guard', 'back_rank', 'trapped_piece');
+ *  spoken raw they read as the coach saying a variable name — David 2026-09-07
+ *  heard "landing a mate_threat" in his own Traxler review on prod. Every site
+ *  that voices tacticLanded MUST route through this. A clean single-word type
+ *  (fork/pin/skewer) maps to itself; an unknown type falls back to
+ *  underscores-to-spaces so a NEW enum never leaks raw. */
+const TACTIC_WORD: Record<string, string> = {
+  fork: 'fork', pin: 'pin', skewer: 'skewer', discovery: 'discovered attack',
+  back_rank: 'back-rank threat', mate_threat: 'mating threat',
+  removal_of_guard: 'removal of the defender', trapped_piece: 'piece trap',
+};
+export function tacticWord(type: string): string {
+  return TACTIC_WORD[type] ?? type.replace(/_/g, ' ');
+}
+
 export interface PlyFacts {
   /** 'capture' facts: what was taken, in plain words ("takes the knight"). */
   captured: string | null;
@@ -382,7 +398,7 @@ export function renderPlyFactLine(ply: PvPly): string | null {
   if (f.captured) bits.push(`takes the ${f.captured}`);
   if (f.isCheck) bits.push('with check');
   if (f.promotion) bits.push(`promoting to a ${f.promotion}`);
-  if (f.tacticLanded) bits.push(`landing a ${f.tacticLanded}`);
+  if (f.tacticLanded) bits.push(`landing a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) bits.push(`planting an outpost on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${f.newPassedPawns[0]}`);
   if (f.newOpenFiles.length > 0) bits.push(`opening the ${f.newOpenFiles[0]}-file`);
@@ -401,7 +417,7 @@ export function plyFactsString(ply: PvPly): string | null {
   if (f.isMate) parts.push('checkmate');
   else if (f.isCheck) parts.push('check');
   if (f.promotion) parts.push(`promotes to ${f.promotion}`);
-  if (f.tacticLanded) parts.push(`lands a ${f.tacticLanded}`);
+  if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
   if (f.outpostGained) parts.push(`outpost established on ${f.outpostGained}`);
   if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
   if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
@@ -431,7 +447,7 @@ export function plyFactsClause(fenBefore: string, san: string, prev?: PrevCaptur
     if (f.isMate) parts.push('delivers checkmate');
     else if (f.isCheck) parts.push('gives check');
     if (f.promotion) parts.push(`promotes to a ${f.promotion}`);
-    if (f.tacticLanded) parts.push(`lands a ${f.tacticLanded}`);
+    if (f.tacticLanded) parts.push(`lands a ${tacticWord(f.tacticLanded)}`);
     if (f.outpostGained) parts.push(`plants an outpost on ${f.outpostGained}`);
     if (f.newPassedPawns.length > 0) parts.push(`creates a passed pawn on ${f.newPassedPawns.join(', ')}`);
     if (f.newOpenFiles.length > 0) parts.push(`opens the ${f.newOpenFiles.join(' and ')}-file`);
@@ -484,7 +500,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
     if (f.isMate) parts.push(vb('deliver checkmate', 'delivers checkmate'));
     else if (f.isCheck) parts.push(vb('give check', 'gives check'));
     if (f.promotion) parts.push(vb(`promote to a ${f.promotion}`, `promotes to a ${f.promotion}`));
-    if (f.tacticLanded) parts.push(vb(`land a ${f.tacticLanded}`, `lands a ${f.tacticLanded}`));
+    if (f.tacticLanded) parts.push(vb(`land a ${tacticWord(f.tacticLanded)}`, `lands a ${tacticWord(f.tacticLanded)}`));
     if (f.outpostGained) parts.push(vb(`plant an outpost on ${f.outpostGained}`, `plants an outpost on ${f.outpostGained}`));
     if (f.newPassedPawns.length > 0) parts.push(vb(`create a passed pawn on ${f.newPassedPawns[0]}`, `creates a passed pawn on ${f.newPassedPawns[0]}`));
     if (f.newOpenFiles.length > 0) parts.push(vb(`open the ${f.newOpenFiles[0]}-file`, `opens the ${f.newOpenFiles[0]}-file`));

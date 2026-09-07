@@ -25,7 +25,7 @@
  * "you", the opponent "they".
  */
 import { Chess } from 'chess.js';
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { computePlyFacts, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { detectNewThreat } from './groundedAnswer';
 import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';
@@ -247,7 +247,7 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
 
   // 3. A tactic LANDED (fork / pin / skewer) — when it isn't already the threat.
   if (facts.tacticLanded && !threat) {
-    aspects.push({ text: `landing a ${facts.tacticLanded}`, weight: 84, keystone: true });
+    aspects.push({ text: `landing a ${tacticWord(facts.tacticLanded)}`, weight: 84, keystone: true });
   }
   // 3b. Battery / discovery / overload the fork/pin/skewer set doesn't carry.
   const namedTactic = newNamedTactic(fenBefore, fenAfter, toSquare, ['battery', 'discovery', 'overload']);
