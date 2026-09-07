@@ -2105,7 +2105,11 @@ export function buildReviewSegments(
       && !opponentDevReadShown
       && m.ply >= 10
       && m.ply <= OPENING_TEACH_MAX_PLY
-      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      // 'great'/'brilliant' included so a STRONG opponent move still narrates
+      // (David 2026-09-07 prod read: an opponent 'great' Ke2/Be3 fell through
+      // every opponent path and rendered as a bare SAN). Opponent brilliant is
+      // already handled by buildDeterministicNarration; this catches 'great'.
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
       const devRead = buildOpponentDevelopmentRead(opponentSans, fenPair.fenAfter, studentColorWB);
       if (devRead) {
@@ -2124,7 +2128,7 @@ export function buildReviewSegments(
       && studentColorWB !== null
       && moverColor !== playerColor
       && playerColor !== undefined
-      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
       // No count cap (David 2026-07-20: "always narrate both sides") — the
       // per-target dedup already stops the same idea repeating; this richer
@@ -2151,7 +2155,7 @@ export function buildReviewSegments(
       narration === null
       && moverColor !== playerColor
       && playerColor !== undefined
-      && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
       const clause = plyFactsClause(fenPair.fenBefore, m.san, prevCap);
       if (clause) {

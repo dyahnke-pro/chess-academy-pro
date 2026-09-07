@@ -477,6 +477,23 @@ describe('coachFeatureService', () => {
       expect(seg.narration?.toLowerCase()).toMatch(/inaccuracy|more precise/);
     });
 
+    it('an opponent GREAT move narrates — never a bare SAN (David 2026-09-07 prod read)', () => {
+      // A strong opponent move classified 'great'/'brilliant' used to fall
+      // through every opponent narration path (the fallbacks only accepted
+      // null/book/good), leaving the banner showing a bare "Ke2"/"Be3". Student
+      // is Black; White's quiet developing Nc3 is graded 'great'.
+      const segments = buildReviewSegments([
+        move({ ply: 1, san: 'e4', classification: 'book' }),
+        move({ ply: 2, san: 'c5', classification: 'book', isCoachMove: true }),
+        move({ ply: 3, san: 'Nc3', classification: 'great', evaluation: 15, preMoveEval: 40 }),
+      ], 'black', 'Sicilian Defense');
+      const seg = segments[2];
+      expect(seg.narration).not.toBeNull();
+      // Not a bare SAN — real prose, framed as the opponent's move.
+      expect((seg.narration as string).length).toBeGreaterThan('Nc3'.length + 5);
+      expect(seg.narration as string).toMatch(/opponent|their/i);
+    });
+
     it('reads a flagged move that is established THEORY as book, with the honest eval (David 2026-09-07)', () => {
       // The Traxler's signature move 4...Bc5 is a real gambit — 130 master games
       // — that the engine flags as dubious. It must read as BOOK (named line +
