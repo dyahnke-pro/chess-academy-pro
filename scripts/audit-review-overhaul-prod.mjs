@@ -79,6 +79,10 @@ const run = async () => {
   // above stops synthesis in the app; this fulfils any /api/tts request
   // locally so not one byte can reach the provider even if a path slips.
   await blockTtsNetwork(page);
+  // MUTE evidence: every synthesis request the page would have sent (blocked
+  // above) and every spoken line's voice tag — the audit must prove it ran silent.
+  let ttsRequests = 0;
+  page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) ttsRequests += 1; });
 
   const errs = [];
   page.on('pageerror', (e) => { if (/startsWith is not a function/.test(e.message)) return; errs.push('PAGEERROR: ' + e.message.slice(0, 160)); });
@@ -483,6 +487,9 @@ const run = async () => {
   log('===== SPOKEN (last 10) =====');
   const all = spoken();
   all.slice(-10).forEach((s, i) => log(`  [${String(all.length - 10 + i + 1).padStart(2)}] ${s.text.slice(0, 200)}`));
+  const voiced = listener.getCapturedEvents().filter((e) => e.kind === 'coach-narration-spoken');
+  const unmuted = voiced.filter((e) => !/voice=audit-muted/.test(String(e.summary ?? '')));
+  await add('MUTE audit-ran-silent', unmuted.length === 0 && ttsRequests === 0, `${voiced.length} spoken lines, ${unmuted.length} unmuted, ${ttsRequests} /api/tts requests`);
   log('\n===== CONTRACT GRID =====');
   let allPass = true;
   for (const r of results) { log(`  ${r.pass ? '✅ PASS' : '❌ FAIL'}  ${r.id.padEnd(40)} ${r.detail}`); if (!r.pass) allPass = false; }
