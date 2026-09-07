@@ -34,6 +34,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
@@ -74,6 +75,10 @@ const run = async () => {
   // text (narrationText), which is what the contracts below read.
   const listener = await attachVoiceListener(ctx);
   const page = await ctx.newPage();
+  // Belt AND braces (David 2026-09-07: "all audits are silent"): the mute
+  // above stops synthesis in the app; this fulfils any /api/tts request
+  // locally so not one byte can reach the provider even if a path slips.
+  await blockTtsNetwork(page);
 
   const errs = [];
   page.on('pageerror', (e) => { if (/startsWith is not a function/.test(e.message)) return; errs.push('PAGEERROR: ' + e.message.slice(0, 160)); });
@@ -421,12 +426,18 @@ const run = async () => {
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
   let blown = false;
   let onFund2 = false;
+  const workerList = async () => { if (!cdp) return []; const r = await Promise.race([cdp.send('Target.getTargets'), new Promise((res) => setTimeout(() => res(null), 4000))]).catch(() => null); return r ? r.targetInfos.filter((t) => t.type === 'worker').map((t) => (t.url || '?').split('/').pop()) : []; };
   for (let i = 0; i < 40 && !blown; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const h = await heapMB();
-    if (i % 4 === 0 || h > 1500) log(`  [heap] reopened walk ply=${n}: ${h}MB workers=${await workers()}`);
-    if (h > 2500 || h === -1) { blown = true; log(`  [heap] BLOW-UP at ply ${n} (${h}MB) — dumping profile`); await dumpProfile('blow-up'); break; }
+    const wl = await workerList();
+    const by = {}; for (const u of wl) by[u] = (by[u] ?? 0) + 1;
+    if (i % 2 === 0 || wl.length > 20) log(`  [heap] reopened walk ply=${n}: ${h}MB workers=${wl.length} ${JSON.stringify(by)}`);
+    // The blow-up is WORKERS, not JS heap (2026-09-06: 128 DedicatedWorkers at
+    // 230 MB of heap). Trip on the census, dump the profile, and get out
+    // before the renderer wedges the box.
+    if (h > 2500 || h === -1 || wl.length > 40) { blown = true; log(`  [heap] BLOW-UP at ply ${n} (${h}MB, ${wl.length} workers) — dumping profile`); await dumpProfile('blow-up'); break; }
     if (n === FUND_PLY) { onFund2 = true; break; }
     const sel = n < FUND_PLY ? '[data-testid="review-forward-btn"]' : '[data-testid="review-back-btn"]';
     await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);

@@ -1875,11 +1875,19 @@ class VoiceService {
   }
 
   private isAuditMuted(): boolean {
+    // The in-memory flag the audit's init script ALSO sets. Storage can throw
+    // or read empty under pressure (a wedging renderer, a locked-down
+    // context) and the first read used to LATCH `false` for the whole
+    // document — 60 real-voice lines were synthesised inside two "muted"
+    // prod runs on 2026-09-06 exactly while their renderer was drowning in
+    // leaked workers. A memory flag cannot be lost that way.
+    const mem = (globalThis as { __auditMuteTts?: unknown }).__auditMuteTts === true;
+    if (mem) return true;
     if (this.auditMutedCache !== null) return this.auditMutedCache;
     try {
       this.auditMutedCache = globalThis.localStorage?.getItem('auditMuteTts') === '1';
     } catch {
-      this.auditMutedCache = false; // no localStorage (SSR, locked-down context)
+      return false; // no localStorage right now — decide again next time, never latch
     }
     return this.auditMutedCache;
   }

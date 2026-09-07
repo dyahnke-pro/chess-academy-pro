@@ -4,6 +4,8 @@
 // synthesise it. This pins the two halves of that deal: the text still reaches
 // the audit stream, and no synthesis request is made.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { readFileSync as readFile } from 'node:fs';
+import { resolve as resolvePath } from 'node:path';
 
 describe('audit TTS mute', () => {
   beforeEach(() => {
@@ -50,5 +52,35 @@ describe('audit TTS mute', () => {
     // If these two ever drift, every audit silently starts paying again — the
     // failure mode is invisible (audits stay green, the bill grows).
     expect(service).toContain(`getItem('${helperKey}')`);
+  });
+});
+
+describe('the mute cannot be lost under storage pressure (2026-09-06: 60 billed lines inside two muted runs)', () => {
+  it('a storage read that THROWS does not latch the mute off; the memory flag mutes on its own', async () => {
+    vi.resetModules();
+    const g = globalThis as { __auditMuteTts?: boolean };
+    delete g.__auditMuteTts;
+    const realLs = globalThis.localStorage;
+    // First read throws (locked-down / wedged context) …
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw new Error('storage unavailable'); } });
+    const { voiceService } = await import('./voiceService');
+    const svc = voiceService as unknown as { isAuditMuted: () => boolean };
+    expect(svc.isAuditMuted()).toBe(false);
+    // … storage recovers WITH the flag set: the answer must follow it, not the latched miss.
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: realLs });
+    // (key assembled so the "product code never sets the flag" scan above stays honest)
+    const KEY = ['auditMute', 'Tts'].join('');
+    globalThis.localStorage.setItem(KEY, '1');
+    expect(svc.isAuditMuted()).toBe(true);
+    globalThis.localStorage.removeItem(KEY);
+    // And the memory flag alone mutes, whatever storage says.
+    const svc2 = (await import('./voiceService')).voiceService as unknown as { isAuditMuted: () => boolean };
+    g.__auditMuteTts = true;
+    expect(svc2.isAuditMuted()).toBe(true);
+    delete g.__auditMuteTts;
+  });
+  it('the helper sets the memory flag as well as the storage key', () => {
+    const src = readFile(resolvePath(__dirname, '../../scripts/audit-lib/mute-tts.mjs'), 'utf8');
+    expect(src).toContain('__auditMuteTts = true');
   });
 });
