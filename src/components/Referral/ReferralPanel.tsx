@@ -18,7 +18,7 @@ import { getStatus, claimCode, type ClaimOutcome } from '../../services/referral
 const APP_STORE_URL = 'https://apps.apple.com/app/id6776418777';
 
 const OUTCOME_COPY: Record<ClaimOutcome, string> = {
-  ok: "You're in! Play your first lesson and you'll both get a free opening class.",
+  ok: "You're in! Get your first win — a lesson, puzzle, or game review — and you'll both get a free opening class.",
   'already-claimed': "You've already redeemed a friend's code.",
   'unknown-code': "That code isn't right — double-check it with your friend.",
   'own-code': "That's your own code — share it with a friend instead.",
@@ -97,7 +97,7 @@ export function ReferralPanel(): JSX.Element | null {
 
         <div className="flex-1 space-y-4 overflow-y-auto p-4">
           <p className="text-sm text-theme-text">
-            Share your code. When a friend enters it and plays their first lesson, you <strong>both</strong> get a free opening masterclass.
+            Share your code. When a friend enters it and gets their first win — a lesson, puzzle, or game review — you <strong>both</strong> get a free opening masterclass.
           </p>
 
           {credits > 0 && (
