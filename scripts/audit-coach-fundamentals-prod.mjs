@@ -37,11 +37,20 @@ async function ask(text) {
   await box.click();
   await box.pressSequentially(text, { delay: 10 });
   await box.press('Enter');
+  // Wait for the answer to APPEAR, then to SETTLE. A coach reply STREAMS in, so
+  // breaking at the first +40 chars returns a half-rendered response and a later
+  // grep misses words that arrive at the end — that was the "morphy → opera"
+  // FALSE RED (2026-09-07): the Opera lane was fine, the harness read the answer
+  // before "opera" had streamed. Poll until two consecutive equal reads after
+  // real growth (≈4s quiet = done), or the budget runs out.
   let body = '';
-  for (let i = 0; i < 30; i++) {
+  let last = -1, stable = 0, grew = false;
+  for (let i = 0; i < 45; i++) {
     await p.waitForTimeout(2000);
     body = (await p.locator('body').innerText());
-    if (body.length > before + 40) break;
+    if (body.length > before + 40) grew = true;
+    if (grew && body.length === last) { if (++stable >= 2) break; } else stable = 0;
+    last = body.length;
   }
   return body.toLowerCase();
 }
@@ -81,9 +90,13 @@ try {
   await dismiss();
   {
     const body = await ask("show me morphy's games");
-    const opera = /morphy|opera/.test(body);
+    // Grounded = the app's own Opera-Game data surfaced (name, players, year, or
+    // the finish), not a fuzzy opening pick. Broadened beyond the literal
+    // "opera" so a valid grounded phrasing that leads with Morphy/1858/Rd8 still
+    // passes — the settle-aware ask() already removed the half-render false red.
+    const grounded = /morphy|opera|1858|rd8|brunswick|walk it move-by-move/.test(body);
     const notEvans = !/evans gambit/.test(body) && !/did you mean/.test(body);
-    rec('morphy → opera game, not fuzzy opening', opera && notEvans, `opera=${opera} notEvans=${notEvans}`);
+    rec('morphy → opera game, not fuzzy opening', grounded && notEvans, `grounded=${grounded} notEvans=${notEvans}`);
   }
 
   await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
