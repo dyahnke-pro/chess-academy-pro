@@ -31,7 +31,29 @@ interface GameReviewWeaknessCaptureProps {
 
 /** Build the player's blundered/mistaken moves into BlunderForAnalysis,
  *  using the prior move's resulting FEN as the position-before. */
-function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): BlunderForAnalysis[] {
+/** Normalize an engine best move to SAN from the position before it, whether it
+ *  arrives as UCI ("c7c5") or SAN ("c5"). `CoachGameMove.bestMove` is populated
+ *  as UCI on some paths and SAN on others (the review builds the last move's as
+ *  UCI, CoachGamePage as SAN) — so the classifier + attributor, which need SAN,
+ *  were silently getting UCI on some games and attaching nothing. This is the
+ *  connective tissue that makes the whole record→drill chain fire regardless of
+ *  which format the caller happened to store. Returns undefined on an illegal /
+ *  unparseable value. */
+function bestMoveToSan(fenBefore: string, best: string | null): string | undefined {
+  if (!best) return undefined;
+  try {
+    const c = new Chess(fenBefore);
+    if (/^[a-h][1-8][a-h][1-8][qrbn]?$/i.test(best)) {
+      const m = c.move({ from: best.slice(0, 2), to: best.slice(2, 4), promotion: best.slice(4, 5) || undefined });
+      return m ? m.san : undefined;
+    }
+    const m = c.move(best.replace(/[+#!?]+$/, ''));
+    return m ? m.san : undefined;
+  } catch {
+    return undefined;
+  }
+}
+export function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): BlunderForAnalysis[] {
   const sign = playerColor === 'white' ? 1 : -1;
   const out: BlunderForAnalysis[] = [];
   for (let i = 0; i < moves.length; i++) {
@@ -44,7 +66,7 @@ function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): 
         ? (move.preMoveEval - move.evaluation) * sign
         : undefined;
     const fenBefore = i > 0 ? moves[i - 1].fen : START_FEN;
-    const bestSan = move.bestMove ?? undefined;
+    const bestSan = bestMoveToSan(fenBefore, move.bestMove);
     // History up to AND INCLUDING the played move — lets the classifier run the
     // fundamentals attributor and RECORD its proven fundamental as the weakness
     // tag (the same one the review speaks). Without this the loop was half-wired:
