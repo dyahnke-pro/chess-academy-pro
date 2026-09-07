@@ -1312,6 +1312,7 @@ class StockfishEngine {
     depth: number = 18,
     options?: Record<string, string | number>,
     priority: AnalysisPriority = 'brain',
+    onStart?: () => void,
   ): Promise<StockfishAnalysis> {
     // FEN cache short-circuit — if we've already analyzed this exact
     // position+depth, return the cached result without invoking the
@@ -1413,11 +1414,13 @@ class StockfishEngine {
           /* prior brain rejected — we still proceed */
         }
         try {
+          onStart?.();
           return await this._dispatchAnalysis(fen, depth, options, priority);
         } finally {
           release();
         }
       }
+      onStart?.();
       return this._dispatchAnalysis(fen, depth, options, priority);
     };
 
@@ -1704,17 +1707,32 @@ class StockfishEngine {
     // One budgeted attempt: force a bestmove at the budget, and if nothing
     // lands within the grace the (iOS) worker is dead → recover so the caller
     // doesn't hang (David 2026-06-16).
+    // 🔒 THE BUDGET STARTS WHEN THE SEARCH STARTS, NOT WHEN IT IS ASKED FOR.
+    //
+    // Brain calls serialize on `_brainMutex`, so a budgeted call that arrives
+    // behind another search WAITS before its `go` is ever sent. These timers
+    // used to arm at call time: for two concurrent 2.5s calls (the review's
+    // explore grades the position before AND after the student's move at
+    // once) the second call's `stop()` fired into the FIRST search, and its
+    // grace timer then force-restarted the worker under whichever search was
+    // running — both rejected, the explore had no evals, and the engine never
+    // replied to the student's move (prod audit 2026-09-07, EXPL red under
+    // load). Arming on dispatch makes the budget mean what it says for every
+    // caller, however many are queued.
     const runOnce = async (): Promise<StockfishAnalysis> => {
-      const promise = this.analyzePosition(fen, depth);
-      const timer = setTimeout(() => this.stop(), budgetMs);
-      const graceTimer = setTimeout(() => {
-        this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
-      }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let graceTimer: ReturnType<typeof setTimeout> | undefined;
+      const promise = this.analyzePosition(fen, depth, undefined, 'brain', () => {
+        timer = setTimeout(() => this.stop(), budgetMs);
+        graceTimer = setTimeout(() => {
+          this.recoverStuckAnalysis('budget grace exceeded (engine not responding to stop)');
+        }, budgetMs + ANALYSIS_BUDGET_GRACE_MS);
+      });
       try {
         return await promise;
       } finally {
-        clearTimeout(timer);
-        clearTimeout(graceTimer);
+        if (timer) clearTimeout(timer);
+        if (graceTimer) clearTimeout(graceTimer);
       }
     };
     try {

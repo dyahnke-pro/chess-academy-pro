@@ -2151,3 +2151,46 @@ describe('runtime fallback (multi → single)', () => {
     });
   });
 });
+
+describe('analyzeWithBudget — the budget starts when the search dispatches', () => {
+  it('a budgeted call queued behind another brain search does not stop or restart that search', async () => {
+    const { stockfishEngine } = await getEngine();
+    await initEngine(stockfishEngine);
+    // Answer the handshake so a respawned worker would init, but never answer
+    // `go` on our own — the test emits bestmove by hand.
+    const pmMock = mockWorker.instance.postMessage as ReturnType<typeof vi.fn>;
+    pmMock.mockImplementation((msg: string) => {
+      mockWorker.postMessageCalls.push(msg);
+      if (msg === 'uci') queueMicrotask(() => mockWorker.emit('uciok'));
+      if (msg === 'isready') queueMicrotask(() => mockWorker.emit('readyok'));
+    });
+    vi.useFakeTimers();
+    const fenB = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const a = stockfishEngine.analyzeWithBudget(STARTING_FEN, 12, 300);
+    const b = stockfishEngine.analyzeWithBudget(fenB, 12, 300);
+    const settled = Promise.allSettled([a, b]);
+    await vi.advanceTimersByTimeAsync(0);
+    // Only A has dispatched; B waits on the brain mutex.
+    expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go ')).length).toBe(1);
+    // Well past B's budget measured from CALL time (and short of A's own
+    // grace): the old code posted a second `stop` into A's search here.
+    await vi.advanceTimersByTimeAsync(2_200);
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(1); // A's own budget stop
+    expect(mockWorker.instance.terminate).not.toHaveBeenCalled();
+    // A answers; B now dispatches and gets its OWN full budget.
+    mockWorker.emit('info depth 12 score cp 20 pv e2e4');
+    mockWorker.emit('bestmove e2e4');
+    await vi.advanceTimersByTimeAsync(0);
+    expect(mockWorker.postMessageCalls.filter((m) => m.startsWith('go ')).length).toBe(2);
+    await vi.advanceTimersByTimeAsync(200);
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(1);
+    await vi.advanceTimersByTimeAsync(150);
+    expect(mockWorker.postMessageCalls.filter((m) => m === 'stop').length).toBe(2);
+    mockWorker.emit('info depth 12 score cp -10 pv e7e5');
+    mockWorker.emit('bestmove e7e5');
+    const [ra, rb] = await settled;
+    expect(ra.status).toBe('fulfilled');
+    expect(rb.status).toBe('fulfilled');
+    vi.useRealTimers();
+  });
+});

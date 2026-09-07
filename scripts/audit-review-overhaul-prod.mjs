@@ -463,6 +463,15 @@ const run = async () => {
     await page.locator(sel).first().click({ timeout: 2000, force: true }).catch(() => undefined);
     await page.waitForTimeout(700);
   }
+  // Pool churn is visible on EVERY run, not only on a blow-up: each pool spawn
+  // logs a variant-resolved event, each stall/fallback its own kind. Three warm
+  // engines on a reopen means ~3 spawns; a starved box that pings warm workers
+  // dead and respawns them shows up here as a spawn count far above the pool.
+  {
+    const churn = events().filter((e) => (e.receivedAt ?? 0) >= t1 && /stockfish-variant-resolved|analysis-pool|stockfish-analysis-stalled|analysis-worker|wedge/i.test(String(e.kind) + ' ' + String(e.source ?? '')));
+    const by = {}; for (const e of churn) { const k = `${e.kind}|${String(e.source ?? '').split('.').pop()}`; by[k] = (by[k] ?? 0) + 1; }
+    log(`  [pool churn since reopen] ${JSON.stringify(by)}`);
+  }
   if (blown) { await add('HEAP reopened-walk-stays-sane', false, 'renderer heap exploded on the reopened walk'); }
   else { await dumpProfile('reopened-walk'); await add('HEAP reopened-walk-stays-sane', true, `heap ${await heapMB()}MB at ply ${FUND_PLY}`); }
   await settle();
