@@ -30,10 +30,16 @@
 // Those are the only cases where the bytes matter — and they should be a short,
 // deliberate run, not a side effect of auditing something else.
 export function muteTtsForAudit() {
+  // BOTH a storage flag and a memory flag. The service reads the memory flag
+  // first: a storage read that throws or comes back empty under pressure
+  // (2026-09-06: a renderer wedged by leaked workers) once latched the mute
+  // OFF for a whole document and 60 real-voice lines were billed inside a
+  // "muted" audit. The memory flag cannot be dropped by storage.
+  try { window.__auditMuteTts = true; } catch { /* unreachable */ }
   try {
     window.localStorage.setItem('auditMuteTts', '1');
   } catch {
-    /* no localStorage in this context — the app then speaks normally */
+    /* no localStorage in this context — the memory flag still mutes */
   }
 }
 

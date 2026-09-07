@@ -354,6 +354,12 @@ class DedicatedWorker {
     this.worker = worker;
   }
 
+  /** Signal a genuinely new game — sends `ucinewgame` ONCE so the hash is
+   *  cleared between games, never between positions of the same game. */
+  newGame(): void {
+    try { this.worker.postMessage('ucinewgame'); } catch { /* dead worker; analyzePosition will report it */ }
+  }
+
   /** @param budgetMs optional `movetime` cap. REQUIRED on a slow engine: this
    *  used to send a bare `go depth 16` against a hard 10s reject, so on the
    *  asm.js build (every iPhone) a deep search simply blew the timeout and the
@@ -410,7 +416,12 @@ class DedicatedWorker {
 
       try {
         this.worker.addEventListener('message', handler);
-        this.worker.postMessage('ucinewgame');
+        // NO `ucinewgame` per position (the singleton learned this on
+        // 2026-07-03; the pool had not). On the multi-thread build every
+        // `ucinewgame` clears the hash with a fresh std::thread per search
+        // thread — a new pthread Worker each when the runtime's idle pool is
+        // empty — and the census on 2026-09-07 found 101 such workers behind
+        // three engines. One `ucinewgame` per GAME (`newGame()`), never per ply.
         this.worker.postMessage(`position fen ${fen}`);
         this.worker.postMessage(budgetMs ? `go depth ${depth} movetime ${budgetMs}` : `go depth ${depth}`);
       } catch {
@@ -517,7 +528,14 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       // asm.js cold-compiles ~1.58MB before `readyok` — give it the engine's
       // full init budget. Fast WASM builds keep the short gate.
       const spawnTimeoutMs = resolved.variant === 'asm' ? ASM_POOL_SPAWN_TIMEOUT_MS : POOL_SPAWN_TIMEOUT_MS;
+      // A spawn that times out (or errors) must TERMINATE its Worker, not just
+      // reject: the engine keeps compiling and allocating in the background,
+      // the pool spawns a replacement, and every retry leaks another resident
+      // Stockfish. On a loaded box that compounded to a 12 GB renderer while
+      // the JS heap sat at 230 MB (prod audit 2026-09-06).
+      let worker: Worker | null = null;
       timeoutId = setTimeout(() => {
+        try { worker?.terminate(); } catch { /* already gone */ }
         reject(new Error(`Worker ${index} init timed out after ${spawnTimeoutMs}ms (variant=${resolved.variant})`));
       }, spawnTimeoutMs);
       // NAME THE BUILD THE POOL SPAWNS. The pool is the only Stockfish consumer
@@ -533,25 +551,27 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
         source: 'gameAnalysisService.spawnDedicatedWorker',
         summary: `pool worker ${index} variant=${resolved.variant} url=${resolved.url} reason=${resolved.reason}`,
       });
-      const worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
+      worker = new Worker(resolved.url, resolved.workerType === 'module' ? { type: 'module' } : undefined);
+      const w = worker;
 
-      worker.onerror = () => {
+      w.onerror = () => {
         clearTimeout(timeoutId);
+        try { w.terminate(); } catch { /* already gone */ }
         reject(new Error(`Worker ${index} failed to load`));
       };
 
       const readyHandler = (event: MessageEvent<string>): void => {
         if (event.data === 'readyok') {
           clearTimeout(timeoutId);
-          worker.removeEventListener('message', readyHandler);
-          worker.postMessage('setoption name MultiPV value 1');
-          resolve(new DedicatedWorker(worker));
+          w.removeEventListener('message', readyHandler);
+          w.postMessage('setoption name MultiPV value 1');
+          resolve(new DedicatedWorker(w));
         }
       };
 
-      worker.addEventListener('message', readyHandler);
-      worker.postMessage('uci');
-      worker.postMessage('isready');
+      w.addEventListener('message', readyHandler);
+      w.postMessage('uci');
+      w.postMessage('isready');
     } catch {
       clearTimeout(timeoutId);
       reject(new Error(`Worker ${index} spawn failed`));
@@ -933,6 +953,7 @@ async function evaluateFensPooled(
   let done = 0;
 
   const run = async (w: DedicatedWorker): Promise<void> => {
+    w.newGame(); // one game's positions share the hash; clear it once
     for (;;) {
       const i = next;
       next += 1;
@@ -972,6 +993,7 @@ export async function analyzeGameOnWorker(
 ): Promise<{ annotations: MoveAnnotation[]; achievedDepth: number; stats: GameAnalysisStats } | null> {
   const { fens, moves } = replayPgnToFens(game.pgn);
   if (fens.length < 2) return null;
+  worker.newGame(); // once per game, never per position
 
   // 🔒 BUDGET THE SEARCH HERE TOO, OR THE POOL FIX BECOMES A DATA BUG.
   //
@@ -1333,6 +1355,7 @@ async function analyzeGamePositions(
     // the singleton only when no worker can be had at all.
     let diveWorker: DedicatedWorker | null = null;
     try { diveWorker = (await acquirePool(1))[0] ?? null; } catch { diveWorker = null; }
+    diveWorker?.newGame();
     const search = async (fen: string): Promise<{ evaluation: number; bestMove: string; depth: number; pv: string[] }> => {
       if (diveWorker) return diveWorker.analyzePosition(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);
       const a = await stockfishEngine.analyzeWithBudget(fen, REVIEW_DEEP_DEPTH, REVIEW_POSITION_BUDGET_MS);

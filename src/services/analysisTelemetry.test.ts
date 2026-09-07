@@ -54,6 +54,7 @@ function worker() {
     analyzePosition: vi.fn((fen: string, depth: number) =>
       Promise.resolve({ evaluation: CURVE[FENS.indexOf(fen)] ?? 0, bestMove: 'd2d4', depth })),
     destroy: vi.fn(),
+    newGame: vi.fn(),
   } as never;
 }
 
