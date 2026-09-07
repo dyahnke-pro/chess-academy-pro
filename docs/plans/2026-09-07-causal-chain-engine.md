@@ -107,14 +107,22 @@ Wiring (consumers, each with a "note comes OUT" test):
   + the explored-move path. `coachFeatureService.causalChain.test.ts` (3) proves
   the chain text comes OUT of the review walk for the fixture. 49 existing review
   tests still green. ✅ DONE.
-- **P4 — wire Learn.** ⏳ NEXT. Present-tense register into the live "talk you
-  through the game" commentary in CoachTeachPage (a 9k-line P0 surface — needs a
-  focused pass on the live-commentary hook + a "note comes OUT" test; NOT a blind
-  inject). The engine + 'learn' register are already built and tested, so this is
-  consumer-wiring only.
-- **P5 — ship-check + 3-instrument audit** (review-real-game standard) + draft
-  PR for David's review of the design. ⏳ (PR opened after P3 so David can react
-  to the working feature; audit runs once Learn is wired.)
+- **P4 — wire Learn.** ✅ DONE (wired). Present-tense register into the live
+  "talk you through the game" commentary in CoachTeachPage, at the coach-reply
+  teaching pass (frame = the move just played, so arrows/highlights are true
+  there). Leads `facts` with the chain, feeds green attack arrows via
+  `setArrows`/`chainArrowsRef` and key-square highlights via `setHighlights`,
+  rating from `activeProfile`. Emits a `CoachTeachPage.causalChain` audit event.
+  Typecheck + lint clean. **The DOM firing is an interactive-audit concern
+  (§G1/G7) — it runs on main/prod, so it is NOT yet audited on this branch.**
+  Fundamentals link: each node carries `fundamentalId` + misconception `tag`;
+  `causalChainMistakeTags` exposes the drill-spine feed. (Enrolling those tags
+  into the My-Mistakes puzzle pipeline is the one remaining follow-on.)
+- **P5 — ship-check + 3-instrument audit** (review-real-game standard). ⏳ The
+  interactive Learn audit runs once this lands on main. Draft PR opened for
+  David's review of the design.
+- **P6 (follow-on) — feed `causalChainMistakeTags` into the mistake-puzzle /
+  weakness pipeline** so a chained loss becomes a My-Mistakes drill. ⏳
 
 ## Decisions log
 

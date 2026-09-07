@@ -250,6 +250,8 @@ import { gradePlayedMove } from '../../services/playedMoveGrade';
 import { buildOpponentIntent } from '../../services/opponentIntent';
 import { detectOpponentGap, opponentGapClause } from '../../services/opponentGap';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
+import { buildCausalChain, causalChainArrows, causalChainHighlights } from '../../services/causalChain';
+import { renderCausalChain } from '../../services/causalChainVoice';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
@@ -8470,6 +8472,45 @@ export function CoachTeachPage(): JSX.Element {
                 // general principle — so the model was told a borrowed idea was
                 // a fact about the board, and dutifully said so (2026-08-04).
                 {
+                  // 🔗 CROSS-MOVE CAUSAL CHAIN (present-tense — David 2026-09-07:
+                  // "belongs in Learn with coach as well. All coaching surfaces
+                  // should have access to the same builds"). When the move just
+                  // played exploited a loose piece with a provable cross-move
+                  // cause (a premature queen took a defender's square → the piece
+                  // was left loose → the discovery collected it), LEAD the coach's
+                  // commentary with the board-proven chain, its lead-the-eye
+                  // arrows, and its key-square highlights. Self-gates (silent
+                  // unless every link is provable). studentColor = playerColor so
+                  // the perspective reads for the learner; the frame is probe.fen()
+                  // (the move just played), so the arrows/highlights are true here.
+                  try {
+                    const chain = buildCausalChain({ historySans: historyAfterReply });
+                    if (chain) {
+                      const chainRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+                      const chainLines = renderCausalChain(chain, {
+                        register: 'learn',
+                        studentColor: playerColor === 'white' ? 'w' : 'b',
+                        rating: chainRating,
+                      });
+                      if (chainLines.length) {
+                        facts.unshift(`Cross-move causal chain — SAY THIS FIRST, present-tense, in this order: ${chainLines.join(' ')}`);
+                        const chainAr: BoardArrow[] = causalChainArrows(chain).map((a) => ({ startSquare: a.from, endSquare: a.to, color: a.color }));
+                        if (chainAr.length) {
+                          chainArrowsRef.current = [...chainArrowsRef.current, ...chainAr];
+                          void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...chainAr])));
+                        }
+                        const chainHi: BoardHighlight[] = causalChainHighlights(chain).map((h) => ({ square: h.square, color: h.color }));
+                        if (chainHi.length) void padDone.then(() => setHighlights((prev) => [...prev, ...chainHi.filter((h) => !prev.some((p) => p.square === h.square))]));
+                        void logAppAudit({
+                          kind: 'coach-narration-spoken',
+                          category: 'narration',
+                          source: 'CoachTeachPage.causalChain',
+                          summary: `causal chain @[${historyAfterReply.join(' ')}]: ${chainLines.join(' ').slice(0, 90)}`,
+                          fen: probe.fen(),
+                        });
+                      }
+                    }
+                  } catch { /* the chain is a bonus, never a blocker */ }
                   try {
                     // LEAD-THE-EYE FROM THE NOTE (David 2026-08-07: "add the
                     // lead the eye arrows like teach me x opening has").
