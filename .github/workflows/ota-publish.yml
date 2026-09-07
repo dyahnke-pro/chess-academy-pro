@@ -1,8 +1,15 @@
 name: Publish OTA bundle
 
-# Ships the web bundle to native users on every main push.
+# Ships the web bundle to native users — MANUAL ONLY (workflow_dispatch).
 #
-# WHY THIS EXISTS (2026-09-03): the OTA pointer could only advance inside
+# 🔒 David 2026-09-07 ("I want to control ota, remove the auto send"): the
+# auto `push: branches: [main]` trigger is removed (see the `on:` block). OTA
+# now ships ONLY when this workflow is dispatched. The forward-only guard and
+# repeat-safety below are unchanged; the note under WHY is the historical
+# reason the auto-trigger existed — that risk (pointer drifting behind main) is
+# now David's to manage by remembering to dispatch.
+#
+# WHY THE AUTO-TRIGGER EXISTED (2026-09-03): the OTA pointer could only advance inside
 # `daily-deploy.yml`, which runs once a day AND behind two gates. Every other
 # push to main deployed the web via Vercel's git integration and published no
 # bundle at all — so the pointer routinely sat weeks behind main while the app
@@ -19,23 +26,16 @@ name: Publish OTA bundle
 # the pointer is written last.
 
 on:
-  push:
-    branches: [main]
-    # Nothing here can change the shipped bundle, and publishing one that is
-    # byte-identical except for its version string is not free: every device is
-    # then offered an update and re-downloads the changed chunks (~8 MB) for a
-    # change that cannot affect what they run. `dist/` comes from vite, so only
-    # src/, public/, index.html and the build config feed it — server functions
-    # under api/, the CI scripts, and the native project do not.
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - '.github/**'
-      - 'ios-patches/**'
-      - 'ios/**'
-      - 'scripts/**'
-      - 'api/**'
-      - 'e2e/**'
+  # 🔒 OTA IS MANUAL ONLY (David 2026-09-07: "I want to control ota, remove the
+  # auto send"). The `push: branches: [main]` trigger that auto-published a
+  # bundle on every main push has been REMOVED — landing code on main now
+  # deploys the WEB app (Vercel git integration, untouched) but ships NOTHING to
+  # native devices until someone dispatches this workflow. This is a deliberate
+  # trade: the auto-trigger existed so the OTA pointer never drifted behind main
+  # (see the file header), so with it gone the pointer only advances when you
+  # run this workflow — batch your changes, then dispatch ONE OTA. The
+  # `[skip ota]` commit switch is now moot (nothing auto-fires to skip) but stays
+  # honored by the job `if:` below, harmlessly.
   workflow_dispatch:
     inputs:
       force:
