@@ -182,3 +182,24 @@ node scripts/audit-safe-area-layout.mjs                 # localhost:5173
 AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app AUDIT_SANDBOX=1 \
   AUDIT_PROXY=$HTTPS_PROXY node scripts/audit-safe-area-layout.mjs
 ```
+
+## `audit-causal-chain.mts` — causal-chain narration accuracy (silent)
+
+Build-specific audit for the cross-move causal-chain engine (David 2026-09-07:
+"write an audit specific to the build, keep it silent, read each individual
+narration for accuracy"). SILENT by construction — pure node/tsx, no browser, no
+`/api/tts`, no synthesis, so it can never spend TTS budget. READS every narration
+the build produces (both registers × three rating tiers × both perspectives) and
+verifies each sentence against the board: no phantom squares, every "piece on
+square" claim true, the loose target undefended, the displaced-knight
+counterfactual holds, no we/our/us. Also checks structural counterfactuals,
+lead-the-eye arrows (each originates on a real piece), highlights, and the
+silent-on-unprovable negatives. Run on any change to `causalChain.ts`,
+`causalChainVoice.ts`, or the review/learn causal wiring.
+
+```
+npx tsx scripts/audit-causal-chain.mts
+```
+
+NB: this reads the narration for board TRUTH. The interactive live-DOM/voice
+firing on Learn (§G1 3-instrument) runs against main/prod once the build lands.
