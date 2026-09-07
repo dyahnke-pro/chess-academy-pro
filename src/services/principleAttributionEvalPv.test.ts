@@ -69,6 +69,19 @@ describe('eval/PV fundamentals — Wave 3 detectors fire on real legal games', (
     });
   }
 
+  it('botched-conversion clamps a thrown MATE — no absurd "300 points" figure', () => {
+    // Mate is eval-encoded as ±30000; a thrown mate must read as "a winning
+    // position", never a three-digit pawn count.
+    const thrownMate: AttributionInput = { ...BOTCHED, evalBefore: 30000, evalAfterPlayed: 20 };
+    const out = attributePrinciples(thrownMate);
+    const a = out.find((x) => x.id === 'botched-conversion');
+    expect(a, 'botched-conversion did not fire on a thrown mate').toBeTruthy();
+    const text = renderFundamentalVerdict([a!], { ply: thrownMate.historySans.length, seen: new Set() });
+    expect(text).not.toMatch(/\b\d{3,}\b/);        // no 100+ figure
+    expect(text).not.toMatch(/pawns/i);            // points, never pawns (David)
+    expect(text).toMatch(/winning position/i);
+  });
+
   it('the eval/PV-GATED detectors stay SILENT without the persisted eval/PV', () => {
     // Same positions, but no eval and no PV → the eval/PV-gated detectors must not
     // fire (the live-path contract). capture-toward-centre is EXCLUDED — it is

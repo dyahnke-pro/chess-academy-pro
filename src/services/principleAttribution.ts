@@ -857,6 +857,10 @@ const DETECTORS: Detector[] = [
     if (eb === undefined || ea === undefined) return null;
     if (eb < -120) return null;                              // was not already lost
     if (ea > -150) return null;                              // now clearly losing
+    // An overvalued attack INVESTS material for an attack — it is not a material
+    // GRAB. A piece taking a pawn that then gets trapped is a poisoned pawn (its
+    // own detector), so exclude piece-takes-pawn here to keep the two distinct.
+    if (last.captured === 'p' && VAL[last.piece] >= 3) return null;
     const offered = hangsBy(c.after, last.to) > 0;
     if (!offered && !isForcing(last.san)) return null;       // an aggressive commitment
     if (!pvWinsMaterial(c.after, c.pvP, opp)) return null;    // the opponent wins material back
@@ -899,7 +903,12 @@ const DETECTORS: Detector[] = [
     const { best, evalBefore: eb, evalAfterPlayed: ea } = c;
     if (eb === undefined || ea === undefined) return null;
     if (eb < 200 || ea >= 100) return null;
-    return att('botched-conversion', 2, { squares: [best.to], moves: [best.san], pvMoves: [] }, { drop: Math.round((eb - ea) / 100), better: best.san });
+    // Mate is eval-encoded as a huge cp (±30000). Clamp to ±20 points so the
+    // "points thrown away" figure stays sane — a thrown mate is "a winning
+    // position", never "300 pawns".
+    const b = Math.min(2000, eb);
+    const a = Math.max(-2000, ea);
+    return att('botched-conversion', 2, { squares: [best.to], moves: [best.san], pvMoves: [] }, { drop: Math.round((b - a) / 100), better: best.san });
   },
 ];
 

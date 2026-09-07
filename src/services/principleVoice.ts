@@ -291,10 +291,13 @@ function fullVerdict(a: PrincipleAttribution, v: number): string {
       return s[v % s.length];
     }
     case 'botched-conversion': {
+      // Eval is spoken in POINTS, never "pawns" (David 2026-07-24). A big drop
+      // (thrown mate / a rout) names no exact figure — "a winning position".
+      const lost = Number(f.drop) >= 6 ? 'a winning position' : `about ${f.drop} point${Number(f.drop) === 1 ? '' : 's'} of your edge`;
       const s = [
-        `You had it won and rushed — this move throws about ${f.drop} pawns of a winning edge away; ${f.better} keeps it simple and holds the advantage.`,
+        `You had it won and rushed — this move throws away ${lost}; ${f.better} keeps it simple and holds the advantage.`,
         `Convert with patience: you were clearly winning and this hands most of it back — ${f.better} was the calm move.`,
-        `A won position needs care, not haste — this drops roughly ${f.drop} pawns of your lead; ${f.better} stays on track.`,
+        `A won position needs care, not haste — this gives up ${lost}; ${f.better} stays on track.`,
       ];
       return s[v % s.length];
     }

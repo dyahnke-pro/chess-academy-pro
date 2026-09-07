@@ -11,7 +11,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
+import { Chess } from 'chess.js';
 import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
+import { pvUciToSan } from '../../services/principleAttribution';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { hasMisconceptionsForGame } from '../../services/misconceptionService';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
@@ -42,14 +44,40 @@ function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): 
         ? (move.preMoveEval - move.evaluation) * sign
         : undefined;
     const fenBefore = i > 0 ? moves[i - 1].fen : START_FEN;
+    const bestSan = move.bestMove ?? undefined;
+    // History up to AND INCLUDING the played move — lets the classifier run the
+    // fundamentals attributor and RECORD its proven fundamental as the weakness
+    // tag (the same one the review speaks). Without this the loop was half-wired:
+    // the fundamentals were narrated but never became drillable weaknesses.
+    const historySans = moves.slice(0, i + 1).map((m) => m.san);
+    // Eval (mover POV) + engine lines (SAN) unlock the eval/PV-gated fundamentals
+    // on the recording path (overvalued-attack / poisoned-pawn / botched-
+    // conversion). pv is UCI on the annotation — convert against the right FEN,
+    // mirroring the review narrator (coachFeatureService).
+    const evalBefore = move.preMoveEval !== null ? move.preMoveEval * sign : undefined;
+    const evalAfterPlayed = move.evaluation !== null ? move.evaluation * sign : undefined;
+    let pvAfterPlayed: string[] | undefined;
+    let pvAfterBest: string[] | undefined;
+    if (move.pv?.afterPlayed?.length) pvAfterPlayed = pvUciToSan(move.fen, move.pv.afterPlayed);
+    if (move.pv?.afterBest?.length && bestSan) {
+      try {
+        const c = new Chess(fenBefore);
+        if (c.move(bestSan)) pvAfterBest = pvUciToSan(c.fen(), move.pv.afterBest);
+      } catch { /* illegal best (stale analysis) — skip the afterBest line */ }
+    }
     out.push({
       fen: fenBefore,
       playedSan: move.san,
-      bestSan: move.bestMove ?? undefined,
+      bestSan,
       cpLoss: cpLoss !== undefined && cpLoss > 0 ? cpLoss : undefined,
       // Material-aware phase so endgame slips are filed as endgame.
       gamePhase: classifyPhase(fenBefore, i + 1),
       moveNumber: move.moveNumber,
+      historySans,
+      pvAfterPlayed,
+      pvAfterBest,
+      evalBefore,
+      evalAfterPlayed,
     });
   }
   return out;

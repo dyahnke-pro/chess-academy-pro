@@ -38,6 +38,16 @@ export interface ClassifyMisconceptionInput {
    *  fundamental is the tag — the cheap type-based checks below are the
    *  fallback (David 2026-09-05: one coach, one memory). */
   historySans?: string[];
+  /** Persisted engine lines (SAN) + eval (mover POV, cp) for the played move,
+   *  when the caller analysed the game (game-review capture). These unlock the
+   *  eval/PV-gated fundamentals (overvalued-attack, poisoned-pawn, botched-
+   *  conversion) on the RECORDING path, so they become drillable weaknesses and
+   *  not just spoken review lines (David 2026-09-06). Absent live → those stay
+   *  silent, which is correct. */
+  pvAfterPlayed?: string[];
+  pvAfterBest?: string[];
+  evalBefore?: number;
+  evalAfterPlayed?: number;
 }
 
 export interface MisconceptionClassification {
@@ -232,7 +242,15 @@ function classifyMisconceptionImpl(
   // (0) THE ATTRIBUTED FUNDAMENTAL — proven on the board (pattern + available
   // punishment + counterfactual), when the caller can supply the history.
   if (input.historySans && input.historySans.length > 0 && input.bestSan) {
-    const attrs = attributePrinciples({ historySans: input.historySans, bestSan: input.bestSan, classification: 'mistake' });
+    const attrs = attributePrinciples({
+      historySans: input.historySans,
+      bestSan: input.bestSan,
+      classification: 'mistake',
+      pvAfterPlayed: input.pvAfterPlayed,
+      pvAfterBest: input.pvAfterBest,
+      evalBefore: input.evalBefore,
+      evalAfterPlayed: input.evalAfterPlayed,
+    });
     if (attrs.length > 0) {
       return {
         tag: attrs[0].tag,

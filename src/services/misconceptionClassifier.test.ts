@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { Chess } from 'chess.js';
 import { classifyMisconception } from './misconceptionClassifier';
 
 // The classifier is now FULLY DETERMINISTIC — no LLM, no mocks. It reads the
@@ -8,6 +9,38 @@ import { classifyMisconception } from './misconceptionClassifier';
 // model returning parseable JSON.
 
 describe('classifyMisconception (deterministic)', () => {
+  // David 2026-09-06: the eval/PV-gated fundamentals must become RECORDABLE
+  // weaknesses, not just spoken review lines. When the game-review capture path
+  // supplies PV + eval, the classifier attributes them so they file to a tag.
+  it('records the eval/PV fundamental as the tag when PV+eval are supplied (poisoned pawn)', async () => {
+    const history = ['f3', 'c5', 'b4', 'cxb4', 'Na3', 'bxa3', 'g3', 'Na6', 'Bxa3', 'e5', 'Kf2', 'Bxa3', 'h3', 'e4', 'fxe4', 'Nc7', 'c4', 'Nf6', 'Rh2', 'Nxe4+', 'Ke1', 'Nxg3', 'Qc2', 'Kf8', 'Qxh7'];
+    const c = new Chess();
+    for (const san of history.slice(0, -1)) c.move(san);
+    const fenBefore = c.fen();
+    const r = await classifyMisconception({
+      fen: fenBefore,
+      playedSan: 'Qxh7',
+      bestSan: 'c5',
+      historySans: history,
+      pvAfterPlayed: ['Rxh7'],
+      evalBefore: 20,
+      evalAfterPlayed: -550,
+      gamePhase: 'middlegame',
+    });
+    expect(r.tag).toBe('poisoned-pawn');
+    expect(r.coachNote.length).toBeGreaterThan(10);
+  });
+
+  it('WITHOUT PV+eval, the eval/PV fundamental does NOT fire (live-path contract)', async () => {
+    const history = ['f3', 'c5', 'b4', 'cxb4', 'Na3', 'bxa3', 'g3', 'Na6', 'Bxa3', 'e5', 'Kf2', 'Bxa3', 'h3', 'e4', 'fxe4', 'Nc7', 'c4', 'Nf6', 'Rh2', 'Nxe4+', 'Ke1', 'Nxg3', 'Qc2', 'Kf8', 'Qxh7'];
+    const c = new Chess();
+    for (const san of history.slice(0, -1)) c.move(san);
+    const r = await classifyMisconception({
+      fen: c.fen(), playedSan: 'Qxh7', bestSan: 'c5', historySans: history, gamePhase: 'middlegame',
+    });
+    expect(r.tag).not.toBe('poisoned-pawn');
+  });
+
   it('tags hung-material when the move leaves a piece en prise, naming the square', async () => {
     // White Nf3-d4 walks into the e5 pawn; the knight on d4 is undefended.
     const r = await classifyMisconception({

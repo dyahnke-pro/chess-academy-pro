@@ -33,6 +33,13 @@ export interface BlunderForAnalysis {
   /** Every SAN up to and including the played move — lets the classifier run
    *  the fundamentals attributor (the same one the review speaks). */
   historySans?: string[];
+  /** Persisted engine lines (SAN) + eval (mover POV, cp) — unlock the eval/PV-
+   *  gated fundamentals on the recording path so they become drillable
+   *  weaknesses (David 2026-09-06). */
+  pvAfterPlayed?: string[];
+  pvAfterBest?: string[];
+  evalBefore?: number;
+  evalAfterPlayed?: number;
 }
 
 export interface AutoAnalyzeOptions {
@@ -78,6 +85,10 @@ export async function autoAnalyzeBlunders(
         evalSummary: cpToWords(b.cpLoss),
         gamePhase: b.gamePhase,
         ...(b.historySans ? { historySans: b.historySans } : {}),
+        ...(b.pvAfterPlayed ? { pvAfterPlayed: b.pvAfterPlayed } : {}),
+        ...(b.pvAfterBest ? { pvAfterBest: b.pvAfterBest } : {}),
+        ...(b.evalBefore !== undefined ? { evalBefore: b.evalBefore } : {}),
+        ...(b.evalAfterPlayed !== undefined ? { evalAfterPlayed: b.evalAfterPlayed } : {}),
         // No userReason — this is passive analysis.
       },
       source: 'auto-analysis',
