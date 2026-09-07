@@ -265,6 +265,12 @@ export function NotificationBell(): JSX.Element {
               <h2
                 className="font-bold text-theme-text"
                 // Hidden admin unlock: a long-press reveals the secret entry.
+                // iOS fires its native text-selection menu (Copy / Look Up) on a
+                // long-press of selectable text, which stole this gesture on
+                // David's phone (2026-09-07). Disable selection + the callout so
+                // the hold reaches our handler instead of the OS menu.
+                style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none', touchAction: 'manipulation' } as React.CSSProperties}
+                onContextMenu={(e) => e.preventDefault()}
                 onPointerDown={() => {
                   const t = setTimeout(() => setShowSecretInput(true), 700);
                   const cancel = () => { clearTimeout(t); window.removeEventListener('pointerup', cancel); };
