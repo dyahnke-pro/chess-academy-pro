@@ -37,6 +37,8 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
+import { buildCausalChain } from './causalChain';
+import { renderCausalChain } from './causalChainVoice';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
@@ -1059,6 +1061,9 @@ export function buildReviewSegments(
    *  per-move cascade + one-shot flags with the full-data aggregator, which emits
    *  EVERY computed facet on EVERY move. Off by default (production stays capped). */
   uncapped?: boolean,
+  /** The student's rating — scales the causal-chain depth (beginners hear every
+   *  link; strong players hear the compressed 2–3). Default 1500 (medium). */
+  rating?: number,
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1309,6 +1314,25 @@ export function buildReviewSegments(
         })
       : [];
     const fundamentalLed = fundamentals.length > 0;
+    // 🔗 THE CROSS-MOVE CAUSAL CHAIN (David 2026-09-07: "fact A caused fact B
+    // caused fact C. THIS IS CHESS! Moves do not exist in isolation."). When THIS
+    // move is a tactic that collected a loose enemy piece whose looseness traces
+    // to an earlier move (a premature queen taking a defender's square → the
+    // defender displaced → the piece left loose), LEAD the beat with the
+    // board-proven chain — the one teaching that links the moves instead of
+    // grading each alone. Self-gates (null unless a real cross-move chain is
+    // PROVABLE, per the silent-on-unprovable rule); runs for either side (the
+    // cause is often the OPPONENT's early queen enabling the student's tactic).
+    let causalLead: string | null = null;
+    if (studentColorWB !== null) {
+      try {
+        const chain = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
+        if (chain) {
+          const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
+          if (lines.length) causalLead = lines.join(' ');
+        }
+      } catch { causalLead = null; }
+    }
     // UNCAPPED diagnostic branch — emit EVERY computed facet on EVERY move (David
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
@@ -1415,6 +1439,8 @@ export function buildReviewSegments(
         keptRaw.push(f);
       }
       const kept = keptRaw.map(applyRefrainOnce);
+      // The causal chain LEADS the beat when present (it's the cross-move story).
+      const uncappedParts = causalLead ? [causalLead, ...kept] : kept;
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -1427,8 +1453,8 @@ export function buildReviewSegments(
         evalAfter: m.evaluation,
         bestMoveSan,
         bestMoveUci: m.bestMove,
-        narration: kept.length ? kept.join(' ') : null,
-        narrationSource: kept.length ? 'per-move' : null,
+        narration: uncappedParts.length ? uncappedParts.join(' ') : null,
+        narrationSource: uncappedParts.length ? 'per-move' : null,
         ...(fundamentals.length ? { fundamentals } : {}),
       });
       try {
@@ -2188,6 +2214,14 @@ export function buildReviewSegments(
         ? `And there it is — checkmate. You finished the game.`
         : `And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.`;
       narrationSource = 'per-move';
+    }
+    // 🔗 THE CAUSAL CHAIN LEADS the beat when this move exploited a loose piece
+    // with a provable cross-move cause (David 2026-09-07). Prepended last so it
+    // sits ahead of whatever the cascade produced; a mate move never has a chain
+    // (the exploit is winning a piece, not the king), so it doesn't collide.
+    if (causalLead) {
+      narration = narration ? `${causalLead} ${narration}` : causalLead;
+      if (!narrationSource) narrationSource = 'per-move';
     }
     segments.push({
       ply: m.ply,
@@ -3298,7 +3332,7 @@ export async function generateReviewNarration(params: {
   // the his-play DB (primary) + the masters DB (backup). Concurrent; each
   // degrades to null on failure so the beat just falls through.
   await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +

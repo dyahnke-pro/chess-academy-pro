@@ -96,18 +96,25 @@ Wiring (consumers, each with a "note comes OUT" test):
 
 ## Phases (each a shippable increment)
 
-- **P0 — plan doc.** THIS FILE. → committed.
+- **P0 — plan doc.** THIS FILE. ✅ DONE (committed).
 - **P1 — the engine leaf + gate.** `causalChain.ts` + `causalChain.test.ts`
-  with David's game as the acceptance fixture (produces the full 4-node chain;
-  every edge board-proven) AND negative fixtures (a quiet game produces NO
-  chain; an unprovable link truncates). **Load-bearing correctness core.**
-- **P2 — the renderer + gate.** `causalChainVoice.ts` + test: rating-scaled
-  depth, review vs learn register, perspective rule, silent on null.
-- **P3 — wire Review.** Inject into `buildReviewSegments`; test proves the chain
-  text comes OUT of the review walk for the fixture game.
-- **P4 — wire Learn.** Present-tense register into the teach path; test.
+  (13) — David's game produces the full 4-node chain; negatives return null.
+  ✅ DONE.
+- **P2 — the renderer + gate.** `causalChainVoice.ts` + test (6) — rating-scaled
+  depth, review vs learn register, perspective rule, silent on null. ✅ DONE.
+- **P3 — wire Review.** Injected into `buildReviewSegments` (leads the beat, both
+  the capped + uncapped branches); rating threaded from `generateReviewNarration`
+  + the explored-move path. `coachFeatureService.causalChain.test.ts` (3) proves
+  the chain text comes OUT of the review walk for the fixture. 49 existing review
+  tests still green. ✅ DONE.
+- **P4 — wire Learn.** ⏳ NEXT. Present-tense register into the live "talk you
+  through the game" commentary in CoachTeachPage (a 9k-line P0 surface — needs a
+  focused pass on the live-commentary hook + a "note comes OUT" test; NOT a blind
+  inject). The engine + 'learn' register are already built and tested, so this is
+  consumer-wiring only.
 - **P5 — ship-check + 3-instrument audit** (review-real-game standard) + draft
-  PR for David's review of the design.
+  PR for David's review of the design. ⏳ (PR opened after P3 so David can react
+  to the working feature; audit runs once Learn is wired.)
 
 ## Decisions log
 
