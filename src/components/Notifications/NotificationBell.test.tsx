@@ -67,4 +67,18 @@ describe('NotificationBell — unread dot', () => {
     expect(screen.queryByTestId('admin-tab-broadcast')).toBeNull();
     expect(screen.queryByTestId('broadcast-composer')).toBeNull();
   });
+
+  it('shows a broadcast as a collapsed title row and expands the body on tap (David 2026-09-07)', async () => {
+    render(<NotificationBell />);
+    fireEvent.click(await screen.findByTestId('notification-bell'));
+    // The title row is present; the body is NOT shown until tapped.
+    const row = await screen.findByTestId('broadcast-row');
+    expect(row.textContent).toContain('Welcome');
+    expect(screen.queryByTestId('broadcast-body')).toBeNull();
+    // Tap to expand → body appears; tap again → collapses.
+    fireEvent.click(row);
+    expect((await screen.findByTestId('broadcast-body')).textContent).toContain('be patient');
+    fireEvent.click(row);
+    await waitFor(() => expect(screen.queryByTestId('broadcast-body')).toBeNull());
+  });
 });

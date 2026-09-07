@@ -99,22 +99,38 @@ function toAnnouncement(b: { id: string; title: string; body: string; ts: number
   return { id: b.id, title: b.title, body: b.body, date: new Date(b.ts).toISOString().slice(0, 10) };
 }
 
-/** Broadcasts (newest first) + this device's thread. Never throws. */
+/** Merge the pinned welcome set (announcements.json, origin-served so it reaches
+ *  every user — native included — with no App Store release) with the dynamic
+ *  Redis broadcasts, dedup by id (a Redis broadcast with the same id wins),
+ *  newest-first. This is why the welcome messages ALWAYS show: `/api/messages`
+ *  returns `ok` with an empty (or cap-degraded) broadcast list, so the old
+ *  fallback-only path never fired and the welcome note was invisible to everyone
+ *  (David 2026-09-07). Pure. */
+export function mergeBroadcasts(pinned: Announcement[], dynamic: Announcement[]): Announcement[] {
+  const byId = new Map<string, Announcement>();
+  for (const a of pinned) byId.set(a.id, a);
+  for (const a of dynamic) byId.set(a.id, a); // dynamic (Redis) wins on id collision
+  return [...byId.values()].sort((a, b) => `${b.date}${b.id}`.localeCompare(`${a.date}${a.id}`));
+}
+
+/** Broadcasts (newest first) + this device's thread. Never throws. The pinned
+ *  welcome set is always fetched and merged so new users see it regardless of
+ *  Redis state. */
 export async function fetchInbox(): Promise<{ broadcasts: Announcement[]; thread: ThreadMessage[] }> {
+  const pinned = await fetchAnnouncements();
   try {
     const device = await getDeviceId();
     const res = await fetch(`${MESSAGES_API}?device=${encodeURIComponent(device)}&cb=${Date.now()}`, { cache: 'no-store' });
     if (res.ok) {
       const data = (await res.json()) as { broadcasts?: { id: string; title: string; body: string; ts: number }[]; thread?: ThreadMessage[] };
-      const broadcasts = (Array.isArray(data.broadcasts) ? data.broadcasts : [])
+      const dynamic = (Array.isArray(data.broadcasts) ? data.broadcasts : [])
         .filter((b) => b && typeof b.id === 'string')
-        .map(toAnnouncement)
-        .sort((a, b) => `${b.date}${b.id}`.localeCompare(`${a.date}${a.id}`));
+        .map(toAnnouncement);
       const thread = Array.isArray(data.thread) ? data.thread : [];
-      return { broadcasts, thread };
+      return { broadcasts: mergeBroadcasts(pinned, dynamic), thread };
     }
-  } catch { /* fall through to the static file */ }
-  return { broadcasts: await fetchAnnouncements(), thread: [] };
+  } catch { /* fall through to the pinned welcome set only */ }
+  return { broadcasts: pinned, thread: [] };
 }
 
 /** A user replies into their own thread. Returns whether it was accepted. */

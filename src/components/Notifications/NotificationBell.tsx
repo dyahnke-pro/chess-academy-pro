@@ -57,6 +57,17 @@ function Bubble({ m }: { m: ThreadMessage }): JSX.Element {
 
 export function NotificationBell(): JSX.Element {
   const [broadcasts, setBroadcasts] = useState<Announcement[]>([]);
+  // Which broadcasts are expanded (collapsed-title list, David 2026-09-07:
+  // "bullet pointed by title chronologically… tighten it up"). Newest-first is
+  // the fetch order; a tap toggles the body.
+  const [expandedBroadcasts, setExpandedBroadcasts] = useState<Set<string>>(new Set());
+  const toggleBroadcast = useCallback((id: string) => {
+    setExpandedBroadcasts((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
   const [thread, setThread] = useState<ThreadMessage[]>([]);
   const [lastSeenId, setLastSeenId] = useState<string | null>(null);
   const [lastSeenThreadTs, setLastSeenThreadTs] = useState(0);
@@ -371,15 +382,27 @@ export function NotificationBell(): JSX.Element {
                   {broadcasts.length === 0 && thread.length === 0 ? (
                     <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>No messages yet.</p>
                   ) : (
-                    broadcasts.map((msg) => (
-                      <div key={msg.id} className="rounded-xl p-3" style={{ background: 'var(--color-bg)' }}>
-                        <div className="flex items-baseline justify-between gap-2">
-                          <h3 className="font-semibold text-theme-text">{msg.title}</h3>
-                          <span className="shrink-0 text-xs" style={{ color: 'var(--color-text-muted)' }}>{msg.date}</span>
+                    broadcasts.map((msg) => {
+                      const isExpanded = expandedBroadcasts.has(msg.id);
+                      return (
+                        <div key={msg.id} className="rounded-xl" style={{ background: 'var(--color-bg)' }}>
+                          <button
+                            type="button"
+                            data-testid="broadcast-row"
+                            aria-expanded={isExpanded}
+                            onClick={() => toggleBroadcast(msg.id)}
+                            className="flex w-full items-baseline gap-2 px-3 py-2.5 text-left"
+                          >
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-theme-accent" aria-hidden="true" />
+                            <span className="min-w-0 flex-1 truncate font-semibold text-theme-text">{msg.title}</span>
+                            <span className="shrink-0 text-xs" style={{ color: 'var(--color-text-muted)' }}>{msg.date}</span>
+                          </button>
+                          {isExpanded && (
+                            <p className="whitespace-pre-line px-3 pb-3 text-sm text-theme-text" data-testid="broadcast-body">{msg.body}</p>
+                          )}
                         </div>
-                        <p className="mt-1 whitespace-pre-line text-sm text-theme-text">{msg.body}</p>
-                      </div>
-                    ))
+                      );
+                    })
                   )}
                   {thread.length > 0 && (
                     <div className="space-y-2 pt-1" data-testid="user-thread">
