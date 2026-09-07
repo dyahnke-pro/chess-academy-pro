@@ -3,8 +3,9 @@ import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
+import { plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
 import { narrateDnaLine } from './dnaLineNarrator';
+import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
@@ -1244,6 +1245,25 @@ export function buildReviewSegments(
     if (moverColor !== playerColor) opponentSans.push(m.san);
     // Track every SAN for the live variation-naming beat below.
     allSans.push(m.san);
+    // THE PER-MOVE BRIEFING — every important aspect of the move, computed and
+    // ranked most-important-first (salience lifted by the eval swing), the
+    // criticality "this was the moment" line leading when the decision mattered,
+    // in the review register (David 2026-09-07: "compute all the facts, order
+    // them in level of importance using the PV and delta… state all important
+    // aspects of each move"). Supersedes the thinner first-builder-wins
+    // plyFactsForMove/buildReviewMoveTeaching that stated only ONE aspect.
+    const moveBriefing = (moverIsStudent: boolean): string | null => {
+      const swingCp = (m.evaluation != null && m.preMoveEval != null && studentColorWB !== null)
+        ? (studentColorWB === 'w' ? 1 : -1) * (m.evaluation - m.preMoveEval)
+        : null;
+      const critical = m.classification === 'inaccuracy' || m.classification === 'mistake'
+        || m.classification === 'blunder' || m.classification === 'brilliant' || m.classification === 'great'
+        || (swingCp != null && Math.abs(swingCp) >= 150);
+      return buildReviewMoveBriefing({
+        fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap,
+        moverIsStudent, studentSwingCp: swingCp, criticalMoment: critical,
+      });
+    };
     const rawBestSan = uciToSanAt(m.bestMove, fenPair.fenBefore);
     // Defense-in-depth for games analysed BEFORE the source fix: never name the
     // move that was actually played as the "better" move. If the stored best
@@ -1943,8 +1963,7 @@ export function buildReviewSegments(
       // whole reason opening narration read thin next to the middlegame — same
       // engine, but buildOpeningMoveDetail was tried FIRST and buried it
       // (2026-07-25 hand-audit N1 root cause).
-      const openingIdea = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true)
-        ?? buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+      const openingIdea = moveBriefing(true);
       if (openingIdea) {
         narration = openingIdea;
         narrationSource = 'per-move';
@@ -2011,7 +2030,7 @@ export function buildReviewSegments(
       // outposts/passed pawns/files/material), null → still silent for a truly
       // uneventful move.
       if (narration === null) {
-        const rich = plyFactsForMove(fenPair.fenBefore, m.san, prevCap, true);
+        const rich = moveBriefing(true);
         if (rich) { narration = rich; narrationSource = 'per-move'; }
       }
     }

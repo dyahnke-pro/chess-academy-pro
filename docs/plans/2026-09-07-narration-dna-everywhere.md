@@ -166,7 +166,26 @@ Detector also detects battery / discovery / overload that the review ignores.
 INCREMENT 1 (this push): threat-first ordering — a minor that attacks an enemy
 piece states the pressure instead of the "bears down on the center" gloss.
 
-INCREMENT 2 (next): wire the review walk through `computePositionFacts` per ply
+INCREMENT 2 (DONE — this push): new `reviewMoveBriefing.ts` — computes EVERY
+aspect of a move (concrete threat via detectNewThreat, tactic landed incl.
+battery/discovery/overload, material won naming the piece, check, promotion,
+enemy king-cover prised open, outpost/passed-pawn/open-file made, pawn weakness
+inflicted OR conceded, own king cover loosened, positional idea), ranks them by
+a salience table LIFTED by the eval swing, and leads with the "this was the
+moment to slow down" criticality line when the decision mattered — then the
+facts. Wired into the review per-move assembly (student moves), superseding the
+first-builder-wins plyFactsForMove/buildReviewMoveTeaching that stated ONE
+aspect. Perspective-locked (you/they). Gates green: reviewMoveBriefing,
+narrationAccuracy (1834), reviewNarrationFidelity (27), coachFeatureService (47),
+reviewBetterLineWhy, reviewFullGameNarration.harness.
+
+INCREMENT 3 (next): extend to ALL coach surfaces (David: "all coach surfaces get
+this build") — opponent-side review moves, and the Learn/Play live narration
+(they already compute via serveGroundedPositionDefault/positionFacts but state a
+SUBSET of clauses; surface the full ranked set + criticality lead there too).
+
+--- superseded exploratory note (kept for context) ---
+INCREMENT 2 (orig idea): wire the review walk through `computePositionFacts` per ply
 — feed it the per-ply Stockfish analysis (already computed for projections), the
 eval delta (cpLoss), and prev eval — so each move's narration is the COMPUTED,
 importance-RANKED briefing of all its important aspects, DNA register, spoken
