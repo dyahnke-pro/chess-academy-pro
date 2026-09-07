@@ -8,6 +8,8 @@ import {
   installConsoleBackdoor,
   setAuditStreamConfig,
   clearAuditStreamConfig,
+  flushStreamBatch,
+  isStreamSidecarUrl,
 } from './appAuditor';
 
 describe('appAuditor', () => {
@@ -153,6 +155,59 @@ describe('appAuditor', () => {
         globalThis.fetch = originalFetch;
         await clearAuditStreamConfig();
       }
+    });
+  });
+
+  describe('audit-stream batching (2026-09-07 Upstash cap)', () => {
+    it('a REMOTE stream gets one POST per batch, carrying every entry as an array', async () => {
+      const bodies: unknown[] = [];
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (_url: string | URL, init?: RequestInit) => {
+        bodies.push(JSON.parse(typeof init?.body === 'string' ? init.body : 'null'));
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }) as typeof fetch;
+      try {
+        await setAuditStreamConfig('https://chess-academy-pro.vercel.app/api/audit-stream', 'secret');
+        for (let i = 0; i < 5; i++) {
+          await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 'batch-test', summary: `b${i}` });
+        }
+        await flushStreamBatch();
+        const batches = bodies.filter((b) => Array.isArray(b)) as { summary: string }[][];
+        expect(batches.length).toBe(1);
+        expect(batches[0].map((e) => e.summary)).toEqual(['b0', 'b1', 'b2', 'b3', 'b4']);
+        expect(bodies.filter((b) => !Array.isArray(b)).length).toBe(0);
+      } finally {
+        globalThis.fetch = originalFetch;
+        await clearAuditStreamConfig();
+      }
+    });
+
+    it('the loopback SIDECAR keeps one POST per event (the audit scripts read single objects off the wire)', async () => {
+      const bodies: unknown[] = [];
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (_url: string | URL, init?: RequestInit) => {
+        bodies.push(JSON.parse(typeof init?.body === 'string' ? init.body : 'null'));
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }) as typeof fetch;
+      try {
+        await setAuditStreamConfig('http://127.0.0.1:4173/', 'secret');
+        for (let i = 0; i < 3; i++) {
+          await logAppAudit({ kind: 'bad-fen', category: 'subsystem', source: 'sidecar-test', summary: `s${i}` });
+        }
+        await new Promise((r) => setTimeout(r, 30));
+        expect(bodies.length).toBe(3);
+        expect(bodies.every((b) => !Array.isArray(b))).toBe(true);
+      } finally {
+        globalThis.fetch = originalFetch;
+        await clearAuditStreamConfig();
+      }
+    });
+
+    it('isStreamSidecarUrl: loopback only', () => {
+      expect(isStreamSidecarUrl('http://localhost:4173/')).toBe(true);
+      expect(isStreamSidecarUrl('http://127.0.0.1:5555')).toBe(true);
+      expect(isStreamSidecarUrl('https://chess-academy-pro.vercel.app/api/audit-stream')).toBe(false);
+      expect(isStreamSidecarUrl('https://localhost.evil.com/x')).toBe(false);
     });
   });
 

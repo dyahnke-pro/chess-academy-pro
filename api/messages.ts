@@ -134,9 +134,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       }
       // Public, device-scoped: this device's broadcasts + thread.
       const device = safeDevice(req.query.device);
-      const broadcasts = await store.listBroadcasts();
-      const thread = device ? await store.listThread(device) : [];
-      res.status(200).json({ broadcasts, thread });
+      try {
+        const broadcasts = await store.listBroadcasts();
+        const thread = device ? await store.listThread(device) : [];
+        res.status(200).json({ broadcasts, thread });
+      } catch (err) {
+        // The store is down (2026-09-07: Upstash monthly command cap hit) —
+        // the bell shows nothing rather than every boot logging a 500.
+        res.setHeader('x-store', 'degraded');
+        res.status(200).json({ broadcasts: [], thread: [], degraded: true, detail: err instanceof Error ? err.message.slice(0, 160) : String(err) });
+      }
       return;
     }
 

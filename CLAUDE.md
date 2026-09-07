@@ -1834,6 +1834,22 @@ header. The secret is in per-project memory.
   `x-audit-secret` header. Save the secret to memory so you don't have
   to re-ask each session.
 
+**🔒 THE AUDIT-STREAM'S REDIS HAS A MONTHLY COMMAND CAP — AND IT WAS HIT (2026-09-07).**
+Upstash free tier = **500,000 commands / month**. Found at 500,000/500,000: `/api/messages`
+(the bell) and `/api/referrals` were 500ing on EVERY boot for EVERY user, and the
+audit-stream had silently dropped to its memory fallback (`storage: memory`, 0 entries —
+the G2 instrument was blind). Cause: every device streams every audit event (the secret is
+baked into the build) and the server spent THREE commands per event (rpush+ltrim+expire) —
+~1000 events in a two-minute voice session is 3000 commands from ONE phone. Now: the client
+BATCHES remote posts (one array POST per ~1s / 40 entries, `appAuditor.flushStreamBatch`),
+the server does ONE multi-value `rpush` per POST with trim+TTL every 25th write, and the
+bell/referral GETs degrade to `200 {degraded:true}` instead of 500. The loopback SIDECAR
+keeps one POST per event — 20+ audit scripts read single objects off the wire. Gates:
+`api/audit-stream.batch.test.ts`, `api/store-degraded.test.ts`, appAuditor batching tests.
+When `/api/audit-stream` answers `storage: memory` with Redis env present, or any Upstash
+route says `ERR max requests limit exceeded`, the cap is the diagnosis — not "the app is
+closed". Tell David: the plan bump (pay-as-you-go ≈ $0.2 per 100k) is his call.
+
 **🚨 DURABLE ANALYTICS = POSTHOG, NOT THE AUDIT-STREAM (David 2026-06-21,
 LOCKED — emphatic). The audit-stream is EPHEMERAL and is the WRONG place to
 look for anything historical.** The `/api/audit-stream` buffer is in-memory

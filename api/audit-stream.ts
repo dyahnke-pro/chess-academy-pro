@@ -92,27 +92,75 @@ async function readRedis(since: number): Promise<AuditStreamEntry[] | null> {
   }
 }
 
-async function writeRedis(entry: AuditStreamEntry): Promise<boolean> {
+/** Writes since this instance booted — the list's trim + TTL ride every Nth
+ *  write instead of every one. */
+let redisWriteCount = 0;
+const REDIS_HOUSEKEEPING_EVERY = 25;
+
+/**
+ * ONE Redis command per POST, however many entries it carries.
+ *
+ * 🔒 THE UPSTASH QUOTA (2026-09-07): the free tier is 500,000 commands a
+ * MONTH, and it was found at 500,000/500,000 — with `/api/messages` and
+ * `/api/referrals` 500ing on every boot for every user and this stream
+ * silently on its memory fallback. Every device streams every audit event
+ * (the secret is baked into the build), and this used to spend THREE
+ * commands per event (rpush + ltrim + expire): ~1000 events in a two-minute
+ * voice session is 3000 commands from one phone. A multi-value `rpush` is one
+ * command whatever its length, so the client batches and this pushes the
+ * batch; the trim + TTL (the TTL survives pushes, the trim only matters
+ * after thousands) run every 25th write.
+ */
+async function writeRedis(entries: readonly AuditStreamEntry[]): Promise<boolean> {
   const cfg = getRedisConfig();
-  if (!cfg) return false;
+  if (!cfg || entries.length === 0) return false;
   try {
     const { Redis } = await import('@upstash/redis');
     const redis = new Redis(cfg);
-    await redis.rpush('audit-stream', JSON.stringify(entry));
+    const [first, ...rest] = entries.map((e) => JSON.stringify(e));
+    await redis.rpush('audit-stream', first, ...rest);
     // Retain the newest 5000 (was 1000). During heavy voice use the app emits
     // ~1000 events in under 2 MINUTES (voice-speak-invoked / san-to-speech /
     // stockfish-cache-* dominate), so a 1000-cap rotated SPARSE, high-value
     // events (mic-* input, errors) out of the buffer before a diagnostic pull
     // could catch them — the exact gap that hid the mic pipeline on
-    // 2026-09-01. 5000 ≈ a ~9-minute window under that load, long enough to
-    // catch a mic tap → pull. Upstash bills per command (not per element), so a
-    // longer list costs the same rpush/ltrim; only the (rare) full read grows.
-    await redis.ltrim('audit-stream', -5000, -1);
-    await redis.expire('audit-stream', 86_400);
+    // 2026-09-01. 5000 ≈ a ~9-minute window under that load.
+    if (redisWriteCount % REDIS_HOUSEKEEPING_EVERY === 0) {
+      await redis.ltrim('audit-stream', -5000, -1);
+      await redis.expire('audit-stream', 86_400);
+    }
+    redisWriteCount += 1;
     return true;
   } catch {
     return false;
   }
+}
+
+/** Accept ONE entry (the sidecar / legacy shape), an ARRAY of entries, or
+ *  `{ events: [...] }`. Malformed entries are dropped, not fatal. */
+function parseEntries(body: unknown): AuditStreamEntry[] {
+  const raw: unknown[] = Array.isArray(body)
+    ? body
+    : (body && typeof body === 'object' && Array.isArray((body as { events?: unknown }).events))
+      ? (body as { events: unknown[] }).events
+      : [body];
+  const out: AuditStreamEntry[] = [];
+  for (const item of raw.slice(0, 500)) {
+    const b = item as Partial<AuditStreamEntry> | null | undefined;
+    if (!b || typeof b.timestamp !== 'number' || typeof b.kind !== 'string') continue;
+    out.push({
+      timestamp: b.timestamp,
+      kind: b.kind,
+      category: b.category ?? 'unknown',
+      summary: b.summary ?? '',
+      source: b.source ?? 'unknown',
+      details: b.details,
+      fen: b.fen,
+      context: b.context,
+      route: b.route,
+    });
+  }
+  return out;
 }
 
 export default async function handler(
@@ -175,31 +223,20 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
-    const body = req.body as Partial<AuditStreamEntry> | undefined;
-    if (!body || typeof body.timestamp !== 'number' || typeof body.kind !== 'string') {
+    const entries = parseEntries(req.body);
+    if (entries.length === 0) {
       res.status(400).json({ error: 'invalid entry' });
       return;
     }
-    const entry: AuditStreamEntry = {
-      timestamp: body.timestamp,
-      kind: body.kind,
-      category: body.category ?? 'unknown',
-      summary: body.summary ?? '',
-      source: body.source ?? 'unknown',
-      details: body.details,
-      fen: body.fen,
-      context: body.context,
-      route: body.route,
-    };
     let storage: 'redis' | 'memory';
-    if (await writeRedis(entry)) {
+    if (await writeRedis(entries)) {
       storage = 'redis';
     } else {
-      inMemoryBuffer.push(entry);
+      inMemoryBuffer.push(...entries);
       trimInMemory();
       storage = 'memory';
     }
-    res.status(200).json({ ok: true, storage });
+    res.status(200).json({ ok: true, storage, stored: entries.length });
     return;
   }
 

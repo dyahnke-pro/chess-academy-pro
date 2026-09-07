@@ -132,14 +132,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     if (req.method === 'GET') {
       const device = safeDevice(req.query.device);
       if (!device) { res.status(400).json({ error: 'device required' }); return; }
-      const code = await ensureCode(store, device);
-      const [credits, recruits, claimedRaw] = await Promise.all([
-        readInt(store, CREDITS_KEY(device)),
-        readInt(store, RECRUITS_KEY(device)),
-        store.get(CLAIMED_KEY(device)),
-      ]);
-      const claimed = claimedRaw ? (JSON.parse(claimedRaw) as ClaimRec) : null;
-      res.status(200).json({ code, credits, recruits, claimed: claimed ? { qualified: claimed.qualified, ts: claimed.ts } : null });
+      try {
+        const code = await ensureCode(store, device);
+        const [credits, recruits, claimedRaw] = await Promise.all([
+          readInt(store, CREDITS_KEY(device)),
+          readInt(store, RECRUITS_KEY(device)),
+          store.get(CLAIMED_KEY(device)),
+        ]);
+        const claimed = claimedRaw ? (JSON.parse(claimedRaw) as ClaimRec) : null;
+        res.status(200).json({ code, credits, recruits, claimed: claimed ? { qualified: claimed.qualified, ts: claimed.ts } : null });
+      } catch (err) {
+        // Store down (2026-09-07: Upstash monthly command cap) — the client
+        // treats a non-string code as "no referral state" and shows nothing.
+        res.setHeader('x-store', 'degraded');
+        res.status(200).json({ code: null, credits: 0, recruits: 0, claimed: null, degraded: true, detail: err instanceof Error ? err.message.slice(0, 160) : String(err) });
+      }
       return;
     }
 

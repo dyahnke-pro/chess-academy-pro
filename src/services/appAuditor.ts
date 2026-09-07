@@ -1297,6 +1297,68 @@ const STREAM_NETWORK_FAILURE_LIMIT = 20;
  *  secret) via setAuditStreamConfig / loadAuditStreamConfig. */
 let streamAuthDisabled = false;
 
+// ── Remote batching ──────────────────────────────────────────────────────────
+//
+// 🔒 ONE POST PER BATCH TO PROD, ONE POST PER EVENT TO THE SIDECAR (2026-09-07).
+// The stream's Redis backing (Upstash) bills per command and its free tier is
+// 500,000 a month; it was found EXHAUSTED, with the bell and referral endpoints
+// 500ing for every user on every boot. Every device streams every audit event
+// (the secret is baked in), so per-event POSTs were the whole bill. A batch is
+// one `rpush` server-side whatever its length.
+//
+// The local narration-listener sidecar (a Playwright audit points
+// `auditStreamUrl` at 127.0.0.1) keeps the per-event POST: twenty-plus audit
+// scripts read each event off the wire as a single object, and per-scenario
+// attribution needs the event on the wire the moment it fires.
+const STREAM_BATCH_MAX_ENTRIES = 40;
+const STREAM_BATCH_MAX_BYTES = 48_000; // keepalive bodies are capped at 64KB
+const STREAM_BATCH_FLUSH_MS = 1_000;
+let streamBatch: AuditEntry[] = [];
+let streamBatchTimer: ReturnType<typeof setTimeout> | null = null;
+let streamFlushHooksInstalled = false;
+
+/** A loopback URL is the audit sidecar — everything else is the remote stream. */
+export function isStreamSidecarUrl(url: string): boolean {
+  return /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?(?:\/|$)/i.test(url);
+}
+
+function installStreamFlushHooks(): void {
+  if (streamFlushHooksInstalled || typeof window === 'undefined') return;
+  streamFlushHooksInstalled = true;
+  const flush = (): void => { void flushStreamBatch(); };
+  window.addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
+}
+
+/** Post everything queued for the remote stream now (chunked to the keepalive
+ *  body cap). Safe to call with an empty queue. */
+export async function flushStreamBatch(): Promise<void> {
+  if (streamBatchTimer) { clearTimeout(streamBatchTimer); streamBatchTimer = null; }
+  const cfg = cachedStreamConfig;
+  if (!cfg || streamBatch.length === 0) { streamBatch = []; return; }
+  const queued = streamBatch;
+  streamBatch = [];
+  let chunk: AuditEntry[] = [];
+  let bytes = 0;
+  const chunks: AuditEntry[][] = [];
+  for (const e of queued) {
+    const size = JSON.stringify(e).length + 1;
+    if (chunk.length > 0 && (chunk.length >= STREAM_BATCH_MAX_ENTRIES || bytes + size > STREAM_BATCH_MAX_BYTES)) {
+      chunks.push(chunk); chunk = []; bytes = 0;
+    }
+    chunk.push(e); bytes += size;
+  }
+  if (chunk.length > 0) chunks.push(chunk);
+  for (const c of chunks) await postToStream(cfg, c);
+}
+
+function enqueueForRemoteStream(entry: AuditEntry): void {
+  streamBatch.push(entry);
+  installStreamFlushHooks();
+  if (streamBatch.length >= STREAM_BATCH_MAX_ENTRIES) { void flushStreamBatch(); return; }
+  if (!streamBatchTimer) streamBatchTimer = setTimeout(() => { void flushStreamBatch(); }, STREAM_BATCH_FLUSH_MS);
+}
+
 async function streamAuditEntry(entry: AuditEntry): Promise<void> {
   if (typeof window === 'undefined') return;
   // Never recurse: the rollup event itself is part of the stream;
@@ -1317,6 +1379,13 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     }
     return;
   }
+  if (!isStreamSidecarUrl(cfg.url)) { enqueueForRemoteStream(entry); return; }
+  await postToStream(cfg, entry);
+}
+
+/** One POST: a single entry (sidecar) or a batch (remote). */
+async function postToStream(cfg: AuditStreamConfig, payload: AuditEntry | readonly AuditEntry[]): Promise<void> {
+  if (streamAuthDisabled || streamNetworkDisabled) return;
   try {
     // keepalive bypasses the browser's per-origin connection pool
     // queue. Without it, an audit emitted during a fast user action
@@ -1336,7 +1405,7 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
         'content-type': 'application/json',
         'x-audit-secret': cfg.secret,
       },
-      body: JSON.stringify(entry),
+      body: JSON.stringify(payload),
       keepalive: true,
       // Best-effort: don't block on slow networks.
       signal: AbortSignal.timeout(4000),
