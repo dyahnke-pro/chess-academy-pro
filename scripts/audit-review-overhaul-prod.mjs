@@ -448,10 +448,10 @@ const run = async () => {
       await dumpProfile('blow-up');
       // WHO spawned them: the app's own audit events since the reopen (captured
       // off the wire, so a 500 from the stream server cannot hide them).
-      const recent = events.filter((e) => e.t >= t1).slice(-60);
+      const recent = events().filter((e) => (e.t ?? e.receivedAt ?? e.timestamp ?? 0) >= t1).slice(-60);
       const kinds = {}; for (const e of recent) kinds[e.kind] = (kinds[e.kind] ?? 0) + 1;
       log(`  [events since reopen] ${JSON.stringify(kinds)}`);
-      for (const e of recent.filter((e) => /stockfish|analysis|pool|worker|review-walk|deepen/i.test(e.kind)).slice(-25)) log(`    ${e.kind} | ${e.summary.slice(0, 150)}`);
+      for (const e of recent.filter((e) => /stockfish|analysis|pool|worker|review-walk|deepen/i.test(e.kind)).slice(-25)) log(`    ${e.kind} | ${String(e.source ?? "")} — ${String(e.summary ?? "").slice(0, 150)}`);
       break;
     }
     if (n === FUND_PLY) { onFund2 = true; break; }
