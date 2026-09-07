@@ -2194,3 +2194,28 @@ describe('analyzeWithBudget — the budget starts when the search dispatches', (
     vi.useRealTimers();
   });
 });
+
+describe('resolveWorkerUrl — the pool asks for the single-thread build', () => {
+  it('singleThread routes an isolated+SAB host to the single build, never multi', async () => {
+    const { resolveWorkerUrl } = await import('./stockfishEngine');
+    const w = window as unknown as { crossOriginIsolated?: boolean };
+    const prevIso = w.crossOriginIsolated;
+    const prevSab = (globalThis as { SharedArrayBuffer?: unknown }).SharedArrayBuffer;
+    Object.defineProperty(window, 'crossOriginIsolated', { value: true, configurable: true });
+    (globalThis as { SharedArrayBuffer?: unknown }).SharedArrayBuffer = function SharedArrayBufferStub(): void { /* stub */ };
+    try {
+      const single = resolveWorkerUrl({ singleThread: true });
+      const def = resolveWorkerUrl();
+      if (def.variant === 'multi') {
+        expect(single.variant).toBe('single');
+        expect(single.url).toContain('lite-single');
+      } else {
+        // iOS / no-SIMD hosts never resolve to multi; singleThread changes nothing there.
+        expect(single).toEqual(def);
+      }
+    } finally {
+      Object.defineProperty(window, 'crossOriginIsolated', { value: prevIso, configurable: true });
+      (globalThis as { SharedArrayBuffer?: unknown }).SharedArrayBuffer = prevSab;
+    }
+  });
+});

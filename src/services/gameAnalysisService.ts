@@ -524,7 +524,9 @@ function spawnDedicatedWorker(index: number): Promise<DedicatedWorker> {
       //
       // One owner for "which engine build runs on this device". The pool is a
       // second consumer of that decision, not a place to re-guess it.
-      const resolved = resolveWorkerUrl();
+      // One search per pool worker → the single-thread build (no pthread
+      // workers under an idle engine; see resolveWorkerUrl's singleThread).
+      const resolved = resolveWorkerUrl({ singleThread: true });
       // asm.js cold-compiles ~1.58MB before `readyok` — give it the engine's
       // full init budget. Fast WASM builds keep the short gate.
       const spawnTimeoutMs = resolved.variant === 'asm' ? ASM_POOL_SPAWN_TIMEOUT_MS : POOL_SPAWN_TIMEOUT_MS;

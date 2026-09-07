@@ -181,7 +181,16 @@ export function wasmSimdSupported(): boolean {
   return _wasmSimd;
 }
 
-export function resolveWorkerUrl(): ResolvedWorker {
+/**
+ * @param opts.singleThread — the caller runs ONE search per worker (the analysis
+ *   pool: `Threads` is never raised there), so the multi-thread build buys it
+ *   nothing and costs it a SharedArrayBuffer heap plus pthread workers per
+ *   engine. Prod census 2026-09-07: three idle warm pool engines on a reopened
+ *   review sat behind 78–101 `stockfish-18-lite.wasm,worker` targets while the
+ *   walk crawled. The single-thread WASM build spawns no pthreads at all. iOS /
+ *   no-SIMD branches are untouched — they never resolve to multi.
+ */
+export function resolveWorkerUrl(opts: { singleThread?: boolean } = {}): ResolvedWorker {
   if (typeof window === 'undefined') {
     // Default to the BULLETPROOF asm.js build, never the SIMD WASM single build.
     // This branch can't sniff the platform (no `window`), and the single build is
@@ -229,6 +238,14 @@ export function resolveWorkerUrl(): ResolvedWorker {
   }
   // Non-iOS with cross-origin isolation + SAB → the fast multi-threaded build.
   if (isolated && sabAvailable) {
+    if (opts.singleThread) {
+      return {
+        url: STOCKFISH_ST_URL,
+        variant: 'single',
+        reason: 'one search per worker — single-thread build, no pthread workers (pool)',
+        workerType: 'classic',
+      };
+    }
     return {
       url: STOCKFISH_MT_URL,
       variant: 'multi',
