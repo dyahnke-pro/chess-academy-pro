@@ -106,6 +106,27 @@ describe('a mistake is captured with no card ever shown', () => {
     // mistake-puzzle chain, which is well past the 5s default on a cold run.
   }, 20_000);
 
+  it('forwards the move history so the captured slip attributes a fundamental (David 2026-09-07)', async () => {
+    // Live Learn/Play play must feed the per-fundamental scorecard + drill
+    // queue, not just the coarse tag. The classifier needs the SAN history to
+    // prove WHICH fundamental a slip neglected — so evaluatePlayerMove must
+    // forward it into the capture's classifyInput.
+    const { useDiscussionPractice } = await import('./useDiscussionPractice');
+    const { result } = renderHook(() => useDiscussionPractice(true, { surface: 'coach-teach' }));
+
+    const history = ['e4', 'e5', 'Nf3', 'Nf6'];
+    await result.current.evaluatePlayerMove({ ...SLIP, studentRating: 800, historySans: history });
+
+    expect(captureMisconception).toHaveBeenCalledTimes(1);
+    const [[args]] = captureMisconception.mock.calls as unknown as [[{
+      classifyInput: { historySans?: string[] };
+    }]];
+    expect(
+      args.classifyInput.historySans,
+      'without the history the classifier can never attribute a fundamental live',
+    ).toEqual(history);
+  }, 20_000);
+
   it('records the slip that the pop-up used to own', async () => {
     // This is the whole contract in one line: the capture call must be reachable
     // from `evaluatePlayerMove` itself, not from a card's answer handler.

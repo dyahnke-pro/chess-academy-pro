@@ -181,6 +181,8 @@ import { planFromUci, keySquareLine, positionReadLine, lineShapeLine, terminalRe
 import type { LookaheadPlan } from '../../services/lookaheadPlan';
 import { planMarks } from '../../services/planMarks';
 import { backwardLook } from '../../services/backwardLook';
+import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
+import type { FundamentalId } from '../../services/principleAttribution';
 import {
   noteFamilyFork, markWalked, unwalked, nextForkToOffer, progressAt,
   type ForkLog, type Fork,
@@ -1518,6 +1520,13 @@ export function CoachTeachPage(): JSX.Element {
   /** Masterclass beats already spoken this game. A lesson teaches the same
    *  idea at several plies; hearing it twice is what makes a coach sound stuck. */
   const curatedBeatSeenRef = useRef(new Set<string>());
+  /** Fundamentals the coach has already NAMED IN FULL this game (David
+   *  2026-09-07: "Learn it needs to be added into the narration"). The Learn
+   *  narration leads a slip's beat with the fundamental it neglected — the same
+   *  DNA register the post-game review uses — and this set makes the walk
+   *  accumulate: a repeated fundamental comes back in a short stem, never the
+   *  full teach twice. */
+  const fundamentalSeenRef = useRef(new Set<FundamentalId>());
 
   /** The most recent look-ahead plan, KEYED BY THE FEN IT DESCRIBES.
    *
@@ -7292,6 +7301,10 @@ export function CoachTeachPage(): JSX.Element {
         moveNumber: capturedMoveNumber,
         openingName,
         studentRating: activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? undefined,
+        // The full SAN history (incl. this move) so the captured slip is
+        // attributed to its FUNDAMENTAL and lands in the scorecard + drill
+        // queue, not just the coarse tag (David 2026-09-07).
+        historySans: move.history,
       });
     }, 6000);
     // The ENGINE plays the coach's reply (in code), then the LLM is asked to
@@ -8297,6 +8310,7 @@ export function CoachTeachPage(): JSX.Element {
                       announcedTrapsRef.current.clear(); // fresh game
                       announcedOpeningNameRef.current = null;
                       teachNoteSeenIdsRef.current.clear();
+                      fundamentalSeenRef.current.clear();
                       lastTacticRef.current = '';
                       lastThreatRef.current = '';
                       spokenTacticLinesRef.current.clear();
@@ -8846,11 +8860,12 @@ export function CoachTeachPage(): JSX.Element {
                     const cpLoss = bothCp
                       ? (preStudentRead.evaluation * sign) - (mid.evaluation * sign)
                       : 0;
+                    const studentBestSan = uciSanAt(fenBefore, preStudentRead.bestMove);
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,
                       playedSan: move.san,
-                      bestSan: uciSanAt(fenBefore, preStudentRead.bestMove),
+                      bestSan: studentBestSan,
                       bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
                       replyPvUci: mid.topLines?.[0]?.moves ?? [],
                       cpLoss,
@@ -8858,6 +8873,28 @@ export function CoachTeachPage(): JSX.Element {
                       missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
                       allowedMate: mid.isMate ? mid.mateIn : null,
                     });
+                    // THE FUNDAMENTAL, NAMED FIRST (David 2026-09-07: "Learn it
+                    // needs to be added into the narration"). Same attributor +
+                    // DNA voice as the post-game review, fed the two reads we
+                    // already hold — so a flagged move's beat LEADS with the
+                    // fundamental it neglected, and the backward-look drawback
+                    // follows as supporting evidence (the review ordering). The
+                    // attributor self-gates (pattern + available punishment +
+                    // counterfactual), so a clean move names nothing. Absent a
+                    // fundamental, the backward-look speaks alone, unchanged.
+                    const fundamental = learnFundamentalVerdict({
+                      fenBefore,
+                      historySans: move.history,
+                      playedSan: move.san,
+                      bestSan: studentBestSan ?? null,
+                      studentColor: playerColor,
+                      evalBeforeWhiteCp: preStudentRead.isMate ? undefined : preStudentRead.evaluation,
+                      evalAfterWhiteCp: mid.isMate ? undefined : mid.evaluation,
+                      bestPvUci: preStudentRead.topLines?.[0]?.moves ?? [],
+                      playedPvUci: mid.topLines?.[0]?.moves ?? [],
+                      missedMate: preStudentRead.isMate ? preStudentRead.mateIn : null,
+                      allowedMate: mid.isMate ? mid.mateIn : null,
+                    }, fundamentalSeenRef.current);
                     if (look) {
                       // THE SQUARE TRAVELS WITH THE SENTENCE, and is drawn below
                       // only if the package KEPT it. Not `look.line.includes(sq)`
@@ -8865,10 +8902,21 @@ export function CoachTeachPage(): JSX.Element {
                       // substring and failing on a square the sentence names in
                       // words. The producer already knows the square; handing it
                       // over leaves nothing to re-derive and nothing to check.
-                      queueSpokenHint(fenAfterReply, look.line, look.kind,
+                      const line = fundamental ? `${fundamental.verdict} ${look.line}` : look.line;
+                      queueSpokenHint(fenAfterReply, line, look.kind,
                         /^[a-h][1-8]$/.test(look.square) ? [look.square] : []);
                       captureEvent('coach_backward_look', {
                         surface: 'coach-teach', kind: look.kind, cp_loss: Math.round(cpLoss),
+                        fundamental: fundamental?.id ?? null,
+                      });
+                    } else if (fundamental) {
+                      // No nameable material drawback, but a fundamental WAS
+                      // neglected (neglected-development, space-conceded, a passive
+                      // worst piece — costs the eval never itemises). Name it on
+                      // its own; the fundamental IS the teaching here.
+                      queueSpokenHint(fenAfterReply, fundamental.verdict, 'drawback', []);
+                      captureEvent('coach_fundamental_named', {
+                        surface: 'coach-teach', fundamental: fundamental.id, cp_loss: Math.round(cpLoss),
                       });
                     }
                   }

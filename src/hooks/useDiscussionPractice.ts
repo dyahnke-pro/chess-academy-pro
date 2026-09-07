@@ -84,6 +84,13 @@ export interface EvaluatePlayerMoveArgs {
   openingId?: string;
   openingName?: string;
   studentRating?: number;
+  /** Every SAN up to AND INCLUDING the played move. When present, a captured
+   *  slip is attributed to the specific FUNDAMENTAL it neglected (David
+   *  2026-09-07: one coach, one memory) — so a live Learn/Play slip lands in the
+   *  weakness bucket with its `fundamentalId` and feeds the per-fundamental
+   *  scorecard + drill queue, not just the coarse tag. Absent → the cheap
+   *  board-heuristic classification stands, unchanged. */
+  historySans?: string[];
 }
 
 export interface RaiseSlipPromptArgs {
@@ -393,6 +400,13 @@ export function useDiscussionPractice(
             bestSan,
             gamePhase: args.gamePhase,
             userReason: '(not asked — captured silently during play)',
+            // ATTRIBUTE THE FUNDAMENTAL LIVE (David 2026-09-07). With the move
+            // history the classifier proves WHICH fundamental this slip
+            // neglected and records it — so live Learn/Play play, not just
+            // post-game review, feeds the per-fundamental scorecard + drill
+            // queue. The eval/PV-gated detectors still stay review-only (no
+            // persisted lines live), which is correct.
+            historySans: args.historySans,
           },
           source: opts.source ?? 'discussion-practice',
           shouldCount: slip.shouldCount,

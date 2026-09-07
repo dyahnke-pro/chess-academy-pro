@@ -755,6 +755,9 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       openingId: opening.id,
       openingName: displayName,
       studentRating: playerRating,
+      // Attribute the fundamental so a live slip feeds the per-fundamental
+      // scorecard + drill queue, not just the coarse tag (David 2026-09-07).
+      historySans: moveResult.history,
     });
 
     if (inOpeningPhase && currentMoveIdx < openingMoves.length) {

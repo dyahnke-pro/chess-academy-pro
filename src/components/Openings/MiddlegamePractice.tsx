@@ -333,6 +333,9 @@ export function MiddlegamePractice({
       openingId: plan.openingId,
       openingName: plan.title,
       studentRating: useAppStore.getState().activeProfile?.currentRating ?? undefined,
+      // Attribute the fundamental so a live slip feeds the per-fundamental
+      // scorecard + drill queue, not just the coarse tag (David 2026-09-07).
+      historySans: moveResult.history,
     });
     void getCoachFeedback(moveResult.san, moveResult.fen);
   }, [getCoachFeedback, discussion, playerColor, moveCount, plan.openingId, plan.title]);
