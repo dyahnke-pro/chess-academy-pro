@@ -170,7 +170,8 @@ describe.runIf(HARNESS_ON)('offline full-game narration harness', () => {
       const you = (m.ply % 2) === studentParity ? 'YOU ' : 'opp ';
       const num = white ? `${Math.ceil(m.ply / 2)}.` : `${Math.ceil(m.ply / 2)}...`;
       const cls = m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant' ? '' : `[${m.classification}] `;
-      const text = seg?.narration ? seg.narration : '(silent)';
+      const evTag = process.env.HARNESS_SHOW_EVAL === '1' ? `{b=${m.preMoveEval} a=${m.evaluation} c=${m.classification}} ` : '';
+      const text = evTag + (seg?.narration ? seg.narration : '(silent)');
       out.push(`p${String(m.ply).padStart(2)} ${you}${num.padStart(6)} ${m.san.padEnd(7)} ${cls}${text}`);
     }
     if (narration.closing) { out.push(''); out.push(`CLOSING: ${narration.closing}`); }

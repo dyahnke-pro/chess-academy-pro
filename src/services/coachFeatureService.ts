@@ -874,7 +874,16 @@ function buildDeterministicNarration(params: {
       ];
       return stems[variant];
     }
-    return 'Brilliant shot — your opponent found the only line.';
+    // Opponent brilliant/only-move — vary the stem so a game where they have to
+    // find several only-moves in a row doesn't read the identical line each time
+    // (David 2026-09-07, his Traxler: "Brilliant shot — your opponent found the
+    // only line." fired four times verbatim).
+    const oppStems = [
+      'Their only move — and they found it.',
+      'Precise — that was the one line that held for them.',
+      'They had to find that, and they did — the only move.',
+    ];
+    return oppStems[variant];
   }
 
   if (classification === 'great') {
@@ -2118,6 +2127,20 @@ export function buildReviewSegments(
           narrationSource = 'opponent';
         }
       }
+    }
+    // CHECKMATE DELIVERY — board-true from the SAN's '#', for EITHER side, and it
+    // OVERRIDES whatever generic beat the cascade produced (David 2026-09-07, his
+    // own Traxler loss: the move that CHECKMATED him — Ng6# — was narrated as
+    // "the knight steps in eyeing e5, fighting for the center"). The move that
+    // ends the game is the one line that must never read as routine development.
+    // classifyCpLoss already coerces a delivered mate to good/brilliant, so it
+    // never flags; this is the only place the mate gets named on the mating ply.
+    if (/#$/.test(m.san)) {
+      const studentMated = moverColor === playerColor;
+      narration = studentMated
+        ? `And there it is — checkmate. You finished the game.`
+        : `And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.`;
+      narrationSource = 'per-move';
     }
     segments.push({
       ply: m.ply,
