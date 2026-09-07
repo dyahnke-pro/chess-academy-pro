@@ -378,6 +378,15 @@ export interface WeaknessSummaryRow {
  * are excluded: the header shows what's still open, not a trophy case. Pure, so
  * the surface can render it without a service round-trip.
  */
+/** The weakness-bucket key for one mistake — the SAME key `summarizeWeaknesses`
+ *  counts by. A surface that shows the counts can filter its list with this so
+ *  the two never diverge (David 2026-09-07: a "Missed tactical sequences ×906"
+ *  chip returned "No puzzles" because the chip filtered by fuzzy TEXT while the
+ *  count came from this bucket). Filter, then the list matches the chip exactly. */
+export function mistakeWeaknessKey(mp: MistakePuzzle): string {
+  return bucketOf(mp).key;
+}
+
 export function summarizeWeaknesses(mistakes: MistakePuzzle[]): WeaknessSummaryRow[] {
   const rows = new Map<string, WeaknessSummaryRow>();
   for (const mp of mistakes) {

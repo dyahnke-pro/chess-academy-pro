@@ -68,6 +68,13 @@ export function reconstructMovesFromGame(
     // cp scale. See gameAnalysisService.ts.
     const evaluation = annotation?.evaluation ?? null;
     const bestMove = annotation?.bestMove ?? null;
+    // 🔒 bestMoveEval was being DROPPED (hardcoded null below), which silently
+    // zeroed the missed-tactic detector: detectMissedTactics skips every move
+    // whose bestMoveEval is null, so "Tactics found vs missed" always read
+    // 100% / 0 missed even with hundreds of real misses in My Mistakes (David
+    // 2026-09-07: "100% tactical awareness with none missing. This is wrong.").
+    // The annotation carries it — read it.
+    const bestMoveEval = annotation?.bestMoveEval ?? null;
     const classification = annotation?.classification ?? null;
     const comment = annotation?.comment ?? '';
 
@@ -84,7 +91,7 @@ export function reconstructMovesFromGame(
       classification,
       expanded: false,
       bestMove,
-      bestMoveEval: null,
+      bestMoveEval,
       preMoveEval: previousEval,
     });
 

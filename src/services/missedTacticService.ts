@@ -1,5 +1,6 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
+import { capEval } from './accuracyService';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
 const MIN_EVAL_SWING = 100;
@@ -843,8 +844,10 @@ export function detectMissedTactics(
     if (cls !== 'mistake' && cls !== 'blunder') continue;
     if (!move.bestMove || move.bestMoveEval === null || move.evaluation === null) continue;
 
-    // Calculate eval swing
-    const evalSwing = Math.abs(move.bestMoveEval - move.evaluation);
+    // Calculate eval swing — cap each eval first so a mate score (±30000)
+    // doesn't inflate the swing (and the avg-cost-per-miss) into nonsense like
+    // "30000 cp" (David 2026-09-07). capEval saturates mate at ±1500.
+    const evalSwing = Math.abs(capEval(move.bestMoveEval) - capEval(move.evaluation));
     if (evalSwing < MIN_EVAL_SWING) continue;
 
     // Get the FEN from the previous move (the position before this move was played)

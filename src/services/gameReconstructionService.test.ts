@@ -97,11 +97,15 @@ describe('reconstructMovesFromGame', () => {
 
     expect(moves[0].evaluation).toBe(30);
     expect(moves[0].bestMove).toBe('d4');
+    // bestMoveEval MUST carry through — it was hardcoded null once, which
+    // silently zeroed detectMissedTactics (100% awareness, David 2026-09-07).
+    expect(moves[0].bestMoveEval).toBe(0);
     expect(moves[0].classification).toBe('good');
     expect(moves[0].commentary).toBe('Solid opening move');
 
     expect(moves[1].evaluation).toBe(10);
     expect(moves[1].bestMove).toBe('c5');
+    expect(moves[1].bestMoveEval).toBe(30);
     expect(moves[1].classification).toBe('book');
     expect(moves[1].commentary).toBe('Classical response');
   });

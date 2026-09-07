@@ -1,7 +1,7 @@
 import { db } from '../db/schema';
 import { getRepertoireOpenings } from './openingService';
 import { reconstructMovesFromGame } from './gameReconstructionService';
-import { calculateAccuracy, getClassificationCounts } from './accuracyService';
+import { calculateAccuracy, getClassificationCounts, capEval } from './accuracyService';
 import { getPhaseBreakdown } from './gamePhaseService';
 import { uciMoveToSan } from '../utils/uciToSan';
 import { countFullMovesInPgn } from '../utils/pgnMoveCount';
@@ -690,8 +690,11 @@ export async function getTacticInsights(): Promise<TacticInsights> {
       if ((playerColor === 'white' && !isMoveWhite) || (playerColor === 'black' && isMoveWhite)) continue;
 
       if (move.classification === 'brilliant' || move.classification === 'great') {
+        // Cap each eval before differencing so a mate score (±30000) can't
+        // render as a "+30000 cp" brilliancy — mate saturates at ±1500 (David
+        // 2026-09-07 flagged the +30000cp rows). capEval bounds the swing.
         const evalSwing = move.evaluation !== null && move.preMoveEval !== null
-          ? Math.abs(move.evaluation - move.preMoveEval)
+          ? Math.abs(capEval(move.evaluation) - capEval(move.preMoveEval))
           : 0;
         bestSequences.push({
           gameId: game.id,

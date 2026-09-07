@@ -119,6 +119,40 @@ describe('MyMistakesPage', () => {
     expect(screen.getByText('1 mastered')).toBeInTheDocument();
   });
 
+  it('tapping a recurring-weakness chip filters the list to that bucket (not empty)', async () => {
+    // Regression: the chip counted by weakness BUCKET but filtered by fuzzy
+    // TEXT, so "Missed tactical sequences ×N" showed "No puzzles" (David
+    // 2026-09-07). Now the chip filters by the same bucket key it counts.
+    setMockData([
+      buildMistakePuzzle({ id: 'f1', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 11 }),
+      buildMistakePuzzle({ id: 'f2', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 14 }),
+      buildMistakePuzzle({ id: 'f3', tacticType: 'fork', gamePhase: 'middlegame', moveNumber: 21 }),
+      buildMistakePuzzle({ id: 'p1', tacticType: 'pin', gamePhase: 'middlegame', moveNumber: 9 }),
+      buildMistakePuzzle({ id: 'p2', tacticType: 'pin', gamePhase: 'middlegame', moveNumber: 18 }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(5);
+    });
+
+    // Tap the "Missed forks" chip (bucket key tactic:fork).
+    fireEvent.click(screen.getByTestId('weakness-chip-tactic:fork'));
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(3);
+    });
+    // Never the empty state — that was the bug.
+    expect(screen.queryByTestId('no-matches')).toBeNull();
+
+    // Tapping again clears the filter.
+    fireEvent.click(screen.getByTestId('weakness-chip-tactic:fork'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('puzzle-card')).toHaveLength(5);
+    });
+  });
+
   it('filters by classification', async () => {
     setMockData([
       buildMistakePuzzle({ id: 'p1', classification: 'blunder', moveNumber: 3 }),

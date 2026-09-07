@@ -14,7 +14,7 @@ import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, Refre
 import { logAppAudit } from '../../services/appAuditor';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
-import { summarizeWeaknesses } from '../../services/coachDrillService';
+import { summarizeWeaknesses, mistakeWeaknessKey } from '../../services/coachDrillService';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -105,6 +105,10 @@ export function MyMistakesPage(): JSX.Element {
    *  for specific users ive faced, or specific puzzle type. one
    *  smart search bar should be good!". */
   const [searchQuery, setSearchQuery] = useState('');
+  // The recurring-weakness chip filters by its BUCKET KEY (the same key the
+  // count is computed from), not by fuzzy text — so tapping a chip always
+  // shows exactly the puzzles it counted (David 2026-09-07).
+  const [weaknessKeyFilter, setWeaknessKeyFilter] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState<ReanalysisProgress | null>(null);
@@ -174,6 +178,7 @@ export function MyMistakesPage(): JSX.Element {
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
     if (gameFilter !== null && p.sourceGameId !== gameFilter) return false;
     if (gameIdSet !== null && !gameIdSet.has(p.sourceGameId)) return false;
+    if (weaknessKeyFilter !== null && mistakeWeaknessKey(p) !== weaknessKeyFilter) return false;
     // Smart-search: OR-match across opponent name + tactic label +
     // opening. Empty query = no filter.
     if (searchQ) {
@@ -312,9 +317,9 @@ export function MyMistakesPage(): JSX.Element {
             {weaknessRows.map((w) => (
               <button
                 key={w.key}
-                onClick={() => setSearchQuery((q) => (norm(q) === norm(w.label) ? '' : w.label))}
+                onClick={() => setWeaknessKeyFilter((k) => (k === w.key ? null : w.key))}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                  norm(searchQuery) === norm(w.label)
+                  weaknessKeyFilter === w.key
                     ? 'bg-theme-accent/20 border-theme-accent/50 text-theme-accent'
                     : 'bg-theme-surface border-theme-border text-theme-text hover:border-theme-accent/40'
                 }`}
