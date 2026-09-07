@@ -67,6 +67,24 @@ function withTimeout<T>(p: Promise<T>): Promise<T | null> {
   });
 }
 
+/** The LANDING SQUARE of a SAN move ("Bxc3+" → "c3", "e8=Q+" → "e8", "exd5" →
+ *  "d5"), or '' for castling / unparseable.
+ *
+ *  Why the square and not the whole SAN: `mustPreserve` is a substring check
+ *  (`droppedTokens`), but the register directive above says "say the idea, not
+ *  the notation" — so the model renders "the bishop took on c3", which never
+ *  contains the literal "Bxc3+". Preserving the full SAN therefore false-tripped
+ *  the fidelity net on EVERY capture / check move and discarded the warm line
+ *  for the flat computed prose (prod tape 2026-09-07: dropped [Bxc3+], [Qxf3+],
+ *  [Rh4+] …). The destination square is what the move's board-truth hangs on and
+ *  it survives natural phrasing; `gradeNarrationText` (below) still re-checks the
+ *  board, so a wrong square or wrong piece is still caught. */
+export function sanDestinationSquare(san: string | undefined): string {
+  if (!san) return '';
+  const m = /([a-h][1-8])(?:=[NBRQ])?[+#]?$/.exec(san.trim());
+  return m ? m[1] : '';
+}
+
 /**
  * Phrase a computed mistake narration in the coach's voice.
  *
@@ -91,10 +109,12 @@ export async function voiceMistakeNarration(
     const phrased = await withTimeout(voiceFacts(facts, {
       directives: REGISTER_DIRECTIVES,
       intent: 'mistake-review',
-      // The played move must survive verbatim: the student is looking at the
-      // board it was played on, and a corrupted SAN (d4→e4) is a chess
-      // hallucination the number-fidelity net cannot catch.
-      mustPreserve: [params.playerMoveSan].filter(Boolean),
+      // The move's LANDING SQUARE must survive: the student is looking at the
+      // board it was played on, and a corrupted square (d4→e4) is a chess
+      // hallucination the number-fidelity net cannot catch. Preserve the square,
+      // not the full SAN — the register is told not to say the notation, so a
+      // full-SAN mustPreserve false-trips on every capture/check (see helper).
+      mustPreserve: [sanDestinationSquare(params.playerMoveSan)].filter(Boolean),
     }));
 
     const cleaned = phrased?.trim();
