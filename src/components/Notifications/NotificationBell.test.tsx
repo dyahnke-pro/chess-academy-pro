@@ -26,6 +26,10 @@ vi.mock('../../services/announcementsService', () => ({
   sendBroadcast: vi.fn(async () => true),
   fetchAllThreads: vi.fn(async () => []),
   sendDevReply: vi.fn(async () => true),
+  fetchFeedback: vi.fn(async () => []),
+  hasUnreadFeedback: (items: { ts: number }[], lastTs: number) => items.some((f) => f.ts > lastTs),
+  getLastSeenFeedbackTs: vi.fn(async () => 0),
+  markFeedbackSeen: vi.fn(async () => undefined),
 }));
 
 beforeEach(() => { seenId = null; seenTs = 0; });

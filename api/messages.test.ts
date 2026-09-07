@@ -91,6 +91,43 @@ describe('api/messages — admin gate + device scoping', () => {
     expect(payload.thread.at(-1)).toMatchObject({ from: 'dev', body: 'thanks for the feedback' });
   });
 
+  it('anyone can submit feedback, but only an admin can list it', async () => {
+    process.env.ADMIN_MESSAGE_SECRET = 's3cret';
+    const device = 'devUSER_fb0001';
+    // PUBLIC submit — no secret needed.
+    const submit = mkRes();
+    await handler(mkReq('POST', { body: { action: 'feedback', device, message: 'love the coach voice', category: 'praise', rating: 5, route: '/coach/review', name: 'Sam' } }), submit);
+    expect(submit._status).toBe(200);
+    expect((submit._json as { ok: boolean }).ok).toBe(true);
+
+    // Listing is admin-only.
+    const denied = mkRes();
+    await handler(mkReq('GET', { query: { feedback: '1' } }), denied);
+    expect(denied._status).toBe(401);
+
+    const ok = mkRes();
+    await handler(mkReq('GET', { query: { feedback: '1' }, adminSecret: 's3cret' }), ok);
+    expect(ok._status).toBe(200);
+    const payload = ok._json as { feedback: { message: string; category: string; rating: number | null; device: string }[] };
+    expect(payload.feedback.some((f) => f.message === 'love the coach voice' && f.category === 'praise' && f.rating === 5 && f.device === device)).toBe(true);
+  });
+
+  it('feedback requires a message, and clamps an out-of-range rating to null', async () => {
+    const empty = mkRes();
+    await handler(mkReq('POST', { body: { action: 'feedback', device: 'devFB_empty1', message: '   ' } }), empty);
+    expect(empty._status).toBe(400);
+
+    process.env.ADMIN_MESSAGE_SECRET = 's3cret';
+    const device = 'devFB_rating1';
+    const submit = mkRes();
+    await handler(mkReq('POST', { body: { action: 'feedback', device, message: 'meh', category: 'other', rating: 99 } }), submit);
+    expect(submit._status).toBe(200);
+    const list = mkRes();
+    await handler(mkReq('GET', { query: { feedback: '1' }, adminSecret: 's3cret' }), list);
+    const item = (list._json as { feedback: { device: string; rating: number | null }[] }).feedback.find((f) => f.device === device);
+    expect(item?.rating).toBeNull();
+  });
+
   it('the threads list is admin-only', async () => {
     process.env.ADMIN_MESSAGE_SECRET = 's3cret';
     const denied = mkRes();

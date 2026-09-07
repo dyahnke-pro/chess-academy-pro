@@ -19,6 +19,7 @@
  * a bonus for users who want a reply thread.
  */
 import { getBuildId, getSessionId, logAppAudit } from './appAuditor';
+import { postFeedbackToInbox } from './announcementsService';
 
 const MAX_MESSAGE = 2000;
 
@@ -74,6 +75,17 @@ export async function submitFeedback(input: FeedbackInput): Promise<boolean> {
         `SESSION: ${getSessionId()}`,
         `UA: ${ua}`,
       ].join('\n\n'),
+    });
+    // Durable capture for David's admin bell — alert + list + reply (David
+    // 2026-09-07). Independent of the audit above (which is ephemeral) and
+    // fire-and-forget so a store hiccup never breaks the user's send flow.
+    void postFeedbackToInbox({
+      message,
+      category: input.category,
+      rating: input.rating,
+      route: input.route,
+      name: input.profileName,
+      email: input.contactEmail,
     });
     return true;
   } catch {

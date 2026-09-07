@@ -29,13 +29,29 @@ export interface ThreadMessage {
   body: string;
   ts: number;
 }
+/** In-app feedback captured durably so David's bell can alert + list it (David
+ *  2026-09-07: "any new feedback triggers a bell alert icon for me only").
+ *  Submitting is PUBLIC (any user); listing is ADMIN-only, same as threads. */
+export interface FeedbackItem {
+  id: string;
+  device: string;
+  message: string;
+  category: string;
+  rating: number | null;
+  route: string;
+  name: string;
+  email: string;
+  ts: number;
+}
 
 const BROADCASTS_KEY = 'msg:broadcasts';
 const DEVICES_KEY = 'msg:devices';
+const FEEDBACK_KEY = 'msg:feedback';
 const threadKey = (device: string): string => `msg:thread:${device}`;
 
 const MAX_BROADCASTS = 100;
 const MAX_THREAD = 200;
+const MAX_FEEDBACK = 300;
 const MAX_BODY = 4000;
 const MAX_TITLE = 120;
 
@@ -50,6 +66,7 @@ function getRedisConfig(): { url: string; token: string } | null {
 const memBroadcasts: Broadcast[] = [];
 const memThreads = new Map<string, ThreadMessage[]>();
 const memDevices = new Map<string, number>();
+const memFeedback: FeedbackItem[] = [];
 
 interface Store {
   addBroadcast(b: Broadcast): Promise<void>;
@@ -58,6 +75,8 @@ interface Store {
   listThread(device: string): Promise<ThreadMessage[]>;
   touchDevice(device: string, ts: number): Promise<void>;
   listDevices(limit: number): Promise<string[]>;
+  addFeedback(f: FeedbackItem): Promise<void>;
+  listFeedback(): Promise<FeedbackItem[]>;
 }
 
 function memStore(): Store {
@@ -68,6 +87,8 @@ function memStore(): Store {
     async listThread(device) { return [...(memThreads.get(device) ?? [])]; },
     async touchDevice(device, ts) { memDevices.set(device, ts); },
     async listDevices(limit) { return [...memDevices.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit).map((e) => e[0]); },
+    async addFeedback(f) { memFeedback.push(f); if (memFeedback.length > MAX_FEEDBACK) memFeedback.splice(0, memFeedback.length - MAX_FEEDBACK); },
+    async listFeedback() { return [...memFeedback]; },
   };
 }
 
@@ -87,6 +108,11 @@ async function redisStore(cfg: { url: string; token: string }): Promise<Store> {
     },
     async touchDevice(device, ts) { await redis.zadd(DEVICES_KEY, { score: ts, member: device }); },
     async listDevices(limit) { return (await redis.zrange<string[]>(DEVICES_KEY, 0, limit - 1, { rev: true })) ?? []; },
+    async addFeedback(f) { await redis.rpush(FEEDBACK_KEY, JSON.stringify(f)); await redis.ltrim(FEEDBACK_KEY, -MAX_FEEDBACK, -1); },
+    async listFeedback() {
+      const raw = await redis.lrange(FEEDBACK_KEY, 0, -1);
+      return raw.map((r) => (typeof r === 'string' ? JSON.parse(r) : r) as FeedbackItem).filter(Boolean);
+    },
   };
 }
 
@@ -132,6 +158,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         res.status(200).json({ threads });
         return;
       }
+      // Admin: list captured feedback newest-first (David's bell alert + list).
+      if (req.query.feedback === '1') {
+        if (!isAdmin(req)) { res.status(401).json({ error: 'admin only' }); return; }
+        try {
+          const feedback = (await store.listFeedback()).sort((a, b) => b.ts - a.ts);
+          res.status(200).json({ feedback });
+        } catch (err) {
+          res.setHeader('x-store', 'degraded');
+          res.status(200).json({ feedback: [], degraded: true, detail: err instanceof Error ? err.message.slice(0, 160) : String(err) });
+        }
+        return;
+      }
       // Public, device-scoped: this device's broadcasts + thread.
       const device = safeDevice(req.query.device);
       try {
@@ -159,6 +197,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         await store.addThreadMessage(device, { from: 'user', body: text, ts });
         await store.touchDevice(device, ts);
         res.status(200).json({ ok: true });
+        return;
+      }
+
+      // PUBLIC: a user submits in-app feedback. Stored durably so David's
+      // admin bell can alert on it + list it. The device id lets him reply
+      // into that user's 1:1 thread (David 2026-09-07). Anonymous device ids
+      // are not proof of identity, but here they only scope a REPLY back to
+      // the sender's own thread — the same trust model as `reply`.
+      if (action === 'feedback') {
+        const device = safeDevice(body.device) ?? 'unknown';
+        const message = clean(body.message, MAX_BODY);
+        if (!message) { res.status(400).json({ error: 'message required' }); return; }
+        const ratingRaw = typeof body.rating === 'number' ? body.rating : null;
+        const rating = ratingRaw !== null && ratingRaw >= 1 && ratingRaw <= 5 ? Math.round(ratingRaw) : null;
+        const ts = Date.now();
+        const item: FeedbackItem = {
+          id: `f_${ts.toString(36)}`,
+          device,
+          message,
+          category: clean(body.category, 32) || 'other',
+          rating,
+          route: clean(body.route, 200),
+          name: clean(body.name, 120),
+          email: clean(body.email, 200),
+          ts,
+        };
+        try {
+          await store.addFeedback(item);
+          // Register the device so an admin reply can thread back to it.
+          if (device !== 'unknown') await store.touchDevice(device, ts);
+          res.status(200).json({ ok: true, id: item.id });
+        } catch (err) {
+          // Never fail the user's send flow on a store hiccup.
+          res.status(200).json({ ok: false, detail: err instanceof Error ? err.message.slice(0, 160) : String(err) });
+        }
         return;
       }
 

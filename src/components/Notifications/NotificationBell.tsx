@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Bell, X, MessageSquarePlus, Send, ArrowLeft, Megaphone, Gift } from 'lucide-react';
+import { Bell, X, MessageSquarePlus, Send, ArrowLeft, Megaphone, Gift, Inbox, Star } from 'lucide-react';
 import {
   fetchInbox,
   getLastSeenId,
@@ -16,8 +16,13 @@ import {
   sendBroadcast,
   fetchAllThreads,
   sendDevReply,
+  fetchFeedback,
+  hasUnreadFeedback,
+  getLastSeenFeedbackTs,
+  markFeedbackSeen,
   type Announcement,
   type ThreadMessage,
+  type FeedbackItem,
 } from '../../services/announcementsService';
 
 /**
@@ -64,8 +69,10 @@ export function NotificationBell(): JSX.Element {
   const [showSecretInput, setShowSecretInput] = useState(false);
   const [secretText, setSecretText] = useState('');
   const [secretError, setSecretError] = useState(false);
-  const [adminView, setAdminView] = useState<'user' | 'broadcast' | 'threads'>('user');
+  const [adminView, setAdminView] = useState<'user' | 'broadcast' | 'threads' | 'feedback'>('user');
   const [threads, setThreads] = useState<{ device: string; messages: ThreadMessage[] }[]>([]);
+  const [feedback, setFeedback] = useState<FeedbackItem[]>([]);
+  const [lastSeenFeedbackTs, setLastSeenFeedbackTs] = useState(0);
   const [activeDevice, setActiveDevice] = useState<string | null>(null);
   const [bTitle, setBTitle] = useState('');
   const [bBody, setBBody] = useState('');
@@ -81,16 +88,21 @@ export function NotificationBell(): JSX.Element {
   useEffect(() => {
     let alive = true;
     void (async () => {
-      const [inbox, seen, seenTs, secret] = await Promise.all([
-        fetchInbox(), getLastSeenId(), getLastSeenThreadTs(), getAdminSecret(),
+      const [inbox, seen, seenTs, seenFbTs, secret] = await Promise.all([
+        fetchInbox(), getLastSeenId(), getLastSeenThreadTs(), getLastSeenFeedbackTs(), getAdminSecret(),
       ]);
       if (!alive) return;
       setBroadcasts(inbox.broadcasts);
       setThread(inbox.thread);
       setLastSeenId(seen);
       setLastSeenThreadTs(seenTs);
+      setLastSeenFeedbackTs(seenFbTs);
       setAdmin(!!secret);
       setLoading(false);
+      // Admin only: pull feedback so the dot can light for David without the
+      // panel being open. No other user has the secret, so no other user's
+      // bell ever fetches (or alerts on) feedback.
+      if (secret) { const fb = await fetchFeedback(); if (alive) setFeedback(fb); }
     })();
     return () => { alive = false; };
   }, []);
@@ -102,9 +114,19 @@ export function NotificationBell(): JSX.Element {
     pollRef.current = setInterval(() => {
       void loadInbox();
       if (admin && adminView === 'threads') void fetchAllThreads().then(setThreads);
+      if (admin) void fetchFeedback().then(setFeedback);
     }, POLL_MS);
     return () => { if (pollRef.current) clearInterval(pollRef.current); };
   }, [open, admin, adminView, loadInbox]);
+
+  // Admin-only slow background poll so David's bell dot lights when feedback
+  // arrives even with the panel closed. One device (his), one GET/min — no
+  // meaningful load. Non-admin devices never run this (no secret → no fetch).
+  useEffect(() => {
+    if (!admin || open) return;
+    const id = setInterval(() => { void fetchFeedback().then(setFeedback); }, 60_000);
+    return () => clearInterval(id);
+  }, [admin, open]);
 
   // Every bell instance (header + sidebar) clears together when ANY of them
   // marks messages seen — re-read the shared markers from Dexie on the event.
@@ -112,12 +134,17 @@ export function NotificationBell(): JSX.Element {
     const sync = (): void => {
       void getLastSeenId().then(setLastSeenId);
       void getLastSeenThreadTs().then(setLastSeenThreadTs);
+      void getLastSeenFeedbackTs().then(setLastSeenFeedbackTs);
     };
     window.addEventListener('messages-seen', sync);
     return () => window.removeEventListener('messages-seen', sync);
   }, []);
 
-  const unread = hasUnread(broadcasts, lastSeenId) || hasUnreadThread(thread, lastSeenThreadTs);
+  // The feedback alert is admin-gated: only David's bell (which holds the
+  // secret) ever fetches feedback, so `feedback` is empty for every other
+  // user and this term is always false for them (David 2026-09-07).
+  const unreadFeedback = admin && hasUnreadFeedback(feedback, lastSeenFeedbackTs);
+  const unread = hasUnread(broadcasts, lastSeenId) || hasUnreadThread(thread, lastSeenThreadTs) || unreadFeedback;
 
   const openPanel = useCallback(() => {
     setOpen(true);
@@ -155,12 +182,31 @@ export function NotificationBell(): JSX.Element {
     if (!valid) { setSecretError(true); setSecretText(''); return; }
     await setAdminSecret(s);
     setThreads(await fetchAllThreads());
+    setFeedback(await fetchFeedback());
     setAdmin(true);
     setShowSecretInput(false);
     setSecretText('');
     setSecretError(false);
     setAdminView('threads');
   }, [secretText]);
+
+  // Opening the Feedback tab clears the alert up to the newest item seen.
+  const openFeedbackTab = useCallback(async () => {
+    const items = await fetchFeedback();
+    setFeedback(items);
+    const newestTs = items.reduce((mx, f) => Math.max(mx, f.ts), 0);
+    if (newestTs > 0) { await markFeedbackSeen(newestTs); setLastSeenFeedbackTs(newestTs); }
+  }, []);
+
+  // Reply to a feedback sender — threads it into their own 1:1 conversation,
+  // reusing the existing dev-reply channel (David 2026-09-07: "respond to the
+  // person that sent it"). Jumps to that device's thread view.
+  const replyToFeedback = useCallback((device: string) => {
+    if (!device || device === 'unknown') return;
+    setActiveDevice(device);
+    setAdminView('threads');
+    void fetchAllThreads().then(setThreads);
+  }, []);
 
   const submitBroadcast = useCallback(async () => {
     if (!bBody.trim()) return;
@@ -225,7 +271,7 @@ export function NotificationBell(): JSX.Element {
                   window.addEventListener('pointerup', cancel);
                 }}
               >
-                {admin && adminView !== 'user' ? (adminView === 'broadcast' ? 'Broadcast' : activeDevice ? 'Reply' : 'User messages') : 'Messages'}
+                {admin && adminView !== 'user' ? (adminView === 'broadcast' ? 'Broadcast' : adminView === 'feedback' ? 'Feedback' : activeDevice ? 'Reply' : 'User messages') : 'Messages'}
               </h2>
               <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded p-1 text-theme-text hover:opacity-70">
                 <X size={20} />
@@ -238,6 +284,10 @@ export function NotificationBell(): JSX.Element {
                 <button type="button" data-testid="admin-tab-user" onClick={() => { setAdminView('user'); setActiveDevice(null); }} className={`rounded-lg px-2 py-1 text-xs font-semibold ${adminView === 'user' ? 'text-theme-accent' : 'text-theme-text opacity-60'}`}>Inbox</button>
                 <button type="button" data-testid="admin-tab-broadcast" onClick={() => setAdminView('broadcast')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold ${adminView === 'broadcast' ? 'text-theme-accent' : 'text-theme-text opacity-60'}`}><Megaphone size={13} /> Broadcast</button>
                 <button type="button" data-testid="admin-tab-threads" onClick={() => { setAdminView('threads'); setActiveDevice(null); void fetchAllThreads().then(setThreads); }} className={`rounded-lg px-2 py-1 text-xs font-semibold ${adminView === 'threads' && !activeDevice ? 'text-theme-accent' : 'text-theme-text opacity-60'}`}>Threads</button>
+                <button type="button" data-testid="admin-tab-feedback" onClick={() => { setAdminView('feedback'); setActiveDevice(null); void fetchFeedback().then(setFeedback); void openFeedbackTab(); }} className={`relative flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold ${adminView === 'feedback' ? 'text-theme-accent' : 'text-theme-text opacity-60'}`}>
+                  <Inbox size={13} /> Feedback
+                  {unreadFeedback && <span data-testid="admin-feedback-dot" className="h-1.5 w-1.5 rounded-full bg-red-500" />}
+                </button>
               </div>
             )}
 
@@ -265,6 +315,31 @@ export function NotificationBell(): JSX.Element {
                   <textarea value={bBody} onChange={(e) => setBBody(e.target.value)} placeholder="Message to all users…" rows={5} className="w-full rounded-lg px-3 py-2 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
                   <button type="button" onClick={() => void submitBroadcast()} data-testid="broadcast-send" className="flex w-full items-center justify-center gap-2 rounded-xl bg-theme-accent py-2.5 font-semibold text-white hover:opacity-90"><Megaphone size={16} /> Send to all users</button>
                 </div>
+              ) : admin && adminView === 'feedback' ? (
+                feedback.length === 0 ? (
+                  <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>No feedback yet.</p>
+                ) : (
+                  feedback.map((f) => (
+                    <div key={f.id} data-testid="feedback-row" className="rounded-xl p-3" style={{ background: 'var(--color-bg)' }}>
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-theme-accent" style={{ background: 'color-mix(in srgb, var(--color-accent) 15%, transparent)' }}>{f.category}</span>
+                        {typeof f.rating === 'number' && (
+                          <span className="flex items-center gap-0.5 text-xs text-yellow-500"><Star size={11} fill="currentColor" /> {f.rating}/5</span>
+                        )}
+                        <span className="ml-auto text-xs" style={{ color: 'var(--color-text-muted)' }}>{new Date(f.ts).toLocaleDateString()}</span>
+                      </div>
+                      <p className="mt-1.5 whitespace-pre-line text-sm text-theme-text">{f.message}</p>
+                      <div className="mt-1 text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+                        {f.name || 'Anonymous'}{f.route ? ` · ${f.route}` : ''}{f.email ? ` · ${f.email}` : ''}
+                      </div>
+                      {f.device && f.device !== 'unknown' && (
+                        <button type="button" data-testid="feedback-reply" onClick={() => replyToFeedback(f.device)} className="mt-2 flex items-center gap-1 rounded-lg border border-theme-accent px-2.5 py-1 text-xs font-semibold text-theme-accent hover:opacity-80">
+                          <Send size={12} /> Reply to sender
+                        </button>
+                      )}
+                    </div>
+                  ))
+                )
               ) : admin && adminView === 'threads' && !activeDevice ? (
                 threads.length === 0 ? (
                   <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>No user messages yet.</p>
@@ -316,7 +391,7 @@ export function NotificationBell(): JSX.Element {
                   <input value={devReplyText} onChange={(e) => setDevReplyText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void submitDevReply(); }} placeholder="Reply to this user…" className="flex-1 rounded-xl px-3 py-2 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
                   <button type="button" onClick={() => void submitDevReply()} data-testid="dev-reply-send" aria-label="Send reply" className="rounded-xl bg-theme-accent px-3 text-white"><Send size={18} /></button>
                 </div>
-              ) : (admin && (adminView === 'broadcast' || adminView === 'threads')) ? null : (
+              ) : (admin && (adminView === 'broadcast' || adminView === 'threads' || adminView === 'feedback')) ? null : (
                 <div className="space-y-2">
                   <div className="flex gap-2">
                     <input value={replyText} onChange={(e) => setReplyText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void submitReply(); }} data-testid="user-reply-input" placeholder="Reply to the developer…" className="flex-1 rounded-xl px-3 py-2 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
