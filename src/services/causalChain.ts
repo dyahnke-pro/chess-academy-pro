@@ -131,6 +131,14 @@ function developedMinors(chess: Chess, color: Color): number {
   const home: Square[] = color === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
   return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && !home.includes(p.square)).length;
 }
+/** Minors still sitting on their home squares — the "genuinely undeveloped"
+ *  signal that distinguishes an early opening from a traded-down middlegame
+ *  (where developedMinors is also low, but because pieces were exchanged). */
+function homeMinors(chess: Chess, color: Color): number {
+  const home: Square[] = color === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'];
+  return pieces(chess, color).filter((p) => (p.type === 'n' || p.type === 'b') && home.includes(p.square)).length;
+}
+function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().split(' ')[5] ?? '1', 10) || 1; }
 
 /** Squares from which a KNIGHT would attack (defend) `target`. */
 function knightSquaresHitting(target: Square): Square[] {
@@ -254,7 +262,10 @@ function missingNaturalDefender(after: Chess, target: Square, targetColor: Color
   for (const ideal of hitting) {
     if (!natural.includes(ideal)) continue;              // only canonical developing squares tell an honest story
     const occ = after.get(ideal);
-    if (!occ || occ.color !== targetColor || occ.type === 'n') continue; // must be a friendly NON-knight blocker
+    // The blocker must be the OWNER'S QUEEN — the premature-sortie case, the only
+    // sound cross-move cause (a pawn or a routinely-developed piece on a knight's
+    // square is not why another piece is loose — the false-causality trap).
+    if (!occ || occ.color !== targetColor || occ.type !== 'q') continue;
     // The knight that "belongs" near this square: the one whose home shares the file side.
     const homeSide = fileIdx(ideal) >= 4 ? 'k' : 'q';
     const knight = knights.find((k) => (fileIdx(k.square) >= 4 ? 'k' : 'q') === homeSide)
@@ -289,7 +300,14 @@ function plyPieceArrived(historySans: readonly string[], color: Color, square: S
 function wasPrematureQueen(boardBefore: Chess, move: Move): boolean {
   if (move.piece !== 'q') return false;
   if (relRank(move.to, move.color) === 1) return false;
-  return developedMinors(boardBefore, move.color) < 3;
+  // Genuinely EARLY — not a traded-down middlegame where the queen recaptures on
+  // a knight square (Qxc3 on move 29 is not a "premature sortie"). Require the
+  // opening phase AND minors still HOME (traded-off minors also read as "few
+  // developed", which is the loophole that mislabelled a move-29 queen as early).
+  if (fullmoveOf(boardBefore) > 12) return false;
+  if (developedMinors(boardBefore, move.color) >= 3) return false;
+  if (homeMinors(boardBefore, move.color) < 2) return false;
+  return true;
 }
 
 // ─── the builder ────────────────────────────────────────────────────────────
@@ -320,8 +338,17 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   const loose = exploitedLoosePiece(before, after, focus);
   if (!loose) return null;
 
-  // Is it a DISCOVERY (a second attacker unveiled) or a direct hit?
+  // Is it a DISCOVERY (a second attacker unveiled)?
   const unveiler = discoveryUnveiled(before, after, focus, loose.target);
+
+  // 🔒 REQUIRE A GENUINE DISCOVERED ATTACK. A single attacker on an undefended
+  // piece is often just a KICK the piece escapes (…h6 hits Bg5, the bishop simply
+  // retreats — not "won"). The airtight, can't-escape pattern is the discovered
+  // DOUBLE attack: the moved piece AND an unveiled piece both bear on the target,
+  // so it cannot dodge both. No unveiled second attacker → not a won piece →
+  // silence (David 2026-09-07: "don't overstate the why"; a kicked piece is not
+  // a dropped piece).
+  if (!unveiler) return null;
 
   // An arrow only when its `from` really holds a piece on the focus board.
   const arrowIf = (from: Square, to: Square, color: MarkerColor): CausalArrow[] =>
@@ -395,42 +422,41 @@ export function buildCausalChain(input: CausalChainInput): CausalChain | null {
   // 3. WHY is the defender displaced? A friendly blocker occupies its natural
   //    square. Find when the blocker arrived + whether it was premature.
   const arrival = plyPieceArrived(historySans, enemy, missing.idealSquare, focusPly);
+  const premature = arrival ? wasPrematureQueen(arrival.boardBefore, arrival.move) : false;
+
+  // 🔒 STRICT ROOT — only a PREMATURE PIECE that took the defender's square is a
+  // sound cross-move cause (David 2026-09-07: "don't overstate the why"; "does
+  // it know when NOT to link the dots"). A normal PAWN or a routinely-developed
+  // piece on a natural knight square is NOT why a piece is loose — treating it as
+  // the cause is the false-causality trap (a pawn on c3 does not "cause" a queen
+  // that walked to e4 to hang). We require:
+  //   (a) a premature QUEEN sortie sits on the defender's ideal square, AND
+  //   (b) the defender knight is genuinely DISPLACED to a passive rank (≤ 2 from
+  //       its own side) — not merely developed actively elsewhere.
+  // Anything short of both → silence, and the flat list stands.
+  if (!arrival || !premature) return null;
+  if (relRank(missing.knightSquare, enemy) > 2) return null;
 
   // Assemble ROOT → tactic. nodes[i] --edges[i]--> nodes[i+1], so each edge is
   // pushed AFTER its source node and BEFORE its target node.
   const nodes: CausalNode[] = [];
   const edges: CausalEdge[] = [];
-  const premature = arrival ? wasPrematureQueen(arrival.boardBefore, arrival.move) : false;
 
-  // Optional ROOT: the blocker that took the defender's square. When it's a
-  // premature queen, that's the root cause; otherwise a plain "square taken".
-  if (arrival && premature) {
-    nodes.push({
-      kind: 'premature-piece', ply: arrival.ply, color: enemy,
-      squares: [missing.idealSquare],
-      data: { piece: PIECE_NOUN[arrival.move.piece], square: missing.idealSquare, move: arrival.move.san },
-      fundamentalId: 'early-queen-sortie',
-      tag: 'neglected-development',
-      arrows: [],
-      highlights: [{ square: missing.idealSquare, color: 'yellow' }],
-    });
-  } else if (arrival) {
-    nodes.push({
-      kind: 'blocked-square', ply: arrival.ply, color: enemy,
-      squares: [missing.idealSquare],
-      data: { square: missing.idealSquare, blocker: PIECE_NOUN[missing.blocker] },
-      tag: 'misplaced-piece',
-      arrows: [],
-      highlights: [{ square: missing.idealSquare, color: 'yellow' }],
-    });
-  }
-  // ROOT → displaced-defender (only when a root exists).
-  if (nodes.length > 0) {
-    edges.push({
-      relation: 'occupies-developing-square',
-      proof: `${arrival ? arrival.move.san + ' put the ' + PIECE_NOUN[arrival.move.piece] : PIECE_NOUN[missing.blocker]} on ${missing.idealSquare}, the knight's natural developing square`,
-    });
-  }
+  // ROOT — the premature queen that took the knight's square.
+  nodes.push({
+    kind: 'premature-piece', ply: arrival.ply, color: enemy,
+    squares: [missing.idealSquare],
+    data: { piece: PIECE_NOUN[arrival.move.piece], square: missing.idealSquare, move: arrival.move.san },
+    fundamentalId: 'early-queen-sortie',
+    tag: 'neglected-development',
+    arrows: [],
+    highlights: [{ square: missing.idealSquare, color: 'yellow' }],
+  });
+  // ROOT → displaced-defender.
+  edges.push({
+    relation: 'occupies-developing-square',
+    proof: `${arrival.move.san} put the ${PIECE_NOUN[arrival.move.piece]} on ${missing.idealSquare}, the knight's natural developing square`,
+  });
   // displaced-defender → loose-piece (removes-defender; board-proven).
   nodes.push(displacedNode);
   edges.push({

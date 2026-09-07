@@ -131,4 +131,19 @@ describe('buildCausalChain — negatives (silent on unprovable / no chain)', () 
     expect(buildCausalChain({ historySans: DAVID_GAME, focusPly: 99 })).toBeNull();
     expect(buildCausalChain({ historySans: DAVID_GAME, focusPly: 0 })).toBeNull();
   });
+
+  // Regression: real games from David's history that USED to fire a false chain
+  // (found 2026-09-07 by scanning 930 games; each was over-stating the why).
+  it('stays silent on a mere KICK, not a discovery (…h6 kicks Bg5 — it retreats)', () => {
+    // hani_sharaf vs knight_mare_01: premature queen IS there, but …h6 only kicks
+    // the bishop (single attacker, no unveiled second attacker) — not a won piece.
+    const kick = ['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'g6', 'Qf3', 'Nf6', 'Ne2', 'Bg7', 'd3', 'O-O', 'Bg5', 'h6'];
+    expect(buildCausalChain({ historySans: kick })).toBeNull();
+  });
+
+  it('stays silent when the pawn (not a premature queen) sits on the knight\'s square', () => {
+    // A c3 PAWN on the knight's square is a normal move, not why a piece is loose.
+    const pawnBlock = ['e4', 'e5', 'Nc3', 'Bb4', 'Nd5', 'Nc6', 'Nxb4', 'Nxb4', 'c3', 'Nc6', 'd4', 'd5', 'dxe5', 'dxe4', 'Qa4', 'Bd7', 'Qxe4', 'Qe7', 'Nf3', 'Nf6'];
+    expect(buildCausalChain({ historySans: pawnBlock })).toBeNull();
+  });
 });
