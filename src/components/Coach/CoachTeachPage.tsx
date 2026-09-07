@@ -2444,6 +2444,15 @@ export function CoachTeachPage(): JSX.Element {
     // won't interrupt (see userInteractedRef).
     if (!opts?.kickoff) userInteractedRef.current = true;
 
+    // Coach STOPS what it's doing the instant the student asks — the one
+    // consistent rule across every playing surface (David 2026-09-07). The
+    // walkthrough auto-pause below handles the active-walk case, but a typed
+    // question during the continue-the-game narration (which isn't a
+    // walkthrough) would otherwise keep talking over the answer. Cut the voice
+    // up front for every genuine user turn — a kickoff greeting and the coach's
+    // own move-narration are not the student interrupting, so leave those.
+    if (!opts?.kickoff && opts?.coachReplyPlayed === undefined) voiceService.stop();
+
     // Any new user turn cancels a running narrated continuation.
     continuationRef.current = false;
     // CONTINUE-THE-GAME intent (David 2026-07-18): the leaf "Watch the

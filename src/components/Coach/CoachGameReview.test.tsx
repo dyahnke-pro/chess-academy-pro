@@ -13,6 +13,8 @@ vi.mock('../../services/voiceService', () => ({
     speakForced: vi.fn().mockResolvedValue(undefined),
     speakIfFree: vi.fn().mockResolvedValue(undefined),
     speakAlert: vi.fn().mockResolvedValue(undefined),
+    // The walk now warms the TTS clip cache when narration loads.
+    prefetchAudio: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     getLastSpeakDiagnostic: vi.fn().mockReturnValue({
       text: '',

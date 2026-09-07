@@ -155,7 +155,12 @@ export function AppLayout(): JSX.Element {
   // and arms only at scrollTop 0; a release past the threshold hard-reloads,
   // which also applies any deferred SW/OTA bundle swap.
   const mainRef = useRef<HTMLElement>(null);
-  const pull = usePullToRefresh(mainRef);
+  // Live board / lesson surfaces are excluded: a hard reload there wipes the
+  // in-progress game or restarts the review (David 2026-09-07: "I do not want
+  // scroll up to refresh available during game play. It restarted my review").
+  // The gesture stays on hubs/lists where refresh + deferred OTA-apply matter.
+  const pullDisabledHere = /^\/coach\/(play|review|teach|session)\b/.test(location.pathname);
+  const pull = usePullToRefresh(mainRef, undefined, !pullDisabledHere);
 
   // Emit a route-changed audit on every URL change so a session can
   // reconstruct navigation flow from the audit log alone — joins with

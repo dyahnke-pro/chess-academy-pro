@@ -212,6 +212,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const askAbortRef = useRef<AbortController | null>(null);
   const askStreamMsgIdRef = useRef<string | null>(null);
   const askScrollEndRef = useRef<HTMLDivElement | null>(null);
+  const askPanelRef = useRef<HTMLDivElement | null>(null);
 
   // Audit-driven (review walk #4): tracks whether this component is
   // still mounted. The walk-prep effect's generateReviewNarration call
@@ -642,6 +643,22 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ? initialMoveIndex + 1
       : undefined,
   });
+
+  // Warm the TTS clip cache for the whole walk the moment the narration
+  // bundle lands, so each ply's voice fires the instant the move plays instead
+  // of paying synthesis latency per ply (David 2026-09-07: "narrations fire
+  // quicker after each move. Too much down time from move to narration").
+  // prefetchAudio no-ops when voice is off / cloud voice isn't live, and dedups
+  // against the clip cache, so a re-run is cheap. Keyed on the bundle identity.
+  useEffect(() => {
+    if (!walkNarration) return;
+    const texts = [
+      walkNarration.intro,
+      ...walkNarration.segments.map((s) => s.narration),
+      walkNarration.closing,
+    ].filter((t): t is string => typeof t === 'string' && t.trim().length > 0);
+    if (texts.length > 0) void voiceService.prefetchAudio(texts);
+  }, [walkNarration]);
 
   // ── Surface A: "quiz me as I review" reading gate (opt-in, default OFF) ──
   // When the setting is on, advancing the walk PAUSES on the position before
@@ -2663,6 +2680,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const handleAskSend = useCallback((question: string) => {
     if (isAskStreaming) return;
 
+    // Coach STOPS what it's doing the instant the student asks (David
+    // 2026-09-07: "during review coach did not stop narrating to answer my
+    // question" — make it consistent across every playing surface). Cut the
+    // current utterance AND halt the auto-advancing walk so it can't narrate
+    // the next ply over the answer. pause('ask') also bumps the voice
+    // stop-generation, so any in-flight narration chain aborts cleanly.
+    voiceService.stop();
+    walkPlayback.pause('ask');
+
     // WO-BRAIN-03: review-ask now routes through coachService.ask. The
     // brain envelope carries the same memory + manifest awareness as
     // every other migrated surface; the LLM emits set_intended_opening
@@ -2994,6 +3020,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => () => {
     if (askAbortRef.current) askAbortRef.current.abort();
   }, []);
+
+  // When Ask opens, bring the panel into view. The panel renders at the bottom
+  // of the scrollable-middle, below the board and below the fold on mobile — so
+  // tapping "Ask" with no messages yet looked like nothing happened (David
+  // 2026-09-07: "Tapping on ask did not pop up the chat box. It needs to").
+  // Scroll it up regardless of whether there are messages yet; the streaming
+  // scroll below then keeps the newest reply in view.
+  useEffect(() => {
+    if (!askExpanded) return;
+    const panel = askPanelRef.current;
+    if (typeof panel?.scrollIntoView === 'function') {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [askExpanded]);
 
   // Learn/Play chat behavior: keep the newest message in view as it streams.
   useEffect(() => {
@@ -4232,7 +4272,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 identical"). `walk-ask-response` stays on the transcript
                 container for the audit contract. */}
             {askExpanded && (
-              <div className="px-3 py-2 border-t border-theme-border" data-testid="walk-ask-panel">
+              <div ref={askPanelRef} className="px-3 py-2 border-t border-theme-border" data-testid="walk-ask-panel">
                 {askMessages.length > 0 && (
                   <div
                     className="mb-2 max-h-[260px] overflow-y-auto flex flex-col gap-2 pr-1"
@@ -4252,6 +4292,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                   onSend={handleAskSend}
                   disabled={isAskStreaming}
                   placeholder="Ask about this position..."
+                  autoFocus
                 />
               </div>
             )}

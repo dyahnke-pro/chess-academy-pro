@@ -364,6 +364,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
     const handleSend = useCallback(async (text: string) => {
       if (!activeProfile || isStreaming) return;
 
+      // Coach STOPS what it's doing the instant the student asks — consistent
+      // with every playing surface (David 2026-09-07). Cut any in-flight
+      // phase-transition / move narration immediately; the abort flag + the
+      // stop-generation bump keep a queued speak chain from resuming over the
+      // answer. The reply's own speak (later, post-compute) starts fresh.
+      speechAbortedRef.current = false;
+      voiceService.stop();
+
       // A new turn invalidates any outstanding [CHOICES:] picker.
       setCoachChoices(null);
 

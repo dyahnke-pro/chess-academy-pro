@@ -87,6 +87,31 @@ describe('usePullToRefresh', () => {
     expect(onRefresh).not.toHaveBeenCalled();
   });
 
+  it('does NOT wire the gesture when disabled (live board / review surface)', () => {
+    // David 2026-09-07: "I do not want scroll up to refresh available during
+    // game play. It restarted my review." A pull past the threshold on a
+    // disabled surface must be a no-op.
+    const onRefresh = vi.fn();
+    renderHook(() => usePullToRefresh({ current: container }, onRefresh, false));
+    act(() => pull(container, 100, 100 + FAR_ENOUGH));
+    expect(onRefresh).not.toHaveBeenCalled();
+  });
+
+  it('clears any in-flight travel when the surface becomes disabled', () => {
+    const onRefresh = vi.fn();
+    const { result, rerender } = renderHook(
+      ({ enabled }: { enabled: boolean }) => usePullToRefresh({ current: container }, onRefresh, enabled),
+      { initialProps: { enabled: true } },
+    );
+    act(() => {
+      fireEvent.touchStart(container, { touches: [{ clientY: 100, clientX: 100 }] });
+      fireEvent.touchMove(container, { touches: [{ clientY: 100 + PULL_DEAD_ZONE_PX + 50, clientX: 100 }] });
+    });
+    expect(result.current.pullDistance).toBeGreaterThan(0);
+    act(() => rerender({ enabled: false }));
+    expect(result.current.pullDistance).toBe(0);
+  });
+
   it('reports pull distance while dragging and resets on release', () => {
     const onRefresh = vi.fn();
     const { result } = renderHook(() => usePullToRefresh({ current: container }, onRefresh));

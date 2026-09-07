@@ -69,6 +69,11 @@ function nearestScroller(start: Element | null, stopAt: Element): Element | null
 export function usePullToRefresh(
   containerRef: RefObject<HTMLElement | null>,
   onRefresh: () => void = () => window.location.reload(),
+  /** When false, the gesture is not wired at all — for live board / lesson
+   *  surfaces (coach play, review, teach, sessions) where a reload wipes the
+   *  in-progress game or restarts the review (David 2026-09-07: "I do not want
+   *  scroll up to refresh available during game play. It restarted my review"). */
+  enabled = true,
 ): PullToRefreshState {
   const [pullDistance, setPullDistance] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -78,7 +83,15 @@ export function usePullToRefresh(
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || !enabled) {
+      // Stand down on a disabled surface — clear any travel drawn before the
+      // route changed so a stale indicator can't linger.
+      startYRef.current = null;
+      scrollerRef.current = null;
+      distanceRef.current = 0;
+      setPullDistance(0);
+      return;
+    }
 
     const reset = (): void => {
       startYRef.current = null;
@@ -130,7 +143,7 @@ export function usePullToRefresh(
       el.removeEventListener('touchend', onTouchEnd);
       el.removeEventListener('touchcancel', reset);
     };
-  }, [containerRef, onRefresh, refreshing]);
+  }, [containerRef, onRefresh, refreshing, enabled]);
 
   return { pullDistance, ready: pullDistance >= PULL_TO_REFRESH_THRESHOLD_PX, refreshing };
 }
