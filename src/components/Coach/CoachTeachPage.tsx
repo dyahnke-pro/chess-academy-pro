@@ -91,6 +91,7 @@ import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
+import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
 import {
   buildCustomLessonPlan,
   matchCustomLessonRequest,
@@ -9632,6 +9633,17 @@ export function CoachTeachPage(): JSX.Element {
               const plan = buildCustomLessonPlan(await getCoachCurriculum(), unified);
               if (plan.parts.length > 0 && !userInteractedRef.current) {
                 customLessonPlanRef.current = plan;
+                // P7 — the persistent DOSSIER opens the session with "here's where
+                // you stand" (a computed win / what's improving / the top hole)
+                // BEFORE the picker. Memory that builds across sessions (David
+                // 2026-09-08). Silent when there isn't enough history.
+                try {
+                  const stand = dossierOpeningLine(await getStudentDossier());
+                  if (stand && !userInteractedRef.current) {
+                    setMessages((prev) => [...prev, { id: uid('dossier-stand'), role: 'assistant', content: stand, timestamp: Date.now() }]);
+                    speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(stand)).catch(() => undefined);
+                  }
+                } catch { /* dossier is a bonus — the picker still opens */ }
                 setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: plan.pickerLine, timestamp: Date.now() }]);
                 setCoachChoices([...plan.pickerChips, ...generic].slice(0, 4));
                 speechChainRef.current = speechChainRef.current

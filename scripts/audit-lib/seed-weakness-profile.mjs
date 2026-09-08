@@ -14,6 +14,8 @@
 const FORK_FEN = 'r3k3/8/8/3N4/8/8/8/4K3 w - - 0 1';   // Nc7+ forks Ke8 + Ra8
 const PIN_FEN = '4k3/8/8/8/1b6/8/3N4/3K4 w - - 0 1';    // placeholder pin cluster
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 function mkPuzzle(over) {
   const now = new Date().toISOString();
   return {
@@ -51,12 +53,24 @@ function mkPuzzle(over) {
   };
 }
 
-/** The rows that make up the seeded profile: 3 open FORK holes (solvable) + 2
- *  open PIN holes. Distinct ids so all count; distinct fens where it matters. */
+/** The seeded profile drives BOTH the custom-lesson picker AND the dossier:
+ *  - FORK holes (solvable FORK_FEN) span old + recent games → a PERSISTENT,
+ *    open, drillable hole (picker offers it; dossier names it as most pressing).
+ *  - PIN holes appear in OLD games only → still open (picker offers "pins") but
+ *    gone from recent play → the lifecycle calls them a self-fixed STRENGTH in
+ *    the dossier. Distinct sourceGameIds so the lifecycle sample floor (≥4 games,
+ *    ≥6 slips) is met; createdAt spread across a ~45-day span for recent/older. */
 function seedRows() {
+  const iso = (daysAgo) => new Date(Date.now() - daysAgo * DAY_MS).toISOString();
   const rows = [];
-  for (let i = 0; i < 3; i += 1) rows.push(mkPuzzle({ tacticType: 'fork', fen: FORK_FEN }));
-  for (let i = 0; i < 2; i += 1) rows.push(mkPuzzle({ tacticType: 'pin', fen: PIN_FEN, bestMove: 'd2b3', bestMoveSan: 'Nb3', moves: 'd2b3', cpLoss: 210, classification: 'mistake' }));
+  // Forks: 2 old + 2 recent, each its own game → persistent + drillable.
+  rows.push(mkPuzzle({ tacticType: 'fork', fen: FORK_FEN, sourceGameId: 'audit-g1', createdAt: iso(45) }));
+  rows.push(mkPuzzle({ tacticType: 'fork', fen: FORK_FEN, sourceGameId: 'audit-g2', createdAt: iso(40) }));
+  rows.push(mkPuzzle({ tacticType: 'fork', fen: FORK_FEN, sourceGameId: 'audit-g3', createdAt: iso(3) }));
+  rows.push(mkPuzzle({ tacticType: 'fork', fen: FORK_FEN, sourceGameId: 'audit-g4', createdAt: iso(1) }));
+  // Pins: OLD only → gone from recent play → a self-fixed strength in the dossier.
+  rows.push(mkPuzzle({ tacticType: 'pin', fen: PIN_FEN, bestMove: 'd2b3', bestMoveSan: 'Nb3', moves: 'd2b3', cpLoss: 210, classification: 'mistake', sourceGameId: 'audit-g5', createdAt: iso(44) }));
+  rows.push(mkPuzzle({ tacticType: 'pin', fen: PIN_FEN, bestMove: 'd2b3', bestMoveSan: 'Nb3', moves: 'd2b3', cpLoss: 210, classification: 'mistake', sourceGameId: 'audit-g6', createdAt: iso(42) }));
   return rows;
 }
 

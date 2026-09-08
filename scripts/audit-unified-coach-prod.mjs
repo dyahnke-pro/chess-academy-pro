@@ -99,6 +99,13 @@ try {
     pickerBody.includes('forks') && pickerBody.includes('pins'),
     `forks=${pickerBody.includes('forks')} pins=${pickerBody.includes('pins')}`);
 
+  // ── 1b. The persistent DOSSIER opens with "here's where you stand" (P7): a
+  //        computed strength / trend / the top hole, before the picker. The seed
+  //        makes pins a self-fixed strength and forks the most pressing hole.
+  const dossierFired = /costing you the most|gone from your recent games|trending the right way|drilled .* shut|you've cleared/.test(pickerBody);
+  check('dossier states where the student stands (memory)', dossierFired,
+    dossierFired ? 'dossier opening line present' : 'no dossier "where you stand" line seen');
+
   // ── 2. The picker chips render (full-lesson + per-hole).
   const fullChip = page.locator('[data-choice="Build my full lesson"]');
   const forkChip = page.locator('[data-choice^="Lesson on"]').first();

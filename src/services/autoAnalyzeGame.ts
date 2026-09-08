@@ -195,6 +195,13 @@ export async function autoAnalyzeGameMisconceptions(
   // up already-tagged games.
   await persistMistakePuzzlesForBlunders(gameId, blunders);
 
+  // The dossier "builds on each game" (P7, David 2026-09-08): a freshly analyzed
+  // game just changed the weakness picture, so recompute the persistent snapshot
+  // (fire-and-forget; dynamic import keeps this hot path free of the memory
+  // graph). The diff vs the prior snapshot is what lets the coach later say
+  // "you've cleared X".
+  void import('./studentDossier').then((m) => m.refreshStudentDossier()).catch(() => undefined);
+
   // Log the misconception TALLY once per game (bulk / review-walk / live).
   if (await hasMisconceptionsForGame(gameId)) return empty;
   return autoAnalyzeBlunders(blunders, {
