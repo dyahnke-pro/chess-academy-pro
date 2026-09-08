@@ -37,6 +37,10 @@ describe('parsePlayerGameRequest', () => {
       'how does white play the catalan', // "white" is not a player
       'how do i play the catalan', // "i" is not a player
       'middle game plans in the pirc',
+      'can you show me a trap in the italian', // "trap" is a concept, not a player
+      'show me a fork in this position',
+      'show me a plan in the caro',
+      'show me a tactic in the sicilian',
       'I played e4. Your move.',
       'i just played the catalan',
       'what is the catalan',

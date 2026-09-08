@@ -39,6 +39,16 @@ const PLAYER_STOPWORDS = new Set<string>([
   // "game" as the player.
   'game', 'games', 'match', 'matches', 'lesson', 'line', 'lines',
   'position', 'move', 'moves', 'opening', 'someone',
+  // Chess-CONTENT nouns — "show me a TRAP in the Italian" / "a fork in this"
+  // / "a plan in the Caro" must not read the concept as a player (David
+  // 2026-09-08 interrogation: "show me a trap" → looked up player "Trap").
+  'trap', 'traps', 'fork', 'forks', 'pin', 'pins', 'skewer', 'skewers',
+  'tactic', 'tactics', 'plan', 'plans', 'idea', 'ideas', 'puzzle', 'puzzles',
+  'trick', 'tricks', 'combination', 'combinations', 'sacrifice', 'sacrifices',
+  'sac', 'mate', 'mates', 'attack', 'attacks', 'weapon', 'weapons', 'threat',
+  'threats', 'continuation', 'continuations', 'variation', 'variations',
+  'setup', 'structure', 'endgame', 'middlegame', 'strategy', 'win', 'wins',
+  'gambit', 'defense', 'defence',
 ]);
 
 /** Leading filler stripped off a captured player span. The lazy patterns
