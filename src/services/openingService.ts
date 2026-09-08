@@ -285,23 +285,46 @@ export async function getMostPlayedOpenings(
 ): Promise<Array<{ opening: OpeningRecord; games: number }>> {
   const repertoire = await getRepertoireOpenings(color);
   const byId = new Map(repertoire.map((o) => [o.id, o]));
-  // Count games per openingId (only openings that are in the repertoire so we
-  // have a clean display name + color).
+  // 🔒 IMPORTED GAMES COUNT (David 2026-09-08 account audit): chess.com/lichess
+  // imports set `eco` but leave `openingId` null, so counting by openingId alone
+  // skipped ALL 930 imported games → "you haven't played enough openings yet"
+  // with a full game history. Resolve each game to a repertoire record by
+  // openingId first, then by ECO — so a real, imported game history feeds the
+  // most-played read. The full openings DB gives an ECO→record map (preferring a
+  // repertoire record for a clean, color-correct display name).
+  let byEco = new Map<string, OpeningRecord>();
+  try {
+    const all = await db.openings.toArray();
+    // Prefer a repertoire record per ECO (nicer name + tracked); else any.
+    for (const o of all) {
+      if (!o.eco) continue;
+      const cur = byEco.get(o.eco);
+      if (!cur || (o.isRepertoire && !cur.isRepertoire)) byEco.set(o.eco, o);
+    }
+  } catch { byEco = new Map(); }
+  const resolve = (g: { openingId: string | null; eco: string | null }): OpeningRecord | undefined => {
+    if (g.openingId) { const r = byId.get(g.openingId); if (r) return r; }
+    if (g.eco) return byEco.get(g.eco);
+    return undefined;
+  };
+  // Count games per resolved opening record (openingId, else ECO).
   const counts = new Map<string, number>();
+  const recById = new Map<string, OpeningRecord>();
   try {
     const games = await db.games.toArray();
     for (const g of games) {
-      if (!g.openingId) continue;
-      const rec = byId.get(g.openingId);
+      if (g.isMasterGame) continue;
+      const rec = resolve(g);
       if (!rec) continue;
       if (color && rec.color !== color) continue;
-      counts.set(g.openingId, (counts.get(g.openingId) ?? 0) + 1);
+      recById.set(rec.id, rec);
+      counts.set(rec.id, (counts.get(rec.id) ?? 0) + 1);
     }
   } catch {
     /* no games store / read error — fall through to the drill fallback */
   }
   const played = [...counts.entries()]
-    .map(([id, games]) => ({ opening: byId.get(id) as OpeningRecord, games }))
+    .map(([id, games]) => ({ opening: (byId.get(id) ?? recById.get(id)) as OpeningRecord, games }))
     .filter((x) => x.opening)
     .sort((a, b) => b.games - a.games);
   if (played.length > 0) return played.slice(0, limit);
