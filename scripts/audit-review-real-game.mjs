@@ -555,7 +555,7 @@ const run = async () => {
   // ACC/NOWINDFALL flag was projection text). Projections are APPENDED by
   // augmentWithProjections, so cutting from the first marker to the end is
   // exact; parentheticals are the per-move whys inside rendered lines.
-  const PROJECTION_MARKERS = /(?:it runs|the line runs|the plan runs|it goes|it continues|their idea runs|Here's how it gets punished from here:|Here's how you take advantage:|Here's how:)/i;
+  const PROJECTION_MARKERS = /(?:it runs|the line runs|the plan runs|it goes|it continues|their (?:idea|threat|plan) runs|Here's how it gets punished from here:|Here's how you take advantage:|Here's how:)/i;
   const presentTense = (t) => {
     const s = (t || '').replace(/\([^)]*\)/g, ' ');
     const m0 = s.search(PROJECTION_MARKERS);
