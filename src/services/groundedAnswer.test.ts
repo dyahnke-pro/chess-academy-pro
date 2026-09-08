@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer, assembleLastMoveAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -1450,3 +1450,30 @@ describe('assembleTrainingRecommendation — computed recommend-a-game prose (G0
     expect(r.facts).not.toMatch(/the tactics closely/);
   });
 });
+
+describe('assembleLastMoveAnswer (2026-09-08 — "what just moved")', () => {
+  it('names the piece, destination and capture of the last move', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Bb5 a6 4.Bxc6 — White just captured on c6.
+    const hist = ['e4','e5','Nf3','Nc6','Bb5','a6','Bxc6'];
+    const a = assembleLastMoveAnswer({ moveHistory: hist, studentColor: 'black' });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/bishop/i);
+    expect(a!.facts).toMatch(/c6/);
+    expect(a!.facts).toMatch(/captur/i);
+    expect(a!.sources).toContain('chess.js');
+  });
+  it('says "You" when the student made the last move', () => {
+    const a = assembleLastMoveAnswer({ moveHistory: ['e4'], studentColor: 'white' });
+    expect(a!.facts).toMatch(/^You moved/);
+    expect(a!.facts).toMatch(/e4/);
+  });
+  it('describes castling', () => {
+    const hist = ['e4','e5','Nf3','Nc6','Bc4','Bc5','O-O'];
+    const a = assembleLastMoveAnswer({ moveHistory: hist, studentColor: 'black' });
+    expect(a!.facts).toMatch(/castled kingside/i);
+  });
+  it('returns null on empty history', () => {
+    expect(assembleLastMoveAnswer({ moveHistory: [], studentColor: 'white' })).toBeNull();
+  });
+});
+

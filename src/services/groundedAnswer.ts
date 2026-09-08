@@ -462,6 +462,49 @@ export function assembleOpponentMoveAnswer(opts: {
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
+// ── LAST MOVE — "what just moved and where is it?" (neutral, factual) ─────────
+//
+// David 2026-09-08 interrogation: "what piece just moved?" had NO lane and fell
+// through to a hanging report. Describes the LAST move actually played (either
+// side) from chess.js geometry over moveHistory — piece, destination, capture,
+// castle, promotion. G0/G3: pure board truth, never the LLM guessing. Self-gates
+// on an empty / unreplayable history.
+export function assembleLastMoveAnswer(opts: {
+  moveHistory: string[] | undefined;
+  studentColor: 'white' | 'black';
+}): GroundedAnswer | null {
+  const { moveHistory, studentColor } = opts;
+  if (!moveHistory || moveHistory.length === 0) return null;
+  const lastSan = moveHistory[moveHistory.length - 1];
+  let before: Chess;
+  try {
+    before = new Chess();
+    for (let i = 0; i < moveHistory.length - 1; i++) {
+      if (!before.move(moveHistory[i])) return null;
+    }
+  } catch { return null; }
+  const moverColor: 'white' | 'black' = before.turn() === 'w' ? 'white' : 'black';
+  let played: Move | null = null;
+  try { played = new Chess(before.fen()).move(lastSan); } catch { return null; }
+  if (!played) return null;
+
+  const who = moverColor === studentColor ? 'You' : 'They';
+  const whose = moverColor === studentColor ? 'your' : 'their';
+  const theirs = moverColor === studentColor ? 'their' : 'your';
+  let facts: string;
+  if (played.san.startsWith('O-O')) {
+    facts = `${who} castled ${played.san === 'O-O-O' ? 'queenside' : 'kingside'} — ${whose} king is now on ${played.to} (${played.san}).`;
+  } else {
+    const pieceName = REVIEW_PIECE_NAME[played.piece];
+    let base = `${who} moved ${whose} ${pieceName} to ${played.to}`;
+    if (played.captured) base += `, capturing ${theirs} ${REVIEW_PIECE_NAME[played.captured]}`;
+    if (played.promotion) base += `, promoting to a ${REVIEW_PIECE_NAME[played.promotion]}`;
+    const restPiece = played.promotion ? REVIEW_PIECE_NAME[played.promotion] : pieceName;
+    facts = `${base} (${played.san}). The ${restPiece} sits on ${played.to} now.`;
+  }
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
 // ── SQUARE CONTROL — "who controls e5?" / "is d5 safe for my knight?" ─────────
 //
 // David 2026-08-28: these fell to the best-move handler because no lane owned

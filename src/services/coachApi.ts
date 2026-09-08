@@ -59,7 +59,7 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleLastMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental } from './groundedAnswer';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
 import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
@@ -1343,6 +1343,9 @@ export interface MasterGroundingOptions {
   /** Name-this-opening (P-IV.2, 2026-09-01) — "what opening is this?" Detected
    *  from the live move history via detectOpening → assembleOpeningNameAnswer. */
   nameOpeningQuestion?: boolean;
+  /** Last-move read (2026-09-08) — "what piece just moved and where is it?"
+   *  Voiced from assembleLastMoveAnswer over moveHistory. Factual, either side. */
+  lastMoveQuestion?: boolean;
   /** Opponent's last move (P-IV.1, 2026-09-01) — "why did they play that?"
    *  Voiced from assembleOpponentMoveAnswer over moveHistory + the live FEN;
    *  self-gates to the position where the opponent genuinely moved last. */
@@ -3414,6 +3417,7 @@ export async function getCoachChatResponse(
       grounding.lastGameQuestion === true ||
       grounding.lastGameMistakeQuestion === true ||
       grounding.nameOpeningQuestion === true ||
+      grounding.lastMoveQuestion === true ||
       grounding.opponentMoveQuestion === true ||
       grounding.weaknessLifecycleKind !== undefined ||
       grounding.weaknessBriefingQuestion === true ||
@@ -4981,6 +4985,22 @@ export async function getCoachChatResponse(
           });
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opponent-move', preferRaw: true });
+            if (voiced) return voiced;
+          }
+        }
+
+        // LAST MOVE — "what piece just moved and where is it?" (2026-09-08).
+        // The neutral, factual last-move read (either side) from chess.js over
+        // moveHistory. SELF-GATES (null on empty/unreplayable history). G0:
+        // computed geometry, voiceFacts phrases. Placed before the generic
+        // board default so "what just moved" is not swallowed by a hanging read.
+        if (grounding.lastMoveQuestion && grounding.moveHistory && grounding.moveHistory.length > 0) {
+          const sc: 'white' | 'black' =
+            grounding.studentColor ??
+            ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
+          const answer = assembleLastMoveAnswer({ moveHistory: [...grounding.moveHistory], studentColor: sc });
+          if (answer) {
+            const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'last-move', preferRaw: true });
             if (voiced) return voiced;
           }
         }

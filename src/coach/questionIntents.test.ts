@@ -27,6 +27,7 @@ import {
   isLastGameMistakeQuestion,
   isNameOpeningQuestion,
   isOpponentMoveQuestion,
+  isLastMoveQuestion,
   isTheoryQuestion,
   weaknessLifecycleKind,
   isWeaknessBriefingQuestion,
@@ -509,6 +510,26 @@ describe('Wave 1 — where-do-I-go-wrong cluster (David 2026-07-04)', () => {
       'what should I play',                  // best move
       'hi coach',
     ])('does NOT match: %s', (q) => expect(isOpponentMoveQuestion(q)).toBe(false));
+  });
+
+  describe('isLastMoveQuestion (2026-09-08)', () => {
+    it.each([
+      'what piece just moved',
+      'what piece just moved and where is it',
+      'what just moved',
+      'what was the last move',
+      'what move was just played',
+      'which piece moved',
+      'what did they just play',
+      'where did that piece go',
+    ])('matches "%s"', (q) => expect(isLastMoveQuestion(q)).toBe(true));
+    it.each([
+      'why did they play that',              // opponent-move lane
+      'was that a good move',                // rating lane
+      'what happened in my last game',       // last-game lane
+      'what should I play',                  // best-move lane
+      'hi coach',
+    ])('does NOT match: %s', (q) => expect(isLastMoveQuestion(q)).toBe(false));
   });
 
   describe('weakness lifecycle + briefing (Part III, 2026-09-01)', () => {

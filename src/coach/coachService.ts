@@ -209,7 +209,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, openingExistenceQuery,
 } from './questionIntents';
 import { isAnyBoardQuestion } from './boardQuestions';
 export {
@@ -218,7 +218,7 @@ export {
   isProgressQuestion, isImprovementTrendQuestion, isOpeningProfileQuestion, openingProfileKind, buildQuestionGrounding,
   isStatsQuestion, isStrengthsQuestion, isOpeningAccuracyQuestion,
   isOpeningTrapsQuestion, opensTrapsSystemAsk, isReviewDueQuestion,
-  isMistakesQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, isTacticsProfileQuestion, isPhaseQuestion,
+  isMistakesQuestion, isLastGameMistakeQuestion, isNameOpeningQuestion, isOpponentMoveQuestion, isLastMoveQuestion, isTheoryQuestion, weaknessLifecycleKind, isWeaknessLifecycleQuestion, isWeaknessBriefingQuestion, isTacticsProfileQuestion, isPhaseQuestion,
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
@@ -1211,6 +1211,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const lastGameMistakeQuestionEngage = isLastGameMistakeQuestion(askForIntents);
     const nameOpeningQuestionEngage = isNameOpeningQuestion(askForIntents);
     const opponentMoveQuestionEngage = isOpponentMoveQuestion(askForIntents);
+    const lastMoveQuestionEngage = isLastMoveQuestion(askForIntents);
     const theoryQuestionEngage = isTheoryQuestion(askForIntents) && !conceptQuestionEngage && !fundamentalsQuestionEngage && !fundamentalLessonQuestionEngage;
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
@@ -1355,7 +1356,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       // coachApi. Whose-turn and colour are then answerable from `whoseTurn` /
       // `studentColor` alone; draw and mate still need the board, but they now
       // decline honestly through the computed lane instead of being improvised.
-      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
+      (input.liveState.fen || isAnyBoardQuestion(askForIntents) || isAttackAssessmentQuestion(askForIntents) || progressQuestion || trendQuestionEngage || conceptQuestionEngage || fundamentalsQuestionEngage || fundamentalLessonQuestionEngage || famousGameQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || lastGameMistakeQuestionEngage || nameOpeningQuestionEngage || opponentMoveQuestionEngage || lastMoveQuestionEngage || theoryQuestionEngage || weaknessLifecycleKindEngage !== null || weaknessBriefingQuestionEngage || endgameWeaknessQuestionEngage || isEndgameQuestion(askForIntents) || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // The side to move, as the surface already knows it. Threaded so
@@ -1581,6 +1582,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             lastGameQuestion: lastGameQuestionEngage,
             lastGameMistakeQuestion: lastGameMistakeQuestionEngage,
             nameOpeningQuestion: nameOpeningQuestionEngage,
+            lastMoveQuestion: lastMoveQuestionEngage,
             opponentMoveQuestion: opponentMoveQuestionEngage,
             theoryQuestion: theoryQuestionEngage,
             studentColor: input.liveState.studentColor,

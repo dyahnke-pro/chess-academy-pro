@@ -438,6 +438,28 @@ export function isOpponentMoveQuestion(ask: string | undefined): boolean {
   return OPPONENT_MOVE_RE.test(ask);
 }
 
+/** "What piece just moved / what was the last move / where did that piece go" —
+ *  the NEUTRAL, factual last-move read (either side), voiced from
+ *  assembleLastMoveAnswer over moveHistory (David 2026-09-08 interrogation: this
+ *  had no lane and fell through to a hanging report). Carries no "why" (that's
+ *  the opponent-move / rating lanes) and no "game" (that's the last-game lane). */
+const LAST_MOVE_QUESTION_RE = anyOf([
+  String.raw`\bwhat\s+(?:piece\s+)?(?:did\s+(?:i|you|they|we)\s+)?just\s+(?:move|play|played|do)\b`,
+  String.raw`\bwhat\s+(?:piece\s+)?(?:did\s+(?:i|you|they|we)\s+)just\s+(?:move|play|played)\b`,
+  String.raw`\bwhat\s+(?:was|is)\s+(?:the\s+)?last\s+move\b`,
+  String.raw`\bwhat\s+move\s+(?:was\s+)?(?:just\s+)?(?:made|played)\b`,
+  String.raw`\bwhich\s+piece\s+(?:just\s+)?moved\b`,
+  String.raw`\bwhat\s+(?:piece\s+)?just\s+moved\b`,
+  String.raw`\bwhere\s+did\s+(?:the\s+|that\s+)?(?:piece|(?:last\s+)?move)\s+(?:just\s+)?(?:go|move)\b`,
+]);
+export function isLastMoveQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  if (/\bwhy\b/i.test(ask)) return false;            // "why did they play that" → opponent/rating lane
+  if (/\bgame\b/i.test(ask)) return false;           // "…in my last game" → last-game lane
+  if (/\b(?:good|bad|best|sound|blunder|mistake)\b/i.test(ask)) return false; // rating lane
+  return LAST_MOVE_QUESTION_RE.test(ask);
+}
+
 /** SAN-shaped token — the move the student NAMED ("is Qf3 ok", "what about
  *  Nf3", "can I play exd5"). Piece moves (Qf3, Nbd7, Rxe7+), pawn moves (e4,
  *  exd5, a8=Q), castling (O-O / 0-0-0). Case-INSENSITIVE (`i` flag) so lowercase
@@ -2629,6 +2651,9 @@ export function buildQuestionGrounding(
     lastGameQuestion: isLastGameQuestion(a),
     lastGameMistakeQuestion: isLastGameMistakeQuestion(a),
     nameOpeningQuestion: isNameOpeningQuestion(a),
+    // "what piece just moved and where is it?" — the neutral, factual last-move
+    // read (either side). Disjoint from opponentMove/rating (those carry "why").
+    lastMoveQuestion: isLastMoveQuestion(a),
     // "why did THEY play that" — the opponent's last move. Excludes a named
     // move (candidate lane) and self-review, so it's disjoint from the move
     // lanes above (P-IV.1).
