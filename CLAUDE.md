@@ -23,6 +23,13 @@ Before starting ANY coach / narration / grounding / weakness / teaching build:
 - Shipped sub-system: `docs/plans/2026-09-07-causal-chain-engine.md` (the
   cross-move cause→effect engine — moves do not exist in isolation).
 
+🚨 **MAP EVERY SURFACE BEFORE BUILDING (David 2026-09-08, emphatic).** No coach
+build starts as code until you've mapped the target surface ENTIRELY *and* every
+neighboring/touching surface for blast radius — the shared computers
+(`positionFacts`, `computeImportance`, `voiceFacts`, the weakness spine) feed
+review/learn/play/chat/tactics/endgame/openings at once, so a change to one
+reaches all. The pre-build Surface Map procedure is §0 of the unified-coach plan.
+
 ## 🚨 NON-NEGOTIABLE GATES (apply to every change, every session)
 
 These are HARD requirements — not "best effort." Skipping them is a

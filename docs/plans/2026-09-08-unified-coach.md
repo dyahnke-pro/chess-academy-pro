@@ -9,6 +9,41 @@ engineering improvements on top are called out in §7 and the decisions log.
 
 ---
 
+## 0. 🚨 PRE-BUILD GATE — MAP EVERY SURFACE FIRST (David 2026-09-08, emphatic: "gotta map EACH SURFACE ENTIRELY before building! FOR THE LOVE OF GOD... even neighboring or touching surfaces should be reviewed to see if and how they will be affected").
+
+**NO phase below starts as code until its surface map is written and reviewed.**
+A phase that changes a shared computer (`positionFacts`, `computeImportance`,
+`voiceFacts`, the weakness spine) touches EVERY surface that consumes it — that
+is the whole point of a unified coach, and it is also the whole risk. Map the
+blast radius before touching a line.
+
+For each phase, produce a **Surface Map** covering:
+
+1. **The target surface(s)** — read the ENTIRE component + its service path
+   end-to-end (not a sample — §"Operate at full depth" in CLAUDE.md). What it
+   renders, what it calls, what register it speaks, what state it owns.
+2. **The shared computers it changes** — every function you'll edit
+   (`positionFacts.computePositionFacts`, `narrationImportance.computeImportance`,
+   `voiceFacts`, `getUnifiedWeaknessProfile`, …) and its INPUT/OUTPUT contract
+   today.
+3. **EVERY consumer of those computers (the neighbors)** — `grep -rln` each
+   changed function and list every caller: review, learn, play, chat, tactics,
+   endgame, openings/WLPP, kid (EXCLUDED — verify you don't touch it). For each:
+   does the change reach it? intended or collateral? does it stay correct in
+   THAT surface's register?
+4. **The gates + audits that guard those surfaces** — which ship-check gates and
+   which `scripts/audit-*.mjs` cover each affected surface (Post-Deploy matrix in
+   CLAUDE.md). Every affected surface owes a green audit before "done."
+5. **The contract deltas** — exactly what changes in each shared function's
+   signature/behavior, and proof each neighbor tolerates it (a "note comes OUT"
+   test per surface, David 2026-08-07).
+
+Write the Surface Map into this doc (or a dated sibling) as the FIRST commit of
+the phase. Then build. A phase whose neighbors weren't mapped is not started
+correctly — stop and map.
+
+---
+
 ## 1. The vision (David's words)
 
 > "Moves do not exist in isolation. Fact A caused fact B caused fact C — THIS IS
@@ -133,19 +168,35 @@ board with its own hands, then (e) learns from what happened.
 
 ## 5. The phased plan (each phase shippable, each with a "note comes OUT" test)
 
-### Phase 1 — WIRE THE STUDENT MODEL INTO THE SELECTOR  ← the keystone
+### Phase 1 — WIRE THE STUDENT MODEL INTO THE SELECTOR + THE ADAPTIVE SCORE  ← the keystone
 The one wire that turns a fact-lister into a coach that hits THIS student's holes.
+This is where David's "algo/matrix, truly adaptive per individual" lands (§6.1).
 - Add `studentWeaknesses?: WeaknessSignal[]` to `PositionFactsInput`
   (positionFacts.ts:32). A `WeaknessSignal` is a lightweight, precomputed shape
-  (tag, openCount, severity) derived from `getUnifiedWeaknessProfile` ONCE per
-  game/session (NOT per ply — latency, §7).
-- In `computeImportance` / the ranker: when a candidate fact's concept/tag
-  matches a top student weakness, BOOST its rank and RAISE its depth/word budget
-  (principle 3 + 4). A fork-blindness student gets the fork spelled out longer;
-  a student who never has that hole gets it terse or silent.
-- Surface-aware budget: same selection, register per surface (§7 principle).
-- Test: a fixture student with "hangs pieces to forks" gets the fork candidate
-  boosted to the lead with more depth than a default student, on the same board.
+  (tag, `lifecycleStatus`, `trend`, openCount, severity) derived from
+  `getUnifiedWeaknessProfile` + `getWeaknessLifecycle` ONCE per game/session
+  (NOT per ply — latency, §6.4). It carries the individual's profile, not a
+  rating band — that's what makes it adaptive to THE PERSON.
+- **The adaptive score (the "algo").** For each candidate fact compute a
+  deterministic `userImportance` score:
+  `score = criticality × phaseWeight × weaknessMatchBoost`, where
+  `weaknessMatchBoost` rises with the matched hole's lifecycle
+  (`persistent`+`worsening` = biggest boost; `fixed` = ~none) and openCount.
+  This is a TRANSPARENT FORMULA over the individual's profile — NOT a learned/ML
+  model (that would violate G0 and overfit sparse data; even a low-game user has
+  a real misconception profile). "Not all 1200s have the same strengths" is
+  honored because the boost is keyed on the person's holes, never their rating.
+- **Ordering = the score, most-important-to-user first** (§6.2). Primary sort is
+  `userImportance` desc; the static safety→weakness→why→positional priority is
+  only the TIEBREAK when scores are equal (a must-defend threat carries a
+  criticality that already floats it up, so safety leads naturally).
+- **Budget = the score too, no cap.** Total words/facts a moment gets scales
+  with the top candidates' `userImportance` (a moment full of the student's own
+  holes earns more voice), bounded only by the user's verbosity setting (G5).
+- Surface-aware: same selection + score, register per surface (§7 principle).
+- Test: a fixture student with a `persistent`+`worsening` fork hole gets the
+  fork candidate boosted to the lead with MORE depth than a default student, on
+  the same board; a student whose fork hole is `fixed` gets it terse or silent.
 
 ### Phase 2 — THREAT DEPTH REWORK
 - KILL the remedial explainer (`describeThreatRecognition`, groundedAnswer.ts
@@ -166,7 +217,10 @@ The one wire that turns a fact-lister into a coach that hits THIS student's hole
 - Aggregate `theoryDeparture` across a user's games → a per-user stat: do they
   leave book too early/often, and where (which opening, which ply)?
 - Cost gate: only a departure that MEASURABLY hurt (eval drop after leaving)
-  counts as a weakness — leaving book into a fine sideline is not a hole.
+  counts as a weakness — leaving book into a fine sideline is not a hole. The
+  "too early / costly" threshold is an ALGO (§6.5) — a score over rating + the
+  individual's profile + the departure's eval cost — not a hardcoded per-band
+  constant.
 - New weakness bucket type folded into `getUnifiedWeaknessProfile` (so Phase 1
   automatically teaches it). The coach then explains the THEORY behind the
   right opening moves and why, in place of the repeated mistake.
@@ -194,57 +248,67 @@ The one wire that turns a fact-lister into a coach that hits THIS student's hole
 - Test: a fixture student with 3 known holes gets a 3-part session, each part
   anchored to a real position from their games, each feeding the drill queue.
 
-### Phase 6 — CLOSE THE LOOP (taught-concept ledger)
-- Record what the coach TAUGHT (concept, position, when). Next time the same
-  hole appears, the selector knows "covered on <date>; repeated → escalate" vs
-  "new → introduce." This is what makes "a hole THIS student keeps falling in"
-  a real signal over time, not just a per-game count.
-- Test: a concept taught then repeated escalates its treatment.
+### Phase 6 — CLOSE THE LOOP (the memory ALREADY EXISTS — consume it)
+David 2026-09-08: *"app should already have memory!!!"* — correct. Do NOT build
+a new ledger. The recurrence + taught-and-recurred signals already exist:
+- `weaknessLifecycle.ts` — `status: persistent` (recurred recently AND in the
+  past) + `trend: worsening` IS "keeps falling in over time." Consumed by P1's
+  `weaknessMatchBoost`.
+- `coachCurriculumService.ts` — a taught concept goes `mastered`; if it recurs it
+  auto-demotes `mastered → queued`. That IS the taught-then-repeated escalation.
+- So Phase 6 is just: make sure P1 reads `lifecycle.status/trend` and the
+  curriculum's `mastered→queued` demotion (escalate a recurred-after-teaching
+  hole harder than a brand-new one). Nothing new to persist.
+- Test: a concept marked `mastered` that recurs is treated with escalation, not
+  as a first introduction.
 
-Sequencing logic: P1 is the keystone (nothing else personalizes without it). P2
-is the highest-visibility slice and rides P1's rating/depth machinery. P3 adds a
-new weakness the P1 wire then teaches for free. P4/P5/P6 are the "unified" payoff
-and depend on P1–P3 being in place.
+Sequencing logic: P1 is the keystone (nothing else personalizes without it) and
+now carries the adaptive score + the existing lifecycle/curriculum memory. P2 is
+the highest-visibility slice and rides P1's rating/depth machinery. P3 adds a new
+weakness the P1 wire then teaches for free. P4/P5 are the "unified" payoff and
+depend on P1–P3. P6 is folded into P1 (consume, don't build).
 
 ---
 
-## 6. Is anything missing? (open questions that need a DECISION, not a guess)
+## 6. The 7 open questions — DAVID'S CALLS (2026-09-08)
 
-These are the hard, underspecified parts of the vision — flagged now so we
-decide them before building, not mid-build. (This is me stress-testing the idea,
-per the no-yes-man rule.)
+1. **The budget function → RESOLVED: build the algo, keyed on the individual.**
+   David: *"can we build a matrix or algo for this? that would make it truly
+   adaptive. not all 1200 have the same strengths."* YES. Budget + boost are a
+   deterministic scoring FORMULA over the individual's weakness profile +
+   lifecycle (Phase 1's `userImportance` score), NOT a rating-band lookup and
+   NOT a learned/ML model (G0 + sparse data). Adaptive because its inputs are
+   the person's holes. NO cap except verbosity (G5).
+2. **Ordering → RESOLVED: algo, most-important-to-user first.** David: *"i like
+   your order but maybe algo that also? most important to user first?"* Primary
+   sort = the `userImportance` score; the static safety→weakness→why→positional
+   list is only the tiebreak. A must-defend threat floats up on its own high
+   criticality, so safety still leads naturally.
+3. **Memory → RESOLVED: it already exists, consume it (do NOT rebuild).** David:
+   *"app should already have memory!!!"* Correct — `weaknessLifecycle`
+   (`persistent`+`worsening`) + `coachCurriculumService` (`mastered→queued`
+   demotion on recurrence) already give recurrence AND taught-then-repeated.
+   Phase 6 folds into Phase 1 (§5). Nothing new to persist.
+4. **Latency (precompute per game) → APPROVED.** David: *"that way coach does not
+   get distracted with new issues, but stays scoped to the teaching at hand!!!
+   GREAT CALL OUT!"* The weakness profile is computed once per game/session; a
+   hole created mid-game influences narration next game. This is a FEATURE (scope
+   discipline), not just a perf trade.
+5. **Book-departure threshold → RESOLVED: algo, adaptive.** David: *"book, algo
+   that also."* The "too early / costly" threshold is a scoring function over
+   rating + the individual's profile + the eval cost of the departure — not a
+   hardcoded per-band constant. Same adaptive-to-the-person shape as #1.
+6. **Custom-session size + entry UX → acknowledged (not blocking).** Decide at
+   Phase 5. Leaning: adaptive length (as many parts as live top holes, ~3
+   default), entry via chat intent AND a /coach/home button.
+7. **Takeback policy → acknowledged (not blocking).** Decide at Phase 4. Never
+   on Play (locked); in Learn, offer on a proven blunder, boosted when it's a
+   weakness-matched hole.
 
-1. **The budget FUNCTION is undefined.** "Adaptive, not capped" is the
-   principle, but the selector needs a concrete rule for HOW MANY facts / how
-   many words a moment gets. Proposal: budget = f(criticality, weakness-match
-   strength, phase, register) with NO upper cap except the user's verbosity
-   setting — but the exact shape (e.g. "criticality band → base budget, ×boost
-   per matched weakness") needs your sign-off. **Decision needed.**
-2. **Conflict/ordering when many facts fire.** On one move a causal chain + a
-   threat + a weakness-match + a book-departure can ALL fire. What leads?
-   Proposal: safety/threat first (must-defend), then the weakness-matched
-   teaching, then the causal "why," then positional. **Confirm the priority.**
-3. **The feedback loop needs a taught-concept LEDGER (Phase 6) to truly know a
-   "repeated hole."** Today "repeated" = a per-game count. Real "keeps falling
-   in" needs memory of what was TAUGHT and whether it recurred after. Is that in
-   scope now, or v2? **Decision needed.**
-4. **Latency.** Corpus lookup is a fast sync index (90% of speech). Weakness
-   profile is async Dexie; PV is the engine (slow). The plan precomputes the
-   weakness profile once per game/session, not per ply — confirm that's
-   acceptable (a mid-game newly-created weakness won't influence narration until
-   the next game). **Confirm.**
-5. **Book-departure "too early" threshold is rating-relative.** Leaving book at
-   move 6 is fine for a 2000, a hole for an 800. Reuse `ratingBandFor` — but the
-   "costly" eval-drop threshold per band needs a number. **Decision needed.**
-6. **Custom-session SIZE + entry UX.** How long is a "custom session" (3 holes?
-   adaptive?), and where does "teach me something" live (chat intent only, or a
-   button on /coach/home)? **Decision needed.**
-7. **Spine-driven takeback POLICY.** When does the coach OFFER a takeback vs just
-   narrate the mistake? Never on Play (locked). In Learn — every proven blunder,
-   or only weakness-matched ones? **Decision needed.**
-
-None of these block writing code once decided; all of them would cause rework if
-guessed. Everything ELSE from the session is captured in §1–§5.
+**The through-line of David's calls:** everything adaptive is an ALGO keyed on
+the INDIVIDUAL (their weakness profile + lifecycle), never a rating-band table —
+and it's a transparent deterministic score, not a learned model (G0). Memory is
+reused, not rebuilt. Nothing above blocks starting Phase 1.
 
 ---
 
@@ -276,14 +340,35 @@ guessed. Everything ELSE from the session is captured in §1–§5.
   all surfaces, shared engine, per-surface register. SHIPPED (PR #931 draft).
 - 2026-09-08 — unified-coach vision captured. SPINE decides (G0), adaptive
   budget (no cap), deeper-for-stronger, board-truth. Build order P1→P6, P1
-  (weakness→selector) is the keystone. **Open questions in §6 to be decided
-  with David before P1 code.**
+  (weakness→selector) is the keystone.
+- 2026-09-08 — §6 RESOLVED with David: (1) budget = adaptive algo keyed on the
+  individual's profile, not rating band, not ML; (2) ordering = the score,
+  most-important-to-user first, static list is tiebreak; (3) memory already
+  exists (`weaknessLifecycle` + `coachCurriculumService`), consume don't rebuild,
+  Phase 6 folds into P1; (4) precompute-per-game APPROVED (scope discipline);
+  (5) book-departure threshold = adaptive algo. #6/#7 decided at their phases.
+- 2026-09-08 — David, emphatic: **map EACH surface ENTIRELY before building,
+  and every neighboring/touching surface for blast radius.** Locked as §0 —
+  the pre-build gate. No phase starts without its surface map.
 
 ## 9. Next-session pickup
 
-1. Get §6 decisions from David (esp. #1 budget function, #2 ordering).
-2. Start Phase 1: add `studentWeaknesses` to `PositionFactsInput`
-   (positionFacts.ts:32), precompute from `getUnifiedWeaknessProfile` once per
-   game, boost/re-rank matched candidates in `computeImportance`. Ship with the
-   "boosted fixture" test. Then Phase 2 (threat depth) as the first visible slice.
-3. Every wire gets a "note comes OUT" test (David 2026-08-07). Keep it G0/G3.
+§6 decisions are RESOLVED (see §6 + decisions log). Phase 1 is greenlit in
+principle — but do NOT open an editor yet:
+
+1. **FIRST: write the Phase 1 Surface Map (§0).** `computeImportance` +
+   `positionFacts` are shared by review, learn, play, chat, tactics, endgame,
+   openings/WLPP. Read each consumer, confirm the `userImportance` re-rank stays
+   correct in each register, list the gates/audits each owes. Commit the map.
+2. THEN Phase 1: add `studentWeaknesses` to `PositionFactsInput`
+   (positionFacts.ts:32), precompute from `getUnifiedWeaknessProfile` +
+   `getWeaknessLifecycle` once per game, add the deterministic `userImportance`
+   score (criticality × phase × weaknessMatchBoost, boost keyed on
+   lifecycle `persistent`/`worsening`), re-rank + budget by it. Ship with the
+   "boosted fixture" test (persistent hole → lead + more depth; fixed hole →
+   terse/silent).
+3. THEN Phase 2 (threat depth) as the first visible slice — its own Surface Map
+   first (it touches review + learn + chat threat paths).
+4. Every wire gets a "note comes OUT" test per affected surface (David
+   2026-08-07). Keep it G0/G3. Every affected surface owes a green audit before
+   "done."
