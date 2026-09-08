@@ -5299,6 +5299,19 @@ export function CoachTeachPage(): JSX.Element {
       : null;
     const fen = overrideFen ?? walkthroughFen ?? liveGame.fen;
     const fenTurn: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    // GROUNDING: during a Watch/Learn walkthrough the interactive `liveGame`
+    // board is empty, so `liveGame.history` gives the coach NO move context —
+    // "what opening is this?" fell through to "I can't name it yet" while the
+    // board literally showed the Italian (David 2026-09-08 interrogation). When
+    // the displayed board IS the main-path node (no override, not a drill/trap
+    // side-position), the walkthrough's `pathSans` ARE the real move history
+    // walked so far — thread them so opening-name detection + last-move context
+    // work. Gated on `walkthroughFen === walkthrough.fen` so a diverged drill/
+    // trap FEN never gets the main-line history.
+    const onMainWalkthroughPath =
+      walkthrough.isActive && !overrideFen && walkthroughFen === walkthrough.fen &&
+      walkthrough.pathSans.length > 0;
+    const groundingMoveHistory = onMainWalkthroughPath ? walkthrough.pathSans : liveGame.history;
     // Inject the latest Stockfish eval into the envelope when its FEN
     // matches the FEN we're asking about. The brain otherwise
     // self-counts material and gets it wrong — production audit
@@ -5362,7 +5375,7 @@ export function CoachTeachPage(): JSX.Element {
       surface: 'teach',
       currentRoute: '/coach/teach',
       fen,
-      moveHistory: liveGame.history,
+      moveHistory: groundingMoveHistory,
       userJustDid: text,
       // Tell the brain explicitly whose turn it is. Without this the
       // LLM was confusing sides — emitting `play_move {"san":"e5"}`
