@@ -278,14 +278,37 @@ a new ledger. The recurrence + taught-and-recurred signals already exist:
 ### Phase 7 — CONSOLIDATION: roll every orphan adaptive fn into the algo + wire everything (David 2026-09-08)
 The closing sweep that makes it ONE coach, not a pile of features (principles 8+9).
 - **Roll in the orphan adaptive functions.** After P1's `userImportance` exists,
-  `grep` the codebase for every OTHER function that scales by rating / decides
-  verbosity / picks importance / gates depth on its own —
-  `criticalityThresholds` callers, `narrationImportance` variants, any
-  per-surface bespoke "how much to say" logic, `pvBandForRating`, verbosity caps
-  beyond G5, rating-scaled threat/hint tiers — and reconcile them INTO the single
-  algo. Each orphan either delegates to `userImportance` or is deleted. Target:
-  one adaptive source of truth. (Do this carefully per the §0 surface map — these
-  orphans live across review/learn/play/tactics.)
+  reconcile every OTHER rating-scaled/adaptive decider INTO it. Each orphan
+  either delegates to the single algo or is deleted. Target: one adaptive source
+  of truth. Do this per the §0 surface map — these live across review/learn/play/
+  tactics/openings. **The verified inventory (mapped 2026-09-08):**
+  - *(A) importance/criticality:* `criticalityThresholds` (criticalityScan.ts:71
+    — the de-facto ROOT; `computeImportance`, `minSwingPawns`, `scanCriticality`,
+    `computePositionFacts` all derive from it → absorb FIRST), `computeImportance`
+    (narrationImportance.ts:82), `computeCriticality`/`criticalitySignalsFromAnalysis`
+    (criticality.ts:62/:81 — the ONE criticality decider NOT rating-scaled;
+    reconcile its score bands with the rating-scaled root), `minSwingPawns`
+    (reviewTurningPoint.ts:63), `isCriticalThreat`+`alertSensitivityMultiplier`
+    (tacticAlertService.ts:295/skillScaling.ts:25).
+  - *(B) depth/ply:* `pvBandForRating` (mistakePuzzleService.ts:99), `depthFor`
+    (causalChainVoice.ts:36), `getTacticLookahead` (tacticAlertService.ts:237).
+  - *(C) verbosity/how-much:* `resolveLlmNarrationDensity` +
+    `resolvePhaseNarrationVerbosity` + `applyBriefVoiceCap` (coachNarration.ts),
+    `getVerbosityInstruction`/`VERBOSITY_INSTRUCTIONS` (coachPrompts.ts),
+    `resolveVerbosity`/`shouldCallLlmForMove` (coachCommentaryPolicy.ts),
+    `sentenceBudgetExceeded` (voiceContainment.ts). NB these encode the USER's G5
+    verbosity choice — the algo governs importance/depth; G5 stays the user's own
+    ceiling. Reconcile, don't erase the user's setting.
+  - *(D) rating-band helpers:* `ratingBandFor` (theoryDeparture.ts:59) AND a
+    SECOND `ratingBandFor` (amateurPlayCache.ts:34) — name collision, different
+    returns — plus `explorerBandForElo` (coachGameEngine.ts:246): three
+    overlapping explorer-band pickers to unify. `wrongTriesBeforeHint` /
+    `detectStruggleTier`+`ratingMultiplier` (skillScaling.ts / tacticAlertService)
+    are training-aid tiers; `hintStartTier` (skillScaling.ts:49) is exported but
+    UNWIRED (dead — delete or wire during the sweep).
+  - *adjacent, NOT rating-adaptive (leave unless a reason emerges):* `frequencyTier`
+    (courseWhyFacts.ts), `statusBandChange` (positionFacts.ts:108),
+    `defaultDrillTier` (endgameDrillService.ts).
 - **Wire everything into the coach.** Confirm the candidate pool sees every
   fact-computer (§4 of the system map) and the spine can invoke every actuator
   (voice + all cerebrum board tools + eyes). Nothing islanded, no dead-end
