@@ -1,9 +1,9 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
+import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine } from './pvPlayback';
 import { narrateDnaLine } from './dnaLineNarrator';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
@@ -1839,9 +1839,14 @@ export function buildReviewSegments(
       const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
       if (oppThreat && !threatsAnnounced.has(oppThreat.san)) {
         threatsAnnounced.add(oppThreat.san);
+        // The concrete threat, board-computed (kind + detail). The REMEDIAL
+        // "the pattern to spot…" explainer (describeThreatRecognition) was
+        // REMOVED from this default in-game callout (David 2026-09-07: "Obvious,
+        // remedial, and unnecessary"). Depth now comes from the rating-scaled
+        // deep-threat PV pass (augmentWithProjections #5c — "spell the line for
+        // everyone"), and the WHY from the causal chain; recognition-teaching
+        // stays only in the EXPLICIT Learn "spot-it" drill, where it belongs.
         let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
-        const recog = describeThreatRecognition(oppThreat, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
-        if (recog) callOut += ` ${recog.charAt(0).toUpperCase()}${recog.slice(1)}.`;
         const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
         if (nextBest) {
           const prevention = describeThreatPrevention(fenPair.fenAfter, oppThreat, nextBest, oppWB);
@@ -2420,7 +2425,14 @@ async function augmentWithProjections(
    *  (David 2026-07-21, IMG_4571: "How does white take advantage of this
    *  mistake?" — production reviews need the ramification, not just the badge). */
   scope: 'full' | 'mistakes' = 'full',
+  /** The student's rating — scales how DEEP the spelled threat lines run
+   *  (Phase 2: deeper for stronger, via pvDepthForRating). Default 1500. */
+  rating = 1500,
 ): Promise<void> {
+  // How many plies to spell a deep threat line — rating-scaled, capped at the
+  // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
+  // everyone", "the more advanced player should get a DEEPER calculation").
+  const deepThreatPlies = pvDepthForRating(rating);
   const verdictWord = (studentPovCp: number | null): string => {
     if (studentPovCp === null) return 'the position stays balanced';
     if (studentPovCp >= 150) return "you're winning";
@@ -2614,7 +2626,7 @@ async function augmentWithProjections(
       // push the engine past its natural limits!!! Solid and honest is
       // paramount"). One move belongs to the static call-out; 2-4 moves
       // belong here.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
       const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
@@ -2664,7 +2676,7 @@ async function augmentWithProjections(
       const nullFen = parts.join(' ');
       // Same honest window as #5: 7 plies (4 opponent moves), and the eval
       // claim requires the VERIFIED terminal — never the unverified root.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
       // Don't re-narrate the same move the one-move call-out already named.
       const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
@@ -3394,7 +3406,7 @@ export async function generateReviewNarration(params: {
     // timeout the segments keep whatever projections already landed (best-effort)
     // and the walk still becomes ready.
     await raceTimeout(
-      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes'),
+      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes', playerRating),
       uncapped ? REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED : REVIEW_AUGMENT_TIMEOUT_MS,
       undefined,
     );

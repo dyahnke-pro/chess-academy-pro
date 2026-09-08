@@ -1,8 +1,25 @@
 # Phase 2 Surface Map — threat depth rework
 
 **The §0 pre-build gate for Phase 2** of `docs/plans/2026-09-08-unified-coach.md`.
-No code until this map is written + reviewed. Status: **COMPLETE — ready for
-David's review. Recommend merging Phase 1 first (see bottom).**
+Status: **BUILT (core) — David said "keep going", executed on the branch.**
+- ✅ Remedial `describeThreatRecognition` REMOVED from the review callout
+  (coachFeatureService.ts:1842); fn kept for the explicit Learn spot-it drill;
+  import cleaned. reviewNarrationFidelity (27) still green.
+- ✅ Rating-scaled threat depth: `pvDepthForRating(rating)` (pvPlayback.ts, the
+  single PV-depth source) — `<1200→3, <1500→4, <1800→5, <2100→6, else 7`, capped
+  at the reliable window. Threaded into `augmentWithProjections` (rating param)
+  → both deep-threat passes (#5/#5c). +tests.
+- ✅ "Spell for everyone" verified: #5/#5c already run in capped production
+  (budget 2; the scope early-return is at :2781, AFTER them). Rating-scaling now
+  makes that production depth adaptive.
+- ✅ Causal "why" already LEADS every review beat (Phase 1 `causalLead`), so it
+  is attached to the threat that follows it in the same beat.
+- ⏳ **Phase 2b (deferred):** David #4 "the calculation … doesn't have to be
+  forced. Spell the lines out for everyone." The deep-threat passes still gate on
+  `isForcingProjection`. Relaxing it to spell a decisive-but-NON-forcing best
+  line (with honest "not forced, but their strongest try is…" framing) is its own
+  slice — needs a noise gate so a slow plan isn't mislabeled a threat, + a test.
+  Deferred rather than loosen a review-surface gate hastily.
 
 ## What Phase 2 does (David 2026-09-07)
 1. **KILL the remedial explainer** from the default path —
