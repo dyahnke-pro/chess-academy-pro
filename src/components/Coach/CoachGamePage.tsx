@@ -147,6 +147,7 @@ import type {
 import type { MoveResult } from '../../hooks/useChessGame';
 import type { TacticsLiveContext } from '../../coach/types';
 import { classifyMoveFull } from '../../services/moveRating';
+import { assembleSlipNarration } from '../../services/groundedAnswer';
 
 function findKeyMoments(moves: CoachGameMove[]): KeyMoment[] {
   const evaluated = moves.filter((m) => m.evaluation !== null && !m.isCoachMove);
@@ -3652,7 +3653,29 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       if (announcedHangingRef.current.gameId !== gameState.gameId) {
         announcedHangingRef.current = { gameId: gameState.gameId, squares: new Set<string>() };
       }
-      const fastLine = buildFastMoveLine({
+      // 🔒 FULL-STRENGTH SLIP NARRATION (David 2026-09-08, emphatic: "narrations
+      // better be AT FULL STRENGTH … remove that string"). On a mistake /
+      // inaccuracy, state the concrete WHY immediately — the played move, its
+      // cost, the stronger move, and the grounded reason (what it does + what the
+      // slip allowed) — via the same computers the review uses, instead of the
+      // canned "A small slip — there was better". All chess.js-computed from data
+      // already in hand (engine best move + eval swing), so no added latency.
+      // (Blunders take their own grounded path in the blunder-pause branch above.)
+      let fastLine = '';
+      if ((classification === 'mistake' || classification === 'inaccuracy') && engineBestMoveUci) {
+        const slip = assembleSlipNarration({
+          playedSan: moveResult.san,
+          quality: classification,
+          cpLoss: evalLoss,
+          betterSan: engineBestMoveSan !== '?' ? engineBestMoveSan : null,
+          betterFromTo: { from: engineBestMoveUci.slice(0, 2), to: engineBestMoveUci.slice(2, 4) },
+          fenBefore: preFen,
+          bestMoveUci: engineBestMoveUci,
+          moverColor: playerColor === 'white' ? 'white' : 'black',
+        });
+        if (slip?.facts.trim()) fastLine = slip.facts.trim();
+      }
+      if (!fastLine) fastLine = buildFastMoveLine({
         san: moveResult.san,
         moverIsWhite: playerColor === 'white',
         classification,
@@ -3755,28 +3778,47 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // popup. Used verbatim if the LLM call below times out or errors.
       // NEVER falls back to tacticSuffix — that's template prose with
       // "Hanging: White pawn on d2" shape Dave wants gone.
-      let explanation: string;
       // The blunder explanation must describe why the STUDENT's move was bad,
       // so only THEIR OWN hanging piece counts (David 2026-07-07: "not all
-      // accurate"). An OPPONENT's hanging pawn is an opportunity, not the
-      // reason this move blundered — surfacing it as the blunder cause was the
-      // "Opponent's pawn on e5 is hanging" false alert. And when nothing of the
-      // student's is actually hanging, do NOT assert "loses material" — the
-      // blunder may be positional (a lost outpost, a walked-into attack), where
-      // claiming material loss is simply false.
+      // accurate"). An OPPONENT's hanging pawn is an opportunity, not the reason
+      // this move blundered.
       const studentChar = playerColor === 'white' ? 'w' : 'b';
       const ownHanging = (tacticResult?.hangingPieces ?? []).find(
         (h) => h.color === studentChar && h.piece.toLowerCase() !== 'k',
       );
-      if (ownHanging) {
-        const pieceName = {
-          p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
-        }[ownHanging.piece.toLowerCase()] ?? ownHanging.piece;
-        explanation = `Your ${pieceName} on ${ownHanging.square} is hanging.`;
+      const ownHangingLine = ownHanging
+        ? `Your ${({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[ownHanging.piece.toLowerCase()] ?? ownHanging.piece} on ${ownHanging.square} is hanging.`
+        : null;
+      // 🔒 FULL-STRENGTH BLUNDER NARRATION (David 2026-09-08, "narrations better
+      // be AT FULL STRENGTH … remove that string"). State the concrete WHY — the
+      // stronger move + what this move let the opponent do — grounded (chess.js)
+      // from the engine best move already computed for the classification. Never
+      // the contentless "that gives back a big chunk". Falls back to the specific
+      // hanging-piece line, then a concrete verdict — never a vague flag.
+      let explanation: string;
+      const blunderSlip = engineBestMoveUci
+        ? assembleSlipNarration({
+            playedSan: moveResult.san,
+            quality: 'blunder',
+            cpLoss: evalLoss,
+            betterSan: engineBestMoveSan !== '?' ? engineBestMoveSan : null,
+            betterFromTo: { from: engineBestMoveUci.slice(0, 2), to: engineBestMoveUci.slice(2, 4) },
+            fenBefore: preFen,
+            bestMoveUci: engineBestMoveUci,
+            moverColor: playerColor === 'white' ? 'white' : 'black',
+          })
+        : null;
+      if (blunderSlip?.facts.trim()) {
+        explanation = blunderSlip.facts.trim();
+        // Keep the specific hanging-piece call-out when the grounded reason didn't
+        // already name that square (board-true, extra-concrete).
+        if (ownHanging && ownHangingLine && !explanation.includes(ownHanging.square)) {
+          explanation += ` ${ownHangingLine}`;
+        }
+      } else if (ownHangingLine) {
+        explanation = ownHangingLine;
       } else {
-        // No hanging piece of the student's — positional blunder or an indirect
-        // loss. State the honest verdict without a fabricated material claim.
-        explanation = 'That gives back a big chunk of your position — there was a much stronger move here.';
+        explanation = `${moveResult.san} is a blunder — there was a much stronger move here.`;
       }
 
       // WO-POLISH-02: LLM-generated coach-voice alert. Uses the grounded

@@ -1468,6 +1468,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // `resolvedEnginePlan` IS `input.liveState.enginePlan` whenever the
             // surface threaded one, so this only ever adds the on-demand case.
             engineBestMoveUci: input.liveState.engineBestMoveUci ?? resolvedEnginePlan?.bestMoveUci,
+            // The search depth the best move was found at — so the grounded lane
+            // can refuse to voice a confident recommendation off a shallow (~depth
+            // 2) read (the "told me to blunder" guard, David 2026-09-08). Prefer
+            // the on-demand plan's depth; else the eval-bar snapshot's.
+            engineDepth: resolvedEnginePlan?.depth ?? input.liveState.engineDepth,
             // enginePlan carries a white-perspective eval for plan turns; the
             // eval-bar snapshot carries one for every turn. Either is fine — both
             // are white-perspective (the interception converts to side-to-move).

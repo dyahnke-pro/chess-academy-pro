@@ -807,6 +807,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             tactics: gameChatTactics,
             enginePlan,
             engineBestMoveUci: cachedSf?.bestMove,
+            // The depth the snapshot reached — lets the grounded lane refuse to
+            // voice a confident best move off a shallow (~depth 2) read (the
+            // "told me to blunder" guard, David 2026-09-08).
+            engineDepth: cachedSf?.depth,
             evalCp: cachedSf && !cachedSf.isMate ? cachedSf.evaluation : undefined,
             evalMateIn: cachedSf?.isMate ? (cachedSf.mateIn ?? undefined) : undefined,
           };

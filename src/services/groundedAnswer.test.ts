@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -685,6 +685,33 @@ describe('Wave 4 assemblers — colour / records / puzzle-stats / transfer-gap',
     expect(missed!.facts).toMatch(/Nc3 misses a forced mate in 2/);
     const walked = assembleMoveRatingAnswer({ playedSan: 'Kg1', wasBest: false, cpLoss: 900, quality: 'blunder', betterSan: 'Rf1', betterFromTo: { from: 'f8', to: 'f1' }, missedMate: null, allowedMate: 1 });
     expect(walked!.facts).toMatch(/Kg1 walks into a forced mate in 1/);
+  });
+  it('assembleSlipNarration states the concrete why — played move, cost, stronger move, reason (David 2026-09-08)', () => {
+    // Nc3 attacks the undefended Qd5; Nxd5 wins the queen — a grounded reason.
+    const a = assembleSlipNarration({
+      playedSan: 'Ke2', quality: 'mistake', cpLoss: 250,
+      betterSan: 'Nxd5', betterFromTo: { from: 'c3', to: 'd5' },
+      fenBefore: '4k3/8/8/3q4/8/2N5/8/4K3 w - - 0 1', bestMoveUci: 'c3d5', moverColor: 'white',
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toContain('Ke2 is a mistake');
+    expect(a!.facts).toContain('Nxd5');
+    expect(a!.facts).toMatch(/queen/i);
+    // The canned vague flags are gone — never spoken again.
+    expect(a!.facts).not.toMatch(/there was better|gives ground|drops material/i);
+    // Arrow rides the stronger move.
+    expect(a!.bestMoveFromTo).toEqual({ from: 'c3', to: 'd5' });
+  });
+  it('assembleSlipNarration still names the move + cost when no deep reason is computable — never a vague flag', () => {
+    const a = assembleSlipNarration({
+      playedSan: 'a4', quality: 'inaccuracy', cpLoss: 60,
+      betterSan: 'Nf3', betterFromTo: { from: 'g1', to: 'f3' },
+      fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', bestMoveUci: 'g1f3', moverColor: 'white',
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/a4 is a slight inaccuracy/);
+    expect(a!.facts).toContain('Nf3');
+    expect(a!.facts).not.toMatch(/there was better|gives ground|drops material/i);
   });
   it('assemblePuzzleStatsAnswer voices rating + solved + due', () => {
     const a = assemblePuzzleStatsAnswer({ puzzleRating: 1650, totalAttempted: 200, totalCorrect: 150, overallAccuracy: 75, duePuzzles: 8 });

@@ -139,12 +139,17 @@ export function buildFastMoveLine(input: FastMoveLineInput): string {
     // Fall through to a key-moment flag or silence.
   }
 
-  // 3. Key-moment classification with no detected motif.
-  if (isKey) {
-    if (classification === 'blunder') return 'That drops material.';
-    if (classification === 'mistake') return 'That gives ground.';
-    return 'A small slip — there was better.';
-  }
+  // 3. Key-moment classification (blunder / mistake / inaccuracy).
+  //    🔒 The canned flags ("That drops material." / "That gives ground." / "A
+  //    small slip — there was better.") are GONE (David 2026-09-08, emphatic:
+  //    "remove that string … narrations better be AT FULL STRENGTH"). A slip's
+  //    narration is now the GROUNDED per-move WHY — the stronger move + the
+  //    reason — computed by `assembleSlipNarration` at the call site (it has the
+  //    engine best move + eval swing in hand). This builder never speaks the
+  //    vague flag again; when the caller has no grounded slip to hand (no engine
+  //    best move), a key move falls through to move dictation on full density and
+  //    to silence on 'fast' — empty > vague (narration voice rule 4).
+  void isKey;
 
   // 4. Full density: dictate the move so every-move users hear a beat.
   //    'fast' (brief / key-moments) stays silent on routine moves.

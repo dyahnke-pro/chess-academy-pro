@@ -50,12 +50,14 @@ describe('buildFastMoveLine', () => {
         san: 'd4', moverIsWhite: true, density: 'fast',
         classification: 'blunder', hangingPieces: hanging, announcedHangingSquares, volunteerBoardReading: true }),
     ).toBe('That leaves your pawn on d 4 hanging — it can be taken.');
-    // Same pawn still loose next ply → do NOT repeat; fall to the key flag.
+    // Same pawn still loose next ply → do NOT repeat. The canned key flag is
+    // gone (the grounded slip narration owns the "why" at the call site), so on
+    // fast density with nothing new to say this is silent.
     expect(
       buildFastMoveLine({
         san: 'Ke2', moverIsWhite: true, density: 'fast',
         classification: 'blunder', hangingPieces: hanging, announcedHangingSquares, volunteerBoardReading: true }),
-    ).toBe('That drops material.');
+    ).toBe('');
   });
 
   it('does not warn about a hanging piece on a move graded good under fast density', () => {
@@ -90,11 +92,14 @@ describe('buildFastMoveLine', () => {
       ).toBe('');
     });
 
-    it('does NOT volunteer a hanging piece', () => {
+    it('does NOT volunteer a hanging piece — dictates the move under full density instead', () => {
       const hanging: HangingPiece[] = [{ square: 'd4', piece: 'n', color: 'w' }];
+      // The canned slip flag is gone; with volunteering off and full density the
+      // builder just dictates the move (the grounded slip "why" comes from the
+      // call site, not here).
       expect(
         buildFastMoveLine({ san: 'Nd4', moverIsWhite: true, density: 'unlimited', classification: 'inaccuracy', hangingPieces: hanging }),
-      ).toBe('A small slip — there was better.');   // the slip flag, not the board reading
+      ).toBe('Knight to d4.');
     });
 
     it('still dictates the move, which is how the student knows what was played', () => {
@@ -103,10 +108,14 @@ describe('buildFastMoveLine', () => {
       ).toBe('Knight to d5.');
     });
 
-    it('still flags a mistake — the Play contract allows mentioning those', () => {
+    it('no longer emits a canned slip flag — the grounded slip narration owns the "why"', () => {
+      // David 2026-09-08 ("remove that string"): buildFastMoveLine never speaks
+      // "That drops material." again. On fast density with volunteering off it is
+      // silent; the call site voices the grounded slip (played move + stronger
+      // move + reason) via assembleSlipNarration instead.
       expect(
         buildFastMoveLine({ san: 'Qh5', moverIsWhite: true, density: 'fast', classification: 'blunder', tactics: [fork] }),
-      ).toBe('That drops material.');
+      ).toBe('');
     });
 
     it('says the fork when a surface DOES opt in — the ability is intact', () => {
@@ -116,10 +125,12 @@ describe('buildFastMoveLine', () => {
     });
   });
 
-  it('flags a blunder with no motif', () => {
+  it('stays silent on a key move with no grounded slip (canned flag removed)', () => {
+    // The vague "That drops material." is gone (David 2026-09-08). A blunder with
+    // no motif and no grounded slip is silent on fast density — empty > vague.
     expect(
       buildFastMoveLine({ san: 'Qh5', moverIsWhite: true, density: 'fast', classification: 'blunder' }),
-    ).toBe('That drops material.');
+    ).toBe('');
   });
 
   it('stays silent on a routine move under fast density', () => {

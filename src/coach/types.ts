@@ -123,6 +123,11 @@ export interface LiveState {
    *  the grounding pipeline falls back to the master-play top move when
    *  absent. See docs/plans/2026-06-10-coach-chat-grounding-inversion.md. */
   engineBestMoveUci?: string;
+  /** Stockfish search DEPTH that `engineBestMoveUci` was found at. Threaded so
+   *  the grounded best-move lane can withhold a confident recommendation off a
+   *  shallow (~depth 2) read instead of "telling the student to blunder"
+   *  (David 2026-09-08). Undefined = unknown → the lane does not block. */
+  engineDepth?: number;
   /** Pre-fetched Lichess explorer snapshot for the current FEN. The
    *  surface (CoachTeachPage) fires `fetchLichessExplorer` on every
    *  FEN change and threads the compact result here so the brain can

@@ -2151,6 +2151,12 @@ const MOVE_RATING_RE = anyOf([
   String.raw`\bwas\s+(?:moving|playing|pushing|developing)\s+(?:my\s+|the\s+)?(?:king|queen|rook|bishop|knight|pawn)\b[\s\S]{0,20}\b(?:good|bad|sound|weak|blunder|mistake|inaccuracy|error|ok(?:ay)?)\b`,
   // "why did I play that / why is my move bad" — asks to rate the last move.
   String.raw`\bwhy\s+(?:did\s+i\s+play|is\s+my\s+move|was\s+(?:that|my\s+move))\b`,
+  // "why was it a slip / why it was a mistake / why that was bad / why my last
+  // move was a blunder" — the live-play "tell me why" follow-up. David's 2026-09-08
+  // log: "i want you telling me why it was a slip" matched NOTHING and misrouted
+  // to notation-help ("'a7' is chess notation…"). Anchored to slip vocabulary so
+  // it never swallows "why was it a draw" and the like.
+  String.raw`\bwhy\s+(?:was\s+)?(?:it|that|my\s+(?:last\s+)?move|this\s+move)\s+(?:was\s+)?(?:a\s+|an\s+)?(?:slip|mistake|blunder|inaccuracy|bad|wrong|weak|error|not\s+(?:good|best))\b`,
 ]);
 export function isMoveRatingQuestion(ask: string | undefined): boolean {
   if (!ask) return false;

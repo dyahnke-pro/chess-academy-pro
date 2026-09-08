@@ -27,13 +27,16 @@ export const stockfishEvalTool: Tool = {
       return { ok: false, error: 'fen is required' };
     }
     try {
-      // WO-STOCKFISH-SWAP-AND-PERF (part 5): brain-facing eval
-      // budgets at 300ms. If the search hasn't returned by then,
-      // Stockfish is forced to emit bestmove from its current best
-      // line (sent via `stop`), and we return what it had. Direct
-      // engine callers (post-game review, hint system) keep using
+      // Brain-facing eval budget. 🔒 RAISED 300ms→2000ms (David 2026-09-08,
+      // "why the fuck it told me to blunder"): at 300ms the search bottomed out
+      // at ~depth 2 on a real middlegame (audit: `best=d5d6 … d2`), and the coach
+      // voiced that shallow pick as "the best move, you're winning +4" — a
+      // recommended blunder. 2000ms reaches a trustworthy depth on the positions
+      // the brain actually asks about; the grounded lane's MIN_CONFIDENT_BESTMOVE_
+      // DEPTH floor is the backstop for any position still too complex to clear it
+      // in time. Direct engine callers (review, hints) keep using
       // queueAnalysis / analyzePosition without a budget.
-      const analysis = await stockfishEngine.analyzeWithBudget(fen, depth, 300);
+      const analysis = await stockfishEngine.analyzeWithBudget(fen, depth, 2000);
       return {
         ok: true,
         result: {

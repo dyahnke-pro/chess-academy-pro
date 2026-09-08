@@ -4185,6 +4185,66 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
   return { facts: verdict, ...arrow, sources: ['engine:stockfish'] };
 }
 
+/**
+ * assembleSlipNarration — the FULL-STRENGTH, IMMEDIATE "why that was a slip"
+ * narration for the live play surface (David 2026-09-08, emphatic: the coach
+ * flagged every slip with a canned "A small slip — there was better" and never
+ * said WHAT was better or WHY, even though these grounded computers already
+ * existed. "narrations better be AT FULL STRENGTH … I spent weeks building the
+ * coach narration strengths and it's not using them").
+ *
+ * Composes the move-rating VERDICT (played move + eval swing) with the DEEP
+ * board REASON from `explainBestMoveGrounded` — what the better move does AND
+ * what the played move allowed — every clause chess.js-computed (G0/G3). It is
+ * SYNCHRONOUS and makes NO engine call: the caller hands over the engine best
+ * move it already computed for the classification, so this adds zero latency to
+ * the fast per-move narration path.
+ *
+ * There is no vague fallback: the worst case still names the played move and its
+ * cost ("Nf6 is a mistake — about 2.5 points."), never "there was better". The
+ * canned strings are gone.
+ */
+export function assembleSlipNarration(input: {
+  playedSan: string;
+  quality: 'inaccuracy' | 'mistake' | 'blunder';
+  cpLoss: number;
+  betterSan: string | null;
+  betterFromTo: { from: string; to: string } | null;
+  fenBefore: string;
+  bestMoveUci: string | null;
+  moverColor: 'white' | 'black';
+}): GroundedAnswer | null {
+  const { playedSan, quality, cpLoss, betterSan, betterFromTo, fenBefore, bestMoveUci, moverColor } = input;
+  if (!playedSan) return null;
+
+  const pawns = (cpLoss / 100).toFixed(1);
+  const verdictWord = quality === 'blunder' ? 'a blunder' : quality === 'mistake' ? 'a mistake' : 'a slight inaccuracy';
+  const swing = cpLoss >= 20 ? ` — about ${pawns} points.` : '.';
+  const verdict = `${playedSan} is ${verdictWord}${swing}`;
+
+  // The deep grounded reason (sync, chess.js only): the better move's point +
+  // what the played move let the opponent do. Null on a genuinely quiet slip.
+  const reason = explainBestMoveGrounded(fenBefore, playedSan, bestMoveUci, moverColor);
+
+  let facts: string;
+  if (betterSan && reason) {
+    // "Nd5 was stronger — it takes the outpost on d5, while your move let Black
+    //  play Nxe5, winning the pawn."
+    facts = `${verdict} ${betterSan} was stronger — ${reason.charAt(0).toLowerCase()}${reason.slice(1)}`;
+  } else if (betterSan) {
+    facts = `${verdict} ${betterSan} was the stronger move here.`;
+  } else if (reason) {
+    facts = `${verdict} ${reason}`;
+  } else {
+    facts = verdict;
+  }
+
+  const arrow = betterSan && betterFromTo
+    ? { bestMoveSan: betterSan, bestMoveFromTo: betterFromTo }
+    : { bestMoveSan: null, bestMoveFromTo: null };
+  return { facts, ...arrow, sources: ['engine:stockfish'] };
+}
+
 /** Puzzle rating + solve stats. */
 export interface PuzzleStatsLike {
   puzzleRating: number | null;

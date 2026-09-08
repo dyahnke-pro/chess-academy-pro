@@ -1135,6 +1135,17 @@ export interface MasterGroundingOptions {
   /** Stockfish PV[0] in UCI (e.g. `g1f3`) for `currentFen`. The TRUE best
    *  move — preferred over the master-play top move when present. */
   engineBestMoveUci?: string;
+  /** The Stockfish search DEPTH `engineBestMoveUci` was found at. Load-bearing:
+   *  the live coach reads `analyzeWithBudget`'s BEST-SO-FAR move, which on a slow
+   *  or complex position can be a ~depth-2 read — and the lane voiced it with the
+   *  same "The best move is X, you're winning +4" confidence as a depth-20 pick.
+   *  That is how the coach recommended a blunder (David 2026-09-08, "why the fuck
+   *  it told me to blunder" — his Alapin game, a shallow rec played out losing).
+   *  When this is known and below `MIN_CONFIDENT_BESTMOVE_DEPTH`, the confident
+   *  best-move readout is withheld — the honest position assessment speaks
+   *  instead. Undefined = unknown depth → not blocked (backward compatible; only
+   *  the surfaces that thread a real depth get the floor). */
+  engineDepth?: number;
   /** WHITE-perspective centipawn eval of `currentFen` (LiveState convention).
    *  The interception flips the sign to side-to-move POV for the assembler. */
   engineEvalCp?: number;
@@ -2128,6 +2139,14 @@ export async function groundedMoveFeedback(opts: {
   );
 }
 
+/** Below this Stockfish depth, a "best move" recommendation is not trustworthy
+ *  enough to voice as authoritative advice — the live snapshot can bottom out at
+ *  ~depth 2 on a slow/complex position, and a depth-2 pick is how the coach
+ *  recommended a blunder (David 2026-09-08). The ponder cache targets depth 12
+ *  and the on-demand plan depth 18, so a floor of 10 clears every healthy read
+ *  while catching the shallow disasters. */
+const MIN_CONFIDENT_BESTMOVE_DEPTH = 10;
+
 /** SAFE GROUNDED DEFAULT — the computed answer for an unmapped CHESS turn:
  *  the engine's best move + eval (richest) when the surface threaded a
  *  Stockfish snapshot, else the eval + top live-tactic (position assessment).
@@ -2150,7 +2169,15 @@ async function serveGroundedPositionDefault(
   const prefix = voice?.extraFacts ? `${voice.extraFacts.trim()}\n` : '';
   const fen = grounding.currentFen ?? null;
   const bestUci = grounding.engineBestMoveUci ?? null;
-  if (bestUci && fen) {
+  // DEPTH FLOOR (David 2026-09-08, "why the fuck it told me to blunder"): the
+  // live best-move snapshot is `analyzeWithBudget`'s best-SO-FAR line, which on a
+  // slow/complex position bottoms out at ~depth 2. Voicing a depth-2 pick as "the
+  // best move, you're winning +4" is how the coach recommended a losing move. When
+  // the depth is KNOWN and below the floor, withhold the confident move rec and
+  // fall through to the honest position assessment (eval + live tactic). Unknown
+  // depth is not blocked — only surfaces that thread a real depth get the guard.
+  const depthOk = typeof grounding.engineDepth !== 'number' || grounding.engineDepth >= MIN_CONFIDENT_BESTMOVE_DEPTH;
+  if (bestUci && fen && depthOk) {
     const blackToMove = fen.split(' ')[1] === 'b';
     const stmEvalCp =
       typeof grounding.engineEvalCp === 'number'
