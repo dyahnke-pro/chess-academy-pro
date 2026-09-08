@@ -9,6 +9,7 @@ import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { useWeaknessSignals } from './useWeaknessSignals';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -108,6 +109,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  * stay frozen. That's WO-COACH-NARRATION-05's invariant.
  */
 export function usePositionNarration(args: UsePositionNarrationArgs): UsePositionNarrationResult {
+  const weaknessRef = useWeaknessSignals(); // student model → re-ranks the read (Phase 1)
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -238,6 +240,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
             rating,
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
+            studentWeaknesses: weaknessRef.current,
           });
           positionFactsBlock = clauseText(pf.clauses, ['must-defend']).join(' ');
         }
@@ -251,7 +254,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // exact spoken line in code (speakDeepestLookahead — G0: the engine decided,
       // the voice only phrases) and inject it as a REQUIRED utterance, so the
       // model must voice the computed foresight verbatim. Null on a quiet board.
-      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics) : null;
+      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics, weaknessRef.current) : null;
       const requiredLookahead = lookaheadLine
         ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
         : '';

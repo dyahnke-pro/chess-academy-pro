@@ -3,6 +3,7 @@ import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { groundedMoveFeedback } from '../services/coachApi';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { useWeaknessSignals } from './useWeaknessSignals';
 import { logAppAudit } from '../services/appAuditor';
 
 import { db } from '../db/schema';
@@ -119,6 +120,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  * cancellation.
  */
 export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarrationResult {
+  const weaknessRef = useWeaknessSignals(); // student model → re-ranks phase narration (Phase 1)
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -571,6 +573,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             rating,
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
+            studentWeaknesses: weaknessRef.current,
           });
           const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
           if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
@@ -602,7 +605,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // code (G0) and fold it into extraFacts, which the grounded path VOICES —
       // so entering the middlegame the coach states what's coming as computed
       // fact, not an LLM afterthought. Null on a quiet position.
-      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
+      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────

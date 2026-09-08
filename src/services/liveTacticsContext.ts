@@ -37,7 +37,8 @@ import {
 import { detectTactics } from './tacticsDetector';
 import { getTacticLookahead } from './tacticAlertService';
 import { stockfishEngine } from './stockfishEngine';
-import type { TacticPattern, UpcomingTactic } from '../types/tacticTypes';
+import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
+import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 
 /**
  * Build the `TacticsLiveContext` block for the brain envelope.
@@ -403,13 +404,27 @@ function pieceFullName(piece: string): string {
  */
 export function speakDeepestLookahead(
   ctx: TacticsLiveContext,
+  /** The student model (Phase 1b) — when a deep tactic's MOTIF is a hole this
+   *  student keeps falling in (via the tactic-vocabulary bridge), it is PREFERRED
+   *  as the one to speak, and an honest tag names the recurring pattern. Optional/
+   *  inert: [] → the previous first-deep-tactic behavior, unchanged. */
+  studentWeaknesses: readonly WeaknessSignal[] = [],
 ): string | null {
   const deep = (
     list: TacticsLiveContext['threats'],
   ): TacticsLiveContext['threats'] =>
     list.filter((e) => e.depthAhead >= 2 && e.line.length > 0);
-  const opportunity = deep(ctx.opportunities)[0] ?? null;
-  const threat = deep(ctx.threats)[0] ?? null;
+  // e.type is widened to string on TacticsLiveContext; the runtime value is a
+  // real TacticPatternType (from UpcomingTactic.pattern.type). An unknown motif
+  // would map to null in the bridge anyway, so the cast is safe.
+  const isHole = (e: TacticsLiveContext['threats'][number]): boolean =>
+    matchTacticPattern(e.type as TacticPatternType, studentWeaknesses) !== null;
+  const deepOpps = deep(ctx.opportunities);
+  const deepThreats = deep(ctx.threats);
+  // Within each seat, a motif the student keeps falling in wins the pick; else
+  // the deepest (first) one — the prior behavior. Opportunity still beats threat.
+  const opportunity = deepOpps.find(isHole) ?? deepOpps[0] ?? null;
+  const threat = deepThreats.find(isHole) ?? deepThreats[0] ?? null;
   const pick = opportunity ?? threat;
   if (!pick) return null;
   const isOpportunity = pick === opportunity;
@@ -422,10 +437,15 @@ export function speakDeepestLookahead(
     walk.length === 1
       ? walk[0]
       : `${walk[0]}, then ${walk.slice(1).join(', ')}`;
+  // Honest recurring-hole tag ONLY when this motif is one of the student's holes
+  // (profile-proven) AND the tactic is real (board-proven) — never invented.
+  const holeTag = isHole(pick)
+    ? (isOpportunity ? ` This is exactly the kind you tend to miss — grab it.` : ` This is a pattern that keeps catching you — watch for it.`)
+    : '';
   if (isOpportunity) {
-    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.`;
+    return `Look a couple of moves ahead — you've got a ${pattern} coming, ${pick.depthAhead} deep: ${lineProse}.${holeTag}`;
   }
-  return `Look ahead — they're lining up a ${pattern} in ${pick.depthAhead}: ${lineProse}. Spot it before it lands.`;
+  return `Look ahead — they're lining up a ${pattern} in ${pick.depthAhead}: ${lineProse}. Spot it before it lands.${holeTag}`;
 }
 
 /** Render a computed `TacticsLiveContext` into the grounded prompt block (BOARD

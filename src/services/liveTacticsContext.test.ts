@@ -288,6 +288,43 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctx)).toBeNull();
   });
 
+  it('Phase 1b: PREFERS a deep tactic whose motif is a hole the student keeps falling in, and tags it', () => {
+    // Two deep opportunities: a fork (first) and a discovery (second). The student
+    // keeps missing DISCOVERIES → the discovery is picked over the earlier fork.
+    const ctx = ctxWith(
+      [
+        { type: 'fork', description: 'f', depthAhead: 2, line: ['Nd5', 'a6', 'Nxe7'] },
+        { type: 'discovery', description: 'd', depthAhead: 2, line: ['Ne4', 'Qd8', 'Nxc5'] },
+      ],
+      [],
+    );
+    const holeSignals = [{
+      clusterId: 'analysis:tactic:discovered_attack', bucket: 'tactical' as const,
+      label: 'Misses discoveries', openCount: 5, severity: 70,
+      lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: [] as string[],
+    }];
+    const say = speakDeepestLookahead(ctx, holeSignals)!;
+    expect(say.toLowerCase()).toContain('discovery');   // the hole motif won the pick
+    expect(say).toContain('Ne4');
+    expect(say).toMatch(/tend to miss/i);               // honest recurring-hole tag
+    // With NO profile, the FIRST deep tactic (fork) is picked — prior behavior, no tag.
+    const plain = speakDeepestLookahead(ctx)!;
+    expect(plain.toLowerCase()).toContain('fork');
+    expect(plain).not.toMatch(/tend to miss/i);
+  });
+
+  it('Phase 1b: tags an opponent-threat motif that keeps catching the student', () => {
+    const ctx = ctxWith(
+      [],
+      [{ type: 'pin', description: 'p', depthAhead: 3, line: ['Bg5', 'h6', 'Bxf6'] }],
+    );
+    const holeSignals = [{
+      clusterId: 'analysis:tactic:pin', bucket: 'tactical' as const, label: 'Walks into pins',
+      openCount: 4, severity: 60, lifecycleStatus: 'persistent' as const, trend: 'flat' as const, puzzleThemes: [] as string[],
+    }];
+    expect(speakDeepestLookahead(ctx, holeSignals)!).toMatch(/keeps catching you/i);
+  });
+
   it('returns null on a quiet position (nothing upcoming)', () => {
     expect(speakDeepestLookahead(ctxWith([], []))).toBeNull();
   });

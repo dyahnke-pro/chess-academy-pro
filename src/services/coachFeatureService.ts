@@ -1,9 +1,9 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
-import { plyFactsClause, computePvLine, type PvLine } from './pvPlayback';
+import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine } from './pvPlayback';
 import { narrateDnaLine } from './dnaLineNarrator';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
@@ -37,6 +37,10 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
+import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
+import { renderCausalChain } from './causalChainVoice';
+import { matchTag, type WeaknessSignal } from './weaknessSignal';
+import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
@@ -1059,6 +1063,13 @@ export function buildReviewSegments(
    *  per-move cascade + one-shot flags with the full-data aggregator, which emits
    *  EVERY computed facet on EVERY move. Off by default (production stays capped). */
   uncapped?: boolean,
+  /** The student's rating — scales the causal-chain depth (beginners hear every
+   *  link; strong players hear the compressed 2–3). Default 1500 (medium). */
+  rating?: number,
+  /** THE STUDENT MODEL (Phase 1). When a chain the student ERRED into (missed /
+   *  allowed) matches a hole they keep falling in, the review appends an honest
+   *  "this recurs for you — worth drilling" recap. Optional/inert when absent. */
+  studentWeaknesses?: readonly WeaknessSignal[],
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1309,6 +1320,56 @@ export function buildReviewSegments(
         })
       : [];
     const fundamentalLed = fundamentals.length > 0;
+    // 🔗 THE CROSS-MOVE CAUSAL CHAIN (David 2026-09-07: "fact A caused fact B
+    // caused fact C. THIS IS CHESS! Moves do not exist in isolation."). When THIS
+    // move is a tactic that collected a loose enemy piece whose looseness traces
+    // to an earlier move (a premature queen taking a defender's square → the
+    // defender displaced → the piece left loose), LEAD the beat with the
+    // board-proven chain — the one teaching that links the moves instead of
+    // grading each alone. Self-gates (null unless a real cross-move chain is
+    // PROVABLE, per the silent-on-unprovable rule); runs for either side (the
+    // cause is often the OPPONENT's early queen enabling the student's tactic).
+    // BOTH WAYS (David 2026-09-07): the chain that was PLAYED, the winning chain
+    // the student MISSED (what they could have done), and the chain their move
+    // ALLOWED the opponent (how it could have been avoided). Priority: a tactic
+    // played on this move is the main story; else a shot they allowed the opponent
+    // (prophylaxis); else a win they missed. Arrows only for played/allowed (both
+    // valid on the after-move board the segment shows); the missed frame is the
+    // before-move board, so its narration is retrospective and carries no arrows.
+    let causalLead: string | null = null;
+    let causalArrows: ReviewMoveSegment['planArrows'];
+    if (studentColorWB !== null) {
+      try {
+        const isStudentMove = (moverColor === 'white') === (studentColorWB === 'w');
+        const played = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
+        const chain = played
+          ?? (isStudentMove ? findAllowedChain(sansForRun, m.ply, studentColorWB) : null)
+          ?? (isStudentMove ? findMissedChain(sansForRun, m.ply, studentColorWB) : null);
+        if (chain) {
+          const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
+          if (lines.length) causalLead = lines.join(' ');
+          // RECURRENCE RECAP (Phase 1) — when the student ERRED into this chain
+          // (missed a win / allowed a shot) AND it maps to a hole they keep
+          // falling in, name the pattern so the lesson lands: "this recurs for
+          // you." Board-honest (the chain is real) + profile-honest (openCount
+          // proves recurrence). Never on a PLAYED win (that's not a leak), and
+          // never invented — only when a matched, recurring weakness exists.
+          if (causalLead && studentWeaknesses && studentWeaknesses.length > 0 && (chain.stance === 'missed' || chain.stance === 'allowed')) {
+            let recur: WeaknessSignal | null = null;
+            for (const tag of causalChainMistakeTags(chain, studentColorWB)) {
+              const hit = matchTag(tag, studentWeaknesses);
+              if (hit && hit.openCount >= 2 && (!recur || hit.openCount > recur.openCount)) recur = hit;
+            }
+            if (recur) causalLead += ` This one keeps recurring in your games — ${recur.label.toLowerCase()} — a good pattern to drill.`;
+          }
+          if (chain.stance === 'played' || chain.stance === 'allowed') {
+            const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
+            const arr = causalChainArrows(chain);
+            if (arr.length) causalArrows = arr.map((a) => ({ startSquare: a.from, endSquare: a.to, color: CHAIN_ARROW_HEX[a.color] ?? '#22c55e' }));
+          }
+        }
+      } catch { causalLead = null; }
+    }
     // UNCAPPED diagnostic branch — emit EVERY computed facet on EVERY move (David
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
@@ -1415,6 +1476,8 @@ export function buildReviewSegments(
         keptRaw.push(f);
       }
       const kept = keptRaw.map(applyRefrainOnce);
+      // The causal chain LEADS the beat when present (it's the cross-move story).
+      const uncappedParts = causalLead ? [causalLead, ...kept] : kept;
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -1427,8 +1490,9 @@ export function buildReviewSegments(
         evalAfter: m.evaluation,
         bestMoveSan,
         bestMoveUci: m.bestMove,
-        narration: kept.length ? kept.join(' ') : null,
-        narrationSource: kept.length ? 'per-move' : null,
+        narration: uncappedParts.length ? uncappedParts.join(' ') : null,
+        narrationSource: uncappedParts.length ? 'per-move' : null,
+        ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
       });
       try {
@@ -1775,9 +1839,14 @@ export function buildReviewSegments(
       const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
       if (oppThreat && !threatsAnnounced.has(oppThreat.san)) {
         threatsAnnounced.add(oppThreat.san);
+        // The concrete threat, board-computed (kind + detail). The REMEDIAL
+        // "the pattern to spot…" explainer (describeThreatRecognition) was
+        // REMOVED from this default in-game callout (David 2026-09-07: "Obvious,
+        // remedial, and unnecessary"). Depth now comes from the rating-scaled
+        // deep-threat PV pass (augmentWithProjections #5c — "spell the line for
+        // everyone"), and the WHY from the causal chain; recognition-teaching
+        // stays only in the EXPLICIT Learn "spot-it" drill, where it belongs.
         let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
-        const recog = describeThreatRecognition(oppThreat, fenPair.fenAfter, playerColor === 'white' ? 'w' : 'b');
-        if (recog) callOut += ` ${recog.charAt(0).toUpperCase()}${recog.slice(1)}.`;
         const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
         if (nextBest) {
           const prevention = describeThreatPrevention(fenPair.fenAfter, oppThreat, nextBest, oppWB);
@@ -2189,6 +2258,14 @@ export function buildReviewSegments(
         : `And that's checkmate — the game ends here. This is the position to sit with: trace the mating net back and find the move where it became unavoidable.`;
       narrationSource = 'per-move';
     }
+    // 🔗 THE CAUSAL CHAIN LEADS the beat when this move exploited a loose piece
+    // with a provable cross-move cause (David 2026-09-07). Prepended last so it
+    // sits ahead of whatever the cascade produced; a mate move never has a chain
+    // (the exploit is winning a piece, not the king), so it doesn't collide.
+    if (causalLead) {
+      narration = narration ? `${causalLead} ${narration}` : causalLead;
+      if (!narrationSource) narrationSource = 'per-move';
+    }
     segments.push({
       ply: m.ply,
       moveNumber: fullMove,
@@ -2207,7 +2284,11 @@ export function buildReviewSegments(
       // Plan-idea arrows take the slot when present; else the threat arrows
       // (they rarely coincide — a plan beat fires on a quiet move, a threat on a
       // tactical one) so the danger/attack is SHOWN, not just spoken.
-      ...((planArrows && planArrows.length) ? { planArrows } : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
+      // The causal chain leads the beat, so its lead-the-eye arrows take the slot
+      // on the tactic move; else the plan / threat arrows as before.
+      ...((causalArrows && causalArrows.length) ? { planArrows: causalArrows }
+        : (planArrows && planArrows.length) ? { planArrows }
+        : (threatArrows && threatArrows.length ? { planArrows: threatArrows } : {})),
       ...(segmentStoryGame ? { storyGame: segmentStoryGame } : {}),
       ...(segmentStaticThreat ? { staticThreat: segmentStaticThreat } : {}),
     });
@@ -2344,7 +2425,14 @@ async function augmentWithProjections(
    *  (David 2026-07-21, IMG_4571: "How does white take advantage of this
    *  mistake?" — production reviews need the ramification, not just the badge). */
   scope: 'full' | 'mistakes' = 'full',
+  /** The student's rating — scales how DEEP the spelled threat lines run
+   *  (Phase 2: deeper for stronger, via pvDepthForRating). Default 1500. */
+  rating = 1500,
 ): Promise<void> {
+  // How many plies to spell a deep threat line — rating-scaled, capped at the
+  // reliable window (Phase 2, David 2026-09-07: "spell the lines out for
+  // everyone", "the more advanced player should get a DEEPER calculation").
+  const deepThreatPlies = pvDepthForRating(rating);
   const verdictWord = (studentPovCp: number | null): string => {
     if (studentPovCp === null) return 'the position stays balanced';
     if (studentPovCp >= 150) return "you're winning";
@@ -2538,7 +2626,7 @@ async function augmentWithProjections(
       // push the engine past its natural limits!!! Solid and honest is
       // paramount"). One move belongs to the static call-out; 2-4 moves
       // belong here.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static call-out
       const studentPovNow = s.evalAfter !== null ? (studentColorWB === 'w' ? s.evalAfter : -s.evalAfter) : null;
       const lastPly = line.plies[line.plies.length - 1];
@@ -2551,8 +2639,14 @@ async function augmentWithProjections(
       const decisiveJump = studentPovNow !== null && studentPovTerminal !== null
         && studentPovTerminal - studentPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
-      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
-      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
+      // David 2026-09-07 (#4): the deep calculation "doesn't have to be forced —
+      // spell the lines out for everyone." The decisive gate above (mate or a
+      // ≥250cp verified swing) is the noise floor; a quiet eval-drift never
+      // clears it. A FORCING line is a "threat"; a decisive but non-forcing best
+      // line is a "plan" — labelled honestly so we never overstate a plan as a
+      // forced threat (the "if they sit still" framing is already true for both).
+      const deepKind = isForcingProjection(line) ? 'threat' : 'plan';
+      s.narration = `${s.narration ?? ''} And there's a deeper ${deepKind} brewing — if they sit still, it runs ${render(line)}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -2588,7 +2682,7 @@ async function augmentWithProjections(
       const nullFen = parts.join(' ');
       // Same honest window as #5: 7 plies (4 opponent moves), and the eval
       // claim requires the VERIFIED terminal — never the unverified root.
-      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: 7 }), PROJ_TIMEOUT_MS, null);
+      const line = await raceTimeout(computePvLine(nullFen, { maxPlies: deepThreatPlies }), PROJ_TIMEOUT_MS, null);
       if (!line || line.plies.length < 3) continue; // one-movers belong to the static opponent call-out
       // Don't re-narrate the same move the one-move call-out already named.
       const stripGl = (x: string): string => x.replace(/[+#!?]+$/, '');
@@ -2603,8 +2697,11 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
-      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
-      let callOut = `Watch what they're building — left alone, their idea runs ${render(line)}.`;
+      // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
+      // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
+      // ≥250cp gate is the noise floor; "left alone" is true for both.
+      const oppDeepKind = isForcingProjection(line) ? 'threat' : 'idea';
+      let callOut = `Watch what they're building — left alone, their ${oppDeepKind} runs ${render(line)}.`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
@@ -3298,7 +3395,11 @@ export async function generateReviewNarration(params: {
   // the his-play DB (primary) + the masters DB (backup). Concurrent; each
   // degrades to null on failure so the beat just falls through.
   await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped);
+  // THE STUDENT MODEL (Phase 1) — so a chain the student keeps erring into gets
+  // the "this recurs for you, drill it" recap. Memoized once-per-game; degrades
+  // to [] (inert) on any failure.
+  const studentWeaknesses = await loadWeaknessSignals().catch(() => []);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
@@ -3314,7 +3415,7 @@ export async function generateReviewNarration(params: {
     // timeout the segments keep whatever projections already landed (best-effort)
     // and the walk still becomes ready.
     await raceTimeout(
-      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes'),
+      augmentWithProjections(segments, playerColor === 'white' ? 'w' : 'b', uncapped ? 'full' : 'mistakes', playerRating),
       uncapped ? REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED : REVIEW_AUGMENT_TIMEOUT_MS,
       undefined,
     );

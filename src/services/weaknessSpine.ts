@@ -27,6 +27,8 @@ import { describeStructure } from './boardStructure';
 import { getAddressedConversions } from './conversionProgress';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
+import { aggregateBookDepartures } from './bookDepartureWeakness';
+import { getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { useAppStore } from '../stores/appStore';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType, GameRecord } from '../types';
@@ -575,10 +577,17 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const { misAgg, allMis, mistakes, weakSpots, tactics, games } = direct;
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
-  const conversions = detectConversionFailures(games, {
-    lichessUsername: prefs?.lichessUsername,
-    chessComUsername: prefs?.chessComUsername,
-  }).filter((c) => !addressedConv.has(c.fen.split(' ').slice(0, 4).join(' ')));
+  const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
+  const conversions = detectConversionFailures(games, names)
+    .filter((c) => !addressedConv.has(c.fen.split(' ').slice(0, 4).join(' ')));
+
+  // BOOK DEPARTURES (Phase 3) — read the precomputed, cost-gated departures from
+  // the meta cache (cheap; a background refresh fires when stale). Rating scales
+  // the "too early / costly" gate. Async findTheoryDeparture never runs on this
+  // hot path — only the cache read does.
+  const studentRating = useAppStore.getState().activeProfile?.currentRating
+    ?? useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+  const bookRows = await getCachedBookDepartureRows(games, names, studentRating);
 
   const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
   const coachRows = misAgg.map(fromMisconception);
@@ -589,10 +598,8 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateConversionFailures(conversions, games),
     ...aggregateBoardVision(heatmap),
     ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes)),
-    ...aggregateStrongerOpponentErrors(mistakes, games, {
-      lichessUsername: prefs?.lichessUsername,
-      chessComUsername: prefs?.chessComUsername,
-    }),
+    ...aggregateStrongerOpponentErrors(mistakes, games, names),
+    ...aggregateBookDepartures(bookRows, studentRating),
   ]);
 
   const merged = [...coachRows, ...analysisRows];
