@@ -1255,6 +1255,14 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   // critical error") is about one game — the last-game-error lane owns it, not
   // the aggregate weakness profile.
   if (isLastGameMistakeQuestion(ask)) return false;
+  // A FUNDAMENTALS ask ("what are my fundamentals I need to work on") is a
+  // teaching request the fundamentals lane owns — but it ALSO matched the
+  // progress pattern ("...to work on"), and progress dispatches FIRST, so it
+  // swallowed the ask and served the games-dependent "import your games" wall
+  // instead of teaching the fundamentals (David 2026-09-08: "coach was unable
+  // to speak to my fundamentals"). assembleFundamentalsAnswer always answers
+  // (the core four) with no game data, so the fundamentals lane must win.
+  if (isFundamentalsQuestion(ask)) return false;
   // "what's the Weaknesses TAB for?" is an app-help ask about a surface, not
   // a request for the habit profile — same guard the concept lane carries
   // (varied sweep, run allq-mss55zxn: the tab question got the patterns

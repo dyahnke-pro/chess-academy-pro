@@ -12,6 +12,7 @@ import {
   isEndgameWeaknessQuestion,
   isPlayerGamesQuestion,
   isConceptQuestion,
+  isFundamentalsQuestion,
   isProgressQuestion,
   isOpeningProfileQuestion,
   openingProfileKind,
@@ -1311,5 +1312,23 @@ describe('varied-audit routing guards', () => {
     expect(trainingRequestKind('set up endgame training')).toBe('endgame');
     expect(trainingRequestKind('drill my tactics')).toBe('tactics');
     expect(trainingRequestKind('train my mistakes')).toBe('mistakes');
+  });
+});
+
+describe('a fundamentals question wins over progress (David 2026-09-08 "unable to speak to my fundamentals")', () => {
+  it('routes "what are my fundamentals I need to work on" to fundamentals, not progress', () => {
+    for (const a of ['what are my fundamentals i need to work on?', 'what fundamentals do i need to work on']) {
+      expect(isFundamentalsQuestion(a), a).toBe(true);
+      // Progress dispatches first and is games-dependent; it must NOT swallow a
+      // fundamentals ask and serve the "import your games" wall.
+      expect(isProgressQuestion(a), a).toBe(false);
+    }
+  });
+
+  it('still routes a real progress ask to progress', () => {
+    for (const a of ['am i improving', 'how is my progress', 'am i getting better at chess']) {
+      expect(isProgressQuestion(a), a).toBe(true);
+      expect(isFundamentalsQuestion(a), a).toBe(false);
+    }
   });
 });
