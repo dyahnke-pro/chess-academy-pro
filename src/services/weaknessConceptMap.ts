@@ -58,6 +58,14 @@ const CAPTURE_CONCEPTS: Record<'missedThreat' | 'structureDamage' | 'conversionE
   conversionEndgame: { behavior: "you let won endings slip — you don't convert the material advantage with clean technique", conceptQuery: 'endgame technique convert winning advantage king activity opposition passed pawn', conceptName: 'endgame conversion technique' },
 };
 
+// Book departure (analysis:book-departure[:openingId]) — leaving known theory
+// early where masters have a clear main line. Grounds on opening-theory teaching.
+const BOOK_DEPARTURE_CONCEPT: WeaknessConcept = {
+  behavior: 'you leave opening theory early — playing your own move where masters have a clear main line, and it costs you',
+  conceptQuery: 'opening theory main line why follow book development centre tempo',
+  conceptName: 'opening theory & main lines',
+};
+
 const BUCKET_FALLBACK: Partial<Record<MisconceptionBucket, WeaknessConcept>> = {
   tactical: { behavior: 'you miss tactics — the forcing shot on the board', conceptQuery: 'tactics combination forcing move calculation', conceptName: 'tactical alertness' },
   positional: { behavior: 'you misjudge positional trades and structure', conceptQuery: 'positional pawn structure weak square piece activity', conceptName: 'positional judgment' },
@@ -79,5 +87,8 @@ export function conceptForCluster(clusterId: string, bucket: MisconceptionBucket
   if (clusterId === 'analysis:missed-threat') return CAPTURE_CONCEPTS.missedThreat;
   if (clusterId === 'analysis:structure-damage') return CAPTURE_CONCEPTS.structureDamage;
   if (/^analysis:conversion-endgame:/.test(clusterId)) return CAPTURE_CONCEPTS.conversionEndgame;
+  // Book departure (Phase 3) — teach the theory behind the main line the student
+  // left early, not "opening principles" in the abstract.
+  if (/^analysis:book-departure(:|$)/.test(clusterId)) return BOOK_DEPARTURE_CONCEPT;
   return BUCKET_FALLBACK[bucket] ?? null;
 }

@@ -407,6 +407,17 @@ reused, not rebuilt. Nothing above blocks starting Phase 1.
   exists (`weaknessLifecycle` + `coachCurriculumService`), consume don't rebuild,
   Phase 6 folds into P1; (4) precompute-per-game APPROVED (scope discipline);
   (5) book-departure threshold = adaptive algo. #6/#7 decided at their phases.
+- 2026-09-08 — **Phase 2 + 2b BUILT** (threat depth): remedial explainer removed
+  from the review callout; `pvDepthForRating` (single PV-depth source) scales
+  threat depth by rating; deep spelled lines confirmed running in capped
+  production; non-forcing decisive lines now spell (labelled "plan/idea" vs
+  "threat"). See `docs/plans/2026-09-08-phase2-surface-map.md`.
+- 2026-09-08 — **Phase 3 BUILT** (book departure): `bookDepartureWeakness.ts`
+  (adaptive gate + aggregator) + `bookDeparturePrecompute.ts` (masters-only,
+  meta-cached, stale-while-revalidate) folded into `getUnifiedWeaknessProfile`;
+  `conceptForCluster` teaches opening theory. Phase 1's selector auto-teaches it.
+  See `docs/plans/2026-09-08-phase3-surface-map.md`. Follow-ons: analyze-pipeline
+  refresh trigger, openingName population, lifecycle participation.
 - 2026-09-08 — David, emphatic: **map EACH surface ENTIRELY before building,
   and every neighboring/touching surface for blast radius.** Locked as §0 —
   the pre-build gate. No phase starts without its surface map.
