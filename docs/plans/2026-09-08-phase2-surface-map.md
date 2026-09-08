@@ -1,8 +1,8 @@
 # Phase 2 Surface Map — threat depth rework
 
 **The §0 pre-build gate for Phase 2** of `docs/plans/2026-09-08-unified-coach.md`.
-No code until this map is written + reviewed. Status: **DRAFT — consumer/gates
-map in flight (agent).**
+No code until this map is written + reviewed. Status: **COMPLETE — ready for
+David's review. Recommend merging Phase 1 first (see bottom).**
 
 ## What Phase 2 does (David 2026-09-07)
 1. **KILL the remedial explainer** from the default path —
@@ -50,14 +50,74 @@ map in flight (agent).**
 - Where a causal chain (`buildCausalChain`/`findAllowedChain`) explains the
   threat's cause, prepend the chain's "why" (Phase 1 engine, already shipped).
 
-## PENDING (fill when agent returns)
-- [ ] Every production caller of the 4 threat fns + which surface + spoken/text.
-- [ ] Exact call sites of `describeThreatRecognition` (what killing it affects).
-- [ ] coachFeatureService threat callout (~1819) + `staticThreat` +
-      `augmentWithProjections` (~2395) PV deepening — which surface each feeds.
-- [ ] Any existing rating-scaling of threat depth (to reuse, not duplicate).
-- [ ] Gates/tests covering threat narration (reviewDeepThreat, threatCheck, …).
-- [ ] Kid exclusion verified.
+## Blast radius (VERIFIED)
+All four fns are in `groundedAnswer.ts`, pure (chess.js + SEE), and **kid-excluded**
+(kidGameCoach imports only assembleConcept/Teaching/AppHelp — verified).
+
+**`describeThreatRecognition` (the remedial line) — exactly TWO call sites:**
+- `coachFeatureService.ts:1843` — the REVIEW opponent-threat callout (default
+  path). ← David's complaint ("Careful — their move threatens…; the pattern to
+  spot…"). **KILL here.**
+- `learnMoveTeaching.ts:127` — inside `buildDrillThreatSpot`, whose ONLY consumer
+  is `useTeachWalkthrough.ts:2669` (the LEARN "spot-the-threat" DRILL).
+  `buildDrillThreatSpot` is ENTIRELY a wrapper of this fn. **DECISION: KEEP here**
+  — an explicit "spot it" drill is where naming the pattern is the point; that is
+  NOT the "default path" David flagged. Killing it would empty the drill. So the
+  function STAYS; only the review-callout append is removed.
+
+**The review opponent-threat callout (`coachFeatureService.ts` ~1828–1858):**
+`"Careful — their move threatens {san}: it {detail}."` (KEEP — concrete fact) +
+`describeThreatRecognition` (:1843, **REMOVE**) + `describeThreatPrevention`
+(:1847 "The answer: …", KEEP — board-proven, not remedial). Add the spelled,
+rating-scaled continuation.
+
+**Deep spelled threat lines ALREADY EXIST** in `augmentWithProjections`
+(coachFeatureService.ts): #5 deep student threat `maxPlies:7` (:2617), #5c deep
+opponent threat `maxPlies:7` (:2667), gated on `isForcingProjection`; `staticThreat`
+→ #4b `computePvLine(maxPlies:4)` bridge (:2559). **REVIEW-only** (uncapped;
+capped production returns early at :2769 after the punishment pass). So "spell the
+line" in review = rating-scale these existing passes, don't build new.
+
+**Other `detectNewThreat` consumers (unaffected by the remedial kill, but the
+spelled-line upgrade could extend to them later):** `reviewMoveBriefing.ts:237`
+(review+openings, has register param), `reviewTeachingPoints.ts:382` (review
+deepest-lookahead), `engineDeltaLines.ts:54` (LEARN via useTeachWalkthrough +
+OPENINGS play), `learnMoveTeaching.ts:125` (LEARN drill). `describeStudentThreat`
+: `coachFeatureService.ts:1766` + `reviewFullData.ts:345` (review facet).
+
+**Rating scaling of threat depth today: NONE.** Depth is uniform engine plies
+(1-ply static → maxPlies:7 deep). The only rating-scaled review element is
+`renderCausalChain` (:1349). So Phase 2 ADDS the rating scale — reuse the plan's
+depth tiers, do NOT add a second curve (principle 8).
+
+**Gates/tests:** `reviewNarrationFidelity.test.ts` (THE core — tests all 4 fns
+incl. describeThreatRecognition :226), `reviewMoveBriefing.test.ts`,
+`learnMoveTeaching.test.ts` (buildDrillThreatSpot :80), `engineDeltaLines.test.ts`,
+`learnDeltaAudit.test.ts`. `threatCheck.test.ts` is UNRELATED (different subsystem).
+Per "update the audit before you run it": the review-callout test that asserts the
+remedial line must flip to assert its ABSENCE + the spelled line.
+
+## Recommended build order (surgical)
+1. **Kill the remedial append** at `coachFeatureService.ts:1843` (review callout).
+   Keep detail + prevention. Update `reviewNarrationFidelity` accordingly.
+2. **Rating-scale the deep-threat depth** — `augmentWithProjections` #5/#5c
+   `maxPlies` from a rating tier (`<1400→3, <1800→4, <2000→6, else 7`, min 1)
+   instead of the uniform 7. One shared helper (the single depth source,
+   principle 8).
+3. **Spell for everyone (in review):** let the capped production path run the
+   deep-threat pass (not only uncapped) so the spelled line reaches every review,
+   rating-scaled — bounded by budget/timeout so it never stalls the walk.
+4. **Attach causal "why"** where `buildCausalChain`/`findAllowedChain` proves the
+   threat's cause (Phase 1 engine, shipped) — prepend the chain line to the callout.
+5. Board-truth audit: extend the causal-chain audit's board reader to the spelled
+   threat line (every named ply true on the board).
+
+## 🚩 Recommendation to David (sequencing)
+Phase 2 edits the delicate REVIEW narration pipeline (`augmentWithProjections`,
+~350 lines, paying-adjacent). Phase 1 is on the branch but NOT yet merged/prod-
+audited. Cleaner, reversible order: **merge PR #931 → run the Phase 1 prod audit
+→ then execute Phase 2** on a verified base, rather than stacking two unaudited
+phases on one branch. The map above is ready to execute the moment you want it.
 
 ## Tests this phase will ship
 - The remedial line no longer appears on the default path (a "does NOT come out"
