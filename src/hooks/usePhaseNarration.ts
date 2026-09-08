@@ -605,7 +605,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // code (G0) and fold it into extraFacts, which the grounded path VOICES —
       // so entering the middlegame the coach states what's coming as computed
       // fact, not an LLM afterthought. Null on a quiet position.
-      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics) : null;
+      const phaseLookahead = phaseTactics ? speakDeepestLookahead(phaseTactics, weaknessRef.current) : null;
       if (phaseLookahead) transitionSentence += ` ${phaseLookahead}`;
 
       // ── NOTHING CONCRETE, NOTHING SPOKEN ───────────────────────────────────

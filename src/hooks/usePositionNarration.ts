@@ -254,7 +254,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // exact spoken line in code (speakDeepestLookahead — G0: the engine decided,
       // the voice only phrases) and inject it as a REQUIRED utterance, so the
       // model must voice the computed foresight verbatim. Null on a quiet board.
-      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics) : null;
+      const lookaheadLine = posTactics ? speakDeepestLookahead(posTactics, weaknessRef.current) : null;
       const requiredLookahead = lookaheadLine
         ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
         : '';

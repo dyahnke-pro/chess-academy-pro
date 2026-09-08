@@ -412,6 +412,13 @@ reused, not rebuilt. Nothing above blocks starting Phase 1.
   threat depth by rating; deep spelled lines confirmed running in capped
   production; non-forcing decisive lines now spell (labelled "plan/idea" vs
   "threat"). See `docs/plans/2026-09-08-phase2-surface-map.md`.
+- 2026-09-08 — **Phase 1b BUILT** (live tactic-motif boost): `speakDeepestLookahead`
+  now prefers a deep tactic whose motif is a hole the student keeps falling in
+  (via the tactic-vocabulary bridge + matchTacticPattern) and tags it honestly
+  ("you tend to miss this" / "keeps catching you"). Narrow: one function + the two
+  hooks that already hold the Phase-1 weaknessRef (usePositionNarration,
+  usePhaseNarration). 38 liveTacticsContext tests green. Closes the tactic-motif
+  gap Phase 1 left on the live play/teach lookahead.
 - 2026-09-08 — **Phase 3 BUILT** (book departure): `bookDepartureWeakness.ts`
   (adaptive gate + aggregator) + `bookDeparturePrecompute.ts` (masters-only,
   meta-cached, stale-while-revalidate) folded into `getUnifiedWeaknessProfile`;
