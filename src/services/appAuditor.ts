@@ -1024,11 +1024,64 @@ let auditWriteChain: Promise<void> = Promise.resolve();
  *  by a full page reload (= a new module evaluation = a new session). */
 let truncationMarkerEmitted = false;
 
+// Local-persistence buffer (perf fix 2026-09-08). Each audit event used to do a
+// full read-modify-write of the ~1MB log blob to IndexedDB, serialized on the
+// main thread — dozens per coach turn, the primary "choppy" source. Instead we
+// buffer entries in memory and flush them to Dexie in ONE write per burst,
+// drained on a short debounce, on getAppAuditLog, and on page hide.
+let pendingEntries: AuditEntry[] = [];
+let auditFlushTimer: ReturnType<typeof setTimeout> | null = null;
+const AUDIT_FLUSH_DEBOUNCE_MS = 2000;
+
+function scheduleAuditFlush(): void {
+  if (auditFlushTimer) return;
+  if (typeof setTimeout === 'undefined') { void flushAppAuditLog(); return; }
+  auditFlushTimer = setTimeout(() => { auditFlushTimer = null; void flushAppAuditLog(); }, AUDIT_FLUSH_DEBOUNCE_MS);
+  (auditFlushTimer as { unref?: () => void }).unref?.();
+}
+
+/** Drain the buffered entries to Dexie in a single read-modify-write, applying
+ *  the rolling cap + one-time truncation marker. Serialized through
+ *  `auditWriteChain` so concurrent drains don't race. No-op when nothing is
+ *  pending. Exported so callers (page hide, tests) can force a synchronous drain. */
+export async function flushAppAuditLog(): Promise<void> {
+  if (auditFlushTimer) { clearTimeout(auditFlushTimer); auditFlushTimer = null; }
+  if (pendingEntries.length === 0) return;
+  const batch = pendingEntries;
+  pendingEntries = [];
+  const next = auditWriteChain.then(async () => {
+    try {
+      const current = await readLog();
+      current.push(...batch);
+      let trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      const dropped = current.length - trimmed.length;
+      if (dropped > 0 && !truncationMarkerEmitted) {
+        truncationMarkerEmitted = true;
+        trimmed.push({
+          timestamp: Date.now(),
+          kind: 'audit-stream-truncated',
+          category: 'subsystem',
+          source: 'appAuditor.rollingBuffer',
+          summary: `Rolling buffer reached its ${APP_AUDIT_LOG_MAX_ENTRIES}-entry cap — older entries are being dropped (partial view)`,
+          buildId: getBuildId(),
+          sessionId: SESSION_ID,
+        });
+        trimmed = trimmed.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      }
+      await db.meta.put({ key: APP_AUDIT_LOG_META_KEY, value: JSON.stringify(trimmed) });
+    } catch {
+      /* swallow — auditor failures must not affect the feature path */
+    }
+  });
+  auditWriteChain = next.catch(() => undefined);
+  await next;
+}
+
 /** Log one entry. Fire-and-forget. Also streams the entry to
  *  `/api/audit-stream` when the user has opted in by setting
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
  *  failures are silent; the local Dexie log is still written. */
-export async function logAppAudit(
+export function logAppAudit(
   // `route` is normally auto-derived from window.location, but a caller MAY
   // pass an explicit route (e.g. QuickFeedback capturing the route the user was
   // ON when they opened the panel, which can differ from the current location).
@@ -1046,64 +1099,23 @@ export async function logAppAudit(
     // turn id set by the surface (via setCurrentTurnId / runInTurn).
     turnId: entry.turnId ?? currentTurnId ?? undefined,
   };
-  const next = auditWriteChain.then(async () => {
-    try {
-      const current = await readLog();
-      current.push(filled);
-      let trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
-      // Audit-instrumentation phase-1 (2026-05-19): when the rolling
-      // buffer drops entries, emit a marker so exports flag "you're
-      // looking at a partial view".
-      //
-      // Two bugs fixed here (see appAuditor.test.ts "caps at 300"):
-      //   1. The marker used to be appended AFTER the slice, so the
-      //      stored array was cap+1 (301). Every subsequent write then
-      //      saw a length over the cap and reported a fresh drop — a
-      //      self-perpetuating loop. We now re-trim after appending so
-      //      the stored array never exceeds the cap.
-      //   2. A rolling buffer drops one entry on every write once full,
-      //      so emitting a marker per drop flooded the log. We emit a
-      //      single marker the first time we truncate this session.
-      const dropped = current.length - trimmed.length;
-      if (
-        dropped > 0 &&
-        !truncationMarkerEmitted &&
-        filled.kind !== 'audit-stream-truncated'
-      ) {
-        truncationMarkerEmitted = true;
-        // Append the marker directly (no recursive logAppAudit — that
-        // would re-enter the chain), then re-trim so we stay at the cap.
-        trimmed.push({
-          timestamp: Date.now(),
-          kind: 'audit-stream-truncated',
-          category: 'subsystem',
-          source: 'appAuditor.rollingBuffer',
-          summary: `Rolling buffer reached its ${APP_AUDIT_LOG_MAX_ENTRIES}-entry cap — older entries are being dropped (partial view)`,
-          buildId: getBuildId(),
-          sessionId: SESSION_ID,
-        });
-        trimmed = trimmed.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
-      }
-      await db.meta.put({
-        key: APP_AUDIT_LOG_META_KEY,
-        value: JSON.stringify(trimmed),
-      });
-    } catch {
-      /* swallow — auditor failures must not affect the feature path */
-    }
-  });
-  // Re-assign so the next caller chains onto the latest. Swallow the
-  // chain's own errors here so a single failed write doesn't poison
-  // every subsequent audit.
-  auditWriteChain = next.catch(() => undefined);
-  await next;
+  // Buffer locally + flush to Dexie in ONE write per burst (perf fix
+  // 2026-09-08); the buffer drains on debounce, on getAppAuditLog, and on page
+  // hide, so nothing is lost. Synchronous push here keeps concurrent callers
+  // race-free (single-threaded JS) without a per-event read-modify-write.
+  pendingEntries.push(filled);
+  scheduleAuditFlush();
   // Opt-in remote stream — used for live-watch sessions where Claude
-  // polls the backend for new entries. Off by default.
+  // polls the backend for new entries. Off by default. Independent of the
+  // local write, so fire immediately.
   void streamAuditEntry(filled);
   // Productization Phase 1 — mirror curated high-signal kinds into
   // PostHog. No-op unless VITE_POSTHOG_KEY is set and the user hasn't
   // opted out; unmapped kinds return immediately. Never throws.
   mirrorAuditEvent(filled);
+  // Keep the Promise<void> contract (callers `await logAppAudit(...)`) without a
+  // real await — the local write is now deferred to the batched flush.
+  return Promise.resolve();
 }
 
 // ─── Audit-stream config (Dexie-backed, was localStorage) ────────────
@@ -1540,11 +1552,14 @@ function flushPreHydrationQueue(): void {
 
 /** Read the full log, newest-last ordering preserved. */
 export async function getAppAuditLog(): Promise<AuditEntry[]> {
+  await flushAppAuditLog(); // drain the buffer so the read reflects everything logged
   return readLog();
 }
 
-/** Clear the log. */
+/** Clear the log (and any buffered-but-unflushed entries). */
 export async function clearAppAuditLog(): Promise<void> {
+  if (auditFlushTimer) { clearTimeout(auditFlushTimer); auditFlushTimer = null; }
+  pendingEntries = [];
   try {
     await db.meta.delete(APP_AUDIT_LOG_META_KEY);
   } catch {
@@ -1653,6 +1668,13 @@ function formatAuditLogAsMarkdown(log: AuditEntry[]): string {
  */
 export function installGlobalErrorHooks(): () => void {
   if (typeof window === 'undefined') return () => undefined;
+
+  // Drain the audit buffer before the tab goes away, so a close/reload doesn't
+  // lose the last debounce window of entries (perf fix 2026-09-08 pairs the
+  // buffering with this flush). pagehide fires on iOS Safari where unload does not.
+  const flushOnHide = (): void => { void flushAppAuditLog(); };
+  window.addEventListener('pagehide', flushOnHide);
+  window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushOnHide(); });
 
   // Per-source rate limiter. When the same error message repeats from
   // the same source within ERROR_BURST_WINDOW_MS, only the first one

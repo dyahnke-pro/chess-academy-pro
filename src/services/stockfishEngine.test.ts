@@ -1755,9 +1755,16 @@ describe('runtime fallback (multi → single)', () => {
 
     expect(workerUrls).toEqual(['/stockfish/stockfish-18-lite.js']);
     expect(workerConstructorCallCount).toBe(1);
-    expect(mockWorker.postMessageCalls).toContain(
-      'setoption name Threads value 4',
-    );
+    // Threads are CAPPED (perf fix 2026-09-08): the multi-thread singleton no
+    // longer takes every core — at teaching depths the best move is unchanged and
+    // saturating the CPU made the app choppy. Assert the CONTRACT (a Threads
+    // option is set, capped to 1..4) rather than a magic number, so it holds
+    // across machines regardless of navigator.hardwareConcurrency.
+    const threadsMsg = mockWorker.postMessageCalls.find((m: string) => /^setoption name Threads value \d+$/.test(m));
+    expect(threadsMsg, 'a Threads option must be set on the multi variant').toBeTruthy();
+    const threads = Number(/value (\d+)$/.exec(threadsMsg ?? '')?.[1]);
+    expect(threads).toBeGreaterThanOrEqual(1);
+    expect(threads).toBeLessThanOrEqual(4);
   });
 
   it('falls back to single when multi-thread worker.onerror fires before uciok', async () => {

@@ -677,8 +677,14 @@ class StockfishEngine {
         reject(new Error(msg));
       }, INIT_TIMEOUT_MS);
 
-      const threadCount =
-        (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+      // CAP the thread count (perf fix 2026-09-08). Using every core made the
+      // singleton engine — alongside the WASM analysis pool and per-turn ponder —
+      // oversubscribe the CPU and the machine felt "maxed out". This is a TEACHING
+      // app: at the depths we narrate from, Stockfish returns the same best move on
+      // 4 threads as on 16, so the extra cores only heat the CPU. Cap at 4 and
+      // leave a core for the UI/main thread.
+      const cores = (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 4;
+      const threadCount = Math.max(1, Math.min(4, cores - 1));
       const hashMb = 64;
 
       // Track the early-failure timer for the multi-thread variant so

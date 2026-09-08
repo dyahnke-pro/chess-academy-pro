@@ -639,6 +639,7 @@ export async function warmAnalysisPool(): Promise<number> {
  * all could be had — callers then take the singleton fallback exactly as before.
  */
 async function acquirePool(size: number): Promise<DedicatedWorker[]> {
+  cancelIdleRetire(); // in active use again — don't let the retire timer fire
   if (_warmPromise) { try { await _warmPromise; } catch { /* spawn below */ } }
   const taken = _warmPool.splice(0, size);
   const alive: DedicatedWorker[] = [];
@@ -657,17 +658,45 @@ async function acquirePool(size: number): Promise<DedicatedWorker[]> {
   return alive;
 }
 
+// How long the warm pool may sit idle before it's retired. Analysis is bursty
+// (review a game, then nothing for minutes), and holding WORKER_POOL_SIZE resident
+// WASM heaps for the whole session is a standing RAM/CPU cost the user feels as
+// "something maxing out memory" (perf fix 2026-09-08). Keep the pool warm ACROSS a
+// review/sweep, but destroy it once genuinely idle; the next run re-warms on demand.
+const POOL_IDLE_RETIRE_MS = 60_000;
+let _idleRetireTimer: ReturnType<typeof setTimeout> | null = null;
+
+function cancelIdleRetire(): void {
+  if (_idleRetireTimer) { clearTimeout(_idleRetireTimer); _idleRetireTimer = null; }
+}
+
+function scheduleIdleRetire(): void {
+  cancelIdleRetire();
+  if (typeof setTimeout === 'undefined') return;
+  _idleRetireTimer = setTimeout(() => {
+    _idleRetireTimer = null;
+    // Only retire if nothing was acquired since (acquirePool cancels this timer).
+    for (const w of _warmPool) w.destroy();
+    _warmPool = [];
+  }, POOL_IDLE_RETIRE_MS);
+  // Don't keep the process alive for this in Node/test contexts.
+  (_idleRetireTimer as { unref?: () => void }).unref?.();
+}
+
 /** Hand workers back to the warm set for the next run; surplus past the pool
- *  width is destroyed. */
+ *  width is destroyed. Arms the idle-retire timer so a warm pool that goes
+ *  untouched is freed rather than held resident for the whole session. */
 function releasePool(workers: readonly DedicatedWorker[]): void {
   for (const w of workers) {
     if (_warmPool.length < WORKER_POOL_SIZE && !_warmPool.includes(w)) _warmPool.push(w);
     else w.destroy();
   }
+  scheduleIdleRetire();
 }
 
 /** Test hook — destroy every warm worker so a test starts cold. */
 function resetAnalysisPool(): void {
+  cancelIdleRetire();
   for (const w of _warmPool) w.destroy();
   _warmPool = [];
   _warmPromise = null;

@@ -16,6 +16,9 @@ describe('appAuditor', () => {
   beforeEach(async () => {
     await db.delete();
     await db.open();
+    // Reset the in-memory audit buffer so a prior test's pending entries don't
+    // leak into this one (the perf-fix buffer is module state).
+    await clearAppAuditLog();
   });
 
   it('starts with an empty log', async () => {
