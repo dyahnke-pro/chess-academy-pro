@@ -24,7 +24,7 @@ import type { BookDepartureRow } from './bookDepartureWeakness';
 const META_KEY = 'book-departure-rows.v1';
 const TTL_MS = 12 * 60 * 60 * 1000; // recompute at most twice a day
 const MAX_GAMES = 40;               // most-recent fully-analyzed games (bound the scan)
-const noAmateur = async (): Promise<null> => null; // masters-DB-only — no Lichess network
+const noAmateur = (): Promise<null> => Promise.resolve(null); // masters-DB-only — no Lichess network
 
 interface CacheShape { at: number; gameCount: number; rows: BookDepartureRow[]; }
 interface Names { lichessUsername?: string; chessComUsername?: string; }
