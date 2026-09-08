@@ -240,15 +240,25 @@ This is where David's "algo/matrix, truly adaptive per individual" lands (§6.1)
 - Test: a user with repeated costly early departures surfaces a book-departure
   weakness; a disciplined user does not.
 
-### Phase 4 — SPINE-DRIVEN HANDS (the actuator wire)
-- Let the SPINE invoke board-control tools deterministically (not only the LLM):
-  offer a takeback after a proven blunder in Learn; set up a position to
-  demonstrate a refutation; reset to a key FEN to drill a hole. Every position
-  it sets up is board-legal and real (G3).
-- Reuse the existing cerebrum tools; add a thin spine-side trigger layer with
-  its own gates (when is a takeback OFFERED vs forced — never on Play).
-- Test: the spine offers a takeback on a fixture blunder in Learn and stays
-  hands-off on Play.
+### Phase 4 — SPINE-DRIVEN HANDS (the actuator wire) — DEFERRED (David 2026-09-08)
+David, after we scoped it: **"we won't have the right answer until I use it.
+Right now we have the undo button, that should be enough."** So takeback is NOT
+built now — the existing undo button covers it, and the real shape only becomes
+clear once he uses the custom lessons (P5). Do NOT build a speculative takeback
+mechanic (a first version that dressed up the drill's wrong-move nudge as a
+"takeback" was scrapped — a drill retry is not a takeback).
+
+The captured DESIGN INTENT for when we revisit (from real use):
+- Takeback lives ONLY in the custom training session (P5), coach-decided,
+  ADAPTIVE to the student (the deeper the habit, the more vigilant the coach) —
+  never in normal Learn play, never in Play.
+- The authentic trigger is replaying your OWN historical blunder in the drill of
+  your own position (we store `playerMoveSan`) — "that's the move that cost you;
+  take it back."
+- **On a coach-decided drill, a wrong move should not even move the piece** —
+  reject it outright rather than move-then-undo (David's steer). That makes a
+  separate "takeback" largely redundant in the drill.
+- Revisit after David has used the custom lessons; let real use pick the shape.
 
 ### Phase 5 — CUSTOM COACHING SESSION (the capstone)
 - Entry points: "teach me something" / "what should I learn?" → aggregate the
