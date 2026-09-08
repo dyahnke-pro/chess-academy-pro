@@ -69,6 +69,7 @@ import { AnalysisToggles } from '../Board/AnalysisToggles';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import {
   createPhaseTransitionState,
   detectPhaseTransition,
@@ -6230,6 +6231,9 @@ export function CoachTeachPage(): JSX.Element {
   // read button). Declared before handleStudentMove so the move handler can
   // dismiss the banner on a board move (David: "make a move on the board to
   // close it out").
+  // THE STUDENT MODEL (Phase 1) — re-ranks the coach-reply teaching briefing
+  // toward the holes this student keeps falling in. Ref-held; read at speak-time.
+  const weaknessSignalsRef = useWeaknessSignals();
   const positionNarration = usePositionNarration({
     fen: game.fen,
     pgn: game.history.join(' '),
@@ -7687,6 +7691,7 @@ export function CoachTeachPage(): JSX.Element {
                       rating,
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
+                      studentWeaknesses: weaknessSignalsRef.current,
                     });
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
                       queueSpokenHint(probe.fen(), c, 'computed');

@@ -26,6 +26,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlan } from './boardPlan';
+import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -57,6 +58,13 @@ export interface PositionFactsInput {
   /** Injected static-eval fn for the perturbation probe. When omitted, leans-on
    *  is skipped (it's the one expensive fact). */
   evalBoard?: EvalBoardFn;
+  /** THE STUDENT MODEL (Phase 1 of the unified coach). Precomputed once per
+   *  game from getUnifiedWeaknessProfile + getWeaknessLifecycle. When a clause
+   *  teaches to a hole THIS student keeps falling in, its rank is boosted so it
+   *  leads the briefing — "most important TO THE USER first" (David 2026-09-08).
+   *  OPTIONAL + inert: omitted or empty → identical behavior to before (the wire
+   *  does nothing until a surface feeds it). NEVER passed on kid surfaces. */
+  studentWeaknesses?: readonly WeaknessSignal[];
 }
 
 export interface PositionFactsResult {
@@ -275,10 +283,38 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* no fundamental → stay silent */ }
   }
 
+  const clauses = applyWeaknessBoost(
+    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
+    input.studentWeaknesses ?? [],
+  );
   return {
     importance, criticality, mustDefend, leansOn, opponentLeansOn, deliberation, latentDanger, tradeDanger, opponentIntent,
-    clauses: buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
+    clauses,
   };
+}
+
+/**
+ * Re-rank the briefing by the STUDENT'S holes — the Phase-1 selector wire. A
+ * clause whose kind teaches to a hole this student keeps falling in gets its
+ * rank boosted (deterministic, lifecycle-keyed, capped at MAX_WEAKNESS_BOOST so
+ * a live safety-critical fact still leads), then the clauses re-sort. Empty
+ * signals → identity: the input order (already rank-sorted) is returned
+ * untouched, so the wire is inert until a surface feeds a profile. Pure: never
+ * mutates the input clauses. G0 — the SPINE decides, the LLM never sees this.
+ */
+function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSignal[]): ClauseItem[] {
+  if (signals.length === 0) return clauses;
+  let changed = false;
+  const boosted = clauses.map((c) => {
+    const match = matchClauseKind(c.kind, signals);
+    if (!match) return c;
+    const b = boostFor(match);
+    if (b <= 0) return c;
+    changed = true;
+    return { ...c, rank: c.rank + b };
+  });
+  if (!changed) return clauses;
+  return boosted.sort((a, b) => b.rank - a.rank);
 }
 
 /** Fact → board-true DNA clause, emitted most-important-first (rank order). Each

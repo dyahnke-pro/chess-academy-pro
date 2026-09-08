@@ -14,6 +14,7 @@ import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
 import { computePositionFacts, clauseText } from './positionFacts';
+import type { WeaknessSignal } from './weaknessSignal';
 
 export interface WhyBestMoveInput {
   fen: string;
@@ -24,6 +25,9 @@ export interface WhyBestMoveInput {
   rating?: number;
   /** Prior ply's eval (White POV) for the STATUS band-change line, if known. */
   prevEvalCpWhitePov?: number;
+  /** The student model — re-ranks the briefing toward the holes THIS student
+   *  keeps falling in (Phase 1). Optional/inert when absent. */
+  studentWeaknesses?: readonly WeaknessSignal[];
 }
 
 function bestSan(fen: string, uci: string | null): string | null {
@@ -65,6 +69,7 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
       analysis,
       rating: input.rating ?? 1500,
       ...(input.prevEvalCpWhitePov != null ? { prevEvalCpWhitePov: input.prevEvalCpWhitePov } : {}),
+      ...(input.studentWeaknesses ? { studentWeaknesses: input.studentWeaknesses } : {}),
     });
     const briefing = clauseText(pf.clauses, ['key-moment', 'convert']);
     for (const line of briefing) if (line && !parts.some((p) => p.includes(line))) parts.push(line);

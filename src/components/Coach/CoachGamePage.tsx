@@ -28,6 +28,7 @@ import { MoveListPanel } from './MoveListPanel';
 import { ResignButton } from './ResignButton';
 import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { usePhaseNarration } from '../../hooks/usePhaseNarration';
+import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { useNarration } from '../../hooks/useNarration';
 import { buildPlayEntryNarration } from '../../services/playEntryNarration';
 import {
@@ -381,6 +382,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // the student against two different numbers again (they did: this read the
   // rating he set, Learn read his puzzle rating).
   const playerRating = studentPlayingRating(activeProfile);
+  // THE STUDENT MODEL (Phase 1) — re-ranks the computed "Why?" briefing toward
+  // the holes this student keeps falling in. Ref-held; read at button-tap time.
+  const weaknessSignalsRef = useWeaknessSignals();
 
   // Dynamic sessions redirect here with query params set by SmartSearchBar
   // / chat intent routing ("play the Sicilian against me as black hard").
@@ -4237,7 +4241,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current });
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
       gameChatRef.current?.injectAssistantMessage(answer);
       void voiceService.speakReadAloud(answer);

@@ -25,6 +25,8 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { voiceService } from '../../services/voiceService';
 import { computeWhyBestMove } from '../../services/whyBestMove';
+import { loadWeaknessSignals } from '../../services/weaknessSignalLoader';
+import type { WeaknessSignal } from '../../services/weaknessSignal';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { computeThreatDelta, detectEnginePunish, type DeltaAside } from '../../services/engineDeltaLines';
@@ -50,6 +52,15 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const activeProfile = useAppStore((s) => s.activeProfile);
   const { settings } = useSettings();
   const playerRating = activeProfile?.currentRating ?? 1420;
+  // THE STUDENT MODEL (Phase 1) — loaded once per session, re-ranks the computed
+  // "Why?" briefing toward the holes this student keeps falling in. Inert until
+  // loaded (empty ref). Held in a ref so it never re-renders the play board.
+  const weaknessSignalsRef = useRef<readonly WeaknessSignal[]>([]);
+  useEffect(() => {
+    let alive = true;
+    void loadWeaknessSignals().then((s) => { if (alive) weaknessSignalsRef.current = s; });
+    return () => { alive = false; };
+  }, []);
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const targetStrength = getTargetStrength(playerRating, difficulty);
   // When playing out a specific position (quiz "test yourself",
@@ -113,7 +124,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     const fen = game.fen;
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
-      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating });
+      const why = await computeWhyBestMove({ fen, studentColor: playerColor, analysis, rating: playerRating, studentWeaknesses: weaknessSignalsRef.current });
       // Lead the eye to the move we NAME but don't play out (G6).
       const uci = analysis.bestMove;
       if (why && uci && uci.length >= 4) {

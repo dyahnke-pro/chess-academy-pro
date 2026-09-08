@@ -29,6 +29,7 @@ import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
 import { computePositionFacts, clauseText } from '../services/positionFacts';
+import { useWeaknessSignals } from './useWeaknessSignals';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
 import {
@@ -123,6 +124,7 @@ function speakStreamed(text: string): void {
 
 export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
   const { gameId, playerColor } = args;
+  const weaknessRef = useWeaknessSignals(); // student model → re-ranks live interjections (Phase 1)
 
   // student-perspective eval rolling window, oldest first; used by the
   // recovery detector. Capped at the last 12 plies to keep memory
@@ -228,6 +230,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               // line fires only when the assessment actually crossed a band —
               // descriptive commentary, which Play allows (Phase 1 slice).
               prevEvalCpWhitePov: playerColor === 'white' ? ctx.studentEvalBefore : -ctx.studentEvalBefore,
+              studentWeaknesses: weaknessRef.current,
             });
             const cl = clauseText(pf.clauses, ['must-defend', 'key-moment']);
             if (cl.length) liveExtraFacts = cl.join(' ');
