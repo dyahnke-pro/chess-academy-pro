@@ -91,6 +91,16 @@ import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
+import {
+  buildCustomLessonPlan,
+  matchCustomLessonRequest,
+  customLessonIntro,
+  partTransition,
+  customLessonOutro,
+  type CustomLessonPlan,
+  type CustomLessonPart,
+} from '../../services/customLessonPlan';
+import { searchTheoryPassage } from '../../services/chessConceptService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -1290,6 +1300,17 @@ export function CoachTeachPage(): JSX.Element {
      *  took the hint AND still misses is struggling, so the coach eases sooner. */
     hintUsed: boolean;
   } | null>(null);
+  // Custom lesson (P5, David 2026-09-08: "have it put together a custom lesson").
+  // `customLessonPlanRef` holds the picker the coach offered on entry, so a
+  // tapped chip / typed "build me a lesson" resolves to the right holes.
+  // `customLessonRef` is the active runner: the ordered hole tags + which part
+  // we're on. Non-null only while a custom lesson is in progress — so
+  // completeDrill knows to advance the lesson instead of ending on "drilled shut".
+  const customLessonPlanRef = useRef<CustomLessonPlan | null>(null);
+  const customLessonRef = useRef<{ parts: CustomLessonPart[]; idx: number } | null>(null);
+  // Late-bound so runCustomLessonPart can advance without a forward reference to
+  // advanceCustomLesson (defined just after it).
+  const advanceCustomLessonRef = useRef<(() => void) | null>(null);
   // Background-fed tactics context (real PV tactics) for the SPOKEN + displayed
   // tactic strips, so the brain call never blocks on an engine read.
   const fedTacticsRef = useRef<TacticsLiveContext | null>(null);
@@ -2115,6 +2136,98 @@ export function CoachTeachPage(): JSX.Element {
     return false;
   }, [startCoachDrill, coachDrillSay]);
 
+  // ─── Custom lesson (P5) ──────────────────────────────────────────────────
+  // A curated sequence of the student's OWN top holes: each part TEACHES the
+  // concept behind the hole (grounded in the public-domain book corpus — G0/G3,
+  // no LLM decides it) then DRILLS the student's real flubbed positions for it.
+  // The runner state lives in customLessonRef; completeDrill hands control back
+  // here when a part's drill queue is exhausted.
+
+  /** Speak the concept teaching for one part, grounded in the book corpus, then
+   *  set up that part's motif drill. When the student has no drillable positions
+   *  for the pattern, it's a teach-only part → advance immediately. */
+  const runCustomLessonPart = useCallback(async (idx: number): Promise<void> => {
+    const lesson = customLessonRef.current;
+    if (!lesson) return;
+    const part = lesson.parts[idx];
+    if (!part) { return; }
+    lesson.idx = idx;
+
+    // 1. Announce the part (multi-part only) + teach the idea. The teaching text
+    //    is the code-authored behavior line + a verbatim public-domain corpus
+    //    passage (searchTheoryPassage) — never LLM prose.
+    const transition = partTransition(part, idx, lesson.parts.length);
+    const behavior = part.concept ? `${part.concept.behavior}.` : '';
+    let passage = '';
+    if (part.concept) {
+      try {
+        const hit = searchTheoryPassage(part.concept.conceptQuery);
+        if (hit) passage = hit.passage.text.length > 320 ? `${hit.passage.text.slice(0, 320).replace(/\s+\S*$/, '')}…` : hit.passage.text;
+      } catch { /* no passage — the behavior line still teaches the idea */ }
+    }
+    const teachLine = [transition, behavior, passage].filter(Boolean).join(' ').trim();
+    if (teachLine) coachDrillSay(teachLine);
+    captureEvent('custom_lesson_part_advanced', { surface: 'coach-teach', idx, tag: part.tag });
+
+    // 2. Drill the student's OWN positions for this hole.
+    const rating = activeProfile?.currentRating ?? 1200;
+    let queue: DrillProgress['queue'] = [];
+    try {
+      queue = await buildMistakeDrillQueue({ cementReps: 1, rating, motif: part.tag });
+    } catch { queue = []; }
+    if (queue.length > 0) {
+      const progress: DrillProgress = { queue, themeIdx: 0, puzzleIdx: 0 };
+      startCoachDrill(queue[0].drills[0], progress, "Now let's drill it on your own positions.");
+      return;
+    }
+    // Teach-only part (no stored positions for this pattern) — move on.
+    advanceCustomLessonRef.current?.();
+  }, [activeProfile, startCoachDrill, coachDrillSay]);
+
+  /** Advance to the next lesson part, or close the lesson when done. */
+  const advanceCustomLesson = useCallback((): void => {
+    const lesson = customLessonRef.current;
+    if (!lesson) return;
+    const nextIdx = lesson.idx + 1;
+    if (nextIdx < lesson.parts.length) {
+      void runCustomLessonPart(nextIdx);
+      return;
+    }
+    // Done — close the arc (a hole may have been drilled shut) + say so.
+    const total = lesson.parts.length;
+    customLessonRef.current = null;
+    void syncCoachCurriculum();
+    coachDrillSay(customLessonOutro(total));
+    captureEvent('custom_lesson_completed', { surface: 'coach-teach', parts: total });
+  }, [runCustomLessonPart, coachDrillSay]);
+  advanceCustomLessonRef.current = advanceCustomLesson;
+
+  /** Build a custom lesson over `tags` (all offered holes, or one) and start it.
+   *  Empty state: when nothing drillable/teachable maps, say so — never invent. */
+  const startCustomLesson = useCallback(async (tags: string[], entry: 'chip' | 'typed'): Promise<void> => {
+    walkthrough.stop();
+    voiceService.stop();
+    let profile: Awaited<ReturnType<typeof getUnifiedWeaknessProfile>> = [];
+    let curriculum: Awaited<ReturnType<typeof getCoachCurriculum>> = null;
+    try { profile = await getUnifiedWeaknessProfile(); } catch { profile = []; }
+    try { curriculum = await getCoachCurriculum(); } catch { curriculum = null; }
+    const plan = buildCustomLessonPlan(curriculum, profile);
+    // Filter to the requested holes (a specific chip); an empty/absent tags list
+    // (general "build me a lesson") keeps the whole plan.
+    const wanted = new Set(tags);
+    const parts = wanted.size > 0 ? plan.parts.filter((p) => wanted.has(p.tag)) : plan.parts;
+    if (parts.length === 0) {
+      coachDrillSay(
+        "I don't have enough of your games mapped yet to build a custom lesson — play or import a few and I'll spot the patterns worth drilling. In the meantime, name an opening and I'll teach it.",
+      );
+      return;
+    }
+    customLessonRef.current = { parts, idx: 0 };
+    captureEvent('custom_lesson_started', { surface: 'coach-teach', parts: parts.length, entry });
+    coachDrillSay(customLessonIntro(parts));
+    await runCustomLessonPart(0);
+  }, [walkthrough, coachDrillSay, runCustomLessonPart]);
+
   /** Called when the student SOLVES the current drill (whole line done).
    *  Single drill → offer another. Mistake-queue → advance to the next due
    *  mistake / next weakness. The SRS grade (real "test out") is applied
@@ -2128,6 +2241,14 @@ export function CoachTeachPage(): JSX.Element {
     const adv = advanceMistakeDrill(solved.progress);
     if (adv.done) {
       activeDrillRef.current = null;
+      // Custom lesson (P5): this part's drill queue is exhausted → advance to the
+      // next part (teach + drill), or close the lesson. advanceCustomLesson owns
+      // the arc sync + the closing beat, so return before the generic ending.
+      if (customLessonRef.current) {
+        if (adv.completedLabel) coachDrillSay(`That's ${adv.completedLabel} drilled shut for today.`);
+        advanceCustomLessonRef.current?.();
+        return;
+      }
       // A weakness may have been drilled shut this session → advance the
       // persistent curriculum arc (Phase 7). Non-blocking; the next session's
       // opener picks up where this left off.
@@ -3324,6 +3445,27 @@ export function CoachTeachPage(): JSX.Element {
             }
             return;
           }
+        }
+      }
+
+      // ─── Custom lesson (P5, BYPASS opening-name resolution) ────────
+      // A tapped picker chip ("Lesson on Forks" / "Build my full lesson") or a
+      // typed "build me a lesson" / "custom lesson on my weaknesses" builds the
+      // student's own weakness lesson. Matched BEFORE the training-aid router +
+      // opening resolution so "lesson on forks" isn't fuzzy-matched as an
+      // opening name. Bare topics ("forks") do NOT match here (the matcher needs
+      // "lesson"), so opening/stage routing below is untouched.
+      {
+        const cl = matchCustomLessonRequest(text, customLessonPlanRef.current);
+        if (cl) {
+          const clTurnId = freshTurnId('custom-lesson');
+          setMessages((prev) => [...prev, { id: `${clTurnId}-u`, role: 'user', content: text, timestamp: Date.now() }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'user', text,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          await startCustomLesson(cl.tags, cl.entry);
+          return;
         }
       }
 
@@ -9478,6 +9620,27 @@ export function CoachTeachPage(): JSX.Element {
               isRecent = false;
             }
             if (userInteractedRef.current || !topLabel) return;
+
+            // P5 — STATE THE PICKER (David 2026-09-08: "learn with coach should
+            // offer a picker and state in the opening phrase"). When the arc has
+            // holes, the opener IS the custom-lesson picker: the coach names the
+            // top holes and offers to build a lesson from the student's own
+            // games. Tapping a chip builds it; whatever the student types instead
+            // still wins (sovereignty). This replaces the single-weakness opener
+            // below when a plan exists; a new user with no holes falls through.
+            try {
+              const plan = buildCustomLessonPlan(await getCoachCurriculum(), unified);
+              if (plan.parts.length > 0 && !userInteractedRef.current) {
+                customLessonPlanRef.current = plan;
+                setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: plan.pickerLine, timestamp: Date.now() }]);
+                setCoachChoices([...plan.pickerChips, ...generic].slice(0, 4));
+                speechChainRef.current = speechChainRef.current
+                  .then(() => voiceService.speakForced(plan.pickerLine))
+                  .catch(() => undefined);
+                captureEvent('custom_lesson_offered', { surface: 'coach-teach', holes: plan.parts.length });
+                return; // the picker is the opener — don't stack the older one
+              }
+            } catch { /* no plan — fall through to the legacy single-weakness opener */ }
 
             // Evidence-first HANDOFF: a chip that STARTS the in-place mistake
             // drill (routes through the training-aid router → startMistakeDrills,

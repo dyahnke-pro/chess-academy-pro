@@ -402,6 +402,19 @@ reused, not rebuilt. Nothing above blocks starting Phase 1.
 
 ## 8. Decisions log
 
+- 2026-09-08 — **Phase 5 BUILT** (the custom lesson): `customLessonPlan.ts` (pure
+  leaf, 16 tests) turns the curriculum arc + weakness profile into an ordered
+  ~3-part lesson + the code-authored picker opening phrase/chips + the
+  request matcher. Wired into `CoachTeachPage`: the kickoff opener now STATES the
+  picker (names the top holes, offers chips); tapping a hole runs the lesson —
+  each part TEACHES the concept (grounded corpus prose via `searchTheoryPassage`,
+  no LLM) then DRILLS the student's OWN flubbed positions (`buildMistakeDrillQueue`
+  by motif); `completeDrill` advances parts and closes on the arc sync. Typed
+  "build me a lesson" works too. New audit `audit-unified-coach-prod.mjs` +
+  `seed-weakness-profile.mjs` SEEDS a real profile so every inert personalization
+  function fires — 7/7 green on localhost (picker names holes, chips render,
+  voice fired, hole→concept-teach + own-position drill, correct move accepted).
+  See `docs/plans/2026-09-08-phase5-surface-map.md`.
 - 2026-09-07 — causal chain: rating-scaled depth; unprovable link = silent;
   all surfaces, shared engine, per-surface register. SHIPPED (PR #931 draft).
 - 2026-09-08 — unified-coach vision captured. SPINE decides (G0), adaptive
