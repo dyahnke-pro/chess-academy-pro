@@ -81,6 +81,41 @@ EXTEND the spine/lifecycle, do NOT build a second memory (plan Phase 6: memory
 already exists, consume it). The ONLY net-new computation is strengths. NOT
 LLM-authored prose (that reopens G0) — computed facts, phrased by voiceFacts.
 
+## Build outcome (2026-09-08) — what actually got unified, and what should NOT
+After building Step C and scrutinizing A/B against the "don't destructively merge
+semantically-different things" doctrine (no-yes-man on David's "roll in ALL
+orphans"):
+
+- **Step C — DONE.** The `<1000/1000–2000/>2000` taxonomy was a TRUE orphan:
+  hand-copied in `criticalityThresholds`, `slipWarrantsInterjection`,
+  `openingRegister` (each commenting it mirrored another). Now one source
+  (`ratingBands.coreRatingTier`); each maps the tier to its own output.
+  Behavior-preserving; 55 affected tests green.
+- **Step A — LEFT AS-IS (deliberate).** The four rating→depth curves
+  (`pvBandForRating`, `getTacticLookahead`, `causalChainVoice.depthFor`,
+  `expectedBookDepthPlies`) are NOT drift — they are per-feature-TUNED knobs on
+  different grids computing different quantities (PV length, tactic-lookahead
+  count, causal depth, book plies). Folding them onto one grid RETUNES narration
+  depth across review/tactics/causal/book — a behavior change on a live app with
+  no clear benefit. `skillScaling`'s 1400/1800 curve is likewise its own tuning,
+  not a copy. Unifying the BANDING here would mean retuning the OUTPUTS, which the
+  doctrine forbids.
+- **Step B — LEFT AS-IS (and it would DEGRADE if forced).** `getWeakestThemes`
+  ranks by **puzzle-solve accuracy** (correct/total per theme) — a domain-native
+  adaptivity signal for picking the next PUZZLE. That is legitimately different
+  from the spine's GAME-mistake signal, not a drift orphan. Replacing it with the
+  spine would pick puzzles off game mistakes instead of puzzle performance —
+  plausibly worse. The sound improvement is a BLEND (spine-flagged holes as a
+  boost ON TOP of puzzle accuracy) — a real feature change for a separate,
+  David-steered build, not a mechanical fold.
+
+**Conclusion:** "one adaptive brain" is realized where a unified WEAKNESS VIEW
+matters — the coaching/teaching surfaces (P1/P5/dossier) and the rating-band
+taxonomy (C). The specialized adaptive engines correctly keep their domain
+signals; blindly folding them in would degrade the app, so they are intentionally
+left. Tool wiring needs no change (all 23 tools registered/reachable; only two
+stale registry header comments remain — a trivial doc cleanup).
+
 ## Non-negotiables held throughout
 G0 (compute, phrase — never decide), G3 (no invented content), kid surfaces
 excluded, "empty > generic > invented." Each step: unit tests + ship-check +

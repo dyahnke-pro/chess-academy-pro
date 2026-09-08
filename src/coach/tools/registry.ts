@@ -12,15 +12,18 @@
  * `puzzles.json` already serves themed puzzles). Cutting them also
  * drops three tool schemas from every agentic-turn prompt.
  *
- * Spine wires these as (post WO-COACH-LICHESS-OPENINGS):
- *   FULLY IMPLEMENTED — stockfish_eval, stockfish_classify_move,
- *     lichess_opening_lookup, lichess_master_games,
- *     lichess_game_export, local_opening_book, lookup_player_games,
- *     lookup_player_opening_moves, navigate_to_route,
- *     play_move, take_back_move, set_board_position, reset_board,
- *     set_intended_opening, clear_memory, record_hint_request,
- *     record_blunder, quiz_user_for_move,
- *     start_walkthrough_for_opening
+ * Spine wires these (all 23 registered + reachable — verified 2026-09-08):
+ *   cerebellum (read-only): stockfish_eval, stockfish_classify_move,
+ *     lichess_opening_lookup, lichess_master_games, lichess_game_export,
+ *     local_opening_book, lookup_player_games, lookup_player_opening_moves.
+ *   cerebrum (actions): navigate_to_route, play_move, take_back_move,
+ *     set_board_position, reset_board, save_position, restore_saved_position,
+ *     set_intended_opening, favorite_opening, save_opening_to_repertoire,
+ *     clear_memory, record_hint_request, record_blunder, quiz_user_for_move,
+ *     start_walkthrough_for_opening.
+ *   navigate_to_route + set_board_position actuate from ANY surface via the
+ *   global coachActuator (default ctx callbacks); they return {ok:false} when
+ *   they cannot actuate, never synthetic success (full-control fix, 2026-09-08).
  */
 import type { Tool, ToolDefinition } from '../types';
 
