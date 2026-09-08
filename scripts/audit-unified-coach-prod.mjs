@@ -118,14 +118,15 @@ try {
     const chosen = await forkChip.getAttribute('data-choice');
     await forkChip.click();
     // The lesson teaches the concept then mounts the drill (prompt from
-    // mistakePuzzleToDrill: "You missed the best move here").
+    // mistakePuzzleToDrill: "From one of your own games — … Last time you played
+    // Ke2 here and it slipped. Find the stronger move.").
     let taught = false, drillMounted = false, positionRight = false;
     const deadline = Date.now() + 30000;
     while (Date.now() < deadline) {
       await page.waitForTimeout(2000);
       const body = (await page.locator('body').innerText()).toLowerCase();
       if (body.includes('overlook forks') || body.includes('two targets at once')) taught = true;
-      if (body.includes('you missed the best move here')) drillMounted = true;
+      if (body.includes('from one of your own games') && (body.includes('last time you played') || body.includes('find the stronger move'))) drillMounted = true;
       const placement = await readPlacement(page);
       if (placement.d5 === 'wN') positionRight = true;
       if (taught && drillMounted && positionRight) break;

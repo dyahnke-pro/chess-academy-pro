@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { pickCoachDrill, isDrillableAid } from './coachDrillService';
+import { pickCoachDrill, isDrillableAid, mistakePuzzleToDrill } from './coachDrillService';
+import { buildMistakePuzzle } from '../test/factories';
 
 /** Every drill must be a legal, solvable position: the setup FEN parses,
  *  it's the student's move, and the FIRST solution move is legal from
@@ -23,6 +24,22 @@ function assertPlayable(aid: string): void {
   }
   expect(drill.prompt).toMatch(/to move/i);
 }
+
+describe('mistakePuzzleToDrill — names the move the student actually played', () => {
+  it('surfaces "last time you played <playerMoveSan>" in the prompt (David 2026-09-08)', () => {
+    const drill = mistakePuzzleToDrill(buildMistakePuzzle({ playerMoveSan: 'Ng5', playerColor: 'white' }));
+    expect(drill).not.toBeNull();
+    expect(drill!.prompt).toContain('Ng5');
+    expect(drill!.prompt.toLowerCase()).toContain('last time you played');
+    expect(drill!.prompt).toMatch(/to move/i);
+  });
+
+  it('falls back to the generic prompt when the played move is unknown', () => {
+    const drill = mistakePuzzleToDrill(buildMistakePuzzle({ playerMoveSan: '' }));
+    expect(drill).not.toBeNull();
+    expect(drill!.prompt.toLowerCase()).toContain('you missed the best move');
+  });
+});
 
 describe('pickCoachDrill — every aid yields a real, playable drill', () => {
   for (const aid of ['calculation', 'mating-patterns', 'pawn-endings', 'rook-endings', 'endgame', 'puzzle']) {

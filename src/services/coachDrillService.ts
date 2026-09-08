@@ -316,13 +316,21 @@ export function mistakePuzzleToDrill(mp: MistakePuzzle): CoachDrill | null {
   if (solutionSan.length === 0) return null;
 
   const side = playerColor === 'white' ? 'White' : 'Black';
+  // Name the move the student ACTUALLY played (David 2026-09-08: "last time you
+  // played X, find the best move"). Grounded in their real game (G3 —
+  // playerMoveSan is what they played), and a sharper coaching beat than a
+  // generic "you missed it". Falls back to the generic line when the played
+  // move wasn't recorded.
+  const prompt = mp.playerMoveSan
+    ? `From one of your own games — ${side} to move. Last time you played ${mp.playerMoveSan} here and it slipped. Find the stronger move.`
+    : `From one of your own games — ${side} to move. You missed the best move here. Find it.`;
   return {
     aid: `mistake:${key}`,
     label,
     setupFen: mp.fen,
     playerColor,
     solutionSan,
-    prompt: `From one of your own games — ${side} to move. You missed the best move here. Find it.`,
+    prompt,
     puzzleId: mp.id,
     rating: Math.max(400, Math.round(mp.cpLoss)) || 1200,
   };
