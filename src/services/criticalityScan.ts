@@ -18,6 +18,7 @@
 
 import { Chess } from 'chess.js';
 import type { Color } from 'chess.js';
+import { coreRatingTier } from './ratingBands';
 
 /** One engine candidate at a position — white-POV centipawns (+ = White better;
  *  mates folded into cp by the evaluate implementation). */
@@ -69,7 +70,8 @@ export interface CriticalityOpts {
 /** Rating-scaled gap thresholds (cp). Mirrors the slip-detector doctrine:
  *  beginner cares about blunders, advanced about subtleties. */
 export function criticalityThresholds(rating: number): { notable: number; critical: number; onlyMove: number } {
-  const critical = rating < 1000 ? 200 : rating <= 2000 ? 100 : 50;
+  const tier = coreRatingTier(rating);
+  const critical = tier === 'beginner' ? 200 : tier === 'intermediate' ? 100 : 50;
   const notable = Math.round(critical * 0.6);
   // An only-move is an only-move regardless of level — the field has to truly
   // fall off a cliff — but never below a rating-scaled floor.

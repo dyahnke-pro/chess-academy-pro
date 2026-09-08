@@ -24,6 +24,7 @@
 //
 // Same computed fact, three distances.
 import { isNearBest } from './slipDetector';
+import { coreRatingTier } from './ratingBands';
 
 export type HintRegister = 'obvious' | 'moderate' | 'subtle';
 
@@ -61,9 +62,9 @@ const RATE_TO_FALL = 0.35; // missing most of it → spell it out
  *  intermediate 1000–2000, advanced > 2000) — one rating taxonomy in the app,
  *  not two that drift apart. */
 export function openingRegister(rating: number | undefined | null): HintRegister {
-  const r = rating ?? 1200;
-  if (r > 2000) return 'subtle';
-  if (r >= 1000) return 'moderate';
+  const tier = coreRatingTier(rating);
+  if (tier === 'advanced') return 'subtle';
+  if (tier === 'intermediate') return 'moderate';
   return 'obvious';
 }
 

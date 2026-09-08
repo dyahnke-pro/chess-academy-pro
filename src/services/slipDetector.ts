@@ -7,6 +7,8 @@
 
 /** Centipawn-loss thresholds (mover's perspective). Aligned with the
  *  game-import blunder scan (BLUNDER_THRESHOLD_CP = 150). */
+import { coreRatingTier } from './ratingBands';
+
 export const SLIP_CP = {
   inaccuracy: 50,
   mistake: 100,
@@ -74,9 +76,9 @@ function severityFor(cpLoss: number): SlipSeverity | null {
  *  The slip is still CAPTURED to the weakness bucket below the bar — this
  *  governs only whether to INTERRUPT. Defaults the rating to 1200 when unknown. */
 export function slipWarrantsInterjection(cpLoss: number, rating: number | undefined | null): boolean {
-  const r = rating ?? 1200;
-  if (r > 2000) return cpLoss >= SLIP_CP.inaccuracy;
-  if (r >= 1000) return cpLoss >= SLIP_CP.mistake;
+  const tier = coreRatingTier(rating);
+  if (tier === 'advanced') return cpLoss >= SLIP_CP.inaccuracy;
+  if (tier === 'intermediate') return cpLoss >= SLIP_CP.mistake;
   return cpLoss >= SLIP_CP.blunder;
 }
 
