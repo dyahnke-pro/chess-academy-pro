@@ -14,12 +14,15 @@ Status: **BUILT (core) — David said "keep going", executed on the branch.**
   makes that production depth adaptive.
 - ✅ Causal "why" already LEADS every review beat (Phase 1 `causalLead`), so it
   is attached to the threat that follows it in the same beat.
-- ⏳ **Phase 2b (deferred):** David #4 "the calculation … doesn't have to be
-  forced. Spell the lines out for everyone." The deep-threat passes still gate on
-  `isForcingProjection`. Relaxing it to spell a decisive-but-NON-forcing best
-  line (with honest "not forced, but their strongest try is…" framing) is its own
-  slice — needs a noise gate so a slow plan isn't mislabeled a threat, + a test.
-  Deferred rather than loosen a review-surface gate hastily.
+- ✅ **Phase 2b BUILT:** David #4 "doesn't have to be forced — spell the lines
+  out for everyone." Dropped the `isForcingProjection` skip in both deep-threat
+  passes (#5/#5c). The decisive gate (mate OR ≥250cp verified swing) is the noise
+  floor — a slow eval-drift never clears it. Honest labeling: a FORCING line is a
+  "threat", a decisive NON-forcing best line is a "plan/idea" (never overstate a
+  plan as a forced threat); the existing "if they sit still / left alone" framing
+  is already true for both. `isForcingProjection` still guards the opening-plan
+  pass (:2779, correctly requires non-forcing). Typecheck ✓; reviewDeepThreat +
+  reviewNarrationFidelity (31) green.
 
 ## What Phase 2 does (David 2026-09-07)
 1. **KILL the remedial explainer** from the default path —

@@ -2639,8 +2639,14 @@ async function augmentWithProjections(
       const decisiveJump = studentPovNow !== null && studentPovTerminal !== null
         && studentPovTerminal - studentPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
-      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
-      s.narration = `${s.narration ?? ''} And there's a deeper threat brewing — if they sit still, it runs ${render(line)}.`.trim();
+      // David 2026-09-07 (#4): the deep calculation "doesn't have to be forced —
+      // spell the lines out for everyone." The decisive gate above (mate or a
+      // ≥250cp verified swing) is the noise floor; a quiet eval-drift never
+      // clears it. A FORCING line is a "threat"; a decisive but non-forcing best
+      // line is a "plan" — labelled honestly so we never overstate a plan as a
+      // forced threat (the "if they sit still" framing is already true for both).
+      const deepKind = isForcingProjection(line) ? 'threat' : 'plan';
+      s.narration = `${s.narration ?? ''} And there's a deeper ${deepKind} brewing — if they sit still, it runs ${render(line)}.`.trim();
       attachLineArrows(s, line, 3); // deep threat (student's)
       deepBudget -= 1;
     } catch { /* skip this ply — never block the walk on a threat probe */ }
@@ -2691,8 +2697,11 @@ async function augmentWithProjections(
       const decisiveJump = oppPovNow !== null && oppPovTerminal !== null
         && oppPovTerminal - oppPovNow >= 250;
       if (!matesOut && !decisiveJump) continue;
-      if (!isForcingProjection(line)) continue; // a quiet eval-swing maneuver is a plan, not a threat
-      let callOut = `Watch what they're building — left alone, their idea runs ${render(line)}.`;
+      // David 2026-09-07 (#4): non-forcing decisive lines count too. Forcing →
+      // "threat"; decisive non-forcing → "idea/plan" (honest label). The decisive
+      // ≥250cp gate is the noise floor; "left alone" is true for both.
+      const oppDeepKind = isForcingProjection(line) ? 'threat' : 'idea';
+      let callOut = `Watch what they're building — left alone, their ${oppDeepKind} runs ${render(line)}.`;
       const next = segments[i + 1];
       if (next && next.playerColor === studentColorName && next.bestMoveSan) {
         callOut += ` Your defense starts with ${next.bestMoveSan}.`;
