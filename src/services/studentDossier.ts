@@ -139,9 +139,7 @@ async function writeCached(d: StudentDossier): Promise<void> {
   try { await db.meta.put({ key: DOSSIER_KEY, value: JSON.stringify(d) }); } catch { /* read-only fallback */ }
 }
 
-/** Recompute the dossier from the live spine/curriculum and persist it (diffing
- *  the prior for `newlyCleared`). Returns the fresh dossier. */
-export async function refreshStudentDossier(now: number = Date.now()): Promise<StudentDossier> {
+async function doRefresh(now: number): Promise<StudentDossier> {
   const prior = await readCached();
   let lc: WeaknessLifecycle;
   try { lc = await getWeaknessLifecycle(); } catch {
@@ -161,6 +159,31 @@ export async function refreshStudentDossier(now: number = Date.now()): Promise<S
   const next = deriveDossier(lc, masteredLabels, prior, now);
   await writeCached(next);
   return next;
+}
+
+// The refresh reads the whole mistake-puzzle library (getWeaknessLifecycle is a
+// full Dexie scan). Guard it so a game-analysis SWEEP — which fires a refresh
+// per game — can't stack N overlapping full-library aggregations on the main
+// thread (the 2026-09-08 perf regression). Mirrors weaknessSignalLoader.
+let inFlight: Promise<StudentDossier> | null = null;
+let lastRefreshAt = 0;
+
+/** Recompute the dossier from the live spine/curriculum and persist it (diffing
+ *  the prior for `newlyCleared`). Concurrent calls share ONE in-flight refresh
+ *  (no stacking). Returns the fresh dossier. */
+export function refreshStudentDossier(now: number = Date.now()): Promise<StudentDossier> {
+  if (inFlight) return inFlight;
+  inFlight = doRefresh(now).finally(() => { inFlight = null; lastRefreshAt = Date.now(); });
+  return inFlight;
+}
+
+/** Fire a refresh only if one hasn't run within `minGapMs` (default 30s) — the
+ *  entry point for high-frequency callers (per-game analysis in a sweep). A
+ *  burst collapses to at most one refresh per window instead of N. */
+export async function refreshStudentDossierThrottled(minGapMs = 30_000): Promise<void> {
+  if (inFlight) return;
+  if (Date.now() - lastRefreshAt < minGapMs) return;
+  await refreshStudentDossier();
 }
 
 /**

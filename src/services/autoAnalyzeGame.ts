@@ -196,11 +196,12 @@ export async function autoAnalyzeGameMisconceptions(
   await persistMistakePuzzlesForBlunders(gameId, blunders);
 
   // The dossier "builds on each game" (P7, David 2026-09-08): a freshly analyzed
-  // game just changed the weakness picture, so recompute the persistent snapshot
-  // (fire-and-forget; dynamic import keeps this hot path free of the memory
-  // graph). The diff vs the prior snapshot is what lets the coach later say
-  // "you've cleared X".
-  void import('./studentDossier').then((m) => m.refreshStudentDossier()).catch(() => undefined);
+  // game changed the weakness picture, so recompute the persistent snapshot.
+  // THROTTLED (fire-and-forget) so a library SWEEP — one call per game — collapses
+  // to ~one refresh per window instead of N stacked full-library scans (the
+  // 2026-09-08 perf fix); the dossier read path is SWR anyway, so a slightly
+  // delayed snapshot is fine.
+  void import('./studentDossier').then((m) => m.refreshStudentDossierThrottled()).catch(() => undefined);
 
   // Log the misconception TALLY once per game (bulk / review-walk / live).
   if (await hasMisconceptionsForGame(gameId)) return empty;

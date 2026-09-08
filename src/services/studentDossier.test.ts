@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deriveDossier, dossierOpeningLine, type StudentDossier } from './studentDossier';
+import { deriveDossier, dossierOpeningLine, refreshStudentDossier, refreshStudentDossierThrottled, type StudentDossier } from './studentDossier';
 import type { WeaknessLifecycle, WeaknessLifecycleEntry, LifecycleStatus, LifecycleTrend } from './weaknessLifecycle';
 
 function entry(label: string, over: Partial<WeaknessLifecycleEntry> = {}): WeaknessLifecycleEntry {
@@ -79,6 +79,20 @@ describe('deriveDossier', () => {
     const d = deriveDossier(lc, ['M0', 'M1', 'M2', 'M3'], null, 1000);
     expect(d.chronicHoles.length).toBe(3);
     expect(d.strengths.length).toBe(3);
+  });
+});
+
+describe('refresh guards (perf: no stacked full-library scans)', () => {
+  it('concurrent refreshes share ONE in-flight promise (dedup)', () => {
+    const a = refreshStudentDossier();
+    const b = refreshStudentDossier();
+    expect(a).toBe(b); // second call returns the same in-flight promise
+    return a; // settle it so module state resets cleanly
+  });
+
+  it('throttled refresh right after one refreshed is a no-op that resolves', async () => {
+    await refreshStudentDossier();
+    await expect(refreshStudentDossierThrottled(30_000)).resolves.toBeUndefined();
   });
 });
 
