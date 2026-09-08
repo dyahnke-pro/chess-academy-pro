@@ -14,7 +14,7 @@
  * Half these cases exist to pin that it does not.
  */
 import { describe, it, expect } from 'vitest';
-import { looksLikeQuestionNotAnOpeningName as isQuestion } from './questionIntents';
+import { looksLikeQuestionNotAnOpeningName as isQuestion, looksLikeConversationalReply as isReply } from './questionIntents';
 
 describe('bare-name guard — questions must not be routed as opening names', () => {
   it('rejects the exact prod input that burned a generation', () => {
@@ -69,5 +69,51 @@ describe('bare-name guard — real opening names must still route', () => {
     expect(isQuestion('')).toBe(false);
     expect(isQuestion(undefined)).toBe(false);
     expect(isQuestion('   ')).toBe(false);
+  });
+});
+
+describe('bare-name guard — a "yes"/"no" reply is not an opening name (David 2026-09-08 play audit)', () => {
+  it('catches the exact input that answered "Did you mean English Opening: Myers Defense?"', () => {
+    expect(isReply('yes')).toBe(true);
+  });
+
+  it('catches the ways a student affirms an offer', () => {
+    for (const r of [
+      'yes', 'Yes', 'yeah', 'yep', 'yup', 'sure', 'ok', 'okay', 'alright',
+      'please', 'yes please', 'do it', 'go ahead', 'go for it', "let's do it",
+      'sounds good', 'absolutely', 'why not',
+    ]) {
+      expect(isReply(r), `"${r}" should read as a confirmation`).toBe(true);
+    }
+  });
+
+  it('catches the ways a student declines an offer', () => {
+    for (const r of ['no', 'No', 'nope', 'nah', 'no thanks', 'not now', 'maybe later', 'skip', 'pass', 'never mind']) {
+      expect(isReply(r), `"${r}" should read as a negation`).toBe(true);
+    }
+  });
+
+  it('tolerates trailing punctuation', () => {
+    for (const r of ['yes.', 'yes!', 'no.', 'sure!', 'ok,']) {
+      expect(isReply(r), `"${r}" should still read as a reply`).toBe(true);
+    }
+  });
+
+  it('does NOT swallow a real request that merely starts with "yes"/"no"', () => {
+    // Content past the affirmation → the normal path, so the opening still routes.
+    for (const r of [
+      'yes teach me the Sicilian', 'no I meant the French',
+      "Yes Gambit",                 // a name that begins with yes-like letters
+      'Nimzo-Indian', 'Nordic',     // begin with "n", must not be caught as "no"
+      'Kan Variation',              // begins with "k", not "kk"
+    ]) {
+      expect(isReply(r), `"${r}" must stay an opening/request`).toBe(false);
+    }
+  });
+
+  it('is empty-safe', () => {
+    expect(isReply('')).toBe(false);
+    expect(isReply(undefined)).toBe(false);
+    expect(isReply('   ')).toBe(false);
   });
 });

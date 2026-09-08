@@ -283,7 +283,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3913,6 +3913,13 @@ export function CoachTeachPage(): JSX.Element {
         // discriminator the comment below already claims — a verb / trailing
         // punctuation — which was described but never implemented.
         !looksLikeQuestionNotAnOpeningName(workingInput) &&
+        // A bare "yes"/"no"/"sure"/"nope" is a reply to what the coach just
+        // asked, NEVER an opening name. Left in the fuzzy matcher it answered
+        // "I don't have an exact match for 'yes'. Did you mean English Opening:
+        // Myers Defense?" (David's play-audit report, 2026-09-08). Kept out, it
+        // falls through to the brain, which has the conversation history (the
+        // coach's offer) + the actuator tools, so the reply resolves in context.
+        !looksLikeConversationalReply(workingInput) &&
         // A walkthrough control word ("start", "go", "stop", "new
         // lesson", …) is NEVER an opening name — keep it out of the
         // fuzzy matcher so it can't surface a bogus "did you mean

@@ -2664,3 +2664,35 @@ export function looksLikeQuestionNotAnOpeningName(input: string | undefined): bo
   if (/[?.!]$/.test(t)) return true;
   return QUESTION_OPENER_RE.test(t);
 }
+
+/** IS THIS A BARE "YES"/"NO" REPLY TO WHAT THE COACH JUST ASKED?
+ *
+ *  David 2026-09-08, from a live play audit: "when the coach asks if you want
+ *  it to do something and you type yes or no, it has no context of what you are
+ *  talking about." Reproduced — typing "yes" was taken as an OPENING NAME
+ *  (same bare-name branch as "The Vienna"), scored against the whole openings
+ *  DB, and answered "I don't have an exact match for 'yes'. Did you mean
+ *  English Opening: Myers Defense?" The coach had just offered an action a
+ *  sentence earlier; the reply landed nowhere near it.
+ *
+ *  A bare affirmation or negation is never an opening name — it is a reply to
+ *  the coach's last turn. Kept out of opening resolution, it falls through to
+ *  the brain, which already receives `conversationHistory` (the coach's offer
+ *  is right there) AND the actuator tools, so "yes" resolves in context and
+ *  can actually do the thing offered.
+ *
+ *  Deliberately anchored to the WHOLE string with only trailing punctuation —
+ *  it rejects reply SHAPES, never content. "Yes, teach me the Sicilian" has
+ *  content past the "yes" and takes the normal path; no opening in the DB is a
+ *  bare "yes"/"no"/"sure"/"nope". */
+const CONFIRMATION_RE =
+  /^(?:yes|yea|yeah|yep|yup|ya|sure|ok|okay|kk|alright|alrighty|aight|fine|please|yes\s+please|absolutely|definitely|certainly|of\s+course|for\s+sure|sounds?\s+good|go\s+(?:ahead|for\s+it)|do\s+it|let'?s\s+(?:do\s+(?:it|that)|go)|why\s+not)$/i;
+const NEGATION_RE =
+  /^(?:no|nope|nah|naw|no\s+thanks?|not\s+(?:now|really|yet)|maybe\s+later|skip(?:\s+it)?|pass|never\s?mind)$/i;
+
+export function looksLikeConversationalReply(input: string | undefined): boolean {
+  if (!input) return false;
+  const t = input.trim().replace(/[.!,\s]+$/, '');
+  if (!t) return false;
+  return CONFIRMATION_RE.test(t) || NEGATION_RE.test(t);
+}
