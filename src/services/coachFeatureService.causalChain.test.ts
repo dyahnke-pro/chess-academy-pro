@@ -82,4 +82,19 @@ describe('buildReviewSegments — BOTH WAYS wired into the walk', () => {
     expect(t).toMatch(/Rde8 would have avoided it/i);
   }, 30000); // a full 42-ply review build is heavy in the test env; the causal
              // finders themselves are ~0.2s (measured), the rest is the pipeline.
+
+  it('RECURRENCE RECAP: a chain the student keeps erring into is named as a recurring hole', () => {
+    const ALLOWED = ['e4', 'c5', 'f4', 'g6', 'Nf3', 'Bg7', 'Bc4', 'e6', 'O-O', 'Ne7', 'd3', 'O-O', 'Nc3', 'Nbc6', 'Ne2', 'a6', 'c3', 'b5', 'Bb3', 'a5', 'a4', 'Ba6', 'e5', 'bxa4', 'Rxa4', 'Bb5', 'Re4', 'd5', 'exd6', 'Nf5', 'Ng3', 'Nxd6', 'Ree1', 'Qb6', 'Kh1', 'Rad8', 'c4', 'Ba6', 'Ba4', 'Nxc4', 'Qb3', 'Qxb3'];
+    // Cover the mistake tags a removed-defender/allowed chain can carry, each a
+    // recurring hole (openCount >= 2). Exactly the coach-side weakness shape.
+    const weaknesses = ['hung-material', 'misplaced-piece', 'neglected-development'].map((clusterId) => ({
+      clusterId, bucket: 'tactical' as const, label: 'Hanging pieces', openCount: 4, severity: 60, puzzleThemes: [] as string[],
+    }));
+    const segs = buildReviewSegments(mk(ALLOWED), 'black', null, false, 1378, weaknesses);
+    const t = segs.find((s) => s.san === 'Qxb3')?.narration ?? '';
+    expect(t).toMatch(/keeps recurring in your games/i);
+    // and WITHOUT the profile → no recap (inert)
+    const segsNoProfile = buildReviewSegments(mk(ALLOWED), 'black', null, false, 1378);
+    expect(segsNoProfile.find((s) => s.san === 'Qxb3')?.narration ?? '').not.toMatch(/keeps recurring/i);
+  }, 30000);
 });

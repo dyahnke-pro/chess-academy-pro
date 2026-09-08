@@ -14,7 +14,7 @@ import type { WeaknessSignal } from '../services/weaknessSignal';
  * time the coach speaks, the profile is loaded; a stale [] just means "no boost"
  * (the selector wire is inert), never a crash.
  */
-export function useWeaknessSignals(): React.MutableRefObject<readonly WeaknessSignal[]> {
+export function useWeaknessSignals(): React.RefObject<readonly WeaknessSignal[]> {
   const ref = useRef<readonly WeaknessSignal[]>([]);
   useEffect(() => {
     let alive = true;

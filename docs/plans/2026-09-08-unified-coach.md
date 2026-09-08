@@ -410,6 +410,20 @@ reused, not rebuilt. Nothing above blocks starting Phase 1.
 - 2026-09-08 — David, emphatic: **map EACH surface ENTIRELY before building,
   and every neighboring/touching surface for blast radius.** Locked as §0 —
   the pre-build gate. No phase starts without its surface map.
+- 2026-09-08 — **Phase 1 BUILT** (Option B, David gave full autonomy). Shipped:
+  the `tacticVocabulary.ts` bridge (compile-exhaustive, fixes the silent
+  discovery/discovered_attack mismatch), the `weaknessSignal.ts` pure leaf
+  (buildWeaknessSignals + boostFor + matchers), `weaknessSignalLoader.ts`
+  (memoized once-per-game) + `useWeaknessSignals` hook, the `positionFacts`
+  studentWeaknesses re-rank post-pass, threaded into learn/play/openings
+  (usePositionNarration/usePhaseNarration/useLiveCoach/computeWhyBestMove) and
+  review (buildReviewSegments recurrence recap via causal-chain tags). Optional +
+  inert until fed; kid never fed. 35 unit tests green, typecheck clean.
+  **Phase 1b (deferred, needs its own §0 surface map):** boost the LIVE tactic-
+  fact pipeline (liveTacticsContext / playCommentary) so fork/pin/skewer motif
+  holes re-rank in live play/teach commentary too. positionFacts already covers
+  the hanging/must-defend hole; review covers retrospective tactic holes; 1b
+  closes the live tactic-motif gap.
 - 2026-09-08 — David: **roll every orphan "adaptive function" into the new algo
   when all done** (principle 8) + **wire ALL tools into the coach so everything
   is at its disposal** (principle 9). Added as Phase 7 (the closing

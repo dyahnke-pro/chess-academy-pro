@@ -10,6 +10,23 @@ Store release** (TestFlight today, public stores next) — it is NOT a
 private single-user app. Build it for real beta testers and public
 store users.
 
+## 🔧 FIX LATENT ARCHITECTURAL ROT ON SIGHT (David 2026-09-08, emphatic: "FIX ANY PROBLEMS LIKE THIS WHEN YOU COME ACROSS THEM!!! KEEP PAYING ATTENTION TO DETAILS LIKE THAT!!!").
+
+When you find a latent defect while doing other work — two enums/vocabularies
+that mean the same thing but never reconcile (the 2026-09-08 find:
+`TacticPatternType` `discovery` vs `TacticType` `discovered_attack`, so a
+student's weakness silently never matched the live fact), a missing normalizer,
+a duplicated constant that can drift, a silent-mismatch class — FIX IT, don't
+just note it. Prefer the fix that makes the drift IMPOSSIBLE to reopen (a single
+source of truth with compile-time exhaustiveness — e.g. a `Record<Union, …>` so
+a new enum member fails to compile until it's mapped) over a band-aid in one
+caller. Keep the fix honest about blast radius: don't destructively merge/rename
+something PERSISTED in Dexie on live devices without a migration — bridge it
+instead (the two tactic enums stayed separate, joined by `tacticVocabulary.ts`).
+And throw the find into the chat so David sees it — he wants to understand how
+the app works. This is the "sweep, don't spot-fix" rule (below) applied to
+architecture, not just to a single bug class.
+
 ## 🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").
 
 Before starting ANY coach / narration / grounding / weakness / teaching build:

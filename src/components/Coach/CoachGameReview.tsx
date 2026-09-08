@@ -22,6 +22,7 @@ import { ChatInput } from './ChatInput';
 import { ChatMessage } from './ChatMessage';
 import { ReviewReadingChallenge } from './ReviewReadingChallenge';
 import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
+import { useWeaknessSignals } from '../../hooks/useWeaknessSignals';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { useSettings } from '../../hooks/useSettings';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
@@ -153,6 +154,10 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     onPlayAgain, onBackToCoach, onPracticeInChat,
     pgn,
   } = props;
+  // THE STUDENT MODEL (Phase 1) — feeds the free-board exploration recap so a
+  // chain the student keeps erring into is named as a recurring hole. The main
+  // walk narration loads this itself inside generateReviewNarration.
+  const weaknessSignalsRef = useWeaknessSignals();
   const initialMoveIndex = props.initialMoveIndex;
   // ship-4: `keyMoments`, `playerName`, `opponentRating`, `isGuidedLesson`,
   // `autoStartReview` are retained on the prop interface for
@@ -1556,7 +1561,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (inputs.length === 0 || !alive()) return;
     let text: string | null = null;
     try {
-      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating);
+      const segs = buildReviewSegments(inputs, playerColor, openingName, false, playerRating, weaknessSignalsRef.current);
       text = segs[segs.length - 1]?.narration ?? null;
     } catch { text = null; }
     void logAppAudit({

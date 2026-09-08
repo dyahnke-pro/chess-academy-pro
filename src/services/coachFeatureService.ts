@@ -37,8 +37,10 @@ import { voiceFacts, voiceReviewLines } from './coachApi';
 import { logAppAudit } from './appAuditor';
 import { whyItFailed } from './whyItFailed';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
-import { buildCausalChain, causalChainArrows, findMissedChain, findAllowedChain } from './causalChain';
+import { buildCausalChain, causalChainArrows, causalChainMistakeTags, findMissedChain, findAllowedChain } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
+import { matchTag, type WeaknessSignal } from './weaknessSignal';
+import { loadWeaknessSignals } from './weaknessSignalLoader';
 import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap } from './principleVoice';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
@@ -1064,6 +1066,10 @@ export function buildReviewSegments(
   /** The student's rating — scales the causal-chain depth (beginners hear every
    *  link; strong players hear the compressed 2–3). Default 1500 (medium). */
   rating?: number,
+  /** THE STUDENT MODEL (Phase 1). When a chain the student ERRED into (missed /
+   *  allowed) matches a hole they keep falling in, the review appends an honest
+   *  "this recurs for you — worth drilling" recap. Optional/inert when absent. */
+  studentWeaknesses?: readonly WeaknessSignal[],
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1342,6 +1348,20 @@ export function buildReviewSegments(
         if (chain) {
           const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
           if (lines.length) causalLead = lines.join(' ');
+          // RECURRENCE RECAP (Phase 1) — when the student ERRED into this chain
+          // (missed a win / allowed a shot) AND it maps to a hole they keep
+          // falling in, name the pattern so the lesson lands: "this recurs for
+          // you." Board-honest (the chain is real) + profile-honest (openCount
+          // proves recurrence). Never on a PLAYED win (that's not a leak), and
+          // never invented — only when a matched, recurring weakness exists.
+          if (causalLead && studentWeaknesses && studentWeaknesses.length > 0 && (chain.stance === 'missed' || chain.stance === 'allowed')) {
+            let recur: WeaknessSignal | null = null;
+            for (const tag of causalChainMistakeTags(chain, studentColorWB)) {
+              const hit = matchTag(tag, studentWeaknesses);
+              if (hit && hit.openCount >= 2 && (!recur || hit.openCount > recur.openCount)) recur = hit;
+            }
+            if (recur) causalLead += ` This one keeps recurring in your games — ${recur.label.toLowerCase()} — a good pattern to drill.`;
+          }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
             const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
             const arr = causalChainArrows(chain);
@@ -3354,7 +3374,11 @@ export async function generateReviewNarration(params: {
   // the his-play DB (primary) + the masters DB (backup). Concurrent; each
   // degrades to null on failure so the beat just falls through.
   await Promise.all([getHisPlayDb(), ensureMastersDbLoaded()]);
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating);
+  // THE STUDENT MODEL (Phase 1) — so a chain the student keeps erring into gets
+  // the "this recurs for you, drill it" recap. Memoized once-per-game; degrades
+  // to [] (inert) on any failure.
+  const studentWeaknesses = await loadWeaknessSignals().catch(() => []);
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses);
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +
