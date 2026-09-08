@@ -108,25 +108,21 @@ export const playMoveTool: Tool = {
     if (!san) return { ok: false, error: 'san is required' };
 
     if (!ctx?.onPlayMove) {
-      // Constitution: surface absence is not a failure. Match the
-      // navigateToRoute stub pattern so the LLM sees ok=true and
-      // continues the turn instead of apologizing for a missing
-      // callback. Surfaces that genuinely need the move played (live
-      // game) wire onPlayMove; surfaces that don't (walkthrough,
-      // ping, phase-narration) get a synthetic ack.
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08, same rule that fixed navigate/
+      // set-board: "it said done but we were still on the home screen"). A
+      // synthetic ok:true let the coach claim it played a move on a surface with
+      // no board — reporting done while nothing happened. Return ok:false so the
+      // LLM tells the truth (and can set up a board first, which set_board_position
+      // CAN do from any surface via the global actuator).
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'playMoveTool.execute',
-        summary: `STUB play_move ${san} (no onPlayMove callback)`,
+        summary: `play_move ${san} refused — no board on this surface`,
       });
       return {
-        ok: true,
-        result: {
-          stub: true,
-          requested: { san },
-          reason: 'no onPlayMove callback on this surface',
-        },
+        ok: false,
+        error: `Cannot play ${san} here — there is no board on this surface. Set up a position (set_board_position) or go to the play board first.`,
       };
     }
 

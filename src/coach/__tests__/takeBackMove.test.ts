@@ -19,24 +19,10 @@ vi.mock('../../services/appAuditor', () => ({
 import { takeBackMoveTool } from '../tools/cerebrum/takeBackMove';
 
 describe('take_back_move tool', () => {
-  it('graceful no-op when no onTakeBackMove callback is wired (stub=true)', async () => {
+  it('refuses honestly (ok:false) when no onTakeBackMove callback is wired — never fake success (David 2026-09-08)', async () => {
     const result = await takeBackMoveTool.execute({ count: 2 });
-    expect(result.ok).toBe(true);
-    const payload = result.result as {
-      stub?: boolean;
-      requested?: { count?: number };
-      reason?: string;
-    };
-    expect(payload.stub).toBe(true);
-    expect(payload.requested?.count).toBe(2);
-    expect(payload.reason).toMatch(/no onTakeBackMove callback/);
-  });
-
-  it('defaults count to 1 in the stub when args.count is missing', async () => {
-    const result = await takeBackMoveTool.execute({});
-    expect(result.ok).toBe(true);
-    const payload = result.result as { requested?: { count?: number } };
-    expect(payload.requested?.count).toBe(1);
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/no active board on this surface/i);
   });
 
   it('invokes the callback with the requested count when wired', async () => {

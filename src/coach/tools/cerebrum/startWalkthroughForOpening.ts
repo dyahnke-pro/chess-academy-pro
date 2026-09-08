@@ -63,20 +63,18 @@ export const startWalkthroughForOpeningTool: Tool = {
     const pgn = typeof args.pgn === 'string' && args.pgn.trim() ? args.pgn.trim() : undefined;
 
     if (!ctx?.onStartWalkthroughForOpening) {
-      // Graceful no-op when the surface didn't wire the callback.
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08): don't claim a walkthrough started
+      // when no surface can run it. Return ok:false; the coach can navigate to a
+      // teaching surface first (navigate_to_route actuates from anywhere).
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'startWalkthroughForOpeningTool.execute',
-        summary: `STUB start_walkthrough_for_opening opening=${opening} (no onStartWalkthroughForOpening callback)`,
+        summary: `start_walkthrough_for_opening opening=${opening} refused — no walkthrough host on this surface`,
       });
       return {
-        ok: true,
-        result: {
-          stub: true,
-          requested: { opening, variation, orientation, pgn: pgn ? `${pgn.length} chars` : undefined },
-          reason: 'no onStartWalkthroughForOpening callback on this surface',
-        },
+        ok: false,
+        error: `Cannot start a walkthrough here — this surface can't host one. Navigate to Learn with Coach first, then start it.`,
       };
     }
 

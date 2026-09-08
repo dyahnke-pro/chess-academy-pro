@@ -379,20 +379,8 @@ describe('gameInsightsService', () => {
       expect(result.tacticsFound.great).toBe(3);
     });
 
-    it('detects missed tactics', async () => {
+    it('detects missed tactics from the classifiedTactics store', async () => {
       await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
-
-      mockDetectMissedTactics.mockReturnValue([
-        {
-          moveIndex: 15,
-          playerMoved: 'Nf3',
-          bestMove: 'Nxe5',
-          fen: 'some-fen',
-          evalSwing: -300,
-          tacticType: 'fork' as const,
-          explanation: 'Missed a knight fork',
-        },
-      ]);
 
       await db.games.add(
         buildGameRecord({
@@ -406,6 +394,13 @@ describe('gameInsightsService', () => {
           ],
         }),
       );
+      await db.classifiedTactics.add({
+        id: 'ct1', sourceGameId: 'g1', moveIndex: 15, fen: 'some-fen',
+        bestMoveUci: 'f3e5', bestMoveSan: 'Nxe5', playerMoveUci: 'g1f3', playerMoveSan: 'Nf3',
+        playerColor: 'white', tacticType: 'fork', evalSwing: -300, explanation: 'Missed a knight fork',
+        opponentName: 'AI Coach', gameDate: '2026-09-01', openingName: 'Ruy Lopez',
+        puzzleAttempts: 0, puzzleSuccesses: 0, createdAt: '2026-09-01T00:00:00Z',
+      });
 
       const { getTacticInsights } = await import('./gameInsightsService');
       const result = await getTacticInsights();
@@ -451,5 +446,43 @@ describe('gameInsightsService', () => {
 
       expect(result).toEqual([]);
     });
+  });
+
+  describe('getTacticInsights — reads missed tactics from classifiedTactics (David 2026-09-08)', () => {
+    it('counts real missed tactics from the classifiedTactics store, not a null-gated 100%', async () => {
+      // The bug: with missed tactics present the tab showed "100% tactical
+      // awareness / no missed tactics" because it re-derived from raw annotations
+      // (null bestMoveEval gate). It must now read classifiedTactics — the same
+      // populated store the weakness spine reads.
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+      await db.games.add(buildGameRecord({ id: 'g1', eco: 'B22', isMasterGame: false }));
+      await db.classifiedTactics.bulkAdd([
+        {
+          id: 'ct1', sourceGameId: 'g1', moveIndex: 18, fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+          bestMoveUci: 'd5c7', bestMoveSan: 'Nc7+', playerMoveUci: 'e1e2', playerMoveSan: 'Ke2',
+          playerColor: 'white', tacticType: 'fork', evalSwing: 320, explanation: 'Missed a knight fork.',
+          opponentName: 'Opp', gameDate: '2026-09-01', openingName: 'Sicilian Defense: Alapin Variation',
+          puzzleAttempts: 0, puzzleSuccesses: 0, createdAt: '2026-09-01T00:00:00Z',
+        },
+        {
+          id: 'ct2', sourceGameId: 'g1', moveIndex: 24, fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+          bestMoveUci: 'a1a8', bestMoveSan: 'Ra8', playerMoveUci: 'b1b2', playerMoveSan: 'Rb2',
+          playerColor: 'white', tacticType: 'fork', evalSwing: 210, explanation: 'Another missed fork.',
+          opponentName: 'Opp', gameDate: '2026-09-01', openingName: 'Sicilian Defense: Alapin Variation',
+          puzzleAttempts: 0, puzzleSuccesses: 0, createdAt: '2026-09-01T00:00:00Z',
+        },
+      ]);
+
+      const { getTacticInsights } = await import('./gameInsightsService');
+      const insights = await getTacticInsights();
+
+      expect(insights.foundVsMissed.missed).toBe(2);
+      // With 0 found + 2 missed the awareness rate is 0%, NOT the bogus 100%.
+      expect(insights.awarenessRate).toBe(0);
+      const fork = insights.missedByType.find((t) => t.type === 'fork');
+      expect(fork?.count).toBe(2);
+      expect(insights.worstMisses.length).toBeGreaterThan(0);
+      expect(insights.worstMisses[0].san).toBe('Ke2');
+    }, 15000);
   });
 });

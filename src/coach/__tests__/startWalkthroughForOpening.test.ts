@@ -14,12 +14,12 @@ describe('start_walkthrough_for_opening tool', () => {
     expect(r.error).toMatch(/opening is required/);
   });
 
-  it('graceful no-op when no callback wired (stub=true)', async () => {
+  it('refuses honestly (ok:false) when no callback wired — never fake success (David 2026-09-08)', async () => {
     const r = (await startWalkthroughForOpeningTool.execute({
       opening: 'Italian Game',
     })) as ToolResult;
-    expect(r.ok).toBe(true);
-    expect(r.result?.stub).toBe(true);
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(/can't host one|navigate to learn/i);
   });
 
   it('passes opening + variation + orientation to the surface', async () => {

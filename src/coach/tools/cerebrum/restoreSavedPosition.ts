@@ -30,13 +30,11 @@ export const restoreSavedPositionTool: Tool = {
       return { ok: false, error: 'No saved position in memory. Tell the student there is nothing to restore yet.' };
     }
     if (!ctx?.onSetBoardPosition) {
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08): don't claim the saved position was
+      // restored when there's no board to restore it onto. Return ok:false.
       return {
-        ok: true,
-        result: {
-          stub: true,
-          requested: saved,
-          reason: 'no onSetBoardPosition callback on this surface',
-        },
+        ok: false,
+        error: 'Cannot restore the saved position here — there is no board on this surface.',
       };
     }
     try {

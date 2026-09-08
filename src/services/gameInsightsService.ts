@@ -5,7 +5,6 @@ import { calculateAccuracy, getClassificationCounts, capEval } from './accuracyS
 import { getPhaseBreakdown } from './gamePhaseService';
 import { uciMoveToSan } from '../utils/uciToSan';
 import { countFullMovesInPgn } from '../utils/pgnMoveCount';
-import { detectMissedTactics } from './missedTacticService';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { getOpeningNameByEco } from './openingDetectionService';
@@ -13,7 +12,6 @@ import type {
   GameRecord,
   MoveClassificationCounts,
   PhaseAccuracy,
-  MissedTactic,
   OverviewInsights,
   OpeningInsights,
   OpeningAggregateStats,
@@ -668,7 +666,6 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   let totalBrilliant = 0, totalGreat = 0;
   const missedByType = new Map<TacticType, { count: number; totalCost: number }>();
   const missedByPhase = new Map<GamePhase, number>();
-  const allMissed: MissedTactic[] = [];
   const bestSequences: TacticalMoment[] = [];
   const worstMisses: TacticalMoment[] = [];
   let totalMissed = 0;
@@ -711,40 +708,47 @@ export async function getTacticInsights(): Promise<TacticInsights> {
       }
     }
 
-    // Detect missed tactics
-    const missed = detectMissedTactics(moves, playerColor);
-    for (const m of missed) {
-      totalMissed++;
-      allMissed.push(m);
+    // Missed tactics are NOT re-derived from annotations here — see the
+    // classifiedTactics read after this loop (David 2026-09-08 fix).
+  }
 
-      const existing = missedByType.get(m.tacticType);
-      if (existing) {
-        existing.count++;
-        existing.totalCost += Math.abs(m.evalSwing);
-      } else {
-        missedByType.set(m.tacticType, { count: 1, totalCost: Math.abs(m.evalSwing) });
-      }
-
-      // Phase of missed tactic
-      const moveNum = m.moveIndex;
-      let phase: GamePhase = 'middlegame';
-      if (moveNum <= 10) phase = 'opening';
-      else if (moveNum >= 30) phase = 'endgame';
-      missedByPhase.set(phase, (missedByPhase.get(phase) ?? 0) + 1);
-
-      worstMisses.push({
-        gameId: game.id,
-        moveNumber: m.moveIndex,
-        san: m.playerMoved,
-        fen: m.fen,
-        evalSwing: m.evalSwing,
-        tacticType: m.tacticType,
-        explanation: m.explanation,
-        opponentName: getOpponentName(game, playerColor),
-        date: game.date,
-        openingName: getOpeningNameByEco(game.eco) ?? game.eco,
-      });
+  // 🔒 MISSED TACTICS COME FROM THE POPULATED `classifiedTactics` STORE — the
+  // SAME source the weakness spine reads (David 2026-09-08: the tab read
+  // "100% tactical awareness / no missed tactics" while the spine knew about 114
+  // missed forks). The old path re-derived missed tactics from raw
+  // `game.annotations` via `detectMissedTactics`, which skips every move whose
+  // `bestMoveEval` field is null — a newer schema field the user's earlier-
+  // analyzed games never wrote — so it counted 0 missed → 100%. classifyTactics-
+  // FromGame captured the real misses into `classifiedTactics` without needing
+  // that field, so read from there and the tab agrees with the spine.
+  const classified = await db.classifiedTactics.toArray();
+  totalMissed = classified.length;
+  for (const m of classified) {
+    const existing = missedByType.get(m.tacticType);
+    if (existing) {
+      existing.count++;
+      existing.totalCost += Math.abs(m.evalSwing);
+    } else {
+      missedByType.set(m.tacticType, { count: 1, totalCost: Math.abs(m.evalSwing) });
     }
+
+    let phase: GamePhase = 'middlegame';
+    if (m.moveIndex <= 10) phase = 'opening';
+    else if (m.moveIndex >= 30) phase = 'endgame';
+    missedByPhase.set(phase, (missedByPhase.get(phase) ?? 0) + 1);
+
+    worstMisses.push({
+      gameId: m.sourceGameId,
+      moveNumber: m.moveIndex,
+      san: m.playerMoveSan,
+      fen: m.fen,
+      evalSwing: m.evalSwing,
+      tacticType: m.tacticType,
+      explanation: m.explanation,
+      opponentName: m.opponentName ?? 'Unknown',
+      date: m.gameDate ?? '',
+      openingName: m.openingName ?? '',
+    });
   }
 
   // Sort best sequences by eval swing descending

@@ -19,21 +19,17 @@ export const resetBoardTool: Tool = {
     // WO-FOUNDATION-02 trace harness.
 
     if (!ctx?.onResetBoard) {
-      // Constitution: graceful no-op when the surface didn't wire
-      // a reset callback. See navigateToRouteTool for the canonical
-      // pattern.
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08): don't claim the board was reset on
+      // a surface that has none. Return ok:false so the coach tells the truth.
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'resetBoardTool.execute',
-        summary: 'STUB reset_board (no onResetBoard callback)',
+        summary: 'reset_board refused — no board on this surface',
       });
       return {
-        ok: true,
-        result: {
-          stub: true,
-          reason: 'no onResetBoard callback on this surface',
-        },
+        ok: false,
+        error: 'Cannot reset the board here — there is no active board on this surface.',
       };
     }
     try {

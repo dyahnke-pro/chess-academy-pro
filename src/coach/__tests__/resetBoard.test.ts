@@ -17,12 +17,10 @@ vi.mock('../../services/appAuditor', () => ({
 import { resetBoardTool } from '../tools/cerebrum/resetBoard';
 
 describe('reset_board tool', () => {
-  it('graceful no-op when no onResetBoard callback is wired (stub=true)', async () => {
+  it('refuses honestly (ok:false) when no onResetBoard callback is wired — never fake success (David 2026-09-08)', async () => {
     const result = await resetBoardTool.execute({});
-    expect(result.ok).toBe(true);
-    const payload = result.result as { stub?: boolean; reason?: string };
-    expect(payload.stub).toBe(true);
-    expect(payload.reason).toMatch(/no onResetBoard callback/);
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/no active board on this surface/i);
   });
 
   it('invokes the callback when wired', async () => {

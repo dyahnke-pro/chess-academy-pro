@@ -38,22 +38,18 @@ export const takeBackMoveTool: Tool = {
     const count = Math.max(1, Math.floor(rawCount));
 
     if (!ctx?.onTakeBackMove) {
-      // Constitution: graceful no-op when the surface didn't wire
-      // a take-back callback. See navigateToRouteTool for the
-      // canonical pattern.
+      // 🔒 NO FAKE SUCCESS (David 2026-09-08): a synthetic ok:true let the coach
+      // claim it took a move back on a surface with no board. Return ok:false so
+      // it never reports an undo that didn't happen.
       void logAppAudit({
         kind: 'coach-brain-tool-called',
         category: 'subsystem',
         source: 'takeBackMoveTool.execute',
-        summary: `STUB take_back_move count=${count} (no onTakeBackMove callback)`,
+        summary: `take_back_move count=${count} refused — no board on this surface`,
       });
       return {
-        ok: true,
-        result: {
-          stub: true,
-          requested: { count },
-          reason: 'no onTakeBackMove callback on this surface',
-        },
+        ok: false,
+        error: 'Cannot take a move back here — there is no active board on this surface.',
       };
     }
 

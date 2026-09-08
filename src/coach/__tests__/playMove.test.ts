@@ -28,13 +28,10 @@ describe('play_move tool (real)', () => {
     expect(result.error).toMatch(/san is required/);
   });
 
-  it('graceful no-op when no onPlayMove callback is wired (stub=true)', async () => {
+  it('refuses honestly (ok:false) when no onPlayMove callback is wired — never fake success (David 2026-09-08)', async () => {
     const result = await playMoveTool.execute({ san: 'e4' }, { liveFen: STARTING_FEN });
-    expect(result.ok).toBe(true);
-    const payload = result.result as { stub?: boolean; requested?: { san?: string }; reason?: string };
-    expect(payload.stub).toBe(true);
-    expect(payload.requested?.san).toBe('e4');
-    expect(payload.reason).toMatch(/no onPlayMove callback/);
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/no board on this surface/i);
   });
 
   it('rejects illegal SAN against the live FEN before calling the callback', async () => {
