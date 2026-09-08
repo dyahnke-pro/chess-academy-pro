@@ -20,10 +20,13 @@ import {
   hasUnreadFeedback,
   getLastSeenFeedbackTs,
   markFeedbackSeen,
+  claimUndeliveredBroadcasts,
+  claimBroadcastRead,
   type Announcement,
   type ThreadMessage,
   type FeedbackItem,
 } from '../../services/announcementsService';
+import { captureEvent } from '../../services/analytics';
 
 /**
  * NotificationBell — the Home-screen developer ↔ user message channel.
@@ -56,6 +59,9 @@ function Bubble({ m }: { m: ThreadMessage }): JSX.Element {
 }
 
 export function NotificationBell(): JSX.Element {
+  // Admin (David) — declared first because the telemetry gates below read it
+  // (a non-admin device is a real user receiving/reading a message).
+  const [admin, setAdmin] = useState(false);
   const [broadcasts, setBroadcasts] = useState<Announcement[]>([]);
   // Which broadcasts are expanded (collapsed-title list, David 2026-09-07:
   // "bullet pointed by title chronologically… tighten it up"). Newest-first is
@@ -64,10 +70,24 @@ export function NotificationBell(): JSX.Element {
   const toggleBroadcast = useCallback((id: string) => {
     setExpandedBroadcasts((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+        // Expanding the body IS reading the message. Fire message_read once per
+        // message per (non-admin) device so "did they read it?" is answerable.
+        if (!admin) {
+          void claimBroadcastRead(id).then((firstRead) => {
+            if (firstRead) {
+              const b = broadcasts.find((x) => x.id === id);
+              captureEvent('message_read', { message_id: id, message_title: b?.title ?? '', kind: 'broadcast' });
+            }
+          });
+        }
+      }
       return next;
     });
-  }, []);
+  }, [admin, broadcasts]);
   const [thread, setThread] = useState<ThreadMessage[]>([]);
   const [lastSeenId, setLastSeenId] = useState<string | null>(null);
   const [lastSeenThreadTs, setLastSeenThreadTs] = useState(0);
@@ -76,7 +96,6 @@ export function NotificationBell(): JSX.Element {
   const [replyText, setReplyText] = useState('');
 
   // Admin (David) state.
-  const [admin, setAdmin] = useState(false);
   const [showSecretInput, setShowSecretInput] = useState(false);
   const [secretText, setSecretText] = useState('');
   const [secretError, setSecretError] = useState(false);
@@ -117,6 +136,23 @@ export function NotificationBell(): JSX.Element {
     })();
     return () => { alive = false; };
   }, []);
+
+  // Fire message_delivered once per broadcast that reaches this (non-admin)
+  // device — proves the message ARRIVED even if never opened. Runs on the
+  // initial load AND on every poll update (broadcasts identity changes), but
+  // the persisted dedup in claimUndeliveredBroadcasts guarantees one delivery
+  // per message per device. Admin (David's own bell) is excluded — his fetch
+  // isn't a real user receiving a message.
+  useEffect(() => {
+    if (admin || loading || broadcasts.length === 0) return;
+    void (async () => {
+      const fresh = await claimUndeliveredBroadcasts(broadcasts.map((b) => b.id));
+      for (const id of fresh) {
+        const b = broadcasts.find((x) => x.id === id);
+        captureEvent('message_delivered', { message_id: id, message_title: b?.title ?? '', message_date: b?.date ?? '' });
+      }
+    })();
+  }, [broadcasts, admin, loading]);
 
   // Poll while the panel is open so new messages arrive without a reopen.
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -161,8 +197,25 @@ export function NotificationBell(): JSX.Element {
     setOpen(true);
     if (broadcasts.length > 0) { void markAllSeen(broadcasts[0].id); setLastSeenId(broadcasts[0].id); }
     const newestDev = thread.filter((m) => m.from === 'dev').at(-1);
-    if (newestDev) { void markThreadSeen(newestDev.ts); setLastSeenThreadTs(newestDev.ts); }
-  }, [broadcasts, thread]);
+    if (newestDev) {
+      // A dev reply the user hadn't yet seen is now on screen = read.
+      if (!admin && newestDev.ts > lastSeenThreadTs) {
+        captureEvent('message_read', { kind: 'thread', message_ts: newestDev.ts });
+      }
+      void markThreadSeen(newestDev.ts); setLastSeenThreadTs(newestDev.ts);
+    }
+  }, [broadcasts, thread, admin, lastSeenThreadTs]);
+
+  // Closing the bell without reading a shown broadcast — the "saw the dot,
+  // opened, didn't read" signal. CTA taps (invite / feedback) close via their
+  // own handlers and are NOT counted as a dismiss.
+  const closePanel = useCallback(() => {
+    if (!admin && open) {
+      const unread = broadcasts.filter((b) => !expandedBroadcasts.has(b.id)).length;
+      captureEvent('message_dismissed', { broadcasts_shown: broadcasts.length, broadcasts_unread: unread });
+    }
+    setOpen(false);
+  }, [admin, open, broadcasts, expandedBroadcasts]);
 
   const submitReply = useCallback(async () => {
     const text = replyText.trim();
@@ -174,14 +227,16 @@ export function NotificationBell(): JSX.Element {
   }, [replyText, loadInbox]);
 
   const sendFeedback = useCallback(() => {
+    if (!admin) captureEvent('message_cta_tapped', { cta: 'feedback' });
     window.dispatchEvent(new CustomEvent('open-feedback'));
     setOpen(false);
-  }, []);
+  }, [admin]);
 
   const inviteFriend = useCallback(() => {
+    if (!admin) captureEvent('message_cta_tapped', { cta: 'invite' });
     window.dispatchEvent(new CustomEvent('open-referral'));
     setOpen(false);
-  }, []);
+  }, [admin]);
 
   // Admin unlock: enter the secret, verify by attempting an admin read.
   const tryUnlock = useCallback(async () => {
@@ -263,7 +318,7 @@ export function NotificationBell(): JSX.Element {
       {open && createPortal(
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-16"
-          onClick={() => setOpen(false)}
+          onClick={closePanel}
           data-testid="notification-overlay"
         >
           <div
@@ -290,7 +345,7 @@ export function NotificationBell(): JSX.Element {
               >
                 {admin && adminView !== 'user' ? (adminView === 'broadcast' ? 'Broadcast' : adminView === 'feedback' ? 'Feedback' : activeDevice ? 'Reply' : 'User messages') : 'Messages'}
               </h2>
-              <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded p-1 text-theme-text hover:opacity-70">
+              <button type="button" onClick={closePanel} aria-label="Close" className="rounded p-1 text-theme-text hover:opacity-70">
                 <X size={20} />
               </button>
             </div>

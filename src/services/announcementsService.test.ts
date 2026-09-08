@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { hasUnread, mergeBroadcasts, type Announcement } from './announcementsService';
+import {
+  hasUnread,
+  mergeBroadcasts,
+  claimUndeliveredBroadcasts,
+  claimBroadcastRead,
+  type Announcement,
+} from './announcementsService';
 
 const m = (id: string): Announcement => ({ id, date: '2026-09-06', title: 't', body: 'b' });
 const md = (id: string, date: string): Announcement => ({ id, date, title: id, body: 'b' });
@@ -45,5 +51,27 @@ describe('announcementsService.mergeBroadcasts — welcome messages always show'
     const merged = mergeBroadcasts(pinned, dynamic);
     expect(merged).toHaveLength(1);
     expect(merged[0].title).toBe('new');
+  });
+});
+
+describe('announcementsService — message telemetry dedup (David 2026-09-08)', () => {
+  it('claimUndeliveredBroadcasts returns each id only the first time', async () => {
+    const first = await claimUndeliveredBroadcasts(['d1', 'd2']);
+    expect(first.sort()).toEqual(['d1', 'd2']);
+    // A re-fetch (polling) of the same ids yields nothing new.
+    expect(await claimUndeliveredBroadcasts(['d1', 'd2'])).toEqual([]);
+    // A newly-added id is still reported, the seen ones stay suppressed.
+    expect(await claimUndeliveredBroadcasts(['d1', 'd2', 'd3'])).toEqual(['d3']);
+  });
+
+  it('claimUndeliveredBroadcasts ignores empty ids', async () => {
+    expect(await claimUndeliveredBroadcasts(['', 'r1'])).toEqual(['r1']);
+  });
+
+  it('claimBroadcastRead is true once, then false for the same message', async () => {
+    expect(await claimBroadcastRead('m1')).toBe(true);
+    expect(await claimBroadcastRead('m1')).toBe(false);
+    expect(await claimBroadcastRead('m2')).toBe(true);
+    expect(await claimBroadcastRead('')).toBe(false);
   });
 });

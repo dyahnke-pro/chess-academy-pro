@@ -19,6 +19,9 @@ audit/bot traffic).
 
 ## Note
 
-There is currently NO telemetry for in-app message reads/receipts (the bell /
-`/api/messages` emits no PostHog event). "Did users get/read my messages?"
-cannot be answered until a `message_viewed` event is instrumented.
+Message read/delivery telemetry IS now instrumented (David 2026-09-08). The
+bell fires `message_delivered` / `message_read` / `message_dismissed` /
+`message_cta_tapped` — see `docs/analytics-message-events.md`. Events only exist
+from Sep 8 onward, so "did they get/read my messages?" is answerable for
+messages sent after that. (Devices seen before the instrumentation shipped will
+show no delivered/read rows for messages they'd already received.)

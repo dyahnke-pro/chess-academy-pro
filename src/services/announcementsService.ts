@@ -161,6 +161,59 @@ export async function markThreadSeen(ts: number): Promise<void> {
   announceSeen();
 }
 
+// ── Message telemetry dedup (David 2026-09-08) ──────────────────────────────
+// So "did users GET / READ my messages?" is answerable in PostHog, the bell
+// fires message_delivered / message_read (see NotificationBell). Both must fire
+// ONCE per message per device — polling re-fetches the same broadcasts every
+// 15s, and re-reads are noise — so the reported ids are persisted here in Dexie
+// meta (JSON id arrays, bounded). The analytics EVENT is fired by the caller;
+// this layer only owns the "have we already counted this id?" dedup.
+
+const DELIVERED_IDS_KEY = 'messages.deliveredIds';
+const READ_IDS_KEY = 'messages.readIds';
+const REPORTED_IDS_CAP = 200;
+
+async function getReportedIds(key: string): Promise<Set<string>> {
+  try {
+    const rec = await db.meta.get(key);
+    if (typeof rec?.value === 'string') {
+      const arr: unknown = JSON.parse(rec.value);
+      if (Array.isArray(arr)) return new Set(arr.filter((x): x is string => typeof x === 'string'));
+    }
+  } catch { /* fresh device / parse failure → empty set */ }
+  return new Set();
+}
+
+async function putReportedIds(key: string, set: Set<string>): Promise<void> {
+  try {
+    await db.meta.put({ key, value: JSON.stringify([...set].slice(-REPORTED_IDS_CAP)) });
+  } catch { /* best-effort — a re-fired event is harmless */ }
+}
+
+/** Return the broadcast ids NOT yet reported delivered on this device, and
+ *  record them as delivered. The caller fires one `message_delivered` per
+ *  returned id, so each message counts a delivery exactly once per device. */
+export async function claimUndeliveredBroadcasts(ids: string[]): Promise<string[]> {
+  const set = await getReportedIds(DELIVERED_IDS_KEY);
+  const fresh = ids.filter((id) => id && !set.has(id));
+  if (fresh.length > 0) {
+    for (const id of fresh) set.add(id);
+    await putReportedIds(DELIVERED_IDS_KEY, set);
+  }
+  return fresh;
+}
+
+/** True the FIRST time a broadcast id is read on this device (and records it),
+ *  false on every later read — so `message_read` fires once per message. */
+export async function claimBroadcastRead(id: string): Promise<boolean> {
+  if (!id) return false;
+  const set = await getReportedIds(READ_IDS_KEY);
+  if (set.has(id)) return false;
+  set.add(id);
+  await putReportedIds(READ_IDS_KEY, set);
+  return true;
+}
+
 // ── Admin (David only) ──────────────────────────────────────────────────────
 // The secret is entered once on David's device and stored in Dexie; it is sent
 // as x-admin-secret and validated SERVER-SIDE. It never ships in the bundle.

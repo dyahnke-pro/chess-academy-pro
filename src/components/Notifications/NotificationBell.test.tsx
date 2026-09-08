@@ -6,6 +6,12 @@ import { NotificationBell } from './NotificationBell';
 let seenId: string | null = null;
 let seenTs = 0;
 const sendReply = vi.fn(async () => true);
+const captureEvent = vi.fn();
+// Per-device dedup mocks: first delivery/read counts, repeats don't.
+let delivered = new Set<string>();
+let read = new Set<string>();
+
+vi.mock('../../services/analytics', () => ({ captureEvent: (...a: unknown[]) => captureEvent(...a) }));
 
 vi.mock('../../services/announcementsService', () => ({
   fetchInbox: vi.fn(async () => ({
@@ -30,9 +36,19 @@ vi.mock('../../services/announcementsService', () => ({
   hasUnreadFeedback: (items: { ts: number }[], lastTs: number) => items.some((f) => f.ts > lastTs),
   getLastSeenFeedbackTs: vi.fn(async () => 0),
   markFeedbackSeen: vi.fn(async () => undefined),
+  claimUndeliveredBroadcasts: vi.fn(async (ids: string[]) => {
+    const fresh = ids.filter((id) => !delivered.has(id));
+    for (const id of fresh) delivered.add(id);
+    return fresh;
+  }),
+  claimBroadcastRead: vi.fn(async (id: string) => {
+    if (read.has(id)) return false;
+    read.add(id);
+    return true;
+  }),
 }));
 
-beforeEach(() => { seenId = null; seenTs = 0; });
+beforeEach(() => { seenId = null; seenTs = 0; delivered = new Set(); read = new Set(); captureEvent.mockClear(); });
 
 describe('NotificationBell — unread dot', () => {
   it('shows a red dot while there is an unread message, and CLEARS it once read', async () => {
@@ -80,5 +96,50 @@ describe('NotificationBell — unread dot', () => {
     expect((await screen.findByTestId('broadcast-body')).textContent).toContain('be patient');
     fireEvent.click(row);
     await waitFor(() => expect(screen.queryByTestId('broadcast-body')).toBeNull());
+  });
+});
+
+describe('NotificationBell — message telemetry (David 2026-09-08)', () => {
+  // Props of every captured event with the given name.
+  const props = (name: string): Record<string, unknown>[] =>
+    captureEvent.mock.calls.filter((c) => c[0] === name).map((c) => (c[1] ?? {}) as Record<string, unknown>);
+
+  it('fires message_delivered once per broadcast that reaches the device', async () => {
+    render(<NotificationBell />);
+    await waitFor(() => expect(props('message_delivered').length).toBe(1));
+    expect(props('message_delivered')[0]).toMatchObject({ message_id: 'b1', message_title: 'Welcome' });
+  });
+
+  it('fires message_read when the user expands a broadcast — once per message', async () => {
+    render(<NotificationBell />);
+    fireEvent.click(await screen.findByTestId('notification-bell'));
+    const row = await screen.findByTestId('broadcast-row');
+    fireEvent.click(row); // expand = read
+    await waitFor(() => expect(props('message_read').filter((p) => p.kind === 'broadcast').length).toBe(1));
+    fireEvent.click(row); // collapse
+    fireEvent.click(row); // expand again — dedup: no second read
+    await new Promise((r) => setTimeout(r, 0));
+    expect(props('message_read').filter((p) => p.kind === 'broadcast').length).toBe(1);
+  });
+
+  it('fires message_read for a fresh developer reply when the panel opens', async () => {
+    render(<NotificationBell />);
+    fireEvent.click(await screen.findByTestId('notification-bell'));
+    await waitFor(() => expect(props('message_read').some((p) => p.kind === 'thread')).toBe(true));
+  });
+
+  it('fires message_dismissed when the panel is closed with an unread broadcast', async () => {
+    render(<NotificationBell />);
+    fireEvent.click(await screen.findByTestId('notification-bell'));
+    fireEvent.click(await screen.findByTestId('notification-overlay')); // close without expanding
+    await waitFor(() => expect(props('message_dismissed').length).toBe(1));
+    expect(props('message_dismissed')[0]).toMatchObject({ broadcasts_unread: 1 });
+  });
+
+  it('fires message_cta_tapped for the invite and feedback CTAs', async () => {
+    render(<NotificationBell />);
+    fireEvent.click(await screen.findByTestId('notification-bell'));
+    fireEvent.click(await screen.findByTestId('notification-invite-friend'));
+    await waitFor(() => expect(props('message_cta_tapped').some((p) => p.cta === 'invite')).toBe(true));
   });
 });
