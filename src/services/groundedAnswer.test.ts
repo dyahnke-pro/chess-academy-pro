@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -815,6 +815,28 @@ describe('assemblePlanAnswer — Phase 3 (voice the engine PV as the plan)', () 
 function concept(over: Partial<ConceptEntry> = {}): ConceptEntry {
   return { id: 'fork', name: 'fork', type: 'tactic', phrases: ['fork'], passages: [], ...over };
 }
+describe('assembleFundamentalsAnswer — personalizes to the student\'s weak fundamentals (David 2026-09-08)', () => {
+  it('leads with the student\'s most-broken fundamentals + their devices when weak list is present', () => {
+    const a = assembleFundamentalsAnswer('general', [
+      { label: 'King safety', device: 'Castle before you open the centre.', count: 12 },
+      { label: 'Development', device: 'New move, new piece.', count: 5 },
+    ]);
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/from your own games/i);
+    expect(a!.facts).toContain('King safety (12 times)');
+    expect(a!.facts).toContain('Development (5 times)');
+    expect(a!.facts).toContain('Castle before you open the centre.');
+    expect(a!.sources).toContain('data:your-games');
+  });
+
+  it('falls back to the generic core-four when there is no weakness data', () => {
+    const a = assembleFundamentalsAnswer('general');
+    expect(a).not.toBeNull();
+    expect(a!.facts).toMatch(/piece values|control the centre/i);
+    expect(a!.facts).not.toMatch(/from your own games/i);
+  });
+});
+
 describe('assembleConceptAnswer — Phase 5 (voice the book corpus, not memory)', () => {
   it('voices the first sentences of the book passage + a book source', () => {
     const a = assembleConceptAnswer(concept({

@@ -132,15 +132,26 @@ export interface FundamentalStat {
 }
 
 /**
- * The student's per-fundamental slip counts, read from the recorded weaknesses
- * (keyed by the `fundamentalId` stored on each record). Only counted (learned-
- * line) records feed the formal count; display-only slips are excluded, matching
- * the weakness profile. A fundamental the student has never slipped on is absent
- * (the caller renders "not yet"). Pure Dexie read.
+ * The student's per-fundamental slip counts, read from the recorded
+ * misconception tags (keyed by the `fundamentalId` stored on each record).
+ *
+ * 🔒 IMPORTED / ANALYZED GAMES COUNT HERE (David 2026-09-08: "do we capture that
+ * data in game analysis?" → "yes to both"). This used to exclude `counted:false`
+ * rows "matching the weakness profile" — but that hid every imported game from
+ * the fundamentals scorecard, so a heavy importer saw a rich weakness profile
+ * (fed by mistakePuzzles/classifiedTactics) and a near-empty fundamentals view,
+ * from the SAME games split down two pipes. The `counted` flag exists to stop
+ * the misconception TALLY double-counting the mistake-puzzle WEAKNESS PROFILE —
+ * a different consumer. The fundamentals scorecard is "which fundamentals you
+ * break", and an imported-game slip absolutely counts for that. Each game's
+ * misconceptions are logged once (the `hasMisconceptionsForGame` guard in
+ * autoAnalyzeGame), so counting every fundamentalId-tagged row cannot
+ * double-count a game across the live + batch paths. A fundamental never slipped
+ * on is absent (the caller renders "not yet"). Pure Dexie read.
  */
 export async function getFundamentalCounts(): Promise<Partial<Record<FundamentalId, FundamentalStat>>> {
   const out: Partial<Record<FundamentalId, FundamentalStat>> = {};
-  let rows: { fundamentalId?: string; counted?: boolean; createdAt: number }[] = [];
+  let rows: { fundamentalId?: string; createdAt: number }[] = [];
   try {
     rows = await db.misconceptionTags.toArray();
   } catch {
@@ -148,7 +159,7 @@ export async function getFundamentalCounts(): Promise<Partial<Record<Fundamental
   }
   for (const r of rows) {
     const fid = r.fundamentalId as FundamentalId | undefined;
-    if (!fid || r.counted === false) continue;
+    if (!fid) continue;
     if (!(fid in FUNDAMENTAL_SECTION)) continue; // guard stale/unknown ids
     const cur = out[fid] ?? { count: 0, lastSeenAt: 0 };
     cur.count += 1;

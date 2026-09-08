@@ -2661,10 +2661,40 @@ export function assembleFundamentalLessonAnswer(id: FundamentalId): GroundedAnsw
   return { facts: lesson.facts, bestMoveSan: null, bestMoveFromTo: null, sources: lesson.sources };
 }
 
+/** The student's most-broken fundamentals, pre-resolved by the caller (the
+ *  count comes from Dexie via `getFundamentalCounts`, which a pure leaf may not
+ *  read). Each carries the human label + the one-line teaching "device". */
+export interface WeakFundamental {
+  label: string;
+  device: string;
+  count: number;
+}
+
 export function assembleFundamentalsAnswer(
   topic: FundamentalsTopic,
+  /** When the ask is "what are MY fundamentals" and the student has slips on
+   *  record (incl. imported/analyzed games), lead with THEIR most-broken
+   *  fundamentals + teach each via its device, instead of the generic core four
+   *  (David 2026-09-08: "yes to both" — personalize the answer). Empty/omitted
+   *  → the generic catalog answer below. */
+  weak?: readonly WeakFundamental[],
 ): (GroundedAnswer & { exampleReviewId?: string }) | null {
   const exampleReviewId = FUNDAMENTALS_EXAMPLE_REVIEW[topic];
+  // PERSONALIZED — the fundamentals THIS student breaks most, from their games.
+  if (topic === 'general' && weak && weak.length > 0) {
+    const top = weak.slice(0, 3);
+    const lead = `The fundamentals costing you the most, from your own games: ${top
+      .map((w) => `${w.label} (${w.count} time${w.count === 1 ? '' : 's'})`)
+      .join(', ')}.`;
+    const teach = top.map((w) => w.device).filter(Boolean).join(' ');
+    return {
+      facts: `${lead} ${teach}`.trim(),
+      bestMoveSan: null,
+      bestMoveFromTo: null,
+      sources: ['data:your-games'],
+      exampleReviewId,
+    };
+  }
   if (topic !== 'general') {
     const entry = FUNDAMENTALS[topic];
     return { facts: entry.facts, bestMoveSan: null, bestMoveFromTo: null, sources: [entry.source], exampleReviewId };

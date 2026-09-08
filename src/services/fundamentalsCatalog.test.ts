@@ -41,13 +41,16 @@ describe('fundamentalsCatalog — every fundamental is catalogued', () => {
 describe('getFundamentalCounts — reads the student\'s own slips by fundamentalId', () => {
   beforeEach(async () => { await db.misconceptionTags.clear(); });
 
-  it('counts recorded fundamentals, skips display-only + unknown ids', async () => {
+  it('counts recorded fundamentals INCLUDING analyzed/display-only slips (David 2026-09-08)', async () => {
     await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
     await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
-    await logMisconception({ tag: 'tempo-handed', fundamentalId: 'tempo-handed', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false }); // display-only
+    // An imported/analyzed game logs counted:false to avoid double-counting the
+    // weakness PROFILE — but it MUST still feed the fundamentals scorecard
+    // (otherwise a heavy importer sees an empty fundamentals view).
+    await logMisconception({ tag: 'tempo-handed', fundamentalId: 'tempo-handed', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
     const counts = await getFundamentalCounts();
     expect(counts['poisoned-pawn']?.count).toBe(2);
-    expect(counts['tempo-handed']).toBeUndefined();          // counted:false excluded
+    expect(counts['tempo-handed']?.count).toBe(1);           // analyzed game now counts
     expect(counts['same-piece-twice']).toBeUndefined();      // never slipped → absent
   });
 });

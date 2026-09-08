@@ -59,7 +59,9 @@ function deepseekCacheSplit(usage: unknown): { hit: number | null; miss: number 
   };
 }
 import { lookupMasterPlay } from './masterPlayLookup';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleOpeningNameAnswer, type OpeningStat, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assembleFundamentalLessonAnswer, assembleFamousGameAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleAttackAssessment, assemblePositionalAnswer, assembleTeachingAnswer, assembleSettingsAnswer, assembleAppHelpAnswer, assembleCapabilitiesOverview, assembleEngineReasoning, explainBestMoveGrounded, assembleAlternativesAnswer, assembleCounterRepertoireAnswer, pickCounterRecommendation, answerBoardQuestion, assembleOpponentMoveAnswer, assembleTheoryAnswer, assembleEndgameTechniqueAnswer, assembleWeaknessBriefingAnswer, assembleWeaknessLifecycleAnswer, type WeakFundamental } from './groundedAnswer';
+import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
+import type { FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -4679,7 +4681,23 @@ export async function getCoachChatResponse(
 
         if (grounding.fundamentalsQuestion) {
           const userText = lastUserMessage() ?? '';
-          const answer = assembleFundamentalsAnswer(fundamentalsTopicFromText(userText));
+          const topic = fundamentalsTopicFromText(userText);
+          // PERSONALIZE "what are MY fundamentals I need to work on" — lead with
+          // the fundamentals THIS student breaks most, from their own games
+          // (David 2026-09-08). getFundamentalCounts now includes imported/
+          // analyzed games. A generic "what are the fundamentals" (no "my"/"I")
+          // still gets the core-four catalog.
+          let weak: WeakFundamental[] | undefined;
+          if (topic === 'general' && /\b(?:my|i|i'?m|me)\b|\bwork(?:ing)?\s+on\b|\bneed\b|\bweak\b/i.test(userText)) {
+            try {
+              const counts = await getFundamentalCounts();
+              weak = (Object.entries(counts) as [FundamentalId, { count: number; lastSeenAt: number }][])
+                .map(([fid, s]) => ({ label: FUNDAMENTAL_LABEL[fid], device: fundamentalDevice(fid), count: s.count, lastSeenAt: s.lastSeenAt }))
+                .sort((a, b) => b.count - a.count || b.lastSeenAt - a.lastSeenAt)
+                .map(({ label, device, count }) => ({ label, device, count }));
+            } catch { weak = undefined; }
+          }
+          const answer = assembleFundamentalsAnswer(topic, weak);
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
             if (voiced) {
