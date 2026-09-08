@@ -149,6 +149,19 @@ board with its own hands, then (e) learns from what happened.
    voice. A wrong link/claim is worse than a flat list.
 7. **Per-surface register, one brain.** Review retrospective; Learn/Watch
    present-tense; Play silent-until-asked. Perspective you/they, never we.
+8. **ONE adaptive algo — no orphans (David 2026-09-08).** There is a SINGLE
+   source of adaptivity: the `userImportance` score (§5 P1). Every other
+   "adaptive"/rating-scaled function that decides what/how-much/how-deep to say
+   gets ROLLED INTO it (Phase 7). No second parallel criticality, no competing
+   depth curve, no per-surface bespoke throttle. This is the CLAUDE.md
+   "reconcile existing signals, don't add a second criticality" rule made a
+   first-class principle. A leftover orphan adaptive function is a bug.
+9. **Everything at the coach's disposal — nothing islanded (David 2026-09-08).**
+   The candidate pool (Layer 1) enumerates EVERY fact-computer and the actuators
+   (Layer 3) expose EVERY tool (voice + all board-control hands + eyes). The
+   final pass proves nothing is orphaned: every computer can reach the selector,
+   every tool can be invoked by the spine. "Largest build since G0" = the one
+   where the whole toolbox is finally in one hand.
 
 ---
 
@@ -262,11 +275,35 @@ a new ledger. The recurrence + taught-and-recurred signals already exist:
 - Test: a concept marked `mastered` that recurs is treated with escalation, not
   as a first introduction.
 
+### Phase 7 — CONSOLIDATION: roll every orphan adaptive fn into the algo + wire everything (David 2026-09-08)
+The closing sweep that makes it ONE coach, not a pile of features (principles 8+9).
+- **Roll in the orphan adaptive functions.** After P1's `userImportance` exists,
+  `grep` the codebase for every OTHER function that scales by rating / decides
+  verbosity / picks importance / gates depth on its own —
+  `criticalityThresholds` callers, `narrationImportance` variants, any
+  per-surface bespoke "how much to say" logic, `pvBandForRating`, verbosity caps
+  beyond G5, rating-scaled threat/hint tiers — and reconcile them INTO the single
+  algo. Each orphan either delegates to `userImportance` or is deleted. Target:
+  one adaptive source of truth. (Do this carefully per the §0 surface map — these
+  orphans live across review/learn/play/tactics.)
+- **Wire everything into the coach.** Confirm the candidate pool sees every
+  fact-computer (§4 of the system map) and the spine can invoke every actuator
+  (voice + all cerebrum board tools + eyes). Nothing islanded, no dead-end
+  computer, no tool only the LLM can reach.
+- **Completeness gate + audit.** A test that enumerates the fact-computers and
+  the tools and asserts each is reachable by the selector/spine (a "note comes
+  OUT / tool CAN be invoked" proof, not an import check). Then the 3-instrument
+  audit across every affected surface.
+- Test: no orphan rating-scaled decision survives outside the algo; every
+  computer + tool is reachable.
+
 Sequencing logic: P1 is the keystone (nothing else personalizes without it) and
 now carries the adaptive score + the existing lifecycle/curriculum memory. P2 is
 the highest-visibility slice and rides P1's rating/depth machinery. P3 adds a new
 weakness the P1 wire then teaches for free. P4/P5 are the "unified" payoff and
-depend on P1–P3. P6 is folded into P1 (consume, don't build).
+depend on P1–P3. P6 is folded into P1 (consume, don't build). P7 is the closing
+consolidation — it can only run once the algo (P1) exists to roll orphans into,
+so it is LAST, after every feature phase, as David specified ("when all done").
 
 ---
 
@@ -350,6 +387,11 @@ reused, not rebuilt. Nothing above blocks starting Phase 1.
 - 2026-09-08 — David, emphatic: **map EACH surface ENTIRELY before building,
   and every neighboring/touching surface for blast radius.** Locked as §0 —
   the pre-build gate. No phase starts without its surface map.
+- 2026-09-08 — David: **roll every orphan "adaptive function" into the new algo
+  when all done** (principle 8) + **wire ALL tools into the coach so everything
+  is at its disposal** (principle 9). Added as Phase 7 (the closing
+  consolidation) + Layers 1/3 completeness. David: "largest and most important
+  build since going G0."
 
 ## 9. Next-session pickup
 
