@@ -37,7 +37,7 @@ import {
 import { detectTactics } from './tacticsDetector';
 import { getTacticLookahead } from './tacticAlertService';
 import { stockfishEngine } from './stockfishEngine';
-import type { TacticPattern, UpcomingTactic } from '../types/tacticTypes';
+import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
 
 /**
@@ -414,8 +414,11 @@ export function speakDeepestLookahead(
     list: TacticsLiveContext['threats'],
   ): TacticsLiveContext['threats'] =>
     list.filter((e) => e.depthAhead >= 2 && e.line.length > 0);
+  // e.type is widened to string on TacticsLiveContext; the runtime value is a
+  // real TacticPatternType (from UpcomingTactic.pattern.type). An unknown motif
+  // would map to null in the bridge anyway, so the cast is safe.
   const isHole = (e: TacticsLiveContext['threats'][number]): boolean =>
-    matchTacticPattern(e.type, studentWeaknesses) !== null;
+    matchTacticPattern(e.type as TacticPatternType, studentWeaknesses) !== null;
   const deepOpps = deep(ctx.opportunities);
   const deepThreats = deep(ctx.threats);
   // Within each seat, a motif the student keeps falling in wins the pick; else
