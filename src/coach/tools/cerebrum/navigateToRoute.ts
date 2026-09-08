@@ -74,17 +74,20 @@ export const navigateToRouteTool: Tool = {
       }
     }
 
-    // No callback — fall back to stub behavior so calls from
-    // unmigrated surfaces don't fail outright.
+    // No navigator wired — REPORT FAILURE, never synthetic success (David
+    // 2026-09-08: the coach said "done" while still on the home screen). With
+    // the global actuator now defaulted into the tool context, this path is only
+    // reached when navigation is genuinely unavailable — and then the coach must
+    // know it, so it can't claim it navigated (G0).
     void logAppAudit({
       kind: 'coach-brain-tool-called',
       category: 'subsystem',
       source: 'navigateToRouteTool',
-      summary: `STUB navigate to ${path} (no onNavigate callback)`,
+      summary: `navigate to ${path} FAILED (navigation unavailable)`,
     });
     return {
-      ok: true,
-      result: { path, resolvedTo: match.path, title: match.title, stub: true },
+      ok: false,
+      error: `cannot navigate to "${path}" — navigation is unavailable here. Do not tell the user you navigated.`,
     };
   },
 };

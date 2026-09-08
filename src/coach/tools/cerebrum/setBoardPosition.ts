@@ -51,13 +51,17 @@ function tokenizeMoves(moves: unknown): string[] {
 
 async function dispatch(fen: string, ctx: ToolExecutionContext | undefined, extra?: Record<string, unknown>): Promise<ToolExecutionResult> {
   if (!ctx?.onSetBoardPosition) {
+    // No board to set — REPORT FAILURE, never synthetic success (David
+    // 2026-09-08: "it said done, but we were still on the home screen"). With
+    // the global actuator defaulted into the tool context this is only reached
+    // when the board genuinely can't be set, and the coach must NOT claim it did.
     void logAppAudit({
       kind: 'coach-brain-tool-called',
       category: 'subsystem',
       source: 'setBoardPositionTool.execute',
-      summary: `STUB set_board_position (no onSetBoardPosition callback)`,
+      summary: `set_board_position FAILED (no board to set)`,
     });
-    return { ok: true, result: { stub: true, requested: { fen, ...extra }, reason: 'no onSetBoardPosition callback on this surface' } };
+    return { ok: false, error: 'cannot set the board here — no board is available. Do not tell the user the position is set.' };
   }
   try {
     const result = await Promise.resolve(ctx.onSetBoardPosition(fen));

@@ -58,6 +58,7 @@ import type {
   ProviderResponse,
   ToolExecutionContext,
 } from './types';
+import { coachNavigate, coachSetBoardPosition } from '../services/coachActuator';
 
 /** Surfaces whose `ask` text is authored IN CODE (a composed instruction to
  *  the LLM), never typed or spoken by the user. The ~35 user-intent
@@ -968,9 +969,20 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
   const ctx: ToolExecutionContext = {
     onPlayMove: options.onPlayMove,
     onTakeBackMove: options.onTakeBackMove,
-    onSetBoardPosition: options.onSetBoardPosition,
+    // FULL CONTROL (David 2026-09-08): default navigate + board-setup to the
+    // global coach actuator so the coach can open any tab / set up any position
+    // from ANY surface — including the home mic/chat, which wires neither. A
+    // surface WITH its own board (CoachTeachPage/CoachGamePage) passes its own
+    // callbacks and keeps in-place behavior; everyone else falls back to the
+    // actuator (navigate; set-up-position → /coach/play?fen=). onNavigate throws
+    // when the actuator can't navigate, so navigate_to_route reports {ok:false}
+    // instead of the old synthetic success — the coach never fake-says "done".
+    onSetBoardPosition: options.onSetBoardPosition ?? ((fen: string) => coachSetBoardPosition(fen)),
     onResetBoard: options.onResetBoard,
-    onNavigate: options.onNavigate,
+    onNavigate: options.onNavigate ?? ((path: string) => {
+      const r = coachNavigate(path);
+      if (!r.ok) throw new Error(r.reason ?? 'navigation unavailable');
+    }),
     onQuizUserForMove: options.onQuizUserForMove,
     onStartWalkthroughForOpening: options.onStartWalkthroughForOpening,
     liveFen: input.liveState.fen,

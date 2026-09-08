@@ -35,14 +35,15 @@ describe('navigate_to_route tool (real)', () => {
   });
 
   it('accepts an exact-match path from the manifest', async () => {
-    const result = await navigateToRouteTool.execute({ path: '/openings' });
+    const result = await navigateToRouteTool.execute({ path: '/openings' }, { onNavigate: vi.fn() });
     expect(result.ok).toBe(true);
   });
 
   it('accepts a param-pattern match (e.g. /openings/:id)', async () => {
-    const result = await navigateToRouteTool.execute({
-      path: '/openings/caro-kann',
-    });
+    const result = await navigateToRouteTool.execute(
+      { path: '/openings/caro-kann' },
+      { onNavigate: vi.fn() },
+    );
     expect(result.ok).toBe(true);
   });
 
@@ -58,10 +59,12 @@ describe('navigate_to_route tool (real)', () => {
     expect((result.result as { stub?: boolean }).stub).toBeUndefined();
   });
 
-  it('falls back to stub mode when no onNavigate callback is wired', async () => {
+  it('reports FAILURE (never synthetic success) when no onNavigate callback is wired', async () => {
+    // David 2026-09-08: the old stub returned ok:true so the LLM said "done"
+    // while still on the home screen. Now an unwired navigator fails honestly.
     const result = await navigateToRouteTool.execute({ path: '/openings' });
-    expect(result.ok).toBe(true);
-    expect((result.result as { stub?: boolean }).stub).toBe(true);
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/navigation is unavailable/i);
   });
 
   it('surfaces a thrown onNavigate as a tool error', async () => {

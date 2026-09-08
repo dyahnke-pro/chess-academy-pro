@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { registerCoachNavigate, clearCoachNavigate } from './services/coachActuator';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
@@ -125,6 +126,21 @@ import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
  */
 function NativeBackButton(): null {
   useAndroidBackButton();
+  return null;
+}
+
+/**
+ * Registers react-router's navigate with the global coach actuator so the coach
+ * can open any tab / set up any position from ANY surface — including the home
+ * mic/chat that wires no board callbacks (David 2026-09-08 full-control). Mounted
+ * inside BrowserRouter; renders nothing.
+ */
+function CoachActuatorBridge(): null {
+  const navigate = useNavigate();
+  useEffect(() => {
+    registerCoachNavigate((path: string) => { void navigate(path); });
+    return () => clearCoachNavigate();
+  }, [navigate]);
   return null;
 }
 
@@ -494,6 +510,7 @@ export function App(): JSX.Element {
     <>
     <BrowserRouter>
       <NativeBackButton />
+      <CoachActuatorBridge />
       <Routes>
         {/* Standalone legal route — no app chrome, so the production URL
             (/privacy) doubles as the hosted privacy-policy link the App

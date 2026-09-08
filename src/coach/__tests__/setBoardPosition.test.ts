@@ -112,13 +112,12 @@ describe('set_board_position tool', () => {
     });
   });
 
-  it('graceful no-op when no onSetBoardPosition callback is wired (stub=true)', async () => {
+  it('reports FAILURE (never synthetic success) when no onSetBoardPosition callback is wired', async () => {
+    // David 2026-09-08: the old stub returned ok:true, so the coach said the
+    // position was set while nothing changed. Now an unwired board fails honestly.
     const result = await setBoardPositionTool.execute({ fen: DEEP_FEN });
-    expect(result.ok).toBe(true);
-    const payload = result.result as { stub?: boolean; requested?: { fen?: string }; reason?: string };
-    expect(payload.stub).toBe(true);
-    expect(payload.requested?.fen).toBe(DEEP_FEN);
-    expect(payload.reason).toMatch(/no onSetBoardPosition callback/);
+    expect(result.ok).toBe(false);
+    expect(result.error).toMatch(/no board is available/i);
   });
 
   it('accepts a boolean return from the callback', async () => {
