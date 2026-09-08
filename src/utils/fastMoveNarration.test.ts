@@ -92,20 +92,20 @@ describe('buildFastMoveLine', () => {
       ).toBe('');
     });
 
-    it('does NOT volunteer a hanging piece — dictates the move under full density instead', () => {
+    it('does NOT volunteer a hanging piece and NEVER dictates the move (silent with volunteering off)', () => {
       const hanging: HangingPiece[] = [{ square: 'd4', piece: 'n', color: 'w' }];
-      // The canned slip flag is gone; with volunteering off and full density the
-      // builder just dictates the move (the grounded slip "why" comes from the
-      // call site, not here).
+      // No dictation of the student's own move (David 2026-09-08); with volunteering
+      // off there is nothing grounded to volunteer, so it is silent. The grounded
+      // slip "why" comes from the call site (assembleSlipNarration).
       expect(
         buildFastMoveLine({ san: 'Nd4', moverIsWhite: true, density: 'unlimited', classification: 'inaccuracy', hangingPieces: hanging }),
-      ).toBe('Knight to d4.');
+      ).toBe('');
     });
 
-    it('still dictates the move, which is how the student knows what was played', () => {
+    it('never dictates the student’s own move, even on full density (David 2026-09-08 "knight to e4")', () => {
       expect(
         buildFastMoveLine({ san: 'Nd5', moverIsWhite: true, density: 'unlimited', tactics: [fork] }),
-      ).toBe('Knight to d5.');
+      ).toBe('');
     });
 
     it('no longer emits a canned slip flag — the grounded slip narration owns the "why"', () => {
@@ -139,15 +139,15 @@ describe('buildFastMoveLine', () => {
     ).toBe('');
   });
 
-  it('dictates a routine move under full density', () => {
+  it('does NOT dictate a routine move even under full density — the "knight to e4" filler is gone (David 2026-09-08)', () => {
     expect(
       buildFastMoveLine({ san: 'Nf3', moverIsWhite: true, density: 'unlimited', classification: 'good' }),
-    ).toBe('Knight to f3.');
+    ).toBe('');
   });
 
-  it('dictates captures + checks under full density', () => {
+  it('does NOT dictate captures/checks either — no restating the board the student just made', () => {
     expect(
       buildFastMoveLine({ san: 'Bxf7+', moverIsWhite: true, density: 'unlimited' }),
-    ).toBe('Bishop takes on f7, check.');
+    ).toBe('');
   });
 });

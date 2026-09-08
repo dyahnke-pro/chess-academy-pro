@@ -16,7 +16,6 @@
 // only turns the already-computed move + tactic + classification data
 // into a short spoken line. No invented chess content (G3).
 
-import { describeMove } from '../services/tacticNarrationService';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 
 /** Density knob, mirrors `resolveLlmNarrationDensity`:
@@ -102,7 +101,9 @@ function spellSquare(sq: string): string {
  *      check") so every-move users still hear a beat.
  */
 export function buildFastMoveLine(input: FastMoveLineInput): string {
-  const { san, moverIsWhite, classification, tactics, hangingPieces, density, announcedHangingSquares, volunteerBoardReading } = input;
+  // `san` is no longer read — the student's own move is never dictated (David
+  // 2026-09-08); it stays on FastMoveLineInput for callers.
+  const { moverIsWhite, classification, tactics, hangingPieces, density, announcedHangingSquares, volunteerBoardReading } = input;
   if (density === 'none') return '';
 
   const realTactics = (tactics ?? []).filter((t) => t.type !== 'none' && t.description.trim());
@@ -141,22 +142,19 @@ export function buildFastMoveLine(input: FastMoveLineInput): string {
 
   // 3. Key-moment classification (blunder / mistake / inaccuracy).
   //    🔒 The canned flags ("That drops material." / "That gives ground." / "A
-  //    small slip — there was better.") are GONE (David 2026-09-08, emphatic:
-  //    "remove that string … narrations better be AT FULL STRENGTH"). A slip's
-  //    narration is now the GROUNDED per-move WHY — the stronger move + the
-  //    reason — computed by `assembleSlipNarration` at the call site (it has the
-  //    engine best move + eval swing in hand). This builder never speaks the
-  //    vague flag again; when the caller has no grounded slip to hand (no engine
-  //    best move), a key move falls through to move dictation on full density and
-  //    to silence on 'fast' — empty > vague (narration voice rule 4).
+  //    small slip — there was better.") are GONE (David 2026-09-08). A slip's
+  //    narration is the GROUNDED per-move WHY — the stronger move + the reason —
+  //    computed by `assembleSlipNarration` at the call site.
   void isKey;
 
-  // 4. Full density: dictate the move so every-move users hear a beat.
-  //    'fast' (brief / key-moments) stays silent on routine moves.
-  if (density !== 'fast') {
-    return `${describeMove(san, moverIsWhite)}.`;
-  }
-
+  // 4. 🔒 NEVER DICTATE THE STUDENT'S OWN MOVE (David 2026-09-08: "all i really
+  //    heard was it saying the move that i made. knight to e4" → chose "teach the
+  //    idea, else quiet"). The old step-4 read the student's own move back to them
+  //    ("Knight to e4.") on full density — pure filler that restates the board
+  //    (Narration Voice Rule 3) and is not teaching. It is REMOVED. A routine move
+  //    with nothing grounded to teach is silent (rule 4: silence is acceptable);
+  //    the idea, when there is one, is taught by the grounded slip narration
+  //    (assembleSlipNarration) and the volunteered tactic/hanging above.
   return '';
 }
 
