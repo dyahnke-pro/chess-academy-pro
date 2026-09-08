@@ -10,6 +10,19 @@ Store release** (TestFlight today, public stores next) — it is NOT a
 private single-user app. Build it for real beta testers and public
 store users.
 
+## 🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").
+
+Before starting ANY coach / narration / grounding / weakness / teaching build:
+- **`docs/plans/2026-09-08-unified-coach.md`** — the VISION + four-layer
+  blueprint (candidate pool → spine selector → actuators → loop) + the phased
+  build plan (P1 weakness→selector wire is the keystone) + the open decisions.
+  This is the target we build toward and the order we build it in.
+- **`docs/coach-system-map.md`** — how the coach is wired TODAY (surfaces, the
+  brain pipeline, every fact-computer, the student model, the `voiceFacts`
+  chokepoint, fast grep anchors). Read this to regain architectural context.
+- Shipped sub-system: `docs/plans/2026-09-07-causal-chain-engine.md` (the
+  cross-move cause→effect engine — moves do not exist in isolation).
+
 ## 🚨 NON-NEGOTIABLE GATES (apply to every change, every session)
 
 These are HARD requirements — not "best effort." Skipping them is a
