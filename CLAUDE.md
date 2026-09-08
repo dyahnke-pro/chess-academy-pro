@@ -4643,6 +4643,7 @@ After every `git push origin main`:
    | `src/data/pro-game-references.json` (any pro-rep build) | `scripts/audit-coach-player-games.mjs` + `npx vitest run src/data/proGameReferences.test.ts` |
    | `public/data/*-teachings.json` (any farmed corpus) or `farmedCorpusData` / `secondaryCorpora` | `scripts/audit-farmed-corpus-prod.mjs` + `npx vitest run src/data/secondaryTeachings.test.ts src/services/farmedCorpusData.test.ts` — a farmed corpus is FETCHED, not bundled, so a green build proves nothing about whether the running app can actually reach it |
    | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
+   | unified-coach personalization (weakness spine → surfaces, custom lesson) | `scripts/audit-unified-coach-prod.mjs` (SEEDS a real weakness profile via `audit-lib/seed-weakness-profile.mjs` so the inert-until-fed functions fire, then drives the P5 custom-lesson picker → concept teaching → own-position drill; 3-instrument. Every personalization function rides the same weakness spine this exercises) |
    | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
    | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |
    | `/coach/plan` (Training Plan) | `scripts/audit-coach-plan.mjs` |
