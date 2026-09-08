@@ -358,12 +358,14 @@ so it is LAST, after every feature phase, as David specified ("when all done").
    that also."* The "too early / costly" threshold is a scoring function over
    rating + the individual's profile + the eval cost of the departure — not a
    hardcoded per-band constant. Same adaptive-to-the-person shape as #1.
-6. **Custom-session size + entry UX → acknowledged (not blocking).** Decide at
-   Phase 5. Leaning: adaptive length (as many parts as live top holes, ~3
-   default), entry via chat intent AND a /coach/home button.
-7. **Takeback policy → acknowledged (not blocking).** Decide at Phase 4. Never
-   on Play (locked); in Learn, offer on a proven blunder, boosted when it's a
-   weakness-matched hole.
+6. **Custom-session size + entry → DECIDED (David 2026-09-08).** SIZE = adaptive,
+   as many parts as live top holes, ~3 default. ENTRY = **from Learn with Coach**
+   (`/coach/teach`) — a "teach me something / what should I learn?" affordance on
+   that surface launches the aggregated custom session (NOT /coach/home, not
+   chat-only). Build P5 to mount the session inside the Learn-with-Coach flow.
+7. **Takeback policy → DECIDED (David 2026-09-08).** Never on Play (locked); in
+   Learn, offer a takeback **only on a weakness-matched blunder** (the blunder
+   hits one of the student's tracked holes) — targeted, not on every blunder.
 
 **The through-line of David's calls:** everything adaptive is an ALGO keyed on
 the INDIVIDUAL (their weakness profile + lifecycle), never a rating-band table —
