@@ -183,7 +183,36 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # symptom fix, not a cure. 4.0.2 carries the analysis split: sweep as a shallow
 # draft, deep dive moved into the review, 4-worker phone pool, per-FEN eval
 # cache, recent games on Weaknesses.
-IOS_MARKETING_VERSION="4.0.2"
+# BUMP 4.0.2 → 4.0.3 (2026-09-09): 4.0.2 is LIVE on the App Store (public
+# iTunes lookup: version 4.0.2, released 2026-09-07), so Apple rejects new
+# builds under it — the same "Preparing build for App Store Connect failed" at
+# the Archive step that killed Xcode Cloud runs #197 and #198 today. The morning
+# build "succeeded" only because SCHEDULED runs skip iOS (SKIP_IOS=1); today's
+# manual builds are the FIRST iOS attempts since 4.0.2 released. TENTH identical
+# incident. 4.0.3 carries the coach board-awareness-in-chat sweep + the OTA
+# launch-install retry/telemetry/restart-fallback that unsticks stranded devices.
+# 🔒 THE DURABLE CURE IS STILL OWED (begged for since the 9th, 4.0.1): a build-
+# time PREFLIGHT that reads the live/approved version and auto-bumps above it, so
+# this hardcoded string can't go stale silently. The public iTunes lookup
+# (https://itunes.apple.com/lookup?id=6776418777) needs NO ASC keys and is
+# reachable from CI — it alone would have caught every RELEASED-version case
+# here; the ASC train query (keys already in the workflow) additionally catches
+# an approved-but-unreleased train (the 4.0.1 window). Wire the preflight next.
+PINNED_MARKETING_VERSION="4.0.3"
+# DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
+# -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
+# keys) and, if the pin isn't already above it, bumps the patch — so a forgotten
+# bump no longer burns a 9-minute archive with ITMS-90062. It prints the pinned
+# value on ANY error, and the case-guard below rejects a non-semver, so the
+# preflight can only help, never break the build.
+IOS_MARKETING_VERSION="$(node scripts/ci/resolve-marketing-version.mjs "$PINNED_MARKETING_VERSION" 2>/dev/null || echo "$PINNED_MARKETING_VERSION")"
+case "$IOS_MARKETING_VERSION" in
+  [0-9]*.[0-9]*.[0-9]*|[0-9]*.[0-9]*) : ;;                 # looks like a semver — keep it
+  *) IOS_MARKETING_VERSION="$PINNED_MARKETING_VERSION" ;;  # anything else — fall back to the pin
+esac
+if [ "$IOS_MARKETING_VERSION" != "$PINNED_MARKETING_VERSION" ]; then
+  echo "::warning::ci_post_clone: pinned ${PINNED_MARKETING_VERSION} is at/below the live App Store version — preflight auto-bumped to ${IOS_MARKETING_VERSION}. Update PINNED_MARKETING_VERSION."
+fi
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
