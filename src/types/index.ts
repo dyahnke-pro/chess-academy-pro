@@ -1577,6 +1577,11 @@ export interface OverviewInsights {
 export interface OpeningAggregateStats {
   name: string;
   eco: string | null;
+  /** The color the player HAD in these games. An ECO can be two different
+   *  openings depending on side (B07 = White "Anti-Pirc" vs Black "Pirc"), so
+   *  win-rate / best / worst results are aggregated per-color, not per-ECO —
+   *  and the UI keys/labels off this to keep the two sides distinct. */
+  color?: 'white' | 'black';
   openingId: string | null;
   games: number;
   wins: number;

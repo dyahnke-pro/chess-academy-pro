@@ -88,14 +88,18 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
       {data.winRateByOpening.length > 0 && (
         <InsightsSection title="Win Rate by Opening (3+ games)" urgent={data.winRateByOpening.some((o) => o.winRate < 25)}>
           <InsightsBarChart
-            data={data.winRateByOpening.map((o) => ({
-              label: o.name.length > 12 ? o.name.slice(0, 12) + '…' : o.name,
-              value: o.winRate,
-              severity: winRateTokens(o.winRate).tier,
-              suffix: '%',
-              onClick: () => setDrilldownOpening(o),
-              testId: `win-rate-row-${o.eco ?? o.name}`,
-            }))}
+            data={data.winRateByOpening.map((o) => {
+              const cl = o.color ? (o.color === 'white' ? ' (W)' : ' (B)') : '';
+              const base = o.name.length > 12 ? o.name.slice(0, 12) + '…' : o.name;
+              return {
+                label: base + cl,
+                value: o.winRate,
+                severity: winRateTokens(o.winRate).tier,
+                suffix: '%',
+                onClick: () => setDrilldownOpening(o),
+                testId: `win-rate-row-${o.eco ?? o.name}-${o.color ?? ''}`,
+              };
+            })}
             maxValue={100}
           />
         </InsightsSection>
@@ -109,7 +113,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
       {(data.bestResults?.length ?? 0) > 0 && (
         <InsightsSection title="Best results against (3+ games)">
           {(data.bestResults ?? []).map((o) => (
-            <OpeningRow key={`best-${o.eco ?? o.name}`} opening={o} onClick={() => setDrilldownOpening(o)} />
+            <OpeningRow key={`best-${o.eco ?? o.name}-${o.color ?? ''}`} opening={o} showColor onClick={() => setDrilldownOpening(o)} />
           ))}
         </InsightsSection>
       )}
@@ -120,7 +124,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
           urgent={(data.worstResults ?? []).some((o) => o.winRate < 25)}
         >
           {(data.worstResults ?? []).map((o) => (
-            <OpeningRow key={`worst-${o.eco ?? o.name}`} opening={o} onClick={() => setDrilldownOpening(o)} />
+            <OpeningRow key={`worst-${o.eco ?? o.name}-${o.color ?? ''}`} opening={o} showColor onClick={() => setDrilldownOpening(o)} />
           ))}
         </InsightsSection>
       )}
@@ -240,7 +244,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function OpeningRow({ opening, onClick }: { opening: OpeningAggregateStats; onClick: () => void }): JSX.Element {
+function OpeningRow({ opening, onClick, showColor = false }: { opening: OpeningAggregateStats; onClick: () => void; showColor?: boolean }): JSX.Element {
   const tokens = winRateTokens(opening.winRate);
   // Critical and severe tiers pulse / glow so a really lacking stat
   // jumps off the screen.
@@ -264,6 +268,11 @@ function OpeningRow({ opening, onClick }: { opening: OpeningAggregateStats; onCl
           </span>
         )}
         <span>{opening.name}</span>
+        {showColor && opening.color && (
+          <span className="text-[11px] ml-1" style={{ color: 'var(--color-text-muted)' }}>
+            as {opening.color === 'white' ? 'White' : 'Black'}
+          </span>
+        )}
         {opening.eco && (
           <span className="text-[11px] ml-1" style={{ color: 'var(--color-text-muted)' }}>{opening.eco}</span>
         )}

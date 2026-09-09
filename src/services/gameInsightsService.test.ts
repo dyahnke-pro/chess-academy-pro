@@ -301,6 +301,44 @@ describe('gameInsightsService', () => {
       expect(white?.name).toBe('Anti-Pirc: 150 Battery'); // his White games → White name
     });
 
+    it('splits win-rate/best/worst by COLOR for a two-sided ECO instead of merging (loop audit 2026-09-09 sweep)', async () => {
+      // Same class as the coverage + most-played fixes: winRateByOpening /
+      // bestResults / worstResults were aggregated by ECO ALONE, so B07 White
+      // wins and B07 Black losses merged into one 50% blob with a wrong-color
+      // name. They must be two color-correct entries: White Anti-Pirc at 100%,
+      // Black Pirc at 0%.
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+      const { getRepertoireOpenings } = await import('./openingService');
+      (getRepertoireOpenings as ReturnType<typeof vi.fn>).mockResolvedValue([
+        buildOpeningRecord({ eco: 'B07', name: 'Anti-Pirc: 150 Battery', color: 'white' }),
+        buildOpeningRecord({ eco: 'B07', name: 'Pirc Defence', color: 'black' }),
+      ]);
+      await db.games.bulkAdd([
+        // 3 White wins in B07
+        buildGameRecord({ id: 'w1', white: 'TestUser', black: 'Opp', result: '1-0', eco: 'B07' }),
+        buildGameRecord({ id: 'w2', white: 'TestUser', black: 'Opp', result: '1-0', eco: 'B07' }),
+        buildGameRecord({ id: 'w3', white: 'TestUser', black: 'Opp', result: '1-0', eco: 'B07' }),
+        // 3 Black losses in B07
+        buildGameRecord({ id: 'b1', white: 'Opp', black: 'TestUser', result: '1-0', eco: 'B07' }),
+        buildGameRecord({ id: 'b2', white: 'Opp', black: 'TestUser', result: '1-0', eco: 'B07' }),
+        buildGameRecord({ id: 'b3', white: 'Opp', black: 'TestUser', result: '1-0', eco: 'B07' }),
+      ]);
+
+      const { getOpeningInsights } = await import('./gameInsightsService');
+      const result = await getOpeningInsights();
+
+      const b07 = result.winRateByOpening.filter((o) => o.eco === 'B07');
+      expect(b07.length).toBe(2); // NOT merged into one
+      const asWhite = b07.find((o) => o.color === 'white');
+      const asBlack = b07.find((o) => o.color === 'black');
+      expect(asWhite?.winRate).toBe(100);
+      expect(asWhite?.name).toBe('Anti-Pirc: 150 Battery');
+      expect(asBlack?.winRate).toBe(0);
+      expect(asBlack?.name).toBe('Pirc Defence');
+      // No merged 50% blob should exist for B07.
+      expect(b07.some((o) => o.winRate === 50)).toBe(false);
+    });
+
     it('returns empty arrays when no games exist', async () => {
       const { getOpeningInsights } = await import('./gameInsightsService');
       const result = await getOpeningInsights();

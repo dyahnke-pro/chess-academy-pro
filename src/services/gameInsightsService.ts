@@ -389,7 +389,15 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
   const whiteRepEcos = new Set(repertoire.filter((o) => o.color === 'white').map((o) => o.eco));
   const blackRepEcos = new Set(repertoire.filter((o) => o.color === 'black').map((o) => o.eco));
 
-  // Group games by ECO + color
+  // Group games by ECO + COLOR (loop audit 2026-09-09, sweep of the
+  // color-blindness class): an ECO is two different openings depending on the
+  // side the player had (B07 = White "Anti-Pirc: 150 Battery" vs Black "Pirc
+  // Defence"), so aggregating win-rate / best / worst by ECO ALONE merged both
+  // sides into one blob with a wrong-color name — the same disease already fixed
+  // for the headline coverage stat (c8) and the "Most played" tabs (c7). Key by
+  // `${color}:${eco}` and match the repertoire name to the game's color so
+  // winRateByOpening / bestResults / worstResults / the headline strength are
+  // all per-color-correct.
   const openingMap = new Map<string, OpeningAggregateStats>();
 
   let inBook = 0;
@@ -397,7 +405,7 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
 
   for (const { game, playerColor } of playerGames) {
     const eco = game.eco;
-    const key = eco ?? 'unknown';
+    const key = `${playerColor}:${eco ?? 'unknown'}`;
 
     const colorRepEcos = playerColor === 'white' ? whiteRepEcos : blackRepEcos;
     if (eco && colorRepEcos.has(eco)) inBook++;
@@ -406,8 +414,10 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
     let entry = openingMap.get(key);
     if (!entry) {
       // Resolve the opening's display name with a 3-tier fallback:
-      //   1. User's repertoire — if they have this ECO set up as a
-      //      named opening, use that name (most personal / accurate).
+      //   1. User's repertoire for THIS COLOR — if they have this ECO set up as
+      //      a named opening on the side they played, use that name (most
+      //      personal / accurate). Must match color or a two-sided ECO stamps
+      //      the wrong-color name (the Anti-Pirc/Pirc bug).
       //   2. Lichess DB canonical lookup — translate raw ECO codes
       //      like "C24" into readable names ("Bishop's Opening") so
       //      cards don't read like serial numbers.
@@ -415,11 +425,12 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
       // Pre-fix the surface rendered shareable-insight headlines like
       // "You win 75% with the C24" — users couldn't tell what they
       // were good at without knowing the ECO codes by heart.
-      const repOpening = repertoire.find((o) => o.eco === eco);
+      const repOpening = repertoire.find((o) => o.eco === eco && o.color === playerColor);
       const canonical = repOpening?.name ?? getOpeningNameByEco(eco) ?? eco ?? 'Unknown';
       entry = {
         name: canonical,
         eco,
+        color: playerColor,
         openingId: repOpening?.id ?? null,
         games: 0, wins: 0, losses: 0, draws: 0,
         winRate: 0, avgAccuracy: 0, gameIds: [],
@@ -488,6 +499,7 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
       entry = {
         name: canonical,
         eco: game.eco,
+        color: playerColor,
         openingId: repOpening?.id ?? null,
         games: 0, wins: 0, losses: 0, draws: 0,
         winRate: 0, avgAccuracy: 0, gameIds: [],
