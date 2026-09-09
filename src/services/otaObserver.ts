@@ -276,18 +276,35 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
     // forward-only guarantee instead of inventing a weaker one here. If the
     // manifest is unreachable or says up-to-date, we apply NOTHING: staying put
     // is always safe, going backwards is not.
+    // 🔒 RESILIENT MANIFEST FETCH (David 2026-09-09 device audit). A SINGLE
+    // aborted fetch here used to strand every staged bundle: the device's log
+    // showed 6 bundles downloaded but never installed, because this one boot-time
+    // GET kept dying with "Fetch is aborted" (the app backgrounds constantly, and
+    // an unmount/background tears the request down). The manifest itself is
+    // reachable — autoUpdate downloaded the bundles through it moments earlier —
+    // so giving up after one abort was the bug, not the network. Retry a few
+    // times with backoff and a per-attempt timeout so a transient abort no longer
+    // leaves a forward, ready bundle un-applied. Forward-only is UNCHANGED: we
+    // still install ONLY the version the manifest advertises.
     let advertised = '';
-    try {
-      const res = await fetch(
-        `${OTA_MANIFEST_URL}?version=${encodeURIComponent(currentVersion || '0.0.0')}`
-        + `&platform=${encodeURIComponent(Capacitor.getPlatform())}`,
-        { cache: 'no-store' },
-      );
-      if (res.ok) {
-        const body = (await res.json()) as { kind?: string; version?: string };
-        if (body.kind !== 'up_to_date' && typeof body.version === 'string') advertised = body.version;
-      }
-    } catch { /* offline / unreachable — fall through and apply nothing */ }
+    const manifestUrl = `${OTA_MANIFEST_URL}?version=${encodeURIComponent(currentVersion || '0.0.0')}`
+      + `&platform=${encodeURIComponent(Capacitor.getPlatform())}`;
+    for (let attempt = 0; attempt < 4 && !advertised; attempt += 1) {
+      if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * attempt)); // 0, 0.5s, 1s, 1.5s
+      try {
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 8000);
+        let res: Response;
+        try {
+          res = await fetch(manifestUrl, { cache: 'no-store', signal: ctrl.signal });
+        } finally { clearTimeout(to); }
+        if (res.ok) {
+          const body = (await res.json()) as { kind?: string; version?: string };
+          if (body.kind === 'up_to_date') break; // authoritative: nothing to apply
+          if (typeof body.version === 'string') advertised = body.version;
+        }
+      } catch { /* aborted / offline — retry, then fall through and apply nothing */ }
+    }
 
     const target = advertised ? pending.find((b) => b.version === advertised) : undefined;
     if (!target) {
