@@ -908,6 +908,15 @@ describe('isPlayerGamesQuestion', () => {
     'his real games',
     'what did Hikaru play',
   ])('matches: %s', (q) => expect(isPlayerGamesQuestion(q)).toBe(true));
+  // 2nd-person "why did YOU play that?" is about the COACH's own lesson move
+  // (move-purpose), NOT a pro-game lookup — was misrouting to "which player do
+  // you mean?" mid-lesson (David 2026-09-09 teach audit).
+  it.each([
+    'wait, why did you play that move?',
+    'why did you play that',
+    'what do you play here',
+    'did i play that right',
+  ])('does NOT fire on 1st/2nd-person own-move asks: %s', (q) => expect(isPlayerGamesQuestion(q)).toBe(false));
 });
 
 describe('isConceptQuestion', () => {

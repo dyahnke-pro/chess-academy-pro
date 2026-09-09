@@ -919,7 +919,11 @@ export function isPlayerGamesQuestion(ask: string | undefined): boolean {
   // First-person "why did I play that / what did I do" is about the STUDENT'S
   // own move (move-rating / review), NOT a pro-game lookup — the greedy `\w+`
   // player-subject would otherwise catch "i" (matrix pass 12, 2026-07-10).
-  if (/\b(?:did|has|do|does)\s+i\b/i.test(ask)) return false;
+  // SECOND-person "why did YOU play that move?" is about the COACH's own move
+  // in the lesson (move-purpose), NOT a pro lookup — same greedy-\w+ trap; a
+  // mid-lesson "why did you play that?" was misrouting to "which player do you
+  // mean?" (David 2026-09-09 teach audit).
+  if (/\b(?:did|has|do|does|will|would|can)\s+(?:i|you)\b/i.test(ask)) return false;
   return PLAYER_GAMES_QUESTION_RE.test(ask);
 }
 
