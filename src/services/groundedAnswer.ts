@@ -329,26 +329,38 @@ export function assembleBoardPlanAnswer(
     return { facts: `Their side of it: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
-  // side === 'me'
-  const sp = structurePlan(fen, myC);
-  if (sp) return { facts: sp, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  // No structural trump — offer the concrete levers: a pawn break (only when
-  // it's the student's move; findPawnBreaks reads the side to move) + open files.
-  const parts: string[] = [];
+  // side === 'me' — synthesize a PRIORITIZED plan from the sync board computers
+  // (the chat analogue of the narration's ranked briefing; the engine-driven
+  // clauses — leans/key-moment — need a live Stockfish snapshot and live only
+  // in the async narration path). Order = most→least decisive: structural trump,
+  // then the concrete levers (break / open file / outpost / worst piece).
+  const trump = structurePlan(fen, myC); // passed pawn / IQP — the headline
+  const levers: string[] = [];
+
+  // A pawn break to open the position (findPawnBreaks reads the side to move).
   if (chess.turn() === myC) {
-    const breaks = findPawnBreaks(fen);
-    if (breaks.length) parts.push(`your pawn break${breaks.length > 1 ? 's' : ''} on ${breaks.slice(0, 3).join(', ')}`);
+    const breaks = findPawnBreaks(fen).slice(0, 2);
+    if (breaks.length) levers.push(`break with ${breaks.join(' or ')} to open the position`);
   }
+  // A rook belongs on an open / half-open file.
   const files = findOpenFiles(fen);
-  const myFiles = myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
-  const bothOpen = files.open;
-  const rookFiles = [...new Set([...bothOpen, ...myFiles])].slice(0, 2);
-  if (rookFiles.length) parts.push(`swing a rook to the ${rookFiles.join(' or ')}-file`);
-  if (parts.length === 0) return null;
-  return {
-    facts: `No single trump yet — the levers here are ${parts.join(' and ')}.`,
-    bestMoveSan: null, bestMoveFromTo: null, sources: src,
-  };
+  const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])].slice(0, 2);
+  if (rookFiles.length) levers.push(`put a rook on the ${rookFiles.join(' or ')}-file`);
+  // An outpost — a hole in THEIR camp a knight can occupy.
+  const holes = findWeakSquares(fen);
+  const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 2);
+  if (oppHoles.length) levers.push(`plant a knight on ${oppHoles.join(' or ')}`);
+  // Improve your worst-placed piece.
+  const sw = strongestWeakestPiece(fen, myC);
+  if (sw.weakest) levers.push(`improve your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
+
+  const top = levers.slice(0, 3);
+  if (trump && top.length) {
+    return { facts: `${trump} Beyond that: ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+  if (trump) return { facts: trump, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (top.length) return { facts: `No single trump yet — the plan is to ${top.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  return null;
 }
 
 // ── PIECE SAFETY — "is my knight on d5 safe?" ────────────────────────────────

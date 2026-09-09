@@ -56,6 +56,15 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
     expect(out!.answer.facts).not.toMatch(/best move/i);
     expect(out!.answer.bestMoveSan).toBeNull();
   });
+  it('my-plan: synthesizes a multi-lever plan in a quiet middlegame (break / file / outpost / worst piece)', () => {
+    const quiet = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7';
+    const out = answerBoardQuestion(quiet, "what's my plan here?", 'white');
+    expect(out, 'no my-plan answer').not.toBeNull();
+    expect(out!.aspect).toBe('my-plan');
+    // richer than a lone lever — at least one concrete plan verb + a real square/file
+    expect(out!.answer.facts).toMatch(/break|rook|knight|improve|passed|pawn/i);
+    expect(out!.answer.facts.length).toBeGreaterThan(20);
+  });
   it("opponent-plan: names their trump/threat from the student's POV", () => {
     const theirPasser = '6k1/8/8/8/8/3p4/6K1/8 w - - 0 1'; // Black passed pawn on d3
     const out = answerBoardQuestion(theirPasser, "what's their plan?", 'white');
