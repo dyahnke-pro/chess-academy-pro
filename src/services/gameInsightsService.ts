@@ -378,7 +378,16 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
   const playerGames = await getPlayerGames();
   const repertoire = await getRepertoireOpenings();
 
-  const repertoireEcos = new Set(repertoire.map((o) => o.eco));
+  // Repertoire coverage must match the game's COLOR (loop audit 2026-09-09,
+  // real knight_mare_01 data): a color-BLIND ECO set counted a White game as
+  // "in repertoire" whenever its ECO appeared in the player's BLACK repertoire
+  // (and vice versa) — e.g. facing a Philidor as White counted in-book because
+  // the player has the Philidor in his BLACK repertoire, which is NOT playing
+  // his White repertoire. That inflated David's headline coverage from a true
+  // 51% to 67% (151 of 930 games mis-counted). "In repertoire" = you played
+  // your prepared line for the COLOR you had, so match ECO within that color.
+  const whiteRepEcos = new Set(repertoire.filter((o) => o.color === 'white').map((o) => o.eco));
+  const blackRepEcos = new Set(repertoire.filter((o) => o.color === 'black').map((o) => o.eco));
 
   // Group games by ECO + color
   const openingMap = new Map<string, OpeningAggregateStats>();
@@ -390,7 +399,8 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
     const eco = game.eco;
     const key = eco ?? 'unknown';
 
-    if (eco && repertoireEcos.has(eco)) inBook++;
+    const colorRepEcos = playerColor === 'white' ? whiteRepEcos : blackRepEcos;
+    if (eco && colorRepEcos.has(eco)) inBook++;
     else offBook++;
 
     let entry = openingMap.get(key);

@@ -236,7 +236,7 @@ describe('gameInsightsService', () => {
 
       const { getRepertoireOpenings } = await import('./openingService');
       (getRepertoireOpenings as ReturnType<typeof vi.fn>).mockResolvedValue([
-        buildOpeningRecord({ eco: 'C65', name: 'Ruy Lopez' }),
+        buildOpeningRecord({ eco: 'C65', name: 'Ruy Lopez', color: 'white' }),
       ]);
 
       await db.games.bulkAdd([
@@ -251,6 +251,29 @@ describe('gameInsightsService', () => {
       expect(result.repertoireCoverage.inBook).toBe(2);
       expect(result.repertoireCoverage.offBook).toBe(1);
       expect(result.mostPlayedWhite.length).toBeGreaterThan(0);
+    });
+
+    it('coverage counts a game in-book ONLY when the repertoire entry matches the game COLOR (loop audit 2026-09-09)', async () => {
+      // Real bug: a color-blind ECO set counted a game in-repertoire whenever the
+      // ECO appeared in ANY repertoire entry — so facing an opening you only
+      // prepared from the other color inflated coverage (David: 67% vs a true 51%).
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+      const { getRepertoireOpenings } = await import('./openingService');
+      (getRepertoireOpenings as ReturnType<typeof vi.fn>).mockResolvedValue([
+        buildOpeningRecord({ eco: 'C41', name: 'Philidor Defence', color: 'black' }), // Black-only prep
+      ]);
+      await db.games.bulkAdd([
+        // Black game in C41 → matches the Black repertoire entry → IN book.
+        buildGameRecord({ id: 'gb', white: 'Opp', black: 'TestUser', result: '0-1', eco: 'C41' }),
+        // White game in C41 → the player FACED a Philidor; he has no WHITE C41
+        // prep, so this is OFF book (was wrongly counted in-book, color-blind).
+        buildGameRecord({ id: 'gw', white: 'TestUser', black: 'Opp', result: '1-0', eco: 'C41' }),
+      ]);
+
+      const { getOpeningInsights } = await import('./gameInsightsService');
+      const result = await getOpeningInsights();
+      expect(result.repertoireCoverage.inBook).toBe(1);   // only the Black C41 game
+      expect(result.repertoireCoverage.offBook).toBe(1);  // the White C41 game
     });
 
     it('names by-color bucket from the COLOR-matching repertoire entry, not a wrong-color one (loop audit 2026-09-09)', async () => {
