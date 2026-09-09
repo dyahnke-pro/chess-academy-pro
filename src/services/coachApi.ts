@@ -4781,6 +4781,21 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           }
+          // CONCEPT CORPUS MISS → HONEST DECLINE, never the board deflect (David
+          // 2026-09-09). "what makes a good bishop / knight" named no glossary
+          // token and matched no corpus passage; without this it fell through
+          // every later lane to serveGroundedPositionDefault and got "the best
+          // move is e4" — a board answer to a board-independent ask. Decline
+          // HERE, at the concept lane, so no board lane can grab it, pointing to
+          // what we CAN teach (empty > generic > invented). Skip when it's really
+          // an endgame-technique ask (routes to the endgame-lesson lane below) or
+          // a live board-feature ask (positionalTopic → the board read below).
+          if (!grounding.positionalTopic && !matchEndgameLesson(userText)) {
+            const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
+            const voiced = await voiceFacts(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+            if (voiced) return voiced;
+            return decline;
+          }
         }
 
         // ── THEORY (P-II.1) — a general strategy/how-to ask that named no single
@@ -5557,23 +5572,6 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           }
-        }
-
-        // ── CONCEPT MISS — HONEST DECLINE, NEVER A BOARD DEFLECT (David
-        // 2026-09-09). A concept/topic ask ("what makes a good bishop", "what is
-        // a good knight") that named no glossary token AND matched no corpus
-        // passage used to fall through to the board readout below and get "the
-        // best move is e4" — a board answer to a board-independent question. By
-        // here every teaching lane (fundamentals, concept-glossary, theory-
-        // corpus, endgame) has missed, so the honest answer is that we lack that
-        // specific lesson plus a pointer to what we CAN teach (empty > generic >
-        // invented). Gated off positionalTopic so a genuine board-feature ask
-        // ("what's my worst piece") still gets its board read.
-        if (grounding.conceptQuestion && !grounding.positionalTopic) {
-          const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
-          const voiced = await voiceFacts(decline, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'concept', preferRaw: true });
-          if (voiced) return voiced;
-          return decline;
         }
 
         // ── POSITIONAL FEATURE (answer-correctness 2026-07-10) — "who controls
