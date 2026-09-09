@@ -170,6 +170,7 @@ function dispatchPureAspect(
   // king-safety-mine vs -theirs), so no separate side arg is needed.
   switch (aspect) {
     case 'piece-purpose': return assemblePiecePurposeAnswer(fen, ask, studentColor);
+    case 'piece-activity': return assemblePieceActivityAnswer(fen, ask, studentColor);
     case 'square-control':
     case 'square-safety':
     case 'square-occupant': return assembleSquareControlAnswer(fen, ask, studentColor);
@@ -726,6 +727,63 @@ export function assemblePiecePurposeAnswer(
     facts: `Your ${pieceName} on ${s.sq} ${body}.`,
     bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
   };
+}
+
+/**
+ * assemblePieceActivityAnswer — "what's my worst-placed piece?", "which piece is
+ * doing the least?", "what's my most passive piece?". Before this the question
+ * had no computer (boardQuestionBuckets: piece-activity → null) and deflected to
+ * the hanging-piece read (loop audit 2026-09-09). Grounded, board-true (G0/G3):
+ * rank the student's own minor/major pieces by SCOPE — the number of squares the
+ * piece attacks/controls from where it stands (`squaresAttackedBy`, turn-
+ * independent) — and name the LEAST active one. Scope is a standard activity
+ * proxy: a piece hemmed in by its own pawns or still on its starting square
+ * controls few squares. Ties break toward the more valuable piece (a boxed-in
+ * rook is a worse problem than a boxed-in knight). Pawns and the king are
+ * excluded (a "piece" question means the officers). When the ask names a piece
+ * TYPE ("my worst bishop"), scope to that type. Returns null when the side has
+ * no officers on the board (so the caller falls through).
+ */
+export function assemblePieceActivityAnswer(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  // Optional piece-type scope from the ask ("my worst bishop").
+  const t = (ask ?? '').toLowerCase();
+  const typeWord = (['knight', 'bishop', 'rook', 'queen'] as const).find((w) => new RegExp(`\\b${w}s?\\b`).test(t));
+  const wantType: PieceSymbol | null = typeWord ? ({ knight: 'n', bishop: 'b', rook: 'r', queen: 'q' } as const)[typeWord] : null;
+
+  interface Officer { sq: Square; type: PieceSymbol; scope: number; }
+  const officers: Officer[] = [];
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== me) continue;
+      if (cell.type === 'p' || cell.type === 'k') continue;           // officers only
+      if (wantType && cell.type !== wantType) continue;
+      officers.push({ sq: cell.square, type: cell.type, scope: squaresAttackedBy(chess, cell.square, me).length });
+    }
+  }
+  if (officers.length === 0) return null;
+
+  // Least active first; tie → more valuable piece is the bigger problem.
+  officers.sort((a, b) => (a.scope - b.scope) || ((REVIEW_PIECE_VALUE[b.type] ?? 0) - (REVIEW_PIECE_VALUE[a.type] ?? 0)));
+  const worst = officers[0];
+  const name = REVIEW_PIECE_NAME[worst.type];
+  const homeRank = me === 'w' ? '1' : '8';
+  const undeveloped = worst.sq[1] === homeRank && (worst.type === 'n' || worst.type === 'b');
+  const tail = worst.scope === 0
+    ? undeveloped
+      ? `— it hasn't moved yet and controls nothing, so it's the first piece to bring into the game`
+      : `— it's completely hemmed in, controlling no squares, so freeing it is your priority`
+    : worst.scope <= 2
+      ? `— it only covers ${worst.scope} square${worst.scope === 1 ? '' : 's'}, so it wants a more active post`
+      : `— it covers just ${worst.scope} squares, the fewest of your pieces`;
+  const facts = `Your least active piece is the ${name} on ${worst.sq} ${tail}.`;
+  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
 /**

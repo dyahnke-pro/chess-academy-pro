@@ -80,6 +80,12 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   const masterW = /\b(master(?:s)?|theory|book\s+move|main\s+line|what\s+do\s+(?:the\s+)?(?:pros|gms|grandmasters))\b/.test(t);
   const endgameW = /\b(endgame|end\s*game|is\s+this\s+a\s+draw|tablebase|winning\s+ending)\b/.test(t);
   const moveEvalW = moves.length >= 1 && /\b(good|bad|sound|playable|winning|losing|a\s+mistake|blunder|worth\s+it|ok|okay|fine)\b/.test(t);
+  // PIECE ACTIVITY — "worst-placed / least active / most passive / badly placed
+  // piece", "which piece is doing the least / needs improving" (David 2026-09-09
+  // loop audit: deflected to the hanging read; piece-activity had no computer).
+  // Routes to assemblePieceActivityAnswer (scope ranking, board-true).
+  const activityW = /\b(worst|least\s+active|most\s+passive|passive|badly\s+placed|poorly\s+placed|worst[\s-]?placed|doing\s+the\s+least|needs?\s+(?:to\s+be\s+)?improv|out\s+of\s+(?:the\s+)?(?:game|play)|misplaced|awkward)\b/.test(t)
+    && (/\bpieces?\b/.test(t) || pieces.length >= 1);
 
   const aspects: QuestionAspect[] = [];
   const add = (a: QuestionAspect): void => { if (!aspects.includes(a)) aspects.push(a); };
@@ -104,8 +110,11 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
     else if (squares.length >= 1) add('square-safety');
     else if (nonKingPiece) add('piece-safety');
   }
+  // ── PIECE activity (worst-placed / least active) — before purpose so a
+  //    "worst-placed piece" doesn't get read as a purpose question. ──
+  if (activityW) add('piece-activity');
   // ── PIECE purpose ──
-  if (nonKingPiece && purpose && !safety) add('piece-purpose');
+  if (nonKingPiece && purpose && !safety && !activityW) add('piece-purpose');
   // ── SQUARE control ──
   if (squares.length >= 1 && moves.length === 0) {
     if (control) add('square-control');
@@ -145,7 +154,7 @@ export function classifyBoardQuestion(ask: string | null | undefined): QuestionA
  *  (best-move / eval / plan / why-best / master-play / endgame / move-eval /
  *  move-comparison) keep their existing coachApi lanes. */
 export const PURE_BOARD_ASPECTS: ReadonlySet<QuestionAspect> = new Set<QuestionAspect>([
-  'piece-purpose', 'square-control', 'square-safety', 'square-occupant',
+  'piece-purpose', 'piece-activity', 'square-control', 'square-safety', 'square-occupant',
   'piece-safety', 'hanging', 'loose', 'opponent-threats', 'my-threats',
   'king-safety-mine', 'king-safety-theirs', 'king-lines', 'material', 'move-purpose',
   'checks',
