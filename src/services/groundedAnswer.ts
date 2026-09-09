@@ -818,6 +818,10 @@ export function assemblePositionAssessment(opts: {
   mateIn: number | null | undefined;
   tactics?: TacticsLiveContext | null;
   studentColor: 'white' | 'black';
+  /** Live FEN — lets the no-engine-eval path still give a board-true material
+   *  read instead of degrading to a lone hanging-piece note (David 2026-09-09
+   *  loop: "is this winning for me?" answered only "your e5 pawn is hanging"). */
+  fen?: string | null;
 }): GroundedAnswer | null {
   const { tactics, studentColor } = opts;
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -844,6 +848,25 @@ export function assemblePositionAssessment(opts: {
     else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed).replace('{m}', mag.toFixed(1)));
     else parts.push(pick(ahead ? WINNING : LOSING, seed).replace('{m}', mag.toFixed(1)));
+  } else if (opts.fen) {
+    // No engine eval available (e.g. inside a walkthrough with no warm analysis)
+    // — give a board-true material read so "is this winning for me?" gets a real
+    // assessment instead of only a hanging-piece note (David 2026-09-09 loop).
+    try {
+      const c = new Chess(opts.fen);
+      let w = 0, b = 0;
+      for (const row of c.board()) for (const cell of row) {
+        if (!cell || cell.type === 'k') continue;
+        const v = REVIEW_PIECE_VALUE[cell.type] ?? 0;
+        if (cell.color === 'w') w += v; else b += v;
+      }
+      const diff = sc === 'w' ? w - b : b - w;
+      parts.push(diff === 0
+        ? `Material is even, and I don't have an engine read on this exact position — so nothing is decided yet; it's about the plans and the tactics.`
+        : diff > 0
+          ? `You're up ${diff} point${diff === 1 ? '' : 's'} of material — materially you're doing well here (no engine eval on this exact spot).`
+          : `You're down ${-diff} point${-diff === 1 ? '' : 's'} of material here (no engine eval on this exact spot).`);
+    } catch { /* bad fen — skip the material line */ }
   }
 
   // Add the single most relevant computed fact so the assessment names a WHY.

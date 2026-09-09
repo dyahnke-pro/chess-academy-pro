@@ -5582,6 +5582,7 @@ export async function getCoachChatResponse(
             mateIn: grounding.engineMateIn,
             tactics: grounding.tactics,
             studentColor: sc,
+            fen: grounding.currentFen,
           });
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
