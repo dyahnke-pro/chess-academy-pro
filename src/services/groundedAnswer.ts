@@ -635,6 +635,26 @@ export function assemblePiecePurposeAnswer(
     }
   }
   if (candidates.length === 0) {
+    // The named square may hold the OPPONENT's piece — answer about what THAT
+    // piece controls against you, not "you don't have one" (David 2026-09-09
+    // critical audit: "what does the knight on f3 control?" as Black got
+    // "you don't have a knight on f3"). Board-true from chess.js.
+    if (parsed.square) {
+      const op = chess.get(parsed.square);
+      if (op && op.type === parsed.piece && op.color === them) {
+        const attacked = squaresAttackedBy(chess, parsed.square, them);
+        const central = attacked.filter((t) => !chess.get(t) && CENTRAL_SQ.has(t));
+        const hits = attacked.flatMap((t) => { const q = chess.get(t); return q && q.color === me ? [`your ${REVIEW_PIECE_NAME[q.type]} on ${t}`] : []; });
+        const clauses: string[] = [];
+        if (hits.length) clauses.push(`eyes ${hits.slice(0, 3).join(', ')}`);
+        if (central.length) clauses.push(`covers ${central.slice(0, 3).join(', ')} in the centre`);
+        const body = clauses.length > 0 ? clauses.join(' and ') : `covers ${attacked.slice(0, 4).join(', ')}`;
+        return {
+          facts: `Their ${pieceName} on ${parsed.square} ${body}.`,
+          bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
+        };
+      }
+    }
     // Don't invent — say plainly it isn't there (board-true).
     const where = parsed.square ? ` on ${parsed.square}` : '';
     return {
