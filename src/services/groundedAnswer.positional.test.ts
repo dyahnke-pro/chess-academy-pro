@@ -34,9 +34,10 @@ describe('assemblePositionalAnswer — correct deterministic data', () => {
     expect(a?.facts).toMatch(/outpost/);
     expect(a?.bestMoveSan).toBeNull(); // NOT an engine move — a board read
   });
-  it('key-squares: honest null when no side has a hole (start position)', () => {
+  it('key-squares: no bare deflect when no side has a hole — points to a break', () => {
     const START_POS = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    expect(assemblePositionalAnswer(START_POS, 'white', 'key-squares')).toBeNull();
+    const a = assemblePositionalAnswer(START_POS, 'white', 'key-squares');
+    expect(a?.facts).toMatch(/no weak squares|pawn break|create one/i);
   });
   // Every board-awareness computer wired into chat (David 2026-09-09: "all
   // 30ish need to be wired in") — a REAL answer comes out for a real position.

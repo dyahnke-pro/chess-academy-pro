@@ -5009,7 +5009,7 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const holes = findWeakSquares(fen);
     const myHoles = me === 'white' ? holes.white : holes.black;
     const oppHoles = me === 'white' ? holes.black : holes.white;
-    if (myHoles.length === 0 && oppHoles.length === 0) return null;
+    if (myHoles.length === 0 && oppHoles.length === 0) return { facts: `No weak squares for either side yet — every pawn is still covered. A pawn break is how you create one.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     const targets = oppHoles.length
       ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.`
       : '';
@@ -5073,8 +5073,16 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const grabs = turn === myC ? findPawnGrabs(fen).filter((g) => g.safe && g.see > 0) : [];
     const tg = targets.length ? `Aim at ${targets.slice(0, 3).join(', ')} — ${opp}'s weak points.` : '';
     const gr = grabs.length ? `Free pawn${grabs.length > 1 ? 's' : ''}: ${grabs.slice(0, 2).map((g) => g.capture).join(', ')}.` : '';
-    if (!tg && !gr) return null;
-    return { facts: [tg, gr].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (tg || gr) return { facts: [tg, gr].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // No concrete target yet — name what to work toward: their weak pawns, then
+    // the holes to provoke, then "make one with a break". Never a bare deflect.
+    const wp = findWeakPawns(fen, oppC);
+    const weak = [...wp.isolated, ...wp.backward, ...wp.doubled];
+    if (weak.length) return { facts: `No loose piece to grab, but ${opp}'s ${weak.slice(0, 2).join(', ')} pawn${weak.length > 1 ? 's are' : ' is'} the long-term target — pile up on ${weak.length > 1 ? 'them' : 'it'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const holes = findWeakSquares(fen);
+    const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 2);
+    if (oppHoles.length) return { facts: `Nothing hanging yet — the target is the weak square${oppHoles.length > 1 ? 's' : ''} on ${oppHoles.join(', ')}; occupy ${oppHoles.length > 1 ? 'them' : 'it'} and build from there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `No target yet — the structure is solid, so provoke a weakness with a pawn break before you attack.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'open-files') {
@@ -5096,8 +5104,27 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
 
   if (topic === 'structure-name') {
     const s = namedPawnStructure(fen);
-    if (!s) return null;
-    return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (s) return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // Not a textbook-named structure — still describe it board-truthfully from
+    // the pawn faults on each side rather than declining.
+    const mineWp = findWeakPawns(fen, myC);
+    const oppWp = findWeakPawns(fen, oppC);
+    const faultTxt = (wp: ReturnType<typeof findWeakPawns>): string => {
+      const parts = [
+        wp.isolated.length ? `isolated on ${wp.isolated.join(', ')}` : '',
+        wp.doubled.length ? `doubled on ${wp.doubled.join(', ')}` : '',
+        wp.backward.length ? `backward on ${wp.backward.join(', ')}` : '',
+      ].filter(Boolean);
+      return parts.join(', ');
+    };
+    const mineTxt = faultTxt(mineWp);
+    const oppTxt = faultTxt(oppWp);
+    if (!mineTxt && !oppTxt) return { facts: `Not a textbook-named structure — the pawns are still symmetrical and sound on both sides; the game will turn on piece play and the first break.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const parts = [
+      mineTxt ? `yours: ${mineTxt}` : '',
+      oppTxt ? `theirs: ${oppTxt}` : '',
+    ].filter(Boolean);
+    return { facts: `No textbook name for it, but the pawn features are — ${parts.join('; ')}. Play against the weaker structure.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'xray') {
@@ -5117,8 +5144,15 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     if (rl) bits.push(`lift your rook ${rl.rook}–${rl.to}`);
     if (fi) bits.push(`fianchetto a bishop to ${fi}`);
     if (bl) bits.push(`blockade on ${bl.blocker}`);
-    if (bits.length === 0) return null;
-    return { facts: `Piece ideas: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (bits.length) return { facts: `Piece ideas: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // No textbook maneuver fired — still give direction: send the worst-placed
+    // piece toward an outpost (a hole in their camp) or just to a better square.
+    const holes = findWeakSquares(fen);
+    const oppHoles = (myC === 'w' ? holes.black : holes.white).slice(0, 1);
+    const sw = strongestWeakestPiece(fen, myC);
+    if (sw.weakest && oppHoles.length) return { facts: `No forced maneuver, but your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square} is your worst piece — route it toward the outpost on ${oppHoles[0]}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    if (sw.weakest) return { facts: `No forced maneuver here — the improving move is to reroute your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}, your least active piece, to a more useful square.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return null;
   }
 
   if (topic === 'endgame-plan') {
