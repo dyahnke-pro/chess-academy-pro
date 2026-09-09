@@ -14,7 +14,8 @@
  */
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { seeGain, opponentIntentRead, findPawnBreaks, findOpenFiles } from './positionReadingService';
+import { structurePlan } from './boardPlan';
 import { strategicWhySelfContained } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
@@ -183,6 +184,8 @@ function dispatchPureAspect(
     case 'king-lines': return assembleKingSafetyAnswer(fen, studentColor, 'me');
     case 'king-safety-theirs': return assembleKingSafetyAnswer(fen, studentColor, 'opponent');
     case 'material': return assembleMaterialAnswer(fen, studentColor);
+    case 'my-plan': return assembleBoardPlanAnswer(fen, studentColor, 'me');
+    case 'opponent-plan': return assembleBoardPlanAnswer(fen, studentColor, 'opponent');
     case 'move-purpose': return assembleMovePurposeAnswer(fen, ask, studentColor);
     case 'checks': return assembleCheckStatusAnswer(fen, ask, studentColor);
     default: return null;
@@ -264,6 +267,65 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
     ? `Yes — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} loose; you can win about ${pts}.`
     : `Careful — ${named.join(', ')} ${loose.length > 1 ? 'are' : 'is'} hanging; they can win about ${pts}.`;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── BOARD PLAN — "what's my plan here?" / "what's their plan?" ────────────────
+// The chat had no lane for these: the router recognized `my-plan` / `opponent-
+// plan` but dispatchPureAspect had no case, so a paused "what's my plan?"
+// deflected to a tactic — even though `structurePlan` (boardPlan) and
+// `opponentIntentRead` compute exactly this for the narration path. Same disease
+// as key-squares: the computer exists, only the chat wire was missing. Grounded
+// (G0/G3): structural plan first, then pawn breaks / open files (student's move
+// only — findPawnBreaks reads the side to move), then honest null.
+export function assembleBoardPlanAnswer(
+  fen: string,
+  studentColor: 'white' | 'black',
+  side: 'me' | 'opponent',
+): GroundedAnswer | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const myC: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+  const src = ['board:chess.js'];
+
+  if (side === 'opponent') {
+    // Their most concrete idea first (a threat), then their structural trump.
+    const intent = opponentIntentRead(fen, myC);
+    if (intent) {
+      const gain = intent.gain > 0 ? `, winning about ${intent.gain} point${intent.gain === 1 ? '' : 's'}` : '';
+      return {
+        facts: intent.kind === 'fork'
+          ? `They're angling for ${intent.san} — a fork landing on ${intent.target}. Cover it before they get there.`
+          : `Their plan starts with ${intent.san} on ${intent.target}${gain}. Deal with that first.`,
+        bestMoveSan: null, bestMoveFromTo: null, sources: src,
+      };
+    }
+    // structurePlan phrases from the STUDENT's POV, so it already names "their
+    // passed pawn is the danger" etc. — reuse it for the opponent read.
+    const sp = structurePlan(fen, myC);
+    if (sp) return { facts: sp, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return null;
+  }
+
+  // side === 'me'
+  const sp = structurePlan(fen, myC);
+  if (sp) return { facts: sp, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  // No structural trump — offer the concrete levers: a pawn break (only when
+  // it's the student's move; findPawnBreaks reads the side to move) + open files.
+  const parts: string[] = [];
+  if (chess.turn() === myC) {
+    const breaks = findPawnBreaks(fen);
+    if (breaks.length) parts.push(`your pawn break${breaks.length > 1 ? 's' : ''} on ${breaks.slice(0, 3).join(', ')}`);
+  }
+  const files = findOpenFiles(fen);
+  const myFiles = myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
+  const bothOpen = files.open;
+  const rookFiles = [...new Set([...bothOpen, ...myFiles])].slice(0, 2);
+  if (rookFiles.length) parts.push(`swing a rook to the ${rookFiles.join(' or ')}-file`);
+  if (parts.length === 0) return null;
+  return {
+    facts: `No single trump yet — the levers here are ${parts.join(' and ')}.`,
+    bestMoveSan: null, bestMoveFromTo: null, sources: src,
+  };
 }
 
 // ── PIECE SAFETY — "is my knight on d5 safe?" ────────────────────────────────
@@ -4789,13 +4851,18 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findPieceQuality, findWeakPawns, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
+import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
 
-export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece' | 'key-squares';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
 export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string): GroundedAnswer | null {
+  // Board-validity guard (2026-09-09): every branch reads the FEN through
+  // chess.js, so an unparseable FEN can only produce garbage — degrade to a
+  // null (honest decline) rather than a bogus read. Must NOT rely on
+  // countMaterial throwing; it no longer does for a malformed FEN.
+  try { new Chess(fen); } catch { return null; }
   let a: ReturnType<typeof countMaterial>;
   try { a = countMaterial(fen); } catch { return null; }
 
@@ -4892,6 +4959,25 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const exposed = k?.exposed ?? false;
     const detail = exposed ? ' Its pawn shield is compromised.' : '';
     return { facts: `Your king is ${castled ? 'castled' : 'not castled'} and ${exposed ? 'looks exposed' : 'reasonably safe'}.${detail}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'key-squares') {
+    // Holes = squares no pawn of a side can ever guard. A white hole is a
+    // weakness in White's camp that the OTHER side wants to occupy. So the
+    // student's OUTPOST targets are the opponent's holes; the student's own
+    // holes are the squares to watch. Deterministic geometry (G3) — never the
+    // engine, never the model. Honest decline when the pawns leave no holes.
+    const holes = findWeakSquares(fen);
+    const myHoles = me === 'white' ? holes.white : holes.black;
+    const oppHoles = me === 'white' ? holes.black : holes.white;
+    if (myHoles.length === 0 && oppHoles.length === 0) return null;
+    const targets = oppHoles.length
+      ? `${opp === 'white' ? 'White' : 'Black'} can't cover ${oppHoles.join(', ')} — those are your outpost targets, especially for a knight.`
+      : '';
+    const own = myHoles.length
+      ? `Watch your own weak squares on ${myHoles.join(', ')} — no pawn of yours can guard ${myHoles.length === 1 ? 'it' : 'them'}.`
+      : '';
+    return { facts: [targets, own].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // piece quality

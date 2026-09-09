@@ -44,6 +44,26 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
     }
   });
 
+  // PLAN lanes (2026-09-09): the router recognized my-plan / opponent-plan but
+  // dispatchPureAspect had no case, so "what's my plan?" deflected to a tactic.
+  // Now grounded from structurePlan (boardPlan) + opponentIntentRead.
+  it('my-plan: names the structural plan (passed pawn), not a best move', () => {
+    const passer = '6k1/8/8/3P4/8/8/8/6K1 w - - 0 1'; // White passed pawn on d5
+    const out = answerBoardQuestion(passer, "what's my plan here?", 'white');
+    expect(out, 'no my-plan answer').not.toBeNull();
+    expect(out!.aspect).toBe('my-plan');
+    expect(out!.answer.facts).toMatch(/d5|passed|break|file/i);
+    expect(out!.answer.facts).not.toMatch(/best move/i);
+    expect(out!.answer.bestMoveSan).toBeNull();
+  });
+  it("opponent-plan: names their trump/threat from the student's POV", () => {
+    const theirPasser = '6k1/8/8/8/8/3p4/6K1/8 w - - 0 1'; // Black passed pawn on d3
+    const out = answerBoardQuestion(theirPasser, "what's their plan?", 'white');
+    expect(out, 'no opponent-plan answer').not.toBeNull();
+    expect(out!.aspect).toBe('opponent-plan');
+    expect(out!.answer.facts).toMatch(/d3|passed|danger|threat/i);
+  });
+
   it('returns null for a non-board / engine-only ask (existing lanes handle it)', () => {
     expect(answerBoardQuestion(fen, 'how do I import my games?', 'white')).toBeNull();
     expect(answerBoardQuestion(fen, 'what is the best move?', 'white')).toBeNull(); // engine lane

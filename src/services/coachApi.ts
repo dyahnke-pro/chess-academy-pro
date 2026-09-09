@@ -1372,7 +1372,7 @@ export interface MasterGroundingOptions {
    *  assemblePositionalAnswer, which computes the STATIC feature from the FEN
    *  (the eval-only assemblePositionAssessment can't answer these). Needs the
    *  currentFen. */
-  positionalTopic?: 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+  positionalTopic?: 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece' | 'key-squares';
   /** A grounded BOARD question sorted to a PURE aspect (piece-purpose /
    *  square-control / piece-safety / hanging / threats / king-safety / material /
    *  move-purpose). Answered from chess.js facts via answerBoardQuestion,

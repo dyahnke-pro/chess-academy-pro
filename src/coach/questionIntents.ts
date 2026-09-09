@@ -2445,7 +2445,7 @@ export function isAppHelpQuestion(ask: string | undefined): boolean {
 // Stockfish eval — so they route to assemblePositionalAnswer, which computes the
 // real feature from the FEN. Returns the topic, or null when it's a plain
 // eval/assessment question (which stays on assemblePositionAssessment).
-export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
+export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece' | 'key-squares';
 export function positionalTopic(ask: string | undefined): PositionalTopic | null {
   if (!ask) return null;
   const a = ask.toLowerCase();
@@ -2453,6 +2453,11 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:space|cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
   if (/\bhave\s+i\s+developed\b|\bam\s+i\s+(?:behind|ahead)\s+in\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
   if (/\bis\s+my\s+(?:pawn\s+)?structure\b|\bdo\s+i\s+have\s+(?:any\s+)?weak\s+(?:pawns|squares)\b|\bweak\s+pawns?\b/.test(a)) return 'structure';
+  // KEY / WEAK squares + outposts (holes) — a WHERE/WHAT board-geometry question,
+  // grounded from findWeakSquares. Placed after `structure` so "do I have weak
+  // squares" (own-structure yes/no) keeps its existing route; this catches the
+  // open "what/where are the key squares / outposts / holes" phrasings.
+  if (/\b(?:key|weak|strong|important|critical|good|outpost)\s+squares?\b|\boutposts?\b|\bwhere.*\bholes?\b|\bany\s+holes?\b|\bwhat\s+squares?\s+(?:should|matter|to\s+(?:aim|target))\b/.test(a)) return 'key-squares';
   if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
   if (/\bis\s+my\s+(?:bishop|knight|rook|queen|pawn|king)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward|(?:well[\s-]+)?placed|happy|safe\s+there|strong|weak)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed|well[\s-]+placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
   return null;
