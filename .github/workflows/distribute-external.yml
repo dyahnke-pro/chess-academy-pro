@@ -1,0 +1,49 @@
+name: Distribute latest build → TestFlight external
+
+# Distribute the latest VALID Xcode Cloud build to TestFlight WITHOUT rebuilding
+# — internal + external "Beta Test" group (external → Beta App Review). Use this
+# to push an already-built, already-VALID build (e.g. 4.0.3 build 199) to the
+# external testers on demand, instead of re-running daily-deploy (which cuts a
+# fresh Xcode Cloud build). distribute-testflight.mjs is idempotent, so
+# re-running is safe.
+#
+# Manual only. TF_BUILD_ID pins a specific build; omit to use the latest VALID.
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_id:
+        description: 'Specific ASC build id to distribute (blank = latest VALID)'
+        required: false
+        type: string
+      whats_new:
+        description: '"What to Test" note for external review'
+        required: false
+        type: string
+
+concurrency:
+  group: distribute-external
+  cancel-in-progress: false
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Distribute to internal + external
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          TF_EXTERNAL: '1'
+          TF_BUILD_ID: ${{ github.event.inputs.build_id }}
+          TF_WHATS_NEW: ${{ github.event.inputs.whats_new }}
+        run: |
+          if [ -z "$APP_STORE_CONNECT_API_KEY" ]; then
+            echo "::error::APP_STORE_CONNECT_API_* secrets not set — cannot distribute."
+            exit 1
+          fi
+          node scripts/ci/distribute-testflight.mjs
