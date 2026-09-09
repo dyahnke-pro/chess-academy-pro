@@ -672,12 +672,22 @@ export interface WinShapeStats {
   totalWins: number;
 }
 
+// A decisive result reached in under two full moves is an abandonment /
+// timeout-on-move-1 / aborted game, NOT a win by play — legal chess cannot
+// deliver mate before move 2 (Fool's mate). Such "games" polluted the records
+// ("Fastest win: 1 move") and the win-SHAPE breakdown (a forfeit is not a
+// "quick tactical win"), so they're excluded from both. The floor is exactly 2
+// so a genuine Fool's/Scholar's-mate miniature still counts (loop audit
+// 2026-09-09, real knight_mare_01 data showed a bogus "1 move" fastest win).
+const MIN_PLAYED_MOVES = 2;
+
 export async function winShapeStats(): Promise<WinShapeStats> {
   const playerGames = await loadPlayerGames();
   let quick = 0, grind = 0, mid = 0;
   for (const { game, color } of playerGames) {
     if (!isWin(game, color)) continue;
     const moves = countMovesInPgn(game.pgn);
+    if (moves < MIN_PLAYED_MOVES) continue; // abandonment, not a played win
     if (moves <= 20) quick++;
     else if (moves >= 60) grind++;
     else mid++;
@@ -1115,7 +1125,7 @@ export async function personalRecords(): Promise<PersonalRecords> {
         highestBeaten = { name: opponentName, elo: opponentElo, gameId: game.id };
       }
     }
-    if (won) {
+    if (won && moves >= MIN_PLAYED_MOVES) {
       if (!fastestWin || moves < fastestWin.moves) {
         fastestWin = { moves, gameId: game.id, opponent: opponentName };
       }
