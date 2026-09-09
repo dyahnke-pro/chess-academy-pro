@@ -71,7 +71,7 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   // (David 2026-09-09 critical audit: "can I win material?" answered "39 points
   // each"). Routes to 'loose' → assembleHangingAnswer(scanTheirs).
   const winMaterialW = /\b(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|free\s+material)\b/.test(t) || /\bfree\s+material\b/.test(t) || /\bwin\s+material\b/.test(t);
-  const materialW = !winMaterialW && /\b(material|up\s+(?:a|the)\s+\w+|down\s+(?:a|the|material)|who\s+has\s+more|piece\s+count|even\s+material)\b/.test(t);
+  const materialW = !winMaterialW && /\b(material|up\s+(?:a|the)\s+\w+|down\s+(?:a|the|material)|who\s+has\s+more(?!\s+space)|piece\s+count|even\s+material)\b/.test(t);
   const consequence = /\b(what\s+happens\s+(?:after|if)|what\s+if\s+i\s+play|after\s+\w)\b/.test(t);
   const movePurposeW = /\b(what\s+does\b.*\b(?:do|accomplish)|point\s+of|idea\s+behind|purpose\s+of|what'?s\s+the\s+point)\b/.test(t);
   const whyFailedW = /\bwhy\b.*\b(?:fail|failed|bad|wrong|lose|loses|losing|blunder|mistake|can'?t\s+i\s+take|not\s+take)\b/.test(t);

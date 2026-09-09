@@ -55,4 +55,13 @@ describe('extractQuestionFocus — the audit questions sort correctly', () => {
     expect(extractQuestionFocus('how do I import my chess.com games?')).toBeNull();
     expect(extractQuestionFocus('what is your name?')).toBeNull();
   });
+
+  // REGRESSION (David 2026-09-09): "who has more space" was grabbed by the
+  // material aspect (materialW matched "who has more"), pre-empting the space
+  // positionalTopic lane and answering with a material count. The router must
+  // NOT fire a material aspect for a space question.
+  it('"who has more space" is not misrouted to material', () => {
+    const f = extractQuestionFocus('who has more space here?');
+    expect(f?.aspects ?? []).not.toContain('material');
+  });
 });

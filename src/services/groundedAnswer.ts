@@ -309,7 +309,24 @@ export function assembleBoardPlanAnswer(
     // passed pawn is the danger" etc. — reuse it for the opponent read.
     const sp = structurePlan(fen, myC);
     if (sp) return { facts: sp, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    return null;
+    // Quiet position: name their concrete levers so "what's their plan?" gets a
+    // real board read (never the engine's "Your plan" fallback). Their best
+    // piece + their rook files + their pawn breaks (flip the side to move so
+    // findPawnBreaks reads THEIR breaks).
+    const oppColor: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+    const bits: string[] = [];
+    const sw = strongestWeakestPiece(fen, oppColor);
+    if (sw.strongest) bits.push(`their ${REVIEW_PIECE_NAME[sw.strongest.piece]} on ${sw.strongest.square} is their most active piece`);
+    const oppFiles = findOpenFiles(fen);
+    const theirFiles = [...new Set([...oppFiles.open, ...(oppColor === 'w' ? oppFiles.whiteSemiOpen : oppFiles.blackSemiOpen)])].slice(0, 2);
+    if (theirFiles.length) bits.push(`they'll contest the ${theirFiles.join(' and ')}-file`);
+    const flipped = fen.split(' ');
+    if (flipped.length >= 6 && flipped[1] !== oppColor) { flipped[1] = oppColor; flipped[3] = '-'; }
+    let theirBreaks: string[] = [];
+    try { theirBreaks = findPawnBreaks(flipped.join(' ')).slice(0, 2); } catch { theirBreaks = []; }
+    if (theirBreaks.length) bits.push(`they can break with ${theirBreaks.join(', ')}`);
+    if (bits.length === 0) return null;
+    return { facts: `Their side of it: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // side === 'me'

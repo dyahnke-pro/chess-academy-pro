@@ -63,6 +63,15 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
     expect(out!.aspect).toBe('opponent-plan');
     expect(out!.answer.facts).toMatch(/d3|passed|danger|threat/i);
   });
+  it('opponent-plan: gives a board read in a quiet middlegame (never a null → engine "Your plan" fallback)', () => {
+    // Quiet Italian-ish middlegame, no passer/IQP/immediate threat — the
+    // opponent lane must still name their levers (best piece / files / breaks).
+    const quiet = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b - - 0 6';
+    const out = answerBoardQuestion(quiet, "what's their plan?", 'white');
+    expect(out, 'no opponent-plan answer').not.toBeNull();
+    expect(out!.aspect).toBe('opponent-plan');
+    expect(out!.answer.facts.length).toBeGreaterThan(10);
+  });
 
   it('returns null for a non-board / engine-only ask (existing lanes handle it)', () => {
     expect(answerBoardQuestion(fen, 'how do I import my games?', 'white')).toBeNull();
