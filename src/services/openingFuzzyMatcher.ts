@@ -239,7 +239,13 @@ function scoreCandidate(qNorm: string, cNorm: string): number {
   // has low precision, which over-penalizes legitimate typo
   // surfacing. Fall back to the original recall+flat blend.
   if (qTokens.length <= 1) {
-    return Math.max(recall, recall * 0.7 + flat * 0.3);
+    // Blend in whole-string similarity — do NOT take max(recall, …). A single
+    // junk token that happens to resemble ONE token of a long multi-token name
+    // ("banana" ~ "anand" in "French … Shirov-Anand", recall .67) must NOT score
+    // as a full-name typo; the low flat similarity against the long name drags
+    // it under the floor, while a real typo of the distinctive token ("Najdorff"
+    // ~ "Najdorf") still clears it (David 2026-09-09 critical audit).
+    return recall * 0.7 + flat * 0.3;
   }
   const precision = tokenScore(cTokens, qTokens);
   // F1: harmonic mean of precision + recall. Guards against

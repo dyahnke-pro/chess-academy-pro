@@ -2383,9 +2383,40 @@ export function assemblePlanAnswer(opts: {
 export function assembleTacticsAnswer(
   tactics: TacticsLiveContext,
   studentColor: 'white' | 'black',
+  ask?: string | null,
 ): GroundedAnswer | null {
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const parts: string[] = [];
+
+  // QUESTION-AWARE (David 2026-09-09 critical audit): "is there a fork?" / "can
+  // I win material?" ask about an OPPORTUNITY for the student — the old code
+  // voiced whatever tactic existed (e.g. the student's OWN hanging pawn, a
+  // DANGER), which read as a non-answer. When the ask is an opportunity/motif
+  // question, lead with the student's shots and, if there are none, say so
+  // honestly rather than deflecting.
+  const t = (ask ?? '').toLowerCase();
+  const motifM = /\b(fork|pin|skewer|discovered|double\s+attack|combination|sacrifice|windmill|deflection|overload)\b/.exec(t);
+  const opportunityAsk =
+    /\b(can\s+i\s+win|winning\s+(?:move|shot|tactic)|free\s+material|win\s+material|do\s+i\s+have\s+(?:a\s+)?(?:tactic|fork|shot|combination))\b/.test(t) ||
+    /\b(?:is\s+there|any|do\s+i\s+have)\b[\s\S]{0,24}\b(?:fork|pin|skewer|tactic|combination|shot|winning\s+move)\b/.test(t) ||
+    (!!motifM && /\b(is\s+there|any|do\s+i\s+have|can\s+i|available)\b/.test(t));
+  if (opportunityAsk) {
+    if (tactics.boardFacts?.mateInOne) parts.push(`Yes — checkmate in one: ${tactics.boardFacts.mateInOne}.`);
+    for (const o of tactics.opportunities.slice(0, 2)) if (o.description) parts.push(`${o.description}.`);
+    for (const im of tactics.immediate.slice(0, 2)) if (im.description && parts.length < 2) parts.push(`${im.description}.`);
+    if (parts.length > 0) {
+      return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'] };
+    }
+    // Honest no — name the motif asked, and flag a standing danger if one
+    // exists so "no shot" is never mistaken for "all clear".
+    const motif = motifM ? motifM[1] : 'winning tactic';
+    const danger = tactics.hanging.find((h) => h.color === sc);
+    const dangerNote = danger ? ` And watch your ${REVIEW_PIECE_NAME[danger.piece] ?? danger.piece} on ${danger.square} — it's loose.` : '';
+    return {
+      facts: `No ${motif} for you here right now — nothing of theirs is loose to win.${dangerNote}`,
+      bestMoveSan: null, bestMoveFromTo: null, sources: ['engine:stockfish', 'board:chess.js'],
+    };
+  }
 
   // Most urgent: a forced mate-in-one for the side to move.
   if (tactics.boardFacts?.mateInOne) {

@@ -82,6 +82,26 @@ describe('assembleTacticsAnswer — Phase 2 (voice the engine-computed tactics)'
   it('returns null when there is no concrete tactic (caller falls back)', () => {
     expect(assembleTacticsAnswer(tactics(), 'white')).toBeNull();
   });
+
+  // Question-aware (David 2026-09-09 critical audit)
+  it('answers an opportunity ask with the student\'s shot, not a hanging deflection', () => {
+    const a = assembleTacticsAnswer(
+      tactics({ opportunities: [{ type: 'fork', description: 'Nd5 forks the queen and rook', depthAhead: 2, line: [] } as unknown as TacticsLiveContext['opportunities'][number]],
+        hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
+      'white', 'is there a fork available?');
+    expect(a!.facts).toContain('Nd5 forks');
+  });
+  it('says "no fork" honestly when the student has no shot — and flags a standing danger', () => {
+    const a = assembleTacticsAnswer(
+      tactics({ hanging: [{ square: 'e5', piece: 'p', color: 'w' }] }),
+      'white', 'is there a fork available?');
+    expect(a!.facts).toMatch(/No fork for you here right now/i);
+    expect(a!.facts).toMatch(/pawn on e5/i);
+  });
+  it('an opportunity ask with nothing at all → honest no', () => {
+    const a = assembleTacticsAnswer(tactics(), 'white', 'can I win material here?');
+    expect(a!.facts).toMatch(/nothing of theirs is loose/i);
+  });
 });
 
 import type { BadHabit } from '../types';

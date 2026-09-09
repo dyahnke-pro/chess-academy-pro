@@ -66,7 +66,12 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   const planW = /\b(plan|planning|idea|strategy|aim\s+for|continue|next\s+few\s+moves|what\s+should\s+i\s+be\s+doing)\b/.test(t);
   const bestW = /\b(best\s+(?:move|continuation|option|play|idea)|what\s+should\s+i\s+play|strongest\s+move|what\s+(?:do|should)\s+i\s+do\b)\b/.test(t);
   const evalW = /\b(winning|who'?s\s+(?:better|winning|worse)|how\s+do\s+i\s+stand|evaluation|advantage|am\s+i\s+(?:better|worse|winning|losing)|who\s+is\s+(?:better|winning))\b/.test(t);
-  const materialW = /\b(material|up\s+(?:a|the)\s+\w+|down\s+(?:a|the|material)|who\s+has\s+more|piece\s+count|even\s+material)\b/.test(t);
+  // "can I win/grab/take material / free material / win a piece" is a scan for
+  // the OPPONENT's loose pieces (an opportunity), NOT the material balance count
+  // (David 2026-09-09 critical audit: "can I win material?" answered "39 points
+  // each"). Routes to 'loose' → assembleHangingAnswer(scanTheirs).
+  const winMaterialW = /\b(?:win|grab|take|snag|pick\s+up)\s+(?:material|a\s+piece|a\s+pawn|free\s+material)\b/.test(t) || /\bfree\s+material\b/.test(t) || /\bwin\s+material\b/.test(t);
+  const materialW = !winMaterialW && /\b(material|up\s+(?:a|the)\s+\w+|down\s+(?:a|the|material)|who\s+has\s+more|piece\s+count|even\s+material)\b/.test(t);
   const consequence = /\b(what\s+happens\s+(?:after|if)|what\s+if\s+i\s+play|after\s+\w)\b/.test(t);
   const movePurposeW = /\b(what\s+does\b.*\b(?:do|accomplish)|point\s+of|idea\s+behind|purpose\s+of|what'?s\s+the\s+point)\b/.test(t);
   const whyFailedW = /\bwhy\b.*\b(?:fail|failed|bad|wrong|lose|loses|losing|blunder|mistake|can'?t\s+i\s+take|not\s+take)\b/.test(t);
@@ -115,6 +120,7 @@ export function extractQuestionFocus(ask: string | null | undefined): QuestionFo
   if (whyFailedW && moves.length === 0) add('why-failed');
   if (masterW) add('master-play');
   if (endgameW) add('endgame-result');
+  if (winMaterialW) add('loose');
   if (materialW) add('material');
   if (evalW) add('eval');
   if (bestW && moves.length === 0) add('best-move');

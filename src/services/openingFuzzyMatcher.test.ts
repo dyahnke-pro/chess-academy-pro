@@ -81,6 +81,18 @@ describe('fuzzyMatchOpening', () => {
     expect(names.some((n) => n.includes('najdorf'))).toBe(true);
   });
 
+  it("junk single-token input ('banana') offers NO opening (David 2026-09-09)", () => {
+    // "banana" resembled the 'anand' token in "French … Shirov-Anand" (recall
+    // .67) and was wrongly surfaced. The blended single-token score now drops it.
+    const r = fuzzyMatchOpening('banana');
+    expect(r.autoAccept).toBe(false);
+    expect(r.candidates.every((c) => c.score < 0.55)).toBe(true);
+  });
+  it("'flerbomorph' junk → no candidates", () => {
+    const r = fuzzyMatchOpening('flerbomorph');
+    expect(r.candidates.length).toBe(0);
+  });
+
   it("missing letter 'Caro Cann' → Caro-Kann surfaces", () => {
     const r = fuzzyMatchOpening('Caro Cann');
     const names = r.candidates.map((c) => c.canonicalName.toLowerCase());
