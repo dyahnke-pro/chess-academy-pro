@@ -486,3 +486,31 @@ describe('gameInsightsService', () => {
     }, 15000);
   });
 });
+
+describe('openingChoosingColor — White "…Attack" systems must not be filtered as Black (loop audit 2026-09-09)', () => {
+  it('classifies White attack systems that COLLIDE with black keywords as White', async () => {
+    const { openingChoosingColor } = await import('./gameInsightsService');
+    // Real bug: KIA (A07) resolves to "King's Indian Attack", was caught by the
+    // "indian" black keyword and vanished from "Most played as White".
+    expect(openingChoosingColor("King's Indian Attack")).toBe('white');
+    expect(openingChoosingColor("King's Indian Attack: Keres Variation")).toBe('white');
+    expect(openingChoosingColor('Nimzowitsch-Larsen Attack')).toBe('white');
+    expect(openingChoosingColor('Nimzo-Larsen Attack: Modern Variation')).toBe('white');
+  });
+  it('still classifies the Black Indians / defenses as Black', async () => {
+    const { openingChoosingColor } = await import('./gameInsightsService');
+    expect(openingChoosingColor("King's Indian Defense")).toBe('black');
+    expect(openingChoosingColor('Nimzo-Indian Defense')).toBe('black');
+    expect(openingChoosingColor("Queen's Indian Defense")).toBe('black');
+    expect(openingChoosingColor('Nimzowitsch Defense')).toBe('black');
+    expect(openingChoosingColor('Scandinavian Defense')).toBe('black');
+    expect(openingChoosingColor('French Defense')).toBe('black');
+  });
+  it('leaves joint / White openings unclassified (bucketed by player color)', async () => {
+    const { openingChoosingColor } = await import('./gameInsightsService');
+    expect(openingChoosingColor('Italian Game')).toBeNull();
+    expect(openingChoosingColor('London System')).toBeNull();
+    expect(openingChoosingColor("King's Pawn Game")).toBeNull();
+    expect(openingChoosingColor('Vienna Game')).toBeNull();
+  });
+});

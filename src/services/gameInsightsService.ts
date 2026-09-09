@@ -104,9 +104,24 @@ interface AnnotatedGame {
  *  White-named; null when ambiguous / joint (Italian Game,
  *  Queen's Gambit Declined, King's Pawn Game) — those get
  *  bucketed by player color as before. */
-function openingChoosingColor(name: string | null): 'white' | 'black' | null {
+export function openingChoosingColor(name: string | null): 'white' | 'black' | null {
   if (!name) return null;
   const n = name.toLowerCase();
+  // WHITE systems that COLLIDE with a black keyword below and must be caught
+  // FIRST (loop audit 2026-09-09, real knight_mare_01 data): the King's Indian
+  // ATTACK (A07, a White 1.Nf3/g3 system) contains "indian", and the
+  // Nimzowitsch-Larsen Attack (1.b3) contains "nimzowitsch" — both are WHITE's
+  // choice, but the "indian"/"nimzowitsch" black keywords were filtering the KIA
+  // (14 games) straight OUT of "Most played as White". Returning 'white' keeps
+  // them in the White bucket AND excludes them from Black's (the reverse filter),
+  // since neither is ever Black's choice. These strings appear only in White
+  // opening names — "Indian ATTACK" is never a Black opening (the Black Indians
+  // are King's Indian DEFENSE, Nimzo-/Queen's-/Old-Indian, Grünfeld — no
+  // "attack"), and "Larsen" is White (Nimzo-Larsen / Larsen's Opening).
+  const whiteSystems = ['indian attack', 'larsen attack', 'nimzo-larsen', 'nimzowitsch-larsen'];
+  for (const kw of whiteSystems) {
+    if (n.includes(kw)) return 'white';
+  }
   // Black-named: "Defense"/"Defence", "Indian", and specific Black-
   // defense families. The keyword set covers every B0-B99 + most
   // E00-E99 + Black sidelines in D70-D99 and C00-C19. Reported by
