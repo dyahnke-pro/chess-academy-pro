@@ -974,6 +974,22 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
     expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
   });
+  it('gives a board-true material read (not ONLY a hang note) when the engine is cold but a FEN is present (loop 2026-09-09)', () => {
+    // Live teach-QA deflect: inside a walkthrough (no warm eval) "why is this
+    // move played?" / "key squares?" / "worst move?" all fell through to the
+    // safe-default and answered ONLY "your pawn on e5 is hanging". With the FEN
+    // passed, the no-eval branch adds a real material assessment instead of
+    // degrading to the lone hang note.
+    const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
+    const a = assemblePositionAssessment({
+      evalCp: null, mateIn: null, studentColor: 'black', fen,
+      tactics: tactics({ hanging: [{ square: 'e5', piece: 'p', color: 'b' }] }),
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts.toLowerCase()).toContain('material'); // real read, not a bare deflect
+    // and it is NOT just the hang note on its own
+    expect(a!.facts.trim()).not.toBe('Your pawn on e5 is hanging.');
+  });
 });
 
 describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (no pinned-attacker false positive)', () => {

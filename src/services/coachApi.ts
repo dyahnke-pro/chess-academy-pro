@@ -2215,6 +2215,13 @@ async function serveGroundedPositionDefault(
     mateIn: grounding.engineMateIn,
     tactics: grounding.tactics,
     studentColor: sc,
+    // Pass the FEN so a no-engine-eval fallback (e.g. inside a walkthrough) gives
+    // a board-true material read instead of degrading to a lone hanging-piece
+    // note — the exact deflect David hit live (2026-09-09): "why is this move
+    // played?" / "key squares?" / "worst move?" all fell through to here and
+    // answered only "your pawn on e5 is hanging". Same fix already applied at the
+    // position-assessment lane below; this completes it across the call sites.
+    fen: grounding.currentFen,
   });
   if (assess) {
     if (computedOnly && assess.facts.trim()) return `${prefix}${assess.facts}`.trim();
@@ -2361,6 +2368,7 @@ async function computeLiveBoardVerdict(
       mateIn: grounding.engineMateIn,
       tactics: grounding.tactics,
       studentColor: sc,
+      fen: grounding.currentFen, // board-true material read when the engine is cold (see above)
     });
     if (assess) return await voice(assess.facts, 'assessment');
     return null; // no board data at all — the honest refusal downstream.
