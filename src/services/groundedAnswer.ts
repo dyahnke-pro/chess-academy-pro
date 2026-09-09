@@ -14,7 +14,13 @@
  */
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
-import { seeGain, opponentIntentRead, findPawnBreaks, findOpenFiles } from './positionReadingService';
+import {
+  seeGain, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
+  namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
+  findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
+  bishopPair, computeSpace, findPassedPawns,
+} from './positionReadingService';
 import { structurePlan } from './boardPlan';
 import { strategicWhySelfContained } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
@@ -4853,7 +4859,11 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // ─────────────────────────────────────────────────────────────────────────────
 import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
 
-export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece' | 'key-squares';
+export type PositionalTopic =
+  | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
+  | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
+  | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
+  | 'xray' | 'maneuver' | 'endgame-plan';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -4978,6 +4988,122 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
       ? `Watch your own weak squares on ${myHoles.join(', ')} — no pawn of yours can guard ${myHoles.length === 1 ? 'it' : 'them'}.`
       : '';
     return { facts: [targets, own].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  const oppC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+  const oppCap = opp[0].toUpperCase() + opp.slice(1);
+
+  if (topic === 'space') {
+    const s = computeSpace(fen);
+    const mine = me === 'white' ? s.white : s.black;
+    const theirs = me === 'white' ? s.black : s.white;
+    const verdict = mine > theirs ? 'you have the space advantage' : mine < theirs ? `${opp} has more space` : 'space is balanced';
+    return { facts: `You control ${mine} square${mine === 1 ? '' : 's'} in the contested zone to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'bishop-pair') {
+    const mineBP = bishopPair(fen, myC);
+    const theirsBP = bishopPair(fen, oppC);
+    const facts = mineBP
+      ? 'You hold the bishop pair — keep the position open so both bishops bite.'
+      : theirsBP
+        ? `${oppCap} holds the bishop pair — close the position or trade one of theirs off.`
+        : 'Neither side has the bishop pair.';
+    return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'passed-pawn') {
+    const mineP = findPassedPawns(fen, myC);
+    const theirsP = findPassedPawns(fen, oppC);
+    if (mineP.length === 0 && theirsP.length === 0) return { facts: 'No passed pawns on either side yet.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const m = mineP.length ? `Your passed pawn${mineP.length > 1 ? 's' : ''} on ${mineP.join(', ')} — push and support ${mineP.length > 1 ? 'them' : 'it'}.` : '';
+    const t = theirsP.length ? `Their passer${theirsP.length > 1 ? 's' : ''} on ${theirsP.join(', ')} — blockade before ${theirsP.length > 1 ? 'they run' : 'it runs'}.` : '';
+    return { facts: [m, t].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'best-piece') {
+    const sw = strongestWeakestPiece(fen, myC);
+    if (!sw.strongest && !sw.weakest) return null;
+    const best = sw.strongest ? `Your most active piece is the ${REVIEW_PIECE_NAME[sw.strongest.piece] ?? sw.strongest.piece} on ${sw.strongest.square}.` : '';
+    const worst = sw.weakest ? `Your least active is the ${REVIEW_PIECE_NAME[sw.weakest.piece] ?? sw.weakest.piece} on ${sw.weakest.square} — find it a better square.` : '';
+    return { facts: [best, worst].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'pressure') {
+    const onMe = pressuredTargets(fen, oppC).filter((p) => p.attackers > p.defenders);
+    const onThem = pressuredTargets(fen, myC).filter((p) => p.attackers > p.defenders);
+    const mine = onMe.length ? `Under pressure for you: ${onMe.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
+    const theirs = onThem.length ? `You're pressuring ${onThem.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
+    if (!mine && !theirs) return { facts: 'Nothing is under real pressure right now — attackers and defenders balance out.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: [mine, theirs].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'targets') {
+    const targets = findAttackTargets(fen, myC);
+    const turn = fen.split(' ')[1];
+    const grabs = turn === myC ? findPawnGrabs(fen).filter((g) => g.safe && g.see > 0) : [];
+    const tg = targets.length ? `Aim at ${targets.slice(0, 3).join(', ')} — ${opp}'s weak points.` : '';
+    const gr = grabs.length ? `Free pawn${grabs.length > 1 ? 's' : ''}: ${grabs.slice(0, 2).map((g) => g.capture).join(', ')}.` : '';
+    if (!tg && !gr) return null;
+    return { facts: [tg, gr].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'open-files') {
+    const f = findOpenFiles(fen);
+    const mySemi = myC === 'w' ? f.whiteSemiOpen : f.blackSemiOpen;
+    if (f.open.length === 0 && mySemi.length === 0) return { facts: 'No open or half-open files for your rooks yet — a pawn break can create one.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const openTxt = f.open.length ? `open ${f.open.join(', ')}-file${f.open.length > 1 ? 's' : ''}` : '';
+    const semiTxt = mySemi.length ? `half-open ${mySemi.join(', ')}-file${mySemi.length > 1 ? 's' : ''}` : '';
+    return { facts: `Rook files: ${[openTxt, semiTxt].filter(Boolean).join('; ')}. Put a rook there.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'pawn-breaks') {
+    const turn = fen.split(' ')[1];
+    if (turn !== myC) return { facts: `It's not your move, so there's no break to play this instant — line one up for when it's your turn.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const breaks = findPawnBreaks(fen);
+    if (breaks.length === 0) return { facts: 'No pawn break available right now — the structure is locked or none makes contact.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `Your pawn break${breaks.length > 1 ? 's' : ''}: ${breaks.slice(0, 3).join(', ')} — that's how you open the position.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'structure-name') {
+    const s = namedPawnStructure(fen);
+    if (!s) return null;
+    return { facts: `This is ${s.name}. ${s.plan}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'xray') {
+    const x = findXrays(fen, myC);
+    if (x.length === 0) return { facts: 'No x-ray pressure of yours right now — no rook, bishop, or queen lined up through a piece.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const n = x[0];
+    return { facts: `Your ${REVIEW_PIECE_NAME[n.sliderPiece]} on ${n.slider} x-rays their ${REVIEW_PIECE_NAME[n.targetPiece]} on ${n.target} through ${n.blocker} — build the pressure.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'maneuver') {
+    const nr = findKnightReroute(fen, myC);
+    const rl = findRookLift(fen, myC);
+    const fi = findFianchetto(fen, myC);
+    const bl = findBlockade(fen, myC);
+    const bits: string[] = [];
+    if (nr) bits.push(`reroute your knight ${nr.from}–${nr.via ? `${nr.via}–` : ''}${nr.to}`);
+    if (rl) bits.push(`lift your rook ${rl.rook}–${rl.to}`);
+    if (fi) bits.push(`fianchetto a bishop to ${fi}`);
+    if (bl) bits.push(`blockade on ${bl.blocker}`);
+    if (bits.length === 0) return null;
+    return { facts: `Piece ideas: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'endgame-plan') {
+    const ka = kingActivation(fen, myC);
+    const op = oppositionRead(fen, myC);
+    const rb = rookBehindPasser(fen, myC);
+    const bm = bestMinorToKeep(fen, myC);
+    const bits: string[] = [];
+    if (ka) bits.push(`march your king toward ${ka.to}`);
+    if (op) bits.push(op.holds ? 'you hold the opposition' : 'fight for the opposition');
+    if (rb) bits.push(`get your rook behind the passer on ${rb.pawn}`);
+    if (bm) bits.push(`keep your ${REVIEW_PIECE_NAME[bm.note.piece]} on ${bm.note.square}${bm.dominant ? ' — it dominates' : ''}`);
+    if (bits.length === 0) return null;
+    return { facts: `Endgame technique: ${bits.join('; ')}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   // piece quality

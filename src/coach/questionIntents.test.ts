@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isAppHelpQuestion, isWhyBestMoveQuestion, isStructuralConceptTarget } from './questionIntents';
+import { isAppHelpQuestion, isWhyBestMoveQuestion, isStructuralConceptTarget, positionalTopic } from './questionIntents';
 import {
   isAlternativesQuestion,
   isPlanQuestion,
@@ -974,6 +974,35 @@ describe('strengthened vocabulary across every router', () => {
     ['concept', isConceptQuestion, 'what are the principles'],
   ];
   it.each(cases)('%s router matches: %s', (_label, fn, q) => expect(fn(q)).toBe(true));
+});
+
+// Every board-awareness computer now has a chat lane (David 2026-09-09:
+// "obviously all 30ish need to be wired in"). This proves the ROUTING half of
+// each wire — the ask reaches the right positionalTopic; the ANSWER half is in
+// groundedAnswer.positional.test.ts.
+describe('positionalTopic — every board-awareness computer is routable from chat', () => {
+  const cases: Array<[string, string]> = [
+    ['space', 'who has more space here?'],
+    ['space', 'do I have a space advantage?'],
+    ['bishop-pair', 'do I have the bishop pair?'],
+    ['bishop-pair', 'who has the two bishops?'],
+    ['passed-pawn', 'do I have a passed pawn?'],
+    ['passed-pawn', 'is there a passer?'],
+    ['open-files', 'are there any open files for my rooks?'],
+    ['pawn-breaks', 'what pawn break do I have?'],
+    ['xray', 'are there any x-rays here?'],
+    ['pressure', "what's under pressure?"],
+    ['targets', 'what should I attack?'],
+    ['structure-name', 'what pawn structure is this?'],
+    ['maneuver', 'where should my knight go?'],
+    ['endgame-plan', "what's my endgame plan?"],
+    ['endgame-plan', 'do I have the opposition?'],
+    ['best-piece', 'which is my best piece?'],
+    ['best-piece', "what's my worst piece?"],
+    ['key-squares', 'what are the key squares here?'],
+    ['key-squares', 'where are the outposts?'],
+  ];
+  it.each(cases)('routes "%s" ask to topic', (topic, q) => expect(positionalTopic(q)).toBe(topic));
 });
 
 describe('cross-router disambiguation (must NOT collide)', () => {

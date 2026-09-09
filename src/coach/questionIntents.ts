@@ -2445,19 +2445,47 @@ export function isAppHelpQuestion(ask: string | undefined): boolean {
 // Stockfish eval — so they route to assemblePositionalAnswer, which computes the
 // real feature from the FEN. Returns the topic, or null when it's a plain
 // eval/assessment question (which stays on assemblePositionAssessment).
-export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece' | 'key-squares';
+export type PositionalTopic =
+  | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
+  | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
+  | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
+  | 'xray' | 'maneuver' | 'endgame-plan';
 export function positionalTopic(ask: string | undefined): PositionalTopic | null {
   if (!ask) return null;
   const a = ask.toLowerCase();
   if (/\bhow\s+many\s+(?:pieces|pawns)\s+do\s+i\s+have\b|\bmaterial\s+(?:count|balance|situation)\b|\bam\s+i\s+up\s+material\b|\bhow\s+much\s+material\b/.test(a)) return 'material';
-  if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:space|cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
+  if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
   if (/\bhave\s+i\s+developed\b|\bam\s+i\s+(?:behind|ahead)\s+in\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
+  // SPACE — "who has more space / do I have a space advantage".
+  if (/\bspace\s+(?:advantage|edge)\b|\bwho\s+has\s+(?:the\s+|more\s+)?space\b|\bdo\s+i\s+have\s+(?:more|the)\s+space\b|\bmore\s+space\b/.test(a)) return 'space';
+  // BISHOP PAIR — "do I have the bishop pair / two bishops".
+  if (/\bbishop\s+pair\b|\btwo\s+bishops\b|\bpair\s+of\s+bishops\b/.test(a)) return 'bishop-pair';
+  // PASSED PAWN — "do I have a passed pawn / passer".
+  if (/\bpassed\s+pawns?\b|\bpassers?\b|\bpassed\b/.test(a)) return 'passed-pawn';
+  // OPEN FILES — "any open files for my rooks".
+  if (/\bopen\s+files?\b|\bhalf[\s-]?open\s+files?\b|\bfiles?\s+for\s+my\s+rooks?\b|\bwhere\s+(?:do|should)\s+my\s+rooks?\b/.test(a)) return 'open-files';
+  // PAWN BREAKS — "what pawn break do I have / how do I open the position".
+  if (/\bpawn\s+breaks?\b|\bbreaks?\b(?!\s+down)|\bhow\s+(?:do|should)\s+i\s+(?:open|break)\b/.test(a)) return 'pawn-breaks';
+  // X-RAY — "any x-rays / pins through pieces".
+  if (/\bx-?rays?\b|\bpin\s+through\b|\blined?\s+up\s+(?:on|against|through)\b/.test(a)) return 'xray';
+  // PRESSURE — "what's under pressure / what am I pressuring".
+  if (/\bunder\s+pressure\b|\bwhat\s+(?:am\s+i|do\s+i)\s+pressur\w*\b|\bpressur\w+\s+(?:pieces?|targets?)\b|\bwhat'?s\s+being\s+attacked\b/.test(a)) return 'pressure';
+  // ATTACK TARGETS — "what should I attack / target / go after".
+  if (/\bwhat\s+(?:should|do)\s+i\s+(?:attack|target|go\s+after|aim\s+at)\b|\battack\s+targets?\b|\bweak(?:est)?\s+points?\b|\bcan\s+i\s+grab\s+a\s+(?:free\s+)?pawn\b/.test(a)) return 'targets';
+  // NAMED PAWN STRUCTURE — "what pawn structure is this".
+  if (/\bwhat\s+(?:pawn\s+)?structure\s+is\s+this\b|\bpawn\s+structure\s+(?:name|called)\b|\bwhat'?s\s+the\s+structure\b/.test(a)) return 'structure-name';
+  // MANEUVER — "where should my knight/rook/bishop go / reroute".
+  if (/\bwhere\s+(?:should|does|do)\s+my\s+(?:knight|rook|bishop)\b|\breroute\b|\brook\s+lift\b|\bwhere\s+(?:should|do)\s+i\s+(?:put|develop|maneuver|manoeuvre)\b|\bbest\s+square\s+for\s+my\b/.test(a)) return 'maneuver';
+  // ENDGAME TECHNIQUE — "what's my endgame plan / opposition / king activity".
+  if (/\bendgame\s+(?:plan|technique|idea)\b|\bopposition\b|\bactivate\s+my\s+king\b|\brook\s+behind\s+the\s+passer?\b|\bwhich\s+(?:minor|piece)\s+(?:should\s+i\s+)?keep\b/.test(a)) return 'endgame-plan';
   if (/\bis\s+my\s+(?:pawn\s+)?structure\b|\bdo\s+i\s+have\s+(?:any\s+)?weak\s+(?:pawns|squares)\b|\bweak\s+pawns?\b/.test(a)) return 'structure';
   // KEY / WEAK squares + outposts (holes) — a WHERE/WHAT board-geometry question,
   // grounded from findWeakSquares. Placed after `structure` so "do I have weak
   // squares" (own-structure yes/no) keeps its existing route; this catches the
   // open "what/where are the key squares / outposts / holes" phrasings.
   if (/\b(?:key|weak|strong|important|critical|good|outpost)\s+squares?\b|\boutposts?\b|\bwhere.*\bholes?\b|\bany\s+holes?\b|\bwhat\s+squares?\s+(?:should|matter|to\s+(?:aim|target))\b/.test(a)) return 'key-squares';
+  // BEST / WORST PIECE — "which is my best / most active / worst piece".
+  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)\s+piece\b|\bwhich\s+piece\s+is\s+(?:my\s+)?(?:best|worst|most\s+active)\b/.test(a)) return 'best-piece';
   if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
   if (/\bis\s+my\s+(?:bishop|knight|rook|queen|pawn|king)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward|(?:well[\s-]+)?placed|happy|safe\s+there|strong|weak)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed|well[\s-]+placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
   return null;

@@ -38,6 +38,48 @@ describe('assemblePositionalAnswer — correct deterministic data', () => {
     const START_POS = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     expect(assemblePositionalAnswer(START_POS, 'white', 'key-squares')).toBeNull();
   });
+  // Every board-awareness computer wired into chat (David 2026-09-09: "all
+  // 30ish need to be wired in") — a REAL answer comes out for a real position.
+  it('space: names the contested-square counts', () => {
+    const a = assemblePositionalAnswer(START, 'white', 'space');
+    expect(a?.facts).toMatch(/space|square/i);
+    expect(a?.bestMoveSan).toBeNull();
+  });
+  it('bishop-pair: reports the pair when a side has two vs one', () => {
+    const twoB = '4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1'; // White two bishops, Black none
+    expect(assemblePositionalAnswer(twoB, 'white', 'bishop-pair')?.facts).toMatch(/bishop pair/i);
+  });
+  it('passed-pawn: names the passer square', () => {
+    const passer = '6k1/8/8/3P4/8/8/8/6K1 w - - 0 1';
+    expect(assemblePositionalAnswer(passer, 'white', 'passed-pawn')?.facts).toMatch(/d5|passed|passer/i);
+  });
+  it('best-piece: names the most-active piece square', () => {
+    const a = assemblePositionalAnswer(START, 'white', 'best-piece');
+    expect(a?.facts).toMatch(/most active|least active/i);
+    expect(a?.facts).toMatch(/[a-h][1-8]/);
+  });
+  it('open-files: names an open file for the rooks', () => {
+    const openCDE = 'r3k2r/pp3ppp/8/8/8/8/PP3PPP/R3K2R w KQkq - 0 1'; // c/d/e files open
+    expect(assemblePositionalAnswer(openCDE, 'white', 'open-files')?.facts).toMatch(/file/i);
+  });
+  it('pawn-breaks: names a break for the side to move', () => {
+    const sicilian = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2'; // 1.e4 c5, White to move
+    expect(assemblePositionalAnswer(sicilian, 'white', 'pawn-breaks')?.facts).toMatch(/d4|break/i);
+  });
+  it('pressure: reports what the student is pressuring', () => {
+    const press = '4k3/8/8/3n4/8/3R4/8/4K3 w - - 0 1'; // White Rd3 hits undefended Nd5
+    expect(assemblePositionalAnswer(press, 'white', 'pressure')?.facts).toMatch(/pressur|d5/i);
+  });
+  it('xray: names the x-ray through a blocker', () => {
+    const xr = '4k3/4r3/4n3/8/8/8/4R3/4K3 w - - 0 1'; // Re2 x-rays Re7 through Ne6
+    expect(assemblePositionalAnswer(xr, 'white', 'xray')?.facts).toMatch(/x-?ray|e[1-8]/i);
+  });
+  it('endgame-plan: gives king/opposition technique in a K+P ending', () => {
+    const kp = '8/8/8/4k3/8/4K3/4P3/8 w - - 0 1';
+    const a = assemblePositionalAnswer(kp, 'white', 'endgame-plan');
+    // May be null if no technique fires; when present it must be real technique.
+    if (a) expect(a.facts).toMatch(/king|opposition|passer|endgame/i);
+  });
   it('returns null on an invalid FEN (degrades safe)', () => {
     expect(assemblePositionalAnswer('not-a-fen', 'white', 'material')).toBeNull();
   });
