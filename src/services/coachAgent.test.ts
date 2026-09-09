@@ -34,6 +34,22 @@ describe('parseCoachIntent — middlegame continuation', () => {
     expect(intent.kind).toBe('continue-middlegame');
     expect(intent.subject).toBeUndefined();
   });
+
+  it('does NOT capture the bare article "the" as the opening (loop audit 2026-09-09)', () => {
+    // Live teach-QA probe: "what's my plan in the middlegame?" during an Italian
+    // walkthrough returned "no plans for 'the'" because the subject regex grabbed
+    // the article. Subject must be undefined so the caller falls back to the
+    // active walkthrough's context opening.
+    for (const q of [
+      "what's my plan in the middlegame?",
+      'what is my plan in the middlegame',
+      'explain the middlegame plan',
+    ]) {
+      const intent = parseCoachIntent(q);
+      expect(intent.kind).toBe('continue-middlegame');
+      expect(intent.subject).toBeUndefined();
+    }
+  });
 });
 
 describe('parseCoachIntent — play-against', () => {

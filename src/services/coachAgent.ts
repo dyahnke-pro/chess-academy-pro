@@ -423,11 +423,21 @@ function looksLikeSentence(subject: string): boolean {
  * trailing words like "please" and punctuation.
  */
 function cleanSubject(subject: string): string {
-  return subject
+  const cleaned = subject
     .replace(/[?.!,]+$/g, '')
     .replace(/\b(please|now|today|against me|right now|real quick)\b/gi, '')
+    .replace(/^(?:the|a|an)\s+/i, '') // drop a leading article ("the Italian" → "Italian")
     .replace(/\s+/g, ' ')
     .trim();
+  // A bare article / pronoun / filler word is NOT an opening name. Return empty
+  // so the caller falls back to the active-walkthrough context opening instead of
+  // resolving against a garbage subject (loop audit 2026-09-09: "what's my plan
+  // in the middlegame?" captured "the" as the opening → "no plans for 'the'"
+  // when it should have shown the Italian plans of the running walkthrough).
+  if (/^(?:the|a|an|my|your|this|that|it|opening|middle|end|game|here|now)$/i.test(cleaned)) {
+    return '';
+  }
+  return cleaned;
 }
 
 /**
