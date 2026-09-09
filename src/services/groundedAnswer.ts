@@ -4760,8 +4760,13 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   if (topic === 'development') {
     const d = developmentRead(fen, myC);
     if (!d) return null;
+    const oppC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+    const dOpp = developmentRead(fen, oppC);
     const castled = d.castled ? 'and you have castled' : 'and you have not castled yet';
-    return { facts: `You've developed ${d.developedMinors} of your ${d.totalMinors} minor pieces ${castled}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // Report BOTH sides so "how many pieces has White developed?" is answered
+    // whoever is asked about (David 2026-09-09), board-true from chess.js.
+    const theirs = dOpp ? ` ${opp} has developed ${dOpp.developedMinors} of ${dOpp.totalMinors}${dOpp.castled ? ' and castled' : ''}.` : '';
+    return { facts: `You've developed ${d.developedMinors} of your ${d.totalMinors} minor pieces ${castled}.${theirs}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'structure') {
