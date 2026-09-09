@@ -95,6 +95,32 @@ describe('classifyMisconception (deterministic)', () => {
     expect(r!.tag).toBe('king-stuck-center');
   });
 
+  it('prefers the concrete motif over king-stuck-center when castling is still legal (loop audit 2026-09-09)', async () => {
+    // Uncastled White (kingside castling still legal) plays Rxd5 — a rook for a
+    // knight that the c6-pawn recaptures. The real error is the bad trade; the
+    // over-eager king-stuck-center rule used to steal this slip and teach the
+    // wrong lesson. king-stuck-center is now a fallback, so bad-trade wins.
+    const r = await classifyMisconception({
+      fen: '4k3/8/2p5/3n4/2P5/8/8/3RK2R w K - 0 1',
+      playedSan: 'Rxd5',
+      gamePhase: 'middlegame',
+    });
+    expect(r!.tag).toBe('bad-trade');
+    expect(r!.coachNote).toContain('d5');
+  });
+
+  it('still tags king-stuck-center when the move has no concrete motif (fallback intact)', async () => {
+    // The original king-stuck case must still resolve to king-stuck-center: d3
+    // is a quiet push with no bad trade / hung piece / weakness, so the only
+    // fault is declining the available castle.
+    const r = await classifyMisconception({
+      fen: 'rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
+      playedSan: 'd3',
+      gamePhase: 'opening',
+    });
+    expect(r!.tag).toBe('king-stuck-center');
+  });
+
   it('falls back to an honest phase-bucketed "other" when no motif is provable', async () => {
     const r = await classifyMisconception({
       fen: 'r4rk1/pppq1ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPPQ1PPP/R4RK1 w - - 0 1',

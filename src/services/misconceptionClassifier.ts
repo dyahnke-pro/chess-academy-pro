@@ -301,25 +301,6 @@ function classifyMisconceptionImpl(
     };
   }
 
-  // (d) KING STUCK IN THE CENTER — castling was legal and declined, king still
-  // on its home square.
-  if ((phase === 'opening' || phase === 'middlegame') && move.san !== 'O-O' && move.san !== 'O-O-O') {
-    try {
-      const before = new Chess(input.fen);
-      const canCastle = before.moves().some((m) => m === 'O-O' || m === 'O-O-O');
-      const homeSq = moverColor === 'w' ? 'e1' : 'e8';
-      const k = before.get(homeSq as never);
-      if (canCastle && k && k.type === 'k' && k.color === moverColor) {
-        return {
-          tag: 'king-stuck-center',
-          coachNote: 'Castling was available — the king stays exposed in the center.',
-        };
-      }
-    } catch {
-      /* ignore — fall through */
-    }
-  }
-
   // (e) WEAKENED KING SAFETY — pushed a pawn in front of your own winged
   // (castled) king.
   if (move.piece === 'p') {
@@ -418,6 +399,32 @@ function classifyMisconceptionImpl(
         tag: 'passive-king-endgame',
         coachNote: `In the endgame the king belongs in the centre — ${move.to} walks it further away.`,
       };
+    }
+  }
+
+  // (l) KING STUCK IN THE CENTER — castling was legal and declined, king still
+  // on its home square. Ordered LAST among the heuristics (loop audit
+  // 2026-09-09, batch-and-sweep): this rule fires on ANY non-castling move while
+  // castling is legal, so when it sat high in the ladder it stole slips that
+  // were really a bad trade / missed threat / misplaced piece — an uncastled
+  // middlegame Rxd5 that dropped a rook was tagged "king stuck in the center"
+  // instead of "that trade loses material," teaching the wrong lesson. Demoting
+  // it to a fallback matches its intended meaning: the move's ONLY discernible
+  // fault is that it wasn't the available castle (no concrete motif above fired).
+  if ((phase === 'opening' || phase === 'middlegame') && move.san !== 'O-O' && move.san !== 'O-O-O') {
+    try {
+      const before = new Chess(input.fen);
+      const canCastle = before.moves().some((m) => m === 'O-O' || m === 'O-O-O');
+      const homeSq = moverColor === 'w' ? 'e1' : 'e8';
+      const k = before.get(homeSq as never);
+      if (canCastle && k && k.type === 'k' && k.color === moverColor) {
+        return {
+          tag: 'king-stuck-center',
+          coachNote: 'Castling was available — the king stays exposed in the center.',
+        };
+      }
+    } catch {
+      /* ignore — fall through */
     }
   }
 
