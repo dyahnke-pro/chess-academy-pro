@@ -13,6 +13,7 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { isMateEval, INACCURACY_CP, MISTAKE_CP, BLUNDER_CP } from './engineConstants';
+import { detectBrilliancy, describeBrilliancy, type Brilliancy } from './brilliancy';
 import type { MoveClassification } from '../types';
 
 export type MoveQuality = 'best' | 'excellent' | 'good' | 'inaccuracy' | 'mistake' | 'blunder';
@@ -31,6 +32,13 @@ export interface MoveRating {
   missedMate: number | null;
   /** Student's move allows the opponent to force mate in N. */
   allowedMate: number | null;
+  /** True-brilliancy verdict (sacrifice / only-move / mate) — the sharp signal
+   *  distinct from the coarse `quality` band, computed via the shared detector.
+   *  Null when not brilliant. */
+  brilliancy: Brilliancy | null;
+  /** Pre-rendered grounded "why it's brilliant" line, or null. Rendered here so
+   *  the answer assembler needs no runtime import of the detector. */
+  brilliancyWhy: string | null;
 }
 
 /** Shallow-ish depth: on-demand, two positions compared, must feel responsive. */
@@ -99,9 +107,6 @@ export function classifyMoveFull(r: {
 
   // MATE CONTEXT OUTRANKS EVERY BAND, in both directions.
   const postGoodForPlayer = white ? r.postMoveEval > 0 : r.postMoveEval < 0;
-  if (isMateEval(r.postMoveEval) && postGoodForPlayer) {
-    return r.isEngineBestMove ? 'brilliant' : 'great';
-  }
   const postBadForPlayer = white ? r.postMoveEval < 0 : r.postMoveEval > 0;
   if (isMateEval(r.postMoveEval) && postBadForPlayer && !isMateEval(r.preMoveEval)) {
     return 'blunder';
@@ -110,14 +115,25 @@ export function classifyMoveFull(r: {
   // held the line.
   if (isMateEval(r.preMoveEval) && isMateEval(r.postMoveEval)) return 'good';
 
-  // BRILLIANT: the best move, in a position where the second-best is far worse
-  // — the only move that holds, which no centipawn band can express.
-  if (r.isEngineBestMove && r.secondBestEval !== null && r.secondBestEval !== undefined) {
-    const gap = white
-      ? (r.bestMoveEval ?? r.postMoveEval) - r.secondBestEval
-      : r.secondBestEval - (r.bestMoveEval ?? r.postMoveEval);
-    if (gap >= 150) return 'brilliant';
-  }
+  // BRILLIANT — decided by the SHARED detector (single source of truth) so the
+  // play-flash and the "was that a good move?" answer agree. Here only the
+  // eval-only arms fire (mate + only-move): this classifier has no board access,
+  // so the sacrifice arm is added where fen+san exist (computeLastMoveRating,
+  // review). Evals flipped to the student's POV for the detector.
+  const sign = white ? 1 : -1;
+  const onlyMoveGapCp = (r.secondBestEval !== null && r.secondBestEval !== undefined)
+    ? Math.round(((r.bestMoveEval ?? r.postMoveEval) - r.secondBestEval) * sign)
+    : null;
+  const brill = detectBrilliancy({
+    isBest: r.isEngineBestMove,
+    evalAfterStudentCp: r.postMoveEval * sign,
+    postForcedMateForStudent: isMateEval(r.postMoveEval) && postGoodForPlayer,
+    onlyMoveGapCp,
+  });
+  if (brill.brilliant) return 'brilliant';
+  // A found mate that isn't a detector-brilliancy (e.g. not the engine's unique
+  // best) is still a great practical result.
+  if (isMateEval(r.postMoveEval) && postGoodForPlayer) return 'great';
 
   const cpLoss = r.bestMoveEval !== null
     ? (white ? r.bestMoveEval - r.postMoveEval : r.postMoveEval - r.bestMoveEval)
@@ -205,6 +221,26 @@ export async function computeLastMoveRating(moveHistory: readonly string[]): Pro
     }
   }
 
+  // TRUE-BRILLIANCY detection (David 2026-09-09) — the sharp "!!" signal the
+  // coarse band can't express: the best move that SACRIFICES + isn't losing, the
+  // only move that holds, or a found mate. The "only move" gap needs the 2nd-best
+  // line; present only when the engine returned MultiPV ≥ 2 (else the sacrifice +
+  // mate arms still fire). All evals flipped to the student's POV.
+  let onlyMoveGapCp: number | null = null;
+  if (pre.topLines && pre.topLines.length >= 2) {
+    const bestStudent = pre.topLines[0].evaluation * sign;
+    const secondStudent = pre.topLines[1].evaluation * sign;
+    onlyMoveGapCp = Math.round(bestStudent - secondStudent);
+  }
+  const brilliancy = detectBrilliancy({
+    isBest: wasBest,
+    evalAfterStudentCp: postStudent,
+    postForcedMateForStudent: postMate !== null && postMate > 0,
+    onlyMoveGapCp,
+    fenBefore: preFen,
+    san: playedSan,
+  });
+
   return {
     playedSan,
     studentColor,
@@ -215,5 +251,7 @@ export async function computeLastMoveRating(moveHistory: readonly string[]): Pro
     betterFromTo,
     missedMate,
     allowedMate,
+    brilliancy: brilliancy.brilliant ? brilliancy : null,
+    brilliancyWhy: describeBrilliancy(brilliancy, playedSan),
   };
 }

@@ -2191,6 +2191,12 @@ const MOVE_RATING_RE = anyOf([
   // to notation-help ("'a7' is chess notation…"). Anchored to slip vocabulary so
   // it never swallows "why was it a draw" and the like.
   String.raw`\bwhy\s+(?:was\s+)?(?:it|that|my\s+(?:last\s+)?move|this\s+move)\s+(?:was\s+)?(?:a\s+|an\s+)?(?:slip|mistake|blunder|inaccuracy|bad|wrong|weak|error|not\s+(?:good|best))\b`,
+  // "was that brilliant / was my move a brilliancy / was Nxf7 brilliant" — the
+  // rating lane now DETECTS a true brilliancy (sacrifice / only-move / mate) and
+  // explains why (David 2026-09-09: "can the app answer why a move was
+  // brilliant?"). "why was that brilliant" is already caught by the why-frame
+  // above. A non-brilliant move still gets an honest verdict, never a deflect.
+  String.raw`\b(?:was|is)\s+(?:that|this|it|my\s+(?:last\s+)?move|my\s+move|[A-Za-z]{1,2}[1-8x][A-Za-z0-9=+#-]*)\s+(?:move\s+|so\s+|a\s+|really\s+|truly\s+)?brillian(?:t|cy)\b`,
 ]);
 export function isMoveRatingQuestion(ask: string | undefined): boolean {
   if (!ask) return false;

@@ -4484,10 +4484,18 @@ export interface MoveRatingLike {
   betterFromTo: { from: string; to: string } | null;
   missedMate: number | null;
   allowedMate: number | null;
+  /** Pre-rendered grounded "why it's brilliant" line (describeBrilliancy), when
+   *  the move is a true brilliancy — sacrifice / only-move / mate. Null/absent
+   *  otherwise. Rendered in moveRating.ts so this module needs no runtime import
+   *  of the brilliancy detector (which itself depends on describeSacrifice here,
+   *  a would-be cycle). */
+  brilliancyWhy?: string | null;
 }
 /** assembleMoveRatingAnswer — "was that a good move?" G0. States the computed
  *  verdict, the eval swing, and the better move (with a green arrow) when the
- *  student missed it. No praise-for-praise — the verdict IS the content. */
+ *  student missed it. No praise-for-praise — the verdict IS the content. A true
+ *  brilliancy leads with the computed WHY (why the sacrifice/only-move is sound),
+ *  which directly answers "was that brilliant, and why?". */
 export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | null {
   const pawns = (r.cpLoss / 100).toFixed(1);
   const better = r.betterSan ? ` The engine preferred ${r.betterSan}.` : '';
@@ -4496,7 +4504,11 @@ export function assembleMoveRatingAnswer(r: MoveRatingLike): GroundedAnswer | nu
     : { bestMoveSan: null, bestMoveFromTo: null };
 
   let verdict: string;
-  if (r.allowedMate !== null) {
+  if (r.brilliancyWhy) {
+    // A true brilliancy — lead with the grounded reason. It was the best move,
+    // so there is no "better" to offer and no eval given up.
+    verdict = r.brilliancyWhy;
+  } else if (r.allowedMate !== null) {
     verdict = `${r.playedSan} walks into a forced mate in ${r.allowedMate}.${better}`;
   } else if (r.missedMate !== null) {
     verdict = `${r.playedSan} misses a forced mate in ${r.missedMate}.${better}`;
