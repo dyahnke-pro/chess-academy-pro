@@ -183,6 +183,7 @@ function dispatchPureAspect(
     case 'king-safety-theirs': return assembleKingSafetyAnswer(fen, studentColor, 'opponent');
     case 'material': return assembleMaterialAnswer(fen, studentColor);
     case 'move-purpose': return assembleMovePurposeAnswer(fen, ask, studentColor);
+    case 'checks': return assembleCheckStatusAnswer(fen, ask, studentColor);
     default: return null;
   }
 }
@@ -460,6 +461,27 @@ export function assembleOpponentMoveAnswer(opts: {
     : `They played ${played.san} — a quiet move with no immediate tactical point.`;
   const facts = threatText ? `${didPart} ${threatText}` : didPart;
   return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+}
+
+// ── CHECK STATUS — "am I in check?" (David 2026-09-09: deflected to hanging) ──
+// Only answers the STATUS question (chess.js inCheck); an offensive "what checks
+// can I give?" returns null so it falls through to the engine lanes.
+export function assembleCheckStatusAnswer(
+  fen: string,
+  ask: string | null | undefined,
+  studentColor: 'white' | 'black',
+): GroundedAnswer | null {
+  const t = (ask ?? '').toLowerCase();
+  if (!/\b(am\s+i|is\s+my\s+king|are\s+we|is\s+the\s+king|in\s+check)\b/.test(t)) return null;
+  // "give/deliver/find a check" is offensive, not a status ask.
+  if (/\b(give|deliver|find|any|can\s+i\s+(?:give|play)|checks?\s+(?:available|here))\b/.test(t) && !/\bin\s+check\b/.test(t)) return null;
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const meToMove = (chess.turn() === 'w' ? 'white' : 'black') === studentColor;
+  if (chess.inCheck()) {
+    return { facts: meToMove ? 'Yes — your king is in check. You must get out of it this move.' : "Their king is in check.", bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  }
+  return { facts: meToMove ? "No — you're not in check." : 'No — no king is in check right now.', bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
 // ── LAST MOVE — "what just moved and where is it?" (neutral, factual) ─────────

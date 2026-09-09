@@ -148,6 +148,7 @@ export const PURE_BOARD_ASPECTS: ReadonlySet<QuestionAspect> = new Set<QuestionA
   'piece-purpose', 'square-control', 'square-safety', 'square-occupant',
   'piece-safety', 'hanging', 'loose', 'opponent-threats', 'my-threats',
   'king-safety-mine', 'king-safety-theirs', 'king-lines', 'material', 'move-purpose',
+  'checks',
 ]);
 
 /** The first PURE aspect this ask fires, or null. Used by coachService to engage
