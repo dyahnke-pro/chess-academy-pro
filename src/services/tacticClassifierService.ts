@@ -155,16 +155,45 @@ export async function classifyTacticsFromGame(gameId: string): Promise<number> {
   const existing = await db.classifiedTactics.where('sourceGameId').equals(gameId).count();
   if (existing > 0) return 0;
 
-  const playerColor = resolvePlayerColor(game);
-  if (!playerColor) return 0;
+  const tactics = deriveMissedTacticsForGame(game);
+  if (tactics.length > 0) {
+    await db.classifiedTactics.bulkPut(tactics);
+  }
+  return tactics.length;
+}
+
+/**
+ * PURE derivation of a game's missed tactics from its annotations — no DB read
+ * or write. This is the same logic classifyTacticsFromGame persists, split out
+ * so read-only surfaces (the /weaknesses Tactics tab) can compute missed tactics
+ * LIVE from the always-present annotations, instead of depending on the
+ * classifiedTactics cache being populated.
+ *
+ * 🔒 WHY (David 2026-09-09, live report "still seeing 100% tactical awareness"):
+ * classifiedTactics is only written at analyze-time and `backfillClassifiedTactics`
+ * is never called, so every game analyzed before the classifier was wired stays
+ * unclassified forever → the tab read 0 missed → a false 100%. The FOUND side
+ * (brilliant/great) is derived live from annotations every load and was correct;
+ * deriving MISSED live from the same annotations makes the tab self-consistent
+ * regardless of the cache. Games are still classified into the store at
+ * analyze-time (cheap incremental) — this just stops the tab depending on it.
+ */
+export function deriveMissedTacticsForGame(
+  game: GameRecord,
+  playerColorOverride?: 'white' | 'black',
+): ClassifiedTactic[] {
+  if (!game.annotations || game.annotations.length === 0) return [];
+  const playerColor = playerColorOverride ?? resolvePlayerColor(game);
+  if (!playerColor) return [];
 
   const context = resolveGameContext(game, playerColor);
 
   // Replay PGN to get FENs for each position
   const fens = replayPgnToFens(game.pgn);
-  if (fens.length < 2) return 0;
+  if (fens.length < 2) return [];
 
   const annotations = game.annotations;
+  const gameId = game.id;
   const tactics: ClassifiedTactic[] = [];
 
   for (let i = 0; i < annotations.length; i++) {
@@ -225,11 +254,7 @@ export async function classifyTacticsFromGame(gameId: string): Promise<number> {
     });
   }
 
-  if (tactics.length > 0) {
-    await db.classifiedTactics.bulkPut(tactics);
-  }
-
-  return tactics.length;
+  return tactics;
 }
 
 /**

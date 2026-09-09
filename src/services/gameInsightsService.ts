@@ -8,6 +8,7 @@ import { countFullMovesInPgn } from '../utils/pgnMoveCount';
 import { getMistakePuzzleStats } from './mistakePuzzleService';
 import { gameNeedsAnalysis } from './gameAnalysisService';
 import { getOpeningNameByEco } from './openingDetectionService';
+import { deriveMissedTacticsForGame } from './tacticClassifierService';
 import type {
   GameRecord,
   MoveClassificationCounts,
@@ -762,16 +763,20 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     // classifiedTactics read after this loop (David 2026-09-08 fix).
   }
 
-  // 🔒 MISSED TACTICS COME FROM THE POPULATED `classifiedTactics` STORE — the
-  // SAME source the weakness spine reads (David 2026-09-08: the tab read
-  // "100% tactical awareness / no missed tactics" while the spine knew about 114
-  // missed forks). The old path re-derived missed tactics from raw
-  // `game.annotations` via `detectMissedTactics`, which skips every move whose
-  // `bestMoveEval` field is null — a newer schema field the user's earlier-
-  // analyzed games never wrote — so it counted 0 missed → 100%. classifyTactics-
-  // FromGame captured the real misses into `classifiedTactics` without needing
-  // that field, so read from there and the tab agrees with the spine.
-  const classified = await db.classifiedTactics.toArray();
+  // 🔒 MISSED TACTICS ARE DERIVED LIVE FROM ANNOTATIONS (David 2026-09-09: the
+  // tab STILL showed "100% tactical awareness / 0 missed" on a device with 933
+  // analyzed games). The 2026-09-08 fix switched this to read the
+  // `classifiedTactics` CACHE — but that store is only written at analyze-time
+  // and `backfillClassifiedTactics` is never called, so every game analyzed
+  // before the classifier was wired stays unclassified forever → 0 missed. The
+  // FOUND side (brilliant/great) is derived live from these same annotations and
+  // was correct, so derive MISSED live too via the shared pure helper. Uses the
+  // loop's already-resolved `playerColor` so it can't disagree with the found
+  // side. (Analyze-time still fills the cache; the tab just no longer depends
+  // on it being populated.)
+  const classified = playerGames.flatMap(({ game, playerColor }) =>
+    deriveMissedTacticsForGame(game, playerColor),
+  );
   totalMissed = classified.length;
   for (const m of classified) {
     const existing = missedByType.get(m.tacticType);
