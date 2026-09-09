@@ -441,20 +441,33 @@ export async function getOpeningInsights(): Promise<OpeningInsights> {
 
   for (const { game, playerColor } of playerGames) {
     const key = game.eco ?? 'unknown';
-    // Same 3-tier name fallback as the combined-opening pass above.
-    const repOpening = repertoire.find((o) => o.eco === game.eco);
+    // Name fallback — but the repertoire entry MUST match the game's COLOR
+    // (loop audit 2026-09-09, real knight_mare_01 data): David has BOTH a White
+    // anti-system and a Black defense at the same ECO (B07 = white "Anti-Pirc:
+    // 150 Battery" AND black "Pirc Defence"; C41 = white "Anti-Philidor" AND
+    // black "Philidor Defence"). A color-blind `find(eco)` returned the White
+    // anti-system name and stamped it on his BLACK Pirc/Philidor games, so
+    // "Most played as Black" read "Anti-Pirc: 150 Battery" over 63 games he
+    // actually played as the Pirc. Match color first; only then fall back to the
+    // canonical ECO name (never a wrong-color repertoire name).
+    const repOpening = repertoire.find((o) => o.eco === game.eco && o.color === playerColor);
     const canonical = repOpening?.name ?? getOpeningNameByEco(game.eco) ?? game.eco ?? 'Unknown';
 
     // Skip openings that are explicitly named for the OTHER color.
     // A user playing White who faced a Scandinavian (B01) shouldn't
     // see "Scandinavian Defence" listed as their "most played as
-    // White" — they didn't choose it, their opponent did. Black-
-    // named openings (Defenses, Indian Defenses, Sicilian, etc.) are
-    // filtered out of the White bucket; the reverse filter is not
-    // applied because there's no clean equivalent set of explicitly
-    // "White-named" openings (joint names like Italian Game / Queen's
-    // Gambit are still bucketed by player color as before).
-    const choosingColor = openingChoosingColor(canonical);
+    // White" — they didn't choose it, their opponent did.
+    // BUT: when the opening is in the player's OWN repertoire for THIS
+    // color, it IS their choice — trust that explicit color over the
+    // name-keyword guess (loop audit 2026-09-09): David's White
+    // "Anti-Pirc: 150 Battery" / "Anti-Philidor" systems contain the
+    // Black opening's name token ("pirc"/"philidor"), so the keyword
+    // classifier called them Black and filtered his White anti-system
+    // games straight out of "Most played as White". A color-matched
+    // repertoire entry is authoritative; only fall back to the keyword
+    // classifier for openings NOT in the repertoire (the faced-system
+    // case the Scandinavian filter targets).
+    const choosingColor = repOpening ? playerColor : openingChoosingColor(canonical);
     if (playerColor === 'white' && choosingColor === 'black') continue;
     if (playerColor === 'black' && choosingColor === 'white') continue;
 

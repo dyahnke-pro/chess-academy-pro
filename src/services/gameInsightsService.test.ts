@@ -253,6 +253,31 @@ describe('gameInsightsService', () => {
       expect(result.mostPlayedWhite.length).toBeGreaterThan(0);
     });
 
+    it('names by-color bucket from the COLOR-matching repertoire entry, not a wrong-color one (loop audit 2026-09-09)', async () => {
+      // Real bug: David has BOTH a White anti-Pirc and a Black Pirc at ECO B07;
+      // a color-blind repertoire lookup stamped the White "Anti-Pirc" name over
+      // his BLACK Pirc games in "Most played as Black".
+      await db.profiles.add(buildUserProfile({ id: 'p1', name: 'TestUser' }));
+      const { getRepertoireOpenings } = await import('./openingService');
+      (getRepertoireOpenings as ReturnType<typeof vi.fn>).mockResolvedValue([
+        buildOpeningRecord({ eco: 'B07', name: 'Anti-Pirc: 150 Battery', color: 'white' }),
+        buildOpeningRecord({ eco: 'B07', name: 'Pirc Defence', color: 'black' }),
+      ]);
+      await db.games.bulkAdd([
+        buildGameRecord({ id: 'gb1', white: 'Opp', black: 'TestUser', result: '0-1', eco: 'B07' }),
+        buildGameRecord({ id: 'gb2', white: 'Opp', black: 'TestUser', result: '1-0', eco: 'B07' }),
+        buildGameRecord({ id: 'gw1', white: 'TestUser', black: 'Opp', result: '1-0', eco: 'B07' }),
+      ]);
+
+      const { getOpeningInsights } = await import('./gameInsightsService');
+      const result = await getOpeningInsights();
+
+      const black = result.mostPlayedBlack.find((o) => o.eco === 'B07');
+      expect(black?.name).toBe('Pirc Defence');        // his Black games → Black name
+      const white = result.mostPlayedWhite.find((o) => o.eco === 'B07');
+      expect(white?.name).toBe('Anti-Pirc: 150 Battery'); // his White games → White name
+    });
+
     it('returns empty arrays when no games exist', async () => {
       const { getOpeningInsights } = await import('./gameInsightsService');
       const result = await getOpeningInsights();
