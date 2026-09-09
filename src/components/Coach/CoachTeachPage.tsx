@@ -283,7 +283,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isStructuralConceptTarget, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3993,6 +3993,22 @@ export function CoachTeachPage(): JSX.Element {
         isTheoryQuestion(requestedName) ||
         isEndgameQuestion(requestedName)
       )) {
+        requestedName = null;
+      }
+      // A STRUCTURAL-CONCEPT ask is teaching from the BOOK CORPUS, not an
+      // opening. "teach me about pawn structure" captured "about pawn structure"
+      // and the FUZZY opening resolver forced it to the Queen's Pawn Game (on the
+      // token "pawn") — the student asked to learn a concept and got a wrong
+      // opening lesson (David 2026-09-09 loop probe, LIVE on prod). Same class as
+      // the coach-question guards above: a captured subject that is a structural
+      // concept (pawn structure / isolated pawn / bishop pair / outpost / doubled
+      // pawns / weak square …) must reach the spine's concept + theory lane
+      // (chess-concepts.json) instead of the opening matcher. Gated on BOTH a
+      // concept FRAME (isConceptQuestion — "teach me about / explain / what is")
+      // AND a structural token, so "teach me the Sicilian" / "the Queen's Pawn"
+      // (an actual opening request) still routes to the opening pipeline.
+      if (requestedName && !opts?.teachIntent && isConceptQuestion(workingInput)
+        && (isStructuralConceptTarget(requestedName) || isStructuralConceptTarget(workingInput))) {
         requestedName = null;
       }
       // "HOW DO YOU TEACH the Caro-Kann?" is a question about METHOD, not a

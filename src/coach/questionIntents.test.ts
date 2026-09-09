@@ -935,6 +935,39 @@ describe('isConceptQuestion', () => {
   });
 });
 
+// 🔒 REGRESSION (David 2026-09-09 loop, LIVE prod probe): "teach me about pawn
+// structure" was captured by CoachTeachPage's TEACH_PATTERN as an opening name
+// and the FUZZY resolver forced it to the Queen's Pawn Game (on the token
+// "pawn") — a wrong opening lesson for a concept-teaching ask. The CoachTeachPage
+// guard yields the opening capture to the spine's concept/theory corpus lane
+// when BOTH a concept FRAME (isConceptQuestion) AND a structural token are
+// present. This gate proves the decision: structural-concept teach asks YIELD,
+// real opening requests do NOT (so "teach me the Sicilian" still routes to the
+// opening pipeline). A wire that does not fire is not a wire — this is the
+// deterministic half; the live prod re-probe is the other.
+describe('structural-concept teach yields to the corpus lane, opening requests preserved', () => {
+  const yields = (ask: string): boolean =>
+    isConceptQuestion(ask) && isStructuralConceptTarget(ask);
+  it.each([
+    'teach me about pawn structure',
+    'teach me about the isolated pawn',
+    'teach me about doubled pawns',
+    'teach me about the bishop pair',
+    'explain the minority attack',
+  ])('YIELDS to concept lane (not an opening): %s', (ask) => {
+    expect(yields(ask)).toBe(true);
+  });
+  it.each([
+    'teach me the Sicilian',
+    "teach me the Queen's Pawn",
+    'teach me the London',
+    'teach me the Caro-Kann',
+    'teach me the Italian Game',
+  ])('does NOT yield — a real opening request still routes to the pipeline: %s', (ask) => {
+    expect(yields(ask)).toBe(false);
+  });
+});
+
 describe('isPlanQuestion', () => {
   it.each([
     "what's my plan",
