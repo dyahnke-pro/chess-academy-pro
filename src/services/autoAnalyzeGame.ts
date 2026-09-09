@@ -184,6 +184,15 @@ export async function autoAnalyzeGameMisconceptions(
       gamePhase: classifyPhase(fen, ann.moveNumber),
       moveNumber: ann.moveNumber,
       ...(sans.length > fenIndex ? { historySans: sans.slice(0, fenIndex + 1) } : {}),
+      // Pre-move eval (mover POV, centipawns) so the persisted mistakePuzzle can
+      // fill the "Errors by Situation" panel (loop audit 2026-09-09: this path's
+      // puzzles carried a null evalBefore and dropped out of the panel).
+      // `bestMoveEval` is the White-POV value of the position with best play —
+      // i.e. what it was worth before the move; flip to the mover, skip mate
+      // sentinels (a six-figure number is not an eval to threshold at ±100cp).
+      ...(ann.bestMoveEval != null && !isMateEval(ann.bestMoveEval)
+        ? { evalBefore: Math.round(ann.bestMoveEval * (ann.color === 'white' ? 1 : -1)) }
+        : {}),
     });
   }
   if (blunders.length === 0) return empty;
@@ -254,6 +263,7 @@ async function persistMistakePuzzlesForBlunders(
       gamePhase: b.gamePhase,
       moveNumber: b.moveNumber,
       sourceGameId: gameId,
+      evalBefore: b.evalBefore ?? null,
     });
     if (puzzle) fresh.push(puzzle);
   }

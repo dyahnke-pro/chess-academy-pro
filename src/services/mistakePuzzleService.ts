@@ -1013,6 +1013,11 @@ export interface CapturePuzzleInput {
   moveNumber?: number;
   openingName?: string;
   sourceGameId?: string;
+  /** Pre-move eval, PLAYER POV, CENTIPAWNS — fills the "Errors by Situation"
+   *  panel (getMistakeInsights thresholds at ±100cp). Null/omitted when the
+   *  capture had no eval (a live slip with no engine read); the panel then
+   *  honestly leaves that puzzle unclassified. Loop audit 2026-09-09. */
+  evalBefore?: number | null;
 }
 
 /** Option B of the weakness-spine unification (David 2026-05-25): a mistake
@@ -1155,7 +1160,9 @@ export function buildMistakePuzzleFromCapture(
     opponentName: null,
     gameDate: null,
     openingName: input.openingName ?? null,
-    evalBefore: null,
+    // Player-POV centipawns when the caller supplied it (autoAnalyzeGame passes
+    // the pre-move eval); null for a live slip with no engine read.
+    evalBefore: input.evalBefore ?? null,
     srsInterval: srsDefaults.interval,
     srsEaseFactor: srsDefaults.easeFactor,
     srsRepetitions: srsDefaults.repetitions,
