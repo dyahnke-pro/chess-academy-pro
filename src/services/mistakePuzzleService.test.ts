@@ -137,6 +137,14 @@ describe('mistakePuzzleService', () => {
       expect(mistake?.bestMove).toBe('e4d5');
       expect(mistake?.playerMoveSan).toBe('d3');
       expect(mistake?.narration.intro).toBeTruthy();
+
+      // evalBefore is stored in CENTIPAWNS, player POV (loop audit 2026-09-09):
+      // getMistakeInsights' situation classifier thresholds at ±100cp, so a
+      // pawns-unit store (1.5) would bucket every mistake as "equal". The Ng5
+      // blunder's pre-move eval is the prev ply's score (+30cp White); the d3
+      // mistake's is -330cp White — both stored as centipawns, not pawns.
+      expect(blunder?.evalBefore).toBe(30);
+      expect(mistake?.evalBefore).toBe(-330);
     });
 
     // R3/R5 (David 2026-09-01) — the drill validates the student's move against

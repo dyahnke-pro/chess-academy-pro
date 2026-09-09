@@ -546,7 +546,13 @@ async function analyzeGameWithStockfish(
       opponentName: gameContext.opponentName,
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
-      evalBefore: Math.round(evalBeforeFromPlayer * 100) / 100,
+      // STORED in centipawns (player POV) — the unit getMistakeInsights reads
+      // with a ±100cp threshold. `evalBeforeFromPlayer` is PAWNS here (fed to
+      // the narration, which wants pawns), so scale up for the field. Before
+      // this fix Path A stored PAWNS (e.g. 1.5), so the situation classifier —
+      // which expects centipawns — bucketed every Path-A mistake as "equal"
+      // (1.5 is never >100). Loop audit 2026-09-09.
+      evalBefore: Math.round(evalBeforeFromPlayer * 100),
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,
@@ -653,10 +659,19 @@ async function generateFromAnnotations(
     // Get bestMove + PV line via Stockfish (or annotation for quick fallback)
     let bestMove = annotation.bestMove;
     let pvMoves: string[] = [];
+    // The fresh depth-18 read of `fen` (the position BEFORE the move) IS the
+    // pre-move eval — i.e. `evalBefore`. Capture it (White-POV cp) so the
+    // situation panel can be filled even when the prev-ply annotation carried
+    // no evaluation (loop audit 2026-09-09: 14 of 21 mistake puzzles had a null
+    // evalBefore because the light review analysis leaves most plies unscored,
+    // so the annotation-based lookup below found nothing).
+    let posEvalWhiteCp: number | null = null;
 
     try {
       const analysis = await stockfishEngine.analyzePosition(fen, 18);
       if (!bestMove) bestMove = analysis.bestMove;
+      if (typeof analysis.evaluation === 'number' && !analysis.isMate) posEvalWhiteCp = analysis.evaluation;
+      else if (analysis.isMate && typeof analysis.mateIn === 'number') posEvalWhiteCp = analysis.mateIn > 0 ? 3000 : -3000;
       // Get the PV line (multi-move continuation) from top line
       const topLine = analysis.topLines[0] as { moves: string[] } | undefined;
       if (topLine) pvMoves = topLine.moves;
@@ -730,10 +745,14 @@ async function generateFromAnnotations(
       tacticType = null;
     }
 
-    // Compute eval before from annotation context (player perspective)
-    let evalBeforeFromPlayer: number | null = null;
+    // Pre-mistake eval (player perspective, CENTIPAWNS — same unit the stored
+    // MistakePuzzle.evalBefore field carries and the situation classifier in
+    // getMistakeInsights reads with a ±100cp threshold). Prefer the prev-ply
+    // annotation's score; fall back to the fresh depth-18 read of `fen` (the
+    // pre-move position) so a light review analysis with unscored plies still
+    // fills the situation panel instead of leaving evalBefore null.
+    let evalBeforeCp: number | null = null;
     if (annotation.evaluation !== null) {
-      // Find the annotation for the move right before to get pre-mistake eval
       let prevEval: number | null = null;
       for (const ann of annotations) {
         const annIdx = (ann.moveNumber - 1) * 2 + (ann.color === 'black' ? 1 : 0);
@@ -743,8 +762,11 @@ async function generateFromAnnotations(
         }
       }
       if (prevEval !== null) {
-        evalBeforeFromPlayer = playerColor === 'white' ? prevEval : -prevEval;
+        evalBeforeCp = playerColor === 'white' ? prevEval : -prevEval;
       }
+    }
+    if (evalBeforeCp === null && posEvalWhiteCp !== null) {
+      evalBeforeCp = playerColor === 'white' ? posEvalWhiteCp : -posEvalWhiteCp;
     }
 
     const narrationParams = {
@@ -758,7 +780,8 @@ async function generateFromAnnotations(
       opponentName: gameContext.opponentName,
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
-      evalBefore: evalBeforeFromPlayer,
+      // generateMistakeNarration expects evalBefore in PAWNS (player POV).
+      evalBefore: evalBeforeCp !== null ? evalBeforeCp / 100 : null,
     };
     const narration = await voiceMistakeNarration(
       generateMistakeNarration(narrationParams),
@@ -788,7 +811,8 @@ async function generateFromAnnotations(
       opponentName: gameContext.opponentName,
       gameDate: gameContext.gameDate,
       openingName: gameContext.openingName,
-      evalBefore: evalBeforeFromPlayer !== null ? Math.round(evalBeforeFromPlayer * 100) / 100 : null,
+      // STORED in centipawns (player POV) — the unit getMistakeInsights reads.
+      evalBefore: evalBeforeCp !== null ? Math.round(evalBeforeCp) : null,
       srsInterval: srsDefaults.interval,
       srsEaseFactor: srsDefaults.easeFactor,
       srsRepetitions: srsDefaults.repetitions,
