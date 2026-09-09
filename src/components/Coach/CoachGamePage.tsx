@@ -3084,7 +3084,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const prevMoves = gameState.moves;
     const preMoveEval = prevMoves.length > 0 ? (prevMoves[prevMoves.length - 1].evaluation ?? null) : 0;
     let classification = analysis
-      ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval })
+      ? classifyMoveFull({ preMoveEval, postMoveEval: analysis.evaluation, bestMoveEval, isEngineBestMove, playerColor, secondBestEval, fenBefore: preFen, san: moveResult.san })
       : 'good';
 
     const evalLoss = analysis && preMoveEval !== null

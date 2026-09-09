@@ -192,6 +192,7 @@ import {
   INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { winPercent, capEval } from './accuracyService';
+import { detectBrilliancy } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
 /**
@@ -244,21 +245,51 @@ export function classifyCpLoss(
   evalAfter?: number | null,
   isPlayerWhiteMove?: boolean,
   deliveredMate?: boolean,
+  fenBefore?: string | null,
+  san?: string | null,
 ): MoveClassification {
+  // 🔒 BRILLIANT (!!) FOLLOWS CHESS.COM (David 2026-09-09: "Make sure we follow
+  // the same rules as chess.com for brilliant moves. I don't want our app to say
+  // one thing and chess.com to say another"). chess.com's brilliant REQUIRES a
+  // material sacrifice — a big eval gain or a found mate WITHOUT a sacrifice is
+  // great/best, not brilliant. So every "brilliant" return below is gated on the
+  // shared detector (sacrifice + best/near-best + stays-favourable + not-already-
+  // winning); when it's a strong move but not a sacrifice, it downgrades to
+  // 'great' — exactly chess.com's label. Needs the pre-move board (fenBefore+san)
+  // to see the sacrifice; without them, never brilliant (the safe answer).
+  const sign = isPlayerWhiteMove ? 1 : -1;
+  const evalBeforeStudent = (evalBefore === undefined || evalBefore === null) ? null : evalBefore * sign;
+  const evalAfterStudent = (evalAfter === undefined || evalAfter === null) ? null : evalAfter * sign;
+  const postMateForStudent =
+    (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD
+      && (isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0)) || !!deliveredMate;
+  const isBrilliant = (): boolean => {
+    if (!fenBefore || !san) return false;
+    return detectBrilliancy({
+      isBest: false,                 // batch has no explicit best move; near-best is judged from cpLoss
+      cpLossFromBestCp: cpLoss,      // student-POV eval given up vs best play (<= 0 for a gain)
+      evalBeforeStudentCp: evalBeforeStudent,
+      evalAfterStudentCp: evalAfterStudent,
+      postForcedMateForStudent: postMateForStudent,
+      fenBefore,
+      san,
+    }).brilliant;
+  };
+
   // A move that DELIVERS checkmate is the best possible outcome — NEVER a
   // mistake, no matter what the post-mate eval reads. The engine returns 0 for
   // a terminal (checkmated) position, so the eval-swing math below would call
   // the mating move a "blunder" (evalBefore +winning → 0). Board-truth from the
   // SAN's '#' short-circuits that (audit 2026-07-20: "Rd8# was a blunder").
   if (deliveredMate) {
-    return evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD
-      ? 'brilliant'   // found a mate that wasn't already a mate score
-      : 'good';       // converting an already-decisive position
+    const foundNewMate = evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD;
+    if (!foundNewMate) return 'good';               // converting an already-decisive position
+    return isBrilliant() ? 'brilliant' : 'great';   // found a mate: brilliant only if it's a sacrifice
   }
-  // Handle mate evals: if the player delivered/found checkmate, it's brilliant
+  // Handle mate evals: the player's move leads to a forced mate.
   if (evalAfter !== undefined && evalAfter !== null && Math.abs(evalAfter) >= MATE_EVAL_THRESHOLD) {
     const goodForPlayer = isPlayerWhiteMove ? evalAfter > 0 : evalAfter < 0;
-    if (goodForPlayer) return 'brilliant';
+    if (goodForPlayer) return isBrilliant() ? 'brilliant' : 'great';
     // Walked into forced mate that wasn't there before
     if (evalBefore !== undefined && evalBefore !== null && Math.abs(evalBefore) < MATE_EVAL_THRESHOLD) {
       return 'blunder';
@@ -299,8 +330,9 @@ export function classifyCpLoss(
     if (lost >= MISTAKE_WIN_PCT) return 'mistake';
     if (lost >= INACCURACY_WIN_PCT) return 'inaccuracy';
     // Gains. A move that IMPROVES the position beyond noise is the student
-    // finding something; the thresholds mirror the loss side.
-    if (lost <= -BLUNDER_WIN_PCT) return 'brilliant';
+    // finding something — but chess.com only calls it BRILLIANT when it's a
+    // sacrifice; otherwise it's a great move.
+    if (lost <= -BLUNDER_WIN_PCT) return isBrilliant() ? 'brilliant' : 'great';
     if (lost <= -EXCELLENT_WIN_PCT) return 'great';
     return 'good';
   }
@@ -309,7 +341,7 @@ export function classifyCpLoss(
   if (cpLoss >= BLUNDER_CP) return 'blunder';
   if (cpLoss >= MISTAKE_CP) return 'mistake';
   if (cpLoss >= INACCURACY_CP) return 'inaccuracy';
-  if (cpLoss <= -150) return 'brilliant';
+  if (cpLoss <= -150) return isBrilliant() ? 'brilliant' : 'great';
   if (cpLoss <= -10) return 'great';
   return 'good';
 }
@@ -1138,7 +1170,7 @@ export async function analyzeGameOnWorker(
       const cpLoss = isWhiteMove
         ? capEval(evalBefore) - capEval(evalAfter)
         : capEval(evalAfter) - capEval(evalBefore);
-      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
+      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
       // BOOK exemption (David 2026-08-28: "Move 1 or 2 shouldn't be auto
       // marked as mistakes … don't just code to never show an error in the
       // first 2 moves"). A theory move is not flagged for opening eval-NOISE
@@ -1456,7 +1488,7 @@ async function analyzeGamePositions(
         ? capEval(evalBefore) - capEval(evalAfter)
         : capEval(evalAfter) - capEval(evalBefore);
 
-      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'));
+      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
 
       // BOOK exemption — theory suppresses opening eval-noise but a genuine
       // blunder still surfaces even in a named line (see the first loop's note).

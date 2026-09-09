@@ -98,9 +98,15 @@ export function classifyMoveFull(r: {
   bestMoveEval: number | null;
   isEngineBestMove: boolean;
   playerColor: 'white' | 'black';
-  /** Eval of the engine's second line, White-POV — what makes a move brilliant
-   *  rather than merely best. */
+  /** Eval of the engine's second line, White-POV. Kept for callers; no longer
+   *  used for the brilliant decision (chess.com requires a sacrifice, not an
+   *  only-move). */
   secondBestEval?: number | null;
+  /** Position BEFORE the move + the move in SAN — required to detect the
+   *  mandatory sacrifice. Without them the move can't be graded brilliant (the
+   *  safe answer — never disagree with chess.com by guessing). */
+  fenBefore?: string;
+  san?: string;
 }): MoveClassification {
   if (r.preMoveEval === null) return 'good';
   const white = r.playerColor === 'white';
@@ -115,24 +121,27 @@ export function classifyMoveFull(r: {
   // held the line.
   if (isMateEval(r.preMoveEval) && isMateEval(r.postMoveEval)) return 'good';
 
-  // BRILLIANT — decided by the SHARED detector (single source of truth) so the
-  // play-flash and the "was that a good move?" answer agree. Here only the
-  // eval-only arms fire (mate + only-move): this classifier has no board access,
-  // so the sacrifice arm is added where fen+san exist (computeLastMoveRating,
-  // review). Evals flipped to the student's POV for the detector.
+  // BRILLIANT (!!) — the SHARED chess.com-rules detector (single source of truth)
+  // so the play-flash and the "was that a good move?" answer agree with chess.com
+  // and each other. Requires a SACRIFICE, so fenBefore+san must be supplied;
+  // without them the move is never brilliant (returns great/best below). Evals
+  // flipped to the student's POV for the detector.
   const sign = white ? 1 : -1;
-  const onlyMoveGapCp = (r.secondBestEval !== null && r.secondBestEval !== undefined)
-    ? Math.round(((r.bestMoveEval ?? r.postMoveEval) - r.secondBestEval) * sign)
+  const cpLossFromBestCp = (r.bestMoveEval !== null && r.bestMoveEval !== undefined)
+    ? Math.round(white ? r.bestMoveEval - r.postMoveEval : r.postMoveEval - r.bestMoveEval)
     : null;
   const brill = detectBrilliancy({
     isBest: r.isEngineBestMove,
+    cpLossFromBestCp,
+    evalBeforeStudentCp: r.preMoveEval === null ? null : r.preMoveEval * sign,
     evalAfterStudentCp: r.postMoveEval * sign,
     postForcedMateForStudent: isMateEval(r.postMoveEval) && postGoodForPlayer,
-    onlyMoveGapCp,
+    fenBefore: r.fenBefore,
+    san: r.san,
   });
   if (brill.brilliant) return 'brilliant';
-  // A found mate that isn't a detector-brilliancy (e.g. not the engine's unique
-  // best) is still a great practical result.
+  // A found mate that isn't a sacrificial brilliancy is still a great practical
+  // result (chess.com: great/best, not !!).
   if (isMateEval(r.postMoveEval) && postGoodForPlayer) return 'great';
 
   const cpLoss = r.bestMoveEval !== null
@@ -221,22 +230,16 @@ export async function computeLastMoveRating(moveHistory: readonly string[]): Pro
     }
   }
 
-  // TRUE-BRILLIANCY detection (David 2026-09-09) — the sharp "!!" signal the
-  // coarse band can't express: the best move that SACRIFICES + isn't losing, the
-  // only move that holds, or a found mate. The "only move" gap needs the 2nd-best
-  // line; present only when the engine returned MultiPV ≥ 2 (else the sacrifice +
-  // mate arms still fire). All evals flipped to the student's POV.
-  let onlyMoveGapCp: number | null = null;
-  if (pre.topLines && pre.topLines.length >= 2) {
-    const bestStudent = pre.topLines[0].evaluation * sign;
-    const secondStudent = pre.topLines[1].evaluation * sign;
-    onlyMoveGapCp = Math.round(bestStudent - secondStudent);
-  }
+  // BRILLIANT (!!) detection by CHESS.COM's rules (David 2026-09-09) — a
+  // material SACRIFICE that is best/near-best, stays favourable, and is not
+  // played while already winning. cpLoss here IS the student-POV eval given up vs
+  // best play; preStudent/postStudent are the before/after evals student-POV.
   const brilliancy = detectBrilliancy({
     isBest: wasBest,
+    cpLossFromBestCp: cpLoss,
+    evalBeforeStudentCp: preStudent,
     evalAfterStudentCp: postStudent,
     postForcedMateForStudent: postMate !== null && postMate > 0,
-    onlyMoveGapCp,
     fenBefore: preFen,
     san: playedSan,
   });
