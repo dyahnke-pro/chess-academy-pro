@@ -3071,6 +3071,9 @@ export interface OpeningStat {
   drillAttempts?: number;
   /** real games played in this opening (most-played); 0 = drill-count fallback. */
   games?: number;
+  /** 0-100 win rate over real games — the game-based strength signal for
+   *  strongest/weakest when the student has analyzed games (David 2026-09-09). */
+  winRate?: number;
 }
 
 /**
@@ -3099,7 +3102,12 @@ export function assembleOpeningProfileAnswer(opts: {
         ? `${o.name} (${o.games} game${o.games === 1 ? '' : 's'})`
         : `${o.name} (your most-drilled)`;
     }
-    // strongest / weakest → accuracy over attempts
+    // strongest / weakest → prefer the GAME win rate when the student has real
+    // games in the line; fall back to drill accuracy (David 2026-09-09: "best
+    // opening" said "drill more" while 930 analyzed games sat unused).
+    if (typeof o.winRate === 'number' && o.games && o.games > 0) {
+      return `${o.name} (${o.winRate}% win over ${o.games} game${o.games === 1 ? '' : 's'})`;
+    }
     const acc = pct(o.drillAccuracy);
     if (acc && o.drillAttempts) return `${o.name} (${acc} over ${o.drillAttempts} drill${o.drillAttempts === 1 ? '' : 's'})`;
     if (acc) return `${o.name} (${acc})`;
@@ -3423,7 +3431,7 @@ export interface MistakesLike {
  */
 export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
   if (m.totalGames <= 0) return null;
-  const rate = `Across ${m.totalGames} game${m.totalGames === 1 ? '' : 's'} you average ${m.blundersPerGame} blunder${m.blundersPerGame === 1 ? '' : 's'} and ${m.mistakesPerGame} mistake${m.mistakesPerGame === 1 ? '' : 's'} a game, losing about ${Math.round(m.avgCpLoss)} centipawns per game.`;
+  const rate = `Across your ${m.totalGames} analyzed game${m.totalGames === 1 ? '' : 's'} you average ${m.blundersPerGame} blunder${m.blundersPerGame === 1 ? '' : 's'} and ${m.mistakesPerGame} mistake${m.mistakesPerGame === 1 ? '' : 's'} a game, losing about ${Math.round(m.avgCpLoss)} centipawns per game.`;
   const phase = m.worstPhase && m.worstPhase.errors > 0
     ? ` Most of your errors land in the ${phaseWord(m.worstPhase.phase)} (${m.worstPhase.errors} there).`
     : '';
@@ -3437,7 +3445,7 @@ export function assembleMistakesAnswer(m: MistakesLike): GroundedAnswer | null {
     ? ` ${m.lateGameCollapses} game${m.lateGameCollapses === 1 ? ' collapsed' : 's collapsed'} late — errors bunched in the final moves, which usually means clock or fatigue.`
     : '';
   const costly = m.costliest && m.costliest.san
-    ? ` Your costliest slip was ${m.costliest.san} against ${m.costliest.opponentName || 'an opponent'}, dropping ${pawns(m.costliest.cpLoss)} points${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
+    ? ` Your costliest slip was ${m.costliest.san}${m.costliest.opponentName && m.costliest.opponentName !== 'Unknown' ? ` against ${m.costliest.opponentName}` : ''}, dropping ${pawns(m.costliest.cpLoss)} points${m.costliest.openingName ? ` in the ${m.costliest.openingName}` : ''}.`
     : '';
   // Suggestion — pick the dominant lever.
   const suggest = m.thrownWins >= 2

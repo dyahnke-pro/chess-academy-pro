@@ -367,7 +367,7 @@ describe('assembleMistakesAnswer — Wave 1 "where do I go wrong" (+ suggestion)
   it('voices the rate, worst phase, and costliest slip with a suggestion', () => {
     const a = assembleMistakesAnswer(base);
     expect(a).not.toBeNull();
-    expect(a!.facts).toMatch(/Across 40 games you average 1\.2 blunders and 2\.4 mistakes a game, losing about 55 centipawns/);
+    expect(a!.facts).toMatch(/Across your 40 analyzed games you average 1\.2 blunders and 2\.4 mistakes a game, losing about 55 centipawns/);
     expect(a!.facts).toMatch(/Most of your errors land in the middlegame \(31 there\)/);
     expect(a!.facts).toMatch(/costliest slip was Qxd4 against GM Smith, dropping 6\.4 points in the Caro-Kann/);
     expect(a!.facts).toMatch(/Focus your training on the middlegame/);

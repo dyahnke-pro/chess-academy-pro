@@ -6212,12 +6212,23 @@ export function CoachTeachPage(): JSX.Element {
       // confirm continuation with user before restarting walkthrough."
       if (autoPausedThisTurn) {
         const resumeMsg = `Walkthrough is paused. Tap Resume to continue, or ask another question.`;
-        setMessages((prev) => [...prev, {
+        const resumeEntry = {
           id: `${turnId}-resume-prompt`,
-          role: 'assistant',
+          role: 'assistant' as const,
           content: resumeMsg,
           timestamp: Date.now(),
-        }]);
+        };
+        // Slot the resume hint BENEATH this turn's answer, not after it (David
+        // 2026-09-09 audit: appended last, it rendered as the newest/top bubble
+        // and buried the actual answer to the question). Messages render
+        // newest-first, so the answer must stay the last element.
+        setMessages((prev) => {
+          const last = prev[prev.length - 1];
+          if (last && typeof last.id === 'string' && last.id.startsWith(turnId)) {
+            return [...prev.slice(0, -1), resumeEntry, last];
+          }
+          return [...prev, resumeEntry];
+        });
         useCoachMemoryStore.getState().appendConversationMessage({
           surface: 'chat-teach',
           role: 'coach',

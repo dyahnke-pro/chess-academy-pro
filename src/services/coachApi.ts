@@ -3995,7 +3995,7 @@ export async function getCoachChatResponse(
             const worstPhase = [...mi.errorsByPhase].sort((a, b) => b.errors - a.errors)[0] ?? null;
             const top = mi.costliestMistakes[0] ?? null;
             const answer = assembleMistakesAnswer({
-              totalGames: mi.totalGames,
+              totalGames: ov.analyzedGameCount,
               blundersPerGame: ov.avgBlundersPerGame,
               mistakesPerGame: ov.avgMistakesPerGame,
               avgCpLoss: mi.avgCpLoss,
@@ -4552,7 +4552,7 @@ export async function getCoachChatResponse(
               const worstPhase = [...mi.errorsByPhase].sort((a, b) => b.errors - a.errors)[0] ?? null;
               const top = mi.costliestMistakes[0] ?? null;
               const insightAnswer = assembleMistakesAnswer({
-                totalGames: mi.totalGames,
+                totalGames: ov.analyzedGameCount,
                 blundersPerGame: ov.avgBlundersPerGame,
                 mistakesPerGame: ov.avgMistakesPerGame,
                 avgCpLoss: mi.avgCpLoss,
@@ -4598,22 +4598,53 @@ export async function getCoachChatResponse(
             // does; opening-profile named a concrete opening but offered no
             // follow-up — David 2026-07-04 action-offer gap).
             let primaryOpeningId: string | null = null;
-            if (kind === 'favorite') {
-              const [w, b] = await Promise.all([getMostPlayedOpenings(1, 'white'), getMostPlayedOpenings(1, 'black')]);
-              const merged = [...w, ...b];
-              openings = merged.map((x) => toStat(x.opening, x.games));
-              primaryOpeningId = merged[0]?.opening.id ?? null;
-            } else if (kind === 'weakest') {
-              const [w, b] = await Promise.all([getWeakestOpenings(1, 'white'), getWeakestOpenings(1, 'black')]);
-              const merged = [...w, ...b];
-              openings = merged.map((o) => toStat(o));
-              // Weakest → the single lowest-accuracy line is the one to drill.
-              primaryOpeningId = [...merged].sort((a, z) => a.drillAccuracy - z.drillAccuracy)[0]?.id ?? null;
-            } else {
-              const [w, b] = await Promise.all([getStrongestOpenings(1, 'white'), getStrongestOpenings(1, 'black')]);
-              const merged = [...w, ...b];
-              openings = merged.map((o) => toStat(o));
-              primaryOpeningId = merged[0]?.id ?? null;
+            // GAME-BASED first (David 2026-09-09 account audit: "best opening"
+            // said "drill more" while 930 analyzed games sat unused). Rank
+            // strongest/weakest by real win rate + favorite by real game count,
+            // with canonical names from getOpeningInsights. Fall back to drill
+            // data only when no line has enough games.
+            type GS = { name: string; games: number; winRate: number; openingId: string | null };
+            const gStat = (o: GS, color: 'white' | 'black'): OpeningStat =>
+              ({ name: o.name, color, games: o.games, winRate: o.winRate });
+            try {
+              const oi = await getOpeningInsights();
+              if (kind === 'favorite') {
+                const w = oi.mostPlayedWhite[0] as GS | undefined;
+                const b = oi.mostPlayedBlack[0] as GS | undefined;
+                if (w) openings.push(gStat(w, 'white'));
+                if (b) openings.push(gStat(b, 'black'));
+                primaryOpeningId = w?.openingId ?? b?.openingId ?? null;
+              } else {
+                const pick = (list: GS[]): GS | undefined =>
+                  list.filter((o) => o.games >= 3)
+                    .sort((a, z) => (kind === 'weakest' ? a.winRate - z.winRate : z.winRate - a.winRate))[0];
+                const w = pick(oi.mostPlayedWhite as GS[]);
+                const b = pick(oi.mostPlayedBlack as GS[]);
+                if (w) openings.push(gStat(w, 'white'));
+                if (b) openings.push(gStat(b, 'black'));
+                const both = [w, b].filter((x): x is GS => !!x)
+                  .sort((a, z) => (kind === 'weakest' ? a.winRate - z.winRate : z.winRate - a.winRate));
+                primaryOpeningId = both[0]?.openingId ?? null;
+              }
+            } catch { openings = []; }
+            // DRILL fallback — fresh account, or no line with ≥3 games.
+            if (openings.length === 0) {
+              if (kind === 'favorite') {
+                const [w, b] = await Promise.all([getMostPlayedOpenings(1, 'white'), getMostPlayedOpenings(1, 'black')]);
+                const merged = [...w, ...b];
+                openings = merged.map((x) => toStat(x.opening, x.games));
+                primaryOpeningId = merged[0]?.opening.id ?? null;
+              } else if (kind === 'weakest') {
+                const [w, b] = await Promise.all([getWeakestOpenings(1, 'white'), getWeakestOpenings(1, 'black')]);
+                const merged = [...w, ...b];
+                openings = merged.map((o) => toStat(o));
+                primaryOpeningId = [...merged].sort((a, z) => a.drillAccuracy - z.drillAccuracy)[0]?.id ?? null;
+              } else {
+                const [w, b] = await Promise.all([getStrongestOpenings(1, 'white'), getStrongestOpenings(1, 'black')]);
+                const merged = [...w, ...b];
+                openings = merged.map((o) => toStat(o));
+                primaryOpeningId = merged[0]?.id ?? null;
+              }
             }
             const answer = assembleOpeningProfileAnswer({ kind, openings });
             if (answer) {
