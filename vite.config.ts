@@ -61,7 +61,11 @@ export default defineConfig(({ mode }) => {
         // file comes close to this — it's a guard against an accidental giant
         // asset, not the load-bearing limit it used to be when everything
         // inlined into one ~10 MB `index` chunk (WO-PERF-BUNDLE-01).
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
+        // Bumped 8→14 MiB (David 2026-09-09): the `index` chunk crept to 8.39 MB
+        // and vite-plugin-pwa THROWS (fatal) when a precache asset exceeds this,
+        // so the build failed on Vercel while warning-only locally. Headroom until
+        // the index is split further (it should be — 8 MB main bundle is heavy).
+        maximumFileSizeToCacheInBytes: 14 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         globIgnores: ['stockfish/**'],
         navigateFallbackDenylist: [/^\/api\//, /^\/voice-packs\//],
