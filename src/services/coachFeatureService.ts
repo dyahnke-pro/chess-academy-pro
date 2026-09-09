@@ -2964,20 +2964,56 @@ export function frameOpeningForStudent(
   return { label: name, owned: false };
 }
 
-/** True when every "<piece> on <square>" claim in `text` is TRUE on `fen` (the
- *  board the student sees at that ply). Guards the review walk against a house-
- *  voice rephrase that attaches a piece to a square it doesn't occupy — e.g.
- *  "the pawn on b5 gets taken" after a bishop has landed on b5 (audit
- *  2026-07-20). Runtime analog of the build-time narrationAccuracy contract. */
+/** True when every OCCUPANCY claim in `text` — a piece asserted to SIT on a
+ *  square — is TRUE on `fen` (the board the student sees at that ply). Guards
+ *  the review walk against a house-voice rephrase that attaches a piece to a
+ *  square it doesn't occupy — e.g. "the pawn on b5 gets taken" after a bishop
+ *  landed on b5 (audit 2026-07-20), or "their pawn digs in on c4" warmed from a
+ *  fact about d3 (real-game review audit 2026-09-09, chesscom-1000411252: no
+ *  pawn was EVER on c4 — the warm turned "the pawn to d3, guarding e4" into an
+ *  invented c4 pawn, and the bare "<piece> on <square>" pattern never saw it
+ *  because "on" wasn't adjacent to the piece). Runtime analog of the build-time
+ *  narrationAccuracy contract.
+ *
+ *  CATCHES occupancy across phrasings — the piece named followed by an OCCUPANCY
+ *  connective (on/to/onto) directly OR through a whitelisted occupancy verb
+ *  ("digs in on", "lands on", "sits on", "settles on", "plants … on", "parked
+ *  on"), plus the hyphenated "the c4-pawn" form. Deliberately does NOT flag
+ *  CONTROL/vision phrasings ("eyeing c4", "guarding e4", "fighting for the
+ *  center on d4", "bears down on g7") — a piece eyeing an empty square is true
+ *  teaching, only a piece CLAIMED TO OCCUPY an empty/wrong square is the lie. */
 export function narrationBoardAccurate(text: string, fen: string): boolean {
   const WANT: Record<string, string> = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };
+  const occupies = (piece: string, sq: string, board: Chess): boolean => {
+    const cell = board.get(sq.toLowerCase() as Square);
+    return !!cell && cell.type === WANT[piece.toLowerCase()];
+  };
   try {
     const board = new Chess(fen);
-    const re = /\b(knight|bishop|rook|queen|pawn|king)\s+on\s+([a-h][1-8])\b/gi;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(text)) !== null) {
-      const cell = board.get(m[2].toLowerCase() as Square);
-      if (!cell || cell.type !== WANT[m[1].toLowerCase()]) return false;
+    const PIECE = '(knight|bishop|rook|queen|pawn|king)';
+    // Whitelisted occupancy verbs — a piece that "digs in / lands / sits /
+    // settles / plants / parks / posts / camps / stands / holds" ON a square is
+    // asserted to BE there. Attack verbs ("bears down on", "eyes", "hits",
+    // "targets", "fighting for … on") are pointedly absent — they're vision.
+    const OCC_VERB = '(?:digs?\\s+in|lands?|landed|sits?|sat|sitting|settles?|settled|plants?|planted|parks?|parked|posts?|posted|stationed|camps?|camped|stands?|standing|holds?)';
+    const patterns: RegExp[] = [
+      // direct: "knight on e5" / "pawn to d3" / "bishop onto g7"
+      new RegExp(`\\b${PIECE}\\s+(?:on|onto|to)\\s+([a-h][1-8])\\b`, 'gi'),
+      // verb-mediated: "pawn digs in on c4" / "knight settles on d5" (piece within
+      // a short window of the occupancy verb + on/onto square)
+      new RegExp(`\\b${PIECE}\\b[^.,;:]{0,24}?\\b${OCC_VERB}\\s+(?:on|onto)\\s+([a-h][1-8])\\b`, 'gi'),
+      // hyphenated: "the c4-pawn"
+      new RegExp(`\\bthe\\s+([a-h][1-8])-(knight|bishop|rook|queen|pawn|king)\\b`, 'gi'),
+    ];
+    for (let i = 0; i < patterns.length; i++) {
+      const re = patterns[i];
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(text)) !== null) {
+        // The hyphenated form is [square, piece]; the others are [piece, square].
+        const piece = i === 2 ? m[2] : m[1];
+        const sq = i === 2 ? m[1] : m[2];
+        if (!occupies(piece, sq, board)) return false;
+      }
     }
     return true;
   } catch {

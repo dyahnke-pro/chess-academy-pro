@@ -603,6 +603,26 @@ describe('coachFeatureService', () => {
       expect(narrationBoardAccurate('A stunning sacrifice for the initiative.', fenAfterBxb5)).toBe(true);
     });
 
+    it('narrationBoardAccurate catches OCCUPANCY across verb phrasings, keeps control/vision (real-game review audit 2026-09-09)', () => {
+      // chesscom-1000411252 (Sicilian): 1.e4 c5 2.d3 — NO pawn ever on c4. The
+      // warm pass turned "the pawn to d3, guarding e4" into "their pawn digs in
+      // on c4", and the bare "<piece> on <square>" pattern missed it because
+      // "on" wasn't adjacent to "pawn". Occupancy phrased through any verb must
+      // be board-checked.
+      const f = new Chess(); for (const m of ['e4', 'c5', 'd3']) f.move(m);
+      const fen = f.fen();
+      expect(narrationBoardAccurate("Their pawn digs in on c4, and that's a hand on the center.", fen)).toBe(false);
+      expect(narrationBoardAccurate('The pawn lands on c4.', fen)).toBe(false);
+      expect(narrationBoardAccurate('The knight settles on d5.', fen)).toBe(false);
+      expect(narrationBoardAccurate('the c4-pawn is a hand on the center.', fen)).toBe(false);
+      // True occupancy passes.
+      expect(narrationBoardAccurate('supports the center with the pawn to d3, guarding e4.', fen)).toBe(true);
+      // CONTROL / VISION of an EMPTY square is true teaching — never flagged.
+      expect(narrationBoardAccurate('develops the knight, fighting for the center on d4 and e5.', fen)).toBe(true);
+      expect(narrationBoardAccurate('the bishop bears down on g7.', fen)).toBe(true);
+      expect(narrationBoardAccurate('now d5 is yours for good — no pawn will ever kick it.', fen)).toBe(true);
+    });
+
     it('teaches the Opera Game showcase moves — sac named, mate named, no windfall (David 2026-07-20)', () => {
       const OPERA = ['e4','e5','Nf3','d6','d4','Bg4','dxe5','Bxf3','Qxf3','dxe5','Bc4','Nf6','Qb3','Qe7','Nc3','c6','Bg5','b5','Nxb5','cxb5','Bxb5+','Nbd7','O-O-O','Rd8','Rxd7','Rxd7','Rd1','Qe6','Bxd7+','Nxd7','Qb8+','Nxb8','Rd8#'];
       const cls = (ply: number): string => (ply === 31 ? 'brilliant' : ply === 19 ? 'great' : 'good');
