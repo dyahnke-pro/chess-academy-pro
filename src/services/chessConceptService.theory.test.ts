@@ -16,6 +16,28 @@ describe('searchTheoryPassage — corpus theory search (P-II.1)', () => {
     expect(searchTheoryPassage('lorem ipsum dolor sit')).toBeNull();
   });
 
+  // Two-distinct-token gate (David 2026-09-09 loop): a match carried by a single
+  // generic chess noun ("pawn" / "attack" / "squares") is a coincidence, not a
+  // topic match — it let the coach serve a confidently-WRONG concept. These
+  // decline honestly instead.
+  it('declines a single-generic-token coincidence (pawn center ≠ isolated pawn)', () => {
+    // "pawn center" (a c3-d4 duo) shares only "pawn" with the Isolated-pawn
+    // passage — the OPPOSITE structure. Must not serve IQP theory as the answer.
+    const hit = searchTheoryPassage('explain the c3-d4 pawn center');
+    expect(hit?.conceptId).not.toBe('pawn-isolated');
+  });
+
+  it('declines "minority attack" matching the "Discovered attack" tactic on "attack" alone', () => {
+    const hit = searchTheoryPassage('how do I play a minority attack');
+    expect(hit?.conceptId).not.toBe('discovered-attack');
+  });
+
+  it('keeps genuine multi-token matches (bishop pair, doubled pawns, castled-king attack)', () => {
+    expect(searchTheoryPassage('how to use the bishop pair')).not.toBeNull();
+    expect(searchTheoryPassage('what is the plan with doubled pawns')).not.toBeNull();
+    expect(searchTheoryPassage('how do I attack a castled king')).not.toBeNull();
+  });
+
   it('names a real concept for a pawn-structure ask', () => {
     const hit = searchTheoryPassage('what is the plan with doubled pawns');
     if (hit) {

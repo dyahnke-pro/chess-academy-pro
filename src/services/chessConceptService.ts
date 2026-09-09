@@ -229,32 +229,53 @@ export interface TheoryHit {
 /** Best-matching concept passage for a free-text theory/strategy query, or
  *  null when nothing scores above the floor. Scores by how many query keywords
  *  appear in the passage text + concept name/phrases; requires a real overlap so
- *  a vague ask returns null (honest decline) rather than a random passage. */
+ *  a vague ask returns null (honest decline) rather than a random passage.
+ *
+ *  TWO-DISTINCT-TOKEN GATE (David 2026-09-09 loop): in a chess corpus, generic
+ *  nouns like "pawn" / "attack" / "squares" appear in most passages, so a match
+ *  carried by a SINGLE shared token is an unreliable coincidence — it let the
+ *  coach serve a confidently-WRONG concept ("explain the c3-d4 pawn center" →
+ *  Isolated-pawn theory on the sole token "pawn"; "minority attack" → Discovered
+ *  attack on "attack"). That is a G0 miss (the matcher DECIDING on an incidental
+ *  noun). We require the winning concept to share ≥2 DISTINCT query tokens
+ *  (name+phrase and body combined) so the match is about the query's actual
+ *  topic. Every genuine multi-token ask (isolated queen pawn, doubled pawns,
+ *  kingside attack on a castled king, open file, passed/backward pawn) is
+ *  unaffected; unreliable single-token coincidences fall through to an honest
+ *  decline. */
 export function searchTheoryPassage(text: string): TheoryHit | null {
   const q = theoryTokens(text);
   if (q.length === 0) return null;
   const qset = new Set(q);
-  let best: TheoryHit | null = null;
+  let best: (TheoryHit & { distinct: number }) | null = null;
   for (const c of DATA.concepts) {
     if (c.passages.length === 0) continue;
     // Concept name + phrases are a strong signal — a hit there is worth more.
     const nameTokens = new Set(theoryTokens(`${c.name} ${c.phrases.join(' ')}`));
-    let nameOverlap = 0;
-    for (const t of qset) if (nameTokens.has(t)) nameOverlap += 1;
+    const nameMatched = new Set<string>();
+    for (const t of qset) if (nameTokens.has(t)) nameMatched.add(t);
     for (const p of c.passages) {
       const ptext = p.text.toLowerCase();
+      const matched = new Set<string>(nameMatched);
       let bodyOverlap = 0;
-      for (const t of qset) if (ptext.includes(t)) bodyOverlap += 1;
-      const score = nameOverlap * 3 + bodyOverlap;
+      for (const t of qset) {
+        if (ptext.includes(t)) {
+          bodyOverlap += 1;
+          matched.add(t);
+        }
+      }
+      const score = nameMatched.size * 3 + bodyOverlap;
+      // A single shared token is a coincidence, not a topic match — skip it.
+      if (matched.size < 2) continue;
       if (score > (best?.score ?? 0)) {
-        best = { passage: p, conceptId: c.id, conceptName: c.name, score };
+        best = { passage: p, conceptId: c.id, conceptName: c.name, score, distinct: matched.size };
       }
     }
   }
   // Floor: need at least a name-token match OR two body keywords — otherwise the
   // ask isn't really about anything the corpus teaches (honest decline).
   if (!best || best.score < 2) return null;
-  return best;
+  return { passage: best.passage, conceptId: best.conceptId, conceptName: best.conceptName, score: best.score };
 }
 
 /** Detect conceptIds named in arbitrary text via the concept phrase
