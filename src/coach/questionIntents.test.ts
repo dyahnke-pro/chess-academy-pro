@@ -928,6 +928,10 @@ describe('isConceptQuestion', () => {
     'tell me about prophylaxis',
     'what does en passant mean',
     'what is the difference between a pin and a skewer',
+    // "what MAKES a good X" — was a matcher gap; fell to the board deflect
+    // ("the best move is e4") instead of a concept answer (David 2026-09-09).
+    'what makes a good bishop',
+    'what makes a knight strong',
   ])('matches: %s', (q) => expect(isConceptQuestion(q)).toBe(true));
   it('does NOT fire on position-specific cues (those go to tactics/best-move)', () => {
     expect(isConceptQuestion('is there a fork here')).toBe(false);

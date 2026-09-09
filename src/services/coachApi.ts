@@ -5559,6 +5559,23 @@ export async function getCoachChatResponse(
           }
         }
 
+        // ── CONCEPT MISS — HONEST DECLINE, NEVER A BOARD DEFLECT (David
+        // 2026-09-09). A concept/topic ask ("what makes a good bishop", "what is
+        // a good knight") that named no glossary token AND matched no corpus
+        // passage used to fall through to the board readout below and get "the
+        // best move is e4" — a board answer to a board-independent question. By
+        // here every teaching lane (fundamentals, concept-glossary, theory-
+        // corpus, endgame) has missed, so the honest answer is that we lack that
+        // specific lesson plus a pointer to what we CAN teach (empty > generic >
+        // invented). Gated off positionalTopic so a genuine board-feature ask
+        // ("what's my worst piece") still gets its board read.
+        if (grounding.conceptQuestion && !grounding.positionalTopic) {
+          const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
+          const voiced = await voiceFacts(decline, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'concept', preferRaw: true });
+          if (voiced) return voiced;
+          return decline;
+        }
+
         // ── POSITIONAL FEATURE (answer-correctness 2026-07-10) — "who controls
         // the centre / how many pieces / is my structure sound / is my king
         // exposed / is my bishop bad?" These need the STATIC feature computed

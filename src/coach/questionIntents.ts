@@ -952,6 +952,14 @@ const CONCEPT_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:idea|point|purpose|concept)\s+(?:behind|of)\b`,
   String.raw`\bwhy\s+(?:is|are)\s+(?:a\s+|an\s+|the\s+)?(?:[a-z]+\s+){1,3}(?:good|important|strong|useful|bad|weak|better|worse)\b`,
   String.raw`\bwhat\s+(?:are\s+)?(?:the\s+)?principles?\b`,
+  // "what makes a good bishop / what makes a knight strong" — the "what's a good
+  // X" shape (first alt) catches this but "what MAKES a good X" did not, so it
+  // fell to the board deflect ("the best move is e4") — David 2026-09-09. Scoped
+  // to a chess piece/structure noun so it can't swallow "what makes a good
+  // opening/move/plan" (those have their own lanes).
+  String.raw`\bwhat\s+makes?\s+(?:for\s+)?(?:a|an)?\s*(?:good|bad|strong|weak|great|ideal|active|passive)\s+(?:bishop|knight|rook|queen|pawn|piece|square|outpost|structure|king|minor|major|cent(?:re|er)|development)\b`,
+  // reversed order — "what makes a knight STRONG / a bishop BAD" (noun then adjective).
+  String.raw`\bwhat\s+makes?\s+(?:for\s+)?(?:a|an)?\s*(?:bishop|knight|rook|queen|pawn|piece|square|outpost|structure|king|minor|major)\s+(?:good|bad|strong|weak|great|ideal|active|passive|powerful|effective)\b`,
 ]);
 const CONCEPT_POSITIONAL_CUE_RE =
   /\b(?:here|this\s+position|on\s+the\s+board|right\s+now|in\s+this|my\s+(?:position|move)|best\s+move|should\s+i\s+play)\b/i;
