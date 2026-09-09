@@ -179,6 +179,11 @@ const GATE_TESTS = [
   // proxy anywhere else, or adding an untagged primitive, makes ship-check RED.
   // Turns "what else are we missing?" into an enforced, closed question.
   'src/services/coachLlmChokepoint.gate.test.ts',
+  // 🔒 BUILT-BUT-UNWIRED GATE (David 2026-09-09) — every board-awareness
+  // computer must reach the typed chat Q&A, not just automatic narration.
+  // A new positionReadingService computer that no chat lane consumes (and
+  // isn't a declared helper) makes ship-check RED, forcing a chat wire.
+  'src/services/boardComputerChatCoverage.test.ts',
   // 🔒 PRESCRIPTION GATE (David 2026-07-22) — plan templates may never
   // prescribe a piece the student doesn't have or phase-blind technique.
   // Locative claims were gated; prescriptive grammar is now gated too.
