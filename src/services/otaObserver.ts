@@ -232,7 +232,9 @@ export async function startOtaObserver(): Promise<void> {
  *  CapacitorUpdater.updateUrl). It owns the forward-only ordinal. */
 const OTA_MANIFEST_URL = 'https://chess-academy-pro.vercel.app/api/ota/manifest';
 
-export async function installStagedBundleOnLaunch(): Promise<boolean> {
+export async function installStagedBundleOnLaunch(
+  opts?: { userInitiated?: boolean },
+): Promise<boolean> {
   let isNative = false;
   try {
     isNative = Capacitor.isNativePlatform();
@@ -241,6 +243,7 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
   }
   if (!isNative) return false;
 
+  const userInitiated = opts?.userInitiated === true;
   const source = 'otaObserver.installStagedBundleOnLaunch';
   try {
     const [cur, listed, bi] = await Promise.all([
@@ -287,9 +290,10 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
     // leaves a forward, ready bundle un-applied. Forward-only is UNCHANGED: we
     // still install ONLY the version the manifest advertises.
     let advertised = '';
+    let manifestAuthoritative = false; // got a real answer (a version OR up_to_date)
     const manifestUrl = `${OTA_MANIFEST_URL}?version=${encodeURIComponent(currentVersion || '0.0.0')}`
       + `&platform=${encodeURIComponent(Capacitor.getPlatform())}`;
-    for (let attempt = 0; attempt < 4 && !advertised; attempt += 1) {
+    for (let attempt = 0; attempt < 4 && !advertised && !manifestAuthoritative; attempt += 1) {
       if (attempt > 0) await new Promise((r) => setTimeout(r, 500 * attempt)); // 0, 0.5s, 1s, 1.5s
       try {
         const ctrl = new AbortController();
@@ -300,14 +304,40 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
         } finally { clearTimeout(to); }
         if (res.ok) {
           const body = (await res.json()) as { kind?: string; version?: string };
+          manifestAuthoritative = true;
           if (body.kind === 'up_to_date') break; // authoritative: nothing to apply
           if (typeof body.version === 'string') advertised = body.version;
         }
-      } catch { /* aborted / offline — retry, then fall through and apply nothing */ }
+      } catch { /* aborted / offline — retry, then fall through */ }
     }
 
     const target = advertised ? pending.find((b) => b.version === advertised) : undefined;
     if (!target) {
+      // 🔒 EXPLICIT-TAP FALLBACK (David 2026-09-09). The "Restart now" button is a
+      // deliberate user action, so a dead button is the worst outcome. When the
+      // manifest is truly UNREACHABLE (every retry aborted — NOT when it
+      // authoritatively said up_to_date, which would make applying a staged
+      // bundle a rollback) and bundles are staged, apply the most-recently-
+      // DOWNLOADED one. autoUpdate downloads in the manifest's forward order, so
+      // newest-download is the newest version in the common case; a broken bundle
+      // is marked `error` (never pending) so it can't loop, and the next
+      // manifest-reachable launch re-checks forward. The AUTO launch path
+      // (userInitiated=false) still applies nothing — staying put is safe there.
+      if (userInitiated && !manifestAuthoritative && pending.length > 0) {
+        const newest = [...pending].sort((a, b) => (b.downloaded || '').localeCompare(a.downloaded || ''))[0];
+        void logAppAudit({
+          kind: 'ota-launch-install',
+          category: 'subsystem',
+          source,
+          summary: `user tapped restart, manifest unreachable → applying newest staged ${newest.version}`
+            + ` (running ${currentVersion || 'unknown'}, ${pending.length} staged)`,
+        });
+        if (isAnalyticsEnabled()) {
+          captureEvent('ota_user_forced_install', { from: currentVersion, to: newest.version, stagedCount: pending.length });
+        }
+        await CapacitorUpdater.set({ id: newest.id }); // applies + reloads
+        return true;
+      }
       void logAppAudit({
         kind: 'ota-launch-install',
         category: 'subsystem',

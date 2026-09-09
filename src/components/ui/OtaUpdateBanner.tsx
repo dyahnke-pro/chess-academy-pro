@@ -30,9 +30,11 @@ export function OtaUpdateBanner(): JSX.Element | null {
 
   const restartNow = useCallback(() => {
     setRestarting(true);
-    // set() applies + reloads the app onto the staged bundle. If it can't (no
-    // staged bundle matches the server), we just close — it'll land next launch.
-    void installStagedBundleOnLaunch().then((applied) => {
+    // set() applies + reloads the app onto the staged bundle. userInitiated:true
+    // makes this an EXPLICIT-tap install: if the forward-only manifest check is
+    // unreachable, it falls back to the newest staged bundle rather than no-op'ing
+    // a dead button (David 2026-09-09 — "it hasn't been restarting the app").
+    void installStagedBundleOnLaunch({ userInitiated: true }).then((applied) => {
       if (!applied) { setRestarting(false); setShow(false); }
     });
   }, []);

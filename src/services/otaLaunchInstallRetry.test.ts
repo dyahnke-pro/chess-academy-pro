@@ -45,15 +45,38 @@ describe('installStagedBundleOnLaunch — resilient to a flaky manifest fetch', 
     vi.unstubAllGlobals();
   });
 
-  it('applies nothing when the manifest keeps failing (stays put — safe)', async () => {
+  it('applies nothing when the manifest keeps failing on an AUTO launch (stays put — safe)', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => {
       fetchAttempts += 1;
       const e = new Error('Fetch is aborted'); e.name = 'AbortError'; throw e;
     }));
     const { installStagedBundleOnLaunch } = await import('./otaObserver');
-    const applied = await installStagedBundleOnLaunch();
+    const applied = await installStagedBundleOnLaunch(); // no userInitiated
     expect(applied).toBe(false);
-    expect(setCalls).toEqual([]);                          // never rolls to an un-vetted bundle
+    expect(setCalls).toEqual([]);                          // auto path never rolls to an un-vetted bundle
+    vi.unstubAllGlobals();
+  });
+
+  it('USER TAP + manifest unreachable → falls back to the newest staged bundle (no dead button)', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      fetchAttempts += 1;
+      const e = new Error('Fetch is aborted'); e.name = 'AbortError'; throw e; // every attempt dies
+    }));
+    const { installStagedBundleOnLaunch } = await import('./otaObserver');
+    const applied = await installStagedBundleOnLaunch({ userInitiated: true });
+    expect(applied).toBe(true);
+    expect(setCalls).toEqual([{ id: 'staged-id' }]);       // the single staged bundle gets applied
+    vi.unstubAllGlobals();
+  });
+
+  it('USER TAP but manifest says up_to_date → applies NOTHING (never a rollback)', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true, json: async () => ({ kind: 'up_to_date', version: '9a2d187a' }),
+    } as unknown as Response)));
+    const { installStagedBundleOnLaunch } = await import('./otaObserver');
+    const applied = await installStagedBundleOnLaunch({ userInitiated: true });
+    expect(applied).toBe(false);
+    expect(setCalls).toEqual([]);                          // authoritative up-to-date is respected
     vi.unstubAllGlobals();
   });
 });
