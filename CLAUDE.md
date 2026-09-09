@@ -2078,9 +2078,32 @@ session; the recipe above already excludes them, but know WHY:
    **NOT David — a REAL USER, do not exclude:** `4589387b-…` (the heavy "Lake
    Butler / Naaldwijk / Jacksonville" iPhone) — feedback-confirmed real user, and
    the most engaged one. Its coach-chat volume + errors ARE real-user experience.
-   Net confirmed count: **37 real native users** (34 active/30d). Prefer this
-   explicit id list over the build_id heuristic; refresh it by asking David when
-   a new heavy/suspect device shows up.
+   Net confirmed count: **47 real native users** (39 active/30d) as of 2026-09-09.
+   Prefer this explicit id list over the build_id heuristic; refresh it by asking
+   David when a new heavy/suspect device shows up.
+
+   🔒🔒 **STAMP EVERY USER REPORT YOU GIVE HIM — so the NEXT session reports only
+   what's NEW (David 2026-09-09: "Sessions should be marking what information they
+   have given me so you can provide only the new updates. Write that down.").**
+   When David asks for a user update, DON'T re-dump the whole picture — anchor on
+   the last stamped snapshot below, report the DELTA since it (new users, active
+   change, any new feedback), then append a fresh dated line here. Each line: date,
+   headline counts (total real / active-30d), new-users-since-prior, and any new
+   feedback text. Keep the log append-only; do not delete old lines. This is the
+   record of "last checked data sent to David" so nobody starts from scratch again.
+
+   **USER-REPORT LOG (append newest at top):**
+   - **2026-09-09** — 47 real native users, 39 active/30d, 13 active/7d. +10 new
+     since the 2026-09-02 snapshot (9 first-seen in the 7d prior). NEW feedback
+     2026-09-06 (Chicago, real user): *"CRASH! Tried to ask the coach about a
+     potential sac but it couldn't answer, now I can't move any pieces. I want to
+     be able to stop coach and ask questions during the walkthrough."* — a live
+     crash on the teach/walkthrough coach-question path + a request for
+     stop-coach-and-ask mid-walkthrough. Feature adoption (30d, real users): App
+     open 39 · Voice 22 (408 actions/user) · Openings 12 · Paywall 8 · Coach chat
+     7 · Tactics 7 · Play 6 · Import 6 · Feedback 3 · Review 2. Funnel still falls
+     off a cliff past app-open.
+   - **2026-09-02** — 37 real native users, 34 active/30d (the prior baseline).
 
 The canonical **real-native-user WHERE** therefore gains a build_id clause: after
 the `properties.*` filters above, also exclude every `device_id` that has ≥2
