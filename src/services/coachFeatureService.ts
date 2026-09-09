@@ -9,6 +9,7 @@ import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
+import { introducedChessTerms } from './voiceContainment';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
 import { buildMiddlegameOrientation, buildOpeningDevelopmentPlan, buildHisGroundedPlanBeat, buildMastersGroundedPlanBeat } from './reviewStrategicOrientation';
@@ -2991,17 +2992,19 @@ export function narrationBoardAccurate(text: string, fen: string): boolean {
   try {
     const board = new Chess(fen);
     const PIECE = '(knight|bishop|rook|queen|pawn|king)';
-    // Whitelisted occupancy verbs — a piece that "digs in / lands / sits /
-    // settles / plants / parks / posts / camps / stands / holds" ON a square is
-    // asserted to BE there. Attack verbs ("bears down on", "eyes", "hits",
-    // "targets", "fighting for … on") are pointedly absent — they're vision.
-    const OCC_VERB = '(?:digs?\\s+in|lands?|landed|sits?|sat|sitting|settles?|settled|plants?|planted|parks?|parked|posts?|posted|stationed|camps?|camped|stands?|standing|holds?)';
+    // Whitelisted placement verbs — a piece that "digs / sinks / lands / sits /
+    // settles / plants / parks / posts / camps / drops / slots / tucks / nestles
+    // / burrows / stands / holds" onto a square is asserted to BE there. Attack
+    // verbs ("bears down on", "eyes", "hits", "targets", "fighting for … on") are
+    // pointedly absent — they're vision, not occupancy.
+    const OCC_VERB = '(?:digs?|sinks?|lands?|landed|sits?|sat|sitting|settles?|settled|plants?|planted|parks?|parked|posts?|posted|stationed|camps?|camped|drops?|slots?|tucks?|nestles?|burrows?|stands?|standing|holds?)';
     const patterns: RegExp[] = [
-      // direct: "knight on e5" / "pawn to d3" / "bishop onto g7"
-      new RegExp(`\\b${PIECE}\\s+(?:on|onto|to)\\s+([a-h][1-8])\\b`, 'gi'),
-      // verb-mediated: "pawn digs in on c4" / "knight settles on d5" (piece within
-      // a short window of the occupancy verb + on/onto square)
-      new RegExp(`\\b${PIECE}\\b[^.,;:]{0,24}?\\b${OCC_VERB}\\s+(?:on|onto)\\s+([a-h][1-8])\\b`, 'gi'),
+      // direct: "knight on e5" / "pawn to d3" / "bishop onto g7" / "pawn into c4"
+      new RegExp(`\\b${PIECE}\\s+(?:on|onto|into|to)\\s+([a-h][1-8])\\b`, 'gi'),
+      // verb-mediated: "pawn digs in on c4" / "knight settles on d5" / "pawn digs
+      // into c4" / "knight sinks into e5" (piece within a short window of the
+      // placement verb, an optional "in", then a placement prep + square)
+      new RegExp(`\\b${PIECE}\\b[^.,;:]{0,24}?\\b${OCC_VERB}\\s+(?:in\\s+)?(?:on|onto|into)\\s+([a-h][1-8])\\b`, 'gi'),
       // hyphenated: "the c4-pawn"
       new RegExp(`\\bthe\\s+([a-h][1-8])-(knight|bishop|rook|queen|pawn|king)\\b`, 'gi'),
     ];
@@ -3574,6 +3577,16 @@ export async function generateReviewNarration(params: {
             || !/(gets|you get) punished/i.test(w);
           if (!isRepeat && keepsMate && keepsSac && keepsPunishFrame && keepsAdvantageFrame
             && !corruptsName(det, w)
+            // INTRODUCED-SQUARE/TERM GUARD (real-game review audit 2026-09-09):
+            // the warm persistently turned d3's "guarding e4" into a pawn "digs
+            // into c4" — a square the fact never named. voiceReviewLines runs this
+            // net per line in CAPPED mode but SKIPS it for cover-all (coachApi.ts
+            // 3023), leaving the uncapped review with no square-introduction guard
+            // at all. Enforce it here for BOTH modes: a warmed line may restate any
+            // square the fact already gives, never invent one. Board-accuracy alone
+            // can't catch it (a control-phrased "eyeing c4" is board-true; only the
+            // FACT knows c4 was never on the table for this move).
+            && introducedChessTerms(det, w).length === 0
             && narrationBoardAccurate(w, s.fenAfter)
             && narrationSeatFaithful(w, s.fenAfter, playerColor === 'white' ? 'w' : 'b')
             && narrationMoverFaithful(w, s.playerColor === playerColor)

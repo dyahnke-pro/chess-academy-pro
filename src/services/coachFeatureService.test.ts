@@ -612,6 +612,8 @@ describe('coachFeatureService', () => {
       const f = new Chess(); for (const m of ['e4', 'c5', 'd3']) f.move(m);
       const fen = f.fen();
       expect(narrationBoardAccurate("Their pawn digs in on c4, and that's a hand on the center.", fen)).toBe(false);
+      expect(narrationBoardAccurate("Their pawn digs into c4, and that's a clamp.", fen)).toBe(false);
+      expect(narrationBoardAccurate('The knight sinks into e5.', fen)).toBe(false); // no knight on e5 at ply3
       expect(narrationBoardAccurate('The pawn lands on c4.', fen)).toBe(false);
       expect(narrationBoardAccurate('The knight settles on d5.', fen)).toBe(false);
       expect(narrationBoardAccurate('the c4-pawn is a hand on the center.', fen)).toBe(false);
