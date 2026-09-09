@@ -316,6 +316,22 @@ export async function installStagedBundleOnLaunch(): Promise<boolean> {
           + ` (advertised=${advertised || 'none/up-to-date'}, running=${currentVersion || 'unknown'},`
           + ` staged=${pending.map((b) => b.version).join(',')})`,
       });
+      // 🔒 NEVER-AGAIN TELEMETRY (David 2026-09-09). The strand was found by luck
+      // in one device log; the audit-stream is ephemeral, so a recurrence could
+      // hide the same way. Emit a DURABLE PostHog event whenever staged bundles
+      // are held back — the more that pile up (advertised empty ⇒ the manifest
+      // fetch never succeeded even with retries), the louder. This is the signal
+      // to alert on: a device accumulating pending bundles is stuck on old code.
+      if (isAnalyticsEnabled()) {
+        captureEvent('ota_install_held_back', {
+          running: currentVersion || 'unknown',
+          builtin: builtinVersion || 'unknown',
+          stagedCount: pending.length,
+          staged: pending.map((b) => b.version).join(','),
+          manifestReached: advertised !== '' ? true : false,
+          reason: advertised ? 'advertised-not-staged' : 'manifest-unreachable',
+        });
+      }
       return false;
     }
 
