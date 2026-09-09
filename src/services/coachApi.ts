@@ -4760,6 +4760,19 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           }
+          // No exact glossary token ("explain the idea of the c3-d4 pawn centre"
+          // named no single concept) — fall back to a free-text book-corpus
+          // search before deflecting to the position default / best move (David
+          // 2026-09-09 loop: an "explain the idea…" ask was answered "best move
+          // is e4"). Grounded public-domain prose (G3), never invented theory.
+          const passage = searchTheoryPassage(userText);
+          if (passage) {
+            const answer = assembleTheoryAnswer({ conceptName: passage.conceptName, conceptId: passage.conceptId, passage: passage.passage });
+            if (answer) {
+              const voiced = await voiceFacts(answer.facts, { studentMessage: userText, providerConfig: config, intent: 'concept' });
+              if (voiced) return voiced;
+            }
+          }
         }
 
         // ── THEORY (P-II.1) — a general strategy/how-to ask that named no single
