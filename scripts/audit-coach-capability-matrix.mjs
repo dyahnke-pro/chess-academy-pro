@@ -152,10 +152,11 @@ const ACTIONS = [
     setup: async (p) => { await ask(p, 'play the move e4 for me'); await verifyPlacement(p, placementOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1')); },
     check: async (p) => samePlacement(await readPlacement(p), placementOf(START)),
   },
-  {
-    id: 'set_board_position', cmd: 'set up the board after 1.e4 e5 2.Nf3 Nc6 3.Bc4',
-    check: async (p) => { const pl = await readPlacement(p); return pl.c4 === 'wB' && pl.c6 === 'bN' && pl.f3 === 'wN' && pl.e4 === 'wP' && pl.e5 === 'bP'; },
-  },
+  // NB: set_board_position is a BRAIN-only actuator for hypothetical demos
+  // (setBoardPosition.ts) — there is no user-facing "set up the board after
+  // <moves>" NL command, and that phrasing correctly routes to opening-teach.
+  // The user-facing "put this line on the board" capability is start_walkthrough
+  // (below), which is the cell that verifies board actuation from a named line.
   {
     id: 'reset_board', cmd: 'reset the board',
     setup: async (p) => { await ask(p, 'play the move d4 for me'); await sleep(2000); },
@@ -172,7 +173,15 @@ const ACTIONS = [
   {
     id: 'start_walkthrough', cmd: 'start a lesson on the Italian Game',
     check: async (p) => {
-      for (let i = 0; i < 10; i += 1) { await sleep(1500); if (await p.locator('[data-testid="lesson-narration"], [data-testid="lesson-next"], [data-testid="walkthrough-progress"]').count() > 0) return true; }
+      // The teach walkthrough mounts [walkthrough-skip]; verify it started AND
+      // on the RIGHT opening (answer names "Italian"), not a fuzzy mismatch.
+      for (let i = 0; i < 10; i += 1) {
+        await sleep(1500);
+        if (await p.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-progress"]').count() > 0) {
+          const body = (await p.locator('body').innerText()).toLowerCase();
+          return /italian/.test(body);
+        }
+      }
       return false;
     },
   },

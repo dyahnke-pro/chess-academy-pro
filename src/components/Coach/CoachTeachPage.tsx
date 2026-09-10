@@ -2654,13 +2654,24 @@ export function CoachTeachPage(): JSX.Element {
       // "review my last game" rode the fuzzy opening matcher into a "did you
       // mean East Indian Defense?" picker. Both are deterministic commands —
       // route them like a human tapping the nav, no LLM turn.
+      // Root-cause for the "nav command → best-move default" class (David
+      // 2026-09-10 matrix audit: "go to the tactics trainer" fell through
+      // because the regex only accepted "tactics"/"tactics tab"). Instead of a
+      // per-variant regex, every destination shares ONE imperative lead + ONE
+      // optional trailing descriptor (trainer/page/hub/section/screen/room), so
+      // natural tails ("tactics trainer", "openings page") all resolve without
+      // enumerating each phrasing. Destinations stay anchored to end-of-string
+      // so a content ask ("show me a famous game") can never match a route.
+      const navLead = '(?:please\\s+|can\\s+you\\s+|could\\s+you\\s+|would\\s+you\\s+|will\\s+you\\s+|hey\\s+)*(?:take\\s+me\\s+to|go\\s+to|open|navigate\\s+to|bring\\s+up)';
+      const navTail = '(?:\\s+(?:tab|trainer|page|section|hub|screen|room))?[.!]?';
+      const navTo = (dest: string): RegExp => new RegExp(`^${navLead}\\s+(?:the\\s+)?(?:${dest})${navTail}$`, 'i');
       const navTargets: Array<[RegExp, string, string]> = [
         [/^(?:please\s+|can\s+you\s+|could\s+you\s+|would\s+you\s+|will\s+you\s+|hey\s+)*(?:review|go\s+over|look\s+at|narrate|walk\s+me\s+through|recap|summari[sz]e)\s+my\s+(?:last|latest|recent)?\s*game[.!?]*$/i, '/coach/review', 'Opening your games for review.'],
-        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?tactics(?:\s+tab)?[.!]?$/i, '/tactics', 'Heading to Tactics.'],
-        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?openings(?:\s+tab)?[.!]?$/i, '/openings', 'Heading to Openings.'],
-        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:weaknesses|my\s+weaknesses)[.!]?$/i, '/weaknesses', 'Heading to your weaknesses.'],
-        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?settings[.!]?$/i, '/settings', 'Opening Settings.'],
-        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:dashboard|home)[.!]?$/i, '/', 'Back to the dashboard.'],
+        [navTo('tactics|puzzles?|tactic\\s+trainer'), '/tactics', 'Heading to Tactics.'],
+        [navTo('openings?|opening\\s+explorer'), '/openings', 'Heading to Openings.'],
+        [navTo('weaknesses|my\\s+weaknesses|insights|game\\s+insights'), '/weaknesses', 'Heading to your weaknesses.'],
+        [navTo('settings'), '/settings', 'Opening Settings.'],
+        [navTo('dashboard|home'), '/', 'Back to the dashboard.'],
       ];
       for (const [re, route, sayNav] of navTargets) {
         if (re.test(text.trim())) {
