@@ -35,6 +35,23 @@ describe('proForkTreeToWalkthrough — real shipped corpus', () => {
         expect(n.idea.trim().length, `${key} node ${n.san} empty idea`).toBeGreaterThan(0);
         expect(n.idea, `${key} node ${n.san} no why clause`).toContain('—');
       }
+      // EVERY recorded fork is reachable in the walked tree — the majority
+      // branch keeps going down the spine to the next fork, so a tree with N
+      // forks renders N branch nodes (children.length > 1). (Guards the
+      // "spine stops at the first fork" regression.)
+      const branchNodes = [wt.root, ...nodes].filter((n) => n.children.length > 1).length;
+      expect(branchNodes, `${key} should render all ${tree!.forks.length} forks`).toBe(tree!.forks.length);
+    });
+  }
+
+  it('does not regress: at least one pairing renders multiple forks', () => {
+    const scoped = games.filter((g) => g.playerId === 'caruana' && g.openingId === 'ruy-lopez') as never[];
+    if (scoped.length < 2) return;
+    const tree = buildProOpeningForkTree(scoped)!;
+    const wt = proForkTreeToWalkthrough(tree)!;
+    const nodes = allMoveNodes(wt.root);
+    const branchNodes = [wt.root, ...nodes].filter((n) => n.children.length > 1).length;
+    expect(branchNodes).toBeGreaterThanOrEqual(2);
     });
   }
 });

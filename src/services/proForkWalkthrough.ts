@@ -103,21 +103,33 @@ export function proForkTreeToWalkthrough(fork: ProOpeningForkTree): WalkthroughT
     const moverColor: 'white' | 'black' = fenBefore.split(' ')[1] === 'w' ? 'white' : 'black';
 
     if (forkHere && forkHere.branches.length >= 2) {
-      // One child per real alternative the pro played. Majority first.
+      const spineSanHere = fork.spine[ply]?.san;
+      // One child per real alternative the pro played. Majority first. The
+      // branch that IS the majority spine move keeps going down the aggregated
+      // spine (so a deeper fork on the main road is reached — real
+      // fork-in-the-road sequencing); the minority detours follow their own
+      // representative game a few plies so the student sees where the side road
+      // leads before it dead-ends.
       return forkHere.branches.map((b) => {
         const chess = new Chess(fenBefore);
         let mv;
         try { mv = chess.move(b.san); } catch { mv = null; }
         if (!mv) return null;
         const why = whyFor(history, fenBefore, mv.san, moverColor, openingName);
-        // Continue this branch down its representative game for a few plies.
-        const sampleSans = sansOf(b.sample.pgn).slice(ply + 1, ply + 1 + BRANCH_PLIES);
-        const cont = buildLinear(sampleSans, chess.fen(), [...history, mv.san]);
+        const isSpine = b.san === spineSanHere;
+        const childHistory = [...history, mv.san];
+        const children: WalkthroughTreeChild[] = isSpine
+          ? buildFrom(ply + 1, chess.fen(), childHistory)
+          : (() => {
+              const sampleSans = sansOf(b.sample.pgn).slice(ply + 1, ply + 1 + BRANCH_PLIES);
+              const cont = buildLinear(sampleSans, chess.fen(), childHistory);
+              return cont ? [{ node: cont }] : [];
+            })();
         const node: WalkthroughTreeNode = {
           san: mv.san,
           movedBy: moverColor,
           idea: `${sanToSpeech(mv.san)} — ${freqClause(b.count, total)}. ${why}.`,
-          children: cont ? [{ node: cont }] : [],
+          children,
         };
         return {
           label: `${sanToSpeech(mv.san)} — ${freqClause(b.count, total)}`,
