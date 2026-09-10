@@ -2480,7 +2480,11 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   const a = ask.toLowerCase();
   if (/\bhow\s+many\s+(?:pieces|pawns)\s+do\s+i\s+have\b|\bmaterial\s+(?:count|balance|situation)\b|\bam\s+i\s+up\s+material\b|\bhow\s+much\s+material\b/.test(a)) return 'material';
   if (/\bwho\s+controls\s+the\s+(?:cent(?:er|re)|board)\b|\bdo\s+i\s+have\s+(?:more|the)\s+(?:cent(?:er|re))\b|\bis\s+the\s+cent(?:er|re)\s+mine\b/.test(a)) return 'center';
-  if (/\bhave\s+i\s+developed\b|\bam\s+i\s+(?:behind|ahead)\s+in\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
+  // Development — includes the WHO/comparative phrasing (David 2026-09-10 audit:
+  // "who is better developed?" fell to the eval lane because the classifier only
+  // matched first-person "have I developed"). The computer (developmentRead) was
+  // already wired via the positionalTopic path; this connects the ask to it.
+  if (/\bhave\s+i\s+developed\b|\b(?:am\s+i|are\s+we)\s+(?:behind|ahead|better)\s+(?:in\s+)?develop\w*\b|\bwho(?:'?s| is)?\s+(?:better\s+|more\s+)?developed\b|\bwho\s+has\s+(?:better|more)\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
   // SPACE — "who has more space / do I have a space advantage".
   if (/\bspace\s+(?:advantage|edge)\b|\bwho\s+has\s+(?:the\s+|more\s+)?space\b|\bdo\s+i\s+have\s+(?:more|the)\s+space\b|\bmore\s+space\b/.test(a)) return 'space';
   // BISHOP PAIR — "do I have the bishop pair / two bishops".
@@ -2510,7 +2514,11 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   // open "what/where are the key squares / outposts / holes" phrasings.
   if (/\b(?:key|weak|strong|important|critical|good|outpost)\s+squares?\b|\boutposts?\b|\bwhere.*\bholes?\b|\bany\s+holes?\b|\bwhat\s+squares?\s+(?:should|matter|to\s+(?:aim|target))\b/.test(a)) return 'key-squares';
   // BEST / WORST PIECE — "which is my best / most active / worst piece".
-  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)\s+piece\b|\bwhich\s+piece\s+is\s+(?:my\s+)?(?:best|worst|most\s+active)\b/.test(a)) return 'best-piece';
+  // Allow an intervening "placed" — "best PLACED piece" (David 2026-09-10 audit:
+  // it fell to the best-MOVE lane because the regex required best/worst adjacent
+  // to "piece"). worst-placed already worked via the board router's activity arm;
+  // this makes "best placed" resolve to the same best-piece computer.
+  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)(?:[\s-]+placed)?\s+piece\b|\bwhich\s+piece\s+is\s+(?:my\s+)?(?:best|worst|most\s+active)\b/.test(a)) return 'best-piece';
   if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
   if (/\bis\s+my\s+(?:bishop|knight|rook|queen|pawn|king)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward|(?:well[\s-]+)?placed|happy|safe\s+there|strong|weak)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed|well[\s-]+placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
   return null;

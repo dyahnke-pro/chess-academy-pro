@@ -160,6 +160,32 @@ player-game lookup; else → brain Q&A (grounded).
    Philidor walkthrough is the same fuzzy-junk class as the nav/confidence-floor
    fixes.
 
+## FULL AUDIT 2026-09-10 (by hand, all capability groups) — RESULTS
+Every group driven, real bubble read + judged. Fixed the clear classifier bugs;
+remaining are position-dependent/soft or a moderate-risk path (see severity).
+
+FIXED (classifier root-cause, connect asks to EXISTING computers):
+- "who is better developed?" → was the eval lane; classifier now maps the
+  WHO/comparative phrasing to positionalTopic 'development' (developmentRead).
+- "what is my best PLACED piece?" → was the best-MOVE lane; 'best-piece' regex
+  now allows an intervening "placed"/"most active" (strongestWeakestPiece).
+
+REMAINING (severity-ordered):
+- G (real, moderate risk) — "what do masters play in the \<named opening\>?"
+  uses the BOARD fen (masterPlayContext = liveState.fen), ignoring the named
+  opening. Fix = resolve the named opening → its FEN → master-play lookup;
+  touches the validated master-play grounding path. Only wrong when board ≠
+  named opening.
+- D (soft, position-dependent) — "where should my knight go?" on an undeveloped
+  position → the maneuver computer returns null (no reroute) → plan fallback.
+  Works on a real middlegame; the gap is it doesn't say "develop it to c6/f6"
+  from the home square.
+- E (soft) — "what is their plan?" early → "their most active piece is …" (the
+  board-plan computer is thin before development).
+- F (suspect) — "give me a hint" returned empty once; works elsewhere (likely a
+  read/timing flake, not a lane break).
+- Minor: center "0-0 contested" after 1.e4; Sicilian how-to picks Alapin var.
+
 ## OPEN FINDINGS from hand-driving (2026-09-10) — real, unflagged, need David's priority
 These ANSWER (so the non-empty matrix passes them) but the CONTENT is off — the
 kind of thing only driving-by-hand + reading the bubble catches. Left for a
