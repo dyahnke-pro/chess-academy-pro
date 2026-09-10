@@ -894,6 +894,13 @@ export function isEndgameWeaknessQuestion(ask: string | undefined): boolean {
  *  (aggregate master practice) — this is ONE player's actual games. */
 const PLAYER_GAMES_QUESTION_RE = anyOf([
   String.raw`\bhow\s+does\s+(?:he|she|they|\w+)\s+(?:play|handle|treat|approach|continue|meet)\b`,
+  // PRESENT-TENSE named-player arm: "how Magnus plays the Catalan", "teach me
+  // how Levy plays the Vienna" (David 2026-09-10). Without this, "how X plays"
+  // (no "does") fell to opening-capture and fuzzy-matched a WRONG opening
+  // (Catalan → Smith-Morra). Negative lookahead excludes first-person /
+  // auxiliary ("how do I play", "how I play", "how should I play") so the
+  // student's own opening-profile / theory asks are NOT hijacked.
+  String.raw`\bhow\s+(?!do(?:es)?\b|i\b|you\b|we\b|to\b|can\b|should\b|would\b|could\b|will\b)[a-z]+\s+(?:plays?|handles?|treats?|approaches?|meets?)\b`,
   String.raw`\b(?:show|see|find|pull\s+up|got)\s+(?:me\s+)?(?:his|her|their|\w+'?s)\s+games?\b`,
   String.raw`\bwhat\s+does\s+(?:he|she|they|the\s+pro|\w+)\s+(?:do|play|prefer|choose)\s+(?:here|in\s+this|in\s+the)\b`,
   String.raw`\bwhat\s+(?:did|has)\s+(?:he|she|they|\w+)\s+(?:play(?:ed)?|do(?:ne)?)\b`,

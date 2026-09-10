@@ -907,6 +907,11 @@ describe('isPlayerGamesQuestion', () => {
     'has he ever played this',
     'his real games',
     'what did Hikaru play',
+    // present-tense named-player arm (David 2026-09-10) — "how X plays"
+    'teach me how Magnus plays the Catalan',
+    'how Levy plays the Vienna',
+    'how Danya plays the Alapin',
+    'how magnus handles the QGD',
   ])('matches: %s', (q) => expect(isPlayerGamesQuestion(q)).toBe(true));
   // 2nd-person "why did YOU play that?" is about the COACH's own lesson move
   // (move-purpose), NOT a pro-game lookup — was misrouting to "which player do
@@ -916,6 +921,11 @@ describe('isPlayerGamesQuestion', () => {
     'why did you play that',
     'what do you play here',
     'did i play that right',
+    // the student's OWN opening/theory asks must NOT be hijacked by the
+    // present-tense arm (David 2026-09-10)
+    'how do I play the Sicilian',
+    'how should I play the middlegame',
+    'how do I play against an isolated queen pawn',
   ])('does NOT fire on 1st/2nd-person own-move asks: %s', (q) => expect(isPlayerGamesQuestion(q)).toBe(false));
 });
 
