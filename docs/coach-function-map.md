@@ -176,6 +176,15 @@ late):
   BOARD (start → "can't name yet") instead of naming the opening from the typed
   moves (Caro-Kann). Assembler should parse the moves in the ask.
 
+- **"teach me how \<pro\> plays \<opening\>" declines instead of finding games**
+  — FIXED the wrong-opening break (no more Catalan→Smith-Morra; routes to the
+  pro-game lane), but the teach-me path says "no \<pro\> games in this line"
+  where "how does \<pro\> play \<opening\>" FINDS the game (Magnus/Dreev,
+  Levy/Kshetrapala). The opening context isn't threaded after the requestedName
+  guard clears the capture, so the pro-game lane defaults to the board (start) =
+  "no games in this line." Honest decline > wrong opening, but the ideal is to
+  thread the opening so it finds the games like the "how does" phrasing does.
+
 ## FUTURE (deferred until after the audit — David 2026-09-10)
 - **Set up a board from a PHOTO** — accept a photo/screenshot of a board,
   reconstruct the FEN (recognizer produces candidates, chess.js validates —
