@@ -28,6 +28,13 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 const SECTION = (process.env.MATRIX_SECTION || 'all').toLowerCase();
 const RUN_Q = SECTION === 'all' || SECTION === 'questions';
 const RUN_A = SECTION === 'all' || SECTION === 'actions';
+// David 2026-09-10: "reaudit asking new questions but testing the same surface
+// functions." VARIANT 0 = primary phrasing; 1/2 = the `v:[alt1,alt2]` alternates
+// per cell — SAME function, DIFFERENT words. Each consecutive pass runs a new
+// variant so a green streak proves the FUNCTION works, not that we memorised a
+// string.
+const VARIANT = Math.max(0, Math.min(2, Number(process.env.MATRIX_VARIANT || 0)));
+const phrasing = (cell) => (VARIANT > 0 && cell.v && cell.v[VARIANT - 1]) ? cell.v[VARIANT - 1] : cell.ask ?? cell.cmd;
 const STOCK_DEFLECT = "I can't verify that precisely from grounded data right now";
 const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 // A quiet middlegame so board-read questions have real features to name.
@@ -76,59 +83,59 @@ async function ask(p, q, { settleMs = 1500, maxPolls = 26 } = {}) {
 // ── QUESTION MATRIX — representative ask per intent. { id, ask, mid?:true } ──
 const QUESTIONS = [
   // live board reads (need a real position → mid)
-  { id: 'assessment', ask: 'who is winning here?', mid: true },
-  { id: 'whose-turn', ask: 'whose turn is it?', mid: true },
-  { id: 'material', ask: 'who has more material?', mid: true },
-  { id: 'center', ask: 'who controls the center?', mid: true },
-  { id: 'development', ask: 'who is better developed?', mid: true },
-  { id: 'structure', ask: 'do I have any weak pawns?', mid: true },
-  { id: 'structure-name', ask: 'what pawn structure is this?', mid: true },
-  { id: 'king-safety', ask: 'is my king safe?', mid: true },
-  { id: 'space', ask: 'do I have a space advantage?', mid: true },
-  { id: 'bishop-pair', ask: 'do I have the bishop pair?', mid: true },
-  { id: 'best-piece', ask: 'what is my best placed piece?', mid: true },
-  { id: 'worst-piece', ask: 'what is my worst placed piece?', mid: true },
-  { id: 'open-files', ask: 'are there any open files?', mid: true },
-  { id: 'pawn-breaks', ask: 'what pawn breaks do I have?', mid: true },
-  { id: 'key-squares', ask: 'what are the key squares here?', mid: true },
-  { id: 'maneuver', ask: 'where should my knight go?', mid: true },
-  { id: 'my-plan', ask: 'what is my plan here?', mid: true },
-  { id: 'opponent-plan', ask: 'what is their plan?', mid: true },
-  { id: 'hanging', ask: 'is anything hanging?', mid: true },
-  { id: 'threats', ask: 'are there any threats?', mid: true },
-  { id: 'tactics-avail', ask: 'can I win material here?', mid: true },
-  { id: 'piece-purpose', ask: 'what does my bishop on g2 do?', mid: true },
-  { id: 'square-control', ask: 'who controls d5?', mid: true },
-  { id: 'last-move', ask: 'what was the last move?', mid: true },
+  { id: 'assessment', ask: 'who is winning here?', v: ['how does this position stand?', 'evaluate this position for me'], mid: true },
+  { id: 'whose-turn', ask: 'whose turn is it?', v: ['who moves now?', 'is it my move?'], mid: true },
+  { id: 'material', ask: 'who has more material?', v: ["what's the material count?", 'am I up or down material?'], mid: true },
+  { id: 'center', ask: 'who controls the center?', v: ["how's the center looking?", 'who owns the middle of the board?'], mid: true },
+  { id: 'development', ask: 'who is better developed?', v: ['am I ahead in development?', "how's my development?"], mid: true },
+  { id: 'structure', ask: 'do I have any weak pawns?', v: ["how are my pawns?", 'any pawn weaknesses in my camp?'], mid: true },
+  { id: 'structure-name', ask: 'what pawn structure is this?', v: ['describe the pawn structure', 'what kind of pawn skeleton do we have?'], mid: true },
+  { id: 'king-safety', ask: 'is my king safe?', v: ['how safe is my king?', 'any danger to my king?'], mid: true },
+  { id: 'space', ask: 'do I have a space advantage?', v: ['who has more space?', 'am I cramped or do I have room?'], mid: true },
+  { id: 'bishop-pair', ask: 'do I have the bishop pair?', v: ['who has the two bishops?', 'is the bishop pair mine?'], mid: true },
+  { id: 'best-piece', ask: 'what is my best placed piece?', v: ['which of my pieces is strongest?', "what's my best piece right now?"], mid: true },
+  { id: 'worst-piece', ask: 'what is my worst placed piece?', v: ['which piece of mine is badly placed?', "what's my worst piece?"], mid: true },
+  { id: 'open-files', ask: 'are there any open files?', v: ['which files are open?', 'any open lines for the rooks?'], mid: true },
+  { id: 'pawn-breaks', ask: 'what pawn breaks do I have?', v: ['what pawn break should I aim for?', 'how do I break the position open?'], mid: true },
+  { id: 'key-squares', ask: 'what are the key squares here?', v: ['which squares matter most here?', 'what are the important squares?'], mid: true },
+  { id: 'maneuver', ask: 'where should my knight go?', v: ['how do I improve my knight?', "what's the best square for my knight?"], mid: true },
+  { id: 'my-plan', ask: 'what is my plan here?', v: ['what should I be doing here?', 'give me a plan for this position'], mid: true },
+  { id: 'opponent-plan', ask: 'what is their plan?', v: ['what is my opponent trying to do?', 'what are they setting up?'], mid: true },
+  { id: 'hanging', ask: 'is anything hanging?', v: ['are any pieces undefended?', 'is anything loose on the board?'], mid: true },
+  { id: 'threats', ask: 'are there any threats?', v: ['what is being threatened?', 'any immediate threats I should see?'], mid: true },
+  { id: 'tactics-avail', ask: 'can I win material here?', v: ['is there a tactic here?', 'any combinations available?'], mid: true },
+  { id: 'piece-purpose', ask: 'what does my bishop on g2 do?', v: ["what's the role of my g2 bishop?", 'why is my bishop on g2?'], mid: true },
+  { id: 'square-control', ask: 'who controls d5?', v: ["who's fighting for d5?", 'is d5 mine or theirs?'], mid: true },
+  { id: 'last-move', ask: 'what was the last move?', v: ['what did they just play?', 'what move was just made?'], mid: true },
   // moves
-  { id: 'best-move', ask: 'what is the best move?', mid: true },
-  { id: 'why-best', ask: 'why is that the best move?', mid: true },
-  { id: 'candidate', ask: 'is Nd5 a good move here?', mid: true },
-  { id: 'master-play', ask: 'what do masters play in the Italian?' },
-  { id: 'hint', ask: 'give me a hint' , mid: true },
+  { id: 'best-move', ask: 'what is the best move?', v: ['what should I play here?', "what's the strongest move?"], mid: true },
+  { id: 'why-best', ask: 'why is that the best move?', v: ['why is that move good?', 'what makes that the best move?'], mid: true },
+  { id: 'candidate', ask: 'is Nd5 a good move here?', v: ['should I play Nd5?', 'what about Nd5 here?'], mid: true },
+  { id: 'master-play', ask: 'what do masters play in the Italian?', v: ['how do the pros handle the Italian?', 'what main line do masters choose in the Italian?'] },
+  { id: 'hint', ask: 'give me a hint', v: ['can I get a hint?', 'nudge me in the right direction'], mid: true },
   // concepts / teaching
-  { id: 'concept', ask: "what's a fork?" },
-  { id: 'fundamentals', ask: 'teach me the fundamentals' },
-  { id: 'theory', ask: 'how do I play against an isolated queen pawn?' },
-  { id: 'teaching-method', ask: 'how do you teach the Caro-Kann?' },
-  { id: 'famous-game', ask: 'show me a famous game' },
+  { id: 'concept', ask: "what's a fork?", v: ['explain what a fork is', 'how does a fork work?'] },
+  { id: 'fundamentals', ask: 'teach me the fundamentals', v: ['what are the basics I should know?', 'teach me the core principles'] },
+  { id: 'theory', ask: 'how do I play against an isolated queen pawn?', v: ["how do I handle an isolated queen's pawn?", "what's the plan versus an IQP?"] },
+  { id: 'teaching-method', ask: 'how do you teach the Caro-Kann?', v: ["walk me through how you'd teach the Caro-Kann", 'how would you coach the Caro-Kann?'] },
+  { id: 'famous-game', ask: 'show me a famous game', v: ['show me a classic game', 'can you show a famous master game?'] },
   // openings
-  { id: 'opening-profile', ask: 'how do I play the Sicilian?' },
-  { id: 'opening-traps', ask: 'what are the traps in the Italian?' },
-  { id: 'name-opening', ask: 'what opening is 1.e4 c6?' },
-  { id: 'counter-rep', ask: 'what should I play against the London?' },
+  { id: 'opening-profile', ask: 'how do I play the Sicilian?', v: ['teach me the Sicilian', "what's the idea behind the Sicilian?"] },
+  { id: 'opening-traps', ask: 'what are the traps in the Italian?', v: ['any traps I should know in the Italian?', 'show me Italian Game traps'] },
+  { id: 'name-opening', ask: 'what opening is 1.e4 c6?', v: ['what opening starts with 1.e4 c6?', 'which opening is e4 c6?'] },
+  { id: 'counter-rep', ask: 'what should I play against the London?', v: ['how do I meet the London System?', "what's a good answer to the London?"] },
   // self / stats (no imported games on a fresh context — expect honest "import" not a deflect)
-  { id: 'stats', ask: "what's my rating?" },
-  { id: 'progress', ask: 'am I improving?' },
-  { id: 'strengths', ask: 'what am I good at?' },
-  { id: 'mistakes', ask: 'what mistakes do I make?' },
-  { id: 'weakness-brief', ask: 'what should I work on?' },
+  { id: 'stats', ask: "what's my rating?", v: ['how strong am I?', 'what rating am I?'] },
+  { id: 'progress', ask: 'am I improving?', v: ['am I getting better?', "how's my progress?"] },
+  { id: 'strengths', ask: 'what am I good at?', v: ['what are my strengths?', 'where do I play well?'] },
+  { id: 'mistakes', ask: 'what mistakes do I make?', v: ['what are my common errors?', 'what do I keep getting wrong?'] },
+  { id: 'weakness-brief', ask: 'what should I work on?', v: ['what should I improve?', 'where should I focus my training?'] },
   // tactics / endgame / app
-  { id: 'tactics-profile', ask: 'how are my tactics?' },
-  { id: 'endgame', ask: 'how do I win a king and pawn endgame?' },
-  { id: 'time-trouble', ask: 'do I get into time trouble?' },
-  { id: 'app-help', ask: 'what does the tactics tab do?' },
-  { id: 'settings', ask: 'how do I change the board theme?' },
+  { id: 'tactics-profile', ask: 'how are my tactics?', v: ["how's my tactical ability?", 'am I good at tactics?'] },
+  { id: 'endgame', ask: 'how do I win a king and pawn endgame?', v: ['teach me king and pawn endgames', 'how do I convert a king and pawn ending?'] },
+  { id: 'time-trouble', ask: 'do I get into time trouble?', v: ['do I manage my clock well?', 'am I prone to time pressure?'] },
+  { id: 'app-help', ask: 'what does the tactics tab do?', v: ['explain the tactics section', "what's on the tactics page?"] },
+  { id: 'settings', ask: 'how do I change the board theme?', v: ['how do I change how the board looks?', 'where do I set the board colors?'] },
 ];
 
 // ── ACTION MATRIX — command, then verify real state change. ──
@@ -143,12 +150,12 @@ async function placementChanged(p, from) {
 
 const ACTIONS = [
   {
-    id: 'play_move', cmd: 'play the move e4 for me',
+    id: 'play_move', cmd: 'play the move e4 for me', v: ['make the move e4', 'go ahead and play e4'],
     verify: async (p) => { const before = await readPlacement(p); return placementChanged(p, before); },
     check: async (p) => { const pl = await readPlacement(p); return pl.e4 === 'wP' && !pl.e2; },
   },
   {
-    id: 'take_back_move', cmd: 'take that move back',
+    id: 'take_back_move', cmd: 'take that move back', v: ['undo that move', 'take back the last move'],
     setup: async (p) => { await ask(p, 'play the move e4 for me'); await verifyPlacement(p, placementOf('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1')); },
     check: async (p) => samePlacement(await readPlacement(p), placementOf(START)),
   },
@@ -158,20 +165,20 @@ const ACTIONS = [
   // The user-facing "put this line on the board" capability is start_walkthrough
   // (below), which is the cell that verifies board actuation from a named line.
   {
-    id: 'reset_board', cmd: 'reset the board',
+    id: 'reset_board', cmd: 'reset the board', v: ['clear the board', 'start the board over'],
     setup: async (p) => { await ask(p, 'play the move d4 for me'); await sleep(2000); },
     check: async (p) => samePlacement(await readPlacement(p), placementOf(START)),
   },
   {
-    id: 'navigate_weaknesses', cmd: 'take me to my weaknesses',
+    id: 'navigate_weaknesses', cmd: 'take me to my weaknesses', v: ['go to my weaknesses', 'open my weaknesses'],
     check: async (p) => { await sleep(2500); return /weakness/i.test(p.url()); },
   },
   {
-    id: 'navigate_tactics', cmd: 'go to the tactics trainer',
+    id: 'navigate_tactics', cmd: 'go to the tactics trainer', v: ['take me to tactics', 'open the puzzles'],
     check: async (p) => { await sleep(2500); return /tactic|puzzle|train/i.test(p.url()); },
   },
   {
-    id: 'start_walkthrough', cmd: 'start a lesson on the Italian Game',
+    id: 'start_walkthrough', cmd: 'start a lesson on the Italian Game', v: ['teach me the Italian Game', 'walk me through the Italian Game'],
     check: async (p) => {
       // The teach walkthrough mounts [walkthrough-skip]; verify it started AND
       // on the RIGHT opening (answer names "Italian"), not a fuzzy mismatch.
@@ -186,7 +193,7 @@ const ACTIONS = [
     },
   },
   {
-    id: 'quiz_user', cmd: 'quiz me on the Italian Game',
+    id: 'quiz_user', cmd: 'quiz me on the Italian Game', v: ['test me on the Italian Game', 'give me a quiz on the Italian Game'],
     check: async (p) => {
       for (let i = 0; i < 10; i += 1) { await sleep(1500); const body = (await p.locator('body').innerText()).toLowerCase(); if (/quiz|which move|what would you play|your turn|find the/.test(body)) return true; }
       return false;
@@ -200,7 +207,7 @@ async function main() {
 
   // QUESTIONS — batches of 8 on a fresh page (reload between to avoid pollution).
   if (RUN_Q) {
-  console.log('\n═══ QUESTION MATRIX ═══');
+  console.log(`\n═══ QUESTION MATRIX (variant ${VARIANT}) ═══`);
   const BATCH = 8;
   for (let start = 0; start < QUESTIONS.length; start += BATCH) {
     const batch = QUESTIONS.slice(start, start + BATCH);
@@ -209,11 +216,12 @@ async function main() {
     for (const q of batch) {
       try {
         if (q.mid && !seededMid) { await ask(p, `set up the board after 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.c3 Nf6 5.d3 d6 6.Nbd2 a6 7.Bb3 Ba7 8.h3 O-O 9.O-O`); await sleep(2500); seededMid = true; }
-        const a = await ask(p, q.ask);
+        const qText = phrasing(q);
+        const a = await ask(p, qText);
         const deflect = a.includes(STOCK_DEFLECT);
         const empty = a.length < 8;
         const pass = !empty && !deflect;
-        report.questions.push({ id: q.id, ask: q.ask, pass, deflect, empty, answer: a.slice(0, 160) });
+        report.questions.push({ id: q.id, ask: qText, pass, deflect, empty, answer: a.slice(0, 160) });
         console.log(`${pass ? '✓' : '✗'} ${q.id.padEnd(16)} ${deflect ? '[STOCK DEFLECT]' : empty ? '[EMPTY]' : ''} ${a.slice(0, 90)}`);
       } catch (e) { report.questions.push({ id: q.id, ask: q.ask, pass: false, error: String(e).slice(0, 100) }); console.log(`✗ ${q.id.padEnd(16)} ERROR ${String(e).slice(0, 80)}`); }
     }
@@ -224,15 +232,16 @@ async function main() {
 
   // ACTIONS — fresh page each (state isolation matters).
   if (RUN_A) {
-  console.log('\n═══ ACTION MATRIX (actuate for real, never fake-done) ═══');
+  console.log(`\n═══ ACTION MATRIX (variant ${VARIANT} — actuate for real, never fake-done) ═══`);
   for (const act of ACTIONS) {
     const { ctx, p, errs } = await newTeachPage(browser);
+    const cmdText = phrasing(act);
     try {
       if (act.setup) await act.setup(p);
-      await ask(p, act.cmd, { maxPolls: 12 });
+      await ask(p, cmdText, { maxPolls: 12 });
       const ok = act.check ? await act.check(p) : (act.verify ? await act.verify(p) : false);
-      report.actions.push({ id: act.id, cmd: act.cmd, pass: ok, errs });
-      console.log(`${ok ? '✓' : '✗ FAKE-DONE?'} ${act.id.padEnd(20)} "${act.cmd}"${errs.length ? ' ⚠' + errs.join(';') : ''}`);
+      report.actions.push({ id: act.id, cmd: cmdText, pass: ok, errs });
+      console.log(`${ok ? '✓' : '✗ FAKE-DONE?'} ${act.id.padEnd(20)} "${cmdText}"${errs.length ? ' ⚠' + errs.join(';') : ''}`);
     } catch (e) { report.actions.push({ id: act.id, cmd: act.cmd, pass: false, error: String(e).slice(0, 120) }); console.log(`✗ ${act.id.padEnd(20)} ERROR ${String(e).slice(0, 80)}`); }
     await ctx.close();
   }
