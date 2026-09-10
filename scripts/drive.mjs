@@ -36,13 +36,19 @@ async function main() {
   if (SEED.length) { for (const mv of SEED) { await askRead(p, `play the move ${mv} for me`); await sleep(400); } const pl = await readPlacement(p); console.log(`SEEDED via ${SEED.join(' ')} → pieces=${pc(pl)} e4=${pl.e4||'-'} c4=${pl.c4||'-'} c5=${pl.c5||'-'}`); }
   for (const q of ASKS) {
     const b0 = await readPlacement(p);
+    const bodyBefore = new Set((await p.locator('body').innerText()).split('\n').map((s) => s.trim()).filter(Boolean));
     const a = await askRead(p, q);
     await sleep(2500);
     const b1 = await readPlacement(p);
     const wt = await p.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-progress"]').count();
+    // Fallback: when no assistant BUBBLE rendered, capture any NEW body text —
+    // catches responses that render outside a chat-message-assistant bubble
+    // (hint UI, banners) so the reader can't false-negative a working lane.
+    let bodyDelta = '';
+    if (!a) { const now = (await p.locator('body').innerText()).split('\n').map((s) => s.trim()).filter(Boolean); bodyDelta = now.filter((l) => !bodyBefore.has(l) && l.length > 4 && l.toLowerCase() !== q.toLowerCase()).join(' | ').slice(0, 280); }
     console.log(`\n▶ "${q}"`);
     console.log(`  URL   : ${p.url().replace(BASE, '')}`);
-    console.log(`  BUBBLE: ${a ? a.slice(0, 280) : '[NO ASSISTANT BUBBLE]'}`);
+    console.log(`  BUBBLE: ${a ? a.slice(0, 280) : (bodyDelta ? '[non-bubble] ' + bodyDelta : '[NOTHING RENDERED]')}`);
     console.log(`  BOARD : ${pc(b0)}→${pc(b1)} changed=${JSON.stringify(b0)!==JSON.stringify(b1)} walkthrough=${wt>0}`);
   }
   await ctx.close(); await browser.close();

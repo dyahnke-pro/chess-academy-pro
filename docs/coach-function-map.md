@@ -182,7 +182,7 @@ REMAINING (severity-ordered):
   from the home square.
 - E (soft) — "what is their plan?" early → "their most active piece is …" (the
   board-plan computer is thin before development).
-- F (suspect) — "give me a hint" returned empty once; works elsewhere (likely a
+- F: RESOLVED — hint works ("Here's your hint: look at your pawn on e7…"); earlier empties were a flaky read, not a break.
   read/timing flake, not a lane break).
 - Minor: center "0-0 contested" after 1.e4; Sicilian how-to picks Alapin var.
 
