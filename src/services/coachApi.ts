@@ -4882,9 +4882,16 @@ export async function getCoachChatResponse(
             if (sans.length === 0) {
               const typed = lastUserMessage() ?? '';
               if (/[a-h][1-8]/i.test(typed)) {
+                // Strip the question prefix — "what opening is 1.e4 c6?" — before
+                // chess.js. loadPgn chokes on the leading prose ("Invalid move:
+                // what"), so extract the move span from the first move-number or
+                // SAN token to the end (David 2026-09-10: this deflected to the
+                // board and answered "can't name yet" for a clearly-named line).
+                const span = (typed.match(/\d+\s*\.+\s*(?:O-O(?:-O)?|[NBRQKO]|[a-h]).*$/i)
+                  ?? typed.match(/\b[a-h][1-8].*$/i))?.[0] ?? typed;
                 try {
                   const probe = new Chess();
-                  probe.loadPgn(typed.replace(/\?/g, ' '));
+                  probe.loadPgn(span.replace(/\?/g, ' '));
                   const hist = probe.history();
                   if (hist.length > 0) sans = hist;
                 } catch { /* not a parseable move list */ }

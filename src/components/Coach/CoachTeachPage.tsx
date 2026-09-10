@@ -3678,6 +3678,15 @@ export function CoachTeachPage(): JSX.Element {
         // (David's 2026-07-31 audit, finding 103). Same class as the
         // learn/teach synonym fix below — don't lose the ask to semantics.
         /\b(teach(?:\s+me)?|(?:i\s+want\s+to\s+|help\s+me\s+)?learn|study|continue|walk\s*(?:me\s+)?through|show\s+me|let'?s\s+do|let'?s\s+go\s+over|let'?s\s+try|tell\s+me\s+about|review)\b\s+(?:the\s+)?(.+?)(?:\s+(?:opening|defense|defence|game|gambit|attack|variation|line|system))?[.?!]*\s*$/i;
+      // "how do I play the Sicilian" — a request to LEARN a named opening, not
+      // a board-plan question (David 2026-09-10: it answered with a generic
+      // start-position White plan, backwards for a Black defense). Route it to
+      // the opening lesson like "teach me the Sicilian". Excludes "against"
+      // (counter-repertoire) and only fires when the captured name RESOLVES to a
+      // real opening (guards the fuzzy-junk / wrong-opening class); otherwise it
+      // falls through to the brain unchanged.
+      const HOW_TO_PLAY_OPENING =
+        /^how\s+(?:(?:do|can|should|would)\s+i|to)\s+play\s+(?:the\s+)?(?!against\b|versus\b|vs\b)(.+?)[?.!]*$/i;
       // Stage-keyword detection: user inputs like "drill Vienna" /
       // "Vienna punish" / "quiz me on the Sicilian" should skip the
       // walkthrough animation and land directly at that stage. User
@@ -3914,6 +3923,13 @@ export function CoachTeachPage(): JSX.Element {
         } else {
           requestedName = stageStrippedInput;
         }
+      } else if (HOW_TO_PLAY_OPENING.test(workingInput)) {
+        // "how do I play the Sicilian" → the Sicilian lesson, but ONLY when the
+        // captured name resolves to a real opening. A non-opening ("how do I
+        // play the middlegame") leaves requestedName null → the brain answers,
+        // exactly as before (no regression, no fuzzy-junk).
+        const cand = workingInput.match(HOW_TO_PLAY_OPENING)?.[1]?.trim() ?? '';
+        requestedName = cand && resolveOpeningEntry(cand) ? cand : null;
       } else if (
         workingInput.length <= 60 &&
         !workingInput.includes('?') &&

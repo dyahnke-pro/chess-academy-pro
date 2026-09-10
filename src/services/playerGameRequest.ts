@@ -67,6 +67,12 @@ const OPENING_LEAD_FILLER = /^(?:against|versus|vs\.?|in|with|using|on|the|a|an)
 const PATTERNS: ReadonlyArray<RegExp> = [
   // "how does magnus play (against) the catalan"
   /\bhow\s+(?:does|do|did|would|should|'s)\s+(.+?)\s+(?:play|approach|handle|tackle|meet|use|do\s+with)\s+(.+?)\s*[?.!]*$/i,
+  // PRESENT TENSE: "how magnus plays the catalan", "teach me how levy plays the
+  // vienna" (David 2026-09-10). Requires the -s form (plays/handles/…) so the
+  // first-person infinitive "how do I PLAY the Sicilian" (no s) never matches —
+  // that's the student's own opening ask, not a pro-game request. The isPlausible
+  // player + stopword guards still reject "how they play" style leftovers.
+  /\bhow\s+(.+?)\s+(?:plays|approaches|handles|tackles|meets|uses|wields|treats)\s+(.+?)\s*[?.!]*$/i,
   // "show me a game (that) magnus played (in/with) the catalan"
   /\b(?:show|see|pull\s*up|find|get|give|got|have)\b.*?\b(?:game|games|match|matches)\b.*?\b(.+?)\s+(?:played|plays|playing|won\s+with|win\s+with|used|wielded)\s+(.+?)\s*[?.!]*$/i,
   // "a game (that) magnus played the catalan"

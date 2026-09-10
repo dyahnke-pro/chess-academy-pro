@@ -18,6 +18,12 @@ describe('parsePlayerGameRequest', () => {
       ['show me magnus in the catalan', 'magnus', 'catalan'],
       ['can you show me a game naroditsky played the caro-kann', 'naroditsky', 'caro-kann'],
       ['show me a game that magnus won with the catalan', 'magnus', 'catalan'],
+      // present-tense "how X plays" + "teach me how X plays" (David 2026-09-10)
+      ['how magnus plays the catalan', 'magnus', 'catalan'],
+      ['teach me how magnus plays the catalan', 'magnus', 'catalan'],
+      ['how levy plays the vienna', 'levy', 'vienna'],
+      ['how danya plays the alapin', 'danya', 'alapin'],
+      ['teach me how hikaru handles the najdorf', 'hikaru', 'najdorf'],
     ];
     it.each(cases)('%s → player/opening', (input, player, opening) => {
       const r = parsePlayerGameRequest(input);
@@ -36,6 +42,9 @@ describe('parsePlayerGameRequest', () => {
       'show me a game in the catalan', // no player named
       'how does white play the catalan', // "white" is not a player
       'how do i play the catalan', // "i" is not a player
+      'how should i play the middlegame', // present-tense guard: infinitive, not a pro
+      'how do you play the vienna', // "you" is not a player
+      'how do i play against an isolated queen pawn',
       'middle game plans in the pirc',
       'can you show me a trap in the italian', // "trap" is a concept, not a player
       'show me a fork in this position',
