@@ -160,6 +160,22 @@ player-game lookup; else → brain Q&A (grounded).
    Philidor walkthrough is the same fuzzy-junk class as the nav/confidence-floor
    fixes.
 
+## OPEN FINDINGS from hand-driving (2026-09-10) — real, unflagged, need David's priority
+These ANSWER (so the non-empty matrix passes them) but the CONTENT is off — the
+kind of thing only driving-by-hand + reading the bubble catches. Left for a
+deliberate fix (they touch the working opening-teach/name lanes; not band-aiding
+late):
+- **"how do I play the \<named opening\>"** (e.g. "how do I play the Sicilian") →
+  gives a generic start-position plan ("your plan: e4, d4, e5 — White better"),
+  NOT the named opening's profile/plans. `OPENING_PROFILE_RE` only matches the
+  student's OWN openings ("my best opening"); a request to learn a NAMED
+  opening's ideas falls to the plan lane. For a Black defense (Sicilian) the
+  White plan is backwards.
+- **"what opening is \<typed moves\>"** (e.g. "what opening is 1.e4 c6") →
+  `isNameOpeningQuestion` detects the typed move list, but the answer reads the
+  BOARD (start → "can't name yet") instead of naming the opening from the typed
+  moves (Caro-Kann). Assembler should parse the moves in the ask.
+
 ## FUTURE (deferred until after the audit — David 2026-09-10)
 - **Set up a board from a PHOTO** — accept a photo/screenshot of a board,
   reconstruct the FEN (recognizer produces candidates, chess.js validates —
