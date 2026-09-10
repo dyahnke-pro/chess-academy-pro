@@ -283,7 +283,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isStructuralConceptTarget, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3995,22 +3995,10 @@ export function CoachTeachPage(): JSX.Element {
       )) {
         requestedName = null;
       }
-      // A STRUCTURAL-CONCEPT ask is teaching from the BOOK CORPUS, not an
-      // opening. "teach me about pawn structure" captured "about pawn structure"
-      // and the FUZZY opening resolver forced it to the Queen's Pawn Game (on the
-      // token "pawn") — the student asked to learn a concept and got a wrong
-      // opening lesson (David 2026-09-09 loop probe, LIVE on prod). Same class as
-      // the coach-question guards above: a captured subject that is a structural
-      // concept (pawn structure / isolated pawn / bishop pair / outpost / doubled
-      // pawns / weak square …) must reach the spine's concept + theory lane
-      // (chess-concepts.json) instead of the opening matcher. Gated on BOTH a
-      // concept FRAME (isConceptQuestion — "teach me about / explain / what is")
-      // AND a structural token, so "teach me the Sicilian" / "the Queen's Pawn"
-      // (an actual opening request) still routes to the opening pipeline.
-      if (requestedName && !opts?.teachIntent && isConceptQuestion(workingInput)
-        && (isStructuralConceptTarget(requestedName) || isStructuralConceptTarget(workingInput))) {
-        requestedName = null;
-      }
+      // (The old structural-concept guard here is retired — the CONFIDENCE FLOOR
+      // below, right after the Tier-0 gate, now drops EVERY grounded-Q&A intent
+      // that skipped Tier-0 to the brain. That subsumes this guard AND catches
+      // non-structural concept asks it missed, e.g. "teach me about forks".)
       // "HOW DO YOU TEACH the Caro-Kann?" is a question about METHOD, not a
       // request to start the lesson — TEACH_PATTERN's "teach" verb captured it
       // and popped the line picker (2026-08-13 all-questions audit). Clear the
@@ -4331,6 +4319,26 @@ export function CoachTeachPage(): JSX.Element {
           });
           return;
         }
+      } else if (requestedName) {
+        // 🔒 CONFIDENCE FLOOR — THE ROOT-CAUSE FIX FOR THE requestedName-GUARD
+        // GRAVEYARD (David 2026-09-10: "root cause fix that fixes multiple issues
+        // at once, or just slapping bandaids?"). The Tier-0 fuzzy gate ABOVE is
+        // skipped whenever the input is a grounded-Q&A intent (concept / progress
+        // / stats / traps / …) — to avoid a bogus "did you mean?" picker on a
+        // question. But skipping it LEFT requestedName set, so a question with a
+        // TEACH_PATTERN-extracted subject ("teach me about pawn structure" →
+        // "about pawn structure") leaked into the routing tiers below and got
+        // manufactured into a Queen's Pawn walkthrough — a wrong opening lesson
+        // for a board-independent question. Reaching this else means EXACTLY that:
+        // requestedName is set AND a grounded-Q&A intent matched (the if's own
+        // negated condition). A question is not an opening name — drop it to the
+        // brain, where the concept/theory/weakness lanes answer it. This is the
+        // principled inverse of the per-question `requestedName = null` guards
+        // above: instead of enumerating what ISN'T an opening (one guard per
+        // phrasing, forever), the tiers only run for input that skipped Tier-0 as
+        // a real opening. Real opening-teach asks ("teach me the Sicilian") match
+        // NO Q&A predicate, so they still enter Tier-0 and walk through.
+        requestedName = null;
       }
       // Cache key includes face-mode + tour-mode prefixes so the
       // same opening doesn't collide between "learn Najdorf as

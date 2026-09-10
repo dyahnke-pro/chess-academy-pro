@@ -972,6 +972,32 @@ describe('structural-concept teach yields to the corpus lane, opening requests p
   });
 });
 
+// 🔒 CONFIDENCE FLOOR contract (David 2026-09-10 root-cause fix). CoachTeachPage's
+// Tier-0 gate is skipped for grounded-Q&A intents, and an else then drops those
+// to the brain instead of the opening tiers. That is only SAFE if a real
+// opening-teach request trips NONE of the Q&A predicates (else a valid walkthrough
+// would be nulled). This gate pins exactly that: real "teach me the <opening>"
+// asks are not grounded-Q&A; concept-teach asks ARE (so they drop to the brain).
+describe('confidence floor: opening-teach is not grounded-Q&A; concept-teach is', () => {
+  const qaPredicates: Array<(a: string) => boolean> = [
+    isConceptQuestion, isFundamentalsQuestion, isTheoryQuestion, isOpeningProfileQuestion,
+    isOpeningTrapsQuestion, isProgressQuestion, isStatsQuestion, isStrengthsQuestion,
+    isMistakesQuestion, isTacticsQuestion, isBestMoveQuestion, isPlanQuestion,
+  ];
+  const anyQa = (a: string): boolean => qaPredicates.some((p) => p(a));
+  it.each([
+    'teach me the Sicilian', 'teach me the London', 'teach me the Najdorf',
+    'teach me the Caro-Kann', 'teach me the Vienna', "teach me the King's Gambit",
+  ])('real opening-teach trips NO Q&A predicate → tiers run: %s', (ask) => {
+    expect(anyQa(ask)).toBe(false);
+  });
+  it.each([
+    'teach me about pawn structure', 'teach me about forks', 'what makes a good bishop',
+  ])('concept-teach IS grounded-Q&A → drops to the brain: %s', (ask) => {
+    expect(anyQa(ask)).toBe(true);
+  });
+});
+
 describe('isPlanQuestion', () => {
   it.each([
     "what's my plan",
