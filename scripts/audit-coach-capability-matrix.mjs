@@ -154,6 +154,10 @@ const QUESTIONS = [
   { id: 'opening-traps', ask: 'what are the traps in the Italian?', v: ['any traps I should know in the Italian?', 'show me Italian Game traps'] },
   { id: 'name-opening', ask: 'what opening is 1.e4 c6?', v: ['what opening starts with 1.e4 c6?', 'which opening is e4 c6?'] },
   { id: 'counter-rep', ask: 'what should I play against the London?', v: ['how do I meet the London System?', "what's a good answer to the London?"] },
+  // "how does <pro> play <opening>" — the pro-repertoire teaching lane (David
+  // 2026-09-10: "teach me how Magnus plays the Catalan / how Levy plays the
+  // Vienna / how Danya plays the Alapin").
+  { id: 'pro-plays-opening', ask: 'teach me how Magnus plays the Catalan', v: ['how does Levy play the Vienna', 'how does Danya play the Alapin'] },
   // self / stats (no imported games on a fresh context — expect honest "import" not a deflect)
   { id: 'stats', ask: "what's my rating?", v: ['how strong am I?', 'what rating am I?'] },
   { id: 'progress', ask: 'am I improving?', v: ['am I getting better?', "how's my progress?"] },

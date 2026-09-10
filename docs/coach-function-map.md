@@ -160,6 +160,12 @@ player-game lookup; else → brain Q&A (grounded).
    Philidor walkthrough is the same fuzzy-junk class as the nav/confidence-floor
    fixes.
 
+## FUTURE (deferred until after the audit — David 2026-09-10)
+- **Set up a board from a PHOTO** — accept a photo/screenshot of a board,
+  reconstruct the FEN (recognizer produces candidates, chess.js validates —
+  G0/G3, low-confidence squares flagged not guessed), set it via
+  `set_board_position`. Real feature with a recognition dependency; design first.
+
 ## FIXED 2026-09-10
 - `navigate_to_route` narrowness ("tactics trainer" → best-move default) — commit
   43a54e4: nav intent = shared lead + trailing descriptor + synonyms.
