@@ -166,6 +166,29 @@ player-game lookup; else → brain Q&A (grounded).
   G0/G3, low-confidence squares flagged not guessed), set it via
   `set_board_position`. Real feature with a recognition dependency; design first.
 
+## HAND-VERIFIED ON PROD 2026-09-10 (drove it myself, read the real bubble/board)
+- Actions: play_move ✅, take_back ✅, reset ✅, navigate ✅, start_walkthrough ✅,
+  quiz ✅, **set up a middlegame ✅ (new fix — "Middlegame drill… play on the board", 32→23)**,
+  practice endgame ✅ (32→12 drill), **pro-plays-opening ✅** ("how does Danya
+  play the Alapin" / "how does Levy play the Vienna" → the pro's REAL game walked
+  on the board via the `middlegame-plan-inline` view).
+- Questions: every sampled lane answers (real-bubble read) — board reads,
+  concepts, theory, openings, master-play, self/stats (honest "import" decline),
+  app/settings, endgame technique.
+- SEED NOTE (harness): on /coach/teach the first "play X for me" makes the coach
+  take a side and play it; further "play X" only QUEUES the coach's reply and
+  waits for the STUDENT to move (board click). So chaining "play X" seeds only
+  move 1 — a rich-middlegame seed needs board-square clicks. Read LANES are alive
+  regardless; board-TRUTH on a deep middlegame needs the click-seed.
+- SOFT SPOT (not a hard break): "who is better developed?" returns the eval
+  ("0.3") rather than a development-specific count. Answers, but generic.
+
 ## FIXED 2026-09-10
 - `navigate_to_route` narrowness ("tactics trainer" → best-move default) — commit
   43a54e4: nav intent = shared lead + trailing descriptor + synonyms.
+- **"set up / practice a middlegame"** had no route (endgame did) — commit c4ef579:
+  `trainingAidRouter` middlegame branch + `coachDrillService` middlegame aid →
+  drops a real middlegame-tagged puzzle on the board. Verified on prod.
+- **"how <pro> plays <opening>"** (present tense, no "does") fell to fuzzy
+  opening-capture → WRONG opening (Catalan → Smith-Morra) — commit be307d8:
+  present-tense named-player arm in `PLAYER_GAMES_QUESTION_RE`.
