@@ -2008,6 +2008,20 @@ export function CoachTeachPage(): JSX.Element {
   }, []);
 
   const handleResetBoard = useCallback((): { ok: boolean } => {
+    // Restart during a drill resets to the DRILL's position and re-arms it —
+    // NOT the standard starting position (David 2026-09-10: "reset set up the
+    // starting position" instead of the puzzle, blowing the drill away).
+    const cur = activeDrillRef.current;
+    if (cur) {
+      gameRef.current.loadFen(cur.drill.setupFen);
+      gameRef.current.setOrientation(cur.drill.playerColor);
+      setPlayerColor(cur.drill.playerColor);
+      liveFenRef.current = cur.drill.setupFen;
+      activeDrillRef.current = { ...cur, step: 0, graded: false, wrongCount: 0, hintUsed: false };
+      setArrows([]);
+      setHighlights([]);
+      return { ok: true };
+    }
     gameRef.current.resetGame(STARTING_FEN);
     liveFenRef.current = STARTING_FEN;
     return { ok: true };
@@ -2032,11 +2046,22 @@ export function CoachTeachPage(): JSX.Element {
   /** Put a drill's position on the board (no announce) + arm the ref. */
   const loadDrillOntoBoard = useCallback((drill: CoachDrill, progress?: DrillProgress): void => {
     gameRef.current.loadFen(drill.setupFen);
+    // THE DRILL OWNS THE BOARD ORIENTATION + SIDE (David 2026-09-10: a
+    // black-to-move drill rendered White-at-bottom, so every piece the student
+    // naturally reached for was the wrong colour → the move was illegal and
+    // silently snapped back → "unable to move any pieces after the coach set up
+    // tactical sequences". Put the STUDENT'S side at the bottom, matching the
+    // drill's side to move, so their natural moves are legal). Also drop any
+    // stale "opponent thinking" gate left by a prior in-game turn so the fresh
+    // drill board is immediately interactive.
+    gameRef.current.setOrientation(drill.playerColor);
+    setPlayerColor(drill.playerColor);
+    setOpponentThinking(false);
     liveFenRef.current = drill.setupFen;
     activeDrillRef.current = { drill, step: 0, progress, graded: false, startedAt: Date.now(), wrongCount: 0, hintUsed: false };
     setArrows([]);
     setHighlights([]);
-  }, []);
+  }, [setOpponentThinking]);
 
   /** Grade the current drill through the SAME SRS pipeline the rest of
    *  the app uses (gradeMistakePuzzle → 'mastered' after MASTERY_REPETITIONS
@@ -2119,7 +2144,15 @@ export function CoachTeachPage(): JSX.Element {
       let lead = `We'll start with your most common weakness — ${queue[0].label}. Get these right over a few days and they'll test out.`;
       try {
         const thread = await getActiveCoachingThread();
-        const callback = threadCallbackFor(thread, thread ? [thread.tag] : []);
+        // Gate the cross-session callback on the DRILL ACTUALLY LOADED, not the
+        // stale active-thread tag (David 2026-09-10: he asked for tactical
+        // sequences, the board loaded a tactical-sequence puzzle, but the coach
+        // said "the missed forks we've been working on" — the callback fired off
+        // the thread's own tag regardless of what was on the board). Pass the
+        // loaded drill's motif so the wording only calls back when it matches
+        // the puzzle in front of the student.
+        const loadedTag = queue[0].key;
+        const callback = threadCallbackFor(thread, [loadedTag, `analysis:${loadedTag}`]);
         if (callback) lead = `${callback} We'll drill it on the board — get these right over a few days and they'll test out.`;
       } catch { /* the callback is a bonus */ }
       startCoachDrill(queue[0].drills[0], progress, lead);
