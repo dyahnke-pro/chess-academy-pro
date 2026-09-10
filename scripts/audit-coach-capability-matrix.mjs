@@ -229,6 +229,17 @@ const ACTIONS = [
       return false;
     },
   },
+  {
+    // David 2026-09-10: "set up a middlegame — it SHOULD be able to do that."
+    // Drops a real middlegame puzzle position on the board (mirrors endgame).
+    id: 'setup_middlegame', cmd: 'set up a middlegame', v: ['set up a middlegame position', 'practice a middlegame'],
+    check: async (p) => { for (let i = 0; i < 8; i += 1) { await sleep(1500); if (!samePlacement(await readPlacement(p), placementOf(START))) return true; } return false; },
+  },
+  {
+    // "practice a king and pawn endgame" drops a real endgame drill on the board.
+    id: 'practice_endgame', cmd: 'practice a king and pawn endgame', v: ['let me try a rook endgame', 'drill pawn endings'],
+    check: async (p) => { for (let i = 0; i < 8; i += 1) { await sleep(1500); const pl = await readPlacement(p); if (Object.keys(pl).length > 0 && Object.keys(pl).length < 28 && !samePlacement(pl, placementOf(START))) return true; } return false; },
+  },
 ];
 
 async function main() {

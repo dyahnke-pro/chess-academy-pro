@@ -104,6 +104,15 @@ const AID_SPECS: Record<string, AidSpec> = {
     label: 'Endgame technique',
     goal: 'find the best move',
   },
+  // "set up / practice a middlegame" — mirrors the endgame drill (David
+  // 2026-09-10: "you can also ask coach to set up a middlegame — it SHOULD be
+  // able to do that"). 6,962 middlegame-tagged puzzles in the DB; drops a real
+  // middlegame position on the board to solve, exactly like the endgame drills.
+  middlegame: {
+    themes: ['middlegame'],
+    label: 'Middlegame',
+    goal: 'find the best move',
+  },
   puzzle: {
     themes: [],
     label: 'Tactics',
@@ -121,6 +130,7 @@ const DRILLABLE_AIDS = new Set<string>([
   'pawn-endings',
   'rook-endings',
   'endgame',
+  'middlegame',
   'puzzle',
   // "drill my mistakes" / "work on my weaknesses" → the adaptive mistake
   // queue (startMistakeDrills). pickCoachDrill falls back to the generic

@@ -199,6 +199,18 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
     return drillRoute('endgame', 'an endgame');
   }
 
+  // 9b. Middlegame (generic) — the parallel to the endgame branch (David
+  //     2026-09-10: "set up a middlegame — it SHOULD be able to do that"). Was
+  //     the ONE phase with no setup route, so "set up a middlegame" fell to the
+  //     brain (answered as a board question) or fuzzy-matched a random opening
+  //     walkthrough. Drops a real middlegame position on the board to solve,
+  //     same as the endgame drill. Needs a framing verb ("set up", "practice",
+  //     "drill", etc. — FRAMING_RE) so a bare "what's the middlegame plan?" stays
+  //     a brain question.
+  if (/\bmiddle\s?games?\b/i.test(lower) && (framed || /\bset\s*up\b/i.test(lower))) {
+    return drillRoute('middlegame', 'a middlegame');
+  }
+
   // 10. My mistakes → the adaptive mistake queue, ON THE BOARD in Learn
   //     (David 2026-07-03: pull drills from the user's own mistakes, most
   //     common first, until they test out, then the next). Framed only, so

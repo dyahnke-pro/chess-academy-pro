@@ -46,6 +46,23 @@ describe('matchTrainingAidRoute — endgame family', () => {
   });
 });
 
+describe('matchTrainingAidRoute — middlegame (David 2026-09-10: "set up a middlegame — it SHOULD work")', () => {
+  it('routes "set up a middlegame" to a board drill (the reported gap)', () => {
+    expect(matchTrainingAidRoute('set up a middlegame')?.path).toBe('/coach/teach?drill=middlegame');
+  });
+  it('routes "set up a middlegame position"', () => {
+    expect(matchTrainingAidRoute('set up a middlegame position')?.aid).toBe('middlegame');
+  });
+  it('routes "practice a middlegame" / "drill a middlegame"', () => {
+    expect(matchTrainingAidRoute('practice a middlegame')?.aid).toBe('middlegame');
+    expect(matchTrainingAidRoute('drill a middlegame')?.aid).toBe('middlegame');
+  });
+  it('does NOT hijack a bare middlegame QUESTION (stays a brain question)', () => {
+    expect(matchTrainingAidRoute('what is the middlegame plan?')).toBeNull();
+    expect(matchTrainingAidRoute('what should I do in the middlegame')).toBeNull();
+  });
+});
+
 describe('matchTrainingAidRoute — tactics / puzzles (in-place Learn drill)', () => {
   it('routes "drill tactics" to a board drill', () => {
     expect(matchTrainingAidRoute('drill tactics')?.path).toBe('/coach/teach?drill=puzzle');
