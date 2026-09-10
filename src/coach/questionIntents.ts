@@ -303,6 +303,13 @@ export function isBestMoveQuestion(ask: string | undefined): boolean {
   // a board best-MOVE — the bare "best" trigger would misroute it (matrix pass
   // 9, 2026-07-10). ("best line/move here" stays a board question.)
   if (/\bbest\s+(?:opening|defen[cs]e|repertoire|system)\b/i.test(ask)) return false;
+  // "best/worst PLACED piece" is a piece-quality question (positionalTopic
+  // 'best-piece' → strongestWeakestPiece), NOT a best-MOVE — the optional-suffix
+  // "what is my best …" arm below matched it and shadowed the best-piece read
+  // (David 2026-09-10 audit verification: "best placed piece" answered with a
+  // best move). worst-placed already dodged this via the board router; this makes
+  // best-placed fall through to its own computer too.
+  if (/\b(?:best|worst|most\s+active|least\s+active|strongest|weakest)(?:[\s-]+placed)?\s+piece\b/i.test(ask)) return false;
   // "best way to use / learn this app" is an app-help question, not a move.
   if (/\bbest\s+way\s+to\s+(?:use|learn|study|navigate|improve)\b/i.test(ask)) return false;
   return BEST_MOVE_QUESTION_RE.test(ask);

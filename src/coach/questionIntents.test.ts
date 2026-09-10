@@ -835,6 +835,16 @@ describe('isBestMoveQuestion', () => {
     'what is the move here',
     'top move?',
   ])('matches: %s', (q) => expect(isBestMoveQuestion(q)).toBe(true));
+  // A piece-QUALITY ask is NOT a best-move — it must fall to positionalTopic
+  // 'best-piece' (David 2026-09-10 audit: "best placed piece" answered with a
+  // best move because the optional-suffix "what is my best …" arm matched it).
+  it.each([
+    'what is my best placed piece?',
+    'best piece',
+    'my most active piece',
+    'what is my worst placed piece',
+    'strongest piece',
+  ])('does NOT fire on piece-quality ask: %s', (q) => expect(isBestMoveQuestion(q)).toBe(false));
 });
 
 describe('isTacticsQuestion', () => {
