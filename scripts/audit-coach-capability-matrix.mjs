@@ -64,20 +64,50 @@ async function newTeachPage(browser) {
   return { ctx, p, errs };
 }
 
+// Read the ACTUAL newest assistant bubble (data-testid=chat-message-assistant),
+// not a body innerText line-diff. The old diff dropped short lines + required
+// punctuation, which manufactured false [EMPTY] fails (David 2026-09-10: "you
+// have clearly learned nothing" — the audit method itself was unreliable). The
+// bubble is authoritative: messages render newest-first, so .first() is newest.
 async function ask(p, q, { settleMs = 1500, maxPolls = 26 } = {}) {
   const box = p.locator('[data-testid="chat-text-input"]');
-  const before = new Set(lines(await p.locator('body').innerText()));
+  const bubble = p.locator('[data-testid="chat-message-assistant"]');
+  const beforeN = await bubble.count();
   await box.click();
   await box.pressSequentially(q, { delay: 6 });
   await box.press('Enter');
-  let added = [];
+  let text = '';
   for (let i = 0; i < maxPolls; i += 1) {
     await sleep(settleMs);
-    const now = lines(await p.locator('body').innerText());
-    added = now.filter((l) => !before.has(l) && l.toLowerCase() !== q.toLowerCase() && l.length > 6);
-    if (added.some((l) => /[.!?]/.test(l) || /did you mean|walk through|move 1|import/i.test(l)) && i > 1) break;
+    const n = await bubble.count();
+    if (n > beforeN) {
+      try { text = (await bubble.first().innerText()).trim(); } catch { text = ''; }
+      // strip a leading avatar glyph line ("C\n\n…") the bubble renders
+      text = text.replace(/^[A-Z]\s*\n+/, '').trim();
+      // settle: keep polling a couple rounds so a streaming answer finishes.
+      if (text.length > 3 && (/[.!?→]/.test(text) || /did you mean|walk through|import|paused/i.test(text)) && i > 1) break;
+    }
   }
-  return added.join(' ').trim();
+  return text;
+}
+
+// Seed a REAL middlegame by PLAYING the moves (play_move actuates reliably —
+// proven; "set up the board after <moves>" does NOT and misroutes to a wrong
+// walkthrough). Verifies the board actually reached the Italian before any read
+// runs — a silent seed no-op must never contaminate the board questions.
+const MID_TARGET = 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4';
+async function seedMid(p) {
+  for (const mv of ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5']) {
+    await ask(p, `play the move ${mv} for me`, { maxPolls: 10 });
+    await sleep(500);
+  }
+  // assert the seed landed (Italian: bishops + knights out). Return whether real.
+  for (let i = 0; i < 6; i += 1) {
+    const pl = await readPlacement(p);
+    if (pl.c4 === 'wB' && pl.c5 === 'bB' && pl.f3 === 'wN' && pl.c6 === 'bN' && pl.e4 === 'wP' && pl.e5 === 'bP') return true;
+    await sleep(1000);
+  }
+  return false;
 }
 
 // ── QUESTION MATRIX — representative ask per intent. { id, ask, mid?:true } ──
