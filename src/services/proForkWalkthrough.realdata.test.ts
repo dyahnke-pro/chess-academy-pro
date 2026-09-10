@@ -52,6 +52,5 @@ describe('proForkTreeToWalkthrough — real shipped corpus', () => {
     const nodes = allMoveNodes(wt.root);
     const branchNodes = [wt.root, ...nodes].filter((n) => n.children.length > 1).length;
     expect(branchNodes).toBeGreaterThanOrEqual(2);
-    });
-  }
+  });
 });

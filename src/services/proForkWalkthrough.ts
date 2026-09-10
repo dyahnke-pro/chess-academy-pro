@@ -10,8 +10,7 @@
 //   3. a minimal move-type descriptor (capture/check/castle/develop) as a floor
 // Frequency + move are computed; the model never decides anything here.
 import { Chess } from 'chess.js';
-import { describeMoveGeometry } from './groundedAnswer';
-import { teachingNoteForBoard } from './danyaTeachingService';
+import { groundedMoveWhy } from './groundedMoveWhy';
 import { sanToSpeech } from '../utils/sanToSpeech';
 import type { WalkthroughTree, WalkthroughTreeNode, WalkthroughTreeChild } from '../types/walkthroughTree';
 import type { ProOpeningForkTree, ProFork } from './proOpeningForks';
@@ -22,38 +21,10 @@ function sansOf(pgn: string): string[] {
   return pgn.replace(/\b\d+\.(\.\.)?/g, ' ').replace(/\b(1-0|0-1|1\/2-1\/2|\*)\b/g, ' ').trim().split(/\s+/).filter(Boolean);
 }
 
-/** Grounded why for a move — corpus note, then geometry, then a move-type floor.
- *  Never empty (David: "always the why"). */
+/** Grounded why for a move — the ONE shared chain (corpus note → geometry →
+ *  move-type floor). Never empty (David: "always the why"). */
 function whyFor(historyBefore: string[], fenBefore: string, san: string, moverColor: 'white' | 'black', openingName: string): string {
-  const chess = new Chess(fenBefore);
-  let mv;
-  try { mv = chess.move(san); } catch { mv = null; }
-  const fenAfter = chess.fen();
-  const note = teachingNoteForBoard([...historyBefore, san], fenAfter, openingName);
-  const noteWhy = note?.teaches?.trim() || note?.explains?.trim() || '';
-  if (noteWhy) return noteWhy;
-  const geo = describeMoveGeometry(fenBefore, san, moverColor)?.trim();
-  if (geo) return geo;
-  // Floor: describe the move mechanically from chess.js — always concrete
-  // (names a piece/square/concept), never generic filler. Board-true, and
-  // deliberately understated so a quiet developing move is never dressed up
-  // as more than it is (David 2026-07-19: "don't overstate the why").
-  if (mv) {
-    if (mv.flags.includes('k')) return 'castling kingside — the king steps into safety and the rook joins the game';
-    if (mv.flags.includes('q')) return 'castling queenside — the king tucks away and the rook comes toward the centre';
-    if (mv.san.includes('#')) return 'delivering checkmate';
-    if (mv.san.includes('+')) return `a check on ${mv.to}, forcing the king to react`;
-    if (mv.flags.includes('c') || mv.flags.includes('e')) return `capturing on ${mv.to}`;
-    if (mv.piece === 'n' || mv.piece === 'b') return `developing the ${mv.piece === 'n' ? 'knight' : 'bishop'} toward the centre`;
-    if (mv.piece === 'p') {
-      const central = 'cdef'.includes(mv.to[0]) && (mv.to[1] === '4' || mv.to[1] === '5');
-      return central ? `claiming space in the centre with the pawn to ${mv.to}` : `advancing the pawn to ${mv.to}`;
-    }
-    if (mv.piece === 'r') return `bringing the rook to ${mv.to}`;
-    if (mv.piece === 'q') return `bringing the queen to ${mv.to}`;
-    if (mv.piece === 'k') return `stepping the king to ${mv.to}`;
-  }
-  return `playing ${sanToSpeech(san)}`;
+  return groundedMoveWhy(historyBefore, fenBefore, san, moverColor, openingName);
 }
 
 /** "his pick in 4 of 6 games" / "his choice here". */

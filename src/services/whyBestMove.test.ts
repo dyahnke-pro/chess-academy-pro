@@ -33,6 +33,16 @@ describe('computeWhyBestMove — computed, board-true, no LLM', () => {
     expect(why).toMatch(/strongest move is Nxe5/);
   });
 
+  it('a quiet best move still gets a grounded reason (why-chain floor — never a dead tap)', async () => {
+    // Opening position, best move e4 — no fork/pin/capture, so the engine-point
+    // is null. The why-chain floor must still name a concrete reason so the
+    // "Why?" button never answers with a bare "The strongest move is e4.".
+    const fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('e2e4', 30) });
+    expect(why).toMatch(/strongest move is e4 —/);
+    expect(why).not.toMatch(/strongest move is e4\.\s*$/); // never bare
+  });
+
   it('returns empty when there is no best move (silence over a guess)', async () => {
     const fen = '6k1/8/8/8/8/8/8/6K1 w - - 0 1';
     const why = await computeWhyBestMove({ fen, studentColor: 'white', analysis: analysis('', 0) });

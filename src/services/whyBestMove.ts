@@ -14,6 +14,7 @@ import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
 import { explainBestMoveGrounded } from './groundedAnswer';
 import { computePositionFacts, clauseText } from './positionFacts';
+import { positionTeachingWhy, groundedMoveWhy } from './groundedMoveWhy';
 import type { WeaknessSignal } from './weaknessSignal';
 
 export interface WhyBestMoveInput {
@@ -50,12 +51,22 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
   const uci: string | null = analysis.bestMove && analysis.bestMove.length >= 4 ? analysis.bestMove : null;
   const san = bestSan(fen, uci);
+  const parts: string[] = [];
+
+  // 0. THE NOTE LEADS (David 2026-09-10: "tie the why chain into the why
+  //    button"). The corpus teaching about the position in front of the student
+  //    is the 90%-of-the-voice layer; a "Why?" tap is an explicit request, so
+  //    Play may speak it. Exact-position, board-verified, or nothing.
+  const teaching = positionTeachingWhy(fen);
+  if (teaching) parts.push(teaching);
 
   // 1. The concrete point of the strongest move (the engine-reasoning form).
+  //    Never a bare "The strongest move is X." — the why-chain floor guarantees
+  //    a grounded reason so a "Why?" tap is never a dead answer.
   const point = explainBestMoveGrounded(fen, null, uci, studentColor); // "it forks the king and rook" | null
-  const parts: string[] = [];
   if (san) {
-    parts.push(point ? `The strongest move is ${san} — ${point}.` : `The strongest move is ${san}.`);
+    const reason = point?.trim() || groundedMoveWhy([], fen, san, studentColor);
+    parts.push(`The strongest move is ${san} — ${reason}.`);
   }
 
   // 2. The position briefing — the plan + what's at stake + the real fork in the
