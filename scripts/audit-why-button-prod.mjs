@@ -1,6 +1,6 @@
 // Hand-driver for the play-surface "Why?" button (David 2026-09-10: "make sure
 // the why chain is tied into the why button"). Loads /coach/play, taps Why?,
-// reads the COMPUTED answer (injected chat bubble) + the spoken line, and I
+// reads the COMPUTED answer (injected chat bubble / answer card), and I
 // judge whether it leads with real teaching / carries a grounded reason.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -20,10 +20,10 @@ async function main() {
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   const p = await ctx.newPage();
-  const spoken = [];
-  await p.exposeFunction('__auditSpoke', (t) => spoken.push(t));
+  // The answer text IS what speakReadAloud speaks; on-device TTS audibility is
+  // the device-only check (G7). coach-narration-spoken is a logAppAudit event
+  // (sidecar-captured per G1), not a window event.
   await p.addInitScript(muteTtsForAudit);
-  await p.addInitScript(() => { window.addEventListener('coach-narration-spoken', (e) => { try { window.__auditSpoke(String(e.detail?.text || '').slice(0, 260)); } catch {} }); });
   await p.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss(p); await dismiss(p);
 
@@ -45,9 +45,6 @@ async function main() {
   }
   console.log(`  ANSWER: ${answer.slice(0, 400) || '[NOTHING]'}`);
   console.log(`  GROUNDED (has ' — ' reason): ${/—/.test(answer)}`);
-  await sleep(1200);
-  console.log(`  SPOKEN (${spoken.length}): ${spoken.slice(0, 3).join(' | ').slice(0, 300)}`);
-
   await ctx.close(); await browser.close();
 }
 main().catch((e) => { console.error(e); process.exit(2); });

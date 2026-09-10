@@ -21,12 +21,11 @@ async function main() {
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   const p = await ctx.newPage();
-  const spoken = [];
-  await p.exposeFunction('__auditSpoke', (t) => spoken.push(t));
+  // NB: coach-narration-spoken is a logAppAudit event, not a window event — the
+  // spoken line is captured via the narration-listener sidecar (G1), not here.
+  // This driver verifies the VISIBLE contract (fork bar, real options, the why
+  // in the node text); on-device TTS audibility is the device-only check (G7).
   await p.addInitScript(muteTtsForAudit);
-  await p.addInitScript(() => {
-    window.addEventListener('coach-narration-spoken', (e) => { try { window.__auditSpoke(String(e.detail?.text || '').slice(0, 200)); } catch {} });
-  });
   await p.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await dismiss(p); await dismiss(p);
   const box = p.locator('[data-testid="chat-text-input"]');
@@ -71,19 +70,34 @@ async function main() {
       const t = (await opts.nth(i).innerText()).replace(/\s+/g, ' ').trim();
       console.log(`    [${i}] ${t.slice(0, 120)}`);
     }
-    // 3) pick the first (his majority line) and confirm the walk continues
+    // 3) pick the majority line and confirm the walk CONTINUES (deeper fork or
+    //    leaf), delivering the why — not that it silently ends.
     if (n > 0) {
+      const asstBefore = await p.locator('[data-testid="chat-message-assistant"]').count();
       await opts.first().click();
-      await sleep(2500);
-      const stillMounted = await p.locator('[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-fork-option-0"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-fork-panel"]').count();
-      console.log(`  AFTER PICK: walkthrough-still-active=${stillMounted > 0}`);
+      // let the picked node narrate + auto-advance
+      let secondFork = false, leaf = false, wtSkip = false;
+      for (let i = 0; i < 12; i += 1) {
+        await sleep(1500);
+        if (await p.locator('[data-testid="walkthrough-fork-bar"]').count() > 0) secondFork = true;
+        if (await p.locator('[data-testid="walkthrough-leaf-panel"]').count() > 0) leaf = true;
+        if (await p.locator('[data-testid="walkthrough-skip"]').count() > 0) wtSkip = true;
+        if (secondFork || leaf) break;
+      }
+      const asstAfter = await p.locator('[data-testid="chat-message-assistant"]').count();
+      console.log(`  AFTER PICK: reachedSecondFork=${secondFork} reachedLeaf=${leaf} walkthroughSkillActive=${wtSkip} newBubbles=${asstAfter - asstBefore}`);
+      // read the newest coach narration (should carry the picked line's why)
+      if (asstAfter > asstBefore) {
+        try { console.log(`  PICKED-NODE NARRATION: ${(await p.locator('[data-testid="chat-message-assistant"]').last().innerText()).replace(/\s+/g, ' ').trim().slice(0, 240)}`); } catch {}
+      }
+      if (secondFork) {
+        const o2 = p.locator('[data-testid^="walkthrough-fork-option-"]');
+        const n2 = await o2.count();
+        console.log(`  SECOND FORK OPTIONS: ${n2}`);
+        for (let i = 0; i < n2; i += 1) console.log(`    [${i}] ${(await o2.nth(i).innerText()).replace(/\s+/g, ' ').trim().slice(0, 120)}`);
+      }
     }
   }
-
-  // 4) what the coach actually SPOKE (the whys) — narration listener
-  await sleep(1500);
-  console.log(`  SPOKEN LINES (${spoken.length}):`);
-  for (const s of spoken.slice(0, 8)) console.log(`    · ${s}`);
 
   await ctx.close(); await browser.close();
 }
