@@ -20,8 +20,10 @@
  */
 import { Chess } from 'chess.js';
 import { lookupAmateurPlay } from './amateurPlayLookup';
+import { lookupMasterPlay } from './masterPlayLookup';
 import { stockfishEngine } from './stockfishEngine';
 import { narrateContinuationMove } from './continuationMoveNarration';
+import { getMaterialAdvantage } from './boardUtils';
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import type {
@@ -31,12 +33,29 @@ import type {
   WalkthroughTreeNode,
 } from '../types/walkthroughTree';
 
-const FINDER_REV = '2026-08-24-v2-gentle';
-// Centipawn bars — identical to the offline miner (studentEval is white-POV
-// engine cp flipped to the student's side).
-const WEAPON_CP = 100; // ≥ +1.0 = confirmed
-const EDGE_CP = 50; //   +0.5..+1.0 = positional; below → dropped
-const JUMP_CP = 50; //   the slip must COST ≥ +0.5 vs not slipping
+// 🔒 GEM QUALITY BAR — a gem is a CLEAR MATERIAL WIN, not a soft edge (David
+// 2026-09-10, emphatic: "Gems need to be clear advantages! Ideally winning a
+// piece or material!!" after the finder narrated 1…c5 and 1…e5 as "mistakes").
+// Three hard gates now stand between a candidate and a shipped gem:
+//   1. MASTER-PEDIGREE — a move real masters play is NEVER a punishable slip
+//      (kills the c5/e5-are-mistakes class outright, for free, before any
+//      engine work).
+//   2. MATERIAL WIN — the punish must NET the student a real piece's worth of
+//      material at the line's terminus (or be mate). An eval edge alone is not
+//      a gem anymore; the finder's old +0.5 "positional" tier is gone.
+//   3. DEEP CONFIRM — survivors are re-verified deeper so shallow noise can't
+//      mint a fake gem.
+const FINDER_REV = '2026-09-10-v3-material';
+// Centipawn bars.
+const WEAPON_CP = 100; // ≥ +1.0 eval AND a material win — the only tier now.
+const JUMP_CP = 50; //   the slip must COST ≥ +0.5 vs not slipping.
+// Material (in pawns, student POV) the punish must net at the quiet terminus —
+// a minor piece. Mate always qualifies regardless of material.
+const MATERIAL_GAIN_MIN = 2;
+// A candidate move is disqualified as a "slip" if masters play it with real
+// pedigree — either this many games or this share of the master pool.
+const MASTER_PEDIGREE_MIN_GAMES = 50;
+const MASTER_PEDIGREE_MIN_FREQ = 0.02;
 const FREQ_FLOOR = 0.03; // a candidate slip humans play ≥ 3% of the time
 const MIN_GAMES_AT_POS = 20; // the position needs a real human sample
 // 🔒 GENTLE BY CONTRACT (David 2026-08-24: "app and computer are both super
@@ -49,6 +68,12 @@ const MIN_GAMES_AT_POS = 20; // the position needs a real human sample
 // UI and voice always get CPU back.
 const ANALYZE_DEPTH = 12;
 const ANALYZE_BUDGET_MS = 350; // per analysis — a hard time box, not depth
+// Deeper confirm for the 1-2 survivors that clear the cheap screen + the
+// master-pedigree gate — shallow depth-12/350ms noise minted the c5/e5 fakes,
+// so a gem is only shipped after this deeper look agrees (few candidates reach
+// here, so the extra cost is bounded and stays gentle).
+const VERIFY_DEPTH = 16;
+const VERIFY_BUDGET_MS = 900;
 const MAX_CANDIDATES = 2; // top-N human moves to test per position
 const MAX_POSITIONS = 12; // scan the first N opponent positions (spine-first)
 // Engine-only fallback (David 2026-08-27 "do 2"): when the explorer is SILENT at
@@ -76,12 +101,18 @@ function normalizeKey(name: string): string {
   return name.trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
-/** Compose a board-true detour for a discovered [slip, ...punish] line. */
+/** Compose a board-true detour for a discovered [slip, ...punish] line.
+ *  `isMate` describes the VERIFIED outcome so the opening line is framed by what
+ *  actually happens — a dropped piece or a forced mate — never the old "looks
+ *  natural, but it's a mistake" wording that libelled main-line moves (David
+ *  2026-09-10). (The material amount is enforced upstream in verifySlip; the
+ *  narration just distinguishes mate from a material drop.) */
 function buildComputedDetour(
   baseFen: string,
   slipSan: string,
   punishSeq: string[],
   gemId: string,
+  isMate: boolean,
 ): BakedGemLine | null {
   let board: Chess;
   try {
@@ -101,9 +132,14 @@ function buildComputedDetour(
     }
     if (!mv) break;
     const c = narrateContinuationMove(fenBefore, board.fen(), mv.san, mv.from, mv.to);
-    const idea = i === 0
-      ? `${cleanSan(mv.san)} looks natural, but it's a mistake here. ${c.say}`.trim()
-      : c.say;
+    // The slip's framing is grounded in the VERIFIED consequence, not a
+    // value judgement: it drops material or walks into mate. (A move that did
+    // neither never reaches here — the material/mate gate in verifySlip drops
+    // it, and a move masters play is filtered out before that.)
+    const slipLead = isMate
+      ? `${cleanSan(mv.san)} walks into a forced mate.`
+      : `${cleanSan(mv.san)} drops material here.`;
+    const idea = i === 0 ? `${slipLead} ${c.say}`.trim() : c.say;
     steps.push({ san: mv.san, fen: board.fen(), idea, shortIdea: c.short, arrows: c.arrows });
   }
   if (steps.length === 0) return null;
@@ -126,8 +162,11 @@ async function verifySlip(
   baseFen: string,
   slipSan: string,
   studentIsWhite: boolean,
-  minEdge: number = EDGE_CP,
 ): Promise<BakedGemLine | null> {
+  const studentMaterial = (fen: string): number => {
+    const adv = getMaterialAdvantage(fen); // white-POV pawns
+    return studentIsWhite ? adv : -adv;
+  };
   // Baseline: how the student stands BEFORE the slip. If they're already
   // winning, there's no trap worth teaching here. Time-boxed (never depth-
   // bounded, which can run the worker long and starve the UI/voice).
@@ -139,6 +178,7 @@ async function verifySlip(
   }
   const E0 = studentIsWhite ? base.evaluation : -base.evaluation;
   if (E0 >= WEAPON_CP) return null;
+  const M0 = studentMaterial(baseFen);
 
   let board: Chess;
   try {
@@ -155,6 +195,9 @@ async function verifySlip(
   if (!slip) return null;
   const afterSlipFen = board.fen(); // student to move — the punish is theirs
 
+  // Cheap screen first (depth-12/350ms): only the confirmed tier (≥ +1.0) AND
+  // a real cost vs not slipping. The old +0.5 "positional" tier is gone — a
+  // gem is a decisive win now, never a soft edge.
   let after;
   try {
     after = await stockfishEngine.analyzeWithBudget(afterSlipFen, ANALYZE_DEPTH, ANALYZE_BUDGET_MS);
@@ -162,12 +205,20 @@ async function verifySlip(
     return null;
   }
   const E1 = studentIsWhite ? after.evaluation : -after.evaluation;
-  // Must reach a real edge AND the slip must have COST that edge.
-  if (E1 < minEdge || E1 - E0 < JUMP_CP) return null;
+  if (E1 < WEAPON_CP || E1 - E0 < JUMP_CP) return null;
 
-  // The punish line is the engine's own PV from after the slip — no second
-  // multi-second play-out. Replay it UCI→SAN and keep the first few plies.
-  const pv = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
+  // DEEP CONFIRM the survivor — shallow noise minted the c5/e5 fakes. The punish
+  // line is the DEEP analysis's own PV.
+  let deep;
+  try {
+    deep = await stockfishEngine.analyzeWithBudget(afterSlipFen, VERIFY_DEPTH, VERIFY_BUDGET_MS);
+  } catch {
+    return null;
+  }
+  const E1d = studentIsWhite ? deep.evaluation : -deep.evaluation;
+  if (E1d < WEAPON_CP || E1d - E0 < JUMP_CP) return null;
+
+  const pv = deep.topLines?.[0]?.moves ?? (deep.bestMove ? [deep.bestMove] : []);
   if (pv.length === 0) return null;
   const b2 = new Chess(afterSlipFen);
   const punishSeq: string[] = [];
@@ -188,8 +239,39 @@ async function verifySlip(
   }
   if (punishSeq.length === 0) return null;
 
+  // 🔒 THE MATERIAL GATE — a gem wins a piece's worth of material at the line's
+  // quiet terminus, or it's a forced mate. An eval edge with no material behind
+  // it is NOT a gem (David 2026-09-10: "ideally winning a piece or material").
+  const isMate = deep.isMate;
+  const materialGain = studentMaterial(b2.fen()) - M0;
+  if (!isMate && materialGain < MATERIAL_GAIN_MIN) return null;
+
   const gemId = `found:${positionKey(baseFen)}:${cleanSan(slipSan)}`;
-  return buildComputedDetour(baseFen, slipSan, punishSeq, gemId);
+  return buildComputedDetour(baseFen, slipSan, punishSeq, gemId, isMate);
+}
+
+/** The set of moves (cleaned SAN) that masters play at `fen` with real
+ *  pedigree — a move in here is NEVER a punishable slip. Local-only (free) and
+ *  best-effort: an empty set (a position masters don't cover) filters nothing,
+ *  which is correct — a genuine inaccuracy in an off-book position IS
+ *  punishable. */
+async function masterPedigreeSet(fen: string): Promise<Set<string>> {
+  let res;
+  try {
+    res = await lookupMasterPlay(fen, { triggeredBy: 'watcher-walkthrough-preload', surface: '/coach/teach', localOnly: true });
+  } catch {
+    return new Set();
+  }
+  const total = res.totalGames ?? 0;
+  const out = new Set<string>();
+  for (const m of res.moves) {
+    const games = m.games ?? 0;
+    const freq = total > 0 ? games / total : 0;
+    if (games >= MASTER_PEDIGREE_MIN_GAMES || freq >= MASTER_PEDIGREE_MIN_FREQ) {
+      out.add(cleanSan(m.san));
+    }
+  }
+  return out;
 }
 
 /** A position the lesson walks + whose turn it is. */
@@ -229,26 +311,34 @@ export async function findGemsForLine(
     const total = amateur?.totalGames ?? 0;
     const explorerHasData = !!amateur && amateur.source !== 'none' && amateur.moves.length > 0 && total >= MIN_GAMES_AT_POS;
 
-    // Candidate slips + the edge floor they must clear. Explorer-backed: the
-    // human moves at the frequency floor, held to the usual +0.5 tier. Engine-
-    // only fallback: the engine's top-fan inaccuracies, held to the stricter
-    // +1.0 confirmed tier (no frequency evidence → decisive punish or nothing).
+    // 🔒 MASTER-PEDIGREE GATE — a move real masters play is NEVER a punishable
+    // slip. Build the set of master moves at this position up front and drop any
+    // candidate that's in it. This is what stops the finder libelling 1…c5 /
+    // 1…e5 as "mistakes" (David 2026-09-10) — and it's free (a local lookup)
+    // before any per-candidate engine work.
+    const masterMoves = await masterPedigreeSet(pos.fen);
+
+    // Candidate slips. Explorer-backed: the human moves at the frequency floor.
+    // Engine-only fallback: the engine's top-fan inaccuracies (no human sample).
+    // BOTH now clear the SAME strict bar in verifySlip (confirmed eval + a
+    // material win / mate) — there is no soft "positional" tier anymore.
     let candidateSans: string[];
-    let minEdge: number;
     if (explorerHasData) {
       // `explorerHasData` already implies `amateur` is non-null, but that
       // narrowing doesn't flow from a separate const — guard directly.
       candidateSans = (amateur?.moves ?? [])
         .filter((m) => m.games / Math.max(1, total) >= FREQ_FLOOR)
-        .slice(0, MAX_CANDIDATES)
-        .map((m) => m.san);
-      minEdge = EDGE_CP;
+        .map((m) => m.san)
+        .filter((san) => !masterMoves.has(cleanSan(san)))
+        .slice(0, MAX_CANDIDATES);
+      if (candidateSans.length === 0) continue;
       scanned += 1;
     } else {
       if (engineOnlyScanned >= MAX_ENGINE_ONLY_POSITIONS) continue;
-      candidateSans = (await engineOnlySlips(pos.fen)).slice(0, MAX_CANDIDATES);
+      candidateSans = (await engineOnlySlips(pos.fen))
+        .filter((san) => !masterMoves.has(cleanSan(san)))
+        .slice(0, MAX_CANDIDATES);
       if (candidateSans.length === 0) continue;
-      minEdge = WEAPON_CP;
       engineOnlyScanned += 1;
       scanned += 1;
     }
@@ -257,7 +347,7 @@ export async function findGemsForLine(
     for (const cand of candidateSans) {
       if (Date.now() > deadline) break;
       await sleep(YIELD_MS); // hand the CPU back to the UI/voice before each engine burst
-      const d = await verifySlip(pos.fen, cand, studentIsWhite, minEdge);
+      const d = await verifySlip(pos.fen, cand, studentIsWhite);
       if (d) detours.push(d);
     }
     if (detours.length > 0) out.set(key, detours);
