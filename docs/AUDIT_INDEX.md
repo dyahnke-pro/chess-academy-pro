@@ -205,3 +205,27 @@ npx tsx scripts/audit-causal-chain.mts
 
 NB: this reads the narration for board TRUTH. The interactive live-DOM/voice
 firing on Learn (§G1 3-instrument) runs against main/prod once the build lands.
+
+## `audit-coach-capability-matrix.mjs` — full coach capability matrix (MUTED)
+
+The comprehensive coach matrix (David 2026-09-10: "build a matrix audit that
+hits all of those things" + "3 clean consecutive passes and you can stop").
+Two matrices driven live on `/coach/teach`:
+
+- **QUESTIONS** — one representative ask per intent/topic/aspect (board reads,
+  moves, concepts, openings, self/stats, tactics/endgame/app). PASS = the coach
+  answered from a real lane (non-empty, NOT the stock grounded-deflect, no
+  pageerror) — catches a dead/deflecting intent, not prose quality.
+- **ACTIONS** — tell the coach to DO the thing (play/take-back/set/reset the
+  board, navigate, start a walkthrough, quiz), then verify the APP/BOARD STATE
+  actually changed (placement / URL / mounted panel). The P4 "actuate for real,
+  never fake-done" contract: a coach that SAYS done while the board is unchanged
+  FAILS.
+
+Muted (`muteTtsForAudit`). Run sections separately via `MATRIX_SECTION`
+(`actions` | `questions` | `all`) so each fits a single timeout. Emits a
+per-cell grid + JSON report to `audit-reports/coach-capability-matrix-<ts>.json`.
+
+```
+AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY MATRIX_SECTION=actions node scripts/audit-coach-capability-matrix.mjs
+```
