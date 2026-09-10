@@ -209,6 +209,16 @@ const THEORY_STOPWORDS = new Set([
   'about', 'against', 'best', 'way', 'play', 'played', 'playing', 'get', 'got',
   'have', 'has', 'if', 'then', 'so', 'up', 'out', 'at', 'as', 'by', 'from',
   'chess', 'game', 'move', 'moves', 'position', 'positions',
+  // GENERIC QUALIFIERS (David 2026-09-10 loop): adjectives/verbs like "good",
+  // "makes", "powerful" appear in many passages but name no chess concept, so
+  // they supplied a spurious 2nd token that let "what makes a good bishop" match
+  // *Discovered attack* (on "makes" + "good") — a confidently-WRONG concept.
+  // None of these appear in any concept name/phrase (verified), so dropping them
+  // makes such an ask resolve on its CHESS token alone ("bishop") → below the
+  // two-token floor → honest decline, never a wrong passage. NB "weak"/"strong"
+  // are KEPT (they name real concepts, e.g. "Weak squares").
+  'good', 'bad', 'makes', 'make', 'making', 'made', 'powerful', 'great',
+  'better', 'worse', 'improve', 'improving', 'well', 'nice', 'decent',
 ]);
 
 function theoryTokens(text: string): string[] {

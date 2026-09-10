@@ -38,6 +38,27 @@ describe('searchTheoryPassage — corpus theory search (P-II.1)', () => {
     expect(searchTheoryPassage('how do I attack a castled king')).not.toBeNull();
   });
 
+  // Generic-qualifier gate (David 2026-09-10 loop): "good"/"bad"/"makes"/
+  // "powerful" name no chess concept but appear in many passages, so they were
+  // the spurious 2nd token that let "what makes a good bishop" match *Discovered
+  // attack* (on "makes" + "good") — a confidently-WRONG concept. They are now
+  // stopwords, so a bishop/knight-quality ask resolves on its chess token alone
+  // ("bishop") → below the two-token floor → honest decline, never a wrong hit.
+  it('declines "what makes a good/bad bishop" instead of serving a wrong concept', () => {
+    for (const q of ['what makes a good bishop', 'what makes a bishop bad', 'what makes a knight strong']) {
+      const hit = searchTheoryPassage(q);
+      expect(hit?.conceptId).not.toBe('tac-discovered');
+      // With only a single chess token left, it declines honestly (null) rather
+      // than serving an off-topic passage.
+      expect(hit).toBeNull();
+    }
+  });
+
+  it('the qualifier stopwords do NOT break real concepts that use "weak"', () => {
+    // "weak" names a real concept ("Weak squares") and is deliberately KEPT.
+    expect(searchTheoryPassage('what are weak squares')).not.toBeNull();
+  });
+
   it('names a real concept for a pawn-structure ask', () => {
     const hit = searchTheoryPassage('what is the plan with doubled pawns');
     if (hit) {
