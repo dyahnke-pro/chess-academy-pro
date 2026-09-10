@@ -283,7 +283,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -4002,7 +4002,13 @@ export function CoachTeachPage(): JSX.Element {
         isOpponentMoveQuestion(requestedName) ||
         isNameOpeningQuestion(requestedName) ||
         isTheoryQuestion(requestedName) ||
-        isEndgameQuestion(requestedName)
+        isEndgameQuestion(requestedName) ||
+        // "teach me how <pro> plays the Catalan" — the TEACH verb captured this
+        // as an opening name and fuzzy-matched a WRONG opening (Catalan →
+        // Smith-Morra), ignoring the pro (David 2026-09-10). It's a player-games
+        // ask — clear the capture so it reaches the spine's pro-game lane
+        // (assemblePlayerGamesAnswer), same as "how does <pro> play X" already does.
+        isPlayerGamesQuestion(requestedName)
       )) {
         requestedName = null;
       }
