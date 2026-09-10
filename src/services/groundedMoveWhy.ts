@@ -22,11 +22,11 @@ import { sanToSpeech } from '../utils/sanToSpeech';
 /** The concrete floor: name the piece/square/concept from chess.js flags.
  *  Never generic filler ("keeping to the main line"). */
 function moveTypeFloor(mv: Move): string {
-  if (mv.flags.includes('k')) return 'castling kingside — the king steps into safety and the rook joins the game';
-  if (mv.flags.includes('q')) return 'castling queenside — the king tucks away and the rook comes toward the centre';
+  if (mv.isKingsideCastle()) return 'castling kingside — the king steps into safety and the rook joins the game';
+  if (mv.isQueensideCastle()) return 'castling queenside — the king tucks away and the rook comes toward the centre';
   if (mv.san.includes('#')) return 'delivering checkmate';
   if (mv.san.includes('+')) return `a check on ${mv.to}, forcing the king to react`;
-  if (mv.flags.includes('c') || mv.flags.includes('e')) return `capturing on ${mv.to}`;
+  if (mv.isCapture() || mv.isEnPassant()) return `capturing on ${mv.to}`;
   if (mv.piece === 'n' || mv.piece === 'b') return `developing the ${mv.piece === 'n' ? 'knight' : 'bishop'} toward the centre`;
   if (mv.piece === 'p') {
     const central = 'cdef'.includes(mv.to[0]) && (mv.to[1] === '4' || mv.to[1] === '5');
