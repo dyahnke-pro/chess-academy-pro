@@ -136,7 +136,7 @@ export const lookupPlayerGamesTool: Tool = {
       proOpeningId: { type: 'string', description: 'Pro opening id, e.g. "pro-naroditsky-caro-kann". Optional — most precise.' },
       openingName: { type: 'string', description: 'Opening display name, e.g. "Caro-Kann Defense". Optional.' },
       variation: { type: 'string', description: 'Variation label or slug to narrow to one line. Optional.' },
-      limit: { type: 'number', description: 'Max games to return (default 6, max 12).' },
+      limit: { type: 'number', description: 'Max games to return (default 6, max 60). Use a high limit to aggregate how a pro plays a line across many games.' },
       fullPgn: { type: 'boolean', description: 'Return the full move list (default true). When false, the first 40 plies.' },
     },
     required: [],
@@ -148,7 +148,7 @@ export const lookupPlayerGamesTool: Tool = {
     const proOpeningIdArg = typeof args.proOpeningId === 'string' ? norm(args.proOpeningId) : '';
     const openingNameArg = typeof args.openingName === 'string' ? norm(args.openingName.split(':')[0]) : '';
     const variationArg = typeof args.variation === 'string' ? norm(args.variation) : '';
-    const limit = Math.min(Math.max(Number(args.limit) || 6, 1), 12);
+    const limit = Math.min(Math.max(Number(args.limit) || 6, 1), 60);
     const fullPgn = args.fullPgn !== false;
 
     // Resolve a player filter: app id directly, or a display-name match.

@@ -26,6 +26,11 @@ export interface PlayerGameRequest {
    *  we keep type words ("defense", "gambit") that are part of real
    *  names and only strip a trailing bare "opening". */
   openingQuery: string;
+  /** True when the ask is "HOW does X play Y" / "how X plays Y" — the
+   *  teach-me-their-approach framing (David 2026-09-10) — vs "show me a
+   *  GAME X played in Y", which wants a single game. The former mounts the
+   *  fork-in-the-road aggregate of ALL his games; the latter one replay. */
+  wantsHowTheyPlay: boolean;
 }
 
 /** Tokens that are NOT a player — guards against "how does WHITE play the
@@ -135,14 +140,16 @@ export function parsePlayerGameRequest(text: string): PlayerGameRequest | null {
   // A move report ("I played e4.") is never a player-game request.
   if (/^\s*i\s+(?:just\s+)?played\b/i.test(trimmed)) return null;
 
-  for (const re of PATTERNS) {
-    const m = trimmed.match(re);
+  for (let i = 0; i < PATTERNS.length; i += 1) {
+    const m = trimmed.match(PATTERNS[i]);
     if (!m) continue;
     const player = cleanPlayer(m[1]);
     const openingQuery = cleanOpening(m[2]);
     if (!isPlausiblePlayer(player)) continue;
     if (!openingQuery || openingQuery.length > 40) continue;
-    return { player, openingQuery };
+    // Patterns 0 and 1 are the "how does X play / how X plays" framings —
+    // the teach-me-their-approach intent that drives the fork aggregate.
+    return { player, openingQuery, wantsHowTheyPlay: i <= 1 };
   }
   return null;
 }

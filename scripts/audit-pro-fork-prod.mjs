@@ -31,21 +31,36 @@ async function main() {
   await dismiss(p); await dismiss(p);
   const box = p.locator('[data-testid="chat-text-input"]');
   await box.waitFor({ timeout: 20000 });
-
-  console.log(`\n▶ ASK: "${ASK}"`);
+  // Let the mount greeting settle so we don't mistake it for the answer.
+  await sleep(2500);
   const bubble = p.locator('[data-testid="chat-message-assistant"]');
   const before = await bubble.count();
-  await box.click(); await box.pressSequentially(ASK, { delay: 6 }); await box.press('Enter');
 
-  // 1) read the coach's framing bubble
+  console.log(`\n▶ ASK: "${ASK}" (greeting bubbles before = ${before})`);
+  // Wait for the input to be enabled before typing (a busy turn disables it).
+  for (let i = 0; i < 20 && await box.isDisabled().catch(() => false); i += 1) await sleep(1000);
+  await box.click(); await box.pressSequentially(ASK, { delay: 8 }); await box.press('Enter');
+
+  // Confirm the message actually submitted (input clears on submit).
+  let submitted = false;
+  for (let i = 0; i < 8; i += 1) { await sleep(500); if (((await box.inputValue().catch(() => ASK)) || '').trim() === '') { submitted = true; break; } }
+  console.log(`  SUBMITTED: ${submitted}`);
+  await sleep(2500);
+  console.log(`  URL AFTER ASK: ${p.url().replace(BASE, '')}`);
+
+  // 1) read NEW assistant bubbles (after the greeting)
   let prose = '';
-  for (let i = 0; i < 20; i += 1) { await sleep(1200); if (await bubble.count() > before) { try { prose = (await bubble.last().innerText()).trim(); } catch {} if (prose.length > 20) break; } }
-  console.log(`  BUBBLE: ${prose.slice(0, 320) || '[none]'}`);
+  for (let i = 0; i < 24; i += 1) { await sleep(1200); if (await bubble.count() > before) { try { prose = (await bubble.nth(before).innerText()).trim(); } catch {} if (prose.length > 20) break; } }
+  console.log(`  NEW BUBBLE: ${prose.slice(0, 340) || '[none]'}`);
+
+  // 1b) any walkthrough UI mounted? (fork/skip/board panels)
+  const wtAny = await p.locator('[data-testid="walkthrough-fork-bar"],[data-testid="walkthrough-skip"],[data-testid="walkthrough-fork-panel"],[data-testid="walkthrough-leaf-panel"],[data-testid="walkthrough-stage-menu"]').count();
+  console.log(`  WALKTHROUGH UI PRESENT: ${wtAny > 0}`);
 
   // 2) the walkthrough tree should mount + auto-advance to a FORK bar
   const forkBar = p.locator('[data-testid="walkthrough-fork-bar"]');
   let reachedFork = false;
-  for (let i = 0; i < 30; i += 1) { await sleep(1000); if (await forkBar.count() > 0) { reachedFork = true; break; } }
+  for (let i = 0; i < 40; i += 1) { await sleep(1000); if (await forkBar.count() > 0) { reachedFork = true; break; } }
   console.log(`  FORK BAR REACHED: ${reachedFork}`);
 
   if (reachedFork) {

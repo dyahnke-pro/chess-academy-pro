@@ -61,6 +61,25 @@ describe('parsePlayerGameRequest', () => {
     });
   });
 
+  describe('wantsHowTheyPlay intent flag (fork aggregate vs single-game replay)', () => {
+    it.each([
+      'how does magnus play the catalan',
+      'how magnus plays the catalan',
+      'teach me how hikaru handles the najdorf',
+      'how does carlsen play against the catalan',
+    ])('true for "how they play": %s', (input) => {
+      expect(parsePlayerGameRequest(input)?.wantsHowTheyPlay).toBe(true);
+    });
+    it.each([
+      'show me a game that magnus played the catalan',
+      "magnus's catalan game",
+      'show me magnus in the catalan',
+      'a game that magnus played the catalan',
+    ])('false for "show me a game": %s', (input) => {
+      expect(parsePlayerGameRequest(input)?.wantsHowTheyPlay).toBe(false);
+    });
+  });
+
   it('strips a trailing question mark from the opening', () => {
     const r = parsePlayerGameRequest('how does magnus play the catalan?');
     expect(r?.openingQuery.toLowerCase()).toBe('catalan');

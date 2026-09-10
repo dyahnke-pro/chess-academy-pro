@@ -3388,16 +3388,29 @@ export function CoachTeachPage(): JSX.Element {
 
             // W1 — FORK-IN-THE-ROAD (David 2026-09-10: "if they have multiple
             // games with the same opening we use the fork-in-the-road sequencing
-            // for teaching how they play x opening"). When ≥2 of the pro's REAL
-            // games are on disk, teach HOW HE PLAYS IT: aggregate them into a
-            // spine + fork tree (his real choices, frequency-ranked) and walk it
-            // through the same tree runtime — with a grounded WHY on every move
-            // (David: "always the why"), not a single silent game replay.
+            // for teaching how they play x opening"). Only for the "HOW does X
+            // play Y" framing (wantsHowTheyPlay) — "show me a game X played" wants
+            // a single replay, handled below. Aggregate MANY of his real games
+            // into a spine + fork tree (his real choices, frequency-ranked) and
+            // walk it through the same tree runtime — with a grounded WHY on every
+            // move (David: "always the why"). Forks only surface across a wide
+            // sample, so pull the full corpus here, not the 6-game display list.
             let forkMounted = false;
-            if (source === 'disk' && diskGames.length >= 2) {
+            if (pgReq.wantsHowTheyPlay && source === 'disk') {
               try {
+                let forkGames = diskGames;
+                try {
+                  const wide = await lookupPlayerGamesTool.execute({
+                    player: pgReq.player,
+                    openingName,
+                    limit: 60,
+                    fullPgn: true,
+                  });
+                  const wp = wide.ok ? (wide.result as { games?: FoundPlayerGame[] } | undefined) : undefined;
+                  if (wp && Array.isArray(wp.games) && wp.games.length > forkGames.length) forkGames = wp.games;
+                } catch { /* keep the 6-game set */ }
                 const forkTree = buildProOpeningForkTree(
-                  diskGames.map((g) => ({
+                  forkGames.map((g) => ({
                     pgn: g.pgn,
                     studentSide: g.studentSide,
                     plyCount: g.plyCount,
