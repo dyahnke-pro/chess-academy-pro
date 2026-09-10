@@ -14,7 +14,27 @@
 // Pure + dependency-light (chess.js only) so the trie logic is unit-testable
 // without the browser or Dexie.
 import { Chess } from 'chess.js';
-import type { ProGameReference } from '../types';
+
+/** The minimal shape the fork aggregator reads from each of a pro's games.
+ *  `ProGameReference` satisfies it structurally, but so does a lighter mapping
+ *  from the on-disk `lookup_player_games` result — the caller doesn't have to
+ *  fabricate a full reference just to aggregate. */
+export interface ProForkGameInput {
+  /** Clean space-separated SAN, chess.js-validated. */
+  pgn: string;
+  /** The side the pro played in this game. */
+  studentSide: 'white' | 'black';
+  /** Half-move count (deepest game wins the representative pick). */
+  plyCount: number;
+  /** Opponent rating (tie-breaks the representative pick). */
+  opponentRating: number | null;
+  /** App player id (e.g. "naroditsky"). */
+  playerId: string;
+  /** Base opening id (e.g. "caro-kann"). */
+  openingId: string;
+  /** Human variation label (e.g. "Classical (4…Bf5)"). */
+  variationLabel: string;
+}
 
 /** One choice the pro made at a fork: the move + how many of his games took it
  *  + a representative game (deepest, then highest-rated opponent) that did. */
@@ -22,7 +42,7 @@ export interface ProForkBranch {
   san: string;
   count: number;
   /** Representative game continuing down this branch (for a model-game walk). */
-  sample: ProGameReference;
+  sample: ProForkGameInput;
 }
 
 /** A point on the spine where the PRO's own games diverge — his real choices. */
@@ -53,7 +73,7 @@ export interface ProOpeningForkTree {
 interface TrieNode {
   count: number;
   /** Games that pass through this node (for representative-game picking). */
-  games: ProGameReference[];
+  games: ProForkGameInput[];
   children: Map<string, TrieNode>;
 }
 
@@ -69,7 +89,7 @@ function sansOf(pgn: string): string[] {
 }
 
 /** Deepest game wins; tie broken by higher opponent rating. */
-function betterSample(a: ProGameReference, b: ProGameReference): ProGameReference {
+function betterSample(a: ProForkGameInput, b: ProForkGameInput): ProForkGameInput {
   if (b.plyCount !== a.plyCount) return b.plyCount > a.plyCount ? b : a;
   return (b.opponentRating ?? 0) > (a.opponentRating ?? 0) ? b : a;
 }
@@ -81,7 +101,7 @@ function betterSample(a: ProGameReference, b: ProGameReference): ProGameReferenc
  * moves parse — the caller then falls back to the single representative-game walk.
  */
 export function buildProOpeningForkTree(
-  games: readonly ProGameReference[],
+  games: readonly ProForkGameInput[],
   opts: { minForkGames?: number; maxPlies?: number } = {},
 ): ProOpeningForkTree | null {
   const minForkGames = opts.minForkGames ?? 2;

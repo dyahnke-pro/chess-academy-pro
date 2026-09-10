@@ -157,6 +157,8 @@ import {
   isWalkthroughControlPhrase,
 } from '../../services/walkthroughControlIntent';
 import { lookupPlayerGamesTool } from '../../coach/tools/cerebellum/lookupPlayerGames';
+import { buildProOpeningForkTree } from '../../services/proOpeningForks';
+import { proForkTreeToWalkthrough } from '../../services/proForkWalkthrough';
 import { buildSession } from '../../services/walkthroughAdapter';
 import { fetchChesscomPlayerGames } from '../../services/chesscomGamesService';
 import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
@@ -3384,7 +3386,67 @@ export function CoachTeachPage(): JSX.Element {
               }
             }
 
-            if (mountable.length > 0) {
+            // W1 — FORK-IN-THE-ROAD (David 2026-09-10: "if they have multiple
+            // games with the same opening we use the fork-in-the-road sequencing
+            // for teaching how they play x opening"). When ≥2 of the pro's REAL
+            // games are on disk, teach HOW HE PLAYS IT: aggregate them into a
+            // spine + fork tree (his real choices, frequency-ranked) and walk it
+            // through the same tree runtime — with a grounded WHY on every move
+            // (David: "always the why"), not a single silent game replay.
+            let forkMounted = false;
+            if (source === 'disk' && diskGames.length >= 2) {
+              try {
+                const forkTree = buildProOpeningForkTree(
+                  diskGames.map((g) => ({
+                    pgn: g.pgn,
+                    studentSide: g.studentSide,
+                    plyCount: g.plyCount,
+                    opponentRating: g.opponentRating,
+                    playerId: pgReq.player,
+                    openingId: '',
+                    variationLabel: openingName,
+                  })),
+                );
+                const wt = forkTree ? proForkTreeToWalkthrough(forkTree) : null;
+                if (wt && forkTree) {
+                  const proName = titleCase(pgReq.player);
+                  const forkN = forkTree.forks.length;
+                  const prose = forkN > 0
+                    ? `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of his real games. `
+                      + `At ${forkN === 1 ? 'one point' : `${forkN} points`} his games split — you'll pick which of his lines to follow, and I'll tell you why he chose each. `
+                      + `Tap Play or step through with the arrows.`
+                    : `Here's how ${proName} plays the ${openingName}, drawn from ${forkTree.gameCount} of his real games — his main line move by move, with the reason behind each. `
+                      + `Tap Play or step through with the arrows.`;
+                  setMessages((prev) => [...prev, {
+                    id: `${pgTurnId}-c`,
+                    role: 'assistant',
+                    content: prose,
+                    timestamp: Date.now(),
+                  }]);
+                  useCoachMemoryStore.getState().appendConversationMessage({
+                    surface: 'chat-teach',
+                    role: 'coach',
+                    text: prose,
+                    fen: opts?.fenOverride ?? gameRef.current.fen,
+                    trigger: null,
+                  });
+                  startWalkthrough(wt);
+                  void logAppAudit({
+                    kind: 'coach-surface-migrated',
+                    category: 'subsystem',
+                    source: 'CoachTeachPage.handleSubmit.playerGame',
+                    summary:
+                      `player-game "${text.slice(0, 50)}" → ${proName} / ${openingName} FORK tree `
+                      + `(${forkTree.gameCount} games, ${forkN} forks, ${forkTree.spine.length}-ply spine)`,
+                  });
+                  forkMounted = true;
+                }
+              } catch {
+                forkMounted = false; // fall back to the single-game walk below
+              }
+            }
+
+            if (!forkMounted && mountable.length > 0) {
               const top = mountable[0];
               const sideWord = top.studentSide === 'white' ? 'with White' : 'with Black';
               const oppRating = top.opponentRating ? ` (${top.opponentRating})` : '';
@@ -3431,7 +3493,7 @@ export function CoachTeachPage(): JSX.Element {
                   `player-game "${text.slice(0, 50)}" → ${top.player} / ${openingName} ` +
                   `(${source}, ${mountable.length} found) — mounted ${session.steps.length}-ply game`,
               });
-            } else {
+            } else if (!forkMounted) {
               const prose =
                 `I couldn't find one of ${titleCase(pgReq.player)}'s ${openingName} games on disk or in their chess.com history. ` +
                 `Want me to walk the ${openingName} itself? Just say "teach me the ${openingName}".`;
