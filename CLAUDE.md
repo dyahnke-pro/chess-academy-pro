@@ -4124,9 +4124,11 @@ them. Two enforcement layers:
   day).** The `chess-academy-pro.netlify.app` mirror builds from the same
   repo, and it was building a deploy-preview per branch push PLUS a
   production build per merge. `netlify.toml` now carries
-  `[build] ignore = "test \"$BRANCH\" != \"main\""` (exit 0 = SKIP — note
-  Netlify's ignore semantics are the OPPOSITE of Vercel's) so only `main`
-  builds, and a first-position force-301 redirects every path to
+  `[build] ignore = "exit 0"` — a BLANKET skip, every branch including `main`
+  (verified 2026-09-11; it was once the narrower `test "$BRANCH" != "main"`,
+  which is why that wording appeared here — the mirror is now purely a
+  redirect, so it never needs to build at all). Note Netlify's ignore
+  semantics are the OPPOSITE of Vercel's: exit 0 = SKIP. And a first-position force-301 redirects every path to
   `chess-academy-pro.vercel.app` (David: the mirror's free riders funnel to
   the real app; the redirect IS the product there now). Do NOT remove either
   rule, and do NOT re-introduce per-branch Netlify builds. **Batch merges**:
