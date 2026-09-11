@@ -196,13 +196,19 @@ async function ask(q, budgetLoops = 30) {
   await page.locator('[data-testid="chat-text-input"]:visible:not([disabled])').first()
     .waitFor({ timeout: 90000 }).catch(() => {});
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    await box.click({ force: true });
-    await box.pressSequentially(q, { delay: 8 });
+    await box.click({ force: true }).catch(() => {});
+    // GUARD: a stage-starting phrasing can leave the input busy/disabled, so
+    // pressSequentially can time out. Don't let that throw uncaught and KILL
+    // the whole run (it crashed the exhaustive sweep in the actions section) —
+    // catch it and let the "did the text land?" check below decide.
+    await box.pressSequentially(q, { delay: 8 }).catch(() => {});
     const typed = await box.inputValue().catch(() => '');
     if (typed.includes(q.slice(0, 12))) break;
     await page.waitForTimeout(4000);
   }
-  await box.press('Enter');
+  const typedFinal = await box.inputValue().catch(() => '');
+  if (!typedFinal.includes(q.slice(0, 8))) return { reply: '', sent: false };
+  await box.press('Enter').catch(() => {});
   const baseSet = new Set(baseArr);
   for (let i = 0; i < budgetLoops; i++) {
     await page.waitForTimeout(1500);
@@ -257,8 +263,9 @@ for (const [section, ids] of SECTIONS) {
     if (id === 'play-against' || id === 'teach-opening') { await gotoTeach(); }
     const urlBefore = page.url();
     const budget = id === 'teach-opening' ? 80 : id === 'continue-middlegame' ? 50 : 30;
-    const { reply, sent } = await ask(q, budget);
-    if (!sent) { record(id, false, 'chat input never mounted'); continue; }
+    let asked; try { asked = await ask(q, budget); } catch (e) { asked = { reply: '', sent: false, err: String(e).slice(0, 80) }; }
+    const { reply, sent } = asked;
+    if (!sent) { record(id, false, `chat input never usable${asked.err ? ` (${asked.err})` : ''}`); continue; }
     const urlAfter = page.url();
     if (URL_PROOF[id]) {
       // Post-state contract: the ask must MOVE the app.
