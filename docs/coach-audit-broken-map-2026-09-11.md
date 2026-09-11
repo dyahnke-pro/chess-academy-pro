@@ -30,11 +30,13 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
 - ✅ Track 6 (tools): gating + grounding teeth verified sound.
 - ✅ Track 7 (voice/verbosity/perspective): deterministic contracts verified sound.
 - ✅ Track 3 (Learn walkthrough): HAND-DRIVEN, verified sound, 0 confirmed bugs (16 bot 'failures' debunked).
+- ✅ Track 4 (Play): HAND-DRIVEN, sound — accurate move-quality commentary +
+  blunder interception (oracle-verified), within silent contract, 0 bugs.
 - ✅ Track 5 (Review): real-game 3-instrument audit MEETS STANDARD (15/15 text
   contracts); voice-half + mistake-game diagnostic cards owed.
 - **Owed — the rest of the INTERACTIVE layer** (heavy prod-Playwright): Track 2
   remainder (positionFacts/importance/criticality/PV via a real-engine harness),
-  Track 3 (Learn walkthrough live), Track 4 (Play silent-contract live), Track 5
+  Track 3 (Learn walkthrough live), Track 5
   follow-on (a game WITH blunders → find-the-shot/rewind/trap cards + voice),
   Track 8 (WLPP full-play/endgame/fundamentals), Track 9 (learning-loop
   round-trip with seeded games), Track 1c (analytics accuracy with the games
@@ -274,6 +276,35 @@ count.
 **Meta-lesson (validates David's insistence):** hand-driving turned 16 scripted
 "failures" into 0 confirmed bugs. A fire-and-forget bot would have polluted the
 map with 16 false findings.
+
+---
+
+## Track 4 — PLAY (HAND-DRIVEN, silent contract + blunder interception)
+
+Hand-driven via `hand-step.mjs` on prod (0 pageerrors throughout).
+
+**Verdict: SOUND — 0 confirmed bugs.**
+- Loads clean; setup (color/difficulty/time) + all controls present. Played
+  moves, the bot responds, opening auto-detected (Alekhine / Wayward Queen).
+- **Move-quality commentary is ACCURATE — verified against the Stockfish oracle.**
+  It flagged 2.Nf3 as a ~1.4-pt mistake (oracle: e5 best +0.73, Nf3 → −0.62,
+  cpLoss ~1.35 ✓) and the "Nxe4 wins the pawn" consequence is real.
+- **Blunder interception fires correctly with grounded content.** Qxe5+ →
+  `blunder-interception` card: "a blunder — about 6.0 points… let Black play
+  Nxe5, winning the queen" (board + eval −6.3 confirm it) + Continue / Takeback /
+  Try-Bb5. Correct.
+- **Within the silent contract:** only sanctioned volunteering seen (a couple of
+  mistake mentions + the blunder pause); no invented tactics.
+
+**Soft note (NOT a counted finding — not "broken"):** the mistake commentary
+sometimes names a valid-but-SUBOPTIMAL better-move and reuses phrasing verbatim
+across moves — e.g. move 3 said "e5 was stronger" (true: e5 −0.12 > Bc4 −0.89)
+when the actual best was Nc3 (+0.52). Accurate and defensible, just not optimal
+coaching. A polish item, not a bug.
+
+**Owed:** the on-demand controls (Hint / Why / Read-position / Takeback) and a
+clean voice-silence confirm (narration listener) — the CHAT contract is verified;
+the pure no-unprompted-VOICE half is not.
 
 ---
 
