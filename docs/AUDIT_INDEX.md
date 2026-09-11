@@ -229,3 +229,5 @@ per-cell grid + JSON report to `audit-reports/coach-capability-matrix-<ts>.json`
 ```
 AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY MATRIX_SECTION=actions node scripts/audit-coach-capability-matrix.mjs
 ```
+
+- `audit-stream-optin-prod.mjs` — the 2026-09-11 opt-in contract: a fresh device must make ZERO `/api/audit-stream` POSTs, and an explicitly-enabled one must still POST (both halves, so a broken stream cannot pass as "default off").
