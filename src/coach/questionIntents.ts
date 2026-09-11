@@ -989,6 +989,18 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // student asking about the app was taught what a fork is (2026-08-13
   // all-questions audit, run allq-msrzt11w).
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
+  // A self-KNOWLEDGE / app-METHOD ask ("what's my strongest area", "how do you
+  // teach", "assess my chess") is not a glossary lookup — but the broad
+  // "what's <word>" / "how does the" / "explain" shapes above catch them, and
+  // concept dispatches BEFORE those lanes, so it stole them (broken-map #3/#4).
+  // Defer to the owning lane. (All same-module hoisted declarations.)
+  if (
+    isStrengthsQuestion(ask) ||
+    isTeachingMethodQuestion(ask) ||
+    isSkillRadarQuestion(ask)
+  ) {
+    return false;
+  }
   return CONCEPT_QUESTION_RE.test(ask) && !CONCEPT_POSITIONAL_CUE_RE.test(ask);
 }
 
@@ -1492,6 +1504,8 @@ const STRENGTHS_QUESTION_RE = anyOf([
   String.raw`\bwhere\s+(?:am\s+i|do\s+i\s+feel)\s+(?:the\s+)?(?:strong|strongest|solid|confident)\b`,
   // "what part/area of my game is best/strongest/good"
   String.raw`\bwhat\s+(?:part|area|aspect|bit|element)\s+of\s+my\s+(?:game|play|chess)\s+is\s+(?:best|strongest|good|strong|my\s+best)\b`,
+  // reversed order — "what's the strongest/best part of my game" (broken-map #3).
+  String.raw`\bwhat(?:'?s| is)\s+the\s+(?:strongest|best|strong)\s+(?:part|area|aspect|bit|element)\s+of\s+my\s+(?:game|play|chess)\b`,
 ]);
 export function isStrengthsQuestion(ask: string | undefined): boolean {
   return !!ask && STRENGTHS_QUESTION_RE.test(ask);
