@@ -308,6 +308,30 @@ the pure no-unprompted-VOICE half is not.
 
 ---
 
+## Track 8 — WLPP masterclass (HAND-DRIVEN Watch spot-check)
+
+Hand-drove `/openings/vienna-game` (the keystone masterclass), 0 pageerrors.
+
+**Watch: spot-checked SOUND.** It mounts the curated `lesson-player` directly
+(NOT legacy `WalkthroughMode` — Gate A holds for Vienna). Stepped beats 2→6:
+- Beat 2 (1.e4 e5 2.Nc3): board-accurate — "queen's knight to c3… supports the
+  e4-pawn" (Nc3 does cover e4 ✓, "keeps the king-knight free" ✓), with a green
+  lead-the-eye arrow on the b1→c3 knight.
+- Beat 6 (…Bc5): "Black mirrors with Bc5 aiming at f2 as White's Bc4 stares at
+  f7" — board shows exactly that, with green/orange arrows on both bishop
+  diagonals; Capablanca's centre rule cited correctly.
+- No skewer bug — masterclass narration is baked + `narrationAccuracy`-gated, so
+  the runtime `detectTactics` D3 defect doesn't reach it.
+
+**Owed (the big one):** the FULL WLPP sweep — Learn / Practice / Play rungs, the
+punish-gems (unlock ladder), model games, the soundness sweep (no line leaves the
+student worse than ≈−1.0), and every masterclass + pro-rep opening. That is the
+`audit-punish-gems-loop.mjs` 3-pass full-play contract's scope (a very large
+multi-hour run). Watch quality on the keystone is confirmed; the rest is scoped
+but not driven here.
+
+---
+
 ## Track 5 — REVIEW (3-instrument real-game audit)
 
 Ran `scripts/audit-review-real-game.mjs` on prod (seeds a real game unanalyzed,
