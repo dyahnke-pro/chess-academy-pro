@@ -349,7 +349,7 @@ export function computeMoveFundamentals(
         const b = new Chess(fenBefore);
         deniers = b
           .attackers(s as Square, enemy)
-          .map((sq) => b.get(sq as Square)?.type)
+          .map((sq) => b.get(sq)?.type)
           .filter((t): t is 'n' | 'b' => t === 'n' || t === 'b');
       } catch { deniers = []; }
       if (deniers.length > 0) {

@@ -33,9 +33,9 @@ const DEPTH = 16;
 function sfSend(fen: string, cmds: string, onLine: (l: string) => boolean, timeoutMs = 25000): Promise<void> {
   return new Promise((resolve) => {
     const sf = spawn(SF); let buf = ''; let done = false;
-    const finish = () => { if (done) return; done = true; clearTimeout(to); try { sf.kill(); } catch {} resolve(); };
+    const finish = () => { if (done) return; done = true; clearTimeout(to); try { sf.kill(); } catch { /* already exited */ } resolve(); };
     const to = setTimeout(finish, timeoutMs);
-    sf.stdout.on('data', (d) => { buf += d; let nl; while ((nl = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, nl); buf = buf.slice(nl + 1); if (onLine(line)) { finish(); return; } } });
+    sf.stdout.on('data', (d) => { buf += String(d); let nl; while ((nl = buf.indexOf('\n')) >= 0) { const line = buf.slice(0, nl); buf = buf.slice(nl + 1); if (onLine(line)) { finish(); return; } } });
     sf.stdin.write(`uci\nsetoption name MultiPV value 3\nsetoption name UCI_ShowWDL value true\nisready\nposition fen ${fen}\n${cmds}\n`);
   });
 }
@@ -55,7 +55,7 @@ async function sfAnalyze(fen: string): Promise<StockfishAnalysis> {
   const flip = blackToMove ? -1 : 1;
   const topLines = [...lines.entries()].sort((a, b) => a[0] - b[0]).map(([rank, l]) => ({
     rank, evaluation: (l.cp ?? 0) * flip, moves: l.pv, mate: l.mate != null ? l.mate * flip : null,
-    wdl: l.w != null ? (blackToMove ? { win: l.l!, draw: l.d!, loss: l.w! } : { win: l.w!, draw: l.d!, loss: l.l! }) : null, seldepth: null, bound: null,
+    wdl: l.w != null ? (blackToMove ? { win: l.l ?? 0, draw: l.d ?? 0, loss: l.w } : { win: l.w, draw: l.d ?? 0, loss: l.l ?? 0 }) : null, seldepth: null, bound: null,
   }));
   const primary = topLines[0];
   return { bestMove: primary?.moves?.[0] ?? '', evaluation: primary?.evaluation ?? 0, isMate: primary?.mate != null, mateIn: primary?.mate ?? null, depth: DEPTH, topLines: topLines as StockfishAnalysis['topLines'], nodesPerSecond: 0, wdl: primary?.wdl ?? null, seldepth: DEPTH };
