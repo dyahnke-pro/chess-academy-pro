@@ -39,7 +39,13 @@ import { captureEvent } from '../../services/analytics';
  * (the 2026-09-06 gray-strip bug).
  */
 
-const POLL_MS = 15_000;
+// 60s, not 15s (David 2026-09-11: "make sure we only send necessary information
+// there"). This poll ONLY runs while the panel is OPEN — it is not a background
+// firehose — but each GET costs 2 Redis commands against the shared 500k/month
+// budget, and a developer broadcast is not a live feed. At 15s an open panel
+// spent 8 commands/minute; 60s spends 2, and nobody can tell the difference
+// between hearing about a message now and hearing about it in under a minute.
+const POLL_MS = 60_000;
 
 function Bubble({ m }: { m: ThreadMessage }): JSX.Element {
   const mine = m.from === 'user';

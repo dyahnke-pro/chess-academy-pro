@@ -1,10 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-// usageGuard reads KV_REST_API_URL / KV_REST_API_TOKEN + the ceiling at module
-// load, so each scenario sets env, resets the module registry, and dynamically
-// imports a fresh copy.
+// usageGuard reads KV_REST_API_URL / KV_REST_API_TOKEN at module load, so each
+// scenario sets env, resets the module registry, and dynamically imports a
+// fresh copy.
 function makeReq(ip = '1.2.3.4'): Request {
   return new Request('https://x/api/llm-proxy', { headers: { 'x-forwarded-for': ip } });
+}
+function pipelineReply(...results: unknown[]): Response {
+  return new Response(JSON.stringify(results.map((result) => ({ result }))), { status: 200 });
 }
 
 const ORIG = { ...process.env };
@@ -25,81 +28,80 @@ describe('usageGuard', () => {
     const fetchSpy = vi.fn();
     vi.stubGlobal('fetch', fetchSpy);
     const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('llm', makeReq(), 0.005);
-    expect(r.allowed).toBe(true);
+    expect((await checkUsageGuard('llm', makeReq())).allowed).toBe(true);
     expect(fetchSpy).not.toHaveBeenCalled(); // never touches the wire unconfigured
   });
 
-  it('fails OPEN when the KV call errors', async () => {
+  it('blocks on the per-IP rate limit', async () => {
     process.env.KV_REST_API_URL = 'https://kv.example';
     process.env.KV_REST_API_TOKEN = 'tok';
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('kv down')));
-    const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('llm', makeReq(), 0.005);
-    expect(r.allowed).toBe(true);
-  });
-
-  it('blocks on the global daily $ ceiling', async () => {
-    process.env.KV_REST_API_URL = 'https://kv.example';
-    process.env.KV_REST_API_TOKEN = 'tok';
-    process.env.LLM_DAILY_USD_CEILING = '25';
-    // pipeline result: [INCR rl→1, EXPIRE→1, INCRBYFLOAT spend→25.5, EXPIRE→1]
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
-      JSON.stringify([{ result: 1 }, { result: 1 }, { result: '25.5' }, { result: 1 }]),
-      { status: 200 },
-    )));
-    const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('llm', makeReq(), 0.005);
-    expect(r.allowed).toBe(false);
-    expect(r.reason).toBe('daily-ceiling');
-    expect(r.retryAfterSec).toBeGreaterThan(0);
-  });
-
-  it('blocks on the per-IP rate limit when under the daily ceiling', async () => {
-    process.env.KV_REST_API_URL = 'https://kv.example';
-    process.env.KV_REST_API_TOKEN = 'tok';
-    process.env.LLM_DAILY_USD_CEILING = '25';
     process.env.LLM_IP_LIMIT = '60';
-    // 61 calls this window (over 60), spend well under ceiling.
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
-      JSON.stringify([{ result: 61 }, { result: 1 }, { result: '0.30' }, { result: 1 }]),
-      { status: 200 },
-    )));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(pipelineReply(61))); // 61st call this window
     const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('llm', makeReq(), 0.005);
+    const r = await checkUsageGuard('llm', makeReq());
     expect(r.allowed).toBe(false);
     expect(r.reason).toBe('rate-limit');
-  });
-
-  it('blocks on the per-IP daily $ cap before the global ceiling is reached', async () => {
-    process.env.KV_REST_API_URL = 'https://kv.example';
-    process.env.KV_REST_API_TOKEN = 'tok';
-    process.env.LLM_DAILY_USD_CEILING = '25';
-    process.env.PER_IP_DAILY_USD_CAP = '1.00';
-    // pipeline: [INCR rl→5, EXPIRE, spend(day)→0.40, EXPIRE, spend(ip)→1.20, EXPIRE]
-    // global 0.40 < 25 (under), but this IP's day spend 1.20 > 1.00 cap.
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
-      JSON.stringify([
-        { result: 5 }, { result: 1 }, { result: '0.40' }, { result: 1 }, { result: '1.20' }, { result: 1 },
-      ]),
-      { status: 200 },
-    )));
-    const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('llm', makeReq(), 0.001);
-    expect(r.allowed).toBe(false);
-    expect(r.reason).toBe('ip-daily-cap');
     expect(r.retryAfterSec).toBeGreaterThan(0);
   });
 
-  it('allows a normal call under both limits', async () => {
+  it('allows a normal call under the limit', async () => {
     process.env.KV_REST_API_URL = 'https://kv.example';
     process.env.KV_REST_API_TOKEN = 'tok';
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(
-      JSON.stringify([{ result: 3 }, { result: 1 }, { result: '0.05' }, { result: 1 }]),
-      { status: 200 },
-    )));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(pipelineReply(3)));
     const { checkUsageGuard } = await import('./usageGuard');
-    const r = await checkUsageGuard('tts', makeReq(), 0.002);
-    expect(r.allowed).toBe(true);
+    expect((await checkUsageGuard('tts', makeReq())).allowed).toBe(true);
+  });
+
+  // 🔒 COST GATE (David 2026-09-11: "what cannot happen is maxing this out
+  // again"). Upstash bills per COMMAND, so the guard's pipeline width IS its
+  // price — and it is paid on EVERY llm and tts call, with tts firing per
+  // sentence. It was 6; the $ bookkeeping is gone and the TTL rides only the
+  // first write, so the steady state is a single INCR.
+  it('sends 2 commands on first write and only 1 thereafter', async () => {
+    process.env.KV_REST_API_URL = 'https://kv.example';
+    process.env.KV_REST_API_TOKEN = 'tok';
+    const fetchSpy = vi.fn().mockResolvedValue(pipelineReply(1));
+    vi.stubGlobal('fetch', fetchSpy);
+    const { checkUsageGuard } = await import('./usageGuard');
+
+    await checkUsageGuard('llm', makeReq());
+    const first = JSON.parse(fetchSpy.mock.calls[0][1].body as string) as string[][];
+    expect(first.map((c) => c[0])).toEqual(['INCR', 'EXPIRE']);
+
+    await checkUsageGuard('llm', makeReq());
+    const second = JSON.parse(fetchSpy.mock.calls[1][1].body as string) as string[][];
+    expect(second.map((c) => c[0])).toEqual(['INCR']); // TTL already set
+
+    // And it never writes a spend counter — that bookkeeping cost more than the
+    // spend it was guarding (~$0.03/day on DeepSeek).
+    const allCmds = fetchSpy.mock.calls.flatMap(
+      (c) => JSON.parse(c[1].body as string) as string[][],
+    );
+    expect(allCmds.some((c) => String(c[1] ?? '').startsWith('spend:'))).toBe(false);
+  });
+
+  // Fail-open is deliberate — refusing every request while Upstash is capped
+  // would take the coach and voice down for paying customers. But /api/tts and
+  // /api/llm-proxy are UNAUTHENTICATED endpoints on a permanently-open free web
+  // app, so "fail open" must not mean "unthrottled".
+  it('still throttles a runaway caller when KV is down', async () => {
+    process.env.KV_REST_API_URL = 'https://kv.example';
+    process.env.KV_REST_API_TOKEN = 'tok';
+    process.env.LLM_IP_LIMIT = '5';
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('max requests limit exceeded')));
+    const { checkUsageGuard } = await import('./usageGuard');
+
+    // A normal caller is unaffected — fail-open still holds.
+    expect((await checkUsageGuard('llm', makeReq())).allowed).toBe(true);
+
+    let blocked = false;
+    for (let i = 0; i < 20 && !blocked; i++) {
+      const r = await checkUsageGuard('llm', makeReq());
+      if (!r.allowed) { blocked = true; expect(r.reason).toBe('rate-limit'); }
+    }
+    expect(blocked).toBe(true);
+
+    // A different IP is untouched by the noisy one's window.
+    expect((await checkUsageGuard('llm', makeReq('9.9.9.9'))).allowed).toBe(true);
   });
 });

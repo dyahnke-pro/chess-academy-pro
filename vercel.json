@@ -1,40 +1,72 @@
 {
   "installCommand": "npm install",
   "crons": [
-    { "path": "/api/voice-failure-watch", "schedule": "*/10 * * * *" },
-    { "path": "/api/monitor", "schedule": "*/10 * * * *" }
+    {
+      "path": "/api/monitor",
+      "schedule": "0 * * * *"
+    }
   ],
   "rewrites": [
-    { "source": "/voice-packs/:file", "destination": "/api/voice-packs/:file" },
-    { "source": "/api/ph/:path*", "destination": "/api/phproxy?p=:path*" },
-    { "source": "/api/llm/deepseek/:path*", "destination": "/api/llm-proxy?provider=deepseek&path=:path*" },
-    { "source": "/api/llm/anthropic/:path*", "destination": "/api/llm-proxy?provider=anthropic&path=:path*" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "/voice-packs/:file",
+      "destination": "/api/voice-packs/:file"
+    },
+    {
+      "source": "/api/ph/:path*",
+      "destination": "/api/phproxy?p=:path*"
+    },
+    {
+      "source": "/api/llm/deepseek/:path*",
+      "destination": "/api/llm-proxy?provider=deepseek&path=:path*"
+    },
+    {
+      "source": "/api/llm/anthropic/:path*",
+      "destination": "/api/llm-proxy?provider=anthropic&path=:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/data/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        }
       ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cross-Origin-Resource-Policy", "value": "cross-origin" }
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "cross-origin"
+        }
       ]
     }
   ]

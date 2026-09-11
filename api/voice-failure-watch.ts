@@ -5,6 +5,23 @@
  * (`audit-watch.yml`) pulled prod with `${{ secrets.AUDIT_STREAM_SECRET }}`
  * — a GitHub Actions repo secret that was never synced to the rotated value,
  * so the cron ran green every 10 min doing NOTHING and a live tester's
+ * 🔒 THIS ENDPOINT IS NO LONGER ON A CRON (David 2026-09-11: "make sure we only
+ * send necessary information there"). It reads the Redis audit-stream, and
+ * streaming went opt-in / OFF by default the same day — so a tester's phone no
+ * longer streams here and this watcher can only ever see David's own device when
+ * he turns the pipe on. An hourly cron reading a permanently-empty list is ~4k
+ * Redis commands/month against the shared budget for exactly zero signal, and a
+ * watcher that reports "0 failures" from an empty source is the silent-success
+ * failure mode this file was WRITTEN to kill (see the 2026-06-30 note below).
+ *
+ * The signal is NOT lost: `tts-failure` and `voice-fallover` are both mirrored to
+ * PostHog by `analytics.AUDIT_EVENT_MAP` as `tts_failure` / `voice_fallover`,
+ * durable and queryable, on every device. The right home for the ALERT is a
+ * PostHog alert on those two events — no code, no Redis, works for testers.
+ *
+ * The endpoint is KEPT (manually triggerable, and the obvious place to repoint at
+ * PostHog later); only the schedule is removed from vercel.json.
+ *
  * `tts-failure` / `voice-fallover` events raised no alert. The GitHub Actions
  * secrets API is org-policy-blocked through the agent proxy, so that secret
  * can't be fixed from a session. The fix is to run the watcher WHERE the
@@ -189,7 +206,29 @@ export default async function handler(
     return;
   }
 
+  // 🚨 THIS WATCHER'S SOURCE IS NOW DRY BY DESIGN — SAY SO, LOUDLY.
+  //
+  // It reads the Redis audit-stream, and as of 2026-09-11 streaming is opt-in
+  // and OFF by default (David: "i only want the live audit stream to send to
+  // redis when i turn it on"). A tester's phone no longer streams here, so this
+  // watcher will report "0 new failures" forever — a silent no-op that reports
+  // SUCCESS, which is exactly the failure mode that let it sit dead for weeks in
+  // 2026-06-30. It must never again look green while seeing nothing.
+  //
+  // The signal itself is NOT lost: `tts-failure` and `voice-fallover` are both
+  // mirrored to PostHog by `analytics.AUDIT_EVENT_MAP` (as `tts_failure` /
+  // `voice_fallover`), which is durable and queryable. Until this watcher is
+  // repointed at PostHog, treat PostHog as the source of truth for voice
+  // failures and treat this endpoint's zero as "not measured", never "healthy".
+  const sourceIsDry = ran && newFailures === 0;
   const payload: Record<string, unknown> = { ok: true, ran, newFailures, totalFailures };
+  if (sourceIsDry) {
+    payload.warning =
+      'audit-stream is opt-in/off by default since 2026-09-11, so this watcher sees nothing. ' +
+      'A zero here means NOT MEASURED, not healthy — query PostHog tts_failure / voice_fallover instead.';
+    payload.sourceMeasured = false;
+    console.warn('::warning::voice-failure-watch ran against an opt-in (empty) audit-stream — zero is "not measured", not "healthy". Use PostHog tts_failure / voice_fallover.');
+  }
   if (authed) {
     const state = await readState();
     payload.failures = state.failures;

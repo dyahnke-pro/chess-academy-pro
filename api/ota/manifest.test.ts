@@ -227,10 +227,41 @@ describe('OTA update check', () => {
     expect(out.body.manifest).toBeUndefined();
   });
 
-  // ── Redis / Blob divergence ──────────────────────────────────────────────
-  it('prefers whichever store holds the NEWER pointer, not Redis by default', async () => {
-    // Redis is reachable but STALE (the publisher's Redis write is allowed to
-    // fail). Preferring it unconditionally would pin devices to the old bundle.
+  // ── Redis / Blob ─────────────────────────────────────────────────────────
+  // 🔒 COST CONTRACT (David 2026-09-11: "make sure we only send necessary
+  // information there"). An update check fires on every app launch, on every
+  // device. Reading Redis here cost one command EACH TIME for a pointer we
+  // already hold in Blob — the largest avoidable draw on the shared
+  // 500k/month budget. Blob is the publisher's primary write, so it is read
+  // alone on the happy path and Redis is a fallback only.
+  it('does NOT touch Redis when the Blob pointer reads (one command per launch per device)', async () => {
+    process.env.KV_REST_API_URL = 'https://redis.test';
+    process.env.KV_REST_API_TOKEN = 'tok';
+    let redisReads = 0;
+    vi.doMock('@upstash/redis', () => ({
+      Redis: class {
+        async get() {
+          redisReads += 1;
+          return pointer({ version: 'd2d10d06', ordinal: 1000 });
+        }
+      },
+    }));
+    vi.resetModules();
+    const { default: fresh } = await import('./manifest');
+    stubFetch(pointer({ version: 'ff5ed1a2', ordinal: 2000 }));
+    const { req, res, out } = drive({ version_name: 'old00000' });
+    await fresh(req, res);
+    // Blob wins, and Redis was never asked — this is the command we stopped
+    // paying. (It also settles the old stale-Redis failure mode outright
+    // instead of ranking around it: a stale Redis pointer can no longer pin a
+    // device to an old bundle, because it is not consulted at all.)
+    expect(out.body.version).toBe('ff5ed1a2');
+    expect(redisReads).toBe(0);
+    vi.doUnmock('@upstash/redis');
+    vi.resetModules();
+  });
+
+  it('falls back to Redis when the Blob pointer is unreadable', async () => {
     process.env.KV_REST_API_URL = 'https://redis.test';
     process.env.KV_REST_API_TOKEN = 'tok';
     vi.doMock('@upstash/redis', () => ({
@@ -242,10 +273,11 @@ describe('OTA update check', () => {
     }));
     vi.resetModules();
     const { default: fresh } = await import('./manifest');
-    stubFetch(pointer({ version: 'ff5ed1a2', ordinal: 2000 }));
+    // Blob 404s — the one case where the second copy earns its command.
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('nope', { status: 404 })));
     const { req, res, out } = drive({ version_name: 'old00000' });
     await fresh(req, res);
-    expect(out.body.version).toBe('ff5ed1a2');
+    expect(out.body.version).toBe('d2d10d06');
     vi.doUnmock('@upstash/redis');
     vi.resetModules();
   });

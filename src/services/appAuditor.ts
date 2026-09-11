@@ -1178,20 +1178,35 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
       }
     }
 
-    // Bake-in fallback: when this device has no per-profile config (the
-    // common case for beta testers), default to the build-time
-    // audit-stream URL + secret so streaming is ON everywhere with zero
-    // setup. Per-profile values (David's own device, set in Settings)
-    // still win. Empty baked secret (e.g. a preview build without the
-    // env var) leaves streaming off, as before.
-    if (!url || !secret) {
-      const bakedUrl = typeof __AUDIT_STREAM_URL__ === 'string' ? __AUDIT_STREAM_URL__ : '';
-      const bakedSecret = typeof __AUDIT_STREAM_SECRET__ === 'string' ? __AUDIT_STREAM_SECRET__ : '';
-      if (bakedUrl && bakedSecret) {
-        url = url || bakedUrl;
-        secret = secret || bakedSecret;
-      }
-    }
+    // 🔒 STREAMING IS OPT-IN, OFF BY DEFAULT (David 2026-09-11: "i only want
+    // the live audit stream to send to redis when i turn it on").
+    //
+    // There used to be a bake-in fallback here that adopted the build-time URL
+    // + secret whenever this device had no per-profile config, so streaming was
+    // ON for every device with zero setup. Three things were wrong with it:
+    //
+    //  1. COST. The stream's backing store is the SHARED Upstash notepad that
+    //     also holds the LLM/TTS spend counter, the bell's messages and the
+    //     referral credits — one 500k-command/month budget between them. Every
+    //     device shipping every audit event (no severity filter, ~1 POST/sec
+    //     per open page) is what exhausted it in July AND again in September;
+    //     the casualties were the spend guard and David's own messages.
+    //  2. IT MADE "OFF" INEXPRESSIBLE. `clearAuditStreamConfig` writes null,
+    //     and null fell straight back through here to the baked value, so the
+    //     Settings toggle silently turned itself back on at the next boot.
+    //  3. IT WASN'T NEEDED. Other users' telemetry is PostHog's job (durable,
+    //     already paid for); this stream is a LIVE-WATCH pipe for a device you
+    //     are actively debugging. Post-deploy audits don't need it either —
+    //     they record through their own loopback sidecar.
+    //
+    // So: no auto-enable. Streaming happens only when a URL + secret were
+    // configured EXPLICITLY — by David in Settings, or by an audit pointing at
+    // its own sidecar. The baked secret still exists for the one-tap enable in
+    // NarrationAuditPanel and for the 401 auto-heal below; it just no longer
+    // turns anything on by itself.
+    //
+    // The LOCAL Dexie log is unaffected and remains the source of truth — every
+    // device keeps recording whether or not the pipe is open.
 
     streamConfigHydrated = true;
     cachedStreamConfig = url && secret ? { url, secret } : null;
@@ -1322,9 +1337,23 @@ let streamAuthDisabled = false;
 // `auditStreamUrl` at 127.0.0.1) keeps the per-event POST: twenty-plus audit
 // scripts read each event off the wire as a single object, and per-scenario
 // attribution needs the event on the wire the moment it fires.
-const STREAM_BATCH_MAX_ENTRIES = 40;
+// 🔒 ONE COMMAND PER BATCH, AND BATCHES ARE WIDE (David 2026-09-11: "make sure
+// we only send necessary information there").
+//
+// The server spends ~1 Redis command per POST, so the flush window IS the price.
+// At 1s this was up to 60 commands/minute from a SINGLE open page — about eight
+// simultaneous pages would consume the entire 500k/month budget that also holds
+// the spend guard, the bell's messages and the referral credits. 5s cuts that
+// ~5x and loses nothing: every entry still ships, just in fewer, fuller writes.
+//
+// Deliberately NOT a severity filter. Streaming is opt-in and off by default, so
+// the only time this path runs is when David has turned it on to WATCH a device
+// — and a live debugging watch that silently dropped the non-error events would
+// be worse than useless. Volume is controlled by the batch width and by the
+// stream being off, never by hiding events from the person watching.
+const STREAM_BATCH_MAX_ENTRIES = 100;
 const STREAM_BATCH_MAX_BYTES = 48_000; // keepalive bodies are capped at 64KB
-const STREAM_BATCH_FLUSH_MS = 1_000;
+const STREAM_BATCH_FLUSH_MS = 5_000;
 let streamBatch: AuditEntry[] = [];
 let streamBatchTimer: ReturnType<typeof setTimeout> | null = null;
 let streamFlushHooksInstalled = false;

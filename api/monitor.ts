@@ -38,7 +38,6 @@ const BLOB_PATH = 'monitor/state.json';
 const RATE_LIMIT_MS = 5 * 60_000;
 const LASTRUN_KEY = 'monitor:lastrun';
 const MAX_ERRORS = 300;
-const SPEND_WARN_FRACTION = 0.6; // warn when the day's spend crosses 60% of ceiling
 
 interface AuditEntry {
   timestamp: number;
@@ -57,7 +56,7 @@ interface HealthCheck {
 interface MonitorState {
   lastRun: number;
   health: HealthCheck[];
-  spend: { day: string; usd: number; ceiling: number; fraction: number; warn: boolean };
+  spend: { day: string; usd: number; ceiling: number; fraction: number; warn: boolean; measured?: false };
   errorCursor: number;
   recentErrors: AuditEntry[];
 }
@@ -143,18 +142,30 @@ async function probePing(): Promise<HealthCheck> {
   }
 }
 
-async function readSpend(): Promise<{ day: string; usd: number; ceiling: number; fraction: number; warn: boolean }> {
-  const day = new Date().toISOString().slice(0, 10);
-  const ceiling = Number(process.env.LLM_DAILY_USD_CEILING ?? '25');
-  let usd = 0;
-  try {
-    const redis = await getRedis();
-    if (redis) usd = Number(await redis.get<string>(`spend:${day}`)) || 0;
-  } catch {
-    /* fail-open: spend unknown */
-  }
-  const fraction = ceiling > 0 ? usd / ceiling : 0;
-  return { day, usd, ceiling, fraction, warn: fraction >= SPEND_WARN_FRACTION };
+/**
+ * 🔒 SPEND TRACKING IS GONE — AND THIS MUST NOT REPORT A FALSE GREEN
+ * (David 2026-09-11: "deepseek costs pennies … remove the [counter] that checks
+ * for amount used").
+ *
+ * `usageGuard` no longer writes `spend:<day>`, so reading it would return 0
+ * forever and this monitor would cheerfully report "spend healthy" while
+ * measuring nothing — the same silent-success failure mode that let the voice
+ * watcher sit dead for weeks. It also cost a Redis command per run against the
+ * shared budget. So the read is removed and the field reports honestly that it
+ * is not measured.
+ *
+ * If per-$ visibility is ever wanted again, take it from the provider's own
+ * billing API or PostHog, not from a counter this app pays Redis to maintain.
+ */
+function readSpend(): { day: string; usd: number; ceiling: number; fraction: number; warn: boolean; measured: false } {
+  return {
+    day: new Date().toISOString().slice(0, 10),
+    usd: 0,
+    ceiling: 0,
+    fraction: 0,
+    warn: false,
+    measured: false,
+  };
 }
 
 async function readErrorsSince(cursor: number): Promise<AuditEntry[]> {
@@ -250,7 +261,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       state = await readState();
       const [tts, stream, ping] = await Promise.all([probeTts(), probeAuditStream(), probePing()]);
       const health = [tts, stream, ping];
-      const spend = await readSpend();
+      const spend = readSpend();
       const fresh = await readErrorsSince(state.errorCursor);
       const cursor = fresh.length
         ? Math.max(state.errorCursor, ...fresh.map((e) => e.timestamp))
@@ -286,7 +297,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     ran,
     healthOk,
     health: state.health.map((h) => ({ name: h.name, ok: h.ok })),
-    spend: { usd: state.spend.usd, ceiling: state.spend.ceiling, warn: state.spend.warn },
+    // `measured:false` so a reader never mistakes 0 for "nothing was spent".
+    spend: { usd: 0, ceiling: 0, warn: false, measured: false },
     errorCount: state.recentErrors.length,
   };
   if (authed) {

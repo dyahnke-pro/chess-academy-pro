@@ -400,6 +400,47 @@ diagnose it and either fix it or escalate; don't shrug and merge.
 
 ### G2. Audit-stream pull on EVERY runtime-touching change.
 
+🔒🔒 **THE STREAM IS OPT-IN AND OFF BY DEFAULT AS OF 2026-09-11 — AN EMPTY PULL
+NO LONGER MEANS "THE APP ISN'T OPEN" (David: "i only want the live audit stream
+to send to redis when i turn it on", and "i also do not want my post deploy
+audits to run there").**
+
+This SUPERSEDES the older "empty pulls = app not open (informational)" reading
+below and in §G1 instrument 2 — that diagnosis is now wrong by default and will
+send you chasing ghosts. What changed and why:
+
+- The stream's backing store is the SHARED Upstash notepad that also holds the
+  LLM/TTS **spend guard**, the **bell's messages** and the **referral credits** —
+  ONE 500k-command/month budget between them. Every device streaming every audit
+  event (no severity filter, ~1 POST/sec per open page) exhausted it in **July**
+  (stranding ~60% of OTA update checks) and again in **September** (which
+  silently switched the spend guard OFF, since it fails open). The stream is a
+  live-watch pipe, not a telemetry backend.
+- **Other users' telemetry is PostHog's job** and always was — `mirrorAuditEvent`
+  already forwards 56 audit kinds as product events plus the crash/defect kinds
+  as alertable exceptions. Nothing was lost by closing the pipe.
+- **Post-deploy audits must never stream to prod.** They record through their own
+  loopback sidecar (`scripts/audit-lib/audit-listener.mjs`), which is unaffected.
+  Default-off fixes this at the root — there is no longer a per-script sweep to
+  do, and no script should reintroduce a prod `auditStreamUrl`.
+
+So, when reading an empty `/api/audit-stream` pull:
+1. **Default state is OFF.** Empty is EXPECTED. It is NOT evidence about whether
+   the app was open, and NOT evidence the app is healthy.
+2. To actually watch a device live, David turns it on in Settings →
+   NarrationAuditPanel (one tap; the build's baked secret is the default value).
+   It stays on until he turns it off — and **"off" now sticks** (it previously
+   fell back to the baked value on the next boot, so the toggle was a no-op).
+3. `storage: "memory"` with Redis env present still means the **Upstash monthly
+   cap**, not "app closed" — see the Redis cap note below.
+4. The **local Dexie audit log on-device is unchanged and remains the source of
+   truth**; every device records regardless of whether the pipe is open.
+
+Gate: `appAuditor.test.ts` → "audit-stream is opt-in (2026-09-11)". It is
+deliberately non-vacuous — `vitest.config.ts` defines a NON-EMPTY baked secret,
+because with an empty one there is nothing for a regression to fall back to and a
+reintroduced auto-enable would sail through a green suite.
+
 After any push that touches a runtime path that emits audits — coach
 brain, walkthrough runtime, voice, navigation, tool calls, stage gen,
 uncaught errors, openings detail page, kid surfaces, etc. — pull the
@@ -4083,9 +4124,11 @@ them. Two enforcement layers:
   day).** The `chess-academy-pro.netlify.app` mirror builds from the same
   repo, and it was building a deploy-preview per branch push PLUS a
   production build per merge. `netlify.toml` now carries
-  `[build] ignore = "test \"$BRANCH\" != \"main\""` (exit 0 = SKIP — note
-  Netlify's ignore semantics are the OPPOSITE of Vercel's) so only `main`
-  builds, and a first-position force-301 redirects every path to
+  `[build] ignore = "exit 0"` — a BLANKET skip, every branch including `main`
+  (verified 2026-09-11; it was once the narrower `test "$BRANCH" != "main"`,
+  which is why that wording appeared here — the mirror is now purely a
+  redirect, so it never needs to build at all). Note Netlify's ignore
+  semantics are the OPPOSITE of Vercel's: exit 0 = SKIP. And a first-position force-301 redirects every path to
   `chess-academy-pro.vercel.app` (David: the mirror's free riders funnel to
   the real app; the redirect IS the product there now). Do NOT remove either
   rule, and do NOT re-introduce per-branch Netlify builds. **Batch merges**:
@@ -4661,6 +4704,7 @@ After every `git push origin main`:
    | settings toggles | `scripts/audit-settings-behavior.mjs` |
    | first-run strength calibration (boot rating + skill bubble) | `scripts/audit-strength-calibration.mjs` |
    | OTA update pipeline (`api/ota/manifest.ts`, `scripts/ci/publish-ota-bundle.mjs`, `capacitor.config.ts` CapacitorUpdater) | `scripts/audit-ota.mjs` + `npx vitest run api/ota/manifest.test.ts` — the endpoint's REPLY SHAPE is the whole contract: a no-op without `kind:'up_to_date'` makes the plugin record a PHANTOM `downloadFailed` (72 of 127 "failures" were ours), and equality-only version comparison lets a stale pointer roll devices BACKWARD onto an older bundle (this is how devices were stranded on the Aug-5 build carrying the WASM crash). Publishing is forward-only and owned by ONE workflow (`.github/workflows/ota-publish.yml`) — never add a second publisher. |
+   | audit-stream opt-in contract (`appAuditor` stream config, `vite.config.ts` baked constants, any audit's `auditStreamUrl`) | `scripts/audit-stream-optin-prod.mjs` (asserts a fresh device makes ZERO `/api/audit-stream` POSTs AND that an explicitly-enabled one still POSTs — the second half is what stops "it got quieter" being mistaken for a pass) |
    | boot storage persistence / Dexie durability / `device_id` | `scripts/audit-storage-persistence.mjs` (asserts `requestPersistentStorage()` runs once before the first Dexie write + `device_id` survives a reload; run it on ANY change to the boot path, `storageQuota.ts`, `deviceIdentity.ts`, or Dexie schema) |
    | any COACH-ANSWER surface (routing, assemblers, `voiceFacts`, grounding) | re-run its audit with `DEGRADE=llm` (`scripts/audit-lib/degrade.mjs`). Under G0 the model only PHRASES facts computed in code, so with the provider 401ing the coach must STILL answer correctly — in the raw computed register instead of the warm one. A surface that refuses or goes silent under `DEGRADE=llm` was never inverted, it was only asking the model nicely. Verified 2026-09-02: board-verdict 7/7 with the LLM dead, and 7/7 with LLM+engine both dead. |
    | ANY new or edited `scripts/audit-*.mjs` | `node scripts/audit-vacuity-check.mjs --changed` — a negative control that points the audit at a blank app and FAILS it for still printing PASS. "The audit reported green having verified nothing" is the most expensive failure mode in this repo; this is the only instrument that measures it. |

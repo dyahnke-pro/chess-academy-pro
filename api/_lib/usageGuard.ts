@@ -44,25 +44,6 @@ function kvCreds(): KvCreds {
   };
 }
 
-/** Absolute ceiling on a single day's estimated spend, across everyone. */
-function dailyUsdCeiling(): number {
-  return Number(process.env.LLM_DAILY_USD_CEILING ?? '25');
-}
-
-/**
- * Per-IP daily $ cap. The global ceiling alone has a hole: a single looping
- * caller's spend lands in the SHARED `spend:<day>` counter, so an abuser can
- * push the global total to the ceiling and 429 *everyone* (including paying
- * users) until UTC midnight. This per-IP daily cap makes an abuser self-limit
- * — their own day's budget trips first, leaving the global ceiling for genuine
- * fleet-wide protection. Default $1.00/day/IP is generous for a real human
- * (DeepSeek-only ≈ $0.001/call → ~1000 calls/day) and tight on a loop. Set 0
- * to disable.
- */
-function perIpDailyUsdCap(): number {
-  return Number(process.env.PER_IP_DAILY_USD_CAP ?? '1.00');
-}
-
 interface Limit { windowSec: number; maxPerWindow: number; }
 function limitFor(kind: GuardKind): Limit {
   // A real human coach session is ~30-80 calls; 60 / 10 min is generous for a
@@ -73,7 +54,7 @@ function limitFor(kind: GuardKind): Limit {
 
 export interface GuardResult {
   allowed: boolean;
-  reason?: 'rate-limit' | 'daily-ceiling' | 'ip-daily-cap';
+  reason?: 'rate-limit';
   retryAfterSec?: number;
 }
 
@@ -105,64 +86,97 @@ async function kvPipeline(creds: KvCreds, commands: (string | number)[][]): Prom
 }
 
 /**
- * Record this call's estimated cost against the global daily counter, bump the
- * caller's per-IP window, and decide whether to allow it.
+ * 🔒 RATE LIMIT ONLY — THE $ BOOKKEEPING IS GONE (David 2026-09-11: "deepseek
+ * costs pennies. i am not worried about being charged $25 in one day, it barely
+ * gets above 3 cents. so we can probably remove the [counter] that checks for
+ * amount used").
  *
- * @param estimatedCostUsd best-effort $ this call adds (flat per-LLM-call, or
- *        chars × Polly rate for TTS). Used only for the daily ceiling — it
- *        never needs to be exact, only conservative.
+ * He is right about the money: DeepSeek-only, real usage sits near $0.03/day, so
+ * a $25/day ceiling and a $1/day/IP cap were theatre — and they were EXPENSIVE
+ * theatre, because the two INCRBYFLOAT spend keys plus their EXPIREs were paid
+ * on EVERY llm and tts call, against the same 500k/month Upstash budget that
+ * holds the bell and the referral credits. Tracking spend to protect against
+ * spend was the larger cost.
+ *
+ * What does NOT go is the per-IP RATE LIMIT, and removing it with the rest would
+ * be the mistake. `/api/llm-proxy` and `/api/tts` are unauthenticated endpoints
+ * on a permanently-open free web app — the risk was never David's own users at 3
+ * cents, it is anyone who finds those URLs and uses his DeepSeek key and Google
+ * TTS quota as a free public API. The rate limit is what bounds that, and it
+ * needs no cost estimate to work.
+ *
+ * Net: 1 command on the steady path (the INCR), plus one EXPIRE the first time
+ * an instance sees a window key. Down from six.
  */
-export async function checkUsageGuard(
-  kind: GuardKind,
-  req: Request,
-  estimatedCostUsd: number,
-): Promise<GuardResult> {
-  const creds = kvCreds();
-  if (!creds.url || !creds.token) return { allowed: true }; // not provisioned → no-op
 
-  const ip = clientIp(req);
+/** TTL memo: a window-scoped key only needs its expiry set on first write, so
+ *  re-sending EXPIRE on every call was pure spend. Per-instance and bounded. */
+const ttlSeen = new Set<string>();
+const TTL_MEMO_MAX = 5_000;
+function rememberTtl(key: string): void {
+  if (ttlSeen.size > TTL_MEMO_MAX) ttlSeen.clear();
+  ttlSeen.add(key);
+}
+
+/**
+ * Per-instance backstop for when the shared counter is UNREACHABLE.
+ *
+ * Fail-open stays the rule on a KV error, deliberately: refusing every request
+ * while Upstash is capped would take the coach and voice down for paying
+ * customers, which is worse than an unthrottled endpoint. But "fail open" used
+ * to mean "no limit at all", so a scraper during an outage was unbounded. This
+ * applies the same per-IP window in memory.
+ *
+ * It is weaker than the shared counter (a lambda instance is short-lived, and a
+ * caller spread across instances gets a fresh window on each), so it is a floor,
+ * never a replacement.
+ */
+const backstop = new Map<string, { window: number; count: number }>();
+const BACKSTOP_MAX_IPS = 10_000;
+
+function localBackstop(kind: GuardKind, ip: string): GuardResult {
   const lim = limitFor(kind);
-  const day = new Date().toISOString().slice(0, 10);
-  const rlKey = `rl:${kind}:${ip}:${Math.floor(Date.now() / 1000 / lim.windowSec)}`;
-  const spendKey = `spend:${day}`;
-  const ipSpendKey = `spend:${day}:${ip}`;
-  const charge = Math.max(0, estimatedCostUsd).toFixed(6);
-
-  const res = await kvPipeline(creds, [
-    ['INCR', rlKey],
-    ['EXPIRE', rlKey, lim.windowSec],
-    ['INCRBYFLOAT', spendKey, charge],
-    ['EXPIRE', spendKey, 172800], // 2 days, so the key self-cleans
-    ['INCRBYFLOAT', ipSpendKey, charge],
-    ['EXPIRE', ipSpendKey, 172800],
-  ]);
-  if (!res) return { allowed: true }; // KV error → fail open
-
-  const ipCount = Number(res[0] ?? 0);
-  const daySpend = Number(res[2] ?? 0);
-  const ipDaySpend = Number(res[4] ?? 0);
-
-  // Global daily ceiling is the hardest stop — check it first.
-  if (Number.isFinite(daySpend) && daySpend > dailyUsdCeiling()) {
-    return { allowed: false, reason: 'daily-ceiling', retryAfterSec: secondsUntilUtcMidnight() };
-  }
-  // Per-IP daily $ cap — an abuser self-limits before they can poison the
-  // global counter for everyone else. Disabled when cap <= 0.
-  const ipCap = perIpDailyUsdCap();
-  if (ipCap > 0 && Number.isFinite(ipDaySpend) && ipDaySpend > ipCap) {
-    return { allowed: false, reason: 'ip-daily-cap', retryAfterSec: secondsUntilUtcMidnight() };
-  }
-  if (Number.isFinite(ipCount) && ipCount > lim.maxPerWindow) {
+  const window = Math.floor(Date.now() / 1000 / lim.windowSec);
+  const key = `${kind}:${ip}`;
+  const prev = backstop.get(key);
+  const rec = prev && prev.window === window ? prev : { window, count: 0 };
+  rec.count += 1;
+  if (backstop.size > BACKSTOP_MAX_IPS) backstop.clear();
+  backstop.set(key, rec);
+  if (rec.count > lim.maxPerWindow) {
     return { allowed: false, reason: 'rate-limit', retryAfterSec: lim.windowSec };
   }
   return { allowed: true };
 }
 
-function secondsUntilUtcMidnight(): number {
-  const now = Date.now();
-  const next = new Date();
-  next.setUTCHours(24, 0, 0, 0);
-  return Math.max(60, Math.floor((next.getTime() - now) / 1000));
+/** The shared counter answered, so it is authoritative — drop the local tally so
+ *  a past outage can't keep counting against an IP. */
+function resetBackstop(kind: GuardKind, ip: string): void {
+  backstop.delete(`${kind}:${ip}`);
+}
+
+export async function checkUsageGuard(kind: GuardKind, req: Request): Promise<GuardResult> {
+  const creds = kvCreds();
+  if (!creds.url || !creds.token) return { allowed: true }; // not provisioned → no-op
+
+  const ip = clientIp(req);
+  const lim = limitFor(kind);
+  const rlKey = `rl:${kind}:${ip}:${Math.floor(Date.now() / 1000 / lim.windowSec)}`;
+
+  const cmds: (string | number)[][] = [['INCR', rlKey]];
+  if (!ttlSeen.has(rlKey)) cmds.push(['EXPIRE', rlKey, lim.windowSec]);
+
+  const res = await kvPipeline(creds, cmds);
+  if (!res) return localBackstop(kind, ip); // KV down → bounded fail-open
+
+  rememberTtl(rlKey);
+  resetBackstop(kind, ip);
+
+  const ipCount = Number(res[0] ?? 0);
+  if (Number.isFinite(ipCount) && ipCount > lim.maxPerWindow) {
+    return { allowed: false, reason: 'rate-limit', retryAfterSec: lim.windowSec };
+  }
+  return { allowed: true };
 }
 
 /**

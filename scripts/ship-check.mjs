@@ -105,9 +105,21 @@ function summarizePlaywright(out) {
 }
 
 // ── Audit-stream pull (informational; never blocks) ─────────────────
+// 🔒 OFF UNLESS EXPLICITLY ASKED FOR (David 2026-09-11: "make sure no audit runs
+// through redis anymore"). The GET is a Redis LRANGE against the same
+// 500k/month budget that holds the spend guard, and since streaming went
+// opt-in (2026-09-11) the answer is an empty list by default — so this ran a
+// billed query on every ship-check to learn nothing. Set SHIP_CHECK_PULL_STREAM=1
+// when you have deliberately turned streaming on and actually want the pull.
 function pullAuditStream() {
   const start = Date.now();
   process.stdout.write(`  • audit-stream... `);
+  if (process.env.SHIP_CHECK_PULL_STREAM !== '1') {
+    const summary = 'not pulled (stream is opt-in; set SHIP_CHECK_PULL_STREAM=1)';
+    results.push({ label: 'audit-stream', ok: true, ms: 0, optional: true, summary });
+    process.stdout.write(`○ ${summary}\n`);
+    return;
+  }
   const secret = process.env.AUDIT_STREAM_SECRET ?? readAuditSecret();
   if (!secret) {
     process.stdout.write(`○ skipped (AUDIT_STREAM_SECRET not in env)\n`);
@@ -126,7 +138,7 @@ function pullAuditStream() {
     const count = parsed.count ?? 0;
     const errEvents = (parsed.entries ?? []).filter(e => /error|fail|trip|fallback/i.test(`${e.kind} ${e.source}`));
     const summary = count === 0
-      ? 'empty (app not open)'
+      ? 'empty (stream is opt-in & off by default — not a health signal)'
       : `${count} events, ${errEvents.length} error-class`;
     results.push({ label: 'audit-stream', ok: true, ms, optional: true, summary });
     process.stdout.write(`○ ${(ms/1000).toFixed(1)}s :: ${summary}\n`);
@@ -246,6 +258,14 @@ const GATE_TESTS = [
   'src/data/proRepLessonArrows.test.ts',       // pro-rep lesson arrows: non-pawn origin + valid piece geometry (David 2026-06-01 "gate the arrows!")
   'src/data/variationMiddlegameDepth.test.ts',
   'src/data/openingManifests.test.ts',
+  // 🔒 COST GATES (David 2026-09-11: "what cannot happen is maxing this out
+  // again"). The Upstash budget is shared by the spend guard, the bell and the
+  // referral credits; blowing it silently switched the spend guard OFF (it
+  // fails open) and stranded OTA update checks. These are cheap and fast.
+  'src/test/auditStreamNoRedis.test.ts',       // no audit script streams into prod Redis
+  'src/services/appAuditor.test.ts',           // streaming is opt-in; "off" sticks
+  'api/_lib/usageGuard.test.ts',               // guard pipeline stays 3 commands, backstop bounds a runaway
+  'api/ota/manifest.test.ts',                  // OTA reads Blob, not a Redis command per launch
   'src/data/modelGames.test.ts',
   'src/data/modelGames-orientation.test.ts',
   'src/data/perspectiveVoice.test.ts',         // ONE perspective: student=you/your, opponent=they/their, never we/our (David 2026-08-28)

@@ -4,6 +4,16 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  // The build bakes these in (see vite.config.ts). Unit tests need them DEFINED
+  // and NON-EMPTY, otherwise the "streaming is opt-in" gate in
+  // appAuditor.test.ts passes vacuously: with no baked secret there is nothing
+  // for a regression to fall back TO, so a reintroduced auto-enable would sail
+  // straight through a green suite.
+  define: {
+    __BUILD_ID__: JSON.stringify('test-build'),
+    __AUDIT_STREAM_URL__: JSON.stringify('https://baked.test/api/audit-stream'),
+    __AUDIT_STREAM_SECRET__: JSON.stringify('baked-test-secret'),
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

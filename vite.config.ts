@@ -36,13 +36,19 @@ export default defineConfig(({ mode }) => {
   envPrefix: ['VITE_'],
   define: {
     __BUILD_ID__: JSON.stringify(buildId),
-    // Baked-in audit-stream defaults so EVERY device (beta testers
-    // included) streams audit events without per-device opt-in. The
-    // secret ships in the client bundle by design (David's call,
-    // 2026-05-27) — it's a low-stakes shared secret gated by a per-IP
-    // rate limit, traded for zero-setup tester telemetry. A device that
-    // has its own auditStreamUrl/Secret in profile prefs still overrides
-    // these (see loadAuditStreamConfig).
+    // Baked-in audit-stream defaults. These no longer ENABLE anything —
+    // streaming is opt-in and OFF by default as of 2026-09-11 (David: "i only
+    // want the live audit stream to send to redis when i turn it on"). They are
+    // the value the Settings panel offers for one-tap enable, and the secret the
+    // 401 auto-heal adopts when a device carries a pre-rotation one.
+    //
+    // (Superseded: this used to read "so EVERY device streams without per-device
+    // opt-in, David's call 2026-05-27". That is why the shared Upstash budget —
+    // which also holds the spend guard, the bell's messages and the referral
+    // credits — was exhausted in July and again in September.)
+    //
+    // The secret still ships in the client bundle; it is a low-stakes shared
+    // secret gated by a per-IP rate limit.
     __AUDIT_STREAM_URL__: JSON.stringify(
       env.AUDIT_STREAM_URL || process.env.AUDIT_STREAM_URL || 'https://chess-academy-pro.vercel.app/api/audit-stream',
     ),
