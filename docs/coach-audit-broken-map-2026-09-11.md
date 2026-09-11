@@ -29,13 +29,15 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
   causalChain/narrationImportance/threatOut/pins verified sound.
 - ✅ Track 6 (tools): gating + grounding teeth verified sound.
 - ✅ Track 7 (voice/verbosity/perspective): deterministic contracts verified sound.
-- **Owed — the INTERACTIVE layer** (heavy prod-Playwright, each a multi-turn
-  build like Track 1's accuracy pass): Track 2 remainder (positionFacts/
-  importance/criticality/PV via a real-engine harness), Track 3 (Learn
-  walkthrough live), Track 4 (Play silent-contract live), Track 5 (Review +
-  diagnostic cards live), Track 8 (WLPP full-play/endgame/fundamentals), Track 9
-  (learning-loop round-trip with seeded games), and Track 1c (analytics accuracy
-  with the games fixture). These need the drive-hooks/harness the plan calls for.
+- ✅ Track 5 (Review): real-game 3-instrument audit MEETS STANDARD (15/15 text
+  contracts); voice-half + mistake-game diagnostic cards owed.
+- **Owed — the rest of the INTERACTIVE layer** (heavy prod-Playwright): Track 2
+  remainder (positionFacts/importance/criticality/PV via a real-engine harness),
+  Track 3 (Learn walkthrough live), Track 4 (Play silent-contract live), Track 5
+  follow-on (a game WITH blunders → find-the-shot/rewind/trap cards + voice),
+  Track 8 (WLPP full-play/endgame/fundamentals), Track 9 (learning-loop
+  round-trip with seeded games), Track 1c (analytics accuracy with the games
+  fixture).
 
 ---
 
@@ -226,6 +228,32 @@ it live).
 register in a running game, that read-aloud bypasses verbosity, and that the
 in-game register speaks you/they correctly — exercised by interactive Tracks 3–5
 (narration listener + register assertions).
+
+---
+
+## Track 5 — REVIEW (3-instrument real-game audit)
+
+Ran `scripts/audit-review-real-game.mjs` on prod (seeds a real game unanalyzed,
+runs the genuine pipeline, walks all 33 plies). **VERDICT: MEETS STANDARD —
+mostly verified sound.**
+
+- **15/15 experience contracts PASS:** opening named, why-density 100% (8/8),
+  plan beats, mate named-not-pawns, **board-accuracy (no false piece-on-square
+  claims — the skewer bug did NOT leak into this review)**, opponent commentary,
+  no-repetition, queen-sac named + compensation taught, forced-finish framed,
+  mate mechanism taught, no errors. Audit-stream: 503 real events emitted
+  (storage=redis).
+- **Turning-point card fired** correctly (ply 33).
+
+**Caveats (owed, not failures):**
+- **Voice unverified: the narration listener captured 0 spoken lines** (review
+  ran voice-off, or the listener didn't attach). The review TEXT contracts pass,
+  but that review actually SPEAKS — and speaks the right register — is not proven
+  here. Same live-voice gap as Track 7.
+- **Diagnostic cards need a game WITH student mistakes.** This game had none, so
+  find-the-shot / spot-the-sequence / blunder-rewind / trap correctly did NOT
+  fire (the audit confirms the skips are correct). A follow-on must seed a game
+  with real blunders to exercise + oracle-grade those cards.
 
 ---
 
