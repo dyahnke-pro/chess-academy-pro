@@ -154,6 +154,19 @@ tactic/threat computers):
 
 | 11 | `tacticsDetector.findForks` (~line 116) | DEGRADED | P2 | Reports a fork when a piece attacks ≥2 enemy pieces of value ≥3 — but **never checks the forker is SAFE or the targets are undefended/unsavable**. So it fires on "attacks two DEFENDED pieces" (wins nothing) and on a forker that is itself hanging (gets captured, not a fork). Milder than the skewer (it excludes pawn targets via `>= 3`), but the SAME disease. |
 
+**D3 FULL-DETECTOR SWEEP (all 10 audited by source — the class is ISOLATED).**
+Read every detector for the geometry-without-material flaw. Only two skip the
+check: `findSkewers` (BROKEN, #10) and `findForks` (DEGRADED, #11). The other
+eight are properly validated and SOUND: `findPins` (real pin geometry),
+`findDiscoveredAttacks` (requires a real tempo move off the ray — the bare-shape
+version was already fixed as "decor"), `findRemovableGuards` (sole defender +
+rejects losing trades), `findOverloadedPieces` (sole defender of 2+ attacked
+pieces), `findBatteries` (must aim at an enemy target — the "useless 8th-rank
+battery" was already fixed), `findTrappedPieces` (cheaper attacker + no safe
+escape), `findBackRankWeakness` (no luft + a real check available), `findMate`
+(chess.js-verifiable). So the fix is narrow: harden `findSkewers`/`findForks`
+to the same material/SEE standard the siblings already use.
+
 **Disease D3 — the detector validates GEOMETRY, not MATERIAL.** `findSkewers`,
 `findForks` (and to a lesser extent the guard/overload/battery detectors) declare
 a tactic from piece-on-a-ray + value-ordering alone, with no check that the
