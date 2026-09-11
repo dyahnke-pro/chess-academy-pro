@@ -3806,7 +3806,12 @@ export function CoachTeachPage(): JSX.Element {
         regex: RegExp;
         stage: 'concepts' | 'findMove' | 'drill' | 'punish' | 'play-real';
       }> = [
-        { regex: /\b(?:drill|practice)\s+(?:the\s+)?/i, stage: 'drill' },
+        // Consume the "me on / me with" connective the way the quiz pattern
+        // does — otherwise "drill me on the French" strips to "me on the
+        // French", the junk derails resolution and the drill hint is lost, so
+        // the ask started a plain walkthrough instead of a drill (coach audit
+        // 2026-09-11, #7). "drill the French" / "drill Vienna" still work.
+        { regex: /\b(?:drill|practice)\s+(?:me\s+(?:on|with|in|through)\s+)?(?:the\s+)?/i, stage: 'drill' },
         { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
         { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
         { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },

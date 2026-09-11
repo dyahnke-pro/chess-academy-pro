@@ -326,6 +326,19 @@ export async function routeChatIntent(
         source: intent.source,
       });
       if (!game) {
+        // A subject-scoped miss ("review my last Sicilian" with no Sicilian
+        // games) keeps the deliberate offer-to-play reply. But a BARE "review
+        // my last game" that finds nothing must not dead-end with a reply and
+        // no navigation (coach audit 2026-09-11, #8: from /games the URL stayed
+        // put) — route to the review list so the user can pick, mirroring the
+        // teach page's nav command.
+        if (!intent.subject?.trim() && !intent.source) {
+          return {
+            path: '/coach/review',
+            ackMessage: 'Opening your games for review.',
+            intent,
+          };
+        }
         return {
           ackMessage: buildNoMatchOfferMessage(intent),
           intent,

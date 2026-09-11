@@ -233,12 +233,15 @@ describe('review-game routing', () => {
     expect(routed!.ackMessage.toLowerCase()).toContain('lichess');
   });
 
-  it('returns a reply-only offer (no path) when no games at all', async () => {
+  it('routes a bare "review my last game" to /coach/review even with no games (coach audit 2026-09-11, #8)', async () => {
+    // A bare review ask (no subject, no source) that finds nothing must NOT
+    // dead-end with a reply and no navigation — from /games the URL used to
+    // stay put. Route to the review list (mirrors the teach page's nav
+    // command); the list page owns the empty state.
     vi.mocked(findLastMatchingGame).mockResolvedValueOnce(null);
     const routed = await routeChatIntent('review my last game');
     expect(routed).not.toBeNull();
-    expect(routed!.path).toBeUndefined();
-    expect(routed!.ackMessage.toLowerCase()).toContain('history');
+    expect(routed!.path).toBe('/coach/review');
   });
 
   it('"yes" after the no-match offer routes to play-against (affirmation flow)', async () => {

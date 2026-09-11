@@ -39,3 +39,17 @@ describe('D1 — concept lane defers to the self-knowledge / app-method lanes', 
     expect(g.conceptQuestion).toBe(true);
   });
 });
+
+describe('#5 — an endgame ask suppresses the plan lane (plan dispatches first)', () => {
+  const ENDGAME_FEN = '4r3/5pk1/6p1/8/8/6P1/4R1K1/8 w - - 0 1';
+  it('"what\'s my plan in this rook endgame?" is an endgame ask, not a plan ask', () => {
+    const g = buildQuestionGrounding("what's my plan in this rook endgame?", { fen: ENDGAME_FEN });
+    expect(g.endgameQuestion).toBe(true);
+    expect(g.planQuestion).toBe(false);
+  });
+  it('a plain "what\'s my plan here?" still flags planQuestion', () => {
+    const g = buildQuestionGrounding("what's my plan here?", { fen: FEN });
+    expect(g.planQuestion).toBe(true);
+    expect(g.endgameQuestion).toBeFalsy();
+  });
+});

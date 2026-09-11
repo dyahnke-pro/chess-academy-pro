@@ -2666,7 +2666,11 @@ export function buildQuestionGrounding(
     studentColor: liveState.studentColor,
     openingId: liveState.openingId,
     surface: coachSurfaceToRoute(surface),
-    planQuestion: isPlanQuestion(a),
+    // An ENDGAME ask ("how do I hold a rook endgame") reads as a plan question
+    // too, and the plan lane dispatches before the (phase-gated) endgame lane —
+    // so it answered with a middlegame plan on a non-endgame board (broken-map
+    // #5). The endgame lane owns it; suppress plan when endgame fires.
+    planQuestion: isPlanQuestion(a) && !isEndgameQuestion(a),
     // A NAMED-candidate ask ("is Qf3 ok") must EVALUATE that move, not deflect
     // to the best move — so it takes precedence over best-move / move-rating
     // (David 2026-07-10). whyBestMove still wins for "why is X best".

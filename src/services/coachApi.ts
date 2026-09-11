@@ -3491,6 +3491,7 @@ export async function getCoachChatResponse(
                   : grounding.trendQuestion ? "whether you're improving"
                   : grounding.skillRadarQuestion ? 'your skill breakdown'
                   : grounding.recordsQuestion || (grounding.recordVsTarget?.length ?? 0) > 0 ? 'your record'
+                  : grounding.lastGameQuestion ? 'how your last game went'
                   : 'the mistakes you make';
                 lastCoachActionOffer = [IMPORT_ANALYZE_OFFER];
                 const msg = uploadGamesReminder(topic, overview);
