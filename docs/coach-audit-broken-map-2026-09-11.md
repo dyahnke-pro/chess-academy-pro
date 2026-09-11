@@ -6,6 +6,29 @@ verdict (works / **BROKEN** / cant-verify), severity (P0 breaks paid UX / wrong
 at the board · P1 wrong teaching / degraded · P2 rough edge), and a one-line
 symptom+disease. **NO fixes** — this only maps, per David's call.
 
+## Summary (running)
+
+**12 findings so far — Tracks 1 (chat grounding) + 2 (fact-computers/tacticsDetector).**
+
+- **P1 (wrong at the board / wrong teaching, reaching paying users):** #10 the
+  `findSkewers` false-skewer (voiced app-wide per G0 — the headline bug), its
+  symptom #9; #1 `record-vs-target` hijack, #2 `transfer-gap` hijack, #3
+  `strengths`+#4 `teaching-method` (shared "no lesson" mis-route), #8
+  `review-game` action broken.
+- **P2:** #11 `findForks` (no material validation), #5 `endgame-tablebase`, #6
+  `last-game`, #7 `drill-stage`, #12 `tacticsDetector` test-coverage gap.
+- **Confirmed SOUND (not everything is broken):** the coach's eval grounding is
+  accurate + honest (5/5 positions, honesty test passed); `causalChain` verified
+  (real-game acceptance gate); `findPins`, hanging/must-defend paths correct.
+- **Disease clusters:** D1 (a "no specific lesson" catch-all swallows analytics
+  lanes), D2 (training/move routers pre-empt analytics asks), D3 (tactic
+  detectors validate geometry, not material — the biggest).
+- **Not yet mapped:** Track 2 remainder (positionFacts/importance/criticality/PV
+  with a real-engine harness) + Tracks 3–9 (Learn, Play, Review, the 23 tools,
+  voice/verbosity, WLPP/endgame/fundamentals, the learning loop).
+
+---
+
 Environment: prod (`chess-academy-pro.vercel.app`, bundle at run time). Oracle:
 `/usr/games/stockfish` v16 run in-script, independent of the app's WASM engine.
 Instruments: interactive Playwright on prod + per-lane grading. Cold profile (no
@@ -130,6 +153,16 @@ false positives); on the free-queen it correctly flags the hanging queen +
 real d-file pins; `computeMustDefend(free-queen, black)` correctly returns the
 d5 queen (net 9). So the hanging/pin/must-defend paths are sound — the defect is
 the geometry-only skewer/fork detectors (D3).
+
+**Gate sweep (existing fact-computer test files):** all 8 pure/engine computers
+have a `*.test.ts`. The pure ones run green — `causalChain` (26 tests, real-game
+acceptance on David's own game + silent-on-quiet negatives → **VERIFIED sound**),
+`narrationImportance` (15), `threatOut` (7), `tacticsDetector` (**29 — all
+GREEN**). 
+
+| # | finding | verdict | sev | note |
+|---|---|---|---|---|
+| 12 | `tacticsDetector.test.ts` coverage gap | BROKEN (test) | P2 | The 29-test suite is GREEN while `findSkewers` ships the false skewer (#10). The suite has **no case for the skewer/fork material-validation class** — the bug lives precisely in the untested corner. "Green gate ≠ correct": this is the audit's whole premise, demonstrated. The fix for #10/#11 must ship WITH a gate that covers value/material validation (the Ruy skewer as a red case). |
 
 **Owed (Track 2 continuing):** drive `positionFacts.computePositionFacts`,
 `narrationImportance.computeImportance`, `causalChain` on oracle inputs;
