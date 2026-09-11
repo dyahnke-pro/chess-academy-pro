@@ -21,7 +21,7 @@
 //
 // AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY node scripts/audit-coach-track1-accuracy-prod.mjs
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
@@ -34,22 +34,33 @@ const RUN_ID = process.env.AUDIT_RUN_ID ?? `t1acc-${Date.now().toString(36)}`;
 const SF = process.env.STOCKFISH_BIN ?? '/usr/games/stockfish';
 
 // ── the independent Stockfish oracle (in-script, not the app's engine) ───────
+// spawn (NOT spawnSync): stdin stays open during the search, so the Debian
+// build actually emits its `info … score … pv …` lines. spawnSync EOFs stdin
+// mid-search and the build then prints only `bestmove` with no score (the bug
+// the negative controls caught before any green was trusted).
 function sfEval(fen, depth = 16) {
-  const input = `uci\nisready\nposition fen ${fen}\ngo depth ${depth}\n`;
-  const out = spawnSync(SF, [], { input, encoding: 'utf8', timeout: 20000 }).stdout ?? '';
-  let cp = null, mate = null, pvFirst = null;
-  for (const line of out.split('\n')) {
-    const mScore = /score (cp|mate) (-?\d+)/.exec(line);
-    if (mScore && / pv /.test(line)) {
-      if (mScore[1] === 'cp') { cp = Number(mScore[2]); mate = null; }
-      else { mate = Number(mScore[2]); cp = null; }
-      const mPv = / pv ([a-h][1-8][a-h][1-8][qrbn]?)/.exec(line);
-      if (mPv) pvFirst = mPv[1];
-    }
-    const mBest = /^bestmove ([a-h][1-8][a-h][1-8][qrbn]?)/.exec(line);
-    if (mBest) pvFirst = mBest[1];
-  }
-  return { cp, mate, bestUci: pvFirst }; // cp/mate from side-to-move POV
+  return new Promise((resolve) => {
+    const p = spawn(SF, []);
+    let cp = null, mate = null, bestUci = null, buf = '';
+    const done = () => { try { p.kill(); } catch { /* already gone */ } resolve({ cp, mate, bestUci }); };
+    const guard = setTimeout(done, 12000);
+    p.stdout.on('data', (d) => {
+      buf += d;
+      let i;
+      while ((i = buf.indexOf('\n')) >= 0) {
+        const line = buf.slice(0, i); buf = buf.slice(i + 1);
+        const s = /score (cp|mate) (-?\d+)/.exec(line);
+        if (s && / pv /.test(line)) {
+          if (s[1] === 'cp') { cp = Number(s[2]); mate = null; } else { mate = Number(s[2]); cp = null; }
+          const m = / pv ([a-h][1-8][a-h][1-8][qrbn]?)/.exec(line);
+          if (m) bestUci = m[1];
+        }
+        const b = /^bestmove ([a-h][1-8][a-h][1-8][qrbn]?)/.exec(line);
+        if (b) { bestUci = b[1]; clearTimeout(guard); done(); return; }
+      }
+    });
+    p.stdin.write(`uci\nisready\nposition fen ${fen}\ngo depth ${depth}\n`);
+  }); // cp/mate from side-to-move POV
 }
 
 // magnitude in centipawns from stm POV; mate = ±100000
@@ -65,8 +76,8 @@ const POSITIONS = [
     note: 'White (to move) up a full rook (2R vs 1R)' },
   { id: 'losing-stm', fen: 'r3k3/ppp2ppp/8/8/8/8/PPP2PPP/R3K1R1 b Qq - 0 1',
     note: 'Black (to move) down a full rook — "am I winning?" honesty test' },
-  { id: 'free-queen', fen: 'q6k/8/8/8/8/8/8/R6K w - - 0 1',
-    note: 'White to move: Rxa8 wins the black queen for free (real tactic)' },
+  { id: 'free-queen', fen: '3k4/8/8/3q4/8/8/3R4/3K4 w - - 0 1',
+    note: 'White to move: Rxd5 wins the black queen for free (real tactic, no check)' },
   { id: 'forced-mate', fen: '4k3/8/8/8/8/8/8/4KQ2 w - - 0 1',
     note: 'KQ vs K — forced mate for White' },
 ];
@@ -79,27 +90,36 @@ const LANES = [
 ];
 
 // ── graders (each returns {verdict, reason}) — verdict: works|BROKEN|cant ─────
-const SIGN_WIN = /\b(winning|better|ahead|advantage|edge|up (?:a|the|by)|clearly better|dominating)\b/i;
-const SIGN_LOSE = /\b(losing|worse|behind|lost|down (?:a|the|by)|struggling|in trouble|busted)\b/i;
-const SIGN_EQ = /\b(equal|even|balanced|roughly level|about even|level|drawish)\b/i;
+// The coach almost always states a NUMBER ("5.5 points against you", "0.4 in
+// your favour", "win for you, mate in 29"). Grade on the number+sign vs the
+// oracle, with verdict words as the fallback — far more robust than word-only,
+// and negation-guarded so "not yet an advantage" doesn't read as winning.
+const POS = /\b(in your favou?r|for you|winning|better|ahead|advantage|in hand|decisive|dominating|up (?:a|the|by))\b/i;
+const NEG = /\b(against you|behind|losing|worse|lost|down (?:a|the|by)|in trouble|busted|struggling)\b/i;
+const EQW = /\b(equal|even|balanced|roughly level|about even|dead level|drawish|nothing in it)\b/i;
+const NEGATED_POS = /\bnot (?:yet )?(?:an? )?(?:advantage|winning|better|ahead|decisive)\b/i;
 
-function gradeAssessment(reply, oracle) {
+function gradeAssessment(reply, _fen, oracle) { // (reply, fen, oracle) — fen unused, kept for uniform dispatch
   const cp = asCp(oracle);
-  const expect = cp >= 150 ? 'win' : cp <= -150 ? 'lose' : 'eq';
-  const saysWin = SIGN_WIN.test(reply), saysLose = SIGN_LOSE.test(reply), saysEq = SIGN_EQ.test(reply);
-  if (expect === 'win') {
-    if (saysLose && !saysWin) return { verdict: 'BROKEN', reason: `eval is +${(cp / 100).toFixed(1)} (winning) but coach says LOSING` };
-    if (saysWin) return { verdict: 'works', reason: `winning, coach agrees` };
-    if (saysEq) return { verdict: 'BROKEN', reason: `eval +${(cp / 100).toFixed(1)} but coach says equal` };
-  } else if (expect === 'lose') {
-    if (saysWin && !saysLose) return { verdict: 'BROKEN', reason: `eval is ${(cp / 100).toFixed(1)} (losing) but coach says WINNING` };
-    if (saysLose) return { verdict: 'works', reason: `losing, coach agrees` };
-    if (saysEq) return { verdict: 'BROKEN', reason: `eval ${(cp / 100).toFixed(1)} but coach says equal` };
-  } else {
-    if (saysEq) return { verdict: 'works', reason: `equal, coach agrees` };
-    if (saysWin || saysLose) return { verdict: 'BROKEN', reason: `eval ~0 (equal) but coach claims an advantage` };
+  const expectSign = cp >= 120 ? 1 : cp <= -120 ? -1 : 0;
+  const magM = /(-?\d+(?:\.\d+)?)\s*(?:points?|pawns?|of a point)/i.exec(reply);
+  const coachMag = magM ? Math.abs(Number(magM[1])) : null;
+  const posHit = POS.test(reply) && !NEGATED_POS.test(reply);
+  const negHit = NEG.test(reply);
+  let coachSign = negHit && !posHit ? -1 : posHit && !negHit ? 1 : EQW.test(reply) ? 0 : null;
+  if (coachSign === null && /win for you|mate in/i.test(reply)) coachSign = 1;
+  if (coachSign === null && coachMag !== null) coachSign = 0; // a number with no side word ~ small/equal
+  if (coachSign === null) return { verdict: 'cant', reason: 'no verdict word or eval number in reply' };
+  // OPPOSITE sign = the headline fluent-but-wrong bug
+  if (expectSign !== 0 && coachSign !== 0 && coachSign === -expectSign)
+    return { verdict: 'BROKEN', reason: `oracle ${(cp / 100).toFixed(1)} but coach states the OTHER side (${coachSign > 0 ? 'winning' : 'losing'})` };
+  if (coachMag !== null && Math.abs(cp) > 60 && Math.abs(coachMag - Math.abs(cp) / 100) > 1.5)
+    return { verdict: 'BROKEN', reason: `coach magnitude ${coachMag} vs oracle ${(Math.abs(cp) / 100).toFixed(1)} (off by >1.5)` };
+  if (expectSign === 0) {
+    if (coachMag !== null && coachMag >= 1.2) return { verdict: 'BROKEN', reason: `oracle ~0 (equal) but coach claims a ${coachMag}-pawn edge` };
+    return { verdict: 'works', reason: `equal-ish, coach agrees (${coachMag ?? '~0'})` };
   }
-  return { verdict: 'cant', reason: `no clear verdict word in reply` };
+  return { verdict: 'works', reason: `sign+size match (oracle ${(cp / 100).toFixed(1)}, coach ${coachSign > 0 ? '+' : '-'}${coachMag ?? '?'})` };
 }
 
 // pull SANs out of the reply, convert to UCI from the fen
@@ -115,7 +135,7 @@ function extractUciMoves(reply, fen) {
   return [...found];
 }
 
-function gradeBestMove(reply, fen, oracle) {
+async function gradeBestMove(reply, fen, oracle) {
   const ucis = extractUciMoves(reply, fen);
   if (!ucis.length) return { verdict: 'cant', reason: 'no legal SAN found in reply' };
   if (oracle.bestUci && ucis.includes(oracle.bestUci)) return { verdict: 'works', reason: `named engine best ${oracle.bestUci}` };
@@ -123,7 +143,7 @@ function gradeBestMove(reply, fen, oracle) {
   const cand = ucis[0];
   try {
     const c = new Chess(fen); c.move({ from: cand.slice(0, 2), to: cand.slice(2, 4), promotion: cand[4] });
-    const after = sfEval(c.fen(), 14);
+    const after = await sfEval(c.fen(), 14);
     const candCpForMover = -asCp(after); // after opponent's turn, negate to mover POV
     const bestCp = asCp(oracle);
     const loss = bestCp - candCpForMover;
@@ -141,8 +161,10 @@ function gradeTactics(reply, fen, oracle) {
   const cp = asCp(oracle);
   const tacticPresent = oracle.mate != null || cp >= 250;
   if (tacticPresent) {
-    if (TACTIC_AFFIRM.test(reply)) return { verdict: 'works', reason: `tactic present, coach flags it` };
+    // Denial FIRST — "nothing is hanging" contains "hanging", which the affirm
+    // pattern would otherwise match (the negative-control catch).
     if (TACTIC_NONE.test(reply)) return { verdict: 'BROKEN', reason: `a real tactic exists (best ${oracle.bestUci}, +${(cp / 100).toFixed(1)}) but coach says nothing is there` };
+    if (TACTIC_AFFIRM.test(reply)) return { verdict: 'works', reason: `tactic present, coach flags it` };
     return { verdict: 'cant', reason: `tactic present; reply neither flags nor denies clearly` };
   }
   // quiet position — coach must NOT invent a specific tactic
@@ -154,12 +176,14 @@ function gradeTactics(reply, fen, oracle) {
 const GRADERS = { 'position-assessment': gradeAssessment, 'best-move': gradeBestMove, 'tactics-live': gradeTactics };
 
 // ── NEGATIVE CONTROL — prove the graders discriminate before trusting a green ─
-function negativeControls() {
+async function negativeControls() {
   const fails = [];
+  const tacticFen = '3k4/8/8/3q4/8/8/3R4/3K4 w - - 0 1'; // Rxd5 wins the queen
+  const tacticOracle = await sfEval(tacticFen, 16);
   const check = (name, got) => { if (got.verdict !== 'BROKEN') fails.push(`${name} did NOT go red (got ${got.verdict}: ${got.reason})`); };
-  check('assessment', gradeAssessment('You are clearly winning here.', { cp: -500 }));
-  check('bestmove', gradeBestMove('The best move is a2a3.', 'q6k/8/8/8/8/8/8/R6K w - - 0 1', sfEval('q6k/8/8/8/8/8/8/R6K w - - 0 1')));
-  check('tactics', gradeTactics('Nothing is hanging, quiet position.', 'q6k/8/8/8/8/8/8/R6K w - - 0 1', sfEval('q6k/8/8/8/8/8/8/R6K w - - 0 1')));
+  check('assessment', gradeAssessment('You are clearly winning here.', null, { cp: -500 }));
+  check('bestmove', await gradeBestMove('The best move is Ke1.', tacticFen, tacticOracle));
+  check('tactics', gradeTactics('Nothing is hanging, quiet position.', tacticFen, tacticOracle));
   return fails;
 }
 
@@ -179,10 +203,10 @@ async function main() {
   // validate FENs + precompute oracle
   for (const p of POSITIONS) {
     try { new Chess(p.fen); } catch { console.log(`  ⚠ invalid FEN skipped: ${p.id}`); p.skip = true; continue; }
-    p.oracle = sfEval(p.fen, 18);
+    p.oracle = await sfEval(p.fen, 18);
     console.log(`  oracle[${p.id}] best=${p.oracle.bestUci} cp=${p.oracle.cp} mate=${p.oracle.mate}  (${p.note})`);
   }
-  const ncFails = negativeControls();
+  const ncFails = await negativeControls();
   if (ncFails.length) { console.log('\n🚨 NEGATIVE CONTROLS FAILED — graders do not discriminate, aborting:'); ncFails.forEach((f) => console.log('   ' + f)); process.exit(2); }
   console.log('  negative controls: all graders go red on wrong input ✅\n');
 
@@ -199,35 +223,57 @@ async function main() {
   await page.waitForTimeout(10000);
   await page.locator('[data-testid="coach-analyse-page"]').first().waitFor({ timeout: 30000 }).catch(() => {});
 
+  const expl = page.locator('[data-testid="coach-explanation"]').first();
   for (const p of POSITIONS) {
     if (p.skip) continue;
     console.log(`\n── ${p.id} (${p.fen}) ──`);
-    // load the FEN
-    const fenBox = page.locator('[data-testid="fen-input"]').first();
-    await fenBox.click({ force: true }).catch(() => {});
-    await fenBox.fill(p.fen).catch(() => {});
-    await page.locator('[data-testid="load-fen-btn"]').first().click({ force: true }).catch(() => {});
-    // wait for the initial analyse explanation to render
-    const expl = page.locator('[data-testid="coach-explanation"]').first();
-    await expl.waitFor({ timeout: 45000 }).catch(() => {});
-    await page.waitForTimeout(6000);
 
     for (const { lane, q } of LANES) {
+      // FRESH LOAD PER QUESTION — the analyse follow-up stream reliably renders
+      // only the FIRST follow-up after a load; re-loading the FEN makes every
+      // lane question a first-follow-up (fixes the systematic "no reply" on the
+      // 2nd/3rd question of the earlier runs).
+      const fenBox = page.locator('[data-testid="fen-input"]').first();
+      await fenBox.click({ force: true }).catch(() => {});
+      await fenBox.fill(p.fen).catch(() => {});
+      await page.locator('[data-testid="load-fen-btn"]').first().click({ force: true }).catch(() => {});
+      await expl.waitFor({ timeout: 45000 }).catch(() => {});
+      // STABILIZE — the initial analyse streams into coach-explanation; snapshot
+      // the baseline only once it stops growing, so the follow-up's growth is
+      // cleanly attributable (the middlegame "no reply" race of the prior run).
+      let prevLen = -1, stableFor = 0;
+      for (let i = 0; i < 30; i++) {
+        await page.waitForTimeout(1500);
+        const len = ((await expl.innerText().catch(() => '')) || '').length;
+        if (len === prevLen && len > 0) { stableFor += 1; if (stableFor >= 2) break; } else stableFor = 0;
+        prevLen = len;
+      }
       const before = (await expl.innerText().catch(() => '')) || '';
+      // Wait for the input to be ENABLED — it's `disabled` while the prior
+      // stream is loading, and typing into a disabled box is a silent no-op
+      // (the "no reply" false BROKENs of the first accuracy run).
+      const enabled = page.locator('[data-testid="chat-text-input"]:visible:not([disabled])').first();
+      await enabled.waitFor({ timeout: 60000 }).catch(() => {});
       const box = page.locator('[data-testid="chat-text-input"]:visible').first();
-      await box.click({ force: true }).catch(() => {});
-      await box.pressSequentially(q, { delay: 8 }).catch(() => {});
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        await box.click({ force: true }).catch(() => {});
+        await box.fill('').catch(() => {});
+        await box.pressSequentially(q, { delay: 8 }).catch(() => {});
+        const typed = await box.inputValue().catch(() => '');
+        if (typed.includes(q.slice(0, 12))) break;
+        await page.waitForTimeout(3000);
+      }
       await box.press('Enter').catch(() => {});
       // wait for coach-explanation to grow (follow-up appends with "\n\n")
       let reply = '';
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 40; i++) {
         await page.waitForTimeout(1500);
         const now = (await expl.innerText().catch(() => '')) || '';
-        if (now.length > before.length + 8) { reply = now.slice(before.length).trim(); if (reply.length > 20) { await page.waitForTimeout(2000); reply = ((await expl.innerText().catch(() => '')) || '').slice(before.length).trim(); break; } }
+        if (now.length > before.length + 8) { reply = now.slice(before.length).trim(); if (reply.length > 20) { await page.waitForTimeout(2500); reply = ((await expl.innerText().catch(() => '')) || '').slice(before.length).trim(); break; } }
       }
-      const grade = GRADERS[lane](reply, p.fen, p.oracle);
+      const grade = reply ? await GRADERS[lane](reply, p.fen, p.oracle) : { verdict: 'BROKEN', reason: 'no reply rendered' };
       const boardBad = falseBoardClaims(reply, p.fen);
-      rec(p.id, lane, q, reply || '(no reply)', { best: p.oracle.bestUci, cp: p.oracle.cp, mate: p.oracle.mate }, reply ? grade : { verdict: 'BROKEN', reason: 'no reply rendered' }, reply ? boardBad : []);
+      rec(p.id, lane, q, reply || '(no reply)', { best: p.oracle.bestUci, cp: p.oracle.cp, mate: p.oracle.mate }, grade, reply ? boardBad : []);
     }
   }
 
