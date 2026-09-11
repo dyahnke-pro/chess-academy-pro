@@ -136,6 +136,17 @@ function findForks(chess: Chess): TacticPattern[] {
       }
 
       if (targets.length >= 2) {
+        // A fork must WIN something: at least one forked target is undefended,
+        // or one is the king (a check forces a response and the other falls).
+        // Forking two DEFENDED pieces wins nothing (broken-map #11). Kept
+        // conservative — the forker-hanging case is subtler (a piece can attack
+        // the forker yet be capturable itself), so we only gate on winnability.
+        const defColor: Color = piece.color === 'w' ? 'b' : 'w';
+        const winnable = targets.some((t) =>
+          t.type === 'k' ||                                        // check forces a response
+          PIECE_VALUE[t.type] > PIECE_VALUE[piece.type] ||          // favorable trade even if defended (N forks two Rs)
+          chess.attackers(t.square, defColor).filter((d) => d !== t.square).length === 0); // undefended
+        if (!winnable) continue;
         const forkerName = PIECE_NAMES[piece.type] ?? piece.type;
         const targetDescs = targets.map(
           (t) => `${PIECE_NAMES[t.type] ?? t.type} on ${t.square}`,
@@ -238,8 +249,16 @@ function findSkewers(chess: Chess): TacticPattern[] {
         if (
           first.color === enemyColor &&
           second.color === enemyColor &&
+          // A real skewer FORCES the front piece to move: it must be worth MORE
+          // than the attacker (otherwise it just trades or stands), and the
+          // back piece must be a real piece worth winning — never a pawn. The
+          // old check (front > back, back >= 1) fired on Bb5-attacks-Nc6-with-
+          // d7-pawn-behind (equal front, pawn "prize"), a false skewer the coach
+          // then voiced app-wide (broken-map #10). Mirrors the material
+          // validation the sibling detectors already do.
+          PIECE_VALUE[first.type] > PIECE_VALUE[piece.type] &&
           PIECE_VALUE[first.type] > PIECE_VALUE[second.type] &&
-          PIECE_VALUE[second.type] >= 1
+          PIECE_VALUE[second.type] >= 3
         ) {
           skewers.push({
             type: 'skewer',

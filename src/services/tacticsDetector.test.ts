@@ -181,6 +181,42 @@ describe('detectTactics — skewers', () => {
   });
 });
 
+// ─── D3 regression: detectors validate MATERIAL, not just geometry ──────────
+// (broken-map #10/#11 — these would fail before the findSkewers/findForks fix.)
+describe('detectTactics — D3 material-validation regression', () => {
+  it('does NOT call the Ruy Bb5-vs-Nc6-with-d7-pawn a skewer (the app-wide false positive)', () => {
+    const fen = 'r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4';
+    const result = detectTactics(fen);
+    expect(hasTactic(result, 'skewer')).toBe(false);
+  });
+
+  it('does NOT call a bishop-behind-a-knight (pawn-value back piece) a skewer', () => {
+    // White Bb5 rays through Nc6 to a pawn on d7 — same shape, back piece is a pawn.
+    const fen = '4k3/3p4/2n5/1B6/8/8/8/4K3 w - - 0 1';
+    expect(hasTactic(detectTactics(fen), 'skewer')).toBe(false);
+  });
+
+  it('STILL detects a real skewer (bishop → queen → rook)', () => {
+    // White Ba1, black Qd4 in front (worth more than the bishop), black Rf6 behind.
+    const fen = '4k3/8/5r2/8/3q4/8/8/B3K3 w - - 0 1';
+    expect(hasTactic(detectTactics(fen), 'skewer')).toBe(true);
+  });
+
+  it('does NOT call a queen forking two DEFENDED bishops a fork (wins nothing)', () => {
+    // Qc5 hits Bc7 and Be7, both defended by Kd8; queen can win neither.
+    const fen = '3k4/2b1b3/8/2Q5/8/8/8/4K3 w - - 0 1';
+    const result = detectTactics(fen);
+    const fork = result.tactics.find((t) => t.type === 'fork' && t.involvedSquares.includes('c5'));
+    expect(fork).toBeUndefined();
+  });
+
+  it('STILL detects a knight forking two defended rooks (wins the exchange)', () => {
+    // Nd5 hits Rc7 and Re7 (mutually + king defended) — a knight for a rook is +2.
+    const fen = '3k4/2r1r3/8/3N4/8/8/8/K7 w - - 0 1';
+    expect(hasTactic(detectTactics(fen), 'fork')).toBe(true);
+  });
+});
+
 // ─── Summary / Coach Integration ───────────────────────────────────────────
 
 describe('detectTactics — summary', () => {
