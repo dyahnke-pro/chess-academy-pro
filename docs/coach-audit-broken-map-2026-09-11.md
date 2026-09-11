@@ -112,11 +112,24 @@ tactic/threat computers):
 |---|---|---|---|---|
 | 10 | `tacticsDetector.findSkewers` (~line 240) | BROKEN | P1 | **Root cause of #9, exact.** The skewer condition is pure geometry + value-ordering with NO material-won check: `first.color===enemy && second.color===enemy && PIECE_VALUE[first] > PIECE_VALUE[second] && PIECE_VALUE[second] >= 1`. Two defects: **(a)** `>= 1` lets a **pawn** be the skewered "prize" (the Ruy d7 pawn — you can't skewer a knight to win a pawn); **(b)** no check that the front piece is undefended / that material is actually won — Nc6 is defended, so Bxc6 dxc6 is a plain trade, no skewer. It reports on ANY `sliding-piece → higher-value-enemy → lower-value-enemy(≥pawn)` ray. Blast radius: shared computer → the false skewer is voiced on every tactic surface (chat `tactics-live`, teach commentary, review) per G0. Bb5/Bg5 vs a knight is one of the most common opening shapes, so this fires constantly. **Fix direction (later): require the back piece to be worth winning AND verify net material gain (front undefended or the exchange favourable) — a value-ordering geometry check is not a skewer.** |
 
+| 11 | `tacticsDetector.findForks` (~line 116) | DEGRADED | P2 | Reports a fork when a piece attacks ≥2 enemy pieces of value ≥3 — but **never checks the forker is SAFE or the targets are undefended/unsavable**. So it fires on "attacks two DEFENDED pieces" (wins nothing) and on a forker that is itself hanging (gets captured, not a fork). Milder than the skewer (it excludes pawn targets via `>= 3`), but the SAME disease. |
+
+**Disease D3 — the detector validates GEOMETRY, not MATERIAL.** `findSkewers`,
+`findForks` (and to a lesser extent the guard/overload/battery detectors) declare
+a tactic from piece-on-a-ray + value-ordering alone, with no check that the
+attacker is safe and the target is actually winnable (undefended / can't be
+saved). A real tactic WINS material; these fire on trades and on attacks against
+defended pieces. The fix class is uniform: gate every detector on a net-material
+/ SEE check (the app already has `findHangingPieces`/SEE machinery in
+`threatOut`; the detectors just don't consult it). `findPins` is the exception —
+it uses real pin geometry (front less valuable than back) and did NOT false-fire
+on the Ruy, matching the correct free-queen pins.
+
 **Correct (spot-checks that passed):** `detectTactics` on startpos = clean (no
 false positives); on the free-queen it correctly flags the hanging queen +
 real d-file pins; `computeMustDefend(free-queen, black)` correctly returns the
-d5 queen (net 9). So the detector's hanging/pin/must-defend paths look sound —
-the defect is specifically the skewer geometry/value check.
+d5 queen (net 9). So the hanging/pin/must-defend paths are sound — the defect is
+the geometry-only skewer/fork detectors (D3).
 
 **Owed (Track 2 continuing):** drive `positionFacts.computePositionFacts`,
 `narrationImportance.computeImportance`, `causalChain` on oracle inputs;
