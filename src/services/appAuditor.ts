@@ -1178,20 +1178,35 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
       }
     }
 
-    // Bake-in fallback: when this device has no per-profile config (the
-    // common case for beta testers), default to the build-time
-    // audit-stream URL + secret so streaming is ON everywhere with zero
-    // setup. Per-profile values (David's own device, set in Settings)
-    // still win. Empty baked secret (e.g. a preview build without the
-    // env var) leaves streaming off, as before.
-    if (!url || !secret) {
-      const bakedUrl = typeof __AUDIT_STREAM_URL__ === 'string' ? __AUDIT_STREAM_URL__ : '';
-      const bakedSecret = typeof __AUDIT_STREAM_SECRET__ === 'string' ? __AUDIT_STREAM_SECRET__ : '';
-      if (bakedUrl && bakedSecret) {
-        url = url || bakedUrl;
-        secret = secret || bakedSecret;
-      }
-    }
+    // 🔒 STREAMING IS OPT-IN, OFF BY DEFAULT (David 2026-09-11: "i only want
+    // the live audit stream to send to redis when i turn it on").
+    //
+    // There used to be a bake-in fallback here that adopted the build-time URL
+    // + secret whenever this device had no per-profile config, so streaming was
+    // ON for every device with zero setup. Three things were wrong with it:
+    //
+    //  1. COST. The stream's backing store is the SHARED Upstash notepad that
+    //     also holds the LLM/TTS spend counter, the bell's messages and the
+    //     referral credits — one 500k-command/month budget between them. Every
+    //     device shipping every audit event (no severity filter, ~1 POST/sec
+    //     per open page) is what exhausted it in July AND again in September;
+    //     the casualties were the spend guard and David's own messages.
+    //  2. IT MADE "OFF" INEXPRESSIBLE. `clearAuditStreamConfig` writes null,
+    //     and null fell straight back through here to the baked value, so the
+    //     Settings toggle silently turned itself back on at the next boot.
+    //  3. IT WASN'T NEEDED. Other users' telemetry is PostHog's job (durable,
+    //     already paid for); this stream is a LIVE-WATCH pipe for a device you
+    //     are actively debugging. Post-deploy audits don't need it either —
+    //     they record through their own loopback sidecar.
+    //
+    // So: no auto-enable. Streaming happens only when a URL + secret were
+    // configured EXPLICITLY — by David in Settings, or by an audit pointing at
+    // its own sidecar. The baked secret still exists for the one-tap enable in
+    // NarrationAuditPanel and for the 401 auto-heal below; it just no longer
+    // turns anything on by itself.
+    //
+    // The LOCAL Dexie log is unaffected and remains the source of truth — every
+    // device keeps recording whether or not the pipe is open.
 
     streamConfigHydrated = true;
     cachedStreamConfig = url && secret ? { url, secret } : null;

@@ -112,6 +112,52 @@ async function kvPipeline(creds: KvCreds, commands: (string | number)[][]): Prom
  *        chars × Polly rate for TTS). Used only for the daily ceiling — it
  *        never needs to be exact, only conservative.
  */
+/** TTL memo: a day-/window-scoped key only needs its expiry set on first write,
+ *  so re-sending EXPIRE on every call was pure spend. Per-instance and bounded —
+ *  the key space churns slowly (one per day, one per rate window). */
+const ttlSeen = new Set<string>();
+const TTL_MEMO_MAX = 5_000;
+function rememberTtl(key: string): void {
+  if (ttlSeen.size > TTL_MEMO_MAX) ttlSeen.clear();
+  ttlSeen.add(key);
+}
+
+/**
+ * Per-instance backstop for when the shared counter is UNREACHABLE.
+ *
+ * Fail-open stays the rule on a KV error, deliberately: refusing every request
+ * while Upstash is capped would take the coach and voice down for paying
+ * customers, which is worse than an uncapped bill. But "fail open" used to mean
+ * "no limit at all", so a runaway loop during an outage was free. This bounds
+ * that: the same per-IP daily $ cap is enforced against an in-memory tally.
+ *
+ * It is weaker than the shared counter (a lambda instance is short-lived, and a
+ * caller spread across instances gets a fresh tally on each), so it is a floor,
+ * never a replacement — the real guard is the Redis counter coming back.
+ */
+const backstop = new Map<string, { day: string; usd: number }>();
+const BACKSTOP_MAX_IPS = 10_000;
+
+function localBackstop(ip: string, estimatedCostUsd: number): GuardResult {
+  const day = new Date().toISOString().slice(0, 10);
+  const prev = backstop.get(ip);
+  const rec = prev && prev.day === day ? prev : { day, usd: 0 };
+  rec.usd += Math.max(0, estimatedCostUsd);
+  if (backstop.size > BACKSTOP_MAX_IPS) backstop.clear();
+  backstop.set(ip, rec);
+  const cap = perIpDailyUsdCap();
+  if (cap > 0 && rec.usd > cap) {
+    return { allowed: false, reason: 'ip-daily-cap', retryAfterSec: secondsUntilUtcMidnight() };
+  }
+  return { allowed: true };
+}
+
+/** The shared counter answered, so it is authoritative — drop the local tally
+ *  so a past outage can't keep charging an IP twice. */
+function resetBackstop(ip: string): void {
+  backstop.delete(ip);
+}
+
 export async function checkUsageGuard(
   kind: GuardKind,
   req: Request,
@@ -128,19 +174,40 @@ export async function checkUsageGuard(
   const ipSpendKey = `spend:${day}:${ip}`;
   const charge = Math.max(0, estimatedCostUsd).toFixed(6);
 
-  const res = await kvPipeline(creds, [
+  // 🔒 THREE COMMANDS, NOT SIX (2026-09-11). Upstash bills per COMMAND, not per
+  // HTTP request, so a 6-command pipeline costs 6 — on EVERY llm call and EVERY
+  // tts call, and tts fires per sentence. That made the guard one of the largest
+  // consumers of the same 500k/month budget that also holds the audit-stream,
+  // the bell's messages and the referral credits; it helped exhaust it twice
+  // (July and September), which ironically switched the guard itself off.
+  //
+  // The three EXPIREs were the waste: they re-set an unchanged TTL on every
+  // call. A key only needs its TTL on first write, so we memo per key per
+  // instance. Worst case that is a few extra EXPIREs per cold lambda; steady
+  // state is 3 commands instead of 6.
+  const cmds: (string | number)[][] = [
     ['INCR', rlKey],
-    ['EXPIRE', rlKey, lim.windowSec],
     ['INCRBYFLOAT', spendKey, charge],
-    ['EXPIRE', spendKey, 172800], // 2 days, so the key self-cleans
     ['INCRBYFLOAT', ipSpendKey, charge],
-    ['EXPIRE', ipSpendKey, 172800],
-  ]);
-  if (!res) return { allowed: true }; // KV error → fail open
+  ];
+  if (!ttlSeen.has(rlKey)) cmds.push(['EXPIRE', rlKey, lim.windowSec]);
+  if (!ttlSeen.has(spendKey)) cmds.push(['EXPIRE', spendKey, 172800]); // 2 days, self-cleaning
+  if (!ttlSeen.has(ipSpendKey)) cmds.push(['EXPIRE', ipSpendKey, 172800]);
+
+  const res = await kvPipeline(creds, cmds);
+  if (!res) return localBackstop(ip, estimatedCostUsd); // KV down → bounded fail-open
+
+  rememberTtl(rlKey);
+  rememberTtl(spendKey);
+  rememberTtl(ipSpendKey);
+
+  // A successful call means the shared counters are authoritative again, so the
+  // per-instance backstop must not double-count on top of them.
+  resetBackstop(ip);
 
   const ipCount = Number(res[0] ?? 0);
-  const daySpend = Number(res[2] ?? 0);
-  const ipDaySpend = Number(res[4] ?? 0);
+  const daySpend = Number(res[1] ?? 0);
+  const ipDaySpend = Number(res[2] ?? 0);
 
   // Global daily ceiling is the hardest stop — check it first.
   if (Number.isFinite(daySpend) && daySpend > dailyUsdCeiling()) {

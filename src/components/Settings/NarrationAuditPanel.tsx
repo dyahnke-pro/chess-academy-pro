@@ -76,7 +76,12 @@ export function NarrationAuditPanel(): JSX.Element {
   const handleEnableStream = (): void => {
     const defaultUrl = `${window.location.origin}/api/audit-stream`;
     const url = streamUrl || defaultUrl;
-    const secret = streamSecret ||
+    // The build bakes in the server's secret, so turning the stream on is one
+    // tap. It no longer enables anything by itself (see `loadAuditStreamConfig`
+    // — streaming is opt-in as of 2026-09-11); it is only the default value
+    // offered here. Fall back to a prompt when the build carries no secret.
+    const baked = typeof __AUDIT_STREAM_SECRET__ === 'string' ? __AUDIT_STREAM_SECRET__ : '';
+    const secret = streamSecret || baked ||
       window.prompt('Audit-stream secret (must match AUDIT_STREAM_SECRET on the server):') ||
       '';
     if (!secret) return;

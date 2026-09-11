@@ -400,6 +400,47 @@ diagnose it and either fix it or escalate; don't shrug and merge.
 
 ### G2. Audit-stream pull on EVERY runtime-touching change.
 
+🔒🔒 **THE STREAM IS OPT-IN AND OFF BY DEFAULT AS OF 2026-09-11 — AN EMPTY PULL
+NO LONGER MEANS "THE APP ISN'T OPEN" (David: "i only want the live audit stream
+to send to redis when i turn it on", and "i also do not want my post deploy
+audits to run there").**
+
+This SUPERSEDES the older "empty pulls = app not open (informational)" reading
+below and in §G1 instrument 2 — that diagnosis is now wrong by default and will
+send you chasing ghosts. What changed and why:
+
+- The stream's backing store is the SHARED Upstash notepad that also holds the
+  LLM/TTS **spend guard**, the **bell's messages** and the **referral credits** —
+  ONE 500k-command/month budget between them. Every device streaming every audit
+  event (no severity filter, ~1 POST/sec per open page) exhausted it in **July**
+  (stranding ~60% of OTA update checks) and again in **September** (which
+  silently switched the spend guard OFF, since it fails open). The stream is a
+  live-watch pipe, not a telemetry backend.
+- **Other users' telemetry is PostHog's job** and always was — `mirrorAuditEvent`
+  already forwards 56 audit kinds as product events plus the crash/defect kinds
+  as alertable exceptions. Nothing was lost by closing the pipe.
+- **Post-deploy audits must never stream to prod.** They record through their own
+  loopback sidecar (`scripts/audit-lib/audit-listener.mjs`), which is unaffected.
+  Default-off fixes this at the root — there is no longer a per-script sweep to
+  do, and no script should reintroduce a prod `auditStreamUrl`.
+
+So, when reading an empty `/api/audit-stream` pull:
+1. **Default state is OFF.** Empty is EXPECTED. It is NOT evidence about whether
+   the app was open, and NOT evidence the app is healthy.
+2. To actually watch a device live, David turns it on in Settings →
+   NarrationAuditPanel (one tap; the build's baked secret is the default value).
+   It stays on until he turns it off — and **"off" now sticks** (it previously
+   fell back to the baked value on the next boot, so the toggle was a no-op).
+3. `storage: "memory"` with Redis env present still means the **Upstash monthly
+   cap**, not "app closed" — see the Redis cap note below.
+4. The **local Dexie audit log on-device is unchanged and remains the source of
+   truth**; every device records regardless of whether the pipe is open.
+
+Gate: `appAuditor.test.ts` → "audit-stream is opt-in (2026-09-11)". It is
+deliberately non-vacuous — `vitest.config.ts` defines a NON-EMPTY baked secret,
+because with an empty one there is nothing for a regression to fall back to and a
+reintroduced auto-enable would sail through a green suite.
+
 After any push that touches a runtime path that emits audits — coach
 brain, walkthrough runtime, voice, navigation, tool calls, stage gen,
 uncaught errors, openings detail page, kid surfaces, etc. — pull the

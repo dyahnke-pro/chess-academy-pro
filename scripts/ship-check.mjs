@@ -126,7 +126,7 @@ function pullAuditStream() {
     const count = parsed.count ?? 0;
     const errEvents = (parsed.entries ?? []).filter(e => /error|fail|trip|fallback/i.test(`${e.kind} ${e.source}`));
     const summary = count === 0
-      ? 'empty (app not open)'
+      ? 'empty (stream is opt-in & off by default — not a health signal)'
       : `${count} events, ${errEvents.length} error-class`;
     results.push({ label: 'audit-stream', ok: true, ms, optional: true, summary });
     process.stdout.write(`○ ${(ms/1000).toFixed(1)}s :: ${summary}\n`);

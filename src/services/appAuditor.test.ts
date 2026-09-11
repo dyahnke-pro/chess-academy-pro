@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { db } from '../db/schema';
+import { buildUserProfile } from '../test/factories';
 import {
   logAppAudit,
   getAppAuditLog,
@@ -8,6 +9,7 @@ import {
   installConsoleBackdoor,
   setAuditStreamConfig,
   clearAuditStreamConfig,
+  loadAuditStreamConfig,
   flushStreamBatch,
   isStreamSidecarUrl,
 } from './appAuditor';
@@ -390,6 +392,48 @@ describe('appAuditor', () => {
       } finally {
         Object.defineProperty(navigator, 'clipboard', { value: original, configurable: true });
       }
+    });
+  });
+
+  // 🔒 STREAMING IS OPT-IN AND "OFF" MUST STICK (David 2026-09-11: "i only want
+  // the live audit stream to send to redis when i turn it on").
+  //
+  // The bug this gates: a bake-in fallback adopted the build's URL + secret
+  // whenever the profile carried none — and `clearAuditStreamConfig` writes
+  // exactly that (null), so turning the stream OFF in Settings silently turned
+  // itself back ON at the next boot. "Off" was inexpressible, and every device
+  // streamed every audit event into the shared Upstash budget that also holds
+  // the spend guard, the bell's messages and the referral credits.
+  //
+  // vitest.config.ts defines a NON-EMPTY baked secret on purpose — with an empty
+  // one there is nothing for a regression to fall back to and these would pass
+  // vacuously.
+  describe('audit-stream is opt-in (2026-09-11)', () => {
+    afterEach(async () => {
+      await clearAuditStreamConfig();
+    });
+
+    it('stays OFF on a fresh device even though the build bakes a URL + secret', async () => {
+      expect(__AUDIT_STREAM_SECRET__, 'gate would be vacuous without a baked secret').not.toBe('');
+      await clearAuditStreamConfig();
+      expect(await loadAuditStreamConfig()).toBeNull();
+    });
+
+    it('turning it off STICKS — a cleared config never falls back to the baked value', async () => {
+      const profile = buildUserProfile();
+      profile.id = 'main';
+      await db.profiles.put(profile);
+
+      await setAuditStreamConfig('https://example.test/api/audit-stream', 'explicit-secret');
+      expect(await loadAuditStreamConfig()).toEqual({
+        url: 'https://example.test/api/audit-stream',
+        secret: 'explicit-secret',
+      });
+
+      await clearAuditStreamConfig();
+      // Before the fix this came back as the baked config — the off switch was a
+      // no-op that survived exactly until the next boot.
+      expect(await loadAuditStreamConfig()).toBeNull();
     });
   });
 });
