@@ -79,7 +79,7 @@ blunder — did **not** reproduce. The eval grounding is solid and honest.
 
 | # | lane | verdict | sev | symptom → disease |
 |---|---|---|---|---|
-| 9 | `tactics` (Ruy) | BROKEN | P1 | On the Ruy the coach's eval was right but it appended a **fabricated tactic**: *"Bishop on b5 skewers knight on c6 with pawn on d7 behind it."* No skewer exists — the d7 pawn blocks the b5–e8 line, and you cannot skewer a knight to a *pawn*. This is the classic Bb5-hallucination class (CLAUDE.md). → the coach embellishes a correct eval with an invented tactical justification. `falseBoardClaims` MISSED it (the squares b5/c6/d7 are all real — only the *relationship* is invented), so this class needs a pin/skewer **validator**, not just a piece-on-square check. |
+| 9 | `tactics` (Ruy) | BROKEN | P1 | On the Ruy the coach's eval was right but it appended *"Bishop on b5 skewers knight on c6 with pawn on d7 behind it."* No skewer exists. **ROOT-CAUSED in Track 2 (finding #10): this is NOT an LLM hallucination — `detectTactics` the code emits it.** The LLM voiced a wrong computed fact (G0-compliant). Symptom recorded here; disease is #10. |
 
 **Harness discipline (why this took several passes — the layered method working):**
 the negative controls + real-vs-artifact rule caught **5** harness/grader bugs
@@ -97,6 +97,33 @@ reply"). Not recorded as product-broken. To grade those lanes reliably, a
 follow-on needs a gated `__ask`/`__setPosition` drive-hook or a `/coach/teach`
 set-position path (analyse's streaming follow-up is too flaky for automation).
 Also owed: automate the pin/skewer-validity check (finding #9's class).
+
+---
+
+## Track 2 — FACT-COMPUTERS + spine (deterministic oracle)
+
+The pure (engine-free) computers, driven directly with oracle FENs in vitest.
+`positionFacts`, `narrationImportance`, `causalChain`, `tacticsDetector`,
+`threatOut`, `theoryDeparture` are Node-testable; `criticalityScan`, `pvPlayback`
+need the WASM worker (owed a real-engine harness). First probe (the pure
+tactic/threat computers):
+
+| # | computer | verdict | sev | symptom → disease |
+|---|---|---|---|---|
+| 10 | `tacticsDetector.detectTactics` — **skewer detection** | BROKEN | P1 | On the Ruy (`r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w …`) it returns `{type:"skewer", involvedSquares:["b5","c6","d7"], description:"Bishop on b5 skewers knight on c6 with pawn on d7 behind it"}`. **This is the root cause of finding #9.** It is a real CODE bug: (a) the "back" piece is a **pawn** — you cannot skewer a piece to a lower-value pawn; (b) no material is won (Bxc6 dxc6 is a trade); (c) the c6 knight is defended. The skewer detector doesn't validate the value relationship or that material is actually won. **Because it's a shared computer, this false skewer reaches EVERY tactic surface** (chat `tactics-live`, teach commentary, review) per G0 — the LLM will voice it verbatim wherever the position occurs. This is the highest-value finding so far: one code bug, app-wide blast radius. |
+
+**Correct (spot-checks that passed):** `detectTactics` on startpos = clean (no
+false positives); on the free-queen it correctly flags the hanging queen +
+real d-file pins; `computeMustDefend(free-queen, black)` correctly returns the
+d5 queen (net 9). So the detector's hanging/pin/must-defend paths look sound —
+the defect is specifically the skewer geometry/value check.
+
+**Owed (Track 2 continuing):** drive `positionFacts.computePositionFacts`,
+`narrationImportance.computeImportance`, `causalChain` on oracle inputs;
+build a real-engine harness for `criticalityScan` + `pvPlayback` (feed a
+Stockfish-derived analysis); and a broader `detectTactics` sweep across many FENs
+(the skewer bug suggests the fork/pin/discovery detectors deserve the same
+value-and-material validation audit).
 
 ---
 
