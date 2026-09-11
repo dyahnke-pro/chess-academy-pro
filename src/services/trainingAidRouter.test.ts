@@ -82,6 +82,17 @@ describe('matchTrainingAidRoute — tactics / puzzles (in-place Learn drill)', (
   it('routes "endgame puzzles" to a themed board drill', () => {
     expect(matchTrainingAidRoute('endgame puzzles')?.aid).toBe('puzzle:endgame');
   });
+  // David 2026-09-10: "Coach me on tactical sequences" fell through to the brain
+  // (which started a random Caro-Kann walkthrough) because "coach me on" was not
+  // a framing verb. It must route to a tactics board drill (mistakes-first
+  // downstream in handleSubmit).
+  it('routes "Coach me on tactical sequences" to a tactics board drill', () => {
+    const r = matchTrainingAidRoute('Coach me on tactical sequences');
+    expect(r?.path).toBe('/coach/teach?drill=puzzle');
+  });
+  it('routes "coach me on tactics"', () => {
+    expect(matchTrainingAidRoute('coach me on tactics')?.path).toBe('/coach/teach?drill=puzzle');
+  });
 });
 
 describe('matchTrainingAidRoute — a tactics QUESTION about the live board is NOT a drill (David 2026-07-04 audit)', () => {
