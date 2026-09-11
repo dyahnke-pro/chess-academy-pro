@@ -138,3 +138,38 @@ describe('pickLeadingFundamentals — state two only when nearly tied', () => {
     expect(strategicWhyLed(START, 'a3', 'white')).toBeNull();
   });
 });
+
+// Coach audit 2026-09-11 — the three positional fundamentals added so a quiet
+// best move (h3, b4, O-O-side pawns) gets a real "why" instead of "advancing
+// the pawn to h3". Each is board-verified; these lock that they fire on a real
+// board and, for prophylaxis, ONLY when an enemy minor can actually reach the
+// square (never an invented "stops …Bg4").
+describe('computeMoveFundamentals — positional fundamentals (audit 2026-09-11)', () => {
+  it('space: b4 in the KID grabs queenside space', () => {
+    const fen = 'r1bq1rk1/ppp1npbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 1 9';
+    const funds = computeMoveFundamentals(fen, 'b4', 'white');
+    const space = funds.find((f) => f.id === 'space');
+    expect(space, 'b4 should grab queenside space').toBeTruthy();
+    expect(space!.led).toContain('queenside');
+  });
+
+  it('prophylaxis: h3 in the Italian takes g4 from the c8 bishop (which really can reach it)', () => {
+    const fen = 'r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 2 7';
+    const funds = computeMoveFundamentals(fen, 'h3', 'white');
+    const p = funds.find((f) => f.id === 'prophylaxis');
+    expect(p, 'h3 should deny the bishop g4').toBeTruthy();
+    expect(p!.led).toContain('g4');
+    expect(p!.led).toContain('bishop');
+  });
+
+  it('luft (not a false prophylaxis): h3 with no enemy minor able to reach g4 makes luft', () => {
+    // King castled kingside, only rooks + pawns — no black minor can reach g4,
+    // so prophylaxis must NOT fire; luft must.
+    const fen = '6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 20';
+    const funds = computeMoveFundamentals(fen, 'h3', 'white');
+    expect(funds.some((f) => f.id === 'prophylaxis'), 'no minor → no prophylaxis claim').toBe(false);
+    const luft = funds.find((f) => f.id === 'luft');
+    expect(luft, 'h3 in front of the castled king makes luft').toBeTruthy();
+    expect(luft!.led).toContain('luft');
+  });
+});

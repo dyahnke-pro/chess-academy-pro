@@ -22,7 +22,7 @@ import {
   bishopPair, computeSpace, findPassedPawns,
 } from './positionReadingService';
 import { structurePlan } from './boardPlan';
-import { strategicWhySelfContained } from './moveFundamentals';
+import { strategicWhyLed } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
@@ -2072,7 +2072,12 @@ export function quietPurposePhrase(
   // the Why? button + review + play commentary), so upgrading it here lifts them
   // all at once. Falls through to the original per-case reads below only for the
   // handful of quiet purposes the computer doesn't model.
-  const fundamental = strategicWhySelfContained(fenBefore, san, moverColor);
+  // The LED (verb-led) fundamental — reads correctly after "it"/"It" and as a
+  // comma-clause, which is how all three consumers wrap it. The selfContained
+  // form ("castling gets…") produced "It castling gets…" through the "it ${q}"
+  // path (coach audit 2026-09-11); the led form ("castles your king into
+  // safety…") reads right everywhere.
+  const fundamental = strategicWhyLed(fenBefore, san, moverColor);
   if (fundamental) return fundamental;
   try {
     const b = new Chess(fenBefore);
@@ -2367,11 +2372,18 @@ export function assembleEngineReasoning(opts: {
 
   const clauses: string[] = [];
 
-  // 1) THE ENGINE'S MOVE — what it does on the board.
-  const firstGeo = describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor);
+  // 1) THE ENGINE'S MOVE — what it does on the board. Concrete geometry first
+  //    (fork/pin/mate/capture); for a QUIET move (h3, b4, O-O) describeMoveGeometry
+  //    is null, so fall back to the positional fundamental (luft / space /
+  //    prophylaxis / development / center) — the same shared leaf the "Why?"
+  //    button uses — so a quiet best move gets a real idea, not a bare "the
+  //    engine plays h3" (coach audit 2026-09-11, chat-why depth).
+  const firstReason =
+    describeMoveGeometry(plies[0].fenBefore, plies[0].san, opts.moverColor)
+    ?? quietPurposePhrase(plies[0].fenBefore, plies[0].san, opts.moverColor);
   clauses.push(
-    firstGeo
-      ? `The engine plays ${plies[0].san} — it ${firstGeo}.`
+    firstReason
+      ? `The engine plays ${plies[0].san} — it ${firstReason}.`
       : `The engine plays ${plies[0].san}.`,
   );
 

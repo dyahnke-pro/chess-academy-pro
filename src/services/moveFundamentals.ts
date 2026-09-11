@@ -28,7 +28,10 @@ export type MoveFundamentalId =
   | 'center'
   | 'open-file'
   | 'king-activity'
-  | 'passed-pawn';
+  | 'passed-pawn'
+  | 'luft'
+  | 'space'
+  | 'prophylaxis';
 
 export interface MoveFundamental {
   id: MoveFundamentalId;
@@ -122,6 +125,28 @@ function fileOpenness(after: Chess, file: string, mover: 'w' | 'b'): 'open' | 'h
   }
   if (friendly > 0) return null;
   return enemy === 0 ? 'open' : 'half-open';
+}
+
+/** The square the mover's king stands on, or null. */
+function kingSquare(board: Chess, mover: 'w' | 'b'): string | null {
+  for (const row of board.board()) {
+    for (const p of row) { if (p && p.type === 'k' && p.color === mover) return p.square; }
+  }
+  return null;
+}
+
+/** The two diagonal-forward squares a pawn on `sq` attacks, for `mover`. */
+function pawnAttackSquares(sq: string, mover: 'w' | 'b'): string[] {
+  const file = sq.charCodeAt(0);
+  const rank = rankOf(sq);
+  const fwd = mover === 'w' ? rank + 1 : rank - 1;
+  if (fwd < 1 || fwd > 8) return [];
+  const out: string[] = [];
+  for (const df of [-1, 1]) {
+    const f = file + df;
+    if (f >= 97 && f <= 104) out.push(`${String.fromCharCode(f)}${fwd}`);
+  }
+  return out;
 }
 
 function countHomeMinors(board: Chess, mover: 'w' | 'b'): number {
@@ -306,6 +331,86 @@ export function computeMoveFundamentals(
       imperative: `push your passed pawn — passed pawns must be pushed`,
       squares: [mv.to],
     });
+  }
+
+  // ── PROPHYLAXIS — a quiet pawn push that DENIES an enemy minor an active
+  //    square (h3 taking g4 from a bishop/knight). Strictly verified: an enemy
+  //    minor must actually be able to reach the newly-guarded square (else the
+  //    claim is invented — the Italian's h3 is LUFT, not "stops …Bg4", because
+  //    no black minor can reach g4). Only a square deep in the mover's half
+  //    (relRank ≥ 5 for the enemy) counts as a real incursion square.
+  const enemy: 'w' | 'b' = mover === 'w' ? 'b' : 'w';
+  if (mv.piece === 'p' && !mv.captured) {
+    for (const s of pawnAttackSquares(mv.to, mover)) {
+      if (after.get(s as Square)) continue; // occupied — not a denied empty square
+      if (relRank(s, enemy) < 5) continue;  // not deep enough in our half to matter
+      let deniers: Array<'n' | 'b'> = [];
+      try {
+        const b = new Chess(fenBefore);
+        deniers = b
+          .attackers(s as Square, enemy)
+          .map((sq) => b.get(sq as Square)?.type)
+          .filter((t): t is 'n' | 'b' => t === 'n' || t === 'b');
+      } catch { deniers = []; }
+      if (deniers.length > 0) {
+        const pieceName = PIECE_NAME[deniers[0]];
+        out.push({
+          id: 'prophylaxis',
+          weight: 50,
+          led: `takes the ${s} square away from their ${pieceName}`,
+          selfContained: `plays ${mv.to}, denying their ${pieceName} the ${s} square`,
+          imperative: `deny their ${pieceName} the ${s} square`,
+          squares: [mv.to, s],
+        });
+        break; // one denial clause is enough
+      }
+    }
+  }
+
+  // ── LUFT — a pawn step in front of the CASTLED king that opens a flight
+  //    square off the back rank (guards against the back-rank mate). Verified:
+  //    the king sits on its castled square and this pawn shields it.
+  if (mv.piece === 'p' && !mv.captured && !out.some((f) => f.id === 'prophylaxis')) {
+    const kSq = kingSquare(after, mover);
+    const backRank = mover === 'w' ? 1 : 8;
+    const kingside = kSq === (mover === 'w' ? 'g1' : 'g8');
+    const queenside = kSq === (mover === 'w' ? 'c1' : 'c8') || kSq === (mover === 'w' ? 'b1' : 'b8');
+    const shieldFiles = kingside ? ['g', 'h'] : queenside ? ['a', 'b'] : [];
+    if (
+      kSq && rankOf(kSq) === backRank && shieldFiles.includes(fileOf(mv.to))
+      && relRank(mv.to, mover) === 3 && relRank(mv.from, mover) === 2
+    ) {
+      out.push({
+        id: 'luft',
+        weight: 46,
+        led: `gives your king luft — a flight square off the back rank`,
+        selfContained: `makes luft with ${mv.to}, a flight square for the king off the back rank`,
+        imperative: `make luft — give your king a flight square off the back rank`,
+        squares: [mv.to, kSq],
+      });
+    }
+  }
+
+  // ── SPACE — a wing pawn advanced past the middle (b4 / a4 / h4 …), grabbing
+  //    space on that flank. Center pawns and passers are already named above;
+  //    this catches the flank space-grab that otherwise had no "why".
+  if (
+    mv.piece === 'p' && !mv.captured && relRank(mv.to, mover) >= 4
+    && !CENTER.includes(mv.to)
+    && !out.some((f) => f.id === 'passed-pawn' || f.id === 'center' || f.id === 'prophylaxis')
+  ) {
+    const file = fileOf(mv.to);
+    const side = ('ab'.includes(file)) ? 'queenside' : ('gh'.includes(file)) ? 'kingside' : null;
+    if (side) {
+      out.push({
+        id: 'space',
+        weight: 48,
+        led: `grabs space on the ${side}`,
+        selfContained: `advances ${mv.to}, grabbing space on the ${side}`,
+        imperative: `grab space on the ${side} with ${mv.to}`,
+        squares: [mv.to],
+      });
+    }
   }
 
   return out.sort((a, b) => b.weight - a.weight);

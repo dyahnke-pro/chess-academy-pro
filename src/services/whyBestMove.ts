@@ -66,7 +66,11 @@ export async function computeWhyBestMove(input: WhyBestMoveInput): Promise<strin
   const point = explainBestMoveGrounded(fen, null, uci, studentColor); // "it forks the king and rook" | null
   if (san) {
     const reason = point?.trim() || groundedMoveWhy([], fen, san, studentColor);
-    parts.push(`The strongest move is ${san} — ${reason}.`);
+    // Strip a trailing period on the reason before adding our own — the grounded
+    // computers sometimes return a full sentence ("It wins the rook on e7."),
+    // which produced "…on e7.." (coach audit 2026-09-11).
+    const cleaned = (reason ?? '').replace(/\s*\.\s*$/, '');
+    parts.push(`The strongest move is ${san} — ${cleaned}.`);
   }
 
   // 2. The position briefing — the plan + what's at stake + the real fork in the
