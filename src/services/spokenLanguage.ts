@@ -30,7 +30,7 @@
  * teaching in English beats the coach going silent.
  */
 import { useAppStore } from '../stores/appStore';
-import { languageNameFor } from '../utils/detectLanguage';
+import { detectLanguage, languageNameFor } from '../utils/detectLanguage';
 
 /** Translations already paid for, keyed by language + source text. Lines
  *  repeat constantly — a beat re-spoken on resume, a cue replayed on
@@ -56,6 +56,15 @@ export function spokenLanguageName(): string | null {
 export async function localizeSpokenText(text: string): Promise<string> {
   const source = text.trim();
   if (!source) return text;
+  // DETECTED INPUT WINS (David 2026-09-11). The text may ALREADY be in the
+  // student's language — a coach chat reply is written in the detected input
+  // language (coachService), and the i18n lesson packs are pre-localized.
+  // Re-translating it to the narration SETTING would speak a DIFFERENT language
+  // than the student used (type Spanish, hear the French setting). If the text
+  // is already a confident non-English language, speak it as-is. The setting
+  // only localizes an ENGLISH source (computed narration / English-authored
+  // lessons).
+  if (detectLanguage(source).nonEnglish) return text;
   const languageName = spokenLanguageName();
   if (!languageName) return text;
 

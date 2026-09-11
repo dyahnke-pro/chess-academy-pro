@@ -44,6 +44,7 @@ import { loadProGameReferenceData } from '../services/proGameReferenceData';
 import { consumeCoachActionOffer, translateToEnglish } from '../services/coachApi';
 import type { CoachActionOffer } from '../services/coachApi';
 import { detectLanguage } from '../utils/detectLanguage';
+import { spokenLanguageName } from '../services/spokenLanguage';
 import { deepseekProvider } from './providers/deepseek';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
 import type {
@@ -558,9 +559,19 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     if (askLang.nonEnglish) {
       input = { ...input, ask: await translateToEnglish(input.ask) };
     }
+    // THE COACH REPLIES IN THE LANGUAGE THE STUDENT USED (David 2026-09-11:
+    // "the app should speak and write in whatever language the user types or
+    // speaks"). Detected input WINS; the narration-language SETTING is the
+    // FALLBACK when the input isn't confidently a non-English language (bare
+    // chess notation is not a language signal — `askLang.nonEnglish` is false
+    // there). Resolving it once here keeps the WRITTEN reply consistent with the
+    // SPOKEN voice, which honours the same source at the voice chokepoint
+    // (spokenLanguage: a reply already in the student's language is spoken
+    // as-is, never re-translated to the setting).
+    const replyLanguageName = askLang.nonEnglish ? askLang.name : (spokenLanguageName() ?? 'English');
     const languageLine =
-      `STUDENT LANGUAGE (computed by the app): ${askLang.name}. Write your ENTIRE reply in ` +
-      `${askLang.name}. Chess notation (e4, fxe5, Nf3, O-O) is notation, not a language ` +
+      `STUDENT LANGUAGE (computed by the app): ${replyLanguageName}. Write your ENTIRE reply in ` +
+      `${replyLanguageName}. Chess notation (e4, fxe5, Nf3, O-O) is notation, not a language ` +
       `signal — NEVER infer the language from moves or guess it yourself.`;
     options = {
       ...options,

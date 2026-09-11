@@ -76,3 +76,34 @@ describe('spokenLanguage', () => {
     expect(voiceFactsMock).not.toHaveBeenCalled();
   });
 });
+
+// David 2026-09-11: "the app should speak and write in whatever language the
+// user types or speaks." The coach chat reply is written in the DETECTED input
+// language; the voice must speak THAT, not re-translate it to the narration
+// setting (type Spanish, don't hear the French setting). Detected input wins;
+// the setting only localizes an English source.
+describe('spokenLanguage — a reply already in the student\'s language is spoken as-is', () => {
+  beforeEach(() => {
+    __clearSpokenLanguageCache();
+    voiceFactsMock.mockReset();
+    voiceFactsMock.mockResolvedValue('SHOULD-NOT-BE-CALLED');
+  });
+
+  it('does NOT re-translate an already-non-English reply to the setting', async () => {
+    setLanguage('fr'); // setting says French…
+    // …but the reply is already Spanish (the student typed Spanish). Speak it as-is.
+    const spanish = '¿Cuál es la mejor jugada? El caballo va a f3, que es la mejor.';
+    expect(await localizeSpokenText(spanish)).toBe(spanish);
+    expect(voiceFactsMock).not.toHaveBeenCalled();
+  });
+
+  it('still localizes an ENGLISH source to the setting (lessons / computed narration)', async () => {
+    setLanguage('fr');
+    voiceFactsMock.mockResolvedValue('Le cavalier va en f3.');
+    expect(await localizeSpokenText('The knight goes to f3.')).toBe('Le cavalier va en f3.');
+    expect(voiceFactsMock).toHaveBeenCalledWith(
+      'The knight goes to f3.',
+      expect.objectContaining({ targetLanguage: 'French' }),
+    );
+  });
+});
