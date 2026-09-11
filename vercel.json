@@ -2,10 +2,6 @@
   "installCommand": "npm install",
   "crons": [
     {
-      "path": "/api/voice-failure-watch",
-      "schedule": "0 * * * *"
-    },
-    {
       "path": "/api/monitor",
       "schedule": "0 * * * *"
     }
