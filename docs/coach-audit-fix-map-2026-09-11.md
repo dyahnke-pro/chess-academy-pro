@@ -59,14 +59,88 @@ red first, green after.
 
 ---
 
-## ROOT CAUSE B — D1: the "no specific lesson" catch-all (findings #3, #4)
-_Filling from the routing investigation — pending._
+## ROOT CAUSE B — D1: over-broad `isConceptQuestion` (findings #3, #4)
+**One disease behind both.** `CONCEPT_QUESTION_RE` (`questionIntents.ts:952`,
+detector `:980`) = `\bwhat(?:'?s| is| are| does)\s+(?:a|an|the\s+)?[a-z]+` matches
+almost any "what's the/your X" ask; the self-knowledge guard (`:986`) only
+excludes "what's **my** …". So `strengthsQuestion`/`teachingMethodQuestion` asks
+are ALSO flagged `conceptQuestion=true`, and the concept lane
+(`coachApi.ts:4760`) dispatches BEFORE the strengths (`:3629`) and teaching-method
+(`:4824`) lanes — returning the "I don't have a specific lesson…" decline at
+`coachApi.ts:4794`.
 
-## ROOT CAUSE C — D2: deterministic routers pre-empt analytics asks (#1, #2)
-_Filling from the routing investigation — pending._
+**Fix (one disease, two aligned edits):**
+1. Tighten `isConceptQuestion` to defer: near `questionIntents.ts:986` add
+   `if (isStrengthsQuestion(ask) || isTeachingMethodQuestion(ask) || isSkillRadarQuestion(ask)) return false;`
+   (all same-file leaves). This fixes **#4 teaching-method** outright.
+2. **#3 strengths** also has a detector GAP — `STRENGTHS_QUESTION_RE`
+   (`questionIntents.ts:1471`) doesn't match "what's the strongest part of my
+   game" (only "what's my strong…"). Add an alternative:
+   `what(?:'?s| is)\s+the\s+(?:strongest|best)\s+(?:part|area|aspect)\s+of\s+my\s+(?:game|play|chess)`
+   so it flags `strengthsQuestion` (then edit #1 keeps it out of concept + the
+   upload-gate at `:3468` and strengths lane at `:3629` engage).
+**Gate:** `questionMatrix.audit.test.ts` — assert these asks flag their own lane,
+not `conceptQuestion`.
 
-## One-offs (#5 endgame-tablebase, #6 last-game, #7 drill-stage, #8 review-game)
-_Filling from the routing investigation — pending._
+## ROOT CAUSE C — D2: earlier routers/intercepts pre-empt the ask (#1, #2)
+
+### #1 `record-vs-target` → "d4 is chess notation"
+**Root cause:** the early NOTATION-HELP intercept (`coachApi.ts:3330` →
+`notationQuestionSan`, `groundedAnswer.ts:3113`) runs before the recordVs lane
+(`:3511`). `notationQuestionSan` is too loose — accepts any ask with "what's/is"
++ any SAN-shaped token; its only exclusion (a preceding on/at/to/…) misses
+`with`/`against`/`score`. So "what's my score with d4 openings?" decodes "d4".
+**Fix:** at the top of `notationQuestionSan` add `if (recordVsTarget(text)) return null;`
+(or anchor the token as the subject: `what('s| is) <SAN>` / `what does <SAN> mean`).
+**Gate:** add "what's my score with d4 openings?" → recordVs, not notation.
+
+### #2 `transfer-gap` → tactics drill
+**Root cause:** `routeChatIntent` → `matchTrainingAidRoute`
+(`coachSessionRouter.ts:180`) runs BEFORE the brain; inside
+(`trainingAidRouter.ts:181,185`) `hasExplicitPuzzleWord = /\bpuzzles?\b/` drills
+on the bare word "puzzles" with no framing verb — and the transfer-gap ask
+contains "puzzles". (Sibling `trainingRequestKind` already excludes transfer-gap;
+this router doesn't.)
+**Fix:** guard in `trainingAidRouter.ts` (~line 118) —
+`if (isTransferGapQuestion(lower)) return null;` (leaf import, no cycle), or
+require `framed` for the puzzle-word branch.
+**Gate:** transfer-gap ask must NOT return a training-aid route.
+
+## One-offs
+
+### #5 `endgame-tablebase` → middlegame plan on a non-endgame board
+**Root cause:** `planQuestion` + `endgameQuestion` both set, no mutual exclusion
+(`questionIntents.ts:2655`,`:2718`); the plan lane (`coachApi.ts:5231`) dispatches
+before the endgame lane (`:5482`, which correctly phase-gates on `pieceCount>16`).
+**Fix:** `planQuestion: isPlanQuestion(a) && !isEndgameQuestion(a)` at
+`questionIntents.ts:2655` (mirrors the bestMove/candidate suppression at `:2665`).
+
+### #6 `last-game` → generic weakness empty-state
+**Root cause:** the upload-your-games gate (`coachApi.ts:3468`, engaged because
+`personalGameDataQuestion` includes `lastGameQuestion` at `:1749`) runs before the
+last-game lane (`:4317`), and its topic map (`:3473-3494`) has NO lastGame branch
+→ falls to the default topic 'the mistakes you make' (`:3494`).
+**Fix:** add a branch before the default at `coachApi.ts:3494`:
+`: grounding.lastGameQuestion ? 'how your last game went'` (or drop lastGame from
+`personalGameDataQuestion` so its own cold message at `:4324` serves).
+
+### #7 `drill-stage` → concept check instead of a drill
+**Root cause:** `STAGE_PATTERNS` in `CoachTeachPage.tsx:3827` maps
+`/\b(?:quiz\s+me\s+on|quiz)\b/` → `stage:'concepts'`; the ack (`:4750`) then says
+"concept check". A quiz/test-me request lands on the concept stage, not drill.
+**Fix:** change that entry's `stage` to `'drill'` (and mirror "test me"), or split
+"concept check" (informational) from "quiz me" (interactive drill) into distinct
+stages.
+
+### #8 `review-game` → doesn't route (stuck on /games)
+**Root cause:** `routeChatIntent`'s review-game case
+(`coachSessionRouter.ts:317-349`) returns a reply-only result with NO `path` when
+`findLastMatchingGame` returns null (cold surface), so `dispatchCoachTurn` never
+navigates; and even on a hit it targets `/coach/play?review=` or
+`/coach/session/narrate`, not `/coach/review`. (The teach page has its own regex
+→ `/coach/review` at `CoachTeachPage.tsx:2704`, which is why it works there.)
+**Fix:** in the review-game case, route to `/coach/review` even with no specific
+match (mirror the teach page), and change the hit target to the review surface.
 
 ---
 
