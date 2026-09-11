@@ -29,6 +29,7 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
   causalChain/narrationImportance/threatOut/pins verified sound.
 - ✅ Track 6 (tools): gating + grounding teeth verified sound.
 - ✅ Track 7 (voice/verbosity/perspective): deterministic contracts verified sound.
+- ✅ Track 3 (Learn walkthrough): HAND-DRIVEN, verified sound, 0 confirmed bugs (16 bot 'failures' debunked).
 - ✅ Track 5 (Review): real-game 3-instrument audit MEETS STANDARD (15/15 text
   contracts); voice-half + mistake-game diagnostic cards owed.
 - **Owed — the rest of the INTERACTIVE layer** (heavy prod-Playwright): Track 2
@@ -231,6 +232,48 @@ it live).
 register in a running game, that read-aloud bypasses verbosity, and that the
 in-game register speaks you/they correctly — exercised by interactive Tracks 3–5
 (narration listener + register assertions).
+
+---
+
+## Track 3 — LEARN walkthrough (HAND-DRIVEN, step by step)
+
+Driven by hand via `scripts/audit-lib/hand-step.mjs` (one action → dump the true
+state: url, phase, visible testids, transcript, screenshot → decide the next
+click). **NOT a fire-and-forget bot** (the 2026-07-24 standard).
+
+**Verdict: the Learn walkthrough is SOUND — ZERO confirmed product bugs.** Hand-
+confirmed working on prod (0 pageerrors throughout):
+- Tap an opening tile → routes straight to `walkthrough-narrating-panel`
+  ("Sure — let's walk through the Italian Game").
+- `walkthrough-skip` advances beats; after 2 skips the lesson reaches a fork.
+- The fork (`walkthrough-fork-bar`, two line options, deep-dive) **waits for a
+  pick and offers no skip** — picking `walkthrough-fork-option-0` advances to the
+  next branch, board updates correctly each time (Italian developing e4/e5/Bc4/…).
+
+**The scripted bot (`audit-coach-teach-functional.mjs`) reported 16 ❌ — ALL
+FALSE, debunked by hand:**
+- `tile-routing` / `lesson-starts-from-click` "stuck at teach-picker" → **harness
+  artifact.** The bot had accumulated page state from ~20 prior steps; on a fresh
+  page the tile routes instantly. Not broken.
+- `fork-auto-advance STALLED` → **correct by design.** A fork waits for the
+  student's choice and has no skip; the "stall" IS the contract. Not broken.
+- `wt-skip / wt-fork-pick / wt-leaf / stage-*` → all downstream of the above two;
+  they never ran because the bot's tile-tap never started a lesson. Not product
+  bugs.
+- `line-picker-*` / `face-mode-toggle` → the Italian tile started a lesson
+  directly (no line-picker for this tile), so those testids legitimately didn't
+  appear — a test-scenario mismatch, not a break.
+
+**Unconfirmed (NOT recorded as a finding, per "confirm broken"):** the bot's
+"continue button never enabled — stages not gen within 60s" at a leaf. Reaching
+a leaf via stateless hand-replay is many forks deep; not yet reproduced clean.
+Almost certainly the same accumulated-state load, but it is NEITHER confirmed
+broken NOR confirmed sound — owed a clean leaf-reach. It is not in the findings
+count.
+
+**Meta-lesson (validates David's insistence):** hand-driving turned 16 scripted
+"failures" into 0 confirmed bugs. A fire-and-forget bot would have polluted the
+map with 16 false findings.
 
 ---
 
