@@ -175,6 +175,23 @@ describe('matchTrainingAidRoute — puzzle STATS questions fall through to the g
   });
 });
 
+describe('matchTrainingAidRoute — transfer-gap questions fall through to the grounded brain (coach audit 2026-09-11, #2)', () => {
+  // "do I spot tactics in games as well as puzzles?" names "puzzles" but is a
+  // DIAGNOSTIC question the grounded brain answers — the bare-"puzzles" branch
+  // hijacked it into a tactics drill.
+  it.each([
+    'do I spot tactics in games as well as puzzles?',
+    'why am I good at puzzles but bad in games?',
+    'do my puzzle skills show up in my games?',
+  ])('transfer-gap → null (brain grounds it): %s', (q) => {
+    expect(matchTrainingAidRoute(q)).toBeNull();
+  });
+  // A real puzzle-drill imperative still drills.
+  it('imperative "give me a tactics puzzle" still routes to a puzzle drill', () => {
+    expect(matchTrainingAidRoute('give me a tactics puzzle')?.aid).toBe('puzzle');
+  });
+});
+
 describe('matchTrainingAidRoute — "teach me / learn" framing (David 2026-07-16)', () => {
   // "teach me tactics" / "teach me endgames" / "learn tactics" are training
   // requests, not board questions. They used to slip past every matcher

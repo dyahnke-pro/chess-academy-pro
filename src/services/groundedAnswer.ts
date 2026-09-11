@@ -3130,6 +3130,13 @@ export function notationQuestionSan(text: string | null | undefined): string | n
   // ("what is Bxe7", "what does c4 mean") has no location word before the token.
   const before = text.slice(0, m.index ?? text.indexOf(m[0]));
   if (/\b(?:on|at|to|from|onto|upon|near|toward|towards)\s+$/i.test(before)) return null;
+  // A record/analytics framing — "my score WITH d4", "results AGAINST the London",
+  // "how i do PLAYING the Caro" — names the opening/opponent as the SUBJECT of a
+  // stats ask, not a notation token. Without this, "what's my score with d4
+  // openings?" decoded "d4" and answered "'d4' is chess notation — the pawn moves
+  // to d4" (broken-map #1). A genuine notation query ("what is Bxe7", "what does
+  // e4 mean") never has one of these words immediately before the token.
+  if (/\b(?:with|against|versus|vs\.?|v\.?|playing|facing|in)\s+(?:the\s+)?$/i.test(before)) return null;
   return normalizeBeginnerSan(m[0]);
 }
 

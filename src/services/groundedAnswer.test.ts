@@ -1454,6 +1454,16 @@ describe('notationQuestionSan — pull the move out of "what does Bxe7 mean" (Da
     expect(notationQuestionSan('what is Bxe7')).toBe('Bxe7');
     expect(notationQuestionSan('what does c4 mean')).toBe('c4');
   });
+  it('does NOT fire on a record/analytics framing — "score WITH d4" is a stats ask (coach audit 2026-09-11, #1)', () => {
+    // "what's my score with d4 openings?" decoded "d4" and answered "'d4' is
+    // chess notation — the pawn moves to d4", pre-empting the record-vs lane.
+    expect(notationQuestionSan("what's my score with d4 openings?")).toBeNull();
+    expect(notationQuestionSan('what is my record against the London?')).toBeNull();
+    expect(notationQuestionSan('how do I do playing the Caro?')).toBeNull();
+    // A genuine notation ask with no record framing still decodes.
+    expect(notationQuestionSan('what is e4?')).toBe('e4');
+    expect(notationQuestionSan('what does Nf3 mean?')).toBe('Nf3');
+  });
 });
 
 describe('explainSanNotation — plain-English decode for a beginner (G0)', () => {
