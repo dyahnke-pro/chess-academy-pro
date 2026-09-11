@@ -173,6 +173,34 @@ value-and-material validation audit).
 
 ---
 
+## Track 6 — THE COACH'S HANDS (23 tools) — gating + grounding teeth
+
+Driven by importing each tool's `execute(args, ctx)` directly (deterministic).
+
+**VERIFIED SOUND — this is a positive result, no findings.** The security-critical
+contract holds across the action tools:
+- **Gating ("no fake success", David 2026-09-08):** `play_move`, `take_back_move`,
+  `reset_board`, `quiz_user_for_move`, `start_walkthrough_for_opening` all return
+  `{ok:false}` with a clear, actionable error when the surface callback is absent
+  — none fake a success.
+- **Grounding teeth all bite:** `set_board_position` rejects opening-phase raw
+  FENs (fullmove ≤12 — the Catalan-Na3 hallucination guard) and demands real
+  `moves`; `play_move` rejects illegal SAN (`e9`) with the legal-move list;
+  `navigate_to_route` rejects an off-manifest path and accepts a valid one
+  (`/coach/play`).
+
+**Known caveat (from the tool inventory, not re-tested):** `record_blunder` is
+registered but only partially wired — it appends a synthetic conversation entry
+rather than writing a real `blunderPatterns` store (a documented PUNT). Low
+severity (the record path still exists), flag for the fix phase.
+
+**Owed:** an in-person test that a WIRED tool actually mutates the board
+correctly (FEN before/after) on a real surface — the gating/teeth are verified
+here; the actuation-correctness half needs a surface drive (Tracks 3–5 exercise
+it live).
+
+---
+
 ## Track 1c — analytics ACCURACY with seeded games (follow-on)
 
 The profile/analytics lanes (weakness, trend, opening-profile, stats, records,
