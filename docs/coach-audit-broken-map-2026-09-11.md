@@ -176,12 +176,15 @@ GREEN**).
 |---|---|---|---|---|
 | 12 | `tacticsDetector.test.ts` coverage gap | BROKEN (test) | P2 | The 29-test suite is GREEN while `findSkewers` ships the false skewer (#10). The suite has **no case for the skewer/fork material-validation class** — the bug lives precisely in the untested corner. "Green gate ≠ correct": this is the audit's whole premise, demonstrated. The fix for #10/#11 must ship WITH a gate that covers value/material validation (the Ruy skewer as a red case). |
 
-**Owed (Track 2 continuing):** drive `positionFacts.computePositionFacts`,
-`narrationImportance.computeImportance`, `causalChain` on oracle inputs;
-build a real-engine harness for `criticalityScan` + `pvPlayback` (feed a
-Stockfish-derived analysis); and a broader `detectTactics` sweep across many FENs
-(the skewer bug suggests the fork/pin/discovery detectors deserve the same
-value-and-material validation audit).
+**Track 2 remainder — gates GREEN (sound).** `positionFacts`, `criticalityScan`,
+`pvPlayback`, `theoryDeparture` test suites pass (51 tests). Crucially,
+`pvPlayback` explicitly asserts **"a knight move never claims a pin (knights
+cannot pin)"** and **"a recapture claims no material windfall (even trade nets
+0)"** — so the engine-PV narration path DOES carry the material/geometry
+validation that `detectTactics` lacks. **This localizes D3 to `tacticsDetector`'s
+`findSkewers`/`findForks` — it is NOT a systemic pattern across all computers.**
+The rest of Track 2 (positionFacts aggregation, the userImportance selector,
+causalChain) is gated + green.
 
 ---
 
