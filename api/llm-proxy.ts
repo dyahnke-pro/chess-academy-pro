@@ -23,7 +23,7 @@
  * proxies. KV-backed rate limiting + a global daily $ kill-switch live in
  * api/_lib/usageGuard.ts (no-op until a Vercel KV store is provisioned).
  */
-import { checkUsageGuard, LLM_CALL_COST_USD } from './_lib/usageGuard.js';
+import { checkUsageGuard } from './_lib/usageGuard.js';
 import { isAllowedOrigin, originAllowed } from './_lib/allowedOrigin.js';
 
 export const config = { runtime: 'edge' };
@@ -99,13 +99,14 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response(`${provider.env} not configured on the server`, { status: 503, headers: cors });
   }
 
-  // Cost guard: per-IP rate limit + global daily $ kill-switch (no-op until
-  // KV is provisioned — see api/_lib/usageGuard.ts).
-  const guard = await checkUsageGuard('llm', req, LLM_CALL_COST_USD);
+  // Abuse guard: per-IP rate limit (no-op until KV is provisioned — see
+  // api/_lib/usageGuard.ts). The daily-$ kill-switch was removed 2026-09-11:
+  // real spend is ~$0.03/day on DeepSeek, so tracking it cost more in Redis
+  // commands than the spend it guarded. This endpoint is unauthenticated, so
+  // the rate limit stays — it is what stops it being used as a free public API.
+  const guard = await checkUsageGuard('llm', req);
   if (!guard.allowed) {
-    const msg = guard.reason === 'daily-ceiling'
-      ? 'Daily usage limit reached. The coach is resting until tomorrow.'
-      : 'Too many requests — slow down a moment.';
+    const msg = 'Too many requests — slow down a moment.';
     return new Response(JSON.stringify({ error: { message: msg, type: 'usage_cap', reason: guard.reason } }), {
       status: 429,
       headers: { ...cors, 'content-type': 'application/json', 'Retry-After': String(guard.retryAfterSec ?? 3600) },

@@ -145,6 +145,10 @@ describe('appAuditor', () => {
             summary: `e${i}`,
           });
         }
+        // Force the batch out rather than waiting on STREAM_BATCH_FLUSH_MS —
+        // the window is 5s (a cost control, not a behaviour this test is about),
+        // and coupling the test to it makes the constant unchangeable.
+        await flushStreamBatch();
         // Let the fire-and-forget stream POSTs + the disable latch settle.
         await new Promise((r) => setTimeout(r, 50));
         // The first POST 401s and disables streaming for the session, so
@@ -165,6 +169,11 @@ describe('appAuditor', () => {
 
   describe('audit-stream batching (2026-09-07 Upstash cap)', () => {
     it('a REMOTE stream gets one POST per batch, carrying every entry as an array', async () => {
+      // Drain anything a previous test left pending BEFORE the spy goes in —
+      // with a 5s flush window those entries outlive their test and would
+      // otherwise be counted as this one's.
+      await clearAuditStreamConfig();
+      await flushStreamBatch();
       const bodies: unknown[] = [];
       const originalFetch = globalThis.fetch;
       globalThis.fetch = (async (_url: string | URL, init?: RequestInit) => {

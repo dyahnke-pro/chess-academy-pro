@@ -1,6 +1,6 @@
 export const config = { runtime: 'edge' };
 
-import { checkUsageGuard, POLLY_USD_PER_CHAR } from './_lib/usageGuard.js';
+import { checkUsageGuard } from './_lib/usageGuard.js';
 import { detectVoiceForText } from './_lib/ttsLang.js';
 import { isAllowedOrigin } from './_lib/allowedOrigin.js';
 import { googleProvider } from './_lib/tts/google.js';
@@ -234,7 +234,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
   // daily $ kill-switch. This is the durable layer on top of the per-isolate
   // in-memory limit above; no-op until KV is provisioned
   // (api/_lib/usageGuard.ts).
-  const guard = await checkUsageGuard('tts', req, text.length * POLLY_USD_PER_CHAR);
+  const guard = await checkUsageGuard('tts', req);
   if (!guard.allowed) {
     return new Response('Usage limit reached. Voice is resting briefly.', {
       status: 429,

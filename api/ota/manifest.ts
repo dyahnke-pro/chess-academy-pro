@@ -226,12 +226,24 @@ async function readLatestFromBlob(): Promise<OtaLatest | null> {
  * Redis command.
  */
 async function readLatest(): Promise<OtaLatest | null> {
-  const [fromRedis, fromBlob] = await Promise.all([readLatestFromRedis(), readLatestFromBlob()]);
-  if (!fromRedis) return fromBlob;
-  if (!fromBlob) return fromRedis;
-  const r = typeof fromRedis.ordinal === 'number' ? fromRedis.ordinal : -1;
-  const b = typeof fromBlob.ordinal === 'number' ? fromBlob.ordinal : -1;
-  return b > r ? fromBlob : fromRedis;
+  // 🔒 BLOB FIRST, REDIS ONLY AS A FALLBACK (David 2026-09-11: "make sure we
+  // only send necessary information there").
+  //
+  // This used to read BOTH on every check and rank them. The ranking was the
+  // right idea — it is what stops a stale Redis pointer pinning devices to an
+  // old bundle — but paying ONE REDIS COMMAND PER UPDATE CHECK PER DEVICE for a
+  // value we already hold in Blob was the single largest avoidable draw on the
+  // shared 500k/month budget, and an update check fires on every app launch.
+  //
+  // Blob is the publisher's PRIMARY write (Redis is written last and is allowed
+  // to fail), so the Blob copy is authoritative by construction. Reading it
+  // alone is therefore not a downgrade — and it removes the stale-Redis
+  // failure mode entirely rather than ranking around it. Redis is consulted
+  // only when the Blob read itself fails, which is the one case where a second
+  // copy is worth a command.
+  const fromBlob = await readLatestFromBlob();
+  if (fromBlob) return fromBlob;
+  return readLatestFromRedis();
 }
 
 async function readManifest(url: string): Promise<ManifestEntry[] | null> {

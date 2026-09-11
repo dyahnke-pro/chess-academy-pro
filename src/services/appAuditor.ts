@@ -1337,9 +1337,23 @@ let streamAuthDisabled = false;
 // `auditStreamUrl` at 127.0.0.1) keeps the per-event POST: twenty-plus audit
 // scripts read each event off the wire as a single object, and per-scenario
 // attribution needs the event on the wire the moment it fires.
-const STREAM_BATCH_MAX_ENTRIES = 40;
+// 🔒 ONE COMMAND PER BATCH, AND BATCHES ARE WIDE (David 2026-09-11: "make sure
+// we only send necessary information there").
+//
+// The server spends ~1 Redis command per POST, so the flush window IS the price.
+// At 1s this was up to 60 commands/minute from a SINGLE open page — about eight
+// simultaneous pages would consume the entire 500k/month budget that also holds
+// the spend guard, the bell's messages and the referral credits. 5s cuts that
+// ~5x and loses nothing: every entry still ships, just in fewer, fuller writes.
+//
+// Deliberately NOT a severity filter. Streaming is opt-in and off by default, so
+// the only time this path runs is when David has turned it on to WATCH a device
+// — and a live debugging watch that silently dropped the non-error events would
+// be worse than useless. Volume is controlled by the batch width and by the
+// stream being off, never by hiding events from the person watching.
+const STREAM_BATCH_MAX_ENTRIES = 100;
 const STREAM_BATCH_MAX_BYTES = 48_000; // keepalive bodies are capped at 64KB
-const STREAM_BATCH_FLUSH_MS = 1_000;
+const STREAM_BATCH_FLUSH_MS = 5_000;
 let streamBatch: AuditEntry[] = [];
 let streamBatchTimer: ReturnType<typeof setTimeout> | null = null;
 let streamFlushHooksInstalled = false;

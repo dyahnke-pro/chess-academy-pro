@@ -8,6 +8,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const SETTLE_MS = Number(process.env.SETTLE_MS ?? 45000);
@@ -16,6 +17,9 @@ async function run(label, seed) {
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(autoDismissCalibration);
+  // This audit measures REQUEST COUNTS, not audio — synthesising would bill
+  // real TTS money to learn nothing (CLAUDE.md G1: audits run muted).
+  await ctx.addInitScript(muteTtsForAudit);
   if (seed) await ctx.addInitScript(seed);
   const page = await ctx.newPage();
   const posts = [];
