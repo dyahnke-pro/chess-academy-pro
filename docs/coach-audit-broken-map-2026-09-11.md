@@ -8,7 +8,9 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
 
 ## Summary (running)
 
-**12 findings so far — Tracks 1 (chat grounding) + 2 (fact-computers/tacticsDetector).**
+**ALL 9 TRACKS MAPPED. 12 confirmed findings** (every one confirmed broken via
+Stockfish oracle or hand-driving; unconfirmed/harness-artifact items are NOT
+counted). The rest of the coach is confirmed sound or explicitly scoped-owed.
 
 - **P1 (wrong at the board / wrong teaching, reaching paying users):** #10 the
   `findSkewers` false-skewer (voiced app-wide per G0 — the headline bug), its
@@ -23,24 +25,24 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
 - **Disease clusters:** D1 (a "no specific lesson" catch-all swallows analytics
   lanes), D2 (training/move routers pre-empt analytics asks), D3 (tactic
   detectors validate geometry, not material — the biggest).
-**Coverage so far — the DETERMINISTIC layer is mapped:**
+**Coverage — all 9 tracks driven:**
 - ✅ Track 1 (chat grounding): wiring + accuracy, 8 findings + eval sound.
-- ✅ Track 2 (fact-computers): tacticsDetector D3 disease + gate sweep;
-  causalChain/narrationImportance/threatOut/pins verified sound.
+- ✅ Track 2 (fact-computers): tacticsDetector D3 disease (findings 10-12) + gate
+  sweep; causalChain/narrationImportance/threatOut/pvPlayback/pins verified sound.
+- ✅ Track 3 (Learn walkthrough): HAND-DRIVEN, sound, 0 bugs (16 bot 'failures' debunked).
+- ✅ Track 4 (Play): HAND-DRIVEN, sound — commentary + blunder interception oracle-verified, 0 bugs.
+- ✅ Track 5 (Review): real-game 3-instrument audit MEETS STANDARD (15/15).
 - ✅ Track 6 (tools): gating + grounding teeth verified sound.
 - ✅ Track 7 (voice/verbosity/perspective): deterministic contracts verified sound.
-- ✅ Track 3 (Learn walkthrough): HAND-DRIVEN, verified sound, 0 confirmed bugs (16 bot 'failures' debunked).
-- ✅ Track 4 (Play): HAND-DRIVEN, sound — accurate move-quality commentary +
-  blunder interception (oracle-verified), within silent contract, 0 bugs.
-- ✅ Track 5 (Review): real-game 3-instrument audit MEETS STANDARD (15/15 text
-  contracts); voice-half + mistake-game diagnostic cards owed.
-- **Owed — the rest of the INTERACTIVE layer** (heavy prod-Playwright): Track 2
-  remainder (positionFacts/importance/criticality/PV via a real-engine harness),
-  Track 3 (Learn walkthrough live), Track 5
-  follow-on (a game WITH blunders → find-the-shot/rewind/trap cards + voice),
-  Track 8 (WLPP full-play/endgame/fundamentals), Track 9 (learning-loop
-  round-trip with seeded games), Track 1c (analytics accuracy with the games
-  fixture).
+- ✅ Track 8 (WLPP): Watch spot-checked sound (Vienna, curated + board-accurate).
+- ✅ Track 9 (learning loop): 8/8 — weakness→picker→concept→own-position drill.
+- **Owed sub-items (NOT un-driven tracks — each is fixture-blocked or a large
+  deepening):** (a) Track 1c analytics-accuracy-with-real-data — BLOCKED on
+  David's games fixture (a gitignored DevTools export, absent in this container);
+  (b) the FULL WLPP sweep (all rungs/gems/soundness/all openings) = the multi-hour
+  punish-gems-loop; (c) the live-VOICE half of Review/Play + a blunder-game to
+  exercise Review's find-the-shot/rewind/trap cards; (d) Track 3 stage-gen-60s
+  (unconfirmed — not counted as a finding).
 
 ---
 
@@ -329,6 +331,25 @@ student worse than ≈−1.0), and every masterclass + pro-rep opening. That is 
 `audit-punish-gems-loop.mjs` 3-pass full-play contract's scope (a very large
 multi-hour run). Watch quality on the keystone is confirmed; the rest is scoped
 but not driven here.
+
+---
+
+## Track 9 — THE LEARNING LOOP (weakness → custom lesson → own-position drill)
+
+Ran `scripts/audit-unified-coach-prod.mjs` on prod (it SEEDS a real weakness
+profile into IndexedDB — the one thing that can't be hand-clicked into
+existence — then drives the picker). **8/8 GREEN — VERIFIED SOUND end-to-end:**
+- Seed a fork+pin weakness profile → the Learn picker's opening phrase **names
+  the seeded holes** (forks=true, pins=true) and the dossier states where the
+  student stands (memory consumed).
+- Picker renders the full-lesson chip + per-hole chips; the coach **SPOKE** it
+  (4 spoken lines, 47 audit events — voice fired).
+- Picking a hole **teaches its concept** (grounded), then **drills the student's
+  OWN flubbed position** (real FEN `r3k3/8/8/3N4/8/8/8/4K3 w`), and the correct
+  move **Nc7+ is accepted** (no false wrong-move nudge).
+
+This is the capstone loop (weakness spine → curriculum → custom lesson → drill →
+acceptance) and it works. Nothing flagged to hand-confirm (all green).
 
 ---
 
