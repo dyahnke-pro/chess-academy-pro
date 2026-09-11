@@ -4782,21 +4782,16 @@ export async function getCoachChatResponse(
               if (voiced) return voiced;
             }
           }
-          // CONCEPT CORPUS MISS → HONEST DECLINE, never the board deflect (David
-          // 2026-09-09). "what makes a good bishop / knight" named no glossary
-          // token and matched no corpus passage; without this it fell through
-          // every later lane to serveGroundedPositionDefault and got "the best
-          // move is e4" — a board answer to a board-independent ask. Decline
-          // HERE, at the concept lane, so no board lane can grab it, pointing to
-          // what we CAN teach (empty > generic > invented). Skip when it's really
-          // an endgame-technique ask (routes to the endgame-lesson lane below) or
-          // a live board-feature ask (positionalTopic → the board read below).
-          if (!grounding.positionalTopic && !matchEndgameLesson(userText)) {
-            const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
-            const voiced = await voiceFacts(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
-            if (voiced) return voiced;
-            return decline;
-          }
+          // TOKEN-GATED FALL-THROUGH (coach audit 2026-09-11): the concept lane
+          // ANSWERS only when it has a real glossary token or a theory passage
+          // (both handled above). With NEITHER, it must NOT decline here — the
+          // broad CONCEPT_QUESTION_RE also fires on asks that are really
+          // why-best-move ("what's the idea behind the engine's move?", "how
+          // does the engine see this?"), master-play, or app-help, and this lane
+          // dispatches BEFORE them, so an early decline stole those turns. Fall
+          // through so the specific lanes run. The honest "no lesson yet" decline
+          // is now a LAST RESORT after every specific lane (see the concept
+          // fall-through decline near the end of the assembler dispatch).
         }
 
         // ── THEORY (P-II.1) — a general strategy/how-to ask that named no single
@@ -5620,6 +5615,25 @@ export async function getCoachChatResponse(
             if (voiced) return voiced;
           }
         }
+        // CONCEPT FALL-THROUGH DECLINE — the LAST RESORT (coach audit
+        // 2026-09-11). A concept-shaped ask that reached here answered NOWHERE:
+        // no glossary token, no theory passage, and no specific lane above
+        // (why-best-move / master-play / app-help / best-move / plan / endgame /
+        // positional / position-assessment — all dispatch before this point)
+        // claimed it. So "what makes a good bishop" gets the honest, teachable
+        // decline instead of falling through to the board deflect ("the best move
+        // is e4"). Because it runs AFTER every specific lane, it can no longer
+        // steal a why-best-move / master-play / app-help turn (that was the
+        // early-decline bug this relocation fixes). Skip a live board-feature ask
+        // (positionalTopic) and a real endgame-technique ask (handled above).
+        if (grounding.conceptQuestion && !grounding.positionalTopic && !matchEndgameLesson(lastUserMessage() ?? '')) {
+          const userText = lastUserMessage() ?? '';
+          const decline = 'I don’t have a specific lesson on that idea yet. I can teach you a named concept, though — try "what’s an outpost", "the bishop pair", "an isolated pawn", or "what’s a fork".';
+          const voiced = await voiceFacts(decline, { studentMessage: userText, providerConfig: config, intent: 'concept', preferRaw: true });
+          if (voiced) return voiced;
+          return decline;
+        }
+
         // DB-grounding extension: attach canonical openings-lichess.json
         // entries that match the current move history OR were referenced
         // by name in the user's latest message. The claim validator

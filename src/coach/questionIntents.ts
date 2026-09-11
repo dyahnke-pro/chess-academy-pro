@@ -989,18 +989,13 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // student asking about the app was taught what a fork is (2026-08-13
   // all-questions audit, run allq-msrzt11w).
   if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
-  // A self-KNOWLEDGE / app-METHOD ask ("what's my strongest area", "how do you
-  // teach", "assess my chess") is not a glossary lookup — but the broad
-  // "what's <word>" / "how does the" / "explain" shapes above catch them, and
-  // concept dispatches BEFORE those lanes, so it stole them (broken-map #3/#4).
-  // Defer to the owning lane. (All same-module hoisted declarations.)
-  if (
-    isStrengthsQuestion(ask) ||
-    isTeachingMethodQuestion(ask) ||
-    isSkillRadarQuestion(ask)
-  ) {
-    return false;
-  }
+  // NOTE: the broad "what's <word>" / "how does the" shapes below DO also match
+  // some self-knowledge / app-method / why-best-move asks. That over-match is
+  // handled at DISPATCH now (coach audit 2026-09-11): the concept lane answers
+  // only with a real glossary token and otherwise FALLS THROUGH to the owning
+  // lane, with an honest decline as the last resort. So this flag may be true
+  // alongside a more-specific flag — the router, not this detector, resolves it.
+  // (The earlier per-lane exclusion list here was a bandaid; removed.)
   return CONCEPT_QUESTION_RE.test(ask) && !CONCEPT_POSITIONAL_CUE_RE.test(ask);
 }
 

@@ -1,35 +1,43 @@
-// D1 (coach audit 2026-09-11, findings #3/#4): the concept lane's broad
-// "what's <word>" / "how does the" / "explain" shapes matched self-knowledge
-// and app-method asks, and concept dispatches BEFORE those lanes, so it stole
-// them — the student asking "what's the strongest part of my game" was told
-// what a concept is. isConceptQuestion now defers to the owning lane.
+// D1 (coach audit 2026-09-11, findings #3/#4 + re-audit): the concept lane's
+// broad "what's <word>" / "how does the" shapes over-match self-knowledge,
+// app-method, and why-best-move asks. The ROOT fix is token-gated fall-through
+// at DISPATCH (coachApi): the concept lane answers only with a real glossary
+// token and otherwise falls through to the owning lane, with an honest decline
+// as the last resort. So `conceptQuestion` MAY be true alongside a more-specific
+// flag — that overlap is fine and is resolved by the router, not the detector.
+// What this gate locks: the OWNING-lane detector fires for each phrasing (the
+// input the router needs), and a genuine concept ask still flags concept.
 import { describe, it, expect } from 'vitest';
 import {
   buildQuestionGrounding,
   isConceptQuestion,
   isStrengthsQuestion,
   isTeachingMethodQuestion,
+  isWhyBestMoveQuestion,
 } from './questionIntents';
 
 const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 4 4';
 
-describe('D1 — concept lane defers to the self-knowledge / app-method lanes', () => {
-  it('#3 "what\'s the strongest part of my game" is a strengths ask, not concept', () => {
+describe('D1 — owning-lane detectors fire (router resolves any concept overlap)', () => {
+  it('#3 "what\'s the strongest part of my game" flags the strengths lane', () => {
     const ask = "what's the strongest part of my game?";
     expect(isStrengthsQuestion(ask)).toBe(true);
-    expect(isConceptQuestion(ask)).toBe(false);
     const g = buildQuestionGrounding(ask, { fen: FEN });
     expect(g.strengthsQuestion).toBe(true);
-    expect(g.conceptQuestion).toBeFalsy();
   });
 
-  it('#4 "how do you teach openings" is a teaching-method ask, not concept', () => {
+  it('#4 "how do you teach openings" flags the teaching-method lane', () => {
     const ask = 'how do you teach openings?';
     expect(isTeachingMethodQuestion(ask)).toBe(true);
-    expect(isConceptQuestion(ask)).toBe(false);
     const g = buildQuestionGrounding(ask, { fen: FEN });
     expect(g.teachingMethodQuestion).toBe(true);
-    expect(g.conceptQuestion).toBeFalsy();
+  });
+
+  it('the two why-best-move phrasings that also match concept still flag why-best-move', () => {
+    for (const ask of ["what's the idea behind the engine's move?", 'how does the engine see this?']) {
+      expect(isWhyBestMoveQuestion(ask), ask).toBe(true);
+      expect(buildQuestionGrounding(ask, { fen: FEN }).whyBestMoveQuestion, ask).toBe(true);
+    }
   });
 
   it('a REAL concept ask still flags conceptQuestion', () => {
