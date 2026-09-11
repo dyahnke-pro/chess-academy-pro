@@ -40,6 +40,21 @@ describe('D1 — owning-lane detectors fire (router resolves any concept overlap
     }
   });
 
+  it('app-help "tab/page" asks flag app-help and NOT concept (the tab guard)', () => {
+    for (const ask of ['what does the Tactics tab do?', 'what can I do on the play page?', 'how do I use the review tab?']) {
+      const g = buildQuestionGrounding(ask, { fen: FEN });
+      expect(g.appHelpQuestion, ask).toBe(true);
+      expect(g.conceptQuestion, ask).toBeFalsy();
+    }
+  });
+
+  it('master-play asks flag master-play (router resolves any concept overlap)', () => {
+    for (const ask of ['what do masters play here?', 'what is the most popular move here?']) {
+      const g = buildQuestionGrounding(ask, { fen: FEN });
+      expect(g.masterPlayQuestion, ask).toBe(true);
+    }
+  });
+
   it('a REAL concept ask still flags conceptQuestion', () => {
     expect(isConceptQuestion('what is a fork?')).toBe(true);
     expect(isStrengthsQuestion('what is a fork?')).toBe(false);

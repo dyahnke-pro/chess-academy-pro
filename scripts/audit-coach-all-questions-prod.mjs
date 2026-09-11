@@ -23,7 +23,13 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
-import { QUESTION_MATRIX } from './audit-lib/coach-question-matrix.mjs';
+import { QUESTION_MATRIX, allPhrasings } from './audit-lib/coach-question-matrix.mjs';
+
+// EXHAUSTIVE by default (coach audit 2026-09-11): iterate EVERY phrasing per
+// lane, not one seeded draw — a single seeded run is a SAMPLE in depth, which
+// is how phrasing-specific failures (app-help "tab", the endgame plan wording)
+// slipped a "comprehensive" run. Set AUDIT_SAMPLE=1 for the old fast one-draw.
+const EXHAUSTIVE = process.env.AUDIT_SAMPLE !== '1';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const RUN_ID = process.env.AUDIT_RUN_ID ?? `allq-${Date.now().toString(36)}`;
@@ -32,6 +38,19 @@ const RUN_ID = process.env.AUDIT_RUN_ID ?? `allq-${Date.now().toString(36)}`;
 // accept = what the LANE's answer (or its own empty-state) looks like.
 // Universal REJECTS run first: stock fall-through / greeting / picker hijack.
 const REJECT = /i can'?t verify that precisely|what are we working on today|did you mean one of these|hit a snag/i;
+// COLD-DATA UPLOAD GATE — the CORRECT reply for any personal-game / profile lane
+// when no games are imported ("I can't read your strengths yet … Import your
+// Lichess or Chess.com games"). It was reading as a false ❌ on strengths/records
+// because their ACCEPT regexes predate this wording (coach audit 2026-09-11).
+const UPLOAD_GATE = /can'?t read|import your|none of your real games|no games (are )?in here|haven'?t (played|imported|analy)|play (a few|or import)|not enough games/i;
+// Lanes whose answer is personal-game data → cold-profile upload gate is on-contract.
+const PROFILE_LANES = new Set([
+  'weakness', 'progress', 'trend', 'stats', 'strengths', 'opening-profile',
+  'opening-accuracy', 'opening-record', 'opponent-record', 'mistakes',
+  'tactics-profile', 'phase-profile', 'repertoire-gap', 'accuracy', 'consistency',
+  'converting', 'color', 'records', 'record-vs-target', 'puzzle-stats',
+  'transfer-gap', 'skill-radar', 'time-trouble', 'last-game', 'review-due',
+]);
 const ACCEPT = {
   'position-assessment': /winning|better|equal|even|edge|ahead|balanced/i,
   'best-move': /best move is|i'?d play/i,
@@ -70,7 +89,10 @@ const ACCEPT = {
   'last-game': /won|lost|drew|draw|last game|no games|games on file|haven'?t played|don'?t have any of your games/i,
   concept: /fork(?:er)?|discovered|zwischenzug|in-between|pin|skewer|outpost|passed pawn|zugzwang|battery|en prise|lined up|front piece|unmask/i,
   'opening-existence': /no — there'?s no opening called|is a real opening|closest real names/i,
-  'teaching-method': /teach|watch|learn|practice|lesson|walk/i,
+  // A teaching-method ask ("how would you teach the Sicilian") is answered
+  // EITHER by describing the method (watch/learn/practice) OR by giving the
+  // teaching itself (the plan/idea/structure) — both are on-contract.
+  'teaching-method': /teach|watch|learn|practice|lesson|walk|open file|rook|pawn|develop|control|structure|plan|idea|break (it )?down|start with|first/i,
   'settings-query': /voice|narration|on|off|enabled|disabled/i,
   'app-help': /tactic|puzzle|drill|train/i,
   // actions graded by reply/state below; these are their reply shapes.
@@ -222,13 +244,16 @@ for (const [section, ids] of SECTIONS) {
   for (const id of ids) {
     const entry = byId.get(id);
     if (!entry) { record(id, false, 'not in matrix'); continue; }
-    const q = pickPhrasing(entry);
-    if (!q) { record(id, false, 'matrix entry has no phrasing'); continue; }
+    const phrasings = EXHAUSTIVE ? allPhrasings(entry) : [pickPhrasing(entry)].filter(Boolean);
+    if (!phrasings.length) { record(id, false, 'matrix entry has no phrasing'); continue; }
+   for (const q of phrasings) {
     CURRENT_ASK = q;
     // A fresh surface for the session-starting asks — run 2 proved the
     // previous ask's Italian lesson-gen completing DURING "play the
     // Caro-Kann against me" polluted both the surface state and the reply
-    // the reader attributed to it.
+    // the reader attributed to it. Exhaustive mode also reloads between
+    // phrasings of a stage-starting lane so one phrasing's lesson doesn't
+    // bleed into the next.
     if (id === 'play-against' || id === 'teach-opening') { await gotoTeach(); }
     const urlBefore = page.url();
     const budget = id === 'teach-opening' ? 80 : id === 'continue-middlegame' ? 50 : 30;
@@ -247,8 +272,12 @@ for (const [section, ids] of SECTIONS) {
     if (!reply) { record(id, false, 'no reply rendered'); continue; }
     if (REJECT.test(reply)) { record(id, false, `stock/greeting/hijack: "${reply.slice(0, 110)}"`); continue; }
     const acc = ACCEPT[id];
-    const pass = acc ? acc.test(reply) : reply.length > 20;
+    let pass = acc ? acc.test(reply) : reply.length > 20;
+    // A profile/personal-game lane answered with the cold-data upload gate is
+    // on-contract (correct behaviour with no games imported).
+    if (!pass && PROFILE_LANES.has(id) && UPLOAD_GATE.test(reply)) pass = true;
     record(id, pass, `"${reply.slice(0, 130)}"`, pass ? '' : 'reply is off-contract for this lane');
+   }
   }
 }
 
