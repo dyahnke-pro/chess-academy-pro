@@ -23,9 +23,19 @@ symptom+disease. **NO fixes** — this only maps, per David's call.
 - **Disease clusters:** D1 (a "no specific lesson" catch-all swallows analytics
   lanes), D2 (training/move routers pre-empt analytics asks), D3 (tactic
   detectors validate geometry, not material — the biggest).
-- **Not yet mapped:** Track 2 remainder (positionFacts/importance/criticality/PV
-  with a real-engine harness) + Tracks 3–9 (Learn, Play, Review, the 23 tools,
-  voice/verbosity, WLPP/endgame/fundamentals, the learning loop).
+**Coverage so far — the DETERMINISTIC layer is mapped:**
+- ✅ Track 1 (chat grounding): wiring + accuracy, 8 findings + eval sound.
+- ✅ Track 2 (fact-computers): tacticsDetector D3 disease + gate sweep;
+  causalChain/narrationImportance/threatOut/pins verified sound.
+- ✅ Track 6 (tools): gating + grounding teeth verified sound.
+- ✅ Track 7 (voice/verbosity/perspective): deterministic contracts verified sound.
+- **Owed — the INTERACTIVE layer** (heavy prod-Playwright, each a multi-turn
+  build like Track 1's accuracy pass): Track 2 remainder (positionFacts/
+  importance/criticality/PV via a real-engine harness), Track 3 (Learn
+  walkthrough live), Track 4 (Play silent-contract live), Track 5 (Review +
+  diagnostic cards live), Track 8 (WLPP full-play/endgame/fundamentals), Track 9
+  (learning-loop round-trip with seeded games), and Track 1c (analytics accuracy
+  with the games fixture). These need the drive-hooks/harness the plan calls for.
 
 ---
 
@@ -198,6 +208,24 @@ severity (the record path still exists), flag for the fix phase.
 correctly (FEN before/after) on a real surface — the gating/teeth are verified
 here; the actuation-correctness half needs a surface drive (Tracks 3–5 exercise
 it live).
+
+---
+
+## Track 7 — VOICE / VERBOSITY / PERSPECTIVE (deterministic contracts)
+
+**VERIFIED SOUND at the deterministic layer.** Gates green:
+- **Verbosity (G5):** `coachNarration.test.ts` 33 tests — the brief-cap
+  (`applyBriefVoiceCap`, ≤2 sentences / ≤30 words) and density logic hold.
+- **Audit-mute (G1):** `voiceService.auditMute.test.ts` 4 tests — mute is off for
+  real users, product code never sets the flag, a throwing storage read doesn't
+  latch it off.
+- **One perspective (no we/our):** `perspectiveVoice.test.ts` 7 tests — shipped
+  narration carries no we/our/us; the 2026-08-28 migration held.
+
+**Owed (live half):** that silent/brief/full actually fire the right voice
+register in a running game, that read-aloud bypasses verbosity, and that the
+in-game register speaks you/they correctly — exercised by interactive Tracks 3–5
+(narration listener + register assertions).
 
 ---
 
