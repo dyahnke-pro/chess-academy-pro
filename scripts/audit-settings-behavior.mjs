@@ -22,6 +22,7 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -41,33 +42,27 @@ async function main() {
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
   });
-  // Auditor pushes to prod /api/audit-stream when localStorage is set.
-  // We don't care WHERE it tries to push — we intercept the POST body.
-  await ctx.addInitScript(({ url, secret }) => {
-    try {
-      window.localStorage.setItem('auditStreamUrl', url);
-      window.localStorage.setItem('auditStreamSecret', secret);
-    } catch {
-      /* ignore */
-    }
-  }, { url: STREAM_URL_PROD, secret: SECRET });
-
+  // Enable audit emission (opt-in/off by default since 2026-09-11) so the app
+  // POSTs its events, then intercept the POST LOCALLY and fulfil it — the
+  // proven capture pattern (bare-name, storage-persistence). Letting the POST
+  // hit real prod raced the (Upstash-degraded) stream and captured nothing
+  // even though narration fired (probe 2026-09-12 caught it locally fine).
+  await ctx.addInitScript(enableAuditCapture);
   await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
 
   const page = await ctx.newPage();
 
   const captured = [];
-  page.on('request', (req) => {
-    const u = req.url();
-    if ((u === STREAM_URL_PROD || u === STREAM_URL_LOCAL) && req.method() === 'POST') {
+  await page.route('**/api/audit-stream**', async (route) => {
+    const req = route.request();
+    if (req.method() === 'POST') {
       try {
-        const body = req.postDataJSON?.();
-        if (body && typeof body === 'object') captured.push(body);
-      } catch {
-        /* ignore */
-      }
+        const parsed = JSON.parse(req.postData() || '');
+        for (const e of (Array.isArray(parsed) ? parsed : parsed.events || [parsed])) captured.push(e);
+      } catch { /* ignore */ }
     }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
   });
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
@@ -110,6 +105,31 @@ async function main() {
     // Close the modal so subsequent navigation doesn't get caught by it.
     await page.locator('[data-testid="gameplay-coaching-row-close"]').click().catch(() => undefined);
     await page.waitForTimeout(300);
+    // CONFIRM the write actually committed to the profile BEFORE we navigate —
+    // otherwise the auto-launched walkthrough can read the PREVIOUS test's
+    // verbosity (the 2026-09-12 full-mode false-fail: voice-speak-silenced
+    // fired in "full" because the walk narrated while the profile was still
+    // "silent" from the prior test). Poll Dexie until preferences.coachNarration
+    // matches, up to 8s.
+    const deadline = Date.now() + 8000;
+    while (Date.now() < deadline) {
+      const current = await page.evaluate(() => new Promise((resolve) => {
+        try {
+          const open = indexedDB.open('ChessAcademyDB');
+          open.onsuccess = () => {
+            try {
+              const tx = open.result.transaction('profiles', 'readonly');
+              const get = tx.objectStore('profiles').get('main');
+              get.onsuccess = () => resolve(get.result?.preferences?.coachNarration ?? null);
+              get.onerror = () => resolve(null);
+            } catch { resolve(null); }
+          };
+          open.onerror = () => resolve(null);
+        } catch { resolve(null); }
+      })).catch(() => null);
+      if (current === value) break;
+      await page.waitForTimeout(400);
+    }
   }
   async function snapshot() {
     return captured.length;
@@ -128,7 +148,7 @@ async function main() {
   // passed — the audit reporting the exact wiring it had just proved, as
   // broken. One warm-up visit here puts all three scenarios on equal cached
   // footing, which is also the footing a real user's second visit has.
-  await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE_URL}/coach/teach?teach=Vienna%20Game&auto=1`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(
     () => (document.body?.innerText ?? '').length > 200,
     { timeout: 30_000 },
@@ -137,94 +157,99 @@ async function main() {
 
   // ── Test specs ──────────────────────────────────────────────────
   const tests = [
-    // The narration-density assertions drive /coach/session/walkthrough,
-    // not /coach/teach. Audit-driven fix 2026-05-15: /coach/teach is a
-    // chat surface that ignores ?subject= — only CoachSessionPage's
-    // walkthrough route consumes it via resolveWalkthroughSession +
-    // useWalkthroughRunner, which is the path that actually drives
-    // voiceService speak calls per move. The old URL just opened
-    // CoachTeachPage in greeting mode, so full/brief reported 0 voice
-    // events even though the density gate was fine.
+    // The narration assertions drive the AUTO-LAUNCHED walkthrough via
+    // /coach/teach?teach=<name>&auto=1. Route consolidation (2026-09):
+    // /coach/session/walkthrough?subject= now REDIRECTS to /coach/teach and
+    // lands on an opt-in "Ready to start? pick a mode" prompt that does NOT
+    // auto-narrate — so the old URL made full/brief report 0 spoken even though
+    // the walkthrough voice was fine. The `auto=1` kickoff starts the walk and
+    // narrates without a tap (verified on prod 2026-09-12), which is the path
+    // that actually exercises the per-move voiceService gate.
+    //
+    // SIGNAL = `coach-narration-spoken`, the line the voice ACTUALLY fired. The
+    // G1-mandatory audit mute (voiceService.speakInternal isAuditMuted gate)
+    // returns after emitting `coach-narration-spoken` and BEFORE the synthesis
+    // tiers where the success `voice-speak-invoked` fires — so under the mute
+    // (which every audit runs) `voice-speak-invoked` never fires for successful
+    // narration, and keying on it made this measure a dead event (0 vs 0). The
+    // silent gate (voiceService line ~1263) fires `voice-speak-silenced`
+    // instead, before the mute gate.
     {
-      label: 'Coach Narration = "silent" → no UN-SILENCED speak on Vienna walkthrough',
+      label: 'Coach Narration = "silent" → walkthrough ATTEMPTS to speak but is gate-SILENCED (nothing spoken)',
       run: async () => {
         await openSettings();
         await setCoachNarration('silent');
         const before = await snapshot();
-        await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(8000);
+        await page.goto(`${BASE_URL}/coach/teach?teach=Vienna%20Game&auto=1`, { waitUntil: 'domcontentloaded' });
+        // Poll up to 45s: pass only once an attempt was gate-silenced (proves
+        // the gate actually suppressed a real narration, not that the walk
+        // simply hadn't started yet — the vacuous 0/0 the old fixed 8s allowed).
+        let spoke = 0, silenced = 0;
+        const deadline = Date.now() + 45_000;
+        while (Date.now() < deadline) {
+          await page.waitForTimeout(2000);
+          const evs = eventsSince(before);
+          spoke = evs.filter((e) => e.kind === 'coach-narration-spoken').length;
+          silenced = evs.filter((e) => e.kind === 'voice-speak-silenced').length;
+          if (spoke > 0 || silenced > 0) break;
+        }
         const events = eventsSince(before);
-        // The G5 contract is about what PASSES the gate, not what reaches
-        // it: `voice-speak-invoked` fires at speakForced ENTRY, then
-        // `voice-speak-silenced` fires when speakInternal's silent gate
-        // blocks it (proven 2026-08-14 — the same line appeared in both
-        // events, zero audio). Counting bare invocations failed a working
-        // gate. Silent = every invocation must be matched by a silenced.
-        const invoked = events.filter((e) => e.kind === 'voice-speak-invoked').length;
-        const silenced = events.filter((e) => e.kind === 'voice-speak-silenced').length;
         return {
-          ok: invoked - silenced <= 0,
-          why: `${invoked} invoked / ${silenced} silenced; expected every invocation gated`,
+          ok: spoke === 0 && silenced > 0,
+          why: `${spoke} spoken / ${silenced} silenced; silent must suppress a real attempt (0 spoken, ≥1 silenced)`,
           events,
         };
       },
     },
     {
-      label: 'Coach Narration = "full" → voice-speak-invoked fires on Vienna walkthrough',
+      label: 'Coach Narration = "full" → the coach SPEAKS on the Vienna walkthrough',
       run: async () => {
         await openSettings();
         await setCoachNarration('full');
         const before = await snapshot();
-        await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
-        // Poll up to 45s for the first speak — the walkthrough's first
-        // narration lands behind session resolution + voice-gated start,
-        // which cold-varies well past a fixed 8s (2026-08-14 fix: the
-        // fixed wait false-failed brief mode). Early-exit on first event.
-        // ≥1 invocation that was NOT gate-silenced — a silenced-everything
-        // regression must not pass on bare invocation counts (mirror of
-        // the silent scenario's invoked/silenced contract).
-        let passed = 0;
+        await page.goto(`${BASE_URL}/coach/teach?teach=Vienna%20Game&auto=1`, { waitUntil: 'domcontentloaded' });
+        // Poll up to 45s for the first spoken line — the walkthrough's first
+        // narration lands behind session resolution + voice-gated start, which
+        // cold-varies well past a fixed 8s. SIGNAL = `coach-narration-spoken`
+        // (the mute-preserved "voice fired this line" event; see the silent
+        // scenario for why `voice-speak-invoked` is dead under the audit mute).
+        let spoke = 0;
         const deadline = Date.now() + 45_000;
         while (Date.now() < deadline) {
           await page.waitForTimeout(2000);
-          const evs = eventsSince(before);
-          passed = evs.filter((e) => e.kind === 'voice-speak-invoked').length
-            - evs.filter((e) => e.kind === 'voice-speak-silenced').length;
-          if (passed > 0) break;
+          spoke = eventsSince(before).filter((e) => e.kind === 'coach-narration-spoken').length;
+          if (spoke > 0) break;
         }
         const events = eventsSince(before);
         return {
-          ok: passed > 0,
-          why: `${passed} un-silenced speak(s); expected ≥1`,
+          ok: spoke > 0,
+          why: `${spoke} spoken line(s); expected ≥1`,
           events,
         };
       },
     },
     {
-      label: 'Coach Narration = "brief" → voice-speak-invoked fires on Vienna walkthrough (shortText path)',
+      label: 'Coach Narration = "brief" → the coach SPEAKS (capped) on the Vienna walkthrough',
       run: async () => {
         await openSettings();
         await setCoachNarration('brief');
         const before = await snapshot();
-        await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
-        // Same 45s poll as the full-mode scenario (see comment there).
-        // If brief still shows 0 at 45s while full fired, that is a REAL
-        // G5 dead-control (brief must speak the capped line, never
+        await page.goto(`${BASE_URL}/coach/teach?teach=Vienna%20Game&auto=1`, { waitUntil: 'domcontentloaded' });
+        // Same 45s poll + `coach-narration-spoken` signal as the full-mode
+        // scenario. If brief shows 0 spoken at 45s while full spoke, that is a
+        // REAL G5 dead-control (brief must speak the capped line, never
         // silence) — not a timing artifact.
-        // Same un-silenced contract as the full-mode scenario above.
-        let passed = 0;
+        let spoke = 0;
         const deadline = Date.now() + 45_000;
         while (Date.now() < deadline) {
           await page.waitForTimeout(2000);
-          const evs = eventsSince(before);
-          passed = evs.filter((e) => e.kind === 'voice-speak-invoked').length
-            - evs.filter((e) => e.kind === 'voice-speak-silenced').length;
-          if (passed > 0) break;
+          spoke = eventsSince(before).filter((e) => e.kind === 'coach-narration-spoken').length;
+          if (spoke > 0) break;
         }
         const events = eventsSince(before);
         return {
-          ok: passed > 0,
-          why: `${passed} un-silenced speak(s); expected ≥1`,
+          ok: spoke > 0,
+          why: `${spoke} spoken line(s); expected ≥1`,
           events,
         };
       },
