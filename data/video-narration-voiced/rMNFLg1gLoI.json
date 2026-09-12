@@ -419,7 +419,7 @@
    "line": [
     "Ba6+"
    ],
-   "spoken": "First a bishop check on a6 to knock the king off e2, then a rook to d1 clears the promotion path. Rather than promote at once, I'll show a less obvious idea: use our kingside pawns to squeeze White's knight on g3 and bishop on e3, which sit on forkable squares. The only thing that forks them is a pawn reaching f4 — three moves away, and we have all the time in the world since White is paralyzed. We play e5, then f5, threatening f4 and e4, and even if White moves a minor piece, f4 still lands, intercepting the bishop's contact with c1.",
+   "spoken": "First a bishop check on a6 to knock the king off e2, then a rook to d1 clears the promotion path. Rather than promote at once, I'll show a less obvious idea: use our kingside pawns to squeeze White's knight on g3 and bishop on e3, which sit on forkable squares. The only thing that forks them is a pawn reaching f4 — three moves away, and we have all the time in the world since White is paralyzed. We play e5, then f5, threatening f4 and e4, and even if White moves a minor piece, f4 still lands, intercepting the bishop's contact with c1. White has no squares and resigns.",
    "reanchor": true
   },
   {
@@ -879,7 +879,7 @@
     "O-O",
     "Bc4"
    ],
-   "spoken": "It's been played a fair amount, but a bishop to c4 is a follow-up mistake that puts White in huge trouble.",
+   "spoken": "It's been played a fair amount, but a bishop to c4 is a follow-up mistake that puts White in huge trouble — he should have played a bishop to e2 to avoid the center fork trick.",
    "reanchor": true
   },
   {

@@ -398,3 +398,65 @@ describe('videoMechanics — the 1% of fragment worth taking, named explicitly',
     expect(trimPassage(clause)).toBe(clause);
   });
 });
+
+// ── THE GUARD'S CONJUNCTION BUG (David 2026-09-12) ──────────────────────────
+// "and you looked at all the lines that were cut to make sure we did not lose
+// any good chess teachings?" The answer was no. Reading all 165 removed spans
+// found ten real losses, every one caused by `teachesChess` requiring a board
+// referent AND a chess predicate in the SAME clause. Chess teaching routinely
+// has only one half: a concrete sequence names squares without an abstract verb,
+// a maxim makes a chess argument without naming a square.
+//
+// Five class patterns were over-broad for the same reason — each condemned a
+// whole clause on one incidental word: a bare `resign` (which ate "don't panic
+// and don't resign"), a bare `juicy` (which ate "very juicy squares, and the
+// queen can drive in on the light squares"), "your turn", "the verdict".
+describe('the guard: clauses that were being cut and must never be again', () => {
+  const MUST_SURVIVE = [
+    // board referents, no abstract predicate
+    'the knight to h6, the queen to g8, the knight to f7: smothered mate, and he resigns.',
+    'very juicy squares, and the queen can drive in on the light squares too.',
+    'The c2 square looks juicy, and we keep an eye on the a-file.',
+    // chess predicate, no square
+    'and Black is so far behind in development that almost any sacrifice lands.',
+    'but the deeper habit is to defend correctly when it is your turn to be hit.',
+    // advice that merely contains the word "resign"
+    'The essential practical rule when you have blundered into a lost position: do not panic and do not resign.',
+    'So the pawn cannot be taken, which leaves the standard menu of choices: ignore, accept, hand the pawn back on your own terms, or, failing all else, resign.',
+    // a present-tense read of the position that tripped the past-game class
+    'The verdict is yes: it is a valuable central pawn, and the calculation holds up, because after the dust settles the enemy knight hangs and the king is still stuck in the centre.',
+    // rating used pedagogically, not as session framing
+    'The point is that if a GM plays it, they know exactly how to follow up, but if a 1200 plays it, they do not know what they are doing, and if White simply follows up with regular developing moves without being aware of the correct plan, White is going to get cooked.',
+    // a study method
+    'the Kotov, Russian-school approach: calculate concrete variations on your turn, and build conceptual wisdom about the position while your opponent thinks.',
+  ];
+  for (const clause of MUST_SURVIVE) {
+    it(`keeps: ${clause.slice(0, 56)}…`, () => {
+      expect(classifyClause(clause).disposition).toBe('keep');
+    });
+  }
+
+  // The other direction: loosening the guard must not start sparing chatter.
+  const MUST_STILL_CUT: [string, string][] = [
+    ['He resigns.', 'session'],
+    ['Our opponent resigns.', 'session'],
+    ['A hard-fought game, well played by the opponent.', 'videoMechanics'],
+    ['This is the highest-rated person we have faced thus far.', 'session'],
+    ['Our patented Sicilian again.', 'priorVid'],
+    ['a line an earlier speedrun already walked through.', 'videoMechanics'],
+  ];
+  for (const [clause, klass] of MUST_STILL_CUT) {
+    it(`cuts (${klass}): ${clause.slice(0, 44)}…`, () => {
+      const r = classifyClause(clause);
+      expect(r.disposition).toBe('cut');
+      expect(r.class).toBe(klass);
+    });
+  }
+
+  // "juicy" is the house voice describing the board; only the predicative form
+  // ("this is going to be juicy") is the presenter hyping the game.
+  it('separates predicative juicy from juicy-the-adjective', () => {
+    expect(classifyClause('a juicy d4 outpost').disposition).toBe('keep');
+    expect(classifyClause("We are Black against a 2050 — this is going to be juicy.").disposition).toBe('cut');
+  });
+});

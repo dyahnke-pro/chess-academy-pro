@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "The pawn to e4, c5."
+   "spoken": "The pawn to e4, c5 — the Alapin Sicilian."
   },
   {
    "ply": 3,
@@ -357,7 +357,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop to e7 virtually forces our hand — the queen to g4, using it to induce kingside weaknesses. We're starting to squeeze Black: castles, the bishop to h6 loses the exchange; forcing kingside weaknesses gives Black weaknesses on both sides, and we keep pressing toward the knight to b5. Watch the e5-pawn, now without a defender; watch our a6-pawn; watch out for the knight back to c7. Don't get fixated on the knight to b5 — sometimes the knight to c4 and d6 is more worthwhile after the dark-bishop trade — and c4 on demand chases the knight and opens b5, though then the knight drops to c7 and a6 hangs. On my opponent's turn I discuss general ideas."
+   "spoken": "The bishop to e7 virtually forces our hand — the queen to g4, using it to induce kingside weaknesses. We're starting to squeeze Black: castles, the bishop to h6 loses the exchange; forcing kingside weaknesses gives Black weaknesses on both sides, and we keep pressing toward the knight to b5. Watch the e5-pawn, now without a defender; watch our a6-pawn; watch out for the knight back to c7. Don't get fixated on the knight to b5 — sometimes the knight to c4 and d6 is more worthwhile after the dark-bishop trade — and c4 on demand chases the knight and opens b5, though then the knight drops to c7 and a6 hangs. On my opponent's turn I discuss general ideas — the Kotov, Russian-school approach: calculate concrete variations on your turn, and build conceptual wisdom about the position while your opponent thinks."
   },
   {
    "ply": 34,

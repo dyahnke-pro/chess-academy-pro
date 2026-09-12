@@ -1,0 +1,112 @@
+{
+ "_doc": [
+  "HAND-ADJUDICATED OVERRIDES on the automated trim (David 2026-09-12: 'you looked",
+  "at all the lines that were cut to make sure we did not lose any good chess",
+  "teachings?' then 'i think best if you just go through one by one and do this",
+  "manually').",
+  "",
+  "Every one of the 148 passages the trim changed was read individually. 133 were",
+  "correct. The 15 below were not, and each carries the exact text I approved in",
+  "place of what the classifier proposed. `keep` restores the original untouched;",
+  "`text` is a hand-written replacement that removes only the chatter and leaves",
+  "the chess.",
+  "",
+  "The recurring failure the classifier makes, and the reason this file exists: a",
+  "cut-class pattern condemns the WHOLE clause it matches, so a clause that is one",
+  "chess fact glued to one piece of chatter loses both. 'the Alapin, against a very",
+  "strong 2198' loses the opening's name to kill the rating. No regex fixes that",
+  "without reading the sentence."
+ ],
+ "overrides": [
+  {
+   "id": "1tbpB-Qrqds",
+   "keep": true,
+   "why": "The cut line is the LEAD-IN that introduces the recovery-principle list right behind it. Remove it and the list starts cold on 'Complicate - pose your opponent decision after decision'. The list is the best teaching in the file.",
+   "was": "We push to g7 and set the queen toward h5, sowing doubt. This game is really about recovery technique when you're lost, and the principles are these. Complicate — pose your opponent decision after decision, because decisions breed fatigue and doubt. Keep your pieces active — bring the rook in with h4 rather than a timid g3, and ask the \"Shankland question\": what happens if you just do it anyway, developing and ignoring a pawn? Defend key pawns by developing, not by a passive king move — a rook to d3 both guards c3 and prepares to lift to g3. Manoeuvre the knight toward a dream square like d6, via f7. Use a break like d5 not only to lure the bishop off b7 but to open lines and strip away defenders. And once you win material back, convert with a passed pawn — push it hard while the opponent is passive, escort it with a rook cutting off the king, and finish with the ladder-mate technique, bringing your own king up to guard the checking square so the rooks can deliver mate. Even dead lost, purposeful, problem-posing play saves a remarkable number of games."
+  },
+  {
+   "id": "HDSMjuNWNQk",
+   "text": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London.",
+   "why": "priorVid matched 'my main opening' and took the system's whole definition with it. Bf4+Nc3 and the Veresov/London parentage are the content.",
+   "was": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London, and my main opening."
+  },
+  {
+   "id": "PmStO-m1Eu4",
+   "text": "White develops the knight to f3. As a gateway Sicilian for improving players the accelerated dragon is the recommendation.",
+   "why": "Which Sicilian suits an improver is real repertoire teaching. Only 'nearing the top of the run' is session chatter.",
+   "was": "White develops the knight to f3. As a gateway Sicilian for improving players the accelerated dragon is the recommendation, but nearing the top of the run we reach for the Sicilian we know best."
+  },
+  {
+   "id": "Q0CTfDwnd3A",
+   "text": "The pawn to e4, c5 — the Alapin.",
+   "why": "The rating cut took the opening's NAME with it.",
+   "was": "The pawn to e4, c5 — the Alapin, against a very strong 2198, our strongest opponent to date."
+  },
+  {
+   "id": "r7W4yl6y29c",
+   "text": "The pawn to e4, c5 — the Alapin Sicilian.",
+   "why": "Same shape: 'our favorite' is chatter, 'the Alapin Sicilian' is the opening.",
+   "was": "The pawn to e4, c5 — our favorite Alapin Sicilian."
+  },
+  {
+   "id": "xoS71OW-Re0",
+   "text": "Black plays d6 — the Philidor.",
+   "why": "Same shape: 'which we've seen a lot' is chatter, 'the Philidor' names the defence.",
+   "was": "Black plays d6 — the Philidor, which we've seen a lot."
+  },
+  {
+   "id": "YzI6qI-33_U",
+   "text": "The queen to d2.",
+   "why": "Silencing this left the ply with no narration at all. The move survives; the author's surprise at it does not.",
+   "was": "The queen to d2 is a move I honestly hadn't come across."
+  },
+  {
+   "id": "_X7t6o3o6JM",
+   "text": "The queen to a5 — it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that.",
+   "why": "'very impressive play so far' is the chatter; 'it might be inaccurate, because it walks into a lot of tactics' is the verdict on the move just played.",
+   "was": "The queen to a5 — very impressive play so far, but it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that."
+  },
+  {
+   "id": "bRMHNmDMLqw",
+   "text": "Black strikes with the pawn to c5. The normal move now is c3.",
+   "why": "'The normal move now is c3' is theory. Only 'but we've been playing this differently' refers to the run.",
+   "was": "Black strikes with the pawn to c5. The normal move now is c3, but we've been playing this differently."
+  },
+  {
+   "id": "hv0P9kotpJw",
+   "text": "The queen to a3 isn't challenging at all. The critical way — the line the theory recommends — is the queen takes c3, a genuine queen sacrifice; the point is Black is grabbing pieces to justify parting with the queen.",
+   "why": "The reason behind the queen sac is the whole lesson. Only 'I'll show you how that goes after the game' is the unkeepable promise.",
+   "was": "The queen to a3 isn't challenging at all. The critical way — the line the theory recommends — is the queen takes c3, a genuine queen sacrifice; I'll show you how that goes after the game, but the point is Black is grabbing pieces to justify parting with the queen."
+  },
+  {
+   "id": "knRe3EsANdg",
+   "keep": true,
+   "why": "Lead-in again — it ends on a dash and hands off to the next beat. Cutting it orphans that beat's opening.",
+   "was": "e5, the knight to d7, and the rook to e1. This game is famous because Fischer shows, in vivid, textbook fashion —"
+  },
+  {
+   "id": "qhHtJcXkkfg",
+   "text": "We finally develop the light-squared bishop to g4. White's h4 is stronger than it first looks.",
+   "why": "A present-tense judgement of a move on the board. 'Honest admission' and 'this was underestimated' are the author's framing around it.",
+   "was": "We finally develop the light-squared bishop to g4. Honest admission: White's h4 is stronger than it first looks — this was underestimated."
+  },
+  {
+   "id": "rMNFLg1gLoI",
+   "keep": true,
+   "why": "Names the CENTER FORK TRICK and the move that avoids it. A named tactical motif is teaching even when it arrives as hindsight.",
+   "was": "It's been played a fair amount, but a bishop to c4 is a follow-up mistake that puts White in huge trouble — he should have played a bishop to e2 to avoid the center fork trick."
+  },
+  {
+   "id": "rg4NhBBW2pc",
+   "keep": true,
+   "why": "'White is judged a touch better, but it's rich and double-edged' evaluates the position in front of the student. 'judged' tripped the past-game class.",
+   "was": "There's a known plan here of Qg4, provoking a kingside weakness before dropping back to e2. White is judged a touch better, but it's rich and double-edged. My idea was Qe2 followed by Be3 to trade off that strong dark-squared bishop — and, going for broke, the engine's wild suggestion of castling queenside."
+  },
+  {
+   "id": "x-TMzSM51Cw",
+   "text": "The bishop to b6, the rook to g1, the knight to c4 with check — and we also win the exchange.",
+   "why": "The resignation goes; winning the exchange is the point of the line.",
+   "was": "The bishop to b6, the rook to g1, the knight to c4 with check — he resigns, and we also win the exchange."
+  }
+ ]
+}

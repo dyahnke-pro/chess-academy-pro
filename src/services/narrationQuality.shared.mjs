@@ -66,9 +66,37 @@ export const PRED_RE = new RegExp(
   'i',
 );
 
-/** The veto. A clause that does both is teaching and is never cut. */
+/** The veto. A clause that teaches chess is never cut.
+ *
+ *  THE CONJUNCTION WAS THE BUG (David 2026-09-12: "you looked at all the lines
+ *  that were cut to make sure we did not lose any good chess teachings?" — the
+ *  answer was no, and reading all 165 removed spans found ten that were real).
+ *  Requiring a board referent AND a chess predicate in the SAME clause fails on
+ *  the two shapes chess teaching most often takes:
+ *
+ *    concrete, no abstract verb   "the knight to h6, the queen to g8, the knight
+ *                                  to f7: smothered mate"      board only
+ *    maxim, no square             "Black is so far behind in development that
+ *                                  almost any sacrifice lands" predicate only
+ *
+ *  A plain OR is too loose in the other direction — an opening name carries a
+ *  square ("the c3 Sicilian"), so one incidental token would veto pure chatter.
+ *  The rule is therefore: one of each, OR two distinct of either. Two board
+ *  referents means the clause is describing the board; two predicates means it
+ *  is making a chess argument. A single passing mention is neither. */
 export function teachesChess(clause) {
-  return BOARD_RE.test(clause) && PRED_RE.test(clause);
+  const board = distinctMatches(clause, BOARD_RE);
+  const pred = distinctMatches(clause, PRED_RE);
+  return (board >= 1 && pred >= 1) || board >= 2 || pred >= 2;
+}
+
+/** How many DIFFERENT terms of a pattern a clause uses. "the pawn ... the pawn"
+ *  is one referent repeated, not two. */
+function distinctMatches(clause, re) {
+  const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`);
+  const seen = new Set();
+  for (const m of clause.matchAll(global)) seen.add(m[0].toLowerCase());
+  return seen.size;
 }
 
 // Capitalised chess vocabulary that must never read as a person's name.
@@ -132,7 +160,7 @@ export const OPEN_REFERENCE = {
   // retrospective JUDGEMENT on a move — graded, approved, preferred, regretted —
   // rather than the move's idea stated as the board shows it.
   pastGame:
-    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe verdict\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
+    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe (engine.s )?verdict (was|came back|on that)\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
   // VIDEO MECHANICS, harvested by hand from the fragment class rather than by
@@ -143,13 +171,17 @@ export const OPEN_REFERENCE = {
   videoMechanics:
     /\b(rewind|rewinding|scrub(bing)?) (a move|to|back)|\bwe can rewind\b|\blet me (rewind|replay)\b|\bwell played by (my |the )?opponent\b|\ba hard-fought game\b|\bwe take (white|black)\.\s*$|\ban earlier speedrun\b|\banother speedrun\b|\bthe speedrun (already|series)\b/i,
   session:
-    /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\bresigns?\b|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
+    /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\b(he|she|they|white|black|our opponent|the opponent|this)\s+(simply\s+|just\s+)?resigns?\b|\bresigns?\s*[—–]|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
   author:
-    /\bmusic to (my|the) ears\b|\bjuicy\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
+    // PREDICATIVE "juicy" ONLY — "this is going to be juicy" is the presenter
+    // hyping the game; "very juicy squares", "the c2 square looks juicy" and "a
+    // juicy d4 outpost" are the house voice DESCRIBING THE BOARD. A bare \bjuicy\b
+    // cut three clauses of real board commentary (David 2026-09-12).
+    /\b(this|that|it)( is|'s|.s| was) (going to be |gonna be )?(very |really )?juicy\b|\bmusic to (my|the) ears\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
   priorVid:
     /\bwe.ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin this video\b|\bmy main opening\b|\bour (patented|favorite|real opening)\b/i,
   audience:
-    /\b(do you know|did you (see|find|spot)|I didn.t ask you|your (job|task|turn)|can you (see|find|spot)|I.d like to introduce|pause (here|the video)|take a (second|moment)|what.s the priority|I.ll (leave|let) you)\b/i,
+    /\b(do you know|did you (see|find|spot)|I didn.t ask you|your (job|task) (here|now|is)|it.s your turn to (move|play|find|decide)|can you (see|find|spot)|I.d like to introduce|pause (here|the video)|take a (second|moment)|what.s the priority|I.ll (leave|let) you)\b/i,
 };
 
 /**

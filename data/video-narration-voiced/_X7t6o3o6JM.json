@@ -214,7 +214,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The queen to a5. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that."
+   "spoken": "The queen to a5 — it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that."
   },
   {
    "ply": 25,
@@ -610,7 +610,7 @@
    "t": 1637.5,
    "fen": "8/pp2kb2/7R/5r1p/5N2/3BPnR1/PPP5/2K5 b - - 15 31",
    "line": [],
-   "spoken": "it's an unconventional trade. Now, first and foremost, I definitely confused something and got something wrong in the opening — the position was complicated and interesting, but it didn't have that sense that it was the line we were recommending. Actually, this is the main line: the move here is the knight to e5. I apologise — it's been a long day and I had a mental breakdown.",
+   "spoken": "it's an unconventional trade. Now, first and foremost, I definitely confused something and got something wrong in the opening — the position was complicated and interesting, but it didn't have that sense that it was the line we were recommending. Actually, this is the main line: the move here is the knight to e5. I apologise — it's been a long day and I had a mental breakdown; I forgot that we don't have to react to c5, we can just do our own thing, and I'll show you the main lines after the knight to e5.",
    "reanchor": true
   }
  ]
