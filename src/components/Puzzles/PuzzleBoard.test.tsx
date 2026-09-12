@@ -97,7 +97,6 @@ vi.mock('../../hooks/useBoardContext', () => ({ useBoardContext: vi.fn() }));
 vi.mock('../../services/voiceService', () => ({
   voiceService: {
     speak: vi.fn().mockResolvedValue(undefined),
-    speakGrounded: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn(),
     isPlaying: vi.fn().mockReturnValue(false),
     warmup: vi.fn().mockResolvedValue(undefined),

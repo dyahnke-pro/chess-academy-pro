@@ -17,8 +17,6 @@ import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
-import { explainPuzzleMoveGrounded } from '../../services/coachApi';
-import { buildTacticWhy } from '../../services/puzzleWhy';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
@@ -71,9 +69,6 @@ export function PuzzleBoard({
   const hintUsedRef = useRef(false);
   const showedSolutionRef = useRef(false);
   const completionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Cancellation token for the async solve-why → advance chain, so a new puzzle
-  // (or unmount) supersedes an in-flight explanation instead of advancing late.
-  const whyTokenRef = useRef(0);
   const solveStartRef = useRef<number>(Date.now());
   const movesRef = useRef(parseUciMoves(puzzle.moves));
   const { playMoveSound, playErrorPing, playSuccessChime } = usePieceSound();
@@ -179,7 +174,6 @@ export function PuzzleBoard({
 
   // Reset state when puzzle changes
   useEffect(() => {
-    whyTokenRef.current += 1; // cancel any in-flight solve-why → advance chain
     game.loadFen(puzzle.fen);
     game.setOrientation(userColor);
     movesRef.current = parseUciMoves(puzzle.moves);
@@ -219,11 +213,19 @@ export function PuzzleBoard({
         clearTimeout(completionTimerRef.current);
         completionTimerRef.current = null;
       }
-      whyTokenRef.current += 1; // don't advance after unmount
       voiceService.stop();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzle, playMoveSound, resetHints, resetStruggle]);
+
+  // Voice feedback on correct solve — speak the GROUNDED geometry of the
+  // solving move (the position changing in the student's favor IS the
+  // acknowledgment; no "Excellent!" filler, voice rule #5). Falls silent when
+  // the geometry isn't computable rather than emit a generic line.
+  useEffect(() => {
+    if (!settings.voiceEnabled) return;
+    if (state === 'correct' && solveGeometry) void voiceService.speak(`That ${solveGeometry}.`);
+  }, [state, settings.voiceEnabled, solveGeometry]);
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
@@ -249,55 +251,6 @@ export function PuzzleBoard({
       solveTimeMs: Date.now() - solveStartRef.current,
     });
   }, [onComplete, tacticType, subtitle, puzzle.id, meter]);
-
-  // On a correct solve, speak the GROUNDED "why this was the best move" — the
-  // teaching moment David 2026-09-12 wanted taken ("I want the why spoken! Why
-  // was that the best move"), now on the plain Tactics tab too. It's the same
-  // engine-reasoning walk the coach chat gives (G0 — computed in code, only
-  // PHRASED via voiceFacts), spoken in FULL (bypassBriefCap) and honoring the
-  // silent gate. Advance is GATED on the why finishing so the parent's auto-next
-  // doesn't cut it off (the app's voice-promise-gated-advance pattern) — and, per
-  // David 2026-05-19, the deeper meaning is never clipped. Falls straight through
-  // to completion when voice is off, the line has no student move, or phrasing
-  // fails.
-  const finishWithWhy = useCallback(async (): Promise<void> => {
-    const token = ++whyTokenRef.current;
-    let spoke = false;
-    if (settings.voiceEnabled) {
-      try {
-        const why = buildTacticWhy(puzzle.fen, puzzle.moves.trim().split(/\s+/));
-        if (why) {
-          // Bound the whole explanation so a stalled provider can never strand
-          // the student on a solved puzzle — advance regardless after the cap.
-          await Promise.race([
-            (async () => {
-              const response = await explainPuzzleMoveGrounded({
-                fen: why.decisionFen,
-                bestMoveUci: why.keyMoveUci,
-                bestMoveSan: why.keyMoveSan,
-                playedSan: null,
-                pvUci: why.pvUci,
-              });
-              if (whyTokenRef.current !== token) return; // superseded by a new puzzle
-              setSubtitle(response);
-              spoke = true;
-              await voiceService.speakGrounded(response, why.decisionFen, { bypassBriefCap: true });
-            })(),
-            new Promise<void>((r) => setTimeout(r, 20000)),
-          ]);
-        }
-      } catch {
-        /* fall through to completion — never strand the student on a solved puzzle */
-      }
-    }
-    if (whyTokenRef.current !== token) return;
-    if (!spoke) {
-      // No why spoken — keep the brief "Correct!" beat before advancing.
-      await new Promise((r) => setTimeout(r, 1800));
-      if (whyTokenRef.current !== token) return;
-    }
-    completePuzzle(true);
-  }, [puzzle.fen, puzzle.moves, settings.voiceEnabled, completePuzzle]);
 
   const handleMove = useCallback((move: MoveResult): void => {
     if (state !== 'playing' || disabled) return;
@@ -359,8 +312,9 @@ export function PuzzleBoard({
         setState('correct');
         triggerFlash('board-flash-success');
         playSuccessChime();
-        // Speak the grounded why, THEN advance (gated so it isn't cut off).
-        void finishWithWhy();
+        completionTimerRef.current = setTimeout(() => {
+          completePuzzle(true);
+        }, 2500);
         return;
       }
 
@@ -410,7 +364,7 @@ export function PuzzleBoard({
         setState('playing');
       }, 1000);
     }
-  }, [state, disabled, moveIndex, completePuzzle, finishWithWhy, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, puzzle.rating, tacticType, game]);
+  }, [state, disabled, moveIndex, completePuzzle, playMoveSound, playErrorPing, playSuccessChime, resetHints, triggerFlash, maxWrongAttempts, settings.voiceEnabled, puzzle.themes, puzzle.id, tacticType, game]);
 
   // With ControlledChessBoard, the move is already applied to the game object
   const handleChessBoardMove = handleMove;
