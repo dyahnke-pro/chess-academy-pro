@@ -342,3 +342,59 @@ describe('false positives caught in the dry run, before anything was written', (
     expect(CONFIDENT_CUT_CLASSES).not.toContain('fragment');
   });
 });
+
+describe('fragment stays off — read, judged, and rejected as a class', () => {
+  // David 2026-09-12: "read the fragments cut first and the leftover lines
+  // before making the final decision."
+  //
+  // Enabling `fragment` would touch 3,086 passages and silence 438. Reading the
+  // results, the ones that pass a grammar check are WORSE than the ones that
+  // fail it — grammatical, and gutted:
+  //
+  //   "Black trades queens on d1 and we recapture with the rook — and now two
+  //    of Black's pieces are hanging at once."   → drops the tactical point
+  //   "Black plays e6 — this is not good at all." → "Black plays e6."
+  //
+  // The cause is structural. `fragment` means "names no square, no piece, no
+  // chess idea", and the most valuable sentences in chess teaching name none of
+  // those: judgements, conclusions and emphasis attach to the clause before
+  // them. A definition by absence cannot separate "we win it" from "Very well
+  // played by my opponent", and no amount of tuning will make it.
+  it.each([
+    "and now two of Black's pieces are hanging at once.",
+    'this is not good at all.',
+    'It happens astonishingly often.',
+    'we win it.',
+    'a Colle setup.',
+    "objectively one of Black's better tries.",
+  ])('keeps the judgement clause %j', (clause) => {
+    const r = classifyClause(clause);
+    expect(CONFIDENT_CUT_CLASSES).not.toContain(r.class);
+    expect(trimPassage(clause)).toBe(clause);
+  });
+});
+
+describe('videoMechanics — the 1% of fragment worth taking, named explicitly', () => {
+  // Reading all 5,406 fragment clauses turned up ~60 genuine video mechanics.
+  // A 1% harvest is not worth 99% exposure, so they are matched by name and
+  // `fragment` stays off.
+  it.each([
+    'Very well played by my opponent.',
+    'A hard-fought game, well played by the opponent.',
+    'Now we can rewind a move,',
+    'a line an earlier speedrun already walked through.',
+  ])('cuts %j', (clause) => {
+    expect(classifyClause(clause).class).toBe('videoMechanics');
+    expect(trimPassage(clause)).toBe('');
+  });
+
+  it.each([
+    // Both matched a first draft of these patterns and are real teaching.
+    'Miss that and you drop a piece.',
+    'great, so we get to play a Fantasy variation of the Caro.',
+    // "we take White" only counts as framing when it stands alone.
+    'We take White and meet the Sicilian, heading for the Accelerated Dragon.',
+  ])('does not touch %j', (clause) => {
+    expect(trimPassage(clause)).toBe(clause);
+  });
+});

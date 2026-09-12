@@ -21649,7 +21649,7 @@
                                                             ]
                                                            },
                                                            {
-                                                            "idea": "just game over. The knight to a3, the knight takes f3 with check — and I'll probably combine this with another top-level play game.",
+                                                            "idea": "just game over. The knight to a3, the knight takes f3 with check.",
                                                             "shortIdea": "just game over.",
                                                             "arrows": [
                                                              {
@@ -32353,7 +32353,7 @@
          "node": {
           "san": "e5",
           "movedBy": "black",
-          "idea": "We take White. Today is a defensive lesson — we're going to sacrifice a knight on purpose and show how to fight on when down material.",
+          "idea": "Today is a defensive lesson — we're going to sacrifice a knight on purpose and show how to fight on when down material.",
           "children": [
            {
             "node": {
@@ -33720,7 +33720,7 @@
             }
            }
           ],
-          "shortIdea": "We take White."
+          "shortIdea": "Today is a defensive lesson — we're going to sacrifice a knight on purpose and show how to fight on when down material."
          }
         }
        ]
@@ -52327,7 +52327,7 @@
                                                                                                                                                                                                                                                    "node": {
                                                                                                                                                                                                                                                     "san": "Nd5",
                                                                                                                                                                                                                                                     "movedBy": "black",
-                                                                                                                                                                                                                                                    "idea": "Very well played by my opponent. Let's try a knight to d5.",
+                                                                                                                                                                                                                                                    "idea": "Let's try a knight to d5.",
                                                                                                                                                                                                                                                     "children": [
                                                                                                                                                                                                                                                      {
                                                                                                                                                                                                                                                       "node": {
@@ -52737,7 +52737,7 @@
                                                                                                                                                                                                                                                       }
                                                                                                                                                                                                                                                      }
                                                                                                                                                                                                                                                     ],
-                                                                                                                                                                                                                                                    "shortIdea": "Very well played by my opponent."
+                                                                                                                                                                                                                                                    "shortIdea": "Let's try a knight to d5."
                                                                                                                                                                                                                                                    }
                                                                                                                                                                                                                                                   }
                                                                                                                                                                                                                                                  ]

@@ -135,6 +135,13 @@ export const OPEN_REFERENCE = {
     /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe verdict\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
+  // VIDEO MECHANICS, harvested by hand from the fragment class rather than by
+  // enabling it. Reading all 5,406 fragment clauses turned up only ~60 of these
+  // — a 1% harvest against 99% exposure to a rule that cannot tell "Very well
+  // played by my opponent" from "and now two of Black's pieces are hanging at
+  // once". So the junk is named explicitly and `fragment` stays off.
+  videoMechanics:
+    /\b(rewind|rewinding|scrub(bing)?) (a move|to|back)|\bwe can rewind\b|\blet me (rewind|replay)\b|\bwell played by (my |the )?opponent\b|\ba hard-fought game\b|\bwe take (white|black)\.\s*$|\ban earlier speedrun\b|\banother speedrun\b|\bthe speedrun (already|series)\b/i,
   session:
     /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\bresigns?\b|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
   author:
@@ -371,7 +378,7 @@ function exciseIdioms(clause, opensSentence) {
 // and names both colours. It is 31 clauses; reading them by hand is cheaper and
 // more honest than a fourth regex.
 export const CONFIDENT_CUT_CLASSES = Object.freeze([
-  'rating', 'session', 'author', 'priorVid', 'audience', 'pastGame',
+  'rating', 'session', 'author', 'priorVid', 'audience', 'pastGame', 'videoMechanics',
 ]);
 
 export function trimPassage(text, classes = CONFIDENT_CUT_CLASSES) {
