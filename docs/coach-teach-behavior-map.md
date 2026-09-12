@@ -97,11 +97,26 @@ artifacts (per CLAUDE.md §adversarial). Findings land here:
 
 **Functional coverage grid (prod, 2026-09-12): 26/38 reached, 0 console/page errors.**
 
-REAL LEAD (1 root, 6 cascaded fails):
-- **stages-not-generated-within-60s at the leaf** → leaf→continue-learning, stage-quiz,
-  quiz-answer, stage-drill, drill-teaching, stage-play all unreachable. The
-  keep-learning-after-a-line sub-flow didn't deliver a drill/quiz in the window.
-  OPEN: is it >60s cold-gen (raise the wait) or a real stall? (probing)
+REAL BUG — FOUND + FIXED (1 root, 6 cascaded fails):
+- **Static-routed walkthroughs never generated their optional stages.** The
+  Tier-1 static surface-route (tapping the "Sicilian Defense" picker tile →
+  Alapin walkthrough) started the walkthrough but — unlike Tiers 2/2.5/3 —
+  never called `cacheOpening` NOR `generateMissingStagesInBackground`. So at the
+  leaf `hasStages` stayed false and "Continue learning" NEVER surfaced, and the
+  leaf/stage-menu 3s poll (`mergeStagesFromCache`) cache-missed forever on a tree
+  that was never written to `cachedOpenings`. A `drill <static opening>` jump
+  parked on the same missing stage.
+- **Proof (timed prod probe, 2026-09-12):** "Sicilian Defense" tile → Alapin
+  walkthrough → leaf at ~50s; continue-learning NEVER enabled within 150s; ZERO
+  stage-gen events (`generateMissingStagesInBackground` never invoked — no
+  "kicking off" log); `getCachedOpening` cache-missed 9× (51/58/64/70/76s).
+  So it was NOT >60s cold-gen — it was a genuine stall: stages were never
+  requested and had no cache row to land in.
+- **Fix (CoachTeachPage.tsx, Tier-1 static branch):** `await cacheOpening(...)`
+  the static tree (stamps `tree.cacheKey` in place so merges + the poll find its
+  row), then fire `generateMissingStagesInBackground(...)`, matching the other
+  three tiers. Tour mode still skips the optional stages. Typecheck clean.
+  Verify on prod after deploy: continue-learning must enable at the leaf.
 
 STALE/WRONG audit expectations (app behavior is correct, per locked rules):
 - `stage-play→/coach/play` — WLPP Play mounts in-page OpeningPlayMode; it MUST NOT
@@ -120,4 +135,15 @@ CORE VERIFIED ✅: play→named-opening, walkthrough start/narrate/skip/fork/lea
 controls (new/stop/resume/auto-pause), bare-name, both fuzzy paths, brain Q&A,
 player-game, middlegame-plan, /clearcache, board-move.
 
-Next: adversarial break-loop (messy input, escalating) + run down the stage-gen lead.
+**Adversarial break-loop (prod, 2026-09-12) — pass 1, 40 messy/hostile inputs:**
+- ZERO real product breaks (no pageerror, no React same-key/`Maximum update
+  depth` warning — the correctness classes).
+- 3 breaks, ALL the harness/load artifact class CLAUDE.md §adversarial names:
+  `stuck-input` (a brain call queued >90s under rapid fire), `send-failed` +
+  `chaos-pickbeforeload` (the loop's CHAOS injectors use raw `fill`+`chat-send-btn`
+  with 4s timeouts and no wait-for-input-reenable, so they time out / hang on a
+  busy input). The loop's MAIN `ask()` is sound (pressSequentially + 90s recovery
+  wait); only the chaos injectors are rotted.
+- AUDIT-MAINTENANCE (not a product bug): rebuild the chaos injectors to pace
+  themselves + wait for input recovery like `ask()` does, so the loop can run the
+  3-consecutive-clean-pass contract without manufacturing false breaks/hangs.
