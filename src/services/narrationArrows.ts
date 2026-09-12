@@ -105,6 +105,60 @@ function resolveOn(board: Chess, sanRaw: string): { from: string; to: string; sa
   }
 }
 
+// ─── THE SPOKEN REGISTER ─────────────────────────────────────────────────────
+//
+// THE HOUSE VOICE DOES NOT WRITE SAN, AND THIS FILE ONLY UNDERSTOOD SAN.
+//
+// Every narration rule in the project pushes prose AWAY from SAN: G9.4 bans
+// move-number prefixes outright, and the Naroditsky register says write "the
+// queen's knight to c3", never "2.Nc3", because the TTS sanitiser reads bare
+// SAN as robotic. The corpus obeys. This deriver then saw "knight to c3", hit
+// `SQUARE_PREPOSITION_BEFORE` on the trailing "to ", and rejected c3 as "square
+// reference, not a move" — so it drew nothing.
+//
+// Measured on `voiced-walkthroughs.json`: 3,152 of 7,086 narrated nodes (44.5%)
+// name a move ONLY in spoken form. Every one of them drew ZERO arrows, while
+// the lead-the-eye rule ("arrows + highlights on every narrated move — NON-
+// NEGOTIABLE") reported nothing wrong. Two vocabularies for the same thing that
+// never reconciled; the voice rule and the board were arguing and the board
+// lost silently.
+//
+// Resolution goes through the BOARD's own legal moves rather than by building a
+// SAN string, because a synthesised string breaks on exactly the cases that
+// matter: a pawn capture needs its origin file ("exd5", not "xd5"), two knights
+// reaching one square need disambiguation ("Nbd2"), and promotions carry a
+// suffix. Asking chess.js "which legal move puts a knight on c3" has none of
+// those problems and cannot invent a move that is not there (G3).
+const SPOKEN_PIECE: Readonly<Record<string, string>> = {
+  pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
+};
+
+/** "the knight to c3", "our bishop takes e5", "the rook swings to h3" — the
+ *  piece word plus the verb that precedes a destination square. */
+const SPOKEN_MOVE_BEFORE =
+  /\b(pawn|knight|bishop|rook|queen|king)s?\s+(?:then\s+|now\s+|also\s+)?(to|takes|captures|recaptures(?:\s+on)?|goes\s+to|comes\s+to|steps\s+to|drops\s+to|settles\s+on|jumps\s+to|lands\s+on|retreats\s+to|swings\s+to|hops\s+to|returns\s+to|heads\s+(?:to|for)|reroutes\s+to)\s+$/i;
+
+/** Resolve a SPOKEN move against the board: which legal move puts THIS piece on
+ *  THIS square? Ambiguous (two pieces of the same type can reach it) resolves to
+ *  null — drawing the wrong one is worse than drawing none. */
+function resolveSpokenOn(
+  board: Chess,
+  piece: string,
+  to: string,
+  capture: boolean,
+): { from: string; to: string; san: string } | null {
+  try {
+    const hits = board
+      .moves({ verbose: true })
+      .filter((m) => m.piece === piece && m.to === to && (!capture || m.captured !== undefined));
+    return hits.length === 1
+      ? { from: hits[0].from, to: hits[0].to, san: hits[0].san }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Spans covered by compound notation, so their inner squares are skipped by
  *  the plain SAN pass. */
 function compoundSpans(text: string): Array<{ start: number; end: number }> {
@@ -163,7 +217,21 @@ export function deriveNarrationArrows(
     const before = text.slice(Math.max(0, index - 24), index);
     const after = text.slice(index + token.length, index + token.length + 14);
 
+    // A bare square preceded by a PIECE WORD and a move verb is a move spoken
+    // aloud, not a reference to the square. Checked before the square-reference
+    // verdict below, whose "to " preposition would otherwise swallow it.
+    let spokenPiece: { piece: string; capture: boolean } | null = null;
     if (/^[a-h][1-8]$/.test(token) && !MOVE_SHAPED.test(token)) {
+      const m = SPOKEN_MOVE_BEFORE.exec(before);
+      if (m) {
+        spokenPiece = {
+          piece: SPOKEN_PIECE[m[1].toLowerCase()],
+          capture: /takes|captures|recaptures/i.test(m[2]),
+        };
+      }
+    }
+
+    if (!spokenPiece && /^[a-h][1-8]$/.test(token) && !MOVE_SHAPED.test(token)) {
       const gap = listHead && index > listHead.end ? text.slice(listHead.end, index) : null;
       const inList = gap !== null && gap.length <= 8 && LIST_JOIN.test(gap);
       const isSquareRef = inList && listHead
@@ -200,7 +268,9 @@ export function deriveNarrationArrows(
     }
 
     for (const { board, side } of candidates) {
-      const hit = resolveOn(board, token);
+      const hit = spokenPiece
+        ? resolveSpokenOn(board, spokenPiece.piece, token, spokenPiece.capture)
+        : resolveOn(board, token);
       if (!hit) continue;
       const key = `${hit.from}-${hit.to}`;
       if (seen.has(key)) {
