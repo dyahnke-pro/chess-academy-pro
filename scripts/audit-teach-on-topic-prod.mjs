@@ -93,20 +93,46 @@ try {
   // A broad family name opens the LINE PICKER — a real user taps a line, and an
   // audit that doesn't is stuck on the picker while every later step silently
   // no-ops (the false-coverage failure mode this repo has hit before).
+  // 🔒 TWO SHAPES OF CHOICE, AND THIS AUDIT USED TO KNOW ONLY ONE (2026-09-12).
+  // Waiting solely on [data-testid="line-picker"] made this script report 4/8
+  // against a perfectly healthy surface: the Vienna offers its choice as the
+  // WALKTHROUGH FORK BAR (walkthrough-fork-option-N — "Knight to f3" / "Knight
+  // to c3"), the 60s wait for a picker that never renders timed out, the lesson
+  // sat unadvanced at 2 narrated nodes, and every downstream check then failed
+  // for that one reason — including "no spoken line repeated", which only saw
+  // the intro twice. Driving the fork by hand narrates 13 distinct nodes to
+  // depth 14 with voice firing throughout and zero errors. Accept EITHER shape.
+  let choiceMade = false;
   try {
     const picker = page.locator('[data-testid="line-picker"]');
-    await picker.waitFor({ timeout: 60_000 });
-    const tile = page.locator(`[data-testid^="line-picker-"][data-fullname*="${VARIATION}"]`).first();
-    await tile.waitFor({ timeout: 10_000 });
-    // The tile must name its move — the picker contract shipped with this fix.
-    const tileText = await tile.innerText();
-    check('picker tile names the line\'s key move', /\d+\.(\.\.)?[A-Za-z]/.test(tileText),
-      `tile text: ${JSON.stringify(tileText.replace(/\s+/g, ' ').slice(0, 80))}`);
-    await tile.click();
-    await picker.waitFor({ state: 'detached', timeout: 20_000 });
+    const fork = page.locator('[data-testid^="walkthrough-fork-option-"]');
+    await Promise.race([
+      picker.waitFor({ timeout: 90_000 }),
+      fork.first().waitFor({ timeout: 90_000 }),
+    ]);
+
+    if (await picker.count()) {
+      const tile = page.locator(`[data-testid^="line-picker-"][data-fullname*="${VARIATION}"]`).first();
+      await tile.waitFor({ timeout: 10_000 });
+      // The tile must name its move — the picker contract shipped with this fix.
+      const tileText = await tile.innerText();
+      check('picker tile names the line\'s key move', /\d+\.(\.\.)?[A-Za-z]/.test(tileText),
+        `tile text: ${JSON.stringify(tileText.replace(/\s+/g, ' ').slice(0, 80))}`);
+      await tile.click();
+      await picker.waitFor({ state: 'detached', timeout: 20_000 });
+      choiceMade = true;
+    } else {
+      // The fork bar names each branch by its move, spoken-register.
+      const label = (await fork.first().innerText()).replace(/\s+/g, ' ').trim();
+      check('fork option names its move', /[a-h][1-8]|knight|bishop|rook|queen|king|pawn/i.test(label),
+        `fork label: ${JSON.stringify(label.slice(0, 80))}`);
+      await fork.first().click({ force: true });
+      choiceMade = true;
+    }
   } catch (err) {
-    check('line picker reached and a variation picked', false, String(err).slice(0, 140));
+    check('a line choice was offered and taken', false, String(err).slice(0, 140));
   }
+  check('a line choice was offered and taken', choiceMade, choiceMade ? 'lesson advanced past the branch' : 'never got past the branch');
 
   // Let the lesson play forward on its own — no skipping, so any repeat is the
   // walkthrough's doing and not a tap of mine. Voice-gated narration is slow;
