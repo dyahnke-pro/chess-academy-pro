@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 /**
- * Verifies first-run strength calibration — the fix that makes difficulty
- * adaptive for beginners (David 2026-05-26: "difficulty based off imported
- * games, if non-imported then the skill picker").
+ * Verifies FIRST-RUN DIFFICULTY IS FULLY ADAPTIVE — no calibration step.
+ *
+ * REWRITTEN 2026-09-12: the first-run skill-band calibration bubble was
+ * REMOVED by David on 2026-09-02 ("remove strength calibration → go fully
+ * adaptive"; see src/App.tsx "Difficulty is FULLY ADAPTIVE — no calibration
+ * step"). `StrengthCalibrationBubble.tsx` is now orphaned (mounted at no call
+ * site) and `calibrateStrength` runs ONLY when the player has imported games.
+ * The old audit asserted the removed bubble and so false-RED'd a healthy app
+ * (1/4) — a stale tripwire on a deleted feature. This asserts the CURRENT
+ * contract instead, so it catches the real regressions: the bubble sneaking
+ * BACK (blocking first-run) or boot failing to create a usable profile.
  *
  * Scenarios (against a FRESH, cleared IndexedDB so it's a true first run):
- *   1. The strength bubble auto-pops as the FIRST coach-mark, blocking.
- *   2. Picking a band writes BOTH currentRating AND puzzleRating to Dexie
- *      and flips strengthCalibrated → true (the two ratings used to
- *      diverge; the puzzle pool reads puzzleRating).
- *   3. The bubble dismisses and the "how to use this app" PageHelp pops
- *      SECOND (suppressed until calibration is answered).
- *   4. A `strength-calibrated` audit event fires.
- *   5. Re-load → the bubble does NOT pop again (calibration is sticky).
- *
- * Note: this drives a WRITE to db.profiles. Per CLAUDE.md the sandbox
- * IndexedDB write-stall affects the `openings` store specifically; the
- * `profiles` store write here is a simple keyed update and resolves —
- * but if a future sandbox stalls it, route the persistence assertion to
- * a real device. The bubble-popped / dismissed assertions are env-safe.
+ *   1. NO calibration bubble / skill-band picker appears — first run is not
+ *      blocked by a picker (the removal is the contract).
+ *   2. Boot creates a profile with sane default (adaptive-baseline) ratings —
+ *      currentRating AND puzzleRating are real positive numbers, not 0/unset.
+ *   3. The dashboard renders and is usable first-run (section bars present),
+ *      with no page errors — the app is not wedged behind a missing gate.
  *
  * Usage:
  *   node scripts/audit-strength-calibration.mjs              # localhost
@@ -99,52 +99,35 @@ async function main() {
 
   const tests = [
     {
-      label: 'Strength bubble auto-pops as the first blocking coach-mark',
+      label: 'Fully adaptive: NO calibration bubble / skill-band picker on first run',
       run: async () => {
         await freshLoad();
-        const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
-        await bubble.waitFor({ timeout: 30_000 });
-        // The "how to use this app" help must NOT be open yet.
-        const helpOpen = await page.locator('[data-testid="page-help-modal"]').count();
-        return { ok: helpOpen === 0, why: helpOpen === 0 ? 'bubble first, help suppressed' : 'page-help opened simultaneously' };
+        // Give boot + the deferred profile-create effect room; the bubble (if
+        // it regressed back) auto-pops within a couple of seconds of mount.
+        await page.waitForTimeout(12_000);
+        const bubble = await page.locator('[data-testid="strength-calibration-bubble"]').count();
+        const bands = await page.locator('[data-testid^="skill-band-"]').count();
+        const ok = bubble === 0 && bands === 0;
+        return { ok, why: ok ? 'no first-run picker (fully adaptive)' : `REGRESSED: bubble=${bubble} skill-bands=${bands} — the removed calibration picker is back` };
       },
     },
     {
-      label: 'Picking a band seeds BOTH ratings + flips strengthCalibrated',
+      label: 'Boot creates a profile with sane default (adaptive-baseline) ratings',
       run: async () => {
-        await page.locator('[data-testid="skill-band-newcomer"]').click();
-        // Generous timeout: the sandbox IndexedDB write-stall (CLAUDE.md G1)
-        // can delay the profiles.update commit that flips needsCalibration.
-        await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state: 'detached', timeout: 45_000 });
         const profile = await readProfile();
-        const ok = !!profile && profile.currentRating === 600 && profile.puzzleRating === 600 && profile.strengthCalibrated === true;
-        return { ok, why: ok ? 'currentRating=puzzleRating=600, calibrated' : `profile=${JSON.stringify(profile)}` };
+        const cr = Number(profile?.currentRating);
+        const pr = Number(profile?.puzzleRating);
+        const ok = !!profile && Number.isFinite(cr) && cr > 0 && Number.isFinite(pr) && pr > 0;
+        return { ok, why: ok ? `currentRating=${cr} puzzleRating=${pr}` : `bad profile=${JSON.stringify(profile)}` };
       },
     },
     {
-      label: '"How to use this app" help pops SECOND after calibration',
+      label: 'Dashboard renders + usable first-run (section bars, no page errors)',
       run: async () => {
-        const help = page.locator('[data-testid="page-help-modal"]');
-        await help.waitFor({ timeout: 10_000 }).catch(() => undefined);
-        const ok = (await help.count()) > 0;
-        return { ok, why: ok ? 'dashboard help revealed after calibration' : 'help never opened (suppress did not lift)' };
-      },
-    },
-    {
-      label: 'strength-calibrated audit event fired',
-      run: async () => {
-        await page.waitForTimeout(500);
-        const ok = captured.some((e) => e.kind === 'strength-calibrated');
-        return { ok, why: ok ? 'event present' : 'no strength-calibrated event (stream may be blocked in sandbox)', soft: true };
-      },
-    },
-    {
-      label: 'Calibration is sticky — bubble does not re-pop on reload',
-      run: async () => {
-        await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(3000);
-        const popped = await page.locator('[data-testid="strength-calibration-bubble"]').count();
-        return { ok: popped === 0, why: popped === 0 ? 'no re-pop' : 'bubble popped again after calibration' };
+        const sections = await page.locator('[data-testid^="section-"]').count();
+        const errs = consoleErrors.filter((m) => /pageerror:/.test(m));
+        const ok = sections >= 1 && errs.length === 0;
+        return { ok, why: ok ? `${sections} section bar(s), no pageerrors` : `sections=${sections}, pageerrors=${errs.length}` };
       },
     },
   ];
