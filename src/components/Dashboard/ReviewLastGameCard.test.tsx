@@ -13,6 +13,13 @@ import { db } from '../../db/schema';
 import { buildGameRecord } from '../../test/factories';
 import { ReviewLastGameCard } from './ReviewLastGameCard';
 
+// NOT TESTED HERE, ON PURPOSE: that the retirement write is DURABLE BEFORE the
+// card navigates away. On live prod the fire-and-forget write lost the race to
+// the reload and the card re-offered a game the user had just opened
+// (audit-review-card-prod, 2026-09-12). fake-indexeddb settles within a
+// microtask, so a unit test of that ordering passes against the BROKEN code
+// too — it is vacuous. The gate for it is the prod audit, not this file.
+
 const navigate = vi.fn();
 vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual<typeof import('react-router-dom')>('react-router-dom')),

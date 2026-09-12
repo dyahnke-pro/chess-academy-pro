@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, X, ChevronRight } from 'lucide-react';
@@ -45,10 +45,9 @@ async function readActioned(): Promise<string[]> {
   }
 }
 
-async function markActioned(id: string): Promise<void> {
+async function writeActioned(list: string[]): Promise<void> {
   try {
-    const next = [...(await readActioned()).filter((v) => v !== id), id].slice(-ACTIONED_CAP);
-    await db.meta.put({ key: ACTIONED_KEY, value: JSON.stringify(next) });
+    await db.meta.put({ key: ACTIONED_KEY, value: JSON.stringify(list.slice(-ACTIONED_CAP)) });
   } catch {
     /* best-effort — a failed write only means the card shows once more */
   }
@@ -66,6 +65,11 @@ function describe(game: GameRecord): string {
 export function ReviewLastGameCard(): JSX.Element | null {
   const navigate = useNavigate();
   const [game, setGame] = useState<GameRecord | null>(null);
+  /** The actioned list held in memory from mount, so retiring a game is ONE
+   *  write instead of a read-then-write. The read round trip is what the
+   *  fire-and-forget handler used to race: on prod the card re-offered a game
+   *  the user had just opened, because the reload beat the write. */
+  const actionedRef = useRef<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -76,6 +80,7 @@ export function ReviewLastGameCard(): JSX.Element | null {
           readActioned(),
         ]);
         if (cancelled) return;
+        actionedRef.current = actioned;
         const seen = new Set(actioned);
         setGame(recent.find((g) => isOwnGame(g) && !seen.has(g.id)) ?? null);
       } catch {
@@ -87,16 +92,25 @@ export function ReviewLastGameCard(): JSX.Element | null {
 
   if (!game) return null;
 
-  const open = (): void => {
+  /** Retire this game BEFORE anything that can unmount or unload the page.
+   *  The write is awaited, not fired and forgotten — a prod audit caught the
+   *  card re-offering a game the user had already opened, because navigation
+   *  won the race against the write. */
+  const retire = async (id: string): Promise<void> => {
+    actionedRef.current = [...actionedRef.current.filter((v) => v !== id), id];
+    await writeActioned(actionedRef.current);
+  };
+
+  const open = async (): Promise<void> => {
     captureEvent('review_last_game_opened', { game_source: game.source });
-    void markActioned(game.id);
+    await retire(game.id);
     void navigate(`/coach/review/${game.id}`);
   };
 
-  const dismiss = (): void => {
+  const dismiss = async (): Promise<void> => {
     captureEvent('review_last_game_dismissed', { game_source: game.source });
-    void markActioned(game.id);
-    setGame(null);
+    setGame(null); // instant — the tap must never feel like it waited on disk
+    await retire(game.id);
   };
 
   return (
@@ -106,7 +120,7 @@ export function ReviewLastGameCard(): JSX.Element | null {
     >
       <Sparkles size={28} className="text-theme-accent shrink-0" />
       <button
-        onClick={open}
+        onClick={() => void open()}
         className="flex-1 flex items-center gap-2 text-left min-w-0 hover:opacity-80 transition-opacity"
         data-testid="dashboard-review-last-game-open"
       >
@@ -121,7 +135,7 @@ export function ReviewLastGameCard(): JSX.Element | null {
         <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
       </button>
       <button
-        onClick={dismiss}
+        onClick={() => void dismiss()}
         aria-label="Dismiss review suggestion"
         className="shrink-0 p-1 rounded-lg hover:opacity-70 transition-opacity"
         data-testid="dashboard-review-last-game-dismiss"
