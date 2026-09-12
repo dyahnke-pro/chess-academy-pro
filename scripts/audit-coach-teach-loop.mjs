@@ -401,15 +401,29 @@ async function main() {
     return { broke: false };
   }
 
+  // Fire an input the way the app actually receives it — pressSequentially +
+  // Enter — WITHOUT waiting for the turn to settle. This is the chaos submit:
+  // it deliberately does not gate on input-ready (that IS the collision under
+  // test), but it never THROWS (a busy/disabled input is the expected state
+  // here, not an audit failure), so a chaos step can't manufacture a false
+  // `chaos-*` break the way the old raw fill()+chat-send-btn.click() did — the
+  // exact fill/click anti-pattern ask() documents as a false-positive source.
+  async function fireRaw(text, { clearFirst = true } = {}) {
+    try {
+      const input = page.locator('[data-testid="chat-text-input"]');
+      if (clearFirst) await input.fill('', { timeout: 2500 }).catch(() => undefined);
+      await input.pressSequentially(text, { delay: 3, timeout: 6000 });
+      await page.keyboard.press('Enter');
+    } catch { /* busy/disabled mid-collision is expected — never a break here */ }
+  }
+
   // State-chaos sequences (tier 3): rapid-fire, out-of-order, pick-before-load.
   async function chaosSequences(rand) {
     // 1) Rapid double/triple submit (mash send before the turn settles).
     inFlightInput = 'RAPID: vienna / sicilian / najdorf mash';
     try {
-      const input = page.locator('[data-testid="chat-text-input"]');
       for (const t of ['Vienna', 'Sicilian', 'teach me the Najdorf']) {
-        await input.fill(t, { timeout: 3000 }).catch(() => undefined);
-        await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 3000, force: true }).catch(() => undefined);
+        await fireRaw(t);
         await page.waitForTimeout(120); // mash — don't let it settle
       }
       await page.waitForTimeout(6000);
@@ -421,9 +435,7 @@ async function main() {
     await freshReload();
     inFlightInput = 'PICK-BEFORE-LOAD: French gen + drill + question';
     try {
-      const input = page.locator('[data-testid="chat-text-input"]');
-      await input.fill('teach me the French Defense', { timeout: 4000 });
-      await page.locator('[data-testid="chat-send-btn"]').click({ timeout: 4000 });
+      await fireRaw('teach me the French Defense');
       await page.waitForTimeout(500); // do NOT wait for gen
       await ask('drill it');
       await ask('what is the plan here?');
