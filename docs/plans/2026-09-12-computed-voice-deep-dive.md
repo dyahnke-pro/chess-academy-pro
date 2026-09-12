@@ -111,6 +111,89 @@ knight" class does NOT reproduce). Weaknesses found (imprecise, not false):
 speak/silent GATE) takes no weakness signal — so a persistent worsening weakness
 can re-rank but never *un-silence* a fact. Selection stays position+rating-only.
 
+### 🔴 THE DISEASE (root cause across clusters A + C) — `seeGain` is pin-blind
+
+`seeGain` (`positionReadingService.ts:38`) is built on `chess.js.attackers()`,
+which counts pieces by movement pattern, **ignoring pins & legality**. Exactly ONE
+consumer was hardened (`explainBestMoveGrounded`'s cost clause drives off *legal*
+captures + `captureHasCounterTactic`); every other `seeGain`/`attackers()` guard
+inherited the blindness. It is the single root cause behind a whole class of
+false claims. **Keystone fix: one shared legal-recapture-aware landing-safety /
+SEE helper** (the `moves({verbose}).filter(m=>m.to===sq)` + pin-aware pattern
+already at `groundedAnswer.ts:1771`), swept across every consumer below. Also:
+`voiceFacts` can only SUBTRACT (strip invented numbers/terms/sentences) — it can
+NEVER correct a false computed claim; correctness lives 100% upstream in these
+computers.
+
+### Cluster A — computed-voice core (`groundedAnswer.ts` + voiceFacts) (landed)
+
+1. **[#1, confirmed] `assembleEngineReasoning` speaks bare "attacks the X" from an
+   en-prise/irrelevant piece** (`groundedAnswer.ts:2381`, walk `:2397`).
+   `describeMoveGeometry` returns "attacks…" truthily so `?? quietPurposePhrase`
+   never runs; `explainBestMoveGrounded` filters this (`:1728`), the PV walk (and
+   the puzzle "Explain why" via `explainPuzzleMoveGrounded`) does not. Fix: mirror
+   the `!g.startsWith('attacks')` filter at both sites.
+2. **fork/pin/material "landing-safe" fooled by a PINNED defender** (`:1976`
+   `landingSafe = seeGain(c,to)<=0`, gating fork `:1980`/pin `:1996`/material `:2008`)
+   → announces a winning tactic on a piece that actually hangs. Fix: legal-recapture
+   landing safety (the disease fix).
+3. **fork names the two highest-VALUE targets even if the high one is defended**
+   (`:1987` — `realWin` needs only ONE target undefended/king, but phrasing leads
+   with the two most valuable). → "forks the king and the pawn on b7" (king steps
+   aside, pawn defended, nothing won). Fix: name only genuinely winnable targets.
+4. **the other SEE assemblers never got the pinned-attacker fix** →
+   false "hanging / in trouble / not safe": `assembleHangingAnswer:257`,
+   `assemblePieceSafetyAnswer:404`, `assembleThreatAnswer:425`,
+   `assembleSquareControlAnswer:713`. Fix: disease fix.
+5. **bare-"attacks" primitive has no en-prise/winnable guard** (`:2014`) and leaks
+   into `assembleMovePurpose:2256`, `describeMoveMerit:2158`, `explainMoveOrder`
+   (`bestAttackFrom:1915`→`:2507`). Fix: emit "attacks" only when landingSafe AND
+   (target undefended OR value(target)>value(mover)).
+6. **`quietPurposePhrase` praises a developing piece that hangs** to a pinned-only
+   defender (`:2091`). Fix: disease fix (shared).
+7. **`assembleAttackAssessment` mis-counts king-zone attackers/defenders** (pins
+   ignored, x-ray of one empty square counts full — `:1083-1092`) → "you have a
+   real attack, press it" on a losing attack. Fix: real safe contact + exclude pins.
+8. **`assembleThreatAnswer` "you can win the rook" ignores turn/legality** (`:418-443`).
+   Fix: gate on side-to-move + an actual legal capture.
+
+   *Solid (don't over-correct):* `explainBestMoveGrounded` (the reference),
+   `assembleCandidateMoveAnswer`, eval sign/perspective (no bug found),
+   `captureHasCounterTactic`, detectNewThreat family (err toward silence).
+
+### Cluster C — tactics / causal / threat detectors (landed)
+
+*Vocabulary drift is properly bridged* (`tacticVocabulary.ts` is a compile-time
+`Record<Union,…>`; discovery/overload/removal-of-guard reconciled). Remaining:
+
+1. **fork fires on a forker that is itself hanging** (`tacticsDetector.findForks:145-149`,
+   `tacticClassifier.detectFork`, `missedTacticService:718-729`) — `winnable` gate
+   checks only targets, never the forking piece's own safety. → false "you have a
+   fork" that just loses the forker. Fix: SEE-gate the forker square.
+2. **`missedTacticService.detectSkewer` is the OLD unfixed logic** (`:251-256`,
+   `first>second && second>=1`, allows a pawn prize) — the false-skewer bug
+   `tacticsDetector.findSkewers` was already fixed for; this file diverged. Fix:
+   port the three-way threshold.
+3. **mate-threat for the side-NOT-to-move is unverified** (`tacticsDetector.findMateThreats:297-311`)
+   → false "White has a checkmate available" when the side to move simply parries.
+   Fix: confirm the threat is unstoppable, or downgrade wording.
+4. **double-check detection is DEAD everywhere** (`missedTacticService:546-589`,
+   `tacticClassifier:334-389` count checkers via `moves()` which never captures the
+   king → always 0). A real double check is mislabeled a fork; the validator then
+   STRIPS legitimate "double check" mentions. Fix: `attackers(kingSq,mover).length>=2`.
+5. **`seeGain` pin-blindness under causalChain + attackMap** (`causalChain.ts`
+   `hasWinnablePiece:165`, `exploitedLoosePiece:235-251`, `targetWasSavable:178`;
+   `computeAttackMap`) — the disease, in the cause→effect engine + the ground-truth
+   prompt block. Fix: disease fix.
+6. **`isCriticalThreat`/`scanUpcomingTactics` attribute the WHOLE line's eval to
+   each pattern** (`tacticClassifier:722-730`, `tacticAlertService:302-311`) → a
+   harmless depth-1 pin inside a big-swing line flagged "critical" (the noise David
+   complained about); a real shot inside an equalizing line reads non-critical.
+   Fix: evaluate at the tactic's own ply.
+   *Also:* claim-validator lists `x_ray`/`double_check` no detector emits (strips
+   legit mentions) + no `battery` entry; `detectMissedTactics` FEN/color-indexing
+   depends on `CoachGameMove` conventions — verify.
+
 ## Phased plan
 
 - **P0 — deep dive + this doc.** In progress (3 cluster agents + assembler review).
