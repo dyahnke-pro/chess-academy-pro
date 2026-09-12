@@ -127,6 +127,24 @@ async function main() {
   const helpBlocks = (await help.count()) > 0 && (await help.first().isVisible().catch(() => false));
   rec('page-help modal cannot intercept clicks', !helpBlocks);
 
+  // A MASTERCLASS OPENING AUTO-STARTS ITS WATCH LESSON (OpeningDetailPage
+  // autoStartedRef: has a LessonScript + Watch rung not complete + no ?line=
+  // deep link → setViewMode('walkthrough')). So a fresh visit lands in the
+  // LessonPlayer, NOT the detail page — and the Understand zone (Overview /
+  // Key Ideas / Classic Wisdom / From the Books) that this audit reads lives on
+  // the DETAIL view, at the BOTTOM (moved there 2026-08-22). Exit the lesson
+  // back to detail first, mirroring the real "watch, then read the books" flow.
+  try {
+    const back = page.locator('[data-testid="lesson-back"]');
+    await back.waitFor({ state: 'visible', timeout: 20000 });
+    await back.click({ force: true });
+  } catch { /* not a masterclass / already on detail */ }
+  // Now scroll the bottom Understand zone into view and let it (+ the deferred
+  // seed) render before asserting.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)).catch(() => {});
+  await page.locator('[data-testid="book-reader"], [data-testid="classic-wisdom-section"]')
+    .first().waitFor({ state: 'attached', timeout: 30000 }).catch(() => {});
+
   // ── Instrument 1: drive the reads ───────────────────────────────────
   const book = page.locator('[data-testid="book-reader"]');
   if (await book.count()) {
