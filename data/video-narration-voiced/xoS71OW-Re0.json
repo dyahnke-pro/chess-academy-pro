@@ -25,7 +25,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6 — the Philidor, which we've seen a lot."
+   "spoken": "Black plays d6 — the Philidor."
   },
   {
    "ply": 5,
@@ -423,7 +423,7 @@
    "t": 599.5,
    "fen": "r2q1rk1/ppp1bppp/8/2n1P2n/6b1/1BN1BN2/PPP3PP/R3QRK1 b - - 2 14",
    "line": [],
-   "spoken": "Rewinding — essentially he should have taken the bishop.",
+   "spoken": "Rewinding.",
    "reanchor": true
   },
   {
@@ -441,7 +441,7 @@
    "t": 605.5,
    "fen": "r2q1rk1/ppp1bppp/8/2n1P2n/6b1/1BN1BN2/PPP3PP/R3QRK1 b - - 2 14",
    "line": [],
-   "spoken": "This bishop actually won us the game; he should have taken it.",
+   "spoken": "This bishop actually won us the game.",
    "reanchor": true
   },
   {

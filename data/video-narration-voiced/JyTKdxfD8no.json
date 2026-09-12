@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "e4, e5 — an open game. We've been leaning on the Danish Gambit lately, but let's switch it up."
+   "spoken": "e4, e5 — an open game."
   },
   {
    "ply": 3,
@@ -494,7 +494,7 @@
    "t": 973.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 4 4",
    "line": [],
-   "spoken": "He resigns. A very instructive game.",
+   "spoken": "A very instructive game.",
    "reanchor": true
   },
   {

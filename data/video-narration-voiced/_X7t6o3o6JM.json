@@ -71,7 +71,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "If you're not experienced with this idea, which recurs in several openings, I'll show you some examples."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -196,7 +196,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "It's risky, what we're doing, but it's fun and teaches you a lot about tactical positions, and it's just not easy for Black to play this structure. The bishop to e6 is a bit passive — music to my ears, because it doesn't accentuate the queenside attack, essentially loses a move, and takes the e6-square away from the knight, which could have dropped back there. So this increases the appeal of g4, which is now very tempting — still incredibly double-edged, but with our king shepherded to safety it's a good time to consider it. We just smash through on the kingside, the kind of move a GM plays without calculating many variations, because in this line g4 and h5 just works, opening a bunch of files — and our queen from d2 gets direct access to the h-"
+   "spoken": "It's risky, what we're doing, but it's fun and teaches you a lot about tactical positions, and it's just not easy for Black to play this structure. The bishop to e6 is a bit passive — because it doesn't accentuate the queenside attack, essentially loses a move, and takes the e6-square away from the knight, which could have dropped back there. So this increases the appeal of g4, which is now very tempting — still incredibly double-edged, but with our king shepherded to safety it's a good time to consider it. We just smash through on the kingside, the kind of move a GM plays without calculating many variations, because in this line g4 and h5 just works, opening a bunch of files — and our queen from d2 gets direct access to the h-"
   },
   {
    "ply": 23,
@@ -214,7 +214,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The queen to a5 — very impressive play so far, but it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that."
+   "spoken": "The queen to a5 — it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because we don't want our knight to be the only piece standing between us and checkmate — we want to be safer than that."
   },
   {
    "ply": 25,
@@ -610,7 +610,7 @@
    "t": 1637.5,
    "fen": "8/pp2kb2/7R/5r1p/5N2/3BPnR1/PPP5/2K5 b - - 15 31",
    "line": [],
-   "spoken": "it's an unconventional trade. Our opponent resigns. Now, first and foremost, I definitely confused something and got something wrong in the opening — the position was complicated and interesting, but it didn't have that sense that it was the line we were recommending. Actually, this is the main line: the move here is the knight to e5. I apologise — it's been a long day and I had a mental breakdown; I forgot that we don't have to react to c5, we can just do our own thing, and I'll show you the main lines after the knight to e5.",
+   "spoken": "it's an unconventional trade. Now, first and foremost, I definitely confused something and got something wrong in the opening — the position was complicated and interesting, but it didn't have that sense that it was the line we were recommending. Actually, this is the main line: the move here is the knight to e5. I apologise — it's been a long day and I had a mental breakdown; I forgot that we don't have to react to c5, we can just do our own thing, and I'll show you the main lines after the knight to e5.",
    "reanchor": true
   }
  ]

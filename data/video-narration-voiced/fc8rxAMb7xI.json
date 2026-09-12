@@ -186,7 +186,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "wants to park itself. The bishop to h4, and now we have an interesting dilemma — because we have a nice positional advantage and a clamp on d4, there are many good ways to play, so if your intuition suggests a different move than mine, that doesn't make your idea bad. The way I play this may strike you as a little loose or risky, but hopefully I'll show"
+   "spoken": "wants to park itself. The bishop to h4, and now we have an interesting dilemma — because we have a nice positional advantage and a clamp on d4, there are many good ways to play, so if your intuition suggests a different move than mine, that doesn't make your idea bad."
   },
   {
    "ply": 22,
@@ -526,7 +526,7 @@
    "t": 778,
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
    "line": [],
-   "spoken": "The rook to h5 — and you should ask, what happens if White goes h3? White simply resigns. A simple game — we played simple textbook positional chess, nothing crazy or outlandish, and White was unable to deal with the weakness he created on the second move. Let's go through it quickly.",
+   "spoken": "The rook to h5 — and you should ask, what happens if White goes h3? A simple game — we played simple textbook positional chess, nothing crazy or outlandish, and White was unable to deal with the weakness he created on the second move. Let's go through it quickly.",
    "reanchor": true
   },
   {

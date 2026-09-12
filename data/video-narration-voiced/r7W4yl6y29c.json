@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "The pawn to e4, c5 — our favorite Alapin Sicilian."
+   "spoken": "The pawn to e4, c5 — the Alapin Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3 — the elephant. Let's see how it holds up at a 2000-plus level."
+   "spoken": "c3 — the elephant."
   },
   {
    "ply": 4,
@@ -87,7 +87,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "— which I'd like to introduce. Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board. Do you know the move I'm implying? It may seem natural, but on closer look it may seem a serious positional mistake."
+   "spoken": "Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board. It may seem natural, but on closer look it may seem a serious positional mistake."
   },
   {
    "ply": 9,
@@ -123,7 +123,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "— our opponent didn't play it, and that's c4. c4 is scary because after we play d4 later, Black takes en passant and breaks up our chain, seemingly losing our e5-pawn; I'll show the theory."
+   "spoken": "— our opponent didn't play it, and that's c4. c4 is scary because after we play d4 later, Black takes en passant and breaks up our chain, seemingly losing our e5-pawn."
   },
   {
    "ply": 11,

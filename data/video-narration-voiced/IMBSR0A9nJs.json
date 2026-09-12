@@ -401,7 +401,7 @@
     "Rxg8",
     "Bxg8"
    ],
-   "spoken": "This forces the rook trade, and the rest is simple, up a rook and a piece. What matters isn't the individual move but adhering to the correct general strategy — and he resigns.",
+   "spoken": "This forces the rook trade, and the rest is simple, up a rook and a piece. What matters isn't the individual move but adhering to the correct general strategy.",
    "reanchor": true
   },
   {
@@ -482,7 +482,7 @@
    "t": 621.5,
    "fen": "rnbqkbnr/p4ppp/2pp4/1p6/3NP3/1B6/PPP2PPP/RNBQK2R b KQkq - 0 8",
    "line": [],
-   "spoken": "Black should have played the knight to f6 instead.",
+   "spoken": "The knight to f6 is the better square.",
    "reanchor": true
   },
   {

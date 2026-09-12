@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "The pawn to e4, c5 — the Alapin, against a very strong 2198, our strongest opponent to date."
+   "spoken": "The pawn to e4, c5 — the Alapin."
   },
   {
    "ply": 3,
@@ -141,7 +141,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "So far, standard, well-known theory. The bishop to d6 — funnily, we can delay the pawn takes c5 one more move by castling, since Black can't resolve the central tension, but I'll stick to the traditional way."
+   "spoken": "The bishop to d6 — funnily, we can delay the pawn takes c5 one more move by castling, since Black can't resolve the central tension, but I'll stick to the traditional way."
   },
   {
    "ply": 13,
@@ -345,7 +345,7 @@
    "line": [
     "gxf6"
    ],
-   "spoken": "The queen takes f6 would lose on the spot. The g-pawn recaptures. The knight to c6 here fails tactically to the bishop takes c6, the knight takes c6, and the queen to e8 — ultra-advanced tactics I'll show after the game."
+   "spoken": "The queen takes f6 would lose on the spot. The g-pawn recaptures. The knight to c6 here fails tactically to the bishop takes c6, the knight takes c6, and the queen to e8."
   },
   {
    "ply": 35,

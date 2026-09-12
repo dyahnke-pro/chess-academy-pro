@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We play the Sicilian, c5, our real opening."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -814,7 +814,7 @@
    "line": [
     "Kg7"
    ],
-   "spoken": "White checks on d8, the king steps to g7, and White finally trades queens. We're winning: a pawn up, and White's king is cut off along the e-file. The plan: a king to e5, and a rook to c6 forcing a rook trade with our king covering every escape square, then we go after the b-pawn and promote — our pawns are perfectly configured with no kingside passer for White. He resigns.",
+   "spoken": "White checks on d8, the king steps to g7, and White finally trades queens. We're winning: a pawn up, and White's king is cut off along the e-file. The plan: a king to e5, and a rook to c6 forcing a rook trade with our king covering every escape square, then we go after the b-pawn and promote — our pawns are perfectly configured with no kingside passer for White.",
    "reanchor": true
   },
   {

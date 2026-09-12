@@ -645,7 +645,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "We just start pushing the g-pawn, with plenty of squares for our king; if the bishop moves anywhere it gets forked. White resigns.",
+   "spoken": "We just start pushing the g-pawn, with plenty of squares for our king; if the bishop moves anywhere it gets forked.",
    "reanchor": true
   },
   {
@@ -653,7 +653,7 @@
    "t": 891.5,
    "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
    "line": [],
-   "spoken": "A strange game — I'm not used to a 1900 playing like that. This was the delayed Alapin.",
+   "spoken": "A strange game. This was the delayed Alapin.",
    "reanchor": true
   },
   {
@@ -837,7 +837,7 @@
    "t": 984,
    "fen": "rnbqkb1r/pp2pppp/3p1n2/2p1P3/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 6",
    "line": [],
-   "spoken": "An important distinction. After the trades, Black is already slightly better — up in development, with that c3 pawn neither here nor there. This is a dream isolated-queen's-pawn setup for Black: look at the control of the square in front of the pawn — Karpov would slay dragons for a position like this. White should have played d4 long ago instead of the strange knight to a3 and a6.",
+   "spoken": "An important distinction. After the trades, Black is already slightly better — up in development, with that c3 pawn neither here nor there. This is a dream isolated-queen's-pawn setup for Black: look at the control of the square in front of the pawn — Karpov would slay dragons for a position like this.",
    "reanchor": true
   }
  ]

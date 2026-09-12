@@ -115,7 +115,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. We're spoiled for choice — let's see how"
+      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. We're spoiled for choice."
     },
     {
       "ply": 15,
@@ -124,7 +124,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "this works, g4. I had a really cool over-the-board game exactly like this where I beat a 2500. There's a lot to unpack, but everybody should see the bishop is being attacked. Black has a complicating intermediate move that seems to offer a solution: the knight takes e5. After the knight takes e5, d-takes-e5, both the knight and the bishop are hanging, but Black plays the knight takes g4 — and at the very end of that line, don't forget the main idea of g5: the bishop to b5 with check is devastating, because there's nothing to block that diagonal, and the king has to move out to e7."
+      "spoken": "this works, g4. There's a lot to unpack, but everybody should see the bishop is being attacked. Black has a complicating intermediate move that seems to offer a solution: the knight takes e5. After the knight takes e5, d-takes-e5, both the knight and the bishop are hanging, but Black plays the knight takes g4 — and at the very end of that line, don't forget the main idea of g5: the bishop to b5 with check is devastating, because there's nothing to block that diagonal, and the king has to move out to e7."
     },
     {
       "ply": 16,
@@ -142,7 +142,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "the bishop, forcing it back to g6. I'll show everything after the game."
+      "spoken": "the bishop, forcing it back to g6."
     },
     {
       "ply": 18,

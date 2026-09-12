@@ -114,7 +114,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "I'll play that move pretty quickly."
+      "spoken": ""
     },
     {
       "ply": 14,
@@ -167,7 +167,7 @@
       "t": 320.5,
       "fen": "r1b1k1nr/ppqnbp2/2ppp2p/6p1/2PPP3/2NB1N2/PP3PPP/R1BQR1K1 w kq - 0 9",
       "line": [],
-      "spoken": "is just far more desirable for White than the King's-Indian structure that would arise after d5 and e5 — I'll show that after the game,",
+      "spoken": "is just far more desirable for White than the King's-Indian structure that would arise after d5 and e5.",
       "reanchor": true
     },
     {

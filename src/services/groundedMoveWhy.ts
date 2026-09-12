@@ -7,8 +7,9 @@
 // The chain is board-truth only (G0/G3), corpus-note-first (the note is 90% of
 // the coach's voice), and NEVER empty for a move — a "why?" tap always gets a
 // grounded answer, never a dead control:
-//   1. corpus note at the EXACT resulting position (teachingNoteForBoard — the
-//      farmed teaching, position-keyed, board-verified)
+//   1. corpus note at the EXACT resulting position (teachingSourceForBoard,
+//      restricted to origin 'position' — the farmed teaching, position-keyed,
+//      board-verified)
 //   2. describeMoveGeometry (chess.js geometry — fork/pin/check/capture/etc.)
 //   3. a concrete move-type floor that always names a piece/square/concept
 // Deliberately understated so a quiet developing move is never dressed up as
@@ -16,7 +17,7 @@
 import { Chess } from 'chess.js';
 import type { Move } from 'chess.js';
 import { describeMoveGeometry } from './groundedAnswer';
-import { teachingNoteForBoard } from './danyaTeachingService';
+import { teachingSourceForBoard } from './danyaTeachingService';
 import { sanToSpeech } from '../utils/sanToSpeech';
 
 /** The concrete floor: name the piece/square/concept from chess.js flags.
@@ -56,8 +57,20 @@ export function groundedMoveWhy(
   try { mv = chess.move(san); } catch { mv = null; }
   const fenAfter = chess.fen();
   if (mv) {
-    const note = teachingNoteForBoard([...historyBefore, mv.san], fenAfter, openingName);
-    const noteWhy = note?.teaches?.trim() || note?.explains?.trim() || '';
+    // EXACT POSITION ONLY. This read `teachingNoteForBoard`, whose contract is
+    // "exact position → prefix → opening family → structure → concept" — so the
+    // comment above promised the exact resulting position while the selector
+    // could hand back a note borrowed from another opening, and this function
+    // returned it as the why of THIS move. Restricting the tier keeps the
+    // promise; the geometry and floor below still guarantee a non-empty answer,
+    // so the Why? button never becomes a dead control.
+    const src = teachingSourceForBoard(
+      [...historyBefore, mv.san],
+      fenAfter,
+      openingName,
+      (_note, origin) => origin === 'position',
+    );
+    const noteWhy = src?.note.teaches?.trim() || src?.note.explains?.trim() || '';
     if (noteWhy) return noteWhy;
   }
   const geo = describeMoveGeometry(fenBefore, san, moverColor)?.trim();
@@ -73,7 +86,14 @@ export function groundedMoveWhy(
  * the beat".
  */
 export function positionTeachingWhy(fen: string, openingName?: string | null): string | null {
-  const note = teachingNoteForBoard([], fen, openingName);
-  const text = note?.teaches?.trim() || note?.explains?.trim() || '';
+  // The doc above promises an EXACT-position note and "silence beats a borrowed
+  // note". `teachingNoteForBoard` does not promise that — it falls through to
+  // the opening-family, structure and concept tiers — so this function was
+  // labelling borrowed teaching as the read of the board in front of the
+  // student. That is the 2026-08-04 defect (teaching authored at one position
+  // spoken as if it described another), and it is invisible at runtime: the
+  // prose is fluent and the board never contradicts a hypothetical.
+  const src = teachingSourceForBoard([], fen, openingName, (_note, origin) => origin === 'position');
+  const text = src?.note.teaches?.trim() || src?.note.explains?.trim() || '';
   return text || null;
 }

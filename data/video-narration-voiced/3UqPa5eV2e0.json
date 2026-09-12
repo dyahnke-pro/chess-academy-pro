@@ -491,7 +491,7 @@
     "a6",
     "Nf3"
    ],
-   "spoken": "A whole toolbox showed up in this game. A fork is one piece attacking two at once; a pin freezes a piece in front of a more valuable one behind it; a discovered check unveils an attack by moving the piece in front. The trickiest moment was a queen-to-d5 shot that forked a mate threat with an attack on the rook — one piece can't meet both. And when you're up material, the cleanest path is to trade queens, then rooks, and convert.",
+   "spoken": "A fork is one piece attacking two at once; a pin freezes a piece in front of a more valuable one behind it; a discovered check unveils an attack by moving the piece in front. The trickiest moment was a queen-to-d5 shot that forked a mate threat with an attack on the rook — one piece can't meet both. And when you're up material, the cleanest path is to trade queens, then rooks, and convert.",
    "teaches": [
     "fork",
     "pin",

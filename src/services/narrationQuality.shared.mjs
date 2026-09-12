@@ -1,0 +1,469 @@
+// CORPUS SWEEP — clause-level narration classifier (David 2026-09-12).
+//
+// WHY THIS EXISTS. David walked the Accelerated Dragon on /coach/teach and
+// heard, among the teaching: "We're Black against a 2050 — this is going to be
+// juicy", "White recaptures with the knight — music to my ears", and "only our
+// second of the whole run". Those are a streamer narrating a video session to
+// an audience that had the previous twenty minutes of context. The student has
+// a board.
+//
+// THE UNIT IS THE CLAUSE, NOT THE NOTE. Scoring whole notes measured 0.9%
+// chatter and looked like there was nothing to fix — because the defect is
+// distributed INSIDE otherwise-good notes:
+//
+//   "The pawn to g6, the Accelerated Dragon fianchetto — only our second of
+//    the whole run."
+//     ^ a perfect beat                                  ^ chatter
+//
+// A keep/delete verdict on that note loses either the teaching or the student.
+// So every detector below runs per clause and the operation is a TRIM.
+//
+// THE GUARD IS LOAD-BEARING. `teachesChess()` vetoes every cut: a clause that
+// names a board referent AND predicates something about chess is never cut, no
+// matter which chatter pattern it matched. Without it the classifier deletes
+// "Now we castle long, completing our development" and keeps "sacrifices are
+// in the air" — measured, on this corpus, before the guard existed.
+//
+// 🔒 THE STEMS CARRY `\w*` ON PURPOSE. The first version wrote them as
+// `\b(develop|weak|sacrific|...)\b`, where `\bdevelop\b` cannot match
+// "developed", `\bweak\b` cannot match "weaknesses", and `\bsacrific\b` cannot
+// match anything at all — it is not a word. Six predicate terms were dead, the
+// guard ran at half strength, and the classifier proposed deleting 555 clauses
+// of real teaching while still reporting a clean-looking result. It was caught
+// only because David hand-checked two lines. `detectors.test.ts` pins his calls
+// as fixtures so a future edit to these patterns fails the build instead of
+// quietly resuming the over-cut.
+
+/** Board referent: a square, or a piece/geometry noun. */
+export const BOARD_RE =
+  /\b[a-h][1-8]\b|\b(pawns?|knights?|bishops?|rooks?|queens?|kings?|centre|center|file|diagonal|rank|square|castl\w*)\b/i;
+
+/** Chess predicate. Stems, suffixes allowed — see the lock note above. */
+export const PRED_RE = new RegExp(
+  '\\b(' +
+    [
+      'attack', 'defen[sc]', 'defend', 'control', 'pressur', 'develop', 'threat',
+      'weak', 'outpost', 'structur', 'tempo', 'space', 'trade', 'trap', 'fork',
+      'pin', 'pinn', 'skewer', 'sacrific', 'blockad', 'pass', 'isolat',
+      'initiativ', 'counterplay', 'equali', 'plan', 'idea', 'principle',
+      'punish', 'blunder', 'tactic', 'endgame', 'material', 'activity',
+      'convert', 'calculat', 'candidate', 'balanc', 'simplif', 'compensat',
+      'advantag', 'position', 'majorit', 'minorit', 'fianchett', 'zugzwang',
+      'opposition', 'coordinat', 'typical', 'intuitiv', 'theory',
+      // THE GUARD WAS MISSING ORDINARY CHESS VERBS, and three clauses of real
+      // teaching were cut in the dry run because of it: "the immediate d5,
+      // STRIKING the center", "we've been ANALYZING the knight takes on e5",
+      // "if Black had CHECKED on h4 ... we'd ANSWER g3" all name a square and
+      // say what happens, but scored as predicate-free. Widening the guard only
+      // ever protects more text, so it is the safe direction to be wrong in.
+      'strik', 'strike', 'analys', 'analyz', 'answer', 'respond', 'recaptur',
+      'captur', 'check', 'took', 'takes', 'taking', 'retreat', 'exchang',
+      'chase', 'protect', 'push', 'break', 'occup', 'undermin', 'restrain',
+      'overload', 'deflect', 'decoy', 'promot', 'infiltrat', 'centralis',
+      'centraliz', 'liquidat', 'consolidat', 'manoeuvr', 'maneuver',
+    ].join('|') +
+    ')\\w*\\b',
+  'i',
+);
+
+/** The veto. A clause that teaches chess is never cut.
+ *
+ *  THE CONJUNCTION WAS THE BUG (David 2026-09-12: "you looked at all the lines
+ *  that were cut to make sure we did not lose any good chess teachings?" — the
+ *  answer was no, and reading all 165 removed spans found ten that were real).
+ *  Requiring a board referent AND a chess predicate in the SAME clause fails on
+ *  the two shapes chess teaching most often takes:
+ *
+ *    concrete, no abstract verb   "the knight to h6, the queen to g8, the knight
+ *                                  to f7: smothered mate"      board only
+ *    maxim, no square             "Black is so far behind in development that
+ *                                  almost any sacrifice lands" predicate only
+ *
+ *  A plain OR is too loose in the other direction — an opening name carries a
+ *  square ("the c3 Sicilian"), so one incidental token would veto pure chatter.
+ *  The rule is therefore: one of each, OR two distinct of either. Two board
+ *  referents means the clause is describing the board; two predicates means it
+ *  is making a chess argument. A single passing mention is neither. */
+export function teachesChess(clause) {
+  const board = distinctMatches(clause, BOARD_RE);
+  const pred = distinctMatches(clause, PRED_RE);
+  return (board >= 1 && pred >= 1) || board >= 2 || pred >= 2;
+}
+
+/** How many DIFFERENT terms of a pattern a clause uses. "the pawn ... the pawn"
+ *  is one referent repeated, not two. */
+function distinctMatches(clause, re) {
+  const global = new RegExp(re.source, re.flags.includes('g') ? re.flags : `${re.flags}g`);
+  const seen = new Set();
+  for (const m of clause.matchAll(global)) seen.add(m[0].toLowerCase());
+  return seen.size;
+}
+
+// Capitalised chess vocabulary that must never read as a person's name.
+// Without this, "Najdorf knows" and "Maroczy plays" become named humans.
+const CHESS_PROPER_NOUN =
+  /^(White|Black|Sicilian|Dragon|Najdorf|Caro|Kann|French|Italian|Spanish|Ruy|Lopez|Alapin|Scotch|Vienna|London|Grunfeld|Gr[uü]nfeld|Benko|Benoni|Slav|Pirc|Modern|Scandinavian|Petroff|Philidor|Maroczy|Smith|Morra|Accelerated|Open|Closed|Advance|Exchange|Classical|Fantasy|Winawer|Tarrasch|Berlin|Marshall|Nimzo|Indian|Queen|King|Gambit|Attack|Defense|Defence|Variation|System|Opening|Endgame|Middlegame|Stockfish|Lichess|Elo|The|This|That|These|Those|Now|But|And|So|If|When|After|Before|Here|There|Both|Our|Your|Their|It|We|I|He|She|They|You|A|An|In|On|At|One|Two|Three|Reason|Pattern|Idea|Plan)$/;
+
+const PERSON_VERB =
+  /\b(knows?|plays?|played|said|says|thinks?|resigned?|blundered?|is rated|was rated|prefers?|likes?|recommends?|teaches?)\b/;
+/** The same verbs, but they must be the very next word after the name. */
+const ANCHORED_PERSON_VERB =
+  /^\s+(knows?|plays?|played|said|says|thinks?|resigned?|blundered?|is rated|was rated|prefers?|likes?|recommends?|teaches?)\b/;
+
+// Capitalised words that are never people. The bare possessive rule below used
+// to accept any capitalised word before "'s", which classified "TODAY'S choice
+// is the Accelerated Dragon" as a person reference and penalised the Accelerated
+// Dragon's own thesis statement out of first place at ply 2 — the exact note this
+// scoring exists to promote.
+const NEVER_A_PERSON =
+  /^(Today|Tomorrow|Yesterday|Tonight|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|June|July|August|September|October|November|December|Everyone|Everybody|Someone|Somebody|Nobody|Anyone)$/;
+
+/** A capitalised non-chess word acting like a person → the name, else null.
+ *
+ *  Selection is by PERSON VERB only ("Kusha knows", "Magnus played"). A bare
+ *  possessive is deliberately NOT a signal: it carried every false positive this
+ *  detector produced and caught nothing the verb rule missed. */
+export function namedPerson(clause) {
+  for (const m of clause.matchAll(/\b([A-Z][a-z]{2,})\b/g)) {
+    if (CHESS_PROPER_NOUN.test(m[1]) || NEVER_A_PERSON.test(m[1])) continue;
+    // THE VERB MUST FOLLOW THE NAME IMMEDIATELY. Testing a 22-character window
+    // meant any verb later in the window counted: "With precise PLAY White is
+    // slightly better" was read as a person named "With". Third false positive
+    // from this rule, so it is anchored now — "Kusha knows" still matches,
+    // "With precise play" no longer does.
+    const after = clause.slice(m.index + m[1].length, m.index + m[1].length + 22);
+    if (ANCHORED_PERSON_VERB.test(after)) return m[1];
+  }
+  return null;
+}
+
+/** Open-reference classes: the clause points at something the student was
+ *  never given — the video session, an opponent, the presenter, prior videos,
+ *  or the viewers being addressed. */
+export const OPEN_REFERENCE = {
+  // PAST GAME — the post-game-review register bleeding into Watch. The coach
+  // narrates how the pro's own game went ("in the game ... was a mistake",
+  // "in hindsight", "a strong opponent met us with") while the student is
+  // looking at a teaching line they are being walked through for the first
+  // time. CLAUDE.md keeps these two registers apart on purpose: review is
+  // retrospective and about the student's own game; Watch is present-tense
+  // about a demo. Found in the Accelerated Dragon's asides, four times in one
+  // lesson (David 2026-09-12).
+  // THE SIGNAL IS PAST-TENSE VERDICT, NOT VOCABULARY. The first version of this
+  // class matched phrases like "in the game" and caught one clause in four of
+  // the Accelerated Dragon's worst aside — a post-hoc engine review of the whole
+  // game delivered at move 9, which spoils the lesson it interrupts. The other
+  // three passed the teaching guard honestly: "the knight to d5 was flagged as a
+  // slip", "the engine's own preference was the immediate e6" name squares and
+  // predicate chess. They are not bad sentences; they are REVIEW sentences, and
+  // Watch is present tense (CLAUDE.md's two-register rule). So the tell is a
+  // retrospective JUDGEMENT on a move — graded, approved, preferred, regretted —
+  // rather than the move's idea stated as the board shows it.
+  pastGame:
+    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe (engine.s )?verdict (was|came back|on that)\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
+  rating:
+    /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
+  // VIDEO MECHANICS, harvested by hand from the fragment class rather than by
+  // enabling it. Reading all 5,406 fragment clauses turned up only ~60 of these
+  // — a 1% harvest against 99% exposure to a rule that cannot tell "Very well
+  // played by my opponent" from "and now two of Black's pieces are hanging at
+  // once". So the junk is named explicitly and `fragment` stays off.
+  videoMechanics:
+    /\b(rewind|rewinding|scrub(bing)?) (a move|to|back)|\bwe can rewind\b|\blet me (rewind|replay)\b|\bwell played by (my |the )?opponent\b|\ba hard-fought game\b|\bwe take (white|black)\.\s*$|\ban earlier speedrun\b|\banother speedrun\b|\bthe speedrun (already|series)\b/i,
+  session:
+    /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\b(he|she|they|white|black|our opponent|the opponent|this)\s+(simply\s+|just\s+)?resigns?\b|\bresigns?\s*[—–]|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
+  author:
+    // PREDICATIVE "juicy" ONLY — "this is going to be juicy" is the presenter
+    // hyping the game; "very juicy squares", "the c2 square looks juicy" and "a
+    // juicy d4 outpost" are the house voice DESCRIBING THE BOARD. A bare \bjuicy\b
+    // cut three clauses of real board commentary (David 2026-09-12).
+    /\b(this|that|it)( is|'s|.s| was) (going to be |gonna be )?(very |really )?juicy\b|\bmusic to (my|the) ears\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
+  priorVid:
+    /\bwe.ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin this video\b|\bmy main opening\b|\bour (patented|favorite|real opening)\b/i,
+  audience:
+    /\b(do you know|did you (see|find|spot)|I didn.t ask you|your (job|task) (here|now|is)|it.s your turn to (move|play|find|decide)|can you (see|find|spot)|I.d like to introduce|pause (here|the video)|take a (second|moment)|what.s the priority|I.ll (leave|let) you)\b/i,
+};
+
+/**
+ * Classify one clause.
+ *
+ * @returns {{disposition:'keep'|'cut', class:string, name?:string}}
+ *  - `keep`/`teaching`  — names a board referent and predicates chess
+ *  - `keep`/`principle` — no square, but real chess (a general idea)
+ *  - `cut`/<open-reference class or `namedPerson`>
+ *  - `cut`/`fragment`   — no square, no piece, no chess idea
+ */
+export function classifyClause(clause) {
+  // pastGame RUNS AHEAD OF THE TEACHING GUARD, and it is the only class that
+  // does. The guard exists to stop this classifier deleting teaching ABOUT THE
+  // BOARD IN FRONT OF THE STUDENT — it saved 555 clauses of real chess. A
+  // retrospective verdict on a move the student has not seen yet is not that,
+  // however many chess words it contains: "the knight to d5 was flagged as a
+  // slip ... so blunder overstates it" names squares and predicates chess, and
+  // the guard duly protected it, while it spoils a lesson nine plies before the
+  // move happens. Register, not vocabulary, is the thing being judged here.
+  if (OPEN_REFERENCE.pastGame.test(clause)) return { disposition: 'cut', class: 'pastGame' };
+  if (teachesChess(clause)) return { disposition: 'keep', class: 'teaching' };
+
+  const person = namedPerson(clause);
+  if (person) return { disposition: 'cut', class: 'namedPerson', name: person };
+
+  for (const [name, re] of Object.entries(OPEN_REFERENCE)) {
+    if (re.test(clause)) return { disposition: 'cut', class: name };
+  }
+
+  if (BOARD_RE.test(clause)) return { disposition: 'keep', class: 'teaching' };
+  if (PRED_RE.test(clause)) return { disposition: 'keep', class: 'principle' };
+  return { disposition: 'cut', class: 'fragment' };
+}
+
+/** Split narration prose into clauses.
+ *
+ *  🔒 THE SPLIT GRANULARITY IS THE WHOLE MECHANISM. Sentence boundaries alone
+ *  are too coarse, because the defect and the teaching routinely share one
+ *  sentence, joined by a dash:
+ *
+ *    "The pawn to g6, the Accelerated Dragon fianchetto — only our second of
+ *     the whole run."
+ *      ^ a perfect beat                                 ^ chatter
+ *
+ *  As one clause that names g6 and says "fianchetto", the teaching guard
+ *  protects it and the chatter ships. Split at the dash and the trim is
+ *  surgical: the beat is kept, the tail is cut, and the student hears "The pawn
+ *  to g6, the Accelerated Dragon fianchetto."
+ *
+ *  Em-dash and semicolon are the aside markers this corpus actually uses — it
+ *  is transcribed speech, so a spoken aside is punctuated, not subordinated.
+ *  A hyphen is NOT a split point ("light-squared", "well-placed"), nor is a
+ *  comma: "the queen to b6, forking the pawns on f2 and b2" is one thought. */
+export function toClauses(text) {
+  return text
+    .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/)
+    .flatMap((sentence) => sentence.split(/\s+[—–]\s+|\s*;\s+/))
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+// ─── SELECTION SCORING ───────────────────────────────────────────────────────
+//
+// WHY THE SAME MODULE. The sweep decides what to DELETE; selection decides what
+// to SPEAK when several notes sit at one board. Run those off two copies of
+// "what makes narration good" and they drift — the sweep keeps a clause the
+// selector ranks last, or worse, the selector promotes exactly what the sweep
+// was built to remove. One source, both callers.
+//
+// THE BUG THIS FIXES. `noteAtPosition` returned `bucket[0]` after a sort whose
+// only key was "does this note's own opening reach this position". Every voiced
+// note carries `opening: null`, so that key is INERT on this corpus: all 61
+// candidates at `e4 c5` tie and file order decides. David walked the Accelerated
+// Dragon and got "We're Black against a 2050 — this is going to be juicy" while
+// this was sitting at the same position, unselected:
+//
+//   "The reply c5 against the king's-pawn — the Sicilian. Today's choice is the
+//    Accelerated Dragon, a fast, clean setup and one of the friendliest gateways
+//    into the whole Sicilian family: less theory, clearly defined ideas, quick
+//    development."
+//
+// The corpus was never the problem at that ply. The ranking was.
+
+/** A clause made of nothing but move tokens and punctuation — "e4, c5.",
+ *  "Nf3 Nc6 d4". Names squares, teaches nothing: the student just watched it. */
+const MOVE_LIST_ONLY_RE =
+  /^(?:(?:[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8][+#]?|O-O(?:-O)?)[\s,.;—-]*)+$/;
+
+/** Bare move restatement — "The knight to f3.", "We capture on d4." The student
+ *  just watched the move; narration rule 3 says do not say it back to them. */
+const BARE_MOVE_RE =
+  /^(the |white |black |we |he |they |our |their )?[a-z' ]{0,14}(pawns?|knights?|bishops?|rooks?|queens?|kings?) (to|takes|captures?|goes to|comes to|steps to|drops to|settles on|develops? to|plays?) [a-h][1-8][.,]?$/i;
+
+/**
+ * Rank a candidate note for a ply. Higher speaks. Deterministic and pure — no
+ * engine, no model, no board mutation; the caller has already proven the note
+ * is ABOUT this position, so this only asks which of several true notes teaches
+ * best.
+ *
+ * @param {string} text      the note's spoken prose
+ * @param {string|null} openingName the lesson's own opening, when known
+ */
+export function scoreNarration(text, openingName) {
+  const body = (text ?? '').trim();
+  if (!body) return -100;
+  const clauses = toClauses(body);
+  let score = 0;
+
+  for (const clause of clauses) {
+    const { disposition, class: klass } = classifyClause(clause);
+    if (disposition === 'cut') {
+      // A chattery clause is a real cost: it is what the student hears INSTEAD
+      // of teaching. `fragment` is connective tissue and cheap; an open
+      // reference to a rating, a session or a person is the loud kind.
+      score -= klass === 'fragment' ? 2 : 6;
+    } else if (MOVE_LIST_ONLY_RE.test(clause)) {
+      // Pure recitation. `classifyClause` keeps it (it does name the board, so
+      // it is not chatter to DELETE), but it must never out-rank teaching.
+      score -= 3;
+    } else if (klass === 'teaching' && PRED_RE.test(clause)) {
+      score += 3; // names the board AND says something about it
+    } else if (klass === 'teaching') {
+      score += 0; // names a square but explains nothing
+    } else {
+      score += 1; // a general principle — real, but not about this board
+    }
+  }
+
+  // Saying the move back to the student is not teaching, however clean it reads.
+  if (clauses.length === 1 && BARE_MOVE_RE.test(clauses[0])) score -= 4;
+
+  // A note that NAMES the opening being taught is almost always the one written
+  // to teach it, rather than a game that happened to pass through this position.
+  if (openingName) {
+    // Drop the generic scaffolding — "Sicilian DEFENSE: Accelerated Dragon"
+    // requiring the word "Defense" is why the Dragon's own thesis statement
+    // scored zero here: no teaching note ever spells the taxonomy out.
+    const GENERIC = /^(defense|defence|variation|opening|game|attack|system|line|main)$/;
+    const words = openingName
+      .toLowerCase()
+      .split(/[^a-z]+/)
+      .filter((w) => w.length > 3 && !GENERIC.test(w));
+    const lower = body.toLowerCase();
+    const hits = words.filter((w) => lower.includes(w)).length;
+    if (words.length) score += Math.min(hits, 2) * 3;
+  }
+
+  // Mild preference for substance over a one-liner, capped so a rambling
+  // transcript dump cannot outrank a tight beat. Length is a tiebreaker here,
+  // never a driver — the clause scoring above already did the real work.
+  score += Math.min(clauses.length, 3);
+
+  return score;
+}
+
+// ─── THE TRIM ────────────────────────────────────────────────────────────────
+//
+// How the cuts are actually applied, and the rule that keeps a trim from
+// costing teaching (David 2026-09-12: "how do we systematically remove them
+// from the corpus without losing any of the important bits?").
+//
+// A SPOKEN ASIDE IS APPENDED. This corpus is transcribed speech: the throwaway
+// rides on the END of a sentence, after a dash, once the point has landed.
+//
+//   "The pawn to g6, the Accelerated Dragon fianchetto — only our second of the
+//    whole run."          keep ────────────────────────┘ cut ───────────────┘
+//
+// Splitting at the dash is necessary but NOT sufficient, because the same
+// punctuation carries setup→payoff, where the head is the part that reads as
+// filler on its own:
+//
+//   "The key question before ever taking like this is always the same — can the
+//    queen be trapped?"   ^ scores as a fragment        ^ the actual teaching
+//
+// Cut the head there and the student hears "can the queen be trapped?" with no
+// setup. So: find the LAST clause worth keeping and cut only what follows it.
+// The head is never removed while anything after it survives, a cut-class
+// clause sandwiched between keepers stays (it is load-bearing grammar, whatever
+// it scores), and a sentence with no keeper at all goes entirely.
+//
+// The consequence is deliberate: this trim is CONSERVATIVE. It will leave some
+// chatter mid-sentence rather than risk a sentence that no longer reads.
+
+// SHORT FIXED IDIOMS ARE EXCISED, NOT CUT WITH THEIR CLAUSE. Clause-level
+// removal assumes the throwaway owns its clause. Sometimes it only leads it:
+//
+//   "...lifts the queen to e3 — music to the ears, because now the check on e7
+//    no longer bites."
+//                  ^ idiom      ^ real teaching, in the same clause
+//
+// Dropping that clause loses the explanation. These are a closed set of fixed
+// speech tics with no board content, so lifting the phrase out and keeping the
+// remainder is safe where a general rule would not be.
+const EXCISABLE_IDIOM =
+  /\s*[—–,]?\s*\b(music to (my|the) ears|this is going to be juicy|and it'?s juicy|kudos to (him|her|them))\b\s*,?\s*/gi;
+
+/** Lift fixed idioms out of a clause, returning what is left (trimmed).
+ *  `opensSentence` decides capitalisation: a clause that follows a dash is a
+ *  continuation and must stay lower-case, or the excision produces
+ *  "...queen to e3 — Because now the check no longer bites." */
+function exciseIdioms(clause, opensSentence) {
+  const out = clause.replace(EXCISABLE_IDIOM, ' ').replace(/\s{2,}/g, ' ').trim()
+    .replace(/^[,;—–]\s*/, '')
+    .replace(/\s+([.,!?])/g, '$1');
+  return opensSentence ? out.replace(/^([a-z])/, (_m, c) => c.toUpperCase()) : out;
+}
+
+/** Trim one passage. Returns the surviving text, or '' when nothing survives.
+ *
+ *  `classes` limits which cut-classes are acted on. The default is the SIX
+ *  HIGH-CONFIDENCE classes; `fragment` is deliberately excluded, because it is
+ *  the class that cannot be made precise by vocabulary alone and it over-trims
+ *  qualifications that carry real teaching:
+ *
+ *    "This d6 setup is viable — not the worst, but far from the best."
+ *                               ^ scores as a fragment; it is the evaluation
+ *
+ *  Pass the full set explicitly once a human has reviewed that list. */
+// namedPerson IS NOT IN THIS SET, and that is a judgement about the rule, not
+// an oversight. Across every spot-check it produced a false positive — a person
+// named "Today" (possessive), "With" (a verb later in the window), "Always"
+// ("Always KNOW which decisions...") — against exactly one true catch, "Kusha
+// knows this line". Three patches in, the pattern is that a capitalised word
+// next to a verb is a weak signal in prose that capitalises sentence openings
+// and names both colours. It is 31 clauses; reading them by hand is cheaper and
+// more honest than a fourth regex.
+export const CONFIDENT_CUT_CLASSES = Object.freeze([
+  'rating', 'session', 'author', 'priorVid', 'audience', 'pastGame', 'videoMechanics',
+]);
+
+export function trimPassage(text, classes = CONFIDENT_CUT_CLASSES) {
+  const source = (text ?? '').trim();
+  if (!source) return '';
+
+  // Sentence first, so a trim never reaches across a full stop.
+  const sentences = source.split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/).map((x) => x.trim()).filter(Boolean);
+  const out = [];
+
+  for (const sentence of sentences) {
+    // Keep the separators so the sentence can be rebuilt as it was spoken.
+    const parts = sentence.split(/(\s+[—–]\s+|\s*;\s+)/);
+    const clauses = parts.filter((_, i) => i % 2 === 0).map((c) => c.trim());
+    const seps = parts.filter((_, i) => i % 2 === 1);
+
+    // Excise fixed idioms first — a clause that only LED with a speech tic is
+    // rescued here rather than being cut wholesale below.
+    for (let i = 0; i < clauses.length; i += 1) {
+      if (!EXCISABLE_IDIOM.test(clauses[i])) continue;
+      EXCISABLE_IDIOM.lastIndex = 0;
+      const rest = exciseIdioms(clauses[i], i === 0);
+      // Only keep the remainder if it still says something; otherwise leave the
+      // clause as it was and let the verdict below drop it.
+      if (rest && classifyClause(rest).disposition === 'keep') clauses[i] = rest;
+    }
+
+    const act = new Set(classes);
+    const verdicts = clauses.map((c) => {
+      const r = classifyClause(c);
+      // A cut-class we are not acting on counts as a keeper, so the clause both
+      // survives and still anchors the "cut only after the last keeper" rule.
+      return r.disposition === 'cut' && act.has(r.class) ? 'cut' : 'keep';
+    });
+    const lastKeep = verdicts.lastIndexOf('keep');
+    if (lastKeep === -1) continue; // nothing in this sentence earns its place
+
+    // Everything up to and including the last keeper survives, separators and
+    // all — including any cut-class clause in between, which is holding the
+    // sentence together.
+    let rebuilt = clauses[0];
+    for (let i = 1; i <= lastKeep; i += 1) rebuilt += `${seps[i - 1] ?? ' '}${clauses[i]}`;
+
+    // A trimmed tail can leave the sentence without its stop — but ONLY add one
+    // when something was actually removed, and never onto a trailing dash. This
+    // corpus is transcribed speech and a beat that ends "...the traditional move
+    // —" is continuing into the next beat on purpose; appending a stop there
+    // produced "the traditional move —." on 1,255 passages in the first dry run,
+    // every one of them an edit that changed nothing but the punctuation.
+    const droppedTail = lastKeep < clauses.length - 1;
+    if (droppedTail && !/[.!?]$/.test(rebuilt) && !/[—–-]$/.test(rebuilt)) rebuilt += '.';
+    out.push(rebuilt.trim());
+  }
+
+  return out.join(' ').trim();
+}

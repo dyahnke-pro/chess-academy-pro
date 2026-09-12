@@ -224,7 +224,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "the job of defending the d4-pawn. The bishop to e7. Now we can rewind a move,"
+      "spoken": "the job of defending the d4-pawn. The bishop to e7."
     },
     {
       "ply": 30,
@@ -280,7 +280,7 @@
         "Ra1",
         "Kh8"
       ],
-      "spoken": "After the bishop to h6, then the bishop to f6, maybe we can play the bishop takes c6. Let's give the queen to g4 a shot — which probably means the rook to c1 was a mistake. What I should have done is just go the queen to g4, castles, and then the rook to d1, because now we have to worry about the weakness of this pawn, whereas if the rook were on d1 that would be a much safer option — the rook to c1 was short-sighted. People are beasts in the opening; everybody knows their Chessable except yours truly. The problem with a6 and the bishop to d3 is twofold: first, we relinquish control of the d4-pawn; second, Black's f5 idea is super nasty — although f5 weakens the e6-pawn, its main drawback, it potentially pries our fingers off the ledge, because if Black can play f5 and then f4, dislodging the bishop from e3, and the bishop has to drop back to d2, it all comes down to the weakness of the d4-pawn. We must keep this pawn defended.",
+      "spoken": "After the bishop to h6, then the bishop to f6, maybe we can play the bishop takes c6. Let's give the queen to g4 a shot. What I should have done is just go the queen to g4, castles, and then the rook to d1, because now we have to worry about the weakness of this pawn, whereas if the rook were on d1 that would be a much safer option — the rook to c1 was short-sighted. People are beasts in the opening; everybody knows their Chessable except yours truly. The problem with a6 and the bishop to d3 is twofold: first, we relinquish control of the d4-pawn; second, Black's f5 idea is super nasty — although f5 weakens the e6-pawn, its main drawback, it potentially pries our fingers off the ledge, because if Black can play f5 and then f4, dislodging the bishop from e3, and the bishop has to drop back to d2, it all comes down to the weakness of the d4-pawn. We must keep this pawn defended.",
       "reanchor": true
     }
   ]

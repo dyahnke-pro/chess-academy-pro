@@ -106,7 +106,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "The move order isn't essential here — you can start by castling or by playing d3, virtually interchangeable. I'll play d3."
+   "spoken": "The move order isn't essential here — you can start by castling or by playing d3, virtually interchangeable."
   },
   {
    "ply": 12,
@@ -258,7 +258,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Our opponent completely ignores all the threats we've been creating —"
+   "spoken": ""
   },
   {
    "ply": 33,
@@ -267,7 +267,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "— and walks right into the knight to g5. It worked like a charm, and Black resigns."
+   "spoken": "— and walks right into the knight to g5."
   },
   {
    "ply": 9,
@@ -529,7 +529,7 @@
    "t": 557.5,
    "fen": "r1bq1rk1/pppp1ppp/5n2/8/4P3/2b3P1/PPP2PBP/R1BQ1RK1 w - - 0 10",
    "line": [],
-   "spoken": "So in the game Black played d6, we played d3, and the bishop to b6 is already not a great move —",
+   "spoken": "",
    "reanchor": true
   },
   {
