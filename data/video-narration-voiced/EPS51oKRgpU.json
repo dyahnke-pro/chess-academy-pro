@@ -559,7 +559,7 @@
         "Kxg7",
         "Re3"
       ],
-      "spoken": "I'm not going to play the bishop to c3; I'll play the rook to e3,"
+      "spoken": "I'm not going to play the bishop to c3."
     },
     {
       "ply": 64,
@@ -586,7 +586,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "Our opponent is finding this game harder to win than against some of the grandmasters I played recently. Let's trade,"
+      "spoken": "Let's trade,"
     },
     {
       "ply": 67,
@@ -642,7 +642,7 @@
       "t": 1562.5,
       "fen": "r3kbnr/1pNnp3/p1pp1p1p/P7/3PP3/2N1B2P/1PP2PP1/R2b1RK1 b kq - 0 13",
       "line": [],
-      "spoken": "I have to give it up for my opponent, he defended very well — he resigns here. But I apologise, that was sloppy conversion on my end — I was over-explaining a bit. I",
+      "spoken": "I have to give it up for my opponent, he defended very well. But I apologise, that was sloppy conversion on my end — I was over-explaining a bit. I",
       "reanchor": true
     },
     {

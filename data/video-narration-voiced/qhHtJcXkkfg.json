@@ -277,7 +277,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "We finally develop the light-squared bishop to g4. Honest admission: White's h4 is stronger than it first looks — this was underestimated."
+   "spoken": "We finally develop the light-squared bishop to g4."
   },
   {
    "ply": 31,
@@ -322,7 +322,7 @@
    "line": [
     "Qe3"
    ],
-   "spoken": "White declines and lifts the queen to e3 — music to the ears, because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so the moment it moves, the queen falls."
+   "spoken": "White declines and lifts the queen to e3 — because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so the moment it moves, the queen falls."
   },
   {
    "ply": 36,
@@ -624,7 +624,7 @@
    "line": [
     "Nde2"
    ],
-   "spoken": "After the knight's retreat to e2, in hindsight the calm d6 was perfectly reasonable too.",
+   "spoken": "",
    "reanchor": true
   },
   {
@@ -719,7 +719,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "With White castling we switched the engine on — a rare exception, given how messy this game got. The verdict: the knight to g4 and the queen to b6 both earn approval, and the knight to e2 was fine for White. The knight to d5 was flagged as a slip, and a later knight move judged an inaccuracy — the position stayed level, so 'blunder' overstates it. The engine's own preference was the immediate e6 — the very move we shied away from out of worry about the knight to c7 and giving up the d6-square.",
+   "spoken": "",
    "reanchor": true
   }
  ]

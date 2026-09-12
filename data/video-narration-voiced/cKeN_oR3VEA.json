@@ -267,7 +267,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "Black plays b4. I didn't ask you to find a response, but it matters. The obvious approach is to take on a7 then on c3 — that wins a pawn — but there's a much better move: the queen to a4 with check. It doesn't just win the pawn, it may win the game, because Black's minor pieces all end up hanging. There's also the creative knight to c6, covering the check and hitting the queen, but it doesn't work."
+   "spoken": "Black plays b4. The obvious approach is to take on a7 then on c3 — that wins a pawn — but there's a much better move: the queen to a4 with check. It doesn't just win the pawn, it may win the game, because Black's minor pieces all end up hanging. There's also the creative knight to c6, covering the check and hitting the queen, but it doesn't work."
   },
   {
    "ply": 29,
@@ -287,7 +287,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. What's the priority? Stopping Black from castling — keep his king in the centre and we win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up our valuable light-squared bishop — we want that bishop to sit and pin, not be traded."
+   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. Stopping Black from castling — keep his king in the centre and we win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up our valuable light-squared bishop — we want that bishop to sit and pin, not be traded."
   },
   {
    "ply": 31,
@@ -396,7 +396,7 @@
    "t": 986,
    "fen": "rq2k2r/1b1Bppbp/1B1p2p1/3P4/1Q2P3/5N1P/1P3PP1/R4RK1 b kq - 0 19",
    "line": [],
-   "spoken": "The king to f8 was technically best, but who plays that — Black would rather resign. It's all over: the bishop to c6, the queen takes c6, mate. It doesn't matter which rook we lift; it's mate in two either way. Look at the kind of position the Alapin handed us.",
+   "spoken": "The king to f8 was technically best, but who plays that. It's all over: the bishop to c6, the queen takes c6, mate. It doesn't matter which rook we lift; it's mate in two either way. Look at the kind of position the Alapin handed us.",
    "reanchor": true
   },
   {

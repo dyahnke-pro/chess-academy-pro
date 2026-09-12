@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "He resigns — good game. Let's look at the game. e4, c5."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -144,7 +144,7 @@
     "g6",
     "Nf3"
    ],
-   "spoken": "will always attack in the same way, starting with a pawn storm that looks exactly the same. A lot of people would propose a move like a5 or a6 and b5, which is understandable, but you have to be flexible with pawn storms. If the knight doesn't take b5, then you go b4, and a move like the queen to a5 would be devastating, because this pawn is not easy to defend; after a3, Black has many good moves. Can you spot a particularly sexy one? Attacking properly is a lifelong journey — the move is b-takes-a3; you might say, bishop takes queen, you're blundering your queen, but this pawn comes out to a2.",
+   "spoken": "will always attack in the same way, starting with a pawn storm that looks exactly the same. A lot of people would propose a move like a5 or a6 and b5, which is understandable, but you have to be flexible with pawn storms. If the knight doesn't take b5, then you go b4, and a move like the queen to a5 would be devastating, because this pawn is not easy to defend; after a3, Black has many good moves. Attacking properly is a lifelong journey — the move is b-takes-a3; you might say, bishop takes queen, you're blundering your queen, but this pawn comes out to a2.",
    "reanchor": true
   }
  ]

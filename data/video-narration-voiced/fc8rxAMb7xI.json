@@ -186,7 +186,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "wants to park itself. The bishop to h4, and now we have an interesting dilemma — because we have a nice positional advantage and a clamp on d4, there are many good ways to play, so if your intuition suggests a different move than mine, that doesn't make your idea bad. The way I play this may strike you as a little loose or risky, but hopefully I'll show"
+   "spoken": "wants to park itself. The bishop to h4, and now we have an interesting dilemma — because we have a nice positional advantage and a clamp on d4, there are many good ways to play, so if your intuition suggests a different move than mine, that doesn't make your idea bad."
   },
   {
    "ply": 22,
@@ -330,7 +330,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "clearly a panic reaction by White, which walks right into either the knight to d4 or the knight to e5 — the knight to d4 is more thematic, what we've been setting up. Earlier I contradicted myself, saying the point isn't necessarily to occupy the outpost, but here it clearly won't harm our position, and White is really on the"
+   "spoken": "clearly a panic reaction by White, which walks right into either the knight to d4 or the knight to e5. Earlier I contradicted myself, saying the point isn't necessarily to occupy the outpost, but here it clearly won't harm our position, and White is really on the"
   },
   {
    "ply": 35,
@@ -526,7 +526,7 @@
    "t": 778,
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
    "line": [],
-   "spoken": "The rook to h5 — and you should ask, what happens if White goes h3? White simply resigns. A simple game — we played simple textbook positional chess, nothing crazy or outlandish, and White was unable to deal with the weakness he created on the second move. Let's go through it quickly.",
+   "spoken": "The rook to h5 — and you should ask, what happens if White goes h3? A simple game — we played simple textbook positional chess, nothing crazy or outlandish, and White was unable to deal with the weakness he created on the second move. Let's go through it quickly.",
    "reanchor": true
   },
   {
@@ -537,7 +537,7 @@
     "Nb8",
     "Nb1"
    ],
-   "spoken": "Here's a very important clarification: is the move c4 a mistake? No, I don't think you can consider it a mistake — a million grandmasters have played it over the board. The point is that if a GM plays it, they know exactly how to follow up, but if a 1200 plays it, they don't know what they're doing, and if White simply follows up with regular developing moves without being aware of the correct plan, White is going to get cooked. So it's a decent surprise weapon if White is a specialist,",
+   "spoken": "Here's a very important clarification: is the move c4 a mistake? No, I don't think you can consider it a mistake — a million grandmasters have played it over the board. So it's a decent surprise weapon if White is a specialist,",
    "reanchor": true
   },
   {

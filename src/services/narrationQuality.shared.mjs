@@ -50,6 +50,17 @@ export const PRED_RE = new RegExp(
       'convert', 'calculat', 'candidate', 'balanc', 'simplif', 'compensat',
       'advantag', 'position', 'majorit', 'minorit', 'fianchett', 'zugzwang',
       'opposition', 'coordinat', 'typical', 'intuitiv', 'theory',
+      // THE GUARD WAS MISSING ORDINARY CHESS VERBS, and three clauses of real
+      // teaching were cut in the dry run because of it: "the immediate d5,
+      // STRIKING the center", "we've been ANALYZING the knight takes on e5",
+      // "if Black had CHECKED on h4 ... we'd ANSWER g3" all name a square and
+      // say what happens, but scored as predicate-free. Widening the guard only
+      // ever protects more text, so it is the safe direction to be wrong in.
+      'strik', 'strike', 'analys', 'analyz', 'answer', 'respond', 'recaptur',
+      'captur', 'check', 'took', 'takes', 'taking', 'retreat', 'exchang',
+      'chase', 'protect', 'push', 'break', 'occup', 'undermin', 'restrain',
+      'overload', 'deflect', 'decoy', 'promot', 'infiltrat', 'centralis',
+      'centraliz', 'liquidat', 'consolidat', 'manoeuvr', 'maneuver',
     ].join('|') +
     ')\\w*\\b',
   'i',
@@ -121,7 +132,7 @@ export const OPEN_REFERENCE = {
   // retrospective JUDGEMENT on a move — graded, approved, preferred, regretted —
   // rather than the move's idea stated as the board shows it.
   pastGame:
-    /\bin the game\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took\b|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe verdict\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
+    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe verdict\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
   session:
@@ -351,8 +362,16 @@ function exciseIdioms(clause, opensSentence) {
  *                               ^ scores as a fragment; it is the evaluation
  *
  *  Pass the full set explicitly once a human has reviewed that list. */
+// namedPerson IS NOT IN THIS SET, and that is a judgement about the rule, not
+// an oversight. Across every spot-check it produced a false positive — a person
+// named "Today" (possessive), "With" (a verb later in the window), "Always"
+// ("Always KNOW which decisions...") — against exactly one true catch, "Kusha
+// knows this line". Three patches in, the pattern is that a capitalised word
+// next to a verb is a weak signal in prose that capitalises sentence openings
+// and names both colours. It is 31 clauses; reading them by hand is cheaper and
+// more honest than a fourth regex.
 export const CONFIDENT_CUT_CLASSES = Object.freeze([
-  'rating', 'session', 'author', 'priorVid', 'audience', 'namedPerson', 'pastGame',
+  'rating', 'session', 'author', 'priorVid', 'audience', 'pastGame',
 ]);
 
 export function trimPassage(text, classes = CONFIDENT_CUT_CLASSES) {
@@ -396,8 +415,14 @@ export function trimPassage(text, classes = CONFIDENT_CUT_CLASSES) {
     let rebuilt = clauses[0];
     for (let i = 1; i <= lastKeep; i += 1) rebuilt += `${seps[i - 1] ?? ' '}${clauses[i]}`;
 
-    // A trimmed tail can leave the sentence without its stop.
-    if (!/[.!?]$/.test(rebuilt)) rebuilt += '.';
+    // A trimmed tail can leave the sentence without its stop — but ONLY add one
+    // when something was actually removed, and never onto a trailing dash. This
+    // corpus is transcribed speech and a beat that ends "...the traditional move
+    // —" is continuing into the next beat on purpose; appending a stop there
+    // produced "the traditional move —." on 1,255 passages in the first dry run,
+    // every one of them an edit that changed nothing but the punctuation.
+    const droppedTail = lastKeep < clauses.length - 1;
+    if (droppedTail && !/[.!?]$/.test(rebuilt) && !/[—–-]$/.test(rebuilt)) rebuilt += '.';
     out.push(rebuilt.trim());
   }
 

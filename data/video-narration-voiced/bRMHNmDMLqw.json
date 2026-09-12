@@ -51,7 +51,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black strikes with the pawn to c5. The normal move now is c3, but we've been playing this differently."
+   "spoken": "Black strikes with the pawn to c5."
   },
   {
    "ply": 7,
@@ -259,7 +259,7 @@
    "t": 526,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "The position was simply lost — a good game.",
+   "spoken": "The position was simply lost.",
    "reanchor": true
   },
   {

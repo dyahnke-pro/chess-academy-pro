@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "The pawn to e4, e5 — a 1674, a pretty high-rated opponent."
+   "spoken": "The pawn to e4, e5."
   },
   {
    "ply": 3,
@@ -169,7 +169,7 @@
    "line": [
     "Bxe2"
    ],
-   "spoken": "If the bishop takes on e2, what should we recapture with? Both pieces can, but I like one more than the other — these are high-level positional decisions a 1700 should start learning to make."
+   "spoken": "If the bishop takes on e2, what should we recapture with? Both pieces can, but I like one more than the other."
   },
   {
    "ply": 21,

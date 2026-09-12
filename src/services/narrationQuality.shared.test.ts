@@ -41,13 +41,28 @@ describe('corpus sweep — David 2026-09-12 adjudicated fixtures', () => {
 
 describe('corpus sweep — the lines from the Accelerated Dragon run', () => {
   // What David actually heard on /coach/teach, 2026-09-12.
+  // NB these are PASSAGES, not clauses — each is a beat plus an appended aside.
+  // `classifyClause` takes one clause, so the passage goes through `trimPassage`,
+  // which splits at the dash and removes only the aside. (An earlier version of
+  // this test fed the whole passage to `classifyClause`; it passed only because
+  // the teaching guard had not yet learned the verb "recaptures".)
   it.each([
-    ["We're Black against a 2050 — this is going to be juicy.", 'rating'],
-    ['White recaptures with the knight — music to my ears.', 'author'],
-  ])('cuts %j as %s', (clause, klass) => {
+    ["We're Black against a 2050", 'rating'],
+    ['this is going to be juicy.', 'author'],
+    ['music to my ears.', 'author'],
+  ])('cuts the clause %j as %s', (clause, klass) => {
     const r = classifyClause(clause);
     expect(r.disposition).toBe('cut');
     expect(r.class).toBe(klass);
+  });
+
+  it('silences the ply-2 passage entirely — every clause of it is chatter', () => {
+    expect(trimPassage("We're Black against a 2050 — this is going to be juicy.")).toBe('');
+  });
+
+  it('keeps the beat and drops the aside', () => {
+    expect(trimPassage('White recaptures with the knight — music to my ears.'))
+      .toBe('White recaptures with the knight.');
   });
 
   it('keeps the teaching that lost the selection contest at the same ply', () => {
@@ -291,5 +306,39 @@ describe('trimPassage — remove the chatter, keep the teaching', () => {
       expect(trimPassage(line)).toBe(line);
       expect(trimPassage(line, [...CONFIDENT_CUT_CLASSES, 'fragment'])).not.toBe(line);
     }
+  });
+});
+
+describe('false positives caught in the dry run, before anything was written', () => {
+  // Every one of these was cut by a confident class on the first pass over the
+  // 430 source files. The dry run is why they are fixtures instead of edits.
+  it.each([
+    // namedPerson read "Always KNOW which..." as a person named Always. Fourth
+    // false positive from that rule; it left the confident set instead.
+    'Always know which decisions are likely to matter.',
+    // "in the game" is ordinary chess English for "developed", not a reference
+    // to the video's game.
+    "but that doesn't help me, because I have no pieces in the game.",
+    'We need to bring the rook into the game.',
+  ])('keeps %j', (line) => {
+    expect(trimPassage(line)).toBe(line);
+  });
+
+  it('still cuts the retrospective uses of the same phrase', () => {
+    expect(trimPassage('In the game, after the bishop to d4 and knight to c3, Black is already better.')).toBe('');
+    expect(trimPassage("After the knight's retreat to e2, in hindsight the calm d6 was perfectly reasonable too.")).toBe('');
+  });
+
+  it('does not put a full stop on a beat that continues into the next', () => {
+    // Transcribed speech: "...the traditional move —" runs on. Appending a stop
+    // produced "the traditional move —." on 1,255 passages, every one an edit
+    // that changed nothing but punctuation.
+    const line = 'd4 is the old main line, the traditional move —';
+    expect(trimPassage(line)).toBe(line);
+  });
+
+  it('excludes namedPerson from the confident set', () => {
+    expect(CONFIDENT_CUT_CLASSES).not.toContain('namedPerson');
+    expect(CONFIDENT_CUT_CLASSES).not.toContain('fragment');
   });
 });

@@ -299,7 +299,7 @@
     "Rb1",
     "Qd8"
    ],
-   "spoken": "Note that h3 there is met by the knight capturing on f2, then the queen to b6 with check — I'll show the follow-up.",
+   "spoken": "Note that h3 there is met by the knight capturing on f2, then the queen to b6 with check.",
    "reanchor": true
   },
   {
@@ -410,7 +410,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "White drops the rook to e1. The c2 square looks juicy, and we keep an eye on the a-file."
+   "spoken": "White drops the rook to e1."
   },
   {
    "ply": 52,
@@ -594,7 +594,7 @@
    "t": 2980,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 3 6",
    "line": [],
-   "spoken": "My official King's Indian recommendation is c6 and the bishop to f5 — more on that later. The knight to d7 is old-school: at GM level e5, e4 is thought better for White, but at your level it carries huge practical value. The idea is to prepare e5, then meet the main line with c6 and, after White's most popular reply, the queen to a5 — a venomous line beyond this game's scope.",
+   "spoken": "My official King's Indian recommendation is c6 and the bishop to f5 — more on that later. The knight to d7 is old-school: at GM level e5, e4 is thought better for White, but at your level it carries huge practical value. The idea is to prepare e5, then meet the main line with c6 and, after White's most popular reply, the queen to a5.",
    "reanchor": true
   }
  ]
