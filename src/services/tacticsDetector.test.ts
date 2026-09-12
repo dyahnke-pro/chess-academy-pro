@@ -114,6 +114,16 @@ describe('detectTactics — forks', () => {
     expect(hasTactic(result, 'fork')).toBe(true);
   });
 
+  it('does NOT call it a fork when the opponent (to move) just captures the forker (2026-09-12)', () => {
+    // Black Qd3 "forks" the rook on d1 and bishop on f1 — but it is WHITE to
+    // move and White simply takes the queen (cxd3 / Rxd3 / Bxd3). Forker hangs,
+    // so it is not a real fork.
+    const fen = '6k1/8/8/8/8/3q4/2P5/3R1BK1 w - - 0 1';
+    const result = detectTactics(fen);
+    const qFork = result.tactics.find((t) => t.type === 'fork' && t.involvedSquares.includes('d3'));
+    expect(qFork).toBeUndefined();
+  });
+
   it('does not detect a fork when only one piece is attacked', () => {
     // White knight on c7 only attacks the rook on a8 (no king nearby)
     const fen = 'r7/2N5/8/8/4k3/8/8/4K3 b - - 0 1';
