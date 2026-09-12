@@ -78,8 +78,38 @@ knight" class does NOT reproduce). Weaknesses found (imprecise, not false):
    (non-forcing) solves state the moves but not the resulting edge. Fix direction:
    thread the puzzle's engine eval into the verdict clause.
 
-(Deep-dive agents are mapping the three calculator clusters end-to-end; their
-ranked findings append here.)
+(Deep-dive agents are mapping the clusters end-to-end; ranked findings below.)
+
+### Cluster B — position-assessment calculators (landed)
+
+1. **A real hang goes SILENT in a decided-but-winning position.** must-defend bump
+   gated behind `if (contested)` (`narrationImportance.ts:103,108`) + `positionFacts.ts:348`
+   early-returns before the mustDefend clause (:385) when `!importance.speak`.
+   Student up a rook, their rook hangs to the opponent's next move → nothing
+   speaks, though :393-399 has a purpose-built "you're on top — don't let them
+   punch back" line. **Violates the locked importance doctrine (must-defend must
+   fire).** Fix: let live `mustDefend.net≥3` (and mate) bypass the contested gate.
+2. **`latentDanger` counts an ENEMY piece as the "shield"** (`latentDanger.ts:100-107,123`)
+   → false "mind it before you open the line" on an alignment the student cannot
+   open. Fix: only a student (or student-tradeable) piece counts as the openable shield.
+3. **`tacticalRead.summarizeVerdict` states unverified material** (`tacticalRead.ts:92-94`):
+   +2.8 positional edge → "up a piece" (G3 false material claim). Fix: frame by
+   eval magnitude ("clearly better") unless a real material count backs it.
+4. **`boardPlan` false "push the passer"** on blockaded / opposite-colored-bishop
+   passers (`boardPlan.ts:44-46`). Fix: gate on the passer being advanceable.
+5. **Two only-move definitions can disagree** (`positionFacts.ts:139-148` fan-only
+   gap, no legalCount, vs `criticalityScan.ts:120` `legalCount===1`). Fix: thread
+   `scanCriticality`/legalCount into `computeImportance`.
+6. **`weaknessSignal.matchClauseKind` string-key drift** (`weaknessSignal.ts:113-127`,
+   no compile-time link to weaknessSpine vocab — the exact drift `tacticVocabulary.ts`
+   exists to prevent) + a kind collision (kingExposure/centralKingDanger emitted
+   under `kind:'latent-danger'`, `positionFacts.ts:378,406`). Fix: own ClauseKind
+   for king-safety; pin cluster-ids behind a shared typed Record.
+
+**SEAM (unified-coach P1):** `studentWeaknesses` is wired into ORDERING
+(`applyWeaknessBoost`) from 4 live surfaces, but `computeImportance` (the
+speak/silent GATE) takes no weakness signal — so a persistent worsening weakness
+can re-rank but never *un-silence* a fact. Selection stays position+rating-only.
 
 ## Phased plan
 
