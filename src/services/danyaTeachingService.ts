@@ -18,9 +18,9 @@
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
-// @ts-expect-error — shared ESM module, consumed by both the runtime and the
-// corpus-sweep script so selection and the sweep can never disagree about what
-// makes narration good.
+// Shared ESM module (typed by narrationQuality.shared.d.mts), consumed by both
+// the runtime selector and the corpus-sweep script so selection and the sweep
+// can never disagree about what makes narration good.
 import { scoreNarration } from './narrationQuality.shared.mjs';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
@@ -497,7 +497,7 @@ export function noteAtPosition(
       if (hit !== undefined) return hit;
       let v = 0;
       try {
-        v = scoreNarration(spokenBeatText(n), openingName ?? null) as number;
+        v = scoreNarration(spokenBeatText(n), openingName ?? null);
       } catch {
         v = 0; // scoring is a preference, never a blocker
       }

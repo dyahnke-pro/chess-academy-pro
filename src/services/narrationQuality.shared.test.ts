@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-// @ts-expect-error — plain ESM detector module, no types
 import { classifyClause, teachesChess, namedPerson, scoreNarration, PRED_RE } from './narrationQuality.shared.mjs';
 
 // ── CORPUS SWEEP DETECTOR GATE (David 2026-09-12) ────────────────────────────
