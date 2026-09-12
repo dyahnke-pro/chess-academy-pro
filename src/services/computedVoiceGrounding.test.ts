@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { describeMoveGeometry } from './groundedAnswer';
+import { describeMoveGeometry, assemblePieceSafetyAnswer, assembleHangingAnswer } from './groundedAnswer';
 import { legalSeeGain, seeGain, landingIsSafe } from './positionReadingService';
 
 /**
@@ -73,6 +73,25 @@ describe('legalSeeGain is pin-aware where seeGain is blind', () => {
     expect(seeGain(c, 'd5' as never)).toBeLessThanOrEqual(0);
     expect(legalSeeGain(c.fen(), 'd5' as never)).toBeGreaterThan(0);
     expect(landingIsSafe(c.fen(), 'd5' as never)).toBe(false);
+  });
+});
+
+describe('safety assemblers are pin-aware (P1b — no false "hanging"/"in trouble")', () => {
+  // White Bd5 is attacked only by Black Nf6, which is FULLY PINNED to Kf8 by Rf1
+  // (0 legal moves). The bishop is safe; pin-blind seeGain called it "in trouble".
+  const fen = '5k2/8/5n2/3B4/8/8/8/4KR2 w - - 0 1';
+
+  it('assemblePieceSafetyAnswer does not call a piece attacked only by a pinned piece "in trouble"', () => {
+    const ans = assemblePieceSafetyAnswer(fen, 'is my bishop safe?', 'white');
+    expect(ans).not.toBeNull();
+    expect(ans!.facts, ans!.facts).not.toMatch(/in trouble/);
+  });
+
+  it('assembleHangingAnswer does not list a piece defended-by-a-pin as loose', () => {
+    const ans = assembleHangingAnswer(fen, 'what is hanging?', 'white');
+    expect(ans).not.toBeNull();
+    // With only a pinned attacker, nothing of the student's is truly hanging.
+    expect(ans!.facts, ans!.facts).toMatch(/[Nn]othing of yours is hanging/);
   });
 });
 
