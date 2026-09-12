@@ -174,6 +174,14 @@ console.log('');
 // orientation). If any of these fail, the build can't ship. If a non-gate
 // test fails, that's a separate problem the gate harness shouldn't gate.
 const GATE_TESTS = [
+  // Board accuracy for corpus lines rewritten by hand out of the review
+  // register (David 2026-09-12: "make sure the narrations match what is
+  // being shown on the board"). Same contract as narrationAccuracy, applied
+  // to the voiced corpus instead of the curated lessons.
+  'src/data/corpusRewriteAccuracy.test.ts',
+  // The corpus sweep's classifier + trim: pins the ten teaching lines the
+  // guard used to eat, and the chatter that must stay cut.
+  'src/services/narrationQuality.shared.test.ts',
   // 🔒 DANYA DEVICE COVERAGE (David 2026-08-23, "100%") — every teaching device
   // (behaviours + register clauses + structure) must fire on its crafted trigger
   // position. Self-play can't reach every position (the coach controls its own

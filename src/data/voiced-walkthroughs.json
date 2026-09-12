@@ -18020,7 +18020,7 @@
                                                                                     "node": {
                                                                                      "san": "g5",
                                                                                      "movedBy": "white",
-                                                                                     "idea": "b5. We've entered a point of no return; we have to continue the attack and pray we end up faster than he is.",
+                                                                                     "idea": "b5 — a move that helps you, with their rooks on d8 and f8 and nothing behind the b-pawn. We've entered a point of no return; we have to continue the attack and pray we end up faster than he is.",
                                                                                      "children": [
                                                                                       {
                                                                                        "node": {
@@ -18168,7 +18168,7 @@
                                                                                        }
                                                                                       }
                                                                                      ],
-                                                                                     "shortIdea": "b5."
+                                                                                     "shortIdea": "b5 — a move that helps you, with their rooks on d8 and f8 and nothing behind the b-pawn."
                                                                                     }
                                                                                    }
                                                                                   ]
@@ -19985,7 +19985,19 @@
                                                 }
                                                }
                                               ],
-                                              "shortIdea": "We castle, and note what we're deliberately NOT doing: pushing the pawn to d6 yet."
+                                              "shortIdea": "We castle, and note what we're deliberately NOT doing: pushing the pawn to d6 yet.",
+                                              "asides": [
+                                               {
+                                                "idea": "With their knight tucked back on e2, the calm d6 is perfectly reasonable too.",
+                                                "shortIdea": "With their knight tucked back on e2, the calm d6 is perfectly reasonable too.",
+                                                "arrows": [
+                                                 {
+                                                  "from": "d4",
+                                                  "to": "e2"
+                                                 }
+                                                ]
+                                               }
+                                              ]
                                              }
                                             }
                                            ],
@@ -36133,8 +36145,8 @@
                                                 ]
                                                },
                                                {
-                                                "idea": "inaccuracy. But what if Black just ignores the pawn again?",
-                                                "shortIdea": "inaccuracy.",
+                                                "idea": "inaccuracy; the f-pawn can take on e6. But what if Black just ignores the pawn again?",
+                                                "shortIdea": "inaccuracy; the f-pawn can take on e6.",
                                                 "arrows": [
                                                  {
                                                   "from": "e5",
@@ -60616,7 +60628,27 @@
                                              }
                                             }
                                            ],
-                                           "shortIdea": "If White recaptures with the knight, a knight to d4 wins a pawn; he takes with the pawn instead."
+                                           "shortIdea": "If White recaptures with the knight, a knight to d4 wins a pawn; he takes with the pawn instead.",
+                                           "asides": [
+                                            {
+                                             "idea": "With the queens off and the bishop on g4, the bishop to f4 is the move.",
+                                             "shortIdea": "With the queens off and the bishop on g4, the bishop to f4 is the move.",
+                                             "arrows": [
+                                              {
+                                               "from": "d8",
+                                               "to": "d1"
+                                              },
+                                              {
+                                               "from": "e2",
+                                               "to": "d1"
+                                              },
+                                              {
+                                               "from": "c8",
+                                               "to": "g4"
+                                              }
+                                             ]
+                                            }
+                                           ]
                                           }
                                          }
                                         ],
