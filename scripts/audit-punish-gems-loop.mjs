@@ -322,7 +322,20 @@ async function bootSeed(page) {
   }
 }
 async function openDetail(page, id) {
-  await page.goto(`${URL}/openings/${id}`, { waitUntil: 'domcontentloaded' });
+  // A masterclass opening AUTO-STARTS its Watch lesson on first visit
+  // (OpeningDetailPage autoStartedRef: has a LessonScript + Watch not complete
+  // + NO ?line= → setViewMode('walkthrough')), landing in the full-screen
+  // LessonPlayer — the detail view (variation tabs + WLPP ladder + gems card)
+  // never mounts, so the loop saw 'no variation tabs' on every masterclass
+  // opening. The autoStart effect returns early when a `?line=` param is
+  // present (it treats a deep link as an explicit request, never overridden),
+  // so navigate WITH `?line=main` to land straight on the detail page's main
+  // tab — verified on prod: 9 tabs + gems card, lesson-player suppressed.
+  // Clicking a variation tab later rewrites ?line=<label> (handleSelectTab),
+  // which is fine. A deep link is exactly how the training-plan / coach links
+  // reach a variation, so this is a real user path, not a test-only shortcut.
+  const sep = id.includes('?') ? '&' : '?';
+  await page.goto(`${URL}/openings/${id}${sep}line=main`, { waitUntil: 'domcontentloaded' });
   // Poll the FULL window for the gems card — the page headings render seconds
   // before the card finishes (esp. a 21-gem tab), so don't early-return 'detail'.
   let sawDetail = false;
@@ -657,7 +670,9 @@ async function runPass(browser, level) {
 
     // ── deeper passes: pick-before-load + out-of-order toggling ──
     if (level >= 2) {
-      await page.goto(`${URL}/openings/${PRIMARY}`, { waitUntil: 'domcontentloaded' });
+      // ?line=main suppresses the auto-start Watch lesson so the detail page
+      // (and its gem buttons) actually mounts — same reason as openDetail.
+      await page.goto(`${URL}/openings/${PRIMARY}?line=main`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(400);
       const wb = page.locator('[data-testid^="gem-watch-"]').first();
       if (await wb.isVisible().catch(() => false)) await wb.click().catch(() => {});
