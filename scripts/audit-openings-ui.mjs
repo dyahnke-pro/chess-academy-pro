@@ -618,7 +618,13 @@ async function main() {
   // ═══════════════════════════════════════════════════════════════════
   // Pro player flow: click first pro card → /openings/pro/<player>
   // ═══════════════════════════════════════════════════════════════════
-  await page.locator('[data-testid="tab-pro"]').click();
+  // Wait for the tab row to be actionable before clicking — on a cold prod
+  // context the tab-toggle mounts behind the ~3,650-row seed, so a bare click
+  // fired mid-load times out (the testid is correct — 'tab-pro', label
+  // "Elite"). force:true clears any settling overlay the same way a human tap
+  // would. Timing, not a product issue.
+  await waitUntil(() => visible('tab-pro'), 15_000);
+  await page.locator('[data-testid="tab-pro"]').click({ force: true });
   await waitUntil(() => visible('pro-repertoires-tab').then((v) => v), 8000);
   await scenario(
     '20-pro-player-click',
