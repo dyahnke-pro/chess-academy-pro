@@ -95,4 +95,29 @@ drives every branch above with real + adversarial input and records the observed
 behavior. A divergence is a **real bug** only after ruling out load/harness
 artifacts (per CLAUDE.md §adversarial). Findings land here:
 
-- _(pending the break run — populated next)_
+**Functional coverage grid (prod, 2026-09-12): 26/38 reached, 0 console/page errors.**
+
+REAL LEAD (1 root, 6 cascaded fails):
+- **stages-not-generated-within-60s at the leaf** → leaf→continue-learning, stage-quiz,
+  quiz-answer, stage-drill, drill-teaching, stage-play all unreachable. The
+  keep-learning-after-a-line sub-flow didn't deliver a drill/quiz in the window.
+  OPEN: is it >60s cold-gen (raise the wait) or a real stall? (probing)
+
+STALE/WRONG audit expectations (app behavior is correct, per locked rules):
+- `stage-play→/coach/play` — WLPP Play mounts in-page OpeningPlayMode; it MUST NOT
+  nav to /coach/play. Audit asserts the superseded behavior.
+- `fork-auto-advance` — a fork is a CHOICE point; not auto-advancing is correct.
+
+HARNESS (didn't drive the branch):
+- tile-routing / lesson-starts-from-click — tapped a FAMILY tile → fork panel (correct);
+  audit didn't pick a variation. wt-fork-pick passed later, so forks work.
+
+NEEDS A LOOK:
+- line-picker-surfaces / line-picker-variation-click (Tier 1.5 — may be the same panel as fork)
+- face-mode-toggle (is Face mode still exposed?)
+
+CORE VERIFIED ✅: play→named-opening, walkthrough start/narrate/skip/fork/leaf,
+controls (new/stop/resume/auto-pause), bare-name, both fuzzy paths, brain Q&A,
+player-game, middlegame-plan, /clearcache, board-move.
+
+Next: adversarial break-loop (messy input, escalating) + run down the stage-gen lead.
