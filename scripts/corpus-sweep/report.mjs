@@ -7,7 +7,7 @@
 // Output: audit-reports/corpus-sweep-review.md (gitignored)
 import fs from 'node:fs';
 import { Chess } from 'chess.js';
-import { classifyClause, toClauses } from './detectors.mjs';
+import { classifyClause, toClauses } from '../../src/services/narrationQuality.shared.mjs';
 
 const SRC = 'src/data/voiced-walkthroughs.json';
 const PIECE = { pawn: '', knight: 'N', bishop: 'B', rook: 'R', queen: 'Q', king: 'K' };

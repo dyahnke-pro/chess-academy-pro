@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error — plain ESM detector module, no types
-import { classifyClause, teachesChess, PRED_RE } from './detectors.mjs';
+import { classifyClause, teachesChess, namedPerson, scoreNarration, PRED_RE } from './narrationQuality.shared.mjs';
 
 // ── CORPUS SWEEP DETECTOR GATE (David 2026-09-12) ────────────────────────────
 //
@@ -90,5 +90,67 @@ describe('corpus sweep — predicate stems must match suffixed words', () => {
     ['equali', 'the break equalizes'],
   ])('stem %s matches %j', (_stem, phrase) => {
     expect(PRED_RE.test(phrase)).toBe(true);
+  });
+});
+
+describe('narration scoring — the Accelerated Dragon ply-2 contest', () => {
+  // 61 candidate notes sit at `e4 c5`. `noteAtPosition` ranked them only by
+  // "does this note's own opening reach this position", which is INERT on the
+  // voiced corpus (every note carries opening: null) — so all 61 tied and file
+  // order won. David heard the 2050 line; the opening's own thesis statement was
+  // sitting at the same position, unselected. These fixtures pin the ordering.
+  const OPENING = 'Sicilian Defense: Accelerated Dragon';
+
+  const THESIS =
+    "The reply c5 against the king's-pawn — the Sicilian. Today's choice is the " +
+    'Accelerated Dragon, a fast, clean setup and one of the friendliest gateways into ' +
+    'the whole Sicilian family: less theory, clearly defined ideas, quick development.';
+  const HEARD = "We're Black against a 2050 — this is going to be juicy. The pawn to e4, c5.";
+  const MOVE_LIST = 'e4, c5.';
+  const CHATTER = 'Our patented Sicilian again.';
+
+  it('ranks the opening thesis above everything else at this ply', () => {
+    const thesis = scoreNarration(THESIS, OPENING);
+    for (const other of [HEARD, MOVE_LIST, CHATTER]) {
+      expect(thesis).toBeGreaterThan(scoreNarration(other, OPENING));
+    }
+  });
+
+  it('ranks the chatter David heard last', () => {
+    expect(scoreNarration(HEARD, OPENING)).toBeLessThan(scoreNarration(MOVE_LIST, OPENING));
+    expect(scoreNarration(HEARD, OPENING)).toBeLessThan(0);
+  });
+
+  it('never lets a bare move list outrank real teaching', () => {
+    // "e4, c5." names two squares, so a board-referent check alone scores it as
+    // teaching. It is recitation — the student just watched both moves.
+    expect(scoreNarration(MOVE_LIST, OPENING)).toBeLessThan(scoreNarration(THESIS, OPENING));
+    expect(scoreNarration('The knight to f3.', OPENING)).toBeLessThan(0);
+  });
+});
+
+describe('narration scoring — false positives that cost the right answer', () => {
+  it('does not read a time word before an apostrophe-s as a person', () => {
+    // "Today's choice is the Accelerated Dragon" was classified namedPerson and
+    // penalised -6, which is what knocked the thesis out of first place.
+    // The clause as it actually appears in the corpus. (A truncation of it IS a
+    // fragment — no square, no chess idea — so the fixture must be the real text.)
+    const REAL =
+      "Today's choice is the Accelerated Dragon, a fast, clean setup and one of the " +
+      'friendliest gateways into the whole Sicilian family: less theory, clearly ' +
+      'defined ideas, quick development.';
+    expect(namedPerson(REAL)).toBeNull();
+    expect(classifyClause(REAL).disposition).toBe('keep');
+  });
+
+  it('still catches a real person by their verb', () => {
+    expect(namedPerson("Kusha knows this line very well; let's take him out of theory.")).toBe('Kusha');
+  });
+
+  it('scores an opening thesis even when the note omits the taxonomy word', () => {
+    // No teaching note spells out "Sicilian DEFENSE"; requiring every word of
+    // the opening name scored the thesis at zero for its own opening.
+    expect(scoreNarration('A clean setup in the Accelerated Dragon, quick development.', 'Sicilian Defense: Accelerated Dragon'))
+      .toBeGreaterThan(scoreNarration('A clean setup, quick development.', 'Sicilian Defense: Accelerated Dragon'));
   });
 });

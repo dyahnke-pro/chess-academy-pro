@@ -18,6 +18,10 @@
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
+// @ts-expect-error — shared ESM module, consumed by both the runtime and the
+// corpus-sweep script so selection and the sweep can never disagree about what
+// makes narration good.
+import { scoreNarration } from './narrationQuality.shared.mjs';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
@@ -466,12 +470,46 @@ export function noteAtPosition(
   // the tag is just noise from distillation. Sorting costs nothing and fixes
   // the case that matters, because a note that both names a foreign opening AND
   // fails board truth was already dropped above.
+  // 🔒 RANK BY WHAT THE NOTE TEACHES, NOT BY FILE ORDER (David 2026-09-12).
+  //
+  // This sorted on ONE key: does the note's own opening reach this position.
+  // Every voiced note carries `opening: null`, so on that corpus the key is
+  // INERT — all 61 candidates at `e4 c5` compare equal, `Array.sort` is stable,
+  // and the winner is whichever note the build script happened to emit first.
+  //
+  // David walked the Accelerated Dragon and heard "We're Black against a 2050 —
+  // this is going to be juicy." Sitting at the same position, unselected, was
+  // that opening's own thesis statement from a dedicated teaching video:
+  // "...the Accelerated Dragon, a fast, clean setup and one of the friendliest
+  // gateways into the whole Sicilian family: less theory, clearly defined ideas,
+  // quick development." The corpus was never the problem at that ply.
+  //
+  // `scoreNarration` is the tiebreak: chatter and bare move restatement sink,
+  // notes that name the board AND say something about it rise, and a note that
+  // names the opening being taught is preferred over a game that merely passed
+  // through this position. Reachability stays the PRIMARY key so nothing that
+  // worked before is reordered — the score only decides ties it used to lose.
   const preferReachable = (notes: DanyaNote[]): DanyaNote[] => {
     if (notes.length < 2) return notes;
+    const score = new Map<string, number>();
+    const scored = (n: DanyaNote): number => {
+      const hit = score.get(n.id);
+      if (hit !== undefined) return hit;
+      let v = 0;
+      try {
+        v = scoreNarration(spokenBeatText(n), openingName ?? null) as number;
+      } catch {
+        v = 0; // scoring is a preference, never a blocker
+      }
+      score.set(n.id, v);
+      return v;
+    };
     return [...notes].sort((a, b) => {
       const ok = (n: DanyaNote): number =>
         (!n.opening || openingReachesPosition(n.opening, historySans) ? 1 : 0);
-      return ok(b) - ok(a);
+      const byReach = ok(b) - ok(a);
+      if (byReach !== 0) return byReach;
+      return scored(b) - scored(a);
     });
   };
 

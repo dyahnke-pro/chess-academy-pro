@@ -68,12 +68,24 @@ const CHESS_PROPER_NOUN =
 const PERSON_VERB =
   /\b(knows?|plays?|played|said|says|thinks?|resigned?|blundered?|is rated|was rated|prefers?|likes?|recommends?|teaches?)\b/;
 
-/** A capitalised non-chess word acting like a person → the name, else null. */
+// Capitalised words that are never people. The bare possessive rule below used
+// to accept any capitalised word before "'s", which classified "TODAY'S choice
+// is the Accelerated Dragon" as a person reference and penalised the Accelerated
+// Dragon's own thesis statement out of first place at ply 2 — the exact note this
+// scoring exists to promote.
+const NEVER_A_PERSON =
+  /^(Today|Tomorrow|Yesterday|Tonight|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|January|February|March|April|June|July|August|September|October|November|December|Everyone|Everybody|Someone|Somebody|Nobody|Anyone)$/;
+
+/** A capitalised non-chess word acting like a person → the name, else null.
+ *
+ *  Selection is by PERSON VERB only ("Kusha knows", "Magnus played"). A bare
+ *  possessive is deliberately NOT a signal: it carried every false positive this
+ *  detector produced and caught nothing the verb rule missed. */
 export function namedPerson(clause) {
   for (const m of clause.matchAll(/\b([A-Z][a-z]{2,})\b/g)) {
-    if (CHESS_PROPER_NOUN.test(m[1])) continue;
+    if (CHESS_PROPER_NOUN.test(m[1]) || NEVER_A_PERSON.test(m[1])) continue;
     const after = clause.slice(m.index + m[1].length, m.index + m[1].length + 22);
-    if (PERSON_VERB.test(after) || /^'s\b/.test(after)) return m[1];
+    if (PERSON_VERB.test(after)) return m[1];
   }
   return null;
 }
@@ -87,7 +99,7 @@ export const OPEN_REFERENCE = {
   session:
     /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\bresigns?\b|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
   author:
-    /\bmusic to my ears\b|\bjuicy\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday.s\b|\bthe comedy\b/i,
+    /\bmusic to my ears\b|\bjuicy\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
   priorVid:
     /\bwe.ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin this video\b|\bmy main opening\b|\bour (patented|favorite|real opening)\b/i,
   audience:
@@ -124,4 +136,98 @@ export function toClauses(text) {
     .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/)
     .map((s) => s.trim())
     .filter(Boolean);
+}
+
+// ─── SELECTION SCORING ───────────────────────────────────────────────────────
+//
+// WHY THE SAME MODULE. The sweep decides what to DELETE; selection decides what
+// to SPEAK when several notes sit at one board. Run those off two copies of
+// "what makes narration good" and they drift — the sweep keeps a clause the
+// selector ranks last, or worse, the selector promotes exactly what the sweep
+// was built to remove. One source, both callers.
+//
+// THE BUG THIS FIXES. `noteAtPosition` returned `bucket[0]` after a sort whose
+// only key was "does this note's own opening reach this position". Every voiced
+// note carries `opening: null`, so that key is INERT on this corpus: all 61
+// candidates at `e4 c5` tie and file order decides. David walked the Accelerated
+// Dragon and got "We're Black against a 2050 — this is going to be juicy" while
+// this was sitting at the same position, unselected:
+//
+//   "The reply c5 against the king's-pawn — the Sicilian. Today's choice is the
+//    Accelerated Dragon, a fast, clean setup and one of the friendliest gateways
+//    into the whole Sicilian family: less theory, clearly defined ideas, quick
+//    development."
+//
+// The corpus was never the problem at that ply. The ranking was.
+
+/** A clause made of nothing but move tokens and punctuation — "e4, c5.",
+ *  "Nf3 Nc6 d4". Names squares, teaches nothing: the student just watched it. */
+const MOVE_LIST_ONLY_RE =
+  /^(?:(?:[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8][+#]?|O-O(?:-O)?)[\s,.;—-]*)+$/;
+
+/** Bare move restatement — "The knight to f3.", "We capture on d4." The student
+ *  just watched the move; narration rule 3 says do not say it back to them. */
+const BARE_MOVE_RE =
+  /^(the |white |black |we |he |they |our |their )?[a-z' ]{0,14}(pawns?|knights?|bishops?|rooks?|queens?|kings?) (to|takes|captures?|goes to|comes to|steps to|drops to|settles on|develops? to|plays?) [a-h][1-8][.,]?$/i;
+
+/**
+ * Rank a candidate note for a ply. Higher speaks. Deterministic and pure — no
+ * engine, no model, no board mutation; the caller has already proven the note
+ * is ABOUT this position, so this only asks which of several true notes teaches
+ * best.
+ *
+ * @param {string} text      the note's spoken prose
+ * @param {string|null} openingName the lesson's own opening, when known
+ */
+export function scoreNarration(text, openingName) {
+  const body = (text ?? '').trim();
+  if (!body) return -100;
+  const clauses = toClauses(body);
+  let score = 0;
+
+  for (const clause of clauses) {
+    const { disposition, class: klass } = classifyClause(clause);
+    if (disposition === 'cut') {
+      // A chattery clause is a real cost: it is what the student hears INSTEAD
+      // of teaching. `fragment` is connective tissue and cheap; an open
+      // reference to a rating, a session or a person is the loud kind.
+      score -= klass === 'fragment' ? 2 : 6;
+    } else if (MOVE_LIST_ONLY_RE.test(clause)) {
+      // Pure recitation. `classifyClause` keeps it (it does name the board, so
+      // it is not chatter to DELETE), but it must never out-rank teaching.
+      score -= 3;
+    } else if (klass === 'teaching' && PRED_RE.test(clause)) {
+      score += 3; // names the board AND says something about it
+    } else if (klass === 'teaching') {
+      score += 0; // names a square but explains nothing
+    } else {
+      score += 1; // a general principle — real, but not about this board
+    }
+  }
+
+  // Saying the move back to the student is not teaching, however clean it reads.
+  if (clauses.length === 1 && BARE_MOVE_RE.test(clauses[0])) score -= 4;
+
+  // A note that NAMES the opening being taught is almost always the one written
+  // to teach it, rather than a game that happened to pass through this position.
+  if (openingName) {
+    // Drop the generic scaffolding — "Sicilian DEFENSE: Accelerated Dragon"
+    // requiring the word "Defense" is why the Dragon's own thesis statement
+    // scored zero here: no teaching note ever spells the taxonomy out.
+    const GENERIC = /^(defense|defence|variation|opening|game|attack|system|line|main)$/;
+    const words = openingName
+      .toLowerCase()
+      .split(/[^a-z]+/)
+      .filter((w) => w.length > 3 && !GENERIC.test(w));
+    const lower = body.toLowerCase();
+    const hits = words.filter((w) => lower.includes(w)).length;
+    if (words.length) score += Math.min(hits, 2) * 3;
+  }
+
+  // Mild preference for substance over a one-liner, capped so a rambling
+  // transcript dump cannot outrank a tight beat. Length is a tiebreaker here,
+  // never a driver — the clause scoring above already did the real work.
+  score += Math.min(clauses.length, 3);
+
+  return score;
 }
