@@ -167,10 +167,29 @@ export function classifyClause(clause) {
   return { disposition: 'cut', class: 'fragment' };
 }
 
-/** Split narration prose into spoken clauses (one utterance each). */
+/** Split narration prose into clauses.
+ *
+ *  🔒 THE SPLIT GRANULARITY IS THE WHOLE MECHANISM. Sentence boundaries alone
+ *  are too coarse, because the defect and the teaching routinely share one
+ *  sentence, joined by a dash:
+ *
+ *    "The pawn to g6, the Accelerated Dragon fianchetto — only our second of
+ *     the whole run."
+ *      ^ a perfect beat                                 ^ chatter
+ *
+ *  As one clause that names g6 and says "fianchetto", the teaching guard
+ *  protects it and the chatter ships. Split at the dash and the trim is
+ *  surgical: the beat is kept, the tail is cut, and the student hears "The pawn
+ *  to g6, the Accelerated Dragon fianchetto."
+ *
+ *  Em-dash and semicolon are the aside markers this corpus actually uses — it
+ *  is transcribed speech, so a spoken aside is punctuated, not subordinated.
+ *  A hyphen is NOT a split point ("light-squared", "well-placed"), nor is a
+ *  comma: "the queen to b6, forking the pawns on f2 and b2" is one thought. */
 export function toClauses(text) {
   return text
     .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/)
+    .flatMap((sentence) => sentence.split(/\s+[—–]\s+|\s*;\s+/))
     .map((s) => s.trim())
     .filter(Boolean);
 }
@@ -267,4 +286,120 @@ export function scoreNarration(text, openingName) {
   score += Math.min(clauses.length, 3);
 
   return score;
+}
+
+// ─── THE TRIM ────────────────────────────────────────────────────────────────
+//
+// How the cuts are actually applied, and the rule that keeps a trim from
+// costing teaching (David 2026-09-12: "how do we systematically remove them
+// from the corpus without losing any of the important bits?").
+//
+// A SPOKEN ASIDE IS APPENDED. This corpus is transcribed speech: the throwaway
+// rides on the END of a sentence, after a dash, once the point has landed.
+//
+//   "The pawn to g6, the Accelerated Dragon fianchetto — only our second of the
+//    whole run."          keep ────────────────────────┘ cut ───────────────┘
+//
+// Splitting at the dash is necessary but NOT sufficient, because the same
+// punctuation carries setup→payoff, where the head is the part that reads as
+// filler on its own:
+//
+//   "The key question before ever taking like this is always the same — can the
+//    queen be trapped?"   ^ scores as a fragment        ^ the actual teaching
+//
+// Cut the head there and the student hears "can the queen be trapped?" with no
+// setup. So: find the LAST clause worth keeping and cut only what follows it.
+// The head is never removed while anything after it survives, a cut-class
+// clause sandwiched between keepers stays (it is load-bearing grammar, whatever
+// it scores), and a sentence with no keeper at all goes entirely.
+//
+// The consequence is deliberate: this trim is CONSERVATIVE. It will leave some
+// chatter mid-sentence rather than risk a sentence that no longer reads.
+
+// SHORT FIXED IDIOMS ARE EXCISED, NOT CUT WITH THEIR CLAUSE. Clause-level
+// removal assumes the throwaway owns its clause. Sometimes it only leads it:
+//
+//   "...lifts the queen to e3 — music to the ears, because now the check on e7
+//    no longer bites."
+//                  ^ idiom      ^ real teaching, in the same clause
+//
+// Dropping that clause loses the explanation. These are a closed set of fixed
+// speech tics with no board content, so lifting the phrase out and keeping the
+// remainder is safe where a general rule would not be.
+const EXCISABLE_IDIOM =
+  /\s*[—–,]?\s*\b(music to (my|the) ears|this is going to be juicy|and it'?s juicy|kudos to (him|her|them))\b\s*,?\s*/gi;
+
+/** Lift fixed idioms out of a clause, returning what is left (trimmed).
+ *  `opensSentence` decides capitalisation: a clause that follows a dash is a
+ *  continuation and must stay lower-case, or the excision produces
+ *  "...queen to e3 — Because now the check no longer bites." */
+function exciseIdioms(clause, opensSentence) {
+  const out = clause.replace(EXCISABLE_IDIOM, ' ').replace(/\s{2,}/g, ' ').trim()
+    .replace(/^[,;—–]\s*/, '')
+    .replace(/\s+([.,!?])/g, '$1');
+  return opensSentence ? out.replace(/^([a-z])/, (_m, c) => c.toUpperCase()) : out;
+}
+
+/** Trim one passage. Returns the surviving text, or '' when nothing survives.
+ *
+ *  `classes` limits which cut-classes are acted on. The default is the SIX
+ *  HIGH-CONFIDENCE classes; `fragment` is deliberately excluded, because it is
+ *  the class that cannot be made precise by vocabulary alone and it over-trims
+ *  qualifications that carry real teaching:
+ *
+ *    "This d6 setup is viable — not the worst, but far from the best."
+ *                               ^ scores as a fragment; it is the evaluation
+ *
+ *  Pass the full set explicitly once a human has reviewed that list. */
+export const CONFIDENT_CUT_CLASSES = Object.freeze([
+  'rating', 'session', 'author', 'priorVid', 'audience', 'namedPerson', 'pastGame',
+]);
+
+export function trimPassage(text, classes = CONFIDENT_CUT_CLASSES) {
+  const source = (text ?? '').trim();
+  if (!source) return '';
+
+  // Sentence first, so a trim never reaches across a full stop.
+  const sentences = source.split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/).map((x) => x.trim()).filter(Boolean);
+  const out = [];
+
+  for (const sentence of sentences) {
+    // Keep the separators so the sentence can be rebuilt as it was spoken.
+    const parts = sentence.split(/(\s+[—–]\s+|\s*;\s+)/);
+    const clauses = parts.filter((_, i) => i % 2 === 0).map((c) => c.trim());
+    const seps = parts.filter((_, i) => i % 2 === 1);
+
+    // Excise fixed idioms first — a clause that only LED with a speech tic is
+    // rescued here rather than being cut wholesale below.
+    for (let i = 0; i < clauses.length; i += 1) {
+      if (!EXCISABLE_IDIOM.test(clauses[i])) continue;
+      EXCISABLE_IDIOM.lastIndex = 0;
+      const rest = exciseIdioms(clauses[i], i === 0);
+      // Only keep the remainder if it still says something; otherwise leave the
+      // clause as it was and let the verdict below drop it.
+      if (rest && classifyClause(rest).disposition === 'keep') clauses[i] = rest;
+    }
+
+    const act = new Set(classes);
+    const verdicts = clauses.map((c) => {
+      const r = classifyClause(c);
+      // A cut-class we are not acting on counts as a keeper, so the clause both
+      // survives and still anchors the "cut only after the last keeper" rule.
+      return r.disposition === 'cut' && act.has(r.class) ? 'cut' : 'keep';
+    });
+    const lastKeep = verdicts.lastIndexOf('keep');
+    if (lastKeep === -1) continue; // nothing in this sentence earns its place
+
+    // Everything up to and including the last keeper survives, separators and
+    // all — including any cut-class clause in between, which is holding the
+    // sentence together.
+    let rebuilt = clauses[0];
+    for (let i = 1; i <= lastKeep; i += 1) rebuilt += `${seps[i - 1] ?? ' '}${clauses[i]}`;
+
+    // A trimmed tail can leave the sentence without its stop.
+    if (!/[.!?]$/.test(rebuilt)) rebuilt += '.';
+    out.push(rebuilt.trim());
+  }
+
+  return out.join(' ').trim();
 }

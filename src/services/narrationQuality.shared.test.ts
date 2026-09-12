@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { classifyClause, teachesChess, namedPerson, scoreNarration, PRED_RE } from './narrationQuality.shared.mjs';
+import { classifyClause, teachesChess, namedPerson, scoreNarration, trimPassage, CONFIDENT_CUT_CLASSES, PRED_RE } from './narrationQuality.shared.mjs';
 
 // ── CORPUS SWEEP DETECTOR GATE (David 2026-09-12) ────────────────────────────
 //
@@ -217,6 +217,79 @@ describe('pastGame overrides the teaching guard — the one class that may', () 
       'With White castling we switched the engine on — a rare exception.',
     ]) {
       expect(classifyClause(c).disposition).toBe('cut');
+    }
+  });
+});
+
+describe('trimPassage — remove the chatter, keep the teaching', () => {
+  // David 2026-09-12: "how do we systematically remove them from the corpus
+  // without losing any of the important bits?" — with two lines named as
+  // must-keeps. They are fixtures now.
+
+  it.each([
+    'The key question before ever taking like this is always the same — can the queen be trapped?',
+    "That is exactly the check to run before snatching a pawn: list the queen's escapes, and ask whether any one move takes them all away.",
+  ])('leaves David\'s named keepers byte-identical: %j', (line) => {
+    expect(trimPassage(line)).toBe(line);
+  });
+
+  it('cuts the appended chatter and keeps the beat', () => {
+    expect(
+      trimPassage('The pawn to g6, the Accelerated Dragon fianchetto — only our second of the whole run.'),
+    ).toBe('The pawn to g6, the Accelerated Dragon fianchetto.');
+  });
+
+  it('never cuts the head of a sentence while a later clause survives', () => {
+    // "The key question ... is always the same" scores as a fragment on its own.
+    // Cut it and the student hears "can the queen be trapped?" with no setup.
+    const line = 'The key question before ever taking like this is always the same — can the queen be trapped?';
+    expect(trimPassage(line)).toContain('The key question');
+  });
+
+  it('keeps a cut-class clause that is sandwiched between keepers', () => {
+    const line =
+      'The queen swings out to b6, forking the pawns on f2 and b2. It carries risk — our ' +
+      "light-squared bishop still isn't out — but the pressure should tell.";
+    expect(trimPassage(line)).toBe(line);
+  });
+
+  it('excises a fixed idiom rather than dropping the teaching behind it', () => {
+    expect(
+      trimPassage('White declines and lifts the queen to e3 — music to the ears, because now the check on e7 no longer bites.'),
+    ).toBe('White declines and lifts the queen to e3 — because now the check on e7 no longer bites.');
+  });
+
+  it('drops a clause the idiom owned outright', () => {
+    expect(trimPassage('White recaptures with the knight — music to my ears.'))
+      .toBe('White recaptures with the knight.');
+  });
+
+  it('silences a sentence where nothing earns its place', () => {
+    expect(trimPassage('The verdict: the knight to g4 and the queen to b6 both earn approval.')).toBe('');
+  });
+
+  it('documents the cost of holding `fragment` back', () => {
+    // "With White castling we switched the engine on — a rare exception."
+    //   └ pastGame, a confident cut        └ fragment, held back
+    //
+    // The held-back clause counts as a survivor, so the "never cut the head
+    // while a later clause survives" rule protects the chatter in front of it.
+    // That is the conservative direction and it is deliberate: the alternative
+    // leaves a dangling "A rare exception." Enabling `fragment` resolves it.
+    const line = 'With White castling we switched the engine on — a rare exception. The verdict: the knight to g4 and the queen to b6 both earn approval.';
+    expect(trimPassage(line)).toBe('With White castling we switched the engine on — a rare exception.');
+    expect(trimPassage(line, [...CONFIDENT_CUT_CLASSES, 'fragment'])).toBe('');
+  });
+
+  it('holds `fragment` back by default, so qualifications survive', () => {
+    // The class that cannot be made precise by vocabulary. Both of these are
+    // real teaching that the fragment rule would take.
+    for (const line of [
+      'This d6 setup is viable — not the worst, but far from the best.',
+      "Black develops the knight to c6 — a viable move, and what people often play, but if Black isn't careful it can already drift into an inaccuracy.",
+    ]) {
+      expect(trimPassage(line)).toBe(line);
+      expect(trimPassage(line, [...CONFIDENT_CUT_CLASSES, 'fragment'])).not.toBe(line);
     }
   });
 });
