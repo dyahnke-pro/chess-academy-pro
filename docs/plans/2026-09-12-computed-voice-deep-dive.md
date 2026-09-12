@@ -325,13 +325,20 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   109). NB: verified deterministically by the gate + unit tests; a dedicated
   coach-CHAT prod audit ("is my bishop safe?" on a seeded pin) is a recommended
   follow-up addition (the chat wiring is unchanged, only the computation).
-- **P1c — the detector subsystem (NEXT, its own careful pass + gates):**
-  `assembleAttackAssessment` (:1083, king-zone attacker/defender miscount — exclude
-  pins, require real safe contact); the fork forker-safety in `tacticsDetector.findForks`
-  (:145, gate the fork square with `landingIsSafe`) + `missedTacticService`;
-  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185), `exploitedLoosePiece`
-  (:241) + the pattern detectors (:561-575) + `computeAttackMap`. These carry
-  counterfactual/cross-move logic — each needs individual analysis; do NOT bulk-swap.
+- **P1c-fork — fork forker-safety in `tacticsDetector.findForks`.** ✅ DONE.
+  A fork the OPPONENT (to move) can meet by simply capturing the forker is no
+  fork; gated with `capturesWinMaterial`, but ONLY when it's the opponent's move
+  (if the forker's side is to move they capture a target first — the subtlety the
+  old comment deferred, and which a real test fixture caught). Gate: tacticsDetector
+  "does NOT call it a fork when the opponent just captures the forker". 35/35 +
+  the groundTruth board-truth property test still green.
+- **P1c-rest — the intricate detector items (NEXT, dedicated pass + gates):**
+  `assembleAttackAssessment` (:1094, king-zone counts include pinned pieces + x-ray
+  of empty squares — needs real pin-detection / safe-contact, fuzzier than a SEE
+  swap); `missedTacticService.detectSkewer` diverged logic; causalChain
+  `hasWinnablePiece` (:168), `targetWasSavable` (:185), `exploitedLoosePiece`
+  (:241) + pattern detectors (:561-575) + `computeAttackMap`. Counterfactual /
+  cross-move logic — each needs individual analysis; do NOT bulk-swap.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
   own change + gate + audit.
 

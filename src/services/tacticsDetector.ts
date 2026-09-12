@@ -2,6 +2,7 @@ import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
+import { capturesWinMaterial } from './positionReadingService';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -147,6 +148,16 @@ function findForks(chess: Chess): TacticPattern[] {
           PIECE_VALUE[t.type] > PIECE_VALUE[piece.type] ||          // favorable trade even if defended (N forks two Rs)
           chess.attackers(t.square, defColor).filter((d) => d !== t.square).length === 0); // undefended
         if (!winnable) continue;
+        // FORKER SAFETY (2026-09-12 deep-dive #C1): a fork the OPPONENT can meet
+        // by simply capturing the forking piece isn't a real fork — they take
+        // the forker instead of saving a target. This ONLY applies when it is
+        // the opponent's move: if it is the forker's side to move, they capture
+        // a target immediately and the opponent never gets to grab the forker.
+        // Pin/legality-aware SEE (a pinned defender of the forker no longer
+        // makes it look safe; a defended forker isn't a free capture). Closes
+        // the case the old "we only gate on winnability" comment deferred.
+        const forkerToMove = chess.turn() === piece.color;
+        if (!forkerToMove && capturesWinMaterial(chess.fen(), sq, defColor)) continue;
         const forkerName = PIECE_NAMES[piece.type] ?? piece.type;
         const targetDescs = targets.map(
           (t) => `${PIECE_NAMES[t.type] ?? t.type} on ${t.square}`,
