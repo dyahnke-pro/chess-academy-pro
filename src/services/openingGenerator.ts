@@ -382,7 +382,12 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-09-06-explorer-deepen-thin-openings';
+// Bumped for the two-beat cap + the spoken-register arrows: beats bake at
+// GENERATION time, so a cached tree would keep serving three utterances per move
+// and no arrows on spoken-form moves forever. ONE bump for both changes — a
+// gen-rev bump regenerates every lesson's prose into new strings, which miss the
+// /api/tts clip cache and re-synthesise, so they are batched per deploy.
+const WALKTHROUGH_GEN_REV = '2026-09-12-two-beats-spoken-arrows';
 
 export async function getCachedOpening(
   name: string,
@@ -1156,6 +1161,18 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  those say what the corpus COULD offer, while this says what a lesson actually
  *  splices — the dedupe and the board-truth grade both drop plies, and a report
  *  that skips them overstates by a factor of three. */
+/** The first whole sentence of a passage, for the SUPPORTING beat of a ply.
+ *  Narration speaks one sentence at a time, so an un-capped supporting passage
+ *  turns one move into three or four utterances (David 2026-09-12: two beats per
+ *  move, never three). Returns the input untouched when it is already one
+ *  sentence, and never cuts mid-sentence. */
+export function firstSentence(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  const [first] = splitSentences(trimmed);
+  return first ?? trimmed;
+}
+
 export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
@@ -2348,7 +2365,19 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
       if (teaching) {
         plyNoteText[i] = teaching;
-        return generated ? `${teaching} ${generated}` : teaching;
+        // TWO BEATS PER MOVE, NOT THREE (David 2026-09-12: "Two beats if both
+        // teachings are legit").
+        //
+        // The corpus note is beat one — it is the teaching, and it keeps its
+        // sentences. The generated prose is beat two: a supporting aside, so it
+        // gets ONE sentence. It used to be appended whole, and since narration
+        // is spoken one sentence at a time, a two-sentence addition made three
+        // utterances for a single move. Walking the Accelerated Dragon, the
+        // knight-to-f3 ply spoke three times: the note, then "with precise play
+        // White is slightly better, but it's a very playable position that's
+        // easy to learn" (which names no square — filler by the project's own
+        // rule), then a third line about a different move order.
+        return generated ? `${teaching} ${firstSentence(generated)}` : teaching;
       }
       // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
       //
@@ -2382,7 +2411,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // silent generated idea now speaks the discussion; the taught move stays
       // the conclusion (the weighing carries no "the move is X").
       const delib = deliberationByPly[i];
-      if (delib) return fallback ? `${fallback} ${delib}` : delib;
+      // Same two-beat contract: the weighing is beat two behind the prose.
+      if (delib) return fallback ? `${firstSentence(fallback)} ${delib}` : delib;
       return fallback;
     } catch {
       /* the corpus is a bonus, never a blocker */
