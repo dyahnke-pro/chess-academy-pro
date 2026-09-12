@@ -1218,6 +1218,23 @@ export function noteArrowSourceAt(
  *  exists — that is the whole G0 point, and it is why this takes both rather
  *  than a single pre-resolved string: the caller must not be able to quietly
  *  hand the prose in as if it were grounding. */
+// 🔒 FOUR ARROWS IS THE CEILING; FIVE IS A WALK-OUT (David 2026-09-12: "If
+// spoken sequences are 4 moves or longer play them out and snap back. 3 or less
+// can get arrows? Or maybe 4 or less? And bump walkthrough to 5.").
+//
+// A beat's green arrows accumulate as its sentences are spoken, so a passage
+// that recites a long calculation ends with every move of it on the board at
+// once. Measured after the spoken-register fix taught this deriver to see
+// "the queen to f3": 74 nodes crossed five arrows and one Alapin node drew
+// SEVENTEEN — "if the king takes the knight, then h4, the king to g6, h5…"
+// laid over a single position. That is not lead-the-eye, it is a diagram of a
+// variation nobody can read.
+//
+// Above the ceiling the honest answer is to draw NOTHING and leave the line for
+// the walk-out (play it out on the board, snap back) rather than truncate to an
+// arbitrary first four — a half-drawn line teaches a line that does not exist.
+export const MAX_GREEN_ARROWS_PER_PLY = 4;
+
 export function groundedSegmentArrows(
   noteText: string | null,
   prose: string,
@@ -1233,7 +1250,11 @@ export function groundedSegmentArrows(
 } {
   const source = noteText?.trim() ? 'note' : 'prose';
   const text = source === 'note' ? (noteText as string) : prose;
-  const derived = deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows;
+  const all = deriveNarrationArrows(text, move.fen, [{ from: move.from, to: move.to }]).arrows;
+  // Over the ceiling: this ply recites a LINE, not a couple of candidate moves.
+  // The orange trail still marks the move being played; the line itself waits
+  // for the walk-out rather than being dumped on one board.
+  const derived = all.length > MAX_GREEN_ARROWS_PER_PLY ? [] : all;
   return {
     source,
     spans: derived.map((a) => ({ from: a.from, to: a.to, san: a.san, index: a.index })),
