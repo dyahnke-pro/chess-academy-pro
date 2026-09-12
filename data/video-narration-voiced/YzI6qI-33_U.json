@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We have Black against a strong player and answer the king's-pawn with c5 — the Sicilian."
+   "spoken": "You have Black against a strong player and answer the king's-pawn with c5 — the Sicilian."
   },
   {
    "ply": 3,
@@ -51,7 +51,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We capture on d4."
+   "spoken": "You capture on d4."
   },
   {
    "ply": 7,
@@ -141,7 +141,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So we keep it uniquely Accelerated by developing the knight to f6 first — not pushing any central pawns yet, maybe not for several more moves."
+   "spoken": "So you keep it uniquely Accelerated by developing the knight to f6 first — not pushing any central pawns yet, maybe not for several more moves."
   },
   {
    "ply": 13,
@@ -150,7 +150,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "White plays the queen to d2 — a not-especially-good sideline; the main is the bishop to c4. In any Dragon setup, once the queen leaves d1, consider the knight to g4: trading it for White's dark-squared bishop leaves our Dragon bishop uncontested. After the knight to g4 the bishop can't move — it would drop the twice-attacked d4-knight — though White can take on c6 and shift the bishop to d4."
+   "spoken": "White plays the queen to d2 — a not-especially-good sideline; the main is the bishop to c4. In any Dragon setup, once the queen leaves d1, consider the knight to g4: trading it for White's dark-squared bishop leaves your Dragon bishop uncontested. After the knight to g4 the bishop can't move — it would drop the twice-attacked d4-knight — though White can take on c6 and shift the bishop to d4."
   },
   {
    "ply": 14,
@@ -159,7 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle. And we don't play d6, which would let White transition to the Dragon with f3 — keeping the pawn on d7 means we can later strike with d5 in one move."
+   "spoken": "You castle. And you don't play d6, which would let White transition to the Dragon with f3 — keeping the pawn on d7 means you can later strike with d5 in one move."
   },
   {
    "ply": 15,
@@ -168,7 +168,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "White castles queenside. Now the king and queen are aligned, so we recalculate the knight to g4: if White takes c6 and plays the bishop to d4, we have the bishop to h6, pinning the queen. White blocks with f4 — but then the pawn to e5 is winning."
+   "spoken": "White castles queenside. Now the king and queen are aligned, so you recalculate the knight to g4: if White takes c6 and plays the bishop to d4, you have the bishop to h6, pinning the queen. White blocks with f4 — but then the pawn to e5 is winning."
   },
   {
    "ply": 16,
@@ -195,7 +195,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "We recapture with the b-pawn, ruining White's structure and opening the b-file — with White castled queenside that often spells immediate doom. The queen to b6 hits f2, which the g4-knight also attacks; the pawn to e5 chasing the bishop is another plan."
+   "spoken": "You recapture with the b-pawn, ruining White's structure and opening the b-file — with White castled queenside that often spells immediate doom. The queen to b6 hits f2, which the g4-knight also attacks; the pawn to e5 chasing the bishop is another plan."
   },
   {
    "ply": 19,
@@ -213,7 +213,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "We respond instantly with the bishop to h6, pinning the queen."
+   "spoken": "You respond instantly with the bishop to h6, pinning the queen."
   },
   {
    "ply": 21,
@@ -263,7 +263,7 @@
     "g6",
     "Nc3"
    ],
-   "spoken": "We're facing the knight to c3 and the bishop to e3.",
+   "spoken": "You're facing the knight to c3 and the bishop to e3.",
    "reanchor": true
   },
   {
@@ -304,7 +304,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "And the engine confirms castling is the correct reply — so we made the right decision.",
+   "spoken": "And the engine confirms castling is the correct reply — so you made the right decision.",
    "reanchor": true
   },
   {
@@ -536,7 +536,7 @@
    "t": 1728.5,
    "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
    "line": [],
-   "spoken": "Back to the Accelerated — the important point, a trap even Fischer fell into: White tries the same idea with f3 and the queen to d2, but since we haven't committed to d6, we save a tempo and strike with d5 in one move. The same position arises in the mainline Dragon but with White to move; here it's White who must react, and after the capture on d5 we have a simple discovery, the knight to c4, leaving Black much better — the queen to a5 gives a great position against White's damaged structure.",
+   "spoken": "Back to the Accelerated — the important point, a trap even Fischer fell into: White tries the same idea with f3 and the queen to d2, but since you haven't committed to d6, you save a tempo and strike with d5 in one move. The same position arises in the mainline Dragon but with White to move; here it's White who must react, and after the capture on d5 you have a simple discovery, the knight to c4, leaving Black much better — the queen to a5 gives a great position against White's damaged structure.",
    "reanchor": true
   }
  ]

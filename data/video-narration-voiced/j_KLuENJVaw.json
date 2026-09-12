@@ -15,7 +15,7 @@
     "e4",
     "g6"
    ],
-   "spoken": "The point I keep coming back to is never to fall in love with a particular piece. One more game — we face a fianchetto, e4 and g6."
+   "spoken": "The point I keep coming back to is never to fall in love with a particular piece. One more game — you face a fianchetto, e4 and g6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We stake out the center with d4."
+   "spoken": "You stake out the center with d4."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We take, e takes d5, opening the position while Black is underdeveloped."
+   "spoken": "You take, e takes d5, opening the position while Black is underdeveloped."
   },
   {
    "ply": 6,
@@ -205,7 +205,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight leaps to e5. We don't have to restrict ourselves to the kingside; we can play in the center and against Black's queen — exactly what I'm doing."
+   "spoken": "The knight leaps to e5. You don't have to restrict yourself to the kingside; you can play in the center and against Black's queen — exactly what I'm doing."
   },
   {
    "ply": 22,
@@ -295,7 +295,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "Recapturing on h5 with the rook is playable but not most accurate — I think g4 is far more straightforward, keeping our rook for bigger things while trapping the knight."
+   "spoken": "Recapturing on h5 with the rook is playable but not most accurate — I think g4 is far more straightforward, keeping your rook for bigger things while trapping the knight."
   },
   {
    "ply": 32,
@@ -313,7 +313,7 @@
    "line": [
     "Qh6+"
    ],
-   "spoken": "The queen swings to h6 with check — Black is making it very easy for us."
+   "spoken": "The queen swings to h6 with check — Black is making it very easy for you."
   },
   {
    "ply": 34,
@@ -331,7 +331,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Now the final, important step: we need to deflect that f6-knight, and the most clinical way is with another knight — the knight to e4."
+   "spoken": "Now the final, important step: you need to deflect that f6-knight, and the most clinical way is with another knight — the knight to e4."
   },
   {
    "ply": 34,
@@ -386,7 +386,7 @@
     "bxc4",
     "Nxd6"
    ],
-   "spoken": "After the queen to f4, Black takes the bishop with b takes c4, and we simply grab the queen — the knight takes on d6.",
+   "spoken": "After the queen to f4, Black takes the bishop with b takes c4, and you simply grab the queen — the knight takes on d6.",
    "reanchor": true
   },
   {
@@ -397,7 +397,7 @@
     "Rxd6",
     "g5"
    ],
-   "spoken": "Black recaptures the knight with the rook on d6, and we push g5, chasing the last defender.",
+   "spoken": "Black recaptures the knight with the rook on d6, and you push g5, chasing the last defender.",
    "reanchor": true
   },
   {
@@ -408,7 +408,7 @@
     "Nb4",
     "gxf6"
    ],
-   "spoken": "Black lunges with the knight to b4, and we crash through, g takes f6, peeling the cover off the king.",
+   "spoken": "Black lunges with the knight to b4, and you crash through, g takes f6, peeling the cover off the king.",
    "reanchor": true
   },
   {
@@ -438,7 +438,7 @@
    "line": [
     "Kb1"
    ],
-   "spoken": "We calmly step the king to b1."
+   "spoken": "You calmly step the king to b1."
   },
   {
    "ply": 48,
@@ -456,7 +456,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "We take, b takes c3 — a noble but hopeless try."
+   "spoken": "You take, b takes c3 — a noble but hopeless try."
   },
   {
    "ply": 50,
@@ -499,7 +499,7 @@
    "t": 2385,
    "fen": "r5k1/pb2pp1p/2pr1Pp1/4N3/1npP1Q2/5P2/PPP5/2KR3R b - - 0 22",
    "line": [],
-   "spoken": "I like to give real context when we run into a recurring theme, so bear with the little tactical lecture.",
+   "spoken": "I like to give real context when you run into a recurring theme, so bear with the little tactical lecture.",
    "reanchor": true
   },
   {
@@ -569,7 +569,7 @@
     "Nf6",
     "O-O-O"
    ],
-   "spoken": "Black develops the knight, and we castle queenside.",
+   "spoken": "Black develops the knight, and you castle queenside.",
    "reanchor": true
   },
   {
@@ -580,7 +580,7 @@
     "O-O",
     "Nf3"
    ],
-   "spoken": "Black castles kingside, and we bring the knight to f3.",
+   "spoken": "Black castles kingside, and you bring the knight to f3.",
    "reanchor": true
   },
   {
@@ -656,7 +656,7 @@
     "Bxg7",
     "Kxg7"
    ],
-   "spoken": "We take on g7 and Black recaptures with the king, then we stick the knight into the center.",
+   "spoken": "You take on g7 and Black recaptures with the king, then you stick the knight into the center.",
    "reanchor": true
   },
   {
@@ -677,7 +677,7 @@
     "Na6",
     "Bc4"
    ],
-   "spoken": "Black plays the knight to a6, and we develop the bishop to c4.",
+   "spoken": "Black plays the knight to a6, and you develop the bishop to c4.",
    "reanchor": true
   },
   {
@@ -707,7 +707,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "Notice we weren't afraid of the knight to b4.",
+   "spoken": "Notice you weren't afraid of the knight to b4.",
    "reanchor": true
   },
   {
@@ -730,7 +730,7 @@
     "Na6",
     "h4"
    ],
-   "spoken": "So after c6, the knight to c3, the knight to a6, we crash through with h4 — h5 straight away would have been met by g4.",
+   "spoken": "So after c6, the knight to c3, the knight to a6, you crash through with h4 — h5 straight away would have been met by g4.",
    "reanchor": true
   },
   {
@@ -741,7 +741,7 @@
     "h5",
     "g4"
    ],
-   "spoken": "Black plays h5 and we answer g4.",
+   "spoken": "Black plays h5 and you answer g4.",
    "reanchor": true
   },
   {
@@ -769,7 +769,7 @@
    "t": 2478.5,
    "fen": "r4r2/pb2ppkp/1ppq1np1/1N2N3/1nBP4/5P2/PPPQ2PP/2KR3R w - - 0 15",
    "line": [],
-   "spoken": "We'll get plenty more chances to do this kind of thing, so I won't go too deep — but remember, you don't always need to attack by sacrificing, especially when your opponent isn't creating any counter-threats.",
+   "spoken": "You'll get plenty more chances to do this kind of thing, so I won't go too deep — but remember, you don't always need to attack by sacrificing, especially when your opponent isn't creating any counter-threats.",
    "reanchor": true
   },
   {

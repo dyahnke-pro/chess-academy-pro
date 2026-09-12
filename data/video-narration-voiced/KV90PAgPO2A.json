@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "The pawn to e4, c6 — we're facing the Caro-Kann. How dare he play something I play with Black."
+   "spoken": "The pawn to e4, c6 — you're facing the Caro-Kann. How dare he play something I play with Black."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4. Against the Caro, for a sharp line we could play the Nimzowitsch, but the classic sharp way —"
+   "spoken": "d4. Against the Caro, for a sharp line you could play the Nimzowitsch, but the classic sharp way —"
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "— is the Panov Attack: we take on d5, the Exchange Caro, a gateway to very peaceful lines —"
+   "spoken": "— is the Panov Attack: you take on d5, the Exchange Caro, a gateway to very peaceful lines —"
   },
   {
    "ply": 6,
@@ -105,7 +105,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Because there's a pawn on d4 and it's isolated — no neighboring pawns, no c-pawn, no e-pawn; we gave both up. Whether the IQP is good or bad depends entirely on the circumstances — that's the magic; it can be the reason you win the game or the reason you lose it. But the bishop to f5 is a mistake — a classic fork, the queen to b3 forking two pawns, and we take one."
+   "spoken": "Because there's a pawn on d4 and it's isolated — no neighboring pawns, no c-pawn, no e-pawn; you gave both up. Whether the IQP is good or bad depends entirely on the circumstances — that's the magic; it can be the reason you win the game or the reason you lose it. But the bishop to f5 is a mistake — a classic fork, the queen to b3 forking two pawns, and you take one."
   },
   {
    "ply": 16,
@@ -117,7 +117,7 @@
     "Qb5",
     "e6"
    ],
-   "spoken": "The queen to b3, the knight to d7, the queen to b5, e6. We shouldn't go crazy — this is where a lot of people go off a cliff with the knight to b5 and c7; we haven't completed our development, particularly the kingside. Instead of anything rash, let's complete development mindfully — the bishop to f4 prevents the rook to b8, though he's not really threatening it, because we're going to take the a7-pawn."
+   "spoken": "The queen to b3, the knight to d7, the queen to b5, e6. You shouldn't go crazy — this is where a lot of people go off a cliff with the knight to b5 and c7; you haven't completed your development, particularly the kingside. Instead of anything rash, let's complete development mindfully — the bishop to f4 prevents the rook to b8, though he's not really threatening it, because you're going to take the a7-pawn."
   },
   {
    "ply": 20,
@@ -129,7 +129,7 @@
     "Nf3",
     "Qd8"
    ],
-   "spoken": "We take the a7-pawn — careful the queen isn't trapped in a repetition as he chases it with the rook. He plays the rook to b4, hitting the bishop, which isn't scary at all: the bishop moves to b5, a great square protected by the knight, pinning his knight to his king while he's still undeveloped, and the rook on b4 is misplaced, so we threaten a3 to trap it. He plays the bishop to b8, and the queen to b7 is amazing because it pins the rook — a piece of higher value can x-ray a lower one, so if the rook goes to b3 it's undefended, and the knight takes with check exposes the attack on the rook. The queen takes d7 is bad, since the knight is defended by the other knight, and the bishop takes d7 would open the gates for his rook to come back — we want the gates closed. If he castles, we take his rook anyway. He plays the rook to b3, and the knight takes with check — check supersedes, we're not blundering the queen — and we take the rook; his queenside is gone. Now we castle and complete development. He builds a battery on h2, so rather than toy with it, we play g3 — weakening the light squares, yes, but we're up a rook and he has nothing on the kingside to do real damage — and it prepares the bishop to f4; the rule against pushing pawns in front of your king is overrated and needs moderation. The bishop to g4 attacks the knight, but instead of moving it we play the prepared bishop to f4, hitting his queen and getting our last piece out. Then we start trading everything on e5 — no more IQP; it's retired to the beaches. The bishop to f3 is delicate, because the queen to h3 would threaten mate on g2, so we deal with the bishop: the knight on b5 isn't really defending the king, so we drop it back to e2, heading to f4, which limits his queen to g4, and then h3 knocks the queen off its defense of the bishop. He takes, our king is perfectly safe, and we just push the pawn and win.",
+   "spoken": "You take the a7-pawn — careful the queen isn't trapped in a repetition as he chases it with the rook. He plays the rook to b4, hitting the bishop, which isn't scary at all: the bishop moves to b5, a great square protected by the knight, pinning his knight to his king while he's still undeveloped, and the rook on b4 is misplaced, so you threaten a3 to trap it. He plays the bishop to b8, and the queen to b7 is amazing because it pins the rook — a piece of higher value can x-ray a lower one, so if the rook goes to b3 it's undefended, and the knight takes with check exposes the attack on the rook. The queen takes d7 is bad, since the knight is defended by the other knight, and the bishop takes d7 would open the gates for his rook to come back — you want the gates closed. If he castles, you take his rook anyway. He plays the rook to b3, and the knight takes with check — check supersedes, you're not blundering the queen — and you take the rook; his queenside is gone. Now you castle and complete development. He builds a battery on h2, so rather than toy with it, you play g3 — weakening the light squares, yes, but you're up a rook and he has nothing on the kingside to do real damage — and it prepares the bishop to f4; the rule against pushing pawns in front of your king is overrated and needs moderation. The bishop to g4 attacks the knight, but instead of moving it you play the prepared bishop to f4, hitting his queen and getting your last piece out. Then you start trading everything on e5 — no more IQP; it's retired to the beaches. The bishop to f3 is delicate, because the queen to h3 would threaten mate on g2, so you deal with the bishop: the knight on b5 isn't really defending the king, so you drop it back to e2, heading to f4, which limits his queen to g4, and then h3 knocks the queen off its defense of the bishop. He takes, your king is perfectly safe, and you just push the pawn and win.",
    "reanchor": true
   },
   {
@@ -283,7 +283,7 @@
    "t": 1177,
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": "If White controls the square in front of the IQP, White's generally good; if Black blockades it, usually with his knight, Black's often in good shape — a cheap, un-nuanced but useful emergency way to evaluate. The bishop to f5 is bad for reasons unrelated to the IQP — two weak pawns, and we win one. And if he'd kept harassing the queen, we'd have evacuated with c6, and after the rook to b6, a4, and the rook to b4.",
+   "spoken": "If White controls the square in front of the IQP, White's generally good; if Black blockades it, usually with his knight, Black's often in good shape — a cheap, un-nuanced but useful emergency way to evaluate. The bishop to f5 is bad for reasons unrelated to the IQP — two weak pawns, and you win one. And if he'd kept harassing the queen, you'd have evacuated with c6, and after the rook to b6, a4, and the rook to b4.",
    "reanchor": true
   }
  ]

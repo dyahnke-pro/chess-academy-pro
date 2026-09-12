@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We take Black and play the Sicilian, c5."
+   "spoken": "You take Black and play the Sicilian, c5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We continue with d6, heading for the Najdorf."
+   "spoken": "You continue with d6, heading for the Najdorf."
   },
   {
    "ply": 8,
@@ -45,7 +45,7 @@
     "Nxd4",
     "Nf6"
    ],
-   "spoken": "The centre opens — we take on d4, White recaptures with the knight, and we develop to f6: a mainline Najdorf at last."
+   "spoken": "The centre opens — you take on d4, White recaptures with the knight, and you develop to f6: a mainline Najdorf at last."
   },
   {
    "ply": 10,
@@ -55,7 +55,7 @@
     "Nc3",
     "a6"
    ],
-   "spoken": "White develops the knight to c3 and we play the Najdorf move, a6."
+   "spoken": "White develops the knight to c3 and you play the Najdorf move, a6."
   },
   {
    "ply": 11,
@@ -73,7 +73,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We strike in the centre with e5."
+   "spoken": "You strike in the centre with e5."
   },
   {
    "ply": 13,
@@ -91,7 +91,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "We develop the bishop to e6."
+   "spoken": "You develop the bishop to e6."
   },
   {
    "ply": 15,
@@ -109,7 +109,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "We play the bishop to e7. Normally this is the classic opposite-wing race — Black on the queenside, White on the kingside."
+   "spoken": "You play the bishop to e7. Normally this is the classic opposite-wing race — Black on the queenside, White on the kingside."
   },
   {
    "ply": 17,
@@ -136,7 +136,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle too."
+   "spoken": "You castle too."
   },
   {
    "ply": 20,
@@ -145,14 +145,14 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "We develop the knight to d7 — the customary Najdorf square; the knight rarely goes to c6 here, for positional reasons."
+   "spoken": "You develop the knight to d7 — the customary Najdorf square; the knight rarely goes to c6 here, for positional reasons."
   },
   {
    "ply": 10,
    "t": 120.5,
    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
    "line": [],
-   "spoken": "The plan: White has mixed the quiet Karpov bishop-e2 with the English Attack's f3 — a mishmash that hands us comfortable play. We improve with the rook to c8 and the thematic ...b5, watching for a4. If White jumps a knight to d5, we take, and after the recapture drop the bishop to f5, keeping the bishop pair; then reroute it to g6 and roll our kingside pawns — a reverse English Attack, where we attack White's king and slot in ...a4 as prophylaxis against White's queenside play. As a King's-Indian player, attacking the enemy king suits us perfectly.",
+   "spoken": "The plan: White has mixed the quiet Karpov bishop-e2 with the English Attack's f3 — a mishmash that hands you comfortable play. You improve with the rook to c8 and the thematic ...b5, watching for a4. If White jumps a knight to d5, you take, and after the recapture drop the bishop to f5, keeping the bishop pair; then reroute it to g6 and roll your kingside pawns — a reverse English Attack, where you attack White's king and slot in ...a4 as prophylaxis against White's queenside play. As a King's-Indian player, attacking the enemy king suits you perfectly.",
    "reanchor": true
   },
   {

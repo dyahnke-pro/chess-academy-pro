@@ -74,7 +74,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "We just keep developing with the bishop to g2, the Glek's fianchetto.",
+   "spoken": "You just keep developing with the bishop to g2, the Glek's fianchetto.",
    "kind": "main"
   },
   {
@@ -93,7 +93,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "When Black pins with the bishop to b4, don't reflexively play d3 — Black isn't actually winning a pawn. We simply castle.",
+   "spoken": "When Black pins with the bishop to b4, don't reflexively play d3 — Black isn't actually winning a pawn. You simply castle.",
    "kind": "main",
    "teaches": [
     "don’t defend a pawn that isn’t really hanging"
@@ -115,7 +115,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": "And when the trade comes, recapture with the d-pawn — opening lines for our pieces.",
+   "spoken": "And when the trade comes, recapture with the d-pawn — opening lines for your pieces.",
    "kind": "main"
   },
   {
@@ -157,7 +157,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": "After the recapture we take on e4 and win the pawn back, emerging with the two bishops.",
+   "spoken": "After the recapture you take on e4 and win the pawn back, emerging with the two bishops.",
    "kind": "main"
   },
   {
@@ -180,7 +180,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 chases the knight — but play it only with a clear follow-up in mind, since it does loosen our own position a touch.",
+   "spoken": "f4 chases the knight — but play it only with a clear follow-up in mind, since it does loosen your own position a touch.",
    "kind": "main",
    "teaches": [
     "commit to f4 only with a plan"

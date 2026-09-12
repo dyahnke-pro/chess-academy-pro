@@ -35,7 +35,7 @@
       "line": [
         "a6"
       ],
-      "spoken": "There are several replies here — a6; e6, the most common online; the bishop to f5, which our opponent played; c5; and e4, a sharp recent innovation, where before people played e3. The knight to c6 is one appeal of this line at a lower level, because after the knight to b5 White is not simply winning — that's a misconception — but you can win quickly if Black doesn't find the only way to stop the knight taking c7, which is e5, intercepting the diagonal; and here you're supposed to take with the bishop. There's one idea worth knowing that recurs in the Jobava"
+      "spoken": "There are several replies here — a6; e6, the most common online; the bishop to f5, which your opponent played; c5; and e4, a sharp recent innovation, where before people played e3. The knight to c6 is one appeal of this line at a lower level, because after the knight to b5 White is not simply winning — that's a misconception — but you can win quickly if Black doesn't find the only way to stop the knight taking c7, which is e5, intercepting the diagonal; and here you're supposed to take with the bishop. There's one idea worth knowing that recurs in the Jobava"
     },
     {
       "ply": 5,
@@ -237,7 +237,7 @@
       "line": [
         "Bf5"
       ],
-      "spoken": "let's focus on the move our opponent played, the bishop to f5, one of the most popular responses."
+      "spoken": "let's focus on the move your opponent played, the bishop to f5, one of the most popular responses."
     },
     {
       "ply": 7,
@@ -246,7 +246,7 @@
       "line": [
         "e3"
       ],
-      "spoken": "We chose e3, and"
+      "spoken": "You chose e3, and"
     },
     {
       "ply": 9,
@@ -337,7 +337,7 @@
         "Nxc5",
         "Nc7+"
       ],
-      "spoken": "Obviously you can't recapture with the knight, you have to take with the bishop; now the knight to d4 is very strong, because it opens an attack on the bishop, and if the bishop retreats we deliver a nasty check on a4 — you can see how nasty this gets."
+      "spoken": "Obviously you can't recapture with the knight, you have to take with the bishop; now the knight to d4 is very strong, because it opens an attack on the bishop, and if the bishop retreats you deliver a nasty check on a4 — you can see how nasty this gets."
     },
     {
       "ply": 9,
@@ -411,7 +411,7 @@
         "Bf4",
         "Bd6"
       ],
-      "spoken": "Our opponent played the most common line,"
+      "spoken": "Your opponent played the most common line,"
     },
     {
       "ply": 15,
@@ -420,7 +420,7 @@
       "line": [
         "Ne5"
       ],
-      "spoken": "the bishop to d6; we play the knight to e5, and the knight to d7."
+      "spoken": "the bishop to d6; you play the knight to e5, and the knight to d7."
     },
     {
       "ply": 16,
@@ -524,7 +524,7 @@
       "t": 3023,
       "fen": "rn1q1rk1/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQ - 8 9",
       "line": [],
-      "spoken": "Our opponent played the knight to d7. The game I referenced was a slightly different move order, from 2016 — I stand corrected. There I played the traditional early f3 and g4; you can now see why the kingside pawn storm is dangerous. My opponent made a very instructive mistake: I got the knight to f4, and he allowed the knight to take g6, giving a scary-looking check on g3 — but my king is totally fine on d2, and I just kept developing; in fact his queen is the vulnerable one on g3. The queen to e2 connects the rooks and the game ends very fast — he plays g5, I trade, get the rook into the attack, and it's a crushing attack; my king simply hides on c1, then b1, and it's mate on h8. So f3 on move four is the main line, the most popular move, worth investigating. The bishop to d3 was the game continuation; our opponent traded, and it's a shame he then blundered with c6 — hilariously the engine prefers the knight taking c6 over taking f7, because after the queen to c7 there's the extra knight to b5, controlling b4 and a5, so there's no check on a5.",
+      "spoken": "Your opponent played the knight to d7. The game I referenced was a slightly different move order, from 2016 — I stand corrected. There I played the traditional early f3 and g4; you can now see why the kingside pawn storm is dangerous. My opponent made a very instructive mistake: I got the knight to f4, and he allowed the knight to take g6, giving a scary-looking check on g3 — but my king is totally fine on d2, and I just kept developing; in fact his queen is the vulnerable one on g3. The queen to e2 connects the rooks and the game ends very fast — he plays g5, I trade, get the rook into the attack, and it's a crushing attack; my king simply hides on c1, then b1, and it's mate on h8. So f3 on move four is the main line, the most popular move, worth investigating. The bishop to d3 was the game continuation; your opponent traded, and it's a shame he then blundered with c6 — hilariously the engine prefers the knight taking c6 over taking f7, because after the queen to c7 there's the extra knight to b5, controlling b4 and a5, so there's no check on a5.",
       "reanchor": true
     },
     {
@@ -668,7 +668,7 @@
         "c6",
         "Nxf7+"
       ],
-      "spoken": "takes f7, and we solidify the extra pawn. We'll fast-forward — the next moves were intuitive: f4 improving our position, b4 to stop c5, a3 to protect the pawn, lift and connect the rooks on the f-file; the bishop to d6 saving the bishop and chasing the knight. Things got fun after e4 — the knight to f8 is good, we drop the bishop back; e5 here allows the knight to f5, and you've made backward progress, because the bishop to c5, b6, and Black is winning: after you take the knight there's an in-between move and you've lost the exchange. So we drop the bishop back to e5, and here we decided it was time to transform the position."
+      "spoken": "takes f7, and you solidify the extra pawn. You'll fast-forward — the next moves were intuitive: f4 improving your position, b4 to stop c5, a3 to protect the pawn, lift and connect the rooks on the f-file; the bishop to d6 saving the bishop and chasing the knight. Things got fun after e4 — the knight to f8 is good, you drop the bishop back; e5 here allows the knight to f5, and you've made backward progress, because the bishop to c5, b6, and Black is winning: after you take the knight there's an in-between move and you've lost the exchange. So you drop the bishop back to e5, and here you decided it was time to transform the position."
     }
   ]
 }

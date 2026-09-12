@@ -15,7 +15,7 @@
     "e4",
     "Nc6"
    ],
-   "spoken": "We open e4, and Black plays the knight to c6."
+   "spoken": "You open e4, and Black plays the knight to c6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight to f3 — if Black plays e5 we transpose to standard lines."
+   "spoken": "The knight to f3 — if Black plays e5 you transpose to standard lines."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We grab the centre with d4. Bringing the bishop to g4 is dubious for Black — not losing, but very meh, and White doesn't need much theory to get a big edge."
+   "spoken": "You grab the centre with d4. Bringing the bishop to g4 is dubious for Black — not losing, but very meh, and White doesn't need much theory to get a big edge."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "Let's circumvent d5 — why bog down when we can simply develop and target the knight with the bishop to b5?"
+   "spoken": "Let's circumvent d5 — why bog down when you can simply develop and target the knight with the bishop to b5?"
   },
   {
    "ply": 8,
@@ -78,7 +78,7 @@
    "line": [
     "Bxc6+"
    ],
-   "spoken": "We take, capturing on c6 with check."
+   "spoken": "You take, capturing on c6 with check."
   },
   {
    "ply": 10,
@@ -96,7 +96,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Until Black completes development, those weak pawns are a real target. We castle."
+   "spoken": "Until Black completes development, those weak pawns are a real target. You castle."
   },
   {
    "ply": 12,
@@ -132,7 +132,7 @@
    "line": [
     "Qxf3"
    ],
-   "spoken": "We recapture with the queen on f3."
+   "spoken": "You recapture with the queen on f3."
   },
   {
    "ply": 16,
@@ -141,7 +141,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "Now let's pressure these pawns — we don't have forever; if Black completes kingside development, he's fine. So we act now."
+   "spoken": "Now let's pressure these pawns — you don't have forever; if Black completes kingside development, he's fine. So you act now."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "Qc3"
    ],
-   "spoken": "We assault the pawns by sliding the queen to c3. How did I find it? There's a brief moment before the fianchetto completes where the rook is vulnerable."
+   "spoken": "You assault the pawns by sliding the queen to c3. How did I find it? There's a brief moment before the fianchetto completes where the rook is vulnerable."
   },
   {
    "ply": 18,
@@ -177,7 +177,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6. Let's not rush d takes c6 — there's the fine alternative the bishop to e3, which lets Black play c5, saving the pawn but granting us big queenside positional gains."
+   "spoken": "The knight to f6. Let's not rush d takes c6 — there's the fine alternative the bishop to e3, which lets Black play c5, saving the pawn but granting you big queenside positional gains."
   },
   {
    "ply": 21,
@@ -204,7 +204,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "We play it Benoni style — the knight to d2. Watch: the queen to a3 is coming."
+   "spoken": "You play it Benoni style — the knight to d2. Watch: the queen to a3 is coming."
   },
   {
    "ply": 24,
@@ -258,7 +258,7 @@
    "line": [
     "Rfe1"
    ],
-   "spoken": "We deploy the rook to e1."
+   "spoken": "You deploy the rook to e1."
   },
   {
    "ply": 30,
@@ -276,7 +276,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "We complete the knight maneuver to c4, applying Russian-schoolboy pressure."
+   "spoken": "You complete the knight maneuver to c4, applying Russian-schoolboy pressure."
   },
   {
    "ply": 32,
@@ -303,7 +303,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "e6. Do we want this exchange? No — we want the d5 pawn to keep clamping."
+   "spoken": "e6. Do you want this exchange? No — you want the d5 pawn to keep clamping."
   },
   {
    "ply": 35,
@@ -312,7 +312,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "So we protect it — the rook to d1."
+   "spoken": "So you protect it — the rook to d1."
   },
   {
    "ply": 37,
@@ -322,7 +322,7 @@
     "exd5",
     "exd5"
    ],
-   "spoken": "Black opens the e-file for us; we recapture on d5."
+   "spoken": "Black opens the e-file for you; you recapture on d5."
   },
   {
    "ply": 38,
@@ -331,7 +331,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Now that d5 is under fire, we could play c4, but a cooler protection is the knight to the outpost first. The knight to f6."
+   "spoken": "Now that d5 is under fire, you could play c4, but a cooler protection is the knight to the outpost first. The knight to f6."
   },
   {
    "ply": 39,
@@ -367,7 +367,7 @@
    "line": [
     "Qb7"
    ],
-   "spoken": "The queen to b7. I'm looking at that trapped rook — if the diagonal opens, we win the exchange."
+   "spoken": "The queen to b7. I'm looking at that trapped rook — if the diagonal opens, you win the exchange."
   },
   {
    "ply": 43,
@@ -394,7 +394,7 @@
    "line": [
     "bxc5"
    ],
-   "spoken": "We take, capturing on c5."
+   "spoken": "You take, capturing on c5."
   },
   {
    "ply": 47,
@@ -404,7 +404,7 @@
     "dxc5",
     "Bxc5"
    ],
-   "spoken": "Black recaptures, and we take on c5 with the bishop — knocking on the door of victory, Black's pieces still stuck on the b-file."
+   "spoken": "Black recaptures, and you take on c5 with the bishop — knocking on the door of victory, Black's pieces still stuck on the b-file."
   },
   {
    "ply": 48,

@@ -86,7 +86,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "The rule when your opponent is underdeveloped: open the center as fast as possible. So we strike with d4 to shred it open.",
+   "spoken": "The rule when your opponent is underdeveloped: open the center as fast as possible. So you strike with d4 to shred it open.",
    "kind": "main",
    "teaches": [
     "open the center against a lagging opponent"
@@ -162,7 +162,7 @@
     "Ke7",
     "f3"
    ],
-   "spoken": "We follow with f3, defending the queen with tempo and forcing the enemy bishop to declare itself.",
+   "spoken": "You follow with f3, defending the queen with tempo and forcing the enemy bishop to declare itself.",
    "kind": "main"
   },
   {
@@ -172,7 +172,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "Black's bishop to h5 actually helps us — our bishop was stranded on f7, and this hands us a free tempo to snap it off.",
+   "spoken": "Black's bishop to h5 actually helps you — your bishop was stranded on f7, and this hands you a free tempo to snap it off.",
    "kind": "main"
   },
   {
@@ -192,7 +192,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now we close the center with d5 — normally wrong with the enemy king exposed, but here for one concrete purpose: to plant a knight on e6, then reopen the position with f4 to even greater effect.",
+   "spoken": "Now you close the center with d5 — normally wrong with the enemy king exposed, but here for one concrete purpose: to plant a knight on e6, then reopen the position with f4 to even greater effect.",
    "kind": "plan",
    "teaches": [
     "a purposeful center-close to win the e6 outpost"
@@ -223,7 +223,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle to prepare f4 methodically — the king gets safe and the rook is ready for the f-file that's about to open.",
+   "spoken": "You castle to prepare f4 methodically — the king gets safe and the rook is ready for the f-file that's about to open.",
    "kind": "main"
   },
   {
@@ -233,10 +233,10 @@
    "line": [
     "c6"
    ],
-   "spoken": "Black's c6 is no worry: the pawn on e4 defends d5, so a capture there doesn't win anything — it just opens the e-file for us.",
+   "spoken": "Black's c6 is no worry: the pawn on e4 defends d5, so a capture there doesn't win anything — it just opens the e-file for you.",
    "kind": "main",
    "teaches": [
-    "the pawn chain holds; the capture only helps us"
+    "the pawn chain holds; the capture only helps you"
    ]
   },
   {
@@ -281,7 +281,7 @@
    "line": [
     "Nxf8"
    ],
-   "spoken": "The cleanest finish — the knight takes with a threat on the queen, then collects on h5: now we're up a piece AND still attacking, the best kind of insurance if the attack ever stalls.",
+   "spoken": "The cleanest finish — the knight takes with a threat on the queen, then collects on h5: now you're up a piece AND still attacking, the best kind of insurance if the attack ever stalls.",
    "kind": "main",
    "teaches": [
     "convert into a material lead while keeping the attack"

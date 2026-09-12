@@ -65,7 +65,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We push e5 rather than the old knight to c3, which would let Black equalize comfortably with ...e5.",
+   "spoken": "You push e5 rather than the old knight to c3, which would let Black equalize comfortably with ...e5.",
    "kind": "main",
    "teaches": [
     "e5 keeps the initiative"
@@ -87,7 +87,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "We recover the pawn with the bishop on c4.",
+   "spoken": "You recover the pawn with the bishop on c4.",
    "kind": "main"
   },
   {
@@ -160,7 +160,7 @@
    "line": [
     "Nbc3"
    ],
-   "spoken": "We build toward d5 calmly — the knight to e2 first, then to c3. Not the knight to f3, which would allow a ...Bg4 pin; and the knight on e2 also guards its brother on c3, all in service of controlling d5.",
+   "spoken": "You build toward d5 calmly — the knight to e2 first, then to c3. Not the knight to f3, which would allow a ...Bg4 pin; and the knight on e2 also guards its brother on c3, all in service of controlling d5.",
    "kind": "main",
    "teaches": [
     "Ne2 supports c3 and dodges the pin"
@@ -192,7 +192,7 @@
    "line": [
     "Ng3"
    ],
-   "spoken": "The knight to g3 looks like an outright blunder — ...Nxc3 seems to win a pawn and trap our corner rook. But calculating deeper, the trapped-rook line isn't the whole story: with Black uncastled and a gaping hole on d6, White gets a crushing attack.",
+   "spoken": "The knight to g3 looks like an outright blunder — ...Nxc3 seems to win a pawn and trap your corner rook. But calculating deeper, the trapped-rook line isn't the whole story: with Black uncastled and a gaping hole on d6, White gets a crushing attack.",
    "kind": "main",
    "teaches": [
     "calculate past the obvious refutation"

@@ -50,7 +50,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White pushes e5, and we settle into a favorable French-type structure.",
+   "spoken": "White pushes e5, and you settle into a favorable French-type structure.",
    "kind": "main"
   },
   {
@@ -98,7 +98,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the knight to c6, in no hurry to play e6.",
+   "spoken": "You develop the knight to c6, in no hurry to play e6.",
    "kind": "main"
   },
   {
@@ -108,7 +108,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "White pins with the bishop to b5, eyeing the doubling of our c-pawns.",
+   "spoken": "White pins with the bishop to b5, eyeing the doubling of your c-pawns.",
    "kind": "main"
   },
   {
@@ -118,7 +118,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The elegant answer is the queen to b6 — it prepares to recapture on c6 with a piece, keeping our pawn structure intact.",
+   "spoken": "The elegant answer is the queen to b6 — it prepares to recapture on c6 with a piece, keeping your pawn structure intact.",
    "kind": "main",
    "teaches": [
     "Qb6 to recapture with a piece"
@@ -132,7 +132,7 @@
     "Bxc6+",
     "Qxc6"
    ],
-   "spoken": "So we recapture with the queen, structure preserved and everything groovy.",
+   "spoken": "So you recapture with the queen, structure preserved and everything groovy.",
    "kind": "main"
   },
   {
@@ -233,7 +233,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "Then the reshuffle — the bishop to g6 and the knight into f5, a monster square. If White tries g4, we just open the h-file at his exposed king.",
+   "spoken": "Then the reshuffle — the bishop to g6 and the knight into f5, a monster square. If White tries g4, you just open the h-file at his exposed king.",
    "kind": "main",
    "teaches": [
     "Bg6 and Nf5 to dominate"
@@ -255,7 +255,7 @@
    "line": [
     "Bxd3"
    ],
-   "spoken": "White's knight to d2 is a blunder — we gladly snap off the loose central pawn, the bishop landing on d3.",
+   "spoken": "White's knight to d2 is a blunder — you gladly snap off the loose central pawn, the bishop landing on d3.",
    "kind": "main"
   },
   {

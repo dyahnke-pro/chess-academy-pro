@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We meet the king's pawn with c6 — the Caro-Kann."
+   "spoken": "You meet the king's pawn with c6 — the Caro-Kann."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We strike back at the centre with d5 — the heart of the Caro-Kann."
+   "spoken": "You strike back at the centre with d5 — the heart of the Caro-Kann."
   },
   {
    "ply": 5,
@@ -52,7 +52,7 @@
     "Bf5",
     "f4"
    ],
-   "spoken": "Here's the whole reason the Caro exists: unlike the French, we get to develop this light-squared bishop OUTSIDE the pawn chain, to f5, before we ever shut it in with e6 — and that's exactly what we've done. White answers with f4, grabbing more central space, but it's not a good move: it curbs the development of White's own light bishop and it weakens his king."
+   "spoken": "Here's the whole reason the Caro exists: unlike the French, you get to develop this light-squared bishop OUTSIDE the pawn chain, to f5, before you ever shut it in with e6 — and that's exactly what you've done. White answers with f4, grabbing more central space, but it's not a good move: it curbs the development of White's own light bishop and it weakens his king."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White develops the bishop to d3. Since this is our first Advance Caro, here's the rationale. The centre is CLOSED, and a closed centre is built of pawn chains — our black pawns form one chain, and d4 with e5 is White's chain. The side with more levers, more ability to attack and undermine the OTHER side's chain, is the side holding the initiative — and the whole point of the Caro is that Black is that side. White's compensation is space; those two things balance out. And right now we don't want to surrender this prime parking spot on f5 so easily — we trade it on OUR terms."
+   "spoken": "White develops the bishop to d3. Since this is your first Advance Caro, here's the rationale. The centre is CLOSED, and a closed centre is built of pawn chains — your black pawns form one chain, and d4 with e5 is White's chain. The side with more levers, more ability to attack and undermine the OTHER side's chain, is the side holding the initiative — and the whole point of the Caro is that Black is that side. White's compensation is space; those two things balance out. And right now you don't want to surrender this prime parking spot on f5 so easily — you trade it on YOUR terms."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Nh6"
    ],
-   "spoken": "Trading on our own terms means: when this bishop comes off, we want to replace it with a KNIGHT. So the typical move is the knight to h6 — and if White takes on f5, we recapture with the knight."
+   "spoken": "Trading on your own terms means: when this bishop comes off, you want to replace it with a KNIGHT. So the typical move is the knight to h6 — and if White takes on f5, you recapture with the knight."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3. Why do we want our knight to reach f5? To pressure d4. So the question becomes how we keep piling onto that pawn."
+   "spoken": "White develops the knight to f3. Why do you want your knight to reach f5? To pressure d4. So the question becomes how you keep piling onto that pawn."
   },
   {
    "ply": 12,
@@ -97,7 +97,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "We play c5 — hitting the base of White's pawn chain, and at the same time opening the c6 square for our knight."
+   "spoken": "You play c5 — hitting the base of White's pawn chain, and at the same time opening the c6 square for your knight."
   },
   {
    "ply": 13,
@@ -115,7 +115,7 @@
    "line": [
     "Nxf5"
    ],
-   "spoken": "We recapture with the knight, capturing on f5 — and now we have TWO attackers bearing on the d4 pawn."
+   "spoken": "You recapture with the knight, capturing on f5 — and now you have TWO attackers bearing on the d4 pawn."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles. Now we could grab d4 at once, but to play it cleanly there's a subtlety worth a second — and note White can also take on c5, which we'll deal with."
+   "spoken": "White castles. Now you could grab d4 at once, but to play it cleanly there's a subtlety worth a second — and note White can also take on c5, which you'll deal with."
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Rather than snatch d4 immediately, we play the knight to c6 first — the more flexible move, since we want it on the board regardless. The queen to b6 is also possible, but we hold it in reserve: if White plays c3, THEN the queen to b6 becomes strong."
+   "spoken": "Rather than snatch d4 immediately, you play the knight to c6 first — the more flexible move, since you want it on the board regardless. The queen to b6 is also possible, but you hold it in reserve: if White plays c3, THEN the queen to b6 becomes strong."
   },
   {
    "ply": 17,
@@ -169,7 +169,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "He won't allow the trick, so we simply take, capturing on d4 — there's a lot to unpack in this Advance."
+   "spoken": "He won't allow the trick, so you simply take, capturing on d4 — there's a lot to unpack in this Advance."
   },
   {
    "ply": 21,
@@ -178,7 +178,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "White recaptures, capturing on d4. This is a critical pawn: it's the link that breaks up his chain, and with two of our pieces attacking it against a single defender, it's falling — and his whole position starts to crumble."
+   "spoken": "White recaptures, capturing on d4. This is a critical pawn: it's the link that breaks up his chain, and with two of your pieces attacking it against a single defender, it's falling — and his whole position starts to crumble."
   },
   {
    "ply": 22,
@@ -187,7 +187,7 @@
    "line": [
     "Ncxd4"
    ],
-   "spoken": "The knight from c6 takes, capturing on d4 — we've won the pawn and reached the decisive stage: up material, with a protected passed pawn on d5."
+   "spoken": "The knight from c6 takes, capturing on d4 — you've won the pawn and reached the decisive stage: up material, with a protected passed pawn on d5."
   },
   {
    "ply": 23,
@@ -205,7 +205,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "We ask what we haven't done yet, and develop with the bishop to c5 — a great move. The h5 push was also good, but we save it; g4 would have been White's best, though I don't expect it."
+   "spoken": "You ask what you haven't done yet, and develop with the bishop to c5 — a great move. The h5 push was also good, but you save it; g4 would have been White's best, though I don't expect it."
   },
   {
    "ply": 25,
@@ -214,7 +214,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "White takes our knight, capturing on d4 — a mistake; now he collapses. The only question is what we recapture with."
+   "spoken": "White takes your knight, capturing on d4 — a mistake; now he collapses. The only question is what you recapture with."
   },
   {
    "ply": 26,
@@ -223,7 +223,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "We recapture with the bishop, capturing on d4 — the right choice. White's rook is now in trouble, and the game is essentially over: he's losing it."
+   "spoken": "You recapture with the bishop, capturing on d4 — the right choice. White's rook is now in trouble, and the game is essentially over: he's losing it."
   },
   {
    "ply": 27,
@@ -232,7 +232,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "White finds g4. Here's a common trap — tunnel vision. After a move like the bishop to d4, many players automatically snatch the rook on a1. But look wider: taking on a1 gives up our knight, so White gets a knight back for the rook — a real chunk of material. So we do NOT grab the rook immediately."
+   "spoken": "White finds g4. Here's a common trap — tunnel vision. After a move like the bishop to d4, many players automatically snatch the rook on a1. But look wider: taking on a1 gives up your knight, so White gets a knight back for the rook — a real chunk of material. So you do NOT grab the rook immediately."
   },
   {
    "ply": 28,
@@ -241,7 +241,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "And not the knight to e3 either — White just takes it, and then our bishop, which we've assigned the vital task of winning the rook, gets distracted defending. Instead we simply drop the knight back to e7. The point isn't to activate it; we're after far greener pastures — the rook. White's best is the knight to c3, cutting his losses to just the knight."
+   "spoken": "And not the knight to e3 either — White just takes it, and then your bishop, which you've assigned the vital task of winning the rook, gets distracted defending. Instead you simply drop the knight back to e7. The point isn't to activate it; you're after far greener pastures — the rook. White's best is the knight to c3, cutting his losses to just the knight."
   },
   {
    "ply": 30,
@@ -251,7 +251,7 @@
     "Nc3",
     "Bxc3"
    ],
-   "spoken": "White does find the knight to c3, and we take it, capturing on c3 — good defence, but we're winning the rook."
+   "spoken": "White does find the knight to c3, and you take it, capturing on c3 — good defence, but you're winning the rook."
   },
   {
    "ply": 31,
@@ -269,14 +269,14 @@
    "line": [
     "d4"
    ],
-   "spoken": "We exploit that avenue with d4 — a move doing several jobs at once: it shelters our bishop on c3, advances our passed pawn, and prepares the queen to c6, setting up a discovered check. It also opens the path for our e7-knight to reroute via d5 and even into e3 when we're ready."
+   "spoken": "You exploit that avenue with d4 — a move doing several jobs at once: it shelters your bishop on c3, advances your passed pawn, and prepares the queen to c6, setting up a discovered check. It also opens the path for your e7-knight to reroute via d5 and even into e3 when you're ready."
   },
   {
    "ply": 27,
    "t": 646,
    "fen": "r3k2r/pp3ppp/1q2p3/3pPn2/3b1PP1/1P6/P6P/RNBQ1R1K b kq - 0 14",
    "line": [],
-   "spoken": "The lesson here: not every move has to be active — no phobia of retreating. If you KNOW you're winning the rook, the knight's exact square doesn't matter; what matters is that it's SAFE, not that it's nominally more active. Get your priorities in order. Then we slide the queen to c6, and we don't need to take on b2 — that's why we pushed d4. We're not castling because our king is perfectly safe: run the worst-case test — give White five free moves and ask whether he could generate any threat against our king. He can't. So we'd castle only to bring a rook into play, never out of danger. And a general point: whenever a capture is available, spend a couple of seconds each move considering it even if you decline — a capture changes the position significantly and can open tactics, like the bishop taking on b2 setting up a fork on c1. It's not hard to see; it's about allowing yourself to consider the trade.",
+   "spoken": "The lesson here: not every move has to be active — no phobia of retreating. If you KNOW you're winning the rook, the knight's exact square doesn't matter; what matters is that it's SAFE, not that it's nominally more active. Get your priorities in order. Then you slide the queen to c6, and you don't need to take on b2 — that's why you pushed d4. You're not castling because your king is perfectly safe: run the worst-case test — give White five free moves and ask whether he could generate any threat against your king. He can't. So you'd castle only to bring a rook into play, never out of danger. And a general point: whenever a capture is available, spend a couple of seconds each move considering it even if you decline — a capture changes the position significantly and can open tactics, like the bishop taking on b2 setting up a fork on c1. It's not hard to see; it's about allowing yourself to consider the trade.",
    "reanchor": true
   },
   {
@@ -303,7 +303,7 @@
    "t": 853,
    "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "Let me abstract the structure. The French and the Caro are very similar openings. Both allow White to control the centre with two pawns — exactly why they were unpopular when chess began, since the old wisdom was to control the centre with pawns yourself. Later, players saw that Black DOES control part of the centre: in the French, a pawn on d5 and one on e6; in the Caro, the same but with the c-pawn — and the structural difference is almost nonexistent. They even morph into each other: in the Caro you often play e6 then c5, in the French c5 in one go. The shared rationale is to lure White into a pawn chain, then attack it from BOTH sides — c5 hitting the base, f6 hitting the head. Breaking White's centre isn't only good in itself; it hands your pieces more mobility. The KEY difference is Black's dark-squared bishop: in the French it's the famously bad bishop, boxed in, but the upside is you play c5 in a single move; in the Caro it's flipped — you get the bishop out, but you spend TWO tempi on c5, a real trade-off. The downside for Black in both is White's big space edge, and that e5 pawn controls f6, making the knight hard to develop. So your whole struggle in the Caro is developing those starved kingside pieces — the knight has no f6, so it heads to the rim as we did; but solve that AND pressure White's centre, and White's position often collapses spectacularly.",
+   "spoken": "Let me abstract the structure. The French and the Caro are very similar openings. Both allow White to control the centre with two pawns — exactly why they were unpopular when chess began, since the old wisdom was to control the centre with pawns yourself. Later, players saw that Black DOES control part of the centre: in the French, a pawn on d5 and one on e6; in the Caro, the same but with the c-pawn — and the structural difference is almost nonexistent. They even morph into each other: in the Caro you often play e6 then c5, in the French c5 in one go. The shared rationale is to lure White into a pawn chain, then attack it from BOTH sides — c5 hitting the base, f6 hitting the head. Breaking White's centre isn't only good in itself; it hands your pieces more mobility. The KEY difference is Black's dark-squared bishop: in the French it's the famously bad bishop, boxed in, but the upside is you play c5 in a single move; in the Caro it's flipped — you get the bishop out, but you spend TWO tempi on c5, a real trade-off. The downside for Black in both is White's big space edge, and that e5 pawn controls f6, making the knight hard to develop. So your whole struggle in the Caro is developing those starved kingside pieces — the knight has no f6, so it heads to the rim as you did; but solve that AND pressure White's centre, and White's position often collapses spectacularly.",
    "reanchor": true
   },
   {
@@ -351,7 +351,7 @@
     "e5",
     "Bf5"
    ],
-   "spoken": "So after e5, the bishop to f5, we continue.",
+   "spoken": "So after e5, the bishop to f5, you continue.",
    "reanchor": true
   },
   {
@@ -371,7 +371,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "And we meet it with e6.",
+   "spoken": "And you meet it with e6.",
    "reanchor": true
   },
   {
@@ -379,7 +379,7 @@
    "t": 1173.5,
    "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
    "line": [],
-   "spoken": "White has a whole family of systems here, and we'll face them all — there's the knight to c3...",
+   "spoken": "White has a whole family of systems here, and you'll face them all — there's the knight to c3...",
    "reanchor": true
   },
   {
@@ -407,7 +407,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "...going after our bishop immediately — h4 literally tries to trap it.",
+   "spoken": "...going after your bishop immediately — h4 literally tries to trap it.",
    "reanchor": true
   },
   {
@@ -453,7 +453,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "...we go e6.",
+   "spoken": "...you go e6.",
    "reanchor": true
   },
   {
@@ -472,7 +472,7 @@
    "t": 1207.5,
    "fen": "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P1PP1/8/PPP4P/RNBQKBNR b KQkq - 0 5",
    "line": [],
-   "spoken": "He plays the bishop to d3, and now the knight to h6 — trading on our own terms. One of Black's biggest problems in the Caro is these two kingside pieces; find homes for them and we're well on the way. Why h6 and not the g7 route? The knight to h6 heads for f5; the other way just blocks our bishop. The downside is the knight on the rim, but I already anticipate its passage to f5.",
+   "spoken": "He plays the bishop to d3, and now the knight to h6 — trading on your own terms. One of Black's biggest problems in the Caro is these two kingside pieces; find homes for them and you're well on the way. Why h6 and not the g7 route? The knight to h6 heads for f5; the other way just blocks your bishop. The downside is the knight on the rim, but I already anticipate its passage to f5.",
    "reanchor": true
   },
   {
@@ -480,7 +480,7 @@
    "t": 1250.5,
    "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P1P2/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "Think of the Frankfurt-airport analogy: you're flying to Paris, and Paris is f5 — nothing can stop us reaching it. The knight to h6 is playable even after f4, but I like to hold it until White commits the bishop to d3.",
+   "spoken": "Think of the Frankfurt-airport analogy: you're flying to Paris, and Paris is f5 — nothing can stop you reaching it. The knight to h6 is playable even after f4, but I like to hold it until White commits the bishop to d3.",
    "reanchor": true
   },
   {
@@ -493,7 +493,7 @@
     "e6",
     "Nf3"
    ],
-   "spoken": "So after the knight to h6, the bishop to d3, e6 and the knight to f3, we play c5 — executing the main Caro idea.",
+   "spoken": "So after the knight to h6, the bishop to d3, e6 and the knight to f3, you play c5 — executing the main Caro idea.",
    "reanchor": true
   },
   {
@@ -503,7 +503,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "With c5 we hit the base of the chain, then trade and reroute the knight to f5. Even without f4, the knight to h6 is sometimes played. Here's a system where White plays the knight to b3 — with your new understanding, what's the point of spending two moves on that? To discourage c5. In that game Black plays the knight to h6 as early as move six, unafraid of White taking on h6, because it opens the g-file: Black castles long and uses that file, and removing Black's dark-squared bishop actually makes it HARDER for White to stop c5. The same ideas recur across most Caro lines — that's what makes it so rewarding: learn the ideas once and they transfer.",
+   "spoken": "With c5 you hit the base of the chain, then trade and reroute the knight to f5. Even without f4, the knight to h6 is sometimes played. Here's a system where White plays the knight to b3 — with your new understanding, what's the point of spending two moves on that? To discourage c5. In that game Black plays the knight to h6 as early as move six, unafraid of White taking on h6, because it opens the g-file: Black castles long and uses that file, and removing Black's dark-squared bishop actually makes it HARDER for White to stop c5. The same ideas recur across most Caro lines — that's what makes it so rewarding: learn the ideas once and they transfer.",
    "reanchor": true
   },
   {
@@ -516,7 +516,7 @@
     "O-O",
     "Nxf5"
    ],
-   "spoken": "After the trade on f5, we castle, play the knight to c6, and recapture on f5 — pressuring the d4 pawn.",
+   "spoken": "After the trade on f5, you castle, play the knight to c6, and recapture on f5 — pressuring the d4 pawn.",
    "reanchor": true
   },
   {
@@ -534,7 +534,7 @@
    "t": 1404.5,
    "fen": "r2qkb1r/pp3ppp/2n1p2n/2ppPB2/3P1P2/5N2/PPP3PP/RNBQK2R w KQkq - 1 8",
    "line": [],
-   "spoken": "Very important: if White plays c3, do NOT lock the centre with c4 — that closes it further. You'll want to follow with b5 and b4, but even then it's very hard to break through. Use the best-case-scenario test: assume White hands you all the free moves you want to carry out b5-b4 — do you actually win a pawn any time soon? No. It's a Pyrrhic victory, not a real minority attack. That's why c4 is wrong here, though there ARE positions where such a plan is right — generally when you have far greater force on that wing. Here we already have two attackers on d4, so closing the centre is counterproductive.",
+   "spoken": "Very important: if White plays c3, do NOT lock the centre with c4 — that closes it further. You'll want to follow with b5 and b4, but even then it's very hard to break through. Use the best-case-scenario test: assume White hands you all the free moves you want to carry out b5-b4 — do you actually win a pawn any time soon? No. It's a Pyrrhic victory, not a real minority attack. That's why c4 is wrong here, though there ARE positions where such a plan is right — generally when you have far greater force on that wing. Here you already have two attackers on d4, so closing the centre is counterproductive.",
    "reanchor": true
   },
   {
@@ -558,7 +558,7 @@
     "c3",
     "Nc6"
    ],
-   "spoken": "You'd play the knight to c6 and then the queen to b6, much as we did in the game — so after c6, White plays c3.",
+   "spoken": "You'd play the knight to c6 and then the queen to b6, much as you did in the game — so after c6, White plays c3.",
    "reanchor": true
   },
   {
@@ -579,7 +579,7 @@
     "Rg1",
     "Nxf5"
    ],
-   "spoken": "After White takes on c5, we play the knight to c6 and recapture on f5.",
+   "spoken": "After White takes on c5, you play the knight to c6 and recapture on f5.",
    "reanchor": true
   },
   {
@@ -619,7 +619,7 @@
    "t": 1799.5,
    "fen": "r2qkb1r/pp3ppp/2n1p2n/2PpPB2/5P2/5N2/PPP3PP/RNBQ1K1R w kq - 1 10",
    "line": [],
-   "spoken": "Back to the game — after the queen to b6, the same thing would have happened: h5, h4, and the knight to g3. He played b3, which only made it worse; he takes, we take on d4 with the knight, and the bishop to c5, simply developing, is great.",
+   "spoken": "Back to the game — after the queen to b6, the same thing would have happened: h5, h4, and the knight to g3. He played b3, which only made it worse; he takes, you take on d4 with the knight, and the bishop to c5, simply developing, is great.",
    "reanchor": true
   },
   {
@@ -632,7 +632,7 @@
     "Rg1",
     "Nxf5"
    ],
-   "spoken": "The bishop taking on d4 wins the rook, and the knight to f5 is best. White's best there might actually be taking on c5, and if we play h5 the computer defends with the queen to e2 and then the knight to g5 — a hard move to see, blockading, though White is still much worse. The point: after the knight to g3, White has a knight-to-h3 resource to block the mate, and that g5-knight was covering exactly the h3 square.",
+   "spoken": "The bishop taking on d4 wins the rook, and the knight to f5 is best. White's best there might actually be taking on c5, and if you play h5 the computer defends with the queen to e2 and then the knight to g5 — a hard move to see, blockading, though White is still much worse. The point: after the knight to g3, White has a knight-to-h3 resource to block the mate, and that g5-knight was covering exactly the h3 square.",
    "reanchor": true
   },
   {
@@ -648,7 +648,7 @@
    "t": 1914,
    "fen": "rn1qkb1r/pp3ppp/2p1p2n/3pPb2/3P1P2/3B1N2/PPP3PP/RNBQK2R b KQkq - 1 6",
    "line": [],
-   "spoken": "When do we castle long in the Caro? Usually you castle SHORT — in most positions that's right. But there are exceptions: when you put a knight on h6 and White takes it, you castle long to keep the g-file open for the rook; or when you specifically want to attack on the kingside and judge the risk acceptable. Still, long castling is far less common here than short.",
+   "spoken": "When do you castle long in the Caro? Usually you castle SHORT — in most positions that's right. But there are exceptions: when you put a knight on h6 and White takes it, you castle long to keep the g-file open for the rook; or when you specifically want to attack on the kingside and judge the risk acceptable. Still, long castling is far less common here than short.",
    "reanchor": true
   }
  ]

@@ -16,7 +16,7 @@
     "g6",
     "e4"
    ],
-   "spoken": "He plays the Modern with g6 — we take the whole centre.",
+   "spoken": "He plays the Modern with g6 — you take the whole centre.",
    "kind": "main",
    "teaches": [
     "the Modern"
@@ -48,7 +48,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop to e3 — the 150-attack setup, rather than the f4 Austrian. With the centre in hand, we develop our pieces so they actually lend it support.",
+   "spoken": "The bishop to e3 — the 150-attack setup, rather than the f4 Austrian. With the centre in hand, you develop your pieces so they actually lend it support.",
    "kind": "plan",
    "teaches": [
     "develop to support the centre"
@@ -70,7 +70,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "Don't rush the queen to d2 — it allows the annoying knight to g4 hitting the bishop. So f3 first, ruling out that jump and preparing the queen move, since we're castling long anyway.",
+   "spoken": "Don't rush the queen to d2 — it allows the annoying knight to g4 hitting the bishop. So f3 first, ruling out that jump and preparing the queen move, since you're castling long anyway.",
    "kind": "main",
    "teaches": [
     "f3 before Qd2"
@@ -128,7 +128,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now d5 is fine here. Normally it would be a mistake because it opens his bishop's long diagonal — but since that bishop is about to come off the board, we don't care.",
+   "spoken": "Now d5 is fine here. Normally it would be a mistake because it opens his bishop's long diagonal — but since that bishop is about to come off the board, you don't care.",
    "kind": "main",
    "teaches": [
     "a trade justifies a committal push"
@@ -150,7 +150,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Don't take the bishop yet — squeeze more first. The attacking idea is to blast open the h-file with h4 and h5, straight at his king. We don't even bother stopping his queenside expansion; we go for the throat.",
+   "spoken": "Don't take the bishop yet — squeeze more first. The attacking idea is to blast open the h-file with h4 and h5, straight at his king. You don't even bother stopping his queenside expansion; you go for the throat.",
    "kind": "plan",
    "teaches": [
     "open the h-file to attack"
@@ -217,7 +217,7 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "And here's the point — rather than move the attacked knight, we sacrifice it, capturing on g6 to rip the h-file and the king's cover wide open.",
+   "spoken": "And here's the point — rather than move the attacked knight, you sacrifice it, capturing on g6 to rip the h-file and the king's cover wide open.",
    "kind": "main",
    "teaches": [
     "the knight sacrifice"
@@ -239,7 +239,7 @@
    "line": [
     "Qh6+"
    ],
-   "spoken": "The queen swings to h6 with check, and we've built a beautiful attacking battery — he's hanging by a thread.",
+   "spoken": "The queen swings to h6 with check, and you've built a beautiful attacking battery — he's hanging by a thread.",
    "kind": "main",
    "teaches": [
     "the mating battery"
@@ -263,7 +263,7 @@
     "Rf7",
     "Ne3"
    ],
-   "spoken": "With the knight attacked, reroute it toward a lovely central home on e3 — not to g2, which would bury our bishop.",
+   "spoken": "With the knight attacked, reroute it toward a lovely central home on e3 — not to g2, which would bury your bishop.",
    "kind": "plan",
    "teaches": [
     "reroute to the strong square"

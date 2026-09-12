@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We open with the pawn to e4, met by c5 — the Sicilian."
+   "spoken": "You open with the pawn to e4, met by c5 — the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 — the Alapin, our opening. It's given us better or winning positions out of the opening in nearly every game at this level."
+   "spoken": "The pawn to c3 — the Alapin, your opening. It's given you better or winning positions out of the opening in nearly every game at this level."
   },
   {
    "ply": 4,
@@ -60,7 +60,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We recapture on d4. Now Black basically has to play d5 — it's the only route to a viable position; every other move hands us control of the centre and an amazing game."
+   "spoken": "You recapture on d4. Now Black basically has to play d5 — it's the only route to a viable position; every other move hands you control of the centre and an amazing game."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "A lot of people play d6 here when they aren't familiar with the theory, but White is simply better: our centre is fully intact, we have the c3-square for a knight, and it's a very pleasant position. Which knight to develop first? It hardly matters — the knight to f3 and the knight to c3 are both fine."
+   "spoken": "A lot of people play d6 here when they aren't familiar with the theory, but White is simply better: your centre is fully intact, you have the c3-square for a knight, and it's a very pleasant position. Which knight to develop first? It hardly matters — the knight to f3 and the knight to c3 are both fine."
   },
   {
    "ply": 9,
@@ -96,7 +96,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The pawn to h3 — just restricting that bishop as much as we can."
+   "spoken": "The pawn to h3 — just restricting that bishop as much as you can."
   },
   {
    "ply": 12,
@@ -114,7 +114,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "And now we continue developing with the knight to f3."
+   "spoken": "And now you continue developing with the knight to f3."
   },
   {
    "ply": 14,
@@ -123,7 +123,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "Black fianchettoes with the bishop to g7. Is d5 good for us? Positionally no — it opens the g7-bishop, so you'd push it only with a concrete follow-up, like rerouting the dark-squared bishop to d4 to disarm that bishop. Playable, but I prefer simpler chess — no need to worry about overextending the centre yet. I like the bishop to e3; I don't like the bishop to f4, for two reasons."
+   "spoken": "Black fianchettoes with the bishop to g7. Is d5 good for you? Positionally no — it opens the g7-bishop, so you'd push it only with a concrete follow-up, like rerouting the dark-squared bishop to d4 to disarm that bishop. Playable, but I prefer simpler chess — no need to worry about overextending the centre yet. I like the bishop to e3; I don't like the bishop to f4, for two reasons."
   },
   {
    "ply": 15,
@@ -132,7 +132,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop to e3. The bishop to f4 bites on granite against d6 and is vulnerable — Black hits it with e5 or the knight to h5. On e3 the bishop reinforces the centre and is very safe; that's the second point of h3, since we've also stopped the knight to g4. Black is cramped and uncomfortable, without control of the centre."
+   "spoken": "The bishop to e3. The bishop to f4 bites on granite against d6 and is vulnerable — Black hits it with e5 or the knight to h5. On e3 the bishop reinforces the centre and is very safe; that's the second point of h3, since you've also stopped the knight to g4. Black is cramped and uncomfortable, without control of the centre."
   },
   {
    "ply": 16,
@@ -141,7 +141,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "Black plays a6. Now, where does the f1-bishop belong? Not c4 — that's a mistake, for a tactical and a positional reason. The tactical one has come up many times in our speedrun: the knight takes e4, then d5 wins the piece back with interest."
+   "spoken": "Black plays a6. Now, where does the f1-bishop belong? Not c4 — that's a mistake, for a tactical and a positional reason. The tactical one has come up many times in your speedrun: the knight takes e4, then d5 wins the piece back with interest."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The second reason c4 is wrong: we'd walk into b5, and the bishop there is vulnerable, just like on f4. So I much prefer the bishop to d3 — the bishops reinforce the centre pawns and give us the freedom to operate on both wings without our centre collapsing."
+   "spoken": "The second reason c4 is wrong: you'd walk into b5, and the bishop there is vulnerable, just like on f4. So I much prefer the bishop to d3 — the bishops reinforce the centre pawns and give you the freedom to operate on both wings without your centre collapsing."
   },
   {
    "ply": 18,
@@ -159,7 +159,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "Black plays b5, and no action is required from us. b4 is no threat — the knight drops to e2, and pushing further just overextends Black."
+   "spoken": "Black plays b5, and no action is required from you. b4 is no threat — the knight drops to e2, and pushing further just overextends Black."
   },
   {
    "ply": 19,
@@ -168,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "There's a proposal for e5, but I don't get it: Black takes, the knight goes back to d7, and a pawn pushed to e5 becomes a weakness. No need to reinvent the wheel — we complete development and castle."
+   "spoken": "There's a proposal for e5, but I don't get it: Black takes, the knight goes back to d7, and a pawn pushed to e5 becomes a weakness. No need to reinvent the wheel — you complete development and castle."
   },
   {
    "ply": 18,
@@ -185,7 +185,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "And if Black pins with the bishop to d7, the knight to b4 is no danger either — we just drop the bishop back to e2 and play a3. It's simply not dangerous.",
+   "spoken": "And if Black pins with the bishop to d7, the knight to b4 is no danger either — you just drop the bishop back to e2 and play a3. It's simply not dangerous.",
    "reanchor": true
   },
   {
@@ -195,7 +195,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "Black develops the bishop to b7. We have several ways to handle this. Many propose the queen to d2, eyeing the bishop to h6 to trade the fianchettoed bishop, but I prefer to play on the queenside — an idea that shows up often in the Ruy Lopez."
+   "spoken": "Black develops the bishop to b7. You have several ways to handle this. Many propose the queen to d2, eyeing the bishop to h6 to trade the fianchettoed bishop, but I prefer to play on the queenside — an idea that shows up often in the Ruy Lopez."
   },
   {
    "ply": 21,
@@ -204,7 +204,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "The pawn to a4. Rather than the immediate knight maneuver, we provoke Black into damaging his queenside: a4 invites b4, then we route the knight toward g3, and a black pawn stuck on b4 becomes a lasting headache. If Black answers a5, that leaves a hole on b5 for our bishop and dries up his counterplay, freeing us for the kingside. We're expecting b4 — taking on a4 would just leave a6 weak."
+   "spoken": "The pawn to a4. Rather than the immediate knight maneuver, you provoke Black into damaging his queenside: a4 invites b4, then you route the knight toward g3, and a black pawn stuck on b4 becomes a lasting headache. If Black answers a5, that leaves a hole on b5 for your bishop and dries up his counterplay, freeing you for the kingside. You're expecting b4 — taking on a4 would just leave a6 weak."
   },
   {
    "ply": 22,
@@ -240,7 +240,7 @@
    "line": [
     "axb5"
    ],
-   "spoken": "So we take — a free pawn. After a4 takes b5 we could also play the knight takes b5; e4 hangs in that line, but so does the a7-knight."
+   "spoken": "So you take — a free pawn. After a4 takes b5 you could also play the knight takes b5; e4 hangs in that line, but so does the a7-knight."
   },
   {
    "ply": 24,
@@ -249,7 +249,7 @@
    "line": [
     "axb5"
    ],
-   "spoken": "Black recaptures with a6 takes b5. The funny thing is we have something even better than the knight takes b5. Ninety-five percent of people would just grab it — knight takes b5, knight takes b5, bishop takes b5 with check, Black covers with the knight and limits the damage to a pawn. But the a7-knight is tremendously vulnerable — a loose, undefended piece pressured by the rook. Not e5, which would hand Black the d5-square."
+   "spoken": "Black recaptures with a6 takes b5. The funny thing is you have something even better than the knight takes b5. Ninety-five percent of people would just grab it — knight takes b5, knight takes b5, bishop takes b5 with check, Black covers with the knight and limits the damage to a pawn. But the a7-knight is tremendously vulnerable — a loose, undefended piece pressured by the rook. Not e5, which would hand Black the d5-square."
   },
   {
    "ply": 25,
@@ -258,7 +258,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The move is d5. It does two big things: it blunts the b7-bishop — yes it opens our other bishop, but that's a worthy price — and above all it piles onto the knight, which now has no good squares. Remember, when you push a pawn in the centre you often give away a square in return, but here it's worth it."
+   "spoken": "The move is d5. It does two big things: it blunts the b7-bishop — yes it opens your other bishop, but that's a worthy price — and above all it piles onto the knight, which now has no good squares. Remember, when you push a pawn in the centre you often give away a square in return, but here it's worth it."
   },
   {
    "ply": 26,
@@ -287,7 +287,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. Stopping Black from castling — keep his king in the centre and we win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up our valuable light-squared bishop — we want that bishop to sit and pin, not be traded."
+   "spoken": "Black finds the queen to b8 — a disaster, but good defending; even at this level people find resourceful moves. Stopping Black from castling — keep his king in the centre and you win faster. The immediate queen to a4 walks into a discovered attack with the knight to c8; the bishop to b5 to pin the d7-knight is the right idea but wrong execution, since it gives up your valuable light-squared bishop — you want that bishop to sit and pin, not be traded."
   },
   {
    "ply": 31,
@@ -306,14 +306,14 @@
     "Nxb5",
     "Bxb5"
    ],
-   "spoken": "Black takes, and our bishop lands on b5 — the ideal version: we prevent castling and the bishop is unassailable. Black can try to contest it tactically with the bishop to a6, but I believe we're fine."
+   "spoken": "Black takes, and your bishop lands on b5 — the ideal version: you prevent castling and the bishop is unassailable. Black can try to contest it tactically with the bishop to a6, but I believe you're fine."
   },
   {
    "ply": 30,
    "t": 777.5,
    "fen": "rq2k2r/nb1nppbp/3p2p1/3P4/1Q2P3/2NBBN1P/1P3PP1/R4RK1 w kq - 1 16",
    "line": [],
-   "spoken": "Against the bishop to a6 we have multiple options — we'll cross that bridge when we get there. You might ask why we gave up our good knight for Black's bad one; it's about priorities. You can't make an omelette without breaking some eggs.",
+   "spoken": "Against the bishop to a6 you have multiple options — you'll cross that bridge when you get there. You might ask why you gave up your good knight for Black's bad one; it's about priorities. You can't make an omelette without breaking some eggs.",
    "reanchor": true
   },
   {
@@ -335,7 +335,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "The bishop to a6 is Black's best, but he plays the queen to c7 — understandable, protecting the knight and preparing to castle, but the queen is incredibly vulnerable here. We can chase it with the rook to c1, but there's a much prettier tactical sequence."
+   "spoken": "The bishop to a6 is Black's best, but he plays the queen to c7 — understandable, protecting the knight and preparing to castle, but the queen is incredibly vulnerable here. You can chase it with the rook to c1, but there's a much prettier tactical sequence."
   },
   {
    "ply": 35,
@@ -344,14 +344,14 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "The bishop to b6 — using the pin. If the queen takes the bishop, we take on d7 and win the queen. It forces the queen back, and then the rook to c1 is decisive."
+   "spoken": "The bishop to b6 — using the pin. If the queen takes the bishop, you take on d7 and win the queen. It forces the queen back, and then the rook to c1 is decisive."
   },
   {
    "ply": 34,
    "t": 904,
    "fen": "r3k2r/1bqnppbp/3p2p1/1B1P4/1Q2P3/4BN1P/1P3PP1/R4RK1 w kq - 1 18",
    "line": [],
-   "spoken": "Just being alert to tactics rather than always grabbing the obvious move — though the rook to c1 here is also completely winning; after the queen drops back we'd play the bishop to b6 anyway, maybe an even better version.",
+   "spoken": "Just being alert to tactics rather than always grabbing the obvious move — though the rook to c1 here is also completely winning; after the queen drops back you'd play the bishop to b6 anyway, maybe an even better version.",
    "reanchor": true
   },
   {
@@ -371,7 +371,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": "After the queen to b8 the best move is to capture the knight and transform the advantage — we take on d7, drag the king into the open, then check on b5, and it essentially leads to mate. When you have a pin, always consider taking the pinned piece."
+   "spoken": "After the queen to b8 the best move is to capture the knight and transform the advantage — you take on d7, drag the king into the open, then check on b5, and it essentially leads to mate. When you have a pin, always consider taking the pinned piece."
   },
   {
    "ply": 37,
@@ -389,14 +389,14 @@
    "line": [
     "Kxd7"
    ],
-   "spoken": "The king recaptures. Now it wants to retreat to e8, so we stop it and force it onto the c-file, where the rook checkmates it."
+   "spoken": "The king recaptures. Now it wants to retreat to e8, so you stop it and force it onto the c-file, where the rook checkmates it."
   },
   {
    "ply": 37,
    "t": 986,
    "fen": "rq2k2r/1b1Bppbp/1B1p2p1/3P4/1Q2P3/5N1P/1P3PP1/R4RK1 b kq - 0 19",
    "line": [],
-   "spoken": "The king to f8 was technically best, but who plays that — Black would rather resign. It's all over: the bishop to c6, the queen takes c6, mate. It doesn't matter which rook we lift; it's mate in two either way. Look at the kind of position the Alapin handed us.",
+   "spoken": "The king to f8 was technically best, but who plays that — Black would rather resign. It's all over: the bishop to c6, the queen takes c6, mate. It doesn't matter which rook you lift; it's mate in two either way. Look at the kind of position the Alapin handed you.",
    "reanchor": true
   },
   {
@@ -404,7 +404,7 @@
    "t": 1030.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "A brilliant position with a full centre, and it lets us play these kinds of games. Let's go over it.",
+   "spoken": "A brilliant position with a full centre, and it lets you play these kinds of games. Let's go over it.",
    "reanchor": true
   },
   {

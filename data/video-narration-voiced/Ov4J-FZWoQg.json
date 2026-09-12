@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White against a strong opponent — the pawn to e4, met by e5."
+   "spoken": "You have White against a strong opponent — the pawn to e4, met by e5."
   },
   {
    "ply": 3,
@@ -85,7 +85,7 @@
    "t": 109.5,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": "It's a gambit because we don't recapture the d4-pawn — which looks crazy, but the centralized knight poses Black immediate problems.",
+   "spoken": "It's a gambit because you don't recapture the d4-pawn — which looks crazy, but the centralized knight poses Black immediate problems.",
    "reanchor": true
   },
   {
@@ -115,7 +115,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3, then a plan of repositioning to g5. If Black plays the pawn to d6, take the knight and reroute the bishop to b5 to regain d4. The bishop to c5 is possible but risky — the queenside storm with a3 and b4 can force it to lose contact with the d-pawn while opening a fianchetto square for us; and long-term, the h6 weakness invites a sacrifice on h6 once Black castles.",
+   "spoken": "The bishop to d3, then a plan of repositioning to g5. If Black plays the pawn to d6, take the knight and reroute the bishop to b5 to regain d4. The bishop to c5 is possible but risky — the queenside storm with a3 and b4 can force it to lose contact with the d-pawn while opening a fianchetto square for you; and long-term, the h6 weakness invites a sacrifice on h6 once Black castles.",
    "reanchor": true
   },
   {
@@ -135,7 +135,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop to b5. If Black grabs the e4-pawn I'm not scared at all — we just castle with a huge development lead. So I like the bishop to b5 immediately.",
+   "spoken": "The bishop to b5. If Black grabs the e4-pawn I'm not scared at all — you just castle with a huge development lead. So I like the bishop to b5 immediately.",
    "reanchor": true
   },
   {
@@ -143,7 +143,7 @@
    "t": 360.5,
    "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/3B1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
    "line": [],
-   "spoken": "We waited for Black to commit the pawn to d6.",
+   "spoken": "You waited for Black to commit the pawn to d6.",
    "reanchor": true
   },
   {
@@ -194,7 +194,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "No guts, no glory — we keep the bishop in play.",
+   "spoken": "No guts, no glory — you keep the bishop in play.",
    "reanchor": true
   },
   {
@@ -202,7 +202,7 @@
    "t": 477,
    "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/3N4/B2pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
    "line": [],
-   "spoken": "The bishop to a4 keeps the tension; we allow the pawn to b5, but then the bishop repositions to b3, eyeing the f7-pawn, a major weakness in these positions.",
+   "spoken": "The bishop to a4 keeps the tension; you allow the pawn to b5, but then the bishop repositions to b3, eyeing the f7-pawn, a major weakness in these positions.",
    "reanchor": true
   },
   {
@@ -253,7 +253,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Black offers a second pawn with the knight to e5. Taking there makes no sense — it fixes the structure and defends d4 — so the knight takes d4. And beware a Noah's Ark trap: once the knight leaves c6, the pawns to c5 and c4 can trap the bishop. But we have a save: after the knight takes d4 and the pawn to c5, the knight takes f6 with check, the queen recaptures, then the bishop to d5 attacks the exposed rook in the corner, jumping ahead of the pawn storm; if the rook moves, the knight is safe to reroute, even to c6, to seize the initiative.",
+   "spoken": "Black offers a second pawn with the knight to e5. Taking there makes no sense — it fixes the structure and defends d4 — so the knight takes d4. And beware a Noah's Ark trap: once the knight leaves c6, the pawns to c5 and c4 can trap the bishop. But you have a save: after the knight takes d4 and the pawn to c5, the knight takes f6 with check, the queen recaptures, then the bishop to d5 attacks the exposed rook in the corner, jumping ahead of the pawn storm; if the rook moves, the knight is safe to reroute, even to c6, to seize the initiative.",
    "reanchor": true
   },
   {
@@ -286,7 +286,7 @@
     "Bxb5",
     "Qxb5"
    ],
-   "spoken": "The bishop to d5 is our idea — but verify the tactics: after the pawn takes d4 and the bishop takes the corner rook, we're briefly scattered while Black's queen glares at f2. After the bishop to g4, don't play the queen takes d4 — the knight to f3 is a discovered attack winning the queen; and never play f3, because the knight takes f3 with check forks the queen and rook and rips open our king. The careful move is the awkward queen to d2 — it blocks the bishop, but survival comes first, and later the queen can swing to f4 to challenge its counterpart. When consolidating a material edge, positional principles go on the back burner: king safety and killing the initiative come first. Learn to spot your own mental blocks against ugly-looking moves.",
+   "spoken": "The bishop to d5 is your idea — but verify the tactics: after the pawn takes d4 and the bishop takes the corner rook, you're briefly scattered while Black's queen glares at f2. After the bishop to g4, don't play the queen takes d4 — the knight to f3 is a discovered attack winning the queen; and never play f3, because the knight takes f3 with check forks the queen and rook and rips open your king. The careful move is the awkward queen to d2 — it blocks the bishop, but survival comes first, and later the queen can swing to f4 to challenge its counterpart. When consolidating a material edge, positional principles go on the back burner: king safety and killing the initiative come first. Learn to spot your own mental blocks against ugly-looking moves.",
    "reanchor": true
   },
   {
@@ -299,7 +299,7 @@
     "Qd1",
     "Bg4"
    ],
-   "spoken": "If the bishop comes to g4 immediately, by transposition we again have the queen to d2. Alternatives: retreat the knight, removing the threat and winning a tempo on the rook, then chase the bishop with h3. We must also calculate f3 — after f3 and the capture on d4, we can take the bishop rather than the rook, an easy detail to miss. The check on h4 is harmless thanks to g3, but we can't castle and the king gets stuck in the centre, so I don't love it — it comes down to the queen to d2 or the knight to e2.",
+   "spoken": "If the bishop comes to g4 immediately, by transposition you again have the queen to d2. Alternatives: retreat the knight, removing the threat and winning a tempo on the rook, then chase the bishop with h3. You must also calculate f3 — after f3 and the capture on d4, you can take the bishop rather than the rook, an easy detail to miss. The check on h4 is harmless thanks to g3, but you can't castle and the king gets stuck in the centre, so I don't love it — it comes down to the queen to d2 or the knight to e2.",
    "reanchor": true
   },
   {
@@ -319,7 +319,7 @@
    "line": [
     "Rb8"
    ],
-   "spoken": "The bishop occupies d5 as a major outpost — but the ideal piece for that square is a knight, and e2 is the transit route, via c3 or f4, to d5. Instead of h3 we can leave the bishop where it is and castle, then play f3 to chase it, unpin the knight, and build a central pawn chain — while keeping an eye on the check on f3.",
+   "spoken": "The bishop occupies d5 as a major outpost — but the ideal piece for that square is a knight, and e2 is the transit route, via c3 or f4, to d5. Instead of h3 you can leave the bishop where it is and castle, then play f3 to chase it, unpin the knight, and build a central pawn chain — while keeping an eye on the check on f3.",
    "reanchor": true
   },
   {
@@ -329,7 +329,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "If Black sacrifices the knight on f3 and recaptures with the bishop — the classic queen-to-the-g-file pattern — we have the queen to d3: it unpins the knight so it can block a check on g3, and pre-empts the exposure, keeping a lateral defence. So we castle — a bit scary, but White is clearly better. Out of the opening into the middlegame, our biggest asset is the d5-square plus fine piece coordination.",
+   "spoken": "If Black sacrifices the knight on f3 and recaptures with the bishop — the classic queen-to-the-g-file pattern — you have the queen to d3: it unpins the knight so it can block a check on g3, and pre-empts the exposure, keeping a lateral defence. So you castle — a bit scary, but White is clearly better. Out of the opening into the middlegame, your biggest asset is the d5-square plus fine piece coordination.",
    "reanchor": true
   },
   {
@@ -339,7 +339,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black's weak pawns and underdeveloped kingside give us the tempi for central pressure. Black plays the bishop to e7.",
+   "spoken": "Black's weak pawns and underdeveloped kingside give you the tempi for central pressure. Black plays the bishop to e7.",
    "reanchor": true
   },
   {
@@ -359,7 +359,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black plays the bishop to e6. A big mistake would be to trade bishops on e6 — the pawn recapture would defend d5 and nullify our strength. The obvious move is the knight to f4 — better than the knight to c3, which walks into b4; be discriminating about how a piece reaches an outpost. But the knight to f4 isn't mandatory, because after Black castles we've nowhere to tuck the bishop for the knight to reach d5. So perhaps shelve that plan and start a pawn initiative with f4, which is very scary — Black's knight runs short of squares, the retreat to g6 walks into a fork, and the jump to g4 is trapped by h3.",
+   "spoken": "Black plays the bishop to e6. A big mistake would be to trade bishops on e6 — the pawn recapture would defend d5 and nullify your strength. The obvious move is the knight to f4 — better than the knight to c3, which walks into b4; be discriminating about how a piece reaches an outpost. But the knight to f4 isn't mandatory, because after Black castles you've nowhere to tuck the bishop for the knight to reach d5. So perhaps shelve that plan and start a pawn initiative with f4, which is very scary — Black's knight runs short of squares, the retreat to g6 walks into a fork, and the jump to g4 is trapped by h3.",
    "reanchor": true
   },
   {
@@ -369,7 +369,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "The pawn to f4 — Black may have to retreat awkwardly to d7, and we can even hunt his minor pieces. I did miss the knight to c4, probably his best, but then the check on c6 forces the king to f8, harming the rook connection as the game sharpens.",
+   "spoken": "The pawn to f4 — Black may have to retreat awkwardly to d7, and you can even hunt his minor pieces. I did miss the knight to c4, probably his best, but then the check on c6 forces the king to f8, harming the rook connection as the game sharpens.",
    "reanchor": true
   },
   {
@@ -397,7 +397,7 @@
    "line": [
     "Ned7"
    ],
-   "spoken": "If Black takes on d5, we take the knight and win a piece, since both queen and bishop are hit. Black plays the knight to d7. Many options — even the pawn to e5 to blast open the centre against the stranded king — but the cool idea is the bishop to c6 anyway, threatening f5 and going after Black's minor pieces.",
+   "spoken": "If Black takes on d5, you take the knight and win a piece, since both queen and bishop are hit. Black plays the knight to d7. Many options — even the pawn to e5 to blast open the centre against the stranded king — but the cool idea is the bishop to c6 anyway, threatening f5 and going after Black's minor pieces.",
    "reanchor": true
   },
   {
@@ -440,7 +440,7 @@
     "e5",
     "Be6"
    ],
-   "spoken": "After the pawn to e5 and the exchange, it's a double attack on the queen — both the rook and the pawn hit it — so Black can't recapture with the knight. Then we take on e6: if a pawn recaptures, the bishop to f4 wins; the queen has to take, and we already know how to exploit its alignment.",
+   "spoken": "After the pawn to e5 and the exchange, it's a double attack on the queen — both the rook and the pawn hit it — so Black can't recapture with the knight. Then you take on e6: if a pawn recaptures, the bishop to f4 wins; the queen has to take, and you already know how to exploit its alignment.",
    "reanchor": true
   }
  ]

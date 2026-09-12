@@ -45,7 +45,7 @@
     "Nxd4",
     "Nc6"
    ],
-   "spoken": "Against the e6 Sicilian and Nc6 we're into Taimanov territory — a flexible Paulsen-family setup.",
+   "spoken": "Against the e6 Sicilian and Nc6 you're into Taimanov territory — a flexible Paulsen-family setup.",
    "kind": "main"
   },
   {
@@ -123,7 +123,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "The dark bishop is awkward everywhere — Bf4 runs into Nxd4 and e5, Bg5 is kicked by h6, Bd2 hangs the knight. When you're unsure where a piece belongs, one answer is not to develop it there at all. We fianchettoed one bishop — why not the other? b3.",
+   "spoken": "The dark bishop is awkward everywhere — Bf4 runs into Nxd4 and e5, Bg5 is kicked by h6, Bd2 hangs the knight. When you're unsure where a piece belongs, one answer is not to develop it there at all. You fianchettoed one bishop — why not the other? b3.",
    "kind": "main",
    "teaches": "When no good square exists for a bishop, consider a second fianchetto rather than forcing a bad developing move."
   },
@@ -210,7 +210,7 @@
    "line": [
     "Bxg7"
    ],
-   "spoken": "Bxg7 rather than Nxd6 — Nxd6 would allow Kf8 to defend the bishop. This way we hit the rook, grab the pawn, and Black's whole position collapses.",
+   "spoken": "Bxg7 rather than Nxd6 — Nxd6 would allow Kf8 to defend the bishop. This way you hit the rook, grab the pawn, and Black's whole position collapses.",
    "kind": "main",
    "teaches": "Pick the capture that doesn't let the enemy king step over to defend."
   },
@@ -256,7 +256,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": "Don't grab f7 — after Kc7 it forces a queen trade, and we want mate, not a trade. Retreat the bishop to f6 and keep the queens on to finish the attack.",
+   "spoken": "Don't grab f7 — after Kc7 it forces a queen trade, and you want mate, not a trade. Retreat the bishop to f6 and keep the queens on to finish the attack.",
    "kind": "main",
    "teaches": "Refuse a pawn grab that forces a queen trade when you're playing for mate."
   },
@@ -314,7 +314,7 @@
    "line": [
     "Nb5+"
    ],
-   "spoken": "Nb5-check, and now the rook x-rays Black's queen through our own — move our queen with tempo and his queen simply falls.",
+   "spoken": "Nb5-check, and now the rook x-rays Black's queen through your own — move your queen with tempo and his queen simply falls.",
    "kind": "main",
    "teaches": "An x-ray down a file can win the queen: move your own piece off the line with tempo."
   },
@@ -352,7 +352,7 @@
    "line": [
     "Bf1+"
    ],
-   "spoken": "We don't even need the queen — Bf1-check drags the king further into the open, and the fianchetto bishop that looked idle all game redeems itself by joining the mate.",
+   "spoken": "You don't even need the queen — Bf1-check drags the king further into the open, and the fianchetto bishop that looked idle all game redeems itself by joining the mate.",
    "kind": "main",
    "teaches": "Draw the exposed king further out with checks; a quiet piece often delivers the final blow."
   },

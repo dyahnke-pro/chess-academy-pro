@@ -63,7 +63,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "We take, cxd5 Nxd5, and reach for one of the rarest moves on the board.",
+   "spoken": "You take, cxd5 Nxd5, and reach for one of the rarest moves on the board.",
    "kind": "main"
   },
   {
@@ -156,7 +156,7 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": "Here Black slips: the move order must be Bxd2 first, then Qh4-check to fork the king and the a4-knight. Checking on h4 first lets us slot in g3.",
+   "spoken": "Here Black slips: the move order must be Bxd2 first, then Qh4-check to fork the king and the a4-knight. Checking on h4 first lets you slot in g3.",
    "kind": "main",
    "teaches": "In a forcing tactical sequence, the eliminating capture usually must precede the forking check."
   },
@@ -185,7 +185,7 @@
    "line": [
     "Kxd2"
    ],
-   "spoken": "And that's the punishment: after Bxd2 and Kxd2, the queen on h4 still guards nothing of ours — our king recaptures and the queen no longer wins the a4-knight, which we keep defended. Parrot a repertoire one move out of order in these lines and you're simply lost.",
+   "spoken": "And that's the punishment: after Bxd2 and Kxd2, the queen on h4 still guards nothing of yours — your king recaptures and the queen no longer wins the a4-knight, which you keep defended. Parrot a repertoire one move out of order in these lines and you're simply lost.",
    "kind": "main",
    "teaches": "Know why each move order in a sharp line is forced; a single transposition can flip the result."
   },
@@ -327,7 +327,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "To land the bishop on c4 we first chase the queen off c6, and Bb5 does it while developing — even if the queen sidesteps, we've simply improved a piece.",
+   "spoken": "To land the bishop on c4 you first chase the queen off c6, and Bb5 does it while developing — even if the queen sidesteps, you've simply improved a piece.",
    "kind": "main",
    "teaches": "Prefer the queen-chasing move that also develops; it wins either way."
   },

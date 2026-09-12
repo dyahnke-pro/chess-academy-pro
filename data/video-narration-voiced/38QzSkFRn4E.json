@@ -85,7 +85,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "With d6, Nf6, and the trades on d4 we've steered into a Najdorf — the most theory-heavy of the Sicilians.",
+   "spoken": "With d6, Nf6, and the trades on d4 you've steered into a Najdorf — the most theory-heavy of the Sicilians.",
    "kind": "main"
   },
   {
@@ -123,7 +123,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White's Nf3 retreat is a sideline — it withdraws the knight from the centre, so it isn't testing, but it does ask us how we want to arrange our pieces.",
+   "spoken": "White's Nf3 retreat is a sideline — it withdraws the knight from the centre, so it isn't testing, but it does ask you how you want to arrange your pieces.",
    "kind": "branch"
   },
   {
@@ -152,7 +152,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We don't need to commit the e-pawn yet, so just develop — Nc6 — and wait for White to declare himself.",
+   "spoken": "You don't need to commit the e-pawn yet, so just develop — Nc6 — and wait for White to declare himself.",
    "kind": "main"
   },
   {
@@ -205,7 +205,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We take with Nxe5, inviting the further trade — because even though the queens come off and we lose castling rights, White can't exploit it.",
+   "spoken": "You take with Nxe5, inviting the further trade — because even though the queens come off and you lose castling rights, White can't exploit it.",
    "kind": "main",
    "teaches": "Losing castling isn't fatal when the opponent is undeveloped and the king has a safe square waiting."
   },
@@ -243,7 +243,7 @@
    "line": [
     "Kxd8"
    ],
-   "spoken": "The king recaptures and looks exposed, but two things save us: White is poorly developed, and the king has a ready-made home. It can simply walk to c7.",
+   "spoken": "The king recaptures and looks exposed, but two things save you: White is poorly developed, and the king has a ready-made home. It can simply walk to c7.",
    "kind": "main"
   },
   {
@@ -253,7 +253,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Now the point of a6 shines: it covers b5 while the f6-knight covers d5, so together they seal the light squares around the king's future home on c7. First, though, we must be ready to defend the e5-pawn once White castles and swings a rook to e1.",
+   "spoken": "Now the point of a6 shines: it covers b5 while the f6-knight covers d5, so together they seal the light squares around the king's future home on c7. First, though, you must be ready to defend the e5-pawn once White castles and swings a rook to e1.",
    "kind": "main",
    "teaches": "a6 plus a knight on f6 blankets b5 and d5 — the light squares a king on c7 needs covered."
   },
@@ -303,7 +303,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "White's f4 hopes we take, so he can come out with a bishop-check and spoil things on c7. Instead we trade on our own terms: Bd6 invites White to take on e5 rather than the other way around.",
+   "spoken": "White's f4 hopes you take, so he can come out with a bishop-check and spoil things on c7. Instead you trade on your own terms: Bd6 invites White to take on e5 rather than the other way around.",
    "kind": "main",
    "teaches": "Don't capture into your opponent's plan — set up the position so he has to make the trade you want."
   },
@@ -323,7 +323,7 @@
    "line": [
     "Bxe5"
    ],
-   "spoken": "After the recapture the bishop sits beautifully in the centre, and every further trade helps us since we're the one up a pawn.",
+   "spoken": "After the recapture the bishop sits beautifully in the centre, and every further trade helps you since you're the one up a pawn.",
    "kind": "main",
    "teaches": "When you're up material, trades bring you closer to a won endgame — welcome them."
   },
@@ -334,7 +334,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Ne4 looks scary because Nxe4 runs into the zwischenzug Bxf7-check before White recaptures on e4. But ask the real question — does White actually threaten anything right now? He doesn't, so we just carry on developing.",
+   "spoken": "Ne4 looks scary because Nxe4 runs into the zwischenzug Bxf7-check before White recaptures on e4. But ask the real question — does White actually threaten anything right now? He doesn't, so you just carry on developing.",
    "kind": "main",
    "teaches": "Before reacting to a scary move, define its concrete threat; often there isn't one."
   },
@@ -402,7 +402,7 @@
    "line": [
     "Bc6"
    ],
-   "spoken": "No rush — Bc6 first. If White tries Bf4, it doesn't work: we take and push f5.",
+   "spoken": "No rush — Bc6 first. If White tries Bf4, it doesn't work: you take and push f5.",
    "kind": "main"
   },
   {
@@ -501,7 +501,7 @@
    "line": [
     "Rxb2"
    ],
-   "spoken": "Why allow any counterplay when we can just snap off on b2 instead? There is no need to force the second rook in.",
+   "spoken": "Why allow any counterplay when you can just snap off on b2 instead? There is no need to force the second rook in.",
    "kind": "main"
   },
   {
@@ -735,7 +735,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "This looks like a deep-freeze where one pawn holds two, but it isn't — b6 is a breakthrough. After axb6, the a-pawn runs; it's a sacrifice that costs us nothing.",
+   "spoken": "This looks like a deep-freeze where one pawn holds two, but it isn't — b6 is a breakthrough. After axb6, the a-pawn runs; it's a sacrifice that costs you nothing.",
    "kind": "main",
    "teaches": "A pawn breakthrough sacrifices one pawn to clear the path for another to queen."
   },

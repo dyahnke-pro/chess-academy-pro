@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "Back in the ring against a 1580 — and we answer the king-pawn with the Sicilian.",
+   "spoken": "Back in the ring against a 1580 — and you answer the king-pawn with the Sicilian.",
    "kind": "main"
   },
   {
@@ -25,7 +25,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "He picks the Alapin, the quiet c3 move. Its whole idea is to build the big center with d4 next. Our job is to preempt that — don't let him roll his pawns to d4 and e4 unchallenged.",
+   "spoken": "He picks the Alapin, the quiet c3 move. Its whole idea is to build the big center with d4 next. Your job is to preempt that — don't let him roll his pawns to d4 and e4 unchallenged.",
    "kind": "main",
    "teaches": [
     "Alapin: c3 prepares d4",
@@ -39,7 +39,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The tempting reply is e5, and it's playable — but pushing that pawn leaves the d5-square permanently soft. I'd rather not gift a hole on a central square, so we strike with d5 instead.",
+   "spoken": "The tempting reply is e5, and it's playable — but pushing that pawn leaves the d5-square permanently soft. I'd rather not gift a hole on a central square, so you strike with d5 instead.",
    "kind": "main",
    "teaches": [
     "Advancing a pawn concedes the square behind it"
@@ -62,7 +62,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So we jam the door shut with d4 of our own, wedging a pawn into his position before he can get there first.",
+   "spoken": "So you jam the door shut with d4 of your own, wedging a pawn into his position before he can get there first.",
    "kind": "main",
    "teaches": [
     "Contest the center directly with a wedge"
@@ -76,7 +76,7 @@
     "cxd4",
     "cxd4"
    ],
-   "spoken": "After the trade our pawn sits wedged deep in his half, cramping him and denying the natural central setup he wanted.",
+   "spoken": "After the trade your pawn sits wedged deep in his half, cramping him and denying the natural central setup he wanted.",
    "kind": "main"
   },
   {
@@ -104,7 +104,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop swings out to b5 to pin our knight. We've met this pin a hundred times — the only question is how we choose to break it.",
+   "spoken": "The bishop swings out to b5 to pin your knight. You've met this pin a hundred times — the only question is how you choose to break it.",
    "kind": "main"
   },
   {
@@ -114,7 +114,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "We just quietly unpin with the bishop to d7. Not every piece needs to be doing something heroic — a modest developing move that solves the pin is plenty.",
+   "spoken": "You just quietly unpin with the bishop to d7. Not every piece needs to be doing something heroic — a modest developing move that solves the pin is plenty.",
    "kind": "main",
    "teaches": [
     "A quiet unpin is often enough — pieces need not all attack"
@@ -140,7 +140,7 @@
    "line": [
     "Qa5+"
    ],
-   "spoken": "Second: the moment a pawn moves near the king, look at the diagonal it just opened. The check on a5 does both jobs at once — it rakes that fresh diagonal and forks the loose bishop, winning a piece outright, because our wedge pawn covers c3 so the knight can't block.",
+   "spoken": "Second: the moment a pawn moves near the king, look at the diagonal it just opened. The check on a5 does both jobs at once — it rakes that fresh diagonal and forks the loose bishop, winning a piece outright, because your wedge pawn covers c3 so the knight can't block.",
    "kind": "main",
    "teaches": [
     "A pawn move near the king opens diagonals to exploit",
@@ -163,7 +163,7 @@
    "line": [
     "Qxb5"
    ],
-   "spoken": "We scoop up the bishop. A whole piece to the good, and the game is essentially decided.",
+   "spoken": "You scoop up the bishop. A whole piece to the good, and the game is essentially decided.",
    "kind": "main"
   },
   {
@@ -174,7 +174,7 @@
     "O-O",
     "Qxd3"
    ],
-   "spoken": "We grab the central pawn on d3. I got greedy for the juicy pawn.",
+   "spoken": "You grab the central pawn on d3. I got greedy for the juicy pawn.",
    "kind": "main"
   },
   {
@@ -310,7 +310,7 @@
    "line": [
     "Nf5"
    ],
-   "spoken": "The knight jumps to f5, hitting the queen and forcing the trade back on our terms. The extra material carries the game.",
+   "spoken": "The knight jumps to f5, hitting the queen and forcing the trade back on your terms. The extra material carries the game.",
    "kind": "main"
   },
   {
@@ -330,7 +330,7 @@
    "line": [
     "Rxb4"
    ],
-   "spoken": "Into the endgame, and the same rules hold: consolidate first. We recapture and keep everything tidy.",
+   "spoken": "Into the endgame, and the same rules hold: consolidate first. You recapture and keep everything tidy.",
    "kind": "main",
    "teaches": [
     "Consolidate before converting in the endgame"
@@ -375,7 +375,7 @@
    "line": [
     "Ke7"
    ],
-   "spoken": "King to e7 — in the endgame the king is a fighter. No need to castle; walking it toward the center improves the coordination between our pieces.",
+   "spoken": "King to e7 — in the endgame the king is a fighter. No need to castle; walking it toward the center improves the coordination between your pieces.",
    "kind": "main",
    "teaches": [
     "Centralize the king in the endgame"
@@ -415,7 +415,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Careful: dropping the bishop to b7 would run into a nasty rook check on c7. We sidestep to d7 instead, which also forces the rook trade.",
+   "spoken": "Careful: dropping the bishop to b7 would run into a nasty rook check on c7. You sidestep to d7 instead, which also forces the rook trade.",
    "kind": "main",
    "teaches": [
     "Check for tactical replies before developing"
@@ -488,7 +488,7 @@
     "exd5",
     "Qxd5"
    ],
-   "spoken": "On the recap: after exd5 and the queen recapture, this looks like a Scandinavian — but it's better for us. The difference is the extra c3-pawn: it blocks White's own knight from c3, so he can't develop with tempo by hitting the queen.",
+   "spoken": "On the recap: after exd5 and the queen recapture, this looks like a Scandinavian — but it's better for you. The difference is the extra c3-pawn: it blocks White's own knight from c3, so he can't develop with tempo by hitting the queen.",
    "kind": "review",
    "teaches": [
     "The c3-pawn denies White the Nc3 tempo on the queen"
@@ -536,7 +536,7 @@
    "t": 659.5,
    "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "The through-line of the game: we wedged the pawn to d4 to stop his French-style plans, and his key slip d3 walked into the fork. And note the counter-idea — a pin cuts both ways; the bishop's own pin can be turned against it with the knight grabbing on e5.",
+   "spoken": "The through-line of the game: you wedged the pawn to d4 to stop his French-style plans, and his key slip d3 walked into the fork. And note the counter-idea — a pin cuts both ways; the bishop's own pin can be turned against it with the knight grabbing on e5.",
    "kind": "review",
    "teaches": [
     "A pin works both ways — the pinner can be exploited too"

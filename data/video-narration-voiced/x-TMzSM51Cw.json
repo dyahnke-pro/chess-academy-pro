@@ -15,7 +15,7 @@
         "Nf3",
         "d5"
       ],
-      "spoken": "A Black game — the knight to f3, and we answer d5, so no Philidor this time."
+      "spoken": "A Black game — the knight to f3, and you answer d5, so no Philidor this time."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "dxe4"
       ],
-      "spoken": "We're supposed to take the pawn, d takes e4."
+      "spoken": "You're supposed to take the pawn, d takes e4."
     },
     {
       "ply": 5,
@@ -51,7 +51,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "The knight threatens to grab the pawn and pressures f7, so our first priority is to develop — the knight to f6."
+      "spoken": "The knight threatens to grab the pawn and pressures f7, so your first priority is to develop — the knight to f6."
     },
     {
       "ply": 7,
@@ -87,7 +87,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "Keep developing — the bishop to g4 is very effective; if he plays f3, we take and open up his position."
+      "spoken": "Keep developing — the bishop to g4 is very effective; if he plays f3, you take and open up his position."
     },
     {
       "ply": 12,
@@ -97,7 +97,7 @@
         "f3",
         "exf3"
       ],
-      "spoken": "f3, and we take, e takes f3."
+      "spoken": "f3, and you take, e takes f3."
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "gxf3"
       ],
-      "spoken": "White recaptures with the g-pawn — look at his structure now: the bishop undeveloped, the king exposed, and we keep our extra pawn."
+      "spoken": "White recaptures with the g-pawn — look at his structure now: the bishop undeveloped, the king exposed, and you keep your extra pawn."
     },
     {
       "ply": 14,
@@ -115,7 +115,7 @@
       "line": [
         "Bf5"
       ],
-      "spoken": "We step the bishop back to f5, no problem."
+      "spoken": "You step the bishop back to f5, no problem."
     },
     {
       "ply": 15,
@@ -133,7 +133,7 @@
       "line": [
         "Bxh3"
       ],
-      "spoken": "We take on h3."
+      "spoken": "You take on h3."
     },
     {
       "ply": 17,
@@ -232,7 +232,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "White plays the queen to d2; he can't take our knight because of the fork."
+      "spoken": "White plays the queen to d2; he can't take your knight because of the fork."
     },
     {
       "ply": 28,
@@ -269,7 +269,7 @@
         "Ke2",
         "Nxd2"
       ],
-      "spoken": "White plays the king to e2, and we take the queen, capturing on d2."
+      "spoken": "White plays the king to e2, and you take the queen, capturing on d2."
     },
     {
       "ply": 33,
@@ -287,7 +287,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "You castle."
     },
     {
       "ply": 35,
@@ -342,7 +342,7 @@
         "Rhg1",
         "Nc4+"
       ],
-      "spoken": "The bishop to b6, the rook to g1, the knight to c4 with check — and we also win the exchange.",
+      "spoken": "The bishop to b6, the rook to g1, the knight to c4 with check — and you also win the exchange.",
       "reanchor": true
     },
     {

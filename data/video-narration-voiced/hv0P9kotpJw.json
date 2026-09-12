@@ -15,7 +15,7 @@
         "d4",
         "e5"
       ],
-      "spoken": "Nineteen-eighty-two, the highest rated we've faced by far — let's put my money where my mouth is and go very positional against this guy. d4, and out comes e5, the Englund Gambit."
+      "spoken": "Nineteen-eighty-two, the highest rated you've faced by far — let's put my money where my mouth is and go very positional against this guy. d4, and out comes e5, the Englund Gambit."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "We obviously accept it — d takes e5. Black's whole idea is to make a mess and hope we don't know the refutation."
+      "spoken": "You obviously accept it — d takes e5. Black's whole idea is to make a mess and hope you don't know the refutation."
     },
     {
       "ply": 5,
@@ -34,7 +34,7 @@
         "Nc6",
         "Nf3"
       ],
-      "spoken": "Black plays the knight to c6, hitting the extra pawn, and we simply defend it with the knight to f3."
+      "spoken": "Black plays the knight to c6, hitting the extra pawn, and you simply defend it with the knight to f3."
     },
     {
       "ply": 6,
@@ -52,7 +52,7 @@
       "line": [
         "Bf4"
       ],
-      "spoken": "The so-called trap is to go the bishop to f4 or the bishop to g5 — both essentially transpose into the same overall picture. We go the bishop to f4, defending the pawn and staying developed."
+      "spoken": "The so-called trap is to go the bishop to f4 or the bishop to g5 — both essentially transpose into the same overall picture. You go the bishop to f4, defending the pawn and staying developed."
     },
     {
       "ply": 8,
@@ -70,7 +70,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "We block with the bishop to d2, calmly interposing and inviting Black to overreach."
+      "spoken": "You block with the bishop to d2, calmly interposing and inviting Black to overreach."
     },
     {
       "ply": 10,
@@ -88,7 +88,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "Because after the bishop to c3, the bishop swoops into b4, pinning our bishop to the king, and that creates very problematic consequences for us. So we sidestep the whole thing and develop the knight to c3 instead — same square, but no pin, and the queen is still in mortal danger deep in our camp.",
+      "spoken": "Because after the bishop to c3, the bishop swoops into b4, pinning your bishop to the king, and that creates very problematic consequences for you. So you sidestep the whole thing and develop the knight to c3 instead — same square, but no pin, and the queen is still in mortal danger deep in your camp.",
       "reanchor": true
     },
     {
@@ -107,7 +107,7 @@
       "line": [
         "Rb1"
       ],
-      "spoken": "We answer with the rook to b1, kicking the queen and daring Black to give it up. This is where Black's whole gambit stands or falls."
+      "spoken": "You answer with the rook to b1, kicking the queen and daring Black to give it up. This is where Black's whole gambit stands or falls."
     },
     {
       "ply": 14,
@@ -135,7 +135,7 @@
       "line": [
         "Qa5"
       ],
-      "spoken": "If Black tries the queen to a5, we just take the bishop — it's attacked, and there's no good way to keep everything defended once we start collecting on b4."
+      "spoken": "If Black tries the queen to a5, you just take the bishop — it's attacked, and there's no good way to keep everything defended once you start collecting on b4."
     },
     {
       "ply": 17,
@@ -144,7 +144,7 @@
       "line": [
         "Nxb4"
       ],
-      "spoken": "So the knight takes on b4. Whatever piece ends up sitting on b4 is going to be an issue, because Black would love to play c5 and win it back, so we have to be precise about which piece recaptures."
+      "spoken": "So the knight takes on b4. Whatever piece ends up sitting on b4 is going to be an issue, because Black would love to play c5 and win it back, so you have to be precise about which piece recaptures."
     },
     {
       "ply": 18,
@@ -153,7 +153,7 @@
       "line": [
         "Nxb4"
       ],
-      "spoken": "Black recaptures — the knight takes on b4. Taking back with the rook instead would have been bad, because our d5-knight was also hanging to the queen; the recapture order matters."
+      "spoken": "Black recaptures — the knight takes on b4. Taking back with the rook instead would have been bad, because your d5-knight was also hanging to the queen; the recapture order matters."
     },
     {
       "ply": 19,
@@ -171,7 +171,7 @@
       "line": [
         "Qxa2"
       ],
-      "spoken": "Black snatches our edge pawn, the queen taking on a2. Now, how do we continue? Very often players get over-creative here or too fancy — you don't need either."
+      "spoken": "Black snatches your edge pawn, the queen taking on a2. Now, how do you continue? Very often players get over-creative here or too fancy — you don't need either."
     },
     {
       "ply": 21,
@@ -180,7 +180,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "You simply follow the rules of development: complete your development. We push e4, opening the diagonal so this light-squared bishop can finally come out."
+      "spoken": "You simply follow the rules of development: complete your development. You push e4, opening the diagonal so this light-squared bishop can finally come out."
     },
     {
       "ply": 22,
@@ -216,7 +216,7 @@
       "line": [
         "Qc1"
       ],
-      "spoken": "Now the point: that queen on a2 needs an escape square, so we think methodically about trapping it — can we cover the b2-square so it has nowhere to run? The queen to c1 starts building that net."
+      "spoken": "Now the point: that queen on a2 needs an escape square, so you think methodically about trapping it — can you cover the b2-square so it has nowhere to run? The queen to c1 starts building that net."
     },
     {
       "ply": 23,
@@ -234,7 +234,7 @@
         "b6",
         "Qc1"
       ],
-      "spoken": "Replaying it: b6 for Black, the queen to c1 for us, and the mating-net idea against the stranded queen keeps taking shape.",
+      "spoken": "Replaying it: b6 for Black, the queen to c1 for you, and the mating-net idea against the stranded queen keeps taking shape.",
       "reanchor": true
     },
     {
@@ -254,7 +254,7 @@
       "line": [
         "Bb5"
       ],
-      "spoken": "Black is trying to escape, but notice the queen has literally no prospects. We have a very simple move, the bishop to b5, calmly sending the queen back and tightening the noose."
+      "spoken": "Black is trying to escape, but notice the queen has literally no prospects. You have a very simple move, the bishop to b5, calmly sending the queen back and tightening the noose."
     },
     {
       "ply": 29,
@@ -264,7 +264,7 @@
         "Qa2",
         "Ra1"
       ],
-      "spoken": "Count the net: it takes one, two, three, four, five pieces to trap a man's queen — and here they all coordinate. Black resigns, but of course we'd have finished by rounding the queen up; the queen to a2, the rook to a1, and it's caught.",
+      "spoken": "Count the net: it takes one, two, three, four, five pieces to trap a man's queen — and here they all coordinate. Black resigns, but of course you'd have finished by rounding the queen up; the queen to a2, the rook to a1, and it's caught.",
       "reanchor": true
     },
     {
@@ -382,7 +382,7 @@
       "line": [
         "e3"
       ],
-      "spoken": "He's left with an isolated pawn on d6 and zero compensation — as we like to say, White's simply up a pawn with all the compensation. We play e3 and consolidate.",
+      "spoken": "He's left with an isolated pawn on d6 and zero compensation — as you like to say, White's simply up a pawn with all the compensation. You play e3 and consolidate.",
       "reanchor": true
     },
     {
@@ -398,7 +398,7 @@
       "t": 1636,
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
       "line": [],
-      "spoken": "And our bishop can always drop back to b3 if needed. In conclusion, I strongly advise against the Englund — it just doesn't hold up.",
+      "spoken": "And your bishop can always drop back to b3 if needed. In conclusion, I strongly advise against the Englund — it just doesn't hold up.",
       "reanchor": true
     }
   ]

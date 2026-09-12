@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have Black and answer the king's-pawn with e5."
+   "spoken": "You have Black and answer the king's-pawn with e5."
   },
   {
    "ply": 3,
@@ -51,7 +51,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The pawn to d5 — the whole point of c6, now that we've waited for the knight to commit to f3."
+   "spoken": "The pawn to d5 — the whole point of c6, now that you've waited for the knight to commit to f3."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "The pawn to e4 — the f3-knight, far from productive, is now vulnerable. We recover the pawn and get a monster centre with White's king very weak."
+   "spoken": "The pawn to e4 — the f3-knight, far from productive, is now vulnerable. You recover the pawn and get a monster centre with White's king very weak."
   },
   {
    "ply": 9,
@@ -87,7 +87,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "We recapture on d5 — Black is in very good shape."
+   "spoken": "You recapture on d5 — Black is in very good shape."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "White gives a check with the bishop to b5 — how should we cover it?"
+   "spoken": "White gives a check with the bishop to b5 — how should you cover it?"
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The knight to d7, not to c6 — and we hope White castles, a very common oversight."
+   "spoken": "The knight to d7, not to c6 — and you hope White castles, a very common oversight."
   },
   {
    "ply": 13,
@@ -141,7 +141,7 @@
    "line": [
     "Qxb5"
    ],
-   "spoken": "We take the bishop — we could have captured en passant first, but it doesn't matter."
+   "spoken": "You take the bishop — you could have captured en passant first, but it doesn't matter."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White plays the knight to c3, keeping the centre closed. We're up a piece; now consolidate."
+   "spoken": "White plays the knight to c3, keeping the centre closed. You're up a piece; now consolidate."
   },
   {
    "ply": 18,
@@ -177,7 +177,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "We cover the pin with the bishop to b4, preparing to remove the c3-knight."
+   "spoken": "You cover the pin with the bishop to b4, preparing to remove the c3-knight."
   },
   {
    "ply": 22,
@@ -187,7 +187,7 @@
     "a3",
     "Bxc3"
    ],
-   "spoken": "White plays a3 and we take on c3 — the simplest."
+   "spoken": "White plays a3 and you take on c3 — the simplest."
   },
   {
    "ply": 23,
@@ -205,7 +205,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Now we can safely retreat the queen to b6 — the d5-pawn no longer hangs, and we're up a full piece."
+   "spoken": "Now you can safely retreat the queen to b6 — the d5-pawn no longer hangs, and you're up a full piece."
   },
   {
    "ply": 25,
@@ -223,7 +223,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": "We develop the knight to f6, completing development before worrying about dislodging the bishop."
+   "spoken": "You develop the knight to f6, completing development before worrying about dislodging the bishop."
   },
   {
    "ply": 27,
@@ -232,7 +232,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "White plays the pawn to c4. We must be careful — the goal is to castle short, which solves all our problems."
+   "spoken": "White plays the pawn to c4. You must be careful — the goal is to castle short, which solves all your problems."
   },
   {
    "ply": 28,
@@ -241,7 +241,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "We can't castle yet because of the b4-bishop, so we push the pawn to a5 to kick it out."
+   "spoken": "You can't castle yet because of the b4-bishop, so you push the pawn to a5 to kick it out."
   },
   {
    "ply": 29,
@@ -250,7 +250,7 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": "White takes on d7. Which piece do we recapture with? Keep the prize in mind — castling — so we deny the bishop the c5-diagonal."
+   "spoken": "White takes on d7. Which piece do you recapture with? Keep the prize in mind — castling — so you deny the bishop the c5-diagonal."
   },
   {
    "ply": 30,
@@ -259,14 +259,14 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": "We recapture with the knight on d7 — it covers c5. Taking with the bishop, also winning, would let White's bishop park on c5 and delay our castling."
+   "spoken": "You recapture with the knight on d7 — it covers c5. Taking with the bishop, also winning, would let White's bishop park on c5 and delay your castling."
   },
   {
    "ply": 29,
    "t": 393,
    "fen": "r1b1k2r/1p1N1ppp/1q3n2/p2p4/1BPPpP2/P7/1P4PP/R2Q1RK1 b kq - 0 15",
    "line": [],
-   "spoken": "The clean conversion. The queen to c6 forces a queen trade — queens are poor at holding a position together, and an endgame a piece up needs no castling. Crucially, don't play the queen takes d4: up a piece, the priority is to consolidate, not grab pawns that open files for the opponent. Then the bishop to a6 pins the c4-pawn to the rook; the pawn to a4 is the Russian-school touch, keeping en passant ready against b4; we castle by hand, walking the king to f7 and e6, bring the rook in, and infiltrate down the a-file. The rook to c8 forces a rook trade or a passive retreat, we cut off White's king, double on the second rank, and finish by pushing the e-pawn or mating down the a-file.",
+   "spoken": "The clean conversion. The queen to c6 forces a queen trade — queens are poor at holding a position together, and an endgame a piece up needs no castling. Crucially, don't play the queen takes d4: up a piece, the priority is to consolidate, not grab pawns that open files for the opponent. Then the bishop to a6 pins the c4-pawn to the rook; the pawn to a4 is the Russian-school touch, keeping en passant ready against b4; you castle by hand, walking the king to f7 and e6, bring the rook in, and infiltrate down the a-file. The rook to c8 forces a rook trade or a passive retreat, you cut off White's king, double on the second rank, and finish by pushing the e-pawn or mating down the a-file.",
    "reanchor": true
   },
   {

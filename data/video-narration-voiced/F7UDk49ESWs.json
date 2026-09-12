@@ -15,7 +15,7 @@
         "e4",
         "e5"
       ],
-      "spoken": "We open e4, e5, and for the second time in a row we're heading into the Four Knights Scotch."
+      "spoken": "You open e4, e5, and for the second time in a row you're heading into the Four Knights Scotch."
     },
     {
       "ply": 3,
@@ -52,7 +52,7 @@
         "Nf6",
         "d4"
       ],
-      "spoken": "The knight to f6, and we strike with d4 — the Scotch."
+      "spoken": "The knight to f6, and you strike with d4 — the Scotch."
     },
     {
       "ply": 8,
@@ -68,7 +68,7 @@
       "t": 49.5,
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
       "line": [],
-      "spoken": "In the previous video we faced the immediate bishop to b4, which we examined carefully — there the move is the knight takes e5; I incorrectly responded d5. This is the main line of the Four Knights Scotch.",
+      "spoken": "In the previous video you faced the immediate bishop to b4, which you examined carefully — there the move is the knight takes e5; I incorrectly responded d5. This is the main line of the Four Knights Scotch.",
       "reanchor": true
     },
     {
@@ -158,7 +158,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "...which means when we play the bishop to g5, it becomes a very troublesome pin.",
+      "spoken": "...which means when you play the bishop to g5, it becomes a very troublesome pin.",
       "reanchor": true
     },
     {
@@ -168,7 +168,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "So the bishop to g5 — a troublesome pin, because either Black plays g5, an obviously weakening move, or tolerates it, and tolerating it lets us accentuate the pressure on the f6 knight.",
+      "spoken": "So the bishop to g5 — a troublesome pin, because either Black plays g5, an obviously weakening move, or tolerates it, and tolerating it lets you accentuate the pressure on the f6 knight.",
       "reanchor": true
     },
     {
@@ -198,7 +198,7 @@
       "line": [
         "Re8"
       ],
-      "spoken": "Either Black plays g5, obviously weakening, or tolerates it — and we can accentuate the pressure on the knight.",
+      "spoken": "Either Black plays g5, obviously weakening, or tolerates it — and you can accentuate the pressure on the knight.",
       "reanchor": true
     },
     {
@@ -218,7 +218,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "You might say e5 is defended twice and attacked once — but e5 can be strong even as a sacrifice, because after the trade the rook opens up and the pressure on the knight increases. A pawn sac on e5 is standard in the Four Knights Scotch. Black wastes time on the queenside, giving us time. But be careful with the king: after f4, watch the weakening of that diagonal — the immediate e5 lets Black, after the trades, drive the queen into d4 with a nasty check that also hits the h4-bishop.",
+      "spoken": "You might say e5 is defended twice and attacked once — but e5 can be strong even as a sacrifice, because after the trade the rook opens up and the pressure on the knight increases. A pawn sac on e5 is standard in the Four Knights Scotch. Black wastes time on the queenside, giving you time. But be careful with the king: after f4, watch the weakening of that diagonal — the immediate e5 lets Black, after the trades, drive the queen into d4 with a nasty check that also hits the h4-bishop.",
       "reanchor": true
     },
     {
@@ -228,7 +228,7 @@
       "line": [
         "Kh1"
       ],
-      "spoken": "If you drop the bishop back there, Black takes on e5 and our pressure vanishes. So we throw in the prophylactic king to h1, so we don't have to worry about that diagonal.",
+      "spoken": "If you drop the bishop back there, Black takes on e5 and your pressure vanishes. So you throw in the prophylactic king to h1, so you don't have to worry about that diagonal.",
       "reanchor": true
     },
     {
@@ -238,7 +238,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "The bishop to c5. Again — push e5 now, or a preparatory move like the queen to f3, bringing the rook to e1? A matter of taste; aggressive players lean toward e5, but for our first main-line Four Knights Scotch I'll play methodically: the queen to f3, piling indirectly on the knight — imagine e5 is already played and these moves make sense, since the pressure will soar. The main idea is to bring the rook to e1, after which e5 is a devastating threat. But notice: the queen also x-rays Black's other rook — the a8-rook is undefended along the diagonal. So consider e5 again: Black must take, and we don't recapture on e5 — instead, since Black's bishop out on c5 is now undefended, we simply take on c6, a garden-variety fork hitting the a8-rook and the c5-bishop, and the game is over. The queen to d5 would save both, but that square is guarded by our knight. That's the beauty of coordinating your pieces: you have one plan, but with active pieces the winning idea can come from an unexpected source. After e takes f4, desperation — the straightforward queen takes a8, though Black gets a little counterplay with g5; or you can take the dark-squared bishop, since minor pieces can be more impactful in the middlegame; or the elegant intermezzo, the bishop takes f6 — the queen takes f6 gets mated, and pawn takes f6 wrecks Black's kingside. The Russian-schoolboy bishop takes d8 isn't best — don't aim first to trade queens, aim for the most winning position; and don't play queen takes rook, because then Black's queen captures ours and is no longer hanging. The best move is the bishop takes g7 — we're losing that bishop anyway, so we give it up for the pawn, then take the bishop on c5, and the smoke clears: up a full piece, Black's king in shambles, the f-pawn hanging, zero counterplay. We take on c7, hitting the bishop and the pawn — no queen check on g2, our king guards it — then come back and take on f4, following the rule that you don't go out of your way to trade queens but take the chance when it comes, since it simplifies. Checkmate on h7.",
+      "spoken": "The bishop to c5. Again — push e5 now, or a preparatory move like the queen to f3, bringing the rook to e1? A matter of taste; aggressive players lean toward e5, but for your first main-line Four Knights Scotch I'll play methodically: the queen to f3, piling indirectly on the knight — imagine e5 is already played and these moves make sense, since the pressure will soar. The main idea is to bring the rook to e1, after which e5 is a devastating threat. But notice: the queen also x-rays Black's other rook — the a8-rook is undefended along the diagonal. So consider e5 again: Black must take, and you don't recapture on e5 — instead, since Black's bishop out on c5 is now undefended, you simply take on c6, a garden-variety fork hitting the a8-rook and the c5-bishop, and the game is over. The queen to d5 would save both, but that square is guarded by your knight. That's the beauty of coordinating your pieces: you have one plan, but with active pieces the winning idea can come from an unexpected source. After e takes f4, desperation — the straightforward queen takes a8, though Black gets a little counterplay with g5; or you can take the dark-squared bishop, since minor pieces can be more impactful in the middlegame; or the elegant intermezzo, the bishop takes f6 — the queen takes f6 gets mated, and pawn takes f6 wrecks Black's kingside. The Russian-schoolboy bishop takes d8 isn't best — don't aim first to trade queens, aim for the most winning position; and don't play queen takes rook, because then Black's queen captures yours and is no longer hanging. The best move is the bishop takes g7 — you're losing that bishop anyway, so you give it up for the pawn, then take the bishop on c5, and the smoke clears: up a full piece, Black's king in shambles, the f-pawn hanging, zero counterplay. You take on c7, hitting the bishop and the pawn — no queen check on g2, your king guards it — then come back and take on f4, following the rule that you don't go out of your way to trade queens but take the chance when it comes, since it simplifies. Checkmate on h7.",
       "reanchor": true
     },
     {
@@ -268,7 +268,7 @@
         "Nf6",
         "d4"
       ],
-      "spoken": "...which we face for the first time.",
+      "spoken": "...which you face for the first time.",
       "reanchor": true
     },
     {
@@ -278,7 +278,7 @@
       "line": [
         "Bb4"
       ],
-      "spoken": "In the previous game we faced the immediate bishop to b4, an old move; my response was d5 and the centre closed.",
+      "spoken": "In the previous game you faced the immediate bishop to b4, an old move; my response was d5 and the centre closed.",
       "reanchor": true
     },
     {
@@ -335,7 +335,7 @@
       "t": 623.5,
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
       "line": [],
-      "spoken": "In this game we face the main line, e takes d4.",
+      "spoken": "In this game you face the main line, e takes d4.",
       "reanchor": true
     },
     {
@@ -373,7 +373,7 @@
       "t": 632.5,
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
       "line": [],
-      "spoken": "Earlier in the speedrun we faced the knight takes d4...",
+      "spoken": "Earlier in the speedrun you faced the knight takes d4...",
       "reanchor": true
     },
     {
@@ -449,7 +449,7 @@
       "line": [
         "Nxc6"
       ],
-      "spoken": "...the knight takes c6 wins a piece, because we hit the queen...",
+      "spoken": "...the knight takes c6 wins a piece, because you hit the queen...",
       "reanchor": true
     },
     {
@@ -459,7 +459,7 @@
       "line": [
         "bxc6"
       ],
-      "spoken": "...Black must take back, and it doesn't matter with which pawn — we take the bishop on c5.",
+      "spoken": "...Black must take back, and it doesn't matter with which pawn — you take the bishop on c5.",
       "reanchor": true
     },
     {
@@ -566,7 +566,7 @@
         "d5",
         "Be2"
       ],
-      "spoken": "Black can take with the d-pawn, but that leads to a bad endgame: the king is driven into the centre and Black's queenside structure is terrible. The best move there is the bishop to d2. If Black plays the bishop to c3 and the knight to e4, we castle queenside, and if the king moves Black loses the knight — we play the rook to e1 and f3 and pick it off; if the bishop to d7, we take the pawn, the rook to g8 is forced, and the bishop drops to d4 to guard f2, with the bishop pair and a huge initiative.",
+      "spoken": "Black can take with the d-pawn, but that leads to a bad endgame: the king is driven into the centre and Black's queenside structure is terrible. The best move there is the bishop to d2. If Black plays the bishop to c3 and the knight to e4, you castle queenside, and if the king moves Black loses the knight — you play the rook to e1 and f3 and pick it off; if the bishop to d7, you take the pawn, the rook to g8 is forced, and the bishop drops to d4 to guard f2, with the bishop pair and a huge initiative.",
       "reanchor": true
     },
     {
@@ -574,7 +574,7 @@
       "t": 865,
       "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1b1NP3/2NB4/PPP2PPP/R1BQK2R w KQkq - 3 7",
       "line": [],
-      "spoken": "The best move is the bishop to e6, and we bring the other bishop to e2; once Black plays the king to e8, we secure the e4 pawn with f3 — with queens off, f3 makes sense — then castle queenside with a big advantage. So d takes c6 is nothing to worry about; after b takes c6 we play the bishop to d3 to over-protect e4.",
+      "spoken": "The best move is the bishop to e6, and you bring the other bishop to e2; once Black plays the king to e8, you secure the e4 pawn with f3 — with queens off, f3 makes sense — then castle queenside with a big advantage. So d takes c6 is nothing to worry about; after b takes c6 you play the bishop to d3 to over-protect e4.",
       "reanchor": true
     },
     {
@@ -681,7 +681,7 @@
       "line": [
         "bxc3"
       ],
-      "spoken": "You're not afraid, because it's a very steep price for Black to give up the dark-squared bishop: once our bishop comes to g5, the pin plus the dark-square pressure makes it unjustified.",
+      "spoken": "You're not afraid, because it's a very steep price for Black to give up the dark-squared bishop: once your bishop comes to g5, the pin plus the dark-square pressure makes it unjustified.",
       "reanchor": true
     },
     {
@@ -693,7 +693,7 @@
         "O-O",
         "Kg8"
       ],
-      "spoken": "So one way it plays out: Black castles kingside, we castle kingside, Black plays d6 like in the game.",
+      "spoken": "So one way it plays out: Black castles kingside, you castle kingside, Black plays d6 like in the game.",
       "reanchor": true
     },
     {
@@ -704,7 +704,7 @@
         "Bg5",
         "d6"
       ],
-      "spoken": "We play the bishop to g5 and Black really suffers on the dark squares, with the f4-and-e5 plan we executed in the game.",
+      "spoken": "You play the bishop to g5 and Black really suffers on the dark squares, with the f4-and-e5 plan you executed in the game.",
       "reanchor": true
     },
     {
@@ -733,7 +733,7 @@
         "Rg1",
         "O-O"
       ],
-      "spoken": "...we get the same position as in the game, and d5 is considered the best move by far.",
+      "spoken": "...you get the same position as in the game, and d5 is considered the best move by far.",
       "reanchor": true
     },
     {
@@ -753,7 +753,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "...c takes d5, and we reach a branching point with several interesting continuations.",
+      "spoken": "...c takes d5, and you reach a branching point with several interesting continuations.",
       "reanchor": true
     },
     {
@@ -837,7 +837,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "After c6, White plays the queen to f3, and most people play the bishop to d6 to a better square. I like the new rook to e1; the most popular reply is the rook to b8, and now b3, fianchettoing the bishop — uncommon in the Four Knights Scotch, but I like it and prefer White. If the rook to e8, we take on e8, and if the queen takes, we play the bishop to f4, going for the dark squares. The dark-squared bishop's development is flexible — g5, fianchetto, or f4. Bringing it to f4 favors White positionally: if Black trades on f4, look at the dark-square weaknesses on the queenside, all under White's control, and the rook hangs. The textbook way to exploit the c5 square and the c6 pawn: the knight is the best piece for a weak square, so the knight to a4, aiming for c5 and mainly immobilizing the c6 pawn so Black can't play c5. Say the rook to e7, then b4, accentuating control and clamping the pawn chain; even trading rooks doesn't help Black, who pays for the weak queenside pawns while White threatens to infiltrate and blockade c5.",
+      "spoken": "After c6, White plays the queen to f3, and most people play the bishop to d6 to a better square. I like the new rook to e1; the most popular reply is the rook to b8, and now b3, fianchettoing the bishop — uncommon in the Four Knights Scotch, but I like it and prefer White. If the rook to e8, you take on e8, and if the queen takes, you play the bishop to f4, going for the dark squares. The dark-squared bishop's development is flexible — g5, fianchetto, or f4. Bringing it to f4 favors White positionally: if Black trades on f4, look at the dark-square weaknesses on the queenside, all under White's control, and the rook hangs. The textbook way to exploit the c5 square and the c6 pawn: the knight is the best piece for a weak square, so the knight to a4, aiming for c5 and mainly immobilizing the c6 pawn so Black can't play c5. Say the rook to e7, then b4, accentuating control and clamping the pawn chain; even trading rooks doesn't help Black, who pays for the weak queenside pawns while White threatens to infiltrate and blockade c5.",
       "reanchor": true
     },
     {
@@ -845,7 +845,7 @@
       "t": 1582,
       "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1KR1 w - - 0 11",
       "line": [],
-      "spoken": "A brief overview of how quickly things go wrong for Black even with natural moves — we'll delve deeper later.",
+      "spoken": "A brief overview of how quickly things go wrong for Black even with natural moves — you'll delve deeper later.",
       "reanchor": true
     },
     {
@@ -881,7 +881,7 @@
       "t": 1611.5,
       "fen": "r1bqk2r/p1p2ppp/2p2n2/3p4/1b2P3/2NB4/PPP2PPP/R1BQ1K1R w kq - 0 9",
       "line": [],
-      "spoken": "...and keep the fianchetto in mind, aiming both bishops at Black's king. Now the game continuation, common at club level: d6. The bishop to g5 is direct but not the only try — the engine's top move is actually the knight to a4, but I recommend the bishop to g5, because the engine's choice is crazy: the computer says Black has to go g5, which doesn't solve Black's problems, since after the bishop to g3 the g5 pawn sticks out, and you exploit it by pushing f4, blasting open the kingside. Say Black plays a neutral rook to b8 — you play f4 and Black is busted. One database game saw the bishop to g4, White blocked with the bishop, Black gave a useless check on c5, White played the king to h1, the bishop takes e2, the queen takes, Black centralized the bishop, White blasted open with e5, and after the rook to e8, f takes g5, the knight to h7, g6, and the trades, the queen to c4, Black resigned. Black can try the rook to e8 against the f4 threat, and if White plays f4 prematurely the bishop to g4 is nasty since e4 becomes a weakness; so no reason to rush — the best move is the rook to e1, reinforcing e4. Then f4 is still a problem, the bishop to g4 the main move, and we bring the queen to d2 — now you see why the rook went to e1, since the knight takes e4 is no longer a problem; if the knight to h5, chase with h3, and after the bishop drops back, the bishop to h2, a fantastic position. You don't have to rush f4 — make improving moves and play f4 when the moment is right. So g5 doesn't solve Black's problems but is still Black's best. In our game Black missed his chance and played the rook to e8; f4 is automatic because g5 is no longer possible — Black is borderline lost, the pin essentially eternal. The only way to break it is to move the queen, but then we take on f6, play the queen to h5, and Black can resign, the h6 pawn hanging. If the king to g7, the rook to f3 and to g3 steamrolls the kingside. One game continued the rook to h8, and the best move is not the rook to g3 check but the queen to h4 — a prophylactic move aiming at f6 and stopping the king escaping to f8; if Black reinforces the pawn, White plays e5, and only if f takes e5 does White give the check, winning the queen and mating because the king intercepts the rook-queen connection. The main takeaway for intermediate players: there's a temptation to crash through with e5, and at the wrong moment you get burned — here Black has the intermezzo queen-d4 check hitting the bishop and king, the bishop blocks, Black takes on e5, and nothing's left of the attack. So understand whether you're in a hurry; if not, a single move improving your king's safety greatly increases the attack's chance. And throughout, we're not afraid of the bishop takes c3, because e4 is safely defended by the permanently-pinned knight. Back to the game: the queen to f3 — the engine says e5 was possible, and after the rook takes c5 the correct move is the bishop takes f6, g takes f6, and then the bishop to h7, exploiting the x-ray I forgot about. So e5 was winning on the spot, but the queen to f3 doesn't ruin anything, since Black is helpless. The king to h8, and e5 — the square-clearance idea: put more pressure on the knight with the knight to e4, hitting both bishop and knight; after the bishop drops back, take on e5, and after Black takes on e4, the bishop takes f7 with check, the king to h8, the bishop takes e4, and we finish with the queen to g6, a battery exploiting f-file control — after the king moves, the queen to h7 is mate.",
+      "spoken": "...and keep the fianchetto in mind, aiming both bishops at Black's king. Now the game continuation, common at club level: d6. The bishop to g5 is direct but not the only try — the engine's top move is actually the knight to a4, but I recommend the bishop to g5, because the engine's choice is crazy: the computer says Black has to go g5, which doesn't solve Black's problems, since after the bishop to g3 the g5 pawn sticks out, and you exploit it by pushing f4, blasting open the kingside. Say Black plays a neutral rook to b8 — you play f4 and Black is busted. One database game saw the bishop to g4, White blocked with the bishop, Black gave a useless check on c5, White played the king to h1, the bishop takes e2, the queen takes, Black centralized the bishop, White blasted open with e5, and after the rook to e8, f takes g5, the knight to h7, g6, and the trades, the queen to c4, Black resigned. Black can try the rook to e8 against the f4 threat, and if White plays f4 prematurely the bishop to g4 is nasty since e4 becomes a weakness; so no reason to rush — the best move is the rook to e1, reinforcing e4. Then f4 is still a problem, the bishop to g4 the main move, and you bring the queen to d2 — now you see why the rook went to e1, since the knight takes e4 is no longer a problem; if the knight to h5, chase with h3, and after the bishop drops back, the bishop to h2, a fantastic position. You don't have to rush f4 — make improving moves and play f4 when the moment is right. So g5 doesn't solve Black's problems but is still Black's best. In your game Black missed his chance and played the rook to e8; f4 is automatic because g5 is no longer possible — Black is borderline lost, the pin essentially eternal. The only way to break it is to move the queen, but then you take on f6, play the queen to h5, and Black can resign, the h6 pawn hanging. If the king to g7, the rook to f3 and to g3 steamrolls the kingside. One game continued the rook to h8, and the best move is not the rook to g3 check but the queen to h4 — a prophylactic move aiming at f6 and stopping the king escaping to f8; if Black reinforces the pawn, White plays e5, and only if f takes e5 does White give the check, winning the queen and mating because the king intercepts the rook-queen connection. The main takeaway for intermediate players: there's a temptation to crash through with e5, and at the wrong moment you get burned — here Black has the intermezzo queen-d4 check hitting the bishop and king, the bishop blocks, Black takes on e5, and nothing's left of the attack. So understand whether you're in a hurry; if not, a single move improving your king's safety greatly increases the attack's chance. And throughout, you're not afraid of the bishop takes c3, because e4 is safely defended by the permanently-pinned knight. Back to the game: the queen to f3 — the engine says e5 was possible, and after the rook takes c5 the correct move is the bishop takes f6, g takes f6, and then the bishop to h7, exploiting the x-ray I forgot about. So e5 was winning on the spot, but the queen to f3 doesn't ruin anything, since Black is helpless. The king to h8, and e5 — the square-clearance idea: put more pressure on the knight with the knight to e4, hitting both bishop and knight; after the bishop drops back, take on e5, and after Black takes on e4, the bishop takes f7 with check, the king to h8, the bishop takes e4, and you finish with the queen to g6, a battery exploiting f-file control — after the king moves, the queen to h7 is mate.",
       "reanchor": true
     },
     {
@@ -965,7 +965,7 @@
         "O-O",
         "O-O"
       ],
-      "spoken": "I'd review the theory after d5 — we'll surely face it again — but d6 is a really bad move...",
+      "spoken": "I'd review the theory after d5 — you'll surely face it again — but d6 is a really bad move...",
       "reanchor": true
     },
     {

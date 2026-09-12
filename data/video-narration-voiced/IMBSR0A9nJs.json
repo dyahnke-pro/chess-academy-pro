@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White, open with the pawn to e4, and get e5 — a reply we haven't faced much this run."
+   "spoken": "You have White, open with the pawn to e4, and get e5 — a reply you haven't faced much this run."
   },
   {
    "ply": 3,
@@ -70,7 +70,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So it's natural to open the centre with the pawn to d4. We could castle first, but there's no reason to delay — the time has come to open the centre.",
+   "spoken": "So it's natural to open the centre with the pawn to d4. You could castle first, but there's no reason to delay — the time has come to open the centre.",
    "reanchor": true
   },
   {
@@ -80,7 +80,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "Black expands with the pawn to b5 — common at this level and nothing to fear; we've already developed and seized the centre."
+   "spoken": "Black expands with the pawn to b5 — common at this level and nothing to fear; you've already developed and seized the centre."
   },
   {
    "ply": 9,
@@ -89,7 +89,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We simply drop the bishop back to b3, staying on the strong diagonal."
+   "spoken": "You simply drop the bishop back to b3, staying on the strong diagonal."
   },
   {
    "ply": 10,
@@ -98,7 +98,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Black takes on d4 — and we should recapture with the knight, not the queen, since a queen there would be vulnerable to ideas like the pawn to c5.",
+   "spoken": "Black takes on d4 — and you should recapture with the knight, not the queen, since a queen there would be vulnerable to ideas like the pawn to c5.",
    "reanchor": true
   },
   {
@@ -118,7 +118,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "There it is, the pawn to c5 — a Noah's Ark trap attempt: chase the knight, then play c4 to trap the bishop. But first, we can just take on b5, killing the c4 idea. And there's a direct refutation — the bishop to d5! When the opponent hasn't developed, you look for exactly this: after the capture on d4 we take the rook on a8, and the bishop escapes cleanly, up a full exchange.",
+   "spoken": "There it is, the pawn to c5 — a Noah's Ark trap attempt: chase the knight, then play c4 to trap the bishop. But first, you can just take on b5, killing the c4 idea. And there's a direct refutation — the bishop to d5! When the opponent hasn't developed, you look for exactly this: after the capture on d4 you take the rook on a8, and the bishop escapes cleanly, up a full exchange.",
    "reanchor": true
   },
   {
@@ -128,7 +128,7 @@
    "line": [
     "Bd5"
    ],
-   "spoken": "Playing as clinically as possible with the bishop to d5 — we'll end up an exchange and a pawn to the good, which is a lot.",
+   "spoken": "Playing as clinically as possible with the bishop to d5 — you'll end up an exchange and a pawn to the good, which is a lot.",
    "reanchor": true
   },
   {
@@ -167,7 +167,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Black plays the queen to b6, a good move defending the d4-pawn. Tempted to rescue our bishop with the bishop to d5, but we don't need to — the d5-square, protected by our pawn, is always available, and the bishop is nearly impossible to attack where it is.",
+   "spoken": "Black plays the queen to b6, a good move defending the d4-pawn. Tempted to rescue your bishop with the bishop to d5, but you don't need to — the d5-square, protected by your pawn, is always available, and the bishop is nearly impossible to attack where it is.",
    "reanchor": true
   },
   {
@@ -197,7 +197,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 — a classic transformation: we give back the d4-pawn, but in return we get the c3-square for the knight, the e3-square for the bishop, and the open c-file.",
+   "spoken": "The pawn to c3 — a classic transformation: you give back the d4-pawn, but in return you get the c3-square for the knight, the e3-square for the bishop, and the open c-file.",
    "reanchor": true
   },
   {
@@ -207,7 +207,7 @@
    "line": [
     "Na6"
    ],
-   "spoken": "Black plays the knight to a6, heading for c7 — a cute idea but not dangerous. We can simply play the queen takes d4 to steer into a queen trade.",
+   "spoken": "Black plays the knight to a6, heading for c7 — a cute idea but not dangerous. You can simply play the queen takes d4 to steer into a queen trade.",
    "reanchor": true
   },
   {
@@ -237,7 +237,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We recapture with the pawn. The in-between check on c6 was possible, but no need to be fancy — the bishop is perfectly safe.",
+   "spoken": "You recapture with the pawn. The in-between check on c6 was possible, but no need to be fancy — the bishop is perfectly safe.",
    "reanchor": true
   },
   {
@@ -247,7 +247,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": "Black plays the bishop to f6. We're clearly winning — now capitalize efficiently. If the knight goes to c7, we answer with the bishop to c6.",
+   "spoken": "Black plays the bishop to f6. You're clearly winning — now capitalize efficiently. If the knight goes to c7, you answer with the bishop to c6.",
    "reanchor": true
   },
   {
@@ -257,7 +257,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Since Black is undeveloped on the kingside, we push the pawn to e5. If Black takes twice, the rook to e1 pins the bishop and the pawn to f4 wins it.",
+   "spoken": "Since Black is undeveloped on the kingside, you push the pawn to e5. If Black takes twice, the rook to e1 pins the bishop and the pawn to f4 wins it.",
    "reanchor": true
   },
   {
@@ -319,7 +319,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "We capture on e5.",
+   "spoken": "You capture on e5.",
    "reanchor": true
   },
   {
@@ -339,7 +339,7 @@
    "line": [
     "Rxe5+"
    ],
-   "spoken": "The rook takes on e5 with check. No need to rush our development — there's nothing Black can do, so we take our time and mop up.",
+   "spoken": "The rook takes on e5 with check. No need to rush your development — there's nothing Black can do, so you take your time and mop up.",
    "reanchor": true
   },
   {
@@ -390,7 +390,7 @@
    "line": [
     "Rxg8"
    ],
-   "spoken": "The rook takes on g8 — not the other capture, which would hang our rook — and we're up an enormous amount of material.",
+   "spoken": "The rook takes on g8 — not the other capture, which would hang your rook — and you're up an enormous amount of material.",
    "reanchor": true
   },
   {

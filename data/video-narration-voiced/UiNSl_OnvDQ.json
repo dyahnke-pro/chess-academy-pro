@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We take White and face the Caro-Kann."
+   "spoken": "You take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the centre with d4."
+   "spoken": "You build the centre with d4."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "We play f3 — the Fantasy Variation. It's the kryptonite of most Caro-Kann players: less studied than the mainline trifecta, and so sharp that Black can't get away with just improvising standard Caro moves."
+   "spoken": "You play f3 — the Fantasy Variation. It's the kryptonite of most Caro-Kann players: less studied than the mainline trifecta, and so sharp that Black can't get away with just improvising standard Caro moves."
   },
   {
    "ply": 4,
@@ -77,7 +77,7 @@
     "fxe4",
     "e5"
    ],
-   "spoken": "We recapture on e4, and Black plays ...e5, the main line. Note we must not grab with our own pawn on e5 — ...Qh4 with check would then pick off the e4-pawn — so we prioritise development."
+   "spoken": "You recapture on e4, and Black plays ...e5, the main line. Note you must not grab with your own pawn on e5 — ...Qh4 with check would then pick off the e4-pawn — so you prioritise development."
   },
   {
    "ply": 9,
@@ -86,7 +86,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "You develop the knight to f3."
   },
   {
    "ply": 10,
@@ -121,7 +121,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "We bring the bishop to c4. In past games the shot on f7 has been overlooked by unprepared opponents."
+   "spoken": "You bring the bishop to c4. In past games the shot on f7 has been overlooked by unprepared opponents."
   },
   {
    "ply": 12,
@@ -139,7 +139,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle kingside — a big appeal of the Fantasy: the semi-open f-file that fuels the attack."
+   "spoken": "You castle kingside — a big appeal of the Fantasy: the semi-open f-file that fuels the attack."
   },
   {
    "ply": 14,
@@ -148,7 +148,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": "Black develops the knight to f6. Now we must shore up the centre, because once Black is developed ...exd4 grows nasty."
+   "spoken": "Black develops the knight to f6. Now you must shore up the centre, because once Black is developed ...exd4 grows nasty."
   },
   {
    "ply": 15,
@@ -157,7 +157,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3 to buttress the centre — the b1-knight can develop via d2 later. And a capture on e5 doesn't work: Black would take our f3-knight first, and then the centre just evaporates."
+   "spoken": "You play c3 to buttress the centre — the b1-knight can develop via d2 later. And a capture on e5 doesn't work: Black would take your f3-knight first, and then the centre just evaporates."
   },
   {
    "ply": 16,
@@ -175,7 +175,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We develop the bishop to g5, its one good square."
+   "spoken": "You develop the bishop to g5, its one good square."
   },
   {
    "ply": 18,
@@ -193,7 +193,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "We retreat to h4, provoking ...g5."
+   "spoken": "You retreat to h4, provoking ...g5."
   },
   {
    "ply": 20,
@@ -211,7 +211,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "We drop the bishop to g3 — and remember, ...Nxe4 is never a real problem, because the check on f7 always answers it."
+   "spoken": "You drop the bishop to g3 — and remember, ...Nxe4 is never a real problem, because the check on f7 always answers it."
   },
   {
    "ply": 22,
@@ -220,7 +220,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "Black plays the queen to e7, solidifying e5 and preparing to castle queenside — an opposite-wing race, with Black storming ...h5–h4 while we can advance a4–a5 or swing the queen to b3 or a4 to worry his weak queenside pawns."
+   "spoken": "Black plays the queen to e7, solidifying e5 and preparing to castle queenside — an opposite-wing race, with Black storming ...h5–h4 while you can advance a4–a5 or swing the queen to b3 or a4 to worry his weak queenside pawns."
   },
   {
    "ply": 23,
@@ -229,7 +229,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "First we complete development with the knight to d2."
+   "spoken": "First you complete development with the knight to d2."
   },
   {
    "ply": 24,
@@ -238,7 +238,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles queenside. Before pawn-storming, apply the best-case-scenario test: even if a4–a5–a6 all worked, Black just plays ...b5 and we've wasted three tempi for an unexploitable weakness — so we attack with pieces instead, starting with the queen to a4, and don't forget the standing weakness on f7.",
+   "spoken": "Black castles queenside. Before pawn-storming, apply the best-case-scenario test: even if a4–a5–a6 all worked, Black just plays ...b5 and you've wasted three tempi for an unexploitable weakness — so you attack with pieces instead, starting with the queen to a4, and don't forget the standing weakness on f7.",
    "reanchor": true
   }
  ]

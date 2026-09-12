@@ -24,7 +24,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "We accept the pawn, d takes e5, and reach the first big crossroads."
+      "spoken": "You accept the pawn, d takes e5, and reach the first big crossroads."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "To which of course we respond the knight to f3, holding the extra pawn."
+      "spoken": "To which of course you respond the knight to f3, holding the extra pawn."
     },
     {
       "ply": 6,
@@ -51,7 +51,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "The line that's the subject of most videos is the queen to e7 — this will be our main line, but first there are other moves to consider."
+      "spoken": "The line that's the subject of most videos is the queen to e7 — this will be your main line, but first there are other moves to consider."
     },
     {
       "ply": 3,
@@ -238,7 +238,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We follow up with the knight to f3 — and I love these lines where you sacrifice the gambit pawn back but end up as the one attacking.",
+      "spoken": "You follow up with the knight to f3 — and I love these lines where you sacrifice the gambit pawn back but end up as the one attacking.",
       "reanchor": true
     },
     {
@@ -248,7 +248,7 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "Black takes on e5 and we simply recapture.",
+      "spoken": "Black takes on e5 and you simply recapture.",
       "reanchor": true
     },
     {
@@ -278,7 +278,7 @@
       "line": [
         "Ng5"
       ],
-      "spoken": "And we play Fried-Liver style with the knight to g5, hitting f7.",
+      "spoken": "And you play Fried-Liver style with the knight to g5, hitting f7.",
       "reanchor": true
     },
     {
@@ -476,7 +476,7 @@
       "t": 586.5,
       "fen": "r1b1kb1r/ppp3pp/5n2/n2qp1N1/8/3B4/PPP2PPP/RNBQK2R w KQkq - 0 9",
       "line": [],
-      "spoken": "The windmill scoops everything up and takes back on e5; for some reason Black played on, but we'll pause the analysis here.",
+      "spoken": "The windmill scoops everything up and takes back on e5; for some reason Black played on, but you'll pause the analysis here.",
       "reanchor": true
     },
     {
@@ -700,7 +700,7 @@
       "t": 708,
       "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
       "line": [],
-      "spoken": "Back to our second-move deviation — we looked at f6, now let's look at d6.",
+      "spoken": "Back to your second-move deviation — you looked at f6, now let's look at d6.",
       "reanchor": true
     },
     {
@@ -720,7 +720,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "The good news is we don't have to analyze d6 as an independent move — we just play the knight to f3.",
+      "spoken": "The good news is you don't have to analyze d6 as an independent move — you just play the knight to f3.",
       "reanchor": true
     },
     {
@@ -738,7 +738,7 @@
       "t": 745.5,
       "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
       "line": [],
-      "spoken": "It reaches the same position we'd get after the knight to c6 first and then d6.",
+      "spoken": "It reaches the same position you'd get after the knight to c6 first and then d6.",
       "reanchor": true
     },
     {
@@ -750,7 +750,7 @@
         "Nf3",
         "d6"
       ],
-      "spoken": "For organization's sake we'll examine it through the knight-c6 move order.",
+      "spoken": "For organization's sake you'll examine it through the knight-c6 move order.",
       "reanchor": true
     },
     {
@@ -866,7 +866,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "the knight to f3 transposes into a position we examine through the other move order.",
+      "spoken": "the knight to f3 transposes into a position you examine through the other move order.",
       "reanchor": true
     },
     {
@@ -877,7 +877,7 @@
         "Nb8",
         "Ng1"
       ],
-      "spoken": "The knight retreats to b8 and our knight drops back to g1 — so d6 is the only real try.",
+      "spoken": "The knight retreats to b8 and your knight drops back to g1 — so d6 is the only real try.",
       "reanchor": true
     },
     {
@@ -1042,7 +1042,7 @@
         "exd6",
         "Bxd6"
       ],
-      "spoken": "We were looking at the knight to e7, e takes d6, the bishop recaptures on d6 — this changes nothing.",
+      "spoken": "You were looking at the knight to e7, e takes d6, the bishop recaptures on d6 — this changes nothing.",
       "reanchor": true
     },
     {
@@ -1291,7 +1291,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "First we have to look at d6, a serious alternative.",
+      "spoken": "First you have to look at d6, a serious alternative.",
       "reanchor": true
     },
     {
@@ -1309,7 +1309,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "The main line being the queen to e7, the recommendation in most videos — brought into practice by Karl Betins, who also gave us the Latvian Gambit.",
+      "spoken": "The main line being the queen to e7, the recommendation in most videos — brought into practice by Karl Betins, who also gave you the Latvian Gambit.",
       "reanchor": true
     },
     {
@@ -1413,7 +1413,7 @@
       "line": [
         "cxd6"
       ],
-      "spoken": "Black has to recapture with the pawn, and again we get a position with zero compensation for Black.",
+      "spoken": "Black has to recapture with the pawn, and again you get a position with zero compensation for Black.",
       "reanchor": true
     },
     {
@@ -1640,7 +1640,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "We've looked at the bishop to e7 and the queen to d7; the bishop to g5 keeps posing problems.",
+      "spoken": "You've looked at the bishop to e7 and the queen to d7; the bishop to g5 keeps posing problems.",
       "reanchor": true
     },
     {
@@ -1840,7 +1840,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "Because after e4 we transpose into a line we already saw.",
+      "spoken": "Because after e4 you transpose into a line you already saw.",
       "reanchor": true
     },
     {
@@ -1848,7 +1848,7 @@
       "t": 1503,
       "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
       "line": [],
-      "spoken": "Remember we reached it through the other move order.",
+      "spoken": "Remember you reached it through the other move order.",
       "reanchor": true
     },
     {
@@ -2149,7 +2149,7 @@
         "Bf8",
         "Nb1"
       ],
-      "spoken": "The bishop retreats to f8, our knight drops back to b1 — and now we clear the shrubbery and get to the main move.",
+      "spoken": "The bishop retreats to f8, your knight drops back to b1 — and now you clear the shrubbery and get to the main move.",
       "reanchor": true
     },
     {
@@ -2304,7 +2304,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "Black plays d6, and the edge is only about half a pawn — so to truly refute the queen to e7 we need the main line.",
+      "spoken": "Black plays d6, and the edge is only about half a pawn — so to truly refute the queen to e7 you need the main line.",
       "reanchor": true
     },
     {
@@ -2320,7 +2320,7 @@
       "t": 1738.5,
       "fen": "r1b1kbnr/ppppqppp/2n5/4P3/8/2N2N2/PPP1PPPP/R1BQKB1R b KQkq - 8 6",
       "line": [],
-      "spoken": "So we go down the main line.",
+      "spoken": "So you go down the main line.",
       "reanchor": true
     },
     {
@@ -2918,7 +2918,7 @@
       "t": 1971,
       "fen": "r1b1kbnr/pppp1ppp/2n5/4P3/1q6/5N2/PPPBPPPP/RN1QKB1R w KQkq - 11 8",
       "line": [],
-      "spoken": "We avoid all that with a ten-foot pole and simply continue developing — the knight to c3.",
+      "spoken": "You avoid all that with a ten-foot pole and simply continue developing — the knight to c3.",
       "reanchor": true
     },
     {
@@ -2930,7 +2930,7 @@
         "Qxb2",
         "Bg5"
       ],
-      "spoken": "And only after the queen takes on b2 do we bring the bishop to d2, then the bishop to g5.",
+      "spoken": "And only after the queen takes on b2 do you bring the bishop to d2, then the bishop to g5.",
       "reanchor": true
     },
     {
@@ -3208,7 +3208,7 @@
       "line": [
         "Qa1"
       ],
-      "spoken": "And once again our old friend the queen to a1 arrives.",
+      "spoken": "And once again your old friend the queen to a1 arrives.",
       "reanchor": true
     },
     {
@@ -3392,7 +3392,7 @@
       "t": 2280.5,
       "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/8/2b5/P1PNPPPP/1R1QKB1R b Kkq - 1 15",
       "line": [],
-      "spoken": "So we've been analyzing the knight takes on e5, to which we respond the rook to b3.",
+      "spoken": "So you've been analyzing the knight takes on e5, to which you respond the rook to b3.",
       "reanchor": true
     },
     {
@@ -3424,7 +3424,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "And if Black plays d6, we force the knight off e5 with f4.",
+      "spoken": "And if Black plays d6, you force the knight off e5 with f4.",
       "reanchor": true
     },
     {
@@ -4164,7 +4164,7 @@
         "Nd5",
         "Qa3"
       ],
-      "spoken": "That leads to our final variation — the queen to a3, met by the knight to d5.",
+      "spoken": "That leads to your final variation — the queen to a3, met by the knight to d5.",
       "reanchor": true
     },
     {
@@ -4615,7 +4615,7 @@
         "a6",
         "Rb3"
       ],
-      "spoken": "After a6, the rook to b3, we pounce with the knight to g5.",
+      "spoken": "After a6, the rook to b3, you pounce with the knight to g5.",
       "reanchor": true
     },
     {
@@ -4827,7 +4827,7 @@
       "t": 3332,
       "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/1b6/q1N2N2/P1PBPPPP/1R1QKB1R b Kkq - 9 13",
       "line": [],
-      "spoken": "To recap, because there are a lot of moving parts: after the knight to d5 we looked at the bishop to a5.",
+      "spoken": "To recap, because there are a lot of moving parts: after the knight to d5 you looked at the bishop to a5.",
       "reanchor": true
     },
     {
@@ -4967,7 +4967,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We avoid the bishop to d2 and the bishop to c3, and instead play the knight to c3.",
+      "spoken": "You avoid the bishop to d2 and the bishop to c3, and instead play the knight to c3.",
       "reanchor": true
     },
     {
@@ -4989,7 +4989,7 @@
         "Bb4",
         "Rb1"
       ],
-      "spoken": "After the bishop to b4 we say bring it on and sack the queen — the rook to b1.",
+      "spoken": "After the bishop to b4 you say bring it on and sack the queen — the rook to b1.",
       "reanchor": true
     },
     {
@@ -5020,7 +5020,7 @@
         "Ba5",
         "e4"
       ],
-      "spoken": "If Black plays the bishop to a5 keeping the tension, we say bring it on — e4 and the bishop to e2.",
+      "spoken": "If Black plays the bishop to a5 keeping the tension, you say bring it on — e4 and the bishop to e2.",
       "reanchor": true
     },
     {
@@ -5083,7 +5083,7 @@
       "t": 3442,
       "fen": "r1b1k1nr/pppp1ppp/2n5/3NP3/1b6/q4N2/P1PBPPPP/1R1QKB1R b Kkq - 5 8",
       "line": [],
-      "spoken": "We also looked at the more popular immediate trade on d2.",
+      "spoken": "You also looked at the more popular immediate trade on d2.",
       "reanchor": true
     },
     {
@@ -5273,7 +5273,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "We accept with d takes e5. Black either plays with one of the pawns or the main line with the knight to c6 and the queen to e7.",
+      "spoken": "You accept with d takes e5. Black either plays with one of the pawns or the main line with the knight to c6 and the queen to e7.",
       "reanchor": true
     },
     {
@@ -5284,7 +5284,7 @@
         "f6",
         "e4"
       ],
-      "spoken": "If Black plays f6 we do the Fried-Liver thing — e4, the knight to f3, the bishop to c4.",
+      "spoken": "If Black plays f6 you do the Fried-Liver thing — e4, the knight to f3, the bishop to c4.",
       "reanchor": true
     },
     {
@@ -5292,7 +5292,7 @@
       "t": 3550.5,
       "fen": "rnbqkbnr/pppp2pp/5p2/4P3/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 3",
       "line": [],
-      "spoken": "If Black plays d6 we play the knight to f3.",
+      "spoken": "If Black plays d6 you play the knight to f3.",
       "reanchor": true
     },
     {
@@ -5300,7 +5300,7 @@
       "t": 3556,
       "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
       "line": [],
-      "spoken": "After the knight to c6 we transpose into the knight-c6, knight-f3, d6 line.",
+      "spoken": "After the knight to c6 you transpose into the knight-c6, knight-f3, d6 line.",
       "reanchor": true
     },
     {
@@ -5444,7 +5444,7 @@
       "t": 3620.5,
       "fen": "r1b1kbnr/ppp2ppp/2np4/4P1q1/8/4BN2/PPP1PPPP/RN1QKB1R b KQkq - 3 5",
       "line": [],
-      "spoken": "That brought us through the bishop to c5.",
+      "spoken": "That brought you through the bishop to c5.",
       "reanchor": true
     },
     {
@@ -5452,7 +5452,7 @@
       "t": 3624.5,
       "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
       "line": [],
-      "spoken": "There you just play the knight to c3 — which brings us to the main line, the bishop to g5, walking into the trap. Remember the queen check and everything that follows.",
+      "spoken": "There you just play the knight to c3 — which brings you to the main line, the bishop to g5, walking into the trap. Remember the queen check and everything that follows.",
       "reanchor": true
     }
   ]

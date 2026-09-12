@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": "We take White and face the French."
+   "spoken": "You take White and face the French."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the centre with d4."
+   "spoken": "You build the centre with d4."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
     "d5",
     "e5"
    ],
-   "spoken": "Black plays d5; we lock the chain with e5 — the Advance."
+   "spoken": "Black plays d5; you lock the chain with e5 — the Advance."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Instead of c3 we play the odd-looking knight to f3, which has brought a lot of success."
+   "spoken": "Instead of c3 you play the odd-looking knight to f3, which has brought a lot of success."
   },
   {
    "ply": 8,
@@ -86,7 +86,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We develop the bishop to d3 — unfazed by ...cxd4."
+   "spoken": "You develop the bishop to d3 — unfazed by ...cxd4."
   },
   {
    "ply": 10,
@@ -104,7 +104,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "We take on c5."
+   "spoken": "You take on c5."
   },
   {
    "ply": 12,
@@ -122,7 +122,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — reaching the same structure as if Black had taken on d4, but without sacrificing the pawn."
+   "spoken": "You castle — reaching the same structure as if Black had taken on d4, but without sacrificing the pawn."
   },
   {
    "ply": 14,
@@ -140,7 +140,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3, eyeing Na4 to trade off Black's good dark-squared bishop."
+   "spoken": "You develop the knight to c3, eyeing Na4 to trade off Black's good dark-squared bishop."
   },
   {
    "ply": 16,
@@ -158,7 +158,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "We swing the knight to b5, aiming to sink into d6."
+   "spoken": "You swing the knight to b5, aiming to sink into d6."
   },
   {
    "ply": 18,
@@ -186,7 +186,7 @@
     "Bxd6",
     "exd6"
    ],
-   "spoken": "Black takes the knight with the bishop; we recapture with the e-pawn, planting a monster on d6."
+   "spoken": "Black takes the knight with the bishop; you recapture with the e-pawn, planting a monster on d6."
   },
   {
    "ply": 22,
@@ -204,7 +204,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We play the rook to e1, keeping options and x-raying e6."
+   "spoken": "You play the rook to e1, keeping options and x-raying e6."
   },
   {
    "ply": 24,
@@ -213,7 +213,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "Black plays ...Nb4, hitting our bishop."
+   "spoken": "Black plays ...Nb4, hitting your bishop."
   },
   {
    "ply": 25,
@@ -222,7 +222,7 @@
    "line": [
     "Bxg6"
    ],
-   "spoken": "We take the knight first, so the bishop can then come to f4."
+   "spoken": "You take the knight first, so the bishop can then come to f4."
   },
   {
    "ply": 27,
@@ -232,7 +232,7 @@
     "hxg6",
     "Bf4"
    ],
-   "spoken": "Black recaptures with the h-pawn; we plant the bishop on f4, cementing d6 — with no dark-squared bishop, Black can't challenge it."
+   "spoken": "Black recaptures with the h-pawn; you plant the bishop on f4, cementing d6 — with no dark-squared bishop, Black can't challenge it."
   },
   {
    "ply": 28,
@@ -250,7 +250,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "We play the prophylactic knight to g5 — it prevents ...f6 and eyes the kingside."
+   "spoken": "You play the prophylactic knight to g5 — it prevents ...f6 and eyes the kingside."
   },
   {
    "ply": 30,
@@ -268,7 +268,7 @@
    "line": [
     "Re3"
    ],
-   "spoken": "We lift the rook to e3, swinging it toward the king."
+   "spoken": "You lift the rook to e3, swinging it toward the king."
   },
   {
    "ply": 32,

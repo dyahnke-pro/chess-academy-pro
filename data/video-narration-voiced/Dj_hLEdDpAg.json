@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "Our Sicilian again — we'll test the Accelerated Dragon at this level.",
+   "spoken": "Your Sicilian again — you'll test the Accelerated Dragon at this level.",
    "kind": "main"
   },
   {
@@ -69,7 +69,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White pushes e5, trying to move-order us into a French Advance. The escape is that our light-squared bishop isn't shut in yet — we can develop it outside the pawn chain first and reach an improved French.",
+   "spoken": "White pushes e5, trying to move-order you into a French Advance. The escape is that your light-squared bishop isn't shut in yet — you can develop it outside the pawn chain first and reach an improved French.",
    "kind": "main",
    "teaches": [
     "dodge the French move-order with the bishop out"
@@ -82,7 +82,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 is the ambitious choice — it pins the knight and leans on the center, challenging White the most. Then e6 gives us a French on steroids, bishop already outside the chain.",
+   "spoken": "The bishop to g4 is the ambitious choice — it pins the knight and leans on the center, challenging White the most. Then e6 gives you a French on steroids, bishop already outside the chain.",
    "kind": "main",
    "teaches": [
     "Bg4: the good bishop out before ...e6"
@@ -95,7 +95,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "White develops to b5. The capture on c6 isn't really a threat, but we'd rather not wreck our queenside pawns if we don't have to.",
+   "spoken": "White develops to b5. The capture on c6 isn't really a threat, but you'd rather not wreck your queenside pawns if you don't have to.",
    "kind": "main"
   },
   {
@@ -105,7 +105,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "So the queen to c7 — less exposed than b6, and it leans on the e5-pawn, so we're happy to recapture there if White trades on c6.",
+   "spoken": "So the queen to c7 — less exposed than b6, and it leans on the e5-pawn, so you're happy to recapture there if White trades on c6.",
    "kind": "main",
    "teaches": [
     "Qc7 to recapture cleanly and hit e5"
@@ -127,7 +127,7 @@
    "line": [
     "Qxc6"
    ],
-   "spoken": "And that's the point — we take back with the queen, keeping the structure intact and a fine position.",
+   "spoken": "And that's the point — you take back with the queen, keeping the structure intact and a fine position.",
    "kind": "main"
   },
   {
@@ -137,7 +137,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White plays d4 and we've reached exactly that improved French. Rather than a sharp tactical fling that leaves our king behind, we'll keep it simple.",
+   "spoken": "White plays d4 and you've reached exactly that improved French. Rather than a sharp tactical fling that leaves your king behind, you'll keep it simple.",
    "kind": "main"
   },
   {
@@ -147,7 +147,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The clean e6 — an intuitive judgment call, no need for tricks when we have a healthy, easy position.",
+   "spoken": "The clean e6 — an intuitive judgment call, no need for tricks when you have a healthy, easy position.",
    "kind": "main",
    "teaches": [
     "simple over speculative when you’re comfortable"
@@ -277,7 +277,7 @@
    "line": [
     "bxa4"
    ],
-   "spoken": "An unconventional idea — the capture on a4, opening the b-file. Normally you'd never crack open the queenside like this, but White is so passive that the open file is all ours, and that a-pawn is now a weakness.",
+   "spoken": "An unconventional idea — the capture on a4, opening the b-file. Normally you'd never crack open the queenside like this, but White is so passive that the open file is all yours, and that a-pawn is now a weakness.",
    "kind": "main",
    "teaches": [
     "open the file when the passive side can’t use it"
@@ -299,7 +299,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Now we finish development and castle — no need for a defensive a5; White has nothing scary there.",
+   "spoken": "Now you finish development and castle — no need for a defensive a5; White has nothing scary there.",
    "kind": "main"
   },
   {
@@ -427,7 +427,7 @@
    "line": [
     "Rb3"
    ],
-   "spoken": "Rooks before queens: the rook to b3 is the classy, doubt-free move — we may not even need to win d4, just triple down the b-file and let the problems solve themselves.",
+   "spoken": "Rooks before queens: the rook to b3 is the classy, doubt-free move — you may not even need to win d4, just triple down the b-file and let the problems solve themselves.",
    "kind": "main",
    "teaches": [
     "rooks before the queen"
@@ -449,7 +449,7 @@
    "line": [
     "Rfb8"
    ],
-   "spoken": "We double with the rook to b8, and the threat of crashing in on b1 becomes decisive — the knight has done its job and hands the game to the rooks.",
+   "spoken": "You double with the rook to b8, and the threat of crashing in on b1 becomes decisive — the knight has done its job and hands the game to the rooks.",
    "kind": "main",
    "teaches": [
     "transform the advantage — switch targets"

@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "We have the Black pieces against a good player. As promised, I'm going into my main repertoire. d4, the knight to f6."
+   "spoken": "You have the Black pieces against a good player. As promised, I'm going into my main repertoire. d4, the knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 — we might be facing a Jobava London here."
+   "spoken": "The knight to c3 — you might be facing a Jobava London here."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "Of course the bishop to f4 isn't the only move, and we are indeed facing the Jobava London — I'm now Black against my own opening, but I won't hold back, I'll give my honest recommendations. What you should understand about the Black side of the Jobava is that there are seven or eight equalising lines — it's impossible to say that e6 is worse than the bishop to f5, or a6 worse than e6; all the typical moves here, other than the knight to c6, which blunders the knight to b5, are approximately equivalent in objective strength. 'Best' is relative — each line leads to a different type of position, and whichever you play, you have to know it well, because almost every move is good. Even the relatively rare c6 is quite decent. The move that's probably easiest for most people to understand, because it's also the most forcing —"
+   "spoken": "Of course the bishop to f4 isn't the only move, and you are indeed facing the Jobava London — I'm now Black against my own opening, but I won't hold back, I'll give my honest recommendations. What you should understand about the Black side of the Jobava is that there are seven or eight equalising lines — it's impossible to say that e6 is worse than the bishop to f5, or a6 worse than e6; all the typical moves here, other than the knight to c6, which blunders the knight to b5, are approximately equivalent in objective strength. 'Best' is relative — each line leads to a different type of position, and whichever you play, you have to know it well, because almost every move is good. Even the relatively rare c6 is quite decent. The move that's probably easiest for most people to understand, because it's also the most forcing —"
   },
   {
    "ply": 6,
@@ -67,7 +67,7 @@
    "t": 153.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "the fact that White has brought the knight out to c3, and the d4-pawn has now become a serious target, which we are",
+   "spoken": "the fact that White has brought the knight out to c3, and the d4-pawn has now become a serious target, which you are",
    "reanchor": true
   },
   {
@@ -77,7 +77,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "directly assaulting with the move c5. e4 is of course the move in the Jobava London course, so we follow one of its main lines. There are three main moves here, all analysed very deeply: c-takes-d4, d-takes-c4, and the one I'll play in this game,"
+   "spoken": "directly assaulting with the move c5. e4 is of course the move in the Jobava London course, so you follow one of its main lines. There are three main moves here, all analysed very deeply: c-takes-d4, d-takes-c4, and the one I'll play in this game,"
   },
   {
    "ply": 8,
@@ -113,7 +113,7 @@
     "Nxe4",
     "dxe4"
    ],
-   "spoken": "be met with the defensive knight to a6. Now we trade on e4; White will re-establish material equality with d-takes-c5. In the old days, when the Jobava was first appearing and this e4 move came to the fore, people"
+   "spoken": "be met with the defensive knight to a6. Now you trade on e4; White will re-establish material equality with d-takes-c5. In the old days, when the Jobava was first appearing and this e4 move came to the fore, people"
   },
   {
    "ply": 11,
@@ -148,14 +148,14 @@
    "line": [
     "Qa5+"
    ],
-   "spoken": "which we're going to play — the queen to a5 with check, forking the king and the c5-pawn, going down one of the most topical lines of the course and of the Jobava in general."
+   "spoken": "which you're going to play — the queen to a5 with check, forking the king and the c5-pawn, going down one of the most topical lines of the course and of the Jobava in general."
   },
   {
    "ply": 6,
    "t": 303.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "We didn't invent this line — it's in everybody's course, because e4 is the standard recommendation these days by most Jobava London authors. Of course there's also the old-school move e3, which I'll talk about after the game and explain why I don't really recommend it for Jobava aficionados. So the queen takes c5, and of course we're expecting the queen to a4 with check — that's precisely why White blocks the check with the pawn, so that the diagonal is open for the queen and White is able to win back the e4-pawn. It's interesting that our opponent is taking sizable chunks of time on every move — it tells me they may not be totally familiar with the theory, or are just trying to remember it. The queen to a4 with check — how do we block this check? Do we play the bishop to d7, or the knight to c6? Newer players might look at one of these.",
+   "spoken": "You didn't invent this line — it's in everybody's course, because e4 is the standard recommendation these days by most Jobava London authors. Of course there's also the old-school move e3, which I'll talk about after the game and explain why I don't really recommend it for Jobava aficionados. So the queen takes c5, and of course you're expecting the queen to a4 with check — that's precisely why White blocks the check with the pawn, so that the diagonal is open for the queen and White is able to win back the e4-pawn. It's interesting that your opponent is taking sizable chunks of time on every move — it tells me they may not be totally familiar with the theory, or are just trying to remember it. The queen to a4 with check — how do you block this check? Do you play the bishop to d7, or the knight to c6? Newer players might look at one of these.",
    "reanchor": true
   }
  ]

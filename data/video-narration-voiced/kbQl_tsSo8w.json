@@ -52,7 +52,7 @@
     "dxc3",
     "Nxc3"
    ],
-   "spoken": "Black accepts with d takes c3, and we recapture, the knight to c3 — a fully accepted Morra."
+   "spoken": "Black accepts with d takes c3, and you recapture, the knight to c3 — a fully accepted Morra."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "So we develop the knight to f3 first, staying as flexible as possible and waiting for Black to commit to a setup before we do."
+   "spoken": "So you develop the knight to f3 first, staying as flexible as possible and waiting for Black to commit to a setup before you do."
   },
   {
    "ply": 10,
@@ -97,7 +97,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black develops the bishop to e7. Our bishop on c4 is what makes the position tick — it quietly supports the knight that later jumps to d5."
+   "spoken": "Black develops the bishop to e7. Your bishop on c4 is what makes the position tick — it quietly supports the knight that later jumps to d5."
   },
   {
    "ply": 13,
@@ -106,14 +106,14 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle, tucking the king away and finishing development ahead of schedule."
+   "spoken": "You castle, tucking the king away and finishing development ahead of schedule."
   },
   {
    "ply": 12,
    "t": 228.5,
    "fen": "rnbqk1nr/1p1pbppp/p3p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
    "line": [],
-   "spoken": "And remember: after our knight eventually lands on d5, Black is not obliged to take it — that tension is part of what gives White the initiative.",
+   "spoken": "And remember: after your knight eventually lands on d5, Black is not obliged to take it — that tension is part of what gives White the initiative.",
    "reanchor": true
   },
   {

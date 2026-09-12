@@ -34,7 +34,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "Against the French we play the Tarrasch — the knight to d2 rather than c3. The whole point is that it leaves the c-pawn free to come to c3 and reinforce the center.",
+   "spoken": "Against the French you play the Tarrasch — the knight to d2 rather than c3. The whole point is that it leaves the c-pawn free to come to c3 and reinforce the center.",
    "kind": "main",
    "teaches": [
     "Nd2 keeps c3 for the pawn chain"
@@ -56,7 +56,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We grab space with e5, an Advance-style pawn chain that Black must attack.",
+   "spoken": "You grab space with e5, an Advance-style pawn chain that Black must attack.",
    "kind": "main",
    "teaches": [
     "the Advance structure"
@@ -117,7 +117,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "Black plays f6 — a famous mistake. It opens the very diagonal our queen wants, the road to h5.",
+   "spoken": "Black plays f6 — a famous mistake. It opens the very diagonal your queen wants, the road to h5.",
    "kind": "main",
    "teaches": [
     "...f6 opens the h5 diagonal"

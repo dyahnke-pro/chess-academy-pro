@@ -106,7 +106,7 @@
                                     "node": {
                                      "san": "Bg5",
                                      "movedBy": "white",
-                                     "idea": "You play the bishop to g5 — a believable blunder, and at least it develops a piece. The comedy would be if Black declined it.",
+                                     "idea": "You play the bishop to g5 — a believable blunder, and at least it develops a piece.",
                                      "children": [
                                       {
                                        "node": {
@@ -256,7 +256,7 @@
                          "shortIdea": "The c-pawns come off on d4.",
                          "asides": [
                           {
-                           "idea": "Very common at the 1200-1300 level is e6. As inspiration, one of my shortest tournament games: against a 1757, thirteen moves. The engine's best is the immediate d5, but I took a slower knight to f3, still keeping an edge; the knight to f6, the knight to c3, and a decisive mistake by Black — the only way to stay alive was the bishop to b4 or d5. I was planning e5, a great Advanced French where the bishop is locked on c8 and White got the c3 developing square. Instead the bishop to b5 showed unfamiliarity, and Black was dead lost in two moves: d5, much stronger than e5, which would yield the d5 square; the trade, then d6, and the game ends — the bishop drops back to a queen-e2 check, or the pathetic bishop to e7. He tried the knight to c2 check, but I ignored the rook, brought the bishop out, pre-moved the rook to e1, and it was mate in a thousand ways.",
+                           "idea": "Very common at the 1200-1300 level is e6. The engine's best is the immediate d5, but I took a slower knight to f3, still keeping an edge; the knight to f6, the knight to c3, and a decisive mistake by Black — the only way to stay alive was the bishop to b4 or d5. I was planning e5, a great Advanced French where the bishop is locked on c8 and White got the c3 developing square. Instead the bishop to b5 showed unfamiliarity, and Black was dead lost in two moves: d5, much stronger than e5, which would yield the d5 square; the trade, then d6, and the game ends — the bishop drops back to a queen-e2 check, or the pathetic bishop to e7. He tried the knight to c2 check, but I ignored the rook, brought the bishop out, pre-moved the rook to e1, and it was mate in a thousand ways.",
                            "shortIdea": "Very common at the 1200-1300 level is e6.",
                            "arrows": [
                             {
@@ -802,7 +802,7 @@
                                        "node": {
                                         "san": "Bd6",
                                         "movedBy": "black",
-                                        "idea": "So far, standard, well-known theory. The bishop to d6 — funnily, you can delay the pawn takes c5 one more move by castling, since Black can't resolve the central tension, but I'll stick to the traditional way.",
+                                        "idea": "The bishop to d6 — funnily, you can delay the pawn takes c5 one more move by castling, since Black can't resolve the central tension, but I'll stick to the traditional way.",
                                         "children": [
                                          {
                                           "node": {
@@ -910,7 +910,7 @@
                                                                                              "node": {
                                                                                               "san": "gxf6",
                                                                                               "movedBy": "black",
-                                                                                              "idea": "The queen takes f6 would lose on the spot. The g-pawn recaptures. The knight to c6 here fails tactically to the bishop takes c6, the knight takes c6, and the queen to e8 — ultra-advanced tactics I'll show after the game.",
+                                                                                              "idea": "The queen takes f6 would lose on the spot. The g-pawn recaptures. The knight to c6 here fails tactically to the bishop takes c6, the knight takes c6, and the queen to e8.",
                                                                                               "children": [
                                                                                                {
                                                                                                 "node": {
@@ -1095,7 +1095,7 @@
                                           }
                                          }
                                         ],
-                                        "shortIdea": "So far, standard, well-known theory."
+                                        "shortIdea": "The bishop to d6 — funnily, you can delay the pawn takes c5 one more move by castling, since Black can't resolve the central tension, but I'll stick…"
                                        }
                                       }
                                      ],
@@ -1721,7 +1721,7 @@
                               "node": {
                                "san": "Nc3",
                                "movedBy": "white",
-                               "idea": "You bring the knight to c3. The pin with Bb4 that's coming looks scary to some of you — it isn't, and I'll show you exactly why.",
+                               "idea": "You bring the knight to c3. The pin with Bb4 that's coming looks scary to some of you.",
                                "children": [
                                 {
                                  "node": {
@@ -3055,7 +3055,7 @@
                ]
               },
               {
-               "idea": "e6 has an interesting property: after d4, if Black plays d5, White can go e5, a direct transposition to the Advanced French. I'll show how it transposes.",
+               "idea": "e6 has an interesting property: after d4, if Black plays d5, White can go e5, a direct transposition to the Advanced French.",
                "shortIdea": "e6 has an interesting property: after d4, if Black plays d5, White can go e5, a direct transposition to the Advanced French.",
                "arrows": [
                 {
@@ -3133,7 +3133,7 @@
             "node": {
              "san": "Nf3",
              "movedBy": "white",
-             "idea": "White develops the knight to f3. As a gateway Sicilian for improving players the accelerated dragon is the recommendation, but nearing the top of the run you reach for the Sicilian you know best.",
+             "idea": "White develops the knight to f3. As a gateway Sicilian for improving players the accelerated dragon is the recommendation.",
              "children": [
               {
                "node": {
@@ -6564,7 +6564,7 @@
                                                             ]
                                                            },
                                                            {
-                                                            "idea": "just game over. The knight to a3, the knight takes f3 with check — and I'll probably combine this with another top-level play game.",
+                                                            "idea": "just game over. The knight to a3, the knight takes f3 with check.",
                                                             "shortIdea": "just game over.",
                                                             "arrows": [
                                                              {
@@ -6940,7 +6940,7 @@
                                                                         "node": {
                                                                          "san": "Qf4+",
                                                                          "movedBy": "white",
-                                                                         "idea": "The queen to f4, check — and it's mate, with just a pawn, the queen and the rook. A thirteen-move game, all theory, and Black resigns.",
+                                                                         "idea": "The queen to f4, check — and it's mate, with just a pawn, the queen and the rook.",
                                                                          "children": [],
                                                                          "shortIdea": "The queen to f4, check — and it's mate, with just a pawn, the queen and the rook."
                                                                         }
@@ -7250,7 +7250,7 @@
                            "node": {
                             "san": "Nc6",
                             "movedBy": "black",
-                            "idea": "which I'd like to introduce. Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board. Do you know the move I'm implying? It may seem natural, but on closer look it may seem a serious positional mistake.",
+                            "idea": "Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board. It may seem natural, but on closer look it may seem a serious positional mistake.",
                             "children": [
                              {
                               "node": {
@@ -7274,7 +7274,7 @@
                                        "node": {
                                         "san": "d5",
                                         "movedBy": "black",
-                                        "idea": "your opponent didn't play it, and that's c4. c4 is scary because after you play d4 later, Black takes en passant and breaks up your chain, seemingly losing your e5-pawn; I'll show the theory.",
+                                        "idea": "your opponent didn't play it, and that's c4. c4 is scary because after you play d4 later, Black takes en passant and breaks up your chain, seemingly losing your e5-pawn.",
                                         "children": [
                                          {
                                           "node": {
@@ -7547,7 +7547,7 @@
                               }
                              }
                             ],
-                            "shortIdea": "which I'd like to introduce."
+                            "shortIdea": "Black could also play d6 or e6 — those are the three main moves; the knight to c6 is on the board."
                            }
                           }
                          ],
@@ -10704,7 +10704,7 @@
                                                                                                                                                                                                                      "node": {
                                                                                                                                                                                                                       "san": "g5",
                                                                                                                                                                                                                       "movedBy": "black",
-                                                                                                                                                                                                                      "idea": "You just start pushing the g-pawn, with plenty of squares for your king; if the bishop moves anywhere it gets forked. White resigns.",
+                                                                                                                                                                                                                      "idea": "You just start pushing the g-pawn, with plenty of squares for your king; if the bishop moves anywhere it gets forked.",
                                                                                                                                                                                                                       "children": [],
                                                                                                                                                                                                                       "shortIdea": "You just start pushing the g-pawn, with plenty of squares for your king; if the bishop moves anywhere it gets forked."
                                                                                                                                                                                                                      }
@@ -14170,7 +14170,7 @@
                         "node": {
                          "san": "Nxd4",
                          "movedBy": "white",
-                         "idea": "White recaptures with the knight — music to my ears.",
+                         "idea": "White recaptures with the knight.",
                          "children": [
                           {
                            "node": {
@@ -14266,7 +14266,7 @@
                                                                         "node": {
                                                                          "san": "Nc2",
                                                                          "movedBy": "white",
-                                                                         "idea": "this knight through c2; it's not ideal, but at least your knight is now doing something. This is the main line of the Sveshnikov; so far he's been playing all the theoretical moves, kudos to him.",
+                                                                         "idea": "this knight through c2; it's not ideal, but at least your knight is now doing something. This is the main line of the Sveshnikov.",
                                                                          "children": [
                                                                           {
                                                                            "node": {
@@ -14398,7 +14398,7 @@
                            }
                           }
                          ],
-                         "shortIdea": "White recaptures with the knight — music to my ears."
+                         "shortIdea": "White recaptures with the knight."
                         }
                        }
                       ],
@@ -14698,7 +14698,7 @@
          "node": {
           "san": "e5",
           "movedBy": "black",
-          "idea": "The pawn to e4, e5 — a 1674, a pretty high-rated opponent.",
+          "idea": "The pawn to e4, e5.",
           "children": [
            {
             "node": {
@@ -14806,7 +14806,7 @@
                                                                "node": {
                                                                 "san": "Bxe2",
                                                                 "movedBy": "black",
-                                                                "idea": "If the bishop takes on e2, what should you recapture with? Both pieces can, but I like one more than the other — these are high-level positional decisions a 1700 should start learning to make.",
+                                                                "idea": "If the bishop takes on e2, what should you recapture with? Both pieces can, but I like one more than the other.",
                                                                 "children": [
                                                                  {
                                                                   "node": {
@@ -14931,7 +14931,7 @@
             }
            }
           ],
-          "shortIdea": "The pawn to e4, e5 — a 1674, a pretty high-rated opponent."
+          "shortIdea": "The pawn to e4, e5."
          }
         }
        ]
@@ -15474,7 +15474,7 @@
                                                          "node": {
                                                           "san": "h6",
                                                           "movedBy": "black",
-                                                          "idea": "Black plays h6 — but Black should have played h5.",
+                                                          "idea": "Black plays h6.",
                                                           "children": [
                                                            {
                                                             "node": {
@@ -16227,7 +16227,7 @@
                                                             }
                                                            }
                                                           ],
-                                                          "shortIdea": "Black plays h6 — but Black should have played h5."
+                                                          "shortIdea": "Black plays h6."
                                                          }
                                                         }
                                                        ],
@@ -16581,7 +16581,7 @@
                   "node": {
                    "san": "Nf3",
                    "movedBy": "white",
-                   "idea": "face the Slav, I think, in top-level play. The knight to f3 is the main line — you",
+                   "idea": "face the Slav, I think, in all of your top-level play. The knight to f3 is the main line — you",
                    "children": [
                     {
                      "node": {
@@ -17055,7 +17055,7 @@
                      }
                     }
                    ],
-                   "shortIdea": "face the Slav, I think, in top-level play."
+                   "shortIdea": "face the Slav, I think, in all of your top-level play."
                   }
                  }
                 ],
@@ -19280,16 +19280,6 @@
                                     ]
                                    },
                                    {
-                                    "idea": "You faced that line a very long time ago in the run.",
-                                    "shortIdea": "You faced that line a very long time ago in the run.",
-                                    "arrows": [
-                                     {
-                                      "from": "g1",
-                                      "to": "f3"
-                                     }
-                                    ]
-                                   },
-                                   {
                                     "idea": "There's also the queen to e2, the second theoretical move, met by an interesting pawn sacrifice: the knight to e4, giving up the e-pawn, and the queen to e7 threatening the knight to d3 with check — a line tons of grandmasters play.",
                                     "shortIdea": "There's also the queen to e2, the second theoretical move, met by an interesting pawn sacrifice: the knight to e4, giving up the e-pawn, and the queen to…",
                                     "arrows": [
@@ -20056,7 +20046,7 @@
                                                                                                                      "node": {
                                                                                                                       "san": "Rxd4",
                                                                                                                       "movedBy": "black",
-                                                                                                                      "idea": "You just capture on d4, and now it's over even faster — kudos to him for the queen to e2, but the bishop to f3 blunders.",
+                                                                                                                      "idea": "You just capture on d4, and now it's over even faster — for the queen to e2, but the bishop to f3 blunders.",
                                                                                                                       "children": [
                                                                                                                        {
                                                                                                                         "node": {
@@ -20140,7 +20130,7 @@
                                                                                                                                                                "node": {
                                                                                                                                                                 "san": "Bxc5",
                                                                                                                                                                 "movedBy": "black",
-                                                                                                                                                                "idea": "Can you take it? Yes — after a rook capture on c5 and a queen recapture, your rooks are doubled on the d-file so your d2 rook is defended. He resigns.",
+                                                                                                                                                                "idea": "Can you take it? Yes — after a rook capture on c5 and a queen recapture, your rooks are doubled on the d-file so your d2 rook is defended.",
                                                                                                                                                                 "children": [],
                                                                                                                                                                 "shortIdea": "Can you take it?"
                                                                                                                                                                }
@@ -20197,7 +20187,7 @@
                                                                                                                         }
                                                                                                                        }
                                                                                                                       ],
-                                                                                                                      "shortIdea": "You just capture on d4, and now it's over even faster — kudos to him for the queen to e2, but the bishop to f3 blunders."
+                                                                                                                      "shortIdea": "You just capture on d4, and now it's over even faster — for the queen to e2, but the bishop to f3 blunders."
                                                                                                                      }
                                                                                                                     }
                                                                                                                    ],
@@ -20702,8 +20692,8 @@
                                                 ]
                                                },
                                                {
-                                                "idea": "inaccuracy; I should have taken and gotten e6 in this case. But what if Black just ignores the pawn again?",
-                                                "shortIdea": "inaccuracy; I should have taken and gotten e6 in this case.",
+                                                "idea": "inaccuracy; the f-pawn can take on e6. But what if Black just ignores the pawn again?",
+                                                "shortIdea": "inaccuracy; the f-pawn can take on e6.",
                                                 "arrows": [
                                                  {
                                                   "from": "e5",
@@ -22023,7 +22013,7 @@
                                        "node": {
                                         "san": "b5",
                                         "movedBy": "black",
-                                        "idea": "Black's queenside pawns look imposing, and b5 is actually a good move — but Black has bitten off more than she can chew, pushing all those pawns without piece support. You'll use Your pawns, a very typical idea, to break down the whole chain.",
+                                        "idea": "Black's queenside pawns look imposing, and b5 is actually a good move — but Black has bitten off more than she can chew, pushing all those pawns without piece support. You'll use YOUR pawns, a very typical idea, to break down the whole chain.",
                                         "children": [
                                          {
                                           "node": {
@@ -26221,7 +26211,7 @@
          "node": {
           "san": "Nf6",
           "movedBy": "black",
-          "idea": "The knight to f3, the knight to f6 — against a 2431, the highest-rated player you've faced in top-level play.",
+          "idea": "The knight to f3, the knight to f6.",
           "children": [
            {
             "node": {
@@ -26437,7 +26427,7 @@
             }
            }
           ],
-          "shortIdea": "The knight to f3, the knight to f6 — against a 2431, the highest-rated player you've faced in top-level play."
+          "shortIdea": "The knight to f3, the knight to f6."
          }
         }
        ]
@@ -27578,7 +27568,7 @@
                "node": {
                 "san": "Nf6",
                 "movedBy": "black",
-                "idea": "The knight to f6 — an old variation where Black delays the recapture, wanting to take back with the knight. I'll play a line my coach taught me years ago.",
+                "idea": "The knight to f6 — an old variation where Black delays the recapture, wanting to take back with the knight.",
                 "children": [
                  {
                   "node": {
@@ -27620,7 +27610,7 @@
                                     "node": {
                                      "san": "d4",
                                      "movedBy": "white",
-                                     "idea": "so you could develop modestly with the knight to f3, but I think d4 is just more ambitious; I'll show the idea afterward.",
+                                     "idea": "so you could develop modestly with the knight to f3, but I think d4 is just more ambitious.",
                                      "children": [
                                       {
                                        "node": {
@@ -27801,7 +27791,7 @@
                                        }
                                       }
                                      ],
-                                     "shortIdea": "so you could develop modestly with the knight to f3, but I think d4 is just more ambitious; I'll show the idea afterward."
+                                     "shortIdea": "so you could develop modestly with the knight to f3, but I think d4 is just more ambitious."
                                     }
                                    }
                                   ],
@@ -28889,8 +28879,8 @@
                                                                                                              "shortIdea": "White plays the knight to e4.",
                                                                                                              "asides": [
                                                                                                               {
-                                                                                                               "idea": "The bishop to b6, the rook to g1, the knight to c4 with check — he resigns, and you also win the exchange.",
-                                                                                                               "shortIdea": "The bishop to b6, the rook to g1, the knight to c4 with check — he resigns, and you also win the exchange.",
+                                                                                                               "idea": "The bishop to b6, the rook to g1, the knight to c4 with check — and you also win the exchange.",
+                                                                                                               "shortIdea": "The bishop to b6, the rook to g1, the knight to c4 with check — and you also win the exchange.",
                                                                                                                "arrows": [
                                                                                                                 {
                                                                                                                  "from": "c5",
@@ -30826,7 +30816,7 @@
                                                                                                                                                             "node": {
                                                                                                                                                              "san": "Rxd7",
                                                                                                                                                              "movedBy": "white",
-                                                                                                                                                             "idea": "The king takes, the rook takes d7 — I'm going a little faster because he's really strong and I don't want to lose on time. He simply resigns.",
+                                                                                                                                                             "idea": "The king takes, the rook takes d7 — I'm going a little faster because he's really strong and I don't want to lose on time.",
                                                                                                                                                              "children": [
                                                                                                                                                               {
                                                                                                                                                                "node": {
@@ -33017,7 +33007,7 @@
                         "node": {
                          "san": "Nc3",
                          "movedBy": "white",
-                         "idea": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London, and my main opening.",
+                         "idea": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London.",
                          "children": [
                           {
                            "node": {
@@ -33257,7 +33247,7 @@
                            }
                           }
                          ],
-                         "shortIdea": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London, and my main opening."
+                         "shortIdea": "This is the Jobava London — Bf4 paired with Nc3, a cross between the Veresov and the London."
                         }
                        }
                       ],
@@ -33335,13 +33325,13 @@
                                              "node": {
                                               "san": "Nf6",
                                               "movedBy": "black",
-                                              "idea": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. You're spoiled for choice — let's see how",
+                                              "idea": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. You're spoiled for choice.",
                                               "children": [
                                                {
                                                 "node": {
                                                  "san": "g4",
                                                  "movedBy": "white",
-                                                 "idea": "this works, g4. I had a really cool over-the-board game exactly like this where I beat a 2500. There's a lot to unpack, but everybody should see the bishop is being attacked. Black has a complicating intermediate move that seems to offer a solution: the knight takes e5. After the knight takes e5, d-takes-e5, both the knight and the bishop are hanging, but Black plays the knight takes g4 — and at the very end of that line, don't forget the main idea of g5: the bishop to b5 with check is devastating, because there's nothing to block that diagonal, and the king has to move out to e7.",
+                                                 "idea": "this works, g4. There's a lot to unpack, but everybody should see the bishop is being attacked. Black has a complicating intermediate move that seems to offer a solution: the knight takes e5. After the knight takes e5, d-takes-e5, both the knight and the bishop are hanging, but Black plays the knight takes g4 — and at the very end of that line, don't forget the main idea of g5: the bishop to b5 with check is devastating, because there's nothing to block that diagonal, and the king has to move out to e7.",
                                                  "children": [
                                                   {
                                                    "node": {
@@ -33353,7 +33343,7 @@
                                                       "node": {
                                                        "san": "f3",
                                                        "movedBy": "white",
-                                                       "idea": "the bishop, forcing it back to g6. I'll show everything after the game.",
+                                                       "idea": "the bishop, forcing it back to g6.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -36678,7 +36668,7 @@
                   "node": {
                    "san": "Nf3",
                    "movedBy": "white",
-                   "idea": "face the Slav, I think, in top-level play. The knight to f3 is the main line — you",
+                   "idea": "face the Slav, I think, in all of your top-level play. The knight to f3 is the main line — you",
                    "children": [
                     {
                      "node": {
@@ -36762,7 +36752,7 @@
                      }
                     }
                    ],
-                   "shortIdea": "face the Slav, I think, in top-level play."
+                   "shortIdea": "face the Slav, I think, in all of your top-level play."
                   }
                  }
                 ],
@@ -41016,7 +41006,7 @@
                                                          "node": {
                                                           "san": "Qxd3",
                                                           "movedBy": "black",
-                                                          "idea": "You grab the central pawn on d3 — though honestly you should have taken on b2, which would have snagged the rook in the corner too. I got greedy for the juicy pawn.",
+                                                          "idea": "You grab the central pawn on d3. I got greedy for the juicy pawn.",
                                                           "children": [
                                                            {
                                                             "node": {
@@ -41306,7 +41296,7 @@
                                                             }
                                                            }
                                                           ],
-                                                          "shortIdea": "You grab the central pawn on d3 — though honestly you should have taken on b2, which would have snagged the rook in the corner too."
+                                                          "shortIdea": "You grab the central pawn on d3."
                                                          }
                                                         }
                                                        ]
@@ -42019,7 +42009,7 @@
                                                                                                    "node": {
                                                                                                     "san": "Bg4",
                                                                                                     "movedBy": "black",
-                                                                                                    "idea": "You finally develop the light-squared bishop to g4. Honest admission: White's h4 is stronger than it first looks — this was underestimated.",
+                                                                                                    "idea": "You finally develop the light-squared bishop to g4. White's h4 is stronger than it first looks.",
                                                                                                     "children": [
                                                                                                      {
                                                                                                       "node": {
@@ -42037,7 +42027,7 @@
                                                                                                             "node": {
                                                                                                              "san": "Qe3",
                                                                                                              "movedBy": "white",
-                                                                                                             "idea": "White declines and lifts the queen to e3 — music to the ears, because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so the moment it moves, the queen falls.",
+                                                                                                             "idea": "White declines and lifts the queen to e3 — because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so the moment it moves, the queen falls.",
                                                                                                              "children": [
                                                                                                               {
                                                                                                                "node": {
@@ -42313,7 +42303,7 @@
                                                                                                                }
                                                                                                               }
                                                                                                              ],
-                                                                                                             "shortIdea": "White declines and lifts the queen to e3 — music to the ears, because now the check on e7 no longer bites: that knight is tied to defending…"
+                                                                                                             "shortIdea": "White declines and lifts the queen to e3 — because now the check on e7 no longer bites: that knight is tied to defending White's own queen, so…"
                                                                                                             }
                                                                                                            }
                                                                                                           ],
@@ -42392,19 +42382,7 @@
                                                             }
                                                            }
                                                           ],
-                                                          "shortIdea": "The queen swings out to b6, forking the pawns on f2 and b2.",
-                                                          "asides": [
-                                                           {
-                                                            "idea": "With White castling you switched the engine on — a rare exception, given how messy this game got. The verdict: the knight to g4 and the queen to b6 both earn approval, and the knight to e2 was fine for White. The knight to d5 was flagged as a slip, and a later knight move judged an inaccuracy — the position stayed level, so 'blunder' overstates it. The engine's own preference was the immediate e6 — the very move you shied away from out of worry about the knight to c7 and giving up the d6-square.",
-                                                            "shortIdea": "With White castling you switched the engine on — a rare exception, given how messy this game got.",
-                                                            "arrows": [
-                                                             {
-                                                              "from": "e1",
-                                                              "to": "g1"
-                                                             }
-                                                            ]
-                                                           }
-                                                          ]
+                                                          "shortIdea": "The queen swings out to b6, forking the pawns on f2 and b2."
                                                          }
                                                         }
                                                        ],
@@ -42457,8 +42435,8 @@
                                               "shortIdea": "You castle, and note what you're deliberately NOT doing: pushing the pawn to d6 yet.",
                                               "asides": [
                                                {
-                                                "idea": "After the knight's retreat to e2, in hindsight the calm d6 was perfectly reasonable too.",
-                                                "shortIdea": "After the knight's retreat to e2, in hindsight the calm d6 was perfectly reasonable too.",
+                                                "idea": "With their knight tucked back on e2, the calm d6 is perfectly reasonable too.",
+                                                "shortIdea": "With their knight tucked back on e2, the calm d6 is perfectly reasonable too.",
                                                 "arrows": [
                                                  {
                                                   "from": "d4",
@@ -42473,8 +42451,8 @@
                                            "shortIdea": "The bishop to c4 — a sharp Sozin-flavoured try that stares down f7.",
                                            "asides": [
                                             {
-                                             "idea": "You took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
-                                             "shortIdea": "You took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
+                                             "idea": "The more principled path is the leap to g4.",
+                                             "shortIdea": "The more principled path is the leap to g4.",
                                              "arrows": [
                                               {
                                                "from": "f6",
@@ -42497,8 +42475,8 @@
                                         "shortIdea": "Your king's knight comes to f6, hitting e4 and finishing minor-piece development.",
                                         "asides": [
                                          {
-                                          "idea": "A strong opponent met you with the bishop to c4, and you castled — an unfamiliar setup for both sides.",
-                                          "shortIdea": "A strong opponent met you with the bishop to c4, and you castled — an unfamiliar setup for both sides.",
+                                          "idea": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
+                                          "shortIdea": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
                                           "arrows": [
                                            {
                                             "from": "f1",
@@ -42938,8 +42916,8 @@
                                      "shortIdea": "White plays a bishop to e3.",
                                      "asides": [
                                       {
-                                       "idea": "In the game your opponent played a3 — a strange, not very good move.",
-                                       "shortIdea": "In the game your opponent played a3 — a strange, not very good move.",
+                                       "idea": "They play the pawn to a3 — a strange, not very good move.",
+                                       "shortIdea": "They play the pawn to a3 — a strange, not very good move.",
                                        "arrows": [
                                         {
                                          "from": "g8",
@@ -44298,7 +44276,7 @@
             "node": {
              "san": "d4",
              "movedBy": "white",
-             "idea": "d4 — you've been playing the Smith-Morra exclusively.",
+             "idea": "d4.",
              "children": [
               {
                "node": {
@@ -44785,7 +44763,7 @@
                }
               }
              ],
-             "shortIdea": "d4 — you've been playing the Smith-Morra exclusively."
+             "shortIdea": "d4."
             }
            },
            {
@@ -45276,7 +45254,7 @@
                                                                                                                                                 "node": {
                                                                                                                                                  "san": "Nc4",
                                                                                                                                                  "movedBy": "white",
-                                                                                                                                                 "idea": "The knight to c4 — if Black takes on e5 you take back with the knight, so you both eye a5 and guard e5.",
+                                                                                                                                                 "idea": "The knight to c4 — if Black takes on e5 you take back with the knight, so both eye a5 and guard e5.",
                                                                                                                                                  "children": [
                                                                                                                                                   {
                                                                                                                                                    "node": {
@@ -45866,7 +45844,7 @@
                                                                                                                                                    }
                                                                                                                                                   }
                                                                                                                                                  ],
-                                                                                                                                                 "shortIdea": "The knight to c4 — if Black takes on e5 you take back with the knight, so you both eye a5 and guard e5."
+                                                                                                                                                 "shortIdea": "The knight to c4 — if Black takes on e5 you take back with the knight, so both eye a5 and guard e5."
                                                                                                                                                 }
                                                                                                                                                }
                                                                                                                                               ],
@@ -46061,7 +46039,7 @@
    "_X7t6o3o6JM",
    "j2PgJHNFH0c"
   ],
-  "narratedNodes": 88,
+  "narratedNodes": 87,
   "totalNodes": 110,
   "tree": {
    "openingName": "London System vs Sicilian Dragon",
@@ -46554,7 +46532,7 @@
                                  "node": {
                                   "san": "h5",
                                   "movedBy": "black",
-                                  "idea": "If you're not experienced with this idea, which recurs in several openings, I'll show you some examples.",
+                                  "idea": "",
                                   "children": [
                                    {
                                     "node": {
@@ -46626,7 +46604,7 @@
                                                                      "node": {
                                                                       "san": "Be6",
                                                                       "movedBy": "black",
-                                                                      "idea": "It's risky, what you're doing, but it's fun and teaches you a lot about tactical positions, and it's just not easy for Black to play this structure. The bishop to e6 is a bit passive — music to my ears, because it doesn't accentuate the queenside attack, essentially loses a move, and takes the e6-square away from the knight, which could have dropped back there. So this increases the appeal of g4, which is now very tempting — still incredibly double-edged, but with your king shepherded to safety it's a good time to consider it. You just smash through on the kingside, the kind of move a GM plays without calculating many variations, because in this line g4 and h5 just works, opening a bunch of files — and your queen from d2 gets direct access to the h-",
+                                                                      "idea": "It's risky, what you're doing, but it's fun and teaches you a lot about tactical positions, and it's just not easy for Black to play this structure. The bishop to e6 is a bit passive — because it doesn't accentuate the queenside attack, essentially loses a move, and takes the e6-square away from the knight, which could have dropped back there. So this increases the appeal of g4, which is now very tempting — still incredibly double-edged, but with your king shepherded to safety it's a good time to consider it. You just smash through on the kingside, the kind of move a GM plays without calculating many variations, because in this line g4 and h5 just works, opening a bunch of files — and your queen from d2 gets direct access to the h-",
                                                                       "children": [
                                                                        {
                                                                         "node": {
@@ -46638,7 +46616,7 @@
                                                                            "node": {
                                                                             "san": "Qa5",
                                                                             "movedBy": "black",
-                                                                            "idea": "The queen to a5 — very impressive play so far, but it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because you don't want your knight to be the only piece standing between you and checkmate — you want to be safer than that.",
+                                                                            "idea": "The queen to a5 — it might be inaccurate, because it walks into a lot of tactics. The queen to a5 doesn't do anything immediately, but it pressures the a2-pawn, which is annoying, because you don't want your knight to be the only piece standing between you and checkmate — you want to be safer than that.",
                                                                             "children": [
                                                                              {
                                                                               "node": {
@@ -47081,7 +47059,7 @@
                                                                               }
                                                                              }
                                                                             ],
-                                                                            "shortIdea": "The queen to a5 — very impressive play so far, but it might be inaccurate, because it walks into a lot of tactics."
+                                                                            "shortIdea": "The queen to a5 — it might be inaccurate, because it walks into a lot of tactics."
                                                                            }
                                                                           }
                                                                          ],
@@ -47136,8 +47114,7 @@
                                      "shortIdea": "Now you respond by continuing your development — the knight to f3."
                                     }
                                    }
-                                  ],
-                                  "shortIdea": "If you're not experienced with this idea, which recurs in several openings, I'll show you some examples."
+                                  ]
                                  }
                                 }
                                ],
@@ -48258,13 +48235,13 @@
                         "node": {
                          "san": "Nxd4",
                          "movedBy": "white",
-                         "idea": "White recaptures with the knight — music to my ears.",
+                         "idea": "White recaptures with the knight.",
                          "children": [
                           {
                            "node": {
                             "san": "g6",
                             "movedBy": "black",
-                            "idea": "The pawn to g6, the Accelerated Dragon fianchetto — only your second of the whole run.",
+                            "idea": "The pawn to g6, the Accelerated Dragon fianchetto.",
                             "children": [
                              {
                               "node": {
@@ -49089,8 +49066,8 @@
                                         "shortIdea": "So you keep it uniquely Accelerated by developing the knight to f6 first — not pushing any central pawns yet, maybe not for several more moves.",
                                         "asides": [
                                          {
-                                          "idea": "The queen to d2 is a move I honestly hadn't come across.",
-                                          "shortIdea": "The queen to d2 is a move I honestly hadn't come across.",
+                                          "idea": "The queen to d2.",
+                                          "shortIdea": "The queen to d2.",
                                           "arrows": [
                                            {
                                             "from": "d1",
@@ -49324,7 +49301,7 @@
                               }
                              }
                             ],
-                            "shortIdea": "The pawn to g6, the Accelerated Dragon fianchetto — only your second of the whole run.",
+                            "shortIdea": "The pawn to g6, the Accelerated Dragon fianchetto.",
                             "asides": [
                              {
                               "idea": "But the knight to c3 is the other main line.",
@@ -49340,7 +49317,7 @@
                            }
                           }
                          ],
-                         "shortIdea": "White recaptures with the knight — music to my ears.",
+                         "shortIdea": "White recaptures with the knight.",
                          "asides": [
                           {
                            "idea": "You're facing the knight to c3 and the bishop to e3.",
@@ -49377,7 +49354,7 @@
                       "shortIdea": "You capture on d4.",
                       "asides": [
                        {
-                        "idea": "The bishop to e2 is the old move, and the pawn to d5 equalizes — a drawback of the Accelerated is these liquidations. The knight to b4 was a viable alternative avoiding the trades. In the game, after the bishop to d4 and knight to c3, Black is already better; the queen takes d8 was a mistake giving up the d-file for nothing — White should have recaptured on c6, and after your bishop to f5 or e6 you'd have a very nice position. Then the bishop to f3 and the capture on c2, and after the bishop to c6, the rook to c8 does the job.",
+                        "idea": "The bishop to e2 is the old move, and the pawn to d5 equalizes — a drawback of the Accelerated is these liquidations. The knight to b4 was a viable alternative avoiding the trades. Then the bishop to f3 and the capture on c2, and after the bishop to c6, the rook to c8 does the job.",
                         "shortIdea": "The bishop to e2 is the old move, and the pawn to d5 equalizes — a drawback of the Accelerated is these liquidations.",
                         "arrows": [
                          {
@@ -50842,7 +50819,7 @@
                      "node": {
                       "san": "c5",
                       "movedBy": "black",
-                      "idea": "Black strikes with the pawn to c5. The normal move now is c3, but you've been playing this differently.",
+                      "idea": "Black strikes with the pawn to c5. The normal move now is c3.",
                       "children": [
                        {
                         "node": {
@@ -51373,7 +51350,7 @@
                               "node": {
                                "san": "Bd3",
                                "movedBy": "white",
-                               "idea": "White develops the bishop to d3. Since this is your first Advance Caro, here's the rationale. The centre is CLOSED, and a closed centre is built of pawn chains — your black pawns form one chain, and d4 with e5 is White's chain. The side with more levers, more ability to attack and undermine the OTHER side's chain, is the side holding the initiative — and the whole point of the Caro is that Black is that side. White's compensation is space; those two things balance out. And right now you don't want to surrender this prime parking spot on f5 so easily — you trade it on Your terms.",
+                               "idea": "White develops the bishop to d3. Since this is your first Advance Caro, here's the rationale. The centre is CLOSED, and a closed centre is built of pawn chains — your black pawns form one chain, and d4 with e5 is White's chain. The side with more levers, more ability to attack and undermine the OTHER side's chain, is the side holding the initiative — and the whole point of the Caro is that Black is that side. White's compensation is space; those two things balance out. And right now you don't want to surrender this prime parking spot on f5 so easily — you trade it on YOUR terms.",
                                "children": [
                                 {
                                  "node": {
@@ -53307,7 +53284,7 @@
                         "node": {
                          "san": "Nxd4",
                          "movedBy": "white",
-                         "idea": "White recaptures with the knight — music to my ears.",
+                         "idea": "White recaptures with the knight.",
                          "children": [
                           {
                            "node": {
@@ -53537,7 +53514,7 @@
                            }
                           }
                          ],
-                         "shortIdea": "White recaptures with the knight — music to my ears."
+                         "shortIdea": "White recaptures with the knight."
                         }
                        }
                       ],
@@ -54543,7 +54520,7 @@
          "node": {
           "san": "d6",
           "movedBy": "black",
-          "idea": "A ten-minute game, and you're climbing — rated sixteen-seventy-three now. Black plays d6, which could be a Pirc or a Caro depending on what follows.",
+          "idea": "A ten-minute game, and you're climbing. Black plays d6, which could be a Pirc or a Caro depending on what follows.",
           "children": [
            {
             "node": {
@@ -55916,7 +55893,7 @@
             }
            }
           ],
-          "shortIdea": "A ten-minute game, and you're climbing — rated sixteen-seventy-three now.",
+          "shortIdea": "A ten-minute game, and you're climbing.",
           "asides": [
            {
             "idea": "d4 and c6 — the win is very straightforward once you land the knight on f4, with too many weak squares and pawns for Black to defend.",
@@ -58675,7 +58652,7 @@
          "node": {
           "san": "f5",
           "movedBy": "black",
-          "idea": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
+          "idea": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
           "children": [
            {
             "node": {
@@ -58769,7 +58746,7 @@
             }
            }
           ],
-          "shortIdea": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside."
+          "shortIdea": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside."
          }
         },
         {
@@ -59880,7 +59857,7 @@
                                                                                                                                                                                                                "node": {
                                                                                                                                                                                                                 "san": "Kf7",
                                                                                                                                                                                                                 "movedBy": "black",
-                                                                                                                                                                                                                "idea": "You bring the king up, he gives you access to the pawn, and you push — had he defended, I'd just create a passer and distract his king. He resigns.",
+                                                                                                                                                                                                                "idea": "You bring the king up, he gives you access to the pawn, and you push — had he defended, I'd just create a passer and distract his king.",
                                                                                                                                                                                                                 "children": [],
                                                                                                                                                                                                                 "shortIdea": "You bring the king up, he gives you access to the pawn, and you push — had he defended, I'd just create a passer and distract his king."
                                                                                                                                                                                                                }
@@ -60350,8 +60327,8 @@
                                            "shortIdea": "If White recaptures with the knight, a knight to d4 wins a pawn; he takes with the pawn instead.",
                                            "asides": [
                                             {
-                                             "idea": "After the queen trade and a bishop to g4, White should have played a bishop to f4.",
-                                             "shortIdea": "After the queen trade and a bishop to g4, White should have played a bishop to f4.",
+                                             "idea": "With the queens off and the bishop on g4, the bishop to f4 is the move.",
+                                             "shortIdea": "With the queens off and the bishop on g4, the bishop to f4 is the move.",
                                              "arrows": [
                                               {
                                                "from": "d8",
@@ -61294,7 +61271,7 @@
                                  "node": {
                                   "san": "e6",
                                   "movedBy": "black",
-                                  "idea": "Let's go e6, basically playing a Queen's Gambit structure, except with the bishop outside the pawn chain. The problem with my loss of a tempo is that it gave him a chance to develop, with the queen coming to b3. Now this b7-pawn is hanging. The move you often want to avoid is b6 — it creates a lot of weaknesses on that side, look at the c6-square and the light squares b6 weakens, and White has the very nasty knight to e5; if that knight reaches e5 you come under real pressure. So logically, since b6 and g5 are a problem, I'll make a move that may look like a blunder: just take the knight on f3. The queen takes b7 is often possible in such positions, but here it's not as good as it looks — after the queen grabs b7, the knight to d7 is the usual move, but you can actually snatch the pawn on g2 with that same bishop, which is why he didn't go for it. Now, you want to have some fun — you don't want to play like a coward. I'm proposing that you sacrifice. What am I noticing? White's king won't be safe on the kingside, and it's very far from castling queenside; and here's the funny thing — if White takes on b7, that does your bidding for you, because if White then castles queenside, the open b-file gives you very nice play. So you pretend there's no threat and develop as normal. In such positions you rarely put the knight on c6, because you want the c5 pawn lever, so you develop the knight to d7 anyway — objectively probably unsound, but I've had a lot of success sacking b7 like this. What should you recapture with? Both pieces make sense: taking with the pawn preserves the structure; taking with the knight keeps the centre looser and more open, which I like — provocative chess, trying to get him to play e4 and weaken the centre. It's a Grünfeld-style approach where you don't occupy the centre with pawns, planning c5 at some point. Do you play g6? You might, but I don't think you need to — you can just get the bishop out to d6. Then e4, which I think is a mistake. Now the most energetic move — not the knight to f4, that blunders the knight — the knight to g4. You're not threatening to capture the bishop, but there's a hidden threat; you want to play as aggressively as possible, because White is extremely underdeveloped, and the way to exploit a development lead is to open the centre. You could play e5, but that gives the queen pressure on f7 — better to play c5. Then a3, and the knight drops back to c6, increasing the pressure on d4; the knight to d4 is coming and it's unstoppable, these knights are pouring out. e4 walked right into what you wanted, and c5 and a3 is also a mistake — this knight wants to be on c6, then on d4. d5 isn't dangerous; the knight to d4, and now the queen has to keep control of c2, so it goes back, and you grab the pawn, weakening his centre even further — this is close to losing for White. The queen to h4 is a move to keep in mind, but it does nothing yet. Taking on d5 makes sense — weaken his centre and open the e-file, and later you can put a rook to e8. If I were White I'd seriously consider not recapturing, but he recaptures. This is an instructive moment: people get tempted to do something immediate, but the best approach is to complete your development — nothing good happens when only one piece is developed; that knight is great, but without the other pieces and a safe king it's hard to do what you want. So the bishop to d6 — this requires patience — then castle, and only then start thinking about concrete actions. Do you defend that knight, or allow White to capture it on d4? The answer is no, you don't need to defend it — let him take it — because this bishop is the only thing standing in the way of you dominating the e-file; if White takes on d4 twice, you simply put a rook to e8, and this knight on d7 can jump to c5 and perhaps to b3 later. You're essentially replacing one advantage with another — transforming your advantage is one of the hardest things to master, because visually you look at the knight and want to preserve it. Now, which piece to activate? The bishop to e5 would block the e-file — no; the rook to c8 allows the knight to e4; so the knight to c5, threatening the knight to b3, and taking the sting out of a potential g4 — the knight is excellently placed on c5 even if you never reach b3. You certainly don't play the knight to b3 now, because that blunders checkmate in one; you don't have many ways to meet that mate threat, but f6 is perfectly acceptable — it blunts the queen and creates a stronghold on e5. The bishop to f8 was possible, but why overload the bishop? The queen to d1, and White's king is basically busted. When you're attacking, take free material that lies by the side of the road, so if the attack fizzles you still have something to fall back on — the bishop is coming back to e5, a great square, so you grab a pawn along the way first. White is defending well and making it hard, but now the material is equal and he has nothing to show for it, and your pieces are beautifully placed. The only piece you haven't activated is the queen — reverse-engineer where it belongs: the queen to b6 isn't as good because of b4; I want the queen on the kingside where everything is abandoned, so the queen to d7, heading for h3. You could also play f5, opening the path to h4 — equally good. King to f1. Before the queen goes to h3, I'll start with the bishop to f4 — you'll understand the idea soon — then the queen to h3, and if I've calculated correctly you're winning. I actually missed one detail and got a bit bamboozled; rather than take the bishop and try to mate, it's better just to restore the material balance and win positionally. Snag another pawn — now you're up a pawn, and Black is still winning pretty handily. One detail: if White ever captures on f6 with the queen, trying to use the pin, you have a trick — you can 'blunder' the f6-pawn and play the queen takes g2, taking the rook with check so the queen is no longer pinned. Then g4, an excellent move — you take it; the rook to c8 was actually bad, there was an insane idea White had there. Then the bishop to d6. You could take and take on e4, but then the queen to b3 wins your bishop — so instead you drop the bishop back to e6 and blockade with the rook to e8, trying to win the pawn; or the bishop to e7, getting it out of the danger zone. I like blockading the passed pawn so nothing can happen with promotion. Then the bishop to c4 — be careful: although it's not possible right now, a move like the queen to d3 would be dangerous, and the queen to a4 is the same concept, because if you move your bishop he pins your queen and wins. So you defend the bishop with the queen and sidestep the pin: the queen to d6 — better than the queen to e7, because now you have the idea of mating him on d1 if the queen ever loses control of that square. The king to f8 is interesting, but the king to h8 is much safer, and the queen to f7 here is a very common blunder that misses the mate. e5 seems to be panic — you take the pawn, up a ton, and it's winning. King to g1. Remember the queen to f7 is a real threat, so the queen has done its job on d6 — you keep the bishop protected and cover f7 with the queen to e7. Then a6, accomplishing your main plan, and White can resign, because the bishop is actually trapped: the bishop to a4, b5, and White loses not only the bishop but the pawn too. A good game, very well played by your opponent, who climbed back",
+                                  "idea": "Let's go e6, basically playing a Queen's Gambit structure, except with the bishop outside the pawn chain. The problem with my loss of a tempo is that it gave him a chance to develop, with the queen coming to b3. Now this b7-pawn is hanging. The move you often want to avoid is b6 — it creates a lot of weaknesses on that side, look at the c6-square and the light squares b6 weakens, and White has the very nasty knight to e5; if that knight reaches e5 you come under real pressure. So logically, since b6 and g5 are a problem, I'll make a move that may look like a blunder: just take the knight on f3. The queen takes b7 is often possible in such positions, but here it's not as good as it looks — after the queen grabs b7, the knight to d7 is the usual move, but you can actually snatch the pawn on g2 with that same bishop, which is why he didn't go for it. Now, you want to have some fun — you don't want to play like a coward. I'm proposing that you sacrifice. What am I noticing? White's king won't be safe on the kingside, and it's very far from castling queenside; and here's the funny thing — if White takes on b7, that does your bidding for you, because if White then castles queenside, the open b-file gives you very nice play. So you pretend there's no threat and develop as normal. In such positions you rarely put the knight on c6, because you want the c5 pawn lever, so you develop the knight to d7 anyway — objectively probably unsound, but I've had a lot of success sacking b7 like this. What should you recapture with? Both pieces make sense: taking with the pawn preserves the structure; taking with the knight keeps the centre looser and more open, which I like — provocative chess, trying to get him to play e4 and weaken the centre. It's a Grünfeld-style approach where you don't occupy the centre with pawns, planning c5 at some point. Do you play g6? You might, but I don't think you need to — you can just get the bishop out to d6. Then e4, which I think is a mistake. Now the most energetic move — not the knight to f4, that blunders the knight — the knight to g4. You're not threatening to capture the bishop, but there's a hidden threat; you want to play as aggressively as possible, because White is extremely underdeveloped, and the way to exploit a development lead is to open the centre. You could play e5, but that gives the queen pressure on f7 — better to play c5. Then a3, and the knight drops back to c6, increasing the pressure on d4; the knight to d4 is coming and it's unstoppable, these knights are pouring out. e4 walked right into what you wanted, and c5 and a3 is also a mistake — this knight wants to be on c6, then on d4. d5 isn't dangerous; the knight to d4, and now the queen has to keep control of c2, so it goes back, and you grab the pawn, weakening his centre even further — this is close to losing for White. The queen to h4 is a move to keep in mind, but it does nothing yet. Taking on d5 makes sense — weaken his centre and open the e-file, and later you can put a rook to e8. If I were White I'd seriously consider not recapturing, but he recaptures. This is an instructive moment: people get tempted to do something immediate, but the best approach is to complete your development — nothing good happens when only one piece is developed; that knight is great, but without the other pieces and a safe king it's hard to do what you want. So the bishop to d6 — this requires patience — then castle, and only then start thinking about concrete actions. Do you defend that knight, or allow White to capture it on d4? The answer is no, you don't need to defend it — let him take it — because this bishop is the only thing standing in the way of you dominating the e-file; if White takes on d4 twice, you simply put a rook to e8, and this knight on d7 can jump to c5 and perhaps to b3 later. You're essentially replacing one advantage with another — transforming your advantage is one of the hardest things to master, because visually you look at the knight and want to preserve it. Now, which piece to activate? The bishop to e5 would block the e-file — no; the rook to c8 allows the knight to e4; so the knight to c5, threatening the knight to b3, and taking the sting out of a potential g4 — the knight is excellently placed on c5 even if you never reach b3. You certainly don't play the knight to b3 now, because that blunders checkmate in one; you don't have many ways to meet that mate threat, but f6 is perfectly acceptable — it blunts the queen and creates a stronghold on e5. The bishop to f8 was possible, but why overload the bishop? The queen to d1, and White's king is basically busted. When you're attacking, take free material that lies by the side of the road, so if the attack fizzles you still have something to fall back on — the bishop is coming back to e5, a great square, so you grab a pawn along the way first. White is defending well and making it hard, but now the material is equal and he has nothing to show for it, and your pieces are beautifully placed. The only piece you haven't activated is the queen — reverse-engineer where it belongs: the queen to b6 isn't as good because of b4; I want the queen on the kingside where everything is abandoned, so the queen to d7, heading for h3. You could also play f5, opening the path to h4 — equally good. King to f1. Before the queen goes to h3, I'll start with the bishop to f4 — you'll understand the idea soon — then the queen to h3, and if I've calculated correctly you're winning. I actually missed one detail and got a bit bamboozled; rather than take the bishop and try to mate, it's better just to restore the material balance and win positionally. Snag another pawn — now you're up a pawn, and Black is still winning pretty handily. One detail: if White ever captures on f6 with the queen, trying to use the pin, you have a trick — you can 'blunder' the f6-pawn and play the queen takes g2, taking the rook with check so the queen is no longer pinned. Then g4, an excellent move — you take it; the rook to c8 was actually bad, there was an insane idea White had there. Then the bishop to d6. You could take and take on e4, but then the queen to b3 wins your bishop — so instead you drop the bishop back to e6 and blockade with the rook to e8, trying to win the pawn; or the bishop to e7, getting it out of the danger zone. I like blockading the passed pawn so nothing can happen with promotion. Then the bishop to c4 — be careful: although it's not possible right now, a move like the queen to d3 would be dangerous, and the queen to a4 is the same concept, because if you move your bishop he pins your queen and wins. So you defend the bishop with the queen and sidestep the pin: the queen to d6 — better than the queen to e7, because now you have the idea of mating him on d1 if the queen ever loses control of that square. The king to f8 is interesting, but the king to h8 is much safer, and the queen to f7 here is a very common blunder that misses the mate. e5 seems to be panic — you take the pawn, up a ton, and it's winning. King to g1. Remember the queen to f7 is a real threat, so the queen has done its job on d6 — you keep the bishop protected and cover f7 with the queen to e7. Then a6, accomplishing your main plan, and White can resign, because the bishop is actually trapped: the bishop to a4, b5, and White loses not only the bishop but the pawn too.",
                                   "children": [],
                                   "shortIdea": "Let's go e6, basically playing a Queen's Gambit structure, except with the bishop outside the pawn chain."
                                  }
@@ -62297,7 +62274,7 @@
                                                                                                                      "node": {
                                                                                                                       "san": "Kc7",
                                                                                                                       "movedBy": "black",
-                                                                                                                      "idea": "The king to c7. Even up a queen, I have a nice idea cooked up — it doesn't quite do it; I'll show you after.",
+                                                                                                                      "idea": "The king to c7. Even up a queen, I have a nice idea cooked up — it doesn't quite do it.",
                                                                                                                       "children": [
                                                                                                                        {
                                                                                                                         "node": {
@@ -62743,23 +62720,7 @@
                         }
                        }
                       ],
-                      "shortIdea": "Now you can play the bishop to f5, and in the event of the bishop to d3, that bishop trade favours",
-                      "asides": [
-                       {
-                        "idea": "and hopefully, through the lens of this game, you understood why I like this setup —",
-                        "shortIdea": "and hopefully, through the lens of this game, you understood why I like this setup —",
-                        "arrows": [
-                         {
-                          "from": "f1",
-                          "to": "d3"
-                         },
-                         {
-                          "from": "e7",
-                          "to": "e6"
-                         }
-                        ]
-                       }
-                      ]
+                      "shortIdea": "Now you can play the bishop to f5, and in the event of the bishop to d3, that bishop trade favours"
                      }
                     }
                    ],
@@ -64273,7 +64234,7 @@
                                                                            "node": {
                                                                             "san": "Bxf2+",
                                                                             "movedBy": "black",
-                                                                            "idea": "take the bishop and then trap the knight on h1. If Black plays the queen takes d5 first and then the knight to f2, you both essentially take each other's rooks and then both try to get your knights out of the corner. The bishop to f2 with check — I was not expecting that move.",
+                                                                            "idea": "take the bishop and then trap the knight on h1. If Black plays the queen takes d5 first and then the knight to f2, both sides essentially take each other's rooks and then both try to get their knights out of the corner. The bishop to f2 with check — I was not expecting that move.",
                                                                             "children": [
                                                                              {
                                                                               "node": {
@@ -66748,7 +66709,7 @@
                "node": {
                 "san": "d5",
                 "movedBy": "black",
-                "idea": "d5, and you're at an early crossroads. in top-level play you've recommended the Nimzowitsch Advance — e5, and after c5 you skip the automatic c3 and develop the knight instead, voluntarily giving up the pawn chain and inviting a capture on d4. It's counterintuitive, with a deep positional underpinning, and genuinely dangerous for an unprepared opponent.",
+                "idea": "d5, and you're at an early crossroads. In top-level play the recommendation has been the Nimzowitsch Advance — e5, and after c5 you skip the automatic c3 and develop the knight instead, voluntarily giving up the pawn chain and inviting a capture on d4. It's counterintuitive, with a deep positional underpinning, and genuinely dangerous for an unprepared opponent.",
                 "children": [
                  {
                   "node": {
@@ -67429,16 +67390,6 @@
                                               {
                                                "from": "g4",
                                                "to": "h5"
-                                              }
-                                             ]
-                                            },
-                                            {
-                                             "idea": "As noted earlier, the rule for deciding when to take and when to procrastinate —",
-                                             "shortIdea": "As noted earlier, the rule for deciding when to take and when to procrastinate —",
-                                             "arrows": [
-                                              {
-                                               "from": "g4",
-                                               "to": "f3"
                                               }
                                              ]
                                             },

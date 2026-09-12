@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White, open with the pawn to e4, and get e5."
+   "spoken": "You have White, open with the pawn to e4, and get e5."
   },
   {
    "ply": 3,
@@ -40,7 +40,7 @@
    "t": 32,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "The Philidor is always popular with beginner-to-intermediate players — and we've faced this far more than the knight to c6.",
+   "spoken": "The Philidor is always popular with beginner-to-intermediate players — and you've faced this far more than the knight to c6.",
    "reanchor": true
   },
   {
@@ -113,7 +113,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Our knight has moved twice, true — but it occupies a fine central square.",
+   "spoken": "Your knight has moved twice, true — but it occupies a fine central square.",
    "reanchor": true
   },
   {
@@ -158,7 +158,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "The pawn to c5 is almost always a mistake — it's terribly weakening, giving up the d5-square and leaving a backward pawn on d6. The automatic reaction is the knight back to f3; we don't want the knight to f5, which allows a trade that harms our kingside structure and our grip on d5. But there's a nicer move.",
+   "spoken": "The pawn to c5 is almost always a mistake — it's terribly weakening, giving up the d5-square and leaving a backward pawn on d6. The automatic reaction is the knight back to f3; you don't want the knight to f5, which allows a trade that harms your kingside structure and your grip on d5. But there's a nicer move.",
    "reanchor": true
   },
   {
@@ -225,7 +225,7 @@
    "t": 262,
    "fen": "rn1qk2r/pp2bppp/3p1n2/1bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
    "line": [],
-   "spoken": "Note that we're avoiding a tempting capture.",
+   "spoken": "Note that you're avoiding a tempting capture.",
    "reanchor": true
   },
   {
@@ -236,7 +236,7 @@
     "Nxb5",
     "Qa5+"
    ],
-   "spoken": "We steer clear of the tempting knight takes g7 — maybe good, but too complicated.",
+   "spoken": "You steer clear of the tempting knight takes g7 — maybe good, but too complicated.",
    "reanchor": true
   },
   {
@@ -255,7 +255,7 @@
     "Nxb5",
     "Qa5+"
    ],
-   "spoken": "So we avoid the tactics and simply drop the knight back to c3.",
+   "spoken": "So you avoid the tactics and simply drop the knight back to c3.",
    "reanchor": true
   },
   {
@@ -265,7 +265,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3. And what about the knight taking e4 — did we blunder it? No, that capture goes down in flames.",
+   "spoken": "The knight to c3. And what about the knight taking e4 — did you blunder it? No, that capture goes down in flames.",
    "reanchor": true
   },
   {
@@ -295,7 +295,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black plays the pawn to d5 — but the whole thing is about to collapse, since Black can't even castle: the bishop on e7 hangs. We just casually step out of the pin. And remember, escaping a pin doesn't only mean blocking it — you can move the pinned piece itself.",
+   "spoken": "Black plays the pawn to d5 — but the whole thing is about to collapse, since Black can't even castle: the bishop on e7 hangs. You just casually step out of the pin. And remember, escaping a pin doesn't only mean blocking it — you can move the pinned piece itself.",
    "reanchor": true
   },
   {
@@ -305,7 +305,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "So we simply castle, stepping out of the pin.",
+   "spoken": "So you simply castle, stepping out of the pin.",
    "reanchor": true
   },
   {
@@ -449,7 +449,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "The bishop to b5 — but by now you've wasted a tempo, which is why we recaptured with the knight.",
+   "spoken": "The bishop to b5 — but by now you've wasted a tempo, which is why you recaptured with the knight.",
    "reanchor": true
   },
   {

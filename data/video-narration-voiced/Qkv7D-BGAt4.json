@@ -15,7 +15,7 @@
     "e4",
     "g6"
    ],
-   "spoken": "We take White; Black plays the Modern with ...g6."
+   "spoken": "You take White; Black plays the Modern with ...g6."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "d4",
     "Bg7"
    ],
-   "spoken": "We grab the centre with d4; Black fianchettoes with ...Bg7."
+   "spoken": "You grab the centre with d4; Black fianchettoes with ...Bg7."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3, a solid Advance-French-like setup."
+   "spoken": "You play c3, a solid Advance-French-like setup."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We develop the bishop to d3."
+   "spoken": "You develop the bishop to d3."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We lock the chain with e5."
+   "spoken": "You lock the chain with e5."
   },
   {
    "ply": 10,
@@ -88,7 +88,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "You develop the knight to f3."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 14,
@@ -124,7 +124,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": "We retreat the bishop to c2."
+   "spoken": "You retreat the bishop to c2."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We play the rook to e1."
+   "spoken": "You play the rook to e1."
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "We develop the knight to d2."
+   "spoken": "You develop the knight to d2."
   },
   {
    "ply": 21,
@@ -170,7 +170,7 @@
     "Bd7",
     "Nf1"
    ],
-   "spoken": "Black develops the bishop to d7; we reroute the knight to f1."
+   "spoken": "Black develops the bishop to d7; you reroute the knight to f1."
   },
   {
    "ply": 22,
@@ -188,7 +188,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We develop the bishop to g5, hitting the queen."
+   "spoken": "You develop the bishop to g5, hitting the queen."
   },
   {
    "ply": 24,
@@ -207,7 +207,7 @@
     "exf6",
     "Bxf6"
    ],
-   "spoken": "We take on f6; Black recaptures with the bishop."
+   "spoken": "You take on f6; Black recaptures with the bishop."
   },
   {
    "ply": 27,
@@ -216,7 +216,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "We take the bishop on f6."
+   "spoken": "You take the bishop on f6."
   },
   {
    "ply": 28,
@@ -234,7 +234,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "We reroute the knight to e3."
+   "spoken": "You reroute the knight to e3."
   },
   {
    "ply": 30,
@@ -252,7 +252,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "We jump the knight to g4, hitting the queen."
+   "spoken": "You jump the knight to g4, hitting the queen."
   },
   {
    "ply": 32,
@@ -270,7 +270,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "We bring the queen to d2."
+   "spoken": "You bring the queen to d2."
   },
   {
    "ply": 34,
@@ -288,7 +288,7 @@
    "line": [
     "Nge5"
    ],
-   "spoken": "We plant a knight on e5."
+   "spoken": "You plant a knight on e5."
   },
   {
    "ply": 36,
@@ -306,7 +306,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We recapture with the knight."
+   "spoken": "You recapture with the knight."
   },
   {
    "ply": 38,
@@ -324,7 +324,7 @@
    "line": [
     "Re2"
    ],
-   "spoken": "We double on the e-file with the rook to e2."
+   "spoken": "You double on the e-file with the rook to e2."
   },
   {
    "ply": 40,
@@ -342,7 +342,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "We play h4, prying at the kingside."
+   "spoken": "You play h4, prying at the kingside."
   },
   {
    "ply": 42,
@@ -360,7 +360,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "We take the knight on g4."
+   "spoken": "You take the knight on g4."
   },
   {
    "ply": 45,
@@ -370,7 +370,7 @@
     "hxg4",
     "Rxe6"
    ],
-   "spoken": "Black recaptures with the h-pawn; we sacrifice on e6, ripping open the king."
+   "spoken": "Black recaptures with the h-pawn; you sacrifice on e6, ripping open the king."
   },
   {
    "ply": 46,

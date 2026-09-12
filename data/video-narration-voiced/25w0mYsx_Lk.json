@@ -15,7 +15,7 @@
     "e4",
     "g6"
    ],
-   "spoken": "Against the Modern, we want a sound positional line rather than a sharp theoretical race.",
+   "spoken": "Against the Modern, you want a sound positional line rather than a sharp theoretical race.",
    "kind": "main"
   },
   {
@@ -95,7 +95,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We could play h3 to rule out a pin with Bg4, but Bg5 is the more aggressive continuation, provoking a decision.",
+   "spoken": "You could play h3 to rule out a pin with Bg4, but Bg5 is the more aggressive continuation, provoking a decision.",
    "kind": "main"
   },
   {
@@ -135,7 +135,7 @@
     "dxe5",
     "Nxe5"
    ],
-   "spoken": "So we take on e5, keeping the h4-bishop passive rather than letting Black free it with the pawn break.",
+   "spoken": "So you take on e5, keeping the h4-bishop passive rather than letting Black free it with the pawn break.",
    "kind": "main"
   },
   {
@@ -197,7 +197,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 is risky and does loosen our king, but the logic is clean: if Black takes, we push e5 and win the pinned f6-knight; if he plays g5, we take the knight with tempo on the queen. Even the Qc5-check has an answer — an interposition that hits the queen — which is exactly the resource f4 was counting on. Remember the three ways to meet a check: capture the checker, move the king, or block.",
+   "spoken": "f4 is risky and does loosen your king, but the logic is clean: if Black takes, you push e5 and win the pinned f6-knight; if he plays g5, you take the knight with tempo on the queen. Even the Qc5-check has an answer — an interposition that hits the queen — which is exactly the resource f4 was counting on. Remember the three ways to meet a check: capture the checker, move the king, or block.",
    "kind": "main",
    "teaches": "The three replies to a check are capture, king-move, and interpose — the block is the one people forget."
   },
@@ -219,7 +219,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "So Nxe5 instead — it makes no threat, but it banks the extra pawn cleanly and keeps our structure sound.",
+   "spoken": "So Nxe5 instead — it makes no threat, but it banks the extra pawn cleanly and keeps your structure sound.",
    "kind": "main",
    "teaches": "The unflashy recapture that keeps the material and the structure beats the noisy one that gives them back."
   },

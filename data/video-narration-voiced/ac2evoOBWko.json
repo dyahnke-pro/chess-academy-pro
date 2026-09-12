@@ -15,7 +15,7 @@
         "e4",
         "c5"
       ],
-      "spoken": "This is the highest-rated person we've faced thus far, and I'm going to switch back to e4 after a couple of d4 games — let's see how our openings hold up at a high level. e4, c5."
+      "spoken": "This is the highest-rated person you've faced thus far, and I'm going to switch back to e4 after a couple of d4 games — let's see how your openings hold up at a high level. e4, c5."
     },
     {
       "ply": 3,
@@ -97,7 +97,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "And now we play c-takes-d4, recapturing the pawn."
+      "spoken": "And now you play c-takes-d4, recapturing the pawn."
     },
     {
       "ply": 12,
@@ -106,7 +106,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "And the main line is the knight to c6. We're just following mainline theory. Does anybody know the main move here for White? It's very important to be precise, otherwise White risks overextending the centre and getting a crappy IQP position. A lot of people default to e-takes-d6, but that's exactly the kind of crappy IQP you want to avoid. The knight to c3 isn't great"
+      "spoken": "And the main line is the knight to c6. You're just following mainline theory. Does anybody know the main move here for White? It's very important to be precise, otherwise White risks overextending the centre and getting a crappy IQP position. A lot of people default to e-takes-d6, but that's exactly the kind of crappy IQP you want to avoid. The knight to c3 isn't great"
     },
     {
       "ply": 13,
@@ -124,7 +124,7 @@
       "line": [
         "Nb6"
       ],
-      "spoken": "harassing the knight that was on d5. Now we drive the"
+      "spoken": "harassing the knight that was on d5. Now you drive the"
     },
     {
       "ply": 15,
@@ -170,7 +170,7 @@
       "line": [
         "Qxd7"
       ],
-      "spoken": "White gets the two bishops and an active position, but in return we are saddled with an IQP."
+      "spoken": "White gets the two bishops and an active position, but in return you are saddled with an IQP."
     },
     {
       "ply": 21,
@@ -179,7 +179,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "And that IQP does become a potential liability in certain positions. So we continue following the mainline here — the knight to c3, threatening d5."
+      "spoken": "And that IQP does become a potential liability in certain positions. So you continue following the mainline here — the knight to c3, threatening d5."
     },
     {
       "ply": 22,
@@ -188,7 +188,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "which forces Black's e6. Now we castle."
+      "spoken": "which forces Black's e6. Now you castle."
     },
     {
       "ply": 23,
@@ -206,7 +206,7 @@
       "line": [
         "Rd8"
       ],
-      "spoken": "different moves in this position. a6 has been tested at the top level, and the rook to d8 is a move — it's on the board, and here we're on our own; I'm no longer overly familiar with the theory, so let's figure it out over the board. The rook to d8 is totally logical — it attacks the d4-pawn, so Black is threatening to capture it with the queen. Understand that sometimes you sacrifice the d4-pawn for an initiative, so Black taking on d4 before castling isn't the scariest prospect — imagine Black plays the queen takes d4; we meet it with the queen to f3, and his queen is a sitting duck in the centre. Still, we shouldn't give the pawn away for free — let's see if we can develop with a tempo. Some of you might be tempted by the bishop to g5, but that's a little"
+      "spoken": "different moves in this position. a6 has been tested at the top level, and the rook to d8 is a move — it's on the board, and here you're on your own; I'm no longer overly familiar with the theory, so let's figure it out over the board. The rook to d8 is totally logical — it attacks the d4-pawn, so Black is threatening to capture it with the queen. Understand that sometimes you sacrifice the d4-pawn for an initiative, so Black taking on d4 before castling isn't the scariest prospect — imagine Black plays the queen takes d4; you meet it with the queen to f3, and his queen is a sitting duck in the centre. Still, you shouldn't give the pawn away for free — let's see if you can develop with a tempo. Some of you might be tempted by the bishop to g5, but that's a little"
     },
     {
       "ply": 25,
@@ -215,7 +215,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "myopic, because Black responds with the bishop to e7, and remember that in an IQP structure trades generally favour the side facing the isolated queen pawn. So instead I think we should go the bishop to e3 — as passive as it looks, it's still a developing move, and it fulfills"
+      "spoken": "myopic, because Black responds with the bishop to e7, and remember that in an IQP structure trades generally favour the side facing the isolated queen pawn. So instead I think you should go the bishop to e3 — as passive as it looks, it's still a developing move, and it fulfills"
     },
     {
       "ply": 26,
@@ -249,7 +249,7 @@
         "Be3",
         "Be7"
       ],
-      "spoken": "So we should test the queen to g4 here. After the queen to g4, Black will castle, and in comparison to the other position, it seems Black has made an improvement: the insertion of the rook to d8 and the bishop to e3 is probably in Black's favour, because the bishop to h6 is no longer possible due to the queen takes d4. Let's try to find a trickier continuation.",
+      "spoken": "So you should test the queen to g4 here. After the queen to g4, Black will castle, and in comparison to the other position, it seems Black has made an improvement: the insertion of the rook to d8 and the bishop to e3 is probably in Black's favour, because the bishop to h6 is no longer possible due to the queen takes d4. Let's try to find a trickier continuation.",
       "reanchor": true
     },
     {
@@ -259,7 +259,7 @@
       "line": [
         "Rc1"
       ],
-      "spoken": "I'm going to think about this for about a minute in silence, and I encourage you to do the same. Let's play the rook to c1, a move some of you suggested — the idea is to put pressure on the knight on c6 and stay flexible. I didn't see a clear follow-up to the queen to g4 after castling; still, if Black castles, we might play the queen to g4 to vacate the d1-square for the other rook."
+      "spoken": "I'm going to think about this for about a minute in silence, and I encourage you to do the same. Let's play the rook to c1, a move some of you suggested — the idea is to put pressure on the knight on c6 and stay flexible. I didn't see a clear follow-up to the queen to g4 after castling; still, if Black castles, you might play the queen to g4 to vacate the d1-square for the other rook."
     },
     {
       "ply": 36,
@@ -268,7 +268,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Ideally we don't want the queen on d1 — we want the f-rook on d1, a more effective defender of the pawn. Black does castle, but the queen to g4 isn't forced, we have many continuations. Also interesting is the queen to h5, developing the queen to a more aggressive square, worthy of consideration — though after a6 and the trade I don't see a clear continuation. The queen to f3 is also interesting, to pressure the knight on c6 and semi-threaten the bishop takes c6, wrecking his queenside structure — but it runs into a tactic, the knight takes d4, and the complications work out for Black. The knight to e4 walks into f5, which could be pretty nasty; the knight to a4, Black plays the knight to d5 and establishes a knight in the centre. This rook-to-d8 line is so tricky — it seems we have absolutely nothing; I think the position is equal, and we need to find a way to at least create some trouble for Black."
+      "spoken": "Ideally you don't want the queen on d1 — you want the f-rook on d1, a more effective defender of the pawn. Black does castle, but the queen to g4 isn't forced, you have many continuations. Also interesting is the queen to h5, developing the queen to a more aggressive square, worthy of consideration — though after a6 and the trade I don't see a clear continuation. The queen to f3 is also interesting, to pressure the knight on c6 and semi-threaten the bishop takes c6, wrecking his queenside structure — but it runs into a tactic, the knight takes d4, and the complications work out for Black. The knight to e4 walks into f5, which could be pretty nasty; the knight to a4, Black plays the knight to d5 and establishes a knight in the centre. This rook-to-d8 line is so tricky — it seems you have absolutely nothing; I think the position is equal, and you need to find a way to at least create some trouble for Black."
     },
     {
       "ply": 40,
@@ -280,7 +280,7 @@
         "Ra1",
         "Kh8"
       ],
-      "spoken": "After the bishop to h6, then the bishop to f6, maybe we can play the bishop takes c6. Let's give the queen to g4 a shot. What I should have done is just go the queen to g4, castles, and then the rook to d1, because now we have to worry about the weakness of this pawn, whereas if the rook were on d1 that would be a much safer option — the rook to c1 was short-sighted. People are beasts in the opening; everybody knows their Chessable except yours truly. The problem with a6 and the bishop to d3 is twofold: first, we relinquish control of the d4-pawn; second, Black's f5 idea is super nasty — although f5 weakens the e6-pawn, its main drawback, it potentially pries our fingers off the ledge, because if Black can play f5 and then f4, dislodging the bishop from e3, and the bishop has to drop back to d2, it all comes down to the weakness of the d4-pawn. We must keep this pawn defended.",
+      "spoken": "After the bishop to h6, then the bishop to f6, maybe you can play the bishop takes c6. Let's give the queen to g4 a shot. What I should have done is just go the queen to g4, castles, and then the rook to d1, because now you have to worry about the weakness of this pawn, whereas if the rook were on d1 that would be a much safer option — the rook to c1 was short-sighted. People are beasts in the opening; everybody knows their Chessable except yours truly. The problem with a6 and the bishop to d3 is twofold: first, you relinquish control of the d4-pawn; second, Black's f5 idea is super nasty — although f5 weakens the e6-pawn, its main drawback, it potentially pries your fingers off the ledge, because if Black can play f5 and then f4, dislodging the bishop from e3, and the bishop has to drop back to d2, it all comes down to the weakness of the d4-pawn. You must keep this pawn defended.",
       "reanchor": true
     }
   ]

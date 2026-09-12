@@ -17,7 +17,7 @@
     "e4",
     "b5"
    ],
-   "spoken": "Black trots out the St. George \u2014 a6 and b5, a queenside fianchetto setup. The mirror version with h6 and g5 would be far worse, since it just shreds the kingside.",
+   "spoken": "Black trots out the St. George — a6 and b5, a queenside fianchetto setup. The mirror version with h6 and g5 would be far worse, since it just shreds the kingside.",
    "kind": "main"
   },
   {
@@ -54,7 +54,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We develop the bishop to d3, aiming at the kingside \u2014 this is the main line.",
+   "spoken": "You develop the bishop to d3, aiming at the kingside — this is the main line.",
    "kind": "main"
   },
   {
@@ -82,7 +82,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black strikes with c5, the standard try against our broad center.",
+   "spoken": "Black strikes with c5, the standard try against your broad center.",
    "kind": "main"
   },
   {
@@ -92,11 +92,11 @@
    "line": [
     "c3"
    ],
-   "spoken": "And I love this Alapin-esque setup: pawns on c3, d4, and e4, a rock-solid center Black struggles to challenge. The wider lesson \u2014 as you leave beginner level, get flexible with development; don't marry yourself to developing knights to c3 and f3 every game.",
+   "spoken": "And I love this Alapin-esque setup: pawns on c3, d4, and e4, a rock-solid center Black struggles to challenge. The wider lesson — as you leave beginner level, get flexible with development; don't marry yourself to developing knights to c3 and f3 every game.",
    "kind": "main",
    "teaches": [
     "A c3-d4-e4 center is hard to break",
-    "Be flexible with piece placement \u2014 a knight on d2 can be just as good"
+    "Be flexible with piece placement — a knight on d2 can be just as good"
    ]
   },
   {
@@ -144,7 +144,7 @@
     "Bg7",
     "O-O"
    ],
-   "spoken": "a4 \u2014 a very important positional idea, striking at the base of his b5-a6 pawn chain.",
+   "spoken": "a4 — a very important positional idea, striking at the base of his b5-a6 pawn chain.",
    "kind": "main",
    "teaches": [
     "a4 undermines a b5/a6 pawn duo"
@@ -167,7 +167,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3 \u2014 a great move here, because it stops Black from ever getting in a5 to shore up his chain.",
+   "spoken": "You play c3 — a great move here, because it stops Black from ever getting in a5 to shore up his chain.",
    "kind": "main",
    "teaches": [
     "c3 denies Black the ...a5 supporting move"
@@ -181,7 +181,7 @@
     "bxc3",
     "bxc3"
    ],
-   "spoken": "If he trades on c3, who does opening the b-file favor? White \u2014 our pieces are more active, and we get a rook to the b-file faster than he can.",
+   "spoken": "If he trades on c3, who does opening the b-file favor? White — your pieces are more active, and you get a rook to the b-file faster than he can.",
    "kind": "main",
    "teaches": [
     "An opened file favors the side with more active pieces"
@@ -192,7 +192,7 @@
    "t": 1059.5,
    "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/P2PP3/3B1N2/1PP2PPP/RNBQ1RK1 b kq - 2 8",
    "line": [],
-   "spoken": "And note the long-term picture: the a6-pawn is a chronic weakness, permanently stared down by our bishop. Remember the a4 idea whenever Black has pawns on a6 and b5.",
+   "spoken": "And note the long-term picture: the a6-pawn is a chronic weakness, permanently stared down by your bishop. Remember the a4 idea whenever Black has pawns on a6 and b5.",
    "kind": "main",
    "teaches": [
     "Pawns on a6 and b5 leave a6 a lasting target"
@@ -228,7 +228,7 @@
     "a5",
     "c3"
    ],
-   "spoken": "His a5 only makes things worse \u2014 another weakness. He's already a pawn down in a grim position.",
+   "spoken": "His a5 only makes things worse — another weakness. He's already a pawn down in a grim position.",
    "kind": "main"
   },
   {
@@ -330,7 +330,7 @@
     "Rb8",
     "e5"
    ],
-   "spoken": "e5 lands, and Black is already close to lost. Centralized knights give the most return, which is exactly why we steered ours through c4.",
+   "spoken": "e5 lands, and Black is already close to lost. Centralized knights give the most return, which is exactly why you steered yours through c4.",
    "kind": "main",
    "teaches": [
     "A knight gives the most value when centralized"
@@ -364,7 +364,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Here the bishop to c4 would have piled more pressure on f7 \u2014 a crushing follow-up.",
+   "spoken": "Here the bishop to c4 would have piled more pressure on f7 — a crushing follow-up.",
    "kind": "review"
   },
   {

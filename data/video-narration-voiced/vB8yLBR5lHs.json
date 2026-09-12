@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "1681 with the black pieces. Against d4 we develop the knight and get ready for something adventurous.",
+   "spoken": "1681 with the black pieces. Against d4 you develop the knight and get ready for something adventurous.",
    "kind": "main"
   },
   {
@@ -25,7 +25,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "In a celebratory mood, so we roll out the Budapest Gambit \u2014 an underrated, rarely-seen sideline. A great second string once you're around 1700: not bad, a little offbeat, and one you know well.",
+   "spoken": "In a celebratory mood, so you roll out the Budapest Gambit — an underrated, rarely-seen sideline. A great second string once you're around 1700: not bad, a little offbeat, and one you know well.",
    "kind": "main",
    "teaches": [
     "Keep an offbeat sideline you know well alongside your main opening"
@@ -38,7 +38,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "We toss the e5-pawn onto the board and hope he grabs it. Players in this range are often uneasy facing these second-tier openings, which works in our favor.",
+   "spoken": "You toss the e5-pawn onto the board and hope he grabs it. Players in this range are often uneasy facing these second-tier openings, which works in your favor.",
    "kind": "main"
   },
   {
@@ -48,7 +48,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "He pushes d5 instead of taking \u2014 not a great try. It hands us exactly what we want, because advancing that pawn gives up control of the c5-square.",
+   "spoken": "He pushes d5 instead of taking — not a great try. It hands you exactly what you want, because advancing that pawn gives up control of the c5-square.",
    "kind": "main",
    "teaches": [
     "Advancing a pawn concedes the square beside it"
@@ -61,7 +61,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "So we make a natural developing move that also pounces on that hole: the bishop to c5, a lovely nook, with d6 to follow and later c6 to chip at his center.",
+   "spoken": "So you make a natural developing move that also pounces on that hole: the bishop to c5, a lovely nook, with d6 to follow and later c6 to chip at his center.",
    "kind": "main",
    "teaches": [
     "Occupy the square your opponent just weakened"
@@ -83,7 +83,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We anchor the bishop with d6 and open the other bishop's diagonal. The position's equal \u2014 he's not worse, but he's posing us no problems. Note Bg5 here would be a tactical blunder to Bxf2+.",
+   "spoken": "You anchor the bishop with d6 and open the other bishop's diagonal. The position's equal — he's not worse, but he's posing you no problems. Note Bg5 here would be a tactical blunder to Bxf2+.",
    "kind": "main"
   },
   {
@@ -93,7 +93,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "He plays e4, and this is already dubious: it weakens the d4-square as a future knight outpost, fully opens the diagonal for our bishop pressuring f2, and takes away his own e3 to relieve that pressure.",
+   "spoken": "He plays e4, and this is already dubious: it weakens the d4-square as a future knight outpost, fully opens the diagonal for your bishop pressuring f2, and takes away his own e3 to relieve that pressure.",
    "kind": "main",
    "teaches": [
     "e4 here weakens d4 and bares the a7-g1 diagonal"
@@ -106,7 +106,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The move that leaps out is Ng4 \u2014 superficial-looking, but genuinely hard to meet. It piles onto f2, and his only defense is an awkward one.",
+   "spoken": "The move that leaps out is Ng4 — superficial-looking, but genuinely hard to meet. It piles onto f2, and his only defense is an awkward one.",
    "kind": "main",
    "teaches": [
     "Hunt the f2 weak point with ...Ng4"
@@ -132,7 +132,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "But first the ideal setup \u2014 we want a rook on f8 backing the f-pawn before we push f5, so we simply castle and complete development.",
+   "spoken": "But first the ideal setup — you want a rook on f8 backing the f-pawn before you push f5, so you simply castle and complete development.",
    "kind": "main",
    "teaches": [
     "Prepare ...f5 by first placing a rook on f8"
@@ -226,7 +226,7 @@
     "Bxe3",
     "Bxe3"
    ],
-   "spoken": "And now his structure is grim \u2014 our dark-squared bishop is unopposed, raking both long diagonals and dominating a fistful of key squares. A miserable position for White.",
+   "spoken": "And now his structure is grim — your dark-squared bishop is unopposed, raking both long diagonals and dominating a fistful of key squares. A miserable position for White.",
    "kind": "review",
    "teaches": [
     "An unopposed bishop that controls both diagonals is a lasting edge"
@@ -271,7 +271,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Later we chose the calm, positional path \u2014 knight to d7, connecting the rooks \u2014 and his hurried bishop grab actually dropped the exchange. Being patient with a quiet improving move often gets rewarded.",
+   "spoken": "Later you chose the calm, positional path — knight to d7, connecting the rooks — and his hurried bishop grab actually dropped the exchange. Being patient with a quiet improving move often gets rewarded.",
    "kind": "review",
    "teaches": [
     "A patient improving move often provokes the blunder"

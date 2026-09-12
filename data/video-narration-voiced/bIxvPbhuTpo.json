@@ -74,7 +74,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "So we grab the center ourselves with d5.",
+   "spoken": "So you grab the center yourself with d5.",
    "kind": "main",
    "teaches": [
     "contest the center immediately"
@@ -87,7 +87,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White's e5 attacks our knight.",
+   "spoken": "White's e5 attacks your knight.",
    "kind": "main"
   },
   {
@@ -117,7 +117,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "We unpin with the bishop to d7, freeing the knight to move again.",
+   "spoken": "You unpin with the bishop to d7, freeing the knight to move again.",
    "kind": "main"
   },
   {
@@ -136,7 +136,7 @@
    "line": [
     "Ncxe5"
    ],
-   "spoken": "Now the tactic: the knight takes on e5, winning the pawn — because the bishop on b5 is hanging and our knight is double-parked, covering both captures at once.",
+   "spoken": "Now the tactic: the knight takes on e5, winning the pawn — because the bishop on b5 is hanging and your knight is double-parked, covering both captures at once.",
    "kind": "main",
    "teaches": [
     "the double-parked knight wins the pawn"
@@ -159,7 +159,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": "After the bishop check on d7 the recapturing knight collects everything, and we come out a clean center pawn up.",
+   "spoken": "After the bishop check on d7 the recapturing knight collects everything, and you come out a clean center pawn up.",
    "kind": "main"
   },
   {
@@ -238,7 +238,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We fianchetto the bishop to g7, onto the board's longest diagonal.",
+   "spoken": "You fianchetto the bishop to g7, onto the board's longest diagonal.",
    "kind": "main",
    "teaches": [
     "the fianchetto"

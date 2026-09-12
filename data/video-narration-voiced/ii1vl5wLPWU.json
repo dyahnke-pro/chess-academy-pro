@@ -35,7 +35,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "The other side plays the Pirc — d6 and g6. It gets a bad rap for a simple reason: it hands us the full centre without a fight.",
+   "spoken": "The other side plays the Pirc — d6 and g6. It gets a bad rap for a simple reason: it hands you the full centre without a fight.",
    "kind": "main",
    "teaches": [
     "the Pirc cedes the centre"
@@ -66,7 +66,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "White's key strategy in the Pirc is to castle queenside and storm the kingside — you can't launch a pawn avalanche at the wing where your own king lives. So we clear the path for the king to c1 by lining the bishop and queen up on e3 and d2.",
+   "spoken": "White's key strategy in the Pirc is to castle queenside and storm the kingside — you can't launch a pawn avalanche at the wing where your own king lives. So you clear the path for the king to c1 by lining the bishop and queen up on e3 and d2.",
    "kind": "plan",
    "teaches": [
     "opposite-side castling attack"
@@ -110,7 +110,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Now start the attack — h4. Take the hammer to Black's position; without ripping open files and avenues on the kingside, we never reach his king.",
+   "spoken": "Now start the attack — h4. Take the hammer to Black's position; without ripping open files and avenues on the kingside, you never reach his king.",
    "kind": "plan",
    "teaches": [
     "pawn storm the castled king"
@@ -132,7 +132,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "The knight jumps to h5, so g4 chases it out — we don't want it sitting there.",
+   "spoken": "The knight jumps to h5, so g4 chases it out — you don't want it sitting there.",
    "kind": "main",
    "teaches": [
     "kick the blockading knight"
@@ -154,7 +154,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The whole aim is to pry open the h-file, the artery to the king. Rather than sac immediately, we play f3 to defend the g4-pawn — patience first, elimination later.",
+   "spoken": "The whole aim is to pry open the h-file, the artery to the king. Rather than sac immediately, you play f3 to defend the g4-pawn — patience first, elimination later.",
    "kind": "plan",
    "teaches": [
     "open the h-file",
@@ -177,7 +177,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "How to handle the centre? Since we're attacking on the wing, we want it closed — so d5 slams it shut. A closed centre buys the time to focus everything on the kingside; an open one splits your attention.",
+   "spoken": "How to handle the centre? Since you're attacking on the wing, you want it closed — so d5 slams it shut. A closed centre buys the time to focus everything on the kingside; an open one splits your attention.",
    "kind": "main",
    "teaches": [
     "close the centre when attacking the wing"
@@ -199,7 +199,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "With the centre shut we transition straight back to the plan — h5, prising open the kingside.",
+   "spoken": "With the centre shut you transition straight back to the plan — h5, prising open the kingside.",
    "kind": "main"
   },
   {
@@ -231,7 +231,7 @@
    "line": [
     "Nxh5"
    ],
-   "spoken": "We recapture with the queen rather than the rook. The rook would have won a second piece, but keeping the queens on lets us keep taking the hammer to him.",
+   "spoken": "You recapture with the queen rather than the rook. The rook would have won a second piece, but keeping the queens on lets you keep taking the hammer to him.",
    "teaches": [
     "keep the initiative over material"
    ]
@@ -262,7 +262,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "He trades the dark-squared bishops to slow the attack, but we're still up a full piece.",
+   "spoken": "He trades the dark-squared bishops to slow the attack, but you're still up a full piece.",
    "kind": "main"
   },
   {

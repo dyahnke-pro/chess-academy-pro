@@ -131,7 +131,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "a4 distracts one of the two pieces guarding e4 — and if the resulting trade favors us, we snap off the central e4-pawn in return for our flank pawn.",
+   "spoken": "a4 distracts one of the two pieces guarding e4 — and if the resulting trade favors you, you snap off the central e4-pawn in return for your flank pawn.",
    "kind": "main",
    "teaches": "Chase away a defender of the enemy centre; swapping a wing pawn for a central pawn is a good bargain."
   },
@@ -160,7 +160,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "The main line runs into Nb5 and Bb6, hitting our queen and rook and handing White the initiative — but in exchange we've pocketed the central pawn, a fair trade.",
+   "spoken": "The main line runs into Nb5 and Bb6, hitting your queen and rook and handing White the initiative — but in exchange you've pocketed the central pawn, a fair trade.",
    "kind": "main",
    "teaches": "Accept a temporary initiative against you when the compensation is a permanent central pawn."
   },
@@ -171,7 +171,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "d6 shores up the position; next we round up the offside knight with Nf6 and untangle.",
+   "spoken": "d6 shores up the position; next you round up the offside knight with Nf6 and untangle.",
    "kind": "plan",
    "plans": "Reclaim the knight with Nf6 and consolidate the extra centre pawn."
   },

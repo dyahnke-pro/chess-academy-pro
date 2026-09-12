@@ -25,7 +25,7 @@
     "c4",
     "e6"
    ],
-   "spoken": "Against the queen's-pawn opening we play the Queen's Gambit Declined — the rite of passage for most improving players.",
+   "spoken": "Against the queen's-pawn opening you play the Queen's Gambit Declined — the rite of passage for most improving players.",
    "kind": "main",
    "teaches": [
     "the QGD"
@@ -66,7 +66,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The QGD has two ideas. First, a serious claim in the centre — the pawn on d5, solidly defended by the pawn on e6. Second, quick, effective kingside development without giving up our pieces' activity.",
+   "spoken": "The QGD has two ideas. First, a serious claim in the centre — the pawn on d5, solidly defended by the pawn on e6. Second, quick, effective kingside development without giving up your pieces' activity.",
    "kind": "plan",
    "teaches": [
     "the two QGD ideas"
@@ -88,7 +88,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "The bishop on e7 looks passive, but look carefully — it's the very piece that lets us expand our central claim, because it can support another pawn push.",
+   "spoken": "The bishop on e7 looks passive, but look carefully — it's the very piece that lets you expand your central claim, because it can support another pawn push.",
    "teaches": [
     "the e7-bishop is not passive"
    ]
@@ -141,7 +141,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He plays the strong bishop to g5, pinning our knight — and the real meaning of that pin is that our d5-pawn loses one of its key defenders.",
+   "spoken": "He plays the strong bishop to g5, pinning your knight — and the real meaning of that pin is that your d5-pawn loses one of its key defenders.",
    "teaches": [
     "a pin removes a defender"
    ]
@@ -153,7 +153,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "So we add a defender to d5 with the bishop to e6. Playing against a queen's-pawn opening you sometimes have to bite the bullet — a defensive move like this isn't passive weakness, it's sound.",
+   "spoken": "So you add a defender to d5 with the bishop to e6. Playing against a queen's-pawn opening you sometimes have to bite the bullet — a defensive move like this isn't passive weakness, it's sound.",
    "kind": "main",
    "teaches": [
     "defensive moves are fine"
@@ -184,7 +184,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "Because our bishop now guards d5, he can't recapture there with the queen — only with the knight. He does, and that's a mistake: he never stops to weigh the consequences.",
+   "spoken": "Because your bishop now guards d5, he can't recapture there with the queen — only with the knight. He does, and that's a mistake: he never stops to weigh the consequences.",
    "kind": "main",
    "teaches": [
     "forcing the worse recapture"
@@ -197,7 +197,7 @@
    "line": [
     "Qxb2"
    ],
-   "spoken": "Here's the drawback — there's no need to take back the knight; we simply grab on b2 at once.",
+   "spoken": "Here's the drawback — there's no need to take back the knight; you simply grab on b2 at once.",
    "kind": "main",
    "teaches": [
     "seize the counter-shot"
@@ -226,7 +226,7 @@
    "line": [
     "Nf4"
    ],
-   "spoken": "Now the theme: the queen is the worst defender of all. His queen on d1 is the only thing guarding the rook on a1, so we must drive it off that square.",
+   "spoken": "Now the theme: the queen is the worst defender of all. His queen on d1 is the only thing guarding the rook on a1, so you must drive it off that square.",
    "teaches": [
     "the queen is the worst defender"
    ]
@@ -253,7 +253,7 @@
     "Bxd2+",
     "Qxd2"
    ],
-   "spoken": "We take on d2, forcing the queen to move — recapture and we take the rook, decline and it's mate. A rock and a hard place.",
+   "spoken": "You take on d2, forcing the queen to move — recapture and you take the rook, decline and it's mate. A rock and a hard place.",
    "kind": "main",
    "teaches": [
     "the winning fork of duties"

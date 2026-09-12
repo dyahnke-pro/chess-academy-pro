@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "It's a Scandinavian, just dressed up with an early a6 — not that bad, but our strategy doesn't change. We capture and treat it like a normal Scandi.",
+   "spoken": "It's a Scandinavian, just dressed up with an early a6 — not that bad, but your strategy doesn't change. You capture and treat it like a normal Scandi.",
    "kind": "main",
    "teaches": [
     "treat the a6 Scandi normally"
@@ -64,7 +64,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "With the d-pawn already advanced we simply develop the knight to c3, gaining a tempo on the exposed queen — exactly as in the main Scandinavian.",
+   "spoken": "With the d-pawn already advanced you simply develop the knight to c3, gaining a tempo on the exposed queen — exactly as in the main Scandinavian.",
    "kind": "main",
    "teaches": [
     "develop with tempo"
@@ -103,7 +103,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6 is a touch odd because it invites d5. But d5 isn't as good as it looks — it blocks the very bishop we just developed, and pushing the pawn weakens a square the knight can hop into on e5. Better to just keep developing.",
+   "spoken": "The knight to c6 is a touch odd because it invites d5. But d5 isn't as good as it looks — it blocks the very bishop you just developed, and pushing the pawn weakens a square the knight can hop into on e5. Better to just keep developing.",
    "teaches": [
     "do not push into your own bishop"
    ]
@@ -137,7 +137,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "So we crash on f7 with check. The king loses castling rights and the whole kingside is wrecked — well worth it, even though the d4-pawn will hang at the very end, so this isn't the usual clean win.",
+   "spoken": "So you crash on f7 with check. The king loses castling rights and the whole kingside is wrecked — well worth it, even though the d4-pawn will hang at the very end, so this isn't the usual clean win.",
    "kind": "main",
    "teaches": [
     "sacrifice to strip the king"
@@ -171,7 +171,7 @@
     "Qxg4",
     "Nf6"
    ],
-   "spoken": "Queen and knight are the strongest attacking tandem in chess, so the usual 'let the queen support from behind' rule bends here. The queen to e6 is the move — it eyes a landing on f7. We even allow the knight to grab d4 with tempo; it doesn't matter, the queen is going to f7 regardless.",
+   "spoken": "Queen and knight are the strongest attacking tandem in chess, so the usual 'let the queen support from behind' rule bends here. The queen to e6 is the move — it eyes a landing on f7. You even allow the knight to grab d4 with tempo; it doesn't matter, the queen is going to f7 regardless.",
    "kind": "plan",
    "teaches": [
     "queen-and-knight tandem",
@@ -196,7 +196,7 @@
     "Qf7+",
     "Kd7"
    ],
-   "spoken": "After the king runs to d7, Black threatens to grab on c2. Do we bend over backwards to defend it? Absolutely not — the cleanest, most elegant move is to castle, straight out of the fork, preparing the rook to d1. The c2-grab then simply loses to a rook check on d1 with a skewer. When you do play the rook to d1, watch the weak back rank for discoveries, but the knight-to-e2 check is harmless — the king steps to f1, hitting the queen, and it's over. And when converting, keep completing development — the Russian-school habit of bringing every piece in, even when you're up a queen — then the back-rank mating net with the bishop on b6 finishes it.",
+   "spoken": "After the king runs to d7, Black threatens to grab on c2. Do you bend over backwards to defend it? Absolutely not — the cleanest, most elegant move is to castle, straight out of the fork, preparing the rook to d1. The c2-grab then simply loses to a rook check on d1 with a skewer. When you do play the rook to d1, watch the weak back rank for discoveries, but the knight-to-e2 check is harmless — the king steps to f1, hitting the queen, and it's over. And when converting, keep completing development — the Russian-school habit of bringing every piece in, even when you're up a queen — then the back-rank mating net with the bishop on b6 finishes it.",
    "kind": "plan",
    "teaches": [
     "castle out of a fork",

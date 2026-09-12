@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We take Black and answer the king's pawn with e5 — back to our roots."
+   "spoken": "You take Black and answer the king's pawn with e5 — back to your roots."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the knight to c6."
+   "spoken": "You develop the knight to c6."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "We capture on d4."
+   "spoken": "You capture on d4."
   },
   {
    "ply": 7,
@@ -86,7 +86,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "We choose the bishop to c5 — still theoretical, but more manageable than the chaos of the ...Nf6 lines."
+   "spoken": "You choose the bishop to c5 — still theoretical, but more manageable than the chaos of the ...Nf6 lines."
   },
   {
    "ply": 9,
@@ -121,7 +121,7 @@
     "Qf6",
     "c3"
    ],
-   "spoken": "White's point was the capture on c6, hitting the queen, and then taking our c5-bishop; the queen on f6 slips out of the knight's reach. White supports with c3, the main continuation."
+   "spoken": "White's point was the capture on c6, hitting the queen, and then taking your c5-bishop; the queen on f6 slips out of the knight's reach. White supports with c3, the main continuation."
   },
   {
    "ply": 12,
@@ -130,7 +130,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": "We develop the knight from g8 to e7. We don't fear the capture on c6: we'd first grab the bishop on e3, threatening mate on f2 — part of why the queen sits on f6 — and after White recaptures, we take back on c6, having wrecked his structure."
+   "spoken": "You develop the knight from g8 to e7. You don't fear the capture on c6: you'd first grab the bishop on e3, threatening mate on f2 — part of why the queen sits on f6 — and after White recaptures, you take back on c6, having wrecked his structure."
   },
   {
    "ply": 13,
@@ -148,7 +148,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The bishop to c4 changes nothing about our plan, so we castle."
+   "spoken": "The bishop to c4 changes nothing about your plan, so you castle."
   },
   {
    "ply": 15,
@@ -157,7 +157,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles. A subtlety: if White now takes on c6, we can no longer grab the e3-bishop — the knight would answer with a check on g7 — so we'd just recapture with the queen, still comfortable. The known move is the centralizing knight to e5, punishing the exposed c4-bishop. But careful: ...d6 here is a serious positional error — it severs the queen from the knight, so White takes on c6, and after we recapture, he trades on c5 and ruins our queenside pawns."
+   "spoken": "White castles. A subtlety: if White now takes on c6, you can no longer grab the e3-bishop — the knight would answer with a check on g7 — so you'd just recapture with the queen, still comfortable. The known move is the centralizing knight to e5, punishing the exposed c4-bishop. But careful: ...d6 here is a serious positional error — it severs the queen from the knight, so White takes on c6, and after you recapture, he trades on c5 and ruins your queenside pawns."
   },
   {
    "ply": 16,
@@ -166,7 +166,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "We play Bologan's move, b6 — sidestepping theory. It heads for a fianchetto without the drawback of ...d6: if White takes on c6 we keep the queen recapture that supports our c5-bishop, and that bishop is now anchored by the b6-pawn."
+   "spoken": "You play Bologan's move, b6 — sidestepping theory. It heads for a fianchetto without the drawback of ...d6: if White takes on c6 you keep the queen recapture that supports your c5-bishop, and that bishop is now anchored by the b6-pawn."
   },
   {
    "ply": 17,
@@ -175,7 +175,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "White plays f4, the main move — but it threatens little. If you fear e5: with our bishop soon on b7, that push has a real cost, opening the long diagonal for the bishop, and our queen could swing to g6 hitting g2. There's the awkward f5 in reply, so it may be wiser to route the queen to h6, where White can't play f5 because his e3-bishop would hang."
+   "spoken": "White plays f4, the main move — but it threatens little. If you fear e5: with your bishop soon on b7, that push has a real cost, opening the long diagonal for the bishop, and your queen could swing to g6 hitting g2. There's the awkward f5 in reply, so it may be wiser to route the queen to h6, where White can't play f5 because his e3-bishop would hang."
   },
   {
    "ply": 18,
@@ -184,7 +184,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "We develop straightforwardly with the bishop to b7. It looks scary opposite White's centre, but just developing pieces can't be that bad."
+   "spoken": "You develop straightforwardly with the bishop to b7. It looks scary opposite White's centre, but just developing pieces can't be that bad."
   },
   {
    "ply": 19,
@@ -193,7 +193,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White pushes e5. It looks menacing, but there's nothing to attack — you can't be blown off the board without targets and weaknesses, and we have none."
+   "spoken": "White pushes e5. It looks menacing, but there's nothing to attack — you can't be blown off the board without targets and weaknesses, and you have none."
   },
   {
    "ply": 20,
@@ -202,7 +202,7 @@
    "line": [
     "Qh6"
    ],
-   "spoken": "We play the queen to h6, as planned. White's pawns look intimidating but they're stuck in molasses — and the queen sets a hidden threat: an x-ray works both ways, so our queen now x-rays the undefended bishop on e3, making ...Nxe5 a real threat. A further cost of f4: any capture on e3 now comes with check."
+   "spoken": "You play the queen to h6, as planned. White's pawns look intimidating but they're stuck in molasses — and the queen sets a hidden threat: an x-ray works both ways, so your queen now x-rays the undefended bishop on e3, making ...Nxe5 a real threat. A further cost of f4: any capture on e3 now comes with check."
   },
   {
    "ply": 19,
@@ -219,7 +219,7 @@
    "line": [
     "Qh6"
    ],
-   "spoken": "The battle here is over the f5-square: control it and White's kingside pawns freeze — a big asset. To control f5 we must remove White's knight, and recapturing with our own knight fails — a pawn retakes and our bishop is trapped by a bishop check on a3 — so we'd give up our dark-squared bishop to win that control.",
+   "spoken": "The battle here is over the f5-square: control it and White's kingside pawns freeze — a big asset. To control f5 you must remove White's knight, and recapturing with your own knight fails — a pawn retakes and your bishop is trapped by a bishop check on a3 — so you'd give up your dark-squared bishop to win that control.",
    "reanchor": true
   }
  ]

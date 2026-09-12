@@ -43,7 +43,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Black tries the bishop to c5 — it looks too good to be true, seeming to stop our d4. If it really worked, everyone would play it.",
+   "spoken": "Black tries the bishop to c5 — it looks too good to be true, seeming to stop your d4. If it really worked, everyone would play it.",
    "kind": "main",
    "teaches": [
     "...Bc5!? and its hidden flaw"
@@ -105,7 +105,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We collect the pawn back on e5. The exposed king looks disastrous — but it's an illusion: Black has thrown away several tempi AND the dark-squared bishop for it.",
+   "spoken": "You collect the pawn back on e5. The exposed king looks disastrous — but it's an illusion: Black has thrown away several tempi AND the dark-squared bishop for it.",
    "kind": "main",
    "teaches": [
     "open king is fine when the opponent overpaid for it"
@@ -118,7 +118,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So we take the center with d4, cashing in the tempi Black handed us.",
+   "spoken": "So you take the center with d4, cashing in the tempi Black handed you.",
    "kind": "main"
   },
   {
@@ -160,7 +160,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "We develop quietly with the bishop to e3 — better than a knight to f5, which just chases the queen back to where it wanted to go anyway.",
+   "spoken": "You develop quietly with the bishop to e3 — better than a knight to f5, which just chases the queen back to where it wanted to go anyway.",
    "kind": "main",
    "teaches": [
     "don’t make a move that helps the enemy queen"
@@ -200,7 +200,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "With our development lead we play ambitiously — the bishop to c4 — and a careless ...d6 here would even drop the queen.",
+   "spoken": "With your development lead you play ambitiously — the bishop to c4 — and a careless ...d6 here would even drop the queen.",
    "kind": "main"
   },
   {

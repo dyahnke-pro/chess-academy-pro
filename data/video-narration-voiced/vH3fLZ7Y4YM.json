@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "A pretty high-rated opponent at seventeen-ninety-three — let's see how our repertoire fares. e4, c5."
+   "spoken": "A pretty high-rated opponent at seventeen-ninety-three — let's see how your repertoire fares. e4, c5."
   },
   {
    "ply": 3,
@@ -34,7 +34,7 @@
     "cxd4",
     "c3"
    ],
-   "spoken": "Black takes and we offer the gambit pawn with c3 — the Morra gets more exciting at this level, because people tend to accept and play conventionally."
+   "spoken": "Black takes and you offer the gambit pawn with c3 — the Morra gets more exciting at this level, because people tend to accept and play conventionally."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
     "dxc3",
     "Nxc3"
    ],
-   "spoken": "Black accepts, d takes c3, and we recapture with the knight on c3 — a big lead in development for the pawn."
+   "spoken": "Black accepts, d takes c3, and you recapture with the knight on c3 — a big lead in development for the pawn."
   },
   {
    "ply": 8,
@@ -98,7 +98,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The big-picture rule is to develop your kingside and castle quickly — so we castle."
+   "spoken": "The big-picture rule is to develop your kingside and castle quickly — so you castle."
   },
   {
    "ply": 14,
@@ -134,7 +134,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "A logical plan is a bishop on d6, so we push e5, seizing space and squeezing the square."
+   "spoken": "A logical plan is a bishop on d6, so you push e5, seizing space and squeezing the square."
   },
   {
    "ply": 18,
@@ -152,7 +152,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "The knight shifts to e4, adding another attacker to d6 — look at the control we've built over that square."
+   "spoken": "The knight shifts to e4, adding another attacker to d6 — look at the control you've built over that square."
   },
   {
    "ply": 20,
@@ -170,7 +170,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Now we switch gears and keep improving — the queen to d2."
+   "spoken": "Now you switch gears and keep improving — the queen to d2."
   },
   {
    "ply": 22,
@@ -188,7 +188,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "We're trying to keep our e5-pawn well defended, so we calmly drop the bishop to g3."
+   "spoken": "You're trying to keep your e5-pawn well defended, so you calmly drop the bishop to g3."
   },
   {
    "ply": 24,
@@ -224,7 +224,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "The only thing Black might be preparing is the knight to d4, so we bring the rook to d1 to prevent it and get into the game."
+   "spoken": "The only thing Black might be preparing is the knight to d4, so you bring the rook to d1 to prevent it and get into the game."
   },
   {
    "ply": 28,
@@ -233,7 +233,7 @@
    "line": [
     "Bb8"
    ],
-   "spoken": "Black plays the bishop to b8 — and good thing we tucked our bishop to b3 earlier."
+   "spoken": "Black plays the bishop to b8 — and good thing you tucked your bishop to b3 earlier."
   },
   {
    "ply": 29,
@@ -242,14 +242,14 @@
    "line": [
     "Qg5"
    ],
-   "spoken": "Now everything is in place and we can start attacking — the queen to g5, with knight checks on f6 also worth considering."
+   "spoken": "Now everything is in place and you can start attacking — the queen to g5, with knight checks on f6 also worth considering."
   },
   {
    "ply": 5,
    "t": 552,
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "He made it easy for us, but the knight to g5 would have been possible — so let's check the theory of the line.",
+   "spoken": "He made it easy for you, but the knight to g5 would have been possible — so let's check the theory of the line.",
    "reanchor": true
   }
  ]

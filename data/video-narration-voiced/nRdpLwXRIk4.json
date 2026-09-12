@@ -84,7 +84,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "After the exchanges our queen recaptures on d4, and Black's setup is already passive — White is comfortably better.",
+   "spoken": "After the exchanges your queen recaptures on d4, and Black's setup is already passive — White is comfortably better.",
    "kind": "main"
   },
   {
@@ -104,7 +104,7 @@
    "line": [
     "Qe3"
    ],
-   "spoken": "We decline it and find the RIGHT square — the queen to e3. It looks awkward, but from there it oversees everything, and the plan is to castle long quickly and punish Black's undeveloped pieces.",
+   "spoken": "You decline it and find the RIGHT square — the queen to e3. It looks awkward, but from there it oversees everything, and the plan is to castle long quickly and punish Black's undeveloped pieces.",
    "kind": "plan",
    "teaches": [
     "decline the trade to a purposeful square"
@@ -144,7 +144,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Temporary versus permanent: we castle queenside fast. The awkward bishop is a temporary problem that resolves itself — getting the king safe and the rooks working is what matters.",
+   "spoken": "Temporary versus permanent: you castle queenside fast. The awkward bishop is a temporary problem that resolves itself — getting the king safe and the rooks working is what matters.",
    "kind": "main",
    "teaches": [
     "distinguish temporary problems from permanent ones"
@@ -167,7 +167,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "We pounce on that weakness with the bishop to a6, aiming to follow with Bb7 and win the pawn.",
+   "spoken": "You pounce on that weakness with the bishop to a6, aiming to follow with Bb7 and win the pawn.",
    "kind": "main",
    "teaches": [
     "punish ...b6 with Ba6"

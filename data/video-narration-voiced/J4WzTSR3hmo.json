@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": "We take White and open e4; Black replies e6 — the French. This is our opening-focused run: play principled moves and punish typical non-theoretical setups."
+   "spoken": "You take White and open e4; Black replies e6 — the French. This is your opening-focused run: play principled moves and punish typical non-theoretical setups."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the big centre with d4."
+   "spoken": "You build the big centre with d4."
   },
   {
    "ply": 4,
@@ -58,7 +58,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We simply develop the knight to f3 — an immediate ...d5 is too concrete before we've developed."
+   "spoken": "You simply develop the knight to f3 — an immediate ...d5 is too concrete before you've developed."
   },
   {
    "ply": 6,
@@ -67,7 +67,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays the passive ...d6. We have several ways to punish it; the simplest is the knight to c3, keeping to the spirit of e4 openings rather than grabbing space with c4."
+   "spoken": "Black plays the passive ...d6. You have several ways to punish it; the simplest is the knight to c3, keeping to the spirit of e4 openings rather than grabbing space with c4."
   },
   {
    "ply": 7,
@@ -76,7 +76,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "You develop the knight to c3."
   },
   {
    "ply": 8,
@@ -94,7 +94,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop comes to d3 — it props up e4, and once Black castles short we can push e5 and aim the bishop at h7. Combined with the queen coming to e4, that battery threatens mate on h7. Note: even if Black plays ...h6, the square itself stays weak — don't confuse a weak pawn with a weak square."
+   "spoken": "The bishop comes to d3 — it props up e4, and once Black castles short you can push e5 and aim the bishop at h7. Combined with the queen coming to e4, that battery threatens mate on h7. Note: even if Black plays ...h6, the square itself stays weak — don't confuse a weak pawn with a weak square."
   },
   {
    "ply": 11,
@@ -104,7 +104,7 @@
     "h6",
     "O-O"
    ],
-   "spoken": "Black plays ...h6 and we castle. We're unbothered by ...Nb4 — the bishop just steps back and a3 chases it. Black's slow queenside play neglects his kingside, which we punish by opening the centre: Black's d6- and e6-pawns are hooks, and a pawn advance can act like dynamite to blow the centre open."
+   "spoken": "Black plays ...h6 and you castle. You're unbothered by ...Nb4 — the bishop just steps back and a3 chases it. Black's slow queenside play neglects his kingside, which you punish by opening the centre: Black's d6- and e6-pawns are hooks, and a pawn advance can act like dynamite to blow the centre open."
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
     "b6",
     "d5"
    ],
-   "spoken": "Black plays ...b6, and we strike with d5 — the thematic dynamiting of the centre, and crucially it opens the e-file straight at Black's king. If Black takes, we have two defenders to his two attackers; we'd play it even as a sacrifice, because that file is the highway to the king — which is exactly why we castled early."
+   "spoken": "Black plays ...b6, and you strike with d5 — the thematic dynamiting of the centre, and crucially it opens the e-file straight at Black's king. If Black takes, you have two defenders to his two attackers; you'd play it even as a sacrifice, because that file is the highway to the king — which is exactly why you castled early."
   },
   {
    "ply": 14,
@@ -132,7 +132,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We recapture with the pawn — a major step toward winning."
+   "spoken": "You recapture with the pawn — a major step toward winning."
   },
   {
    "ply": 16,
@@ -141,7 +141,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "Black plays ...Nb4. Our objective now is to keep Black's king stuck in the centre — a moving target is hard to hit. We can't stop ...Be7, but a rook to e1 with check pins it, and by piling pressure on the pinned bishop we keep the king glued to the centre as a defender."
+   "spoken": "Black plays ...Nb4. Your objective now is to keep Black's king stuck in the centre — a moving target is hard to hit. You can't stop ...Be7, but a rook to e1 with check pins it, and by piling pressure on the pinned bishop you keep the king glued to the centre as a defender."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "First we insert the check on b5 — avoiding a trade and keeping our light-squared bishop, which rakes the light squares that ...b6 weakened."
+   "spoken": "First you insert the check on b5 — avoiding a trade and keeping your light-squared bishop, which rakes the light squares that ...b6 weakened."
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": "We take on d7 with check."
+   "spoken": "You take on d7 with check."
   },
   {
    "ply": 20,
@@ -186,7 +186,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "So we shove it away with a3 — a move you'd want regardless; the knight has to retreat to a6, since capturing just loses it."
+   "spoken": "So you shove it away with a3 — a move you'd want regardless; the knight has to retreat to a6, since capturing just loses it."
   },
   {
    "ply": 22,
@@ -204,7 +204,7 @@
    "line": [
     "Qe2+"
    ],
-   "spoken": "And there it is: the queen to e2 with check forks king and knight — we forget the e-file and simply win the knight on a6, a full piece up."
+   "spoken": "And there it is: the queen to e2 with check forks king and knight — you forget the e-file and simply win the knight on a6, a full piece up."
   },
   {
    "ply": 18,

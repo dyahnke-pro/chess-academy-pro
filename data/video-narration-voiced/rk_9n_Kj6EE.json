@@ -43,7 +43,7 @@
         "exd5",
         "Qxd5"
       ],
-      "spoken": "We take on d5, and Black recaptures with the queen — most people play one of the two main moves here, d5 or the knight to f6."
+      "spoken": "You take on d5, and Black recaptures with the queen — most people play one of the two main moves here, d5 or the knight to f6."
     },
     {
       "ply": 3,
@@ -72,7 +72,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "d4. Previously, facing this, our opponent played the knight to c6."
+      "spoken": "d4. Previously, facing this, your opponent played the knight to c6."
     },
     {
       "ply": 8,
@@ -90,7 +90,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "We recapture on d4. Conceptually it's an inaccuracy, because now the knight gets the c3-square to chase the queen off d5 and, ultimately, to set the d-pawn in motion."
+      "spoken": "You recapture on d4. Conceptually it's an inaccuracy, because now the knight gets the c3-square to chase the queen off d5 and, ultimately, to set the d-pawn in motion."
     },
     {
       "ply": 10,
@@ -99,7 +99,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The knight to c6, following our last Alapin game; after the knight to f3 our opponent played the bishop to g4, and we may follow that game a while."
+      "spoken": "The knight to c6, following your last Alapin game; after the knight to f3 your opponent played the bishop to g4, and you may follow that game a while."
     },
     {
       "ply": 11,
@@ -108,7 +108,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "The knight to f3 — Black attacks the d4-pawn and we must defend it. The main alternative is e5; there's also the bishop to g4, and e6, after which Black is clearly worse once we play the knight to c3."
+      "spoken": "The knight to f3 — Black attacks the d4-pawn and you must defend it. The main alternative is e5; there's also the bishop to g4, and e6, after which Black is clearly worse once you play the knight to c3."
     },
     {
       "ply": 12,
@@ -117,7 +117,7 @@
       "line": [
         "g6"
       ],
-      "spoken": "In that earlier game, against the bishop to g4 White shouldn't play the obvious bishop to e2 but go directly the knight to c3, then push d5, already winning; the testing line was the bishop to g4, the knight to c3, and the bishop takes f3. But our opponent plays g6 — and as extreme as it sounds, Black is already almost lost."
+      "spoken": "In that earlier game, against the bishop to g4 White shouldn't play the obvious bishop to e2 but go directly the knight to c3, then push d5, already winning; the testing line was the bishop to g4, the knight to c3, and the bishop takes f3. But your opponent plays g6 — and as extreme as it sounds, Black is already almost lost."
     },
     {
       "ply": 13,
@@ -126,14 +126,14 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3 — developing with tempo, the whole point, which is why Black should have kept the pawns on c5 and c3; that version would have been incomparably better. Once the queen moves, unless to e6 with check which we block, we pre-move d5. In fact g6 makes it worse: if Black can't fianchetto, the queen to d4 hits the rook in the corner and stops the bishop to g7."
+      "spoken": "The knight to c3 — developing with tempo, the whole point, which is why Black should have kept the pawns on c5 and c3; that version would have been incomparably better. Once the queen moves, unless to e6 with check which you block, you pre-move d5. In fact g6 makes it worse: if Black can't fianchetto, the queen to d4 hits the rook in the corner and stops the bishop to g7."
     },
     {
       "ply": 12,
       "t": 225.5,
       "fen": "r1b1kbnr/pp2pp1p/2n3p1/3q4/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
       "line": [],
-      "spoken": "— hitting the rook in the corner, precluding the bishop to g7, which could make matters even worse; this merely gives us fuel for the fire. A better version would have been the knight to f6, but still —",
+      "spoken": "— hitting the rook in the corner, precluding the bishop to g7, which could make matters even worse; this merely gives you fuel for the fire. A better version would have been the knight to f6, but still —",
       "reanchor": true
     },
     {
@@ -141,7 +141,7 @@
       "t": 226.5,
       "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 2 6",
       "line": [],
-      "spoken": "— after the knight to c3 we're overwhelmingly better.",
+      "spoken": "— after the knight to c3 you're overwhelmingly better.",
       "reanchor": true
     },
     {
@@ -152,7 +152,7 @@
         "g6",
         "Nc3"
       ],
-      "spoken": "Our opponent has realized what's happened and is hunting for a retreat square for the queen —",
+      "spoken": "Your opponent has realized what's happened and is hunting for a retreat square for the queen —",
       "reanchor": true
     },
     {
@@ -180,7 +180,7 @@
         "Nc3",
         "Qd8"
       ],
-      "spoken": "— by modern theory. But let's develop the initiative accurately, and don't delay: the longer we wait, the less effective d5 becomes. A nonchalant bishop to e2 would let Black fianchetto —",
+      "spoken": "— by modern theory. But let's develop the initiative accurately, and don't delay: the longer you wait, the less effective d5 becomes. A nonchalant bishop to e2 would let Black fianchetto —",
       "reanchor": true
     },
     {
@@ -190,7 +190,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "— and after a slow move the knight could reach e5 and stabilize. So we push d5 — not committal; the pawn wants to be here anyway and it's well defended, so we play it almost without calculation. But there's work to do: no concrete targets for Black, so we convert our development lead into material — a fork after the knight to b4 and the queen to a4 with check — or a direct attack on the king.",
+      "spoken": "— and after a slow move the knight could reach e5 and stabilize. So you push d5 — not committal; the pawn wants to be here anyway and it's well defended, so you play it almost without calculation. But there's work to do: no concrete targets for Black, so you convert your development lead into material — a fork after the knight to b4 and the queen to a4 with check — or a direct attack on the king.",
       "reanchor": true
     },
     {
@@ -200,7 +200,7 @@
       "line": [
         "Nb4"
       ],
-      "spoken": "The knight to b4. The only move that doesn't lose material is the knight back to b8 — not easy to play — and Black collapses immediately: this walks into a basic idea, an undefended knight on b4 with the a4-to-e8 diagonal open. Beware the queen to d4 hoping for the fork — you'd get forked yourself on c2; instead check on a4 and it's over in nine moves. That's the elephant: it's played to win out of the opening, not to dodge theory. Black tries the knight to c6, which only hastens the end; we take the knight, Black recaptures, and now we invest a couple of moments. The queen takes e6 with check is fine, but after the bishop to d7 Black chases the queen with tempo and could untangle. Instead I eye the knight to e5, exploiting that Black hasn't fianchettoed: it threatens the queen takes c6 with check, since after the bishop to d7 the knight takes d7, the queen takes d7, drops the rook in the corner. Black plays the bishop to d7, and I won't even touch the extra pawn — we're up a piece and going for mate, which means developing as actively and quickly as possible, with tempo. The bishop to f4 is the accurate move: it protects the knight while developing and prepares to castle long or bring a rook to d1. Remember diminishing returns — up a minor piece, grabbing the extra pawn is foolish. If c5, we take the bishop and pin the queen with the bishop to b5. Against the bishop to g7 we castle queenside and hit Black's bishop there; taking our knight would surrender the fianchetto bishop, a positional disaster. We can throw in the bishop to c4 forcing e6, then castle long, and if Black tries the knight to d5 we simply take it: if the c-pawn recaptures, the knight to d7 and the bishop to b5; if the e-pawn recaptures, the e-file opens with the king in the centre and the knight takes c6 with the rook to e1 is devastating. So the knight to d5 solves nothing. Black plays e6 and we castle — a massacre; castling clears e1 so that after a trade on d5 the rook lands on e1 at once, doing more than one thing with the move. The rook to c8 lets us finish in style: Black's bishop, sitting on d7, is the weakest piece, defended by queen, king and knight — eliminate the knight and it falls. Not the knight to e4 first, which allows the knight to d5; simply the bishop to g5, take the knight, then take the bishop. If the rook shifts to c7, calculate the mass trade — the bishop takes the knight, the queen recaptures, the knight takes the bishop, the rook recaptures, and the queen takes c6 wins the rook on d7. Cleaner order: the knight takes d7 first, then the bishop takes f6, denying intermediate checks — or just take the rook on d7, or the queen takes c6; everything wins. The clinical path is the rook to d1: the queen must stay anchored to c6, and if the knight to d5, we take it — the c-pawn recapture meets the bishop to b5, the e-pawn recapture meets the check on e1 winning the queen. Twenty moves, and Black never developed the kingside.",
+      "spoken": "The knight to b4. The only move that doesn't lose material is the knight back to b8 — not easy to play — and Black collapses immediately: this walks into a basic idea, an undefended knight on b4 with the a4-to-e8 diagonal open. Beware the queen to d4 hoping for the fork — you'd get forked yourself on c2; instead check on a4 and it's over in nine moves. That's the elephant: it's played to win out of the opening, not to dodge theory. Black tries the knight to c6, which only hastens the end; you take the knight, Black recaptures, and now you invest a couple of moments. The queen takes e6 with check is fine, but after the bishop to d7 Black chases the queen with tempo and could untangle. Instead I eye the knight to e5, exploiting that Black hasn't fianchettoed: it threatens the queen takes c6 with check, since after the bishop to d7 the knight takes d7, the queen takes d7, drops the rook in the corner. Black plays the bishop to d7, and I won't even touch the extra pawn — you're up a piece and going for mate, which means developing as actively and quickly as possible, with tempo. The bishop to f4 is the accurate move: it protects the knight while developing and prepares to castle long or bring a rook to d1. Remember diminishing returns — up a minor piece, grabbing the extra pawn is foolish. If c5, you take the bishop and pin the queen with the bishop to b5. Against the bishop to g7 you castle queenside and hit Black's bishop there; taking your knight would surrender the fianchetto bishop, a positional disaster. You can throw in the bishop to c4 forcing e6, then castle long, and if Black tries the knight to d5 you simply take it: if the c-pawn recaptures, the knight to d7 and the bishop to b5; if the e-pawn recaptures, the e-file opens with the king in the centre and the knight takes c6 with the rook to e1 is devastating. So the knight to d5 solves nothing. Black plays e6 and you castle — a massacre; castling clears e1 so that after a trade on d5 the rook lands on e1 at once, doing more than one thing with the move. The rook to c8 lets you finish in style: Black's bishop, sitting on d7, is the weakest piece, defended by queen, king and knight — eliminate the knight and it falls. Not the knight to e4 first, which allows the knight to d5; simply the bishop to g5, take the knight, then take the bishop. If the rook shifts to c7, calculate the mass trade — the bishop takes the knight, the queen recaptures, the knight takes the bishop, the rook recaptures, and the queen takes c6 wins the rook on d7. Cleaner order: the knight takes d7 first, then the bishop takes f6, denying intermediate checks — or just take the rook on d7, or the queen takes c6; everything wins. The clinical path is the rook to d1: the queen must stay anchored to c6, and if the knight to d5, you take it — the c-pawn recapture meets the bishop to b5, the e-pawn recapture meets the check on e1 winning the queen. Twenty moves, and Black never developed the kingside.",
       "reanchor": true
     },
     {
@@ -218,7 +218,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "— we faced the bishop to g4.",
+      "spoken": "— you faced the bishop to g4.",
       "reanchor": true
     },
     {
@@ -249,7 +249,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "— to which we still reply the knight to c3; the one thing to remember: if the queen moves away —",
+      "spoken": "— to which you still reply the knight to c3; the one thing to remember: if the queen moves away —",
       "reanchor": true
     },
     {
@@ -259,7 +259,7 @@
       "line": [
         "Bxf3"
       ],
-      "spoken": "— we play d5 with an overwhelming attack. But if Black plays the bishop takes f3, there's a line impossible to find over the board —",
+      "spoken": "— you play d5 with an overwhelming attack. But if Black plays the bishop takes f3, there's a line impossible to find over the board —",
       "reanchor": true
     },
     {
@@ -456,7 +456,7 @@
       "t": 1283.5,
       "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
       "line": [],
-      "spoken": "So g6 is a decisive mistake — the engine already reads about plus two and a half, the kind a human can't defend. The queen to d8 is probably correct, but Black had to bite the bullet with the knight to b8, the only way to stave off immediate defeat. Continuing the attack isn't simple: Black needs only three moves to deploy the kingside, so you must play actively and precisely. The engine's counter-intuitive suggestion is the queen to a4 with check — it allows a developing move with tempo, but that's the point: the bishop is awkward, and the queen drops back to b3 hitting the b7-pawn, so if Black plays b6, White has the classic d6 break, clearing the path to f7; Black just isn't fast enough. After the queen to e7 with check, the precise move is the king to d1, not the bishop to e3, because you want the rook to e1 and it's over. If e6, the knight to b5 heads for c7. Black tries the queen to b6, and the engine finds the bishop to b5: if taken, the knight takes b5 and a6, then the beautiful queen from b3 to c3 with a double attack on c8 and h8, and after the queenside push the queen sits untouchable on h8, with the bishop coming to h6. Practically I'd be tempted by the check on b5 — the most natural human move — then after the bishop to d7 you can trade and castle and attack down the e-file with d6; Black is never in time, because if Black brings the knight out we take on e7 and prevent castling. On understanding engine moves: when you don't get a move, make a reply and see the next move, repeating until the point manifests, or ask what you'd play instead and why it's worse — the queen to a4 justifies its lost tempo by the weakness of b7 and by keeping the knight off d7. Back to the game: after the bishop to g5 Black can't save a piece. We could also just play the accurate rook to d1 and win the queen with the bishop to b5.",
+      "spoken": "So g6 is a decisive mistake — the engine already reads about plus two and a half, the kind a human can't defend. The queen to d8 is probably correct, but Black had to bite the bullet with the knight to b8, the only way to stave off immediate defeat. Continuing the attack isn't simple: Black needs only three moves to deploy the kingside, so you must play actively and precisely. The engine's counter-intuitive suggestion is the queen to a4 with check — it allows a developing move with tempo, but that's the point: the bishop is awkward, and the queen drops back to b3 hitting the b7-pawn, so if Black plays b6, White has the classic d6 break, clearing the path to f7; Black just isn't fast enough. After the queen to e7 with check, the precise move is the king to d1, not the bishop to e3, because you want the rook to e1 and it's over. If e6, the knight to b5 heads for c7. Black tries the queen to b6, and the engine finds the bishop to b5: if taken, the knight takes b5 and a6, then the beautiful queen from b3 to c3 with a double attack on c8 and h8, and after the queenside push the queen sits untouchable on h8, with the bishop coming to h6. Practically I'd be tempted by the check on b5 — the most natural human move — then after the bishop to d7 you can trade and castle and attack down the e-file with d6; Black is never in time, because if Black brings the knight out you take on e7 and prevent castling. On understanding engine moves: when you don't get a move, make a reply and see the next move, repeating until the point manifests, or ask what you'd play instead and why it's worse — the queen to a4 justifies its lost tempo by the weakness of b7 and by keeping the knight off d7. Back to the game: after the bishop to g5 Black can't save a piece. You could also just play the accurate rook to d1 and win the queen with the bishop to b5.",
       "reanchor": true
     },
     {

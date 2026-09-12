@@ -16,7 +16,7 @@
     "d5",
     "exd5"
    ],
-   "spoken": "One last game against a 1600 who trots out the Scandinavian, meeting our king-pawn with an immediate central strike.",
+   "spoken": "One last game against a 1600 who trots out the Scandinavian, meeting your king-pawn with an immediate central strike.",
    "kind": "main"
   },
   {
@@ -52,7 +52,7 @@
    "line": [
     "Qd8"
    ],
-   "spoken": "He retreats all the way home to d8, so we've already gained ground for nothing.",
+   "spoken": "He retreats all the way home to d8, so you've already gained ground for nothing.",
    "kind": "main"
   },
   {
@@ -62,7 +62,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We seize the full center with d4 — space and a big development lead, exactly the dream against a passive Scandinavian.",
+   "spoken": "You seize the full center with d4 — space and a big development lead, exactly the dream against a passive Scandinavian.",
    "kind": "main",
    "teaches": [
     "Occupy the center when ahead in development"
@@ -93,7 +93,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "He just shuffles pawns with b5, doing nothing for his development. There's no special reply needed — we simply keep bringing pieces out.",
+   "spoken": "He just shuffles pawns with b5, doing nothing for his development. There's no special reply needed — you simply keep bringing pieces out.",
    "kind": "main",
    "teaches": [
     "Answer aimless pawn moves by continuing development"
@@ -143,7 +143,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "We centralize the knight on e5, a powerful outpost right in the heart of his camp.",
+   "spoken": "You centralize the knight on e5, a powerful outpost right in the heart of his camp.",
    "kind": "main",
    "teaches": [
     "A knight on e5 is a dominant central outpost"

@@ -37,7 +37,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Since White is handing us the centre, we grab it — the principled e5.",
+   "spoken": "Since White is handing you the centre, you grab it — the principled e5.",
    "kind": "main",
    "teaches": [
     "occupy the ceded centre"
@@ -59,7 +59,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "And we grab more with d5, taking a big share of the middle.",
+   "spoken": "And you grab more with d5, taking a big share of the middle.",
    "kind": "main"
   },
   {
@@ -69,7 +69,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The preferred setup refrains from the knight to c6. Instead c6 builds a solid pawn chain, and the queen's knight reroutes Ruy-Lopez style via d7 and f8 to g6. Against such unambitious play, we have all the time in the world to improve.",
+   "spoken": "The preferred setup refrains from the knight to c6. Instead c6 builds a solid pawn chain, and the queen's knight reroutes Ruy-Lopez style via d7 and f8 to g6. Against such unambitious play, you have all the time in the world to improve.",
    "kind": "plan",
    "teaches": [
     "the c6 chain and knight reroute"
@@ -82,7 +82,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop to d6 complements c6 beautifully — London-style. It defends the e5-pawn while the pawn defends d5, giving us a super-compact, well-placed centre.",
+   "spoken": "The bishop to d6 complements c6 beautifully — London-style. It defends the e5-pawn while the pawn defends d5, giving you a super-compact, well-placed centre.",
    "kind": "main",
    "teaches": [
     "the London-style pawn triangle"
@@ -130,7 +130,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "A typical queenside idea is to advance the a-pawn to poke and prod — and if White answers b4, we chip in with c5. With a closed centre, don't rule out moving the same pawn twice; there's no hurry.",
+   "spoken": "A typical queenside idea is to advance the a-pawn to poke and prod — and if White answers b4, you chip in with c5. With a closed centre, don't rule out moving the same pawn twice; there's no hurry.",
    "kind": "plan",
    "teaches": [
     "queenside probing with a4"
@@ -152,7 +152,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "Leave the light-squared bishop at home for now — a bishop to f5 walks into a g4 or e3-e4 expansion, and a bishop to e6 invites a knight jump to g5. We want to keep that bishop, because a key middlegame plan is pressuring the h3-pawn. So develop the knight to d7 instead.",
+   "spoken": "Leave the light-squared bishop at home for now — a bishop to f5 walks into a g4 or e3-e4 expansion, and a bishop to e6 invites a knight jump to g5. You want to keep that bishop, because a key middlegame plan is pressuring the h3-pawn. So develop the knight to d7 instead.",
    "kind": "main",
    "teaches": [
     "keep the light bishop for the h3 plan"
@@ -174,7 +174,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "The rook to e8 overprotects the e5-pawn — a good move in its own right — while we continue rerouting the knight toward g6.",
+   "spoken": "The rook to e8 overprotects the e5-pawn — a good move in its own right — while you continue rerouting the knight toward g6.",
    "kind": "main",
    "teaches": [
     "overprotection"
@@ -196,7 +196,7 @@
    "line": [
     "Nf8"
    ],
-   "spoken": "If White's queen slides to e2, it signals a flirtation with castling queenside — a near-suicidal plan into our setup. So we play a5, telling the opponent: don't you dare castle into this, because we'll be ready to make mincemeat of that king.",
+   "spoken": "If White's queen slides to e2, it signals a flirtation with castling queenside — a near-suicidal plan into your setup. So you play a5, telling the opponent: don't you dare castle into this, because you'll be ready to make mincemeat of that king.",
    "kind": "plan",
    "teaches": [
     "a5 to deter queenside castling"

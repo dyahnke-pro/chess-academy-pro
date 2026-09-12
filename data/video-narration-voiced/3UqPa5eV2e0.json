@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "Black chooses the Caro-Kann, preparing to challenge our center with d5.",
+   "spoken": "Black chooses the Caro-Kann, preparing to challenge your center with d5.",
    "kind": "main"
   },
   {
@@ -25,7 +25,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We take the full center with d4.",
+   "spoken": "You take the full center with d4.",
    "kind": "main"
   },
   {
@@ -35,7 +35,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "But Black shirks the principled d5 for a passive d6 — a hybrid that hands us the center for free.",
+   "spoken": "But Black shirks the principled d5 for a passive d6 — a hybrid that hands you the center for free.",
    "kind": "main",
    "teaches": [
     "a passive setup concedes the center"
@@ -48,7 +48,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "No need for anything clever — we just develop and let the extra space work for us.",
+   "spoken": "No need for anything clever — you just develop and let the extra space work for you.",
    "kind": "plan"
   },
   {
@@ -134,7 +134,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "Black has spent the opening shuffling pawns and only now develops a piece to b7. Against passive play the recipe is fixed: pry the center open so our better-placed pieces can infiltrate — otherwise he consolidates and escapes.",
+   "spoken": "Black has spent the opening shuffling pawns and only now develops a piece to b7. Against passive play the recipe is fixed: pry the center open so your better-placed pieces can infiltrate — otherwise he consolidates and escapes.",
    "kind": "plan",
    "teaches": [
     "open the center against a passive setup"
@@ -147,7 +147,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The d5 hammer is the move — not e5, which he'd meet with d5 and slam the door. We smash the center open and, crucially, keep it open.",
+   "spoken": "The d5 hammer is the move — not e5, which he'd meet with d5 and slam the door. You smash the center open and, crucially, keep it open.",
    "kind": "main",
    "teaches": [
     "choose the lever that keeps the center open"
@@ -194,7 +194,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "But a knight blocks the f-pawn, so first we reroute it to d2 — not a random square: from there it heads to c4 to hit the b6-pawn.",
+   "spoken": "But a knight blocks the f-pawn, so first you reroute it to d2 — not a random square: from there it heads to c4 to hit the b6-pawn.",
    "kind": "main",
    "teaches": [
     "clear the f-pawn’s path first"
@@ -219,7 +219,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "a4 handcuffs that pawn preemptively — like a surgeon, we stop b5 before it can happen.",
+   "spoken": "a4 handcuffs that pawn preemptively — like a surgeon, you stop b5 before it can happen.",
    "kind": "main",
    "teaches": [
     "a4 to freeze b5"
@@ -252,7 +252,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "His position is riddled with holes, and f5 is the juiciest — we plant a bishop on it.",
+   "spoken": "His position is riddled with holes, and f5 is the juiciest — you plant a bishop on it.",
    "kind": "main",
    "teaches": [
     "occupy the outpost hole"
@@ -274,7 +274,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "To open the e-file we first prepare it, bringing the rook to e1 so f4 comes with full force.",
+   "spoken": "To open the e-file you first prepare it, bringing the rook to e1 so f4 comes with full force.",
    "kind": "main"
   },
   {
@@ -315,7 +315,7 @@
    "line": [
     "Nxa5"
    ],
-   "spoken": "We recapture with the knight, not the rook — the knight comes with a threat on the bishop and gains its own outpost.",
+   "spoken": "You recapture with the knight, not the rook — the knight comes with a threat on the bishop and gains its own outpost.",
    "kind": "main",
    "teaches": [
     "recapture actively, with a threat"
@@ -359,7 +359,7 @@
    "line": [
     "Qa1"
    ],
-   "spoken": "We can't swing to c4 yet — the knight hangs — so the queen drops to a1 to defend it first, then the rook is free.",
+   "spoken": "You can't swing to c4 yet — the knight hangs — so the queen drops to a1 to defend it first, then the rook is free.",
    "kind": "main",
    "teaches": [
     "support the piece before the maneuver"
@@ -476,7 +476,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The lesson Black ignored: he pushed pawns without controlling the center, so we got a free hand. The right plan against his e5 wall is to reroute the knight to d2, push f4-f5, and take on e6 — because the f-file leads straight at the king, and once it opens mate can follow in a couple of moves.",
+   "spoken": "The lesson Black ignored: he pushed pawns without controlling the center, so you got a free hand. The right plan against his e5 wall is to reroute the knight to d2, push f4-f5, and take on e6 — because the f-file leads straight at the king, and once it opens mate can follow in a couple of moves.",
    "teaches": [
     "open the f-file to reach the king"
    ],

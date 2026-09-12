@@ -28,8 +28,16 @@ import { ALL_LESSONS } from './lessons/registry';
 const BANNED = /\b(we|we're|we'll|we've|we'd|our|ours|us|ourselves|ourself)\b/i;
 
 const DATA_DIR = join(__dirname);
+// 🔒 THE VOICED PLAY-SURFACE FILES WERE NEVER IN THIS GATE (added 2026-09-12).
+// The 2026-08-28 migration cleared 8,197 occurrences from the files listed
+// here — and these two were not listed, so they kept shipping the banned
+// pronoun to the play surfaces where voiced is the SOLE exact-position source:
+// 9,361 occurrences in voiced-walkthroughs.json and 5,625 in
+// voiced-teachings.json, unseen for two weeks because nothing looked. Both are
+// migrated now and both are gated, so the gap cannot reopen.
 const JSON_FILES = [
   'voiced-matchups.json',
+  'voiced-walkthroughs.json',
   'middlegame-plans.json',
   'common-mistakes.json',
   'model-games.json',
@@ -57,13 +65,38 @@ function collectProseStrings(node: unknown, out: string[]): void {
   }
 }
 
+const EXTRA_FILES: [string, string][] = [
+  ['voiced-teachings.json', join(__dirname, '../../public/data/voiced-teachings.json')],
+];
+
+// "the US Championship" is a COUNTRY, not the pronoun "us". BANNED is
+// case-insensitive by design (it must catch "Us" at a sentence start), so the
+// three real mentions of the US Championship in the voiced corpus would read as
+// violations. Excised before the test, and deliberately narrow: only uppercase
+// US immediately followed by a capitalised word.
+const stripCountry = (s: string): string => s.replace(/\bUS(?= [A-Z])/g, '');
+
 describe('perspective voice — no first-person-plural in shipped narration', () => {
+  for (const [name, path] of EXTRA_FILES) {
+    it(`${name}: no we/our/us in narration prose`, () => {
+      const parsed = JSON.parse(readFileSync(path, 'utf8'));
+      const strings: string[] = [];
+      collectProseStrings(parsed, strings);
+      const offenders = strings.filter((x) => BANNED.test(stripCountry(x))).slice(0, 20);
+      expect(
+        offenders,
+        `${name}: ${offenders.length} narration string(s) use we/our/us. First offenders:\n` +
+          offenders.map((x) => `  • ${x.slice(0, 120)}`).join('\n'),
+      ).toEqual([]);
+    });
+  }
+
   for (const file of JSON_FILES) {
     it(`${file}: no we/our/us in narration prose`, () => {
       const parsed = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8'));
       const strings: string[] = [];
       collectProseStrings(parsed, strings);
-      const offenders = strings.filter((s) => BANNED.test(s)).slice(0, 20);
+      const offenders = strings.filter((s) => BANNED.test(stripCountry(s))).slice(0, 20);
       expect(
         offenders,
         `${file}: ${offenders.length} narration string(s) use we/our/us/let's. ` +

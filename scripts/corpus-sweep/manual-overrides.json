@@ -185,6 +185,12 @@
    "was": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
    "text": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
    "why": "REWRITTEN — only \"This game illustrates how\" is dropped; a general principle about f5 does not need a game to license it. Every claim checks out on the board rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w: the black pawn is on f5, White has played d4, and White's e-pawn really is untouched on e2, which is the whole reason the Dutch exception holds."
+  },
+  {
+   "id": "YXz0xSbhY70",
+   "was": "White's d4 tries to punish the missing knight on c6, but Nf6 is a fully sound answer — we analyzed exactly this before.",
+   "text": "White's d4 tries to punish the missing knight on c6, but Nf6 is a fully sound answer.",
+   "why": "REWRITTEN — a false attribution CREATED by the we→you migration, caught by reading the migrated output rather than trusting it. \"we analyzed exactly this before\" meant the pro in a previous video; flipped mechanically it tells the student they analysed something they never saw. The clause carries no board content, so it goes. Its two near neighbours (\"a position you've seen before\", \"You've seen e3 before\") were read and KEPT — those read as ordinary coaching about a structure, not a claim about the student's history."
   }
  ]
 }

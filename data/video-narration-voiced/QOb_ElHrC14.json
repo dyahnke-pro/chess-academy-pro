@@ -60,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "The knight takes d4, and we have better control of the centre."
+   "spoken": "The knight takes d4, and you have better control of the centre."
   },
   {
    "ply": 9,
@@ -115,7 +115,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "I like getting my bishop into the fianchetto. c5 — a classic move, but I think a mistake: a positional error, creating a backward pawn on d6, already weak, and correspondingly a very weak square on d5. Now, where should the knight go? An important decision — we shouldn't just throw it on a random square."
+   "spoken": "I like getting my bishop into the fianchetto. c5 — a classic move, but I think a mistake: a positional error, creating a backward pawn on d6, already weak, and correspondingly a very weak square on d5. Now, where should the knight go? An important decision — you shouldn't just throw it on a random square."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "Nde2"
    ],
-   "spoken": "The knight to f5 allows the bishop takes f5, a trade I'm not sure benefits us, so I like the knight to e2, from where it can go to f4 —"
+   "spoken": "The knight to f5 allows the bishop takes f5, a trade I'm not sure benefits you, so I like the knight to e2, from where it can go to f4 —"
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "— and control the d5-square, a better square than b3. Do we need to rush the knight to f4 right now? No —"
+   "spoken": "— and control the d5-square, a better square than b3. Do you need to rush the knight to f4 right now? No —"
   },
   {
    "ply": 17,
@@ -142,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "— first it makes sense to complete our development; let's castle."
+   "spoken": "— first it makes sense to complete your development; let's castle."
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "And it would also make sense to play h3. The bishop to g4 — we're not too worried about the bishop takes c2, that's not scary."
+   "spoken": "And it would also make sense to play h3. The bishop to g4 — you're not too worried about the bishop takes c2, that's not scary."
   },
   {
    "ply": 19,
@@ -160,7 +160,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "If we were worried we could play f3, but I don't particularly want to — let's play h3 to chase the bishop away."
+   "spoken": "If you were worried you could play f3, but I don't particularly want to — let's play h3 to chase the bishop away."
   },
   {
    "ply": 20,
@@ -169,7 +169,7 @@
    "line": [
     "Bxe2"
    ],
-   "spoken": "If the bishop takes on e2, what should we recapture with? Both pieces can, but I like one more than the other."
+   "spoken": "If the bishop takes on e2, what should you recapture with? Both pieces can, but I like one more than the other."
   },
   {
    "ply": 21,
@@ -178,7 +178,7 @@
    "line": [
     "Nxe2"
    ],
-   "spoken": "I like taking with the knight; taking with the queen walks into the knight to d4 with tempo, a little unpleasant. And we still don't allow d5 — three defenders on that square to only two attackers."
+   "spoken": "I like taking with the knight; taking with the queen walks into the knight to d4 with tempo, a little unpleasant. And you still don't allow d5 — three defenders on that square to only two attackers."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "How do we restrict that knight? A concept I've talked about many times — with this pawn arrangement we play c3, controlling the knight's advance squares."
+   "spoken": "How do you restrict that knight? A concept I've talked about many times — with this pawn arrangement you play c3, controlling the knight's advance squares."
   },
   {
    "ply": 24,
@@ -205,7 +205,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight to e5 is kind of aimless; we could play f4, but that would deprive the knight of that square, so f4 is too hasty. We'd like to develop the bishop to e3 or g5, but we can't yet, because we dropped the b2-pawn. Instead of b3, we play the harmonious queen to c2, which defends b2 and prepares to connect the rooks — it prepares the rook to d1, reinforcing our control of d5, and a rook on d1 is better than a queen there, getting the queen out of the way and freeing the bishop. The knight to c4 is pointless — it prevents our bishop, but b3 chases it whenever we want, so no rush; let's improve first with the rook to d1, then play b3, tired of that knight. Now develop the bishop — not to g5 to trade for the f6-knight and give up our dark-squared bishop, imprudent since we'd be left with a bad light-squared bishop, but the bishop to e3, x-raying the queen. The queen to c6, and a good chance to reinforce control of d5 — not just the knight to f4, but c4, using our pawns to clamp the square, and the knight gets a nicer path through c3 that doesn't interfere with the f-pawn; we're not afraid of weakening d4, since a bishop and a rook guard it. The knight to b4, we move the queen to e2, and to increase central pressure the g4 and g5 plan is interesting, but let's be Russian-school and double rooks, the rook to d2 and d1, staying flexible, no pawns pushed. Black doubles rooks and then resigns — I think he thought I'd moved the rook off a1, leaving a2 hanging.",
+   "spoken": "The knight to e5 is kind of aimless; you could play f4, but that would deprive the knight of that square, so f4 is too hasty. You'd like to develop the bishop to e3 or g5, but you can't yet, because you dropped the b2-pawn. Instead of b3, you play the harmonious queen to c2, which defends b2 and prepares to connect the rooks — it prepares the rook to d1, reinforcing your control of d5, and a rook on d1 is better than a queen there, getting the queen out of the way and freeing the bishop. The knight to c4 is pointless — it prevents your bishop, but b3 chases it whenever you want, so no rush; let's improve first with the rook to d1, then play b3, tired of that knight. Now develop the bishop — not to g5 to trade for the f6-knight and give up your dark-squared bishop, imprudent since you'd be left with a bad light-squared bishop, but the bishop to e3, x-raying the queen. The queen to c6, and a good chance to reinforce control of d5 — not just the knight to f4, but c4, using your pawns to clamp the square, and the knight gets a nicer path through c3 that doesn't interfere with the f-pawn; you're not afraid of weakening d4, since a bishop and a rook guard it. The knight to b4, you move the queen to e2, and to increase central pressure the g4 and g5 plan is interesting, but let's be Russian-school and double rooks, the rook to d2 and d1, staying flexible, no pawns pushed. Black doubles rooks and then resigns — I think he thought I'd moved the rook off a1, leaving a2 hanging.",
    "reanchor": true
   },
   {
@@ -213,7 +213,7 @@
    "t": 470,
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
    "line": [],
-   "spoken": "a2 wasn't actually hanging — a strange move. A pretty classic Philidor; we played g3, and d5 is a move here — d5, e5, the knight to g4 is a line where White's supposed to be better, but check it if you want to play g3.",
+   "spoken": "a2 wasn't actually hanging — a strange move. A pretty classic Philidor; you played g3, and d5 is a move here — d5, e5, the knight to g4 is a line where White's supposed to be better, but check it if you want to play g3.",
    "reanchor": true
   },
   {
@@ -231,7 +231,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "— connected to the urge to attack something: you push a pawn and create a threat, not realizing that creating a threat isn't inherently good. c5 is an illusion — it doesn't control the centre, it weakens it, creating a massive hole on d5; you'd only play c5 if you could follow up with d5 and break through. We took with the knight to avoid the d5 push with tempo, centralizing the knight, already gearing up to play c3 and restrict the knight.",
+   "spoken": "— connected to the urge to attack something: you push a pawn and create a threat, not realizing that creating a threat isn't inherently good. c5 is an illusion — it doesn't control the centre, it weakens it, creating a massive hole on d5; you'd only play c5 if you could follow up with d5 and break through. You took with the knight to avoid the d5 push with tempo, centralizing the knight, already gearing up to play c3 and restrict the knight.",
    "reanchor": true
   }
  ]

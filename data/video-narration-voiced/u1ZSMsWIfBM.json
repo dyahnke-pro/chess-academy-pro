@@ -15,7 +15,7 @@
         "e4",
         "d5"
       ],
-      "spoken": "We answer the king's pawn with d5, heading into a Scandinavian."
+      "spoken": "You answer the king's pawn with d5, heading into a Scandinavian."
     },
     {
       "ply": 3,
@@ -35,7 +35,7 @@
         "d4",
         "e6"
       ],
-      "spoken": "We hurry the light-squared bishop out to f5 before the centre locks; White builds with d4, and we settle the pawn on e6. It's a French Advance where our \"bad\" bishop is already free and outside the chain."
+      "spoken": "You hurry the light-squared bishop out to f5 before the centre locks; White builds with d4, and you settle the pawn on e6. It's a French Advance where your \"bad\" bishop is already free and outside the chain."
     },
     {
       "ply": 7,
@@ -53,7 +53,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "We hit the base of the chain with c5 in one fell swoop — no wasted tempo on c6."
+      "spoken": "You hit the base of the chain with c5 in one fell swoop — no wasted tempo on c6."
     },
     {
       "ply": 9,
@@ -71,7 +71,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "We develop the knight to c6, leaning on d4."
+      "spoken": "You develop the knight to c6, leaning on d4."
     },
     {
       "ply": 11,
@@ -80,7 +80,7 @@
       "line": [
         "h3"
       ],
-      "spoken": "White plays h3, denying our bishop the g4 square."
+      "spoken": "White plays h3, denying your bishop the g4 square."
     },
     {
       "ply": 12,
@@ -89,7 +89,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "We swing the queen to b6, piling onto d4 and glaring at b2."
+      "spoken": "You swing the queen to b6, piling onto d4 and glaring at b2."
     },
     {
       "ply": 13,
@@ -107,7 +107,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "We choose this moment to capture on d4 — there's a concrete point coming."
+      "spoken": "You choose this moment to capture on d4 — there's a concrete point coming."
     },
     {
       "ply": 15,
@@ -144,7 +144,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "White develops the bishop to d3, reinforcing so that b4 could win our loose bishop."
+      "spoken": "White develops the bishop to d3, reinforcing so that b4 could win your loose bishop."
     },
     {
       "ply": 20,
@@ -153,7 +153,7 @@
       "line": [
         "Bb4+"
       ],
-      "spoken": "We keep the bishop working and give check from b4."
+      "spoken": "You keep the bishop working and give check from b4."
     },
     {
       "ply": 21,
@@ -171,7 +171,7 @@
       "line": [
         "Nge7"
       ],
-      "spoken": "Rather than trade, we develop the king's knight to e7, keeping f5 and g6 in reach."
+      "spoken": "Rather than trade, you develop the king's knight to e7, keeping f5 and g6 in reach."
     },
     {
       "ply": 23,
@@ -189,7 +189,7 @@
       "line": [
         "Bxd2"
       ],
-      "spoken": "We swap first, capturing on d2."
+      "spoken": "You swap first, capturing on d2."
     },
     {
       "ply": 25,
@@ -207,7 +207,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Now we castle into safety — and note White's queen can't reach h4 or h5, so there's no Greek-gift on our king."
+      "spoken": "Now you castle into safety — and note White's queen can't reach h4 or h5, so there's no Greek-gift on your king."
     },
     {
       "ply": 27,
@@ -225,7 +225,7 @@
       "line": [
         "Ng6"
       ],
-      "spoken": "We reroute the knight to g6 — a solid blocker on the bishop's diagonal, full of potential energy, dreaming of f4."
+      "spoken": "You reroute the knight to g6 — a solid blocker on the bishop's diagonal, full of potential energy, dreaming of f4."
     },
     {
       "ply": 29,
@@ -243,7 +243,7 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "We've out-calculated him — the knight captures on d4."
+      "spoken": "You've out-calculated him — the knight captures on d4."
     },
     {
       "ply": 32,
@@ -253,7 +253,7 @@
         "Nxd4",
         "Qxd4"
       ],
-      "spoken": "White recaptures with the knight, and we take back on d4 with the queen."
+      "spoken": "White recaptures with the knight, and you take back on d4 with the queen."
     },
     {
       "ply": 33,
@@ -262,7 +262,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "White lunges h5, going after our g6-knight."
+      "spoken": "White lunges h5, going after your g6-knight."
     },
     {
       "ply": 34,
@@ -271,14 +271,14 @@
       "line": [
         "Qf4"
       ],
-      "spoken": "We slide the queen to f4, using the g6-knight as its shield."
+      "spoken": "You slide the queen to f4, using the g6-knight as its shield."
     },
     {
       "ply": 33,
       "t": 674,
       "fen": "r4rk1/pp3ppp/4p1n1/3pP2P/3q4/3B4/1P1Q1PP1/1R2R1K1 b - - 0 17",
       "line": [],
-      "spoken": "If we'd shoved the knight to f4 instead, it would simply drop the queen — White captures on h7 and the rook on e1 covers the fork at the end. So we don't.",
+      "spoken": "If you'd shoved the knight to f4 instead, it would simply drop the queen — White captures on h7 and the rook on e1 covers the fork at the end. So you don't.",
       "reanchor": true
     },
     {
@@ -307,7 +307,7 @@
       "line": [
         "Rac8"
       ],
-      "spoken": "We bring the a-rook to c8, deliberately keeping the f-rook home to shelter the king."
+      "spoken": "You bring the a-rook to c8, deliberately keeping the f-rook home to shelter the king."
     },
     {
       "ply": 35,
@@ -325,7 +325,7 @@
         "Rac8",
         "Qe2"
       ],
-      "spoken": "White will have to shuffle the queen back toward e2; we're simply two clean pawns up and consolidating.",
+      "spoken": "White will have to shuffle the queen back toward e2; you're simply two clean pawns up and consolidating.",
       "reanchor": true
     },
     {
@@ -335,7 +335,7 @@
       "line": [
         "Ne7"
       ],
-      "spoken": "We plan to swing the knight back to e7 and untangle — no need to hurry a two-pawn edge.",
+      "spoken": "You plan to swing the knight back to e7 and untangle — no need to hurry a two-pawn edge.",
       "reanchor": true
     },
     {
@@ -346,7 +346,7 @@
         "g3",
         "Qg5"
       ],
-      "spoken": "White pokes with g3, so we lift the queen to g5, staying active."
+      "spoken": "White pokes with g3, so you lift the queen to g5, staying active."
     },
     {
       "ply": 41,
@@ -364,7 +364,7 @@
       "line": [
         "Rc3"
       ],
-      "spoken": "We sink the rook into c3 — into the hole b4 just left — making contact with the bishop. Whenever a pawn advances, spend five seconds on which squares it weakened."
+      "spoken": "You sink the rook into c3 — into the hole b4 just left — making contact with the bishop. Whenever a pawn advances, spend five seconds on which squares it weakened."
     },
     {
       "ply": 43,
@@ -382,7 +382,7 @@
       "line": [
         "Nf5"
       ],
-      "spoken": "The knight belongs on f5 — we go straight for the king. If White trades it off, that only simplifies toward our extra pawns.",
+      "spoken": "The knight belongs on f5 — you go straight for the king. If White trades it off, that only simplifies toward your extra pawns.",
       "reanchor": true
     },
     {
@@ -392,7 +392,7 @@
       "line": [
         "Rb4"
       ],
-      "spoken": "White tries the rook to b4; it looks strong, but after our reply it achieves nothing real.",
+      "spoken": "White tries the rook to b4; it looks strong, but after your reply it achieves nothing real.",
       "reanchor": true
     },
     {
@@ -412,7 +412,7 @@
       "line": [
         "fxg3"
       ],
-      "spoken": "After White recaptures on g3 with the f-pawn, our queen comes crashing through.",
+      "spoken": "After White recaptures on g3 with the f-pawn, your queen comes crashing through.",
       "reanchor": true
     },
     {
@@ -422,7 +422,7 @@
       "line": [
         "Qxg3+"
       ],
-      "spoken": "The queen would grab on g3 with check — now we're four pawns up.",
+      "spoken": "The queen would grab on g3 with check — now you're four pawns up.",
       "reanchor": true
     },
     {
@@ -432,7 +432,7 @@
       "line": [
         "Qg2"
       ],
-      "spoken": "White would offer the queen trade on g2, but we have a sharper path than the simple recapture.",
+      "spoken": "White would offer the queen trade on g2, but you have a sharper path than the simple recapture.",
       "reanchor": true
     },
     {
@@ -442,7 +442,7 @@
       "line": [
         "Qxe1+"
       ],
-      "spoken": "The rook on e1 hangs, so our queen would snap it off with check.",
+      "spoken": "The rook on e1 hangs, so your queen would snap it off with check.",
       "reanchor": true
     },
     {
@@ -452,7 +452,7 @@
       "line": [
         "Kh2"
       ],
-      "spoken": "After White tucks the king to h2, we check for any mate threats against us — there are none.",
+      "spoken": "After White tucks the king to h2, you check for any mate threats against you — there are none.",
       "reanchor": true
     },
     {
@@ -462,7 +462,7 @@
       "line": [
         "Rxd3"
       ],
-      "spoken": "Then we'd safely collect the bishop on d3, noting that a pawn and a rook also drop with check.",
+      "spoken": "Then you'd safely collect the bishop on d3, noting that a pawn and a rook also drop with check.",
       "reanchor": true
     },
     {
@@ -472,7 +472,7 @@
       "line": [
         "Rg4"
       ],
-      "spoken": "If White swings the rook to g4 it's already too late — though g6 for us earlier would have been the one blunder, handing over a perpetual.",
+      "spoken": "If White swings the rook to g4 it's already too late — though g6 for you earlier would have been the one blunder, handing over a perpetual.",
       "reanchor": true
     },
     {
@@ -482,7 +482,7 @@
       "line": [
         "Qxe5+"
       ],
-      "spoken": "We would capture on e5 with check, defending our own passer and finishing the game.",
+      "spoken": "You would capture on e5 with check, defending your own passer and finishing the game.",
       "reanchor": true
     },
     {
@@ -512,7 +512,7 @@
       "line": [
         "Qg1"
       ],
-      "spoken": "If White interposes the queen on g1, we don't rush the capture — we keep him pinned and give him no air.",
+      "spoken": "If White interposes the queen on g1, you don't rush the capture — you keep him pinned and give him no air.",
       "reanchor": true
     },
     {
@@ -522,7 +522,7 @@
       "line": [
         "Qxh5+"
       ],
-      "spoken": "Our queen would grab the pawn on h5 with check first, refusing to let him breathe.",
+      "spoken": "Your queen would grab the pawn on h5 with check first, refusing to let him breathe.",
       "reanchor": true
     },
     {
@@ -542,7 +542,7 @@
       "line": [
         "Qxg4+"
       ],
-      "spoken": "We would scoop up the loose rook, capturing on g4 with check, and the game is over.",
+      "spoken": "You would scoop up the loose rook, capturing on g4 with check, and the game is over.",
       "reanchor": true
     },
     {
@@ -562,7 +562,7 @@
       "line": [
         "Qxg1+"
       ],
-      "spoken": "...and after we'd pick off the queen on g1 with check...",
+      "spoken": "...and after you'd pick off the queen on g1 with check...",
       "reanchor": true
     },
     {
@@ -572,7 +572,7 @@
       "line": [
         "Kf3"
       ],
-      "spoken": "With the king wandering to f3, we'd hunt for a forced mate rather than just hoovering material.",
+      "spoken": "With the king wandering to f3, you'd hunt for a forced mate rather than just hoovering material.",
       "reanchor": true
     },
     {

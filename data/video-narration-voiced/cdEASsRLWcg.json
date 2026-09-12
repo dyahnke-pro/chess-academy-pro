@@ -44,7 +44,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "White tries a Bg5 line against our King's Indian.",
+   "spoken": "White tries a Bg5 line against your King's Indian.",
    "kind": "main"
   },
   {
@@ -81,7 +81,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "White builds a huge pawn front. That's the hypermodern bargain — we cede the center on purpose, attack it from a distance with our pieces, and only claim the center ourselves when WE are ready.",
+   "spoken": "White builds a huge pawn front. That's the hypermodern bargain — you cede the center on purpose, attack it from a distance with your pieces, and only claim the center yourself when YOU are ready.",
    "kind": "main",
    "teaches": [
     "hypermodern: cede the center, then strike it"
@@ -94,7 +94,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Now the strike — c5. It looks like White is winning, but Black is already better: White has overextended, his pieces are uncoordinated, and when we hit the center we mean business.",
+   "spoken": "Now the strike — c5. It looks like White is winning, but Black is already better: White has overextended, his pieces are uncoordinated, and when you hit the center you mean business.",
    "kind": "main",
    "teaches": [
     "strike when the big center is overextended"
@@ -107,7 +107,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "White pushes e5, attacking our knight.",
+   "spoken": "White pushes e5, attacking your knight.",
    "kind": "main"
   },
   {
@@ -117,7 +117,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "The key move order — we take on d4 first.",
+   "spoken": "The key move order — you take on d4 first.",
    "kind": "main",
    "teaches": [
     "insert the zwischenzug ...cxd4"
@@ -140,7 +140,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "...but we recapture, and now we're a pawn up, attacking two pieces at once with an open avenue straight at his king.",
+   "spoken": "...but you recapture, and now you're a pawn up, attacking two pieces at once with an open avenue straight at his king.",
    "kind": "main"
   },
   {
@@ -159,7 +159,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "We recapture with the bishop, keeping our King's-Indian bishop alive — taking with the queen would allow a knight to f5 harassing it.",
+   "spoken": "You recapture with the bishop, keeping your King's-Indian bishop alive — taking with the queen would allow a knight to f5 harassing it.",
    "kind": "main",
    "teaches": [
     "keep the queen for better duties"
@@ -200,7 +200,7 @@
    "line": [
     "Rxe4+"
    ],
-   "spoken": "And we win it with check, the rook capturing on e4.",
+   "spoken": "And you win it with check, the rook capturing on e4.",
    "kind": "main"
   },
   {

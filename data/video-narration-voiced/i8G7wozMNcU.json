@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "The pawn to e4, c6 — the Caro-Kann. We haven't faced it too many times."
+   "spoken": "The pawn to e4, c6 — the Caro-Kann. You haven't faced it too many times."
   },
   {
    "ply": 3,
@@ -42,7 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 — the Fantasy Variation, the line we played the one time we faced the Caro."
+   "spoken": "f3 — the Fantasy Variation, the line you played the one time you faced the Caro."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": "We recapture on e4."
+   "spoken": "You recapture on e4."
   },
   {
    "ply": 8,
@@ -87,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 — the main move, pinning the knight. Again we don't take on e5: that allows the queen trade and Black wins the pawn back."
+   "spoken": "The bishop to g4 — the main move, pinning the knight. Again you don't take on e5: that allows the queen trade and Black wins the pawn back."
   },
   {
    "ply": 11,
@@ -150,7 +150,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "The knight takes g4 — now we're two pawns up, the king in shambles, completely winning eight moves in. It could become one pawn if the knight takes c4, but we have mating ideas on the a2-to-g8 diagonal."
+   "spoken": "The knight takes g4 — now you're two pawns up, the king in shambles, completely winning eight moves in. It could become one pawn if the knight takes c4, but you have mating ideas on the a2-to-g8 diagonal."
   },
   {
    "ply": 18,
@@ -159,7 +159,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight to d7 — as good a move as any, and it leaves our centre intact. We can choose between the materialistic knight to c3 protecting e4, or simply castling; we care far more about the open f-file and activating quickly. There's also c3 threatening the queen to b3, but that over-relies on a gimmick and under-emphasizes development."
+   "spoken": "The knight to d7 — as good a move as any, and it leaves your centre intact. You can choose between the materialistic knight to c3 protecting e4, or simply castling; you care far more about the open f-file and activating quickly. There's also c3 threatening the queen to b3, but that over-relies on a gimmick and under-emphasizes development."
   },
   {
    "ply": 19,
@@ -168,7 +168,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 — probably simpler, keeping the two extra pawns; we'll castle next. Don't fall for one-move-itis: seeing a cool mating pattern, getting excited, and not asking whether your opponent can stop the threat."
+   "spoken": "The knight to c3 — probably simpler, keeping the two extra pawns; you'll castle next. Don't fall for one-move-itis: seeing a cool mating pattern, getting excited, and not asking whether your opponent can stop the threat."
   },
   {
    "ply": 20,
@@ -186,7 +186,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Now of course we castle, not fearing the bishop takes c3 and the knight takes d4 — because without the dark-squared bishop, Black's dark squares will also be really weak."
+   "spoken": "Now of course you castle, not fearing the bishop takes c3 and the knight takes d4 — because without the dark-squared bishop, Black's dark squares will also be really weak."
   },
   {
    "ply": 22,
@@ -204,7 +204,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "— but I don't like it, since it blocks the f-file. The best is e5: the idea is to dislodge the knight from f6 — you control that square, so after it takes, we recapture and threaten the queen to e6 checkmate, with nothing able to block the rook; our centre evicts Black's last remaining defender."
+   "spoken": "— but I don't like it, since it blocks the f-file. The best is e5: the idea is to dislodge the knight from f6 — you control that square, so after it takes, you recapture and threaten the queen to e6 checkmate, with nothing able to block the rook; your centre evicts Black's last remaining defender."
   },
   {
    "ply": 22,

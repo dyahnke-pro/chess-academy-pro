@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We take on d5."
+   "spoken": "You take on d5."
   },
   {
    "ply": 4,
@@ -60,7 +60,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "— we drop the bishop back to e2, and Black takes on d5; the point involves the bishop on d7 —"
+   "spoken": "— you drop the bishop back to e2, and Black takes on d5; the point involves the bishop on d7 —"
   },
   {
    "ply": 8,
@@ -78,7 +78,7 @@
    "line": [
     "dxe6"
    ],
-   "spoken": "We take."
+   "spoken": "You take."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": "Now we're just up a pawn for no compensation. The question is how to structure our development: we can play d4 to occupy the centre, but maybe Black plays c5 —"
+   "spoken": "Now you're just up a pawn for no compensation. The question is how to structure your development: you can play d4 to occupy the centre, but maybe Black plays c5 —"
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "— so we could develop modestly with the knight to f3, but I think d4 is just more ambitious."
+   "spoken": "— so you could develop modestly with the knight to f3, but I think d4 is just more ambitious."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop to d6 is some weird move. He doesn't play c5, so we're fine — let's just develop the knight to f3 —"
+   "spoken": "The bishop to d6 is some weird move. He doesn't play c5, so you're fine — let's just develop the knight to f3 —"
   },
   {
    "ply": 13,
@@ -124,7 +124,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": "We castle, and Black castles."
+   "spoken": "You castle, and Black castles."
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Up a pawn, no comp. There are always multiple ways to play — one of the best ways to restrict this knight is to push c3, creating a pawn chain and keeping our central pawn well defended. c4 I like a little less, since the centre becomes flimsy and Black could play the bishop to g4."
+   "spoken": "Up a pawn, no comp. There are always multiple ways to play — one of the best ways to restrict this knight is to push c3, creating a pawn chain and keeping your central pawn well defended. c4 I like a little less, since the centre becomes flimsy and Black could play the bishop to g4."
   },
   {
    "ply": 17,
@@ -142,7 +142,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "If we're pushing the c-pawn, I'd prefer c3; or we could start with the bishop to g5, developing and deciding based on what Black does."
+   "spoken": "If you're pushing the c-pawn, I'd prefer c3; or you could start with the bishop to g5, developing and deciding based on what Black does."
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 — exactly my point: if our pawn were on c4, Black would threaten the tactic, the bishop takes f3 and the knight to d4, and because of the standoff between the queens you couldn't recapture the knight."
+   "spoken": "The bishop to g4 — exactly my point: if your pawn were on c4, Black would threaten the tactic, the bishop takes f3 and the knight to d4, and because of the standoff between the queens you couldn't recapture the knight."
   },
   {
    "ply": 19,
@@ -169,7 +169,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "People's reservation about c3 is that it's not clear where to put the knight, but the knight to d2 is a completely legitimate developing move. The queen to d7 is risky — it lets us take on f6 and ruin Black's structure, but the downside is we give up a good bishop, and Black can play the king to h8 and the rook to g8, using the pawn structure to his benefit."
+   "spoken": "People's reservation about c3 is that it's not clear where to put the knight, but the knight to d2 is a completely legitimate developing move. The queen to d7 is risky — it lets you take on f6 and ruin Black's structure, but the downside is you give up a good bishop, and Black can play the king to h8 and the rook to g8, using the pawn structure to his benefit."
   },
   {
    "ply": 21,
@@ -178,7 +178,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "I'm actually not enthralled by the bishop takes f6 — not as slam-dunk as it looks — so we refrain and complete development with the knight to d2, maybe taking a bit later."
+   "spoken": "I'm actually not enthralled by the bishop takes f6 — not as slam-dunk as it looks — so you refrain and complete development with the knight to d2, maybe taking a bit later."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "The rook to e1, continuing to improve our position."
+   "spoken": "The rook to e1, continuing to improve your position."
   },
   {
    "ply": 24,
@@ -205,7 +205,7 @@
    "line": [
     "Re6"
    ],
-   "spoken": "The rook to e6 — the idea is to double on the e-file and pressure our bishop, and the bishop on g4 is quite annoying too. I think I see a tactic; I have to calculate it."
+   "spoken": "The rook to e6 — the idea is to double on the e-file and pressure your bishop, and the bishop on g4 is quite annoying too. I think I see a tactic; I have to calculate it."
   },
   {
    "ply": 25,
@@ -214,7 +214,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "The tactic starts — we take on f6, hoping for the rook to recapture —"
+   "spoken": "The tactic starts — you take on f6, hoping for the rook to recapture —"
   },
   {
    "ply": 26,
@@ -270,7 +270,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "The bishop to h5. We're still up a pawn, but now in a little danger on the kingside."
+   "spoken": "The bishop to h5. You're still up a pawn, but now in a little danger on the kingside."
   },
   {
    "ply": 31,
@@ -330,7 +330,7 @@
     "Qh4",
     "Qe2"
    ],
-   "spoken": "I'm down a pawn and virtually getting mated, but I don't think there's anything forced, and if he gives me time I can get the knight into the defence with the knight to f3 or g4. So far I've played only-moves — the queen to h2, the king to f1 — and I go the knight to e4 to get the knight into the defence, with the threat of the knight to d6; the knight on e7 hangs, and if he takes I take back, saving the knight with the knight back to e4, and if f5 there's an only-move that wins. Then the queen to f3 out of the pin, and after the knight to f6, allowing a check, the queen to g3 tries to force the queen trade — more accurate, since a trade ends it. Now we're up a piece for no comp, the attack evaporated. We can play aggressively with the knight to g5, but he'd meet it with the knight to h5 and the rook to g6, so let's just take. After the rook to f6, we can take the c7-pawn — nothing to fear down the g-file — or play the rook to b1 and take b7; I'm a bit concerned about the rook to g6, the queen to d5, and f3, so we cut the queen off with c4, preventing the queen to d5 and threatening the rook to b8. The real pest is the rook on g6, since f3 would blunder mate-in-one, so I play the rook to b3 and then g3 to eliminate it. Now we convert by pushing the c-pawn, putting the rook behind it like in an endgame, and push. The queen to c3, push toward c7; when Black blockades with the queen, use the method of offering a queen trade to force it out, and when he blockades with the rook, use the light-squared bishop, the bishop to h3, to chase the rook away. The most efficient is to take on f5, since then the pawn promotes; then the queen to d3 forces g6, opening the seventh rank for a ladder mate, and the rook to f8 mates.",
+   "spoken": "I'm down a pawn and virtually getting mated, but I don't think there's anything forced, and if he gives me time I can get the knight into the defence with the knight to f3 or g4. So far I've played only-moves — the queen to h2, the king to f1 — and I go the knight to e4 to get the knight into the defence, with the threat of the knight to d6; the knight on e7 hangs, and if he takes I take back, saving the knight with the knight back to e4, and if f5 there's an only-move that wins. Then the queen to f3 out of the pin, and after the knight to f6, allowing a check, the queen to g3 tries to force the queen trade — more accurate, since a trade ends it. Now you're up a piece for no comp, the attack evaporated. You can play aggressively with the knight to g5, but he'd meet it with the knight to h5 and the rook to g6, so let's just take. After the rook to f6, you can take the c7-pawn — nothing to fear down the g-file — or play the rook to b1 and take b7; I'm a bit concerned about the rook to g6, the queen to d5, and f3, so you cut the queen off with c4, preventing the queen to d5 and threatening the rook to b8. The real pest is the rook on g6, since f3 would blunder mate-in-one, so I play the rook to b3 and then g3 to eliminate it. Now you convert by pushing the c-pawn, putting the rook behind it like in an endgame, and push. The queen to c3, push toward c7; when Black blockades with the queen, use the method of offering a queen trade to force it out, and when he blockades with the rook, use the light-squared bishop, the bishop to h3, to chase the rook away. The most efficient is to take on f5, since then the pawn promotes; then the queen to d3 forces g6, opening the seventh rank for a ladder mate, and the rook to f8 mates.",
    "reanchor": true
   },
   {
@@ -397,7 +397,7 @@
    "t": 869.5,
    "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "A parallel is the early-f4 Sicilian, where Black's answer is d5 — that's why, if you want the Grand Prix, you start with the knight to c3. After d5, the pawns trade, we don't take on d5 but play the knight to f6; then c4, and Black plays e6 with total control over d4 and a better position. Similarly here Black goes e5 and the bishop to c5 with full compensation for the pawn. You can play d4, which transposes into the Panov Attack of the Caro-Kann, but that's cashing your lottery ticket for fifteen bucks — not the best you can do.",
+   "spoken": "A parallel is the early-f4 Sicilian, where Black's answer is d5 — that's why, if you want the Grand Prix, you start with the knight to c3. After d5, the pawns trade, you don't take on d5 but play the knight to f6; then c4, and Black plays e6 with total control over d4 and a better position. Similarly here Black goes e5 and the bishop to c5 with full compensation for the pawn. You can play d4, which transposes into the Panov Attack of the Caro-Kann, but that's cashing your lottery ticket for fifteen bucks — not the best you can do.",
    "reanchor": true
   }
  ]

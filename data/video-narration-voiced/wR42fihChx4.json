@@ -95,7 +95,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We commit to a King's Indian, putting the pawn on d6 rather than d5 — even after the knight to c3 prevents d5, that's fine, it's what we want.",
+   "spoken": "You commit to a King's Indian, putting the pawn on d6 rather than d5 — even after the knight to c3 prevents d5, that's fine, it's what you want.",
    "kind": "main",
    "teaches": [
     "the KID with d6"
@@ -152,7 +152,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The point of routing the knight to d7 was to prepare e5, which we now play, striking at the centre.",
+   "spoken": "The point of routing the knight to d7 was to prepare e5, which you now play, striking at the centre.",
    "kind": "main",
    "teaches": [
     "Nbd7 prepares e5"
@@ -219,7 +219,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Now discharge the central tension with the capture on d4 — wait too long and White closes the centre, leaving our rook biting on granite.",
+   "spoken": "Now discharge the central tension with the capture on d4 — wait too long and White closes the centre, leaving your rook biting on granite.",
    "kind": "main",
    "teaches": [
     "release the tension in time"
@@ -322,7 +322,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "The King's Indian is an anti-engine opening — engines love White's space and overrate the edge, but the positions are hard to play practically. Since d5 will never happen, we nibble around the edges instead: a6 is a low-risk move preparing b5 to chew at the c4-pawn. Nothing happens fast here; it's a long maneuvering battle where you accumulate weaknesses, hedgehog-style, until something gives.",
+   "spoken": "The King's Indian is an anti-engine opening — engines love White's space and overrate the edge, but the positions are hard to play practically. Since d5 will never happen, you nibble around the edges instead: a6 is a low-risk move preparing b5 to chew at the c4-pawn. Nothing happens fast here; it's a long maneuvering battle where you accumulate weaknesses, hedgehog-style, until something gives.",
    "kind": "plan",
    "teaches": [
     "anti-engine KID",
@@ -337,7 +337,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "When White plays the queen to d2, spot the forkable squares — his queen and king now sit on a fork pattern, and our own queen is in an undefended standoff to watch. The f3-square is the target.",
+   "spoken": "When White plays the queen to d2, spot the forkable squares — his queen and king now sit on a fork pattern, and your own queen is in an undefended standoff to watch. The f3-square is the target.",
    "teaches": [
     "watch forkable squares"
    ]
@@ -371,7 +371,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": "The bishop crashes on h3 — untouchable, because the knight jumps to f3 with check, forking king and queen and winning the queen for two minor pieces. A classic textbook deflection sacrifice: even if White declines, we've traded off the fianchetto bishop that holds his centre together.",
+   "spoken": "The bishop crashes on h3 — untouchable, because the knight jumps to f3 with check, forking king and queen and winning the queen for two minor pieces. A classic textbook deflection sacrifice: even if White declines, you've traded off the fianchetto bishop that holds his centre together.",
    "kind": "main",
    "teaches": [
     "the deflection sacrifice",
@@ -420,7 +420,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "When it gets chaotic, break the position into its parts. Rather than flirt with a fatally weak king after giving up our own fianchetto bishop, the Russian-schoolboy choice is the knight takes e4 — steering into a clean, better endgame of a rook and three pawns against two minor pieces.",
+   "spoken": "When it gets chaotic, break the position into its parts. Rather than flirt with a fatally weak king after giving up your own fianchetto bishop, the Russian-schoolboy choice is the knight takes e4 — steering into a clean, better endgame of a rook and three pawns against two minor pieces.",
    "kind": "plan",
    "teaches": [
     "simplify into a favourable endgame"
@@ -447,7 +447,7 @@
    "t": 1554,
    "fen": "r1b1r1k1/1p3pbp/p1pp1np1/q3n3/2PNP3/1PN1B1PP/P2Q1PB1/2R2RK1 b - - 1 14",
    "line": [],
-   "spoken": "After the knight grabs e4 our queen is hanging from the standoff, so we must take White's queen — the tactic we spotted the moment the queens faced off. At this level, above 2000, there's simply more to calculate: the pieces are better placed, the openings more principled, so visualisation becomes everything.",
+   "spoken": "After the knight grabs e4 your queen is hanging from the standoff, so you must take White's queen — the tactic you spotted the moment the queens faced off. At this level, above 2000, there's simply more to calculate: the pieces are better placed, the openings more principled, so visualisation becomes everything.",
    "kind": "plan",
    "teaches": [
     "the queen standoff pays off",

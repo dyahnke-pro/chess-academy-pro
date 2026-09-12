@@ -42,7 +42,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "Against the French we play our Tarrasch — the knight to d2.",
+   "spoken": "Against the French you play your Tarrasch — the knight to d2.",
    "kind": "main",
    "teaches": [
     "the Tarrasch Nd2"
@@ -88,7 +88,7 @@
     "Nxf6+",
     "gxf6"
    ],
-   "spoken": "After we take with check and he recaptures with the g-pawn, Black's kingside pawns are shattered — doubled and weak.",
+   "spoken": "After you take with check and he recaptures with the g-pawn, Black's kingside pawns are shattered — doubled and weak.",
    "kind": "main"
   },
   {
@@ -129,7 +129,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "The bishop on b7 is that piece. We contest it — but there's a subtlety worth knowing: if we grab with the bishop on a6, after the recapture Black can leave a loose piece that a queen check on a4 forks against king and knight. Beyond that, we're happy to give a pawn for the initiative here: with Black's king stranded in the center and the board wide open, the bishop to f4 keeps the rook-lift avenue open, and we attack down the half-open g-file.",
+   "spoken": "The bishop on b7 is that piece. You contest it — but there's a subtlety worth knowing: if you grab with the bishop on a6, after the recapture Black can leave a loose piece that a queen check on a4 forks against king and knight. Beyond that, you're happy to give a pawn for the initiative here: with Black's king stranded in the center and the board wide open, the bishop to f4 keeps the rook-lift avenue open, and you attack down the half-open g-file.",
    "kind": "plan",
    "teaches": [
     "pawn for initiative against a stuck king",

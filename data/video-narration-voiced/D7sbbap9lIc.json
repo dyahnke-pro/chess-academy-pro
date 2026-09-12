@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We take White and open e4, Black meets e5."
+   "spoken": "You take White and open e4, Black meets e5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black develops to c6. We're playing the Four Knights Scotch — a great opening for improving players: it brings every piece out on sound principles, not gimmicks."
+   "spoken": "Black develops to c6. You're playing the Four Knights Scotch — a great opening for improving players: it brings every piece out on sound principles, not gimmicks."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "You develop the knight to c3."
   },
   {
    "ply": 6,
@@ -70,7 +70,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "Black takes and we recapture with the knight."
+   "spoken": "Black takes and you recapture with the knight."
   },
   {
    "ply": 10,
@@ -88,7 +88,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The most principled move is the bishop to e3 — it defends our knight and sets a threat: take on c6, and Black's bishop on c5 falls because the queen behind it hangs."
+   "spoken": "The most principled move is the bishop to e3 — it defends your knight and sets a threat: take on c6, and Black's bishop on c5 falls because the queen behind it hangs."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "We recapture with the bishop, and now we hold the two bishops and a bigger share of the centre."
+   "spoken": "You recapture with the bishop, and now you hold the two bishops and a bigger share of the centre."
   },
   {
    "ply": 14,
@@ -115,7 +115,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black castles. Our priority: finish developing quickly while preserving the bishop pair."
+   "spoken": "Black castles. Your priority: finish developing quickly while preserving the bishop pair."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "We keep the pair by retreating the bishop to e3 — the aggressive c5 would just invite ...d6; on an open board we want both bishops."
+   "spoken": "You keep the pair by retreating the bishop to e3 — the aggressive c5 would just invite ...d6; on an open board you want both bishops."
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "Black plays ...h6 — and that's a hook. A good moment to train your castling intuition: I'd castle queenside, because ...h6 invites g4–g5 to prise it open, and with the bishop pair and more centre, an opposite-side race favours us."
+   "spoken": "Black plays ...h6 — and that's a hook. A good moment to train your castling intuition: I'd castle queenside, because ...h6 invites g4–g5 to prise it open, and with the bishop pair and more centre, an opposite-side race favours you."
   },
   {
    "ply": 17,
@@ -142,7 +142,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "We begin with the flexible queen to d2."
+   "spoken": "You begin with the flexible queen to d2."
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "We castle queenside. Note f3 isn't only to stop ...Ng4 — it also props up e4 and prepares g4."
+   "spoken": "You castle queenside. Note f3 isn't only to stop ...Ng4 — it also props up e4 and prepares g4."
   },
   {
    "ply": 20,
@@ -178,7 +178,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "We play f3 — unlike h3, it supports the e4-pawn, so it's automatic here: the English-Attack setup of f3, g4 and h4."
+   "spoken": "You play f3 — unlike h3, it supports the e4-pawn, so it's automatic here: the English-Attack setup of f3, g4 and h4."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "The king to b1 is a fine improving move, but Black has so little counterplay that we simply start the attack with g4."
+   "spoken": "The king to b1 is a fine improving move, but Black has so little counterplay that you simply start the attack with g4."
   },
   {
    "ply": 24,
@@ -205,7 +205,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Black centralises with the knight to e5 — a good move, and now attacking calls for creativity. We must defend f3 — losing it collapses our kingside — while helping the attack, and the queen to g2 does both, landing on the g-file beside the rook to bear down on g7. Then g5 rolls in. And the Shankland question returns: can we play f5 anyway? Yes — f5 traps and wins the queen, and even after a capture the pin from the bishop to d3 decides. The theme throughout: keep asking \"what if I do it anyway\" instead of recoiling from a threat.",
+   "spoken": "Black centralises with the knight to e5 — a good move, and now attacking calls for creativity. You must defend f3 — losing it collapses your kingside — while helping the attack, and the queen to g2 does both, landing on the g-file beside the rook to bear down on g7. Then g5 rolls in. And the Shankland question returns: can you play f5 anyway? Yes — f5 traps and wins the queen, and even after a capture the pin from the bishop to d3 decides. The theme throughout: keep asking \"what if I do it anyway\" instead of recoiling from a threat.",
    "reanchor": true
   },
   {

@@ -15,7 +15,7 @@
     "g3",
     "e5"
    ],
-   "spoken": "White opens with the flank move g3, so we grab the center at once with e5 — a reverse Modern where we get the big pawn share.",
+   "spoken": "White opens with the flank move g3, so you grab the center at once with e5 — a reverse Modern where you get the big pawn share.",
    "kind": "main",
    "teaches": [
     "answer a flank opening by taking the center"
@@ -70,7 +70,7 @@
     "Bb2",
     "Bd6"
    ],
-   "spoken": "The bishop to d6 props up the e5-pawn; a later f4 holds no real danger for us here.",
+   "spoken": "The bishop to d6 props up the e5-pawn; a later f4 holds no real danger for you here.",
    "kind": "main"
   },
   {
@@ -139,7 +139,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "White's knight to e5 is dubious — we're not winning outright, but Black is now solidly the better side.",
+   "spoken": "White's knight to e5 is dubious — you're not winning outright, but Black is now solidly the better side.",
    "kind": "main"
   },
   {
@@ -162,7 +162,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "An instructive moment: we do NOT capture en passant here. Taking would do the dark-squared bishop and the f3-square a real favor — and our pawn on e4 is exactly what clamps f3 shut. The clamp is worth more than the trade.",
+   "spoken": "An instructive moment: you do NOT capture en passant here. Taking would do the dark-squared bishop and the f3-square a real favor — and your pawn on e4 is exactly what clamps f3 shut. The clamp is worth more than the trade.",
    "kind": "main",
    "teaches": [
     "don’t relieve his bad bishop or free f3"
@@ -175,7 +175,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The right way to remove the knight is clinical, not the capture on e5 that would hand over our good bishop — the queen's knight comes to d7 to swap it off instead.",
+   "spoken": "The right way to remove the knight is clinical, not the capture on e5 that would hand over your good bishop — the queen's knight comes to d7 to swap it off instead.",
    "kind": "main",
    "teaches": [
     "trade off cleanly, keep your good bishop"
@@ -197,7 +197,7 @@
     "Nxd7",
     "Bxd7"
    ],
-   "spoken": "The knight is gone and we've kept everything that matters — the clamp on f3, the intact pawn chain — and now we turn to the kingside attack.",
+   "spoken": "The knight is gone and you've kept everything that matters — the clamp on f3, the intact pawn chain — and now you turn to the kingside attack.",
    "kind": "main",
    "teaches": [
     "liquidate the intruder, keep the structure"
@@ -219,7 +219,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "No fear of the uncastled king — we can castle long whenever we like, so we start straight in with h5, going for a quick mate on the thematic g3 hook.",
+   "spoken": "No fear of the uncastled king — you can castle long whenever you like, so you start straight in with h5, going for a quick mate on the thematic g3 hook.",
    "kind": "plan",
    "teaches": [
     "attack with the king in the center when it’s safe"
@@ -304,7 +304,7 @@
    "line": [
     "Nxe3"
    ],
-   "spoken": "The precise finish isn't grabbing the rook — it's the knight taking on g2 to rip open the h-file, combining winning material with the mating attack. And never take on f1 while our own rook on h8 sits undefended. The light squares decide it: we have a light-squared bishop and White has none.",
+   "spoken": "The precise finish isn't grabbing the rook — it's the knight taking on g2 to rip open the h-file, combining winning material with the mating attack. And never take on f1 while your own rook on h8 sits undefended. The light squares decide it: you have a light-squared bishop and White has none.",
    "kind": "main",
    "teaches": [
     "combine material win with mate",

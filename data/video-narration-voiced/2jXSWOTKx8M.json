@@ -15,7 +15,7 @@
     "e4",
     "Nc6"
    ],
-   "spoken": "We face the Nimzowitsch Defence, the knight to c6. In most cases this move has little independent value — meaning it just transposes into another opening."
+   "spoken": "You face the Nimzowitsch Defence, the knight to c6. In most cases this move has little independent value — meaning it just transposes into another opening."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "d4 would give an independent game, but the knight to f3 is easier — Black usually plays e5, and we're back into familiar territory."
+   "spoken": "d4 would give an independent game, but the knight to f3 is easier — Black usually plays e5, and you're back into familiar territory."
   },
   {
    "ply": 4,
@@ -68,7 +68,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — Black will probably capture. He could also try the old bishop to b4, against which we'd take the knight."
+   "spoken": "d4 — Black will probably capture. He could also try the old bishop to b4, against which you'd take the knight."
   },
   {
    "ply": 8,
@@ -120,7 +120,7 @@
    "line": [
     "Nxf6+"
    ],
-   "spoken": "Against the knight to b4, we take on f6. And crucially, against the recapture with the queen, never take on d4 — Qxd4, Qxd4, and the knight forks on c2, winning a piece."
+   "spoken": "Against the knight to b4, you take on f6. And crucially, against the recapture with the queen, never take on d4 — Qxd4, Qxd4, and the knight forks on c2, winning a piece."
   },
   {
    "ply": 12,
@@ -156,7 +156,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The plan is to meet d6 with the bishop to b5. For now, the flexible bishop to d3 — signalling we're not chasing the pawn back unless Black plays d6."
+   "spoken": "The plan is to meet d6 with the bishop to b5. For now, the flexible bishop to d3 — signalling you're not chasing the pawn back unless Black plays d6."
   },
   {
    "ply": 17,
@@ -166,7 +166,7 @@
     "d6",
     "Bb5"
    ],
-   "spoken": "d6, and now the bishop to b5 — convenient, because it pins the knight, and we're ready to recapture with a small advantage."
+   "spoken": "d6, and now the bishop to b5 — convenient, because it pins the knight, and you're ready to recapture with a small advantage."
   },
   {
    "ply": 18,
@@ -193,7 +193,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "It's not that Black is better — it's just equal. He trades on d4 and we head into an endgame."
+   "spoken": "It's not that Black is better — it's just equal. He trades on d4 and you head into an endgame."
   },
   {
    "ply": 21,
@@ -263,7 +263,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "None of these calls is make-or-break — follow your intuition. The bishop to d3, supporting the e4-pawn, which is a central element of our position; the bishop to a6 did too little after the rook to b8."
+   "spoken": "None of these calls is make-or-break — follow your intuition. The bishop to d3, supporting the e4-pawn, which is a central element of your position; the bishop to a6 did too little after the rook to b8."
   },
   {
    "ply": 24,
@@ -298,7 +298,7 @@
     "Bb5",
     "Bf8"
    ],
-   "spoken": "The bishop to c4 I avoided because of the bishop to e6 — and we want to dodge trades."
+   "spoken": "The bishop to c4 I avoided because of the bishop to e6 — and you want to dodge trades."
   },
   {
    "ply": 30,
@@ -317,7 +317,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop to e3, eyeing the a7-pawn. We deliberately keep the king's destination open — kingside, queenside, or central, depending on how Black sets up."
+   "spoken": "The bishop to e3, eyeing the a7-pawn. You deliberately keep the king's destination open — kingside, queenside, or central, depending on how Black sets up."
   },
   {
    "ply": 32,
@@ -385,7 +385,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "Against my own bullet instinct for c3, I choose b3 — because c3 would leave our b-pawn a long-term weakness and let Black double rooks on the b-file. b3 keeps our queenside healthy.",
+   "spoken": "Against my own bullet instinct for c3, I choose b3 — because c3 would leave your b-pawn a long-term weakness and let Black double rooks on the b-file. b3 keeps your queenside healthy.",
    "reanchor": true
   },
   {
@@ -447,7 +447,7 @@
    "line": [
     "Bc3"
    ],
-   "spoken": "Watch for Black's typical break — advancing to c4; if we're forced to take, we get a weakness on a4 and the b-file opens."
+   "spoken": "Watch for Black's typical break — advancing to c4; if you're forced to take, you get a weakness on a4 and the b-file opens."
   },
   {
    "ply": 39,
@@ -632,7 +632,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "The drawback: he can take and swing a rook to f2 — but it works out concretely. And we keep posing him problems, brutal with his clock low."
+   "spoken": "The drawback: he can take and swing a rook to f2 — but it works out concretely. And you keep posing him problems, brutal with his clock low."
   },
   {
    "ply": 52,
@@ -668,7 +668,7 @@
    "line": [
     "Rc3"
    ],
-   "spoken": "The rook to c3 attacks c6, heading for c5, then we double. Not worried about him grabbing e4 — he has three weak pawns to our one, so we come out ahead."
+   "spoken": "The rook to c3 attacks c6, heading for c5, then you double. Not worried about him grabbing e4 — he has three weak pawns to your one, so you come out ahead."
   },
   {
    "ply": 57,
@@ -687,7 +687,7 @@
    "line": [
     "Ra6"
    ],
-   "spoken": "The rook to a6 is another slip; the rook to a8 was better. He keeps cooperating with our plan."
+   "spoken": "The rook to a6 is another slip; the rook to a8 was better. He keeps cooperating with your plan."
   },
   {
    "ply": 59,
@@ -714,7 +714,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Break the pawn chain with c4 — it clears the d5-pawn that restricted our rook and opens lines. Now White is much better, maybe technically winning — but rook endgames are treacherous; one slip and he's active."
+   "spoken": "Break the pawn chain with c4 — it clears the d5-pawn that restricted your rook and opens lines. Now White is much better, maybe technically winning — but rook endgames are treacherous; one slip and he's active."
   },
   {
    "ply": 62,
@@ -750,7 +750,7 @@
    "line": [
     "Rxc6+"
    ],
-   "spoken": "We take the calmer route — the rook takes on c6 with check."
+   "spoken": "You take the calmer route — the rook takes on c6 with check."
   },
   {
    "ply": 67,
@@ -769,7 +769,7 @@
    "line": [
     "Kxc6"
    ],
-   "spoken": "Now the plan: watch our pieces' activity. Start with the rook to e1 — not the king to c3, which would let his rook infiltrate to e2."
+   "spoken": "Now the plan: watch your pieces' activity. Start with the rook to e1 — not the king to c3, which would let his rook infiltrate to e2."
   },
   {
    "ply": 69,
@@ -805,7 +805,7 @@
    "line": [
     "Kd6"
    ],
-   "spoken": "If we want b4, now is the moment — before he plays c5."
+   "spoken": "If you want b4, now is the moment — before he plays c5."
   },
   {
    "ply": 73,
@@ -814,7 +814,7 @@
    "line": [
     "Kc3"
    ],
-   "spoken": "The king to c3 — and if he plays c5, the a5-pawn becomes a long-term weakness we can round up with the rook, or invade on b5 with the king. c5 only weakens him."
+   "spoken": "The king to c3 — and if he plays c5, the a5-pawn becomes a long-term weakness you can round up with the rook, or invade on b5 with the king. c5 only weakens him."
   },
   {
    "ply": 74,
@@ -823,7 +823,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "A frontal attack on our pawns never succeeds — h5 is met by h4, the rook to g5 by g4."
+   "spoken": "A frontal attack on your pawns never succeeds — h5 is met by h4, the rook to g5 by g4."
   },
   {
    "ply": 75,
@@ -850,7 +850,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "Create the passer with b4 — recapture with the king to stay active, close to pushing a5. And on the kingside, gxh4, rook takes h4, and we near a second passer — one on each wing."
+   "spoken": "Create the passer with b4 — recapture with the king to stay active, close to pushing a5. And on the kingside, gxh4, rook takes h4, and you near a second passer — one on each wing."
   },
   {
    "ply": 79,
@@ -1026,7 +1026,7 @@
     "Ka5",
     "Re5"
    ],
-   "spoken": "This is a Lucena position — his king is cut right off, so we simply push the pawn; checks from behind don't matter. Bring the king to f8, push f7, and it's the textbook win."
+   "spoken": "This is a Lucena position — his king is cut right off, so you simply push the pawn; checks from behind don't matter. Bring the king to f8, push f7, and it's the textbook win."
   }
  ]
 }

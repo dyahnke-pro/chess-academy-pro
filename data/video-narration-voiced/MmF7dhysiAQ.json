@@ -71,7 +71,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We begin by castling."
+   "spoken": "You begin by castling."
   },
   {
    "ply": 11,
@@ -116,7 +116,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "White plays the knight takes e5 — not very advisable. Why? We need to induce weaknesses in White's centre, and a move like the rook to e8 threatens nothing, so —"
+   "spoken": "White plays the knight takes e5 — not very advisable. Why? You need to induce weaknesses in White's centre, and a move like the rook to e8 threatens nothing, so —"
   },
   {
    "ply": 16,
@@ -125,7 +125,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "— we use our pawns: the typical King's Indian move c5. My theoretical knowledge ends here, so now we're on our own. The point of c5 is to force the d4-pawn to move; the knight in the centre is x-rayed by the bishop and vulnerable to the rook to e8 and the knight takes c4, so we must make it undefended at all costs."
+   "spoken": "— you use your pawns: the typical King's Indian move c5. My theoretical knowledge ends here, so now you're on your own. The point of c5 is to force the d4-pawn to move; the knight in the centre is x-rayed by the bishop and vulnerable to the rook to e8 and the knight takes c4, so you must make it undefended at all costs."
   },
   {
    "ply": 17,
@@ -134,7 +134,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 is totally reasonable. A fork in the road: to win the pawn back we can take on e4 — the knight takes c4, the knight takes e4, then a check on h4 forces the knight back and we recapture on e5 with a nice position —"
+   "spoken": "d5 is totally reasonable. A fork in the road: to win the pawn back you can take on e4 — the knight takes c4, the knight takes e4, then a check on h4 forces the knight back and you recapture on e5 with a nice position —"
   },
   {
    "ply": 18,
@@ -180,7 +180,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "The bishop to e2. We've recaptured on e4. White wants to castle kingside next; if he does, our whole e-file strategy has failed, so we must prevent castling at all costs."
+   "spoken": "The bishop to e2. You've recaptured on e4. White wants to castle kingside next; if he does, your whole e-file strategy has failed, so you must prevent castling at all costs."
   },
   {
    "ply": 24,
@@ -189,7 +189,7 @@
    "line": [
     "Qe8"
    ],
-   "spoken": "We can do it without sacrificing, using our queen: the queen to e8, which is better than e7, where the queen is vulnerable to d6 and to the bishop to g5 with tempo. The queen to e8 prevents castling — if White castles he loses the bishop. His best is probably the king to f2; then we develop the light-squared bishop to g4, and the dark-squared bishop eyes d4."
+   "spoken": "You can do it without sacrificing, using your queen: the queen to e8, which is better than e7, where the queen is vulnerable to d6 and to the bishop to g5 with tempo. The queen to e8 prevents castling — if White castles he loses the bishop. His best is probably the king to f2; then you develop the light-squared bishop to g4, and the dark-squared bishop eyes d4."
   },
   {
    "ply": 25,
@@ -207,7 +207,7 @@
    "line": [
     "Rd4"
    ],
-   "spoken": "The rook to d4 is the move if you want to go for checkmate; the rook takes c4 is the materialistic option. We're going for the throat in the spirit of the King's Indian, so the rook to d4. Then the queen to b3: if we play the bishop to g4 prematurely, White has the queen to b3 and e3, throwing our queen off e8 — the battle still revolves around preventing castling. The no-frills option is h6, the knight to f3, then the rook back to e4 to re-establish the pin, and only then the bishop to g4 — less calculation than the bishop to g4 at once. The a5-a4-a3 push putting pressure on b2 is standard but a bit slow; our attention stays on the e-file: prevent castling, drive the king out, induce the king to f2, then go for the throat. If White castles the game simply goes on — our structure is sound. Then the bishop to b3 is a bad panic move, because it lets Black get two pieces for a rook, crushing in the middlegame: we take the knight, achieve our dream of the bishop to d4, prevent castling, and stand up big material. Now the bishop to g4; b2 hangs, but we keep hammering down the e-file. We can take on e2 with a fork. Then the queen to b7, and the quiet knight to d7 opens the connection between our queen and rook to defend it — the bishop takes the rook also wins. If White plays the rook to e1, we have the intermezzo the bishop to e3 with check; then the rook takes d4, choosing the rook that gives us a passed pawn and the check on e3 that ends it.",
+   "spoken": "The rook to d4 is the move if you want to go for checkmate; the rook takes c4 is the materialistic option. You're going for the throat in the spirit of the King's Indian, so the rook to d4. Then the queen to b3: if you play the bishop to g4 prematurely, White has the queen to b3 and e3, throwing your queen off e8 — the battle still revolves around preventing castling. The no-frills option is h6, the knight to f3, then the rook back to e4 to re-establish the pin, and only then the bishop to g4 — less calculation than the bishop to g4 at once. The a5-a4-a3 push putting pressure on b2 is standard but a bit slow; your attention stays on the e-file: prevent castling, drive the king out, induce the king to f2, then go for the throat. If White castles the game simply goes on — your structure is sound. Then the bishop to b3 is a bad panic move, because it lets Black get two pieces for a rook, crushing in the middlegame: you take the knight, achieve your dream of the bishop to d4, prevent castling, and stand up big material. Now the bishop to g4; b2 hangs, but you keep hammering down the e-file. You can take on e2 with a fork. Then the queen to b7, and the quiet knight to d7 opens the connection between your queen and rook to defend it — the bishop takes the rook also wins. If White plays the rook to e1, you have the intermezzo the bishop to e3 with check; then the rook takes d4, choosing the rook that gives you a passed pawn and the check on e3 that ends it.",
    "reanchor": true
   },
   {
@@ -215,7 +215,7 @@
    "t": 602,
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
    "line": [],
-   "spoken": "Our opponent lost his mind. Let's review.",
+   "spoken": "Your opponent lost his mind. Let's review.",
    "reanchor": true
   },
   {
@@ -373,7 +373,7 @@
    "t": 667,
    "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
    "line": [],
-   "spoken": "e5 is one of those lines people don't study with White, as we saw. Here the knight takes e5 is actually a very serious mistake — accepting the so-called sacrifice is a bad idea; the best and only move is d5, where White is better, the theoretical assessment being an edge for White.",
+   "spoken": "e5 is one of those lines people don't study with White, as you saw. Here the knight takes e5 is actually a very serious mistake — accepting the so-called sacrifice is a bad idea; the best and only move is d5, where White is better, the theoretical assessment being an edge for White.",
    "reanchor": true
   },
   {
@@ -486,7 +486,7 @@
    "t": 917,
    "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
    "line": [],
-   "spoken": "So e5, the pawns trade, White plays the knight takes e5, we push c5 to shatter the centre and weaken the knight, then d5, and the rook to e8, which I can now see is the best move. The knight to f3 — the alternative was the knight takes c4, e4, then a check on h4 forcing the knight back and the bishop takes c5, where Black is also clearly better, White struggling with development and tons of weaknesses; but the rook to e8 is even stronger. Funnily, the rook takes c4 is actually an inaccuracy by the engine — a great example of the gulf between engine and human thinking; ninety-nine percent of people would take on e4 automatically, but there's an even stronger move.",
+   "spoken": "So e5, the pawns trade, White plays the knight takes e5, you push c5 to shatter the centre and weaken the knight, then d5, and the rook to e8, which I can now see is the best move. The knight to f3 — the alternative was the knight takes c4, e4, then a check on h4 forcing the knight back and the bishop takes c5, where Black is also clearly better, White struggling with development and tons of weaknesses; but the rook to e8 is even stronger. Funnily, the rook takes c4 is actually an inaccuracy by the engine — a great example of the gulf between engine and human thinking; ninety-nine percent of people would take on e4 automatically, but there's an even stronger move.",
    "reanchor": true
   }
  ]

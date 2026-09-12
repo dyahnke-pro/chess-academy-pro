@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "Against a strong opponent we answer the king's-pawn with c5 — the Sicilian, heading for the Accelerated Dragon."
+   "spoken": "Against a strong opponent you answer the king's-pawn with c5 — the Sicilian, heading for the Accelerated Dragon."
   },
   {
    "ply": 3,
@@ -43,7 +43,7 @@
     "d4",
     "cxd4"
    ],
-   "spoken": "White strikes with d4 and we take on d4.",
+   "spoken": "White strikes with d4 and you take on d4.",
    "reanchor": true
   },
   {
@@ -54,7 +54,7 @@
     "Nxd4",
     "g6"
    ],
-   "spoken": "White recaptures with the knight, and we fianchetto with the pawn to g6.",
+   "spoken": "White recaptures with the knight, and you fianchetto with the pawn to g6.",
    "reanchor": true
   },
   {
@@ -83,7 +83,7 @@
     "Be3",
     "Nf6"
    ],
-   "spoken": "White plays the bishop to e3, and we develop the knight to f6.",
+   "spoken": "White plays the bishop to e3, and you develop the knight to f6.",
    "reanchor": true
   },
   {
@@ -102,7 +102,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 15,
@@ -111,7 +111,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles. There's a specific reason White usually puts the bishop on c4 in the Accelerated — to stop the freeing break we're about to make."
+   "spoken": "White castles. There's a specific reason White usually puts the bishop on c4 in the Accelerated — to stop the freeing break you're about to make."
   },
   {
    "ply": 16,
@@ -120,7 +120,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The pawn to d5! We exploit the drawback of White's setup — and in the Accelerated, if you get a good version of d5 in, you solve all your opening problems."
+   "spoken": "The pawn to d5! You exploit the drawback of White's setup — and in the Accelerated, if you get a good version of d5 in, you solve all your opening problems."
   },
   {
    "ply": 17,
@@ -129,7 +129,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "White captures on d5. Our pieces are active and it's equal — White isn't worse with accuracy, but can drift worse if careless."
+   "spoken": "White captures on d5. Your pieces are active and it's equal — White isn't worse with accuracy, but can drift worse if careless."
   },
   {
    "ply": 18,
@@ -156,7 +156,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "We recapture with the b-pawn."
+   "spoken": "You recapture with the b-pawn."
   },
   {
    "ply": 21,
@@ -165,7 +165,7 @@
    "line": [
     "Bd4"
    ],
-   "spoken": "White plays the bishop to d4, and it's equal — so we must manufacture winning chances. One option is the knight takes c3, forcing a pawn recapture that ruins White's queenside, though both structures suffer. A more circumspect idea is the bishop takes d4, the queen recaptures, then the queen to b6, forcing a queen trade on our terms to fix the structure — though that may just draw."
+   "spoken": "White plays the bishop to d4, and it's equal — so you must manufacture winning chances. One option is the knight takes c3, forcing a pawn recapture that ruins White's queenside, though both structures suffer. A more circumspect idea is the bishop takes d4, the queen recaptures, then the queen to b6, forcing a queen trade on your terms to fix the structure — though that may just draw."
   },
   {
    "ply": 22,
@@ -174,7 +174,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "We choose the knight takes c3 — it creates more imbalance and is the simpler move."
+   "spoken": "You choose the knight takes c3 — it creates more imbalance and is the simpler move."
   },
   {
    "ply": 23,
@@ -192,7 +192,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "That's fine — we take, ruining White's pawn structure."
+   "spoken": "That's fine — you take, ruining White's pawn structure."
   },
   {
    "ply": 25,
@@ -201,7 +201,7 @@
    "line": [
     "Qxd8"
    ],
-   "spoken": "White plays the queen takes d8 — not a good move: it hands us the d-file and plays for a draw."
+   "spoken": "White plays the queen takes d8 — not a good move: it hands you the d-file and plays for a draw."
   },
   {
    "ply": 27,
@@ -211,7 +211,7 @@
     "Rxd8",
     "bxc3"
    ],
-   "spoken": "We recapture on d8, and White recaptures the bishop. He's playing for a draw — now we devise a strategy to play for the win.",
+   "spoken": "You recapture on d8, and White recaptures the bishop. He's playing for a draw — now you devise a strategy to play for the win.",
    "reanchor": true
   },
   {
@@ -239,7 +239,7 @@
    "line": [
     "Bxc2"
    ],
-   "spoken": "We calculate: the bishop takes c2, and if the bishop takes c6, the rook to c8 skewers the bishop and the pawn. We absolutely take — and a bonus is that White can no longer swing a rook to b1 or to d1, so our bishop is superb."
+   "spoken": "You calculate: the bishop takes c2, and if the bishop takes c6, the rook to c8 skewers the bishop and the pawn. You absolutely take — and a bonus is that White can no longer swing a rook to b1 or to d1, so your bishop is superb."
   },
   {
    "ply": 31,
@@ -248,7 +248,7 @@
    "line": [
     "Rfe1"
    ],
-   "spoken": "White plays the rook to e1. Our bishop is so strong we protect it at all costs, unless White chases it away properly."
+   "spoken": "White plays the rook to e1. Your bishop is so strong you protect it at all costs, unless White chases it away properly."
   },
   {
    "ply": 32,
@@ -257,14 +257,14 @@
    "line": [
     "e6"
    ],
-   "spoken": "We play the pawn to e6, defending it — the king to f8 was also fine and it barely matters."
+   "spoken": "You play the pawn to e6, defending it — the king to f8 was also fine and it barely matters."
   },
   {
    "ply": 31,
    "t": 329.5,
    "fen": "r2r2k1/p3pp1p/2p3p1/8/8/2P2B2/P1b2PPP/R3R1K1 b - - 1 16",
    "line": [],
-   "spoken": "The rook to d2 would have been premature, because our e7-pawn was hanging — so we do need to defend it.",
+   "spoken": "The rook to d2 would have been premature, because your e7-pawn was hanging — so you do need to defend it.",
    "reanchor": true
   },
   {
@@ -282,7 +282,7 @@
    "t": 339,
    "fen": "r2r2k1/p3pp1p/2p3p1/5b2/8/2P2B2/P1P2PPP/R4RK1 b - - 2 15",
    "line": [],
-   "spoken": "Why bother defending c6 when we can just take White's pawn instead?",
+   "spoken": "Why bother defending c6 when you can just take White's pawn instead?",
    "reanchor": true
   },
   {
@@ -305,7 +305,7 @@
    "line": [
     "Rac8"
    ],
-   "spoken": "The rook to c8, then the rook takes c3, and we're a pawn up in the endgame, with many dark-square weaknesses to exploit.",
+   "spoken": "The rook to c8, then the rook takes c3, and you're a pawn up in the endgame, with many dark-square weaknesses to exploit.",
    "reanchor": true
   },
   {
@@ -315,7 +315,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "We'll take on c3 against every move except the bishop to e4 — then we take the bishop first. At this level, never play a move automatically; always watch for in-between moves.",
+   "spoken": "You'll take on c3 against every move except the bishop to e4 — then you take the bishop first. At this level, never play a move automatically; always watch for in-between moves.",
    "reanchor": true
   },
   {
@@ -335,7 +335,7 @@
    "line": [
     "Rac1"
    ],
-   "spoken": "White's big idea is to pin our rook and then pick off the bishop. The real problem isn't the bishop — it's that the c3-rook is undefended; if it were defended, the bishop could go anywhere. The most efficient, safe way is the rook to d7 and then c7.",
+   "spoken": "White's big idea is to pin your rook and then pick off the bishop. The real problem isn't the bishop — it's that the c3-rook is undefended; if it were defended, the bishop could go anywhere. The most efficient, safe way is the rook to d7 and then c7.",
    "reanchor": true
   },
   {
@@ -375,7 +375,7 @@
    "line": [
     "Bf3"
    ],
-   "spoken": "Now the rook is defended by two rooks and White is in huge trouble. White tries the bishop to f3 to keep pieces on — so where do we place our bishop most accurately?",
+   "spoken": "Now the rook is defended by two rooks and White is in huge trouble. White tries the bishop to f3 to keep pieces on — so where do you place your bishop most accurately?",
    "reanchor": true
   },
   {
@@ -398,7 +398,7 @@
     "Rcc1",
     "Bc2"
    ],
-   "spoken": "We don't want the bishop on a square where it can be easily attacked.",
+   "spoken": "You don't want the bishop on a square where it can be easily attacked.",
    "reanchor": true
   },
   {
@@ -458,7 +458,7 @@
    "line": [
     "Ra3"
    ],
-   "spoken": "The rook to a3 — the Rubinstein technique of fronting a pawn and attacking it while blockading. If White plays the rook to e1, we use the pin ourselves with the bishop to b3, pick off the second pawn, and push the passer home. Rubinstein's endgames, including his famous ones against Lasker, are the model for this.",
+   "spoken": "The rook to a3 — the Rubinstein technique of fronting a pawn and attacking it while blockading. If White plays the rook to e1, you use the pin yourself with the bishop to b3, pick off the second pawn, and push the passer home. Rubinstein's endgames, including his famous ones against Lasker, are the model for this.",
    "reanchor": true
   },
   {
@@ -468,7 +468,7 @@
    "line": [
     "Re2"
    ],
-   "spoken": "White plays the rook to e2 — and the bishop to d1 is the crushing skewer; if White defends, we trade into a trivially winning pawn endgame. There the technique is: find White's weakness — the isolated h3-pawn — and tie down his king by marching ours toward h4, so his king is stuck near g2 and h2. Then advance our pawns carefully, avoiding a swiss-cheese structure: don't push into an e4 or f4 fix. Start with the pawn to e5, then f5 and g5, and the king takes the route to the h-file — the rare exception to centralizing the king. A patient, winning grind.",
+   "spoken": "White plays the rook to e2 — and the bishop to d1 is the crushing skewer; if White defends, you trade into a trivially winning pawn endgame. There the technique is: find White's weakness — the isolated h3-pawn — and tie down his king by marching yours toward h4, so his king is stuck near g2 and h2. Then advance your pawns carefully, avoiding a swiss-cheese structure: don't push into an e4 or f4 fix. Start with the pawn to e5, then f5 and g5, and the king takes the route to the h-file — the rare exception to centralizing the king. A patient, winning grind.",
    "reanchor": true
   },
   {
@@ -476,7 +476,7 @@
    "t": 1235,
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
    "line": [],
-   "spoken": "We skip ahead to the endgame — my technique could have been cleaner, but it did the trick.",
+   "spoken": "You skip ahead to the endgame — my technique could have been cleaner, but it did the trick.",
    "reanchor": true
   },
   {

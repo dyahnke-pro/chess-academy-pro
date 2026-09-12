@@ -35,7 +35,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We punish it with d5 at once. This is precisely why the Grand Prix Attack is supposed to start with the knight to c3 — to stop this very move. Skip it, and d5 is the refutation.",
+   "spoken": "You punish it with d5 at once. This is precisely why the Grand Prix Attack is supposed to start with the knight to c3 — to stop this very move. Skip it, and d5 is the refutation.",
    "kind": "main",
    "teaches": [
     "d5 punishes an early f4"
@@ -65,7 +65,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "After the capture we do NOT slide into a Scandinavian with the queen — that would throw away the whole point of d5.",
+   "spoken": "After the capture you do NOT slide into a Scandinavian with the queen — that would throw away the whole point of d5.",
    "teaches": [
     "don’t recapture with the queen here"
    ]
@@ -91,7 +91,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "So we safely recapture on d5, and here the queen would sit far more securely than in a normal Scandinavian — White has no second knight to hit it from c3.",
+   "spoken": "So you safely recapture on d5, and here the queen would sit far more securely than in a normal Scandinavian — White has no second knight to hit it from c3.",
    "kind": "main",
    "teaches": [
     "the point: no Nc3 available to harass the queen"
@@ -104,7 +104,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The f4-pawn hangs, but grabbing it isn't the spirit of the line. The prudent move is to drop the knight back to b6 — after which a later c4 nearly traps the bishop and forces an awkward check. And we're glad to keep White's dark-squared bishop terrible, hemmed in by its own f4-pawn.",
+   "spoken": "The f4-pawn hangs, but grabbing it isn't the spirit of the line. The prudent move is to drop the knight back to b6 — after which a later c4 nearly traps the bishop and forces an awkward check. And you're glad to keep White's dark-squared bishop terrible, hemmed in by its own f4-pawn.",
    "kind": "main",
    "teaches": [
     "don’t contort for a pawn you want left on the board"
@@ -117,7 +117,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "The knight to b6 is the practical choice, forcing the bishop to decide. That f4-pawn is actually in our favor — it dries up White's kingside and buries his bishop — and we own the d4-square, which is the whole job of the c5-pawn.",
+   "spoken": "The knight to b6 is the practical choice, forcing the bishop to decide. That f4-pawn is actually in your favor — it dries up White's kingside and buries his bishop — and you own the d4-square, which is the whole job of the c5-pawn.",
    "kind": "main",
    "teaches": [
     "a cramping enemy pawn can be your asset"
@@ -141,7 +141,7 @@
     "Kxf7",
     "Nf3"
    ],
-   "spoken": "We take, and the refutation is castling by hand. Since the king has moved we build the shelter from scratch — clear the bishop, swing a rook to f8, tuck the king to g8. Short term, the f3-knight eyes e5, but any knight check we simply answer by stepping the king to g8; we only avoid the blunder of the bishop to g4.",
+   "spoken": "You take, and the refutation is castling by hand. Since the king has moved you build the shelter from scratch — clear the bishop, swing a rook to f8, tuck the king to g8. Short term, the f3-knight eyes e5, but any knight check you simply answer by stepping the king to g8; you only avoid the blunder of the bishop to g4.",
    "kind": "plan",
    "teaches": [
     "manual castling",
@@ -180,7 +180,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The bishop to g7, and even a knight check we'd meet calmly, because White is simply out of attackers — the c1-bishop is buried and the c3-knight has no prospects. Next comes the rook to f8 and the manual castling is complete.",
+   "spoken": "The bishop to g7, and even a knight check you'd meet calmly, because White is simply out of attackers — the c1-bishop is buried and the c3-knight has no prospects. Next comes the rook to f8 and the manual castling is complete.",
    "kind": "main",
    "teaches": [
     "count the attackers — the defense holds"
@@ -193,7 +193,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "White has to throw in f5 to keep any hope alive; its point is to rip open the file. Taking with the bishop plays into his hands — it runs into g4 and a crushing double check. If we capture, we capture with the pawn.",
+   "spoken": "White has to throw in f5 to keep any hope alive; its point is to rip open the file. Taking with the bishop plays into his hands — it runs into g4 and a crushing double check. If you capture, you capture with the pawn.",
    "kind": "main",
    "teaches": [
     "open-file sac: capture with the pawn, not the bishop"
@@ -206,7 +206,7 @@
    "line": [
     "gxf5"
    ],
-   "spoken": "So we take with the pawn — the principled choice. Don't fear ghosts: if there's no forced mate, an uncomfortable-looking king is nothing to be afraid of.",
+   "spoken": "So you take with the pawn — the principled choice. Don't fear ghosts: if there's no forced mate, an uncomfortable-looking king is nothing to be afraid of.",
    "kind": "main",
    "teaches": [
     "no forced mate means no reason to panic"
@@ -219,7 +219,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "g4 just loses on the spot — pure trickery — so of course we don't take it.",
+   "spoken": "g4 just loses on the spot — pure trickery — so of course you don't take it.",
    "kind": "main"
   },
   {
@@ -229,7 +229,7 @@
    "line": [
     "Rf8"
    ],
-   "spoken": "We follow through with the rook to f8: castling by hand is complete, and the win won't be far behind.",
+   "spoken": "You follow through with the rook to f8: castling by hand is complete, and the win won't be far behind.",
    "kind": "main"
   },
   {

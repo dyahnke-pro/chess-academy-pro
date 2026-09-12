@@ -134,7 +134,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "Here's the payoff: with the knight on e2, the bishop capture on c3 is completely harmless — we just recapture with the knight. With a knight on f3 instead, that same capture actually wins a pawn, a very common blunder. And a bigger lesson: don't defend a pawn by pinning. Meeting a threat on e4 with a pin looks clever, but Black plays h6, and after the bishop retreats, g5 breaks the pin and wins the pawn outright — you can't recapture with the knight, so you've made two bishop moves only to swap it for a knight that moved once. The right, and nearly only, way to hold e4 is the queen to e2.",
+   "spoken": "Here's the payoff: with the knight on e2, the bishop capture on c3 is completely harmless — you just recapture with the knight. With a knight on f3 instead, that same capture actually wins a pawn, a very common blunder. And a bigger lesson: don't defend a pawn by pinning. Meeting a threat on e4 with a pin looks clever, but Black plays h6, and after the bishop retreats, g5 breaks the pin and wins the pawn outright — you can't recapture with the knight, so you've made two bishop moves only to swap it for a knight that moved once. The right, and nearly only, way to hold e4 is the queen to e2.",
    "kind": "plan",
    "teaches": [
     "don’t defend a pawn with a pin",
@@ -155,7 +155,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The whole reason for the knight on e2 rather than f3: with it on f3, Black plays d5 and starts leaning on the knight — an annoying pressure the e2 setup avoids, so after the knight to f6 we simply castle.",
+   "spoken": "The whole reason for the knight on e2 rather than f3: with it on f3, Black plays d5 and starts leaning on the knight — an annoying pressure the e2 setup avoids, so after the knight to f6 you simply castle.",
    "kind": "plan",
    "teaches": [
     "Ne2 dodges the d5 pressure"
@@ -287,7 +287,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Now watch the flexibility: earlier I recommended the knight to e2, but the situation has changed — Black's bishop is on e7, not b4 — so we develop to f3 instead. Adapting your development to the position is a vital opening skill.",
+   "spoken": "Now watch the flexibility: earlier I recommended the knight to e2, but the situation has changed — Black's bishop is on e7, not b4 — so you develop to f3 instead. Adapting your development to the position is a vital opening skill.",
    "kind": "review",
    "teaches": [
     "adapt development to the position"
@@ -301,7 +301,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "This is exactly why system players struggle — a London or Torre repeats the same moves and never learns to adapt in the opening. After the knight to f3 and the reply, we play the queen to e2.",
+   "spoken": "This is exactly why system players struggle — a London or Torre repeats the same moves and never learns to adapt in the opening. After the knight to f3 and the reply, you play the queen to e2.",
    "kind": "review",
    "teaches": [
     "why system openings limit growth"

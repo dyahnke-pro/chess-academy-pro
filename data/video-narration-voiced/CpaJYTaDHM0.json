@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We open another e4 game."
+   "spoken": "You open another e4 game."
   },
   {
    "ply": 3,
@@ -34,7 +34,7 @@
     "Nc6",
     "Bb5"
    ],
-   "spoken": "The knight develops to f3, Black answers with the knight to c6, and we pin with the bishop to b5 — the Ruy Lopez, our main weapon."
+   "spoken": "The knight develops to f3, Black answers with the knight to c6, and you pin with the bishop to b5 — the Ruy Lopez, your main weapon."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "There are many ways to face the Berlin, but we go straight in — heading for the Berlin endgame, to show it's more than a draw."
+   "spoken": "There are many ways to face the Berlin, but you go straight in — heading for the Berlin endgame, to show it's more than a draw."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Previously we'd prepare with c3; now, at a higher level, we play the more topical immediate d4."
+   "spoken": "Previously you'd prepare with c3; now, at a higher level, you play the more topical immediate d4."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Black takes on d4. We open the centre precisely because Black has played passively."
+   "spoken": "Black takes on d4. You open the centre precisely because Black has played passively."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "We recapture with the knight."
+   "spoken": "You recapture with the knight."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3, opening things up to press our lead in development."
+   "spoken": "You develop the knight to c3, opening things up to press your lead in development."
   },
   {
    "ply": 14,
@@ -124,7 +124,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "Theory says take on c6 with the bishop, keeping our knight strongly centralized."
+   "spoken": "Theory says take on c6 with the bishop, keeping your knight strongly centralized."
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "Black recaptures with the b-pawn, taking a defect into his queenside structure. Now the point: Black wants ...c5 to kick our knight, and we'd love to answer with the knight to f5 — but playing it right now lets Black trade it, and recapturing with a pawn would wreck our kingside and pull a pawn from the centre; b4 would be artificial. We don't need to prevent ...c5 at all — we prepare our response to it. Prophylaxis cuts both ways: you can stop a move, or ready an answer to it. The queen to f3 is best — it improves a piece and readies the knight to f5 the moment ...c5 arrives."
+   "spoken": "Black recaptures with the b-pawn, taking a defect into his queenside structure. Now the point: Black wants ...c5 to kick your knight, and you'd love to answer with the knight to f5 — but playing it right now lets Black trade it, and recapturing with a pawn would wreck your kingside and pull a pawn from the centre; b4 would be artificial. You don't need to prevent ...c5 at all — you prepare your response to it. Prophylaxis cuts both ways: you can stop a move, or ready an answer to it. The queen to f3 is best — it improves a piece and readies the knight to f5 the moment ...c5 arrives."
   }
  ]
 }

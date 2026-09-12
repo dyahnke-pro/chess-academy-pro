@@ -51,7 +51,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "we exploit the premature development of White's bishop to c4? We play e6 — an idea we'd quite possibly play even if the bishop weren't on c4."
+   "spoken": "you exploit the premature development of White's bishop to c4? You play e6 — an idea you'd quite possibly play even if the bishop weren't on c4."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "And we go d5 with tempo — so the bishop looks really, really dumb here."
+   "spoken": "And you go d5 with tempo — so the bishop looks really, really dumb here."
   },
   {
    "ply": 10,
@@ -106,7 +106,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Now we have a slightly sexier way of developing. Some of you know the rook to e1 is an idea for White, so you could get the bishop out to e7 first, so the rook to e1 isn't a check, and then castle. But to play very ambitiously — remember that just because a move isn't effective in one position doesn't mean you shouldn't consider it in another. When White pushes the f-pawn, one of its main weaknesses is that it creates"
+   "spoken": "Now you have a slightly sexier way of developing. Some of you know the rook to e1 is an idea for White, so you could get the bishop out to e7 first, so the rook to e1 isn't a check, and then castle. But to play very ambitiously — remember that just because a move isn't effective in one position doesn't mean you shouldn't consider it in another. When White pushes the f-pawn, one of its main weaknesses is that it creates"
   },
   {
    "ply": 14,
@@ -142,7 +142,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "this initially — when our opponent castled, at first I saw c4 with the bishop-to-c5 idea, but this is amazing. And now, if you want to take it to the next level, how should we deal with the knight to e5?"
+   "spoken": "this initially — when your opponent castled, at first I saw c4 with the bishop-to-c5 idea, but this is amazing. And now, if you want to take it to the next level, how should you deal with the knight to e5?"
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "bxa4"
    ],
-   "spoken": "This is really cool — we can give the queen to b6 with check and then take on a4; but if you really want to rub it in your opponent's face, we can just take on a4."
+   "spoken": "This is really cool — you can give the queen to b6 with check and then take on a4; but if you really want to rub it in your opponent's face, you can just take on a4."
   },
   {
    "ply": 20,
@@ -197,7 +197,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Between the knight to e4 and the knight to g4, I like the knight to e4 more, because it also closes the e-file, so White can't defend the f2-square with check — he can still defend f2 with his queen, but not with check — and this arrangement creates all sorts of tactical concepts. The bishop to g4 is an interesting idea: the bishop to g4, the queen takes g4, and we're very close to the queen to g1 with check, and if the rook takes g1 there's mate on f2 — but after the bishop to g4, the queen to g4, the queen to g1, there's the king takes. So you set it up: h5 to prepare the bishop to g4, or, more elegantly, the bishop to c5, which also prepares the bishop to g4 — and I think we win precisely that way. He plays h3 — a good move — but now we can take it to the next level: since we haven't castled yet, we can use that to our advantage with h5, and now the bishop to g4 is a threat, because after h-takes-g4 you recapture with the h-pawn, which is a check against the king, essentially checkmate. And there we go, the bishop to g4 — a total beatdown; that's why you need an opening repertoire at this rating. The queen to e3 is a nice move I honestly didn't see, but let's decline the draw; our instinct here should be to simplify. The moment he played h3, you should have noted that the g3-square is now a weakness — so in your mind, if the queen ever moves away from f3, there's a fork on g3. Combining that observation with this position, the simplest is just to take the queen and then deliver a nice little fork on g3 — we'll be up a rook, and the rest is really easy.",
+   "spoken": "Between the knight to e4 and the knight to g4, I like the knight to e4 more, because it also closes the e-file, so White can't defend the f2-square with check — he can still defend f2 with his queen, but not with check — and this arrangement creates all sorts of tactical concepts. The bishop to g4 is an interesting idea: the bishop to g4, the queen takes g4, and you're very close to the queen to g1 with check, and if the rook takes g1 there's mate on f2 — but after the bishop to g4, the queen to g4, the queen to g1, there's the king takes. So you set it up: h5 to prepare the bishop to g4, or, more elegantly, the bishop to c5, which also prepares the bishop to g4 — and I think you win precisely that way. He plays h3 — a good move — but now you can take it to the next level: since you haven't castled yet, you can use that to your advantage with h5, and now the bishop to g4 is a threat, because after h-takes-g4 you recapture with the h-pawn, which is a check against the king, essentially checkmate. And there you go, the bishop to g4 — a total beatdown; that's why you need an opening repertoire at this rating. The queen to e3 is a nice move I honestly didn't see, but let's decline the draw; your instinct here should be to simplify. The moment he played h3, you should have noted that the g3-square is now a weakness — so in your mind, if the queen ever moves away from f3, there's a fork on g3. Combining that observation with this position, the simplest is just to take the queen and then deliver a nice little fork on g3 — you'll be up a rook, and the rest is really easy.",
    "reanchor": true
   },
   {
@@ -266,7 +266,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "pretty spoiled for choice — we could play a6 to prepare b5, for example, which seems like a good approach; the bishop is just very misplaced. The knight to f3, d5, trade.",
+   "spoken": "pretty spoiled for choice — you could play a6 to prepare b5, for example, which seems like a good approach; the bishop is just very misplaced. The knight to f3, d5, trade.",
    "reanchor": true
   },
   {
@@ -274,7 +274,7 @@
    "t": 524,
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "What if they go e5? Then there's a tactic with the bishop on c4 and a queen on h4, so e5 isn't even possible. But don't think of the point of our play as trapping the bishop — we're not trying to trap it, we're trying to gain control of the centre; the point of e6 and d5 isn't that I'm seriously flirting with trapping his bishop, it's that we're gaining control of the centre. Our opponent should have gone b5, where the bishop is at least doing something; the setup I recommend is to get the bishop out to d6, let White castle, and then continue.",
+   "spoken": "What if they go e5? Then there's a tactic with the bishop on c4 and a queen on h4, so e5 isn't even possible. But don't think of the point of your play as trapping the bishop — you're not trying to trap it, you're trying to gain control of the centre; the point of e6 and d5 isn't that I'm seriously flirting with trapping his bishop, it's that you're gaining control of the centre. Your opponent should have gone b5, where the bishop is at least doing something; the setup I recommend is to get the bishop out to d6, let White castle, and then continue.",
    "reanchor": true
   }
  ]

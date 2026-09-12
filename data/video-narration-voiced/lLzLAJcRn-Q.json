@@ -160,7 +160,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "If Black recaptures the other way with the b-pawn — rare — we just develop the knight to c3, and Black's only try to generate anything is d5.",
+   "spoken": "If Black recaptures the other way with the b-pawn — rare — you just develop the knight to c3, and Black's only try to generate anything is d5.",
    "kind": "review",
    "reanchor": true
   },
@@ -814,7 +814,7 @@
    "t": 992,
    "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQ1RK1 b kq - 1 7",
    "line": [],
-   "spoken": "The purpose of c3 is to prepare d4, slicing away the bishop's control of the f2-square. It looks to weaken the d3-pawn, but Black has no central pawns left to exploit it. Against everything, the recipe is d4; the one prophylactic move Black has is the bishop to b6 to stop it, and then we support the centre with the knight to d2 and always meet a knight to g4 with d4. And never fear the pawn break c5 — the knight to c4 answers it every time, keeping our centre intact.",
+   "spoken": "The purpose of c3 is to prepare d4, slicing away the bishop's control of the f2-square. It looks to weaken the d3-pawn, but Black has no central pawns left to exploit it. Against everything, the recipe is d4; the one prophylactic move Black has is the bishop to b6 to stop it, and then you support the centre with the knight to d2 and always meet a knight to g4 with d4. And never fear the pawn break c5 — the knight to c4 answers it every time, keeping your centre intact.",
    "kind": "review",
    "teaches": [
     "c3 prepares d4",
@@ -835,7 +835,7 @@
    "t": 1447.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "The condensed version, from the top: the Stafford starts as the Petrov, Black plays the knight to c6, we take and play d3.",
+   "spoken": "The condensed version, from the top: the Stafford starts as the Petrov, Black plays the knight to c6, you take and play d3.",
    "kind": "review",
    "reanchor": true
   },
@@ -867,7 +867,7 @@
     "dxc6",
     "d3"
    ],
-   "spoken": "Black develops the bishop to c5, we play the bishop to e2 to smother the knight-to-g4 jump.",
+   "spoken": "Black develops the bishop to c5, you play the bishop to e2 to smother the knight-to-g4 jump.",
    "kind": "review",
    "reanchor": true
   },
@@ -898,7 +898,7 @@
     "c3",
     "h5"
    ],
-   "spoken": "He plays h5 hoping we castle — we don't. We play c3 to prepare d4, and if the knight ever hops to g4, d4 is the immediate answer.",
+   "spoken": "He plays h5 hoping you castle — you don't. You play c3 to prepare d4, and if the knight ever hops to g4, d4 is the immediate answer.",
    "kind": "review",
    "teaches": [
     "the summary sequence"
@@ -921,7 +921,7 @@
     "Nd2",
     "Bb6"
    ],
-   "spoken": "Against everything but the bishop to b6 we play d4; b6 is the only move that stops it, and we meet it with the knight to d2, defending the centre.",
+   "spoken": "Against everything but the bishop to b6 you play d4; b6 is the only move that stops it, and you meet it with the knight to d2, defending the centre.",
    "kind": "review",
    "reanchor": true
   },

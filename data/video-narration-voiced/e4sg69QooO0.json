@@ -60,7 +60,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "After the main-line exchanges we have three good replies — the bishop to f5, the knight to d7, or the knight to f6.",
+   "spoken": "After the main-line exchanges you have three good replies — the bishop to f5, the knight to d7, or the knight to f6.",
    "kind": "main",
    "teaches": [
     "the three Caro-Kann main replies"
@@ -96,7 +96,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "We develop with the bishop to f5, pressuring the knight. No need to rush to punish f3 — it's not a race, and White pays for it later.",
+   "spoken": "You develop with the bishop to f5, pressuring the knight. No need to rush to punish f3 — it's not a race, and White pays for it later.",
    "kind": "main",
    "teaches": [
     "develop first; the weakness keeps"
@@ -109,7 +109,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "White's bishop to c4 tempts us to capture on e4, but taking there is risky — it opens the f-file and hands White real compensation. So we simply keep developing.",
+   "spoken": "White's bishop to c4 tempts you to capture on e4, but taking there is risky — it opens the f-file and hands White real compensation. So you simply keep developing.",
    "kind": "main",
    "teaches": [
     "don’t grab a pawn that opens a file at you"
@@ -164,7 +164,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "We recapture toward the center and, as a bonus, open the c-file for a future rook.",
+   "spoken": "You recapture toward the center and, as a bonus, open the c-file for a future rook.",
    "kind": "main",
    "teaches": [
     "recapture toward the center"

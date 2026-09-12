@@ -150,7 +150,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": "Now the Ruy-Lopez knight tour: Nd2-f1 and onward, angling the knight toward the powerful f5 square. We don't jump in at once — the bishop guards it — but the threat looms.",
+   "spoken": "Now the Ruy-Lopez knight tour: Nd2-f1 and onward, angling the knight toward the powerful f5 square. You don't jump in at once — the bishop guards it — but the threat looms.",
    "kind": "main",
    "teaches": "Reroute the knight via f1 to g3, targeting f5; the threat pressures even before you land it."
   },
@@ -170,7 +170,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "When Ng4 pokes at us, the second point of c3 arrives: d4 intercepts the bishop with tempo. That's the Italian's resilience — the same pawn that prepared the break also parries the threat.",
+   "spoken": "When Ng4 pokes at you, the second point of c3 arrives: d4 intercepts the bishop with tempo. That's the Italian's resilience — the same pawn that prepared the break also parries the threat.",
    "kind": "main",
    "teaches": "A prepared d4 in the Italian both opens the centre and answers threats with tempo."
   },
@@ -182,7 +182,7 @@
     "exd4",
     "cxd4"
    ],
-   "spoken": "And Black hands us the whole centre — after h3 chases the knight, we're simply better with a free hand.",
+   "spoken": "And Black hands you the whole centre — after h3 chases the knight, you're simply better with a free hand.",
    "kind": "main"
   },
   {

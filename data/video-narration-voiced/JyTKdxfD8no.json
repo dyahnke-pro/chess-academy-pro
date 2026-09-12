@@ -73,7 +73,7 @@
    "line": [
     "exf4"
    ],
-   "spoken": "Black takes on f4. This is the hot-button moment, because we have to reckon with a queen check on h4."
+   "spoken": "Black takes on f4. This is the hot-button moment, because you have to reckon with a queen check on h4."
   },
   {
    "ply": 11,
@@ -91,7 +91,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6, holding the center — and we still have to keep an eye on that queen check."
+   "spoken": "Black plays d6, holding the center — and you still have to keep an eye on that queen check."
   },
   {
    "ply": 13,
@@ -109,7 +109,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "Black captures on d4 and we've backed ourselves into a corner — down a knight, with the queen check on h4 still looming. We can't meet g3 with a recapture because both our rook and the pawn would hang.",
+   "spoken": "Black captures on d4 and you've backed yourself into a corner — down a knight, with the queen check on h4 still looming. You can't meet g3 with a recapture because both your rook and the pawn would hang.",
    "reanchor": true
   },
   {
@@ -119,7 +119,7 @@
    "line": [
     "Qf3"
    ],
-   "spoken": "A queen to f3 begins the recovery: now, if the queen comes to h4 and we answer g3 and the pawns trade, both the rook and the pawn are defended.",
+   "spoken": "A queen to f3 begins the recovery: now, if the queen comes to h4 and you answer g3 and the pawns trade, both the rook and the pawn are defended.",
    "reanchor": true
   },
   {
@@ -129,7 +129,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "Black captures on c3 to trade — but that's already a small win for us, because that bishop was a monster. When you're down a piece, the priority is development."
+   "spoken": "Black captures on c3 to trade — but that's already a small win for you, because that bishop was a monster. When you're down a piece, the priority is development."
   },
   {
    "ply": 17,
@@ -138,7 +138,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": "We recapture with the d-pawn on c3 — the fastest route to quick development. We'll castle long, since the kingside is already wrecked."
+   "spoken": "You recapture with the d-pawn on c3 — the fastest route to quick development. You'll castle long, since the kingside is already wrecked."
   },
   {
    "ply": 18,
@@ -147,7 +147,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Black plays g5 to defend the f4 pawn — another subtle mistake, because we're castling queenside and if his king goes short he'll pay dearly for that advanced pawn."
+   "spoken": "Black plays g5 to defend the f4 pawn — another subtle mistake, because you're castling queenside and if his king goes short he'll pay dearly for that advanced pawn."
   },
   {
    "ply": 19,
@@ -156,7 +156,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "A bishop to d2, prioritizing development and king safety so we can start attacking. It isn't pretty, but we need to castle as fast as possible."
+   "spoken": "A bishop to d2, prioritizing development and king safety so you can start attacking. It isn't pretty, but you need to castle as fast as possible."
   },
   {
    "ply": 21,
@@ -166,7 +166,7 @@
     "Be6",
     "O-O-O"
    ],
-   "spoken": "Castling long is the fastest way to safety. I don't care in the slightest about the a2 pawn — if Black grabs it we play b3 and trap the bishop; when you're down a piece you can't fret over a single pawn.",
+   "spoken": "Castling long is the fastest way to safety. I don't care in the slightest about the a2 pawn — if Black grabs it you play b3 and trap the bishop; when you're down a piece you can't fret over a single pawn.",
    "reanchor": true
   },
   {
@@ -196,7 +196,7 @@
     "Nf6",
     "hxg5"
    ],
-   "spoken": "We take on g5 to make that foot collapse. I know Black wants a bishop to g4, pinning my queen to the rook, but we're ready to give the exchange to topple his kingside.",
+   "spoken": "You take on g5 to make that foot collapse. I know Black wants a bishop to g4, pinning my queen to the rook, but you're ready to give the exchange to topple his kingside.",
    "reanchor": true
   },
   {
@@ -206,7 +206,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Black plays the bishop to g4, and we'll sacrifice another exchange to make his whole kingside cave in.",
+   "spoken": "Black plays the bishop to g4, and you'll sacrifice another exchange to make his whole kingside cave in.",
    "reanchor": true
   },
   {
@@ -216,7 +216,7 @@
    "line": [
     "Qxf4"
    ],
-   "spoken": "The queen captures on f4 — we have to preserve the queen while Black grabs the rook."
+   "spoken": "The queen captures on f4 — you have to preserve the queen while Black grabs the rook."
   },
   {
    "ply": 28,
@@ -225,7 +225,7 @@
    "line": [
     "Bxd1"
    ],
-   "spoken": "Black takes our rook, landing on d1, and now we choose what to capture — because something very cool happens here.",
+   "spoken": "Black takes your rook, landing on d1, and now you choose what to capture — because something very cool happens here.",
    "reanchor": true
   },
   {
@@ -235,7 +235,7 @@
    "line": [
     "gxf6"
    ],
-   "spoken": "After we recapture on f6, Black's bishop is trapped: it retreats to h5, but we've opened the h-file and our rook covers that square. That's the kind of thing that just falls into your lap when you play aggressively and hunt for chances.",
+   "spoken": "After you recapture on f6, Black's bishop is trapped: it retreats to h5, but you've opened the h-file and your rook covers that square. That's the kind of thing that just falls into your lap when you play aggressively and hunt for chances.",
    "reanchor": true
   },
   {
@@ -265,7 +265,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Now we act on our strong f6 pawn — a great anchor for our pieces. The question is what Black wants: he won't castle kingside, since we'd mate him at once, so he'll try to castle queenside via a queen to d7, and we must stop that. A bishop to g4 tempts, but it has a drawback.",
+   "spoken": "Now you act on your strong f6 pawn — a great anchor for your pieces. The question is what Black wants: he won't castle kingside, since you'd mate him at once, so he'll try to castle queenside via a queen to d7, and you must stop that. A bishop to g4 tempts, but it has a drawback.",
    "reanchor": true
   },
   {
@@ -295,7 +295,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "And we go to h3 with the bishop.",
+   "spoken": "And you go to h3 with the bishop.",
    "reanchor": true
   },
   {
@@ -305,7 +305,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": "Black's knight comes to g6 — but he still can't get his queen out; his pieces are stuck in molasses. He hits our queen, so we move it to a square that keeps the f6 pawn defended — that pawn is a huge bargaining chip.",
+   "spoken": "Black's knight comes to g6 — but he still can't get his queen out; his pieces are stuck in molasses. He hits your queen, so you move it to a square that keeps the f6 pawn defended — that pawn is a huge bargaining chip.",
    "reanchor": true
   },
   {
@@ -325,7 +325,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Black plays c6. We want to open the center, because he's paralyzed and any opening favors us. Here's the thought experiment: if you could remove one of your own pawns, which would it be?",
+   "spoken": "Black plays c6. You want to open the center, because he's paralyzed and any opening favors you. Here's the thought experiment: if you could remove one of your own pawns, which would it be?",
    "reanchor": true
   },
   {
@@ -355,7 +355,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "A rook to e1, and now we're threatening to capture on e5 with a mating attack.",
+   "spoken": "A rook to e1, and now you're threatening to capture on e5 with a mating attack.",
    "reanchor": true
   },
   {
@@ -365,7 +365,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "Black finds a defense with a queen to c7 — so we pile onto the knight, keeping our eyes on the target.",
+   "spoken": "Black finds a defense with a queen to c7 — so you pile onto the knight, keeping your eyes on the target.",
    "reanchor": true
   },
   {
@@ -375,7 +375,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "A bishop to f4, adding an attacker to the knight so we can blast through with a capture on e5.",
+   "spoken": "A bishop to f4, adding an attacker to the knight so you can blast through with a capture on e5.",
    "reanchor": true
   },
   {
@@ -395,7 +395,7 @@
    "line": [
     "Bxe5"
    ],
-   "spoken": "We take on e5 with the bishop.",
+   "spoken": "You take on e5 with the bishop.",
    "reanchor": true
   },
   {
@@ -446,7 +446,7 @@
    "line": [
     "Re7+"
    ],
-   "spoken": "We begin with a check on e7, forcing the king toward f8 — if it goes to d8 instead, a queen to d7 is mate.",
+   "spoken": "You begin with a check on e7, forcing the king toward f8 — if it goes to d8 instead, a queen to d7 is mate.",
    "reanchor": true
   },
   {
@@ -456,7 +456,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "The king goes to f8. Now we just win it normally.",
+   "spoken": "The king goes to f8. Now you just win it normally.",
    "reanchor": true
   },
   {
@@ -466,7 +466,7 @@
    "line": [
     "Qh5"
    ],
-   "spoken": "We need to attack f7 while posing as many threats as possible — the queen does that far better from h5 than from d7.",
+   "spoken": "You need to attack f7 while posing as many threats as possible — the queen does that far better from h5 than from d7.",
    "reanchor": true
   },
   {
@@ -486,7 +486,7 @@
    "line": [
     "Qh6+"
    ],
-   "spoken": "The reason h5 is better: from there the queen also has a check on h6 and a mate on g7. When you have an idea while attacking, develop and sharpen it — this is a forced mate, so we pre-move the queen to g7.",
+   "spoken": "The reason h5 is better: from there the queen also has a check on h6 and a mate on g7. When you have an idea while attacking, develop and sharpen it — this is a forced mate, so you pre-move the queen to g7.",
    "reanchor": true
   },
   {
@@ -532,7 +532,7 @@
    "line": [
     "Bxg1"
    ],
-   "spoken": "People think it's impossible because of a bishop capture on g1 — after we recapture with the rook, a queen check on h4 sends chills down your spine.",
+   "spoken": "People think it's impossible because of a bishop capture on g1 — after you recapture with the rook, a queen check on h4 sends chills down your spine.",
    "reanchor": true
   },
   {
@@ -545,7 +545,7 @@
     "Rxg1",
     "Qxh2"
    ],
-   "spoken": "It looks terrible — we block the check and Black grabs a pawn. But take the bigger view: Black has developed exactly one piece, the queen, the very piece you don't want out this early.",
+   "spoken": "It looks terrible — you block the check and Black grabs a pawn. But take the bigger view: Black has developed exactly one piece, the queen, the very piece you don't want out this early.",
    "reanchor": true
   },
   {
@@ -687,7 +687,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "After the knight to d4, the capture, and the queen to f3, our opponent played very well but began a series of subtle mistakes.",
+   "spoken": "After the knight to d4, the capture, and the queen to f3, your opponent played very well but began a series of subtle mistakes.",
    "reanchor": true
   },
   {
@@ -719,7 +719,7 @@
     "hxg3",
     "Qg4"
    ],
-   "spoken": "After the trades and a queen to g4, that bishop is Black's best piece, monopolizing the whole center — so capturing on c3 was wrong, it gave us air and sped up our development.",
+   "spoken": "After the trades and a queen to g4, that bishop is Black's best piece, monopolizing the whole center — so capturing on c3 was wrong, it gave you air and sped up your development.",
    "reanchor": true
   },
   {
@@ -727,7 +727,7 @@
    "t": 1176.5,
    "fen": "rnb1k1nr/ppp2ppp/3p4/8/3bPp1q/2N2QP1/PPPP3P/R1B1KB1R b KQkq - 0 9",
    "line": [],
-   "spoken": "Most importantly it accelerated the development of our king.",
+   "spoken": "Most importantly it accelerated the development of your king.",
    "reanchor": true
   },
   {
@@ -735,7 +735,7 @@
    "t": 1188.5,
    "fen": "rnbqk1nr/ppp2ppp/3p4/2b5/3NPp2/2N5/PPPP2PP/R1BQKB1R b KQkq - 1 7",
    "line": [],
-   "spoken": "If Black had checked on h4 before we took the knight, we'd answer g3.",
+   "spoken": "If Black had checked on h4 before you took the knight, you'd answer g3.",
    "reanchor": true
   },
   {
@@ -748,7 +748,7 @@
     "fxg3",
     "Bg2"
    ],
-   "spoken": "And a bishop to g2, and we're still very much in the game — though the other way was totally winning too.",
+   "spoken": "And a bishop to g2, and you're still very much in the game — though the other way was totally winning too.",
    "reanchor": true
   },
   {
@@ -765,7 +765,7 @@
    "t": 1201,
    "fen": "rnb1k1nr/ppp2ppp/3p4/2b5/3NPp1q/2N5/PPPP2PP/R1BQKB1R w KQkq - 2 8",
    "line": [],
-   "spoken": "Recapturing on d4 isn't bad; after the trades and g5 we again prioritize queenside development and king safety. That g5 was a big waste of time — a knight to f6 or c6 was better. When you're up a piece, trading is not the priority: play exactly as you would with equal material. That's my single most important piece of advice — the closer you play to a level-material game, the less you'll go wrong, and the same is true in the endgame.",
+   "spoken": "Recapturing on d4 isn't bad; after the trades and g5 you again prioritize queenside development and king safety. That g5 was a big waste of time — a knight to f6 or c6 was better. When you're up a piece, trading is not the priority: play exactly as you would with equal material. That's my single most important piece of advice — the closer you play to a level-material game, the less you'll go wrong, and the same is true in the endgame.",
    "reanchor": true
   }
  ]

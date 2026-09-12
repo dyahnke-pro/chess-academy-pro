@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "Through a strange move order we've reached a Jobava London, and the whole game turns on one idea: trading the dark bishops to expose White's centre.",
+   "spoken": "Through a strange move order you've reached a Jobava London, and the whole game turns on one idea: trading the dark bishops to expose White's centre.",
    "kind": "main"
   },
   {
@@ -59,7 +59,7 @@
     "d5",
     "Nc3"
    ],
-   "spoken": "After d5 and Nc3 it's a Jobava London — and Nc3 carries a hidden cost: it makes the pawn on d4 chronically weak, which becomes our target.",
+   "spoken": "After d5 and Nc3 it's a Jobava London — and Nc3 carries a hidden cost: it makes the pawn on d4 chronically weak, which becomes your target.",
    "kind": "main",
    "teaches": "Nc3 in a Queen's-Pawn setup weakens d4; pressure it with c5."
   },
@@ -105,7 +105,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The key operation: meet the dark-bishop sortie with Bxh6, deflecting the queen away from the pawn on d4. It looks like it wrecks our castling, but the point is the centre — once we hit d4 with c5, the whole structure starts to buckle.",
+   "spoken": "The key operation: meet the dark-bishop sortie with Bxh6, deflecting the queen away from the pawn on d4. It looks like it wrecks your castling, but the point is the centre — once you hit d4 with c5, the whole structure starts to buckle.",
    "kind": "main",
    "teaches": "Trade to deflect the piece guarding a weak pawn, then strike that pawn with a break.",
    "reanchor": true
@@ -117,7 +117,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "The broader lesson: don't reflexively answer Bh6 by castling short. Taking pulls your opponent's attention off the centre — Bh6 was premature, and after the trade we hit c5 and White can't hold the middle.",
+   "spoken": "The broader lesson: don't reflexively answer Bh6 by castling short. Taking pulls your opponent's attention off the centre — Bh6 was premature, and after the trade you hit c5 and White can't hold the middle.",
    "kind": "main",
    "teaches": "Answer a flank provocation by trading and counterpunching the centre, not by castling into it.",
    "reanchor": true
@@ -178,7 +178,7 @@
     "O-O-O",
     "Qxc5"
    ],
-   "spoken": "Just recapture on c5 — simple is best. Resist the impulsive Ng4; that's one-move-itis, the queen just slides back and we've weakened d5 for nothing.",
+   "spoken": "Just recapture on c5 — simple is best. Resist the impulsive Ng4; that's one-move-itis, the queen just slides back and you've weakened d5 for nothing.",
    "kind": "main",
    "teaches": "Don't chase a one-move threat; take the sound, simplifying recapture."
   },
@@ -189,7 +189,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Bring the bishop to g4 and trade on f3 — swapping it off increases our grip on d4 and keeps the option of planting a pawn there later.",
+   "spoken": "Bring the bishop to g4 and trade on f3 — swapping it off increases your grip on d4 and keeps the option of planting a pawn there later.",
    "kind": "main",
    "teaches": "Trade the knight that guards a key square to take the square for yourself."
   },
@@ -209,7 +209,7 @@
    "line": [
     "Qg5"
    ],
-   "spoken": "Qg5 is the loose novelty — the actual mistake. We can chase it with h6, but the sharper plan is Rc8, punishing White's careless play down the c-file.",
+   "spoken": "Qg5 is the loose novelty — the actual mistake. You can chase it with h6, but the sharper plan is Rc8, punishing White's careless play down the c-file.",
    "kind": "main"
   },
   {

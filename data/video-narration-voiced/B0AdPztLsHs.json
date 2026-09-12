@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "We take White and open d4; Black replies with the knight to f6."
+      "spoken": "You take White and open d4; Black replies with the knight to f6."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "We claim space with c4."
+      "spoken": "You claim space with c4."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We develop the knight to c3."
+      "spoken": "You develop the knight to c3."
     },
     {
       "ply": 6,
@@ -76,7 +76,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "We build the big centre with e4."
+      "spoken": "You build the big centre with e4."
     },
     {
       "ply": 8,
@@ -94,7 +94,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "We develop the bishop to e2."
+      "spoken": "You develop the bishop to e2."
     },
     {
       "ply": 10,
@@ -112,7 +112,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "We pin the knight with the bishop to g5."
+      "spoken": "You pin the knight with the bishop to g5."
     },
     {
       "ply": 12,
@@ -130,7 +130,7 @@
       "line": [
         "h4"
       ],
-      "spoken": "We launch the h4 pawn storm."
+      "spoken": "You launch the h4 pawn storm."
     },
     {
       "ply": 14,
@@ -148,7 +148,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "We drop the bishop back to e3."
+      "spoken": "You drop the bishop back to e3."
     },
     {
       "ply": 16,
@@ -166,7 +166,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "We close with d5 — a King's-Indian pawn chain."
+      "spoken": "You close with d5 — a King's-Indian pawn chain."
     },
     {
       "ply": 18,
@@ -184,7 +184,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "We bring the queen to d2."
+      "spoken": "You bring the queen to d2."
     },
     {
       "ply": 20,
@@ -202,7 +202,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "We roll g4, storming the kingside."
+      "spoken": "You roll g4, storming the kingside."
     },
     {
       "ply": 22,
@@ -220,7 +220,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "We buttress with f3."
+      "spoken": "You buttress with f3."
     },
     {
       "ply": 24,
@@ -238,7 +238,7 @@
       "line": [
         "Nh3"
       ],
-      "spoken": "We develop the knight to h3."
+      "spoken": "You develop the knight to h3."
     },
     {
       "ply": 26,
@@ -256,7 +256,7 @@
       "line": [
         "g5"
       ],
-      "spoken": "We push g5, prying open lines."
+      "spoken": "You push g5, prying open lines."
     },
     {
       "ply": 28,
@@ -274,7 +274,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "We push h5."
+      "spoken": "You push h5."
     },
     {
       "ply": 30,
@@ -283,7 +283,7 @@
       "line": [
         "Bxh3"
       ],
-      "spoken": "Black takes our knight, capturing on h3."
+      "spoken": "Black takes your knight, capturing on h3."
     },
     {
       "ply": 31,
@@ -292,7 +292,7 @@
       "line": [
         "Rxh3"
       ],
-      "spoken": "We recapture with the rook."
+      "spoken": "You recapture with the rook."
     },
     {
       "ply": 32,
@@ -310,7 +310,7 @@
       "line": [
         "O-O-O"
       ],
-      "spoken": "We castle queenside."
+      "spoken": "You castle queenside."
     },
     {
       "ply": 34,
@@ -328,7 +328,7 @@
       "line": [
         "Rg1"
       ],
-      "spoken": "We bring the rook to g1."
+      "spoken": "You bring the rook to g1."
     },
     {
       "ply": 36,
@@ -346,7 +346,7 @@
       "line": [
         "Rxh5"
       ],
-      "spoken": "We grab on h5 with the rook."
+      "spoken": "You grab on h5 with the rook."
     },
     {
       "ply": 38,
@@ -364,7 +364,7 @@
       "line": [
         "f4"
       ],
-      "spoken": "We open with f4."
+      "spoken": "You open with f4."
     },
     {
       "ply": 40,
@@ -382,7 +382,7 @@
       "line": [
         "Bxc5"
       ],
-      "spoken": "We take on c5."
+      "spoken": "You take on c5."
     },
     {
       "ply": 43,
@@ -392,7 +392,7 @@
         "bxc5",
         "Qxf4"
       ],
-      "spoken": "Black recaptures with the b-pawn; we grab on f4 with the queen."
+      "spoken": "Black recaptures with the b-pawn; you grab on f4 with the queen."
     },
     {
       "ply": 3,

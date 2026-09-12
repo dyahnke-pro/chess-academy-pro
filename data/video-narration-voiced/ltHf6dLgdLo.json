@@ -24,7 +24,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "d4 — the Danish Gambit. We still haven't managed to get one accepted; nobody seems willing to grab the pawn."
+      "spoken": "d4 — the Danish Gambit. You still haven't managed to get one accepted; nobody seems willing to grab the pawn."
     },
     {
       "ply": 4,
@@ -51,7 +51,7 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "Black recaptures, the knight to e5. It looks like we're letting Black plant a knight in the center, but that knight has no stable home — it'll have to move again."
+      "spoken": "Black recaptures, the knight to e5. It looks like you're letting Black plant a knight in the center, but that knight has no stable home — it'll have to move again."
     },
     {
       "ply": 7,
@@ -60,7 +60,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We play an inoffensive developing move, the knight to c3, and see how Black arranges his pieces before we commit to f4."
+      "spoken": "You play an inoffensive developing move, the knight to c3, and see how Black arranges his pieces before you commit to f4."
     },
     {
       "ply": 8,
@@ -78,7 +78,7 @@
       "line": [
         "f4"
       ],
-      "spoken": "Now f4 — both knights are stuck in no man's land, so we just push and kick them around."
+      "spoken": "Now f4 — both knights are stuck in no man's land, so you just push and kick them around."
     },
     {
       "ply": 10,
@@ -105,7 +105,7 @@
       "line": [
         "Ng8"
       ],
-      "spoken": "It's forced all the way back to g8. We have a big center, a big development lead, and Black's king is slightly loosened."
+      "spoken": "It's forced all the way back to g8. You have a big center, a big development lead, and Black's king is slightly loosened."
     },
     {
       "ply": 13,
@@ -114,7 +114,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We finish developing with the knight to f3 — no need for anything crazy."
+      "spoken": "You finish developing with the knight to f3 — no need for anything crazy."
     },
     {
       "ply": 14,
@@ -123,7 +123,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "d6 is exactly what Black should do, challenging our center — and these players are starting to play a bit better."
+      "spoken": "d6 is exactly what Black should do, challenging your center — and these players are starting to play a bit better."
     },
     {
       "ply": 15,
@@ -150,7 +150,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We don't have to do anything fancy — just castle, and look at that f-file, where the disaster is going to unfold for Black."
+      "spoken": "You don't have to do anything fancy — just castle, and look at that f-file, where the disaster is going to unfold for Black."
     },
     {
       "ply": 19,
@@ -160,7 +160,7 @@
         "dxe5",
         "fxe5"
       ],
-      "spoken": "Black takes on e5, and we recapture with the f-pawn — no reason to take with the knight and trade off pieces that help Black defend."
+      "spoken": "Black takes on e5, and you recapture with the f-pawn — no reason to take with the knight and trade off pieces that help Black defend."
     },
     {
       "ply": 20,
@@ -196,7 +196,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "They get attracted to grabbing the bishop — so we block the check with the bishop to e3, hitting the queen."
+      "spoken": "They get attracted to grabbing the bishop — so you block the check with the bishop to e3, hitting the queen."
     },
     {
       "ply": 24,
@@ -214,7 +214,7 @@
       "line": [
         "Bxd7+"
       ],
-      "spoken": "We take on d7 with the bishop, check."
+      "spoken": "You take on d7 with the bishop, check."
     },
     {
       "ply": 26,
@@ -253,7 +253,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight drops back to c3 — I love these moves; it keeps our forces trained on that d-file where the king lingers."
+      "spoken": "The knight drops back to c3 — I love these moves; it keeps your forces trained on that d-file where the king lingers."
     },
     {
       "ply": 28,
@@ -271,7 +271,7 @@
       "line": [
         "Bxd4"
       ],
-      "spoken": "We take with the bishop on d4 — and there's something sexy here, because it sets up a discovered check."
+      "spoken": "You take with the bishop on d4 — and there's something sexy here, because it sets up a discovered check."
     },
     {
       "ply": 30,
@@ -353,7 +353,7 @@
       "line": [
         "Bxg7"
       ],
-      "spoken": "The bishop takes on g7 — and now we're going to pick up a rook."
+      "spoken": "The bishop takes on g7 — and now you're going to pick up a rook."
     },
     {
       "ply": 40,
@@ -374,7 +374,7 @@
         "Qh6",
         "Nxh6"
       ],
-      "spoken": "The cleanest finish runs the queen to d2, the king to b7, the queen to h6, and if the knight takes on h6 we simply mop up — it's crushing.",
+      "spoken": "The cleanest finish runs the queen to d2, the king to b7, the queen to h6, and if the knight takes on h6 you simply mop up — it's crushing.",
       "reanchor": true
     },
     {

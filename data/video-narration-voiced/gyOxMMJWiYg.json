@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We're White — the pawn to e4, c6, the Caro-Kann. There are so many good lines against it."
+   "spoken": "You're White — the pawn to e4, c6, the Caro-Kann. There are so many good lines against it."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4. We could play the Nimzowitsch, but that's a little too cheap — let's play the Fantasy, which doesn't get nearly enough love."
+   "spoken": "d4. You could play the Nimzowitsch, but that's a little too cheap — let's play the Fantasy, which doesn't get nearly enough love."
   },
   {
    "ply": 4,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "— and if he continues this way, we'll probably go long to exploit these shenanigans. The knight to f6 is just bad."
+   "spoken": "— and if he continues this way, you'll probably go long to exploit these shenanigans. The knight to f6 is just bad."
   },
   {
    "ply": 5,
@@ -107,7 +107,7 @@
    "line": [
     "Nh7"
    ],
-   "spoken": "The knight to h7 — this is not the way to play the Caro. Had he played the knight to d7, we'd play e6, a typical gambit. f4 is possible but we don't need it yet — we have something far better."
+   "spoken": "The knight to h7 — this is not the way to play the Caro. Had he played the knight to d7, you'd play e6, a typical gambit. f4 is possible but you don't need it yet — you have something far better."
   },
   {
    "ply": 11,
@@ -116,7 +116,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 — not f4 — stopping him from coming out to f5; now his bishop has nowhere good to go, and if we want we can follow with a4, the knight to f3, and so on."
+   "spoken": "The bishop to d3 — not f4 — stopping him from coming out to f5; now his bishop has nowhere good to go, and if you want you can follow with a4, the knight to f3, and so on."
   },
   {
    "ply": 12,
@@ -134,7 +134,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "— to figure out where the knight goes: f4 and the knight to f3 is the natural way to continue, reinforcing our centre. An amazing position — look how passive he is."
+   "spoken": "— to figure out where the knight goes: f4 and the knight to f3 is the natural way to continue, reinforcing your centre. An amazing position — look how passive he is."
   },
   {
    "ply": 14,
@@ -152,7 +152,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "So we simply play the knight to f3 and follow it up with h3 — no need to change how we play at all."
+   "spoken": "So you simply play the knight to f3 and follow it up with h3 — no need to change how you play at all."
   },
   {
    "ply": 16,
@@ -161,7 +161,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "He keeps making moves with the same piece and will pay the price. The queen to b6. The key question: can we play h3, or must we first defend the d4-pawn? A cool trap: after h3, the bishop takes f3, the queen takes f3, there's the queen takes d4 — painful to give up the central pawn, but see the bigger picture; your development lead gives full compensation. And there's a very cool idea here."
+   "spoken": "He keeps making moves with the same piece and will pay the price. The queen to b6. The key question: can you play h3, or must you first defend the d4-pawn? A cool trap: after h3, the bishop takes f3, the queen takes f3, there's the queen takes d4 — painful to give up the central pawn, but see the bigger picture; your development lead gives full compensation. And there's a very cool idea here."
   },
   {
    "ply": 17,
@@ -226,7 +226,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": "Do we have to take the knight and let his queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and his queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource."
+   "spoken": "Do you have to take the knight and let his queen out? Is he actually doing anything with this move? No — the queen back to e2 is simplest, and his queen is still very much trapped. Kudos to Black for the knight to g5, a nice defensive resource."
   },
   {
    "ply": 26,
@@ -253,7 +253,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "The knight to e4. It doesn't matter — we're up a queen — but let's be precise: should we take with the knight or the bishop?"
+   "spoken": "The knight to e4. It doesn't matter — you're up a queen — but let's be precise: should you take with the knight or the bishop?"
   },
   {
    "ply": 29,
@@ -262,7 +262,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": "We should take with the bishop, because d6 is a huge weakness, and the knight is the piece best equipped to exploit it — so we sack the bishop back."
+   "spoken": "You should take with the bishop, because d6 is a huge weakness, and the knight is the piece best equipped to exploit it — so you sack the bishop back."
   },
   {
    "ply": 31,
@@ -281,7 +281,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "— but that doesn't mean the square isn't a weakness; we can still slam a knight onto d6, and that trade is desirable since we're up a queen."
+   "spoken": "— but that doesn't mean the square isn't a weakness; you can still slam a knight onto d6, and that trade is desirable since you're up a queen."
   },
   {
    "ply": 33,
@@ -290,7 +290,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Clearly we should castle — always compare and contrast. The knight is much better equipped than a bishop to exploit these weaknesses; a bishop on e4 would just bite on granite."
+   "spoken": "Clearly you should castle — always compare and contrast. The knight is much better equipped than a bishop to exploit these weaknesses; a bishop on e4 would just bite on granite."
   },
   {
    "ply": 34,
@@ -299,7 +299,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Understanding how the position has changed: we can play the knight to g5 to go after the pawn, or the knight to d6, but the simplest —"
+   "spoken": "Understanding how the position has changed: you can play the knight to g5 to go after the pawn, or the knight to d6, but the simplest —"
   },
   {
    "ply": 35,
@@ -326,7 +326,7 @@
    "line": [
     "Rd6"
    ],
-   "spoken": "— we could put a knight on d6, but we could also put a rook on d6, using the knight; I really hope he plays f5 so we can demonstrate the finale."
+   "spoken": "— you could put a knight on d6, but you could also put a rook on d6, using the knight; I really hope he plays f5 so you can demonstrate the finale."
   },
   {
    "ply": 38,
@@ -471,7 +471,7 @@
    "t": 740,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": "So if you play the Caro, we'll probably face the Fantasy at some point —",
+   "spoken": "So if you play the Caro, you'll probably face the Fantasy at some point —",
    "reanchor": true
   },
   {
@@ -522,7 +522,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "— we would definitely have played e6.",
+   "spoken": "— you would definitely have played e6.",
    "reanchor": true
   },
   {
@@ -588,7 +588,7 @@
    "t": 792,
    "fen": "rnbqkb1r/pp1nppp1/2p1P3/3p3p/3P4/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": "Black is totally paralyzed, barely able to move — this is crushing. So the knight to h7, the bishop to d3. Where did I learn this trap? A little-known line in the Nimzowitsch; one day I found out about it and thought it was cool, and we applied it here — that's pattern recognition, and that's how learning works: keep your eyes peeled for chances to apply what you know. After e6, White plays the queen to f3, Black the queen to b6, and a3 — one of White's main theoretical moves, even played by Anand.",
+   "spoken": "Black is totally paralyzed, barely able to move — this is crushing. So the knight to h7, the bishop to d3. Where did I learn this trap? A little-known line in the Nimzowitsch; one day I found out about it and thought it was cool, and you applied it here — that's pattern recognition, and that's how learning works: keep your eyes peeled for chances to apply what you know. After e6, White plays the queen to f3, Black the queen to b6, and a3 — one of White's main theoretical moves, even played by Anand.",
    "reanchor": true
   }
  ]

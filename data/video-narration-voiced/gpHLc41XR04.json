@@ -44,7 +44,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "We settle into a Philidor-like structure — quiet, positional, no rush.",
+   "spoken": "You settle into a Philidor-like structure — quiet, positional, no rush.",
    "kind": "plan",
    "teaches": [
     "quiet positional setup"
@@ -141,7 +141,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Now we work out the plan. The standard idea in this kind of structure is c3, challenging the opponent's central pawn before committing anywhere else.",
+   "spoken": "Now you work out the plan. The standard idea in this kind of structure is c3, challenging the opponent's central pawn before committing anywhere else.",
    "kind": "plan",
    "teaches": [
     "c3 to challenge the centre"
@@ -202,7 +202,7 @@
     "b6",
     "Bf1"
    ],
-   "spoken": "We retool the position, rerouting the bishop back to a more civilised square where it actually does something.",
+   "spoken": "You retool the position, rerouting the bishop back to a more civilised square where it actually does something.",
    "teaches": [
     "rerouting a bad bishop"
    ]
@@ -269,7 +269,7 @@
    "line": [
     "Bc1"
    ],
-   "spoken": "Ask who benefits from a bishop trade here — it's us, because both of our bishops are passive. Swapping the poor pieces off is a small win.",
+   "spoken": "Ask who benefits from a bishop trade here — it's you, because both of your bishops are passive. Swapping the poor pieces off is a small win.",
    "kind": "plan",
    "teaches": [
     "trade your bad pieces"
@@ -338,7 +338,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The plan is to make the bishop better; right now it just bites on our own pawns.",
+   "spoken": "The plan is to make the bishop better; right now it just bites on your own pawns.",
    "teaches": [
     "improve the worst piece"
    ]
@@ -523,7 +523,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "This is the break we were worried about — the position may already be objectively better for the other side here.",
+   "spoken": "This is the break you were worried about — the position may already be objectively better for the other side here.",
    "teaches": [
     "honest assessment"
    ]

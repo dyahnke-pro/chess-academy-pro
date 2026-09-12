@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White, open with the pawn to e4, and get e5."
+   "spoken": "You have White, open with the pawn to e4, and get e5."
   },
   {
    "ply": 3,
@@ -60,7 +60,7 @@
     "Nxe5",
     "dxe4"
    ],
-   "spoken": "Black recaptures on e4 — I'm fairly sure that's inaccurate. The tempting bishop to c4 exists, but the queen to d4 gives me pause, so today we play a little safer while keeping a guaranteed edge.",
+   "spoken": "Black recaptures on e4 — I'm fairly sure that's inaccurate. The tempting bishop to c4 exists, but the queen to d4 gives me pause, so today you play a little safer while keeping a guaranteed edge.",
    "reanchor": true
   },
   {
@@ -80,7 +80,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "Black plays the queen to h4. We ignore it — it does nothing, and there's no need for g3. The queen causes no harm, so we simply carry on with our plan.",
+   "spoken": "Black plays the queen to h4. You ignore it — it does nothing, and there's no need for g3. The queen causes no harm, so you simply carry on with your plan.",
    "reanchor": true
   },
   {
@@ -100,7 +100,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black plays the knight to f6, ignoring the f7 threat — and now we have a pleasant choice of what to capture with.",
+   "spoken": "Black plays the knight to f6, ignoring the f7 threat — and now you have a pleasant choice of what to capture with.",
    "reanchor": true
   },
   {
@@ -170,7 +170,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop to g5 — and the game is over, the queen is trapped. If the queen takes it, the knight to f7 is a fork — that's exactly why we vacated f7; and if the queen goes to h5, we simply take it, since the knight is pinned.",
+   "spoken": "The bishop to g5 — and the game is over, the queen is trapped. If the queen takes it, the knight to f7 is a fork — that's exactly why you vacated f7; and if the queen goes to h5, you simply take it, since the knight is pinned.",
    "reanchor": true
   },
   {
@@ -181,7 +181,7 @@
     "Qxg5",
     "Nf7+"
    ],
-   "spoken": "Black takes on g5, and we give the fork with the knight to f7 and check.",
+   "spoken": "Black takes on g5, and you give the fork with the knight to f7 and check.",
    "reanchor": true
   },
   {
@@ -229,7 +229,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "If Black plays the queen to e7, we play the pawn to d4, cementing the knight on e5.",
+   "spoken": "If Black plays the queen to e7, you play the pawn to d4, cementing the knight on e5.",
    "reanchor": true
   },
   {
@@ -439,7 +439,7 @@
    "t": 1243,
    "fen": "rnb2bnr/ppp1kBpp/8/8/4q3/5N2/PPPP1KPP/RNBQ3R b - - 2 10",
    "line": [],
-   "spoken": "Threatening the rook to e1 as well — so the king to f2 works out in our favour. Very cool.",
+   "spoken": "Threatening the rook to e1 as well — so the king to f2 works out in your favour. Very cool.",
    "reanchor": true
   },
   {
@@ -466,7 +466,7 @@
    "t": 1299.5,
    "fen": "rnb1kbnr/ppp1qppp/8/3pN3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
    "line": [],
-   "spoken": "Against the knight to d7, the queen to d2, then the knight to c3 and castling queenside catch Black's king in the crossfire — simple. The best move was the bishop to c4, but we chose the safe d4.",
+   "spoken": "Against the knight to d7, the queen to d2, then the knight to c3 and castling queenside catch Black's king in the crossfire — simple. The best move was the bishop to c4, but you chose the safe d4.",
    "reanchor": true
   },
   {
@@ -479,7 +479,7 @@
     "d4",
     "dxe4"
    ],
-   "spoken": "If Black plays on, we can recapture with the knight or the bishop, and White is a touch better.",
+   "spoken": "If Black plays on, you can recapture with the knight or the bishop, and White is a touch better.",
    "reanchor": true
   },
   {

@@ -78,7 +78,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 is the Max Lange / Nakhmanson tricky line. We take, exd4, and castle — nothing to fear if you know the ideas.",
+   "spoken": "d4 is the Max Lange / Nakhmanson tricky line. You take, exd4, and castle — nothing to fear if you know the ideas.",
    "kind": "main"
   },
   {
@@ -106,7 +106,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "Playing principled chess, we grab on e4 into the Max Lange — the tamer d6 keeps it out of theory but leaves the bishop passive on e7.",
+   "spoken": "Playing principled chess, you grab on e4 into the Max Lange — the tamer d6 keeps it out of theory but leaves the bishop passive on e7.",
    "kind": "main"
   },
   {
@@ -266,7 +266,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "d3 is the star — a strong passed pawn deep in White's camp. Even if he wins it back, the tempi and energy he burns doing so let us pour our other pieces into the game. It's win-win.",
+   "spoken": "d3 is the star — a strong passed pawn deep in White's camp. Even if he wins it back, the tempi and energy he burns doing so let you pour your other pieces into the game. It's win-win.",
    "kind": "main",
    "teaches": "A far-advanced passed pawn is worth it even if it eventually falls, because it drags the enemy pieces out of play."
   },
@@ -370,7 +370,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": "Improve calmly — the bishop to the long diagonal — because with a rook, knight, and bishop for the queen we have time on our side.",
+   "spoken": "Improve calmly — the bishop to the long diagonal — because with a rook, knight, and bishop for the queen you have time on your side.",
    "kind": "main",
    "teaches": "After a material-for-position sacrifice, improve your pieces slowly; you don't owe the position a quick knockout."
   },
@@ -410,7 +410,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "Re8 seizes the freshly opened file, beating White to it — if he tries Rd1 we trade and strip the defenders away from our d-pawn.",
+   "spoken": "Re8 seizes the freshly opened file, beating White to it — if he tries Rd1 you trade and strip the defenders away from your d-pawn.",
    "kind": "main",
    "teaches": "Grab the open file before your opponent; trading his active rook off leaves his weakness undefended."
   },

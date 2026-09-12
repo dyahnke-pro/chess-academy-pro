@@ -72,7 +72,7 @@
     "c6",
     "Bc4"
    ],
-   "spoken": "Black plays c6, and we bring the bishop out to c4, seeking the most active squares for our pieces."
+   "spoken": "Black plays c6, and you bring the bishop out to c4, seeking the most active squares for your pieces."
   },
   {
    "ply": 12,
@@ -108,7 +108,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Let's complete our development and castle."
+   "spoken": "Let's complete your development and castle."
   },
   {
    "ply": 16,
@@ -136,7 +136,7 @@
     "O-O",
     "Ne5"
    ],
-   "spoken": "Black castles, and we slam the knight into e5 — and the bishop does a nice job keeping that knight stable."
+   "spoken": "Black castles, and you slam the knight into e5 — and the bishop does a nice job keeping that knight stable."
   },
   {
    "ply": 20,
@@ -154,7 +154,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "So we drop the bishop back to g3, maintaining everything."
+   "spoken": "So you drop the bishop back to g3, maintaining everything."
   },
   {
    "ply": 22,
@@ -172,7 +172,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "We recapture, b takes c3 — and I'll explain during the game why this doubled structure isn't actually a problem."
+   "spoken": "You recapture, b takes c3 — and I'll explain during the game why this doubled structure isn't actually a problem."
   },
   {
    "ply": 25,
@@ -182,7 +182,7 @@
     "a5",
     "a4"
    ],
-   "spoken": "On one hand it's doubled, but on the other we have a big mass of central pawns all defending each other. Black plays a5 and we answer a4."
+   "spoken": "On one hand it's doubled, but on the other you have a big mass of central pawns all defending each other. Black plays a5 and you answer a4."
   },
   {
    "ply": 26,
@@ -191,7 +191,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "Black plays the bishop to a6, creating an x-ray against my rook. How should we respond?"
+   "spoken": "Black plays the bishop to a6, creating an x-ray against my rook. How should you respond?"
   },
   {
    "ply": 27,
@@ -237,7 +237,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "Black plays the bishop to b7. Notice the rook in the corner is undefended, which means our threats are just getting started."
+   "spoken": "Black plays the bishop to b7. Notice the rook in the corner is undefended, which means your threats are just getting started."
   },
   {
    "ply": 2,

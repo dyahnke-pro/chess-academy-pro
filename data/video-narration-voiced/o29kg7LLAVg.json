@@ -24,7 +24,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "c3 — once again we go for the Alapin."
+      "spoken": "c3 — once again you go for the Alapin."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "exd5"
       ],
-      "spoken": "We take on d5."
+      "spoken": "You take on d5."
     },
     {
       "ply": 6,
@@ -51,7 +51,7 @@
       "line": [
         "Qxd5"
       ],
-      "spoken": "The queen recaptures on d5, and d4 — we've had this a thousand times in the speedrun."
+      "spoken": "The queen recaptures on d5, and d4 — you've had this a thousand times in the speedrun."
     },
     {
       "ply": 7,
@@ -78,7 +78,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "— because it opens the c3-square for White's knight. The knight to c6, the knight to f3 — there's the bishop to g4, the knight to f6, e6; many possible moves, but under 2000 a lot of people don't know the theory, and the queen on d5 is both a strength and a weakness — controlling a lot of squares, but incredibly vulnerable if we can get a bishop to c4."
+      "spoken": "— because it opens the c3-square for White's knight. The knight to c6, the knight to f3 — there's the bishop to g4, the knight to f6, e6; many possible moves, but under 2000 a lot of people don't know the theory, and the queen on d5 is both a strength and a weakness — controlling a lot of squares, but incredibly vulnerable if you can get a bishop to c4."
     },
     {
       "ply": 10,
@@ -87,7 +87,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "The bishop to g4. A couple of moves here: the bishop to b2 is what most people think of, but there's a more dangerous move if Black doesn't know the theory — it kills two birds, guarding against the bishop takes f3, which would ruin our structure —"
+      "spoken": "The bishop to g4. A couple of moves here: the bishop to b2 is what most people think of, but there's a more dangerous move if Black doesn't know the theory — it kills two birds, guarding against the bishop takes f3, which would ruin your structure —"
     },
     {
       "ply": 11,
@@ -96,7 +96,7 @@
       "line": [
         "Nbd2"
       ],
-      "spoken": "— the knight to d2, the same idea as the knight to a3 but reinforcing the knight on f3. Now we've lost the queen's connection to the d4-pawn — can't Black just take on d4 and win a pawn? He can, but that's exactly why we play the knight to d2: we sacrifice the pawn for very rapid development. After the pawn takes d4, the idea isn't just to recapture — against almost all of Black's moves except the bishop takes f3, it's the bishop to c4, developing with tempo, and then the queen to b3, since b7 and f7 are vulnerable. Yes, it blocks the bishop, a drawback, but we prioritize developing our other pieces."
+      "spoken": "— the knight to d2, the same idea as the knight to a3 but reinforcing the knight on f3. Now you've lost the queen's connection to the d4-pawn — can't Black just take on d4 and win a pawn? He can, but that's exactly why you play the knight to d2: you sacrifice the pawn for very rapid development. After the pawn takes d4, the idea isn't just to recapture — against almost all of Black's moves except the bishop takes f3, it's the bishop to c4, developing with tempo, and then the queen to b3, since b7 and f7 are vulnerable. Yes, it blocks the bishop, a drawback, but you prioritize developing your other pieces."
     },
     {
       "ply": 12,
@@ -105,7 +105,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "The knight to f6 — that doesn't fundamentally change what we want to do."
+      "spoken": "The knight to f6 — that doesn't fundamentally change what you want to do."
     },
     {
       "ply": 13,
@@ -114,7 +114,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "So the bishop to c4, following our plan, hitting the queen."
+      "spoken": "So the bishop to c4, following your plan, hitting the queen."
     },
     {
       "ply": 14,
@@ -123,7 +123,7 @@
       "line": [
         "Bxf3"
       ],
-      "spoken": "The bishop takes f3, as I expected, and now a very interesting decision. The queen takes f3 allows a queen trade, which neutralizes our initiative, so I'd consider the pawn recapture on f3 — risky, but later the queen to b3 hits both pawns — or a third move, the queen to b3, ignoring the bishop entirely; the key is that Black's queen can't escape with check, since a4 is controlled by the knight, b5 by the pawn, and e6 by the bishop. After the queen moves, we take on f7 with check or take the bishop on f3, recapturing with the knight, preserving the queens with a tremendous initiative, since his king is nowhere near castling. The knight to a5 is the only move to stay in the game — we give a check, the queen to b5 rather than a4, since the queen to a4 leaves our queen undefended after the queen to d7, whereas after the queen to b5 with the queen covering, we take on f3 and stay a little better. But he plays the unexpected queen to c6, a mistake, because now the bishop to b5 is a far more serious threat, so we play the queen takes a5 — checking first that there are no e-file checks leading to mate, and there aren't — taking the knight with the threat of the bishop to b5. He plays b6, and the important follow-up is the queen to a6, preserving the bishop-to-b5 threat. Panic creeps in at this level when players see their queen threatened, so they stop resisting. The simplest win: our queen is defended by the bishop, so we just take Black's bishop on f3, emerging up a piece — game over in twelve moves. Then the bishop to b5 with check keeps the king in the centre, and even in the endgame the knight to e5 or g5 hits f7.",
+      "spoken": "The bishop takes f3, as I expected, and now a very interesting decision. The queen takes f3 allows a queen trade, which neutralizes your initiative, so I'd consider the pawn recapture on f3 — risky, but later the queen to b3 hits both pawns — or a third move, the queen to b3, ignoring the bishop entirely; the key is that Black's queen can't escape with check, since a4 is controlled by the knight, b5 by the pawn, and e6 by the bishop. After the queen moves, you take on f7 with check or take the bishop on f3, recapturing with the knight, preserving the queens with a tremendous initiative, since his king is nowhere near castling. The knight to a5 is the only move to stay in the game — you give a check, the queen to b5 rather than a4, since the queen to a4 leaves your queen undefended after the queen to d7, whereas after the queen to b5 with the queen covering, you take on f3 and stay a little better. But he plays the unexpected queen to c6, a mistake, because now the bishop to b5 is a far more serious threat, so you play the queen takes a5 — checking first that there are no e-file checks leading to mate, and there aren't — taking the knight with the threat of the bishop to b5. He plays b6, and the important follow-up is the queen to a6, preserving the bishop-to-b5 threat. Panic creeps in at this level when players see their queen threatened, so they stop resisting. The simplest win: your queen is defended by the bishop, so you just take Black's bishop on f3, emerging up a piece — game over in twelve moves. Then the bishop to b5 with check keeps the king in the centre, and even in the endgame the knight to e5 or g5 hits f7.",
       "reanchor": true
     },
     {

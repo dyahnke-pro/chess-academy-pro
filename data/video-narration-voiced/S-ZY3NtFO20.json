@@ -15,7 +15,7 @@
     "d4",
     "e6"
    ],
-   "spoken": "We open with the queen's pawn. Black's e6 offers a French transposition, but as a d4 player we're under no obligation to oblige.",
+   "spoken": "You open with the queen's pawn. Black's e6 offers a French transposition, but as a d4 player you're under no obligation to oblige.",
    "kind": "main",
    "teaches": [
     "e6 has transpositional potential, not a French requirement"
@@ -47,7 +47,7 @@
    "line": [
     "cxb5"
    ],
-   "spoken": "We just take the pawn. Against an obscure gambit, don't agonize over why — simply grab the material and develop.",
+   "spoken": "You just take the pawn. Against an obscure gambit, don't agonize over why — simply grab the material and develop.",
    "kind": "main",
    "teaches": [
     "accept and develop against an unknown gambit"
@@ -83,7 +83,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The bishop to f4 leans on the c7-pawn — and our pawn on b5 clamps that backward pawn in place, so any ...c6 just liquidates into us staying a pawn up.",
+   "spoken": "The bishop to f4 leans on the c7-pawn — and your pawn on b5 clamps that backward pawn in place, so any ...c6 just liquidates into you staying a pawn up.",
    "kind": "main",
    "teaches": [
     "fix and pressure the backward c7 pawn"
@@ -123,7 +123,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "e3 and the bishop to d3 give us ideal development — everything on its best square, a clean pawn to the good.",
+   "spoken": "e3 and the bishop to d3 give you ideal development — everything on its best square, a clean pawn to the good.",
    "kind": "main"
   },
   {
@@ -142,7 +142,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "A little prophylaxis: h3, taking the sting out of any ...Nh5. We can easily afford it, given how passively Black has played.",
+   "spoken": "A little prophylaxis: h3, taking the sting out of any ...Nh5. You can easily afford it, given how passively Black has played.",
    "kind": "main",
    "teaches": [
     "you can afford a quiet move against passive play"

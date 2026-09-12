@@ -83,7 +83,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "— should we take on f3, or drop the bishop back to h5?"
+   "spoken": "— should you take on f3, or drop the bishop back to h5?"
   },
   {
    "ply": 13,
@@ -203,7 +203,7 @@
    "t": 1393.5,
    "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": "So be really careful — sometimes it's good to induce this move, but make sure you're not giving your opponent a big initiative. We actually would want to take this knight —",
+   "spoken": "So be really careful — sometimes it's good to induce this move, but make sure you're not giving your opponent a big initiative. You actually would want to take this knight —",
    "reanchor": true
   },
   {
@@ -213,7 +213,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "— and play as we did in the game: e6, the bishop to d6, castle, and maybe eventually the queen to b6 to increase pressure on the pawn. The queen to d3, we take, that's why we played e6, and the knight takes d5 gave up the game immediately. Taking on g4 is fine in plenty of positions, but generally when White has castled, be careful. As for what White should do here — I'd consider castling long, though it's very dangerous, since the d-pawn is weak and there's the semi-open c-file; castling short is bad because you blunder the pawn.",
+   "spoken": "— and play as you did in the game: e6, the bishop to d6, castle, and maybe eventually the queen to b6 to increase pressure on the pawn. The queen to d3, you take, that's why you played e6, and the knight takes d5 gave up the game immediately. Taking on g4 is fine in plenty of positions, but generally when White has castled, be careful. As for what White should do here — I'd consider castling long, though it's very dangerous, since the d-pawn is weak and there's the semi-open c-file; castling short is bad because you blunder the pawn.",
    "reanchor": true
   }
  ]

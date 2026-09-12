@@ -34,7 +34,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Because we hit it with d5, gaining a tempo on the bishop while striking the center.",
+   "spoken": "Because you hit it with d5, gaining a tempo on the bishop while striking the center.",
    "kind": "main",
    "teaches": [
     "d5 hits the c4 bishop with tempo"
@@ -74,7 +74,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "On the check we block with the bishop to d7 rather than a knight — a small point of principle: don't move one piece repeatedly and trade it for a piece that's only moved once.",
+   "spoken": "On the check you block with the bishop to d7 rather than a knight — a small point of principle: don't move one piece repeatedly and trade it for a piece that's only moved once.",
    "kind": "main",
    "teaches": [
     "don’t trade a busy piece for a fresh one"
@@ -105,7 +105,7 @@
    "line": [
     "Nxb5"
    ],
-   "spoken": "Don't fear the knight that lands on b5 — a lone piece on your side of the board is harmless, and you can even gain tempi hitting it later. We just develop.",
+   "spoken": "Don't fear the knight that lands on b5 — a lone piece on your side of the board is harmless, and you can even gain tempi hitting it later. You just develop.",
    "teaches": [
     "a single intruding piece is not a threat"
    ]
@@ -117,7 +117,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "So we develop the knight to c6 as if nothing is going on — because nothing is.",
+   "spoken": "So you develop the knight to c6 as if nothing is going on — because nothing is.",
    "kind": "main"
   },
   {
@@ -136,7 +136,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "Once White plays c3 the a6 push becomes timely: the knight has lost its retreat, so if it jumps to d4 we take, saddling White with isolated, doubled center pawns — a real positional concession.",
+   "spoken": "Once White plays c3 the a6 push becomes timely: the knight has lost its retreat, so if it jumps to d4 you take, saddling White with isolated, doubled center pawns — a real positional concession.",
    "kind": "main",
    "teaches": [
     "a6 to trap the knight into a bad structure"
@@ -167,7 +167,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "After the trade White is left with an isolated pawn on d4 — that pawn becomes our target for the rest of the game.",
+   "spoken": "After the trade White is left with an isolated pawn on d4 — that pawn becomes your target for the rest of the game.",
    "kind": "main",
    "teaches": [
     "the isolated d-pawn as a fixed target"
@@ -198,7 +198,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop to d6 is an excellent square, eyeing the kingside and supporting our own play.",
+   "spoken": "The bishop to d6 is an excellent square, eyeing the kingside and supporting your own play.",
    "kind": "main"
   },
   {
@@ -250,7 +250,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 has a bonus: besides hitting d4, it discourages White's dark-squared bishop from developing. That extra benefit is why we move the queen before the knight.",
+   "spoken": "The queen to b6 has a bonus: besides hitting d4, it discourages White's dark-squared bishop from developing. That extra benefit is why you move the queen before the knight.",
    "kind": "main",
    "teaches": [
     "choose the move order by the extra benefit"
@@ -291,7 +291,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "Rather than cash in on the pawn right away, we open the queenside with a5, prying open files to expose more weaknesses — flexibility over grabbing material too soon.",
+   "spoken": "Rather than cash in on the pawn right away, you open the queenside with a5, prying open files to expose more weaknesses — flexibility over grabbing material too soon.",
    "kind": "plan",
    "teaches": [
     "open a second front instead of rushing to win a pawn"
@@ -331,7 +331,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Now is the moment to take on d4 — we've made a fresh weakness on the queenside, so capturing opens a second front White can't defend everywhere at once.",
+   "spoken": "Now is the moment to take on d4 — you've made a fresh weakness on the queenside, so capturing opens a second front White can't defend everywhere at once.",
    "kind": "main",
    "teaches": [
     "time the capture to overload the defense"
@@ -371,7 +371,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "After trading down, the queen is centralized and we're up two pawns with a passer. The winning method is textbook endgame technique: put the rook behind the passed pawn, bring the king in, and use the extra pawn as a decoy — sacrifice it to drag White's king offside and transition into a won pawn ending where our king marches into his position. Waiting moves and zugzwang do the rest.",
+   "spoken": "After trading down, the queen is centralized and you're up two pawns with a passer. The winning method is textbook endgame technique: put the rook behind the passed pawn, bring the king in, and use the extra pawn as a decoy — sacrifice it to drag White's king offside and transition into a won pawn ending where your king marches into his position. Waiting moves and zugzwang do the rest.",
    "kind": "plan",
    "teaches": [
     "rook behind the passer",
@@ -384,7 +384,7 @@
    "t": 1987,
    "fen": "rnbqkbnr/pp2pppp/2p5/3P4/2B5/8/PPPP1PPP/RNBQK1NR b KQkq - 0 3",
    "line": [],
-   "spoken": "Why we didn't just push e5 earlier: controlling the center isn't a race. You control it with pawns AND pieces, and pawns pushed out without piece support become targets — the whole hypermodern idea is to let the opponent over-extend and then pick the pawns off.",
+   "spoken": "Why you didn't just push e5 earlier: controlling the center isn't a race. You control it with pawns AND pieces, and pawns pushed out without piece support become targets — the whole hypermodern idea is to let the opponent over-extend and then pick the pawns off.",
    "teaches": [
     "center control needs pieces, not just pawns"
    ],

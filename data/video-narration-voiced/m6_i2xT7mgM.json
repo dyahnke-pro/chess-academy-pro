@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We meet the Spanish bishop with the knight to f6 — the Berlin Variation, rock-solid.",
+   "spoken": "You meet the Spanish bishop with the knight to f6 — the Berlin Variation, rock-solid.",
    "kind": "main",
    "teaches": [
     "the Berlin Defence"
@@ -117,7 +117,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Don't be tempted by the loose pawn — our own pawn on e5 is hanging and we're undeveloped. Priority one is defending e5 with d6, then developing as fast as possible.",
+   "spoken": "Don't be tempted by the loose pawn — your own pawn on e5 is hanging and you're undeveloped. Priority one is defending e5 with d6, then developing as fast as possible.",
    "kind": "main",
    "teaches": [
     "defend and develop before grabbing"
@@ -186,7 +186,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop comes to e7 and we castle. This is a kind of chess to learn: unimposing but solid, no weaknesses, the two bishops, and no clear plan for the opponent to break through.",
+   "spoken": "The bishop comes to e7 and you castle. This is a kind of chess to learn: unimposing but solid, no weaknesses, the two bishops, and no clear plan for the opponent to break through.",
    "kind": "plan",
    "teaches": [
     "solid positions have value"
@@ -286,7 +286,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "White pushes and we attend to the tension — take the pawn. Whether he heads for an endgame is his call; either way we're fine, with the two bishops.",
+   "spoken": "White pushes and you attend to the tension — take the pawn. Whether he heads for an endgame is his call; either way you're fine, with the two bishops.",
    "kind": "main"
   },
   {
@@ -374,7 +374,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "He finds the one defence, guarding the back rank. But we switch targets: the bishop to c5 skewers the rook against the f2-pawn — and he can't recapture, because that knight is still frozen.",
+   "spoken": "He finds the one defence, guarding the back rank. But you switch targets: the bishop to c5 skewers the rook against the f2-pawn — and he can't recapture, because that knight is still frozen.",
    "kind": "main",
    "teaches": [
     "switch the point of attack",

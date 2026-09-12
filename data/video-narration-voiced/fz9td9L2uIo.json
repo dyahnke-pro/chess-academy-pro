@@ -16,7 +16,7 @@
         "c6",
         "e4"
       ],
-      "spoken": "We're Black, playing the Caro. c4 — the first time we see this move; White is clearly preparing to grab the d5-square as soon as possible."
+      "spoken": "You're Black, playing the Caro. c4 — the first time you see this move; White is clearly preparing to grab the d5-square as soon as possible."
     },
     {
       "ply": 4,
@@ -25,7 +25,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "But we still play d5 — very likely to transpose into the Panov Attack after the pawns trade and d4; White can also grab twice. Both variations likely lead to the same structure — the classic isolated queen's pawn."
+      "spoken": "But you still play d5 — very likely to transpose into the Panov Attack after the pawns trade and d4; White can also grab twice. Both variations likely lead to the same structure — the classic isolated queen's pawn."
     },
     {
       "ply": 6,
@@ -44,7 +44,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "e5 is definitely not the way, for many reasons — one is that it gives us an ideal French. We'd normally bring the bishop to f5 and then e6, but no rush; we could also develop the knight to c6. There's the idea of d4, to prevent White's d4 and sever the connection between the d- and e-pawns —"
+      "spoken": "e5 is definitely not the way, for many reasons — one is that it gives you an ideal French. You'd normally bring the bishop to f5 and then e6, but no rush; you could also develop the knight to c6. There's the idea of d4, to prevent White's d4 and sever the connection between the d- and e-pawns —"
     },
     {
       "ply": 8,
@@ -53,7 +53,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "— which also gives the bishop a nice square on c4, but let's not be too adventurous — the knight to c6 and the bishop to f5; no reason to refuse an ideal French setup handed to us like this."
+      "spoken": "— which also gives the bishop a nice square on c4, but let's not be too adventurous — the knight to c6 and the bishop to f5; no reason to refuse an ideal French setup handed to you like this."
     },
     {
       "ply": 10,
@@ -63,7 +63,7 @@
         "d4",
         "Bf5"
       ],
-      "spoken": "The bishop to f5 — French players are completely in paradise: an Advanced French with the bishop on f5. One semi-drawback: in the French we'd have pawns fixed at c5 and c3, and here we've traded on d4 so the knight has a natural square on c3, but the bishop outside the pawn chain is no contest."
+      "spoken": "The bishop to f5 — French players are completely in paradise: an Advanced French with the bishop on f5. One semi-drawback: in the French you'd have pawns fixed at c5 and c3, and here you've traded on d4 so the knight has a natural square on c3, but the bishop outside the pawn chain is no contest."
     },
     {
       "ply": 11,
@@ -81,7 +81,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "Of course we play e6. Even with White’s pawn advanced to c3, there's also one advanced to c5 — they cancel; the presence of c5 and c3 doesn't make d4 any weaker or stronger, just one more attacker and defender, but Black holds the power, deciding when to take on d4, and White's queen's knight lacks the c3-square. g4 is interesting but not dangerous — we'd meet it with h5, and White overextends further."
+      "spoken": "Of course you play e6. Even with White’s pawn advanced to c3, there's also one advanced to c5 — they cancel; the presence of c5 and c3 doesn't make d4 any weaker or stronger, just one more attacker and defender, but Black holds the power, deciding when to take on d4, and White's queen's knight lacks the c3-square. g4 is interesting but not dangerous — you'd meet it with h5, and White overextends further."
     },
     {
       "ply": 13,
@@ -99,7 +99,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "— we don't want to bring the king up, so the queen to b6, just like in the French, putting significant pressure on the d4-pawn; the queen to a4 is the same concept, also forcing the knight back. Unlike the French, our bishop is on f5."
+      "spoken": "— you don't want to bring the king up, so the queen to b6, just like in the French, putting significant pressure on the d4-pawn; the queen to a4 is the same concept, also forcing the knight back. Unlike the French, your bishop is on f5."
     },
     {
       "ply": 15,
@@ -108,7 +108,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "The one drawback, if you can call it that: we'll have to be creative developing the g8-knight, since in the French it often goes to f5, but the bishop is there. Two or three ways — the knight to h6, leaving room for the dark-squared bishop, then castle; or the knight to h6 or e7 and then a maneuver to vacate the f5-square for the knight. We'll do the bishop to g6 and the knight to f5."
+      "spoken": "The one drawback, if you can call it that: you'll have to be creative developing the g8-knight, since in the French it often goes to f5, but the bishop is there. Two or three ways — the knight to h6, leaving room for the dark-squared bishop, then castle; or the knight to h6 or e7 and then a maneuver to vacate the f5-square for the knight. You'll do the bishop to g6 and the knight to f5."
     },
     {
       "ply": 16,
@@ -126,7 +126,7 @@
       "line": [
         "Na4"
       ],
-      "spoken": "As I showed in my own game against a Peruvian grandmaster, it's not dangerous, because his dark-squared bishop is a very important defensive piece — without it the d4-pawn is much harder to defend and his position looser. The knight to a4 — fine; we can go the queen to a5 with check, but then the bishop to d2; the bishop to b4 with check looks good, but he just plays the bishop to d2, and trading dark-squared bishops isn't good for us."
+      "spoken": "As I showed in my own game against a Peruvian grandmaster, it's not dangerous, because his dark-squared bishop is a very important defensive piece — without it the d4-pawn is much harder to defend and his position looser. The knight to a4 — fine; you can go the queen to a5 with check, but then the bishop to d2; the bishop to b4 with check looks good, but he just plays the bishop to d2, and trading dark-squared bishops isn't good for you."
     },
     {
       "ply": 18,
@@ -135,7 +135,7 @@
       "line": [
         "Qc7"
       ],
-      "spoken": "It's good if he trades his dark-squared bishop for our knight, but I want to keep a bishop. No need for anything crazy — just drop the queen back to c7."
+      "spoken": "It's good if he trades his dark-squared bishop for your knight, but I want to keep a bishop. No need for anything crazy — just drop the queen back to c7."
     },
     {
       "ply": 19,
@@ -153,7 +153,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "Let's begin by developing our bishop to e7."
+      "spoken": "Let's begin by developing your bishop to e7."
     },
     {
       "ply": 21,
@@ -171,7 +171,7 @@
       "line": [
         "Bg6"
       ],
-      "spoken": "Now complete our regrouping — the bishop to g6, and then the knight to f5."
+      "spoken": "Now complete your regrouping — the bishop to g6, and then the knight to f5."
     },
     {
       "ply": 24,
@@ -181,7 +181,7 @@
         "a3",
         "Nf5"
       ],
-      "spoken": "a3, and the knight to f5 — everything is in perfect place; our knight has a home, our bishop has a home, all our pieces are developed except our king. We're going to castle —"
+      "spoken": "a3, and the knight to f5 — everything is in perfect place; your knight has a home, your bishop has a home, all your pieces are developed except your king. You're going to castle —"
     },
     {
       "ply": 25,
@@ -190,7 +190,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "— and then embark on the middlegame. I have to compliment my opponent — he's handling this very well; not better for us, but a very comfortable position. Do we take on e3? No, for two reasons: that bishop isn't going anywhere, it'll be there for us to take later —"
+      "spoken": "— and then embark on the middlegame. I have to compliment my opponent — he's handling this very well; not better for you, but a very comfortable position. Do you take on e3? No, for two reasons: that bishop isn't going anywhere, it'll be there for you to take later —"
     },
     {
       "ply": 26,
@@ -208,7 +208,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "— the pressure has reached its apex; how do we take it to the next level? The move is f6."
+      "spoken": "— the pressure has reached its apex; how do you take it to the next level? The move is f6."
     },
     {
       "ply": 28,
@@ -226,7 +226,7 @@
       "line": [
         "Nb5"
       ],
-      "spoken": "The knight to b5, attacking the queen. Where should we go?"
+      "spoken": "The knight to b5, attacking the queen. Where should you go?"
     },
     {
       "ply": 30,
@@ -235,7 +235,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "We can go to b8, that's okay, but I like dragging the queen back to b6 — it pins the knight to the pawn and reinforces the pressure on d4; after the pawns take on f6 and the bishop recaptures, look how many of our pieces will be trained on that d4-pawn, his position close to collapsing. If he doesn't take, we play a6, or remember we can still take the bishop and then the pawn — that's why we held off."
+      "spoken": "You can go to b8, that's okay, but I like dragging the queen back to b6 — it pins the knight to the pawn and reinforces the pressure on d4; after the pawns take on f6 and the bishop recaptures, look how many of your pieces will be trained on that d4-pawn, his position close to collapsing. If he doesn't take, you play a6, or remember you can still take the bishop and then the pawn — that's why you held off."
     },
     {
       "ply": 31,
@@ -244,7 +244,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "So we hold that over his head. A very funny subtlety I just realized: after a6 and the knight to c3, is the knight takes b2 possible? I missed this at first — after a6, the knight to c3, taking, there's the pattern the knight to a4, and the rook to b1 blunders the knight on c3 —"
+      "spoken": "So you hold that over his head. A very funny subtlety I just realized: after a6 and the knight to c3, is the knight takes b2 possible? I missed this at first — after a6, the knight to c3, taking, there's the pattern the knight to a4, and the rook to b1 blunders the knight on c3 —"
     },
     {
       "ply": 30,
@@ -261,7 +261,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "In what order? The most obvious is to take on e5, and after the d-pawn recaptures, take the bishop, and his position collapses — the f-pawn takes e3, the queen recaptures, and we win at least a pawn, probably also a piece. But after the f-pawn takes e5, does White have the bishop takes f5? Let's calculate: the bishop takes f5, the bishop recaptures, and he takes back on e5 — is that good for White, or are we missing something? Takes, takes, takes — what happens at the end?",
+      "spoken": "In what order? The most obvious is to take on e5, and after the d-pawn recaptures, take the bishop, and his position collapses — the f-pawn takes e3, the queen recaptures, and you win at least a pawn, probably also a piece. But after the f-pawn takes e5, does White have the bishop takes f5? Let's calculate: the bishop takes f5, the bishop recaptures, and he takes back on e5 — is that good for White, or are you missing something? Takes, takes, takes — what happens at the end?",
       "reanchor": true
     },
     {
@@ -271,14 +271,14 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "The knight on b5 is hanging — that's why it's so important to note all the undefended pieces; forgetting a piece hangs at the end of a line is one of the most common causes of miscalculation. Doesn't that give White an attack on the queen? No — the bishop is gone, and if White takes with the d-pawn, we take his bishop on e3 and his position collapses."
+      "spoken": "The knight on b5 is hanging — that's why it's so important to note all the undefended pieces; forgetting a piece hangs at the end of a line is one of the most common causes of miscalculation. Doesn't that give White an attack on the queen? No — the bishop is gone, and if White takes with the d-pawn, you take his bishop on e3 and his position collapses."
     },
     {
       "ply": 31,
       "t": 764,
       "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
       "line": [],
-      "spoken": "So either he takes the knight to stop the knight takes c3, and his knight hangs, or he takes on e5 and allows the knight takes e3 — that's why I didn't want to play a6 first. This knight, though it may seem a bone in our throat, is actually a very big asset: it burdens White's defenders —",
+      "spoken": "So either he takes the knight to stop the knight takes c3, and his knight hangs, or he takes on e5 and allows the knight takes e3 — that's why I didn't want to play a6 first. This knight, though it may seem a bone in your throat, is actually a very big asset: it burdens White's defenders —",
       "reanchor": true
     },
     {
@@ -288,7 +288,7 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "— it burdens the bishop, which is no longer free to do other things. White is busted. Opening the f-file is fine, since we also have an open rook — it's a moot point; we're winning a piece, and concrete gains outweigh a positional advantage like the f-file.",
+      "spoken": "— it burdens the bishop, which is no longer free to do other things. White is busted. Opening the f-file is fine, since you also have an open rook — it's a moot point; you're winning a piece, and concrete gains outweigh a positional advantage like the f-file.",
       "reanchor": true
     },
     {
@@ -304,7 +304,7 @@
       "t": 1013,
       "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
       "line": [],
-      "spoken": "— there's a place where blocking is fine versus not. Let's have a look at the game. We had a Caro, c6, d4, and c4 is reasonable, but after the pawns trade —",
+      "spoken": "— there's a place where blocking is fine versus not. Let's have a look at the game. You had a Caro, c6, d4, and c4 is reasonable, but after the pawns trade —",
       "reanchor": true
     }
   ]

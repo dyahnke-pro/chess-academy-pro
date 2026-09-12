@@ -109,7 +109,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We just keep developing the knight to f6 — we can't win a pawn yet, everything is defended twice over.",
+   "spoken": "You just keep developing the knight to f6 — you can't win a pawn yet, everything is defended twice over.",
    "kind": "main"
   },
   {
@@ -132,7 +132,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We strike with d5 — the power of the Sicilian, opening the center to exploit exactly those weaknesses.",
+   "spoken": "You strike with d5 — the power of the Sicilian, opening the center to exploit exactly those weaknesses.",
    "kind": "main",
    "teaches": [
     "the ...d5 central break"
@@ -154,7 +154,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Keep the tension. Instead of rushing to resolve it, we simply castle and keep developing — the benefit comes later.",
+   "spoken": "Keep the tension. Instead of rushing to resolve it, you simply castle and keep developing — the benefit comes later.",
    "kind": "main",
    "teaches": [
     "maintain the tension, don’t resolve it"
@@ -198,7 +198,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "Then dxe4, exposing our attack on d4.",
+   "spoken": "Then dxe4, exposing your attack on d4.",
    "kind": "main"
   },
   {
@@ -227,7 +227,7 @@
     "fxe4",
     "Bxd4+"
    ],
-   "spoken": "And here's exactly why we play the Accelerated Dragon — the bishop crashes in with the check on d4, winning the pawn cleanly.",
+   "spoken": "And here's exactly why you play the Accelerated Dragon — the bishop crashes in with the check on d4, winning the pawn cleanly.",
    "kind": "main",
    "teaches": [
     "the Dragon bishop wins material"
@@ -249,7 +249,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "We complete development with the bishop to e6 — its only square, since d7 is unavailable.",
+   "spoken": "You complete development with the bishop to e6 — its only square, since d7 is unavailable.",
    "kind": "main"
   }
  ]

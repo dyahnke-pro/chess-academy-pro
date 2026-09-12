@@ -16,7 +16,7 @@
         "g6",
         "e4"
       ],
-      "spoken": "We're playing a strong opponent — let's go e4 this time, and he plays the Modern."
+      "spoken": "You're playing a strong opponent — let's go e4 this time, and he plays the Modern."
     },
     {
       "ply": 4,
@@ -34,7 +34,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We've already faced the Modern a lot of times — the knight to c3."
+      "spoken": "You've already faced the Modern a lot of times — the knight to c3."
     },
     {
       "ply": 6,
@@ -52,7 +52,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "the point being that we want to keep our centre nicely protected."
+      "spoken": "the point being that you want to keep your centre nicely protected."
     },
     {
       "ply": 8,
@@ -70,7 +70,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "There are several ways to play — we could play a4 and stop b5, but we're actually going to allow it. The queen to d2."
+      "spoken": "There are several ways to play — you could play a4 and stop b5, but you're actually going to allow it. The queen to d2."
     },
     {
       "ply": 10,
@@ -88,7 +88,7 @@
       "line": [
         "h4"
       ],
-      "spoken": "We're going to play h4 and start attacking the kingside."
+      "spoken": "You're going to play h4 and start attacking the kingside."
     },
     {
       "ply": 12,
@@ -97,7 +97,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "Now, what's the drawback of h5 — he stops us from playing h5 ourselves, but"
+      "spoken": "Now, what's the drawback of h5 — he stops you from playing h5 yourself, but"
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "what's the drawback of this move? First of all, we need f3 to support this pawn. The drawback is that it"
+      "spoken": "what's the drawback of this move? First of all, you need f3 to support this pawn. The drawback is that it"
     },
     {
       "ply": 14,
@@ -115,7 +115,7 @@
       "line": [
         "Nd7"
       ],
-      "spoken": "weakens g5 — and that's exactly what we're going to exploit: we go the knight to h3 and"
+      "spoken": "weakens g5 — and that's exactly what you're going to exploit: you go the knight to h3 and"
     },
     {
       "ply": 17,
@@ -126,7 +126,7 @@
         "Bb7",
         "Ng5"
       ],
-      "spoken": "the knight to g5, sinking our knight into the weak square he's just created."
+      "spoken": "the knight to g5, sinking your knight into the weak square he's just created."
     },
     {
       "ply": 18,
@@ -135,7 +135,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "Now we need to complete our development,"
+      "spoken": "Now you need to complete your development,"
     },
     {
       "ply": 19,
@@ -144,7 +144,7 @@
       "line": [
         "O-O-O"
       ],
-      "spoken": "but we need to do it very carefully, so we're actually going to castle long first, to see how he develops — that helps us understand where to put our bishop."
+      "spoken": "but you need to do it very carefully, so you're actually going to castle long first, to see how he develops — that helps you understand where to put your bishop."
     },
     {
       "ply": 20,
@@ -171,7 +171,7 @@
       "line": [
         "Rd8"
       ],
-      "spoken": "castling long, because the king is just safer there, away from the c-file. Now, what Black is preparing here is c5 — so if we put our bishop on d3 we obstruct our own control of the file and help him play c5, which I don't want. But there's a really cool idea we"
+      "spoken": "castling long, because the king is just safer there, away from the c-file. Now, what Black is preparing here is c5 — so if you put your bishop on d3 you obstruct your own control of the file and help him play c5, which I don't want. But there's a really cool idea you"
     },
     {
       "ply": 23,
@@ -180,7 +180,7 @@
       "line": [
         "Ne2"
       ],
-      "spoken": "could try to apply instead. This knight on c3 can be improved — a typical idea in these positions: we lead the knight to e2, and try to go to"
+      "spoken": "could try to apply instead. This knight on c3 can be improved — a typical idea in these positions: you lead the knight to e2, and try to go to"
     },
     {
       "ply": 24,
@@ -189,7 +189,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "f4, which has its own dangers. He goes c5 sort of automatically, and we"
+      "spoken": "f4, which has its own dangers. He goes c5 sort of automatically, and you"
     },
     {
       "ply": 25,
@@ -218,7 +218,7 @@
         "e5",
         "Bc3"
       ],
-      "spoken": "blundered. The bishop to c3 was my idea, because he can't take — but what I blundered was the move b4. The good thing is that because of how I've played it, we can actually sacrifice the piece"
+      "spoken": "blundered. The bishop to c3 was my idea, because he can't take — but what I blundered was the move b4. The good thing is that because of how I've played it, you can actually sacrifice the piece"
     },
     {
       "ply": 30,
@@ -227,7 +227,7 @@
       "line": [
         "Nc5"
       ],
-      "spoken": "and I think we have very legitimate compensation. Let's see if he finds b4 — after the knight to d5 he'll just take on d5 and then take the bishop; he doesn't find b4. We don't actually have to move this knight, but we will."
+      "spoken": "and I think you have very legitimate compensation. Let's see if he finds b4 — after the knight to d5 he'll just take on d5 and then take the bishop; he doesn't find b4. You don't actually have to move this knight, but you will."
     },
     {
       "ply": 31,
@@ -236,7 +236,7 @@
       "line": [
         "Nd5"
       ],
-      "spoken": "The d5-square is extremely weak, so we're going to occupy it with our knight and then reoccupy it with our queen."
+      "spoken": "The d5-square is extremely weak, so you're going to occupy it with your knight and then reoccupy it with your queen."
     },
     {
       "ply": 32,
@@ -245,7 +245,7 @@
       "line": [
         "Qd7"
       ],
-      "spoken": "This opening is absolutely legit. He goes the queen to d7, leaving the knight here. How do we play this position? We should try to find where we can"
+      "spoken": "This opening is absolutely legit. He goes the queen to d7, leaving the knight here. How do you play this position? You should try to find where you can"
     },
     {
       "ply": 33,
@@ -254,7 +254,7 @@
       "line": [
         "Ba5"
       ],
-      "spoken": "infiltrate — what are the weak avenues in his position? One thing I see is this diagonal, so we put our bishop here; the bishop has done its job on c3, it was just biting on granite."
+      "spoken": "infiltrate — what are the weak avenues in his position? One thing I see is this diagonal, so you put your bishop here; the bishop has done its job on c3, it was just biting on granite."
     },
     {
       "ply": 34,
@@ -263,7 +263,7 @@
       "line": [
         "Rb8"
       ],
-      "spoken": "Now we improve the position of our bishop and get the rook out of the picture. Two possibilities: we can give a check on c7, but even better perhaps is the knight to b6 and then capturing the pawn on"
+      "spoken": "Now you improve the position of your bishop and get the rook out of the picture. Two possibilities: you can give a check on c7, but even better perhaps is the knight to b6 and then capturing the pawn on"
     },
     {
       "ply": 35,
@@ -272,7 +272,7 @@
       "line": [
         "Nb6"
       ],
-      "spoken": "d6 — the problem is that we trade queens, and I feel we could get more out of this position; but it's fine, a pawn is a pawn."
+      "spoken": "d6 — the problem is that you trade queens, and I feel you could get more out of this position; but it's fine, a pawn is a pawn."
     },
     {
       "ply": 39,
@@ -284,7 +284,7 @@
         "Qxd6",
         "Rxd6"
       ],
-      "spoken": "Let's not overthink it — I'll just take. We still have all the superiorities we had previously — our"
+      "spoken": "Let's not overthink it — I'll just take. You still have all the superiorities you had previously — your"
     },
     {
       "ply": 40,
@@ -302,7 +302,7 @@
       "line": [
         "Rd1"
       ],
-      "spoken": "He attacks the rook, so we move it back, and we can circle back to d5 with our knight."
+      "spoken": "He attacks the rook, so you move it back, and you can circle back to d5 with your knight."
     },
     {
       "ply": 42,
@@ -311,7 +311,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "We also need to develop the bishops and connect the rooks — he's not actually threatening to take at all, so we have several ways of playing this."
+      "spoken": "You also need to develop the bishops and connect the rooks — he's not actually threatening to take at all, so you have several ways of playing this."
     },
     {
       "ply": 43,
@@ -320,7 +320,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "We can go the bishop to e2 — let's complete our development first."
+      "spoken": "You can go the bishop to e2 — let's complete your development first."
     },
     {
       "ply": 44,
@@ -329,7 +329,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "This pawn is very weak — I notice it and think, aha, how can we attack it? Again, it's all about flexibility; there's a certain piece that has already done its job on its square,"
+      "spoken": "This pawn is very weak — I notice it and think, aha, how can you attack it? Again, it's all about flexibility; there's a certain piece that has already done its job on its square,"
     },
     {
       "ply": 45,
@@ -421,7 +421,7 @@
       "line": [
         "Kxd7"
       ],
-      "spoken": "we need to play this first, then we take on e5, we win the exchange back, and we're going to be up three pawns — and at this level, when you're three pawns down, there's"
+      "spoken": "you need to play this first, then you take on e5, you win the exchange back, and you're going to be up three pawns — and at this level, when you're three pawns down, there's"
     },
     {
       "ply": 51,
@@ -436,7 +436,7 @@
       "t": 363.5,
       "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
       "line": [],
-      "spoken": "Let's talk about what happened — there's a lot to discuss, but don't panic, I'll guide you through everything I did; that's the fun part about analysing afterward. Be prepared, we'll take a while on these games, because I want to squeeze all the instructive content out — it's not about playing the maximum number of games, I really want you to fully appreciate the logic.",
+      "spoken": "Let's talk about what happened — there's a lot to discuss, but don't panic, I'll guide you through everything I did; that's the fun part about analysing afterward. Be prepared, you'll take a while on these games, because I want to squeeze all the instructive content out — it's not about playing the maximum number of games, I really want you to fully appreciate the logic.",
       "reanchor": true
     },
     {
@@ -446,7 +446,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "The Modern we've faced before several times — it's a hypermodern opening, similar to the Pirc."
+      "spoken": "The Modern you've faced before several times — it's a hypermodern opening, similar to the Pirc."
     },
     {
       "ply": 7,

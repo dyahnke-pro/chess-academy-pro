@@ -99,7 +99,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Against a quick queen recapture on d4, we develop the knight to c6 with tempo, hitting the queen and gaining a free move.",
+   "spoken": "Against a quick queen recapture on d4, you develop the knight to c6 with tempo, hitting the queen and gaining a free move.",
    "kind": "main",
    "teaches": [
     "develop with tempo against the early queen"
@@ -121,7 +121,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "The Accelerated Dragon starts with g6 — we fianchetto the bishop first.",
+   "spoken": "The Accelerated Dragon starts with g6 — you fianchetto the bishop first.",
    "kind": "main",
    "teaches": [
     "the Accelerated Dragon fianchetto"
@@ -174,7 +174,7 @@
     "Bc4",
     "e6"
    ],
-   "spoken": "The biggest test at this level is the bishop to c4. The antidote is e6 — it blunts the bishop, and the key is that our e-pawn hasn't gone to e5, so e6 is available to take the whole point out of Bc4.",
+   "spoken": "The biggest test at this level is the bishop to c4. The antidote is e6 — it blunts the bishop, and the key is that your e-pawn hasn't gone to e5, so e6 is available to take the whole point out of Bc4.",
    "kind": "main",
    "teaches": [
     "e6 blunts the c4 bishop in the Sicilian"
@@ -281,7 +281,7 @@
    "line": [
     "Bxd6"
    ],
-   "spoken": "The bishop develops to d6, and with both bishops trained on the kingside we've got the Horowitz bishops — beautiful, active development.",
+   "spoken": "The bishop develops to d6, and with both bishops trained on the kingside you've got the Horowitz bishops — beautiful, active development.",
    "kind": "main",
    "teaches": [
     "the Horowitz bishops"
@@ -487,7 +487,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "We slot the bishop to e7 first — taking the sting out of a rook coming to e1 before we castle.",
+   "spoken": "You slot the bishop to e7 first — taking the sting out of a rook coming to e1 before you castle.",
    "kind": "main",
    "teaches": [
     "Be7 to neutralize Re1"
@@ -509,7 +509,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Then we castle. Black is comfortable, holding the bigger share of the center, with the light bishop headed for g4 or f5.",
+   "spoken": "Then you castle. Black is comfortable, holding the bigger share of the center, with the light bishop headed for g4 or f5.",
    "kind": "main"
   },
   {

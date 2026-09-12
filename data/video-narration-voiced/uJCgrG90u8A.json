@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We answer the king-pawn with the Sicilian and head for the Najdorf, my main opening from 1600 all the way to 2500.",
+   "spoken": "You answer the king-pawn with the Sicilian and head for the Najdorf, my main opening from 1600 all the way to 2500.",
    "kind": "main"
   },
   {
@@ -34,7 +34,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "For the 1400-1500 crowd I'd recommend the Accelerated Dragon, but here we go for the Najdorf itself, starting with the little d6.",
+   "spoken": "For the 1400-1500 crowd I'd recommend the Accelerated Dragon, but here you go for the Najdorf itself, starting with the little d6.",
    "kind": "main"
   },
   {
@@ -44,7 +44,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He opens with d4, the Open Sicilian, and after the trades we reach the tabiya.",
+   "spoken": "He opens with d4, the Open Sicilian, and after the trades you reach the tabiya.",
    "kind": "main"
   },
   {
@@ -140,7 +140,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "First we solve our light-squared bishop, developing it to e6 to lend cover to d5, so he can't just plant a knight there and blockade.",
+   "spoken": "First you solve your light-squared bishop, developing it to e6 to lend cover to d5, so he can't just plant a knight there and blockade.",
    "kind": "main",
    "teaches": [
     "Cover the weak square before the opponent occupies it"
@@ -163,7 +163,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "We simply unpin by developing the bishop to e7. Note we avoid h6: that pawn would become a hook his g-pawn could latch onto once we castle short, so we keep our kingside pawns intact.",
+   "spoken": "You simply unpin by developing the bishop to e7. Note you avoid h6: that pawn would become a hook his g-pawn could latch onto once you castle short, so you keep your kingside pawns intact.",
    "kind": "main",
    "teaches": [
     "Don\\u2019t create a pawn hook in front of your king"
@@ -198,7 +198,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "He castles queenside; we castle short. Opposite wings — now the race is on, each side storming the other's king.",
+   "spoken": "He castles queenside; you castle short. Opposite wings — now the race is on, each side storming the other's king.",
    "kind": "main",
    "teaches": [
     "Opposite-side castling means a pawn-storm race"
@@ -220,7 +220,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "He starts the storm with h4, intending g4-g5 to pry my king open. We answer on the other flank.",
+   "spoken": "He starts the storm with h4, intending g4-g5 to pry my king open. You answer on the other flank.",
    "kind": "main"
   },
   {
@@ -230,7 +230,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "This is where a6 pays off: we counterattack with b5, and both sides are charging on opposite sides of the board. My follow-up is b4, a5, a4.",
+   "spoken": "This is where a6 pays off: you counterattack with b5, and both sides are charging on opposite sides of the board. My follow-up is b4, a5, a4.",
    "kind": "main",
    "teaches": [
     "Race the opponent\\u2019s attack with your own — tempo is everything"
@@ -252,7 +252,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "We push b4, hitting his knight — and watch how much time that stranded g5-bishop costs him: it blocks his g-pawn, so the storm he wanted in one move now takes several.",
+   "spoken": "You push b4, hitting his knight — and watch how much time that stranded g5-bishop costs him: it blocks his g-pawn, so the storm he wanted in one move now takes several.",
    "kind": "main",
    "teaches": [
     "A misplaced bishop that blocks your own pawn storm loses crucial tempi"
@@ -265,7 +265,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "He drops the knight into d5. We don't let it marinate on such a fine square.",
+   "spoken": "He drops the knight into d5. You don't let it marinate on such a fine square.",
    "kind": "main"
   },
   {
@@ -275,7 +275,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "And we take with the bishop, not the knight — because recapturing with the knight lets him take back and trap our e6-bishop, while his g5-bishop stays defended by the h-pawn.",
+   "spoken": "And you take with the bishop, not the knight — because recapturing with the knight lets him take back and trap your e6-bishop, while his g5-bishop stays defended by the h-pawn.",
    "kind": "main",
    "teaches": [
     "Choose the recapture that doesn\\u2019t leave a piece trapped"
@@ -288,7 +288,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "After he recaptures, that d5-pawn is like a dental filling: it closes the center and walls off our weak d6-pawn from the d-file, sealing the very weakness he was pressuring.",
+   "spoken": "After he recaptures, that d5-pawn is like a dental filling: it closes the center and walls off your weak d6-pawn from the d-file, sealing the very weakness he was pressuring.",
    "kind": "main",
    "teaches": [
     "A closed center can neutralize your own structural weakness"
@@ -301,7 +301,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "With the center shut, we roll on with a5 and a4 — pure, sharp Najdorf, which fits my style like a glove.",
+   "spoken": "With the center shut, you roll on with a5 and a4 — pure, sharp Najdorf, which fits my style like a glove.",
    "kind": "main"
   },
   {
@@ -329,7 +329,7 @@
    "line": [
     "Nc1"
    ],
-   "spoken": "He tucks the king toward safety, but we're a step ahead in the race. Now we bring in the beef — pawns alone won't break through; the pieces have to join.",
+   "spoken": "He tucks the king toward safety, but you're a step ahead in the race. Now you bring in the beef — pawns alone won't break through; the pieces have to join.",
    "kind": "main",
    "teaches": [
     "A pawn storm needs pieces behind it to break through"
@@ -361,7 +361,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "Now b3 — we sacrifice a pawn to blast open the files around his king.",
+   "spoken": "Now b3 — you sacrifice a pawn to blast open the files around his king.",
    "kind": "main",
    "teaches": [
     "Sacrifice pawns to open lines toward the enemy king"
@@ -384,7 +384,7 @@
    "line": [
     "Nxb3"
    ],
-   "spoken": "We crash through on b3, opening the b-file, and prepare a frontal assault against the exposed king.",
+   "spoken": "You crash through on b3, opening the b-file, and prepare a frontal assault against the exposed king.",
    "kind": "main"
   },
   {
@@ -413,7 +413,7 @@
    "line": [
     "Ra8+"
    ],
-   "spoken": "Ra8+ chases the king, then we scoop the knight back with the queen. And the key lesson: sacrifices live on a sliding scale — an exchange sac is nothing like a queen sac. Even if the attack fizzles we're only down the exchange, so there's no reason to be scared.",
+   "spoken": "Ra8+ chases the king, then you scoop the knight back with the queen. And the key lesson: sacrifices live on a sliding scale — an exchange sac is nothing like a queen sac. Even if the attack fizzles you're only down the exchange, so there's no reason to be scared.",
    "kind": "main",
    "teaches": [
     "Sacrifices exist on a sliding scale — risk the exchange freely"
@@ -427,7 +427,7 @@
     "Kb1",
     "Qxb3"
    ],
-   "spoken": "Look how many attackers we have. Even the d7-knight, seemingly outside the zone, comes roaring in with Nc5. The Najdorf poses very human problems that are hard to defend at the board.",
+   "spoken": "Look how many attackers you have. Even the d7-knight, seemingly outside the zone, comes roaring in with Nc5. The Najdorf poses very human problems that are hard to defend at the board.",
    "kind": "plan",
    "plans": [
     "Bring the d7-knight in via c5",
@@ -454,7 +454,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": "We collect on d5 — up a piece, his position collapsing. The game is over.",
+   "spoken": "You collect on d5 — up a piece, his position collapsing. The game is over.",
    "kind": "main"
   },
   {
@@ -482,7 +482,7 @@
    "t": 846.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "With a knight loitering next to his open king, we finish with the fork. Clean game.",
+   "spoken": "With a knight loitering next to his open king, you finish with the fork. Clean game.",
    "kind": "review",
    "teaches": [
     "A knight near an exposed king is a forking weapon"

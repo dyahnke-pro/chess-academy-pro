@@ -34,7 +34,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "If I go the knight to c3, that's not the move we were just looking at, but I still want you to know it."
+      "spoken": "If I go the knight to c3, that's not the move you were just looking at, but I still want you to know it."
     },
     {
       "ply": 6,
@@ -124,7 +124,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "If White just ignores you here, we take it —"
+      "spoken": "If White just ignores you here, you take it —"
     },
     {
       "ply": 8,
@@ -133,14 +133,14 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "we just take the knight."
+      "spoken": "you just take the knight."
     },
     {
       "ply": 6,
       "t": 149,
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
       "line": [],
-      "spoken": "If White drops the knight back, we haven't talked about this yet — I want you to think on your feet.",
+      "spoken": "If White drops the knight back, you haven't talked about this yet — I want you to think on your feet.",
       "reanchor": true
     },
     {
@@ -219,7 +219,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "The knight takes e4, the queen to e2, we need the queen to e7; and if I play d3 to chase your knight, where does it go to keep pressure on the bishop? And if I castle —",
+      "spoken": "The knight takes e4, the queen to e2, you need the queen to e7; and if I play d3 to chase your knight, where does it go to keep pressure on the bishop? And if I castle —",
       "reanchor": true
     },
     {
@@ -244,7 +244,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "the knight to c3, which we looked at, and then we'll move on."
+      "spoken": "the knight to c3, which you looked at, and then you'll move on."
     },
     {
       "ply": 10,
@@ -406,7 +406,7 @@
       "t": 493,
       "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 1 11",
       "line": [],
-      "spoken": "Wait — where were we? We were looking at the bishop to e3.",
+      "spoken": "Wait — where were you? You were looking at the bishop to e3.",
       "reanchor": true
     },
     {
@@ -655,7 +655,7 @@
       "t": 831,
       "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 8 9",
       "line": [],
-      "spoken": "Maybe we can look at one final variation — there's a lot to review in this line.",
+      "spoken": "Maybe you can look at one final variation — there's a lot to review in this line.",
       "reanchor": true
     },
     {
@@ -791,7 +791,7 @@
         "Bc4",
         "Ng4"
       ],
-      "spoken": "We just talked about this through the lens of the bishop to e2 — what can White do to defend the pawn? It's an additional move that wasn't present when the bishop stayed on f1 —"
+      "spoken": "You just talked about this through the lens of the bishop to e2 — what can White do to defend the pawn? It's an additional move that wasn't present when the bishop stayed on f1 —"
     },
     {
       "ply": 21,
@@ -869,7 +869,7 @@
       "t": 1269.5,
       "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/2B1P3/2N5/PPPP1PPP/R1BQK2R b KQkq - 7 8",
       "line": [],
-      "spoken": "And even if that weren't mate, you'd be winning White's queen. That's a good amount for now — we'll review these lines and show a couple more traps next time.",
+      "spoken": "And even if that weren't mate, you'd be winning White's queen. That's a good amount for now — you'll review these lines and show a couple more traps next time.",
       "reanchor": true
     }
   ]

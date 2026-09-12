@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We're White against a lower-rated opponent, so let's play very aggressively — we still haven't had the chance to unveil a legitimate Danish Gambit. e4, e5."
+   "spoken": "You're White against a lower-rated opponent, so let's play very aggressively — you still haven't had the chance to unveil a legitimate Danish Gambit. e4, e5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Instead of grabbing, he plays the knight to c6. So what do we do here?"
+   "spoken": "Instead of grabbing, he plays the knight to c6. So what do you do here?"
   },
   {
    "ply": 5,
@@ -60,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop naturally with the knight to c3, getting a piece out and keeping options open."
+   "spoken": "You develop naturally with the knight to c3, getting a piece out and keeping options open."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black offers a trade with the knight to f6 — a non-committal move; we don't have to decide about trading yet."
+   "spoken": "Black offers a trade with the knight to f6 — a non-committal move; you don't have to decide about trading yet."
   },
   {
    "ply": 9,
@@ -106,7 +106,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We bring the other knight out, the knight to f3, developing with gain of time."
+   "spoken": "You bring the other knight out, the knight to f3, developing with gain of time."
   },
   {
    "ply": 14,
@@ -115,7 +115,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "His best try is d6, striking at our advanced e5-pawn."
+   "spoken": "His best try is d6, striking at your advanced e5-pawn."
   },
   {
    "ply": 15,
@@ -143,7 +143,7 @@
     "O-O",
     "dxe5"
    ],
-   "spoken": "We castle — the king still has a nice pawn shell, and the fact that we advanced the f-pawn doesn't spoil it. He replies d takes e5."
+   "spoken": "You castle — the king still has a nice pawn shell, and the fact that you advanced the f-pawn doesn't spoil it. He replies d takes e5."
   },
   {
    "ply": 19,
@@ -152,7 +152,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "We recapture, f takes e5, and he's done us a big favor by opening the f-file straight at his king."
+   "spoken": "You recapture, f takes e5, and he's done you a big favor by opening the f-file straight at his king."
   },
   {
    "ply": 20,
@@ -170,7 +170,7 @@
    "line": [
     "Kh1"
    ],
-   "spoken": "We tuck the king to h1, out of the checks and ready to attack."
+   "spoken": "You tuck the king to h1, out of the checks and ready to attack."
   },
   {
    "ply": 22,
@@ -179,7 +179,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": "It looks like Black will finish developing before we do — the knight to e7 — but that doesn't matter, because we're about to whip up a very quick attack on that king."
+   "spoken": "It looks like Black will finish developing before you do — the knight to e7 — but that doesn't matter, because you're about to whip up a very quick attack on that king."
   },
   {
    "ply": 23,
@@ -188,7 +188,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "What active moves can we play? The first thing my mind's eye sees is that loose bishop on c5 — so the knight to e4 jumps in, hitting it."
+   "spoken": "What active moves can you play? The first thing my mind's eye sees is that loose bishop on c5 — so the knight to e4 jumps in, hitting it."
   },
   {
    "ply": 25,
@@ -198,7 +198,7 @@
     "Bf5",
     "Nxc5"
    ],
-   "spoken": "Black slides the bishop to f5, and we take the bishop — the knight captures on c5, winning the bishop pair and staying on top."
+   "spoken": "Black slides the bishop to f5, and you take the bishop — the knight captures on c5, winning the bishop pair and staying on top."
   },
   {
    "ply": 26,
@@ -207,7 +207,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "Black plays a6, poking at our bishop."
+   "spoken": "Black plays a6, poking at your bishop."
   },
   {
    "ply": 27,
@@ -216,7 +216,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop simply drops back to c4, and we're basically winning."
+   "spoken": "The bishop simply drops back to c4, and you're basically winning."
   },
   {
    "ply": 29,
@@ -226,7 +226,7 @@
     "Qxd1",
     "Rxd1"
    ],
-   "spoken": "He offers the queen trade, queen takes on d1, and we recapture with the rook. This raises a very contentious question — is it good to trade when you're up material?"
+   "spoken": "He offers the queen trade, queen takes on d1, and you recapture with the rook. This raises a very contentious question — is it good to trade when you're up material?"
   },
   {
    "ply": 30,
@@ -244,7 +244,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "My take: don't feel you HAVE to simplify just because you're ahead. A lot of blunders come from ignoring the other features of the position. We calmly play c3."
+   "spoken": "My take: don't feel you HAVE to simplify just because you're ahead. A lot of blunders come from ignoring the other features of the position. You calmly play c3."
   },
   {
    "ply": 32,
@@ -280,7 +280,7 @@
    "line": [
     "Rxd8+"
    ],
-   "spoken": "I do have a clean chance to trade rooks, so why not — the rook takes on d8 with check. We give up the d-file, no big deal."
+   "spoken": "I do have a clean chance to trade rooks, so why not — the rook takes on d8 with check. You give up the d-file, no big deal."
   },
   {
    "ply": 36,
@@ -298,7 +298,7 @@
    "line": [
     "Nxb7"
    ],
-   "spoken": "It's an endgame and we can snap off another pawn — the knight takes on b7, a free pawn."
+   "spoken": "It's an endgame and you can snap off another pawn — the knight takes on b7, a free pawn."
   },
   {
    "ply": 39,
@@ -308,7 +308,7 @@
     "Rd1+",
     "Rxd1"
    ],
-   "spoken": "Black tries the rook to d1 with check; we trade it off. A word of caution I've shared: don't chase too many extra pawns when you're already up a stack of pieces."
+   "spoken": "Black tries the rook to d1 with check; you trade it off. A word of caution I've shared: don't chase too many extra pawns when you're already up a stack of pieces."
   },
   {
    "ply": 43,
@@ -333,7 +333,7 @@
     "N8e7",
     "Bxe7"
    ],
-   "spoken": "Now we simplify: Black shuffles the knight to c8, our bishop comes to f6, the knight reroutes to e7, and the bishop takes on e7, peeling off another defender.",
+   "spoken": "Now you simplify: Black shuffles the knight to c8, your bishop comes to f6, the knight reroutes to e7, and the bishop takes on e7, peeling off another defender.",
    "reanchor": true
   },
   {
@@ -371,7 +371,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "We push the passed pawn to e6 — it's about to become a monster."
+   "spoken": "You push the passed pawn to e6 — it's about to become a monster."
   },
   {
    "ply": 52,
@@ -380,7 +380,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "Black lunges with the knight to e3. We'll just retreat our bishop and then win this pawn — the game is over, we're up a piece."
+   "spoken": "Black lunges with the knight to e3. You'll just retreat your bishop and then win this pawn — the game is over, you're up a piece."
   },
   {
    "ply": 53,

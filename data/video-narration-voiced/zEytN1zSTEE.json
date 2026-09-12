@@ -25,7 +25,7 @@
    "line": [
     "exf4"
    ],
-   "spoken": "We accept, e takes f4."
+   "spoken": "You accept, e takes f4."
   },
   {
    "ply": 5,
@@ -181,7 +181,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We'll start with d4.",
+   "spoken": "You'll start with d4.",
    "reanchor": true
   },
   {
@@ -291,7 +291,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "We avoid the immediate queen to h5 because of g4, and start with the bishop to d6.",
+   "spoken": "You avoid the immediate queen to h5 because of g4, and start with the bishop to d6.",
    "reanchor": true
   },
   {
@@ -659,7 +659,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We simply develop the knight to c6.",
+   "spoken": "You simply develop the knight to c6.",
    "reanchor": true
   },
   {
@@ -679,7 +679,7 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": "we give the check on h4.",
+   "spoken": "you give the check on h4.",
    "reanchor": true
   },
   {
@@ -699,7 +699,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "And then we play d6.",
+   "spoken": "And then you play d6.",
    "reanchor": true
   },
   {
@@ -719,7 +719,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "we can bring the bishop to g4 anyway, pinning the knight to the queen — essentially forcing a queen trade, and d4 has compromised White's center.",
+   "spoken": "you can bring the bishop to g4 anyway, pinning the knight to the queen — essentially forcing a queen trade, and d4 has compromised White's center.",
    "reanchor": true
   },
   {
@@ -966,7 +966,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 — we strike at the center with d5.",
+   "spoken": "The knight to c3 — you strike at the center with d5.",
    "reanchor": true
   },
   {
@@ -1064,7 +1064,7 @@
     "Nc3",
     "Nh5"
    ],
-   "spoken": "So we go the knight to h5 — the first time it lands there.",
+   "spoken": "So you go the knight to h5 — the first time it lands there.",
    "reanchor": true
   },
   {
@@ -1275,7 +1275,7 @@
    "t": 1856.5,
    "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 2 4",
    "line": [],
-   "spoken": "And that brings us to the main move, e5.",
+   "spoken": "And that brings you to the main move, e5.",
    "reanchor": true
   },
   {
@@ -1351,7 +1351,7 @@
    "t": 1925.5,
    "fen": "r1bqkb1r/pppp1ppp/2n5/4P2n/5p2/5N2/PPPPB1PP/RNBQK2R w KQkq - 3 6",
    "line": [],
-   "spoken": "If White plays d4, we go with the immediate d6.",
+   "spoken": "If White plays d4, you go with the immediate d6.",
    "reanchor": true
   },
   {
@@ -1390,7 +1390,7 @@
     "d6",
     "O-O"
    ],
-   "spoken": "So if White castles we go d6; if White plays e takes d6 our knight has an easy retreat to f6.",
+   "spoken": "So if White castles you go d6; if White plays e takes d6 your knight has an easy retreat to f6.",
    "reanchor": true
   },
   {
@@ -1400,7 +1400,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "So after d4 we go g6 — sometimes g5, sometimes g6.",
+   "spoken": "So after d4 you go g6 — sometimes g5, sometimes g6.",
    "reanchor": true
   },
   {
@@ -1455,7 +1455,7 @@
    "t": 1965,
    "fen": "r1bqkb1r/ppp2p1p/2np4/4P1pn/3P1p2/5N2/PPP1B1PP/RNBQ1RK1 w kq - 0 8",
    "line": [],
-   "spoken": "So we go g6, which takes the sting out of the line.",
+   "spoken": "So you go g6, which takes the sting out of the line.",
    "reanchor": true
   },
   {
@@ -1506,7 +1506,7 @@
     "g5",
     "O-O"
    ],
-   "spoken": "The knight to c6, the bishop to d3, g5, castles — we've gained a tempo, so c4 is totally harmless.",
+   "spoken": "The knight to c6, the bishop to d3, g5, castles — you've gained a tempo, so c4 is totally harmless.",
    "reanchor": true
   },
   {
@@ -1547,7 +1547,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "We go g4, counterstriking on the kingside — chaotic-looking, but White is completely lost.",
+   "spoken": "You go g4, counterstriking on the kingside — chaotic-looking, but White is completely lost.",
    "reanchor": true
   },
   {
@@ -1569,7 +1569,7 @@
     "Rxd1",
     "gxf3"
    ],
-   "spoken": "The queens come off, we take on f3 — already a pawn up, and the attack on White's king is devastating.",
+   "spoken": "The queens come off, you take on f3 — already a pawn up, and the attack on White's king is devastating.",
    "reanchor": true
   },
   {
@@ -1735,7 +1735,7 @@
     "Nc3",
     "d5"
    ],
-   "spoken": "After the knight to c3 we strike with d5 — remember the key detail.",
+   "spoken": "After the knight to c3 you strike with d5 — remember the key detail.",
    "reanchor": true
   },
   {
@@ -1756,7 +1756,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "we simply develop, because White doesn't have the c4 break.",
+   "spoken": "you simply develop, because White doesn't have the c4 break.",
    "reanchor": true
   },
   {
@@ -1764,7 +1764,7 @@
    "t": 3062,
    "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": "We also looked at e takes d5, where you cling to the pawn and castle.",
+   "spoken": "You also looked at e takes d5, where you cling to the pawn and castle.",
    "reanchor": true
   },
   {

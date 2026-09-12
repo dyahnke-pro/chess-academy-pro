@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "He plays d6, which isn't the best line against it — it lets us take control of the centre."
+   "spoken": "He plays d6, which isn't the best line against it — it lets you take control of the centre."
   },
   {
    "ply": 5,
@@ -60,7 +60,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "He hits the e4-pawn, so we defend it with the bishop to d3 — and there are subtleties to watch for, particularly if he plays the knight to c6."
+   "spoken": "He hits the e4-pawn, so you defend it with the bishop to d3 — and there are subtleties to watch for, particularly if he plays the knight to c6."
   },
   {
    "ply": 8,
@@ -124,7 +124,7 @@
     "O-O",
     "Nbd2"
    ],
-   "spoken": "Let's develop by the book — the knight to d2. That's the downside of the Alapin: you can't route this knight to c3. But it's fine here, and it buttresses the e4-pawn. We're clearly better, with a nice pawn centre."
+   "spoken": "Let's develop by the book — the knight to d2. That's the downside of the Alapin: you can't route this knight to c3. But it's fine here, and it buttresses the e4-pawn. You're clearly better, with a nice pawn centre."
   },
   {
    "ply": 18,
@@ -144,7 +144,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Taking on e5 would open the position to his benefit and let him attack our bishop — so d5, keeping the centre closed. Our space advantage should, in theory, tell against him."
+   "spoken": "Taking on e5 would open the position to his benefit and let him attack your bishop — so d5, keeping the centre closed. Your space advantage should, in theory, tell against him."
   },
   {
    "ply": 20,
@@ -216,7 +216,7 @@
    "line": [
     "Nxd6"
    ],
-   "spoken": "We win the pawn back on d6; roughly equal. And if he pushes d5, we take, and his e5-pawn hangs — we're eyeing that pawn too."
+   "spoken": "You win the pawn back on d6; roughly equal. And if he pushes d5, you take, and his e5-pawn hangs — you're eyeing that pawn too."
   },
   {
    "ply": 28,
@@ -234,7 +234,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "Our knight was the vulnerable piece — so rather than use the get-out-of-jail rook to c1 to activate the rook, we've evacuated it to b5. Chess is all about priorities, and the top priority was getting that knight out."
+   "spoken": "Your knight was the vulnerable piece — so rather than use the get-out-of-jail rook to c1 to activate the rook, you've evacuated it to b5. Chess is all about priorities, and the top priority was getting that knight out."
   },
   {
    "ply": 30,
@@ -243,7 +243,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Now our knight is safely out and defended — something we couldn't do a move ago."
+   "spoken": "Now your knight is safely out and defended — something you couldn't do a move ago."
   },
   {
    "ply": 31,
@@ -252,7 +252,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "He's forgotten the pawn is hanging — the knight takes on e5, and we're up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising."
+   "spoken": "He's forgotten the pawn is hanging — the knight takes on e5, and you're up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising."
   },
   {
    "ply": 32,
@@ -270,7 +270,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We retreat the knight to c3 — an even safer square."
+   "spoken": "You retreat the knight to c3 — an even safer square."
   },
   {
    "ply": 34,
@@ -279,14 +279,14 @@
    "line": [
     "Rad8"
    ],
-   "spoken": "The rook to d8 — and we must be careful, because the queen to e1 walks into a fork. So the queen goes to a4 instead, active and pressuring his knights. When he tries the queen to c5 it doesn't actually attack our knight, because his knight on b4 would hang. That b4-knight is what cramps us, so e3 compels the trade — and with us a pawn up, trades are good, plus it removes his strongest piece. Then the finishing trick: with his queen in contact with the rook, we swing a rook to d8, and he can't defend it without a back-rank mate or giving up the rook; the queen to f5 finishes with mate to follow."
+   "spoken": "The rook to d8 — and you must be careful, because the queen to e1 walks into a fork. So the queen goes to a4 instead, active and pressuring his knights. When he tries the queen to c5 it doesn't actually attack your knight, because his knight on b4 would hang. That b4-knight is what cramps you, so e3 compels the trade — and with you a pawn up, trades are good, plus it removes his strongest piece. Then the finishing trick: with his queen in contact with the rook, you swing a rook to d8, and he can't defend it without a back-rank mate or giving up the rook; the queen to f5 finishes with mate to follow."
   },
   {
    "ply": 8,
    "t": 494,
    "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
    "line": [],
-   "spoken": "A quick recap: he played d6, which handed us central control — a line I've even played from the Black side.",
+   "spoken": "A quick recap: he played d6, which handed you central control — a line I've even played from the Black side.",
    "reanchor": true
   },
   {
@@ -335,7 +335,7 @@
     "Nxe5",
     "Bxb5"
    ],
-   "spoken": "When his bishop pins from g4 and the long diagonal opens, the knight takes on e5 becomes possible — we're not blundering the queen, we're setting up a combination: the check on b5 in between wins the queen back, and when the smoke clears we're up a piece. It's the same idea as the famous Queen's Gambit knight-to-d7 trap.",
+   "spoken": "When his bishop pins from g4 and the long diagonal opens, the knight takes on e5 becomes possible — you're not blundering the queen, you're setting up a combination: the check on b5 in between wins the queen back, and when the smoke clears you're up a piece. It's the same idea as the famous Queen's Gambit knight-to-d7 trap.",
    "reanchor": true
   },
   {

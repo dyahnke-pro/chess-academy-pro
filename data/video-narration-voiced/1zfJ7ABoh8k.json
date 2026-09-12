@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": "We go for the kill with e4, and Black answers with the Scandinavian, d5."
+   "spoken": "You go for the kill with e4, and Black answers with the Scandinavian, d5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "exd5",
     "Qxd5"
    ],
-   "spoken": "We take, and Black recaptures early with the queen, capturing on d5."
+   "spoken": "You take, and Black recaptures early with the queen, capturing on d5."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We hit the queen with the knight to c3."
+   "spoken": "You hit the queen with the knight to c3."
   },
   {
    "ply": 6,
@@ -70,7 +70,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "We fianchetto the bishop to g2, planning a modest d3 and a specific attacking idea."
+   "spoken": "You fianchetto the bishop to g2, planning a modest d3 and a specific attacking idea."
   },
   {
    "ply": 10,
@@ -88,7 +88,7 @@
    "line": [
     "Nge2"
    ],
-   "spoken": "We put the knight on e2, not f3 — the knight to f3 would block our own fianchettoed bishop."
+   "spoken": "You put the knight on e2, not f3 — the knight to f3 would block your own fianchettoed bishop."
   },
   {
    "ply": 12,
@@ -124,7 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "We play the modest d3, opening the fianchettoed bishop."
+   "spoken": "You play the modest d3, opening the fianchettoed bishop."
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles queenside — which actually makes our plan five times stronger. Long castling here is very risky."
+   "spoken": "Black castles queenside — which actually makes your plan five times stronger. Long castling here is very risky."
   },
   {
    "ply": 19,
@@ -160,7 +160,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "We hit immediately with b4 — if Black takes, the b-file opens straight onto the king."
+   "spoken": "You hit immediately with b4 — if Black takes, the b-file opens straight onto the king."
   },
   {
    "ply": 20,
@@ -178,7 +178,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "We push on with b5."
+   "spoken": "You push on with b5."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "We keep the storm rolling with a4, planning a5 and b6."
+   "spoken": "You keep the storm rolling with a4, planning a5 and b6."
   },
   {
    "ply": 24,
@@ -214,7 +214,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "We absolutely play a5, prying open the king."
+   "spoken": "You absolutely play a5, prying open the king."
   },
   {
    "ply": 26,
@@ -232,7 +232,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "No rush to take b6 — first we develop the bishop to f4, connecting the rooks."
+   "spoken": "No rush to take b6 — first you develop the bishop to f4, connecting the rooks."
   },
   {
    "ply": 28,
@@ -251,7 +251,7 @@
     "Bxd6",
     "Qxd6"
    ],
-   "spoken": "We take on d6, and Black recaptures with the queen, capturing on d6 — move order matters here."
+   "spoken": "You take on d6, and Black recaptures with the queen, capturing on d6 — move order matters here."
   },
   {
    "ply": 31,
@@ -260,7 +260,7 @@
    "line": [
     "axb6"
    ],
-   "spoken": "Now we take, capturing on b6 — and Black is in huge trouble."
+   "spoken": "Now you take, capturing on b6 — and Black is in huge trouble."
   },
   {
    "ply": 32,
@@ -296,7 +296,7 @@
    "line": [
     "Rxa7"
    ],
-   "spoken": "We grab, capturing on a7 with the rook, and the queen will join the attack via a1."
+   "spoken": "You grab, capturing on a7 with the rook, and the queen will join the attack via a1."
   },
   {
    "ply": 34,
@@ -314,7 +314,7 @@
    "line": [
     "Ra6"
    ],
-   "spoken": "The queen is the supporting actress — so rather than rush her out, we keep the rook alive with a6, pinning the knight."
+   "spoken": "The queen is the supporting actress — so rather than rush her out, you keep the rook alive with a6, pinning the knight."
   },
   {
    "ply": 36,
@@ -333,7 +333,7 @@
     "Nxd5",
     "exd5"
    ],
-   "spoken": "We remove it — the knight takes, and Black recaptures with the pawn, capturing on d5 — killing the knight-to-b4 idea."
+   "spoken": "You remove it — the knight takes, and Black recaptures with the pawn, capturing on d5 — killing the knight-to-b4 idea."
   },
   {
    "ply": 39,
@@ -342,7 +342,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "First we insert g4."
+   "spoken": "First you insert g4."
   },
   {
    "ply": 40,
@@ -396,7 +396,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "We win material, capturing on d5 with the knight."
+   "spoken": "You win material, capturing on d5 with the knight."
   },
   {
    "ply": 46,
@@ -414,7 +414,7 @@
    "line": [
     "Nxb6"
    ],
-   "spoken": "The fastest path — we take, capturing on b6 with the knight, so the a6-rook can swing to a8."
+   "spoken": "The fastest path — you take, capturing on b6 with the knight, so the a6-rook can swing to a8."
   },
   {
    "ply": 48,
@@ -432,7 +432,7 @@
    "line": [
     "Rxb6"
    ],
-   "spoken": "We take back, capturing on b6 with the rook."
+   "spoken": "You take back, capturing on b6 with the rook."
   },
   {
    "ply": 50,
@@ -441,7 +441,7 @@
    "line": [
     "Rxb6"
    ],
-   "spoken": "Black recaptures, capturing on b6 — and now we check on a8."
+   "spoken": "Black recaptures, capturing on b6 — and now you check on a8."
   },
   {
    "ply": 53,
@@ -470,7 +470,7 @@
     "Nf6",
     "Bg2"
    ],
-   "spoken": "After the knight to f6 and our fianchetto...",
+   "spoken": "After the knight to f6 and your fianchetto...",
    "reanchor": true
   },
   {
@@ -579,7 +579,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "In the game we castled and Black developed the knight to d7.",
+   "spoken": "In the game you castled and Black developed the knight to d7.",
    "reanchor": true
   },
   {
@@ -589,7 +589,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "We played d3; database games from here continued with e6.",
+   "spoken": "You played d3; database games from here continued with e6.",
    "reanchor": true
   },
   {
@@ -609,7 +609,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "Here we would have prepared with a3, readying b4.",
+   "spoken": "Here you would have prepared with a3, readying b4.",
    "reanchor": true
   },
   {
@@ -638,7 +638,7 @@
    "t": 931.5,
    "fen": "r3k2r/pp1nbppp/2p1pn2/q6b/8/P1NP2PP/1PP1NPB1/R1BQ1RK1 w kq - 1 11",
    "line": [],
-   "spoken": "So to play b4 there, we would first develop the bishop.",
+   "spoken": "So to play b4 there, you would first develop the bishop.",
    "reanchor": true
   },
   {
@@ -708,7 +708,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "...and we would storm exactly as in the game, pushing the a-pawn up to a6 — strong even without a king on that wing.",
+   "spoken": "...and you would storm exactly as in the game, pushing the a-pawn up to a6 — strong even without a king on that wing.",
    "reanchor": true
   },
   {
@@ -885,7 +885,7 @@
    "t": 1520.5,
    "fen": "2kr1b1r/pp1npppp/2p2n2/7b/1q6/2NP2PP/P1P1NPB1/R1BQ1RK1 w - - 0 11",
    "line": [],
-   "spoken": "Our opponent didn't go for that line — can't blame him.",
+   "spoken": "Your opponent didn't go for that line — can't blame him.",
    "reanchor": true
   },
   {
@@ -924,7 +924,7 @@
     "c5",
     "a4"
    ],
-   "spoken": "Then, textbook — we'd shove the pawn to provoke weaknesses, exactly as before.",
+   "spoken": "Then, textbook — you'd shove the pawn to provoke weaknesses, exactly as before.",
    "reanchor": true
   },
   {
@@ -935,7 +935,7 @@
     "b6",
     "a5"
    ],
-   "spoken": "The pawn storm provokes the weaknesses we need.",
+   "spoken": "The pawn storm provokes the weaknesses you need.",
    "reanchor": true
   },
   {
@@ -1036,7 +1036,7 @@
     "Bf4",
     "Bf8"
    ],
-   "spoken": "Skipping ahead — after a5 our play was all intuitive; the bishop to f4.",
+   "spoken": "Skipping ahead — after a5 your play was all intuitive; the bishop to f4.",
    "reanchor": true
   },
   {
@@ -1061,7 +1061,7 @@
     "Qxd6",
     "axb6"
    ],
-   "spoken": "We take on d6 first, then on b6 — not the other way round.",
+   "spoken": "You take on d6 first, then on b6 — not the other way round.",
    "reanchor": true
   },
   {
@@ -1079,7 +1079,7 @@
    "line": [
     "axb6"
    ],
-   "spoken": "...because if we take on b6 first, the knight would recapture on b6...",
+   "spoken": "...because if you take on b6 first, the knight would recapture on b6...",
    "reanchor": true
   },
   {
@@ -1091,7 +1091,7 @@
     "Bxd6",
     "Rxd6"
    ],
-   "spoken": "...and Black holds by recapturing on d6 with the rook, keeping a7 defended. So we do it the other way.",
+   "spoken": "...and Black holds by recapturing on d6 with the rook, keeping a7 defended. So you do it the other way.",
    "reanchor": true
   },
   {
@@ -1111,7 +1111,7 @@
     "Ra6",
     "Qd7"
    ],
-   "spoken": "...we would have the rook to a6, incredibly strong, with the queen to a1 to follow.",
+   "spoken": "...you would have the rook to a6, incredibly strong, with the queen to a1 to follow.",
    "reanchor": true
   },
   {
@@ -1150,7 +1150,7 @@
     "Be3",
     "e5"
    ],
-   "spoken": "Provoking e5 gains us the d5 square — attacking doesn't mean positional sense goes out the window.",
+   "spoken": "Provoking e5 gains you the d5 square — attacking doesn't mean positional sense goes out the window.",
    "reanchor": true
   },
   {
@@ -1163,7 +1163,7 @@
     "g5",
     "Bg6"
    ],
-   "spoken": "If Black plays the bishop to b7, we'd have g4 and g5 to build a monster on d5.",
+   "spoken": "If Black plays the bishop to b7, you'd have g4 and g5 to build a monster on d5.",
    "reanchor": true
   },
   {
@@ -1203,7 +1203,7 @@
    "t": 2007.5,
    "fen": "2kr1b1r/p1qn1pp1/1p3n1p/PPp1p2b/6P1/2NPB2P/2P1NPB1/R2Q1RK1 w - - 0 18",
    "line": [],
-   "spoken": "So it collapses for Black — the bishop to d6, we trade, take a7, and it's over. Moves like the rook to a6 can be hard to find.",
+   "spoken": "So it collapses for Black — the bishop to d6, you trade, take a7, and it's over. Moves like the rook to a6 can be hard to find.",
    "reanchor": true
   }
  ]

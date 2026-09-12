@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We play e5 again, staying with classical openings."
+   "spoken": "You play e5 again, staying with classical openings."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We answer a knight to c6."
+   "spoken": "You answer a knight to c6."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We develop the knight to f6."
+   "spoken": "You develop the knight to f6."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We accept, recapturing on e5. We'll play a variation that dodges most of the theory."
+   "spoken": "You accept, recapturing on e5. You'll play a variation that dodges most of the theory."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White plays d4. The engine's best is to keep the extra piece — retreat the knight to c6, meet e5 with a knight tucked back to g8, and White lacks full compensation — but I'm out of my depth there and suspect our opponent has analyzed it.",
+   "spoken": "White plays d4. The engine's best is to keep the extra piece — retreat the knight to c6, meet e5 with a knight tucked back to g8, and White lacks full compensation — but I'm out of my depth there and suspect your opponent has analyzed it.",
    "reanchor": true
   },
   {
@@ -88,7 +88,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": "So we play a knight to g6 — not to keep the piece, but to give it back."
+   "spoken": "So you play a knight to g6 — not to keep the piece, but to give it back."
   },
   {
    "ply": 11,
@@ -107,7 +107,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "We don't even move the f6 knight — a bishop to b4 develops as if nothing's the matter."
+   "spoken": "You don't even move the f6 knight — a bishop to b4 develops as if nothing's the matter."
   },
   {
    "ply": 13,
@@ -126,7 +126,7 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": "We recapture with the queen. I can't believe Black could be worse here — and gambit players hate a line where you sacrifice the piece back and drain the life out of the position. We'll play a solid, positional style, aiming a later queen to e6 to open lines toward f2."
+   "spoken": "You recapture with the queen. I can't believe Black could be worse here — and gambit players hate a line where you sacrifice the piece back and drain the life out of the position. You'll play a solid, positional style, aiming a later queen to e6 to open lines toward f2."
   },
   {
    "ply": 17,
@@ -137,7 +137,7 @@
     "Qe6+",
     "Qe2"
    ],
-   "spoken": "A classic standoff of queens — you don't want to be the one to release the tension and help your opponent develop, so we won't take on e2; we develop and castle instead.",
+   "spoken": "A classic standoff of queens — you don't want to be the one to release the tension and help your opponent develop, so you won't take on e2; you develop and castle instead.",
    "reanchor": true
   },
   {
@@ -149,7 +149,7 @@
     "Qxe6",
     "dxe6"
    ],
-   "spoken": "We recapture on e6 with the d-pawn — it opens the d-file and gives our light-squared bishop air, whereas the f-pawn recapture would leave that bishop boxed in behind pawns on d7 and e6.",
+   "spoken": "You recapture on e6 with the d-pawn — it opens the d-file and gives your light-squared bishop air, whereas the f-pawn recapture would leave that bishop boxed in behind pawns on d7 and e6.",
    "reanchor": true
   },
   {
@@ -169,7 +169,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "A bishop to d7. The position is completely equal — we win it by patience, developing our pieces first."
+   "spoken": "A bishop to d7. The position is completely equal — you win it by patience, developing your pieces first."
   },
   {
    "ply": 23,
@@ -187,7 +187,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "We trade on c3 — most people wouldn't, but this has a lot of venom."
+   "spoken": "You trade on c3 — most people wouldn't, but this has a lot of venom."
   },
   {
    "ply": 25,
@@ -206,7 +206,7 @@
    "line": [
     "Bc6"
    ],
-   "spoken": "A bishop to c6, onto the long diagonal — the point is that White's bishop on c3 is a bad piece, and we'll launch a campaign against it."
+   "spoken": "A bishop to c6, onto the long diagonal — the point is that White's bishop on c3 is a bad piece, and you'll launch a campaign against it."
   },
   {
    "ply": 27,
@@ -225,7 +225,7 @@
    "line": [
     "Rfd8"
    ],
-   "spoken": "A rook to d8. Our plan is to pile on the d4 pawn — double the rooks and reroute the knight to f5, and before long d4 becomes a sitting duck."
+   "spoken": "A rook to d8. Your plan is to pile on the d4 pawn — double the rooks and reroute the knight to f5, and before long d4 becomes a sitting duck."
   },
   {
    "ply": 29,
@@ -244,7 +244,7 @@
    "line": [
     "Rd7"
    ],
-   "spoken": "We start doubling with a rook to d7. We'll speed up, since our opponent is playing fast and confidently, but the pressure keeps building."
+   "spoken": "You start doubling with a rook to d7. You'll speed up, since your opponent is playing fast and confidently, but the pressure keeps building."
   },
   {
    "ply": 31,
@@ -263,7 +263,7 @@
    "line": [
     "Rad8"
    ],
-   "spoken": "A rook to d8, completing the doubling — I don't see what the bishop threatens, so we continue the plan."
+   "spoken": "A rook to d8, completing the doubling — I don't see what the bishop threatens, so you continue the plan."
   },
   {
    "ply": 33,
@@ -293,7 +293,7 @@
     "f4",
     "Nd5"
    ],
-   "spoken": "White plays f4. A knight to d5 might run into f5, so we think carefully.",
+   "spoken": "White plays f4. A knight to d5 might run into f5, so you think carefully.",
    "reanchor": true
   },
   {
@@ -306,7 +306,7 @@
     "Re5",
     "Ne7"
    ],
-   "spoken": "A very good move is h5, stopping g4 and making it impossible for White to push f5 — a light-square blockade. It looks passive, but it freezes White's pawns; then g6 makes his kingside pawns immobile, and a capture on e6 is nothing to fear since we recapture and White loses his light-squared bishop. Our structure is watertight.",
+   "spoken": "A very good move is h5, stopping g4 and making it impossible for White to push f5 — a light-square blockade. It looks passive, but it freezes White's pawns; then g6 makes his kingside pawns immobile, and a capture on e6 is nothing to fear since you recapture and White loses his light-squared bishop. Your structure is watertight.",
    "reanchor": true
   },
   {
@@ -330,7 +330,7 @@
     "Bb2",
     "Bb7"
    ],
-   "spoken": "A bishop to f3 would allow a rook to d3 with tempo, so instead we build a home for the bishop with b6 and drop it back to b7, freeing the knight to reach c6.",
+   "spoken": "A bishop to f3 would allow a rook to d3 with tempo, so instead you build a home for the bishop with b6 and drop it back to b7, freeing the knight to reach c6.",
    "reanchor": true
   },
   {
@@ -340,7 +340,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "White plays c4 — this also lets us push c5 if needed.",
+   "spoken": "White plays c4 — this also lets you push c5 if needed.",
    "reanchor": true
   },
   {
@@ -350,7 +350,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We play a knight to c6. White was almost lost but survives with a rook to e4 — very fortunate for him.",
+   "spoken": "You play a knight to c6. White was almost lost but survives with a rook to e4 — very fortunate for him.",
    "reanchor": true
   },
   {
@@ -370,7 +370,7 @@
    "line": [
     "Rd6"
    ],
-   "spoken": "A rook to d6. Maybe the h5-and-g6 plan was a mistake, since it weakened the dark squares — I underestimated that, and now we have to spin our way out.",
+   "spoken": "A rook to d6. Maybe the h5-and-g6 plan was a mistake, since it weakened the dark squares — I underestimated that, and now you have to spin your way out.",
    "reanchor": true
   },
   {
@@ -380,7 +380,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "I'm quite concerned about d5 here — I'd totally forgotten it was an idea. We have to be careful not to get mated, but we have resources.",
+   "spoken": "I'm quite concerned about d5 here — I'd totally forgotten it was an idea. You have to be careful not to get mated, but you have resources.",
    "reanchor": true
   },
   {
@@ -400,7 +400,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": "White plays a bishop to f6. There's a back-rank idea, so we always have to keep a rook guarding the eighth rank, which really limits us. We need to calculate carefully here.",
+   "spoken": "White plays a bishop to f6. There's a back-rank idea, so you always have to keep a rook guarding the eighth rank, which really limits you. You need to calculate carefully here.",
    "reanchor": true
   },
   {
@@ -410,7 +410,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We have to play the capture on d5.",
+   "spoken": "You have to play the capture on d5.",
    "reanchor": true
   },
   {
@@ -430,7 +430,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "We recapture on e4.",
+   "spoken": "You recapture on e4.",
    "reanchor": true
   },
   {
@@ -450,7 +450,7 @@
    "line": [
     "cxd6"
    ],
-   "spoken": "We recapture on d6. The good thing is that our knight on a5 is a monster, hitting b3.",
+   "spoken": "You recapture on d6. The good thing is that your knight on a5 is a monster, hitting b3.",
    "reanchor": true
   },
   {
@@ -460,7 +460,7 @@
    "line": [
     "Kc2"
    ],
-   "spoken": "White plays a king to c2. The knight on a5 gives us a tempo — we can push toward promotion, bring the king to f8, or play the f5 I like, which solidifies the whole pawn chain.",
+   "spoken": "White plays a king to c2. The knight on a5 gives you a tempo — you can push toward promotion, bring the king to f8, or play the f5 I like, which solidifies the whole pawn chain.",
    "reanchor": true
   },
   {
@@ -470,7 +470,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "We play a king to f8 — the drawback is a bishop to f6, but it's better than nothing.",
+   "spoken": "You play a king to f8 — the drawback is a bishop to f6, but it's better than nothing.",
    "reanchor": true
   },
   {
@@ -490,7 +490,7 @@
    "line": [
     "Ke8"
    ],
-   "spoken": "We bring the king closer with a king to e8.",
+   "spoken": "You bring the king closer with a king to e8.",
    "reanchor": true
   },
   {
@@ -501,7 +501,7 @@
     "Kc3",
     "d5"
    ],
-   "spoken": "And if the king comes to c3, we'll play d5.",
+   "spoken": "And if the king comes to c3, you'll play d5.",
    "reanchor": true
   },
   {
@@ -512,7 +512,7 @@
     "cxd5",
     "Bxd5"
    ],
-   "spoken": "We're playing for a win a pawn up, but White's bishops are strong and he has a lot of time — this will be a real challenge.",
+   "spoken": "You're playing for a win a pawn up, but White's bishops are strong and he has a lot of time — this will be a real challenge.",
    "reanchor": true
   },
   {
@@ -543,7 +543,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "Let's play e3 — inducing b5 has an upside: it fixes the pawns on light squares, so if the king moves away we can play a bishop to b3.",
+   "spoken": "Let's play e3 — inducing b5 has an upside: it fixes the pawns on light squares, so if the king moves away you can play a bishop to b3.",
    "reanchor": true
   },
   {
@@ -553,7 +553,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "White plays b5. I wouldn't say I'm in trouble — probably equal, but hard to win with Black despite our extra passed pawn on e3.",
+   "spoken": "White plays b5. I wouldn't say I'm in trouble — probably equal, but hard to win with Black despite your extra passed pawn on e3.",
    "reanchor": true
   },
   {
@@ -563,7 +563,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "A knight to e7. If White now plays the king to d4 or d3, we have a bishop to b3. What worries me is a5, a high-level move to shatter our queenside.",
+   "spoken": "A knight to e7. If White now plays the king to d4 or d3, you have a bishop to b3. What worries me is a5, a high-level move to shatter your queenside.",
    "reanchor": true
   },
   {
@@ -593,7 +593,7 @@
    "line": [
     "Kd2"
    ],
-   "spoken": "White plays a king to d2. We can try a bishop to c4, an ambitious try.",
+   "spoken": "White plays a king to d2. You can try a bishop to c4, an ambitious try.",
    "reanchor": true
   },
   {
@@ -603,7 +603,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We play a bishop to b3. If White plays a bishop to b8 and takes, we can't win — but I see no alternative.",
+   "spoken": "You play a bishop to b3. If White plays a bishop to b8 and takes, you can't win — but I see no alternative.",
    "reanchor": true
   },
   {
@@ -721,7 +721,7 @@
    "line": [
     "Kd6"
    ],
-   "spoken": "Even up a piece it's hard — the pawn on b5 ties us down.",
+   "spoken": "Even up a piece it's hard — the pawn on b5 ties you down.",
    "reanchor": true
   },
   {
@@ -750,7 +750,7 @@
     "h3",
     "Ke7"
    ],
-   "spoken": "h3 is another mistake, because we drop back to e7 attacking the bishop.",
+   "spoken": "h3 is another mistake, because you drop back to e7 attacking the bishop.",
    "reanchor": true
   },
   {
@@ -761,7 +761,7 @@
     "Bc6",
     "Bxh3"
    ],
-   "spoken": "We'll take on h3 next and be up a full piece — but I have no time, so it's a tall order.",
+   "spoken": "You'll take on h3 next and be up a full piece — but I have no time, so it's a tall order.",
    "reanchor": true
   },
   {
@@ -801,7 +801,7 @@
     "Be4",
     "Bf5"
    ],
-   "spoken": "It should be a bishop to f5 — we complete that anyway.",
+   "spoken": "It should be a bishop to f5 — you complete that anyway.",
    "reanchor": true
   },
   {
@@ -871,7 +871,7 @@
     "Ba6",
     "Ne4"
    ],
-   "spoken": "We go here to stop the pawn.",
+   "spoken": "You go here to stop the pawn.",
    "reanchor": true
   },
   {
@@ -882,7 +882,7 @@
     "b7",
     "Kc7"
    ],
-   "spoken": "The point is that after b7 we stop it with a king to c7.",
+   "spoken": "The point is that after b7 you stop it with a king to c7.",
    "reanchor": true
   },
   {
@@ -893,7 +893,7 @@
     "Ke5",
     "Nxg3"
    ],
-   "spoken": "Now we take on g3 and simply push the h-pawn home.",
+   "spoken": "Now you take on g3 and simply push the h-pawn home.",
    "reanchor": true
   },
   {
@@ -904,7 +904,7 @@
     "Kf6",
     "h4"
    ],
-   "spoken": "And we win — probably the closest speedrun game we've had.",
+   "spoken": "And you win — probably the closest speedrun game you've had.",
    "reanchor": true
   },
   {
@@ -1049,7 +1049,7 @@
     "bxc3",
     "N8e7"
    ],
-   "spoken": "White has two pawns for the piece, but we control all the light squares.",
+   "spoken": "White has two pawns for the piece, but you control all the light squares.",
    "reanchor": true
   },
   {
@@ -1069,7 +1069,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "...similar to the game — we plant the bishop into f5 and totally dominate the light squares, so White can never push f5.",
+   "spoken": "...similar to the game — you plant the bishop into f5 and totally dominate the light squares, so White can never push f5.",
    "reanchor": true
   },
   {
@@ -1077,7 +1077,7 @@
    "t": 1095.5,
    "fen": "r1bqkbnr/pppp1ppp/6n1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 7",
    "line": [],
-   "spoken": "But we chose to give the piece back, which I think is a valid approach even though the engine doesn't love it.",
+   "spoken": "But you chose to give the piece back, which I think is a valid approach even though the engine doesn't love it.",
    "reanchor": true
   },
   {
@@ -1118,7 +1118,7 @@
    "t": 1112,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
    "line": [],
-   "spoken": "...maybe the way we did it wasn't best. In retrospect White's queen to e2 was strong, because otherwise we castle and play d5 with dead-equal play. Square control isn't abstract here: the point of controlling f5 is to stop White from playing f5 and rolling us off the board, and controlling g4 stops g4 — concrete purposes, not theory.",
+   "spoken": "...maybe the way you did it wasn't best. In retrospect White's queen to e2 was strong, because otherwise you castle and play d5 with dead-equal play. Square control isn't abstract here: the point of controlling f5 is to stop White from playing f5 and rolling you off the board, and controlling g4 stops g4 — concrete purposes, not theory.",
    "reanchor": true
   }
  ]

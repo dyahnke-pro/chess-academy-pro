@@ -79,7 +79,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "We answer with the pedestrian e3, and note Black still has Bf5 or c5 available.",
+   "spoken": "You answer with the pedestrian e3, and note Black still has Bf5 or c5 available.",
    "kind": "main"
   },
   {
@@ -98,7 +98,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Rather than the g4 sideline, we keep it strictly positional and start with Bd3.",
+   "spoken": "Rather than the g4 sideline, you keep it strictly positional and start with Bd3.",
    "kind": "main"
   },
   {
@@ -108,7 +108,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "After Bd6 we face a choice, and one option is out: Bxd6 is bad because cxd6 hands Black a broad central pawn mass. Bg3 is the usual retreat.",
+   "spoken": "After Bd6 you face a choice, and one option is out: Bxd6 is bad because cxd6 hands Black a broad central pawn mass. Bg3 is the usual retreat.",
    "kind": "main",
    "teaches": "Don't trade into a recapture that gifts your opponent a central pawn majority."
   },
@@ -119,7 +119,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "But there's nothing to fear if Black takes on f4 — after exf4 the doubled f-pawns actually increase our central control. Think of it as a reverse Maroczy bind, clamping the e5 square.",
+   "spoken": "But there's nothing to fear if Black takes on f4 — after exf4 the doubled f-pawns actually increase your central control. Think of it as a reverse Maroczy bind, clamping the e5 square.",
    "kind": "main",
    "teaches": "Doubled f-pawns from an exf4 recapture bind e5 and boost central control — welcome them, don't avoid them."
   },

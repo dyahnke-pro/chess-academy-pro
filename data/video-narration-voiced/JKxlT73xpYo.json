@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": "We open e4 and meet a French — e6, preparing to challenge our center with d5."
+   "spoken": "You open e4 and meet a French — e6, preparing to challenge your center with d5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4, grabbing the full center. This is the heart of the French: our broad pawn duo against Black's coming counterstrike."
+   "spoken": "d4, grabbing the full center. This is the heart of the French: your broad pawn duo against Black's coming counterstrike."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5, and we're at an early crossroads. In earlier speedruns I've recommended the Nimzowitsch Advance — e5, and after c5 you skip the automatic c3 and develop the knight instead, voluntarily giving up the pawn chain and inviting a capture on d4. It's counterintuitive, with a deep positional underpinning, and genuinely dangerous for an unprepared opponent.",
+   "spoken": "d5, and you're at an early crossroads. In earlier speedruns I've recommended the Nimzowitsch Advance — e5, and after c5 you skip the automatic c3 and develop the knight instead, voluntarily giving up the pawn chain and inviting a capture on d4. It's counterintuitive, with a deep positional underpinning, and genuinely dangerous for an unprepared opponent.",
    "reanchor": true
   },
   {
@@ -73,7 +73,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "But a knight to c3 leads to incredibly theoretical waters we don't want to touch with a ten-foot pole, and the Exchange is equally to be avoided. The Tarrasch is the answer.",
+   "spoken": "But a knight to c3 leads to incredibly theoretical waters you don't want to touch with a ten-foot pole, and the Exchange is equally to be avoided. The Tarrasch is the answer.",
    "reanchor": true
   },
   {
@@ -101,7 +101,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "That traditional move is a knight to f6, and in response we push e5, reaching an Advanced-French structure.",
+   "spoken": "That traditional move is a knight to f6, and in response you push e5, reaching an Advanced-French structure.",
    "reanchor": true
   },
   {
@@ -120,7 +120,7 @@
    "line": [
     "Nfd7"
    ],
-   "spoken": "The knight retreats to d7, ready to regroup and to help hit our chain with a later c5 or f6."
+   "spoken": "The knight retreats to d7, ready to regroup and to help hit your chain with a later c5 or f6."
   },
   {
    "ply": 13,
@@ -138,7 +138,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black plays c5, striking at the base of our chain, the d4 pawn."
+   "spoken": "Black plays c5, striking at the base of your chain, the d4 pawn."
   },
   {
    "ply": 15,
@@ -147,7 +147,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "And here we do play c3. Don't file this under the Advance variation — this pawn structure shows up across many French lines, and the Advance has very different piece configurations for both sides."
+   "spoken": "And here you do play c3. Don't file this under the Advance variation — this pawn structure shows up across many French lines, and the Advance has very different piece configurations for both sides."
   },
   {
    "ply": 16,
@@ -171,7 +171,7 @@
    "t": 254.5,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 4 5",
    "line": [],
-   "spoken": "Here's the strategic backbone of the whole game. White must defend d4, and there are two ways. The traditional route is a knight to e2, positional and solid; the move I've always played is the sharper knight-g1-to-f3. For a decade or two it caught even strong French experts off guard, and it's still less common than routing the knight to e2 but, to my eye, more dangerous and easier for an intermediate player to handle. After a developing bishop to e7 we castle kingside, and Black's most testing try is the tactical g5, hoping to chase the f3 knight and collapse our grip on d4. In the game Black chooses a5, grabbing queenside space and aiming to clamp with a4, often paired with a queen to b6 hitting d4. We answer a4, freezing that pawn in its tracks and denying Black his main aim. Then comes a capture on d4, which grants Black the b4 outpost — but a newer player overrates that: we have the mirror outpost on b5, and because the center is closed we have the tempi to reroute a knight there via b1 and c3. We also stay alert to the universal French break, f6; a rook to e1 discourages it, since after a trade on f6 the e-file opens onto e6 and the e5 square becomes a glorious knight outpost. Black plants a knight into b4, so the bishop retreats to b1 — still raking the b1-h7 diagonal at h7 for Greek-gift ideas, and now a rook lift, a1-a3, is available under the knight's nose. Then the signature maneuver: the knight from d2 goes f1 and g3, the same Ruy Lopez regrouping, unclogging our pieces and heading for h5 or f6. We add h2-h4 — not to close the kingside with h5, but to prepare a knight leap to g5 and open the diagonal for the queen to h5. A single pawn sacrifice is nothing like a piece sacrifice, so h4 costs us little. Black tries f6; we take on f6 from a position of strength and fight for e5 with a bishop to g5, repurposing a tactical idea into a positional squeeze. When the moment ripens, a knight to e5 breaks through — a fork after a knight capture, and after a bishop takes e5 we recapture with the pawn and the kingside is simply hopeless. The finish is a knight sacrifice on g7, shattering the pawn cover and clearing h5 so the queen crashes in — resignable. One caution the whole time: a premature bishop check on f6 would let Black sacrifice the exchange and run the king toward the center, so we keep our dark-squared bishop alive to bolt the e7 escape. That, in one breath, is how to kill the French.",
+   "spoken": "Here's the strategic backbone of the whole game. White must defend d4, and there are two ways. The traditional route is a knight to e2, positional and solid; the move I've always played is the sharper knight-g1-to-f3. For a decade or two it caught even strong French experts off guard, and it's still less common than routing the knight to e2 but, to my eye, more dangerous and easier for an intermediate player to handle. After a developing bishop to e7 you castle kingside, and Black's most testing try is the tactical g5, hoping to chase the f3 knight and collapse your grip on d4. In the game Black chooses a5, grabbing queenside space and aiming to clamp with a4, often paired with a queen to b6 hitting d4. You answer a4, freezing that pawn in its tracks and denying Black his main aim. Then comes a capture on d4, which grants Black the b4 outpost — but a newer player overrates that: you have the mirror outpost on b5, and because the center is closed you have the tempi to reroute a knight there via b1 and c3. You also stay alert to the universal French break, f6; a rook to e1 discourages it, since after a trade on f6 the e-file opens onto e6 and the e5 square becomes a glorious knight outpost. Black plants a knight into b4, so the bishop retreats to b1 — still raking the b1-h7 diagonal at h7 for Greek-gift ideas, and now a rook lift, a1-a3, is available under the knight's nose. Then the signature maneuver: the knight from d2 goes f1 and g3, the same Ruy Lopez regrouping, unclogging your pieces and heading for h5 or f6. You add h2-h4 — not to close the kingside with h5, but to prepare a knight leap to g5 and open the diagonal for the queen to h5. A single pawn sacrifice is nothing like a piece sacrifice, so h4 costs you little. Black tries f6; you take on f6 from a position of strength and fight for e5 with a bishop to g5, repurposing a tactical idea into a positional squeeze. When the moment ripens, a knight to e5 breaks through — a fork after a knight capture, and after a bishop takes e5 you recapture with the pawn and the kingside is simply hopeless. The finish is a knight sacrifice on g7, shattering the pawn cover and clearing h5 so the queen crashes in — resignable. One caution the whole time: a premature bishop check on f6 would let Black sacrifice the exchange and run the king toward the center, so you keep your dark-squared bishop alive to bolt the e7 escape. That, in one breath, is how to kill the French.",
    "reanchor": true
   },
   {
@@ -238,7 +238,7 @@
    "t": 2355,
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 6",
    "line": [],
-   "spoken": "But the line we played previously instead of c3 was a knight to f3.",
+   "spoken": "But the line you played previously instead of c3 was a knight to f3.",
    "reanchor": true
   },
   {
@@ -430,7 +430,7 @@
    "t": 2503,
    "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "That's especially true for a newer-to-intermediate player. We'll leave that line for the next time we face the French and focus on the knight to f6, which has plenty to talk about.",
+   "spoken": "That's especially true for a newer-to-intermediate player. You'll leave that line for the next time you face the French and focus on the knight to f6, which has plenty to talk about.",
    "reanchor": true
   },
   {
@@ -533,7 +533,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "It transposes right back — after a knight to f6, e5, bishop to d3, we reach the exact game position.",
+   "spoken": "It transposes right back — after a knight to f6, e5, bishop to d3, you reach the exact game position.",
    "reanchor": true
   },
   {
@@ -543,7 +543,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "After the knight to f6, White plays e5 and then the bishop to d3 — reaching the exact position we had in the game.",
+   "spoken": "After the knight to f6, White plays e5 and then the bishop to d3 — reaching the exact position you had in the game.",
    "reanchor": true
   },
   {
@@ -632,7 +632,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We'll stick to a knight to c6, knight-g-f3.",
+   "spoken": "You'll stick to a knight to c6, knight-g-f3.",
    "reanchor": true
   },
   {
@@ -674,7 +674,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Spot the difference — with the knight already on f3, we have enough defenders of d4: three defenders against three attackers.",
+   "spoken": "Spot the difference — with the knight already on f3, you have enough defenders of d4: three defenders against three attackers.",
    "reanchor": true
   },
   {
@@ -697,7 +697,7 @@
     "Qd8",
     "Nc1"
    ],
-   "spoken": "But in this version, if we'd committed the other knight to f3, we couldn't reroute a knight to b3 — it would get forked.",
+   "spoken": "But in this version, if you'd committed the other knight to f3, you couldn't reroute a knight to b3 — it would get forked.",
    "reanchor": true
   },
   {
@@ -814,7 +814,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Our opponent chose the second main line, a bishop to e7.",
+   "spoken": "Your opponent chose the second main line, a bishop to e7.",
    "reanchor": true
   },
   {
@@ -824,7 +824,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle, and there's one more critical branch to explore.",
+   "spoken": "You castle, and there's one more critical branch to explore.",
    "reanchor": true
   },
   {
@@ -931,7 +931,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Black plays a queen to b6, and now a pawn sacrifice makes far less sense because our pawn is on g4 and the king is exposed; White is reduced to a queen to a4, and the crushing idea still applies.",
+   "spoken": "Black plays a queen to b6, and now a pawn sacrifice makes far less sense because your pawn is on g4 and the king is exposed; White is reduced to a queen to a4, and the crushing idea still applies.",
    "reanchor": true
   },
   {
@@ -1060,7 +1060,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "It's just awful for Black — a knight to a5, we answer a knight to b3, open the bishop, and Black collapses on all sides. That's g5 in a nutshell.",
+   "spoken": "It's just awful for Black — a knight to a5, you answer a knight to b3, open the bishop, and Black collapses on all sides. That's g5 in a nutshell.",
    "reanchor": true
   },
   {
@@ -1070,7 +1070,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "Now to our opponent's actual move, a5.",
+   "spoken": "Now to your opponent's actual move, a5.",
    "reanchor": true
   },
   {
@@ -1090,7 +1090,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Our opponent follows with a capture on d4. If Black instead plays a queen to b6 here...",
+   "spoken": "Your opponent follows with a capture on d4. If Black instead plays a queen to b6 here...",
    "reanchor": true
   },
   {
@@ -1100,7 +1100,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "We can already capture on c5, because we have sufficient resources to defend the e5 pawn. I had this over the board and won convincingly.",
+   "spoken": "You can already capture on c5, because you have sufficient resources to defend the e5 pawn. I had this over the board and won convincingly.",
    "reanchor": true
   },
   {
@@ -1140,7 +1140,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "You just play a rook to e1 with exactly enough defenders to keep the pawn safe. Now — who was paying attention? If instead Black castles kingside here, the strong plan is the very maneuver we played: a knight to f1 and g3.",
+   "spoken": "You just play a rook to e1 with exactly enough defenders to keep the pawn safe. Now — who was paying attention? If instead Black castles kingside here, the strong plan is the very maneuver you played: a knight to f1 and g3.",
    "reanchor": true
   },
   {
@@ -1181,7 +1181,7 @@
     "Nb4",
     "Re1"
    ],
-   "spoken": "Here's a mind-expanding subtlety: I actually think castling kingside is a mistake for Black. After castling, rook to e1, knight to b4, bishop to b1 — the king is committed to a lifetime of misery under our attack.",
+   "spoken": "Here's a mind-expanding subtlety: I actually think castling kingside is a mistake for Black. After castling, rook to e1, knight to b4, bishop to b1 — the king is committed to a lifetime of misery under your attack.",
    "reanchor": true
   },
   {
@@ -1194,7 +1194,7 @@
     "Kh8",
     "Rf1"
    ],
-   "spoken": "But after the immediate knight to b4 and our bishop to b1, Black doesn't have to castle kingside — and, believe it or not, the king is safer in the center here than on the kingside.",
+   "spoken": "But after the immediate knight to b4 and your bishop to b1, Black doesn't have to castle kingside — and, believe it or not, the king is safer in the center here than on the kingside.",
    "reanchor": true
   },
   {
@@ -1205,7 +1205,7 @@
     "b6",
     "Bb1"
    ],
-   "spoken": "So the bishop to b1 is a lot less effective in this move order. Black can play b6, and if we try the same rook-e1 idea from the game...",
+   "spoken": "So the bishop to b1 is a lot less effective in this move order. Black can play b6, and if you try the same rook-e1 idea from the game...",
    "reanchor": true
   },
   {
@@ -1216,7 +1216,7 @@
     "Ba6",
     "Re1"
    ],
-   "spoken": "Black meets rook to e1 with a bishop to a6 — fifty games in the database — and after our knight to f1, Black...",
+   "spoken": "Black meets rook to e1 with a bishop to a6 — fifty games in the database — and after your knight to f1, Black...",
    "reanchor": true
   },
   {
@@ -1229,7 +1229,7 @@
     "Rc8",
     "Be1"
    ],
-   "spoken": "...saves a tempo on castling and swings a rook to c8 for immediate queenside pressure. This has happened many times at the top, and after our knight to g3 Black has a crazy-looking resource he wouldn't have if he'd castled.",
+   "spoken": "...saves a tempo on castling and swings a rook to c8 for immediate queenside pressure. This has happened many times at the top, and after your knight to g3 Black has a crazy-looking resource he wouldn't have if he'd castled.",
    "reanchor": true
   },
   {
@@ -1266,7 +1266,7 @@
     "Nb4",
     "Re1"
    ],
-   "spoken": "...and the knight to b4, the bishop to b1 is a no-brainer, because the king is stuck kingside and we're setting up a massive attack. It all comes down to these tiny move-order subtleties that decide the game at this level.",
+   "spoken": "...and the knight to b4, the bishop to b1 is a no-brainer, because the king is stuck kingside and you're setting up a massive attack. It all comes down to these tiny move-order subtleties that decide the game at this level.",
    "reanchor": true
   },
   {
@@ -1276,7 +1276,7 @@
    "line": [
     "Nb8"
    ],
-   "spoken": "After a bishop back to e1, Black is borderline lost from a human standpoint, White's attack is so strong. Our opponent sensibly played a knight to b8, and we played the knight to f1.",
+   "spoken": "After a bishop back to e1, Black is borderline lost from a human standpoint, White's attack is so strong. Your opponent sensibly played a knight to b8, and you played the knight to f1.",
    "reanchor": true
   },
   {
@@ -1288,7 +1288,7 @@
     "N8c6",
     "Be1"
    ],
-   "spoken": "Completing the standard maneuver. The engine already gives White plus two and a half — Black has no queenside play while we're fully positioned for a decisive kingside attack.",
+   "spoken": "Completing the standard maneuver. The engine already gives White plus two and a half — Black has no queenside play while you're fully positioned for a decisive kingside attack.",
    "reanchor": true
   },
   {
@@ -1324,7 +1324,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "We focused on the second main line, ready to sacrifice the d4-pawn after the queen to b6, and the sharp line with g5 where the queen to e2 is a powerful weapon to have up your sleeve. The pawn to g6 is probably Black's best bet for dynamic equality, with the immediate a5 also interesting — but most players meet the bishop to e7, and against kingside castling you answer with the rook to e1.",
+   "spoken": "You focused on the second main line, ready to sacrifice the d4-pawn after the queen to b6, and the sharp line with g5 where the queen to e2 is a powerful weapon to have up your sleeve. The pawn to g6 is probably Black's best bet for dynamic equality, with the immediate a5 also interesting — but most players meet the bishop to e7, and against kingside castling you answer with the rook to e1.",
    "reanchor": true
   }
  ]

@@ -36,7 +36,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "So we simply take on e5, and if Black wants the pawn back he'll have to spend time and moves for it.",
+   "spoken": "So you simply take on e5, and if Black wants the pawn back he'll have to spend time and moves for it.",
    "kind": "main"
   },
   {
@@ -95,7 +95,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "Ng5 manufactures our own fried liver — it hits the queen and sets up Bc4 against f7. Moving a piece twice is usually wrong, but a lead in development buys you that liberty.",
+   "spoken": "Ng5 manufactures your own fried liver — it hits the queen and sets up Bc4 against f7. Moving a piece twice is usually wrong, but a lead in development buys you that liberty.",
    "kind": "main",
    "teaches": "A big development lead licenses breaking the rules — even moving one piece twice for a concrete attack."
   },
@@ -222,7 +222,7 @@
    "t": 1073,
    "fen": "rnb1kbnr/pp1p1ppp/2pq4/8/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 3 6",
    "line": [],
-   "spoken": "Black's best defense was d5 — it opens the bishop and hits ours, and we can't take because of the pin. But don't be intimidated: after we castle, that d5-pawn becomes a blessing, since exd5 can rip open the e-file against the stranded king.",
+   "spoken": "Black's best defense was d5 — it opens the bishop and hits yours, and you can't take because of the pin. But don't be intimidated: after you castle, that d5-pawn becomes a blessing, since exd5 can rip open the e-file against the stranded king.",
    "kind": "review",
    "teaches": "A pawn that pins your bishop now can become a target the moment you castle and can capture it.",
    "reanchor": true

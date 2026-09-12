@@ -70,7 +70,7 @@
         "cxd4",
         "cxd4"
       ],
-      "spoken": "The tension is released, c takes d4 and we recapture."
+      "spoken": "The tension is released, c takes d4 and you recapture."
     },
     {
       "ply": 10,
@@ -89,7 +89,7 @@
         "exd5",
         "Qxd5"
       ],
-      "spoken": "We take on d5 and Black recaptures with the queen, pulling it into the open early."
+      "spoken": "You take on d5 and Black recaptures with the queen, pulling it into the open early."
     },
     {
       "ply": 13,
@@ -116,7 +116,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "The bishop to d2 — we unpin ourselves and, in doing so, keep pressure on his queen."
+      "spoken": "The bishop to d2 — you unpin yourself and, in doing so, keep pressure on his queen."
     },
     {
       "ply": 17,
@@ -126,7 +126,7 @@
         "Bxc3",
         "Bxc3"
       ],
-      "spoken": "Black trades on c3 and we recapture — now we have the two bishops."
+      "spoken": "Black trades on c3 and you recapture — now you have the two bishops."
     },
     {
       "ply": 18,
@@ -162,7 +162,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "Let's just develop with the bishop to e2 — we're up a pawn and clearly better."
+      "spoken": "Let's just develop with the bishop to e2 — you're up a pawn and clearly better."
     },
     {
       "ply": 22,
@@ -180,7 +180,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We keep developing and castle."
+      "spoken": "You keep developing and castle."
     },
     {
       "ply": 25,
@@ -190,7 +190,7 @@
         "Rd8",
         "Qe1"
       ],
-      "spoken": "Black brings the rook to d8, and we play the queen to e1 to maintain contact with our e5-pawn."
+      "spoken": "Black brings the rook to d8, and you play the queen to e1 to maintain contact with your e5-pawn."
     },
     {
       "ply": 26,
@@ -226,7 +226,7 @@
       "line": [
         "Rxe1"
       ],
-      "spoken": "We recapture, which lightens the load — now it's an endgame where I have weak pawns scattered around but I'm up a pawn."
+      "spoken": "You recapture, which lightens the load — now it's an endgame where I have weak pawns scattered around but I'm up a pawn."
     },
     {
       "ply": 31,
@@ -236,7 +236,7 @@
         "Nxc3",
         "bxc3"
       ],
-      "spoken": "Black takes on c3 and we recapture with the b-pawn — weak pawns, yes, but up a pawn, so this should be winnable."
+      "spoken": "Black takes on c3 and you recapture with the b-pawn — weak pawns, yes, but up a pawn, so this should be winnable."
     },
     {
       "ply": 32,
@@ -307,7 +307,7 @@
       "line": [
         "Rd3"
       ],
-      "spoken": "Black plants the rook on d3, deep in our position."
+      "spoken": "Black plants the rook on d3, deep in your position."
     },
     {
       "ply": 45,
@@ -334,7 +334,7 @@
       "line": [
         "Ng5"
       ],
-      "spoken": "We look to improve, and it'd be nice to trade off that active rook — the knight to g5."
+      "spoken": "You look to improve, and it'd be nice to trade off that active rook — the knight to g5."
     },
     {
       "ply": 49,
@@ -344,7 +344,7 @@
         "Bxb3",
         "axb3"
       ],
-      "spoken": "Bishops come off on b3 and we recapture, giving us doubled pawns — a trip to the orthodontist."
+      "spoken": "Bishops come off on b3 and you recapture, giving you doubled pawns — a trip to the orthodontist."
     },
     {
       "ply": 50,
@@ -415,7 +415,7 @@
         "e6",
         "Re8"
       ],
-      "spoken": "We push e6, and Black answers with the rook to e8."
+      "spoken": "You push e6, and Black answers with the rook to e8."
     },
     {
       "ply": 58,
@@ -454,7 +454,7 @@
         "Rxd3",
         "Kg1"
       ],
-      "spoken": "Rooks come off on d3 and we tuck the king to g1, planning to march it to e2."
+      "spoken": "Rooks come off on d3 and you tuck the king to g1, planning to march it to e2."
     },
     {
       "ply": 65,
@@ -464,7 +464,7 @@
         "Ke8",
         "Kf1"
       ],
-      "spoken": "Black plays the king to e8, and we begin the king walk with the king to f1."
+      "spoken": "Black plays the king to e8, and you begin the king walk with the king to f1."
     },
     {
       "ply": 66,
@@ -544,7 +544,7 @@
         "b5",
         "f4"
       ],
-      "spoken": "Now we expand — Black plays b5 and we answer f4, looking to exploit our kingside majority."
+      "spoken": "Now you expand — Black plays b5 and you answer f4, looking to exploit your kingside majority."
     },
     {
       "ply": 74,
@@ -642,7 +642,7 @@
         "Re8+",
         "Kf2"
       ],
-      "spoken": "Black checks with the rook to e8 and we step to f2."
+      "spoken": "Black checks with the rook to e8 and you step to f2."
     },
     {
       "ply": 84,
@@ -670,7 +670,7 @@
         "g6",
         "h4"
       ],
-      "spoken": "Black plays g6 and we push h4 — we keep advancing the pawns."
+      "spoken": "Black plays g6 and you push h4 — you keep advancing the pawns."
     },
     {
       "ply": 88,
@@ -690,7 +690,7 @@
         "gxh5",
         "Rg1"
       ],
-      "spoken": "Pawns trade on h5, doubling ours, but it opens the g-file — the rook to g1."
+      "spoken": "Pawns trade on h5, doubling yours, but it opens the g-file — the rook to g1."
     },
     {
       "ply": 92,
@@ -726,7 +726,7 @@
       "line": [
         "Nd4+"
       ],
-      "spoken": "The knight to d4 with check — the bottom line is our protected passed pawn on c4 is going to be very strong."
+      "spoken": "The knight to d4 with check — the bottom line is your protected passed pawn on c4 is going to be very strong."
     },
     {
       "ply": 97,
@@ -736,7 +736,7 @@
         "Nxd4",
         "Kxd4"
       ],
-      "spoken": "Knights come off and we recapture with the king on d4."
+      "spoken": "Knights come off and you recapture with the king on d4."
     },
     {
       "ply": 99,
@@ -746,7 +746,7 @@
         "Kxf4",
         "Rg5"
       ],
-      "spoken": "Black grabs on f4 and we check with the rook to g5."
+      "spoken": "Black grabs on f4 and you check with the rook to g5."
     },
     {
       "ply": 101,
@@ -756,7 +756,7 @@
         "Re4+",
         "Kc5"
       ],
-      "spoken": "Black checks with the rook to e4 and we step the king to c5."
+      "spoken": "Black checks with the rook to e4 and you step the king to c5."
     },
     {
       "ply": 102,
@@ -774,7 +774,7 @@
       "line": [
         "Kb5"
       ],
-      "spoken": "The king to b5 — we need to win this pawn, otherwise Black gets connected passers."
+      "spoken": "The king to b5 — you need to win this pawn, otherwise Black gets connected passers."
     },
     {
       "ply": 105,
@@ -784,7 +784,7 @@
         "Rxb3",
         "Kxa5"
       ],
-      "spoken": "Black grabs on b3 and we take his a-pawn with the king, capturing on a5."
+      "spoken": "Black grabs on b3 and you take his a-pawn with the king, capturing on a5."
     },
     {
       "ply": 106,
@@ -830,7 +830,7 @@
         "b3",
         "Rg2"
       ],
-      "spoken": "Black pushes b3 and we cover with the rook to g2."
+      "spoken": "Black pushes b3 and you cover with the rook to g2."
     },
     {
       "ply": 115,
@@ -862,7 +862,7 @@
         "Rb1",
         "b2"
       ],
-      "spoken": "We defend with the rook to b1 and Black pushes b2."
+      "spoken": "You defend with the rook to b1 and Black pushes b2."
     },
     {
       "ply": 119,
@@ -871,7 +871,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "c6, driving our passer home."
+      "spoken": "c6, driving your passer home."
     },
     {
       "ply": 120,
@@ -962,7 +962,7 @@
         "e4",
         "Ne5"
       ],
-      "spoken": "Because we've got the two bishops — but as played, this just gives the pawn up; the key move really was the bishop to d1 to sort out our development.",
+      "spoken": "Because you've got the two bishops — but as played, this just gives the pawn up; the key move really was the bishop to d1 to sort out your development.",
       "reanchor": true
     }
   ]

@@ -42,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We capture, e takes d5."
+   "spoken": "You capture, e takes d5."
   },
   {
    "ply": 6,
@@ -79,7 +79,7 @@
     "cxd4",
     "Nc6"
    ],
-   "spoken": "We recapture and Black develops the knight to c6. A word of warning: people have a tendency to release the tension — if there's a trade available, they grab it — but sometimes you should resist clarifying the position."
+   "spoken": "You recapture and Black develops the knight to c6. A word of warning: people have a tendency to release the tension — if there's a trade available, they grab it — but sometimes you should resist clarifying the position."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3."
+   "spoken": "You develop the knight to f3."
   },
   {
    "ply": 12,
@@ -124,7 +124,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Now we reap the reward and develop the knight to c3, hitting the queen with tempo."
+   "spoken": "Now you reap the reward and develop the knight to c3, hitting the queen with tempo."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — the passive bishop to d2 is unnecessary; castling is the move."
+   "spoken": "You castle — the passive bishop to d2 is unnecessary; castling is the move."
   },
   {
    "ply": 18,
@@ -151,7 +151,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "Now we can develop the light-squared bishop toward a3, and if Black doesn't castle in time, that king in the center will have a very bad time. Black plays the queen to d7."
+   "spoken": "Now you can develop the light-squared bishop toward a3, and if Black doesn't castle in time, that king in the center will have a very bad time. Black plays the queen to d7."
   },
   {
    "ply": 19,
@@ -188,7 +188,7 @@
     "Qxd1",
     "Rxd1"
    ],
-   "spoken": "Black trades queens on d1 and we recapture with the rook — and now two of Black's pieces are hanging at once."
+   "spoken": "Black trades queens on d1 and you recapture with the rook — and now two of Black's pieces are hanging at once."
   },
   {
    "ply": 24,
@@ -197,7 +197,7 @@
    "line": [
     "Ba5"
    ],
-   "spoken": "Black retreats the bishop to a5, but he simply doesn't have the firepower to contain our passed pawn on the queenside."
+   "spoken": "Black retreats the bishop to a5, but he simply doesn't have the firepower to contain your passed pawn on the queenside."
   },
   {
    "ply": 25,
@@ -235,7 +235,7 @@
     "gxf3",
     "Nf6"
    ],
-   "spoken": "Black takes on f3 and we recapture with the g-pawn, and Black develops the knight to f6."
+   "spoken": "Black takes on f3 and you recapture with the g-pawn, and Black develops the knight to f6."
   },
   {
    "ply": 31,
@@ -253,7 +253,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Black plays the knight to d7 — he has to move the rook, and then we promote the pawn."
+   "spoken": "Black plays the knight to d7 — he has to move the rook, and then you promote the pawn."
   },
   {
    "ply": 33,
@@ -298,7 +298,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "We plant the rook on c8, and it's goodbye — no matter what Black does."
+   "spoken": "You plant the rook on c8, and it's goodbye — no matter what Black does."
   },
   {
    "ply": 38,
@@ -344,7 +344,7 @@
     "Nxd7",
     "Bxd7"
    ],
-   "spoken": "We force the knight to take, and after we recapture the red carpet is unrolled — the pawn is about to promote."
+   "spoken": "You force the knight to take, and after you recapture the red carpet is unrolled — the pawn is about to promote."
   },
   {
    "ply": 3,
@@ -384,7 +384,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We recapture with c takes d4, and the real question is whether Black can handle the resulting isolated-pawn position accurately.",
+   "spoken": "You recapture with c takes d4, and the real question is whether Black can handle the resulting isolated-pawn position accurately.",
    "reanchor": true
   },
   {
@@ -441,7 +441,7 @@
    "t": 1219,
    "fen": "r3kbnr/pp2pppp/2n5/2pq4/3P2b1/2P5/PP2BPPP/RNBQK1NR w KQkq - 3 6",
    "line": [],
-   "spoken": "So the move order runs c takes d4, we recapture, the knight to c6, the knight to f3.",
+   "spoken": "So the move order runs c takes d4, you recapture, the knight to c6, the knight to f3.",
    "reanchor": true
   },
   {
@@ -474,7 +474,7 @@
     "Bxf3",
     "Qxd4"
    ],
-   "spoken": "We recapture and Black grabs on d4 — but the point is you don't actually lose the pawn.",
+   "spoken": "You recapture and Black grabs on d4 — but the point is you don't actually lose the pawn.",
    "reanchor": true
   },
   {
@@ -484,7 +484,7 @@
    "line": [
     "Bxc6+"
    ],
-   "spoken": "Because the knight is defending the queen, we can take the knight with check, the bishop capturing on c6.",
+   "spoken": "Because the knight is defending the queen, you can take the knight with check, the bishop capturing on c6.",
    "reanchor": true
   },
   {
@@ -495,7 +495,7 @@
     "bxc6",
     "Qxd4"
    ],
-   "spoken": "Black recaptures, and then we take on d4 — the game is over, we're up a queen.",
+   "spoken": "Black recaptures, and then you take on d4 — the game is over, you're up a queen.",
    "reanchor": true
   },
   {

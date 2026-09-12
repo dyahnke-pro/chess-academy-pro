@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We play the Caro-Kann. e4, c6."
+   "spoken": "You play the Caro-Kann. e4, c6."
   },
   {
    "ply": 4,
@@ -34,7 +34,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "e5 — we've met this line at several junctures before. There are several ways to tackle it; the Caro-Kann response is the bishop to f5. But funnily, against the bishop to f5 there's a very nasty knight to d4, which I'll cover after the game — so it's worth switching up the move"
+   "spoken": "e5 — you've met this line at several junctures before. There are several ways to tackle it; the Caro-Kann response is the bishop to f5. But funnily, against the bishop to f5 there's a very nasty knight to d4, which I'll cover after the game — so it's worth switching up the move"
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "order here to stop the knight to d4, by making a move we often make in the Caro-Kann anyway — c5. Trust me, the knight to d4 is the super-nasty idea he may have."
+   "spoken": "order here to stop the knight to d4, by making a move you often make in the Caro-Kann anyway — c5. Trust me, the knight to d4 is the super-nasty idea he may have."
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop to b5 with check — not a dangerous move; we can cover it a variety of ways."
+   "spoken": "The bishop to b5 with check — not a dangerous move; you can cover it a variety of ways."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "There's no reason not to play the knight to c6 and develop normally. He'll probably take it — a lot of people at this level still fall in love with doubling our pawns, but I don't fear that structure."
+   "spoken": "There's no reason not to play the knight to c6 and develop normally. He'll probably take it — a lot of people at this level still fall in love with doubling your pawns, but I don't fear that structure."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We save a tempo, he's moved his bishop twice, and I like the two bishops and that his e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do we develop? e6 is fine but would block the c8-bishop, so we turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
+   "spoken": "You save a tempo, he's moved his bishop twice, and I like the two bishops and that his e5-pawn is weak — I'm not worried about the bishop taking c6 in the slightest. The knight to c3. In what order do you develop? e6 is fine but would block the c8-bishop, so you turn to that bishop first. The bishop to f5 is possible, but be flexible in development and always consider whether there's something better —"
   },
   {
    "ply": 10,
@@ -108,7 +108,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "He goes d4 — he's created a lot of weaknesses on his kingside, and now d4. He's not playing this badly, and he's hoping for c-takes-d4, because then he plays the knight takes d4 and piles up on our knight on c6."
+   "spoken": "He goes d4 — he's created a lot of weaknesses on his kingside, and now d4. He's not playing this badly, and he's hoping for c-takes-d4, because then he plays the knight takes d4 and piles up on your knight on c6."
   },
   {
    "ply": 16,
@@ -117,7 +117,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "How should we respond to d4? Just e6 — a super-typical Caro-Kann move,"
+   "spoken": "How should you respond to d4? Just e6 — a super-typical Caro-Kann move,"
   },
   {
    "ply": 17,
@@ -126,7 +126,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "preparing to recapture with the bishop, trading on our own terms. The bishop to g5 is not dangerous; the knee-jerk reaction for most people is the bishop to e7 here,"
+   "spoken": "preparing to recapture with the bishop, trading on your own terms. The bishop to g5 is not dangerous; the knee-jerk reaction for most people is the bishop to e7 here,"
   },
   {
    "ply": 18,
@@ -144,7 +144,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Because we're applying pressure on the pawn and on the bishop, and there's a sense in which White is already close to collapsing. When he played g4, out of the corner of my eye I made a note to check a move: the knight on f3 no longer has a defender, and the d4-pawn is also very poorly defended — it would be nice for White to have a pawn on c3, as he usually does here. He plays the queen to d2. You might be"
+   "spoken": "Because you're applying pressure on the pawn and on the bishop, and there's a sense in which White is already close to collapsing. When he played g4, out of the corner of my eye I made a note to check a move: the knight on f3 no longer has a defender, and the d4-pawn is also very poorly defended — it would be nice for White to have a pawn on c3, as he usually does here. He plays the queen to d2. You might be"
   },
   {
    "ply": 20,
@@ -153,7 +153,7 @@
    "line": [
     "Be4"
    ],
-   "spoken": "saying, wait, I have three attackers and only two defenders on d4 — why can't I just take? The complicating factor is the pin. So we play the bishop to e4, attacking the knight; if he takes the bishop, I recapture with the pawn, the knight is dislodged, and his bishop will also be"
+   "spoken": "saying, wait, I have three attackers and only two defenders on d4 — why can't I just take? The complicating factor is the pin. So you play the bishop to e4, attacking the knight; if he takes the bishop, I recapture with the pawn, the knight is dislodged, and his bishop will also be"
   },
   {
    "ply": 21,
@@ -162,7 +162,7 @@
    "line": [
     "Qe3"
    ],
-   "spoken": "undefended if he takes on e4. The queen to e3 defends the knight but doesn't solve the underlying issue — and actually, looking again, we have something even better."
+   "spoken": "undefended if he takes on e4. The queen to e3 defends the knight but doesn't solve the underlying issue — and actually, looking again, you have something even better."
   },
   {
    "ply": 22,
@@ -171,7 +171,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "Let me look a bit more carefully — what can we do here?"
+   "spoken": "Let me look a bit more carefully — what can you do here?"
   },
   {
    "ply": 23,
@@ -197,7 +197,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "We'll talk about it after the game. He's panicked and gone the queen to d2. Which of these two knights should we take? We can actually take either — that's the funny thing."
+   "spoken": "You'll talk about it after the game. He's panicked and gone the queen to d2. Which of these two knights should you take? You can actually take either — that's the funny thing."
   },
   {
    "ply": 24,
@@ -206,7 +206,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "If you wanted to play the most precise way — he just resigns — we can take either knight; I'd take the knight on f3."
+   "spoken": "If you wanted to play the most precise way — he just resigns — you can take either knight; I'd take the knight on f3."
   },
   {
    "ply": 23,
@@ -338,7 +338,7 @@
    "t": 1031,
    "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
    "line": [],
-   "spoken": "Developing normally is often the solution to these things. Instead we decided to play c5, and the bishop check — what if he",
+   "spoken": "Developing normally is often the solution to these things. Instead you decided to play c5, and the bishop check — what if he",
    "reanchor": true
   },
   {
@@ -557,7 +557,7 @@
    "line": [
     "Bxc6+"
    ],
-   "spoken": "because after the bishop takes c6 we can do something really, really cool — Black is winning. What should we recapture with, and"
+   "spoken": "because after the bishop takes c6 you can do something really, really cool — Black is winning. What should you recapture with, and"
   },
   {
    "ply": 24,
@@ -566,7 +566,7 @@
    "line": [
     "Qxc6"
    ],
-   "spoken": "what's the idea of that capture? Very nice — first the queen takes c6, and we notice the x-ray, the standoff with"
+   "spoken": "what's the idea of that capture? Very nice — first the queen takes c6, and you notice the x-ray, the standoff with"
   },
   {
    "ply": 26,
@@ -576,7 +576,7 @@
     "Nh4",
     "e3"
    ],
-   "spoken": "the rook: after the knight moves, we have the move e3, winning on the spot because the rook is lost. That's why I"
+   "spoken": "the rook: after the knight moves, you have the move e3, winning on the spot because the rook is lost. That's why I"
   },
   {
    "ply": 22,
@@ -609,7 +609,7 @@
    "t": 1244.5,
    "fen": "r3kbnr/pp3ppp/1qn1p3/1Bp1P1B1/3Pp1P1/5N1P/PPPQ1P2/R3K2R w KQkq - 0 12",
    "line": [],
-   "spoken": "this point the situation is dire. He should have tried this: if we just take the knight, thinking he can't take our pawn because it's defended — first White takes the queen, then takes the pawn and forks the rook, so Black has to be very precise to avoid getting mated; White is even threatening mate, but Black plays a6, and after the bishop to a4, b5 shuts the bishop down and Black is up the exchange. So this line was more complicated than it looked — I saw a6 in my head and relied on it, but this stuff needed to be calculated. After the queen to e2 the game is over: we just take one knight and then the other, and White loses all of his pieces.",
+   "spoken": "this point the situation is dire. He should have tried this: if you just take the knight, thinking he can't take your pawn because it's defended — first White takes the queen, then takes the pawn and forks the rook, so Black has to be very precise to avoid getting mated; White is even threatening mate, but Black plays a6, and after the bishop to a4, b5 shuts the bishop down and Black is up the exchange. So this line was more complicated than it looked — I saw a6 in my head and relied on it, but this stuff needed to be calculated. After the queen to e2 the game is over: you just take one knight and then the other, and White loses all of his pieces.",
    "reanchor": true
   }
  ]

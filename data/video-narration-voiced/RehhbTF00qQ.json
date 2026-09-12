@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We play e5 — the classical opening I've leaned on all speedrun, focused on fundamentals."
+   "spoken": "You play e5 — the classical opening I've leaned on all speedrun, focused on fundamentals."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "And we answer with the traditional knight to f6. This is still very much theory."
+   "spoken": "And you answer with the traditional knight to f6. This is still very much theory."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 — the Vienna Gambit, hugely popular lately thanks to Levy's course and a wave of content. Every e5 player needs to know how to meet it. People confuse it with the King's Gambit, but the difference is the two knights already out on c3 and f6 — which means accepting the gambit is terrible, because White shoves the pawn to e5 and our knight has to slink back to g8."
+   "spoken": "f4 — the Vienna Gambit, hugely popular lately thanks to Levy's course and a wave of content. Every e5 player needs to know how to meet it. People confuse it with the King's Gambit, but the difference is the two knights already out on c3 and f6 — which means accepting the gambit is terrible, because White shoves the pawn to e5 and your knight has to slink back to g8."
   },
   {
    "ply": 6,
@@ -69,7 +69,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "And we recapture with a knight on e4 — common, well-known theory. Now White has two tries."
+   "spoken": "And you recapture with a knight on e4 — common, well-known theory. Now White has two tries."
   },
   {
    "ply": 9,
@@ -105,7 +105,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "We make a developing move and keep the knight on e4 — no trading on c3 unless forced. A bishop to c5 is a fine choice: it threatens a knight fork on f2 and guards that square."
+   "spoken": "You make a developing move and keep the knight on e4 — no trading on c3 unless forced. A bishop to c5 is a fine choice: it threatens a knight fork on f2 and guards that square."
   },
   {
    "ply": 11,
@@ -114,7 +114,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "This might look dumb, since we walk right into d4, letting White grab the center with tempo and chase the bishop — but there's a catch."
+   "spoken": "This might look dumb, since you walk right into d4, letting White grab the center with tempo and chase the bishop — but there's a catch."
   },
   {
    "ply": 12,
@@ -123,7 +123,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "d4 exposes the a5-e1 diagonal, so we swing the bishop to b4. Yes, moving a piece twice breaks a rule, but White gave us license by pushing so many pawns — here quality of development beats speed. Now we pressure the knight from two directions and threaten a capture on c3 that would fork the king and rook, forcing White to defend."
+   "spoken": "d4 exposes the a5-e1 diagonal, so you swing the bishop to b4. Yes, moving a piece twice breaks a rule, but White gave you license by pushing so many pawns — here quality of development beats speed. Now you pressure the knight from two directions and threaten a capture on c3 that would fork the king and rook, forcing White to defend."
   },
   {
    "ply": 13,
@@ -132,7 +132,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "A bishop to d2 is White's best, but then we capture it with our knight, keeping the bishop pair and continuing to press the center with a later c5. To my knowledge this is the best way to equalize against the knight-f3 Vienna."
+   "spoken": "A bishop to d2 is White's best, but then you capture it with your knight, keeping the bishop pair and continuing to press the center with a later c5. To my knowledge this is the best way to equalize against the knight-f3 Vienna."
   },
   {
    "ply": 15,
@@ -142,7 +142,7 @@
     "Nxd2",
     "Qxd2"
    ],
-   "spoken": "We eliminate the bishop and White recaptures with the queen. Now several solid options: a bishop to g4, a bishop to e6, or c5 against d4. I want to keep it solid, and I especially don't want a bishop to f5, because a bishop to d3 trades off our light-squared bishop — and I want to preserve the bishop pair, a genuine asset.",
+   "spoken": "You eliminate the bishop and White recaptures with the queen. Now several solid options: a bishop to g4, a bishop to e6, or c5 against d4. I want to keep it solid, and I especially don't want a bishop to f5, because a bishop to d3 trades off your light-squared bishop — and I want to preserve the bishop pair, a genuine asset.",
    "reanchor": true
   },
   {
@@ -152,7 +152,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "So the light-squared bishop develops to e6 — solid, completing our development quietly, with c5 still available down the line."
+   "spoken": "So the light-squared bishop develops to e6 — solid, completing your development quietly, with c5 still available down the line."
   },
   {
    "ply": 17,
@@ -171,7 +171,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "So we drop the bishop back to e7 instead, keeping c5 alive. White can still push b4, but now it comes without tempo — so it carries no threat, and we can undermine it with our own pawns."
+   "spoken": "So you drop the bishop back to e7 instead, keeping c5 alive. White can still push b4, but now it comes without tempo — so it carries no threat, and you can undermine it with your own pawns."
   },
   {
    "ply": 19,
@@ -190,7 +190,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Let's continue developing — we castle."
+   "spoken": "Let's continue developing — you castle."
   },
   {
    "ply": 21,
@@ -199,7 +199,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles, and we have a major choice. We can play c5, which I've praised, but we can also aim for the other break most people are reluctant to try: f6. The reason is that White's e5 pawn hangs over us like the sword of Damocles, clamping our pieces and cutting communication between the flanks."
+   "spoken": "White castles, and you have a major choice. You can play c5, which I've praised, but you can also aim for the other break most people are reluctant to try: f6. The reason is that White's e5 pawn hangs over you like the sword of Damocles, clamping your pieces and cutting communication between the flanks."
   },
   {
    "ply": 22,
@@ -208,7 +208,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The best way to prepare f6 is to develop the knight — but to d7, not c6, so we keep c5 in reserve and the knight covers f6. It slightly loosens d5, but White can't pile on it, and we can always defend with c6."
+   "spoken": "The best way to prepare f6 is to develop the knight — but to d7, not c6, so you keep c5 in reserve and the knight covers f6. It slightly loosens d5, but White can't pile on it, and you can always defend with c6."
   },
   {
    "ply": 23,
@@ -217,7 +217,7 @@
    "line": [
     "Nd1"
    ],
-   "spoken": "We could build a little pawn chain with c6 if needed, so d5 is no worry. White plays a knight to d1.",
+   "spoken": "You could build a little pawn chain with c6 if needed, so d5 is no worry. White plays a knight to d1.",
    "reanchor": true
   },
   {
@@ -227,7 +227,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "White is probably rerouting the knight to e3, but that doesn't stop f6 — now is the perfect moment to push it and undermine e5. If White doesn't capture, we take on e5 ourselves."
+   "spoken": "White is probably rerouting the knight to e3, but that doesn't stop f6 — now is the perfect moment to push it and undermine e5. If White doesn't capture, you take on e5 yourself."
   },
   {
    "ply": 25,
@@ -236,7 +236,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "White recaptures on f6, but that leaves the e5 pawn isolated — it loses the support of d4. Between the recaptures, a rook to f6 is awkward, so it's a knight or bishop capture: the knight recapture heads for the fine central e4 square, and though it allows a knight to g5, that's harmless — we drop the bishop to d7 and chase with h6.",
+   "spoken": "White recaptures on f6, but that leaves the e5 pawn isolated — it loses the support of d4. Between the recaptures, a rook to f6 is awkward, so it's a knight or bishop capture: the knight recapture heads for the fine central e4 square, and though it allows a knight to g5, that's harmless — you drop the bishop to d7 and chase with h6.",
    "reanchor": true
   },
   {
@@ -246,7 +246,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": "So we recapture on f6 with the knight — the clearest path to a good position, always seeking the best square for a piece. Don't suffer from one-move-itis, fearing a move just because it makes a threat: moves aren't good simply because they threaten something."
+   "spoken": "So you recapture on f6 with the knight — the clearest path to a good position, always seeking the best square for a piece. Don't suffer from one-move-itis, fearing a move just because it makes a threat: moves aren't good simply because they threaten something."
   },
   {
    "ply": 27,
@@ -265,7 +265,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Our bishop can be repositioned from e7 to d6 — a better square, controlling more, discouraging a knight to e5, and clearing the e-file for a rook."
+   "spoken": "Your bishop can be repositioned from e7 to d6 — a better square, controlling more, discouraging a knight to e5, and clearing the e-file for a rook."
   },
   {
    "ply": 29,
@@ -274,7 +274,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White mirrors with a bishop to d3. It's equal. We coordinate our rooks: a queen to d7, then a rook to e8, centralizing everything.",
+   "spoken": "White mirrors with a bishop to d3. It's equal. You coordinate your rooks: a queen to d7, then a rook to e8, centralizing everything.",
    "reanchor": true
   },
   {
@@ -284,7 +284,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "A queen to d7 — it defends the e6 bishop, so a rook to e1 no longer carries a threat and we can safely bring our own rook to e8. I've soured on c5, since White just meets it with c3."
+   "spoken": "A queen to d7 — it defends the e6 bishop, so a rook to e1 no longer carries a threat and you can safely bring your own rook to e8. I've soured on c5, since White just meets it with c3."
   },
   {
    "ply": 31,
@@ -303,7 +303,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": "We do the same, a rook to e8 — totally equal. This is where 1700-level players often start to go wrong, unable to keep the tension without weakening.",
+   "spoken": "You do the same, a rook to e8 — totally equal. This is where 1700-level players often start to go wrong, unable to keep the tension without weakening.",
    "reanchor": true
   },
   {
@@ -313,7 +313,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3. Do we have a long-term plan? Not really — plans are overrated.",
+   "spoken": "White plays c3. Do you have a long-term plan? Not really — plans are overrated.",
    "reanchor": true
   },
   {
@@ -323,7 +323,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "We play c6 to protect d5 and open the c7 square for our queen, so if a knight comes to g5 we needn't take it — we drop the queen aside. In open-center positions like this it's hard to form a plan, and you don't need one yet: both sides improve pieces until the confrontation comes."
+   "spoken": "You play c6 to protect d5 and open the c7 square for your queen, so if a knight comes to g5 you needn't take it — you drop the queen aside. In open-center positions like this it's hard to form a plan, and you don't need one yet: both sides improve pieces until the confrontation comes."
   },
   {
    "ply": 35,
@@ -332,7 +332,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": "White plays a bishop to c2 — a fine move eyeing a knight to d3. Our light-squared bishop is clearly worse than White's, so I want to trade it off.",
+   "spoken": "White plays a bishop to c2 — a fine move eyeing a knight to d3. Your light-squared bishop is clearly worse than White's, so I want to trade it off.",
    "reanchor": true
   },
   {
@@ -342,7 +342,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "A bishop to f5 — trading our worst piece for White's better one, and starting a direct confrontation: the rooks stare at each other and tension builds, fertile ground for tactics."
+   "spoken": "A bishop to f5 — trading your worst piece for White's better one, and starting a direct confrontation: the rooks stare at each other and tension builds, fertile ground for tactics."
   },
   {
    "ply": 38,
@@ -352,7 +352,7 @@
     "Rxe8",
     "Rxe8"
    ],
-   "spoken": "We recapture on e8 with the rook — the queen recapture would just drop the bishop. The pawn structure is dead symmetrical with the e-file open, so this will be a tough position to squeeze.",
+   "spoken": "You recapture on e8 with the rook — the queen recapture would just drop the bishop. The pawn structure is dead symmetrical with the e-file open, so this will be a tough position to squeeze.",
    "reanchor": true
   },
   {
@@ -372,7 +372,7 @@
    "line": [
     "Qxf5"
    ],
-   "spoken": "We recapture with the queen. These boring positions are exactly the ones you must learn to play without doing anything dumb — squeezing equal positions is an inevitable skill.",
+   "spoken": "You recapture with the queen. These boring positions are exactly the ones you must learn to play without doing anything dumb — squeezing equal positions is an inevitable skill.",
    "reanchor": true
   },
   {
@@ -392,7 +392,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "We take the risk with a knight to e4, betting on a blunder. The key move behind everything is a rook to e6 — it solves our one problem, keeping the knight on e4 safe by guarding e8, and it prepares a rook lift to h6, because the bishop already eyes h2 and if the f3 knight ever moves, h2 becomes a fatal weakness. After White's c4 I first looked at a clearance sacrifice, a bishop capture on h2, but the combination needs setting up. So we play g5, aiming to push g4 — that both weakens f2 and, by forcing the f3 knight away, weakens h2; and White's king is nearly out of defenders, so opening our own kingside is safe when nobody's around to exploit it. After g4 the f3 knight is paralyzed, because moving it drops the f2 knight, and White's king is in serious trouble. The finish: a bishop capture on h2 forces the king there, then g3 forks king and knight; after the pawns trade we lift a rook to h6, and a rook to h1 is mate that White can do nothing about, since the f2 pawn is defended twice. It's objectively winning — pick the simple win over the beautiful one.",
+   "spoken": "You take the risk with a knight to e4, betting on a blunder. The key move behind everything is a rook to e6 — it solves your one problem, keeping the knight on e4 safe by guarding e8, and it prepares a rook lift to h6, because the bishop already eyes h2 and if the f3 knight ever moves, h2 becomes a fatal weakness. After White's c4 I first looked at a clearance sacrifice, a bishop capture on h2, but the combination needs setting up. So you play g5, aiming to push g4 — that both weakens f2 and, by forcing the f3 knight away, weakens h2; and White's king is nearly out of defenders, so opening your own kingside is safe when nobody's around to exploit it. After g4 the f3 knight is paralyzed, because moving it drops the f2 knight, and White's king is in serious trouble. The finish: a bishop capture on h2 forces the king there, then g3 forks king and knight; after the pawns trade you lift a rook to h6, and a rook to h1 is mate that White can do nothing about, since the f2 pawn is defended twice. It's objectively winning — pick the simple win over the beautiful one.",
    "reanchor": true
   },
   {
@@ -604,7 +604,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Back to the game: our opponent played the knight to f3, and we made the relatively rare bishop to c5, inducing d4.",
+   "spoken": "Back to the game: your opponent played the knight to f3, and you made the relatively rare bishop to c5, inducing d4.",
    "reanchor": true
   },
   {
@@ -690,7 +690,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "c5 is the main database move — I'd honestly forgotten it; it's probably fine, but we chose to play more solidly. To recap: after a3 and a bishop to e7, a bishop to b2 is a touch inaccurate — I'd prefer a bishop to d3. We castled and played a knight to d7 to prepare f6, not a bishop to a5, which allows b4 imprisoning the bishop on b6 and killing c5. If White plays b4 we have the strong a5, and after b5 we get c5. Notice a3 is a weak pawn: the typical positional move to consider — as in many Ruy Lopez lines — is a4, fixing it on a dark square so our bishop pressures it, with the knight rerouting to b6 to guard a4 and eye c4, tying White's rook down. Then a5-knight-to-b6 mirrors the Anti-Marshall. In the game, my opponent's knight to d1 was headed for f2 and eventually e5; against a knight to g5 I'd play a bishop to d7 and h6 to chase it. A queen to e3 was the move that worried me — prophylaxis, stopping our knight-to-e6 trade — but I found a knight to g4, and after the rook trade and recapture Black is totally fine, two bishops against two knights. The fun started with the bishop to c2, a slow move; I'd have doubled rooks on the e-file or played a knight to e5. On why not c5 late: with d4 well protected, c5 no longer achieves much, White need not capture, and after c4 it just hems in our bishop; you can never assume your opponent will take just because a trade suits you. We spiced it up with the knight to e4, and the rook to e6 was the cog that made the whole machine work — I reverse-engineered it from the need to keep the e4 knight and guard e8, and it doubled as a rook-lift preparation, because the bishop aimed at h2. On giving up the bishop pair: our light-squared bishop had become lame, so trading off White's strongest piece mattered more. And the hidden gem was a rook to h6 and the Petrosian-Spassky idea — the queen-h8-check deflection from their 1966 world championship — a beautiful theme, but I chose the simple g3 win: play to win games, not to paint pictures.",
+   "spoken": "c5 is the main database move — I'd honestly forgotten it; it's probably fine, but you chose to play more solidly. To recap: after a3 and a bishop to e7, a bishop to b2 is a touch inaccurate — I'd prefer a bishop to d3. You castled and played a knight to d7 to prepare f6, not a bishop to a5, which allows b4 imprisoning the bishop on b6 and killing c5. If White plays b4 you have the strong a5, and after b5 you get c5. Notice a3 is a weak pawn: the typical positional move to consider — as in many Ruy Lopez lines — is a4, fixing it on a dark square so your bishop pressures it, with the knight rerouting to b6 to guard a4 and eye c4, tying White's rook down. Then a5-knight-to-b6 mirrors the Anti-Marshall. In the game, my opponent's knight to d1 was headed for f2 and eventually e5; against a knight to g5 I'd play a bishop to d7 and h6 to chase it. A queen to e3 was the move that worried me — prophylaxis, stopping your knight-to-e6 trade — but I found a knight to g4, and after the rook trade and recapture Black is totally fine, two bishops against two knights. The fun started with the bishop to c2, a slow move; I'd have doubled rooks on the e-file or played a knight to e5. On why not c5 late: with d4 well protected, c5 no longer achieves much, White need not capture, and after c4 it just hems in your bishop; you can never assume your opponent will take just because a trade suits you. You spiced it up with the knight to e4, and the rook to e6 was the cog that made the whole machine work — I reverse-engineered it from the need to keep the e4 knight and guard e8, and it doubled as a rook-lift preparation, because the bishop aimed at h2. On giving up the bishop pair: your light-squared bishop had become lame, so trading off White's strongest piece mattered more. And the hidden gem was a rook to h6 and the Petrosian-Spassky idea — the queen-h8-check deflection from their 1966 world championship — a beautiful theme, but I chose the simple g3 win: play to win games, not to paint pictures.",
    "reanchor": true
   },
   {
@@ -698,7 +698,7 @@
    "t": 3209.5,
    "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
    "line": [],
-   "spoken": "The knight defends the pawn, and that's that. Takeaways: as an e5 player, remember d5 in the Vienna; in boring positions don't self-destruct — make incremental improving moves, undermine with f6, improve your pieces, trade your worst piece for White's best, and recognize when to step on the gas. That's when we did. Kudos to our opponent — a tough game, played very well.",
+   "spoken": "The knight defends the pawn, and that's that. Takeaways: as an e5 player, remember d5 in the Vienna; in boring positions don't self-destruct — make incremental improving moves, undermine with f6, improve your pieces, trade your worst piece for White's best, and recognize when to step on the gas. That's when you did. Kudos to your opponent — a tough game, played very well.",
    "reanchor": true
   }
  ]

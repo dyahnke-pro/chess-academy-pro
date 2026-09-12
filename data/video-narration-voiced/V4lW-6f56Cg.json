@@ -34,7 +34,7 @@
     "Nf6",
     "f4"
    ],
-   "spoken": "The Vienna Gambit — the knight to c3, then f4, offering the f-pawn. We're sacrificing for two things: a bigger center with d4, and the open f-file, which will hand our rook a battering-ram file against f7 once we castle.",
+   "spoken": "The Vienna Gambit — the knight to c3, then f4, offering the f-pawn. You're sacrificing for two things: a bigger center with d4, and the open f-file, which will hand your rook a battering-ram file against f7 once you castle.",
    "kind": "main",
    "teaches": [
     "the Vienna Gambit: center + the f-file"
@@ -47,7 +47,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The passive d6 declines the gambit — it blocks in the bishop and simply hands us everything we wanted.",
+   "spoken": "The passive d6 declines the gambit — it blocks in the bishop and simply hands you everything you wanted.",
    "kind": "main",
    "teaches": [
     "declining with ...d6 is too passive"
@@ -122,7 +122,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "With the king safe we bring the bishop to c4, trained on f7 with a sacrifice in the air.",
+   "spoken": "With the king safe you bring the bishop to c4, trained on f7 with a sacrifice in the air.",
    "kind": "main"
   },
   {
@@ -150,7 +150,7 @@
    "line": [
     "fxe6"
    ],
-   "spoken": "We take on e6, weakening his structure — a clean, simple trade on our own terms.",
+   "spoken": "You take on e6, weakening his structure — a clean, simple trade on your own terms.",
    "kind": "main",
    "teaches": [
     "trade to damage the structure"
@@ -200,7 +200,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 comes with tempo, kicking the knight off e5, and it's a phenomenal position for us.",
+   "spoken": "d4 comes with tempo, kicking the knight off e5, and it's a phenomenal position for you.",
    "kind": "main"
   },
   {

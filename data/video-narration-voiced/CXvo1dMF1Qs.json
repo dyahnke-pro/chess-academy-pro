@@ -42,7 +42,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We wave the pawn by with d5, heading into Benoni/Benko territory.",
+   "spoken": "You wave the pawn by with d5, heading into Benoni/Benko territory.",
    "kind": "main"
   },
   {
@@ -65,7 +65,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "Instead of the topical capture we play an old Soviet sideline — the knight to d2. Little-known, but it has teeth.",
+   "spoken": "Instead of the topical capture you play an old Soviet sideline — the knight to d2. Little-known, but it has teeth.",
    "kind": "main",
    "teaches": [
     "a rare but venomous anti-Benko"
@@ -87,7 +87,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Here's the point: we meet the capture on c4 with e4, almost reversing the gambit — sacrificing a pawn ourselves, but only temporarily, since we'll win it straight back.",
+   "spoken": "Here's the point: you meet the capture on c4 with e4, almost reversing the gambit — sacrificing a pawn yourself, but only temporarily, since you'll win it straight back.",
    "kind": "main",
    "teaches": [
     "reverse the gambit with e4"
@@ -125,7 +125,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "We recapture on c4 with the bishop — it has to be the bishop, or the pawn on e4 hangs. White holds a small but stable edge.",
+   "spoken": "You recapture on c4 with the bishop — it has to be the bishop, or the pawn on e4 hangs. White holds a small but stable edge.",
    "kind": "main",
    "teaches": [
     "recapture to keep e4 defended"
@@ -174,7 +174,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "Black sets up the Benko-Benoni structure with the fianchetto to g7. There's a standard plan here — Black's knight rerouting through g4 to e5 — so we'll want to restrain it.",
+   "spoken": "Black sets up the Benko-Benoni structure with the fianchetto to g7. There's a standard plan here — Black's knight rerouting through g4 to e5 — so you'll want to restrain it.",
    "kind": "main"
   },
   {
@@ -184,7 +184,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "h3 restrains that knight from g4. We can't rush the bishop to b2 yet — b3 right now runs into the Nxc4 tactic — so first we prepare it.",
+   "spoken": "h3 restrains that knight from g4. You can't rush the bishop to b2 yet — b3 right now runs into the Nxc4 tactic — so first you prepare it.",
    "kind": "main",
    "teaches": [
     "prepare the fianchetto around the Nxc4 trick"
@@ -206,7 +206,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "The rook to e1 is one of those moves that's almost always useful — quietly improving while we sort out the bishop's route.",
+   "spoken": "The rook to e1 is one of those moves that's almost always useful — quietly improving while you sort out the bishop's route.",
    "kind": "main"
   },
   {
@@ -216,7 +216,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "Now the whole middlegame plan. Our overarching aim is to fix on the d6-pawn and lean on Black's center as a whole. We finally want the dark-squared bishop on b2 — reached either through a rook to b1, then b3, then bishop to b2, or the creative rook-swing to a3 and into the center. Then it's a division of labor: one rook hammers d6 while the other lifts to g3 against the king. Squeeze both wings, and the position cracks with a mating tactic on the kingside.",
+   "spoken": "Now the whole middlegame plan. Your overarching aim is to fix on the d6-pawn and lean on Black's center as a whole. You finally want the dark-squared bishop on b2 — reached either through a rook to b1, then b3, then bishop to b2, or the creative rook-swing to a3 and into the center. Then it's a division of labor: one rook hammers d6 while the other lifts to g3 against the king. Squeeze both wings, and the position cracks with a mating tactic on the kingside.",
    "kind": "plan",
    "teaches": [
     "squeeze d6 and the king at once",

@@ -43,7 +43,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "White offers the Wing Gambit with b4 — a third-string gambit with a dubious reputation. Its idea is the usual one: deflect our c-pawn off c5 so White can occupy the center with d4. But here Black is objectively better with accurate play.",
+   "spoken": "White offers the Wing Gambit with b4 — a third-string gambit with a dubious reputation. Its idea is the usual one: deflect your c-pawn off c5 so White can occupy the center with d4. But here Black is objectively better with accurate play.",
    "kind": "main",
    "teaches": [
     "the Wing Gambit idea and its flaw"
@@ -74,7 +74,7 @@
    "line": [
     "cxb4"
    ],
-   "spoken": "We accept with the c-pawn, not the knight — taking with the knight would hand White a tempo to play c3 and prop up his center.",
+   "spoken": "You accept with the c-pawn, not the knight — taking with the knight would hand White a tempo to play c3 and prop up his center.",
    "kind": "main",
    "teaches": [
     "accept with the pawn to deny White c3 with tempo"
@@ -106,7 +106,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White plays d4 as expected, and the move on everyone's mind should be d5 — contesting the center before it's too late, and the queen can't even be hit by a knight to c3 because our pawn covers that square.",
+   "spoken": "White plays d4 as expected, and the move on everyone's mind should be d5 — contesting the center before it's too late, and the queen can't even be hit by a knight to c3 because your pawn covers that square.",
    "kind": "main",
    "teaches": [
     "d5 contests the center safely"
@@ -119,7 +119,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Here, though, a practical choice — the modest d6. It's probably a shade worse than d5, but it drags a theory-armed opponent onto their own thinking, and it does a fine job stopping White's e-pawn while we've lost almost no development.",
+   "spoken": "Here, though, a practical choice — the modest d6. It's probably a shade worse than d5, but it drags a theory-armed opponent onto their own thinking, and it does a fine job stopping White's e-pawn while you've lost almost no development.",
    "kind": "plan",
    "teaches": [
     "a modest off-theory move to make the opponent think"
@@ -142,7 +142,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight swings to e5 to fight for a central pawn of our own; and note the trade is safe — a check on b5 just runs into the bishop to d7, so our queen is never in danger.",
+   "spoken": "The knight swings to e5 to fight for a central pawn of your own; and note the trade is safe — a check on b5 just runs into the bishop to d7, so your queen is never in danger.",
    "kind": "main",
    "teaches": [
     "Ne5 for a center pawn, with ...Bd7 covering the check"

@@ -76,7 +76,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We play the principled d5, reaching a reversed Accelerated Dragon — an Accelerated Dragon with White a tempo up. The danger for our side is that if you just put pieces on natural squares without a thought, you drift into serious positional pressure.",
+   "spoken": "You play the principled d5, reaching a reversed Accelerated Dragon — an Accelerated Dragon with White a tempo up. The danger for your side is that if you just put pieces on natural squares without a thought, you drift into serious positional pressure.",
    "kind": "plan",
    "teaches": [
     "the reversed Accelerated Dragon"
@@ -116,7 +116,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "Now the whole opening battle revolves around one thing: stopping the d4 break. So the knight drops back to b6, keeping its clamp on d4 — and we avoid Be6, which, down a tempo, would let White strike with d4 at once.",
+   "spoken": "Now the whole opening battle revolves around one thing: stopping the d4 break. So the knight drops back to b6, keeping its clamp on d4 — and you avoid Be6, which, down a tempo, would let White strike with d4 at once.",
    "kind": "main",
    "teaches": [
     "prevent the d4 break",
@@ -138,7 +138,7 @@
     "Nb6",
     "Nf3"
    ],
-   "spoken": "And we don't trade on c3 — in the Sicilian, and so in the reversed Sicilian too, that only boosts White's centre, helps the d4 push, and opens the b-file against our own b7-pawn.",
+   "spoken": "And you don't trade on c3 — in the Sicilian, and so in the reversed Sicilian too, that only boosts White's centre, helps the d4 push, and opens the b-file against your own b7-pawn.",
    "teaches": [
     "don’t trade on c3"
    ]
@@ -182,7 +182,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "When e3 threatens d4, reassess — pawn moves change the structure. Allowing d4 now is fine, because we trade and reach an isolated-queen-pawn structure. The shorthand for judging an IQP: who controls the square in front of the isolated pawn, and does its owner have attacking chances against the king. Both favour us here.",
+   "spoken": "When e3 threatens d4, reassess — pawn moves change the structure. Allowing d4 now is fine, because you trade and reach an isolated-queen-pawn structure. The shorthand for judging an IQP: who controls the square in front of the isolated pawn, and does its owner have attacking chances against the king. Both favour you here.",
    "kind": "plan",
    "teaches": [
     "the IQP structure",
@@ -205,7 +205,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We deliberately allow d4 — because in the resulting position we control the d5-square, the keys to the kingdom.",
+   "spoken": "You deliberately allow d4 — because in the resulting position you control the d5-square, the keys to the kingdom.",
    "kind": "main",
    "teaches": [
     "control the blockade square"
@@ -243,7 +243,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "The key: it's harder to shoot at a moving target, and we want to pile up on the square in front of the isolated pawn. But controlling that square is more important than occupying it — don't confuse the two.",
+   "spoken": "The key: it's harder to shoot at a moving target, and you want to pile up on the square in front of the isolated pawn. But controlling that square is more important than occupying it — don't confuse the two.",
    "kind": "plan",
    "teaches": [
     "control, don’t occupy"
@@ -285,7 +285,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We're a smidge better, maybe just equal — the isolated pawn isn't a big weakness since the bishop defends it, and White has the strong fianchetto bishop. But our pieces are compact and central, with many ways to intensify the pressure and bring more force to bear.",
+   "spoken": "You're a smidge better, maybe just equal — the isolated pawn isn't a big weakness since the bishop defends it, and White has the strong fianchetto bishop. But your pieces are compact and central, with many ways to intensify the pressure and bring more force to bear.",
    "kind": "review",
    "teaches": [
     "assess the IQP position honestly"

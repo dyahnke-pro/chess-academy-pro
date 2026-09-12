@@ -47,7 +47,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "The knight jumps to d4 — a move designed to scare a beginner: 'a knight is charging into the centre!' Look at it calmly and you'll see it just wanders in with nothing behind it. It might be some trick gambit, but we don't buy the bluff.",
+   "spoken": "The knight jumps to d4 — a move designed to scare a beginner: 'a knight is charging into the centre!' Look at it calmly and you'll see it just wanders in with nothing behind it. It might be some trick gambit, but you don't buy the bluff.",
    "teaches": [
     "not fearing a lone central knight"
    ]
@@ -59,7 +59,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "If you were nervous you could ignore it entirely and keep developing with the bishop to c4. But there's nothing to calculate: we simply capture on e5, because the other side has only one piece out — a real trick can't exist when your opponent hasn't developed.",
+   "spoken": "If you were nervous you could ignore it entirely and keep developing with the bishop to c4. But there's nothing to calculate: you simply capture on e5, because the other side has only one piece out — a real trick can't exist when your opponent hasn't developed.",
    "kind": "main",
    "teaches": [
     "no tactics without development"
@@ -72,7 +72,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We're not satisfied with just the pawn. The Soviet-schoolboy move is to retreat the knight to f3 and smoke the intruder out of d4. Grabbing with the bishop to c4 instead invites a tricky queen-to-e7 line where White is actually much better but there's real theory to know. The point to hold onto: a knight sitting in the centre isn't automatically good — this one lacks an anchor and is easy to harass.",
+   "spoken": "You're not satisfied with just the pawn. The Soviet-schoolboy move is to retreat the knight to f3 and smoke the intruder out of d4. Grabbing with the bishop to c4 instead invites a tricky queen-to-e7 line where White is actually much better but there's real theory to know. The point to hold onto: a knight sitting in the centre isn't automatically good — this one lacks an anchor and is easy to harass.",
    "teaches": [
     "central piece needs an anchor"
    ]
@@ -84,7 +84,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The real threat is the queen coming to e7 — it would chase the knight back and let Black regain the pawn on e4 at the same time. So we double back to f3, killing two birds: the knight retreats to safety.",
+   "spoken": "The real threat is the queen coming to e7 — it would chase the knight back and let Black regain the pawn on e4 at the same time. So you double back to f3, killing two birds: the knight retreats to safety.",
    "kind": "main",
    "teaches": [
     "double-purpose retreat"
@@ -131,7 +131,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "By process of elimination the knight drops back to b3: b5 walks into a6, e2 blocks the bishop — b3 keeps everything flowing so we can develop rapidly and actively.",
+   "spoken": "By process of elimination the knight drops back to b3: b5 walks into a6, e2 blocks the bishop — b3 keeps everything flowing so you can develop rapidly and actively.",
    "kind": "main",
    "teaches": [
     "process of elimination"
@@ -145,7 +145,7 @@
     "c5",
     "d3"
    ],
-   "spoken": "The pawn on e4 is annoying, hanging over the position and cramping us. Playing d3 liquidates it, makes the minor pieces easier to coordinate, and opens the dark-squared bishop toward an eventual post on g5.",
+   "spoken": "The pawn on e4 is annoying, hanging over the position and cramping you. Playing d3 liquidates it, makes the minor pieces easier to coordinate, and opens the dark-squared bishop toward an eventual post on g5.",
    "kind": "main",
    "teaches": [
     "liquidate the awkward pawn"
@@ -158,7 +158,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "The queen-and-king alignment on the e-file is a liability, not a strength: if we seize the d-file the king has no squares, and since the c5-pawn is already committed, a future bishop check on b5 can no longer be met by c6. That's the move this is quietly setting up.",
+   "spoken": "The queen-and-king alignment on the e-file is a liability, not a strength: if you seize the d-file the king has no squares, and since the c5-pawn is already committed, a future bishop check on b5 can no longer be met by c6. That's the move this is quietly setting up.",
    "teaches": [
     "king-queen alignment as a target"
    ]
@@ -170,7 +170,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "We take back on e4 to control the d-file and keep the b5-check threat alive. The knight-takes discovery looks scary but it's a paper tiger — even without the winning check, we'd simply take and force a queen trade.",
+   "spoken": "You take back on e4 to control the d-file and keep the b5-check threat alive. The knight-takes discovery looks scary but it's a paper tiger — even without the winning check, you'd simply take and force a queen trade.",
    "kind": "main",
    "teaches": [
     "seeing through a fake discovery"
@@ -192,7 +192,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop is untouchable — the e4-pawn is pinned to the queen — so the bishop check on b5 just develops with tempo, and then we castle.",
+   "spoken": "The bishop is untouchable — the e4-pawn is pinned to the queen — so the bishop check on b5 just develops with tempo, and then you castle.",
    "kind": "main",
    "teaches": [
     "develop with a real tempo"
@@ -217,7 +217,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": "We trade the bishops off and, crucially, force Black to recapture with the knight — clearing the way to plant our own knight on a beautiful d5 stronghold.",
+   "spoken": "You trade the bishops off and, crucially, force Black to recapture with the knight — clearing the way to plant your own knight on a beautiful d5 stronghold.",
    "kind": "plan",
    "teaches": [
     "trade to win a stronghold"
@@ -283,7 +283,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "Whenever a pawn is pushed, get in the habit of asking which squares just opened. Here the push hands us a juicy central outpost for the knight on d4.",
+   "spoken": "Whenever a pawn is pushed, get in the habit of asking which squares just opened. Here the push hands you a juicy central outpost for the knight on d4.",
    "teaches": [
     "a pawn push opens squares"
    ]
@@ -371,7 +371,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "With the rooks doubling, f3 nails down the e4-pawn once and for all so we never have to worry about a knight jump to e4 again — solid and safe.",
+   "spoken": "With the rooks doubling, f3 nails down the e4-pawn once and for all so you never have to worry about a knight jump to e4 again — solid and safe.",
    "teaches": [
     "make the position airtight"
    ]
@@ -432,7 +432,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "We capture, hitting the rook on f8 at the same time — and the game is over.",
+   "spoken": "You capture, hitting the rook on f8 at the same time — and the game is over.",
    "teaches": [
     "simplify into the win"
    ]
@@ -796,7 +796,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "After the game, worth explaining why we rejected the bishop to c4 on move four. This trap line is a genuine piece of theory to know.",
+   "spoken": "After the game, worth explaining why you rejected the bishop to c4 on move four. This trap line is a genuine piece of theory to know.",
    "kind": "review",
    "reanchor": true
   },
@@ -1172,7 +1172,7 @@
    "t": 1454.5,
    "fen": "r1bqkb1r/pppp1Npp/5n2/8/3nP3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 5",
    "line": [],
-   "spoken": "For all these reasons we just drop the knight back to f3 — simple, strong, easy to calculate. And if you had the black side, the classy try is the bishop to c5: not trade-or-retreat, but a third option — offer the trade while developing, so you get something in return.",
+   "spoken": "For all these reasons you just drop the knight back to f3 — simple, strong, easy to calculate. And if you had the black side, the classy try is the bishop to c5: not trade-or-retreat, but a third option — offer the trade while developing, so you get something in return.",
    "kind": "review",
    "teaches": [
     "trade on your own terms"

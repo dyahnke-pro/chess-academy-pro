@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We take White and face the Caro-Kann."
+   "spoken": "You take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the centre with d4."
+   "spoken": "You build the centre with d4."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "We play f3 — the Fantasy Variation, sharp and tactical, and far less studied than the mainlines."
+   "spoken": "You play f3 — the Fantasy Variation, sharp and tactical, and far less studied than the mainlines."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black plays e6 — the most reputable reply — and we treat it like a French. Note the threat: ...dxe4 and then ...Qh4 with check."
+   "spoken": "Black plays e6 — the most reputable reply — and you treat it like a French. Note the threat: ...dxe4 and then ...Qh4 with check."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We defend while developing — the knight to c3 reinforces e4 and takes the sting out of ...Qh4, which would now meet g3."
+   "spoken": "You defend while developing — the knight to c3 reinforces e4 and takes the sting out of ...Qh4, which would now meet g3."
   },
   {
    "ply": 8,
@@ -78,7 +78,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "We try a3 — a pawn sacrifice, forcing the bishop to decide."
+   "spoken": "You try a3 — a pawn sacrifice, forcing the bishop to decide."
   },
   {
    "ply": 10,
@@ -96,7 +96,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "We recapture with the b-pawn onto c3. Black has given up the dark-squared bishop, leaving a position riddled with dark-square weaknesses on d6 and e7."
+   "spoken": "You recapture with the b-pawn onto c3. Black has given up the dark-squared bishop, leaving a position riddled with dark-square weaknesses on d6 and e7."
   },
   {
    "ply": 12,
@@ -132,7 +132,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": "We fianchetto to b2 rather than d2 — d2 would run into ...e3, deflecting the bishop and forcing our king to move. On b2 it looks bad now, but c4 and d5 later give it real potential energy."
+   "spoken": "You fianchetto to b2 rather than d2 — d2 would run into ...e3, deflecting the bishop and forcing your king to move. On b2 it looks bad now, but c4 and d5 later give it real potential energy."
   },
   {
    "ply": 16,
@@ -150,7 +150,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": "We take back on e4."
+   "spoken": "You take back on e4."
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We develop the bishop to d3, hitting the knight and preparing to castle. If ...Nxc3, then Qd2 would pin and win it, since the a5-queen is undefended."
+   "spoken": "You develop the bishop to d3, hitting the knight and preparing to castle. If ...Nxc3, then Qd2 would pin and win it, since the a5-queen is undefended."
   },
   {
    "ply": 20,
@@ -186,7 +186,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — king to safety, and more importantly the rook lands on the semi-open f-file, a hallmark of the Fantasy."
+   "spoken": "You castle — king to safety, and more importantly the rook lands on the semi-open f-file, a hallmark of the Fantasy."
   },
   {
    "ply": 22,
@@ -195,7 +195,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Black plays the slow b6, preparing to fianchetto — but we're a couple of moves from smashing open the kingside."
+   "spoken": "Black plays the slow b6, preparing to fianchetto — but you're a couple of moves from smashing open the kingside."
   },
   {
    "ply": 23,
@@ -204,7 +204,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "On theme, we push c4 — investing a tempo to free the b2-bishop and prepare d5."
+   "spoken": "On theme, you push c4 — investing a tempo to free the b2-bishop and prepare d5."
   },
   {
    "ply": 24,
@@ -224,7 +224,7 @@
     "Bb7",
     "Qg3"
    ],
-   "spoken": "We bring the queen into the attack with Qf3; Black develops the bishop to b7; and the queen slides to g3 — its real destination, bearing down the g-file at g7 and clear of the rook."
+   "spoken": "You bring the queen into the attack with Qf3; Black develops the bishop to b7; and the queen slides to g3 — its real destination, bearing down the g-file at g7 and clear of the rook."
   },
   {
    "ply": 28,
@@ -242,7 +242,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "We take the free pawn — even in attack, material matters; the queen crashes into g7."
+   "spoken": "You take the free pawn — even in attack, material matters; the queen crashes into g7."
   },
   {
    "ply": 30,

@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We dive into a Sicilian — c5."
+   "spoken": "You dive into a Sicilian — c5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We capture on d4."
+   "spoken": "You capture on d4."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "And White recaptures with the queen — a center-game against the Sicilian, an offbeat line we still face at this level.",
+   "spoken": "And White recaptures with the queen — a center-game against the Sicilian, an offbeat line you still face at this level.",
    "reanchor": true
   },
   {
@@ -60,7 +60,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "It looks even worse than a center game, because it grants us a lead in development.",
+   "spoken": "It looks even worse than a center game, because it grants you a lead in development.",
    "reanchor": true
   },
   {
@@ -70,7 +70,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We don't waste time — a knight to c6. The plan is to expand with e6 and d5, though a fianchetto is also possible depending on where White puts the queen."
+   "spoken": "You don't waste time — a knight to c6. The plan is to expand with e6 and d5, though a fianchetto is also possible depending on where White puts the queen."
   },
   {
    "ply": 7,
@@ -79,7 +79,7 @@
    "line": [
     "Qd1"
    ],
-   "spoken": "White retreats the queen to d1. Our setup depends entirely on where the queen goes.",
+   "spoken": "White retreats the queen to d1. Your setup depends entirely on where the queen goes.",
    "reanchor": true
   },
   {
@@ -169,7 +169,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "We recapture with the b-pawn — not a bishop capture on c3 (no hurry, and it gives up the dark squares), and not a capture on c5, which allows a queen trade when we have a big lead, the bishop pair, and the prospect of grabbing the center with d5."
+   "spoken": "You recapture with the b-pawn — not a bishop capture on c3 (no hurry, and it gives up the dark squares), and not a capture on c5, which allows a queen trade when you have a big lead, the bishop pair, and the prospect of grabbing the center with d5."
   },
   {
    "ply": 15,
@@ -188,7 +188,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "So we grab the center with d5 — no reason to procrastinate; our center is well supported and our king is safe."
+   "spoken": "So you grab the center with d5 — no reason to procrastinate; your center is well supported and your king is safe."
   },
   {
    "ply": 17,
@@ -197,7 +197,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "White plays a bishop to g5, but his king is in grave danger and we should start winning material. A capture on d4 doesn't win a piece outright, because of the classic a3 technique; but there are other ways to pile on the knight — a queen to a5, or a bishop to a6 to prevent kingside castling.",
+   "spoken": "White plays a bishop to g5, but his king is in grave danger and you should start winning material. A capture on d4 doesn't win a piece outright, because of the classic a3 technique; but there are other ways to pile on the knight — a queen to a5, or a bishop to a6 to prevent kingside castling.",
    "reanchor": true
   },
   {
@@ -207,7 +207,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We play d4 — and after a3 we play for a long-term advantage rather than grabbing a stray pawn.",
+   "spoken": "You play d4 — and after a3 you play for a long-term advantage rather than grabbing a stray pawn.",
    "reanchor": true
   },
   {
@@ -227,7 +227,7 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": "We recapture with the queen, preserving our structure.",
+   "spoken": "You recapture with the queen, preserving your structure.",
    "reanchor": true
   },
   {
@@ -247,7 +247,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": "We capture on c3.",
+   "spoken": "You capture on c3.",
    "reanchor": true
   },
   {
@@ -287,7 +287,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle, since a bishop to a6 is less effective with the pawn on c4."
+   "spoken": "You castle, since a bishop to a6 is less effective with the pawn on c4."
   },
   {
    "ply": 25,
@@ -314,7 +314,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "A rook to d8 looks great — anything is winning, and now we play for mate.",
+   "spoken": "A rook to d8 looks great — anything is winning, and now you play for mate.",
    "reanchor": true
   },
   {
@@ -344,7 +344,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "White plays a rook to d1, and we coordinate with a bishop to e6.",
+   "spoken": "White plays a rook to d1, and you coordinate with a bishop to e6.",
    "reanchor": true
   },
   {
@@ -1327,7 +1327,7 @@
     "Bf8",
     "Bf1"
    ],
-   "spoken": "A typical Sicilian structure with a damaged queenside — Black is slightly better; here we faced an outright poor move.",
+   "spoken": "A typical Sicilian structure with a damaged queenside — Black is slightly better; here you faced an outright poor move.",
    "reanchor": true
   },
   {
@@ -1340,7 +1340,7 @@
     "Bb4",
     "Bb5"
    ],
-   "spoken": "We faced a bad move, a bishop to b5, and after a bishop to b4 White is already in trouble.",
+   "spoken": "You faced a bad move, a bishop to b5, and after a bishop to b4 White is already in trouble.",
    "reanchor": true
   },
   {

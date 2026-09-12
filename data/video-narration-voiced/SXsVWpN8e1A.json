@@ -57,7 +57,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "a3 chases the bishop, and after it takes on c3 we get the Sämisch structure. The entire game now revolves around one question: can White get e4 in under the right conditions?",
+   "spoken": "a3 chases the bishop, and after it takes on c3 you get the Sämisch structure. The entire game now revolves around one question: can White get e4 in under the right conditions?",
    "kind": "main",
    "teaches": "In the Sämisch, everything hinges on whether White can achieve e4 safely."
   },
@@ -187,7 +187,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Now e4 — the break the whole setup was built for — and we steamroll the kingside.",
+   "spoken": "Now e4 — the break the whole setup was built for — and you steamroll the kingside.",
    "kind": "main"
   },
   {
@@ -302,7 +302,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "And the pin is deadly precisely because no pawn protects the pinned knight — so we simply pile up on it, win the piece, and transform into a won endgame a piece up.",
+   "spoken": "And the pin is deadly precisely because no pawn protects the pinned knight — so you simply pile up on it, win the piece, and transform into a won endgame a piece up.",
    "kind": "main",
    "teaches": "A pin is fatal when no pawn defends the pinned piece; stack attackers and collect it."
   },

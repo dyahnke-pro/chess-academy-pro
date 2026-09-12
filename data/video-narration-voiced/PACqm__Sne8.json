@@ -16,7 +16,7 @@
         "c5",
         "Nf3"
       ],
-      "spoken": "We play the Accelerated Dragon, hoping for an open Sicilian — praying for d4."
+      "spoken": "You play the Accelerated Dragon, hoping for an open Sicilian — praying for d4."
     },
     {
       "ply": 4,
@@ -61,7 +61,7 @@
       "line": [
         "g6"
       ],
-      "spoken": "As Accelerated Dragon players we play g6 — there are two main ways to meet the Rossolimo.",
+      "spoken": "As Accelerated Dragon players you play g6 — there are two main ways to meet the Rossolimo.",
       "reanchor": true
     },
     {
@@ -80,7 +80,7 @@
         "g6",
         "Bxc6"
       ],
-      "spoken": "For Paulsen or Taimanov players, e6 is more sensible, but for us the fianchetto is consistent. Again there's a choice between b takes c6 and d takes c6.",
+      "spoken": "For Paulsen or Taimanov players, e6 is more sensible, but for you the fianchetto is consistent. Again there's a choice between b takes c6 and d takes c6.",
       "reanchor": true
     },
     {
@@ -110,7 +110,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "We complete kingside development with the bishop to g7, fianchettoing. Here White often plays h3 to prevent the bishop to g4.",
+      "spoken": "You complete kingside development with the bishop to g7, fianchettoing. Here White often plays h3 to prevent the bishop to g4.",
       "reanchor": true
     },
     {
@@ -120,7 +120,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "But trading the bishop for the knight isn't that good for Black, just positionally fine. Our plan: set up to fully clamp the centre. Think e5, where the bishop is an extension of the pawn — one unit controlling d4 and f4.",
+      "spoken": "But trading the bishop for the knight isn't that good for Black, just positionally fine. Your plan: set up to fully clamp the centre. Think e5, where the bishop is an extension of the pawn — one unit controlling d4 and f4.",
       "reanchor": true
     },
     {
@@ -140,7 +140,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "If White's bishop comes to e3, our knight drops back to d7, controlling c5 and reinforcing e5. That's why Ruy Lopez players play the bishop to g4 with Black — the drawback of the knight to d7 is that it locks in the c8-bishop.",
+      "spoken": "If White's bishop comes to e3, your knight drops back to d7, controlling c5 and reinforcing e5. That's why Ruy Lopez players play the bishop to g4 with Black — the drawback of the knight to d7 is that it locks in the c8-bishop.",
       "reanchor": true
     },
     {
@@ -180,7 +180,7 @@
       "line": [
         "Qxf3"
       ],
-      "spoken": "We recapture with the queen. Now the knight drops back to d7.",
+      "spoken": "You recapture with the queen. Now the knight drops back to d7.",
       "reanchor": true
     },
     {
@@ -198,7 +198,7 @@
       "t": 345,
       "fen": "r2qk2r/pp2ppbp/2p2np1/2p5/4P3/2NP1Q1P/PPP2PP1/R1B2RK1 b kq - 0 9",
       "line": [],
-      "spoken": "We play the knight to d7 first, because e5 immediately would allow White the bishop to g5, trading off that knight.",
+      "spoken": "You play the knight to d7 first, because e5 immediately would allow White the bishop to g5, trading off that knight.",
       "reanchor": true
     },
     {
@@ -209,7 +209,7 @@
         "Nd7",
         "Be3"
       ],
-      "spoken": "The knight to d7, the bishop to e3 — this knight is integral to our central control.",
+      "spoken": "The knight to d7, the bishop to e3 — this knight is integral to your central control.",
       "reanchor": true
     },
     {
@@ -220,7 +220,7 @@
         "e5",
         "a4"
       ],
-      "spoken": "We complete the plan with e5. White plays a4, grabbing queenside space. We don't want a5 clamping us, so we meet White at the top: b6 doesn't stop a5 and actually helps it — just play a5, clamping it down. Our next plan: castle and push f5, a kingside pawn attack, like the King's Indian.",
+      "spoken": "You complete the plan with e5. White plays a4, grabbing queenside space. You don't want a5 clamping you, so you meet White at the top: b6 doesn't stop a5 and actually helps it — just play a5, clamping it down. Your next plan: castle and push f5, a kingside pawn attack, like the King's Indian.",
       "reanchor": true
     },
     {
@@ -231,7 +231,7 @@
         "a5",
         "Ne2"
       ],
-      "spoken": "That's another reason we fianchettoed — pushing f5 doesn't over-weaken our king. a5, the knight to e2.",
+      "spoken": "That's another reason you fianchettoed — pushing f5 doesn't over-weaken your king. a5, the knight to e2.",
       "reanchor": true
     },
     {
@@ -241,7 +241,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle kingside.",
+      "spoken": "You castle kingside.",
       "reanchor": true
     },
     {
@@ -251,7 +251,7 @@
       "line": [
         "Ng3"
       ],
-      "spoken": "White heads the knight to g3 to prevent f5. We don't give up: how to reinforce f5? Ideally we would have a bishop developed to e6, but we make do.",
+      "spoken": "White heads the knight to g3 to prevent f5. You don't give up: how to reinforce f5? Ideally you would have a bishop developed to e6, but you make do.",
       "reanchor": true
     },
     {
@@ -261,7 +261,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "We use the queen — from e6 it prepares f5. So start with the queen to e7.",
+      "spoken": "You use the queen — from e6 it prepares f5. So start with the queen to e7.",
       "reanchor": true
     },
     {
@@ -310,7 +310,7 @@
       "line": [
         "f5"
       ],
-      "spoken": "Dicey doesn't mean insurmountable — we've done all this to play f5, so follow through.",
+      "spoken": "Dicey doesn't mean insurmountable — you've done all this to play f5, so follow through.",
       "reanchor": true
     },
     {
@@ -318,7 +318,7 @@
       "t": 600.5,
       "fen": "r4rk1/1p1n1pbp/2p1q1p1/p1p1p3/P3P3/2PPBQNP/1P3PP1/1R3RK1 b - - 0 15",
       "line": [],
-      "spoken": "The queen-to-b3 idea lets White's queen drop to d1, and an endgame favors White with our damaged structure.",
+      "spoken": "The queen-to-b3 idea lets White's queen drop to d1, and an endgame favors White with your damaged structure.",
       "reanchor": true
     },
     {
@@ -339,7 +339,7 @@
       "line": [
         "gxf5"
       ],
-      "spoken": "We recapture, g takes f5. The knight to h5 is what I'd play as White. We're following the prescribed method, cutting some corners — I'm illustrating the skeletal plans, not perfect play. We threaten f4, forking the minor pieces, so White must move one; plus improving moves like the a-rook to e8.",
+      "spoken": "You recapture, g takes f5. The knight to h5 is what I'd play as White. You're following the prescribed method, cutting some corners — I'm illustrating the skeletal plans, not perfect play. You threaten f4, forking the minor pieces, so White must move one; plus improving moves like the a-rook to e8.",
       "reanchor": true
     },
     {
@@ -349,7 +349,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "On the opponent's turn, generate a list of general improving moves — think conceptually on their turn, concretely on yours. The bishop to d2. There's a move I love that offers a queen trade — to fix our queenside structure and remove White's nastily-placed queen on f3, which halts our kingside pawns and aims at the queenside.",
+      "spoken": "On the opponent's turn, generate a list of general improving moves — think conceptually on their turn, concretely on yours. The bishop to d2. There's a move I love that offers a queen trade — to fix your queenside structure and remove White's nastily-placed queen on f3, which halts your kingside pawns and aims at the queenside.",
       "reanchor": true
     },
     {
@@ -359,7 +359,7 @@
       "line": [
         "Qd5"
       ],
-      "spoken": "The queen from e6 to d5 — a positional threat to take White's queen and ruin the kingside structure. If the knight takes f5, that fails: we take the queen on f3, White has the intermezzo knight-e7 check, and we go king to f7, not h8; White wastes a tempo taking our queen, and we win a piece. If White trades queens, we get a massive four-pawn centre and steamroll with e4. Does the queen takes d5 create a b5 hole? Yes, but it'd take the knight five moves to reach it — an eternity.",
+      "spoken": "The queen from e6 to d5 — a positional threat to take White's queen and ruin the kingside structure. If the knight takes f5, that fails: you take the queen on f3, White has the intermezzo knight-e7 check, and you go king to f7, not h8; White wastes a tempo taking your queen, and you win a piece. If White trades queens, you get a massive four-pawn centre and steamroll with e4. Does the queen takes d5 create a b5 hole? Yes, but it'd take the knight five moves to reach it — an eternity.",
       "reanchor": true
     },
     {
@@ -389,7 +389,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "White plays c4 — one-move-itis: it attacks the queen but weakens the backward d3 pawn, creating a juicy d4 outpost, and our d7-knight is three moves from it: knight f8, knight e6, knight d4.",
+      "spoken": "White plays c4 — one-move-itis: it attacks the queen but weakens the backward d3 pawn, creating a juicy d4 outpost, and your d7-knight is three moves from it: knight f8, knight e6, knight d4.",
       "reanchor": true
     },
     {
@@ -409,7 +409,7 @@
       "line": [
         "Bc3"
       ],
-      "spoken": "The bishop to c3. Charting the knight's course is easy — find the destination, then the fastest route. Careful: the a5 pawn hangs if we rush the rook to e8, so throw in b6 first, or sacrifice a5 if reaching d4 matters more. The knight-f8 route runs into the rook to e1 dropping e5, so knight f8, rook e1, then knight g6, defending e5 and eyeing f4. Or a slower b6 and rook to e8 first, shoring up weaknesses. Let's play solidly with b6 and the rook to e8, keeping the knight's options open — note after f4, the knight to e4 comes with tempo, so doubling and pushing f3 no longer works.",
+      "spoken": "The bishop to c3. Charting the knight's course is easy — find the destination, then the fastest route. Careful: the a5 pawn hangs if you rush the rook to e8, so throw in b6 first, or sacrifice a5 if reaching d4 matters more. The knight-f8 route runs into the rook to e1 dropping e5, so knight f8, rook e1, then knight g6, defending e5 and eyeing f4. Or a slower b6 and rook to e8 first, shoring up weaknesses. Let's play solidly with b6 and the rook to e8, keeping the knight's options open — note after f4, the knight to e4 comes with tempo, so doubling and pushing f3 no longer works.",
       "reanchor": true
     },
     {
@@ -430,7 +430,7 @@
       "line": [
         "Re8"
       ],
-      "spoken": "Should we reinforce f5 instead? I feel White may play f4, and we'd want a rook on the e-file. The rook to e8.",
+      "spoken": "Should you reinforce f5 instead? I feel White may play f4, and you'd want a rook on the e-file. The rook to e8.",
       "reanchor": true
     },
     {
@@ -438,7 +438,7 @@
       "t": 1274.5,
       "fen": "r5k1/3n1rbp/1ppq4/p1p1pp2/P1P5/2BP2NP/1P2QPP1/1R2R1K1 b - - 1 21",
       "line": [],
-      "spoken": "If the e-file opens, having a rook there helps fight for it. The real reason for the rook to e8 is to free the knight — we couldn't play the knight to f8, blundering e5 to White's three attackers versus our two defenders.",
+      "spoken": "If the e-file opens, having a rook there helps fight for it. The real reason for the rook to e8 is to free the knight — you couldn't play the knight to f8, blundering e5 to White's three attackers versus your two defenders.",
       "reanchor": true
     },
     {
@@ -448,7 +448,7 @@
       "line": [
         "Re8"
       ],
-      "spoken": "We add a defender to maneuver the knight to g6 — not just to defend e5 but as a transit to f4, Frankfurt Airport. We're over-protecting e5, in Nimzowitschian terms — protecting it more than necessary to free the defending pieces.",
+      "spoken": "You add a defender to maneuver the knight to g6 — not just to defend e5 but as a transit to f4, Frankfurt Airport. You're over-protecting e5, in Nimzowitschian terms — protecting it more than necessary to free the defending pieces.",
       "reanchor": true
     },
     {
@@ -458,7 +458,7 @@
       "line": [
         "f4"
       ],
-      "spoken": "f4. We'll exploit its drawback — it'd be nice to double rooks on the e-file with the f-rook to e7.",
+      "spoken": "f4. You'll exploit its drawback — it'd be nice to double rooks on the e-file with the f-rook to e7.",
       "reanchor": true
     },
     {
@@ -488,7 +488,7 @@
       "line": [
         "Rfe7"
       ],
-      "spoken": "The queen to f3 lets us continue — the f-rook to e7, doubling on the e-file.",
+      "spoken": "The queen to f3 lets you continue — the f-rook to e7, doubling on the e-file.",
       "reanchor": true
     },
     {
@@ -496,7 +496,7 @@
       "t": 1415.5,
       "fen": "4r1k1/3n1rbp/1pp3q1/p1p1pp2/P1P2P2/2BP1QNP/1P4P1/1R2R1K1 b - - 2 23",
       "line": [],
-      "spoken": "Now we can move the e-pawn — before, e takes f4 hung the e8-rook.",
+      "spoken": "Now you can move the e-pawn — before, e takes f4 hung the e8-rook.",
       "reanchor": true
     },
     {
@@ -516,7 +516,7 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "White strikes first, f takes e5. What to recapture with? If the bishop, we walk into the knight takes f5...",
+      "spoken": "White strikes first, f takes e5. What to recapture with? If the bishop, you walk into the knight takes f5...",
       "reanchor": true
     },
     {
@@ -526,7 +526,7 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "...so we take with the knight, capturing on e5. The point: if the queen takes f5, the g3-knight drops; if the bishop takes e5, we take with the rook, and f5 is protected.",
+      "spoken": "...so you take with the knight, capturing on e5. The point: if the queen takes f5, the g3-knight drops; if the bishop takes e5, you take with the rook, and f5 is protected.",
       "reanchor": true
     },
     {
@@ -557,7 +557,7 @@
         "Rxe5",
         "Rxe5"
       ],
-      "spoken": "...the rook takes e5, then the rook to f1, and we can't defend f5 — but we have a beautiful tactical solution.",
+      "spoken": "...the rook takes e5, then the rook to f1, and you can't defend f5 — but you have a beautiful tactical solution.",
       "reanchor": true
     },
     {
@@ -567,7 +567,7 @@
       "line": [
         "Ne2"
       ],
-      "spoken": "Our opponent doesn't fall for it — the knight to e2. I've been outplayed somewhat, but we're not worse. Now claim the e-file, the only open file — control it first. Not the queen to e6, allowing f4 with tempo; the queen to e8, same idea without the tempo.",
+      "spoken": "Your opponent doesn't fall for it — the knight to e2. I've been outplayed somewhat, but you're not worse. Now claim the e-file, the only open file — control it first. Not the queen to e6, allowing f4 with tempo; the queen to e8, same idea without the tempo.",
       "reanchor": true
     },
     {
@@ -577,7 +577,7 @@
       "line": [
         "Qe8"
       ],
-      "spoken": "The queen to e8, keeping the bishop fianchettoed, flexible, posing White a decision. Note if the knight leaves e2, we trade rooks with a rook-e1 check.",
+      "spoken": "The queen to e8, keeping the bishop fianchettoed, flexible, posing White a decision. Note if the knight leaves e2, you trade rooks with a rook-e1 check.",
       "reanchor": true
     },
     {
@@ -617,7 +617,7 @@
       "line": [
         "Qxc6"
       ],
-      "spoken": "And our opponent blunders the queen — the queen takes c6, consistent with the pattern: strong play, but under a stream of threats blunders come.",
+      "spoken": "And your opponent blunders the queen — the queen takes c6, consistent with the pattern: strong play, but under a stream of threats blunders come.",
       "reanchor": true
     },
     {
@@ -677,7 +677,7 @@
       "line": [
         "Qg3"
       ],
-      "spoken": "The queen to g3 is game over — the knight-e7 check is covered by the rook, the knight-f6 check we meet with the bishop takes f6. Two threats: mate with the queen takes g2...",
+      "spoken": "The queen to g3 is game over — the knight-e7 check is covered by the rook, the knight-f6 check you meet with the bishop takes f6. Two threats: mate with the queen takes g2...",
       "reanchor": true
     },
     {
@@ -697,7 +697,7 @@
       "line": [
         "Qxg2#"
       ],
-      "spoken": "The queen takes g2, checkmate, and we cross 1200. The Rossolimo is a main line alongside d4 — which is why some Accelerated Dragon players start with g6, the Hyper-Accelerated Dragon, but there's no free lunch: the immediate g6 lets in the annoying c3 Alapin, plus d4, c takes d4, queen takes d4.",
+      "spoken": "The queen takes g2, checkmate, and you cross 1200. The Rossolimo is a main line alongside d4 — which is why some Accelerated Dragon players start with g6, the Hyper-Accelerated Dragon, but there's no free lunch: the immediate g6 lets in the annoying c3 Alapin, plus d4, c takes d4, queen takes d4.",
       "reanchor": true
     }
   ]

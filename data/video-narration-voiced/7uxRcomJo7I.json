@@ -99,7 +99,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "e5 is the main move, striking straight at the d4-pawn. It doesn't lose a pawn, and the point is to open the centre so our pieces can get at e4.",
+   "spoken": "e5 is the main move, striking straight at the d4-pawn. It doesn't lose a pawn, and the point is to open the centre so your pieces can get at e4.",
    "kind": "main"
   },
   {
@@ -147,7 +147,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 is a general weakening move, and here's the concrete flaw: it leaves the bishop on e3 undefended. If we can lever the e4-pawn out of the way, that loose bishop turns into a target.",
+   "spoken": "f3 is a general weakening move, and here's the concrete flaw: it leaves the bishop on e3 undefended. If you can lever the e4-pawn out of the way, that loose bishop turns into a target.",
    "kind": "main",
    "teaches": "Every f3 push weakens something — log the pieces it leaves undefended."
   },
@@ -158,7 +158,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "We can't play d5 at once, so prepare it with c6 — this is main-line theory, and if White doesn't know exactly how to handle it he's in serious trouble.",
+   "spoken": "You can't play d5 at once, so prepare it with c6 — this is main-line theory, and if White doesn't know exactly how to handle it he's in serious trouble.",
    "kind": "plan",
    "plans": "Follow up with the d5 break to blast open the centre."
   },
@@ -207,7 +207,7 @@
    "line": [
     "Rxe5"
    ],
-   "spoken": "White's e5 just drops a pawn; Rxe5 grabs it and hands us exactly what we wanted — the open e-file.",
+   "spoken": "White's e5 just drops a pawn; Rxe5 grabs it and hands you exactly what you wanted — the open e-file.",
    "kind": "main"
   },
   {
@@ -226,7 +226,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Keep developing with Nc6; if he takes, we recapture with the pawn and shore up our passed pawn on d5.",
+   "spoken": "Keep developing with Nc6; if he takes, you recapture with the pawn and shore up your passed pawn on d5.",
    "kind": "main",
    "teaches": "Recapture toward the centre to reinforce your advanced pawn."
   },
@@ -246,7 +246,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "By the book we develop the bishop — not Bf5, which allows Nxf5, but Bd7. Not every piece needs an active job; some just connect the rooks and sit quietly, and that's fine.",
+   "spoken": "By the book you develop the bishop — not Bf5, which allows Nxf5, but Bd7. Not every piece needs an active job; some just connect the rooks and sit quietly, and that's fine.",
    "kind": "main",
    "teaches": "A modestly-placed developing move that connects the rooks beats a flashy square that hangs."
   },
@@ -284,7 +284,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Now the metal detector goes off: Nxd4. The knight is defended by the queen, but taking drags the queen onto d4 — a square x-rayed by our bishop on g7. That x-ray is the seed of a discovered attack.",
+   "spoken": "Now the metal detector goes off: Nxd4. The knight is defended by the queen, but taking drags the queen onto d4 — a square x-rayed by your bishop on g7. That x-ray is the seed of a discovered attack.",
    "kind": "main",
    "teaches": "Lure the queen onto a square your bishop already x-rays, then tear the cover off."
   },
@@ -304,7 +304,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": "Get the most from it: Nh5 makes contact with the f4-bishop before we cash in.",
+   "spoken": "Get the most from it: Nh5 makes contact with the f4-bishop before you cash in.",
    "kind": "main"
   },
   {
@@ -341,7 +341,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "Bxc3 is the winning stroke — it chops off the only defender of the bishop on e2, and that undefended piece falls next move. We're up a clean piece.",
+   "spoken": "Bxc3 is the winning stroke — it chops off the only defender of the bishop on e2, and that undefended piece falls next move. You're up a clean piece.",
    "kind": "main",
    "teaches": "Win a piece by removing the single defender of a loosely-guarded target."
   },
@@ -433,7 +433,7 @@
    "line": [
     "Qh6"
    ],
-   "spoken": "And catalog the opponent's weaknesses like a librarian — h4 was one, and the queen is tied to it, so we simply collect it with check.",
+   "spoken": "And catalog the opponent's weaknesses like a librarian — h4 was one, and the queen is tied to it, so you simply collect it with check.",
    "kind": "main",
    "teaches": "Keep a running list of enemy weaknesses; the winning move is usually already on it."
   },

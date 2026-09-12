@@ -93,7 +93,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "To punish the bishop fully we strike with d5, seizing the center with tempo.",
+   "spoken": "To punish the bishop fully you strike with d5, seizing the center with tempo.",
    "kind": "main",
    "teaches": [
     "d5 with tempo"
@@ -124,7 +124,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "The light-squared bishop's placement dictates our whole development. We can't lead with the dark bishop — it would drop d5 — so we bring the g8-knight out first.",
+   "spoken": "The light-squared bishop's placement dictates your whole development. You can't lead with the dark bishop — it would drop d5 — so you bring the g8-knight out first.",
    "kind": "main",
    "teaches": [
     "let the key piece decide the move order"
@@ -147,7 +147,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "c4 is White's first real error — a weakening move that pretends to fight for the center but only helps us.",
+   "spoken": "c4 is White's first real error — a weakening move that pretends to fight for the center but only helps you.",
    "kind": "main"
   },
   {
@@ -157,7 +157,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "We take on c4, and though it opens White's bishop, it leaves him with a backward pawn on d2 and an open d-file to lean on — and we get the open-center game the Sicilian wants.",
+   "spoken": "You take on c4, and though it opens White's bishop, it leaves him with a backward pawn on d2 and an open d-file to lean on — and you get the open-center game the Sicilian wants.",
    "kind": "main",
    "teaches": [
     "open the center; saddle White with a backward d-pawn"
@@ -210,7 +210,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "White plays d3, and now we combine development with prophylaxis.",
+   "spoken": "White plays d3, and now you combine development with prophylaxis.",
    "kind": "main"
   },
   {
@@ -242,7 +242,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 pins, and it's especially juicy because the pawn on d3 denies White the Be2 unpin — the pin simply sticks. Now we threaten the knight into d4 or e5, either of which lets us capture on f3 and wreck White's kingside pawns.",
+   "spoken": "The bishop to g4 pins, and it's especially juicy because the pawn on d3 denies White the Be2 unpin — the pin simply sticks. Now you threaten the knight into d4 or e5, either of which lets you capture on f3 and wreck White's kingside pawns.",
    "kind": "main",
    "teaches": [
     "a pin White can’t break, then Nd4/Ne5 to smash f3"

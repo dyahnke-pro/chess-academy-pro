@@ -16,7 +16,7 @@
     "d5",
     "Nc3"
    ],
-   "spoken": "We open d4, Black replies ...d5, and we develop the knight to c3."
+   "spoken": "You open d4, Black replies ...d5, and you develop the knight to c3."
   },
   {
    "ply": 4,
@@ -34,7 +34,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "We enter the French proper with e4."
+   "spoken": "You enter the French proper with e4."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We take on d5."
+   "spoken": "You take on d5."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "We grab the free pawn, the knight landing on d5."
+   "spoken": "You grab the free pawn, the knight landing on d5."
   },
   {
    "ply": 10,
@@ -88,7 +88,7 @@
    "line": [
     "Nxf6+"
    ],
-   "spoken": "Already a pawn up, we simplify — trading on f6 with check."
+   "spoken": "Already a pawn up, you simplify — trading on f6 with check."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3, a clean pawn up in the centre."
+   "spoken": "You develop the knight to f3, a clean pawn up in the centre."
   },
   {
    "ply": 14,
@@ -124,7 +124,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We choose the bishop on d3, not b5 — a pin there is easily broken by ...c6, which would be a healthy move for Black anyway."
+   "spoken": "You choose the bishop on d3, not b5 — a pin there is easily broken by ...c6, which would be a healthy move for Black anyway."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3 — supporting d4 and preparing the Bc2 then Qd3 battery."
+   "spoken": "You play c3 — supporting d4 and preparing the Bc2 then Qd3 battery."
   },
   {
    "ply": 20,
@@ -178,7 +178,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": "Our d4-pawn is well protected, so we ignore the poke and continue with the bishop to c2."
+   "spoken": "Your d4-pawn is well protected, so you ignore the poke and continue with the bishop to c2."
   },
   {
    "ply": 22,
@@ -196,7 +196,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "We undermine that pawn with b3 — the textbook method."
+   "spoken": "You undermine that pawn with b3 — the textbook method."
   },
   {
    "ply": 24,
@@ -214,7 +214,7 @@
    "line": [
     "bxc4"
    ],
-   "spoken": "We take on c4, softening it up."
+   "spoken": "You take on c4, softening it up."
   },
   {
    "ply": 26,
@@ -235,7 +235,7 @@
     "Qc2",
     "Qg6"
    ],
-   "spoken": "We swing the bishop to e4, completing the battery that threatens mate on h7; Black defends with ...Nb6, we bring the queen to c2 behind the bishop, and Black must cover with ...Qg6."
+   "spoken": "You swing the bishop to e4, completing the battery that threatens mate on h7; Black defends with ...Nb6, you bring the queen to c2 behind the bishop, and Black must cover with ...Qg6."
   },
   {
    "ply": 34,
@@ -247,7 +247,7 @@
     "Qc2",
     "Qxc2"
    ],
-   "spoken": "We reposition the queen to b3; Black grabs our bishop with ...Qxe4; we return to c2 offering the trade, and the queens come off on c2 — leaving us up material."
+   "spoken": "You reposition the queen to b3; Black grabs your bishop with ...Qxe4; you return to c2 offering the trade, and the queens come off on c2 — leaving you up material."
   },
   {
    "ply": 4,

@@ -78,7 +78,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "There's no reason not to stake a claim of our own with c5 — almost a Queen's Gambit with colors reversed, prodding the d4-pawn to declare itself.",
+   "spoken": "There's no reason not to stake a claim of your own with c5 — almost a Queen's Gambit with colors reversed, prodding the d4-pawn to declare itself.",
    "kind": "plan",
    "plans": "If White takes on c5, recapture and take over the centre exactly as White does in the Queen's Gambit Accepted."
   },
@@ -110,7 +110,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3 shores up the centre but is another slow move — White keeps developing incoherently while our pieces flow out naturally.",
+   "spoken": "c3 shores up the centre but is another slow move — White keeps developing incoherently while your pieces flow out naturally.",
    "kind": "main"
   },
   {
@@ -141,7 +141,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "Ng4 is the move: it hits the bishop and threatens to wreck White's structure, and its second point is that if the bishop steps away, we take on c5 and regain the pawn in fine shape.",
+   "spoken": "Ng4 is the move: it hits the bishop and threatens to wreck White's structure, and its second point is that if the bishop steps away, you take on c5 and regain the pawn in fine shape.",
    "kind": "main",
    "teaches": "A knight leap that attacks a defender AND unpins the recapture does two jobs at once."
   },
@@ -173,7 +173,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The point of moving with tempo is that when the bishop is forced to shift, we can take on c5 immediately. e5 is tempting here but held back on purpose.",
+   "spoken": "The point of moving with tempo is that when the bishop is forced to shift, you can take on c5 immediately. e5 is tempting here but held back on purpose.",
    "kind": "main"
   },
   {
@@ -183,7 +183,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "The drawback of e5 is that it would weaken the light squares f5 and e6 and undermine the d5-pawn — so in the name of solidity we take on c5 instead, keeping the centre firm and the light squares covered.",
+   "spoken": "The drawback of e5 is that it would weaken the light squares f5 and e6 and undermine the d5-pawn — so in the name of solidity you take on c5 instead, keeping the centre firm and the light squares covered.",
    "kind": "main",
    "teaches": "Weigh the squares a pawn push abandons before you play it, not after."
   },
@@ -263,7 +263,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "The biggest queenside target is the pawn on c3, so rook to c8 takes the semi-open file. If he defends with a rook, that rook is nailed to the pawn — the weakness ties his pieces down, which matters more than the pawn itself, because he can't reallocate his forces while we can.",
+   "spoken": "The biggest queenside target is the pawn on c3, so rook to c8 takes the semi-open file. If he defends with a rook, that rook is nailed to the pawn — the weakness ties his pieces down, which matters more than the pawn itself, because he can't reallocate his forces while you can.",
    "kind": "plan",
    "teaches": "A weak pawn's value is often the defenders it pins in place, not the material."
   },

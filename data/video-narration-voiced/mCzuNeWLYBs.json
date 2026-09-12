@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We grab the centre with the pawn to d4."
+   "spoken": "You grab the centre with the pawn to d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black contests it with d5, attacking our e4-pawn — so we must deal with that. Options include the knight to c3, the pawn to e5 for the Advance, capturing on d5, or the line that flies under the radar."
+   "spoken": "Black contests it with d5, attacking your e4-pawn — so you must deal with that. Options include the knight to c3, the pawn to e5 for the Advance, capturing on d5, or the line that flies under the radar."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 — the Fantasy Variation. It defends the e4-pawn and preserves our big pawn centre."
+   "spoken": "The pawn to f3 — the Fantasy Variation. It defends the e4-pawn and preserves your big pawn centre."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": "We recapture on e4 — a pawn trade leaving us two pawns in the centre."
+   "spoken": "You recapture on e4 — a pawn trade leaving you two pawns in the centre."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black follows up correctly with the pawn to e5. It looks like we can just take, but never forget development in the opening: after taking on e5, the queen to h4 is a fork — check on the king while hitting the e4-pawn at the same time."
+   "spoken": "Black follows up correctly with the pawn to e5. It looks like you can just take, but never forget development in the opening: after taking on e5, the queen to h4 is a fork — check on the king while hitting the e4-pawn at the same time."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "So we prevent the queen coming to h4 not by pushing a pawn but by developing — the knight to f3."
+   "spoken": "So you prevent the queen coming to h4 not by pushing a pawn but by developing — the knight to f3."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Black develops the bishop to g4. Taking on e5 is still bad — not for a check, but because it allows a queen trade that drags our king into the centre."
+   "spoken": "Black develops the bishop to g4. Taking on e5 is still bad — not for a check, but because it allows a queen trade that drags your king into the centre."
   },
   {
    "ply": 11,
@@ -105,7 +105,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Black plays the knight to d7. A very sharp opening — we have sacrifices ready on f7."
+   "spoken": "Black plays the knight to d7. A very sharp opening — you have sacrifices ready on f7."
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle, continuing development. Notice both the c4-bishop and the f1-rook aim at f7 — only our own knight is in the way, and it's easy to move, after which f7 comes under heavy fire."
+   "spoken": "You castle, continuing development. Notice both the c4-bishop and the f1-rook aim at f7 — only your own knight is in the way, and it's easy to move, after which f7 comes under heavy fire."
   },
   {
    "ply": 14,
@@ -141,7 +141,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "Black plays the king to f8 — the umbrella method, hiding behind our bishop. We can't win with a discovered check yet, so we step back and retreat the bishop — but with a distracting move that forces a reaction."
+   "spoken": "Black plays the king to f8 — the umbrella method, hiding behind your bishop. You can't win with a discovered check yet, so you step back and retreat the bishop — but with a distracting move that forces a reaction."
   },
   {
    "ply": 17,
@@ -168,7 +168,7 @@
    "line": [
     "Bxg4"
    ],
-   "spoken": "We take on g4, winning a piece — and if Black recaptures, he exposes himself to a discovered check again."
+   "spoken": "You take on g4, winning a piece — and if Black recaptures, he exposes himself to a discovered check again."
   },
   {
    "ply": 20,
@@ -223,7 +223,7 @@
     "Nxd8",
     "Raxd8"
    ],
-   "spoken": "We take the queen, and after the recapture we're up a full queen for a piece. Now just complete development — but first make sure the d4-pawn is well protected.",
+   "spoken": "You take the queen, and after the recapture you're up a full queen for a piece. Now just complete development — but first make sure the d4-pawn is well protected.",
    "reanchor": true
   },
   {
@@ -243,7 +243,7 @@
    "line": [
     "Rdf8"
    ],
-   "spoken": "Black contests the file with the rook. Our centre is safe — now we complete development, since the bishop and knight are still on their home squares.",
+   "spoken": "Black contests the file with the rook. Your centre is safe — now you complete development, since the bishop and knight are still on their home squares.",
    "reanchor": true
   },
   {
@@ -253,7 +253,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop to g5 — developing with a pin on the f6-knight. A pin means the knight can't move without exposing its king. Next we'll develop the knight to d2 and maybe c4.",
+   "spoken": "The bishop to g5 — developing with a pin on the f6-knight. A pin means the knight can't move without exposing its king. Next you'll develop the knight to d2 and maybe c4.",
    "reanchor": true
   },
   {
@@ -273,7 +273,7 @@
    "line": [
     "Bxf6+"
    ],
-   "spoken": "So we trade the bishop for the knight, following the trade-when-ahead principle.",
+   "spoken": "So you trade the bishop for the knight, following the trade-when-ahead principle.",
    "reanchor": true
   },
   {
@@ -321,7 +321,7 @@
    "t": 1008,
    "fen": "5r1r/pp2k3/2pb1n1p/4p1p1/3PP3/2P5/PP1N2PP/R2Q1RK1 w - - 0 18",
    "line": [],
-   "spoken": "We could also have manoeuvred a knight to that outpost.",
+   "spoken": "You could also have manoeuvred a knight to that outpost.",
    "reanchor": true
   },
   {
@@ -371,7 +371,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": "Black takes our pawn on c3 — and again, don't just recapture.",
+   "spoken": "Black takes your pawn on c3 — and again, don't just recapture.",
    "reanchor": true
   },
   {
@@ -411,7 +411,7 @@
    "line": [
     "Kc7"
    ],
-   "spoken": "Black's king goes to c7. Now we ensnare the king or win a pile of material.",
+   "spoken": "Black's king goes to c7. Now you ensnare the king or win a pile of material.",
    "reanchor": true
   },
   {
@@ -421,7 +421,7 @@
    "line": [
     "Qd6+"
    ],
-   "spoken": "The queen to d6 with check — an in-between move bringing another piece in. He can't take, since the queen is protected by the knight; the king moves back, and then we take the knight.",
+   "spoken": "The queen to d6 with check — an in-between move bringing another piece in. He can't take, since the queen is protected by the knight; the king moves back, and then you take the knight.",
    "reanchor": true
   },
   {
@@ -441,7 +441,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": "We take the free knight on f6, then go for the mate.",
+   "spoken": "You take the free knight on f6, then go for the mate.",
    "reanchor": true
   },
   {

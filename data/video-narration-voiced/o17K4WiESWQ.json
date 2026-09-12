@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "Finally we get White — and we're going to play the mainline, d4 and c4, grabbing the big classical center."
+      "spoken": "Finally you get White — and you're going to play the mainline, d4 and c4, grabbing the big classical center."
     },
     {
       "ply": 3,
@@ -59,7 +59,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3 keeps us in the most positionally rich waters.",
+      "spoken": "The knight to c3 keeps you in the most positionally rich waters.",
       "reanchor": true
     },
     {
@@ -88,7 +88,7 @@
         "Nc3",
         "e6"
       ],
-      "spoken": "So after c5, the knight to c3, e6, we head into a mainline Benoni with d5.",
+      "spoken": "So after c5, the knight to c3, e6, you head into a mainline Benoni with d5.",
       "reanchor": true
     },
     {
@@ -143,7 +143,7 @@
       "line": [
         "Nbd7"
       ],
-      "spoken": "Black plays the knight to d7. There's no need for us to take on c5 — that trade doesn't especially help White."
+      "spoken": "Black plays the knight to d7. There's no need for you to take on c5 — that trade doesn't especially help White."
     },
     {
       "ply": 13,
@@ -152,7 +152,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "You could play f4 immediately to grab a pawn, but I don't like that — playing positionally, we simply develop the knight to f3."
+      "spoken": "You could play f4 immediately to grab a pawn, but I don't like that — playing positionally, you simply develop the knight to f3."
     },
     {
       "ply": 14,
@@ -161,7 +161,7 @@
       "line": [
         "Ng4"
       ],
-      "spoken": "Black is cramped, and we're going to squeeze the life out of him. He tries the knight to g4."
+      "spoken": "Black is cramped, and you're going to squeeze the life out of him. He tries the knight to g4."
     },
     {
       "ply": 15,
@@ -170,7 +170,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "No need to go out of our way to stop it — we just castle, because if you calculate a bit further you'll see it resolves in our favor."
+      "spoken": "No need to go out of your way to stop it — you just castle, because if you calculate a bit further you'll see it resolves in your favor."
     },
     {
       "ply": 16,
@@ -188,7 +188,7 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "The real question is how easily you can chase it, and we'll be able to hit it with f4 — so we take, the knight capturing on e5."
+      "spoken": "The real question is how easily you can chase it, and you'll be able to hit it with f4 — so you take, the knight capturing on e5."
     },
     {
       "ply": 18,
@@ -206,7 +206,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "Be careful not to automatically drop the bishop to c2 — that would blunder the pawn. The bishop to e2 is precise, and then we hit with a nice f4 with tempo."
+      "spoken": "Be careful not to automatically drop the bishop to c2 — that would blunder the pawn. The bishop to e2 is precise, and then you hit with a nice f4 with tempo."
     },
     {
       "ply": 20,
@@ -271,7 +271,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "The bishop to e3 is important, and we've also got interesting ideas with an e5 break brewing."
+      "spoken": "The bishop to e3 is important, and you've also got interesting ideas with an e5 break brewing."
     },
     {
       "ply": 24,
@@ -289,7 +289,7 @@
       "line": [
         "dxe6"
       ],
-      "spoken": "Now look at the d-file: there's a weak backward pawn on d6. We take, d5 takes e6, opening the file and putting that weakness on trial."
+      "spoken": "Now look at the d-file: there's a weak backward pawn on d6. You take, d5 takes e6, opening the file and putting that weakness on trial."
     },
     {
       "ply": 26,
@@ -325,7 +325,7 @@
       "line": [
         "fxg6"
       ],
-      "spoken": "We take, f takes g6, ripping open the kingside."
+      "spoken": "You take, f takes g6, ripping open the kingside."
     },
     {
       "ply": 30,
@@ -361,7 +361,7 @@
       "line": [
         "Rad1"
       ],
-      "spoken": "We bring the rook to d1, piling onto the d-file."
+      "spoken": "You bring the rook to d1, piling onto the d-file."
     },
     {
       "ply": 34,
@@ -370,7 +370,7 @@
       "line": [
         "Rf7"
       ],
-      "spoken": "Black tries the rook to f7 — but we can't let him escape. How should we continue?"
+      "spoken": "Black tries the rook to f7 — but you can't let him escape. How should you continue?"
     },
     {
       "ply": 35,

@@ -15,7 +15,7 @@
     "e4",
     "d6"
    ],
-   "spoken": "A ten-minute game, and we're climbing. Black plays d6, which could be a Pirc or a Caro depending on what follows."
+   "spoken": "A ten-minute game, and you're climbing. Black plays d6, which could be a Pirc or a Caro depending on what follows."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We grab the full center with d4."
+   "spoken": "You grab the full center with d4."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Our strategy is no different from usual — the knight to c3, developing and holding the center."
+   "spoken": "Your strategy is no different from usual — the knight to c3, developing and holding the center."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "How to arrange our pieces? There's no single right answer — the bishop to b3, the bishop to c4 — but I like f4, planning the knight to f3, especially against this early c6."
+   "spoken": "How to arrange your pieces? There's no single right answer — the bishop to b3, the bishop to c4 — but I like f4, planning the knight to f3, especially against this early c6."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
     "Bg7",
     "Nf3"
    ],
-   "spoken": "Black fianchettoes with the bishop to g7, and we bring the knight to f3, supporting the big center."
+   "spoken": "Black fianchettoes with the bishop to g7, and you bring the knight to f3, supporting the big center."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Black develops the other bishop to g4, pinning our knight on f3 — double-bishop development aiming at our center."
+   "spoken": "Black develops the other bishop to g4, pinning your knight on f3 — double-bishop development aiming at your center."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "We develop with an eye toward defending d4 and that pinned knight — the bishop to e3."
+   "spoken": "You develop with an eye toward defending d4 and that pinned knight — the bishop to e3."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "The theoretical reply, as far as I remember, is the queen to d2 — now if Black snatches on b2, we're ready to meet it."
+   "spoken": "The theoretical reply, as far as I remember, is the queen to d2 — now if Black snatches on b2, you're ready to meet it."
   },
   {
    "ply": 15,
@@ -116,7 +116,7 @@
     "Bxf3",
     "gxf3"
    ],
-   "spoken": "Black takes on f3, and we recapture with the g-pawn. Yes, we have doubled pawns, but it's really no big deal — it opens the g-file straight at Black's kingside, which could benefit us."
+   "spoken": "Black takes on f3, and you recapture with the g-pawn. Yes, you have doubled pawns, but it's really no big deal — it opens the g-file straight at Black's kingside, which could benefit you."
   },
   {
    "ply": 16,
@@ -134,7 +134,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "We castle queenside. Not h4 yet — that's too early, since we don't even know where Black is going to castle."
+   "spoken": "You castle queenside. Not h4 yet — that's too early, since you don't even know where Black is going to castle."
   },
   {
    "ply": 18,
@@ -143,7 +143,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black castles kingside, and now we can start thinking about a kingside attack."
+   "spoken": "Black castles kingside, and now you can start thinking about a kingside attack."
   },
   {
    "ply": 19,
@@ -152,7 +152,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "h4 is a great move here, but it's not the only way to shatter Black's king position — we can also use the f-pawn and play f5 first, prying it open so h4 lands even harder later."
+   "spoken": "h4 is a great move here, but it's not the only way to shatter Black's king position — you can also use the f-pawn and play f5 first, prying it open so h4 lands even harder later."
   },
   {
    "ply": 20,
@@ -188,7 +188,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "We push h5, and notice I'm completely ignoring Black's queenside — his attack there simply isn't fast enough."
+   "spoken": "You push h5, and notice I'm completely ignoring Black's queenside — his attack there simply isn't fast enough."
   },
   {
    "ply": 24,
@@ -197,7 +197,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "Black plays b4, poking our knight."
+   "spoken": "Black plays b4, poking your knight."
   },
   {
    "ply": 25,
@@ -224,7 +224,7 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "We take, h takes g6, also eyeing the e6-square that gets weak once the f7-pawn is pried away."
+   "spoken": "You take, h takes g6, also eyeing the e6-square that gets weak once the f7-pawn is pried away."
   },
   {
    "ply": 29,
@@ -234,7 +234,7 @@
     "fxg6",
     "fxg6"
    ],
-   "spoken": "Black recaptures on g6, and we take again with the f-pawn."
+   "spoken": "Black recaptures on g6, and you take again with the f-pawn."
   },
   {
    "ply": 31,
@@ -253,7 +253,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": "Black's king crawls to f7 with literally no squares, and our queen is ready to pour into the attack."
+   "spoken": "Black's king crawls to f7 with literally no squares, and your queen is ready to pour into the attack."
   },
   {
    "ply": 3,
@@ -337,7 +337,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "And after we castle queenside, ninety-one games continued from here.",
+   "spoken": "And after you castle queenside, ninety-one games continued from here.",
    "reanchor": true
   },
   {
@@ -357,7 +357,7 @@
    "line": [
     "Kb1"
    ],
-   "spoken": "This whole line is very dubious for Black; our center is monstrous, and we can just play the king to b1 for safety.",
+   "spoken": "This whole line is very dubious for Black; your center is monstrous, and you can just play the king to b1 for safety.",
    "reanchor": true
   },
   {
@@ -377,7 +377,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "And we simply start our own attack with h4. Grabbing on b2 is never a good idea for Black — not outright losing, but very dubious.",
+   "spoken": "And you simply start your own attack with h4. Grabbing on b2 is never a good idea for Black — not outright losing, but very dubious.",
    "reanchor": true
   },
   {
@@ -404,7 +404,7 @@
     "d4",
     "c6"
    ],
-   "spoken": "d4 and c6 — the win is very straightforward once we land the knight on f4, with too many weak squares and pawns for Black to defend.",
+   "spoken": "d4 and c6 — the win is very straightforward once you land the knight on f4, with too many weak squares and pawns for Black to defend.",
    "reanchor": true
   },
   {

@@ -449,7 +449,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Nc6 and White is essentially lost. The knight on d3 is a sitting duck — pinned to the queen down the d-file — and we control every important central square, so it can't escape.",
+   "spoken": "Nc6 and White is essentially lost. The knight on d3 is a sitting duck — pinned to the queen down the d-file — and you control every important central square, so it can't escape.",
    "kind": "main",
    "teaches": "A piece pinned on an open file to the queen, with no escape squares, is as good as lost."
   },
@@ -596,7 +596,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The moral of the whole game — don't hunt stray pawns. Aim for piece-placement superiority; once we secured the position, White's own move handed us the bishop pair and collapse on both fronts.",
+   "spoken": "The moral of the whole game — don't hunt stray pawns. Aim for piece-placement superiority; once you secured the position, White's own move handed you the bishop pair and collapse on both fronts.",
    "kind": "review",
    "teaches": "Play for improvement and piece superiority; the material follows on its own.",
    "reanchor": true

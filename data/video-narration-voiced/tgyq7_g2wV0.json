@@ -16,7 +16,7 @@
     "e5",
     "e4"
    ],
-   "spoken": "We're White, hoping for another Danish — d4, e5, e4, building a broad center."
+   "spoken": "You're White, hoping for another Danish — d4, e5, e4, building a broad center."
   },
   {
    "ply": 4,
@@ -34,7 +34,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "We want to open the center as much as possible — the more open it is, the more chances to attack — so we take, d takes e5."
+   "spoken": "You want to open the center as much as possible — the more open it is, the more chances to attack — so you take, d takes e5."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 — developing flexibly and keeping our options open."
+   "spoken": "The knight to c3 — developing flexibly and keeping your options open."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6 — and that's what flexible development gets you: we waited, and now he's shown us he'll castle short."
+   "spoken": "Black plays d6 — and that's what flexible development gets you: you waited, and now he's shown you he'll castle short."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Once Black castles short, we'll have carte blanche to storm our pawns. The bishop to e3."
+   "spoken": "Once Black castles short, you'll have carte blanche to storm your pawns. The bishop to e3."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 is a common slight mistake — it lets us shore up the e4-pawn."
+   "spoken": "The bishop to g4 is a common slight mistake — it lets you shore up the e4-pawn."
   },
   {
    "ply": 11,
@@ -97,7 +97,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "But things have changed: because we're about to castle long, f3 turns from a liability into a huge asset, covering e4 and building the chain. Black plays the bishop to h5."
+   "spoken": "But things have changed: because you're about to castle long, f3 turns from a liability into a huge asset, covering e4 and building the chain. Black plays the bishop to h5."
   },
   {
    "ply": 13,
@@ -115,7 +115,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black plays c5 without developing a piece — and now the d5-square becomes a very juicy outpost for us."
+   "spoken": "Black plays c5 without developing a piece — and now the d5-square becomes a very juicy outpost for you."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "We castle long — now it's easy to operate, because we don't have to worry about our own king."
+   "spoken": "You castle long — now it's easy to operate, because you don't have to worry about your own king."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "By the book we'd hold off, but let's go — g4, offering the pawn and prying open lines."
+   "spoken": "By the book you'd hold off, but let's go — g4, offering the pawn and prying open lines."
   },
   {
    "ply": 18,
@@ -161,7 +161,7 @@
     "fxg4",
     "Nfxg4"
    ],
-   "spoken": "We recapture with the f-pawn, Black takes back with the knight — and now, and only now, we've won a piece."
+   "spoken": "You recapture with the f-pawn, Black takes back with the knight — and now, and only now, you've won a piece."
   },
   {
    "ply": 21,

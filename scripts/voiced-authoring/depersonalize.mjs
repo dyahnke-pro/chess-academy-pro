@@ -20,12 +20,35 @@ const RULES = [
   // every "speedrun(s)" reference → depersonalized "top-level play" (the pro's
   // own speedrun series must never surface). Prepositional forms first so the
   // grammar stays clean.
+  // Capitalise only when the phrase LANDS at a sentence start. A blanket
+  // recapitalise is unsafe here: a beat can legitimately open on SAN ("e5, and
+  // after c5…") and upper-casing that would name a different square.
+  [/(^|[.!?]\s+)(?:in|on|for|during)\s+(?:earlier|previous|all of our|our|these|this|the|my|a)\s+speedruns?\b/gi,
+    (_m, lead) => `${lead}In top-level play`],
   [/\b(?:in|on|for|during)\s+(?:earlier|previous|all of our|our|these|this|the|my|a)\s+speedruns?\b/gi, 'in top-level play'],
   [/\b(?:this|our|the|my)\s+speedruns?\b/gi, 'in top-level play'],
   [/\b(?:earlier|previous|all of our|these)\s+speedruns?\b/gi, 'top-level play'],
   [/\bspeedruns?\b/gi, 'top-level play'],
-  // the pro's own history verbs after a reword → coach plural
-  [/\bI['’]ve (recommended|called|suggested|shown|mentioned)\b/gi, "we've $1"],
+  // The pro's own history verbs, made IMPERSONAL — never first-person plural.
+  //
+  // This rule used to emit "we've $1", which put the app's two locked voice
+  // rules in direct conflict: depersonalise says no "I" (the pro's identity),
+  // and the 2026-08-28 perspective standard says no "we/our" (the student is
+  // "you", the opponent is "they"). Trading one for the other just moved the
+  // violation, and because it happens at BUILD time it survived a clean source:
+  // the corpus said "In earlier speedruns I've recommended", the shipped file
+  // said "in top-level play we've recommended", and no source-level migration
+  // could ever reach it. Passive/impersonal satisfies both rules at once.
+  // ONLY the two forms that actually occur, each checked against its real
+  // sentence. The first draft also mapped suggested/shown/mentioned on spec and
+  // produced "is called it a cardinal sin" on a shape the corpus never uses —
+  // an untested rule is how a build-time rewrite ships broken prose.
+  //   "In earlier speedruns I've recommended the Nimzowitsch Advance"
+  //     → "In top-level play the recommendation has been the Nimzowitsch Advance"
+  //   "which on previous speedruns I've called one of the cardinal sins"
+  //     → "which in top-level play is called one of the cardinal sins"
+  [/\bI['’]ve recommended\b/gi, 'the recommendation has been'],
+  [/\bI['’]ve called\b/gi, 'is called'],
   // "— I've played it in semi-competitive games and it…" → drop the aside
   [/[,—\s]*\bI['’]ve (?:already )?played (?:it )?in [a-z\s-]*?games?\b/gi, ''],
   [/[,—\s]*\bI['’]ve (?:already )?played (?:it|this)?\s*(?:a lot|often|many times)?\b/gi, ''],

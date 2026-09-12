@@ -15,7 +15,7 @@
     "c4",
     "e5"
    ],
-   "spoken": "We haven't faced the English yet — I'm going to play it in principled fashion. c4, e5, playing the"
+   "spoken": "You haven't faced the English yet — I'm going to play it in principled fashion. c4, e5, playing the"
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "Reversed Sicilian. As you might know, we play the Alapin Sicilian with White against the Sicilian, and the Reversed Alapin is a very viable system against the English —"
+   "spoken": "Reversed Sicilian. As you might know, you play the Alapin Sicilian with White against the Sicilian, and the Reversed Alapin is a very viable system against the English —"
   },
   {
    "ply": 4,
@@ -77,7 +77,7 @@
     "Bg2",
     "d5"
    ],
-   "spoken": "us to go d5 and control the centre — we basically play this as if we're on the White side of an Alapin."
+   "spoken": "you to go d5 and control the centre — you basically play this as if you're on the White side of an Alapin."
   },
   {
    "ply": 8,
@@ -96,7 +96,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "g3 and e3 — a very passive setup by our opponent,"
+   "spoken": "g3 and e3 — a very passive setup by your opponent,"
   },
   {
    "ply": 10,
@@ -105,7 +105,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "which doesn't necessitate anything in particular on our part — normal development will suffice; the knight to c6, the knight to f6, it doesn't really matter which order."
+   "spoken": "which doesn't necessitate anything in particular on your part — normal development will suffice; the knight to c6, the knight to f6, it doesn't really matter which order."
   },
   {
    "ply": 11,
@@ -132,7 +132,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The knight to e2. Some of you know I like to play e4 in such positions, but if you play e4 prematurely, the downside is that White plays d3 and it becomes hard to sustain the pawn on e4 without sufficient development, so it might backfire. d5 being a weakness isn't a big problem, because we defend it well — the bishop to e6, the queen to d7 — and long castling is an idea, but with the c-file open and White having easy pawn pressure, I don't think we should castle queenside; it feels needlessly"
+   "spoken": "The knight to e2. Some of you know I like to play e4 in such positions, but if you play e4 prematurely, the downside is that White plays d3 and it becomes hard to sustain the pawn on e4 without sufficient development, so it might backfire. d5 being a weakness isn't a big problem, because you defend it well — the bishop to e6, the queen to d7 — and long castling is an idea, but with the c-file open and White having easy pawn pressure, I don't think you should castle queenside; it feels needlessly"
   },
   {
    "ply": 14,
@@ -141,7 +141,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "risky. We could give e4 a shot, but I prefer conventional, simple development — the bishop to e6, safeguarding the pawn on d5."
+   "spoken": "risky. You could give e4 a shot, but I prefer conventional, simple development — the bishop to e6, safeguarding the pawn on d5."
   },
   {
    "ply": 15,
@@ -159,7 +159,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "Now a couple of approaches — we could go h5, or we could play the queen to d7, which I like a lot as a way to start,"
+   "spoken": "Now a couple of approaches — you could go h5, or you could play the queen to d7, which I like a lot as a way to start,"
   },
   {
    "ply": 17,
@@ -168,7 +168,7 @@
    "line": [
     "Nbc3"
    ],
-   "spoken": "because it's very flexible — we're preparing the bishop to h3 in some cases, but not committing to anything in particular. This is one of those positions with so many roughly equivalent ways to develop; we adhere to the general strategy of completing our development before embarking on anything specific. Where to develop this bishop? One thing to keep in mind is that White"
+   "spoken": "because it's very flexible — you're preparing the bishop to h3 in some cases, but not committing to anything in particular. This is one of those positions with so many roughly equivalent ways to develop; you adhere to the general strategy of completing your development before embarking on anything specific. Where to develop this bishop? One thing to keep in mind is that White"
   },
   {
    "ply": 18,
@@ -177,7 +177,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "is very likely to play d4, and then after e4 you might notice White's knight could jump onto f4, quite an annoying square — so by playing the bishop to d6 we preempt that."
+   "spoken": "is very likely to play d4, and then after e4 you might notice White's knight could jump onto f4, quite an annoying square — so by playing the bishop to d6 you preempt that."
   },
   {
    "ply": 19,
@@ -186,7 +186,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "b4 — right, I think it's high time for the attacking approach; I think we've completed our development."
+   "spoken": "b4 — right, I think it's high time for the attacking approach; I think you've completed your development."
   },
   {
    "ply": 20,
@@ -195,7 +195,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Let's go h5. I'm not worried about b5 — we just drop our knight back, it's a paper tiger. h5, h4 — you know the drill, we've had a million games in the Hippo."
+   "spoken": "Let's go h5. I'm not worried about b5 — you just drop your knight back, it's a paper tiger. h5, h4 — you know the drill, you've had a million games in the Hippo."
   },
   {
    "ply": 21,
@@ -204,7 +204,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We've won precisely in this way — the purpose is to open the h-file, then the bishop to h3 comes and White's position collapses very quickly. d4 —"
+   "spoken": "You've won precisely in this way — the purpose is to open the h-file, then the bishop to h3 comes and White's position collapses very quickly. d4 —"
   },
   {
    "ply": 22,
@@ -213,7 +213,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "we want to play e4 and close down the centre."
+   "spoken": "you want to play e4 and close down the centre."
   },
   {
    "ply": 23,
@@ -222,7 +222,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 — pretty good stuff by our opponent, but I feel it's too slow. We need to figure out whether to respond to the tension in the centre."
+   "spoken": "f3 — pretty good stuff by your opponent, but I feel it's too slow. You need to figure out whether to respond to the tension in the centre."
   },
   {
    "ply": 24,
@@ -231,7 +231,7 @@
    "line": [
     "exf3"
    ],
-   "spoken": "There's a certain temptation to play h4, but if you look more carefully, we'd just be giving up the e4-pawn for nothing — so it's worth taking on f3 first, and then"
+   "spoken": "There's a certain temptation to play h4, but if you look more carefully, you'd just be giving up the e4-pawn for nothing — so it's worth taking on f3 first, and then"
   },
   {
    "ply": 25,
@@ -249,7 +249,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "We could play the bishop to h3, but that's unnecessary — let's keep our bishop here to defend the pawn on d5."
+   "spoken": "You could play the bishop to h3, but that's unnecessary — let's keep your bishop here to defend the pawn on d5."
   },
   {
    "ply": 27,
@@ -258,7 +258,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": "And now we're very close to opening the h-file, and once we open it, stuff is going to go down."
+   "spoken": "And now you're very close to opening the h-file, and once you open it, stuff is going to go down."
   },
   {
    "ply": 28,
@@ -267,7 +267,7 @@
    "line": [
     "Bh3+"
    ],
-   "spoken": "The bishop to h3 with check — that's a blunder, just a panic move; I think our opponent was trying to play the rook to h1 but forgot about the bishop to h3, which now wins the exchange."
+   "spoken": "The bishop to h3 with check — that's a blunder, just a panic move; I think your opponent was trying to play the rook to h1 but forgot about the bishop to h3, which now wins the exchange."
   },
   {
    "ply": 29,
@@ -294,7 +294,7 @@
    "line": [
     "Nxg3"
    ],
-   "spoken": "our rook may infiltrate to h2."
+   "spoken": "your rook may infiltrate to h2."
   },
   {
    "ply": 32,
@@ -303,14 +303,14 @@
    "line": [
     "Bxf1"
    ],
-   "spoken": "Now we take on f1 and we're just taking everything here. That's another blunder — our opponent totally collapsing. He should have taken with the knight, but then we'd play the queen out to f5, which is obviously crushing as well, and the rook takes h2 — nothing remains of White's kingside."
+   "spoken": "Now you take on f1 and you're just taking everything here. That's another blunder — your opponent totally collapsing. He should have taken with the knight, but then you'd play the queen out to f5, which is obviously crushing as well, and the rook takes h2 — nothing remains of White's kingside."
   },
   {
    "ply": 3,
    "t": 368.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "And he resigns — that was pretty smooth. Notice how much easier it was to attack once we completed our development at the start of the game.",
+   "spoken": "And he resigns — that was pretty smooth. Notice how much easier it was to attack once you completed your development at the start of the game.",
    "reanchor": true
   },
   {
@@ -349,7 +349,7 @@
     "Nc3",
     "Nf6"
    ],
-   "spoken": "And most people end up playing the knight to f6, although the bishop to b4 is also a move here; but after the knight to f6 and g3, I think c6 is still possible — I'll look into whether it's viable and make a video with Black against the English. I've played the bishop to b4 in this position myself; it's a hard-to-analyse line with lots of sub-variations. You can see c6 threw him for a loop — e3 is just some weird Hippo where pawns have been traded and White is down a bunch of tempo, so it's just not viable at all. And of course we could have played e4, with the idea of g5, clamping down on his light squares, but after d3 I was a little concerned about that pawn.",
+   "spoken": "And most people end up playing the knight to f6, although the bishop to b4 is also a move here; but after the knight to f6 and g3, I think c6 is still possible — I'll look into whether it's viable and make a video with Black against the English. I've played the bishop to b4 in this position myself; it's a hard-to-analyse line with lots of sub-variations. You can see c6 threw him for a loop — e3 is just some weird Hippo where pawns have been traded and White is down a bunch of tempo, so it's just not viable at all. And of course you could have played e4, with the idea of g5, clamping down on his light squares, but after d3 I was a little concerned about that pawn.",
    "reanchor": true
   }
  ]

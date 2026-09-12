@@ -46,7 +46,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The reason it looks shaky is e5, hitting the knight — but this simply transposes into an improved Alapin, with the extra pawn on c5 working in our favor.",
+   "spoken": "The reason it looks shaky is e5, hitting the knight — but this simply transposes into an improved Alapin, with the extra pawn on c5 working in your favor.",
    "kind": "main",
    "teaches": [
     "...Nf6 e5 = an improved Alapin"
@@ -94,7 +94,7 @@
    "line": [
     "Nc7"
    ],
-   "spoken": "The knight tucks back to c7, ready to reroute through e6 to contest the center — and our pawn on c5 discourages White from playing d4.",
+   "spoken": "The knight tucks back to c7, ready to reroute through e6 to contest the center — and your pawn on c5 discourages White from playing d4.",
    "kind": "main",
    "teaches": [
     "...Nc7-e6 and the c5 restraint"
@@ -134,7 +134,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the knight to c6, contesting White's centralized knight on d4.",
+   "spoken": "You develop the knight to c6, contesting White's centralized knight on d4.",
    "kind": "main"
   },
   {
@@ -175,7 +175,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "g6 does double duty — it defends the knight on e5 and prepares the fianchetto, so even a bishop to f4 with tempo can't stop us.",
+   "spoken": "g6 does double duty — it defends the knight on e5 and prepares the fianchetto, so even a bishop to f4 with tempo can't stop you.",
    "kind": "main",
    "teaches": [
     "...g6 defends e5 and enables the fianchetto"
@@ -197,7 +197,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We fianchetto the bishop to g7.",
+   "spoken": "You fianchetto the bishop to g7.",
    "kind": "main"
   },
   {

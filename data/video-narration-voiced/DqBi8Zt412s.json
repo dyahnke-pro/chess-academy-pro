@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White and open with the pawn to e4, in the spirit of our recent gambits."
+   "spoken": "You have White and open with the pawn to e4, in the spirit of your recent gambits."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black plays the knight to c6, declining the gambit — it transposes to a Nimzowitsch setup, and it's not a bad move. As usual, we prefer the centre open."
+   "spoken": "Black plays the knight to c6, declining the gambit — it transposes to a Nimzowitsch setup, and it's not a bad move. As usual, you prefer the centre open."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "We capture on e5. The tempting pawn to d5 gains time but closing the centre isn't as good as it looks — better to take on e5 and make the knight move twice."
+   "spoken": "You capture on e5. The tempting pawn to d5 gains time but closing the centre isn't as good as it looks — better to take on e5 and make the knight move twice."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Black recaptures with the knight on e5. The centralized knight actually helps us — as a standalone piece it's vulnerable: we can chase it with f4, or offer a trade with the knight to f3. The pawn to f4 is okay but exposing, so I prefer the knight to f3 — but first, a more flexible move."
+   "spoken": "Black recaptures with the knight on e5. The centralized knight actually helps you — as a standalone piece it's vulnerable: you can chase it with f4, or offer a trade with the knight to f3. The pawn to f4 is okay but exposing, so I prefer the knight to f3 — but first, a more flexible move."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "Black plays the bishop to b4 — good. We're not scared of the capture on c3: we'll castle kingside and don't mind the doubled pawns. And notice both the bishop and the e5-knight are undefended — which points to the queen to d4."
+   "spoken": "Black plays the bishop to b4 — good. You're not scared of the capture on c3: you'll castle kingside and don't mind the doubled pawns. And notice both the bishop and the e5-knight are undefended — which points to the queen to d4."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Qd4"
    ],
-   "spoken": "The queen to d4, hitting both loose pieces. The knight to c6 blunders g7, the bishop retreat or the capture on c3 are big wins for us — the only save is the queen to e7."
+   "spoken": "The queen to d4, hitting both loose pieces. The knight to c6 blunders g7, the bishop retreat or the capture on c3 are big wins for you — the only save is the queen to e7."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "Black finds the queen to e7. That's usually why the queen to d4 is dubious — but here there's an extenuating factor: the g7-pawn is vulnerable, the c3-knight is pinned, and we can chase the e5-knight with f4."
+   "spoken": "Black finds the queen to e7. That's usually why the queen to d4 is dubious — but here there's an extenuating factor: the g7-pawn is vulnerable, the c3-knight is pinned, and you can chase the e5-knight with f4."
   },
   {
    "ply": 11,
@@ -132,7 +132,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "We take on g7 with check anyway — we can't take the queen because of the pin, and c2 hangs, so it's a mess, but there's an interesting idea I just spotted."
+   "spoken": "You take on g7 with check anyway — you can't take the queen because of the pin, and c2 hangs, so it's a mess, but there's an interesting idea I just spotted."
   },
   {
    "ply": 14,
@@ -141,7 +141,7 @@
    "line": [
     "Qxe4+"
    ],
-   "spoken": "Black plays the queen takes e4 with check — extremely risky for us."
+   "spoken": "Black plays the queen takes e4 with check — extremely risky for you."
   },
   {
    "ply": 15,
@@ -150,7 +150,7 @@
    "line": [
     "Kd1"
    ],
-   "spoken": "The king to d1 — the exception to not moving the king early. Blocking with the knight buries the bishop, and c2 would hang with a cascade of problems. Instead the king to d1 opens our attack on the queen and, crucially, the e-file — it's a race to land a rook there, and Black can't castle short with our queen on g7."
+   "spoken": "The king to d1 — the exception to not moving the king early. Blocking with the knight buries the bishop, and c2 would hang with a cascade of problems. Instead the king to d1 opens your attack on the queen and, crucially, the e-file — it's a race to land a rook there, and Black can't castle short with your queen on g7."
   },
   {
    "ply": 16,
@@ -168,7 +168,7 @@
    "line": [
     "Qxc3"
    ],
-   "spoken": "We recapture with the queen, not the pawn — the pawn recapture is too risky, since the queen could be smoked out by the pawn to g7 and the knight to f5. The queen recapture keeps contact with the rook, and the plan is to bring the knight and bishop out and land a rook on e1."
+   "spoken": "You recapture with the queen, not the pawn — the pawn recapture is too risky, since the queen could be smoked out by the pawn to g7 and the knight to f5. The queen recapture keeps contact with the rook, and the plan is to bring the knight and bishop out and land a rook on e1."
   },
   {
    "ply": 18,
@@ -177,7 +177,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Black plays the pawn to c6 — a mistake, misjudging the danger. The best was the knight to e7 developing; c6 misses how close we are to a rook reaching e1."
+   "spoken": "Black plays the pawn to c6 — a mistake, misjudging the danger. The best was the knight to e7 developing; c6 misses how close you are to a rook reaching e1."
   },
   {
    "ply": 19,
@@ -195,7 +195,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black plays the pawn to d5, and now we're winning — the knight intercepts the queen."
+   "spoken": "Black plays the pawn to d5, and now you're winning — the knight intercepts the queen."
   },
   {
    "ply": 21,
@@ -204,7 +204,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 — two threats: the rook to e1, and the capture on g6, a loose piece our queen and rook combine against. That's the reward of keeping the queen in contact with the rook when we recaptured on c3."
+   "spoken": "The bishop to d3 — two threats: the rook to e1, and the capture on g6, a loose piece your queen and rook combine against. That's the reward of keeping the queen in contact with the rook when you recaptured on c3."
   },
   {
    "ply": 20,
@@ -222,7 +222,7 @@
     "Bd3",
     "d4"
    ],
-   "spoken": "Why not the bishop to b5? It's fancy but comes without tempo, whereas the bishop to d3 attacks the queen. Black finds the strong defence, the pawn to d4 — the only way to survive, with the idea of the bishop to g4 and check to get pieces out fast. We have several options: an endgame a pawn up, or keeping a huge initiative.",
+   "spoken": "Why not the bishop to b5? It's fancy but comes without tempo, whereas the bishop to d3 attacks the queen. Black finds the strong defence, the pawn to d4 — the only way to survive, with the idea of the bishop to g4 and check to get pieces out fast. You have several options: an endgame a pawn up, or keeping a huge initiative.",
    "reanchor": true
   },
   {
@@ -242,7 +242,7 @@
    "line": [
     "Qd5"
    ],
-   "spoken": "Black plays the queen to d5 — his queen has only three squares. Before taking, we throw in a useful move that can't hurt.",
+   "spoken": "Black plays the queen to d5 — his queen has only three squares. Before taking, you throw in a useful move that can't hurt.",
    "reanchor": true
   },
   {
@@ -262,7 +262,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black blocks with the bishop to e6 — and that's a blunder that loses, because the pawn to f5 is coming, once we trade queens."
+   "spoken": "Black blocks with the bishop to e6 — and that's a blunder that loses, because the pawn to f5 is coming, once you trade queens."
   },
   {
    "ply": 30,
@@ -274,7 +274,7 @@
     "f5",
     "Qd5"
    ],
-   "spoken": "First we trade queens, then the pawn to f5 wins a piece and the game is over. Black defended resourcefully, but couldn't contain the initiative — and the king to d1 was the money decision, letting us bring a rook to the open file. Nearly a miniature.",
+   "spoken": "First you trade queens, then the pawn to f5 wins a piece and the game is over. Black defended resourcefully, but couldn't contain the initiative — and the king to d1 was the money decision, letting you bring a rook to the open file. Nearly a miniature.",
    "reanchor": true
   },
   {
@@ -302,7 +302,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We've faced the knight to f6 before.",
+   "spoken": "You've faced the knight to f6 before.",
    "reanchor": true
   },
   {
@@ -352,7 +352,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "And we have a huge development lead and a massive centre — the bishop to c4, castle, and blow Black off the board.",
+   "spoken": "And you have a huge development lead and a massive centre — the bishop to c4, castle, and blow Black off the board.",
    "reanchor": true
   },
   {
@@ -360,7 +360,7 @@
    "t": 793.5,
    "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
    "line": [],
-   "spoken": "The bishop to b4 is definitely good, and then we go for the queen-to-d4 idea.",
+   "spoken": "The bishop to b4 is definitely good, and then you go for the queen-to-d4 idea.",
    "reanchor": true
   },
   {
@@ -396,7 +396,7 @@
     "Bxc3+",
     "bxc3"
    ],
-   "spoken": "If Black takes on c3, we tell him congratulations — he's damaged our structure, but now we have the two bishops and a nice position.",
+   "spoken": "If Black takes on c3, you tell him congratulations — he's damaged your structure, but now you have the two bishops and a nice position.",
    "reanchor": true
   },
   {
@@ -425,7 +425,7 @@
    "line": [
     "Qd8"
    ],
-   "spoken": "This doesn't win the rook, because of the queen to f6; after the queen trade we get an endgame a pawn up — not terrible for Black.",
+   "spoken": "This doesn't win the rook, because of the queen to f6; after the queen trade you get an endgame a pawn up — not terrible for Black.",
    "reanchor": true
   },
   {
@@ -437,7 +437,7 @@
     "Bxc3+",
     "Qxc3"
    ],
-   "spoken": "The queen to c5, and if Black takes on c3 the queen recapture is a big win for us too.",
+   "spoken": "The queen to c5, and if Black takes on c3 the queen recapture is a big win for you too.",
    "reanchor": true
   },
   {
@@ -445,7 +445,7 @@
    "t": 851,
    "fen": "r1bqk2r/pppp1ppp/5n2/4n3/1b1QP3/2N5/PPP2PPP/R1B1KBNR b KQkq - 5 6",
    "line": [],
-   "spoken": "So the queen to e7, and the knight to g6 is really the only move; we take on g7. A subtle difference: if Black takes on e4 in a slightly different position, the king to d1 becomes a mistake, because the priority shifts to winning the rook now that the queen-to-f6 defence is gone — but watch for the saving resource, the queen to d4 forcing the queen trade, and cover that square.",
+   "spoken": "So the queen to e7, and the knight to g6 is really the only move; you take on g7. A subtle difference: if Black takes on e4 in a slightly different position, the king to d1 becomes a mistake, because the priority shifts to winning the rook now that the queen-to-f6 defence is gone — but watch for the saving resource, the queen to d4 forcing the queen trade, and cover that square.",
    "reanchor": true
   }
  ]

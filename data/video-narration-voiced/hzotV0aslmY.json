@@ -60,7 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We could develop a knight, but occupy the centre first with d4, so the other side never gets in e5 or c5.",
+   "spoken": "You could develop a knight, but occupy the centre first with d4, so the other side never gets in e5 or c5.",
    "kind": "main",
    "teaches": [
     "grab the centre first"
@@ -82,7 +82,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We could shove the pawn to d5, but let's stay principled: the knight to f3 defends the pawn while developing.",
+   "spoken": "You could shove the pawn to d5, but let's stay principled: the knight to f3 defends the pawn while developing.",
    "kind": "main",
    "teaches": [
     "defend while developing"
@@ -95,7 +95,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Now it's actually time to bend our own rules. That queen's knight has hopped around so many times, and the other side still hasn't moved a single central pawn — a clear drawback we can pounce on.",
+   "spoken": "Now it's actually time to bend your own rules. That queen's knight has hopped around so many times, and the other side still hasn't moved a single central pawn — a clear drawback you can pounce on.",
    "teaches": [
     "when to violate a principle"
    ]
@@ -129,7 +129,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "A lot of players miscount here. The subtlety: a knight is an attacker, but the instant it captures the pawn it stops being one — that's why the count comes out in our favour.",
+   "spoken": "A lot of players miscount here. The subtlety: a knight is an attacker, but the instant it captures the pawn it stops being one — that's why the count comes out in your favour.",
    "teaches": [
     "the capturing piece leaves the count"
    ]
@@ -150,7 +150,7 @@
     "Nxd5",
     "Bg4"
    ],
-   "spoken": "We're up a piece — a perfect time to practise converting an advantage cleanly.",
+   "spoken": "You're up a piece — a perfect time to practise converting an advantage cleanly.",
    "kind": "plan",
    "teaches": [
     "convert an extra piece"
@@ -164,7 +164,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Develop the bishop and unpin ourselves.",
+   "spoken": "Develop the bishop and unpin yourself.",
    "kind": "main"
   },
   {
@@ -209,7 +209,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Against the bishop coming to c5, the bishop to e3 disarms it — and we welcome the trade, because when you're up a piece, trades help you.",
+   "spoken": "Against the bishop coming to c5, the bishop to e3 disarms it — and you welcome the trade, because when you're up a piece, trades help you.",
    "kind": "main",
    "teaches": [
     "trade freely when ahead"
@@ -231,7 +231,7 @@
    "line": [
     "Nxe3"
    ],
-   "spoken": "Recapture with the knight, not the pawn: it comes with a hit on the queen and forces a queen trade — exactly the simplifying method we chose.",
+   "spoken": "Recapture with the knight, not the pawn: it comes with a hit on the queen and forces a queen trade — exactly the simplifying method you chose.",
    "kind": "main",
    "teaches": [
     "recapture toward a queen trade"
@@ -324,7 +324,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "Now the rook to d1, offering another rook trade — he does our bidding.",
+   "spoken": "Now the rook to d1, offering another rook trade — he does your bidding.",
    "kind": "main",
    "teaches": [
     "keep trading"
@@ -408,7 +408,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "Here we kill every bird with one stone: the rook to d8. Play it carefully — but for the pin holding his back rank together, he'd be the one giving checkmate. One move accomplishing everything.",
+   "spoken": "Here you kill every bird with one stone: the rook to d8. Play it carefully — but for the pin holding his back rank together, he'd be the one giving checkmate. One move accomplishing everything.",
    "kind": "main",
    "teaches": [
     "maximise every move",

@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "We're playing the King's Indian — the knight to f6."
+      "spoken": "You're playing the King's Indian — the knight to f6."
     },
     {
       "ply": 3,
@@ -78,7 +78,7 @@
       "line": [
         "e3"
       ],
-      "spoken": "e3. The point of the knight's to-and-fro: we induced h4, provoking a serious kingside weakness, and now develop conventionally. We've been move-ordered into a reverse Queen's Gambit Declined — where White plays c4, we play c5 from the black side, but after c5 we must watch d takes c5."
+      "spoken": "e3. The point of the knight's to-and-fro: you induced h4, provoking a serious kingside weakness, and now develop conventionally. You've been move-ordered into a reverse Queen's Gambit Declined — where White plays c4, you play c5 from the black side, but after c5 you must watch d takes c5."
     },
     {
       "ply": 10,
@@ -87,14 +87,14 @@
       "line": [
         "e6"
       ],
-      "spoken": "Since White is developed, after c5, d takes c5, e6, White solidifies with b4 — so we start with the solid e6 and follow with c5 to contest and pressure White's centre."
+      "spoken": "Since White is developed, after c5, d takes c5, e6, White solidifies with b4 — so you start with the solid e6 and follow with c5 to contest and pressure White's centre."
     },
     {
       "ply": 9,
       "t": 474.5,
       "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P3P/4P3/PPPN1PP1/R2QKBNR b KQkq - 0 5",
       "line": [],
-      "spoken": "Don't overthink c5 — normal stuff. Are we worried about blocking our bishop? Yes, that's e6's drawback — so why not the bishop to f5 first? Because a bishop developed to f5 can be quite vulnerable here.",
+      "spoken": "Don't overthink c5 — normal stuff. Are you worried about blocking your bishop? Yes, that's e6's drawback — so why not the bishop to f5 first? Because a bishop developed to f5 can be quite vulnerable here.",
       "reanchor": true
     },
     {
@@ -104,7 +104,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "And because the centre is closed, not every piece needs immediate development — the light bishop can wait, its temporary block by our own pawn no issue.",
+      "spoken": "And because the centre is closed, not every piece needs immediate development — the light bishop can wait, its temporary block by your own pawn no issue.",
       "reanchor": true
     },
     {
@@ -114,7 +114,7 @@
       "line": [
         "Ne2"
       ],
-      "spoken": "The knight to e2. Let's play c5 — we can also throw in h6 to force the bishop to commit, but no rush; this pin isn't dangerous, since an easy test is whether the pinned piece is protected by a pawn, and it is."
+      "spoken": "The knight to e2. Let's play c5 — you can also throw in h6 to force the bishop to commit, but no rush; this pin isn't dangerous, since an easy test is whether the pinned piece is protected by a pawn, and it is."
     },
     {
       "ply": 13,
@@ -124,7 +124,7 @@
         "c5",
         "dxc5"
       ],
-      "spoken": "We play c5, and White takes, capturing on c5."
+      "spoken": "You play c5, and White takes, capturing on c5."
     },
     {
       "ply": 14,
@@ -133,7 +133,7 @@
       "line": [
         "Bxc5"
       ],
-      "spoken": "We recapture with the bishop, capturing on c5 — precisely why we started with e6."
+      "spoken": "You recapture with the bishop, capturing on c5 — precisely why you started with e6."
     },
     {
       "ply": 15,
@@ -151,7 +151,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "b4 chases our bishop from c5 — but the bishop is happy to drop to e7, ending the pin. So we develop the knight to c6. And after b4, that pawn becomes a target: we chisel with a5 once White's pawn is on b4 — the base of the chain, or sometimes the tip."
+      "spoken": "b4 chases your bishop from c5 — but the bishop is happy to drop to e7, ending the pin. So you develop the knight to c6. And after b4, that pawn becomes a target: you chisel with a5 once White's pawn is on b4 — the base of the chain, or sometimes the tip."
     },
     {
       "ply": 15,
@@ -168,7 +168,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The knight to c6 — we could also castle here; both are entirely acceptable.",
+      "spoken": "The knight to c6 — you could also castle here; both are entirely acceptable.",
       "reanchor": true
     },
     {
@@ -188,7 +188,7 @@
         "h6",
         "Bxf6"
       ],
-      "spoken": "So it's time for h6, forcing White to trade the bishop for the knight, capturing on f6, letting our queen come to the active f6."
+      "spoken": "So it's time for h6, forcing White to trade the bishop for the knight, capturing on f6, letting your queen come to the active f6."
     },
     {
       "ply": 20,
@@ -197,7 +197,7 @@
       "line": [
         "Qxf6"
       ],
-      "spoken": "We recapture with the queen, capturing on f6. White has traded the dark-squared bishop, the pride of the Trompowsky — a great position for us."
+      "spoken": "You recapture with the queen, capturing on f6. White has traded the dark-squared bishop, the pride of the Trompowsky — a great position for you."
     },
     {
       "ply": 21,
@@ -206,7 +206,7 @@
       "line": [
         "Nh5"
       ],
-      "spoken": "The queen on f6 attacks b2 and pressures f2 — Black's already better. The knight to h5. We can grab the pawn on b2: people fear the queen getting trapped, but calculate concretely — after the queen takes b2, the rook to b1, our queen defends g7, so we drop it to e5, not c3 where the rook to b3 chases it; the central queen looks vulnerable to f4, but f4 gives up e3 with check."
+      "spoken": "The queen on f6 attacks b2 and pressures f2 — Black's already better. The knight to h5. You can grab the pawn on b2: people fear the queen getting trapped, but calculate concretely — after the queen takes b2, the rook to b1, your queen defends g7, so you drop it to e5, not c3 where the rook to b3 chases it; the central queen looks vulnerable to f4, but f4 gives up e3 with check."
     },
     {
       "ply": 22,
@@ -215,7 +215,7 @@
       "line": [
         "Qxb2"
       ],
-      "spoken": "The queen takes, capturing on b2. After the rook to b1, the queen to e5 — and if White chases with the knight, it severs the connection to the h5-knight, letting us take on h5. So we can safely take b2. Even if e5 were unavailable, taking on a3 would be fine — a king move to f8 isn't the end of the world."
+      "spoken": "The queen takes, capturing on b2. After the rook to b1, the queen to e5 — and if White chases with the knight, it severs the connection to the h5-knight, letting you take on h5. So you can safely take b2. Even if e5 were unavailable, taking on a3 would be fine — a king move to f8 isn't the end of the world."
     },
     {
       "ply": 23,
@@ -224,7 +224,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "The bishop to e2. We have ways to deal with g7 — g6 is the forcing option, or we simply castle. The king is safest on f8, surrounded by pawn cover; d7 walks into the d-file x-ray."
+      "spoken": "The bishop to e2. You have ways to deal with g7 — g6 is the forcing option, or you simply castle. The king is safest on f8, surrounded by pawn cover; d7 walks into the d-file x-ray."
     },
     {
       "ply": 24,
@@ -278,7 +278,7 @@
         "O-O",
         "Ng3"
       ],
-      "spoken": "But now we absolutely can take on a3.",
+      "spoken": "But now you absolutely can take on a3.",
       "reanchor": true
     },
     {
@@ -288,7 +288,7 @@
       "line": [
         "Bxa3"
       ],
-      "spoken": "So we take, capturing on a3 — a free pawn, having solved our problems: castled, centre secure. Don't think I always caution against taking material — take it when it's literally free.",
+      "spoken": "So you take, capturing on a3 — a free pawn, having solved your problems: castled, centre secure. Don't think I always caution against taking material — take it when it's literally free.",
       "reanchor": true
     },
     {
@@ -298,7 +298,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "Now up two pawns — remember diminishing returns: the second pawn matters more than the third. White plays e4, a great-looking move that does nothing: d5 is defended by the e6 pawn, and if White takes on d5 and we recapture, our light bishop opens up — we'd welcome White taking on e4. Not the knight to b4 or d4 grabbing c2 — that's greed too far, our pieces clustering on the queenside with the queen overextended after the rook to b1. Instead, improve: our a3-bishop is awkward and ties the queen down, so move it.",
+      "spoken": "Now up two pawns — remember diminishing returns: the second pawn matters more than the third. White plays e4, a great-looking move that does nothing: d5 is defended by the e6 pawn, and if White takes on d5 and you recapture, your light bishop opens up — you'd welcome White taking on e4. Not the knight to b4 or d4 grabbing c2 — that's greed too far, your pieces clustering on the queenside with the queen overextended after the rook to b1. Instead, improve: your a3-bishop is awkward and ties the queen down, so move it.",
       "reanchor": true
     },
     {
@@ -339,7 +339,7 @@
       "line": [
         "Rb1"
       ],
-      "spoken": "The rook to b1 chases the queen from b2 — glad we moved the bishop off a3. Where to? Not the queen to c3, chased by the rook to b3; I like the queen to f6, though it runs into the knight to h5, then the queen to e7.",
+      "spoken": "The rook to b1 chases the queen from b2 — glad you moved the bishop off a3. Where to? Not the queen to c3, chased by the rook to b3; I like the queen to f6, though it runs into the knight to h5, then the queen to e7.",
       "reanchor": true
     },
     {
@@ -359,7 +359,7 @@
       "line": [
         "exd5"
       ],
-      "spoken": "...e takes d5, we recapture...",
+      "spoken": "...e takes d5, you recapture...",
       "reanchor": true
     },
     {
@@ -389,7 +389,7 @@
       "line": [
         "Bxf5"
       ],
-      "spoken": "The knight to f5 prevents castling, and our opponent resigns — if White had castled, the bishop takes g3 wins a piece via the pin on f2. The same narrative: pressure in the opening and early middlegame, and people collapse.",
+      "spoken": "The knight to f5 prevents castling, and your opponent resigns — if White had castled, the bishop takes g3 wins a piece via the pin on f2. The same narrative: pressure in the opening and early middlegame, and people collapse.",
       "reanchor": true
     },
     {
@@ -484,7 +484,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "...we try to win it back with e6.",
+      "spoken": "...you try to win it back with e6.",
       "reanchor": true
     },
     {
@@ -544,7 +544,7 @@
       "t": 1444.5,
       "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
       "line": [],
-      "spoken": "So d5 is a good move. We played the knight to e4, White plays h4...",
+      "spoken": "So d5 is a good move. You played the knight to e4, White plays h4...",
       "reanchor": true
     },
     {
@@ -555,7 +555,7 @@
         "h4",
         "Ne4"
       ],
-      "spoken": "...and we kept it simple with d5.",
+      "spoken": "...and you kept it simple with d5.",
       "reanchor": true
     },
     {
@@ -573,7 +573,7 @@
       "line": [
         "Ne4"
       ],
-      "spoken": "...so we played d5 to keep it simple.",
+      "spoken": "...so you played d5 to keep it simple.",
       "reanchor": true
     },
     {
@@ -604,7 +604,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "...but Black's position is tremendously solid, so we play e6 to prepare c5.",
+      "spoken": "...but Black's position is tremendously solid, so you play e6 to prepare c5.",
       "reanchor": true
     },
     {
@@ -632,7 +632,7 @@
       "line": [
         "Ngf3"
       ],
-      "spoken": "...either knight to f3, and we'd play c5, and White can play it like a London with c3 and the bishop to d3 — a good position.",
+      "spoken": "...either knight to f3, and you'd play c5, and White can play it like a London with c3 and the bishop to d3 — a good position.",
       "reanchor": true
     },
     {
@@ -643,7 +643,7 @@
         "c5",
         "c3"
       ],
-      "spoken": "So the knight to e2 is passive, and d takes c5 is passive too — I already think Black is better. Yielding the centre is a bad idea; White should play c3 to be solid, or c4 to counter-strike. After a3, we don't fear b4, since it sends our bishop to e7 where it wants to go — and this is a Trompowsky, not a King's Indian; we'd just ignore it and castle.",
+      "spoken": "So the knight to e2 is passive, and d takes c5 is passive too — I already think Black is better. Yielding the centre is a bad idea; White should play c3 to be solid, or c4 to counter-strike. After a3, you don't fear b4, since it sends your bishop to e7 where it wants to go — and this is a Trompowsky, not a King's Indian; you'd just ignore it and castle.",
       "reanchor": true
     }
   ]

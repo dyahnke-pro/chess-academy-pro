@@ -37,7 +37,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We occupy the center with d5. The formula against any flank opening is simple: take a sound chunk of the center and back it with pieces — it's not a race to cram in the most pawns.",
+   "spoken": "You occupy the center with d5. The formula against any flank opening is simple: take a sound chunk of the center and back it with pieces — it's not a race to cram in the most pawns.",
    "kind": "main",
    "teaches": [
     "occupy and support, don’t over-push"
@@ -59,7 +59,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So we develop the knight to f6 instead of shoving more pawns forward and biting off more than we can chew.",
+   "spoken": "So you develop the knight to f6 instead of shoving more pawns forward and biting off more than you can chew.",
    "kind": "main"
   },
   {
@@ -88,7 +88,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "White fianchettoes, and the bishop on g2 immediately bites on granite: it stares at the d5-pawn, which our pawn chain defends beautifully, so the bishop is nearly useless. The knight will develop via d7 and reroute f8-g6 rather than block it.",
+   "spoken": "White fianchettoes, and the bishop on g2 immediately bites on granite: it stares at the d5-pawn, which your pawn chain defends beautifully, so the bishop is nearly useless. The knight will develop via d7 and reroute f8-g6 rather than block it.",
    "kind": "main",
    "teaches": [
     "blunt the fianchetto bishop with the c6/d5 wall"
@@ -150,7 +150,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White's knight to c3 is out of step with the hippo setup — it just invites us to grab more space.",
+   "spoken": "White's knight to c3 is out of step with the hippo setup — it just invites you to grab more space.",
    "kind": "main"
   },
   {
@@ -160,7 +160,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So we play d4, seizing space and asking the knight awkward questions — the very reason we put the pawn on c6.",
+   "spoken": "So you play d4, seizing space and asking the knight awkward questions — the very reason you put the pawn on c6.",
    "kind": "main",
    "teaches": [
     "d4 to gain space and harass the knight"
@@ -254,7 +254,7 @@
    "line": [
     "axb3"
    ],
-   "spoken": "We clear the queenside with axb3, and now White's d3 and e3 pawns are exposed, attackable targets.",
+   "spoken": "You clear the queenside with axb3, and now White's d3 and e3 pawns are exposed, attackable targets.",
    "kind": "main"
   },
   {

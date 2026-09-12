@@ -111,7 +111,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Because everything is healthily placed, we can expand further with e5.",
+   "spoken": "Because everything is healthily placed, you can expand further with e5.",
    "kind": "main"
   },
   {
@@ -121,7 +121,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "An instructive recapture choice: fxe5 opens the f-bishop and lets us storm the h-pawn for mate, but in a serious game dxe5 is better — it opens the d-file so a rook can x-ray the queen painfully.",
+   "spoken": "An instructive recapture choice: fxe5 opens the f-bishop and lets you storm the h-pawn for mate, but in a serious game dxe5 is better — it opens the d-file so a rook can x-ray the queen painfully.",
    "kind": "main",
    "teaches": "Pick the recapture that opens the file your pieces want, not just the one that looks natural."
   },
@@ -179,7 +179,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "When Black tries c5 to break the chain, the principle is to capture toward the centre — but our central grip is so strong we can often just push past and ignore the poke.",
+   "spoken": "When Black tries c5 to break the chain, the principle is to capture toward the centre — but your central grip is so strong you can often just push past and ignore the poke.",
    "kind": "main",
    "teaches": "With an overwhelming centre you can sometimes brush aside a flank break instead of resolving it."
   },
@@ -243,7 +243,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "The queen grabbed b2 and attacks our rook, so first things first — Rb1 gets it out of the fork.",
+   "spoken": "The queen grabbed b2 and attacks your rook, so first things first — Rb1 gets it out of the fork.",
    "kind": "main"
   },
   {
@@ -262,7 +262,7 @@
    "line": [
     "Rb3"
    ],
-   "spoken": "Here's the key move: before winning the knight on h6, ask whether we can preemptively defend our own c3-knight with tempo, so Black's knight can't wriggle free. Rb3 does exactly that — it shields c3 and hits the queen at once.",
+   "spoken": "Here's the key move: before winning the knight on h6, ask whether you can preemptively defend your own c3-knight with tempo, so Black's knight can't wriggle free. Rb3 does exactly that — it shields c3 and hits the queen at once.",
    "kind": "main",
    "teaches": "Before cashing a win, secure your loose piece with tempo so the opponent gets no escape and no fork."
   },

@@ -47,7 +47,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "One misconception: the Nimzo proper is only the knight to c3 met by the bishop to b4. Against anything else we shift to a Queen's-Indian or Bogo setup. White's e3 is passive but solid — it does box in his own bishop, and the ideal companion here is the Queen's-Indian plan with b6.",
+   "spoken": "One misconception: the Nimzo proper is only the knight to c3 met by the bishop to b4. Against anything else you shift to a Queen's-Indian or Bogo setup. White's e3 is passive but solid — it does box in his own bishop, and the ideal companion here is the Queen's-Indian plan with b6.",
    "kind": "plan",
    "teaches": [
     "when it is really the Nimzo"
@@ -60,7 +60,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Why not check on b4 now? The bishop check is most effective specifically against the knight once it commits to c3; here White just interposes on d2 and we lose the structure-wrecking capture. So b6 instead — d5 transposing into a favourable Queen's Gambit Declined was also fine.",
+   "spoken": "Why not check on b4 now? The bishop check is most effective specifically against the knight once it commits to c3; here White just interposes on d2 and you lose the structure-wrecking capture. So b6 instead — d5 transposing into a favourable Queen's Gambit Declined was also fine.",
    "kind": "main",
    "teaches": [
     "save Bb4 for Nc3"
@@ -82,7 +82,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "We fianchetto the bishop, and note the lovely control it gives us over the e4-square.",
+   "spoken": "You fianchetto the bishop, and note the lovely control it gives you over the e4-square.",
    "kind": "main",
    "teaches": [
     "fianchetto to fight for e4"
@@ -104,7 +104,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Now d5 to stake out the centre — a chance to explain the pawn as an extension of the bishop. It looks like d5 buries our own bishop, and it does restrict it for the moment. But the aim is control of central squares: if we later plant a piece on e4 and recapture with a pawn, the bishop ends up defending that pawn — and we can always take on c4 to reopen the diagonal. No rush; complete development first.",
+   "spoken": "Now d5 to stake out the centre — a chance to explain the pawn as an extension of the bishop. It looks like d5 buries your own bishop, and it does restrict it for the moment. But the aim is control of central squares: if you later plant a piece on e4 and recapture with a pawn, the bishop ends up defending that pawn — and you can always take on c4 to reopen the diagonal. No rush; complete development first.",
    "kind": "plan",
    "teaches": [
     "the pawn as an extension of the bishop"
@@ -175,7 +175,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "We've got very nice central control. White's e4 break isn't a threat — we outnumber it three defenders to two attackers.",
+   "spoken": "You've got very nice central control. White's e4 break isn't a threat — you outnumber it three defenders to two attackers.",
    "teaches": [
     "count the central break"
    ]
@@ -187,7 +187,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The queen's knight goes to d7, never c6 — c6 would block our own c-pawn and hem the bishop in further. And a6 is often useful to take the sting out of a knight jump to b5.",
+   "spoken": "The queen's knight goes to d7, never c6 — c6 would block your own c-pawn and hem the bishop in further. And a6 is often useful to take the sting out of a knight jump to b5.",
    "kind": "main",
    "teaches": [
     "knight to d7, not c6"
@@ -209,7 +209,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "Here's the strategic engine of the position. Rather than the passive a6, we answer the knight-to-b5 threat with c5, turning up the temperature in the centre — and if the knight does jump to b5 we simply tuck the bishop back to b8, keeping it on its beautiful diagonal. Recapture with the pawn to preserve our central integrity, and now a d4 break can open that bishop with devastating effect — this is potential energy, the bishop coiled behind its own pawn. The calculation lesson runs through everything that follows: don't cash in too soon. Grabbing on f3 was more complicated than it looked, so keep every piece maximally active and hunt for a real knockout instead. There's a Greek-gift sacrifice in the air — the bishop crashing on h2, the knight to g4, and a queen infiltration exploiting an undefended f2 — and an all-hands-on-deck effort where even the sleepy knight must join. Control the e2-square so the king can never make its dash to safety, and the net closes with a rook to e2 and mate. The theme is converting potential energy into kinetic: often the simplest continuation is strongest because it keeps all your trumps.",
+   "spoken": "Here's the strategic engine of the position. Rather than the passive a6, you answer the knight-to-b5 threat with c5, turning up the temperature in the centre — and if the knight does jump to b5 you simply tuck the bishop back to b8, keeping it on its beautiful diagonal. Recapture with the pawn to preserve your central integrity, and now a d4 break can open that bishop with devastating effect — this is potential energy, the bishop coiled behind its own pawn. The calculation lesson runs through everything that follows: don't cash in too soon. Grabbing on f3 was more complicated than it looked, so keep every piece maximally active and hunt for a real knockout instead. There's a Greek-gift sacrifice in the air — the bishop crashing on h2, the knight to g4, and a queen infiltration exploiting an undefended f2 — and an all-hands-on-deck effort where even the sleepy knight must join. Control the e2-square so the king can never make its dash to safety, and the net closes with a rook to e2 and mate. The theme is converting potential energy into kinetic: often the simplest continuation is strongest because it keeps all your trumps.",
    "kind": "plan",
    "teaches": [
     "the c5 break",

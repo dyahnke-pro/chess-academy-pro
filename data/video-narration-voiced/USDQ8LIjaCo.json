@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "Let's do one more ten-minute game, White. e4 — great, so we get to play a Fantasy variation of the Caro."
+   "spoken": "Let's do one more ten-minute game, White. e4 — great, so you get to play a Fantasy variation of the Caro."
   },
   {
    "ply": 3,
@@ -76,7 +76,7 @@
    "t": 641.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "c5 tells me our opponent is aware of the general concepts but not aware of the right execution — c5 is not the right way to strike at the centre. The main move here for Black is of course e5, to which we respond with the knight to f3, and that's its own theory. c5 is like an e5, but much worse,",
+   "spoken": "c5 tells me your opponent is aware of the general concepts but not aware of the right execution — c5 is not the right way to strike at the centre. The main move here for Black is of course e5, to which you respond with the knight to f3, and that's its own theory. c5 is like an e5, but much worse,",
    "reanchor": true
   },
   {
@@ -95,7 +95,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Our response is d5."
+   "spoken": "Your response is d5."
   },
   {
    "ply": 10,
@@ -104,7 +104,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "So Black is trying to play this kind of Benoni style, but because he's lacking in development, if we play carefully we can put Black in very serious trouble — though we can also get into serious trouble ourselves if we're not careful. Now, because our f-pawn is gone, we have to look at this position through a very specific lens: we have to remember that the f-pawn is gone, and that bears consequences — so the queen to h4 with check is always in play in these situations. A similar opening where this is a thing is the Four Knights, the a-line — if White plays it, as I'll show you after the game, you always have to watch out for a check on h4, just like last game. So we don't actually need to play c4, which I assume is a lot of people's instinctive response, because Black isn't attacking this pawn — just the knight to f3. And in general, our biggest advantage here as White is not the fact that we have a pawn on d5.",
+   "spoken": "So Black is trying to play this kind of Benoni style, but because he's lacking in development, if you play carefully you can put Black in very serious trouble — though you can also get into serious trouble yourself if you're not careful. Now, because your f-pawn is gone, you have to look at this position through a very specific lens: you have to remember that the f-pawn is gone, and that bears consequences — so the queen to h4 with check is always in play in these situations. A similar opening where this is a thing is the Four Knights, the a-line — if White plays it, as I'll show you after the game, you always have to watch out for a check on h4, just like last game. So you don't actually need to play c4, which I assume is a lot of people's instinctive response, because Black isn't attacking this pawn — just the knight to f3. And in general, your biggest advantage here as White is not the fact that you have a pawn on d5.",
    "reanchor": true
   }
  ]

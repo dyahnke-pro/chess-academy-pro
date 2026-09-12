@@ -15,7 +15,7 @@
         "e4",
         "c5"
       ],
-      "spoken": "We roll out the Alapin — e4, and Black answers with the Sicilian, c5."
+      "spoken": "You roll out the Alapin — e4, and Black answers with the Sicilian, c5."
     },
     {
       "ply": 3,
@@ -34,7 +34,7 @@
         "Nf6",
         "e5"
       ],
-      "spoken": "Black develops the knight to f6, hitting e4, so we shove it away with e5."
+      "spoken": "Black develops the knight to f6, hitting e4, so you shove it away with e5."
     },
     {
       "ply": 6,
@@ -61,7 +61,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "Black plays d6, striking at our e5 pawn."
+      "spoken": "Black plays d6, striking at your e5 pawn."
     },
     {
       "ply": 9,
@@ -79,7 +79,7 @@
       "line": [
         "Bd7"
       ],
-      "spoken": "Black blocks with the bishop to d7 — the most popular response, and exactly what we wanted to provoke."
+      "spoken": "Black blocks with the bishop to d7 — the most popular response, and exactly what you wanted to provoke."
     },
     {
       "ply": 11,
@@ -88,7 +88,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "We drop the bishop back to c4. The point: if the knight retreats to b6, hitting the bishop, we have a trick."
+      "spoken": "You drop the bishop back to c4. The point: if the knight retreats to b6, hitting the bishop, you have a trick."
     },
     {
       "ply": 12,
@@ -97,7 +97,7 @@
       "line": [
         "Nb6"
       ],
-      "spoken": "Black plays the natural knight to b6, attacking our bishop — and now the trick."
+      "spoken": "Black plays the natural knight to b6, attacking your bishop — and now the trick."
     },
     {
       "ply": 14,
@@ -107,7 +107,7 @@
         "Bxf7+",
         "Kxf7"
       ],
-      "spoken": "We sacrifice — the bishop takes on f7 with check, and the king must recapture on f7. Most people follow with the knight to g5, but here that's WRONG: the king to g8 is a dead end, and the queen to b3 isn't mate because Black blocks with c4."
+      "spoken": "You sacrifice — the bishop takes on f7 with check, and the king must recapture on f7. Most people follow with the knight to g5, but here that's WRONG: the king to g8 is a dead end, and the queen to b3 isn't mate because Black blocks with c4."
     },
     {
       "ply": 15,
@@ -143,7 +143,7 @@
       "line": [
         "Kf6"
       ],
-      "spoken": "Black's king steps to f6 — this is supposed to be losing. I'm nearly certain it's the queen to f3. Calculating: if the king takes the knight, then h4, the king to g6, h5, the king to h6 forced, then d4 with a discovery — but the king can escape to g7. Instead, after h4 and the king to the side, the queen to e3 is mate. d4 would let Black save the bishop to d5 and make our queen harder to activate."
+      "spoken": "Black's king steps to f6 — this is supposed to be losing. I'm nearly certain it's the queen to f3. Calculating: if the king takes the knight, then h4, the king to g6, h5, the king to h6 forced, then d4 with a discovery — but the king can escape to g7. Instead, after h4 and the king to the side, the queen to e3 is mate. d4 would let Black save the bishop to d5 and make your queen harder to activate."
     },
     {
       "ply": 19,
@@ -335,7 +335,7 @@
         "Kxf7",
         "e6+"
       ],
-      "spoken": "Here Black doesn't have to take the pawn — with the bishop still home, Black just drops the king back to g8, and we have no bishop left to capture with.",
+      "spoken": "Here Black doesn't have to take the pawn — with the bishop still home, Black just drops the king back to g8, and you have no bishop left to capture with.",
       "reanchor": true
     },
     {
@@ -712,7 +712,7 @@
       "t": 577.5,
       "fen": "r1bqkb1r/pp1ppppp/2n5/3nP3/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 6",
       "line": [],
-      "spoken": "But at the higher level we're at...",
+      "spoken": "But at the higher level you're at...",
       "reanchor": true
     },
     {
@@ -748,7 +748,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The idea: our opponent played d6, a different line, but if Black plays the knight to c6...",
+      "spoken": "The idea: your opponent played d6, a different line, but if Black plays the knight to c6...",
       "reanchor": true
     },
     {
@@ -778,7 +778,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "...you play d4, and generally transpose to a promising line we just saw via the other move order.",
+      "spoken": "...you play d4, and generally transpose to a promising line you just saw via the other move order.",
       "reanchor": true
     },
     {
@@ -799,7 +799,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "If Black drops back to b6, we drop back to b3 — a more tactical, more theoretical, very promising position. Black has two main moves here: c4, natural, preventing d4; and d6 or d5, essentially the same, playing the d-pawn and then the queen takes d6, you castle. One amateur trap: if Black plays the bishop to g4, even grandmasters miss the classic bishop-takes-f7 and knight-to-g5. The main move is the bishop to b6, trading the light bishops — and about a year ago a new idea completely rejuvenated the line. The old view was dead equal: White played d4 automatically, trades, a draw. But the a4 idea was found, and Black's been in significant trouble since. The plan is simple: drive the pawn up to a6, provoking weaknesses on Black's queenside. Black steps the queen away to prepare e6, White pushes a5, Black centralises the knight, White pushes a6, and ONLY now d4 — a big central initiative. The queen aims at g7, making the kingside hard to develop; the knight comes to c4, sometimes the pawn to c4, the rook to d1. If Black pushes c4, again Black can play d6 and White pushes a4 with the knight to a3, standard Alapin; or Black goes after the pawn with the queen to c7, and the new idea is to just sacrifice the pawn and castle. If Black accepts, you get White's \"potential energy\" — down a pawn and barely developed, yet plus one, because once you push d3 everything comes alive: the bishops aim at the kingside, the rook comes to e1 with tempo, and a5 knocks the knight to an awkward square. After the queen to c7, the knight to a3 aims for b5, sacrificing another pawn; open with d3, the c4-pawn hangs, and after the queen takes e3 it's over. If Black plays e6 there's a tactic: the knight to b5, the queen takes a1, the knight to c7, the king to d8 — and here the high-level detail: everyone under 2000 plays the bishop to g5 automatically, but Black plays the king takes c7 and escapes; White probably wins but unconvincingly. The stronger player desperados the knight, takes the e6 pawn FIRST, and only THEN the bishop — and that pawn makes all the difference: e6 becomes a huge target, Black lacks structural integrity, and it's plus five. The lesson: always pause before an automatic, non-forced move to see if you can improve the tactic — the difference between clearly better and completely winning.",
+      "spoken": "If Black drops back to b6, you drop back to b3 — a more tactical, more theoretical, very promising position. Black has two main moves here: c4, natural, preventing d4; and d6 or d5, essentially the same, playing the d-pawn and then the queen takes d6, you castle. One amateur trap: if Black plays the bishop to g4, even grandmasters miss the classic bishop-takes-f7 and knight-to-g5. The main move is the bishop to b6, trading the light bishops — and about a year ago a new idea completely rejuvenated the line. The old view was dead equal: White played d4 automatically, trades, a draw. But the a4 idea was found, and Black's been in significant trouble since. The plan is simple: drive the pawn up to a6, provoking weaknesses on Black's queenside. Black steps the queen away to prepare e6, White pushes a5, Black centralises the knight, White pushes a6, and ONLY now d4 — a big central initiative. The queen aims at g7, making the kingside hard to develop; the knight comes to c4, sometimes the pawn to c4, the rook to d1. If Black pushes c4, again Black can play d6 and White pushes a4 with the knight to a3, standard Alapin; or Black goes after the pawn with the queen to c7, and the new idea is to just sacrifice the pawn and castle. If Black accepts, you get White's \"potential energy\" — down a pawn and barely developed, yet plus one, because once you push d3 everything comes alive: the bishops aim at the kingside, the rook comes to e1 with tempo, and a5 knocks the knight to an awkward square. After the queen to c7, the knight to a3 aims for b5, sacrificing another pawn; open with d3, the c4-pawn hangs, and after the queen takes e3 it's over. If Black plays e6 there's a tactic: the knight to b5, the queen takes a1, the knight to c7, the king to d8 — and here the high-level detail: everyone under 2000 plays the bishop to g5 automatically, but Black plays the king takes c7 and escapes; White probably wins but unconvincingly. The stronger player desperados the knight, takes the e6 pawn FIRST, and only THEN the bishop — and that pawn makes all the difference: e6 becomes a huge target, Black lacks structural integrity, and it's plus five. The lesson: always pause before an automatic, non-forced move to see if you can improve the tactic — the difference between clearly better and completely winning.",
       "reanchor": true
     },
     {
@@ -818,7 +818,7 @@
         "Nb8",
         "Bf1"
       ],
-      "spoken": "So those are Black's options after the bishop to c4. Our opponent played a different line — the immediate d6.",
+      "spoken": "So those are Black's options after the bishop to c4. Your opponent played a different line — the immediate d6.",
       "reanchor": true
     },
     {
@@ -1441,7 +1441,7 @@
         "Kxf7",
         "e6+"
       ],
-      "spoken": "...and now the bishop-f7 and e6 trick — our opponent played the bishop takes c6, letting us show the forced mate.",
+      "spoken": "...and now the bishop-f7 and e6 trick — your opponent played the bishop takes c6, letting you show the forced mate.",
       "reanchor": true
     },
     {
@@ -1454,7 +1454,7 @@
         "Kf6",
         "Qf3+"
       ],
-      "spoken": "The relative lesser evil — funnily the computer calls this equal, but we'll get to that. Many get scared and play the king to g8, understandable but terrible for Black: the queen takes d7, you castle; if the knight to c6, push a4 again — if Black plays a5 you fork and win the knight; if e6, push d4, take, take, then the knight to c3, a5, the rook to e1, and Black's position is visually terrible.",
+      "spoken": "The relative lesser evil — funnily the computer calls this equal, but you'll get to that. Many get scared and play the king to g8, understandable but terrible for Black: the queen takes d7, you castle; if the knight to c6, push a4 again — if Black plays a5 you fork and win the knight; if e6, push d4, take, take, then the knight to c3, a5, the rook to e1, and Black's position is visually terrible.",
       "reanchor": true
     },
     {
@@ -1462,7 +1462,7 @@
       "t": 1430,
       "fen": "rn1qkb1r/pp1bpppp/3p4/1BpnP3/8/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 2 8",
       "line": [],
-      "spoken": "The only testing try is to take the pawn; Black can also take with the king, transposing to the game — the knight to g5, the queen to f3, and if the king takes on g5 he's mated, but you must know one very important move that forces mate, and it's NOT h4 — it's the queen to f7. This restricting move is the hardest to find in a king hunt: you're tempted to spray checks, but restricting moves set up the mating net far better. If you play d4 and get excited about the discovery, the attack fizzles and the king runs to g6. You have to block the escape to f7. Then if the king steps back to h6, d4 and h4, and h takes g5 is mate next move. This reminds me of a famous Petrosian combination: white to play, the queen takes f6 with check, the king takes f6, the bishop to e5 with check, the king to g5 — the instructive position. Newer players want h4, a bad move that HELPS the king escape, same with f4, same with the rook to h4, which Black blocks with h5. The correct move is the quiet bishop to g7, restricting escape squares — hard to find because you're down a queen and want to rush, but the king's in no danger, so there's no hurry. The bishop to g7 forces mate in two or three. The point: in a king hunt, don't rush the obvious checks — first identify the escape routes and find a slow restrictive move that sets the mating net, like the queen to f7 in our game. Then the queen to f7, and now d4 is fine; the computer line is g6 check, d3 or d4, then h3 setting up g4, another quiet move, check, the knight to d2 heading to f3 — mate in two, the pieces cooperating beautifully. That's why Black has to play the bishop to f5. Remember where this came from — the king takes c6; our opponent played the bishop to b6, but we could reach the same via the bishop to f5. The computer calls it equal, massively misleading: after White plays g4, Black faces an incredibly difficult defensive task and must play ultra-accurately — e6 to meet the mate-in-one threat and defend the bishop, then White's knight to e4 check forcing the king to e7 (the king to f7 is much worse — you take and have the queen to h5 with check), then g takes f5, which looks terrible but after e f5, the queen to f5, the queen to d7, White's attack rolls on; you drop the queen back, Black plays the knight to c6, you play d4 opening the bishop, and only super-accurate play with c d holds — you're not supposed to check with the bishop to g5, you recapture. It's enough to remember: give the check, meet the bishop to f5 with g4, remember the knight to e4. If Black plays g6 instead it's losing — after g f, g f, the queen to h5 comes to f7 unstoppably.",
+      "spoken": "The only testing try is to take the pawn; Black can also take with the king, transposing to the game — the knight to g5, the queen to f3, and if the king takes on g5 he's mated, but you must know one very important move that forces mate, and it's NOT h4 — it's the queen to f7. This restricting move is the hardest to find in a king hunt: you're tempted to spray checks, but restricting moves set up the mating net far better. If you play d4 and get excited about the discovery, the attack fizzles and the king runs to g6. You have to block the escape to f7. Then if the king steps back to h6, d4 and h4, and h takes g5 is mate next move. This reminds me of a famous Petrosian combination: white to play, the queen takes f6 with check, the king takes f6, the bishop to e5 with check, the king to g5 — the instructive position. Newer players want h4, a bad move that HELPS the king escape, same with f4, same with the rook to h4, which Black blocks with h5. The correct move is the quiet bishop to g7, restricting escape squares — hard to find because you're down a queen and want to rush, but the king's in no danger, so there's no hurry. The bishop to g7 forces mate in two or three. The point: in a king hunt, don't rush the obvious checks — first identify the escape routes and find a slow restrictive move that sets the mating net, like the queen to f7 in your game. Then the queen to f7, and now d4 is fine; the computer line is g6 check, d3 or d4, then h3 setting up g4, another quiet move, check, the knight to d2 heading to f3 — mate in two, the pieces cooperating beautifully. That's why Black has to play the bishop to f5. Remember where this came from — the king takes c6; your opponent played the bishop to b6, but you could reach the same via the bishop to f5. The computer calls it equal, massively misleading: after White plays g4, Black faces an incredibly difficult defensive task and must play ultra-accurately — e6 to meet the mate-in-one threat and defend the bishop, then White's knight to e4 check forcing the king to e7 (the king to f7 is much worse — you take and have the queen to h5 with check), then g takes f5, which looks terrible but after e f5, the queen to f5, the queen to d7, White's attack rolls on; you drop the queen back, Black plays the knight to c6, you play d4 opening the bishop, and only super-accurate play with c d holds — you're not supposed to check with the bishop to g5, you recapture. It's enough to remember: give the check, meet the bishop to f5 with g4, remember the knight to e4. If Black plays g6 instead it's losing — after g f, g f, the queen to h5 comes to f7 unstoppably.",
       "reanchor": true
     },
     {
@@ -1473,7 +1473,7 @@
         "Bc4",
         "Nb6"
       ],
-      "spoken": "Our opponent played the king to h6 — and again d4 is very bad: Black plays g5 and the king escapes to g7. So the correct move is the queen to f4, mate in one. This strong player just didn't know the line, figured I was bluffing, went for it too fast, and got mated — that's the benefit of learning a course: you win countless games like this.",
+      "spoken": "Your opponent played the king to h6 — and again d4 is very bad: Black plays g5 and the king escapes to g7. So the correct move is the queen to f4, mate in one. This strong player just didn't know the line, figured I was bluffing, went for it too fast, and got mated — that's the benefit of learning a course: you win countless games like this.",
       "reanchor": true
     },
     {
@@ -1505,7 +1505,7 @@
         "Nd5",
         "Nf3"
       ],
-      "spoken": "We didn't cover the e6 variations...",
+      "spoken": "You didn't cover the e6 variations...",
       "reanchor": true
     },
     {
@@ -1590,7 +1590,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "The Alapin is far more practical to learn in a couple of weeks, with the aid of the speedrun. That's where we'll end.",
+      "spoken": "The Alapin is far more practical to learn in a couple of weeks, with the aid of the speedrun. That's where you'll end.",
       "reanchor": true
     }
   ]

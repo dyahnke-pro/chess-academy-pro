@@ -91,7 +91,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We don't need to chase the bishop; it isn't doing much. But note the principle of proximity — the closer things happen to your king, the more attentive you must be. If the bishop had pinned a knight near your king, then h6 would be the move.",
+   "spoken": "You don't need to chase the bishop; it isn't doing much. But note the principle of proximity — the closer things happen to your king, the more attentive you must be. If the bishop had pinned a knight near your king, then h6 would be the move.",
    "kind": "plan",
    "teaches": [
     "proximity to the king"
@@ -157,7 +157,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Now develop the bishop to its most active square, g4, setting the pin. If he shoves a pawn at it he only weakens himself, and we simply hold the pin.",
+   "spoken": "Now develop the bishop to its most active square, g4, setting the pin. If he shoves a pawn at it he only weakens himself, and you simply hold the pin.",
    "kind": "main",
    "teaches": [
     "develop actively, keep the pin"

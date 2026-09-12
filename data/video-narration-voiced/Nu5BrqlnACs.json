@@ -84,7 +84,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We keep the King's-Indian character with d6, not d5 — d5 would drift into Grünfeld territory. The beauty of the KID is you barely change your moves for what White does.",
+   "spoken": "You keep the King's-Indian character with d6, not d5 — d5 would drift into Grünfeld territory. The beauty of the KID is you barely change your moves for what White does.",
    "kind": "main",
    "teaches": [
     "d6 keeps the KID structure"
@@ -97,7 +97,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The KID has two pawn breaks — c5 and e5 — and the whole point of the Torre's bishop on g5 is to discourage e5 with a nasty pin. So we don't rush into it; we finish developing first.",
+   "spoken": "The KID has two pawn breaks — c5 and e5 — and the whole point of the Torre's bishop on g5 is to discourage e5 with a nasty pin. So you don't rush into it; you finish developing first.",
    "kind": "plan",
    "teaches": [
     "the c5 and e5 breaks; beware the pin on e5"
@@ -110,7 +110,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "We fianchetto the light-squared bishop to b7 rather than g4 — a bishop developed to g4 has no retreat, and h3 would simply trap it.",
+   "spoken": "You fianchetto the light-squared bishop to b7 rather than g4 — a bishop developed to g4 has no retreat, and h3 would simply trap it.",
    "kind": "main",
    "teaches": [
     "fianchetto to keep the bishop safe"
@@ -143,7 +143,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "We meet White's queenside expansion with a5 of our own, freezing his a-pawn.",
+   "spoken": "You meet White's queenside expansion with a5 of your own, freezing his a-pawn.",
    "kind": "main",
    "teaches": [
     "a5 to stop the a4-a5 push"
@@ -165,7 +165,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight develops to d7, not c6, so it doesn't block our fianchetto bishop. From here the plan is clear: break the pin with g5 and h5 when needed, pile pieces onto the kingside — the queen to f6 and beyond — and eventually launch the e5 and f5-f4 pawn storm, opening the h-file at White's king and overloading the f3-knight.",
+   "spoken": "The knight develops to d7, not c6, so it doesn't block your fianchetto bishop. From here the plan is clear: break the pin with g5 and h5 when needed, pile pieces onto the kingside — the queen to f6 and beyond — and eventually launch the e5 and f5-f4 pawn storm, opening the h-file at White's king and overloading the f3-knight.",
    "kind": "plan",
    "teaches": [
     "Nd7 keeps the bishop’s diagonal open",

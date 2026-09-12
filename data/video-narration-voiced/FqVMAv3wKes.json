@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We take White; Black answers our king's pawn with ...e5."
+   "spoken": "You take White; Black answers your king's pawn with ...e5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": "We develop the knight to f3; Black defends with ...Nc6."
+   "spoken": "You develop the knight to f3; Black defends with ...Nc6."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "We play the bishop to b5 — the Ruy Lopez."
+   "spoken": "You play the bishop to b5 — the Ruy Lopez."
   },
   {
    "ply": 6,
@@ -52,7 +52,7 @@
    "line": [
     "Ba4"
    ],
-   "spoken": "We retreat the bishop to a4, keeping the pin."
+   "spoken": "You retreat the bishop to a4, keeping the pin."
   },
   {
    "ply": 8,
@@ -70,7 +70,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 10,
@@ -88,7 +88,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We play the rook to e1, defending e4."
+   "spoken": "You play the rook to e1, defending e4."
   },
   {
    "ply": 12,
@@ -106,7 +106,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We retreat the bishop to b3."
+   "spoken": "You retreat the bishop to b3."
   },
   {
    "ply": 14,
@@ -124,7 +124,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3, preparing a later d4 and giving the bishop a bolthole."
+   "spoken": "You play c3, preparing a later d4 and giving the bishop a bolthole."
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "We play the modest d3."
+   "spoken": "You play the modest d3."
   },
   {
    "ply": 18,
@@ -160,7 +160,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "We develop the knight to d2, heading for the kingside."
+   "spoken": "You develop the knight to d2, heading for the kingside."
   },
   {
    "ply": 22,
@@ -171,7 +171,7 @@
     "Bc2",
     "c5"
    ],
-   "spoken": "Black hits our bishop with ...Na5; we tuck it to c2; and Black expands with ...c5 — the typical Chigorin plan."
+   "spoken": "Black hits your bishop with ...Na5; you tuck it to c2; and Black expands with ...c5 — the typical Chigorin plan."
   },
   {
    "ply": 23,
@@ -180,7 +180,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": "We reroute the knight to f1 — the classic Ruy maneuver toward e3."
+   "spoken": "You reroute the knight to f1 — the classic Ruy maneuver toward e3."
   },
   {
    "ply": 24,
@@ -198,7 +198,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "We swing the knight to e3."
+   "spoken": "You swing the knight to e3."
   },
   {
    "ply": 26,
@@ -216,7 +216,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We finally strike with d4."
+   "spoken": "You finally strike with d4."
   },
   {
    "ply": 28,
@@ -234,7 +234,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We recapture on d4 — but now Black threatens a fork with ...d5."
+   "spoken": "You recapture on d4 — but now Black threatens a fork with ...d5."
   },
   {
    "ply": 30,
@@ -252,7 +252,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "We recapture with the knight."
+   "spoken": "You recapture with the knight."
   },
   {
    "ply": 32,
@@ -270,7 +270,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "We recapture with the queen, centralized on d4."
+   "spoken": "You recapture with the queen, centralized on d4."
   },
   {
    "ply": 34,
@@ -288,7 +288,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "We jump the knight into d5."
+   "spoken": "You jump the knight into d5."
   },
   {
    "ply": 36,
@@ -306,7 +306,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We recapture with the pawn."
+   "spoken": "You recapture with the pawn."
   },
   {
    "ply": 38,
@@ -325,7 +325,7 @@
     "Qd3",
     "g6"
    ],
-   "spoken": "We reposition the queen to d3; Black plays g6."
+   "spoken": "You reposition the queen to d3; Black plays g6."
   },
   {
    "ply": 23,

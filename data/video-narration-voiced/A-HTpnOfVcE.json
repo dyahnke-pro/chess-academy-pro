@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We open e4, and Black replies e5."
+   "spoken": "You open e4, and Black replies e5."
   },
   {
    "ply": 3,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3, heading for a Four Knights or Glek system."
+   "spoken": "You develop the knight to c3, heading for a Four Knights or Glek system."
   },
   {
    "ply": 6,
@@ -61,7 +61,7 @@
     "Nb1",
     "Bf8"
    ],
-   "spoken": "Our opponent takes it back — the knight returns to b1, the bishop to f8 — so we're back to the earlier position."
+   "spoken": "Your opponent takes it back — the knight returns to b1, the bishop to f8 — so you're back to the earlier position."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3 again."
+   "spoken": "You develop the knight to c3 again."
   },
   {
    "ply": 10,
@@ -143,7 +143,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "Why it's good for us...",
+   "spoken": "Why it's good for you...",
    "reanchor": true
   },
   {
@@ -153,7 +153,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "In this case our opponent is forced to part with the bishop, and after the queen recaptures on d4 the e5-knight is unstable.",
+   "spoken": "In this case your opponent is forced to part with the bishop, and after the queen recaptures on d4 the e5-knight is unstable.",
    "reanchor": true
   },
   {
@@ -163,7 +163,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The g7 pawn is already under fire and Black's in huge trouble — the bishop takes d4 was a serious mistake. Now pause: the obvious move is f4, on the tip of everyone's tongue, but whenever you push a pawn like that, watch the weaknesses it creates. Against f4, Black has the unpleasant queen-h4 check; we can't play g3, because the knight sneaks into f3, forking our queen. We could meet it with the queen to f2, but why trade queens when we have the lead in development, the bishop pair and a huge centre? Keep the queens on and play for maximum. So instead of f4, we develop — bring the dark-squared bishop out.",
+   "spoken": "The g7 pawn is already under fire and Black's in huge trouble — the bishop takes d4 was a serious mistake. Now pause: the obvious move is f4, on the tip of everyone's tongue, but whenever you push a pawn like that, watch the weaknesses it creates. Against f4, Black has the unpleasant queen-h4 check; you can't play g3, because the knight sneaks into f3, forking your queen. You could meet it with the queen to f2, but why trade queens when you have the lead in development, the bishop pair and a huge centre? Keep the queens on and play for maximum. So instead of f4, you develop — bring the dark-squared bishop out.",
    "reanchor": true
   },
   {
@@ -183,7 +183,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "The queen to f6 — our opponent gets excited about a discovered check, but with the bishop guarding the queen we've nothing to fear; the queen to f6 is a waste of time and potentially fatal.",
+   "spoken": "The queen to f6 — your opponent gets excited about a discovered check, but with the bishop guarding the queen you've nothing to fear; the queen to f6 is a waste of time and potentially fatal.",
    "reanchor": true
   },
   {
@@ -193,7 +193,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "When you see a queen out early on f6, think of the piece that most commonly attacks it — the knight. So the knight to d5 leaps to mind, forcing the queen back. This is exactly why we put the bishop on e3 and not f4: on f4, Black would have the counter-strike knight to f3 with check, winning the queen.",
+   "spoken": "When you see a queen out early on f6, think of the piece that most commonly attacks it — the knight. So the knight to d5 leaps to mind, forcing the queen back. This is exactly why you put the bishop on e3 and not f4: on f4, Black would have the counter-strike knight to f3 with check, winning the queen.",
    "reanchor": true
   },
   {
@@ -213,7 +213,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "The problem with f4 was the queen-h4 check — but now we have the bishop on e3 to block it, and the knight on d5 guards f4 from behind. So f4 is not just viable now but incredibly strong.",
+   "spoken": "The problem with f4 was the queen-h4 check — but now you have the bishop on e3 to block it, and the knight on d5 guards f4 from behind. So f4 is not just viable now but incredibly strong.",
    "reanchor": true
   },
   {
@@ -223,7 +223,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "c5 — that doesn't scare us; we'd prefer to stay on the same diagonal.",
+   "spoken": "c5 — that doesn't scare you; you'd prefer to stay on the same diagonal.",
    "reanchor": true
   },
   {
@@ -233,7 +233,7 @@
    "line": [
     "Qc3"
    ],
-   "spoken": "Can we? Yes — the queen drops back to c3, staying on the long diagonal.",
+   "spoken": "Can you? Yes — the queen drops back to c3, staying on the long diagonal.",
    "reanchor": true
   },
   {
@@ -262,7 +262,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "Yes, we can take on g7, and the game's essentially over. If the opponent takes our bishop, we'll have a pleasant choice of what to take back — the rook or the knight.",
+   "spoken": "Yes, you can take on g7, and the game's essentially over. If the opponent takes your bishop, you'll have a pleasant choice of what to take back — the rook or the knight.",
    "reanchor": true
   },
   {
@@ -272,7 +272,7 @@
    "line": [
     "N8f6"
    ],
-   "spoken": "Notice how damaging c5 was — the d5-knight is a monster. But it's moot: we have forced mate. A good example of not rushing — the queen takes h8, the king to d7, the bishop to b5 is nearly as good, but the most accurate is to start with the bishop to b5, taking away the king's escape square.",
+   "spoken": "Notice how damaging c5 was — the d5-knight is a monster. But it's moot: you have forced mate. A good example of not rushing — the queen takes h8, the king to d7, the bishop to b5 is nearly as good, but the most accurate is to start with the bishop to b5, taking away the king's escape square.",
    "reanchor": true
   },
   {
@@ -301,7 +301,7 @@
    "t": 628,
    "fen": "r1bqk2r/pp3pQp/3p1n2/2pN4/4PPn1/4B3/PPP3PP/R3KB1R w KQkq - 1 14",
    "line": [],
-   "spoken": "In our game it was much simpler, but the similarity holds: often you don't grab the material or give the check immediately — first identify the escape route, and give the check, or even a quiet move that blocks it, and only then capture the rook with checkmate. That's the most clinical approach.",
+   "spoken": "In your game it was much simpler, but the similarity holds: often you don't grab the material or give the check immediately — first identify the escape route, and give the check, or even a quiet move that blocks it, and only then capture the rook with checkmate. That's the most clinical approach.",
    "reanchor": true
   },
   {
@@ -502,7 +502,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "So we play d4, with major assets, and once the bishop comes out we simply castle by hand — tucking the king manually back to g1.",
+   "spoken": "So you play d4, with major assets, and once the bishop comes out you simply castle by hand — tucking the king manually back to g1.",
    "reanchor": true
   },
   {
@@ -512,7 +512,7 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": "Actually it's good in the long run that Black took f2, because you get the semi-open f-file when Black castles kingside. Are we afraid of the queen-h4 check? Absolutely not.",
+   "spoken": "Actually it's good in the long run that Black took f2, because you get the semi-open f-file when Black castles kingside. Are you afraid of the queen-h4 check? Absolutely not.",
    "reanchor": true
   },
   {
@@ -522,7 +522,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "We parry with g3.",
+   "spoken": "You parry with g3.",
    "reanchor": true
   },
   {
@@ -589,7 +589,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Then we develop the bishop; say Black plays d6...",
+   "spoken": "Then you develop the bishop; say Black plays d6...",
    "reanchor": true
   },
   {
@@ -600,7 +600,7 @@
     "d6",
     "Rf1"
    ],
-   "spoken": "...and we're set to play the rook to f1.",
+   "spoken": "...and you're set to play the rook to f1.",
    "reanchor": true
   },
   {
@@ -628,7 +628,7 @@
    "t": 822,
    "fen": "r1bqk1nr/pppp1ppp/2n5/4N3/4P3/2N5/PPPP1bPP/R1BQKB1R w KQkq - 0 5",
    "line": [],
-   "spoken": "So these bishop-f2 moves aren't scary. Our opponent took d4, and the bishop takes d4 was a further inaccuracy — Black is in some trouble. If you miss the center fork trick, the textbook best reaction most of the time is to keep your bishop with the bishop to d6; White is better with the development lead and a good centre, but Black has a playable position after the knight to f6. This isn't dogma, though — there's the Four Knights English, where White plays a modern setup and, after the bishop to c5, actually implements the center fork trick himself.",
+   "spoken": "So these bishop-f2 moves aren't scary. Your opponent took d4, and the bishop takes d4 was a further inaccuracy — Black is in some trouble. If you miss the center fork trick, the textbook best reaction most of the time is to keep your bishop with the bishop to d6; White is better with the development lead and a good centre, but Black has a playable position after the knight to f6. This isn't dogma, though — there's the Four Knights English, where White plays a modern setup and, after the bishop to c5, actually implements the center fork trick himself.",
    "reanchor": true
   }
  ]

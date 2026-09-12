@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We answer e4 with e5, looking for something offbeat."
+   "spoken": "You answer e4 with e5, looking for something offbeat."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We play the knight to f6, angling for the Stafford."
+   "spoken": "You play the knight to f6, angling for the Stafford."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "We try the bishop to c5, Eric Rosen style, hoping to goad a gambit."
+   "spoken": "You try the bishop to c5, Eric Rosen style, hoping to goad a gambit."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "He plays the bishop to c4 — so we'll have to play conventionally, but we'll make it interesting."
+   "spoken": "He plays the bishop to c4 — so you'll have to play conventionally, but you'll make it interesting."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "If we castle and he takes, there's no Stafford left — he's close to castling. So we either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so we start with d6 to defend the e5 pawn."
+   "spoken": "If you castle and he takes, there's no Stafford left — he's close to castling. So you either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so you start with d6 to defend the e5 pawn."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles. Now, to make it hard for him to develop, how do we add some spice?"
+   "spoken": "White castles. Now, to make it hard for him to develop, how do you add some spice?"
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 — because if we play the knight to c6 first, knowing his style he'll play h3 and we'll regret it, so we squeeze this in while we can. He'll probably retreat to e2."
+   "spoken": "The bishop to g4 — because if you play the knight to c6 first, knowing his style he'll play h3 and you'll regret it, so you squeeze this in while you can. He'll probably retreat to e2."
   },
   {
    "ply": 11,
@@ -105,7 +105,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Now we play the knight to c6, threatening the knight to d4."
+   "spoken": "Now you play the knight to c6, threatening the knight to d4."
   },
   {
    "ply": 13,
@@ -123,7 +123,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "The classic way to make White decide is to drop the bishop back to b6, avoiding his taking on c5 and ruining our structure — and if he takes now, a takes b6 gives us doubled pawns that don't matter, plus the a-file, which is great."
+   "spoken": "The classic way to make White decide is to drop the bishop back to b6, avoiding his taking on c5 and ruining your structure — and if he takes now, a takes b6 gives you doubled pawns that don't matter, plus the a-file, which is great."
   },
   {
    "ply": 15,
@@ -141,7 +141,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "We drop the bishop to h5 — he'll probably contemplate g4 for a while; if he plays it, we consider a sacrifice on g4."
+   "spoken": "You drop the bishop to h5 — he'll probably contemplate g4 for a while; if he plays it, you consider a sacrifice on g4."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "I don't think the time's right for the sac — not enough there — so we keep the bishop. He plays the king to h2, a weird move; maybe planning the rook to g1 and g4."
+   "spoken": "I don't think the time's right for the sac — not enough there — so you keep the bishop. He plays the king to h2, a weird move; maybe planning the rook to g1 and g4."
   },
   {
    "ply": 18,
@@ -159,7 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We just castle — no point doing anything wild."
+   "spoken": "You just castle — no point doing anything wild."
   },
   {
    "ply": 19,
@@ -177,7 +177,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "Does that warrant not taking on f3? No — the bishop takes f3, capturing on f3, creates such damage on his kingside that it's worth it, as long as we're careful."
+   "spoken": "Does that warrant not taking on f3? No — the bishop takes f3, capturing on f3, creates such damage on his kingside that it's worth it, as long as you're careful."
   },
   {
    "ply": 21,
@@ -186,7 +186,7 @@
    "line": [
     "gxf3"
    ],
-   "spoken": "He recaptures, capturing on f3. The weaknesses he's created are permanent, so it's worth it if we manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis."
+   "spoken": "He recaptures, capturing on f3. The weaknesses he's created are permanent, so it's worth it if you manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis."
   },
   {
    "ply": 22,
@@ -195,7 +195,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": "The greater priority is to stake a claim on the kingside so he doesn't run circles over us — so the knight to h5, getting the wheels turning."
+   "spoken": "The greater priority is to stake a claim on the kingside so he doesn't run circles over you — so the knight to h5, getting the wheels turning."
   },
   {
    "ply": 23,
@@ -213,7 +213,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "The queen to f6 — on h4 it does nothing, since we've no light-squared bishop to hit h3; on f6 it's active."
+   "spoken": "The queen to f6 — on h4 it does nothing, since you've no light-squared bishop to hit h3; on f6 it's active."
   },
   {
    "ply": 25,
@@ -258,7 +258,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5 is good — this guy's very legit. We keep attacking; our king is very safe."
+   "spoken": "The knight to d5 is good — this guy's very legit. You keep attacking; your king is very safe."
   },
   {
    "ply": 30,
@@ -267,7 +267,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "We need spice on the kingside — open files, something to join this lonely queen. So f5 — gutsy play by both of us."
+   "spoken": "You need spice on the kingside — open files, something to join this lonely queen. So f5 — gutsy play by both sides."
   },
   {
    "ply": 31,
@@ -294,7 +294,7 @@
    "line": [
     "R4g2"
    ],
-   "spoken": "The rook to g2 — this seems like capitulation of his attack, which I like; it means he doesn't know what to do and is milking my clock. Now g7 is protected; we want to triple, with the knight to d4 and the rook to f8 coming."
+   "spoken": "The rook to g2 — this seems like capitulation of his attack, which I like; it means he doesn't know what to do and is milking my clock. Now g7 is protected; you want to triple, with the knight to d4 and the rook to f8 coming."
   },
   {
    "ply": 34,
@@ -321,7 +321,7 @@
    "line": [
     "axb6"
    ],
-   "spoken": "We recapture, capturing on b6, checking for intermediate moves first — nothing there."
+   "spoken": "You recapture, capturing on b6, checking for intermediate moves first — nothing there."
   },
   {
    "ply": 37,
@@ -330,7 +330,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "The bishop to e6 — a very advanced idea I'll admit I missed: if we move the rook, he plays the bishop to g4 and wins a piece. So we'll have to sac the exchange."
+   "spoken": "The bishop to e6 — a very advanced idea I'll admit I missed: if you move the rook, he plays the bishop to g4 and wins a piece. So you'll have to sac the exchange."
   },
   {
    "ply": 38,
@@ -339,7 +339,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "We sac the exchange with the knight to e7."
+   "spoken": "You sac the exchange with the knight to e7."
   },
   {
    "ply": 40,
@@ -349,7 +349,7 @@
     "Bxf5",
     "Nxf5"
    ],
-   "spoken": "After the bishop takes f5 and we recapture with the knight on f5, my worry isn't even the position, it's the clock."
+   "spoken": "After the bishop takes f5 and you recapture with the knight on f5, my worry isn't even the position, it's the clock."
   },
   {
    "ply": 41,
@@ -403,14 +403,14 @@
    "line": [
     "Qxg4"
    ],
-   "spoken": "Now I want a knight on f3, so we take the rook first, the queen capturing on g4."
+   "spoken": "Now I want a knight on f3, so you take the rook first, the queen capturing on g4."
   },
   {
    "ply": 43,
    "t": 693,
    "fen": "5r1k/1pp3pp/1p1p4/4p2n/6Rn/3PBq1P/PPPQ1P1K/6R1 b - - 3 22",
    "line": [],
-   "spoken": "...then the knight to f3 recaptures his queen, winning back the exchange, and we're up a pawn.",
+   "spoken": "...then the knight to f3 recaptures his queen, winning back the exchange, and you're up a pawn.",
    "reanchor": true
   },
   {
@@ -459,7 +459,7 @@
    "line": [
     "Nf4+"
    ],
-   "spoken": "We play the knight to f4, check, centralizing it; if he takes, that's a good trade for us — up a pawn."
+   "spoken": "You play the knight to f4, check, centralizing it; if he takes, that's a good trade for you — up a pawn."
   },
   {
    "ply": 51,
@@ -477,7 +477,7 @@
    "line": [
     "Rxf4"
    ],
-   "spoken": "We recapture, capturing on f4 — a very nice rook on f4, and we're up a pawn."
+   "spoken": "You recapture, capturing on f4 — a very nice rook on f4, and you're up a pawn."
   },
   {
    "ply": 53,
@@ -495,7 +495,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": "Let's get our king out — the king to g8."
+   "spoken": "Let's get your king out — the king to g8."
   },
   {
    "ply": 56,
@@ -505,7 +505,7 @@
     "a3",
     "b5"
    ],
-   "spoken": "a3, and we push b5."
+   "spoken": "a3, and you push b5."
   },
   {
    "ply": 57,
@@ -523,7 +523,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": "Our king comes to f7."
+   "spoken": "Your king comes to f7."
   },
   {
    "ply": 59,
@@ -541,7 +541,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "We play h6."
+   "spoken": "You play h6."
   },
   {
    "ply": 61,
@@ -577,7 +577,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "We push c5."
+   "spoken": "You push c5."
   },
   {
    "ply": 65,
@@ -659,7 +659,7 @@
     "Kh4",
     "g6"
    ],
-   "spoken": "The king to h4, and we play g6."
+   "spoken": "The king to h4, and you play g6."
   },
   {
    "ply": 75,
@@ -677,7 +677,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "We play h5."
+   "spoken": "You play h5."
   },
   {
    "ply": 78,
@@ -687,7 +687,7 @@
     "Kg3",
     "d5"
    ],
-   "spoken": "The king to g3, and we push d5."
+   "spoken": "The king to g3, and you push d5."
   },
   {
    "ply": 79,
@@ -705,7 +705,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We push d4."
+   "spoken": "You push d4."
   },
   {
    "ply": 82,
@@ -715,7 +715,7 @@
     "Ke2",
     "h4"
    ],
-   "spoken": "The king to e2, and we push h4 — this is winning: two passed pawns."
+   "spoken": "The king to e2, and you push h4 — this is winning: two passed pawns."
   },
   {
    "ply": 83,
@@ -733,7 +733,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We recapture, capturing on d4 — two connected passers too far from his king."
+   "spoken": "You recapture, capturing on d4 — two connected passers too far from his king."
   },
   {
    "ply": 85,
@@ -751,7 +751,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "We just go h3."
+   "spoken": "You just go h3."
   },
   {
    "ply": 87,
@@ -769,7 +769,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "We push d3 — d2, d1, and it's a queen. There's no stalemate: I leave him a pawn, then walk my king around to mate on the other side. A tip: when mating with a couple of seconds left, leave your opponent pawn moves so you never have to worry about stalemate."
+   "spoken": "You push d3 — d2, d1, and it's a queen. There's no stalemate: I leave him a pawn, then walk my king around to mate on the other side. A tip: when mating with a couple of seconds left, leave your opponent pawn moves so you never have to worry about stalemate."
   },
   {
    "ply": 3,

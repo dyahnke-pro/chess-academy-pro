@@ -15,7 +15,7 @@
         "d4",
         "d5"
       ],
-      "spoken": "We've been playing d4 religiously — d4, and a Queen's Gambit."
+      "spoken": "You've been playing d4 religiously — d4, and a Queen's Gambit."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "He declines with c6 — the Slav; I don't think we've faced it, or maybe once."
+      "spoken": "He declines with c6 — the Slav; I don't think you've faced it, or maybe once."
     },
     {
       "ply": 3,
@@ -50,7 +50,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "After c6 we could of course play c-takes-d5, the Exchange Slav — but the Exchange Slav is extremely colourless, unless you play a very interesting variation that the vast majority of people are unfamiliar with. I'm going to"
+      "spoken": "After c6 you could of course play c-takes-d5, the Exchange Slav — but the Exchange Slav is extremely colourless, unless you play a very interesting variation that the vast majority of people are unfamiliar with. I'm going to"
     },
     {
       "ply": 5,
@@ -59,7 +59,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "introduce you to it. We can reach it through c-takes-d5, or through the knight to c3 — that's the Boor variation. Take on d5."
+      "spoken": "introduce you to it. You can reach it through c-takes-d5, or through the knight to c3 — that's the Boor variation. Take on d5."
     },
     {
       "ply": 6,
@@ -77,7 +77,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "Now we play the knight to c3. Whether we can play this line hinges on Black playing the main move, the knight to f6; if he plays the knight to c6, we have a second, also very dangerous idea."
+      "spoken": "Now you play the knight to c3. Whether you can play this line hinges on Black playing the main move, the knight to f6; if he plays the knight to c6, you have a second, also very dangerous idea."
     },
     {
       "ply": 8,
@@ -95,7 +95,7 @@
       "line": [
         "f3"
       ],
-      "spoken": "If you're seeing this for the first time, this move should feel crazy — it violates essentially all principles of development. But that's exactly why it contains so much venom: people don't realise how dangerous Black's position can get, and how fast. Black has several ways to equalise, but the vast majority of players below 2200, and even 2000s, get completely lost in the complications. The idea of f3 should be obvious — to occupy the centre with e4 — but that's only the tip of the iceberg. Most people here play the knight to c6, which isn't necessarily bad, but really lets us carry out the main idea. It's not played at the highest level, because strong players know how to neutralise f3 — I'll show that after the game — and the critical move is not the bishop to f5. I'm not a specialist in the Boor, so our opponent might make a move I don't know."
+      "spoken": "If you're seeing this for the first time, this move should feel crazy — it violates essentially all principles of development. But that's exactly why it contains so much venom: people don't realise how dangerous Black's position can get, and how fast. Black has several ways to equalise, but the vast majority of players below 2200, and even 2000s, get completely lost in the complications. The idea of f3 should be obvious — to occupy the centre with e4 — but that's only the tip of the iceberg. Most people here play the knight to c6, which isn't necessarily bad, but really lets you carry out the main idea. It's not played at the highest level, because strong players know how to neutralise f3 — I'll show that after the game — and the critical move is not the bishop to f5. I'm not a specialist in the Boor, so your opponent might make a move I don't know."
     },
     {
       "ply": 10,
@@ -104,7 +104,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The knight to c6 — so we ignore it and"
+      "spoken": "The knight to c6 — so you ignore it and"
     },
     {
       "ply": 11,
@@ -113,7 +113,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "continue with our plan, e4. Here you start to understand the main idea. It may seem d-takes-e4 wins a pawn — d-takes-e4, f-takes-e4, Black has two attackers on d4 and White only one defender, so the queen takes d4 wins a central pawn and offers a queen trade. But the point is that after d-takes-e4, you play d5 — an intermezzo a lot of players miss — leading to a very"
+      "spoken": "continue with your plan, e4. Here you start to understand the main idea. It may seem d-takes-e4 wins a pawn — d-takes-e4, f-takes-e4, Black has two attackers on d4 and White only one defender, so the queen takes d4 wins a central pawn and offers a queen trade. But the point is that after d-takes-e4, you play d5 — an intermezzo a lot of players miss — leading to a very"
     },
     {
       "ply": 12,
@@ -122,7 +122,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "dangerous position for Black: we play d5, force the knight off c6, and only then recapture on e4, getting a major pawn mass. But all of that is moot, because Black has played e5 — I don't know this move, which probably means it's not correct, but we'll think on our feet. Logically, White's choices are limited to really one move; it doesn't make much sense to"
+      "spoken": "dangerous position for Black: you play d5, force the knight off c6, and only then recapture on e4, getting a major pawn mass. But all of that is moot, because Black has played e5 — I don't know this move, which probably means it's not correct, but you'll think on your feet. Logically, White's choices are limited to really one move; it doesn't make much sense to"
     },
     {
       "ply": 13,
@@ -131,7 +131,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "take on d5 — if we play e-takes-d5, at the very least Black takes the pawn on d4, establishing a knight in the centre. So the only reasonable move is d-takes-e5."
+      "spoken": "take on d5 — if you play e-takes-d5, at the very least Black takes the pawn on d4, establishing a knight in the centre. So the only reasonable move is d-takes-e5."
     },
     {
       "ply": 12,
@@ -148,7 +148,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "seems quite awkward; there's just no need. We simply clarify the tension with d-takes-e5."
+      "spoken": "seems quite awkward; there's just no need. You simply clarify the tension with d-takes-e5."
     },
     {
       "ply": 14,
@@ -157,7 +157,7 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "The knight takes e5 — a critical moment. A couple of candidate moves jump out. The most obvious is e-takes-d5, winning a pawn — but the drawback is that our development isn't great, the main flaw of the Boor. After e-takes-d5 I'm worried about the bishop to c5, developing to a really nice square, preventing us from castling. So set e-takes-d5 aside. Noticing this knight configuration should lead to a typical, universal idea: play f4 to chase one knight away, then e5 to drive the wedge and chase the other, creating a central pawn chain — that looks a lot more appealing than taking on d5. So I think f4 is correct. Why not develop the bishop while doing the same? Because"
+      "spoken": "The knight takes e5 — a critical moment. A couple of candidate moves jump out. The most obvious is e-takes-d5, winning a pawn — but the drawback is that your development isn't great, the main flaw of the Boor. After e-takes-d5 I'm worried about the bishop to c5, developing to a really nice square, preventing you from castling. So set e-takes-d5 aside. Noticing this knight configuration should lead to a typical, universal idea: play f4 to chase one knight away, then e5 to drive the wedge and chase the other, creating a central pawn chain — that looks a lot more appealing than taking on d5. So I think f4 is correct. Why not develop the bishop while doing the same? Because"
     },
     {
       "ply": 15,
@@ -175,7 +175,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "The bishop to g4 simply creates a one-move threat against the queen, which we parry a million ways — the queen to b3 or the queen to a4 with check. Now, the fact that he's played the knight to c6 increases the appeal of taking on d5, because now it comes with tempo. After e-takes-d5, probably the knight to b4; but there's another interesting option, and a way to trade queens by force — even after the trade, though, our king could be a sitting duck. The main deterrent to e5 is the counter d4: after e5, d4, we take the knight on f6, Black takes on c3, we trade queens with the queen takes d8 with check, the knight to d8, b-takes-c3, g-takes-f6 — evaluate that endgame: both sides have a pawn deficiency, but Black's kingside pawns are worse than our queenside ones, and White has a small"
+      "spoken": "The bishop to g4 simply creates a one-move threat against the queen, which you parry a million ways — the queen to b3 or the queen to a4 with check. Now, the fact that he's played the knight to c6 increases the appeal of taking on d5, because now it comes with tempo. After e-takes-d5, probably the knight to b4; but there's another interesting option, and a way to trade queens by force — even after the trade, though, your king could be a sitting duck. The main deterrent to e5 is the counter d4: after e5, d4, you take the knight on f6, Black takes on c3, you trade queens with the queen takes d8 with check, the knight to d8, b-takes-c3, g-takes-f6 — evaluate that endgame: both sides have a pawn deficiency, but Black's kingside pawns are worse than your queenside ones, and White has a small"
     },
     {
       "ply": 17,
@@ -184,7 +184,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "initiative — we can quickly get the bishop to b5 with check, and it seems easier for us to castle than for Black. So I think e5 is the wisest continuation."
+      "spoken": "initiative — you can quickly get the bishop to b5 with check, and it seems easier for you to castle than for Black. So I think e5 is the wisest continuation."
     },
     {
       "ply": 16,
@@ -201,7 +201,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "greedy here, entirely possible, but I think we should be principled and stick to e5. You're welcome to follow with an engine and laugh at me, but that violates the whole zen of this. I think he takes d5, and the bishop to c4 might have been a lot better — but I want to be principled in the centre. We considered d4; Black can also move the knight — to e4, and there I thought we also get a better endgame: after the knight to e4 we refrain from taking d5, since we've got nothing developed and Black has the nasty queen to h4 with check, but after the knight to e4 we play the knight takes e4, d-takes-e4, and again trade on d8, and Black has a serious pawn weakness on e4 that we attack with the knight to c3 or g3; White's better. What else can Black do? The knight to g4, but then we take the pawn with the queen, the queen takes d5 — so I don't, and maybe this is minus two, but I don't see off the top of my head"
+      "spoken": "greedy here, entirely possible, but I think you should be principled and stick to e5. You're welcome to follow with an engine and laugh at me, but that violates the whole zen of this. I think he takes d5, and the bishop to c4 might have been a lot better — but I want to be principled in the centre. You considered d4; Black can also move the knight — to e4, and there I thought you also get a better endgame: after the knight to e4 you refrain from taking d5, since you've got nothing developed and Black has the nasty queen to h4 with check, but after the knight to e4 you play the knight takes e4, d-takes-e4, and again trade on d8, and Black has a serious pawn weakness on e4 that you attack with the knight to c3 or g3; White's better. What else can Black do? The knight to g4, but then you take the pawn with the queen, the queen takes d5 — so I don't, and maybe this is minus two, but I don't see off the top of my head"
     },
     {
       "ply": 18,
@@ -210,7 +210,7 @@
       "line": [
         "Ng4"
       ],
-      "spoken": "what's so scary about this position, beyond Black's lead in development. Maybe there's a crazy idea leaving that knight where it is and playing the bishop to c5, accelerating development. But the knight to g4 is on the board — and I'm beginning to see why we might be in trouble. What I underestimated is that after the queen takes d5, Black has the weird-looking queen to b6, and suddenly our queen is left stranded in the centre and Black threatens a devastating check on f2 — he gets his pieces out so quickly. So we need to amend our strategy: develop at all costs, accelerate before worrying about the d5-pawn. How can we supercharge development? Can we develop with tempo, attacking a piece?"
+      "spoken": "what's so scary about this position, beyond Black's lead in development. Maybe there's a crazy idea leaving that knight where it is and playing the bishop to c5, accelerating development. But the knight to g4 is on the board — and I'm beginning to see why you might be in trouble. What I underestimated is that after the queen takes d5, Black has the weird-looking queen to b6, and suddenly your queen is left stranded in the centre and Black threatens a devastating check on f2 — he gets his pieces out so quickly. So you need to amend your strategy: develop at all costs, accelerate before worrying about the d5-pawn. How can you supercharge development? Can you develop with tempo, attacking a piece?"
     },
     {
       "ply": 19,
@@ -219,7 +219,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "We can play the bishop to e2. The crazy thing is that the bishop to e2 doesn't actually carry a threat, because even if we take on g4, Black responds with the queen to h4 with check, forking the king and the bishop — but that leads to a queen trade, and after g3, the queen takes g4, a queen trade should be in White's favour, since we're behind in development. On the other hand, giving up our light-squared bishop is problematic given how many weak light squares we have. The move I'm most worried about is the advanced bishop to c5,"
+      "spoken": "You can play the bishop to e2. The crazy thing is that the bishop to e2 doesn't actually carry a threat, because even if you take on g4, Black responds with the queen to h4 with check, forking the king and the bishop — but that leads to a queen trade, and after g3, the queen takes g4, a queen trade should be in White's favour, since you're behind in development. On the other hand, giving up your light-squared bishop is problematic given how many weak light squares you have. The move I'm most worried about is the advanced bishop to c5,"
     },
     {
       "ply": 20,
@@ -228,7 +228,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "because he'd have to sense that the bishop takes g4 meets the queen to h4 with check, and just continue developing as if nothing's the matter. The bishop to c5 is very, very dangerous. Let me spell out why the bishop takes g4 is so unappetising: the bishop takes g4, the queen to h4 with check, g3, the queen takes g4 — the queens are off, but our king is still devastatingly weak, and Black can swing the knight into d4, too many threats, and we don't get to complete our development. So the best move here might be the queen takes d5 — the trickiest move you can play: we take a pawn, attack the bishop, and after the queen takes d5, the knight takes d5, we're also threatening a fork on c7. Black has the knight to f2, but that's bad, because we"
+      "spoken": "because he'd have to sense that the bishop takes g4 meets the queen to h4 with check, and just continue developing as if nothing's the matter. The bishop to c5 is very, very dangerous. Let me spell out why the bishop takes g4 is so unappetising: the bishop takes g4, the queen to h4 with check, g3, the queen takes g4 — the queens are off, but your king is still devastatingly weak, and Black can swing the knight into d4, too many threats, and you don't get to complete your development. So the best move here might be the queen takes d5 — the trickiest move you can play: you take a pawn, attack the bishop, and after the queen takes d5, the knight takes d5, you're also threatening a fork on c7. Black has the knight to f2, but that's bad, because you"
     },
     {
       "ply": 24,
@@ -240,7 +240,7 @@
         "Qf2",
         "Bxf2+"
       ],
-      "spoken": "take the bishop and then trap the knight on h1. If Black plays the queen takes d5 first and then the knight to f2, we both essentially take each other's rooks and then both try to get our knights out of the corner. The bishop to f2 with check — I was not expecting that move."
+      "spoken": "take the bishop and then trap the knight on h1. If Black plays the queen takes d5 first and then the knight to f2, both sides essentially take each other's rooks and then both try to get their knights out of the corner. The bishop to f2 with check — I was not expecting that move."
     },
     {
       "ply": 25,
@@ -249,7 +249,7 @@
       "line": [
         "Kf1"
       ],
-      "spoken": "The bishop check — okay, I'll bite, the king to f1. We're pretty close to getting mated here, but I think the king is safe for the time being. The bishop to f2 might have been a mistake, unless there's a ridiculous follow-up like the knight to e3 with check — but after g3 with check we can already take on e3 and trade queens, White probably still worse but defensible. The other problem of putting minor pieces so close to the king is the contact, so the bishop takes g4 has become a serious threat; the bishop on f2 is a type-two undefended piece, defended by one piece that's also under fire. The queen to h4 is possible, but then we develop with tempo, the knight to f3. The queen to b6 might be best — it protects the bishop and builds a battery threatening the bishop takes g1 and the queen to f2."
+      "spoken": "The bishop check — okay, I'll bite, the king to f1. You're pretty close to getting mated here, but I think the king is safe for the time being. The bishop to f2 might have been a mistake, unless there's a ridiculous follow-up like the knight to e3 with check — but after g3 with check you can already take on e3 and trade queens, White probably still worse but defensible. The other problem of putting minor pieces so close to the king is the contact, so the bishop takes g4 has become a serious threat; the bishop on f2 is a type-two undefended piece, defended by one piece that's also under fire. The queen to h4 is possible, but then you develop with tempo, the knight to f3. The queen to b6 might be best — it protects the bishop and builds a battery threatening the bishop takes g1 and the queen to f2."
     },
     {
       "ply": 26,
@@ -258,7 +258,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "After the queen to b6, we'll have to find a way to defend the f2-square with another piece — but let's cross that bridge when we get there. Our opponent's already getting really low on time, which is good."
+      "spoken": "After the queen to b6, you'll have to find a way to defend the f2-square with another piece — but let's cross that bridge when you get there. Your opponent's already getting really low on time, which is good."
     },
     {
       "ply": 27,
@@ -267,14 +267,14 @@
       "line": [
         "Nh3"
       ],
-      "spoken": "I think we have to go the knight to h3 — I don't see another move; we develop the knight, but most importantly we defend the f2-square, taking the sting out of any bishop move Black could come up with."
+      "spoken": "I think you have to go the knight to h3 — I don't see another move; you develop the knight, but most importantly you defend the f2-square, taking the sting out of any bishop move Black could come up with."
     },
     {
       "ply": 17,
       "t": 1117,
       "fen": "r1bqkb1r/pp3ppp/2n2n2/3pP3/5P2/2N5/PP4PP/R1BQKBNR b KQkq - 0 9",
       "line": [],
-      "spoken": "So the opening experiment has misfired dreadfully — f4 and e5 was bad intuition by me; I completely underestimated how much we weakened our king and how much the lack of development impacts the evaluation. I just missed the knight to g4 — the only two moves I considered were d4 and the knight to e4, both of which allow a queen trade, whereas the knight to g4 keeps the queens on the board and gives Black attacking chances. But the game is not over — we continue to defend and milk Black's clock. g3 with check, we have no choice, we have to take, the bishop takes e3; now we have to be very precise. To survive these positions, don't get overwhelmed — understand the priorities, because you won't be able to attend to every need. Two things matter most: first, the immediate threats — the queen takes b2 is a really bad move to allow, because it forks the rook and the knight; second, whether we have any counterplay, any way to get active and create counter-threats that deflect the opponent. And there you immediately see an interesting idea: the knight to g5, creating a threat against the f7-pawn. Why is that dangerous? Because f7 isn't easy to protect — and if Black castles, the h7-pawn becomes weak, and we drop the queen to d3, attacking h7 and threatening mate in one; the queen to d3 also vacates the d5-square for the knight, and the knight to d5 forks the black queen and the bishop. But that's not the end of the line: the knight to g5, Black castles kingside, the queen to d3, g6, the knight to d5, and Black plays the queen takes b2, counterattacking the rook on a1 — and here White has a key move without which the whole line fails: the rook to b1, attacking the queen, while the bishop still hangs. Then the queen to d3 — perhaps the queen to e4 is more accurate, I don't see a difference — a very important move to see: the queen has done its job in the centre, poorly placed, so my inclination is always to move it away from the most vulnerable square. The knight to d5; note there's a potential check on f6, not dangerous at the moment because of the king to g7, but a mental note — and if the rook to d8, at a minimum we take the black queen, Black takes our queen, and then we take either of the two rooks with a big material advantage, and we're officially out of the woods. So: the knight to d5, the queen takes b2, the rook to b1 — and after the rook to b1, the queen takes a2, and we recapture the bishop on e3 with the knight, not the queen, because the White queen still has to keep contact with the rook — we cannot abandon the rook on b1, so we take back with the knight even though it's a retreating move. If Black tries the queen takes b2, the rook to b1, the bishop to f5, the simplest is just to take the black queen and then the bishop — the bishop to f5 is desperation; keep it simple, just take the bishop, you don't have to calculate. Now, I briefly asked whether we can move the queen away with check — the answer is obviously no, but that should be your first instinct when both queens are hanging: go down a clear list — can I move my queen away with check, or with a mate threat? If h4 were accessible, the queen to h4 would win the queen here. Once you answer no, you look for desperados: moving the queen with tempo, moving it while capturing a piece — here we just take the undefended bishop, the queen takes b2. Now the last step before we win: consolidate. Our king is on a vulnerable spot, our rooks are disconnected, so we need everything centralised and defended, and we need to repel the last of Black's initiative. The nicest move is the king up to f2 — not only does it protect the rook, it connects the rooks and brings the king onto a square surrounded by defensive pieces. Some of you worry about the bishop being pinned, but it's all about how many times the bishop is defended: it's defended twice and not attacked once except by the queen, so Black has no effective way to pressure it — and if we need to, we can bring a rook to e1 to protect it further. The higher-rated you get, the more you have to concretise: general principles you'd have accepted as fact five hundred points ago, like never playing the king to f2 into a pin, you have to reexamine — not all pins are dangerous, and you have to get better at discerning which are and which aren't. Now I see a way to trade queens by force I missed on the previous move: the queen to c3, offering the trade — the black queen is undefended, so after the rook takes d5 we simply take the queen; b6 is covered by the knight on d5, and d5 is covered by the bishop, so Black has to trade, and we're up a piece in the endgame. That's a GG move — once you've determined you're getting the queens off, you convert up a piece, and Black resigns.",
+      "spoken": "So the opening experiment has misfired dreadfully — f4 and e5 was bad intuition by me; I completely underestimated how much you weakened your king and how much the lack of development impacts the evaluation. I just missed the knight to g4 — the only two moves I considered were d4 and the knight to e4, both of which allow a queen trade, whereas the knight to g4 keeps the queens on the board and gives Black attacking chances. But the game is not over — you continue to defend and milk Black's clock. g3 with check, you have no choice, you have to take, the bishop takes e3; now you have to be very precise. To survive these positions, don't get overwhelmed — understand the priorities, because you won't be able to attend to every need. Two things matter most: first, the immediate threats — the queen takes b2 is a really bad move to allow, because it forks the rook and the knight; second, whether you have any counterplay, any way to get active and create counter-threats that deflect the opponent. And there you immediately see an interesting idea: the knight to g5, creating a threat against the f7-pawn. Why is that dangerous? Because f7 isn't easy to protect — and if Black castles, the h7-pawn becomes weak, and you drop the queen to d3, attacking h7 and threatening mate in one; the queen to d3 also vacates the d5-square for the knight, and the knight to d5 forks the black queen and the bishop. But that's not the end of the line: the knight to g5, Black castles kingside, the queen to d3, g6, the knight to d5, and Black plays the queen takes b2, counterattacking the rook on a1 — and here White has a key move without which the whole line fails: the rook to b1, attacking the queen, while the bishop still hangs. Then the queen to d3 — perhaps the queen to e4 is more accurate, I don't see a difference — a very important move to see: the queen has done its job in the centre, poorly placed, so my inclination is always to move it away from the most vulnerable square. The knight to d5; note there's a potential check on f6, not dangerous at the moment because of the king to g7, but a mental note — and if the rook to d8, at a minimum you take the black queen, Black takes your queen, and then you take either of the two rooks with a big material advantage, and you're officially out of the woods. So: the knight to d5, the queen takes b2, the rook to b1 — and after the rook to b1, the queen takes a2, and you recapture the bishop on e3 with the knight, not the queen, because the White queen still has to keep contact with the rook — you cannot abandon the rook on b1, so you take back with the knight even though it's a retreating move. If Black tries the queen takes b2, the rook to b1, the bishop to f5, the simplest is just to take the black queen and then the bishop — the bishop to f5 is desperation; keep it simple, just take the bishop, you don't have to calculate. Now, I briefly asked whether you can move the queen away with check — the answer is obviously no, but that should be your first instinct when both queens are hanging: go down a clear list — can I move my queen away with check, or with a mate threat? If h4 were accessible, the queen to h4 would win the queen here. Once you answer no, you look for desperados: moving the queen with tempo, moving it while capturing a piece — here you just take the undefended bishop, the queen takes b2. Now the last step before you win: consolidate. Your king is on a vulnerable spot, your rooks are disconnected, so you need everything centralised and defended, and you need to repel the last of Black's initiative. The nicest move is the king up to f2 — not only does it protect the rook, it connects the rooks and brings the king onto a square surrounded by defensive pieces. Some of you worry about the bishop being pinned, but it's all about how many times the bishop is defended: it's defended twice and not attacked once except by the queen, so Black has no effective way to pressure it — and if you need to, you can bring a rook to e1 to protect it further. The higher-rated you get, the more you have to concretise: general principles you'd have accepted as fact five hundred points ago, like never playing the king to f2 into a pin, you have to reexamine — not all pins are dangerous, and you have to get better at discerning which are and which aren't. Now I see a way to trade queens by force I missed on the previous move: the queen to c3, offering the trade — the black queen is undefended, so after the rook takes d5 you simply take the queen; b6 is covered by the knight on d5, and d5 is covered by the bishop, so Black has to trade, and you're up a piece in the endgame. That's a GG move — once you've determined you're getting the queens off, you convert up a piece, and Black resigns.",
       "reanchor": true
     },
     {
@@ -357,7 +357,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "and e5, striking in the centre. The most similar opening to this is the Fantasy Caro-Kann — we might almost have a transposition to it; it's not exactly the same, since in the Fantasy there's a pawn on c6, but it's a very similar theme. In the Fantasy Caro-Kann, White plays the sharp move f3, and Black has a line where he goes the queen to b6, the knight to c3, and e5 — a reputable variation, though not that good for Black, because after d-takes-e5, the bishop to c5, there's the knight to a4; without that move the line would work like a charm. Notice how similar the idea is: e5 to weaken the a7-g1 diagonal. Same concept here — the queen to b6, e4, takes, takes, and e5.",
+      "spoken": "and e5, striking in the centre. The most similar opening to this is the Fantasy Caro-Kann — you might almost have a transposition to it; it's not exactly the same, since in the Fantasy there's a pawn on c6, but it's a very similar theme. In the Fantasy Caro-Kann, White plays the sharp move f3, and Black has a line where he goes the queen to b6, the knight to c3, and e5 — a reputable variation, though not that good for Black, because after d-takes-e5, the bishop to c5, there's the knight to a4; without that move the line would work like a charm. Notice how similar the idea is: e5 to weaken the a7-g1 diagonal. Same concept here — the queen to b6, e4, takes, takes, and e5.",
       "reanchor": true
     }
   ]

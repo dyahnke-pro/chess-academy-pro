@@ -28,7 +28,7 @@
     "Qxd5",
     "d4"
    ],
-   "spoken": "We capture on d5, the queen recaptures, and we play the pawn to d4, gaining the centre with tempo."
+   "spoken": "You capture on d5, the queen recaptures, and you play the pawn to d4, gaining the centre with tempo."
   },
   {
    "ply": 9,
@@ -38,7 +38,7 @@
     "Nf6",
     "Nf3"
    ],
-   "spoken": "Black develops the knight to f6, we play the knight to f3 — a famous, well-studied theoretical position."
+   "spoken": "Black develops the knight to f6, you play the knight to f3 — a famous, well-studied theoretical position."
   },
   {
    "ply": 10,
@@ -128,7 +128,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "We recapture with the knight on d4. Now the queen grabbing g2 allows the bishop to f3 with a massive initiative."
+   "spoken": "You recapture with the knight on d4. Now the queen grabbing g2 allows the bishop to f3 with a massive initiative."
   },
   {
    "ply": 19,
@@ -233,7 +233,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "After the capture on d4 we play the knight to b5, threatening the knight to c7.",
+   "spoken": "After the capture on d4 you play the knight to b5, threatening the knight to c7.",
    "reanchor": true
   },
   {
@@ -328,7 +328,7 @@
    "t": 1549.5,
    "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
    "line": [],
-   "spoken": "So the capture on d4, the knight to b5, and the knight to a6 is the main line, where White plays the queen or knight to take d4 and is solidly better. The authors give the bishop to e7, the bishop to e5 with check, the bishop to d7, and a tension-keeping queen to e2, leaving Black cramped with a vulnerable queen — once both sides castle, a rook to d1 causes real anguish. The bishop to d6 instead runs into the bishop to c4 with massively unpleasant consequences, and the king to d8 to defend c7 is a huge concession, at which point we just take on d4 and keep developing. After the bishop to c4 and the queen to e4 with check, the bishop to e3 is a beautiful theoretical move. The engine likes the queen to d4, but note a hidden winning move — not f4, which fails to the capture on d4, because you mustn't stop calculating just because you win a rook; instead the knight to f3 prevents the capture on d4, and Black must play a6, dropping a pawn into a technically winning endgame.",
+   "spoken": "So the capture on d4, the knight to b5, and the knight to a6 is the main line, where White plays the queen or knight to take d4 and is solidly better. The authors give the bishop to e7, the bishop to e5 with check, the bishop to d7, and a tension-keeping queen to e2, leaving Black cramped with a vulnerable queen — once both sides castle, a rook to d1 causes real anguish. The bishop to d6 instead runs into the bishop to c4 with massively unpleasant consequences, and the king to d8 to defend c7 is a huge concession, at which point you just take on d4 and keep developing. After the bishop to c4 and the queen to e4 with check, the bishop to e3 is a beautiful theoretical move. The engine likes the queen to d4, but note a hidden winning move — not f4, which fails to the capture on d4, because you mustn't stop calculating just because you win a rook; instead the knight to f3 prevents the capture on d4, and Black must play a6, dropping a pawn into a technically winning endgame.",
    "reanchor": true
   },
   {
@@ -396,7 +396,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Now the bishop to c4 — a move we didn't play in the game, but the position is different.",
+   "spoken": "Now the bishop to c4 — a move you didn't play in the game, but the position is different.",
    "reanchor": true
   },
   {
@@ -590,7 +590,7 @@
    "t": 1803,
    "fen": "rnb1k1nr/pp2ppbp/6p1/8/2Bpq3/N1P2N2/PP3PPP/R1BQK2R w KQkq - 2 8",
    "line": [],
-   "spoken": "The bishop to b3 is a known idea in that different position — but in our game the knight takes d6 just wins, no calculation needed. The bishop to d6 and the king to e7 were the decisive mistakes; Black is completely lost given the wretched king. Even against a Magnus-level defence with the queen to g6, the knight to f5 with check doesn't work, and the engine's brute-force route is the bishop back to d3 to unpin, then the check on f5 leads to spectacular mating lines with the pieces in perfect coordination. The human moves are the queen to b3 or f3, or a slow h3 — all keeping a huge advantage. And after the pawn to e5 and the bishop to g5, the game ends at once; after the queen to g6, the rook takes c5 with check, the king to f8, and the knight to e6 with check picks up the rook. You simply can't survive as Black without developing.",
+   "spoken": "The bishop to b3 is a known idea in that different position — but in your game the knight takes d6 just wins, no calculation needed. The bishop to d6 and the king to e7 were the decisive mistakes; Black is completely lost given the wretched king. Even against a Magnus-level defence with the queen to g6, the knight to f5 with check doesn't work, and the engine's brute-force route is the bishop back to d3 to unpin, then the check on f5 leads to spectacular mating lines with the pieces in perfect coordination. The human moves are the queen to b3 or f3, or a slow h3 — all keeping a huge advantage. And after the pawn to e5 and the bishop to g5, the game ends at once; after the queen to g6, the rook takes c5 with check, the king to f8, and the knight to e6 with check picks up the rook. You simply can't survive as Black without developing.",
    "reanchor": true
   },
   {

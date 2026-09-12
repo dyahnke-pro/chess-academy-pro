@@ -33,7 +33,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "React no differently than against the Vienna: since White didn't play the knight to f3, we don't need to start with the knight to c6 — we play the knight to f6, exploiting that."
+      "spoken": "React no differently than against the Vienna: since White didn't play the knight to f3, you don't need to start with the knight to c6 — you play the knight to f6, exploiting that."
     },
     {
       "ply": 5,
@@ -60,7 +60,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "After the knight to f3 we've transposed into an Italian; with the bishop to c5 it's a full Italian, or we can play the bishop to e7, slightly more passive."
+      "spoken": "After the knight to f3 you've transposed into an Italian; with the bishop to c5 it's a full Italian, or you can play the bishop to e7, slightly more passive."
     },
     {
       "ply": 8,
@@ -69,7 +69,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "I'll play the bishop to e7 — perfectly viable, and we're playing very solid; some practice in these dry positions."
+      "spoken": "I'll play the bishop to e7 — perfectly viable, and you're playing very solid; some practice in these dry positions."
     },
     {
       "ply": 9,
@@ -78,7 +78,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3. We can play d6 or castle — the order really doesn't matter."
+      "spoken": "The knight to c3. You can play d6 or castle — the order really doesn't matter."
     },
     {
       "ply": 10,
@@ -97,7 +97,7 @@
         "h3",
         "O-O"
       ],
-      "spoken": "h3, and we castle — the Hungarian Variation: quite passive but extremely solid, no weaknesses, relatively symmetrical."
+      "spoken": "h3, and you castle — the Hungarian Variation: quite passive but extremely solid, no weaknesses, relatively symmetrical."
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "White's bishops are marginally better placed, but we'll try to neutralize that. We have one undeveloped piece left — would the bishop to e6 be justified? Is that trade something to fear?"
+      "spoken": "White's bishops are marginally better placed, but you'll try to neutralize that. You have one undeveloped piece left — would the bishop to e6 be justified? Is that trade something to fear?"
     },
     {
       "ply": 14,
@@ -115,7 +115,7 @@
       "line": [
         "Be6"
       ],
-      "spoken": "In Italian positions, opening the f-file is generally good for the side that controls it, even at the cost of doubled pawns. So the bishop to e6 is rarely a move to refrain from over the bishop takes c6 — never dangerous; after the recapture our doubled e-pawns control important squares, and we get free f-file pressure. The other advantage: if White continues the standoff, we don't have to take on c4 —"
+      "spoken": "In Italian positions, opening the f-file is generally good for the side that controls it, even at the cost of doubled pawns. So the bishop to e6 is rarely a move to refrain from over the bishop takes c6 — never dangerous; after the recapture your doubled e-pawns control important squares, and you get free f-file pressure. The other advantage: if White continues the standoff, you don't have to take on c4 —"
     },
     {
       "ply": 15,
@@ -124,7 +124,7 @@
       "line": [
         "Bxe6"
       ],
-      "spoken": "— we can actually break through in the centre with d5, gaining space. A tough situation for White — and he takes."
+      "spoken": "— you can actually break through in the centre with d5, gaining space. A tough situation for White — and he takes."
     },
     {
       "ply": 16,
@@ -133,7 +133,7 @@
       "line": [
         "fxe6"
       ],
-      "spoken": "We take, and I already like Black's position here."
+      "spoken": "You take, and I already like Black's position here."
     },
     {
       "ply": 17,
@@ -142,7 +142,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "One comment: White isn't castled yet — we need to be prepared for castling in either direction. Many good approaches: the queen to e8, aiming for g6 if he castles short; or more ambitiously a6 to prepare a pawn storm if he castles queenside; and if he castles kingside, a6 is still a helpful move."
+      "spoken": "One comment: White isn't castled yet — you need to be prepared for castling in either direction. Many good approaches: the queen to e8, aiming for g6 if he castles short; or more ambitiously a6 to prepare a pawn storm if he castles queenside; and if he castles kingside, a6 is still a helpful move."
     },
     {
       "ply": 18,
@@ -151,7 +151,7 @@
       "line": [
         "a6"
       ],
-      "spoken": "d5 is probably what I'd play over the board, but for solid style, a6 — flexible, it doesn't hurt to control b5, and if he castles queenside we jump-start our pawn storm with b5. If he castles short, we'll have clear ways to pressure down the file."
+      "spoken": "d5 is probably what I'd play over the board, but for solid style, a6 — flexible, it doesn't hurt to control b5, and if he castles queenside you jump-start your pawn storm with b5. If he castles short, you'll have clear ways to pressure down the file."
     },
     {
       "ply": 19,
@@ -169,7 +169,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "After the knight takes g4 and the pawn recaptures, we open the h-file for him — not advisable, since he'll probably castle queenside. Much better to take the centre pawn: we open no avenues on his kingside. He takes, we take the knight on f3."
+      "spoken": "After the knight takes g4 and the pawn recaptures, you open the h-file for him — not advisable, since he'll probably castle queenside. Much better to take the centre pawn: you open no avenues on his kingside. He takes, you take the knight on f3."
     },
     {
       "ply": 22,
@@ -179,7 +179,7 @@
         "Nxe4",
         "Rxf3"
       ],
-      "spoken": "It's a good idea to make sure your rook doesn't get trapped on f3 — but with the whole f-file, we have nothing to fear, and we're up a pawn. After any pawn trade, ask how the position changed: with the e-pawn gone, the move d5 becomes much stronger."
+      "spoken": "It's a good idea to make sure your rook doesn't get trapped on f3 — but with the whole f-file, you have nothing to fear, and you're up a pawn. After any pawn trade, ask how the position changed: with the e-pawn gone, the move d5 becomes much stronger."
     },
     {
       "ply": 23,
@@ -188,7 +188,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "d5 looks extremely appealing — it sends the knight back, and then d4 might trap the bishop on e3; d5 is our default reaction. The bishop to g5 — d5 still looks great: he'll take the bishop, we recapture with the queen —"
+      "spoken": "d5 looks extremely appealing — it sends the knight back, and then d4 might trap the bishop on e3; d5 is your default reaction. The bishop to g5 — d5 still looks great: he'll take the bishop, you recapture with the queen —"
     },
     {
       "ply": 24,
@@ -197,7 +197,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "— chasing the knight out of the centre. I see no reason to refrain; takes, takes, then we bring the other rook to f8."
+      "spoken": "— chasing the knight out of the centre. I see no reason to refrain; takes, takes, then you bring the other rook to f8."
     },
     {
       "ply": 25,
@@ -215,7 +215,7 @@
       "line": [
         "Qxe7"
       ],
-      "spoken": "We take, obviously with the queen. This'll go the knight to g5, further exacerbating the situation."
+      "spoken": "You take, obviously with the queen. This'll go the knight to g5, further exacerbating the situation."
     },
     {
       "ply": 27,
@@ -233,7 +233,7 @@
       "line": [
         "Rf4"
       ],
-      "spoken": "— notice the queen defends the knight; our queen pressures it, and the rook to f4 slices off the connection — the knight is simply trapped. He's got to go h4, giving up another pawn, and White's position collapses."
+      "spoken": "— notice the queen defends the knight; your queen pressures it, and the rook to f4 slices off the connection — the knight is simply trapped. He's got to go h4, giving up another pawn, and White's position collapses."
     },
     {
       "ply": 29,
@@ -251,7 +251,7 @@
       "line": [
         "Raf8"
       ],
-      "spoken": "We also have a third approach — we don't have to touch any of that; play the knight to d4, or more incisive, the rook from a8 to f8. The knight to f4 isn't going anywhere."
+      "spoken": "You also have a third approach — you don't have to touch any of that; play the knight to d4, or more incisive, the rook from a8 to f8. The knight to f4 isn't going anywhere."
     },
     {
       "ply": 29,
@@ -268,7 +268,7 @@
       "line": [
         "Raf8"
       ],
-      "spoken": "Don't rush to bring our pieces to central squares; the rook to f8 creates a big threat of the rook takes f2, forcing him to commit further, then we decide.",
+      "spoken": "Don't rush to bring your pieces to central squares; the rook to f8 creates a big threat of the rook takes f2, forcing him to commit further, then you decide.",
       "reanchor": true
     },
     {
@@ -286,7 +286,7 @@
       "line": [
         "Raf8"
       ],
-      "spoken": "— often it's two or three valid alternatives, a matter of taste. Why is the rook to f8 a threat? It's not just two rooks for the queen — after the trades we win a bunch of pawns on top, and there's a fork: the queen to c5 with check —",
+      "spoken": "— often it's two or three valid alternatives, a matter of taste. Why is the rook to f8 a threat? It's not just two rooks for the queen — after the trades you win a bunch of pawns on top, and there's a fork: the queen to c5 with check —",
       "reanchor": true
     },
     {
@@ -296,7 +296,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "— then we take c2, a common queen fork at the end of a line, like a famous game. c4 does a whole lot of bad — first, it permanently weakens the d4-square —"
+      "spoken": "— then you take c2, a common queen fork at the end of a line, like a famous game. c4 does a whole lot of bad — first, it permanently weakens the d4-square —"
     },
     {
       "ply": 32,
@@ -305,7 +305,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "— so I love the idea of slamming the knight into d4. We can still play the rook takes f2, nothing wrong with that, but now we can squeeze a lot more by bringing our pieces to dominant squares; pawns don't go backwards, so he can never chase us from d4. We threaten h6 followed by the knight to f3 with a fork. The queen takes g5 is a decent winning endgame, but play to win economically — h6 chases the knight; don't be fancy just to force liquidation, find the most efficient win."
+      "spoken": "— so I love the idea of slamming the knight into d4. You can still play the rook takes f2, nothing wrong with that, but now you can squeeze a lot more by bringing your pieces to dominant squares; pawns don't go backwards, so he can never chase you from d4. You threaten h6 followed by the knight to f3 with a fork. The queen takes g5 is a decent winning endgame, but play to win economically — h6 chases the knight; don't be fancy just to force liquidation, find the most efficient win."
     },
     {
       "ply": 33,
@@ -314,7 +314,7 @@
       "line": [
         "Rh3"
       ],
-      "spoken": "If he castles, we take f2 with a devastating second-rank attack. I like that we still have a pawn on a6 from a past life. The rook to h3 doesn't substantively change anything —"
+      "spoken": "If he castles, you take f2 with a devastating second-rank attack. I like that you still have a pawn on a6 from a past life. The rook to h3 doesn't substantively change anything —"
     },
     {
       "ply": 34,
@@ -323,7 +323,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "— we can still go h6; in fact the knight is now simply trapped, which is kind of funny. This might be resigns."
+      "spoken": "— you can still go h6; in fact the knight is now simply trapped, which is kind of funny. This might be resigns."
     },
     {
       "ply": 35,
@@ -341,7 +341,7 @@
       "line": [
         "Qxe6"
       ],
-      "spoken": "We keep the knight on d4 and take with the queen. Resigning is a very good option here."
+      "spoken": "You keep the knight on d4 and take with the queen. Resigning is a very good option here."
     },
     {
       "ply": 37,
@@ -350,7 +350,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "He takes on d5. We can take g4 or take d5 — it absolutely doesn't matter, as long as we're taking something."
+      "spoken": "He takes on d5. You can take g4 or take d5 — it absolutely doesn't matter, as long as you're taking something."
     },
     {
       "ply": 38,
@@ -359,7 +359,7 @@
       "line": [
         "Qxg4"
       ],
-      "spoken": "Let's take g4 — that seems more incisive, hitting the rook, and if the rook to g3, we have a nice tactic to finish the game."
+      "spoken": "Let's take g4 — that seems more incisive, hitting the rook, and if the rook to g3, you have a nice tactic to finish the game."
     },
     {
       "ply": 39,
@@ -377,7 +377,7 @@
       "line": [
         "Qxg3"
       ],
-      "spoken": "— that's the second ingredient, with our doubled rooks and queen: the queen takes g3 ends the game, the rook to f1 being checkmate."
+      "spoken": "— that's the second ingredient, with your doubled rooks and queen: the queen takes g3 ends the game, the rook to f1 being checkmate."
     },
     {
       "ply": 41,
@@ -395,7 +395,7 @@
       "line": [
         "Qxf2"
       ],
-      "spoken": "The queen takes f2 — we could have taken the rook, but —"
+      "spoken": "The queen takes f2 — you could have taken the rook, but —"
     },
     {
       "ply": 44,

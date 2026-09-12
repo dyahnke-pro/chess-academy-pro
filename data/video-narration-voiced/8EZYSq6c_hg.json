@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We stay with the Sicilian.",
+   "spoken": "You stay with the Sicilian.",
    "kind": "main"
   },
   {
@@ -25,7 +25,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "White tries the bishop to c4, and its main flaw against the Sicilian is that e6 can blunt it entirely at any moment — we don't even have to hurry.",
+   "spoken": "White tries the bishop to c4, and its main flaw against the Sicilian is that e6 can blunt it entirely at any moment — you don't even have to hurry.",
    "kind": "main",
    "teaches": [
     "e6 blunts the c4 bishop"
@@ -38,7 +38,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the knight to c6 first; e6 stays in our pocket for later.",
+   "spoken": "You develop the knight to c6 first; e6 stays in your pocket for later.",
    "kind": "main"
   },
   {
@@ -49,7 +49,7 @@
     "Nc3",
     "Nf6"
    ],
-   "spoken": "We bring out this knight to f6 rather than the other — developing the far knight first could invite an annoying e5. No rush.",
+   "spoken": "You bring out this knight to f6 rather than the other — developing the far knight first could invite an annoying e5. No rush.",
    "kind": "main",
    "teaches": [
     "develop the right knight to deny e5"
@@ -104,7 +104,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Development doesn't have to be a volcano of activity — a plain, effective bishop to d7 is fine, and it stops White from taking on c6 and wrecking our structure.",
+   "spoken": "Development doesn't have to be a volcano of activity — a plain, effective bishop to d7 is fine, and it stops White from taking on c6 and wrecking your structure.",
    "kind": "main",
    "teaches": [
     "quiet development is still development"
@@ -126,7 +126,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "We recapture with the bishop to keep our pawns healthy.",
+   "spoken": "You recapture with the bishop to keep your pawns healthy.",
    "kind": "main"
   },
   {
@@ -207,7 +207,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "The pin with the bishop to b4 wins material — it attacks the c3-knight, which has only a pawn to defend it, and we can pile more pressure on with d-pawn support.",
+   "spoken": "The pin with the bishop to b4 wins material — it attacks the c3-knight, which has only a pawn to defend it, and you can pile more pressure on with d-pawn support.",
    "kind": "main",
    "teaches": [
     "pin and pile onto the undefended knight"
@@ -240,7 +240,7 @@
     "Ke2",
     "exd5"
    ],
-   "spoken": "With the king stuck on e2, we recapture and head straight for the finish.",
+   "spoken": "With the king stuck on e2, you recapture and head straight for the finish.",
    "kind": "main"
   },
   {
@@ -283,7 +283,7 @@
     "Kf1",
     "dxc4"
    ],
-   "spoken": "After the king shuffles we open every file and diagonal we can — the point of taking on c4 isn't to level the pawns, it's to tear more lines open.",
+   "spoken": "After the king shuffles you open every file and diagonal you can — the point of taking on c4 isn't to level the pawns, it's to tear more lines open.",
    "kind": "plan",
    "teaches": [
     "open lines, don’t count pawns, when attacking"
@@ -307,7 +307,7 @@
     "Rxd1",
     "Qe3"
    ],
-   "spoken": "We take the queen and infiltrate — simple, direct, and the rest is history.",
+   "spoken": "You take the queen and infiltrate — simple, direct, and the rest is history.",
    "kind": "main"
   }
  ]

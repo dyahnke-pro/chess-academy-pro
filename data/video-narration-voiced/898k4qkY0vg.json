@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We have Black against a strong opponent and play a very conceptual opening — the Caro-Kann, answering the king's-pawn with the pawn to c6."
+   "spoken": "You have Black against a strong opponent and play a very conceptual opening — the Caro-Kann, answering the king's-pawn with the pawn to c6."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "d4",
     "d5"
    ],
-   "spoken": "White plays the pawn to d4 and we meet it with d5."
+   "spoken": "White plays the pawn to d4 and you meet it with d5."
   },
   {
    "ply": 5,
@@ -43,7 +43,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "We recapture with the c-pawn — the Exchange Caro-Kann."
+   "spoken": "You recapture with the c-pawn — the Exchange Caro-Kann."
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So the soundest choice is the knight to f6 first, rather than the natural knight to c6 — and if White plays c3, we develop the bishop before it can be shut in."
+   "spoken": "So the soundest choice is the knight to f6 first, rather than the natural knight to c6 — and if White plays c3, you develop the bishop before it can be shut in."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "White plays the pawn to h3, restricting our bishop — so we revert to a different plan."
+   "spoken": "White plays the pawn to h3, restricting your bishop — so you revert to a different plan."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop the other knight to c6. And if White plays c3, we have an interesting line that gives Black a very active game."
+   "spoken": "You develop the other knight to c6. And if White plays c3, you have an interesting line that gives Black a very active game."
   },
   {
    "ply": 11,
@@ -97,7 +97,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 — this is real theory, not spitballing. It most likely leads to an isolated queen's pawn structure for us on d5."
+   "spoken": "The pawn to e5 — this is real theory, not spitballing. It most likely leads to an isolated queen's pawn structure for you on d5."
   },
   {
    "ply": 13,
@@ -106,7 +106,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "White captures on e5, and we get the IQP structure — a good chance to talk about handling the isolated queen's pawn."
+   "spoken": "White captures on e5, and you get the IQP structure — a good chance to talk about handling the isolated queen's pawn."
   },
   {
    "ply": 14,
@@ -115,7 +115,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We recapture with the knight on e5."
+   "spoken": "You recapture with the knight on e5."
   },
   {
    "ply": 15,
@@ -124,7 +124,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White plays the knight to f3 — the best line. Now we decide what to capture."
+   "spoken": "White plays the knight to f3 — the best line. Now you decide what to capture."
   },
   {
    "ply": 16,
@@ -133,7 +133,7 @@
    "line": [
     "Nxd3+"
    ],
-   "spoken": "The plan, step by step. The bishop pair is worth keeping active, so we take the light-squared bishop — the knight takes d3 with check, and the queen recaptures. Now the dark-squared bishop: e7 is too passive and c5 runs into the check on b5 that provokes the awkward knight to d7, so the right square is d6 — safe and eyeing the kingside. In an IQP position, whoever controls the square in front of the isolated pawn is better, and that's White on d4 — but our compensation is the bishop pair in an open position with fine coordination. If White plays the bishop to g5, we answer the pawn to h6, sacrificing the IQP for an open game and the two bishops. After the trade on f6 we recapture toward the centre — never with the g-pawn, which would wreck our structure. Then the rook swings to d8, an x-ray on the queen forcing it off the centre, and since White's queenside is undeveloped we pour on the initiative: the bishop to f5, ignoring the b7-pawn, chasing the queen around — the queen has almost no squares, and there's a recurring bishop-h2 back-rank motif because we still control the luft square even after White's h3. The deepest idea is the bishop to c2 setting up the retreat bishop to d6 to trap the queen. When we finally win the extra piece, we convert cleanly: simplify with a rook trade, force the queens off with the queen to e6 while keeping the bishop attacking the knight, then the deep freeze — the pawn to b5 to freeze White's queenside pawns so the dark-squared bishop can pick them off, trade the light bishop for the knight, and mop up.",
+   "spoken": "The plan, step by step. The bishop pair is worth keeping active, so you take the light-squared bishop — the knight takes d3 with check, and the queen recaptures. Now the dark-squared bishop: e7 is too passive and c5 runs into the check on b5 that provokes the awkward knight to d7, so the right square is d6 — safe and eyeing the kingside. In an IQP position, whoever controls the square in front of the isolated pawn is better, and that's White on d4 — but your compensation is the bishop pair in an open position with fine coordination. If White plays the bishop to g5, you answer the pawn to h6, sacrificing the IQP for an open game and the two bishops. After the trade on f6 you recapture toward the centre — never with the g-pawn, which would wreck your structure. Then the rook swings to d8, an x-ray on the queen forcing it off the centre, and since White's queenside is undeveloped you pour on the initiative: the bishop to f5, ignoring the b7-pawn, chasing the queen around — the queen has almost no squares, and there's a recurring bishop-h2 back-rank motif because you still control the luft square even after White's h3. The deepest idea is the bishop to c2 setting up the retreat bishop to d6 to trap the queen. When you finally win the extra piece, you convert cleanly: simplify with a rook trade, force the queens off with the queen to e6 while keeping the bishop attacking the knight, then the deep freeze — the pawn to b5 to freeze White's queenside pawns so the dark-squared bishop can pick them off, trade the light bishop for the knight, and mop up.",
    "reanchor": true
   },
   {
@@ -346,7 +346,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "After c3 and the bishop to g4, we reach a position hugely popular among 2700-plus grandmasters lately — genuinely topical theory. White generally answers with the queen to b3, a move to always watch for once the bishop leaves c8, hitting b7 and d5.",
+   "spoken": "After c3 and the bishop to g4, you reach a position hugely popular among 2700-plus grandmasters lately — genuinely topical theory. White generally answers with the queen to b3, a move to always watch for once the bishop leaves c8, hitting b7 and d5.",
    "reanchor": true
   },
   {
@@ -480,7 +480,7 @@
     "Bxf5",
     "gxf5"
    ],
-   "spoken": "Allowing White to double our pawns looks terrible, but it's interesting: those pawns create a stronghold for a knight on e4, and the open g-file often favours Black — a double-edged position.",
+   "spoken": "Allowing White to double your pawns looks terrible, but it's interesting: those pawns create a stronghold for a knight on e4, and the open g-file often favours Black — a double-edged position.",
    "reanchor": true
   },
   {

@@ -126,7 +126,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We retreat the knight — any square is fine, and f3 is its natural home.",
+   "spoken": "You retreat the knight — any square is fine, and f3 is its natural home.",
    "kind": "main"
   },
   {
@@ -145,7 +145,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "Now the plan crystallizes: to install a knight on d5 we first remove its defender — the bishop to g5, pressuring the knight on f6.",
+   "spoken": "Now the plan crystallizes: to install a knight on d5 you first remove its defender — the bishop to g5, pressuring the knight on f6.",
    "kind": "plan",
    "teaches": [
     "eliminate the outpost’s defender first"
@@ -167,7 +167,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "We take the knight, freeing the outpost.",
+   "spoken": "You take the knight, freeing the outpost.",
    "kind": "main"
   },
   {

@@ -70,7 +70,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "Think about what f5 costs Black: it weakens the a2-g8 diagonal and makes castling awkward — if we react correctly.",
+   "spoken": "Think about what f5 costs Black: it weakens the a2-g8 diagonal and makes castling awkward — if you react correctly.",
    "kind": "main",
    "teaches": "The Dutch f5 concedes the a2-g8 diagonal; punish it before Black consolidates."
   },
@@ -81,7 +81,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "So we break our own routine: Bc4 instead of the usual Bd3 or Be2. This is a schematic opening, but when the opponent deviates you must think outside the setup — Bc4 seizes the diagonal f5 just weakened and slows his castling.",
+   "spoken": "So you break your own routine: Bc4 instead of the usual Bd3 or Be2. This is a schematic opening, but when the opponent deviates you must think outside the setup — Bc4 seizes the diagonal f5 just weakened and slows his castling.",
    "kind": "main",
    "teaches": "In a system opening, abandon the automatic move when the opponent's play demands a concrete reaction."
   },
@@ -110,7 +110,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "He struggles to play e6, and we keep the Ng5 jump in our pocket — but don't rush it, just finish developing patiently.",
+   "spoken": "He struggles to play e6, and you keep the Ng5 jump in your pocket — but don't rush it, just finish developing patiently.",
    "kind": "main",
    "teaches": "Bank a strong idea for later; complete development before cashing it in."
   },
@@ -150,7 +150,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Now expand on the queenside with c4. Yes, it blunts our own bishop for the moment — but the plan is a later c5, which reopens the diagonal and cranks up the queenside pressure.",
+   "spoken": "Now expand on the queenside with c4. Yes, it blunts your own bishop for the moment — but the plan is a later c5, which reopens the diagonal and cranks up the queenside pressure.",
    "kind": "main",
    "teaches": "Temporarily blocking your own bishop is fine when a later break reopens it with interest."
   },
@@ -170,7 +170,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Nc3 develops and points us toward the c5 or e4 break — either one gets at the e6-pawn.",
+   "spoken": "Nc3 develops and points you toward the c5 or e4 break — either one gets at the e6-pawn.",
    "kind": "plan",
    "plans": "Prepare c5 or e4 to open lines against e6."
   },
@@ -252,7 +252,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "c5 breaks through. Don't fear him carving out d5 — the square is firmly held by our bishop and knight, so a knight can't settle there.",
+   "spoken": "c5 breaks through. Don't fear him carving out d5 — the square is firmly held by your bishop and knight, so a knight can't settle there.",
    "kind": "main",
    "teaches": "A pawn break is safe to make when your pieces already blanket the hole it concedes."
   },
@@ -272,7 +272,7 @@
    "line": [
     "Bxe6+"
    ],
-   "spoken": "And there's the payoff of reopening the diagonal: Bxe6-check slices straight through, and we simply help ourselves to the free pawns.",
+   "spoken": "And there's the payoff of reopening the diagonal: Bxe6-check slices straight through, and you simply help yourself to the free pawns.",
    "kind": "main",
    "teaches": "The point of opening a bishop's diagonal is the sacrifice-free tactic waiting at the end of it."
   },

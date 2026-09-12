@@ -62,7 +62,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Black wants Bb4, so we neutralize it with Bd3 rather than committing a3.",
+   "spoken": "Black wants Bb4, so you neutralize it with Bd3 rather than committing a3.",
    "kind": "main"
   },
   {
@@ -73,7 +73,7 @@
     "Bb4",
     "Ne2"
    ],
-   "spoken": "Ne2 is the key — the g1-knight goes to e2 so that after a3 and Bxc3, we recapture with the other knight, keeping our pawn structure whole and the e4-pawn firmly defended.",
+   "spoken": "Ne2 is the key — the g1-knight goes to e2 so that after a3 and Bxc3, you recapture with the other knight, keeping your pawn structure whole and the e4-pawn firmly defended.",
    "kind": "main",
    "teaches": "Reroute so a knight can recapture on c3, avoiding doubled pawns and keeping e4 solid."
   },
@@ -112,7 +112,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "After the trades we own the two bishops and stand solidly better; castling is simplest, but Bg5 is the more ambitious, annoying try.",
+   "spoken": "After the trades you own the two bishops and stand solidly better; castling is simplest, but Bg5 is the more ambitious, annoying try.",
    "kind": "main"
   },
   {

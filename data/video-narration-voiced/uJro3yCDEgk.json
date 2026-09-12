@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We know we're facing the Sicilian — c5."
+   "spoken": "You know you're facing the Sicilian — c5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We play c3 — the Alapin, which I recommend to every beginner; it's positionally very healthy."
+   "spoken": "You play c3 — the Alapin, which I recommend to every beginner; it's positionally very healthy."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We play d4."
+   "spoken": "You play d4."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We go the traditional Alapin way and capture on d5, letting Black choose how to recapture."
+   "spoken": "You go the traditional Alapin way and capture on d5, letting Black choose how to recapture."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "Black recaptures with the pawn — this heads toward an isolated-queen's-pawn structure, since we'll eventually take on c5 and leave Black an isolated d5 pawn. No rush to take c5 yet — develop first."
+   "spoken": "Black recaptures with the pawn — this heads toward an isolated-queen's-pawn structure, since you'll eventually take on c5 and leave Black an isolated d5 pawn. No rush to take c5 yet — develop first."
   },
   {
    "ply": 9,
@@ -136,7 +136,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": "We trade on d7, then castle."
+   "spoken": "You trade on d7, then castle."
   },
   {
    "ply": 19,
@@ -146,7 +146,7 @@
     "Nbxd7",
     "O-O"
    ],
-   "spoken": "Black recaptures and we castle — the main line; White is slightly better, a chance to show fundamentals.",
+   "spoken": "Black recaptures and you castle — the main line; White is slightly better, a chance to show fundamentals.",
    "reanchor": true
   },
   {
@@ -156,7 +156,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black plays a bishop to e7. He's positioned the knight so that after a capture on c5 he can retake with the knight — but we still want the IQP, even without winning the tempo."
+   "spoken": "Black plays a bishop to e7. He's positioned the knight so that after a capture on c5 he can retake with the knight — but you still want the IQP, even without winning the tempo."
   },
   {
    "ply": 21,
@@ -165,7 +165,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "We capture on c5.",
+   "spoken": "You capture on c5.",
    "reanchor": true
   },
   {
@@ -203,7 +203,7 @@
    "line": [
     "Re1+"
    ],
-   "spoken": "A rook check on e1. If a knight to e4, Black loses contact with the d5 pawn and we play a queen capture on d5 — after a bishop capture on f2 with check, keep calculating.",
+   "spoken": "A rook check on e1. If a knight to e4, Black loses contact with the d5 pawn and you play a queen capture on d5 — after a bishop capture on f2 with check, keep calculating.",
    "reanchor": true
   },
   {
@@ -213,7 +213,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "So a knight to e4, a queen capture on d5, a bishop capture on f2 with check — but we move the king to f1, Black takes the rook, and we assess.",
+   "spoken": "So a knight to e4, a queen capture on d5, a bishop capture on f2 with check — but you move the king to f1, Black takes the rook, and you assess.",
    "reanchor": true
   },
   {
@@ -234,7 +234,7 @@
    "line": [
     "Kf1"
    ],
-   "spoken": "The king steps to f1 — very good for us.",
+   "spoken": "The king steps to f1 — very good for you.",
    "reanchor": true
   },
   {
@@ -245,7 +245,7 @@
     "Bxe1",
     "Qxe4+"
    ],
-   "spoken": "Black takes on e1 and we play a queen capture on e4 with check — then trade queens and pick up the bishop, two pieces for a rook.",
+   "spoken": "Black takes on e1 and you play a queen capture on e4 with check — then trade queens and pick up the bishop, two pieces for a rook.",
    "reanchor": true
   },
   {
@@ -265,7 +265,7 @@
    "line": [
     "Qxe7+"
    ],
-   "spoken": "We take the queen.",
+   "spoken": "You take the queen.",
    "reanchor": true
   },
   {
@@ -276,7 +276,7 @@
     "Kxe7",
     "Kxe1"
    ],
-   "spoken": "Black recaptures and we take the bishop with the king. Our knight is perfectly placed on f3, and we have two pieces for a rook — a material advantage we should convert.",
+   "spoken": "Black recaptures and you take the bishop with the king. Your knight is perfectly placed on f3, and you have two pieces for a rook — a material advantage you should convert.",
    "reanchor": true
   },
   {
@@ -296,7 +296,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "A bishop to e3, preventing a knight to c5 — and I'm not worried about the pin, because if the king moves we answer king to f2, getting out and defending the bishop. Concrete calculation supersedes a vague worry about a temporary pin."
+   "spoken": "A bishop to e3, preventing a knight to c5 — and I'm not worried about the pin, because if the king moves you answer king to f2, getting out and defending the bishop. Concrete calculation supersedes a vague worry about a temporary pin."
   },
   {
    "ply": 37,
@@ -306,7 +306,7 @@
     "Kf8",
     "Kf2"
    ],
-   "spoken": "The plan: king to f2, a knight to d2, then a knight to c4, and bring the rook in — once all our pieces are active, Black struggles to hold.",
+   "spoken": "The plan: king to f2, a knight to d2, then a knight to c4, and bring the rook in — once all your pieces are active, Black struggles to hold.",
    "reanchor": true
   },
   {
@@ -326,7 +326,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We trade. The key rule for two-pieces-versus-a-rook: the extra pair of rooks favors the side with the pieces.",
+   "spoken": "You trade. The key rule for two-pieces-versus-a-rook: the extra pair of rooks favors the side with the pieces.",
    "reanchor": true
   },
   {
@@ -336,7 +336,7 @@
    "line": [
     "Rxe5"
    ],
-   "spoken": "We recapture on e5. The rooks let us keep the minors anchored, defending against side-to-side rook moves.",
+   "spoken": "You recapture on e5. The rooks let you keep the minors anchored, defending against side-to-side rook moves.",
    "reanchor": true
   },
   {
@@ -346,7 +346,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "We develop the knight to d2.",
+   "spoken": "You develop the knight to d2.",
    "reanchor": true
   },
   {
@@ -356,7 +356,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": "Black plays a rook to e8. We can't move the bishop because of a rook to e2 — so a knight to c4 is the aim.",
+   "spoken": "Black plays a rook to e8. You can't move the bishop because of a rook to e2 — so a knight to c4 is the aim.",
    "reanchor": true
   },
   {
@@ -386,7 +386,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "But a knight to f3 comes with tempo, so we don't worry about f4.",
+   "spoken": "But a knight to f3 comes with tempo, so you don't worry about f4.",
    "reanchor": true
   },
   {
@@ -415,7 +415,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Black plays b6 — the rook is almost trapped; if our pawn were on a3 we'd play c4. I have a clever move: a4 would trap the rook if not for a rook to d5.",
+   "spoken": "Black plays b6 — the rook is almost trapped; if your pawn were on a3 you'd play c4. I have a clever move: a4 would trap the rook if not for a rook to d5.",
    "reanchor": true
   },
   {
@@ -445,7 +445,7 @@
    "line": [
     "Bxf4"
    ],
-   "spoken": "We take on f4 — another pawn to the good, ready to infiltrate with a rook to d7.",
+   "spoken": "You take on f4 — another pawn to the good, ready to infiltrate with a rook to d7.",
    "reanchor": true
   },
   {
@@ -483,7 +483,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "I like g3 — it solidifies the bishop and defends against g5; if h6, we play h4, the typical sequence.",
+   "spoken": "I like g3 — it solidifies the bishop and defends against g5; if h6, you play h4, the typical sequence.",
    "reanchor": true
   },
   {
@@ -493,7 +493,7 @@
    "line": [
     "Rf7"
    ],
-   "spoken": "Now down to business: we have a queenside pawn majority, so the fastest win is to create a passed pawn and promote it.",
+   "spoken": "Now down to business: you have a queenside pawn majority, so the fastest win is to create a passed pawn and promote it.",
    "reanchor": true
   },
   {
@@ -503,7 +503,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Not a4 — that lets Black ignore us. We play c4, and Black can't stop c5."
+   "spoken": "Not a4 — that lets Black ignore you. You play c4, and Black can't stop c5."
   },
   {
    "ply": 54,
@@ -539,7 +539,7 @@
     "c4",
     "Rc8"
    ],
-   "spoken": "We want to push the pawn — and find the move with a bit of tactics, not assuming anything automatically.",
+   "spoken": "You want to push the pawn — and find the move with a bit of tactics, not assuming anything automatically.",
    "reanchor": true
   },
   {
@@ -549,7 +549,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Using a little tactics — c5 is possible, because after Black takes we have a bishop to d6 with a fork, classic stuff with such an active bishop.",
+   "spoken": "Using a little tactics — c5 is possible, because after Black takes you have a bishop to d6 with a fork, classic stuff with such an active bishop.",
    "reanchor": true
   },
   {
@@ -580,7 +580,7 @@
     "bxc5",
     "bxc5"
    ],
-   "spoken": "The b-pawns come off and we recapture with the pawn — I like a knight to d4 followed by c6.",
+   "spoken": "The b-pawns come off and you recapture with the pawn — I like a knight to d4 followed by c6.",
    "reanchor": true
   },
   {
@@ -590,7 +590,7 @@
    "line": [
     "Rb7"
    ],
-   "spoken": "Black plays a rook to b7, defending well, but we grind him down. In these endgames you must be ready to give away a couple of pawns to promote your passer.",
+   "spoken": "Black plays a rook to b7, defending well, but you grind him down. In these endgames you must be ready to give away a couple of pawns to promote your passer.",
    "reanchor": true
   },
   {
@@ -600,7 +600,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "c6 — after a rook takes on c6, we have a rook to d8 with check driving the king out, then a knight to e5 picks up the rook, so it's safe. Black can grab a2, but our pawn is essentially home free.",
+   "spoken": "c6 — after a rook takes on c6, you have a rook to d8 with check driving the king out, then a knight to e5 picks up the rook, so it's safe. Black can grab a2, but your pawn is essentially home free.",
    "reanchor": true
   },
   {
@@ -639,7 +639,7 @@
     "Ke3",
     "Rc2"
    ],
-   "spoken": "The rook to c2 locks our king on the first rank and threatens a ladder mate — which I don't want; so we push the pawn to c7.",
+   "spoken": "The rook to c2 locks your king on the first rank and threatens a ladder mate — which I don't want; so you push the pawn to c7.",
    "reanchor": true
   },
   {
@@ -676,7 +676,7 @@
    "t": 1056,
    "fen": "2r5/p1P2kpp/8/3R4/5B2/4KNP1/P1r4P/8 w - - 1 35",
    "line": [],
-   "spoken": "We could have finessed with a rook check on d7 and rerouted the knight.",
+   "spoken": "You could have finessed with a rook check on d7 and rerouted the knight.",
    "reanchor": true
   },
   {
@@ -686,7 +686,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "But we know we win a full piece, so let's just go for it.",
+   "spoken": "But you know you win a full piece, so let's just go for it.",
    "reanchor": true
   },
   {

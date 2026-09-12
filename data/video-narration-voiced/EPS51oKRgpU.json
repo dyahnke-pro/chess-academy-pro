@@ -15,7 +15,7 @@
         "e4",
         "c6"
       ],
-      "spoken": "We're facing the Caro-Kann. e4, c6."
+      "spoken": "You're facing the Caro-Kann. e4, c6."
     },
     {
       "ply": 3,
@@ -76,7 +76,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The way to respond is just to develop our pieces. The knight to c3."
+      "spoken": "The way to respond is just to develop your pieces. The knight to c3."
     },
     {
       "ply": 6,
@@ -112,7 +112,7 @@
       "line": [
         "h3"
       ],
-      "spoken": "h3, just to have the ability to push g4 if we want to."
+      "spoken": "h3, just to have the ability to push g4 if you want to."
     },
     {
       "ply": 10,
@@ -121,7 +121,7 @@
       "line": [
         "Bh5"
       ],
-      "spoken": "The bishop to h5. The big decision is which side we're going to castle to."
+      "spoken": "The bishop to h5. The big decision is which side you're going to castle to."
     },
     {
       "ply": 11,
@@ -130,7 +130,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "It's tempting to castle queenside, but I'd like to play a little more quietly this game, so we start with the bishop to e2, getting rid of the pin,"
+      "spoken": "It's tempting to castle queenside, but I'd like to play a little more quietly this game, so you start with the bishop to e2, getting rid of the pin,"
     },
     {
       "ply": 12,
@@ -139,7 +139,7 @@
       "line": [
         "Nd7"
       ],
-      "spoken": "the knight to d7 — and we just play quietly with short castling."
+      "spoken": "the knight to d7 — and you just play quietly with short castling."
     },
     {
       "ply": 13,
@@ -157,7 +157,7 @@
       "line": [
         "Qc7"
       ],
-      "spoken": "The queen to c7 — Black continues to develop decently, but of course we have a nice advantage with our centre."
+      "spoken": "The queen to c7 — Black continues to develop decently, but of course you have a nice advantage with your centre."
     },
     {
       "ply": 15,
@@ -175,7 +175,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "h6. Because there's no direct confrontation between the two armies, we shouldn't try to punish Black immediately — this is how these systems often succeed: you get over-excited, play something rash like e5, and end up blundering"
+      "spoken": "h6. Because there's no direct confrontation between the two armies, you shouldn't try to punish Black immediately — this is how these systems often succeed: you get over-excited, play something rash like e5, and end up blundering"
     },
     {
       "ply": 17,
@@ -184,7 +184,7 @@
       "line": [
         "a4"
       ],
-      "spoken": "all of your pieces. So the way we handle this is to make incremental gains, hoping they transform into something more tangible. One easy thing: push a4, grabbing queenside space and preventing Black from expanding with b5."
+      "spoken": "all of your pieces. So the way you handle this is to make incremental gains, hoping they transform into something more tangible. One easy thing: push a4, grabbing queenside space and preventing Black from expanding with b5."
     },
     {
       "ply": 18,
@@ -193,7 +193,7 @@
       "line": [
         "g5"
       ],
-      "spoken": "Not that b5 is scary, but it's a good bonus; and if we drive the pawn up to a5, the b7-pawn becomes backward. But before that, I'd like to address —"
+      "spoken": "Not that b5 is scary, but it's a good bonus; and if you drive the pawn up to a5, the b7-pawn becomes backward. But before that, I'd like to address —"
     },
     {
       "ply": 19,
@@ -202,7 +202,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "actually, no, there's nothing to address, because if Black pushes g4 — it looks scary, like we're opening our king, but we simply respond by moving the knight",
+      "spoken": "actually, no, there's nothing to address, because if Black pushes g4 — it looks scary, like you're opening your king, but you simply respond by moving the knight",
       "reanchor": true
     },
     {
@@ -239,7 +239,7 @@
       "line": [
         "Ne6"
       ],
-      "spoken": "the knight to e6, and now we"
+      "spoken": "the knight to e6, and now you"
     },
     {
       "ply": 24,
@@ -257,7 +257,7 @@
       "line": [
         "Nxc7+"
       ],
-      "spoken": "we take the queen with check"
+      "spoken": "you take the queen with check"
     },
     {
       "ply": 26,
@@ -266,7 +266,7 @@
       "line": [
         "Kd8"
       ],
-      "spoken": "and win the rook in the corner. Incidentally, we could also drop back to e6 — not a bad move — picking up the bishop with total domination; I'm very tempted,"
+      "spoken": "and win the rook in the corner. Incidentally, you could also drop back to e6 — not a bad move — picking up the bishop with total domination; I'm very tempted,"
     },
     {
       "ply": 27,
@@ -293,7 +293,7 @@
       "line": [
         "Rfxd1"
       ],
-      "spoken": "in a classical game — we take with this rook, because I see a very nice prospect for the other rook."
+      "spoken": "in a classical game — you take with this rook, because I see a very nice prospect for the other rook."
     },
     {
       "ply": 30,
@@ -320,7 +320,7 @@
       "line": [
         "Kf7"
       ],
-      "spoken": "Black can go the king to f7, but now we"
+      "spoken": "Black can go the king to f7, but now you"
     },
     {
       "ply": 33,
@@ -329,7 +329,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "can keep the knight in place with d5 — we do not want to remove this knight, because it would give Black breathing room."
+      "spoken": "can keep the knight in place with d5 — you do not want to remove this knight, because it would give Black breathing room."
     },
     {
       "ply": 34,
@@ -338,7 +338,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "c5. Now we complete our idea with"
+      "spoken": "c5. Now you complete your idea with"
     },
     {
       "ply": 35,
@@ -356,7 +356,7 @@
       "line": [
         "Rb8"
       ],
-      "spoken": "And now, if we're so inclined, there's another tactic with the rook takes b7 and the knight to d8 — but that would involve moving the knight from its dominant post, and there's no rush; Black"
+      "spoken": "And now, if you're so inclined, there's another tactic with the rook takes b7 and the knight to d8 — but that would involve moving the knight from its dominant post, and there's no rush; Black"
     },
     {
       "ply": 37,
@@ -365,7 +365,7 @@
       "line": [
         "Na4"
       ],
-      "spoken": "is paralysed, we have all the time in the world. How do we improve? Through slow but very decisive queenside expansion."
+      "spoken": "is paralysed, you have all the time in the world. How do you improve? Through slow but very decisive queenside expansion."
     },
     {
       "ply": 38,
@@ -374,7 +374,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "We start by trading off Black's only developed piece, the knight on d7, by"
+      "spoken": "You start by trading off Black's only developed piece, the knight on d7, by"
     },
     {
       "ply": 39,
@@ -383,7 +383,7 @@
       "line": [
         "Nb6"
       ],
-      "spoken": "manoeuvring our knight to b6 — and as a nice bonus this also lets us establish a very powerful rook later on b6,"
+      "spoken": "manoeuvring your knight to b6 — and as a nice bonus this also lets you establish a very powerful rook later on b6,"
     },
     {
       "ply": 41,
@@ -402,7 +402,7 @@
       "line": [
         "Bh6"
       ],
-      "spoken": "the bishop to h6, we're going to respond by"
+      "spoken": "the bishop to h6, you're going to respond by"
     },
     {
       "ply": 43,
@@ -420,7 +420,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "A high-rated player would play f5 here, but that's a pretty advanced move; you see our opponent is just stagnating."
+      "spoken": "A high-rated player would play f5 here, but that's a pretty advanced move; you see your opponent is just stagnating."
     },
     {
       "ply": 45,
@@ -438,7 +438,7 @@
       "line": [
         "f5"
       ],
-      "spoken": "pawn on b7. Are we worried about c4? No, because we can just play the rook to c3."
+      "spoken": "pawn on b7. Are you worried about c4? No, because you can just play the rook to c3."
     },
     {
       "ply": 47,
@@ -467,7 +467,7 @@
         "Nd7",
         "Rbb3"
       ],
-      "spoken": "with our plan. I played a little inaccurately, allowing the knight to d7, and our opponent finds it — but we're up two pawns, and now we have a massive"
+      "spoken": "with your plan. I played a little inaccurately, allowing the knight to d7, and your opponent finds it — but you're up two pawns, and now you have a massive"
     },
     {
       "ply": 53,
@@ -477,7 +477,7 @@
         "Bf6",
         "g4"
       ],
-      "spoken": "kingside pawn majority we could push with g4 — let's go for it. Now we're playing on the kingside too, and note that"
+      "spoken": "kingside pawn majority you could push with g4 — let's go for it. Now you're playing on the kingside too, and note that"
     },
     {
       "ply": 54,
@@ -486,7 +486,7 @@
       "line": [
         "b6"
       ],
-      "spoken": "Black's rook is tied down to the file, so we can push"
+      "spoken": "Black's rook is tied down to the file, so you can push"
     },
     {
       "ply": 55,
@@ -504,7 +504,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "Now we're going to go the bishop"
+      "spoken": "Now you're going to go the bishop"
     },
     {
       "ply": 57,
@@ -522,7 +522,7 @@
       "line": [
         "b5"
       ],
-      "spoken": "but we are winning."
+      "spoken": "but you are winning."
     },
     {
       "ply": 59,
@@ -531,7 +531,7 @@
       "line": [
         "g6+"
       ],
-      "spoken": "We can push g — oh, that was another bad move, sorry; I'm suddenly making some mistakes here,"
+      "spoken": "You can push g — oh, that was another bad move, sorry; I'm suddenly making some mistakes here,"
     },
     {
       "ply": 60,
@@ -540,7 +540,7 @@
       "line": [
         "Kg8"
       ],
-      "spoken": "but we're going to"
+      "spoken": "but you're going to"
     },
     {
       "ply": 61,
@@ -613,7 +613,7 @@
       "line": [
         "Bc3"
       ],
-      "spoken": "knight; now we're going to go the rook to e3,"
+      "spoken": "knight; now you're going to go the rook to e3,"
     },
     {
       "ply": 73,
@@ -625,7 +625,7 @@
         "exf6",
         "Rbe3"
       ],
-      "spoken": "forcing either an undesirable rook trade or allowing us to infiltrate with the rook to e7."
+      "spoken": "forcing either an undesirable rook trade or allowing you to infiltrate with the rook to e7."
     },
     {
       "ply": 75,
@@ -635,7 +635,7 @@
         "Rxe6",
         "dxe6"
       ],
-      "spoken": "Now we take with a pawn in order to be able to play e7. Too many passed pawns — we have three; what we ultimately do is promote one to deflect the rook, then promote the other."
+      "spoken": "Now you take with a pawn in order to be able to play e7. Too many passed pawns — you have three; what you ultimately do is promote one to deflect the rook, then promote the other."
     },
     {
       "ply": 25,
@@ -679,7 +679,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "but a lot of people like to play these weird openings where you push out a bunch of pawns. The first thing you should notice is that I didn't try to punish this on move six with some crazy pawn storm or a central break. Some openings should be punished on move six — if your opponent is playing f6 and the king to f7, that's a different story — but nothing Black did was bad enough that you're somehow winning and should try to end the game in the opening. First we developed our pieces modestly — h3, the bishop to e2, the knight to d7 — we castled kingside, Black played the queen to c7, we completed our development, and then simply a4, methodically improving and preparing to drive the pawn up to a5. If Black had played a5 himself, maybe we'd start playing more in the centre with d5 — the power of d5 is that if Black pushes c5, it gives up a massive outpost for the knight, and the knight on f3 can then sink in."
+      "spoken": "but a lot of people like to play these weird openings where you push out a bunch of pawns. The first thing you should notice is that I didn't try to punish this on move six with some crazy pawn storm or a central break. Some openings should be punished on move six — if your opponent is playing f6 and the king to f7, that's a different story — but nothing Black did was bad enough that you're somehow winning and should try to end the game in the opening. First you developed your pieces modestly — h3, the bishop to e2, the knight to d7 — you castled kingside, Black played the queen to c7, you completed your development, and then simply a4, methodically improving and preparing to drive the pawn up to a5. If Black had played a5 himself, maybe you'd start playing more in the centre with d5 — the power of d5 is that if Black pushes c5, it gives up a massive outpost for the knight, and the knight on f3 can then sink in."
     }
   ]
 }

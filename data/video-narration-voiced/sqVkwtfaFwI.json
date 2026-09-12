@@ -34,7 +34,7 @@
     "cxd4",
     "c3"
    ],
-   "spoken": "The Smith-Morra — we offer the c-pawn to rip the centre open.",
+   "spoken": "The Smith-Morra — you offer the c-pawn to rip the centre open.",
    "kind": "main",
    "teaches": [
     "the Smith-Morra Gambit"
@@ -144,7 +144,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We retreat the bishop to b3 and reach the edge of theory — from here we're on our own. The core idea to hold in mind is the knight sacrifice on d5, shoving it into the centre to blow up the e6-pawn and open the e-file.",
+   "spoken": "You retreat the bishop to b3 and reach the edge of theory — from here you're on your own. The core idea to hold in mind is the knight sacrifice on d5, shoving it into the centre to blow up the e6-pawn and open the e-file.",
    "kind": "plan",
    "teaches": [
     "the Nd5 sacrifice idea"
@@ -166,7 +166,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "With Black's whole kingside undeveloped, this is the moment for the knight to d5 — and we can play it almost without calculation, because if it's taken we get tremendous play down the e-file. Some sacrifices are so typical you can trust them intuitively. The knight disrupts his coordination, and a bishop to e3 and b6 even sets up a fork on c7.",
+   "spoken": "With Black's whole kingside undeveloped, this is the moment for the knight to d5 — and you can play it almost without calculation, because if it's taken you get tremendous play down the e-file. Some sacrifices are so typical you can trust them intuitively. The knight disrupts his coordination, and a bishop to e3 and b6 even sets up a fork on c7.",
    "kind": "main",
    "teaches": [
     "the intuitive sacrifice",
@@ -180,7 +180,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": "Notice his king is boxed in with no squares — file that away. Now develop our last minor piece: the bishop to g5 pins and piles on, while the bishop to e3 would close the e-file and make a recapture on d5 more palatable for him.",
+   "spoken": "Notice his king is boxed in with no squares — file that away. Now develop your last minor piece: the bishop to g5 pins and piles on, while the bishop to e3 would close the e-file and make a recapture on d5 more palatable for him.",
    "kind": "plan",
    "teaches": [
     "note the boxed-in king",
@@ -194,7 +194,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "Both are fine — a matter of taste. We choose the long-term move, the bishop to g5, and if he ever meets it with f6, a bishop sacrifice there becomes very interesting.",
+   "spoken": "Both are fine — a matter of taste. You choose the long-term move, the bishop to g5, and if he ever meets it with f6, a bishop sacrifice there becomes very interesting.",
    "kind": "main",
    "teaches": [
     "choosing the long-term move"
@@ -232,7 +232,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "After h6 and the bishop to h4, we're hoping for g5 — because then the knight to f6 is checkmate, a smothered mate with the king boxed in. The only reason the knight to f6 isn't already mate is that the g7-pawn still covers that square.",
+   "spoken": "After h6 and the bishop to h4, you're hoping for g5 — because then the knight to f6 is checkmate, a smothered mate with the king boxed in. The only reason the knight to f6 isn't already mate is that the g7-pawn still covers that square.",
    "kind": "main",
    "teaches": [
     "the smothered-mate trap"

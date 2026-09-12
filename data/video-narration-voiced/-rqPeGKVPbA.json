@@ -57,7 +57,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We answer the big centre with d6. White's most testing plan from here is the fianchetto with g3 and Ng2 — the Botvinnik setup.",
+   "spoken": "You answer the big centre with d6. White's most testing plan from here is the fianchetto with g3 and Ng2 — the Botvinnik setup.",
    "kind": "main"
   },
   {
@@ -67,7 +67,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Be2 doesn't fit White's structure. With the pawn on d4 this would be a mainline King's Indian; the pawn on d3 instead is a real positional downgrade, because it hands us the d4 square as a stronghold. So don't reflexively play e5 here — think flexibly about what the structure actually wants.",
+   "spoken": "Be2 doesn't fit White's structure. With the pawn on d4 this would be a mainline King's Indian; the pawn on d3 instead is a real positional downgrade, because it hands you the d4 square as a stronghold. So don't reflexively play e5 here — think flexibly about what the structure actually wants.",
    "kind": "main",
    "teaches": "A pawn on d3 instead of d4 gifts the opponent d4 as an outpost; don't play the automatic move, play the structure."
   },
@@ -89,7 +89,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "White drifts with Bd2; there's really no fight for d4 to speak of — we simply occupy and control it. A bloodless war.",
+   "spoken": "White drifts with Bd2; there's really no fight for d4 to speak of — you simply occupy and control it. A bloodless war.",
    "kind": "main"
   },
   {
@@ -118,7 +118,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White shuffles fairly randomly, which doesn't disturb our development at all — we just keep bringing pieces out.",
+   "spoken": "White shuffles fairly randomly, which doesn't disturb your development at all — you just keep bringing pieces out.",
    "kind": "main"
   },
   {
@@ -139,7 +139,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "h5 is the accurate reply, not h6 — it clamps the g4 square and denies White the break, whereas h6 carries drawbacks we'd rather avoid.",
+   "spoken": "h5 is the accurate reply, not h6 — it clamps the g4 square and denies White the break, whereas h6 carries drawbacks you'd rather avoid.",
    "kind": "main",
    "teaches": "Meeting a wing pawn thrust by fixing it with your own pawn can be stronger than inviting the exchange."
   },
@@ -150,7 +150,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "With the g4 square locked down, it's very hard for White to prise our kingside open at all.",
+   "spoken": "With the g4 square locked down, it's very hard for White to prise your kingside open at all.",
    "kind": "main"
   },
   {
@@ -179,7 +179,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "White simply hands over the bishop pair. A hidden bonus of Nd4 was that it took the g4 break away — if White plays g4 anyway, we take the bishop and recapture on g4 with our structure fully intact.",
+   "spoken": "White simply hands over the bishop pair. A hidden bonus of Nd4 was that it took the g4 break away — if White plays g4 anyway, you take the bishop and recapture on g4 with your structure fully intact.",
    "kind": "main",
    "teaches": "A well-placed knight can quietly veto a pawn break before it's played."
   },
@@ -200,9 +200,9 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We're close to positionally winning, so we keep the dark-squared bishop rather than trade it, retreat it to safety, and plan to chase the knight from the centre at our leisure with e6.",
+   "spoken": "You're close to positionally winning, so you keep the dark-squared bishop rather than trade it, retreat it to safety, and plan to chase the knight from the centre at your leisure with e6.",
    "kind": "plan",
-   "plans": "Nudge the centralized knight back with e6 once we're ready."
+   "plans": "Nudge the centralized knight back with e6 once you're ready."
   },
   {
    "ply": 23,
@@ -230,7 +230,7 @@
    "t": 407.5,
    "fen": "r1bq1rk1/pp2pp2/3p1bp1/2p4p/2PnP2P/2NP4/PP2BPP1/2RQK1NR w K - 0 11",
    "line": [],
-   "spoken": "The key realization: once the knight leaves c3, the long diagonal springs open and the b2-pawn becomes a target we're entitled to grab.",
+   "spoken": "The key realization: once the knight leaves c3, the long diagonal springs open and the b2-pawn becomes a target you're entitled to grab.",
    "kind": "branch",
    "plans": "Exploit the opened long diagonal against b2.",
    "reanchor": true
@@ -284,7 +284,7 @@
    "line": [
     "Rc2"
    ],
-   "spoken": "Retreat the bishop to g7. With the knight gone from d4 we now have to respect g4 again — kept near the king, the bishop helps us meet it.",
+   "spoken": "Retreat the bishop to g7. With the knight gone from d4 you now have to respect g4 again — kept near the king, the bishop helps you meet it.",
    "kind": "main",
    "teaches": "When your blockading knight leaves a square, re-check every break it used to prevent."
   },
@@ -295,7 +295,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "This is exactly why g7 beats d4 for the bishop — after Bd4, g4 would leave our king a shade too exposed, so we keep the bishop closer to home.",
+   "spoken": "This is exactly why g7 beats d4 for the bishop — after Bd4, g4 would leave your king a shade too exposed, so you keep the bishop closer to home.",
    "kind": "main"
   },
   {
@@ -342,7 +342,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": "White's g4 is double-edged: he may be eyeing h5, but he's uncastled, can't castle queenside with the rook moved, and has no kingside left to castle into. Fundamentally our position is the sounder one.",
+   "spoken": "White's g4 is double-edged: he may be eyeing h5, but he's uncastled, can't castle queenside with the rook moved, and has no kingside left to castle into. Fundamentally your position is the sounder one.",
    "kind": "main",
    "teaches": "A wing attack from an uncastled king cuts both ways — count whose king is safer first."
   },
@@ -353,7 +353,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "Because our structure is healthier and our pieces better coordinated, we benefit if the position opens — which is the whole idea behind f5. Why should White have a monopoly on the kingside?",
+   "spoken": "Because your structure is healthier and your pieces better coordinated, you benefit if the position opens — which is the whole idea behind f5. Why should White have a monopoly on the kingside?",
    "kind": "main"
   },
   {
@@ -372,7 +372,7 @@
    "line": [
     "exf5"
    ],
-   "spoken": "Recapturing exf5 keeps our king's pawn shelter more or less intact while opening the e-file for our rooks — cleaner than taking with the g-pawn.",
+   "spoken": "Recapturing exf5 keeps your king's pawn shelter more or less intact while opening the e-file for your rooks — cleaner than taking with the g-pawn.",
    "kind": "main",
    "teaches": "Choose the recapture that opens a file for you while preserving your own king cover."
   },
@@ -394,7 +394,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "Rook to e8 loads the open file; we're threatening f4 and getting the heavy pieces into the attack.",
+   "spoken": "Rook to e8 loads the open file; you're threatening f4 and getting the heavy pieces into the attack.",
    "kind": "plan",
    "plans": "Push f4 and pile down the e-file."
   },
@@ -414,7 +414,7 @@
    "line": [
     "Rb8"
    ],
-   "spoken": "Rb8 overprotects the queenside pawn so it can never become a distraction — we can afford the tempo here.",
+   "spoken": "Rb8 overprotects the queenside pawn so it can never become a distraction — you can afford the tempo here.",
    "kind": "main"
   },
   {
@@ -424,7 +424,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Keep the king's pawn structure intact with g5. Letting White reach h6 looks scary, but once the pawn parks on h7 we simply tuck the king in behind it.",
+   "spoken": "Keep the king's pawn structure intact with g5. Letting White reach h6 looks scary, but once the pawn parks on h7 you simply tuck the king in behind it.",
    "kind": "main",
    "teaches": "A rammed enemy pawn on h6/h7 can become a shield for your king rather than a battering ram."
   },
@@ -460,7 +460,7 @@
    "line": [
     "Bd5+"
    ],
-   "spoken": "Bd5 comes with check; step the king to h7, sidestepping ideas like Bf7. Our position isn't optimal, but there's nothing to fear on the king.",
+   "spoken": "Bd5 comes with check; step the king to h7, sidestepping ideas like Bf7. Your position isn't optimal, but there's nothing to fear on the king.",
    "kind": "main"
   },
   {

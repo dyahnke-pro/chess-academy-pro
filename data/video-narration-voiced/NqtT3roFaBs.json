@@ -42,7 +42,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "And we're facing the Scotch — d4."
+      "spoken": "And you're facing the Scotch — d4."
     },
     {
       "ply": 6,
@@ -51,7 +51,7 @@
       "line": [
         "exd4"
       ],
-      "spoken": "Obviously here we play e-takes-d4, that's what we do, and the Scotch Gambit would be the bishop to c4."
+      "spoken": "Obviously here you play e-takes-d4, that's what you do, and the Scotch Gambit would be the bishop to c4."
     },
     {
       "ply": 7,
@@ -60,7 +60,7 @@
       "line": [
         "Bc4"
       ],
-      "spoken": "There we go, we're facing the Scotch Gambit. One thing I could do is play a bad line of it for Black and then try to recover. Black has two main approaches — the first is the knight to f6,"
+      "spoken": "There you go, you're facing the Scotch Gambit. One thing I could do is play a bad line of it for Black and then try to recover. Black has two main approaches — the first is the knight to f6,"
     },
     {
       "ply": 8,
@@ -69,7 +69,7 @@
       "line": [
         "Bc5"
       ],
-      "spoken": "which leads to e5 and then Black's move d5, which is what I actually play. The other approach is to cling to the pawn on d4 with the bishop to c5, which is what we'll do — and White's main move is c3."
+      "spoken": "which leads to e5 and then Black's move d5, which is what I actually play. The other approach is to cling to the pawn on d4 with the bishop to c5, which is what you'll do — and White's main move is c3."
     },
     {
       "ply": 9,
@@ -78,7 +78,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "And that contains a pretty vicious trap, which we're going to fall into deliberately. The correct way here for Black is the knight to f6, with a possible transposition to"
+      "spoken": "And that contains a pretty vicious trap, which you're going to fall into deliberately. The correct way here for Black is the knight to f6, with a possible transposition to"
     },
     {
       "ply": 10,
@@ -87,7 +87,7 @@
       "line": [
         "dxc3"
       ],
-      "spoken": "the Italian — c-takes-d4, the bishop to b4 with check. What we're going to do instead is something not advised: d-takes-c3."
+      "spoken": "the Italian — c-takes-d4, the bishop to b4 with check. What you're going to do instead is something not advised: d-takes-c3."
     },
     {
       "ply": 11,
@@ -96,7 +96,7 @@
       "line": [
         "Bxf7+"
       ],
-      "spoken": "Now, as our opponent thinks — she knows the correct approach — the bishop takes f7"
+      "spoken": "Now, as your opponent thinks — she knows the correct approach — the bishop takes f7"
     },
     {
       "ply": 12,
@@ -105,7 +105,7 @@
       "line": [
         "Kxf7"
       ],
-      "spoken": "with check, which forces our king out of its shell, and the bishop on c5 is picked up as the queen swings into the centre with tempo; White is considered clearly better. So that's an instructive blunder. How bad is it? Not as bad as some books have said — Black is by no means losing, but Black is much worse. The first order of business is where to put the king: obviously not g6 or f6, we'd get mated. The real question is e7, e8 or f8 — which is safest, relatively speaking? You might reason: the king to f8 allows White to take on c5 with check, so we don't want that, therefore the king to e7 — and after the queen takes e5 we have a tempo. What can we do with it? We could take on b2 and keep our extra pawn — but that's flawed logic, because although you win a pawn, the bishop comes out to b2 and immediately attacks g7, and Black gets smothered. The point isn't to cling to the extra pawn — it's to make the king as"
+      "spoken": "with check, which forces your king out of its shell, and the bishop on c5 is picked up as the queen swings into the centre with tempo; White is considered clearly better. So that's an instructive blunder. How bad is it? Not as bad as some books have said — Black is by no means losing, but Black is much worse. The first order of business is where to put the king: obviously not g6 or f6, you'd get mated. The real question is e7, e8 or f8 — which is safest, relatively speaking? You might reason: the king to f8 allows White to take on c5 with check, so you don't want that, therefore the king to e7 — and after the queen takes e5 you have a tempo. What can you do with it? You could take on b2 and keep your extra pawn — but that's flawed logic, because although you win a pawn, the bishop comes out to b2 and immediately attacks g7, and Black gets smothered. The point isn't to cling to the extra pawn — it's to make the king as"
     },
     {
       "ply": 15,
@@ -125,7 +125,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "On f8 the king is temporarily safe from anything terrible on the e-file for now — does that make sense? So here we go, d6, covering the check and opening up our bishop."
+      "spoken": "On f8 the king is temporarily safe from anything terrible on the e-file for now — does that make sense? So here you go, d6, covering the check and opening up your bishop."
     },
     {
       "ply": 17,
@@ -143,7 +143,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "by hand. So what should we start with? The knight to f6 — it hits the pawn on e4, and then the bishop can come out to g4. In such situations you should always be aware of the"
+      "spoken": "by hand. So what should you start with? The knight to f6 — it hits the pawn on e4, and then the bishop can come out to g4. In such situations you should always be aware of the"
     },
     {
       "ply": 19,
@@ -152,7 +152,7 @@
       "line": [
         "Nbd2"
       ],
-      "spoken": "eventual plan of castling by hand: the king back up to f7, the rook swung to f8 or e8, and the king tucked back to g8. Unfortunately the immediate king to f7 is bad — why? Because of the knight to g5. So logically, a candidate move: we can play h6 first. You might say, doesn't h6 weaken"
+      "spoken": "eventual plan of castling by hand: the king back up to f7, the rook swung to f8 or e8, and the king tucked back to g8. Unfortunately the immediate king to f7 is bad — why? Because of the knight to g5. So logically, a candidate move: you can play h6 first. You might say, doesn't h6 weaken"
     },
     {
       "ply": 20,
@@ -161,7 +161,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "the g6-square — can't White play the knight to h4? Yes he can, but then we go the king to f7 and that square is protected. Let's give it a shot with h6 — I'm not developing the light-squared bishop, because castling by hand is the top priority."
+      "spoken": "the g6-square — can't White play the knight to h4? Yes he can, but then you go the king to f7 and that square is protected. Let's give it a shot with h6 — I'm not developing the light-squared bishop, because castling by hand is the top priority."
     },
     {
       "ply": 21,
@@ -170,7 +170,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "If we can squeeze that in, everything else falls into place. Now, a very skilled opponent is going to find a way to deter us from this."
+      "spoken": "If you can squeeze that in, everything else falls into place. Now, a very skilled opponent is going to find a way to deter you from this."
     },
     {
       "ply": 22,
@@ -179,7 +179,7 @@
       "line": [
         "Kf7"
       ],
-      "spoken": "But let's see if she's up to the task. The king to f7 — and another point of not developing the bishop is that if our opponent gives us a queen check on one of these squares, we can cover it with the bishop."
+      "spoken": "But let's see if she's up to the task. The king to f7 — and another point of not developing the bishop is that if your opponent gives you a queen check on one of these squares, you can cover it with the bishop."
     },
     {
       "ply": 23,
@@ -188,7 +188,7 @@
       "line": [
         "b3"
       ],
-      "spoken": "A very important detail, without which this wouldn't work. b3 is not a particularly scary move, and it seems we'll accomplish our first aim. Now, where should we go with the rook — f8 or e8? You could make a case for"
+      "spoken": "A very important detail, without which this wouldn't work. b3 is not a particularly scary move, and it seems you'll accomplish your first aim. Now, where should you go with the rook — f8 or e8? You could make a case for"
     },
     {
       "ply": 24,
@@ -197,7 +197,7 @@
       "line": [
         "Re8"
       ],
-      "spoken": "both, but the more natural move is the rook to e8, because at least there it's doing something, pressuring the pawn. And our opponent — I like what she's doing — is going to put the bishop on b2,"
+      "spoken": "both, but the more natural move is the rook to e8, because at least there it's doing something, pressuring the pawn. And your opponent — I like what she's doing — is going to put the bishop on b2,"
     },
     {
       "ply": 25,
@@ -215,7 +215,7 @@
       "line": [
         "Kg8"
       ],
-      "spoken": "Nonetheless, we've accomplished something very serious — our king is now a"
+      "spoken": "Nonetheless, you've accomplished something very serious — your king is now a"
     },
     {
       "ply": 27,
@@ -224,7 +224,7 @@
       "line": [
         "Bb2"
       ],
-      "spoken": "lot safer than it was on f8, but we're still worse. Why? First of all, White has a very nice pawn on e4 that could advance to e5, and the main reason we're worse is this battery — a permanent strain that doesn't let our knight move; and if that knight is eliminated, we face very serious threats along the diagonal. How should we continue? A couple of approaches, but I think the time has come to complete our development. What does that mean? g5 is a candidate, trying to put more stuff on the diagonal — I'll explain after the game why I think it's"
+      "spoken": "lot safer than it was on f8, but you're still worse. Why? First of all, White has a very nice pawn on e4 that could advance to e5, and the main reason you're worse is this battery — a permanent strain that doesn't let your knight move; and if that knight is eliminated, you face very serious threats along the diagonal. How should you continue? A couple of approaches, but I think the time has come to complete your development. What does that mean? g5 is a candidate, trying to put more stuff on the diagonal — I'll explain after the game why I think it's"
     },
     {
       "ply": 28,
@@ -233,7 +233,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "a bad move, or at least not the right approach. Instead, the bishop to g4 — we could also play the bishop to e6, but let's play with maximal activity, so the bishop to g4. Someone asked me to explain the king to g8: the point is just to physically get the king as far from harm as possible. When the king lands on f7 it's far more susceptible to all sorts of tactics — the knight to g5, or the centre opening — because it's closer to the centre; the further the king is from the centre, the safer it is, as a rule of thumb. That's why you castle in the first place: it's much harder to open up the kingside and get pieces there than it is to get pieces to the centre. Now, White plays the queen to c2, opening his bishop. The simplest idea is to connect our rooks and get the queen off d8 onto a more active square. There's a little manoeuvre I'm thinking about — where should the queen ultimately go? Be careful, because the queen to d7 allows the bishop to take on f6 and ruin our pawn structure; I'm not sure I want to allow that. So start with the queen to e7, and eventually get the queen to f7 — not g6, f7 — because from f7 the queen controls the knight on f6, controls the f-file, lets the rooks breathe, and physically shields the king. Now you might ask, aren't I worried about e5? I am — it's a worrisome move — but I think we'll survive the impact: we trade, then move the queen aside, and I don't see it being that dangerous. So we'll put the queen on f7, and then how do we keep improving? We can potentially double on the e-file. The knight to d4 is a great move: it gets the knight out of the purview of the bishop, and now that bishop on g4 just looks dumb, shooting into thin air. Then we should probably trade, because otherwise we lose a pawn; some of you are thinking of the knight to e5, but, as I explained last game, a knight on e5 is often unstable and can be chased away with f4 — why allow that? So we take. Now there are issues: if we play the queen to f7, White has a nasty response. Think about type-two undefended pieces and pawns — the pawn on c7 is a type two, protected by the queen, and the queen is overextended, defending the knight and protecting the pawn — so the bishop takes f6 is a positional threat that would force g-takes-f6. So we have to defend the c-pawn: not the rook to c8, we don't want to tie down a whole rook. Can we do it more economically? We could play c5, but I'd argue c5 really weakens the d6-pawn — yes, it's with tempo, but we get a permanent weakness on d6. I think c6 is better, because it makes it far more realistic that we'll be able to play d5; when you're worse and struggling, you don't want to fall in love with tempo moves — c5 is a classic case of one-move-itis, attacking the bishop but creating more permanent weaknesses. I'm not saying c5 is terrible, maybe almost as good, but c6 is a little safer because it creates the possibility of d5 — in fact d5 is almost a threat here, since e-takes-d5 lets us take the rook. The best approach for White is probably f3 or h3 and then activating the knight to c4; the move I'm really worried about is a rook to e3, lifting up to g3. So h3 happens. Now I move the bishop — the bishop to h5 is possible, but it's safer to keep the pieces closer to the centre, clustered so they control more important squares. The knight wants to go to c4; the bishop to d7 looks quite awkward and makes it harder to defend d6, so the bishop to e6 is the most natural, and it also cuts into the pin, which makes it less urgent to move the queen aside. It blocks the battery, yes, but that's not the most important thing — we're not trying to win the e4-pawn, which is perfectly well defended; it makes the rook temporarily a little passive, but we're adopting a defensive posture, controlling as many squares as possible. Now e5, striking in the centre — we have to take that pawn, and then it's a good time to move our queen off e7. The bishop to h5 was fine, but the bishop to b6 is a little safer. Queen versus two rooks totally depends on the concrete situation — it can be good, bad, or anything between. The rook takes e5, so we clearly have to move our queen: the queen to d6 attacks the bishop with tempo, but it's further from our king than I'd like — I feel we should stick to our earlier destination and play the queen to f7, where it seems really solid. After a rook to e1 we're still worse, we haven't equalised, but we're making progress, and I feel safer knowing my queen protects the g7-pawn in case the knight is traded off. And notice the opposite-coloured bishops — what does that tell you? In the endgame opposite-coloured bishops are drawish, but in the middlegame they favour the attacker, because intuitively we have nothing to control the dark squares. Now the natural thing is to play the bishop to d5, offering a trade of rooks. Let's calculate: the bishop to d5, the rook takes, the rook takes back, the queen takes — and at the end White has the bishop taking f6, but then g-takes-f6, and because so many pieces are traded I'm far less concerned about the pawn structure; White also has the bishop taking a7, but calculate one move further and Black has a check, on e1 or the queen to e2, and the combination of opposite-coloured bishops with our activity should give sufficient compensation for a draw. Someone asks, can't we take with the knight? You can, but you yield the e-file, and I really don't want to give the opponent full control of it — if the rook ever infiltrates to e7 we're toast. So we're expecting the rook takes, a trade of rooks and an endgame. The queen to f5 puts on more pressure but isn't as scary as it looks — we should discharge the tension by trading, the best method of dealing with pressure and a dubious position. We can trade immediately, the rook takes e5, or some propose the knight to d7 forcing a queen trade — but the knight to d7 doesn't work concretely: after queen-takes-queen and king recaptures, once the rooks come off on e8 the g7-pawn hangs, because our knight is no longer covering it. So take on e5 first, and then the knight to d7 makes more sense, forcing the queen trade, and in the endgame White's control of the e-file matters far less. The endgame is still slightly worse for us, because White's bishop is a little better — it pressures both pawns and White has the e-file — but we're close to equalising. Move order is super important: don't assume different move orders transpose, because frequently they don't, and that's where problems happen. Now what? The rook to f3 is no problem, our bishop controls that square. Ideally we solve the problem of our pawns on dark squares that the bishop pressures: we could play a6, but let's go full attack mode with a5, creating pressure on White's queenside — a5, a4, maybe open the a-file and one day attack that b3-pawn. Then g4 — the move I was worried about, because it forces a trade: the knight to d6 would be a nasty threat winning the b7-pawn, which is unallowable, so we have to take that knight. The bishop takes g7 — there was the rook to g8, which I missed — but the bishop takes g7, and here we had the rook to g8 in response. Now a very interesting endgame, bishop versus knight. We could contemplate a4, but White answers b4 and it doesn't accomplish much. I don't like c5 or b5 — pushing pawns just creates further weaknesses, and remember White is threatening the bishop takes g7 — so we could push the g-pawn, but I like the knight to f6: the rook to e8 loses a pawn, and the knight to f6 offers a trade that's good for us, with the knight used as a shield from the bishop's pressure on g7. A rook to f4 might worry you because White can follow with the bishop taking f6 — but remember that in the endgame pawn structure works differently: doubled pawns on f6 and h6 would be unthinkable in the middlegame with the king so weak, but in the endgame they're totally fine, even better than consecutive pawns, because the king can defend both from a single square. So we take with the king, not g-takes-f6, and I think we've fully equalised — it took twenty-nine moves — into an equal, drawish endgame. How to play it? First, activate the rook: it's sitting doing nothing, so bring it to d8 and potentially to d5. The other idea is to push our pawns — b5, c5, c4, to create a passer — but if we push too fast they become weak and White wins them, so we could also play g5 to slow White's pawns. Let's try b5, an ambitious move that weakens the c6-square but might pay off. Does the queenside majority mean we're better? No — both sides have a three-versus-two majority, so any pawn endgame depends directly on king placement and who creates a passer faster. A draw is offered; let's play on. The move c5 is very interesting but risky: whenever three pawns are arranged with none defending the other, moves that carve out squares become dangerous — White has the move a4. Our opponent goes a rook to e3. If we play c4 it's premature, because after the exchanges and a rook to c3 our pawn becomes more of a weakness than a strength, so instead let's play g5 to slow White's pawns, or the rook to d4, though that lets White infiltrate to e8. I'll start with g5, which helps in the event of a pawn endgame by slowing the creation of a passer. Now we have to play the rook to d5 to defend the pawn, and potentially h5 and h4 — a deep freeze, where two pawns hold three. The king comes to e3; our opponent wants the king to e4, but that's not dangerous because we have a check on e5. This might be a good moment for h5, but I also like centralising our king. The problem is we can't move our rook and we'd like to: b4 is bad, because it disqualifies us from ever making a passer on the queenside; a rook move blunders the pawn, so we have to defend c5 with the king to d6. Maybe the pawn endgame is winning for White — I don't rule that out, it's very close and I'm too lazy to calculate it exactly. But calculating the pawn race carefully — the h-pawn and the a-pawn queening, king and pawn against king — it turns out we win: we promote and hold the new queen, and this would only be a draw if White's king could reach b8, which it cannot. In fact the move f4 for White actually loses. A really cool endgame. And as a closing thought — there are a lot of underrated, strong players out there; be careful about jumping to cheating accusations on the basis of a few good moves, and act on evidence you can check.",
+      "spoken": "a bad move, or at least not the right approach. Instead, the bishop to g4 — you could also play the bishop to e6, but let's play with maximal activity, so the bishop to g4. Someone asked me to explain the king to g8: the point is just to physically get the king as far from harm as possible. When the king lands on f7 it's far more susceptible to all sorts of tactics — the knight to g5, or the centre opening — because it's closer to the centre; the further the king is from the centre, the safer it is, as a rule of thumb. That's why you castle in the first place: it's much harder to open up the kingside and get pieces there than it is to get pieces to the centre. Now, White plays the queen to c2, opening his bishop. The simplest idea is to connect your rooks and get the queen off d8 onto a more active square. There's a little manoeuvre I'm thinking about — where should the queen ultimately go? Be careful, because the queen to d7 allows the bishop to take on f6 and ruin your pawn structure; I'm not sure I want to allow that. So start with the queen to e7, and eventually get the queen to f7 — not g6, f7 — because from f7 the queen controls the knight on f6, controls the f-file, lets the rooks breathe, and physically shields the king. Now you might ask, aren't I worried about e5? I am — it's a worrisome move — but I think you'll survive the impact: you trade, then move the queen aside, and I don't see it being that dangerous. So you'll put the queen on f7, and then how do you keep improving? You can potentially double on the e-file. The knight to d4 is a great move: it gets the knight out of the purview of the bishop, and now that bishop on g4 just looks dumb, shooting into thin air. Then you should probably trade, because otherwise you lose a pawn; some of you are thinking of the knight to e5, but, as I explained last game, a knight on e5 is often unstable and can be chased away with f4 — why allow that? So you take. Now there are issues: if you play the queen to f7, White has a nasty response. Think about type-two undefended pieces and pawns — the pawn on c7 is a type two, protected by the queen, and the queen is overextended, defending the knight and protecting the pawn — so the bishop takes f6 is a positional threat that would force g-takes-f6. So you have to defend the c-pawn: not the rook to c8, you don't want to tie down a whole rook. Can you do it more economically? You could play c5, but I'd argue c5 really weakens the d6-pawn — yes, it's with tempo, but you get a permanent weakness on d6. I think c6 is better, because it makes it far more realistic that you'll be able to play d5; when you're worse and struggling, you don't want to fall in love with tempo moves — c5 is a classic case of one-move-itis, attacking the bishop but creating more permanent weaknesses. I'm not saying c5 is terrible, maybe almost as good, but c6 is a little safer because it creates the possibility of d5 — in fact d5 is almost a threat here, since e-takes-d5 lets you take the rook. The best approach for White is probably f3 or h3 and then activating the knight to c4; the move I'm really worried about is a rook to e3, lifting up to g3. So h3 happens. Now I move the bishop — the bishop to h5 is possible, but it's safer to keep the pieces closer to the centre, clustered so they control more important squares. The knight wants to go to c4; the bishop to d7 looks quite awkward and makes it harder to defend d6, so the bishop to e6 is the most natural, and it also cuts into the pin, which makes it less urgent to move the queen aside. It blocks the battery, yes, but that's not the most important thing — you're not trying to win the e4-pawn, which is perfectly well defended; it makes the rook temporarily a little passive, but you're adopting a defensive posture, controlling as many squares as possible. Now e5, striking in the centre — you have to take that pawn, and then it's a good time to move your queen off e7. The bishop to h5 was fine, but the bishop to b6 is a little safer. Queen versus two rooks totally depends on the concrete situation — it can be good, bad, or anything between. The rook takes e5, so you clearly have to move your queen: the queen to d6 attacks the bishop with tempo, but it's further from your king than I'd like — I feel you should stick to your earlier destination and play the queen to f7, where it seems really solid. After a rook to e1 you're still worse, you haven't equalised, but you're making progress, and I feel safer knowing my queen protects the g7-pawn in case the knight is traded off. And notice the opposite-coloured bishops — what does that tell you? In the endgame opposite-coloured bishops are drawish, but in the middlegame they favour the attacker, because intuitively you have nothing to control the dark squares. Now the natural thing is to play the bishop to d5, offering a trade of rooks. Let's calculate: the bishop to d5, the rook takes, the rook takes back, the queen takes — and at the end White has the bishop taking f6, but then g-takes-f6, and because so many pieces are traded I'm far less concerned about the pawn structure; White also has the bishop taking a7, but calculate one move further and Black has a check, on e1 or the queen to e2, and the combination of opposite-coloured bishops with your activity should give sufficient compensation for a draw. Someone asks, can't you take with the knight? You can, but you yield the e-file, and I really don't want to give the opponent full control of it — if the rook ever infiltrates to e7 you're toast. So you're expecting the rook takes, a trade of rooks and an endgame. The queen to f5 puts on more pressure but isn't as scary as it looks — you should discharge the tension by trading, the best method of dealing with pressure and a dubious position. You can trade immediately, the rook takes e5, or some propose the knight to d7 forcing a queen trade — but the knight to d7 doesn't work concretely: after queen-takes-queen and king recaptures, once the rooks come off on e8 the g7-pawn hangs, because your knight is no longer covering it. So take on e5 first, and then the knight to d7 makes more sense, forcing the queen trade, and in the endgame White's control of the e-file matters far less. The endgame is still slightly worse for you, because White's bishop is a little better — it pressures both pawns and White has the e-file — but you're close to equalising. Move order is super important: don't assume different move orders transpose, because frequently they don't, and that's where problems happen. Now what? The rook to f3 is no problem, your bishop controls that square. Ideally you solve the problem of your pawns on dark squares that the bishop pressures: you could play a6, but let's go full attack mode with a5, creating pressure on White's queenside — a5, a4, maybe open the a-file and one day attack that b3-pawn. Then g4 — the move I was worried about, because it forces a trade: the knight to d6 would be a nasty threat winning the b7-pawn, which is unallowable, so you have to take that knight. The bishop takes g7 — there was the rook to g8, which I missed — but the bishop takes g7, and here you had the rook to g8 in response. Now a very interesting endgame, bishop versus knight. You could contemplate a4, but White answers b4 and it doesn't accomplish much. I don't like c5 or b5 — pushing pawns just creates further weaknesses, and remember White is threatening the bishop takes g7 — so you could push the g-pawn, but I like the knight to f6: the rook to e8 loses a pawn, and the knight to f6 offers a trade that's good for you, with the knight used as a shield from the bishop's pressure on g7. A rook to f4 might worry you because White can follow with the bishop taking f6 — but remember that in the endgame pawn structure works differently: doubled pawns on f6 and h6 would be unthinkable in the middlegame with the king so weak, but in the endgame they're totally fine, even better than consecutive pawns, because the king can defend both from a single square. So you take with the king, not g-takes-f6, and I think you've fully equalised — it took twenty-nine moves — into an equal, drawish endgame. How to play it? First, activate the rook: it's sitting doing nothing, so bring it to d8 and potentially to d5. The other idea is to push your pawns — b5, c5, c4, to create a passer — but if you push too fast they become weak and White wins them, so you could also play g5 to slow White's pawns. Let's try b5, an ambitious move that weakens the c6-square but might pay off. Does the queenside majority mean you're better? No — both sides have a three-versus-two majority, so any pawn endgame depends directly on king placement and who creates a passer faster. A draw is offered; let's play on. The move c5 is very interesting but risky: whenever three pawns are arranged with none defending the other, moves that carve out squares become dangerous — White has the move a4. Your opponent goes a rook to e3. If you play c4 it's premature, because after the exchanges and a rook to c3 your pawn becomes more of a weakness than a strength, so instead let's play g5 to slow White's pawns, or the rook to d4, though that lets White infiltrate to e8. I'll start with g5, which helps in the event of a pawn endgame by slowing the creation of a passer. Now you have to play the rook to d5 to defend the pawn, and potentially h5 and h4 — a deep freeze, where two pawns hold three. The king comes to e3; your opponent wants the king to e4, but that's not dangerous because you have a check on e5. This might be a good moment for h5, but I also like centralising your king. The problem is you can't move your rook and you'd like to: b4 is bad, because it disqualifies you from ever making a passer on the queenside; a rook move blunders the pawn, so you have to defend c5 with the king to d6. Maybe the pawn endgame is winning for White — I don't rule that out, it's very close and I'm too lazy to calculate it exactly. But calculating the pawn race carefully — the h-pawn and the a-pawn queening, king and pawn against king — it turns out you win: you promote and hold the new queen, and this would only be a draw if White's king could reach b8, which it cannot. In fact the move f4 for White actually loses. A really cool endgame. And as a closing thought — there are a lot of underrated, strong players out there; be careful about jumping to cheating accusations on the basis of a few good moves, and act on evidence you can check.",
       "reanchor": true
     },
     {
@@ -263,7 +263,7 @@
         "exd4",
         "Bc4"
       ],
-      "spoken": "d4, and we have a Scotch Gambit —",
+      "spoken": "d4, and you have a Scotch Gambit —",
       "reanchor": true
     },
     {

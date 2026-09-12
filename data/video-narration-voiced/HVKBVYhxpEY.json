@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Black plays the Pirc, ceding the center. Played well it's fine, but most players at this level get into trouble fast — so we punish it by strict adherence to opening principles.",
+   "spoken": "Black plays the Pirc, ceding the center. Played well it's fine, but most players at this level get into trouble fast — so you punish it by strict adherence to opening principles.",
    "kind": "main",
    "teaches": [
     "meet an offbeat opening with principled play"
@@ -46,7 +46,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "We expand the center further with c4, since we're free to grab space here.",
+   "spoken": "You expand the center further with c4, since you're free to grab space here.",
    "kind": "main"
   },
   {
@@ -136,7 +136,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Everything's developed — now the hard part most players struggle with: converting a space edge into something real. We expand in the center and attack a flank.",
+   "spoken": "Everything's developed — now the hard part most players struggle with: converting a space edge into something real. You expand in the center and attack a flank.",
    "kind": "plan",
    "teaches": [
     "transform space into an attack"
@@ -184,7 +184,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "We trap it with g4. Yes, that's a pawn push in front of our own king — but it's the exception, because it simply wins a knight, and Black has nothing on the kingside to punish it.",
+   "spoken": "You trap it with g4. Yes, that's a pawn push in front of your own king — but it's the exception, because it simply wins a knight, and Black has nothing on the kingside to punish it.",
    "kind": "main",
    "teaches": [
     "break the rule when it wins material"
@@ -198,7 +198,7 @@
     "Nf6",
     "exf6"
    ],
-   "spoken": "The knight has no escape — forced back to f6, and we take, opening the f-file.",
+   "spoken": "The knight has no escape — forced back to f6, and you take, opening the f-file.",
    "kind": "main"
   },
   {
@@ -217,7 +217,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "g5 shoves the bishop, and if it grabs on c3 that only trades off a defender of Black's king — fine by us.",
+   "spoken": "g5 shoves the bishop, and if it grabs on c3 that only trades off a defender of Black's king — fine by you.",
    "kind": "main",
    "teaches": [
     "welcome trades that strip the king’s guards"
@@ -248,7 +248,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We snap off the bishop — thank you — removing another piece from around Black's king.",
+   "spoken": "You snap off the bishop — thank you — removing another piece from around Black's king.",
    "kind": "main"
   },
   {

@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "d4, the knight to f6. We've been alternating between e4 and d4 — a chance to learn new positions, which can be exciting."
+      "spoken": "d4, the knight to f6. You've been alternating between e4 and d4 — a chance to learn new positions, which can be exciting."
     },
     {
       "ply": 3,
@@ -60,7 +60,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "Black plays the King's Indian; our move is e4, the main line."
+      "spoken": "Black plays the King's Indian; your move is e4, the main line."
     },
     {
       "ply": 8,
@@ -69,7 +69,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "d6 — we reach the first tabia, a big branching point almost every King's Indian passes through, with ten or fifteen viable lines from here."
+      "spoken": "d6 — you reach the first tabia, a big branching point almost every King's Indian passes through, with ten or fifteen viable lines from here."
     },
     {
       "ply": 9,
@@ -130,7 +130,7 @@
       "t": 152,
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
       "line": [],
-      "spoken": "The first trap: e5 doesn't lose the game, but it loses a pawn and leads to a terrible endgame, which I'll show after. After h6 we have two moves — the bishop to h4, though h6 isn't that common —",
+      "spoken": "The first trap: e5 doesn't lose the game, but it loses a pawn and leads to a terrible endgame, which I'll show after. After h6 you have two moves — the bishop to h4, though h6 isn't that common —",
       "reanchor": true
     },
     {
@@ -140,7 +140,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "— because it creates a target we can attack; the main move is to drop the bishop back to e3.",
+      "spoken": "— because it creates a target you can attack; the main move is to drop the bishop back to e3.",
       "reanchor": true
     },
     {
@@ -168,7 +168,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "— because inducing h6 helps White; that pawn on h6 rather than h7 typically favors us. Now we close the centre with d5 — the whole point: closing it unties our hands for kingside action, since we no longer divert resources to hold the centre."
+      "spoken": "— because inducing h6 helps White; that pawn on h6 rather than h7 typically favors you. Now you close the centre with d5 — the whole point: closing it unties your hands for kingside action, since you no longer divert resources to hold the centre."
     },
     {
       "ply": 16,
@@ -177,7 +177,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "a5 — a typical King's Indian move preventing b4, usually followed by the knight maneuver to c5 via d7 or a6, pressuring e4. Another branching point; in the spirit of the Averbakh we go straight for Black's throat with a move that looks like a coffee-house move but is often the engine's top choice —"
+      "spoken": "a5 — a typical King's Indian move preventing b4, usually followed by the knight maneuver to c5 via d7 or a6, pressuring e4. Another branching point; in the spirit of the Averbakh you go straight for Black's throat with a move that looks like a coffee-house move but is often the engine's top choice —"
     },
     {
       "ply": 17,
@@ -203,7 +203,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "Full send g4. The idea is obvious: send the pawns at Black's king and open the h-file, using the h6-pawn as a hook — a pawn advanced past its start that acts like dynamite to blow open a file. Two things to mind: keep the e4-pawn protected — if Black's knight lands on c5 we play f3 to solidify e4, our main anchor; if the centre opens, the whole strategy collapses, so g4 and h4 depend entirely on keeping the centre closed. That's why, as Black, a common idea is to push c6, chipping at White's centre and preparing the queen to b6. Black can't fall asleep — the attack comes fast. Should we take the knight on c5? Almost never in the King's Indian: giving up the dark-squared bishop is a bad idea in maybe eighty percent of cases, because it lords over the position — controlling queenside squares, stopping the queen to b6 after c6, and above all supervising the pawn storm, controlling g5 and h6 and making h4 and g5 far stronger. It's a Swiss army knife; giving it up wrecks the dark squares, and after the d-pawn recaptures on c5 it hands Black the d6-square for the other knight.",
+      "spoken": "Full send g4. The idea is obvious: send the pawns at Black's king and open the h-file, using the h6-pawn as a hook — a pawn advanced past its start that acts like dynamite to blow open a file. Two things to mind: keep the e4-pawn protected — if Black's knight lands on c5 you play f3 to solidify e4, your main anchor; if the centre opens, the whole strategy collapses, so g4 and h4 depend entirely on keeping the centre closed. That's why, as Black, a common idea is to push c6, chipping at White's centre and preparing the queen to b6. Black can't fall asleep — the attack comes fast. Should you take the knight on c5? Almost never in the King's Indian: giving up the dark-squared bishop is a bad idea in maybe eighty percent of cases, because it lords over the position — controlling queenside squares, stopping the queen to b6 after c6, and above all supervising the pawn storm, controlling g5 and h6 and making h4 and g5 far stronger. It's a Swiss army knife; giving it up wrecks the dark squares, and after the d-pawn recaptures on c5 it hands Black the d6-square for the other knight.",
       "reanchor": true
     },
     {
@@ -213,7 +213,7 @@
       "line": [
         "Na6"
       ],
-      "spoken": "The knight to a6. Do we need to stop the knight from reaching c5? No — as I just explained, it's fine —"
+      "spoken": "The knight to a6. Do you need to stop the knight from reaching c5? No — as I just explained, it's fine —"
     },
     {
       "ply": 19,
@@ -222,7 +222,7 @@
       "line": [
         "h4"
       ],
-      "spoken": "— because we protect e4 with f3. So we continue the kingside campaign with h4, launching the second pawn. Why not g5 immediately? That was also very good, I agree —"
+      "spoken": "— because you protect e4 with f3. So you continue the kingside campaign with h4, launching the second pawn. Why not g5 immediately? That was also very good, I agree —"
     },
     {
       "ply": 20,
@@ -231,7 +231,7 @@
       "line": [
         "Nd7"
       ],
-      "spoken": "— but the added benefit of h4 is that after g5 and the h-pawn takes g5, we recapture with the h-pawn and open the h-file. The knight to d7. Now a pleasant choice: h5, and Black closes with g5, which actually helps us — f5 becomes a gaping weakness and a coveted outpost for our knight. Or the queen to d2, but after the king to h7 it's hard to open the kingside; the knight to d7 was smart, so it's the classic situation where if we play g5 Black plays h5, and if we play h5 Black plays g5."
+      "spoken": "— but the added benefit of h4 is that after g5 and the h-pawn takes g5, you recapture with the h-pawn and open the h-file. The knight to d7. Now a pleasant choice: h5, and Black closes with g5, which actually helps you — f5 becomes a gaping weakness and a coveted outpost for your knight. Or the queen to d2, but after the king to h7 it's hard to open the kingside; the knight to d7 was smart, so it's the classic situation where if you play g5 Black plays h5, and if you play h5 Black plays g5."
     },
     {
       "ply": 21,
@@ -240,7 +240,7 @@
       "line": [
         "h5"
       ],
-      "spoken": "So we switch from tactics to positional play and play h5, inducing g5, then aim to bring the g1-knight around to f5 —"
+      "spoken": "So you switch from tactics to positional play and play h5, inducing g5, then aim to bring the g1-knight around to f5 —"
     },
     {
       "ply": 22,
@@ -265,7 +265,7 @@
       "t": 662,
       "fen": "r1bq1rk1/1ppn1pb1/n2p3p/p2Pp1pP/2P1P1P1/2N1B3/PP2BP2/R2QK1NR w KQ - 0 12",
       "line": [],
-      "spoken": "— otherwise we couldn't play the knight to f3; and we deliberately don't put a pawn on f3, which would make navigating the knight over to f5 much harder.",
+      "spoken": "— otherwise you couldn't play the knight to f3; and you deliberately don't put a pawn on f3, which would make navigating the knight over to f5 much harder.",
       "reanchor": true
     },
     {
@@ -275,7 +275,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "The plan: get the knight to g3; Black will move the knight off d7 so the bishop controls f5, and we wait for the moment to plant the knight on f5. Meanwhile we shift the centre of our attention from the kingside to the queenside — a big misconception is that White can never attack the queenside in the King's Indian.",
+      "spoken": "The plan: get the knight to g3; Black will move the knight off d7 so the bishop controls f5, and you wait for the moment to plant the knight on f5. Meanwhile you shift the centre of your attention from the kingside to the queenside — a big misconception is that White can never attack the queenside in the King's Indian.",
       "reanchor": true
     },
     {
@@ -304,7 +304,7 @@
         "Nc5",
         "f3"
       ],
-      "spoken": "The knight to c5, and now that our knight is off g1 we can play f3 very safely — not interfering with the knight's path from f1 to g3. Note the queen to c2 would have been a blunder, taking our eye off the g4-pawn; there's a strict order of operations. And we're not worried about king safety as long as the centre stays closed."
+      "spoken": "The knight to c5, and now that your knight is off g1 you can play f3 very safely — not interfering with the knight's path from f1 to g3. Note the queen to c2 would have been a blunder, taking your eye off the g4-pawn; there's a strict order of operations. And you're not worried about king safety as long as the centre stays closed."
     },
     {
       "ply": 28,
@@ -313,7 +313,7 @@
       "line": [
         "c6"
       ],
-      "spoken": "c6 — Black does everything right, but weakening f5 means Black is worse for the rest of the game. Do we take on c6 or on c5? No and no —"
+      "spoken": "c6 — Black does everything right, but weakening f5 means Black is worse for the rest of the game. Do you take on c6 or on c5? No and no —"
     },
     {
       "ply": 29,
@@ -322,14 +322,14 @@
       "line": [
         "Nf1"
       ],
-      "spoken": "— White's job is to keep the centre closed. c6 and the trade on d5 don't open it much, so we continue routing the knight to g3."
+      "spoken": "— White's job is to keep the centre closed. c6 and the trade on d5 don't open it much, so you continue routing the knight to g3."
     },
     {
       "ply": 28,
       "t": 829.5,
       "fen": "r1bq1rk1/1p3pb1/2pp1n1p/p1nPp1pP/2P1P1P1/2N1BP2/PP1NB3/R2QK2R w KQ - 0 15",
       "line": [],
-      "spoken": "Why don't we take the c5-knight? As I said, we don't give away the dark-squared bishop or create permanent dark-square weaknesses —",
+      "spoken": "Why don't you take the c5-knight? As I said, you don't give away the dark-squared bishop or create permanent dark-square weaknesses —",
       "reanchor": true
     },
     {
@@ -349,7 +349,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "The pawn takes d5 — an interesting moment. We recapture with the c-pawn to keep the structure symmetrical; you consider the e-pawn recapture only when you control e4 —"
+      "spoken": "The pawn takes d5 — an interesting moment. You recapture with the c-pawn to keep the structure symmetrical; you consider the e-pawn recapture only when you control e4 —"
     },
     {
       "ply": 31,
@@ -358,7 +358,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "— but the flaw here is that Black could advance e4, opening the centre and reopening the dark-squared bishop, the last thing we want. So the c-pawn takes. The c-file opens, but our queenside is perfectly defended; why not recapture with the knight —"
+      "spoken": "— but the flaw here is that Black could advance e4, opening the centre and reopening the dark-squared bishop, the last thing you want. So the c-pawn takes. The c-file opens, but your queenside is perfectly defended; why not recapture with the knight —"
     },
     {
       "ply": 32,
@@ -376,7 +376,7 @@
       "line": [
         "Ng3"
       ],
-      "spoken": "The bishop to d7 doesn't threaten b5 yet — we have two defenders there. So finally, after about seven moves, we land the knight on g3. Long-term, our top goal is a specific minor-piece trade."
+      "spoken": "The bishop to d7 doesn't threaten b5 yet — you have two defenders there. So finally, after about seven moves, you land the knight on g3. Long-term, your top goal is a specific minor-piece trade."
     },
     {
       "ply": 34,
@@ -385,7 +385,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "Not the dark-squared bishops — that Black bishop is terrible, a big pawn — the light-squared bishops: trade them and we land an uncontested knight on the f5-square, which just terrorizes Black. The queen to b6 hits b2; we must defend it."
+      "spoken": "Not the dark-squared bishops — that Black bishop is terrible, a big pawn — the light-squared bishops: trade them and you land an uncontested knight on the f5-square, which just terrorizes Black. The queen to b6 hits b2; you must defend it."
     },
     {
       "ply": 35,
@@ -394,7 +394,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "Not b3 — that creates a queenside hook, allows a4 and loosens the knight on c3. We play the queen to d2 — harmonious, connecting the rooks and defending the bishop. Watch for the bishop takes g5, a frequently missed tactic: after the h-pawn takes g5, h6 can lead to a quick mate; Black defends with the knight to h7. Also, a nice square for the king is g2 — out of the way when the queenside opens."
+      "spoken": "Not b3 — that creates a queenside hook, allows a4 and loosens the knight on c3. You play the queen to d2 — harmonious, connecting the rooks and defending the bishop. Watch for the bishop takes g5, a frequently missed tactic: after the h-pawn takes g5, h6 can lead to a quick mate; Black defends with the knight to h7. Also, a nice square for the king is g2 — out of the way when the queenside opens."
     },
     {
       "ply": 36,
@@ -403,7 +403,7 @@
       "line": [
         "Rac8"
       ],
-      "spoken": "On f2 the king is still susceptible to long-term tactics on g4 and c4. The rook to c8 — we can start walking the king toward g2."
+      "spoken": "On f2 the king is still susceptible to long-term tactics on g4 and c4. The rook to c8 — you can start walking the king toward g2."
     },
     {
       "ply": 37,
@@ -412,7 +412,7 @@
       "line": [
         "Kf2"
       ],
-      "spoken": "The king to f2 — routed this way to keep the rooks connected, so we could bring a rook in urgently without the king to g2. We forfeit the bishop takes g5 for now. Why not castle? We can, but I want to keep the bishop takes g5 alive by leaving the rook on h1 — in closed positions you keep tactical possibilities open to keep the opponent on edge."
+      "spoken": "The king to f2 — routed this way to keep the rooks connected, so you could bring a rook in urgently without the king to g2. You forfeit the bishop takes g5 for now. Why not castle? You can, but I want to keep the bishop takes g5 alive by leaving the rook on h1 — in closed positions you keep tactical possibilities open to keep the opponent on edge."
     },
     {
       "ply": 38,
@@ -430,7 +430,7 @@
       "line": [
         "Rab1"
       ],
-      "spoken": "— if Black plays a3 we meet it with b4, pinning the knight on c5; but playing a3 ourselves leaves a hole on b3, and after a3 Black has the knight to b3 hitting the queen. So the subtle rook to b1, planning to answer a3 with b4."
+      "spoken": "— if Black plays a3 you meet it with b4, pinning the knight on c5; but playing a3 yourself leaves a hole on b3, and after a3 Black has the knight to b3 hitting the queen. So the subtle rook to b1, planning to answer a3 with b4."
     },
     {
       "ply": 40,
@@ -439,7 +439,7 @@
       "line": [
         "Qa5"
       ],
-      "spoken": "The rook to b1 protects b4. The queen to a5 — Black shows keen King's Indian knowledge, but now we're almost ready for the bishop takes g5. Let's calculate: the bishop takes g5, the h-pawn takes g5, h6, and after the bishop to h8 the problem is that if we take on g5 with check the king hides on h7; so we need to open the h-file for the other rook to jump to h1 — meaning after the bishop to h8 we play h7, forcing the knight to take on h7, and there's a critical move."
+      "spoken": "The rook to b1 protects b4. The queen to a5 — Black shows keen King's Indian knowledge, but now you're almost ready for the bishop takes g5. Let's calculate: the bishop takes g5, the h-pawn takes g5, h6, and after the bishop to h8 the problem is that if you take on g5 with check the king hides on h7; so you need to open the h-file for the other rook to jump to h1 — meaning after the bishop to h8 you play h7, forcing the knight to take on h7, and there's a critical move."
     },
     {
       "ply": 41,
@@ -457,7 +457,7 @@
       "line": [
         "hxg5"
       ],
-      "spoken": "The h-pawn takes g5 — we're already checkmating the black king."
+      "spoken": "The h-pawn takes g5 — you're already checkmating the black king."
     },
     {
       "ply": 43,
@@ -501,7 +501,7 @@
       "line": [
         "h7+"
       ],
-      "spoken": "— and it isn't necessary; h7 is a much simpler way to win. Let's stick to our guns with h7.",
+      "spoken": "— and it isn't necessary; h7 is a much simpler way to win. Let's stick to your guns with h7.",
       "reanchor": true
     },
     {
@@ -521,7 +521,7 @@
       "line": [
         "Kxh7"
       ],
-      "spoken": "The king takes on h7. The necessary component of the entire combination was actually putting our king on f2. What's the best move now? Not the rook to h1 —"
+      "spoken": "The king takes on h7. The necessary component of the entire combination was actually putting your king on f2. What's the best move now? Not the rook to h1 —"
     },
     {
       "ply": 49,
@@ -530,14 +530,14 @@
       "line": [
         "Qxg5"
       ],
-      "spoken": "— because Black plays the king to g6 and defends g5. So instead the queen takes g5, cutting the king off the g-file, and next we swing the rook to h1 with mate. Black's only try is the bishop to g7 to block g8, but then the rook to h1 forces the king back to g8, and the winning move is the knight to h5."
+      "spoken": "— because Black plays the king to g6 and defends g5. So instead the queen takes g5, cutting the king off the g-file, and next you swing the rook to h1 with mate. Black's only try is the bishop to g7 to block g8, but then the rook to h1 forces the king back to g8, and the winning move is the knight to h5."
     },
     {
       "ply": 43,
       "t": 1467.5,
       "fen": "2r2rk1/1p1b1pb1/3p1n1P/q1nPp1p1/p3P1P1/2N2PN1/PP1QBK2/1R5R b - - 0 22",
       "line": [],
-      "spoken": "There we threaten both the queen takes g7 and the knight to f6 mate. Interestingly, after h6 earlier Black had a ridiculous defensive resource that might have held on, still much worse. We could also start with the knight to h5; either way it's all over. Great game — only twenty-seven moves, and yet a lot to talk about.",
+      "spoken": "There you threaten both the queen takes g7 and the knight to f6 mate. Interestingly, after h6 earlier Black had a ridiculous defensive resource that might have held on, still much worse. You could also start with the knight to h5; either way it's all over. Great game — only twenty-seven moves, and yet a lot to talk about.",
       "reanchor": true
     }
   ]

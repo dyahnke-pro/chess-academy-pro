@@ -25,7 +25,7 @@
     "c4",
     "g6"
    ],
-   "spoken": "We go for the King's Indian from the very start, fianchettoing the bishop on the long diagonal.",
+   "spoken": "You go for the King's Indian from the very start, fianchettoing the bishop on the long diagonal.",
    "kind": "main",
    "teaches": [
     "KID: fianchetto and aim the g7-bishop at the center"
@@ -56,7 +56,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He pins with the bishop to g5, the Smyslov-style sideline. It doesn't change our plan.",
+   "spoken": "He pins with the bishop to g5, the Smyslov-style sideline. It doesn't change your plan.",
    "kind": "main"
   },
   {
@@ -66,7 +66,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We simply play d6 to start, keeping the classical King's Indian structure.",
+   "spoken": "You simply play d6 to start, keeping the classical King's Indian structure.",
    "kind": "main"
   },
   {
@@ -85,7 +85,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle and keep it as simple as possible — there's nothing fancy needed against this setup.",
+   "spoken": "You castle and keep it as simple as possible — there's nothing fancy needed against this setup.",
    "kind": "main"
   },
   {
@@ -104,7 +104,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Now c5, contesting the center and trying to open the long diagonal for our fianchettoed bishop.",
+   "spoken": "Now c5, contesting the center and trying to open the long diagonal for your fianchettoed bishop.",
    "kind": "main",
    "teaches": [
     "...c5 is one of the two KID central breaks"
@@ -162,7 +162,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "We complete development with the bishop to f5. It's not exactly what I'd play in a classical game, but it's an easy, sound setup.",
+   "spoken": "You complete development with the bishop to f5. It's not exactly what I'd play in a classical game, but it's an easy, sound setup.",
    "kind": "main"
   },
   {
@@ -181,7 +181,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Here we start with g5, chasing the bishop back, planning to plant the knight on e4 next.",
+   "spoken": "Here you start with g5, chasing the bishop back, planning to plant the knight on e4 next.",
    "kind": "main"
   },
   {
@@ -203,7 +203,7 @@
     "Nxe4",
     "Bxe4"
    ],
-   "spoken": "We trade on e4.",
+   "spoken": "You trade on e4.",
    "kind": "main"
   },
   {
@@ -213,7 +213,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "He pushes d5. Two things we've achieved: we've cleared the path for our dark-squared bishop, now a monster on the long diagonal, and we've loosened White's grip on the center.",
+   "spoken": "He pushes d5. Two things you've achieved: you've cleared the path for your dark-squared bishop, now a monster on the long diagonal, and you've loosened White's grip on the center.",
    "kind": "main",
    "teaches": [
     "Trading on e4 frees the KID bishop and loosens White\\u2019s center"
@@ -257,7 +257,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "His attack on b7 is a false alarm — we can ignore it — and now we begin operations on the queenside.",
+   "spoken": "His attack on b7 is a false alarm — you can ignore it — and now you begin operations on the queenside.",
    "kind": "main"
   },
   {
@@ -267,7 +267,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We start with a6, preparing the b5 break to prise open the queenside.",
+   "spoken": "You start with a6, preparing the b5 break to prise open the queenside.",
    "kind": "main",
    "teaches": [
     "...a6 and ...b5 open the queenside in these structures"
@@ -325,7 +325,7 @@
    "line": [
     "Rb8"
    ],
-   "spoken": "The rook lifts to b8, keeping the pressure down the b-file, and our knight eyes the e5 outpost.",
+   "spoken": "The rook lifts to b8, keeping the pressure down the b-file, and your knight eyes the e5 outpost.",
    "kind": "main"
   },
   {
@@ -380,7 +380,7 @@
    "line": [
     "fxg6"
    ],
-   "spoken": "We recapture toward the center with the f-pawn — deliberately opening the f-file, because both our rooks and that pawn are lining up for an attack down toward f2.",
+   "spoken": "You recapture toward the center with the f-pawn — deliberately opening the f-file, because both your rooks and that pawn are lining up for an attack down toward f2.",
    "kind": "plan",
    "teaches": [
     "Recapture toward the center to open a file for attack"
@@ -503,7 +503,7 @@
    "line": [
     "Rxc2"
    ],
-   "spoken": "We simplify and grab the central d5-pawn — up material with a winning position. Game over.",
+   "spoken": "You simplify and grab the central d5-pawn — up material with a winning position. Game over.",
    "kind": "main"
   },
   {

@@ -51,7 +51,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "We've faced this many times, and the response is simply to develop — there's nothing special White threatens. The knight to f6."
+      "spoken": "You've faced this many times, and the response is simply to develop — there's nothing special White threatens. The knight to f6."
     },
     {
       "ply": 7,
@@ -69,7 +69,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "We continue developing, the knight to c6."
+      "spoken": "You continue developing, the knight to c6."
     },
     {
       "ply": 9,
@@ -105,7 +105,7 @@
       "line": [
         "Be7"
       ],
-      "spoken": "We develop the bishop to e7, planning the bishop to b7 and castling — and White will often drop the bishop back to b3, just like in an Italian or a Ruy."
+      "spoken": "You develop the bishop to e7, planning the bishop to b7 and castling — and White will often drop the bishop back to b3, just like in an Italian or a Ruy."
     },
     {
       "ply": 13,
@@ -114,7 +114,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "When that happens, we often want to play b5 to gain queenside space. White develops the bishop to e3."
+      "spoken": "When that happens, you often want to play b5 to gain queenside space. White develops the bishop to e3."
     },
     {
       "ply": 14,
@@ -123,7 +123,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Let's castle and complete our kingside development."
+      "spoken": "Let's castle and complete your kingside development."
     },
     {
       "ply": 15,
@@ -132,7 +132,7 @@
       "line": [
         "Nbd2"
       ],
-      "spoken": "White plays the knight to d2. Our light-squared bishop is a little boxed in, true, but it'll find a nice square in time."
+      "spoken": "White plays the knight to d2. Your light-squared bishop is a little boxed in, true, but it'll find a nice square in time."
     },
     {
       "ply": 16,
@@ -141,7 +141,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "How to play? There's something macho about d5 in this position — we're not messing around, striking in the center at once."
+      "spoken": "How to play? There's something macho about d5 in this position — you're not messing around, striking in the center at once."
     },
     {
       "ply": 17,
@@ -159,7 +159,7 @@
       "line": [
         "Nxd5"
       ],
-      "spoken": "We recapture with the knight on d5 — the plan being b6 and the bishop to b7, keeping contact against White's d3-pawn."
+      "spoken": "You recapture with the knight on d5 — the plan being b6 and the bishop to b7, keeping contact against White's d3-pawn."
     },
     {
       "ply": 19,
@@ -168,7 +168,7 @@
       "line": [
         "Ne4"
       ],
-      "spoken": "If White opens with d4 we still go b6. White plays the knight to e4."
+      "spoken": "If White opens with d4 you still go b6. White plays the knight to e4."
     },
     {
       "ply": 20,
@@ -187,7 +187,7 @@
         "Bb5",
         "Bb7"
       ],
-      "spoken": "White pins with the bishop to b5, and we develop the bishop to b7, defending the knight — Black is comfortably better here."
+      "spoken": "White pins with the bishop to b5, and you develop the bishop to b7, defending the knight — Black is comfortably better here."
     },
     {
       "ply": 23,
@@ -205,7 +205,7 @@
       "line": [
         "Nxe3"
       ],
-      "spoken": "We refute it: the knight captures the bishop, taking on e3."
+      "spoken": "You refute it: the knight captures the bishop, taking on e3."
     },
     {
       "ply": 26,
@@ -215,7 +215,7 @@
         "fxe3",
         "Bxg5"
       ],
-      "spoken": "White recaptures, and we take the knight on g5 — and note the queen to h5 is ineffective because of h6."
+      "spoken": "White recaptures, and you take the knight on g5 — and note the queen to h5 is ineffective because of h6."
     },
     {
       "ply": 27,

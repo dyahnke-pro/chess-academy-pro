@@ -25,7 +25,7 @@
     "Nf3",
     "d6"
    ],
-   "spoken": "White develops a knight to f3 and we play d6, heading toward Najdorf waters."
+   "spoken": "White develops a knight to f3 and you play d6, heading toward Najdorf waters."
   },
   {
    "ply": 5,
@@ -97,7 +97,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We play g6 — a Dragon setup. I've played this against Magnus in blitz: allow d4, then attack the center from a distance."
+   "spoken": "You play g6 — a Dragon setup. I've played this against Magnus in blitz: allow d4, then attack the center from a distance."
   },
   {
    "ply": 11,
@@ -116,7 +116,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We fianchetto with a bishop to g7."
+   "spoken": "You fianchetto with a bishop to g7."
   },
   {
    "ply": 13,
@@ -125,7 +125,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles, allowing us to play e5 — another interesting setup. Which setup you choose as Black is largely a matter of taste."
+   "spoken": "White castles, allowing you to play e5 — another interesting setup. Which setup you choose as Black is largely a matter of taste."
   },
   {
    "ply": 14,
@@ -134,7 +134,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "I like e5, clamping d4 — it strongly discourages d4, and if White plays it anyway, a series of trades reopens our g7 bishop to lord over the long diagonal."
+   "spoken": "I like e5, clamping d4 — it strongly discourages d4, and if White plays it anyway, a series of trades reopens your g7 bishop to lord over the long diagonal."
   },
   {
    "ply": 15,
@@ -143,7 +143,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "White plays a rook to e1. Don't think of the g7 bishop alone — the bishop and the e5 pawn are a unit exerting control over d4, the key square. The d5 hole is real, but White can't easily occupy it, since our knight guards it.",
+   "spoken": "White plays a rook to e1. Don't think of the g7 bishop alone — the bishop and the e5 pawn are a unit exerting control over d4, the key square. The d5 hole is real, but White can't easily occupy it, since your knight guards it.",
    "reanchor": true
   },
   {
@@ -153,7 +153,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The drawbacks are real, but the benefits outweigh them here, and we have nice central control."
+   "spoken": "The drawbacks are real, but the benefits outweigh them here, and you have nice central control."
   },
   {
    "ply": 17,
@@ -171,7 +171,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We capture on d4 — that's the whole point."
+   "spoken": "You capture on d4 — that's the whole point."
   },
   {
    "ply": 19,
@@ -180,7 +180,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We take twice — with the pawn, not the knight, which is too committal; then we can decide between grabbing on e4 or a neutral move like a rook to e8."
+   "spoken": "You take twice — with the pawn, not the knight, which is too committal; then you can decide between grabbing on e4 or a neutral move like a rook to e8."
   },
   {
    "ply": 20,
@@ -189,7 +189,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "We recapture on d4 with the pawn — the whole zen of the setup was to take this way if he pushed d4."
+   "spoken": "You recapture on d4 with the pawn — the whole zen of the setup was to take this way if he pushed d4."
   },
   {
    "ply": 21,
@@ -198,7 +198,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "White recaptures on d4. d6 is a weakness, but we have real strengths: a development lead, White's undeveloped queenside, our monster g7 bishop, and the e4 pawn as a target for our rook — a structure I know well from the Ruy Lopez.",
+   "spoken": "White recaptures on d4. d6 is a weakness, but you have real strengths: a development lead, White's undeveloped queenside, your monster g7 bishop, and the e4 pawn as a target for your rook — a structure I know well from the Ruy Lopez.",
    "reanchor": true
   },
   {
@@ -218,7 +218,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White plays a knight to f3 — a bishop to a4 would be a feeble one-move threat. Now d5 is the direct attempt to erase our biggest weakness.",
+   "spoken": "White plays a knight to f3 — a bishop to a4 would be a feeble one-move threat. Now d5 is the direct attempt to erase your biggest weakness.",
    "reanchor": true
   },
   {
@@ -228,7 +228,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "So d5. The complications peak — either the center opens and our superior bishop and White's undeveloped queenside tell, or White pushes on and we've exploited his lack of development.",
+   "spoken": "So d5. The complications peak — either the center opens and your superior bishop and White's undeveloped queenside tell, or White pushes on and you've exploited his lack of development.",
    "reanchor": true
   },
   {
@@ -265,7 +265,7 @@
    "line": [
     "Rxe1+"
    ],
-   "spoken": "First we take on e1 — a rook capture threatens the exchange on e8 with the queen overloaded — then, depending on how White recaptures, we take on d5.",
+   "spoken": "First you take on e1 — a rook capture threatens the exchange on e8 with the queen overloaded — then, depending on how White recaptures, you take on d5.",
    "reanchor": true
   },
   {
@@ -283,7 +283,7 @@
    "line": [
     "Rxe1+"
    ],
-   "spoken": "We take on e1 with the rook and check first, then wait to see how White recaptures — a knight recapture at least keeps contact with the d5-pawn."
+   "spoken": "You take on e1 with the rook and check first, then wait to see how White recaptures — a knight recapture at least keeps contact with the d5-pawn."
   },
   {
    "ply": 27,
@@ -302,7 +302,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "We recapture on d5 with the knight — a queen recapture walks into a knight to c3 with tempo. Centralizing, we discourage a knight to c3, and the knight has b4 and d3 in its future. Black has a small edge, and open-center positions are hard for anyone.",
+   "spoken": "You recapture on d5 with the knight — a queen recapture walks into a knight to c3 with tempo. Centralizing, you discourage a knight to c3, and the knight has b4 and d3 in its future. Black has a small edge, and open-center positions are hard for anyone.",
    "reanchor": true
   },
   {
@@ -312,7 +312,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "White plays a bishop to b3 — a good square. We develop our bishop: a bishop to b6 walks into a knight to g5, so a bishop to f5.",
+   "spoken": "White plays a bishop to b3 — a good square. You develop your bishop: a bishop to b6 walks into a knight to g5, so a bishop to f5.",
    "reanchor": true
   },
   {
@@ -322,7 +322,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "A bishop to f5. The queen isn't overloaded — against a bishop to g5 we move the queen to d7, which also lets a rook come to e8.",
+   "spoken": "A bishop to f5. The queen isn't overloaded — against a bishop to g5 you move the queen to d7, which also lets a rook come to e8.",
    "reanchor": true
   },
   {
@@ -332,7 +332,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "White plays a knight to a3, working around the obstacles. The only way to develop the bishop with tempo is a bishop to g5, else b2 hangs — so we want to take the sting out of it with a queen to d7, off the bishop's line.",
+   "spoken": "White plays a knight to a3, working around the obstacles. The only way to develop the bishop with tempo is a bishop to g5, else b2 hangs — so you want to take the sting out of it with a queen to d7, off the bishop's line.",
    "reanchor": true
   },
   {
@@ -352,7 +352,7 @@
    "line": [
     "Qd1"
    ],
-   "spoken": "White plays a queen to d1, attacking the knight. A bishop capture on d5 would play into our hands — an unassailable queen on d5, and without that bishop White's position comes unstuck.",
+   "spoken": "White plays a queen to d1, attacking the knight. A bishop capture on d5 would play into your hands — an unassailable queen on d5, and without that bishop White's position comes unstuck.",
    "reanchor": true
   },
   {
@@ -384,7 +384,7 @@
     "Qd1",
     "Ncb4"
    ],
-   "spoken": "White's queen drops back to d1 and we plant the knight on b4 — White is stuck, hamstrung by the weak pawn on b2.",
+   "spoken": "White's queen drops back to d1 and you plant the knight on b4 — White is stuck, hamstrung by the weak pawn on b2.",
    "reanchor": true
   },
   {
@@ -394,7 +394,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "White is stuck because of the b2 pawn — nothing moves. He plays a knight to d4, trying to eliminate our g7 bishop, which anchors our whole position.",
+   "spoken": "White is stuck because of the b2 pawn — nothing moves. He plays a knight to d4, trying to eliminate your g7 bishop, which anchors your whole position.",
    "reanchor": true
   },
   {
@@ -424,7 +424,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "So a rook to c8, activating our last piece and pressuring the c2 knight — the c-file is where the party is.",
+   "spoken": "So a rook to c8, activating your last piece and pressuring the c2 knight — the c-file is where the party is.",
    "reanchor": true
   },
   {
@@ -444,7 +444,7 @@
    "line": [
     "Nxb4"
    ],
-   "spoken": "We recapture on b4 — the knight still protects the bishop, and White still has the problem knight on d4.",
+   "spoken": "You recapture on b4 — the knight still protects the bishop, and White still has the problem knight on d4.",
    "reanchor": true
   },
   {
@@ -490,7 +490,7 @@
    "t": 1486.5,
    "fen": "2r3k1/pp1q1pbp/6p1/8/1n1N4/PB1b3P/1P3PP1/R1BQ2K1 b - - 0 23",
    "line": [],
-   "spoken": "Most people would recapture with the queen for the security of a centralized queen, but after the pawn takes our knight, our bishop isn't actually hanging — a bishop capture on f2 with check.",
+   "spoken": "Most people would recapture with the queen for the security of a centralized queen, but after the pawn takes your knight, your bishop isn't actually hanging — a bishop capture on f2 with check.",
    "reanchor": true
   },
   {
@@ -501,7 +501,7 @@
     "Bxd4",
     "axb4"
    ],
-   "spoken": "After the capture on d4 and the recapture on b4, our bishop looks loose — but it isn't, because the capture on f2 with check saves it.",
+   "spoken": "After the capture on d4 and the recapture on b4, your bishop looks loose — but it isn't, because the capture on f2 with check saves it.",
    "reanchor": true
   },
   {
@@ -511,7 +511,7 @@
    "line": [
     "Qf5"
    ],
-   "spoken": "The bishop sacrifice on f2 doesn't work; my idea is a straightforward queen to f5, attacking f2 and piling on the pressure while our time advantage grows.",
+   "spoken": "The bishop sacrifice on f2 doesn't work; my idea is a straightforward queen to f5, attacking f2 and piling on the pressure while your time advantage grows.",
    "reanchor": true
   },
   {
@@ -521,7 +521,7 @@
    "line": [
     "Qe1"
    ],
-   "spoken": "White plays a queen to e1 — a bishop to e3 was the best try to eliminate our d4 monster. Now a rook to e8 is tempting but a queen capture on c8 is a check, so we need prep.",
+   "spoken": "White plays a queen to e1 — a bishop to e3 was the best try to eliminate your d4 monster. Now a rook to e8 is tempting but a queen capture on c8 is a check, so you need prep.",
    "reanchor": true
   },
   {
@@ -531,7 +531,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We play a6, a small improvement, so that when the bishop comes out we grab b2 — a pawn is better than nothing.",
+   "spoken": "You play a6, a small improvement, so that when the bishop comes out you grab b2 — a pawn is better than nothing.",
    "reanchor": true
   },
   {
@@ -551,7 +551,7 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": "We claim a small prize on b2 — just a pawn, but it always starts with a pawn.",
+   "spoken": "You claim a small prize on b2 — just a pawn, but it always starts with a pawn.",
    "reanchor": true
   },
   {
@@ -590,7 +590,7 @@
    "line": [
     "Bd4"
    ],
-   "spoken": "A bishop to d4, testing our opponent — we can always repeat, which isn't a draw since we can vary.",
+   "spoken": "A bishop to d4, testing your opponent — you can always repeat, which isn't a draw since you can vary.",
    "reanchor": true
   },
   {
@@ -628,7 +628,7 @@
    "line": [
     "Bxd2"
    ],
-   "spoken": "We trade the dark-squared bishops on d2 to keep our winning chances alive.",
+   "spoken": "You trade the dark-squared bishops on d2 to keep your winning chances alive.",
    "reanchor": true
   },
   {
@@ -668,7 +668,7 @@
    "line": [
     "Qxc2"
    ],
-   "spoken": "We recapture on c2 — that recapture might have been a blunder.",
+   "spoken": "You recapture on c2 — that recapture might have been a blunder.",
    "reanchor": true
   },
   {
@@ -697,7 +697,7 @@
     "Qxf7",
     "Qd4"
    ],
-   "spoken": "g4 was blundered by me — bad — but our opponent missed it, so we keep torturing White.",
+   "spoken": "g4 was blundered by me — bad — but your opponent missed it, so you keep torturing White.",
    "reanchor": true
   },
   {
@@ -766,7 +766,7 @@
    "line": [
     "Qc5"
    ],
-   "spoken": "White plays a queen to c5. We play a waiting game, hoping for a blunder.",
+   "spoken": "White plays a queen to c5. You play a waiting game, hoping for a blunder.",
    "reanchor": true
   },
   {
@@ -776,7 +776,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "We play h5, improving slowly and forcing another decision as White's clock dwindles.",
+   "spoken": "You play h5, improving slowly and forcing another decision as White's clock dwindles.",
    "reanchor": true
   },
   {
@@ -814,7 +814,7 @@
    "line": [
     "Kg7"
    ],
-   "spoken": "White checks on d8, the king steps to g7, and White finally trades queens. We're winning: a pawn up, and White's king is cut off along the e-file. The plan: a king to e5, and a rook to c6 forcing a rook trade with our king covering every escape square, then we go after the b-pawn and promote — our pawns are perfectly configured with no kingside passer for White.",
+   "spoken": "White checks on d8, the king steps to g7, and White finally trades queens. You're winning: a pawn up, and White's king is cut off along the e-file. The plan: a king to e5, and a rook to c6 forcing a rook trade with your king covering every escape square, then you go after the b-pawn and promote — your pawns are perfectly configured with no kingside passer for White.",
    "reanchor": true
   },
   {

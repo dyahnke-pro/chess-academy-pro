@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": "Black meets the king's pawn with the Scandinavian, challenging our center at once.",
+   "spoken": "Black meets the king's pawn with the Scandinavian, challenging your center at once.",
    "kind": "main"
   },
   {
@@ -43,7 +43,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3 with tempo, hitting the queen on d5 and gaining a free move.",
+   "spoken": "You develop the knight to c3 with tempo, hitting the queen on d5 and gaining a free move.",
    "kind": "main",
    "teaches": [
     "develop with tempo against the early queen"
@@ -57,7 +57,7 @@
     "Qd6",
     "d4"
    ],
-   "spoken": "The queen tucks to d6 — a modern, fully respectable branch of the Scandinavian — and we seize the full center with d4.",
+   "spoken": "The queen tucks to d6 — a modern, fully respectable branch of the Scandinavian — and you seize the full center with d4.",
    "kind": "main",
    "teaches": [
     "Qd6 is a legitimate modern line"
@@ -79,7 +79,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Nothing exotic is needed: we simply develop and control the center, and let Black prove his setup.",
+   "spoken": "Nothing exotic is needed: you simply develop and control the center, and let Black prove his setup.",
    "kind": "plan"
   },
   {
@@ -89,7 +89,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black leans on the d4-pawn and eyes the pin with the bishop to g4 — the classic pressure we have to answer.",
+   "spoken": "Black leans on the d4-pawn and eyes the pin with the bishop to g4 — the classic pressure you have to answer.",
    "teaches": [
     "anticipate the Bg4 pin"
    ]
@@ -101,7 +101,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "So we play the mildly ugly but effective h3, taking the g4-square away from the bishop before the pin can happen.",
+   "spoken": "So you play the mildly ugly but effective h3, taking the g4-square away from the bishop before the pin can happen.",
    "kind": "main",
    "teaches": [
     "prophylaxis against the pin"
@@ -123,7 +123,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Threat handled, we develop actively — the bishop to c4, raking toward f7 and supporting a future d5 break.",
+   "spoken": "Threat handled, you develop actively — the bishop to c4, raking toward f7 and supporting a future d5 break.",
    "kind": "main"
   },
   {
@@ -204,7 +204,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The idea behind the retreat: reroute the knight to e2, then to g3, which frees us to play c3 and secure d4 permanently. A backward-looking move can be exactly right.",
+   "spoken": "The idea behind the retreat: reroute the knight to e2, then to g3, which frees you to play c3 and secure d4 permanently. A backward-looking move can be exactly right.",
    "kind": "plan",
    "teaches": [
     "retreats can be good moves"
@@ -232,7 +232,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "b3 solves everything at once: no worry about the capture on b2, and if the knight harasses from a5 our bishop just drops to d3 and aims at the king.",
+   "spoken": "b3 solves everything at once: no worry about the capture on b2, and if the knight harasses from a5 your bishop just drops to d3 and aims at the king.",
    "kind": "main"
   },
   {
@@ -242,7 +242,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The queen on b4 is stranded in no man's land now; we can trade on e7 or tuck the bishop back to d2, both comfortable.",
+   "spoken": "The queen on b4 is stranded in no man's land now; you can trade on e7 or tuck the bishop back to d2, both comfortable.",
    "teaches": [
     "strand the enemy queen offside"
    ]
@@ -324,7 +324,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "The knight swings to c5 and we begin piling onto the queenside.",
+   "spoken": "The knight swings to c5 and you begin piling onto the queenside.",
    "kind": "main"
   },
   {
@@ -334,7 +334,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "b6 shoves the knight but leaves lasting holes on the queenside — weaknesses we intend to make him pay for later.",
+   "spoken": "b6 shoves the knight but leaves lasting holes on the queenside — weaknesses you intend to make him pay for later.",
    "teaches": [
     "provoked pawn moves create targets"
    ]
@@ -346,7 +346,7 @@
    "line": [
     "Nd3"
    ],
-   "spoken": "Rather than grab anything, we reroute the knight back to d3, heading for e5. It looks mysterious, but it's pure piece-optimization — hunting the best central square for every piece.",
+   "spoken": "Rather than grab anything, you reroute the knight back to d3, heading for e5. It looks mysterious, but it's pure piece-optimization — hunting the best central square for every piece.",
    "kind": "plan",
    "teaches": [
     "maneuver to your best squares before striking"
@@ -396,7 +396,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "We bring the knight back to g4 with tempo: the e6-pawn is falling and the black queen is running out of squares.",
+   "spoken": "You bring the knight back to g4 with tempo: the e6-pawn is falling and the black queen is running out of squares.",
    "kind": "main",
    "teaches": [
     "retreat with tempo to win the weakness"
@@ -435,7 +435,7 @@
     "Nc3",
     "g3"
    ],
-   "spoken": "That's why the rook went to e6 — not just to take the pawn but to deny the queen its escape to d6. With both knights loose, we move one with a threat to win material, pin the defender with the bishop to c4, and route the knight via g5 to e6 to crash through on g7.",
+   "spoken": "That's why the rook went to e6 — not just to take the pawn but to deny the queen its escape to d6. With both knights loose, you move one with a threat to win material, pin the defender with the bishop to c4, and route the knight via g5 to e6 to crash through on g7.",
    "kind": "plan",
    "teaches": [
     "deny the escape square, then collect"
@@ -462,7 +462,7 @@
     "Nc3",
     "Qd6"
    ],
-   "spoken": "To recap: against the popular Qd6 Scandinavian we stop the pin with h3, halt b5 with a4, then reroute the knight to e2 and g3 so c3 can permanently secure d4 — retreats and all. After the trade on e7 the rook to e1 x-rays the queen, the knights improve through g3, e4, c5 and back to d3, and every move simply optimizes a piece.",
+   "spoken": "To recap: against the popular Qd6 Scandinavian you stop the pin with h3, halt b5 with a4, then reroute the knight to e2 and g3 so c3 can permanently secure d4 — retreats and all. After the trade on e7 the rook to e1 x-rays the queen, the knights improve through g3, e4, c5 and back to d3, and every move simply optimizes a piece.",
    "reanchor": true
   }
  ]

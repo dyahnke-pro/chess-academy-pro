@@ -41,7 +41,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight to f3 — of course we play the knight to c6.",
+   "spoken": "The knight to f3 — of course you play the knight to c6.",
    "reanchor": true
   },
   {
@@ -69,7 +69,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We follow the main line with a6, chasing the bishop away from b5. White must decide: take on c6 — the Exchange Variation — or drop the bishop back to a4."
+   "spoken": "You follow the main line with a6, chasing the bishop away from b5. White must decide: take on c6 — the Exchange Variation — or drop the bishop back to a4."
   },
   {
    "ply": 7,
@@ -78,7 +78,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": "The bishop takes c6 — a legitimate move. Aren't we blundering a pawn if White then grabs e5? It's actually a trap a lot of beginners miss. Which pawn do we recapture with?"
+   "spoken": "The bishop takes c6 — a legitimate move. Aren't you blundering a pawn if White then grabs e5? It's actually a trap a lot of beginners miss. Which pawn do you recapture with?"
   },
   {
    "ply": 8,
@@ -87,7 +87,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "The queen to d4 — to enable that, we have to recapture with the d-pawn. There's a rule to take toward the centre, but it's highly overrated; always weigh the pros and cons."
+   "spoken": "The queen to d4 — to enable that, you have to recapture with the d-pawn. There's a rule to take toward the centre, but it's highly overrated; always weigh the pros and cons."
   },
   {
    "ply": 7,
@@ -104,7 +104,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "— the d-pawn recapture opens the bishop for quicker development and, more importantly, takes the sting out of the knight takes e5, because we bring our queen up to d4.",
+   "spoken": "— the d-pawn recapture opens the bishop for quicker development and, more importantly, takes the sting out of the knight takes e5, because you bring your queen up to d4.",
    "reanchor": true
   },
   {
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He knows not to take the pawn, and he castles. Now we have to do something about the e5-pawn, which is hanging — the knight takes e5 is a threat. Many ways to defend it: directly with f6 or the bishop to d6, or indirectly with the bishop to g4, pinning the knight."
+   "spoken": "He knows not to take the pawn, and he castles. Now you have to do something about the e5-pawn, which is hanging — the knight takes e5 is a threat. Many ways to defend it: directly with f6 or the bishop to d6, or indirectly with the bishop to g4, pinning the knight."
   },
   {
    "ply": 10,
@@ -139,7 +139,7 @@
    "t": 276,
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
    "line": [],
-   "spoken": "— do we just not care about developing our knight?",
+   "spoken": "— do you just not care about developing your knight?",
    "reanchor": true
   },
   {
@@ -149,7 +149,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "That's why I'm playing this — to explain a couple of specific properties that make f6 not only possible but quite effective. d4 is correct, and it's an important moment: if we take on d4 we play into White's hands, opening the centre. Having played f6 we've physically weakened our king, and we've developed nothing — the one piece we developed was exchanged — so it's important to keep the centre closed, or better, trade queens, since trading queens makes it less likely your opponent checkmates you.",
+   "spoken": "That's why I'm playing this — to explain a couple of specific properties that make f6 not only possible but quite effective. d4 is correct, and it's an important moment: if you take on d4 you play into White's hands, opening the centre. Having played f6 you've physically weakened your king, and you've developed nothing — the one piece you developed was exchanged — so it's important to keep the centre closed, or better, trade queens, since trading queens makes it less likely your opponent checkmates you.",
    "reanchor": true
   },
   {
@@ -175,7 +175,7 @@
    "t": 366.5,
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
    "line": [],
-   "spoken": "Had White taken on e5, we'd have traded queens and recaptured — I'll talk about that endgame after the game.",
+   "spoken": "Had White taken on e5, you'd have traded queens and recaptured — I'll talk about that endgame after the game.",
    "reanchor": true
   },
   {
@@ -185,7 +185,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3 reinforces the d4-pawn. Now we develop our pieces — nothing extraordinary, but there's a really cool move I remember analyzing —",
+   "spoken": "c3 reinforces the d4-pawn. Now you develop your pieces — nothing extraordinary, but there's a really cool move I remember analyzing —",
    "reanchor": true
   },
   {
@@ -195,7 +195,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "— most people play the bishop to d6, and that's what we play too, for solid, simple chess, though it's not the move I actually play over the board."
+   "spoken": "— most people play the bishop to d6, and that's what you play too, for solid, simple chess, though it's not the move I actually play over the board."
   },
   {
    "ply": 15,
@@ -204,7 +204,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "The knight to d2 — our opponent continues developing well, and we should keep developing too."
+   "spoken": "The knight to d2 — your opponent continues developing well, and you should keep developing too."
   },
   {
    "ply": 16,
@@ -213,7 +213,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "We need to develop the knight from g8, our last piece preventing castling. The knight to h6 is awkward — you don't usually develop knights to the rim — so the knight to e7."
+   "spoken": "You need to develop the knight from g8, your last piece preventing castling. The knight to h6 is awkward — you don't usually develop knights to the rim — so the knight to e7."
   },
   {
    "ply": 17,
@@ -231,7 +231,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "— there's no need: the bishop was pinning White's knight to the queen, a valuable bishop, so we simply drop it back to h5, preserving the pin. Retreating moves are never inherently bad."
+   "spoken": "— there's no need: the bishop was pinning White's knight to the queen, a valuable bishop, so you simply drop it back to h5, preserving the pin. Retreating moves are never inherently bad."
   },
   {
    "ply": 19,
@@ -257,7 +257,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "— and those pawns become easier to attack; g4 would play right into our hands.",
+   "spoken": "— and those pawns become easier to attack; g4 would play right into your hands.",
    "reanchor": true
   },
   {
@@ -267,7 +267,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "The pawns come off; we simply recapture with the f-pawn, and I think the queen to b3 is the theoretical move."
+   "spoken": "The pawns come off; you simply recapture with the f-pawn, and I think the queen to b3 is the theoretical move."
   },
   {
    "ply": 21,
@@ -285,7 +285,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Let's figure out this position. There's no problem — we just castle, and we're not blundering our bishop, because the c7-pawn guards the bishop on d6. By castling we exert more pressure on the knight on f3, still pinning it. But the queen to b3 is a very powerful move: it sets up an x-ray against our king and unpins the knight, which can now move without fear of losing White's queen. Our top priority is to deal with that x-ray, which in many cases leads to a discovered check — White threatens the knight takes d6 with a devastating check."
+   "spoken": "Let's figure out this position. There's no problem — you just castle, and you're not blundering your bishop, because the c7-pawn guards the bishop on d6. By castling you exert more pressure on the knight on f3, still pinning it. But the queen to b3 is a very powerful move: it sets up an x-ray against your king and unpins the knight, which can now move without fear of losing White's queen. Your top priority is to deal with that x-ray, which in many cases leads to a discovered check — White threatens the knight takes d6 with a devastating check."
   }
  ]
 }

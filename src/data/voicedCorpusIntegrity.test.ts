@@ -29,6 +29,7 @@ import {
 const ROOT = join(__dirname, '../..');
 const WALKTHROUGHS = join(ROOT, 'src/data/voiced-walkthroughs.json');
 const TEACHINGS = join(ROOT, 'public/data/voiced-teachings.json');
+const MATCHUPS = join(ROOT, 'src/data/voiced-matchups.json');
 
 type Node = { idea?: string; asides?: { idea?: string }[]; children?: ({ node?: Node } & Node)[] };
 type Root = { openingName?: string; tree: { root: Node } };
@@ -52,25 +53,54 @@ describe('the derived voiced files are in sync with their source', () => {
   // (verified: identical md5 across consecutive runs), so a clean corpus is a
   // clean pass. Non-destructive — the originals are restored either way, so a
   // failure reports the drift instead of silently "fixing" it in the tree.
-  it('rebuilding from data/video-narration-voiced reproduces both files exactly', () => {
-    const before = { w: readFileSync(WALKTHROUGHS), t: readFileSync(TEACHINGS) };
+  // MATCHUPS IS IN HERE NOW, and it is the reason this test exists. Its
+  // committed file carried the 2026-08-28 perspective migration that
+  // build-voiced-matchups.mjs did not apply, so regenerating it REVERTED 8,197
+  // pronouns — a landmine for whoever next ran the builder. Fixed at the root
+  // (the corpus source is migrated and the depersonaliser no longer emits
+  // first-person plural), so a rebuild now reproduces it exactly and this test
+  // keeps it that way.
+  it('rebuilding from data/video-narration-voiced reproduces all three files exactly', () => {
+    const before = {
+      w: readFileSync(WALKTHROUGHS),
+      t: readFileSync(TEACHINGS),
+      m: readFileSync(MATCHUPS),
+    };
     try {
-      execFileSync('node', ['scripts/build-voiced-walkthroughs.mjs'], { cwd: ROOT, stdio: 'ignore' });
-      execFileSync('node', ['scripts/build-voiced-teachings.mjs'], { cwd: ROOT, stdio: 'ignore' });
-      const after = { w: readFileSync(WALKTHROUGHS), t: readFileSync(TEACHINGS) };
-      expect(
-        after.w.equals(before.w),
-        'voiced-walkthroughs.json is not what its source builds — rerun scripts/build-voiced-walkthroughs.mjs and commit',
-      ).toBe(true);
-      expect(
-        after.t.equals(before.t),
-        'voiced-teachings.json is not what its source builds — rerun scripts/build-voiced-teachings.mjs and commit',
-      ).toBe(true);
+      for (const script of [
+        'scripts/build-voiced-walkthroughs.mjs',
+        'scripts/build-voiced-teachings.mjs',
+        'scripts/build-voiced-matchups.mjs',
+      ]) execFileSync('node', [script], { cwd: ROOT, stdio: 'ignore' });
+      const after = {
+        w: readFileSync(WALKTHROUGHS),
+        t: readFileSync(TEACHINGS),
+        m: readFileSync(MATCHUPS),
+      };
+      // voiced-teachings.json stamps a "generatedAt" DATE. Comparing it raw made
+      // this gate fail the moment the clock crossed midnight UTC — a false alarm
+      // every day for anyone who had not rebuilt that day, which is exactly how
+      // a gate teaches people to ignore it. Neutralise that one field and keep
+      // the byte comparison everywhere else.
+      const stable = (b: Buffer): string =>
+        b.toString('utf8').replace(/"generatedAt":\s*"[^"]*"/, '"generatedAt":"<stamp>"');
+
+      for (const [key, name, script] of [
+        ['w', 'voiced-walkthroughs.json', 'build-voiced-walkthroughs.mjs'],
+        ['t', 'voiced-teachings.json', 'build-voiced-teachings.mjs'],
+        ['m', 'voiced-matchups.json', 'build-voiced-matchups.mjs'],
+      ] as const) {
+        expect(
+          stable(after[key]) === stable(before[key]),
+          `${name} is not what its source builds — rerun scripts/${script} and commit`,
+        ).toBe(true);
+      }
     } finally {
       writeFileSync(WALKTHROUGHS, before.w);
       writeFileSync(TEACHINGS, before.t);
+      writeFileSync(MATCHUPS, before.m);
     }
-  }, 60_000);
+  }, 120_000);
 });
 
 describe('chatter cannot grow back into the shipped narration', () => {

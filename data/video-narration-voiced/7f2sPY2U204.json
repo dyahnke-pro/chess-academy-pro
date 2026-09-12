@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "Another King's Indian — since we've spent so long talking about it, we might as well play it."
+   "spoken": "Another King's Indian — since you've spent so long talking about it, you might as well play it."
   },
   {
    "ply": 4,
@@ -92,7 +92,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "In effect we've reached the Maroczy structure from the last game — but with one key difference."
+   "spoken": "In effect you've reached the Maroczy structure from the last game — but with one key difference."
   },
   {
    "ply": 16,
@@ -110,7 +110,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "Our pawn is on c7 instead of e7, and that gives us a direct line of fire at the e4-pawn. The question is what breakthrough to prepare."
+   "spoken": "Your pawn is on c7 instead of e7, and that gives you a direct line of fire at the e4-pawn. The question is what breakthrough to prepare."
   },
   {
    "ply": 18,
@@ -146,7 +146,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "This opens ideas like the queen to h4 — and note, his bishop is now on a square where it's undefended, and our rook on e8 x-rays it."
+   "spoken": "This opens ideas like the queen to h4 — and note, his bishop is now on a square where it's undefended, and your rook on e8 x-rays it."
   },
   {
    "ply": 22,
@@ -164,7 +164,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "He's stopped f4 — so ask the Sam Shankland question: can we play it anyway?"
+   "spoken": "He's stopped f4 — so ask the Sam Shankland question: can you play it anyway?"
   },
   {
    "ply": 24,
@@ -173,7 +173,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "Yes we can — because if he captures, we recapture, and he's forced to shed a tempo with the knight."
+   "spoken": "Yes you can — because if he captures, you recapture, and he's forced to shed a tempo with the knight."
   },
   {
    "ply": 25,
@@ -200,7 +200,7 @@
    "line": [
     "Nc2"
    ],
-   "spoken": "And there's a sacrifice we're beginning to eye — one we can apply right now."
+   "spoken": "And there's a sacrifice you're beginning to eye — one you can apply right now."
   },
   {
    "ply": 28,
@@ -227,7 +227,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "It looks like we should just grab the rook on f1 — and against another grandmaster I would. But here we're going for mate: the queen to h4."
+   "spoken": "It looks like you should just grab the rook on f1 — and against another grandmaster I would. But here you're going for mate: the queen to h4."
   },
   {
    "ply": 31,
@@ -245,7 +245,7 @@
    "line": [
     "Nxf1"
    ],
-   "spoken": "So we take the exchange, not forfeiting the opportunity."
+   "spoken": "So you take the exchange, not forfeiting the opportunity."
   },
   {
    "ply": 33,
@@ -254,7 +254,7 @@
    "line": [
     "Bxf1"
    ],
-   "spoken": "We've won the exchange — and now the key principle: the number one cause of disaster after winning material is forgetting to keep applying basic principles, like continuing your development."
+   "spoken": "You've won the exchange — and now the key principle: the number one cause of disaster after winning material is forgetting to keep applying basic principles, like continuing your development."
   },
   {
    "ply": 34,
@@ -273,7 +273,7 @@
     "Bxe5",
     "dxe5"
    ],
-   "spoken": "He trades pieces, which only cements our pawn structure."
+   "spoken": "He trades pieces, which only cements your pawn structure."
   },
   {
    "ply": 37,
@@ -282,7 +282,7 @@
    "line": [
     "Qd6"
    ],
-   "spoken": "To consolidate: develop the knight and bring a rook to d8 — the question is whether we can do both, or first have to defend the pawn."
+   "spoken": "To consolidate: develop the knight and bring a rook to d8 — the question is whether you can do both, or first have to defend the pawn."
   },
   {
    "ply": 38,
@@ -291,7 +291,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The knight to d7 — and we can always smoke his queen out with the queen to e7 next."
+   "spoken": "The knight to d7 — and you can always smoke his queen out with the queen to e7 next."
   },
   {
    "ply": 39,
@@ -345,7 +345,7 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "The knight to c5 — nothing has happened to the idea from the previous game: we threaten a check on d2 that would win his knight."
+   "spoken": "The knight to c5 — nothing has happened to the idea from the previous game: you threaten a check on d2 that would win his knight."
   },
   {
    "ply": 45,
@@ -354,7 +354,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "He doesn't seem aware he's down the exchange. We double the rooks on d8, and a5 will stop him chasing our knight away."
+   "spoken": "He doesn't seem aware he's down the exchange. You double the rooks on d8, and a5 will stop him chasing your knight away."
   },
   {
    "ply": 49,
@@ -375,7 +375,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": "Now bring our king into the picture."
+   "spoken": "Now bring your king into the picture."
   },
   {
    "ply": 52,
@@ -431,7 +431,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "Push the pawn — it breaks through, and it opens a path for our king to march all the way to g3, Russian-school style."
+   "spoken": "Push the pawn — it breaks through, and it opens a path for your king to march all the way to g3, Russian-school style."
   },
   {
    "ply": 60,
@@ -513,7 +513,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "Always look at the undefended pieces and the x-rays. The bishop to h3, textbook style, forces the pawn forward — then we win the knight and promote, or force him to give up his bishop for the pawn."
+   "spoken": "Always look at the undefended pieces and the x-rays. The bishop to h3, textbook style, forces the pawn forward — then you win the knight and promote, or force him to give up his bishop for the pawn."
   },
   {
    "ply": 69,
@@ -559,7 +559,7 @@
     "Kxf1",
     "Rxc2"
    ],
-   "spoken": "Now his knight is lost — we send our knight forward with a check, or simply promote; the game is over."
+   "spoken": "Now his knight is lost — you send your knight forward with a check, or simply promote; the game is over."
   },
   {
    "ply": 10,

@@ -17,7 +17,7 @@
         "exd5",
         "Nf6"
       ],
-      "spoken": "We're White against the Scandinavian: the pawn to e4, d5, we take on d5, and instead of recapturing with the queen Black plays the knight to f6."
+      "spoken": "You're White against the Scandinavian: the pawn to e4, d5, you take on d5, and instead of recapturing with the queen Black plays the knight to f6."
     },
     {
       "ply": 5,
@@ -72,7 +72,7 @@
         "Nxd5",
         "d4"
       ],
-      "spoken": "After the knight takes d5, we play d4. Look how awkward Black's light-squared bishop is — in the way of everything."
+      "spoken": "After the knight takes d5, you play d4. Look how awkward Black's light-squared bishop is — in the way of everything."
     },
     {
       "ply": 10,
@@ -311,7 +311,7 @@
       "t": 1419,
       "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4",
       "line": [],
-      "spoken": "— but it's an interesting line. Now: the knight from b8 to d7, the knight to c3, a6, and refraining from the bishop to a4 and b5, Black plays the knight to b6, we go d4 — and here Black could take the queen, but the knight takes d5 is more solid, then the knight to f3. A great example of concrete thinking: I said c4 was bad in the other position, but you can't assume it's bad here and reflexively play a3 — you'd waste time. c4 is good here because the situation differs: before, a pawn stood at e6 protecting the knight; now the queen to a4 with check wins, since after the knight to c6, b5, and c takes b5. Think concretely.",
+      "spoken": "— but it's an interesting line. Now: the knight from b8 to d7, the knight to c3, a6, and refraining from the bishop to a4 and b5, Black plays the knight to b6, you go d4 — and here Black could take the queen, but the knight takes d5 is more solid, then the knight to f3. A great example of concrete thinking: I said c4 was bad in the other position, but you can't assume it's bad here and reflexively play a3 — you'd waste time. c4 is good here because the situation differs: before, a pawn stood at e6 protecting the knight; now the queen to a4 with check wins, since after the knight to c6, b5, and c takes b5. Think concretely.",
       "reanchor": true
     }
   ]

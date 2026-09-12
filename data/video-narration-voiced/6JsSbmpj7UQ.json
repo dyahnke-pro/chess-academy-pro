@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "We open with the queen's pawn, looking for a solid, structured game.",
+   "spoken": "You open with the queen's pawn, looking for a solid, structured game.",
    "kind": "main"
   },
   {
@@ -76,7 +76,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "The natural e4 kicks the knight and builds the broad pawn center Black has invited us to build.",
+   "spoken": "The natural e4 kicks the knight and builds the broad pawn center Black has invited you to build.",
    "kind": "main"
   },
   {
@@ -96,7 +96,7 @@
     "bxc3",
     "Bg7"
    ],
-   "spoken": "There's the hypermodern bargain: Black lets us plant pawns on d4 and c3 and fianchettoes, planning to strike with c5, the knight to c6, and the bishop to g4 — giving up the center only to assault it as fast as possible.",
+   "spoken": "There's the hypermodern bargain: Black lets you plant pawns on d4 and c3 and fianchettoes, planning to strike with c5, the knight to c6, and the bishop to g4 — giving up the center only to assault it as fast as possible.",
    "kind": "main",
    "teaches": [
     "Black concedes then attacks the center"
@@ -187,7 +187,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Top priority is getting the king out of the center, so we castle. A brazen h4 lunge would be far too loose with our center already under fire.",
+   "spoken": "Top priority is getting the king out of the center, so you castle. A brazen h4 lunge would be far too loose with your center already under fire.",
    "kind": "main"
   },
   {
@@ -213,7 +213,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black develops to c6, and it's tempting to swap it off — but capturing wrecks our light squares: it opens the bishop's path to a6 to harass the e2-knight, and the doubled c-pawns actually become a Grünfeld asset. So we don't take.",
+   "spoken": "Black develops to c6, and it's tempting to swap it off — but capturing wrecks your light squares: it opens the bishop's path to a6 to harass the e2-knight, and the doubled c-pawns actually become a Grünfeld asset. So you don't take.",
    "kind": "main",
    "teaches": [
     "why Bxc6 helps Black"
@@ -226,7 +226,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Instead we bring up reinforcements — the bishop to e3, buttressing d4. White is now a shade better.",
+   "spoken": "Instead you bring up reinforcements — the bishop to e3, buttressing d4. White is now a shade better.",
    "kind": "main"
   },
   {
@@ -309,7 +309,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We keep the bishops on with the retreat to b3, backing the future d5 break rather than trading pieces.",
+   "spoken": "You keep the bishops on with the retreat to b3, backing the future d5 break rather than trading pieces.",
    "kind": "main"
   },
   {
@@ -346,7 +346,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "With the rooks traded the queen finally comes to d2, connecting our forces free of any Nxd4 tricks.",
+   "spoken": "With the rooks traded the queen finally comes to d2, connecting your forces free of any Nxd4 tricks.",
    "kind": "main"
   },
   {
@@ -406,7 +406,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "The classic h4. Not a three-move mate — a nagging, Soviet-style improving move that leans on Black's g6 hook. We march to h5 and maybe h6 to seed back-rank ideas; our king is perfectly safe and Black has no counterplay at all.",
+   "spoken": "The classic h4. Not a three-move mate — a nagging, Soviet-style improving move that leans on Black's g6 hook. You march to h5 and maybe h6 to seed back-rank ideas; your king is perfectly safe and Black has no counterplay at all.",
    "kind": "plan",
    "teaches": [
     "h4 exploits the g6 hook"
@@ -477,7 +477,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "This trade is a limited-time offer: taking on g7 lets us plant the knight on f4 — impossible right now, since it would sever queen and bishop and hang the h6-bishop.",
+   "spoken": "This trade is a limited-time offer: taking on g7 lets you plant the knight on f4 — impossible right now, since it would sever queen and bishop and hang the h6-bishop.",
    "teaches": [
     "sequence the captures to keep the pieces connected"
    ]
@@ -529,7 +529,7 @@
    "line": [
     "Qg5"
    ],
-   "spoken": "We dive in with the queen to g5, eyeing h5. A sac on h5 right now would be two empty checks — no pieces behind it — so we build first.",
+   "spoken": "You dive in with the queen to g5, eyeing h5. A sac on h5 right now would be two empty checks — no pieces behind it — so you build first.",
    "kind": "main",
    "teaches": [
     "don’t sacrifice without follow-up force"
@@ -556,7 +556,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 — opening the center is all in our favor here; it carries the strong points of e5 with none of the drawbacks, and it threatens to take on e6.",
+   "spoken": "d5 — opening the center is all in your favor here; it carries the strong points of e5 with none of the drawbacks, and it threatens to take on e6.",
    "kind": "main"
   },
   {
@@ -575,7 +575,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We recapture with the e-pawn, not the bishop, which would leave the d1-rook loose. This keeps a passed pawn rolling toward d6 and opens both the knight's and the bishop's pathways.",
+   "spoken": "You recapture with the e-pawn, not the bishop, which would leave the d1-rook loose. This keeps a passed pawn rolling toward d6 and opens both the knight's and the bishop's pathways.",
    "kind": "main",
    "teaches": [
     "recapture to keep the passer and the lines"
@@ -588,7 +588,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "f5 reeks of desperation but has a point — trying to stop the knight reaching e4 and to hem in our light-squared bishop.",
+   "spoken": "f5 reeks of desperation but has a point — trying to stop the knight reaching e4 and to hem in your light-squared bishop.",
    "kind": "main"
   },
   {
@@ -617,7 +617,7 @@
    "line": [
     "Bf7"
    ],
-   "spoken": "The deflection: the bishop to f7 hits g6 and forces the queen to take, or it's mate — after which we grab the rook and the pawn queens.",
+   "spoken": "The deflection: the bishop to f7 hits g6 and forces the queen to take, or it's mate — after which you grab the rook and the pawn queens.",
    "kind": "main",
    "teaches": [
     "deflection to the promotion"
@@ -639,7 +639,7 @@
    "line": [
     "Qxd8"
    ],
-   "spoken": "We collect the rook. The rest is just clean technique.",
+   "spoken": "You collect the rook. The rest is just clean technique.",
    "kind": "main"
   },
   {
@@ -680,7 +680,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "Simpler still: step the queen off d8 so that promoting is unstoppable, and if the knight is given up we recapture and win the queen anyway.",
+   "spoken": "Simpler still: step the queen off d8 so that promoting is unstoppable, and if the knight is given up you recapture and win the queen anyway.",
    "kind": "main"
   },
   {
@@ -713,7 +713,7 @@
     "Qxd5",
     "d8=N+"
    ],
-   "spoken": "We promote to a knight with check — the underpromotion delivers a discovered check on the king, winning the queen and the game.",
+   "spoken": "You promote to a knight with check — the underpromotion delivers a discovered check on the king, winning the queen and the game.",
    "kind": "main",
    "teaches": [
     "promotion-with-check underpromotion"

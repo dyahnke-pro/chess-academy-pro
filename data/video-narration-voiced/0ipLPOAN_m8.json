@@ -16,7 +16,7 @@
         "Nf6",
         "d4"
       ],
-      "spoken": "We meet the queen-pawn setup with the knight to f6; White stakes out c4 and d4, and we're heading into a King's Indian."
+      "spoken": "You meet the queen-pawn setup with the knight to f6; White stakes out c4 and d4, and you're heading into a King's Indian."
     },
     {
       "ply": 5,
@@ -26,7 +26,7 @@
         "g6",
         "Nf3"
       ],
-      "spoken": "We fianchetto with g6, and White develops the knight to f3."
+      "spoken": "You fianchetto with g6, and White develops the knight to f3."
     },
     {
       "ply": 7,
@@ -66,7 +66,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "We reply with the classical d6."
+      "spoken": "You reply with the classical d6."
     },
     {
       "ply": 9,
@@ -85,7 +85,7 @@
         "O-O",
         "O-O"
       ],
-      "spoken": "We castle, and White castles."
+      "spoken": "You castle, and White castles."
     },
     {
       "ply": 12,
@@ -94,7 +94,7 @@
       "line": [
         "Nbd7"
       ],
-      "spoken": "We pick the classical setup — the queen's knight to d7. Easy to learn, easy to understand, and what I play in my serious blitz."
+      "spoken": "You pick the classical setup — the queen's knight to d7. Easy to learn, easy to understand, and what I play in my serious blitz."
     },
     {
       "ply": 13,
@@ -103,7 +103,7 @@
       "line": [
         "Bg5"
       ],
-      "spoken": "White develops the bishop to g5, eyeing our knight — though the e7-pawn means it's no real pin."
+      "spoken": "White develops the bishop to g5, eyeing your knight — though the e7-pawn means it's no real pin."
     },
     {
       "ply": 15,
@@ -142,7 +142,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "We ask the bishop the polite question with h6."
+      "spoken": "You ask the bishop the polite question with h6."
     },
     {
       "ply": 19,
@@ -161,14 +161,14 @@
         "Nxf6",
         "Nc3"
       ],
-      "spoken": "We recapture on f6 with the knight — flexibility. With White's dark-squared bishop gone, White brings the other knight to c3."
+      "spoken": "You recapture on f6 with the knight — flexibility. With White's dark-squared bishop gone, White brings the other knight to c3."
     },
     {
       "ply": 19,
       "t": 217,
       "fen": "r1bq1rk1/pppnppb1/3p1Bpp/8/2PP4/5NP1/PP2PPBP/RN1Q1RK1 b - - 0 10",
       "line": [],
-      "spoken": "Why recapture with the knight and not the bishop? Because giving up White's dark-squared bishop has changed our whole read of the position.",
+      "spoken": "Why recapture with the knight and not the bishop? Because giving up White's dark-squared bishop has changed your whole read of the position.",
       "reanchor": true
     },
     {
@@ -178,7 +178,7 @@
       "line": [
         "Nxf6"
       ],
-      "spoken": "We now own the dark squares uncontested, so we no longer need to force e5.",
+      "spoken": "You now own the dark squares uncontested, so you no longer need to force e5.",
       "reanchor": true
     },
     {
@@ -188,7 +188,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "Instead the dark squares are simply ours to dominate.",
+      "spoken": "Instead the dark squares are simply yours to dominate.",
       "reanchor": true
     },
     {
@@ -198,7 +198,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "We carve open the long diagonal with c5."
+      "spoken": "You carve open the long diagonal with c5."
     },
     {
       "ply": 23,
@@ -234,7 +234,7 @@
       "line": [
         "a6"
       ],
-      "spoken": "We play a6, planning to drop the bishop calmly back to d7."
+      "spoken": "You play a6, planning to drop the bishop calmly back to d7."
     },
     {
       "ply": 28,
@@ -262,7 +262,7 @@
       "line": [
         "Ng4"
       ],
-      "spoken": "We stop it with the knight to g4, heading for the e5 outpost."
+      "spoken": "You stop it with the knight to g4, heading for the e5 outpost."
     },
     {
       "ply": 32,
@@ -282,7 +282,7 @@
         "Nxe5",
         "Bxe5"
       ],
-      "spoken": "White takes on e5, and we recapture with the bishop, capturing on e5 — this bishop is our main asset."
+      "spoken": "White takes on e5, and you recapture with the bishop, capturing on e5 — this bishop is your main asset."
     },
     {
       "ply": 35,
@@ -291,7 +291,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "White lunges g4, doing nothing at all against our real plan of b5."
+      "spoken": "White lunges g4, doing nothing at all against your real plan of b5."
     },
     {
       "ply": 36,
@@ -300,7 +300,7 @@
       "line": [
         "b5"
       ],
-      "spoken": "We push b5. Some would grab dark squares with g5 here, but that would be a serious mistake."
+      "spoken": "You push b5. Some would grab dark squares with g5 here, but that would be a serious mistake."
     },
     {
       "ply": 38,
@@ -310,7 +310,7 @@
         "cxb5",
         "axb5"
       ],
-      "spoken": "White takes on b5, and we recapture with the a-pawn, capturing on b5."
+      "spoken": "White takes on b5, and you recapture with the a-pawn, capturing on b5."
     },
     {
       "ply": 39,
@@ -328,7 +328,7 @@
       "line": [
         "b4"
       ],
-      "spoken": "Rather than g5, we keep piling on with b4."
+      "spoken": "Rather than g5, you keep piling on with b4."
     },
     {
       "ply": 41,
@@ -364,7 +364,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "We tuck the bishop back to g7, which also stops f4 coming with tempo."
+      "spoken": "You tuck the bishop back to g7, which also stops f4 coming with tempo."
     },
     {
       "ply": 45,
@@ -382,7 +382,7 @@
       "line": [
         "Qa5"
       ],
-      "spoken": "So we prepare it and beef up the queenside with the queen to a5."
+      "spoken": "So you prepare it and beef up the queenside with the queen to a5."
     },
     {
       "ply": 45,
@@ -418,7 +418,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "Now we step on the gas with c4."
+      "spoken": "Now you step on the gas with c4."
     },
     {
       "ply": 49,
@@ -436,7 +436,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "We could close the kingside with g5, but there's no need yet — instead we play c3."
+      "spoken": "You could close the kingside with g5, but there's no need yet — instead you play c3."
     },
     {
       "ply": 51,
@@ -454,7 +454,7 @@
       "line": [
         "bxc3"
       ],
-      "spoken": "The greedy move is to grab material, but we recapture on c3 with the b-pawn — very much in the King's Indian spirit."
+      "spoken": "The greedy move is to grab material, but you recapture on c3 with the b-pawn — very much in the King's Indian spirit."
     },
     {
       "ply": 53,
@@ -472,7 +472,7 @@
       "line": [
         "g5"
       ],
-      "spoken": "Now we shut the kingside with g5 so our king never gets pried open."
+      "spoken": "Now you shut the kingside with g5 so your king never gets pried open."
     },
     {
       "ply": 55,
@@ -500,7 +500,7 @@
         "Qxa4",
         "Rxa4"
       ],
-      "spoken": "White takes, and we recapture with the rook, capturing on a4 — the queen trade itself is our weapon, and White's position collapses."
+      "spoken": "White takes, and you recapture with the rook, capturing on a4 — the queen trade itself is your weapon, and White's position collapses."
     },
     {
       "ply": 59,
@@ -536,7 +536,7 @@
       "line": [
         "Bxa1"
       ],
-      "spoken": "We collect the exchange, capturing on a1 with the bishop."
+      "spoken": "You collect the exchange, capturing on a1 with the bishop."
     },
     {
       "ply": 63,
@@ -554,7 +554,7 @@
       "line": [
         "Rfa8"
       ],
-      "spoken": "We bring the other rook in — to a8, not c8 — forcing White's knight back to c1."
+      "spoken": "You bring the other rook in — to a8, not c8 — forcing White's knight back to c1."
     },
     {
       "ply": 66,
@@ -564,7 +564,7 @@
         "Rc1",
         "Rxa2"
       ],
-      "spoken": "White's rook retreats to c1, and we snatch the pawn, capturing on a2 with the rook — the rook to b4 and b1 was cleanest, but this wins too."
+      "spoken": "White's rook retreats to c1, and you snatch the pawn, capturing on a2 with the rook — the rook to b4 and b1 was cleanest, but this wins too."
     },
     {
       "ply": 67,
@@ -582,7 +582,7 @@
       "line": [
         "R8a3"
       ],
-      "spoken": "We swing the back rook down to a3, doubling on the third rank."
+      "spoken": "You swing the back rook down to a3, doubling on the third rank."
     },
     {
       "ply": 70,
@@ -610,7 +610,7 @@
       "line": [
         "Bxb5"
       ],
-      "spoken": "We simply capture on b5 with the bishop; White has blundered the knight."
+      "spoken": "You simply capture on b5 with the bishop; White has blundered the knight."
     },
     {
       "ply": 73,
@@ -638,7 +638,7 @@
         "Kg3",
         "Ra1"
       ],
-      "spoken": "White's king wanders to g3, and we plant a rook on a1."
+      "spoken": "White's king wanders to g3, and you plant a rook on a1."
     },
     {
       "ply": 78,
@@ -648,7 +648,7 @@
         "Rxc2",
         "Bxc2"
       ],
-      "spoken": "White grabs the c-pawn, and we recapture with the bishop, capturing on c2 — up two full rooks now."
+      "spoken": "White grabs the c-pawn, and you recapture with the bishop, capturing on c2 — up two full rooks now."
     },
     {
       "ply": 79,
@@ -666,7 +666,7 @@
       "line": [
         "R1a2"
       ],
-      "spoken": "We double the rooks again, the back one to a2."
+      "spoken": "You double the rooks again, the back one to a2."
     },
     {
       "ply": 82,
@@ -694,7 +694,7 @@
       "line": [
         "Rxf3#"
       ],
-      "spoken": "We finish it — the rook captures on f3, checkmate. A classic, smooth King's Indian win."
+      "spoken": "You finish it — the rook captures on f3, checkmate. A classic, smooth King's Indian win."
     }
   ]
 }

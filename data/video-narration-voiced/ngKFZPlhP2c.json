@@ -33,7 +33,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "We've been playing e5 exclusively; I want to vary it up a little."
+      "spoken": "You've been playing e5 exclusively; I want to vary it up a little."
     },
     {
       "ply": 5,
@@ -88,7 +88,7 @@
         "c5",
         "c3"
       ],
-      "spoken": "c5, and we meet it with c3, keeping our centre intact. In a way you get the best of all worlds: you develop your pieces and keep the centre —"
+      "spoken": "c5, and you meet it with c3, keeping your centre intact. In a way you get the best of all worlds: you develop your pieces and keep the centre —"
     },
     {
       "ply": 12,
@@ -106,7 +106,7 @@
       "line": [
         "Ngf3"
       ],
-      "spoken": "— and the knight to f3, which looks more natural, was thought inferior; yet we're going to play it. That changed about 25 years ago —"
+      "spoken": "— and the knight to f3, which looks more natural, was thought inferior; yet you're going to play it. That changed about 25 years ago —"
     },
     {
       "ply": 14,
@@ -142,7 +142,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "— we recapture on d4 —"
+      "spoken": "— you recapture on d4 —"
     },
     {
       "ply": 18,
@@ -160,7 +160,7 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "We take on d4."
+      "spoken": "You take on d4."
     },
     {
       "ply": 20,
@@ -169,7 +169,7 @@
       "line": [
         "Qxd4"
       ],
-      "spoken": "The queen takes d4. Now, without our next move, White's entire position would collapse — the bishop is hanging and the pawn is hanging —"
+      "spoken": "The queen takes d4. Now, without your next move, White's entire position would collapse — the bishop is hanging and the pawn is hanging —"
     },
     {
       "ply": 21,
@@ -178,7 +178,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "— so we play the knight to f3."
+      "spoken": "— so you play the knight to f3."
     },
     {
       "ply": 22,
@@ -187,7 +187,7 @@
       "line": [
         "Qb6"
       ],
-      "spoken": "The knight to f3 forces the queen back, and the main move here is the queen to b6. This isn't the only French line where you give up the d-pawn — the Milner-Barry is another — but you must follow up very accurately or Black consolidates and we get nothing. White's best is the queen to a4, stopping the knight from coming to c5 and preparing to swing to g4. So the queen to g4, attacking g7 — Black can't castle, since that runs into the bishop to h6 winning the exchange, and if g6, we put the bishop on h6 anyway, with serious control of the dark squares. The bishop to f8 is a serious concession. Nothing happens fast here; White mounts a slow campaign, massaging the weak dark squares, getting the rooks in, a rook to e1 to overprotect e5. Moving the bishop back to e3 would be a tempo move, but I like the queen to f4 — b2 is hanging, but we're happy to sacrifice it; in these lines you must be ready to give up two or even three pawns to keep control, and the knight to g5, hitting f7, is a real threat. We keep the tension to get the queen to h6 and prevent castling. The queen to d8. Now a perfect chance to bring pieces in — the rook to c1 stops the knight to c5, confining it to d7, and controls the only open file; if the queen to e7, we infiltrate to c7. A cool idea against an opponent with all his pawns on one color: chip at the pawn shell with h4 and h5, since g6 is our primary target — if we play h5 and Black ignores it, we take on g6 with devastating effect. The knight to c5 — now tactics: calculate the h-pawn takes g6; if the bishop is taken, we have the pawn to g7 and then the queen to h7, forking the knight and rook, re-establishing material at worst. The queen to a3 heads into d6, the mouth of madness, and the queen to e7 is an elementary blunder — the rook to c7 wins the queen, with mate to follow. A nice technical game showing the power of this line; don't get tunnel vision on checkmate — you can use the king's weakness to win material — though here the rook takes c8 and the queen to d6 with check is mate in three.",
+      "spoken": "The knight to f3 forces the queen back, and the main move here is the queen to b6. This isn't the only French line where you give up the d-pawn — the Milner-Barry is another — but you must follow up very accurately or Black consolidates and you get nothing. White's best is the queen to a4, stopping the knight from coming to c5 and preparing to swing to g4. So the queen to g4, attacking g7 — Black can't castle, since that runs into the bishop to h6 winning the exchange, and if g6, you put the bishop on h6 anyway, with serious control of the dark squares. The bishop to f8 is a serious concession. Nothing happens fast here; White mounts a slow campaign, massaging the weak dark squares, getting the rooks in, a rook to e1 to overprotect e5. Moving the bishop back to e3 would be a tempo move, but I like the queen to f4 — b2 is hanging, but you're happy to sacrifice it; in these lines you must be ready to give up two or even three pawns to keep control, and the knight to g5, hitting f7, is a real threat. You keep the tension to get the queen to h6 and prevent castling. The queen to d8. Now a perfect chance to bring pieces in — the rook to c1 stops the knight to c5, confining it to d7, and controls the only open file; if the queen to e7, you infiltrate to c7. A cool idea against an opponent with all his pawns on one color: chip at the pawn shell with h4 and h5, since g6 is your primary target — if you play h5 and Black ignores it, you take on g6 with devastating effect. The knight to c5 — now tactics: calculate the h-pawn takes g6; if the bishop is taken, you have the pawn to g7 and then the queen to h7, forking the knight and rook, re-establishing material at worst. The queen to a3 heads into d6, the mouth of madness, and the queen to e7 is an elementary blunder — the rook to c7 wins the queen, with mate to follow. A nice technical game showing the power of this line; don't get tunnel vision on checkmate — you can use the king's weakness to win material — though here the rook takes c8 and the queen to d6 with check is mate in three.",
       "reanchor": true
     },
     {
@@ -301,7 +301,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "— as Black did in the game, we can play c3 to support d4. The knight to f6 is one of two main responses —",
+      "spoken": "— as Black did in the game, you can play c3 to support d4. The knight to f6 is one of two main responses —",
       "reanchor": true
     },
     {
@@ -337,7 +337,7 @@
       "t": 837,
       "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
       "line": [],
-      "spoken": "The knight to f6, e5, the knight to d7 is super-old theory; c5, c3 has obvious similarities to the Advance variation, and after the knight to c6 we reach a fork in the road. A historical detour: the first three times this position occurred were Tarrasch's own games, 1890 to 1892; everybody played the knight to e2 until Israel Horowitz first tried the knight to f3 in 1938, and Frank Marshall, after whom the Marshall Club is named, played the queen to a4 here, which isn't considered good anymore — you can see how understanding has grown, since sacrificing the d4-pawn wouldn't have crossed even a strong attacker's radar in the thirties. The knight to e2 and the knight to f3 are about equivalent; everybody played the knight to e2 because after the queen to b6 you have the knight to f3 supporting d4. The main move now is the queen to b4 — a queen trade is out of the question for us, down a pawn, so we drop back to c2; the old-school line goes the queen to c5, and the queen to a4 makes a draw while the queen to e2 is more combative, reaching a roughly equal but very cramped position for Black that I love playing as White. Wesley So once crushed me in one of these — he got all his pieces out and I was down a pawn with nothing; he pinned his own knight with the knight to c5, well protected, his king perfectly safe on d7, then the queen to a6 sacking the exchange, and I resigned. So be very careful with this line as White. Back to our game: after the bishop to f8 we kept the tension with the queen to f4 — Black struggling to keep the tension gives our queen prime real estate, a Manhattan penthouse over the square it covets; the bishop takes h6 lacks resilience. What worried me was the queen to b4, using the bishop to offer a queen trade, and after the queen to c1, the queen to c5 keeps harassing — the white queen is pegged to the bishop, and wherever it goes, Black has a corresponding square to offer the trade, so a draw is likely; trading into an endgame with an extra pawn is a big deal, so I'd be reluctant. Instead Black traded on h6 and it went downhill; the queen to d8 was another bad move — I'd prioritize getting the queen off h6 or at least getting the pieces off their passive squares with the knight to c5 and the bishop to d7. On the queen takes b2, I was just planning the rook to c1, bringing pieces in — the pawns are irrelevant. And the knight to g5 idea: play it prematurely and Black has the annoying knight takes e5, since the queen also defends that pawn, so we force the queen off the diagonal by making it take on a2, and then the knight to g5 is crushing, the bishop takes h6 being checkmate; if instead the queen to c3, we keep going with the rook to b3. Compensation is poorly taught — it's made to sound mystical, but there's nothing mysterious here: more active pieces, weak pawns, a weak king, all visible. So the bishop to h6, the queen recaptures, the queen to d8, we deploy a rook to c1, and after a6, we apply the classic h4 and h5 to destroy Black's pawn cover so our pieces infiltrate — not the queen to g7, which spends two tempi to grab the corner pawn. b6, h5, and if Black takes on h5, the knight to g5 with the detail that if Black takes on e5, the queen to g7 forks the rook and knight, and the knight takes d3 is mate. Black's b6 plan was the bishop to b7 and the rook to c8 to contest the c-file, but it's a runaway train — we win back the knight, the king to e8 is most resilient, and the game goes on, though White is much better.",
+      "spoken": "The knight to f6, e5, the knight to d7 is super-old theory; c5, c3 has obvious similarities to the Advance variation, and after the knight to c6 you reach a fork in the road. A historical detour: the first three times this position occurred were Tarrasch's own games, 1890 to 1892; everybody played the knight to e2 until Israel Horowitz first tried the knight to f3 in 1938, and Frank Marshall, after whom the Marshall Club is named, played the queen to a4 here, which isn't considered good anymore — you can see how understanding has grown, since sacrificing the d4-pawn wouldn't have crossed even a strong attacker's radar in the thirties. The knight to e2 and the knight to f3 are about equivalent; everybody played the knight to e2 because after the queen to b6 you have the knight to f3 supporting d4. The main move now is the queen to b4 — a queen trade is out of the question for you, down a pawn, so you drop back to c2; the old-school line goes the queen to c5, and the queen to a4 makes a draw while the queen to e2 is more combative, reaching a roughly equal but very cramped position for Black that I love playing as White. Wesley So once crushed me in one of these — he got all his pieces out and I was down a pawn with nothing; he pinned his own knight with the knight to c5, well protected, his king perfectly safe on d7, then the queen to a6 sacking the exchange, and I resigned. So be very careful with this line as White. Back to your game: after the bishop to f8 you kept the tension with the queen to f4 — Black struggling to keep the tension gives your queen prime real estate, a Manhattan penthouse over the square it covets; the bishop takes h6 lacks resilience. What worried me was the queen to b4, using the bishop to offer a queen trade, and after the queen to c1, the queen to c5 keeps harassing — the white queen is pegged to the bishop, and wherever it goes, Black has a corresponding square to offer the trade, so a draw is likely; trading into an endgame with an extra pawn is a big deal, so I'd be reluctant. Instead Black traded on h6 and it went downhill; the queen to d8 was another bad move — I'd prioritize getting the queen off h6 or at least getting the pieces off their passive squares with the knight to c5 and the bishop to d7. On the queen takes b2, I was just planning the rook to c1, bringing pieces in — the pawns are irrelevant. And the knight to g5 idea: play it prematurely and Black has the annoying knight takes e5, since the queen also defends that pawn, so you force the queen off the diagonal by making it take on a2, and then the knight to g5 is crushing, the bishop takes h6 being checkmate; if instead the queen to c3, you keep going with the rook to b3. Compensation is poorly taught — it's made to sound mystical, but there's nothing mysterious here: more active pieces, weak pawns, a weak king, all visible. So the bishop to h6, the queen recaptures, the queen to d8, you deploy a rook to c1, and after a6, you apply the classic h4 and h5 to destroy Black's pawn cover so your pieces infiltrate — not the queen to g7, which spends two tempi to grab the corner pawn. b6, h5, and if Black takes on h5, the knight to g5 with the detail that if Black takes on e5, the queen to g7 forks the rook and knight, and the knight takes d3 is mate. Black's b6 plan was the bishop to b7 and the rook to c8 to contest the c-file, but it's a runaway train — you win back the knight, the king to e8 is most resilient, and the game goes on, though White is much better.",
       "reanchor": true
     },
     {

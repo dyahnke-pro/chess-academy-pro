@@ -70,7 +70,7 @@
     "Nc3",
     "a6"
    ],
-   "spoken": "Two big questions: c4, which we skip since we aren't d4 players, and f4. I'm usually bearish on f4 unless you can land a knockout in the centre — but here it's objectively strong, so in it goes.",
+   "spoken": "Two big questions: c4, which you skip since you aren't d4 players, and f4. I'm usually bearish on f4 unless you can land a knockout in the centre — but here it's objectively strong, so in it goes.",
    "kind": "main",
    "teaches": "Only commit to f4 in these structures when you can actually punch through the centre."
   },
@@ -212,7 +212,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Recapture with the d-pawn, or we drop material — and now the d-file opens onto Black's cramped queen while f6 becomes a glaring hole.",
+   "spoken": "Recapture with the d-pawn, or you drop material — and now the d-file opens onto Black's cramped queen while f6 becomes a glaring hole.",
    "kind": "plan",
    "plans": "Swing a rook to the d-file and aim a knight at f6."
   },
@@ -577,7 +577,7 @@
     "Rxh4",
     "Nf6+"
    ],
-   "spoken": "So we do trade queens — but in service of the attack: Nf6-check keeps the mate rolling, and the rook finishes faster than the queens could have. Trading queens is only wrong when it abandons the attack.",
+   "spoken": "So you do trade queens — but in service of the attack: Nf6-check keeps the mate rolling, and the rook finishes faster than the queens could have. Trading queens is only wrong when it abandons the attack.",
    "kind": "main",
    "teaches": "A queen trade is fine — even best — when it speeds up the mate rather than dissolving your attack."
   },

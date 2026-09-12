@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We're higher-rated here, so a bit faster — and we answer e4 with the Sicilian, c5."
+   "spoken": "You're higher-rated here, so a bit faster — and you answer e4 with the Sicilian, c5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We capture on d4."
+   "spoken": "You capture on d4."
   },
   {
    "ply": 5,
@@ -98,7 +98,7 @@
     "e5",
     "Nc6"
    ],
-   "spoken": "We play a knight to c6, hitting the queen.",
+   "spoken": "You play a knight to c6, hitting the queen.",
    "reanchor": true
   },
   {
@@ -117,7 +117,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "So a knight back to d7 — yes, we give up d5, but it's solid."
+   "spoken": "So a knight back to d7 — yes, you give up d5, but it's solid."
   },
   {
    "ply": 14,
@@ -127,7 +127,7 @@
     "Nf3",
     "Nxd4"
    ],
-   "spoken": "White plays a knight to f3, and we win the queen with a knight capture on d4 — White simply blundered.",
+   "spoken": "White plays a knight to f3, and you win the queen with a knight capture on d4 — White simply blundered.",
    "reanchor": true
   },
   {
@@ -147,7 +147,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "We play e6."
+   "spoken": "You play e6."
   },
   {
    "ply": 17,
@@ -165,7 +165,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We play a6."
+   "spoken": "You play a6."
   },
   {
    "ply": 14,
@@ -193,7 +193,7 @@
    "line": [
     "Ba4"
    ],
-   "spoken": "White retreats to a4, and the rest is easy conversion — we're up a queen for a piece.",
+   "spoken": "White retreats to a4, and the rest is easy conversion — you're up a queen for a piece.",
    "reanchor": true
   },
   {
@@ -203,7 +203,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "We play b5.",
+   "spoken": "You play b5.",
    "reanchor": true
   },
   {
@@ -214,7 +214,7 @@
     "Bc2",
     "Nxe5"
    ],
-   "spoken": "We just grab the pawn in the center.",
+   "spoken": "You just grab the pawn in the center.",
    "reanchor": true
   },
   {
@@ -253,7 +253,7 @@
    "line": [
     "Nd6"
    ],
-   "spoken": "We bring the knight around to d6.",
+   "spoken": "You bring the knight around to d6.",
    "reanchor": true
   },
   {
@@ -303,7 +303,7 @@
    "line": [
     "Qxe7"
    ],
-   "spoken": "We recapture with the queen.",
+   "spoken": "You recapture with the queen.",
    "reanchor": true
   },
   {
@@ -393,7 +393,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "White plays a knight to g4 — and we have a tactic. A keen tactical eye and well-developed pattern recognition are what let you finish efficiently.",
+   "spoken": "White plays a knight to g4 — and you have a tactic. A keen tactical eye and well-developed pattern recognition are what let you finish efficiently.",
    "reanchor": true
   },
   {
@@ -401,7 +401,7 @@
    "t": 2494,
    "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N1P2/2P5/PPB3PP/RNB2RK1 b kq - 0 12",
    "line": [],
-   "spoken": "The c3 pawn is White's biggest target, and whenever White pushes the f-pawn with the king on g1, tactics on the a7-g1 diagonal should light up your pattern recognition. Put them together: a knight capture on c3 deflects the bishop off the diagonal. If White recaptures with the rook, we take, he takes, and we fork — the bishop can't return to d4, that square is no longer protected; had White taken with the bishop, we have other moves like d4. Then a bishop to h7, and the classic right-triangle queen rotation wins.",
+   "spoken": "The c3 pawn is White's biggest target, and whenever White pushes the f-pawn with the king on g1, tactics on the a7-g1 diagonal should light up your pattern recognition. Put them together: a knight capture on c3 deflects the bishop off the diagonal. If White recaptures with the rook, you take, he takes, and you fork — the bishop can't return to d4, that square is no longer protected; had White taken with the bishop, you have other moves like d4. Then a bishop to h7, and the classic right-triangle queen rotation wins.",
    "reanchor": true
   },
   {
@@ -830,7 +830,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "In our game White grabbed with the queen, we played a knight to f6...",
+   "spoken": "In your game White grabbed with the queen, you played a knight to f6...",
    "reanchor": true
   },
   {
@@ -877,7 +877,7 @@
    "t": 2810,
    "fen": "rnbqkbnr/pp2pppp/8/8/3Qp3/2P5/PP3PPP/RNB1KBNR w KQkq - 0 5",
    "line": [],
-   "spoken": "Instead of dropping the queen, White can take the pawn on e4. I planned e6 thinking we'd recover it, but I forgot about a queen to e4 — a snafu. After something like a queen to b6 we're just playing the Smith-Morra as Black: down a pawn, but great development and not easy for White. Our opponent simply didn't assume the pin was permanent.",
+   "spoken": "Instead of dropping the queen, White can take the pawn on e4. I planned e6 thinking you'd recover it, but I forgot about a queen to e4 — a snafu. After something like a queen to b6 you're just playing the Smith-Morra as Black: down a pawn, but great development and not easy for White. Your opponent simply didn't assume the pin was permanent.",
    "reanchor": true
   }
  ]

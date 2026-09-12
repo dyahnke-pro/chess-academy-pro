@@ -59,7 +59,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We choose a rarer setup with d6 rather than the usual immediate fianchetto — a slightly dangerous, less-charted system.",
+   "spoken": "You choose a rarer setup with d6 rather than the usual immediate fianchetto — a slightly dangerous, less-charted system.",
    "kind": "main"
   },
   {
@@ -104,7 +104,7 @@
     "Nc3",
     "Nf6"
    ],
-   "spoken": "The knight to f6 transposes us back into the main line.",
+   "spoken": "The knight to f6 transposes you back into the main line.",
    "kind": "main"
   },
   {
@@ -133,7 +133,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "We develop the bishop to d7.",
+   "spoken": "You develop the bishop to d7.",
    "kind": "main"
   },
   {
@@ -215,7 +215,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "We take it with the bishop.",
+   "spoken": "You take it with the bishop.",
    "kind": "main"
   },
   {
@@ -225,7 +225,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "White recaptures on d5. Now the key question — which bishops to trade. We want White's dark-squared bishop gone; his light-squared bishop is the bad one, hemmed in by pawns on its own color.",
+   "spoken": "White recaptures on d5. Now the key question — which bishops to trade. You want White's dark-squared bishop gone; his light-squared bishop is the bad one, hemmed in by pawns on its own color.",
    "kind": "main",
    "teaches": [
     "trade off the good bishop, leave him the bad one"
@@ -258,7 +258,7 @@
     "Bxd4+",
     "Qxd4"
    ],
-   "spoken": "We give up the fianchetto bishop with the check on d4 — a real concession, but with so few pieces left he can't get at our king, and this trade was the whole point of the plan.",
+   "spoken": "You give up the fianchetto bishop with the check on d4 — a real concession, but with so few pieces left he can't get at your king, and this trade was the whole point of the plan.",
    "kind": "main",
    "teaches": [
     "a concession that fits the plan"

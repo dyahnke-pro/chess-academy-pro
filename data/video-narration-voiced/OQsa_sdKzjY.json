@@ -15,7 +15,7 @@
     "e4",
     "Nf6"
    ],
-   "spoken": "We answer the king's pawn with the knight to f6 — the Alekhine, a rare but sound choice."
+   "spoken": "You answer the king's pawn with the knight to f6 — the Alekhine, a rare but sound choice."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "e5",
     "Nd5"
    ],
-   "spoken": "White chases with e5 and our knight hops to d5."
+   "spoken": "White chases with e5 and your knight hops to d5."
   },
   {
    "ply": 5,
@@ -43,7 +43,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "We retreat the knight to b6."
+   "spoken": "You retreat the knight to b6."
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We strike back with d6."
+   "spoken": "You strike back with d6."
   },
   {
    "ply": 9,
@@ -79,7 +79,7 @@
    "line": [
     "cxd6"
    ],
-   "spoken": "We recapture with the c-pawn on d6 — my recommendation for Alekhine beginners, because it teaches you to handle an imbalanced structure: White gets a queenside pawn majority, we get a kingside majority."
+   "spoken": "You recapture with the c-pawn on d6 — my recommendation for Alekhine beginners, because it teaches you to handle an imbalanced structure: White gets a queenside pawn majority, you get a kingside majority."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White develops the knight to c3. Our light-squared bishop will struggle to get out, so we'll fianchetto."
+   "spoken": "White develops the knight to c3. Your light-squared bishop will struggle to get out, so you'll fianchetto."
   },
   {
    "ply": 12,
@@ -97,7 +97,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We play g6, preparing the fianchetto."
+   "spoken": "You play g6, preparing the fianchetto."
   },
   {
    "ply": 13,
@@ -127,7 +127,7 @@
     "Rg1",
     "O-O"
    ],
-   "spoken": "We continue naturally with the knight to c6, and the plan writes itself: press White's two central pawns. It resembles a Dragon but far calmer — both sides castle short and nobody's getting mated soon. It's hard to play at club level for two reasons: you're a touch cramped, so accuracy matters, and you must know how to meet a wide range of White setups."
+   "spoken": "You continue naturally with the knight to c6, and the plan writes itself: press White's two central pawns. It resembles a Dragon but far calmer — both sides castle short and nobody's getting mated soon. It's hard to play at club level for two reasons: you're a touch cramped, so accuracy matters, and you must know how to meet a wide range of White setups."
   }
  ]
 }

@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "A Sicilian, and we go for the Open with the knight to f3 and d4.",
+   "spoken": "A Sicilian, and you go for the Open with the knight to f3 and d4.",
    "kind": "main",
    "teaches": [
     "the Open Sicilian"
@@ -68,7 +68,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Why is d6 a mistake? It lets us expand in the centre with d5 and kick the knight, and now it has nowhere good to go — a retreat to e5 wrecks his structure this early.",
+   "spoken": "Why is d6 a mistake? It lets you expand in the centre with d5 and kick the knight, and now it has nowhere good to go — a retreat to e5 wrecks his structure this early.",
    "teaches": [
     "punish d6 with d5"
    ]
@@ -111,7 +111,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "Don't play c4 yet — reserve that square for the knight. The knight belongs on c4, not f3, where a bishop pin would annoy us.",
+   "spoken": "Don't play c4 yet — reserve that square for the knight. The knight belongs on c4, not f3, where a bishop pin would annoy you.",
    "kind": "main",
    "teaches": [
     "reserve the square for the knight"
@@ -147,7 +147,7 @@
     "e6",
     "c4"
    ],
-   "spoken": "So we prop the pawn up with c4 — which does mean the knight now has to go to f3 instead; our development has to react dynamically to what the position needs.",
+   "spoken": "So you prop the pawn up with c4 — which does mean the knight now has to go to f3 instead; your development has to react dynamically to what the position needs.",
    "kind": "main",
    "teaches": [
     "adapt development to the position"
@@ -179,7 +179,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "He castles and we can grab the weak pawn — though personally I'd have castled first, for reasons I'll explain after the game.",
+   "spoken": "He castles and you can grab the weak pawn — though personally I'd have castled first, for reasons I'll explain after the game.",
    "kind": "main"
   },
   {
@@ -198,7 +198,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Rather than trade, drop the knight back. Beyond the extra pawn we have a space advantage, and with more space you want to keep pieces on — no reason to ease his defence with a trade.",
+   "spoken": "Rather than trade, drop the knight back. Beyond the extra pawn you have a space advantage, and with more space you want to keep pieces on — no reason to ease his defence with a trade.",
    "kind": "plan",
    "teaches": [
     "keep pieces on when you have space"
@@ -263,7 +263,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "To prepare the b4 push we play a3 first — at this level the plans we run are no longer one-move plans; they take two or three moves, and that's fine.",
+   "spoken": "To prepare the b4 push you play a3 first — at this level the plans you run are no longer one-move plans; they take two or three moves, and that's fine.",
    "kind": "plan",
    "teaches": [
     "multi-move plans"
@@ -340,7 +340,7 @@
    "line": [
     "Qxh3"
    ],
-   "spoken": "His queen crashes in to complete the bishop sacrifice. Why not be scared? Because it's actually harmless — but to refute it cleanly we make an escape route for the king and note he has no threat beyond a check on g4.",
+   "spoken": "His queen crashes in to complete the bishop sacrifice. Why not be scared? Because it's actually harmless — but to refute it cleanly you make an escape route for the king and note he has no threat beyond a check on g4.",
    "teaches": [
     "refuting an unsound sac"
    ]
@@ -431,7 +431,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "To swing the rook to h3 we must move the knight — most players won't, fearing the check on h2. But that's exactly why the rook went to e1 earlier: it takes the sting out of that check, so we just slide the king.",
+   "spoken": "To swing the rook to h3 you must move the knight — most players won't, fearing the check on h2. But that's exactly why the rook went to e1 earlier: it takes the sting out of that check, so you just slide the king.",
    "kind": "plan",
    "teaches": [
     "prepared prophylaxis pays off"
@@ -453,7 +453,7 @@
    "line": [
     "Rh3"
    ],
-   "spoken": "The rook lands on h3 and his position begins to collapse — the queen is chased off, and once it moves the h-pawn falls, opening our own file for the attack.",
+   "spoken": "The rook lands on h3 and his position begins to collapse — the queen is chased off, and once it moves the h-pawn falls, opening your own file for the attack.",
    "kind": "main",
    "teaches": [
     "open the h-file"
@@ -487,7 +487,7 @@
     "Rf6",
     "exf5"
    ],
-   "spoken": "Now his position is weak enough that we open the board — taking on f5 lets our pieces stream in toward a decisive attack.",
+   "spoken": "Now his position is weak enough that you open the board — taking on f5 lets your pieces stream in toward a decisive attack.",
    "kind": "main",
    "teaches": [
     "open lines when he’s weakened"

@@ -15,7 +15,7 @@
         "e4",
         "e5"
       ],
-      "spoken": "The pawn to e4, e5 — traditional, old-school, and we play very solid."
+      "spoken": "The pawn to e4, e5 — traditional, old-school, and you play very solid."
     },
     {
       "ply": 4,
@@ -61,7 +61,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "We go the knight to f6, and White has d4 or d3 — d3 is what the big guns play."
+      "spoken": "You go the knight to f6, and White has d4 or d3 — d3 is what the big guns play."
     },
     {
       "ply": 9,
@@ -88,7 +88,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "The pawns come off on d4. Now, very importantly, we don't drop our bishop back —"
+      "spoken": "The pawns come off on d4. Now, very importantly, you don't drop your bishop back —"
     },
     {
       "ply": 12,
@@ -97,7 +97,7 @@
       "line": [
         "Bb4+"
       ],
-      "spoken": "— that would let White dominate the centre; we give the important check on b4, a tempo to either capture the pawn or strike back with d5."
+      "spoken": "— that would let White dominate the centre; you give the important check on b4, a tempo to either capture the pawn or strike back with d5."
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "The bishop to d2. The main continuation isn't the knight takes c4 — that's what we'll play — the main move is the bishop takes d2 with check, the knight recaptures, and d5 striking the centre; that's my game against Sevian from the US Championship, a colorless position. A narrower, more interesting move is the knight takes e4 —"
+      "spoken": "The bishop to d2. The main continuation isn't the knight takes c4 — that's what you'll play — the main move is the bishop takes d2 with check, the knight recaptures, and d5 striking the centre; that's my game against Sevian from the US Championship, a colorless position. A narrower, more interesting move is the knight takes e4 —"
     },
     {
       "ply": 14,
@@ -124,7 +124,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3 is already a very bad reaction — it lets us off scot-free and gives us a favorable trade. What should we take?"
+      "spoken": "The knight to c3 is already a very bad reaction — it lets you off scot-free and gives you a favorable trade. What should you take?"
     },
     {
       "ply": 17,
@@ -143,7 +143,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "But like a good Russian schoolboy, there's nothing wrong with castling; for this speedrun we play conservatively and avoid the need for calculation — we already have one pawn if he defends it."
+      "spoken": "But like a good Russian schoolboy, there's nothing wrong with castling; for this speedrun you play conservatively and avoid the need for calculation — you already have one pawn if he defends it."
     },
     {
       "ply": 19,
@@ -159,7 +159,7 @@
       "t": 219,
       "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R w KQ - 1 10",
       "line": [],
-      "spoken": "— but if he had, we'd have also had a very nasty check on e8.",
+      "spoken": "— but if he had, you'd have also had a very nasty check on e8.",
       "reanchor": true
     },
     {
@@ -169,7 +169,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "Now that we've castled it's clear —",
+      "spoken": "Now that you've castled it's clear —",
       "reanchor": true
     },
     {
@@ -186,7 +186,7 @@
       "t": 224.5,
       "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2Q1RK1 b - - 2 10",
       "line": [],
-      "spoken": "— we can just take this pawn.",
+      "spoken": "— you can just take this pawn.",
       "reanchor": true
     },
     {
@@ -196,7 +196,7 @@
       "line": [
         "Nxd4"
       ],
-      "spoken": "Of course we can take. One thing I'd check — the queen x-rays the knight, so make sure there are no dangerous discovered attacks.",
+      "spoken": "Of course you can take. One thing I'd check — the queen x-rays the knight, so make sure there are no dangerous discovered attacks.",
       "reanchor": true
     },
     {
@@ -206,7 +206,7 @@
       "line": [
         "a3"
       ],
-      "spoken": "For instance, if there were a queen here, the knight to e4 would be very nasty, hitting the queen and pressuring the knight. Now we choose our bishop move carefully — a lot of people would play the bishop to c5, but why is that, though totally fine, a little inaccurate?"
+      "spoken": "For instance, if there were a queen here, the knight to e4 would be very nasty, hitting the queen and pressuring the knight. Now you choose your bishop move carefully — a lot of people would play the bishop to c5, but why is that, though totally fine, a little inaccurate?"
     },
     {
       "ply": 22,
@@ -251,7 +251,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "He's given us the chance to go d5, so we'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3."
+      "spoken": "He's given you the chance to go d5, so you'll play d5 and then get the bishop out with e6, maybe the queen to f6 hitting the pawn on c3."
     },
     {
       "ply": 27,
@@ -314,7 +314,7 @@
       "line": [
         "Rb1"
       ],
-      "spoken": "The rook to b1 — the queen takes c3 forces us to calculate; the queen takes it, the rook takes b7 —"
+      "spoken": "The rook to b1 — the queen takes c3 forces you to calculate; the queen takes it, the rook takes b7 —"
     },
     {
       "ply": 32,
@@ -330,7 +330,7 @@
       "t": 475,
       "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 b - - 5 16",
       "line": [],
-      "spoken": "The queen to b3 — a cool moment. A lot of you immediately think d4, but remember this knight: after d4, White plays the queen to a4 or b5 hitting the knight on c6, and we might lose the pawn on d4. A much more mature move is the knight to a5, hitting the queen from the side, landing on a defended square, and we can expand on the queenside with c5, eventually aiming at d4 to create a passer. The knight on the rim is fine here for two reasons: it's anchored by the pawn, and it's doing stuff — aiming at c4, controlling queenside squares. The queen takes c3 would allow the rook to c1, and I don't want to give White any activity on the c7 point, so I kick the queen with c6, over a6, because c6 kills two birds — it makes a little pawn chain that takes the burden off the bishop on e6, so now we can play the bishop to f5 and he can't even take on d5. Then take the rook and the pawn — no reason not to; the knight to g5 is easily parried by g6, and don't be afraid of mate-in-one threats just because they're mate-in-one threats. First we get control of the e-file, bringing the other rook to d8 to support the d5-pawn. On making luft: most people think of h6 or h3, but you should also consider g6 or g3, which is often far more efficient — when your opponent has a bishop of the same color as the luft square, h-luft can leave that square controlled, whereas g-luft is safer; here it's moot since White has no pieces. There's a great endgame example: Rosentalis versus McNab — Black is up a pawn with White's weak e4 and e5 pawns and a well-placed rook cutting off the king; the move g5 kills two birds, making luft on g7 and freezing White's kingside so the king gets a path through g6, and that wins. In our game we just push the d-pawn and it's over.",
+      "spoken": "The queen to b3 — a cool moment. A lot of you immediately think d4, but remember this knight: after d4, White plays the queen to a4 or b5 hitting the knight on c6, and you might lose the pawn on d4. A much more mature move is the knight to a5, hitting the queen from the side, landing on a defended square, and you can expand on the queenside with c5, eventually aiming at d4 to create a passer. The knight on the rim is fine here for two reasons: it's anchored by the pawn, and it's doing stuff — aiming at c4, controlling queenside squares. The queen takes c3 would allow the rook to c1, and I don't want to give White any activity on the c7 point, so I kick the queen with c6, over a6, because c6 kills two birds — it makes a little pawn chain that takes the burden off the bishop on e6, so now you can play the bishop to f5 and he can't even take on d5. Then take the rook and the pawn — no reason not to; the knight to g5 is easily parried by g6, and don't be afraid of mate-in-one threats just because they're mate-in-one threats. First you get control of the e-file, bringing the other rook to d8 to support the d5-pawn. On making luft: most people think of h6 or h3, but you should also consider g6 or g3, which is often far more efficient — when your opponent has a bishop of the same color as the luft square, h-luft can leave that square controlled, whereas g-luft is safer; here it's moot since White has no pieces. There's a great endgame example: Rosentalis versus McNab — Black is up a pawn with White's weak e4 and e5 pawns and a well-placed rook cutting off the king; the move g5 kills two birds, making luft on g7 and freezing White's kingside so the king gets a path through g6, and that wins. In your game you just push the d-pawn and it's over.",
       "reanchor": true
     },
     {

@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — the variation someone introduced me to, and we're going to play it again."
+   "spoken": "d4 — the variation someone introduced me to, and you're going to play it again."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "When you face such moves, there's nothing in particular you should do — you should simply develop your pieces. The knight to f3 seems reasonable, not the knight to c3, because we want to be able to play c3"
+   "spoken": "When you face such moves, there's nothing in particular you should do — you should simply develop your pieces. The knight to f3 seems reasonable, not the knight to c3, because you want to be able to play c3"
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "when the moment is right. c5 — Black is trying to transpose the game into a Sicilian; if we play the knight to c3 here, Black takes on d4 and we transpose. But of course we're not going to play the knight to c3; we're going"
+   "spoken": "when the moment is right. c5 — Black is trying to transpose the game into a Sicilian; if you play the knight to c3 here, Black takes on d4 and you transpose. But of course you're not going to play the knight to c3; you're going"
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "to punish Black for all these pawn moves — we play principled chess and push the pawn down to d5, almost a Benoni structure, except Black has lost a bunch of tempo on weird pawn moves."
+   "spoken": "to punish Black for all these pawn moves — you play principled chess and push the pawn down to d5, almost a Benoni structure, except Black has lost a bunch of tempo on weird pawn moves."
   },
   {
    "ply": 8,
@@ -78,7 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "But we defend the pawn — the knight to c3."
+   "spoken": "But you defend the pawn — the knight to c3."
   },
   {
    "ply": 8,
@@ -95,7 +95,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "then we drop e4 and we're going to lose the d6-pawn."
+   "spoken": "then you drop e4 and you're going to lose the d6-pawn."
   },
   {
    "ply": 10,
@@ -104,7 +104,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "d6 is a good move — I was really hoping he'd take on d5, which would be wrong. There are multiple ways to play this with White; don't feel White is winning, just solidly better. Now we have a positional approach and a more tactical one — we can take on e6 and keep the centre open, White is definitely better, and given our lead in development it makes sense to go after him."
+   "spoken": "d6 is a good move — I was really hoping he'd take on d5, which would be wrong. There are multiple ways to play this with White; don't feel White is winning, just solidly better. Now you have a positional approach and a more tactical one — you can take on e6 and keep the centre open, White is definitely better, and given your lead in development it makes sense to go after him."
   },
   {
    "ply": 11,
@@ -113,7 +113,7 @@
    "line": [
     "dxe6"
    ],
-   "spoken": "The other approach is the positional move a4, preventing Black's main idea, b5 — largely a matter of taste, but with White I feel we should go for a more principled approach. Take on e6."
+   "spoken": "The other approach is the positional move a4, preventing Black's main idea, b5 — largely a matter of taste, but with White I feel you should go for a more principled approach. Take on e6."
   },
   {
    "ply": 12,
@@ -122,7 +122,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": "The bishop takes e6. Now what? Of course we can develop with the bishop to f4 or g5, but I'm hinting at principled play — this might not be the best thing, but I feel like playing ambitiously and really trying to punish Black. e5, d-takes-e5 leads to an endgame we don't want. We want a move that's often extremely superficial, one I've discouraged in many positions, but here has a specific aim."
+   "spoken": "The bishop takes e6. Now what? Of course you can develop with the bishop to f4 or g5, but I'm hinting at principled play — this might not be the best thing, but I feel like playing ambitiously and really trying to punish Black. e5, d-takes-e5 leads to an endgame you don't want. You want a move that's often extremely superficial, one I've discouraged in many positions, but here has a specific aim."
   },
   {
    "ply": 13,
@@ -131,7 +131,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "The knight to g5 — its very specific aim is to destroy Black's pawn structure and get rid of the bishop on e6. We want to take the bishop, then get our bishop out to c4 and hit him where it hurts, on that e6-pawn; and if the bishop moves away, the bishop to c4 is totally crushing, that threat against f7 incredibly nasty. The knight to g5 might not be best — as Black here I'd simply develop with the knight to c6, not h6, since we want to take the bishop anyway, and h6 weakens the diagonal. The bishop to g4 isn't dangerous — we go f3, or the bishop to e2, trading the light-squared bishops and getting nice control of the d5-square. Black's best is the knight to c6; b5 could be considered but it's dangerous to keep not developing."
+   "spoken": "The knight to g5 — its very specific aim is to destroy Black's pawn structure and get rid of the bishop on e6. You want to take the bishop, then get your bishop out to c4 and hit him where it hurts, on that e6-pawn; and if the bishop moves away, the bishop to c4 is totally crushing, that threat against f7 incredibly nasty. The knight to g5 might not be best — as Black here I'd simply develop with the knight to c6, not h6, since you want to take the bishop anyway, and h6 weakens the diagonal. The bishop to g4 isn't dangerous — you go f3, or the bishop to e2, trading the light-squared bishops and getting nice control of the d5-square. Black's best is the knight to c6; b5 could be considered but it's dangerous to keep not developing."
   },
   {
    "ply": 14,
@@ -149,7 +149,7 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": "walks right into the knight takes e6, and we win the knight; I think he had internet problems that distracted him. This type of play often works, so at this level don't be afraid"
+   "spoken": "walks right into the knight takes e6, and you win the knight; I think he had internet problems that distracted him. This type of play often works, so at this level don't be afraid"
   },
   {
    "ply": 13,
@@ -167,7 +167,7 @@
     "Ng4",
     "Nxe6"
    ],
-   "spoken": "Black can try the queen to h4, but then we go g3, hitting the queen and preventing checkmate; and if Black plays the queen to f6, we have multiple moves, including the simple"
+   "spoken": "Black can try the queen to h4, but then you go g3, hitting the queen and preventing checkmate; and if Black plays the queen to f6, you have multiple moves, including the simple"
   },
   {
    "ply": 16,
@@ -176,7 +176,7 @@
    "line": [
     "Nxf2"
    ],
-   "spoken": "queen takes g4. He plays the knight to f2. Let's try to be accurate — a lot of people would just instantly grab this. We have a choice: we can play the knight takes d8 and simplify into an endgame up a piece; the king takes f2; but there's a third move I think"
+   "spoken": "queen takes g4. He plays the knight to f2. Let's try to be accurate — a lot of people would just instantly grab this. You have a choice: you can play the knight takes d8 and simplify into an endgame up a piece; the king takes f2; but there's a third move I think"
   },
   {
    "ply": 19,
@@ -187,7 +187,7 @@
     "fxe6",
     "Qxf2"
    ],
-   "spoken": "is even more accurate. Not the queen to f3 — though I like the queen to f3 too, because then we can take on f2 with the queen and preserve the right to castle — I like the queen to h5, pinning the pawn and going for the throat: we're pinning the pawn, still attacking the knight, and attacking the queen; and after the queen to f6, rather than the knight to c7 with check, which isn't the most accurate though still completely winning, there's a very typical concept that wins on the spot — g5; and of course if the queen to e6, the knight to c7"
+   "spoken": "is even more accurate. Not the queen to f3 — though I like the queen to f3 too, because then you can take on f2 with the queen and preserve the right to castle — I like the queen to h5, pinning the pawn and going for the throat: you're pinning the pawn, still attacking the knight, and attacking the queen; and after the queen to f6, rather than the knight to c7 with check, which isn't the most accurate though still completely winning, there's a very typical concept that wins on the spot — g5; and of course if the queen to e6, the knight to c7"
   },
   {
    "ply": 7,
@@ -303,7 +303,7 @@
     "d6",
     "dxe6"
    ],
-   "spoken": "can be very dangerous. So d6, we decided to take on e6.",
+   "spoken": "can be very dangerous. So d6, you decided to take on e6.",
    "reanchor": true
   },
   {

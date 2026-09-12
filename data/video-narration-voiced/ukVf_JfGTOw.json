@@ -60,7 +60,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "g3 — our opponent trots out the Fianchetto Variation, one of the most reputable and positionally dangerous responses: White fianchettoes the kingside bishop and castles. We haven't committed to a King's Indian yet — we commit by pushing d6; we could also play it Grünfeld or Grünfeld-Slav style with c6 and d5."
+   "spoken": "g3 — your opponent trots out the Fianchetto Variation, one of the most reputable and positionally dangerous responses: White fianchettoes the kingside bishop and castles. You haven't committed to a King's Indian yet — you commit by pushing d6; you could also play it Grünfeld or Grünfeld-Slav style with c6 and d5."
   },
   {
    "ply": 8,
@@ -87,7 +87,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "— which is why we play d6, reaching a very wide theoretical crossroads."
+   "spoken": "— which is why you play d6, reaching a very wide theoretical crossroads."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Black has a million setups against the Fianchetto, broadly three categories: setups preparing e5 — the most traditional, which we play here; setups with c5, more Benoni-flavored, which Gawain Jones recommends; and systems with neither immediately, like c6, the bishop to f5, or the knight to c6 and a6, the Panov."
+   "spoken": "Black has a million setups against the Fianchetto, broadly three categories: setups preparing e5 — the most traditional, which you play here; setups with c5, more Benoni-flavored, which Gawain Jones recommends; and systems with neither immediately, like c6, the bishop to f5, or the knight to c6 and a6, the Panov."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "So many decent variations, but we choose the one I've played the longest — the knight to d7."
+   "spoken": "So many decent variations, but you choose the one I've played the longest — the knight to d7."
   },
   {
    "ply": 13,
@@ -159,7 +159,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The point of the line is to bring the queen out to a5. Our opponent already shows very good knowledge of this system."
+   "spoken": "The point of the line is to bring the queen out to a5. Your opponent already shows very good knowledge of this system."
   },
   {
    "ply": 19,
@@ -186,7 +186,7 @@
     "Be3",
     "exd4"
    ],
-   "spoken": "After the bishop to e3 we're supposed to release the tension with the pawn takes d4 — this is theory, so I'm just making the moves.",
+   "spoken": "After the bishop to e3 you're supposed to release the tension with the pawn takes d4 — this is theory, so I'm just making the moves.",
    "reanchor": true
   },
   {
@@ -194,7 +194,7 @@
    "t": 294,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BNPP/PP3PB1/R2Q1RK1 b - - 2 10",
    "line": [],
-   "spoken": "We discharge the central tension right now because White is already prepared to push d5 and close the centre, and the bishop on e3 is very harmoniously placed —",
+   "spoken": "You discharge the central tension right now because White is already prepared to push d5 and close the centre, and the bishop on e3 is very harmoniously placed —",
    "reanchor": true
   },
   {
@@ -224,7 +224,7 @@
     "exd4",
     "Bxd4"
    ],
-   "spoken": "Our opponent plays the annoying move, the bishop takes d4, which I really dislike facing: your standard response is the knight to e5, but White has a tactic that kills the line, so the knight to e5 is almost a decisive mistake — that's why we keep the knight on d7 for the time being. Against the knight to e5, White undermines the knight with c5 —",
+   "spoken": "Your opponent plays the annoying move, the bishop takes d4, which I really dislike facing: your standard response is the knight to e5, but White has a tactic that kills the line, so the knight to e5 is almost a decisive mistake — that's why you keep the knight on d7 for the time being. Against the knight to e5, White undermines the knight with c5 —",
    "reanchor": true
   },
   {
@@ -234,7 +234,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "— and typically you take on f3, but White recaptures with the queen and the knight on f6 is suddenly hanging — that's the power of recapturing with the bishop. So the knight to e5 walks into c5, which is why we make a more flexible move: the low-hanging rook to e8, which won't harm our position, waiting for White to show his cards. Our queen on a5 may have done its job and should drop back to c7 to make the knight to e5 possible, since we can't keep the knight on d7 forever — it blocks the bishop on c8 and cramps us. The knight to c5 is tempting to hit e4, but I prefer it on e5, since with the queen on a5 White has a3 and b4 ideas, the knight on c5 seems flimsy, and White defends e4 easily and could push e5."
+   "spoken": "— and typically you take on f3, but White recaptures with the queen and the knight on f6 is suddenly hanging — that's the power of recapturing with the bishop. So the knight to e5 walks into c5, which is why you make a more flexible move: the low-hanging rook to e8, which won't harm your position, waiting for White to show his cards. Your queen on a5 may have done its job and should drop back to c7 to make the knight to e5 possible, since you can't keep the knight on d7 forever — it blocks the bishop on c8 and cramps you. The knight to c5 is tempting to hit e4, but I prefer it on e5, since with the queen on a5 White has a3 and b4 ideas, the knight on c5 seems flimsy, and White defends e4 easily and could push e5."
   },
   {
    "ply": 23,
@@ -243,7 +243,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "This is the kind of thing you feel from playing a line many times — you develop a finer understanding of where the pieces belong that can't always be explained step by step. The rook to e1 — and I think we should drop our queen back to c7, since the knight to e5 still allows c5, and the queen on a5 is neither here nor there; the queen to c7, then jump out to e5 with the knight."
+   "spoken": "This is the kind of thing you feel from playing a line many times — you develop a finer understanding of where the pieces belong that can't always be explained step by step. The rook to e1 — and I think you should drop your queen back to c7, since the knight to e5 still allows c5, and the queen on a5 is neither here nor there; the queen to c7, then jump out to e5 with the knight."
   },
   {
    "ply": 24,
@@ -252,14 +252,14 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "We have other maneuvers around the hurdles — the knight to f8 and e6, a Ruy-Lopez-style idea — but the queen to c7 seems a lot more King's-Indian in nature. A cramped but solid position."
+   "spoken": "You have other maneuvers around the hurdles — the knight to f8 and e6, a Ruy-Lopez-style idea — but the queen to c7 seems a lot more King's-Indian in nature. A cramped but solid position."
   },
   {
    "ply": 18,
    "t": 566,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": "A classic King's Indian situation. What was the idea of the queen to a5? It's harder to see because of the bishop to e3; had our opponent played the main rook to e1, you'd really understand its value — it can swing over to h5, and it aims at the knight on c3, so b3, a very useful move for White to defend the c4-pawn, isn't possible with the queen on a5; that's a very common blunder at lower levels, since after b3 the knight hangs — I've even beaten titled players that way. So when c4 is attacked from b6 or e5, it's very hard to defend it adequately without b3. The queen to c2 — our opponent continues to improve his position.",
+   "spoken": "A classic King's Indian situation. What was the idea of the queen to a5? It's harder to see because of the bishop to e3; had your opponent played the main rook to e1, you'd really understand its value — it can swing over to h5, and it aims at the knight on c3, so b3, a very useful move for White to defend the c4-pawn, isn't possible with the queen on a5; that's a very common blunder at lower levels, since after b3 the knight hangs — I've even beaten titled players that way. So when c4 is attacked from b6 or e5, it's very hard to defend it adequately without b3. The queen to c2 — your opponent continues to improve his position.",
    "reanchor": true
   }
  ]

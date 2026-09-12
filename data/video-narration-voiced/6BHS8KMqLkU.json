@@ -44,7 +44,7 @@
     "d6",
     "Be3"
    ],
-   "spoken": "Against the Modern we run the 150 Attack: Be3, the queen to d2, and a quick h4 — the order of h4 barely matters as long as it goes in.",
+   "spoken": "Against the Modern you run the 150 Attack: Be3, the queen to d2, and a quick h4 — the order of h4 barely matters as long as it goes in.",
    "kind": "main"
   },
   {
@@ -92,7 +92,7 @@
     "b5",
     "f3"
    ],
-   "spoken": "Black wants his bishop on b7, so we play f3 first — reinforcing e4 so that when the bishop arrives it isn't hitting a loose pawn.",
+   "spoken": "Black wants his bishop on b7, so you play f3 first — reinforcing e4 so that when the bishop arrives it isn't hitting a loose pawn.",
    "kind": "main",
    "teaches": "Pre-defend the pawn a fianchettoed bishop will target, before the bishop gets there."
   },
@@ -131,7 +131,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "A menu for the light bishop: Bd3 severs contact with d4 and invites c5; castling instead ups our control of the d-file and discourages c5 — but there's a sharper third idea.",
+   "spoken": "A menu for the light bishop: Bd3 severs contact with d4 and invites c5; castling instead ups your control of the d-file and discourages c5 — but there's a sharper third idea.",
    "kind": "main",
    "teaches": "Each bishop square trades a different concession; know what each one invites before you choose."
   },
@@ -160,7 +160,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "That third idea is Bh3, leaning on e6. It isn't a move we must follow up immediately — the point is that from here on White threatens a sacrifice there, and Black has to reckon with it every move.",
+   "spoken": "That third idea is Bh3, leaning on e6. It isn't a move you must follow up immediately — the point is that from here on White threatens a sacrifice there, and Black has to reckon with it every move.",
    "kind": "main",
    "teaches": "Building pressure on a point forces the defender to spend resources on it, weakening him elsewhere."
   },
@@ -198,7 +198,7 @@
    "line": [
     "Nf4"
    ],
-   "spoken": "Nf4 plants the knight on its ideal square, piling more pressure onto e6 — and notice we haven't castled: the king is perfectly safe in the centre while we prioritize the attack.",
+   "spoken": "Nf4 plants the knight on its ideal square, piling more pressure onto e6 — and notice you haven't castled: the king is perfectly safe in the centre while you prioritize the attack.",
    "kind": "main",
    "teaches": "Don't castle on reflex; if your king is safe, keep developing the attack instead."
   },
@@ -209,7 +209,7 @@
    "line": [
     "Nf8"
    ],
-   "spoken": "His Nf8 is the only real defense — it guards e6, so taking there twice just trades our attackers off.",
+   "spoken": "His Nf8 is the only real defense — it guards e6, so taking there twice just trades your attackers off.",
    "kind": "main"
   },
   {
@@ -228,7 +228,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "So we castle — patient, no forced sacrifices, simply completing development and increasing the pressure.",
+   "spoken": "So you castle — patient, no forced sacrifices, simply completing development and increasing the pressure.",
    "kind": "main",
    "teaches": "When the pressure is building on its own, finish developing rather than forcing the issue."
   },
@@ -251,7 +251,7 @@
     "Bxg5",
     "hxg5"
    ],
-   "spoken": "When he gives up his dark-squared bishop, the dark squares around his king turn permanently weak — that's the concession we'll exploit.",
+   "spoken": "When he gives up his dark-squared bishop, the dark squares around his king turn permanently weak — that's the concession you'll exploit.",
    "kind": "main",
    "teaches": "Trading off the king's-side bishop leaves a dark-square hole complex behind it."
   },
@@ -271,7 +271,7 @@
    "line": [
     "Nd3"
    ],
-   "spoken": "The knight is attacked, and we can't defend the pawn directly, so reroute the knight toward the centre where it stays relevant — and now the plan is to prise the position open to reach those weak dark squares.",
+   "spoken": "The knight is attacked, and you can't defend the pawn directly, so reroute the knight toward the centre where it stays relevant — and now the plan is to prise the position open to reach those weak dark squares.",
    "kind": "main",
    "teaches": "When the opponent surrenders a key defender, open lines to cash in the squares it guarded."
   },
@@ -312,7 +312,7 @@
    "line": [
     "cxd3"
    ],
-   "spoken": "Recapture with cxd3 — it opens the c-file for our rook and, as a bonus, shores up the e-pawn.",
+   "spoken": "Recapture with cxd3 — it opens the c-file for your rook and, as a bonus, shores up the e-pawn.",
    "kind": "main",
    "teaches": "Choose the recapture that opens a file for you while simultaneously fixing your own structure."
   },
@@ -332,7 +332,7 @@
    "line": [
     "Rc1"
    ],
-   "spoken": "The c-file is beautiful; we don't even need to occupy it, but the rook belongs there all the same.",
+   "spoken": "The c-file is beautiful; you don't even need to occupy it, but the rook belongs there all the same.",
    "kind": "plan",
    "plans": "Post a rook on the open c-file to pressure c7."
   },
@@ -352,7 +352,7 @@
    "line": [
     "Rhf1"
    ],
-   "spoken": "The other rook belongs on the f-file, because once f5 lands we crash straight through his position.",
+   "spoken": "The other rook belongs on the f-file, because once f5 lands you crash straight through his position.",
    "kind": "plan",
    "plans": "Double toward the f-file to power the f5 break."
   },
@@ -442,7 +442,7 @@
    "line": [
     "Ra7"
    ],
-   "spoken": "Now the knight on h7 is a loose piece, defended only by a rook — so attack that rook with the piece we just improved.",
+   "spoken": "Now the knight on h7 is a loose piece, defended only by a rook — so attack that rook with the piece you just improved.",
    "kind": "main",
    "teaches": "Undefended-except-by-one pieces fall when you hit their single defender."
   },
@@ -653,7 +653,7 @@
    "t": 794,
    "fen": "r2qk2r/1bp1np1n/3pB1p1/p5Pp/1p1PPN2/4BPP1/PPPQ4/1R1K3R b kq - 0 17",
    "line": [],
-   "spoken": "One more principle: opening the b-file toward our own king is harmless because Black has no pieces there. No pieces, no attack — he's too bogged down in weaknesses to ever assemble one.",
+   "spoken": "One more principle: opening the b-file toward your own king is harmless because Black has no pieces there. No pieces, no attack — he's too bogged down in weaknesses to ever assemble one.",
    "kind": "review",
    "teaches": "A file opened near your king is safe if the opponent has no pieces to pour down it.",
    "reanchor": true

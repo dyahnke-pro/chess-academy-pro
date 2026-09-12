@@ -16,7 +16,7 @@
         "d5",
         "Bf4"
       ],
-      "spoken": "We're going to play d4 and a London System. d4, d5, the bishop to f4."
+      "spoken": "You're going to play d4 and a London System. d4, d5, the bishop to f4."
     },
     {
       "ply": 4,
@@ -52,7 +52,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We're going to play the knight to c3 here and transpose into the Jobava London — I've done that several times now."
+      "spoken": "You're going to play the knight to c3 here and transpose into the Jobava London — I've done that several times now."
     },
     {
       "ply": 8,
@@ -79,7 +79,7 @@
       "line": [
         "Bf5"
       ],
-      "spoken": "You already know the drill — this knight can potentially go to b5, but we don't want the knight to b5 here. Why is the knight to b5 innocuous after the bishop to f5?"
+      "spoken": "You already know the drill — this knight can potentially go to b5, but you don't want the knight to b5 here. Why is the knight to b5 innocuous after the bishop to f5?"
     },
     {
       "ply": 11,
@@ -97,7 +97,7 @@
       "line": [
         "e6"
       ],
-      "spoken": "So now we basically want control over this diagonal."
+      "spoken": "So now you basically want control over this diagonal."
     },
     {
       "ply": 13,
@@ -106,7 +106,7 @@
       "line": [
         "Ne5"
       ],
-      "spoken": "What's blocking the bishop to b5 from being a check? The knight on c6. How do we get rid of it? We slam our knight into e5 — one of the key ideas of the Jobava. Now, this bishop on f5 is actually in more trouble than it appears, and the idea that exploits its hidden vulnerability is g4 and h4. And"
+      "spoken": "What's blocking the bishop to b5 from being a check? The knight on c6. How do you get rid of it? You slam your knight into e5 — one of the key ideas of the Jobava. Now, this bishop on f5 is actually in more trouble than it appears, and the idea that exploits its hidden vulnerability is g4 and h4. And"
     },
     {
       "ply": 14,
@@ -115,7 +115,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. We're spoiled for choice."
+      "spoken": "it's not that Black loses the bishop, but he may have to play h6, and if the bishop is on g6 and the knight on e5, then the knight takes g6 forces f-takes-g6, which is tremendously awkward. You're spoiled for choice."
     },
     {
       "ply": 15,
@@ -133,7 +133,7 @@
       "line": [
         "Be4"
       ],
-      "spoken": "That's just absolutely devastating — when the king moves out to e7 in the opening, that's generally not a good sign. Now of course we play the typical f3, attacking"
+      "spoken": "That's just absolutely devastating — when the king moves out to e7 in the opening, that's generally not a good sign. Now of course you play the typical f3, attacking"
     },
     {
       "ply": 17,
@@ -151,7 +151,7 @@
       "line": [
         "Bg6"
       ],
-      "spoken": "The bishop to g6, then h4 — that's the bottom line — and here we go, h5."
+      "spoken": "The bishop to g6, then h4 — that's the bottom line — and here you go, h5."
     },
     {
       "ply": 19,
@@ -179,7 +179,7 @@
         "Nxg6",
         "fxg6"
       ],
-      "spoken": "Now we play the knight takes g6. How do we exploit the fact that the g6-pawn is weak?"
+      "spoken": "Now you play the knight takes g6. How do you exploit the fact that the g6-pawn is weak?"
     },
     {
       "ply": 23,
@@ -197,7 +197,7 @@
       "line": [
         "Kf7"
       ],
-      "spoken": "The knight takes d4 isn't really a threat, because the bishop takes g6 with check exposes the attack on the knight. So how do we arrange our pieces here to increase"
+      "spoken": "The knight takes d4 isn't really a threat, because the bishop takes g6 with check exposes the attack on the knight. So how do you arrange your pieces here to increase"
     },
     {
       "ply": 25,
@@ -206,7 +206,7 @@
       "line": [
         "g5"
       ],
-      "spoken": "the pressure — while not losing sight of the fact that we haven't completed our development? We're going to go g5 here, which isn't an intuitive move — why close down the position?"
+      "spoken": "the pressure — while not losing sight of the fact that you haven't completed your development? You're going to go g5 here, which isn't an intuitive move — why close down the position?"
     },
     {
       "ply": 26,
@@ -224,7 +224,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "So we go the queen to d2 — remember, the knight takes d4 isn't worrisome, I can just ignore that move entirely."
+      "spoken": "So you go the queen to d2 — remember, the knight takes d4 isn't worrisome, I can just ignore that move entirely."
     },
     {
       "ply": 28,
@@ -233,7 +233,7 @@
       "line": [
         "Bd6"
       ],
-      "spoken": "Can I ignore this and castle here, or do we need to deal with it and take the bishop? Yes,"
+      "spoken": "Can I ignore this and castle here, or do you need to deal with it and take the bishop? Yes,"
     },
     {
       "ply": 29,
@@ -242,7 +242,7 @@
       "line": [
         "O-O-O"
       ],
-      "spoken": "no — that's why we put the queen on d2. Now we castle long."
+      "spoken": "no — that's why you put the queen on d2. Now you castle long."
     },
     {
       "ply": 30,
@@ -260,7 +260,7 @@
       "line": [
         "Rhe1"
       ],
-      "spoken": "We bring the rook into the game — the final piece comes in."
+      "spoken": "You bring the rook into the game — the final piece comes in."
     },
     {
       "ply": 32,
@@ -279,7 +279,7 @@
         "Bxf5",
         "gxf5"
       ],
-      "spoken": "Let's get rid of the knight, and now a very typical winning move — this move crushes when we have a pawn on g5 and the e6-pawn is"
+      "spoken": "Let's get rid of the knight, and now a very typical winning move — this move crushes when you have a pawn on g5 and the e6-pawn is"
     },
     {
       "ply": 35,
@@ -298,7 +298,7 @@
         "Kg8",
         "Rxe6"
       ],
-      "spoken": "And the king stepping into the same diagonal as the queen should also catch your attention. Now we play the rook takes e6."
+      "spoken": "And the king stepping into the same diagonal as the queen should also catch your attention. Now you play the rook takes e6."
     },
     {
       "ply": 39,
@@ -308,7 +308,7 @@
         "Bxf4",
         "Qxf4"
       ],
-      "spoken": "The bishop takes f4, the queen recaptures — this is also something that should alert our metal detectors,"
+      "spoken": "The bishop takes f4, the queen recaptures — this is also something that should alert your metal detectors,"
     },
     {
       "ply": 40,
@@ -317,7 +317,7 @@
       "line": [
         "Rh6"
       ],
-      "spoken": "because a mate on e8 is actually very likely, and we already have distraction sacrifices that help create the possibility. The rook to h6."
+      "spoken": "because a mate on e8 is actually very likely, and you already have distraction sacrifices that help create the possibility. The rook to h6."
     },
     {
       "ply": 41,
@@ -335,7 +335,7 @@
       "line": [
         "Qf8"
       ],
-      "spoken": "Now we don't need to overthink things — all we need to do is simply collect the"
+      "spoken": "Now you don't need to overthink things — all you need to do is simply collect the"
     },
     {
       "ply": 43,
@@ -353,7 +353,7 @@
       "line": [
         "Rc8"
       ],
-      "spoken": "We simply want to improve our pieces until an opportunity to win presents itself naturally. How do we win this? Play gradually rather than doing anything crazy. Let's think logically: how do we get our rook to e8? The number-one item on the wish list is"
+      "spoken": "You simply want to improve your pieces until an opportunity to win presents itself naturally. How do you win this? Play gradually rather than doing anything crazy. Let's think logically: how do you get your rook to e8? The number-one item on the wish list is"
     },
     {
       "ply": 45,
@@ -362,14 +362,14 @@
       "line": [
         "Nc7"
       ],
-      "spoken": "to get a rook to e8, and we know we should employ the least valuable piece for the task. You're making the mistake of employing the queen, but we can employ the knight — the knight to c7 — and the reason this is better than the queen to e3 is that we actually win Black's queen; involving the queen isn't good, because ultimately we'd capture with the queen and offer a queen trade, and we want to win the queen, not trade it. The queen to f5 doesn't work — close, but no. A rook immediately would be insane — he'd just take. g7 with check, and he resigns."
+      "spoken": "to get a rook to e8, and you know you should employ the least valuable piece for the task. You're making the mistake of employing the queen, but you can employ the knight — the knight to c7 — and the reason this is better than the queen to e3 is that you actually win Black's queen; involving the queen isn't good, because ultimately you'd capture with the queen and offer a queen trade, and you want to win the queen, not trade it. The queen to f5 doesn't work — close, but no. A rook immediately would be insane — he'd just take. g7 with check, and he resigns."
     },
     {
       "ply": 7,
       "t": 534.5,
       "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 2 4",
       "line": [],
-      "spoken": "g7 — why is g7 so good? He takes on g6; people are overestimating it, but g7 with check and he resigns. So, we get a Jobava London — the knight to c3, the bishop to f5. First point: why is the knight to b5",
+      "spoken": "g7 — why is g7 so good? He takes on g6; people are overestimating it, but g7 with check and he resigns. So, you get a Jobava London — the knight to c3, the bishop to f5. First point: why is the knight to b5",
       "reanchor": true
     },
     {
@@ -389,7 +389,7 @@
       "t": 539.5,
       "fen": "r2qkbnr/pp2pppp/2n5/3p1b2/3p1B2/2N1PN2/PPP2PPP/R2QKB1R w KQkq - 0 6",
       "line": [],
-      "spoken": "not dangerous here? Be careful about this move in general. The queen to a5 doesn't actually win the knight — the knight is defended — so when we move the knight out of c3, we can simply play c3, which is a helpful move regardless: it creates a pawn chain and protects the d4-pawn, and the queen over on a5 is kind of offside, like a soccer player.",
+      "spoken": "not dangerous here? Be careful about this move in general. The queen to a5 doesn't actually win the knight — the knight is defended — so when you move the knight out of c3, you can simply play c3, which is a helpful move regardless: it creates a pawn chain and protects the d4-pawn, and the queen over on a5 is kind of offside, like a soccer player.",
       "reanchor": true
     },
     {
@@ -480,7 +480,7 @@
       "line": [
         "Bxg4"
       ],
-      "spoken": "The knight is hanging, the bishop is hanging — two pieces are hanging at once. Both can be protected: we can play the bishop takes g4, and White has several ways to win — but you want to be very careful.",
+      "spoken": "The knight is hanging, the bishop is hanging — two pieces are hanging at once. Both can be protected: you can play the bishop takes g4, and White has several ways to win — but you want to be very careful.",
       "reanchor": true
     },
     {
@@ -696,7 +696,7 @@
       "line": [
         "Bxg6+"
       ],
-      "spoken": "I think we could get better than that. Questioning your assumptions and not making these knee-jerk moves is an element of chess mastery at a higher level. The knight takes f3 actually does our work for us — we open the f-file, the queen could come to f2, the knight is trapped, and even if it weren't, the bishop to c7 would expose the attack on the queen. Pawns in such positions, when we're aiming for checkmate, can actually hurt us, and sacrificing two or three pawns is something you need to be able to do without a second thought when Black is this undeveloped. My intuition just screams that White is completely winning — Black has not a single piece developed.",
+      "spoken": "I think you could get better than that. Questioning your assumptions and not making these knee-jerk moves is an element of chess mastery at a higher level. The knight takes f3 actually does your work for you — you open the f-file, the queen could come to f2, the knight is trapped, and even if it weren't, the bishop to c7 would expose the attack on the queen. Pawns in such positions, when you're aiming for checkmate, can actually hurt you, and sacrificing two or three pawns is something you need to be able to do without a second thought when Black is this undeveloped. My intuition just screams that White is completely winning — Black has not a single piece developed.",
       "reanchor": true
     },
     {
@@ -704,7 +704,7 @@
       "t": 1007,
       "fen": "r2q1bnr/pp3kp1/4p1p1/3p2Pp/3n1B1P/2NB1P2/PPPQ4/R3K2R w KQ - 3 15",
       "line": [],
-      "spoken": "Black has literally just one developed piece, a knight — that's it. So the bishop to d6, we castle, again avoiding the knee-jerk reaction — the queen defends the bishop; we want him to take on f4, because then the queen enters the game, dislodges the king from the pawn, and we play the bishop takes g6. The knight to g7 brings the last piece into the game; the knight to f5, of course we take it, and whichever way Black recaptures he opens a fatal avenue: if he takes with the f-pawn, the pawn has lost its supporter — the knight takes d5 — and if g-takes-f5, we push through with g6; if the king takes g6, it's a fork, so the king has to go, and the rook takes e6. Now the queen takes f5 — I understand people think it's going to be checkmate, but remember the three ways to deal with a check; here categories two and three are available.",
+      "spoken": "Black has literally just one developed piece, a knight — that's it. So the bishop to d6, you castle, again avoiding the knee-jerk reaction — the queen defends the bishop; you want him to take on f4, because then the queen enters the game, dislodges the king from the pawn, and you play the bishop takes g6. The knight to g7 brings the last piece into the game; the knight to f5, of course you take it, and whichever way Black recaptures he opens a fatal avenue: if he takes with the f-pawn, the pawn has lost its supporter — the knight takes d5 — and if g-takes-f5, you push through with g6; if the king takes g6, it's a fork, so the king has to go, and the rook takes e6. Now the queen takes f5 — I understand people think it's going to be checkmate, but remember the three ways to deal with a check; here categories two and three are available.",
       "reanchor": true
     }
   ]

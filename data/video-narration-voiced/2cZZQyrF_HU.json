@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We open e4, Black replies e5, and we head for our Four Knights Scotch."
+   "spoken": "You open e4, Black replies e5, and you head for your Four Knights Scotch."
   },
   {
    "ply": 3,
@@ -59,7 +59,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6 — a souped-up Philidor, quite passive; it doesn't change our plan."
+   "spoken": "Black plays d6 — a souped-up Philidor, quite passive; it doesn't change your plan."
   },
   {
    "ply": 7,
@@ -68,7 +68,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We play d4 as usual — with Black so passive, why not."
+   "spoken": "You play d4 as usual — with Black so passive, why not."
   },
   {
    "ply": 8,
@@ -86,7 +86,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "We recapture with the knight."
+   "spoken": "You recapture with the knight."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
     "Nxd4",
     "Qxd4"
    ],
-   "spoken": "The knights come off and our queen recaptures on d4 — Black often trades everything here, but our queen sits beautifully."
+   "spoken": "The knights come off and your queen recaptures on d4 — Black often trades everything here, but your queen sits beautifully."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black develops the knight to f6. Note: a later ...c5 is no threat — it would only weaken d6 badly and hand us the d5-square as an outpost for a knight. Don't fear your queen being attacked; it isn't inherently dangerous."
+   "spoken": "Black develops the knight to f6. Note: a later ...c5 is no threat — it would only weaken d6 badly and hand you the d5-square as an outpost for a knight. Don't fear your queen being attacked; it isn't inherently dangerous."
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We develop the bishop to g5, natural and strong — and since our queen has already left d1, castling long is on the cards."
+   "spoken": "You develop the bishop to g5, natural and strong — and since your queen has already left d1, castling long is on the cards."
   },
   {
    "ply": 14,
@@ -132,7 +132,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "We castle long."
+   "spoken": "You castle long."
   },
   {
    "ply": 16,
@@ -150,7 +150,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "We check with the bishop on b5. Black will block with ...Bd7 and we trade the light-squared bishops — excellent positionally: d5 grows even weaker, and with the light bishops gone nothing guards it, so we can take the f6-knight whenever we like and plant a knight on d5."
+   "spoken": "You check with the bishop on b5. Black will block with ...Bd7 and you trade the light-squared bishops — excellent positionally: d5 grows even weaker, and with the light bishops gone nothing guards it, so you can take the f6-knight whenever you like and plant a knight on d5."
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": "We take on d7 with check."
+   "spoken": "You take on d7 with check."
   },
   {
    "ply": 20,
@@ -177,7 +177,7 @@
    "line": [
     "Qxd7"
    ],
-   "spoken": "Black recaptures with the queen on d7. Now a good square for our queen: e3 walks into ...Ng4, and d3 blocks our rook — we want the d1-rook to x-ray down the file, so we clear it. That leaves c4: active and pressing, with ...b5 harmless since we guard it twice. And the x-ray is the point — it enables e5."
+   "spoken": "Black recaptures with the queen on d7. Now a good square for your queen: e3 walks into ...Ng4, and d3 blocks your rook — you want the d1-rook to x-ray down the file, so you clear it. That leaves c4: active and pressing, with ...b5 harmless since you guard it twice. And the x-ray is the point — it enables e5."
   },
   {
    "ply": 23,
@@ -188,7 +188,7 @@
     "O-O",
     "e5"
    ],
-   "spoken": "We play the queen to c4. Now e5 is almost a no-brainer — it forces the f6-knight back and Black's position teeters, all because ...c5 wrecked the centre. The x-ray on the d-pawn is exactly why e5 works: meet ...d5 with a capture on f6, and if Black takes our queen we take his and emerge a piece up. From here we simply release the tension and collect — the weakened c5-pawn falls, and with a pin — while our rook heads to e1 and a knight to d5, tremendous energy in our pieces."
+   "spoken": "You play the queen to c4. Now e5 is almost a no-brainer — it forces the f6-knight back and Black's position teeters, all because ...c5 wrecked the centre. The x-ray on the d-pawn is exactly why e5 works: meet ...d5 with a capture on f6, and if Black takes your queen you take his and emerge a piece up. From here you simply release the tension and collect — the weakened c5-pawn falls, and with a pin — while your rook heads to e1 and a knight to d5, tremendous energy in your pieces."
   }
  ]
 }

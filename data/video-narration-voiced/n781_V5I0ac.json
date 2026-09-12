@@ -115,7 +115,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": "He's forced to push d5, and we snap it off en passant.",
+   "spoken": "He's forced to push d5, and you snap it off en passant.",
    "kind": "main"
   },
   {
@@ -173,7 +173,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "By jumping the knight to d5 he surrenders control of a gorgeous central square — so we slam our own knight into e4, eyeing the d6-hole.",
+   "spoken": "By jumping the knight to d5 he surrenders control of a gorgeous central square — so you slam your own knight into e4, eyeing the d6-hole.",
    "kind": "main",
    "teaches": [
     "occupy the vacated square"
@@ -195,7 +195,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We could play the modest c3, but let's be ambitious with the bishop to g5, trying to induce f6 — a horribly weakening move.",
+   "spoken": "You could play the modest c3, but let's be ambitious with the bishop to g5, trying to induce f6 — a horribly weakening move.",
    "kind": "plan",
    "teaches": [
     "provoke a weakening pawn move"
@@ -217,7 +217,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "He pins himself. His position is desperately passive, so we lay it on by centralising the knight on e5 — look at the disparity in piece activity.",
+   "spoken": "He pins himself. His position is desperately passive, so you lay it on by centralising the knight on e5 — look at the disparity in piece activity.",
    "kind": "main",
    "teaches": [
     "centralise and pile up"
@@ -285,7 +285,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "And if he never plays d5, we simply plant a knight on d6 — even more disastrous for him. Natural development, hit the queen, then chase the knight off d5 by retreating the bishop and advancing the pawn.",
+   "spoken": "And if he never plays d5, you simply plant a knight on d6 — even more disastrous for him. Natural development, hit the queen, then chase the knight off d5 by retreating the bishop and advancing the pawn.",
    "kind": "review",
    "teaches": [
     "the d6 outpost plan"

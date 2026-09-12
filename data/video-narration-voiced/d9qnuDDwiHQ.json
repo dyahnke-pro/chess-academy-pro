@@ -259,14 +259,14 @@
    "line": [
     "Kc7"
    ],
-   "spoken": "The king to c7. So you can't take the rook, because of a check on h6 — so do the next best thing, take the stuff that you can take. He'll probably go the king to b6, and then you have a sexy move: a check on a4 with the knight — and I want you to tell me why we're not blundering the bishop. He might think you blundered it. Then it's checkmate — c4, even sexier than the mate I had in mind, because you dropped the piece back; the knight from the rim is defending b6."
+   "spoken": "The king to c7. So you can't take the rook, because of a check on h6 — so do the next best thing, take the stuff that you can take. He'll probably go the king to b6, and then you have a sexy move: a check on a4 with the knight — and I want you to tell me why you're not blundering the bishop. He might think you blundered it. Then it's checkmate — c4, even sexier than the mate I had in mind, because you dropped the piece back; the knight from the rim is defending b6."
   },
   {
    "ply": 26,
    "t": 1423.5,
    "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R w - - 3 14",
    "line": [],
-   "spoken": "The queen takes b3 made it a little bit easier for you, but everything was pretty straightforward. What do you say we do one last one for the road?",
+   "spoken": "The queen takes b3 made it a little bit easier for you, but everything was pretty straightforward. What do you say you do one last one for the road?",
    "reanchor": true
   },
   {

@@ -24,7 +24,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": "The Nimzowitsch-Larsen — b3 and the bishop to b2. It's a hypermodern opening: instead of building our own center, we attack the opponent's from a distance with our pieces.",
+   "spoken": "The Nimzowitsch-Larsen — b3 and the bishop to b2. It's a hypermodern opening: instead of building your own center, you attack the opponent's from a distance with your pieces.",
    "kind": "main",
    "teaches": [
     "the Nimzo-Larsen fianchetto"
@@ -46,7 +46,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "e3 is the old main line — pure hypermodern, with all our pressure aimed at the enemy center rather than our own.",
+   "spoken": "e3 is the old main line — pure hypermodern, with all your pressure aimed at the enemy center rather than your own.",
    "kind": "main"
   },
   {
@@ -87,7 +87,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The knight goes to e2, not f3 — f3 would invite ...e4 with tempo, and we want to leave that pawn on the operating table. The e2 square also prepares a second plan.",
+   "spoken": "The knight goes to e2, not f3 — f3 would invite ...e4 with tempo, and you want to leave that pawn on the operating table. The e2 square also prepares a second plan.",
    "kind": "main",
    "teaches": [
     "Ne2 avoids ...e4 with tempo"
@@ -110,7 +110,7 @@
     "Bxc6",
     "dxc6"
    ],
-   "spoken": "We take the knight. Even though e5 is no longer attacked directly, we can pile straight back onto it — Black is already in trouble just six moves in.",
+   "spoken": "You take the knight. Even though e5 is no longer attacked directly, you can pile straight back onto it — Black is already in trouble just six moves in.",
    "kind": "main"
   },
   {
@@ -138,7 +138,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "The pawn to f4 pries at e5 — d4 would only block in our own bishop and hand Black the ...e4 push.",
+   "spoken": "The pawn to f4 pries at e5 — d4 would only block in your own bishop and hand Black the ...e4 push.",
    "kind": "main",
    "teaches": [
     "f4, not d4, to open the bishop and hit e5"
@@ -188,7 +188,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles long — so we have opposite-side castling, a straight race of attacks.",
+   "spoken": "Black castles long — so you have opposite-side castling, a straight race of attacks.",
    "kind": "main"
   },
   {
@@ -198,7 +198,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "Our attack starts with a4, heading for b4 and b5 to blast open his queenside pawn cover — and in opposite-side castling you simply have to get on with it.",
+   "spoken": "Your attack starts with a4, heading for b4 and b5 to blast open his queenside pawn cover — and in opposite-side castling you simply have to get on with it.",
    "kind": "plan",
    "teaches": [
     "a4-b4-b5 to crack the castled king"

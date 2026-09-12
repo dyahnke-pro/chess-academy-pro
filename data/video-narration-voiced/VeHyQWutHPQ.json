@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "We take White and open d4; Black plays ...Nf6."
+      "spoken": "You take White and open d4; Black plays ...Nf6."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "c4"
       ],
-      "spoken": "We claim space with c4."
+      "spoken": "You claim space with c4."
     },
     {
       "ply": 5,
@@ -34,7 +34,7 @@
         "g6",
         "Nc3"
       ],
-      "spoken": "Black fianchettoes with ...g6; we develop the knight to c3."
+      "spoken": "Black fianchettoes with ...g6; you develop the knight to c3."
     },
     {
       "ply": 6,
@@ -52,7 +52,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "We develop the bishop to e3."
+      "spoken": "You develop the bishop to e3."
     },
     {
       "ply": 6,
@@ -86,7 +86,7 @@
       "line": [
         "h3"
       ],
-      "spoken": "We play h3, taking the g4-square."
+      "spoken": "You play h3, taking the g4-square."
     },
     {
       "ply": 10,
@@ -104,7 +104,7 @@
       "line": [
         "dxc5"
       ],
-      "spoken": "We take on c5."
+      "spoken": "You take on c5."
     },
     {
       "ply": 10,
@@ -138,7 +138,7 @@
       "line": [
         "g3"
       ],
-      "spoken": "We fianchetto with g3."
+      "spoken": "You fianchetto with g3."
     },
     {
       "ply": 14,
@@ -156,7 +156,7 @@
       "line": [
         "a3"
       ],
-      "spoken": "We play a3."
+      "spoken": "You play a3."
     },
     {
       "ply": 16,
@@ -174,7 +174,7 @@
       "line": [
         "Bd2"
       ],
-      "spoken": "We drop the bishop to d2."
+      "spoken": "You drop the bishop to d2."
     },
     {
       "ply": 18,
@@ -183,7 +183,7 @@
       "line": [
         "Nxc3"
       ],
-      "spoken": "Black takes our knight on c3."
+      "spoken": "Black takes your knight on c3."
     },
     {
       "ply": 19,
@@ -192,7 +192,7 @@
       "line": [
         "bxc3"
       ],
-      "spoken": "We recapture with the b-pawn."
+      "spoken": "You recapture with the b-pawn."
     },
     {
       "ply": 20,
@@ -210,7 +210,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We develop the knight to f3."
+      "spoken": "You develop the knight to f3."
     },
     {
       "ply": 22,
@@ -228,7 +228,7 @@
       "line": [
         "Rc1"
       ],
-      "spoken": "We play the rook to c1."
+      "spoken": "You play the rook to c1."
     },
     {
       "ply": 24,
@@ -246,7 +246,7 @@
       "line": [
         "Bg2"
       ],
-      "spoken": "We complete the fianchetto with the bishop to g2."
+      "spoken": "You complete the fianchetto with the bishop to g2."
     },
     {
       "ply": 26,
@@ -264,7 +264,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "You castle."
     },
     {
       "ply": 28,
@@ -273,7 +273,7 @@
       "line": [
         "Nxd2"
       ],
-      "spoken": "Black takes our bishop, capturing on d2."
+      "spoken": "Black takes your bishop, capturing on d2."
     },
     {
       "ply": 29,
@@ -282,7 +282,7 @@
       "line": [
         "Qxd2"
       ],
-      "spoken": "We recapture with the queen."
+      "spoken": "You recapture with the queen."
     },
     {
       "ply": 30,
@@ -300,7 +300,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "We centralize the knight on d4."
+      "spoken": "You centralize the knight on d4."
     },
     {
       "ply": 32,
@@ -318,7 +318,7 @@
       "line": [
         "Bxb7"
       ],
-      "spoken": "We grab on b7."
+      "spoken": "You grab on b7."
     },
     {
       "ply": 34,
@@ -336,7 +336,7 @@
       "line": [
         "Ra1"
       ],
-      "spoken": "We reroute the rook to a1."
+      "spoken": "You reroute the rook to a1."
     },
     {
       "ply": 36,
@@ -354,7 +354,7 @@
       "line": [
         "Ba6"
       ],
-      "spoken": "We play the bishop to a6, offering a trade."
+      "spoken": "You play the bishop to a6, offering a trade."
     },
     {
       "ply": 38,
@@ -372,7 +372,7 @@
       "line": [
         "Rxa6"
       ],
-      "spoken": "We recapture with the rook."
+      "spoken": "You recapture with the rook."
     },
     {
       "ply": 40,
@@ -390,7 +390,7 @@
       "line": [
         "Rc1"
       ],
-      "spoken": "We play the rook to c1."
+      "spoken": "You play the rook to c1."
     },
     {
       "ply": 42,
@@ -399,7 +399,7 @@
       "line": [
         "Bxd4"
       ],
-      "spoken": "Black takes our knight, capturing on d4."
+      "spoken": "Black takes your knight, capturing on d4."
     },
     {
       "ply": 43,
@@ -408,7 +408,7 @@
       "line": [
         "e3"
       ],
-      "spoken": "We play e3, hitting the bishop."
+      "spoken": "You play e3, hitting the bishop."
     },
     {
       "ply": 44,
@@ -426,7 +426,7 @@
       "line": [
         "Raa1"
       ],
-      "spoken": "We bring the rook to a1."
+      "spoken": "You bring the rook to a1."
     },
     {
       "ply": 46,
@@ -444,7 +444,7 @@
       "line": [
         "Kh2"
       ],
-      "spoken": "We tuck the king to h2."
+      "spoken": "You tuck the king to h2."
     },
     {
       "ply": 48,
@@ -465,7 +465,7 @@
         "Rdb1",
         "Rxb1"
       ],
-      "spoken": "We play the rook to d1; Black pushes a5; we swing the rook to b1; Black trades on b1."
+      "spoken": "You play the rook to d1; Black pushes a5; you swing the rook to b1; Black trades on b1."
     },
     {
       "ply": 53,
@@ -474,7 +474,7 @@
       "line": [
         "Rxb1"
       ],
-      "spoken": "We recapture with the rook."
+      "spoken": "You recapture with the rook."
     },
     {
       "ply": 55,
@@ -484,7 +484,7 @@
         "d5",
         "Rb7"
       ],
-      "spoken": "Black pushes d5; we infiltrate with the rook to b7."
+      "spoken": "Black pushes d5; you infiltrate with the rook to b7."
     },
     {
       "ply": 58,
@@ -495,7 +495,7 @@
         "Rxe7",
         "Bxe7"
       ],
-      "spoken": "Black plays ...Bd6; we grab on e7 with the rook; Black recaptures with the bishop."
+      "spoken": "Black plays ...Bd6; you grab on e7 with the rook; Black recaptures with the bishop."
     },
     {
       "ply": 60,
@@ -505,7 +505,7 @@
         "Qd4",
         "Qxd4"
       ],
-      "spoken": "We offer the queen trade on d4; Black takes."
+      "spoken": "You offer the queen trade on d4; Black takes."
     },
     {
       "ply": 62,
@@ -515,7 +515,7 @@
         "exd4",
         "a4"
       ],
-      "spoken": "We recapture with the pawn; Black pushes the passed a-pawn."
+      "spoken": "You recapture with the pawn; Black pushes the passed a-pawn."
     }
   ]
 }

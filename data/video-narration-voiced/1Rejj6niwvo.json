@@ -17,7 +17,7 @@
     "Qh5",
     "c5"
    ],
-   "spoken": "e4, the knight to f6, and White throws the queen out to h5 — a famous early sortie. We answer with c5, striking at the centre and offering the pawn."
+   "spoken": "e4, the knight to f6, and White throws the queen out to h5 — a famous early sortie. You answer with c5, striking at the centre and offering the pawn."
   },
   {
    "ply": 5,
@@ -35,7 +35,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "the knight grabs on e4 — we've traded our c-pawn for his e-pawn, but the real point is that White has developed nothing but his queen."
+   "spoken": "the knight grabs on e4 — you've traded your c-pawn for his e-pawn, but the real point is that White has developed nothing but his queen."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
    "line": [
     "Qh5"
    ],
-   "spoken": "Where White puts the queen matters — if it dropped back to e3 we'd hit it with d5. He keeps it on h5, and the knight to c6 and later b5 are our ideas."
+   "spoken": "Where White puts the queen matters — if it dropped back to e3 you'd hit it with d5. He keeps it on h5, and the knight to c6 and later b5 are your ideas."
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We develop with the knight to c6. You might ask, what if White chases it with d3? So be it — the knight just goes back; we've lost nothing by developing."
+   "spoken": "You develop with the knight to c6. You might ask, what if White chases it with d3? So be it — the knight just goes back; you've lost nothing by developing."
   },
   {
    "ply": 9,
@@ -62,7 +62,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4, obviously threatening mate on f7, so we have to be careful — don't play d6, which doesn't defend the f7-pawn."
+   "spoken": "The bishop to c4, obviously threatening mate on f7, so you have to be careful — don't play d6, which doesn't defend the f7-pawn."
   },
   {
    "ply": 10,
@@ -71,7 +71,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "There are two good moves here; the one more consistent with our strategy is e6, which blunts the bishop."
+   "spoken": "There are two good moves here; the one more consistent with your strategy is e6, which blunts the bishop."
   },
   {
    "ply": 11,
@@ -89,7 +89,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "— but it's true in many positions that it's fine to tuck a piece back to d7 temporarily; it won't change the assessment. We play d5, striking at the bishop and grabbing the centre."
+   "spoken": "— but it's true in many positions that it's fine to tuck a piece back to d7 temporarily; it won't change the assessment. You play d5, striking at the bishop and grabbing the centre."
   },
   {
    "ply": 14,
@@ -99,7 +99,7 @@
     "Bb5",
     "Bc5"
    ],
-   "spoken": "The bishop to b5, and we develop the bishop to c5. We break the pin naturally, so we don't really need the bishop to d7 or a6 — we can just keep developing."
+   "spoken": "The bishop to b5, and you develop the bishop to c5. You break the pin naturally, so you don't really need the bishop to d7 or a6 — you can just keep developing."
   },
   {
    "ply": 15,
@@ -117,7 +117,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "castling is more flexible right now: we keep our options open and unpin the knight."
+   "spoken": "castling is more flexible right now: you keep your options open and unpin the knight."
   },
   {
    "ply": 17,
@@ -135,7 +135,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "The knight to d4 — the queen drops back, we take his bishop, but then he takes our knight; what do we actually gain? Let me think it through."
+   "spoken": "The knight to d4 — the queen drops back, you take his bishop, but then he takes your knight; what do you actually gain? Let me think it through."
   },
   {
    "ply": 19,
@@ -160,7 +160,7 @@
    "t": 508.5,
    "fen": "r1bqk2r/pp3ppp/2n1p3/1Bbp4/4n3/5Q1N/PPPP1PPP/RNB1K2R b KQkq - 3 8",
    "line": [],
-   "spoken": "We won't have to wait long to cross a thousand, and then we'll get more serious games; this one was won a little early.",
+   "spoken": "You won't have to wait long to cross a thousand, and then you'll get more serious games; this one was won a little early.",
    "reanchor": true
   },
   {
@@ -220,7 +220,7 @@
     "Ne4",
     "Qc5"
    ],
-   "spoken": "avoid being basically lost. The knight to c5, the queen to g5, the knight to e4, the queen to c5 — the queen just shuffles while we develop for free.",
+   "spoken": "avoid being basically lost. The knight to c5, the queen to g5, the knight to e4, the queen to c5 — the queen just shuffles while you develop for free.",
    "reanchor": true
   },
   {
@@ -238,7 +238,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "So anyway — the queen to h5, we play the knight to c6, continuing our development,"
+   "spoken": "So anyway — the queen to h5, you play the knight to c6, continuing your development,"
   },
   {
    "ply": 9,
@@ -256,7 +256,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "the queen from f3 or h5 attacks f7, and so does the bishop — so we just play e6, and it's really the main thing to know."
+   "spoken": "the queen from f3 or h5 attacks f7, and so does the bishop — so you just play e6, and it's really the main thing to know."
   },
   {
    "ply": 12,
@@ -284,7 +284,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "natural. The bishop to c5, then we castle, we"
+   "spoken": "natural. The bishop to c5, then you castle, you"
   },
   {
    "ply": 16,
@@ -304,7 +304,7 @@
     "d3",
     "Nd4"
    ],
-   "spoken": "d4. What would we have done if White had"
+   "spoken": "d4. What would you have done if White had"
   },
   {
    "ply": 19,
@@ -322,7 +322,7 @@
    "line": [
     "Nxb5"
    ],
-   "spoken": "The easy option is just the knight takes b5, and after d-takes-e4 we recapture d-takes-e4, and"
+   "spoken": "The easy option is just the knight takes b5, and after d-takes-e4 you recapture d-takes-e4, and"
   },
   {
    "ply": 22,
@@ -332,7 +332,7 @@
     "dxe4",
     "dxe4"
    ],
-   "spoken": "we're up a pawn with better development and the two bishops; his knight is"
+   "spoken": "you're up a pawn with better development and the two bishops; his knight is"
   },
   {
    "ply": 24,
@@ -387,7 +387,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "then we can play e5, occupying the centre; the bishop is strong and the other bishop is good as well — this is a great position for Black."
+   "spoken": "then you can play e5, occupying the centre; the bishop is strong and the other bishop is good as well — this is a great position for Black."
   },
   {
    "ply": 19,

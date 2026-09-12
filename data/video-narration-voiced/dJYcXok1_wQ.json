@@ -69,7 +69,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "In the Rossolimo, recapture with dxc6, not the b-pawn — it opens the bishop's diagonal and, crucially, boosts our grip on the d-file and the d4 square.",
+   "spoken": "In the Rossolimo, recapture with dxc6, not the b-pawn — it opens the bishop's diagonal and, crucially, boosts your grip on the d-file and the d4 square.",
    "kind": "main",
    "teaches": "Recapture dxc6 in the Rossolimo to open the bishop and dominate d4."
   },
@@ -249,7 +249,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Our position is a bit flimsy, so finish developing before launching — f5 now, with the rooks disconnected, would be premature. And a key idea when up a pawn: don't cling to it. Give it back with interest at the right moment to gain something bigger.",
+   "spoken": "Your position is a bit flimsy, so finish developing before launching — f5 now, with the rooks disconnected, would be premature. And a key idea when up a pawn: don't cling to it. Give it back with interest at the right moment to gain something bigger.",
    "kind": "main",
    "teaches": "Complete development before the break, and return an extra pawn when doing so wins you more than it costs."
   },
@@ -326,7 +326,7 @@
    "line": [
     "Kh7"
    ],
-   "spoken": "Kh7 preemptively guards h6, so that when Be3 comes it doesn't hit the pawn with tempo — buying us the free move we need.",
+   "spoken": "Kh7 preemptively guards h6, so that when Be3 comes it doesn't hit the pawn with tempo — buying you the free move you need.",
    "kind": "main",
    "teaches": "A prophylactic king move can rob the opponent's next attack of the tempo it relied on."
   },
@@ -346,7 +346,7 @@
    "line": [
     "Qc8"
    ],
-   "spoken": "Qc8 does double duty — it supports the bishop on e6 and preempts Nxe6, which would have crippled our pawn structure.",
+   "spoken": "Qc8 does double duty — it supports the bishop on e6 and preempts Nxe6, which would have crippled your pawn structure.",
    "kind": "main",
    "teaches": "Find the multi-purpose defensive move that both supports a piece and forestalls a damaging trade."
   },

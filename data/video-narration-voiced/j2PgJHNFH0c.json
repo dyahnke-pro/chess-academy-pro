@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "We're Black, and against d4 out comes the knight to f6 — let's go."
+      "spoken": "You're Black, and against d4 out comes the knight to f6 — let's go."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "We're going to test our opponent on a London line I've used myself, one a lot of people still don't know. It starts with c5, hitting the center immediately."
+      "spoken": "You're going to test your opponent on a London line I've used myself, one a lot of people still don't know. It starts with c5, hitting the center immediately."
     },
     {
       "ply": 5,
@@ -51,7 +51,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "We take on d4, forcing the issue."
+      "spoken": "You take on d4, forcing the issue."
     },
     {
       "ply": 8,
@@ -61,7 +61,7 @@
         "exd4",
         "Qb6"
       ],
-      "spoken": "After White recaptures, we quickly fire off the queen to b6 — the very tricky line, and inexperienced London players hate it because it hits both b2 and d4."
+      "spoken": "After White recaptures, you quickly fire off the queen to b6 — the very tricky line, and inexperienced London players hate it because it hits both b2 and d4."
     },
     {
       "ply": 9,
@@ -79,7 +79,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "And here's the point: we play d6, deliberately luring that knight to stay on c3. London players do not like having their knight committed to c3 — it clogs the natural pawn setup London players lean on."
+      "spoken": "And here's the point: you play d6, deliberately luring that knight to stay on c3. London players do not like having their knight committed to c3 — it clogs the natural pawn setup London players lean on."
     },
     {
       "ply": 11,
@@ -97,7 +97,7 @@
       "line": [
         "g6"
       ],
-      "spoken": "Now the fianchetto should feel natural: g6. If you play e6 instead you block in your own light-squared bishop, so we let it breathe on the long diagonal."
+      "spoken": "Now the fianchetto should feel natural: g6. If you play e6 instead you block in your own light-squared bishop, so you let it breathe on the long diagonal."
     },
     {
       "ply": 14,
@@ -107,7 +107,7 @@
         "Nf3",
         "Bg7"
       ],
-      "spoken": "White brings out the knight to f3; we complete the fianchetto with the bishop to g7."
+      "spoken": "White brings out the knight to f3; you complete the fianchetto with the bishop to g7."
     },
     {
       "ply": 16,
@@ -117,7 +117,7 @@
         "Be2",
         "O-O"
       ],
-      "spoken": "White develops the bishop to e2; we castle."
+      "spoken": "White develops the bishop to e2; you castle."
     },
     {
       "ply": 17,
@@ -126,7 +126,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "White castles too — a normal-looking middlegame, but our queen sortie has already made White slightly uncomfortable."
+      "spoken": "White castles too — a normal-looking middlegame, but your queen sortie has already made White slightly uncomfortable."
     },
     {
       "ply": 18,
@@ -153,7 +153,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "We develop the knight to c6, piling onto d4."
+      "spoken": "You develop the knight to c6, piling onto d4."
     },
     {
       "ply": 21,
@@ -162,7 +162,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "White lashes out with d5 — a committal push London players usually dislike, but he goes for it, kicking our knight."
+      "spoken": "White lashes out with d5 — a committal push London players usually dislike, but he goes for it, kicking your knight."
     },
     {
       "ply": 22,
@@ -189,7 +189,7 @@
       "line": [
         "Rac8"
       ],
-      "spoken": "We bring the rook to c8, stacking up on the c-file."
+      "spoken": "You bring the rook to c8, stacking up on the c-file."
     },
     {
       "ply": 25,
@@ -198,7 +198,7 @@
       "line": [
         "a3"
       ],
-      "spoken": "White plays a3, poking our knight on b4."
+      "spoken": "White plays a3, poking your knight on b4."
     },
     {
       "ply": 26,
@@ -207,7 +207,7 @@
       "line": [
         "Na6"
       ],
-      "spoken": "We retreat the knight to a6, planning to redeploy it to c5 — and one point I want to make through this game is that people become terrified of a move like the knight to a6 when there's no reason to fear it."
+      "spoken": "You retreat the knight to a6, planning to redeploy it to c5 — and one point I want to make through this game is that people become terrified of a move like the knight to a6 when there's no reason to fear it."
     },
     {
       "ply": 27,
@@ -216,7 +216,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "White develops the bishop to e3, hitting our queen."
+      "spoken": "White develops the bishop to e3, hitting your queen."
     },
     {
       "ply": 28,
@@ -225,7 +225,7 @@
       "line": [
         "Qa5"
       ],
-      "spoken": "We slide the queen to a5 — and honestly this drops a pawn; I completely forgot it was hanging. I should have brought the other rook over instead, a clean improving move rather than this."
+      "spoken": "You slide the queen to a5 — and honestly this drops a pawn; I completely forgot it was hanging. I should have brought the other rook over instead, a clean improving move rather than this."
     },
     {
       "ply": 23,

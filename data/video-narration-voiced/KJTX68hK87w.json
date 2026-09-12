@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The Queen's Gambit — and we mix it up.",
+   "spoken": "The Queen's Gambit — and you mix it up.",
    "kind": "main"
   },
   {
@@ -51,7 +51,7 @@
     "Nc6",
     "Nf3"
    ],
-   "spoken": "The knight to c6 is the Chigorin. The whole idea is dead simple: everything we do for the next few moves is geared toward attacking the d4-pawn.",
+   "spoken": "The knight to c6 is the Chigorin. The whole idea is dead simple: everything you do for the next few moves is geared toward attacking the d4-pawn.",
    "kind": "main",
    "teaches": [
     "the Chigorin: pile onto d4"
@@ -114,7 +114,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "We take on f3, wrecking White's pawn structure and weakening d4 further.",
+   "spoken": "You take on f3, wrecking White's pawn structure and weakening d4 further.",
    "kind": "main"
   },
   {
@@ -133,7 +133,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "We play solidly with e6 — defending d5, since a premature capture on c4 would run into the d5 push and let White toss his knight around.",
+   "spoken": "You play solidly with e6 — defending d5, since a premature capture on c4 would run into the d5 push and let White toss his knight around.",
    "kind": "main",
    "teaches": [
     "e6 keeps the center solid"
@@ -177,7 +177,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "Winning the pawn back, we recapture with the queen on d4, forcing the trade — with both white bishops hanging, White has no way to decline.",
+   "spoken": "Winning the pawn back, you recapture with the queen on d4, forcing the trade — with both white bishops hanging, White has no way to decline.",
    "kind": "main",
    "teaches": [
     "the Russian-schoolboy queen trade with hanging bishops"
@@ -200,7 +200,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We're not out of the woods with our kingside undeveloped, so priority one is safety — castle short and take the sting out of any b5 tricks.",
+   "spoken": "You're not out of the woods with your kingside undeveloped, so priority one is safety — castle short and take the sting out of any b5 tricks.",
    "kind": "main",
    "teaches": [
     "king safety before ambition"
@@ -229,7 +229,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Even better, we castle long — it makes the king safe AND defends c7 against the bishop, one move doing two jobs.",
+   "spoken": "Even better, you castle long — it makes the king safe AND defends c7 against the bishop, one move doing two jobs.",
    "kind": "main",
    "teaches": [
     "a move that does two jobs"
@@ -259,7 +259,7 @@
    "line": [
     "Nc2"
    ],
-   "spoken": "Now we simplify: the knight to c2 hits the bishop and forces a trade, gaining a tempo toward finishing development.",
+   "spoken": "Now you simplify: the knight to c2 hits the bishop and forces a trade, gaining a tempo toward finishing development.",
    "kind": "main"
   },
   {
@@ -278,7 +278,7 @@
    "line": [
     "Nxe3"
    ],
-   "spoken": "We take on e3, eliminating White's bishop pair — his only compensation — and leaving a fresh weakness on e3.",
+   "spoken": "You take on e3, eliminating White's bishop pair — his only compensation — and leaving a fresh weakness on e3.",
    "kind": "main",
    "teaches": [
     "trade off the enemy’s only trump"
@@ -412,7 +412,7 @@
    "line": [
     "Red1"
    ],
-   "spoken": "These endgames aren't won in five moves. We keep making slow, improving moves and stay patient.",
+   "spoken": "These endgames aren't won in five moves. You keep making slow, improving moves and stay patient.",
    "kind": "plan",
    "teaches": [
     "patience in a technical endgame"
@@ -526,7 +526,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "Black's b5 break walks into a tactic — we kept our eyes open, and the rook capture on c6 wins clean while the long game paid off.",
+   "spoken": "Black's b5 break walks into a tactic — you kept your eyes open, and the rook capture on c6 wins clean while the long game paid off.",
    "kind": "main",
    "teaches": [
     "play the plan but watch for the tactic"

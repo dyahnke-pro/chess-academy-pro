@@ -15,7 +15,7 @@
         "e4",
         "e6"
       ],
-      "spoken": "We take White; Black answers with the French, ...e6."
+      "spoken": "You take White; Black answers with the French, ...e6."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "d4"
       ],
-      "spoken": "We build the centre with d4."
+      "spoken": "You build the centre with d4."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "We push e5 — the Advance."
+      "spoken": "You push e5 — the Advance."
     },
     {
       "ply": 6,
@@ -60,7 +60,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "Instead of the natural c3, we gambit the centre and just develop — the knight to f3."
+      "spoken": "Instead of the natural c3, you gambit the centre and just develop — the knight to f3."
     },
     {
       "ply": 8,
@@ -78,7 +78,7 @@
       "line": [
         "Bd3"
       ],
-      "spoken": "We keep developing with the bishop to d3, inviting Black to grab the pawn."
+      "spoken": "You keep developing with the bishop to d3, inviting Black to grab the pawn."
     },
     {
       "ply": 10,
@@ -96,7 +96,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle — the point is to keep the e5-pawn that clamps Black, and to develop fast."
+      "spoken": "You castle — the point is to keep the e5-pawn that clamps Black, and to develop fast."
     },
     {
       "ply": 12,
@@ -114,7 +114,7 @@
       "line": [
         "Re1"
       ],
-      "spoken": "We overprotect e5 with the rook to e1."
+      "spoken": "You overprotect e5 with the rook to e1."
     },
     {
       "ply": 14,
@@ -132,7 +132,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We play the awkward-looking knight to c3, eyeing the Nb5–d6 route."
+      "spoken": "You play the awkward-looking knight to c3, eyeing the Nb5–d6 route."
     },
     {
       "ply": 16,
@@ -169,7 +169,7 @@
         "Nxc5",
         "Bxc5"
       ],
-      "spoken": "Our knight takes on c5; Black recaptures with the bishop."
+      "spoken": "Your knight takes on c5; Black recaptures with the bishop."
     },
     {
       "ply": 22,
@@ -179,7 +179,7 @@
         "dxc5",
         "Qxc5"
       ],
-      "spoken": "We take that bishop with the d-pawn; Black recaptures with the queen — and we've traded off Black's important dark-squared bishop, keeping the two bishops."
+      "spoken": "You take that bishop with the d-pawn; Black recaptures with the queen — and you've traded off Black's important dark-squared bishop, keeping the two bishops."
     },
     {
       "ply": 23,
@@ -188,7 +188,7 @@
       "line": [
         "c3"
       ],
-      "spoken": "We solidify d4 with c3."
+      "spoken": "You solidify d4 with c3."
     },
     {
       "ply": 24,
@@ -206,7 +206,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "We develop the bishop to e3."
+      "spoken": "You develop the bishop to e3."
     },
     {
       "ply": 26,
@@ -224,7 +224,7 @@
       "line": [
         "b4"
       ],
-      "spoken": "We gain a tempo with b4."
+      "spoken": "You gain a tempo with b4."
     },
     {
       "ply": 28,

@@ -38,7 +38,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We recover the pawn while developing — the knight to f3, not a queen check on a4. Winning the pawn back is only half the job; you have to develop while doing it, and dragging the queen out early achieves nothing.",
+   "spoken": "You recover the pawn while developing — the knight to f3, not a queen check on a4. Winning the pawn back is only half the job; you have to develop while doing it, and dragging the queen out early achieves nothing.",
    "kind": "main",
    "teaches": [
     "recover the pawn with a developing move, not the queen"
@@ -95,7 +95,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": "We take the pawn back with the bishop on c4, raking toward f7.",
+   "spoken": "You take the pawn back with the bishop on c4, raking toward f7.",
    "kind": "main"
   },
   {
@@ -105,7 +105,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black hits back with c5, and after the exchange we reach the classic isolated-queen-pawn structure — the same battleground you get from the Queen's Gambit Declined.",
+   "spoken": "Black hits back with c5, and after the exchange you reach the classic isolated-queen-pawn structure — the same battleground you get from the Queen's Gambit Declined.",
    "kind": "main",
    "teaches": [
     "the IQP structure from the QGA"

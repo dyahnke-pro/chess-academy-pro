@@ -15,7 +15,7 @@
         "e4",
         "c5"
       ],
-      "spoken": "We open e4, and our opponent plays the Sicilian, c5."
+      "spoken": "You open e4, and your opponent plays the Sicilian, c5."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "We face d5, the direct counter in the centre."
+      "spoken": "You face d5, the direct counter in the centre."
     },
     {
       "ply": 5,
@@ -42,7 +42,7 @@
       "line": [
         "exd5"
       ],
-      "spoken": "We take, capturing on d5."
+      "spoken": "You take, capturing on d5."
     },
     {
       "ply": 7,
@@ -52,7 +52,7 @@
         "Qxd5",
         "d4"
       ],
-      "spoken": "The queen recaptures on d5, and we play d4 — a highly theoretical position we've had many times."
+      "spoken": "The queen recaptures on d5, and you play d4 — a highly theoretical position you've had many times."
     },
     {
       "ply": 8,
@@ -70,7 +70,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We develop our own knight to f3 — all theory. Black is at a major crossroads with four or so worthy options."
+      "spoken": "You develop your own knight to f3 — all theory. Black is at a major crossroads with four or so worthy options."
     },
     {
       "ply": 10,
@@ -88,7 +88,7 @@
       "line": [
         "dxc5"
       ],
-      "spoken": "We take, capturing on c5 — you might be reluctant, since it lets Black trade queens and drive our king out for a pawn, and you might think c5 is easy to win back, but that's far from true."
+      "spoken": "You take, capturing on c5 — you might be reluctant, since it lets Black trade queens and drive your king out for a pawn, and you might think c5 is easy to win back, but that's far from true."
     },
     {
       "ply": 13,
@@ -98,7 +98,7 @@
         "Qxd1+",
         "Kxd1"
       ],
-      "spoken": "The queen takes d1 with check, and our king recaptures on d1 — if he knows the theory, this gets sharp."
+      "spoken": "The queen takes d1 with check, and your king recaptures on d1 — if he knows the theory, this gets sharp."
     },
     {
       "ply": 14,
@@ -107,7 +107,7 @@
       "line": [
         "a5"
       ],
-      "spoken": "a5, a very understandable move preventing b4 — but that doesn't mean we must part with the c5 pawn. We have many ways to cling to it, though not at the cost of our position. The bishop to e3 runs into the knight to g4, ruining our structure; h3 to meet e6 with the bishop to e3 runs into the knight to d5; and a3 with b4 fails to a takes b4, c takes b4, the knight takes b4. So a more indirect approach — a5 weakens the b5 square."
+      "spoken": "a5, a very understandable move preventing b4 — but that doesn't mean you must part with the c5 pawn. You have many ways to cling to it, though not at the cost of your position. The bishop to e3 runs into the knight to g4, ruining your structure; h3 to meet e6 with the bishop to e3 runs into the knight to d5; and a3 with b4 fails to a takes b4, c takes b4, the knight takes b4. So a more indirect approach — a5 weakens the b5 square."
     },
     {
       "ply": 15,
@@ -116,14 +116,14 @@
       "line": [
         "Na3"
       ],
-      "spoken": "The bishop to b5 has limited value since Black plays e6, so I like the Alapin-esque idea of getting the knight to b5. So the knight to a3 — from b5 the knight eyes c7, and if Black pushes the e-pawn and we play the knight to b5, we can even reach d6, where after Black takes and we recapture, we get the bishop pair and dark-square control; even if Black wins the pawn back, we'd get the better endgame. A nice flexible developing move, waiting for Black to show his cards."
+      "spoken": "The bishop to b5 has limited value since Black plays e6, so I like the Alapin-esque idea of getting the knight to b5. So the knight to a3 — from b5 the knight eyes c7, and if Black pushes the e-pawn and you play the knight to b5, you can even reach d6, where after Black takes and you recapture, you get the bishop pair and dark-square control; even if Black wins the pawn back, you'd get the better endgame. A nice flexible developing move, waiting for Black to show his cards."
     },
     {
       "ply": 13,
       "t": 320.5,
       "fen": "r1b1kb1r/pp2pppp/2n2n2/2P5/8/2P2N2/PP3PPP/RNBK1B1R b kq - 0 7",
       "line": [],
-      "spoken": "If Black had played the immediate e6, we'd play b4 — one of the theoretical lines.",
+      "spoken": "If Black had played the immediate e6, you'd play b4 — one of the theoretical lines.",
       "reanchor": true
     },
     {
@@ -145,7 +145,7 @@
       "line": [
         "Nb5"
       ],
-      "spoken": "Some want c4 or the bishop to c4 — both reasonable; I prefer the bishop to c4, a developing move, but Black answers e6, defending the knight and hitting c5; then we could trade on d5 and play the bishop to e3, permanently securing our extra pawn. Or we stick to our guns with the knight to b5, which I like even more, since it creates a devious threat of c4 and the bishop to c4, and once the d5-knight is dislodged our knight travels to c7.",
+      "spoken": "Some want c4 or the bishop to c4 — both reasonable; I prefer the bishop to c4, a developing move, but Black answers e6, defending the knight and hitting c5; then you could trade on d5 and play the bishop to e3, permanently securing your extra pawn. Or you stick to your guns with the knight to b5, which I like even more, since it creates a devious threat of c4 and the bishop to c4, and once the d5-knight is dislodged your knight travels to c7.",
       "reanchor": true
     },
     {
@@ -165,7 +165,7 @@
       "line": [
         "Ng5"
       ],
-      "spoken": "Now our knight on b5 just chills. We could also go from the other side with the knight to g5 — sticking knights on b5 and g5, hitting f7 and c7. Black would play g6 to defend f7, and after f4 Black could counter with h6. Or the straightforward bishop to c4, simple and strong. The knight to g5 is the move to win on the spot — I'm going for the throat, and it's not a big commitment: knights move backwards.",
+      "spoken": "Now your knight on b5 just chills. You could also go from the other side with the knight to g5 — sticking knights on b5 and g5, hitting f7 and c7. Black would play g6 to defend f7, and after f4 Black could counter with h6. Or the straightforward bishop to c4, simple and strong. The knight to g5 is the move to win on the spot — I'm going for the throat, and it's not a big commitment: knights move backwards.",
       "reanchor": true
     },
     {
@@ -175,7 +175,7 @@
       "line": [
         "Be6"
       ],
-      "spoken": "The bishop to e6 immediately justifies the knight to g5, because we have the standing option of taking on e6 and permanently wrecking Black's structure — I'll take those doubled pawns any day. You don't have to take immediately, but not having to rush a move doesn't mean you shouldn't play it.",
+      "spoken": "The bishop to e6 immediately justifies the knight to g5, because you have the standing option of taking on e6 and permanently wrecking Black's structure — I'll take those doubled pawns any day. You don't have to take immediately, but not having to rush a move doesn't mean you shouldn't play it.",
       "reanchor": true
     },
     {
@@ -186,7 +186,7 @@
         "Nxe6+",
         "fxe6"
       ],
-      "spoken": "I don't see a reason to keep the knight there, so let's take on e6 while we can. Now the e6 pawn is one of Black's main weaknesses — we could hit it with a rook to e1, but I see a more effective, unconventional development: getting the bishop to h3 or g4, either via the bishop to e2 and g4, or g3 and the bishop to h3, which I call the hyper-fianchetto.",
+      "spoken": "I don't see a reason to keep the knight there, so let's take on e6 while you can. Now the e6 pawn is one of Black's main weaknesses — you could hit it with a rook to e1, but I see a more effective, unconventional development: getting the bishop to h3 or g4, either via the bishop to e2 and g4, or g3 and the bishop to h3, which I call the hyper-fianchetto.",
       "reanchor": true
     },
     {
@@ -214,7 +214,7 @@
       "line": [
         "g3"
       ],
-      "spoken": "What about c4 to fork? Remember c7 is already protected by Black's king, so we're no longer aiming at the fork on c7.",
+      "spoken": "What about c4 to fork? Remember c7 is already protected by Black's king, so you're no longer aiming at the fork on c7.",
       "reanchor": true
     },
     {
@@ -234,7 +234,7 @@
       "line": [
         "Bh3"
       ],
-      "spoken": "We follow up with our plan, the bishop to h3.",
+      "spoken": "You follow up with your plan, the bishop to h3.",
       "reanchor": true
     },
     {
@@ -252,7 +252,7 @@
       "line": [
         "Bh3"
       ],
-      "spoken": "...but here we have bigger fish to fry.",
+      "spoken": "...but here you have bigger fish to fry.",
       "reanchor": true
     },
     {
@@ -262,7 +262,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "e5 — its obvious drawback is that the d5-knight loses its support. The idea plays itself: we want a rook on d1, not to attack the knight in some random way; if the bishop to b6, the knight drops to c7 and we've achieved nothing.",
+      "spoken": "e5 — its obvious drawback is that the d5-knight loses its support. The idea plays itself: you want a rook on d1, not to attack the knight in some random way; if the bishop to b6, the knight drops to c7 and you've achieved nothing.",
       "reanchor": true
     },
     {
@@ -272,7 +272,7 @@
       "line": [
         "Ke2"
       ],
-      "spoken": "So instead we move the king off d1 — to the c-file or e-file, doesn't matter; I like keeping the king central in the endgame. The king to e2. Notice how our pawns restrict both black knights — d4, b4 and f4 are all covered, a major appeal of g3 over the bishop-e2 route. Now the devastating threat of the rook to d1, and Black is borderline dead lost — not just from the extra pawn, but because his position is in shambles. He can't castle, the king has moved; against the rook to d1 there's no good answer — if the king to e8, the rook to d1, and if the rook to d8 defends the knight, we play the rook takes d5, the classic trick with the knight coming to c7 to win the rook. e6 might be the only move for breathing room, but then we take on e6 and Black can resign. What's wrong with the knight to f6? A check on d1 forces the king to e8 — which is partly why we put the bishop on h3: not just to hit e6, but so that when Black played e5 we also contained the king, preventing it from reaching c8.",
+      "spoken": "So instead you move the king off d1 — to the c-file or e-file, doesn't matter; I like keeping the king central in the endgame. The king to e2. Notice how your pawns restrict both black knights — d4, b4 and f4 are all covered, a major appeal of g3 over the bishop-e2 route. Now the devastating threat of the rook to d1, and Black is borderline dead lost — not just from the extra pawn, but because his position is in shambles. He can't castle, the king has moved; against the rook to d1 there's no good answer — if the king to e8, the rook to d1, and if the rook to d8 defends the knight, you play the rook takes d5, the classic trick with the knight coming to c7 to win the rook. e6 might be the only move for breathing room, but then you take on e6 and Black can resign. What's wrong with the knight to f6? A check on d1 forces the king to e8 — which is partly why you put the bishop on h3: not just to hit e6, but so that when Black played e5 you also contained the king, preventing it from reaching c8.",
       "reanchor": true
     },
     {
@@ -288,7 +288,7 @@
       "t": 864.5,
       "fen": "r1b1kb1r/pp2pppp/2n2n2/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
       "line": [],
-      "spoken": "Kudos to Chimp for finding e6 — we just grab the pawn, low risk. Now the knight has a big problem: if it drops to c7, we check on d1, force the king away, win the knight, and mate follows with the bishop to g5. If the knight to f6, that's the only way to stave off immediate defeat, then the bishop to g5 or the rook-d1 check. He played the knight to c7 — that loses: the rook to d1 with check, the king to e7, and we collect the knight while delivering mate with the bishop to g5.",
+      "spoken": "Kudos to Chimp for finding e6 — you just grab the pawn, low risk. Now the knight has a big problem: if it drops to c7, you check on d1, force the king away, win the knight, and mate follows with the bishop to g5. If the knight to f6, that's the only way to stave off immediate defeat, then the bishop to g5 or the rook-d1 check. He played the knight to c7 — that loses: the rook to d1 with check, the king to e7, and you collect the knight while delivering mate with the bishop to g5.",
       "reanchor": true
     },
     {
@@ -472,7 +472,7 @@
         "Bxh3",
         "Rxh3"
       ],
-      "spoken": "...and after the trade we win the f3 pawn back and get a massive queenside pawn phalanx that often decides the game — a well-timed b5 sends the knight away, then c6 makes a passer. So this line has become very popular.",
+      "spoken": "...and after the trade you win the f3 pawn back and get a massive queenside pawn phalanx that often decides the game — a well-timed b5 sends the knight away, then c6 makes a passer. So this line has become very popular.",
       "reanchor": true
     },
     {
@@ -500,7 +500,7 @@
       "line": [
         "Na3"
       ],
-      "spoken": "...and here our move is the knight to a3, the same idea as the game.",
+      "spoken": "...and here your move is the knight to a3, the same idea as the game.",
       "reanchor": true
     },
     {
@@ -520,7 +520,7 @@
       "line": [
         "Nb5"
       ],
-      "spoken": "...we play the knight to b5, threatening the fork on c7 with tempo.",
+      "spoken": "...you play the knight to b5, threatening the fork on c7 with tempo.",
       "reanchor": true
     },
     {
@@ -540,7 +540,7 @@
       "line": [
         "Nbxd4"
       ],
-      "spoken": "If the queen to d8, we can play the queen takes d4 for a slightly better endgame, or recapture with the knight for slightly pleasanter development.",
+      "spoken": "If the queen to d8, you can play the queen takes d4 for a slightly better endgame, or recapture with the knight for slightly pleasanter development.",
       "reanchor": true
     },
     {
@@ -639,7 +639,7 @@
       "line": [
         "Nd6+"
       ],
-      "spoken": "...but the engine likes keeping the tension of the dark-squared bishop — it's plus two. Say the bishop to e7, Black develops; we castle queenside. If Black castles queenside, he gets mated on a7, a worthy mating construction; if kingside, we make the improving bishop to f3, then the rook to e1, and it's plus two — compare the piece placement: Black's position is miserable and hard to play, running out of useful moves. The a8-rook can't move because a7 hangs, the other rook can go to d8, we move the rook to e1, threatening the bishop takes d5, and we can tuck the king to b1.",
+      "spoken": "...but the engine likes keeping the tension of the dark-squared bishop — it's plus two. Say the bishop to e7, Black develops; you castle queenside. If Black castles queenside, he gets mated on a7, a worthy mating construction; if kingside, you make the improving bishop to f3, then the rook to e1, and it's plus two — compare the piece placement: Black's position is miserable and hard to play, running out of useful moves. The a8-rook can't move because a7 hangs, the other rook can go to d8, you move the rook to e1, threatening the bishop takes d5, and you can tuck the king to b1.",
       "reanchor": true
     },
     {
@@ -737,7 +737,7 @@
       "line": [
         "Nb5"
       ],
-      "spoken": "...our knight jumps to b5, and Black is in big trouble; if the knight to d5...",
+      "spoken": "...your knight jumps to b5, and Black is in big trouble; if the knight to d5...",
       "reanchor": true
     },
     {
@@ -758,7 +758,7 @@
       "line": [
         "a6"
       ],
-      "spoken": "...because we threaten the d5-knight, and if Black counter-attacks, remember you're also hitting the other knight.",
+      "spoken": "...because you threaten the d5-knight, and if Black counter-attacks, remember you're also hitting the other knight.",
       "reanchor": true
     },
     {
@@ -794,7 +794,7 @@
       "line": [
         "Qe7"
       ],
-      "spoken": "...the queen to e7, upon which we play the queen to a4, and Black can't go anywhere because of the fork — constantly stumbling due to the cramped position.",
+      "spoken": "...the queen to e7, upon which you play the queen to a4, and Black can't go anywhere because of the fork — constantly stumbling due to the cramped position.",
       "reanchor": true
     },
     {
@@ -822,7 +822,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "...b5 is protected but c4 is now incredibly weak, so we go the bishop to e3.",
+      "spoken": "...b5 is protected but c4 is now incredibly weak, so you go the bishop to e3.",
       "reanchor": true
     },
     {
@@ -832,7 +832,7 @@
       "line": [
         "Qh5"
       ],
-      "spoken": "Say the queen swings to h5, we play the knight to c4...",
+      "spoken": "Say the queen swings to h5, you play the knight to c4...",
       "reanchor": true
     },
     {
@@ -842,7 +842,7 @@
       "line": [
         "Nc4"
       ],
-      "spoken": "...our knight heading for b6 — very, very juicy.",
+      "spoken": "...your knight heading for b6 — very, very juicy.",
       "reanchor": true
     },
     {
@@ -860,7 +860,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "...there's also e5, a bit more ambitious than e6, which happens often; we play the knight to b5...",
+      "spoken": "...there's also e5, a bit more ambitious than e6, which happens often; you play the knight to b5...",
       "reanchor": true
     },
     {

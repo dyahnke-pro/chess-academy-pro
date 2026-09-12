@@ -15,7 +15,7 @@
     "Nf3",
     "Nf6"
    ],
-   "spoken": "We face a knight to f3 and answer, of course, with a knight to f6."
+   "spoken": "You face a knight to f3 and answer, of course, with a knight to f6."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We fianchetto with g6."
+   "spoken": "You fianchetto with g6."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We play a bishop to g7 and wait for White to show his cards."
+   "spoken": "You play a bishop to g7 and wait for White to show his cards."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle. Because the bishop is on g5, treating this like a London is innocuous for White."
+   "spoken": "You castle. Because the bishop is on g5, treating this like a London is innocuous for White."
   },
   {
    "ply": 9,
@@ -104,7 +104,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "We keep the King's Indian spirit and push d6."
+   "spoken": "You keep the King's Indian spirit and push d6."
   },
   {
    "ply": 11,
@@ -113,7 +113,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Now h4 — not a move I've faced, and it looks scary if you don't know it. Against h4 there are three options: ignore it and allow h5; push h5 ourselves to freeze the kingside; or push the pawn one square."
+   "spoken": "Now h4 — not a move I've faced, and it looks scary if you don't know it. Against h4 there are three options: ignore it and allow h5; push h5 yourself to freeze the kingside; or push the pawn one square."
   },
   {
    "ply": 12,
@@ -122,7 +122,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "We choose the third — h6, encouraging White to hand us the bishop pair, then we push h5."
+   "spoken": "You choose the third — h6, encouraging White to hand you the bishop pair, then you push h5."
   },
   {
    "ply": 13,
@@ -142,7 +142,7 @@
     "Bxf6",
     "h5"
    ],
-   "spoken": "We recapture and White pushes h5.",
+   "spoken": "You recapture and White pushes h5.",
    "reanchor": true
   },
   {
@@ -152,7 +152,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "And now the point of h6: we push g5, and the kingside is essentially frozen."
+   "spoken": "And now the point of h6: you push g5, and the kingside is essentially frozen."
   },
   {
    "ply": 17,
@@ -161,7 +161,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "White plays a knight to d2. The drawback of what we did is the light squares.",
+   "spoken": "White plays a knight to d2. The drawback of what you did is the light squares.",
    "reanchor": true
   },
   {
@@ -169,7 +169,7 @@
    "t": 194,
    "fen": "rnbq1rk1/ppp1ppb1/3p1npp/6B1/3P3P/2P1PN2/PP3PP1/RN1QKB1R w KQ - 0 7",
    "line": [],
-   "spoken": "We pushed h6, encouraged the trade, then h5 and g5 — what can bite us?",
+   "spoken": "You pushed h6, encouraged the trade, then h5 and g5 — what can bite you?",
    "reanchor": true
   },
   {
@@ -191,7 +191,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "The light squares, in particular h7 — we must never allow White to build a battery on that diagonal, since a queen to h7 is no light threat.",
+   "spoken": "The light squares, in particular h7 — you must never allow White to build a battery on that diagonal, since a queen to h7 is no light threat.",
    "reanchor": true
   },
   {
@@ -201,7 +201,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "One interesting move probably not on your radar: we push d5, restricting the knight and preventing it from jumping to e4."
+   "spoken": "One interesting move probably not on your radar: you push d5, restricting the knight and preventing it from jumping to e4."
   },
   {
    "ply": 19,
@@ -237,7 +237,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "A knight to g4 isn't scary, just annoying since it hits two pieces — so we bring the bishop back to g7."
+   "spoken": "A knight to g4 isn't scary, just annoying since it hits two pieces — so you bring the bishop back to g7."
   },
   {
    "ply": 21,
@@ -246,7 +246,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": "White plays a queen to e2. Now we attack White's center — e5 wouldn't make sense here."
+   "spoken": "White plays a queen to e2. Now you attack White's center — e5 wouldn't make sense here."
   },
   {
    "ply": 22,
@@ -255,7 +255,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "So we play the other break, c5 — because after e5, White just takes and we'd shuffle the bishop repeatedly."
+   "spoken": "So you play the other break, c5 — because after e5, White just takes and you'd shuffle the bishop repeatedly."
   },
   {
    "ply": 23,
@@ -282,7 +282,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "White plays a rook to e1. It's harder to shoot at a moving target — by fixing the king, we stop it fleeing to a1, and now a queen to a5 is much more effective.",
+   "spoken": "White plays a rook to e1. It's harder to shoot at a moving target — by fixing the king, you stop it fleeing to a1, and now a queen to a5 is much more effective.",
    "reanchor": true
   },
   {
@@ -311,7 +311,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "We capture on d4 — not a bishop capture on d4, which is a blunder."
+   "spoken": "You capture on d4 — not a bishop capture on d4, which is a blunder."
   },
   {
    "ply": 29,
@@ -330,7 +330,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": "Patience is the crucial element — we set everything up by bringing the rook to c8, threatening a rook capture on c3."
+   "spoken": "Patience is the crucial element — you set everything up by bringing the rook to c8, threatening a rook capture on c3."
   },
   {
    "ply": 31,
@@ -349,7 +349,7 @@
    "line": [
     "Rxc3+"
    ],
-   "spoken": "We play the rook sacrifice on c3 with check.",
+   "spoken": "You play the rook sacrifice on c3 with check.",
    "reanchor": true
   },
   {
@@ -360,7 +360,7 @@
     "bxc3",
     "Qxc3+"
    ],
-   "spoken": "White recaptures and we check with the queen on c3.",
+   "spoken": "White recaptures and you check with the queen on c3.",
    "reanchor": true
   },
   {
@@ -380,7 +380,7 @@
    "line": [
     "Bc2+"
    ],
-   "spoken": "A bishop check on c2 — if the king goes to c1, we play a bishop to d3 and a queen to c2.",
+   "spoken": "A bishop check on c2 — if the king goes to c1, you play a bishop to d3 and a queen to c2.",
    "reanchor": true
   },
   {
@@ -437,7 +437,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "...we have a London.",
+   "spoken": "...you have a London.",
    "reanchor": true
   },
   {
@@ -454,7 +454,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "Our opponent chose the Torre, so we start by castling.",
+   "spoken": "Your opponent chose the Torre, so you start by castling.",
    "reanchor": true
   },
   {
@@ -715,7 +715,7 @@
    "t": 761,
    "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/2P2N2/PP1NPPPP/R2QKB1R b KQ - 4 5",
    "line": [],
-   "spoken": "Our opponent played the less ambitious e3 — nothing wrong, just unambitious. We proceed with d6, and h4 was already a novelty. We answered h6, forcing White's hand: after a bishop to f6, h5, g5, we have a great position. Then a knight to d2, d5, restricting e4.",
+   "spoken": "Your opponent played the less ambitious e3 — nothing wrong, just unambitious. You proceed with d6, and h4 was already a novelty. You answered h6, forcing White's hand: after a bishop to f6, h5, g5, you have a great position. Then a knight to d2, d5, restricting e4.",
    "reanchor": true
   }
  ]

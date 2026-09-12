@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We have White and open the pawn to e4, met by e5."
+   "spoken": "You have White and open the pawn to e4, met by e5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Black develops the knight to c6. We could play many things here — the Scotch, the Italian."
+   "spoken": "Black develops the knight to c6. You could play many things here — the Scotch, the Italian."
   },
   {
    "ply": 5,
@@ -116,7 +116,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Black recaptures with the knight on d4, giving back the pawn to open the diagonal for the bishop. We have a very nice position — better central control, a bishop on c4 like a good Scotch, and the sacrificed pawn recovered."
+   "spoken": "Black recaptures with the knight on d4, giving back the pawn to open the diagonal for the bishop. You have a very nice position — better central control, a bishop on c4 like a good Scotch, and the sacrificed pawn recovered."
   },
   {
    "ply": 10,
@@ -125,7 +125,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black develops the knight to f6. Now, should we fear a capture on d4 that puts our queen in the centre?"
+   "spoken": "Black develops the knight to f6. Now, should you fear a capture on d4 that puts your queen in the centre?"
   },
   {
    "ply": 11,
@@ -143,7 +143,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black plays the bishop to e7 — a Philidor-like, very solid setup, the d6-pawn restraining our e4. Don't lunge at Black's throat here."
+   "spoken": "Black plays the bishop to e7 — a Philidor-like, very solid setup, the d6-pawn restraining your e4. Don't lunge at Black's throat here."
   },
   {
    "ply": 13,
@@ -152,7 +152,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — nurture the advantage, bring the pieces out, and enjoy the space and well-placed pieces."
+   "spoken": "You castle — nurture the advantage, bring the pieces out, and enjoy the space and well-placed pieces."
   },
   {
    "ply": 14,
@@ -161,7 +161,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black castles — and it's trickier than it looks. The pawn to f4 is premature with the queen undeveloped. The bishop to e3 or g5 look natural, but both allow tactics: the bishop to e3 runs into the knight to g4, and the center-fork trick — the knight takes e4, then the pawn to d5 recovers the piece with mass trades we don't want."
+   "spoken": "Black castles — and it's trickier than it looks. The pawn to f4 is premature with the queen undeveloped. The bishop to e3 or g5 look natural, but both allow tactics: the bishop to e3 runs into the knight to g4, and the center-fork trick — the knight takes e4, then the pawn to d5 recovers the piece with mass trades you don't want."
   },
   {
    "ply": 15,
@@ -188,7 +188,7 @@
     "Bb3",
     "Ne5"
    ],
-   "spoken": "We play the bishop to b3 without f3. Black's knight to e5 is odd — it walks into something.",
+   "spoken": "You play the bishop to b3 without f3. Black's knight to e5 is odd — it walks into something.",
    "reanchor": true
   },
   {
@@ -198,7 +198,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "No need for h3 — the pawn to f4: the e5-knight isn't stable, so we kick it and grab more of the centre.",
+   "spoken": "No need for h3 — the pawn to f4: the e5-knight isn't stable, so you kick it and grab more of the centre.",
    "reanchor": true
   },
   {
@@ -218,7 +218,7 @@
     "Ne5",
     "f4"
    ],
-   "spoken": "Now we have more central control; we still want to complete development, though the immediate bishop to e3 might run into the knight to g4.",
+   "spoken": "Now you have more central control; you still want to complete development, though the immediate bishop to e3 might run into the knight to g4.",
    "reanchor": true
   },
   {
@@ -246,7 +246,7 @@
    "line": [
     "Ned7"
    ],
-   "spoken": "Black plays the knight to d7, anticipating our plans.",
+   "spoken": "Black plays the knight to d7, anticipating your plans.",
    "reanchor": true
   },
   {
@@ -278,7 +278,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The pawn to h3 — and the g4-bishop is in trouble. If Black tries the bishop to h5, we push g4, it drops to g6, and f5 corners it. The bishop-to-b6 counter wins the exchange, since after the capture on e6 and the recapture, the knight takes e6 forking king, queen and rook.",
+   "spoken": "The pawn to h3 — and the g4-bishop is in trouble. If Black tries the bishop to h5, you push g4, it drops to g6, and f5 corners it. The bishop-to-b6 counter wins the exchange, since after the capture on e6 and the recapture, the knight takes e6 forking king, queen and rook.",
    "reanchor": true
   },
   {
@@ -288,7 +288,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": "Black gives up the bishop, taking on h3. Pushing a pawn in front of our king is justified: Black has no kingside firepower, winning a piece is significant, and the queen can always come to g3 to shelter.",
+   "spoken": "Black gives up the bishop, taking on h3. Pushing a pawn in front of your king is justified: Black has no kingside firepower, winning a piece is significant, and the queen can always come to g3 to shelter.",
    "reanchor": true
   },
   {
@@ -298,7 +298,7 @@
    "line": [
     "gxh3"
    ],
-   "spoken": "We recapture on h3 — and the queen can also defend from g3, lending the king some cover, like an umbrella.",
+   "spoken": "You recapture on h3 — and the queen can also defend from g3, lending the king some cover, like an umbrella.",
    "reanchor": true
   },
   {
@@ -358,7 +358,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We're up a piece and clearly better. The pawn to e5 is great, maybe even best; the queen to g3 threatens mate, which Black must meet with the pawn to g6, not the flimsy knight to h5 — a biting-on-granite situation.",
+   "spoken": "You're up a piece and clearly better. The pawn to e5 is great, maybe even best; the queen to g3 threatens mate, which Black must meet with the pawn to g6, not the flimsy knight to h5 — a biting-on-granite situation.",
    "reanchor": true
   },
   {
@@ -378,7 +378,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "We take on e5 — holding the queen to g3 in our pocket while also attacking down the middle; combining the two fronts crushes Black.",
+   "spoken": "You take on e5 — holding the queen to g3 in your pocket while also attacking down the middle; combining the two fronts crushes Black.",
    "reanchor": true
   },
   {
@@ -388,7 +388,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "We recapture on e5.",
+   "spoken": "You recapture on e5.",
    "reanchor": true
   },
   {
@@ -398,7 +398,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": "Black plays the knight to h5. We can't play the queen to g3, but no matter."
+   "spoken": "Black plays the knight to h5. You can't play the queen to g3, but no matter."
   },
   {
    "ply": 31,
@@ -407,7 +407,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 — actualizing the b3-bishop. Crushing: we attack the knight and the pawn, and the bishop will fall too, a piece defended only once.",
+   "spoken": "The pawn to e6 — actualizing the b3-bishop. Crushing: you attack the knight and the pawn, and the bishop will fall too, a piece defended only once.",
    "reanchor": true
   },
   {
@@ -415,7 +415,7 @@
    "t": 1746,
    "fen": "r2q1rk1/pp1nbppp/3p1n2/2p2N2/4PP2/1BN4P/PPP5/R1B1QRK1 b - - 1 13",
    "line": [],
-   "spoken": "A note on undefended pieces: a type-two undefended piece is protected by only one other piece — never a pawn — while type-one is simply hanging. Black's knight on h5 is hanging, but the d7-knight and the e7-bishop are each defended only once, and opening the e-file exploits that, since the queen is a poor defender. The finish: the obvious pawn to f7, but take the bishop first — if Black recaptures, the pawn takes f7 and wins the queen, or a rook recapture leaves it pinned. Then the pawn takes f7, up two pieces. Consolidate and keep control. Later Black's queen to b6 sets up an x-ray on the king with the threat of the check on c4 — prevent it not passively but by targeting the queen: the queen to e6, using the trade as a weapon, since up two pieces a trade is entirely in our favour. If Black keeps the x-ray with the queen to a7, our queen on e6 is beautifully placed and the bishop to e3 follows. Then complete development, the bishop to g5 — even up two pieces, adhere to principles. As Purdy said, you play to win points, not to paint pictures; don't chase beauty at the cost of a simple win.",
+   "spoken": "A note on undefended pieces: a type-two undefended piece is protected by only one other piece — never a pawn — while type-one is simply hanging. Black's knight on h5 is hanging, but the d7-knight and the e7-bishop are each defended only once, and opening the e-file exploits that, since the queen is a poor defender. The finish: the obvious pawn to f7, but take the bishop first — if Black recaptures, the pawn takes f7 and wins the queen, or a rook recapture leaves it pinned. Then the pawn takes f7, up two pieces. Consolidate and keep control. Later Black's queen to b6 sets up an x-ray on the king with the threat of the check on c4 — prevent it not passively but by targeting the queen: the queen to e6, using the trade as a weapon, since up two pieces a trade is entirely in your favour. If Black keeps the x-ray with the queen to a7, your queen on e6 is beautifully placed and the bishop to e3 follows. Then complete development, the bishop to g5 — even up two pieces, adhere to principles. As Purdy said, you play to win points, not to paint pictures; don't chase beauty at the cost of a simple win.",
    "reanchor": true
   },
   {

@@ -140,6 +140,15 @@ export function namedPerson(clause) {
 /** Open-reference classes: the clause points at something the student was
  *  never given — the video session, an opponent, the presenter, prior videos,
  *  or the viewers being addressed. */
+// 🔒 THE CUT CLASSES MUST MATCH BOTH PRONOUNS (2026-09-12). The corpus was
+// migrated from "we/our" to "you/your" (David's 2026-08-28 perspective
+// standard). Every pattern below that named a pronoun was written against the
+// OLD spelling, so leaving them alone would have made real chatter INVISIBLE
+// the moment the migration landed — "we can rewind" caught, "you can rewind"
+// missed — and the ceiling gate would have read that as an improvement. A
+// detector that silently stops detecting is the worst outcome here, so each
+// pronoun-bound pattern accepts both forms and the migration was verified to
+// change WHICH SPELLING is found, never HOW MANY.
 export const OPEN_REFERENCE = {
   // PAST GAME — the post-game-review register bleeding into Watch. The coach
   // narrates how the pro's own game went ("in the game ... was a mistake",
@@ -160,7 +169,7 @@ export const OPEN_REFERENCE = {
   // retrospective JUDGEMENT on a move — graded, approved, preferred, regretted —
   // rather than the move's idea stated as the board shows it.
   pastGame:
-    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|our opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe (engine.s )?verdict (was|came back|on that)\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
+    /(?:^|[.!?]\s+)in the game,|\bin the game (he|she|they|white|black|(our|your) opponent) \w+ed\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\b(we|you) took the (more|less|other|safer|principled|practical|calm|quiet|solid) \w+|\bmet (us|you) with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\b(we|you) ended up\b|\bthe (engine.s )?verdict (was|came back|on that)\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\b(we|you) shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
   // VIDEO MECHANICS, harvested by hand from the fragment class rather than by
@@ -169,9 +178,9 @@ export const OPEN_REFERENCE = {
   // played by my opponent" from "and now two of Black's pieces are hanging at
   // once". So the junk is named explicitly and `fragment` stays off.
   videoMechanics:
-    /\b(rewind|rewinding|scrub(bing)?) (a move|to|back)|\bwe can rewind\b|\blet me (rewind|replay)\b|\bwell played by (my |the )?opponent\b|\ba hard-fought game\b|\bwe take (white|black)\.\s*$|\ban earlier speedrun\b|\banother speedrun\b|\bthe speedrun (already|series)\b/i,
+    /\b(rewind|rewinding|scrub(bing)?) (a move|to|back)|\b(we|you) can rewind\b|\blet me (rewind|replay)\b|\bwell played by (my |the )?opponent\b|\ba hard-fought game\b|\b(we|you) take (white|black)\.\s*$|\ban earlier speedrun\b|\banother speedrun\b|\bthe speedrun (already|series)\b/i,
   session:
-    /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\b(he|she|they|white|black|our opponent|the opponent|this)\s+(simply\s+|just\s+)?resigns?\b|\bresigns?\s*[—–]|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
+    /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\b(he|she|they|white|black|our opponent|your opponent|the opponent|this)\s+(simply\s+|just\s+)?resigns?\b|\bresigns?\s*[—–]|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly (our|your) (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
   author:
     // PREDICATIVE "juicy" ONLY — "this is going to be juicy" is the presenter
     // hyping the game; "very juicy squares", "the c2 square looks juicy" and "a
@@ -179,7 +188,7 @@ export const OPEN_REFERENCE = {
     // cut three clauses of real board commentary (David 2026-09-12).
     /\b(this|that|it)( is|'s|.s| was) (going to be |gonna be )?(very |really )?juicy\b|\bmusic to (my|the) ears\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
   priorVid:
-    /\bwe.ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin this video\b|\bmy main opening\b|\bour (patented|favorite|real opening)\b/i,
+    /\b(we|you).ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin (this|earlier|previous|other) videos?\b|\bmy main opening\b|\b(our|your) (patented|favorite|real opening)\b/i,
   audience:
     /\b(do you know|did you (see|find|spot)|I didn.t ask you|your (job|task) (here|now|is)|it.s your turn to (move|play|find|decide)|can you (see|find|spot)|I.d like to introduce|pause (here|the video)|take a (second|moment)|what.s the priority|I.ll (leave|let) you)\b/i,
 };

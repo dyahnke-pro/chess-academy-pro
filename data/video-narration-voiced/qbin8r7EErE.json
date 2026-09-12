@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to f3, and we continue developing as Black brings out the knight to c6."
+   "spoken": "The knight to f3, and you continue developing as Black brings out the knight to c6."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "We continue with the Four Knights, heading for the Scotch."
+   "spoken": "You continue with the Four Knights, heading for the Scotch."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — the Scotch break. We still haven't faced the main line, which is the bishop to b4 or the bishop to c5."
+   "spoken": "d4 — the Scotch break. You still haven't faced the main line, which is the bishop to b4 or the bishop to c5."
   },
   {
    "ply": 9,
@@ -70,7 +70,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "Black takes and we recapture with the knight on d4. Most players below 1500 tend to grab the knight here."
+   "spoken": "Black takes and you recapture with the knight on d4. Most players below 1500 tend to grab the knight here."
   },
   {
    "ply": 10,
@@ -79,7 +79,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Black takes the knight on d4 — but that's not a good move, as we've discussed several times."
+   "spoken": "Black takes the knight on d4 — but that's not a good move, as you've discussed several times."
   },
   {
    "ply": 11,
@@ -88,7 +88,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "We recapture with the queen, which enters the center. Now a lot of players reflexively want to play c5 to attack it, thinking they gain something."
+   "spoken": "You recapture with the queen, which enters the center. Now a lot of players reflexively want to play c5 to attack it, thinking they gain something."
   },
   {
    "ply": 12,
@@ -97,7 +97,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Instead Black plays d6. Note the bishop to b5 with check would be an empty gesture, because c6 just kicks it and we've gained nothing."
+   "spoken": "Instead Black plays d6. Note the bishop to b5 with check would be an empty gesture, because c6 just kicks it and you've gained nothing."
   },
   {
    "ply": 14,
@@ -134,7 +134,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "I don't like the bishop to d2 — it's passive and blocks the d-file, where we'll want a rook. So b3, planning to fianchetto."
+   "spoken": "I don't like the bishop to d2 — it's passive and blocks the d-file, where you'll want a rook. So b3, planning to fianchetto."
   }
  ]
 }

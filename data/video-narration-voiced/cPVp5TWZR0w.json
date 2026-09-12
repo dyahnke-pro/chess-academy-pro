@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": "We play another Caro-Kann — c6."
+   "spoken": "You play another Caro-Kann — c6."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "d4",
     "d5"
    ],
-   "spoken": "White plays d4 and we answer d5, challenging e4."
+   "spoken": "White plays d4 and you answer d5, challenging e4."
   },
   {
    "ply": 5,
@@ -43,7 +43,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "We capture on e4, heading for the Tartakower — a line I've played a lot in blitz."
+   "spoken": "You capture on e4, heading for the Tartakower — a line I've played a lot in blitz."
   },
   {
    "ply": 7,
@@ -61,7 +61,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "But we play a knight to f6 — old-fashioned wisdom calls it bad because we voluntarily ruin our structure, but strong players including Magnus have taken it up."
+   "spoken": "But you play a knight to f6 — old-fashioned wisdom calls it bad because you voluntarily ruin your structure, but strong players including Magnus have taken it up."
   },
   {
    "ply": 9,
@@ -80,7 +80,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "And we recapture with the e-pawn — the Tartakower. Recapturing with the g-pawn instead is the Bronstein, considered too weakening."
+   "spoken": "And you recapture with the e-pawn — the Tartakower. Recapturing with the g-pawn instead is the Bronstein, considered too weakening."
   },
   {
    "ply": 11,
@@ -89,7 +89,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White plays a knight to f3. Magnus lost to Duda from here but had a great position — the e-file recapture opens our bishop's diagonal.",
+   "spoken": "White plays a knight to f3. Magnus lost to Duda from here but had a great position — the e-file recapture opens your bishop's diagonal.",
    "reanchor": true
   },
   {
@@ -117,7 +117,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — another natural developing move."
+   "spoken": "You castle — another natural developing move."
   },
   {
    "ply": 15,
@@ -126,7 +126,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles, which is already inaccurate, because it allows us a very nasty move that's hard to meet."
+   "spoken": "White castles, which is already inaccurate, because it allows you a very nasty move that's hard to meet."
   },
   {
    "ply": 16,
@@ -165,7 +165,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "First we drop the bishop to h5."
+   "spoken": "First you drop the bishop to h5."
   },
   {
    "ply": 21,
@@ -193,7 +193,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "White plays a bishop to g4 — a creative idea I've never seen; it gives us a choice.",
+   "spoken": "White plays a bishop to g4 — a creative idea I've never seen; it gives you a choice.",
    "reanchor": true
   },
   {
@@ -203,7 +203,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "We play a bishop to g6, keeping the tension — and it threatens f5, which would trap White's bishop, while pointing toward the pawn-box structure I love."
+   "spoken": "You play a bishop to g6, keeping the tension — and it threatens f5, which would trap White's bishop, while pointing toward the pawn-box structure I love."
   },
   {
    "ply": 25,
@@ -212,7 +212,7 @@
    "line": [
     "Nh4"
    ],
-   "spoken": "White has to play a knight to h4 to hold the balance, since we threatened f5. After a knight capture on g6 we recapture with the h-pawn and get the pawn box.",
+   "spoken": "White has to play a knight to h4 to hold the balance, since you threatened f5. After a knight capture on g6 you recapture with the h-pawn and get the pawn box.",
    "reanchor": true
   },
   {
@@ -222,7 +222,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": "We keep improving with a knight to b6 — a bit more active, maybe heading to d5. Another idea is to drop the bishop to c7 and prepare a queen to d6."
+   "spoken": "You keep improving with a knight to b6 — a bit more active, maybe heading to d5. Another idea is to drop the bishop to c7 and prepare a queen to d6."
   },
   {
    "ply": 27,
@@ -241,7 +241,7 @@
    "line": [
     "hxg6"
    ],
-   "spoken": "We recapture on g6 — the pawn cube. After a bishop to c7 and a queen to d6, if White plays g3 to block the battery, a rook capture on e3 works because his f2 pawn is overloaded, guarding both g3 and the bishop.",
+   "spoken": "You recapture on g6 — the pawn cube. After a bishop to c7 and a queen to d6, if White plays g3 to block the battery, a rook capture on e3 works because his f2 pawn is overloaded, guarding both g3 and the bishop.",
    "reanchor": true
   },
   {
@@ -261,7 +261,7 @@
    "line": [
     "Bc7"
    ],
-   "spoken": "A bishop to c7 — and delaying a knight to d5 matters, because if we jump there and he retreats the bishop, we lose this tactic.",
+   "spoken": "A bishop to c7 — and delaying a knight to d5 matters, because if you jump there and he retreats the bishop, you lose this tactic.",
    "reanchor": true
   },
   {
@@ -272,7 +272,7 @@
     "c4",
     "Qd6"
    ],
-   "spoken": "White plays c4, and we play a queen to d6 — he's already basically losing.",
+   "spoken": "White plays c4, and you play a queen to d6 — he's already basically losing.",
    "reanchor": true
   },
   {
@@ -283,7 +283,7 @@
     "g3",
     "Rxe3"
    ],
-   "spoken": "If White plays g3, we capture on e3; if f4, we capture on e3 anyway. This was not boring — you can score many nice attacking wins in the Tartakower.",
+   "spoken": "If White plays g3, you capture on e3; if f4, you capture on e3 anyway. This was not boring — you can score many nice attacking wins in the Tartakower.",
    "reanchor": true
   },
   {
@@ -293,7 +293,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "White finds a queen to e2 — a super move, the only way to stay alive. When attacking, be flexible about converting: a stubborn rook capture on g3 lets his king drop back since h2 is no longer accessible, so we retreat the rook, aware his next move is c5 to win the piece back.",
+   "spoken": "White finds a queen to e2 — a super move, the only way to stay alive. When attacking, be flexible about converting: a stubborn rook capture on g3 lets his king drop back since h2 is no longer accessible, so you retreat the rook, aware his next move is c5 to win the piece back.",
    "reanchor": true
   },
   {
@@ -303,7 +303,7 @@
    "line": [
     "Re4"
    ],
-   "spoken": "So a rook to e4, preparing to grab as many pawns as possible if he plays c5 — then a capture on d4 leaves us two pawns up and winning even in an opposite-colored-bishop endgame.",
+   "spoken": "So a rook to e4, preparing to grab as many pawns as possible if he plays c5 — then a capture on d4 leaves you two pawns up and winning even in an opposite-colored-bishop endgame.",
    "reanchor": true
   },
   {
@@ -323,7 +323,7 @@
    "line": [
     "Rxd4"
    ],
-   "spoken": "We just capture on d4, and now it's over even faster — for the queen to e2, but the bishop to f3 blunders.",
+   "spoken": "You just capture on d4, and now it's over even faster — for the queen to e2, but the bishop to f3 blunders.",
    "reanchor": true
   },
   {
@@ -333,7 +333,7 @@
    "line": [
     "Qe2"
    ],
-   "spoken": "White plays a queen to e2. A rook to e8 would be nice but the square is undefended; he's no longer threatening c5, so we have a free hand.",
+   "spoken": "White plays a queen to e2. A rook to e8 would be nice but the square is undefended; he's no longer threatening c5, so you have a free hand.",
    "reanchor": true
   },
   {
@@ -343,7 +343,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "A queen to d7 prepares the cube, and the knight on b6 is annoying since it blocks d5 — so we bring it back to d7 to centralize. Don't overthink these; there are a million good moves.",
+   "spoken": "A queen to d7 prepares the cube, and the knight on b6 is annoying since it blocks d5 — so you bring it back to d7 to centralize. Don't overthink these; there are a million good moves.",
    "reanchor": true
   },
   {
@@ -353,7 +353,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": "White plays a rook to d1. Taking the rook is bad, because he recaptures and pins our knight.",
+   "spoken": "White plays a rook to d1. Taking the rook is bad, because he recaptures and pins your knight.",
    "reanchor": true
   },
   {
@@ -363,7 +363,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "A bishop to b6 — how to trade on our terms. Assume his rook takes on d4: we want the bishop to land there, centralizing and threatening a capture on g3, then a knight to e5. No need to be fancy with a rook to h4.",
+   "spoken": "A bishop to b6 — how to trade on your terms. Assume his rook takes on d4: you want the bishop to land there, centralizing and threatening a capture on g3, then a knight to e5. No need to be fancy with a rook to h4.",
    "reanchor": true
   },
   {
@@ -373,7 +373,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": "White plays a king to g2, seeing it — again, we don't have to take his rook; let him improve our position.",
+   "spoken": "White plays a king to g2, seeing it — again, you don't have to take his rook; let him improve your position.",
    "reanchor": true
   },
   {
@@ -383,7 +383,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Now we centralize the knight with a knight to e5, and then a rook to d8 controls the d-file.",
+   "spoken": "Now you centralize the knight with a knight to e5, and then a rook to d8 controls the d-file.",
    "reanchor": true
   },
   {
@@ -394,7 +394,7 @@
     "Be4",
     "Rd8"
    ],
-   "spoken": "White's bishop to e4 and our rook to d8 — a good moment to study how the pawn structure shapes both sides' plans.",
+   "spoken": "White's bishop to e4 and your rook to d8 — a good moment to study how the pawn structure shapes both sides' plans.",
    "reanchor": true
   },
   {
@@ -414,7 +414,7 @@
    "line": [
     "Rd2"
    ],
-   "spoken": "A rook to d2 almost traps the queen and forces it back to e1 — easy play. We could play f5 first, but it's not necessary.",
+   "spoken": "A rook to d2 almost traps the queen and forces it back to e1 — easy play. You could play f5 first, but it's not necessary.",
    "reanchor": true
   },
   {
@@ -434,7 +434,7 @@
    "line": [
     "Qd4"
    ],
-   "spoken": "We centralize with a queen to d4, piling on the f-pawn — no need to play f5.",
+   "spoken": "You centralize with a queen to d4, piling on the f-pawn — no need to play f5.",
    "reanchor": true
   },
   {
@@ -454,7 +454,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": "Can we take it? Yes — after a rook capture on c5 and a queen recapture, our rooks are doubled on the d-file so our d2 rook is defended.",
+   "spoken": "Can you take it? Yes — after a rook capture on c5 and a queen recapture, your rooks are doubled on the d-file so your d2 rook is defended.",
    "reanchor": true
   },
   {
@@ -678,7 +678,7 @@
    "t": 941,
    "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
    "line": [],
-   "spoken": "Current theory says Black is fine, and after our opponent's setup the position is equal. Let me introduce the pawn cube. Why is that f6 pawn actually good? Think of the snake: when you push the pawn up to attack the bishop, what's left behind is a fully intact structure, so you can do it even with your king on the kingside — it assists the attack, and stops a knight to g5 or e5. With the pawn cube the same idea works with even greater effect: you can push two pawns for attacking purposes without your king becoming weak. Look how safe the king is. The one drawback is that doubled pawns can be clumsy in an endgame. So b3 weakens White; we play a bishop to c7, preparing a queen to d6. White should have tried a rook to e1 so g3 is possible and the bishop is defended — but even then f5 and a queen to h4 pile immense pressure on, and Black is better. It's more positional than tactical, but there are plenty of tactics: against a queen to f3, f5 traps the bishop, and sacrificing it opens nothing because the king is so safe. After c4, a queen to d6, and g3, a rook to e3 — and if he'd played c5, a rook capture on g3, a king to h1, and a very pretty finish, the same rook-and-discovery idea I used to win a game as a 1500 back in 2004. All hail the pawn cube.",
+   "spoken": "Current theory says Black is fine, and after your opponent's setup the position is equal. Let me introduce the pawn cube. Why is that f6 pawn actually good? Think of the snake: when you push the pawn up to attack the bishop, what's left behind is a fully intact structure, so you can do it even with your king on the kingside — it assists the attack, and stops a knight to g5 or e5. With the pawn cube the same idea works with even greater effect: you can push two pawns for attacking purposes without your king becoming weak. Look how safe the king is. The one drawback is that doubled pawns can be clumsy in an endgame. So b3 weakens White; you play a bishop to c7, preparing a queen to d6. White should have tried a rook to e1 so g3 is possible and the bishop is defended — but even then f5 and a queen to h4 pile immense pressure on, and Black is better. It's more positional than tactical, but there are plenty of tactics: against a queen to f3, f5 traps the bishop, and sacrificing it opens nothing because the king is so safe. After c4, a queen to d6, and g3, a rook to e3 — and if he'd played c5, a rook capture on g3, a king to h1, and a very pretty finish, the same rook-and-discovery idea I used to win a game as a 1500 back in 2004. All hail the pawn cube.",
    "reanchor": true
   },
   {
@@ -704,7 +704,7 @@
    "t": 1284.5,
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": "Maybe a knight to f5 was an idea, but after a bishop to c7 we still threaten a queen to d6. The most challenging Caro-Kann line is the Advance.",
+   "spoken": "Maybe a knight to f5 was an idea, but after a bishop to c7 you still threaten a queen to d6. The most challenging Caro-Kann line is the Advance.",
    "reanchor": true
   },
   {
@@ -724,7 +724,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "You've seen me play c5 there, my main line.",
+   "spoken": "",
    "reanchor": true
   },
   {

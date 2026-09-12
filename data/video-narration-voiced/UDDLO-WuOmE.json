@@ -35,7 +35,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "As Accelerated Dragon players we answer Nc6 — though a Najdorf player should avoid it here, since White can move-order you into a system you don't play.",
+   "spoken": "As Accelerated Dragon players you answer Nc6 — though a Najdorf player should avoid it here, since White can move-order you into a system you don't play.",
    "kind": "main",
    "teaches": "Match your move-two choice to the Open Sicilian you actually play, or risk being transposed out of your book."
   },
@@ -122,7 +122,7 @@
     "Nxb5",
     "Nxb5"
    ],
-   "spoken": "We swap the knight for the bishop. Now a6 is the human instinct, but it's worth questioning your instincts — the b5-knight isn't dangerous on its own, so d6 or Nf6 hitting the loose e4-pawn are real options too.",
+   "spoken": "You swap the knight for the bishop. Now a6 is the human instinct, but it's worth questioning your instincts — the b5-knight isn't dangerous on its own, so d6 or Nf6 hitting the loose e4-pawn are real options too.",
    "kind": "main",
    "teaches": "Don't play the automatic pawn-kick reflexively; a stray enemy knight often isn't worth the tempo."
   },
@@ -170,7 +170,7 @@
     "cxd4",
     "Qxd4"
    ],
-   "spoken": "Even after cxd4 this stays an anti-Sicilian — White has no light-squared bishop, so it's a different animal from a Najdorf. Our one problem is that we're badly behind in development.",
+   "spoken": "Even after cxd4 this stays an anti-Sicilian — White has no light-squared bishop, so it's a different animal from a Najdorf. Your one problem is that you're badly behind in development.",
    "kind": "main",
    "teaches": "Read the position by what's missing: no light bishop means it's not a real Open Sicilian."
   },
@@ -190,7 +190,7 @@
    "line": [
     "Qb4"
    ],
-   "spoken": "Nf6 would run into e5, so we head that off — sometimes you accept a small positional concession rather than get crushed while undeveloped.",
+   "spoken": "Nf6 would run into e5, so you head that off — sometimes you accept a small positional concession rather than get crushed while undeveloped.",
    "kind": "main",
    "teaches": "Concede a little structurally to prevent a central break that would punish your lack of development."
   },
@@ -201,7 +201,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "h6 stops Bg5 — the Smyslov idea of trading the knight and then planting one on d5. We have to keep a knight available to contest that square.",
+   "spoken": "h6 stops Bg5 — the Smyslov idea of trading the knight and then planting one on d5. You have to keep a knight available to contest that square.",
    "kind": "main",
    "teaches": "Prevent the trade that would surrender d5; contesting the outpost is worth a pawn move."
   },
@@ -221,7 +221,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Now we finally develop with Nf6; if Bb6, Qd7 is a fine, if slightly awkward, answer, and the queen can reroute to c6 later to free the bishop.",
+   "spoken": "Now you finally develop with Nf6; if Bb6, Qd7 is a fine, if slightly awkward, answer, and the queen can reroute to c6 later to free the bishop.",
    "kind": "main"
   },
   {

@@ -15,7 +15,7 @@
     "e3",
     "e5"
    ],
-   "spoken": "Against a passive e3, just occupy the centre — this becomes a reverse French with an extra tempo for us.",
+   "spoken": "Against a passive e3, just occupy the centre — this becomes a reverse French with an extra tempo for you.",
    "kind": "main",
    "teaches": "Meet a passive first move by planting pawns in the centre and playing for the extra tempo."
   },
@@ -74,7 +74,7 @@
     "c6",
     "Be2"
    ],
-   "spoken": "Bb5-check is an empty check — block it with c6, which also props up the centre and gives us a nice pawn chain and a small edge.",
+   "spoken": "Bb5-check is an empty check — block it with c6, which also props up the centre and gives you a nice pawn chain and a small edge.",
    "kind": "main",
    "teaches": "Answer a harmless check with a move that also reinforces your own structure."
   },
@@ -104,7 +104,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "Don't take the g4-bishop, which would let White's queen out to hit g7 — instead f5 simply chases it back while extending our pawn chain.",
+   "spoken": "Don't take the g4-bishop, which would let White's queen out to hit g7 — instead f5 simply chases it back while extending your pawn chain.",
    "kind": "main",
    "teaches": "Repel a bishop with a pawn rather than trade it into your opponent's attacking plan."
   },
@@ -224,7 +224,7 @@
    "line": [
     "exf3"
    ],
-   "spoken": "Now that we're a piece up, open the centre — extra material shows its value most on an open board, and our pieces are developed while his sit passive.",
+   "spoken": "Now that you're a piece up, open the centre — extra material shows its value most on an open board, and your pieces are developed while his sit passive.",
    "kind": "main",
    "teaches": "When you're up material, open the position so your extra piece can dominate."
   },
@@ -284,7 +284,7 @@
    "line": [
     "Qh4+"
    ],
-   "spoken": "The king-hunt begins with Qh4-check. Before grabbing h2, we'll insert a preliminary move to drag his king toward the fire.",
+   "spoken": "The king-hunt begins with Qh4-check. Before grabbing h2, you'll insert a preliminary move to drag his king toward the fire.",
    "kind": "plan",
    "plans": "Check on h4, then draw the king out before cashing in on h2."
   },

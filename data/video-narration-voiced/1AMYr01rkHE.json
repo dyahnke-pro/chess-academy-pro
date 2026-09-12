@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "We answer the king's pawn with the Sicilian.",
+   "spoken": "You answer the king's pawn with the Sicilian.",
    "kind": "main"
   },
   {
@@ -56,7 +56,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "As an Accelerated Dragon player we stay consistent and fianchetto with g6 anyway — the bishop belongs on the long diagonal whether or not White ever takes on c6.",
+   "spoken": "As an Accelerated Dragon player you stay consistent and fianchetto with g6 anyway — the bishop belongs on the long diagonal whether or not White ever takes on c6.",
    "kind": "main",
    "teaches": [
     "keep the Dragon structure"
@@ -79,7 +79,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": "We take with the d-pawn, not the b-pawn. Recapturing toward the center looks natural, but taking with the d-pawn opens the d-file for our rooks and frees the light-squared bishop — activity over a tidy pawn mass.",
+   "spoken": "You take with the d-pawn, not the b-pawn. Recapturing toward the center looks natural, but taking with the d-pawn opens the d-file for your rooks and frees the light-squared bishop — activity over a tidy pawn mass.",
    "kind": "main",
    "teaches": [
     "dxc6: open the d-file, free the bishop"
@@ -141,7 +141,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": "The knight belongs on e7 for two reasons: it keeps the e5-pawn from hanging, and it leaves the a-pawn free so we can strike with a5 later. It blocks the bishop only for a moment.",
+   "spoken": "The knight belongs on e7 for two reasons: it keeps the e5-pawn from hanging, and it leaves the a-pawn free so you can strike with a5 later. It blocks the bishop only for a moment.",
    "kind": "main",
    "teaches": [
     "Ne7 guards e5 and prepares a5"
@@ -154,7 +154,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3, but he isn't actually threatening d4 yet — a bit of simple counting shows the center holds, and even if he pushed d4 it would only open our long-diagonal bishop.",
+   "spoken": "White plays c3, but he isn't actually threatening d4 yet — a bit of simple counting shows the center holds, and even if he pushed d4 it would only open your long-diagonal bishop.",
    "teaches": [
     "count before you fear a break"
    ]
@@ -175,7 +175,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "The pawn on d3 is weak, and that's our target. There are two ways to pressure a fixed weakness: the brute-force pawn lever with c4 or the bishop swinging to a6, and doubling rooks on the d-file. We aim to do both.",
+   "spoken": "The pawn on d3 is weak, and that's your target. There are two ways to pressure a fixed weakness: the brute-force pawn lever with c4 or the bishop swinging to a6, and doubling rooks on the d-file. You aim to do both.",
    "kind": "plan",
    "teaches": [
     "two ways to hit a backward pawn"
@@ -226,7 +226,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": "The queen to d7 links up with a rook to d8 — piling every piece we can onto the d3 weakness. Win that pawn and his position caves.",
+   "spoken": "The queen to d7 links up with a rook to d8 — piling every piece you can onto the d3 weakness. Win that pawn and his position caves.",
    "kind": "plan"
   },
   {
@@ -245,7 +245,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "We kick the knight off its active post with b5.",
+   "spoken": "You kick the knight off its active post with b5.",
    "kind": "main"
   },
   {
@@ -255,7 +255,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "The knight slinks back to a3, buried and passive; it did block our light-squared bishop, but a knight on the rim is a fair trade for that.",
+   "spoken": "The knight slinks back to a3, buried and passive; it did block your light-squared bishop, but a knight on the rim is a fair trade for that.",
    "teaches": [
     "a rim knight is a poor blockader"
    ]
@@ -277,7 +277,7 @@
     "Be3",
     "b4"
    ],
-   "spoken": "Now b4 is finally right. A move earlier it would have run into a nasty queen check on b3; with that resource gone we push it.",
+   "spoken": "Now b4 is finally right. A move earlier it would have run into a nasty queen check on b3; with that resource gone you push it.",
    "kind": "main",
    "teaches": [
     "timing a pawn break around a check"
@@ -325,7 +325,7 @@
    "line": [
     "Rd7"
    ],
-   "spoken": "We double on the d-file, rook to d7, stacking the pressure exactly where White is weakest.",
+   "spoken": "You double on the d-file, rook to d7, stacking the pressure exactly where White is weakest.",
    "kind": "main"
   },
   {
@@ -362,7 +362,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The pawn to c4 walls the knight in — his knight on a3 is now buried alive with no way out, effectively leaving us a piece up in the fight for the d-file.",
+   "spoken": "The pawn to c4 walls the knight in — his knight on a3 is now buried alive with no way out, effectively leaving you a piece up in the fight for the d-file.",
    "kind": "main",
    "teaches": [
     "bury the rim knight with c4"
@@ -406,7 +406,7 @@
     "Ng3",
     "Nd6"
    ],
-   "spoken": "We answer his regrouping in kind, rerouting our own knight to d6 — a superb square eyeing c4 and e4 and reinforcing the pressure.",
+   "spoken": "You answer his regrouping in kind, rerouting your own knight to d6 — a superb square eyeing c4 and e4 and reinforcing the pressure.",
    "kind": "main",
    "teaches": [
     "knight to d6 outpost"
@@ -487,7 +487,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "When White releases the tension we recapture with the f-pawn, not the knight — taking with the knight would have surrendered the d4-square, and control of d4 is the whole point of the position.",
+   "spoken": "When White releases the tension you recapture with the f-pawn, not the knight — taking with the knight would have surrendered the d4-square, and control of d4 is the whole point of the position.",
    "kind": "main",
    "teaches": [
     "recapture to keep your key square"
@@ -572,7 +572,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "We swing the bishop around toward h6 to bring the last piece into the attack.",
+   "spoken": "You swing the bishop around toward h6 to bring the last piece into the attack.",
    "kind": "plan"
   },
   {
@@ -664,7 +664,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "Now the exchange sacrifice: give up the rook, because in return we get a monster.",
+   "spoken": "Now the exchange sacrifice: give up the rook, because in return you get a monster.",
    "kind": "main",
    "teaches": [
     "sac the exchange for a runner"

@@ -119,7 +119,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The accurate move isn't the flashy one — the quiet bishop to d3. Not f4, which lets ...Bxc3 and ...d6 turn that pawn into a liability and hampers our own Bg5; and not Bc4, which leaves e4 loose.",
+   "spoken": "The accurate move isn't the flashy one — the quiet bishop to d3. Not f4, which lets ...Bxc3 and ...d6 turn that pawn into a liability and hampers your own Bg5; and not Bc4, which leaves e4 loose.",
    "kind": "main",
    "teaches": [
     "the accurate, unflashy Bd3"
@@ -141,7 +141,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — and there's no Greek gift here, since the g4 square is covered.",
+   "spoken": "You castle — and there's no Greek gift here, since the g4 square is covered.",
    "kind": "main"
   },
   {
@@ -160,7 +160,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The conventional bishop to g5 — better than dropping the knight to e2, which would surrender our grip on d5.",
+   "spoken": "The conventional bishop to g5 — better than dropping the knight to e2, which would surrender your grip on d5.",
    "kind": "main"
   },
   {
@@ -171,7 +171,7 @@
     "h6",
     "Bh4"
    ],
-   "spoken": "After ...h6 we retreat to h4, and that h6-pawn becomes a hook we'll use later to push f4 open.",
+   "spoken": "After ...h6 you retreat to h4, and that h6-pawn becomes a hook you'll use later to push f4 open.",
    "kind": "main",
    "teaches": [
     "a pawn hook to lever open the kingside"
@@ -212,7 +212,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Black's knight to g4 makes no sense — we just chase it with h3. The knight to h2 is the road to hell: we move the rook and the knight is trapped.",
+   "spoken": "Black's knight to g4 makes no sense — you just chase it with h3. The knight to h2 is the road to hell: you move the rook and the knight is trapped.",
    "kind": "main"
   },
   {
@@ -240,7 +240,7 @@
    "line": [
     "Qxg4"
    ],
-   "spoken": "We happily collect the knight.",
+   "spoken": "You happily collect the knight.",
    "kind": "main"
   },
   {
@@ -250,7 +250,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "The simplest finish — not g3, which would trap our own bishop after ...g5, but the bishop to g3: a piece up, we shed a pawn to remove Black's only developed minor, keep the king safe, and grab the semi-open f-file.",
+   "spoken": "The simplest finish — not g3, which would trap your own bishop after ...g5, but the bishop to g3: a piece up, you shed a pawn to remove Black's only developed minor, keep the king safe, and grab the semi-open f-file.",
    "kind": "main",
    "teaches": [
     "don’t be greedy — simplify when ahead"

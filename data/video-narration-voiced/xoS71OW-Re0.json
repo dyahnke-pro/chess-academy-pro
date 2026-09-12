@@ -34,7 +34,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We know the move is d4, opening up the center."
+   "spoken": "You know the move is d4, opening up the center."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "Black takes and we recapture with the knight on d4."
+   "spoken": "Black takes and you recapture with the knight on d4."
   },
   {
    "ply": 9,
@@ -54,7 +54,7 @@
     "Be7",
     "Nc3"
    ],
-   "spoken": "Black develops the bishop to e7, and we bring out the knight to c3 — just natural development."
+   "spoken": "Black develops the bishop to e7, and you bring out the knight to c3 — just natural development."
   },
   {
    "ply": 11,
@@ -64,7 +64,7 @@
     "Nf6",
     "Bc4"
    ],
-   "spoken": "Black plays the knight to f6, and we develop the bishop to c4."
+   "spoken": "Black plays the knight to f6, and you develop the bishop to c4."
   },
   {
    "ply": 12,
@@ -82,7 +82,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "We tuck the bishop away to b3 so that idea isn't a thing."
+   "spoken": "You tuck the bishop away to b3 so that idea isn't a thing."
   },
   {
    "ply": 14,
@@ -100,7 +100,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "And now we can very safely castle."
+   "spoken": "And now you can very safely castle."
   },
   {
    "ply": 16,
@@ -109,7 +109,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Black puts the knight on e5 — a bit weird, since we can just challenge it."
+   "spoken": "Black puts the knight on e5 — a bit weird, since you can just challenge it."
   },
   {
    "ply": 17,
@@ -118,7 +118,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4, chasing the knight away in a manner conducive to our kingside attack."
+   "spoken": "f4, chasing the knight away in a manner conducive to your kingside attack."
   },
   {
    "ply": 18,
@@ -136,7 +136,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Now we decide about the f-file — the knight to f3."
+   "spoken": "Now you decide about the f-file — the knight to f3."
   },
   {
    "ply": 20,
@@ -172,7 +172,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Now we can go e5."
+   "spoken": "Now you can go e5."
   },
   {
    "ply": 24,
@@ -190,7 +190,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": "We recapture, f takes e5 — see how methodically we're playing."
+   "spoken": "You recapture, f takes e5 — see how methodically you're playing."
   },
   {
    "ply": 26,
@@ -208,7 +208,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Never forget about development — we still have a whole side to finish. The bishop to e3."
+   "spoken": "Never forget about development — you still have a whole side to finish. The bishop to e3."
   },
   {
    "ply": 28,
@@ -235,7 +235,7 @@
    "line": [
     "Qe8"
    ],
-   "spoken": "Black plays the queen to e8 and doesn't even take our bishop."
+   "spoken": "Black plays the queen to e8 and doesn't even take your bishop."
   },
   {
    "ply": 31,
@@ -244,7 +244,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "We keep tightening the screw — the knight to d5, centralizing."
+   "spoken": "You keep tightening the screw — the knight to d5, centralizing."
   },
   {
    "ply": 32,
@@ -253,7 +253,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Black plays c6. The knight to d5 was a bit impulsive, but Black is so passive we can afford it."
+   "spoken": "Black plays c6. The knight to d5 was a bit impulsive, but Black is so passive you can afford it."
   },
   {
    "ply": 33,
@@ -298,7 +298,7 @@
    "line": [
     "Rxf3"
    ],
-   "spoken": "We recapture with the rook on f3."
+   "spoken": "You recapture with the rook on f3."
   },
   {
    "ply": 38,
@@ -316,7 +316,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "We look at that knight on h5 — g4, going after it."
+   "spoken": "You look at that knight on h5 — g4, going after it."
   },
   {
    "ply": 40,
@@ -346,7 +346,7 @@
     "Qxd8",
     "Bxe6+"
    ],
-   "spoken": "Black plays the queen to e7, we take on h5, the queen takes on d8, and the bishop takes on e6 with check — we're up two pieces."
+   "spoken": "Black plays the queen to e7, you take on h5, the queen takes on d8, and the bishop takes on e6 with check — you're up two pieces."
   },
   {
    "ply": 46,
@@ -366,7 +366,7 @@
     "f4",
     "Bxf4"
    ],
-   "spoken": "We're up two pieces; he gives more, and we carefully collect — the bishop to g5, f4, the bishop takes on f4."
+   "spoken": "You're up two pieces; he gives more, and you carefully collect — the bishop to g5, f4, the bishop takes on f4."
   },
   {
    "ply": 50,
@@ -375,7 +375,7 @@
    "line": [
     "Bc5+"
    ],
-   "spoken": "Black tries the bishop to c5 with check, thinking it forks us — but it's an empty check."
+   "spoken": "Black tries the bishop to c5 with check, thinking it forks you — but it's an empty check."
   },
   {
    "ply": 51,
@@ -384,7 +384,7 @@
    "line": [
     "Kg2"
    ],
-   "spoken": "We simply step the king to g2. Now we win by centralizing and going after his king."
+   "spoken": "You simply step the king to g2. Now you win by centralizing and going after his king."
   },
   {
    "ply": 53,
@@ -394,7 +394,7 @@
     "Qe7",
     "Bc4"
    ],
-   "spoken": "Black plays the queen to e7, and we develop the bishop to c4."
+   "spoken": "Black plays the queen to e7, and you develop the bishop to c4."
   },
   {
    "ply": 55,
@@ -404,7 +404,7 @@
     "b5",
     "Bd3"
    ],
-   "spoken": "Black plays b5 and we reposition the bishop to d3 — with no light-squared bishop for Black, this battery is unstoppable."
+   "spoken": "Black plays b5 and you reposition the bishop to d3 — with no light-squared bishop for Black, this battery is unstoppable."
   },
   {
    "ply": 59,
@@ -441,7 +441,7 @@
    "t": 605.5,
    "fen": "r2q1rk1/ppp1bppp/8/2n1P2n/6b1/1BN1BN2/PPP3PP/R3QRK1 b - - 2 14",
    "line": [],
-   "spoken": "This bishop actually won us the game.",
+   "spoken": "This bishop actually won you the game.",
    "reanchor": true
   },
   {
@@ -452,7 +452,7 @@
     "Nxb3",
     "axb3"
    ],
-   "spoken": "The knight takes on b3, we recapture a takes b3, bring the rook to d1, and eventually chase the bishop away from g4.",
+   "spoken": "The knight takes on b3, you recapture a takes b3, bring the rook to d1, and eventually chase the bishop away from g4.",
    "reanchor": true
   },
   {

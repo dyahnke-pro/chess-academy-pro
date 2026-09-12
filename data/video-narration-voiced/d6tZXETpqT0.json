@@ -52,7 +52,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "The Carlsbad is defined by this early trade on d5 — instead of the traditional Bg5 main line with the pawn left on c4, we release the tension right away.",
+   "spoken": "The Carlsbad is defined by this early trade on d5 — instead of the traditional Bg5 main line with the pawn left on c4, you release the tension right away.",
    "kind": "main",
    "teaches": [
     "the Carlsbad = the early cxd5"
@@ -65,7 +65,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "After Black recaptures we reach the Carlsbad structure: White's e-pawn against Black's c-pawn, with everything else symmetric. That small imbalance is what generates rich positional — and often sharply tactical — middlegame play.",
+   "spoken": "After Black recaptures you reach the Carlsbad structure: White's e-pawn against Black's c-pawn, with everything else symmetric. That small imbalance is what generates rich positional — and often sharply tactical — middlegame play.",
    "kind": "main",
    "teaches": [
     "the Carlsbad pawn structure"
@@ -78,7 +78,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "We handle it like a normal Queen's Gambit Declined — the bishop to g5, e3, the standard moves — and let the structure dictate the game later.",
+   "spoken": "You handle it like a normal Queen's Gambit Declined — the bishop to g5, e3, the standard moves — and let the structure dictate the game later.",
    "kind": "main"
   },
   {
@@ -88,7 +88,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Starting with the queen to c2 stops an annoying bishop to f5. When Black develops to the inaccurate d6 rather than e7, we go for the classic plan: install the Pillsbury Knight on e5, braced by the d4-pawn and a pawn to f4 — a construction many players simply can't handle. If Black challenges it, f5 nets a full minor piece for two pawns, and with our two bishops raking an open board we castle queenside and grind, seizing the only open file.",
+   "spoken": "Starting with the queen to c2 stops an annoying bishop to f5. When Black develops to the inaccurate d6 rather than e7, you go for the classic plan: install the Pillsbury Knight on e5, braced by the d4-pawn and a pawn to f4 — a construction many players simply can't handle. If Black challenges it, f5 nets a full minor piece for two pawns, and with your two bishops raking an open board you castle queenside and grind, seizing the only open file.",
    "kind": "plan",
    "teaches": [
     "the Pillsbury Knight plan in the Carlsbad"

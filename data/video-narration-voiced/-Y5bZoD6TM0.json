@@ -16,7 +16,7 @@
     "e5",
     "Nf3"
    ],
-   "spoken": "We take the white pieces and steer for the Glek System."
+   "spoken": "You take the white pieces and steer for the Glek System."
   },
   {
    "ply": 5,
@@ -26,7 +26,7 @@
     "Nf6",
     "Nc3"
    ],
-   "spoken": "Black's knight comes to f6 and we answer with the knight to c3, heading into the Four Knights."
+   "spoken": "Black's knight comes to f6 and you answer with the knight to c3, heading into the Four Knights."
   },
   {
    "ply": 6,
@@ -44,7 +44,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "We fianchetto with g3 — the move that defines the Glek."
+   "spoken": "You fianchetto with g3 — the move that defines the Glek."
   },
   {
    "ply": 8,
@@ -71,7 +71,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6 — a modest, passive setup: nothing outright wrong with it, but it lets us do whatever we like."
+   "spoken": "Black plays d6 — a modest, passive setup: nothing outright wrong with it, but it lets you do whatever you like."
   },
   {
    "ply": 7,
@@ -99,7 +99,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle."
+   "spoken": "You castle."
   },
   {
    "ply": 12,
@@ -108,7 +108,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Black develops the bishop to e6, which tempts d4 — but in the Glek be careful with that push. Not because Black might trade everything on d4 (that suits us fine), but because of ...Bg4: even at the cost of a tempo it hangs the d4-pawn and can force us to close with d5, betraying the whole spirit of the system. Ducking it by taking on e5 is a dull move that invites mass exchanges."
+   "spoken": "Black develops the bishop to e6, which tempts d4 — but in the Glek be careful with that push. Not because Black might trade everything on d4 (that suits you fine), but because of ...Bg4: even at the cost of a tempo it hangs the d4-pawn and can force you to close with d5, betraying the whole spirit of the system. Ducking it by taking on e5 is a dull move that invites mass exchanges."
   },
   {
    "ply": 13,
@@ -117,7 +117,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "So instead of an immediate d4 we play h3, keeping our options open and preparing d4 under better circumstances (the quiet d3 is also available)."
+   "spoken": "So instead of an immediate d4 you play h3, keeping your options open and preparing d4 under better circumstances (the quiet d3 is also available)."
   },
   {
    "ply": 14,
@@ -135,7 +135,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We push d4. It works like a charm: it threatens a fork and all but forces Black to release the tension."
+   "spoken": "You push d4. It works like a charm: it threatens a fork and all but forces Black to release the tension."
   },
   {
    "ply": 17,
@@ -145,7 +145,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": "Black captures on d4 and we recapture with the knight."
+   "spoken": "Black captures on d4 and you recapture with the knight."
   },
   {
    "ply": 19,
@@ -155,7 +155,7 @@
     "Nxd4",
     "Qxd4"
    ],
-   "spoken": "The knights come off on d4 and our queen recaptures, landing us a very pleasant position — but we mustn't forget the h3-pawn."
+   "spoken": "The knights come off on d4 and your queen recaptures, landing you a very pleasant position — but you mustn't forget the h3-pawn."
   },
   {
    "ply": 20,
@@ -173,7 +173,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "We step the king to h2 to defend h3. Careful here: many players castle queenside instead and simply hang the a7-pawn — a mistake I've seen again and again."
+   "spoken": "You step the king to h2 to defend h3. Careful here: many players castle queenside instead and simply hang the a7-pawn — a mistake I've seen again and again."
   },
   {
    "ply": 22,
@@ -182,7 +182,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Black lunges h5, trying for a kingside attack — but knowing the system, you see it isn't one: Black threatens nothing. To ...h4 we simply push g4, and a sac like ...Bxg4 is futile — the position is too passive, there aren't enough attackers, and our king is far too safe."
+   "spoken": "Black lunges h5, trying for a kingside attack — but knowing the system, you see it isn't one: Black threatens nothing. To ...h4 you simply push g4, and a sac like ...Bxg4 is futile — the position is too passive, there aren't enough attackers, and your king is far too safe."
   },
   {
    "ply": 23,
@@ -200,7 +200,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black plays c5. And yes, White's plan is genuinely hard to meet: as long as we deny the bishop its escape, f5 is a monstrous threat."
+   "spoken": "Black plays c5. And yes, White's plan is genuinely hard to meet: as long as you deny the bishop its escape, f5 is a monstrous threat."
   },
   {
    "ply": 25,
@@ -209,7 +209,7 @@
    "line": [
     "Qd3"
    ],
-   "spoken": "That tells us where the queen belongs — d3, guarding the c4-square and discouraging ...b5 (which wasn't dangerous anyway, since e5 would answer it)."
+   "spoken": "That tells you where the queen belongs — d3, guarding the c4-square and discouraging ...b5 (which wasn't dangerous anyway, since e5 would answer it)."
   },
   {
    "ply": 26,
@@ -227,7 +227,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "We play f5. The game is effectively over — after the coming exchanges the e6-bishop is trapped."
+   "spoken": "You play f5. The game is effectively over — after the coming exchanges the e6-bishop is trapped."
   },
   {
    "ply": 28,
@@ -245,7 +245,7 @@
    "line": [
     "exf5"
    ],
-   "spoken": "We recapture with the e-pawn on f5 — the bishop is trapped and our position fully open."
+   "spoken": "You recapture with the e-pawn on f5 — the bishop is trapped and your position fully open."
   },
   {
    "ply": 30,
@@ -254,7 +254,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Black tries c4, but it changes nothing. We could lift the queen to f3, but simpler is to capture on e6."
+   "spoken": "Black tries c4, but it changes nothing. You could lift the queen to f3, but simpler is to capture on e6."
   },
   {
    "ply": 31,
@@ -263,7 +263,7 @@
    "line": [
     "fxe6"
    ],
-   "spoken": "We take on e6, hitting the queen on d7."
+   "spoken": "You take on e6, hitting the queen on d7."
   },
   {
    "ply": 32,
@@ -281,7 +281,7 @@
    "line": [
     "Qf5"
    ],
-   "spoken": "Here the check would be harmless — our king just steps to g1 — but there's no reason to invite it. Instead the queen goes to f5, more to the point, and now the queen trade can't be avoided."
+   "spoken": "Here the check would be harmless — your king just steps to g1 — but there's no reason to invite it. Instead the queen goes to f5, more to the point, and now the queen trade can't be avoided."
   },
   {
    "ply": 34,
@@ -290,7 +290,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles long. There's no reason for us to capture on e6 ourselves — it would only repair Black's pawns and help build a central chain."
+   "spoken": "Black castles long. There's no reason for you to capture on e6 yourself — it would only repair Black's pawns and help build a central chain."
   },
   {
    "ply": 35,
@@ -299,7 +299,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "So instead we play the bishop to g5, hitting the knight — this should win further material, since after a queen trade on f5 and the rook recapture the pin tells."
+   "spoken": "So instead you play the bishop to g5, hitting the knight — this should win further material, since after a queen trade on f5 and the rook recapture the pin tells."
   },
   {
    "ply": 36,
@@ -308,7 +308,7 @@
    "line": [
     "Ng4+"
    ],
-   "spoken": "Black tries the knight to g4 with check, but we simply take it — the g1-square is free."
+   "spoken": "Black tries the knight to g4 with check, but you simply take it — the g1-square is free."
   },
   {
    "ply": 37,
@@ -317,7 +317,7 @@
    "line": [
     "hxg4"
    ],
-   "spoken": "We capture on g4."
+   "spoken": "You capture on g4."
   },
   {
    "ply": 39,
@@ -327,7 +327,7 @@
     "hxg4+",
     "Kg1"
    ],
-   "spoken": "Black checks on g4 and we tuck the king to g1."
+   "spoken": "Black checks on g4 and you tuck the king to g1."
   },
   {
    "ply": 40,
@@ -345,7 +345,7 @@
    "line": [
     "Qxg5"
    ],
-   "spoken": "We don't need the queen — we just take the bishop back on g5, staying up two minor pieces. Always watch the a7–g1 diagonal, but with no checks there our king is perfectly safe."
+   "spoken": "You don't need the queen — you just take the bishop back on g5, staying up two minor pieces. Always watch the a7–g1 diagonal, but with no checks there your king is perfectly safe."
   },
   {
    "ply": 42,
@@ -354,7 +354,7 @@
    "line": [
     "Kb8"
    ],
-   "spoken": "Black tucks the king to b8. We're up two pieces — time to bring a rook to the centre."
+   "spoken": "Black tucks the king to b8. You're up two pieces — time to bring a rook to the centre."
   },
   {
    "ply": 43,
@@ -381,7 +381,7 @@
    "line": [
     "Re7"
    ],
-   "spoken": "We plant the rook on e7."
+   "spoken": "You plant the rook on e7."
   },
   {
    "ply": 46,
@@ -433,7 +433,7 @@
    "line": [
     "Rxb7+"
    ],
-   "spoken": "We take on b7 with check, winning the queen and mopping up everything loose."
+   "spoken": "You take on b7 with check, winning the queen and mopping up everything loose."
   },
   {
    "ply": 53,
@@ -445,7 +445,7 @@
     "Kxb7",
     "Bxd5+"
    ],
-   "spoken": "The queens come off, we recapture with check, and the bishop check on d5 opens the hunt for the king."
+   "spoken": "The queens come off, you recapture with check, and the bishop check on d5 opens the hunt for the king."
   },
   {
    "ply": 54,
@@ -481,7 +481,7 @@
    "line": [
     "Qc6+"
    ],
-   "spoken": "So don't agonize over the quickest path — just keep checking and the mate arrives. We check on c6."
+   "spoken": "So don't agonize over the quickest path — just keep checking and the mate arrives. You check on c6."
   },
   {
    "ply": 59,

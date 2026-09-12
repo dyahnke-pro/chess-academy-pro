@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "We have Black against a strong player — White opens the pawn to d4 and we answer the knight to f6."
+   "spoken": "You have Black against a strong player — White opens the pawn to d4 and you answer the knight to f6."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We play the pawn to g6 — our response doesn't change, a King's Indian setup."
+   "spoken": "You play the pawn to g6 — your response doesn't change, a King's Indian setup."
   },
   {
    "ply": 5,
@@ -69,7 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle — the kingside is developed, and now we get down to punishing White's overextension in the centre."
+   "spoken": "You castle — the kingside is developed, and now you get down to punishing White's overextension in the centre."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "White plays the bishop to e3 — a slightly odd move that locks in the f1-bishop. White's c4-and-d5 chain aims to cramp us, so we want to break it."
+   "spoken": "White plays the bishop to e3 — a slightly odd move that locks in the f1-bishop. White's c4-and-d5 chain aims to cramp you, so you want to break it."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "The pawn to c6 — the basic idea, using our own pawn to break the chain. I prefer c6 to e6: it opens an avenue for our queen, and if White takes on c6 we recapture and develop."
+   "spoken": "The pawn to c6 — the basic idea, using your own pawn to break the chain. I prefer c6 to e6: it opens an avenue for your queen, and if White takes on c6 you recapture and develop."
   },
   {
    "ply": 11,
@@ -103,7 +103,7 @@
    "t": 156.5,
    "fen": "rnbq1rk1/pp1pppbp/2p2np1/3P4/2P5/4BN2/PP2PPPP/RN1QKB1R w KQ - 0 6",
    "line": [],
-   "spoken": "The main point of c6 is that it opens a nice avenue for our queen.",
+   "spoken": "The main point of c6 is that it opens a nice avenue for your queen.",
    "reanchor": true
   },
   {
@@ -113,7 +113,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "And if White captures on c6, we'd recapture a pawn while developing a piece. The knight to d2 simply blundered a pawn — we just take.",
+   "spoken": "And if White captures on c6, you'd recapture a pawn while developing a piece. The knight to d2 simply blundered a pawn — you just take.",
    "reanchor": true
   },
   {
@@ -124,7 +124,7 @@
     "cxd5",
     "Qc2"
    ],
-   "spoken": "We capture on d5, and White switches into bullet mode with the queen to c2."
+   "spoken": "You capture on d5, and White switches into bullet mode with the queen to c2."
   },
   {
    "ply": 14,
@@ -133,7 +133,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We keep developing with the knight to c6."
+   "spoken": "You keep developing with the knight to c6."
   },
   {
    "ply": 15,
@@ -142,7 +142,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "White plays the knight to d4, offering a trade. The default from beginner level on is to keep the tension — only trade with a good reason — and here I dislike taking, because it lets White's bishop reposition to contest ours and ease his kingside development."
+   "spoken": "White plays the knight to d4, offering a trade. The default from beginner level on is to keep the tension — only trade with a good reason — and here I dislike taking, because it lets White's bishop reposition to contest yours and ease his kingside development."
   },
   {
    "ply": 17,
@@ -152,7 +152,7 @@
     "d6",
     "N2b3"
    ],
-   "spoken": "The knight to d4 threatens nothing, so we develop with the pawn to d6, and White reroutes the knight to b3. Now the decisive central invasion begins — I'm focused on the centre, where White has a failing pawn structure."
+   "spoken": "The knight to d4 threatens nothing, so you develop with the pawn to d6, and White reroutes the knight to b3. Now the decisive central invasion begins — I'm focused on the centre, where White has a failing pawn structure."
   },
   {
    "ply": 18,
@@ -161,7 +161,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "We take on d4 first — modifying the move order so White can't reply with a knight capture on c6 that gains a tempo for the defence."
+   "spoken": "You take on d4 first — modifying the move order so White can't reply with a knight capture on c6 that gains a tempo for the defence."
   },
   {
    "ply": 20,
@@ -171,7 +171,7 @@
     "Bxd4",
     "e5"
    ],
-   "spoken": "White recaptures on d4, and we play the pawn to e5."
+   "spoken": "White recaptures on d4, and you play the pawn to e5."
   },
   {
    "ply": 21,
@@ -189,7 +189,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "But before that, we throw in the bishop to f5 with tempo — not playing automatically; this move has zero downside and a major upside."
+   "spoken": "But before that, you throw in the bishop to f5 with tempo — not playing automatically; this move has zero downside and a major upside."
   },
   {
    "ply": 23,
@@ -198,7 +198,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "White plays the queen to d2, and now we don't play d4 at all, since it might allow the bishop to h6."
+   "spoken": "White plays the queen to d2, and now you don't play d4 at all, since it might allow the bishop to h6."
   },
   {
    "ply": 24,
@@ -207,7 +207,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "Instead we take on c4 — far more efficient, winning another pawn, and White is suffocating without any kingside development."
+   "spoken": "Instead you take on c4 — far more efficient, winning another pawn, and White is suffocating without any kingside development."
   },
   {
    "ply": 25,
@@ -216,7 +216,7 @@
    "line": [
     "Na5"
    ],
-   "spoken": "White plays the knight to a5. It hangs by a single thread — if we could kick the queen off the diagonal we'd win it, but the knight to e4 runs into the queen to b4, a dead end. So look at the interference tactic."
+   "spoken": "White plays the knight to a5. It hangs by a single thread — if you could kick the queen off the diagonal you'd win it, but the knight to e4 runs into the queen to b4, a dead end. So look at the interference tactic."
   },
   {
    "ply": 26,
@@ -225,7 +225,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 — the interference tactic. It's a deep move: after the queen takes it, we hunt the knight and induce further concessions."
+   "spoken": "The pawn to c3 — the interference tactic. It's a deep move: after the queen takes it, you hunt the knight and induce further concessions."
   },
   {
    "ply": 27,
@@ -243,7 +243,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5 — hitting the queen and preparing to cash in. If the queen drops back, we take the bishop and White can't recapture with the queen."
+   "spoken": "The knight to d5 — hitting the queen and preparing to cash in. If the queen drops back, you take the bishop and White can't recapture with the queen."
   },
   {
    "ply": 29,
@@ -300,7 +300,7 @@
    "t": 407,
    "fen": "r2q1rk1/pp3pbp/3p2p1/N3pb2/8/1Q2n3/PP2PPPP/R3KB1R w KQ - 0 16",
    "line": [],
-   "spoken": "If the knight to b7 scared you, in that position we have a resource.",
+   "spoken": "If the knight to b7 scared you, in that position you have a resource.",
    "reanchor": true
   },
   {
@@ -310,7 +310,7 @@
    "line": [
     "Qxe3"
    ],
-   "spoken": "The knight to c2 with check forces a bunch of trades, and we're totally winning.",
+   "spoken": "The knight to c2 with check forces a bunch of trades, and you're totally winning.",
    "reanchor": true
   },
   {
@@ -340,7 +340,7 @@
    "line": [
     "Qxd2+"
    ],
-   "spoken": "We take the queens off. Keeping queens on should be your default, but for newer players exchanging can be simpler — just not indiscriminately.",
+   "spoken": "You take the queens off. Keeping queens on should be your default, but for newer players exchanging can be simpler — just not indiscriminately.",
    "reanchor": true
   },
   {
@@ -371,7 +371,7 @@
    "line": [
     "Rxc1"
    ],
-   "spoken": "We take on c1.",
+   "spoken": "You take on c1.",
    "reanchor": true
   },
   {
@@ -382,7 +382,7 @@
     "Kxc1",
     "Rc8+"
    ],
-   "spoken": "We take control of the c-file — but that doesn't mean deliberately seeking the trade of the last pair of rooks.",
+   "spoken": "You take control of the c-file — but that doesn't mean deliberately seeking the trade of the last pair of rooks.",
    "reanchor": true
   },
   {
@@ -430,7 +430,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "For now we just start taking material, the rook capturing on f2.",
+   "spoken": "For now you just start taking material, the rook capturing on f2.",
    "reanchor": true
   },
   {
@@ -484,7 +484,7 @@
    "t": 661.5,
    "fen": "rnbqkb1r/pppppppp/5n2/3P4/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "The pawn to d5 isn't terrible — unlike the pawn to g4, the engine's worst first move. We complete the King's Indian setup with the bishop to g7, the knight to f3, and castling; White should have developed the knight to c3, and Black plays c6 or e6, sometimes starting with d6 and delaying c6 until the right moment.",
+   "spoken": "The pawn to d5 isn't terrible — unlike the pawn to g4, the engine's worst first move. You complete the King's Indian setup with the bishop to g7, the knight to f3, and castling; White should have developed the knight to c3, and Black plays c6 or e6, sometimes starting with d6 and delaying c6 until the right moment.",
    "reanchor": true
   }
  ]

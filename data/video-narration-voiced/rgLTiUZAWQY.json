@@ -17,7 +17,7 @@
     "exd5",
     "Nf6"
    ],
-   "spoken": "We open e4 and face the Scandinavian — d5, and after we take, the Portuguese variation with a knight to f6."
+   "spoken": "You open e4 and face the Scandinavian — d5, and after you take, the Portuguese variation with a knight to f6."
   },
   {
    "ply": 5,
@@ -63,7 +63,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "And we play d4, building a pawn center."
+   "spoken": "And you play d4, building a pawn center."
   },
   {
    "ply": 10,
@@ -98,7 +98,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "So we use our pawns to stake a claim in the center, starting with c4 — pretty automatic."
+   "spoken": "So you use your pawns to stake a claim in the center, starting with c4 — pretty automatic."
   },
   {
    "ply": 12,
@@ -188,7 +188,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "And we literally win the knight, trapped on g6."
+   "spoken": "And you literally win the knight, trapped on g6."
   },
   {
    "ply": 17,
@@ -206,7 +206,7 @@
     "h6",
     "h5"
    ],
-   "spoken": "And now we literally win the knight — it's simply trapped on g6.",
+   "spoken": "And now you literally win the knight — it's simply trapped on g6.",
    "reanchor": true
   },
   {
@@ -227,7 +227,7 @@
     "Rxh5",
     "e6"
    ],
-   "spoken": "We recapture on h5, and Black plays e6 — now the choice: keep pieces on for mate, or trade down. We'll trade.",
+   "spoken": "You recapture on h5, and Black plays e6 — now the choice: keep pieces on for mate, or trade down. You'll trade.",
    "reanchor": true
   },
   {
@@ -237,7 +237,7 @@
    "line": [
     "dxe6"
    ],
-   "spoken": "We capture on e6.",
+   "spoken": "You capture on e6.",
    "reanchor": true
   },
   {
@@ -247,7 +247,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": "Black recaptures on e6; we're low on time, so we trade queens.",
+   "spoken": "Black recaptures on e6; you're low on time, so you trade queens.",
    "reanchor": true
   },
   {
@@ -277,7 +277,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop a knight to c3."
+   "spoken": "You develop a knight to c3."
   },
   {
    "ply": 28,
@@ -295,7 +295,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "A bishop to e3 — no need to rush a3, and we don't care about the doubled pawns; we're up a piece."
+   "spoken": "A bishop to e3 — no need to rush a3, and you don't care about the doubled pawns; you're up a piece."
   },
   {
    "ply": 30,
@@ -304,7 +304,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Black plays b6. Now I want to improve our king — the a1 rook is out of the game."
+   "spoken": "Black plays b6. Now I want to improve your king — the a1 rook is out of the game."
   },
   {
    "ply": 31,
@@ -313,7 +313,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "We'd love to castle long, but the rook is on the d-file, so a knight to d4 — stable, and it clears the way to castle queenside and, if needed, eliminate the e6 bishop."
+   "spoken": "You'd love to castle long, but the rook is on the d-file, so a knight to d4 — stable, and it clears the way to castle queenside and, if needed, eliminate the e6 bishop."
   },
   {
    "ply": 32,
@@ -332,7 +332,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "We castle queenside, which also opens a knight jump to d5 if Black doesn't trade."
+   "spoken": "You castle queenside, which also opens a knight jump to d5 if Black doesn't trade."
   },
   {
    "ply": 34,
@@ -341,7 +341,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": "Black trades on c3 — completely winning for us.",
+   "spoken": "Black trades on c3 — completely winning for you.",
    "reanchor": true
   },
   {
@@ -352,7 +352,7 @@
     "bxc3",
     "c5"
    ],
-   "spoken": "We recapture on c3. Where does the knight go? We keep encouraging trades.",
+   "spoken": "You recapture on c3. Where does the knight go? You keep encouraging trades.",
    "reanchor": true
   },
   {
@@ -362,7 +362,7 @@
    "line": [
     "Nf5"
    ],
-   "spoken": "A knight to f5, hitting g7 — if Black takes, we trade rooks and recapture on f5."
+   "spoken": "A knight to f5, hitting g7 — if Black takes, you trade rooks and recapture on f5."
   },
   {
    "ply": 38,
@@ -383,7 +383,7 @@
     "Kxd8",
     "Rxf5"
    ],
-   "spoken": "We trade rooks and recapture on f5, left with the extra minor piece.",
+   "spoken": "You trade rooks and recapture on f5, left with the extra minor piece.",
    "reanchor": true
   },
   {
@@ -422,7 +422,7 @@
    "line": [
     "Bxg6"
    ],
-   "spoken": "We capture on g6.",
+   "spoken": "You capture on g6.",
    "reanchor": true
   },
   {
@@ -462,7 +462,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Our opponent is doing nothing of substance on the kingside.",
+   "spoken": "Your opponent is doing nothing of substance on the kingside.",
    "reanchor": true
   },
   {
@@ -472,7 +472,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "We just trade pawns with a4."
+   "spoken": "You just trade pawns with a4."
   },
   {
    "ply": 53,
@@ -492,7 +492,7 @@
    "line": [
     "Rxh3"
    ],
-   "spoken": "Now we hunt Black's weak kingside pawns.",
+   "spoken": "Now you hunt Black's weak kingside pawns.",
    "reanchor": true
   },
   {
@@ -540,7 +540,7 @@
    "line": [
     "Rxb6+"
    ],
-   "spoken": "We take on b6 with check.",
+   "spoken": "You take on b6 with check.",
    "reanchor": true
   },
   {
@@ -560,7 +560,7 @@
    "line": [
     "Kd3"
    ],
-   "spoken": "A king to d3 is clinical — why give up pawns when we can just defend them?"
+   "spoken": "A king to d3 is clinical — why give up pawns when you can just defend them?"
   },
   {
    "ply": 62,
@@ -578,7 +578,7 @@
    "line": [
     "Rxa6"
    ],
-   "spoken": "We take on a6 and can swing the rook over to g6.",
+   "spoken": "You take on a6 and can swing the rook over to g6.",
    "reanchor": true
   },
   {
@@ -608,7 +608,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "We push a5 — no need to grab more pawns, we can just promote.",
+   "spoken": "You push a5 — no need to grab more pawns, you can just promote.",
    "reanchor": true
   },
   {
@@ -638,7 +638,7 @@
    "line": [
     "Rxg7"
    ],
-   "spoken": "We take on g7 to cut off the king, and I expect resignation.",
+   "spoken": "You take on g7 to cut off the king, and I expect resignation.",
    "reanchor": true
   },
   {
@@ -689,7 +689,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "We push c5 — and it's a good idea not to push a7, which is what causes last-second stalemates.",
+   "spoken": "You push c5 — and it's a good idea not to push a7, which is what causes last-second stalemates.",
    "reanchor": true
   },
   {
@@ -778,7 +778,7 @@
     "Rxd8",
     "Bxd8"
    ],
-   "spoken": "We trade the rooks and promote the pawns with checkmate.",
+   "spoken": "You trade the rooks and promote the pawns with checkmate.",
    "reanchor": true
   },
   {
@@ -797,7 +797,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "We push c6.",
+   "spoken": "You push c6.",
    "reanchor": true
   },
   {
@@ -827,7 +827,7 @@
     "Kc8",
     "a7"
    ],
-   "spoken": "Black has the g-pawn move available, so we're safe.",
+   "spoken": "Black has the g-pawn move available, so you're safe.",
    "reanchor": true
   },
   {
@@ -838,7 +838,7 @@
     "g3",
     "a8=N"
    ],
-   "spoken": "We promote to a knight — checkmate. A straightforward game, because Black blundered a piece in the opening.",
+   "spoken": "You promote to a knight — checkmate. A straightforward game, because Black blundered a piece in the opening.",
    "reanchor": true
   },
   {
@@ -982,7 +982,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "Our development is excellent — a bishop to f4, a rook to d1, and a simple plan of queenside expansion with a3 and b4.",
+   "spoken": "Your development is excellent — a bishop to f4, a rook to d1, and a simple plan of queenside expansion with a3 and b4.",
    "reanchor": true
   },
   {
@@ -1001,7 +1001,7 @@
    "t": 3135.5,
    "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
    "line": [],
-   "spoken": "The same pawn structure, the same plan — Black has to play very carefully to equalize. Our opponent's knight to c6...",
+   "spoken": "The same pawn structure, the same plan — Black has to play very carefully to equalize. Your opponent's knight to c6...",
    "reanchor": true
   },
   {
@@ -1149,7 +1149,7 @@
    "line": [
     "Qxd8+"
    ],
-   "spoken": "Black will cover it with a pawn; and if we lead with the queen trade, Black just recaptures with the rook.",
+   "spoken": "Black will cover it with a pawn; and if you lead with the queen trade, Black just recaptures with the rook.",
    "reanchor": true
   },
   {
@@ -1196,7 +1196,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": "Which here was freeing the kingside. Our opponent just trusted us with a knight to g6...",
+   "spoken": "Which here was freeing the kingside. Your opponent just trusted you with a knight to g6...",
    "reanchor": true
   },
   {
@@ -1302,7 +1302,7 @@
    "t": 3300,
    "fen": "r2qkb1r/pppbppp1/5nn1/3P3p/2P4P/3B1N2/PP3PP1/RNBQK2R b KQkq - 1 10",
    "line": [],
-   "spoken": "Black's best was still e5, though it runs into h5. We did nothing extraordinary — traded everything, followed the endgame rules, and patiently advanced: king to d2, a4, then infiltrate and pick off the weak pawns.",
+   "spoken": "Black's best was still e5, though it runs into h5. You did nothing extraordinary — traded everything, followed the endgame rules, and patiently advanced: king to d2, a4, then infiltrate and pick off the weak pawns.",
    "reanchor": true
   },
   {
@@ -1330,7 +1330,7 @@
    "t": 3359,
    "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3",
    "line": [],
-   "spoken": "A straightforward game. In the bonus game we'll aim for a Najdorf against the knight-f3 line — the more positional variation, where White usually castles kingside.",
+   "spoken": "A straightforward game. In the bonus game you'll aim for a Najdorf against the knight-f3 line — the more positional variation, where White usually castles kingside.",
    "reanchor": true
   }
  ]

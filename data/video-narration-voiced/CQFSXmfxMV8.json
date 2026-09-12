@@ -15,7 +15,7 @@
         "e4",
         "c5"
       ],
-      "spoken": "We take White and face the Sicilian."
+      "spoken": "You take White and face the Sicilian."
     },
     {
       "ply": 3,
@@ -24,7 +24,7 @@
       "line": [
         "f4"
       ],
-      "spoken": "We play f4 — the Grand Prix Attack."
+      "spoken": "You play f4 — the Grand Prix Attack."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "exd5"
       ],
-      "spoken": "We take on d5."
+      "spoken": "You take on d5."
     },
     {
       "ply": 3,
@@ -94,7 +94,7 @@
       "line": [
         "Bb5+"
       ],
-      "spoken": "We check on b5."
+      "spoken": "You check on b5."
     },
     {
       "ply": 8,
@@ -112,7 +112,7 @@
       "line": [
         "Bxd7+"
       ],
-      "spoken": "We take on d7 with check."
+      "spoken": "You take on d7 with check."
     },
     {
       "ply": 10,
@@ -130,7 +130,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "We develop the knight to c3."
+      "spoken": "You develop the knight to c3."
     },
     {
       "ply": 12,
@@ -148,7 +148,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "We develop the knight to f3."
+      "spoken": "You develop the knight to f3."
     },
     {
       "ply": 14,
@@ -166,7 +166,7 @@
       "line": [
         "d3"
       ],
-      "spoken": "We play d3."
+      "spoken": "You play d3."
     },
     {
       "ply": 13,
@@ -201,7 +201,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle."
+      "spoken": "You castle."
     },
     {
       "ply": 18,
@@ -219,7 +219,7 @@
       "line": [
         "Ne5"
       ],
-      "spoken": "We plant the knight on e5."
+      "spoken": "You plant the knight on e5."
     },
     {
       "ply": 20,
@@ -228,7 +228,7 @@
       "line": [
         "Nxe5"
       ],
-      "spoken": "Black takes our knight on e5."
+      "spoken": "Black takes your knight on e5."
     },
     {
       "ply": 21,
@@ -237,7 +237,7 @@
       "line": [
         "fxe5"
       ],
-      "spoken": "We recapture with the f-pawn."
+      "spoken": "You recapture with the f-pawn."
     },
     {
       "ply": 22,
@@ -255,7 +255,7 @@
       "line": [
         "Qf3"
       ],
-      "spoken": "We swing the queen to f3."
+      "spoken": "You swing the queen to f3."
     },
     {
       "ply": 24,
@@ -273,7 +273,7 @@
       "line": [
         "Rf2"
       ],
-      "spoken": "We lift the rook to f2."
+      "spoken": "You lift the rook to f2."
     },
     {
       "ply": 26,
@@ -291,7 +291,7 @@
       "line": [
         "Bf4"
       ],
-      "spoken": "We develop the bishop to f4."
+      "spoken": "You develop the bishop to f4."
     },
     {
       "ply": 28,
@@ -309,7 +309,7 @@
       "line": [
         "Rd1"
       ],
-      "spoken": "We play the rook to d1."
+      "spoken": "You play the rook to d1."
     },
     {
       "ply": 30,
@@ -327,7 +327,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "We offer a trade with the bishop to e3."
+      "spoken": "You offer a trade with the bishop to e3."
     },
     {
       "ply": 32,
@@ -345,7 +345,7 @@
       "line": [
         "Qe4"
       ],
-      "spoken": "We play the queen to e4."
+      "spoken": "You play the queen to e4."
     },
     {
       "ply": 34,
@@ -354,7 +354,7 @@
       "line": [
         "Bxe3"
       ],
-      "spoken": "Black takes our bishop on e3."
+      "spoken": "Black takes your bishop on e3."
     },
     {
       "ply": 35,
@@ -363,7 +363,7 @@
       "line": [
         "Qxe3"
       ],
-      "spoken": "We recapture with the queen."
+      "spoken": "You recapture with the queen."
     },
     {
       "ply": 36,
@@ -381,7 +381,7 @@
       "line": [
         "Qe4"
       ],
-      "spoken": "We return the queen to e4."
+      "spoken": "You return the queen to e4."
     },
     {
       "ply": 38,
@@ -390,7 +390,7 @@
       "line": [
         "Nxf2"
       ],
-      "spoken": "Black takes our rook, capturing on f2."
+      "spoken": "Black takes your rook, capturing on f2."
     },
     {
       "ply": 39,
@@ -399,7 +399,7 @@
       "line": [
         "Kxf2"
       ],
-      "spoken": "We recapture with the king."
+      "spoken": "You recapture with the king."
     },
     {
       "ply": 40,
@@ -417,7 +417,7 @@
       "line": [
         "Rxd3"
       ],
-      "spoken": "We recapture with the rook."
+      "spoken": "You recapture with the rook."
     },
     {
       "ply": 42,
@@ -435,7 +435,7 @@
       "line": [
         "g3"
       ],
-      "spoken": "We play g3."
+      "spoken": "You play g3."
     },
     {
       "ply": 44,
@@ -453,7 +453,7 @@
       "line": [
         "b3"
       ],
-      "spoken": "We play b3."
+      "spoken": "You play b3."
     },
     {
       "ply": 46,
@@ -462,7 +462,7 @@
       "line": [
         "Rxd3"
       ],
-      "spoken": "Black takes our rook on d3."
+      "spoken": "Black takes your rook on d3."
     },
     {
       "ply": 48,
@@ -472,7 +472,7 @@
         "Qxd3",
         "Rd8"
       ],
-      "spoken": "We recapture with the queen; Black plays the rook to d8."
+      "spoken": "You recapture with the queen; Black plays the rook to d8."
     },
     {
       "ply": 49,
@@ -481,7 +481,7 @@
       "line": [
         "Qe3"
       ],
-      "spoken": "We play the queen to e3."
+      "spoken": "You play the queen to e3."
     },
     {
       "ply": 50,
@@ -499,7 +499,7 @@
       "line": [
         "Nb5"
       ],
-      "spoken": "We jump the knight to b5."
+      "spoken": "You jump the knight to b5."
     },
     {
       "ply": 52,
@@ -517,7 +517,7 @@
       "line": [
         "Kf3"
       ],
-      "spoken": "We walk the king to f3."
+      "spoken": "You walk the king to f3."
     },
     {
       "ply": 54,
@@ -535,7 +535,7 @@
       "line": [
         "Qf4"
       ],
-      "spoken": "We block with the queen to f4."
+      "spoken": "You block with the queen to f4."
     },
     {
       "ply": 56,

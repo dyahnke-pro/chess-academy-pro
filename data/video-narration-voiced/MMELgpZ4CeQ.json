@@ -40,7 +40,7 @@
    "t": 112.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "Early in the speedrun we faced a lot of Philidors, but past 1300, 1400 —",
+   "spoken": "Early in the speedrun you faced a lot of Philidors, but past 1300, 1400 —",
    "reanchor": true
   },
   {
@@ -50,7 +50,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "— we'll get a lot more Glek systems, and I can delve deeper into the intricacies.",
+   "spoken": "— you'll get a lot more Glek systems, and I can delve deeper into the intricacies.",
    "reanchor": true
   },
   {
@@ -79,7 +79,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "The bishop to c5, the bishop to g2 — we've faced this before."
+   "spoken": "The bishop to c5, the bishop to g2 — you've faced this before."
   },
   {
    "ply": 9,
@@ -115,7 +115,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "Our opponent plays the bishop to e6 —"
+   "spoken": "Your opponent plays the bishop to e6 —"
   },
   {
    "ply": 13,
@@ -124,7 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "— which doesn't really impact what we do; we castle."
+   "spoken": "— which doesn't really impact what you do; you castle."
   },
   {
    "ply": 14,
@@ -154,7 +154,7 @@
    "line": [
     "Bc8"
    ],
-   "spoken": "The bishop back to c8 — both sides castle kingside, and we get a more positional battle.",
+   "spoken": "The bishop back to c8 — both sides castle kingside, and you get a more positional battle.",
    "reanchor": true
   },
   {
@@ -167,7 +167,7 @@
     "Kg1",
     "Qd7"
    ],
-   "spoken": "This may seem scary to less experienced Glek players — you might imagine Black playing the bishop to h3, running the h-pawn down the board, castling queenside, and checkmating us. But there are many ways to fight this, and Black's position has more holes than it looks. The knight to a4 should always be on your radar as long as Black hasn't pushed the a-pawn — that's why top players play a5 or a6. But here I don't love the knight to a4: it does nothing against the bishop to h3, and if we trade on c5 Black clamps down on d4. The knight to g5 I also dislike, because of the bishop to g4, and f3 would be illegal.",
+   "spoken": "This may seem scary to less experienced Glek players — you might imagine Black playing the bishop to h3, running the h-pawn down the board, castling queenside, and checkmating you. But there are many ways to fight this, and Black's position has more holes than it looks. The knight to a4 should always be on your radar as long as Black hasn't pushed the a-pawn — that's why top players play a5 or a6. But here I don't love the knight to a4: it does nothing against the bishop to h3, and if you trade on c5 Black clamps down on d4. The knight to g5 I also dislike, because of the bishop to g4, and f3 would be illegal.",
    "reanchor": true
   },
   {
@@ -177,7 +177,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The knight to g5 with the bishop to g4 just fails concretely, since Black plays h6 and we've achieved nothing. The move I like, which may surprise you, is the bishop to g5 — largely a positional move."
+   "spoken": "The knight to g5 with the bishop to g4 just fails concretely, since Black plays h6 and you've achieved nothing. The move I like, which may surprise you, is the bishop to g5 — largely a positional move."
   },
   {
    "ply": 24,
@@ -186,7 +186,7 @@
    "line": [
     "Bh3"
    ],
-   "spoken": "Our opponent walks right into it, playing the bishop to h3 against everything."
+   "spoken": "Your opponent walks right into it, playing the bishop to h3 against everything."
   },
   {
    "ply": 25,
@@ -195,7 +195,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "What's the point of the bishop to g5? Very simple — we want the bishop takes f6 —"
+   "spoken": "What's the point of the bishop to g5? Very simple — you want the bishop takes f6 —"
   },
   {
    "ply": 26,
@@ -231,7 +231,7 @@
    "line": [
     "Nxf6"
    ],
-   "spoken": "We could take on h3 and on f6, but that makes no sense — just start by taking on f6, a free pawn."
+   "spoken": "You could take on h3 and on f6, but that makes no sense — just start by taking on f6, a free pawn."
   },
   {
    "ply": 30,
@@ -240,7 +240,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": "The queen to e6, the only move. Now we pause: is there a forced win, or do we just drop the knight back to d5 and stabilize? The knight to g5 is bad — the queen takes f6, and after the check the king steps away, leaving that knight awkward. The other option is the bishop takes h3, the queen takes h3, then the knight to g5, nearly trapping the queen with only h6 — but I don't see a clear follow-up, since both knights hang."
+   "spoken": "The queen to e6, the only move. Now you pause: is there a forced win, or do you just drop the knight back to d5 and stabilize? The knight to g5 is bad — the queen takes f6, and after the check the king steps away, leaving that knight awkward. The other option is the bishop takes h3, the queen takes h3, then the knight to g5, nearly trapping the queen with only h6 — but I don't see a clear follow-up, since both knights hang."
   },
   {
    "ply": 31,
@@ -304,7 +304,7 @@
    "t": 421,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": "That's no coincidence. Let me plug it into the database and see what insights we can generate.",
+   "spoken": "That's no coincidence. Let me plug it into the database and see what insights you can generate.",
    "reanchor": true
   },
   {
@@ -521,7 +521,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "— you have the move the rook to e1, and we're not too afraid of slightly damaging our queenside pawns, because we have a lot of assets in return — the bishop pair and a good centre; White is slightly better.",
+   "spoken": "— you have the move the rook to e1, and you're not too afraid of slightly damaging your queenside pawns, because you have a lot of assets in return — the bishop pair and a good centre; White is slightly better.",
    "reanchor": true
   },
   {
@@ -537,7 +537,7 @@
    "t": 560.5,
    "fen": "r1bq1rk1/pppp1ppp/5n2/2b1n3/4P3/2N3P1/PPPP1PBP/R1BQK2R w KQ - 0 7",
    "line": [],
-   "spoken": "— the computer suggests the knight to a4 straight away, and if the queen to d7, the knight to g5; after the bishop to g4 we start by snagging the bishop on c5, also hitting the queen; then f3 is possible — habitual if you're a King's Indian player — the bishop to h5, and the best move is the knight to h3. I mention the King's Indian because we get a very similar sequence there, for example in the Gligoric system, a main-line King's Indian, starting with the knight to f3.",
+   "spoken": "— the computer suggests the knight to a4 straight away, and if the queen to d7, the knight to g5; after the bishop to g4 you start by snagging the bishop on c5, also hitting the queen; then f3 is possible — habitual if you're a King's Indian player — the bishop to h5, and the best move is the knight to h3. I mention the King's Indian because you get a very similar sequence there, for example in the Gligoric system, a main-line King's Indian, starting with the knight to f3.",
    "reanchor": true
   }
  ]

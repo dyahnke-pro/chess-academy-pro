@@ -42,7 +42,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "And now we play e4 — the key difference to understand."
+   "spoken": "And now you play e4 — the key difference to understand."
   },
   {
    "ply": 4,
@@ -70,7 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "We develop the knight to c3."
+   "spoken": "You develop the knight to c3."
   },
   {
    "ply": 8,
@@ -88,7 +88,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Look at the hole it leaves — if only we could plant a knight there. We play e5, seizing space."
+   "spoken": "Look at the hole it leaves — if only you could plant a knight there. You play e5, seizing space."
   },
   {
    "ply": 11,
@@ -98,7 +98,7 @@
     "Ne7",
     "Ne4"
    ],
-   "spoken": "Black plays the knight to e7, and we jump the knight to e4 — cutting corners on development, but controlling that key square is worth it."
+   "spoken": "Black plays the knight to e7, and you jump the knight to e4 — cutting corners on development, but controlling that key square is worth it."
   },
   {
    "ply": 12,
@@ -152,7 +152,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "We recapture with the bishop on f6."
+   "spoken": "You recapture with the bishop on f6."
   },
   {
    "ply": 18,
@@ -188,7 +188,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "Now we use our pawns as battering rams to break down the last line of defense — h4."
+   "spoken": "Now you use your pawns as battering rams to break down the last line of defense — h4."
   },
   {
    "ply": 22,
@@ -234,7 +234,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We just need one more piece — the knight to f3."
+   "spoken": "You just need one more piece — the knight to f3."
   },
   {
    "ply": 28,
@@ -345,7 +345,7 @@
    "line": [
     "gxh5"
    ],
-   "spoken": "If Black takes, g takes h5, we push g5.",
+   "spoken": "If Black takes, g takes h5, you push g5.",
    "reanchor": true
   },
   {
@@ -355,7 +355,7 @@
    "line": [
     "g5#"
    ],
-   "spoken": "g5 — checkmate, opening the bishop's diagonal; that's why we placed it there.",
+   "spoken": "g5 — checkmate, opening the bishop's diagonal; that's why you placed it there.",
    "reanchor": true
   },
   {
@@ -449,7 +449,7 @@
    "t": 555,
    "fen": "r1b1qr2/pp3p2/2p1pnPk/3pP2n/2PP2P1/3B1N2/PP3P2/R3K2R w KQ - 1 18",
    "line": [],
-   "spoken": "So we need to account for that — this is where quiet moves come in, the hardest to see when you've sacrificed your queen and assume everything must be a check.",
+   "spoken": "So you need to account for that — this is where quiet moves come in, the hardest to see when you've sacrificed your queen and assume everything must be a check.",
    "reanchor": true
   },
   {
@@ -459,7 +459,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "We play the quiet e takes f6 — not a check, but decisive.",
+   "spoken": "You play the quiet e takes f6 — not a check, but decisive.",
    "reanchor": true
   },
   {
@@ -539,7 +539,7 @@
    "line": [
     "Rh7"
    ],
-   "spoken": "The knight is the big problem, but we don't want to take it — we preserve its influence with the rook to h7.",
+   "spoken": "The knight is the big problem, but you don't want to take it — you preserve its influence with the rook to h7.",
    "reanchor": true
   },
   {
@@ -559,7 +559,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "We take back on f6, threatening the rook takes on g7 — probably mating.",
+   "spoken": "You take back on f6, threatening the rook takes on g7 — probably mating.",
    "reanchor": true
   },
   {

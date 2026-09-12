@@ -39,7 +39,7 @@
     "Nxd4",
     "exd4"
    ],
-   "spoken": "We take and recapture exd4, leaving a unique doubled-pawn shape — a false Ruy Lopez that stands entirely on its own.",
+   "spoken": "You take and recapture exd4, leaving a unique doubled-pawn shape — a false Ruy Lopez that stands entirely on its own.",
    "kind": "main"
   },
   {
@@ -426,7 +426,7 @@
     "Nf6",
     "f5"
    ],
-   "spoken": "Roll the f-pawn to f5, closing off Black's bishop, and the moment his knight steps away we assemble the pieces on the kingside for a huge attack.",
+   "spoken": "Roll the f-pawn to f5, closing off Black's bishop, and the moment his knight steps away you assemble the pieces on the kingside for a huge attack.",
    "kind": "main",
    "teaches": "Advance f4-f5 to entomb the enemy bishop, then mass your pieces for the kingside assault."
   },

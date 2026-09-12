@@ -15,7 +15,7 @@
         "e4",
         "e5"
       ],
-      "spoken": "We play it traditional — e5."
+      "spoken": "You play it traditional — e5."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "Nf6"
       ],
-      "spoken": "We develop the knight to f6."
+      "spoken": "You develop the knight to f6."
     },
     {
       "ply": 5,
@@ -51,7 +51,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "We bring out the knight to c6."
+      "spoken": "You bring out the knight to c6."
     },
     {
       "ply": 7,
@@ -69,7 +69,7 @@
       "line": [
         "exd4"
       ],
-      "spoken": "We take, capturing on d4."
+      "spoken": "You take, capturing on d4."
     },
     {
       "ply": 9,
@@ -105,7 +105,7 @@
       "line": [
         "bxc6"
       ],
-      "spoken": "We recapture with the b-pawn, capturing on c6 — not the d-pawn, which would allow a queen trade and cost us castling."
+      "spoken": "You recapture with the b-pawn, capturing on c6 — not the d-pawn, which would allow a queen trade and cost you castling."
     },
     {
       "ply": 13,
@@ -123,7 +123,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle — if White ever pushes e5, we pin it with the rook to e8."
+      "spoken": "You castle — if White ever pushes e5, you pin it with the rook to e8."
     },
     {
       "ply": 15,
@@ -132,7 +132,7 @@
       "line": [
         "Be2"
       ],
-      "spoken": "White develops the bishop to e2. Now e5 becomes a possibility, so we deal with it."
+      "spoken": "White develops the bishop to e2. Now e5 becomes a possibility, so you deal with it."
     },
     {
       "ply": 16,
@@ -141,7 +141,7 @@
       "line": [
         "h6"
       ],
-      "spoken": "We throw in h6 — for a specific reason."
+      "spoken": "You throw in h6 — for a specific reason."
     },
     {
       "ply": 17,
@@ -159,7 +159,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "We play d6, shutting the door on e5 for good."
+      "spoken": "You play d6, shutting the door on e5 for good."
     },
     {
       "ply": 19,
@@ -177,7 +177,7 @@
       "line": [
         "Re8"
       ],
-      "spoken": "The rook comes to e8 — old school. And with h6 in, we can later win the e4-pawn with g5."
+      "spoken": "The rook comes to e8 — old school. And with h6 in, you can later win the e4-pawn with g5."
     },
     {
       "ply": 21,
@@ -213,7 +213,7 @@
       "line": [
         "g4"
       ],
-      "spoken": "We push g4, kicking the bishop and planning to snag the e4-pawn."
+      "spoken": "You push g4, kicking the bishop and planning to snag the e4-pawn."
     },
     {
       "ply": 25,
@@ -222,7 +222,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "White lunges e5 — unexpected, and not great; it hands us a very nice endgame."
+      "spoken": "White lunges e5 — unexpected, and not great; it hands you a very nice endgame."
     },
     {
       "ply": 26,
@@ -231,7 +231,7 @@
       "line": [
         "gxf3"
       ],
-      "spoken": "That opens the diagonal onto c6, so we take the bishop, capturing on f3."
+      "spoken": "That opens the diagonal onto c6, so you take the bishop, capturing on f3."
     },
     {
       "ply": 27,
@@ -249,7 +249,7 @@
       "line": [
         "Qxf6"
       ],
-      "spoken": "We play it safe and remove it, the queen capturing on f6 — no pawn left on f6 for a back-rank trick."
+      "spoken": "You play it safe and remove it, the queen capturing on f6 — no pawn left on f6 for a back-rank trick."
     },
     {
       "ply": 30,
@@ -259,7 +259,7 @@
         "Qxd6",
         "Qxd6"
       ],
-      "spoken": "White grabs d6, and we recapture with the queen, capturing on d6 — heading for that good endgame, and we'll trade queens."
+      "spoken": "White grabs d6, and you recapture with the queen, capturing on d6 — heading for that good endgame, and you'll trade queens."
     },
     {
       "ply": 31,
@@ -268,7 +268,7 @@
       "line": [
         "gxf3"
       ],
-      "spoken": "White recaptures on f3 — White's kingside pawns are wrecked, while our queenside stays compact."
+      "spoken": "White recaptures on f3 — White's kingside pawns are wrecked, while your queenside stays compact."
     },
     {
       "ply": 32,
@@ -277,14 +277,14 @@
       "line": [
         "Bf5"
       ],
-      "spoken": "We develop the bishop to f5, stopping the knight from landing on e4."
+      "spoken": "You develop the bishop to f5, stopping the knight from landing on e4."
     },
     {
       "ply": 31,
       "t": 352,
       "fen": "r1b1r1k1/p1p2p2/2pq3p/2b5/8/2N2PB1/PPP2P1P/R4RK1 b - - 0 16",
       "line": [],
-      "spoken": "Pushing d5 would hang c7, so we don't give up the pawn.",
+      "spoken": "Pushing d5 would hang c7, so you don't give up the pawn.",
       "reanchor": true
     },
     {
@@ -313,7 +313,7 @@
       "line": [
         "Bxe4"
       ],
-      "spoken": "We take, capturing on e4 with the bishop."
+      "spoken": "You take, capturing on e4 with the bishop."
     },
     {
       "ply": 36,
@@ -323,7 +323,7 @@
         "fxe4",
         "Rxe4"
       ],
-      "spoken": "White recaptures with the pawn, and we take on e4 with the rook — now we own the e-file too."
+      "spoken": "White recaptures with the pawn, and you take on e4 with the rook — now you own the e-file too."
     },
     {
       "ply": 37,
@@ -341,7 +341,7 @@
       "line": [
         "Rae8"
       ],
-      "spoken": "We don't trade — we double up with the a-rook to e8, keeping the file on our terms."
+      "spoken": "You don't trade — you double up with the a-rook to e8, keeping the file on your terms."
     },
     {
       "ply": 39,
@@ -359,7 +359,7 @@
       "line": [
         "Kg7"
       ],
-      "spoken": "In an endgame the king is the priority — we march it up with the king to g7."
+      "spoken": "In an endgame the king is the priority — you march it up with the king to g7."
     },
     {
       "ply": 42,
@@ -369,7 +369,7 @@
         "Rxe4",
         "Rxe4"
       ],
-      "spoken": "White trades a pair of rooks on e4, and we recapture, capturing on e4 — improving while White simplifies."
+      "spoken": "White trades a pair of rooks on e4, and you recapture, capturing on e4 — improving while White simplifies."
     },
     {
       "ply": 43,
@@ -387,7 +387,7 @@
       "line": [
         "Rxe1+"
       ],
-      "spoken": "We take, capturing on e1 with check."
+      "spoken": "You take, capturing on e1 with check."
     },
     {
       "ply": 45,
@@ -405,7 +405,7 @@
       "line": [
         "Bd4"
       ],
-      "spoken": "An instructive moment — White wants c3 to bury our bishop, so we seize the centre first with the bishop to d4.",
+      "spoken": "An instructive moment — White wants c3 to bury your bishop, so you seize the centre first with the bishop to d4.",
       "reanchor": true
     },
     {
@@ -425,7 +425,7 @@
       "line": [
         "Be5"
       ],
-      "spoken": "We reroute — the bishop to e5, staying central. If White tries f4, it only pushes a pawn onto a dark square.",
+      "spoken": "You reroute — the bishop to e5, staying central. If White tries f4, it only pushes a pawn onto a dark square.",
       "reanchor": true
     },
     {
@@ -435,7 +435,7 @@
       "line": [
         "Ke2"
       ],
-      "spoken": "White's king comes to e2 — which lets us head into a pawn endgame, and up a pawn it should be winning.",
+      "spoken": "White's king comes to e2 — which lets you head into a pawn endgame, and up a pawn it should be winning.",
       "reanchor": true
     },
     {
@@ -445,7 +445,7 @@
       "line": [
         "Bxg3"
       ],
-      "spoken": "We trade, the bishop capturing on g3.",
+      "spoken": "You trade, the bishop capturing on g3.",
       "reanchor": true
     },
     {
@@ -455,7 +455,7 @@
       "line": [
         "hxg3"
       ],
-      "spoken": "White recaptures with the h-pawn on g3 — our structure is ragged, but I like our chances.",
+      "spoken": "White recaptures with the h-pawn on g3 — your structure is ragged, but I like your chances.",
       "reanchor": true
     },
     {
@@ -485,7 +485,7 @@
       "line": [
         "Ke5"
       ],
-      "spoken": "We centralise further, the king to e5. The plan is c5, then d5 and d4, making a passed pawn.",
+      "spoken": "You centralise further, the king to e5. The plan is c5, then d5 and d4, making a passed pawn.",
       "reanchor": true
     },
     {
@@ -495,7 +495,7 @@
       "line": [
         "Kg4"
       ],
-      "spoken": "The moment White's king heads to g4, we begin creating that passer.",
+      "spoken": "The moment White's king heads to g4, you begin creating that passer.",
       "reanchor": true
     },
     {
@@ -505,7 +505,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "There we go — c5.",
+      "spoken": "There you go — c5.",
       "reanchor": true
     },
     {
@@ -543,7 +543,7 @@
         "c5",
         "Kh5"
       ],
-      "spoken": "So we push d5, and there isn't even a pawn race to speak of.",
+      "spoken": "So you push d5, and there isn't even a pawn race to speak of.",
       "reanchor": true
     },
     {
@@ -553,7 +553,7 @@
       "line": [
         "Qd5"
       ],
-      "spoken": "The game is over — we just roll d4. White has gone completely off the rails, never asking how Black makes a passer.",
+      "spoken": "The game is over — you just roll d4. White has gone completely off the rails, never asking how Black makes a passer.",
       "reanchor": true
     },
     {
@@ -573,7 +573,7 @@
       "line": [
         "Ke4+"
       ],
-      "spoken": "We simply step the king to e4 — we clearly win the pawn race.",
+      "spoken": "You simply step the king to e4 — you clearly win the pawn race.",
       "reanchor": true
     },
     {
@@ -583,7 +583,7 @@
       "line": [
         "Kxh6"
       ],
-      "spoken": "By the time White collects f7, our pawn is promoting — there's barely a race at all.",
+      "spoken": "By the time White collects f7, your pawn is promoting — there's barely a race at all.",
       "reanchor": true
     },
     {
@@ -604,7 +604,7 @@
         "cxd4",
         "cxd4"
       ],
-      "spoken": "After the pawns come off on d4, we recapture and keep rolling.",
+      "spoken": "After the pawns come off on d4, you recapture and keep rolling.",
       "reanchor": true
     },
     {
@@ -624,7 +624,7 @@
       "line": [
         "f5"
       ],
-      "spoken": "We push f5 — not even giving up a single pawn.",
+      "spoken": "You push f5 — not even giving up a single pawn.",
       "reanchor": true
     },
     {
@@ -635,7 +635,7 @@
         "Kg6",
         "d3"
       ],
-      "spoken": "If White plays g4 we take it; both pawns are unstoppable. f5 is clinical, and we push d3.",
+      "spoken": "If White plays g4 you take it; both pawns are unstoppable. f5 is clinical, and you push d3.",
       "reanchor": true
     },
     {
@@ -646,7 +646,7 @@
         "g4",
         "fxg4"
       ],
-      "spoken": "After g4 we can capture, and after f5 either passer runs.",
+      "spoken": "After g4 you can capture, and after f5 either passer runs.",
       "reanchor": true
     },
     {
@@ -656,7 +656,7 @@
       "line": [
         "f5"
       ],
-      "spoken": "We can even push the g-pawn to promote with check.",
+      "spoken": "You can even push the g-pawn to promote with check.",
       "reanchor": true
     },
     {
@@ -697,7 +697,7 @@
       "t": 739.5,
       "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
       "line": [],
-      "spoken": "A solid, simple positional game, and we're winning more of these as we climb — the bishop to c5 is a good line for an e5 player.",
+      "spoken": "A solid, simple positional game, and you're winning more of these as you climb — the bishop to c5 is a good line for an e5 player.",
       "reanchor": true
     },
     {
@@ -835,7 +835,7 @@
         "O-O",
         "Bg5"
       ],
-      "spoken": "So we castle, White plays the bishop to e2, and we throw in h6.",
+      "spoken": "So you castle, White plays the bishop to e2, and you throw in h6.",
       "reanchor": true
     },
     {
@@ -877,7 +877,7 @@
         "O-O",
         "Be2"
       ],
-      "spoken": "Had White known, the bishop to d3 supports the pawn. So we play h6, the rook to e8, and d6.",
+      "spoken": "Had White known, the bishop to d3 supports the pawn. So you play h6, the rook to e8, and d6.",
       "reanchor": true
     },
     {
@@ -888,7 +888,7 @@
         "Re8",
         "O-O"
       ],
-      "spoken": "We make all the typical moves.",
+      "spoken": "You make all the typical moves.",
       "reanchor": true
     },
     {
@@ -907,7 +907,7 @@
         "Re8",
         "O-O"
       ],
-      "spoken": "...is probably a mistake, assuming our whole idea is sound.",
+      "spoken": "...is probably a mistake, assuming your whole idea is sound.",
       "reanchor": true
     },
     {
@@ -936,7 +936,7 @@
         "O-O",
         "Be2"
       ],
-      "spoken": "We simply win a pawn; at the end of the day this pawn push is never dangerous.",
+      "spoken": "You simply win a pawn; at the end of the day this pawn push is never dangerous.",
       "reanchor": true
     },
     {
@@ -1019,7 +1019,7 @@
       "t": 894,
       "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/8/1b2P2B/2NB4/PPP2PPP/R2Q1RK1 b - - 3 13",
       "line": [],
-      "spoken": "So e5 makes our job easy — after the bishop to e2 we play the knight takes d4. We've pushed pawns in front of our king, but how is White actually going to attack? The white bishop belongs on d3, and not putting it there is White's main mistake.",
+      "spoken": "So e5 makes your job easy — after the bishop to e2 you play the knight takes d4. You've pushed pawns in front of your king, but how is White actually going to attack? The white bishop belongs on d3, and not putting it there is White's main mistake.",
       "reanchor": true
     }
   ]

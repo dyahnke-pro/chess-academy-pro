@@ -16,7 +16,7 @@
     "d5",
     "g3"
    ],
-   "spoken": "We've seen e3 before, and the response is d5. This looks like a Hippo setup — g3, e3, then b3 and d3."
+   "spoken": "You've seen e3 before, and the response is d5. This looks like a Hippo setup — g3, e3, then b3 and d3."
   },
   {
    "ply": 4,
@@ -127,7 +127,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Since we're attacking on the kingside, close the centre — e4. If he plays c4 it achieves nothing; the pawn on d5 is very well protected."
+   "spoken": "Since you're attacking on the kingside, close the centre — e4. If he plays c4 it achieves nothing; the pawn on d5 is very well protected."
   },
   {
    "ply": 19,
@@ -145,7 +145,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "A common misconception is that we must develop the bishop. We don't — it's perfectly happy on c8, and we'll bring it out only when we need it. Play h5; we're going for the king."
+   "spoken": "A common misconception is that you must develop the bishop. You don't — it's perfectly happy on c8, and you'll bring it out only when you need it. Play h5; you're going for the king."
   },
   {
    "ply": 21,
@@ -163,7 +163,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "The pawn on d5 is well protected, so h4 — we're already on the verge of delivering mate. That's how fast this is."
+   "spoken": "The pawn on d5 is well protected, so h4 — you're already on the verge of delivering mate. That's how fast this is."
   },
   {
    "ply": 23,
@@ -190,7 +190,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Recapture on d5. His knight to c3 accomplishes nothing. Now be careful how we open the kingside — hxg3 is double-edged, since after fxg3 he opens the f-file for his rook, so we need a follow-up. Don't hurry: the tempting knight to e4 hits h2, but it's wrong — it gives up the pawn on d5, and if d5 falls, the e4-pawn goes with it."
+   "spoken": "Recapture on d5. His knight to c3 accomplishes nothing. Now be careful how you open the kingside — hxg3 is double-edged, since after fxg3 he opens the f-file for his rook, so you need a follow-up. Don't hurry: the tempting knight to e4 hits h2, but it's wrong — it gives up the pawn on d5, and if d5 falls, the e4-pawn goes with it."
   },
   {
    "ply": 26,
@@ -208,7 +208,7 @@
    "line": [
     "Rc1"
    ],
-   "spoken": "If he's angling for the knight to b5, we can always retreat the bishop to b8. Now the time has come to open fire on the kingside."
+   "spoken": "If he's angling for the knight to b5, you can always retreat the bishop to b8. Now the time has come to open fire on the kingside."
   },
   {
    "ply": 28,
@@ -236,7 +236,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "Notice his bishop is overloaded — defending both d5 and the knight. He grabs on d5, but I'd planned for this: his knight is now hanging, and if we move ours with tempo, he'll have two loose pieces at once."
+   "spoken": "Notice his bishop is overloaded — defending both d5 and the knight. He grabs on d5, but I'd planned for this: his knight is now hanging, and if you move yours with tempo, he'll have two loose pieces at once."
   },
   {
    "ply": 32,
@@ -245,7 +245,7 @@
    "line": [
     "Nxh2"
    ],
-   "spoken": "Not taking on f3 — that just drops the knight. The knight takes on h2, hitting the rook: if it moves, we win the other knight. It isn't fully clear-cut, since his knight can return to c3."
+   "spoken": "Not taking on f3 — that just drops the knight. The knight takes on h2, hitting the rook: if it moves, you win the other knight. It isn't fully clear-cut, since his knight can return to c3."
   },
   {
    "ply": 33,
@@ -263,7 +263,7 @@
    "line": [
     "Nxf1"
    ],
-   "spoken": "We take the rook."
+   "spoken": "You take the rook."
   },
   {
    "ply": 35,
@@ -272,7 +272,7 @@
    "line": [
     "Nxf1"
    ],
-   "spoken": "Now we're up the exchange, and still attacking."
+   "spoken": "Now you're up the exchange, and still attacking."
   },
   {
    "ply": 36,
@@ -290,7 +290,7 @@
    "line": [
     "exf4"
    ],
-   "spoken": "He recaptures, and we've converted the attack into material — an extra exchange. Now the technique: f5 is one way, but it allows d5, opening his bishop's diagonal, so this must be handled very carefully."
+   "spoken": "He recaptures, and you've converted the attack into material — an extra exchange. Now the technique: f5 is one way, but it allows d5, opening his bishop's diagonal, so this must be handled very carefully."
   },
   {
    "ply": 38,
@@ -317,7 +317,7 @@
    "line": [
     "Bf7"
    ],
-   "spoken": "We retreat the bishop to f7."
+   "spoken": "You retreat the bishop to f7."
   },
   {
    "ply": 41,
@@ -335,7 +335,7 @@
    "line": [
     "Rg8"
    ],
-   "spoken": "And it is worth it — because we keep the e4-pawn, which is enormous."
+   "spoken": "And it is worth it — because you keep the e4-pawn, which is enormous."
   },
   {
    "ply": 43,
@@ -353,7 +353,7 @@
    "line": [
     "Qb6+"
    ],
-   "spoken": "The bishop to c5 with check is guarded, but the queen to b6 with check forces his king onto the h-file — and there sits his undefended bishop on h6. We swing the rook to h8 and collect it."
+   "spoken": "The bishop to c5 with check is guarded, but the queen to b6 with check forces his king onto the h-file — and there sits his undefended bishop on h6. You swing the rook to h8 and collect it."
   },
   {
    "ply": 45,
@@ -389,7 +389,7 @@
    "line": [
     "Rxh6"
    ],
-   "spoken": "Convert as fast as possible: his knight on h2 is very vulnerable, so double on the h-file — walk the king to e7 and bring the other rook to h8. We're not afraid of him grabbing on c4; he's out of pieces and our king is safe in the centre. And there's even a forced mate: once his queen leaves e2 and the bishop is gone from g2, the f2-square lights up — take on h2, swing the rook to the h-file, and after the block, crash into f2."
+   "spoken": "Convert as fast as possible: his knight on h2 is very vulnerable, so double on the h-file — walk the king to e7 and bring the other rook to h8. You're not afraid of him grabbing on c4; he's out of pieces and your king is safe in the centre. And there's even a forced mate: once his queen leaves e2 and the bishop is gone from g2, the f2-square lights up — take on h2, swing the rook to the h-file, and after the block, crash into f2."
   }
  ]
 }

@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We take White; Black meets our king's pawn with ...e5."
+   "spoken": "You take White; Black meets your king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "We build the centre with d4."
+   "spoken": "You build the centre with d4."
   },
   {
    "ply": 4,
@@ -42,7 +42,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We offer c3 — the Danish Gambit."
+   "spoken": "You offer c3 — the Danish Gambit."
   },
   {
    "ply": 6,
@@ -60,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "We develop the bishop to c4 — the heart of the Danish."
+   "spoken": "You develop the bishop to c4 — the heart of the Danish."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "Black plays the queen to e7 — targeting our pawn, but with nothing else developed it's a poor way to do it, and it blocks in his own bishop."
+   "spoken": "Black plays the queen to e7 — targeting your pawn, but with nothing else developed it's a poor way to do it, and it blocks in his own bishop."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "We recapture on c3 with the knight — two pieces out already, and that queen on e7 is a liability."
+   "spoken": "You recapture on c3 with the knight — two pieces out already, and that queen on e7 is a liability."
   },
   {
    "ply": 10,
@@ -96,7 +96,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We develop the knight to f3. If ...d5 comes, so much the better — with our lead in development we want the centre opened."
+   "spoken": "You develop the knight to f3. If ...d5 comes, so much the better — with your lead in development you want the centre opened."
   },
   {
    "ply": 12,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We simply castle — no need for wild sacrifices; completing development already does us a huge favour."
+   "spoken": "You simply castle — no need for wild sacrifices; completing development already does you a huge favour."
   },
   {
    "ply": 14,
@@ -132,7 +132,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We slide the rook to e1 — queen and king share the e-file. The e4-pawn is in the way for now, but this sets up the knight to d5."
+   "spoken": "You slide the rook to e1 — queen and king share the e-file. The e4-pawn is in the way for now, but this sets up the knight to d5."
   },
   {
    "ply": 16,
@@ -168,7 +168,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "We recapture on d5, and now the bishop on e6 is attacked — once it falls the whole position caves in."
+   "spoken": "You recapture on d5, and now the bishop on e6 is attacked — once it falls the whole position caves in."
   },
   {
    "ply": 20,
@@ -186,7 +186,7 @@
    "line": [
     "dxe6"
    ],
-   "spoken": "We take the bishop, our pawn landing on e6."
+   "spoken": "You take the bishop, your pawn landing on e6."
   },
   {
    "ply": 22,
@@ -204,7 +204,7 @@
    "line": [
     "Rxe4"
    ],
-   "spoken": "We simply take it with the rook."
+   "spoken": "You simply take it with the rook."
   },
   {
    "ply": 24,
@@ -240,7 +240,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": "We drop the knight into g6, heading straight for the rook."
+   "spoken": "You drop the knight into g6, heading straight for the rook."
   },
   {
    "ply": 29,

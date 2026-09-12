@@ -24,7 +24,7 @@
       "line": [
         "exd5"
       ],
-      "spoken": "We take on d5."
+      "spoken": "You take on d5."
     },
     {
       "ply": 4,
@@ -42,7 +42,7 @@
       "line": [
         "Nc3"
       ],
-      "spoken": "The knight to c3 — d4 is far less common but also good; everybody plays the knight to c3, so that's what we do."
+      "spoken": "The knight to c3 — d4 is far less common but also good; everybody plays the knight to c3, so that's what you do."
     },
     {
       "ply": 6,
@@ -98,7 +98,7 @@
         "e5",
         "O-O"
       ],
-      "spoken": "e5, and we castle — just the normal developing moves, d3, nothing much to say; once development is complete I'll show the main plan."
+      "spoken": "e5, and you castle — just the normal developing moves, d3, nothing much to say; once development is complete I'll show the main plan."
     },
     {
       "ply": 14,
@@ -107,7 +107,7 @@
       "line": [
         "Bb4"
       ],
-      "spoken": "The bishop to b4 isn't great — usually people play e6; I'm less familiar with e5, which could let us play d4 and challenge the centre. The bishop to b4 walks right into a move we'd have played anyway."
+      "spoken": "The bishop to b4 isn't great — usually people play e6; I'm less familiar with e5, which could let you play d4 and challenge the centre. The bishop to b4 walks right into a move you'd have played anyway."
     },
     {
       "ply": 15,
@@ -125,7 +125,7 @@
       "line": [
         "Bxc3"
       ],
-      "spoken": "— but he takes anyway. Neither the b-pawn nor the d-pawn recapture is worth ruining our pawn structure —"
+      "spoken": "— but he takes anyway. Neither the b-pawn nor the d-pawn recapture is worth ruining your pawn structure —"
     },
     {
       "ply": 17,
@@ -134,7 +134,7 @@
       "line": [
         "Nxc3"
       ],
-      "spoken": "— we take with the knight. Now, what are we preparing with a3? Ask it that way and you should see the plan —"
+      "spoken": "— you take with the knight. Now, what are you preparing with a3? Ask it that way and you should see the plan —"
     },
     {
       "ply": 18,
@@ -152,7 +152,7 @@
       "line": [
         "Qe1"
       ],
-      "spoken": "We don't want f3, and definitely not the bishop to f3 — we want the queen to e1, and later chase the bishop away with h3."
+      "spoken": "You don't want f3, and definitely not the bishop to f3 — you want the queen to e1, and later chase the bishop away with h3."
     },
     {
       "ply": 20,
@@ -161,7 +161,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "If Black castles, are we in a huge rush to play b4? No — knowing your plan doesn't mean carrying it out immediately; it's fine to complete development first and carry out the plan when you're ready."
+      "spoken": "If Black castles, are you in a huge rush to play b4? No — knowing your plan doesn't mean carrying it out immediately; it's fine to complete development first and carry out the plan when you're ready."
     },
     {
       "ply": 21,
@@ -170,7 +170,7 @@
       "line": [
         "d3"
       ],
-      "spoken": "You could play b4, but I like the more patient d3; don't reveal your hand too soon, especially when there's no way to stop b4 — c5 would be horrendous and does our work for us. Maybe we'll want the bishop to g5 first, for a kingside attack."
+      "spoken": "You could play b4, but I like the more patient d3; don't reveal your hand too soon, especially when there's no way to stop b4 — c5 would be horrendous and does your work for you. Maybe you'll want the bishop to g5 first, for a kingside attack."
     },
     {
       "ply": 22,
@@ -188,7 +188,7 @@
       "line": [
         "b4"
       ],
-      "spoken": "That defeats part of the purpose of b4, which is that it's a move with tempo. So now we play b4, which also opens a very attractive developing square on b2 for the bishop — a double fianchetto — pressuring the e5-pawn. The knight on c3 will eventually move; don't hesitate to put a piece on a square another of your pieces covers."
+      "spoken": "That defeats part of the purpose of b4, which is that it's a move with tempo. So now you play b4, which also opens a very attractive developing square on b2 for the bishop — a double fianchetto — pressuring the e5-pawn. The knight on c3 will eventually move; don't hesitate to put a piece on a square another of your pieces covers."
     },
     {
       "ply": 24,
@@ -197,7 +197,7 @@
       "line": [
         "Qa6"
       ],
-      "spoken": "The knight will go to e4, or maybe stay; the bishop has a lot of potential energy. The queen to a6 is very strange — trying to prevent b5, but this queen goes offside, and we reinforce b5 with a later a4."
+      "spoken": "The knight will go to e4, or maybe stay; the bishop has a lot of potential energy. The queen to a6 is very strange — trying to prevent b5, but this queen goes offside, and you reinforce b5 with a later a4."
     },
     {
       "ply": 25,
@@ -206,7 +206,7 @@
       "line": [
         "h3"
       ],
-      "spoken": "Why not kick the bishop with h3? Fine, but the bishop isn't truly bothering me on g4; I'll throw it in to force a decision, though I wouldn't in a classical game, since it lets the bishop reposition. When Black's bishop lands on f5, watch for e4 later — we have a queen on e1 and an x-ray — though e4 isn't immediately possible, with four defenders against three attackers."
+      "spoken": "Why not kick the bishop with h3? Fine, but the bishop isn't truly bothering me on g4; I'll throw it in to force a decision, though I wouldn't in a classical game, since it lets the bishop reposition. When Black's bishop lands on f5, watch for e4 later — you have a queen on e1 and an x-ray — though e4 isn't immediately possible, with four defenders against three attackers."
     },
     {
       "ply": 26,
@@ -252,7 +252,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "How should we capture the pawn? Taking with the pawn and then f4 and e5 is one very powerful approach, but I like the knight takes e4, which is probably worse than the d-pawn recapture —",
+      "spoken": "How should you capture the pawn? Taking with the pawn and then f4 and e5 is one very powerful approach, but I like the knight takes e4, which is probably worse than the d-pawn recapture —",
       "reanchor": true
     },
     {
@@ -262,7 +262,7 @@
       "line": [
         "Nxe4"
       ],
-      "spoken": "— but I want to emphasize an idea. Do we take automatically with a pawn? Does the bishop takes e4 lose the bishop to f5? No, it does not —",
+      "spoken": "— but I want to emphasize an idea. Do you take automatically with a pawn? Does the bishop takes e4 lose the bishop to f5? No, it does not —",
       "reanchor": true
     },
     {

@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We play e5 for once — we haven't gone for it much this speedrun, even though it's what most people play."
+   "spoken": "You play e5 for once — you haven't gone for it much this speedrun, even though it's what most people play."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3, hitting our pawn."
+   "spoken": "White develops the knight to f3, hitting your pawn."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "We defend with a knight to c6."
+   "spoken": "You defend with a knight to c6."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "We head for the main line with a6, questioning the bishop."
+   "spoken": "You head for the main line with a6, questioning the bishop."
   },
   {
    "ply": 7,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "And we develop the knight to f6, hitting e4."
+   "spoken": "And you develop the knight to f6, hitting e4."
   },
   {
    "ply": 9,
@@ -104,7 +104,7 @@
    "t": 80.5,
    "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 6",
    "line": [],
-   "spoken": "At various points in the Ruy, White can capture on c6 and grab e5 — pointless while our e4 is hanging.",
+   "spoken": "At various points in the Ruy, White can capture on c6 and grab e5 — pointless while your e4 is hanging.",
    "reanchor": true
   },
   {
@@ -124,7 +124,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "You might think it's time for d6, but first we throw in the very useful b5 — grabbing queenside space and forcing the bishop back."
+   "spoken": "You might think it's time for d6, but first you throw in the very useful b5 — grabbing queenside space and forcing the bishop back."
   },
   {
    "ply": 13,
@@ -133,7 +133,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "White retreats to b3. Now e5 is no longer hanging, so d6 isn't forced — the main move d6 just opens the bishop, but we can also play the Marshall Gambit."
+   "spoken": "White retreats to b3. Now e5 is no longer hanging, so d6 isn't forced — the main move d6 just opens the bishop, but you can also play the Marshall Gambit."
   },
   {
    "ply": 14,
@@ -142,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We castle, going for the Marshall — not moving the d-pawn, hoping to play d5 in one fell swoop. If White plays c3, we can choose the Marshall with d5 or transpose back to the main line with d6."
+   "spoken": "You castle, going for the Marshall — not moving the d-pawn, hoping to play d5 in one fell swoop. If White plays c3, you can choose the Marshall with d5 or transpose back to the main line with d6."
   },
   {
    "ply": 15,
@@ -160,7 +160,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "So we play the Marshall Gambit — d5, sacrificing a pawn for a raging initiative."
+   "spoken": "So you play the Marshall Gambit — d5, sacrificing a pawn for a raging initiative."
   },
   {
    "ply": 17,
@@ -179,7 +179,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "We recapture with the knight on d5.",
+   "spoken": "You recapture with the knight on d5.",
    "reanchor": true
   },
   {
@@ -189,7 +189,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "White grabs on e5 — the gambit is that we've sacrificed it.",
+   "spoken": "White grabs on e5 — the gambit is that you've sacrificed it.",
    "reanchor": true
   },
   {
@@ -199,7 +199,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We take on e5, and White recaptures with the rook.",
+   "spoken": "You take on e5, and White recaptures with the rook.",
    "reanchor": true
   },
   {
@@ -209,7 +209,7 @@
    "line": [
     "Rxe5"
    ],
-   "spoken": "Our knight on d5 is hanging, so we have to deal with that threat.",
+   "spoken": "Your knight on d5 is hanging, so you have to deal with that threat.",
    "reanchor": true
   },
   {
@@ -228,7 +228,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White plays d4. Now we need to chase the rook off e5 — it's in our way — while aiming our pieces at White's king.",
+   "spoken": "White plays d4. Now you need to chase the rook off e5 — it's in your way — while aiming your pieces at White's king.",
    "reanchor": true
   },
   {
@@ -238,7 +238,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "So a bishop to d6, chasing the rook knowing that once it moves, our pieces are trained on the white king."
+   "spoken": "So a bishop to d6, chasing the rook knowing that once it moves, your pieces are trained on the white king."
   },
   {
    "ply": 26,
@@ -248,7 +248,7 @@
     "Re1",
     "Qh4"
    ],
-   "spoken": "The rook retreats, and we bring the queen into the attack with a queen to h4.",
+   "spoken": "The rook retreats, and you bring the queen into the attack with a queen to h4.",
    "reanchor": true
   },
   {
@@ -259,7 +259,7 @@
     "g3",
     "Qh3"
    ],
-   "spoken": "White plays g3, and the queen sinks into h3. This is all theory — I'm rusty on it, and White looks out of book too. Our compensation is clear: a development lead and Swiss-cheese light squares around White's king. If his bishop could reach g2, Black would have nothing — but it can't, so those weak light squares are a lasting problem. The immediate threat is a bishop to g4, hitting the queen.",
+   "spoken": "White plays g3, and the queen sinks into h3. This is all theory — I'm rusty on it, and White looks out of book too. Your compensation is clear: a development lead and Swiss-cheese light squares around White's king. If his bishop could reach g2, Black would have nothing — but it can't, so those weak light squares are a lasting problem. The immediate threat is a bishop to g4, hitting the queen.",
    "reanchor": true
   },
   {
@@ -305,7 +305,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "Sacrificing the bishop on g3 is often low-risk, because we have a perpetual check in our pocket. If you spot a sacrifice that at least guarantees a draw, the risk collapses — you can spend the rest of your time hunting for the win, since a draw beats a loss.",
+   "spoken": "Sacrificing the bishop on g3 is often low-risk, because you have a perpetual check in your pocket. If you spot a sacrifice that at least guarantees a draw, the risk collapses — you can spend the rest of your time hunting for the win, since a draw beats a loss.",
    "reanchor": true
   },
   {
@@ -315,7 +315,7 @@
    "line": [
     "Bxg3"
    ],
-   "spoken": "So a bishop capture on g3. If White grabs the light-squared bishop instead he gets mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe we have more.",
+   "spoken": "So a bishop capture on g3. If White grabs the light-squared bishop instead he gets mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe you have more.",
    "reanchor": true
   },
   {
@@ -335,7 +335,7 @@
    "line": [
     "Bxe1"
    ],
-   "spoken": "A bishop capture on e1 — the rook just hangs! We take it, go up the exchange, and the attack rolls on. Black is winning.",
+   "spoken": "A bishop capture on e1 — the rook just hangs! You take it, go up the exchange, and the attack rolls on. Black is winning.",
    "reanchor": true
   },
   {
@@ -355,7 +355,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": "We could retreat the bishop to h4, but that's plain — a rook to e8 does more, defending the bishop and bringing the rook toward e4 to hit g4, potentially crushing."
+   "spoken": "You could retreat the bishop to h4, but that's plain — a rook to e8 does more, defending the bishop and bringing the rook toward e4 to hit g4, potentially crushing."
   },
   {
    "ply": 37,
@@ -374,7 +374,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "We recapture on d5. The only reason I put the a-rook on e8 was a possible f5 to open the file — otherwise it doesn't much matter.",
+   "spoken": "You recapture on d5. The only reason I put the a-rook on e8 was a possible f5 to open the file — otherwise it doesn't much matter.",
    "reanchor": true
   },
   {
@@ -394,7 +394,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "So let's play f5, trying to open the f-file. If White answers g5, we get a passed f-pawn that can later push to f4 and accelerate the attack."
+   "spoken": "So let's play f5, trying to open the f-file. If White answers g5, you get a passed f-pawn that can later push to f4 and accelerate the attack."
   },
   {
    "ply": 41,
@@ -413,7 +413,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": "White intercepts with a bishop to h4, so our bishop is attacked and must move — but that's no issue; if we open the file, the game ends fast.",
+   "spoken": "White intercepts with a bishop to h4, so your bishop is attacked and must move — but that's no issue; if you open the file, the game ends fast.",
    "reanchor": true
   },
   {
@@ -433,7 +433,7 @@
    "line": [
     "Rxf5"
    ],
-   "spoken": "We recapture, and the f-file is ours with a million threats — a rook to f2 hitting the queen and threatening mate on g2. Its only drawback is that White can give up material to survive a little longer, so a rook to f8 doubling might finish faster. But if you see a move that wins the queen and you know how to convert, just do it — don't rule out a win because it takes a few extra moves.",
+   "spoken": "You recapture, and the f-file is yours with a million threats — a rook to f2 hitting the queen and threatening mate on g2. Its only drawback is that White can give up material to survive a little longer, so a rook to f8 doubling might finish faster. But if you see a move that wins the queen and you know how to convert, just do it — don't rule out a win because it takes a few extra moves.",
    "reanchor": true
   },
   {
@@ -465,7 +465,7 @@
    "line": [
     "Rf8+"
    ],
-   "spoken": "We throw in a rook check on f8 to reposition the rook onto the open file.",
+   "spoken": "You throw in a rook check on f8 to reposition the rook onto the open file.",
    "reanchor": true
   },
   {
@@ -485,7 +485,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "We want to stop White from blocking a check with a piece on g5, so we push the h-pawn to take that square under control — White is totally paralyzed — and then lift a rook to g5 to force the king out.",
+   "spoken": "You want to stop White from blocking a check with a piece on g5, so you push the h-pawn to take that square under control — White is totally paralyzed — and then lift a rook to g5 to force the king out.",
    "reanchor": true
   },
   {
@@ -524,7 +524,7 @@
     "b5",
     "Bb3"
    ],
-   "spoken": "We won't dwell on the opening — this isn't an opening course. At the very top, people don't enter the Marshall much anymore; players like Wesley, Duda and Giri prefer the Anti-Marshall.",
+   "spoken": "You won't dwell on the opening — this isn't an opening course. At the very top, people don't enter the Marshall much anymore; players like Wesley, Duda and Giri prefer the Anti-Marshall.",
    "reanchor": true
   },
   {
@@ -677,7 +677,7 @@
    "t": 940.5,
    "fen": "r1bq1rk1/2p1bppp/p1n2n2/1p1P4/4p3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 0 10",
    "line": [],
-   "spoken": "Everybody up to the 1940s played a knight to f6 after the rook capture, rerouting the knight via g4 — nowadays that's not good. The move c6 was first played only in 1939 by Conel Hugh O'Donel Alexander, who also helped decrypt German communications in the war — the Imitation Game connection. After c6, d4, a bishop to d6, a rook to e1, a queen to h4, g3, a queen to h3, there are two main tries for White: a bishop to e3 and a rook to e4. A knight to d2 is just bad — in our game it's essentially a fatal mistake because of the bishop to g4. Black overwhelms White in the center and on the kingside; if a knight to f3, then a nasty pin with a queen to h5 and a rook to e8 leaves White in ruins. After f3 and the bishop to g3, if White had captured, the winning move is a knight to f4, threatening mate on g2; if he gives up the rook, a bishop capture on f3 and we're winning on material and attack. The engine says White's only try is a rook to e2 giving up the exchange, but after the bishop capture on c2 and a queen to e2, Black is much better. So the Marshall was absolutely not refuted — Marshall just didn't play accurately because the theory was undeveloped. Black is doing great in the Marshall today.",
+   "spoken": "Everybody up to the 1940s played a knight to f6 after the rook capture, rerouting the knight via g4 — nowadays that's not good. The move c6 was first played only in 1939 by Conel Hugh O'Donel Alexander, who also helped decrypt German communications in the war — the Imitation Game connection. After c6, d4, a bishop to d6, a rook to e1, a queen to h4, g3, a queen to h3, there are two main tries for White: a bishop to e3 and a rook to e4. A knight to d2 is just bad — in your game it's essentially a fatal mistake because of the bishop to g4. Black overwhelms White in the center and on the kingside; if a knight to f3, then a nasty pin with a queen to h5 and a rook to e8 leaves White in ruins. After f3 and the bishop to g3, if White had captured, the winning move is a knight to f4, threatening mate on g2; if he gives up the rook, a bishop capture on f3 and you're winning on material and attack. The engine says White's only try is a rook to e2 giving up the exchange, but after the bishop capture on c2 and a queen to e2, Black is much better. So the Marshall was absolutely not refuted — Marshall just didn't play accurately because the theory was undeveloped. Black is doing great in the Marshall today.",
    "reanchor": true
   },
   {

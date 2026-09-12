@@ -16,7 +16,7 @@
     "Nc6",
     "Nf3"
    ],
-   "spoken": "e4, the knight to c6 — the Nimzowitsch Defense; the Alekhine would be the knight to f6. We play the knight to f3."
+   "spoken": "e4, the knight to c6 — the Nimzowitsch Defense; the Alekhine would be the knight to f6. You play the knight to f3."
   },
   {
    "ply": 6,
@@ -147,7 +147,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "We go c3 — solid, definitely solid. c3 makes sense to everybody, right?"
+   "spoken": "You go c3 — solid, definitely solid. c3 makes sense to everybody, right?"
   },
   {
    "ply": 8,
@@ -177,7 +177,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": "Our opening development was very straightforward. The bishop to g5 — again, the bishop to f4 walks essentially right into"
+   "spoken": "Your opening development was very straightforward. The bishop to g5 — again, the bishop to f4 walks essentially right into"
   },
   {
    "ply": 15,
@@ -197,7 +197,7 @@
     "Bc8",
     "Bc1"
    ],
-   "spoken": "there comes e5 with tempo. We don't want to invite that with tempo, so we play the bishop to g5"
+   "spoken": "there comes e5 with tempo. You don't want to invite that with tempo, so you play the bishop to g5"
   },
   {
    "ply": 13,
@@ -214,7 +214,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "we're discouraging e5, because that would open up a pin."
+   "spoken": "you're discouraging e5, because that would open up a pin."
   },
   {
    "ply": 13,
@@ -266,7 +266,7 @@
    "t": 1762.5,
    "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8",
    "line": [],
-   "spoken": "So this is a price we're willing to pay. Castling queenside can be",
+   "spoken": "So this is a price you're willing to pay. Castling queenside can be",
    "reanchor": true
   },
   {

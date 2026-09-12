@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Chess } from 'chess.js';
+import { rewritePerspective } from '../../scripts/corpus-sweep/perspective.mjs';
 
 // ── BOARD ACCURACY FOR HAND-REWRITTEN CORPUS LINES ──────────────────────────
 // David 2026-09-12: "rewrite what you can" — then, immediately: "but you need to
@@ -41,7 +42,13 @@ function beatFor(o: Override): { fen: string; spoken: string } {
   const json = JSON.parse(readFileSync(join(CORPUS, `${o.id}.json`), 'utf8')) as {
     moves: { fen: string; spoken?: string }[];
   };
-  const hits = json.moves.filter((m) => m.spoken === o.text);
+  // The corpus is migrated to "you/your" AFTER the overrides are applied
+  // (trim → overrides → perspective → build), so an override written with
+  // "we/our" no longer matches the shipped text verbatim. Locate it through the
+  // same migration rather than loosening the match — the board checks below
+  // still run against whatever the corpus actually ships.
+  const wanted = rewritePerspective(o.text ?? '');
+  const hits = json.moves.filter((m) => m.spoken === o.text || m.spoken === wanted);
   expect(hits.length, `${o.id}: rewrite should appear exactly once in the corpus`).toBe(1);
   return { fen: hits[0].fen, spoken: hits[0].spoken ?? '' };
 }
@@ -60,9 +67,15 @@ describe('hand-rewritten corpus lines are true on the board they are spoken over
       //     The piece and its square must be ADJACENT — no other piece noun in
       //     between — or "the queens off and the bishop on g4" reads as a claim
       //     about the queen.
+      // A piece named as ABSENT is a claim about an empty square, and an empty
+      // square is what makes it true: "White's d4 tries to punish the MISSING
+      // knight on c6" is correct precisely because c6 has no knight. Without
+      // this the checker reads absence as presence and fails a true sentence.
+      const ABSENT = /\b(missing|absent|no|without (?:a|the|its)|lack of|departed|vanished|traded)\s+$/i;
       const onSquare =
         /\b(knight|bishop|rook|queen|king|pawn)\b(?:(?!\b(?:knights?|bishops?|rooks?|queens?|kings?|pawns?)\b)[^.;—]){0,20}?\bon ([a-h][1-8])\b/gi;
       for (const m of spoken.matchAll(onSquare)) {
+        if (ABSENT.test(spoken.slice(Math.max(0, m.index - 24), m.index))) continue;
         const piece = board.get(m[2] as Parameters<Chess['get']>[0]);
         expect(piece?.type, `"${m[1]} on ${m[2]}" is not what stands there`).toBe(
           PIECE[m[1].toLowerCase()],

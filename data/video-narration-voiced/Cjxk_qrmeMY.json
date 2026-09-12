@@ -15,7 +15,7 @@
         "d4",
         "Nf6"
       ],
-      "spoken": "White plays d4, and we develop the knight to f6, keeping our options open."
+      "spoken": "White plays d4, and you develop the knight to f6, keeping your options open."
     },
     {
       "ply": 4,
@@ -25,7 +25,7 @@
         "c4",
         "g6"
       ],
-      "spoken": "White grabs space with c4, and we fianchetto with g6 — heading for a Grünfeld this time rather than the King's Indian."
+      "spoken": "White grabs space with c4, and you fianchetto with g6 — heading for a Grünfeld this time rather than the King's Indian."
     },
     {
       "ply": 5,
@@ -43,7 +43,7 @@
       "line": [
         "d5"
       ],
-      "spoken": "We strike in the centre with d5 — the Grünfeld, universally regarded as one of the best objective defenses to d4. Nobody has found an advantage against it anywhere; the downside is just the out-of-this-world amount of theory to play it professionally."
+      "spoken": "You strike in the centre with d5 — the Grünfeld, universally regarded as one of the best objective defenses to d4. Nobody has found an advantage against it anywhere; the downside is just the out-of-this-world amount of theory to play it professionally."
     },
     {
       "ply": 7,
@@ -52,7 +52,7 @@
       "line": [
         "Bf4"
       ],
-      "spoken": "The bishop to f4 is a legitimate try. The Grünfeld's idea is simple: we grab central control by combining the King's Indian fianchetto with a proactive d5, instead of letting White build with e4."
+      "spoken": "The bishop to f4 is a legitimate try. The Grünfeld's idea is simple: you grab central control by combining the King's Indian fianchetto with a proactive d5, instead of letting White build with e4."
     },
     {
       "ply": 8,
@@ -61,7 +61,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "We don't take the c4 pawn — that's not the point. The point is rapid development so we can attack White's centre; it's a hypermodern opening. So the bishop goes to g7, and c6 is unnecessary."
+      "spoken": "You don't take the c4 pawn — that's not the point. The point is rapid development so you can attack White's centre; it's a hypermodern opening. So the bishop goes to g7, and c6 is unnecessary."
     },
     {
       "ply": 9,
@@ -70,7 +70,7 @@
       "line": [
         "cxd5"
       ],
-      "spoken": "We're perfectly happy to recapture on d5 with the knight. White takes, capturing on d5."
+      "spoken": "You're perfectly happy to recapture on d5 with the knight. White takes, capturing on d5."
     },
     {
       "ply": 10,
@@ -118,7 +118,7 @@
       "line": [
         "c5"
       ],
-      "spoken": "It's c5 — the knight to c6 can be met by e3, forming a pawn chain, but c5 is very strong: if White simply takes with d takes c5, we play the knight takes c3, and after trading queens he loses a piece, because he can't recapture the bishop takes c3 with check between the king and rook. If instead e3, after the trade he gets an isolated queen pawn and we blockade the square in front of it — phenomenal for Black."
+      "spoken": "It's c5 — the knight to c6 can be met by e3, forming a pawn chain, but c5 is very strong: if White simply takes with d takes c5, you play the knight takes c3, and after trading queens he loses a piece, because he can't recapture the bishop takes c3 with check between the king and rook. If instead e3, after the trade he gets an isolated queen pawn and you blockade the square in front of it — phenomenal for Black."
     },
     {
       "ply": 13,
@@ -127,7 +127,7 @@
       "line": [
         "dxc5"
       ],
-      "spoken": "He should probably take the knight first, then the pawn — but he takes the pawn, capturing on c5. Unless I miscalculated, we're in great shape."
+      "spoken": "He should probably take the knight first, then the pawn — but he takes the pawn, capturing on c5. Unless I miscalculated, you're in great shape."
     },
     {
       "ply": 14,
@@ -146,7 +146,7 @@
         "Qxd8+",
         "Kxd8"
       ],
-      "spoken": "He miscalculated something — maybe he thought he had a check — but the queen takes d8 with check, and we simply recapture on d8. A nice introduction to the Grünfeld."
+      "spoken": "He miscalculated something — maybe he thought he had a check — but the queen takes d8 with check, and you simply recapture on d8. A nice introduction to the Grünfeld."
     },
     {
       "ply": 17,
@@ -164,7 +164,7 @@
       "line": [
         "Bxc3+"
       ],
-      "spoken": "We take, capturing on c3 with check — and at this point it's already over."
+      "spoken": "You take, capturing on c3 with check — and at this point it's already over."
     },
     {
       "ply": 20,
@@ -192,7 +192,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "Let's develop our knight to c6."
+      "spoken": "Let's develop your knight to c6."
     },
     {
       "ply": 23,
@@ -201,7 +201,7 @@
       "line": [
         "e4"
       ],
-      "spoken": "e4. We just need to develop and get the king out of the centre. Where should this bishop go? Even when we're not up a rook, there's a good square for it in the Grünfeld."
+      "spoken": "e4. You just need to develop and get the king out of the centre. Where should this bishop go? Even when you're not up a rook, there's a good square for it in the Grünfeld."
     },
     {
       "ply": 24,
@@ -219,7 +219,7 @@
       "line": [
         "Bb5"
       ],
-      "spoken": "The bishop to b5. We could take the a2 pawn, but up a rook we'd rather prioritise piece play, as you often do in the Grünfeld."
+      "spoken": "The bishop to b5. You could take the a2 pawn, but up a rook you'd rather prioritise piece play, as you often do in the Grünfeld."
     },
     {
       "ply": 26,
@@ -228,7 +228,7 @@
       "line": [
         "Rc8"
       ],
-      "spoken": "Many good moves here. One approach is to target the c5 pawn, realizing it's a conduit toward his king — so we begin with the rook to c8. The knight to d4 is stronger once it's prepared this way."
+      "spoken": "Many good moves here. One approach is to target the c5 pawn, realizing it's a conduit toward his king — so you begin with the rook to c8. The knight to d4 is stronger once it's prepared this way."
     },
     {
       "ply": 27,
@@ -237,7 +237,7 @@
       "line": [
         "Nf3"
       ],
-      "spoken": "The knight to f3 — and we're going for a mating attack, with the knight to d4 next."
+      "spoken": "The knight to f3 — and you're going for a mating attack, with the knight to d4 next."
     },
     {
       "ply": 28,
@@ -246,7 +246,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "The knight to d4 — the bishop can come back to capture it, and note White has the rook to d1 if he wants, but then we take on c5 just in time."
+      "spoken": "The knight to d4 — the bishop can come back to capture it, and note White has the rook to d1 if he wants, but then you take on c5 just in time."
     },
     {
       "ply": 29,
@@ -264,7 +264,7 @@
       "line": [
         "Bxd4"
       ],
-      "spoken": "We recapture, capturing on d4, eliminating that bishop."
+      "spoken": "You recapture, capturing on d4, eliminating that bishop."
     },
     {
       "ply": 31,
@@ -309,7 +309,7 @@
       "line": [
         "Kc2"
       ],
-      "spoken": "The king to c2. Now, we can't save this bishop, which is kind of funny. If we play the rook to b4 to defend it, what does White do?"
+      "spoken": "The king to c2. Now, you can't save this bishop, which is kind of funny. If you play the rook to b4 to defend it, what does White do?"
     },
     {
       "ply": 37,
@@ -319,7 +319,7 @@
         "Rb4",
         "a3"
       ],
-      "spoken": "We play the rook to b4, and White tries a3 — but the rook to a4 wins, or the bishop to b3 with check. The move is the bishop to e5, since the bishop-b5 attacks both the rook and the bishop; probably f6, walk the king over to f7, swing the rook to c8, and win easily."
+      "spoken": "You play the rook to b4, and White tries a3 — but the rook to a4 wins, or the bishop to b3 with check. The move is the bishop to e5, since the bishop-b5 attacks both the rook and the bishop; probably f6, walk the king over to f7, swing the rook to c8, and win easily."
     },
     {
       "ply": 35,
@@ -481,7 +481,7 @@
         "Bf4",
         "Nxd5"
       ],
-      "spoken": "There are probably nine or ten reputable counters to the Grünfeld, which is mind-boggling. But our opponent takes.",
+      "spoken": "There are probably nine or ten reputable counters to the Grünfeld, which is mind-boggling. But your opponent takes.",
       "reanchor": true
     },
     {
@@ -577,7 +577,7 @@
       "t": 1916.5,
       "fen": "rnb1k2r/ppp1ppbp/6p1/3q4/3P1B2/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
       "line": [],
-      "spoken": "MVL and Svidler are probably the top two super-grandmaster Grünfeld specialists. So our opponent played the bishop to g3, we played c5.",
+      "spoken": "MVL and Svidler are probably the top two super-grandmaster Grünfeld specialists. So your opponent played the bishop to g3, you played c5.",
       "reanchor": true
     },
     {

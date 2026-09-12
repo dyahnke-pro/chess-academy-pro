@@ -77,10 +77,10 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "And remember, the knight to f6 is perfectly safe here — no need to fear e5, which we'd meet with d5 or a knight jump to g4 hitting the pawn.",
+   "spoken": "And remember, the knight to f6 is perfectly safe here — no need to fear e5, which you'd meet with d5 or a knight jump to g4 hitting the pawn.",
    "kind": "main",
    "teaches": [
-    "...Nf6 is safe; ...e5 doesn’t scare us"
+    "...Nf6 is safe; ...e5 doesn’t scare you"
    ]
   },
   {
@@ -100,7 +100,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "And we reap the reward of not committing d6 early — d5 in one fell swoop, grabbing the center and solving all our opening problems at once.",
+   "spoken": "And you reap the reward of not committing d6 early — d5 in one fell swoop, grabbing the center and solving all your opening problems at once.",
    "kind": "main",
    "teaches": [
     "...d5 in one move solves the opening"
@@ -113,7 +113,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "White pins with the bishop to b5. We have a pleasant choice — force a slightly better endgame with dxe4, or simply keep developing.",
+   "spoken": "White pins with the bishop to b5. You have a pleasant choice — force a slightly better endgame with dxe4, or simply keep developing.",
    "kind": "main"
   },
   {
@@ -123,7 +123,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "We choose the fun game — the bishop to e7. No need to force the trade with a6; White may well capture on c6 anyway.",
+   "spoken": "You choose the fun game — the bishop to e7. No need to force the trade with a6; White may well capture on c6 anyway.",
    "kind": "main"
   },
   {
@@ -143,7 +143,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "We defend the knight the strategic way — the queen to c7, not the bishop to d7 which would surrender the bishop pair; and if a bishop comes to f4, we unpin by shifting our bishop to d6. One habit to keep with a hanging queen: before moving it, look for an intermezzo like dxe4, and always check the opponent can't reply with a queen-check desperado.",
+   "spoken": "You defend the knight the strategic way — the queen to c7, not the bishop to d7 which would surrender the bishop pair; and if a bishop comes to f4, you unpin by shifting your bishop to d6. One habit to keep with a hanging queen: before moving it, look for an intermezzo like dxe4, and always check the opponent can't reply with a queen-check desperado.",
    "kind": "main",
    "teaches": [
     "Qc7 keeps the bishop pair",

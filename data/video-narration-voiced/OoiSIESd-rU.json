@@ -34,7 +34,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Against the bishop on c4, we blunt it and build with e6.",
+   "spoken": "Against the bishop on c4, you blunt it and build with e6.",
    "kind": "main",
    "teaches": [
     "e6 against the c4 bishop"
@@ -87,7 +87,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We answer with d5, staking out the center and taking the sting out of that pin in one move.",
+   "spoken": "You answer with d5, staking out the center and taking the sting out of that pin in one move.",
    "kind": "main",
    "teaches": [
     "d5 hits the pin and grabs the center"
@@ -127,7 +127,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "To deal with the pin we don't rush the bishop to g4 — we develop the light bishop by fianchetto and castle, keeping it safe from being harassed.",
+   "spoken": "To deal with the pin you don't rush the bishop to g4 — you develop the light bishop by fianchetto and castle, keeping it safe from being harassed.",
    "kind": "plan",
    "teaches": [
     "fianchetto rather than expose the bishop"
@@ -151,7 +151,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": "The bishop to e6 relieves the pressure on d5 and gets our last piece into play.",
+   "spoken": "The bishop to e6 relieves the pressure on d5 and gets your last piece into play.",
    "kind": "main"
   },
   {
@@ -252,7 +252,7 @@
     "dxc4",
     "Ba2"
    ],
-   "spoken": "White's bishop ends up buried on a2, staring at our own pawn chain with nothing to do — he's effectively playing a piece down.",
+   "spoken": "White's bishop ends up buried on a2, staring at your own pawn chain with nothing to do — he's effectively playing a piece down.",
    "kind": "main",
    "teaches": [
     "a buried bishop = a piece down"
@@ -265,7 +265,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "We press the advantage with the queen to c7 and a rook to d8, keeping his pieces smothered.",
+   "spoken": "You press the advantage with the queen to c7 and a rook to d8, keeping his pieces smothered.",
    "kind": "main"
   },
   {
@@ -334,7 +334,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "In the main line, when White trades on c6 and we recapture with the b-pawn, the b-file opens for us — a long-term resource.",
+   "spoken": "In the main line, when White trades on c6 and you recapture with the b-pawn, the b-file opens for you — a long-term resource.",
    "teaches": [
     "...bxc6 opens the b-file"
    ],

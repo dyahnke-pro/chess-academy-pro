@@ -26,7 +26,7 @@
     "Nc6",
     "Nf3"
    ],
-   "spoken": "He develops, and the knight to f3 attacks our pawn on e5."
+   "spoken": "He develops, and the knight to f3 attacks your pawn on e5."
   },
   {
    "ply": 6,
@@ -35,7 +35,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "Rather than defend it, we push the pawn forward to e4."
+   "spoken": "Rather than defend it, you push the pawn forward to e4."
   },
   {
    "ply": 7,
@@ -44,7 +44,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "This is a well-known, fully legitimate theoretical line — and a very complex one. White's hypermodern idea is to tempt our pawns forward now so he can attack them later."
+   "spoken": "This is a well-known, fully legitimate theoretical line — and a very complex one. White's hypermodern idea is to tempt your pawns forward now so he can attack them later."
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "We don't capture the knight — instead the queen comes to f6 to chase it. It may look like we're pinning ourselves..."
+   "spoken": "You don't capture the knight — instead the queen comes to f6 to chase it. It may look like you're pinning yourself..."
   },
   {
    "ply": 9,
@@ -71,7 +71,7 @@
    "line": [
     "Qg6"
    ],
-   "spoken": "And we reposition the queen to g6."
+   "spoken": "And you reposition the queen to g6."
   },
   {
    "ply": 11,
@@ -107,7 +107,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "What have we not done yet? Completed development, and fully occupied the centre with pawns. So d5, building a big central pawn chain."
+   "spoken": "What have you not done yet? Completed development, and fully occupied the centre with pawns. So d5, building a big central pawn chain."
   },
   {
    "ply": 15,
@@ -116,7 +116,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "He fianchettoes with the bishop to g2. Now all that remains is to bring our pieces out."
+   "spoken": "He fianchettoes with the bishop to g2. Now all that remains is to bring your pieces out."
   },
   {
    "ply": 16,
@@ -125,7 +125,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "We develop the bishop to e6 first, reinforcing the centre."
+   "spoken": "You develop the bishop to e6 first, reinforcing the centre."
   },
   {
    "ply": 17,
@@ -134,7 +134,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles. This is the instructive moment: we could keep developing or castle long — but notice White has completely neglected his queenside development."
+   "spoken": "He castles. This is the instructive moment: you could keep developing or castle long — but notice White has completely neglected his queenside development."
   },
   {
    "ply": 18,
@@ -143,7 +143,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Even though we're not fully developed either, we're ready to start attacking — so h5, aiming to pry open the h-file."
+   "spoken": "Even though you're not fully developed either, you're ready to start attacking — so h5, aiming to pry open the h-file."
   },
   {
    "ply": 19,
@@ -161,7 +161,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Now we castle long, completing our development — and mark that pawn on g3; sacrifices are in the air."
+   "spoken": "Now you castle long, completing your development — and mark that pawn on g3; sacrifices are in the air."
   },
   {
    "ply": 21,
@@ -188,7 +188,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "He plays the king to h2, walking right into it. We're eyeing a knight check on g4 — though he can capture the knight."
+   "spoken": "He plays the king to h2, walking right into it. You're eyeing a knight check on g4 — though he can capture the knight."
   },
   {
    "ply": 24,
@@ -197,7 +197,7 @@
    "line": [
     "Ng4+"
    ],
-   "spoken": "But that's the point: the knight checks on g4, and after he takes, we recapture with the pawn, ripping open the h-file — exactly what we wanted."
+   "spoken": "But that's the point: the knight checks on g4, and after he takes, you recapture with the pawn, ripping open the h-file — exactly what you wanted."
   },
   {
    "ply": 26,
@@ -207,7 +207,7 @@
     "Nxg4",
     "hxg4"
    ],
-   "spoken": "Now we threaten to grab his pawn, and he's forced to drop the king back toward g1."
+   "spoken": "Now you threaten to grab his pawn, and he's forced to drop the king back toward g1."
   },
   {
    "ply": 27,
@@ -216,7 +216,7 @@
    "line": [
     "Ba3"
    ],
-   "spoken": "That retreat was his only serious move; instead he lets us capture on h4 with check."
+   "spoken": "That retreat was his only serious move; instead he lets you capture on h4 with check."
   },
   {
    "ply": 28,
@@ -243,7 +243,7 @@
    "line": [
     "Rxh4+"
    ],
-   "spoken": "Now we take on h4 with check, and head for a beautiful little finale."
+   "spoken": "Now you take on h4 with check, and head for a beautiful little finale."
   },
   {
    "ply": 31,
@@ -288,7 +288,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "We're threatening mate; his only way to stave it off is the rook to e1."
+   "spoken": "You're threatening mate; his only way to stave it off is the rook to e1."
   },
   {
    "ply": 36,
@@ -297,7 +297,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "But after g3, all of our pieces come pouring in."
+   "spoken": "But after g3, all of your pieces come pouring in."
   },
   {
    "ply": 37,
@@ -324,7 +324,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "If he tries e3, we can simply take the rook, winning the material back..."
+   "spoken": "If he tries e3, you can simply take the rook, winning the material back..."
   },
   {
    "ply": 40,

@@ -84,7 +84,7 @@
    "line": [
     "Na6"
    ],
-   "spoken": "After Na6 the knight on a6 is stuck out of play, and Black can't kick the b5-knight with a pawn — so we calmly develop the other side.",
+   "spoken": "After Na6 the knight on a6 is stuck out of play, and Black can't kick the b5-knight with a pawn — so you calmly develop the other side.",
    "kind": "main",
    "teaches": "Provoke a defender to an offside square, then develop while it languishes."
   },
@@ -211,7 +211,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "The clever b6 pawn sacrifice forces his knight offside to a8, buying us time — his knight now has to trek all the way back into the game.",
+   "spoken": "The clever b6 pawn sacrifice forces his knight offside to a8, buying you time — his knight now has to trek all the way back into the game.",
    "kind": "main",
    "teaches": "Sacrifice a pawn to shove an enemy piece to the corner; the tempi it loses are your compensation."
   },
@@ -241,7 +241,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "While his knight is exiled, we complete development and start piling onto the king, combined with pressure down the a-file.",
+   "spoken": "While his knight is exiled, you complete development and start piling onto the king, combined with pressure down the a-file.",
    "kind": "plan",
    "plans": "Finish developing, then attack the king and the a-file together."
   },
@@ -280,7 +280,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "g4 launches the attack — we have to use this window before Black reroutes his pieces to the queenside.",
+   "spoken": "g4 launches the attack — you have to use this window before Black reroutes his pieces to the queenside.",
    "kind": "main",
    "teaches": "When you're ahead in development, strike before the opponent untangles."
   },

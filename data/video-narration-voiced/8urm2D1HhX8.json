@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "We're Black — e5."
+   "spoken": "You're Black — e5."
   },
   {
    "ply": 3,
@@ -87,7 +87,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "We want the bishop to c5, aiming at the f2-pawn — this creates a very wide range of tricks."
+   "spoken": "You want the bishop to c5, aiming at the f2-pawn — this creates a very wide range of tricks."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The bishop to e3 by our opponent takes a little of the sting out — it's accurate, though as I remember not the best move."
+   "spoken": "The bishop to e3 by your opponent takes a little of the sting out — it's accurate, though as I remember not the best move."
   },
   {
    "ply": 12,
@@ -114,7 +114,7 @@
    "line": [
     "fxe3"
    ],
-   "spoken": "— look how nasty: he creates all these weaknesses on his kingside, which we exploit through targeted play and rapid development. The key word is rapid — if he plays the bishop to e2 and castles, the flame of the Stafford initiative is extinguished."
+   "spoken": "— look how nasty: he creates all these weaknesses on his kingside, which you exploit through targeted play and rapid development. The key word is rapid — if he plays the bishop to e2 and castles, the flame of the Stafford initiative is extinguished."
   },
   {
    "ply": 14,
@@ -123,7 +123,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The knight takes e4 doesn't work here — we play the knight to g4, going straight after the e3-pawn; we don't let him consolidate. How can we pile up the pressure on it?"
+   "spoken": "The knight takes e4 doesn't work here — you play the knight to g4, going straight after the e3-pawn; you don't let him consolidate. How can you pile up the pressure on it?"
   },
   {
    "ply": 16,
@@ -142,7 +142,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": "— it forces the king up. Now, as many of you spot, if the knight were gone from g4 we'd have a pin —"
+   "spoken": "— it forces the king up. Now, as many of you spot, if the knight were gone from g4 you'd have a pin —"
   },
   {
    "ply": 18,
@@ -168,7 +168,7 @@
    "line": [
     "Nxh2"
    ],
-   "spoken": "— but this move is too cool to pass up, so we'll indulge; I actually think castling might have been even stronger.",
+   "spoken": "— but this move is too cool to pass up, so you'll indulge; I actually think castling might have been even stronger.",
    "reanchor": true
   },
   {
@@ -196,7 +196,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "Should we take the queen, or is there a slightly more accurate move?"
+   "spoken": "Should you take the queen, or is there a slightly more accurate move?"
   },
   {
    "ply": 22,
@@ -250,7 +250,7 @@
    "line": [
     "gxf3"
    ],
-   "spoken": "The g-pawn recaptures. A clear application of 'strike while the iron is hot' — after winning material, your opponent often blunders more, less attentive to tactics. What tactical detail do we watch here? This rook — tactical observation 101."
+   "spoken": "The g-pawn recaptures. A clear application of 'strike while the iron is hot' — after winning material, your opponent often blunders more, less attentive to tactics. What tactical detail do you watch here? This rook — tactical observation 101."
   },
   {
    "ply": 26,
@@ -268,7 +268,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "— a fork: not only do we win b2, we're going to take all the other queenside pawns."
+   "spoken": "— a fork: not only do you win b2, you're going to take all the other queenside pawns."
   },
   {
    "ply": 28,
@@ -277,7 +277,7 @@
    "line": [
     "Qxb2"
    ],
-   "spoken": "Give me that, and that, and that — our king is perfectly safe, the game is over."
+   "spoken": "Give me that, and that, and that — your king is perfectly safe, the game is over."
   },
   {
    "ply": 29,
@@ -286,7 +286,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "Assuming the rook to b1, and wanting to win efficiently, which pawn do we take? We can take c2 then a2 — could a case be made for a2 immediately? Yes, both create a passed pawn, but there's a subtle reason: if we play the queen takes c2, he walks the king to g3, opening his rook's defence and the queen x-ray."
+   "spoken": "Assuming the rook to b1, and wanting to win efficiently, which pawn do you take? You can take c2 then a2 — could a case be made for a2 immediately? Yes, both create a passed pawn, but there's a subtle reason: if you play the queen takes c2, he walks the king to g3, opening his rook's defence and the queen x-ray."
   },
   {
    "ply": 30,
@@ -295,7 +295,7 @@
    "line": [
     "Qxa2"
    ],
-   "spoken": "So when we push the a-pawn, he might get his rook into the defence. Largely irrelevant — we're totally winning — but keeping the c-pawn alive walls his rook off from its defence."
+   "spoken": "So when you push the a-pawn, he might get his rook into the defence. Largely irrelevant — you're totally winning — but keeping the c-pawn alive walls his rook off from its defence."
   },
   {
    "ply": 31,
@@ -313,7 +313,7 @@
    "line": [
     "a5"
    ],
-   "spoken": "— should we defend the a-pawn? No — push it. a4, a3 —"
+   "spoken": "— should you defend the a-pawn? No — push it. a4, a3 —"
   },
   {
    "ply": 33,
@@ -367,7 +367,7 @@
    "line": [
     "Qa1"
    ],
-   "spoken": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and we'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless he plays the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end."
+   "spoken": "Be very careful — look at the whole board. Can he prevent the a-pawn queening? The rook to h1, and you'd only be up the exchange, starting over. When in doubt, go for the simplest continuation — the queen to a1 followed by a2 ends it, unless he plays the bishop to f5. Don't pre-move a2; stay vigilant of counterplay to the very end."
   },
   {
    "ply": 39,
@@ -483,7 +483,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "— and then we play the very simple and very nasty move c3.",
+   "spoken": "— and then you play the very simple and very nasty move c3.",
    "reanchor": true
   },
   {
@@ -511,7 +511,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "If they go the knight to g4, we simply take it —",
+   "spoken": "If they go the knight to g4, you simply take it —",
    "reanchor": true
   },
   {
@@ -531,7 +531,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "— the queen to h4, and I think we go something like the queen to f3 and g3.",
+   "spoken": "— the queen to h4, and I think you go something like the queen to f3 and g3.",
    "reanchor": true
   },
   {

@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": "White opens d4, and we play the King's Indian move-order, the knight to f6."
+   "spoken": "White opens d4, and you play the King's Indian move-order, the knight to f6."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "We fianchetto with g6, heading for a King's Indian — my real opening repertoire at this stage."
+   "spoken": "You fianchetto with g6, heading for a King's Indian — my real opening repertoire at this stage."
   },
   {
    "ply": 5,
@@ -51,7 +51,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "We play d5 here to stop White from move-ordering us into a Pirc, which we're not playing in this speedrun."
+   "spoken": "You play d5 here to stop White from move-ordering you into a Pirc, which you're not playing in this speedrun."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The bishop to f4, and we've transposed into the Jobava London — the old name is the Barry system, specifically the setup against g6."
+   "spoken": "The bishop to f4, and you've transposed into the Jobava London — the old name is the Barry system, specifically the setup against g6."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "We complete our fianchetto, the bishop to g7 — all standard fare."
+   "spoken": "You complete your fianchetto, the bishop to g7 — all standard fare."
   },
   {
    "ply": 9,
@@ -87,7 +87,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We complete kingside development with castling."
+   "spoken": "You complete kingside development with castling."
   },
   {
    "ply": 11,
@@ -114,7 +114,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "And White does play h4, combining two ideas: the bishop to e2 lulled us into a false sense of security, and now suddenly the h4 attack."
+   "spoken": "And White does play h4, combining two ideas: the bishop to e2 lulled you into a false sense of security, and now suddenly the h4 attack."
   },
   {
    "ply": 14,
@@ -141,7 +141,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "We have to get this knight off the board ASAP, so the knight to d7 is standard — otherwise White plays g4 and crashes through, and we could get mated. If White plays g4, my plan is the knight takes e5, d takes e5, the knight takes g4 — in time to eliminate the g-pawn while keeping the kingside intact."
+   "spoken": "You have to get this knight off the board ASAP, so the knight to d7 is standard — otherwise White plays g4 and crashes through, and you could get mated. If White plays g4, my plan is the knight takes e5, d takes e5, the knight takes g4 — in time to eliminate the g-pawn while keeping the kingside intact."
   },
   {
    "ply": 17,
@@ -150,7 +150,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "Jobava players like to keep the tension with a move like the queen to d2. Once White plays h4, it's clear that in almost every case White castles queenside — so we're heading for an opposite-side-castling position with attacks on both wings. f3 is a very good move, preparing g4; our opponent is showing fantastic knowledge of the system's ideas."
+   "spoken": "Jobava players like to keep the tension with a move like the queen to d2. Once White plays h4, it's clear that in almost every case White castles queenside — so you're heading for an opposite-side-castling position with attacks on both wings. f3 is a very good move, preparing g4; your opponent is showing fantastic knowledge of the system's ideas."
   },
   {
    "ply": 18,
@@ -159,7 +159,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "We could play the queen to b6 hitting b2, or the queen to a5, but I'll implement a creative idea — we take on e5, capturing on e5."
+   "spoken": "You could play the queen to b6 hitting b2, or the queen to a5, but I'll implement a creative idea — you take on e5, capturing on e5."
   },
   {
    "ply": 19,
@@ -177,7 +177,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "I'll play the unconventional bishop to h6 — within the framework of attacking the weak e3 pawn it makes sense. Players find it awkward to move the bishop off its fianchetto spot, but here it works, especially because if White pushes e4, he'll struggle to castle queenside, since our bishop will be holding c1. So e4 is way over-ambitious."
+   "spoken": "I'll play the unconventional bishop to h6 — within the framework of attacking the weak e3 pawn it makes sense. Players find it awkward to move the bishop off its fianchetto spot, but here it works, especially because if White pushes e4, he'll struggle to castle queenside, since your bishop will be holding c1. So e4 is way over-ambitious."
   },
   {
    "ply": 21,
@@ -186,7 +186,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "If White plays the queen to d2 — the standard defence of the pawn — then our bishop exerts nasty long-term pressure on this diagonal. Now we prepare for White most likely castling queenside next."
+   "spoken": "If White plays the queen to d2 — the standard defence of the pawn — then your bishop exerts nasty long-term pressure on this diagonal. Now you prepare for White most likely castling queenside next."
   },
   {
    "ply": 22,
@@ -195,7 +195,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "If White castles queenside, we'd want a queenside attack — so preemptively, b5 might discourage it. It's like a lead-off in baseball, stepping off the base ready for the pitch. If White doesn't castle queenside, b5 costs nothing and grabs space; if White does, we've gained a tempo, our attack already started. And every tempo is crucial in opposite-side castling, since White will try to get g4 going."
+   "spoken": "If White castles queenside, you'd want a queenside attack — so preemptively, b5 might discourage it. It's like a lead-off in baseball, stepping off the base ready for the pitch. If White doesn't castle queenside, b5 costs nothing and grabs space; if White does, you've gained a tempo, your attack already started. And every tempo is crucial in opposite-side castling, since White will try to get g4 going."
   },
   {
    "ply": 23,
@@ -204,7 +204,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White takes their time with the bishop to d3, a nice move — I assume preparing to meet things with the knight to e2, a high-level idea. Our options: drop the knight back to d7 to trade off that annoying bishop; or something tactical like c5 for pandemonium; or b4, the knight to e2, then c5, staking a big central claim; or the knight to d7, the bishop to f4, the bishop to g7 to prepare e5."
+   "spoken": "White takes their time with the bishop to d3, a nice move — I assume preparing to meet things with the knight to e2, a high-level idea. Your options: drop the knight back to d7 to trade off that annoying bishop; or something tactical like c5 for pandemonium; or b4, the knight to e2, then c5, staking a big central claim; or the knight to d7, the bishop to f4, the bishop to g7 to prepare e5."
   },
   {
    "ply": 24,
@@ -240,7 +240,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "Why start with b4? First, to expand on the queenside; second, we were threatening c4, which would trap the bishop. White plays c3."
+   "spoken": "Why start with b4? First, to expand on the queenside; second, you were threatening c4, which would trap the bishop. White plays c3."
   },
   {
    "ply": 28,
@@ -249,7 +249,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "White's treating this like a London. We take, capturing on c3, to fully discourage White from castling queenside."
+   "spoken": "White's treating this like a London. You take, capturing on c3, to fully discourage White from castling queenside."
   },
   {
    "ply": 29,
@@ -258,7 +258,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "White recaptures, capturing on c3. We've opened the queenside and prevented queenside castling, which would now be madness with the b-file open — very easy to reach White's king."
+   "spoken": "White recaptures, capturing on c3. You've opened the queenside and prevented queenside castling, which would now be madness with the b-file open — very easy to reach White's king."
   },
   {
    "ply": 30,
@@ -276,7 +276,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "White can castle kingside, but then the h4 pawn becomes a major liability; queenside castling is easy to punish; and if White stays in the centre and we open it, we get to the king."
+   "spoken": "White can castle kingside, but then the h4 pawn becomes a major liability; queenside castling is easy to punish; and if White stays in the centre and you open it, you get to the king."
   },
   {
    "ply": 32,
@@ -285,7 +285,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "So we drop the bishop back to its fianchetto square, g7, preparing e5 — which would blast open the centre and open the bishop's diagonal, with very positive consequences."
+   "spoken": "So you drop the bishop back to its fianchetto square, g7, preparing e5 — which would blast open the centre and open the bishop's diagonal, with very positive consequences."
   },
   {
    "ply": 33,
@@ -294,7 +294,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "The rook to d1 — clearly our opponent sees the idea and discourages e5. Do we push anyway? If e5, d takes e5, knight takes e5, there's the weird bishop-e4, and our d5 pawn crumbles a bit — so maybe prepare one more move."
+   "spoken": "The rook to d1 — clearly your opponent sees the idea and discourages e5. Do you push anyway? If e5, d takes e5, knight takes e5, there's the weird bishop-e4, and your d5 pawn crumbles a bit — so maybe prepare one more move."
   },
   {
    "ply": 34,
@@ -303,7 +303,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "We play the bishop to b7 — which seems silly in isolation, biting on granite, but after e5 and the trade it makes sure the d5 pawn isn't a soft target for White's heavy pieces on the d-file."
+   "spoken": "You play the bishop to b7 — which seems silly in isolation, biting on granite, but after e5 and the trade it makes sure the d5 pawn isn't a soft target for White's heavy pieces on the d-file."
   },
   {
    "ply": 35,
@@ -312,7 +312,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "g4 — now things really heat up, and I'll likely go quiet as it gets tactical. After take, take on h5, we push e5, feeling good for Black."
+   "spoken": "g4 — now things really heat up, and I'll likely go quiet as it gets tactical. After take, take on h5, you push e5, feeling good for Black."
   },
   {
    "ply": 36,
@@ -321,7 +321,7 @@
    "line": [
     "hxg4"
    ],
-   "spoken": "We take, capturing on g4 — starting with e5 first would allow g takes h5, which feels scary and could get us mated, so this order first."
+   "spoken": "You take, capturing on g4 — starting with e5 first would allow g takes h5, which feels scary and could get you mated, so this order first."
   },
   {
    "ply": 37,
@@ -348,7 +348,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "The bishop to g3. Time's fine — four minutes, plenty. We force another decision."
+   "spoken": "The bishop to g3. Time's fine — four minutes, plenty. You force another decision."
   },
   {
    "ply": 40,
@@ -357,7 +357,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": "We could snap off a pawn, but I go with my gut — the rook to e8, keeping the tension and preparing e takes d4, putting the rook in an x-ray with the king."
+   "spoken": "You could snap off a pawn, but I go with my gut — the rook to e8, keeping the tension and preparing e takes d4, putting the rook in an x-ray with the king."
   },
   {
    "ply": 41,
@@ -411,7 +411,7 @@
    "line": [
     "Re7"
    ],
-   "spoken": "We could take on d4, but why not calmly bring the rook up to e7, also solidifying the very valuable f7 pawn?"
+   "spoken": "You could take on d4, but why not calmly bring the rook up to e7, also solidifying the very valuable f7 pawn?"
   },
   {
    "ply": 47,
@@ -420,7 +420,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "White takes the pawn, capturing on c5. Now we'd love to win it back."
+   "spoken": "White takes the pawn, capturing on c5. Now you'd love to win it back."
   },
   {
    "ply": 48,
@@ -429,7 +429,7 @@
    "line": [
     "Qc8"
    ],
-   "spoken": "We can win it back with the queen — the queen to c8 makes most sense, with more tactics behind it: if White pushes c6, after the trade White can't take on d5, because we'd pick up the e3 pawn with a fork. That's why I didn't play the rook to c8."
+   "spoken": "You can win it back with the queen — the queen to c8 makes most sense, with more tactics behind it: if White pushes c6, after the trade White can't take on d5, because you'd pick up the e3 pawn with a fork. That's why I didn't play the rook to c8."
   },
   {
    "ply": 52,
@@ -441,7 +441,7 @@
     "Bxc6",
     "Bxc6"
    ],
-   "spoken": "White pushes c6, we take with the queen, White takes with the bishop, and we recapture, capturing on c6 with the bishop — and once we collect the c5 pawn we'll have an intact centre, excellent coordination with both bishops fianchettoed, and White's pawns terribly weak."
+   "spoken": "White pushes c6, you take with the queen, White takes with the bishop, and you recapture, capturing on c6 with the bishop — and once you collect the c5 pawn you'll have an intact centre, excellent coordination with both bishops fianchettoed, and White's pawns terribly weak."
   },
   {
    "ply": 53,
@@ -450,7 +450,7 @@
    "line": [
     "Bf2"
    ],
-   "spoken": "White plays c6 and the bishop to f2 — but we're very close to winning; he wants to take on d5."
+   "spoken": "White plays c6 and the bishop to f2 — but you're very close to winning; he wants to take on d5."
   },
   {
    "ply": 54,
@@ -459,7 +459,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "Let's solidify — the rook to d8, protecting d5 and bringing the rook into play. I expect e4, then we double on the d-file and blast through the centre. Black is borderline winning, strategically, given how many weaknesses White has."
+   "spoken": "Let's solidify — the rook to d8, protecting d5 and bringing the rook into play. I expect e4, then you double on the d-file and blast through the centre. Black is borderline winning, strategically, given how many weaknesses White has."
   },
   {
    "ply": 55,
@@ -468,7 +468,7 @@
    "line": [
     "Ng3"
    ],
-   "spoken": "The knight to g3. If I keep my clock under control, we're going to win."
+   "spoken": "The knight to g3. If I keep my clock under control, you're going to win."
   },
   {
    "ply": 56,
@@ -477,7 +477,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "e4 — not sure it's best, but it opens our bishop and creates strongholds for our knight, which can circle back to e5."
+   "spoken": "e4 — not sure it's best, but it opens your bishop and creates strongholds for your knight, which can circle back to e5."
   },
   {
    "ply": 57,
@@ -523,7 +523,7 @@
    "line": [
     "Nxh4+"
    ],
-   "spoken": "We capture, taking on h4 with check — not just for the free pawn, but because now the g5 pawn is a huge weakness."
+   "spoken": "You capture, taking on h4 with check — not just for the free pawn, but because now the g5 pawn is a huge weakness."
   },
   {
    "ply": 63,
@@ -541,7 +541,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We don't need the complications — we simply go back to f3."
+   "spoken": "You don't need the complications — you simply go back to f3."
   },
   {
    "ply": 65,
@@ -561,7 +561,7 @@
     "Kg2",
     "Be6"
    ],
-   "spoken": "We check with the bishop to d7 — the g5 pawn isn't going anywhere, so we go for the kill — the king goes to g2, and the bishop repositions to e6, heading for g4 to set up a discovered attack on White's queen."
+   "spoken": "You check with the bishop to d7 — the g5 pawn isn't going anywhere, so you go for the kill — the king goes to g2, and the bishop repositions to e6, heading for g4 to set up a discovered attack on White's queen."
   },
   {
    "ply": 70,
@@ -571,7 +571,7 @@
     "Kf1",
     "Bg4"
    ],
-   "spoken": "The king to f1, and the bishop to g4 — with our other bishop coming to e5 to press the knight, and if needed our king can escape through the centre."
+   "spoken": "The king to f1, and the bishop to g4 — with your other bishop coming to e5 to press the knight, and if needed your king can escape through the centre."
   },
   {
    "ply": 72,
@@ -581,7 +581,7 @@
     "Rg1",
     "Be5"
    ],
-   "spoken": "The bishop to e5 — White's resistance is ending, because after the rook to g1 there's a check on h3 that wins. We're not taking the rook and blundering our queen."
+   "spoken": "The bishop to e5 — White's resistance is ending, because after the rook to g1 there's a check on h3 that wins. You're not taking the rook and blundering your queen."
   },
   {
    "ply": 74,
@@ -591,7 +591,7 @@
     "Rg2",
     "Bh3"
    ],
-   "spoken": "We give the check, the bishop to h3 — let's be accurate; I see at least two ways to win."
+   "spoken": "You give the check, the bishop to h3 — let's be accurate; I see at least two ways to win."
   },
   {
    "ply": 78,

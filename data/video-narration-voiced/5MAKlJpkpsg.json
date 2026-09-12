@@ -15,7 +15,7 @@
         "e4",
         "c5"
       ],
-      "spoken": "We take Black and answer the king's pawn with the Sicilian."
+      "spoken": "You take Black and answer the king's pawn with the Sicilian."
     },
     {
       "ply": 3,
@@ -33,7 +33,7 @@
       "line": [
         "Nc6"
       ],
-      "spoken": "We develop the knight to c6."
+      "spoken": "You develop the knight to c6."
     },
     {
       "ply": 5,
@@ -51,7 +51,7 @@
       "line": [
         "g6"
       ],
-      "spoken": "We reply g6 — the natural choice if you play the accelerated dragon against the Open Sicilian."
+      "spoken": "You reply g6 — the natural choice if you play the accelerated dragon against the Open Sicilian."
     },
     {
       "ply": 7,
@@ -69,7 +69,7 @@
       "line": [
         "Bg7"
       ],
-      "spoken": "We complete the fianchetto with the bishop to g7."
+      "spoken": "You complete the fianchetto with the bishop to g7."
     },
     {
       "ply": 9,
@@ -87,7 +87,7 @@
       "line": [
         "e5"
       ],
-      "spoken": "We play the surprising ...e5 — it blocks the bishop and leaves holes, yet it's the heart of Black's Rossolimo setup, since it clamps d4 and hands the knight the e7-square."
+      "spoken": "You play the surprising ...e5 — it blocks the bishop and leaves holes, yet it's the heart of Black's Rossolimo setup, since it clamps d4 and hands the knight the e7-square."
     },
     {
       "ply": 11,
@@ -105,7 +105,7 @@
       "line": [
         "Nge7"
       ],
-      "spoken": "We link the knights with ...Nge7 and prepare ...d6 — our pawns on c5 and e5 combining to lock down d4 so White can never play the break."
+      "spoken": "You link the knights with ...Nge7 and prepare ...d6 — your pawns on c5 and e5 combining to lock down d4 so White can never play the break."
     },
     {
       "ply": 13,
@@ -123,7 +123,7 @@
       "line": [
         "d6"
       ],
-      "spoken": "We play d6, deliberately holding off on castling — the closed centre means our king is safe in the middle for now."
+      "spoken": "You play d6, deliberately holding off on castling — the closed centre means your king is safe in the middle for now."
     },
     {
       "ply": 15,
@@ -141,7 +141,7 @@
       "line": [
         "f6"
       ],
-      "spoken": "We kick it with f6 — normally unthinkable, but with the centre closed it's perfectly safe."
+      "spoken": "You kick it with f6 — normally unthinkable, but with the centre closed it's perfectly safe."
     },
     {
       "ply": 17,
@@ -159,7 +159,7 @@
       "line": [
         "Be6"
       ],
-      "spoken": "We develop the bishop to e6, covering the a2–g8 diagonal that ...f6 just weakened."
+      "spoken": "You develop the bishop to e6, covering the a2–g8 diagonal that ...f6 just weakened."
     },
     {
       "ply": 19,
@@ -177,7 +177,7 @@
       "line": [
         "O-O"
       ],
-      "spoken": "We castle kingside at last."
+      "spoken": "You castle kingside at last."
     },
     {
       "ply": 21,
@@ -195,7 +195,7 @@
       "line": [
         "Bg4"
       ],
-      "spoken": "We play the bishop to g4 — the plan is to take on f3, wreck White's kingside, then land our own knight on d4 with a fork, the queen eyeing h3."
+      "spoken": "You play the bishop to g4 — the plan is to take on f3, wreck White's kingside, then land your own knight on d4 with a fork, the queen eyeing h3."
     },
     {
       "ply": 23,
@@ -213,7 +213,7 @@
       "line": [
         "Kxg7"
       ],
-      "spoken": "We recapture with the king."
+      "spoken": "You recapture with the king."
     },
     {
       "ply": 25,
@@ -231,7 +231,7 @@
       "line": [
         "Nd4"
       ],
-      "spoken": "We plant the knight on d4."
+      "spoken": "You plant the knight on d4."
     },
     {
       "ply": 27,
@@ -249,7 +249,7 @@
       "line": [
         "cxd4"
       ],
-      "spoken": "We recapture with the pawn, hitting the rook on e3."
+      "spoken": "You recapture with the pawn, hitting the rook on e3."
     },
     {
       "ply": 29,
@@ -267,7 +267,7 @@
       "line": [
         "dxc3"
       ],
-      "spoken": "We capture on c3, removing the knight — and the pawn simultaneously attacks the queen."
+      "spoken": "You capture on c3, removing the knight — and the pawn simultaneously attacks the queen."
     },
     {
       "ply": 31,
@@ -276,7 +276,7 @@
       "line": [
         "Qxc3"
       ],
-      "spoken": "White recaptures on c3; we're a clean piece up for a pawn."
+      "spoken": "White recaptures on c3; you're a clean piece up for a pawn."
     }
   ]
 }

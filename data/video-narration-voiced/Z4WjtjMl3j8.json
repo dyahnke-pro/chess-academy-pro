@@ -188,7 +188,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Now the strike: the knight on e4 is a type-two piece, and the queen already x-rays it through the pawn — so push the pawn to e5, occupying the centre while keeping the knight supported. If White replies f3, we take on d4 with devastating consequences to his loose king.",
+   "spoken": "Now the strike: the knight on e4 is a type-two piece, and the queen already x-rays it through the pawn — so push the pawn to e5, occupying the centre while keeping the knight supported. If White replies f3, you take on d4 with devastating consequences to his loose king.",
    "kind": "main",
    "teaches": "When your queen x-rays your own advanced knight through a pawn, advance that pawn to gain the centre with tempo."
   },
@@ -354,7 +354,7 @@
     "Rf1",
     "Bxd4"
    ],
-   "spoken": "Even Kf1 doesn't help — the rook x-rays its own king, so we play e5 as if nothing happened; if White takes, he's mated in the centre of the board.",
+   "spoken": "Even Kf1 doesn't help — the rook x-rays its own king, so you play e5 as if nothing happened; if White takes, he's mated in the centre of the board.",
    "kind": "branch",
    "teaches": "A rook that x-rays its own king can leave a capture illegal in effect — exploit the pin.",
    "reanchor": true
@@ -413,7 +413,7 @@
    "t": 1413.5,
    "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
    "line": [],
-   "spoken": "One honest caveat: f5 does weaken e5, and you must always factor that in — here it's fine only because we have plenty of pieces, like Nd7, to contest that square.",
+   "spoken": "One honest caveat: f5 does weaken e5, and you must always factor that in — here it's fine only because you have plenty of pieces, like Nd7, to contest that square.",
    "kind": "main",
    "teaches": "Before playing f5, count the pieces guarding the e5 hole it creates.",
    "reanchor": true

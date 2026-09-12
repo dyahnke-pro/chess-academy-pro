@@ -27,7 +27,7 @@
         "Nc3",
         "c6"
       ],
-      "spoken": "We develop the knight to c3, and Black plays c6."
+      "spoken": "You develop the knight to c3, and Black plays c6."
     },
     {
       "ply": 7,
@@ -36,7 +36,7 @@
       "line": [
         "Be3"
       ],
-      "spoken": "After c6 we choose the bishop to e3."
+      "spoken": "After c6 you choose the bishop to e3."
     },
     {
       "ply": 9,
@@ -46,7 +46,7 @@
         "d5",
         "f3"
       ],
-      "spoken": "Black plays d5, and we build the pawn chain with f3."
+      "spoken": "Black plays d5, and you build the pawn chain with f3."
     },
     {
       "ply": 10,
@@ -65,7 +65,7 @@
         "fxe4",
         "e5"
       ],
-      "spoken": "We recapture, capturing on e4 with the f-pawn, and Black often counter-strikes in the centre with e5 — but after e5 Black is clearly worse."
+      "spoken": "You recapture, capturing on e4 with the f-pawn, and Black often counter-strikes in the centre with e5 — but after e5 Black is clearly worse."
     },
     {
       "ply": 13,
@@ -74,7 +74,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "We take on e5, capturing on e5, and generally Black trades queens here."
+      "spoken": "You take on e5, capturing on e5, and generally Black trades queens here."
     },
     {
       "ply": 14,
@@ -348,7 +348,7 @@
       "line": [
         "dxe5"
       ],
-      "spoken": "After the bishop to f4 Black should play e5, reaching a slightly better version of the endgame — but White's still better: take, take, the knight to d7, we play e6, f takes e6...",
+      "spoken": "After the bishop to f4 Black should play e5, reaching a slightly better version of the endgame — but White's still better: take, take, the knight to d7, you play e6, f takes e6...",
       "reanchor": true
     },
     {
@@ -577,7 +577,7 @@
         "Nc7+",
         "Kd8"
       ],
-      "spoken": "I played the knight to c7, and after the king to d8 we had total chaos — but White is winning on the spot with an incredible move.",
+      "spoken": "I played the knight to c7, and after the king to d8 you had total chaos — but White is winning on the spot with an incredible move.",
       "reanchor": true
     },
     {
@@ -765,7 +765,7 @@
       "t": 2769,
       "fen": "rnb1k1nr/pp1pppbp/1qp3p1/8/3PP3/2N1B3/PPPQ1PPP/R3KBNR b KQkq - 3 5",
       "line": [],
-      "spoken": "Unfortunately we are talking about a slightly different version here, with the d-pawn already advanced — improved for Black.",
+      "spoken": "Unfortunately you are talking about a slightly different version here, with the d-pawn already advanced — improved for Black.",
       "reanchor": true
     },
     {
@@ -907,7 +907,7 @@
         "Ng8",
         "Qd1"
       ],
-      "spoken": "So finally we get to our opponent's move.",
+      "spoken": "So finally you get to your opponent's move.",
       "reanchor": true
     },
     {
@@ -937,7 +937,7 @@
       "line": [
         "Bxe5"
       ],
-      "spoken": "So the bishop takes e5, and we played e takes d5, which is normal — the computer also likes the immediate bishop to d4.",
+      "spoken": "So the bishop takes e5, and you played e takes d5, which is normal — the computer also likes the immediate bishop to d4.",
       "reanchor": true
     },
     {
@@ -1045,7 +1045,7 @@
       "t": 2923,
       "fen": "rnbqk1nr/pp3p1p/2p3p1/3pb3/3BP3/2N2P2/PPP3PP/R2QKBNR b KQkq - 1 11",
       "line": [],
-      "spoken": "Then the game reached an isolated-queen-pawn middlegame — we develop, Black castles, the bishop to e6. The next real moment came after the knight to d4, when Black played the queen to d7 and, I feel, chose the wrong plan: castling queenside opens Black up to so many problems in the centre and on the queenside — at a titled level that might be close to a decisive mistake. What I'd fear as Black is the simple approach: trade off everything you can and castle kingside. Piece trades favour the side playing against the isolated pawn, yes, but here Black has bigger fish to fry — avoiding getting mated — and the blockading queen is not a good blockader; by trading you've lured the queen onto d4 where the knight to f5 or the knight to c6 hits it. If White plays h4, Black plays the knight to c6, and if the queen to d2, Black pushes d4 with serious counterplay. The engine still likes White with the knight to e4, since the queen to d5 runs into a fork and the bishop takes a2 is dubious because of the typical b3 — but Black stays playable. So after the queen to d7, the bishop to b5, long castling, and a move like the rook to e1 — I played the calm king to b1 to show how pleasant these positions are: no hurry, just improving moves, and the opponent collapses on his own. Then the key bishop to f4, trading off Black's strongest piece and leaving that terrible bishop on e6, essentially a big pawn. The opponent gave us too many free moves, letting every piece reach a perfect square — and when everything is placed perfectly, you must search for a tactic. On the hanging-pawn structure with pawns on c6 and d5, the textbook plan is the Rubinstein maneuver, named for Akiba Rubinstein: leave the perfect d4-knight alone, and route the other knight, the knight to a4 and the knight to c5, occupying the second blockading square to completely immobilise the chain — the same principle as blockading an isolated pawn on d4 or d5. In Rubinstein versus Salwe, White brought the knight to a4, piled up on c5 with the rook to c1 and the bishop, kept c5 under total control so c6 stayed weak forever, and eventually a tactic appeared with the rook takes c6 and the queen takes a7. In our game, contact on the d-file between the rooks was a source of tactics, especially with that rook left undefended, so the knight to e4 came into view; don't fixate on one pawn structure — you must be willing to change the opponent's structure to shift the target from one file to another. Then the knight to g5, the knight takes c6 winning the pawn, the bishop back to b3 hitting d5, the patient c3, and we pounced on g7 without tunnel-visioning the d5 pawn.",
+      "spoken": "Then the game reached an isolated-queen-pawn middlegame — you develop, Black castles, the bishop to e6. The next real moment came after the knight to d4, when Black played the queen to d7 and, I feel, chose the wrong plan: castling queenside opens Black up to so many problems in the centre and on the queenside — at a titled level that might be close to a decisive mistake. What I'd fear as Black is the simple approach: trade off everything you can and castle kingside. Piece trades favour the side playing against the isolated pawn, yes, but here Black has bigger fish to fry — avoiding getting mated — and the blockading queen is not a good blockader; by trading you've lured the queen onto d4 where the knight to f5 or the knight to c6 hits it. If White plays h4, Black plays the knight to c6, and if the queen to d2, Black pushes d4 with serious counterplay. The engine still likes White with the knight to e4, since the queen to d5 runs into a fork and the bishop takes a2 is dubious because of the typical b3 — but Black stays playable. So after the queen to d7, the bishop to b5, long castling, and a move like the rook to e1 — I played the calm king to b1 to show how pleasant these positions are: no hurry, just improving moves, and the opponent collapses on his own. Then the key bishop to f4, trading off Black's strongest piece and leaving that terrible bishop on e6, essentially a big pawn. The opponent gave you too many free moves, letting every piece reach a perfect square — and when everything is placed perfectly, you must search for a tactic. On the hanging-pawn structure with pawns on c6 and d5, the textbook plan is the Rubinstein maneuver, named for Akiba Rubinstein: leave the perfect d4-knight alone, and route the other knight, the knight to a4 and the knight to c5, occupying the second blockading square to completely immobilise the chain — the same principle as blockading an isolated pawn on d4 or d5. In Rubinstein versus Salwe, White brought the knight to a4, piled up on c5 with the rook to c1 and the bishop, kept c5 under total control so c6 stayed weak forever, and eventually a tactic appeared with the rook takes c6 and the queen takes a7. In your game, contact on the d-file between the rooks was a source of tactics, especially with that rook left undefended, so the knight to e4 came into view; don't fixate on one pawn structure — you must be willing to change the opponent's structure to shift the target from one file to another. Then the knight to g5, the knight takes c6 winning the pawn, the bishop back to b3 hitting d5, the patient c3, and you pounced on g7 without tunnel-visioning the d5 pawn.",
       "reanchor": true
     },
     {
@@ -1061,7 +1061,7 @@
       "t": 3473.5,
       "fen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/3PP3/2N1BP2/PPP3PP/R2QKBNR b KQkq - 4 9",
       "line": [],
-      "spoken": "So we had a summary of the theory after f3 — remember the queen to b6 is the best move, and still doesn't solve all of Black's problems.",
+      "spoken": "So you had a summary of the theory after f3 — remember the queen to b6 is the best move, and still doesn't solve all of Black's problems.",
       "reanchor": true
     },
     {
@@ -1082,7 +1082,7 @@
         "dxe5",
         "Bxe5"
       ],
-      "spoken": "Then we could have played the bishop to d4 in this position to immediately target Black's strongest piece — a sub-theme of the game.",
+      "spoken": "Then you could have played the bishop to d4 in this position to immediately target Black's strongest piece — a sub-theme of the game.",
       "reanchor": true
     },
     {
@@ -1130,7 +1130,7 @@
       "t": 3505.5,
       "fen": "rnbqk1nr/pp3p1p/6p1/3pb3/8/2N1BP2/PPP3PP/R2QKBNR w KQkq - 0 12",
       "line": [],
-      "spoken": "...neither of which we want.",
+      "spoken": "...neither of which you want.",
       "reanchor": true
     },
     {
@@ -1140,7 +1140,7 @@
       "line": [
         "Qd2"
       ],
-      "spoken": "...so we patiently played the queen to d2.",
+      "spoken": "...so you patiently played the queen to d2.",
       "reanchor": true
     },
     {
@@ -1151,7 +1151,7 @@
         "Ne7",
         "O-O-O"
       ],
-      "spoken": "We patiently develop the queenside, then patience bringing pieces to good squares because we have the time, then trading off the opponent's strongest piece with the rook to d1, then tactical awareness at the right moment — when everything's well placed you're likely to have a way to convert. That's what I did by bringing the knight to g5, winning the pawn, and the technical phase was very straightforward.",
+      "spoken": "You patiently develop the queenside, then patience bringing pieces to good squares because you have the time, then trading off the opponent's strongest piece with the rook to d1, then tactical awareness at the right moment — when everything's well placed you're likely to have a way to convert. That's what I did by bringing the knight to g5, winning the pawn, and the technical phase was very straightforward.",
       "reanchor": true
     }
   ]

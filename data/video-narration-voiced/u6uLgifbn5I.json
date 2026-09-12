@@ -24,7 +24,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "The opponent throws in an unusual bishop-to-a6 — a positional sacrifice, aiming either to wreck our structure or to drag our knight off the centre. Odd, but genuinely sensible.",
+   "spoken": "The opponent throws in an unusual bishop-to-a6 — a positional sacrifice, aiming either to wreck your structure or to drag your knight off the centre. Odd, but genuinely sensible.",
    "kind": "main",
    "teaches": [
     "a positional piece sacrifice"
@@ -46,7 +46,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "We recapture, but this will be hard to come back from — we've given up our light-squared bishop, the one that so often fuels a kingside attack, so attacking chances will be scarce.",
+   "spoken": "You recapture, but this will be hard to come back from — you've given up your light-squared bishop, the one that so often fuels a kingside attack, so attacking chances will be scarce.",
    "kind": "main",
    "teaches": [
     "losing the attacking bishop"
@@ -112,7 +112,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "Don't defend the e-pawn passively with a rook or d3 — play d4, right in the Ponziani spirit. The point: if he captures, we push on to e5, a common gambit motif; and a knight grab on e4 is harmless, met by taking on e5 or by d5.",
+   "spoken": "Don't defend the e-pawn passively with a rook or d3 — play d4, right in the Ponziani spirit. The point: if he captures, you push on to e5, a common gambit motif; and a knight grab on e4 is harmless, met by taking on e5 or by d5.",
    "kind": "main",
    "teaches": [
     "d4 and the e5 push"
@@ -125,7 +125,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "The bishop to d6 almost hands the piece back and hands us a big lead in development, because it blocks in his other bishop. The tactical idea is to trade twice on e5, then f4 to shove the bishop back, then e5 — though it doesn't quite win a piece because of a bishop check on c5 and a knight jump to e4. So keeping the tension with the bishop to g5 is the sober alternative.",
+   "spoken": "The bishop to d6 almost hands the piece back and hands you a big lead in development, because it blocks in his other bishop. The tactical idea is to trade twice on e5, then f4 to shove the bishop back, then e5 — though it doesn't quite win a piece because of a bishop check on c5 and a knight jump to e4. So keeping the tension with the bishop to g5 is the sober alternative.",
    "kind": "plan",
    "teaches": [
     "the f4 tactic and its flaw"
@@ -221,7 +221,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "In the main-line Ponziani, after c3, the knight to f6 and d4, if he captures we push e5 into tremendous complications — this is my own US Championship game.",
+   "spoken": "In the main-line Ponziani, after c3, the knight to f6 and d4, if he captures you push e5 into tremendous complications — this is my own US Championship game.",
    "kind": "review",
    "teaches": [
     "the Ponziani main line"
