@@ -456,7 +456,15 @@ async function main() {
   });
 
   // ── Final assertions across the full event stream ─────────────────
-  const allPrefetchEvents = captured.filter((e) => e.kind === 'master-play-prefetch');
+  // Read from `seenEvents` (accumulated per-scenario from the in-page Dexie log
+  // via attributeScenarioEvents — the no-network-race source), NOT `captured`
+  // (the page.on('request') POSTs to the prod stream). The prefetch events fire
+  // early + small and, with the stream opt-in/Upstash-degraded, don't reliably
+  // land in a captured POST even though the prefetch ran (scenario 1 proves the
+  // cache populated). The per-scenario checks already trust the Dexie source;
+  // the aggregate must too, or it false-fails a working watcher.
+  const prefetchSource = seenEvents.length > 0 ? seenEvents : captured;
+  const allPrefetchEvents = prefetchSource.filter((e) => e.kind === 'master-play-prefetch');
   report.scenarios.push(
     allPrefetchEvents.length > 0
       ? { name: 'assert.master-play-prefetch-fired-somewhere', ok: true, count: allPrefetchEvents.length }
