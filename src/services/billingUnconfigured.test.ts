@@ -64,7 +64,7 @@ describe('billing unconfigured on native', () => {
 
     const hit = captured.find((c) => c.name === EVENT);
     expect(hit, 'a native boot with no billing key must emit an event').toBeDefined();
-    expect(hit?.props?.native_platform).toBe('ios');
+    expect(hit?.props?.reported_platform).toBe('ios');
     // The bundle is the discriminator: the shipped builtin carries the key, an
     // OTA bundle does not. Without it the event says a device is broken but not
     // which population it belongs to.

@@ -473,19 +473,87 @@ export function isAnalyticsEnabled(): boolean {
   return enabled && !optedOut;
 }
 
+/**
+ * RESERVED SUPER-PROPERTY NAMES — a call-site prop may never use one.
+ * ------------------------------------------------------------------
+ * These keys are registered as posthog SUPER-PROPERTIES (device identity in
+ * `resolveDeviceIdentity`, platform in `resolvePlatformSuperProps`, the audit
+ * stamp at init). posthog-js merges call-site props OVER super-properties, so
+ * a local prop sharing one of these names SILENTLY OVERWRITES the device
+ * dimension on that event — and the event then vanishes from every analysis
+ * that filters on it.
+ *
+ * That is not hypothetical. `ImportPage` passed `platform` meaning
+ * "chess.com vs lichess", which clobbered `platform: 'native'` on all four
+ * import-funnel events. The LOCKED native-only user analysis
+ * (`properties.platform = 'native'`) therefore DELETED the entire import
+ * funnel from every report, and three separate sessions concluded from the
+ * empty result that manual import was uninstrumented. It was fully
+ * instrumented; the filter was eating it.
+ *
+ * A guard at the chokepoint, not a fix at the one call site: any colliding key
+ * is re-keyed to `local_<name>` so the data is kept while the device dimension
+ * survives. No future call site can reopen the class.
+ */
+export const RESERVED_SUPER_PROPS: ReadonlySet<string> = new Set([
+  // resolvePlatformSuperProps
+  'platform',
+  'is_native',
+  'is_standalone',
+  'native_platform',
+  // resolveDeviceIdentity
+  'device_id',
+  'device_id_source',
+  'is_internal',
+  'distribution',
+  'device_label',
+  // stamped at init for audit-run correlation
+  'audit_run_id',
+]);
+
+/** Re-key any reserved-name collision to `local_<name>`. Returns the original
+ *  object untouched when there is no collision (the overwhelming case). */
+export function sanitizeEventProps(
+  props?: Record<string, unknown>,
+): Record<string, unknown> | undefined {
+  if (!props) return props;
+  let collided = false;
+  for (const key of Object.keys(props)) {
+    if (RESERVED_SUPER_PROPS.has(key)) { collided = true; break; }
+  }
+  if (!collided) return props;
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (RESERVED_SUPER_PROPS.has(key)) {
+      out[`local_${key}`] = value;
+      if (import.meta.env?.DEV) {
+        console.warn(
+          `[analytics] event prop "${key}" collides with a super-property; sent as "local_${key}". Rename it at the call site.`,
+        );
+      }
+    } else {
+      out[key] = value;
+    }
+  }
+  return out;
+}
+
 /** Capture an explicit product event. Queues if posthog hasn't loaded
  *  yet (within a bounded buffer). No-op when disabled / opted out. */
 export function captureEvent(name: string, props?: Record<string, unknown>): void {
   try {
     if (optedOut) return;
+    // Sanitize BEFORE the queue branch so a replayed pre-init event is guarded
+    // too — the boot-time events are exactly the ones a device filter reads.
+    const safeProps = sanitizeEventProps(props);
     if (!client) {
       // Only queue when init is in flight (a key exists); otherwise drop.
       if (initStarted && resolveKey() && preInitQueue.length < PRE_INIT_QUEUE_LIMIT) {
-        preInitQueue.push({ name, props });
+        preInitQueue.push({ name, props: safeProps });
       }
       return;
     }
-    client.capture(name, props);
+    client.capture(name, safeProps);
   } catch {
     /* swallow — analytics must never break a feature path */
   }

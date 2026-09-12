@@ -6,6 +6,7 @@ import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2, Baby } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
+import { ReviewLastGameCard } from './ReviewLastGameCard';
 import { TableOfContents } from './TableOfContents';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
@@ -279,6 +280,11 @@ export function DashboardPage(): JSX.Element {
 
       {/* Live loop status — today's reps, routes into the Training Plan hub */}
       <TodayStatus />
+
+      {/* The import→review handoff. Analysis already ran on their games and
+          nobody was being shown it — see ReviewLastGameCard for the numbers.
+          Renders nothing until they have a game of their own; dismissible. */}
+      <ReviewLastGameCard />
 
       {/* "The Philosophy of A General" (our book) now lives in The Coaches
           Library (Coach › The Coaches Library), so its dashboard tile is gone. */}

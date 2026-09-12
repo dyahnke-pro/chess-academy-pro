@@ -120,11 +120,15 @@ export function ImportPage(): JSX.Element {
     // box from a typo'd username from a rate limit from an outage. These three
     // events make the drop diagnosable instead of merely visible.
     if (!username.trim()) {
-      captureEvent('import_blocked', { platform, reason: 'empty-username' });
+      captureEvent('import_blocked', { import_source: platform, reason: 'empty-username' });
       return;
     }
     captureEvent('import_started', {
-      platform,
+      // `import_source`, NOT `platform` — `platform` is a posthog
+      // super-property (native / pwa / web) and a local prop of that name
+      // overwrites it, which erased this whole funnel from every
+      // native-only analysis. See RESERVED_SUPER_PROPS in analytics.ts.
+      import_source: platform,
       // Whether we could prefill tells us if the user had to remember and type
       // their handle on another service — the likeliest place to lose them.
       username_prefilled: Boolean(
@@ -147,7 +151,7 @@ export function ImportPage(): JSX.Element {
         : await importChessComGames(username, handleProgress);
 
       setGameResult(count);
-      captureEvent('import_succeeded', { platform, game_count: count });
+      captureEvent('import_succeeded', { import_source: platform, game_count: count });
 
       // Import stats
       setProgressStatus('Fetching player stats...');
@@ -186,7 +190,7 @@ export function ImportPage(): JSX.Element {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Import failed');
-      captureEvent('import_failed', { platform, error_class: errorClass(err) });
+      captureEvent('import_failed', { import_source: platform, error_class: errorClass(err) });
     } finally {
       setImporting(false);
       setProgressStatus('');

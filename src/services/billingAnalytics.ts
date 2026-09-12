@@ -255,7 +255,7 @@ export function trackFreeCoachLimitReached(via: 'lesson' | 'chat_turn'): void {
  * decides it: the shipped builtin has the key, an OTA bundle does not.
  */
 export function trackBillingUnconfiguredNative(platform: string, bundle: string): void {
-  captureEvent(BILLING_EVENT.billingUnconfiguredNative, { native_platform: platform, bundle });
+  captureEvent(BILLING_EVENT.billingUnconfiguredNative, { reported_platform: platform, bundle });
 }
 
 /** The one free masterclass opening was just claimed (activation milestone). */
