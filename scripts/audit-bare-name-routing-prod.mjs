@@ -25,6 +25,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const QUESTION = 'Did I have any good moves';
@@ -34,6 +35,10 @@ const events = [];
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1280, height: 900 } });
 await ctx.addInitScript(muteTtsForAudit);
+// The audit-stream is opt-in/off by default (2026-09-11); turn it on so the
+// app EMITS its audit events for the interceptor below to see. The route
+// fulfills locally, so nothing reaches prod.
+await ctx.addInitScript(enableAuditCapture);
 const page = await ctx.newPage();
 
 // Capture the app's own audit POSTs locally — no secret needed.
