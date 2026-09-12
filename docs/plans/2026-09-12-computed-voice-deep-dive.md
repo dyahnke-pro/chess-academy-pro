@@ -302,13 +302,29 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
 
 ## Phased plan
 
-- **P0 — deep dive + this doc.** In progress (3 cluster agents + assembler review).
-- **P1 — fix #1** (en-prise "attacks" / dropped-capture in the PV walk). Contained
-  to `assembleEngineReasoning`; blast radius = every surface that calls it (review,
-  chat, teach, puzzle why). Add a focused gate test (real positions) + re-run the
-  computed-voice eval + a prod audit.
-- **P2..Pn — the ranked list** from the deep dive, each its own change + gate +
-  audit.
+- **P0 — deep dive + this doc.** ✅ DONE (4 clusters mapped; findings above).
+- **P1 — the keystone (`describeMoveGeometry` + the pin-aware SEE primitive).** ✅ DONE.
+  Added `legalSeeGain` / `landingIsSafe` / `capturesWinMaterial` (legal-capture SEE,
+  pin-aware by construction) to `positionReadingService.ts`. Rewrote
+  `describeMoveGeometry`: landing-safety (fork/pin/material) now pin-aware
+  (`landingIsSafe`, was pin-blind `seeGain(c,to)<=0`); fork now names only the
+  genuinely WINNABLE targets (`capturesWinMaterial`, fixes "forks the king and the
+  pawn"); the bare-"attacks" clause is safety-guarded at the SOURCE (kills the
+  12/12 real en-prise-"attacks" hits AND #1 — the PV walk `assembleEngineReasoning`
+  now never gets an unsafe attack, no consumer-side filter needed). Permanent gate
+  `computedVoiceGrounding.test.ts` (11 tests: 6 real hanging-piece negatives, the
+  pin-aware SEE unit, 4 real fork/pin/mate/capture positives) wired into ship-check.
+  Verified: gate 11/11, groundedAnswer+positionReading 323/323, narrationAccuracy
+  1834/1834 — no regression.
+- **P1b — sweep the pin-blind `seeGain` into the remaining consumers** using the
+  same helpers: `assembleHangingAnswer` (:257), `assemblePieceSafetyAnswer` (:404),
+  `assembleThreatAnswer` (:425, + turn/legality for "you can win"),
+  `assembleSquareControlAnswer` (:713), `assembleAttackAssessment` (:1083),
+  `quietPurposePhrase` (:2091 safety), causalChain `hasWinnablePiece`/`exploitedLoosePiece`
+  + `computeAttackMap`, and the fork forker-safety in `tacticsDetector`/`missedTacticService`.
+  Each pin-vulnerable site, one at a time, extending the gate. (chat/review/play surfaces.)
+- **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
+  own change + gate + audit.
 
 ## Decisions log
 

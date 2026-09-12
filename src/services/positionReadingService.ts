@@ -74,6 +74,74 @@ export function seeGain(chess: Chess, square: Square): number {
 }
 
 /**
+ * Pin/legality-aware Static Exchange Evaluation on `square`: the net material
+ * the SIDE TO MOVE in `fen` wins by initiating a capture on `square`, playing
+ * out ONLY LEGAL captures (least-valuable attacker first) for both sides, with
+ * the standing-pat option at every step. Returns the initiator's net gain
+ * (`> 0` ⇒ the piece on `square` is effectively hanging to a REAL, legal
+ * capture; `0` ⇒ safe — no profitable legal capture exists).
+ *
+ * This is the pin-safe replacement for `seeGain` at every landing-safety /
+ * hanging / "you can win" decision. `seeGain` drives off `chess.attackers()`,
+ * which is GEOMETRIC — it counts a PINNED piece as a real attacker or defender,
+ * so it (a) invents defenders that can't actually recapture (→ a fork/pin/"wins
+ * the piece" claim on a piece that in fact hangs) and (b) invents attackers that
+ * can't actually capture (→ a false "your piece is hanging"). Driving off
+ * `chess.moves()` instead makes every layer legal by construction, and because
+ * captures are regenerated after each ply it also sees discovered/x-ray
+ * recapturers correctly.
+ *
+ * NB: evaluates from the perspective of whoever is to move in `fen`. Callers
+ * asking "is MY piece safe here" must pass a position where the OPPONENT is to
+ * move (e.g. the position right after the mover's move), so the opponent is the
+ * one initiating the capture. `forceTurn` can set the side to move when needed.
+ */
+export function legalSeeGain(fen: string, square: Square): number {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return 0; }
+  return seeCaptureValue(chess, square);
+}
+
+/** Negamax SEE over LEGAL captures on `square` for the side to move on `chess`.
+ *  Mutates + restores `chess` (no per-ply clone). Depth is naturally bounded by
+ *  the number of attackers of one square; a hard guard caps pathological cases. */
+function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
+  if (depth > 16) return 0;
+  const victim = chess.get(square);
+  if (!victim) return 0;
+  const caps = chess
+    .moves({ verbose: true })
+    .filter((m) => m.to === square && m.captured);
+  if (caps.length === 0) return 0;
+  caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+  const cap = caps[0]; // least-valuable legal attacker
+  const gain = PIECE_VALUE[victim.type] ?? 0;
+  try { chess.move(cap); } catch { return 0; }
+  const reply = seeCaptureValue(chess, square, depth + 1);
+  chess.undo();
+  // Standing pat: the initiator only captures when it nets material.
+  return Math.max(0, gain - reply);
+}
+
+/** True when a piece the mover just placed on `square` is SAFE there — the
+ *  opponent (to move in `fenAfterMove`) has no profitable legal capture of it.
+ *  The pin-aware replacement for `seeGain(c, to) <= 0`. */
+export function landingIsSafe(fenAfterMove: string, square: Square): boolean {
+  return legalSeeGain(fenAfterMove, square) <= 0;
+}
+
+/** Would `moverColor` win material by capturing on `square` if it were their
+ *  move in `fen`? Pin/legality-aware — the honest "is this fork/attack target
+ *  actually winnable" test (a pinned defender of the target no longer makes it
+ *  look safe, and a defended equal piece is not "winnable"). */
+export function capturesWinMaterial(fen: string, square: Square, moverColor: Color): boolean {
+  const parts = fen.split(' ');
+  parts[1] = moverColor;
+  parts[3] = '-'; // clear en-passant, which a flipped turn could make illegal
+  return legalSeeGain(parts.join(' '), square) > 0;
+}
+
+/**
  * The actual capture SEQUENCE (SAN) of the static exchange on `square` — each
  * side recaptures with its least-valuable attacker, in order. This is the
  * grounded line we PLAY OUT ON THE BOARD so the student SEES why a pawn is

@@ -15,7 +15,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  seeGain, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  seeGain, landingIsSafe, capturesWinMaterial, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -1971,24 +1971,40 @@ export function describeMoveGeometry(
   // LANDING SAFETY — a fork or a pin only "counts" if the opponent can't just
   // CAPTURE the piece that made it (David 2026-07-20: "Qxd8+ … not technically a
   // fork, the bishop was defended" — the queen simply gets recaptured, so it
-  // neither forks nor pins). Static-exchange: if grabbing the piece on `to` wins
-  // material for the opponent, the tactic is illusory. Board truth over label.
-  const landingSafe = seeGain(c, to) <= 0;
+  // neither forks nor pins). PIN/LEGALITY-AWARE static exchange: `seeGain`
+  // counts a PINNED defender as a real recapturer, so it declared a piece "safe"
+  // that in fact hangs (the fork/pin/wins claim then fired on a piece the
+  // opponent simply wins — 2026-09-12 deep-dive #2). `landingIsSafe` drives off
+  // LEGAL captures, so a pinned defender no longer masks the hang. Board truth.
+  const landingSafe = landingIsSafe(c.fen(), to);
+  const mcb: 'w' | 'b' = mc === 'w' ? 'b' : 'w';
+
+  // A fork/attack target only "counts" as winnable when the mover could
+  // actually take it for material (king excluded — it must move). Pin-aware:
+  // a defender that is itself pinned no longer makes the target look guarded,
+  // and a defended equal piece is not "winnable" (2026-09-12 deep-dive #3).
+  const cfen = c.fen();
+  const targetWinnable = (t: { square: Square; piece: PieceSymbol }): boolean =>
+    t.piece === 'k' || capturesWinMaterial(cfen, t.square, mc);
 
   // FORK — the moved piece hits two enemy pieces at once (royal fork when the
-  // king is one of them), AND survives on its square.
+  // king is one of them), AND survives on its square, AND actually wins one.
   if (targets.length >= 2 && landingSafe) {
-    const enemyWB: 'w' | 'b' = mc === 'w' ? 'b' : 'w';
-    // A "fork" only wins when it forces a real concession: the king is one of
-    // the targets (a royal fork — the king MUST move, the other is threatened),
-    // OR at least one target is UNDEFENDED (falls next). Forking two defended
-    // pawns wins nothing — don't call it a fork (board-awareness sweep,
-    // 2026-07-22).
-    const realWin = targets.some((t) => t.piece === 'k'
-      || c.attackers(t.square, enemyWB).length === 0);
-    if (realWin) {
-      const sorted = [...targets].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
-      return `forks the ${REVIEW_PIECE_NAME[sorted[0].piece]} on ${sorted[0].square} and the ${REVIEW_PIECE_NAME[sorted[1].piece]} on ${sorted[1].square}`;
+    const winnable = targets.filter(targetWinnable);
+    // A real fork needs a genuine concession: the king (must move) or a piece
+    // the mover truly wins. Name the WINNABLE targets — leading with a defended
+    // high piece the mover can't take is the "forks the king and the pawn on b7"
+    // mislead (deep-dive #3). Prefer the two most valuable winnable targets;
+    // pair a lone winnable target with the king / the next real target.
+    if (winnable.length >= 1 && (winnable.length >= 2 || winnable.some((t) => t.piece === 'k'))) {
+      const byVal = (arr: typeof targets): typeof targets =>
+        [...arr].sort((a, b) => (REVIEW_PIECE_VALUE[b.piece] ?? 0) - (REVIEW_PIECE_VALUE[a.piece] ?? 0));
+      const named = byVal(winnable);
+      const second = named[1]
+        ?? byVal(targets.filter((t) => t.square !== named[0].square))[0];
+      if (second) {
+        return `forks the ${REVIEW_PIECE_NAME[named[0].piece]} on ${named[0].square} and the ${REVIEW_PIECE_NAME[second.piece]} on ${second.square}`;
+      }
     }
   }
 
@@ -2001,18 +2017,28 @@ export function describeMoveGeometry(
   // CHECK.
   if (c.inCheck()) return 'gives check';
 
-  // MATERIAL — a capture the opponent can't profitably recapture AND can't
-  // refute with an immediate counter-tactic elsewhere (the Berlin "wins the
-  // pawn while the recapture forks" class — the same guard its sibling clauses
-  // at :677/:3336 already carry; board-awareness sweep 2026-07-22).
-  if (mv.captured && seeGain(c, to) <= 0
-    && !captureHasCounterTactic(fenBefore, mv.san, mc === 'w' ? 'b' : 'w', REVIEW_PIECE_VALUE[mv.captured] ?? 0)) {
+  // MATERIAL — a capture the opponent can't profitably recapture (pin-aware —
+  // `landingIsSafe`, was the pin-blind `seeGain(c,to)<=0`) AND can't refute with
+  // an immediate counter-tactic elsewhere (the Berlin "wins the pawn while the
+  // recapture forks" class — the same guard its sibling clauses at :677/:3336
+  // already carry).
+  if (mv.captured && landingSafe
+    && !captureHasCounterTactic(fenBefore, mv.san, mcb, REVIEW_PIECE_VALUE[mv.captured] ?? 0)) {
     return `wins the ${REVIEW_PIECE_NAME[mv.captured]} on ${to}`;
   }
 
-  // Single ATTACK (tempo) on a non-king piece.
-  if (targets.length === 1 && targets[0].piece !== 'k') {
-    return `attacks the ${REVIEW_PIECE_NAME[targets[0].piece]} on ${targets[0].square}`;
+  // Single ATTACK (tempo) on a non-king piece — ONLY when the attacking piece is
+  // itself safe on its square AND the target is worth it (a piece the mover can
+  // win, or a higher-value piece it puts to flight). A bare "attacks the X" from
+  // a piece that itself hangs is the most common false claim the deep dive found
+  // (2026-09-12 #5 / #1): 12/12 real hits were "attacks …" from an en-prise
+  // piece. Guarding at the source also means the PV walk (assembleEngineReasoning)
+  // never speaks an en-prise attack — no consumer-side filter needed.
+  if (targets.length === 1 && targets[0].piece !== 'k' && landingSafe) {
+    const t = targets[0];
+    const worthIt = capturesWinMaterial(cfen, t.square, mc)
+      || (REVIEW_PIECE_VALUE[t.piece] ?? 0) > (REVIEW_PIECE_VALUE[mv.piece] ?? 0);
+    if (worthIt) return `attacks the ${REVIEW_PIECE_NAME[t.piece]} on ${t.square}`;
   }
 
   return null;
