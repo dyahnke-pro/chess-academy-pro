@@ -316,13 +316,22 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   pin-aware SEE unit, 4 real fork/pin/mate/capture positives) wired into ship-check.
   Verified: gate 11/11, groundedAnswer+positionReading 323/323, narrationAccuracy
   1834/1834 — no regression.
-- **P1b — sweep the pin-blind `seeGain` into the remaining consumers** using the
-  same helpers: `assembleHangingAnswer` (:257), `assemblePieceSafetyAnswer` (:404),
-  `assembleThreatAnswer` (:425, + turn/legality for "you can win"),
-  `assembleSquareControlAnswer` (:713), `assembleAttackAssessment` (:1083),
-  `quietPurposePhrase` (:2091 safety), causalChain `hasWinnablePiece`/`exploitedLoosePiece`
-  + `computeAttackMap`, and the fork forker-safety in `tacticsDetector`/`missedTacticService`.
-  Each pin-vulnerable site, one at a time, extending the gate. (chat/review/play surfaces.)
+- **P1b — sweep the pin-aware SEE into the chat safety answers.** ✅ DONE (commit
+  a45d899 on main). New `legalSeeGainFor(fen, square, capturingColor)`; swept
+  `assembleHangingAnswer`, `assemblePieceSafetyAnswer`, `assembleThreatAnswer`,
+  `assembleSquareControlAnswer` (→ legalSeeGainFor) and `quietPurposePhrase`
+  landing-safety (→ landingIsSafe). Gate extended (pinned-attacker not "in
+  trouble" / not listed loose). No regression (groundedAnswer 200, positionReading
+  109). NB: verified deterministically by the gate + unit tests; a dedicated
+  coach-CHAT prod audit ("is my bishop safe?" on a seeded pin) is a recommended
+  follow-up addition (the chat wiring is unchanged, only the computation).
+- **P1c — the detector subsystem (NEXT, its own careful pass + gates):**
+  `assembleAttackAssessment` (:1083, king-zone attacker/defender miscount — exclude
+  pins, require real safe contact); the fork forker-safety in `tacticsDetector.findForks`
+  (:145, gate the fork square with `landingIsSafe`) + `missedTacticService`;
+  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185), `exploitedLoosePiece`
+  (:241) + the pattern detectors (:561-575) + `computeAttackMap`. These carry
+  counterfactual/cross-move logic — each needs individual analysis; do NOT bulk-swap.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
   own change + gate + audit.
 
