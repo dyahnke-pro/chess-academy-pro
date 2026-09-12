@@ -137,6 +137,7 @@ import {
 } from '../../services/narratedContinuation';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
+import { matchNavigationRoute } from '../../services/navigationRouter';
 import {
   pickCoachDrill,
   isDrillableAid,
@@ -3652,6 +3653,43 @@ export function CoachTeachPage(): JSX.Element {
             void navigate(aid.path);
             return;
           }
+        }
+      }
+
+      // ─── Navigation intent (BYPASS opening-name resolution) ────────
+      // "take me to my repertoire" / "manage my repertoire" / "edit my
+      // openings" / "open settings" are NAVIGATION, not opening names.
+      // The teach pre-flight never called the navigation spine, so these
+      // fell into the bare-name capture below and got fuzzy-matched to an
+      // opening — "manage my repertoire" taught the Sicilian, "edit my
+      // openings" surfaced a wrong "did you mean" picker (prod probe,
+      // 2026-09-12). matchNavigationRoute requires BOTH a nav verb AND a
+      // known route topic, so a bare "the Vienna" (no verb) still routes
+      // as a lesson and "manage my time" (no destination) falls through.
+      // Runs AFTER training-aids / walkthrough-control so "go"/"stop"/
+      // "take back" during a lesson keep their meaning.
+      {
+        const nav = matchNavigationRoute(text);
+        if (nav) {
+          const navTurnId = freshTurnId('navigate');
+          setMessages((prev) => [...prev, {
+            id: `${navTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+          }]);
+          setMessages((prev) => [...prev, {
+            id: `${navTurnId}-c`, role: 'assistant', content: nav.ack, timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'coach', text: nav.ack,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.navigation',
+            summary: `navigation intent "${text.slice(0, 50)}" → ${nav.path}`,
+          });
+          void navigate(nav.path);
+          return;
         }
       }
 

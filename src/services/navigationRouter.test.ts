@@ -34,6 +34,26 @@ describe('matchNavigationRoute', () => {
     expect(matchNavigationRoute('open the pod bay doors')).toBeNull();
   });
 
+  // manage/edit/organize/build are navigation verbs too (2026-09-12): on
+  // /coach/teach "manage my repertoire" was captured as an OPENING name and
+  // taught the Sicilian; "edit my openings" surfaced a wrong "did you mean"
+  // picker. They now route to the real surface — but still only with a known
+  // destination topic, so they can't over-fire.
+  it('treats manage/edit/organize/build as navigation to a named surface', () => {
+    expect(matchNavigationRoute('manage my repertoire')?.path).toBe('/openings');
+    expect(matchNavigationRoute('edit my openings')?.path).toBe('/openings');
+    expect(matchNavigationRoute('organize my openings')?.path).toBe('/openings');
+    expect(matchNavigationRoute('build my repertoire')?.path).toBe('/openings');
+    expect(matchNavigationRoute('take me to my repertoire')?.path).toBe('/openings');
+  });
+
+  it('does NOT navigate a manage/edit/build verb without a known destination', () => {
+    // The verb+topic gate keeps these on the brain, not a bogus route.
+    expect(matchNavigationRoute('manage my time better')).toBeNull();
+    expect(matchNavigationRoute('build an attack on the kingside')).toBeNull();
+    expect(matchNavigationRoute('edit this move')).toBeNull();
+  });
+
   it('does not fire navigation on a content/show-a-puzzle phrase target it does not know', () => {
     // "show me" is a nav trigger, but with no known destination it declines
     // (the training-aid router upstream handles "show me a fork puzzle").
