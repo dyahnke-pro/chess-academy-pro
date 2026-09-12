@@ -491,6 +491,41 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
     }
   }, [state, puzzle]);
 
+  // Speak WHY the solved move was best, GROUNDED (G0): the rationale (what it
+  // really wins, whether the capture is recapturable) is computed in code and
+  // only PHRASED by the LLM via the voiceFacts chokepoint. The LLM decides no
+  // chess, so it can't invent a false fork or a wrong recapture (the 2026-06-11
+  // weakness-drill hallucination). Spoken in FULL (bypassBriefCap) — David
+  // 2026-09-12 wants the full teaching why on solve, even for "brief" users;
+  // still honors the SILENT gate. Shared by the auto-fire on solve and the
+  // manual "Why?" button so both speak the same explanation.
+  const speakBestMoveWhy = useCallback(async (): Promise<void> => {
+    setWhyLoading(true);
+    setSubtitle('Analyzing why this was the best move...');
+    const rating = activeProfile?.currentRating ?? 1200;
+    try {
+      const response = await explainPuzzleMoveGrounded({
+        fen: puzzle.fen,
+        bestMoveUci: puzzle.bestMove,
+        bestMoveSan: puzzle.bestMoveSan,
+        playedSan: puzzle.playerMoveSan,
+        // The solution line (UCI half-moves) so the "why" RECALLS the full
+        // engine-reasoning walk, not just the single move (David 2026-07-10).
+        pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
+      });
+      setWhyLoading(false);
+      setSubtitle(response);
+      await voiceService.speakGrounded(response, puzzle.fen, { bypassBriefCap: true });
+    } catch {
+      setWhyLoading(false);
+      // Fallback to tactic-specific coaching
+      const coaching = getCoachingMessage(tacticType, 'guide', rating);
+      const fallback = coaching ?? 'The best move exploits a tactical pattern in this position.';
+      setSubtitle(fallback);
+      void voiceService.speak(fallback);
+    }
+  }, [puzzle, activeProfile?.currentRating, tacticType]);
+
   // "Why?" button — explain the concept without revealing the move
   const handleWhy = useCallback(() => {
     if (state !== 'playing' && state !== 'correct') return;
@@ -512,36 +547,9 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       return;
     }
 
-    // state === 'correct' — explain why the move was best, GROUNDED (G0): the
-    // rationale (what it really wins, whether the capture is recapturable) is
-    // computed in code and only PHRASED by the LLM via the voiceFacts
-    // chokepoint. The LLM decides no chess, so it can't invent a false fork or
-    // a wrong recapture (the 2026-06-11 weakness-drill hallucination).
-    setWhyLoading(true);
-    setSubtitle('Analyzing why this was the best move...');
-
-    const rating = activeProfile?.currentRating ?? 1200;
-    void explainPuzzleMoveGrounded({
-      fen: puzzle.fen,
-      bestMoveUci: puzzle.bestMove,
-      bestMoveSan: puzzle.bestMoveSan,
-      playedSan: puzzle.playerMoveSan,
-      // The solution line (UCI half-moves) so the "Why?" RECALLS the full
-      // engine-reasoning walk, not just the single move (David 2026-07-10).
-      pvUci: puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined,
-    }).then((response) => {
-      setWhyLoading(false);
-      setSubtitle(response);
-      void voiceService.speakGrounded(response, puzzle.fen);
-    }).catch(() => {
-      setWhyLoading(false);
-      // Fallback to tactic-specific coaching
-      const coaching = getCoachingMessage(tacticType, 'guide', rating);
-      const fallback = coaching ?? 'The best move exploits a tactical pattern in this position.';
-      setSubtitle(fallback);
-      void voiceService.speak(fallback);
-    });
-  }, [state, puzzle, activeProfile?.currentRating, tacticType]);
+    // state === 'correct' — the grounded why.
+    void speakBestMoveWhy();
+  }, [state, puzzle, activeProfile?.currentRating, tacticType, speakBestMoveWhy]);
 
   // Ask Coach — chat handler for the post-solve chat bar. Sends the
   // student's question + position context to the LLM, displays the
@@ -640,21 +648,18 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           wasCoached: hasMadeMistakeRef.current,
           context: skipReplayContext ? 'create' : 'drill',
         });
-        // Speak outro after celebration sound. NO auto-advance —
-        // student taps "Next puzzle" themselves when they're done
-        // analyzing the position. David's directive 2026-05-19:
-        // "i want the user to push next when they are done analyzing
-        // the position. it cuts away before i can identify the
-        // deeper meaning behind the puzzle/tactic." Previously the
-        // 4000ms auto-onComplete clipped the outro and rushed the
-        // student through.
-        if (puzzle.narration.outro) {
-          outroTimerRef.current = setTimeout(() => {
-            voiceService.stop();
-            setSubtitle(puzzle.narration.outro);
-            void voiceService.speak(puzzle.narration.outro);
-          }, 800);
-        }
+        // Auto-speak the GROUNDED "why this was the best move" after the
+        // celebration sound — the teaching moment David 2026-09-12 wanted taken:
+        // "When coach is training drills/weaknesses I want the why spoken! Why
+        // was that the best move." This replaces the canned outro auto-speak
+        // with the engine-grounded reasoning walk (G0), the same explanation the
+        // "Why?" button gives. NO auto-advance — the student taps "Next puzzle"
+        // themselves when they're done analyzing (David 2026-05-19: the deeper
+        // meaning gets clipped otherwise).
+        outroTimerRef.current = setTimeout(() => {
+          voiceService.stop();
+          void speakBestMoveWhy();
+        }, 800);
         // Stay on 'correct' state until the user taps Next.
         return;
       }
@@ -739,7 +744,7 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
       }, 1500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; intentional dep list.
-  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext]);
+  }, [state, moveIndex, onComplete, playMoveSound, playCelebration, playEncouragement, resetHints, puzzle.narration, tacticType, skipReplayContext, speakBestMoveWhy]);
 
   // ── KEEP PLAYING (R4, David 2026-09-01) — after the puzzle is solved, let the
   // student play the position out; the computer answers each move. Reuses the

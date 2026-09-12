@@ -1203,7 +1203,11 @@ class VoiceService {
    * narrationAccuracy gate, and board-stripping it against an unrelated FEN
    * would delete legitimate teaching — those use `speak()` / `speakLecture()`.
    */
-  async speakGrounded(text: string, fen: string | null, force = false): Promise<void> {
+  async speakGrounded(
+    text: string,
+    fen: string | null,
+    opts?: { force?: boolean; bypassBriefCap?: boolean },
+  ): Promise<void> {
     this.logSpeakInvoked('speakGrounded', text);
     let grounded = text;
     if (fen) {
@@ -1224,7 +1228,14 @@ class VoiceService {
       } catch { /* unparseable FEN — speak the raw text rather than go silent */ }
     }
     if (!grounded.trim()) return;
-    return this.speakInternal(sanitizeForTTS(grounded), force);
+    // `bypassBriefCap` lets an explicit teaching explanation (the "why this was
+    // the best move" on a drill/tactics solve) speak in FULL even when the user
+    // picked "brief" — David 2026-09-12 chose the full grounded why on solve. It
+    // still honors the SILENT gate (silent = no in-game voice, the hard G5
+    // contract), which speakInternal enforces regardless.
+    return this.speakInternal(sanitizeForTTS(grounded), opts?.force ?? false, {
+      bypassBriefCap: opts?.bypassBriefCap,
+    });
   }
 
   private async speakInternal(
