@@ -110,14 +110,24 @@ export const OPEN_REFERENCE = {
   // retrospective and about the student's own game; Watch is present-tense
   // about a demo. Found in the Accelerated Dragon's asides, four times in one
   // lesson (David 2026-09-12).
+  // THE SIGNAL IS PAST-TENSE VERDICT, NOT VOCABULARY. The first version of this
+  // class matched phrases like "in the game" and caught one clause in four of
+  // the Accelerated Dragon's worst aside — a post-hoc engine review of the whole
+  // game delivered at move 9, which spoils the lesson it interrupts. The other
+  // three passed the teaching guard honestly: "the knight to d5 was flagged as a
+  // slip", "the engine's own preference was the immediate e6" name squares and
+  // predicate chess. They are not bad sentences; they are REVIEW sentences, and
+  // Watch is present tense (CLAUDE.md's two-register rule). So the tell is a
+  // retrospective JUDGEMENT on a move — graded, approved, preferred, regretted —
+  // rather than the move's idea stated as the board shows it.
   pastGame:
-    /\bin the game\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took\b|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b/i,
+    /\bin the game\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took\b|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b|\bthe verdict\b|\bwas flagged\b|\bjudged an? \w+\b|\bearns? approval\b|\bearn approval\b|\bthe engine.s (own )?preference\b|\bwe shied away\b|\boverstates it\b|\bwas underestimated\b|\bhonest admission\b|\bswitched the engine on\b|\bturned out to be (right|wrong)\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
   session:
     /\bthis game\b|\bthe run\b|\b(one|another) more game\b|\banother game\b|\bmust-win\b|\bresigns?\b|\bgood game\b|\bso far\b|\bthus far\b|\bto date\b|\bhome stretch\b|\bback in the ring\b|\blet.s look at the game\b|\bonly our (second|third|fourth|fifth)\b|\b(tournament|the match|round \d|a strong junior)\b/i,
   author:
-    /\bmusic to my ears\b|\bjuicy\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
+    /\bmusic to (my|the) ears\b|\bjuicy\b|\bI.m in the mood\b|\bI.ll (show|play|pick)\b|\blet.s (see how|hope)\b|\bkudos\b|\btoday'?s (game|video|run|session|opponent|stream)\b|\bthe comedy\b/i,
   priorVid:
     /\bwe.ve (recommended|seen|been|covered)\b|\bas (I|we) (said|mentioned|covered)\b|\bin this video\b|\bmy main opening\b|\bour (patented|favorite|real opening)\b/i,
   audience:
@@ -134,6 +144,15 @@ export const OPEN_REFERENCE = {
  *  - `cut`/`fragment`   — no square, no piece, no chess idea
  */
 export function classifyClause(clause) {
+  // pastGame RUNS AHEAD OF THE TEACHING GUARD, and it is the only class that
+  // does. The guard exists to stop this classifier deleting teaching ABOUT THE
+  // BOARD IN FRONT OF THE STUDENT — it saved 555 clauses of real chess. A
+  // retrospective verdict on a move the student has not seen yet is not that,
+  // however many chess words it contains: "the knight to d5 was flagged as a
+  // slip ... so blunder overstates it" names squares and predicates chess, and
+  // the guard duly protected it, while it spoils a lesson nine plies before the
+  // move happens. Register, not vocabulary, is the thing being judged here.
+  if (OPEN_REFERENCE.pastGame.test(clause)) return { disposition: 'cut', class: 'pastGame' };
   if (teachesChess(clause)) return { disposition: 'keep', class: 'teaching' };
 
   const person = namedPerson(clause);

@@ -186,3 +186,37 @@ describe('narration scoring — asides and the past-game register', () => {
     ).toBe('keep');
   });
 });
+
+describe('pastGame overrides the teaching guard — the one class that may', () => {
+  // The guard vetoes every other cut, and should: it saved 555 clauses of real
+  // chess. But a review-register clause is full of chess words by nature, so the
+  // guard protected an engine verdict delivered nine plies before the moves it
+  // judges. Register, not vocabulary, is what is being judged.
+  it('cuts a retrospective verdict even though it names squares and predicates chess', () => {
+    const c =
+      'The knight to d5 was flagged as a slip, and a later knight move judged an ' +
+      'inaccuracy — the position stayed level, so blunder overstates it.';
+    expect(teachesChess(c)).toBe(true);          // the guard WOULD protect it
+    expect(classifyClause(c).class).toBe('pastGame');
+    expect(classifyClause(c).disposition).toBe('cut');
+  });
+
+  it.each([
+    'The knight steps back to e2 — a poor choice, because it abandons the strong central d4-square.',
+    'The queen swings out to b6, forking the pawns on f2 and b2.',
+    'White plays the correct plan — the pawn to h4, prying open our king.',
+    'That is exactly the check to run before snatching a pawn: list the queen\'s escapes.',
+  ])('does not touch present-tense teaching that judges the move on the board: %j', (clause) => {
+    expect(classifyClause(clause).disposition).toBe('keep');
+  });
+
+  it('cuts the engine-review aside spoken mid-lesson', () => {
+    for (const c of [
+      'The verdict: the knight to g4 and the queen to b6 both earn approval.',
+      "The engine's own preference was the immediate e6 — the very move we shied away from.",
+      'With White castling we switched the engine on — a rare exception.',
+    ]) {
+      expect(classifyClause(c).disposition).toBe('cut');
+    }
+  });
+});
