@@ -4814,12 +4814,37 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
           voiceService.stop();
+          // Give the static tree a HOME in the Dexie cache before starting.
+          // cacheOpening stamps `tree.cacheKey` IN PLACE, so the live tree
+          // handed to the walkthrough carries the same key its background
+          // stages later merge under — and the leaf/stage-menu poll
+          // (mergeStagesFromCache) can find its row. Without this the merges
+          // land nowhere and the poll cache-misses forever.
+          await cacheOpening(staticTree.openingName, staticTree);
           if (stageHint) {
             walkthrough.startAtStageMenu(staticTree, stageHint);
           } else if (walkthroughDone) {
             startWalkthrough(staticTree, { showChooser: true });
           } else {
             startWalkthrough(staticTree);
+          }
+          // Static registry trees ship the walkthrough SPINE but usually not
+          // the four optional stages (concepts / findMove / drill / punish).
+          // Every other tier (2 / 2.5 / 3) fires background stage-gen; the
+          // static path was the ONE that didn't — so at the leaf hasStages
+          // stayed false and "Continue learning" NEVER surfaced, and a
+          // "drill <static opening>" jump parked forever. Prod probe
+          // 2026-09-12: the "Sicilian Defense" picker tile surface-routed to
+          // the Alapin walkthrough, reached the leaf, and continue-learning
+          // never enabled while getCachedOpening cache-missed 9×. Tour mode
+          // skips the optional stages by design.
+          if (pace !== 'tour') {
+            void generateMissingStagesInBackground(
+              staticTree.openingName,
+              staticTree,
+              handleStageMerged,
+              handleStageUnavailable,
+            );
           }
           return;
         }
