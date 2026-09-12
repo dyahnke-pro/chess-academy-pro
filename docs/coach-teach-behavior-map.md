@@ -116,7 +116,11 @@ REAL BUG — FOUND + FIXED (1 root, 6 cascaded fails):
   the static tree (stamps `tree.cacheKey` in place so merges + the poll find its
   row), then fire `generateMissingStagesInBackground(...)`, matching the other
   three tiers. Tour mode still skips the optional stages. Typecheck clean.
-  Verify on prod after deploy: continue-learning must enable at the leaf.
+- **VERIFIED on prod (commit 90cdfcb, 2026-09-12):** same "Sicilian Defense"
+  tile → Alapin leaf; background gen "kicking off 4 stages" at 15.9s → all 4
+  merged at 40s (concepts 5, findMove 2, drill 2, punish 5) → continue-learning
+  ENABLED at 52.2s → click opened the stage menu. Before/after: NEVER→52s,
+  0→5 stage-gen events, 9×cache-miss→0.
 
 STALE/WRONG audit expectations (app behavior is correct, per locked rules):
 - `stage-play→/coach/play` — WLPP Play mounts in-page OpeningPlayMode; it MUST NOT
