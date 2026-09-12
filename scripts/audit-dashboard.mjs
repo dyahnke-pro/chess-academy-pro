@@ -19,7 +19,7 @@
  *     - Chess Academy Pro title
  *     - Import Games button present + clickable
  *     - SmartSearchBar mounts + responds to typing
- *     - 4 section tiles render: Openings / Coach / Tactics / Weaknesses
+ *     - 5 section tiles render: Openings / Coach / Weaknesses / Tactics / Kids Mode
  *     - Clicking each section navigates to its route
  *     - Table of Contents bar expands; main tabs + nested subcategories
  *       collapse/expand independently
@@ -206,11 +206,15 @@ async function main() {
     { kind: 'visible', selector: '[data-testid="import-games-btn"]', label: 'Import Games button present' },
     { kind: 'visible', selector: '[data-testid="smart-search"]', label: 'SmartSearchBar mounts' },
     { kind: 'visible', selector: '[data-testid="smart-search-input"]', label: 'search input present' },
-    { kind: 'count-eq', selector: '[data-testid^="section-"]', value: 4, label: '4 section tiles render' },
+    // 5 tiles since the 2026-09-03 redesign: the four loop sections
+    // (Openings → Coach → Weaknesses → Tactics) PLUS the Kids Mode row
+    // (DashboardPage renders `[...SECTIONS, KIDS_SECTION]`).
+    { kind: 'count-eq', selector: '[data-testid^="section-"]', value: 5, label: '5 section tiles render (4 loop + Kids)' },
     { kind: 'visible', selector: '[data-testid="section-openings"]', label: 'Openings tile' },
     { kind: 'visible', selector: '[data-testid="section-coach"]', label: 'Coach tile' },
     { kind: 'visible', selector: '[data-testid="section-tactics"]', label: 'Tactics tile' },
     { kind: 'visible', selector: '[data-testid="section-weaknesses"]', label: 'Weaknesses tile' },
+    { kind: 'visible', selector: '[data-testid="section-kids-mode"]', label: 'Kids Mode tile' },
   ]);
 
   // Dismiss the first-run onboarding overlays. On a fresh profile two
