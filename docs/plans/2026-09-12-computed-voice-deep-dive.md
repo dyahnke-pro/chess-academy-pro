@@ -332,13 +332,23 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   old comment deferred, and which a real test fixture caught). Gate: tacticsDetector
   "does NOT call it a fork when the opponent just captures the forker". 35/35 +
   the groundTruth board-truth property test still green.
-- **P1c-rest — the intricate detector items (NEXT, dedicated pass + gates):**
-  `assembleAttackAssessment` (:1094, king-zone counts include pinned pieces + x-ray
-  of empty squares — needs real pin-detection / safe-contact, fuzzier than a SEE
-  swap); `missedTacticService.detectSkewer` diverged logic; causalChain
-  `hasWinnablePiece` (:168), `targetWasSavable` (:185), `exploitedLoosePiece`
-  (:241) + pattern detectors (:561-575) + `computeAttackMap`. Counterfactual /
-  cross-move logic — each needs individual analysis; do NOT bulk-swap.
+- **P1c-mate — false "checkmate available" for the side NOT to move.** ✅ DONE.
+  `findMateThreats` now only reports the not-to-move side's mate-in-1 when it's
+  genuinely unstoppable (`mateThreatIsUnstoppable` — every legal defense still
+  leaves a mate-in-1); the side-to-move's own mate is still reported. Gate: 2 new
+  tacticsDetector tests (parryable Rd8# with Black to move is NOT announced; the
+  side-to-move's Rd8# is). groundTruth mate-puzzle test still green.
+- **P1c-skewer — `missedTacticService.detectSkewer` diverged logic.** ✅ DONE.
+  Ported the gated three-way threshold from `tacticsDetector.findSkewers`
+  (front > attacker, front > back, back ≥ 3 — never a pawn prize); the old
+  `front>back, back>=1` fired false skewers. No regression (missedTactic 36+26).
+- **P1c-rest — the intricate items (NEXT, dedicated pass + gates):**
+  `assembleAttackAssessment` (:1094, king-zone counts include pinned pieces +
+  x-ray of empty squares — needs real pin-detection / safe-contact, fuzzier than
+  a SEE swap); `tacticalRead.summarizeVerdict` unverified "up a piece" (B#3);
+  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
+  `exploitedLoosePiece` (:241) + pattern detectors (:561-575) + `computeAttackMap`.
+  Counterfactual / cross-move logic — each needs individual analysis; no bulk-swap.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
   own change + gate + audit.
 

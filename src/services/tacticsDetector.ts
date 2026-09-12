@@ -307,20 +307,43 @@ function withTurn(chess: Chess, color: Color): Chess | null {
  *  entirely, so the coach could name a fork while ignoring a mate. */
 function findMateThreats(chess: Chess): TacticPattern[] {
   const out: TacticPattern[] = [];
+  const turn = chess.turn();
   for (const color of ['w', 'b'] as Color[]) {
     const probe = withTurn(chess, color);
     if (!probe || probe.isCheck()) continue; // in-check positions: not a quiet threat
     const mate = probe.moves({ verbose: true }).find((m) => m.san.includes('#'));
-    if (mate) {
-      out.push({
-        type: 'mate_threat',
-        beneficiary: color,
-        involvedSquares: [mate.from, mate.to],
-        description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
-      });
-    }
+    if (!mate) continue;
+    // For the side NOT to move, a mate-in-1 is only a real threat if the side to
+    // move cannot prevent it — otherwise "White has a checkmate available" is a
+    // false alarm the defender simply parries (2026-09-12 deep-dive #C3, G3).
+    // The side to move's own mate-in-1 is genuinely available now.
+    if (color !== turn && !mateThreatIsUnstoppable(chess)) continue;
+    out.push({
+      type: 'mate_threat',
+      beneficiary: color,
+      involvedSquares: [mate.from, mate.to],
+      description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
+    });
   }
   return out;
+}
+
+/** Does the side NOT to move in `chess` have a mate-in-1 that the side to move
+ *  cannot prevent? True only when EVERY legal defense still leaves a mate-in-1
+ *  for the threatening side — a genuine one-move threat, not a parryable one.
+ *  (After each defense it is naturally the threatening side's move, so its
+ *  mate is read straight off `after.moves()`.) */
+function mateThreatIsUnstoppable(chess: Chess): boolean {
+  const defenses = chess.moves({ verbose: true });
+  if (defenses.length === 0) return false;
+  for (const dm of defenses) {
+    const after = new Chess(chess.fen());
+    try { after.move(dm); } catch { return false; }
+    // If the defense ended the game or removed every mating move, it was preventable.
+    if (after.isGameOver()) return false;
+    if (!after.moves({ verbose: true }).some((m) => m.san.includes('#'))) return false;
+  }
+  return true;
 }
 
 /** BACK-RANK WEAKNESS: a king sitting on its home rank with no luft while an

@@ -364,3 +364,21 @@ describe('detectTactics — edge cases', () => {
     expect(result).toBeDefined();
   });
 });
+
+describe('detectTactics — mate threats (2026-09-12)', () => {
+  it('reports a mate-in-1 for the side to move', () => {
+    // White to move: Rd8# is a real, available mate.
+    const fen = '6k1/5ppp/8/8/8/8/8/3R2K1 w - - 0 1';
+    const result = detectTactics(fen);
+    expect(hasTactic(result, 'mate_threat')).toBe(true);
+  });
+
+  it('does NOT claim "checkmate available" for the side NOT to move when it is parryable', () => {
+    // Same position but BLACK to move — White's Rd8# is prevented by ...h6, so
+    // it is not a real threat and must not be announced.
+    const fen = '6k1/5ppp/8/8/8/8/8/3R2K1 b - - 0 1';
+    const result = detectTactics(fen);
+    const whiteMate = result.tactics.find((t) => t.type === 'mate_threat' && t.beneficiary === 'w');
+    expect(whiteMate).toBeUndefined();
+  });
+});
