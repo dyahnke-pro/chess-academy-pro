@@ -20004,8 +20004,8 @@
                                            "shortIdea": "The bishop to c4 — a sharp Sozin-flavoured try that stares down f7.",
                                            "asides": [
                                             {
-                                             "idea": "We took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
-                                             "shortIdea": "We took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
+                                             "idea": "The more principled path is the leap to g4.",
+                                             "shortIdea": "The more principled path is the leap to g4.",
                                              "arrows": [
                                               {
                                                "from": "f6",
@@ -20038,8 +20038,8 @@
                                           ]
                                          },
                                          {
-                                          "idea": "A strong opponent met us with the bishop to c4, and we castled — an unfamiliar setup for both sides.",
-                                          "shortIdea": "A strong opponent met us with the bishop to c4, and we castled — an unfamiliar setup for both sides.",
+                                          "idea": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
+                                          "shortIdea": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
                                           "arrows": [
                                            {
                                             "from": "f1",
@@ -20982,8 +20982,8 @@
                                      "shortIdea": "White plays a bishop to e3.",
                                      "asides": [
                                       {
-                                       "idea": "In the game our opponent played a3 — a strange, not very good move.",
-                                       "shortIdea": "In the game our opponent played a3 — a strange, not very good move.",
+                                       "idea": "They play the pawn to a3 — a strange, not very good move.",
+                                       "shortIdea": "They play the pawn to a3 — a strange, not very good move.",
                                        "arrows": [
                                         {
                                          "from": "g8",
@@ -119249,7 +119249,7 @@
          "node": {
           "san": "f5",
           "movedBy": "black",
-          "idea": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
+          "idea": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
           "children": [
            {
             "node": {
@@ -119455,7 +119455,7 @@
             }
            }
           ],
-          "shortIdea": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside."
+          "shortIdea": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside."
          }
         }
        ]

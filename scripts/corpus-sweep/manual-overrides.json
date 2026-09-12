@@ -161,6 +161,30 @@
    "was": "The very bad move was e6 — Black should have played d6, the knight to f6, and castled into a normal King's Indian.",
    "text": "e6 is the very bad move — d6, the knight to f6 and castling is the normal King's Indian.",
    "why": "REWRITTEN. Board: rnbqk1nr/pp1pppbp/2p3p1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b — e6 has NOT been played yet (the e7 pawn is home), so the present tense is the accurate one. d6 and Nf6 are both legal now, and f8 is already clear, so castling follows once the knight leaves g8."
+  },
+  {
+   "id": "qhHtJcXkkfg",
+   "was": "A strong opponent met us with the bishop to c4, and we castled — an unfamiliar setup for both sides.",
+   "text": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
+   "why": "REWRITTEN. Survived the trim by head-protection (a cut-class clause sitting BEFORE the last keeper is spared so the sentence does not become a fragment), so it was still shipping in the Accelerated Dragon. Board r1bq1rk1/pp1ppp1p/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w: the white bishop really is on c4 and Black really has castled, so both halves are statements about this board."
+  },
+  {
+   "id": "qhHtJcXkkfg",
+   "was": "We took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
+   "text": "The more principled path is the leap to g4.",
+   "why": "REWRITTEN, and DELIBERATELY SHORTER. \"meeting the bishop's move to g5\" is DROPPED, not reworded: on this board g5 is empty and the white bishop is on e3, which the sibling beat states correctly (\"leaping at the bishop on e3\"). Naming a bishop on g5 would be the exact error class this pass exists to remove. The knight IS on g4, so what remains is true."
+  },
+  {
+   "id": "rMNFLg1gLoI",
+   "was": "In the game our opponent played a3 — a strange, not very good move.",
+   "text": "They play the pawn to a3 — a strange, not very good move.",
+   "why": "REWRITTEN. Board r1bqk2r/pp1ppp1p/2n2np1/8/3NP3/P1N1B3/1PP2PPP/R2QKB1R b: the white pawn really is on a3."
+  },
+  {
+   "id": "LLidbvIUZ5I",
+   "was": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
+   "text": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
+   "why": "REWRITTEN — only \"This game illustrates how\" is dropped; a general principle about f5 does not need a game to license it. Every claim checks out on the board rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w: the black pawn is on f5, White has played d4, and White's e-pawn really is untouched on e2, which is the whole reason the Dutch exception holds."
   }
  ]
 }

@@ -111121,7 +111121,7 @@
    ],
    "opening": null,
    "phase": "opening",
-   "explains": "This game illustrates how bad f5 is across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
+   "explains": "f5 is bad across most openings — it opens the king's diagonal and permanently weakens the kingside. The Dutch is the one exception, and only because White hasn't touched the e-pawn, so that diagonal stays closed; even so, against d4 it's dubious and the Staunton Gambit is no joke.",
    "teaches": "f5 is only sound when the e-file diagonal to your king is still closed; otherwise it's a lasting weakness.",
    "plans": "",
    "concepts": [],

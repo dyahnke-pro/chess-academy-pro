@@ -179,6 +179,10 @@ const GATE_TESTS = [
   // being shown on the board"). Same contract as narrationAccuracy, applied
   // to the voiced corpus instead of the curated lessons.
   'src/data/corpusRewriteAccuracy.test.ts',
+  // The voiced corpus cannot regress: the two derived files must still be
+  // what their source builds (the drift that silently reverts
+  // voiced-matchups.json), and chatter is held under a shrink-only ceiling.
+  'src/data/voicedCorpusIntegrity.test.ts',
   // The corpus sweep's classifier + trim: pins the ten teaching lines the
   // guard used to eat, and the chatter that must stay cut.
   'src/services/narrationQuality.shared.test.ts',

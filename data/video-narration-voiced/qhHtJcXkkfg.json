@@ -614,7 +614,7 @@
     "Bc4",
     "O-O"
    ],
-   "spoken": "A strong opponent met us with the bishop to c4, and we castled — an unfamiliar setup for both sides.",
+   "spoken": "Their bishop on c4 meets your castling — an unfamiliar setup for both sides.",
    "reanchor": true
   },
   {
@@ -690,7 +690,7 @@
     "Nde2",
     "O-O"
    ],
-   "spoken": "We took the more principled path instead — the leap to g4, meeting the bishop's move to g5.",
+   "spoken": "The more principled path is the leap to g4.",
    "reanchor": true
   },
   {
