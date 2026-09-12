@@ -25,6 +25,7 @@ import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 import { attachVoiceListener, voiceLines, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -70,6 +71,10 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...(process.env.AUDIT_LISTENER === '1' ? LISTENER_LAUNCH_ARGS : [])] });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  // Opt-in stream is off by default (2026-09-11); enable it so the app EMITS
+  // its audit events for the page.route interceptor below to capture. The route
+  // fulfills locally, so nothing reaches prod.
+  await ctx.addInitScript(enableAuditCapture);
   // UNCAPPED diagnostic (David 2026-07-20): turn on the full-data review — every
   // computed facet on every move + the future-position projections. Set unless
   // AUDIT_UNCAPPED=0 (default ON for this audit, since its whole job now is to
