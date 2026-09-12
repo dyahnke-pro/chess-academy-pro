@@ -35,6 +35,8 @@ Prod probe (2026-09-12, muted):
 
 ## Status
 - [x] root-caused on prod
-- [ ] navigationRouter verbs + test
-- [ ] teach nav dispatch
-- [ ] re-audit on prod
+- [x] navigationRouter verbs + test (11/11 green)
+- [x] teach nav dispatch (typecheck + ship-check green)
+- [x] shipped to main (60f4e8c) + branch
+- [x] re-audit on prod — 5/5 (3 nav phrasings navigate to /openings; app-help + bare-name regression-clean)
+- [x] audit method locked into CLAUDE.md (exhaustive coach-question routing standard)

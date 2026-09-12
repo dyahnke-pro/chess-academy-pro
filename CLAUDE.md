@@ -4708,10 +4708,57 @@ After every `git push origin main`:
    | boot storage persistence / Dexie durability / `device_id` | `scripts/audit-storage-persistence.mjs` (asserts `requestPersistentStorage()` runs once before the first Dexie write + `device_id` survives a reload; run it on ANY change to the boot path, `storageQuota.ts`, `deviceIdentity.ts`, or Dexie schema) |
    | any COACH-ANSWER surface (routing, assemblers, `voiceFacts`, grounding) | re-run its audit with `DEGRADE=llm` (`scripts/audit-lib/degrade.mjs`). Under G0 the model only PHRASES facts computed in code, so with the provider 401ing the coach must STILL answer correctly — in the raw computed register instead of the warm one. A surface that refuses or goes silent under `DEGRADE=llm` was never inverted, it was only asking the model nicely. Verified 2026-09-02: board-verdict 7/7 with the LLM dead, and 7/7 with LLM+engine both dead. |
    | ANY new or edited `scripts/audit-*.mjs` | `node scripts/audit-vacuity-check.mjs --changed` — a negative control that points the audit at a blank app and FAILS it for still printing PASS. "The audit reported green having verified nothing" is the most expensive failure mode in this repo; this is the only instrument that measures it. |
+   | coach QUESTION-ROUTING (questionIntents detectors, coachApi lane dispatch, coachService/coachSessionRouter, voiceFacts, the teach pre-flight capture) | `scripts/audit-coach-all-questions-prod.mjs` — THE EXHAUSTIVE ROUTING AUDIT (see locked standard below). Companion: `scripts/audit-coach-multilingual-prod.mjs` (the translateToEnglish seam). |
    | Cross-surface UI scaffolding | run multiple of the above |
 
    Every script in `scripts/audit-*.mjs` targets the live prod URL
    by default (override with `AUDIT_SMOKE_URL` for local).
+
+### 🔒🔒 THE EXHAUSTIVE COACH-QUESTION ROUTING AUDIT — run it THIS EXACT WAY, every session (David 2026-09-12, LOCKED: "make sure that every session does this audit in the same exact way as you").
+
+This is the audit that verified the coach-routing sweep. When you touch coach
+question routing (the ~55 `questionIntents` detectors, the 40+ `coachApi` lane
+dispatch, `coachService`/`coachSessionRouter`, `voiceFacts`, or the `/coach/teach`
+pre-flight capture), run `scripts/audit-coach-all-questions-prod.mjs` — and run
+it the way that made it work, not a cheaper shape:
+
+1. **EXHAUSTIVE, not sampled.** Iterate EVERY phrasing of every lane
+   (`qs`+`qs2`+`qs3` — the full matrix), not one seeded `pickPhrasing`. Sampling
+   one phrasing per lane is what HID the routing bugs the first time — a single
+   comprehensive pass came back green while other phrasings of the same lane
+   misrouted. `EXHAUSTIVE = process.env.AUDIT_SAMPLE !== '1'` (default exhaustive;
+   set `AUDIT_SAMPLE=1` only for a fast smoke).
+2. **REAL DISPATCH on LIVE prod — never a parallel `resolveLane`.** The audit
+   drives the actual `/coach/teach` chat against `https://chess-academy-pro.vercel.app`
+   through the real `coachSessionRouter → coachService → coachApi` path. A
+   hand-rolled parallel lane-resolver would false-green (it isn't the code that
+   ships). This is why it's a prod Playwright audit, not a unit test.
+3. **MUTED — ALWAYS (G1).** `ctx.addInitScript(muteTtsForAudit)` on every context.
+   Zero TTS synthesis; the driver reads the rendered reply text, never the audio.
+   Verified silent across a full session. DeepSeek chat completions are the ONLY
+   cost (inherent to driving real routing) — that's accepted; TTS is not.
+4. **HONEST CONTRACTS.** Profile/self-knowledge lanes gate behind `UPLOAD_GATE`
+   + `PROFILE_LANES` (a cold prod device has no games, so "strongest part of my
+   game" honestly declines — don't false-FAIL it). App-help/teaching-method
+   ACCEPT patterns are broadened to the real answer shape.
+5. **CRASH-GUARDED driver.** `pressSequentially` + the `ask()` call site are
+   wrapped so one stuck lane can't abort the sweep before it finishes.
+6. **PROD incantation:**
+   `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app node scripts/audit-coach-all-questions-prod.mjs`
+7. **Root-cause, don't chase noise.** The known NON-bugs this audit throws
+   (triaged 2026-09-11): move-rating lanes with no eval-delta context on the free
+   board; board-state mate-alert pollution hijacking unrelated replies; the
+   exhaustive-mode "actions" section leaving the chat input busy ("chat input
+   never usable"); and stale ACCEPT contracts in the audit itself. A ❌ is a
+   product bug only after you've ruled those out. When a bug IS real: REPRODUCE
+   it with a tiny muted prod probe (capture the ACTUAL reply), fix at ROOT (name
+   the disease, not the symptom — the 2026-09-12 fix was one greedy-capture
+   disease behind several "lane bugs"), then re-probe on prod to confirm.
+
+Companion: `scripts/audit-coach-multilingual-prod.mjs` drives native questions in
+8 languages through the SAME real dispatch to prove the `translateToEnglish` seam
+routes them on-topic. Any miss feeds a phrasing back into the ONE English matrix —
+never a per-language regex.
 
 ### 🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")
 
