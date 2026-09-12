@@ -82,13 +82,26 @@ the key contract (a P0 if it ever invents chess content).
 
 ---
 
-## Coverage summary (this session)
-- **✅ verified green on prod:** Dashboard, Openings explorer, Tactics hub, Weaknesses, **Review (real-game 18/18)**, **Play (full-game 10/10)**, coach routing/nav, player-games, tactical-awareness, unified-coach, untouched-surfaces, stream-optin, storage-persistence*.
-- **🔧 audit-rot flagged (app fine, no product bug):** master-integration (prefetch capture), teach-forkdive (capture design), settings-behavior (route consolidation), strength-calibration (fresh-context), book-reader (zone render). Systemic cause for most: the 2026-09-11 opt-in stream blinded event-capture audits → `enableAuditCapture` helper built + proven.
-- **⬜ biggest untested surfaces (ranked by user value):** Kids deep-play, the import→mistakes→drill learning-loop chain, `/coach/teach` adversarial break-loop, individual tactics trainers, `/coach/plan` + `/coach/chat` + `/coach/analyse`, Academy courses, endgame trainer, pro-rep pages, punish-gems full-play loop.
+## Coverage summary (this session + overnight sweep 2026-09-12)
+- **✅ verified green on prod:** Dashboard, Openings explorer, Tactics hub, Weaknesses, **Review (real-game 18/18)**, **Play (full-game 10/10)**, coach routing/nav, player-games, tactical-awareness, unified-coach, untouched-surfaces, stream-optin, storage-persistence (8/8), **strength-calibration (3/3, rewritten to fully-adaptive)**, **settings-behavior G5 (4/4)**, **teach-forkdive (15/15)**, **master-integration (10/10)**.
+- **✅ audit-rot REPAIRED this sweep (app was healthy; audits were stale):**
+  - storage-persistence — read the event at emission off the stream, not the 300-cap Dexie tail.
+  - strength-calibration — rewrote to the fully-adaptive contract (first-run picker removed by David 2026-09-02; component now orphaned dead code, flagged for deletion).
+  - settings-behavior — route consolidation (`/coach/session/walkthrough` → `?teach=X&auto=1`), key on `coach-narration-spoken` (mute-preserved, not `voice-speak-invoked`), proven local capture, confirm the verbosity write before navigating.
+  - master-integration — aggregate prefetch check reads the reliable Dexie source, not racy prod POSTs.
+  - teach-forkdive — already green (stale flag).
+  - break-loop — chaos injectors rebuilt to never manufacture false chaos-* breaks.
+- **🔧 partially restored:** book-reader — core read-aloud tripwire GREEN (book-reader mounts after exiting the auto-started masterclass; reads route through speakReadAloud/bypassVerbosity, no briefCap). 4 residual per-paragraph TEXT-capture fails read `/api/tts` requests that cached clips serve from browser cache; needs clickAndCapture rewired to the listener (separate refinement).
+- **⬜ biggest untested surfaces (ranked by user value):** Kids deep-play, the import→mistakes→drill learning-loop chain, individual tactics trainers, `/coach/plan` + `/coach/chat` + `/coach/analyse`, Academy courses, endgame trainer, pro-rep pages, punish-gems full-play loop.
 
-## Product-bug tally this session
-**One** real product bug found and fixed: `/coach/teach` navigation capture (nav
-imperatives taught a wrong opening). Everything else swept = healthy app or stale
-audit. Fixes shipped: nav bug, dashboard/openings-ui/bare-name/review audits, the
-event-capture enabler.
+## Product-bug tally
+**Two** real product bugs found + fixed + verified on prod:
+1. `/coach/teach` navigation capture (nav imperatives taught a wrong opening).
+2. **Static-routed walkthroughs never generated their optional stages** — tapping
+   a static opening tile (e.g. "Sicilian Defense") started the Watch walk but
+   never cached the tree or fired background stage-gen, so "Continue learning"
+   never surfaced at the leaf and a "drill <static opening>" jump parked forever.
+   Fixed (cache + gen, matching the other tiers); verified on prod (continue-learning
+   enables at 52s, 4 stages generate).
+Everything else swept = healthy app or stale audit. Soundness sweep: clean (all
+negative-eval lessons are honest gambit showcases or honestly-flagged worse lines).
