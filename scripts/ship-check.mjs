@@ -200,6 +200,11 @@ const GATE_TESTS = [
   // prescribe a piece the student doesn't have or phase-blind technique.
   // Locative claims were gated; prescriptive grammar is now gated too.
   'src/services/planPrescriptions.test.ts',
+  // 🔒 COMPUTED-VOICE GROUNDING (David 2026-09-12 deep dive) — describeMoveGeometry
+  // must never claim fork/pin/"wins"/"attacks" on a move whose piece LEGALLY hangs
+  // (the pin-blind seeGain class + the unguarded bare-"attacks" clause). voiceFacts
+  // can only rephrase, never correct a false computed claim, so it's gated here.
+  'src/services/computedVoiceGrounding.test.ts',
   // 🔒 OTA UPDATE CONTRACT (2026-09-03) — the reply shape of /api/ota/manifest
   // IS the update mechanism for every native device, and both of its failure
   // modes are INVISIBLE from the app: a no-op without `kind:'up_to_date'` makes

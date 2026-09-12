@@ -41,6 +41,10 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
+  // pin/legality-aware SEE primitive (2026-09-12) — reached through the chat
+  // path via `landingIsSafe` / `capturesWinMaterial` (both consumed by
+  // groundedAnswer's describeMoveGeometry), not a Q&A lane of its own.
+  'legalSeeGain',
   // reached through an existing chat lane, not on their own
   'findHangingBySee',          // behind the hanging/loose lane (seeGain)
   // narration / reading-drill renderers + graders (not typed Q&A)
