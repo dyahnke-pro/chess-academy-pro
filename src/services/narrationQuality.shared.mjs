@@ -67,6 +67,9 @@ const CHESS_PROPER_NOUN =
 
 const PERSON_VERB =
   /\b(knows?|plays?|played|said|says|thinks?|resigned?|blundered?|is rated|was rated|prefers?|likes?|recommends?|teaches?)\b/;
+/** The same verbs, but they must be the very next word after the name. */
+const ANCHORED_PERSON_VERB =
+  /^\s+(knows?|plays?|played|said|says|thinks?|resigned?|blundered?|is rated|was rated|prefers?|likes?|recommends?|teaches?)\b/;
 
 // Capitalised words that are never people. The bare possessive rule below used
 // to accept any capitalised word before "'s", which classified "TODAY'S choice
@@ -84,8 +87,13 @@ const NEVER_A_PERSON =
 export function namedPerson(clause) {
   for (const m of clause.matchAll(/\b([A-Z][a-z]{2,})\b/g)) {
     if (CHESS_PROPER_NOUN.test(m[1]) || NEVER_A_PERSON.test(m[1])) continue;
+    // THE VERB MUST FOLLOW THE NAME IMMEDIATELY. Testing a 22-character window
+    // meant any verb later in the window counted: "With precise PLAY White is
+    // slightly better" was read as a person named "With". Third false positive
+    // from this rule, so it is anchored now — "Kusha knows" still matches,
+    // "With precise play" no longer does.
     const after = clause.slice(m.index + m[1].length, m.index + m[1].length + 22);
-    if (PERSON_VERB.test(after)) return m[1];
+    if (ANCHORED_PERSON_VERB.test(after)) return m[1];
   }
   return null;
 }
@@ -94,6 +102,16 @@ export function namedPerson(clause) {
  *  never given — the video session, an opponent, the presenter, prior videos,
  *  or the viewers being addressed. */
 export const OPEN_REFERENCE = {
+  // PAST GAME — the post-game-review register bleeding into Watch. The coach
+  // narrates how the pro's own game went ("in the game ... was a mistake",
+  // "in hindsight", "a strong opponent met us with") while the student is
+  // looking at a teaching line they are being walked through for the first
+  // time. CLAUDE.md keeps these two registers apart on purpose: review is
+  // retrospective and about the student's own game; Watch is present-tense
+  // about a demo. Found in the Accelerated Dragon's asides, four times in one
+  // lesson (David 2026-09-12).
+  pastGame:
+    /\bin the game\b|\bin hindsight\b|\bwas a mistake\b|\bshould have (played|recaptured|taken|been)\b|\bwe took\b|\bmet us with\b|\bhadn.t come across\b|\bthe game continued\b|\bas it happened\b|\bwe ended up\b/i,
   rating:
     /\b(a|against a|rated) ?\d{4}\b|\b\d{4}-rated\b|\b(eighteen|seventeen|nineteen|sixteen)-\w+\b|\b\w+-something\b/i,
   session:

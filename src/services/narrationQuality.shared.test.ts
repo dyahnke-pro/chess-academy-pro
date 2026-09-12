@@ -153,3 +153,36 @@ describe('narration scoring — false positives that cost the right answer', () 
       .toBeGreaterThan(scoreNarration('A clean setup, quick development.', 'Sicilian Defense: Accelerated Dragon'));
   });
 });
+
+describe('narration scoring — asides and the past-game register', () => {
+  // The Accelerated Dragon's node `asides` — a field the first sweep report
+  // never scanned — carry the post-game-review register into a Watch lesson:
+  // the coach narrates how the pro's own game went while the student is being
+  // walked through a teaching line for the first time. CLAUDE.md keeps those
+  // registers apart deliberately.
+  it.each([
+    'In the game, after the bishop to d4 and knight to c3, Black is already better; the queen takes d8 was a mistake.',
+    'A strong opponent met us with the bishop to c4, and we castled — an unfamiliar setup for both sides.',
+    "After the knight's retreat to e2, in hindsight the calm d6 was perfectly reasonable too.",
+    "The queen to d2 is a move I honestly hadn't come across.",
+  ])('cuts past-game commentary: %j', (clause) => {
+    expect(classifyClause(clause).disposition).toBe('cut');
+  });
+
+  it('does not read a capitalised word as a person when the verb is merely nearby', () => {
+    // "With precise PLAY White is slightly better" was read as a person named
+    // "With", because the verb check scanned a 22-character window instead of
+    // requiring the verb to follow the name. Third false positive from this one
+    // rule; it is anchored now.
+    expect(namedPerson('With precise play White is slightly better, but it is playable.')).toBeNull();
+    expect(namedPerson("Kusha knows this line very well.")).toBe('Kusha');
+  });
+
+  it('still keeps ordinary present-tense teaching about the demo line', () => {
+    expect(
+      classifyClause(
+        "The bishop settles on g7, aimed straight down the long diagonal at White's centre and queenside.",
+      ).disposition,
+    ).toBe('keep');
+  });
+});

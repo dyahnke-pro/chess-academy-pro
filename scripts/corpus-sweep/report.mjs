@@ -33,14 +33,27 @@ for (const tree of trees) {
   const walk = (node, sans) => {
     if (node.san) sans = [...sans, node.san];
     const idea = (node.idea || '').trim();
-    if (idea) {
+    // A NODE SPEAKS MORE THAN ITS `idea`. Every entry in `asides` is its own
+    // spoken utterance with its own arrows, and the first version of this report
+    // walked `idea` only — leaving 1,147 utterances unscanned, including the
+    // 530-character game recap that is the worst line in the Accelerated Dragon.
+    // Scanning half the narration and reporting a total is worse than not
+    // reporting one.
+    const asideTexts = (node.asides ?? [])
+      .map((a) => (a?.idea || '').trim())
+      .filter(Boolean);
+    if (idea || asideTexts.length) {
       nodes += 1;
       const at = `${tree.openingName} @ ${sans.join(' ') || '(start)'}`;
-      for (const clause of toClauses(idea)) {
-        sentences += 1;
-        const r = classifyClause(clause);
-        if (r.disposition === 'cut') (cuts[r.class] ??= []).push({ at, clause, name: r.name });
-        else if (r.class === 'principle') kept.push({ at, clause });
+      for (const [passage, isAside] of [[idea, false], ...asideTexts.map((t) => [t, true])]) {
+        if (!passage) continue;
+        for (const clause of toClauses(passage)) {
+          sentences += 1;
+          const r = classifyClause(clause);
+          const where = isAside ? `${at}  [aside]` : at;
+          if (r.disposition === 'cut') (cuts[r.class] ??= []).push({ at: where, clause, name: r.name });
+          else if (r.class === 'principle') kept.push({ at: where, clause });
+        }
       }
       // LOOK-AHEAD: moves named that cannot be played from this very board.
       // <=4 get arrows; >=5 get played out and snapped back (David 2026-09-12).
@@ -52,8 +65,15 @@ for (const tree of trees) {
       if (legalPath) {
         const legal = new Set(board.moves().map((m) => m.replace(/[+#]/g, '')));
         const played = sans.length ? sans[sans.length - 1].replace(/[+#]/g, '') : '';
-        const future = namedMoves(idea).filter((m) => m !== played && !legal.has(m));
-        if (future.length >= 5) walkouts.push({ at, future, idea });
+        // Asides recite lines far more often than the beat does — the Dragon's
+        // worst one is an aside — so they are measured for the walk-out too.
+        for (const [passage, isAside] of [[idea, false], ...asideTexts.map((t) => [t, true])]) {
+          if (!passage) continue;
+          const future = namedMoves(passage).filter((m) => m !== played && !legal.has(m));
+          if (future.length >= 5) {
+            walkouts.push({ at: isAside ? `${at}  [aside]` : at, future, idea: passage });
+          }
+        }
       }
     }
     for (const child of node.children ?? []) walk(child.node, sans);
@@ -68,6 +88,7 @@ if (process.argv.includes('--json')) {
 }
 
 const LABEL = {
+  pastGame: 'PAST GAME — retrospective commentary on a game the student never saw',
   rating: 'OPPONENT RATING — a player the student never saw',
   session: 'SESSION / TOURNAMENT FRAMING — the game as an event',
   author: 'AUTHOR ASIDE — the presenter on themselves, or the game as entertainment',
