@@ -15,7 +15,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  seeGain, landingIsSafe, capturesWinMaterial, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  seeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -253,8 +253,12 @@ export function assembleHangingAnswer(fen: string, ask: string | null | undefine
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+      // Pin-aware (2026-09-12): a pinned attacker can't legally take, so it must
+      // not read as "hanging"; a pinned defender can't recapture, so a real hang
+      // isn't masked. `seeGain` (geometric) got both wrong.
+      const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
       let g = 0;
-      try { g = seeGain(chess, cell.square); } catch { g = 0; }
+      try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
       if (g > 0) loose.push({ sq: cell.square, type: cell.type, g });
     }
   }
@@ -400,8 +404,10 @@ export function assemblePieceSafetyAnswer(fen: string, ask: string | null | unde
     .map((s) => ({ s, type: chess.get(s)?.type ?? 'p' }))
     .sort((a, b) => (REVIEW_PIECE_VALUE[a.type] ?? 0) - (REVIEW_PIECE_VALUE[b.type] ?? 0))
     .map((x) => `the ${REVIEW_PIECE_NAME[x.type]} on ${x.s}`);
+  // Pin-aware (2026-09-12): "in trouble" only if THEY have a LEGAL profitable
+  // capture — a pinned attacker that can't actually take must not read as a hang.
   let g = 0;
-  try { g = seeGain(chess, sq); } catch { g = 0; }
+  try { g = legalSeeGainFor(fen, sq, them); } catch { g = 0; }
   if (g > 0) {
     return { facts: `Your ${name} on ${sq} is in trouble — ${named.join(' and ')} ${attackers.length > 1 ? 'hit' : 'hits'} it and it drops about ${g} point${g === 1 ? '' : 's'}.`, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
@@ -421,8 +427,11 @@ export function assembleThreatAnswer(fen: string, _ask: string | null | undefine
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+      // Pin-aware (2026-09-12): only a LEGAL profitable capture counts, so a
+      // pinned attacker/defender can't invent or mask a threat.
+      const capturer: 'w' | 'b' = victimColor === 'w' ? 'b' : 'w';
       let g = 0;
-      try { g = seeGain(chess, cell.square); } catch { g = 0; }
+      try { g = legalSeeGainFor(fen, cell.square, capturer); } catch { g = 0; }
       if (g > 0) wins.push({ sq: cell.square, type: cell.type, g });
     }
   }
@@ -710,7 +719,9 @@ export function assembleSquareControlAnswer(
     const probe = new Chess(fen);
     if (!occupant) probe.put({ type: placedType, color: me }, q.square);
     else if (occupant.color !== me) { probe.remove(q.square); probe.put({ type: placedType, color: me }, q.square); }
-    oppGain = seeGain(probe, q.square); // material THEY net capturing on the square
+    // Pin-aware (2026-09-12): material THEY win by a LEGAL capture on the square
+    // (a pinned attacker no longer makes a safe square read as "NOT safe").
+    oppGain = legalSeeGainFor(probe.fen(), q.square, them);
   } catch { oppGain = 0; }
   const theirs = nameList(theirAtt);
   const mine = nameList(myAtt);
@@ -2111,10 +2122,11 @@ export function quietPurposePhrase(
     if (!mv) return null;
     const mc = moverColor === 'white' ? 'w' : 'b';
     // SAFETY (recapture-safety, mirrors explainBestMoveGrounded): never praise a
-    // piece that HANGS on its landing square. If the opponent can win material
-    // there by SEE, the move isn't a positional gain — stay silent (a rook that
-    // "develops eyeing the centre" but drops to a queen is not a merit).
-    if (seeGain(b, mv.to) > 0) return null;
+    // piece that HANGS on its landing square. Pin-aware (2026-09-12,
+    // `landingIsSafe` — was pin-blind `seeGain(b,mv.to)>0`): a rook that
+    // "develops eyeing the centre" but drops to a legal capture is not a merit,
+    // and a landing defended only by a pinned piece is NOT safe.
+    if (!landingIsSafe(b.fen(), mv.to)) return null;
     // Outpost — a minor piece planted where no enemy pawn can ever attack it.
     if ((mv.piece === 'n' || mv.piece === 'b') && isOutpostSquare(b, mv.to, moverColor)) {
       const rank = parseInt(mv.to[1], 10);

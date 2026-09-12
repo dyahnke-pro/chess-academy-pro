@@ -130,15 +130,25 @@ export function landingIsSafe(fenAfterMove: string, square: Square): boolean {
   return legalSeeGain(fenAfterMove, square) <= 0;
 }
 
+/** Pin/legality-aware SEE gain for `capturingColor` capturing on `square` in
+ *  `fen`, REGARDLESS of whose turn the FEN records — the honest "how much does
+ *  this side win by taking here" used by the safety/hanging/"you-can-win" chat
+ *  answers. A pinned attacker or defender is never counted (drives off legal
+ *  captures), so it neither invents a hang nor masks one. Returns net material
+ *  the capturer wins (`0` = no profitable legal capture). */
+export function legalSeeGainFor(fen: string, square: Square, capturingColor: Color): number {
+  const parts = fen.split(' ');
+  parts[1] = capturingColor;
+  parts[3] = '-'; // clear en-passant, which a flipped turn could make illegal
+  return legalSeeGain(parts.join(' '), square);
+}
+
 /** Would `moverColor` win material by capturing on `square` if it were their
  *  move in `fen`? Pin/legality-aware — the honest "is this fork/attack target
  *  actually winnable" test (a pinned defender of the target no longer makes it
  *  look safe, and a defended equal piece is not "winnable"). */
 export function capturesWinMaterial(fen: string, square: Square, moverColor: Color): boolean {
-  const parts = fen.split(' ');
-  parts[1] = moverColor;
-  parts[3] = '-'; // clear en-passant, which a flipped turn could make illegal
-  return legalSeeGain(parts.join(' '), square) > 0;
+  return legalSeeGainFor(fen, square, moverColor) > 0;
 }
 
 /**
