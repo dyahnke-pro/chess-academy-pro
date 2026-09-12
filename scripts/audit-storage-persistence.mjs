@@ -28,6 +28,7 @@
  */
 import { chromium } from 'playwright';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { enableAuditCapture } from './audit-lib/enable-audit-capture.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import {
   resolveChromiumExecutable,
@@ -47,6 +48,13 @@ async function main() {
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const context = await browser.newContext(sandboxContextOptions());
   await context.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
+  // The `storage-persistence` event fires in the first ~1s of boot; the on-device
+  // Dexie audit log is a 300-entry ROLLING buffer, and 12s of boot+seed traffic
+  // (stockfish, master-play, seed…) trims that early entry out before dump() can
+  // read it — a false "not found". Capture it AT EMISSION off the audit-stream
+  // batch instead (opt-in since 2026-09-11, so enable it; the route fulfils
+  // locally, nothing reaches prod).
+  await context.addInitScript(enableAuditCapture);
   // Chromium denies persist() to a low-engagement origin, which would leave the
   // granted path untested. Grant it explicitly so we exercise the real branch;
   // the DENIED branch is covered by storageQuota.test.ts.
@@ -56,6 +64,20 @@ async function main() {
     /* older Playwright / unsupported permission name — assertions below adapt */
   }
   const page = await context.newPage();
+
+  // Capture the app's own audit events at EMISSION (before the 300-entry Dexie
+  // rolling log can trim them). Fulfilled locally — nothing reaches prod.
+  const streamEvents = [];
+  await page.route('**/api/audit-stream**', async (route) => {
+    const req = route.request();
+    if (req.method() === 'POST') {
+      try {
+        const parsed = JSON.parse(req.postData() || '');
+        for (const e of (Array.isArray(parsed) ? parsed : parsed.events || [parsed])) streamEvents.push(e);
+      } catch { /* ignore */ }
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+  });
 
   // Count persist() calls from the page itself — the "asked exactly once"
   // contract. Installed before any app code runs.
@@ -102,11 +124,16 @@ async function main() {
   //    read from PostHog on-device, so it must exist and carry the grant.
   //    `__AUDIT__` exposes dump(), not recent() (the first pass of this script
   //    guessed the API and produced three false failures).
-  const auditEntry = await page.evaluate(async () => {
-    const rows = await window.__AUDIT__?.dump?.();
-    const hit = (rows ?? []).find((r) => r.kind === 'storage-persistence');
-    return hit ? { summary: hit.summary, source: hit.source } : null;
-  });
+  // Prefer the stream capture (caught at emission); fall back to the Dexie dump
+  // for a localhost run where the buffer hasn't overflowed.
+  const streamHit = streamEvents.find((e) => e?.kind === 'storage-persistence');
+  const auditEntry = streamHit
+    ? { summary: streamHit.summary, source: `${streamHit.source} (stream)` }
+    : await page.evaluate(async () => {
+      const rows = await window.__AUDIT__?.dump?.();
+      const hit = (rows ?? []).find((r) => r.kind === 'storage-persistence');
+      return hit ? { summary: hit.summary, source: `${hit.source} (dexie)` } : null;
+    });
   record(
     'storage-persistence audit emitted',
     !!auditEntry && /persisted=|unsupported/.test(auditEntry.summary ?? ''),
