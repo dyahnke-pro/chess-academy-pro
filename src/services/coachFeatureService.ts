@@ -1509,8 +1509,21 @@ export function buildReviewSegments(
       // matched to the RAW facet strings (the map keys), before applyRefrainOnce
       // rewrites them, so a highlight only rides a facet actually spoken.
       const segKeySquares = [...new Set(keptRaw.flatMap((f) => facetSquares.get(f) ?? []))];
+      // FUNDAMENTALS-FIRST on a flagged student ply (David 2026-09-05 overhaul:
+      // "narrate the fundamentals FIRST"). computeMoveFacets emits the neglected
+      // principle as a [principle] facet, but AFTER the move-mechanics facets —
+      // so in the (now-default) uncapped review a flagged ply led with "your
+      // knight eyes d5" instead of the lesson. Lift the [principle] verdict to
+      // the front of the facets so the flagged move leads with WHY it was flagged;
+      // the causal cross-move chain, when present, still leads ahead of it (it is
+      // itself the deeper positional lesson). Non-flagged plies are unchanged.
+      let orderedKept = kept;
+      if (fundamentalLed) {
+        const principle = kept.filter((f) => /^\[principle\]/.test(f));
+        if (principle.length > 0) orderedKept = [...principle, ...kept.filter((f) => !/^\[principle\]/.test(f))];
+      }
       // The causal chain LEADS the beat when present (it's the cross-move story).
-      const uncappedParts = causalLead ? [causalLead, ...kept] : kept;
+      const uncappedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
