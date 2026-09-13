@@ -285,4 +285,12 @@ deep-dive issue. "Gain context before each fix. Keep the loop tight."
 ### Status
 - [x] typecheck clean; targeted tests green (classroomOpener 7, coachAnswerGates
       16, CoachGamePage 26); lint errors fixed
-- [ ] ship-check + push + batched deploy + audit
+- [x] ship-check green; pushed 48bc7ab → prod bundle DJsCDo_w (verified live)
+- [x] post-deploy: review-overhaul audit ✅ MEETS STANDARD (deep-dive after-dive
+      checks now green, both flagged plies lead with the fundamental; no review
+      regression). UI smoke: Learn opener renders with ≤3 coach-choice chips,
+      Settings "Board Arrows & Highlights" toggle present, 0 pageErrors.
+- [~] on-device (seeded) confirmation of the trend clause + untried-feature nudge
+      firing in a real classroom (needs games-with-Elo + a weakness profile) and
+      the toggle OFF hiding both markers on the board — unit-gated
+      (classroomOpener.test 7, coachAnswerGates), best eyeballed on David's device.
