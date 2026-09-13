@@ -92,7 +92,8 @@ export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): Latent
       if (!cell || cell.color !== enemy || !'rbq'.includes(cell.piece)) continue;
       for (const [dr, dc] of dirsFor(cell.piece)) {
         let rr = r + dr, cc = c + dc;
-        let shields = 0;       // non-student pieces between the enemy and P1
+        let shields = 0;       // blockers between the enemy and P1
+        let shieldColor: 'w' | 'b' | null = null; // the (single) blocker's color
         let front: Cell | null = null;
         // Walk to the first STUDENT piece (P1), counting shields on the way.
         while (rr >= 0 && rr < 8 && cc >= 0 && cc < 8) {
@@ -100,11 +101,19 @@ export function detectLatentDanger(fen: string, studentColor: 'w' | 'b'): Latent
           if (cur) {
             if (cur.color === studentColor) { front = cur; break; }
             shields++;             // an enemy/own blocker between the ray and P1
+            shieldColor = cur.color;
             if (shields > 1) break; // too remote to be a real warning
           }
           rr += dr; cc += dc;
         }
         if (!front || shields > 1) continue;
+        // B#2: a LATENT (shields===1) danger is only a student concern when the
+        // shield is the STUDENT's OWN piece — something they might trade/move and
+        // OPEN the line onto themselves ("mind it before you open the line"). An
+        // ENEMY shield is not the student's to open; that would be the opponent
+        // creating a threat (a different, incoming concern), so this ray is not a
+        // student prophylaxis warning. (A shields===0 ray is already open — kept.)
+        if (shields === 1 && shieldColor === enemy) continue;
         // Continue past P1 to the next piece (P2) — only empties may sit between.
         rr += dr; cc += dc;
         let back: Cell | null = null;

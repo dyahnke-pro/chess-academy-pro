@@ -94,9 +94,16 @@ knight" class does NOT reproduce). Weaknesses found (imprecise, not false):
    also bypasses on a live `mustDefend.net>=3`. Gates: 2 new narrationImportance
    tests (decided-but-winning hang speaks; a mere decided swing stays silent).
    35/35 (importance + positionFacts) green.
-2. **`latentDanger` counts an ENEMY piece as the "shield"** (`latentDanger.ts:100-107,123`)
-   → false "mind it before you open the line" on an alignment the student cannot
-   open. Fix: only a student (or student-tradeable) piece counts as the openable shield.
+2. **`latentDanger` counts an ENEMY piece as the "shield".** ✅ DONE (2026-09-13,
+   B#2). Key realization: a shield is ALWAYS an enemy piece (the walk takes the
+   first STUDENT piece as P1), so the `shields===1` "latent — mind it before you
+   open the line" warning was ALWAYS a line the student cannot open standing-still
+   → a false prophylaxis. Fix: skip the `shields===1` enemy-shielded case in
+   `detectLatentDanger`; the standing warning now fires only on an already-open
+   pin (`shields===0`, "that file is a pin"). The student-OPENS-it-by-trading
+   case keeps its correct, separate framing via `detectTradeCreatesPin`
+   ("before you trade on X…"). Gate: the stale latent-fixture test rewritten to
+   assert the enemy-shielded alignment returns null. latentDanger 11/11.
 3. **`tacticalRead.summarizeVerdict` states unverified material** (`tacticalRead.ts:92-94`):
    +2.8 positional edge → "up a piece" (G3 false material claim). Fix: frame by
    eval magnitude ("clearly better") unless a real material count backs it.
