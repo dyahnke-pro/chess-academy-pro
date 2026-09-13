@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { buildUserProfile, buildGameRecord } from '../test/factories';
-import { ratingTrendNote, untriedFeatureNudge } from './classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance } from './classroomOpener';
 
 // Integration: seed real games / feature stores into fake-indexeddb and verify
 // the two computed opener signals. The student is "hero" (white in every seeded
@@ -73,6 +73,30 @@ describe('classroomOpener — computed opener signals (David 2026-09-13)', () =>
       expect(n!.feature).toBe('review');
     });
 
+  });
+
+  describe('coldStartGuidance', () => {
+    it('prompts upload/review + teach/play when no games are uploaded', async () => {
+      const c = await coldStartGuidance();
+      expect(c).not.toBeNull();
+      expect(c!.line).toMatch(/upload and review/i);
+      expect(c!.line).toMatch(/teach or play/i);
+      expect(c!.chips).toEqual(['Import my games', 'Teach me the Italian', 'Play the Caro-Kann']);
+    });
+
+    it('still prompts upload when the student has only played coach games (none uploaded)', async () => {
+      await db.games.put(buildGameRecord({ id: 'cg', white: 'hero', black: 'AI Coach', source: 'coach', isMasterGame: false }));
+      const c = await coldStartGuidance();
+      expect(c).not.toBeNull(); // coach games are not "uploaded" games to review
+    });
+
+    it('returns null once a real game has been uploaded', async () => {
+      await db.games.put(buildGameRecord({ id: 'imp', white: 'hero', black: 'foe', source: 'chesscom', isMasterGame: false }));
+      expect(await coldStartGuidance()).toBeNull();
+    });
+  });
+
+  describe('untriedFeatureNudge — all tried', () => {
     it('returns null when every surface has been tried', async () => {
       await db.mistakePuzzles.put({ id: 'mp1' } as never);                         // tactics
       await db.openings.put({ id: 'o1', isRepertoire: true } as never);            // openings

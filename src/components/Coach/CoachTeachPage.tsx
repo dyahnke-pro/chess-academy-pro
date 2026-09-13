@@ -89,7 +89,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
-import { ratingTrendNote, untriedFeatureNudge } from '../../services/classroomOpener';
+import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
@@ -10006,7 +10006,23 @@ export function CoachTeachPage(): JSX.Element {
               topCategory = top?.category;
               isRecent = false;
             }
-            if (userInteractedRef.current || !topLabel) return;
+            if (userInteractedRef.current) return;
+            // COLD START (David 2026-09-13) — no weakness to personalize from.
+            // If the student hasn't uploaded any games yet, don't fall back to a
+            // generic set: tell them to upload + review their games, or ask to
+            // teach/play a certain opening. Chips route through the coach (Import
+            // my games → the nav router; teach/play → those intents).
+            if (!topLabel) {
+              const cold = await coldStartGuidance().catch(() => null);
+              if (cold && !userInteractedRef.current) {
+                setMessages((prev) => [...prev, { id: uid('cold-start'), role: 'assistant', content: cold.line, timestamp: Date.now() }]);
+                setCoachChoices(cold.chips.slice(0, 3));
+                speechChainRef.current = speechChainRef.current
+                  .then(() => voiceService.speakForced(cold.line))
+                  .catch(() => undefined);
+              }
+              return; // no weakness data → generic set (or cold-start) stands
+            }
 
             // COMPUTED OPENER SIGNALS (David 2026-09-13) — keep the intro NEW and
             // show the coach is tracking the student's history: name their rating

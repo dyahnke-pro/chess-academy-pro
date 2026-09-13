@@ -66,6 +66,28 @@ export async function ratingTrendNote(windowSize = 12): Promise<RatingTrend | nu
   } catch { return null; }
 }
 
+export interface ColdStart { line: string; chips: string[]; }
+
+/** Cold-start guidance for a student with NO uploaded games yet — nothing to
+ *  compute a weakness or trend from (David 2026-09-13: the opener should say
+ *  "upload and review games" + "ask me to teach or play a certain opening").
+ *  Null once they have imported a game (the personalized opener takes over).
+ *  Coach-played games don't count — the prompt is specifically about UPLOADING
+ *  games to review. Chips route through the coach: "Import my games" → the nav
+ *  router's /games/import, the teach/play chips → the teach/play intents. */
+export async function coldStartGuidance(): Promise<ColdStart | null> {
+  try {
+    const imported = await db.games
+      .filter((g) => g.source !== 'coach' && !g.isMasterGame)
+      .count();
+    if (imported > 0) return null;
+    return {
+      line: "I don't have any of your games yet — upload and review your games and I'll find the patterns costing you points. Or ask me to teach or play a certain opening, like “teach me the Italian” or “play the Caro-Kann.”",
+      chips: ['Import my games', 'Teach me the Italian', 'Play the Caro-Kann'],
+    };
+  } catch { return null; }
+}
+
 type FeatureKey = 'tactics' | 'openings' | 'endgame' | 'review' | 'play';
 
 /** The surface that trains each weakness category — so an untried nudge stays
