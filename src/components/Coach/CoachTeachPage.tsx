@@ -286,7 +286,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
-import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
+import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -4212,6 +4212,16 @@ export function CoachTeachPage(): JSX.Element {
         isNameOpeningQuestion(requestedName) ||
         isTheoryQuestion(requestedName) ||
         isEndgameQuestion(requestedName) ||
+        // POSITION-READ questions — "read the position", "how do I stand",
+        // "who's better", "what's the plan", "are my dark squares weak", "do I
+        // have a minority attack" (David 2026-09-13: a bare "read the position"
+        // on the empty Learn screen was captured as an OPENING NAME to teach,
+        // failed to resolve, and fell to the conversational greeting instead of a
+        // board read). Clearing the capture routes it to the spine's grounded
+        // assessment / positional lanes (assemblePositionAssessment /
+        // assemblePositionalAnswer) — the same read every other surface answers.
+        isPositionAssessmentQuestion(requestedName) ||
+        positionalTopic(requestedName) !== null ||
         // "teach me how <pro> plays the Catalan" — the TEACH verb captured this
         // as an opening name and fuzzy-matched a WRONG opening (Catalan →
         // Smith-Morra), ignoring the pro (David 2026-09-10). It's a player-games
