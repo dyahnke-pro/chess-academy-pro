@@ -87,18 +87,26 @@ import { CLASSIFICATION_STYLES } from './classificationStyles';
 import { Chess } from 'chess.js';
 import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassificationCounts, PhaseAccuracy, MissedTactic, ChatMessage as ChatMessageType, MoveClassification, StockfishAnalysis } from '../../types';
 
-/** UNCAPPED / DEEP-DETAIL review: opt-in via the "Deep Review Detail" Settings
- *  toggle (David 2026-07-21: "we have a toggle switch — at least we should"),
- *  `?uncapped=1` on the URL, or `window.__REVIEW_UNCAPPED__ = true` (the audit
- *  sets the latter via an init script). No localStorage (project rule). Off →
- *  the standard one-beat review register. */
+/** FULL-DETAIL review is now the DEFAULT (David 2026-09-13: "There are no caps!
+ *  Review gets the same level of care and attention!! Same voice, spoken in past
+ *  tense"). Review gets the full per-move teaching every time, matching the
+ *  uncapped Learn voice — the compressed one-beat register was a hidden cap that
+ *  gave real users LESS than the diagnostic showed. The "Deep Review Detail"
+ *  Settings toggle (David 2026-07-21: "we have a toggle switch — at least we
+ *  should") is now an explicit OPT-OUT: set `reviewFullDetail === false` for the
+ *  faster, one-beat review. `?uncapped=0` forces it off for a quick manual check;
+ *  `window.__REVIEW_UNCAPPED__` still works but is redundant now. No localStorage
+ *  (project rule). */
 function isReviewUncapped(): boolean {
   try {
-    if (useAppStore.getState().activeProfile?.preferences.reviewFullDetail === true) return true;
-    if (typeof window === 'undefined') return false;
-    if (new URLSearchParams(window.location.search).get('uncapped') === '1') return true;
-    return (window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === true;
-  } catch { return false; }
+    const pref = useAppStore.getState().activeProfile?.preferences.reviewFullDetail;
+    if (pref === false) return false; // explicit opt-out → fast one-beat review
+    if (pref === true) return true;
+    if (typeof window === 'undefined') return true;
+    if (new URLSearchParams(window.location.search).get('uncapped') === '0') return false;
+    if ((window as unknown as { __REVIEW_UNCAPPED__?: boolean }).__REVIEW_UNCAPPED__ === false) return false;
+    return true; // DEFAULT: full detail, same care as Learn
+  } catch { return true; }
 }
 
 interface CoachGameReviewProps {

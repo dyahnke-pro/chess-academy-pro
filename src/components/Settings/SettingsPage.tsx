@@ -928,8 +928,8 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
       />
       <ToggleRow
         label="Deep Review Detail"
-        tooltip="Post-game reviews narrate every computed fact on every move — tactics, structure, plans, and played-out future lines — instead of the standard one-idea-per-move walk. Applies the next time a review opens."
-        checked={profile.preferences.reviewFullDetail ?? false}
+        tooltip="On by default: post-game reviews narrate every computed fact on every move — tactics, structure, plans, and played-out future lines — the same full voice as Learn. Turn OFF for a faster, shorter one-idea-per-move walk. Applies the next time a review opens."
+        checked={profile.preferences.reviewFullDetail ?? true}
         onChange={(v) => void handleToggle('reviewFullDetail', v)}
         testId="review-full-detail-toggle"
       />
