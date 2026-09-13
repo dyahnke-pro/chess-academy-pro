@@ -660,7 +660,7 @@ describe('coachFeatureService', () => {
       expect(at(33)).toMatch(/checkmate/i);
       // The forced finish is FRAMED at its first move (forcing-move concept).
       expect(at(29)).toMatch(/forced|ends in mate|watch it land/i);
-    });
+    }, 20000); // full 31-move review analysis (~5s) — headroom for CI parallel load
 
     it('delivers the ENUMERATED positional verdict — "you\'re better, here\'s why: 1, 2" (David 2026-07-20 teaching messages)', () => {
       // Sicilian → Black gets an isolated d5 pawn and White owns the open e-file:

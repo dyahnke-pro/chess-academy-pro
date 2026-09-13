@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
-import { legalSeeGain } from './positionReadingService';
+import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine } from './pvPlayback';
@@ -1678,7 +1678,7 @@ export function buildReviewSegments(
         const smv = sb.move(m.san);
         if (smv) {
           const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-          const oppWins = legalSeeGain(sb.fen(), smv.to); // pin-aware: opponent's legal recapture
+          const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
           if (oppWins - capVal >= 1) {
             sacInfo = { piece: ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as const)[smv.piece] ?? 'piece', sq: smv.to };
           }

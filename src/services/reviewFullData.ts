@@ -13,7 +13,7 @@
  */
 import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
-import { legalSeeGain } from './positionReadingService';
+import { legalSeeGainOn } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
@@ -418,7 +418,7 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     const smv = sb.move(san);
     if (smv) {
       const capVal = smv.captured ? (PIECE_PTS[smv.captured] ?? 0) : 0;
-      const oppWins = legalSeeGain(sb.fen(), smv.to); // pin-aware: opponent's legal recapture
+      const oppWins = legalSeeGainOn(sb, smv.to); // pin-aware: opponent's legal recapture
       if (oppWins - capVal >= 1 && studentColorWB) {
         const comp = sacrificeCompensation(fenAfter, moverWB, studentPovCp);
         if (comp.length) facets.push(`[sac] It's a sacrifice — compensation: ${comp.join('; ')}.`);

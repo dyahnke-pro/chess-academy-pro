@@ -102,6 +102,14 @@ export function legalSeeGain(fen: string, square: Square): number {
   return seeCaptureValue(chess, square);
 }
 
+/** Same pin-aware SEE as `legalSeeGain`, but for a caller that ALREADY holds a
+ *  `Chess` at the right side-to-move — skips the fen serialize+parse round-trip
+ *  that dominates the cost in per-ply/per-candidate review loops (2026-09-13
+ *  perf fix). `seeCaptureValue` moves+undoes, so `chess` is restored unchanged. */
+export function legalSeeGainOn(chess: Chess, square: Square): number {
+  try { return seeCaptureValue(chess, square); } catch { return 0; }
+}
+
 /** Negamax SEE over LEGAL captures on `square` for the side to move on `chess`.
  *  Mutates + restores `chess` (no per-ply clone). Depth is naturally bounded by
  *  the number of attackers of one square; a hard guard caps pathological cases. */
@@ -109,6 +117,11 @@ function seeCaptureValue(chess: Chess, square: Square, depth = 0): number {
   if (depth > 16) return 0;
   const victim = chess.get(square);
   if (!victim) return 0;
+  // FAST-PATH (2026-09-13 perf): `attackers()` is a cheap GEOMETRIC superset of
+  // the legal capturers, so if the side to move has NONE, no legal capture
+  // exists and we can skip the expensive full `moves()` generation. This is the
+  // common case in per-ply review loops (a queried square with no attacker).
+  if (chess.attackers(square, chess.turn()).length === 0) return 0;
   const caps = chess
     .moves({ verbose: true })
     .filter((m) => m.to === square && m.captured);

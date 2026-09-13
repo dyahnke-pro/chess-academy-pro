@@ -33,7 +33,7 @@
  */
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
-import { legalSeeGain } from './positionReadingService';
+import { legalSeeGainOn } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat } from './groundedAnswer';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
@@ -84,7 +84,7 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
     if (!flipped) continue;
     const cap = flipped.moves({ verbose: true }).find((m) => m.to === sq && m.captured);
     if (!cap) continue; // no legal capture (pinned attackers) — it does not fall
-    const net = legalSeeGain(flipped.fen(), sq); // pin-aware: legal swap for the side to move
+    const net = legalSeeGainOn(flipped, sq); // pin-aware: legal swap for the side to move
     if (net <= 0) continue; // the exchange sequence does not actually win material
     if (captureHasCounterTactic(flipped.fen(), cap.san, enemy, net)) continue; // refuted one move later
     const cand = { value: PIECE_VAL[c.type] ?? 0,
@@ -471,7 +471,7 @@ export function explainTemptingCapture(
     const after = new Chess(fen);
     after.move(t.san);
     // Opponent's best exchange net on the landing square (their POV, pin-aware).
-    const oppNet = legalSeeGain(after.fen(), t.to);
+    const oppNet = legalSeeGainOn(after, t.to);
     const capturerNoun = PIECE_NOUN[t.piece];
     const victimNoun = PIECE_NOUN[t.captured as string];
     // THE TRAPPED-CAPTURER CASE (David 2026-07-21: "the trapped piece was the
@@ -672,7 +672,7 @@ export function describeTradeConsequence(
     // opponent's LEGAL recapture (geometric seeGain counted pinned recapturers,
     // mislabelling a real swing as an even trade or vice-versa — 2026-09-13).
     let gain = 0;
-    try { gain = (PIECE_VAL[mv.captured] ?? 0) - legalSeeGain(before.fen(), mv.to); } catch { gain = 0; }
+    try { gain = (PIECE_VAL[mv.captured] ?? 0) - legalSeeGainOn(before, mv.to); } catch { gain = 0; }
     if (Math.abs(gain) >= 2) return null; // a real material swing isn't a "trade"
     return moverIsStudent
       ? 'another pair comes off — and with your extra material, every trade is one step closer to the win'
@@ -775,7 +775,7 @@ export function findTrappedPiece(
         after.move(m.san);
         if (m.captured) {
           // Capture-flight: unsafe when the recapture wins the exchange (pin-aware).
-          const oppNet = legalSeeGain(after.fen(), m.to);
+          const oppNet = legalSeeGainOn(after, m.to);
           const gain = PIECE_VAL[m.captured] ?? 0;
           if (oppNet - gain < 1) { allLose = false; break; } // wins/even → escape
         } else {
