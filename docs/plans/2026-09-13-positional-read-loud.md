@@ -103,6 +103,27 @@ to `computeMoveFacets`, registered in the once-per-game dedup regex in
 reviewFullData/reviewDeepThreat/coachFeatureService/reviewCorpusSweep (64 tests;
 corpus board-truth sweep passed).
 
+## Post-deploy (2026-09-13)
+
+- All four commits on `main` (`55633bd`); clean full `ship-check` (the one
+  merge-push failure was a corpus-gate timeout flake — the direct run was green).
+- Prod bundle advanced to `index-DvX-mZgO.js` (deploy healthy, zero pageErrors).
+- **Board-truth of every new lane is locked by deterministic gates**:
+  `narrationAdversarial` (60 real games through every computed lane incl. the
+  widened read — no crash, no move handed over, no empty square named),
+  `reviewCorpusSweep` (every review line board-true across a diverse corpus),
+  `positionalRead` (widened rungs surface), `voicePackage` (cross-turn novelty),
+  `groundedAnswer` (assessment appends the read).
+- **Live-chat probe limitation (honest):** a muted prod probe of the on-demand
+  read on `/coach/teach` hit the fresh-surface ONBOARDING greeting — and so did
+  an untouched lane (`are my dark squares weak` → colour-complex), so it's a
+  pre-existing start-state routing quirk, not this build's regression. Board-move
+  clicks to build a live position were too flaky to drive reliably headless.
+  TRUE live-fire — a typed "read the position / what's the plan" mid-game on
+  `/coach/play`, the in-game observation lane firing on `/coach/teach` during
+  play, and the review walk showing the minority/colour-complex facets — is best
+  confirmed on-device (routed to David).
+
 ## Status
 - [x] voicePackage priorKeys + spokenSentenceKeys + test (46 tests green)
 - [x] CoachTeachPage: observation→DNA kinds; quietTurn shackle dropped; per-game
