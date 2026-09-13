@@ -97,20 +97,29 @@ export function computeImportance(s: ImportanceSignals, rating = 1500): Importan
     else bump(20, 'convert', 'decided — convert-mode teaching');
   }
 
-  // The tactical signals only matter while the game is contested. (A real
-  // must-defend keeps the position contested — the eval/WDL reflect the danger —
-  // so a genuine threat is never silenced by this gate.)
+  // The DECISION/SWING signals only matter while the game is contested — a swing
+  // inside a decided game (+8→+5) is the "eval-bar moved" false positive the
+  // contested gate exists to kill (doctrine failure #2).
   if (contested) {
     if (s.cpLossCp != null && s.cpLossCp >= th.critical) {
       const big = s.cpLossCp >= th.critical * 2;
       bump(big ? 90 : 70, big ? 'blunder' : 'swing', `realized swing ${(s.cpLossCp / 100).toFixed(1)}p`);
     }
-    if (s.threatNet >= 3) bump(75, 'must-defend', `must-defend: ${s.threatNet} hangs`);
     if (s.decision) {
       if (s.decision.severity === 'only-move') bump(85, 'only-move', 'only move holds');
       else if (s.decision.severity === 'critical') bump(65, 'critical', 'a decision hinges here');
     }
   }
+
+  // MUST-DEFEND is NOT gated by contested (B#1, deep-dive 2026-09-12). A live
+  // standing threat that drops ≥ a minor is exactly what the flat/decided bar
+  // HIDES (doctrine item #3: "catches the hanging-piece the flat bar hides"):
+  // in a WON game it becomes the "consolidate — don't let them punch back" beat
+  // (positionFacts frames it by eval), and losing a piece is precisely what
+  // un-decides a won game; in a lost game it is still valid defensive advice.
+  // The old `if (contested)` gate silenced a real hang whenever the student was
+  // clearly winning — the purpose-built winning-framing beat could never fire.
+  if (s.threatNet >= 3) bump(75, 'must-defend', `must-defend: ${s.threatNet} hangs`);
 
   // A forced mate outranks everything, contested-gate or not.
   if (s.evalCpWhitePov != null && Math.abs(s.evalCpWhitePov) >= MATE_CP) {

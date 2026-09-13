@@ -25,6 +25,23 @@ describe('computeImportance — the four failure modes of "eval-bar movement"', 
     expect(v.tier).toBe('must-defend');
   });
 
+  it('B#1 decided-but-winning: a real hang STILL speaks (must-defend bypasses the contested gate)', () => {
+    // Student up a rook (won game, WDL lopsided) AND their rook hangs next move.
+    // The old `if (contested)` gate silenced this; the purpose-built "consolidate
+    // — don't let them punch back" beat could never fire. Losing the piece is
+    // exactly what un-decides a won game, so must-defend must speak here.
+    const v = computeImportance({ ...quiet, threatNet: 5, evalCpWhitePov: 800, wdl: [960, 40, 0] });
+    expect(v.contested).toBe(false);   // the position IS decided…
+    expect(v.speak).toBe(true);        // …yet the hang still earns voice
+    expect(v.tier).toBe('must-defend');
+  });
+
+  it('B#1 guard: a mere SWING in a decided game stays silent (only must-defend bypasses)', () => {
+    // The bypass is scoped to must-defend, NOT to swings — failure #2 stays fixed.
+    const v = computeImportance({ ...quiet, cpLossCp: 400, threatNet: 0, evalCpWhitePov: 800, wdl: [960, 40, 0] });
+    expect(v.speak).toBe(false);
+  });
+
   it('#4 quiet lesson: nothing tactical, but a declared teaching beat SPEAKS', () => {
     const v = computeImportance({ ...quiet, teachingBeat: true });
     expect(v.speak).toBe(true);

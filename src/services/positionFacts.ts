@@ -343,9 +343,12 @@ function buildClauses(a: {
   centralKingDanger: CentralKingDanger | null;
 }): ClauseItem[] {
   const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger } = a;
-  // A latent danger to your own king — or a STATUS band-change — is worth a word
-  // even in an otherwise quiet spot; neither needs the importance gate to fire.
-  if (!importance.speak && !latentDanger && !tradeDanger && !statusText && !kingExposure && !centralKingDanger) return [];
+  // A latent danger to your own king — or a STATUS band-change, or a live
+  // must-defend (a piece hangs next move) — is worth a word even in an otherwise
+  // quiet/decided spot; none of these needs the importance gate to fire (B#1: a
+  // real hang must never be silenced by a decided-but-winning eval).
+  const liveMustDefend = mustDefend.net >= 3 && mustDefend.pieces[0] != null;
+  if (!importance.speak && !liveMustDefend && !latentDanger && !tradeDanger && !statusText && !kingExposure && !centralKingDanger) return [];
   const ranked: ClauseItem[] = [];
 
   // THE STATUS LINE LEADS the briefing (the general's opening read) — highest

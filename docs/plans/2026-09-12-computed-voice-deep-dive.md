@@ -82,13 +82,18 @@ knight" class does NOT reproduce). Weaknesses found (imprecise, not false):
 
 ### Cluster B — position-assessment calculators (landed)
 
-1. **A real hang goes SILENT in a decided-but-winning position.** must-defend bump
-   gated behind `if (contested)` (`narrationImportance.ts:103,108`) + `positionFacts.ts:348`
-   early-returns before the mustDefend clause (:385) when `!importance.speak`.
-   Student up a rook, their rook hangs to the opponent's next move → nothing
-   speaks, though :393-399 has a purpose-built "you're on top — don't let them
-   punch back" line. **Violates the locked importance doctrine (must-defend must
-   fire).** Fix: let live `mustDefend.net≥3` (and mate) bypass the contested gate.
+1. **A real hang goes SILENT in a decided-but-winning position.** ✅ DONE
+   (2026-09-13, B#1). The must-defend bump was inside `if (contested)`
+   (`narrationImportance.ts`) and `positionFacts.ts` early-returned before the
+   mustDefend clause when `!importance.speak`. Fix: moved the `threatNet >= 3`
+   bump OUT of the contested gate (alongside the mate override) — swings/decisions
+   stay gated (failure #2 preserved), but an incoming hang always earns voice
+   (doctrine item #3, "catches the hanging-piece the flat bar hides"); the
+   winning case becomes the purpose-built "consolidate — don't let them punch
+   back" beat. Belt-and-suspenders: `renderRankedBriefing`'s early-return now
+   also bypasses on a live `mustDefend.net>=3`. Gates: 2 new narrationImportance
+   tests (decided-but-winning hang speaks; a mere decided swing stays silent).
+   35/35 (importance + positionFacts) green.
 2. **`latentDanger` counts an ENEMY piece as the "shield"** (`latentDanger.ts:100-107,123`)
    → false "mind it before you open the line" on an alignment the student cannot
    open. Fix: only a student (or student-tradeable) piece counts as the openable shield.
