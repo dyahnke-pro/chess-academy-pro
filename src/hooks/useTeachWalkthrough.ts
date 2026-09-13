@@ -886,6 +886,28 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const treeRef = useRef<WalkthroughTree | null>(null);
   treeRef.current = tree;
 
+  // ── THE COACH DOES NOT SAY THE SAME SENTENCE TWICE IN ONE LESSON ──────────
+  // The per-move delta aside is COMPUTED from the board, and a STANDING threat
+  // is still standing several plies later — so `computeThreatDelta` honestly
+  // returns the identical sentence again. Honest, and unbearable to listen to:
+  // a 2026-09-13 prod walk of the Vienna spoke "And now White is threatening
+  // knight to f7 — forks the queen…" at spoken line 16 and again at line 19,
+  // on two DIFFERENT nodes (all 67 nodes were distinct, so this was not the
+  // replay bug the runIdRef fix closed — it was one computed sentence landing
+  // twice).
+  //
+  // Dedupe on the exact sentence, per lesson. A threat the student has already
+  // been told about, unchanged, is not news; CLAUDE.md's narration rules make
+  // silence the right answer ("silence is acceptable", "don't restate the
+  // board"). The moment the threat CHANGES the sentence changes with it and
+  // speaks again. Same shape as `planSaidRef` / `announcedTrapsRef` on the
+  // sibling play surface.
+  const deltaSaidRef = useRef<{ tree: WalkthroughTree | null; said: Set<string> }>({
+    tree: null,
+    said: new Set(),
+  });
+  if (deltaSaidRef.current.tree !== tree) deltaSaidRef.current = { tree, said: new Set() };
+
   // BOARD-ORIENTATION-DRIVEN REGISTER (David 2026-07-31: "if the user flips
   // the board, I want the coach to flip how it addresses the different
   // colors"). The surface reports the CURRENT view orientation; when it
@@ -1247,7 +1269,19 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               aside = computeRouteDelta(fenBefore, node.san);
             }
           }
+          // Already said, verbatim, earlier in this lesson → say nothing and
+          // move on (see deltaSaidRef).
+          if (aside && deltaSaidRef.current.said.has(aside.say)) {
+            void logAppAudit({
+              kind: 'coach-narration-spoken',
+              category: 'narration',
+              source: 'useTeachWalkthrough.deltaAside.deduped',
+              summary: `repeat suppressed @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
+            });
+            aside = null;
+          }
           if (aside) {
+            deltaSaidRef.current.said.add(aside.say);
             // Draw the delta (gem crush or engine threat) on the current static
             // position — board never moves.
             setNarrationArrows(aside.arrows);

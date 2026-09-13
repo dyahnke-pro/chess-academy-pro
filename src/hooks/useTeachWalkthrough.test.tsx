@@ -605,6 +605,61 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
   });
 });
 
+// ─── THE COACH DOES NOT REPEAT ITSELF (2026-09-13 prod walk) ───────────────
+describe('delta aside is not spoken twice in one lesson', () => {
+  beforeEach(() => {
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+    vi.mocked(voiceService.speakForced).mockClear();
+    vi.mocked(logAppAudit).mockClear();
+    useAppStore.setState({ activeProfile: undefined } as never);
+  });
+
+  // THIS IS THE REAL LINE THAT DID IT, not a contrived one. A prod walk of the
+  // Vienna spoke "And now White is threatening Nf7 — forks the queen on d8 and
+  // rook on h8." at spoken line 16 and again at line 19, three beats apart, on
+  // two DIFFERENT nodes. `computeThreatDelta` is right both times: 12.Bc4 arms
+  // the fork, Black's 13...Bxc3+ (a check) forces it off the table for a ply,
+  // and 14.bxc3 re-arms it — so the threat is genuinely NEW again and the same
+  // sentence is genuinely computed again. Correct, and unbearable to hear.
+  // Stops at 14.bxc3 — the ply that re-arms the fork and used to say it again.
+  const LINE = 'e4 e5 Nf3 Nc6 Nc3 f5 d4 fxe4 Nxe5 Nf6 Bg5 Bb4 Bc4 Bxc3+ bxc3'.split(' ');
+
+  it('speaks a standing threat once, not again when it re-arms', async () => {
+    const nodes = LINE.map((san, i) => ({
+      san,
+      movedBy: i % 2 === 0 ? ('white' as const) : ('black' as const),
+      idea: san,
+      children: [] as { node: unknown }[],
+    }));
+    for (let i = nodes.length - 2; i >= 0; i -= 1) nodes[i].children = [{ node: nodes[i + 1] }];
+    const tree: WalkthroughTree = {
+      openingName: 'Vienna Game',
+      eco: 'C25',
+      intro: '',
+      outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [{ node: nodes[0] as never }] },
+    } as WalkthroughTree;
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(tree));
+
+    // Run to the leaf — the whole lesson, exactly as Watch plays it.
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 60000 });
+
+    const spoken = vi.mocked(voiceService.speakForced).mock.calls.map((c) => c[0]);
+    const forkLine = spoken.filter((t) => /threatening Nf7/.test(t));
+    // Non-vacuous: the aside must actually have fired, or this passes on silence.
+    expect(forkLine.length, 'the Nf7 fork aside never fired — the fixture no longer reproduces it').toBeGreaterThan(0);
+    expect(forkLine.length, `spoken ${forkLine.length}x: ${JSON.stringify(forkLine)}`).toBe(1);
+
+    // And the suppression is observable, not silent.
+    const suppressed = vi
+      .mocked(logAppAudit)
+      .mock.calls.filter((c) => (c[0] as { source?: string })?.source === 'useTeachWalkthrough.deltaAside.deduped');
+    expect(suppressed.length).toBeGreaterThan(0);
+  }, 90000);
+});
+
 // ─── Baked gem picker (David 2026-08-23) ──────────────────────────────────
 describe('baked gem picker', () => {
   beforeEach(() => {

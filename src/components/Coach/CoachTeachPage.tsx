@@ -1215,6 +1215,11 @@ export function CoachTeachPage(): JSX.Element {
   // Guard for the narrated middle+endgame continuation (see
   // startNarratedContinuation). Declared early so handleSubmit can cancel it.
   const continuationRef = useRef(false);
+  /** Render-visible mirror of the guard above, used ONLY to hold the
+   *  service-worker update reload for the length of the play-out (the ref
+   *  can't drive an effect, and the effect is what guarantees release on
+   *  unmount). */
+  const [continuationLive, setContinuationLive] = useState(false);
   /** Arrows for the current play-out move — the same orange trail + green
    *  threat grammar the walkthrough uses, so the middlegame looks like the
    *  lesson it continues (David 2026-07-31). */
@@ -1713,12 +1718,34 @@ export function CoachTeachPage(): JSX.Element {
   const chainHighlightsRef = useRef<BoardHighlight[]>([]);
 
 
-  // A live walkthrough must survive a deploy: hold the service-worker update
-  // reload (index.html controllerchange handler) until the lesson ends.
+  // A live session must survive a deploy: hold the service-worker update
+  // reload (index.html controllerchange handler) until there is nothing on the
+  // board to lose.
+  //
+  // 🔒 A WALKTHROUGH IS NOT THE ONLY THING WORTH HOLDING (2026-09-13 prod
+  // probe). This effect used to gate on `walkthrough.isActive` alone, so the
+  // moment the lesson handed off, the hold dropped and a deploy that had been
+  // waiting all lesson landed instantly. The probe caught it end to end: the
+  // Vienna walk reached its leaf on move 34, the student tapped "Watch the
+  // middlegame and endgame", the play-out made ONE move — and then
+  // `controllerchange — new bundle taking over`, `pagehide`, and a cold
+  // `route-changed (initial) → /coach/teach` with 32 pieces back on the board.
+  // Read as a board bug it looks like the continuation resetting the position;
+  // it was the page reloading underneath it. `continuationLive` is what closes
+  // that hand-off: the play-out is not a walkthrough and outlives one.
+  //
+  // Moves on the board cover the rest of what this surface can hold: a real
+  // game the student is playing against the coach, and an in-place drill they
+  // have started answering. Same rule /coach/play already applies to itself —
+  // an empty board has nothing to lose, so it does not defer anything.
+  // (Known narrow gap: a drill the coach has just SET UP but the student has
+  // not moved in yet has an empty history, so it is not held. The position is
+  // regenerable; a lesson and a game are not.)
+  const boardHasMoves = game.history.length > 0;
   useEffect(() => {
-    if (!walkthrough.isActive) return;
+    if (!walkthrough.isActive && !boardHasMoves && !continuationLive) return;
     return acquireSwReloadHold();
-  }, [walkthrough.isActive]);
+  }, [walkthrough.isActive, boardHasMoves, continuationLive]);
 
   // Auto-flip the board when a walkthrough loads a tree whose
   // studentSide differs from the current orientation. Black-side
@@ -10173,6 +10200,20 @@ export function CoachTeachPage(): JSX.Element {
   const startNarratedContinuation = useCallback(async function startNarratedContinuation(): Promise<void> {
     if (continuationRef.current) return;
     continuationRef.current = true;
+    // HOLD THE DEPLOY RELOAD FOR THE WHOLE PLAY-OUT. Set in the same
+    // synchronous batch as `walkthrough.stop()` below (nothing awaits before
+    // the loop), so the walkthrough's release and this acquire land in ONE
+    // React commit — no gap a timer can see. Releasing the walkthrough's hold
+    // with nothing behind it is what let a `controllerchange` that had been
+    // deferred all lesson fire one move into the middlegame.
+    //
+    // A FLAG, NOT AN IMPERATIVE acquire/release pair: this loop can park
+    // indefinitely on the endgame prompt (`await new Promise` with no timeout),
+    // so a hold released only in the `finally` would leak forever if the
+    // student left the page while the prompt was up — and a stuck
+    // `__HOLD_SW_RELOAD__` blocks every future deploy in that tab. Routed
+    // through the effect above, React's cleanup releases it on unmount.
+    setContinuationLive(true);
     try {
       // The leaf position lives on the walkthrough (the board renders
       // walkthrough.fen while it's active); game.fen is still the start. So
@@ -10338,6 +10379,7 @@ export function CoachTeachPage(): JSX.Element {
         } catch { /* memory is a bonus */ }
       }
     } finally {
+      setContinuationLive(false);
       continuationRef.current = false;
       setContinuationArrows([]);
       setContinuationEndgamePrompt(false);

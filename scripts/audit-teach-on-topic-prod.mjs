@@ -34,6 +34,13 @@ const browser = await chromium.launch({ executablePath: await resolveChromiumExe
 const ctx = await browser.newContext(sandboxContextOptions());
 await ctx.addInitScript(muteTtsForAudit);
 const page = await ctx.newPage();
+// A RELOAD LOOKS EXACTLY LIKE A BOARD BUG (2026-09-13). When a deploy landed
+// mid-run the service worker reloaded the page one move into the play-out, and
+// the board check below reported "snapped back to the start" — sending a
+// session hunting a reset that the continuation never performed. Count main
+// frame navigations so the failure can name what actually happened.
+let navCount = 0;
+page.on('framenavigated', (f) => { if (f === page.mainFrame()) navCount += 1; });
 
 /** What the app actually SPOKE — READ OFF THE APP'S OWN EVENTS, NOT THE WIRE.
  *
@@ -202,9 +209,29 @@ try {
   } else {
     const pieces = async () => page.locator('[data-piece]').count();
     const before = await pieces();
+    const navsBefore = navCount;
     await page.getByText('Watch the middlegame and endgame').first().click();
-    await page.waitForTimeout(8000);
+
+    // ── THE PLAY-OUT HOLDS THE DEPLOY RELOAD. Deterministic — it reads the
+    //    real flag index.html polls, so it needs no deploy to land to fail.
+    //    The lesson's own hold drops the moment `walkthrough.stop()` runs, and
+    //    for one build that was the last hold standing: a `controllerchange`
+    //    that had been deferred all lesson fired one move into the middlegame,
+    //    reloading the page and putting 32 pieces back on the board.
+    await page.waitForTimeout(2500);
+    const heldDuringPlayOut = await page.evaluate(() => window.__HOLD_SW_RELOAD__ === true);
+    check('play-out holds the service-worker reload', heldDuringPlayOut,
+      heldDuringPlayOut
+        ? 'window.__HOLD_SW_RELOAD__ is up while the middlegame plays'
+        : 'the hold dropped at the lesson→play-out hand-off — a deploy will wipe the board mid-narration');
+
+    await page.waitForTimeout(5500);
     const after = await pieces();
+    const reloaded = navCount > navsBefore;
+    check('the page did not reload under the play-out', !reloaded,
+      reloaded
+        ? `${navCount - navsBefore} navigation(s) after the tap — a deploy landed and the reload was not held`
+        : 'no navigation after the tap');
     // 32 pieces is the starting position, and the lesson's leaf is well past it.
     //
     // AN EMPTY BOARD USED TO PASS THIS CHECK (2026-09-13). Under the old
@@ -215,7 +242,11 @@ try {
     const vanished = after < 2;
     const reset = (after === 32 && before < 32) || vanished;
     check('board holds after "Watch the middlegame"', !reset,
-      `pieces before=${before} after=${after}${vanished ? ' — the board rendered NOTHING' : reset ? ' — snapped back to the start' : ''}`);
+      `pieces before=${before} after=${after}`
+      + (vanished ? ' — the board rendered NOTHING'
+        : reset ? (reloaded ? ' — the PAGE RELOADED (not a board reset): see the two checks above'
+                            : ' — snapped back to the start')
+        : ''));
     check('walkthrough released the board', await page.locator('[data-testid="walkthrough-narrating-panel"]').count() === 0,
       'the walkthrough panel must be gone once the continuation owns the board');
   }
