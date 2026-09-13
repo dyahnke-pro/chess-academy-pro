@@ -176,3 +176,25 @@ describe('gradeBorrowedTeaching — probe calls do not pollute the audit', () =>
     expect(page).toMatch(/gradeBorrowedTeaching\(spokenBeatText\(src\.note\), args\.fenAfterReply, 'coachTeach\.teachingTier'\)/);
   });
 });
+
+describe('applyCandidateArrows preserves code-authored highlight markers (David 2026-09-13)', () => {
+  it('keeps a [BOARD: highlight:sq:yellow] across the arrow re-derive pass', async () => {
+    // injectCandidateArrows strips ALL [BOARD:] markers to re-derive arrows — which
+    // used to drop the on-demand read's key-square highlights on every coachService
+    // surface (chat/play/drawer). The wrapper must re-append them.
+    const { applyCandidateArrows } = await import('./coachAnswerGates');
+    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const out = await applyCandidateArrows(
+      'Their king is still stuck in the centre — worth targeting. [BOARD: highlight:e8:yellow]',
+      start, 'test',
+    );
+    expect(out).toContain('[BOARD: highlight:e8:yellow]');
+  });
+
+  it('does not duplicate a highlight the pass already kept', async () => {
+    const { applyCandidateArrows } = await import('./coachAnswerGates');
+    const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const out = await applyCandidateArrows('A quiet read. [BOARD: highlight:d4:yellow]', start, 'test');
+    expect((out.match(/\[BOARD:\s*highlight:d4:yellow\]/gi) ?? []).length).toBe(1);
+  });
+});

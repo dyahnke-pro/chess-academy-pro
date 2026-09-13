@@ -420,6 +420,15 @@ export async function applyCandidateArrows(
 ): Promise<string> {
   if (!text.trim() || !fen) return text;
   try {
+    // injectCandidateArrows STRIPS every pre-existing [BOARD:] marker to
+    // re-derive the arrows fresh — which also drops any code-authored HIGHLIGHT
+    // markers the answer carried (the on-demand read's key squares, coupled from
+    // the computer per G0; David 2026-09-13 "highlights on all surfaces"). This
+    // is the arrow-DISPLAY pass, not a highlight gate, so preserve those markers
+    // across it and re-append if the pass didn't keep them. Without this the read
+    // spoke its key squares but the board never lit them on any coachService
+    // surface (chat / play / the global drawer).
+    const highlightMarkers = text.match(/\[BOARD:\s*highlight:[^\]]*\]/gi) ?? [];
     const { text: out, injected } = await injectCandidateArrows(text, fen, rankCandidatesAtFen, opts);
     if (injected.length > 0) {
       void logAppAudit({
@@ -430,6 +439,9 @@ export async function applyCandidateArrows(
         details: JSON.stringify({ source, injected }),
         fen,
       });
+    }
+    if (highlightMarkers.length > 0 && !/\[BOARD:\s*highlight:/i.test(out)) {
+      return `${out} ${highlightMarkers.join(' ')}`.trim();
     }
     return out;
   } catch {
