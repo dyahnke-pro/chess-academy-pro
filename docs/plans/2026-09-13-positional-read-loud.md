@@ -224,3 +224,20 @@ this path (component state), so they were always fine.
   FUND/FUNDLEAD caught it; fixed by lifting the `[principle]` facet to the front of
   a flagged student ply in the uncapped branch.
 - **On-demand highlight strip** (above), caught by `audit-ondemand-read-marks-prod`.
+
+### Post-deploy audit results (prod bundle CYsmJCND / cde3445)
+- `audit-ondemand-read-marks-prod`: read fires on-topic + **yellow key-square
+  highlights render on the play board** (`e8,d4`), 0 pageErrors. ✅ (the highlight
+  fix confirmed end-to-end on prod).
+- `audit-review-overhaul-prod`: the contracts this work touches all PASS —
+  **FUNDLEAD** (flagged plies lead with the fundamental, 1/1 both runs),
+  board-accuracy, seat-attribution, no-we/our, recap, WIN card, auto-advance,
+  free-board explore, show-me. Two checks still ❌: `FUND fixture-ply-graded-
+  after-dive` + `…leads-with-fundamentals-after-dive` — the DEEP-DIVE re-grade of
+  the fixture move (6...Nb6) is flaky across runs (badge GOOD/none/inaccuracy,
+  `best` sometimes null, after-dive lead sometimes ""). PRE-EXISTING (failed on
+  84d1a2a, before the fundamentals fix) and independent of the facet-reorder
+  (which reorders, never empties, a flagged ply's narration). 🚩 Separate
+  follow-up: the deep-dive re-analysis/re-narration path (why a dived ply can
+  come back badge=none / lead="") — a review-feature reliability issue, not this
+  build's marks/swap-per-phrase work.
