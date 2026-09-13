@@ -41,10 +41,12 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // low-level helpers other computers call
   'seeSequence', 'minorCanReachSquare', 'pieceScope', 'pressureCount',
   'forcingPrefix', 'findForcingCandidates',
-  // pin/legality-aware SEE primitive (2026-09-12) — reached through the chat
+  // pin/legality-aware SEE primitives (2026-09-12/13) — reached through the chat
   // path via `landingIsSafe` / `capturesWinMaterial` (both consumed by
-  // groundedAnswer's describeMoveGeometry), not a Q&A lane of its own.
-  'legalSeeGain',
+  // groundedAnswer's describeMoveGeometry), not Q&A lanes of their own.
+  // `legalSeeGainOn` is the Chess-object entry point (perf); `signedLegalSeeFor`
+  // is the signed variant backing principleAttribution's tempo/hang attribution.
+  'legalSeeGain', 'legalSeeGainOn', 'signedLegalSeeFor',
   // reached through an existing chat lane, not on their own
   'findHangingBySee',          // behind the hanging/loose lane (seeGain)
   // narration / reading-drill renderers + graders (not typed Q&A)
