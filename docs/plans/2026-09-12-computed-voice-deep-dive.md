@@ -602,14 +602,28 @@ re-design their surface), then:
     reviewTrapQuestion:87.
   - **DELIBERATELY LEFT (not bugs):** `whyItFailed.ts` has its OWN pin-aware SEE
     (`seeInitiate` plays legal moves, returns 0 when pinned) — correct as-is.
-  - **DEFERRED — needs a SIGNED pin-aware SEE helper:** `principleAttribution.ts`
-    `hangsBy` (240). It is used as a signed SEE in `tempoTargets` (a NEGATIVE net
-    — the defender LOSES by capturing the attacker — is what makes a kick a real
-    tempo). The floored primitives can't express that, and a speculative floored
-    conversion broke 3 attribution tests, so it was reverted with a comment. The
-    right fix is a small signed-legal-SEE helper (least-valuable legal first
-    capture, unfloored root; floored recaptures) — a follow-up, low-stakes
-    (internal misconception attribution, not a direct "you win X" claim).
+  - **✅ CLOSED 2026-09-13 — `principleAttribution.hangsBy` now pin-aware via the
+    new SIGNED helper.** hangsBy backs the review's tempo / loose-piece / kick
+    teaching (and the misconception classifier → weakness spine). It is used as a
+    SIGNED SEE (a NEGATIVE net — the defender LOSES by capturing the attacker —
+    proves a kick is a real tempo), which the floored primitives can't express (a
+    first floored attempt broke tempo-handed / same-piece-twice detection). The
+    user-facing bug was real and demonstrated: on a board with a pin (e.g. Nd4
+    "attacked" only by a bishop pinned to its king), geometric hangsBy returned
+    +3 → the review would falsely narrate "you left the knight loose, they take
+    it" / "you handed a tempo" when the attacker can't legally capture; the
+    mirror (defender pinned) missed a real hang. Fixed with
+    `signedLegalSeeFor(fen, square, capturingColor)` — least-valuable LEGAL root
+    capture (pinned attackers excluded → 0), floored `seeCaptureValue` recapture,
+    sign preserved. principleAttribution 12/12, misconceptionClassifier +
+    learnFundamentalNarration green; corpus locks it (pinned → 0, real hang → +,
+    genuine loss → −).
+  - **PERF:** the pin-aware SEE is heavier than geometric; in the per-ply review
+    loops it added ~21% (Opera review 4815→5823ms, over the test's 5s budget).
+    Restored to baseline (4839ms) with a `seeCaptureValue` `attackers()`
+    fast-path (skip full move-gen when no geometric capturer — behavior-
+    preserving) + `legalSeeGainOn(chess, sq)` (no fen round-trip) in the hot
+    loops. The one heavy full-game review test got explicit 20s headroom.
   - Gates: the differential corpus grew to 13 rows (hanging-detection added);
     every touched file's co-located tests stay green (positionReading 109,
     groundedAnswer 234, review/danya/coachFeature/pvPlayback/moveFundamentals

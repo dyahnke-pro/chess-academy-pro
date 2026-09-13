@@ -156,6 +156,33 @@ export function legalSeeGainFor(fen: string, square: Square, capturingColor: Col
   return legalSeeGain(parts.join(' '), square);
 }
 
+/** SIGNED pin/legality-aware SEE: what `capturingColor` NETS by initiating a
+ *  capture on `square` — like `legalSeeGainFor` but NOT floored at 0, so a
+ *  capture that LOSES material returns a NEGATIVE value. This is the pin-aware
+ *  replacement for the geometric `seeGain` at the handful of sites that need the
+ *  sign (a negative net — "the defender loses by capturing the attacker" — is
+ *  how a kick is proven a real tempo). The root capture is the least-valuable
+ *  LEGAL attacker (a pinned one is never counted → 0 when none can legally
+ *  take); the recapture swap is the floored `seeCaptureValue`. `0` = no legal
+ *  capturer OR an exactly-even trade. */
+export function signedLegalSeeFor(fen: string, square: Square, capturingColor: Color): number {
+  const parts = fen.split(' ');
+  parts[1] = capturingColor;
+  parts[3] = '-';
+  let chess: Chess;
+  try { chess = new Chess(parts.join(' ')); } catch { return 0; }
+  const victim = chess.get(square);
+  if (!victim || victim.color === capturingColor) return 0;
+  if (chess.attackers(square, capturingColor).length === 0) return 0; // cheap superset — no capturer
+  const caps = chess.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+  if (caps.length === 0) return 0; // every geometric attacker is pinned
+  caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+  try { chess.move(caps[0]); } catch { return 0; }
+  const recapture = seeCaptureValue(chess, square); // owner's best floored legal recapture
+  chess.undo();
+  return (PIECE_VALUE[victim.type] ?? 0) - recapture;
+}
+
 /** Would `moverColor` win material by capturing on `square` if it were their
  *  move in `fen`? Pin/legality-aware — the honest "is this fork/attack target
  *  actually winnable" test (a pinned defender of the target no longer makes it

@@ -36,6 +36,7 @@ import {
   pressureCount,
   pressuredTargets,
   findHangingBySee,
+  signedLegalSeeFor,
 } from './positionReadingService';
 import { isCriticalThreat } from './tacticAlertService';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -184,6 +185,25 @@ describe('computedMaterialTruth — pressureCount verdict + chat "pressure" answ
     // Undefended black knight on e6, White rook bearing on it.
     const fen = '6k1/8/4n3/8/8/4R3/8/6K1 w - - 0 1';
     expect(pressureCount(fen, 'e6')?.verdict).toBe('winnable');
+  });
+});
+
+describe('computedMaterialTruth — signedLegalSeeFor is pin-aware AND keeps the sign', () => {
+  // The signed helper backs principleAttribution's hangsBy (the review's tempo /
+  // loose-piece / kick teaching). It must be pin-aware like the floored
+  // primitives BUT preserve the negative net the tempo detectors rely on.
+  it('a pinned attacker wins nothing here (was a geometric false +3)', () => {
+    // Black Bg7 geometrically attacks Nd4 but is pinned to Kg8 by Rg1.
+    const fen = '6k1/6b1/8/8/3N4/8/8/6RK b - - 0 1';
+    expect(seeGain(new Chess(fen), 'd4')).toBeGreaterThan(0); // geometric: "hangs"
+    expect(signedLegalSeeFor(fen, 'd4', 'b')).toBe(0); // pin-aware: safe
+  });
+  it('keeps a real hang positive and a genuine loss negative', () => {
+    // Undefended knight → a real hang (+3).
+    expect(signedLegalSeeFor('6k1/8/8/8/3N4/8/8/3rK3 b - - 0 1', 'd4', 'b')).toBe(3);
+    // Black queen grabs a knight defended by a pawn → she is lost (net negative);
+    // the negative is the signal that a same-square kick is a real tempo.
+    expect(signedLegalSeeFor('6k1/8/8/3q4/3N4/2P5/8/6K1 b - - 0 1', 'd4', 'b')).toBeLessThan(0);
   });
 });
 

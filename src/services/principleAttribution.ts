@@ -26,7 +26,7 @@
  * deep dive.
  */
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { signedLegalSeeFor } from './positionReadingService';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 export const FUNDAMENTAL_IDS = [
@@ -230,14 +230,16 @@ function pawnAttacks(sq: string, color: Color): string[] {
   if (f < 7) out.push(`${String.fromCharCode(98 + f)}${r}`);
   return out;
 }
-/** SEE for the piece on `sq`: > 0 means its ENEMY wins material by capturing it.
- *  NB kept on the geometric `seeGain` deliberately: this is used as a SIGNED
- *  SEE in `tempoTargets` (a NEGATIVE net — the defender loses by capturing the
- *  attacker — is what makes a kick a real tempo), and the pin-aware primitives
- *  floor at 0, so they can't express that. Converting it needs a signed
- *  pin-aware SEE helper (2026-09-13 sweep — deferred, tracked in the plan doc). */
+/** SEE for the piece on `sq`: > 0 means its ENEMY wins material by capturing it;
+ *  < 0 means the enemy LOSES by capturing (the piece is safe, and — for a kick —
+ *  that negative is what proves a real tempo). Pin/legality-aware via the SIGNED
+ *  helper (2026-09-13): a pinned attacker no longer invents a hang, a pinned
+ *  defender no longer masks one, and the sign the tempo detectors rely on is
+ *  preserved (unlike the floored primitives). */
 function hangsBy(chess: Chess, sq: Square): number {
-  try { return seeGain(chess, sq); } catch { return 0; }
+  const p = chess.get(sq);
+  if (!p) return 0;
+  try { return signedLegalSeeFor(chess.fen(), sq, other(p.color)); } catch { return 0; }
 }
 /** After `mover` plays `m` from `chess`: does the moved unit survive an exchange
  *  on its square (nobody wins material by taking it)? */
