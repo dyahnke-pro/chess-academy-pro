@@ -5009,13 +5009,13 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
+import { findPieceQuality, findWeakPawns, findWeakSquares, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 
 export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
   | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
   | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
-  | 'xray' | 'maneuver' | 'endgame-plan';
+  | 'xray' | 'maneuver' | 'endgame-plan' | 'color-complex' | 'minority-attack';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -5151,6 +5151,30 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const theirs = me === 'white' ? s.black : s.white;
     const verdict = mine > theirs ? 'you have the space advantage' : mine < theirs ? `${opp} has more space` : 'space is balanced';
     return { facts: `You control ${mine} square${mine === 1 ? '' : 's'} in the contested zone to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'color-complex') {
+    // A colour-complex weakness: a side missing its bishop of one colour with
+    // ≥2 own-camp holes of that colour. Deterministic (G3) — the opponent's
+    // pieces settle on those squares unchallenged. Honest decline when neither
+    // side has one.
+    const cc = findColorComplexWeakness(fen);
+    const mine = cc.find((c) => c.side === myC);
+    const theirs = cc.find((c) => c.side === oppC);
+    const yours = mine ? `Your ${mine.complex} squares are weak — ${mine.squares.join(', ')}; with no ${mine.complex}-squared bishop, no piece naturally covers them.` : '';
+    const opps = theirs ? `${oppCap}'s ${theirs.complex} squares are weak — ${theirs.squares.join(', ')}; a knight or bishop planted there can't be challenged, ${opp} having no ${theirs.complex}-squared bishop.` : '';
+    if (!yours && !opps) return { facts: `No colour-complex weakness right now — both sides still hold the bishop that covers those squares.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: [opps, yours].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  }
+
+  if (topic === 'minority-attack') {
+    // A pawn minority on a flank with a legal lever ready to make contact. Names
+    // the concrete push + target (G3), never a vague "play on the wing".
+    const ma = findMinorityAttack(fen, myC);
+    if (ma) return { facts: `You have a minority attack on the ${ma.flank}: push ${ma.leverSan} to hit the pawn on ${ma.target}, forcing a trade that leaves ${opp} a backward pawn on a half-open file to target.`, bestMoveSan: ma.leverSan, bestMoveFromTo: null, sources: src };
+    const theirs = findMinorityAttack(fen, oppC);
+    if (theirs) return { facts: `${oppCap} has a minority attack on the ${theirs.flank} — ${theirs.leverSan} is coming to hit your pawn on ${theirs.target}, and the trade would leave you a weak pawn there. Prepare to defend it or break the tension first.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `No minority attack going — no flank where one side has fewer pawns with a lever ready to strike.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'bishop-pair') {

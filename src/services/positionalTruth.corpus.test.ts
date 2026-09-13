@@ -20,6 +20,8 @@ import {
   findWeakSquares,
   findPassedPawns,
   findBlockade,
+  findColorComplexWeakness,
+  findMinorityAttack,
 } from './positionReadingService';
 
 describe('positionalTruth — knight outpost', () => {
@@ -71,6 +73,44 @@ describe('positionalTruth — weak squares are pawn-holes, not piece-guarded squ
     const w = findWeakSquares('4k3/8/8/8/4P3/8/8/4K3 w - - 0 1').white;
     expect(w).not.toContain('d5'); // e4 guards d5
     expect(w).not.toContain('f5'); // e4 guards f5
+  });
+});
+
+describe('positionalTruth — rook on the seventh (2026-09-13 add)', () => {
+  it('flags a rook on the relative 7th that bites on enemy pawns', () => {
+    const q = findPieceQuality('6k1/3R1ppp/8/8/8/8/5PPP/6K1 w - - 0 1');
+    expect(q.some((n) => n.square === 'd7' && n.reason === 'rook on the seventh rank')).toBe(true);
+  });
+  it('does NOT praise a rook on the 7th that simply hangs', () => {
+    // Bc8 attacks d7 — the rook is not safe there.
+    const q = findPieceQuality('2b3k1/3R2pp/8/8/8/8/6PP/6K1 w - - 0 1');
+    expect(q.some((n) => n.reason === 'rook on the seventh rank')).toBe(false);
+  });
+});
+
+describe('positionalTruth — weak colour complex (2026-09-13 add)', () => {
+  it('fires when the bishop of that colour is gone and ≥2 own-camp holes are that colour', () => {
+    // Black has a light bishop (c8) but NO dark bishop; d6/f6/h6 are dark holes
+    // in Black's camp → a dark-square complex weakness for Black.
+    const cc = findColorComplexWeakness('2b3k1/pp3p1p/4p1p1/8/8/8/8/4K3 w - - 0 1');
+    expect(cc.some((c) => c.side === 'b' && c.complex === 'dark' && c.squares.includes('d6'))).toBe(true);
+  });
+  it('does NOT fire when a bishop of that colour still covers the squares', () => {
+    // Black keeps its dark bishop on g7 → no dark-complex weakness.
+    const cc = findColorComplexWeakness('2b2bk1/pp3p1p/4p1p1/8/8/8/8/4K3 w - - 0 1');
+    expect(cc.some((c) => c.side === 'b' && c.complex === 'dark')).toBe(false);
+  });
+});
+
+describe('positionalTruth — minority attack (2026-09-13 add)', () => {
+  it('names the lever + target when a real minority is ready to strike', () => {
+    // White a2,b4 vs Black a7,b7,c6 → b5 hits c6 (Carlsbad archetype).
+    const ma = findMinorityAttack('6k1/pp3ppp/2p1p3/8/1P6/4P3/P4PPP/6K1 w - - 0 1', 'w');
+    expect(ma).toEqual({ flank: 'queenside', leverSan: 'b5', leverFrom: 'b4', leverTo: 'b5', target: 'c6' });
+  });
+  it('does NOT fire without a pawn minority on the flank', () => {
+    // Equal pawns on the queenside → no minority attack.
+    expect(findMinorityAttack('6k1/pp3ppp/4p3/8/1P6/4P3/P4PPP/6K1 w - - 0 1', 'w')).toBeNull();
   });
 });
 

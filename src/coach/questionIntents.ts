@@ -2490,7 +2490,7 @@ export type PositionalTopic =
   | 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece'
   | 'key-squares' | 'space' | 'bishop-pair' | 'passed-pawn' | 'best-piece'
   | 'pressure' | 'targets' | 'open-files' | 'pawn-breaks' | 'structure-name'
-  | 'xray' | 'maneuver' | 'endgame-plan';
+  | 'xray' | 'maneuver' | 'endgame-plan' | 'color-complex' | 'minority-attack';
 export function positionalTopic(ask: string | undefined): PositionalTopic | null {
   if (!ask) return null;
   const a = ask.toLowerCase();
@@ -2509,6 +2509,9 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   if (/\bpassed\s+pawns?\b|\bpassers?\b|\bpassed\b/.test(a)) return 'passed-pawn';
   // OPEN FILES — "any open files for my rooks".
   if (/\bopen\s+files?\b|\bhalf[\s-]?open\s+files?\b|\bfiles?\s+for\s+my\s+rooks?\b|\bwhere\s+(?:do|should)\s+my\s+rooks?\b/.test(a)) return 'open-files';
+  // MINORITY ATTACK — "do I have a minority attack / pawn minority / Carlsbad".
+  // Before pawn-breaks so the specific plan wins over the generic "break".
+  if (/\bminority\s+attack\b|\bpawn\s+minority\b|\bcarlsbad\b|\bminority\s+(?:on\s+the\s+)?(?:queenside|kingside)\b/.test(a)) return 'minority-attack';
   // PAWN BREAKS — "what pawn break do I have / how do I open the position".
   if (/\bpawn\s+breaks?\b|\bbreaks?\b(?!\s+down)|\bhow\s+(?:do|should)\s+i\s+(?:open|break)\b/.test(a)) return 'pawn-breaks';
   // X-RAY — "any x-rays / pins through pieces".
@@ -2528,6 +2531,10 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   // grounded from findWeakSquares. Placed after `structure` so "do I have weak
   // squares" (own-structure yes/no) keeps its existing route; this catches the
   // open "what/where are the key squares / outposts / holes" phrasings.
+  // COLOUR COMPLEX — "are my dark/light squares weak / colour-complex weakness".
+  // Before key-squares so a COLOUR-qualified weak-square ask routes to the
+  // complex read; a bare "weak squares" still falls through to key-squares.
+  if (/\bcolou?r\s+complex\b|\b(?:dark|light)[\s-]?squares?\s+(?:weak|weakness|complex|problem)\b|\b(?:weak|weakness)\s+(?:on\s+(?:the\s+)?|of\s+(?:the\s+)?)?(?:dark|light)\s+squares?\b|\b(?:dark|light)[\s-]square\s+(?:weakness|complex|hole)\b/.test(a)) return 'color-complex';
   if (/\b(?:key|weak|strong|important|critical|good|outpost)\s+squares?\b|\boutposts?\b|\bwhere.*\bholes?\b|\bany\s+holes?\b|\bwhat\s+squares?\s+(?:should|matter|to\s+(?:aim|target))\b/.test(a)) return 'key-squares';
   // BEST / WORST PIECE — "which is my best / most active / worst piece".
   // Allow an intervening "placed" — "best PLACED piece" (David 2026-09-10 audit:

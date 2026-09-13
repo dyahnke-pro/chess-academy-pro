@@ -411,6 +411,27 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           const occ = chess.get(`${fileLetter}${r}` as Square);
           if (occ && occ.type === 'p') { if (occ.color === color) ownPawns += 1; else enemyPawns += 1; }
         }
+        // ROOK ON THE (RELATIVE) SEVENTH — a rook on the opponent's 2nd rank
+        // that BITES on something: an enemy pawn stuck on that rank, or the
+        // enemy king pinned to its back rank. "A rook on the seventh is worth a
+        // pawn" only when it has targets; a rook on an empty 7th with the king
+        // long gone is just a rook. Guarded by pin-aware safety so a rook that
+        // simply hangs there is never praised (2026-09-13). Board geometry (G3).
+        const seventh = color === 'w' ? 7 : 2;
+        if (rank === seventh) {
+          const enemy: Color = color === 'w' ? 'b' : 'w';
+          const backRank = color === 'w' ? 8 : 1;
+          let enemyPawnOnRank = false;
+          for (let f2 = 0; f2 < 8; f2 += 1) {
+            const occ = chess.get(`${String.fromCharCode(97 + f2)}${seventh}` as Square);
+            if (occ && occ.type === 'p' && occ.color === enemy) { enemyPawnOnRank = true; break; }
+          }
+          const enemyKing = chess.board().flat().find((c2) => c2 && c2.type === 'k' && c2.color === enemy);
+          const kingOnBack = !!enemyKing && Number(enemyKing.square[1]) === backRank;
+          if ((enemyPawnOnRank || kingOnBack) && legalSeeGainFor(fen, square, enemy) <= 0) {
+            notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the seventh rank' });
+          }
+        }
         if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on the open file' });
         else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', reason: 'rook on a semi-open file' });
       }
@@ -466,6 +487,110 @@ export function findWeakSquares(fen: string): { white: Square[]; black: Square[]
   out.white = out.white.slice(0, 4);
   out.black = out.black.slice(0, 4);
   return out;
+}
+
+export interface ColorComplexWeakness {
+  /** The side whose complex is weak. */
+  side: Color;
+  /** The square-colour that is weak in that side's camp. */
+  complex: 'light' | 'dark';
+  /** The holes of that colour the opponent can settle on. */
+  squares: Square[];
+}
+
+/**
+ * WEAK COLOR COMPLEX — a side that has NO bishop of one square-colour AND has
+ * ≥2 holes of that colour in its own camp. With the bishop gone, no piece
+ * naturally covers those squares and no pawn ever can (they're holes), so the
+ * opponent's knight or surviving bishop settles there unchallenged. The classic
+ * "dark-square weakness after the dark-squared bishop is traded." Reuses
+ * `findWeakSquares` (pawn-holes) + bishop presence — pure geometry (G3), never
+ * an eval guess. Both conditions must hold: a missing bishop alone isn't a
+ * weakness, and holes a bishop still covers aren't a complex.
+ */
+export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const holes = findWeakSquares(fen);
+  const out: ColorComplexWeakness[] = [];
+  for (const side of ['w', 'b'] as Color[]) {
+    const hasBishopOfColor: Record<'light' | 'dark', boolean> = { light: false, dark: false };
+    for (const row of chess.board()) for (const cell of row) {
+      if (cell && cell.type === 'b' && cell.color === side) hasBishopOfColor[squareColor(cell.square)] = true;
+    }
+    // Only holes in the side's OWN half count — a colour-complex weakness is
+    // about squares in your camp the opponent settles on, not the shared centre.
+    const sideHoles = (side === 'w' ? holes.white : holes.black)
+      .filter((sq) => (side === 'w' ? Number(sq[1]) <= 4 : Number(sq[1]) >= 5));
+    for (const complex of ['light', 'dark'] as const) {
+      if (hasBishopOfColor[complex]) continue; // a bishop of that colour still covers it
+      const cHoles = sideHoles.filter((sq) => squareColor(sq) === complex);
+      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles });
+    }
+  }
+  return out;
+}
+
+export interface MinorityAttack {
+  /** The flank the minority runs on. */
+  flank: 'queenside' | 'kingside';
+  /** The lever push that makes contact (SAN), e.g. "b5". */
+  leverSan: string;
+  leverFrom: Square;
+  leverTo: Square;
+  /** The enemy pawn the lever attacks — the future weakness. */
+  target: Square;
+}
+
+/**
+ * MINORITY ATTACK — `color` has FEWER pawns than the opponent on a flank and can
+ * advance one of them to make contact, forcing a trade that leaves the opponent
+ * a weak (backward/isolated) pawn on a half-open file. The Carlsbad archetype
+ * (White a+b vs Black a+b+c → b4-b5 hits c6). Board-provable and CONSERVATIVE:
+ * requires a real minority (≥2 own pawns, strictly fewer than the opponent's,
+ * opponent ≥3 on the flank) AND a LEGAL lever push that lands diagonally on an
+ * enemy pawn — so it names a concrete move + target, never a vague "play on the
+ * queenside". Returns null when no grounded lever exists (empty > invented).
+ */
+export function findMinorityAttack(fen: string, color: Color): MinorityAttack | null {
+  let chess: Chess;
+  try { chess = new Chess(forceTurn(fen, color)); } catch { return null; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const flanks: { name: 'queenside' | 'kingside'; files: number[] }[] = [
+    { name: 'queenside', files: [0, 1, 2] },
+    { name: 'kingside', files: [5, 6, 7] },
+  ];
+  const pawnsOn = (c: Color, files: number[]): Square[] => {
+    const out: Square[] = [];
+    for (const row of chess.board()) for (const cell of row) {
+      if (cell && cell.type === 'p' && cell.color === c && files.includes(cell.square.charCodeAt(0) - 97)) out.push(cell.square);
+    }
+    return out;
+  };
+  for (const flank of flanks) {
+    const mine = pawnsOn(color, flank.files);
+    const theirs = pawnsOn(enemy, flank.files);
+    if (mine.length < 2 || theirs.length < 3 || mine.length >= theirs.length) continue; // a real minority only
+    // A legal pawn push on the flank that lands diagonally adjacent to an enemy
+    // pawn on the flank = the contact lever (…b5 hitting c6).
+    for (const push of chess.moves({ verbose: true })) {
+      if (push.piece !== 'p' || push.captured) continue;
+      const toFile = push.to.charCodeAt(0) - 97;
+      const toRank = Number(push.to[1]);
+      if (!flank.files.includes(toFile)) continue;
+      const fwd = color === 'w' ? 1 : -1;
+      for (const df of [-1, 1]) {
+        const tf = toFile + df;
+        if (tf < 0 || tf > 7) continue;
+        const diagSq = `${String.fromCharCode(97 + tf)}${toRank + fwd}` as Square;
+        const occ = chess.get(diagSq);
+        if (occ && occ.type === 'p' && occ.color === enemy && flank.files.includes(tf)) {
+          return { flank: flank.name, leverSan: push.san, leverFrom: push.from, leverTo: push.to, target: diagSq };
+        }
+      }
+    }
+  }
+  return null;
 }
 
 /** How many squares the piece on `sq` attacks (its board scope) — turn-independent
