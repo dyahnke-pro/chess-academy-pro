@@ -1555,6 +1555,10 @@ class StockfishEngine {
           // replaced, the identity check fails and this no-ops, so no
           // cleanup is needed and the resolve/reject flow is untouched.
           const watched = this.pending;
+          // Captured here, not read off `watched` inside the callback: the
+          // pending slot is nullable, and `this.pending === watched` does not
+          // narrow it for the compiler.
+          const startedAt = watched?.startedAt ?? Date.now();
           setTimeout(() => {
             if (this.pending === watched && this._analysisStarted) {
               // 🚨 THIS LOG WAS UNTRIAGEABLE FOR A MONTH (PostHog, 2026-09-12).
@@ -1578,7 +1582,7 @@ class StockfishEngine {
               // different bug from a stall on an unbudgeted one — the budget
               // is enforced inside the engine's search loop, so a budgeted
               // search that overruns means the worker is not executing at all.
-              const elapsedMs = Date.now() - (watched.startedAt ?? 0);
+              const elapsedMs = Date.now() - startedAt;
               void logAppAudit({
                 kind: 'stockfish-analysis-stalled',
                 category: 'subsystem',
