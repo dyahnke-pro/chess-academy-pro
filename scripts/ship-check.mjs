@@ -217,6 +217,14 @@ const GATE_TESTS = [
   // (the pin-blind seeGain class + the unguarded bare-"attacks" clause). voiceFacts
   // can only rephrase, never correct a false computed claim, so it's gated here.
   'src/services/computedVoiceGrounding.test.ts',
+  // 🔒 DIFFERENTIAL MATERIAL-TRUTH CORPUS (David 2026-09-13 "make the drift
+  // impossible to reopen") — locks the pin/legality-aware SEE sweep against a
+  // geometry-only regression. Every differential row proves BOTH the pin-aware
+  // read is honest AND the naive seeGain would have lied on that board (invents
+  // a win on a pinned attacker / misses a hang behind a pinned defender), and
+  // ties capturesWinMaterial + landingIsSafe + the C#6 isCriticalThreat gate to
+  // the honest sign — so reintroducing any geometry-only path trips it.
+  'src/services/computedMaterialTruth.corpus.test.ts',
   // 🔒 OTA UPDATE CONTRACT (2026-09-03) — the reply shape of /api/ota/manifest
   // IS the update mechanism for every native device, and both of its failure
   // modes are INVISIBLE from the app: a no-op without `kind:'up_to_date'` makes

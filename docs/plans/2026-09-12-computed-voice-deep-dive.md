@@ -524,6 +524,31 @@ re-design their surface), then:
   grow the causal-chain pattern library + structure→plan library, eval-verdict in
   the drill why, the computed-voice regression-gate corpus.
 
+## STRENGTHENING — shipped 2026-09-13 (David: "work independently")
+
+- **✅ Differential material-truth corpus** — `src/services/computedMaterialTruth.corpus.test.ts`,
+  wired into the ship-check GATE_TESTS. This is the "make the drift impossible"
+  lock for the whole pin-aware SEE sweep. It is DISTINCT from the
+  `boardClaimValidator` hammer test (which guards piece-on-square truth): it
+  guards board-LEGAL but semantically-false MATERIAL claims — the exact class the
+  sweep fixed — and it tests the ENSEMBLE, not one function. Design:
+  - Differential rows (pinned attacker ×2 → naive invents a win; pinned defender
+    → naive misses a hang) each assert BOTH the pin-aware read is honest AND the
+    naive geometric `seeGain` LIES on that same board (non-vacuity — a row where
+    naive doesn't lie doesn't belong). Every FEN verified against chess.js before
+    baking (G3 for fixtures too).
+  - Anchor rows (clean hang, equal trade) prove pin-awareness does NOT
+    over-correct where there's no pin to see through.
+  - Ensemble ties: `capturesWinMaterial` + `landingIsSafe` + the C#6
+    `isCriticalThreat` gate all read the honest sign — so reintroducing ANY
+    geometry-only path (or reverting C#6 to line-eval) trips the corpus.
+  - Doubles as a discovery instrument: building it re-ran the sweep; no new
+    pin-blind path surfaced. 8/8 green.
+  - Remaining improvements below still stand (widen quietPurposePhrase, grow the
+    pattern libraries, drill-why eval-verdict) — those are additive teaching, to
+    do after the correctness lock, per David's "improve once everything is to
+    standard."
+
 **Method reminders:** 1. `scripts/audit-drill-why-prod.mjs` is the muted prod
 pattern (clone per surface). 2. The eval method: run the calculator on real
 `src/data/puzzles.json` positions and read output vs board (throwaway console.log
