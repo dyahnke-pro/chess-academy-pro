@@ -779,11 +779,21 @@ export function pressureCount(fen: string, square: Square): PressureCount | null
   const defenderSquares = chess.attackers(square, piece.color);
   const attackers = attackerSquares.length;
   const defenders = defenderSquares.length;
+  // PIN/LEGALITY-AWARE verdict (2026-09-13 sweep follow-up). `attackers` /
+  // `defenders` are GEOMETRIC counts (chess.attackers), so a PINNED attacker is
+  // counted though it can't legally capture, and a piece defended only by a
+  // pinned piece looks defended though it hangs. The old `attackers > defenders`
+  // fallthrough declared 'winnable' off the raw count, so the coach said
+  // "you're pressuring the bishop on f6" when the only attacker was pinned. The
+  // 'winnable' verdict is now decided ONLY by whether the enemy can win material
+  // with a REAL, legal capture — `capturesWinMaterial` (pin-aware SEE), which
+  // also catches the pin-masked hang the count misses. The geometric counts are
+  // still reported as informational tension data; they no longer drive the claim.
+  const enemyWinsMaterial = capturesWinMaterial(fen, square, enemy);
   let verdict: PressureVerdict = 'none';
-  if (attackers === 0) verdict = 'none';
-  else if (attackers > defenders && seeGain(chess, square) > 0) verdict = 'winnable';
-  else if (attackers >= 1 && attackers === defenders) verdict = 'balanced-tension';
-  else if (attackers > defenders) verdict = 'winnable';
+  if (enemyWinsMaterial) verdict = 'winnable';
+  else if (attackers === 0) verdict = 'none';
+  else if (attackers === defenders) verdict = 'balanced-tension';
   else verdict = 'solid';
   return { square, piece: piece.type, color: piece.color, attackers, defenders, attackerSquares, defenderSquares, verdict };
 }

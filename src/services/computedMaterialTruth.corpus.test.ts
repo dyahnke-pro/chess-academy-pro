@@ -33,6 +33,8 @@ import {
   legalSeeGainFor,
   capturesWinMaterial,
   landingIsSafe,
+  pressureCount,
+  pressuredTargets,
 } from './positionReadingService';
 import { isCriticalThreat } from './tacticAlertService';
 
@@ -153,6 +155,33 @@ describe('computedMaterialTruth — landingIsSafe honours pins', () => {
     const fen = '2k5/8/2p5/3N4/8/8/8/2R4K b - - 0 1';
     expect(seeGain(new Chess(fen), 'd5')).toBeGreaterThan(0); // naive: "unsafe"
     expect(landingIsSafe(fen, 'd5')).toBe(true); // honest: safe
+  });
+});
+
+describe('computedMaterialTruth — pressureCount verdict + chat "pressure" answer are pin-aware', () => {
+  // The coach chat "pressure" answer (groundedAnswer) and the Danya
+  // pressured-target behavior name a piece as winnable/under-pressure off
+  // pressureCount's verdict. The verdict used to fall through to 'winnable' on a
+  // raw geometric attacker>defender count, so a pinned attacker produced
+  // "you're pressuring the bishop on f6" on a piece it can't legally take
+  // (2026-09-13 sweep). The verdict is now decided by capturesWinMaterial.
+  it('a pinned attacker does NOT make its geometric target "winnable"', () => {
+    // White Nd5 (pinned to Ke1 by Rd8) geometrically attacks Bf6.
+    const fen = '3r2k1/8/5b2/3N4/8/8/8/3K4 w - - 0 1';
+    const pc = pressureCount(fen, 'f6');
+    expect(pc?.attackers).toBe(1); // geometric count still sees the pinned knight…
+    expect(pc?.verdict).not.toBe('winnable'); // …but the verdict is honest.
+    // The chat's "you're pressuring…" set (verdict-filtered) is empty here.
+    const claimed = pressuredTargets(fen, 'w').filter(
+      (p) => p.verdict === 'winnable' || p.verdict === 'balanced-tension',
+    );
+    expect(claimed.some((p) => p.square === 'f6')).toBe(false);
+  });
+
+  it('a genuinely winnable target still reads "winnable"', () => {
+    // Undefended black knight on e6, White rook bearing on it.
+    const fen = '6k1/8/4n3/8/8/4R3/8/6K1 w - - 0 1';
+    expect(pressureCount(fen, 'e6')?.verdict).toBe('winnable');
   });
 });
 

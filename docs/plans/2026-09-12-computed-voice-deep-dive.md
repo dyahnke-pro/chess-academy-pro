@@ -549,6 +549,24 @@ re-design their surface), then:
     do after the correctness lock, per David's "improve once everything is to
     standard."
 
+- **✅ P#7 — pressureCount verdict was geometry-only (rot the corpus SURFACED
+  while sweeping remaining `seeGain` sites).** `pressureCount` (positionReading)
+  declared `'winnable'` on a raw `attackers > defenders` count fallthrough, so a
+  PINNED attacker (counted but can't legally capture) made the coach chat
+  "pressure" answer say *"You're pressuring the bishop on f6"* and the Danya
+  behavior claim *"You win the bishop on f6 — it can't be held"* — on a piece it
+  can't take; the same blindness hid a pin-masked hang. Confirmed empirically
+  (`pressureCount('f6') = 'winnable'`, chat named f6) then fixed at root: the
+  `'winnable'` verdict is now decided ONLY by `capturesWinMaterial` (pin-aware
+  SEE), which also catches the masked hang; geometric counts stay as
+  informational tension data. Also fixed the `groundedAnswer` "pressure" consumer
+  that filtered on the raw count, bypassing even the partial SEE. All 109
+  positionReading + 47 danya tests green; f6 now reads `'solid'` (chat says
+  nothing), a real undefended target still `'winnable'`. Locked by two new corpus
+  rows. This is why the differential corpus is a discovery instrument, not just a
+  gate — building the sweep-lock surfaced a live false-claim the earlier sweep
+  had missed.
+
 **Method reminders:** 1. `scripts/audit-drill-why-prod.mjs` is the muted prod
 pattern (clone per surface). 2. The eval method: run the calculator on real
 `src/data/puzzles.json` positions and read output vs board (throwaway console.log

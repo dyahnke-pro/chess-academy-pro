@@ -21,6 +21,7 @@ import {
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
   bishopPair, computeSpace, findPassedPawns,
 } from './positionReadingService';
+import type { PressureCount } from './positionReadingService';
 import { structurePlan } from './boardPlan';
 import { strategicWhyLed } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
@@ -5180,8 +5181,13 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   }
 
   if (topic === 'pressure') {
-    const onMe = pressuredTargets(fen, oppC).filter((p) => p.attackers > p.defenders);
-    const onThem = pressuredTargets(fen, myC).filter((p) => p.attackers > p.defenders);
+    // Filter on the pin-aware VERDICT, not the geometric attacker/defender count
+    // — a pinned attacker inflates the count and would false-claim "you're
+    // pressuring X" on a piece it can't legally take (2026-09-13 sweep).
+    const underPressure = (p: PressureCount): boolean =>
+      p.verdict === 'winnable' || p.verdict === 'balanced-tension';
+    const onMe = pressuredTargets(fen, oppC).filter(underPressure);
+    const onThem = pressuredTargets(fen, myC).filter(underPressure);
     const mine = onMe.length ? `Under pressure for you: ${onMe.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
     const theirs = onThem.length ? `You're pressuring ${onThem.slice(0, 3).map((p) => `the ${REVIEW_PIECE_NAME[p.piece]} on ${p.square}`).join(', ')}.` : '';
     if (!mine && !theirs) return { facts: 'Nothing is under real pressure right now — attackers and defenders balance out.', bestMoveSan: null, bestMoveFromTo: null, sources: src };
