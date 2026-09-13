@@ -114,6 +114,19 @@ import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
 
+/** Lead-the-eye suffix for an on-demand answer: paint every key square the
+ *  computed read NAMED as a yellow highlight, coupled from `answer.keySquares`
+ *  (the observation's OWN declared squares — never scraped from prose, G0).
+ *  Rides the existing `[BOARD:]` tag pipeline, so it renders wherever a live
+ *  board receives the annotation (Play, Learn, the global drawer on a boardful
+ *  tab) and is stripped from display + TTS everywhere else. Empty when the
+ *  answer named no square. */
+function keySquareHighlightTags(answer: { keySquares?: readonly string[] } | null): string {
+  const sq = answer?.keySquares ?? [];
+  if (sq.length === 0) return '';
+  return ` ${sq.map((s) => `[BOARD: highlight:${s}:yellow]`).join(' ')}`;
+}
+
 /**
  * Model routing policy
  * --------------------
@@ -2224,9 +2237,10 @@ async function serveGroundedPositionDefault(
     fen: grounding.currentFen,
   });
   if (assess) {
-    if (computedOnly && assess.facts.trim()) return `${prefix}${assess.facts}`.trim();
+    const hl = keySquareHighlightTags(assess);
+    if (computedOnly && assess.facts.trim()) return `${`${prefix}${assess.facts}`.trim()}${hl}`;
     const voiced = await voiceFacts(`${prefix}${assess.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-assessment', preferRaw: true });
-    if (voiced) return voiced;
+    if (voiced) return `${voiced}${hl}`;
   }
   // Nothing engine/tactic-backed, but a COMPUTED moment cue can still stand on
   // its own (e.g. a pure eval-swing recovery) — voice it warmly rather than
@@ -2370,7 +2384,10 @@ async function computeLiveBoardVerdict(
       studentColor: sc,
       fen: grounding.currentFen, // board-true material read when the engine is cold (see above)
     });
-    if (assess) return await voice(assess.facts, 'assessment');
+    if (assess) {
+      const v = await voice(assess.facts, 'assessment');
+      return v ? `${v}${keySquareHighlightTags(assess)}` : v;
+    }
     return null; // no board data at all — the honest refusal downstream.
   }
 
@@ -5612,7 +5629,7 @@ export async function getCoachChatResponse(
           });
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'position-assessment', preferRaw: true });
-            if (voiced) return voiced;
+            if (voiced) return `${voiced}${keySquareHighlightTags(answer)}`;
           }
         }
         // CONCEPT FALL-THROUGH DECLINE — the LAST RESORT (coach audit

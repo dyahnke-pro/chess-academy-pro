@@ -107,6 +107,50 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     });
     for (const f of facets) expect(f).toMatch(/^\[[a-z-]+\]/);
   });
+
+  // KEY-SQUARE HIGHLIGHTS (David 2026-09-13 "add highlights to all spoken key
+  // squares" + "on review"): the optional outSquares map records the squares a
+  // facet NAMED, coupled from the computer — so the review board can lead the
+  // eye where the words point, never by scraping prose.
+  it('records a facet\'s key squares in outSquares, and every one appears in that facet\'s text', () => {
+    // A passed White a-pawn — the [passer] facet fires and records its square.
+    const fenBefore = '4k3/8/8/P7/8/8/6K1/8 w - - 0 1';
+    const c = new Chess(fenBefore); c.move('a6'); const fenAfter = c.fen();
+    const out = new Map<string, readonly string[]>();
+    const facets = computeMoveFacets({
+      fenBefore, fenAfter, san: 'a6', ply: 1,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 200, preMoveEval: 200, classification: 'good', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['a6'], forcedRunStartPly: null,
+    }, out);
+    // At least one facet recorded squares…
+    expect(out.size).toBeGreaterThan(0);
+    // …the coupling invariant: every key it recorded is a real facet that was
+    // emitted, and every square it recorded is a valid token that OCCURS in that
+    // facet's own text (marks match the words — never a mark without a word).
+    for (const [facet, squares] of out) {
+      expect(facets).toContain(facet);
+      for (const sq of squares) {
+        expect(sq).toMatch(/^[a-h][1-8]$/);
+        expect(facet).toContain(sq);
+      }
+    }
+  });
+
+  it('records nothing into outSquares for a facet with no clean square (no phantom highlight)', () => {
+    // The opening ply has [move]/[opening] prose facets but no trapped/passer/
+    // minority/complex square — outSquares must stay empty, so a highlight never
+    // appears without a board-true square behind it (G0).
+    const c = new Chess(); c.move('e4'); const fenAfter = c.fen();
+    const out = new Map<string, readonly string[]>();
+    computeMoveFacets({
+      fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
+      moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 20, preMoveEval: 0, classification: 'good', bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null,
+    }, out);
+    expect(out.size).toBe(0);
+  });
 });
 
 describe('computeThroughLine (David 2026-07-20 — through-line theme ledger)', () => {

@@ -1003,6 +1003,19 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // …and the READ follows: the uncastled king in the centre is board-true here.
     expect(a!.facts.toLowerCase()).toContain('centre');
   });
+
+  it('carries the read\'s KEY SQUARES out structurally so the caller paints marks (David 2026-09-13 "highlights on all surfaces")', () => {
+    // Same board — the centre-king read names e8. The squares must travel on
+    // `keySquares` (coupled from the observation, not scraped) so coachApi can
+    // emit [BOARD: highlight:e8:yellow] on any live board. Without this the
+    // on-demand read spoke but the board stayed bare.
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
+    const a = assemblePositionAssessment({ evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    expect(a!.keySquares).toBeDefined();
+    expect(a!.keySquares).toContain('e8');
+    // every entry is a real square token, never a move or prose fragment
+    for (const s of a!.keySquares!) expect(s).toMatch(/^[a-h][1-8]$/);
+  });
 });
 
 describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (no pinned-attacker false positive)', () => {

@@ -3558,6 +3558,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       return null;
                     }
                   })()}
+                  // KEY-SQUARE HIGHLIGHTS (David 2026-09-13 "add highlights to all
+                  // spoken key squares" + "these builds on review"): the squares
+                  // THIS ply's narration named, yellow, coupled from the computer
+                  // (seg.keySquares) — never scraped. They swap per ply as the walk
+                  // advances (the review's "next phrase"), and stand down while a
+                  // card/walkout/exploration owns the board so nothing double-marks.
+                  annotationHighlights={(() => {
+                    if (walkExplorationFen || walkShowMeActive || shotState || seqState || cameoState || theoryState) return undefined;
+                    const ks = seg?.keySquares;
+                    return ks && ks.length ? ks.map((square) => ({ square, color: '#eab308' })) : undefined;
+                  })()}
                   onMove={theoryState?.stage === 'ask' ? (moveResult) => {
                     // THEORY QUIZ answer (Phase 4) — the board move is the
                     // student's "main move" guess at the book position.

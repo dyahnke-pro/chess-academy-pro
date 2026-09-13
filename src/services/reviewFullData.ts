@@ -165,8 +165,19 @@ function matingSideIsStudent(sans: string[], studentColorWB: Color | null): bool
  * Every computed facet for this move, ordered, each a prose clause. The uncapped
  * review joins them into the move's narration. This function IS the data inventory.
  */
-export function computeMoveFacets(ctx: MoveFactContext): string[] {
+export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string, readonly string[]>): string[] {
   const facets: string[] = [];
+  // Record the KEY SQUARES a facet named, keyed by the facet text, so the
+  // review can lead the eye with a yellow highlight coupled from the COMPUTER's
+  // own squares — never scraped from the prose (David 2026-09-13 "add highlights
+  // to all spoken key squares"; G0 coupling). Only facets with a clean square
+  // variable in scope record; prose-only facets (badbishop/worst) don't, so a
+  // highlight never appears without a board-true square behind it.
+  const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
+    if (!outSquares) return;
+    const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
+    if (clean.length) outSquares.set(facet, [...new Set(clean)]);
+  };
   const { fenBefore, fenAfter, san, ply, moverColor, playerColor, studentColorWB } = ctx;
   const isStudent = playerColor ? moverColor === playerColor : false;
   const subj = isStudent ? 'You' : 'Your opponent';
@@ -382,9 +393,9 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
   if (studentColorWB) {
     const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
     const trapTheirs = findTrappedPiece(fenAfter, enemyWB);
-    if (trapTheirs) facets.push(`[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`);
+    if (trapTheirs) { const f = `[trapped] Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered; it's coming off the board.`; facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); }
     const trapMine = findTrappedPiece(fenAfter, studentColorWB);
-    if (trapMine) facets.push(`[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`);
+    if (trapMine) { const f = `[trapped] Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`; facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); }
   }
 
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
@@ -401,7 +412,7 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     if (worst) facets.push(`[worst] ${cap(worst)}.`);
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
-    if (passNote) facets.push(`[passer] ${cap(passNote)}.`);
+    if (passNote) { const f = `[passer] ${cap(passNote)}.`; facets.push(f); recSquares(f, [passer]); }
 
     // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want
     // these changes on review") — the same minority-attack + colour-complex
@@ -410,16 +421,16 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     // student's own camp is what to shore up. Deduped once per game by the caller.
     const enemyWB2: Color = studentColorWB === 'w' ? 'b' : 'w';
     const myMinority = findMinorityAttack(fenAfter, studentColorWB);
-    if (myMinority) facets.push(`[minority] You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`);
+    if (myMinority) { const f = `[minority] You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`; facets.push(f); recSquares(f, [myMinority.target]); }
     const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
-    if (theirMinority) facets.push(`[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`);
+    if (theirMinority) { const f = `[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`; facets.push(f); recSquares(f, [theirMinority.target]); }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = cc.squares.slice(0, 2).join(' and ');
-      if (cc.side === enemyWB2) { facets.push(`[complex] Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`); break; }
+      if (cc.side === enemyWB2) { const f = `[complex] Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`; facets.push(f); recSquares(f, cc.squares.slice(0, 2)); break; }
     }
     for (const cc of findColorComplexWeakness(fenAfter)) {
       const sqs = cc.squares.slice(0, 2).join(' and ');
-      if (cc.side === studentColorWB) { facets.push(`[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`); break; }
+      if (cc.side === studentColorWB) { const f = `[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`; facets.push(f); recSquares(f, cc.squares.slice(0, 2)); break; }
     }
     // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
     // in more future plans … and exactly how to do those plans"). EVERY applicable

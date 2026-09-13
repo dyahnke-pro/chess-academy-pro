@@ -52,6 +52,11 @@ export interface GroundedAnswer {
   bestMoveFromTo: { from: string; to: string } | null;
   /** Where every fact came from (engine / chess.js) — recorded, never the LLM. */
   sources: string[];
+  /** Key squares the answer NAMED, carried structurally so the caller can paint
+   *  `[BOARD: highlight:sq:yellow]` — the lead-the-eye rule, coupled from the
+   *  computed observation's own `squares`, NEVER scraped from the prose (G0).
+   *  Optional: only the on-demand position read populates it. */
+  keySquares?: readonly string[];
 }
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
@@ -1058,6 +1063,10 @@ export function assemblePositionAssessment(opts: {
   // ranked, for BOTH sides ("even for the opponent's pieces"). Append the top
   // couple so the on-demand read teaches, not just scores. Never auto-narrated —
   // this assembler only runs when the student asked (isPositionAssessmentQuestion).
+  // Key squares the read NAMED, carried out structurally so the caller can
+  // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
+  // observation's OWN declared `squares`, never scraped from the prose (G0).
+  const keySquares: string[] = [];
   if (opts.fen) {
     try {
       const already = parts.join(' ').toLowerCase();
@@ -1069,6 +1078,9 @@ export function assemblePositionAssessment(opts: {
         const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
         if (naming && already.includes(naming)) continue;
         reads.push(o.text);
+        for (const sq of o.squares ?? []) {
+          if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
+        }
         if (reads.length >= 2) break;
       }
       if (reads.length > 0) parts.push(...reads);
@@ -1077,7 +1089,8 @@ export function assemblePositionAssessment(opts: {
 
   if (parts.length === 0) return null;
   const sources = tactics ? ['engine:stockfish', 'board:chess.js'] : ['engine:stockfish'];
-  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources };
+  return { facts: parts.join(' '), bestMoveSan: null, bestMoveFromTo: null, sources,
+    ...(keySquares.length > 0 ? { keySquares } : {}) };
 }
 
 /** The enemy king's square + its on-board neighbours — where an attack lands. */

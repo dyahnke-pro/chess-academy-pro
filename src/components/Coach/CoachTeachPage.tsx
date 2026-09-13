@@ -6446,10 +6446,18 @@ export function CoachTeachPage(): JSX.Element {
               for (const seg of segments) {
                 const at = (accChars / totalChars) * estMs;
                 accChars += seg.text.length;
-                if (seg.revealSquares.length === 0) continue;
+                // SWAP PER PHRASE (David 2026-09-13: "stack until next phrase is
+                // spoken"). Each spoken sentence shows ONLY the squares IT names;
+                // when the next sentence starts its marks REPLACE the last one's,
+                // so the board never accumulates a wall of arrows/highlights over
+                // a long reply. A square-less phrase still fires — it clears the
+                // prior phrase's prose marks back to the persistent chain marks.
+                // Chain marks (the reply move, per G6) survive every swap via
+                // paintRevealed's chain filter and are never taken down here.
                 const squares = seg.revealSquares;
                 window.setTimeout(() => {
                   if (turnAbortRef.aborted || liveFenRef.current !== fen) return;
+                  revealed.clear();
                   for (const s of squares) revealed.add(s);
                   paintRevealed();
                 }, at);

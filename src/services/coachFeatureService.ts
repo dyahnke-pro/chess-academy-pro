@@ -527,6 +527,13 @@ export interface ReviewMoveSegment {
    *  this carries the OTHER lines the walk only spoke. `fenBefore` lets the
    *  board name the move (SAN) as it draws the arrow. */
   spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>;
+  /** KEY SQUARES this ply's narration NAMED (trapped piece + its attacker, a
+   *  passed pawn, a minority-attack target, colour-complex holes) — coupled from
+   *  the fact-computer's OWN squares, never scraped from prose (G0). The review
+   *  board paints these yellow while this segment is active so the eye lands on
+   *  the square as the coach names it (David 2026-09-13 "add highlights to all
+   *  spoken key squares"). Undefined when the ply named no clean square. */
+  keySquares?: readonly string[];
   /** The STATIC threat call-out this ply's narration carries, tagged so the
    *  engine pass can CONFIRM it (David 2026-07-21: "We need to find a way for
    *  these two to work together. They need to compliment each other!!"). The
@@ -1391,6 +1398,9 @@ export function buildReviewSegments(
     // 2026-07-20: "turn off all narration caps"). Skips the one-beat cascade + the
     // one-shot flags entirely; the aggregator is the full data inventory.
     if (uncapped) {
+      // Key squares each facet NAMED, coupled from the computer (never scraped)
+      // so the review can lead the eye with a yellow highlight per kept facet.
+      const facetSquares = new Map<string, readonly string[]>();
       const facets = computeMoveFacets({
         fundamentals,
         fenBefore: fenPair.fenBefore,
@@ -1407,7 +1417,7 @@ export function buildReviewSegments(
         prevCap,
         allSans: sansForRun,
         forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
-      });
+      }, facetSquares);
       // Drop an identical STATIC state facet already spoken on an earlier ply
       // (opening / plan-opening / plan-middlegame / opp-dev); keep every dynamic
       // per-move fact.
@@ -1493,6 +1503,12 @@ export function buildReviewSegments(
         keptRaw.push(f);
       }
       const kept = keptRaw.map(applyRefrainOnce);
+      // KEY-SQUARE HIGHLIGHTS (David 2026-09-13): every square a KEPT facet
+      // named, from the computer's own squares (facetSquares), so the review
+      // board leads the eye in yellow exactly where the narration points —
+      // matched to the RAW facet strings (the map keys), before applyRefrainOnce
+      // rewrites them, so a highlight only rides a facet actually spoken.
+      const segKeySquares = [...new Set(keptRaw.flatMap((f) => facetSquares.get(f) ?? []))];
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const uncappedParts = causalLead ? [causalLead, ...kept] : kept;
       segments.push({
@@ -1511,6 +1527,7 @@ export function buildReviewSegments(
         narrationSource: uncappedParts.length ? 'per-move' : null,
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
+        ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
       });
       try {
         const pc = new Chess(fenPair.fenBefore).move(m.san);

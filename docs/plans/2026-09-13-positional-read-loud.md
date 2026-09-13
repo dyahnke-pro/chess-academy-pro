@@ -135,3 +135,67 @@ corpus board-truth sweep passed).
       boardComputerChatCoverage, computedVoiceGrounding, danyaDeviceCoverage,
       danyaExploitability, perspectiveVoice — all green; typecheck clean
 - [ ] ship-check + push + deploy + audit
+
+---
+
+## Build 7 — UNIFIED AVAILABILITY + "STACK UNTIL NEXT PHRASE" (2026-09-13)
+
+David: "Stack until next phrase is spoken. / All of these changes need to be
+available for all coach surfaces. We have a unified coach now... Review play
+learn all get these builds they are just used differently. Need to also be
+available to coach in tactics and other tabs in case a user asks."
+
+### §0 SURFACE MAP (pre-build gate — the shared computers touch all of these)
+
+Shared spine (already built): `positionalRead.readPosition/buildPositionalRead`
+→ facts → `voicePackage.buildVoicePackage` → `voiceFacts` (voice) + mark-coupling
+(arrows/highlights drawn from a fact's declared `squares`, never scraped — G0).
+
+| Surface | Register | Read today | Marks today | Gap for "all surfaces" |
+|---|---|---|---|---|
+| Learn `/coach/teach` | present-tense, AUTO every move | ✓ observation lane, deduped, uncapped | ✓ arrows + key-square highlights (build 6) | stack-until-next-phrase timing |
+| Review `/coach/review` | past-tense, AUTO ply-walk | ✓ facets incl. minority/complex, uncapped default | ✓ playout arrows (09-07 auto-arrow); ✗ key-square highlights | key-square highlights + stack timing |
+| Play `/coach/play` | SILENT by contract; on-demand only | on-demand via drawer/chat | on-demand (live board present) | render read's `squares` as marks on ask |
+| Chat / GlobalCoachDrawer (every tab) | Q&A on-demand | ✓ groundedAnswer.assemblePositionAssessment appends read | boardful tab → onBoardAnnotation; boardless tab STRIPS tags (GameChatPanel:1325) | emit read `squares` as [BOARD:] so a boardful surface draws them |
+| Tactics / Endgame / Plan / Fundamentals | drill / lesson | on-demand via drawer (same as chat) | where a live board exists | same on-demand path |
+
+### THE DECOMPOSITION (improvement on "auto-narrate everywhere")
+"All surfaces get these builds" is right — but the mechanism is the ALREADY-
+UNIFIED on-demand path (GlobalCoachDrawer in AppLayout → GameChatPanel → coach
+brain → groundedAnswer read), NOT duplicating AUTO-narration onto Play/Tactics.
+- AUTO-narration stays on Learn + Review (their registers/contracts allow it).
+- Play stays SILENT-by-contract; gets the read ON-DEMAND (locked rule).
+- Tactics/Endgame/other tabs get it ON-DEMAND ("in case a user asks" = on-demand).
+- Marks render wherever a live board exists to receive them.
+
+### THE REAL GAPS (honest, small)
+1. Read `squares` don't travel as [BOARD:] annotations → marks from the read
+   never render even on a boardful chat surface. Couple them (G0: from squares).
+2. Review key-square highlights (deferred half of build 6).
+3. "Stack until next phrase" — mark lifecycle tied to sentence-grained reveal.
+
+### Status
+- [x] dial-in with David: swap-per-phrase (each sentence's marks replace the
+      last; chain/threat marks persist) + unified on-demand, AUTO only on
+      Learn/Review (Play silent-by-contract, on-demand read; tactics/other tabs
+      via the global drawer on-demand). Auto-narrate-everywhere was REJECTED
+      (breaks Play/Tactics contracts).
+- [x] #1 unified on-demand marks: `GroundedAnswer.keySquares` (optional) carries
+      the read's declared squares; `keySquareHighlightTags` emits
+      `[BOARD: highlight:sq:yellow]` at all 3 assessment call sites — renders on
+      any live board (Play, Learn, drawer on a boardful tab), stripped elsewhere.
+      Test: groundedAnswer keySquares contains e8 on the centre-king read.
+- [x] #2 swap-per-phrase: CoachTeachPage chat-reply reveal (6425+) — each spoken
+      sentence's prose marks REPLACE the prior phrase's; chain (reply-move, G6)
+      marks persist via paintRevealed's chain filter. LessonPlayer left as-is
+      (already per-beat reset + small within-beat set = "swap per beat"; curated
+      surface, low-gain/high-risk to change — noted for a follow-up if wanted).
+- [x] #3 review key-square highlights: `computeMoveFacets(ctx, outSquares?)`
+      records each facet's declared squares (trapped/passer/minority/complex —
+      prose-only badbishop/worst skipped, no scrape); segment gains `keySquares`;
+      CoachGameReview paints them yellow via `annotationHighlights`, swapping per
+      ply, standing down under any card/walkout. Tests: coupling invariant
+      (recorded square appears in facet text) + no-phantom (opening ply records 0).
+- [x] typecheck clean; targeted gates green (groundedAnswer 202, reviewFullData
+      11, positionalRead 21, voicePackage 46, narrationAdversarial 60-game sweep)
+- [ ] ship-check + push + batched deploy + audit
