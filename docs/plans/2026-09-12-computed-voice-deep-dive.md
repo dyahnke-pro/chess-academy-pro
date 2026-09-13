@@ -440,12 +440,55 @@ it's the single chokepoint every surface's claims flow through, so one fix there
 improves review + chat + teach + puzzles at once. Calculator-cluster findings
 follow, ordered by how user-visible the wrong/thin claim is.
 
+## SHIPPED so far (2026-09-13 session) — all on `main`, gated, prod-verified
+
+Tier-1 disease (pin-blind SEE), fully swept: P1 keystone + P1b chat assemblers +
+P1c-fork + P1c-mate + P1c-skewer + **A#7** (attack-assessment) + **C#5**
+(causalChain: all 8 SEE sites via `winnableGain` + exploitedLoosePiece loose
+test). Tier-2: **B#3** (verdict material honesty), **B#1** (must-defend bypasses
+the contested gate), **B#2** (no enemy-shielded "latent pin"), **B#4** (no "push"
+on a blockaded passer). Tier-3: **C#4** (double-check detection revived).
+Incidental: a `tsc -b` build unblock on main (parallel session fixed the same
+first; dup dropped). Each shipped with a real-position gate; ship-check green
+each push.
+
 ## Next-session pickup
 
-1. Read this doc. 2. Check the deep-dive findings section (agent reports folded
-in). 3. `scripts/audit-drill-why-prod.mjs` is the muted prod pattern for a solve
-+ grounded-why assertion — clone per surface. 4. The computed-voice eval method:
-run `assembleEngineReasoning` / `describeMoveGeometry` on real `src/data/puzzles.json`
-entries across themes and read the output against the board (a throwaway vitest
-that console.logs is the fastest harness). 5. Every fix stays G0/G3 (compute in
-code, never let the LLM decide) and ships with a gate + prod audit.
+**DONE (above).** **HELD:** **D#1** (review: don't spell "you're winning" on an
+unverified line) is committed but NOT pushed — it edits `coachFeatureService.ts`,
+whose co-located `coachFeatureService.test.ts` has a PRE-EXISTING red test from
+another session's `strategicWhyLed` led-vs-selfContained change (`:50` still
+expects "It develops the knight…" but the code now says "It develops into the
+game…"). That stale test blocks the shared changed-file gate for any change to
+that file. Re-apply D#1 (`git cherry-pick` the saved commit / re-do the small
+`render()` edit at the `terminalEvalCp` fallback) once that session updates their
+test. Flagged to David.
+
+**REMAINING (ranked, lower impact):**
+- **C#6** (isCriticalThreat/scanUpcomingTactics attribute the WHOLE line's eval
+  to every pattern → early-pin "critical" noise). NEEDS a design pass: the honest
+  fix is per-ply evals, but `scanUpcomingTactics` is sync + engine-free (takes
+  precomputed topLines). Thread a per-ply eval (or attribute `lineMate`/decisive
+  eval only to the ply that causes it) — not a safe one-line heuristic. Deferred
+  deliberately (empty > a fuzzy fix).
+- **D#2** (reviewOpeningTheory bidirectional-`includes` name-match drift — reuse
+  `identifyingTokens`/`GENERIC_TOKENS`), **D#5** (SAN-only dedupe keys silence a
+  genuinely-new same-SAN threat — key on SAN+fenBefore/targets), **D#6** (causal-
+  lead/recap per-game dedupe). D#5/D#6 live in `coachFeatureService.ts` → BLOCKED
+  by the same stale test as D#1 until it's fixed; D#2 is in reviewOpeningTheory.ts
+  (clean).
+- **SEAM / unified-coach P1:** make `computeImportance` weakness-aware (let a
+  persistent worsening weakness UN-SILENCE a fact, not just re-rank) — the biggest
+  "build upon"; a real design change, sequence last.
+- **Improvements & additions** (§ above): widen `quietPurposePhrase` coverage,
+  grow the causal-chain pattern library + structure→plan library, eval-verdict in
+  the drill why, the computed-voice regression-gate corpus.
+
+**Method reminders:** 1. `scripts/audit-drill-why-prod.mjs` is the muted prod
+pattern (clone per surface). 2. The eval method: run the calculator on real
+`src/data/puzzles.json` positions and read output vs board (throwaway console.log
+vitest). 3. The pin-aware SEE primitives are `legalSeeGain`/`legalSeeGainFor`/
+`landingIsSafe`/`capturesWinMaterial` (positionReadingService) — reuse, never
+reach for raw `seeGain`/`attackers()` at a safety/winnability decision. 4. Every
+fix stays G0/G3 and ships with a real-position gate. 5. `coachFeatureService.ts`
+is a HOT parallel-session surface — coordinate before editing.
