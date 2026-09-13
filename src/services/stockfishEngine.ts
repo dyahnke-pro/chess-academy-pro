@@ -1557,11 +1557,33 @@ class StockfishEngine {
           const watched = this.pending;
           setTimeout(() => {
             if (this.pending === watched && this._analysisStarted) {
+              // 🚨 THIS LOG WAS UNTRIAGEABLE FOR A MONTH (PostHog, 2026-09-12).
+              // 33 of these across 7 devices, and no way to tell an engine
+              // fault from a suspended tab — so nobody could act on any of
+              // them. The 30s path (`recoverStuckAnalysis`) already computes
+              // exactly that distinction and says "page was BACKGROUNDED …
+              // not an engine fault"; this watchdog knew none of it and
+              // emitted wording that reads like a hang either way.
+              //
+              // `elapsedMs` is the sharper discriminator, not `hidden`: this
+              // is a MAIN-THREAD setTimeout and iOS suspends those when the
+              // app backgrounds, so on resume it fires immediately with the
+              // pending analysis still open. Elapsed ≫ the window is a
+              // suspended timer; elapsed ≈ the window is 12s of real search
+              // that outlived its own `movetime` budget. The flag can miss a
+              // suspension whose `visibilitychange` never landed in time;
+              // the clock cannot.
+              //
+              // `budget` is carried because a stall on a budgeted search is a
+              // different bug from a stall on an unbudgeted one — the budget
+              // is enforced inside the engine's search loop, so a budgeted
+              // search that overruns means the worker is not executing at all.
+              const elapsedMs = Date.now() - (watched.startedAt ?? 0);
               void logAppAudit({
                 kind: 'stockfish-analysis-stalled',
                 category: 'subsystem',
                 source: 'stockfishEngine._dispatchAnalysis',
-                summary: `no bestmove in ${ANALYSIS_STALL_MS}ms — variant=${this.workerVariant ?? '?'} depth=${depth} fen=${fen.slice(0, 40)}`,
+                summary: `no bestmove in ${ANALYSIS_STALL_MS}ms — variant=${this.workerVariant ?? '?'} depth=${depth} budget=${budgetMs ?? 'none'} elapsed=${elapsedMs}ms hidden=${this._hiddenDuringPending} fen=${fen.slice(0, 40)}`,
               });
             }
           }, ANALYSIS_STALL_MS);
