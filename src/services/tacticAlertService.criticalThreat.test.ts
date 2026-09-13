@@ -61,3 +61,33 @@ describe('isCriticalThreat', () => {
     expect(isCriticalThreat(t(-(CRITICAL_THREAT_CP - 1)), 'w', false)).toBe(false);
   });
 });
+
+// C#6 — judge the pattern at its OWN board, not the line's terminal eval/mate.
+describe('isCriticalThreat — per-ply judgment when pattern + fen are present (C#6)', () => {
+  const tp = (
+    type: 'pin' | 'fork' | 'mate_threat',
+    fen: string,
+    lineEval: number,
+    lineMate: number | null = null,
+  ) => ({ lineEval, lineMate, pattern: { type, involvedSquares: [], description: '' }, fen });
+
+  it('a harmless pin does NOT inherit a later mate in the line', () => {
+    // A quiet Ruy position (Black to move); nothing of White's hangs. The line
+    // this pin sat in mates (lineMate=3) — the OLD code returned true for any
+    // non-null lineMate. Now: a pin that wins no material HERE is not critical.
+    const quiet = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    expect(isCriticalThreat(tp('pin', quiet, 0, 3), 'w', true)).toBe(false);
+    expect(isCriticalThreat(tp('pin', quiet, -400, null), 'w', false)).toBe(false); // even a bad lineEval doesn't rescue a nothing-pin
+  });
+
+  it('fires when the opponent actually WINS material at the pattern board', () => {
+    // Black to move; the white knight on e4 hangs to …dxe4 (wins a full piece).
+    const winsKnight = '4k3/8/8/3p4/4N3/8/8/4K3 b - - 0 1';
+    expect(isCriticalThreat(tp('fork', winsKnight, 0, null), 'w', false)).toBe(true);
+  });
+
+  it('always fires on a real MATE MOTIF regardless of material', () => {
+    const quiet = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
+    expect(isCriticalThreat(tp('mate_threat', quiet, 0, null), 'w', true)).toBe(true);
+  });
+});

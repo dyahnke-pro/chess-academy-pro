@@ -494,17 +494,23 @@ re-design their surface), then:
   single-token collision; punctuation normalizes; generic-only shares → null).
   reviewOpeningTheory 16/16, danyaTeachingService 19/19 (export change inert).
 - **C#6** (isCriticalThreat/scanUpcomingTactics attribute the WHOLE line's eval
-  to every pattern → early-pin "critical" noise). ⏸ DEFERRED — needs a scoped
-  BUILD, not a sweep fix (mapped 2026-09-13). Disease: `scanUpcomingTactics`
-  stamps every pattern with the LINE's terminal `lineEval`/`lineMate`; the live
-  `CoachGamePage:2789` alert (already gated to `depthAhead<=2`) then reads them,
-  so a harmless ply-1 pin in a line that mates at ply 5 inherits the mate and
-  fires "Watch out". The honest fix computes criticality at the pattern's OWN
-  ply — either (a) per-ply engine evals (the sync scanner has none; a contract
-  change), or (b) a mechanics rewrite of `isCriticalThreat` using each pattern's
-  stored `fen` (pin-aware SEE on the target / forced-mate-now). Both change a
-  LIVE in-game alert → owe a gate + 3-instrument prod audit. A scoped build, not
-  a drop-in; not rushed into a user-facing alert.
+  to every pattern → early-pin "critical" noise). ✅ DONE 2026-09-13 (option b).
+  Disease: `scanUpcomingTactics` stamps every pattern with the LINE's terminal
+  `lineEval`/`lineMate`; the live `CoachGamePage:2789` alert (gated to
+  `depthAhead<=2`) read them, so a harmless ply-1 pin in a line that mates at
+  ply 5 inherited the mate and fired "Watch out". Fix: rewrote `isCriticalThreat`
+  to judge the pattern at its OWN board using the stamped `fen` — a real MATE
+  MOTIF (`mate_threat`/`back_rank`/`double_check`) there is critical; any other
+  pattern must WIN MATERIAL past the rating-scaled bar at its own position via
+  the new `maxMaterialWinCp(fen, oppColor)` (pin-aware `legalSeeGainFor` over
+  every enemy target, ×100). A pin/fork that wins nothing HERE is not a threat
+  no matter how sharp the line becomes later. Backward-compat: callers with only
+  the line signal (no pattern/fen) fall through to the original line-terminal
+  read, so the 6 existing tests stay green. Gate: 3 new per-ply tests
+  (`tacticAlertService.criticalThreat.test.ts` 9/9) — harmless pin does NOT
+  inherit a later mate; a knight-winning fork DOES fire; a real mate motif always
+  fires. Owes a 3-instrument prod audit of the live alert (changes a live in-game
+  surface).
 - **D#2** (reviewOpeningTheory bidirectional-`includes` name-match drift — reuse
   `identifyingTokens`/`GENERIC_TOKENS`), **D#5** (SAN-only dedupe keys silence a
   genuinely-new same-SAN threat — key on SAN+fenBefore/targets), **D#6** (causal-

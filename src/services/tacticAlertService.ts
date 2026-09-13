@@ -15,6 +15,7 @@ import { Chess } from 'chess.js';
 import { detectTacticType } from './missedTacticService';
 import { getStoredTacticalProfile } from './tacticalProfileService';
 import { alertSensitivityMultiplier } from './skillScaling';
+import { legalSeeGainFor } from './positionReadingService';
 import type { TacticType, StockfishAnalysis } from '../types';
 import type { UpcomingTactic } from '../types/tacticTypes';
 
@@ -275,6 +276,27 @@ export function getTacticLookahead(
 export const CRITICAL_THREAT_CP = 150;          // 1.5 pawns — middlegame+
 export const CRITICAL_THREAT_CP_OPENING = 250;  // 2.5 pawns — opening
 
+const MATE_MOTIFS = new Set(['mate_threat', 'back_rank', 'double_check']);
+
+/** The most material (in CENTIPAWNS) `capturingColor` can win off ANY enemy
+ *  piece on `fen`, pin-aware and legal-capture-driven (`legalSeeGainFor` returns
+ *  pawn units; ×100). This is the per-ply "does the opponent actually win
+ *  material HERE" signal that replaces the line's terminal eval (C#6). */
+function maxMaterialWinCp(fen: string, capturingColor: 'w' | 'b'): number {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return 0; }
+  const victimColor = capturingColor === 'w' ? 'b' : 'w';
+  let best = 0;
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== victimColor || cell.type === 'k') continue;
+      const g = legalSeeGainFor(fen, cell.square, capturingColor);
+      if (g > best) best = g;
+    }
+  }
+  return best * 100;
+}
+
 /**
  * Is an upcoming OPPONENT tactic worth a proactive "Watch out" alert?
  *
@@ -282,25 +304,30 @@ export const CRITICAL_THREAT_CP_OPENING = 250;  // 2.5 pawns — opening
  * — including pins that win nothing. Announcing those (David: "it points
  * out every pin even if it's not critical … mainly in the opening") is
  * noise. A threat is CRITICAL only when it actually matters: a forced
- * mate, or the opponent genuinely winning material. The source PV line's
- * eval is the signal — a pin in an equal opening line scores ~0; a real
- * material-winning tactic tanks the student's eval.
+ * mate, or the opponent genuinely winning material.
  *
- * @param tactic       The upcoming tactic (carries the source PV line's
- *                     eval + mate).
- * @param playerColor  The student's color — used to read the eval, which
- *                     is stored from WHITE's perspective.
+ * 🔒 C#6 (2026-09-13): judge the pattern at its OWN board, not the LINE's
+ * terminal eval/mate. `scanUpcomingTactics` stamps every pattern with the
+ * whole line's `lineEval`/`lineMate`, so a harmless ply-1 pin sitting in a
+ * line that mates at ply 5 inherited the mate and fired. Now: a real MATE
+ * MOTIF on this board is critical; any other pattern must WIN MATERIAL past
+ * the (rating-scaled) bar at its own position — a pin/fork that wins nothing
+ * is not a threat no matter how sharp the line later becomes. When `pattern`
+ * + `fen` are absent (a caller with only the line signal) the old
+ * line-terminal read is the fallback.
+ *
+ * @param tactic       The upcoming tactic. `pattern` + `fen` drive the
+ *                     per-ply judgment; `lineEval`/`lineMate` are the fallback.
+ * @param playerColor  The student's color (the beneficiary is the opponent).
  * @param isOpening    Apply the stricter opening bar.
  */
 export function isCriticalThreat(
-  tactic: Pick<UpcomingTactic, 'lineEval' | 'lineMate'>,
+  tactic: Pick<UpcomingTactic, 'lineEval' | 'lineMate'> & Partial<Pick<UpcomingTactic, 'pattern' | 'fen'>>,
   playerColor: 'w' | 'b',
   isOpening: boolean,
   playerRating?: number,
   tacticsSkill?: number,
 ): boolean {
-  if (tactic.lineMate !== null) return true; // a forced mate is always worth it
-  const studentEval = playerColor === 'w' ? tactic.lineEval : -tactic.lineEval;
   const baseBar = isOpening ? CRITICAL_THREAT_CP_OPENING : CRITICAL_THREAT_CP;
   // Adaptive: weaker players get alerted on smaller swings (more help); stronger
   // players only on bigger ones (less noise) — David 2026-07-03. Omitted rating
@@ -308,6 +335,17 @@ export function isCriticalThreat(
   const bar = typeof playerRating === 'number'
     ? baseBar * alertSensitivityMultiplier(playerRating, tacticsSkill)
     : baseBar;
+
+  // C#6 — per-ply judgment when the pattern + its board are in hand.
+  if (tactic.pattern && tactic.fen) {
+    if (MATE_MOTIFS.has(tactic.pattern.type)) return true; // a real mate motif HERE
+    const oppWB: 'w' | 'b' = playerColor === 'w' ? 'b' : 'w';
+    return maxMaterialWinCp(tactic.fen, oppWB) >= bar; // opponent must WIN material here
+  }
+
+  // Fallback (no pattern/fen): the original line-terminal signal.
+  if (tactic.lineMate !== null) return true;
+  const studentEval = playerColor === 'w' ? tactic.lineEval : -tactic.lineEval;
   return studentEval <= -bar; // opponent winning by ≥ the bar
 }
 
