@@ -4,7 +4,7 @@
 // Deterministically… same rules apply, just now to Google voice."
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildVoicePackage, describeVoicePackage, type VoiceFact, markableSquares } from './voicePackage';
+import { buildVoicePackage, describeVoicePackage, spokenSentenceKeys, type VoiceFact, markableSquares } from './voicePackage';
 
 /** Move 3 of the Pirc David played on prod — quiet, everything home. */
 const PIRC_3 = 'rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3';
@@ -506,5 +506,49 @@ describe('the late package does not repeat what the turn already said', () => {
       said,
     );
     expect(markableSquares(pkg)).toEqual([]);
+  });
+});
+
+// David 2026-09-13: "don't let it repeat phrases … checking every turn for new
+// and different teaching phrases. Same with all of the other calculators!!" The
+// within-turn `alreadySaid` guard (above) only covers ONE turn's two packages;
+// `priorKeys` is the CROSS-turn, cross-lane guarantee — an uncastled king is
+// true for ten plies and must be said once, not ten times.
+describe('cross-turn novelty (priorKeys) — no lane repeats a phrase all game', () => {
+  const FEN = '4k3/8/8/8/8/8/8/4K3 w - - 0 1';
+
+  it('drops a phrase already spoken on an EARLIER turn (reason: duplicate, not "already said this turn")', () => {
+    const line = 'You want to activate the king toward the centre.';
+    const prior = new Set(spokenSentenceKeys({ kept: [{ kind: 'plan', text: line, fen: FEN }] }));
+    const pkg = buildVoicePackage([{ kind: 'plan', text: line, fen: FEN }], undefined, prior);
+    expect(pkg.spoken).toBe('');
+    // 'duplicate' (an earlier turn), NOT 'already said this turn' (this turn) —
+    // the two point at different bugs when a silent package is diagnosed.
+    expect(pkg.dropped[0]?.reason).toBe('duplicate');
+  });
+
+  it('a DIFFERENT phrase is untouched by the prior-turn set', () => {
+    const prior = new Set(spokenSentenceKeys({
+      kept: [{ kind: 'plan', text: 'You want to activate the king toward the centre.', fen: FEN }],
+    }));
+    const pkg = buildVoicePackage([{ kind: 'plan', text: 'You want to win the exchange.', fen: FEN }], undefined, prior);
+    expect(pkg.spoken).toBe('You want to win the exchange.');
+  });
+
+  it('spokenSentenceKeys returns one key per kept sentence, in a form priorKeys suppresses', () => {
+    // Squareless plan prose so board-grading has nothing to refuse on the
+    // kings-only board — the dedupe round-trip is what is under test.
+    const line = 'You want to win a pawn. Then you activate the king.';
+    const pkg = buildVoicePackage([{ kind: 'plan', text: line, fen: FEN }]);
+    const keys = spokenSentenceKeys(pkg);
+    expect(keys.length).toBe(2);
+    // Round-trip: feeding those keys back as priorKeys silences the same fact.
+    const next = buildVoicePackage([{ kind: 'plan', text: line, fen: FEN }], undefined, new Set(keys));
+    expect(next.spoken).toBe('');
+  });
+
+  it('no priorKeys behaves exactly as before (backward-compatible)', () => {
+    const pkg = buildVoicePackage([{ kind: 'plan', text: 'You want to win a pawn.', fen: FEN }]);
+    expect(pkg.spoken).toBe('You want to win a pawn.');
   });
 });

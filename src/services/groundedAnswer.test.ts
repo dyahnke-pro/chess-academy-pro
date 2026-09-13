@@ -990,6 +990,19 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // and it is NOT just the hang note on its own
     expect(a!.facts.trim()).not.toBe('Your pawn on e5 is hanging.');
   });
+
+  it('on demand, appends the positional READ (both sides) so "read the position" teaches the plan (David 2026-09-13)', () => {
+    // Black to move, king still on e8 (uncastled) — a real, board-true feature
+    // readPosition reports. The assessment must carry the plan, not just the
+    // eval number, when the student asks for a read on the play board.
+    const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
+    const a = assemblePositionAssessment({ evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    expect(a).not.toBeNull();
+    // The eval verdict still LEADS (the direct "how do I stand" answer)…
+    expect(a!.facts).toMatch(/balanced|level|concrete|edge|better|worse/i);
+    // …and the READ follows: the uncastled king in the centre is board-true here.
+    expect(a!.facts.toLowerCase()).toContain('centre');
+  });
 });
 
 describe('explainBestMoveGrounded — hanging is legal-capture + SEE grounded (no pinned-attacker false positive)', () => {

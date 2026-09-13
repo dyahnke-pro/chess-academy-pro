@@ -356,6 +356,21 @@ export function buildVoicePackage(
    *  output — it is comparing what it is about to say against what it already
    *  said, which is bookkeeping, not judgement. */
   alreadySaid?: string,
+  /** EVERY PHRASE ALREADY SPOKEN THIS GAME (sentence sayKeys), across all prior
+   *  turns and all lanes.
+   *
+   *  David 2026-09-13: "don't let it repeat phrases … checking every turn for
+   *  new and different teaching phrases. Same with all of the other
+   *  calculators!!" `alreadySaid` gates repeats within ONE turn (its two
+   *  packages); this gates them across the WHOLE game, for every lane at once —
+   *  an uncastled king is true for ten plies running and must be said once, not
+   *  ten times. The caller owns the set (one per game) and feeds each spoken
+   *  package's keys back in via `spokenSentenceKeys`.
+   *
+   *  Seeded into `seen` but NOT `saidEarlier`: a repeat from an earlier turn is
+   *  a 'duplicate', not 'already said this turn' — the two point at different
+   *  things when a silent package needs diagnosing. */
+  priorKeys?: ReadonlySet<string>,
 ): VoicePackage {
   const kept: VoiceFact[] = [];
   const dropped: VoicePackage['dropped'] = [];
@@ -366,6 +381,7 @@ export function buildVoicePackage(
   // three different bugs.
   const saidEarlier = new Set<string>();
   for (const s of sentencesOf(alreadySaid ?? '')) { seen.add(sayKey(s)); saidEarlier.add(sayKey(s)); }
+  if (priorKeys) for (const k of priorKeys) seen.add(k);
 
   // Sort by rank, then by the order the caller supplied — stable, so two facts
   // of the same kind keep the sequence the caller computed them in.
@@ -529,6 +545,16 @@ export function buildVoicePackage(
   };
   const spoken = kept.map((f) => sentence(f.text)).join(' ');
   return { spoken, kept, dropped };
+}
+
+/** The sentence-level sayKeys a package actually spoke — what the caller feeds
+ *  back into its per-game novelty set so the NEXT turn's package (`priorKeys`)
+ *  never repeats any of them. Keyed exactly as the dedupe inside
+ *  `buildVoicePackage`, so a key added here is a key that suppresses there. */
+export function spokenSentenceKeys(pkg: { kept: VoiceFact[] }): string[] {
+  const out: string[] = [];
+  for (const f of pkg.kept) for (const s of sentencesOf(f.text)) out.push(sayKey(s));
+  return out;
 }
 
 /** One-line summary for the audit stream, built from the SAME object that was

@@ -22,6 +22,7 @@ import {
   bishopPair, computeSpace, findPassedPawns,
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
+import { readPosition } from './positionalRead';
 import { structurePlan } from './boardPlan';
 import { strategicWhyLed } from './moveFundamentals';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
@@ -1047,6 +1048,31 @@ export function assemblePositionAssessment(opts: {
       if (myHang) parts.push(`Your ${REVIEW_PIECE_NAME[myHang.piece] ?? myHang.piece} on ${myHang.square} is hanging.`);
       else if (tactics.threats[0]?.description) parts.push(`Watch out — ${tactics.threats[0].description}.`);
     }
+  }
+
+  // THE PLAN, ON DEMAND (David 2026-09-13: "Play with coach needs to on demand
+  // when asked through the text field"). An assessment answers "how do I stand"
+  // with the eval + the sharp fact above; a student who asks it on the play
+  // board also wants the READ — king safety, a bad piece, an outpost, a lever,
+  // both sides' plans. `readPosition` computes exactly that, board-true and
+  // ranked, for BOTH sides ("even for the opponent's pieces"). Append the top
+  // couple so the on-demand read teaches, not just scores. Never auto-narrated —
+  // this assembler only runs when the student asked (isPositionAssessmentQuestion).
+  if (opts.fen) {
+    try {
+      const already = parts.join(' ').toLowerCase();
+      const reads: string[] = [];
+      for (const o of readPosition(opts.fen, studentColor)) {
+        // Skip an observation the eval/tactic line already covered (a shared
+        // square token or subject) — a light guard, this is not the voice
+        // package's cross-lane dedupe, just "don't say the same thing twice".
+        const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
+        if (naming && already.includes(naming)) continue;
+        reads.push(o.text);
+        if (reads.length >= 2) break;
+      }
+      if (reads.length > 0) parts.push(...reads);
+    } catch { /* the read is a bonus, never a blocker */ }
   }
 
   if (parts.length === 0) return null;

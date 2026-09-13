@@ -20,7 +20,7 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
-import { buildVoicePackage, describeVoicePackage, markableSquares, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
+import { buildVoicePackage, describeVoicePackage, markableSquares, spokenSentenceKeys, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
@@ -339,12 +339,19 @@ const NARRATE_DNA_ONLY = true;
  *                   up, the mistake call-out, the coach's own-blunder admission.
  *                   DNA per David's 2026-08-10 ordering ("backwards first…").
  *
- *  OUT — silent: `observation` (the generic positional filler — "your pawn on a2
- *  is isolated", not a specific Danya behaviour), `plan` and `borrowed` (already
- *  silenced at source; here for defence in depth). */
+ *  IN as of 2026-09-13 — `observation` (the positional read: king in the centre,
+ *  a bad piece + the break that frees it, an outpost, a lever, both sides'
+ *  plans). David saw its output and reversed the 2026-08-23 exclusion: "That is
+ *  a beautiful teaching tool!! … loud and proud on learn … checking every turn
+ *  for new and different teaching phrases." It stays rank-0 in `voicePackage`,
+ *  so it never displaces a note or a detector and only fills the DNA breath when
+ *  a turn had room; it still yields behind a corpus note (`softStandDown`).
+ *
+ *  OUT — silent: `plan` and `borrowed` (already silenced at source; here for
+ *  defence in depth). */
 const DNA_VOICE_KINDS: ReadonlySet<VoiceFactKind> = new Set<VoiceFactKind>([
   'note', 'gem', 'threat', 'tactic', 'opening', 'computed',
-  'drawback', 'mistake', 'coachMistake',
+  'drawback', 'mistake', 'coachMistake', 'observation',
 ]);
 
 /** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
@@ -1635,6 +1642,13 @@ export function CoachTeachPage(): JSX.Element {
    *  castles, and the boundary repeat-guard turns each of those back into the
    *  silence this lane exists to fill. */
   const positionalSaidRef = useRef(new Set<string>());
+  /** EVERY PHRASE (sentence sayKey) THE COACH HAS SPOKEN THIS GAME, across every
+   *  lane and both packages of every turn. David 2026-09-13: "don't let it repeat
+   *  phrases … Same with all of the other calculators!!" `buildVoicePackage`
+   *  already dedupes within a turn; this is the CROSS-turn, cross-lane guarantee —
+   *  passed in as `priorKeys` and topped up with each spoken package's
+   *  `spokenSentenceKeys`. Cleared on a new game. */
+  const spokenKeysRef = useRef(new Set<string>());
   /** The last gem callout spoken, so a gem that stays live across plies is
    *  named once rather than nagged every move. */
   const gemSeenRef = useRef<string | null>(null);
@@ -1935,6 +1949,7 @@ export function CoachTeachPage(): JSX.Element {
     // one's memory and starts out quieter than it should.
     planSaidRef.current.clear();
     positionalSaidRef.current.clear();
+    spokenKeysRef.current.clear();
     gameRef.current.setOrientation(studentSide);
     setPlayerColor(studentSide);
     liveFenRef.current = gameRef.current.fen;
@@ -7475,15 +7490,21 @@ export function CoachTeachPage(): JSX.Element {
         const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }
       } catch { /* never a blocker */ }
-      // The generic positional filler is a LAST resort — only on a genuinely
-      // quiet turn where no behavior fired either. It must never ride alongside
-      // the plan (that was the "irrelevant observation" David flagged).
-      if (quietTurn && !behaviorLine) {
-        try {
-          const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
-          if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
-        } catch { /* never a blocker */ }
-      }
+      // THE POSITIONAL READ IS CHECKED EVERY (non-urgent) TURN (David 2026-09-13:
+      // "loud and proud on learn … checking every turn for new and different
+      // teaching phrases"). No longer gated behind `quietTurn` — it is offered on
+      // every turn that isn't already an urgent tactical moment, and the machinery
+      // downstream decides whether it is HEARD: it is rank-0, so a note/behaviour
+      // leads; the per-game novelty set drops it if it repeats a phrase; the
+      // 3-reason DNA cap keeps a busy turn clean; and `softStandDown` (at the add
+      // site) still yields it entirely behind a corpus note — his "no aside behind
+      // a note". `buildPositionalRead` descends its ranked list past what it has
+      // already offered, so a fresh, different observation surfaces each turn
+      // instead of the same one repeating.
+      try {
+        const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
+        if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
+      } catch { /* never a blocker */ }
     }
 
     // ── THE BOARD WALKS ANY LINE THE TEACHING RECITES ─────────────────────
@@ -7565,7 +7586,10 @@ export function CoachTeachPage(): JSX.Element {
       // teaching rank it could displace a masterclass beat with "your pawn on
       // a2 is isolated". Lowest rank by construction.
       ...(positionalLine && !softStandDown ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
-    ]);
+      // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
+      // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
+      // (the late package's `alreadySaid`); this is the cross-turn guarantee.
+    ], undefined, spokenKeysRef.current);
     // DNA WHITELIST + ~3 REASONS — INSTANT package (David 2026-08-23: "only the
     // DNA computations… if it doesn't fit the DNA structure it does not get
     // spoken", and "doesn't he give 3 ideas?" — DNA tally 3.4/move). Drop any
@@ -7576,7 +7600,7 @@ export function CoachTeachPage(): JSX.Element {
     const INSTANT_MAX_REASONS = 3;
     const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind)).slice(0, INSTANT_MAX_REASONS);
     const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
-      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })))
+      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })), undefined, spokenKeysRef.current)
       : instantFull;
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
@@ -9219,6 +9243,9 @@ export function CoachTeachPage(): JSX.Element {
                 });
                 if (instant.pkg.spoken) {
                   lines.push(instant.pkg.spoken);
+                  // Feed what was actually SPOKEN into the per-game novelty set so
+                  // no later turn (or the late package below) repeats it.
+                  for (const k of spokenSentenceKeys(instant.pkg)) spokenKeysRef.current.add(k);
                   // The arrow rides only when the THREAT actually SURVIVED
                   // into the utterance — an arrow pointing at a claim the
                   // package refused is the same lie drawn instead of said.
@@ -9563,6 +9590,7 @@ export function CoachTeachPage(): JSX.Element {
                   const fullPkg = buildVoicePackage(
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                     instantSpokenText,
+                    spokenKeysRef.current,
                   );
                   // DNA WHITELIST + ~3 REASONS (David 2026-08-23: "only the DNA
                   // computations… if it doesn't fit the DNA structure it does not
@@ -9576,10 +9604,14 @@ export function CoachTeachPage(): JSX.Element {
                     ? buildVoicePackage(
                       lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
                       instantSpokenText,
+                      spokenKeysRef.current,
                     )
                     : fullPkg;
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
+                    // Record the late package's phrases too — the per-game set is
+                    // what keeps the NEXT turn from repeating any of them.
+                    for (const k of spokenSentenceKeys(hintPkg)) spokenKeysRef.current.add(k);
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
                     // so the board draws the ones belonging to lanes the package
                     // KEPT — a refused claim takes its marks away with it, which
