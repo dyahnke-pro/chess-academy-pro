@@ -892,7 +892,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'reviewFullDetail', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'reviewFullDetail' | 'coachBoardMarkersOn', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -937,6 +937,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
           The fields stay on UserPreferences and are read by
           resolveCoachNarration() and resolveVerbosity() as a migration
           fallback for profiles that predate the unified setting. */}
+      <ToggleRow
+        label="Board Arrows & Highlights"
+        tooltip="Show the coach's move arrows AND square highlights on the board — together. Off hides both on every coach board (Learn and Play), and the on-board Coach Tips button toggles this same setting. A Hint you tap still draws its arrow."
+        checked={profile.preferences.coachBoardMarkersOn ?? true}
+        onChange={(v) => void handleToggle('coachBoardMarkersOn', v)}
+        testId="coach-board-markers-toggle"
+      />
       <ToggleRow
         label="Blunder Alerts"
         tooltip="Coach alerts you when your opponent makes a big mistake"

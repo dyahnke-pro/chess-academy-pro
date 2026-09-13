@@ -886,6 +886,11 @@ export interface UserPreferences {
    *  (graded against the engine + board) before revealing the move. A vision
    *  test at your own mistakes; non-blocking, skippable, inline (never a modal). */
   readingChallengesInReview?: boolean;
+  /** Show the coach's board markers — move ARROWS + square HIGHLIGHTS — together.
+   *  Off hides both on every coach board; the on-board Coach Tips button toggles
+   *  this same persisted value (David 2026-09-13). Default ON. An explicit Hint
+   *  the student taps still draws its arrow. */
+  coachBoardMarkersOn?: boolean;
   coachVerbosity?: CoachVerbosity;
   /** Live phase-transition narration verbosity. 'off' silences the
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the

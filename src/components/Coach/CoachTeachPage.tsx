@@ -89,6 +89,7 @@ import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weaknessSpine';
+import { ratingTrendNote, untriedFeatureNudge } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
 import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
@@ -1466,7 +1467,7 @@ export function CoachTeachPage(): JSX.Element {
   // (orientation hand-off), difficulty + coach-tips are visually
   // present for parity even though teach mode doesn't run engine
   // moves; eval-bar / engine-lines toggles drive the board overlays.
-  const { settings } = useSettings();
+  const { settings, updateSetting } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
 
@@ -1490,7 +1491,11 @@ export function CoachTeachPage(): JSX.Element {
     // chat — no lingering card (David 2026-07-10).
     onReveal: (text) => setMessages((prev) => [...prev, { id: uid('why-reveal'), role: 'assistant', content: text, timestamp: Date.now() }]),
   });
-  const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
+  // Coach board markers (arrows + highlights) — sourced from the PERSISTED
+  // setting so the on-board button and the Settings toggle are one source of
+  // truth and the choice survives across sessions (David 2026-09-13). The button
+  // below writes it; the arrow/highlight render gates read it as before.
+  const coachTipsOn = settings.coachBoardMarkersOn;
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 
   /** STEP BACK THROUGH THE GAME WITHOUT DESTROYING IT (David 2026-08-16:
@@ -9955,7 +9960,7 @@ export function CoachTeachPage(): JSX.Element {
       // chip they tap), still grounded (routes to a computed vertical). Cheap
       // stored read; null-guarded so a fresh profile just shows the generic set.
       if (!rolodexOpening) {
-        const generic = pickSuggestedQuestions(greetingRotation, 4);
+        const generic = pickSuggestedQuestions(greetingRotation, 3);
         // Show the generic set immediately, then asynchronously upgrade to a
         // nudge-led set if a stored weakness profile is available (non-blocking
         // — the kickoff IIFE is synchronous). Null-guarded end to end.
@@ -10003,6 +10008,38 @@ export function CoachTeachPage(): JSX.Element {
             }
             if (userInteractedRef.current || !topLabel) return;
 
+            // COMPUTED OPENER SIGNALS (David 2026-09-13) — keep the intro NEW and
+            // show the coach is tracking the student's history: name their rating
+            // TREND ("CC noted his elo dropping") and point at a surface they
+            // haven't tried, chosen to help THIS weakness (relevance is the
+            // point). Both computed (G0 — the coach only phrases them). Folded
+            // into the existing lead line + the ≤3-chip set so the intro stays
+            // short ("I don't want the intro too long and annoying").
+            const [trend, untried] = await Promise.all([
+              ratingTrendNote().catch(() => null),
+              untriedFeatureNudge(topCategory ?? null).catch(() => null),
+            ]);
+            if (userInteractedRef.current) return;
+            // Prepend the trend to the FIRST opener line only (said once).
+            let trendUsed = false;
+            const withTrend = (line: string): string => {
+              if (!trend || trendUsed) return line;
+              trendUsed = true;
+              const head = `${trend.clause.charAt(0).toUpperCase()}${trend.clause.slice(1)}`;
+              return `${head} — ${line.charAt(0).toLowerCase()}${line.slice(1)}`;
+            };
+            // Fold the untried-feature nudge into a ≤3-chip set (after the lead),
+            // deduped. Null when they've tried everything relevant.
+            const untriedChip = untried?.chip ?? null;
+            // The lead chip (weakness drill) stays first; the untried-feature
+            // nudge takes SECOND slot so it survives the ≤3 cap (appending it
+            // last would slice it off when the pool is already full).
+            const capChips = (chips: string[]): string[] => {
+              if (!untriedChip) return [...new Set(chips)].slice(0, 3);
+              const [lead, ...rest] = chips;
+              return [...new Set([lead, untriedChip, ...rest].filter((c): c is string => Boolean(c)))].slice(0, 3);
+            };
+
             // P5 — STATE THE PICKER (David 2026-09-08: "learn with coach should
             // offer a picker and state in the opening phrase"). When the arc has
             // holes, the opener IS the custom-lesson picker: the coach names the
@@ -10021,14 +10058,16 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const stand = dossierOpeningLine(await getStudentDossier());
                   if (stand && !userInteractedRef.current) {
-                    setMessages((prev) => [...prev, { id: uid('dossier-stand'), role: 'assistant', content: stand, timestamp: Date.now() }]);
-                    speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(stand)).catch(() => undefined);
+                    const standLine = withTrend(stand);
+                    setMessages((prev) => [...prev, { id: uid('dossier-stand'), role: 'assistant', content: standLine, timestamp: Date.now() }]);
+                    speechChainRef.current = speechChainRef.current.then(() => voiceService.speakForced(standLine)).catch(() => undefined);
                   }
                 } catch { /* dossier is a bonus — the picker still opens */ }
-                setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: plan.pickerLine, timestamp: Date.now() }]);
-                setCoachChoices([...plan.pickerChips, ...generic].slice(0, 4));
+                const pickerLine = withTrend(plan.pickerLine);
+                setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: pickerLine, timestamp: Date.now() }]);
+                setCoachChoices(capChips([...plan.pickerChips, ...generic]));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => voiceService.speakForced(plan.pickerLine))
+                  .then(() => voiceService.speakForced(pickerLine))
                   .catch(() => undefined);
                 captureEvent('custom_lesson_offered', { surface: 'coach-teach', holes: plan.parts.length });
                 return; // the picker is the opener — don't stack the older one
@@ -10044,7 +10083,7 @@ export function CoachTeachPage(): JSX.Element {
             const leadChip = isRecent
               ? drillChip
               : (weaknessNudgeFromItem(topCategory, topLabel) ?? drillChip);
-            setCoachChoices([leadChip, ...generic.filter((q) => q !== leadChip)].slice(0, 4));
+            setCoachChoices(capChips([leadChip, ...generic.filter((q) => q !== leadChip)]));
 
             let spokeCall = false;
             try {
@@ -10055,10 +10094,11 @@ export function CoachTeachPage(): JSX.Element {
                 // a proper noun phrase; never lowercase-splice it.
                 spokeCall = true;
                 const chip = call.prescription === 'weakness' ? leadChip : call.chip;
-                setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: call.line, timestamp: Date.now() }]);
-                setCoachChoices((prev) => [chip, ...(prev ?? generic).filter((q) => q !== chip)].slice(0, 4));
+                const callLine = withTrend(call.line);
+                setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: callLine, timestamp: Date.now() }]);
+                setCoachChoices((prev) => capChips([chip, ...(prev ?? generic).filter((q) => q !== chip)]));
                 speechChainRef.current = speechChainRef.current
-                  .then(() => voiceService.speakForced(call.line))
+                  .then(() => voiceService.speakForced(callLine))
                   .catch(() => undefined);
               }
             } catch { /* the call is a bonus — fall through to the opener */ }
@@ -10077,9 +10117,10 @@ export function CoachTeachPage(): JSX.Element {
                 const arc = curriculumArcLine(await getCoachCurriculum());
                 if (arc && arc.includes('then')) planLine = `${planLine} ${arc}`;
               } catch { /* the arc is a bonus */ }
-              setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: planLine, timestamp: Date.now() }]);
+              const openerLine = withTrend(planLine);
+              setMessages((prev) => [...prev, { id: uid('session-opener'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
               speechChainRef.current = speechChainRef.current
-                .then(() => voiceService.speakForced(planLine))
+                .then(() => voiceService.speakForced(openerLine))
                 .catch(() => undefined);
             }
           })
@@ -10756,7 +10797,7 @@ export function CoachTeachPage(): JSX.Element {
                 <span className="hidden sm:inline">Chat</span>
               </button>
               <button
-                onClick={() => setCoachTipsOn((v) => !v)}
+                onClick={() => void updateSetting('coachBoardMarkersOn', !coachTipsOn)}
               className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
               style={{
                 background: coachTipsOn ? 'var(--color-accent)' : 'var(--color-surface)',

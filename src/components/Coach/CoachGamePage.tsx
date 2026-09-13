@@ -265,8 +265,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     });
   }, [reviewGameId]);
 
-  const coachTipsOn = useAppStore((s) => s.coachTipsOn);
-  const toggleCoachTips = useAppStore((s) => s.toggleCoachTips);
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
   const gameChatRef = useRef<GameChatPanelHandle>(null);
@@ -882,7 +880,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   }, []);
 
   // Settings-driven analysis toggles (user can override in-game)
-  const { settings } = useSettings();
+  const { settings, updateSetting } = useSettings();
+  // Coach board markers (arrows + highlights) — the PERSISTED setting is the one
+  // source of truth (David 2026-09-13). The on-board Coach Tips button toggles
+  // it; off hides every AUTO coach arrow + highlight here and gates tip-firing,
+  // and it persists + matches the Settings toggle. An explicit Hint still draws.
+  const coachTipsOn = settings.coachBoardMarkersOn;
+  const toggleCoachTips = (): void => { void updateSetting('coachBoardMarkersOn', !coachTipsOn); };
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
@@ -5017,8 +5021,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               showFlipButton={false}
               showVoiceMic={false}
               highlightSquares={coachLastMove}
-              arrows={(() => { const a = dedupeArrowsBySquarePair([...hintState.arrows, ...annotationArrows, ...voiceArrows, ...tacticArrows]); return a.length > 0 ? a : undefined; })()}
-              annotationHighlights={(() => { const h = [...annotationHighlights, ...tacticHighlights]; return h.length > 0 ? h : undefined; })()}
+              arrows={(() => {
+                // Coach markers OFF hides every AUTO coach arrow (chat / voice /
+                // tactic); an explicit Hint the student tapped still draws its
+                // arrow (David 2026-09-13 — user-requested affordance).
+                const auto = coachTipsOn ? [...annotationArrows, ...voiceArrows, ...tacticArrows] : [];
+                const a = dedupeArrowsBySquarePair([...hintState.arrows, ...auto]);
+                return a.length > 0 ? a : undefined;
+              })()}
+              annotationHighlights={(() => {
+                if (!coachTipsOn) return undefined; // markers off → no highlights (twins with the arrows above)
+                const h = [...annotationHighlights, ...tacticHighlights];
+                return h.length > 0 ? h : undefined;
+              })()}
               ghostMove={hintState.ghostMove}
               pgnForChat={game.history.join(' ')}
               onOpeningRequest={handleOpeningRequest}

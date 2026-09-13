@@ -31,6 +31,12 @@ export interface EffectiveSettings {
   coachInGameDiscussion: boolean;
   coachedReview: boolean;
   readingChallengesInReview: boolean;
+  /** Show the coach's board markers — move ARROWS and square HIGHLIGHTS —
+   *  together (David 2026-09-13: "combine square highlights and arrows … turning
+   *  off arrows also turns off highlights"). Off hides both on every coach board;
+   *  the on-board Coach Tips button toggles this same value. An explicit Hint the
+   *  student taps still draws its arrow (a user-requested affordance). */
+  coachBoardMarkersOn: boolean;
   coachVerbosity: CoachVerbosity;
   // Neon glow
   glowBrightness: number;
@@ -56,6 +62,7 @@ const MASTER_OFF_OVERRIDES: Partial<EffectiveSettings> = {
   highlightLastMove: false,
   showLegalMoves: false,
   pieceAnimationSpeed: 'none',
+  coachBoardMarkersOn: false,
 };
 
 const DEFAULT_SETTINGS: EffectiveSettings = {
@@ -86,6 +93,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachInGameDiscussion: true,
   coachedReview: true,
   readingChallengesInReview: true,
+  coachBoardMarkersOn: true,
   coachVerbosity: 'unlimited',
   glowBrightness: 100,
   boardGlowColor: '0, 229, 255',
@@ -130,6 +138,7 @@ export function useSettings(): UseSettingsReturn {
       coachInGameDiscussion: raw.coachInGameDiscussion ?? true,
       coachedReview: raw.coachedReview ?? true,
       readingChallengesInReview: raw.readingChallengesInReview ?? true,
+      coachBoardMarkersOn: raw.coachBoardMarkersOn ?? true,
       coachVerbosity: raw.coachVerbosity ?? 'unlimited',
       glowBrightness: raw.glowBrightness ?? 100,
       boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',
