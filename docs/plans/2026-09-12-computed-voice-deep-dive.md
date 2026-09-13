@@ -107,8 +107,15 @@ knight" class does NOT reproduce). Weaknesses found (imprecise, not false):
 3. **`tacticalRead.summarizeVerdict` states unverified material** (`tacticalRead.ts:92-94`):
    +2.8 positional edge → "up a piece" (G3 false material claim). Fix: frame by
    eval magnitude ("clearly better") unless a real material count backs it.
-4. **`boardPlan` false "push the passer"** on blockaded / opposite-colored-bishop
-   passers (`boardPlan.ts:44-46`). Fix: gate on the passer being advanceable.
+4. **`boardPlan` false "push the passer"** on blockaded passers. ✅ DONE
+   (2026-09-13, B#4). `structurePlan` said "push it — make them deal with the
+   promotion" without checking the pawn can advance. Added `passerBlock` (chess.js
+   read of the square in front): clear → push it; enemy blockader → "challenge or
+   dislodge that blockader first"; own piece → "clear the way before it can
+   advance." Gates: 2 new boardPlan tests (blockaded + self-blocked never say
+   "push it"). boardPlan 6/6. (OCB permanent-blockade with an empty front square
+   is a deeper positional judgment — left out per "empty > invented"; the
+   concrete blockade case is the board-true fix.)
 5. **Two only-move definitions can disagree** (`positionFacts.ts:139-148` fan-only
    gap, no legalCount, vs `criticalityScan.ts:120` `legalCount===1`). Fix: thread
    `scanCriticality`/legalCount into `computeImportance`.

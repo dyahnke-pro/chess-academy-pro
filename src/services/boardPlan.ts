@@ -6,6 +6,7 @@
 // generic "improve your pieces", per "when unsure, leave blank"). G0/G3: the
 // structure comes from chess.js geometry (describeStructure); the plan is the
 // established idea for that structure, phrased in code.
+import { Chess, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 
 type Color = 'w' | 'b';
@@ -14,6 +15,31 @@ type Color = 'w' | 'b';
 function stepsToPromote(square: string, color: Color): number {
   const rank = Number.parseInt(square[1] ?? '2', 10);
   return color === 'w' ? 8 - rank : rank - 1;
+}
+
+const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** The square directly in front of a pawn (toward promotion), or null off-board. */
+function frontSquare(square: string, color: Color): string | null {
+  const file = square[0];
+  const rank = Number.parseInt(square[1] ?? '0', 10);
+  const nr = color === 'w' ? rank + 1 : rank - 1;
+  if (nr < 1 || nr > 8) return null;
+  return `${file}${nr}`;
+}
+
+/** What blocks a passer's advance: 'clear' (front empty, push it), 'enemy' (a
+ *  blockader sits in front — the push is stopped), or 'friendly' (self-blocked).
+ *  Board-true via chess.js so the plan never says "push it" on a pawn that can't
+ *  move (B#4). Returns the blocker's piece letter when occupied. */
+function passerBlock(fen: string, square: string, color: Color): { kind: 'clear' | 'enemy' | 'friendly'; piece?: string } {
+  const front = frontSquare(square, color);
+  if (!front) return { kind: 'clear' }; // already on the promotion rank — nothing ahead
+  try {
+    const occ = new Chess(fen).get(front as Square);
+    if (!occ) return { kind: 'clear' };
+    return { kind: occ.color === color ? 'friendly' : 'enemy', piece: occ.type };
+  } catch { return { kind: 'clear' }; }
 }
 
 /** The most advanced pawn square in a list, for the given colour. */
@@ -39,9 +65,18 @@ export function structurePlan(fen: string, studentColor: Color): string | null {
   if (!s) return null;
   const opp: Color = studentColor === 'w' ? 'b' : 'w';
 
-  // Passed pawns — the most forcing structural feature.
+  // Passed pawns — the most forcing structural feature. But "push it" is only
+  // honest when the pawn can actually advance (B#4): a blockaded passer needs the
+  // blockader challenged first, and a self-blocked one needs its path cleared.
   const mine = mostAdvanced(s.pawns.passedPawns[studentColor], studentColor);
   if (mine) {
+    const block = passerBlock(fen, mine, studentColor);
+    if (block.kind === 'enemy') {
+      return `Your passed pawn on ${mine} is a trump, but their ${PIECE_NOUN[block.piece ?? 'p']} blockades it — challenge or dislodge that blockader before it can run.`;
+    }
+    if (block.kind === 'friendly') {
+      return `Your passed pawn on ${mine} is a trump, but your own ${PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.`;
+    }
     return `Your passed pawn on ${mine} is the trump here — push it and make them deal with the promotion.`;
   }
   const theirs = mostAdvanced(s.pawns.passedPawns[opp], opp);
