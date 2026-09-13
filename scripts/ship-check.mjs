@@ -225,6 +225,11 @@ const GATE_TESTS = [
   // ties capturesWinMaterial + landingIsSafe + the C#6 isCriticalThreat gate to
   // the honest sign — so reintroducing any geometry-only path trips it.
   'src/services/computedMaterialTruth.corpus.test.ts',
+  // 🔒 POSITIONAL-TRUTH CORPUS (David 2026-09-13 "strengthen the computers") —
+  // locks the positional fact-computers (piece quality / outpost / bad bishop /
+  // weak-square holes / passers + blockade) to their board-true definitions so a
+  // refactor can't reintroduce a count-only bad bishop or a piece-based hole.
+  'src/services/positionalTruth.corpus.test.ts',
   // 🔒 OTA UPDATE CONTRACT (2026-09-03) — the reply shape of /api/ota/manifest
   // IS the update mechanism for every native device, and both of its failure
   // modes are INVISIBLE from the app: a no-op without `kind:'up_to_date'` makes
