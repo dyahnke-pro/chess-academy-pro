@@ -204,20 +204,23 @@ brain → groundedAnswer read), NOT duplicating AUTO-narration onto Play/Tactics
       "king still in the centre", "pawn break on d4"), 0 pageErrors; best-move
       ARROWS render on the same chat path.
 
-### 🚩 OPEN FOLLOW-UP — on-demand HIGHLIGHTS on the in-game chat (play)
-Diagnosed this session, precisely: on `/coach/play` the read TEXT + best-move
-ARROWS render, but the read's yellow key-square HIGHLIGHT does NOT reach the
-board (scanned every square cell — no rgba(234,179,8); the last-move cyan on the
-same cell IS detectable, so the customSquareStyles channel works and the
-highlight simply isn't there). The reply is the VERBATIM `readPosition` prose, so
-it's the preferRaw computed assessment answer (my `[BOARD: highlight:...]` append
-should be present). `OpeningPlayMode.handleChatBoardAnnotation` sets
-`setChatHighlights` correctly and `GameChatPanel` parses+forwards highlight
-commands at 1129 — so the loss is between coachApi's return and GameChatPanel's
-`answer.text` for the assessment lane (arrows from the best-move lane survive the
-identical path). Needs local tracing (add temp logging on the play dispatch) to
-pin the exact strip/return point — a focused fix, NOT a guess at session end.
-- Marks on **Learn** (build 6 instant lane) and **Review** (this build) are
-  unaffected — they render through the component's own highlight state, not the
-  GameChatPanel path.
-- The on-demand read TEXT (the substance) reaches every surface.
+### ✅ FIXED — on-demand HIGHLIGHTS lost on every coachService surface
+The post-deploy probe found the read's yellow key-square highlight not landing on
+`/coach/play` (read text + best-move arrows DID). Root-caused in code (not a
+guess): `injectCandidateArrows` (arrowEngine, the ONE arrow-display pass called
+from `coachService.ask` at ~2031) does `stripBoardMarkers(text)` to re-derive
+arrows fresh — stripping EVERY `[BOARD:]` marker, including the read's
+code-authored `[BOARD: highlight:sq:yellow]`, on ALL coachService surfaces (chat,
+play, drawer). Arrows survived only because that pass re-adds them. Fix:
+`applyCandidateArrows` now captures highlight markers before the pass and
+re-appends them after (arrows still re-derive). Gate: `coachAnswerGates.test.ts`
+— highlight survives the pass + no duplicate. Learn/Review marks were never on
+this path (component state), so they were always fine.
+
+### Two audit-caught fixes this session (drive-to-green)
+- **Fundamentals-FIRST regression** (my earlier uncapped-default commit 0102120):
+  the capped review path led flagged plies with the neglected principle, the
+  uncapped path (now default) led with move-mechanics. `audit-review-overhaul-prod`
+  FUND/FUNDLEAD caught it; fixed by lifting the `[principle]` facet to the front of
+  a flagged student ply in the uncapped branch.
+- **On-demand highlight strip** (above), caught by `audit-ondemand-read-marks-prod`.

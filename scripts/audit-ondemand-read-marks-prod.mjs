@@ -14,14 +14,13 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 // king-in-the-centre + pawn-break read, so the read names real squares.
 const FEN = 'r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5';
 
-// KNOWN GAP (2026-09-13, diagnosed in this run): on /coach/play the read TEXT
-// fires (verbatim computed prose) and best-move ARROWS render, but the read's
-// yellow key-square HIGHLIGHT does not reach the board — the computed
-// assessment answer's appended [BOARD: highlight:...] tags survive to the board
-// on CoachTeachPage (build 6) but are lost on the GameChatPanel/OpeningPlayMode
-// in-game path (arrows on the same path DO render). Marks on Learn/Review are
-// unaffected. Tracked in docs/plans/2026-09-13-positional-read-loud.md; the
-// read-fires check is the hard gate here, the highlight is reported-only.
+// FIXED 2026-09-13 (this probe FOUND it): the read's yellow highlight was
+// stripped by injectCandidateArrows (the arrow-display pass strips every [BOARD:]
+// marker to re-derive arrows) on all coachService surfaces; applyCandidateArrows
+// now preserves highlight markers. The read-fires check is the hard gate here;
+// the on-board highlight is reported-only because react-chessboard v5 square
+// styling is fragile to detect headlessly (the unit gate coachAnswerGates.test
+// proves the marker survives the pass).
 
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext(sandboxContextOptions());
