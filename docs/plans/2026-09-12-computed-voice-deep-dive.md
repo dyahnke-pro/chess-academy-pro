@@ -379,10 +379,25 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   bearing pieces; the first-rank-pinned rook is dropped → one). groundedAnswer
   200/200, positionReading 109/109, gate 15/15. **This is the last cheap-ish
   P1c item; the remaining ones are the counterfactual engine.**
-- **P1c-rest — the counterfactual engine (NEXT, dedicated pass + gates):**
-  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
-  `exploitedLoosePiece` (:241) + pattern detectors (:561-575) + `computeAttackMap`.
-  Cross-move cause→effect logic — each needs individual analysis; no bulk-swap.
+- **C#5 — causalChain rode the pin-blind `seeGain` at every SEE site.** ✅ DONE
+  (2026-09-13). Not a bulk-swap: verified all 8 `seeGain` call sites share ONE
+  semantics ("is the piece on `square` winnable by its enemy") and introduced a
+  local `winnableGain(chess, square)` that preserves it exactly but drives off
+  the already-gated pin-aware `legalSeeGainFor` (forces enemy-of-owner regardless
+  of recorded turn). Swept `hasWinnablePiece`, `targetWasSavable` (×2),
+  `buildRemovedDefenderChain` (×4 incl. the proof string), `chainAvailableFor`,
+  `findAllowedChain` (×2). Also hardened `exploitedLoosePiece`'s "loose" test:
+  the geometric `after.attackers(_, enemy).length > 0` counted a defender pinned
+  to its own king as a live guard (→ a genuinely loose piece read as defended and
+  the chain went unbuilt); replaced with `winnableGain(after, sq) >= VAL[type]`
+  (the mover wins the FULL piece iff there is no real, unpinned recapturer).
+  `seeGain` import dropped (fully unused after the swap). Correctness inherited
+  from the gated primitive; causalChain 26/26 + causalChainVoice 6/6 confirm no
+  regression. `computeAttackMap` was not found in this file (stale reference).
+- **P1c-rest — remaining Tier-2/3 items (NEXT):** latentDanger enemy-shield (B#2),
+  boardPlan false push-passer (B#4), augmentWithProjections #4 ungated verdict
+  (D#1), narrationImportance must-defend-when-winning (B#1), double-check dead
+  detection (C#4), isCriticalThreat whole-line eval (C#6). Each its own pass + gate.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
   own change + gate + audit.
 

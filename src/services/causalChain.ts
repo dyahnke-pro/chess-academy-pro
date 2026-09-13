@@ -26,7 +26,20 @@
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
 import type { FundamentalId } from './principleAttribution';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { seeGain } from './positionReadingService';
+import { legalSeeGainFor } from './positionReadingService';
+
+/** Pin/legality-aware "is the piece on `square` winnable by its enemy?" — the
+ *  exact semantics `seeGain` had here (net material the side NOT owning the piece
+ *  wins by initiating a capture), but driven off LEGAL captures so a PINNED
+ *  attacker or defender is never counted. causalChain rode the pin-blind `seeGain`
+ *  at every SEE site (deep-dive C#5): a piece guarded only by a pinned defender
+ *  read as "safe" and a real cause→effect chain went unbuilt, while a pinned
+ *  would-be capturer could invent one. `>0` ⇒ effectively hanging. */
+function winnableGain(chess: Chess, square: Square): number {
+  const owner = chess.get(square)?.color;
+  if (!owner) return 0;
+  return legalSeeGainFor(chess.fen(), square, owner === 'w' ? 'b' : 'w');
+}
 
 // ─── types ──────────────────────────────────────────────────────────────────
 
@@ -165,7 +178,7 @@ function fullmoveOf(chess: Chess): number { return Number.parseInt(chess.fen().s
 function hasWinnablePiece(chess: Chess, victimSide: Color): boolean {
   for (const p of pieces(chess, victimSide)) {
     if (p.type === 'k' || VAL[p.type] < 3) continue;
-    try { if (seeGain(chess, p.square) >= 2) return true; } catch { /* skip */ }
+    try { if (winnableGain(chess, p.square) >= 2) return true; } catch { /* skip */ }
   }
   return false;
 }
@@ -182,10 +195,10 @@ function targetWasSavable(prev: Chess, s: Square, enemy: Color, victimType: Piec
     const c = new Chess(prev.fen());
     try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
     // (a) the victim moved to safety
-    if (m.from === s && m.piece === victimType && seeGain(c, m.to) <= 0) return true;
+    if (m.from === s && m.piece === victimType && winnableGain(c, m.to) <= 0) return true;
     // (b) the victim stayed on s and is no longer winnable (defended / attacker gone)
     const p = c.get(s);
-    if (p && p.color === enemy && p.type === victimType && seeGain(c, s) <= 0) return true;
+    if (p && p.color === enemy && p.type === victimType && winnableGain(c, s) <= 0) return true;
   }
   return false;
 }
@@ -240,8 +253,13 @@ function exploitedLoosePiece(before: Chess, after: Chess, focus: Move): { target
     if (p.type === 'k' || VAL[p.type] < 3) continue;
     const attackersNow = after.attackers(p.square, mover);
     if (attackersNow.length === 0) continue;
-    const defenders = after.attackers(p.square, enemy);
-    if (defenders.length > 0) continue;                 // not loose
+    // Pin-aware "loose": the mover wins the FULL piece — i.e. there is no REAL,
+    // unpinned recapturer. `after.attackers(_, enemy).length > 0` counted a
+    // defender pinned to its own king as a live guard, so a genuinely loose
+    // piece read as defended and the chain went unbuilt (deep-dive C#5).
+    // winnableGain drives off legal captures, so a pinned defender no longer
+    // masks the win (and a pinned would-be recapturer can't inflate the count).
+    if (winnableGain(after, p.square) < VAL[p.type]) continue;
     const attackedBefore = before.get(p.square)?.color === enemy && before.attackers(p.square, mover).length > 0;
     if (attackedBefore) continue;                        // the move didn't create the attack
     const cand = { target: p.square, type: p.type, movedPieceAttacks: attackersNow.includes(focus.to) };
@@ -558,17 +576,17 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   const s = focus.to;
   const victimType = beforeR.chess.get(s)?.type;
   if (!victimType || victimType === 'k' || VAL[victimType] < 3) return null;
-  if (seeGain(beforeR.chess, s) < 2) return null;   // capturing it wins material NOW
+  if (winnableGain(beforeR.chess, s) < 2) return null;   // capturing it wins material NOW
   // …and the capturer SITS SAFELY afterwards — else it's a trade in a flurry, not
   // a won piece (the single-square SEE win must survive the recapture).
-  if (seeGain(afterR.chess, s) > 0) return null;
+  if (winnableGain(afterR.chess, s) > 0) return null;
 
   // It was SAFE before the opponent's move: the SAME enemy piece stood on s and
   // was not winnable then. (Excludes recaptures — if the opponent had just
   // captured on s, prevR's s held a MOVER piece, not this enemy victim.)
   const prevPiece = prevR.chess.get(s);
   if (!prevPiece || prevPiece.color !== enemy || prevPiece.type !== victimType) return null;
-  if (seeGain(prevR.chess, s) > 0) return null;     // already hanging before → not the opponent's doing
+  if (winnableGain(prevR.chess, s) > 0) return null;     // already hanging before → not the opponent's doing
 
   // The opponent's move MOVED one of s's own defenders away (abandonment). The
   // guard was defending s before and no longer is, and the opponent moved it.
@@ -607,7 +625,7 @@ function buildRemovedDefenderChain(input: CausalChainInput): CausalChain | null 
   };
   return {
     nodes: [causeNode, tacticNode],
-    edges: [{ relation: 'removes-defender', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${seeGain(beforeR.chess, s)})` }],
+    edges: [{ relation: 'removes-defender', proof: `${oppMove.san} moved the ${PIECE_NOUN[guardType]} off ${oppMove.from}; it was defending ${s}, now winnable (SEE ${winnableGain(beforeR.chess, s)})` }],
     beneficiary: mover,
     focusPly,
     stance: 'played',
@@ -652,7 +670,7 @@ function chainAvailableFor(historySans: readonly string[], plyBefore: number, si
     // Only a capture of a genuinely WINNABLE piece can be a chain tactic — this
     // prunes the candidate set to ~1-2 (the hot-path optimisation that keeps the
     // both-ways lookahead cheap enough to run per move).
-    let g = 0; try { g = seeGain(r.chess, m.to); } catch { g = 0; }
+    let g = 0; try { g = winnableGain(r.chess, m.to); } catch { g = 0; }
     if (g < 2) continue;
     const chain = buildCausalChain({ historySans: [...base, m.san], focusPly: plyBefore + 1 });
     if (chain) return { chain, moveSan: m.san };
@@ -715,8 +733,8 @@ export function findAllowedChain(historySans: readonly string[], studentMovePly:
       if (m.san.replace(/[?!]+$/, '') === played) continue;   // the move they actually played
       const c = new Chess(posBefore.chess.fen());
       try { if (!c.move({ from: m.from, to: m.to, promotion: m.promotion })) continue; } catch { continue; }
-      if (seeGain(c, m.to) > 0) continue;                     // don't suggest a move that hangs
-      if (seeGain(c, targetSq) > 0) continue;                 // the target is still winnable → not an avoidance
+      if (winnableGain(c, m.to) > 0) continue;                     // don't suggest a move that hangs
+      if (winnableGain(c, targetSq) > 0) continue;                 // the target is still winnable → not an avoidance
       avoidance = m.san;
       break;
     }
