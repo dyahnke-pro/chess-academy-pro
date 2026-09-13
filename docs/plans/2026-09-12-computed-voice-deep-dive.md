@@ -567,6 +567,38 @@ re-design their surface), then:
   gate — building the sweep-lock surfaced a live false-claim the earlier sweep
   had missed.
 
+- **✅ P#8 — verifyForkOnBoard passed a FAKE fork off a pinned forker (second
+  rot the sweep surfaced).** `tacticVerification.verifyForkOnBoard` — the review
+  path's "is this fork a real win" gate — used geometric `seeGain`, so a forker
+  pinned to its own king (no legal move) returned `status:'live', winsPoints:5`
+  (proven: Ne5 pinned by Re8, forking Qc6+Rg6). Fixed both branches: LIVE uses
+  `capturesWinMaterial` (pin-aware per-target), THREAT uses `legalSeeGainFor`
+  after each defender reply. Two existing fixtures had an accidental g-file check
+  (rook g6 checking Kg1) the geometric code ignored; corrected to test the fork
+  intent without the artifact (LIVE → Ka1; THREAT → shielded king so neither
+  rook escapes with a check, the honest threat condition). New regression test +
+  a corpus row lock the pinned-forker rejection. tacticVerification 8/8,
+  reviewFullData green.
+
+- **REMAINING `seeGain` SITES — triage for David (NOT yet swept).** The two bugs
+  above proved the original sweep was incomplete; ~18 production call sites still
+  import the naive geometric `seeGain`. NOT all are bugs — `whyItFailed.ts` has
+  its OWN pin-aware SEE (`seeInitiate` plays legal moves, returns 0 when pinned),
+  so it is correct; many others use `seeGain(c, mv.to)` to score a move actually
+  played, where pin-blindness rarely flips the answer. The disciplined call
+  overnight was to fix the PROVEN user-facing false-claim sites (pressureCount,
+  verifyForkOnBoard) and leave the rest for a reviewed pass rather than blind-
+  convert 18 sites in a live app. Sites to triage next (probe each on a pinned
+  position first): groundedAnswer.ts (1841 residual — comment says "legal
+  captures + SEE" but still calls geometric seeGain for the swap;
+  1428/1898/1921/2274/2590/5563/5585), reviewTeachingPoints (87/474/672/775),
+  reviewTrapQuestion:87, reviewQuestionPlan:58, principleAttribution:235,
+  moveFundamentals:187, pvPlayback:244, reviewFullData:421, coachFeatureService:1681,
+  danyaBehaviors:448, positionReadingService internal (235/514/515/1010/1026/1156).
+  Method: probe with a pinned-attacker / pinned-defender FEN; if the naive read
+  flips a user-facing winnability/safety claim, convert to
+  legalSeeGain(For)/capturesWinMaterial and add a corpus row.
+
 **Method reminders:** 1. `scripts/audit-drill-why-prod.mjs` is the muted prod
 pattern (clone per surface). 2. The eval method: run the calculator on real
 `src/data/puzzles.json` positions and read output vs board (throwaway console.log

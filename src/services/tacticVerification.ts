@@ -19,7 +19,7 @@
 
 import { Chess } from 'chess.js';
 import type { Square, Color, PieceSymbol } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
 
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 
@@ -63,9 +63,11 @@ export function verifyForkOnBoard(fen: string, forkerSq: string, targetSqs: stri
   if (targets.length < (forksKing ? 1 : 2)) return NONE;
 
   if (owner === stm) {
-    // LIVE — owner executes now. Winnable = SEE-positive targets. A fork needs
-    // ≥ 2 winnable (the defender can only rescue one).
-    const winnable = targets.filter((sq) => seeGain(chess, sq as Square) > 0);
+    // LIVE — owner executes now. Winnable = targets the owner can win material
+    // on with a REAL, legal capture (pin-aware SEE — a pinned forker that can't
+    // legally take wins nothing, so the fork is not live). A fork needs ≥ 2
+    // winnable (the defender can only rescue one).
+    const winnable = targets.filter((sq) => capturesWinMaterial(chess.fen(), sq as Square, owner));
     if (winnable.length < 2) return NONE;
     // Guaranteed material = the SMALLER winnable target (defender saves the
     // bigger, the fork takes the rest). Conservative and true.
@@ -91,7 +93,7 @@ export function verifyForkOnBoard(fen: string, forkerSq: string, targetSqs: stri
     for (const sq of targets) {
       const p = after.get(sq as Square);
       if (!p || p.color === owner || p.type === 'k') continue; // target saved / moved / captured
-      const g = seeGain(after, sq as Square);
+      const g = legalSeeGainFor(after.fen(), sq as Square, owner); // pin-aware
       if (g > best) best = g;
     }
     if (best < minGuaranteed) minGuaranteed = best;

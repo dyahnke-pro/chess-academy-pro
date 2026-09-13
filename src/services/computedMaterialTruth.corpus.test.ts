@@ -37,6 +37,7 @@ import {
   pressuredTargets,
 } from './positionReadingService';
 import { isCriticalThreat } from './tacticAlertService';
+import { verifyForkOnBoard } from './tacticVerification';
 
 /** A geometry-blindness case. `naiveLies` = the direction the naive read is
  *  wrong, proving the position actually exercises the pin/legality blindness. */
@@ -182,6 +183,16 @@ describe('computedMaterialTruth — pressureCount verdict + chat "pressure" answ
     // Undefended black knight on e6, White rook bearing on it.
     const fen = '6k1/8/4n3/8/8/4R3/8/6K1 w - - 0 1';
     expect(pressureCount(fen, 'e6')?.verdict).toBe('winnable');
+  });
+});
+
+describe('computedMaterialTruth — fork verification rejects a pinned forker', () => {
+  it('a fully pinned forker wins nothing → not a live fork', () => {
+    // White Ne5 geometrically forks Qc6 + Rg6 but is pinned to Ke1 by Re8 (no
+    // legal knight move). The geometric SEE returned status:'live' winsPoints:5;
+    // the pin-aware verifier returns 'none' (2026-09-13).
+    const fen = '4r1k1/8/2q3r1/4N3/8/8/8/4K3 w - - 0 1';
+    expect(verifyForkOnBoard(fen, 'e5', ['c6', 'g6']).status).toBe('none');
   });
 });
 
