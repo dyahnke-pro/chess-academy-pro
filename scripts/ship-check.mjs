@@ -230,6 +230,12 @@ const GATE_TESTS = [
   // weak-square holes / passers + blockade) to their board-true definitions so a
   // refactor can't reintroduce a count-only bad bishop or a piece-based hole.
   'src/services/positionalTruth.corpus.test.ts',
+  // 🔒 COMPUTED-TRUTH FUZZER (David 2026-09-13 "then do 2") — seeded, reproducible
+  // fuzz over the board computers: legalSeeGain vs brute-force optimal SEE on 80
+  // random legal positions + definitional invariants (holes, passers, colour
+  // complex, minority lever) on 240. The discovery half that catches the next
+  // false-claim class at scale, deterministic so it can gate.
+  'src/services/computedTruth.fuzz.test.ts',
   // 🔒 OTA UPDATE CONTRACT (2026-09-03) — the reply shape of /api/ota/manifest
   // IS the update mechanism for every native device, and both of its failure
   // modes are INVISIBLE from the app: a no-op without `kind:'up_to_date'` makes
