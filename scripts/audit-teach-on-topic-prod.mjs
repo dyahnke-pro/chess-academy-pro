@@ -18,7 +18,7 @@
 // Every assertion below therefore proves it had data before it may pass.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
-import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -32,19 +32,34 @@ const LESSON_BUDGET_MS = Number(process.env.AUDIT_LESSON_BUDGET_MS ?? 600_000);
 const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+await ctx.addInitScript(muteTtsForAudit);
 const page = await ctx.newPage();
-  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
-/** What the app actually SPOKE. /api/tts is a GET; the text is in the query. */
-const spoken = [];
-page.on('request', (req) => {
-  const url = req.url();
-  if (!url.includes('/api/tts')) return;
-  try {
-    const text = new URL(url).searchParams.get('text');
-    if (text && text.trim() !== '.') spoken.push(text); // '.' is the warmup probe
-  } catch { /* a malformed URL must not fail the run */ }
-});
+/** What the app actually SPOKE — READ OFF THE APP'S OWN EVENTS, NOT THE WIRE.
+ *
+ *  🔒 THIS INSTRUMENT USED TO MEASURE ITSELF (2026-09-13). It read the spoken
+ *  line out of the `/api/tts` GET while `blockTtsNetwork` fulfilled that route
+ *  with a 32-byte silent MPEG frame. That frame is not playable audio, so
+ *  voiceService took its self-heal branch ("cached audio playback failed —
+ *  refetching"), evicted the clip and asked again — twice, at ~0.1s and again
+ *  ~8s later through the deeper fallover. Every line hit the wire two or three
+ *  times, and the run reported `no spoken line repeated` FAILED, naming the
+ *  lesson intro. There was no such bug: run the same lesson MUTED and the app
+ *  emits exactly ONE `voiceService.speakForced` per line. A stale audit that
+ *  invents a defect costs more than one that misses it — this one sent a
+ *  session hunting a double-intro that the app never spoke.
+ *
+ *  So: MUTE (no synthesis, no stub, no retry) and read the app's own
+ *  `coach-narration-spoken` event, whose `narrationText` carries the FULL line
+ *  — the summary field truncates at 40 chars and would silently defeat the
+ *  off-topic and directive checks below.
+ *
+ *  This is what CLAUDE.md §G1 already prefers: "Better still, migrate the
+ *  instrument off the wire." */
+const spokenLines = () => listener.getCapturedEvents()
+  .filter((e) => e.kind === 'coach-narration-spoken' && typeof e.narrationText === 'string')
+  .map((e) => e.narrationText.trim())
+  .filter((t) => t && t !== '.');
 
 const results = [];
 const check = (name, pass, detail) => { results.push({ name, pass, detail }); };
@@ -144,6 +159,7 @@ try {
     if ((await page.locator('body').innerText()).includes('Watch the middlegame and endgame')) { sawLeaf = true; break; }
   }
 
+  const spoken = spokenLines();
   const paths = narrationEntries().map((s) => /path=\[([^\]]*)\]/.exec(s)?.[1] ?? s);
 
   // ── 0. The instruments actually captured something. Without this the three
@@ -170,8 +186,14 @@ try {
     repeatedNodes.length ? `repeated: ${[...new Set(repeatedNodes)].slice(0, 4).join(' / ')}` : `${paths.length} node(s), all distinct`);
 
   const repeatedLines = spoken.filter((s, i) => s.trim().length > 40 && spoken.indexOf(s) !== i);
+  // WHEN a line repeats matters more than THAT it repeats: an immediate echo is
+  // an instrument retry, a late one is the lesson genuinely saying it again.
+  const repeatWhen = [...new Set(repeatedLines)].map((line) => {
+    const at = spoken.map((s, i) => (s === line ? i : -1)).filter((i) => i >= 0);
+    return `${JSON.stringify(line.slice(0, 60))} spoken at index ${at.join(',')} of ${spoken.length}`;
+  });
   check('no spoken line repeated', repeatedLines.length === 0,
-    repeatedLines.length ? `repeated: ${JSON.stringify(repeatedLines[0].slice(0, 80))}` : `${spoken.length} line(s), no repeats`);
+    repeatedLines.length ? repeatWhen.join(' | ') : `${spoken.length} line(s), no repeats`);
 
   // ── 3. BOARD HOLDS through the continuation hand-off.
   if (!sawLeaf) {
@@ -184,9 +206,16 @@ try {
     await page.waitForTimeout(8000);
     const after = await pieces();
     // 32 pieces is the starting position, and the lesson's leaf is well past it.
-    const reset = after === 32 && before < 32;
+    //
+    // AN EMPTY BOARD USED TO PASS THIS CHECK (2026-09-13). Under the old
+    // blocked-TTS instrument a run reported "pieces before=13 after=0" and went
+    // GREEN: `reset` only asked whether the board had snapped back to 32, so
+    // every other wrong answer — including the board rendering NOTHING —
+    // satisfied it. A board with no pieces is not a board that held.
+    const vanished = after < 2;
+    const reset = (after === 32 && before < 32) || vanished;
     check('board holds after "Watch the middlegame"', !reset,
-      `pieces before=${before} after=${after}${reset ? ' — snapped back to the start' : ''}`);
+      `pieces before=${before} after=${after}${vanished ? ' — the board rendered NOTHING' : reset ? ' — snapped back to the start' : ''}`);
     check('walkthrough released the board', await page.locator('[data-testid="walkthrough-narrating-panel"]').count() === 0,
       'the walkthrough panel must be gone once the continuation owns the board');
   }
