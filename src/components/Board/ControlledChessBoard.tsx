@@ -13,6 +13,7 @@ import { EvalBar } from './EvalBar';
 import { VoiceChatMic } from './VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
 import type { UseChessGameReturn, MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
 import type {
@@ -112,6 +113,11 @@ export function ControlledChessBoard({
   const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const isMobile = useIsMobile();
+
+  // A live board holds the deploy reload while it has work on it. Keyed on the
+  // REAL game position, never `positionOverride` — a student stepping back
+  // through their own moves still has a game to lose.
+  useBoardReloadHold(game.fen);
 
   // Resolve the board-display settings here so the rest of the
   // component can ignore where they came from. Explicit prop overrides

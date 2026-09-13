@@ -15,6 +15,7 @@ import { EvalBar } from './EvalBar';
 import { VoiceChatMic } from './VoiceChatMic';
 import type { EngineSnapshot, LastMoveContext } from './VoiceChatMic';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { GhostPieceOverlay } from './GhostPieceOverlay';
 import type {
@@ -132,6 +133,10 @@ export function ChessBoard({
   getVoiceCurrentFen,
 }: ChessBoardProps): JSX.Element {
   const game = useChessGame(initialFen, initialOrientation, computerColor);
+  // This board owns its own game, so it also owns holding the deploy reload
+  // while that game has work on it — the lesson/drill/trainer surfaces above it
+  // do not have to remember.
+  useBoardReloadHold(game.fen);
   const { playMoveSound } = usePieceSound();
   const { settings } = useSettings();
   const isMobile = useIsMobile();

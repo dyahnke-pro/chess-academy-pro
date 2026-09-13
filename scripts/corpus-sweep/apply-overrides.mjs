@@ -11,6 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { rewritePerspective } from './perspective.mjs';
 
 const DIR = 'data/video-narration-voiced';
 const BASE = 'd05a9ac';
@@ -27,7 +28,21 @@ for (const o of overrides) {
     .filter((i) => i >= 0);
   if (hits.length !== 1) throw new Error(`${o.id}: 'was' matched ${hits.length} beats, need exactly 1`);
   const i = hits[0];
-  const next = o.keep ? o.was : o.text;
+  // THROUGH THE PERSPECTIVE MIGRATION, ALWAYS.
+  //
+  // The pipeline runs trim → overrides → perspective, so `was` and `text` are
+  // written in the corpus's ORIGINAL we/our voice — `was` has to be, since it
+  // is the locator against the pre-sweep tree. But the shipped corpus has since
+  // been migrated to you/your, and this script writes straight into it. Run as
+  // it stood, it would have REVERTED six adjudicated beats (and every `keep`,
+  // which writes `was` verbatim) back to "we/our" — the identical drift that
+  // made regenerating voiced-matchups.json undo 8,197 pronouns.
+  //
+  // Migrating here instead of rewriting the 30 stored strings keeps `was`/`text`
+  // readable as the adjudication record, and makes the applier IDEMPOTENT
+  // against the shipped corpus: `rewritePerspective` on already-migrated text is
+  // a no-op, so a re-run reports "already" instead of undoing a migration.
+  const next = rewritePerspective(o.keep ? o.was : o.text);
   if (json.moves[i].spoken === next) { console.log(`= ${o.id} #${i} (already)`); continue; }
   console.log(`\n${o.id} #${i}\n  TRIM: ${json.moves[i].spoken || '(silenced)'}\n  HAND: ${next}`);
   json.moves[i].spoken = next;

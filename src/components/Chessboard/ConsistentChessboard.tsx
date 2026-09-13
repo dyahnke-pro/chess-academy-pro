@@ -30,6 +30,7 @@ import { buildGlowSquareStyles } from '../../hooks/useBoardGlow';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { detectMoveFromFen } from '../../utils/boardMoveDetect';
 import { useSettings } from '../../hooks/useSettings';
+import { useBoardReloadHold } from '../../hooks/useBoardReloadHold';
 
 export type BoardArrow = { startSquare: string; endSquare: string; color: string };
 export type BoardHighlight = { square: string; color: string };
@@ -143,6 +144,17 @@ function StaticBoard({
   const theme = useBoardTheme();
   const { settings } = useSettings();
   const { playMoveSound } = usePieceSound();
+
+  // An INTERACTIVE static board is a puzzle / drill / endgame the student is
+  // working through, so it holds the deploy reload the same way a live game
+  // does. A display-only board (thumbnail, search result, citation preview,
+  // model-game viewer) never does — `interactive` defaults to false here, so
+  // display boards opt out by doing nothing, which is the right default.
+  // A piece-map position (kid boards) is not a FEN, so there is no untouched
+  // start to compare it against — any interactive one counts as work. Serialise
+  // it rather than passing a constant, so a kid game that MOVES a piece trips
+  // the moved-since-mount clause the same way a FEN board does.
+  useBoardReloadHold(typeof position === 'string' ? position : JSON.stringify(position), interactive);
 
   // Explicit prop > user setting > BOARD_ANIMATION_MS default. Static
   // boards can still override (e.g. demo boards at 400ms for clarity).

@@ -53,6 +53,32 @@ function beatFor(o: Override): { fen: string; spoken: string } {
   return { fen: hits[0].fen, spoken: hits[0].spoken ?? '' };
 }
 
+describe('the hand adjudication is still in force in the shipped corpus', () => {
+  // A SECOND DRIFT OF THE SAME SHAPE, caught 2026-09-13 while re-examining the
+  // remaining cuts. `apply-overrides.mjs` writes `text` (and, for a `keep`,
+  // `was`) straight into the corpus — but both are stored in the ORIGINAL
+  // we/our voice, because `was` has to match the pre-sweep tree it locates
+  // against. The corpus has since been migrated to you/your, so running the
+  // applier would have REVERTED six adjudicated beats and every `keep` back to
+  // "we/our": exactly what regenerating voiced-matchups.json used to do to
+  // 8,197 pronouns. The applier now migrates on the way in.
+  //
+  // This asserts the OUTCOME rather than the script: every adjudicated decision
+  // is present, in the migrated voice, in the file that actually ships. It fails
+  // whether the cause is a reverting applier, a hand edit to a beat someone
+  // already ruled on, or a re-farm that overwrites one.
+  for (const o of overrides) {
+    const expected = rewritePerspective(o.keep ? o.was : (o.text ?? ''));
+    it(`${o.id}: ${(o.why ?? '').slice(0, 8)}… survives in the shipped corpus`, () => {
+      const json = JSON.parse(readFileSync(join(CORPUS, `${o.id}.json`), 'utf8')) as {
+        moves: { spoken?: string }[];
+      };
+      const hits = json.moves.filter((m) => (m.spoken ?? '') === expected).length;
+      expect(hits, `adjudicated text is not what ships (found ${hits} match(es))`).toBe(1);
+    });
+  }
+});
+
 describe('hand-rewritten corpus lines are true on the board they are spoken over', () => {
   it('there are rewrites to check (a vacuous pass would hide a lost file)', () => {
     expect(REWRITES.length).toBeGreaterThan(0);
