@@ -241,3 +241,48 @@ this path (component state), so they were always fine.
   follow-up: the deep-dive re-analysis/re-narration path (why a dived ply can
   come back badge=none / lead="") — a review-feature reliability issue, not this
   build's marks/swap-per-phrase work.
+
+---
+
+## Build 8 — CLASSROOM OPENER + UNIFIED MARKERS SETTING + DEEP-DIVE AUDIT FIX (2026-09-13)
+
+David: algo opener that suggests things to work on + things not yet tried, kept
+relevant, capped at 3, not too long ("CC noted his elo dropping, coach should ID
+this"); combine arrows+highlights in settings + link to the play button; fix the
+deep-dive issue. "Gain context before each fix. Keep the loop tight."
+
+### A. Classroom opener (computed, G0) — `src/services/classroomOpener.ts`
+- `ratingTrendNote()` — rating delta over recent RATED games (student's own Elo,
+  via `resolvePlayerColor`), newest→oldest window of 12; null when flat (<25pts)
+  or <5 games. Never invents a number.
+- `untriedFeatureNudge(weaknessCategory)` — top surface not yet used (read off its
+  own Dexie stores), preferring the one that trains the weakness; null when all
+  tried. Fail-safe to "used" so an error never nudges toward the known.
+- Wired into the EXISTING Learn opener (didn't rebuild it): trend folds into the
+  FIRST lead line once (`withTrend`, no extra line), untried takes the 2nd chip
+  slot, whole chip set capped at 3 (`capChips`) + initial generic cut 4→3.
+- Gate: `classroomOpener.test.ts` (7) — trend up/down/flat/too-few; untried
+  relevance + fallthrough + all-tried null.
+
+### B. Unified coach-markers setting (persisted) — `coachBoardMarkersOn`
+- New pref (default on) in `useSettings` (DEFAULT_SETTINGS + master-off + base
+  resolution) + `UserPreferences` type + a "Board Arrows & Highlights" ToggleRow
+  in Settings (Gameplay Coaching).
+- ONE source of truth: Learn's Coach Tips button + `/coach/play` (CoachGamePage)
+  Coach Tips button both read/write it; off hides BOTH arrows AND highlights on
+  both surfaces and gates tip-firing on play. Explicit Hint arrows stay.
+- Scoped to the two surfaces with a Coach Tips button; OpeningPlayMode (WLPP
+  lesson play, gem/hint arrows) intentionally untouched.
+
+### C. Deep-dive after-dive audit fix (audit-only; product proven correct)
+- `audit-review-overhaul-prod.mjs`: land on the fixture ply via `goTo` (not the
+  heap-stress loop endpoint), assert the DIVE deepened the annotation (Dexie
+  ground truth), require a fundamental lead only WHEN flagged — mirroring the
+  cold-open FUND check's proven-correct tolerance. Root-cause: the product
+  narrates flagged plies correctly after a dive (cold-open FUNDLEAD passes same
+  run); the old check tested engine-grading variance + a stressed reopen.
+
+### Status
+- [x] typecheck clean; targeted tests green (classroomOpener 7, coachAnswerGates
+      16, CoachGamePage 26); lint errors fixed
+- [ ] ship-check + push + batched deploy + audit
