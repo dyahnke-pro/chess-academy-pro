@@ -366,12 +366,23 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   + to keep a future wiring honest. Gate: 3 new summarizeVerdict tests (positional
   edge stays magnitude-only; material claimed only when backed; bare eval invents
   nothing) + lineOutcomeClause regrounded to magnitude. tacticalRead 45/45.
-- **P1c-rest — the intricate items (NEXT, dedicated pass + gates):**
-  `assembleAttackAssessment` (:1094, king-zone counts include pinned pieces +
-  x-ray of empty squares — needs real pin-detection / safe-contact, fuzzier than
-  a SEE swap); causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
+- **A#7 — `assembleAttackAssessment` king-zone count is pin-blind.** ✅ DONE
+  (2026-09-13). The attacker/defender count drove off raw `c.attackers()`, which
+  is geometric — a piece pinned to its OWN king counted as a full attacker/
+  defender, flipping "you have a real attack, press it" on a losing attack.
+  (Verified chess.js `attackers()` already respects blockers — the flagged
+  "x-ray of an empty square" does NOT reproduce; pins were the real defect.) Added
+  `absolutePinRay` (removes the piece, confirms an enemy slider then checks the
+  king along that exact line) + `bearsOnSquare` (a pinned piece is counted toward
+  a zone square only when it lies on the pin ray). Swept both the attacker and
+  defender loops. Gate: 2 new computedVoiceGrounding tests (control counts two
+  bearing pieces; the first-rank-pinned rook is dropped → one). groundedAnswer
+  200/200, positionReading 109/109, gate 15/15. **This is the last cheap-ish
+  P1c item; the remaining ones are the counterfactual engine.**
+- **P1c-rest — the counterfactual engine (NEXT, dedicated pass + gates):**
+  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
   `exploitedLoosePiece` (:241) + pattern detectors (:561-575) + `computeAttackMap`.
-  Counterfactual / cross-move logic — each needs individual analysis; no bulk-swap.
+  Cross-move cause→effect logic — each needs individual analysis; no bulk-swap.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its
   own change + gate + audit.
 

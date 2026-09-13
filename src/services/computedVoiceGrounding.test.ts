@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { describeMoveGeometry, assemblePieceSafetyAnswer, assembleHangingAnswer } from './groundedAnswer';
+import { describeMoveGeometry, assemblePieceSafetyAnswer, assembleHangingAnswer, assembleAttackAssessment } from './groundedAnswer';
 import { legalSeeGain, seeGain, landingIsSafe } from './positionReadingService';
 
 /**
@@ -111,4 +111,21 @@ describe('genuine tactics are still named (no over-correction)', () => {
       expect(describeMoveGeometry(fen, san, mover)).toMatch(expected);
     });
   }
+});
+
+describe('assembleAttackAssessment excludes a pinned attacker (A#7)', () => {
+  // Control: White Rf1 (bears on f7/f8) + Qh4 (bears on h7) both bear on the
+  // Black king zone → TWO attackers.
+  it('counts both bearing pieces when neither is pinned', () => {
+    const a = assembleAttackAssessment('6k1/6pp/8/8/7Q/8/8/5R1K w - - 0 1', 'white');
+    expect(a?.facts).toMatch(/2 piece/);
+  });
+  // Same, but a Black rook on a1 pins Rf1 along the FIRST RANK (verified: removing
+  // Rf1 gives Ra1 a check on Kh1). f7/f8 lie off the pin ray, so the pinned rook
+  // can no longer join the attack — it must NOT be counted, leaving ONE attacker.
+  it('drops the pinned rook — it cannot bear on the king zone off its pin ray', () => {
+    const b = assembleAttackAssessment('6k1/6pp/8/8/7Q/8/8/r4R1K w - - 0 1', 'white');
+    expect(b?.facts).toMatch(/1 piece/);
+    expect(b?.facts).not.toMatch(/2 piece/);
+  });
 });

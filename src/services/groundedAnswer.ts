@@ -1069,6 +1069,56 @@ function kingZoneSquares(kingSq: string): Square[] {
   return out;
 }
 
+/** The unit direction [df,dr] from a piece's OWN king through the piece, when the
+ *  piece is ABSOLUTELY pinned (removing it exposes the king to an enemy slider
+ *  along that exact line); null when the piece is not absolutely pinned. Used to
+ *  refuse counting a pinned piece as an attacker/defender on a king-zone square
+ *  it cannot legally act toward — the pin-blind `attackers()` count would flip
+ *  "you have a real attack, press it" on a losing attack (deep-dive A#7). */
+function absolutePinRay(c: Chess, sq: Square): [number, number] | null {
+  const p = c.get(sq);
+  if (!p || p.type === 'k') return null;
+  const me = p.color;
+  const them = me === 'w' ? 'b' : 'w';
+  let king: Square | null = null;
+  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'k' && cell.color === me) king = cell.square;
+  if (!king) return null;
+  const kf = king.charCodeAt(0) - 97, kr = Number(king[1]);
+  const sf = sq.charCodeAt(0) - 97, sr = Number(sq[1]);
+  const df = sf - kf, dr = sr - kr;
+  const collinear = (df === 0 && dr !== 0) || (dr === 0 && df !== 0) || (Math.abs(df) === Math.abs(dr) && df !== 0);
+  if (!collinear) return null;
+  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
+  let test: Chess;
+  try { test = new Chess(c.fen()); test.remove(sq); } catch { return null; }
+  let f = kf + ud[0], r = kr + ud[1];
+  while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
+    const s = `${String.fromCharCode(97 + f)}${r}` as Square;
+    const hit = test.get(s);
+    if (hit) {
+      if (hit.color !== them) return null; // first piece past the pinned one is friendly → no pin
+      const diagonal = Math.abs(ud[0]) === 1 && Math.abs(ud[1]) === 1;
+      const straight = ud[0] === 0 || ud[1] === 0;
+      if ((diagonal && (hit.type === 'b' || hit.type === 'q')) || (straight && (hit.type === 'r' || hit.type === 'q'))) return ud;
+      return null; // an enemy piece, but not one that pins along this line
+    }
+    f += ud[0]; r += ud[1];
+  }
+  return null;
+}
+
+/** Does the piece on `pieceSq` genuinely bear on `targetSq` — i.e. it attacks it
+ *  AND, if absolutely pinned, `targetSq` lies on its pin ray (the only squares a
+ *  pinned piece can still act toward)? Caller has already confirmed the attack. */
+function bearsOnSquare(c: Chess, pieceSq: Square, targetSq: Square): boolean {
+  const ray = absolutePinRay(c, pieceSq);
+  if (!ray) return true;
+  const df = (targetSq.charCodeAt(0) - 97) - (pieceSq.charCodeAt(0) - 97);
+  const dr = Number(targetSq[1]) - Number(pieceSq[1]);
+  const ud: [number, number] = [Math.sign(df), Math.sign(dr)];
+  return (ud[0] === ray[0] && ud[1] === ray[1]) || (ud[0] === -ray[0] && ud[1] === -ray[1]);
+}
+
 /**
  * assembleAttackAssessment — the GROUNDED answer to "do I have an attack lined
  * up?" / "is my kingside attack good?" (David 2026-09-06: "if an attack on the
@@ -1076,7 +1126,9 @@ function kingZoneSquares(kingSq: string): Square[] {
  * student's pieces bearing on the ENEMY king zone against the pieces defending
  * it — the literal "count attackers against defenders" device (principles.ts) —
  * plus the enemy king's shelter/centre exposure. Everything chess.js-computed
- * (G0); the LLM only phrases the counts. Returns null on an unparseable FEN.
+ * (G0); the LLM only phrases the counts. Pinned pieces are only counted toward
+ * squares on their pin ray (a piece pinned to its own king can't join the attack
+ * elsewhere). Returns null on an unparseable FEN.
  */
 export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'black'): GroundedAnswer | null {
   let c: Chess;
@@ -1093,8 +1145,8 @@ export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'b
   const defenderSet = new Set<string>();
   for (const sq of zone) {
     try {
-      for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k') attackerSet.add(a); }
-      for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k') defenderSet.add(d); }
+      for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k' && bearsOnSquare(c, a, sq)) attackerSet.add(a); }
+      for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k' && bearsOnSquare(c, d, sq)) defenderSet.add(d); }
     } catch { /* skip a bad square */ }
   }
   const attackers = attackerSet.size;
