@@ -1105,6 +1105,11 @@ export function buildReviewSegments(
   // verbatim on each move (David 2026-07-23: the mating-net line repeated
   // word-for-word on consecutive moves). Keyed by the threat's SAN.
   const threatsAnnounced = new Set<string>();
+  // D#6 — per-game dedupe for the causal chain and its recurrence recap, so the
+  // same cross-move story doesn't LEAD several beats and "this keeps recurring —
+  // <hole>" isn't repeated on every move that maps to the same weakness.
+  const causalChainsSeen = new Set<string>();
+  const recurrenceLabelsSeen = new Set<string>();
   // Deepest-look-ahead shots announced (David 2026-07-26 — the review-register
   // peer of the live speakDeepestLookahead), keyed by the shot's SAN so the same
   // combination is called out once per game.
@@ -1346,7 +1351,15 @@ export function buildReviewSegments(
         const chain = played
           ?? (isStudentMove ? findAllowedChain(sansForRun, m.ply, studentColorWB) : null)
           ?? (isStudentMove ? findMissedChain(sansForRun, m.ply, studentColorWB) : null);
-        if (chain) {
+        // Per-game dedupe (D#6): the same cross-move chain can re-derive across
+        // adjacent plies (the played/allowed/missed paths surface a recurring
+        // tactic more than once). Signature = stance + each node's kind+squares.
+        // If it has already LED a beat this game, don't lead with it again.
+        const chainSig = chain
+          ? `${chain.stance}:${chain.nodes.map((n) => `${n.kind}${n.squares.join('')}`).join('|')}`
+          : '';
+        if (chain && !causalChainsSeen.has(chainSig)) {
+          causalChainsSeen.add(chainSig);
           const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? 1500 });
           if (lines.length) causalLead = lines.join(' ');
           // RECURRENCE RECAP (Phase 1) — when the student ERRED into this chain
@@ -1361,7 +1374,10 @@ export function buildReviewSegments(
               const hit = matchTag(tag, studentWeaknesses);
               if (hit && hit.openCount >= 2 && (!recur || hit.openCount > recur.openCount)) recur = hit;
             }
-            if (recur) causalLead += ` This one keeps recurring in your games — ${recur.label.toLowerCase()} — a good pattern to drill.`;
+            if (recur && !recurrenceLabelsSeen.has(recur.label)) {
+              recurrenceLabelsSeen.add(recur.label);
+              causalLead += ` This one keeps recurring in your games — ${recur.label.toLowerCase()} — a good pattern to drill.`;
+            }
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {
             const CHAIN_ARROW_HEX: Record<string, string> = { green: '#22c55e', yellow: '#eab308', red: '#ef4444', blue: '#3b82f6' };
@@ -1797,7 +1813,12 @@ export function buildReviewSegments(
       if (!m.isCoachMove && (m.classification === null || m.classification === 'book' || m.classification === 'good')) {
         const shot = buildReviewDeepestLookahead(fenPair.fenBefore, m.bestMove, playerColor === 'white' ? 'w' : 'b');
         if (shot) {
-          const shotKey = /—\s(\S+)\swas the shot/.exec(shot)?.[1] ?? shot.slice(0, 24);
+          // Dedupe on the WHOLE shot sentence, not just its SAN (D#5). Two
+          // different shots later in the game can share a SAN (a knight jump that
+          // sets up different forks at move 10 and move 30); keying on the SAN
+          // alone dropped the second as a repeat. The full text is the shot's
+          // identity — an identical shot dedupes, a genuinely-new one speaks.
+          const shotKey = shot;
           if (!deepShotAnnounced.has(shotKey)) {
             deepShotAnnounced.add(shotKey);
             narration = narration ? `${narration} ${shot}` : shot;
@@ -1838,8 +1859,15 @@ export function buildReviewSegments(
     if (playerColor && moverColor !== playerColor) {
       const oppWB: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
       const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
-      if (oppThreat && !threatsAnnounced.has(oppThreat.san)) {
-        threatsAnnounced.add(oppThreat.san);
+      // Dedupe on the threat's IDENTITY (kind + landing + victims), not its bare
+      // SAN (D#5). A persisting identical threat still dedupes (no re-announce
+      // each ply), but a genuinely-new threat that happens to share a SAN — a
+      // different Nf3 fork hitting different pieces — is no longer silenced.
+      const threatKey = oppThreat
+        ? `${oppThreat.san}|${oppThreat.kind}|${oppThreat.landing}|${[...oppThreat.targetSquares].sort().join(',')}`
+        : '';
+      if (oppThreat && !threatsAnnounced.has(threatKey)) {
+        threatsAnnounced.add(threatKey);
         // The concrete threat, board-computed (kind + detail). The REMEDIAL
         // "the pattern to spot…" explainer (describeThreatRecognition) was
         // REMOVED from this default in-game callout (David 2026-09-07: "Obvious,
@@ -2454,8 +2482,16 @@ async function augmentWithProjections(
   // threaded inside the renderer, so an even trade never reads as a windfall.
   const render = (line: PvLine, _rich = false): string => {
     const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
-    const whiteCp = line.terminalEvalCp ?? line.rootEvalCp;
-    const studentPov = studentColorWB === 'w' ? whiteCp : -whiteCp;
+    const lastPly = line.plies[line.plies.length - 1];
+    if (lastPly?.facts.isMate) return `${clause} — and it's mate`;
+    // Append an outcome verdict ONLY when the terminal position was actually
+    // re-evaluated (D#1). `terminalEvalCp === null` on a non-mate line means the
+    // verify pass failed (`delivers=false`); falling back to the ROOT eval would
+    // spell "you're winning" on a line the engine never confirmed. The gated
+    // passes (#3/#5) never reach that state, but the ungated better-line pass
+    // (#4) could — so narrate the line WITHOUT a verdict rather than invent one.
+    if (line.terminalEvalCp == null) return clause;
+    const studentPov = studentColorWB === 'w' ? line.terminalEvalCp : -line.terminalEvalCp;
     return `${clause} — and ${verdictWord(studentPov)}`;
   };
   // David 2026-07-24: "we NEED arrows showing the lines the coach mentions. The

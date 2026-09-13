@@ -464,6 +464,22 @@ that file. Re-apply D#1 (`git cherry-pick` the saved commit / re-do the small
 `render()` edit at the `terminalEvalCp` fallback) once that session updates their
 test. Flagged to David.
 
+**D-CLUSTER — DONE (2026-09-13).** Unblocked by aligning the other session's
+stale `strategicWhyLed` test to its shipped led-form (tolerant regex — didn't
+re-design their surface), then:
+- **D#1** — review `render()` no longer spells "you're winning" on an unverified
+  line (mate → "it's mate"; verified terminal → verdict; else no verdict). Same
+  fix as the tacticalRead sibling; principle gated in computedVoiceGrounding.
+- **D#5** — dedupe keys are now IDENTITY, not bare SAN: the deep-shot on the
+  whole sentence, the opponent threat on `san|kind|landing|targets`. A persisting
+  identical threat still dedupes; a genuinely-new threat sharing a SAN speaks.
+- **D#6** — per-game seen-sets for the causal chain (stance+node signature) and
+  the recurrence recap (weakness label), so the same cross-move story never leads
+  several beats and "this keeps recurring — <hole>" fires once per game.
+  coachFeatureService 50/50 green (regression coverage); bespoke dedupe fixtures
+  are a follow-up (a reliable same-SAN-different-threat review fixture is
+  engine-heavy; the identity keys are self-evidently more specific).
+
 **REMAINING (ranked, lower impact):**
 - **D#2 — reviewOpeningTheory name-match drift.** ✅ DONE (2026-09-13).
   `resolveCuratedOpeningIdeas` matched by bidirectional full-name substring
