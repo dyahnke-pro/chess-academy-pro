@@ -7484,6 +7484,7 @@ export function CoachTeachPage(): JSX.Element {
     let behaviorLine: string | null = null;
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
+    let positionalSquares: readonly string[] = [];
     // THE CONTESTED GATE (David 2026-09-13) — the standing board read stands down
     // in a DECIDED game: a positional lesson ("your knight has an outpost") is
     // noise when someone is up a queen. This is the non-count importance filter
@@ -7534,7 +7535,11 @@ export function CoachTeachPage(): JSX.Element {
       // full board-awareness pool — surfaces each turn instead of repeating.
       try {
         const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
-        if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
+        if (pr) {
+          positionalLine = pr.text;
+          positionalSquares = (pr.squares ?? []).filter((s) => /^[a-h][1-8]$/.test(s));
+          factLines.push(`Positional read: ${pr.text}`);
+        }
       } catch { /* never a blocker */ }
     }
 
@@ -7620,7 +7625,7 @@ export function CoachTeachPage(): JSX.Element {
       // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
       // outpost, passer, colour-complex, open file, lever, both sides). Stands
       // down behind a note and in a decided game (the contested gate).
-      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
+      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply, squares: positionalSquares }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
@@ -7683,11 +7688,18 @@ export function CoachTeachPage(): JSX.Element {
         // A cost already paid, not a threat arriving.
         drawback: '#f59e0b',
         mistake: '#f59e0b',
+        // KEY SQUARES the computed board-read named — the lead-the-eye yellow
+        // (David 2026-09-13: "add highlights to all spoken key squares"). Covers
+        // the positional read + the Danya behaviours (both speak as `observation`
+        // now) — every square handed over on the fact gets marked.
+        observation: '#eab308',
       };
       for (const f of pkg.kept) {
         const color = COLOR_FOR[f.kind];
         if (!color) continue;
-        for (const sq of (f.squares ?? []).slice(0, 3)) {
+        // EVERY named square, no cap (David 2026-09-13). A fact names at most a
+        // handful; the earlier slice(0,3) could drop a genuinely-named square.
+        for (const sq of (f.squares ?? [])) {
           if (!/^[a-h][1-8]$/.test(sq)) continue;
           if (!planHighlights.some((h) => h.square === sq)) planHighlights.push({ square: sq, color });
         }

@@ -157,10 +157,21 @@ describe('the one-sentence face still behaves', () => {
   it('speaks the highest-ranked thing and remembers it', () => {
     const said = new Set<string>();
     const first = buildPositionalRead(FRENCH, 'white', said);
-    expect(first).not.toBe('');
+    expect(first).not.toBeNull();
     expect(said.size).toBe(1);
     const second = buildPositionalRead(FRENCH, 'white', said);
-    expect(second, 'the same observation was spoken twice in a row').not.toBe(first);
+    expect(second?.text, 'the same observation was spoken twice in a row').not.toBe(first?.text);
+  });
+
+  it('the observation carries the key squares it names (for board highlights)', () => {
+    // David 2026-09-13: "add highlights to all spoken key squares." The read now
+    // hands its squares over with the fact — every square is a real board square.
+    const said = new Set<string>();
+    for (let i = 0; i < 6; i++) {
+      const o = buildPositionalRead(FRENCH, 'white', said);
+      if (!o) break;
+      for (const sq of o.squares ?? []) expect(sq).toMatch(/^[a-h][1-8]$/);
+    }
   });
 
   it('descends the ladder rather than falling silent', () => {
@@ -168,12 +179,12 @@ describe('the one-sentence face still behaves', () => {
     // the guard suppressed instead of descending, the ply would go silent —
     // which is the problem this file exists to fix.
     const said = new Set<string>();
-    const lines = [1, 2, 3].map(() => buildPositionalRead(FRENCH, 'white', said));
+    const lines = [1, 2, 3].map(() => buildPositionalRead(FRENCH, 'white', said)?.text);
     expect(new Set(lines.filter(Boolean)).size).toBeGreaterThan(1);
   });
 
-  it('returns empty rather than inventing something on a bare board', () => {
-    expect(buildPositionalRead('8/8/4k3/8/8/4K3/8/8 w - - 0 1', 'white')).toBe('');
+  it('returns null rather than inventing something on a bare board', () => {
+    expect(buildPositionalRead('8/8/4k3/8/8/4K3/8/8 w - - 0 1', 'white')).toBeNull();
   });
 });
 

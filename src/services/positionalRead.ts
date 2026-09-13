@@ -68,6 +68,11 @@ export interface PositionalObservation {
   rank: number;
   /** Speakable as-is. Names squares, never a move. */
   text: string;
+  /** THE KEY SQUARES THIS OBSERVATION NAMES (David 2026-09-13: "add highlights
+   *  to all spoken key squares"). Handed over with the fact so the board marks
+   *  what the voice named — computed here, never scraped from the prose (the
+   *  coupling rule). Empty when the read names only files/counts, not squares. */
+  squares?: readonly string[];
 }
 
 /** Urgency by kind. A plan outranks the facts it is built from — that is the
@@ -116,6 +121,7 @@ function observationsFor(
   if (king?.inCenter && !king.castled) {
     out.push({
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
+      squares: [king.square],
       text: own
         ? 'Your king is still in the centre — getting it castled is worth more than another pawn move right now.'
         : 'Their king is still in the centre — every line that opens toward it is worth looking at.',
@@ -163,6 +169,7 @@ function observationsFor(
   if (outpost) {
     out.push({
       key: `${side}-good-${outpost.square}`, side, kind: 'piece', rank: rank('piece'),
+      squares: [outpost.square],
       text: own
         ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${outpost.reason}.`
         : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is their best-placed piece — ${outpost.reason}. Trading it off is a plan in itself.`,
@@ -175,6 +182,7 @@ function observationsFor(
   if (bad) {
     out.push({
       key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),
+      squares: [bad.square],
       text: own
         ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece — ${bad.reason}. Improving it is a plan in itself.`
         : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece — ${bad.reason}. Keeping it bad is worth as much as winning a pawn.`,
@@ -185,6 +193,7 @@ function observationsFor(
   if (weak.isolated.length > 0) {
     out.push({
       key: `${side}-iso-${weak.isolated[0]}`, side, kind: 'structure', rank: rank('structure'),
+      squares: [weak.isolated[0]],
       text: own
         ? `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`
         : `Their pawn on ${weak.isolated[0]} is isolated — that is a long-term target worth playing against.`,
@@ -204,6 +213,7 @@ function observationsFor(
   if (breaks.length > 0) {
     out.push({
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
+      squares: [breaks[0]],
       text: own
         ? `A pawn break is available on ${breaks[0]} — in a quiet position the pawn levers are where the play comes from.`
         : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
@@ -220,6 +230,7 @@ function observationsFor(
   if (minority) {
     out.push({
       key: `${side}-minority-${minority.flank}`, side, kind: 'minority', rank: rank('minority'),
+      squares: [minority.leverTo, minority.target],
       text: own
         ? `You have a minority attack on the ${minority.flank} — ${minority.leverSan} makes contact and leaves them a weak pawn on ${minority.target}.`
         : `They have a minority attack on the ${minority.flank} — ${minority.leverSan} is the lever, and it would leave you a weak pawn on ${minority.target}.`,
@@ -231,6 +242,7 @@ function observationsFor(
   if (passers.length > 0) {
     out.push({
       key: `${side}-passer-${passers[0]}`, side, kind: 'passer', rank: rank('passer'),
+      squares: [passers[0]],
       text: own
         ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
         : `Their passed pawn on ${passers[0]} is the danger here — blockade it with a piece before it runs.`,
@@ -244,6 +256,7 @@ function observationsFor(
     const sqs = cc.squares.slice(0, 2).join(' and ');
     out.push({
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
+      squares: cc.squares.slice(0, 2),
       text: own
         ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, so a piece has to babysit them.`
         : `Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`,
@@ -333,6 +346,7 @@ function joinsFor(
         side,
         kind: 'plan',
         rank: RANK.plan - (side === 'opponent' ? OPPONENT_PENALTY : 0),
+        squares: [b.square, mv.to],
         text: side === 'student'
           ? `Your ${NAME[b.piece] ?? 'piece'} on ${b.square} is your problem piece — ${b.reason} — and the pawn move to ${mv.to} is what fixes it. That pairing is the plan: the pawn move is not about the pawn.`
           : `Their ${NAME[b.piece] ?? 'piece'} on ${b.square} is their problem piece — ${b.reason} — and a pawn to ${mv.to} would fix it. Stopping that pawn is worth more than it looks.`,
@@ -396,11 +410,14 @@ export function buildPositionalRead(
    *  ladder SKIPS what has been said and descends to the next true observation
    *  instead. Caller owns the set for the game. */
   said?: Set<string>,
-): string {
+): PositionalObservation | null {
+  // Returns the whole observation (not just its text) so the caller can mark the
+  // squares it named (David 2026-09-13: "add highlights to all spoken key
+  // squares"). `.text` is the line; `.squares` are what to highlight.
   for (const o of readPosition(fen, studentColor)) {
     if (said?.has(o.key)) continue;
     said?.add(o.key);
-    return o.text;
+    return o;
   }
-  return '';
+  return null;
 }
