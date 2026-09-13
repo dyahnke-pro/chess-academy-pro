@@ -1484,7 +1484,7 @@ export function buildReviewSegments(
           keptRaw.push(f);
           continue;
         }
-        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped)\]/.test(f)) {
+        if (/^\[(opening|plan-middlegame|passer|badbishop|worst|trapped|minority|complex)\]/.test(f)) {
           if (emittedStaticFacets.has(f)) continue;
           emittedStaticFacets.add(f);
           keptRaw.push(f);

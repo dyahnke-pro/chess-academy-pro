@@ -92,6 +92,17 @@ Play answers a typed "read the position" with the both-sides read) → report.
   not a count. The read still emits one strongest unsaid observation per turn
   (buildPositionalRead descent) drawn from the widened pool — loud, not a wall.
 
+## Review surface (David 2026-09-13: "I also want these changes on review")
+
+Review already has a standing-read facet system (`computeMoveFacets` in
+`reviewFullData.ts`: structure/king/passer/badbishop/worst/rook-7th), deduped
+once per game in the RETROSPECTIVE register — so it already has "no cap, no
+repeat." The gap was SCOPE. Added `[minority]` + `[complex]` facets (both sides)
+to `computeMoveFacets`, registered in the once-per-game dedup regex in
+`coachFeatureService.ts`. Tags stripped before TTS (line ~3651). Green:
+reviewFullData/reviewDeepThreat/coachFeatureService/reviewCorpusSweep (64 tests;
+corpus board-truth sweep passed).
+
 ## Status
 - [x] voicePackage priorKeys + spokenSentenceKeys + test (46 tests green)
 - [x] CoachTeachPage: observation→DNA kinds; quietTurn shackle dropped; per-game

@@ -13,7 +13,7 @@
  */
 import { Chess, type Color } from 'chess.js';
 import { plyFactsForMove } from './pvPlayback';
-import { legalSeeGainOn } from './positionReadingService';
+import { legalSeeGainOn, findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { detectTactics } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, describeStudentThreat } from './groundedAnswer';
@@ -402,6 +402,25 @@ export function computeMoveFacets(ctx: MoveFactContext): string[] {
     const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
     const passNote = passedPawnPush(fenAfter, studentColorWB, passer);
     if (passNote) facets.push(`[passer] ${cap(passNote)}.`);
+
+    // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want
+    // these changes on review") — the same minority-attack + colour-complex
+    // computers the Learn/Play read gained, in the retrospective register. Both
+    // sides: a weakness in the opponent's camp is the student's plan; one in the
+    // student's own camp is what to shore up. Deduped once per game by the caller.
+    const enemyWB2: Color = studentColorWB === 'w' ? 'b' : 'w';
+    const myMinority = findMinorityAttack(fenAfter, studentColorWB);
+    if (myMinority) facets.push(`[minority] You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`);
+    const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
+    if (theirMinority) facets.push(`[minority] They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`);
+    for (const cc of findColorComplexWeakness(fenAfter)) {
+      const sqs = cc.squares.slice(0, 2).join(' and ');
+      if (cc.side === enemyWB2) { facets.push(`[complex] Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`); break; }
+    }
+    for (const cc of findColorComplexWeakness(fenAfter)) {
+      const sqs = cc.squares.slice(0, 2).join(' and ');
+      if (cc.side === studentColorWB) { facets.push(`[complex] Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}.`); break; }
+    }
     // FORWARD PLANS — what to DO from here + exactly HOW (David 2026-07-20: "add
     // in more future plans … and exactly how to do those plans"). EVERY applicable
     // plan, each with its method; deduped to first mention of each distinct plan
