@@ -567,28 +567,12 @@ function detectDoubleCheck(chess: Chess, movingColor: Color): boolean {
   if (!kingSq) return false;
 
   try {
-    // Force moving color's turn to check which pieces attack the king
-    const fenParts = chess.fen().split(' ');
-    fenParts[1] = movingColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-
-    let checkCount = 0;
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const piece = board[r][c];
-        if (!piece || piece.color !== movingColor) continue;
-        const sq = coordsToSquare(c, 7 - r);
-        if (!sq) continue;
-
-        const moves = testChess.moves({ square: sq, verbose: true });
-        if (moves.some((m) => m.to === kingSq)) {
-          checkCount++;
-        }
-      }
-    }
-
-    return checkCount >= 2;
+    // The checkers are the movingColor pieces ATTACKING the enemy king. The old
+    // code asked chess.moves() for a move landing ON the king — but chess.js
+    // never generates a king-capture, so checkCount was ALWAYS 0 and double
+    // check was NEVER detected (deep-dive C#4). `attackers` counts them directly
+    // and is turn-independent.
+    return chess.attackers(kingSq, movingColor).length >= 2;
   } catch {
     return false;
   }

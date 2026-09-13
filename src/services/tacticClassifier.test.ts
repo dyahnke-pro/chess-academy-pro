@@ -72,6 +72,29 @@ describe('classifyPosition — move quality', () => {
 
 // ─── Fork Detection Tests ───────────────────────────────────────────────────
 
+describe('classifyPosition — double check (C#4: detection was dead)', () => {
+  it('detects a discovered double check', () => {
+    // White Nb5, Ba4 (blocked by the knight on b5), Black Ke8. Nb5-d6+ vacates
+    // b5 → the bishop checks e8 (discovered) AND the knight checks e8 = DOUBLE
+    // check. The old detector asked chess.moves() for a move landing ON the king
+    // (impossible), so it NEVER fired; attackers(kingSq, mover) counts both.
+    const fen = '4k3/8/8/1N6/B7/8/8/4K3 w - - 0 1';
+    const fenAfter = playMove(fen, 'Nd6+');
+    const result = classifyPosition(fen, fenAfter, 'Nd6+', 0, -300);
+    expect(hasTactic(result, 'double_check')).toBe(true);
+    const dc = result.tactics.find((t) => t.type === 'double_check');
+    expect(dc?.involvedSquares).toEqual(expect.arrayContaining(['d6', 'a4', 'e8']));
+  });
+
+  it('does NOT call a single check a double check', () => {
+    // Only the knight checks e8 (no second attacker) → single check, not double.
+    const fen = '4k3/8/8/1N6/8/8/8/4K3 w - - 0 1';
+    const fenAfter = playMove(fen, 'Nd6+');
+    const result = classifyPosition(fen, fenAfter, 'Nd6+', 0, -50);
+    expect(hasTactic(result, 'double_check')).toBe(false);
+  });
+});
+
 describe('classifyPosition — fork detection', () => {
   it('detects a knight fork on king and rook', () => {
     // White knight on b5 plays Nc7+ forking black king on e8 and rook on a8

@@ -196,10 +196,17 @@ computers.
 3. **mate-threat for the side-NOT-to-move is unverified** (`tacticsDetector.findMateThreats:297-311`)
    → false "White has a checkmate available" when the side to move simply parries.
    Fix: confirm the threat is unstoppable, or downgrade wording.
-4. **double-check detection is DEAD everywhere** (`missedTacticService:546-589`,
-   `tacticClassifier:334-389` count checkers via `moves()` which never captures the
-   king → always 0). A real double check is mislabeled a fork; the validator then
-   STRIPS legitimate "double check" mentions. Fix: `attackers(kingSq,mover).length>=2`.
+4. **double-check detection is DEAD everywhere.** ✅ DONE (2026-09-13, C#4).
+   Both `detectDoubleCheck` (missedTacticService + tacticClassifier) counted
+   checkers by asking `chess.moves()` for a move landing ON the enemy king —
+   which chess.js NEVER generates (no king-capture), so the count was always 0
+   and double check was never detected (mislabeled a fork; the claim-validator
+   then stripped legit "double check" mentions as not-in-vocabulary). Replaced
+   with `chess.attackers(kingSq, movingColor)` (direct, turn-independent). The
+   validator already had a `double_check` vocabulary entry — it just never had a
+   live detection to back it, so this ALSO un-strips legit mentions, no validator
+   change needed. Gate: 2 new tacticClassifier tests (a discovered double check
+   is detected; a single check is not). tacticClassifier 26/26, missedTactic 36/36.
 5. **`seeGain` pin-blindness under causalChain + attackMap** (`causalChain.ts`
    `hasWinnablePiece:165`, `exploitedLoosePiece:235-251`, `targetWasSavable:178`;
    `computeAttackMap`) — the disease, in the cause→effect engine + the ground-truth

@@ -351,24 +351,13 @@ function detectDoubleCheck(
   if (!kingSq) return null;
 
   try {
-    const fenParts = chessAfter.fen().split(' ');
-    fenParts[1] = movingColor;
-    fenParts[3] = '-';
-    const testChess = new Chess(fenParts.join(' '));
-
-    const checkers: Square[] = [];
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        const p = board[r][c];
-        if (!p || p.color !== movingColor) continue;
-        const sq = coordsToSquare(c, 7 - r);
-        if (!sq) continue;
-        const moves = testChess.moves({ square: sq, verbose: true });
-        if (moves.some((m) => m.to === kingSq)) {
-          checkers.push(sq);
-        }
-      }
-    }
+    // Checkers = the movingColor pieces ATTACKING the enemy king. The old code
+    // asked chess.moves() for a move landing ON the king, which chess.js never
+    // generates (no king-capture), so `checkers` was ALWAYS empty and double
+    // check was NEVER detected — a real double check got mislabeled a fork, and
+    // the claim-validator then STRIPPED legitimate "double check" mentions
+    // (deep-dive C#4). `attackers` counts them directly, turn-independent.
+    const checkers: Square[] = chessAfter.attackers(kingSq, movingColor);
 
     if (checkers.length >= 2) {
       const checkerDescs = checkers.map((sq) => {
