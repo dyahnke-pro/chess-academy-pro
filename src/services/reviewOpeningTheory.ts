@@ -18,6 +18,7 @@ import { lookupMasterPlay } from './masterPlayLookup';
 import { walkBookLine } from './theoryDeparture';
 import { detectOpeningTranspositional } from './openingDetectionService';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { identifyingTokens } from './danyaTeachingService';
 import { explainTemptingCapture } from './reviewTeachingPoints';
 import repertoire from '../data/repertoire.json';
 
@@ -134,11 +135,29 @@ export function resolveOpeningIdeas(openingName: string | null): string[] {
  *  game). G3 — never invents theory. */
 export function resolveCuratedOpeningIdeas(openingName: string | null): string[] | null {
   if (!openingName) return null;
-  const norm = openingName.toLowerCase();
-  const entry = (repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>)
-    .find((r) => typeof r.name === 'string' && (norm.includes(r.name.toLowerCase()) || r.name.toLowerCase().includes(norm)));
-  if (entry?.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
-  if (entry?.shortOverview) return [entry.shortOverview];
+  // Match by IDENTIFYING-token overlap, not a bidirectional full-name substring
+  // (deep-dive D#2). The old substring match drifted two ways: a short entry
+  // name substring-hits an unrelated game ("English" inside "…English Attack"),
+  // and punctuation differences ("Sicilian Defense: Najdorf" vs the entry
+  // "Sicilian: Najdorf") made a real match MISS. Tokenizing strips generic
+  // scaffolding ("Defense", "Opening", "Attack") and normalizes punctuation, and
+  // picking the entry that shares the MOST identifying tokens means a
+  // "Sicilian … English Attack" game resolves to the Najdorf entry (2 shared),
+  // never the English Opening (1 shared). G3 — still never invents theory.
+  const queryTokens = identifyingTokens(openingName);
+  if (queryTokens.size === 0) return null;
+  let entry: { name?: string; keyIdeas?: string[]; shortOverview?: string } | null = null;
+  let bestOverlap = 0;
+  for (const r of repertoire as Array<{ name?: string; keyIdeas?: string[]; shortOverview?: string }>) {
+    if (typeof r.name !== 'string') continue;
+    const nameTokens = identifyingTokens(r.name);
+    let overlap = 0;
+    for (const t of nameTokens) if (queryTokens.has(t)) overlap += 1;
+    if (overlap > bestOverlap) { bestOverlap = overlap; entry = r; }
+  }
+  if (bestOverlap === 0 || !entry) return null;
+  if (entry.keyIdeas && entry.keyIdeas.length > 0) return entry.keyIdeas.slice(0, 3);
+  if (entry.shortOverview) return [entry.shortOverview];
   return null;
 }
 

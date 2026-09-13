@@ -465,12 +465,30 @@ that file. Re-apply D#1 (`git cherry-pick` the saved commit / re-do the small
 test. Flagged to David.
 
 **REMAINING (ranked, lower impact):**
+- **D#2 — reviewOpeningTheory name-match drift.** ✅ DONE (2026-09-13).
+  `resolveCuratedOpeningIdeas` matched by bidirectional full-name substring
+  (`norm.includes(entry) || entry.includes(norm)`), which drifts two ways: a
+  short entry name substring-hits an unrelated game, and punctuation differences
+  ("Sicilian Defense: Najdorf" vs the entry "Sicilian: Najdorf") made a real
+  match MISS. Now matches by IDENTIFYING-token overlap, picking the entry sharing
+  the MOST tokens — a "Sicilian … English Attack" game resolves to Najdorf
+  (2 shared) over English Opening (1). Reused danya's canonical `identifyingTokens`
+  (exported it — no 4th GENERIC_TOKENS copy; honors the single-source rule) rather
+  than a local copy. Gate: 3 new reviewOpeningTheory tests (best-overlap beats
+  single-token collision; punctuation normalizes; generic-only shares → null).
+  reviewOpeningTheory 16/16, danyaTeachingService 19/19 (export change inert).
 - **C#6** (isCriticalThreat/scanUpcomingTactics attribute the WHOLE line's eval
-  to every pattern → early-pin "critical" noise). NEEDS a design pass: the honest
-  fix is per-ply evals, but `scanUpcomingTactics` is sync + engine-free (takes
-  precomputed topLines). Thread a per-ply eval (or attribute `lineMate`/decisive
-  eval only to the ply that causes it) — not a safe one-line heuristic. Deferred
-  deliberately (empty > a fuzzy fix).
+  to every pattern → early-pin "critical" noise). ⏸ DEFERRED — needs a scoped
+  BUILD, not a sweep fix (mapped 2026-09-13). Disease: `scanUpcomingTactics`
+  stamps every pattern with the LINE's terminal `lineEval`/`lineMate`; the live
+  `CoachGamePage:2789` alert (already gated to `depthAhead<=2`) then reads them,
+  so a harmless ply-1 pin in a line that mates at ply 5 inherits the mate and
+  fires "Watch out". The honest fix computes criticality at the pattern's OWN
+  ply — either (a) per-ply engine evals (the sync scanner has none; a contract
+  change), or (b) a mechanics rewrite of `isCriticalThreat` using each pattern's
+  stored `fen` (pin-aware SEE on the target / forced-mate-now). Both change a
+  LIVE in-game alert → owe a gate + 3-instrument prod audit. A scoped build, not
+  a drop-in; not rushed into a user-facing alert.
 - **D#2** (reviewOpeningTheory bidirectional-`includes` name-match drift — reuse
   `identifyingTokens`/`GENERIC_TOKENS`), **D#5** (SAN-only dedupe keys silence a
   genuinely-new same-SAN threat — key on SAN+fenBefore/targets), **D#6** (causal-

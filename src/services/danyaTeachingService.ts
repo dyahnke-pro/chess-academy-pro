@@ -126,8 +126,11 @@ const GENERIC_TOKENS = new Set([
 ]);
 
 /** The tokens of an opening name that actually NAME an opening, with the
- *  generic scaffolding ("Opening", "Defense", "Variation") removed. */
-const identifyingTokens = (name: string): Set<string> =>
+ *  generic scaffolding ("Opening", "Defense", "Variation") removed. Exported so
+ *  other opening-name matchers (e.g. reviewOpeningTheory) reuse ONE tokenizer
+ *  instead of a bidirectional substring match that a short entry name would
+ *  drift on (deep-dive D#2). */
+export const identifyingTokens = (name: string): Set<string> =>
   new Set(normName(name).split(' ').filter((t) => t.length > 2 && !GENERIC_TOKENS.has(t)));
 
 /** A note tagged with an opening may only teach in a lesson on THAT opening.

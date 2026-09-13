@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine } from './reviewOpeningTheory';
+import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, resolveCuratedOpeningIdeas, enrichLectureWithEngine } from './reviewOpeningTheory';
 import type { MasterPlayResult, MasterPlayMove } from '../types';
 
 function mv(san: string, games: number, w = 0.4, d = 0.3, b = 0.3): MasterPlayMove {
@@ -93,6 +93,32 @@ describe('resolveOpeningIdeas — grounded, never invented', () => {
   it('never returns empty (a lecture always has a plan to land on)', () => {
     expect(resolveOpeningIdeas(null).length).toBeGreaterThan(0);
     expect(resolveOpeningIdeas('Totally Made Up Opening XYZ').length).toBeGreaterThan(0);
+  });
+});
+
+describe('resolveCuratedOpeningIdeas — identifying-token match, not substring drift (D#2)', () => {
+  it('picks the entry sharing the MOST identifying tokens, not a single-token collision', () => {
+    // "…English Attack" is a Najdorf, NOT the English Opening. It shares one token
+    // (english) with "English Opening" but two (sicilian, najdorf) with the
+    // Najdorf entry — best-overlap must resolve to the Najdorf's ideas.
+    const ideas = resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf Variation, English Attack');
+    const najdorf = resolveCuratedOpeningIdeas('Sicilian: Najdorf');
+    expect(ideas).not.toBeNull();
+    expect(ideas).toEqual(najdorf); // resolved to Najdorf, never English Opening
+    const english = resolveCuratedOpeningIdeas('English Opening');
+    expect(ideas).not.toEqual(english);
+  });
+
+  it('normalizes punctuation so a colon/"Defense" spelling still matches (old substring MISSED this)', () => {
+    // The old raw-lowercase substring failed on "Sicilian Defense: Najdorf" vs the
+    // entry "Sicilian: Najdorf" (punctuation differs); token match resolves it.
+    expect(resolveCuratedOpeningIdeas('Sicilian Defense: Najdorf')).not.toBeNull();
+  });
+
+  it('returns null when only GENERIC scaffolding words are shared', () => {
+    // "Made-Up Defense" shares only the generic "defense" with real entries → no
+    // identifying token in common → no curated ideas (universal fallback upstream).
+    expect(resolveCuratedOpeningIdeas('Made-Up Defense')).toBeNull();
   });
 });
 
