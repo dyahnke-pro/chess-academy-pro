@@ -7590,15 +7590,20 @@ export function CoachTeachPage(): JSX.Element {
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.
     ], undefined, spokenKeysRef.current);
-    // DNA WHITELIST + ~3 REASONS — INSTANT package (David 2026-08-23: "only the
-    // DNA computations… if it doesn't fit the DNA structure it does not get
-    // spoken", and "doesn't he give 3 ideas?" — DNA tally 3.4/move). Drop any
-    // non-DNA kind (the generic positional filler), then keep the top three
-    // rank-sorted (gem/note/mistake lead). A busy tactical turn used to stack
-    // coach-mistake + tactic + backward-look + register into a 400-char wall
-    // (prod audit, 2026-08-23); this caps it to his three-reason breath.
-    const INSTANT_MAX_REASONS = 3;
-    const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind)).slice(0, INSTANT_MAX_REASONS);
+    // DNA WHITELIST, NO COUNT CAP — INSTANT package. Drop any non-DNA kind, then
+    // speak EVERY DNA fact that survived, rank-sorted (gem/note/mistake lead).
+    //
+    // 🔒 NO HARD CAP (David 2026-09-13, emphatic: "I want all important computed
+    // narration facts to fire, anything deemed important enough to tell the user
+    // should not be hard capped"). This REVERSES the 2026-08-23 three-reason
+    // breath. The wall that cap was fighting was REPETITION, not count — a lane
+    // saying the same thing another already said. That is now handled properly:
+    // the double-phrase gate drops in-turn twins, and the per-game novelty set
+    // (`spokenKeysRef`) drops anything said on an earlier turn. What is left is
+    // every DISTINCT important fact, most-important first — which is exactly what
+    // a briefing should be, and what "no budget on the coach narrations" always
+    // meant.
+    const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
     const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
       ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })), undefined, spokenKeysRef.current)
       : instantFull;
@@ -9592,14 +9597,12 @@ export function CoachTeachPage(): JSX.Element {
                     instantSpokenText,
                     spokenKeysRef.current,
                   );
-                  // DNA WHITELIST + ~3 REASONS (David 2026-08-23: "only the DNA
-                  // computations… if it doesn't fit the DNA structure it does not
-                  // get spoken", and "doesn't he give 3 ideas?"). Drop any non-DNA
-                  // kind, then keep the TOP THREE rank-sorted — the register, a
-                  // structure note and a piece-quality read as his three-reason
-                  // breath, never the 6-8-lane grab-bag that made the wall.
-                  const DNA_MAX_REASONS = 3;
-                  const lateDna = fullPkg.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind)).slice(0, DNA_MAX_REASONS);
+                  // DNA WHITELIST, NO COUNT CAP (David 2026-09-13: "anything
+                  // deemed important enough to tell the user should not be hard
+                  // capped"). Drop non-DNA kinds; speak every DNA fact that
+                  // survived. The grab-bag "wall" was repetition, now caught by the
+                  // double-phrase gate + the per-game novelty set — not by a count.
+                  const lateDna = fullPkg.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind));
                   const hintPkg = (NARRATE_DNA_ONLY && lateDna.length < fullPkg.kept.length)
                     ? buildVoicePackage(
                       lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
