@@ -18,7 +18,7 @@
 
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { landingIsSafe } from './positionReadingService';
 import { classifyPhase } from './gamePhaseService';
 
 export type MoveFundamentalId =
@@ -184,7 +184,7 @@ export function computeMoveFundamentals(
   // Recapture-safety: never dress a piece that HANGS on its landing square as a
   // positional gain (a rook that "eyes the center" but drops to a queen is not a
   // merit). Castling / passed-pawn pushes clear this trivially.
-  if (seeGain(after, mv.to) > 0) return [];
+  if (!landingIsSafe(after.fen(), mv.to)) return [];
 
   const moveNumber = Number(fenBefore.split(' ')[5]) || 1;
   const phase = classifyPhase(fenBefore, moveNumber);

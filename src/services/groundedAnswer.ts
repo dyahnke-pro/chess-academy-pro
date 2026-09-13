@@ -15,7 +15,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol, Move } from 'chess.js';
 import {
-  seeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
+  legalSeeGain, landingIsSafe, capturesWinMaterial, legalSeeGainFor, opponentIntentRead, findPawnBreaks, findOpenFiles,
   strongestWeakestPiece, pressuredTargets, findAttackTargets, findPawnGrabs,
   namedPawnStructure, findXrays, findKnightReroute, findRookLift, findFianchetto,
   findBlockade, kingActivation, oppositionRead, rookBehindPasser, bestMinorToKeep,
@@ -1426,7 +1426,7 @@ function sacrificeOffer(fen: string, candSan: string): number | null {
     const c = new Chess(fen);
     const mv = c.move(candSan);
     if (!mv) return null;
-    const gain = seeGain(c, mv.to);
+    const gain = legalSeeGain(c.fen(), mv.to); // opponent to move — their legal winning capture
     return gain >= 2 ? gain : null;
   } catch {
     return null;
@@ -1838,7 +1838,7 @@ export function explainBestMoveGrounded(
           const to = cap.to;
           const victim = c.get(to);
           if (!victim || victim.color !== mc) continue; // must capture the mover's own piece
-          const gain = seeGain(c, to); // material the opponent wins on that square
+          const gain = legalSeeGain(c.fen(), to); // material the opponent (to move) wins on that square (pin-aware)
           if (gain > 0 && (!worst || gain > worst.gain)) {
             worst = { square: to, piece: victim.type, gain, san: cap.san };
           }
@@ -1896,7 +1896,7 @@ export function captureHasCounterTactic(
     for (const reply of c.moves({ verbose: true })) {
       // REGAIN: a capture that nets back at least what was lost.
       if (reply.captured) {
-        const net = seeGain(c, reply.to);
+        const net = legalSeeGain(c.fen(), reply.to); // mover to move — their legal recapture (pin-aware)
         if (net >= lostValue) return true;
       }
       // SAFE FORK: after the reply, the moved piece attacks the enemy king
@@ -1919,8 +1919,9 @@ export function captureHasCounterTactic(
         }
       }
       if ((hitsKing && majors >= 1) || majors >= 2) {
-        const punishNet = seeGain(sim, mv.to); // opponent's best take-back on the fork square
-        if (punishNet <= 0) return true;
+        // The forker must land safely — pin-aware (a pinned enemy recapturer
+        // can't take it back), else it's no fork (2026-09-13 sweep).
+        if (landingIsSafe(sim.fen(), mv.to)) return true;
       }
     }
     return false;
@@ -2272,7 +2273,7 @@ export function describeSacrifice(
     const mv = b.move(san);
     if (!mv) return null;
     const capturedVal = mv.captured ? (REVIEW_PIECE_VALUE[mv.captured] ?? 0) : 0;
-    const opponentWins = seeGain(b, mv.to); // material the opponent wins back on `to`
+    const opponentWins = legalSeeGain(b.fen(), mv.to); // material the opponent (to move) wins back on `to` (pin-aware)
     // Net material handed over. ≥ 2 (a minor piece's worth) so a 1-pawn poke
     // isn't dressed up as a "sacrifice".
     if (opponentWins - capturedVal >= 2) {
@@ -2588,7 +2589,7 @@ export function explainMoveOrder(opts: {
       const captured = mv.captured;
       // seeGain(c, to) = what the OPPONENT wins back by recapturing on `to`.
       // A genuine material win means they can't recapture profitably (≤ 0).
-      const oppRecapGain = captured ? seeGain(c, to) : 1;
+      const oppRecapGain = captured ? legalSeeGain(c.fen(), to) : 1; // opponent to move (pin-aware)
       const attack = bestAttackFrom(c, to, moverColor);
       if (captured && oppRecapGain <= 0) {
         mechanism = 'material';
@@ -5566,7 +5567,7 @@ export function detectNewThreat(
           }
         }
         if ((hitsKing && majors.length >= 1) || majors.length >= 2) {
-          if (seeGain(sim, played.to) <= 0) {
+          if (landingIsSafe(sim.fen(), played.to)) { // forker un-takeable (pin-aware)
             const capBit = played.captured ? `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${played.to} and ` : '';
             // SEAT-NEUTRAL victims ("the king", "the queen on d1") — this
             // detector is side-agnostic (called for BOTH the student's threats
@@ -5588,7 +5589,7 @@ export function detectNewThreat(
         // verification the cost clause gets; a poisoned Qxb2-style grab must
         // never be narrated as a threat).
         if (played.captured) {
-          const net = seeGain(c, mv.to);
+          const net = legalSeeGain(c.fen(), mv.to); // mover to move — legal winning capture (pin-aware)
           if (net >= 3 && (!best || net > best.rank)
             && !captureHasCounterTactic(fen, mv.san, moverWB === 'w' ? 'b' : 'w', net)) {
             best = { san: mv.san, detail: `wins the ${REVIEW_PIECE_NAME[played.captured]} on ${mv.to}`, kind: 'capture', from: mv.from, landing: mv.to, targets: [], targetSquares: [], guards: guardsOf(sim, mv.to), rank: net };

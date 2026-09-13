@@ -580,24 +580,40 @@ re-design their surface), then:
   a corpus row lock the pinned-forker rejection. tacticVerification 8/8,
   reviewFullData green.
 
-- **REMAINING `seeGain` SITES — triage for David (NOT yet swept).** The two bugs
-  above proved the original sweep was incomplete; ~18 production call sites still
-  import the naive geometric `seeGain`. NOT all are bugs — `whyItFailed.ts` has
-  its OWN pin-aware SEE (`seeInitiate` plays legal moves, returns 0 when pinned),
-  so it is correct; many others use `seeGain(c, mv.to)` to score a move actually
-  played, where pin-blindness rarely flips the answer. The disciplined call
-  overnight was to fix the PROVEN user-facing false-claim sites (pressureCount,
-  verifyForkOnBoard) and leave the rest for a reviewed pass rather than blind-
-  convert 18 sites in a live app. Sites to triage next (probe each on a pinned
-  position first): groundedAnswer.ts (1841 residual — comment says "legal
-  captures + SEE" but still calls geometric seeGain for the swap;
-  1428/1898/1921/2274/2590/5563/5585), reviewTeachingPoints (87/474/672/775),
-  reviewTrapQuestion:87, reviewQuestionPlan:58, principleAttribution:235,
-  moveFundamentals:187, pvPlayback:244, reviewFullData:421, coachFeatureService:1681,
-  danyaBehaviors:448, positionReadingService internal (235/514/515/1010/1026/1156).
-  Method: probe with a pinned-attacker / pinned-defender FEN; if the naive read
-  flips a user-facing winnability/safety claim, convert to
-  legalSeeGain(For)/capturesWinMaterial and add a corpus row.
+- **✅ FULL `seeGain` SWEEP COMPLETED 2026-09-13 (David: "Fix").** Every naive
+  geometric `seeGain` claim-site converted to the pin-aware primitives, across:
+  - **positionReadingService internal:** `findHangingBySee` (235), the
+    discovered-attack exploitability check (514/515), `opponentIntentRead`
+    (1024 winning-capture + 1040 forker landing-safety), `findPawnGrabs` (1156).
+  - **groundedAnswer.ts:** `sacrificeOffer` (1429), the cost-clause hang scan
+    (1841), the regain/safe-fork counterplay checks (1899/1922), the
+    sacrifice-detector (2275), the better-move recap (2591), and the threat
+    assembler's safe-fork + clean-material-win (5569/5591).
+  - **review/misc:** reviewTeachingPoints (overload 87, exchange-net 474,
+    trade-vs-swing 672 [signed], capture-flight 775), reviewQuestionPlan:58
+    (poisoned-capture, signed), reviewTrapQuestion:87 (poisoned-bait, signed +
+    legal-capture guard), reviewFullData:421 + coachFeatureService:1681
+    (sacrifice detection), moveFundamentals:187 (landing safety), pvPlayback:244
+    (signed material-gained), danyaBehaviors:448 (landing safety).
+  - **The signed pattern** (where a NEGATIVE value carries meaning — sacrifice /
+    poisoned capture / trade-vs-swing): `capturedValue − legalSeeGain(afterFen,
+    to)`, since the floored primitives can't return negatives. Used at
+    pvPlayback:244, reviewTeachingPoints:672, reviewQuestionPlan:58,
+    reviewTrapQuestion:87.
+  - **DELIBERATELY LEFT (not bugs):** `whyItFailed.ts` has its OWN pin-aware SEE
+    (`seeInitiate` plays legal moves, returns 0 when pinned) — correct as-is.
+  - **DEFERRED — needs a SIGNED pin-aware SEE helper:** `principleAttribution.ts`
+    `hangsBy` (240). It is used as a signed SEE in `tempoTargets` (a NEGATIVE net
+    — the defender LOSES by capturing the attacker — is what makes a kick a real
+    tempo). The floored primitives can't express that, and a speculative floored
+    conversion broke 3 attribution tests, so it was reverted with a comment. The
+    right fix is a small signed-legal-SEE helper (least-valuable legal first
+    capture, unfloored root; floored recaptures) — a follow-up, low-stakes
+    (internal misconception attribution, not a direct "you win X" claim).
+  - Gates: the differential corpus grew to 13 rows (hanging-detection added);
+    every touched file's co-located tests stay green (positionReading 109,
+    groundedAnswer 234, review/danya/coachFeature/pvPlayback/moveFundamentals
+    all green).
 
 **Method reminders:** 1. `scripts/audit-drill-why-prod.mjs` is the muted prod
 pattern (clone per surface). 2. The eval method: run the calculator on real

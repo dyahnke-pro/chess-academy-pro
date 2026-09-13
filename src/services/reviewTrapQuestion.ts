@@ -19,7 +19,7 @@
 
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
-import { seeGain, seeSequence } from './positionReadingService';
+import { legalSeeGain, seeSequence } from './positionReadingService';
 
 const PIECE_LABEL: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
@@ -82,11 +82,22 @@ export function buildTrapQuestion(args: { fen: string; studentColor: 'white' | '
     for (const cell of row) {
       if (!cell || cell.color !== enemy) continue;
       const square = cell.square;
-      // The student must actually be able to capture here.
-      if (chess.attackers(square, studentWB).length === 0) continue;
-      const gain = seeGain(chess, square); // net for the capturing (student) side
-      if (gain >= 0) continue; // a real free/even piece — not a trap
-      const loss = -gain;
+      // The student must actually be able to LEGALLY capture here — a pinned
+      // attacker can't grab it, so it is no trap for the student (2026-09-13
+      // sweep; the old geometric attackers() guard counted pinned pieces).
+      const grabs = chess
+        .moves({ verbose: true })
+        .filter((m) => m.to === square && m.captured)
+        .sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+      if (grabs.length === 0) continue;
+      // Signed, pin-aware net: the student grabs with the least-valuable
+      // attacker, then the opponent plays their best LEGAL recapture. net < 0 ⇒
+      // poisoned bait (the trap).
+      let acc: Chess;
+      try { acc = new Chess(fen); acc.move(grabs[0]); } catch { continue; }
+      const net = (PIECE_VALUE[cell.type] ?? 0) - legalSeeGain(acc.fen(), square);
+      if (net >= 0) continue; // a real free/even piece — not a trap
+      const loss = -net;
       if (loss < TRAP_MIN_LOSS) continue;
       // Tempt-factor: prefer the highest-value victim (a hanging-looking queen
       // beats a poisoned pawn). Tie-break on the biggest loss.

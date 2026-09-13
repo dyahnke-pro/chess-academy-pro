@@ -230,7 +230,12 @@ function pawnAttacks(sq: string, color: Color): string[] {
   if (f < 7) out.push(`${String.fromCharCode(98 + f)}${r}`);
   return out;
 }
-/** SEE for the piece on `sq`: > 0 means its ENEMY wins material by capturing it. */
+/** SEE for the piece on `sq`: > 0 means its ENEMY wins material by capturing it.
+ *  NB kept on the geometric `seeGain` deliberately: this is used as a SIGNED
+ *  SEE in `tempoTargets` (a NEGATIVE net — the defender loses by capturing the
+ *  attacker — is what makes a kick a real tempo), and the pin-aware primitives
+ *  floor at 0, so they can't express that. Converting it needs a signed
+ *  pin-aware SEE helper (2026-09-13 sweep — deferred, tracked in the plan doc). */
 function hangsBy(chess: Chess, sq: Square): number {
   try { return seeGain(chess, sq); } catch { return 0; }
 }

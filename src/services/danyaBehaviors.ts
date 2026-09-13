@@ -49,7 +49,7 @@ import {
   findRookLift,
   findBlockade,
   minorCanReachSquare,
-  seeGain,
+  landingIsSafe,
   kingActivation,
   rookBehindPasser,
   oppositionRead,
@@ -445,7 +445,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         try {
           const probe = new Chess(fen);
           probe.move({ from: mv.from, to: mv.to, promotion: 'q' });
-          sound = seeGain(probe, dest) <= 0;
+          sound = landingIsSafe(probe.fen(), dest);
         } catch { sound = false; }
         if (sound) {
           return { fact: `${dest} is the pawn break that cracks the position open — prepare it.`, squares: [dest] };

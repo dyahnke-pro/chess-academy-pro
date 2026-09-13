@@ -21,7 +21,7 @@ import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
 import { describeStructure } from './boardStructure';
-import { seeGain } from './positionReadingService';
+import { legalSeeGain } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 
 /** Face values for the recapture-net calc (mirrors positionReadingService). */
@@ -241,7 +241,11 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     if (prev && prev.square === toSquare && prev.capturedValue > 0) {
       materialGained = capturedVal - prev.capturedValue;
     } else {
-      try { materialGained = seeGain(new Chess(fenBefore), toSquare as Square); }
+      // Signed, pin-aware net: what the mover grabbed minus the opponent's best
+      // LEGAL recapture (from fenAfter, where they are to move). A sacrifice
+      // nets negative, an even trade ~0, a hanging piece its value — and a
+      // pinned recapturer no longer distorts the swap (2026-09-13 sweep).
+      try { materialGained = capturedVal - legalSeeGain(fenAfter, toSquare as Square); }
       catch { materialGained = 0; }
     }
   }

@@ -232,7 +232,11 @@ export function findHangingBySee(fen: string): HangingPiece[] {
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell) continue;
-      const gain = seeGain(chess, cell.square);
+      // Pin/legality-aware: a piece hangs only if its OWNER's enemy can win it
+      // with a REAL, legal capture. Geometric `seeGain` counted pinned attackers
+      // (false hang) and pinned defenders (masked a real hang) — 2026-09-13 sweep.
+      const enemy: Color = cell.color === 'w' ? 'b' : 'w';
+      const gain = legalSeeGainFor(fen, cell.square, enemy);
       if (gain > 0) out.push({ square: cell.square, piece: cell.type, color: cell.color, gain });
     }
   }
@@ -511,8 +515,11 @@ export function findXrays(fen: string, color: Color): XrayNote[] {
           for (const bm of c0.moves({ verbose: true }).filter((m) => m.from === blocker.sq)) {
             const probe = new Chess(start);
             probe.move({ from: bm.from, to: bm.to, promotion: bm.promotion });
-            if (seeGain(probe, bm.to) > 0) continue;            // the blocker just hangs
-            if (majorOnKing ? probe.isCheck() : seeGain(probe, found[1].sq) > 0) { exploitable = true; break; }
+            // Pin-aware (2026-09-13 sweep): opponent (to move in `probe`) wins
+            // the blocker on its new square ⇒ it just hangs; and the student
+            // (`color`) genuinely wins the unveiled target with a legal capture.
+            if (legalSeeGain(probe.fen(), bm.to) > 0) continue;            // the blocker just hangs
+            if (majorOnKing ? probe.isCheck() : capturesWinMaterial(probe.fen(), found[1].sq, color)) { exploitable = true; break; }
           }
         } catch { exploitable = false; }
         if (!exploitable) continue;
@@ -1017,7 +1024,9 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   for (const mv of chess.moves({ verbose: true })) {
     if (!mv.captured || seen.has(mv.to)) continue;
     seen.add(mv.to);
-    const gain = seeGain(chess, mv.to);
+    // Opponent is to move here — legal SEE so a pinned student defender can't
+    // mask a real win and a pinned opponent attacker can't invent one.
+    const gain = legalSeeGain(chess.fen(), mv.to);
     if (gain <= 0) continue;
     // Name it with the least-valuable attacker's capture (the move actually played).
     const caps = chess.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured);
@@ -1030,10 +1039,11 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
       let after: Chess;
       try { after = new Chess(chess.fen()); after.move(mv); } catch { continue; }
       // The forking piece must LAND SAFELY — if the student just wins it back
-      // (SEE > 0 for the student on the landing square), it is no fork, only a
-      // losing check/capture (this is the "Bxf2+ that just drops the bishop"
-      // false-positive). seeGain here is the student's net as the recapturer.
-      if (seeGain(after, mv.to) > 0) continue;
+      // (the student, to move in `after`, has a legal winning capture on the
+      // landing square), it is no fork, only a losing check/capture (the
+      // "Bxf2+ that just drops the bishop" false-positive). Pin-aware so a
+      // pinned student recapturer can't be counted (2026-09-13 sweep).
+      if (!landingIsSafe(after.fen(), mv.to)) continue;
       const hitFen = after.fen().split(' '); hitFen[1] = opp; // keep opp as attacker to read attacks
       let probe: Chess;
       try { probe = new Chess(hitFen.join(' ')); } catch { continue; }
@@ -1163,7 +1173,7 @@ export function findPawnGrabs(fen: string): PawnGrabNote[] {
     if (mv.captured !== 'p') continue;
     const to = mv.to;
     if (bySquare.has(to)) continue;
-    const see = seeGain(chess, to); // material the side to move wins on that square
+    const see = legalSeeGain(fen, to); // material the side to move wins on that square (pin-aware)
     bySquare.set(to, { square: to, capture: mv.san, see, safe: see > 0 });
   }
   // Poisoned (greedy) grabs first — those are the teachable ones.

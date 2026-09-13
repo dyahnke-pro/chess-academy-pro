@@ -19,7 +19,10 @@
 // exchange (seeGain). Nothing here is invented.
 
 import { Chess } from 'chess.js';
-import { seeGain } from './positionReadingService';
+import { legalSeeGain } from './positionReadingService';
+
+/** Centipawn-free piece values for the signed material net (king ~ ∞). */
+const CAPTURE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 import { GUIDED_FIND_MIN_EVAL_CP } from './guidedFindTheMove';
 
 export type ReviewQuestionKind = 'find-shot' | 'trap' | 'why';
@@ -53,9 +56,11 @@ export function playedCaptureIsPoisoned(fenBefore: string, san: string): boolean
     const probe = new Chess(fenBefore);
     const mv = probe.move(san);
     if (!mv || !mv.captured) return false;
-    const before = new Chess(fenBefore);
-    // seeGain returns the net for the side capturing on that square (the student).
-    return seeGain(before, mv.to) <= -1;
+    // Signed, pin-aware: the student grabbed `captured`, then the opponent (to
+    // move in `probe`) plays their best LEGAL recapture. Net ≤ -1 ⇒ poisoned.
+    // Geometric seeGain counted pinned recapturers and mislabelled the trap.
+    const grabbed = CAPTURE_VALUE[mv.captured] ?? 0;
+    return grabbed - legalSeeGain(probe.fen(), mv.to) <= -1;
   } catch {
     return false;
   }

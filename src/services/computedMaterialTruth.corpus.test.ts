@@ -35,6 +35,7 @@ import {
   landingIsSafe,
   pressureCount,
   pressuredTargets,
+  findHangingBySee,
 } from './positionReadingService';
 import { isCriticalThreat } from './tacticAlertService';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -183,6 +184,26 @@ describe('computedMaterialTruth — pressureCount verdict + chat "pressure" answ
     // Undefended black knight on e6, White rook bearing on it.
     const fen = '6k1/8/4n3/8/8/4R3/8/6K1 w - - 0 1';
     expect(pressureCount(fen, 'e6')?.verdict).toBe('winnable');
+  });
+});
+
+describe('computedMaterialTruth — findHangingBySee is pin-aware', () => {
+  it('does not report a piece a pinned attacker only geometrically hits', () => {
+    // White Nd5 (pinned to Kd1 by Rd8) geometrically attacks Bf6 — but can't
+    // take it, so the bishop is NOT hanging. (The pinned, undefended Nd5 itself
+    // genuinely hangs to the rook, and is correctly reported.)
+    const fen = '3r2k1/8/5b2/3N4/8/8/8/3K4 w - - 0 1';
+    const hanging = findHangingBySee(fen).map((h) => h.square);
+    expect(hanging).not.toContain('f6'); // pinned attacker → no false hang
+    expect(hanging).toContain('d5'); // pinned + undefended → a real hang
+  });
+
+  it('catches a hang masked by a PINNED defender', () => {
+    // Black Nf5 is "defended" only by the g6 pawn, but g6 is pinned to Kg8 —
+    // the knight actually hangs to Rxf5. Geometric SEE counted the pinned pawn
+    // and missed it.
+    const fen = '6k1/8/6p1/5n2/8/8/8/5RRK w - - 0 1';
+    expect(findHangingBySee(fen).map((h) => h.square)).toContain('f5');
   });
 });
 
