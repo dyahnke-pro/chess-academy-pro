@@ -19,6 +19,7 @@
 import { Chess } from 'chess.js';
 import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
+import { getMaterialAdvantage } from './boardUtils';
 import type { TacticPattern } from '../types/tacticTypes';
 
 export type VerdictKind = 'mate' | 'winning' | 'edge' | 'equal';
@@ -77,10 +78,32 @@ export function toStudentCp(whiteCp: number, studentColor: 'white' | 'black'): n
   return studentColor === 'white' ? whiteCp : -whiteCp;
 }
 
-/** Spoken verdict from the line. `mateForStudent` > 0 means the student mates. */
+/** Board-true material descriptor for a verdict, or null. `md` is the student's
+ *  NET material in pawn units (getMaterialAdvantage scale: p1 n/b3 r5 q9), > 0 =
+ *  student ahead. We only NAME material the board actually shows (G3): a +2.8
+ *  positional edge with even material must NOT say "up a piece". Returns the
+ *  smallest honest label the count supports. */
+function materialLabel(md: number | null | undefined): string | null {
+  if (md == null) return null;
+  if (md >= 8) return 'up a queen';
+  if (md >= 5) return 'up a rook';
+  if (md >= 3) return 'up a piece';
+  if (md >= 2) return 'up the exchange';
+  if (md >= 1) return 'up a pawn';
+  return null;
+}
+
+/** Spoken verdict from the line. `mateForStudent` > 0 means the student mates.
+ *  `materialDeltaPawns` (student POV, + = student ahead, getMaterialAdvantage
+ *  scale) is the material the line's TERMINAL position actually shows — it is the
+ *  ONLY thing that licenses a material claim. When it is null/undefined (no line
+ *  in hand, e.g. an eval-only caller) the verdict frames by eval MAGNITUDE and
+ *  never invents material (G3: `voiceFacts` can only subtract, so a false "up a
+ *  piece" here would be spoken uncorrected). */
 export function summarizeVerdict(
   studentCp: number,
   mateForStudent: number | null,
+  materialDeltaPawns?: number | null,
 ): ReadVerdict {
   if (mateForStudent != null && mateForStudent > 0) {
     const words = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -88,14 +111,39 @@ export function summarizeVerdict(
     return { kind: 'mate', mateIn: mateForStudent, studentCp, text: `a forced mate in ${n}` };
   }
   const a = Math.abs(studentCp);
-  // Material framing when the swing is a clean piece/exchange or more.
-  if (studentCp >= 500) return { kind: 'winning', mateIn: null, studentCp, text: 'a winning material advantage' };
-  if (studentCp >= 280) return { kind: 'winning', mateIn: null, studentCp, text: 'a decisive edge — up a piece' };
-  if (studentCp >= 150) return { kind: 'winning', mateIn: null, studentCp, text: 'clearly better — up the exchange or a pawn with pressure' };
+  const mat = materialLabel(materialDeltaPawns);
+  // Material framing ONLY when the eval says winning AND the board backs the
+  // count; otherwise a magnitude-only phrase that claims no material.
+  if (studentCp >= 500) {
+    if (materialDeltaPawns != null && materialDeltaPawns >= 5) {
+      return { kind: 'winning', mateIn: null, studentCp, text: 'a winning material advantage' };
+    }
+    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `winning — ${mat}` : 'a winning advantage' };
+  }
+  if (studentCp >= 280) {
+    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `a decisive edge — ${mat}` : 'a decisive advantage' };
+  }
+  if (studentCp >= 150) {
+    return { kind: 'winning', mateIn: null, studentCp, text: mat ? `clearly better — ${mat}` : 'clearly better' };
+  }
   if (studentCp >= 60) return { kind: 'edge', mateIn: null, studentCp, text: 'a pleasant edge' };
   if (a < 60) return { kind: 'equal', mateIn: null, studentCp, text: 'roughly balanced' };
   if (studentCp <= -280) return { kind: 'equal', mateIn: null, studentCp, text: 'lost — there is no read to give here' };
   return { kind: 'edge', mateIn: null, studentCp, text: 'slightly worse' };
+}
+
+/** Student-POV net material (getMaterialAdvantage scale) at the line's terminal
+ *  position — the board-fact that licenses a material claim in the verdict. Null
+ *  when no ply carries a resolvable fenAfter. */
+function terminalMaterialDelta(line: PvPly[], studentColor: 'white' | 'black'): number | null {
+  for (let i = line.length - 1; i >= 0; i -= 1) {
+    const f = line[i].fenAfter;
+    if (f && f.length > 0) {
+      const whitePov = getMaterialAdvantage(f);
+      return studentColor === 'white' ? whitePov : -whitePov;
+    }
+  }
+  return null;
 }
 
 /** The decisive tactic in the line: the first ply whose move LANDS a tactic,
@@ -196,7 +244,7 @@ export async function computeTacticalRead(
   const first = pv.plies[0];
   const bestStudentCp = toStudentCp(pv.rootEvalCp, studentColor);
   const mateIn = studentMateIn(pv.plies, studentColor);
-  const verdict = summarizeVerdict(bestStudentCp, mateIn);
+  const verdict = summarizeVerdict(bestStudentCp, mateIn, terminalMaterialDelta(pv.plies, studentColor));
   const keyTactic = pickKeyTactic(pv.plies);
   const checkPlies = pv.plies.map((p, i) => (p.facts.isCheck ? i : -1)).filter((i) => i >= 0);
 
@@ -299,7 +347,7 @@ export function tacticalReadFromLines(
   const rootEvalCp = best.evaluation; // WHITE POV, like computePvLine.rootEvalCp
   const bestStudentCp = toStudentCp(rootEvalCp, studentColor);
   const mateIn = studentMateIn(plies, studentColor);
-  const verdict = summarizeVerdict(bestStudentCp, mateIn);
+  const verdict = summarizeVerdict(bestStudentCp, mateIn, terminalMaterialDelta(plies, studentColor));
   const keyTactic = pickKeyTactic(plies);
   const checkPlies = plies.map((p, i) => (p.facts.isCheck ? i : -1)).filter((i) => i >= 0);
 
@@ -657,9 +705,12 @@ export function voiceRejectsBestMove(text: string, bestMoveSan: string | null): 
  *  Null on a roughly-level or unclear terminus (nothing decisive to claim). */
 export function lineOutcomeClause(rootEvalCpWhite: number, studentColor: 'white' | 'black'): string | null {
   const studentCp = toStudentCp(rootEvalCpWhite, studentColor);
+  // Eval-only caller — no line/terminal position in hand, so the verdict frames
+  // by MAGNITUDE and claims no specific material (G3: never state "up a piece"
+  // from a bare eval; only a board-backed count may).
   const v = summarizeVerdict(studentCp, null);
   if (v.kind === 'equal' || v.kind === 'edge') return null; // no decisive outcome to name
-  // v.text reads "a decisive edge — up a piece" / "a winning material advantage".
+  // v.text reads "a decisive advantage" / "a winning advantage" / "clearly better".
   const with_ = v.text.startsWith('a ') ? `with ${v.text}` : v.text;
   return `And that leaves you ${with_}.`;
 }

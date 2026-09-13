@@ -338,15 +338,38 @@ Beyond fixing errors, where the computed voice can get RICHER and more robust:
   leaves a mate-in-1); the side-to-move's own mate is still reported. Gate: 2 new
   tacticsDetector tests (parryable Rd8# with Black to move is NOT announced; the
   side-to-move's Rd8# is). groundTruth mate-puzzle test still green.
+  **Follow-through (2026-09-13):** the fix left `tacticalRead.test.ts`'s
+  mate_threat-downgrade fixture stale — its old parryable position no longer
+  emits a mate_threat, so the wording-downgrade test went red. Regrounded it on
+  a chess.js-verified UNSTOPPABLE not-to-move mate (`r5r1/8/8/2k5/8/7p/2P4P/7K w`
+  — Black threatens Ra1#, White's only moves c3/c4 can't stop it), the shape the
+  C#3 gate still emits. tacticalRead 42/42 green.
 - **P1c-skewer — `missedTacticService.detectSkewer` diverged logic.** ✅ DONE.
   Ported the gated three-way threshold from `tacticsDetector.findSkewers`
   (front > attacker, front > back, back ≥ 3 — never a pawn prize); the old
   `front>back, back>=1` fired false skewers. No regression (missedTactic 36+26).
+- **B#3 — `tacticalRead.summarizeVerdict` unverified "up a piece".** ✅ DONE
+  (2026-09-13). The verdict mapped eval→material wording (+2.8 → "up a piece")
+  with NO material check — a G3 false claim. Now the material clause is licensed
+  ONLY by the board: added `materialDeltaPawns` (student-POV net material at the
+  line's TERMINAL position, via `terminalMaterialDelta` + `getMaterialAdvantage`)
+  and `materialLabel` (smallest honest label the count supports). Both live call
+  sites (`computeTacticalRead`, `tacticalReadFromLines`) now pass the terminal
+  material; the eval-only caller (`lineOutcomeClause`) passes none and frames by
+  MAGNITUDE ("a decisive advantage" / "a winning advantage" / "clearly better")
+  — never inventing material. Eval-gate + board-gate together are self-consistent
+  (a truncation-artifact material count can't leak: it only speaks inside a
+  winning eval band, and the eval already accounts for the recapture). NB: latent
+  — no runtime surface currently speaks `verdict.text` (narrateTacticalRead /
+  tacticalReadFacts are the "fallback floor", uncalled; CoachTeachPage +
+  danyaBehaviors use the clause helpers, not the verdict). Fixed for correctness
+  + to keep a future wiring honest. Gate: 3 new summarizeVerdict tests (positional
+  edge stays magnitude-only; material claimed only when backed; bare eval invents
+  nothing) + lineOutcomeClause regrounded to magnitude. tacticalRead 45/45.
 - **P1c-rest — the intricate items (NEXT, dedicated pass + gates):**
   `assembleAttackAssessment` (:1094, king-zone counts include pinned pieces +
   x-ray of empty squares — needs real pin-detection / safe-contact, fuzzier than
-  a SEE swap); `tacticalRead.summarizeVerdict` unverified "up a piece" (B#3);
-  causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
+  a SEE swap); causalChain `hasWinnablePiece` (:168), `targetWasSavable` (:185),
   `exploitedLoosePiece` (:241) + pattern detectors (:561-575) + `computeAttackMap`.
   Counterfactual / cross-move logic — each needs individual analysis; no bulk-swap.
 - **P2..Pn — the Tier-2/Tier-3 ranked list + Improvements & additions**, each its

@@ -28,6 +28,25 @@ describe('summarizeVerdict', () => {
   it('calls a dead-level position balanced', () => {
     expect(summarizeVerdict(10, null).kind).toBe('equal');
   });
+  it('does NOT claim material from a positional edge — even material stays magnitude-only (B#3/G3)', () => {
+    // +2.8 eval but the board shows even material: never "up a piece".
+    const v = summarizeVerdict(280, null, 0);
+    expect(v.kind).toBe('winning');
+    expect(v.text).toBe('a decisive advantage');
+    expect(v.text).not.toMatch(/piece|pawn|exchange|rook|queen/);
+  });
+  it('claims material ONLY when the board backs the count', () => {
+    expect(summarizeVerdict(280, null, 3).text).toBe('a decisive edge — up a piece');
+    expect(summarizeVerdict(280, null, 2).text).toBe('a decisive edge — up the exchange');
+    expect(summarizeVerdict(180, null, 1).text).toBe('clearly better — up a pawn');
+    expect(summarizeVerdict(600, null, 5).text).toBe('a winning material advantage');
+  });
+  it('a bare eval (no line/material) never invents material', () => {
+    // The eval-only path (e.g. lineOutcomeClause) frames by magnitude only.
+    expect(summarizeVerdict(600, null).text).toBe('a winning advantage');
+    expect(summarizeVerdict(280, null).text).toBe('a decisive advantage');
+    expect(summarizeVerdict(180, null).text).toBe('clearly better');
+  });
 });
 
 describe('appealScore', () => {
@@ -141,7 +160,8 @@ describe('narrateTacticalRead (the computed voice)', () => {
       { san: 'Kh1', uci: 'g1h1', moverColor: 'white' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
       forkPly,
     ],
-    verdict: summarizeVerdict(439, null),
+    // +439 eval AND the line wins a bishop (net +3, board-backed) → "up a piece".
+    verdict: summarizeVerdict(439, null, 3),
     keyTactic: pickKeyTactic([forkPly]),
     checkPlies: [0], closeAlternative: null,
   };
@@ -216,7 +236,7 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
     const facts = tacticalReadFacts({
       fen: 'x', studentColor: 'black', bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
       line,
-      verdict: summarizeVerdict(439, null),
+      verdict: summarizeVerdict(439, null, 3), // +439 AND wins a bishop → board-backed "up a piece"
       keyTactic: pickKeyTactic(line),
       checkPlies: [0], closeAlternative: null,
       tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
@@ -250,9 +270,12 @@ describe('voiceRejectsBestMove (recommendation guard)', () => {
 });
 
 describe('lineOutcomeClause (review outcome)', () => {
-  it('names a decisive terminus from the student seat', () => {
-    expect(lineOutcomeClause(-445, 'black')).toContain('up a piece');
-    expect(lineOutcomeClause(500, 'white')).toContain('winning material advantage');
+  it('names a decisive terminus by MAGNITUDE (no material claim from a bare eval — G3)', () => {
+    // Eval-only: it cannot see the board, so it must not invent "up a piece".
+    expect(lineOutcomeClause(-445, 'black')).toContain('decisive advantage');
+    expect(lineOutcomeClause(-445, 'black')).not.toContain('piece');
+    expect(lineOutcomeClause(500, 'white')).toContain('winning advantage');
+    expect(lineOutcomeClause(500, 'white')).not.toContain('material advantage');
   });
   it('stays silent on a level or unclear terminus (no false claim)', () => {
     expect(lineOutcomeClause(30, 'white')).toBeNull();
