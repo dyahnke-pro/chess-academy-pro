@@ -177,6 +177,27 @@ describe('the one-sentence face still behaves', () => {
   });
 });
 
+// David 2026-09-13: "increased scope … our strongest narration tool." The read
+// now draws from a wider board-awareness pool — each rung selective at source.
+describe('the widened board-awareness pool surfaces the new rungs', () => {
+  it('surfaces a passed pawn', () => {
+    const obs = readPosition('4k3/8/4P3/8/8/8/8/4K3 w - - 0 1', 'white');
+    expect(obs.some((o) => o.kind === 'passer')).toBe(true);
+  });
+
+  it('surfaces a fully-open file when the side has a rook to use it', () => {
+    const obs = readPosition('r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1', 'white');
+    expect(obs.some((o) => o.kind === 'file')).toBe(true);
+  });
+
+  it('does NOT read an open file when there is no rook (pawnless K+K)', () => {
+    // Every file is "open" on a pawnless board, but with no rook the read is
+    // meaningless — the same precondition class as the king-open-file rung.
+    const obs = readPosition('8/8/4k3/8/8/4K3/8/8 w - - 0 1', 'white');
+    expect(obs.some((o) => o.kind === 'file')).toBe(false);
+  });
+});
+
 describe('a piece that has not moved is not a problem piece', () => {
   // Found on PROD, not in the unit gates, because it was TRUE and useless
   // rather than false. A live run said at move two: "Your bishop on f1 is your

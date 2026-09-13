@@ -7474,6 +7474,27 @@ export function CoachTeachPage(): JSX.Element {
     let behaviorLine: string | null = null;
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
+    // THE CONTESTED GATE (David 2026-09-13) — the standing board read stands down
+    // in a DECIDED game: a positional lesson ("your knight has an outpost") is
+    // noise when someone is up a queen. This is the non-count importance filter
+    // that partners the removed cap — uncapped, but silent where nothing hinges.
+    // Synchronous material proxy (no engine at this instant site); the full
+    // eval/WDL contested read (narrationImportance.isContested) governs the late
+    // package where the engine has settled. Only gates the standing READ; the
+    // event lanes (gem/tactic/threat/mistake) always fire.
+    const decidedByMaterial = (() => {
+      try {
+        const b = new Chess(args.fenAfterReply);
+        const val: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+        let w = 0, bl = 0;
+        for (const row of b.board()) for (const cell of row) {
+          if (!cell || cell.type === 'k') continue;
+          const v = val[cell.type] ?? 0;
+          if (cell.color === 'w') w += v; else bl += v;
+        }
+        return Math.abs(w - bl) >= 9; // ~a queen up — decided enough to stop teaching plans
+      } catch { return false; }
+    })();
     // The URGENT board reads — the ~10% the corpus doctrine says are computed
     // interrupts (a threat the opponent just set up, a latent x-ray, a piece
     // you now win, a passer, a knight that belongs on an outpost). These RIDE
@@ -7495,12 +7516,12 @@ export function CoachTeachPage(): JSX.Element {
       // teaching phrases"). No longer gated behind `quietTurn` — it is offered on
       // every turn that isn't already an urgent tactical moment, and the machinery
       // downstream decides whether it is HEARD: it is rank-0, so a note/behaviour
-      // leads; the per-game novelty set drops it if it repeats a phrase; the
-      // 3-reason DNA cap keeps a busy turn clean; and `softStandDown` (at the add
-      // site) still yields it entirely behind a corpus note — his "no aside behind
-      // a note". `buildPositionalRead` descends its ranked list past what it has
-      // already offered, so a fresh, different observation surfaces each turn
-      // instead of the same one repeating.
+      // leads; the per-game novelty set drops it if it repeats a phrase;
+      // `softStandDown` yields it entirely behind a corpus note (his "no aside
+      // behind a note"), and the contested gate silences it in a decided game.
+      // `buildPositionalRead` descends its (now widened) ranked list past what it
+      // has already offered, so a fresh, different observation — drawn from the
+      // full board-awareness pool — surfaces each turn instead of repeating.
       try {
         const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
         if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
@@ -7553,10 +7574,13 @@ export function CoachTeachPage(): JSX.Element {
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine && !softStandDown ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
-      // Rate-matched Danya behavior — computed board-truth, ranks with the other
-      // computed lanes and above the positional observation filler. Stands down
-      // behind a note (softStandDown).
-      ...(behaviorLine && !softStandDown ? [{ kind: 'computed' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
+      // Rate-matched Danya behavior — board-truth. MERGED with the positional
+      // read into ONE board-read lane (David 2026-09-13: "computer and observation
+      // can be merged"): it now speaks as `observation`, the single home for the
+      // computer's board reads, so the two never split or duplicate (the outpost
+      // both once computed is now one deduped lane). Stands down behind a note
+      // and in a decided game (the contested gate).
+      ...(behaviorLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
       // TIER 1 — the corpus (video-distilled, position-keyed, board-true) leads
       // the teaching lanes. It is the coach's DNA voice on this exact board, and
       // David's tier restructure (2026-08-24) makes it primary: "Tier 1 needs to
@@ -7582,10 +7606,11 @@ export function CoachTeachPage(): JSX.Element {
       // handed back and queued alongside the plan, where the comparison is real.
       // It is corpus teaching about a DIFFERENT board, so nothing is lost by it
       // arriving with the plan rather than ahead of it.
-      // `observation`, not `note` — it is filler, and while it shared the
-      // teaching rank it could displace a masterclass beat with "your pawn on
-      // a2 is isolated". Lowest rank by construction.
-      ...(positionalLine && !softStandDown ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
+      // The positional read — the SAME `observation` lane the behaviour now
+      // speaks in (the merge). Widened board-awareness pool (king, plan, minority,
+      // outpost, passer, colour-complex, open file, lever, both sides). Stands
+      // down behind a note and in a decided game (the contested gate).
+      ...(positionalLine && !softStandDown && !decidedByMaterial ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
       // priorKeys = every phrase spoken EARLIER this game, so no lane repeats a
       // phrase across turns (David 2026-09-13). Within-turn dedupe is separate
       // (the late package's `alreadySaid`); this is the cross-turn guarantee.

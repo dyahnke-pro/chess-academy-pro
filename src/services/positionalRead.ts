@@ -32,6 +32,10 @@ import {
   findWeakPawns,
   findPieceQuality,
   findPawnBreaks,
+  findColorComplexWeakness,
+  findMinorityAttack,
+  findPassedPawns,
+  findOpenFiles,
 } from './positionReadingService';
 
 const NAME: Record<string, string> = {
@@ -47,7 +51,12 @@ const NAME: Record<string, string> = {
  * it could describe half a chess position. Every rung now runs for both
  * colours, and each observation carries whose it is.
  */
-export type ObservationKind = 'plan' | 'king' | 'development' | 'piece' | 'structure' | 'lever';
+export type ObservationKind =
+  | 'plan' | 'king' | 'development' | 'piece' | 'structure' | 'lever'
+  // WIDENED BOARD AWARENESS (David 2026-09-13: "increased scope … our strongest
+  // narration tool"). Each is a concrete, board-provable feature, ranked by how
+  // much it should lead a quiet-position read.
+  | 'minority' | 'passer' | 'complex' | 'file';
 
 export interface PositionalObservation {
   /** Dedupe key for the caller's said-set. */
@@ -64,7 +73,11 @@ export interface PositionalObservation {
 /** Urgency by kind. A plan outranks the facts it is built from — that is the
  *  whole reason to build it. */
 const RANK: Record<ObservationKind, number> = {
-  plan: 100, king: 90, development: 70, piece: 60, structure: 50, lever: 40,
+  plan: 100, king: 90, development: 70,
+  // A concrete plan with a legal lever outranks a static piece read; a passer
+  // and a colour-complex weakness are notable assets/targets; a fully-open file
+  // is the lowest of the new rungs (a where-rooks-belong pointer).
+  minority: 65, piece: 60, passer: 58, complex: 55, structure: 50, file: 45, lever: 40,
 };
 
 /** The same fact about the opponent is worth slightly less than about the
@@ -195,6 +208,69 @@ function observationsFor(
         ? `A pawn break is available on ${breaks[0]} — in a quiet position the pawn levers are where the play comes from.`
         : `${you.charAt(0).toUpperCase()}${you.slice(1)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
     });
+  }
+
+  // ── WIDENED BOARD AWARENESS (David 2026-09-13) — each fires only when the
+  //    feature is genuinely on the board (selective at source, so the read never
+  //    pads), and each runs for BOTH sides via the caller. ──────────────────────
+
+  // MINORITY ATTACK — fewer pawns on a flank with a LEGAL lever onto an enemy
+  // pawn. A concrete plan, so it leads the new rungs.
+  const minority = findMinorityAttack(fen, color);
+  if (minority) {
+    out.push({
+      key: `${side}-minority-${minority.flank}`, side, kind: 'minority', rank: rank('minority'),
+      text: own
+        ? `You have a minority attack on the ${minority.flank} — ${minority.leverSan} makes contact and leaves them a weak pawn on ${minority.target}.`
+        : `They have a minority attack on the ${minority.flank} — ${minority.leverSan} is the lever, and it would leave you a weak pawn on ${minority.target}.`,
+    });
+  }
+
+  // PASSED PAWN — no enemy pawn ahead on its own or an adjacent file.
+  const passers = findPassedPawns(fen, color);
+  if (passers.length > 0) {
+    out.push({
+      key: `${side}-passer-${passers[0]}`, side, kind: 'passer', rank: rank('passer'),
+      text: own
+        ? `Your passed pawn on ${passers[0]} is a long-term trump — every trade that clears its path makes it stronger.`
+        : `Their passed pawn on ${passers[0]} is the danger here — blockade it with a piece before it runs.`,
+    });
+  }
+
+  // COLOUR COMPLEX — a side missing the bishop of a colour with ≥2 own-camp holes
+  // of it, so no piece naturally covers those squares.
+  for (const cc of findColorComplexWeakness(fen)) {
+    if (cc.side !== color) continue;
+    const sqs = cc.squares.slice(0, 2).join(' and ');
+    out.push({
+      key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
+      text: own
+        ? `Your ${cc.complex} squares are weak — with no bishop of that colour, nothing covers ${sqs}, so a piece has to babysit them.`
+        : `Their ${cc.complex} squares are weak — ${sqs} are holes their bishop can't cover; a knight belongs on one.`,
+    });
+    break; // one complex read is enough — the second is the same lesson
+  }
+
+  // FULLY-OPEN FILE — where the rooks belong. Only the fully-open files (semi-open
+  // are too common to be notable), lowest of the new rungs, and STUDENT-side only:
+  // a fully-open file is open for both, so emitting it on both passes would twin
+  // (and the file token isn't an [a-h][1-8] square the dedupe guard catches).
+  // Requires the side to actually HAVE a rook — on a pawnless K+K board every file
+  // is "open" and means nothing, the same precondition the king-open-file rung uses.
+  const openFiles = findOpenFiles(fen).open;
+  if (own && openFiles.length > 0) {
+    const hasRook = (() => {
+      try {
+        const b = new Chess(fen);
+        return b.board().flat().some((c) => c && c.color === color && c.type === 'r');
+      } catch { return false; }
+    })();
+    if (hasRook) {
+      out.push({
+        key: `${side}-file-${openFiles[0]}`, side, kind: 'file', rank: rank('file'),
+        text: `The ${openFiles[0]}-file is open — that is where a rook wants to be.`,
+      });
+    }
   }
   void your;
   return out;

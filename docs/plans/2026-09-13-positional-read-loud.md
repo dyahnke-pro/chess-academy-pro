@@ -69,6 +69,29 @@ ship-check green → push main → prod bundle advances → 3-instrument MUTED
 post-deploy audit (Learn narration fires the observation lane + never repeats;
 Play answers a typed "read the position" with the both-sides read) → report.
 
+## Follow-on (David 2026-09-13): cap removed, merge + scope + importance gate
+
+- **Cap removed** at both package sites — every important fact fires, ranked;
+  repetition (not count) was the wall, and the double-phrase + per-game novelty
+  gates handle that. (Shipped separately.)
+- **Merge**: the Danya-behaviour lane (`computed`) and the positional read
+  (`observation`) now speak as ONE `observation` lane — the single home for the
+  computer's board reads, so they never split or duplicate the same feature.
+  (`buildPlayCommentary` stays `computed` — distinct mature lane with analytics;
+  a later, optional fold.)
+- **Scope**: `readPosition` widened with minority-attack, passed-pawn,
+  colour-complex, and fully-open-file rungs (each selective at source; open-file
+  requires a rook + student-side-only to avoid a both-sides twin). Flows to the
+  Learn read AND the Play on-demand answer.
+- **Importance gate (partner to uncapping)**: the standing board read stands
+  down in a DECIDED game (synchronous material-blowout proxy at the instant
+  site; full eval/WDL `isContested` governs the late package). Non-count, so the
+  cap stays gone. Event lanes always fire.
+- **The honest correction on "no cap"**: novelty ≠ importance; the gate that
+  stops a breadth-wall is contested + event-deference + at-source selectivity,
+  not a count. The read still emits one strongest unsaid observation per turn
+  (buildPositionalRead descent) drawn from the widened pool — loud, not a wall.
+
 ## Status
 - [x] voicePackage priorKeys + spokenSentenceKeys + test (46 tests green)
 - [x] CoachTeachPage: observation→DNA kinds; quietTurn shackle dropped; per-game
