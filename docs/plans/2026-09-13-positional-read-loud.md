@@ -198,4 +198,26 @@ brain → groundedAnswer read), NOT duplicating AUTO-narration onto Play/Tactics
       (recorded square appears in facet text) + no-phantom (opening ply records 0).
 - [x] typecheck clean; targeted gates green (groundedAnswer 202, reviewFullData
       11, positionalRead 21, voicePackage 46, narrationAdversarial 60-game sweep)
-- [ ] ship-check + push + batched deploy + audit
+- [x] ship-check green; pushed 84d1a2a → prod bundle DQOumiHl (verified live).
+- [x] post-deploy probe (`scripts/audit-ondemand-read-marks-prod.mjs`, MUTED):
+      on `/coach/play` the on-demand read FIRES on-topic (verbatim computed read —
+      "king still in the centre", "pawn break on d4"), 0 pageErrors; best-move
+      ARROWS render on the same chat path.
+
+### 🚩 OPEN FOLLOW-UP — on-demand HIGHLIGHTS on the in-game chat (play)
+Diagnosed this session, precisely: on `/coach/play` the read TEXT + best-move
+ARROWS render, but the read's yellow key-square HIGHLIGHT does NOT reach the
+board (scanned every square cell — no rgba(234,179,8); the last-move cyan on the
+same cell IS detectable, so the customSquareStyles channel works and the
+highlight simply isn't there). The reply is the VERBATIM `readPosition` prose, so
+it's the preferRaw computed assessment answer (my `[BOARD: highlight:...]` append
+should be present). `OpeningPlayMode.handleChatBoardAnnotation` sets
+`setChatHighlights` correctly and `GameChatPanel` parses+forwards highlight
+commands at 1129 — so the loss is between coachApi's return and GameChatPanel's
+`answer.text` for the assessment lane (arrows from the best-move lane survive the
+identical path). Needs local tracing (add temp logging on the play dispatch) to
+pin the exact strip/return point — a focused fix, NOT a guess at session end.
+- Marks on **Learn** (build 6 instant lane) and **Review** (this build) are
+  unaffected — they render through the component's own highlight state, not the
+  GameChatPanel path.
+- The on-demand read TEXT (the substance) reaches every surface.
