@@ -73,6 +73,41 @@ puzzle genuinely maps to no concept — the descriptor-only floor — the coach
 teaches at least the coarse matchup-class / board principle; bare arrow is never
 acceptable from the coach.)
 
+## 🔒 GOVERNING LAW — ONE COMPUTATIONAL SYSTEM, NO ISOLATED FUNCTION (David 2026-09-14: "No more isolation. It needs to be tied into the entire computer system so no function is working independently, rather they all work as one single computational system.")
+
+The P1 engine was built BESIDE the app's computer (its own geometry walk, its own
+static importance table, its own output). Tested in isolation it plateaued —
+single-position geometry surfaces incidental tactics; material-count can't find
+the critical move. The fix is not more detectors; it is INTEGRATION:
+
+- **The concept engine is a CONSUMER of the one computer the app already runs,
+  never its own.** Input = the surface's existing `StockfishAnalysis` (the
+  eval-bar read `buildFedTacticsContext` already GUARANTEES is fed) and its PV;
+  on a puzzle the solution IS the PV. Zero new engine sweeps — never in the
+  render path.
+- **Ranking = the engine's eval swing**, with `scanCriticality` / `cpLoss` as the
+  SHARED signals. A static per-tactic importance table is the "second parallel
+  criticality" CLAUDE.md forbids — it is retired. Material swing is only the
+  no-engine fallback.
+- **Output rides the fed package**: the ranked concepts join the same
+  `TacticsLiveContext` block that `buildFedTacticsContext` assembles and
+  `envelope.ts:741` / `voiceFacts` speak. One package → every surface. No side
+  channel.
+- **The comprehensive picture is the LINE, not a position** (David: "the forward
+  looking PV is needed and stockfish analysis all working together at the time"):
+  engine PV → walk each ply (`computePlyFacts`, the existing per-ply fact
+  computer) → detectors name what lands at each ply → the swing ranks which is
+  THE point → renderer speaks the ranked set. The sacrifice, the fork it buys,
+  the ending it reaches — one story.
+- Honest bounds: the walk respects `pvDepthForRating` (never past what the engine
+  can stand behind); a cold board with no cached analysis answers with geometry
+  now and the deeper line picture when the PV arrives (same async posture as the
+  eval bar). Geometry-now is a degrade, never silence.
+
+The integration seam is `buildFedTacticsContext` — the function that already IS
+the one-computer package builder. `conceptForLine` is one more thing it computes
+from the same analysis.
+
 ## Architecture — ONE shared computer, exposed at the chokepoints
 
 Build a single surface-agnostic entry point (mirrors `teachingNoteForBoard`):
@@ -381,6 +416,13 @@ Update the phase's status marker + the decisions log as each lands.
 - **P3 — consolidate** `puzzleConceptHint` → one source [pending].
 - **P4 — wire chokepoints** [pending]: `envelope.ts:741` + `coachApi.ts:5395`;
   each surface with a fires-for-real test + its speaking contract (table above).
+- **P4a — ONE COMPUTATIONAL SYSTEM integration** [done 2026-09-14]:
+  `conceptForLine` (the single walker over `computePlyFacts`, solution or engine
+  PV), importance from the engine's swing on the shared `criticalityThresholds`
+  (static table retired), `conceptForBoard` consumes the surface's existing
+  `StockfishAnalysis`, and `buildTacticsLiveContext` attaches ranked `concepts`
+  to the fed package that `formatTacticsSubBlock` renders. The chat/prompt path
+  now carries computed concepts on every surface that builds the package.
 - **P4c — wire the LIVE-GAMEPLAY narration computers** [pending, DONE-condition]:
   weave `conceptForBoard` into the per-move narration paths so themes/concepts are
   spoken mid-game — `openingGenerator`/walkthrough (Learn + Teach-x-opening),
