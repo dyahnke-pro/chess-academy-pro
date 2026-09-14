@@ -65,7 +65,11 @@ export function dnaMoveClause(
   fenBefore: string,
   san: string,
   prev: PrevCaptureContext = NO_PREV,
-): { text: string; prev: PrevCaptureContext; tacticLanded: string | null } {
+  /** Concept clauses the line ALREADY spoke — the same idea is said once per
+   *  line ("forces the king to react" on every check read as a stuck record
+   *  in the 2026-09-14 prod audit). */
+  spoken: ReadonlySet<string> | null = null,
+): { text: string; prev: PrevCaptureContext; tacticLanded: string | null; concept: string | null } {
   let mv: ReturnType<Chess['move']> | null = null;
   let fenAfter = '';
   try {
@@ -73,9 +77,9 @@ export function dnaMoveClause(
     mv = c.move(san);
     fenAfter = c.fen();
   } catch {
-    return { text: san, prev: NO_PREV, tacticLanded: null };
+    return { text: san, prev: NO_PREV, tacticLanded: null, concept: null };
   }
-  if (!mv) return { text: san, prev: NO_PREV, tacticLanded: null };
+  if (!mv) return { text: san, prev: NO_PREV, tacticLanded: null, concept: null };
 
   const nextPrev: PrevCaptureContext = mv.captured
     ? { square: mv.to, capturedValue: PTS[mv.captured] ?? 0 }
@@ -89,7 +93,7 @@ export function dnaMoveClause(
   );
 
   // Mate ends the line — nothing else matters.
-  if (facts.isMate) return { text: `${mv.san} — checkmate`, prev: nextPrev, tacticLanded: null };
+  if (facts.isMate) return { text: `${mv.san} — checkmate`, prev: nextPrev, tacticLanded: null, concept: null };
 
   // Tactical outcome, in the DNA register. A winning capture NAMES the piece
   // it wins (concrete + naturally varied by piece) rather than the flat,
@@ -113,17 +117,20 @@ export function dnaMoveClause(
   // walk speaks. buildReviewMoveTeaching never returns null and never
   // restates the move.
   const teach = buildReviewMoveTeaching(fenBefore, san);
-  const concept = teach && !GENERIC_TEACH.test(teach) ? toClause(teach) : null;
+  const rawConcept = teach && !GENERIC_TEACH.test(teach) ? toClause(teach) : null;
+  // An idea the line already said → say it once. The move still gets its
+  // tactical bits; only the repeated concept clause is dropped.
+  const concept = rawConcept && spoken?.has(rawConcept) ? null : rawConcept;
 
   // Compose. A quiet move rides its concept alone. A tactical move leads with
   // the outcome; the concept is added only when it brings a DISTINCT idea and
   // the line hasn't already earned two clauses (keeps each move tight).
   if (bits.length === 0) {
-    return { text: concept ? `${mv.san}, ${concept}` : mv.san, prev: nextPrev, tacticLanded: facts.tacticLanded };
+    return { text: concept ? `${mv.san}, ${concept}` : mv.san, prev: nextPrev, tacticLanded: facts.tacticLanded, concept: rawConcept };
   }
   let text = `${mv.san}, ${bits.join(', ')}`;
   if (concept && bits.length <= 1) text += `, ${concept}`;
-  return { text, prev: nextPrev, tacticLanded: facts.tacticLanded };
+  return { text, prev: nextPrev, tacticLanded: facts.tacticLanded, concept: rawConcept };
 }
 
 /** Sentence form of a tactic invariant ("A fork hits two targets…"). */
@@ -204,9 +211,11 @@ export function narrateDnaLine(
   let prev: PrevCaptureContext = NO_PREV;
   const parts: string[] = [];
   let taught = false;
+  const spoken = new Set<string>();
   for (const p of take) {
-    const { text, prev: np, tacticLanded } = dnaMoveClause(p.fenBefore, p.san, prev);
+    const { text, prev: np, tacticLanded, concept } = dnaMoveClause(p.fenBefore, p.san, prev, spoken);
     prev = np;
+    if (concept) spoken.add(concept);
     if (opts.teachInvariant && !taught && tacticLanded) {
       const inv = tacticInvariant(tacticLanded);
       // Mid-line clause: drop the register's terminal period so the comma-join

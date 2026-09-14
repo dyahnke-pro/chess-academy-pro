@@ -142,3 +142,22 @@ describe('firstTacticInvariant / landedTacticTeaching / teachInvariant', () => {
     expect(taught.match(/two targets at once/g)).toHaveLength(1);
   });
 });
+
+describe('narrateDnaLine — a repeated concept is said once (prod audit 2026-09-14)', () => {
+  it('two consecutive checks do not both say "forces the king to react"', () => {
+    // Qh4-h5+ (h5→e8 diagonal), …Kd8, Qh5-a5+ (a5→d8 diagonal): two checks in a row.
+    const d = new Chess('4k3/8/8/8/7Q/8/8/4K3 w - - 0 1');
+    const f0 = d.fen(); d.move('Qh5+');
+    const f1 = d.fen(); d.move('Kd8');
+    const f2 = d.fen(); d.move('Qa5+');
+    const line = narrateDnaLine([
+      { fenBefore: f0, san: 'Qh5+' },
+      { fenBefore: f1, san: 'Kd8' },
+      { fenBefore: f2, san: 'Qa5+' },
+    ]);
+    const hits = line.match(/forces the king to react/g) ?? [];
+    expect(hits.length, line).toBeLessThanOrEqual(1);
+    expect(line).toContain('Qh5+');
+    expect(line).toContain('Qa5+');
+  });
+});

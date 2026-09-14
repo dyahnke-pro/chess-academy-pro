@@ -517,10 +517,46 @@ Update the phase's status marker + the decisions log as each lands.
   contract-respecting), `dnaLineNarrator`/`reviewMoveTeaching` (Review). Each with
   a fires-for-real test proving the spoken "why" names the concept. NOT done until
   gameplay speaks these, not only puzzles.
-- **P4b — must-build refinements** [pending]: renderer voice-gate compliance,
-  no-solution live-board path, weakness-spine both-directions, importance filter,
-  harness triage. Woven through P1/P4 (listed separately so none is dropped).
-- **P5 — ship** [pending]: ship-check + master-set validation report +
+- **P4b — must-build refinements** [4 of 5 done 2026-09-14]:
+  1. voice gates — every register is authored neutral/you-they (the tests
+     assert no we/our/us on every concept + every technique + every mate
+     register); the spoken path still runs through `voiceFacts` → briefCap →
+     sanitizeForTTS, nothing bypasses `speakInternal`. DONE.
+  2. no-solution live path — `conceptForBoard` walks the surface's existing
+     engine PV (`analysis.topLines[0]`) as the solution surrogate. DONE.
+  3. weakness spine — BOOST direction done (`applyWeaknessBoost` matches the
+     concept clause through `matchTacticPattern`). FEED direction (a MISSED
+     puzzle's computed concept recorded to the weakness model) is still owed:
+     hook points are `PuzzleBoard`'s outcome → `weaknessClusterForPattern(id)`
+     → the spine's cluster record; `captureMisconception` is the LLM slip
+     classifier and is NOT the right recorder for a computed concept.
+  4. importance filter — the concept rides `computePositionFacts`' ranked
+     clauses (tactic/mate 70, technique/principle 39) under the same
+     `criticalityThresholds`; on the line walk `importanceFromSwing` scores the
+     lead. Deliberately NOT gated on "decided": a named technique IS the
+     convert-mode teaching (Lucena in a won rook ending must speak), and a
+     positional platitude never leads (`dropGenericLead`). DONE.
+  5. harness triage buckets — DONE (`conceptCoverage.report.test.ts`).
+- **P5 — ship** [in progress 2026-09-14]: four stacks landed on `main`
+  through the ship-check hook (P4a/P4c → `16709b0`, P2 → `788d0cf`,
+  P2b+P3+tile → `4d9ecf2`). Prod audit `scripts/audit-concept-engine-prod.mjs`
+  (muted, 3-instrument, vacuity-checked: "noticed the void") — first run
+  16/17 against the pre-tile bundle (A1 tile absent, expected), re-run
+  against `index-eJ36YYcf`: **19/19 green** (hub tile → `/tactics/master`
+  mounts; 3 drill puzzles → computed FORK explanation, gate-clean; 37 app
+  events on the loopback listener, 6 narration events, all muted; 0 page
+  errors). G7 note: this surface has no typed input, so the off-canonical
+  probes don't apply; pick-before-load is covered by the Show-Solution wait.
+  The Random Mix pool led with forks every time, so the OTHER concept names
+  are proven by the unit gates on prod code, not by this run. The drill run also caught a narration
+  smell in the prod voice — the same concept clause ("forces the king to
+  react") on every check of one line — fixed: `narrateDnaLine` says an idea
+  once per line. Still owed here: OTA when David asks (only when asked).
+  Rot noted, not yet fixed: `missedTacticService.detectTacticType` is a
+  SECOND one-ply tactic classifier (no reality gate) feeding mistake-puzzle
+  `tacticType`; P6's generator must tag through the concept engine instead,
+  and that classifier should be retired behind the vocabulary bridge.
+- **P5 — ship** [detail]: ship-check + master-set validation report +
   3-instrument prod audit across every surface — INCLUDING live-gameplay
   narration (Learn/Teach-x-opening/Play), with the narration listener confirming
   the concept was SPOKEN mid-game — + OTA (David asked for OTA on completion).
