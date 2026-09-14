@@ -83,6 +83,27 @@ async function main() {
     const board = await waitAny(['puzzle-board'], 30_000);
     check('Master serves a puzzle board', board === 'puzzle-board');
 
+    // ── 3. Concept teaching (David 2026-09-14) — resolving the puzzle TEACHES
+    //    the concept behind the solution, not just an arrow. Show the solution to
+    //    reach the terminal state, then verify the concept block + the master
+    //    Continue teaching-beat pause render.
+    if (board === 'puzzle-board') {
+      // The show-solution button appears only once the puzzle reaches 'playing'
+      // (after the opponent's setup move auto-plays ~800ms in) — wait for it.
+      const showReady = await waitAny(['show-solution-button'], 10_000);
+      const showBtn = page.locator('[data-testid="show-solution-button"]').first();
+      if (showReady === 'show-solution-button' && await showBtn.isVisible().catch(() => false)) {
+        await showBtn.click().catch(() => {});
+        const concept = await waitAny(['puzzle-concept-explanation'], 12_000);
+        check('concept explanation renders on solution (not just an arrow)', concept === 'puzzle-concept-explanation');
+        const conceptText = await text('[data-testid="puzzle-concept-explanation"]');
+        check('concept explanation has teaching text', conceptText.trim().length > 20, conceptText.trim().slice(0, 80));
+        check('master Continue teaching-beat pause present', await visible('concept-continue'));
+      } else {
+        check('show-solution button available to reach concept teaching', false, 'no show-solution button');
+      }
+    }
+
     // Prove the served puzzle is ELITE: the master pool + reach target should
     // pick a 2400+ puzzle. Read it from Dexie (the app seeded the master pool).
     const elite = await page.evaluate(async () => {
