@@ -412,6 +412,22 @@ describe('useReviewPlayback — auto-advance', () => {
     } finally { vi.useRealTimers(); }
   });
 
+  it('a same-game narration REGEN (background deepen) keeps the ply and stays silent (David 2026-09-14)', async () => {
+    const { result, rerender } = renderHook(
+      ({ narration }) => useReviewPlayback({ narration, totalPlies: 4, gameId: 'g1' }),
+      { initialProps: { narration: narr() } },
+    );
+    await act(async () => { speakRecords[0].resolve(); });     // intro on first load
+    await act(async () => { result.current.goForward(); result.current.goForward(); });
+    expect(result.current.currentPly).toBe(2);
+    const speaksBefore = speakRecords.length;
+    // A background deepen re-runs generateReviewNarration → a NEW narration
+    // object for the SAME game. Must not re-speak the intro or snap to ply 0.
+    await act(async () => { rerender({ narration: narr() }); });
+    expect(result.current.currentPly).toBe(2);                 // not snapped back to 0
+    expect(speakRecords.length).toBe(speaksBefore);            // intro not re-spoken
+  });
+
   it('resume MID-sentence re-speaks the interrupted ply (never skips it)', async () => {
     vi.useFakeTimers();
     try {

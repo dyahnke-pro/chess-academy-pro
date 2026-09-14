@@ -177,9 +177,27 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     setCurrentPly(Math.min(initialPly, lastPly));
   }, [initialPly, lastPly]);
 
-  // Reset when a new narration bundle loads (e.g. user reopens review).
+  // Reset when a DIFFERENT game's narration loads (a genuine reopen).
+  //
+  // 🔒 A same-game narration REGENERATION must NOT reset (David 2026-09-14:
+  // "coach said the same thing twice — once during 'sharpening analysis', again
+  // directly after entering"). A background deepen re-runs generateReviewNarration
+  // for the SAME game, producing a new `narration` object; the old
+  // reset-on-every-narration effect then re-fired the intro AND snapped the walk
+  // back to ply 0 mid-stride. Gate the reset on the GAME actually changing
+  // (`gameId`), so a deepen keeps the intro silent and the student where they
+  // are. When no gameId is supplied (legacy callers), fall back to
+  // reset-on-narration-identity so a real reopen still resets.
+  const lastResetGameIdRef = useRef<string | undefined>(undefined);
+  const sawFirstNarrationRef = useRef(false);
   useEffect(() => {
     if (!narration) return;
+    const sameGame = gameId !== undefined
+      ? (sawFirstNarrationRef.current && lastResetGameIdRef.current === gameId)
+      : false; // no id → can't dedupe a regen; treat each bundle as a (re)open
+    lastResetGameIdRef.current = gameId;
+    sawFirstNarrationRef.current = true;
+    if (sameGame) return; // deepen/regeneration of the current game — leave it be
     introSpokenRef.current = false;
     activeTokenRef.current += 1;
     voiceService.stop();
@@ -191,7 +209,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     narrationSeenRef.current = true;
     if (firstLoad && appliedInitialRef.current) return; // keep the deep-linked ply
     setCurrentPly(0);
-  }, [narration]);
+  }, [narration, gameId]);
 
   // Unmount: make sure we don't leave audio playing.
   useEffect(() => {
