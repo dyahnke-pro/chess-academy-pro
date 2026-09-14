@@ -423,7 +423,18 @@ Update the phase's status marker + the decisions log as each lands.
   `StockfishAnalysis`, and `buildTacticsLiveContext` attaches ranked `concepts`
   to the fed package that `formatTacticsSubBlock` renders. The chat/prompt path
   now carries computed concepts on every surface that builds the package.
-- **P4c — wire the LIVE-GAMEPLAY narration computers** [pending, DONE-condition]:
+- **P4c (part 1) — the concept SPEAKS on the computed paths** [done 2026-09-14]:
+  `computePositionFacts` ranks the lead concept as a `concept` clause in the
+  spoken briefing (Play phase transitions, Read-this-position, Learn live coach,
+  review `whyBestMove`), matched to the student's specific hole through the
+  vocabulary bridge; Learn's spoken interjection (`assembleTacticsAnswer` →
+  `voiceFacts`) leads with the concept sentence. Kids excluded (gate test).
+  A wire that fires: gated by tests that a real concept comes OUT.
+- **P4c (part 2) — the remaining computed narration paths** [pending]:
+  `openingGenerator` (Teach-x-opening beats), `dnaLineNarrator` /
+  `reviewMoveTeaching` (review's per-move "why"), `usePhaseNarration`'s own
+  spoken template. Same rule: consume the existing analysis, never a new sweep.
+- **P4c — wire the LIVE-GAMEPLAY narration computers** [in progress — see parts 1–2 above]:
   weave `conceptForBoard` into the per-move narration paths so themes/concepts are
   spoken mid-game — `openingGenerator`/walkthrough (Learn + Teach-x-opening),
   `usePhaseNarration` + `playCommentary`/`coachMoveCommentary` (Play,
