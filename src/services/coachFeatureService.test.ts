@@ -1,12 +1,29 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate } from './coachFeatureService';
+import { detectBadHabits, detectBadHabitsFromGame, buildProfileContext, buildReviewSegments, buildReviewCitations, narrationBoardAccurate, frameTeachingForOpponent } from './coachFeatureService';
 import { explainBestMoveGrounded, describeSacrifice } from './groundedAnswer';
 import { __setLocalDbForTests, __resetLocalDbForTests } from './masterPlayLookup';
 import type { ReviewMoveInput } from './coachFeatureService';
 import { buildUserProfile, buildBadHabit } from '../test/factories';
 import type { UserProfile } from '../types';
+
+describe('frameTeachingForOpponent — perspective (David 2026-09-14)', () => {
+  it("flips a CHECK to the student's king + the opponent's initiative", () => {
+    // Seat-free line is written student-as-checker; for the OPPONENT's check the
+    // king in check is YOURS and THEY hold the initiative.
+    const out = frameTeachingForOpponent('The check forces their king to react — you set the tempo and keep the initiative for a move.');
+    expect(out).toMatch(/your opponent's check/i);
+    expect(out).toMatch(/your king/i);
+    expect(out).not.toMatch(/their king/i);
+    expect(out).toMatch(/they set the tempo/i);
+    expect(out).not.toMatch(/\byou set the tempo\b/i);
+  });
+
+  it('still reframes a piece sentence to the opponent', () => {
+    expect(frameTeachingForOpponent('The knight bears down on d4 and e5.')).toMatch(/your opponent's knight/i);
+  });
+});
 
 // Mock puzzleService (getThemeSkills)
 vi.mock('./puzzleService', () => ({

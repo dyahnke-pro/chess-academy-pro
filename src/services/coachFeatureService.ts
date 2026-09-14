@@ -1031,13 +1031,25 @@ const REVIEW_AUGMENT_TIMEOUT_MS_UNCAPPED = 75000;
  *  transform is clean: a piece subject becomes "Your opponent's <piece>…", a
  *  verb-first observation becomes "Your opponent <verb>…", and "the opponent"
  *  (which meant the student in a neutral sentence) becomes "you". */
-function frameTeachingForOpponent(sentence: string): string {
+export function frameTeachingForOpponent(sentence: string): string {
   // The neutral sentence's "the opponent" means the mover's opponent = the
   // STUDENT, so from the opponent's seat it becomes "you" / "your" (possessive
   // FIRST so "the opponent's" → "your", never the broken "you's").
   const s = sentence.trim()
     .replace(/\bthe opponent's\b/g, 'your')
     .replace(/\bthe opponent\b/g, 'you');
+  // A CHECK sentence needs its INTERNAL pronouns flipped, not just its subject.
+  // The seat-free line is written student-as-checker ("The check forces THEIR
+  // king to react — YOU set the tempo…"), so for the OPPONENT's check the king
+  // in check is YOURS and THEY hold the initiative (David 2026-09-14: "they are
+  // checking me, so it's my king not their king"). Must run before the generic
+  // "^The …" subject swap below, which would leave the inner pronouns wrong.
+  if (/^The check\b/.test(s)) {
+    return s
+      .replace(/^The check\b/, "Your opponent's check")
+      .replace(/\btheir king\b/g, 'your king')
+      .replace(/\byou set the tempo\b/g, 'they set the tempo');
+  }
   // The universal teacher (reviewMoveTeaching) emits "The pawn …" / "The check
   // …" too, so include them — else "The pawn clamps down…" falls to the
   // verb-first branch and reads "Your opponent the pawn clamps down…" (double

@@ -15,6 +15,48 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     expect(t).toMatch(/center/i);
   });
 
+  // David 2026-09-14: the review said Be7 "covers f8, getting into the game" —
+  // f8 is the bishop's own empty origin, and it MISSED that Be7 unpinned the
+  // knight. The move-influence now leads with the unpin and never names a
+  // meaningless covered square.
+  it('leads with the UNPIN when a developing move frees a pinned piece', () => {
+    // 1.d4 d5 2.Nf3 Nf6 3.Bg5 (Nf6 pinned to the queen) 3...e6 4.e3 Be7 —
+    // …Be7 interposes on e7 and unpins the f6-knight.
+    const { fen, san } = beforeLast(['d4', 'd5', 'Nf3', 'Nf6', 'Bg5', 'e6', 'e3', 'Be7']);
+    const t = buildReviewMoveTeaching(fen, san);
+    expect(t).toMatch(/unpins your knight on f6/i);
+  });
+
+  it('never emits the banned "getting into the game" filler / a bogus covered square', () => {
+    // A sweep of quiet developing moves — none may name a meaningless square or
+    // use the retired filler phrase.
+    const samples: string[][] = [
+      ['d4', 'd5', 'Nf3', 'Nf6', 'Bg5', 'e6', 'e3', 'Be7'],
+      ['e4', 'e5', 'Nf3', 'Nc6', 'Be2'],
+      ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4', 'Qc2', 'O-O'],
+      ['e4', 'c5', 'Nf3', 'Nc6', 'Bb5', 'e6', 'O-O', 'Nge7'],
+    ];
+    for (const sans of samples) {
+      const { fen, san } = beforeLast(sans);
+      const t = buildReviewMoveTeaching(fen, san);
+      if (t) expect(t).not.toMatch(/getting into the game/i);
+    }
+  });
+
+  it('a flank pawn striking at the centre is a central fight, not a "cramp" (David 2026-09-14)', () => {
+    // 1.e4 c5 — the Sicilian …c5 attacks d4: fighting for the centre from the flank.
+    const t = buildReviewMoveTeaching(beforeLast(['e4', 'c5']).fen, 'c5');
+    expect(t).toMatch(/fights for the center from the flank/i);
+    expect(t).not.toMatch(/cramps|land.?grab/i);
+  });
+
+  it('a genuine space-gaining pawn advance (no centre strike) still cramps', () => {
+    // 1.d4 d5 2.c4 e6 3.Nc3 Nf6 4.c5 — White's c4-c5 hits b6/d6, not the centre.
+    const { fen, san } = beforeLast(['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'c5']);
+    const t = buildReviewMoveTeaching(fen, san);
+    expect(t).toMatch(/gains space and cramps/i);
+  });
+
   it('calls castling king safety — never restates "castles"', () => {
     const { fen, san } = beforeLast(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'O-O']);
     const t = buildReviewMoveTeaching(fen, san);

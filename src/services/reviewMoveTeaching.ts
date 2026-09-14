@@ -140,6 +140,55 @@ function pieceEyes(chess: Chess, sq: string, type: string, mover: 'w' | 'b'): { 
   return { enemies, controlled };
 }
 
+/** Squares of `color` pieces PINNED by an enemy slider — absolute (to the king)
+ *  OR relative (to a MORE-VALUABLE friendly piece behind them, e.g. a knight
+ *  pinned to the queen). Board-true (chess.js): walking out from each enemy
+ *  rook/bishop/queen, the first piece is a friendly A and the next is a friendly
+ *  of greater value (or the king) with nothing between → A is pinned. Used to
+ *  detect an UNPIN — a developing move whose real point is freeing a pinned
+ *  friend (David 2026-09-14: the review said Be7 "covers f8, getting into the
+ *  game" and missed that it unpinned the knight). */
+function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
+  const out = new Set<string>();
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return out; }
+  const enemy: 'w' | 'b' = color === 'w' ? 'b' : 'w';
+  const val = (t: string): number => (t === 'k' ? 100 : (PIECE_VAL[t] ?? 0));
+  const RAYS: Record<string, number[][]> = {
+    r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
+    b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
+    q: [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]],
+  };
+  for (const row of chess.board()) {
+    for (const cell of row) {
+      if (!cell || cell.color !== enemy || !RAYS[cell.type]) continue;
+      const f0 = cell.square.charCodeAt(0) - 97;
+      const r0 = Number(cell.square[1]) - 1;
+      for (const [df, dr] of RAYS[cell.type]) {
+        let f = f0 + df;
+        let r = r0 + dr;
+        let a: { sq: string; val: number } | null = null;
+        while (f >= 0 && f <= 7 && r >= 0 && r <= 7) {
+          const s = `${String.fromCharCode(97 + f)}${r + 1}`;
+          const pc = chess.get(s as Sq);
+          if (pc) {
+            if (!a) {
+              if (pc.color === color && pc.type !== 'k') a = { sq: s, val: val(pc.type) };
+              else break; // enemy piece, or our king as the first piece → no pin starts here
+            } else {
+              if (pc.color === color && val(pc.type) > a.val) out.add(a.sq); // A pinned to a costlier friend (incl. king)
+              break; // the second piece resolves the line
+            }
+          }
+          f += df;
+          r += dr;
+        }
+      }
+    }
+  }
+  return out;
+}
+
 /**
  * Build a grounded review note for ONE move. `fenBefore` is the position
  * before the move; `san` is the move played. Returns a concrete, board-true
@@ -195,6 +244,29 @@ export function buildReviewMoveTeaching(
   // A minor only skips its developing gloss when it makes a REAL threat.
   const minorAttacksPiece = (mv.piece === 'n' || mv.piece === 'b') && winnableTarget !== null;
 
+  // UNPIN — the move's real point is often freeing a pinned friend (David
+  // 2026-09-14: the review said Be7 "covers f8, getting into the game" and
+  // missed that it unpinned the knight + eyed the enemy bishop). Board-true:
+  // a friendly piece pinned BEFORE the move and free AFTER it (and still on its
+  // square) was unpinned. Leads over the generic developing gloss, but not over
+  // a concrete winnable threat.
+  if (!winnableTarget) {
+    const pinnedBefore = pinnedSquares(fenBefore, mv.color);
+    if (pinnedBefore.size) {
+      const pinnedAfter = pinnedSquares(chess.fen(), mv.color);
+      for (const sq of pinnedBefore) {
+        if (sq === mv.from || pinnedAfter.has(sq)) continue;
+        const freed = chess.get(sq as Sq);
+        if (!freed) continue;
+        const base = `Unpins your ${PIECE_NOUN[freed.type]} on ${sq}`;
+        const eyed = moverEyes.enemies.find((e) => e.type !== 'k');
+        return eyed
+          ? `${base} — and the ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyed.type]} on ${eyed.sq}.`
+          : `${base}, freeing it to join the game.`;
+      }
+    }
+  }
+
   // Minor-piece development — carry what the picture doesn't: the squares it
   // now bears on. Never "develops the knight" (restates the move).
   if (mv.piece === 'n' && !minorAttacksPiece) {
@@ -248,7 +320,22 @@ export function buildReviewMoveTeaching(
       return 'Stakes a claim in the center and opens lines for the pieces.';
     }
     if (!mv.captured && BROAD_CENTER.has(mv.to) && (toRank === 4 || toRank === 5)) {
-      return 'Gains space and cramps the opponent.';
+      // A c/f-file pawn that ATTACKS a central square is fighting for the centre
+      // from the flank — NOT a space-grab / "cramp" (David 2026-09-14: "the first
+      // pawn push on my side is not a land grab as much as fighting for the
+      // centre from the flank"). The Sicilian …c5 attacks d4; the Dutch …f5
+      // attacks e4. A pawn whose captures reach no centre square (e.g. a White
+      // c4-c5 advance hitting d6) genuinely grabs space.
+      const dir = mv.color === 'w' ? 1 : -1;
+      const ff = mv.to.charCodeAt(0) - 97;
+      const rr = Number(mv.to[1]) - 1;
+      const strikesCenter = [[ff - 1, rr + dir], [ff + 1, rr + dir]].some(
+        ([af, ar]) => af >= 0 && af <= 7 && ar >= 0 && ar <= 7
+          && CENTER.has(`${String.fromCharCode(97 + af)}${ar + 1}`),
+      );
+      return strikesCenter
+        ? 'Fights for the center from the flank, striking at the central squares.'
+        : 'Gains space and cramps the opponent.';
     }
     // LUFT — a pawn beside the CASTLED king making an escape square. Board-true:
     // the king sits on its castled back-rank square and this pawn just advanced
@@ -317,11 +404,15 @@ export function buildReviewMoveTeaching(
       ? 'The king marches up — in the endgame it stops hiding and becomes a fighting piece.'
       : 'The king steps toward safety; no place for it in the crossfire yet.';
   }
-  // (f) Last resort — still concrete + true: name a square it now holds.
-  const holds = eyes.controlled[0];
-  return holds
-    ? `The ${PIECE_NOUN[mv.piece]} settles on ${mv.to}, covering ${holds} and getting into the game.`
-    : `The ${PIECE_NOUN[mv.piece]} steps to ${mv.to}, ready to join the attack.`;
+  // (f) Last resort — name a REAL point, never a meaningless empty/own-origin
+  //     square (David 2026-09-14: "Be7 covers f8 … f8 is the starting square,
+  //     that's a bad computed line"). Prefer an enemy piece it now eyes (even a
+  //     defended one — "eyes", not "pressure they must answer", so it isn't
+  //     overstated); otherwise state the development plainly without inventing a
+  //     covered square.
+  const eyedEnemy = eyes.enemies.find((e) => e.type !== 'k');
+  if (eyedEnemy) return `The ${PIECE_NOUN[mv.piece]} eyes the ${PIECE_NOUN[eyedEnemy.type]} on ${eyedEnemy.sq}.`;
+  return `The ${PIECE_NOUN[mv.piece]} develops to ${mv.to}, joining the game.`;
 }
 
 /**
