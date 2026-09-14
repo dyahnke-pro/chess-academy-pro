@@ -42,6 +42,27 @@ happens here*; the invariant says *why the pattern works*, and both are computed
 - The 2,293 signatures are why matchups must be a **general calculator**, not an
   enum. Single-bishop-each-side splits 548 opposite-colored / 774 same-colored.
 
+## Coach is the hub — no bouncing (David 2026-09-14: "I just want ppl to be able to use coach without bouncing all over the app")
+
+The coach is the ONE place. It pulls puzzles IN and serves them in the
+conversation/classroom — the user never navigates to `/tactics`, `/openings`, etc.
+to learn. Puzzle SOURCES the coach can pull from:
+- the **master DB** (`master-puzzles.json`, the 4,132 elite Lichess puzzles),
+- the general puzzle DB (`puzzles.json`),
+- **generated from the user's own games** (P6),
+- **generated master tier** from master/pro games (P6).
+
+All flow through the classroom drill + `conceptForBoard`, in-conversation.
+
+**HARD RULE — every puzzle the coach serves carries its concept teaching (David
+2026-09-14: "Coach needs to be able to teach the concepts behind the puzzles it
+is showing… Otherwise what is the point??").** Teach and generate/serve are two
+abilities, but the coach NEVER shows a puzzle it cannot teach the concept behind.
+A served puzzle with no computed concept is a defect, not a fallback. (If a
+puzzle genuinely maps to no concept — the descriptor-only floor — the coach
+teaches at least the coarse matchup-class / board principle; bare arrow is never
+acceptable from the coach.)
+
 ## Architecture — ONE shared computer, exposed at the chokepoints
 
 Build a single surface-agnostic entry point (mirrors `teachingNoteForBoard`):
@@ -332,6 +353,11 @@ first-class label.
   tagger, rating estimated + validated vs known Lichess ratings. (David: "even
   better if it's from their own games")
 - OPEN: P2 coarse-class-first vs all-named-techniques-at-once. (awaiting David)
+- 2026-09-14: coach is the HUB — pulls puzzles (master DB + general DB +
+  generated) in-conversation so users don't bounce across the app. Every served
+  puzzle carries its concept teaching (bare arrow never acceptable). (David)
+- 2026-09-14: P2 = coarse-matchup-class-first, then named techniques as validated
+  passes (degrade-safe; fastest correct coverage). (my call, logged)
 - OPEN: P6 own-games generation runtime cadence — after every analyzed game, or
   on demand? (revisit when P6 starts)
 
