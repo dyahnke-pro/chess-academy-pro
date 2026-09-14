@@ -365,7 +365,11 @@ export async function answerKidGameQuestion(input: KidGameQuestionInput): Promis
       null,
       () => Promise.resolve(null),
     );
-    groundingBlock = formatTacticsSubBlock(tactics);
+    // KIDS ARE EXCLUDED FROM THE CONCEPT ENGINE BY CONTRACT (kid non-negotiables
+    // + the computed-concept plan): the fed package now carries ranked
+    // `concepts` for every adult surface; the kid prompt must never see them.
+    // Strip before rendering so the block stays board-facts-only.
+    groundingBlock = formatTacticsSubBlock({ ...tactics, concepts: undefined });
   } catch {
     groundingBlock = '';
   }

@@ -327,7 +327,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   }
 
   out.sort((a, b) => b.importance - a.importance);
-  return out.slice(0, max);
+  return dropGenericLead(out).slice(0, max);
 }
 
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
@@ -465,7 +465,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   }
 
   out.sort((a, b) => b.importance - a.importance);
-  return out.slice(0, input.max ?? 3);
+  return dropGenericLead(out).slice(0, input.max ?? 3);
 }
 
 export interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
@@ -503,6 +503,21 @@ const POSITIONAL_INVARIANT: Record<string, { name: string; full: string; short: 
 /** Most-instructive-first, so the lead positional concept is the decisive one. */
 const POSITIONAL_PRIORITY = ['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file', 'bishop-pair', 'pawn-structure', 'development'];
 
+/** Tags SHARP enough to LEAD a quiet position on their own. The rest (bishop
+ *  pair, a pawn weakness, a development lead) are true on nearly every
+ *  middlegame — platitudes as a lead ("empty > generic"). They ride only as
+ *  SUPPORTS behind a real lead. Measured 2026-09-14: letting them lead took
+ *  puzzle silence 57%→3% while agreement did not move — noise, not teaching. */
+const POSITIONAL_LEAD_ELIGIBLE = new Set(['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file']);
+
+/** Drop positional platitudes that would be the LEAD (or the only) concept.
+ *  A generic positional idea is fine as a support behind a real lead. */
+function dropGenericLead(out: ComputedConcept[]): ComputedConcept[] {
+  const lead = out[0];
+  if (!lead || lead.source !== 'positional' || POSITIONAL_LEAD_ELIGIBLE.has(lead.id)) return out;
+  return out.filter((c) => c.source !== 'positional');
+}
+
 /** Board-provable positional concepts present (from boardConcepts), rendered and
  *  priority-ordered. Endgame-type + tactic tags are excluded (owned by the
  *  matchup classifier + detectTactics). Importance sits below tactics/endgame —
@@ -516,7 +531,9 @@ export function positionalConcepts(fen: string): ComputedConcept[] {
     if (!bc.concepts.includes(tag)) continue;
     const t = POSITIONAL_INVARIANT[tag];
     if (!t) continue;
-    out.push({ id: tag, name: t.name, source: 'positional', squares: [], full: t.full, short: t.short, importance: 0.4 });
+    // Sharp ideas may lead a quiet position; generic ones are supports only.
+    const importance = POSITIONAL_LEAD_ELIGIBLE.has(tag) ? 0.4 : 0.3;
+    out.push({ id: tag, name: t.name, source: 'positional', squares: [], full: t.full, short: t.short, importance });
   }
   return out;
 }

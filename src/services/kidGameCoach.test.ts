@@ -232,3 +232,19 @@ describe('answerKidGameQuestion', () => {
     expect(out).toMatch(/knight/i);
   });
 });
+
+describe('kid coach — computed CONCEPTS never reach the kid prompt (contract)', () => {
+  it('formatTacticsSubBlock output for the kid path carries no CONCEPTS block', async () => {
+    const { formatTacticsSubBlock } = await import('./liveTacticsContext');
+    // Simulate what kidGameCoach does: the fed package MAY carry concepts (every
+    // adult surface gets them); the kid path must strip them before rendering.
+    const withConcepts = {
+      immediate: [], hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
+      concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5'], full: 'x', short: 'y', importance: 0.9 }],
+    };
+    const adult = formatTacticsSubBlock(withConcepts);
+    const kid = formatTacticsSubBlock({ ...withConcepts, concepts: undefined });
+    expect(adult).toMatch(/CONCEPTS/);
+    expect(kid).not.toMatch(/CONCEPTS/);
+  });
+});

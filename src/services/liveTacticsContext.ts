@@ -481,7 +481,8 @@ export function formatTacticsSubBlock(tactics: TacticsLiveContext): string {
     tactics.immediate.length > 0 ||
     tactics.hanging.length > 0 ||
     tactics.threats.length > 0 ||
-    tactics.opportunities.length > 0;
+    tactics.opportunities.length > 0 ||
+    (tactics.concepts?.length ?? 0) > 0; // a lone computed concept must still render
   if (!has) return '';
   const lines: string[] = [
     `- Tactical context (PRE-COMPUTED — bounded vocabulary, G3 applies; lookahead ${tactics.lookaheadDepth} half-moves):`,
