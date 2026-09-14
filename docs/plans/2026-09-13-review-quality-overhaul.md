@@ -216,6 +216,80 @@ the weakness profile as a false "mistake" he'd be drilled on.
 
 ---
 
+---
+
+## UPDATE 2026-09-14 — raw-log strings pulled + PostHog impact (supersedes where noted)
+
+Extracted the actual spoken text for every review finding from the 300-line log,
+and queried PostHog. Corrections + confirmations:
+
+**CONFIRMED with exact strings:**
+- **B2 (Be7 covers f8)** — ply 12 spoke verbatim: *"You were a touch better …
+  and you played bishop to e7, covering f8 and getting into the game."* Ply 13
+  (opponent Nd2): *"Their knight settles on d2, covering f1 and getting into the
+  game."* Both are the (f) last-resort at `reviewMoveTeaching.ts:320-324`; the
+  opponent one is that string run through `frameTeachingForOpponent`. Root cause
+  stands exactly.
+- **#2 c5 "land-grab"** — ply 2 spoke: *"That c5 push is a genuine land-grab; the
+  other side starts tripping over its own pieces for room."* SOURCE: the computed
+  facet `reviewMoveTeaching.ts:250-251` ("Gains space and cramps the opponent")
+  fires for a broad-center pawn to rank 4/5 — INCLUDING a flank c-pawn that's
+  really contesting the center — and the house-voice reword prompt
+  `coachApi.ts:2941-2942` turns it into "a real land-grab … tripping over its own
+  pieces for room." Two-part fix: (a) c5/f5 fighting the center ≠ "cramps"; gate
+  the space-cramp facet to genuine space-gainers; (b) the reword amplifies it.
+
+**CORRECTIONS to the first pass:**
+- **D1 reframed** — the review did NOT fail to find the tactic. Ply 18 spoke
+  *"…there was a forcing move here: knight takes d2 wins by force, and this quiet
+  move lets it go."* The engine SEES Nxd2 wins. The real failures are two:
+  1. **Question mis-route (C1/#10) — SAME square, wrong capture.** The trap card
+     (ply ~15) asked *"Your opponent's knight on d2 looks like it's just sitting
+     there. Do you take it?"* → *"It's poisoned. Grab it with queen takes d2,
+     check … costs you a decisive amount of material."* So it surfaced **Qxd2
+     (poisoned)** as the question while **Nxd2 (winning)** was the real shot on
+     the same square. `buildTrapQuestion` found the poisoned capture; `find-shot`
+     didn't fire because it requires the student was ALREADY clearly better
+     (`reviewQuestionPlan.ts:106-108`). Disease confirmed.
+  2. **Classification ≠ narration (#11).** His actual played Nxd2 graded an
+     inaccuracy while the narration path calls it "wins by force" — the two use
+     different code (`classifyCpLoss` vs `principleVoice`). The classification
+     path never consulted the tactic the narration path already computed. NB: the
+     logged walk only covers **plies 0-20**; the game is **79 moves** (Finding
+     260, analyzed depth=16 in 154.2s). His "brilliant" Nxd2 is likely beyond
+     ply 20 — pinning #11's exact grade needs the full-game classification, not
+     this window. Fix D2 (feed the tactic/sac signal into classification) either
+     way.
+- **E3 typo** — his build DID speak *"Checks, captured, threats"* (Finding 27),
+  but current code says *"captures"* (`principleVoice.ts:147`) — already fixed on
+  web; his `f8e0fd9` is behind. No action beyond shipping him a build.
+- **E4 confirmed non-bug** — master-play `source=none` (Finding 296) is the
+  Bowdler Qh5 line (queen on h5); the normal Sicilian positions returned
+  186k/179k games (Findings 299/300). Correct silence.
+
+**POSTHOG IMPACT (native / App Store, last 30d, David + reviewers + bots excluded):**
+| event | fires | devices |
+|---|---|---|
+| misconception_captured | 793 | 11 |
+| weakness_captured | 791 | 8 |
+| coach_opponent_masters_miss | 16 | 4 |
+| review_started | 14 | 3 |
+| review_find_shot_asked | 11 | 3 |
+| review_completed | 6 | 2 |
+| coach_inaccuracy_called | 5 | 2 |
+| review_trap_asked | 1 | 1 |
+
+Reading: the **weakness/misconception capture pipeline is HIGH-VOLUME for real
+paying users** (≈790 captures across 8-11 devices) — this is where #11/D2 bites
+hardest: a mis-graded brilliancy becomes a false drilled weakness, and 8-11 real
+users are accumulating hundreds of entries. The review WALK itself is low-volume
+(14 starts / 3 devices) — so the narration bugs (#1-#7) hit the few who walk,
+while the CLASSIFICATION bug reaches the many via the capture pipeline fed by
+PLAY. That reprioritizes D2 up. (Error tracking / `$exception` autocapture is OFF
+in this project, so no crash data available.)
+
+---
+
 ## Fix order (tight loops, per CLAUDE.md — clarify with David before each build)
 1. **A1/A2/A3** — deterministic structural (dup intro, auto-resume, arrow sync).
 2. **B1 + sweep (E1), B2** — perspective + move-influence quality.
