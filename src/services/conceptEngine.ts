@@ -317,11 +317,10 @@ export function conceptForSolution(
 ): ComputedConcept[] {
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
-
-  try {
-    const eg = endgameConceptFor(fen);
-    if (eg) { if (eg.source !== 'technique') eg.importance = 0.5; out.push(eg); seen.add(eg.id); }
-  } catch { /* not an ending */ }
+  // A named endgame technique (the opposition, …) is REACHED by the solution, not
+  // present at the start — so scan for it along the student's moves and prefer it
+  // over the generic start-position principle.
+  let techConcept: ComputedConcept | null = null;
 
   try {
     const c = new Chess(fen);
@@ -341,6 +340,10 @@ export function conceptForSolution(
         if (score > bestScore) {
           bestScore = score;
           best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, from: mv.from, to: mv.to };
+        }
+        if (!techConcept) {
+          const tech = endgameConceptFor(fenAfter);
+          if (tech && tech.source === 'technique') techConcept = tech;
         }
       }
     }
@@ -362,6 +365,17 @@ export function conceptForSolution(
       }
     }
   } catch { /* unparseable — skip */ }
+
+  // Endgame teaching beat: the technique reached during the solution (preferred),
+  // else the start-position matchup principle.
+  try {
+    const eg = techConcept ?? endgameConceptFor(fen);
+    if (eg && !seen.has(eg.id)) {
+      if (eg.source !== 'technique') eg.importance = 0.5;
+      out.push(eg);
+      seen.add(eg.id);
+    }
+  } catch { /* not an ending */ }
 
   out.sort((a, b) => b.importance - a.importance);
   return out.slice(0, opts.max ?? 3);
