@@ -109,6 +109,29 @@ Anti-fake gate ("a wire that doesn't fire is not a wire"): each surface ships a
 test proving a REAL concept comes OUT for a real position — not that the import
 exists.
 
+### TWO-FOR-ONE — this feeds LIVE GAMEPLAY narration, not just puzzles (David 2026-09-14: "You're not done until coach can speak these themes and concepts during game play as well as puzzles")
+
+The same computed themes/concepts that TEACH a puzzle must ENRICH the per-move
+narration during Learn, Teach-x-opening, and Play. This is the whole "carry
+everywhere" point and it is a DEFINITION-OF-DONE condition, not a stretch goal.
+
+CRITICAL wiring note: the puzzle path and the live-gameplay narration path are
+DIFFERENT code. Learn / Teach-x-opening narrate through `openingGenerator`
+(`generateOpeningFromDbNarration`) + the walkthrough runtime; Play narrates
+through `usePhaseNarration` + `playCommentary` / `coachMoveCommentary`; Review
+through `dnaLineNarrator` / `reviewMoveTeaching`. None of those is the chat
+envelope. So `conceptForBoard` must be woven into the **per-move narration
+computers themselves**, so the spoken "why" of a move names the theme/concept it
+serves ("…Nd5, planting the outpost AND eyeing the fork on c7"), not just the
+chat surface. Respecting each contract: Learn/Teach narrate actively per move;
+Play stays silent-until-asked + phase-transitions; the importance filter still
+gates so it doesn't narrate a concept on every quiet move.
+
+**DONE = the coach speaks these themes/concepts during LIVE GAMEPLAY (Learn
+walkthrough per-move, Teach-x-opening, Play phase-transitions/on-ask) AND on
+puzzles, proven by the 3-instrument audit + narration listener.** "Puzzles pass"
+is not done.
+
 ---
 
 ## FULL DETECTOR + COMPUTER INVENTORY (leave nothing out)
@@ -343,12 +366,20 @@ first-class label.
 - **P3 — consolidate** `puzzleConceptHint` → one source [pending].
 - **P4 — wire chokepoints** [pending]: `envelope.ts:741` + `coachApi.ts:5395`;
   each surface with a fires-for-real test + its speaking contract (table above).
+- **P4c — wire the LIVE-GAMEPLAY narration computers** [pending, DONE-condition]:
+  weave `conceptForBoard` into the per-move narration paths so themes/concepts are
+  spoken mid-game — `openingGenerator`/walkthrough (Learn + Teach-x-opening),
+  `usePhaseNarration` + `playCommentary`/`coachMoveCommentary` (Play,
+  contract-respecting), `dnaLineNarrator`/`reviewMoveTeaching` (Review). Each with
+  a fires-for-real test proving the spoken "why" names the concept. NOT done until
+  gameplay speaks these, not only puzzles.
 - **P4b — must-build refinements** [pending]: renderer voice-gate compliance,
   no-solution live-board path, weakness-spine both-directions, importance filter,
   harness triage. Woven through P1/P4 (listed separately so none is dropped).
 - **P5 — ship** [pending]: ship-check + master-set validation report +
-  3-instrument prod audit across every surface + OTA (David asked for OTA on
-  completion).
+  3-instrument prod audit across every surface — INCLUDING live-gameplay
+  narration (Learn/Teach-x-opening/Play), with the narration listener confirming
+  the concept was SPOKEN mid-game — + OTA (David asked for OTA on completion).
 - **P6 — puzzle generation** [pending]: ONE source-agnostic generator (engine
   swing → uniqueness → soundness → concept-detector tag → rating estimator →
   dedupe), pointed at own games (runtime, off `autoAnalyzeGame`) AND master/pro
@@ -389,6 +420,10 @@ first-class label.
 - 2026-09-14: Master Level reachable from BOTH the coach AND a dedicated square in
   the Tactics hub (`TacticsPage.tsx` → `/tactics/master`); coach-as-hub does not
   remove the Tactics entry. (David)
+- 2026-09-14: TWO-FOR-ONE / DONE-condition — the concept engine feeds LIVE
+  gameplay narration (Learn, Teach-x-opening, Play), woven into the per-move
+  narration computers, not just puzzle surfaces. Not done until the coach speaks
+  themes/concepts during gameplay. (David)
 - OPEN: P6 own-games generation runtime cadence — after every analyzed game, or
   on demand? (revisit when P6 starts)
 
