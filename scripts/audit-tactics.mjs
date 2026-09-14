@@ -713,6 +713,11 @@ async function main() {
       { label: 'player rating header', fn: () => visible('player-rating-header') },
       { label: 'classic + mistakes cross-links',
         fn: async () => (await visible('classic-trainer-link')) && (await visible('my-mistakes-link')) },
+      // Reach ladder (2026-09-14): the badge is now the reach ladder (Level N ·
+      // rating), and the Master Level entry is present.
+      { label: 'reach-ladder badge shows Level',
+        fn: async () => /Level\s+\d+\s+·\s+\d+/.test((await page.locator('[data-testid="player-rating-value"]').textContent().catch(() => '')) || '') },
+      { label: 'Master Level entry present', fn: () => visible('master-level-link') },
     ],
   );
 
@@ -748,6 +753,33 @@ async function main() {
         fn: async () => (await visible('puzzle-board')) || (await visible('loading')) },
       { label: 'end-session button when puzzle-board',
         fn: async () => (await visible('puzzle-board')) ? await visible('end-session') : true },
+    ],
+  );
+
+  // ═══════════════════════════════════════════════════════════════════
+  // /tactics/master — Master Level (2026-09-14 reach ladder P3)
+  // Lazy-fetches the elite CC0 pool from /data/master-puzzles.json and
+  // auto-starts on the masterReachState ladder (2400+ band).
+  // ═══════════════════════════════════════════════════════════════════
+  await page.goto(`${BASE_URL}/tactics/master`, { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-testid="adaptive-puzzle-page"]').waitFor({ timeout: 10_000 });
+  await scenario(
+    '18b-master-level-loads-elite-puzzle',
+    async () => {
+      // master-loading shows while the pool fetches, then it auto-starts and a
+      // puzzle board renders (proving the lazy fetch + elite selection worked).
+      await waitUntil(
+        async () => (await visible('puzzle-board')) || (await visible('loading')),
+        30_000,
+      );
+    },
+    SETTLE_PUZZLE,
+    [
+      { label: 'Master Level title', fn: async () =>
+        /Master Level/.test((await page.locator('h1').first().textContent().catch(() => '')) || '') },
+      { label: 'auto-started to a puzzle board (no difficulty select)',
+        fn: async () => (await visible('puzzle-board')) || (await visible('loading')) },
+      { label: 'reach badge present (own master ladder)', fn: () => visible('player-rating-header') },
     ],
   );
 
