@@ -308,17 +308,26 @@ Shipped to `main` (web), ship-check green, tests added for each:
 - ✅ **#5 / B1 (perspective half)** an opponent's check → "your king" + "they set
   the tempo".
 
-REMAINING — repro-dependent, need HIS game (`chesscom-1025633348`) driven on
-prod, NOT guessed (empty > generic > invented):
-- ⏳ **#5 (redundancy half)** "comes with check" doubling — lives in the
-  proposed-line narrators (pvPlayback / dnaLineNarrator / continuationMoveNarration);
-  pin the exact one against his line.
-- ⏳ **#4 / B3** proposed-line "generic" — the facts ARE computed (plyFactsString/PV);
-  need to see what his line produced to judge the gap.
-- ⏳ **#9 / B4** narration cutoff at ply 15 — a voice-idle/token race in
-  `playBetterLineOut`; needs his line to repro.
-- ⏳ **#8/#10/#12 / C1** question routing (Qxd2-poisoned vs Nxd2-winning) — #11's
-  deepening now surfaces the tactic; verify the find-shot vs trap routing on his game.
+RESOLVED via the REAL-GAME repro on prod (`scripts/audit-davids-bowdler-repro.mjs`
+drives his actual game `vribak vs Knight_Mare_01`, chess.com daily 1025633348):
+- ✅ **#5** de-duped + seat-neutral — `dnaMoveClause` dropped the redundant
+  "with check" bit; the check teaching is "Forces the king to react, seizing the
+  initiative" ("the king", not "their king"; no "you set the tempo"). VERIFIED on
+  his game: "bishop to b5, check forces the king to react and seizes the
+  initiative" — one check, right perspective.
+- ✅ **#11 VERIFIED on his game**: 8...Nxe4 now graded **great** (was the
+  inaccuracy he flagged). No false weakness.
+- ⭕ **#4 / B3 (generic) — NOT reproducing** on current build: the proposed lines
+  are rich + computed ("their h5 queen is completely undefended… count it up:
+  one attacker, zero defenders"). His complaint was the old build `f8e0fd9`.
+- ⭕ **#8/#10/#12 / C1 — NOT reproducing**: no remedial trap/find-shot fired; the
+  d2-poison is explained INLINE in the better-line ("the king on e1 has d2
+  covered, so grabbing it costs nine points to win three"). Old build.
+- 📱 **#9 / B4 (cutoff)** — no text cutoff in the repro (every captured line is
+  complete, 0 errors). Likely the old build OR a live audio interrupt that only
+  shows on-device; flagged for David to confirm on the OTA build.
+
+All code findings shipped to `main` + verified on prod. OTA cut with everything.
 
 ## Fix order (tight loops, per CLAUDE.md — clarify with David before each build)
 1. **A1/A2/A3** — deterministic structural (dup intro, auto-resume, arrow sync).
