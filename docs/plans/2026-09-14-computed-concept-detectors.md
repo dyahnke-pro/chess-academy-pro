@@ -468,6 +468,22 @@ native-import problem).
 Lesson: run the harness in the env that matches production (mocked engine), never a
 bare `tsx` script that silently loses the engine chain.
 
+## §E positional finding (2026-09-14) — SILENCE IS NOT THE METRIC, AGREEMENT IS
+
+Wiring the board-provable positional tags took puzzle silence **57% → 3.3%** —
+and agreement **did not move (22.6%)**; fires-no-tag ballooned to 74%. Because
+"development lead / bishop pair / pawn weakness" are TRUE on nearly every
+middlegame: platitudes. Replacing silence with a generic truth is not teaching
+("empty > generic"). Rule adopted: **positional platitudes may SUPPORT but never
+LEAD** — only sharp, decision-bearing ideas (passed pawn, knight outpost, king
+safety, pawn storm, active rook, open file) can lead a quiet position; the
+generic tags ride only behind a real lead. Watch the AGREE line, never the
+SILENT line, when judging a change.
+
+Also caught by the kid gate test: `formatTacticsSubBlock` dropped the whole block
+when a concept was the ONLY computed content (its `has` gate didn't count
+concepts) — a quiet rook ending would have rendered nothing. Fixed; gate holds.
+
 ## P1 validation finding (2026-09-14 — the harness did its job) — SUPERSEDED BY THE CORRECTION ABOVE
 
 Ran `conceptForSolution` over 1,500 master puzzles (agree / fires-no-tag / silent):
