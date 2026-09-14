@@ -2785,9 +2785,17 @@ export function assembleTacticsAnswer(
   if (tactics.boardFacts?.mateInOne) {
     parts.push(`There is checkmate in one: ${tactics.boardFacts.mateInOne}.`);
   }
-  // Immediate tactics on the board now — voice the engine's own descriptions.
+  // THE COMPUTED CONCEPT first (David 2026-09-14): the ranked lead concept from
+  // the same analysis carries the instance AND the invariant ("Knight on d5
+  // forks … — a fork hits two targets at once …"), already gate-clean. It
+  // supersedes the bare description of the same tactic below (no double-speak).
+  const leadConcept = tactics.concepts?.[0];
+  const spokenConceptId = leadConcept?.source === 'tactic' ? leadConcept.id : null;
+  if (leadConcept && leadConcept.source !== 'positional') parts.push(leadConcept.full);
+  // Immediate tactics on the board now — voice the engine's own descriptions
+  // (skipping the one the concept sentence already taught).
   for (const t of tactics.immediate.slice(0, 2)) {
-    if (t.description) parts.push(`${t.description}.`);
+    if (t.description && t.type !== spokenConceptId) parts.push(`${t.description}.`);
   }
   // The STUDENT's pieces left hanging — warn concretely.
   for (const h of tactics.hanging.filter((p) => p.color === sc).slice(0, 2)) {

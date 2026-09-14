@@ -238,8 +238,10 @@ export interface ConceptForBoardOptions {
   max?: number;
   /** The surface's EXISTING engine read (the eval-bar analysis
    *  `buildFedTacticsContext` guarantees). Never fetched here — one computer.
-   *  When present, its PV is walked and its swing ranks the concepts. */
-  analysis?: StockfishAnalysis | null;
+   *  When present, its PV is walked and its swing ranks the concepts. Only the
+   *  fields actually read are required, so a `Pick` (as positionFacts holds)
+   *  and the full analysis both fit. */
+  analysis?: Pick<StockfishAnalysis, 'topLines' | 'evaluation'> | null;
   /** Student rating — scales the PV walk depth (`pvDepthForRating`) and the
    *  shared criticality thresholds. Default 1500. */
   rating?: number;

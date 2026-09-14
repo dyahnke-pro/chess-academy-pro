@@ -1549,3 +1549,19 @@ describe('assembleLastMoveAnswer (2026-09-08 — "what just moved")', () => {
   });
 });
 
+
+describe('groundedAnswer — Learn voices the computed concept, not just the bare description', () => {
+  it('leads with the ranked concept sentence and does not repeat the same tactic as a bare description', async () => {
+    const { assembleTacticsAnswer } = await import('./groundedAnswer');
+    const tactics = {
+      immediate: [{ type: 'fork', description: 'Knight on d5 forks queen on c7 and rook on f6', squares: ['d5', 'c7', 'f6'], side: 'student' as const }],
+      hanging: [], threats: [], opportunities: [], lookaheadDepth: 2,
+      concepts: [{ id: 'fork', name: 'Fork', source: 'tactic' as const, squares: ['d5', 'c7', 'f6'], full: 'Knight on d5 forks queen on c7 and rook on f6 — a fork hits two targets at once, and only one can escape — the other falls.', short: 'Fork — two targets, one falls.', importance: 0.9 }],
+    } as unknown as import('../coach/types').TacticsLiveContext;
+    const out = assembleTacticsAnswer(tactics, 'white', "what's going on");
+    expect(out).not.toBeNull();
+    expect(out!.facts).toContain('a fork hits two targets at once');
+    // The bare description of the SAME fork must not be spoken a second time.
+    expect(out!.facts.match(/Knight on d5 forks/g)?.length ?? 0).toBe(1);
+  });
+});

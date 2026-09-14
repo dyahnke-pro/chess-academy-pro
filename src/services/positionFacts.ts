@@ -26,7 +26,9 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { structurePlan } from './boardPlan';
-import { matchClauseKind, boostFor, type WeaknessSignal } from './weaknessSignal';
+import { matchClauseKind, matchTacticPattern, boostFor, type WeaknessSignal } from './weaknessSignal';
+import type { TacticPatternType } from '../types/tacticTypes';
+import { conceptForBoard } from './conceptEngine';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -94,7 +96,7 @@ export interface PositionFactsResult {
   clauses: ClauseItem[];
 }
 
-export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert';
+export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept';
 
 /** STATUS bands from the student's POV (cp). The general's opening read. */
 type StatusBand = 'lost' | 'worse' | 'level' | 'better' | 'winning';
@@ -127,7 +129,16 @@ export function statusBandChange(studentCp: number, prevStudentCp: number): stri
   if (cur === 'worse') return `You've drifted to the worse side here.`;
   return `The edge is gone — it's level again.`;
 }
-export interface ClauseItem { kind: ClauseKind; rank: number; text: string; }
+export interface ClauseItem {
+  kind: ClauseKind;
+  rank: number;
+  text: string;
+  /** For a `concept` clause: the concept's id (a TacticPatternType for tactic
+   *  concepts) so the weakness boost can match it to the student's SPECIFIC
+   *  hole through the canonical vocabulary bridge — a fork concept lands on a
+   *  fork-blind student's `analysis:tactic:fork`, not on a generic bucket. */
+  conceptId?: string;
+}
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
 export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
@@ -283,8 +294,23 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* no fundamental → stay silent */ }
   }
 
+  // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
+  // analysis this briefing already holds (David 2026-09-14: one computational
+  // system; "coach needs to be able to teach the concepts … during game play").
+  // conceptForBoard walks the engine's PV and ranks by its swing; the lead joins
+  // the briefing as a ranked `concept` clause (tactic 70 — under a must-defend,
+  // above a generic "critical moment"; technique/principle 39 — just above
+  // `fundamental`, it IS the teaching idea). Positional leads are excluded here:
+  // `fundamental` / `structure-plan` already carry them — no walk-over. Never
+  // fails the briefing.
+  let concept: { id: string; source: string; full: string } | null = null;
+  try {
+    const lead = conceptForBoard(fen, { analysis, studentSide: studentColor === 'w' ? 'white' : 'black', rating, max: 1 })[0];
+    if (lead && lead.source !== 'positional') concept = { id: lead.id, source: lead.source, full: lead.full };
+  } catch { concept = null; }
+
   const clauses = applyWeaknessBoost(
-    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger }),
+    buildClauses({ importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, concept }),
     input.studentWeaknesses ?? [],
   );
   return {
@@ -306,7 +332,13 @@ function applyWeaknessBoost(clauses: ClauseItem[], signals: readonly WeaknessSig
   if (signals.length === 0) return clauses;
   let changed = false;
   const boosted = clauses.map((c) => {
-    const match = matchClauseKind(c.kind, signals);
+    // A CONCEPT clause matches the student's hole by its concept id through the
+    // canonical vocabulary bridge (weakness → selector wire, unified-coach P1):
+    // a fork concept meets a fork-blind student's hole exactly. Non-tactic
+    // concepts (technique/matchup) have no honest single-hole mapping → no boost.
+    const match = c.kind === 'concept'
+      ? (c.conceptId ? matchTacticPattern(c.conceptId as TacticPatternType, signals) : null)
+      : matchClauseKind(c.kind, signals);
     if (!match) return c;
     const b = boostFor(match);
     if (b <= 0) return c;
@@ -341,8 +373,12 @@ function buildClauses(a: {
   studentEvalCp: number;
   kingExposure: KingExposure | null;
   centralKingDanger: CentralKingDanger | null;
+  /** The lead COMPUTED CONCEPT of the position (conceptEngine, from the same
+   *  analysis) — the teachable idea, joined to the briefing as a ranked fact.
+   *  Null when nothing teachable / positional-only (no walk-over). */
+  concept: { id: string; source: string; full: string } | null;
 }): ClauseItem[] {
-  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger } = a;
+  const { importance, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, tradeDanger, opponentIntent, statusText, structureText, fundamentalText, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   // A latent danger to your own king — or a STATUS band-change, or a live
   // must-defend (a piece hangs next move) — is worth a word even in an otherwise
   // quiet/decided spot; none of these needs the importance gate to fire (B#1: a
@@ -411,6 +447,24 @@ function buildClauses(a: {
   // In the opening, nothing but a real hanging threat / castle-now speaks — no
   // "critical moment" / "knife-edge" / "best piece, trade it off" on move one.
   if (openingPhase) return ranked;
+
+  // THE COMPUTED CONCEPT — the teachable idea of this position, from the SAME
+  // analysis this briefing already holds (David 2026-09-14: one computational
+  // system; "coach needs to be able to teach the concepts … during game play").
+  // conceptForBoard walks the engine's PV and ranks by its swing; here the lead
+  // concept joins the spoken briefing as a ranked fact:
+  //   • a tactic/mate concept (the engine's decisive line) ranks 70 — under a
+  //     must-defend (75), above a generic "critical moment" (65): a NAMED winning
+  //     idea beats an unnamed one;
+  //   • an endgame technique/principle ranks 39 — just above `fundamental` (38),
+  //     because it IS the teaching idea for the position.
+  // Positional supports are excluded here on purpose: `fundamental` and
+  // `structure-plan` already carry them — no walk-over. Text is the engine's
+  // gate-clean sentence, spoken verbatim (G0).
+  if (concept) {
+    const rank = concept.source === 'tactic' ? 70 : 39;
+    ranked.push({ kind: 'concept', rank, text: concept.full, conceptId: concept.source === 'tactic' ? concept.id : undefined });
+  }
 
   // Decision leverage — framed by whose move it is.
   if (studentToMove) {
