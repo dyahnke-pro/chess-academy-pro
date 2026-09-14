@@ -136,9 +136,24 @@ every surface reads it.
   puzzles (71% multi-move, 2400–3035) → `public/data/master-puzzles.json` (lazy,
   `seedMasterPuzzles`). `/tactics/master` route + entry; own `masterReachState`.
   Gate: `masterPuzzles.test.ts`.
-- P4 review sequences — pending
-- P5 mistakes/teach fold-in — pending
+- P4 review sequences — DONE. The review "Spot-the-sequence" multi-move ask is
+  now reach-targeted: `reachAskDepth(reach)` caps how many moves the student must
+  find UNAIDED (+1 stretch, a step beyond level), the tail auto-plays narrated.
+  A higher reach is asked more, a lower reach less — "no easy questions for
+  higher-rated players" (`reachRating.ts` + `CoachGameReview.tryStartSequence`/
+  `handleSequenceMove`). Gate: reachAskDepth tests.
+- P5 mistakes/teach fold-in — DONE (scoped). `TacticDrillPage` ("teach me
+  tactics" theme drill) now SEEDS its starting difficulty from the shared reach
+  ladder (initial + startSession), so a strong player never gets easy drills
+  there either. Its bounded 10-puzzle ramp is kept (distinct ceiling-finder UX).
+  Train-My-Mistakes replays the student's ACTUAL past mistakes (SRS-driven, no
+  rating-band selection) — there is no reach knob to fold, so it is correctly
+  left as-is. Full streak-write unification of the drill's distinct ramp is
+  deliberately NOT done: driving the one reach number from two different ramp
+  models (the 80% float vs the drill's aggressive bumps) would make it
+  inconsistent — seeding from it is the sound unification.
 
 ### Deploy log
-- 2026-09-14: P1–P3 shipped as milestone 1 (controller + felt tactics + Master
-  Level). P4 (review sequences) + P5 (mistakes/teach fold-in) to follow.
+- 2026-09-14: P1–P3 shipped + prod-verified (11/11 audit-reach-ladder-prod).
+  P4 (review reach-targeted sequences) + P5 (drill seeds from reach) shipped as
+  milestone 2. OTA to native cut after prod verification.

@@ -36,6 +36,7 @@ import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '.
 import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
 import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
+import { resolveReachState, reachAskDepth } from '../../services/reachRating';
 import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
 import { voiceFacts, voiceReviewLines } from '../../services/coachApi';
 import { logMisconception } from '../../services/misconceptionService';
@@ -1942,7 +1943,14 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!line || !line.delivers || line.plies.length < 4) return false;
     // The student just found/saw plies[0]; the defender's reply auto-plays;
     // the ask covers the MOVER plies from index 2 on.
-    const totalAsk = moverPlies(line.plies.slice(2)).length;
+    const fullAsk = moverPlies(line.plies.slice(2)).length;
+    if (fullAsk === 0) return false;
+    // Reach-target the ask (docs/plans/2026-09-14-adaptive-reach-ladder.md P4):
+    // ask as many unaided moves as the reach ladder warrants (+1 stretch, a step
+    // beyond level), capped at the line's real length — the tail then auto-plays.
+    const prof = useAppStore.getState().activeProfile;
+    const reach = resolveReachState(prof?.preferences?.reachState, prof?.puzzleRating ?? 1200);
+    const totalAsk = Math.min(fullAsk, reachAskDepth(reach.rating));
     if (totalAsk === 0) return false;
     const voice = (line as PvLine & { __voice?: (string | null)[] }).__voice
       ?? line.plies.map(() => null);
@@ -2046,6 +2054,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setWalkExplorationSan(defender.san);
           playMoveSound(defender.san);
         }
+        // The reach ladder caps how many moves are asked unaided (P4). If the
+        // student has found that many but the line runs deeper, auto-play the
+        // TAIL (narrated) rather than asking to the end — a lower reach is asked
+        // less, a higher reach more, and it always stretched one past level.
+        const askedEnough = reached >= state.totalAsk;
         if (done) {
           captureEvent('review_sequence_completed', { reached, total: state.totalAsk, at_ply: state.atPly });
           const bravo = 'You saw the whole thing — that was the line, move for move.';
@@ -2055,6 +2068,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           setWalkExplorationFen(null);
           setWalkExplorationSan(null);
           if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
+        } else if (askedEnough) {
+          captureEvent('review_sequence_ask_met', { reached, total: state.totalAsk, at_ply: state.atPly });
+          try { await reviewSay('You found it — here’s the rest of the line.'); } catch { /* voice off */ }
+          if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
+          void runSequencePlayback({ ...state, reached }, afterDefender);
         } else {
           setSeqState({ ...state, ptr: afterDefender, reached });
           void reviewSay(defender ? `${defender.san}. And now?` : 'And now?').catch(() => undefined);

@@ -245,3 +245,17 @@ export function recordReachResult(
 export function reachTier(rating: number): number {
   return Math.max(1, Math.floor(rating / TIER_BAND));
 }
+
+/**
+ * How many moves of a review multi-move sequence the student must find UNAIDED
+ * before the tail auto-plays. Scales with the reach ladder and adds a +1 stretch
+ * so the ask always sits a little BEYOND their comfort level (David 2026-09-14:
+ * "a couple hundred elo above the player's current level… push them to find
+ * things beyond their skill level"). The caller caps this at the line's real
+ * length — a short/forcing line can't ask more moves than it has. A game
+ * position has no Elo, so the line's difficulty is handled by that cap: a longer
+ * line naturally exposes more of the ask as reach climbs. */
+export function reachAskDepth(reachRating: number): number {
+  const base = Math.max(1, Math.floor((reachRating - 800) / 400)); // 1200→1, 1600→2, 2000→3, 2400→4
+  return base + 1; // the stretch — push just past their level
+}

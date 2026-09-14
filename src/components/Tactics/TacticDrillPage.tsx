@@ -10,6 +10,7 @@ import {
   THEME_MAP,
 } from '../../services/puzzleService';
 import { getPuzzleIdsByOpening } from '../../services/puzzlesByOpening';
+import { resolveReachState } from '../../services/reachRating';
 import { useAppStore } from '../../stores/appStore';
 import { PuzzleBoard } from '../Puzzles/PuzzleBoard';
 import type { PuzzleOutcome } from '../Puzzles/PuzzleBoard';
@@ -71,8 +72,15 @@ export function TacticDrillPage(): JSX.Element {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [solved, setSolved] = useState(0);
   const [failed, setFailed] = useState(0);
+  // Seed from the shared reach ladder (docs/plans/2026-09-14-adaptive-reach-
+  // ladder.md P5) so a higher-rated player never gets easy drills here either —
+  // the drill keeps its own bounded 10-puzzle ramp, but STARTS at the student's
+  // reach, unifying the starting difficulty across every tactics surface.
   const [sessionRating, setSessionRating] = useState(
-    activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+    () => resolveReachState(
+      activeProfile?.preferences?.reachState,
+      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+    ).rating,
   );
   const [ratingDelta, setRatingDelta] = useState<number | null>(null);
 
@@ -125,7 +133,10 @@ export function TacticDrillPage(): JSX.Element {
   /** Start or restart a drill session. */
   const startSession = useCallback(async (): Promise<void> => {
     setPhase('loading');
-    const startRating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200;
+    const startRating = resolveReachState(
+      activeProfile?.preferences?.reachState,
+      activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? 1200,
+    ).rating;
     setSessionRating(startRating);
     seenIdsRef.current = new Set();
     completedRef.current = new Set();

@@ -5,6 +5,7 @@ import {
   nextTarget,
   recordReachResult,
   reachTier,
+  reachAskDepth,
   STRETCH_SEED,
   BASE_UP,
   BASE_DOWN,
@@ -231,5 +232,26 @@ describe('reachTier', () => {
   it('is 1-based and never zero', () => {
     expect(reachTier(50)).toBe(1);
     expect(reachTier(1500)).toBe(Math.floor(1500 / TIER_BAND));
+  });
+});
+
+describe('reachAskDepth (review sequence, +1 stretch)', () => {
+  it('asks more of the line as reach climbs, always a step beyond level', () => {
+    expect(reachAskDepth(1000)).toBe(2);  // base 1 (min) + stretch
+    expect(reachAskDepth(1200)).toBe(2);
+    expect(reachAskDepth(1600)).toBe(3);
+    expect(reachAskDepth(2000)).toBe(4);
+    expect(reachAskDepth(2400)).toBe(5);
+  });
+  it('never asks fewer than 2 (one move + the stretch)', () => {
+    expect(reachAskDepth(400)).toBeGreaterThanOrEqual(2);
+  });
+  it('monotonically non-decreasing in reach', () => {
+    let prev = 0;
+    for (let r = 400; r <= 3000; r += 100) {
+      const d = reachAskDepth(r);
+      expect(d).toBeGreaterThanOrEqual(prev);
+      prev = d;
+    }
   });
 });
