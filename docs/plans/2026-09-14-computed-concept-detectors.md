@@ -405,7 +405,28 @@ Update the phase's status marker + the decisions log as each lands.
   (substantial), but the tagger is the concept engine from P1–P2, so P6 must
   follow the engine.
 
-## P1 validation finding (2026-09-14 — the harness did its job)
+## CORRECTION (2026-09-14) — the "pin over-fires" finding was a RUNNER ARTIFACT
+
+The finding below said the tactic side was detector-limited and pin over-fired 3×
+(Pin 424 vs Fork 149). **That was wrong** — it came from the `tsx` harness, which
+could not load the engine import chain (`capacitor-stockfish-native`) and produced
+garbage. Re-run under vitest (mocked engine — the CORRECT env), the distribution is
+balanced: opposition 85, rook 79, **Pin 78, Fork 57**, pawn 54, discovered 48, …
+No pin inversion. The tactic DETECTORS are fine; do NOT "tighten" them.
+
+Corrected scorecard (n=1500 master, `conceptForSolution`): **43% covered** with a
+computed concept (agree 22.6% + fires-no-tag 20.3%), **57% silent**. The silence is
+mostly honest — master puzzles are quiet/defensive/positional-heavy with no single
+nameable tactic (empty > invented). What lifts the 57% is §E **positional concepts**
+(outpost/open-file/weak-square/IQP — not yet wired) + P4b's **eval-swing** to name a
+quiet move's point — NOT detector tightening. The harness is now the env-gated
+`conceptCoverage.report.test.ts` (the `.mts` couldn't run here — that was the same
+native-import problem).
+
+Lesson: run the harness in the env that matches production (mocked engine), never a
+bare `tsx` script that silently loses the engine chain.
+
+## P1 validation finding (2026-09-14 — the harness did its job) — SUPERSEDED BY THE CORRECTION ABOVE
 
 Ran `conceptForSolution` over 1,500 master puzzles (agree / fires-no-tag / silent):
 - **OLD theme-map: 30.7%. AGREE 28.9%, FIRES-NO-TAG 55.5%, SILENT 15.6%.**
