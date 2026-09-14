@@ -405,6 +405,29 @@ Update the phase's status marker + the decisions log as each lands.
   (substantial), but the tagger is the concept engine from P1–P2, so P6 must
   follow the engine.
 
+## P1 validation finding (2026-09-14 — the harness did its job)
+
+Ran `conceptForSolution` over 1,500 master puzzles (agree / fires-no-tag / silent):
+- **OLD theme-map: 30.7%. AGREE 28.9%, FIRES-NO-TAG 55.5%, SILENT 15.6%.**
+- Split by concept family, two very different stories:
+  - **Endgame/matchup side — SOLID.** 62% of endgame puzzles get a teachable
+    class; endgame leads agree cleanly with their tags (rook/pawn/knight endings).
+  - **Tactic side — DETECTOR-LIMITED.** Lead distribution is inverted from reality
+    (Pin 424 vs Fork 149; the corpus is ~2× more forks than pins), and puzzles
+    tagged `fork` come back `Pin`. Root cause: `computePlyFacts.tacticLanded`
+    flags whatever tactic the key move's landing square creates, incidental pins
+    over-fire, and a puzzle's true motif often spans moves — material-count alone
+    doesn't locate the critical move.
+- **Consequences for the plan:**
+  - **P2 must tighten the tactic detectors** (pin over-fire first) before the
+    tactic-concept path is trustworthy — the endgame path is ready now.
+  - **P4b's importance filter must use the EVAL SWING**, not material-count, to
+    locate the solution's critical move + true motif. This is why must-build #4 is
+    load-bearing, not polish.
+  - The `fires-no-tag` bucket is a MIX of tag-missing (Lichess didn't tag the
+    motif — a real win) and detector-wrong (pin over-fire) — the harness prints a
+    sample for human triage; do not read 55.5% as all-error or all-win.
+
 ## Decisions log
 
 - 2026-09-14: concept is COMPUTED (detector invariant), not authored. LLM decides

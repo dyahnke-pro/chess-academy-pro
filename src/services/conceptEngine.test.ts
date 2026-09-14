@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   sideToMove, solvingSide, materialBalance, strongerSide, framingSide,
-  renderTacticConcept, renderMatchupConcept, conceptForBoard,
+  renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution,
 } from './conceptEngine';
 import { classifyMatchup } from './endgameMatchup';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -131,5 +131,20 @@ describe('conceptForBoard — the ranked multi-concept router', () => {
     if (cs.some((c) => c.source === 'tactic')) {
       expect(cs[0].source).toBe('tactic');
     }
+  });
+});
+
+describe('conceptForSolution — the puzzle / solution path', () => {
+  it('teaches the endgame principle from the start position of a rook ending', () => {
+    const cs = conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2']);
+    expect(cs.some((c) => c.id === 'rook-endgame')).toBe(true);
+  });
+
+  it('returns an array and never throws on a benign line', () => {
+    expect(Array.isArray(conceptForSolution('8/8/8/8/8/8/8/K6k w - - 0 1', ['a1a2']))).toBe(true);
+  });
+
+  it('respects the max cap', () => {
+    expect(conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2'], { max: 1 }).length).toBeLessThanOrEqual(1);
   });
 });

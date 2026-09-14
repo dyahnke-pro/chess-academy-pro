@@ -259,3 +259,77 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   out.sort((a, b) => b.importance - a.importance);
   return out.slice(0, max);
 }
+
+// ─── conceptForSolution — the PUZZLE / solution path ─────────────────────────
+import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+import { Chess } from 'chess.js';
+
+export interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
+
+/**
+ * The concept behind a SOLUTION (puzzle / best line) — distinct from
+ * `conceptForBoard` (a static live board). The harness proved the difference:
+ * detecting tactics on an arbitrary position surfaces INCIDENTAL tactics, and the
+ * decisive move isn't always the first. So this walks the solution, scores each
+ * STUDENT move by its computed swing (`computePlyFacts`: mate > material gained,
+ * +bonus for a landed tactic — a deterministic importance signal, no engine), and
+ * teaches the tactic the KEY move actually LANDS, read back from `detectTactics`
+ * at that exact position (full squares + description). The endgame matchup
+ * principle rides from the start position. Ranked, multi-concept, G0.
+ */
+export function conceptForSolution(
+  fen: string,
+  solutionUci: string[],
+  opts: ConceptForSolutionOptions = {},
+): ComputedConcept[] {
+  const out: ComputedConcept[] = [];
+  const seen = new Set<string>();
+
+  try {
+    const m = renderMatchupConcept(classifyMatchup(fen));
+    if (m) { m.importance = 0.5; out.push(m); seen.add(m.id); }
+  } catch { /* not an ending */ }
+
+  try {
+    const c = new Chess(fen);
+    const studentColor: 'w' | 'b' = fen.split(' ')[1] === 'w' ? 'b' : 'w';
+    let best: { fenAfter: string; tactic: string | null; isMate: boolean; from: string; to: string } | null = null;
+    let bestScore = -1;
+    let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
+    for (const u of solutionUci) {
+      const fenBefore = c.fen();
+      const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
+      if (!mv) break;
+      const fenAfter = c.fen();
+      const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
+      prev = mv.captured ? { square: mv.to, capturedValue: VAL[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
+      if (mv.color === studentColor) {
+        const score = facts.isMate ? 100 : facts.materialGained + (facts.tacticLanded ? 3 : 0);
+        if (score > bestScore) {
+          bestScore = score;
+          best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, from: mv.from, to: mv.to };
+        }
+      }
+    }
+    if (best && (best.tactic || best.isMate)) {
+      const type = best.tactic ?? 'mate_threat';
+      let pattern: TacticPattern | null = null;
+      try {
+        pattern = detectTactics(best.fenAfter).tactics.find(
+          (t) => t.type === type && (!t.beneficiary || t.beneficiary === studentColor),
+        ) ?? null;
+      } catch { pattern = null; }
+      const concept = pattern
+        ? renderTacticConcept(pattern)
+        : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.from, best.to], description: '' });
+      if (concept && !seen.has(concept.id)) {
+        concept.importance = best.isMate ? 0.98 : 0.85;
+        out.push(concept);
+        seen.add(concept.id);
+      }
+    }
+  } catch { /* unparseable — skip */ }
+
+  out.sort((a, b) => b.importance - a.importance);
+  return out.slice(0, opts.max ?? 3);
+}

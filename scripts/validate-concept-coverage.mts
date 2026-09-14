@@ -16,8 +16,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { Chess } from 'chess.js';
-import { conceptForBoard, type ComputedConcept } from '../src/services/conceptEngine.ts';
+import { conceptForSolution, type ComputedConcept } from '../src/services/conceptEngine.ts';
 
 interface Puzzle { id: string; fen: string; moves: string; themes: string[]; }
 
@@ -40,29 +39,10 @@ const CONCEPT_THEMES: Record<string, string[]> = {
 };
 
 function conceptsForPuzzle(p: Puzzle): ComputedConcept[] {
-  // Teach "the concept behind THE solution": detect the tactic on the position
-  // right after the student's KEY (first solving) move — where the motif lands —
-  // NOT every replayed position (that surfaces incidental tactics). The endgame
-  // matchup principle comes from the start position. This mirrors how a puzzle
-  // surface calls the engine.
-  const concepts: ComputedConcept[] = [];
-  try { concepts.push(...conceptForBoard(p.fen).filter((c) => c.source === 'matchup')); } catch { /* skip */ }
-  try {
-    const c = new Chess(p.fen);
-    const studentColor = p.fen.split(' ')[1] === 'w' ? 'b' : 'w';
-    const uci = p.moves.trim().split(/\s+/);
-    for (const u of uci) {
-      const mover = c.fen().split(' ')[1];
-      c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
-      if (mover === studentColor) {
-        // First student move only — the key move that defines the puzzle.
-        try { concepts.push(...conceptForBoard(c.fen()).filter((x) => x.source === 'tactic')); } catch { /* skip */ }
-        break;
-      }
-    }
-  } catch { /* unparseable — skip */ }
-  concepts.sort((a, b) => b.importance - a.importance);
-  return concepts;
+  // The solution path: find the student move that LANDS the decisive tactic (by
+  // computed swing) and teach THAT, plus the endgame matchup principle. This is
+  // exactly how a puzzle surface teaches "the concept behind the solution".
+  try { return conceptForSolution(p.fen, p.moves.trim().split(/\s+/)); } catch { return []; }
 }
 
 function agrees(concepts: ComputedConcept[], themes: string[]): boolean {
