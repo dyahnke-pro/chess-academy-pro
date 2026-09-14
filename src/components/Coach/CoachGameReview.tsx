@@ -331,6 +331,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // want the arrows to appear as the moves are spoken" — without moving the
   // pieces). A token supersedes an in-flight reveal on any ply change.
   const autoLineArrowTokenRef = useRef(0);
+  // Projected-line arrow reveal (David 2026-09-14): clear on PLY change only, and
+  // schedule the staggered reveal ONCE per ply (when the voice starts) — a
+  // narrationState wiggle within a ply must neither wipe painted arrows nor
+  // restart the stagger.
+  const lastArrowPlyRef = useRef(-1);
+  const arrowsScheduledForPlyRef = useRef(-1);
   // THE BOARD IS FREE (David 2026-09-05: "I wasn't able to move piece freely.
   // Let's unlock that and remove the 'explore this position' button. If the
   // user chooses to move a piece at any time that is them choosing to explore
@@ -2389,28 +2395,54 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   useEffect(() => {
     if (walkExplorationFen !== null || walkShowMeActive) return; // a walkout owns the board
     if (shotState || seqState || cameoState || theoryState) return; // a card owns the board
-    const arrows = walkPlayback.currentSegment?.spokenLineArrows;
-    const token = ++autoLineArrowTokenRef.current;
-    // Clear any prior ply's auto-arrows so a line never bleeds across plies.
-    setWalkExplorationArrows(null);
+    const seg = walkPlayback.currentSegment;
+    const arrows = seg?.spokenLineArrows;
+    // Clear ONLY when the ply changed — a fresh ply starts with a clean board.
+    // A narrationState change WITHIN a ply must not wipe arrows already painted
+    // (they linger after the statement).
+    const plyChanged = lastArrowPlyRef.current !== walkPlayback.currentPly;
+    if (plyChanged) {
+      lastArrowPlyRef.current = walkPlayback.currentPly;
+      autoLineArrowTokenRef.current += 1;
+      setWalkExplorationArrows(null);
+    }
     // Only a real multi-move LINE earns the sequence reveal; a single move is
     // already shown by the best-move arrow.
     if (!arrows || arrows.length < 2) return;
+    // 🔒 REVEAL EACH ARROW AS THE LINE IS NARRATED — not all at once before the
+    // statement (David 2026-09-14: "they showed all at once before the statement.
+    // I want them to pop up as the move is being named"). With voice ON, wait for
+    // the ply to actually START speaking, then stagger the arrows across the
+    // spoken duration (estimated from the narration length — NOT wired to TTS
+    // word boundaries, per the narration standard). With voice OFF there is no
+    // statement to sync to, so reveal on a reading-time cadence.
+    const voiceOn = reviewVoiceRef.current;
+    if (voiceOn && walkPlayback.narrationState !== 'speaking') return; // wait for the voice
+    if (arrowsScheduledForPlyRef.current === walkPlayback.currentPly) return; // already scheduled this ply
+    arrowsScheduledForPlyRef.current = walkPlayback.currentPly;
+    const token = ++autoLineArrowTokenRef.current;
     const anchor = walkPlayback.currentPly;
+    const words = (seg?.narration ?? '').trim().split(/\s+/).filter(Boolean).length;
+    // ~180 wpm, floored, so the reveals span the statement instead of racing it.
+    const spanMs = Math.max(2200, Math.round((words / 180) * 60_000));
+    const step = spanMs / (arrows.length + 1);
+    // No effect-cleanup that clears these timers: the effect re-runs on every
+    // narrationState change (incl. speech-END), and clearing there would truncate
+    // an in-flight reveal. Each timer instead self-guards on the token (bumped on
+    // ply change), mount, and the anchor ply — so a ply change no-ops the stale
+    // ones and the arrows finish painting even after the statement ends.
     const painted: Array<{ startSquare: string; endSquare: string; color: string }> = [];
-    const timers: ReturnType<typeof setTimeout>[] = [];
     arrows.forEach((a, i) => {
       if (!a.uci || a.uci.length < 4) return;
-      timers.push(setTimeout(() => {
+      setTimeout(() => {
         if (autoLineArrowTokenRef.current !== token
           || !walkMountedRef.current
           || walkPlyRef.current !== anchor) return;
         painted.push({ startSquare: a.uci.slice(0, 2), endSquare: a.uci.slice(2, 4), color: '#22c55e' });
         setWalkExplorationArrows([...painted]);
-      }, 700 + i * 1000)); // start after the line's lead-in, one per ~second
+      }, Math.round(step * (i + 1)));
     });
-    return () => { for (const t of timers) clearTimeout(t); };
-  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkExplorationFen, walkShowMeActive, shotState, seqState, cameoState, theoryState]);
+  }, [walkPlayback.currentPly, walkPlayback.currentSegment, walkPlayback.narrationState, walkExplorationFen, walkShowMeActive, shotState, seqState, cameoState, theoryState]);
 
   const theoryFoundRef = useRef<{ dep: TheoryDeparture; bookLine: BookLinePly[] } | null>(null);
   const theoryScanDoneRef = useRef(false);
