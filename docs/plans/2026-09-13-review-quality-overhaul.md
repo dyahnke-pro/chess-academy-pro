@@ -290,6 +290,36 @@ in this project, so no crash data available.)
 
 ---
 
+## FIX STATUS (2026-09-14)
+
+Shipped to `main` (web), ship-check green, tests added for each:
+- ✅ **#11** sac/brilliancy mis-grade — `verifySacrificeDeep` guard wired into all
+  3 mistake-detection paths (review classifier + both mistakePuzzle paths). A
+  sound sac is never graded/drilled as a mistake.
+- ✅ **#6** auto-play — one ▶/⏸ (removed the separate replay toggle); resume after
+  a pause advances instead of restating; initial Start still shows ply 0.
+- ✅ **#1 / A1** duplicate intro — reset gated on gameId, so a background deepen
+  no longer re-speaks the intro or snaps to ply 0.
+- ✅ **#3 / A3** arrows synced to the narration (gated on speech, staggered over
+  the spoken duration; linger after).
+- ✅ **#7 / B2** move-influence — leads with the UNPIN; never names a meaningless
+  covered square; retired "getting into the game".
+- ✅ **#2** flank pawn = "fighting for the centre from the flank", not land-grab.
+- ✅ **#5 / B1 (perspective half)** an opponent's check → "your king" + "they set
+  the tempo".
+
+REMAINING — repro-dependent, need HIS game (`chesscom-1025633348`) driven on
+prod, NOT guessed (empty > generic > invented):
+- ⏳ **#5 (redundancy half)** "comes with check" doubling — lives in the
+  proposed-line narrators (pvPlayback / dnaLineNarrator / continuationMoveNarration);
+  pin the exact one against his line.
+- ⏳ **#4 / B3** proposed-line "generic" — the facts ARE computed (plyFactsString/PV);
+  need to see what his line produced to judge the gap.
+- ⏳ **#9 / B4** narration cutoff at ply 15 — a voice-idle/token race in
+  `playBetterLineOut`; needs his line to repro.
+- ⏳ **#8/#10/#12 / C1** question routing (Qxd2-poisoned vs Nxd2-winning) — #11's
+  deepening now surfaces the tactic; verify the find-shot vs trap routing on his game.
+
 ## Fix order (tight loops, per CLAUDE.md — clarify with David before each build)
 1. **A1/A2/A3** — deterministic structural (dup intro, auto-resume, arrow sync).
 2. **B1 + sweep (E1), B2** — perspective + move-influence quality.
