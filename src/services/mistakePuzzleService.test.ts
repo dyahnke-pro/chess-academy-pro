@@ -71,8 +71,11 @@ function buildAnnotations(): MoveAnnotation[] {
     { moveNumber: 2, color: 'white', san: 'Nf3', evaluation: 40, bestMove: 'g1f3', bestMoveEval: 20, classification: 'good', comment: null },
     // Move 2: Black Nc6 — good
     { moveNumber: 2, color: 'black', san: 'Nc6', evaluation: 30, bestMove: 'b8c6', bestMoveEval: 40, classification: 'good', comment: null },
-    // Move 3: White Ng5?? — blunder (drops from +40 to -350, cpLoss = 390)
-    { moveNumber: 3, color: 'white', san: 'Ng5', evaluation: -350, bestMove: 'f1b5', bestMoveEval: 30, classification: 'blunder', comment: null },
+    // Move 3: White Bc4 — synthetic blunder eval (drops +40 → -350, cpLoss 390).
+    // A quiet NON-sacrifice on purpose: the sound-sac exemption (2026-09-14) must
+    // not fire here, so this exercises plain puzzle plumbing. (A material sac that
+    // holds up / genuinely loses is covered in brilliancy.test.ts.)
+    { moveNumber: 3, color: 'white', san: 'Bc4', evaluation: -350, bestMove: 'f1b5', bestMoveEval: 30, classification: 'blunder', comment: null },
     // Move 3: Black d5 — good
     { moveNumber: 3, color: 'black', san: 'd5', evaluation: -330, bestMove: 'd7d5', bestMoveEval: -350, classification: 'good', comment: null },
     // Move 4: White d3? — mistake (from -330 to -480, cpLoss = 150)
@@ -80,7 +83,7 @@ function buildAnnotations(): MoveAnnotation[] {
   ];
 }
 
-const TEST_PGN = '1.e4 e5 2.Nf3 Nc6 3.Ng5 d5 4.d3';
+const TEST_PGN = '1.e4 e5 2.Nf3 Nc6 3.Bc4 d5 4.d3';
 
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
@@ -105,12 +108,12 @@ describe('mistakePuzzleService', () => {
 
       const count = await generateMistakePuzzlesFromGame('coach-game-1');
 
-      expect(count).toBe(2); // Ng5 blunder + d3 mistake
+      expect(count).toBe(2); // Bc4 blunder + d3 mistake
 
       const puzzles = await db.mistakePuzzles.toArray();
       expect(puzzles).toHaveLength(2);
 
-      // First puzzle: Ng5 blunder (move 3)
+      // First puzzle: Bc4 blunder (move 3)
       const blunder = puzzles.find((p) => p.classification === 'blunder');
       expect(blunder).toBeDefined();
       expect(blunder?.moveNumber).toBe(3);
@@ -124,7 +127,7 @@ describe('mistakePuzzleService', () => {
       // strict equality so theme-detection growth doesn't keep
       // breaking the assertion.
       expect(blunder?.promptText).toContain('Oops — this was a serious mistake. Find the best move.');
-      expect(blunder?.playerMoveSan).toBe('Ng5');
+      expect(blunder?.playerMoveSan).toBe('Bc4');
       expect(blunder?.narration).toBeDefined();
       expect(blunder?.narration.intro).toBeTruthy();
       expect(blunder?.narration.outro).toBeTruthy();
@@ -140,7 +143,7 @@ describe('mistakePuzzleService', () => {
 
       // evalBefore is stored in CENTIPAWNS, player POV (loop audit 2026-09-09):
       // getMistakeInsights' situation classifier thresholds at ±100cp, so a
-      // pawns-unit store (1.5) would bucket every mistake as "equal". The Ng5
+      // pawns-unit store (1.5) would bucket every mistake as "equal". The Bc4
       // blunder's pre-move eval is the prev ply's score (+30cp White); the d3
       // mistake's is -330cp White — both stored as centipawns, not pawns.
       expect(blunder?.evalBefore).toBe(30);
@@ -166,7 +169,7 @@ describe('mistakePuzzleService', () => {
     });
 
     it('rebuilds the solution from bestMove when the fresh PV starts elsewhere', async () => {
-      // Force the divergence: annotation's committed best move (f1b5 for the Ng5
+      // Force the divergence: annotation's committed best move (f1b5 for the Bc4
       // blunder) but a fresh search whose PV starts on a DIFFERENT move. The
       // guard must make moves[0] === the committed bestMove, not the stray PV
       // head. Restore the default impl after (beforeEach does not reset mocks).

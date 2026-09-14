@@ -14,6 +14,7 @@ import {
 } from './positionTransformation';
 import { getOpeningNameByEco, isBookLine } from './openingDetectionService';
 import { capEval } from './accuracyService';
+import { verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { useAppStore } from '../stores/appStore';
 import type {
   MistakePuzzle,
@@ -394,6 +395,24 @@ async function analyzeGameWithStockfish(
     if (fenBeforeIdx >= fens.length) continue;
     const fen = fens[fenBeforeIdx];
 
+    // SOUND-SACRIFICE EXEMPTION (David 2026-09-14): a material sacrifice the
+    // depth-12 curve read as a loss is NOT a mistake — re-verify deep before
+    // recording a puzzle/weakness, so a brilliancy never becomes a drilled
+    // "weakness". Gated on describeSacrifice inside the helper (rare).
+    const { soundSac } = await verifySacrificeDeep({
+      fenBefore: fen,
+      san: moves[moveIdx],
+      isWhiteMove,
+      analyzeAfterWhiteCp: async (fa) => {
+        try {
+          return (await stockfishEngine.analyzePosition(fa, SAC_VERIFY_DEPTH)).evaluation;
+        } catch {
+          return null;
+        }
+      },
+    });
+    if (soundSac) continue;
+
     // Get best move + PV line via Stockfish at higher depth
     let bestMove: string | null = null;
     let pvMoves: string[] = [];
@@ -614,6 +633,26 @@ async function generateFromAnnotations(
     if (fenIndex < 0 || fenIndex >= fens.length) continue;
 
     const fen = fens[fenIndex]; // position BEFORE the bad move
+
+    // SOUND-SACRIFICE EXEMPTION (David 2026-09-14): even when an annotation was
+    // graded a slip by a classifier that isn't sac-aware (the sweep, an older
+    // stored game, the crude importer), a material sacrifice that holds up deep
+    // is NOT a mistake — never turn a brilliancy into a drilled "weakness". Gated
+    // on describeSacrifice inside the helper (rare); the review classifier now
+    // grades most sound sacs great/brilliant up front, so this is the safety net.
+    const { soundSac } = await verifySacrificeDeep({
+      fenBefore: fen,
+      san: annotation.san,
+      isWhiteMove: annotation.color === 'white',
+      analyzeAfterWhiteCp: async (fa) => {
+        try {
+          return (await stockfishEngine.analyzePosition(fa, SAC_VERIFY_DEPTH)).evaluation;
+        } catch {
+          return null;
+        }
+      },
+    });
+    if (soundSac) continue;
 
     // Determine cpLoss from eval data
     let cpLoss: number | null = null;

@@ -192,7 +192,7 @@ import {
   INACCURACY_WIN_PCT, MISTAKE_WIN_PCT, BLUNDER_WIN_PCT, EXCELLENT_WIN_PCT,
 } from './engineConstants';
 import { winPercent, capEval } from './accuracyService';
-import { detectBrilliancy } from './brilliancy';
+import { detectBrilliancy, verifySacrificeDeep, SAC_VERIFY_DEPTH } from './brilliancy';
 import { lookupPositionEvals, storePositionEvals, prunePositionEvalCache, type EvalToStore } from './positionEvalCache';
 
 /**
@@ -1488,7 +1488,33 @@ async function analyzeGamePositions(
         ? capEval(evalBefore) - capEval(evalAfter)
         : capEval(evalAfter) - capEval(evalBefore);
 
-      const graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
+      let graded = classifyCpLoss(cpLoss, evalBefore, evalAfter, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
+
+      // SOUND-SACRIFICE RESCUE (David 2026-09-14) — a material sac the mid-depth
+      // eval read as a loss may be a brilliancy; re-search the resulting position
+      // DEEP and re-grade before it becomes a verdict (and, downstream, a false
+      // "weakness"). Gated on describeSacrifice inside the helper, so the deep
+      // search runs only on actual sacrifices.
+      if ((graded === 'inaccuracy' || graded === 'mistake' || graded === 'blunder') && evalBefore !== null) {
+        const { soundSac, deepEvalAfterWhiteCp } = await verifySacrificeDeep({
+          fenBefore: fens[moveIdx],
+          san: moves[moveIdx],
+          isWhiteMove,
+          analyzeAfterWhiteCp: async (fa) => {
+            try {
+              return (await stockfishEngine.analyzeWithBudget(fa, SAC_VERIFY_DEPTH, positionBudgetMs ?? REVIEW_POSITION_BUDGET_MS)).evaluation;
+            } catch {
+              return null;
+            }
+          },
+        });
+        if (soundSac && deepEvalAfterWhiteCp !== null) {
+          const deepCpLoss = isWhiteMove
+            ? capEval(evalBefore) - capEval(deepEvalAfterWhiteCp)
+            : capEval(deepEvalAfterWhiteCp) - capEval(evalBefore);
+          graded = classifyCpLoss(deepCpLoss, evalBefore, deepEvalAfterWhiteCp, isWhiteMove, moves[moveIdx]?.includes('#'), fens[moveIdx], moves[moveIdx]);
+        }
+      }
 
       // BOOK exemption — theory suppresses opening eval-noise but a genuine
       // blunder still surfaces even in a named line (see the first loop's note).

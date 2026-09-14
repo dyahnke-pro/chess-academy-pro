@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectBrilliancy, describeBrilliancy } from './brilliancy';
+import { detectBrilliancy, describeBrilliancy, verifySacrificeDeep } from './brilliancy';
 
 // 🔒 David 2026-09-09: "Make sure we follow the same rules as chess.com for
 // brilliant moves." chess.com Brilliant (!!) = a MATERIAL SACRIFICE that is
@@ -66,6 +66,58 @@ describe('detectBrilliancy — chess.com Brilliant (!!) rules', () => {
       fenBefore: SAC_FEN, san: SAC_SAN,
     });
     expect(b.brilliant).toBe(false);
+  });
+});
+
+// 🔒 David 2026-09-14: a brilliancy the mid-depth eval read as a loss was graded
+// an inaccuracy in review AND drilled as a false "weakness". verifySacrificeDeep
+// is the shared guard: a material sacrifice that HOLDS UP once searched deep is
+// never a slip. The engine is injected, so these run without a real Stockfish.
+describe('verifySacrificeDeep — sound sacrifice is not a mistake', () => {
+  // Black-to-move net sacrifice: ...Qxh2+ hands the queen for a pawn (Kxh2).
+  const BLACK_SAC_FEN = '6k1/8/8/8/7q/8/5PPP/6K1 b - - 0 1';
+
+  it('a SAC that stays favourable deep → soundSac (white mover)', async () => {
+    const r = await verifySacrificeDeep({
+      fenBefore: SAC_FEN, san: SAC_SAN, isWhiteMove: true,
+      analyzeAfterWhiteCp: async () => 250, // deep: white still winning after the sac
+    });
+    expect(r.soundSac).toBe(true);
+    expect(r.deepEvalAfterWhiteCp).toBe(250);
+  });
+
+  it('a SAC that genuinely LOSES deep → not sound (keep the real verdict)', async () => {
+    const r = await verifySacrificeDeep({
+      fenBefore: SAC_FEN, san: SAC_SAN, isWhiteMove: true,
+      analyzeAfterWhiteCp: async () => -300, // deep: white is just down a queen
+    });
+    expect(r.soundSac).toBe(false);
+  });
+
+  it('a NON-sacrifice never triggers (no deep search, no rescue)', async () => {
+    let called = false;
+    const r = await verifySacrificeDeep({
+      fenBefore: '6k1/5ppp/8/7Q/8/8/8/6K1 w - - 0 1', san: 'Qe2', isWhiteMove: true,
+      analyzeAfterWhiteCp: async () => { called = true; return 500; },
+    });
+    expect(r.soundSac).toBe(false);
+    expect(called).toBe(false); // gated on describeSacrifice — engine untouched
+  });
+
+  it('respects the MOVER\'s POV — a black sac favourable for black is sound', async () => {
+    const r = await verifySacrificeDeep({
+      fenBefore: BLACK_SAC_FEN, san: 'Qxh2+', isWhiteMove: false,
+      analyzeAfterWhiteCp: async () => -250, // white-POV negative = black (the mover) is winning
+    });
+    expect(r.soundSac).toBe(true);
+  });
+
+  it('a losing deep eval never returns null soundSac (defined, false)', async () => {
+    const r = await verifySacrificeDeep({
+      fenBefore: SAC_FEN, san: SAC_SAN, isWhiteMove: true,
+      analyzeAfterWhiteCp: async () => null, // engine failed
+    });
+    expect(r.soundSac).toBe(false);
   });
 });
 

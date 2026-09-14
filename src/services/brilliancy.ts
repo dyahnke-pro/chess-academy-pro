@@ -28,6 +28,7 @@
  * G0/G3: the sacrifice is board-true (describeSacrifice, chess.js), soundness is
  * the engine's (isBest + favourable-after). The model only phrases the result.
  */
+import { Chess } from 'chess.js';
 import { describeSacrifice } from './groundedAnswer';
 
 /** Given up ≤ this vs the engine's best still counts as "near-best". */
@@ -89,6 +90,58 @@ export function detectBrilliancy(input: {
   if (input.evalBeforeStudentCp !== null && input.evalBeforeStudentCp >= ALREADY_WINNING_CP) return NOT_BRILLIANT;
 
   return { brilliant: true, sacrificePhrase: sac };
+}
+
+/** Depth to verify a suspected sacrifice's TRUE worth. Deeper than the review
+ *  (REVIEW_DEEP_DEPTH 16) and the best-move search (BEST_MOVE_DEPTH 18) on
+ *  purpose: a sound sacrifice's compensation is exactly the long forced line the
+ *  shallower passes cannot see, so a mid-depth eval reports the material as
+ *  simply lost and the move gets graded a slip. Gated behind describeSacrifice
+ *  (a cheap, rare board check), so this depth is spent only on real material
+ *  sacrifices. */
+export const SAC_VERIFY_DEPTH = 22;
+
+/**
+ * verifySacrificeDeep — decide whether a flagged move is a MATERIAL SACRIFICE
+ * that actually HOLDS UP once searched deep. This is the shared guard behind the
+ * 2026-09-14 fix: a brilliancy the shallow/mid-depth eval read as a loss was
+ * graded an inaccuracy in the review AND drilled as a false "weakness" (the
+ * high-volume real-user harm — the misconception/weakness capture pipeline).
+ *
+ * `analyzeAfterWhiteCp(fenAfter)` returns the WHITE-POV centipawn eval of the
+ * position after the move, at the injected engine's deepest available search
+ * (callers pass SAC_VERIFY_DEPTH). Returns:
+ *   - soundSac: the move sacrifices material AND the deep eval keeps the mover at
+ *     least roughly level (>= FAVORABLE_FLOOR_CP student-POV, which a
+ *     student-favourable forced mate clears automatically) — i.e. NOT a slip.
+ *   - deepEvalAfterWhiteCp: the deep white-POV eval, so a caller with
+ *     classifyCpLoss can re-grade to the exact label (great / brilliant / good).
+ *
+ * Board-true sacrifice (describeSacrifice, chess.js) + engine soundness (the
+ * deep re-eval); the model decides nothing (G0/G3).
+ */
+export async function verifySacrificeDeep(opts: {
+  fenBefore: string;
+  san: string;
+  isWhiteMove: boolean;
+  analyzeAfterWhiteCp: (fenAfter: string) => Promise<number | null>;
+}): Promise<{ soundSac: boolean; deepEvalAfterWhiteCp: number | null }> {
+  const NOT: { soundSac: boolean; deepEvalAfterWhiteCp: number | null } = { soundSac: false, deepEvalAfterWhiteCp: null };
+  if (!describeSacrifice(opts.fenBefore, opts.san)) return NOT;
+  let fenAfter: string;
+  try {
+    const c = new Chess(opts.fenBefore);
+    if (!c.move(opts.san)) return NOT;
+    fenAfter = c.fen();
+  } catch {
+    return NOT;
+  }
+  const white = await opts.analyzeAfterWhiteCp(fenAfter);
+  if (white === null || white === undefined) return NOT;
+  // Student-POV: a mover-favourable forced mate is a large positive cp, so it
+  // clears the floor without a separate mate branch.
+  const studentCp = opts.isWhiteMove ? white : -white;
+  return { soundSac: studentCp >= FAVORABLE_FLOOR_CP, deepEvalAfterWhiteCp: white };
 }
 
 /**
