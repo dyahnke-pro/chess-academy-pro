@@ -49,7 +49,7 @@ describe('endgameMatchup — class reducer', () => {
 
   it('opposite-bishops: one bishop each, opposite colours', () => {
     // Bc3 dark vs Bg2 light.
-    expectClass('6k1/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1', 'opposite-bishops');
+    expectClass('8/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1', 'opposite-bishops');
   });
 
   it('same-bishops: one bishop each, same colour', () => {
@@ -79,5 +79,12 @@ describe('endgameMatchup — class reducer', () => {
 
   it('non-endgame: the starting position', () => {
     expectClass('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'non-endgame');
+  });
+});
+
+describe('classifyMatchup — garbage in, silence out', () => {
+  it('an unparseable FEN is non-endgame, never a specific class read off stray letters', () => {
+    expect(classifyMatchup('nope').cls).toBe('non-endgame');
+    expect(classifyMatchup('').cls).toBe('non-endgame');
   });
 });

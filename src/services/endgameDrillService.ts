@@ -22,7 +22,7 @@
  */
 import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
-import { pickConceptHint } from './puzzleConceptHint';
+import { conceptHintForPuzzle } from './puzzleConceptHint';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
 interface RawPuzzle {
@@ -157,7 +157,7 @@ function puzzleToLessonPosition(p: RawPuzzle, _lessonName: string): EndgameLesso
     // toward the tactic name without losing the cold-find aspect.
     // null when no theme matches — UI then falls back to the
     // lesson's narration.rule.
-    conceptHint: pickConceptHint(p.themes) ?? undefined,
+    conceptHint: conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: p.themes }) ?? undefined,
   };
 }
 

@@ -108,6 +108,8 @@ describe('TacticsPage', () => {
     expect(screen.getByTestId('section-my mistakes')).toBeInTheDocument();
     expect(screen.getByText('My Profile')).toBeInTheDocument();
     expect(screen.getByText('My Mistakes')).toBeInTheDocument();
+    // Master Level is reachable from the hub, not only from the coach (David 2026-09-14).
+    expect(screen.getByText('Master Level')).toBeInTheDocument();
   });
 
   it('shows Daily Training and Setup Trainer sections', async () => {

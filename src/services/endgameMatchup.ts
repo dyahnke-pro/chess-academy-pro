@@ -17,6 +17,7 @@
  * winning side) that the coarse bucket can't carry. Pure / deterministic / G0 —
  * no engine, no network, no LLM.
  */
+import { Chess } from 'chess.js';
 import { classifyEndgameType, type EndgameType } from './endgameProfileService';
 
 export type PieceLetter = 'P' | 'N' | 'B' | 'R' | 'Q';
@@ -148,6 +149,13 @@ const ENDGAME_PIECE_CAP = 12;
  * detectors only run when this is NOT `non-endgame`/`complex`.
  */
 export function classifyMatchup(fen: string): MatchupResult {
+  // An unparseable FEN is NOT a position — the hand parser below would count
+  // stray letters as pieces ("nope" read as a knight and a pawn → "minor
+  // ending"), which is specific-but-wrong on garbage. Validate first.
+  try { new Chess(fen); } catch {
+    const empty: SideMaterial = { P: 0, N: 0, B: 0, R: 0, Q: 0, bishops: [] };
+    return { cls: 'non-endgame', coarse: 'other', label: LABELS['non-endgame'], signature: { white: empty, black: { ...empty, bishops: [] }, totalPieces: 0 } };
+  }
   const signature = matchupSignature(fen);
   const coarse = classifyEndgameType(fen);
   const { white: w, black: b, totalPieces } = signature;

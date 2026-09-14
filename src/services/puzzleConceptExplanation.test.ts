@@ -27,14 +27,34 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
     expect(r!.arrow).toEqual({ from: 'e6', to: 'c7' });
   });
 
-  it('still returns the board-true mechanics when no concept maps (idea null)', () => {
-    // A theme with no chess-concepts.json entry — the mechanics line still teaches.
+  it('the BOARD names the concept even when the tags do not (P3: one computational system)', () => {
+    // No motif tag at all — the engine still classifies Nc7+ as the fork, so the
+    // hint/explanation teaches it; only the book-passage sourcing id is missing.
     const r = explainPuzzleConcept({ fen: FORK_FEN, solutionUci: FORK_SOLUTION, themes: ['short', 'endgame'] });
     expect(r).not.toBeNull();
     expect(r!.conceptId).toBeNull();
-    expect(r!.idea).toBeNull();
+    expect(r!.computedId).toBe('fork');
+    expect(r!.computedSource).toBe('tactic');
+    expect(r!.conceptName).toBe('Fork');
+    expect(r!.idea).toMatch(/two targets/);
     expect(r!.line).toMatch(/Nc7/);
-    expect(r!.spoken.length).toBeGreaterThan(0);
+    expect(r!.spoken).toContain(r!.idea!);
+  });
+
+  it('an endgame-technique solution teaches the technique the board reaches', () => {
+    // Opponent …Kd6, student Kd4 — direct opposition / key square with the e2 pawn.
+    const r = explainPuzzleConcept({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', solutionUci: ['d5d6', 'd3d4'], themes: ['endgame', 'pawnEndgame'] });
+    expect(r).not.toBeNull();
+    expect(['key-squares', 'opposition']).toContain(r!.computedId);
+    expect(r!.computedSource).toBe('technique');
+    expect(r!.idea).toMatch(/key square|opposition/i);
+  });
+
+  it('a delivered mate is named by its pattern', () => {
+    const r = explainPuzzleConcept({ fen: '5r1k/6pp/8/6N1/8/8/8/7K b - - 0 1', solutionUci: ['f8g8', 'g5f7'], themes: ['mate', 'mateIn1'] });
+    expect(r!.computedId).toBe('smothered-mate');
+    expect(r!.conceptName).toBe('Smothered Mate');
+    expect(r!.idea).toMatch(/Smothered Mate — /);
   });
 
   it('is G0-safe: never throws on a bad FEN or empty solution', () => {
@@ -74,6 +94,14 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
   it('conceptIdeaForThemes is null when no known concept maps', () => {
     expect(conceptIdeaForThemes(['short', 'endgame'])).toBeNull();
     expect(conceptIdeaForThemes([])).toBeNull();
+  });
+
+  it('conceptIdeaForThemes with a board: the computed concept beats the tags', () => {
+    const c = new Chess(FORK_FEN); c.move('b7b5');
+    const r = conceptIdeaForThemes(['pin'], { fen: c.fen(), uci: ['e6c7'], studentToMove: true });
+    expect(r!.conceptName).toBe('Fork'); // the board says fork, the (wrong) tag said pin
+    expect(r!.idea).toMatch(/two targets/);
+    expect(r!.idea).not.toMatch(/\b[a-h][1-8]\b/); // the invariant leaks no square
   });
 
   it('maps the mate patterns to their concept ideas', () => {

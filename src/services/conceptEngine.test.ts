@@ -74,7 +74,7 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
     expect(rook!.full.toLowerCase()).toContain('activity');
     expect(rook!.short).toBe('Rook ending — activity first.');
 
-    const ocb = renderMatchupConcept(classifyMatchup('6k1/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1'));
+    const ocb = renderMatchupConcept(classifyMatchup('8/8/8/3k4/8/2B5/6b1/4K3 w - - 0 1'));
     expect(ocb!.full.toLowerCase()).toContain('draw');
   });
 
@@ -236,5 +236,26 @@ describe('conceptEngine — ONE computational system (consumes the fed analysis)
   it('a forced mate on the line is decisive regardless of cp', () => {
     const cs = conceptForLine({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w', rootEvalCp: 0, lineEvalCp: 0, lineMate: 3 });
     expect(cs.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('conceptEngine — a delivered mate is NAMED by its pattern (P2b)', () => {
+  it('a back-rank mate solution teaches "Back-Rank Mate", not a generic mate register', () => {
+    // Lichess shape: the FEN is BEFORE the opponent's setup move (…Kh8), then
+    // the solver's Re8# — the textbook back-rank mate.
+    const cs = conceptForSolution('6k1/5ppp/8/8/8/8/4RPPP/6K1 b - - 0 1', ['g8h8', 'e2e8']);
+    const lead = cs[0];
+    expect(lead.id).toBe('back-rank-mate');
+    expect(lead.source).toBe('mate');
+    expect(lead.full).toMatch(/^Back-Rank Mate — /);
+    expect(lead.full).not.toMatch(/\b(we|our|us)\b/i);
+    expect(lead.short.split(/\s+/).length).toBeLessThanOrEqual(8);
+    expect(lead.importance).toBeGreaterThanOrEqual(0.95);
+  });
+
+  it('a smothered mate along the solution names the pattern at the mating ply', () => {
+    // …Rg8 (the opponent's setup move) then Nf7# — smothered.
+    const cs = conceptForSolution('5r1k/6pp/8/6N1/8/8/8/7K b - - 0 1', ['f8g8', 'g5f7']);
+    expect(cs.some((c) => c.id === 'smothered-mate' && c.source === 'mate')).toBe(true);
   });
 });

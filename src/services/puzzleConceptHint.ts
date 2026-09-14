@@ -15,6 +15,8 @@
  * or structural themes that tell the student WHAT to look for.
  */
 
+import { conceptForLine } from './conceptEngine';
+
 /** Priority list — earlier entries are more specific, win the
  *  mapping race when a puzzle has multiple matches. */
 const HINT_ENTRIES: Array<readonly [string, string]> = [
@@ -80,6 +82,36 @@ export function pickConceptHint(themes: ReadonlyArray<string>): string | null {
     if (themes.includes(theme)) return hint;
   }
   return null;
+}
+
+/**
+ * THE ONE SOURCE for a puzzle's concept hint (P3 of the computed-concept
+ * engine): the board-COMPUTED concept's short register leads — the same
+ * `conceptForLine` walker the live briefing, Learn, Review and the puzzle
+ * explanation all consume — and the theme→hint table above is only the
+ * fallback for a solution the engine can't classify. Lichess tags are patchy
+ * (a quarter of master endgames carry no motif tag); the board is not.
+ *
+ * `studentToMove`: a Lichess puzzle FEN is BEFORE the opponent's setup move
+ * (solver = the other side); a game-derived puzzle's FEN is already the
+ * student's turn.
+ */
+export function conceptHintForPuzzle(args: {
+  fen: string;
+  moves: string | readonly string[];
+  themes: readonly string[];
+  studentToMove?: boolean;
+}): string | null {
+  const uci = typeof args.moves === 'string' ? args.moves.trim().split(/\s+/).filter(Boolean) : [...args.moves];
+  if (args.fen && uci.length > 0) {
+    try {
+      const turn = args.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      const studentColor: 'w' | 'b' = args.studentToMove ? turn : (turn === 'w' ? 'b' : 'w');
+      const lead = conceptForLine({ fen: args.fen, uci, studentColor, max: 1 })[0];
+      if (lead && lead.source !== 'positional' && lead.short.trim()) return lead.short.trim();
+    } catch { /* fall back to the tag table */ }
+  }
+  return pickConceptHint(args.themes);
 }
 
 /** Test-only export — the mapping itself, for snapshot/coverage. */

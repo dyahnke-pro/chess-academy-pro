@@ -362,9 +362,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           // WHY the solution works, not only what it is (David 2026-09-14).
           // The general idea comes from the concept corpus, keyed by the
           // puzzle's themes (computed/authored, no LLM). Appended to the answer.
-          const concept = puzzleThemes && puzzleThemes.length > 0
-            ? conceptIdeaForThemes(puzzleThemes)
-            : null;
+          // The BOARD leads (P3, one computational system): the engine's best
+          // move on this FEN is classified by the same concept walker the
+          // briefing/Learn/Review speak; the tags are the fallback.
+          const concept = conceptIdeaForThemes(puzzleThemes ?? [], { fen, uci: [best.bestMoveUci], studentToMove: true });
           const tier3Text = concept ? `${answerText} ${concept.idea}` : answerText;
 
           // Record the tap directly (BRAIN-05b moved this into the brain's tool;

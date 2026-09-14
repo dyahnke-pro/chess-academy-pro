@@ -22,7 +22,7 @@
 import { getAllMistakePuzzles } from './mistakePuzzleService';
 import { getCalculationSkillById } from './calculationDrillService';
 import { matchCalculationThemes } from './calculationSkillMatch';
-import { pickConceptHint } from './puzzleConceptHint';
+import { conceptHintForPuzzle } from './puzzleConceptHint';
 import type { RawPuzzle } from './adaptiveEndgameService';
 import type { MistakePuzzle } from '../types';
 
@@ -72,7 +72,9 @@ function conceptHintFor(p: MistakePuzzle, themes: string[]): string | undefined 
     keys.push(TACTIC_TO_HINT_KEY[p.tacticType]);
   }
   keys.push(...themes);
-  return pickConceptHint(keys) ?? undefined;
+  // The board-computed concept leads (the mistake FEN is the student's turn);
+  // the tactic-type / theme keys are the fallback.
+  return conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: keys, studentToMove: true }) ?? undefined;
 }
 
 /** Build a game-derived RawPuzzle from a mistake puzzle, or null when

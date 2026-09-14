@@ -20,6 +20,7 @@
 import { Chess } from 'chess.js';
 import { narrateDnaLine, type DnaLinePly } from './dnaLineNarrator';
 import { getConcept } from './chessConceptService';
+import { conceptForLine, tacticInvariant, type ComputedConcept } from './conceptEngine';
 
 /** Lichess puzzle theme → chess-concepts.json concept id (the IDEA passage).
  *  Only patterns the corpus actually teaches; a theme with no concept still
@@ -57,10 +58,16 @@ const THEME_DISPLAY: Record<string, string> = {
 };
 
 export interface PuzzleConceptExplanation {
-  /** The pattern name, e.g. "Fork" — null when no known concept maps. */
+  /** The pattern name, e.g. "Fork" — the board-COMPUTED concept when the
+   *  engine classifies the solution, else the tag's display name; null when
+   *  neither. */
   conceptName: string | null;
-  /** chess-concepts.json id, for sourcing. */
+  /** chess-concepts.json id, for sourcing (tag-mapped; null when no passage). */
   conceptId: string | null;
+  /** The computed concept's id + source (P3: one computational system) —
+   *  null when the solution classified as nothing. */
+  computedId: string | null;
+  computedSource: ComputedConcept['source'] | null;
   /** Board-true mechanics of the solution line (dnaLineNarrator). */
   line: string;
   /** One-sentence general idea behind the pattern (from the concept passage). */
@@ -80,14 +87,42 @@ function firstSentence(text: string): string | null {
   return s.length >= 12 ? s : null;
 }
 
-/** The concept NAME + one-sentence general IDEA for a puzzle's themes — the
- *  teaching a HINT adds so it's "not just an arrow, but an explanation of the
- *  concepts to understand the solution" (David 2026-09-14). No board replay,
- *  no move given away — just the pattern and why it works, so the student can
- *  still find the move themselves. Null when no known concept maps. */
+/** The general IDEA a computed concept teaches — the invariant alone for a
+ *  tactic (the instance is already narrated by the line), the full register
+ *  otherwise. Capitalised, sentence-terminated. */
+function computedIdea(c: ComputedConcept): string {
+  const inv = c.source === 'tactic' ? tacticInvariant(c.id) : null;
+  const text = (inv ? inv.full : c.full).trim();
+  const cap = text.charAt(0).toUpperCase() + text.slice(1);
+  return /[.!?]$/.test(cap) ? cap : `${cap}.`;
+}
+
+/** The board-computed lead concept for a solution line (never positional —
+ *  a hint/explanation names a pattern, not a platitude). */
+function computedLead(board: { fen: string; uci: readonly string[]; studentColor: 'w' | 'b' } | null): ComputedConcept | null {
+  if (!board || !board.fen || board.uci.length === 0) return null;
+  try {
+    return conceptForLine({ fen: board.fen, uci: [...board.uci], studentColor: board.studentColor, max: 2 })
+      .find((c) => c.source !== 'positional') ?? null;
+  } catch { return null; }
+}
+
+/** The concept NAME + one-sentence general IDEA for a puzzle — the teaching a
+ *  HINT adds so it's "not just an arrow, but an explanation of the concepts to
+ *  understand the solution" (David 2026-09-14). No move given away — just the
+ *  pattern and why it works. When the board is supplied the COMPUTED concept
+ *  leads (the tags are patchy; the board isn't); the theme→passage table is
+ *  the fallback. Null when neither classifies. */
 export function conceptIdeaForThemes(
   themes: readonly string[],
+  board?: { fen: string; uci: readonly string[]; studentToMove?: boolean },
 ): { conceptName: string; conceptId: string; idea: string } | null {
+  if (board?.fen && board.uci.length > 0) {
+    const turn = board.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    const studentColor: 'w' | 'b' = board.studentToMove ? turn : (turn === 'w' ? 'b' : 'w');
+    const lead = computedLead({ fen: board.fen, uci: board.uci, studentColor });
+    if (lead) return { conceptName: lead.name, conceptId: lead.id, idea: computedIdea(lead) };
+  }
   for (const t of themes) {
     const id = THEME_TO_CONCEPT_ID[t];
     if (!id) continue;
@@ -107,24 +142,31 @@ function compose(
   keyPlies: DnaLinePly[],
   themes: string[],
   arrow: { from: string; to: string } | null,
+  computed: ComputedConcept | null,
 ): PuzzleConceptExplanation | null {
   if (keyPlies.length === 0) return null;
   const line = narrateDnaLine(keyPlies);
 
+  // Tag-mapped book passage (kept for sourcing + as the fallback idea).
   let conceptId: string | null = null;
-  let conceptName: string | null = null;
-  let idea: string | null = null;
+  let tagName: string | null = null;
+  let passageIdea: string | null = null;
   for (const t of themes) {
     const id = THEME_TO_CONCEPT_ID[t];
     if (!id) continue;
     const concept = getConcept(id);
     if (!concept) continue;
     conceptId = id;
-    conceptName = THEME_DISPLAY[t] ?? concept.name;
+    tagName = THEME_DISPLAY[t] ?? concept.name;
     const passage = concept.passages[0]?.text;
-    idea = passage ? firstSentence(passage) : null;
+    passageIdea = passage ? firstSentence(passage) : null;
     break;
   }
+
+  // THE COMPUTED CONCEPT LEADS (P3): the board classified the solution, so the
+  // name + idea come from the engine; the tag table only fills in behind it.
+  const conceptName = computed?.name ?? tagName;
+  const idea = computed ? computedIdea(computed) : passageIdea;
 
   const parts: string[] = [];
   if (line) parts.push(line.charAt(0).toUpperCase() + line.slice(1) + (/[.!?]$/.test(line) ? '' : '.'));
@@ -132,7 +174,10 @@ function compose(
   const spoken = parts.join(' ').trim();
   if (!spoken) return null;
 
-  return { conceptName, conceptId, line, idea, arrow, spoken };
+  return {
+    conceptName, conceptId, computedId: computed?.id ?? null, computedSource: computed?.source ?? null,
+    line, idea, arrow, spoken,
+  };
 }
 
 /**
@@ -184,7 +229,8 @@ export function explainPuzzleConcept(args: {
     ? { from: keyUci.slice(0, 2), to: keyUci.slice(2, 4) }
     : null;
 
-  return compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow);
+  const computed = computedLead({ fen, uci: solutionUci, studentColor });
+  return compose(keyPlies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), themes, arrow, computed);
 }
 
 /**
@@ -200,8 +246,9 @@ export function explainDrillConcept(args: {
 }): PuzzleConceptExplanation | null {
   const { setupFen, solutionSan, themes = [] } = args;
   if (!setupFen || solutionSan.length === 0) return null;
-  const studentColor = setupFen.split(' ')[1]; // student is to move at setupFen
+  const studentColor = setupFen.split(' ')[1] === 'b' ? 'b' : 'w'; // student is to move at setupFen
   const plies: DnaLinePly[] = [];
+  const uci: string[] = [];
   let arrow: { from: string; to: string } | null = null;
   try {
     const c = new Chess(setupFen);
@@ -214,9 +261,10 @@ export function explainDrillConcept(args: {
       // arrow leads the eye to the student's FIRST move.
       if (i === 0 && mover === studentColor) arrow = { from: mv.from, to: mv.to };
       plies.push({ fenBefore, san: mv.san });
+      uci.push(`${mv.from}${mv.to}${mv.promotion ?? ''}`);
     }
   } catch {
     return null;
   }
-  return compose(plies, themes, arrow);
+  return compose(plies, themes, arrow, computedLead({ fen: setupFen, uci, studentColor }));
 }

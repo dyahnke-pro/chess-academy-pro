@@ -32,7 +32,7 @@ export function solvingSide(fen: string): Side {
   return sideToMove(fen) === 'white' ? 'black' : 'white';
 }
 
-export type ConceptSource = 'tactic' | 'matchup' | 'technique' | 'positional';
+export type ConceptSource = 'tactic' | 'matchup' | 'technique' | 'positional' | 'mate';
 
 export interface ComputedConcept {
   /** Stable id, e.g. 'fork' | 'rook-endgame'. */
@@ -451,6 +451,7 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 
 // ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
 import { computePlyFacts, pvDepthForRating, type PrevCaptureContext } from './pvPlayback';
+import { classifyMatePattern } from './matePatterns';
 import { Chess } from 'chess.js';
 
 export interface LineInput {
@@ -510,6 +511,11 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   const { fen, uci, studentColor } = input;
   let techConcept: ComputedConcept | null = null;
 
+  // No position, no concept: an unparseable root FEN must not reach the
+  // endgame / positional beats below (the matchup parser once read "nope"
+  // as a minor-piece ending — specific-but-wrong on garbage).
+  try { new Chess(fen); } catch { return out; }
+
   try {
     const c = new Chess(fen);
     let best: { fenAfter: string; tactic: string | null; isMate: boolean; to: string; material: number } | null = null;
@@ -536,6 +542,28 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
       }
     }
 
+    // A DELIVERED mate is named by its pattern (Narration Voice Rule 7: "name
+    // the pattern, not the move") — the geometry classifier over the mated
+    // board, vocabulary from mating-patterns.json. Falls through to the
+    // generic mate register when no named pattern matches.
+    if (best?.isMate) {
+      const mp = classifyMatePattern(best.fenAfter);
+      if (mp && !seen.has(mp.id)) {
+        out.push({
+          id: mp.id,
+          name: mp.name,
+          source: 'mate',
+          squares: mp.squares,
+          // Prospective phrasing on purpose: the same line walker serves a
+          // solved puzzle AND a live engine PV that merely REACHES the mate.
+          full: `${mp.name} — ${mp.recognition}`,
+          short: `${mp.name}.`,
+          importance: 0.98,
+        });
+        seen.add(mp.id);
+        best = null;
+      }
+    }
     if (best && (best.tactic || best.isMate)) {
       const type = best.tactic ?? 'mate_threat';
       const landingSquare = best.to;

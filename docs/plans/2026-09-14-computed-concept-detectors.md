@@ -435,9 +435,42 @@ Update the phase's status marker + the decisions log as each lands.
   trades them on f7. The lesson teaches OCB over a board that isn't one. Needs
   a real OCB game position (G3 — never invented); the gate pins it to
   `same-bishops` until replaced.
-- **P2b — mate-pattern detectors** [pending]: §C, audit `mating-patterns.json`
-  first for what already detects.
-- **P3 — consolidate** `puzzleConceptHint` → one source [pending].
+- **P2b — mate-pattern detectors** [done 2026-09-14]: `matePatterns.ts` —
+  `classifyMatePattern(fenAfterMate)` builds the mate geometry (checkers,
+  the eight flights with self-block vs. cover-by-whom computed with the king
+  lifted, protectors) and runs 28 named rules most-specific-first plus the
+  seven piece-mate fundamentals (K+Q, K+R, R+R, B+B, B+N, Q+B, Q+N — only
+  when the attacking king takes part and no pawn helps; otherwise a named
+  pattern wins, e.g. Balestra / Anderssen). Vocabulary + spoken register =
+  `mating-patterns.json` (hand-authored `narration.recognition`). Known-answer
+  gate: `matePatterns.test.ts` plays the mating move of all 33 mate-in-1
+  lesson positions (found by search, no solution field needed) and pins each
+  to its id — 36/36. Wired: `conceptForLine` names a delivered mate by its
+  pattern (`source: 'mate'`, importance 0.98, prospective phrasing so the
+  same walker serves a live PV that merely reaches the mate), so puzzles,
+  the briefing, Learn, Review and the walkthrough all say "Anastasia's mate",
+  not "Rh5#" (Narration Voice Rule 7). Nothing detected → generic mate
+  register (never specific-but-wrong).
+- **P3 — consolidate** `puzzleConceptHint` → one source [done 2026-09-14]:
+  `conceptHintForPuzzle({fen, moves, themes, studentToMove})` — the computed
+  lead's short register leads, the theme table is the fallback — now feeds
+  every drill hint (`endgameDrillService`, `adaptiveEndgameService` ×2,
+  `gameCalculationPuzzleService`). `puzzleConceptExplanation` (PuzzleBoard +
+  the classroom drill) leads with the COMPUTED concept (name + invariant idea;
+  `computedId`/`computedSource` added; the tag→book passage kept for sourcing
+  and as fallback), and `conceptIdeaForThemes(themes, board?)` lets the hint
+  system's Tier-3 answer classify the engine's best move on the live FEN
+  instead of trusting tags — a puzzle tagged "pin" whose solution forks now
+  says fork. Gates: `puzzleConceptHint.test.ts`, the extended
+  `puzzleConceptExplanation.test.ts`.
+- **Master Level square** [done 2026-09-14]: `/tactics/master` already existed
+  but only the coach door led to it — the Tactics hub now carries the tile
+  (David: "reach it from both surfaces"). Gate in `TacticsPage.test.tsx`.
+- **Rot fixed on the way (P2b/P3):** `classifyMatchup` hand-parsed any string
+  and read `"nope"` as a knight + pawn → "minor-piece ending"; it now
+  validates the FEN first (→ `non-endgame`), and `conceptForLine` returns []
+  on an unparseable root. Two test fixtures carried TWO black kings (invalid
+  FENs the hand parser tolerated) — fixed.
 - **P4 — wire chokepoints** [pending]: `envelope.ts:741` + `coachApi.ts:5395`;
   each surface with a fires-for-real test + its speaking contract (table above).
 - **P4a — ONE COMPUTATIONAL SYSTEM integration** [done 2026-09-14]:

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin, Lightbulb, Calculator, Swords, Crown } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -55,6 +55,11 @@ const FIXED_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ s
 // reaches, ahead of the generic themed sets (David 2026-06-11).
 const TOP_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
   { key: 'pattern-school', label: 'Pattern Recognition', icon: Swords, route: '/tactics/patterns', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },
+  // Master Level — the elite (2400+) pool, reachable from the Tactics hub as
+  // well as from the coach ("quiz me master puzzles") — David 2026-09-14: "I do
+  // also want a master level puzzle square in tactics … reach it from both
+  // surfaces." The route already existed; only the coach door led to it.
+  { key: 'master-level', label: 'Master Level', icon: Crown, route: '/tactics/master', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', rgb: '250, 204, 21' },
   { key: 'my mistakes', label: 'My Mistakes', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
   { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
   { key: 'analysis-practice', label: 'Analysis Practice', icon: Lightbulb, route: '/tactics/analysis-practice', color: 'text-indigo-400', bgColor: 'bg-indigo-500/10', rgb: '99, 102, 241' },

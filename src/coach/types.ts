@@ -498,7 +498,7 @@ export interface LiveAnnotationContext {
 export interface CoachConcept {
   id: string;
   name: string;
-  source: 'tactic' | 'matchup' | 'technique' | 'positional';
+  source: 'tactic' | 'matchup' | 'technique' | 'positional' | 'mate';
   squares: string[];
   full: string;
   short: string;

@@ -27,7 +27,7 @@
 import { Chess } from 'chess.js';
 import puzzlesData from '../data/puzzles.json';
 import { calculateRatingDelta } from './puzzleService';
-import { pickConceptHint } from './puzzleConceptHint';
+import { conceptHintForPuzzle } from './puzzleConceptHint';
 import type { EndgameLesson, EndgameLessonPosition } from '../types/endgameLesson';
 
 export interface RawPuzzle {
@@ -380,7 +380,7 @@ export function adaptivePuzzleToLessonPosition(
         bestMove: sans[0],
         solution: sans,
         source: p.sourceLabel ?? 'From one of your games',
-        conceptHint: p.conceptHint ?? pickConceptHint(p.themes) ?? undefined,
+        conceptHint: p.conceptHint ?? conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: p.themes, studentToMove: true }) ?? undefined,
       };
     }
     chess.move({
@@ -414,7 +414,7 @@ export function adaptivePuzzleToLessonPosition(
       // Concept hint mapped from the puzzle's theme tags. Shown
       // under the prompt after a wrong first move so the student
       // gets a tactical nudge without revealing the move.
-      conceptHint: pickConceptHint(p.themes) ?? undefined,
+      conceptHint: conceptHintForPuzzle({ fen: p.fen, moves: p.moves, themes: p.themes }) ?? undefined,
     };
   } catch {
     return null;
