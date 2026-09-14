@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Brain, BookOpen, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Brain, BookOpen, AlertTriangle, Crown } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
-import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
+import { seedPuzzles, seedMasterPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
 import type { PuzzleStats } from '../../services/puzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
 import { markRepCompletedToday } from '../../services/repCompletion';
@@ -17,6 +17,14 @@ import type {
   AdaptiveSessionState,
   AdaptiveSessionSummary as SummaryData,
 } from '../../services/adaptivePuzzleService';
+import {
+  resolveReachState,
+  recordReachResult,
+  nextTarget,
+  reachTier,
+  type ReachState,
+} from '../../services/reachRating';
+import { reachCueFor, spikeIncomingCue, type ReachCue } from '../../services/reachCue';
 import type { PuzzleRecord } from '../../types';
 import type { PuzzleOutcome } from './PuzzleBoard';
 import { voiceService } from '../../services/voiceService';
@@ -37,7 +45,7 @@ const RATING_DELTA_CLEAN = 20;
 const RATING_DELTA_ASSISTED = 5;
 const RATING_DELTA_FAILED = -20;
 
-export function AdaptivePuzzlePage(): JSX.Element {
+export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
@@ -82,15 +90,60 @@ export function AdaptivePuzzlePage(): JSX.Element {
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [stats, setStats] = useState<PuzzleStats | null>(null);
   const [playerRating, setPlayerRating] = useState<number>(activeProfile?.puzzleRating ?? 1200);
-  const [ratingDelta, setRatingDelta] = useState<number | null>(null);
   const seenIdsRef = useRef<Set<string>>(new Set());
 
   const userRating = activeProfile?.puzzleRating ?? 1200;
+
+  // ── Adaptive Reach Ladder (docs/plans/2026-09-14-adaptive-reach-ladder.md) ──
+  // ONE persisted difficulty controller drives selection + the felt cues. The
+  // reach rating (not the classic puzzleRating) is the number the ladder shows
+  // and floats to ~80% success; puzzleRating keeps updating classically in the
+  // background for calibration continuity (P5 folds them fully).
+  const reachRef = useRef<ReachState | null>(null);
+  const spikeServedRef = useRef(false);
+  const cueRotateRef = useRef(0);
+  // Master Level rides its OWN persisted ladder (masterReachState) in the elite
+  // band, so a bad day at 2600 never craters the normal tactics number.
+  const persistedReach = master
+    ? activeProfile?.preferences?.masterReachState
+    : activeProfile?.preferences?.reachState;
+  const [reachRating, setReachRating] = useState<number>(
+    persistedReach?.rating
+      ?? (activeProfile?.puzzleRating ?? 1200) + (master ? 0 : 200),
+  );
+  const [reachDelta, setReachDelta] = useState<number | null>(null);
+  const [cue, setCue] = useState<ReachCue | null>(null);
+  const [masterReady, setMasterReady] = useState<boolean>(!master);
 
   // Keep playerRating synced with profile
   useEffect(() => {
     setPlayerRating(activeProfile?.puzzleRating ?? 1200);
   }, [activeProfile?.puzzleRating]);
+
+  /** Persist the reach ladder to profile.preferences (non-indexed — no schema
+   *  bump), mirroring the puzzleRating write pattern. Master mode writes its
+   *  own key. */
+  const persistReach = useCallback((next: ReachState): void => {
+    reachRef.current = next;
+    setReachRating(next.rating);
+    if (activeProfile) {
+      const preferences = {
+        ...activeProfile.preferences,
+        ...(master ? { masterReachState: next } : { reachState: next }),
+      };
+      setActiveProfile({ ...activeProfile, preferences });
+      void db.profiles.update(activeProfile.id, { preferences });
+    }
+  }, [activeProfile, setActiveProfile, master]);
+
+  /** Show a cue: visual toast always; voice honors verbosity via speakForced
+   *  (Silent users see it, don't hear it). Auto-clears. */
+  const showCue = useCallback((c: ReachCue | null): void => {
+    if (!c) return;
+    setCue(c);
+    if (c.voice) void voiceService.speakForced(c.voice);
+    window.setTimeout(() => setCue((cur) => (cur === c ? null : cur)), 4500);
+  }, []);
 
   // Seed puzzles and load stats on mount
   useEffect(() => {
@@ -102,8 +155,31 @@ export function AdaptivePuzzlePage(): JSX.Element {
       });
   }, []);
 
+  // Master Level: lazily fetch the elite (2400+) CC0 pool the first time this
+  // section is opened, then flag it ready so the auto-start below can fire.
+  useEffect(() => {
+    if (!master) return;
+    void seedMasterPuzzles()
+      .catch((err: unknown) => {
+        console.warn('[AdaptivePuzzlePage] master pool seeding failed:', err);
+      })
+      .finally(() => setMasterReady(true));
+  }, [master]);
+
   const fetchNextPuzzle = useCallback(async (sess: AdaptiveSessionState): Promise<void> => {
-    const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current);
+    // The reach controller decides the target difficulty + whether this is a
+    // boss spike; selection favors multi-move sequences (David 2026-09-14).
+    const reach = reachRef.current;
+    const { target, isSpike } = reach
+      ? nextTarget(reach, { master })
+      : { target: sess.sessionRating, isSpike: false };
+    spikeServedRef.current = isSpike;
+    if (isSpike) showCue(spikeIncomingCue(cueRotateRef.current++));
+
+    const puzzle = await getNextAdaptivePuzzle(sess, seenIdsRef.current, {
+      targetOverride: target,
+      preferMultiMove: true,
+    });
     if (!puzzle) {
       // No more puzzles available — end session
       voiceService.stop();
@@ -114,9 +190,9 @@ export function AdaptivePuzzlePage(): JSX.Element {
     voiceService.stop();
     seenIdsRef.current.add(puzzle.id);
     setCurrentPuzzle(puzzle);
-    setRatingDelta(null);
+    setReachDelta(null);
     setPhase('solving');
-  }, []);
+  }, [showCue]);
 
   const handleSelectDifficulty = useCallback(async (difficulty: AdaptiveDifficulty): Promise<void> => {
     // Seed the session at the player's real puzzle rating (clamped into the
@@ -125,9 +201,19 @@ export function AdaptivePuzzlePage(): JSX.Element {
     const newSession = createAdaptiveSession(difficulty, forcedWeakThemes, userRating);
     setSession(newSession);
     seenIdsRef.current = new Set();
+    // Resume the persisted reach ladder, or seed it first-time from the
+    // player's puzzleRating + STRETCH_SEED. Never re-inflate on resume.
+    const reach = resolveReachState(
+      master ? activeProfile?.preferences?.masterReachState : activeProfile?.preferences?.reachState,
+      userRating,
+      { master },
+    );
+    reachRef.current = reach;
+    setReachRating(reach.rating);
+    setReachDelta(null);
     setPhase('loading');
     await fetchNextPuzzle(newSession);
-  }, [fetchNextPuzzle, forcedWeakThemes]);
+  }, [fetchNextPuzzle, forcedWeakThemes, activeProfile, userRating, master]);
 
   // Auto-start with medium difficulty when forcedWeakThemes are provided (from Lichess Dashboard)
   useEffect(() => {
@@ -136,6 +222,15 @@ export function AdaptivePuzzlePage(): JSX.Element {
       void handleSelectDifficulty('medium');
     }
   }, [forcedWeakThemes, handleSelectDifficulty]);
+
+  // Master Level auto-starts (no difficulty select) once the elite pool is
+  // ready — the master reach ladder seeds/floors it in the 2400+ band.
+  useEffect(() => {
+    if (master && masterReady && !autoStartedRef.current) {
+      autoStartedRef.current = true;
+      void handleSelectDifficulty('hard');
+    }
+  }, [master, masterReady, handleSelectDifficulty]);
 
   // On session end, space out the misconception tag that sent us here:
   // a solid session (≥60% accuracy) advances its SRS interval so it
@@ -164,19 +259,34 @@ export function AdaptivePuzzlePage(): JSX.Element {
       delta = RATING_DELTA_FAILED;
     }
 
-    // Update adaptive session state
+    // Update adaptive session state (theme tracking, streak, weakness boost,
+    // summary). Its band-clamped sessionRating is then OVERWRITTEN by the reach
+    // ladder below so selection + the panel float freely (no band cage).
     const updatedSession = processAdaptiveResult(
       session,
       currentPuzzle.rating,
       outcome.correct,
       currentPuzzle.themes,
     );
+
+    // ── The reach ladder: float to ~80% success, fire the felt cues ──
+    const reach = reachRef.current;
+    if (reach) {
+      const r = recordReachResult(reach, outcome.correct, {
+        wasSpike: spikeServedRef.current,
+        master,
+      });
+      persistReach(r.state);
+      setReachDelta(r.delta);
+      updatedSession.sessionRating = r.state.rating; // panel + selection = reach
+      for (const ev of r.events) showCue(reachCueFor(ev, cueRotateRef.current++));
+    }
     setSession(updatedSession);
 
-    // Apply the WO-specified Elo delta to the player's persistent puzzle rating
+    // Keep the classic persistent puzzleRating updating in the background for
+    // calibration continuity (P5 folds the two systems fully).
     const newRating = Math.max(100, playerRating + delta);
     setPlayerRating(newRating);
-    setRatingDelta(delta);
 
     // Record attempt in DB (auto-grade: correct='good', incorrect='again')
     await recordAttempt(
@@ -250,7 +360,8 @@ export function AdaptivePuzzlePage(): JSX.Element {
     setSession(null);
     setCurrentPuzzle(null);
     setSummary(null);
-    setRatingDelta(null);
+    setReachDelta(null);
+    setCue(null);
     seenIdsRef.current = new Set();
     void getPuzzleStats().then(setStats);
   }, []);
@@ -268,36 +379,61 @@ export function AdaptivePuzzlePage(): JSX.Element {
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
-          onClick={phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
+          onClick={master || phase === 'select' ? () => navigate('/tactics') : handleBackToSelect}
           className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label={phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
+          aria-label={master || phase === 'select' ? 'Back to Tactics' : 'Back to difficulty select'}
           data-testid="back-button"
         >
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <div className="flex items-center gap-2">
           <Brain size={24} className="text-theme-accent" />
-          <h1 className="text-xl font-bold text-theme-text">Puzzles</h1>
+          <h1 className="text-xl font-bold text-theme-text">{master ? 'Master Level' : 'Puzzles'}</h1>
         </div>
         <div className="flex-1" />
-        {/* Player rating badge with animated delta */}
+        {/* Reach-ladder badge: Level + reach rating with animated delta */}
         <div className="flex items-center gap-2" data-testid="player-rating-header">
-          <span className={`text-sm font-semibold text-theme-text ${ratingDelta !== null ? 'rating-bump' : ''}`} data-testid="player-rating-value">
-            Rating: {playerRating}
+          <span className={`text-sm font-semibold text-theme-text ${reachDelta !== null ? 'rating-bump' : ''}`} data-testid="player-rating-value">
+            Level {reachTier(reachRating)} · {reachRating}
           </span>
-          {ratingDelta !== null && (
+          {reachDelta !== null && reachDelta !== 0 && (
             <span
-              className={`text-xs font-bold ${ratingDelta > 0 ? 'text-green-400' : 'text-red-400'}`}
+              className={`text-xs font-bold ${reachDelta > 0 ? 'text-green-400' : 'text-red-400'}`}
               data-testid="rating-delta"
             >
-              {ratingDelta > 0 ? '+' : ''}{ratingDelta}
+              {reachDelta > 0 ? '+' : ''}{reachDelta}
             </span>
           )}
         </div>
       </div>
 
-      {/* Difficulty Select */}
-      {phase === 'select' && (
+      {/* Reach cue toast — the felt step-up / boss / settle callout. Visual
+          always; voice honored the verbosity setting when it fired. */}
+      {cue && (
+        <div
+          className={`mb-3 rounded-lg px-4 py-2 text-sm font-semibold text-center animate-pulse ${
+            cue.tone === 'down'
+              ? 'bg-theme-surface text-theme-text-muted'
+              : cue.tone === 'spike'
+              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/40'
+              : 'bg-green-500/15 text-green-300 border border-green-500/40'
+          }`}
+          data-testid="reach-cue"
+        >
+          {cue.visual}
+        </div>
+      )}
+
+      {/* Master Level warm-up: fetching the elite pool + auto-starting. */}
+      {master && phase === 'select' && (
+        <div className="flex flex-col items-center justify-center flex-1 gap-3" data-testid="master-loading">
+          <p className="text-theme-text">Loading Master Level…</p>
+          <p className="text-sm text-theme-text-muted">2400+ puzzles, multi-move favored</p>
+        </div>
+      )}
+
+      {/* Difficulty Select (normal tactics only) */}
+      {!master && phase === 'select' && (
         <div className="space-y-6">
           {stats && (
             <div className="flex flex-wrap gap-4 text-sm text-theme-text-muted">
@@ -327,6 +463,15 @@ export function AdaptivePuzzlePage(): JSX.Element {
               My Mistakes
             </Link>
           </div>
+          {/* Master Level — opt-in elite (2400+) ladder, multi-move favored. */}
+          <Link
+            to="/tactics/master"
+            className="flex items-center justify-center gap-2 mx-auto max-w-xs px-4 py-3 rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 text-amber-300 font-semibold hover:bg-amber-500/20 transition-colors"
+            data-testid="master-level-link"
+          >
+            <Crown size={18} />
+            Master Level
+          </Link>
         </div>
       )}
 
@@ -430,7 +575,7 @@ export function AdaptivePuzzlePage(): JSX.Element {
       {phase === 'summary' && summary && (
         <AdaptiveSessionSummary
           summary={summary}
-          onBackToSelect={handleBackToSelect}
+          onBackToSelect={master ? () => navigate('/tactics') : handleBackToSelect}
           onPlayAgain={() => void handlePlayAgain()}
         />
       )}

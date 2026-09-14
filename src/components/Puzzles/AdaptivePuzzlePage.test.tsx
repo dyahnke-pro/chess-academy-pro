@@ -122,10 +122,13 @@ describe('AdaptivePuzzlePage', () => {
     });
   });
 
-  it('shows user rating in header', async () => {
+  it('shows the reach-ladder badge in the header (Level + seeded reach rating)', async () => {
+    // No persisted reachState ⇒ seed = puzzleRating(1200) + STRETCH_SEED(200).
     render(<AdaptivePuzzlePage />);
     await waitFor(() => {
-      expect(screen.getByText('Rating: 1200')).toBeInTheDocument();
+      const badge = screen.getByTestId('player-rating-value');
+      expect(badge).toHaveTextContent('1400');
+      expect(badge.textContent).toMatch(/Level \d+ · 1400/);
     });
   });
 

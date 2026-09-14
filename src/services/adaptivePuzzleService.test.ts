@@ -6,6 +6,7 @@ import {
   getNextAdaptivePuzzle,
   getAdaptiveSessionSummary,
   ADAPTIVE_CONFIGS,
+  isMultiMovePuzzle,
 } from './adaptivePuzzleService';
 import type { AdaptiveDifficulty, AdaptiveSessionState } from './adaptivePuzzleService';
 import type { PuzzleRecord } from '../types';
@@ -283,6 +284,68 @@ describe('adaptivePuzzleService', () => {
       const session = createAdaptiveSession('easy');
       const summary = getAdaptiveSessionSummary(session);
       expect(summary.duration).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  // ── Adaptive Reach Ladder (P2): targetOverride + multi-move favoring ──
+  describe('reach-ladder selection hooks', () => {
+    it('isMultiMovePuzzle flags long / veryLong / mateIn2+ but not short/oneMove', () => {
+      expect(isMultiMovePuzzle({ themes: ['long', 'fork'] })).toBe(true);
+      expect(isMultiMovePuzzle({ themes: ['veryLong'] })).toBe(true);
+      expect(isMultiMovePuzzle({ themes: ['mateIn3'] })).toBe(true);
+      expect(isMultiMovePuzzle({ themes: ['short', 'fork'] })).toBe(false);
+      expect(isMultiMovePuzzle({ themes: ['oneMove', 'mateIn1'] })).toBe(false);
+    });
+
+    it('targetOverride selects around the OVERRIDE rating, not the session rating', async () => {
+      // Session seeded easy (~1000), but the reach controller wants a 1400 spike.
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 'low', rating: 1000 }),
+        makePuzzle({ id: 'spike', rating: 1400 }),
+      ]);
+      const session = createAdaptiveSession('easy');
+      const puzzle = await getNextAdaptivePuzzle(session, new Set(), { targetOverride: 1400 });
+      expect(puzzle?.id).toBe('spike');
+    });
+
+    it('preferMultiMove draws from the multi-move pool when one is healthy in-band', async () => {
+      // A fat band with a healthy multi-move sub-pool + single-move puzzles at
+      // the exact target. preferMultiMove must pick a multi-move one.
+      const at = 1500;
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 's1', rating: at, themes: ['short'] }),
+        makePuzzle({ id: 's2', rating: at, themes: ['oneMove'] }),
+        makePuzzle({ id: 'm1', rating: at + 5, themes: ['long'] }),
+        makePuzzle({ id: 'm2', rating: at + 8, themes: ['veryLong'] }),
+        makePuzzle({ id: 'm3', rating: at + 12, themes: ['mateIn3'] }),
+      ]);
+      const session = createAdaptiveSession('hard');
+      const ids = new Set<string>();
+      // Sample several draws — every one must be a multi-move puzzle.
+      for (let i = 0; i < 8; i++) {
+        const p = await getNextAdaptivePuzzle(session, new Set(), {
+          targetOverride: at,
+          preferMultiMove: true,
+        });
+        if (p) ids.add(p.id);
+      }
+      expect([...ids].every((id) => id.startsWith('m'))).toBe(true);
+    });
+
+    it('preferMultiMove falls back to the full pool when the multi-move sub-pool is thin', async () => {
+      // Only ONE multi-move in band (< 3 threshold) → selection must not starve;
+      // it falls back to the full pool rather than returning null.
+      await db.puzzles.bulkPut([
+        makePuzzle({ id: 's1', rating: 1500, themes: ['short'] }),
+        makePuzzle({ id: 's2', rating: 1505, themes: ['short'] }),
+        makePuzzle({ id: 'm1', rating: 1502, themes: ['long'] }),
+      ]);
+      const session = createAdaptiveSession('hard');
+      const p = await getNextAdaptivePuzzle(session, new Set(), {
+        targetOverride: 1500,
+        preferMultiMove: true,
+      });
+      expect(p).not.toBeNull();
     });
   });
 });

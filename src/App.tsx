@@ -576,6 +576,7 @@ export function App(): JSX.Element {
           <Route path="/tactics/analysis-practice" element={<ErrorBoundary><AnalysisPracticePage /></ErrorBoundary>} />
           <Route path="/tactics/calculation" element={<ErrorBoundary><CalculationDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
+          <Route path="/tactics/master" element={<ErrorBoundary><AdaptivePuzzlePage master /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-drill" element={<ErrorBoundary><WeaknessTagDrillPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness-themes" element={<ErrorBoundary><WeaknessThemesPage /></ErrorBoundary>} />

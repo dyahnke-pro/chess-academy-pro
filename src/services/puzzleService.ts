@@ -148,6 +148,69 @@ export async function seedPuzzles(): Promise<void> {
   });
 }
 
+// ─── Master Level pool (lazy — David 2026-09-14) ────────────────────────────
+
+const MASTER_SEED_KEY = 'master_puzzles_seeded_v1';
+
+/** Whether the Master Level elite pool has been fetched into Dexie. */
+export async function isMasterPoolSeeded(): Promise<boolean> {
+  const record = await db.meta.get(MASTER_SEED_KEY);
+  return record?.value === 'true';
+}
+
+/**
+ * Lazily fetch the elite (2400+) CC0 Master Level pool from
+ * `public/data/master-puzzles.json` (NOT bundled — keeps the JS bundle lean)
+ * and seed it into the shared `puzzles` store tagged `source: 'master'`. Called
+ * only when the Master Level section is opened, so a user who never touches it
+ * never pays the ~1MB fetch. Idempotent + StrictMode-safe like seedPuzzles.
+ * Returns the number of master puzzles available after seeding.
+ */
+export async function seedMasterPuzzles(): Promise<number> {
+  if (!(await isMasterPoolSeeded())) {
+    let raw: RawPuzzle[] = [];
+    try {
+      const res = await fetch(`${import.meta.env.BASE_URL ?? '/'}data/master-puzzles.json`);
+      if (res.ok) raw = (await res.json()) as RawPuzzle[];
+    } catch (err) {
+      console.warn('[puzzleService] master pool fetch failed:', err);
+      return db.puzzles.filter((p) => p.source === 'master').count();
+    }
+
+    await db.transaction('rw', db.puzzles, db.meta, async () => {
+      if (await isMasterPoolSeeded()) return;
+      const defaults = createDefaultSrsFields();
+      const today = new Date().toISOString().split('T')[0];
+      const existingIds = new Set(await db.puzzles.toCollection().primaryKeys());
+      const records: PuzzleRecord[] = raw
+        .filter((p) => !existingIds.has(p.id))
+        .map((p) => ({
+          id: p.id,
+          fen: p.fen,
+          moves: p.moves,
+          rating: p.rating,
+          themes: p.themes,
+          openingTags: p.openingTags,
+          popularity: p.popularity,
+          nbPlays: p.nbPlays,
+          movingPiece: p.movingPiece,
+          source: 'master' as const,
+          srsInterval: defaults.interval,
+          srsEaseFactor: defaults.easeFactor,
+          srsRepetitions: defaults.repetitions,
+          srsDueDate: today,
+          srsLastReview: null,
+          userRating: 1200,
+          attempts: 0,
+          successes: 0,
+        }));
+      if (records.length > 0) await db.puzzles.bulkAdd(records);
+      await db.meta.put({ key: MASTER_SEED_KEY, value: 'true' });
+    });
+  }
+  return db.puzzles.filter((p) => p.source === 'master').count();
+}
+
 // ─── Adaptive Difficulty ────────────────────────────────────────────────────
 
 const K_FACTOR = 32;

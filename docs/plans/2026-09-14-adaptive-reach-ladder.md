@@ -126,8 +126,19 @@ Start at the current phase marker below. The controller (P1) is the keystone —
 every surface reads it.
 
 ### Status
-- P1 controller — pending
-- P2 tactics wire — pending
-- P3 master level — pending
+- P1 controller — DONE (`reachRating.ts` + `reachCue.ts`, 26 tests). Seed +200,
+  80% float (down=4×up), streak ramp ×2/×3, boss spikes (+350, cadence 8 + hot
+  streak, miss ×0.25), tier-up/settle/streak/spike cues, no band cage, floor 400.
+- P2 tactics wire — DONE. `AdaptivePuzzlePage` drives selection + cues from the
+  controller; reach persisted to `preferences.reachState`; badge = Level+reach;
+  boss-spike banner; `getNextAdaptivePuzzle` favors multi-move + targetOverride.
+- P3 master level — DONE. `scripts/build-master-puzzles.mjs` pulled 4132 CC0
+  puzzles (71% multi-move, 2400–3035) → `public/data/master-puzzles.json` (lazy,
+  `seedMasterPuzzles`). `/tactics/master` route + entry; own `masterReachState`.
+  Gate: `masterPuzzles.test.ts`.
 - P4 review sequences — pending
 - P5 mistakes/teach fold-in — pending
+
+### Deploy log
+- 2026-09-14: P1–P3 shipped as milestone 1 (controller + felt tactics + Master
+  Level). P4 (review sequences) + P5 (mistakes/teach fold-in) to follow.

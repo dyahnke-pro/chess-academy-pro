@@ -26,8 +26,11 @@ export interface PuzzleRecord {
    *  records in `puzzles.json`). 'training' = the hand-crafted /
    *  procedurally-generated sub-400 ELO pool that lives in
    *  `training-puzzles.json` — used by kid mode to bridge the gap
-   *  between rating 100 (kid floor) and 400 (Lichess floor). */
-  source?: 'lichess' | 'training';
+   *  between rating 100 (kid floor) and 400 (Lichess floor).
+   *  'master' = the elite (2400+) CC0 pool lazy-fetched from
+   *  `public/data/master-puzzles.json` for the Master Level ladder
+   *  (see reachRating.ts + the 2026-09-14 reach-ladder plan). */
+  source?: 'lichess' | 'training' | 'master';
   // SRS fields
   srsInterval: number;
   srsEaseFactor: number;
@@ -1009,6 +1012,18 @@ export interface UserPreferences {
    * avoid runaway growth; see coachMemoryService for limits.
    */
   coachMemory?: string[];
+  /**
+   * Persisted "reach rating" ladder state — the one adaptive-difficulty
+   * controller shared by Tactics / Train-Mistakes / Teach-Tactics / Review
+   * (see src/services/reachRating.ts + docs/plans/2026-09-14-adaptive-reach-ladder.md).
+   * NOT session-reset: the edge the player climbed to is still there next
+   * session. `reachState` is the general tactics ladder; `masterReachState`
+   * is the separate elite (2400+) Master Level ladder so a bad day at 2600
+   * never craters the normal number. Non-indexed, so no Dexie schema bump.
+   * Absent ⇒ seed on first use from puzzleRating + STRETCH_SEED.
+   */
+  reachState?: import('../services/reachRating').ReachState;
+  masterReachState?: import('../services/reachRating').ReachState;
 }
 
 export interface UserProfile {
