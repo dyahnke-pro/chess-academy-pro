@@ -352,6 +352,21 @@ source (`own-game` | `master-gen`), flow into the reach ladder + classroom drill
 `conceptForBoard` teaching like any other puzzle. "From your own game" is a
 first-class label.
 
+## Per-phase process (David 2026-09-14: "regain context after each build, even before auditing so you know what to look for")
+
+After EACH phase's build, BEFORE running its audit:
+1. Re-read this plan doc (the phase's intent + its done-condition + the gates it
+   must pass) and the relevant surface-map region (`docs/coach-system-map.md`,
+   and the detector/endgame/consumer maps this plan was built from).
+2. Restate what the phase was supposed to change and therefore WHAT THE AUDIT
+   MUST LOOK FOR — the specific fires-for-real assertions, the surfaces touched,
+   the voice/importance/verbosity gates in scope.
+3. THEN run the 3-instrument audit against that restated checklist, not a stale
+   mental model. A build followed by an audit that doesn't know what changed is
+   how green audits miss real regressions.
+
+Update the phase's status marker + the decisions log as each lands.
+
 ## Phased plan
 
 - **P1 — shared engine** [pending]: material signature + matchup-class reducer +
