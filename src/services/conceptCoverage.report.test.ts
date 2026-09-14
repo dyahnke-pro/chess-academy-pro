@@ -57,16 +57,16 @@ describe('concept coverage report (env-gated)', () => {
     const triageSample: string[] = [];
 
     for (const p of sample) {
-      if ((p.themes ?? []).some((t) => oldThemeMap.has(t))) oldCovered += 1;
+      if (p.themes.some((t) => oldThemeMap.has(t))) oldCovered += 1;
       const concepts = conceptForSolution(p.fen, p.moves.trim().split(/\s+/));
       if (concepts.length === 0) { silent += 1; continue; }
       leadDist[concepts[0].name] = (leadDist[concepts[0].name] ?? 0) + 1;
-      const tset = new Set(p.themes ?? []);
+      const tset = new Set(p.themes);
       if (concepts.some((c) => (CONCEPT_THEMES[c.id] ?? []).some((t) => tset.has(t)))) {
         agree += 1;
       } else {
         firesNoTag += 1;
-        if (triageSample.length < 25) triageSample.push(`${p.id} [${(p.themes ?? []).join(',')}] → ${concepts[0].name}`);
+        if (triageSample.length < 25) triageSample.push(`${p.id} [${p.themes.join(',')}] → ${concepts[0].name}`);
       }
     }
 
@@ -83,7 +83,6 @@ describe('concept coverage report (env-gated)', () => {
     fs.mkdirSync(path.join(root, 'audit-reports'), { recursive: true });
     fs.writeFileSync(path.join(root, 'audit-reports/concept-coverage.json'), JSON.stringify(report, null, 2));
 
-    // eslint-disable-next-line no-console
     console.log(`concept coverage: OLD ${pct(oldCovered)} | AGREE ${pct(agree)} | FIRES-NO-TAG ${pct(firesNoTag)} | SILENT ${pct(silent)} (n=${n})`);
     expect(agree + firesNoTag + silent).toBe(n);
   }, 600_000);

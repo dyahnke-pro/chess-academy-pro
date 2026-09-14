@@ -206,7 +206,7 @@ describe('positionFacts — the computed CONCEPT joins the spoken briefing (one 
     const concept = r.clauses.find((c) => c.kind === 'concept');
     expect(concept).toBeDefined();
     expect(concept!.rank).toBeGreaterThanOrEqual(39);
-    expect(concept!.text.toLowerCase()).toContain('rook ending');
+    expect(concept!.text.toLowerCase()).toMatch(/lucena|rook ending/); // the fixture is a Lucena → the named technique leads
   });
 
   it('speaks no concept in the opening (nothing but a real threat speaks there)', async () => {

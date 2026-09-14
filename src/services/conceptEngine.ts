@@ -156,17 +156,18 @@ function cap(s: string): string {
 }
 
 /** Named-technique concept for an ending, when a deterministic technique detector
- *  fires (specific > the generic matchup principle). Currently: the opposition. */
+ *  fires (specific > the generic matchup principle). `importance` is the
+ *  technique's own (a fired theorem outranks the generic principle). */
+function technique(id: string, name: string, full: string, short: string, squares: string[] = [], importance = 0.6): ComputedConcept {
+  return { id, name, source: 'technique', squares, full, short, importance };
+}
+
 function renderOppositionConcept(): ComputedConcept {
-  return {
-    id: 'opposition',
-    name: 'The opposition',
-    source: 'technique',
-    squares: [],
-    full: 'The opposition: the kings face off with an odd number of squares between them, and the side NOT to move has to give ground — taking it is how the stronger king forces its way in.',
-    short: 'The opposition — force them back.',
-    importance: 0,
-  };
+  return technique(
+    'opposition', 'The opposition',
+    'The opposition: the kings face off with an odd number of squares between them, and the side NOT to move has to give ground — taking it is how the stronger king forces its way in.',
+    'The opposition — force them back.',
+  );
 }
 
 /**
@@ -211,7 +212,126 @@ export function renderMatchupConcept(m: MatchupResult): ComputedConcept | null {
 // ─── conceptForBoard — the ONE entry point ───────────────────────────────────
 import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
-import { detectOpposition } from './endgameTechnique';
+import {
+  detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner,
+  detectLucena, detectPhilidor, detectCutOff, detectRookBehindPasser,
+} from './endgameTechnique';
+
+/**
+ * The NAMED endgame technique a position teaches, when one of the deterministic
+ * geometry predicates fires — routed by matchup class so a theorem is only
+ * asked on the board it holds for. Most-specific first inside each class.
+ * Every `full` states the geometry the detector proved plus the technique's
+ * general rule; none claims a game result (the other king may still decide it).
+ */
+function namedTechniqueFor(fen: string, cls: MatchupClass): ComputedConcept | null {
+  if (cls === 'kp-vs-k') {
+    const ks = detectKeySquares(fen);
+    if (ks?.kingOnKeySquare) {
+      return technique(
+        'key-squares', 'The key squares',
+        `The king on ${ks.kingOnKeySquare} stands on a key square of the ${ks.pawn} pawn — from there the pawn promotes by force whoever is to move, so the whole fight in king and pawn against king is to reach one of those squares (${ks.keySquares.join(', ')}).`,
+        'Key square — the pawn queens by force.', [ks.kingOnKeySquare, ks.pawn], 0.7,
+      );
+    }
+    const corner = detectRookPawnCorner(fen);
+    if (corner) {
+      return technique(
+        'rook-pawn-corner', 'The rook-pawn draw',
+        `The ${corner.pawn} pawn is a rook pawn and the defending king holds the ${corner.corner} corner: it can never be driven out, and pushing the pawn only stalemates — a rook pawn alone cannot be forced through.`,
+        'Rook pawn — the corner holds.', [corner.pawn, corner.corner], 0.65,
+      );
+    }
+    // A pure RACE (the attacking king too far to support) is the rule of the
+    // square, even if the kings happen to be aligned — the opposition only
+    // governs when the kings are fighting over the pawn's squares.
+    const race = detectRuleOfSquare(fen);
+    if (race) {
+      return technique(
+        'rule-of-the-square', 'The rule of the square',
+        race.defenderInside
+          ? `The defending king is inside the square of the ${race.pawn} pawn — count the ranks to promotion, draw the square, and a king inside it catches the pawn on its own; the race then depends on the other king.`
+          : `The defending king is outside the square of the ${race.pawn} pawn — count the ranks to promotion, draw the square, and a king outside it can never catch the pawn: it queens on its own.`,
+        race.defenderInside ? 'Inside the square — the pawn is caught.' : 'Outside the square — the pawn queens.', [race.pawn], 0.65,
+      );
+    }
+    const opp = detectOpposition(fen);
+    if (opp) return renderOppositionConcept();
+    if (ks) {
+      return technique(
+        'key-squares', 'The key squares',
+        `The ${ks.pawn} pawn's key squares are ${ks.keySquares.join(', ')} — get the king onto one of them and the pawn promotes by force whoever is to move; the pawn itself waits until the king is there.`,
+        'Head for a key square.', [ks.pawn, ...ks.keySquares], 0.6,
+      );
+    }
+    return null;
+  }
+  if (cls === 'pawn-endgame') {
+    // With several pawns only the DIRECT opposition is a concept — kings that
+    // happen to share a rank three squares apart across a busy pawn ending are
+    // not "in distant opposition" in any way that decides the position (the
+    // 4,000-puzzle probe: every distant hit there was noise, every direct hit
+    // a real face-off).
+    const opp = detectOpposition(fen);
+    return opp?.kind === 'direct' ? renderOppositionConcept() : null;
+  }
+  // Rook techniques: the pure rook ending, and R(+P) against a lone king
+  // (classed as mating material) — cutting the king off is the same theorem
+  // there. Each detector checks its own exact material.
+  if (cls === 'rook-endgame' || cls === 'mating-material') {
+    const lucena = detectLucena(fen);
+    if (lucena) {
+      return technique(
+        'lucena', 'The Lucena position',
+        `This is the Lucena position: the ${lucena.pawn} pawn on the seventh with the king in front of it and the defending king cut off. The win is to build a bridge — lift the rook to the fourth rank, then walk the king out of the checks and shelter it behind that rook.`,
+        'Lucena — build the bridge.', [lucena.pawn], 0.75,
+      );
+    }
+    const phil = detectPhilidor(fen);
+    if (phil) {
+      return technique(
+        'philidor', 'The Philidor defence',
+        phil.thirdRankSet
+          ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank; the moment the pawn steps up, drop the rook back and check from behind.`
+          : `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn, which has not crossed the fifth rank. The drawing plan is the third-rank defence — put the rook on the third rank to fence the attacking king out, and once the pawn advances, check it from behind for as long as it takes.`,
+        'Philidor — hold the third rank.', [phil.pawn], 0.7,
+      );
+    }
+    const cut = detectCutOff(fen);
+    if (cut) {
+      const kind = /^[a-h]$/.test(cut.line) ? `${cut.line}-file` : `${cut.line}${cut.line === '1' ? 'st' : cut.line === '2' ? 'nd' : cut.line === '3' ? 'rd' : 'th'} rank`;
+      return technique(
+        'cut-off-king', 'Cutting off the king',
+        `The rook on ${cut.rook} cuts the defending king off along the ${kind}: it cannot cross to reach the ${cut.pawn} pawn without stepping into the rook's line, so the pawn and king can advance on the far side unhindered.`,
+        'Cut the king off.', [cut.rook, cut.pawn], 0.65,
+      );
+    }
+    // Tarrasch's rule is only claimed on the pure rook ending — on a busier
+    // board the file the rook holds is one factor among many.
+    const behind = cls === 'rook-endgame' ? detectRookBehindPasser(fen) : null;
+    if (behind) {
+      return technique(
+        'rook-behind-passer', 'Rook behind the passed pawn',
+        behind.ownPawn
+          ? `The rook on ${behind.rook} stands behind its own ${behind.pawn} pawn — Tarrasch's rule: from behind it pushes the pawn while staying free, and every step forward lengthens its reach.`
+          : `The rook on ${behind.rook} stands behind the enemy ${behind.pawn} pawn — Tarrasch's rule: from behind it ties the pawn down, and every step the pawn takes shortens its own defender's leash.`,
+        'Rook behind the passed pawn.', [behind.rook, behind.pawn], 0.6,
+      );
+    }
+    return null;
+  }
+  // The wrong-bishop draw lives in a K+B+P vs K matchup (classed as a minor
+  // ending) — the detector checks the exact material itself.
+  const wrong = detectRookPawnCorner(fen);
+  if (wrong?.kind === 'wrong-bishop') {
+    return technique(
+      'wrong-rook-pawn-bishop', 'The wrong-bishop draw',
+      `The ${wrong.pawn} pawn is a rook pawn and the bishop never touches its promotion corner (${wrong.corner}), so with the defending king in that corner nothing can evict it and the pawn cannot be forced through — a wrong-bishop draw.`,
+      'Wrong bishop — the corner holds.', [wrong.pawn, wrong.corner], 0.7,
+    );
+  }
+  return null;
+}
 
 /**
  * The endgame concept for a position: the NAMED technique when a deterministic
@@ -220,13 +340,10 @@ import { detectOpposition } from './endgameTechnique';
  */
 export function endgameConceptFor(fen: string): ComputedConcept | null {
   const m = classifyMatchup(fen);
-  if (m.cls === 'pawn-endgame' || m.cls === 'kp-vs-k') {
-    if (detectOpposition(fen)) {
-      const opp = renderOppositionConcept();
-      opp.importance = 0.6; // a fired technique outranks the generic principle
-      return opp;
-    }
-  }
+  try {
+    const named = namedTechniqueFor(fen, m.cls);
+    if (named) return named;
+  } catch { /* a predicate that throws teaches nothing — fall through to the principle */ }
   return renderMatchupConcept(m);
 }
 

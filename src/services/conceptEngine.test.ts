@@ -108,10 +108,17 @@ describe('conceptEngine — renderer (computed invariant, not authored blob)', (
 
 describe('conceptForBoard — the ranked multi-concept router', () => {
   it('teaches the endgame principle in a quiet rook ending (matchup leads)', () => {
-    const cs = conceptForBoard('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1');
+    // Multi-pawn rook ending with no named technique on the board.
+    const cs = conceptForBoard('8/5pk1/8/8/8/6P1/R4PK1/3r4 w - - 0 1');
     expect(cs.length).toBeGreaterThanOrEqual(1);
     expect(cs[0].id).toBe('rook-endgame');
     expect(cs[0].source).toBe('matchup');
+  });
+
+  it('teaches the NAMED technique (Lucena) over the generic rook principle', () => {
+    const cs = conceptForBoard('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1');
+    expect(cs[0].id).toBe('lucena');
+    expect(cs[0].source).toBe('technique');
   });
 
   it('returns nothing teachable on the quiet starting position', () => {
@@ -136,9 +143,9 @@ describe('conceptForBoard — the ranked multi-concept router', () => {
 });
 
 describe('conceptForSolution — the puzzle / solution path', () => {
-  it('teaches the endgame principle from the start position of a rook ending', () => {
+  it('teaches the named technique (Lucena) from the start position of a rook ending', () => {
     const cs = conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2']);
-    expect(cs.some((c) => c.id === 'rook-endgame')).toBe(true);
+    expect(cs.some((c) => c.id === 'lucena')).toBe(true);
   });
 
   it('returns an array and never throws on a benign line', () => {
@@ -166,7 +173,11 @@ describe('conceptForSolution — technique reached along the solution', () => {
     // opposition with Kd4. After that move the kings are aligned d4/d6, one square
     // between, Black to move → White holds the opposition.
     const cs = conceptForSolution('8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', ['d5d6', 'd3d4']);
-    expect(cs.some((c) => c.id === 'opposition')).toBe(true);
+    // After …Kd6 Kd4 the kings are in opposition AND Kd4 stands on a key square
+    // of the e2 pawn — the more specific theorem (key square → promotes by
+    // force) leads; either is the named K+P technique, never the generic beat.
+    expect(cs.some((c) => c.id === 'key-squares' || c.id === 'opposition')).toBe(true);
+    expect(cs.some((c) => c.source === 'technique')).toBe(true);
   });
 });
 
@@ -217,8 +228,9 @@ describe('conceptEngine — ONE computational system (consumes the fed analysis)
     const noSwing = conceptForLine({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w' });
     // Both walks reach the same technique; the engine-fed one carries a concept
     // whose importance was set from the swing tier, the fed-less one falls back.
-    expect(withSwing.some((c) => c.id === 'opposition')).toBe(true);
-    expect(noSwing.some((c) => c.id === 'opposition')).toBe(true);
+    const named = (c: { id: string }): boolean => c.id === 'key-squares' || c.id === 'opposition';
+    expect(withSwing.some(named)).toBe(true);
+    expect(noSwing.some(named)).toBe(true);
   });
 
   it('a forced mate on the line is decisive regardless of cp', () => {

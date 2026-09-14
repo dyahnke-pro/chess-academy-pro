@@ -404,13 +404,37 @@ Update the phase's status marker + the decisions log as each lands.
 
 ## Phased plan
 
-- **P1 — shared engine** [pending]: material signature + matchup-class reducer +
-  winning-side + bishop-colour + concept renderer + router → `conceptForBoard`.
-  Regression: existing tactical puzzles still board-true. Validation harness
-  scaffolded.
-- **P2 — endgame technique detectors** [pending]: §D + §A.5, each landed with its
-  harness assertion over master + lesson corpus. Closes the 68%.
-  DECISION: coarse-matchup-class-first, or all named techniques at once?
+- **P1 — shared engine** [done 2026-09-14]: `endgameMatchup` (signature +
+  15-class reducer), `conceptEngine` (renderer registers + `conceptForBoard` /
+  `conceptForLine` router), `conceptCoverage.report.test.ts` harness.
+- **P2 — endgame technique detectors** [in progress 2026-09-14 — first pass
+  landed]: `endgameTechnique.ts` now carries eight geometry theorems, routed by
+  matchup class in `namedTechniqueFor` (most-specific first): key squares (on /
+  head-for), rule of the square (who-moves + double-step honest), the rook-pawn
+  corner draw, the opposition, Lucena, Philidor (setup vs third-rank-held),
+  cutting off the king, rook behind the passer (Tarrasch), wrong-bishop draw.
+  Every `full` states the geometry proved + the rule — NEVER a game result (the
+  other king may still decide it). Known-answer gate: `endgameTechnique.test.ts`
+  walks all 30 labeled positions of `pawn-endings` / `rook-endings` /
+  `drawn-patterns` and pins each to its concept id, plus a "no other lesson
+  fires a technique it wasn't labeled for" sweep. DECIDED: coarse class first,
+  named techniques inside it (specific > general > silent).
+  Still owed (need the solution line or the engine, not bare geometry):
+  triangulation, outflanking, breakthrough, zugzwang, Vancura, OCB fortress,
+  Q-vs-R fortress, mate-pattern detectors (P2b).
+  Coverage after P2 (400-puzzle sample, line-walk): AGREE 23.3% / FIRES-NO-TAG
+  70.8% / SILENT 6.0% — silence rose from 3.1% on purpose (generic positional
+  leads no longer count as teaching); the endgame leads are now named
+  techniques (opposition, rook-behind-passer, cutting-off, pawn ending…)
+  instead of the bare matchup principle. Multi-pawn endings count only the
+  DIRECT opposition (a 4,000-puzzle probe showed every distant hit there was
+  noise).
+  **DATA DEFECT flagged:** `drawn-patterns.json` → `opposite-color-bishops`'s
+  only position (`4b3/6k1/8/7p/pP5P/3BK1P1/2P5/8 b`) has BOTH bishops on light
+  squares (Be8, Bd3) — it is a same-coloured-bishop ending and its own solution
+  trades them on f7. The lesson teaches OCB over a board that isn't one. Needs
+  a real OCB game position (G3 — never invented); the gate pins it to
+  `same-bishops` until replaced.
 - **P2b — mate-pattern detectors** [pending]: §C, audit `mating-patterns.json`
   first for what already detects.
 - **P3 — consolidate** `puzzleConceptHint` → one source [pending].
