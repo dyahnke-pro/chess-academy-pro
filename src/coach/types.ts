@@ -492,6 +492,19 @@ export interface LiveAnnotationContext {
 
 /** Pre-computed tactical context attached to the envelope's live
  *  state. See `LiveState.tactics`. */
+/** A computed, ranked concept as carried in the fed package. Structurally
+ *  identical to `conceptEngine.ComputedConcept` (declared here, type-only, so the
+ *  types module never imports a service). */
+export interface CoachConcept {
+  id: string;
+  name: string;
+  source: 'tactic' | 'matchup' | 'technique' | 'positional';
+  squares: string[];
+  full: string;
+  short: string;
+  importance: number;
+}
+
 export interface TacticsLiveContext {
   /** Tactics on the board RIGHT NOW for the side to move
    *  (forks/pins/skewers/back-rank/etc.). */
@@ -535,6 +548,14 @@ export interface TacticsLiveContext {
    *  `getTacticLookahead`). The brain must not claim a tactic
    *  further out than this depth. */
   lookaheadDepth: number;
+  /** COMPUTED CONCEPTS — the teachable idea(s) of this position, ranked
+   *  most-important-first, computed by the one shared engine
+   *  (`conceptEngine.conceptForBoard`) from the SAME analysis this package
+   *  already carries (David 2026-09-14: "one single computational system, no
+   *  function working independently"). Each carries a full sentence and a
+   *  ≤8-word cue; the brain VOICES these in order — it never decides the
+   *  concept (G0). Absent/empty on a quiet position (empty > invented). */
+  concepts?: CoachConcept[];
   /** GROUND-TRUTH board facts computed deterministically from the FEN
    *  (chess.js), injected so the brain NEVER has to eyeball the board —
    *  the audit (2026-06-02) caught it putting a castled king on e8 and

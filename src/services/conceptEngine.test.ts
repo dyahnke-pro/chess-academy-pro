@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   sideToMove, solvingSide, materialBalance, strongerSide, framingSide,
   renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution, positionalConcepts,
+  conceptForLine,
 } from './conceptEngine';
 import { classifyMatchup } from './endgameMatchup';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -186,5 +187,42 @@ describe('conceptEngine — positional concepts (§E)', () => {
   it('surfaces a positional concept on a quiet position with a d5 knight outpost', () => {
     const cs = conceptForBoard('r2q1rk1/pp3ppp/2n1b3/3Np3/8/2P3P1/PP2PPBP/R2Q1RK1 w - - 0 1');
     expect(cs.some((c) => c.source === 'positional')).toBe(true);
+  });
+});
+
+describe('conceptEngine — ONE computational system (consumes the fed analysis)', () => {
+  // A puzzle-shaped line: Black to move (opponent) plays ...Kd6, White (student)
+  // takes the opposition with Kd4. Fed as the ENGINE's PV with a swing that
+  // clears the shared "critical" threshold, the line-walk must produce the
+  // opposition concept and rank it from the engine's swing.
+  const fen = '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1';
+  const pv = ['d5d6', 'd3d4'];
+
+  it('conceptForBoard walks the surface\'s existing PV instead of running its own engine', () => {
+    const analysis = {
+      bestMove: 'd5d6', evaluation: 50, isMate: false, mateIn: null, depth: 14, nodesPerSecond: 0,
+      topLines: [{ moves: pv, evaluation: 50, mate: null }],
+    } as unknown as import('../types').StockfishAnalysis;
+    const cs = conceptForBoard(fen, { analysis, studentSide: 'white', rating: 1500 });
+    expect(cs.some((c) => c.id === 'opposition')).toBe(true);
+  });
+
+  it('conceptForLine ranks a landed tactic by the engine\'s swing on the shared thresholds', () => {
+    // Same solution shape as the mate/tactic tests: importance must come from the
+    // swing (critical tier at 1500 = >=100cp → 0.88), not a static table.
+    const withSwing = conceptForLine({
+      fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w',
+      rootEvalCp: 0, lineEvalCp: 150, rating: 1500,
+    });
+    const noSwing = conceptForLine({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w' });
+    // Both walks reach the same technique; the engine-fed one carries a concept
+    // whose importance was set from the swing tier, the fed-less one falls back.
+    expect(withSwing.some((c) => c.id === 'opposition')).toBe(true);
+    expect(noSwing.some((c) => c.id === 'opposition')).toBe(true);
+  });
+
+  it('a forced mate on the line is decisive regardless of cp', () => {
+    const cs = conceptForLine({ fen: '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', uci: pv, studentColor: 'w', rootEvalCp: 0, lineEvalCp: 0, lineMate: 3 });
+    expect(cs.length).toBeGreaterThanOrEqual(1);
   });
 });

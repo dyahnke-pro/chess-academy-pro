@@ -12,6 +12,8 @@
 
 import type { TacticPattern, TacticPatternType } from '../types/tacticTypes';
 import type { MatchupClass, MatchupResult } from './endgameMatchup';
+import type { StockfishAnalysis } from '../types';
+import { criticalityThresholds } from './criticalityScan';
 
 export type Side = 'white' | 'black';
 
@@ -234,44 +236,71 @@ export interface ConceptForBoardOptions {
   studentSide?: Side;
   /** Cap on concepts returned (lead + supports). Default 3. */
   max?: number;
+  /** The surface's EXISTING engine read (the eval-bar analysis
+   *  `buildFedTacticsContext` guarantees). Never fetched here — one computer.
+   *  When present, its PV is walked and its swing ranks the concepts. */
+  analysis?: StockfishAnalysis | null;
+  /** Student rating — scales the PV walk depth (`pvDepthForRating`) and the
+   *  shared criticality thresholds. Default 1500. */
+  rating?: number;
 }
 
-/** Deterministic importance so the ranking is computed, never LLM-picked. The
- *  full rating-scaled importance filter (decision-leverage / realized-swing /
- *  must-defend / contested gate — plan §must-build 4) refines this in P4b; this
- *  is the coarse, honest ordering: decisive tactics first, then material-winning
- *  tactics, then the endgame teaching beat. */
-const TACTIC_IMPORTANCE: Record<Exclude<TacticPatternType, 'none'>, number> = {
-  mate_threat: 0.98, back_rank: 0.95, double_check: 0.93,
-  fork: 0.85, skewer: 0.84, discovery: 0.83, removal_of_guard: 0.80,
-  trapped_piece: 0.78, pin: 0.75, overload: 0.72, battery: 0.60,
-};
+/** A DECISIVE tactic on the board right now (mate threat / back rank / double
+ *  check) is worth naming even without a line; a bare geometric pin/fork sitting
+ *  on a busy board is not (that is exactly the incidental-tactic noise the
+ *  isolated tests surfaced). The LINE walk (`conceptForLine`) is what names the
+ *  rest — from the engine's own PV, ranked by its swing. No static importance
+ *  table: that would be the "second parallel criticality" CLAUDE.md forbids. */
+const DECISIVE_ON_BOARD = new Set<TacticPatternType>(['mate_threat', 'back_rank', 'double_check']);
 
 /**
  * Read a board and return the teachable concept(s) present — COMPUTED and RANKED
  * most-important-first (multi-concept: David 2026-09-14 "Speak multi concepts").
- * Tactic concepts from `detectTactics` (FEN-only geometry) + the endgame
- * governing principle from the matchup classifier. Pure/synchronous/G0 — every
- * surface can call it inline. Empty array = nothing teachable here (quiet
- * position); the caller stays silent (empty > invented).
  *
- * NOTE: this analyzes the FEN it is given. A puzzle surface teaching "the concept
- * behind the SOLUTION" passes the position AFTER the key solving move (as
- * `explainPuzzleConcept` already replays); a live surface passes the live board.
+ * ONE COMPUTATIONAL SYSTEM (David 2026-09-14): this is a CONSUMER of the
+ * analysis the surface already holds, never its own engine. Geometry answers
+ * instantly (decisive tactics on the board, the endgame principle/technique, the
+ * board-provable positional ideas); when `opts.analysis` — the eval-bar read
+ * `buildFedTacticsContext` already guarantees — is present, the engine's PV is
+ * walked by `conceptForLine` and its swing ranks the story of the line. A cold
+ * board degrades to geometry, never to silence-where-it-matters. Empty array =
+ * nothing teachable (quiet position); the caller stays silent (empty > invented).
  */
 export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}): ComputedConcept[] {
   const max = opts.max ?? 3;
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
 
-  // 1. Tactics on the board (geometry, FEN-only).
+  // 0. The engine's line, when the surface already has one (the one computer).
+  const line = opts.analysis?.topLines?.[0];
+  if (line && line.moves.length > 0) {
+    const studentColor: 'w' | 'b' = opts.studentSide
+      ? (opts.studentSide === 'white' ? 'w' : 'b')
+      : (fen.split(' ')[1] === 'w' ? 'w' : 'b'); // live board: the mover's line
+    const depth = pvDepthForRating(opts.rating ?? 1500);
+    for (const c of conceptForLine({
+      fen,
+      uci: line.moves.slice(0, depth),
+      studentColor,
+      rootEvalCp: opts.analysis?.evaluation ?? null,
+      lineEvalCp: line.evaluation,
+      lineMate: line.mate ?? null,
+      rating: opts.rating,
+    })) {
+      if (seen.has(c.id)) continue;
+      out.push(c);
+      seen.add(c.id);
+    }
+  }
+
+  // 1. Decisive tactics on the board right now (geometry, FEN-only, instant).
   let tactics: ReturnType<typeof detectTactics>['tactics'] = [];
   try { tactics = detectTactics(fen).tactics; } catch { tactics = []; }
   for (const t of tactics) {
-    if (t.type === 'none' || seen.has(t.type)) continue;
+    if (!DECISIVE_ON_BOARD.has(t.type) || seen.has(t.type)) continue;
     const concept = renderTacticConcept(t);
     if (!concept) continue;
-    concept.importance = TACTIC_IMPORTANCE[t.type] ?? 0.5;
+    concept.importance = 0.95;
     out.push(concept);
     seen.add(t.type);
   }
@@ -301,78 +330,119 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
   return out.slice(0, max);
 }
 
-// ─── conceptForSolution — the PUZZLE / solution path ─────────────────────────
-import { computePlyFacts, type PrevCaptureContext } from './pvPlayback';
+// ─── conceptForLine — THE single walker (solution OR engine PV) ──────────────
+import { computePlyFacts, pvDepthForRating, type PrevCaptureContext } from './pvPlayback';
 import { Chess } from 'chess.js';
 
-export interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
+export interface LineInput {
+  fen: string;
+  /** The line in UCI — a puzzle's verified solution, or `topLines[0].moves`. */
+  uci: string[];
+  /** The side whose concept we teach (the solver / the student). */
+  studentColor: 'w' | 'b';
+  /** Root eval (white-POV cp) from the SAME analysis the line came from. */
+  rootEvalCp?: number | null;
+  /** The line's eval (white-POV cp) — the engine's own read of what the line
+   *  delivers. With rootEvalCp this is the engine's SWING, the shared ranking
+   *  signal. Omitted on a puzzle (its solution is already verified). */
+  lineEvalCp?: number | null;
+  /** Forced mate reported for the line (null/undefined = none). */
+  lineMate?: number | null;
+  rating?: number;
+  max?: number;
+}
 
 /**
- * The concept behind a SOLUTION (puzzle / best line) — distinct from
- * `conceptForBoard` (a static live board). The harness proved the difference:
- * detecting tactics on an arbitrary position surfaces INCIDENTAL tactics, and the
- * decisive move isn't always the first. So this walks the solution, scores each
- * STUDENT move by its computed swing (`computePlyFacts`: mate > material gained,
- * +bonus for a landed tactic — a deterministic importance signal, no engine), and
- * teaches the tactic the KEY move actually LANDS, read back from `detectTactics`
- * at that exact position (full squares + description). The endgame matchup
- * principle rides from the start position. Ranked, multi-concept, G0.
+ * Importance from the ENGINE'S swing, bucketed against the SHARED rating-scaled
+ * `criticalityThresholds` — the same scale `scanCriticality` uses, so there is
+ * ONE criticality in the app (CLAUDE.md: never a second parallel one). Mover-POV:
+ * a line that is good for the student scores high. Returns null when no engine
+ * read is available (the caller falls back to board-true material).
  */
-export function conceptForSolution(
-  fen: string,
-  solutionUci: string[],
-  opts: ConceptForSolutionOptions = {},
-): ComputedConcept[] {
+function importanceFromSwing(input: LineInput): number | null {
+  if (input.lineMate != null) return 0.98; // forced mate — decisive, full stop
+  if (input.rootEvalCp == null || input.lineEvalCp == null) return null;
+  const whiteSwing = input.lineEvalCp - input.rootEvalCp;
+  const moverSwing = input.studentColor === 'w' ? whiteSwing : -whiteSwing;
+  const t = criticalityThresholds(input.rating ?? 1500);
+  if (moverSwing >= t.onlyMove) return 0.95;
+  if (moverSwing >= t.critical) return 0.88;
+  if (moverSwing >= t.notable) return 0.8;
+  return 0.65; // a real line, modest gain — worth teaching, below the decisive tier
+}
+
+/**
+ * The concept(s) of a LINE — the one walker behind both puzzles and the live
+ * board (David 2026-09-14: "the forward looking PV is needed and stockfish
+ * analysis all working together at the time to form a comprehensive picture").
+ *
+ * Walks the line with `computePlyFacts` — the app's existing per-ply computer,
+ * whose `tacticLanded` is already reality-gated (agent = the moved piece,
+ * targets winnable, sliders only for pins). Per STUDENT ply the key move is the
+ * one that mates, else lands a real tactic with the most material, else wins
+ * the most material. Importance = the engine's swing (shared thresholds) when the
+ * line came with one, else board-true material. The technique the line REACHES
+ * (the opposition) is preferred over the generic start principle; positional
+ * ideas ride as supports. Ranked, multi-concept, G0 — the story of the line.
+ */
+export function conceptForLine(input: LineInput): ComputedConcept[] {
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
-  // A named endgame technique (the opposition, …) is REACHED by the solution, not
-  // present at the start — so scan for it along the student's moves and prefer it
-  // over the generic start-position principle.
+  const { fen, uci, studentColor } = input;
   let techConcept: ComputedConcept | null = null;
 
   try {
     const c = new Chess(fen);
-    const studentColor: 'w' | 'b' = fen.split(' ')[1] === 'w' ? 'b' : 'w';
-    let best: { fenAfter: string; tactic: string | null; isMate: boolean; from: string; to: string } | null = null;
-    let bestScore = -1;
+    let best: { fenAfter: string; tactic: string | null; isMate: boolean; to: string; material: number } | null = null;
+    let bestScore = -Infinity;
     let prev: PrevCaptureContext = { square: null, capturedValue: 0 };
-    for (const u of solutionUci) {
+    for (const u of uci) {
       const fenBefore = c.fen();
       const mv = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.length > 4 ? u[4] : undefined });
       if (!mv) break;
       const fenAfter = c.fen();
       const facts = computePlyFacts(fenBefore, fenAfter, { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
       prev = mv.captured ? { square: mv.to, capturedValue: VAL[mv.captured] ?? 0 } : { square: null, capturedValue: 0 };
-      if (mv.color === studentColor) {
-        const score = facts.isMate ? 100 : facts.materialGained + (facts.tacticLanded ? 3 : 0);
-        if (score > bestScore) {
-          bestScore = score;
-          best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, from: mv.from, to: mv.to };
-        }
-        if (!techConcept) {
-          const tech = endgameConceptFor(fenAfter);
-          if (tech && tech.source === 'technique') techConcept = tech;
-        }
+      if (mv.color !== studentColor) continue;
+      // Key-move score: mate » real landed tactic (weighted by what it nets) »
+      // material. Every term is board-true from computePlyFacts.
+      const score = facts.isMate ? 1000 : (facts.tacticLanded ? 10 : 0) + facts.materialGained;
+      if (score > bestScore) {
+        bestScore = score;
+        best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, to: mv.to, material: facts.materialGained };
+      }
+      if (!techConcept) {
+        const tech = endgameConceptFor(fenAfter);
+        if (tech && tech.source === 'technique') techConcept = tech;
       }
     }
+
     if (best && (best.tactic || best.isMate)) {
       const type = best.tactic ?? 'mate_threat';
+      const landingSquare = best.to;
       let pattern: TacticPattern | null = null;
       try {
+        // Re-fetch the SAME pattern computePlyFacts validated: same type AND its
+        // agent square is the square the student's move landed on. Type-only
+        // matching could return a different pattern of that type (e.g. the
+        // opponent's pin) — the bug the integration exposed.
         pattern = detectTactics(best.fenAfter).tactics.find(
-          (t) => t.type === type && (!t.beneficiary || t.beneficiary === studentColor),
+          (t) => t.type === type && t.involvedSquares[0] === landingSquare,
         ) ?? null;
       } catch { pattern = null; }
       const concept = pattern
         ? renderTacticConcept(pattern)
-        : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.from, best.to], description: '' });
+        : renderTacticConcept({ type: type as TacticPatternType, involvedSquares: [best.to], description: '' });
       if (concept && !seen.has(concept.id)) {
-        concept.importance = best.isMate ? 0.98 : 0.85;
+        const fromEngine = importanceFromSwing(input);
+        concept.importance = best.isMate
+          ? 0.98
+          : (fromEngine ?? Math.min(0.9, 0.7 + Math.max(0, best.material) * 0.04));
         out.push(concept);
         seen.add(concept.id);
       }
     }
-  } catch { /* unparseable — skip */ }
+  } catch { /* unparseable line — teach nothing from it */ }
 
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.
@@ -395,7 +465,22 @@ export function conceptForSolution(
   }
 
   out.sort((a, b) => b.importance - a.importance);
-  return out.slice(0, opts.max ?? 3);
+  return out.slice(0, input.max ?? 3);
+}
+
+export interface ConceptForSolutionOptions { studentSide?: Side; max?: number; }
+
+/** The concept behind a PUZZLE solution — `conceptForLine` over the verified
+ *  solution (the solver is the side opposite the FEN's turn: Lichess convention). */
+export function conceptForSolution(
+  fen: string,
+  solutionUci: string[],
+  opts: ConceptForSolutionOptions = {},
+): ComputedConcept[] {
+  const studentColor: 'w' | 'b' = opts.studentSide
+    ? (opts.studentSide === 'white' ? 'w' : 'b')
+    : (fen.split(' ')[1] === 'w' ? 'b' : 'w');
+  return conceptForLine({ fen, uci: solutionUci, studentColor, max: opts.max });
 }
 
 // ─── POSITIONAL concept source (§E) ──────────────────────────────────────────

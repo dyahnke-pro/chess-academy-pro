@@ -39,6 +39,7 @@ import { getTacticLookahead } from './tacticAlertService';
 import { stockfishEngine } from './stockfishEngine';
 import type { TacticPattern, UpcomingTactic, TacticPatternType } from '../types/tacticTypes';
 import { matchTacticPattern, type WeaknessSignal } from './weaknessSignal';
+import { conceptForBoard } from './conceptEngine';
 
 /**
  * Build the `TacticsLiveContext` block for the brain envelope.
@@ -88,12 +89,27 @@ export function buildTacticsLiveContext(
     opportunities = opportunities.slice(0, 5);
   }
 
+  // 3. COMPUTED CONCEPTS — from the SAME analysis this package already holds
+  // (David 2026-09-14: one computational system, no function working alone).
+  // conceptForBoard is a consumer: geometry now + the engine's PV walked and
+  // ranked by its swing when `analysis` is present. Never a second engine read.
+  let concepts: TacticsLiveContext['concepts'];
+  try {
+    const list = conceptForBoard(fen, {
+      analysis,
+      studentSide: playerColor === 'w' ? 'white' : 'black',
+      rating: playerRating,
+    });
+    concepts = list.length > 0 ? list : undefined;
+  } catch { concepts = undefined; }
+
   return {
     immediate,
     hanging,
     threats,
     opportunities,
     lookaheadDepth,
+    concepts,
     boardFacts: computeBoardFacts(fen),
   };
 }
@@ -532,6 +548,17 @@ export function formatTacticsSubBlock(tactics: TacticsLiveContext): string {
     lines.push(`    Student opportunities (point these out, name the pattern):`);
     for (const t of tactics.opportunities) {
       lines.push(`      depth ${t.depthAhead}/${tactics.lookaheadDepth}: ${t.type.toUpperCase()} — ${t.description} (line: ${t.line.join(' ')})`);
+    }
+  }
+  // COMPUTED CONCEPTS — the teachable idea(s) of this position, ranked, computed
+  // by the shared engine from this same analysis. The brain VOICES these in the
+  // order given; it does not choose, add, or omit a concept (G0). Each line is
+  // already gate-clean prose (you/they, no move-number prefixes).
+  if (tactics.concepts && tactics.concepts.length > 0) {
+    lines.push(`    CONCEPTS (COMPUTED — voice these, in this order, most important first; never invent a concept not listed):`);
+    for (const c of tactics.concepts) {
+      const sq = c.squares.length > 0 ? ` [squares: ${c.squares.join(' ')}]` : '';
+      lines.push(`      ${c.name.toUpperCase()}${sq}: ${c.full} (cue: "${c.short}")`);
     }
   }
   lines.push(

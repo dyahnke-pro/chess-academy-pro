@@ -409,3 +409,23 @@ describe('Play and Learn read the board with the same awareness', () => {
     expect(get).not.toMatch(/Promise</);
   });
 });
+
+describe('buildTacticsLiveContext — attaches computed concepts from the SAME analysis', () => {
+  it('carries a ranked concept list when an analysis with a PV is fed', async () => {
+    const { buildTacticsLiveContext } = await import('./liveTacticsContext');
+    const fen = '8/8/8/3k4/8/3K4/4P3/8 b - - 0 1';
+    const analysis = {
+      bestMove: 'd5d6', evaluation: 50, isMate: false, mateIn: null, depth: 14, nodesPerSecond: 0,
+      topLines: [{ moves: ['d5d6', 'd3d4'], evaluation: 50, mate: null }],
+    } as unknown as import('../types').StockfishAnalysis;
+    const ctx = buildTacticsLiveContext(fen, analysis, 'w', 1500);
+    expect(ctx.concepts && ctx.concepts.length).toBeGreaterThan(0);
+    expect(ctx.concepts?.some((c) => c.id === 'opposition')).toBe(true);
+  });
+
+  it('is silent (no concepts field) on a quiet non-endgame with no analysis', async () => {
+    const { buildTacticsLiveContext } = await import('./liveTacticsContext');
+    const ctx = buildTacticsLiveContext('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', null, 'w', 1500);
+    expect(ctx.concepts).toBeUndefined();
+  });
+});
