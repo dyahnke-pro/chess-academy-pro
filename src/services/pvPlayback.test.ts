@@ -163,6 +163,22 @@ describe('plyFactsForMove — no phantom tactics (David 2026-07-20)', () => {
     if (out) expect(out).not.toMatch(/pin/i);
   });
 
+  it('a ROYAL fork (king + rook) is a real landed fork — the king counts as a target', () => {
+    // Nb5-c7+ forks king e8 and rook a8. The rook "defends" e8 along the rank
+    // and the king is worth 0, so the two-winnable-targets rule dropped the
+    // textbook royal fork as a false alarm (found 2026-09-14).
+    const out = plyFactsForMove('r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1', 'Nc7+');
+    expect(out).toMatch(/fork/);
+  });
+
+  it('a fork on two DEFENDED, cheaper pieces still does not land (no king involved)', () => {
+    // Knight to d5 hits two pawns each defended by a pawn — geometry, not a win.
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'Bc4', 'Bc5']) c.move(m);
+    const out = plyFactsForMove(c.fen(), 'Nd5');
+    if (out) expect(out).not.toMatch(/fork/);
+  });
+
   it('returns a grounded fact string or null (never throws on a legal move)', () => {
     const out = plyFactsForMove(new Chess().fen(), 'e4');
     // 1.e4 is a quiet developing push — no concrete tactic/capture → silence.

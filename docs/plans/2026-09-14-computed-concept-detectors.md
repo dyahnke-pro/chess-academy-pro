@@ -436,11 +436,24 @@ Update the phase's status marker + the decisions log as each lands.
   Play phase transitions (`usePhaseNarration`), Read-this-position
   (`usePositionNarration`), and Learn's computed spoken-hint queue
   (`CoachTeachPage` → `queueSpokenHint(…, 'computed')`).
-- **P4c (part 2) — the remaining computed narration paths** [pending]:
-  `openingGenerator` (Teach-x-opening beats), `dnaLineNarrator` /
-  `reviewMoveTeaching` (review's per-move "why"), `usePhaseNarration`'s own
-  spoken template. Same rule: consume the existing analysis, never a new sweep.
-- **P4c — wire the LIVE-GAMEPLAY narration computers** [in progress — see parts 1–2 above]:
+- **P4c (part 2) — the remaining computed narration paths** [done 2026-09-14]:
+  the tactic INVARIANT (why the pattern wins) now rides every projected line
+  at the ply it lands, once per line, from the same `tacticInvariant` register:
+  `narrateDnaLine(…, { teachInvariant })` → Learn/Play's best-line delta
+  (`bestLineDeltaFromPv`); `firstTacticInvariant(plies)` → the review's
+  better-line walk AND the shot-sequence playback (CoachGameReview); and
+  `landedTacticTeaching(fenBefore, san)` → `openingGenerator` PASS 1 as beat
+  two on any taught ply that lands a tactic (trap/punish plies), replacing the
+  generated aside/weighing so the two-beat contract holds. All consume
+  `computePlyFacts` — no new sweep. `usePhaseNarration` needs nothing extra:
+  its spoken text is the `computePositionFacts` briefing from part 1.
+  **Latent find fixed on sight:** `computePlyFacts`' fork reality-gate required
+  two *winnable* targets and scored the king as worth 0 and "defended" by any
+  friendly piece covering its square — so the textbook ROYAL fork (Nc7+ on
+  king+rook) never "landed" on any surface. Royal forks now need one other
+  winnable target (same rule the skewer branch already had). Gate:
+  `pvPlayback.test.ts` royal-fork test.
+- **P4c — wire the LIVE-GAMEPLAY narration computers** [done — parts 1–2 above]:
   weave `conceptForBoard` into the per-move narration paths so themes/concepts are
   spoken mid-game — `openingGenerator`/walkthrough (Learn + Teach-x-opening),
   `usePhaseNarration` + `playCommentary`/`coachMoveCommentary` (Play,

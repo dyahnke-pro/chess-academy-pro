@@ -198,7 +198,17 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       if (landed.type === 'fork') {
         // A fork wins because the defender can't save BOTH — needs >=2 winnable
         // targets. (Kills "Qh4 lands a fork" on two defended minors.)
-        real = landed.involvedSquares.slice(1).filter(winnable).length >= 2;
+        // A ROYAL fork (one target is the king) is real with ONE other winnable
+        // target: the check forces the king to move, so the other piece falls.
+        // The king is worth 0 here and is "defended" by any friendly piece
+        // that also covers its square, so it never passed `winnable` and the
+        // textbook Nc7+ king-and-rook fork was dropped as a false alarm
+        // (found 2026-09-14 wiring the concept engine; same royal rule the
+        // skewer branch below already applies).
+        const targets = landed.involvedSquares.slice(1);
+        const royal = targets.some((sq) => afterBoard.get(sq as Square)?.type === 'k');
+        const winnableCount = targets.filter(winnable).length;
+        real = royal ? winnableCount >= 1 : winnableCount >= 2;
       } else if (landed.type === 'skewer') {
         // A skewer is real only if its FRONT piece can actually be won (or it's
         // a royal skewer). (Kills "Bg7 lands a skewer" on a defended, equal-

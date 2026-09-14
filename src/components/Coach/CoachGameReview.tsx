@@ -34,6 +34,7 @@ import { buildTrapQuestion, judgeTrapAnswer, type TrapQuestion, type TrapChoiceI
 import { selectReviewQuestions, type ReviewQuestionMoment } from '../../services/reviewQuestionPlan';
 import { computePvLine, renderPlyFactLine, plyFactsString, type PvLine } from '../../services/pvPlayback';
 import { buildReviewMoveTeaching } from '../../services/reviewMoveTeaching';
+import { firstTacticInvariant } from '../../services/dnaLineNarrator';
 import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { resolveReachState, reachAskDepth } from '../../services/reachRating';
@@ -1360,9 +1361,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (!line) return;
       // Prefetch the spoken lines too (per-ply voiceFacts; quiet plies stay
       // null → silent). Fire-and-forget — playback falls back per ply.
-      void Promise.all(line.plies.map(async (p) => {
-        const facts = plyFactsString(p);
+      const lineInvariant = firstTacticInvariant(line.plies);
+      void Promise.all(line.plies.map(async (p, idx) => {
+        let facts = plyFactsString(p);
         if (!facts) return null;
+        // The first landed tactic carries its computed WHY (one voice with the
+        // live briefing / Learn — David 2026-09-14).
+        if (lineInvariant && lineInvariant.index === idx) facts = `${facts} ${lineInvariant.sentence}`;
         try {
           const phrased = await voiceFacts(facts, { intent: 'review-pv-playback', warm: true });
           return phrased ?? null;
@@ -1432,8 +1437,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // capture, explainTemptingCapture computes the concrete refutation — the
     // guarded piece, the losing trade, the file that rips open — so the line
     // finally makes sense to the student staring at the grab.
+    // THE CONCEPT RIDES THE LINE (David 2026-09-14): the first ply that lands a
+    // tactic also teaches WHY that pattern works — the same computed invariant
+    // the live briefing + Learn speak, so the review is one voice with them.
+    const lineInvariant = firstTacticInvariant(line.plies);
     const rawWhys = line.plies.map((ply, i) => {
-      const base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '';
+      let base = plyFactsString(ply) ?? renderPlyFactLine(ply) ?? buildReviewMoveTeaching(ply.fenBefore, ply.san) ?? '';
+      if (lineInvariant && lineInvariant.index === i) base = `${base} ${lineInvariant.sentence}`.trim();
       // Seat-correct speech: the walked line's mover ALTERNATES every ply, so
       // "your queen" is right only on the student's plies (David 2026-07-21:
       // "You realize it was white in this game..?").

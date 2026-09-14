@@ -52,6 +52,7 @@ import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
+import { landedTacticTeaching } from './dnaLineNarrator';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
@@ -2383,9 +2384,20 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     const fallback = generated;
     try {
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
+      // THE COMPUTED CONCEPT (David 2026-09-14: "coach can speak these themes
+      // and concepts during game play as well as puzzles"). When the taught
+      // move LANDS a tactic — the trap branches, the punish plies — the ply's
+      // beat two is the tactic named plus its invariant, computed by the same
+      // engine the live briefing / Learn / review speak (one computational
+      // system). It outranks the generated aside and the weighing as beat two:
+      // the pattern that just landed IS the lesson on that ply. The two-beat
+      // contract holds — it replaces beat two, never adds a third.
+      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+      const landed = landedTacticTeaching(preFen, p.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
       if (teaching) {
         plyNoteText[i] = teaching;
+        if (landed) return `${teaching} ${landed.text}`;
         // TWO BEATS PER MOVE, NOT THREE (David 2026-09-12: "Two beats if both
         // teachings are legit").
         //
@@ -2418,6 +2430,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         if (graded?.trim()) {
           plyNoteText[i] = graded;
           authoredSpoke.push({ ply: i, variation: authored.variationName, text: graded });
+          if (landed) return `${graded} ${landed.text}`;
           return generated ? `${graded} ${generated}` : graded;
         }
         // SELECTED, THEN REFUSED BY THE GATE. A different outcome from never
@@ -2431,6 +2444,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // tempting alternatives) when we have it for this student ply. Even a
       // silent generated idea now speaks the discussion; the taught move stays
       // the conclusion (the weighing carries no "the move is X").
+      if (landed) return fallback ? `${firstSentence(fallback)} ${landed.text}` : landed.text;
       const delib = deliberationByPly[i];
       // Same two-beat contract: the weighing is beat two behind the prose.
       if (delib) return fallback ? `${firstSentence(fallback)} ${delib}` : delib;

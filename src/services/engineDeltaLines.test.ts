@@ -128,3 +128,23 @@ describe('computeRouteDelta (Watch quiet-move plan look-ahead, P1)', () => {
     expect(computeRouteDelta(fenBefore, 'Qh8')).toBeNull();
   });
 });
+
+describe('bestLineDeltaFromPv — the concept rides the line (David 2026-09-14)', () => {
+  it('the first landed tactic in the best line also TEACHES its invariant', () => {
+    // Knight b5 → c7+ forks king e8 + rook a8: a real fork, so the delta says
+    // the line lands a fork AND why a fork wins — one voice with the briefing.
+    const c = new Chess('r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1');
+    const p0 = c.fen(); c.move('Nc7+');
+    const p1 = c.fen(); c.move('Kd8');
+    const pv = {
+      plies: [
+        { san: 'Nc7+', uci: 'b5c7', moverColor: 'white', fenBefore: p0, fenAfter: p1, facts: {} },
+        { san: 'Kd8', uci: 'e8d8', moverColor: 'black', fenBefore: p1, fenAfter: c.fen(), facts: {} },
+      ],
+    } as unknown as PvLine;
+    const d = bestLineDeltaFromPv(pv);
+    expect(d!.say).toMatch(/landing a fork.* — a fork hits two targets at once/);
+    expect(d!.say).not.toMatch(/\.,/);
+    expect(d!.arrows).toEqual([{ from: 'b5', to: 'c7', color: 'green' }]);
+  });
+});

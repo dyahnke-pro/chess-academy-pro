@@ -539,3 +539,13 @@ export function positionalConcepts(fen: string): ComputedConcept[] {
   }
   return out;
 }
+
+/** The computed INVARIANT for a landed tactic type — the general "why it works",
+ *  in both registers — so a per-ply/line renderer (review projections, Learn/Play
+ *  engine deltas) can teach the idea once where the tactic lands instead of a
+ *  bare "lands a fork". Same vocabulary the concept engine speaks (one voice).
+ *  Null for the no-tactic sentinel / an unknown type. */
+export function tacticInvariant(type: string): Register | null {
+  if (type === 'none') return null;
+  return (TACTIC_INVARIANT as Record<string, Register | undefined>)[type] ?? null;
+}

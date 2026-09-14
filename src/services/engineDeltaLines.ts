@@ -121,7 +121,9 @@ export function bestLineDeltaFromPv(pv: PvLine | null): DeltaAside | null {
   // projection lines (David 2026-09-07: ALL narrations follow one pattern, run
   // through the computer not the LLM) — so each move carries its board-true
   // "why" instead of a bare SAN chain.
-  const line = narrateDnaLine(pv.plies.slice(0, 3).map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
+  // teachInvariant: the first landed tactic in the line also carries its computed
+  // WHY (the concept), so Learn/Play's best-line delta teaches the idea it names.
+  const line = narrateDnaLine(pv.plies.slice(0, 3).map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { teachInvariant: true });
   const say = `The strongest line here runs ${line}.`;
   const short = `Best: ${cleanSan(first.san)}.`;
   return {

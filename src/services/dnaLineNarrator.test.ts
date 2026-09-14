@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { dnaMoveClause, narrateDnaLine } from './dnaLineNarrator';
+import { dnaMoveClause, narrateDnaLine, firstTacticInvariant, landedTacticTeaching } from './dnaLineNarrator';
 
 /** Position where Black's knight on d4 hangs — White's Qxd4 wins it clean. */
 const HANGING_KNIGHT = '4k3/8/8/8/3n4/8/8/3QK3 w - - 0 1';
@@ -88,5 +88,57 @@ describe('narrateDnaLine', () => {
     const line = narrateDnaLine([{ fenBefore: HANGING_KNIGHT, san: 'Qxd4' }]);
     expect(line).toMatch(/winning the knight/);
     expect(line).not.toMatch(/wins material/);
+  });
+});
+
+// ── THE CONCEPT RIDES THE LINE (David 2026-09-14) ─────────────────────────────
+// A knight on b5 forking king e8 + rook a8 with Nc7+ — a REAL fork (two winnable
+// targets), so computePlyFacts lands it and the invariant is taught once.
+const FORK_FEN = 'r3k3/8/8/1N6/8/8/8/6K1 w - - 0 1';
+
+describe('firstTacticInvariant / landedTacticTeaching / teachInvariant', () => {
+  it('landedTacticTeaching names the landed tactic AND teaches its invariant', () => {
+    const t = landedTacticTeaching(FORK_FEN, 'Nc7+');
+    expect(t).toBeTruthy();
+    expect(t!.type).toBe('fork');
+    expect(t!.text).toMatch(/^This lands a fork: a fork hits two targets/);
+    expect(t!.text).not.toMatch(/\b(we|our|us)\b/i);
+  });
+
+  it('landedTacticTeaching is null on a quiet move and on garbage', () => {
+    expect(landedTacticTeaching(new Chess().fen(), 'Nf3')).toBeNull();
+    expect(landedTacticTeaching('not a fen', 'Nf3')).toBeNull();
+  });
+
+  it('firstTacticInvariant picks the FIRST landed tactic in an already-computed line', () => {
+    const plies = [
+      { facts: { tacticLanded: null } },
+      { facts: { tacticLanded: 'fork' } },
+      { facts: { tacticLanded: 'pin' } },
+    ];
+    const inv = firstTacticInvariant(plies);
+    expect(inv).toEqual(expect.objectContaining({ index: 1, type: 'fork' }));
+    expect(inv!.sentence).toMatch(/^A fork hits two targets/);
+    expect(inv!.sentence).toMatch(/\.$/);
+    expect(firstTacticInvariant([{ facts: { tacticLanded: null } }])).toBeNull();
+  });
+
+  it('narrateDnaLine teaches the invariant ONCE when opted in — never by default', () => {
+    const c = new Chess(FORK_FEN);
+    const p0 = c.fen(); c.move('Nc7+');
+    const p1 = c.fen(); c.move('Kd8');
+    const p2 = c.fen();
+    const plies = [
+      { fenBefore: p0, san: 'Nc7+' },
+      { fenBefore: p1, san: 'Kd8' },
+      { fenBefore: p2, san: 'Nxa8' },
+    ];
+    const plain = narrateDnaLine(plies);
+    expect(plain).toMatch(/landing a fork/);
+    expect(plain).not.toMatch(/two targets at once/);
+    const taught = narrateDnaLine(plies, { teachInvariant: true });
+    expect(taught).toMatch(/landing a fork.* — a fork hits two targets at once/);
+    expect(taught).not.toMatch(/\.,/); // no stray period mid-line
+    expect(taught.match(/two targets at once/g)).toHaveLength(1);
   });
 });
