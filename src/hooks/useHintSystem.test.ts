@@ -227,6 +227,28 @@ describe('useHintSystem — Tier 3 answers deterministically (David 2026-09-06)'
     expect(result.current.hintState.arrows[0]).toMatchObject({ startSquare: 'e5', endSquare: 'c6' });
   });
 
+  it('adds the CONCEPT explanation to the hint from the puzzle themes (David 2026-09-14: "not just an arrow")', async () => {
+    // The hint teaches the pattern behind the solution, not just the move+arrow.
+    const { result } = renderHook(() =>
+      useHintSystem({
+        fen: FEN_AFTER_E4,
+        playerColor: 'black',
+        enabled: true,
+        gameId: 'g-concept',
+        moveNumber: 1,
+        ply: 1,
+        puzzleThemes: ['fork', 'long'],
+      }),
+    );
+
+    act(() => { result.current.requestHint(); });
+    await waitFor(() => expect(result.current.hintState.nudgeText).toBeTruthy());
+    const text = (result.current.hintState.nudgeText ?? '').toLowerCase();
+    // The move is still named (the answer), AND the general fork idea is taught.
+    expect(text).toContain('f3');
+    expect(text).toMatch(/fork|two/);
+  });
+
   it('an advanced player also gets the answer on one tap — no tiers, no brain', async () => {
     // David 2026-09-06 ("Fuck that system! Push once get answer"): the adaptive
     // WHY/WHICH rungs are gone. Every rating gets the full answer immediately,

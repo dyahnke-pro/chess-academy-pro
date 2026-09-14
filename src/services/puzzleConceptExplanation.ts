@@ -80,6 +80,27 @@ function firstSentence(text: string): string | null {
   return s.length >= 12 ? s : null;
 }
 
+/** The concept NAME + one-sentence general IDEA for a puzzle's themes — the
+ *  teaching a HINT adds so it's "not just an arrow, but an explanation of the
+ *  concepts to understand the solution" (David 2026-09-14). No board replay,
+ *  no move given away — just the pattern and why it works, so the student can
+ *  still find the move themselves. Null when no known concept maps. */
+export function conceptIdeaForThemes(
+  themes: readonly string[],
+): { conceptName: string; conceptId: string; idea: string } | null {
+  for (const t of themes) {
+    const id = THEME_TO_CONCEPT_ID[t];
+    if (!id) continue;
+    const concept = getConcept(id);
+    if (!concept) continue;
+    const passage = concept.passages[0]?.text;
+    const idea = passage ? firstSentence(passage) : null;
+    if (!idea) continue;
+    return { conceptName: THEME_DISPLAY[t] ?? concept.name, conceptId: id, idea };
+  }
+  return null;
+}
+
 /** Shared composer: given the student's key plies + themes + the key move's
  *  arrow, build the concept explanation (board mechanics + general idea). */
 function compose(

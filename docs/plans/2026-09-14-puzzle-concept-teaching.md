@@ -45,6 +45,17 @@ next puzzle — the classroom teaching beat.
 CoachTeachPage component tests. Audit: `audit-reach-ladder-prod.mjs` extended +
 a classroom master-drill prod check.
 
+## Correction (David 2026-09-14: "I meant the explanation of the master level puzzles" / "not just a HINT with an arrow")
+The explanation belongs on the **HINT** — when a student asks for help on a
+(master) puzzle, the hint must teach the concept, not just draw an arrow. The
+one-tap hint (`useHintSystem` Tier 3) already gave move + arrow + a one-line
+why; it now ALSO appends the general concept idea from the corpus
+(`conceptIdeaForThemes(puzzleThemes)` — computed/authored, no move given away,
+no LLM). Runs on every puzzle incl. master (`PuzzleBoard` passes `puzzle.themes`).
+Gate: `useHintSystem.test.ts` ("adds the CONCEPT explanation to the hint"),
+`puzzleConceptExplanation.test.ts` (`conceptIdeaForThemes`). The solve-reveal
+concept block (above) stays as a complementary teach on completion.
+
 ## Next (not built tonight — for David to steer)
 - Concept teaching on the ADAPTIVE-MISTAKE-QUEUE drill path (completeDrill's
   `progress` branch) — today it teaches on the single-drill path.

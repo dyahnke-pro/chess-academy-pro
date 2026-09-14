@@ -28,6 +28,7 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import { voiceService } from '../services/voiceService';
 import { describeMoveGeometry } from '../services/groundedAnswer';
 import { strategicWhyLed } from '../services/moveFundamentals';
+import { conceptIdeaForThemes } from '../services/puzzleConceptExplanation';
 import {
   getCachedStockfish,
   setCachedStockfish,
@@ -50,8 +51,10 @@ export interface UseHintSystemConfig {
    *  for API stability with prior callers. */
   analysisDepth?: number;
   knownMove?: { from: string; to: string; san: string } | null;
-  /** @deprecated Reserved for future hint classification (fork / pin /
-   *  back-rank) but unused in the current tier prompts. */
+  /** The puzzle's Lichess theme tags. The one-tap answer hint uses them to
+   *  TEACH the concept behind the solution — appends the general pattern idea
+   *  from the concept corpus (`conceptIdeaForThemes`) so a hint is "not just an
+   *  arrow, but an explanation of the concepts" (David 2026-09-14). */
   puzzleThemes?: string[];
   /** Optional context fields used to enrich the memory record so
    *  cross-game queries can filter / surface in review. Falls back to
@@ -193,7 +196,7 @@ async function resolveBestMove(
 }
 
 export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn {
-  const { fen, enabled, knownMove, gameId, moveNumber, ply, playerColor, playerRating } = config;
+  const { fen, enabled, knownMove, gameId, moveNumber, ply, playerColor, playerRating, puzzleThemes } = config;
 
   const [hintState, setHintState] = useState<HintState>(INITIAL_STATE);
   const fenRef = useRef(fen);
@@ -354,7 +357,15 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
           const tacticLed = geom && !geom.startsWith('attacks') ? geom : null;
           const why = tacticLed ?? strategicWhyLed(fen, best.bestMoveSan, moverColor);
           const whyClean = why ? why.trim().replace(/[.!?]+$/, '') : '';
-          const tier3Text = whyClean ? `${movePhrase} — ${whyClean}.` : `${movePhrase} — that's the strongest move here.`;
+          const answerText = whyClean ? `${movePhrase} — ${whyClean}.` : `${movePhrase} — that's the strongest move here.`;
+          // NOT JUST AN ARROW — explain the CONCEPT so the student understands
+          // WHY the solution works, not only what it is (David 2026-09-14).
+          // The general idea comes from the concept corpus, keyed by the
+          // puzzle's themes (computed/authored, no LLM). Appended to the answer.
+          const concept = puzzleThemes && puzzleThemes.length > 0
+            ? conceptIdeaForThemes(puzzleThemes)
+            : null;
+          const tier3Text = concept ? `${answerText} ${concept.idea}` : answerText;
 
           // Record the tap directly (BRAIN-05b moved this into the brain's tool;
           // Tier 3 no longer calls the brain, so record it here — same escalate-
@@ -394,7 +405,7 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
         inFlightRef.current = false;
       }
     })();
-  }, [enabled, knownMove, fen, gameId, moveNumber, ply, playerColor, playerRating]);
+  }, [enabled, knownMove, fen, gameId, moveNumber, ply, playerColor, playerRating, puzzleThemes]);
 
   const resetHints = useCallback((): void => {
     bestMoveRef.current = null;

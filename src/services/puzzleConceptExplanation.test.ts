@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { explainPuzzleConcept, explainDrillConcept } from './puzzleConceptExplanation';
+import { explainPuzzleConcept, explainDrillConcept, conceptIdeaForThemes } from './puzzleConceptExplanation';
 
 describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
   // Black (opponent) to move plays a quiet pawn push; White (student) answers
@@ -59,6 +59,21 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
   it('explainDrillConcept is G0-safe on bad input', () => {
     expect(explainDrillConcept({ setupFen: '', solutionSan: ['Nc7+'] })).toBeNull();
     expect(explainDrillConcept({ setupFen: FORK_FEN, solutionSan: [] })).toBeNull();
+  });
+
+  it('conceptIdeaForThemes gives the pattern name + idea for a HINT, no move given away', () => {
+    const r = conceptIdeaForThemes(['fork', 'long']);
+    expect(r).not.toBeNull();
+    expect(r!.conceptName).toBe('Fork');
+    expect(r!.conceptId).toBe('tac-fork');
+    expect(r!.idea).toMatch(/fork|two/i);
+    // It's the general idea — no square/move leaked.
+    expect(r!.idea).not.toMatch(/\b[a-h][1-8]\b/);
+  });
+
+  it('conceptIdeaForThemes is null when no known concept maps', () => {
+    expect(conceptIdeaForThemes(['short', 'endgame'])).toBeNull();
+    expect(conceptIdeaForThemes([])).toBeNull();
   });
 
   it('maps the mate patterns to their concept ideas', () => {
