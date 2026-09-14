@@ -169,6 +169,48 @@ pair, space, initiative, tempo, prophylaxis, centre, development, king safety.
 
 ---
 
+## Must-build refinements (found stress-testing the plan, 2026-09-14)
+
+These are load-bearing; the plan is wrong without them.
+
+1. **Renderer obeys the voice gates.** Computed concept prose still routes through
+   the voice contract: `perspectiveVoice` (you/they, **never we/our** — that gate
+   fails the build), G5 verbosity / `briefCap` (≤30 words on "brief" or the idea
+   clips mid-sentence), `sanitizeForTTS` (no move-number prefixes, no robotic bare
+   SAN). The renderer emits gate-clean prose, never raw English.
+2. **No-solution live-board path.** On Play / Review / Read-this-position there is
+   no puzzle solution, so the engine/tablebase **best move is the solution
+   surrogate** that feeds the winning-side + named-technique detectors. Without
+   this the ability silently degrades to tactics-only on exactly the live
+   surfaces it must carry to.
+3. **Weakness-spine integration (both directions).** A computed concept is
+   PRIORITIZED when it matches the student's recurring hole
+   (`tacticVocabulary.weaknessClusterForPattern` → the weakness spine, as
+   `speakDeepestLookahead` already does) AND taught/missed concepts FEED the
+   weakness model. This is what makes it coaching, not narrating.
+4. **Importance filter (2026-08-26 rule).** On the proactive / Play path a concept
+   speaks only when it clears the importance gate (decision leverage / realized
+   swing / must-defend / teaching beat; silent if the position is decided). The
+   computer selects + orders; concepts ride the same gate.
+5. **Validation-harness triage, not equality.** Lichess tags are patchy, so
+   "classification == known theme" is naive. Three buckets: **agree /
+   detector-wrong / tag-missing**, with a human-reviewable disagreement list — not
+   a pass/fail number.
+
+## Multi-concept output (decided 2026-09-14 — David: "Speak multi concepts")
+
+Positions often carry several true concepts (fork + deflection + winning; opposition
++ zugzwang). `conceptForBoard` returns a RANKED list, not one. The renderer speaks
+the lead + supporting concepts, ordered by the importance filter (§ must-build 4)
+and capped to the verbosity budget (§ must-build 1) so "brief" still fits. Ranking is
+computed (decision leverage, realized swing, specificity); the model never picks.
+
+## Quiz vs teach (decided 2026-09-14)
+
+Teach = the concept engine explains. **Quiz = the classroom drill + generated
+puzzles (below), fed BY the concept engine** — same detectors tag what the quiz is
+testing. Not a separate probe engine; teach and quiz share one machinery.
+
 ## Router
 
 `conceptForBoard` selects: **board-first for endgames** (Lichess tags are patchy
@@ -202,6 +244,48 @@ drifts from `THEME_TO_CONCEPT_ID`. Consolidate into the one source
 (`conceptForBoard` / `conceptIdeaForThemes`); repoint the drill-builders
 (`endgameDrillService`, `adaptiveEndgameService`, `gameCalculationPuzzleService`).
 
+## Puzzle GENERATION ability (added 2026-09-14 — David: "Ability to make puzzles… master level on its own… even better from their own games")
+
+The generator and the concept engine are the same machinery pointed two ways: the
+detectors that TEACH a puzzle are what TAG a generated one. The LLM generates
+nothing (G0/G3) — this is exactly how Lichess built the DB we ship.
+
+**Reconciliation (no-yes-man): rating = how hard the solution is to find, not who
+you are.** A 1200's game yields ~1200-rated puzzles, not 2400. So two SOURCES,
+one generator (mirrors the pro-rep doctrine — only the source differs):
+
+- **From the user's own games** — highest value, most motivating. Rated at TRUE
+  difficulty, whatever it is. Extends existing infra: `mistakePuzzleService`,
+  `gameCalculationPuzzleService`, `fromYourGamesService`, `autoAnalyzeGame`,
+  `gameAnalysisService`. Runs at runtime, piggybacking the analysis pass the app
+  already does (never a second engine sweep).
+- **Master-level tier** — genuinely 2400+ from MASTER/PRO games: the pro corpora
+  we already hold (`pro-game-references.json`, chess.com pro archives) + the
+  Lichess master DB. Offline batch (like `build-master-puzzles.mjs`).
+
+**The generator pipeline (deterministic):**
+1. Engine over each position (reuse the game's analysis where present).
+2. Detect a decisive **eval swing** after a candidate best move (a blunder by one
+   side creates a puzzle for the other).
+3. **Uniqueness gate** — the solution must be the ONLY move that wins/holds;
+   two equal winners = not a puzzle, hard reject.
+4. **Soundness gate** — never generate a puzzle whose "solution" is actually
+   losing (the soundness-sweep rule, student's perspective).
+5. **Tag** with the concept detectors (§B–E) — the reuse payoff.
+6. **Rate** via the rating estimator below.
+7. **Dedupe** near-identical positions.
+
+**Rating estimator** — we can't crowd-vote Glicko, so estimate from computable
+features: solution depth, quiet-vs-forcing key move (quiet = harder), sacrifice
+involved, count of plausible-looking alternatives, eval margin. **Validated
+against the KNOWN Lichess ratings on the master DB** (the puzzles are the test
+bench once more) — tune until our estimate correlates, report the error.
+
+**Persistence + surfacing:** generated puzzles land in the puzzle store tagged by
+source (`own-game` | `master-gen`), flow into the reach ladder + classroom drill +
+`conceptForBoard` teaching like any other puzzle. "From your own game" is a
+first-class label.
+
 ## Phased plan
 
 - **P1 — shared engine** [pending]: material signature + matchup-class reducer +
@@ -216,9 +300,19 @@ drifts from `THEME_TO_CONCEPT_ID`. Consolidate into the one source
 - **P3 — consolidate** `puzzleConceptHint` → one source [pending].
 - **P4 — wire chokepoints** [pending]: `envelope.ts:741` + `coachApi.ts:5395`;
   each surface with a fires-for-real test + its speaking contract (table above).
+- **P4b — must-build refinements** [pending]: renderer voice-gate compliance,
+  no-solution live-board path, weakness-spine both-directions, importance filter,
+  harness triage. Woven through P1/P4 (listed separately so none is dropped).
 - **P5 — ship** [pending]: ship-check + master-set validation report +
   3-instrument prod audit across every surface + OTA (David asked for OTA on
   completion).
+- **P6 — puzzle generation** [pending]: one generator (engine swing → uniqueness
+  → soundness → concept-detector tag → rating estimator → dedupe), two sources
+  (own-games runtime off `autoAnalyzeGame`; master tier offline off pro corpora +
+  master DB). Rating estimator validated vs known Lichess ratings. Ships behind a
+  source tag into the reach ladder + drill + concept teaching. Likely its own plan
+  doc when P6 starts (substantial), but the tagger is the concept engine from
+  P1–P2, so P6 must follow the engine.
 
 ## Decisions log
 
@@ -229,7 +323,17 @@ drifts from `THEME_TO_CONCEPT_ID`. Consolidate into the one source
 - 2026-09-14: matchups = general signature calculator + finite teachable classes,
   NOT an enum (2,293 signatures measured). (David: "all variations… leave nothing
   out.")
+- 2026-09-14: speak MULTI concepts (ranked lead + supports, importance-ordered,
+  verbosity-capped), not one. (David)
+- 2026-09-14: quiz = classroom drill + generated puzzles fed by the concept
+  engine; teach and quiz share one machinery. (David)
+- 2026-09-14: ADD a puzzle GENERATION ability — two sources (own games; master
+  tier from master/pro games), one deterministic generator, concept engine as
+  tagger, rating estimated + validated vs known Lichess ratings. (David: "even
+  better if it's from their own games")
 - OPEN: P2 coarse-class-first vs all-named-techniques-at-once. (awaiting David)
+- OPEN: P6 own-games generation runtime cadence — after every analyzed game, or
+  on demand? (revisit when P6 starts)
 
 ## Next-session pickup
 
