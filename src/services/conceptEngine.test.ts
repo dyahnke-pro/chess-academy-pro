@@ -158,3 +158,13 @@ describe('conceptEngine — named technique preferred over generic principle', (
     expect(cs[0].source).toBe('technique');
   });
 });
+
+describe('conceptForSolution — technique reached along the solution', () => {
+  it('surfaces THE OPPOSITION when the K+P solution reaches it', () => {
+    // Black to move (opponent) must give way; White (student) then takes the
+    // opposition with Kd4. After that move the kings are aligned d4/d6, one square
+    // between, Black to move → White holds the opposition.
+    const cs = conceptForSolution('8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', ['d5d6', 'd3d4']);
+    expect(cs.some((c) => c.id === 'opposition')).toBe(true);
+  });
+});
