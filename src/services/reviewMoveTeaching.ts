@@ -366,9 +366,15 @@ export function buildReviewMoveTeaching(
   //    NEVER returns null and never falls back to a generic "quiet development"
   //    tag — the whole point of the 2026-07-25 rebuild.
   const eyes = moverEyes;
-  // (a) A check forces a reply — the student keeps the initiative for a move.
+  // (a) A check forces a reply — the mover keeps the initiative for a move.
+  //     SEAT-NEUTRAL ON PURPOSE (David 2026-09-14: "they are checking me, so it's
+  //     MY king not their king"): "the king" is whoever is in check, correct for a
+  //     student check AND an opponent check (reframed). And it does NOT restate
+  //     "check" — the SAN's "+" already sanitises to "check" at speak time, so a
+  //     "their king … check" concept clause after it read "check … with check …
+  //     check forces their king" (the triple-check redundancy David flagged).
   if (mv.san.includes('+') && !mv.san.includes('#')) {
-    return 'The check forces their king to react — you set the tempo and keep the initiative for a move.';
+    return 'Forces the king to react, seizing the initiative for a move.';
   }
   // (b) The move makes a REAL threat — attacks a WINNABLE enemy piece (hangs, or
   // wins the exchange). A defended equal/lesser piece is NOT "pressure" (the

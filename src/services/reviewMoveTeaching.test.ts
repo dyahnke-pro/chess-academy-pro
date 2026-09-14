@@ -43,6 +43,16 @@ describe('buildReviewMoveTeaching (grounded per-move review why)', () => {
     }
   });
 
+  it('a check teaching is seat-neutral and does not restate "check" (David 2026-09-14)', () => {
+    // 1.e4 e5 2.Nf3 d6 3.Bb5+ — a check. Seat-neutral "the king", no redundant
+    // "check" word (the SAN carries it), no wrong-perspective "their king".
+    const { fen, san } = beforeLast(['e4', 'e5', 'Nf3', 'd6', 'Bb5+']);
+    const t = buildReviewMoveTeaching(fen, san);
+    expect(t).toMatch(/forces the king to react/i);
+    expect(t).not.toMatch(/their king|you set the tempo/i);
+    expect(t).not.toMatch(/\bcheck\b/i); // the SAN's "+" is the only check mention
+  });
+
   it('a flank pawn striking at the centre is a central fight, not a "cramp" (David 2026-09-14)', () => {
     // 1.e4 c5 — the Sicilian …c5 attacks d4: fighting for the centre from the flank.
     const t = buildReviewMoveTeaching(beforeLast(['e4', 'c5']).fen, 'c5');

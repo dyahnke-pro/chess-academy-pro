@@ -43,7 +43,7 @@ export interface DnaLinePly {
  *  as filler when repeated down a line (2026-07-25 hand-audit: the same
  *  "quiet development" glued to four moves). The universal teacher's
  *  last-resort forms fall here. */
-const GENERIC_TEACH = /quiet development|ready to join the attack|getting into the game|steps to [a-h][1-8]/i;
+const GENERIC_TEACH = /quiet development|ready to join the attack|getting into the game|joining the game|steps to [a-h][1-8]/i;
 
 const NO_PREV: PrevCaptureContext = { square: null, capturedValue: 0 };
 
@@ -99,7 +99,10 @@ export function dnaMoveClause(
   if (mv.captured && facts.materialGained >= 1) bits.push(`winning the ${facts.captured}`);
   if (facts.tacticLanded) bits.push(`landing a ${tacticWord(facts.tacticLanded)}`);
   if (facts.promotion) bits.push(`promoting to a ${facts.promotion}`);
-  if (facts.isCheck) bits.push('with check');
+  // NOT "with check" — the SAN's "+" is spelled out as "check" by the TTS
+  // sanitizer at speak time, so adding it here doubled it ("…to b5, check, with
+  // check…"), and the check concept clause below tripled it (David 2026-09-14).
+  // The SAN carries the check; the concept clause carries WHY it matters.
   if (facts.outpostGained) bits.push(`planting an outpost on ${facts.outpostGained}`);
   if (facts.newPassedPawns.length > 0) bits.push(`creating a passed pawn on ${facts.newPassedPawns[0]}`);
   if (facts.newOpenFiles.length > 0) bits.push(`opening the ${facts.newOpenFiles[0]}-file`);

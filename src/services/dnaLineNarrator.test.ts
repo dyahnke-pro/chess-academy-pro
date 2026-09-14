@@ -37,6 +37,18 @@ describe('dnaMoveClause', () => {
     expect(text).not.toMatch(/wins material/);
   });
 
+  it('a CHECK is not doubled — the SAN carries it, no "with check" clause (David 2026-09-14)', () => {
+    // 1.e4 e5 2.Nf3 d6 3.Bb5+ — a check. The SAN already ends in "+", which the
+    // TTS sanitizer spells as "check"; the clause must not add "with check" and
+    // must not restate "their king / you set the tempo" (seat-neutral concept).
+    const c = new Chess();
+    c.move('e4'); c.move('e5'); c.move('Nf3'); c.move('d6');
+    const { text } = dnaMoveClause(c.fen(), 'Bb5+');
+    expect(text).not.toMatch(/with check/i);
+    expect(text).not.toMatch(/their king|you set the tempo/i);
+    expect(text).toMatch(/Bb5\+/); // the SAN (its "+" is the only "check" mention)
+  });
+
   it('never throws on an empty / invalid FEN — falls back to the SAN', () => {
     expect(dnaMoveClause('', 'Nf3').text).toBe('Nf3');
     expect(dnaMoveClause('not a fen', 'Bb5').text).toBe('Bb5');
