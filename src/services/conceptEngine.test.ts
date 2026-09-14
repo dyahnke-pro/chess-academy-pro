@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   sideToMove, solvingSide, materialBalance, strongerSide, framingSide,
-  renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution,
+  renderTacticConcept, renderMatchupConcept, conceptForBoard, conceptForSolution, positionalConcepts,
 } from './conceptEngine';
 import { classifyMatchup } from './endgameMatchup';
 import type { TacticPattern } from '../types/tacticTypes';
@@ -166,5 +166,25 @@ describe('conceptForSolution — technique reached along the solution', () => {
     // between, Black to move → White holds the opposition.
     const cs = conceptForSolution('8/8/8/3k4/8/3K4/4P3/8 b - - 0 1', ['d5d6', 'd3d4']);
     expect(cs.some((c) => c.id === 'opposition')).toBe(true);
+  });
+});
+
+describe('conceptEngine — positional concepts (§E)', () => {
+  it('returns nothing on bare kings', () => {
+    expect(positionalConcepts('8/8/8/4k3/8/4K3/8/8 w - - 0 1')).toEqual([]);
+  });
+
+  it('every positional concept has source=positional and both registers', () => {
+    const cs = positionalConcepts('r2q1rk1/pp3ppp/2n1b3/3Np3/8/2P3P1/PP2PPBP/R2Q1RK1 w - - 0 1');
+    for (const c of cs) {
+      expect(c.source).toBe('positional');
+      expect(c.full.length).toBeGreaterThan(10);
+      expect(c.short.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('surfaces a positional concept on a quiet position with a d5 knight outpost', () => {
+    const cs = conceptForBoard('r2q1rk1/pp3ppp/2n1b3/3Np3/8/2P3P1/PP2PPBP/R2Q1RK1 w - - 0 1');
+    expect(cs.some((c) => c.source === 'positional')).toBe(true);
   });
 });

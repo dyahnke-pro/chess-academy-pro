@@ -289,6 +289,14 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
     }
   } catch { /* not an ending — skip */ }
 
+  // 3. Positional concepts — the quiet-position teaching (lead when nothing
+  // tactical/endgame fired; a support otherwise). Board-provable only.
+  for (const p of positionalConcepts(fen)) {
+    if (seen.has(p.id)) continue;
+    out.push(p);
+    seen.add(p.id);
+  }
+
   out.sort((a, b) => b.importance - a.importance);
   return out.slice(0, max);
 }
@@ -377,6 +385,53 @@ export function conceptForSolution(
     }
   } catch { /* not an ending */ }
 
+  // Positional teaching beat — many quiet/defensive puzzles are about a
+  // positional idea rather than a tactic; the board-provable positional concepts
+  // catch those (lead when nothing else fired, a support otherwise).
+  for (const p of positionalConcepts(fen)) {
+    if (seen.has(p.id)) continue;
+    out.push(p);
+    seen.add(p.id);
+  }
+
   out.sort((a, b) => b.importance - a.importance);
   return out.slice(0, opts.max ?? 3);
+}
+
+// ─── POSITIONAL concept source (§E) ──────────────────────────────────────────
+import { boardConcepts } from './boardConcepts';
+
+/** Positional-tag → invariant (computed vocabulary; general + reusable). Only the
+ *  board-PROVABLE tags boardConcepts emits — never intent judgements. */
+const POSITIONAL_INVARIANT: Record<string, { name: string; full: string; short: string }> = {
+  'passed-pawn': { name: 'Passed pawn', full: 'A passed pawn: no enemy pawn can stop it, so push it — enemy pieces must drop back to babysit it, and that ties them down.', short: 'Passed pawn — push it.' },
+  'knight-outpost': { name: 'Knight outpost', full: 'A knight outpost: a knight on a hole the enemy pawns can no longer challenge is a monster — it can\'t be kicked, so build the position around it.', short: 'Outpost — it can\'t be kicked.' },
+  'king-safety': { name: 'King safety', full: 'The king is exposed: before anything else, count its flight squares and the attackers heading its way — safety comes before ambition.', short: 'King safety — count the attackers.' },
+  'pawn-storm': { name: 'Pawn storm', full: 'A pawn storm: pawns marching at the enemy king pry it open — every push is a crowbar against its shelter.', short: 'Pawn storm — pry the king open.' },
+  'piece-activity': { name: 'Active rook', full: 'An active rook on the seventh rank or an open file is a highway — it hits pawns from behind and cramps the enemy; seize the file before they do.', short: 'Active rook — take the file.' },
+  'open-file': { name: 'Open file', full: 'An open file is a highway for the rooks — occupy it, double on it, and use it to break into the enemy camp.', short: 'Open file — occupy it.' },
+  'bishop-pair': { name: 'Bishop pair', full: 'The bishop pair rakes open diagonals in tandem — open the position so both bishops can breathe and the pair tells.', short: 'Bishop pair — open it up.' },
+  'pawn-structure': { name: 'Pawn weakness', full: 'A pawn weakness — an isolated or doubled pawn can\'t be defended by another pawn, so it\'s a permanent target: fix it, then pile on.', short: 'Weak pawn — a fixed target.' },
+  'development': { name: 'Development lead', full: 'A lead in development is temporary — get the last pieces out and open lines now, before the opponent catches up and it evaporates.', short: 'Develop — use the lead fast.' },
+};
+
+/** Most-instructive-first, so the lead positional concept is the decisive one. */
+const POSITIONAL_PRIORITY = ['passed-pawn', 'knight-outpost', 'king-safety', 'pawn-storm', 'piece-activity', 'open-file', 'bishop-pair', 'pawn-structure', 'development'];
+
+/** Board-provable positional concepts present (from boardConcepts), rendered and
+ *  priority-ordered. Endgame-type + tactic tags are excluded (owned by the
+ *  matchup classifier + detectTactics). Importance sits below tactics/endgame —
+ *  positional teaching is the quiet-position lead, a support otherwise. */
+export function positionalConcepts(fen: string): ComputedConcept[] {
+  let bc: ReturnType<typeof boardConcepts>;
+  try { bc = boardConcepts(fen); } catch { return []; }
+  if (!bc) return [];
+  const out: ComputedConcept[] = [];
+  for (const tag of POSITIONAL_PRIORITY) {
+    if (!bc.concepts.includes(tag)) continue;
+    const t = POSITIONAL_INVARIANT[tag];
+    if (!t) continue;
+    out.push({ id: tag, name: t.name, source: 'positional', squares: [], full: t.full, short: t.short, importance: 0.4 });
+  }
+  return out;
 }
