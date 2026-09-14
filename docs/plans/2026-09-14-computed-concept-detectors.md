@@ -54,6 +54,16 @@ to learn. Puzzle SOURCES the coach can pull from:
 
 All flow through the classroom drill + `conceptForBoard`, in-conversation.
 
+**Both doors (David 2026-09-14: "I do also want a master level puzzle square in
+tactics tho! Able to reach it from both surfaces").** Coach-as-hub does NOT remove
+the Tactics entry. Master Level is reachable from BOTH:
+- **Coach** — pulled in-conversation (above).
+- **Tactics hub** — a dedicated **Master Level square** in `TacticsPage.tsx` →
+  `/tactics/master` (route + `AdaptivePuzzlePage master` already exist; today the
+  link lives only inside the adaptive page, NOT on the hub grid — that's the gap
+  to close). Tile matches the hub's Dashboard grid language; loading/empty/error
+  already handled by the master surface. Both doors, one destination.
+
 **HARD RULE — every puzzle the coach serves carries its concept teaching (David
 2026-09-14: "Coach needs to be able to teach the concepts behind the puzzles it
 is showing… Otherwise what is the point??").** Teach and generate/serve are two
@@ -376,6 +386,9 @@ first-class label.
   puzzle carries its concept teaching (bare arrow never acceptable). (David)
 - 2026-09-14: P2 = coarse-matchup-class-first, then named techniques as validated
   passes (degrade-safe; fastest correct coverage). (my call, logged)
+- 2026-09-14: Master Level reachable from BOTH the coach AND a dedicated square in
+  the Tactics hub (`TacticsPage.tsx` → `/tactics/master`); coach-as-hub does not
+  remove the Tactics entry. (David)
 - OPEN: P6 own-games generation runtime cadence — after every analyzed game, or
   on demand? (revisit when P6 starts)
 
