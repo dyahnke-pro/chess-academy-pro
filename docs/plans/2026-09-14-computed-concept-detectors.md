@@ -429,7 +429,13 @@ Update the phase's status marker + the decisions log as each lands.
   review `whyBestMove`), matched to the student's specific hole through the
   vocabulary bridge; Learn's spoken interjection (`assembleTacticsAnswer` →
   `voiceFacts`) leads with the concept sentence. Kids excluded (gate test).
-  A wire that fires: gated by tests that a real concept comes OUT.
+  A wire that fires: gated by tests that a real concept comes OUT. Verified
+  by inspection 2026-09-14 that every briefing consumer uses a DENY-list
+  (`clauseText(pf.clauses, ['must-defend', …])`), never an allowlist, so the
+  `concept` clause is spoken on all four: Learn live coach (`useLiveCoach`),
+  Play phase transitions (`usePhaseNarration`), Read-this-position
+  (`usePositionNarration`), and Learn's computed spoken-hint queue
+  (`CoachTeachPage` → `queueSpokenHint(…, 'computed')`).
 - **P4c (part 2) — the remaining computed narration paths** [pending]:
   `openingGenerator` (Teach-x-opening beats), `dnaLineNarrator` /
   `reviewMoveTeaching` (review's per-move "why"), `usePhaseNarration`'s own
