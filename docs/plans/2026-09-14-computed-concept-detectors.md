@@ -271,18 +271,30 @@ The generator and the concept engine are the same machinery pointed two ways: th
 detectors that TEACH a puzzle are what TAG a generated one. The LLM generates
 nothing (G0/G3) — this is exactly how Lichess built the DB we ship.
 
-**Reconciliation (no-yes-man): rating = how hard the solution is to find, not who
-you are.** A 1200's game yields ~1200-rated puzzles, not 2400. So two SOURCES,
-one generator (mirrors the pro-rep doctrine — only the source differs):
+**Difficulty is a property of the POSITION, not the pedigree of the game (David
+2026-09-14: "no difference between my games and a master game… should be able to
+make master puzzles from users own").** The engine finds a hard-to-find resource
+whether a GM or a 1200 sat at the board; if the position holds a 2400-hard shot,
+it's a 2400 puzzle regardless of source. So: **ONE source-agnostic generator;
+difficulty computed per position; "master tier" is a difficulty filter (≥2400)
+over ANY source — including the user's own games.** An own-game master puzzle is
+the most motivating outcome of all ("you were in a 2400-level position in your own
+game — here's the shot").
 
-- **From the user's own games** — highest value, most motivating. Rated at TRUE
-  difficulty, whatever it is. Extends existing infra: `mistakePuzzleService`,
-  `gameCalculationPuzzleService`, `fromYourGamesService`, `autoAnalyzeGame`,
-  `gameAnalysisService`. Runs at runtime, piggybacking the analysis pass the app
-  already does (never a second engine sweep).
-- **Master-level tier** — genuinely 2400+ from MASTER/PRO games: the pro corpora
-  we already hold (`pro-game-references.json`, chess.com pro archives) + the
-  Lichess master DB. Offline batch (like `build-master-puzzles.mjs`).
+Sources the SAME generator points at:
+- **The user's own games** — via `autoAnalyzeGame` / `gameAnalysisService` at
+  runtime (piggyback the analysis the app already runs — never a second sweep);
+  extends `mistakePuzzleService`, `gameCalculationPuzzleService`,
+  `fromYourGamesService`.
+- **Master / pro games** — the pro corpora we hold (`pro-game-references.json`,
+  chess.com pro archives). Offline batch (like `build-master-puzzles.mjs`).
+- **The Lichess master DB** — already shipped; also the CALIBRATION set for the
+  rating estimator (known ratings) and a guaranteed-quality supply.
+
+Honest nuance (yield, not a gate): hard resources arise LESS OFTEN in a weaker
+player's games, so fewer master-tier puzzles per game from a beginner's corpus.
+Surface them when they genuinely occur; never promise a firehose from a beginner's
+history. Source stays open; expectation stays honest.
 
 **The generator pipeline (deterministic):**
 1. Engine over each position (reuse the game's analysis where present).
@@ -327,13 +339,15 @@ first-class label.
 - **P5 — ship** [pending]: ship-check + master-set validation report +
   3-instrument prod audit across every surface + OTA (David asked for OTA on
   completion).
-- **P6 — puzzle generation** [pending]: one generator (engine swing → uniqueness
-  → soundness → concept-detector tag → rating estimator → dedupe), two sources
-  (own-games runtime off `autoAnalyzeGame`; master tier offline off pro corpora +
-  master DB). Rating estimator validated vs known Lichess ratings. Ships behind a
-  source tag into the reach ladder + drill + concept teaching. Likely its own plan
-  doc when P6 starts (substantial), but the tagger is the concept engine from
-  P1–P2, so P6 must follow the engine.
+- **P6 — puzzle generation** [pending]: ONE source-agnostic generator (engine
+  swing → uniqueness → soundness → concept-detector tag → rating estimator →
+  dedupe), pointed at own games (runtime, off `autoAnalyzeGame`) AND master/pro
+  games (offline). Difficulty is computed per position; the **master tier is a
+  difficulty filter (≥2400) over any source — own games included.** Rating
+  estimator validated vs known Lichess ratings. Ships tagged by source into the
+  reach ladder + drill + concept teaching. Likely its own plan doc when P6 starts
+  (substantial), but the tagger is the concept engine from P1–P2, so P6 must
+  follow the engine.
 
 ## Decisions log
 
@@ -348,10 +362,14 @@ first-class label.
   verbosity-capped), not one. (David)
 - 2026-09-14: quiz = classroom drill + generated puzzles fed by the concept
   engine; teach and quiz share one machinery. (David)
-- 2026-09-14: ADD a puzzle GENERATION ability — two sources (own games; master
-  tier from master/pro games), one deterministic generator, concept engine as
-  tagger, rating estimated + validated vs known Lichess ratings. (David: "even
-  better if it's from their own games")
+- 2026-09-14: ADD a puzzle GENERATION ability — ONE source-agnostic generator,
+  concept engine as tagger, rating estimated + validated vs known Lichess ratings.
+  (David: "even better if it's from their own games")
+- 2026-09-14 (CORRECTION): difficulty is a property of the POSITION, not the game
+  source — master tier is a difficulty filter over ANY source, so master-level
+  puzzles CAN come from the user's own games. Dropped the "own games = their
+  rating" gate. Only real difference is yield. (David: "no difference between my
+  games and a master game")
 - OPEN: P2 coarse-class-first vs all-named-techniques-at-once. (awaiting David)
 - 2026-09-14: coach is the HUB — pulls puzzles (master DB + general DB +
   generated) in-conversation so users don't bounce across the app. Every served
