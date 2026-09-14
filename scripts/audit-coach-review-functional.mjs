@@ -136,8 +136,8 @@ async function main() {
   const engT = await clickReq('[data-testid="review-engine-lines-toggle"]');
   record('engine-lines-toggle', engT && await until(() => visible('[data-testid="review-engine-lines-panel"]'), 8000), engT ? 'panel toggled' : 'no toggle');
 
-  // ── narration toggle ──
-  record('narration-toggle', await clickReq('[data-testid="walk-narration-toggle-btn"]'), 'tapped narration toggle');
+  // ── play/pause (single control; David 2026-09-14 removed the separate replay toggle) ──
+  record('play-pause', await clickReq('[data-testid="review-play-pause-btn"]'), 'tapped play/pause');
 
   // ── ask panel: open → type a real question → response ──
   const askOpen = await clickReq('[data-testid="walk-ask-toggle-btn"]') && await until(() => visible('[data-testid="walk-ask-panel"]'), 8000);

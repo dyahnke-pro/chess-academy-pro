@@ -134,6 +134,17 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   useEffect(() => { currentPlyRef.current = currentPly; }, [currentPly]);
   const [narrationState, setNarrationState] = useState<ReviewNarrationState>('idle');
   const introSpokenRef = useRef(false);
+  // Did the CURRENT ply's narration finish speaking? Set false when a new
+  // utterance starts, true when it resolves (or when the ply is silent / voice
+  // is off). Lets Play RESUME correctly: a ply already narrated advances to the
+  // next instead of restating itself (David 2026-09-14: "it restates the
+  // narration it just said first before advancing"); a ply paused mid-sentence
+  // is re-spoken so the interrupted line finishes.
+  const plyFullySpokenRef = useRef(false);
+  // A pause happened, so the NEXT play() is a resume (not a fresh Start). Only a
+  // resume advances past an already-finished ply; the initial Start still speaks
+  // the current ply (so ply 0 / the intro is shown, not skipped).
+  const resumingAfterPauseRef = useRef(false);
   const activeTokenRef = useRef(0);
   /** Deep-link landing applied once — so user navigation afterward is
    *  never overridden, and a same-component narration reopen snaps to 0. */
@@ -294,8 +305,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     const token = activeTokenRef.current;
     voiceService.stop();
     clearAdvanceTimer();
+    plyFullySpokenRef.current = false; // a fresh utterance for this ply begins
     if (!text || !text.trim()) {
       setNarrationState('idle');
+      plyFullySpokenRef.current = true; // nothing to say = nothing left to finish
       scheduleAdvance(ply, holdAfter(ply, text, false), token);
       return;
     }
@@ -308,6 +321,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     const voiceOn = useAppStore.getState().activeProfile?.preferences.coachReviewVoice ?? true;
     if (!voiceOn) {
       setNarrationState('idle');
+      plyFullySpokenRef.current = true; // voice off = nothing left to finish
       scheduleAdvance(ply, holdAfter(ply, text, false), token);
       return;
     }
@@ -323,6 +337,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       () => {
         if (token !== activeTokenRef.current) return;
         setNarrationState('idle');
+        plyFullySpokenRef.current = true; // this ply's narration finished
         // VOICE-PROMISE RESOLUTION IS THE ONLY ADVANCE TRIGGER (the app's
         // strict-narration contract): the pause starts when the speech ends.
         scheduleAdvance(ply, holdAfter(ply, text, true), token);
@@ -330,6 +345,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       () => {
         if (token !== activeTokenRef.current) return;
         setNarrationState('idle');
+        plyFullySpokenRef.current = true; // treat a failed utterance as finished
         scheduleAdvance(ply, holdAfter(ply, text, true), token);
       },
     );
@@ -354,6 +370,10 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   const commitPly = useCallback((ply: number, opts: { speak: boolean; navSource?: string }): void => {
     const bounded = Math.max(0, Math.min(ply, lastPly + 1));
     const fromPly = currentPlyRef.current;
+    // A new ply is not yet narrated. speakCurrent (speak:true) flips this true on
+    // resolve; a silent nav (speak:false, e.g. goBack) leaves it false so a
+    // subsequent resume SPEAKS the ply landed on rather than skipping it.
+    plyFullySpokenRef.current = false;
     // Mirror synchronously — two taps inside one render tick must step twice,
     // and the auto-advance timer compares against the LIVE ply.
     currentPlyRef.current = bounded;
@@ -414,6 +434,7 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
   const pause = useCallback((reason = 'pause'): void => {
     const wasOn = autoRef.current;
     autoRef.current = false;
+    resumingAfterPauseRef.current = true; // the next play() is a resume, not a Start
     clearAdvanceTimer();
     setIsAutoPlaying(false);
     if (wasOn) {
@@ -472,9 +493,21 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
       summary: `auto-play started at ply ${currentPlyRef.current}`,
       details: JSON.stringify({ ply: currentPlyRef.current }),
     });
-    // Not mid-sentence → (re)speak the current ply so the chain starts here;
-    // mid-sentence → the resolution handler picks the chain up.
-    if (narrationState !== 'speaking') speakCurrent(currentPlyRef.current, currentText);
+    // Mid-sentence when paused → the in-flight resolution handler resumes the
+    // chain (autoRef is now true), so don't start a second utterance.
+    if (narrationState === 'speaking') { resumingAfterPauseRef.current = false; return; }
+    const resuming = resumingAfterPauseRef.current;
+    resumingAfterPauseRef.current = false;
+    // RESUMING after a pause, on a ply that already finished narrating → ADVANCE
+    // rather than restate it (David 2026-09-14: "it restates the narration it
+    // just said first before advancing"). A fresh Start, or a ply interrupted
+    // mid-sentence, still SPEAKS the current ply (so ply 0 / the intro shows).
+    if (resuming && plyFullySpokenRef.current) {
+      if (onAutoAdvanceRef.current) onAutoAdvanceRef.current();
+      else advanceRef.current(currentPlyRef.current + 1);
+    } else {
+      speakCurrent(currentPlyRef.current, currentText);
+    }
   }, [narrationState, speakCurrent, currentText]);
 
   const togglePausePlay = useCallback(() => {

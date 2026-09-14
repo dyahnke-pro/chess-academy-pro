@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, Target, Crosshair, Play, Pause } from 'lucide-react';
+import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, Play, Pause } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { buildVoicePackage } from '../../services/voicePackage';
@@ -3812,25 +3812,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
               </div>
             )}
 
-            {/* Secondary controls row: pause/play + Ask (inline, small) */}
+            {/* Secondary controls row: Ask (inline, small). The separate
+                narration replay/stop toggle was REMOVED (David 2026-09-14: "one
+                ▶/⏸ only") — it sat beside the ▶/⏸ auto-play button and let the
+                walk land in a "plays one move then stops" state. The single
+                ▶/⏸ above now owns play/pause; a ply is re-heard by stepping
+                back to it. */}
             <div className="flex items-center justify-center gap-2 pb-2">
-              {/* Narration toggle — pauses or replays the SPOKEN narration
-                  for the current ply. Does NOT advance to the next ply
-                  (manual-only stepping). User feedback (build 3d8e3ef)
-                  caught the prior "Play / Pause" labels reading like an
-                  auto-advance toggle; this rename + Volume icons make
-                  voice control unambiguous. */}
-              <button
-                onClick={walkPlayback.togglePausePlay}
-                className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"
-                style={{ color: 'var(--color-text)' }}
-                aria-label={walkPlayback.narrationState === 'speaking' ? 'Stop narration' : 'Replay narration'}
-                data-testid="walk-narration-toggle-btn"
-              >
-                {walkPlayback.narrationState === 'speaking'
-                  ? <><VolumeX size={12} /> Stop narration</>
-                  : <><Volume2 size={12} /> Replay narration</>}
-              </button>
               <button
                 onClick={() => setAskExpanded((v: boolean) => !v)}
                 className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-theme-border hover:bg-theme-surface"

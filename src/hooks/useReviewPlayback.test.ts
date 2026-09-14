@@ -361,10 +361,10 @@ describe('useReviewPlayback — auto-advance', () => {
       const onAutoAdvance = vi.fn();
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
-      await act(async () => { speakRecords[0].resolve(); });
+      // Intro is still speaking on mount → play() sets auto and lets the in-flight
+      // narration's resolution drive the advance (no restate, no double-speak).
       await act(async () => { result.current.play(); });
       expect(result.current.isAutoPlaying).toBe(true);
-      // play() re-speaks the current ply (the intro); it resolves…
       const intro = speakRecords[speakRecords.length - 1];
       await act(async () => { intro.resolve(); });
       // …not yet (the pause is still running)…
@@ -373,6 +373,57 @@ describe('useReviewPlayback — auto-advance', () => {
       // …and at 500ms the walk advances through the parent's forward.
       await act(async () => { vi.advanceTimersByTime(150); });
       expect(onAutoAdvance).toHaveBeenCalledTimes(1);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('RESUME after a pause, on a finished ply, advances instead of restating it (David 2026-09-14)', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      // Start playing; the current ply finishes narrating (advance now pending)…
+      await act(async () => { result.current.play(); });
+      await act(async () => { speakRecords[speakRecords.length - 1].resolve(); });
+      // …the user PAUSES during the hold, then taps play again to resume.
+      await act(async () => { result.current.pause(); });
+      onAutoAdvance.mockClear();
+      const spokenBefore = speakRecords.length;
+      await act(async () => { result.current.play(); });
+      expect(speakRecords.length).toBe(spokenBefore);          // no restate of the finished ply
+      expect(onAutoAdvance).toHaveBeenCalledTimes(1);          // advances via the parent forward
+      expect(result.current.isAutoPlaying).toBe(true);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('the INITIAL Start speaks the current ply (does not skip ply 0 / the intro)', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      // Intro finished on the summary screen; the FIRST play() is a Start, not a
+      // resume — it speaks ply 0 rather than jumping to ply 1.
+      await act(async () => { speakRecords[0].resolve(); });
+      const spokenBefore = speakRecords.length;
+      await act(async () => { result.current.play(); });
+      expect(speakRecords.length).toBe(spokenBefore + 1);      // ply 0 spoken, not skipped
+      expect(onAutoAdvance).not.toHaveBeenCalled();
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('resume MID-sentence re-speaks the interrupted ply (never skips it)', async () => {
+    vi.useFakeTimers();
+    try {
+      const onAutoAdvance = vi.fn();
+      const n = narr();
+      const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
+      // Intro is still speaking → pause mid-sentence, then play.
+      await act(async () => { result.current.pause(); });
+      const spokenBefore = speakRecords.length;
+      await act(async () => { result.current.play(); });
+      expect(speakRecords.length).toBe(spokenBefore + 1);      // the interrupted ply is re-spoken
+      expect(onAutoAdvance).not.toHaveBeenCalled();            // not advanced past it
     } finally { vi.useRealTimers(); }
   });
 
@@ -412,7 +463,7 @@ describe('useReviewPlayback — auto-advance', () => {
       const onAutoAdvance = vi.fn();
       const n = narr();
       const { result } = renderHook(() => useReviewPlayback({ narration: n, totalPlies: 4, onAutoAdvance }));
-      await act(async () => { speakRecords[0].resolve(); });
+      // play() while the intro is still speaking (auto on, no immediate advance).
       await act(async () => { result.current.play(); });
       await act(async () => { result.current.goForward(); });
       // Back = the student stepping in.

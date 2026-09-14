@@ -593,9 +593,12 @@ describe('CoachGameReview', () => {
     expect(onBackToCoach).toHaveBeenCalledOnce();
   });
 
-  it('voice narration toggle button is present', async () => {
+  it('has a single play/pause control and no separate narration toggle (David 2026-09-14)', async () => {
     await renderWalk();
-    expect(screen.getByTestId('walk-narration-toggle-btn')).toBeInTheDocument();
+    // One ▶/⏸ owns play/pause; the separate "Replay narration" button was
+    // removed (it let the walk land in "plays one move then stops").
+    expect(screen.getByTestId('review-play-pause-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('walk-narration-toggle-btn')).not.toBeInTheDocument();
   });
 
   // ─── Missed Tactics (ship-1 + ship-4 contract) ──────────────────────────────

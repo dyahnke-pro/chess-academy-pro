@@ -327,7 +327,7 @@ async function main() {
     { kind: 'visible', selector: '[data-testid="review-narration-banner"]', label: '2.9 narration banner' },
     { kind: 'visible', selector: '[data-testid="review-engine-lines-section"]', label: '2.10 engine-lines section header' },
     { kind: 'visible', selector: '[data-testid="review-engine-lines-toggle"]', label: '2.10 engine-lines toggle' },
-    { kind: 'visible', selector: '[data-testid="walk-narration-toggle-btn"]', label: '2.9 narration toggle button' },
+    { kind: 'visible', selector: '[data-testid="review-play-pause-btn"]', label: '2.9 single play/pause control' },
     { kind: 'visible', selector: '[data-testid="walk-ask-toggle-btn"]', label: '2.11 ask toggle button' },
     { kind: 'visible', selector: '[data-testid="review-bottom-bar"]', label: '2.14 bottom bar container' },
     { kind: 'visible', selector: '[data-testid="walk-play-again-btn"]', label: '2.14 play-again button' },
