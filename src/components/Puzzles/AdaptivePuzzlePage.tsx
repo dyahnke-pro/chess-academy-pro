@@ -114,6 +114,10 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
   const [reachDelta, setReachDelta] = useState<number | null>(null);
   const [cue, setCue] = useState<ReachCue | null>(null);
   const [masterReady, setMasterReady] = useState<boolean>(!master);
+  // Master concept-review pause: hold on the solved board until the student taps
+  // Continue, so the concept lesson lands (the classroom teaching beat).
+  const [awaitingConcept, setAwaitingConcept] = useState(false);
+  const pendingSessionRef = useRef<AdaptiveSessionState | null>(null);
 
   // Keep playerRating synced with profile
   useEffect(() => {
@@ -328,6 +332,17 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
       return;
     }
 
+    // Master Level: pause on the solved board so the CONCEPT lesson (rendered +
+    // spoken in PuzzleBoard) is actually read/heard before advancing — the
+    // "classroom" teaching beat (David 2026-09-14). Keeps PuzzleBoard mounted;
+    // Continue runs the normal checkpoint-or-fetch below. Other surfaces keep
+    // their existing cadence (the voice still carries the concept there).
+    if (master) {
+      pendingSessionRef.current = updatedSession;
+      setAwaitingConcept(true);
+      return;
+    }
+
     // Check if checkpoint
     if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {
       setPhase('checkpoint');
@@ -336,7 +351,20 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
 
     // Fetch next puzzle
     await fetchNextPuzzle(updatedSession);
-  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag]);
+  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag, master]);
+
+  /** Master concept-review Continue → run the deferred checkpoint-or-fetch. */
+  const handleContinueAfterConcept = useCallback(async (): Promise<void> => {
+    const updatedSession = pendingSessionRef.current;
+    pendingSessionRef.current = null;
+    setAwaitingConcept(false);
+    if (!updatedSession) return;
+    if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {
+      setPhase('checkpoint');
+      return;
+    }
+    await fetchNextPuzzle(updatedSession);
+  }, [fetchNextPuzzle]);
 
   const handleContinueAfterRepCap = useCallback(async (): Promise<void> => {
     if (!session) return;
@@ -489,17 +517,28 @@ export function AdaptivePuzzlePage({ master = false }: { master?: boolean } = {}
             <PuzzleBoard
               puzzle={currentPuzzle}
               onComplete={(outcome) => void handlePuzzleComplete(outcome)}
+              disabled={awaitingConcept}
             />
           </div>
           <div className="space-y-4">
             <AdaptiveSessionPanel session={session} />
-            <button
-              onClick={handleEndSession}
-              className="text-sm text-theme-text-muted hover:text-theme-text transition-colors"
-              data-testid="end-session"
-            >
-              End Session
-            </button>
+            {awaitingConcept ? (
+              <button
+                onClick={() => void handleContinueAfterConcept()}
+                className="w-full px-4 py-3 rounded-2xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+                data-testid="concept-continue"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={handleEndSession}
+                className="text-sm text-theme-text-muted hover:text-theme-text transition-colors"
+                data-testid="end-session"
+              >
+                End Session
+              </button>
+            )}
           </div>
         </div>
       )}

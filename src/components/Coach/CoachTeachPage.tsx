@@ -141,6 +141,7 @@ import { matchTrainingAidRoute } from '../../services/trainingAidRouter';
 import { matchNavigationRoute } from '../../services/navigationRouter';
 import {
   pickCoachDrill,
+  pickMasterDrill,
   isDrillableAid,
   buildMistakeDrillQueue,
   advanceMistakeDrill,
@@ -148,6 +149,8 @@ import {
   type CoachDrill,
   type DrillProgress,
 } from '../../services/coachDrillService';
+import { seedMasterPuzzles } from '../../services/puzzleService';
+import { explainDrillConcept } from '../../services/puzzleConceptExplanation';
 import { gradeMistakePuzzle } from '../../services/mistakePuzzleService';
 import { reportCoachReask, isMoveReport } from '../../services/coachNonAnswer';
 import { tryCaptureOpeningIntent, tryCaptureForgetIntent } from '../../services/openingIntentCapture';
@@ -2164,6 +2167,23 @@ export function CoachTeachPage(): JSX.Element {
     void voiceService.speak(intro);
   }, [walkthrough, loadDrillOntoBoard]);
 
+  /** Quiz a MASTER-level puzzle in the classroom (David 2026-09-14: "tie coach
+   *  into master puzzles so it can quiz them in the classroom"). Lazily seeds
+   *  the elite pool, picks one nearest the master reach rating, and sets it up
+   *  in-place — the concept behind the solution is taught on solve
+   *  (completeDrill → explainDrillConcept). Returns false if the pool is
+   *  unavailable so the caller can fall back. */
+  const startMasterDrill = useCallback(async (): Promise<boolean> => {
+    try {
+      await seedMasterPuzzles();
+    } catch { /* fall through — pickMasterDrill returns null if unseeded */ }
+    const rating = activeProfile?.preferences?.masterReachState?.rating ?? 2400;
+    const drill = await pickMasterDrill({ rating });
+    if (!drill) return false;
+    startCoachDrill(drill, undefined, "Here's a master-level one.");
+    return true;
+  }, [activeProfile, startCoachDrill]);
+
   /** Load the user's mistake queue (most-common weakness first) and start
    *  drilling it. Returns false when the user has no mistakes yet, so the
    *  caller can fall back to a single DB-sourced drill. */
@@ -2319,7 +2339,18 @@ export function CoachTeachPage(): JSX.Element {
   const completeDrill = useCallback((solved: { drill: CoachDrill; step: number; progress?: DrillProgress }): void => {
     if (!solved.progress) {
       activeDrillRef.current = null;
-      coachDrillSay('Solved — nice. Say “drill” again for another.');
+      // TEACH THE CONCEPT behind the solution (David 2026-09-14: "not just a
+      // hint with an arrow, but an explanation of the concepts to understand the
+      // solution"). Computed (G0): board mechanics + the general idea. Falls
+      // back to the plain line when no explanation is computable.
+      const concept = explainDrillConcept({
+        setupFen: solved.drill.setupFen,
+        solutionSan: solved.drill.solutionSan,
+        themes: solved.drill.themes,
+      });
+      coachDrillSay(concept
+        ? `${concept.spoken} Say “drill” again for another.`
+        : 'Solved — nice. Say “drill” again for another.');
       return;
     }
     const adv = advanceMistakeDrill(solved.progress);
@@ -2455,6 +2486,9 @@ export function CoachTeachPage(): JSX.Element {
     }, { replace: true });
     if (!isDrillableAid(drillAid)) return;
     void (async () => {
+      // Master Level is an EXPLICIT quiz request — the elite pool, not the
+      // student's mistakes. Try it first and stop there.
+      if (drillAid === 'master') { await startMasterDrill(); return; }
       // Prefer the user's own mistakes (most common first, adaptive);
       // fall back to a single DB-sourced drill for a new user. A `game` param
       // scopes the queue to that one game's mistakes; a `theme` param scopes it
@@ -2464,7 +2498,7 @@ export function CoachTeachPage(): JSX.Element {
       const drill = pickCoachDrill(drillAid, { rating });
       if (drill) startCoachDrill(drill);
     })();
-  }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills]);
+  }, [searchParams, setSearchParams, activeProfile, startCoachDrill, startMistakeDrills, startMasterDrill]);
 
   // Hand-off from the Fundamentals scorecard: `/coach/teach?learnFundamental=<id>`
   // opens the per-fundamental teaching lesson ON THE SPOT in the classroom, with
@@ -3664,6 +3698,12 @@ export function CoachTeachPage(): JSX.Element {
           // (David 2026-07-03: coach sets them up on the board under
           // Learn, never the tactics tab, never an LLM-invented drill).
           if (isDrillableAid(aid.aid)) {
+            // Master Level is an explicit quiz of the elite pool — not the
+            // student's mistakes. Try it first and stop.
+            if (aid.aid === 'master') {
+              if (await startMasterDrill()) return;
+              // Pool unavailable → fall through to the brain rather than a dead end.
+            } else {
             // Prefer the user's OWN mistakes — most common weakness first,
             // adaptive until they test out, then the next (David 2026-07-03).
             if (await startMistakeDrills()) {
@@ -3680,6 +3720,7 @@ export function CoachTeachPage(): JSX.Element {
             }
             // No puzzle matched (rare) — fall through to the brain rather
             // than a dead navigation.
+            }
           } else {
             // Lesson-shaped aid (eval-lab / principles / drawing /
             // weaknesses / mistakes) → its real surface, NOT the tactics

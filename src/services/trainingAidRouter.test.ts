@@ -275,4 +275,21 @@ describe('matchTrainingAidRoute — HOW-TO questions are ANSWERED, never hijacke
   it('"rook endings" (bare chip) still drills', () => {
     expect(matchTrainingAidRoute('practice rook endings')?.aid).toBe('rook-endings');
   });
+
+  // Master Level quiz in the classroom (David 2026-09-14).
+  it('"master tactics" routes to the master drill', () => {
+    expect(matchTrainingAidRoute('master tactics')?.aid).toBe('master');
+  });
+  it('"quiz me on master puzzles" routes to the master drill', () => {
+    expect(matchTrainingAidRoute('quiz me on master puzzles')?.aid).toBe('master');
+  });
+  it('"drill master level" routes to the master drill', () => {
+    expect(matchTrainingAidRoute('drill master level')?.aid).toBe('master');
+  });
+  it('"masterclass" is an opening surface, NOT the master drill', () => {
+    expect(matchTrainingAidRoute('masterclass')).toBeNull();
+  });
+  it('"teach me the Najdorf masterclass" does not route to the master drill', () => {
+    expect(matchTrainingAidRoute('teach me the Najdorf masterclass')?.aid).not.toBe('master');
+  });
 });

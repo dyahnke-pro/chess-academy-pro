@@ -17,6 +17,7 @@ import { recordTacticOutcome } from '../../services/tacticAlertService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
 import { getTacticTypeFromThemes, getPrimaryThemeLabel } from '../../services/tacticClassifierService';
 import { describeMoveGeometry } from '../../services/groundedAnswer';
+import { explainPuzzleConcept } from '../../services/puzzleConceptExplanation';
 import { useAppStore } from '../../stores/appStore';
 import { logAppAudit } from '../../services/appAuditor';
 import type { CoachingTier } from '../../services/tacticAlertService';
@@ -76,6 +77,12 @@ export function PuzzleBoard({
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [subtitle, setSubtitle] = useState<string>('');
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
+  // Terminal = the puzzle is resolved (solved OR failed/shown) — the moment to
+  // TEACH the concept behind the solution (David 2026-09-14: "not just a hint
+  // with an arrow, but an explanation of the concepts to understand the
+  // solution"). Distinct from the transient 'incorrect' of a single wrong try.
+  const [terminal, setTerminal] = useState(false);
+  const conceptSpokenRef = useRef(false);
 
   // Determine which color the user plays (opposite of who moves first in the FEN)
   const fenTurn = puzzle.fen.split(' ')[1];
@@ -104,6 +111,18 @@ export function PuzzleBoard({
       return null;
     }
   }, [puzzle.fen, puzzle.moves, userColor]);
+
+  // The CONCEPT behind the solution — computed board mechanics + the general
+  // idea from the concept corpus (G0, no LLM). Shared teaching for every puzzle
+  // surface; taught at the terminal state below.
+  const conceptExplanation = useMemo(
+    () => explainPuzzleConcept({
+      fen: puzzle.fen,
+      solutionUci: puzzle.moves.trim().split(/\s+/),
+      themes: puzzle.themes,
+    }),
+    [puzzle.fen, puzzle.moves, puzzle.themes],
+  );
 
   // Game state owned at page level — ControlledChessBoard renders from this
   const game = useChessGame(puzzle.fen, userColor);
@@ -184,6 +203,8 @@ export function PuzzleBoard({
     wrongAttemptsRef.current = 0;
     hintUsedRef.current = false;
     showedSolutionRef.current = false;
+    setTerminal(false);
+    conceptSpokenRef.current = false;
     setState('loading');
     resetHints();
     setSubtitle('');
@@ -218,17 +239,23 @@ export function PuzzleBoard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [puzzle, playMoveSound, resetHints, resetStruggle]);
 
-  // Voice feedback on correct solve — speak the GROUNDED geometry of the
-  // solving move (the position changing in the student's favor IS the
-  // acknowledgment; no "Excellent!" filler, voice rule #5). Falls silent when
-  // the geometry isn't computable rather than emit a generic line.
+  // TEACH THE CONCEPT when the puzzle resolves (solved or shown) — the computed
+  // explanation of WHY the solution works, not just the grounded geometry of
+  // the last move. Speaks the concept (mechanics + the general idea) once per
+  // puzzle; falls back to the solve geometry when no concept explanation is
+  // computable, and to silence when neither is (voice rule #5, no filler).
+  // Verbosity-gated via voiceService.speak (speakInternal honours the setting).
   useEffect(() => {
-    if (!settings.voiceEnabled) return;
-    if (state === 'correct' && solveGeometry) void voiceService.speak(`That ${solveGeometry}.`);
-  }, [state, settings.voiceEnabled, solveGeometry]);
+    if (!settings.voiceEnabled || !terminal || conceptSpokenRef.current) return;
+    conceptSpokenRef.current = true;
+    const line = conceptExplanation?.spoken
+      ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null);
+    if (line) void voiceService.speak(line);
+  }, [terminal, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
   // Complete the puzzle with outcome metadata
   const completePuzzle = useCallback((correct: boolean): void => {
+    setTerminal(true); // resolved — teach the concept (render + speak below)
     if (tacticType && tacticType !== 'tactical_sequence') {
       recordTacticOutcome({
         tacticType,
@@ -479,6 +506,22 @@ export function PuzzleBoard({
               That {solveGeometry}.
             </span>
           )}
+        </div>
+      )}
+      {/* Concept teaching — the WHY behind the solution, not just an arrow.
+          Shown whenever the puzzle is resolved (solved or shown). Computed
+          (G0): board mechanics + the general idea from the concept corpus. */}
+      {terminal && conceptExplanation && (
+        <div
+          className="w-full max-w-md rounded-lg border border-theme-border bg-theme-surface/60 px-3 py-2 text-left"
+          data-testid="puzzle-concept-explanation"
+        >
+          {conceptExplanation.conceptName && (
+            <p className="text-xs font-semibold uppercase tracking-wide text-theme-accent mb-0.5">
+              {conceptExplanation.conceptName}
+            </p>
+          )}
+          <p className="text-sm text-theme-text">{conceptExplanation.spoken}</p>
         </div>
       )}
       {state === 'loading' && (

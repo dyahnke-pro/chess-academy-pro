@@ -149,6 +149,20 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
     return drillRoute('mating-patterns', 'a mating-pattern');
   }
 
+  // 2b. Master Level → an elite (2400+) puzzle quizzed ON THE BOARD in the
+  //     classroom (David 2026-09-14: "tie coach into master puzzles so it can
+  //     quiz them in the classroom"). Matches "master tactics/puzzles",
+  //     "master(-)level (puzzles)", "quiz me on master…". `masterclass` /
+  //     "master game" are opening surfaces and stay untouched (they carry no
+  //     tactics/puzzle/level noun after "master").
+  if (
+    /\bmaster\s+(?:level\s+)?(?:tactics?|puzzles?)\b/i.test(lower) ||
+    /\bmaster[-\s]level\b/i.test(lower) ||
+    (framed && /\bmaster\b/i.test(lower) && /\b(?:tactics?|puzzles?)\b/i.test(lower))
+  ) {
+    return drillRoute('master', 'a master-level');
+  }
+
   // 3. Eval Lab → position-evaluation drills.
   if (/\beval(?:uation)?\s+lab\b/i.test(lower)) {
     return { path: '/coach/endgame?tab=eval-lab', ack: 'Opening the Eval Lab.', aid: 'eval-lab' };

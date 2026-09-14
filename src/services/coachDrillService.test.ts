@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { pickCoachDrill, isDrillableAid, mistakePuzzleToDrill } from './coachDrillService';
+import { pickCoachDrill, pickMasterDrill, isDrillableAid, mistakePuzzleToDrill } from './coachDrillService';
 import { buildMistakePuzzle } from '../test/factories';
+import { db } from '../db/schema';
+import type { PuzzleRecord } from '../types';
 
 /** Every drill must be a legal, solvable position: the setup FEN parses,
  *  it's the student's move, and the FIRST solution move is legal from
@@ -83,3 +85,50 @@ describe('pickCoachDrill — every aid yields a real, playable drill', () => {
     expect(hard!.rating).toBeGreaterThanOrEqual(easy!.rating);
   });
 });
+
+describe('pickMasterDrill — Dexie-backed elite classroom quiz (David 2026-09-14)', () => {
+  function masterPuzzle(over: Partial<PuzzleRecord> = {}): PuzzleRecord {
+    return {
+      id: `m-${Math.random().toString(36).slice(2)}`,
+      fen: 'r3k3/1p6/4N3/8/8/8/8/4K3 b - - 0 1',
+      moves: 'b7b5 e6c7',
+      rating: 2500,
+      themes: ['fork', 'long'],
+      openingTags: null,
+      popularity: 90,
+      nbPlays: 500,
+      source: 'master',
+      srsInterval: 0, srsEaseFactor: 2.5, srsRepetitions: 0,
+      srsDueDate: '2026-01-01', srsLastReview: null,
+      userRating: 1200, attempts: 0, successes: 0,
+      ...over,
+    };
+  }
+
+  it("'master' is a drillable aid", () => {
+    expect(isDrillableAid('master')).toBe(true);
+  });
+
+  it('returns null when the master pool is not seeded', async () => {
+    await db.delete(); await db.open();
+    expect(await pickMasterDrill({ rating: 2600 })).toBeNull();
+  });
+
+  it('picks a legal drill from the master pool only (not the bundled pool)', async () => {
+    await db.delete(); await db.open();
+    await db.puzzles.bulkPut([
+      masterPuzzle({ id: 'master-a', rating: 2450 }),
+      masterPuzzle({ id: 'master-b', rating: 2700 }),
+      // a non-master puzzle must be ignored by pickMasterDrill
+      masterPuzzle({ id: 'lichess-x', rating: 1200, source: 'lichess' }),
+    ]);
+    const drill = await pickMasterDrill({ rating: 2450, seed: 3 });
+    expect(drill).not.toBeNull();
+    expect(drill!.aid).toBe('master');
+    expect(['master-a', 'master-b']).toContain(drill!.puzzleId);
+    // Legal + student-to-move + carries themes for concept teaching.
+    const c = new Chess(drill!.setupFen);
+    expect(() => c.move(drill!.solutionSan[0])).not.toThrow();
+    expect(drill!.themes).toContain('fork');
+  });
+})

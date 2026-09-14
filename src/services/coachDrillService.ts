@@ -58,6 +58,9 @@ export interface CoachDrill {
   /** Source puzzle id + rating (for audits / SRS). */
   puzzleId: string;
   rating: number;
+  /** Lichess theme tags of the source puzzle — lets the surface TEACH the
+   *  concept behind the solution (explainDrillConcept), not just grade it. */
+  themes?: string[];
   /** A fresh pattern rep appended AFTER the student's own flubbed instances,
    *  to cement the pattern rather than only re-testing their exact positions
    *  (Phase 3, David 2026-08-26 "evidence-first, then drill the pattern"). Not
@@ -113,6 +116,14 @@ const AID_SPECS: Record<string, AidSpec> = {
     label: 'Middlegame',
     goal: 'find the best move',
   },
+  // Master Level — the elite (2400+) pool, quizzed in the classroom (David
+  // 2026-09-14). Sourced from Dexie via pickMasterDrill (the pool is lazy-
+  // fetched, not bundled), so this spec is only the label/goal.
+  master: {
+    themes: [],
+    label: 'Master tactics',
+    goal: 'find the best move a master would',
+  },
   puzzle: {
     themes: [],
     label: 'Tactics',
@@ -131,6 +142,7 @@ const DRILLABLE_AIDS = new Set<string>([
   'rook-endings',
   'endgame',
   'middlegame',
+  'master',
   'puzzle',
   // "drill my mistakes" / "work on my weaknesses" → the adaptive mistake
   // queue (startMistakeDrills). pickCoachDrill falls back to the generic
@@ -217,6 +229,47 @@ export function pickCoachDrill(aid: string, options: PickDrillOptions = {}): Coa
   return null;
 }
 
+/** Multi-move theme tags — the reach ladder favors these; the master classroom
+ *  quiz does too (David 2026-09-14: multi-move is his favorite + most useful). */
+const MASTER_MULTI_MOVE = new Set(['long', 'veryLong', 'mateIn2', 'mateIn3', 'mateIn4', 'mateIn5']);
+
+/**
+ * Pick a Master Level (2400+ CC0) drill for the classroom quiz, from the Dexie
+ * master pool (lazy-fetched, so NOT in the bundled PUZZLES). The CALLER must
+ * have seeded the pool (puzzleService.seedMasterPuzzles) first — this only
+ * reads. Favors multi-move sequences and picks nearest the target (master reach)
+ * rating. Async because the master pool lives in IndexedDB. Returns null when
+ * the pool isn't seeded / empty.
+ */
+export async function pickMasterDrill(options: PickDrillOptions = {}): Promise<CoachDrill | null> {
+  const targetRating = options.rating ?? 2400;
+  const seed = options.seed ?? 1;
+  let pool: RawPuzzle[];
+  try {
+    pool = (await db.puzzles.filter((p) => p.source === 'master').toArray()) as unknown as RawPuzzle[];
+  } catch {
+    return null;
+  }
+  if (pool.length === 0) return null;
+
+  // Favor multi-move when a healthy sub-pool exists; else the whole pool.
+  const multi = pool.filter((p) => p.themes.some((t) => MASTER_MULTI_MOVE.has(t)));
+  const candidates = multi.length >= 5 ? multi : pool;
+
+  candidates.sort((a, b) => {
+    const da = Math.abs(a.rating - targetRating);
+    const dbb = Math.abs(b.rating - targetRating);
+    if (da !== dbb) return da - dbb;
+    return hash(seed, a.id) - hash(seed, b.id);
+  });
+
+  for (const p of candidates.slice(0, 32)) {
+    const drill = toDrill(p, 'master', 'Master tactics', 'find the best move a master would');
+    if (drill) return drill;
+  }
+  return null;
+}
+
 /** Convert a raw Lichess puzzle to a solve-on-the-board drill. Lichess
  *  convention: `moves[0]` is the opponent's setup move; the student
  *  solves from the resulting position. Every move is chess.js-validated;
@@ -251,6 +304,7 @@ function toDrill(p: RawPuzzle, aid: string, label: string, goal: string): CoachD
       prompt,
       puzzleId: p.id,
       rating: p.rating,
+      themes: p.themes,
     };
   } catch {
     return null;
