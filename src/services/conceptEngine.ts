@@ -153,6 +153,20 @@ function cap(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+/** Named-technique concept for an ending, when a deterministic technique detector
+ *  fires (specific > the generic matchup principle). Currently: the opposition. */
+function renderOppositionConcept(): ComputedConcept {
+  return {
+    id: 'opposition',
+    name: 'The opposition',
+    source: 'technique',
+    squares: [],
+    full: 'The opposition: the kings face off with an odd number of squares between them, and the side NOT to move has to give ground — taking it is how the stronger king forces its way in.',
+    short: 'The opposition — force them back.',
+    importance: 0,
+  };
+}
+
 /**
  * Render a detected tactic into a ComputedConcept: the board-true INSTANCE (the
  * detector's own description) + the computed INVARIANT. `importance` is left 0
@@ -195,6 +209,24 @@ export function renderMatchupConcept(m: MatchupResult): ComputedConcept | null {
 // ─── conceptForBoard — the ONE entry point ───────────────────────────────────
 import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
+import { detectOpposition } from './endgameTechnique';
+
+/**
+ * The endgame concept for a position: the NAMED technique when a deterministic
+ * detector fires (specific), else the matchup governing principle (general), else
+ * null (not an ending). This is the specific>general>silent degrade.
+ */
+export function endgameConceptFor(fen: string): ComputedConcept | null {
+  const m = classifyMatchup(fen);
+  if (m.cls === 'pawn-endgame' || m.cls === 'kp-vs-k') {
+    if (detectOpposition(fen)) {
+      const opp = renderOppositionConcept();
+      opp.importance = 0.6; // a fired technique outranks the generic principle
+      return opp;
+    }
+  }
+  return renderMatchupConcept(m);
+}
 
 export interface ConceptForBoardOptions {
   /** The student's side, when the board is their own game (frames "you/they").
@@ -246,13 +278,14 @@ export function conceptForBoard(fen: string, opts: ConceptForBoardOptions = {}):
 
   // 2. The endgame governing principle (teaching beat), when it's an ending.
   try {
-    const matchup = renderMatchupConcept(classifyMatchup(fen));
-    if (matchup && !seen.has(matchup.id)) {
+    const eg = endgameConceptFor(fen);
+    if (eg && !seen.has(eg.id)) {
       // A teaching beat ranks below live tactics but is always worth saying in a
-      // quiet ending (where no tactic fired, it becomes the lead).
-      matchup.importance = out.length === 0 ? 0.55 : 0.5;
-      out.push(matchup);
-      seen.add(matchup.id);
+      // quiet ending (where no tactic fired, it becomes the lead). A fired named
+      // technique keeps its own (higher) importance from endgameConceptFor.
+      if (eg.source !== 'technique') eg.importance = out.length === 0 ? 0.55 : 0.5;
+      out.push(eg);
+      seen.add(eg.id);
     }
   } catch { /* not an ending — skip */ }
 
@@ -286,8 +319,8 @@ export function conceptForSolution(
   const seen = new Set<string>();
 
   try {
-    const m = renderMatchupConcept(classifyMatchup(fen));
-    if (m) { m.importance = 0.5; out.push(m); seen.add(m.id); }
+    const eg = endgameConceptFor(fen);
+    if (eg) { if (eg.source !== 'technique') eg.importance = 0.5; out.push(eg); seen.add(eg.id); }
   } catch { /* not an ending */ }
 
   try {

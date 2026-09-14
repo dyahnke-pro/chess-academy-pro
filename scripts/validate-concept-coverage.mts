@@ -27,6 +27,7 @@ const CONCEPT_THEMES: Record<string, string[]> = {
   back_rank: ['backRankMate'], removal_of_guard: ['capturingDefender'],
   trapped_piece: ['trappedPiece'], overload: ['overloading'],
   mate_threat: ['mate', 'mateIn1', 'mateIn2', 'mateIn3', 'mateIn4', 'mateIn5'],
+  opposition: ['pawnEndgame'], // Lichess tags opposition positions 'pawnEndgame'
   'rook-endgame': ['rookEndgame'], 'kp-vs-k': ['pawnEndgame'],
   'pawn-endgame': ['pawnEndgame'], 'knight-endgame': ['knightEndgame'],
   'queen-endgame': ['queenEndgame'], 'queen-vs-rook': ['queenRookEndgame'],

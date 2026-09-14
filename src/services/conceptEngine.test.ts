@@ -148,3 +148,13 @@ describe('conceptForSolution — the puzzle / solution path', () => {
     expect(conceptForSolution('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', ['c1c2'], { max: 1 }).length).toBeLessThanOrEqual(1);
   });
 });
+
+describe('conceptEngine — named technique preferred over generic principle', () => {
+  it('teaches THE OPPOSITION (specific) over the generic pawn-ending principle', () => {
+    // White Ke4 + Pe3 vs Black Ke6, White to move → kings in direct opposition.
+    const cs = conceptForBoard('8/8/4k3/8/4K3/4P3/8/8 w - - 0 1');
+    expect(cs.length).toBeGreaterThanOrEqual(1);
+    expect(cs[0].id).toBe('opposition');
+    expect(cs[0].source).toBe('technique');
+  });
+});
