@@ -471,8 +471,21 @@ Update the phase's status marker + the decisions log as each lands.
   validates the FEN first (→ `non-endgame`), and `conceptForLine` returns []
   on an unparseable root. Two test fixtures carried TWO black kings (invalid
   FENs the hand parser tolerated) — fixed.
-- **P4 — wire chokepoints** [pending]: `envelope.ts:741` + `coachApi.ts:5395`;
-  each surface with a fires-for-real test + its speaking contract (table above).
+- **P4 — wire chokepoints** [done — landed inside P4a, marker corrected
+  2026-09-15]: BOTH chokepoints carry the concept. Proactive: `envelope.ts:741`
+  → `formatTacticsSubBlock` → the `CONCEPTS (COMPUTED — voice these, in this
+  order…)` block (`liveTacticsContext.ts:556`), gated by
+  `liveTacticsContext.test.ts` "attaches computed concepts from the SAME
+  analysis". Reactive: `coachApi.ts:5395` → `assembleTacticsAnswer` leads with
+  `tactics.concepts[0].full` (`groundedAnswer.ts:2746`), gated by
+  `groundedAnswer.test.ts` "leads with the ranked concept sentence". The
+  `[pending]` here was stale for a day and would have sent the next session
+  re-wiring a wire that fires.
+- **P4b — ONE tactic classifier** [in progress 2026-09-15]: see the SURFACE MAP
+  section. `detectTacticType` = a projection of `conceptForLine` through the
+  vocabulary bridge; `TacticType` gains `checkmate`; `TACTIC_TEACHING.concept`
+  derives from `tacticInvariant`; the drill readers go stored-first; the
+  `legacy` tail is `{clearance, x_ray}` and shrink-only.
 - **P4a — ONE COMPUTATIONAL SYSTEM integration** [done 2026-09-14]:
   `conceptForLine` (the single walker over `computePlyFacts`, solution or engine
   PV), importance from the engine's swing on the shared `criticalityThresholds`
@@ -569,6 +582,145 @@ Update the phase's status marker + the decisions log as each lands.
   reach ladder + drill + concept teaching. Likely its own plan doc when P6 starts
   (substantial), but the tagger is the concept engine from P1–P2, so P6 must
   follow the engine.
+
+## SURFACE MAP — P4b: ONE tactic classifier (2026-09-15, David: "make sure this build is unified. One coach system, not 5")
+
+Written BEFORE the code, per the §0 pre-build gate in
+`docs/plans/2026-09-08-unified-coach.md`. This is the map of the one real split
+the unification sweep found — everything else the sweep checked is already one
+system (importance is single-source on `criticalityThresholds`; the concept
+engine fans out through three hubs, `positionFacts` / `liveTacticsContext` /
+`dnaLineNarrator`, to ~15 surfaces).
+
+### The disease (one sentence)
+
+The app has TWO tactic classifiers on TWO vocabularies, and the one that TAGS
+what a student is weak at is not the one the coach TEACHES from.
+
+- **Stack A — the engine** (`TacticPatternType`): `tacticClassifier` geometry →
+  `tacticsDetector.detectTactics` → `pvPlayback.computePlyFacts.tacticLanded`
+  (reality-gated: the move must CREATE the tactic, the moved piece must be its
+  agent, ≥2 winnable targets for a fork) → `conceptEngine.conceptForLine` →
+  `TACTIC_INVARIANT` / `TACTIC_NAME`. This is what every coach surface voices.
+- **Stack B — the tagger** (`TacticType`): `missedTacticService.detectTacticType
+  (fen, uci)` — one ply, priority-ordered geometry, NO reality gate (a check
+  plus one attacked piece is a "fork"; a fork on two DEFENDED pieces counts; a
+  smothered mate is a "fork"). Its answer is PERSISTED as `mistakePuzzles.
+  tacticType` and `classifiedTactics.tacticType`, becomes the weakness cluster
+  `analysis:tactic:<TacticType>` (`weaknessSpine.bucketForMistake`), the
+  tactical profile's `weakestTypes`, and the drill-queue filter.
+- **The join** between them (`weaknessSignal.matchTacticPattern` →
+  `tacticVocabulary`) is correct — but it joins a tag Stack B computed to a
+  concept Stack A computed, so the same board can be a "pin" in the student's
+  hole and a "fork" in the coach's mouth, and the hole never gets hit.
+- **A second authored concept vocabulary rides Stack B:** `tacticAlertService.
+  TACTIC_TEACHING[t].concept` ("A fork attacks two or more pieces at once…")
+  is spoken by the My-Mistakes drill (`MistakePuzzleBoard` → `useStruggleDetection`
+  → `getCoachingMessage`, and as the Why fallback) and by the Play tactic
+  alerts — while the classroom drill speaks the engine's invariant ("a fork hits
+  two targets at once, and only one can escape"). Two puzzle surfaces, two
+  definitions of a fork.
+
+### Target + shared computers changed
+
+1. `missedTacticService.detectTacticType(fen, bestMoveUci, pvUci?)` becomes
+   the ONE classifier: engine-first, `TacticType` = a PROJECTION of
+   `conceptForLine`'s answer through `tacticVocabulary.toTacticType`, tiered so
+   the tail can never contradict the engine (mechanics → engine → mechanics →
+   legacy tail → sentinel). The old geometry survives ONLY as
+   `legacyTacticGeometry`, consulted for the members the engine has no detector
+   for, declared in `TACTIC_TYPE_AUTHORITY: Record<TacticType, …>` (compile-time
+   exhaustive; the `legacy` set = `{clearance, x_ray}` and can only shrink).
+2. `TacticType` gains `'checkmate'`. Without it the unified classifier REGRESSES:
+   a missed non-back-rank mate stops being a (wrong) "fork" and becomes
+   `tactical_sequence`, which `mistakePuzzleService` drops — the student would
+   lose the puzzle. Non-destructive to stored rows; every `Record<TacticType,…>`
+   fails to compile until filled (TACTIC_TEACHING, TACTIC_LABELS, the two
+   explanation tables, icons, the bridge). New weakness bucket: "Missed
+   checkmates", drill pool `mate` / `mateIn1` / `mateIn2`.
+3. `tacticVocabulary`: `mate_threat → 'checkmate'` (one-way; a delivered mate is
+   not a live `TacticPatternType`, so `checkmate → null`). A live mate-threat
+   concept now boosts for a student who misses mates.
+4. `TACTIC_TEACHING[t].concept` is DERIVED from `tacticInvariant(toTacticPattern
+   Type(t))` for every bridged member — one invariant vocabulary, two
+   projections. `lookFor` / `beginnerHint` stay authored: they are WHERE-TO-LOOK
+   registers, not competing definitions.
+
+### Every consumer (the neighbours) — 10 call sites of `detectTacticType`
+
+| Kind | Site | Reach of the change | Register |
+|---|---|---|---|
+| PRODUCER (persists) | `mistakePuzzleService` ×3 (L486 import path, L748 coach-game path, L1168 capture builder) | new `mistakePuzzles.tacticType` rows are engine-tagged; the two PV paths now pass `pvMoves` so the walk sees the whole solution | — |
+| PRODUCER (persists) | `tacticClassifierService.deriveMissedTacticsForGame` L230 | new `classifiedTactics.tacticType` rows engine-tagged (1-ply, no PV in the annotation) | — |
+| PRODUCER (in-memory) | `missedTacticService.detectMissedTactics` L847 | game-insights missed-tactic list | review |
+| PRODUCER (in-memory) | `analyticsService.scanFoundTacticsByType` L764 | "tactics the player FOUND" breadth — now reality-gated too (a brilliant that "forked" two defended pieces no longer counts as a fork find) | analytics |
+| READER (re-classified on read — ROT) | `tacticDrillService` L70 + L234, `tacticCreateService` L103, `MistakePuzzleBoard` L214 | switched to STORED-FIRST (`m.tacticType ?? detectTacticType(…)`), the pattern `tacticalProfileService` already uses. Old rows keep their stored (legacy) tag consistently everywhere; new rows carry the engine tag consistently everywhere — no row disagrees with itself | drill |
+| READER (stored-first, correct) | `tacticalProfileService` L196 | unchanged | profile |
+| LIVE | `tacticAlertService.detectGameplayTactic` L375 + `scanUpcomingTactic` L434 → `useCoachTips` → `CoachGamePage` (tip bubble + chat inject, no voice) / `OpeningPlayMode` (`say(tip)` in the locked-line middlegame — a Settings-opted training aid, pre-existing contract, NOT changed here) | the alert's LABEL now comes from the engine; both sites pass the PV tail. The walker itself (`scanUpcomingTactic`) stays — it is a cadence/cooldown surface with its own tests; it is a remaining parallel PV walker beside `tacticClassifier.scanUpcomingTactics` + `conceptForBoard`, noted below | play (silent-until-asked honoured: this path only fires when the user enabled tactic alerts) |
+
+Downstream of the persisted tag (unchanged code, changed INPUT): `weaknessSpine.
+bucketForMistake` → `UnifiedWeakness.tag` → `weaknessSignal.matchTacticPattern` →
+`positionFacts` concept-clause boost (L339); `tacticalProfileService.weakestTypes`
+→ `isTacticWeakness`; `themesForTactic` → drill pools; `TACTIC_LABELS` /
+`tacticLabel` / `tacticTypeLabel` / both `generateExplanation`s → display text.
+
+**Kid surfaces:** none of the touched files live under `Kid/`; verified by grep
+after the edit (the kid contract is untouched).
+
+### Gates that guard these surfaces
+
+Existing (all must stay green or be updated to the NEW contract, never deleted):
+`missedTacticService.test.ts` (50 legacy-geometry cases — those that pin legacy
+PRIORITY rather than the contract retarget to `legacyTacticGeometry`),
+`missedTacticService.audit.test.ts`, `tacticAlertService.test.ts` (asserts the
+OLD authored fork/pin sentences — updated to the one voice),
+`tacticVocabulary.test.ts` (asserts `mate_threat → null` — updated),
+`useStruggleDetection.test.ts`, `useCoachTips.test.ts`,
+`MistakePuzzleBoard.test.tsx`, `mistakePuzzleService*.test.ts`,
+`weaknessSpine.test.ts`, `conceptEngine.test.ts`.
+
+New: `tacticTypeUnification.test.ts` — (a) `TACTIC_TYPE_AUTHORITY` is exhaustive
+and every `engine` member is bridged; (b) AGREEMENT on real boards: the tag ==
+the projection of the engine's lead; (c) the engine's strictness holds (a check
+plus one defended attacked piece is NOT a fork); (d) mechanics (promotion,
+hanging piece); (e) the legacy tail classifies clearance / x-ray and a legacy
+"fork" on an engine-silent board is NOT surfaced; (f) a delivered smothered mate
+→ `checkmate`, a back-rank mate → `back_rank`; (g) one voice: for every bridged
+member, `getCoachingMessage(t,'guide')` opens with the engine's invariant;
+(h) a cost bound (the classifier now walks the line).
+
+Runtime audits owed (Post-Deploy matrix): `audit-mistakes-quality-loop.mjs`
+(My-Mistakes chip + hint tiers), `audit-coach-tactical-awareness.mjs`,
+`audit-concept-engine-prod.mjs` (regression), `audit-weaknesses.mjs`, plus P5's
+live-gameplay concept-spoken run.
+
+### Contract deltas (what each neighbour must tolerate)
+
+1. `detectTacticType` is STRICTER. Same signature + optional PV. New rows are
+   tagged by the reality-gated walk. NO backfill of old rows — re-tagging a
+   student's history rewrites their weakness record without their action; the
+   stored-first readers make old and new rows each self-consistent instead.
+   (Decision logged; David can ask for a backfill.)
+2. `TACTIC_TEACHING.concept` text changes for the 9 bridged members → the
+   struggle coaching and the missed-tactic alert now say what the classroom
+   drill says. Spoken text, so the `perspectiveVoice` gate applies — the engine
+   invariants are already gate-clean.
+3. `TacticType` is wider by one member. `Partial<Record<…>>` sites
+   (`weaknessSpine` labels/themes, analytics) get `checkmate` where it is a real
+   value; the exhaustive ones are compiler-enumerated.
+
+### Remaining rot, seen and NOT taken in this pass (each is its own blast radius)
+
+- Four label tables for one enum (`TACTIC_LABELS`, `tacticLabel`,
+  `tacticTypeLabel`, `TACTIC_NAME`) — different registers (singular / plural /
+  spoken / pattern-side); duplicated constants that can drift.
+- Three PV walkers beside `conceptForLine`: `tacticAlertService.scanUpcomingTactic`
+  (label now unified), `tacticClassifier.scanUpcomingTactics`, and
+  `CoachGamePage`'s threat announce over the latter.
+- `LICHESS_THEME_TO_TACTIC` has no `mate*` entries, so solved mate puzzles do not
+  yet count toward the new `checkmate` motif stats (`getTacticTypeFromThemes`
+  is first-match-wins over the theme list, so adding `mate` must not shadow
+  `backRankMate`).
 
 ## CORRECTION (2026-09-14) — the "pin over-fires" finding was a RUNNER ARTIFACT
 
@@ -669,7 +821,10 @@ Ran `conceptForSolution` over 1,500 master puzzles (agree / fires-no-tag / silen
 
 ## Next-session pickup
 
-Start P1: `src/services/conceptEngine.ts` (the shared computer) + the material
-signature calculator + the renderer, with the validation harness reading
-`public/data/master-puzzles.json` and `src/data/puzzles.json`. Do NOT wire
-surfaces until the engine validates green against the known-answer corpora.
+P1–P4a, P4c, P2, P2b, P3 and the Master Level tile are on `main`. Do not rebuild
+them. In flight: **P4b** (one tactic classifier — see SURFACE MAP). Owed after it:
+**P5** — the 3-instrument prod audit that proves the concept is SPOKEN during
+LIVE gameplay (Learn / Teach-x-opening / Play phase-transition), with the
+narration listener, not just on puzzles; then **P6** (puzzle generation, its own
+plan doc). Regain context first: this doc's phase markers + `docs/coach-system-map.md`
++ the surface's contract in the table under "Everywhere the coach lives".
