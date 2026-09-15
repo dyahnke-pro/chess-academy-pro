@@ -166,9 +166,18 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
       if (sq === to) continue;
       const p = after.get(sq as Square);
       if (!p || p.color !== moverColor || p.type === 'k') continue;
-      if (after.attackers(sq as Square, moverColor).length === 0) {
-        abandoned.push(`the ${PIECE_WORD[p.type]} on ${sq}`);
-      }
+      if (after.attackers(sq as Square, moverColor).length !== 0) continue;
+      // NOT EVERY UNDEFENDED PAWN IS NEWS (David 2026-09-15, reading a real
+      // review: "the move walks away from your pawn on h7 — no defender left"
+      // fired on a dozen plies, most about a home-rank pawn nothing was near).
+      // A pawn still on its starting rank with no enemy attacker is not a
+      // standing invitation; it is filler, and the Narration Voice Rules ban
+      // filler. Every other abandoned piece — any minor/rook/queen, and any
+      // pawn an enemy piece actually eyes — still speaks.
+      const enemyColor: Color = moverColor === 'w' ? 'b' : 'w';
+      const homeRank = moverColor === 'w' ? '2' : '7';
+      if (p.type === 'p' && sq[1] === homeRank && after.attackers(sq as Square, enemyColor).length === 0) continue;
+      abandoned.push(`the ${PIECE_WORD[p.type]} on ${sq}`);
     }
     if (abandoned.length) {
       clauses.push(`the move walks away from ${abandoned.slice(0, 2).join(' and ')} — no defender left, and an undefended piece is a standing invitation`);

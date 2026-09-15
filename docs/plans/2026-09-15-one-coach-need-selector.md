@@ -358,6 +358,42 @@ before the selector exists, or the July silence returns.
 - Review's book-departure beat does not yet carry the DB-popular framing of the
   refuted alternative (the engine punishment line is already spoken there).
 
+## 6c. READING THE ACTUAL NARRATION (David 2026-09-15: "Fire does not equal green. Show me the narrations as well")
+
+A pass count is not a read. The method that found six real defects in one
+sitting, and the method every future narration change owes:
+
+1. Take a REAL game (David's Alapin, the review audit's fixture PGN).
+2. Get REAL per-ply evals + classifications: drive the bundled engine
+   (`node_modules/stockfish/bin/stockfish-18-lite-single.js`) over every ply
+   from a throwaway node script, white-POV normalised, and write the
+   `ReviewMoveInput[]` to JSON. ~46 plies at depth 14 takes about a minute.
+3. Call `buildReviewSegments(moves, 'black', openingName, /* uncapped */ true,
+   rating, [], need)` from a throwaway vitest file, strip the `[tags]`, and
+   PRINT every line next to its ply, classification and need score.
+4. Run it TWICE — once with a cold student (no `studentNeed`), once with a
+   warm mastered profile (`lineReps` = FAMILIAR_REPS) — and read both.
+5. Delete the throwaway file; keep the defects as tests built on the REAL
+   FENs the game produced (`reviewNarrationDefects.test.ts`).
+
+What that read produced (all six fixed in `fix(review): the narration defects
+a real prod transcript exposed`): the uncapped default path was never
+need-gated; the structure inventory was spoken as machine atoms with a colour
+instead of a seat; "inaccuracy move (eval swung 0.4)"; a projected line said
+"their position" about the student's own camp; two copies of the
+worst-placed-piece loop with the gates on only one (a reroute plan offered on
+the ply a check-fork landed, and the same knight called both an outpost and
+the worst piece); and the outpost stated twice on one ply by two computers.
+
+Still open from that read, not yet fixed:
+- "The move walks away from your pawn on X — no defender left" fires on ~12 of
+  46 plies. Each instance is a different piece, so it is not a verbatim repeat,
+  but the STEM is a recording. Rotate the stem or raise its bar.
+- Ply 38: the move is classified an inaccuracy AND gets a sacrifice-compensation
+  read in the same beat. Both are board-true; the beat should pick one frame.
+- Ply 46: "you own the open c-file" and "the plan is to seize the open d-file"
+  in one breath, on the move that took the c-file.
+
 ## 7. Next-session pickup
 
 Read CLAUDE.md standard + this doc + `docs/coach-system-map.md` §4. Start at N1.

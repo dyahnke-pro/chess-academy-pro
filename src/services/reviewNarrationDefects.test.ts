@@ -59,3 +59,20 @@ describe('the worst-placed piece — one finder, gated', () => {
     }
   });
 });
+
+describe('filler — an undefended home-rank pawn nothing attacks is not news', () => {
+  it('does not warn about the h7 pawn when no enemy piece is near it', async () => {
+    const { computeBoardDelta } = await import('./boardDelta');
+    // Black plays ...Rxa8 far from the kingside; h7 is undefended but untouched.
+    const fen = 'N4b1r/pp1k1ppp/8/4p3/1b1n4/8/5PPP/1R3K1R b - - 0 21';
+    const out = computeBoardDelta(fen, 'Rxa8').join(' | ');
+    expect(out).not.toMatch(/walks away from the pawn on h7/);
+  });
+  it('still warns about an undefended pawn an enemy piece actually eyes', async () => {
+    const { computeBoardDelta } = await import('./boardDelta');
+    // The white rook on b1 eyes b7; the knight on c5 leaves it undefended.
+    const fen = '4k3/1p6/8/2n5/8/8/8/1R2K3 b - - 0 20';
+    const out = computeBoardDelta(fen, 'Nd7').join(' | ');
+    expect(out).toMatch(/walks away from the pawn on b7/);
+  });
+});
