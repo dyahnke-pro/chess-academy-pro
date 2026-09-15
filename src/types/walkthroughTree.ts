@@ -223,6 +223,10 @@ export interface WalkthroughTreeTeaching {
   /** Student plies whose computed need cleared the bar (unified-coach N2).
    *  Absent on trees generated before N2. */
   needPlies?: number[];
+  /** The refuted alternatives baked into the line (unified-coach N3): per
+   *  student ply, the DB-popular sibling, its engine cost and the concept the
+   *  punishment lands (null = positional). Absent before N3. */
+  refuted?: Array<{ ply: number; alt: string; pct: number | null; costCp: number; concept: string | null }>;
 }
 
 export interface WalkthroughTree {

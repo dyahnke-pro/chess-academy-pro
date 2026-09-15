@@ -33,6 +33,7 @@ import { turningPointCandidates, moveLabel, type TurningPointSegmentLike } from 
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
 import { structurePlan } from './boardPlan';
+import { foldPlans, type PlanPly } from './planMemory';
 import { tacticWord } from './pvPlayback';
 
 export interface SelectorPly {
@@ -104,6 +105,11 @@ export interface TeachingPackage {
    *  teaching beat here? (Moments / must-defend / mate speak on their own
    *  importance regardless.) Computed from `input.student` (cold when absent). */
   needByPly: ReadonlyMap<number, NeedVerdict>;
+  /** N3 — plan memory: per ply, the structure→plan in force and whether this
+   *  ply ANNOUNCES it (first time / structure changed) or merely carries it. A
+   *  surface speaks the plan on 'announce' and refers to progress otherwise —
+   *  never re-announces. */
+  planByPly: ReadonlyMap<number, PlanPly>;
 }
 
 export const MAX_MOMENTS = 3;
@@ -133,7 +139,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const { plies, kind } = input;
   const rating = input.rating ?? 1500;
   const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
-  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map() };
+  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map(), planByPly: new Map() };
 
   // 1. Landed tactics, per ply (cheap; the same computer the live beat speaks).
   const landedByPly = new Map<number, string>();
@@ -205,7 +211,11 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     }, student));
   }
 
-  return { thesis, moments, chain, onThread, kind, needByPly };
+  // 7. PLAN MEMORY (N3) — announced once, carried until the structure changes.
+  let planByPly: Map<number, PlanPly>;
+  try { planByPly = foldPlans(plies, input.studentColor); } catch { planByPly = new Map(); }
+
+  return { thesis, moments, chain, onThread, kind, needByPly, planByPly };
 }
 
 export type ThesisRegister = 'retrospective' | 'present';

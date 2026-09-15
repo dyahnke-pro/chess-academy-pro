@@ -60,6 +60,10 @@ import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
 import { stockfishEngine } from './stockfishEngine';
 import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
+import { refutedAlternative, candidatesFromMasters } from './refutedAlternative';
+import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
+import { loadStudentNeedContext } from './studentNeedLoader';
+import { coldStudent } from './needScore';
 import { selectTeaching, summarizeTeaching, pliesFromSans, type SelectorPly } from './teachingSelector';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -389,7 +393,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // and no arrows on spoken-form moves forever. ONE bump for both changes — a
 // gen-rev bump regenerates every lesson's prose into new strings, which miss the
 // /api/tts clip cache and re-synthesise, so they are batched per deploy.
-const WALKTHROUGH_GEN_REV = '2026-09-12-two-beats-spoken-arrows';
+const WALKTHROUGH_GEN_REV = '2026-09-15-refuted-alternative-need-selector';
 
 export async function getCachedOpening(
   name: string,
@@ -504,11 +508,11 @@ export async function getCachedOpening(
  *  module calls this — the LLM-narrated main path AND the DB-only fallback —
  *  so a tree never ships without its thesis / moments / thread / need plies.
  *  Never throws: a line the selector cannot read yields undefined. */
-function teachingForLine(sans: readonly string[], studentSide: 'white' | 'black'): WalkthroughTree['teaching'] {
+function teachingForLine(sans: readonly string[], studentSide: 'white' | 'black', student?: import('./needScore').StudentNeedContext): WalkthroughTree['teaching'] {
   try {
     const plies = pliesFromSans(sans);
     if (plies.length === 0) return undefined;
-    return summarizeTeaching(selectTeaching({ plies, studentColor: studentSide, kind: 'line', surface: 'teach' }));
+    return summarizeTeaching(selectTeaching({ plies, studentColor: studentSide, kind: 'line', surface: 'teach', student }));
   } catch {
     return undefined;
   }
@@ -2373,6 +2377,37 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   const deliberationByPly: Record<number, string> = {};
   const studentChar: 'w' | 'b' = studentSide === 'white' ? 'w' : 'b';
   const DELIB_PLY_CAP = 16;
+  // THE REFUTED ALTERNATIVE (unified-coach N3, David 2026-09-15: "this is the
+  // big one"): on the student's own opening plies, the move most people play
+  // instead of the taught one, what it costs (engine, quiet-end graded), the
+  // punishing line and the concept it lands — ONE composed fact, baked at
+  // generation time. Gated by the student's NEED (N2): a ply they have mastered
+  // is not re-taught; a cold student hears every one. Bounded to the first 12
+  // plies so the added engine time stays modest on a one-time generation.
+  const refutedByPly: Record<number, string> = {};
+  const refutedFacts: NonNullable<WalkthroughTree['teaching']>['refuted'] = [];
+  const REFUTED_PLY_CAP = 12;
+  try {
+    await ensureMastersDbLoaded().catch(() => undefined);
+    const spineSans = positions.map((q) => q.san);
+    const student = await loadStudentNeedContext({ rating: 1500, sans: spineSans, studentColor: studentSide, openingId: null, eco: entry.eco ?? null })
+      .catch(() => coldStudent(1500));
+    const needPlies = new Set(teachingForLine(spineSans, studentSide, student)?.needPlies ?? []);
+    for (let i = 0; i < positions.length && i < REFUTED_PLY_CAP; i += 1) {
+      if (positions[i].movedBy !== studentSide) continue;
+      if (!needPlies.has(i + 1)) continue;
+      const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+      const candidates = candidatesFromMasters(mastersMovesSync(preFen));
+      if (candidates.length < 2) continue;
+      try {
+        const r = await refutedAlternative({ fenBefore: preFen, taughtSan: positions[i].san, candidates, studentColor: studentSide, rating: student.rating, depth: 12, maxPlies: 6 });
+        if (r) {
+          refutedByPly[i] = r.text;
+          refutedFacts.push({ ply: i + 1, alt: r.alt, pct: r.pct, costCp: r.costCp, concept: r.concept?.id ?? null });
+        }
+      } catch { /* the alternative is a bonus on this ply — never block generation */ }
+    }
+  } catch { /* never block generation */ }
   try {
     for (let i = 0; i < positions.length && i < DELIB_PLY_CAP; i += 1) {
       if (positions[i].movedBy !== studentSide) continue; // only the student's own choices
@@ -2437,9 +2472,13 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const preFen = i === 0 ? new Chess().fen() : positions[i - 1].fen;
       const landed = landedTacticTeaching(preFen, p.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
+      const refuted = refutedByPly[i];
       if (teaching) {
         plyNoteText[i] = teaching;
         if (landed) return `${teaching} ${landed.text}`;
+        // THE REFUTED ALTERNATIVE is beat two when the note holds beat one — it
+        // is the theory content itself, so it outranks the generated aside.
+        if (refuted) return `${teaching} ${refuted}`;
         // TWO BEATS PER MOVE, NOT THREE (David 2026-09-12: "Two beats if both
         // teachings are legit").
         //
@@ -2473,6 +2512,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           plyNoteText[i] = graded;
           authoredSpoke.push({ ply: i, variation: authored.variationName, text: graded });
           if (landed) return `${graded} ${landed.text}`;
+          if (refuted) return `${graded} ${refuted}`;
           return generated ? `${graded} ${generated}` : graded;
         }
         // SELECTED, THEN REFUSED BY THE GATE. A different outcome from never
@@ -2487,6 +2527,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // silent generated idea now speaks the discussion; the taught move stays
       // the conclusion (the weighing carries no "the move is X").
       if (landed) return fallback ? `${firstSentence(fallback)} ${landed.text}` : landed.text;
+      // The refuted alternative outranks the plain weighing: same subject (the
+      // tempting move), but with the DB frequency, the line and the concept.
+      if (refuted) return fallback ? `${firstSentence(fallback)} ${refuted}` : refuted;
       const delib = deliberationByPly[i];
       // Same two-beat contract: the weighing is beat two behind the prose.
       if (delib) return fallback ? `${firstSentence(fallback)} ${delib}` : delib;
@@ -2667,7 +2710,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       playerColor: (i % 2 === 0 ? 'white' : 'black'),
     }));
     const pkg = selectTeaching({ plies: selectorPlies, studentColor: studentSide, kind: 'line', surface: 'teach' });
-    teaching = summarizeTeaching(pkg);
+    teaching = { ...summarizeTeaching(pkg), refuted: refutedFacts };
     void logAppAudit({
       kind: 'coach-surface-migrated',
       category: 'subsystem',

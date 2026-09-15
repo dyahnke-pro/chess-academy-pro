@@ -306,7 +306,11 @@ const GATE_TESTS = [
   'src/data/modelGames-orientation.test.ts',
   'src/data/perspectiveVoice.test.ts',         // ONE perspective: student=you/your, opponent=they/their, never we/our (David 2026-08-28)
   'src/services/tacticTypeUnification.test.ts', // ONE tactic classifier: the weakness tag is a projection of the concept the coach teaches; legacy geometry has no product caller (David 2026-09-15 "one coach system, not 5")
-  'src/services/teachingSelector.test.ts', // N1: THE ONE SELECTOR — thesis/moments/chain, surface-blind, the review card's own candidates
+  'src/services/teachingSelector.test.ts',
+  'src/services/needScore.test.ts',
+  'src/services/reviewNeedGate.test.ts',
+  'src/services/refutedAlternative.test.ts',
+  'src/services/planMemory.test.ts', // N1: THE ONE SELECTOR — thesis/moments/chain, surface-blind, the review card's own candidates
   'src/services/tacticTypeBackfill.test.ts', // N0: persisted tactic tags are re-tagged through the ONE unified classifier on boot (idempotent, sync-safe, never guesses)
   'src/test/auditConceptGameplayCues.test.ts', // the gameplay audit recognises a SPOKEN concept by name + the engine invariant's cue — pinned to conceptEngine so the audit cannot drift from the source it verifies
   'src/data/lessons/openingWiring.test.ts',
