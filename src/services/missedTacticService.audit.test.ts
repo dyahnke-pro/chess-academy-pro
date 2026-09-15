@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectTacticType } from './missedTacticService';
+import { detectTacticType, legacyTacticGeometry } from './missedTacticService';
 
 // ── Promotion ──────────────────────────────────────────────────────────────
 describe('audit: promotion', () => {
@@ -115,10 +115,14 @@ describe('audit: discovered_attack', () => {
 
 // ── Removing the Guard ────────────────────────────────────────────────────
 describe('audit: removing_the_guard', () => {
-  it('detects removing the guard when capture removes defender of a valuable piece', () => {
-    // Black bishop on d5 defends the queen on e6.
-    // White Rxd5 captures the bishop, and the queen on e6 is now undefended.
-    expect(detectTacticType('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('removing_the_guard');
+  it('legacy geometry: "removing the guard" on Rxd5 Qxd5 — a LOSING trade the unified classifier refuses', () => {
+    // Black bishop d5 "defends" the queen e6 — but the bishop is itself
+    // defended BY that queen, so Rxd5 Qxd5 loses the exchange, and the queen
+    // was never attacked afterwards anyway. The legacy tail still returns the
+    // label; the unified classifier does not (tacticTypeUnification.test.ts
+    // pins the real removal-of-guard shape).
+    expect(legacyTacticGeometry('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).toBe('removing_the_guard');
+    expect(detectTacticType('k7/8/4q3/3b4/8/8/8/3R3K w - - 0 1', 'd1d5')).not.toBe('removing_the_guard');
   });
 
   it('does NOT detect removing the guard when captured piece was not defending anything valuable', () => {

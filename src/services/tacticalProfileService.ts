@@ -254,6 +254,7 @@ export function tacticTypeIcon(type: TacticType): string {
     x_ray: '\uD83D\uDD2C',
     double_check: '\u2757\u2757',
     removing_the_guard: '\uD83D\uDEE1\uFE0F',
+    checkmate: '\u265A',
     tactical_sequence: '\uD83C\uDFAF',
   };
   return icons[type];

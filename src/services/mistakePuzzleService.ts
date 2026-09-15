@@ -483,7 +483,7 @@ async function analyzeGameWithStockfish(
     // precision (the detector returns null unless the shape is clearly a
     // trade), so the queue is not flooded. tacticType=null → the spine
     // buckets it as a positional (phase) weakness.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove);
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves);
     let transformation: TransformationResult | null = null;
     if (tacticType === 'tactical_sequence') {
       transformation = (classification === 'mistake' || classification === 'blunder')
@@ -745,7 +745,7 @@ async function generateFromAnnotations(
     // Tactical quality gate — same filter as the imported-game path. The
     // tactical_sequence skip is DEFERRED to after playerMove/classification are
     // known, so the Phase 4 position-transformation exception can run.
-    let tacticType: TacticType | null = detectTacticType(fen, bestMove);
+    let tacticType: TacticType | null = detectTacticType(fen, bestMove, pvMoves);
     let transformation: TransformationResult | null = null;
 
     // Cap solution length at 6 ply for clean, focused drills.

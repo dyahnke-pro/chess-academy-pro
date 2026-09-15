@@ -1,6 +1,10 @@
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import type { CoachGameMove, MissedTactic, TacticType } from '../types';
+import type { TacticPatternType } from '../types/tacticTypes';
 import { capEval } from './accuracyService';
+import { conceptForLine } from './conceptEngine';
+import { classifyPosition } from './tacticClassifier';
+import { toTacticType } from './tacticVocabulary';
 
 /** Minimum centipawn swing to qualify as a missed tactic */
 const MIN_EVAL_SWING = 100;
@@ -666,7 +670,141 @@ function detectXRay(chess: Chess, to: Square, movingColor: Color): boolean {
  * Detect what type of tactic the best move represents by analyzing the resulting position.
  * Returns the most specific tactic type found, with priority ordering.
  */
-export function detectTacticType(fen: string, bestMoveUci: string): TacticType {
+// ─── ONE classifier (P4b, 2026-09-15) ────────────────────────────────────────
+//
+// `detectTacticType` used to be a SECOND, ungated one-ply tactic classifier
+// (priority-ordered geometry, no reality gate: a check plus one attacked piece
+// read as a "fork"; a fork on two DEFENDED pieces still counted; a smothered
+// mate was a "fork"). It tagged every mistake puzzle, the classifiedTactics
+// store, the tactical profile, the drill queues, the live Play alerts and the
+// "found tactics" analytics — while the coach TAUGHT the concept from
+// `conceptEngine` (reality-gated, walks the line). The same board could be a
+// "pin" in the student's weakness bucket and a "fork" in the coach's mouth
+// (CLAUDE.md 2026-09-08: the silent-mismatch class). David 2026-09-15: "one
+// coach system, not 5".
+//
+// Now there is ONE classifier. The analysis vocabulary (`TacticType`) is a
+// PROJECTION of the engine's answer through the canonical bridge
+// (`tacticVocabulary.toTacticType`), tiered so the tail can never contradict
+// the engine:
+//   0. MECHANICS — a board-certain fact of the move itself: promotion.
+//   1. ENGINE — `conceptForLine` over [best, ...pv], the same walker that
+//      teaches the concept on every surface. A landed tactic → its TacticType;
+//      a delivered mate → 'back_rank' when the pattern is the back-rank mate,
+//      else 'checkmate'.
+//   2. MECHANICS — capture of an undefended piece → 'hanging_piece'.
+//   3. 'tactical_sequence' — the honest "no named motif" sentinel.
+//
+// The old geometry is NOT a tail. The build first kept it for `clearance` /
+// `x_ray` (the two motifs the engine has no detector for), but the moment it
+// stopped being shadowed by its own priority chain, `detectClearance` fired on
+// Rd8+ — a rook simply hanging on a defended square — and `detectXRay` is the
+// static "slider behind a friendly piece" shape tacticsDetector had already
+// rejected as ambiguous. Empty > generic > invented: those two motifs are now
+// theme-only (Lichess puzzle tags), and `legacyTacticGeometry` has NO product
+// caller (the gate source-scans to keep it that way).
+
+export type TacticTypeAuthority = 'mechanics' | 'engine' | 'theme-only' | 'sentinel';
+
+/** WHO decides each TacticType. Keyed by the FULL union, so a new member fails
+ *  to compile until it is given an authority. 'theme-only' members are never
+ *  produced by any classifier — they enter only through Lichess puzzle themes
+ *  (`LICHESS_THEME_TO_TACTIC`). */
+export const TACTIC_TYPE_AUTHORITY: Record<TacticType, TacticTypeAuthority> = {
+  promotion: 'mechanics',
+  hanging_piece: 'mechanics',
+  fork: 'engine',
+  pin: 'engine',
+  skewer: 'engine',
+  discovered_attack: 'engine',
+  back_rank: 'engine',
+  double_check: 'engine',
+  removing_the_guard: 'engine',
+  overloaded_piece: 'engine',
+  trapped_piece: 'engine',
+  checkmate: 'engine',
+  clearance: 'theme-only',
+  x_ray: 'theme-only',
+  deflection: 'theme-only',
+  interference: 'theme-only',
+  zwischenzug: 'theme-only',
+  tactical_sequence: 'sentinel',
+};
+
+/** `mating-patterns.json` id the engine gives a back-rank mate — the one
+ *  delivered mate that already has its own analysis motif. */
+const BACK_RANK_MATE_ID = 'back-rank-mate';
+
+/** Does this move deliver a back-rank check (the engine's own move-based
+ *  detector, `tacticClassifier.detectBackRank`)? */
+function isBackRankPly(before: Chess, uci: string): boolean {
+  try {
+    const c = new Chess(before.fen());
+    const mv = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
+    return classifyPosition(before.fen(), c.fen(), mv.san, 0, 0).tactics.some((t) => t.type === 'back_rank');
+  } catch { return false; }
+}
+
+/**
+ * Classify the tactic a move (or the line it starts) delivers — the ONE
+ * classifier behind every `TacticType` the app persists or speaks.
+ *
+ * @param fen         Position BEFORE the move (mover = side to move).
+ * @param bestMoveUci The move to classify (UCI).
+ * @param pvUci       Optional continuation starting WITH `bestMoveUci` (a
+ *                    puzzle's solution / the engine PV). When present the
+ *                    engine walks the whole line, so a mate or tactic that
+ *                    lands two plies later is still the move's motif.
+ */
+export function detectTacticType(fen: string, bestMoveUci: string, pvUci?: readonly string[]): TacticType {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return 'tactical_sequence'; }
+  if (bestMoveUci.length < 4) return 'tactical_sequence';
+  const from = bestMoveUci.slice(0, 2) as Square;
+  const to = bestMoveUci.slice(2, 4) as Square;
+  const moving = chess.get(from);
+  if (!moving) return 'tactical_sequence';
+
+  // 0. Promotion — certain from the move itself.
+  if (bestMoveUci.length > 4 || (moving.type === 'p' && (to[1] === '8' || to[1] === '1'))) {
+    return 'promotion';
+  }
+
+  // 1. The engine — the same walker the coach teaches from.
+  const line = pvUci && pvUci.length > 0 && pvUci[0] === bestMoveUci ? [...pvUci] : [bestMoveUci];
+  try {
+    for (const c of conceptForLine({ fen, uci: line, studentColor: chess.turn(), max: 4, sources: ['tactic', 'mate'] })) {
+      if (c.source === 'mate') return c.id === BACK_RANK_MATE_ID ? 'back_rank' : 'checkmate';
+      if (c.source === 'tactic') {
+        // A forced mate THREATENED along the line keeps its back-rank
+        // specificity when the threat IS the back rank (Qa8+ Rc8 Qxc8#) — the
+        // "Missed back-rank tactics" bucket + drill pool are the more
+        // teachable home than the generic "Missed checkmates".
+        if (c.id === 'mate_threat' && isBackRankPly(chess, bestMoveUci)) return 'back_rank';
+        const t = toTacticType(c.id as TacticPatternType);
+        if (t) return t;
+      }
+    }
+  } catch { /* an unwalkable line teaches nothing — fall through */ }
+
+  // 2. A capture of a piece that had no defender — board-certain.
+  const victim = chess.get(to);
+  if (victim && victim.color !== moving.color && chess.attackers(to, victim.color).length === 0) {
+    return 'hanging_piece';
+  }
+
+  // 3. Nothing named — the honest sentinel.
+  return 'tactical_sequence';
+}
+
+/**
+ * TEST-ONLY. The ORIGINAL one-ply geometry classifier, kept so the historical
+ * tests can document what it USED to answer next to what the one classifier
+ * answers now. It has no reality gate — that is the bug P4b removed — and NO
+ * product caller: `tacticTypeUnification.test.ts` source-scans `src/` and
+ * fails if any non-test file ever imports it again.
+ */
+export function legacyTacticGeometry(fen: string, bestMoveUci: string): TacticType {
   try {
     const chessBefore = new Chess(fen);
     const from = bestMoveUci.slice(0, 2) as Square;
@@ -797,6 +935,7 @@ function generateExplanation(tacticType: TacticType, bestMove: string, evalSwing
     x_ray: `You missed an x-ray attack with ${bestMove}! The attack goes through one piece to target another (${swingPawns} pawn advantage).`,
     double_check: `You missed a double check with ${bestMove}! Two pieces deliver check simultaneously — the king MUST move (${swingPawns} pawn advantage).`,
     removing_the_guard: `You missed removing the guard with ${bestMove}! Capturing that defender leaves another piece unprotected (${swingPawns} pawn advantage).`,
+    checkmate: `You missed a forced checkmate starting with ${bestMove} (${swingPawns} pawn advantage).`,
     tactical_sequence: `You missed the tactical sequence starting with ${bestMove} (${swingPawns} pawn advantage).`,
   };
 

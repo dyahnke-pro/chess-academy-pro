@@ -470,6 +470,11 @@ export interface LineInput {
   lineMate?: number | null;
   rating?: number;
   max?: number;
+  /** Restrict the walk to these concept sources. A caller that only needs the
+   *  line's TACTIC (the tactic classifier, P4b) skips the endgame + positional
+   *  beats — same walker, narrowed output, ~5ms saved per quiet ply. Omitted =
+   *  every source (the teaching surfaces). */
+  sources?: readonly ConceptSource[];
 }
 
 /**
@@ -509,6 +514,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   const out: ComputedConcept[] = [];
   const seen = new Set<string>();
   const { fen, uci, studentColor } = input;
+  const wants = (src: ConceptSource): boolean => !input.sources || input.sources.includes(src);
   let techConcept: ComputedConcept | null = null;
 
   // No position, no concept: an unparseable root FEN must not reach the
@@ -536,7 +542,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
         bestScore = score;
         best = { fenAfter, tactic: facts.tacticLanded, isMate: facts.isMate, to: mv.to, material: facts.materialGained };
       }
-      if (!techConcept) {
+      if (!techConcept && wants('technique')) {
         const tech = endgameConceptFor(fenAfter);
         if (tech && tech.source === 'technique') techConcept = tech;
       }
@@ -546,7 +552,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
     // the pattern, not the move") — the geometry classifier over the mated
     // board, vocabulary from mating-patterns.json. Falls through to the
     // generic mate register when no named pattern matches.
-    if (best?.isMate) {
+    if (best?.isMate && wants('mate')) {
       const mp = classifyMatePattern(best.fenAfter);
       if (mp && !seen.has(mp.id)) {
         out.push({
@@ -564,7 +570,7 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
         best = null;
       }
     }
-    if (best && (best.tactic || best.isMate)) {
+    if (best && (best.tactic || best.isMate) && wants('tactic')) {
       const type = best.tactic ?? 'mate_threat';
       const landingSquare = best.to;
       let pattern: TacticPattern | null = null;
@@ -594,8 +600,8 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   // Endgame teaching beat: the technique reached during the solution (preferred),
   // else the start-position matchup principle.
   try {
-    const eg = techConcept ?? endgameConceptFor(fen);
-    if (eg && !seen.has(eg.id)) {
+    const eg = techConcept ?? ((wants('technique') || wants('matchup')) ? endgameConceptFor(fen) : null);
+    if (eg && !seen.has(eg.id) && wants(eg.source)) {
       if (eg.source !== 'technique') eg.importance = 0.5;
       out.push(eg);
       seen.add(eg.id);
@@ -605,10 +611,12 @@ export function conceptForLine(input: LineInput): ComputedConcept[] {
   // Positional teaching beat — many quiet/defensive puzzles are about a
   // positional idea rather than a tactic; the board-provable positional concepts
   // catch those (lead when nothing else fired, a support otherwise).
-  for (const p of positionalConcepts(fen)) {
-    if (seen.has(p.id)) continue;
-    out.push(p);
-    seen.add(p.id);
+  if (wants('positional')) {
+    for (const p of positionalConcepts(fen)) {
+      if (seen.has(p.id)) continue;
+      out.push(p);
+      seen.add(p.id);
+    }
   }
 
   out.sort((a, b) => b.importance - a.importance);

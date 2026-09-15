@@ -215,8 +215,12 @@ describe('the read sees the whole line, not just where pieces land', () => {
   const uci = (moves: string[]): string[] => moves;
 
   it('reports material won across the line', () => {
-    // 1.e4 d5 2.exd5 Qxd5 3.Nc3 Qa5 — White is a pawn up inside the horizon.
-    const plan = planFromUci(START, uci(['e2e4', 'd7d5', 'e4d5', 'd8d5', 'b1c3', 'd5a5']), 'white');
+    // Petrov: 1.e4 e5 2.Nf3 Nf6 3.Nxe5 d6 — after 2...Nf6 the e5 pawn is
+    // genuinely undefended, so 3.Nxe5 nets a real pawn. (This fixture used to
+    // be the Scandinavian 1.e4 d5 2.exd5 Qxd5, where the pawn is recaptured
+    // at once and the honest per-ply material read — SEE, not face value —
+    // correctly reports ZERO; the test had been red on main.)
+    const plan = planFromUci(START, uci(['e2e4', 'e7e5', 'g1f3', 'g8f6', 'f3e5', 'd7d6']), 'white');
     expect(plan, 'the line did not replay').not.toBeNull();
     expect(plan?.white.materialSwing).toBeGreaterThan(0);
   });

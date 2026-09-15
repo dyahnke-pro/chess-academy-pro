@@ -3,6 +3,15 @@ import { detectTacticType } from './missedTacticService';
 import { mistakePuzzleToPuzzleRecord } from './puzzleService';
 import type { MistakePuzzle, TacticType, PuzzleRecord } from '../types';
 
+/** The RECORD is the truth (P4b): read the tag the producer persisted; only a
+ *  row that carries none is classified here — through the one classifier, over
+ *  the stored solution line — the pattern `tacticalProfileService` already uses.
+ *  Re-deriving every row on read was how an old row could disagree with its own
+ *  weakness bucket. */
+function tacticTypeOf(m: MistakePuzzle): TacticType {
+  return m.tacticType ?? detectTacticType(m.fen, m.bestMove, m.moves ? m.moves.split(/\s+/).filter(Boolean) : undefined);
+}
+
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 export interface TacticDrillItem {
@@ -67,7 +76,7 @@ export async function buildTacticDrillQueue(
   // Classify each by tactic type and filter
   const classified: Array<{ mistake: MistakePuzzle; tacticType: TacticType }> = [];
   for (const m of allMistakes) {
-    const tacticType = detectTacticType(m.fen, m.bestMove);
+    const tacticType = tacticTypeOf(m);
     if (filterTypes && !filterTypes.includes(tacticType)) continue;
     classified.push({ mistake: m, tacticType });
   }
@@ -231,7 +240,7 @@ export async function getTacticDrillCounts(): Promise<Map<TacticType, number>> {
 
   const counts = new Map<TacticType, number>();
   for (const m of allMistakes) {
-    const tacticType = detectTacticType(m.fen, m.bestMove);
+    const tacticType = tacticTypeOf(m);
     counts.set(tacticType, (counts.get(tacticType) ?? 0) + 1);
   }
 

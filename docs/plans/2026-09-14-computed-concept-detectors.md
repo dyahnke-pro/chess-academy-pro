@@ -484,8 +484,25 @@ Update the phase's status marker + the decisions log as each lands.
 - **P4b — ONE tactic classifier** [in progress 2026-09-15]: see the SURFACE MAP
   section. `detectTacticType` = a projection of `conceptForLine` through the
   vocabulary bridge; `TacticType` gains `checkmate`; `TACTIC_TEACHING.concept`
-  derives from `tacticInvariant`; the drill readers go stored-first; the
-  `legacy` tail is `{clearance, x_ray}` and shrink-only.
+  derives from `tacticInvariant`; the drill readers go stored-first; the legacy
+  geometry is retired from product code (`clearance` / `x_ray` → theme-only).
+  **Engine gaps closed on the way** (each a shared-computer fix that reaches
+  every consumer, not a classifier patch): (a) `computePlyFacts.tacticLanded`
+  read only the after-board and could never credit a MOVE-based motif —
+  discovery, double check, removing the guard — so the coach could not teach
+  "removing the guard" on a puzzle whose solution is exactly that; it now
+  consults `classifyPosition`'s before/after detectors under the same
+  winnability bar (a removal must not lose on the capture, and the unguarded
+  piece must be attacked); (b) victim-first patterns (trapped piece, overload)
+  name the opponent's piece first, so the mover was never their agent — now
+  "this move added the attack" is the agent rule; (c) `findTrappedPieces`
+  required an attacker CHEAPER than the victim and handed undefended pieces to
+  the hanging-piece detector — but an undefended piece with NO safe square is
+  the textbook trap, and an escape square where the runner merely hangs to an
+  equal piece is not an escape; (d) the reality gate counted an uncovered KING
+  as a "winnable" fork target, so `Rc8+` against a defended knight passed as a
+  fork. Gate: `tacticTypeUnification.test.ts` — every fixture probed on the
+  live engine before it was pinned.
 - **P4a — ONE COMPUTATIONAL SYSTEM integration** [done 2026-09-14]:
   `conceptForLine` (the single walker over `computePlyFacts`, solution or engine
   PV), importance from the engine's swing on the shared `criticalityThresholds`
@@ -625,12 +642,18 @@ what a student is weak at is not the one the coach TEACHES from.
 
 1. `missedTacticService.detectTacticType(fen, bestMoveUci, pvUci?)` becomes
    the ONE classifier: engine-first, `TacticType` = a PROJECTION of
-   `conceptForLine`'s answer through `tacticVocabulary.toTacticType`, tiered so
-   the tail can never contradict the engine (mechanics → engine → mechanics →
-   legacy tail → sentinel). The old geometry survives ONLY as
-   `legacyTacticGeometry`, consulted for the members the engine has no detector
-   for, declared in `TACTIC_TYPE_AUTHORITY: Record<TacticType, …>` (compile-time
-   exhaustive; the `legacy` set = `{clearance, x_ray}` and can only shrink).
+   `conceptForLine`'s answer through `tacticVocabulary.toTacticType`, tiered
+   (promotion → engine → hanging piece → sentinel). Authority per member is
+   declared in `TACTIC_TYPE_AUTHORITY: Record<TacticType, …>` (compile-time
+   exhaustive). **The legacy geometry is RETIRED from product code entirely**
+   (built 2026-09-15): the plan was to keep it as a tail for `clearance` /
+   `x_ray`, but once it was no longer shadowed by its own priority chain the
+   clearance detector fired on `Rd8+` — a rook simply hanging on a defended
+   square — and the x-ray detector is static geometry `tacticsDetector` had
+   already rejected as ambiguous. Both motifs are now `theme-only` (they enter
+   only through Lichess puzzle tags); `legacyTacticGeometry` survives solely
+   for the historical tests that document the contract change, and the gate
+   source-scans the product tree to prove nothing calls it.
 2. `TacticType` gains `'checkmate'`. Without it the unified classifier REGRESSES:
    a missed non-back-rank mate stops being a (wrong) "fork" and becomes
    `tactical_sequence`, which `mistakePuzzleService` drops — the student would
@@ -680,14 +703,17 @@ OLD authored fork/pin sentences — updated to the one voice),
 `weaknessSpine.test.ts`, `conceptEngine.test.ts`.
 
 New: `tacticTypeUnification.test.ts` — (a) `TACTIC_TYPE_AUTHORITY` is exhaustive
-and every `engine` member is bridged; (b) AGREEMENT on real boards: the tag ==
-the projection of the engine's lead; (c) the engine's strictness holds (a check
-plus one defended attacked piece is NOT a fork); (d) mechanics (promotion,
-hanging piece); (e) the legacy tail classifies clearance / x-ray and a legacy
-"fork" on an engine-silent board is NOT surfaced; (f) a delivered smothered mate
-→ `checkmate`, a back-rank mate → `back_rank`; (g) one voice: for every bridged
-member, `getCoachingMessage(t,'guide')` opens with the engine's invariant;
-(h) a cost bound (the classifier now walks the line).
+and every `engine` member is PROVEN by a fixture the engine actually names;
+(b) AGREEMENT on real boards: the tag == the projection of the engine's lead;
+(c) the engine's strictness holds against every legacy false positive (check +
+one defended piece is not a fork; a forker that hangs is not a fork; a losing
+capture is not removing the guard; a defended escape square is not a trap);
+(d) mechanics (promotion, hanging piece); (e) the old geometry is DEAD in
+product code (source scan) and its answers are never surfaced; (f) a delivered
+smothered mate → `checkmate`, a back-rank mate/threat → `back_rank`; (g) one
+voice: for every bridged member, `getCoachingMessage(t,'guide')` opens with the
+engine's invariant; (h) a cost bound (100 quiet one-ply classifications <
+1.5s — the walk is scoped to `sources: ['tactic','mate']`).
 
 Runtime audits owed (Post-Deploy matrix): `audit-mistakes-quality-loop.mjs`
 (My-Mistakes chip + hint tiers), `audit-coach-tactical-awareness.mjs`,

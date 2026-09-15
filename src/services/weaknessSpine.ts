@@ -209,6 +209,7 @@ function tacticLabel(t: TacticType): string {
     overloaded_piece: 'overloaded pieces', trapped_piece: 'trapped pieces',
     clearance: 'clearance tactics', interference: 'interference', zwischenzug: 'in-between moves',
     x_ray: 'x-ray tactics', removing_the_guard: 'remove-the-defender tactics',
+    checkmate: 'checkmates',
     tactical_sequence: 'tactical sequences',
   };
   return map[t] ?? t.replace(/_/g, ' ');
@@ -225,6 +226,7 @@ export function themesForTactic(t: TacticType): string[] {
     overloaded_piece: ['overloadedPiece'], trapped_piece: ['trappedPiece'],
     clearance: ['clearance'], interference: ['interference'], zwischenzug: ['zwischenzug'],
     x_ray: ['xRayAttack'], removing_the_guard: ['defensiveMove'],
+    checkmate: ['mate', 'mateIn1', 'mateIn2'],
   };
   return map[t] ?? [];
 }

@@ -45,6 +45,8 @@ const TACTIC_WORD: Record<string, string> = {
   mate_threat: 'mating threat',
   removal_of_guard: 'removal of the defender',
   trapped_piece: 'piece trap',
+  double_check: 'double check',
+  overload: 'overloaded defender',
 };
 
 /**

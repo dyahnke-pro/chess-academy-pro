@@ -22,6 +22,7 @@ const ALL_TACTICS: TacticType[] = [
   'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank', 'hanging_piece',
   'promotion', 'deflection', 'overloaded_piece', 'trapped_piece', 'clearance',
   'interference', 'zwischenzug', 'x_ray', 'double_check', 'removing_the_guard',
+  'checkmate',
   'tactical_sequence',
 ];
 
@@ -58,17 +59,24 @@ describe('tacticVocabulary — the canonical bridge', () => {
   });
 
   it('returns null for live motifs with no weakness counterpart (never a forced match)', () => {
-    expect(toTacticType('mate_threat')).toBeNull();
     expect(toTacticType('battery')).toBeNull();
     expect(toTacticType('none')).toBeNull();
-    expect(weaknessClusterForPattern('mate_threat')).toBeNull();
     expect(weaknessClusterForPattern('battery')).toBeNull();
     expect(weaknessClusterForPattern('none')).toBeNull();
   });
 
+  it('joins a live mate THREAT to the "Missed checkmates" hole, one-way (P4b)', () => {
+    // A student who keeps missing mates should be hit by a live mating-threat
+    // concept — that join is honest. A DELIVERED mate is not a live pattern,
+    // so the reverse mapping stays null (never a forced round-trip).
+    expect(toTacticType('mate_threat')).toBe('checkmate');
+    expect(weaknessClusterForPattern('mate_threat')).toBe('analysis:tactic:checkmate');
+    expect(toTacticPatternType('checkmate')).toBeNull();
+  });
+
   it('returns null for analysis motifs never produced by a live detector', () => {
     for (const t of ['hanging_piece', 'promotion', 'deflection', 'clearance',
-      'interference', 'zwischenzug', 'x_ray', 'tactical_sequence'] as const) {
+      'interference', 'zwischenzug', 'x_ray', 'checkmate', 'tactical_sequence'] as const) {
       expect(toTacticPatternType(t)).toBeNull();
     }
   });

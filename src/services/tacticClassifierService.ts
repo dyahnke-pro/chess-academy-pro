@@ -27,6 +27,7 @@ export const TACTIC_LABELS: Record<TacticType, string> = {
   x_ray: 'X-Ray',
   double_check: 'Double Check',
   removing_the_guard: 'Removing the Guard',
+  checkmate: 'Checkmate',
   tactical_sequence: 'Combination',
 };
 
@@ -479,6 +480,7 @@ function generateExplanation(tacticType: TacticType, bestMove: string, cpLoss: n
     x_ray: `Missed x-ray attack with ${bestMove} (${pawns} pawns lost)`,
     double_check: `Missed double check with ${bestMove} (${pawns} pawns lost)`,
     removing_the_guard: `Missed removing the guard with ${bestMove} (${pawns} pawns lost)`,
+    checkmate: `Missed forced checkmate with ${bestMove} (${pawns} pawns lost)`,
     tactical_sequence: `Missed tactic with ${bestMove} (${pawns} pawns lost)`,
   };
   return labels[tacticType];

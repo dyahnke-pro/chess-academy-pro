@@ -100,7 +100,9 @@ export async function buildTacticCreateQueue(
   // Classify and filter to tactical types only
   const classified: Array<{ mistake: MistakePuzzle; tacticType: TacticType }> = [];
   for (const m of allMistakes) {
-    const tacticType = detectTacticType(m.fen, m.bestMove);
+    // The RECORD is the truth (P4b): the persisted tag first; a row without one
+    // goes through the one classifier over its stored solution line.
+    const tacticType = m.tacticType ?? detectTacticType(m.fen, m.bestMove, m.moves ? m.moves.split(/\s+/).filter(Boolean) : undefined);
     if (filterTypes && !filterTypes.includes(tacticType)) continue;
     classified.push({ mistake: m, tacticType });
   }

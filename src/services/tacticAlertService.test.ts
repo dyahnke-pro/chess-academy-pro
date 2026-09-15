@@ -124,10 +124,10 @@ describe('tacticAlertService', () => {
       expect(msg).toContain('two things at once');
     });
 
-    it('returns concept with hint for teach tier', () => {
+    it('returns concept with hint for teach tier — the concept is the ENGINE\'s invariant (one voice, P4b)', () => {
       const msg = getCoachingMessage('fork', 'teach', 1200);
       expect(msg).toBeTruthy();
-      expect(msg).toContain('fork attacks two or more');
+      expect(msg).toContain('fork hits two targets at once');
       expect(msg).toContain('knight or queen');
     });
 
@@ -135,13 +135,13 @@ describe('tacticAlertService', () => {
       const msg = getCoachingMessage('fork', 'teach', 800);
       expect(msg).toBeTruthy();
       expect(msg).toContain('two things at once');
-      expect(msg).toContain('fork attacks');
+      expect(msg).toContain('fork hits');
     });
 
     it('returns full concept for guide tier', () => {
       const msg = getCoachingMessage('pin', 'guide', 1500);
       expect(msg).toBeTruthy();
-      expect(msg).toContain('immobilize');
+      expect(msg).toContain('freezes the piece in front');
       expect(msg).toContain('Look along');
     });
 
@@ -150,7 +150,7 @@ describe('tacticAlertService', () => {
         'fork', 'pin', 'skewer', 'discovered_attack', 'back_rank',
         'hanging_piece', 'promotion', 'deflection', 'overloaded_piece',
         'trapped_piece', 'clearance', 'interference', 'zwischenzug',
-        'x_ray', 'double_check', 'removing_the_guard', 'tactical_sequence',
+        'x_ray', 'double_check', 'removing_the_guard', 'checkmate', 'tactical_sequence',
       ];
       for (const type of types) {
         for (const tier of ['nudge', 'teach', 'guide'] as const) {

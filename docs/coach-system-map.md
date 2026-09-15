@@ -122,6 +122,13 @@ coach's fingertips.")
 - `tacticsDetector.ts` — fork/pin/skewer/discovery/etc. detection.
 - `liveTacticsContext.ts` — the TacticsLiveContext block for in-game awareness.
 - `tacticAlertService.ts`, `missedTacticService.ts`, `tacticClaimValidator.ts`.
+  **ONE tactic classifier (P4b, 2026-09-15):** `missedTacticService.detectTacticType`
+  is a PROJECTION of `conceptEngine.conceptForLine` through `tacticVocabulary` —
+  the tag a student's weakness bucket carries (`TacticType`) and the concept the
+  coach teaches (`TacticPatternType`) come from the same walk. `TACTIC_TYPE_AUTHORITY`
+  declares who decides each motif; `legacyTacticGeometry` is test-only (gate:
+  `tacticTypeUnification.test.ts`). `TACTIC_TEACHING.concept` derives from
+  `tacticInvariant` — one definition of a fork in the app.
 
 **Causal chain (SHIPPED — see `docs/plans/2026-09-07-causal-chain-engine.md`)**
 - `causalChain.ts` — cross-move cause→effect graph. `buildCausalChain` (played),

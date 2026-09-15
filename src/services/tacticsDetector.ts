@@ -402,12 +402,20 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
       if (!p || p.type === 'k' || p.type === 'p') continue;
       const sq = p.square;
       const enemy: Color = p.color === 'w' ? 'b' : 'w';
-      // Trapped means ATTACKED BY CHEAPER with nowhere to run. A piece whose
-      // only attacker is pricier (or equal — that is a trade offer) is not
-      // trapped when it stands defended, and if it is undefended that is
-      // findHangingPieces' pattern, not this one.
+      // Trapped means ATTACKED with nowhere to run. Two honest entries:
+      //   • attacked by a CHEAPER piece (the pawn-kicks-the-knight shape), or
+      //   • UNDEFENDED and attacked at all (P4b, 2026-09-15) — a hanging piece
+      //     that could simply step away is findHangingPieces' pattern, but a
+      //     hanging piece with NO safe square is won by force: that is the
+      //     textbook trap (Ra1 against an undefended Ba2 whose only squares are
+      //     covered). The old cheaper-only entry called that silence.
+      // A DEFENDED piece whose only attacker is pricier or equal is a trade
+      // offer, not a trap — unchanged.
       const attackersHere = attackersOfSquare(chess, sq, enemy);
-      if (!attackersHere.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) continue;
+      if (attackersHere.length === 0) continue;
+      const defendedHere = chess.attackers(sq, p.color).some((d) => d !== sq);
+      const attackedByCheaper = attackersHere.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type]);
+      if (!attackedByCheaper && defendedHere) continue;
       const myView = withTurn(chess, p.color);
       if (!myView) continue;
       const escapes = myView.moves({ square: sq, verbose: true });
@@ -415,9 +423,14 @@ function findTrappedPieces(chess: Chess): TacticPattern[] {
         try {
           const after = new Chess(myView.fen());
           after.move({ from: m.from, to: m.to, promotion: 'q' });
-          // Safe = not attackable by a piece CHEAPER than the runner.
+          // Safe = not capturable at a profit there: no attacker CHEAPER than
+          // the runner, and either no attacker at all or the runner stands
+          // DEFENDED on arrival (an undefended runner hit by an equal piece
+          // still just hangs — that square is not an escape).
           const attackers = attackersOfSquare(after, m.to, enemy);
-          return !attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type]);
+          if (attackers.some((a) => PIECE_VALUE[a] < PIECE_VALUE[p.type])) return false;
+          if (attackers.length === 0) return true;
+          return after.attackers(m.to, p.color).some((d) => d !== m.to);
         } catch { return true; }
       });
       if (!hasSafeSquare) {

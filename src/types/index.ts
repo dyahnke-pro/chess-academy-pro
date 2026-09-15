@@ -1545,6 +1545,11 @@ export type TacticType =
   | 'x_ray'
   | 'double_check'
   | 'removing_the_guard'
+  /** A DELIVERED forced mate on the solution line (P4b, 2026-09-15). Added so
+   *  the unified classifier never has to call a missed smothered mate a
+   *  "fork" (the old geometry did) or drop it as an unnamed sequence. Weakness
+   *  bucket "Missed checkmates"; a live `mate_threat` concept joins to it. */
+  | 'checkmate'
   | 'tactical_sequence';
 
 export interface MissedTactic {

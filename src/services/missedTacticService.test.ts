@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectTacticType, detectMissedTactics } from './missedTacticService';
+import { detectTacticType, detectMissedTactics, legacyTacticGeometry } from './missedTacticService';
 import type { CoachGameMove } from '../types';
 
 function makeMoves(overrides: Partial<CoachGameMove>[]): CoachGameMove[] {
@@ -77,12 +77,18 @@ describe('detectTacticType', () => {
     expect(result).toBe('pin');
   });
 
-  it('detects removing the guard (capturing a defender)', () => {
+    it('legacy geometry: "removing the guard" fired on a capture that LOSES material (kept only on the legacy tail)', () => {
+    // The old one-ply geometry called any capture of a last defender
+    // "removing the guard" — even when the capture itself is a losing trade
+    // (the guard is defended by a pricier piece that just recaptures). The
+    // unified classifier refuses that: a removal must not lose on the capture
+    // and the unguarded piece must actually be under attack
+    // (tacticTypeUnification.test.ts has the REAL fixture).
     // Black knight on c6 defends bishop on e5.
     // White rook captures knight: Rxc6 removes the guard.
     // After Rxc6, bishop on e5 is undefended.
     const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
-    expect(detectTacticType(fen, 'c1c6')).toBe('removing_the_guard');
+    expect(legacyTacticGeometry(fen, 'c1c6')).toBe('removing_the_guard');
   });
 
   it('returns tactical_sequence for invalid input', () => {
@@ -159,12 +165,15 @@ describe('detectTacticType — priority ordering', () => {
     expect(detectTacticType(fen, 'a1d4')).toBe('fork');
   });
 
-  it('rook check on back rank with open king is fork, not back_rank', () => {
-    // White rook on d1 moves to d8+, checking black king on f8 and attacking Ra8.
-    // King on f8 has many escape squares (e7, f7, g7, g8) — NOT trapped.
-    // This is a fork (king + rook), not a back rank pattern.
+  it('legacy geometry: called Rd8+ a "fork" while the rook simply hangs to Rxd8 (legacy tail only)', () => {
+    // White rook d1→d8+ checks Kf8 and "attacks" Ra8 — but the a8 rook just
+    // takes the undefended forker (Rxd8). The engine's fork detector has a
+    // forker-safety gate and correctly refuses it; the unified classifier
+    // therefore does NOT return 'fork' here. This pins the legacy priority
+    // geometry only.
     const fen = 'r4k2/8/8/8/8/8/8/3RK3 w - - 0 1';
-    expect(detectTacticType(fen, 'd1d8')).toBe('fork');
+    expect(legacyTacticGeometry(fen, 'd1d8')).toBe('fork');
+    expect(detectTacticType(fen, 'd1d8')).not.toBe('fork');
   });
 
   it('check plus one valuable attack equals fork', () => {
@@ -197,58 +206,57 @@ describe('detectTacticType — overloaded_piece', () => {
 });
 
 describe('detectTacticType — trapped_piece', () => {
-  it('detects a piece newly trapped by the move', () => {
-    // Black Ba2 has only two escape squares: b1 and b3.
-    // Black pawn on c4 blocks the long diagonal.
-    // White Nd2 defends both b1 and b3. Before Re1-a1 the bishop
-    // is NOT attacked (no white piece reaches a2). After Ra1 the
-    // rook attacks a2 along the a-file — the bishop is now trapped.
+  it('legacy geometry: called Ba2 "trapped" although Bb3 is DEFENDED by the c4 pawn (legacy tail only)', () => {
+    // Black Ba2, white Nd2 covering b1 and b3, white Re1-a1 attacking a2. The
+    // legacy detector said "trapped" — but black's own c4 pawn defends b3, so
+    // ...Bb3 Nxb3 cxb3 is an even trade and the bishop is NOT lost. The engine's
+    // trap detector checks the escape square's defence and correctly refuses;
+    // the unified classifier does not return 'trapped_piece' here.
     const fen = '7k/8/8/8/2p5/8/b2N4/4R1K1 w - - 0 1';
-    expect(detectTacticType(fen, 'e1a1')).toBe('trapped_piece');
+    expect(legacyTacticGeometry(fen, 'e1a1')).toBe('trapped_piece');
+    expect(detectTacticType(fen, 'e1a1')).not.toBe('trapped_piece');
   });
 
-  it('false-positive: reports a pre-existing stuck piece as trapped', () => {
-    // Black Na1 can only move to b3 and c2, both defended by white
-    // (Nd2 defends b3, Rc7 defends c2 along the c-file) BEFORE the
-    // move. The knight is already stuck but not attacked (no white
-    // piece targets a1). White Rc7-c1 merely adds the attack on a1.
-    // isPieceTrapped(before) returns false (countDefenders on a1 = 0)
-    // so the before/after guard fails and the code reports trapped_piece.
+  it('a stuck piece becomes TRAPPED the moment it is attacked (this is correct, not a false positive)', () => {
+    // Black Na1 can only move to b3 and c2, both covered by white BEFORE the
+    // move, but nothing attacks a1 yet — the knight is stuck, not lost. White
+    // Rc7-c1 adds the attack: now it is attacked, undefended, and has no safe
+    // square, so the rook move WINS it by force. That is the definition of a
+    // trapped piece; the old comment here called it a false positive because
+    // the legacy detector reached the right answer for the wrong reason.
     const fen = '7k/2R5/8/8/8/8/3N4/n5K1 w - - 0 1';
     expect(detectTacticType(fen, 'c7c1')).toBe('trapped_piece');
   });
 });
 
-describe('detectTacticType — clearance', () => {
-  it('detects clearance when piece sacrifices on a defended square', () => {
-    // White Nd4 moves to e6, which is defended by Black Bf5 (sacrifice).
-    // After the knight clears d4, White Rd1 can move to d4.
+describe('legacy geometry — clearance (theme-only now; the classifier never produces it)', () => {
+  it('the old geometry called a knight stepping onto a defended square "clearance"', () => {
+    // White Nd4 moves to e6, which is defended by Black Bf5, and Rd1 can
+    // then reach d4. That shape also matches a rook simply hanging on a
+    // defended square (Rd8+ Rxd8), which is why the motif is theme-only now.
     const fen = '6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1';
-    expect(detectTacticType(fen, 'd4e6')).toBe('clearance');
+    expect(legacyTacticGeometry(fen, 'd4e6')).toBe('clearance');
+    expect(detectTacticType(fen, 'd4e6')).not.toBe('clearance');
   });
 
-  it('rejects clearance when the destination is not defended', () => {
-    // Same setup without Black Bf5 — e6 is undefended so the knight
-    // move is not a sacrifice. The clearance detector requires the
-    // destination to be defended by the opponent.
+  it('the old geometry rejected clearance when the destination is not defended', () => {
     const fen = '6k1/8/8/8/3N4/8/8/3R2K1 w - - 0 1';
-    expect(detectTacticType(fen, 'd4e6')).not.toBe('clearance');
+    expect(legacyTacticGeometry(fen, 'd4e6')).not.toBe('clearance');
   });
 });
 
-describe('detectTacticType — x_ray', () => {
-  it('detects x-ray through a friendly piece to a valuable enemy piece', () => {
-    // White Rb1 moves to b4. From b4 up the b-file the ray hits
-    // White Pb5 (friendly) then Black Rb7 (enemy, value 5 >= 3).
+describe('legacy geometry — x_ray (theme-only now; the classifier never produces it)', () => {
+  it('the old geometry called a slider behind a friendly piece an "x-ray"', () => {
+    // Rb4 with white Pb5 in front of black Rb7: static geometry with no
+    // winnability — the shape tacticsDetector deliberately declined to name.
     const fen = '7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1';
-    expect(detectTacticType(fen, 'b1b4')).toBe('x_ray');
+    expect(legacyTacticGeometry(fen, 'b1b4')).toBe('x_ray');
+    expect(detectTacticType(fen, 'b1b4')).not.toBe('x_ray');
   });
 
-  it('rejects x-ray when the piece behind is worth less than 3', () => {
-    // Same geometry but Black has a pawn on b7 instead of a rook.
-    // Pawn value is 1, below the >= 3 threshold.
+  it('the old geometry rejected x-ray when the piece behind is worth less than 3', () => {
     const fen = '7k/1p6/8/1P6/8/8/8/1R4K1 w - - 0 1';
-    expect(detectTacticType(fen, 'b1b4')).not.toBe('x_ray');
+    expect(legacyTacticGeometry(fen, 'b1b4')).not.toBe('x_ray');
   });
 });
 

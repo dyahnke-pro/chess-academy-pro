@@ -210,8 +210,14 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const [chatLoading, setChatLoading] = useState(false);
   const [chatReply, setChatReply] = useState<string>('');
 
-  // Derive the tactic type for coaching (sub-millisecond, pure pattern matching)
-  const tacticType = useMemo(() => detectTacticType(puzzle.fen, puzzle.bestMove), [puzzle.fen, puzzle.bestMove]);
+  // The tactic type for coaching — the RECORD's tag first (P4b: the persisted
+  // tag IS the weakness bucket this puzzle lives in, so the coaching must name
+  // the same motif); a row without one goes through the one classifier over its
+  // stored solution line.
+  const tacticType = useMemo(
+    () => puzzle.tacticType ?? detectTacticType(puzzle.fen, puzzle.bestMove, puzzle.moves ? puzzle.moves.split(/\s+/).filter(Boolean) : undefined),
+    [puzzle.tacticType, puzzle.fen, puzzle.bestMove, puzzle.moves],
+  );
 
   // Proactive struggle detection — coach speaks up when player is stuck
   const handleStruggleCoach = useCallback((message: string, _tier: CoachingTier) => {

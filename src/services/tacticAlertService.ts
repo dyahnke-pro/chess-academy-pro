@@ -16,6 +16,8 @@ import { detectTacticType } from './missedTacticService';
 import { getStoredTacticalProfile } from './tacticalProfileService';
 import { alertSensitivityMultiplier } from './skillScaling';
 import { legalSeeGainFor } from './positionReadingService';
+import { tacticInvariant } from './conceptEngine';
+import { toTacticPatternType } from './tacticVocabulary';
 import type { TacticType, StockfishAnalysis } from '../types';
 import type { UpcomingTactic } from '../types/tacticTypes';
 
@@ -25,6 +27,15 @@ import type { UpcomingTactic } from '../types/tacticTypes';
  * Conceptual teaching for each tactic type. These explain the PATTERN,
  * not the specific position — they teach the player what to look for
  * so they can find it themselves.
+ *
+ * ONE VOICE (P4b, 2026-09-15): `concept` — the definition of the motif — is
+ * NOT authored here for any motif the live vocabulary can name. It is DERIVED
+ * from the concept engine's `TACTIC_INVARIANT` through the vocabulary bridge
+ * (see `unifyConceptVoice` below), so the My-Mistakes struggle coaching, the
+ * Play tactic alert and the classroom drill all define a fork with the same
+ * sentence. The literal below is the fallback for motifs the engine has no
+ * invariant for. `lookFor` / `beginnerHint` stay authored: they are WHERE-TO-
+ * LOOK registers, not a competing definition.
  */
 const TACTIC_TEACHING: Record<TacticType, {
   concept: string;
@@ -111,12 +122,37 @@ const TACTIC_TEACHING: Record<TacticType, {
     lookFor: 'Find which enemy piece is the sole defender of a valuable target. Can you capture that defender?',
     beginnerHint: 'One of their pieces is protecting something important. If you take it, the thing it was guarding is free!',
   },
+  checkmate: {
+    concept: 'A forced checkmate ends the game on the spot — every check, every capture and every escape square counts.',
+    lookFor: 'Count the enemy king\'s escape squares, then look for the check that takes the last one away.',
+    beginnerHint: 'Can you check the king so it has nowhere to go?',
+  },
   tactical_sequence: {
     concept: 'Sometimes the best move involves a combination of ideas — a sequence of forcing moves that work together.',
     lookFor: 'Look for checks, captures, and threats that force your opponent\'s responses. Each move should limit their options.',
     beginnerHint: 'Try to find moves that force your opponent to respond in a specific way. Checks and captures are good starting points.',
   },
 };
+
+/** The engine's invariant sentence for a motif, capitalised for a sentence
+ *  start — or null when the live vocabulary can't name the motif. */
+function engineConceptFor(t: TacticType): string | null {
+  const pattern = toTacticPatternType(t);
+  const inv = pattern ? tacticInvariant(pattern) : null;
+  if (!inv) return null;
+  return inv.full.charAt(0).toUpperCase() + inv.full.slice(1);
+}
+
+/** Overwrite every bridged motif's `concept` with the engine's invariant, so
+ *  there is exactly one definition of each tactic in the app. Runs once at
+ *  module load; gated by tacticTypeUnification.test.ts. */
+function unifyConceptVoice(): void {
+  for (const t of Object.keys(TACTIC_TEACHING) as TacticType[]) {
+    const engine = engineConceptFor(t);
+    if (engine) TACTIC_TEACHING[t].concept = engine;
+  }
+}
+unifyConceptVoice();
 
 // ─── Coaching Tiers ───────────────────────────────────────────────────────────
 
@@ -372,7 +408,10 @@ export function detectGameplayTactic(
     if (gap < 150) return null;
   }
 
-  const tacticType = detectTacticType(fen, analysis.bestMove);
+  // The engine walks the whole best line (P4b) — a mate or tactic that lands
+  // two plies in is still THIS move's motif, and the label matches what the
+  // coach will teach.
+  const tacticType = detectTacticType(fen, analysis.bestMove, analysis.topLines[0]?.moves);
   // Don't alert on generic tactical_sequence — not specific enough to teach
   if (tacticType === 'tactical_sequence') return null;
 
@@ -431,7 +470,7 @@ export function scanUpcomingTactic(
 
       if (isPlayerMove && i > 0) {
         // Check if this future player move is a tactic
-        const tacticType = detectTacticType(chess.fen(), uci);
+        const tacticType = detectTacticType(chess.fen(), uci, bestLine.moves.slice(i));
         if (tacticType !== 'tactical_sequence') {
           const movesAway = Math.ceil((i + 1) / 2);
           return { tacticType, movesAway };
@@ -470,6 +509,7 @@ export function tacticTypeLabel(t: TacticType): string {
     case 'interference': return 'interference';
     case 'zwischenzug': return 'zwischenzug';
     case 'x_ray': return 'x-ray';
+    case 'checkmate': return 'checkmate';
     default: return 'tactic';
   }
 }

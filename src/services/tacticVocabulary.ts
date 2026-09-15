@@ -32,9 +32,12 @@ import type { TacticType } from '../types';
 /**
  * Live narration motif → analysis/weakness motif. `null` when the live motif
  * has no honest weakness counterpart:
- *  - `mate_threat` — a mating idea, not one of the analysis tactic motifs.
  *  - `battery` — a piece configuration, not a scored analysis tactic.
  *  - `none` — the "no tactic" sentinel.
+ *  - `mate_threat` → `checkmate` (2026-09-15): a live mating threat is exactly
+ *    the idea a student with a "Missed checkmates" hole keeps missing, so the
+ *    join is honest. It is ONE-WAY — a delivered mate is not a live
+ *    `TacticPatternType` (see `TACTIC_TO_PATTERN.checkmate`).
  * Never guess a mapping to force a match (G3 / "empty > generic > invented").
  */
 export const PATTERN_TO_TACTIC: Record<TacticPatternType, TacticType | null> = {
@@ -46,7 +49,7 @@ export const PATTERN_TO_TACTIC: Record<TacticPatternType, TacticType | null> = {
   back_rank: 'back_rank',
   removal_of_guard: 'removing_the_guard',
   trapped_piece: 'trapped_piece',
-  mate_threat: null,
+  mate_threat: 'checkmate',
   overload: 'overloaded_piece',
   battery: null,
   none: null,
@@ -57,7 +60,8 @@ export const PATTERN_TO_TACTIC: Record<TacticPatternType, TacticType | null> = {
  * motif is never produced by a live geometry detector (so it can't be matched
  * from the narration side): `hanging_piece` is surfaced as a `HangingPiece`, not
  * a `TacticPattern`; `promotion`/`deflection`/`clearance`/`interference`/
- * `zwischenzug`/`x_ray`/`tactical_sequence` have no live `TacticPatternType`.
+ * `zwischenzug`/`x_ray`/`checkmate`/`tactical_sequence` have no live
+ * `TacticPatternType`.
  */
 export const TACTIC_TO_PATTERN: Record<TacticType, TacticPatternType | null> = {
   fork: 'fork',
@@ -76,6 +80,9 @@ export const TACTIC_TO_PATTERN: Record<TacticType, TacticPatternType | null> = {
   x_ray: null,
   double_check: 'double_check',
   removing_the_guard: 'removal_of_guard',
+  // A DELIVERED mate has no live pattern type; the live side names the
+  // pattern (matePatterns) or the threat (`mate_threat`, which maps here).
+  checkmate: null,
   tactical_sequence: null,
 };
 

@@ -305,6 +305,7 @@ const GATE_TESTS = [
   'src/data/modelGames.test.ts',
   'src/data/modelGames-orientation.test.ts',
   'src/data/perspectiveVoice.test.ts',         // ONE perspective: student=you/your, opponent=they/their, never we/our (David 2026-08-28)
+  'src/services/tacticTypeUnification.test.ts', // ONE tactic classifier: the weakness tag is a projection of the concept the coach teaches; legacy geometry has no product caller (David 2026-09-15 "one coach system, not 5")
   'src/data/lessons/openingWiring.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/data/middlegamePlanThemes.test.ts',

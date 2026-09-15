@@ -20,12 +20,33 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
 import { detectTactics } from './tacticsDetector';
+import { classifyPosition } from './tacticClassifier';
 import { describeStructure } from './boardStructure';
 import { legalSeeGain } from './positionReadingService';
 import type { StockfishAnalysis } from '../types';
 
 /** Face values for the recapture-net calc (mirrors positionReadingService). */
 const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+function pieceVal(t?: string): number {
+  return t ? (PIECE_POINTS[t] ?? 0) : 0;
+}
+
+/** The ONE tactic-reality rule (David 2026-07-23): a target is worth naming
+ *  only if the attacking piece can actually WIN it — it is worth more than the
+ *  attacker, or it hangs. Shared by the board-landed scan and the move-based
+ *  motifs in `computePlyFacts`. */
+function winnableBy(board: Chess, sq: string, attackerVal: number): boolean {
+  const p = board.get(sq as Square);
+  if (!p) return false;
+  // A king is never WON — the royal-fork rule credits the check separately
+  // (one other winnable target suffices). Counting an uncovered king as an
+  // "undefended target" let Rc8+ against a defended knight pass as a fork
+  // (found 2026-09-15 building the one tactic classifier).
+  if (p.type === 'k') return false;
+  const undefended = board.attackers(sq as Square, p.color).length === 0;
+  return pieceVal(p.type) > attackerVal || undefended;
+}
 
 /** Context the material calc needs about the PREVIOUS ply: if the opponent just
  *  captured on the square we're now capturing on, this move is a RECAPTURE and
@@ -54,6 +75,7 @@ const TACTIC_WORD: Record<string, string> = {
   fork: 'fork', pin: 'pin', skewer: 'skewer', discovery: 'discovered attack',
   back_rank: 'back-rank threat', mate_threat: 'mating threat',
   removal_of_guard: 'removal of the defender', trapped_piece: 'piece trap',
+  double_check: 'double check', overload: 'overloaded defender',
 };
 export function tacticWord(type: string): string {
   return TACTIC_WORD[type] ?? type.replace(/_/g, ' ');
@@ -162,6 +184,19 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     // "the knight lands on c3 and suddenly it's pinning" — knights can't pin).
     const isSlider = /^[BRQ]/.test(mv.san); // bishop/rook/queen — the only pinning pieces
     const afterBoard = new Chess(fenAfter);
+    // VICTIM-first patterns (P4b, 2026-09-15): a trapped piece and an overload
+    // name the OPPONENT's piece first (there is no "agent square" — the trap is
+    // the victim's lack of squares, the overload is the guard's two jobs). The
+    // agent rule for those is "THIS move added the attack": the landing square
+    // must attack the trapped piece / one of the overloaded guard's charges.
+    // Without this the mover could never be credited for a trap it just sprang.
+    const attacksFrom = (target: string): boolean =>
+      toSquare !== null && afterBoard.attackers(target as Square, mover).includes(toSquare as Square);
+    const isAgent = (x: { type: string; involvedSquares: string[] }): boolean => {
+      if (x.type === 'trapped_piece') return attacksFrom(x.involvedSquares[0]);
+      if (x.type === 'overload') return x.involvedSquares.slice(1).some(attacksFrom);
+      return toSquare !== null && x.involvedSquares[0] === toSquare;
+    };
     const landed = detectTactics(fenAfter).tactics
       .filter((x) => x.type !== 'none')
       .filter((x) => !beforeSigs.has(sig(x)))
@@ -172,7 +207,7 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
       // this the mover was credited for the OPPONENT's pin whenever its move just
       // landed BEHIND the pinned piece (David 2026-07-20 Opera nitpick: Black's
       // "Rd8 lands a pin" was really White's Rd1 pinning Black's own knight).
-      .filter((x) => toSquare !== null && x.involvedSquares[0] === toSquare)
+      .filter(isAgent)
       // Drop a shallow pin whose pinned piece is a mere PAWN (e.g. Qf3 "pinning"
       // the f7 pawn to the bishop) — technically true, not worth a tactic call.
       .filter((x) => !(x.type === 'pin' && afterBoard.get(x.involvedSquares[1] as Square)?.type === 'p'))
@@ -186,14 +221,9 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
     // against the king). "Winnable" = the target is worth more than the mover
     // OR is undefended (it hangs). Kills the false alarms; keeps the real ones.
     if (landed) {
-      const val = (t?: string): number => (t ? (PIECE_POINTS[t] ?? 0) : 0);
-      const attackerVal = val(afterBoard.get(landed.involvedSquares[0] as Square)?.type);
-      const winnable = (sq: string): boolean => {
-        const p = afterBoard.get(sq as Square);
-        if (!p) return false;
-        const undefended = afterBoard.attackers(sq as Square, p.color).length === 0;
-        return val(p.type) > attackerVal || undefended;
-      };
+      const agentSquare = (landed.type === 'trapped_piece' || landed.type === 'overload') ? toSquare : landed.involvedSquares[0];
+      const attackerVal = pieceVal(afterBoard.get(agentSquare as Square)?.type);
+      const winnable = (sq: string): boolean => winnableBy(afterBoard, sq, attackerVal);
       let real: boolean;
       if (landed.type === 'fork') {
         // A fork wins because the defender can't save BOTH — needs >=2 winnable
@@ -223,6 +253,42 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
         real = true;
       }
       tacticLanded = real ? landed.type : null;
+    }
+
+    // MOVE-based motifs (P4b, 2026-09-15). The scan above reads the AFTER
+    // board, so it can never credit a motif that is a property of the MOVE
+    // rather than the position: a discovered attack (the unveiling is the
+    // event), a double check, removing the guard (the guard is GONE from the
+    // after-board). `classifyPosition` is the engine's own before/after
+    // detector for exactly those, in the same vocabulary — without this the
+    // coach could not teach "removing the guard" on a puzzle whose solution is
+    // exactly that (found wiring the one tactic classifier). Same reality bar
+    // as the board scan: the unveiled / unguarded target must be WINNABLE;
+    // a double check is decisive by nature. Only consulted when nothing landed.
+    if (!tacticLanded && toSquare) {
+      try {
+        const moved = afterBoard.get(toSquare as Square);
+        for (const t of classifyPosition(fenBefore, fenAfter, mv.san, 0, 0).tactics) {
+          if (t.type === 'double_check') { tacticLanded = 'double_check'; break; }
+          if (t.type === 'discovery') {
+            // involvedSquares = [from, revealer, target]
+            const revealerVal = pieceVal(afterBoard.get(t.involvedSquares[1] as Square)?.type);
+            if (winnableBy(afterBoard, t.involvedSquares[2], revealerVal)) { tacticLanded = 'discovery'; break; }
+          }
+          if (t.type === 'removal_of_guard' && moved && mv.captured) {
+            // involvedSquares = [captureSquare, nowUnguarded]. Two things must
+            // be true or nothing is won: the capture itself must not LOSE
+            // (taking a defended guard with a pricier piece — Rxd5 Qxd5 — is a
+            // trade, not a removal), and the formerly-guarded piece must now be
+            // under the mover's attack (a guard removed from a piece nobody
+            // hits is a fact, not a tactic).
+            const unguarded = t.involvedSquares[1] as Square;
+            let captureNets = 0;
+            try { captureNets = pieceVal(mv.captured) - legalSeeGain(fenAfter, toSquare as Square); } catch { captureNets = 0; }
+            if (captureNets >= 0 && afterBoard.attackers(unguarded, mover).length > 0) { tacticLanded = 'removal_of_guard'; break; }
+          }
+        }
+      } catch { /* move-based scan failed — facts stay as they are */ }
     }
   } catch { /* facts stay null */ }
 
