@@ -1,6 +1,6 @@
 # Computed Concept Detectors — the coach's board-reading ability
 
-**Status:** planning (no feature code yet). Plan doc committed before diving in
+**Status:** P1–P5 shipped on `main` (2026-09-14); P6 core landed, sinks pending. Plan doc committed before diving in
 per the PLAN-doc standing order.
 **Owner context:** David, 2026-09-14. Started from "tie the coach into the master
 puzzles so it can teach the concept, not just point an arrow," and sharpened
@@ -560,7 +560,27 @@ Update the phase's status marker + the decisions log as each lands.
   3-instrument prod audit across every surface — INCLUDING live-gameplay
   narration (Learn/Teach-x-opening/Play), with the narration listener confirming
   the concept was SPOKEN mid-game — + OTA (David asked for OTA on completion).
-- **P6 — puzzle generation** [pending]: ONE source-agnostic generator (engine
+- **P6 — puzzle generation** [core landed 2026-09-15; sinks pending]:
+  `puzzleGenerator.ts` — `generatePuzzlesFromPgn/Positions(plies, {analyze})`
+  walks every position of ANY game with an injected engine (runtime
+  Stockfish or a spawned UCI offline): unique + winning by the engine's
+  swing (best beats the runner-up by ≥150cp, solver ≥+150 or mating), the
+  solution trimmed to end on the solver's move, the CONCEPT from
+  `conceptForLine` (HARD RULE: no tactic/mate/technique lead → no puzzle; a
+  bare matchup principle never justifies one), Lichess-shaped output
+  (fen before the setup move, `moves` = setup + solution) so every existing
+  puzzle surface serves it unchanged, tags from the concepts + shape, and a
+  COMPUTED rating (`puzzleDifficulty.ts`: depth, quiet first move,
+  sacrifice, all-forcing discount, endgame, concept rarity; master tier =
+  ≥2400 over any source). Gates: `puzzleGenerator.test.ts` (canned engine),
+  `puzzleDifficulty.test.ts`. STILL OWED: the runtime door (a "make a puzzle
+  from my games" aid → `startCoachDrill`), storing generated puzzles
+  (`PuzzleRecord.source` gains 'generated'; Master pool = master ∪
+  generated ≥2400), the offline master-game run over
+  `public/data/pro-game-references.json` (env-gated vitest report spawning
+  `/usr/games/stockfish`), and calibrating the estimator against the known
+  Lichess ratings. Original spec follows.
+- **P6 — puzzle generation** [spec]: ONE source-agnostic generator (engine
   swing → uniqueness → soundness → concept-detector tag → rating estimator →
   dedupe), pointed at own games (runtime, off `autoAnalyzeGame`) AND master/pro
   games (offline). Difficulty is computed per position; the **master tier is a

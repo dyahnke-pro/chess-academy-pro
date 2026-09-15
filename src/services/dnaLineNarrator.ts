@@ -44,7 +44,7 @@ export interface DnaLinePly {
  *  as filler when repeated down a line (2026-07-25 hand-audit: the same
  *  "quiet development" glued to four moves). The universal teacher's
  *  last-resort forms fall here. */
-const GENERIC_TEACH = /quiet development|ready to join the attack|getting into the game|joining the game|steps to [a-h][1-8]/i;
+const GENERIC_TEACH = /quiet development|ready to join the attack|getting into the game|joining the game|steps to [a-h][1-8]|forces the king to react|seizing the initiative for a move/i;
 
 const NO_PREV: PrevCaptureContext = { square: null, capturedValue: 0 };
 
