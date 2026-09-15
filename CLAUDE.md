@@ -2934,6 +2934,51 @@ signals (`scanCriticality`, `cpLoss`, the threat probe, the note/bake tiers) —
 do NOT add a second parallel criticality (that is the walk-over this build
 exists to remove).
 
+### 🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).
+
+This is the narration-selection law for EVERY coach surface (review, Watch/Learn,
+Play phase-transitions, chat, drills). It supersedes any rule that decides
+narration by ply COUNT, by rating band alone, or by leaving it to the model.
+
+- **The unit is the GAME (or the taught line), not the move.** The coach reads
+  the whole sequence first the way a master reads a position handed to him:
+  ONE computed thesis (what this game/line is about), the 1–3 moments it turned
+  on (rating-scaled criticality, contested-gated), linked by the causal chain.
+  Per-ply beats speak only when they serve that thread or clear the need score.
+- **Need is COMPUTED per ply/moment from the student's own data** — book-departure
+  history in this opening (`bookDepartureWeakness`), weakness-spine match for the
+  concept the ply teaches (lifecycle-weighted, the `applyWeaknessBoost` wire),
+  line familiarity (correct repetitions DECAY the need — a line played right
+  five times is silent), results in this opening/variation, and whether the
+  game's causal thread runs through the ply. Speak when need clears the
+  importance threshold; silent otherwise. Silence is a computed verdict.
+- **Cold start defaults to TEACH.** A new student (< ~5 games) has no data, so
+  the prior is the rating band; the data takes over as it arrives. A fresh
+  install must never meet a mute coach.
+- **"Needs teaching" ≠ "made a mistake here."** A correctly played ply still
+  earns the refuted-alternative beat when the student has gone wrong there in
+  other games. The alternative the DB says humans actually play, its engine
+  cost + punishing line, and the concept's name are the content of opening
+  theory — that computer is the build after the selector.
+- **This RETIRES R2** (`audit-review-real-game.mjs` "≥80% of own-side opening
+  plies get a WHY", 2026-07-19). R2 fixed a badge-labeler review by counting
+  sentences; David 2026-09-15: review "takes too long and says too much in
+  opening book moves." The audit now measures coverage AGAINST NEED: every ply
+  whose need cleared threshold got a why, and no ply below it spoke. Retire the
+  R2 assertion and the `coachFeatureService` "teach every silent opening move"
+  loop TOGETHER with the selector build — never one without the other, or the
+  July silence comes back.
+- **One selector, one fact-computer set, one chokepoint (`voiceFacts`).** No
+  surface owns its own selection logic. Surfaces differ ONLY in register and
+  withholding, declared once in `Record<CoachSurface, {register, withholds}>`
+  (review = retrospective + withholds the thesis until the student answers
+  "where did it turn?"; Watch/Learn = present tense; Play = silent until a
+  phase transition or the student asks). A new surface fails to compile until
+  it declares both; nothing else about it may differ.
+- **It must not become a second criticality.** Need is the "student" term of
+  the existing importance filter (unified-coach P1 `userImportance`), not a
+  parallel gate.
+
 ### 🔒🔒 THE THREE NARRATION TIERS — get these the right way round (David 2026-08-01, LOCKED: "Tier 2 is not baked. Tier 1 is baked. Tier 2 is note driven. Tier 3 has neither.")
 
 Sessions keep re-deriving this backwards and picking the wrong opening to
