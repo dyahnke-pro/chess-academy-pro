@@ -89,6 +89,15 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** The classifier revision that last computed `tacticType`
+   *  (`TACTIC_TYPE_REV`, tacticTypeBackfill). Rows behind the current rev are
+   *  re-tagged on boot through the ONE unified classifier so a student's
+   *  weakness buckets never rest on the retired geometry tags. Absent on rows
+   *  written before 2026-09-15. Additive, unindexed — no schema bump. */
+  tacticTypeRev?: string;
+  /** Set when the backfill could not recompute (inputs missing/illegal); the
+   *  stored tag is KEPT, never guessed. */
+  tacticTypeFlag?: 'no-inputs' | null;
   /** Positional-transformation motif (Phase 4) when the mistake is a trade
    *  error rather than a tactic — buckets it as its own "Unfavorable trades" /
    *  "Missed favorable trades" weakness instead of a generic phase bucket.
@@ -1700,6 +1709,9 @@ export interface ClassifiedTactic {
   playerMoveSan: string;
   playerColor: 'white' | 'black';
   tacticType: TacticType;
+  /** See `MistakePuzzle.tacticTypeRev`. */
+  tacticTypeRev?: string;
+  tacticTypeFlag?: 'no-inputs' | null;
   evalSwing: number;
   explanation: string;
   // Game context

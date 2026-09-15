@@ -17,6 +17,8 @@ import middlegamePlansData from '../data/middlegame-plans.json';
 import gambitPlansData from '../data/gambit-plans.json';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
 import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan, ProGameReference } from '../types';
+import { reconcileTacticTypes } from './tacticTypeBackfill';
+import { logAppAudit } from './appAuditor';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -940,6 +942,19 @@ async function runSeedOnce(): Promise<void> {
   // Same for the BASE repertoire (repertoire.json) — content edits like
   // per-variation overview/keyIdeas otherwise never reach existing users.
   await reconcileBaseRepertoire();
+
+  // Persisted tactic tags → the ONE unified classifier (unified-coach N0).
+  // Detached: it is a per-row no-op once every row carries the current rev,
+  // and the weakness spine must never wait on it to paint. Failures are
+  // audited, never thrown — a stale tag is a worse coach, not a broken boot.
+  void reconcileTacticTypes().catch((err: unknown) => {
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'dataLoader.reconcileTacticTypes',
+      summary: `tacticType backfill failed: ${err instanceof Error ? err.message : String(err)}`,
+    });
+  });
 
   // Anti-opening courses (Counter-Weapons) — bulkPut upsert reaches
   // already-seeded users on every boot without touching their progress.
