@@ -36,6 +36,20 @@ function pieceVal(t?: string): number {
  *  only if the attacking piece can actually WIN it — it is worth more than the
  *  attacker, or it hangs. Shared by the board-landed scan and the move-based
  *  motifs in `computePlyFacts`. */
+/** Every square strictly between `a` and `b` (same file, rank or diagonal) is
+ *  empty — the line of sight a slider needs. False when they are not aligned. */
+function rayClear(board: Chess, a: string, b: string): boolean {
+  const fa = a.charCodeAt(0), ra = Number(a[1]), fb = b.charCodeAt(0), rb = Number(b[1]);
+  const df = Math.sign(fb - fa), dr = Math.sign(rb - ra);
+  if (!(df === 0 || dr === 0 || Math.abs(fb - fa) === Math.abs(rb - ra))) return false;
+  let f = fa + df, r = ra + dr;
+  while (f !== fb || r !== rb) {
+    if (board.get(`${String.fromCharCode(f)}${r}` as Square)) return false;
+    f += df; r += dr;
+  }
+  return true;
+}
+
 function winnableBy(board: Chess, sq: string, attackerVal: number): boolean {
   const p = board.get(sq as Square);
   if (!p) return false;
@@ -271,9 +285,15 @@ export function computePlyFacts(fenBefore: string, fenAfter: string, mv: {
         for (const t of classifyPosition(fenBefore, fenAfter, mv.san, 0, 0).tactics) {
           if (t.type === 'double_check') { tacticLanded = 'double_check'; break; }
           if (t.type === 'discovery') {
-            // involvedSquares = [from, revealer, target]
-            const revealerVal = pieceVal(afterBoard.get(t.involvedSquares[1] as Square)?.type);
-            if (winnableBy(afterBoard, t.involvedSquares[2], revealerVal)) { tacticLanded = 'discovery'; break; }
+            // involvedSquares = [from, revealer, target]. The detector treats the
+            // moved piece's landing square as transparent, so a pawn stepping
+            // ALONG the queen's file (3.d4 in the Alekhine) "unveiled" the queen
+            // through itself. A discovery exists only if the revealer→target ray
+            // is actually clear on the after-board — the mover must have LEFT it.
+            const revealer = t.involvedSquares[1];
+            const target = t.involvedSquares[2];
+            const revealerVal = pieceVal(afterBoard.get(revealer as Square)?.type);
+            if (rayClear(afterBoard, revealer, target) && winnableBy(afterBoard, target, revealerVal)) { tacticLanded = 'discovery'; break; }
           }
           if (t.type === 'removal_of_guard' && moved && mv.captured) {
             // involvedSquares = [captureSquare, nowUnguarded]. Two things must

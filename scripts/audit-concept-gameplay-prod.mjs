@@ -16,11 +16,14 @@
  * WHY THIS OPENING. `landedTacticTeaching` (dnaLineNarrator) splices the
  * computed tactic + its invariant as beat two on any taught ply that lands a
  * tactic — on every narration tier, corpus note or not (openingGenerator PASS
- * 1). Probed offline 2026-09-15 over the resolver: "Torre Attack" resolves to
- * "Torre Attack: Classical Defense" and its spine lands a PIN on ply 5 (the
- * student's own Bg5 — knight to queen through the empty e7). So the spoken
- * walkthrough MUST contain the pin invariant; the LLM has no say in it (G0).
- * Fallback ask: "Alekhine Defense" (ply 5 d4 lands a discovered attack).
+ * 1). The ask must name a line whose OWN entry carries the tactic: the
+ * generator extends a family ask along the most-popular branch, and the first
+ * run of this audit learned that the hard way ("Torre Attack" resolved to the
+ * …e6 Classical entry offline but the live spine went …g6, where Bg5 pins
+ * nothing). Probed 2026-09-15: "Scandinavian Defense, Lasker Variation"
+ * resolves to its 11-ply entry and ply 10 is the student's own …Bg4, pinning
+ * Nf3 to the queen — so the spoken walkthrough MUST contain the pin
+ * invariant; the LLM has no say in it (G0).
  *
  * Contracts asserted (experience, not text-presence):
  *   A. the ask starts a real walkthrough (a walkthrough testid mounts) — never
@@ -46,8 +49,8 @@ import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
-const ASK = process.env.AUDIT_CONCEPT_ASK ?? 'Teach me the Torre Attack';
-const ASK_TYPO = process.env.AUDIT_CONCEPT_ASK_TYPO ?? 'teach me the torre atack';
+const ASK = process.env.AUDIT_CONCEPT_ASK ?? 'Teach me the Scandinavian Defense, Lasker Variation';
+const ASK_TYPO = process.env.AUDIT_CONCEPT_ASK_TYPO ?? 'teach me the scandinavian lasker variaton';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
 const BOOT_TIMEOUT_MS = 45_000;
@@ -156,8 +159,12 @@ async function main() {
     record('B. narration listener captured spoken lines (instrument 3 alive)', lines.length > 0, `${lines.length} spoken`);
     const hit = lines.find((l) => INVARIANT.test(l));
     record('C. a SPOKEN line carries a computed concept INVARIANT (the concept was voiced mid-lesson)', !!hit, hit ? hit.replace(/\s+/g, ' ').slice(0, 180) : `none of ${lines.length} lines`);
-    const dirty = lines.filter((l) => /\b(we|our|us)\b/i.test(l) || RAW_ENUM_LEAK.test(l));
-    record('D. every spoken line is gate-clean (you/they; no raw enum leak)', dirty.length === 0, dirty.slice(0, 2).map((l) => l.slice(0, 100)).join(' | '));
+    // Board NARRATION only (a line that names a square or a piece) — the
+    // coach's opening greeting ("What are we working on today?") is not a
+    // piece-perspective claim and is outside the you/they rule.
+    const boardLines = lines.filter((l) => /\b[a-h][1-8]\b|\b(knight|bishop|rook|queen|king|pawn)\b/i.test(l));
+    const dirty = boardLines.filter((l) => /\b(we|our|us)\b/i.test(l) || RAW_ENUM_LEAK.test(l));
+    record('D. every spoken board line is gate-clean (you/they; no raw enum leak)', dirty.length === 0, `${boardLines.length} board lines${dirty.length ? ' — ' + dirty.slice(0, 2).map((l) => l.slice(0, 100)).join(' | ') : ''}`);
     await writeFile(`${OUT_DIR}/spoken-canonical.json`, JSON.stringify(lines, null, 1)).catch(() => {});
 
     // ── E: off-canonical ask (G7 — interactive, messy human input) ──────────
