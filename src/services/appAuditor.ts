@@ -218,6 +218,7 @@ export type AuditKind =
   // from a surface that has been migrated to coachService.ask. Used in
   // production logs to confirm the migrated path is the one running.
   | 'coach-surface-migrated'
+  | 'review-need-coverage'
   // Rolodex entry beat (WO-ROLODEX-PLUMBING-01 item 1). Fires once per
   // session per opening when /coach/play (or another coach surface in
   // future) is loaded with `?opening=<name>` and the captured intent

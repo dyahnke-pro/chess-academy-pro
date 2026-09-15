@@ -1,4 +1,11 @@
 /**
+ * ⚠️ STALE SINCE THE 2026-09-05 REVIEW OVERHAUL (found 2026-09-15): the walk
+ * auto-advances now and its ply readout moved — this driver reads "Ply 0/0" on
+ * every step, records no narration, and every rubric row false-fails. The
+ * LIVING review audit is `audit-review-overhaul-prod.mjs` (it carries the
+ * THESIS + NEED contracts). Resurrect this one by porting `readWalkPly` +
+ * auto-advance handling from there before trusting a red from it.
+ *
  * audit-review-real-game — THE post-game-review audit, held to the locked
  * REAL-GAME EXPERIENCE AUDIT STANDARD (CLAUDE.md). Unlike a capture harness, this
  * ASSERTS the experience contracts and exits non-zero on any failure.
@@ -188,26 +195,40 @@ const run = async () => {
   // is the OPPORTUNITY, and without it the rate is unreadable.
   const cacheTally = { hit: 0, miss: 0 };
   const askedDepths = new Map();
+  // N2 (2026-09-15): the app's own need-coverage rows for the walk — the
+  // instrument that replaced R2's sentence count.
+  let needCoverage = null;
   await page.route('**/api/audit-stream**', async (route) => {
     try {
       const body = route.request().postData();
       if (body) {
-        const entry = JSON.parse(body);
-        const kind = entry?.kind;
-        if (kind === 'stockfish-cache-hit') cacheTally.hit += 1;
-        else if (kind === 'stockfish-cache-miss') cacheTally.miss += 1;
-        if (kind === 'stockfish-cache-hit' || kind === 'stockfish-cache-miss') {
-          // `fen=<first 32 chars>… depth=N` — the summary is all we get.
-          const m = /fen=(\S+)\s+depth=(\d+)/.exec(String(entry?.summary ?? ''));
-          if (m) {
-            const seen = askedDepths.get(m[1]) ?? [];
-            seen.push(Number(m[2]));
-            askedDepths.set(m[1], seen);
+        // The app BATCHES remote audit posts (one array per ~1s) — the old
+        // single-object read silently tallied nothing (2026-09-15 fix).
+        const parsed = JSON.parse(body);
+        const entries = Array.isArray(parsed) ? parsed : (parsed?.events ?? [parsed]);
+        for (const entry of entries) {
+          const kind = entry?.kind;
+          if (kind === 'stockfish-cache-hit') cacheTally.hit += 1;
+          else if (kind === 'stockfish-cache-miss') cacheTally.miss += 1;
+          if (kind === 'stockfish-cache-hit' || kind === 'stockfish-cache-miss') {
+            // `fen=<first 32 chars>… depth=N` — the summary is all we get.
+            const m = /fen=(\S+)\s+depth=(\d+)/.exec(String(entry?.summary ?? ''));
+            if (m) {
+              const seen = askedDepths.get(m[1]) ?? [];
+              seen.push(Number(m[2]));
+              askedDepths.set(m[1], seen);
+            }
+          }
+          if (kind === 'review-need-coverage') {
+            try { needCoverage = JSON.parse(entry.details ?? '{}'); } catch { needCoverage = { rows: [] }; }
           }
         }
       }
     } catch { /* a malformed body is not this audit's business */ }
-    await route.continue();
+    // Fulfil LOCALLY: `enableAuditCapture` sets a placeholder secret, so letting
+    // the POST reach prod 401s in the console (a false ERR fail) and touches the
+    // shared Upstash budget for nothing.
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
   });
   const analysisStartedAt = Date.now();
 
@@ -477,13 +498,32 @@ const run = async () => {
     : (saysLoss && !saysDraw && !saysWin);
   add('RES result-correct', resOk, `expected=${expected} intro="${introLine.slice(0, 70)}" win=${saysWin} loss=${saysLoss} draw=${saysDraw}`);
 
-  // R2 — own-side opening why-density >= 80% (student parity from AUDIT_STUDENT:
-  // white = odd plies, black = even plies, 1..15/16).
-  const studentParity = STUDENT_SIDE === 'white' ? 1 : 0;
-  const studentOpening = plies.filter((p) => p.ply >= 1 && p.ply <= 16 && p.ply % 2 === studentParity);
-  const withWhy = studentOpening.filter((p) => p.narr && p.narr.length > 3);
-  const density = studentOpening.length ? withWhy.length / studentOpening.length : 0;
-  add('R2 why-density>=80%', density >= 0.8, `${withWhy.length}/${studentOpening.length} = ${(density * 100).toFixed(0)}%`);
+  // NEED COVERAGE (unified-coach N2, 2026-09-15 — RETIRES R2). R2 counted
+  // sentences ("≥80% of own-side opening plies get a why"); David 2026-09-15:
+  // review "takes too long and says too much in opening book moves". The
+  // contract is now coverage AGAINST THE STUDENT'S COMPUTED NEED, read from the
+  // app's own `review-need-coverage` rows: every opening ply whose need cleared
+  // the bar was narrated, and no quiet per-move beat fired where need said
+  // silent. A cold prod profile clears on the rating prior, so on a fresh
+  // context this still demands the opening be taught — the July silence cannot
+  // hide behind "need said no".
+  {
+    const rows = needCoverage?.rows ?? null;
+    const studentParity = STUDENT_SIDE === 'white' ? 1 : 0;
+    if (!rows) {
+      add('NEED coverage-rows-captured', false, 'no review-need-coverage event captured — the N2 wire did not fire');
+    } else {
+      const opening = rows.filter((r) => r.ply <= 16 && r.ply % 2 === studentParity);
+      const owed = opening.filter((r) => r.speak);
+      const covered = owed.filter((r) => r.source !== null);
+      const leaked = rows.filter((r) => !r.speak && r.spoke);
+      add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; cold=${needCoverage.gamesPlayed < 5} (games=${needCoverage.gamesPlayed})`);
+      add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8),
+        `${covered.length}/${owed.length} owed opening plies narrated (need ≥ bar)`);
+      add('NEED silent-where-not-needed', leaked.length === 0,
+        leaked.length ? `quiet per-move beat fired on ${leaked.length} ply(s) need marked silent: ${leaked.map((r) => r.ply).join(',')}` : 'no per-move beat where need said silent');
+    }
+  }
 
   // PLAN — both plan beats fired (opening developing + middlegame majority/race).
   // Check the DETERMINISTIC beat source tag, not the WARMED prose — the house-

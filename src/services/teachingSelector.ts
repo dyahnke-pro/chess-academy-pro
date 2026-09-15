@@ -28,6 +28,7 @@
 // narration" failure the CLAUDE.md standard forbids reopening.
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
+import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { turningPointCandidates, moveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
@@ -58,6 +59,9 @@ export interface SelectorInput {
   kind: SequenceKind;
   /** Audit trail only — never changes the package (invariant 1). */
   surface?: CoachSurface;
+  /** THE STUDENT (N2). When given, every student ply gets a computed need
+   *  verdict (`needByPly`); absent = a cold student (the rating prior teaches). */
+  student?: StudentNeedContext;
 }
 
 export interface Moment {
@@ -96,6 +100,10 @@ export interface TeachingPackage {
    *  N2 gates per-ply beats on this together with the need score. */
   onThread: ReadonlySet<number>;
   kind: SequenceKind;
+  /** N2 — the student term: per STUDENT ply, does this student need the quiet
+   *  teaching beat here? (Moments / must-defend / mate speak on their own
+   *  importance regardless.) Computed from `input.student` (cold when absent). */
+  needByPly: ReadonlyMap<number, NeedVerdict>;
 }
 
 export const MAX_MOMENTS = 3;
@@ -125,7 +133,7 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
   const { plies, kind } = input;
   const rating = input.rating ?? 1500;
   const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
-  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind };
+  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind, needByPly: new Map() };
 
   // 1. Landed tactics, per ply (cheap; the same computer the live beat speaks).
   const landedByPly = new Map<number, string>();
@@ -181,7 +189,23 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     if (plan) thesis = { kind: 'plan', ply: last.ply, label: null, swingPawns: null, tactic: null, plan, chainRoot: null };
   }
 
-  return { thesis, moments, chain, onThread, kind };
+  // 6. THE STUDENT TERM (N2) — need per student ply, from the student's own
+  //    data (cold → the rating prior). The tactic a moment landed is the ply's
+  //    concept for the weakness match; the thread membership is the thesis term.
+  const student = input.student ?? coldStudent(rating);
+  const tacticByPly = new Map<number, string | null>(moments.map((m) => [m.ply, m.tactic] as const));
+  const needByPly = new Map<number, NeedVerdict>();
+  for (const p of plies) {
+    if (p.playerColor !== input.studentColor) continue;
+    const tactic = tacticByPly.get(p.ply) ?? landedByPly.get(p.ply) ?? null;
+    needByPly.set(p.ply, computeNeed({
+      ply: p.ply, studentMove: true,
+      conceptId: tactic as import('../types/tacticTypes').TacticPatternType | null,
+      onThread: onThread.has(p.ply),
+    }, student));
+  }
+
+  return { thesis, moments, chain, onThread, kind, needByPly };
 }
 
 export type ThesisRegister = 'retrospective' | 'present';
@@ -252,10 +276,11 @@ export function selectTeachingForSegments(
   studentColor: 'white' | 'black',
   rating: number | undefined,
   surface: CoachSurface,
+  student?: StudentNeedContext,
 ): TeachingPackage {
   return selectTeaching({
     plies: segments.map((s) => ({ ply: s.ply, san: s.san, fenBefore: s.fenBefore, fenAfter: s.fenAfter, playerColor: s.playerColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, classification: s.classification })),
-    studentColor, rating, kind: 'game', surface,
+    studentColor, rating, kind: 'game', surface, student,
   });
 }
 
@@ -266,6 +291,8 @@ export interface TreeTeaching {
   momentPlies: number[];
   onThread: number[];
   chainRoot: string | null;
+  /** N2 — student plies whose need cleared the bar at generation time. */
+  needPlies: number[];
 }
 
 export function summarizeTeaching(pkg: TeachingPackage): TreeTeaching {
@@ -274,5 +301,6 @@ export function summarizeTeaching(pkg: TeachingPackage): TreeTeaching {
     momentPlies: pkg.moments.map((m) => m.ply),
     onThread: [...pkg.onThread].sort((a, b) => a - b),
     chainRoot: pkg.chain?.nodes[0]?.kind ?? null,
+    needPlies: [...pkg.needByPly.entries()].filter(([, v]) => v.speak).map(([ply]) => ply).sort((a, b) => a - b),
   };
 }

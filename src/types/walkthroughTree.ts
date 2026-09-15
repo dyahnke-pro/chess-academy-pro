@@ -220,6 +220,9 @@ export interface WalkthroughTreeTeaching {
   momentPlies: number[];
   onThread: number[];
   chainRoot: string | null;
+  /** Student plies whose computed need cleared the bar (unified-coach N2).
+   *  Absent on trees generated before N2. */
+  needPlies?: number[];
 }
 
 export interface WalkthroughTree {

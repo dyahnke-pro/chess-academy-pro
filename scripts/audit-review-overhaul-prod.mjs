@@ -18,6 +18,8 @@
  *   OPEN   first open analyses + the walk becomes startable (timed)
  *   FUND   ply-12 narration LEADS with the fundamentals (same piece / tempo / space)
  *   AUTO   the walk advances by itself after Start (no Forward click)
+ *   THESIS the selector's thesis spoken once at the turning-point reveal, after the pick (N1)
+ *   NEED   opening teaching covered AGAINST the student's computed need, never a sentence count (N2 — R2 retired)
  *   FREE   a piece moved on the board = exploring: banner up, walk PAUSED
  *   EXPL   the explored move is NARRATED and the engine REPLIES
  *   EXIT   Back exits exploration; Play restarts auto-advance
@@ -308,6 +310,46 @@ const run = async () => {
   await until(() => spoken().some((s) => RECAP_RE.test(s.text)), 60000, 1000);
   const recap = spoken().find((s) => RECAP_RE.test(s.text));
   await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; no aggregate line spoken`);
+  // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
+  // is spoken at the turning-point REVEAL, retrospective register, exactly once,
+  // and only after the student commits (withheld until the pick). The card is
+  // driven by resolveCards (confirm → done); its ask line is the marker that it
+  // fired at all. The legacy flat "The turning point was" reveal is a regression.
+  {
+    const lines = spoken().map((x) => x.text);
+    const askIdx = lines.findIndex((t) => /where do you think this game turned/i.test(t));
+    const thesisIdx = lines.findIndex((t) => /The game turned at /.test(t));
+    const thesisCount = lines.filter((t) => /The game turned at /.test(t)).length;
+    const legacyCount = lines.filter((t) => /The turning point was /.test(t)).length;
+    if (askIdx === -1) {
+      await add('THESIS spoken-once-at-reveal', true, 'no turning-point card this game (fewer than 2 costed moments) — thesis withheld by design');
+    } else {
+      await add('THESIS spoken-once-at-reveal', thesisCount === 1 && legacyCount === 0, `thesis lines=${thesisCount} legacy=${legacyCount}${thesisIdx >= 0 ? ` "${lines[thesisIdx].slice(0, 100)}"` : ''}`);
+      await add('THESIS withheld-until-pick', thesisIdx === -1 || thesisIdx > askIdx, `ask@${askIdx} thesis@${thesisIdx}`);
+    }
+  }
+  // NEED COVERAGE (unified-coach N2, 2026-09-15 — the retired R2's replacement):
+  // read the app's own `review-need-coverage` rows off the wire. Every opening
+  // ply whose computed need cleared the bar was narrated; no quiet per-move beat
+  // fired where need said silent. A fresh prod profile is COLD, so the rating
+  // prior owes the opening — the July silence cannot hide behind "need said no".
+  {
+    const ev = listener.getCapturedEvents().filter((e) => e.kind === 'review-need-coverage').pop();
+    let cov = null;
+    try { cov = ev ? JSON.parse(ev.details ?? '{}') : null; } catch { cov = null; }
+    const rows = cov?.rows ?? null;
+    if (!rows) {
+      await add('NEED coverage-rows-captured', false, 'no review-need-coverage event — the N2 wire did not fire');
+    } else {
+      const opening = rows.filter((r) => r.ply <= 24);
+      const owed = opening.filter((r) => r.speak);
+      const covered = owed.filter((r) => r.source !== null);
+      const leaked = rows.filter((r) => !r.speak && r.spoke);
+      await add('NEED coverage-rows-captured', rows.length > 0, `${rows.length} student plies scored; games=${cov.gamesPlayed} cold=${cov.gamesPlayed < 5}`);
+      await add('NEED owed-plies-narrated', owed.length > 0 && covered.length >= Math.ceil(owed.length * 0.8), `${covered.length}/${owed.length} owed opening plies narrated`);
+      await add('NEED silent-where-not-needed', leaked.length === 0, leaked.length ? `per-move beat on ${leaked.map((r) => r.ply).join(',')} where need said silent` : 'no per-move beat where need said silent');
+    }
+  }
   // ACC — board accuracy of every "<piece> on <square>" claim, on the board AFTER
   // that ply (present-tense text only; a projected line is about a future board).
   const PIECE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', pawn: 'p', king: 'k' };

@@ -60,7 +60,7 @@ import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
 import { stockfishEngine } from './stockfishEngine';
 import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
-import { selectTeaching, summarizeTeaching, type SelectorPly } from './teachingSelector';
+import { selectTeaching, summarizeTeaching, pliesFromSans, type SelectorPly } from './teachingSelector';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
@@ -499,6 +499,36 @@ export async function getCachedOpening(
 }
 
 /** Persist a generated tree to Dexie so the second visit is instant. */
+/** THE ONE SELECTOR's read of a taught line (unified-coach N1/N2) as the
+ *  serializable `tree.teaching` facts. Every WalkthroughTree builder in this
+ *  module calls this — the LLM-narrated main path AND the DB-only fallback —
+ *  so a tree never ships without its thesis / moments / thread / need plies.
+ *  Never throws: a line the selector cannot read yields undefined. */
+function teachingForLine(sans: readonly string[], studentSide: 'white' | 'black'): WalkthroughTree['teaching'] {
+  try {
+    const plies = pliesFromSans(sans);
+    if (plies.length === 0) return undefined;
+    return summarizeTeaching(selectTeaching({ plies, studentColor: studentSide, kind: 'line', surface: 'teach' }));
+  } catch {
+    return undefined;
+  }
+}
+
+/** The tree's main line — root → first child at every node — as SANs. */
+function mainLineSans(tree: WalkthroughTree): string[] {
+  const out: string[] = [];
+  let node: WalkthroughTreeNode | undefined = tree.root;
+  const guard = new Set<WalkthroughTreeNode>();
+  while (node && !guard.has(node)) {
+    guard.add(node);
+    const next: WalkthroughTreeNode | undefined = node.children[0]?.node;
+    if (!next?.san) break;
+    out.push(stripSanAnnotations(next.san));
+    node = next;
+  }
+  return out;
+}
+
 export async function cacheOpening(
   name: string,
   tree: WalkthroughTree,
@@ -512,6 +542,17 @@ export async function cacheOpening(
         summary: `refusing to cache "${name}" — template-fallback narration (regen next ask)`,
       });
       return;
+    }
+    // STAMP THE SELECTOR'S TEACHING ON EVERY CACHED TREE (unified-coach N1/N2).
+    // Trees reach the cache from several builders — the LLM-narrated main
+    // path, the DB-only fallback, the STATIC registry (vienna.ts & co.), a
+    // shared tree — and only the generator paths compute `teaching` up front.
+    // The cache is the ONE chokepoint every tree passes, so a tree that
+    // arrives without it gets the selector's read of its main line here.
+    if (!tree.teaching) {
+      const sans = mainLineSans(tree);
+      const t = sans.length > 0 ? teachingForLine(sans, tree.studentSide ?? 'white') : undefined;
+      if (t) tree.teaching = t;
     }
     // STAMP THE CACHE KEY ON THE TREE (David 2026-08-04 — the trap-stage hang).
     //
@@ -2721,7 +2762,9 @@ function buildFallbackTreeFromDb(
     };
     nextChildren = [{ node }];
   }
+  const fallbackTeaching = teachingForLine(entry.moves.map(stripSanAnnotations), studentSide);
   const tree: WalkthroughTree = {
+    ...(fallbackTeaching ? { teaching: fallbackTeaching } : {}),
     openingName: entry.canonicalName,
     eco: entry.eco,
     studentSide,

@@ -2,6 +2,9 @@ import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
+import { selectTeaching } from './teachingSelector';
+import { coldStudent, computeNeed, COLD_START_GAMES, type StudentNeedContext, type NeedVerdict } from './needScore';
+import { loadStudentNeedContext } from './studentNeedLoader';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsClause, computePvLine, pvDepthForRating, type PvLine } from './pvPlayback';
 import { narrateDnaLine } from './dnaLineNarrator';
@@ -501,6 +504,10 @@ export interface ReviewMoveSegment {
   bestMoveSan: string | null;
   bestMoveUci: string | null;
   narration: string | null;
+  /** N2 — the student's computed NEED for teaching at this ply (student plies
+   *  only). The quiet per-move opening beat speaks only when `need.speak`;
+   *  flags / plan one-shots / moments speak on their own importance. */
+  need?: NeedVerdict;
   /** The fundamentals this (student, flagged) move neglected — attributed on
    *  the board (principleAttribution), spoken FIRST in `narration`, and
    *  aggregated into the closing. Undefined when nothing attached. */
@@ -1090,6 +1097,11 @@ export function buildReviewSegments(
    *  allowed) matches a hole they keep falling in, the review appends an honest
    *  "this recurs for you — worth drilling" recap. Optional/inert when absent. */
   studentWeaknesses?: readonly WeaknessSignal[],
+  /** THE STUDENT'S NEED CONTEXT (unified-coach N2). Gates the quiet per-move
+   *  opening teaching on this student's own data (book departures, holes, line
+   *  familiarity, results). Absent = a cold student → the rating prior teaches
+   *  (today's behaviour for a fresh install; never a mute coach). */
+  studentNeed?: StudentNeedContext,
 ): ReviewMoveSegment[] {
   // Curated, opening-specific ideas for the dev-plan beat (null → uncurated).
   const curatedOpeningIdeas = resolveCuratedOpeningIdeas(openingName ?? null);
@@ -1107,6 +1119,33 @@ export function buildReviewSegments(
     : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
+  // THE ONE SELECTOR's student term (N2): need per student ply, computed once
+  // for the game from the student's own data (cold → the rating prior). This is
+  // what retires R2 ("teach every silent opening move"): a book ply speaks only
+  // when THIS student needs it — a line they have played right five times is
+  // silent, a line they keep leaving early is taught.
+  // COLD FAST-PATH: a student below the cold-start floor (or a caller with no
+  // context) clears the bar on the rating prior at every ply, so the thread /
+  // landed-tactic computation cannot change a verdict — skip the selector and
+  // stamp the prior directly (keeps the legacy callers' walk at its old cost).
+  const needByPly: ReadonlyMap<number, NeedVerdict> = playerColor
+    ? (!studentNeed || studentNeed.gamesPlayed < COLD_START_GAMES)
+      ? new Map(moves.slice(0, usable)
+          .filter((mv) => (mv.ply % 2 === 1 ? 'white' : 'black') === playerColor)
+          .map((mv) => [mv.ply, computeNeed({ ply: mv.ply, studentMove: true }, studentNeed ?? coldStudent(rating ?? 1500))] as const))
+      : (() => {
+        try {
+          return selectTeaching({
+            plies: moves.slice(0, usable).map((mv, i) => ({
+              ply: mv.ply, san: mv.san, fenBefore: fenChain[i].fenBefore, fenAfter: fenChain[i].fenAfter,
+              playerColor: mv.ply % 2 === 1 ? 'white' as const : 'black' as const,
+              evalBefore: mv.preMoveEval, evalAfter: mv.evaluation, classification: mv.classification,
+            })),
+            studentColor: playerColor, rating, kind: 'game', surface: 'review', student: studentNeed,
+          }).needByPly;
+        } catch { return new Map<number, NeedVerdict>(); }
+      })()
+    : new Map<number, NeedVerdict>();
   /** Fundamentals already spoken in full this game — repeats get the short stem. */
   const seenFundamentals = new Set<import('./principleAttribution').FundamentalId>();
   const segments: ReviewMoveSegment[] = [];
@@ -2140,6 +2179,9 @@ export function buildReviewSegments(
       // actually SEE the game).
       if (storyGame.pgn) segmentStoryGame = { citation: storyGame.citation, pgn: storyGame.pgn, overview: storyGame.overview, criticalMoments: storyGame.criticalMoments };
     }
+    // N2 — the student's need at this ply. Only the STUDENT's plies carry one;
+    // undefined on the opponent's / when no student colour was given.
+    const needHere = needByPly.get(m.ply);
     if (
       narration === null
       && playerColor !== undefined
@@ -2147,6 +2189,10 @@ export function buildReviewSegments(
       && moverColor === playerColor
       && m.ply <= OPENING_TEACH_MAX_PLY
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+      // THE BOOK-MOVE RULE (CLAUDE.md standard, N2): a quiet opening ply speaks
+      // only when this student's computed need clears the bar. A cold student
+      // clears it on the prior; a familiar, well-played line is silent.
+      && (needHere ? needHere.speak : true)
     ) {
       // GROUNDED opening detail FIRST (David 2026-07-24: "we already attached his
       // corpus for opening details, master DB for games he doesn't have") — what
@@ -2350,6 +2396,7 @@ export function buildReviewSegments(
       bestMoveSan,
       bestMoveUci: m.bestMove,
       narration,
+      ...(needHere ? { need: needHere } : {}),
       narrationSource,
       ...(fundamentals.length ? { fundamentals } : {}),
       // Plan-idea arrows take the slot when present; else the threat arrows
@@ -3452,6 +3499,10 @@ export async function generateReviewNarration(params: {
    *  accuracy / seat / number nets reject any warm that loses a facet — so no
    *  fact is ever compressed away regardless of what the model does. */
   uncapped?: boolean;
+  /** The game's opening id / ECO when known — scope the student's need context
+   *  (opening results, departures) to this opening (N2). */
+  openingId?: string | null;
+  eco?: string | null;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
 
@@ -3516,7 +3567,30 @@ export async function generateReviewNarration(params: {
   // the "this recurs for you, drill it" recap. Memoized once-per-game; degrades
   // to [] (inert) on any failure.
   const studentWeaknesses = await loadWeaknessSignals().catch(() => []);
-  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses);
+  // THE STUDENT'S NEED CONTEXT (unified-coach N2) — loaded once per game; cold
+  // on any failure (the coach teaches, never mutes).
+  const studentNeed = await loadStudentNeedContext({
+    rating: playerRating, sans: moves.slice(0, usableCount).map((m) => m.san), studentColor: playerColor,
+    openingId: params.openingId ?? null, eco: params.eco ?? null,
+  }).catch(() => coldStudent(playerRating));
+  const segments = buildReviewSegments(moves.slice(0, usableCount), playerColor, openingName, uncapped, playerRating, studentWeaknesses, studentNeed);
+  // NEED COVERAGE (the audit's instrument for the retired R2 — CLAUDE.md
+  // standard): per student ply, the computed need and whether the quiet
+  // teaching beat spoke. The prod audit reads THIS, not a sentence count.
+  {
+    const rows = segments.flatMap((sg) => sg.need
+      ? [{ ply: sg.ply, score: sg.need.score, speak: sg.need.speak, prior: sg.need.prior, spoke: sg.narrationSource === 'per-move', source: sg.narrationSource ?? null }]
+      : []);
+    const owed = rows.filter((r) => r.speak && r.ply <= OPENING_TEACH_MAX_PLY);
+    const covered = owed.filter((r) => r.source !== null);
+    void logAppAudit({
+      kind: 'review-need-coverage',
+      category: 'subsystem',
+      source: 'coachFeatureService.generateReviewNarration',
+      summary: `need coverage: ${covered.length}/${owed.length} owed opening plies narrated; ${rows.filter((r) => !r.speak).length} silent by need; cold=${studentNeed.gamesPlayed < 5} games=${studentNeed.gamesPlayed}`,
+      details: JSON.stringify({ gamesPlayed: studentNeed.gamesPlayed, rows }),
+    });
+  }
 
   // FUTURE-POSITION PROJECTIONS (#1 plan realization + #2 consequence projection)
   // — Stockfish-projected teaching, uncapped-diagnostic only (bounded budget +

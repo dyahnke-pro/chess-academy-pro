@@ -211,7 +211,11 @@ try {
       : `no cached tree read (${teachingRow.reason})`) + (teachingRow.ok && !generatedThisRun ? ' — ROW PREDATES THIS RUN: the lesson was served from a static/voiced tier, so the generator wire was not exercised; pick a DB-generated AUDIT_LESSON' : '');
 
   // ── 1. ON TOPIC across the opening plies.
-  const drift = spoken.filter((line) => OFF_TOPIC.some((re) => re.test(line)));
+  // The classroom OPENER greeting (spoken on entry, before any lesson) names
+  // example openings ("teach me the Italian", "play the Caro-Kann") — it is the
+  // hub's welcome, not the lesson, so it is not drift (2026-09-15 false red).
+  const GREETING = /I don't have any of your games yet|What are we working on today/i;
+  const drift = spoken.filter((line) => !GREETING.test(line) && OFF_TOPIC.some((re) => re.test(line)));
   check('lesson never teaches another opening', drift.length === 0,
     drift.length ? `off-topic: ${drift.map((d) => JSON.stringify(d.slice(0, 90))).join(' | ')}` : `${spoken.length} line(s) checked, none off-topic`);
 
