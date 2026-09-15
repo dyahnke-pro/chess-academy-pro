@@ -39,7 +39,7 @@ export function PuzzleQuickSettings(): JSX.Element {
 
   return (
     <div
-      className="max-w-lg mx-auto w-full rounded-2xl border border-theme-border bg-theme-surface/60 overflow-hidden"
+      className="max-w-lg mx-auto w-full shrink-0 rounded-2xl border border-theme-border bg-theme-surface/60 overflow-hidden"
       data-testid="puzzle-quick-settings"
     >
       <button

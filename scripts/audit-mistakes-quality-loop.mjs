@@ -555,9 +555,22 @@ async function main() {
   // panel should reflect that even before any puzzles exist.
   await page.goto(`${BASE_URL}/tactics`, { waitUntil: 'domcontentloaded' });
   await waitForMount(page, '[data-testid="puzzle-quick-settings"]', '/tactics QS panel');
+  // A REAL tap must open the panel. 2026-09-15: on every phone viewport the
+  // panel root (an overflow-hidden flex item in the flex-col scroll body) was
+  // shrunk to its 2px border by the tile grid, so the toggle was unreachable —
+  // a force-click landed on the grid and the un-guarded getAttribute below
+  // FATALed the whole loop instead of recording the bug. Assert the panel
+  // actually opened (record, never throw), and read the toggle only if it did.
   await tap(page, '[data-testid="puzzle-quick-settings-toggle"]', 'open QS panel');
   await page.waitForTimeout(400);
-  const timerToggleChecked = await page.locator('[data-testid="qs-toggle-timer"]').getAttribute('data-checked');
+  const qsToggleBox = await page.locator('[data-testid="puzzle-quick-settings-toggle"]').boundingBox();
+  const qsPanelOpen = await page.locator('[data-testid="puzzle-quick-settings-panel"]').count() > 0;
+  record('QS toggle is tappable + a real tap opens the panel',
+    qsPanelOpen && (qsToggleBox?.height ?? 0) >= 24,
+    `panelOpen=${qsPanelOpen}, toggleHeight=${qsToggleBox?.height ?? 'none'}`);
+  const timerToggleChecked = qsPanelOpen
+    ? await page.locator('[data-testid="qs-toggle-timer"]').getAttribute('data-checked', { timeout: 5000 }).catch(() => null)
+    : null;
   record('countdown clock default OFF (background mode is default)',
     timerToggleChecked === 'false',
     `data-checked=${timerToggleChecked}`);
