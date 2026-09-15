@@ -58,6 +58,11 @@ const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
 const BOOT_TIMEOUT_MS = 45_000;
 /** Cold generation on prod (DeepSeek) + the muted, voice-gated playback. */
 const LESSON_BUDGET_MS = Number(process.env.AUDIT_CONCEPT_BUDGET_MS ?? 210_000);
+/** Once the lesson MOUNTS, playback gets its own clock — a cold generation can
+ *  eat ~200s of the lesson budget and leave no time for the walk to reach the
+ *  ply that lands the tactic (2026-09-15: entry #10 …Bg4 was reached, its
+ *  narration was never spoken, and the audit called the concept missing). */
+const PLAYBACK_BUDGET_MS = Number(process.env.AUDIT_CONCEPT_PLAYBACK_MS ?? 150_000);
 
 /** The engine's invariants (conceptEngine TACTIC_INVARIANT), matched on
  *  SUBSTANCE: the concept NAMED plus the invariant's distinctive cue. The
@@ -132,10 +137,11 @@ async function askForLesson(page, listener, ask, label) {
   // the typo run on its first tick, before the picker was answered).
   const spokenStart = spokenLines(listener).length;
   let spokenBefore = spokenStart;
-  while (Date.now() - started < LESSON_BUDGET_MS) {
+  let mountedAt = 0;
+  while (mounted ? Date.now() - mountedAt < PLAYBACK_BUDGET_MS : Date.now() - started < LESSON_BUDGET_MS) {
     await page.waitForTimeout(3000);
     for (const t of WALKTHROUGH_TESTIDS) {
-      if (!mounted && (await page.locator(`[data-testid="${t}"]`).count()) > 0) mounted = t;
+      if (!mounted && (await page.locator(`[data-testid="${t}"]`).count()) > 0) { mounted = t; mountedAt = Date.now(); }
     }
     const lines = spokenLines(listener);
     // Stop once the concept has been voiced, or the lesson reached its leaf.
