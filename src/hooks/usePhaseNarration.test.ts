@@ -59,7 +59,13 @@ vi.mock('./stockfishFenCache', () => ({
 
 vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn() }));
 vi.mock('../db/schema', () => ({ db: { profiles: { get: () => Promise.resolve({ currentRating: 1200 }) } } }));
-vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: () => Promise.resolve('') }));
+// The grounded chokepoint. Default: silent (''), which keeps every test
+// below honest about what the NOTE path speaks on its own. A test that needs
+// the engine half VOICED swaps in the G0 echo — `voiceFacts(preferRaw)` speaks
+// the computed facts it is handed, so echoing `extraFacts` IS the contract.
+const groundedMoveFeedback = vi.fn(async (_args: unknown): Promise<string> => '');
+const echoComputedFacts = async (args: unknown): Promise<string> => (args as { extraFacts?: string }).extraFacts ?? '';
+vi.mock('../services/coachApi', () => ({ groundedMoveFeedback: (...a: unknown[]): Promise<string> => groundedMoveFeedback(a[0]) }));
 vi.mock('../services/liveTacticsContext', () => ({
   buildFedTacticsContext: () => Promise.resolve(undefined),
   speakDeepestLookahead: () => null,
@@ -120,6 +126,8 @@ const setup = (getLiveFen?: () => string) => renderHook(() => usePhaseNarration(
 beforeEach(() => {
   spoken.length = 0;
   speakPackage.mockClear();
+  groundedMoveFeedback.mockReset();
+  groundedMoveFeedback.mockImplementation(async () => '');
   engineGate = deferred<unknown>();
   noteText = 'Black should trade the light-squared bishops.';
   noteOrigin = 'position';
@@ -168,11 +176,15 @@ describe('a sentence is never said twice on one transition', () => {
     // The note is spoken early AND rides into `extraFacts`, so it returns
     // inside the grounded response. Keeping it there is deliberate — the chat
     // report should read as one whole thing — so the voice is what dedupes.
+    // With the chokepoint ECHOING its computed facts (the G0 contract) the
+    // note really does return inside the grounded text — under the old
+    // always-'' mock this test could not fail.
+    groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
     const { result } = setup(() => FEN);
     act(() => { void result.current.narrate(EVENT, 'full'); });
     await vi.waitFor(() => expect(spoken.length).toBeGreaterThan(0), { timeout: 2000 });
     engineGate.resolve(ANALYSIS);
-    await new Promise((r) => setTimeout(r, 80));
+    await new Promise((r) => setTimeout(r, 120));
     const hits = spoken.filter((s) => s.includes('light-squared bishops')).length;
     expect(hits, `the note was spoken ${hits} times: ${JSON.stringify(spoken)}`).toBe(1);
   });
@@ -247,5 +259,59 @@ describe('a borrowed note is framed as borrowed', () => {
     // With no `plans` on the note there is nothing a borrowed tier may say, so
     // the correct outcome is silence rather than the explanation leaking.
     expect(spoken.join(' ')).toBe('');
+  });
+});
+
+describe('the COMPUTED CONCEPT speaks at a phase transition (P4c — a wire that fires)', () => {
+  // The contract: the phase beat VOICES the ranked concept clause that
+  // computePositionFacts derives from the engine's own line (one computer).
+  // This is the surface-level proof — the hook, not just positionFacts — and
+  // the fixture was probed through the same board router before it was
+  // pinned: white to move, the engine's line is Ne5+, a royal fork on Kd7 and
+  // the winnable Rc6. Corpus silent, so only the computed facts can speak.
+  const FORK_FEN = '8/3k4/2r5/8/8/3N4/8/6K1 w - - 0 40';
+  const FORK_EVENT: PhaseTransitionEvent = {
+    kind: 'middlegame-to-endgame',
+    fen: FORK_FEN,
+    playerColor: 'white',
+  } as PhaseTransitionEvent;
+  // Two lines, as a real multipv read has: the fork is the ONLY move that
+  // wins (+3.5), everything else is level — that gap is the decision leverage
+  // the importance gate needs before any clause speaks (one computer, one
+  // criticality: the same bar the live briefing uses).
+  const FORK_ANALYSIS = {
+    bestMove: 'd3e5', evaluation: 350, isMate: false, mateIn: null,
+    depth: 12,
+    topLines: [
+      { rank: 1, evaluation: 350, moves: ['d3e5'], mate: null },
+      { rank: 2, evaluation: 0, moves: ['g1f2'], mate: null },
+    ],
+    nodesPerSecond: 1,
+  };
+
+  it('hands the fork, with its invariant, to the grounded chokepoint — and it is spoken', async () => {
+    noteText = '';
+    groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
+    const { result } = setup(() => FORK_FEN);
+    act(() => { void result.current.narrate(FORK_EVENT, 'full'); });
+    engineGate.resolve(FORK_ANALYSIS);
+    // Mock-independent proof: the concept clause reached the chokepoint's facts.
+    await vi.waitFor(() => expect(groundedMoveFeedback).toHaveBeenCalledTimes(1), { timeout: 4000 });
+    const handed = (groundedMoveFeedback.mock.calls[0][0] as { extraFacts?: string }).extraFacts ?? '';
+    expect(handed, 'the concept clause never reached the chokepoint').toMatch(/a fork hits two targets at once/);
+    // …and once the chokepoint voices it, the student hears it.
+    await vi.waitFor(() => {
+      expect(spoken.join(' '), `spoken: ${spoken.join(' ')}`).toMatch(/a fork hits two targets at once/);
+    }, { timeout: 4000 });
+  });
+
+  it('a spoken concept is gate-clean (you/they perspective, never we/our)', async () => {
+    noteText = '';
+    groundedMoveFeedback.mockImplementationOnce(echoComputedFacts);
+    const { result } = setup(() => FORK_FEN);
+    act(() => { void result.current.narrate(FORK_EVENT, 'full'); });
+    engineGate.resolve(FORK_ANALYSIS);
+    await vi.waitFor(() => expect(spoken.length).toBeGreaterThan(0), { timeout: 4000 });
+    expect(spoken.join(' ')).not.toMatch(/\b(we|our|us)\b/i);
   });
 });

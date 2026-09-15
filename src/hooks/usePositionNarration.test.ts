@@ -67,7 +67,7 @@ vi.mock('../services/appAuditor', () => ({
 }));
 
 type StreamCb = (chunk: string) => void;
-const chatCalls: { addition: string; task: string; onStream?: StreamCb }[] = [];
+const chatCalls: { addition: string; task: string; onStream?: StreamCb; messages: unknown }[] = [];
 let chatResolver: ((text: string) => void) | null = null;
 let chatRejecter: ((err: Error) => void) | null = null;
 
@@ -79,7 +79,7 @@ vi.mock('../services/coachApi', () => ({
       onStream?: StreamCb,
       task: string = 'chat_response',
     ) => {
-      chatCalls.push({ addition: systemPromptAddition, task, onStream });
+      chatCalls.push({ addition: systemPromptAddition, task, onStream, messages: _messages });
       return new Promise<string>((resolve, reject) => {
         chatResolver = resolve;
         chatRejecter = reject;
@@ -393,5 +393,25 @@ describe('usePositionNarration', () => {
 
     // New FEN → engine runs again, no cache-hit audit for THIS call.
     expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount + 1);
+  });
+});
+
+describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that fires)', () => {
+  it('hands the fork the engine line lands to the brain as a computed board fact', async () => {
+    // White to move, student white; the engine's line is Ne5+ — a royal fork
+    // on Kd7 and the winnable Rc6. Probed through conceptForBoard with this
+    // exact analysis before it was pinned. The read is the LLM's phrasing of
+    // the computed facts (G0), so the proof is that the concept clause is IN
+    // the facts handed over — not that the mocked brain echoed it.
+    const FORK_FEN = '8/3k4/2r5/8/8/3N4/8/6K1 w - - 0 40';
+    vi.mocked(stockfishEngine.analyzeWithBudget).mockResolvedValueOnce({
+      bestMove: 'd3e5', evaluation: 350, isMate: false, mateIn: null, depth: 12, nodesPerSecond: 1,
+      topLines: [{ rank: 1, evaluation: 350, moves: ['d3e5'], mate: null }],
+    } as unknown as Awaited<ReturnType<typeof stockfishEngine.analyzeWithBudget>>);
+    const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white' }));
+    act(() => { void result.current.narrate(); });
+    await waitFor(() => expect(chatCalls.length).toBe(1), { timeout: 4000 });
+    const handed = JSON.stringify(chatCalls[0].messages);
+    expect(handed, 'the concept clause never reached the brain call').toMatch(/a fork hits two targets at once/);
   });
 });

@@ -540,6 +540,23 @@ Update the phase's status marker + the decisions log as each lands.
   king+rook) never "landed" on any surface. Royal forks now need one other
   winnable target (same rule the skewer branch already had). Gate:
   `pvPlayback.test.ts` royal-fork test.
+- **P4c (part 3) — the SURFACE-level fires-for-real gates** [2026-09-15]:
+  parts 1–2 had gated the COMPUTERS (`positionFacts`, `dnaLineNarrator`,
+  `engineDeltaLines`) and "verified by inspection" that the hooks' deny-lists
+  let the concept clause through. Inspection is not a wire that fires (David
+  2026-08-07). Every hook surface now carries a test that drives the HOOK with
+  a real position + a real engine line and proves the concept comes OUT of
+  that surface: Play phase transition (`usePhaseNarration.test.ts` — spoken),
+  Learn live coach (`useLiveCoach.test.tsx` — reaches `groundedMoveFeedback`'s
+  `extraFacts`), Read-this-position (`usePositionNarration.test.ts` — reaches
+  the brain call's computed facts), endgame drills
+  (`endgameDrillService.test.ts` — every drill item carries exactly what the
+  one hint source computes; ≥15 engine-named). Learn WALKTHROUGH's
+  `landedTacticTeaching` splice (openingGenerator PASS 1) has no generation
+  harness — it is proven on PROD by the P5 live-gameplay audit (narration
+  listener on a trap ply), not by a synthetic LLM/DB harness. Fixtures probed
+  through each hook's own router before pinning; all two-register + you/they
+  gate-clean.
 - **P4c — wire the LIVE-GAMEPLAY narration computers** [done — parts 1–2 above]:
   weave `conceptForBoard` into the per-move narration paths so themes/concepts are
   spoken mid-game — `openingGenerator`/walkthrough (Learn + Teach-x-opening),

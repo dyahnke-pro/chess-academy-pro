@@ -10,6 +10,9 @@ import {
   defaultDrillTier,
 } from './endgameDrillService';
 import { getEndgamePrinciples, getPawnEndings } from './endgameLessonsService';
+import puzzlesData from '../data/puzzles.json';
+import { conceptForLine } from './conceptEngine';
+import { conceptHintForPuzzle } from './puzzleConceptHint';
 
 describe('endgameDrillService', () => {
   it('returns empty drills for a lesson with no practiceThemes', () => {
@@ -129,6 +132,41 @@ describe('endgameDrillService', () => {
     const all = getDrillPositionsForLesson(lesson, { seed: 1 });
     expect(all.length).toBeGreaterThan(50);
   });
+
+  it('every drill carries the COMPUTED concept hint the engine names for its solution (P3 — a wire that fires)', () => {
+    // The contract (conceptHintForPuzzle, THE one source): the engine's lead
+    // concept's short register leads; the theme→hint table is only the
+    // fallback when the engine's leads are positional or absent. This proves
+    // the DRILL ITEM carries exactly what that source computes for its raw
+    // puzzle — not that the function exists. Measured 2026-09-15 over the
+    // shipped lesson corpus: 47 of 70 drills carry an engine short; the
+    // vacuity floor below is well under that.
+    type RawPuzzle = { id: string; fen: string; moves: string; themes: string[] };
+    const byId = new Map((puzzlesData as RawPuzzle[]).map((p) => [p.id, p]));
+    const lessons = [...getEndgamePrinciples(), ...getPawnEndings()].filter((l) => (l.practiceThemes?.length ?? 0) > 0);
+    let engineHinted = 0;
+    let checked = 0;
+    for (const lesson of lessons) {
+      for (const d of getDrillPositionsForLesson(lesson, { limit: 3, seed: 1 })) {
+        const id = /#(\S+)/.exec(d.source)?.[1];
+        const raw = id ? byId.get(id) : undefined;
+        expect(raw, `drill ${d.source} does not resolve to a puzzle`).toBeDefined();
+        if (!raw) continue;
+        checked += 1;
+        // The drill carries what the one source computes for its raw puzzle.
+        expect(d.conceptHint, `${d.source}: the drill's hint must be the computed one`).toBe(conceptHintForPuzzle({ fen: raw.fen, moves: raw.moves, themes: raw.themes }) ?? undefined);
+        // …and the engine, not the tag table, named it whenever it could.
+        const turn = raw.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+        const lead = conceptForLine({ fen: raw.fen, uci: raw.moves.split(/\s+/), studentColor: turn === 'w' ? 'b' : 'w', max: 1 }).at(0);
+        if (lead && lead.source !== 'positional') {
+          expect(d.conceptHint).toBe(lead.short.trim());
+          engineHinted += 1;
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(10);
+    expect(engineHinted, 'the engine named nothing on any drill — the wire is not firing').toBeGreaterThanOrEqual(15);
+  }, 20000);
 
   describe('defaultDrillTier', () => {
     it('defaults to the player endgame level (skill preferred)', () => {
