@@ -109,6 +109,7 @@ try {
   const box = page.locator('[data-testid="chat-text-input"]');
   await box.waitFor({ timeout: 20000 });
   await box.click();
+  const runStart = Date.now();
   await box.pressSequentially(LESSON, { delay: 12 });
   await box.press('Enter');
 
@@ -176,6 +177,38 @@ try {
     `${paths.length} narrated node(s), ${listener.getCapturedEvents().length} audit event(s) total`);
   check('TTS capture saw the coach speak', spoken.length >= 4,
     `${spoken.length} spoken line(s)`);
+
+  // ── 0b. THE ONE SELECTOR rode the generated tree (unified-coach N1,
+  //       2026-09-15). `openingGenerator` runs `selectTeaching` over the DB
+  //       spine and stores `tree.teaching` (thesis + moment plies + on-thread)
+  //       on the cached WalkthroughTree — facts the Watch renders in N3. Read
+  //       the row the app just wrote; a tree without `teaching` means the
+  //       selector wire never fired on the live bundle.
+  const teachingRow = await page.evaluate(() => new Promise((resolve) => {
+    setTimeout(() => resolve({ ok: false, reason: 'open-timeout' }), 10000);
+    const req = indexedDB.open('ChessAcademyDB');
+    req.onerror = () => resolve({ ok: false, reason: 'open-error' });
+    req.onsuccess = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains('cachedOpenings')) { db.close(); return resolve({ ok: false, reason: 'no-store' }); }
+      const all = db.transaction('cachedOpenings', 'readonly').objectStore('cachedOpenings').getAll();
+      all.onsuccess = () => {
+        db.close();
+        const rows = (all.result ?? []).filter((r) => r.tree);
+        rows.sort((a, b) => (b.generatedAt ?? 0) - (a.generatedAt ?? 0));
+        const r = rows[0];
+        resolve(r ? { ok: true, name: r.displayName ?? r.normalizedName, generatedAt: r.generatedAt, teaching: r.tree?.teaching ?? null, plies: r.tree?.spine?.length ?? null } : { ok: false, reason: 'no-generated-rows' });
+      };
+      all.onerror = () => { db.close(); resolve({ ok: false, reason: 'read-error' }); };
+    };
+  }));
+  const t = teachingRow.teaching;
+  const generatedThisRun = teachingRow.ok && (teachingRow.generatedAt ?? 0) >= runStart;
+  check('generated tree carries the selector\'s teaching package (tree.teaching)',
+    generatedThisRun && !!t && typeof t.thesis?.kind === 'string' && Array.isArray(t.momentPlies) && Array.isArray(t.onThread),
+    teachingRow.ok
+      ? `${teachingRow.name}: thesis=${t?.thesis?.kind ?? 'MISSING'}${t?.thesis?.label ? ` @ ${t.thesis.label}` : ''}${t?.thesis?.tactic ? ` (${t.thesis.tactic})` : ''} moments=[${(t?.momentPlies ?? []).join(',')}] onThread=${(t?.onThread ?? []).length}`
+      : `no cached tree read (${teachingRow.reason})`) + (teachingRow.ok && !generatedThisRun ? ' — ROW PREDATES THIS RUN: the lesson was served from a static/voiced tier, so the generator wire was not exercised; pick a DB-generated AUDIT_LESSON' : '');
 
   // ── 1. ON TOPIC across the opening plies.
   const drift = spoken.filter((line) => OFF_TOPIC.some((re) => re.test(line)));

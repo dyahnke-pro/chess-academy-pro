@@ -551,6 +551,33 @@ const run = async () => {
   const seen = new Map();
   let dup = null;
   for (const p of plies) { const n = (p.narr || '').trim().toLowerCase(); if (n.length < 8) continue; if (seen.has(n)) { dup = p.narr; break; } seen.set(n, p.ply); }
+  // THESIS (unified-coach N1, 2026-09-15) — the ONE selector's game-level
+  // thesis is spoken at the turning-point REVEAL, in the retrospective register,
+  // and only after the student commits a pick (withheld until then). When the
+  // card fired, the reveal must carry "The game turned at …" (the computed
+  // thesis; the old flat "The turning point was …" is the fallback for a
+  // thesis that is not the answer ply — which the shared computation makes
+  // impossible, so its presence is a regression). Exactly ONCE across the walk.
+  if (cardsFired.has('review-turning-point-card') || cardsFired.has('review-turning-point-reveal')) {
+    // Read the EXACT spoken text (the /api/tts body), not the 40-char
+    // listener preview — the thesis sits mid-sentence after the verdict.
+    const spokenFull = ttsSpoken.length ? ttsSpoken : voiceAll;
+    const thesisLines = spokenFull.filter((l) => /The game turned at /.test(l));
+    const legacyLines = spokenFull.filter((l) => /The turning point was /.test(l));
+    add('THESIS spoken-once-at-reveal', thesisLines.length === 1 && legacyLines.length === 0,
+      thesisLines.length === 1
+        ? `"${thesisLines[0].slice(0, 90)}"`
+        : `thesis lines=${thesisLines.length} legacy lines=${legacyLines.length}`);
+    // Withheld until the pick: no thesis line before the card was driven — the
+    // card's own prompt is the last line before the reveal.
+    const idxThesis = spokenFull.findIndex((l) => /The game turned at /.test(l));
+    const idxAsk = spokenFull.findIndex((l) => /where do you think this game turned/i.test(l));
+    add('THESIS withheld-until-pick', idxAsk === -1 || idxThesis === -1 || idxThesis > idxAsk,
+      `ask@${idxAsk} thesis@${idxThesis}`);
+  } else {
+    add('THESIS spoken-once-at-reveal', true, 'no turning-point card this game (fewer than 2 costed moments) — thesis withheld by design');
+  }
+
   add('R10 no-repetition', dup === null, dup ? `duplicate line: "${dup.slice(0, 60)}"` : 'every narration line distinct');
 
   // Projected-line text describes HYPOTHETICAL future positions ("it runs
