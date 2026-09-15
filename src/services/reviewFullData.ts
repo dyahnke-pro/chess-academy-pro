@@ -241,7 +241,7 @@ export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string,
     && ctx.ply >= ctx.forcedRunStartPly
     && matingSideIsStudent(ctx.allSans, studentColorWB);
   if (ctx.classification && ctx.classification !== 'good' && ctx.classification !== 'book' && !insideStudentForcedMate) {
-    const swingBit = swing != null ? ` (eval swung ${(swing / 100).toFixed(1)})` : '';
+    const swingBit = swing != null ? `, costing about ${(swing / 100).toFixed(1)} points` : '';
     // WHY it's a mistake, when we can prove it (a premature central break). Danya
     // leads with the positional reason, THEN names the better move — so does this.
     const whyBad = (ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'inaccuracy')
@@ -255,7 +255,7 @@ export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string,
     // clue to whose move it was — and with it subject-less, the LLM voiced Black's
     // great move as "a great move from you" (the White student). Mirror the [move]
     // facet's "You:" / "Your opponent:" tag so attribution is never guessed.
-    facets.push(`[quality] ${subj}: ${lowerFirst(cap(ctx.classification))} move${swingBit}${betterBit}.`);
+    facets.push(`[quality] ${subj}: ${qualityClause(ctx.classification, isStudent)}${swingBit}${betterBit}.`);
   }
   // ── 2a. THE FUNDAMENTAL NEGLECTED (David 2026-09-05) — the attributed rule
   // the flagged move crossed, proven on the board; stated as its own facet so
@@ -569,6 +569,26 @@ export function computeThroughLine(fensAfter: string[], studentColorWB: Color | 
 
 function cap(s: string): string { return s.charAt(0).toUpperCase() + s.slice(1); }
 function lowerFirst(s: string): string { return s.charAt(0).toLowerCase() + s.slice(1); }
+
+// The move-quality label, spoken as English. The old template read
+// "<Classification> move" — so the coach literally said "inaccuracy move" and
+// "great move" in the same breath (David 2026-09-15, reading a prod review
+// transcript). The classification is still the computer's verdict; only its
+// wording changes.
+const QUALITY_CLAUSE: Record<string, string> = {
+  inaccuracy: 'that was an inaccuracy',
+  mistake: 'that was a mistake',
+  blunder: 'that was a blunder',
+  miss: 'that missed the chance',
+  great: 'that was a great move',
+  brilliant: 'that was a brilliant move',
+  best: 'that was the best move',
+};
+function qualityClause(classification: string, isStudent: boolean): string {
+  const clause = QUALITY_CLAUSE[classification.toLowerCase()];
+  if (clause) return clause;
+  return `${lowerFirst(cap(classification))}${isStudent ? '' : ''}`;
+}
 function pieceWord(p: string): string {
   return ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[p.toLowerCase()] ?? 'piece';
 }

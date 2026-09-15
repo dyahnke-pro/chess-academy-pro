@@ -216,12 +216,24 @@ const run = async () => {
       ['review-trap-reveal', '[data-testid="review-trap-done"]'],
       ['review-rewind-card', '[data-testid="review-rewind-decline"]'],
       ['review-turning-point-card', '[data-testid="review-turning-point-confirm"]'],
-      ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
+      // The reveal is SPOKEN after the pick — a human reads/hears it before
+      // tapping Done. Dismissing it 400ms after confirm cancelled the speech
+      // and the THESIS line never reached the listener (2026-09-15). Handled
+      // below with a wait, not in this table.
+      // ['review-turning-point-reveal', '[data-testid="review-turning-point-done"]'],
       ['review-blunder-capture', '[data-testid="review-capture-skip"]'],
       ['review-sequence-ask', '[data-testid="review-sequence-skip"]'],
       ['review-sequence-playback', '[data-testid="review-sequence-skip"]'],
     ]) {
       if (await has(page, `[data-testid="${c}"]`) && await has(page, sel)) { await page.locator(sel).first().click({ timeout: 1500, force: true }).catch(() => undefined); await page.waitForTimeout(400); }
+    }
+    if (await has(page, '[data-testid="review-turning-point-reveal"]')) {
+      // Wait for the reveal's spoken line (the thesis) to land in the listener,
+      // like a human who reads it before moving on; then Done.
+      await until(() => spoken().some((x) => /The game turned at |The turning point was /.test(x.text)), 12000, 300);
+      await page.waitForTimeout(600);
+      await page.locator('[data-testid="review-turning-point-done"]').first().click({ timeout: 1500, force: true }).catch(() => undefined);
+      await page.waitForTimeout(400);
     }
   };
   const goTo = async (target) => {

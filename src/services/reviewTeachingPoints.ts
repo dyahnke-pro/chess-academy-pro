@@ -35,6 +35,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
 import { legalSeeGainOn } from './positionReadingService';
 import { captureHasCounterTactic, detectNewThreat } from './groundedAnswer';
+import { isKnightOutpost } from './forwardTeaching';
 
 const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -173,18 +174,80 @@ export function worstPlacedFriendlyPiece(fen: string, studentColorWB: Color): st
   try { chess = new Chess(fen); } catch { return null; }
   const fullmove = Number(fen.split(' ')[5] ?? '0');
   if (fullmove < 10) return null;
+  const worst = findWorstPlacedPiece(chess, studentColorWB);
+  if (!worst) return null;
+  return `your worst-placed piece is the ${PIECE_NOUN[worst.type]} on ${worst.sq} — it has almost no squares, so the plan is to reroute it somewhere it actually does a job`;
+}
+
+/**
+ * THE ONE worst-placed-piece finder (David 2026-09-15). Two copies of this
+ * selection loop existed — M12's facet and `deriveNextPlans`' rescue plan — and
+ * only one carried the gates, so the review said "your knight sits on an
+ * outpost on d4, make it the boss of the board" and "rescue your worst piece,
+ * the knight on d4" in the SAME breath, and offered a slow reroute on the ply a
+ * check-fork landed. One finder, one set of gates, no drift.
+ */
+export function findWorstPlacedPiece(
+  chess: Chess,
+  studentColorWB: Color,
+): { sq: string; type: string; m: number } | null {
+  // While a king is in check the plan IS the check; nothing gets repositioned.
+  if (chess.isCheck()) return null;
+  const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   const mob = mobilityMap(chess, studentColorWB); // ONE moves() enumeration
   let worst: { sq: string; type: string; m: number } | null = null;
   for (const c of cells(chess)) {
     if (c.color !== studentColorWB) continue;
     if (c.type !== 'n' && c.type !== 'b' && c.type !== 'r') continue;
+    // A piece UNDER ATTACK needs saving, not rerouting — and its mobility reads
+    // low precisely because it is boxed in by the attack. Naming it "worst
+    // placed, reroute it" buries the live threat under a positional plan.
+    try { if (chess.attackers(c.square as Square, enemy).length > 0) continue; } catch { /* keep the candidate */ }
+    // A minor on a real OUTPOST is doing a job — one board cannot call the same
+    // knight an outpost and the worst piece.
+    if ((c.type === 'n' || c.type === 'b') && isKnightOutpost(chess, c.square as Square, studentColorWB)) continue;
+    // A PINNED piece is immobile because of the pin, not because it is badly
+    // placed; the lesson there is the pin, not a reroute.
+    if (mob.get(c.square) === 0 && isPinnedPiece(chess, c.square as Square, studentColorWB)) continue;
     const m = mob.get(c.square) ?? 0;
     if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
   }
-  if (worst && worst.m <= 1) {
-    return `your worst-placed piece is the ${PIECE_NOUN[worst.type]} on ${worst.sq} — it has almost no squares, so the plan is to reroute it somewhere it actually does a job`;
-  }
-  return null;
+  return worst && worst.m <= 1 ? worst : null;
+}
+
+/** Is this piece pinned to its own king (so its immobility is the pin's doing)? */
+function isPinnedPiece(chess: Chess, sq: Square, color: Color): boolean {
+  try {
+    const king = cells(chess).find((c) => c.type === 'k' && c.color === color);
+    if (!king) return false;
+    const enemy: Color = color === 'w' ? 'b' : 'w';
+    const f = (s: string): number => s.charCodeAt(0) - 97;
+    const r = (s: string): number => Number(s[1]) - 1;
+    const df = Math.sign(f(sq) - f(king.square));
+    const dr = Math.sign(r(sq) - r(king.square));
+    if (df === 0 && dr === 0) return false;
+    // Must be on a king ray with nothing between, and a slider behind it.
+    let cf = f(king.square) + df;
+    let cr = r(king.square) + dr;
+    while (cf >= 0 && cf < 8 && cr >= 0 && cr < 8) {
+      const at = `${String.fromCharCode(97 + cf)}${cr + 1}`;
+      if (at === sq) break;
+      if (chess.get(at as Square)) return false; // blocked before the piece
+      cf += df; cr += dr;
+    }
+    cf = f(sq) + df; cr = r(sq) + dr;
+    while (cf >= 0 && cf < 8 && cr >= 0 && cr < 8) {
+      const at = `${String.fromCharCode(97 + cf)}${cr + 1}`;
+      const pc = chess.get(at as Square);
+      if (pc) {
+        if (pc.color !== enemy) return false;
+        const diag = df !== 0 && dr !== 0;
+        return pc.type === 'q' || (diag ? pc.type === 'b' : pc.type === 'r');
+      }
+      cf += df; cr += dr;
+    }
+    return false;
+  } catch { return false; }
 }
 
 /**
@@ -291,14 +354,8 @@ export function deriveNextPlans(fen: string, studentColorWB: Color): string[] {
 
   // 6. Your worst-placed piece (stuck) → reroute it, HOW spelled out.
   if (fullmove >= 10) {
-    const mob = mobilityMap(chess, studentColorWB);
-    let worst: { sq: string; type: string; m: number } | null = null;
-    for (const c of all) {
-      if (c.color !== studentColorWB || (c.type !== 'n' && c.type !== 'b' && c.type !== 'r')) continue;
-      const m = mob.get(c.square) ?? 0;
-      if (!worst || m < worst.m) worst = { sq: c.square, type: c.type, m };
-    }
-    if (worst && worst.m <= 1) {
+    const worst = findWorstPlacedPiece(chess, studentColorWB);
+    if (worst) {
       plans.push(`the plan from here is to rescue your worst piece, the ${PIECE_NOUN[worst.type]} on ${worst.sq}. Here's how: don't play a single attacking move until it's fixed — spend two or three tempi walking it to a square where it actually bites, because a piece doing nothing means you're effectively playing down a piece`);
     }
   }

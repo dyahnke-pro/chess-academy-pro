@@ -69,6 +69,11 @@ export function dnaMoveClause(
    *  line ("forces the king to react" on every check read as a stuck record
    *  in the 2026-09-14 prod audit). */
   spoken: ReadonlySet<string> | null = null,
+  /** The STUDENT's colour. A projected line alternates movers, so the seat-
+   *  relative clauses ("a highway straight into their position") are only right
+   *  for the student's own moves; on the opponent's ply "their" means the
+   *  student's own camp. Null keeps the pre-2026-09-15 behaviour (mover = you). */
+  studentColor: 'w' | 'b' | null = null,
 ): { text: string; prev: PrevCaptureContext; tacticLanded: string | null; concept: string | null } {
   let mv: ReturnType<Chess['move']> | null = null;
   let fenAfter = '';
@@ -116,8 +121,12 @@ export function dnaMoveClause(
   // The board-true positional concept — the SAME DNA voice the rest of the
   // walk speaks. buildReviewMoveTeaching never returns null and never
   // restates the move.
-  const teach = buildReviewMoveTeaching(fenBefore, san);
-  const rawConcept = teach && !GENERIC_TEACH.test(teach) ? toClause(teach) : null;
+  const teach = buildReviewMoveTeaching(fenBefore, san, studentColor === null || mv.color === studentColor);
+  // The outpost is already in `bits` when the move gained one — the universal
+  // teacher says it too, so the line read "planting an outpost on d5, secures an
+  // outpost on d5" (David 2026-09-15, prod transcript). One fact, one clause.
+  const duplicatesOutpost = facts.outpostGained != null && !!teach && /outpost/i.test(teach);
+  const rawConcept = teach && !GENERIC_TEACH.test(teach) && !duplicatesOutpost ? toClause(teach) : null;
   // An idea the line already said → say it once. The move still gets its
   // tactical bits; only the repeated concept clause is dropped.
   const concept = rawConcept && spoken?.has(rawConcept) ? null : rawConcept;
@@ -204,6 +213,9 @@ export function narrateDnaLine(
      *  Opt-in so a caller that already appends the idea (puzzleConceptExplanation)
      *  never double-teaches. */
     teachInvariant?: boolean;
+    /** The STUDENT's colour, so the seat-relative clauses flip on the
+     *  opponent's plies of the projection (see dnaMoveClause). */
+    studentColor?: 'w' | 'b' | null;
   } = {},
 ): string {
   const take = plies.slice(0, opts.max ?? plies.length);
@@ -213,7 +225,7 @@ export function narrateDnaLine(
   let taught = false;
   const spoken = new Set<string>();
   for (const p of take) {
-    const { text, prev: np, tacticLanded, concept } = dnaMoveClause(p.fenBefore, p.san, prev, spoken);
+    const { text, prev: np, tacticLanded, concept } = dnaMoveClause(p.fenBefore, p.san, prev, spoken, opts.studentColor ?? null);
     prev = np;
     if (concept) spoken.add(concept);
     if (opts.teachInvariant && !taught && tacticLanded) {

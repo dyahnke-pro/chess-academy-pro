@@ -199,6 +199,14 @@ function pinnedSquares(fen: string, color: 'w' | 'b'): Set<string> {
 export function buildReviewMoveTeaching(
   fenBefore: string,
   san: string,
+  // WHOSE side of the board is "theirs" (David 2026-09-15, from a real prod
+  // transcript: the coach said White's queen "takes the open c-file — a highway
+  // straight into their position" to a student playing BLACK, i.e. it called the
+  // student's own camp "theirs"). The clauses below are written from the MOVER's
+  // seat, so when the mover is the opponent every "their" must flip to "your".
+  // Default true = the mover is the student, which is what every caller meant
+  // before this parameter existed.
+  moverIsStudent: boolean = true,
 ): string | null {
   const chess = new Chess(fenBefore);
   let mv: Move;
@@ -387,7 +395,7 @@ export function buildReviewMoveTeaching(
     const file = mv.to[0];
     const struct = describeStructure(chess.fen());
     if (struct?.pawns.openFiles.includes(file)) {
-      return `The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into their position.`;
+      return `The ${PIECE_NOUN[mv.piece]} takes the open ${file}-file — a highway straight into ${moverIsStudent ? 'their' : 'your'} position.`;
     }
     if (struct?.pawns.halfOpenFiles[mv.color].includes(file)) {
       return `The ${PIECE_NOUN[mv.piece]} presses down the half-open ${file}-file, leaning on what's left there.`;
@@ -400,7 +408,7 @@ export function buildReviewMoveTeaching(
   }
   const advanced = eyes.controlled.filter((s) => (mv.color === 'w' ? Number(s[1]) >= 5 : Number(s[1]) <= 4));
   if (advanced.length) {
-    return `The ${PIECE_NOUN[mv.piece]} reaches into their half, covering ${list(advanced.slice(0, 3))}.`;
+    return `The ${PIECE_NOUN[mv.piece]} reaches into ${moverIsStudent ? 'their' : 'your'} half, covering ${list(advanced.slice(0, 3))}.`;
   }
   // (e) The king — its journey IS the lesson (endgame = few pieces left → the
   //     king turns into a fighting piece; else it's about getting to safety).

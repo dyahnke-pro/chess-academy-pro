@@ -26,6 +26,7 @@ import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge } from './reviewPositionalAssessment';
+import { renderStructureAtoms } from './structureProse';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead } from './reviewTeachingPoints';
 import { computeGemCrush, buildReviewGemSay } from './gemCrushLines';
@@ -1222,7 +1223,7 @@ export function buildReviewSegments(
   // pawn) still speaks; the unchanged ones fall silent — so the [structure]
   // line always ADDS something instead of re-listing the whole pawn skeleton.
   const structAtomsSeen = new Set<string>();
-  const freshStructureFacet = (facet: string): string | null => {
+  const freshStructureFacet = (facet: string, outpostSquaresAlreadySaid?: ReadonlySet<string>): string | null => {
     const inner = facet.replace(/^\[structure\]\s*/, '').replace(/\.\s*$/, '');
     const atoms: string[] = [];
     for (const seg of inner.split(' · ')) {
@@ -1238,10 +1239,20 @@ export function buildReviewSegments(
     const fresh = atoms.filter((a) => {
       const k = a.toLowerCase();
       if (structAtomsSeen.has(k)) return false;
+      if (/outpost/i.test(a) && outpostSquaresAlreadySaid) {
+        const sq = a.match(/\b[a-h][1-8]\b/)?.[0];
+        if (sq && outpostSquaresAlreadySaid.has(sq)) { structAtomsSeen.add(k); return false; }
+      }
       structAtomsSeen.add(k);
       return true;
     });
-    return fresh.length ? `[structure] ${fresh.join(' · ')}.` : null;
+    // Spoken as ENGLISH from the student's seat, never as the machine
+    // inventory (`isolated pawns white a3`) the computer emits — see
+    // structureProse.ts. The dedupe key stays the RAW atom so the
+    // once-per-game contract is unaffected by the phrasing.
+    return fresh.length
+      ? `[structure] ${renderStructureAtoms(fresh, playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null)}`
+      : null;
   };
   // TEACHING REFRAINS speak ONCE per review (David 2026-07-22: "Once a line
   // like this has been said that's it"). The FACTS stay every time (the
@@ -1328,6 +1339,9 @@ export function buildReviewSegments(
     const fenPair = fenChain[i];
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
+    // N2 — the student's computed need at this ply. Only the STUDENT's plies
+    // carry one; undefined on the opponent's / when no student colour was given.
+    const needHere = needByPly.get(m.ply);
     // Track the opponent's own moves for the development read below.
     if (moverColor !== playerColor) opponentSans.push(m.san);
     // Track every SAN for the live variation-naming beat below.
@@ -1513,9 +1527,16 @@ export function buildReviewSegments(
           keptRaw.push(f);
           continue;
         }
-        // Structure: speak only the sub-claims not yet taught this game.
+        // Structure: speak only the sub-claims not yet taught this game — and
+        // never an outpost the POSITIONAL VERDICT already named on this same
+        // ply (David 2026-09-15, reading the real review: "your knight sits on a
+        // protected outpost on d4 … Your knight sits on an outpost at d4"). Two
+        // computers, one fact, one sentence.
         if (/^\[structure\]/.test(f)) {
-          const fresh = freshStructureFacet(f);
+          const outpostSquaresAlreadySaid = new Set(
+            keptRaw.filter((k) => /outpost/i.test(k)).flatMap((k) => k.match(/\b[a-h][1-8]\b/g) ?? []),
+          );
+          const fresh = freshStructureFacet(f, outpostSquaresAlreadySaid);
           if (fresh) keptRaw.push(fresh);
           continue;
         }
@@ -1575,6 +1596,48 @@ export function buildReviewSegments(
       }
       // The causal chain LEADS the beat when present (it's the cross-move story).
       const uncappedParts = causalLead ? [causalLead, ...orderedKept] : orderedKept;
+      // 🔒 THE BOOK-MOVE RULE APPLIES HERE TOO (CLAUDE.md narration-by-need
+      // standard, N2). The capped cascade has carried the need gate since N2
+      // landed — but `isReviewUncapped()` is TRUE by default, so THIS is the
+      // branch a real review actually runs, and it was ungated: every quiet
+      // opening ply still got the full computed inventory, which is exactly the
+      // "takes too long and says too much in opening book moves" David reported.
+      // Gate only the QUIET student opening plies — a flagged move, a move on
+      // the causal thread, and every opponent ply are untouched, so nothing the
+      // student got wrong can be silenced by a low need score.
+      const quietOpeningPly = playerColor !== undefined
+        && moverColor === playerColor
+        && m.ply <= OPENING_TEACH_MAX_PLY
+        && (m.classification === null || m.classification === 'book' || m.classification === 'good')
+        && !causalLead
+        && !(fundamentals.length > 0);
+      if (quietOpeningPly && needHere && !needHere.speak) {
+        segments.push({
+          ply: m.ply,
+          moveNumber: fullMove,
+          san: m.san,
+          playerColor: moverColor,
+          fenBefore: fenPair.fenBefore,
+          fenAfter: fenPair.fenAfter,
+          classification: m.classification,
+          evalBefore: m.preMoveEval,
+          evalAfter: m.evaluation,
+          bestMoveSan,
+          bestMoveUci: m.bestMove,
+          narration: null,
+          narrationSource: null,
+          ...(needHere ? { need: needHere } : {}),
+        });
+        try {
+          const pc0 = new Chess(fenPair.fenBefore).move(m.san);
+          prevCap = pc0
+            ? { square: pc0.to, capturedValue: pc0.captured ? (PIECE_PTS[pc0.captured] ?? 0) : 0 }
+            : { square: null, capturedValue: 0 };
+        } catch {
+          prevCap = { square: null, capturedValue: 0 };
+        }
+        continue;
+      }
       segments.push({
         ply: m.ply,
         moveNumber: fullMove,
@@ -1589,6 +1652,7 @@ export function buildReviewSegments(
         bestMoveUci: m.bestMove,
         narration: uncappedParts.length ? uncappedParts.join(' ') : null,
         narrationSource: uncappedParts.length ? 'per-move' : null,
+        ...(needHere ? { need: needHere } : {}),
         ...(causalArrows && causalArrows.length ? { planArrows: causalArrows } : {}),
         ...(fundamentals.length ? { fundamentals } : {}),
         ...(segKeySquares.length ? { keySquares: segKeySquares } : {}),
@@ -2179,9 +2243,6 @@ export function buildReviewSegments(
       // actually SEE the game).
       if (storyGame.pgn) segmentStoryGame = { citation: storyGame.citation, pgn: storyGame.pgn, overview: storyGame.overview, criticalMoments: storyGame.criticalMoments };
     }
-    // N2 — the student's need at this ply. Only the STUDENT's plies carry one;
-    // undefined on the opponent's / when no student colour was given.
-    const needHere = needByPly.get(m.ply);
     if (
       narration === null
       && playerColor !== undefined
@@ -2354,7 +2415,7 @@ export function buildReviewSegments(
         // the student's quiet moves get, reframed to the opponent's seat. Only a
         // TRULY uneventful move (teaching === null) stays silent, symmetric with
         // the student side.
-        const teach = buildReviewMoveTeaching(fenPair.fenBefore, m.san);
+        const teach = buildReviewMoveTeaching(fenPair.fenBefore, m.san, false);
         if (teach) {
           narration = frameTeachingForOpponent(teach);
           narrationSource = 'opponent';
@@ -2570,7 +2631,7 @@ async function augmentWithProjections(
   // compatibility; the DNA renderer is always rich. The recapture context is
   // threaded inside the renderer, so an even trade never reads as a windfall.
   const render = (line: PvLine, _rich = false): string => {
-    const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
+    const clause = narrateDnaLine(line.plies.map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { studentColor: studentColorWB });
     const lastPly = line.plies[line.plies.length - 1];
     if (lastPly?.facts.isMate) return `${clause} — and it's mate`;
     // Append an outcome verdict ONLY when the terminal position was actually
@@ -2705,7 +2766,7 @@ async function augmentWithProjections(
       // AGREEMENT — extend the claim with the engine's continuation when it
       // has real follow-up teaching (2+ further plies).
       if (line.plies.length >= 3 && s.narration) {
-        const tail = narrateDnaLine(line.plies.slice(1).map((p) => ({ fenBefore: p.fenBefore, san: p.san })));
+        const tail = narrateDnaLine(line.plies.slice(1).map((p) => ({ fenBefore: p.fenBefore, san: p.san })), { studentColor: studentColorWB });
         s.narration = `${s.narration} The engine confirms it — and if they try to run, it continues ${tail}.`;
         attachLineArrows(s, line, 3); // confirmed threat continuation
       }
