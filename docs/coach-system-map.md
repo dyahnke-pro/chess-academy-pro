@@ -169,6 +169,30 @@ coach's fingertips.")
 
 ---
 
+## 4b. THE ONE SELECTOR — how the coach decides WHAT to say (2026-09-15, unified-coach N0–N6)
+
+Plan: `docs/plans/2026-09-15-one-coach-need-selector.md`. Standard: CLAUDE.md
+"NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED". Four invariants: ONE
+selector, ONE fact-computer set, ONE chokepoint (`voiceFacts`), ONE surface
+table. The unit is the GAME / the taught line, not the move.
+
+| Module | What it computes | Consumers |
+|---|---|---|
+| `services/teachingSelector.ts` — `selectTeaching(seq, student, surface)` | ONE package per sequence: `thesis` (turned / landed / plan / none), `moments` ≤3 (`turningPointCandidates` ∪ `landedTacticTeaching`, re-ranked by the student's holes — N5), `chain` (`buildCausalChain`), `onThread`, `needByPly` (N2), `planByPly` (N3). Surface-blind; `renderThesis(thesis, register)` is the DNA template. | review (`CoachGameReview` turning-point reveal, `buildReviewSegments` need gate), play (`usePhaseNarration` present thesis), teach (`openingGenerator` → `tree.teaching`, stamped at `cacheOpening` for every tree) |
+| `services/needScore.ts` — `computeNeed(ply, student)` | The STUDENT term of importance: book departure here + weakness match + unfamiliarity (5 reps → silent) + opening result deficit + causal thread; bar 50; cold start (<5 analysed games) → rating prior, every band TEACHES. | the selector; `buildReviewSegments` book-move rule (the quiet per-move opening beat speaks only when need clears — R2 retired) |
+| `services/studentNeedLoader.ts` — `loadStudentNeedContext` | The context once per game from Dexie: analysed-game count, weakness signals, cached book departures, line reps from the student's own annotated games, opening vs overall score. Cold on any failure. | `generateReviewNarration`, the generator's refuted-alternative pre-pass |
+| `services/refutedAlternative.ts` — `refutedAlternative(fenBefore, taughtSan, candidates)` | THE composed theory fact: the move most people play instead (masters DB), its engine cost (two `computePvLine` reads, quiet-end graded when the line delivers), the punishing line, the concept it lands (`conceptForLine`, opponent's seat; positional → null). | generator PASS 1 beat two on the student's first-12 plies where need clears (`tree.teaching.refuted[]`) |
+| `services/planMemory.ts` — `foldPlans` / `stepPlan` | A structure→plan announced once, carried until `structurePlan` changes. | selector `planByPly` |
+| `coach/surfaceContract.ts` — `SURFACE_CONTRACT` | Record<CoachSurface, {register, withholds, speaks}> — the ONLY place surfaces differ. `registerFor(surface)`. Gate: `surfaceContract.scan.test.ts` (exhaustive; no literal register; components/hooks call a fact-computer directly ≤ 1, shrink-only). | `CoachGameReview`, `usePhaseNarration` |
+| `services/tacticTypeBackfill.ts` (N0) | Persisted `mistakePuzzles` / `classifiedTactics` re-tagged through the unified classifier on boot (`TACTIC_TYPE_REV`, per-row, idempotent). | `dataLoader.runSeedOnce` (already-seeded branch) |
+
+The number: `needCoverage.report.test.ts` → `audit-reports/need-coverage.json`
+(cold 100% floor; mastered ≤ 2% ceiling). Audits: `audit-review-overhaul-prod`
+(THESIS + NEED rows), `audit-refuted-alternative-prod`, `audit-tactic-type-backfill-prod`,
+`audit-teach-on-topic-prod` (tree.teaching), `audit-concept-gameplay-prod`.
+
+---
+
 ## 5. The student model (weakness spine)
 
 - **`weaknessSpine.ts:538`** — `getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]>`.
@@ -231,6 +255,7 @@ coach's fingertips.")
 - Selection: `positionFacts.ts:32` (`PositionFactsInput`) + `narrationImportance`
   + `criticalityScan`.
 - Student model: `weaknessSpine.ts:538` `getUnifiedWeaknessProfile`.
+- THE ONE SELECTOR: `teachingSelector.ts` `selectTeaching`; the need term `needScore.ts` `computeNeed`; the review gate `coachFeatureService.ts` `needByPly` (grep `THE BOOK-MOVE RULE`); the refuted alternative `refutedAlternative.ts` + generator pre-pass (grep `REFUTED_PLY_CAP`); the surface table `coach/surfaceContract.ts`.
 
 ## 9. How to regain context fast
 

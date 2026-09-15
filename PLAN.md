@@ -1,3 +1,5 @@
+> **LIVE PLAN (2026-09-15):** the unified-coach build — `docs/plans/2026-09-15-one-coach-need-selector.md` (N0–N6 built; §6b open findings; §7 pickup). The nav-capture plan below landed 2026-09-12 and is kept for its root-cause record.
+
 # PLAN — coach-teach navigation capture fix (2026-09-12)
 
 ## Disease (root cause, empirically confirmed on prod)
