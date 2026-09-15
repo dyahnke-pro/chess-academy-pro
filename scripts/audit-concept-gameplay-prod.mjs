@@ -50,6 +50,8 @@ import { muteTtsForAudit, stampAuditRunId } from './audit-lib/mute-tts.mjs';
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 const ASK = process.env.AUDIT_CONCEPT_ASK ?? 'Teach me the Scandinavian Defense, Lasker Variation';
+/** The chip a student taps when the typo ask lands on a picker. */
+const CHIP_PICK = new RegExp(process.env.AUDIT_CONCEPT_CHIP ?? 'Lasker', 'i');
 const ASK_TYPO = process.env.AUDIT_CONCEPT_ASK_TYPO ?? 'teach me the scandinavian lasker variaton';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/concept-gameplay-${stamp}`;
@@ -57,9 +59,28 @@ const BOOT_TIMEOUT_MS = 45_000;
 /** Cold generation on prod (DeepSeek) + the muted, voice-gated playback. */
 const LESSON_BUDGET_MS = Number(process.env.AUDIT_CONCEPT_BUDGET_MS ?? 210_000);
 
-/** The engine's invariant sentences (conceptEngine TACTIC_INVARIANT + the mate
- *  register) — a spoken line carrying one of these was COMPUTED, not authored. */
-const INVARIANT = /hits two targets at once|freezes the piece in front|hits the valuable piece first|unveils a second attacker|attacks the king with two pieces|boxed in by its own pawns|takes away the piece defending|has no safe square|forced checkmate is coming|doing two defensive jobs|stacks two pieces on the same line/i;
+/** The engine's invariants (conceptEngine TACTIC_INVARIANT), matched on
+ *  SUBSTANCE: the concept NAMED plus the invariant's distinctive cue. The
+ *  computed beat is handed to the phrasing pass, which may reword it (G0: the
+ *  model phrases, it never decides) — on prod "a pin freezes the piece in
+ *  front: it can't move without exposing…" was spoken as "That's a pin: the
+ *  piece in front is frozen — it cannot move without exposing…", and an
+ *  exact-sentence regex called that a miss (2026-09-15). Each cue is a phrase
+ *  the reword keeps; `auditConceptGameplayCues.test.ts` pins every cue to the
+ *  engine's own invariant text so this list cannot drift from the source. */
+export const CONCEPT_CUES = [
+  { type: 'fork', name: /\bfork/i, cue: /two targets/i },
+  { type: 'pin', name: /\bpin\b|\bpinned\b/i, cue: /piece in front/i },
+  { type: 'skewer', name: /\bskewer/i, cue: /valuable piece/i },
+  { type: 'discovery', name: /\bdiscover/i, cue: /second attacker|unveil/i },
+  { type: 'double_check', name: /double check/i, cue: /two pieces/i },
+  { type: 'back_rank', name: /back[- ]rank/i, cue: /own pawns/i },
+  { type: 'removal_of_guard', name: /remov\w* the (?:guard|defender)|defender/i, cue: /defending|defender/i },
+  { type: 'trapped_piece', name: /trapped/i, cue: /no safe square/i },
+  { type: 'overload', name: /overload/i, cue: /two defensive jobs|two jobs/i },
+  { type: 'battery', name: /battery/i, cue: /same line/i },
+];
+const carriesConcept = (line) => CONCEPT_CUES.some((c) => c.name.test(line) && c.cue.test(line));
 const RAW_ENUM_LEAK = /\b(mate_threat|removal_of_guard|trapped_piece|back_rank|double_check|discovered_attack|tactical_sequence)\b/;
 const WALKTHROUGH_TESTIDS = ['walkthrough-choose-mode', 'walkthrough-stage-menu', 'walkthrough-leaf-panel', 'walkthrough-fork-panel', 'walkthrough-step-back', 'walkthrough-trap-bar', 'walkthrough-gem-bar'];
 
@@ -114,11 +135,25 @@ async function askForLesson(page, listener, ask, label) {
     }
     const lines = spokenLines(listener);
     // Stop once the concept has been voiced, or the lesson reached its leaf.
-    if (lines.some((l) => INVARIANT.test(l))) break;
+    if (lines.some(carriesConcept)) break;
     // A fork is a question to the STUDENT — a human taps a line; so does the
     // driver (functional-audit rule: handle the branch a real user hits, never
     // let one unanswered prompt swallow the rest of the run). Prefer the taught
     // continuation when it is on offer, else the first option.
+    // A "did you mean…" picker (fuzzy match below auto-accept — the wide-berth
+    // rule: when in doubt, ASK) is answered the way a student answers it: tap
+    // the chip that names the line asked for. A picker is the CORRECT reply
+    // to a typo; leaving it unanswered is the harness failing, not the coach.
+    const chips = page.locator('[data-testid^="coach-choice-chip-"]');
+    if (!mounted && (await chips.count()) > 0) {
+      const labels = await chips.allInnerTexts();
+      const want = labels.findIndex((l) => CHIP_PICK.test(l));
+      if (want >= 0) {
+        await chips.nth(want).click({ force: true }).catch(() => {});
+        console.log(`[picker] ${label}: tapped "${labels[want].replace(/\s+/g, ' ').slice(0, 60)}" of ${labels.length} chips`);
+        continue;
+      }
+    }
     const fork = page.locator('[data-testid^="walkthrough-fork-option-"]');
     if ((await fork.count()) > 0) {
       const labels = await fork.allInnerTexts();
@@ -170,7 +205,7 @@ async function main() {
     record('A. the ask STARTS a walkthrough (never a refusal / picker)', !!a.mounted, `ask="${ASK}" mounted=${a.mounted ?? 'none'} after ${a.secs}s`);
     const lines = spokenLines(listener);
     record('B. narration listener captured spoken lines (instrument 3 alive)', lines.length > 0, `${lines.length} spoken`);
-    const hit = lines.find((l) => INVARIANT.test(l));
+    const hit = lines.find(carriesConcept);
     record('C. a SPOKEN line carries a computed concept INVARIANT (the concept was voiced mid-lesson)', !!hit, hit ? hit.replace(/\s+/g, ' ').slice(0, 180) : `none of ${lines.length} lines`);
     // Board NARRATION only (a line that names a square or a piece) — the
     // coach's opening greeting ("What are we working on today?") is not a
