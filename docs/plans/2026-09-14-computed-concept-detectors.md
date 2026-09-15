@@ -584,7 +584,21 @@ Update the phase's status marker + the decisions log as each lands.
      convert-mode teaching (Lucena in a won rook ending must speak), and a
      positional platitude never leads (`dropGenericLead`). DONE.
   5. harness triage buckets — DONE (`conceptCoverage.report.test.ts`).
-- **P5 — ship** [in progress 2026-09-14]: four stacks landed on `main`
+- **P5 — DONE 2026-09-15 (the done-condition met on PROD):** `scripts/audit-concept-gameplay-prod.mjs`
+  (muted, 3-instrument, vacuity-checked) asked Learn for "Teach me the Scandinavian
+  Defense, Lasker Variation" on `index-PIkssFu-` (b6f86af) and the narration listener
+  heard the engine's pin invariant SPOKEN at …Bg4 mid-lesson — "It lands a pin: a pin
+  freezes the piece in front…" — computed by `landedTacticTeaching` (code), phrased by
+  the model. 55–63 spoken lines, 40+ board lines gate-clean (you/they, no enum leak),
+  0 `/api/tts` requests, 0 page errors. Companion prod runs the same day: tactical-
+  awareness 6/6, concept-engine 19/19, weaknesses 21/21, mistakes-quality 46/46,
+  full-game audit run 80 green. Three product defects the run exposed were fixed at
+  root and shipped (d8b7e25 discovery `rayClear`, b6f86af voiced-lesson selection by
+  MOVES not name, d4cf0ed the /tactics quick-settings panel shrunk to its border on
+  every phone). The audit's own drift: the concept is now matched on SUBSTANCE (name +
+  engine cue, pinned by `auditConceptGameplayCues.test.ts` in ship-check), lines are
+  scoped per ask, forks and "did you mean" pickers are answered like a student.
+- **P5 — ship** [history, 2026-09-14]: four stacks landed on `main`
   through the ship-check hook (P4a/P4c → `16709b0`, P2 → `788d0cf`,
   P2b+P3+tile → `4d9ecf2`). Prod audit `scripts/audit-concept-engine-prod.mjs`
   (muted, 3-instrument, vacuity-checked: "noticed the void") — first run
@@ -884,10 +898,11 @@ Ran `conceptForSolution` over 1,500 master puzzles (agree / fires-no-tag / silen
 
 ## Next-session pickup
 
-P1–P4a, P4c, P2, P2b, P3 and the Master Level tile are on `main`. Do not rebuild
-them. In flight: **P4b** (one tactic classifier — see SURFACE MAP). Owed after it:
-**P5** — the 3-instrument prod audit that proves the concept is SPOKEN during
-LIVE gameplay (Learn / Teach-x-opening / Play phase-transition), with the
-narration listener, not just on puzzles; then **P6** (puzzle generation, its own
-plan doc). Regain context first: this doc's phase markers + `docs/coach-system-map.md`
+P1–P5 are on `main` and proven on prod (2026-09-15) — including P4b (ONE tactic
+classifier: `detectTacticType` is a projection of `conceptForLine`, gated by
+`tacticTypeUnification.test.ts`) and P5 (the concept SPOKEN during live gameplay,
+`audit-concept-gameplay-prod.mjs` 8/8). Do not rebuild them. Remaining: **P6**
+sinks (puzzle generation — its own plan doc). Open decision for David: backfill
+of already-persisted `tacticType` rows onto the unified classifier (not done —
+persisted Dexie data, needs a migration call). Regain context first: this doc's phase markers + `docs/coach-system-map.md`
 + the surface's contract in the table under "Everywhere the coach lives".
