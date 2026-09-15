@@ -389,10 +389,15 @@ async function main() {
     }
     // Wait for the mistakes-tab container to mount specifically —
     // this is the "active tab" signal since only the active tab's
-    // body is rendered.
+    // body is rendered. The game-data tab bodies are gated on the
+    // page's `loading` (Dexie reads + the analyze pass on the seeded
+    // games), which on a prod cold start took >7s twice on 2026-09-15
+    // while the tab itself WAS restored (diag showed `mistakes-tab` in
+    // the DOM right after the wait expired) — give the data a real
+    // budget so a slow load isn't reported as a broken restore.
     const ok = await page
       .locator('[data-testid="mistakes-tab"]')
-      .waitFor({ timeout: 5_000 })
+      .waitFor({ timeout: 30_000 })
       .then(() => true)
       .catch(() => false);
     if (!ok) throw new Error('mistakes tab not active on back-nav');

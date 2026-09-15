@@ -115,6 +115,19 @@ async function askForLesson(page, listener, ask, label) {
     const lines = spokenLines(listener);
     // Stop once the concept has been voiced, or the lesson reached its leaf.
     if (lines.some((l) => INVARIANT.test(l))) break;
+    // A fork is a question to the STUDENT — a human taps a line; so does the
+    // driver (functional-audit rule: handle the branch a real user hits, never
+    // let one unanswered prompt swallow the rest of the run). Prefer the taught
+    // continuation when it is on offer, else the first option.
+    const fork = page.locator('[data-testid^="walkthrough-fork-option-"]');
+    if ((await fork.count()) > 0) {
+      const labels = await fork.allInnerTexts();
+      const want = labels.findIndex((l) => /queen takes d5|qxd5/i.test(l));
+      const idx = want >= 0 ? want : 0;
+      await fork.nth(idx).click({ force: true }).catch(() => {});
+      console.log(`[fork] ${label}: answered "${(labels[idx] ?? '').replace(/\s+/g, ' ').slice(0, 60)}" (${labels.length} options)`);
+      continue;
+    }
     if (mounted && (await page.locator('[data-testid="walkthrough-leaf-panel"]').count()) > 0 && lines.length === spokenBefore) break;
     spokenBefore = lines.length;
   }
