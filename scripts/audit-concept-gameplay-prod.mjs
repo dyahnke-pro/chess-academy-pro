@@ -148,7 +148,7 @@ async function askForLesson(page, listener, ask, label) {
     // rule: when in doubt, ASK) is answered the way a student answers it: tap
     // the chip that names the line asked for. A picker is the CORRECT reply
     // to a typo; leaving it unanswered is the harness failing, not the coach.
-    const chips = page.locator('[data-testid^="coach-choice-chip-"]');
+    const chips = page.locator('[data-testid^="message-choice-chip-"], [data-testid^="coach-choice-chip-"]');
     if (!mounted && (await chips.count()) > 0) {
       const labels = await chips.allInnerTexts();
       const want = labels.findIndex((l) => CHIP_PICK.test(l));
