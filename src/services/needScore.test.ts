@@ -42,11 +42,13 @@ describe('needScore — the data takes over', () => {
     expect(v.prior).toBe(false);
     expect(familiarity(FAMILIAR_REPS)).toBe(1);
   });
-  it('a never-seen line on a warm profile leans toward teaching but does not clear the bar alone', () => {
-    const ctx = warm({ lineReps: new Array(20).fill(0) });
-    const v = computeNeed({ ply: 5, studentMove: true }, ctx);
-    expect(v.score).toBeGreaterThan(0);
-    expect(v.speak).toBe(false); // 25 < 50 — unfamiliarity alone is not a lesson
+  it('a never-seen line on a warm profile IS a need — and each correct rep decays it', () => {
+    const never = computeNeed({ ply: 5, studentMove: true }, warm({ lineReps: new Array(20).fill(0) }));
+    expect(never.speak).toBe(true);
+    expect(never.prior).toBe(false);
+    const twice = computeNeed({ ply: 5, studentMove: true }, warm({ lineReps: new Array(20).fill(2) }));
+    expect(twice.speak).toBe(false); // 30 < 50 — decayed; needs a hole / departure / the thread
+    expect(twice.score).toBeLessThan(never.score);
   });
   it('a persistent, worsening hole matching the ply\'s concept SPEAKS', () => {
     const ctx = warm({ signals: [forkHole], lineReps: new Array(20).fill(FAMILIAR_REPS) });

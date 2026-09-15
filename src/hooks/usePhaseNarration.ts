@@ -12,6 +12,7 @@ import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachA
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
 import { selectTeaching, renderThesis, pliesFromSans } from '../services/teachingSelector';
+import { registerFor } from '../coach/surfaceContract';
 import { buildVoicePackage } from '../services/voicePackage';
 import { detectOpening } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
@@ -499,7 +500,7 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       try {
         const sans = (argsRef.current.getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
         const pkg = selectTeaching({ plies: pliesFromSans(sans), studentColor: event.playerColor, kind: 'live', surface: 'phase-narration' });
-        const thesis = renderThesis(pkg.thesis, 'present');
+        const thesis = renderThesis(pkg.thesis, registerFor('phase-narration'));
         if (thesis) {
           sentenceBuffer += ` ${thesis}`;
           flushCompletedSentences();

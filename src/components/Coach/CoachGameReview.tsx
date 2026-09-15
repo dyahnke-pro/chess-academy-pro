@@ -51,6 +51,7 @@ import { findRewindTarget, type RewindTarget } from '../../services/blunderRewin
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
 import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
+import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { captureEvent } from '../../services/analytics';
@@ -1226,7 +1227,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     try {
       const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? 1500, 'review');
       if (pkg.thesis.kind === 'turned' && pkg.thesis.ply === q.answer.ply) {
-        turningThesisRef.current = renderThesis(pkg.thesis, 'retrospective');
+        turningThesisRef.current = renderThesis(pkg.thesis, registerFor('review'));
       }
       void logAppAudit({
         kind: 'coach-surface-migrated',

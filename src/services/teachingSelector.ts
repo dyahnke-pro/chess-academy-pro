@@ -29,6 +29,8 @@
 import { Chess, type Color } from 'chess.js';
 import type { CoachSurface } from '../coach/types';
 import { computeNeed, coldStudent, type StudentNeedContext, type NeedVerdict } from './needScore';
+import { matchTacticPattern, boostFor } from './weaknessSignal';
+import type { TacticPatternType } from '../types/tacticTypes';
 import { turningPointCandidates, moveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
 import { landedTacticTeaching } from './dnaLineNarrator';
 import { buildCausalChain, type CausalChain } from './causalChain';
@@ -129,6 +131,26 @@ function toSegment(p: SelectorPly): TurningPointSegmentLike {
   };
 }
 
+/** The student-hole boost for a moment, in centipawns (N5): `boostFor` (0–30)
+ *  of the weakness the moment's landed tactic matches, else 0. */
+export function weaknessBoostCp(tactic: string | null, signals: readonly import('./weaknessSignal').WeaknessSignal[]): number {
+  if (!tactic || signals.length === 0) return 0;
+  const m = matchTacticPattern(tactic as TacticPatternType, signals);
+  return m ? boostFor(m) : 0;
+}
+
+/** Swing candidates re-ranked by swing + the student's hole (N5). Pure;
+ *  an empty profile returns the input order. */
+export function rankSwingCandidates<T extends { ply: number; swingPawns: number }>(
+  swings: readonly T[],
+  landedByPly: ReadonlyMap<number, string>,
+  signals: readonly import('./weaknessSignal').WeaknessSignal[],
+): T[] {
+  if (signals.length === 0) return [...swings];
+  const score = (c: T): number => c.swingPawns * 100 + weaknessBoostCp(landedByPly.get(c.ply) ?? null, signals);
+  return [...swings].sort((a, b) => score(b) - score(a));
+}
+
 /**
  * The one game-level read. Pure, deterministic, chess.js-only (no engine call
  * — it consumes the eval record the caller already has), so it is cheap enough
@@ -150,8 +172,18 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     } catch { /* an illegal ply is not a moment */ }
   }
 
-  // 2. Swing moments — the review card's own candidates, biggest first.
-  const swings = turningPointCandidates(plies.map(toSegment), rating);
+  // 2. Swing moments — the review card's own candidates, biggest first…
+  const swingsRaw = turningPointCandidates(plies.map(toSegment), rating);
+  // …RE-RANKED BY THE STUDENT'S HOLES (unified-coach N5): a moment whose landed
+  // tactic is a hole this student keeps falling in outranks a moment of EQUAL
+  // criticality that is not. The boost is `boostFor` (0–30, lifecycle-keyed,
+  // the same number positionFacts uses), read in centipawns so it re-orders
+  // comparable swings and never vaults a subtlety over a real blunder.
+  // Deterministic; an empty profile → identity order (the card and the
+  // selector still agree on the biggest swing).
+  const signals = input.student?.signals ?? [];
+  const weaknessCp = (ply: number): number => weaknessBoostCp(landedByPly.get(ply) ?? null, signals);
+  const swings = rankSwingCandidates(swingsRaw, landedByPly, signals);
   const byPly = new Map(plies.map((p) => [p.ply, p] as const));
   const moments: Moment[] = [];
   const seen = new Set<number>();
@@ -162,8 +194,10 @@ export function selectTeaching(input: SelectorInput): TeachingPackage {
     moments.push({ ply: c.ply, label: c.label, kind: 'swing', swingPawns: c.swingPawns, tactic: landedByPly.get(c.ply) ?? null, fenBefore: p.fenBefore, san: p.san });
     seen.add(c.ply);
   }
-  // 3. Landed tactics fill the remaining slots, in game order.
-  for (const p of plies) {
+  // 3. Landed tactics fill the remaining slots — the student's holes first
+  //    (N5), then game order.
+  const landedOrder = [...plies].sort((a, b) => weaknessCp(b.ply) - weaknessCp(a.ply) || a.ply - b.ply);
+  for (const p of landedOrder) {
     if (moments.length >= MAX_MOMENTS) break;
     const t = landedByPly.get(p.ply);
     if (!t || seen.has(p.ply)) continue;

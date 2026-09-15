@@ -8,7 +8,7 @@
 // the model felt like it (G0). Five terms, every one computed from the
 // student's record:
 //
-//   need = bookDepartureHere (35/55) + weaknessMatch (≤55) + unfamiliarity (≤25)
+//   need = bookDepartureHere (35/55) + weaknessMatch (≤55) + unfamiliarity (≤50)
 //        + openingResultDeficit (≤40) + onCausalThread (35)     — bar: 50
 //
 // Cold start (< COLD_START_GAMES fully-analysed games): the data terms are all
@@ -129,7 +129,10 @@ function weaknessTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number
 function unfamiliarityTerm(p: NeedPlyInput, ctx: StudentNeedContext): { score: number; reason: string | null } {
   if (!ctx.lineReps) return { score: 0, reason: null };
   const f = familiarity(ctx.lineReps[p.ply - 1]);
-  const score = Math.round(25 * (1 - f));
+  // A never-seen line is a real need on its own (the bar exactly); each correct
+  // rep decays it, so by FAMILIAR_REPS the line is silent unless a hole, a
+  // departure or the thread says otherwise.
+  const score = Math.round(NEED_THRESHOLD * (1 - f));
   return score > 0 ? { score, reason: `line familiarity ${(f * 100).toFixed(0)}%` } : { score: 0, reason: 'line familiar — silent' };
 }
 

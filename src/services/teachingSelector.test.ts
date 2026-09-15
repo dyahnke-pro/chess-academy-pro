@@ -106,3 +106,27 @@ describe('helpers', () => {
     expect(JSON.parse(JSON.stringify(t))).toEqual(t);
   });
 });
+
+describe('N5 — the student\'s holes re-rank comparable moments', () => {
+  const forkHole = {
+    clusterId: 'analysis:tactic:fork', bucket: 'tactical' as const, label: 'Forks', openCount: 4, severity: 70,
+    lifecycleStatus: 'persistent' as const, trend: 'worsening' as const, puzzleThemes: ['fork'],
+  };
+  const swings = [{ ply: 8, label: '4… x', swingPawns: 2.0 }, { ply: 13, label: '7. y', swingPawns: 2.0 }];
+  const landed = new Map<number, string>([[13, 'fork']]);
+  it('equal swings: the moment that lands the student\'s hole leads', async () => {
+    const { rankSwingCandidates, weaknessBoostCp } = await import('./teachingSelector');
+    expect(weaknessBoostCp('fork', [forkHole])).toBeGreaterThan(0);
+    expect(weaknessBoostCp('pin', [forkHole])).toBe(0);
+    expect(rankSwingCandidates(swings, landed, [forkHole]).map((c) => c.ply)).toEqual([13, 8]);
+  });
+  it('an empty profile is the identity — the review card and the selector agree', async () => {
+    const { rankSwingCandidates } = await import('./teachingSelector');
+    expect(rankSwingCandidates(swings, landed, []).map((c) => c.ply)).toEqual([8, 13]);
+  });
+  it('a hole never vaults a subtlety over a real blunder (boost ≤ 0.3 pawns)', async () => {
+    const { rankSwingCandidates } = await import('./teachingSelector');
+    const big = [{ ply: 8, label: 'a', swingPawns: 3.0 }, { ply: 13, label: 'b', swingPawns: 1.0 }];
+    expect(rankSwingCandidates(big, landed, [forkHole]).map((c) => c.ply)).toEqual([8, 13]);
+  });
+});
