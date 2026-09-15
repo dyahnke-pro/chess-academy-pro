@@ -9,7 +9,8 @@
  * from real games (chess.js-legal at build time); the prose is the DNA note
  * (G0/G3 — nothing generated at runtime).
  */
-import type { WalkthroughTree } from '../types/walkthroughTree';
+import type { WalkthroughTree, WalkthroughTreeNode } from '../types/walkthroughTree';
+import { resolveOpeningEntry } from '../services/openingDetectionService';
 import voicedData from './voiced-walkthroughs.json';
 import voicedMatchupData from './voiced-matchups.json';
 
@@ -41,7 +42,10 @@ function tokens(text: string): string[] {
   return (text || '')
     .toLowerCase()
     .split(/[^a-z0-9]+/)
-    .filter((w) => w.length > 1 && !STOP.has(w) && !/^\d+$/.test(w));
+    .filter((w) => w.length > 1 && !STOP.has(w) && !/^\d+$/.test(w))
+    // Light plural/possessive fold so "kings indian" meets "King's Indian"
+    // (tokenized king, indian) — applied to request AND name alike.
+    .map((w) => (w.length > 3 && w.endsWith('s') ? w.slice(0, -1) : w));
 }
 
 /** Score how well a request matches an entry: number of request tokens that
@@ -55,16 +59,56 @@ function scoreMatch(reqTokens: string[], nameTokens: Set<string>): number {
   return hits;
 }
 
+/** True when `moves` is a path through the tree from its root — every ply
+ *  of the line is a child the tree actually teaches. A voiced lesson that
+ *  ends BEFORE the line's distinguishing moves does not contain it. */
+export function voicedTreeContainsLine(tree: WalkthroughTree, moves: readonly string[]): boolean {
+  let cur: WalkthroughTreeNode = tree.root;
+  for (const san of moves) {
+    const next = cur.children.find((c) => c.node.san === san);
+    if (!next) return false;
+    cur = next.node;
+  }
+  return true;
+}
+
+function pickRichest(pool: VoicedEntry[], reqTokens: string[]): VoicedEntry | null {
+  let best: VoicedEntry | null = null;
+  let bestScore = -1;
+  for (const e of pool) {
+    const score = scoreMatch(reqTokens, new Set(tokens(e.openingName)));
+    if (!best || score > bestScore || (score === bestScore && e.narratedNodes > best.narratedNodes)) {
+      best = e;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 /**
  * Resolve a teach request to a voiced walkthrough tree, or null.
  *
- * Strategy: score every voiced entry by content-token overlap with the
- * request. The winner is the highest score; ties break toward the entry with
- * the most narrated nodes (the richest lesson). A request must land at least
- * one content token on the winner — a zero-overlap "best" is no match.
+ * A VOICED TREE IS SELECTED BY THE MOVES IT TEACHES, NEVER BY ITS NAME
+ * (2026-09-15). The old strategy scored entries by name-token overlap and
+ * served the top hit even on a PARTIAL match — so "Scandinavian Defense:
+ * Lasker Variation" landed one token on the voiced "Scandinavian Defense"
+ * family tree and the student got a lesson that does not contain a single
+ * Lasker move, forking at ply 3 and asking them to pick a line they had
+ * already named. That is selection-by-name — the same class as the corpus
+ * note-selection bug (a note may only be spoken at a position its own line
+ * produces), and the "stay scoped to the opening it was asked to teach" rule.
  *
- * "caro-kann" → Caro-Kann Fantasy (deepest Caro). "french advance" → the
- * French Advance entry (both tokens hit). "sicilian najdorf" → the Najdorf.
+ * Strategy:
+ *  1. Resolve the request to a DB entry (`resolveOpeningEntry` — the ONE
+ *     canonical name resolver, aliases and typos included). A voiced tree is
+ *     eligible only if the entry's move line is a path through it. Among the
+ *     eligible trees, the best name-token match wins, then the richest
+ *     lesson (most narrated nodes) — so a family ask ("caro-kann") still gets
+ *     the deepest Caro lesson, while a sub-line the corpus never voiced
+ *     honestly returns null and the lesson is generated for THAT line.
+ *  2. A request the DB cannot resolve (a voiced-only label such as
+ *     "Scandinavian Defense (2.e5 Advance)") falls back to name tokens, but
+ *     EVERY content token must hit — a partial overlap never serves a family.
  */
 export function resolveVoicedWalkthrough(query: string): WalkthroughTree | null {
   if (!query || !query.trim()) return null;
@@ -76,19 +120,24 @@ export function resolveVoicedWalkthrough(query: string): WalkthroughTree | null 
   const reqTokens = tokens(query);
   if (reqTokens.length === 0) return null;
 
-  let best: VoicedEntry | null = null;
-  let bestScore = 0;
-  for (const e of ENTRIES) {
-    const nameTokens = new Set(tokens(e.openingName));
-    const score = scoreMatch(reqTokens, nameTokens);
-    if (score > bestScore || (score === bestScore && score > 0 && best && e.narratedNodes > best.narratedNodes)) {
-      best = e;
-      bestScore = score;
-    }
+  let entryMoves: string[] | null = null;
+  try {
+    entryMoves = resolveOpeningEntry(query)?.moves ?? null;
+  } catch {
+    entryMoves = null;
   }
-  if (!best || bestScore === 0) return null;
-  // carry studentSide onto the tree so the board orients correctly
-  return { ...best.tree, studentSide: best.studentSide };
+  if (entryMoves && entryMoves.length > 0) {
+    const containing = ENTRIES.filter((e) => voicedTreeContainsLine(e.tree, entryMoves));
+    const best = pickRichest(containing, reqTokens);
+    if (best) return { ...best.tree, studentSide: best.studentSide };
+    // The corpus voices nothing that teaches this line. Do NOT fall back to
+    // a name match — that is exactly how the wrong family lesson got served.
+    return null;
+  }
+
+  const exact = ENTRIES.filter((e) => scoreMatch(reqTokens, new Set(tokens(e.openingName))) === reqTokens.length);
+  const best = pickRichest(exact, reqTokens);
+  return best ? { ...best.tree, studentSide: best.studentSide } : null;
 }
 
 /** The full catalogue — for a "what can you teach me" index / greeting. */

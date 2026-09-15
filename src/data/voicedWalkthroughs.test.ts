@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { resolveVoicedWalkthrough, listVoicedWalkthroughs, resolveVoicedMatchup, listVoicedMatchups } from './voicedWalkthroughs';
+import { resolveVoicedWalkthrough, listVoicedWalkthroughs, resolveVoicedMatchup, listVoicedMatchups, voicedTreeContainsLine } from './voicedWalkthroughs';
+import { resolveOpeningEntry } from '../services/openingDetectionService';
 
 describe('resolveVoicedWalkthrough', () => {
   it('resolves a single-opening teach request to a voiced tree', () => {
@@ -62,5 +63,44 @@ describe('resolveVoicedWalkthrough', () => {
       expect(w.narratedNodes).toBeGreaterThan(0);
       expect(['white', 'black']).toContain(w.studentSide);
     }
+  });
+});
+
+describe('resolveVoicedWalkthrough selects by the MOVES a tree teaches, never by name (2026-09-15)', () => {
+  it('a sub-line the corpus never voiced returns null instead of the family lesson', () => {
+    // The voiced "Scandinavian Defense" family tree forks at ply 3 and never
+    // plays …Qa5 d4 Nf6 Nf3 Bg4 — serving it for the Lasker ask handed the
+    // student a lesson with zero Lasker moves (prod, 2026-09-15).
+    expect(resolveVoicedWalkthrough('Scandinavian Defense: Lasker Variation')).toBeNull();
+    expect(resolveVoicedWalkthrough('Scandinavian Defense, Lasker Variation')).toBeNull();
+    expect(resolveVoicedWalkthrough('scandinavian lasker')).toBeNull();
+  });
+
+  it('a line the corpus DOES voice resolves to a tree that contains every move of it', () => {
+    const tree = resolveVoicedWalkthrough('Scandinavian Defense: Main Line');
+    expect(tree).not.toBeNull();
+    expect(voicedTreeContainsLine(tree!, ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5'])).toBe(true);
+  });
+
+  it('every DB-resolvable ask that returns a voiced tree returns one containing the resolved line', () => {
+    const asks = [
+      ...listVoicedWalkthroughs().map((e) => e.openingName),
+      'caro-kann', 'Caro-Kann Defense: Fantasy Variation', 'Italian Game', 'kings indian',
+      'French Defense: Advance Variation', 'Sicilian Defense: Najdorf Variation', 'London System',
+    ];
+    let checked = 0;
+    for (const ask of asks) {
+      const moves = resolveOpeningEntry(ask)?.moves ?? null;
+      const tree = resolveVoicedWalkthrough(ask);
+      if (!moves || !tree) continue;
+      checked += 1;
+      expect(voicedTreeContainsLine(tree, moves), `"${ask}" → ${tree.openingName} lacks ${moves.join(' ')}`).toBe(true);
+    }
+    expect(checked).toBeGreaterThan(5);
+  }, 60_000);
+
+  it('a voiced-only label still resolves by name when EVERY content token hits', () => {
+    const adv = resolveVoicedWalkthrough('Scandinavian Defense (2.e5 Advance)');
+    expect(adv?.openingName).toBe('Scandinavian Defense (2.e5 Advance)');
   });
 });
