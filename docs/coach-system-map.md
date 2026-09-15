@@ -106,9 +106,10 @@ coach's fingertips.")
 - `positionFacts.ts` — the aggregator. `computePositionFacts(input)` →
   `PositionFactsResult{ importance, criticality, mustDefend, leansOn,
   opponentLeansOn, deliberation, latentDanger, kingExposure, opponentIntent,
-  structurePlan … }`. `PositionFactsInput` (line 32) is the SEAM — it has
-  fen/moverColor/studentColor/rating/analysis but **NO studentWeaknesses**
-  field yet (that's P1).
+  structurePlan … }`. `PositionFactsInput` is the SEAM — fen/moverColor/studentColor/rating/analysis
+  **+ `studentWeaknesses`** (the P1 weakness→selector wire: `applyWeaknessBoost`
+  re-ranks clauses by the student's holes; fed by teach, play, phase narration,
+  live coach, position read and opening play — verified 2026-09-15).
 - `criticalityScan.ts` — `criticalityThresholds(rating)` rating bands
   (<1000 / 1000–2000 / >2000); gapCp/severity = decision leverage.
 - `narrationImportance.ts` — `computeImportance(...)` → the importance verdict
