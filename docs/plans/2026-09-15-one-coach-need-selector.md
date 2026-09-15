@@ -187,6 +187,30 @@ the number keeps us honest. Plan memory (7) rides with 1. §4 maps this to phase
 
 ## 3. The design
 
+### 3.0 The four invariants — the architecture this whole plan hangs on (David 2026-09-15: "One unified coach, whose abilities are the same no matter where in the app you are"; "this is actually where we started")
+
+- **One selector.** The game-level reader (`{thesis, moments[], chain}`) is a
+  single function. It takes a move list — a finished game, a taught line, a live
+  game so far — and it doesn't know which surface called it.
+- **One fact-computer set.** Landed tactic, refuted alternative, setup/threat,
+  structure→plan, criticality, causal chain — each exists once, in
+  `src/services/`, and the selector is the only thing that calls them for
+  narration.
+- **One chokepoint.** The package goes through `voiceFacts`; the model phrases,
+  never chooses.
+- **Surfaces differ in exactly two things, both declared not coded per surface:**
+  register (review = retrospective "you played / they slipped"; watch/learn =
+  present tense; play = silent until phase transition or asked) and withholding
+  (review's honesty contract asks "where did it turn?" before the reveal; watch
+  just tells you). Same brain, same abilities, different tense and timing.
+
+The compile-time way to hold that: one `CoachSurface` union → one
+`Record<CoachSurface, {register, withholds}>` — a new surface fails to build
+until it declares both, and nothing else about the surface is allowed to differ.
+The runtime way to hold the second invariant: a source-scan gate that FAILS when
+any surface file calls a fact-computer for narration directly instead of through
+the selector (N4's gate), so the five-computers drift cannot reopen.
+
 ### 3.1 The selector (one function, surface-blind)
 
 ```
@@ -270,7 +294,7 @@ re-announcing.
 | **N1 — the selector (item 2)** | `selectTeaching(seq, student, surface)` over the existing computers: thesis + ≤3 moments + causal chain; per-ply beats gated on `onCausalThread`. Wired to review, Watch/Learn, Play phase-transitions and Learn live commentary in the SAME phase (they already share the fact-computers; one selector, surface-blind) | `selectTeaching.test.ts` on 3 real games + 2 taught lines: thesis computed, ≤3 moments, chain links them, identical package regardless of `surface` | `audit-review-real-game` R1/R3 green + NEW: thesis spoken once, moments ≤3; `audit-teach-on-topic-prod`; `audit-coach-play`; full-game workflow |
 | **N2 — need + the book-move rule (item 3, the standard)** | Need score (§3.2) + cold-start prior wired as the student term of importance; book plies silent unless need clears; opening = one beat; **retire R2** in `coachFeatureService` ("teach every silent opening move") AND the audit rubric in the SAME push | need-coverage gate: every ply with need ≥ threshold has a why, none below; cold profile → teaches; seeded weakness profile → teaches at its holes; mastered line → silent | `audit-review-real-game` with R2 replaced by need-coverage, run twice (cold + seeded via `seed-weakness-profile.mjs`); `audit-concept-gameplay-prod` |
 | **N3 — the refuted alternative + plan memory (items 1, 7)** | `refutedAlternative()` (§3.4) → beat in Watch/Learn (gen-time bake, one `WALKTHROUGH_GEN_REV` bump) and in review at the student's first departure; `PlanState` carried across plies (§3.6) | `refutedAlternative.test.ts` (DB sibling chosen, cost graded at the quiet end, concept from the engine, positional → null); plan announced once per structure | `audit-concept-gameplay-prod` + "a refuted-alternative beat was SPOKEN"; live `narrationAccuracy` on every spoken line; `audit-teach-on-topic-prod` no repeated plan announcements |
-| **N4 — the surface table (item 4)** | `SURFACE_CONTRACT: Record<CoachSurface, {register, withholds}>`; every surface reads register/withholding from it; nothing else per-surface | compile-time exhaustiveness test; a surface with logic outside the table fails a source-scan gate | review/teach/play audits unchanged in outcome |
+| **N4 — the surface table (item 4)** | `SURFACE_CONTRACT: Record<CoachSurface, {register, withholds}>`; every surface reads register/withholding from it; nothing else per-surface | compile-time exhaustiveness test; a source-scan gate fails any surface file that calls a fact-computer for narration directly (the selector is the only caller — invariant 2) or carries register/withholding logic outside the table | review/teach/play audits unchanged in outcome |
 | **N5 — weakness-aware moment ranking (item 5)** | moments matching the student's weakness tags outrank equal-criticality moments inside the selector (extends `applyWeaknessBoost` to the game level) | seeded profile changes the thesis/moment order deterministically | `audit-unified-coach-prod` |
 | **N6 — the number (item 6)** | need-coverage per surface per profile → `audit-reports/need-coverage.json`, shrink-only ceilings | report test | — |
 
