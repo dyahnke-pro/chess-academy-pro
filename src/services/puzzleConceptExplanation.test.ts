@@ -37,6 +37,8 @@ describe('explainPuzzleConcept (teach the concept behind the solution)', () => {
     expect(r!.computedSource).toBe('tactic');
     expect(r!.conceptName).toBe('Fork');
     expect(r!.idea).toMatch(/two targets/);
+    // The explanation names WHAT is forked (the instance), not just "a fork".
+    expect(r!.idea).toMatch(/forks .*a8|forks .*e8|king|rook/i);
     expect(r!.line).toMatch(/Nc7/);
     expect(r!.spoken).toContain(r!.idea!);
   });

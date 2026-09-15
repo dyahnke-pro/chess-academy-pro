@@ -90,8 +90,14 @@ function firstSentence(text: string): string | null {
 /** The general IDEA a computed concept teaches — the invariant alone for a
  *  tactic (the instance is already narrated by the line), the full register
  *  otherwise. Capitalised, sentence-terminated. */
-function computedIdea(c: ComputedConcept): string {
-  const inv = c.source === 'tactic' ? tacticInvariant(c.id) : null;
+function computedIdea(c: ComputedConcept, reveal: boolean): string {
+  // Two registers. The post-solve EXPLANATION (reveal) speaks the full register
+  // = the board-true INSTANCE ("bishop on g5 forks king e7 and queen d8") + the
+  // invariant — the line only says "landing a fork" and never names the
+  // targets, so the instance IS the teaching (David 2026-09-15 narration
+  // review). The pre-solve HINT (no reveal) speaks the invariant alone — the
+  // pattern and why it works, no square given away.
+  const inv = !reveal && c.source === 'tactic' ? tacticInvariant(c.id) : null;
   const text = (inv ? inv.full : c.full).trim();
   const cap = text.charAt(0).toUpperCase() + text.slice(1);
   return /[.!?]$/.test(cap) ? cap : `${cap}.`;
@@ -121,7 +127,7 @@ export function conceptIdeaForThemes(
     const turn = board.fen.split(' ')[1] === 'b' ? 'b' : 'w';
     const studentColor: 'w' | 'b' = board.studentToMove ? turn : (turn === 'w' ? 'b' : 'w');
     const lead = computedLead({ fen: board.fen, uci: board.uci, studentColor });
-    if (lead) return { conceptName: lead.name, conceptId: lead.id, idea: computedIdea(lead) };
+    if (lead) return { conceptName: lead.name, conceptId: lead.id, idea: computedIdea(lead, false) };
   }
   for (const t of themes) {
     const id = THEME_TO_CONCEPT_ID[t];
@@ -166,7 +172,7 @@ function compose(
   // THE COMPUTED CONCEPT LEADS (P3): the board classified the solution, so the
   // name + idea come from the engine; the tag table only fills in behind it.
   const conceptName = computed?.name ?? tagName;
-  const idea = computed ? computedIdea(computed) : passageIdea;
+  const idea = computed ? computedIdea(computed, true) : passageIdea;
 
   const parts: string[] = [];
   if (line) parts.push(line.charAt(0).toUpperCase() + line.slice(1) + (/[.!?]$/.test(line) ? '' : '.'));
