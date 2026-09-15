@@ -315,3 +315,34 @@ describe('the COMPUTED CONCEPT speaks at a phase transition (P4c — a wire that
     expect(spoken.join(' ')).not.toMatch(/\b(we|our|us)\b/i);
   });
 });
+
+
+describe('THE ONE SELECTOR at a phase transition (unified-coach N1)', () => {
+  it('speaks the game-level thesis — the tactic the game turned on — in the present register', async () => {
+    noteText = '';
+    const { result } = renderHook(() => usePhaseNarration({
+      // The Scandinavian Lasker: …Bg4 (ply 10) pins the f3-knight to the queen.
+      getPgn: () => 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4',
+      getOpeningName: () => 'Scandinavian Defense: Lasker Variation',
+      getLiveFen: () => FEN,
+    }));
+    act(() => { void result.current.narrate({ ...EVENT, playerColor: 'black' }, 'full'); });
+    await vi.waitFor(() => {
+      const all = spoken.join(' ');
+      expect(all, 'the thesis was not spoken').toMatch(/Bg4/);
+      expect(all).toMatch(/pin/i);
+    }, { timeout: 2000 });
+  });
+
+  it('stays silent about a thesis when nothing has turned yet (no tactic, no evals)', async () => {
+    noteText = '';
+    const { result } = renderHook(() => usePhaseNarration({
+      getPgn: () => 'e4 e6 d4 d5 Nc3 Nf6',
+      getOpeningName: () => 'French Defense',
+      getLiveFen: () => FEN,
+    }));
+    act(() => { void result.current.narrate(EVENT, 'full'); });
+    await new Promise((r) => setTimeout(r, 300));
+    expect(spoken.join(' ')).not.toMatch(/turns at|lands there/);
+  });
+});

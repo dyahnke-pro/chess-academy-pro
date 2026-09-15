@@ -11,6 +11,7 @@ import { getCachedStockfish, setCachedStockfish } from './stockfishFenCache';
 import { isSpokenSentenceGrounded, gradeNarrationText } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { transitionTeachingSourceForGame } from '../services/danyaTeachingService';
+import { selectTeaching, renderThesis, pliesFromSans } from '../services/teachingSelector';
 import { buildVoicePackage } from '../services/voicePackage';
 import { detectOpening } from '../services/openingDetectionService';
 import { splitSpeakableSentences } from '../utils/sentenceSplit';
@@ -488,6 +489,23 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
           }
         } catch { /* corpus is a bonus, never a blocker */ }
       }
+
+      // THE ONE SELECTOR reads the live game so far (unified-coach N1): the
+      // thesis — the tactic the game has turned on — is a computed DNA-register
+      // sentence in the present register, dispatched through the same sentence
+      // pipeline as the corpus note (split, gate, staleness, packaging). Silent
+      // when nothing has turned yet; a phase transition is a beat, and this is
+      // the one game-level fact it may carry.
+      try {
+        const sans = (argsRef.current.getPgn() ?? '').split(/\s+/).filter((t) => t && !/^\d+\.$/.test(t));
+        const pkg = selectTeaching({ plies: pliesFromSans(sans), studentColor: event.playerColor, kind: 'live', surface: 'phase-narration' });
+        const thesis = renderThesis(pkg.thesis, 'present');
+        if (thesis) {
+          sentenceBuffer += ` ${thesis}`;
+          flushCompletedSentences();
+          if (sentenceBuffer.trim()) { dispatchSentence(sentenceBuffer); sentenceBuffer = ''; }
+        }
+      } catch { /* the selector is a bonus here, never a blocker */ }
 
       // WO-PHASE-LAG-02: check the shared Stockfish FEN cache first.
       // When Read Position ran the engine on this exact board a few

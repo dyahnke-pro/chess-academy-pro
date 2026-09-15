@@ -60,6 +60,7 @@ import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
 import { stockfishEngine } from './stockfishEngine';
 import { buildDeliberation, deliberationAlternativesFacts } from './deliberation';
+import { selectTeaching, summarizeTeaching, type SelectorPly } from './teachingSelector';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
@@ -2613,8 +2614,29 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     narration.shortIntro && narration.shortIntro.trim().length > 0
       ? stripMoveRecitationLeadIn(narration.shortIntro.trim()) || undefined
       : undefined;
+  // THE ONE SELECTOR reads the taught line once (unified-coach N1): the thesis
+  // (the landed tactic the line turns on, else the structure→plan), the moment
+  // plies and the thread ride the tree as FACTS; the surface renders them in
+  // its register. Never a blocker — a tree without `teaching` is the pre-N1 tree.
+  let teaching: WalkthroughTree['teaching'];
+  try {
+    const startFen = new Chess().fen();
+    const selectorPlies: SelectorPly[] = positions.map((q, i) => ({
+      ply: i + 1, san: q.san, fenBefore: i === 0 ? startFen : positions[i - 1].fen, fenAfter: q.fen,
+      playerColor: (i % 2 === 0 ? 'white' : 'black'),
+    }));
+    const pkg = selectTeaching({ plies: selectorPlies, studentColor: studentSide, kind: 'line', surface: 'teach' });
+    teaching = summarizeTeaching(pkg);
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'openingGenerator.teachingSelector',
+      summary: `selector read "${entry.canonicalName}": thesis=${pkg.thesis.kind}${pkg.thesis.tactic ? `/${pkg.thesis.tactic}` : ''}@${pkg.thesis.ply ?? '-'} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+    });
+  } catch { teaching = undefined; }
   const tree: WalkthroughTree = {
     ...(narrationFellBack ? { narrationFallback: true } : {}),
+    ...(teaching ? { teaching } : {}),
     openingName: displayName,
     eco: entry.eco,
     studentSide,

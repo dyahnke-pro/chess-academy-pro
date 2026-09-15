@@ -67,7 +67,7 @@ export function minSwingPawns(rating: number): number {
 export const TURNING_POINT_MIN_CANDIDATES = 2;
 const MAX_CANDIDATES = 4;
 
-function moveLabel(s: TurningPointSegmentLike): string {
+export function moveLabel(s: TurningPointSegmentLike): string {
   return `${s.moveNumber}${s.playerColor === 'black' ? '…' : '.'} ${s.san}`;
 }
 
@@ -84,10 +84,16 @@ function swingPawns(s: TurningPointSegmentLike): number | null {
  * two costed moments — a clean game has no turning point to find, and a
  * one-blunder game answers itself). Empty > generic > invented.
  */
-export function buildTurningPointQuestion(
+/**
+ * The costed, contested-gated moments of a sequence, BIGGEST SWING FIRST. The
+ * one computation the review's turning-point card and the game-level selector
+ * (`teachingSelector`, unified-coach N1) share — a moment is a moment on every
+ * surface, computed once here. Rating-scaled via `minSwingPawns`.
+ */
+export function turningPointCandidates(
   segments: ReadonlyArray<TurningPointSegmentLike>,
   rating = 1500,
-): TurningPointQuestion | null {
+): TurningPointCandidate[] {
   const minSwing = minSwingPawns(rating);
   const costed: TurningPointCandidate[] = [];
   for (const s of segments) {
@@ -100,9 +106,16 @@ export function buildTurningPointQuestion(
       && decidedSameSide(s.evalBefore, s.evalAfter)) continue;
     costed.push({ ply: s.ply, label: moveLabel(s), swingPawns: swing, fenBefore: s.fenBefore });
   }
-  if (costed.length < TURNING_POINT_MIN_CANDIDATES) return null;
+  return costed.sort((a, b) => b.swingPawns - a.swingPawns);
+}
 
-  const bySwing = [...costed].sort((a, b) => b.swingPawns - a.swingPawns);
+export function buildTurningPointQuestion(
+  segments: ReadonlyArray<TurningPointSegmentLike>,
+  rating = 1500,
+): TurningPointQuestion | null {
+  const bySwing = turningPointCandidates(segments, rating);
+  if (bySwing.length < TURNING_POINT_MIN_CANDIDATES) return null;
+
   const answer = bySwing[0];
   const candidates = bySwing.slice(0, MAX_CANDIDATES).sort((a, b) => a.ply - b.ply);
 

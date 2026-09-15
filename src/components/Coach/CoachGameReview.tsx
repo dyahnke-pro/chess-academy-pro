@@ -50,6 +50,7 @@ import { classifyGameTheme, type GameThemeResult } from '../../services/gameThem
 import { findRewindTarget, type RewindTarget } from '../../services/blunderRewind';
 import { buildTurningPointQuestion, judgeTurningPointPick, type TurningPointQuestion } from '../../services/reviewTurningPoint';
 import { computeTurningPointHinge } from '../../services/reviewHinge';
+import { selectTeachingForSegments, renderThesis } from '../../services/teachingSelector';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, resolveOpeningIdeas, enrichLectureWithEngine, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
 import { captureEvent } from '../../services/analytics';
@@ -845,6 +846,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   /** The retrospective "what it hinged on" line, computed async when the turning
    *  point is set (Phase 5); appended to the reveal. */
   const turningHingeRef = useRef<string>('');
+  const turningThesisRef = useRef<string>('');
   const [turningReveal, setTurningReveal] = useState<{ correct: boolean; text: string } | null>(null);
   const turningAskedRef = useRef(false);
   // Preview-then-commit for the turning-point chips (David 2026-07-19: "chips
@@ -1216,6 +1218,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     turningAskedRef.current = true; // one ask per game, even when unanswerable
     const q = buildTurningPointQuestion(walkNarration.segments, playerRating ?? 1500);
     if (!q) return; // clean game / single obvious moment — no question to ask
+    // THE ONE SELECTOR reads the whole game (unified-coach N1). Its thesis is
+    // the reveal — WITHHELD until the student commits (the honesty contract):
+    // the same biggest-swing moment the card asks about, plus the tactic that
+    // landed there and the chain's root cause when one links the moments.
+    turningThesisRef.current = '';
+    try {
+      const pkg = selectTeachingForSegments(walkNarration.segments, playerColor, playerRating ?? 1500, 'review');
+      if (pkg.thesis.kind === 'turned' && pkg.thesis.ply === q.answer.ply) {
+        turningThesisRef.current = renderThesis(pkg.thesis, 'retrospective');
+      }
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachGameReview.teachingSelector',
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+      });
+    } catch { turningThesisRef.current = ''; }
     setTurningQ(q);
     captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });
     void reviewSay(q.question).catch(() => undefined);
@@ -1242,7 +1261,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       ? ` It fits the thread of the game — ${themeRef.current.reprise}.`
       : '';
     const hinge = turningHingeRef.current ? ` ${turningHingeRef.current}` : '';
-    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningQ.reveal}${hinge}${reprise}`;
+    const text = `${correct ? 'You called it.' : 'Not quite.'} ${turningThesisRef.current || turningQ.reveal}${hinge}${reprise}`;
     captureEvent('review_turning_point_result', { correct, picked_ply: ply, answer_ply: turningQ.answer.ply, hinged: !!turningHingeRef.current });
     setTurningQ(null);
     setTurningReveal({ correct, text });

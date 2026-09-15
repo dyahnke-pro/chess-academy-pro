@@ -203,7 +203,28 @@ export interface WalkthroughTreeChild {
 
 /** A complete opening walkthrough tree, registered by name in
  *  `src/data/openingWalkthroughs/index.ts`. */
+/** The game-level read of a taught line (unified-coach N1, `teachingSelector`):
+ *  the computed THESIS, the moment plies and the thread. Facts only — the
+ *  surface renders them in its declared register. Absent on trees generated
+ *  before 2026-09-15 (a cache row is never invalidated for it). */
+export interface WalkthroughTreeTeaching {
+  thesis: {
+    kind: 'turned' | 'landed' | 'plan' | 'none';
+    ply: number | null;
+    label: string | null;
+    swingPawns: number | null;
+    tactic: string | null;
+    plan: string | null;
+    chainRoot: string | null;
+  };
+  momentPlies: number[];
+  onThread: number[];
+  chainRoot: string | null;
+}
+
 export interface WalkthroughTree {
+  /** See `WalkthroughTreeTeaching`. */
+  teaching?: WalkthroughTreeTeaching;
   /** Canonical opening name (matches the brain's intendedOpening
    *  memory and Lichess explorer responses). */
   openingName: string;

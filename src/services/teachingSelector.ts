@@ -1,0 +1,278 @@
+// teachingSelector — THE ONE SELECTOR (unified-coach N1, David 2026-09-15:
+// "I want the coach to view each game like a master level puzzle. Not each
+// move." / "One unified coach, whose abilities are the same no matter where in
+// the app you are.").
+//
+// Reads a whole sequence ONCE — a finished game, a taught line, a live game so
+// far — and emits one package: the THESIS (what the sequence is about), the
+// MOMENTS it turned on (≤ MAX_MOMENTS, rating-scaled, contested-gated), the
+// CAUSAL CHAIN linking them, and the set of plies ON THAT THREAD. It does not
+// know which surface called it (invariant 1 of
+// docs/plans/2026-09-15-one-coach-need-selector.md §3.0): `surface` is accepted
+// for the audit trail only and never changes the package — the gate asserts
+// deep-equality across surfaces.
+//
+// Everything here is COMPUTED from the existing fact-computers (invariant 2 —
+// this module is the only narration caller of them): `turningPointCandidates`
+// (reviewTurningPoint — the same moments the review card asks about),
+// `landedTacticTeaching` (dnaLineNarrator → computePlyFacts → tacticInvariant),
+// `buildCausalChain`, `structurePlan`. `renderThesis` is a DNA-register
+// TEMPLATE over those facts: the register (retrospective / present) is the
+// caller's declared surface contract; the model may phrase it via `voiceFacts`,
+// it never chooses it (G0).
+//
+// What this phase deliberately does NOT do: gate the existing per-ply beats.
+// `onThread` is handed to every surface so N2 (the need score + R2 retirement)
+// can gate on it TOGETHER with need — gating on the thread alone would silence
+// every ply off the thread today, which is the July "there is no coach
+// narration" failure the CLAUDE.md standard forbids reopening.
+import { Chess, type Color } from 'chess.js';
+import type { CoachSurface } from '../coach/types';
+import { turningPointCandidates, moveLabel, type TurningPointSegmentLike } from './reviewTurningPoint';
+import { landedTacticTeaching } from './dnaLineNarrator';
+import { buildCausalChain, type CausalChain } from './causalChain';
+import { structurePlan } from './boardPlan';
+import { tacticWord } from './pvPlayback';
+
+export interface SelectorPly {
+  /** 1-based ply. */
+  ply: number;
+  san: string;
+  fenBefore: string;
+  fenAfter: string;
+  playerColor: 'white' | 'black';
+  /** White-POV centipawns, as the review walk carries them. Absent on a taught
+   *  line (no engine record) — then only landed tactics can be moments. */
+  evalBefore?: number | null;
+  evalAfter?: number | null;
+  classification?: string | null;
+}
+
+/** What the sequence IS: a finished game, a taught line, or a live game so far. */
+export type SequenceKind = 'game' | 'line' | 'live';
+
+export interface SelectorInput {
+  plies: readonly SelectorPly[];
+  studentColor: 'white' | 'black';
+  rating?: number;
+  kind: SequenceKind;
+  /** Audit trail only — never changes the package (invariant 1). */
+  surface?: CoachSurface;
+}
+
+export interface Moment {
+  ply: number;
+  /** "18… Rd8" — the review card's label, shared. */
+  label: string;
+  kind: 'swing' | 'landed-tactic';
+  /** Mover-POV cost in pawns for a swing moment; null for a landed tactic on a
+   *  sequence without evals. */
+  swingPawns: number | null;
+  /** The tactic type that LANDED on this ply (`computePlyFacts.tacticLanded`),
+   *  when one did — a swing moment can carry one too. */
+  tactic: string | null;
+  fenBefore: string;
+  san: string;
+}
+
+export interface Thesis {
+  kind: 'turned' | 'landed' | 'plan' | 'none';
+  ply: number | null;
+  label: string | null;
+  swingPawns: number | null;
+  tactic: string | null;
+  /** The structure→plan sentence (`structurePlan`) for a quiet taught line. */
+  plan: string | null;
+  /** The root-cause node kind of the causal chain, when one links the moments. */
+  chainRoot: string | null;
+}
+
+export interface TeachingPackage {
+  thesis: Thesis;
+  /** Biggest first; ≤ MAX_MOMENTS. */
+  moments: Moment[];
+  chain: CausalChain | null;
+  /** Plies that are links in the thread: every moment + every chain node ply.
+   *  N2 gates per-ply beats on this together with the need score. */
+  onThread: ReadonlySet<number>;
+  kind: SequenceKind;
+}
+
+export const MAX_MOMENTS = 3;
+
+const NONE: Thesis = { kind: 'none', ply: null, label: null, swingPawns: null, tactic: null, plan: null, chainRoot: null };
+
+function toSegment(p: SelectorPly): TurningPointSegmentLike {
+  return {
+    ply: p.ply,
+    moveNumber: Math.ceil(p.ply / 2),
+    san: p.san,
+    playerColor: p.playerColor,
+    evalBefore: p.evalBefore ?? null,
+    evalAfter: p.evalAfter ?? null,
+    classification: p.classification ?? null,
+    fenBefore: p.fenBefore,
+  };
+}
+
+/**
+ * The one game-level read. Pure, deterministic, chess.js-only (no engine call
+ * — it consumes the eval record the caller already has), so it is cheap enough
+ * to run on every review open, every lesson generation and every phase
+ * transition.
+ */
+export function selectTeaching(input: SelectorInput): TeachingPackage {
+  const { plies, kind } = input;
+  const rating = input.rating ?? 1500;
+  const studentWB: Color = input.studentColor === 'white' ? 'w' : 'b';
+  if (plies.length === 0) return { thesis: NONE, moments: [], chain: null, onThread: new Set(), kind };
+
+  // 1. Landed tactics, per ply (cheap; the same computer the live beat speaks).
+  const landedByPly = new Map<number, string>();
+  for (const p of plies) {
+    try {
+      const landed = landedTacticTeaching(p.fenBefore, p.san);
+      if (landed) landedByPly.set(p.ply, landed.type);
+    } catch { /* an illegal ply is not a moment */ }
+  }
+
+  // 2. Swing moments — the review card's own candidates, biggest first.
+  const swings = turningPointCandidates(plies.map(toSegment), rating);
+  const byPly = new Map(plies.map((p) => [p.ply, p] as const));
+  const moments: Moment[] = [];
+  const seen = new Set<number>();
+  for (const c of swings) {
+    if (moments.length >= MAX_MOMENTS) break;
+    const p = byPly.get(c.ply);
+    if (!p) continue;
+    moments.push({ ply: c.ply, label: c.label, kind: 'swing', swingPawns: c.swingPawns, tactic: landedByPly.get(c.ply) ?? null, fenBefore: p.fenBefore, san: p.san });
+    seen.add(c.ply);
+  }
+  // 3. Landed tactics fill the remaining slots, in game order.
+  for (const p of plies) {
+    if (moments.length >= MAX_MOMENTS) break;
+    const t = landedByPly.get(p.ply);
+    if (!t || seen.has(p.ply)) continue;
+    moments.push({ ply: p.ply, label: moveLabel(toSegment(p)), kind: 'landed-tactic', swingPawns: null, tactic: t, fenBefore: p.fenBefore, san: p.san });
+    seen.add(p.ply);
+  }
+
+  // 4. The chain through the top moment (root cause → tactic), when one exists.
+  let chain: CausalChain | null = null;
+  const top = moments[0];
+  if (top) {
+    try {
+      chain = buildCausalChain({ historySans: plies.slice(0, top.ply).map((p) => p.san), focusPly: top.ply });
+    } catch { chain = null; }
+  }
+  const onThread = new Set<number>(moments.map((m) => m.ply));
+  if (chain) for (const n of chain.nodes) if (typeof n.ply === 'number') onThread.add(n.ply);
+
+  // 5. The thesis — one computed fact the whole package serves.
+  let thesis: Thesis = NONE;
+  if (top && top.kind === 'swing') {
+    thesis = { kind: 'turned', ply: top.ply, label: top.label, swingPawns: top.swingPawns, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null };
+  } else if (top) {
+    thesis = { kind: 'landed', ply: top.ply, label: top.label, swingPawns: null, tactic: top.tactic, plan: null, chainRoot: chain?.nodes[0]?.kind ?? null };
+  } else if (kind === 'line') {
+    const last = plies[plies.length - 1];
+    let plan: string | null = null;
+    try { plan = structurePlan(last.fenAfter, studentWB); } catch { plan = null; }
+    if (plan) thesis = { kind: 'plan', ply: last.ply, label: null, swingPawns: null, tactic: null, plan, chainRoot: null };
+  }
+
+  return { thesis, moments, chain, onThread, kind };
+}
+
+export type ThesisRegister = 'retrospective' | 'present';
+
+/**
+ * The thesis as one DNA-register sentence in the caller's declared register.
+ * A TEMPLATE over computed facts — the model may phrase it through
+ * `voiceFacts`, it never chooses it. '' when there is nothing to say.
+ */
+export function renderThesis(t: Thesis, register: ThesisRegister): string {
+  const word = t.tactic ? tacticWord(t.tactic) : null;
+  switch (t.kind) {
+    case 'turned': {
+      const swing = t.swingPawns !== null ? ` — about ${t.swingPawns.toFixed(1)} pawns` : '';
+      return register === 'retrospective'
+        ? `The game turned at ${t.label}${swing}${word ? `; a ${word} landed there` : ''}.`
+        : `This turns at ${t.label}${swing}${word ? ` — the ${word} lands there` : ''}.`;
+    }
+    case 'landed':
+      return register === 'retrospective'
+        ? `The moment was ${t.label}: the ${word ?? 'tactic'} landed there.`
+        : `Watch ${t.label} — that is where the ${word ?? 'tactic'} lands.`;
+    case 'plan':
+      return t.plan ?? '';
+    case 'none':
+      return '';
+  }
+}
+
+/** Build selector plies from a SAN history (chess.js replays it; an illegal
+ *  SAN truncates the sequence there — never a throw). Evals optional. */
+export function pliesFromSans(sans: readonly string[], evals?: readonly (number | null)[]): SelectorPly[] {
+  const c = new Chess();
+  const out: SelectorPly[] = [];
+  let before = c.fen();
+  let evalBefore: number | null = 0;
+  for (let i = 0; i < sans.length; i++) {
+    let mv: ReturnType<Chess['move']> | null;
+    try { mv = c.move(sans[i]); } catch { break; }
+    if (!mv) break;
+    const evalAfter = evals ? (evals[i] ?? null) : undefined;
+    out.push({
+      ply: i + 1, san: mv.san, fenBefore: before, fenAfter: c.fen(),
+      playerColor: mv.color === 'w' ? 'white' : 'black',
+      ...(evals ? { evalBefore, evalAfter } : {}),
+    });
+    before = c.fen();
+    if (evals) evalBefore = evalAfter ?? evalBefore;
+  }
+  return out;
+}
+
+/** The review walk's segments carry everything the selector needs. Structural
+ *  type so the component never imports a review-only shape into the selector. */
+export interface SegmentLike {
+  ply: number;
+  san: string;
+  fenBefore: string;
+  fenAfter: string;
+  playerColor: 'white' | 'black';
+  evalBefore: number | null;
+  evalAfter: number | null;
+  classification: string | null;
+}
+
+export function selectTeachingForSegments(
+  segments: ReadonlyArray<SegmentLike>,
+  studentColor: 'white' | 'black',
+  rating: number | undefined,
+  surface: CoachSurface,
+): TeachingPackage {
+  return selectTeaching({
+    plies: segments.map((s) => ({ ply: s.ply, san: s.san, fenBefore: s.fenBefore, fenAfter: s.fenAfter, playerColor: s.playerColor, evalBefore: s.evalBefore, evalAfter: s.evalAfter, classification: s.classification })),
+    studentColor, rating, kind: 'game', surface,
+  });
+}
+
+/** The serializable slice of a package a cached WalkthroughTree carries
+ *  (`WalkthroughTree.teaching`): facts only, no Sets, no chain object. */
+export interface TreeTeaching {
+  thesis: Thesis;
+  momentPlies: number[];
+  onThread: number[];
+  chainRoot: string | null;
+}
+
+export function summarizeTeaching(pkg: TeachingPackage): TreeTeaching {
+  return {
+    thesis: pkg.thesis,
+    momentPlies: pkg.moments.map((m) => m.ply),
+    onThread: [...pkg.onThread].sort((a, b) => a - b),
+    chainRoot: pkg.chain?.nodes[0]?.kind ?? null,
+  };
+}
