@@ -226,6 +226,14 @@ const run = async () => {
     const btn = page.locator('[data-testid="start-walk-btn"]').first();
     if ((await btn.count()) && (await btn.getAttribute('disabled')) === null) { ready = true; break; }
     if (i % 8 === 0) log(`  …analysing (${(i * 1.5).toFixed(0)}s)`);
+    // Vacuity guard (2026-09-15): patience is for a review that IS analysing.
+    // If no review surface has mounted at all after 30s, there is no app here —
+    // fail fast instead of waiting the full budget (the negative control caps
+    // at 90s; the old loop sat ~12 min on a blank page before its FATAL).
+    if (i === 20 && (await page.locator('[data-testid="coach-game-review"]').count()) === 0) {
+      log('[FATAL] no review surface mounted after 30s — blank app / wrong URL');
+      if (voice) await voice.stop(); await browser.close(); process.exit(1);
+    }
   }
   const readyInMs = Date.now() - analysisStartedAt;
   const lookups = cacheTally.hit + cacheTally.miss;
