@@ -358,6 +358,18 @@ before the selector exists, or the July silence returns.
 - Review's book-departure beat does not yet carry the DB-popular framing of the
   refuted alternative (the engine punishment line is already spoken there).
 
+### N2 CORRECTION (2026-09-15, same day) — the gate was on the wrong branch
+
+N2 shipped the book-move gate on the CAPPED cascade. `isReviewUncapped()`
+returns TRUE by default (`CoachGameReview.tsx:104-114`), so the branch a real
+review runs is the full-data aggregator, and it was ungated: every quiet
+opening ply still emitted the whole computed inventory. Every N2 assertion was
+green because `reviewNeedGate.test.ts` also passed `uncapped=false` — a gate
+that only covers the path nobody runs. Fixed in `fix(review): the narration
+defects a real prod transcript exposed`; the test file now carries three
+uncapped cases. When you gate a review behaviour, gate the UNCAPPED path first
+and the capped one second.
+
 ## 6c. READING THE ACTUAL NARRATION (David 2026-09-15: "Fire does not equal green. Show me the narrations as well")
 
 A pass count is not a read. The method that found six real defects in one
