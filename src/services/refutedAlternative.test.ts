@@ -102,7 +102,7 @@ describe('refutedAlternative', () => {
     const r = await refutedAlternative({ fenBefore: FEN, taughtSan: 'g6', candidates: cands, studentColor: 'black', rating: 1500, engine });
     expect(r).not.toBeNull();
     expect(r!.concept).toBeNull();
-    expect(r!.text).toMatch(/costs about 1\.0 pawns/);
+    expect(r!.text).toMatch(/costs about 1\.0 points/);
     expect(r!.text).not.toMatch(/fork|pin|mate/i);
   });
 

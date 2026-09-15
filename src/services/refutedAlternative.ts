@@ -101,7 +101,7 @@ export function renderRefutedAlternative(f: Omit<RefutedAlternative, 'text'>, ta
   if (f.concept) {
     return `Most people play ${f.alt} here (${pop}), and it walks into a ${f.concept.name.toLowerCase()}:${runs ? runs + ' —' : ''} ${f.concept.full} ${taughtSan} keeps that off the board.`;
   }
-  return `Most people play ${f.alt} here (${pop}), and it costs about ${pawns(f.costCp)} pawns —${runs ? runs + ';' : ''} nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
+  return `Most people play ${f.alt} here (${pop}), and it costs about ${pawns(f.costCp)} points —${runs ? runs + ';' : ''} nothing forcing, just a worse position. ${taughtSan} holds the balance.`;
 }
 
 /**
