@@ -65,3 +65,35 @@ describe('review need gate (N2)', () => {
     expect(student.every((s) => s.need?.speak === true)).toBe(true);
   });
 });
+
+// 🔒 THE DEFAULT PATH. `isReviewUncapped()` returns TRUE on prod, so the branch
+// a real review runs is the full-data aggregator — and until 2026-09-15 the
+// gate above sat only on the capped cascade, so every one of these assertions
+// was green while the shipping review still narrated every quiet book ply.
+// A gate that only covers the path nobody runs is not a gate.
+describe('review need gate (N2) — the UNCAPPED path prod actually runs', () => {
+  const familiar: StudentNeedContext = {
+    rating: 1400, gamesPlayed: 40, signals: [], bookDepartures: [],
+    lineReps: new Array(SANS.length + 2).fill(FAMILIAR_REPS),
+  };
+  it('a mastered line goes quiet on the student\'s own book plies', () => {
+    const cold = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], coldStudent(1400));
+    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    const spokenStudent = (segs: ReturnType<typeof buildReviewSegments>): number =>
+      segs.filter((s) => s.playerColor === 'white' && s.narration).length;
+    expect(spokenStudent(cold)).toBeGreaterThan(0);
+    expect(spokenStudent(warm)).toBeLessThan(spokenStudent(cold));
+  });
+  it('the OPPONENT\'s plies are never silenced by the student\'s need', () => {
+    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    const opp = warm.filter((s) => s.playerColor === 'black');
+    expect(opp.some((s) => s.narration)).toBe(true);
+    expect(opp.every((s) => s.need === undefined)).toBe(true);
+  });
+  it('a silenced ply reports no narration SOURCE, so the audit\'s leak check can see it', () => {
+    const warm = buildReviewSegments(inputs(), 'white', 'Italian Game', true, 1400, [], familiar);
+    for (const s of warm) {
+      if (s.need && !s.need.speak && s.playerColor === 'white') expect(s.narrationSource).toBeNull();
+    }
+  });
+});
