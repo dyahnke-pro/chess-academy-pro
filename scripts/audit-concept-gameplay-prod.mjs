@@ -127,7 +127,11 @@ async function askForLesson(page, listener, ask, label) {
   await page.keyboard.press('Enter');
   const started = Date.now();
   let mounted = null;
-  let spokenBefore = spokenLines(listener).length;
+  // Lines are cumulative across the run — a concept voiced by an EARLIER ask
+  // must not satisfy this one (2026-09-15: the canonical lesson's pin ended
+  // the typo run on its first tick, before the picker was answered).
+  const spokenStart = spokenLines(listener).length;
+  let spokenBefore = spokenStart;
   while (Date.now() - started < LESSON_BUDGET_MS) {
     await page.waitForTimeout(3000);
     for (const t of WALKTHROUGH_TESTIDS) {
@@ -135,7 +139,7 @@ async function askForLesson(page, listener, ask, label) {
     }
     const lines = spokenLines(listener);
     // Stop once the concept has been voiced, or the lesson reached its leaf.
-    if (lines.some(carriesConcept)) break;
+    if (lines.slice(spokenStart).some(carriesConcept)) break;
     // A fork is a question to the STUDENT — a human taps a line; so does the
     // driver (functional-audit rule: handle the branch a real user hits, never
     // let one unanswered prompt swallow the rest of the run). Prefer the taught
