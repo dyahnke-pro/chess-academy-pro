@@ -159,11 +159,15 @@ describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
     const fn = comp.slice(comp.indexOf('function isReviewUncapped'), comp.indexOf('interface CoachGameReviewProps'));
     expect(fn).toMatch(/^\s*return true;\s*$/m);              // default ON
     expect(fn).toMatch(/get\('uncapped'\) === '0'/);            // manual compare only
-    // The cut lives in the selector, wired into the facet path.
+    // The cut lives in the ONE deciding computer, wired into the facet path.
+    // Deliberately NOT asserting the argument list: this gate has now gone stale
+    // twice in one night by pinning call-site TEXT that a refactor legitimately
+    // changed (`selectFacts(...)` → `decide(...)`). Assert the door, and let
+    // `coachDecider.test.ts` own "no surface composes the decision by hand".
     const svc = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
-    expect(svc).toMatch(/selectFacts\(kept, facetSquares, tier/);
+    expect(svc).toMatch(/\bdecide\(/);
     // Silence must stay explainable — the quiet facts are emitted with a reason.
-    expect(svc).toMatch(/selection\.quiet/);
+    expect(svc).toMatch(/decision\.quiet/);
   });
 
   it('no Settings toggle may turn the inventory back on — a switch is not a decision', async () => {
