@@ -101,9 +101,27 @@ const run = async () => {
   const tid = await chip.getAttribute('data-testid');
   log(`[probe] first chip testid: ${tid}`);
 
+  // WATCH THE TAP CLOSELY. `handleWalkForward` DISMISSES this card on purpose
+  // (David 2026-07-19: forward must never leave a frozen board), so any stray
+  // forward click destroys it without answering — and `turningAskedRef` means it
+  // never comes back. Poll every 200ms after the tap and report the first frame
+  // where the card, the confirm button or the reveal changes, plus any NEW
+  // spoken line, so the next reader sees WHICH transition happened.
+  const before = spoken().length;
   await chip.click({ timeout: 3000, force: true }).catch((e) => log(`[probe] chip click threw: ${String(e).slice(0, 80)}`));
-  const confirmUp = await until(() => has(page, '[data-testid="review-turning-point-confirm"]'), 8000, 250);
-  log(`[probe] after tap 1 → confirm present: ${confirmUp}; card still present: ${await has(page, '[data-testid="review-turning-point-card"]')}`);
+  let sawConfirm = false; let sawReveal = false; let cardGoneAt = -1;
+  for (let i = 0; i < 40; i += 1) {
+    const card = await has(page, '[data-testid="review-turning-point-card"]');
+    if (!card && cardGoneAt < 0) cardGoneAt = i * 200;
+    if (await has(page, '[data-testid="review-turning-point-confirm"]')) sawConfirm = true;
+    if (await has(page, '[data-testid="review-turning-point-reveal"]')) sawReveal = true;
+    if (sawConfirm || sawReveal) break;
+    await page.waitForTimeout(200);
+  }
+  const newLines = spoken().slice(before).map((x) => x.text.slice(0, 90));
+  log(`[probe] after tap: confirmEverSeen=${sawConfirm} revealEverSeen=${sawReveal} cardGoneAfterMs=${cardGoneAt}`);
+  log(`[probe] new spoken lines after tap: ${JSON.stringify(newLines)}`);
+  const confirmUp = sawConfirm;
 
   if (confirmUp) {
     await page.locator('[data-testid="review-turning-point-confirm"]').first().click({ timeout: 3000, force: true }).catch(() => undefined);
