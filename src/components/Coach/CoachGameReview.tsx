@@ -39,7 +39,7 @@ import { explainTemptingCapture } from '../../services/reviewTeachingPoints';
 import { judgeSequenceAttempt, moverPlies, type SequenceVerdict } from '../../services/sequenceChallenge';
 import { resolveReachState, reachAskDepth } from '../../services/reachRating';
 import { pickCameoAnchor, buildCameoPlayback, type CameoAnchor, type CameoPlayback } from '../../services/modelGameMatcher';
-import { voiceFacts, voiceReviewLines } from '../../services/coachApi';
+import { voiceFacts } from '../../services/coachApi';
 import { logMisconception } from '../../services/misconceptionService';
 import { buildMisconceptionCallback } from '../../services/misconceptionCallbacks';
 import { principleFor } from '../../data/principles';
@@ -1395,7 +1395,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         // live briefing / Learn — David 2026-09-14).
         if (lineInvariant && lineInvariant.index === idx) facts = `${facts} ${lineInvariant.sentence}`;
         try {
-          const phrased = await voiceFacts(facts, { intent: 'review-pv-playback', warm: true });
+          // The `warm` flag FORCED the phrasing model even under preferRaw — the
+          // last model call left on the review walk. Cut for the same reason as
+          // the other two (David 2026-09-16): the PlyFacts prose is computed,
+          // board-true and already in register, so a rewrite can only drift it.
+          const phrased = await voiceFacts(facts, { intent: 'review-pv-playback', preferRaw: true });
           return phrased ?? null;
         } catch { return null; }
       })).then((voice) => {
@@ -1507,8 +1511,17 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // the time from card to best line walk"). The warm runs while it plays.
     const intro = seed.bestSan ? `Here's the stronger line — ${seed.bestSan}.` : "Here's the stronger line.";
     await speakPaced(intro);
-    let warmed = new Map<number, string>();
-    try { warmed = await voiceReviewLines(rawWhys.filter((w) => w.fact.length > 0)); } catch { /* raw fallback */ }
+    // NO PHRASING MODEL (David 2026-09-16: "cut but pass through dna"). The
+    // computed "why" per ply IS the voice; it goes through the ONE chokepoint
+    // raw, which strips internal headers and eye-notation without a model call.
+    const warmed = new Map<number, string>();
+    for (const w of rawWhys) {
+      if (!w.fact || w.fact.length === 0) continue;
+      try {
+        const spoken = await voiceFacts(w.fact, { preferRaw: true, intent: 'review-better-line' });
+        if (spoken && spoken.trim().length > 0) warmed.set(w.id, spoken);
+      } catch { /* keep the computed text */ }
+    }
     if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
     for (let i = 0; i < line.plies.length; i++) {
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) { onDone(); return; }
@@ -1678,7 +1691,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // Warm the beat facts AND every dive step's why in ONE house-voice batch —
     // dive whys are keyed 1000*(beatIdx+1)+stepIdx so both registers come back
     // from a single call (no per-step LLM racing during playback).
-    let warmed = new Map<number, string>();
+    const warmed = new Map<number, string>();
     try {
       // kind:'theory' tells the warmer this is an OPENING LECTURE — here it may
       // name the move (Danya says "Bishop to B5") and MUST keep the game counts +
@@ -1690,7 +1703,11 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           if (step.why) warmInput.push({ id: 1000 * (i + 1) + j, fact: step.why, kind: 'theory' });
         });
       });
-      warmed = await voiceReviewLines(warmInput);
+      for (const w of warmInput) {
+        if (!w.fact || w.fact.length === 0) continue;
+        const spoken = await voiceFacts(w.fact, { preferRaw: true, intent: 'review-theory' });
+        if (spoken && spoken.trim().length > 0) warmed.set(w.id, spoken);
+      }
     } catch { /* raw */ }
     for (let i = 0; i < beats.length; i++) {
       if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;

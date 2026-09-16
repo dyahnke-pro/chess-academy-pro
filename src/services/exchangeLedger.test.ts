@@ -130,5 +130,15 @@ describe('no phrasing model on the review walk (David 2026-09-16: "cut but pass 
     expect(src).not.toMatch(/REVIEW_HOUSE_VOICE_TIMEOUT_MS/);
     // The computed prose goes through the ONE chokepoint, raw.
     expect(src).toMatch(/voiceFacts\([^)]*preferRaw: true/);
+    // 🔒 SWEEP, don't spot-fix. The first cut took the service's call and
+    // declared the warm pass gone — the REVIEW COMPONENT still had two more
+    // (`voiceReviewLines` for the better-line whys and the theory lecture) plus
+    // a third model call hiding behind `warm: true`, which forces the phrasing
+    // model even under preferRaw. Found by grepping the deployed bundle, not
+    // the source. Scan the component too, and scan for `warm: true`, not just
+    // the function name.
+    const comp = readFileSync(join(process.cwd(), 'src/components/Coach/CoachGameReview.tsx'), 'utf8');
+    expect(comp).not.toMatch(/voiceReviewLines/);
+    expect(comp).not.toMatch(/warm: true/);
   });
 });
