@@ -531,6 +531,47 @@ reappears in the projection code.
 **This is the third duplicate-computer defect of the session** (the worst-piece
 loop, the outpost stated twice, the verdict) and is the evidence behind §9.
 
+## 8b. NO HARD CAPS — the sweep (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things don't get stated or teachings left out")
+
+This is CLAUDE.md's own quality-is-the-only-metric rule applied to a class of
+code nobody had swept for: a `.slice(0, N)` on a list of COMPUTED FACTS. Each
+one silently drops teaching, and every one found so far was written for
+readability or thrift, never for pedagogy.
+
+**DONE (review path, shipped 2026-09-16):** eight caps removed — the verdict
+reasons (×2, one of them added the same night), the intro's key moments, the
+three projection COUNT budgets, the trapped-minor candidate scan, and the
+`eyes` / colour-complex enumerations. Enumerations get a shared `andList`
+because a long list is a PHRASING problem, never a reason to drop a fact.
+
+**KEPT deliberately, do not "fix" these:**
+- The G5 verbosity contract (silent / brief = 2 sentences, 30 words). That is
+  the STUDENT's own setting, not the app rationing them. G5 is locked.
+- `maxPlies: 6` on the punishment pass — DEEPER than `pvDepthForRating` for
+  every player under 2100, so unifying it onto the rating-scaled value would
+  SHORTEN lines for most users. Verified before touching; left alone.
+
+**STILL OWED — 61 more sites, measured 2026-09-16:**
+| file | count | surface |
+|---|---|---|
+| `groundedAnswer.ts` | 53 | coach chat / direct answers |
+| `openingGenerator.ts` | 7 | Watch/Learn generation |
+| `positionFacts.ts` | 1 | the shared clause list |
+
+Sampled and confirmed same-class: `loose.slice(0, 3)` names three loose pieces
+when five are loose; `levers.slice(0, 3)`; `eyes.slice(0, 2)`; `holes.slice(0, 2)`.
+
+**Why it is a SEPARATE pass, not a bolt-on:** `groundedAnswer` is the chat
+surface, and its contract is proven by the EXHAUSTIVE routing audit
+(`audit-coach-all-questions-prod.mjs`, every phrasing of every lane against
+live prod). Changing 53 answer-assembly sites without that audit behind them is
+the reckless version. Each site also needs a judgement — dropping a fact is
+always wrong, but some slices sit on genuinely unbounded lists where the fix is
+a count plus the list ("four holes: d5, b5, c4 and e4"), not a run-on.
+
+Procedure for the next session: convert site by site to `andList` (or a count +
+list), run the exhaustive routing audit on prod, read the answers.
+
 ## 9. N8 — TYPE THE FACT (David 2026-09-16: "this is not one cohesive computer")
 
 Not yet built; David asked for thoughts, the answer is recorded here so the
