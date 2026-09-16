@@ -308,7 +308,7 @@ const GATE_TESTS = [
   'src/services/tacticTypeUnification.test.ts', // ONE tactic classifier: the weakness tag is a projection of the concept the coach teaches; legacy geometry has no product caller (David 2026-09-15 "one coach system, not 5")
   'src/services/teachingSelector.test.ts',
   'src/services/structureProse.test.ts',
-  'src/services/exchangeLedger.test.ts',
+  'src/services/exchangeLedger.test.ts src/services/factSelector.test.ts',
   'src/services/mapConcurrent.test.ts',
   'src/services/reviewFacetRank.test.ts',
   'src/services/reviewNarrationDefects.test.ts',

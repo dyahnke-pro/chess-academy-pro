@@ -165,7 +165,15 @@ function matingSideIsStudent(sans: string[], studentColorWB: Color | null): bool
  * Every computed facet for this move, ordered, each a prose clause. The uncapped
  * review joins them into the move's narration. This function IS the data inventory.
  */
-export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string, readonly string[]>): string[] {
+export function computeMoveFacets(
+  ctx: MoveFactContext,
+  outSquares?: Map<string, readonly string[]>,
+  /** Facts describing something the OPPONENT is doing TO the student, taken from
+   *  the detector's own `beneficiary` — the signal `factSelector` uses to decide
+   *  that their battery outranks your pin when both describe one diagonal.
+   *  Coupled here, never inferred from the prose (G0). */
+  outIncoming?: Set<string>,
+): string[] {
   const facets: string[] = [];
   // Record the KEY SQUARES a facet named, keyed by the facet text, so the
   // review can lead the eye with a yellow highlight coupled from the COMPUTER's
@@ -173,6 +181,10 @@ export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string,
   // to all spoken key squares"; G0 coupling). Only facets with a clean square
   // variable in scope record; prose-only facets (badbishop/worst) don't, so a
   // highlight never appears without a board-true square behind it.
+  const recIncoming = (facet: string, beneficiary: 'w' | 'b' | undefined): void => {
+    if (!outIncoming || !beneficiary || !ctx.studentColorWB) return;
+    if (beneficiary !== ctx.studentColorWB) outIncoming.add(facet);
+  };
   const recSquares = (facet: string, squares: ReadonlyArray<string | null | undefined>): void => {
     if (!outSquares) return;
     const clean = squares.filter((s): s is string => typeof s === 'string' && /^[a-h][1-8]$/.test(s));
@@ -336,16 +348,32 @@ export function computeMoveFacets(ctx: MoveFactContext, outSquares?: Map<string,
       // "tell the computer whose move it is"). Live win / real threat / drop.
       if (tac.type === 'fork') {
         const v = verifyForkOnBoard(fenAfter, tac.involvedSquares[0], tac.involvedSquares.slice(1));
-        if (v.status === 'live') facets.push(`[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`);
-        else if (v.status === 'threat') facets.push(`[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`);
+        // COUPLE THE SQUARES (2026-09-16). The detector already knows exactly
+        // which squares a tactic involves; not recording them left every
+        // [tactic] fact geometry-blind, so four readings of ONE configuration
+        // (the pin, the battery, the lone defender, the royal guard on the
+        // d1–e2–g4 diagonal) all spoke as if they were four separate findings.
+        // Subsumption needs the squares, and scraping them back out of the
+        // prose is the anti-pattern that caused this session's other bugs.
+        if (v.status === 'live') {
+          const f = `[tactic] ${seat(tac.description)} — it's the move, so the material comes off.`;
+          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+        } else if (v.status === 'threat') {
+          const f = `[tactic] Threat: ${seat(tac.description)} — the defender can't save everything.`;
+          facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+        }
         // status 'none' → unproven fork shape, say nothing (G0).
         continue;
       }
-      facets.push(`[tactic] ${seat(tac.description)}.`);
+      {
+        const f = `[tactic] ${seat(tac.description)}.`;
+        facets.push(f); recSquares(f, tac.involvedSquares); recIncoming(f, tac.beneficiary);
+      }
     }
     if (t.hangingPieces.length > 0) {
       const desc = t.hangingPieces.map((h) => `${pieceWord(h.piece)} on ${h.square}`).join(', ');
-      facets.push(`[loose] Undefended right now: ${seat(desc)}.`);
+      const f = `[loose] Undefended right now: ${seat(desc)}.`;
+      facets.push(f); recSquares(f, t.hangingPieces.map((h) => h.square));
     }
   } catch { /* ignore */ }
 
