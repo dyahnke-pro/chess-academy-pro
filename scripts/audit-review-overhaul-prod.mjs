@@ -413,6 +413,12 @@ const run = async () => {
       flaggedLeads.set(n, { badge: b, lead: nt.split(/(?<=[.!?])\s+/)[0] || '' });
     }
     if (n >= total) { reachedEnd = true; break; }
+    // PROGRESS, so a 10-minute walk is not 10 minutes of silence (CLAUDE.md
+    // "never run blind, never wait silent"). Without this the recap phase is
+    // indistinguishable from a hang, which is the exact failure this audit
+    // exists to catch in the PRODUCT — an instrument that reports nothing is
+    // indistinguishable from a green one.
+    if (i > 0 && i % 25 === 0) log(`  [walk] ply ${n}/${total} after ${i}s (poll ${i}/600)`);
     // NEVER RESUME WHILE THE TURNING-POINT CARD IS UP — resuming advances the
     // walk, which dismisses it unanswered (see the pause note in resolveCards).
     const cardBlocking = await has(page, '[data-testid="review-turning-point-card"]');
