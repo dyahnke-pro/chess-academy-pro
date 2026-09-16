@@ -572,6 +572,54 @@ a count plus the list ("four holes: d5, b5, c4 and e4"), not a run-on.
 Procedure for the next session: convert site by site to `andList` (or a count +
 list), run the exhaustive routing audit on prod, read the answers.
 
+## 8c. N9 — THE RANK TABLE (built 2026-09-16) and the honest cap recount
+
+**Built.** `reviewFacetRank.ts` — `Record<FacetTag, number>` over the full tag
+union, so a NEW facet tag fails to COMPILE until someone decides what it is
+worth. Order: the fundamental crossed and what the move cost → what is FORCING
+→ the concrete tactics → the lasting positional facts → the standing verdict →
+the plans that follow. The STUDENT term rides on top via `matchClauseKind` +
+`boostFor` (already in weaknessSignal.ts, never called from the review facets),
+bounded at 30 so it re-orders comparable facts and cannot vault a plan over a
+blunder. Wired at the uncapped beat's join. Gate: `reviewFacetRank.test.ts`,
+including the G4.5 invariant that the SET is identical before and after.
+
+Why it had to land WITH the cap removal: the caps had been doing a crude
+version of this job. Truncating the list was the only thing deciding what a
+student heard first, so removing them without an order leaves an unranked pile.
+
+Bonus, no code needed: `applyBriefVoiceCap` keeps whole sentences in order
+until the budget runs out — which used to mean the FIRST facts. The beat now
+arrives pre-ranked, so the same cap keeps the TOP-RANKED sentences. The cap has
+no access to the tags, so re-ranking inside it would have been guesswork.
+
+### THE CAP RECOUNT — "61" was a raw grep, not 61 dropped facts
+
+Triage matters here; a blind sweep would have broken working surfaces.
+
+| file | raw hits | genuinely a dropped fact |
+|---|---|---|
+| `positionFacts.ts` | 1 | **0** — `bestUci.slice(0, 2)` is a from-square |
+| `openingGenerator.ts` | 7 | **2** (fixed 2026-09-16) |
+| `groundedAnswer.ts` | 53 | ~48 candidates after removing UCI-shaped hits |
+
+NOT caps, do not "fix": a quiz's fixed distractor count is CARDINALITY (a
+multiple-choice needs a set number of wrong answers); a debug `details` /
+`notes` string nobody hears; any `uci.slice(0, 2)` / `.slice(2, 4)` square
+split.
+
+Fixed in openingGenerator: the punish line truncated the detector's audited
+tactics at three and the undefended pieces at two.
+
+**The remaining ~48 are in the CHAT surface and are their own session.**
+`groundedAnswer.ts` is 5,800 lines and its contract is proven only by
+`audit-coach-all-questions-prod.mjs` — every phrasing of every lane through the
+real dispatch on live prod. Converting 48 answer-assembly sites without that
+audit behind them trades a few dropped facts for a broken lane, on the surface
+where users actually talk to the coach. Procedure: triage each site (dropped
+fact vs cardinality vs debug), convert the real ones to an `andList` or a count
+plus the list, run the exhaustive routing audit, READ the answers.
+
 ## 9. N8 — TYPE THE FACT (David 2026-09-16: "this is not one cohesive computer")
 
 Not yet built; David asked for thoughts, the answer is recorded here so the
