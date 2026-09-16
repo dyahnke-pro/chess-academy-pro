@@ -28,6 +28,7 @@ import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment'
 import { renderStructureAtoms } from './structureProse';
 import { decide, habitNeedFrom } from './coachDecider';
 import { habitIsOwed, type MethodHabit } from './methodBeat';
+import { recurrenceClause } from './misconceptionCallbacks';
 import { computeExchangeLedger, describeExchange } from './exchangeLedger';
 import { computeMoveFacets, computeThroughLine, prematureBreakWhy } from './reviewFullData';
 import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
@@ -1469,7 +1470,13 @@ export function buildReviewSegments(
             }
             if (recur && !recurrenceLabelsSeen.has(recur.label)) {
               recurrenceLabelsSeen.add(recur.label);
-              causalLead += ` This one keeps recurring in your games — ${recur.label.toLowerCase()} — a good pattern to drill.`;
+              // NAME THE GAME (David 2026-09-16: "Yes! Name the game! Date and
+              // opponent if available"). The beat could say a hole recurs but
+              // never HOW OFTEN or WHERE — the count and the provenance were
+              // computed upstream and dropped at every layer between. Each
+              // clause appears only when its source actually knows it: no
+              // "against your opponent", no invented recency.
+              causalLead += ` ${recurrenceClause(recur.label, recur.total, recur.lastPrior)}`;
             }
           }
           if (chain.stance === 'played' || chain.stance === 'allowed') {

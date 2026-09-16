@@ -40,6 +40,16 @@ export interface WeaknessSignal {
   trend?: LifecycleTrend;
   /** Lichess camelCase theme ids, for downstream drill/theory linking. */
   puzzleThemes: string[];
+  /** TOTAL instances ever logged (open or not) — "the fourth time" needs this;
+   *  `openCount` is only what is still due. Dropped by this shape until
+   *  2026-09-16, which is why the recurrence beat could say a hole recurs but
+   *  never how often. */
+  total: number;
+  /** The PREVIOUS occurrence's game, when the source knows it. Carried through
+   *  from the spine's `WeaknessProvenance` so the narration can name it (David
+   *  2026-09-16: "Name the game! Date and opponent if available"). Absent when
+   *  the source has no game (a drill) or no link yet (coach captures). */
+  lastPrior?: { opponentName?: string | null; playedAt?: number };
 }
 
 /** Join the unified profile with the lifecycle read. Lifecycle only carries the
@@ -68,6 +78,13 @@ export function buildWeaknessSignals(
       lifecycleStatus: life?.status,
       trend: life?.trend,
       puzzleThemes: w.puzzleThemes,
+      total: w.total,
+      // positions are newest-first, so [1] is the occurrence BEFORE this one —
+      // the one a callback refers to. Undefined when there is no prior or the
+      // source cannot name a game; never guessed.
+      lastPrior: w.positions[1]?.from
+        ? { opponentName: w.positions[1].from.opponentName, playedAt: w.positions[1].from.playedAt }
+        : undefined,
     };
   });
 }

@@ -41,6 +41,7 @@ const forkHole = (status: WeaknessSignal['lifecycleStatus']): WeaknessSignal[] =
   bucket: 'tactical',
   label: 'Missed forks',
   openCount: status === 'fixed' ? 0 : 4,
+  total: status === 'fixed' ? 4 : 4,
   severity: 60,
   lifecycleStatus: status,
   trend: 'flat',

@@ -15,13 +15,22 @@ function ordinal(n: number): string {
   return words[n] ?? `${n}th`;
 }
 
+/** CONCRETE OVER GENERIC (the first Narration Voice Rule). Two roundings were
+ *  costing the student real information: 9 days read as "1 week ago" — David
+ *  asked for this in DAYS — and anything past a month collapsed to "a while
+ *  back", which is exactly the vague filler rule 1 bans. Days stay days for a
+ *  fortnight, then weeks, then real months. */
 function recencyPhrase(lastPriorAt: number, now: number): string {
   const days = Math.floor((now - lastPriorAt) / DAY_MS);
   if (days <= 0) return 'earlier today';
   if (days === 1) return 'yesterday';
-  if (days < 7) return `${days} days ago`;
-  if (days < 32) return `${Math.floor(days / 7)} week${days >= 14 ? 's' : ''} ago`;
-  return 'a while back';
+  if (days < 14) return `${days} days ago`;
+  if (days < 32) return `${Math.floor(days / 7)} weeks ago`;
+  if (days < 365) {
+    const months = Math.max(1, Math.round(days / 30));
+    return months === 1 ? 'about a month ago' : `about ${months} months ago`;
+  }
+  return 'over a year ago';
 }
 
 /**
@@ -29,10 +38,24 @@ function recencyPhrase(lastPriorAt: number, now: number): string {
  * record history (newest capture included). Returns null when this is the
  * first occurrence (nothing to call back to) or the tag is unknown.
  */
+/** WHERE THE PREVIOUS OCCURRENCE HAPPENED — optional, and honestly absent when
+ *  the source cannot say (a drill has no opponent; an older record has no game
+ *  link). Mirrors `WeaknessProvenance` on the spine so one shape describes
+ *  "where did this come from" everywhere (CLAUDE.md capability parity). */
+export interface CallbackContext {
+  opponentName?: string | null;
+  /** ms — when the game was PLAYED. Never the capture clock: see the note on
+   *  `recencyPhrase` below. */
+  playedAt?: number;
+}
+
 export function composeCallbackLine(
   tag: string,
   records: ReadonlyArray<Pick<MisconceptionTagRecord, 'createdAt' | 'counted'>>,
   now: number = Date.now(),
+  /** The previous occurrence's game, when known. David 2026-09-16: "Name the
+   *  game! Date and opponent if available." */
+  prior?: CallbackContext,
 ): string | null {
   const def = getMisconceptionTag(tag);
   if (!def) return null;
@@ -49,9 +72,13 @@ export function composeCallbackLine(
     .sort((a, b) => a - b);
   const n = counted.length;
   if (n < 2) return null;
-  const lastPrior = counted[n - 2];
-  const label = def.label.toLowerCase();
-  return `We've seen this before — ${label}. That's the ${ordinal(n)} time this pattern has come up; the last one was ${recencyPhrase(lastPrior, now)}.`;
+  // 🔒 THE CLOCK. Prefer the PLAY time over the capture time whenever the caller
+  // can supply it. `createdAt` is when the APP recorded the slip — on an
+  // imported archive that is the day the user hit Import, so every slip in a
+  // three-year archive would read "earlier today". `weaknessLifecycle` anchors
+  // on the play clock for exactly this reason; so does this.
+  const lastPrior = prior?.playedAt ?? counted[n - 2];
+  return composeFrom(def.label, n, lastPrior, now, prior);
 }
 
 /**
@@ -67,4 +94,90 @@ export async function buildMisconceptionCallback(tag: string): Promise<string | 
   } catch {
     return null;
   }
+}
+
+// ── THE SAME SENTENCE, FROM THE WHOLE SPINE ────────────────────────────────
+// David 2026-09-16: "Name the game! Date and opponent if available."
+//
+// The callback above keys on the 26-tag closed misconception set — the slips
+// the coach caught by ASKING. But most of a student's holes are `analysis:*`
+// clusters derived from their mistake puzzles and classified tactics, and those
+// got no callback at all: the app could tell you it had seen a misconception
+// before, and could not tell you it had seen you miss forks four times. Same
+// sentence, wider source (CLAUDE.md capability parity).
+
+/** One composer, two vocabularies — so the two can never drift into saying the
+ *  same thing differently. */
+function composeFrom(label: string, occurrences: number, lastPriorAt: number, now: number, prior?: CallbackContext): string | null {
+  if (occurrences < 2) return null; // nothing to call BACK to
+  // NAME THE GAME when we can; omit the clause entirely when we cannot. Naming
+  // the wrong player is worse than naming none (empty > generic > invented).
+  const who = prior?.opponentName ? ` against ${prior.opponentName}` : '';
+  return `We've seen this before — ${label.toLowerCase()}. That's the ${ordinal(occurrences)} time this pattern has come up; the last one was${who} ${recencyPhrase(lastPriorAt, now)}.`;
+}
+
+/** Cluster ids whose label is a PLACEHOLDER, not a pattern. Calling back on
+ *  "mistakes in the middlegame" is the `other`-tag dilution in a different
+ *  costume: it counts unrelated slips as one recurring thing and teaches
+ *  nothing. `bucketForMistake` calls these the vaguest buckets itself. */
+const GENERIC_CLUSTERS = new Set([
+  'analysis:phase:opening',
+  'analysis:phase:middlegame',
+  'analysis:phase:endgame',
+]);
+
+/** The minimal weakness shape this needs — structurally satisfied by
+ *  `UnifiedWeakness`, without importing it (keeps this a leaf). */
+export interface CallbackWeakness {
+  tag: string;
+  label: string;
+  total: number;
+  lastSeenAt: number;
+  positions: ReadonlyArray<{ from?: { opponentName?: string | null; playedAt?: number } }>;
+}
+
+/**
+ * The callback line for ANY weakness cluster — analysis or coach. Reads the
+ * PRIOR occurrence's provenance (positions are newest-first, so [1] is the one
+ * before this), which is why the spine had to carry provenance first.
+ *
+ * Null when the cluster is a generic placeholder, or when there is nothing to
+ * call back to.
+ */
+export function composeWeaknessCallback(w: CallbackWeakness, now: number = Date.now()): string | null {
+  if (GENERIC_CLUSTERS.has(w.tag)) return null;
+  const prior = w.positions[1]?.from;
+  // The PLAY clock when the source knows it; the row's own lastSeenAt otherwise.
+  // Never `createdAt` — on an imported archive that is the day they hit Import.
+  const lastPriorAt = prior?.playedAt ?? w.lastSeenAt;
+  return composeFrom(w.label, w.total, lastPriorAt, now, {
+    opponentName: prior?.opponentName,
+    playedAt: prior?.playedAt,
+  });
+}
+
+/**
+ * THE IN-FLOW RECURRENCE CLAUSE — the review walk's register, not the reveal's.
+ *
+ * The review already had a recurrence beat ("This one keeps recurring in your
+ * games — missed forks — a good pattern to drill."). It could say a hole recurs
+ * and never how OFTEN or WHERE, because the count and the game were computed
+ * upstream and dropped at every layer in between (the spine threw away the
+ * provenance its sources carried; `WeaknessSignal` then threw away the count).
+ * Both now survive, so the beat can name them.
+ *
+ * Every clause is conditional on its source actually knowing the answer — an
+ * unknown count simply does not appear, and an unknown opponent never becomes
+ * "your opponent" (empty > generic > invented).
+ */
+export function recurrenceClause(
+  label: string,
+  occurrences?: number,
+  prior?: CallbackContext,
+  now: number = Date.now(),
+): string {
+  const times = occurrences && occurrences >= 2 ? `, the ${ordinal(occurrences)} time now` : '';
+  const who = prior?.opponentName ? ` against ${prior.opponentName}` : '';
+  const when = prior?.playedAt ? ` — the last one was${who} ${recencyPhrase(prior.playedAt, now)}` : (who ? ` — the last one was${who}` : '');
+  return `This one keeps recurring in your games — ${label.toLowerCase()}${times}${when}. Worth drilling.`;
 }
