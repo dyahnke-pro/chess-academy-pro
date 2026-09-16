@@ -63,14 +63,14 @@ describe('the callback reaches analysis clusters, not just coach tags', () => {
 
 describe('read it', () => {
   it('prints', () => {
-    console.log('\n  WITH a named opponent:\n  ' + composeWeaknessCallback(w(), NOW));
-    console.log('\n  WITHOUT one:\n  ' + composeWeaknessCallback(w({
+    console.log('\n  WITH a named opponent:\n  ' + String(composeWeaknessCallback(w(), NOW)));
+    console.log('\n  WITHOUT one:\n  ' + String(composeWeaknessCallback(w({
       positions: [{ from: { playedAt: daysAgo(1) } }, { from: { playedAt: daysAgo(9) } }],
-    }), NOW));
-    console.log('\n  A different hole, months back:\n  ' + composeWeaknessCallback(w({
+    }), NOW)));
+    console.log('\n  A different hole, months back:\n  ' + String(composeWeaknessCallback(w({
       tag: 'analysis:conversion-endgame:rook', label: 'Converting rook endings', total: 3,
       positions: [{ from: { opponentName: 'A', playedAt: daysAgo(3) } }, { from: { opponentName: 'chessMaster99', playedAt: daysAgo(70) } }],
-    }), NOW));
+    }), NOW)));
     console.log('');
   });
 });
