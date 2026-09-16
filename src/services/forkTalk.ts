@@ -130,7 +130,7 @@ export function buildForkTalk(opts: {
     return `${o.san}: ${bits.join('; ')}`;
   };
   const facts =
-    `FORK IN THE ROAD — two real options here, near-equal (engine gap about ${gapPawns} pawns). ` +
+    `FORK IN THE ROAD — two real options here, near-equal (engine gap about ${gapPawns} points). ` +
     `Road one — ${describe(a)}. Road two — ${describe(b)}. ` +
     `Deliberate BOTH roads for the student — what each move does and the kind of game it leads to — ` +
     `and END by asking which game they want to play. Do NOT recommend one; the student answers by playing.`;

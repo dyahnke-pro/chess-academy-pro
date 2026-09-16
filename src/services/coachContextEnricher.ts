@@ -368,7 +368,7 @@ async function buildEngineBlock(fen: string): Promise<string | null> {
     if (!analysis || !analysis.bestMove) return null;
     const evalStr = analysis.isMate
       ? `mate in ${Math.abs(analysis.mateIn ?? 0)}`
-      : `${(analysis.evaluation / 100).toFixed(2)} pawns (White's POV)`;
+      : `${(analysis.evaluation / 100).toFixed(2)} points (White's POV)`;
     const lines: string[] = [
       `Best move: ${analysis.bestMove}`,
       `Evaluation: ${evalStr}`,
@@ -436,7 +436,7 @@ async function buildTacticsBlock(): Promise<string | null> {
     if (t.missedByType.length > 0) {
       const top = t.missedByType
         .slice(0, 5)
-        .map((x) => `${x.type} missed ${x.count}× (avg cost ${(x.avgCost / 100).toFixed(1)} pawns)`)
+        .map((x) => `${x.type} missed ${x.count}× (avg cost ${(x.avgCost / 100).toFixed(1)} points)`)
         .join('; ');
       lines.push(`Missed tactics by type: ${top}`);
     }
@@ -469,7 +469,7 @@ async function buildMistakesBlock(): Promise<string | null> {
     if (m.costliestMistakes.length > 0) {
       const top = m.costliestMistakes.slice(0, 5).map((c) => {
         const op = c.openingName ? ` in ${c.openingName}` : '';
-        return `  - ${c.date} vs ${c.opponentName}${op} — move ${c.moveNumber} ${c.san} (${c.classification}, lost ${(c.cpLoss / 100).toFixed(1)} pawns, ${c.phase})`;
+        return `  - ${c.date} vs ${c.opponentName}${op} — move ${c.moveNumber} ${c.san} (${c.classification}, lost ${(c.cpLoss / 100).toFixed(1)} points, ${c.phase})`;
       });
       lines.push(`Costliest recent mistakes:\n${top.join('\n')}`);
     }

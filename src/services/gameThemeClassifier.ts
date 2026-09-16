@@ -79,7 +79,7 @@ export function classifyGameTheme(
         theme: 'squandered-advantage',
         peakPly: slip.ply,
         confidence: Math.min(1, 0.7 + (max.cp - 250) / 1000),
-        line: `This is the thread of the game — you were ${pawns(max.cp)} pawns up by move ${moveOf(max.ply)}, and ${slip.san} handed it back.`,
+        line: `This is the thread of the game — you were ${pawns(max.cp)} points up by move ${moveOf(max.ply)}, and ${slip.san} handed it back.`,
         reprise: `the ${pawns(max.cp)}-pawn advantage that slipped away`,
       });
     }
@@ -93,7 +93,7 @@ export function classifyGameTheme(
         theme: 'comeback',
         peakPly: gift.ply,
         confidence: Math.min(1, 0.7 + (-min.cp - 250) / 1000),
-        line: `This is the thread of the game — ${pawns(min.cp)} pawns down at move ${moveOf(min.ply)}, and you took it all back after ${gift.san}.`,
+        line: `This is the thread of the game — ${pawns(min.cp)} points down at move ${moveOf(min.ply)}, and you took it all back after ${gift.san}.`,
         reprise: 'the comeback from a lost position',
       });
     }

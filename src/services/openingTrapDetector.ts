@@ -121,5 +121,5 @@ export function formatTrapForPrompt(trap: TrapSignal): string {
   const pawns = (trap.evalCpForMover / 100).toFixed(1);
   const severity = trap.severity === 'severe' ? 'SEVERE TRAP' : 'TRAP';
   const refutation = trap.refutationSan ? ` — refute with ${trap.refutationSan}` : '';
-  return `[${severity} AVAILABLE] The natural-looking move ${trap.trapMove} has been played ${trap.gamesPlayed.toLocaleString()} times on Lichess, but it's losing by ${pawns} pawns${refutation}. Real players walk into it — tell the student what to watch for.`;
+  return `[${severity} AVAILABLE] The natural-looking move ${trap.trapMove} has been played ${trap.gamesPlayed.toLocaleString()} times on Lichess, but it's losing by ${pawns} points${refutation}. Real players walk into it — tell the student what to watch for.`;
 }

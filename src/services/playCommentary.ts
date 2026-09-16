@@ -483,7 +483,7 @@ export function buildRejectedTempting(args: {
       // a recommendation — every tier has to stand on its own.
       const hint: HintPackage = {
         anchor: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
-        detail: `That line leaves the student about ${dropPawns} pawns worse than the best plan.`,
+        detail: `That line leaves the student about ${dropPawns} points worse than the best plan.`,
         stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
         withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
       };

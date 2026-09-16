@@ -181,5 +181,5 @@ export function quizVerdictLine(quiz: PrincipleQuiz, pickedSan: string): string 
     return `${picked.san} fails the device — it throws away a forced mate. The move that passes is ${quiz.correctSan}.`;
   }
   const pawns = (picked.deltaCp / 100).toFixed(1);
-  return `${picked.san} fails the device — it gives up about ${pawns} pawns. The move that passes is ${quiz.correctSan}.`;
+  return `${picked.san} fails the device — it gives up about ${pawns} points. The move that passes is ${quiz.correctSan}.`;
 }

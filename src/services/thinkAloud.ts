@@ -103,7 +103,7 @@ export function buildThinkAloud(opts: {
         punish = g ? ` — the reply ${second.replySan} ${g}` : ` — ${second.replySan} is the punishing reply`;
       } catch { /* geometry is a bonus */ }
     }
-    facts.push(`${second.san} looks natural here but concretely falls short (about ${(gap / 100).toFixed(1)} pawns worse than the position's best)${punish}.`);
+    facts.push(`${second.san} looks natural here but concretely falls short (about ${(gap / 100).toFixed(1)} points worse than the position's best)${punish}.`);
   }
 
   // 3. Principle-then-exception.

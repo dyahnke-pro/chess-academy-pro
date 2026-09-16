@@ -29,9 +29,9 @@ function pick<T>(arr: T[]): T {
 
 function cpToText(cp: number): string {
   const pawns = (cp / 100).toFixed(1);
-  if (cp >= 300) return `about ${pawns} pawns — a serious swing`;
-  if (cp >= 150) return `around ${pawns} pawns`;
-  return `roughly ${pawns} pawns`;
+  if (cp >= 300) return `about ${pawns} points — a serious swing`;
+  if (cp >= 150) return `around ${pawns} points`;
+  return `roughly ${pawns} points`;
 }
 
 function timeAgoText(dateStr: string): string {

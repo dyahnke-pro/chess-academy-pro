@@ -53,8 +53,8 @@ const ALL = new Set([
 // Measured 2026-09-16 across 11,809 unique spoken strings.
 const BASELINE_FIRST_PERSON = 521;
 const BASELINE_FRAGMENT = 81;
-const BASELINE_META = 4;
-const BASELINE_MASCULINE_OPPONENT = 1146;
+const BASELINE_META = 0;
+const BASELINE_MASCULINE_OPPONENT = 1145;
 
 describe('voiced corpus register — shrink-only backlog', () => {
   it('the corpus is actually loaded (non-vacuous)', () => {

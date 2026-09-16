@@ -138,7 +138,7 @@ export function buildTurningPointQuestion(
     answer,
     reveal:
       `The turning point was ${answer.label} — the game's biggest single swing, ` +
-      `about ${answer.swingPawns.toFixed(1)} pawns.`,
+      `about ${answer.swingPawns.toFixed(1)} points.`,
   };
 }
 

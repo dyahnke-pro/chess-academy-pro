@@ -386,7 +386,7 @@ export function buildGameContextBlock(
     ? [
         '[Engine Analysis — TRUST THIS DATA]',
         `Best move: ${uciMoveToSan(gameContext.engineData.bestMove, gameContext.fen)}`,
-        `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} pawns`}`,
+        `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} points`}`,
         ...gameContext.engineData.topLines.slice(0, 3).map(
           (l, i) => `Line ${i + 1}: ${uciLinesToSan(l.moves, gameContext.fen, 6)} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
         ),
@@ -467,7 +467,7 @@ export function buildGameChatMessages(
     ? [
         '[Engine Analysis — TRUST THIS DATA]',
         `Best move: ${uciMoveToSan(gameContext.engineData.bestMove, gameContext.fen)}`,
-        `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} pawns`}`,
+        `Eval: ${gameContext.engineData.isMate ? `Mate in ${gameContext.engineData.mateIn}` : `${(gameContext.engineData.evaluation / 100).toFixed(1)} points`}`,
         ...gameContext.engineData.topLines.slice(0, 3).map(
           (l, i) => `Line ${i + 1}: ${uciLinesToSan(l.moves, gameContext.fen, 6)} (${l.mate !== null ? `M${l.mate}` : (l.evaluation / 100).toFixed(1)})`,
         ),

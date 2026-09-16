@@ -4059,7 +4059,7 @@ export function assembleLastGameMistakeAnswer(d: LastGameErrorLike): GroundedAns
       bestMoveSan: null, bestMoveFromTo: null, sources: ['data:your-games'],
     };
   }
-  const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} pawns` : '';
+  const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} points` : '';
   const better = d.worst.bestMoveSan ? ` ${d.worst.bestMoveSan} was the move instead.` : '';
   const serious = d.errorCount.blunders + d.errorCount.mistakes;
   const more = serious > 1
@@ -4098,7 +4098,7 @@ export function assembleRecentGamesMistakeAnswer(d: RecentGamesErrorLike): Groun
   if (d.worst) {
     const where = `${d.worst.opponent ? ` against ${d.worst.opponent}` : ''}${d.worst.opening ? ` in the ${d.worst.opening}` : ''}`;
     const better = d.worst.bestMoveSan ? ` ${d.worst.bestMoveSan} was the move.` : '';
-    const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} pawns` : '';
+    const drop = d.worst.cpLoss > 0 ? `, dropping about ${pawns(d.worst.cpLoss)} points` : '';
     worstLine = ` The worst was ${d.worst.san} on move ${d.worst.moveNumber} — a ${d.worst.classification} in the ${phaseWord(d.worst.phase)}${where}${drop}.${better}`;
   }
   return { facts: `${tally}${worstLine} Ask to drill your mistakes and I'll queue them up.`, bestMoveSan: d.worst?.bestMoveSan ?? null, bestMoveFromTo: null, sources: ['data:your-games'] };
