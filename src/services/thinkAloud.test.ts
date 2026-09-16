@@ -38,7 +38,7 @@ describe('buildThinkAloud', () => {
       ],
     });
     expect(moment!.facts).toContain('d4');
-    expect(moment!.facts).toContain('1.2 pawns');
+    expect(moment!.facts).toContain('1.2 points');
   });
 
   it('stays quiet when the top lines are near-equal and no principle fired', () => {

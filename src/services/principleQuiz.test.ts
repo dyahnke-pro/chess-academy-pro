@@ -104,7 +104,7 @@ describe('principleQuiz — the device application quiz (Phase 3.3)', () => {
     }))!;
     const wrong = quizVerdictLine(quiz, 'f6');
     expect(wrong).toContain('fails the device');
-    expect(wrong).toContain('1.8 pawns');
+    expect(wrong).toContain('1.8 points');
     expect(wrong).toContain('Nc6');
     const right = quizVerdictLine(quiz, 'Nc6');
     expect(right).toContain('passes the device');

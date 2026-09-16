@@ -40,7 +40,7 @@ describe('buildTurningPointQuestion', () => {
     // Candidates in game order, both costed moments present.
     expect(q!.candidates.map((c) => c.ply)).toEqual([9, 18]);
     expect(q!.reveal).toContain('9… Rd8');
-    expect(q!.reveal).toContain('4.0 pawns');
+    expect(q!.reveal).toContain('4.0 points');
   });
 
   it('carries each candidate fenBefore so the card can preview the board (David 2026-07-19)', () => {

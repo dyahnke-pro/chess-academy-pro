@@ -107,7 +107,7 @@ describe('detectTrapInPosition', () => {
     expect(text).toContain('TRAP AVAILABLE');
     expect(text).toContain('Bxf2+');
     expect(text).toContain('12,345');
-    expect(text).toContain('-3.5 pawns');
+    expect(text).toContain('-3.5 points');
     expect(text).toContain('Kxf2');
   });
 });
