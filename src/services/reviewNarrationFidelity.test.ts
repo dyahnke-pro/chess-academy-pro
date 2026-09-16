@@ -275,3 +275,33 @@ describe('narrationMoverFaithful (the warm pass may not move a ply to the other 
     expect(narrationMoverFaithful('You take the pawn — an even trade, nothing won.', true)).toBe(true);
   });
 });
+
+// ── A DEMONSTRATIVE IS A DETERMINER (David's Alapin, plies 34 and 44) ───────
+// "the plan from here is to make that knight on d4 the boss of the board" came
+// back as "…make that YOUR KNIGHT on d4…". `seatPieceReferences` knew the leads
+// your/their/the/a/an and NOT that/this, so the bare noun matched, no lead was
+// captured, and the possessive was stamped in front of the NOUN instead of
+// replacing the determiner. Untested until now, which is how it shipped.
+describe('seatPieceReferences and determiners', () => {
+  // Black knight on d4, white to move — so from Black's seat it is "your".
+  const FEN = 'r1bqkb1r/pppp1ppp/5n2/8/3n4/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 5';
+
+  it('REPLACES a demonstrative rather than stacking a possessive after it', async () => {
+    const { seatPieceReferences } = await import('./groundedAnswer');
+    const out = seatPieceReferences('make that knight on d4 the boss of the board', FEN, 'b');
+    expect(out).toContain('your knight on d4');
+    expect(out).not.toMatch(/that your|this your/);
+  });
+
+  it('keeps the seat — dropping the possessive would lose who owns the piece', async () => {
+    const { seatPieceReferences } = await import('./groundedAnswer');
+    const out = seatPieceReferences('make that knight on d4 the boss', FEN, 'w');
+    expect(out).toContain('their knight on d4'); // same board, other seat
+  });
+
+  it('still leaves an author possessive and an indefinite article alone', async () => {
+    const { seatPieceReferences } = await import('./groundedAnswer');
+    expect(seatPieceReferences('your knight on d4 holds', FEN, 'b')).toContain('your knight on d4');
+    expect(seatPieceReferences('creates a passed pawn on d4', FEN, 'b')).toContain('a passed pawn on d4');
+  });
+});
