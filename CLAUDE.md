@@ -27,6 +27,39 @@ And throw the find into the chat so David sees it — he wants to understand how
 the app works. This is the "sweep, don't spot-fix" rule (below) applied to
 architecture, not just to a single bug class.
 
+## 🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").
+
+The sibling of the rot rule above. That one is about two ENUMS that mean the same
+thing and never reconcile. This is about two RECORD TYPES (or two surfaces) that
+mean the same KIND of thing and carry different capabilities — which rots the
+same way, silently, and shows up as "the coach can do it on the tactics tab but
+not in review."
+
+**THE RULE.** When you find a field, a join, or a capability on ONE captured
+signal, ask immediately which of its siblings should have it. The answer is
+almost always "all of them." Add it once, as one shape, and let every source
+fill it — with an HONEST null where the source genuinely has no such thing (a
+drill has no opponent; that is `origin:'drill'`, never a fabricated game).
+
+**THE WORKED EXAMPLE (2026-09-16).** `MistakePuzzle` and `ClassifiedTactic` carry
+`opponentName` + `gameDate`. The weakness spine threw them away, and the other
+six sources never had them — so no surface could say "you met this against X
+thirteen days ago." Worst of all, `MisconceptionTagRecord`, the COACH'S OWN
+"why did you play that?" capture and the richest signal in the app, had no game
+link whatsoever: it stored the student's reasoning and dropped where it
+happened. One `WeaknessProvenance` shape on the spine's position row, filled by
+every aggregator, gives review, drills, custom lessons, the transfer beat and
+the insight bucket the same capability at once. That is one coach, used
+differently — not six features.
+
+**MAKE IT UNREOPENABLE, NOT JUST FIXED.** A convention rots; a type does not.
+Prefer a REQUIRED field or a `Record<Union, ...>` so a NEW sibling fails to
+compile until someone decides its answer. (Same reason the seat parameter on
+`describeThreatRecognition` is required and `COACH_TAG_HABIT` is exhaustive.)
+
+**THE TEST before you ship a capability:** name its siblings out loud. If you
+cannot say why sibling N should NOT have it, it should.
+
 ## 🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").
 
 Before starting ANY coach / narration / grounding / weakness / teaching build:
