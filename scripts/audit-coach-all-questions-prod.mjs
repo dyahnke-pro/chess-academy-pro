@@ -171,14 +171,29 @@ const page = await ctx.newPage();
 const pageErrors = [];
 page.on('pageerror', (e) => { pageErrors.push(String(e).slice(0, 160)); });
 
+// A DEAD BROWSER MUST END THE RUN WITH ITS REPORT, NOT AN UNCAUGHT EXCEPTION.
+// Run allq-mu3wo6pc died in the `actions` section — "Target page, context or
+// browser has been closed" — and because `gotoTeach` was unguarded (only `ask`
+// was), the throw escaped, killed the process before `writeFileSync`, and threw
+// away 449 real results. It also logged the same failure 16 times on the way
+// down, which reads like sixteen product bugs. An audit that cannot finish must
+// still say what it learned.
+let browserDead = false;
+const isClosedError = (e) => /Target page, context or browser has been closed|Target closed|browser has been closed/i.test(String(e));
+
 async function gotoTeach() {
+  if (browserDead) return false;
   for (let i = 0; i < 3; i++) {
     try {
       await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120000 });
       await page.waitForTimeout(12000);
-      return;
-    } catch { await page.waitForTimeout(5000); }
+      return true;
+    } catch (e) {
+      if (isClosedError(e)) { browserDead = true; return false; }
+      try { await page.waitForTimeout(5000); } catch { browserDead = true; return false; }
+    }
   }
+  return false;
 }
 
 async function ask(q, budgetLoops = 30) {
@@ -241,7 +256,25 @@ async function ask(q, budgetLoops = 30) {
 }
 
 console.log(`[all-questions] ${QUESTION_MATRIX.length} capabilities, run ${RUN_ID}, target ${BASE}`);
-await gotoTeach();
+// FAIL FAST WHEN THE APP IS NOT THERE. Pointed at a dead target this used to
+// grind through all 56 lanes waiting out per-ask budgets, so a real outage
+// HUNG the run instead of reporting one — which is how an audit stops being an
+// instrument (negative control, 2026-09-16).
+if (!(await gotoTeach())) {
+  console.log(`\n❌ could not load ${BASE}/coach/teach after 3 attempts — the app is unreachable.`);
+  console.log('   Nothing was measured. This is an outage or a harness/proxy problem, not a lane result.');
+  try { await browser.close(); } catch { /* already gone */ }
+  process.exit(1);
+}
+// …and the page LOADING is not the surface MOUNTING. Pointed at a target that
+// serves a blank shell, every lane would still be attempted at ~30 loops each.
+// The chat input is the surface: no input, nothing to audit.
+if (!(await page.locator('[data-testid="chat-text-input"]').first().waitFor({ timeout: 60000 }).then(() => true).catch(() => false))) {
+  console.log(`\n❌ ${BASE}/coach/teach loaded but the chat surface never mounted (no chat-text-input in 60s).`);
+  console.log('   Nothing was measured. Check the deploy before reading anything into the lanes.');
+  try { await browser.close(); } catch { /* already gone */ }
+  process.exit(1);
+}
 // Give move-rating / position lanes a real last move: play 1.e4 on the free board.
 try {
   await page.locator('[data-square="e2"]').first().click({ timeout: 5000, force: true });
@@ -270,7 +303,13 @@ for (const [section, ids] of SECTIONS) {
     if (id === 'play-against' || id === 'teach-opening') { await gotoTeach(); }
     const urlBefore = page.url();
     const budget = id === 'teach-opening' ? 80 : id === 'continue-middlegame' ? 50 : 30;
-    let asked; try { asked = await ask(q, budget); } catch (e) { asked = { reply: '', sent: false, err: String(e).slice(0, 80) }; }
+    if (browserDead) break;
+    let asked;
+    try { asked = await ask(q, budget); }
+    catch (e) {
+      if (isClosedError(e)) { browserDead = true; break; }
+      asked = { reply: '', sent: false, err: String(e).slice(0, 80) };
+    }
     const { reply, sent } = asked;
     if (!sent) { record(id, false, `chat input never usable${asked.err ? ` (${asked.err})` : ''}`); continue; }
     const urlAfter = page.url();
@@ -295,6 +334,14 @@ for (const [section, ids] of SECTIONS) {
   }
 }
 
+if (browserDead) {
+  console.log('\n⚠️  THE BROWSER DIED MID-RUN — the results below are PARTIAL.');
+  console.log('    Everything after that point is unmeasured, not passing. Re-run');
+  console.log('    before drawing any conclusion about the lanes it never reached.');
+  console.log('    (Most likely cause in this container: memory pressure from other');
+  console.log('     work running alongside a long Chromium session — run it alone.)');
+}
+
 const passed = results.filter((r) => r.pass).length;
 console.log(`\n── coverage grid ──`);
 for (const r of results) console.log(`${r.pass ? '✅' : '❌'} ${r.id}`);
@@ -304,7 +351,8 @@ for (const e of pageErrors.slice(0, 5)) console.log(`  PAGEERROR: ${e}`);
 console.log(`audit_run_id: ${RUN_ID}`);
 const dir = `audit-reports/coach-all-questions-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 mkdirSync(dir, { recursive: true });
-writeFileSync(`${dir}/report.json`, JSON.stringify({ runId: RUN_ID, base: BASE, results, pageErrors }, null, 2));
+writeFileSync(`${dir}/report.json`, JSON.stringify({ runId: RUN_ID, base: BASE, partial: browserDead, results, pageErrors }, null, 2));
 console.log(`report: ${dir}/report.json`);
-await browser.close();
-process.exitCode = passed === results.length ? 0 : 1;
+try { await browser.close(); } catch { /* already gone */ }
+// A partial run is never a pass, however many of its checks were green.
+process.exitCode = (!browserDead && passed === results.length) ? 0 : 1;
