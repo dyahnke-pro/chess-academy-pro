@@ -88,7 +88,13 @@ const RECUR_FLOOR = 2; // a one-off early departure is not a weakness; it must r
  * Only departures that pass `bookDepartureIsCostly` AND whose opening recurs
  * (≥ RECUR_FLOOR games) surface. Returns [] when nothing qualifies (silence).
  */
-export function aggregateBookDepartures(rows: readonly BookDepartureRow[], rating: number): UnifiedWeakness[] {
+export function aggregateBookDepartures(
+  rows: readonly BookDepartureRow[],
+  rating: number,
+  /** gameId → opponent name, from the profile's shared game index. Optional so
+   *  the leaf stays pure + testable; absent simply means the name is unknown. */
+  opponentFor?: (gameId: string) => string | null,
+): UnifiedWeakness[] {
   const costly = rows.filter((r) => bookDepartureIsCostly(r, rating));
   if (costly.length === 0) return [];
   // Group by opening (null opening → one shared "opening theory" bucket).
@@ -129,7 +135,15 @@ export function aggregateBookDepartures(rows: readonly BookDepartureRow[], ratin
       positions: group
         .sort((a, b) => b.playedAt - a.playedAt)
         .slice(0, 8)
-        .map((g) => ({ fen: g.bookFen, playedSan: g.departedSan, bestSan: g.mainSan, ...(openingId ? { openingId } : {}) })),
+        .map((g) => ({
+          fen: g.bookFen,
+          playedSan: g.departedSan,
+          bestSan: g.mainSan,
+          ...(openingId ? { openingId } : {}),
+          // The row already knows the game and when it was played; the opponent
+          // name comes from the profile's game index (capability parity).
+          from: { origin: 'game' as const, gameId: g.gameId, opponentName: opponentFor?.(g.gameId) ?? null, playedAt: g.playedAt },
+        })),
       lastSeenAt,
       fen: group[0].bookFen,
     });

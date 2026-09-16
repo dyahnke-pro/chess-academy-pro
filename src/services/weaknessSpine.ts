@@ -55,6 +55,59 @@ export interface WeaknessRepInput {
   openCount: number;
 }
 
+/** WHERE A SIGNAL CAME FROM — one shape on EVERY source (David 2026-09-16,
+ *  capability parity: "if tactics and puzzles have something so should
+ *  everything else").
+ *
+ *  `MistakePuzzle` and `ClassifiedTactic` have carried `opponentName` +
+ *  `gameDate` all along and the spine threw them away, so no surface could say
+ *  "you met this against X thirteen days ago" — and the six other sources never
+ *  had them at all. This is that capability defined once, so review, drills,
+ *  custom lessons, the transfer beat and the insight bucket all gain it at the
+ *  same moment instead of one tab at a time.
+ *
+ *  A DRILL has no opponent and that is not a gap: `origin: 'drill'` is the
+ *  honest answer, and it is why this is a discriminated shape rather than three
+ *  optional fields nobody fills. */
+export interface WeaknessProvenance {
+  origin: 'game' | 'drill';
+  gameId?: string;
+  /** Who they were playing. null when the source knows the game but not the
+   *  name; undefined when there is no game at all. */
+  opponentName?: string | null;
+  /** ms — when the game was PLAYED. NEVER the capture clock: on an imported
+   *  archive `createdAt` is the day they hit Import, so every slip in a
+   *  three-year archive would read "earlier today". `weaknessLifecycle` already
+   *  anchors on the play clock for exactly this reason. */
+  playedAt?: number;
+}
+
+/** One of the student's own positions, with its provenance ATTACHED.
+ *  `from` is REQUIRED on purpose — a new weakness source fails to compile until
+ *  someone decides where its positions came from, which is the only version of
+ *  this rule that cannot quietly rot back (CLAUDE.md capability parity). */
+export interface WeaknessPosition {
+  fen: string;
+  playedSan?: string;
+  bestSan?: string;
+  openingId?: string;
+  from: WeaknessProvenance;
+}
+
+/** ms from a stored date string, or undefined when absent/unparseable — never a
+ *  fabricated "now" (a guessed timestamp is a lie the student would hear). */
+export function playedAtMs(date: string | null | undefined): number | undefined {
+  if (!date) return undefined;
+  const t = Date.parse(date);
+  return Number.isFinite(t) ? t : undefined;
+}
+
+/** gameId → who they played and when, resolved ONCE from the games table for
+ *  the sources that carry a gameId but not the names (conversion, time trouble,
+ *  book departures). Built inside the profile's existing shared read
+ *  transaction, so it is a Map lookup and costs no extra I/O. */
+export type GameProvenanceIndex = ReadonlyMap<string, { opponentName: string | null; playedAt?: number }>;
+
 export interface UnifiedWeakness extends WeaknessRepInput {
   /** Stable React/dedupe key. */
   key: string;
@@ -68,7 +121,7 @@ export interface UnifiedWeakness extends WeaknessRepInput {
   /** puzzles.json theme tags to pull tactical reps from (may be empty). */
   puzzleThemes: string[];
   /** The student's own flubbed positions (newest first) — replay material. */
-  positions: { fen: string; playedSan?: string; bestSan?: string; openingId?: string }[];
+  positions: WeaknessPosition[];
   lastSeenAt: number;
   /** A single position to drill (conversion: the winning peak FEN). Lets the
    *  rep deep-link into "play out this position" without carrying positions. */
@@ -265,6 +318,12 @@ export function aggregateMistakePuzzles(mistakes: MistakePuzzle[], excludeKeys?:
         playedSan: r.playerMoveSan,
         bestSan: r.bestMoveSan,
         openingId: r.openingName ?? undefined,
+        from: {
+          origin: 'game' as const,
+          gameId: r.sourceGameId,
+          opponentName: r.opponentName,
+          playedAt: playedAtMs(r.gameDate),
+        },
       })),
       lastSeenAt: rows[0] ? Date.parse(rows[0].createdAt) || 0 : 0,
     });
@@ -284,7 +343,14 @@ function fromMisconception(a: MisconceptionAggregate): UnifiedWeakness {
     severity: Math.min(95, a.openCount * 12 + a.total * 3),
     sources: ['coach'],
     puzzleThemes: a.def?.drill.puzzleThemes ?? [],
+    // ORIGIN IS 'game' AND THE REST IS HONESTLY UNKNOWN. The coach captures
+    // these DURING a game's review — so it is a game, we simply cannot say
+    // which: `MisconceptionTagRecord` stores the student's reasoning and drops
+    // the game link entirely (the biggest parity hole found 2026-09-16). Adding
+    // gameId/gameDate at the capture sites is the follow-up; until then these
+    // stay undefined rather than guessed.
     positions: a.examples.map((e) => ({
+      from: { origin: 'game' as const },
       fen: e.fen,
       playedSan: e.playedSan,
       bestSan: e.bestSan,
@@ -322,7 +388,8 @@ export function aggregateOpeningWeakSpots(spots: OpeningWeakSpot[], now: number 
       severity: Math.min(95, totalFails * 8 + rows.length * 4),
       sources: ['analysis'],
       puzzleThemes: [],
-      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, bestSan: r.correctMoveSan, openingId: r.openingId })),
+      // A repertoire drill, not a game — 'drill' is the answer, not a gap.
+      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, bestSan: r.correctMoveSan, openingId: r.openingId, from: { origin: 'drill' as const, playedAt: playedAtMs(r.lastFailedAt) } })),
       lastSeenAt,
     });
   }
@@ -356,7 +423,7 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
       severity: Math.min(95, rows.length * 6),
       sources: ['analysis'],
       puzzleThemes: themesForTactic(type),
-      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined })),
+      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined, from: { origin: 'game' as const, opponentName: r.opponentName, playedAt: playedAtMs(r.gameDate) } })),
       lastSeenAt,
     });
   }
@@ -366,7 +433,7 @@ export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): Unified
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
-export function aggregateConversionFailures(failures: ConversionFailure[], games: GameRecord[] = []): UnifiedWeakness[] {
+export function aggregateConversionFailures(failures: ConversionFailure[], games: GameRecord[] = [], gameIndex?: GameProvenanceIndex): UnifiedWeakness[] {
   if (failures.length === 0) return [];
   const toRow = (key: string, label: string, rows: ConversionFailure[]): UnifiedWeakness => {
     const lastSeenAt = rows.reduce((m, f) => Math.max(m, f.date ? Date.parse(f.date) || 0 : 0), 0);
@@ -376,7 +443,16 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
       openCount: rows.length, total: rows.length,
       severity: Math.min(95, rows.length * 12 + Math.round(avgPeak / 60)),
       sources: ['analysis'], puzzleThemes: [],
-      positions: rows.slice(0, 8).map((f) => ({ fen: f.fen, openingId: f.openingName ?? undefined })),
+      positions: rows.slice(0, 8).map((f) => ({
+        fen: f.fen,
+        openingId: f.openingName ?? undefined,
+        from: {
+          origin: 'game' as const,
+          gameId: f.gameId,
+          opponentName: gameIndex?.get(f.gameId)?.opponentName ?? null,
+          playedAt: playedAtMs(f.date) ?? gameIndex?.get(f.gameId)?.playedAt,
+        },
+      })),
       lastSeenAt,
       fen: rows[0]?.fen, // the most-recent blown win — drill this one
     };
@@ -453,14 +529,14 @@ export function aggregateStrongerOpponentErrors(
     severity: Math.min(90, vsStronger.length * 6 + Math.round(worstCp / 30)),
     sources: ['analysis'],
     puzzleThemes: [],
-    positions: vsStronger.slice(0, 8).map((p) => ({ fen: p.fen, playedSan: p.playerMoveSan, bestSan: p.bestMoveSan, openingId: p.openingName ?? undefined })),
+    positions: vsStronger.slice(0, 8).map((p) => ({ fen: p.fen, playedSan: p.playerMoveSan, bestSan: p.bestMoveSan, openingId: p.openingName ?? undefined, from: { origin: 'game' as const, gameId: p.sourceGameId, opponentName: p.opponentName, playedAt: playedAtMs(p.gameDate) } })),
     lastSeenAt,
   }];
 }
 
 /** Roll up blunders made in time trouble into one weakness, routed to timed
  *  practice. Sourced from the per-ply clock now captured on clocked games. */
-export function aggregateTimeTrouble(hits: TimeTroubleHit[]): UnifiedWeakness[] {
+export function aggregateTimeTrouble(hits: TimeTroubleHit[], gameIndex?: GameProvenanceIndex): UnifiedWeakness[] {
   if (hits.length === 0) return [];
   return [{
     key: TIME_TROUBLE_TAG,
@@ -472,7 +548,16 @@ export function aggregateTimeTrouble(hits: TimeTroubleHit[]): UnifiedWeakness[] 
     severity: Math.min(95, hits.length * 10),
     sources: ['analysis'],
     puzzleThemes: [],
-    positions: hits.slice(0, 8).map((h) => ({ fen: h.fen, openingId: undefined })),
+    positions: hits.slice(0, 8).map((h) => ({
+      fen: h.fen,
+      openingId: undefined,
+      from: {
+        origin: 'game' as const,
+        gameId: h.gameId,
+        opponentName: gameIndex?.get(h.gameId)?.opponentName ?? null,
+        playedAt: gameIndex?.get(h.gameId)?.playedAt,
+      },
+    })),
     lastSeenAt: Date.now(),
   }];
 }
@@ -591,17 +676,33 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ?? useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
   const bookRows = await getCachedBookDepartureRows(games, names, studentRating);
 
+  // THE GAME INDEX (capability parity, David 2026-09-16). Resolved ONCE, here,
+  // where the student's usernames are known — so the sources that carry a gameId
+  // but not the names (conversion, time trouble, book departures) get the same
+  // "who and when" the mistake/tactic rows have always had. `games` is already
+  // in hand from the shared read transaction above, so this is pure arithmetic:
+  // no extra I/O, no second transaction (see the iOS WebKit cursor note above).
+  const gameIndex: Map<string, { opponentName: string | null; playedAt?: number }> = new Map();
+  for (const g of games) {
+    const color = resolvePlayerColor(g, names);
+    // Unknown colour → unknown opponent, NOT a guess: naming the wrong player is
+    // worse than naming none (empty > generic > invented).
+    const opponentName = color === 'white' ? g.black : color === 'black' ? g.white : null;
+    gameIndex.set(g.id, { opponentName: opponentName ?? null, playedAt: playedAtMs(g.date) });
+  }
+  const opponentFor = (gameId: string): string | null => gameIndex.get(gameId)?.opponentName ?? null;
+
   const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
   const coachRows = misAgg.map(fromMisconception);
   const analysisRows = mergeByKey([
     ...aggregateMistakePuzzles(mistakes, coachKeys),
     ...aggregateClassifiedTactics(tactics),
     ...aggregateOpeningWeakSpots(weakSpots),
-    ...aggregateConversionFailures(conversions, games),
+    ...aggregateConversionFailures(conversions, games, gameIndex),
     ...aggregateBoardVision(heatmap),
-    ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes)),
+    ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes), gameIndex),
     ...aggregateStrongerOpponentErrors(mistakes, games, names),
-    ...aggregateBookDepartures(bookRows, studentRating),
+    ...aggregateBookDepartures(bookRows, studentRating, opponentFor),
   ]);
 
   const merged = [...coachRows, ...analysisRows];
