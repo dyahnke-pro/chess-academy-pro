@@ -623,6 +623,67 @@ session's other bugs.
 must never be re-coupled to the register flag; `'mistakes'` scope reinstates
 three `scope === 'full' ? 999 : 2` budgets.
 
+### G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").
+
+Everything the coach says passes through ONE decision. Three modules used to
+make it and no two callers composed them the same way, which is why
+`factSelector` reached review and nothing else.
+
+**The merged order, and why it is this order:**
+1. **IMPORTANCE** — is the moment worth anything (rating-scaled, contested-gated).
+2. **NEED** — does THIS student need it here (their own data; absent ≠ silent).
+3. **SUBSUME** — collapse facts that are one claim about one geometry.
+4. **FLOOR** — sweep what is not worth saying at this moment.
+5. **ORDER** — most-important-first, their weaknesses raised.
+6. **METHOD** — the habit that finds it next time, appended LAST.
+
+Steps 1–2 decide WHETHER, 3–6 decide WHAT. The maths still lives in
+`narrationImportance` / `factSelector` / `reviewFacetRank` (separately tested —
+never copy it, never add a second criticality); what is merged is the DOOR.
+Gate: `coachDecider.test.ts` fails if a surface calls `computeImportance`,
+`selectFacts` or `rankFacets` directly.
+
+🚨 **EVERY SURFACE MUST DECLARE ITS POSTURE — there is no safe default.**
+- `'walk'` (review, Watch) — the student ASKED for the sequence, so every ply is
+  a beat. Importance ranks the moment and sets the floor; it must NEVER decide
+  whether the ply speaks.
+- `'interrupt'` (Play, live boards) — silence is the default and the coach has
+  to earn the interruption, so importance gates.
+
+This was learned twice in one night, both times by READING the output while
+every unit test stayed green: applying the live-surface gate to review cut a
+46-ply walk to SIX narrated plies. If a change to the decider drops coverage,
+suspect the posture first.
+
+### G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").
+
+The audit that provoked this is `docs/plans/2026-09-16-teaching-behaviour-audit.md`
+— read it before adding narration. Summary: the coach is STRONG at describing
+the board and diagnosing the error (33 named fundamentals), GOOD at foresight,
+and was close to silent on METHOD. The entire in-flow method teaching was one
+line in `playCommentary` plus a paragraph of static UI copy on one drill page.
+
+`methodBeat.ts` is the fix. A method beat is NOT a new fact — it is the
+procedure the student should have run, **earned by a signal already computed**:
+- opponent-intent, when the attributor found `ignored-threat`;
+- the forcing scan, when the move that was there was a check/capture AND the
+  real swing was ≥ 1 pawn (the REAL cpLoss, never a bucket keyed off the
+  classification label — buckets made every inaccuracy look like 0.6);
+- slow down, when the tier is `critical`/`only-move` — the app has always
+  COMPUTED which moments are forks in the road and never said so.
+
+Rules: it is taught to the MOVER only, stems rotate on the ply, it ranks LAST
+(rank 8) so it closes the beat rather than preaching before the evidence, and it
+returns null rather than generic advice (empty > generic). It lives inside
+`coachDecider` because it needs the tier and because what to teach is a
+decision, not a call-site choice.
+
+**Still missing, ranked** (from the audit): threat identification as a HABIT
+rather than an announcement; candidate-move discipline in flow; foresight taught
+as a skill ("here was the signal"); concept-level spaced retrieval (SRS is
+keyed to `openingId` and covers MOVES, not ideas); transfer ("you met this idea
+two games ago"); non-blocking elicitation in review; plan-versus-plan.
+
 ### G4.5.2 NEVER TELL A STUDENT TO FIND A MOVE THEY PLAYED (found reading the shipped register, 2026-09-16).
 
 `buildReviewDeepestLookahead` names the combination the engine's best move sets

@@ -804,3 +804,48 @@ it; every test was green. Bars are now 0/20, `factSelector.test.ts` asserts
 
 D1–D3 from §11 remain open. D4 (telling the student to find a move they played)
 is fixed — CLAUDE.md §G4.5.2.
+
+---
+
+## §14. ONE DECIDING COMPUTER + THE METHOD LAYER (David 2026-09-16, overnight)
+
+> "I want one unified deciding computer. Merge them if possible."
+> "Calling out pins and forks isn't teaching. Future moves, how to think,
+> threat identification, that is teaching."
+
+**Merged.** `src/services/coachDecider.ts` — `decide(signals, student, bundle,
+posture, method?)` is the only door. Importance → need → subsume → floor →
+order → method, in that order, returning `{speak, reason, tier, rank, spoken,
+quiet}`. Doctrine: CLAUDE.md §G4.5.15. The three modules keep their maths and
+their tests; what merged is the entry point, gated so no surface composes it by
+hand again.
+
+**Posture is now explicit and mandatory.** `'walk'` (review/Watch — the student
+asked for the sequence, importance never gates the ply) vs `'interrupt'`
+(Play — silence is the default, importance gates). Wiring review without this
+cut the Alapin walk from 43 narrated plies to 6, with every test green. Twice in
+one night the only instrument that caught an over-silencing was READING the
+narration.
+
+**Method layer.** `src/services/methodBeat.ts`, wired inside the decider, rank 8
+so it closes the beat. Three habits, each earned by a computed signal:
+opponent-intent (`ignored-threat` fired), the forcing scan (the missed move was
+a check/capture AND the real swing ≥ 1 pawn), slow-down (tier critical /
+only-move). Uses the REAL cpLoss, not a bucket keyed off the classification.
+
+David's own Alapin game earns ZERO method beats — every move he missed there was
+quiet, so the forcing-scan habit is correctly silent. The wire is proven
+end-to-end by a test that takes the same game and the same builder and makes the
+ply-12 best move the capture Nxc3.
+
+**Teaching audit:** `docs/plans/2026-09-16-teaching-behaviour-audit.md` — seven
+teaching modes with code evidence, and the ranked list of what is still missing.
+The headline: the app's real teaching (calculation drills, position reading) is
+STRANDED on separate surfaces while the narration describes and diagnoses.
+
+### Next, in order
+1. Couple squares on `[delta]` (§13) — the remaining subsumption win.
+2. Adopt the decider on Learn / Play / read-position / chat, each declaring its
+   posture. Today only review goes through it.
+3. Threat identification as a habit, and candidate-move discipline in flow.
+4. Concept-level SRS (today `FlashcardRecord` is opening-keyed).
