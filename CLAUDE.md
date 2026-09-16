@@ -514,6 +514,73 @@ to be done LATER (not now):
   provider migration is the durable fix so the app is never cliff-edged
   by a single TTS vendor again.
 
+### G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — the ONLY cap is the student's own short/brief verbosity setting (David 2026-09-16, emphatic: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!! That's how things don't get stated or teachings left out" → "The only cap should be the short verbosity coach setting").
+
+A `.slice(0, N)` on a list of COMPUTED FACTS is a ship-blocking defect. Every
+one ever found was written for readability or thrift and every one silently
+deleted teaching the board had already earned. This is the
+quality-is-the-only-metric rule (G5 §QUALITY, David 2026-07-06) applied to a
+code class nobody had swept for.
+
+**THE RULE.** If code computed a fact, the student hears it. No ceiling on the
+number of reasons in a verdict, moments in a recap, engine lines per game,
+squares in an enumeration, loose pieces named, or pawn levers listed. A long
+list is a PHRASING problem — use an `andList` ("a, b and c"), or a count plus
+the list ("four holes: d5, b5, c4 and e4") — never a truncation.
+
+**THE ONE SANCTIONED CAP** is `coachNarration` = `silent` / `brief`
+(`applyBriefVoiceCap`, 2 sentences / 30 words, §G5 below). That is not the app
+rationing the student; it is the student's own switch, and it stays exactly as
+G5 specifies. Nothing else may cap.
+
+**NOT caps, do not "fix" these:**
+- **Need-based SELECTION (the 2026-09-15 standard).** "Speak wherever this
+  student's computed need clears the bar, however many plies that is" has no
+  ceiling. A hard cap says "stop after N regardless of value"; selection says
+  "value decides". They are opposites — do not conflate them.
+- **`maxPlies` on a projected line** where it is already DEEPER than
+  `pvDepthForRating` for the band (the punishment pass's 6 beats the scaled
+  value for every player under 2100). Unifying that onto the scaled value would
+  SHORTEN lines for most users. Verify the direction before touching it.
+
+**SWEEP STATUS — do not let this be forgotten (2026-09-16).**
+- DONE, review path: 8 caps removed (verdict reasons ×2, intro key moments, the
+  three projection COUNT budgets, trapped-minor candidates, `eyes` and the
+  colour-complex squares). Shared `andList` added.
+- OWED, 61 sites: `groundedAnswer.ts` 53 (coach chat), `openingGenerator.ts` 7
+  (Watch/Learn generation), `positionFacts.ts` 1. Convert site by site, then run
+  the EXHAUSTIVE routing audit (`audit-coach-all-questions-prod.mjs`) — that is
+  the only thing that proves the chat lanes still answer — and READ the answers.
+
+### G4.6 THE REVIEW-PREP LAG IS SERIALIZED ENGINE CALLS, NOT THE TIMEOUT (David 2026-09-16: "we need to fix that seven second lag").
+
+Diagnosed 2026-09-16; the timeout is a symptom, not the cause. Three layers
+multiply:
+
+1. **One projected line is ~7 engine calls, not one.** `computePvLine` runs a
+   root `analyzePosition` plus one per ply of playout (`maxPlies: 6` ⇒ ~7), each
+   at depth 14.
+2. **Every call SERIALIZES.** `stockfishEngine` is a singleton with an internal
+   queue that deliberately "serializes requests so they don't cancel each
+   other". So `Promise.all` over projections buys NOTHING — the calls just fill
+   that queue.
+3. **The number of lines is now unbounded** (correctly — see G4.5), so a game
+   with 12 flagged moves is ~84 sequential depth-14 analyses.
+
+`PROJ_TIMEOUT_MS = 7000` is a wall-clock deadline per call, never a narration
+length cap — and it was HIDING this by aborting slow calls, which is a hard cap
+on teaching wearing a latency costume.
+
+**THE FIX (next build): route review projections through the WORKER POOL.**
+A pool already exists (`gameAnalysisService`, `WORKER_POOL_SIZE`,
+`spawnDedicatedWorker`) but is reachable only from batch game analysis. The seam
+is already in place: `computePvLine(fen, { engine })` takes a `PvEngine`. Expose
+a pool-backed `PvEngine` adapter and pass it from `augmentWithProjections`, so N
+lines cost about the slowest one instead of the sum. Only THEN can the deadline
+be relaxed, because a slow call no longer blocks the others — and no beat is
+ever dropped for time. Do NOT remove the deadline before the pool wire lands, or
+one wedged worker hangs the walk forever and the student gets nothing.
+
 ### G5. Verbosity setting is RESPECTED, not hinted at.
 
 `coachNarration` has three values: `silent` / `brief` / `full`.
