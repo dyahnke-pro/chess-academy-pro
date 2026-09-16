@@ -58,7 +58,7 @@ describe('teachingSelector — the ONE game-level read (unified-coach N1)', () =
     // The +900 → +650 blowout never "turned" (contested gate).
     expect(pkg.moments.map((m) => m.ply)).not.toContain(19);
     expect(pkg.moments.map((m) => m.ply)).toEqual(expect.arrayContaining([8, 13]));
-    expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* pawns/);
+    expect(renderThesis(pkg.thesis, 'retrospective')).toMatch(/^The game turned at .* points/);
   });
 
   it('is SURFACE-BLIND — the same input yields a deep-equal package whichever surface asks (invariant 1)', () => {

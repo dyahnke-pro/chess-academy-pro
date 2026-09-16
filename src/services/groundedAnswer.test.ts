@@ -416,7 +416,7 @@ describe('assembleLastGameMistakeAnswer — R6 last-game critical error (David 2
     const a = assembleLastGameMistakeAnswer(base);
     expect(a).not.toBeNull();
     expect(a!.facts).toMatch(/critical error in your last game against Rival in the Caro-Kann was Nd5 on move 22/);
-    expect(a!.facts).toMatch(/a blunder in the middlegame, dropping about 3\.2 pawns/);
+    expect(a!.facts).toMatch(/a blunder in the middlegame, dropping about 3\.2 points/);
     expect(a!.facts).toMatch(/Bxf7 was the move instead/);
     expect(a!.facts).toMatch(/2 blunders and 1 mistake in all/);
     expect(a!.bestMoveSan).toBe('Bxf7');
@@ -458,7 +458,7 @@ describe('assembleRecentGamesMistakeAnswer — last N games (R6, David 2026-09-0
       worst: { san: 'Qxd4', moveNumber: 19, classification: 'blunder', bestMoveSan: 'Nf3', cpLoss: 450, phase: 'middlegame', opponent: 'Rook', opening: 'Sicilian' },
     });
     expect(a!.facts).toMatch(/Across your last 3 games you made 2 blunders and 4 mistakes/);
-    expect(a!.facts).toMatch(/worst was Qxd4 on move 19 — a blunder in the middlegame against Rook in the Sicilian, dropping about 4\.5 pawns\. Nf3 was the move/);
+    expect(a!.facts).toMatch(/worst was Qxd4 on move 19 — a blunder in the middlegame against Rook in the Sicilian, dropping about 4\.5 points\. Nf3 was the move/);
   });
   it('reports clean games when the span has no serious errors', () => {
     const a = assembleRecentGamesMistakeAnswer({ gamesChecked: 5, blunders: 0, mistakes: 0, worst: null });

@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { explainBestMoveGrounded, describeMoveGeometry } from './groundedAnswer';
+import { strategicWhySelfContained } from './moveFundamentals';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { gradeNarrationText } from './coachAnswerGates';
 import type { MistakeClassification, MistakeGamePhase, MistakeNarration } from '../types';
@@ -598,7 +599,23 @@ function buildMoveNarrations(fen: string, movesUci: string, params: NarrationPar
         ?? (geometry && !/^attacks\b/i.test(geometry.trim()) ? geometry : '')
         ?? '';
       const isFinal = playerIdx === playerMoveCount - 1;
-      const clauses = [point.trim()];
+      // NAME THE FIRST MOVE (David 2026-09-16). Rule 3 says don't restate the
+      // board — the student watched the move play out — and that holds for every
+      // beat AFTER the first. But the FIRST beat opened on a pronoun with no
+      // antecedent while the opponent's reply was named in the same breath:
+      //   "It stakes out the center and grabs space. Your opponent replies e5."
+      // Their move gets a name, yours gets "It". The asymmetry is the bug, not
+      // the naming. `moveFundamentals` already ships the register for exactly
+      // this distinction — `selfContained` names the square, `led` assumes the
+      // move was named already — so this picks the right one rather than
+      // bolting a SAN onto the front. Only when the computed point does not
+      // ALREADY name the destination, so a grounded tactical explanation
+      // ("wins the rook on a8") is never displaced by a generic strategic one.
+      const namesMove = point.includes(san) || point.includes(uciMoves[i].slice(2, 4));
+      const opening = playerIdx === 0 && !namesMove
+        ? strategicWhySelfContained(fenBefore, san, moverColor)
+        : null;
+      const clauses = [(opening ?? point).trim()];
       // Mate is the ONE closing clause worth speaking: the line is over and the
       // board has changed in a way the student needs told. An earlier draft of
       // this also appended "That is the idea." to every final move — which,
@@ -607,7 +624,7 @@ function buildMoveNarrations(fen: string, movesUci: string, params: NarrationPar
       // deleted.
       if (isFinal && chess.isCheckmate()) clauses.push('That is mate.');
       const text = clauses.filter(Boolean).join(' ');
-      narrations.push(text ? capitalizeFirst(text) : '');
+      narrations.push(text ? terminate(capitalizeFirst(text)) : '');
     } else if (narrations.length > 0) {
       // The opponent's reply is stated plainly and appended to the student's
       // last beat, so the two never overlap as separate spoken lines.
@@ -623,4 +640,13 @@ function buildMoveNarrations(fen: string, movesUci: string, params: NarrationPar
 
 function capitalizeFirst(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** Close the beat so the opponent's reply doesn't run into it. The append below
+ *  is a bare `${prev} ${reply}` with no punctuation guard — latent until a beat
+ *  arrived without a trailing period, which produced "Stakes out the center
+ *  with the pawn to e4 Your opponent replies e5." Terminating at the source
+ *  fixes every caller rather than the one that exposed it. */
+function terminate(s: string): string {
+  return /[.!?]$/.test(s.trim()) ? s : `${s.trim()}.`;
 }
