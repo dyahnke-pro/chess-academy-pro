@@ -488,6 +488,73 @@ in an alternating line.
 assert the net sentence is present and seat-correct. Per David 2026-09-15, the
 audit reads the NARRATION, not a pass count.
 
+### N7d — ONE VERDICT COMPUTER (David 2026-09-16, reading the shipped line:
+"Why is the user clearly better? That sentence is missing")
+
+Two verdict computers existed over the same eval bands:
+
+| | input | output |
+|---|---|---|
+| `augmentWithProjections.verdictWord` (private, now deleted) | cp | a word |
+| `assessPositionalEdge` | cp + fen | `{verdict, reasons}` |
+
+The per-move `[verdict]` facet always used the second ("You're clearly better:
+you have the bishop pair"); the PROJECTED lines got the first, so they ended on
+a bare "you're clearly better" — the eval bar read aloud, which the Narration
+Voice Rules call filler and G0 calls voicing a number instead of a fact.
+
+They also DISAGREED ON THE WORD. At +120 the projection said "you're clearly
+better" while the per-move verdict on the same game said "you're a bit better".
+One review, one number, two verdicts — the drift class, demonstrable inside a
+single walk.
+
+Fixed: `verdictWord` deleted; projected lines read `assessPositionalEdge` at the
+line's TERMINAL position (the board the verdict is about, not the root) and
+carry up to two ranked board reasons; no reasons → the word alone, never an
+invented why. Gated by a source scan that fails if a second cp-to-word ladder
+reappears in the projection code.
+
+**This is the third duplicate-computer defect of the session** (the worst-piece
+loop, the outpost stated twice, the verdict) and is the evidence behind §9.
+
+## 9. N8 — TYPE THE FACT (David 2026-09-16: "this is not one cohesive computer")
+
+Not yet built; David asked for thoughts, the answer is recorded here so the
+next session does not re-derive it.
+
+**The finding.** There are TWO fact representations in the app:
+- `positionFacts` → `ClauseItem { kind, rank, text, conceptId }` — typed,
+  ranked, concept-tagged. `applyWeaknessBoost` matches on `conceptId`, cleanly.
+- `reviewFullData.computeMoveFacets` → `string[]` with ~30 bracket tags
+  (`[verdict]`, `[structure]`, `[worst]`, …). Every consumer reverse-engineers
+  structure back out of prose: `standingSig` strips words by regex,
+  `freshStructureFacet` splits on `' · '`, highlights are coupled through a
+  `Map` keyed on the facet STRING (with a comment warning that a later rewrite
+  breaks the key), and the 2026-09-15 outpost dedupe greps `/outpost/i` plus
+  `\b[a-h][1-8]\b` out of a sentence to ask what another computer said.
+
+Every narration defect found on 2026-09-15/16 lived in the prose representation.
+
+**What NOT to do.** Merge the detectors. That loses the ~200 board-truth tests
+that are the only reason the narration is trustworthy, and it makes the
+synchronous corpus lookup (90% of what gets said) wait behind 7s-budgeted
+engine reads. The spine (selector, surface table, `voiceFacts`, `positionFacts`)
+already exists — every defect was code that BYPASSED it.
+
+**The build.** Make the review's facets `ClauseItem[]` and give `ClauseItem` the
+three fields whose absence caused this session's bugs, each killing a class by
+construction rather than by patch:
+- `subject` — whose piece. Kills "a highway into their position" about the
+  student's own camp, and "winning the rook" with no owner. Seat decided ONCE.
+- `squares` — kills the string-keyed highlight map.
+- `claimId` (e.g. `outpost:d4`) — kills one fact stated twice. Structural, not
+  regex.
+
+Then ONE renderer owns dedupe, seat-stamping, importance ordering and the N2
+need bar; the detectors stay small, pure and separately gated, and stop writing
+English. Scope v1 to REVIEW end to end — that is where the prose ledger lives
+and where every defect was — not all surfaces at once.
+
 ### Explicitly NOT in this build
 
 The missing forcing PLAN in `deriveNextPlans` (eight plans, all assuming a
