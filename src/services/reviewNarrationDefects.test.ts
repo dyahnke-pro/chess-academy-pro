@@ -76,3 +76,23 @@ describe('filler — an undefended home-rank pawn nothing attacks is not news', 
     expect(out).toMatch(/walks away from the pawn on b7/);
   });
 });
+
+describe('a forcing board is where the coach must speak, not go mute', () => {
+  it('names a sound capture that ALSO answers the check', async () => {
+    const { attackerDefenderCount } = await import('./reviewTeachingPoints');
+    // White to move and IN CHECK from Bb4; Qa3xb4 answers the check and wins
+    // the undefended bishop. The null-move flip used to bail on any in-check
+    // board and drop every claim, so this position said nothing at all.
+    const out = attackerDefenderCount('7k/8/8/8/1b6/Q7/8/4K3 w - - 0 1', 'w');
+    expect(out).toMatch(/bishop on b4/);
+    expect(out).toMatch(/so it falls/);
+  });
+  it('still refuses the claim when the capture is answered — the fork that wins the exchange', async () => {
+    const { attackerDefenderCount } = await import('./reviewTeachingPoints');
+    // Ply 29 of David's Alapin: Nc7+ forks king and rook. Kxd7 wins a knight,
+    // but Nxa8 collects the rook, so the d7 knight does NOT simply fall. The
+    // counter-tactic guard must keep that claim off the board.
+    const out = attackerDefenderCount('r3kb1r/ppNNpppp/2n5/8/3P4/8/PP2nPPP/R3K2R b KQkq - 1 15', 'b');
+    expect(out).toBeNull();
+  });
+});

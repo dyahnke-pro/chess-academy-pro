@@ -68,14 +68,29 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
   // hallucination class, David 2026-07-21). Verify with the flipped-board
   // student-to-move scan: the capture must exist, net material by SEE, and
   // survive the opponent's immediate counter-tactics — or the claim is dropped.
-  const flippedParts = fen.split(' ');
-  flippedParts[1] = studentColorWB;
-  flippedParts[3] = '-';
+  //
+  // 🔒 WHEN IT IS ALREADY THE STUDENT'S TURN, DO NOT NULL-MOVE (David
+  // 2026-09-15, reading his own review at the ply a check-fork landed). The
+  // flip exists to ask "what could the student take if it were their move";
+  // when it IS their move the flip is a no-op that only introduces an illegal
+  // state, and the `inCheck` bail then DROPPED EVERY CLAIM — so the computer
+  // went silent exactly where the board was most forcing. At ply 29 of his
+  // Alapin the coach named the fork, the trapped rook and the trapped knight,
+  // and never said the one thing that mattered: the knight on d7 falls, take
+  // it. chess.js only generates legal replies, so in check the scan naturally
+  // considers only moves that answer the check.
   let flipped: Chess | null = null;
-  try {
-    flipped = new Chess(flippedParts.join(' '));
-    if (flipped.inCheck()) flipped = null; // illegal null-move state — no claim
-  } catch { flipped = null; }
+  if ((fen.split(' ')[1] ?? '') === studentColorWB) {
+    flipped = chess; // the real board — checks and all
+  } else {
+    const flippedParts = fen.split(' ');
+    flippedParts[1] = studentColorWB;
+    flippedParts[3] = '-';
+    try {
+      flipped = new Chess(flippedParts.join(' '));
+      if (flipped.inCheck()) flipped = null; // illegal null-move state — no claim
+    } catch { flipped = null; }
+  }
   for (const c of cells(chess)) {
     if (c.color !== enemy || c.type === 'k' || c.type === 'p') continue;
     const sq = c.square as Square;
