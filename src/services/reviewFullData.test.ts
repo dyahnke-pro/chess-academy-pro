@@ -137,19 +137,31 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     }
   });
 
-  it('records nothing into outSquares for a facet with no clean square (no phantom highlight)', () => {
-    // The opening ply has [move]/[opening] prose facets but no trapped/passer/
-    // minority/complex square — outSquares must stay empty, so a highlight never
-    // appears without a board-true square behind it (G0).
+  it('never records a square a facet did not name (no phantom highlight)', () => {
+    // SUPERSEDES an assertion that outSquares stays EMPTY on 1.e4. That was a
+    // proxy for the real contract, and it stopped being true on 2026-09-16 when
+    // `[delta]` began coupling its geometry — "it opens the diagonals for both
+    // the queen on d1 and the bishop on f1" names d1 and f1, and recording them
+    // is exactly right. The contract was never "no squares"; it is "no square
+    // without a board-true square behind it" (G0), so assert THAT.
     const c = new Chess(); c.move('e4'); const fenAfter = c.fen();
     const out = new Map<string, readonly string[]>();
-    computeMoveFacets({
+    const facets = computeMoveFacets({
       fenBefore: new Chess().fen(), fenAfter, san: 'e4', ply: 1,
       moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 20, preMoveEval: 0, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0 }, allSans: ['e4'], forcedRunStartPly: null,
     }, out);
-    expect(out.size).toBe(0);
+    for (const [facet, squares] of out) {
+      expect(facets).toContain(facet);               // never a key nothing spoke
+      expect(squares.length).toBeGreaterThan(0);     // never an empty record
+      for (const sq of squares) expect(sq).toMatch(/^[a-h][1-8]$/);
+      // …and every square it recorded is one the facet's own text names.
+      for (const sq of squares) expect(facet).toContain(sq);
+    }
+    // A prose-only facet still records nothing.
+    const opening = facets.find((f) => f.startsWith('[opening]'));
+    if (opening) expect(out.has(opening)).toBe(false);
   });
 });
 

@@ -223,9 +223,16 @@ export function computeMoveFacets(
   // pawn gave up for good, castling rights surrendered. Each clause computed
   // (boardDelta.ts, pure chess.js), seat-stamped, one [delta] facet per clause
   // so the coverage net guards each independently.
-  for (const clause of computeBoardDelta(fenBefore, san)) {
+  // The squares come back keyed by the RAW clause, so re-key them onto the
+  // finished facet text — that is what `factSelector` looks up. Without this the
+  // `[delta]` facts stay geometry-blind and two clauses about one diagonal both
+  // speak (David 2026-09-16, ply 23).
+  const deltaSquares = new Map<string, readonly string[]>();
+  for (const clause of computeBoardDelta(fenBefore, san, deltaSquares)) {
     const seated = ctx.studentColorWB ? seatPieceReferences(clause, fenAfter, ctx.studentColorWB) : clause;
-    facets.push(`[delta] ${seated.charAt(0).toUpperCase()}${seated.slice(1)}.`);
+    const f = `[delta] ${seated.charAt(0).toUpperCase()}${seated.slice(1)}.`;
+    facets.push(f);
+    recSquares(f, deltaSquares.get(clause) ?? []);
   }
 
   // ── 2. MOVE QUALITY (classification + eval swing + the better move) ──

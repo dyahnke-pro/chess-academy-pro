@@ -62,19 +62,36 @@ function kingZone(c: Chess, color: Color): Set<string> {
   return new Set();
 }
 
-export function computeBoardDelta(fenBefore: string, san: string): string[] {
+export function computeBoardDelta(
+  fenBefore: string,
+  san: string,
+  /** Optional: clause text → the squares that clause NAMED, coupled here at the
+   *  point the squares are known. Without it a `[delta]` fact is geometry-blind,
+   *  so two clauses describing ONE diagonal opening from both ends cannot be
+   *  recognised as one claim and both speak (David 2026-09-16, reading ply 23).
+   *  Same out-map pattern as `computeMoveFacets`'s `recSquares` — optional, so
+   *  every existing caller is untouched. NEVER scrape these back out of prose. */
+  outSquares?: Map<string, readonly string[]>,
+): string[] {
   try {
     const before = new Chess(fenBefore);
     const after = new Chess(fenBefore);
     const mv = after.move(san.replace(/[?!]+$/, ''));
     if (!mv) return [];
     const clauses: string[] = [];
+    const rec = (text: string, squares: ReadonlyArray<string | null | undefined>): string => {
+      if (outSquares) {
+        const clean = squares.filter((x): x is string => typeof x === 'string' && /^[a-h][1-8]$/.test(x));
+        if (clean.length) outSquares.set(text, [...new Set(clean)]);
+      }
+      return text;
+    };
     const moverColor: Color = mv.color;
     const from = mv.from;
     const to = mv.to;
 
     // ── UNCOVERS + BLOCKS — sliders whose reach changed because of this move ──
-    const uncovered: Array<{ type: PieceSymbol; sq: string; color: Color; text: string }> = [];
+    const uncovered: Array<{ type: PieceSymbol; sq: string; color: Color; text: string; squares: readonly string[] }> = [];
     const blocked: string[] = [];
     // Every mover slider this move UNBLOCKED, ungated — used to spot the
     // free-both-pieces IDEA below even when the diagonals open onto empty space.
@@ -110,11 +127,24 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
       });
       if (wasUnblocked && worthSaying) {
         const far = gained.reduce((m, g) => (chebyshev(g, sq) > chebyshev(m, sq) ? g : m), gained[0]);
-        const hits = gained
+        const hitTargets = gained
           .map((g) => ({ g, p: after.get(g as Square) }))
-          .filter((x) => x.p && x.p.color !== pb.color)
-          .map((x) => `the ${PIECE_WORD[(x.p as { type: PieceSymbol }).type]} on ${x.g}`);
-        uncovered.push({ type: pb.type, sq, color: pb.color, text: `the ${PIECE_WORD[pb.type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hits.slice(0, 2).join(' and ')}` : ''}` });
+          .filter((x) => x.p && x.p.color !== pb.color);
+        const hits = hitTargets.map((x) => `the ${PIECE_WORD[(x.p as { type: PieceSymbol }).type]} on ${x.g}`);
+        // No `.slice(0, 2)` — a cap on computed facts is banned (G4.5); a long
+        // list is a PHRASING problem, so it reads as "a, b and c".
+        const hitList = hits.length <= 1 ? hits.join('')
+          : `${hits.slice(0, -1).join(', ')} and ${hits[hits.length - 1]}`;
+        uncovered.push({
+          type: pb.type, sq, color: pb.color,
+          // THE CLAUSE'S OWN GEOMETRY: the slider and what it now bears on.
+          // Deliberately NOT the move's from/to — including those diluted the
+          // overlap between "their bishop on e2 now reaches g4" and "your bishop
+          // on g4 now reaches e2" from 1.0 to 0.5, so the two halves of ONE
+          // opened diagonal stopped reading as one claim (David 2026-09-16).
+          squares: [sq, far, ...hitTargets.map((x) => x.g)],
+          text: `the ${PIECE_WORD[pb.type]} on ${sq}'s line just opened — it now reaches ${far}${hits.length ? `, hitting ${hitList}` : ''}`,
+        });
       }
       if (lost.length > 0 && !lost.includes(to) && sa.has(to) && pb.color === moverColor) {
         // The landing square sits on this OWN slider's former line — the move
@@ -146,14 +176,19 @@ export function computeBoardDelta(fenBefore: string, san: string): string[] {
       // Seat-neutral ending — seatPieceReferences stamps the named pieces
       // (your/their queen…); the tail must NOT hard-code "your" or it mis-seats
       // the opponent's move ("free your pieces" on …e5).
-      clauses.push(`it opens the diagonals for both the ${PIECE_WORD.q} on ${openQ.sq} and the ${PIECE_WORD.b} on ${openB.sq} at once — the most aggressive way to open the position`);
+      clauses.push(rec(`it opens the diagonals for both the ${PIECE_WORD.q} on ${openQ.sq} and the ${PIECE_WORD.b} on ${openB.sq} at once — the most aggressive way to open the position`,
+        // ONLY the squares this clause NAMES. Recording the move's own from/to
+        // here would light a yellow highlight on squares the narration never
+        // mentions — the opposite of lead-the-eye, and a phantom-highlight bug
+        // that `reviewFullData.test.ts` catches by construction.
+        [openQ.sq, openB.sq]));
       // Any OTHER slider that opened onto a real target still reports normally.
       const rest = uncovered.filter((u) => !(u.color === moverColor && (u.type === 'q' || u.type === 'b')));
-      clauses.push(...rest.slice(0, 2).map((u) => u.text));
+      clauses.push(...rest.map((u) => rec(u.text, u.squares)));
     } else {
-      clauses.push(...uncovered.slice(0, 2).map((u) => u.text));
+      clauses.push(...uncovered.map((u) => rec(u.text, u.squares)));
     }
-    clauses.push(...blocked.slice(0, 2));
+    clauses.push(...blocked);
 
     // ── ABANDONS — own pieces the mover guarded from `from`, now guarded by nobody ──
     const dutiesBefore = attackSet(before, from, moverColor);

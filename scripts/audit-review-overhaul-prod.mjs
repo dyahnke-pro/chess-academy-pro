@@ -354,6 +354,16 @@ const run = async () => {
   } else {
     await add('RECAP fundamentals-aggregate', reachedEnd && !!recap, recap ? `"${recap.text.slice(0, 140)}"` : `end reached=${reachedEnd}; ${flaggedLeads.size} flagged ply(s) but no aggregate line spoken`);
   }
+  // THE TURNING-POINT CARD FIRES AFTER THE WALK ENDS — the component raises it
+  // when currentPly === moves.length, which is AFTER the step loop above has
+  // already broken out. So the loop's last `resolveCards()` ran before the card
+  // existed and nothing ever answered it (found 2026-09-16: the THESIS row read
+  // as a broken N1 wire for two runs while the product was fine). Wait for it
+  // here, answer it, and let the reveal speak.
+  await until(() => has(page, '[data-testid="review-turning-point-card"]'), 45000, 500);
+  await resolveCards();
+  await until(() => spoken().some((x) => /^(You called it\.|Not quite\.)/.test(x.text)), 20000, 500);
+
   // THESIS (unified-coach N1, 2026-09-15): THE ONE SELECTOR's game-level thesis
   // is spoken at the turning-point REVEAL, retrospective register, exactly once,
   // and only after the student commits (withheld until the pick). The card is
