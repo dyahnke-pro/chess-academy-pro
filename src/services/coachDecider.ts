@@ -32,7 +32,8 @@
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, type QuietFact } from './factSelector';
 import { rankFacets } from './reviewFacetRank';
-import { methodBeatFor, type MethodSignals, type HabitNeed } from './methodBeat';
+import { methodBeatFor, type MethodSignals, type HabitNeed, type MethodHabit } from './methodBeat';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
@@ -197,30 +198,93 @@ export function decide(
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.
  *
  *  A method beat is earned by RECURRENCE, not by the size of one slip (David
- *  2026-09-16, after his Alapin review spoke zero method: 2 inaccuracies and 2
- *  mistakes, none of which cleared the flat `cpLoss >= 100` bar). The spine
- *  already tracks recurrence per cluster; this joins those clusters to the
- *  habit that would have caught them.
+ *  2026-09-16, after his Alapin review spoke zero method). The spine already
+ *  tracks recurrence per cluster; this joins those clusters to the habit that
+ *  would have caught them.
  *
  *  Matching is on `clusterId`, the spine's documented join key — never on
  *  `label`, which is display text and is explicitly "never used for matching".
- *  A cluster must be genuinely open (`openCount > 0`) to count: a hole the
- *  student has since closed is not a habit they still need taught. */
-function habitNeedFrom(weaknesses: readonly WeaknessSignal[]): HabitNeed {
+ *  A cluster must be genuinely open (`openCount > 0`): a hole the student has
+ *  since closed is not a habit they still need taught. */
+export function habitNeedFrom(weaknesses: readonly WeaknessSignal[]): HabitNeed {
   const need: HabitNeed = {};
   for (const w of weaknesses) {
     if (w.openCount <= 0) continue;
-    const id = w.clusterId.toLowerCase();
-    // Missing what the OPPONENT was doing — hanging pieces, allowed tactics.
-    if (/hanging|allowed|ignored-threat|undefended|missed-threat/.test(id)) need['opponent-threat'] = true;
-    // Missing a shot that was forcing — the checks-and-captures scan.
-    if (/tactic|fork|pin|skewer|discovered|double-check|back-rank|mate|deflection|overload/.test(id)) {
-      need['forcing-scan'] = true;
-    }
-    // Falling apart at the moments that decide the game.
-    if (/blunder|critical|time|rush|conversion/.test(id)) need['slow-down'] = true;
-    // Picking the first move that looks right.
-    if (/candidate|calculation|impulse|premature/.test(id)) need['candidates'] = true;
+    const habit = habitForCluster(w.clusterId);
+    if (habit) need[habit] = true;
   }
   return need;
 }
+
+/** One cluster id → one habit, or null when the weakness is real but is not a
+ *  THINKING habit. Both vocabularies are handled here so a caller never has to
+ *  know which one it is holding. */
+export function habitForCluster(clusterId: string): MethodHabit | null {
+  for (const [re, habit] of ANALYSIS_HABIT) if (re.test(clusterId)) return habit;
+  return COACH_TAG_HABIT[clusterId as MisconceptionTagId] ?? null;
+}
+
+/** THE COACH-SIDE TAG → HABIT MAP, EXHAUSTIVE OVER THE CLOSED SET.
+ *
+ *  There are TWO weakness vocabularies feeding `clusterId`: the generated
+ *  `analysis:*` family (open — `analysis:tactic:${tacticType}`) and this closed
+ *  set of 26 misconception tags, mapped straight through by
+ *  `weaknessSignal.ts:63` (`clusterId: w.tag`).
+ *
+ *  A regex join across both silently missed the two tags that matter most for
+ *  the threat habit, on a string NEAR-miss: `missed-opponents-threat` does not
+ *  contain "missed-threat", and `hung-material` does not contain "hanging"
+ *  (found 2026-09-16). That is the "two enums that mean the same thing and
+ *  never reconcile" rot — it fails silently and every test stays green. A
+ *  `Record` over `MisconceptionTagId` makes it IMPOSSIBLE to reopen: a 27th tag
+ *  fails to compile until someone decides its habit.
+ *
+ *  `null` means "real weakness, but not a THINKING habit" — a positional
+ *  principle (king safety, pawn structure, a passive rook) is taught by the
+ *  fundamentals layer, not by a method beat. Empty beats generic. */
+const COACH_TAG_HABIT: Record<MisconceptionTagId, MethodHabit | null> = {
+  // — the opponent's move is the thing you did not look at —
+  'missed-opponents-threat': 'opponent-threat',
+  'hung-material': 'opponent-threat',
+  'greedy-pawn-grab': 'opponent-threat',
+  'poisoned-pawn': 'opponent-threat',
+  // — the shot that was there was forcing —
+  'missed-tactic': 'forcing-scan',
+  // — you picked before you compared —
+  'calculation-depth': 'candidates',
+  'overvalued-attack': 'candidates',
+  'bad-trade': 'candidates',
+  'bad-trade-material': 'candidates',
+  'no-plan': 'candidates',
+  // — the moment deserved more clock than you gave it —
+  'botched-conversion': 'slow-down',
+  'mistimed-pawn-break': 'slow-down',
+  // — real holes, taught by the fundamentals layer rather than a habit —
+  'left-book-early': null,
+  'neglected-development': null,
+  'king-stuck-center': null,
+  'tempo-handed': null,
+  'space-conceded': null,
+  'weakened-king-safety': null,
+  'created-pawn-weakness': null,
+  'misplaced-piece': null,
+  'overextended-pawn': null,
+  'capture-toward-centre': null,
+  'passive-king-endgame': null,
+  'passed-pawn-neglected': null,
+  'passive-rook': null,
+  other: null,
+};
+
+/** The GENERATED `analysis:*` family is open (`analysis:tactic:${type}`), so it
+ *  matches by prefix — but only on prefixes that are actually emitted by
+ *  `weaknessSpine.ts`, listed here rather than guessed. */
+const ANALYSIS_HABIT: ReadonlyArray<readonly [RegExp, MethodHabit]> = [
+  [/^analysis:missed-threat/, 'opponent-threat'],
+  // "doesn't see what is on the board" IS the threat habit — the regex join
+  // walked straight past this one.
+  [/^analysis:boardvision/, 'opponent-threat'],
+  [/^analysis:tactic:/, 'forcing-scan'],
+  [/^analysis:conversion/, 'slow-down'],
+  [/^analysis:timetrouble/, 'slow-down'],
+];
