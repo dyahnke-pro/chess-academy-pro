@@ -664,3 +664,53 @@ The missing forcing PLAN in `deriveNextPlans` (eight plans, all assuming a
 quiet board). With the ledger speaking the net, ply 29 teaches correctly
 without one. Whether a ninth plan is still owed is a judgement to make after
 reading the shipped output, not before.
+
+---
+
+## §11. READING THE SHIPPED OUTPUT — full detail vs one-beat, same game (2026-09-16)
+
+Ran `buildReviewSegments` twice over David's Alapin loss (46 plies, real
+Stockfish depth-14 evals), once with `uncapped=true` (the "Deep Review Detail"
+default) and once `false` (the opt-out one-beat register), and read every line.
+
+| | plies spoken | words |
+|---|---|---|
+| Deep Review Detail (default) | 43 / 46 | 3,242 |
+| One-beat (opt-out) | 44 / 46 | 1,060 |
+
+The `[tag]` prefixes visible in `buildReviewSegments` output are stripped in
+`generateReviewNarration` before anything is spoken — verified, they do not ship.
+
+### Three defects the read found. None is a cap; all three are in scope.
+
+**D1 — FULL is SILENT on 3 plies where one-beat SPEAKS (17 Be2, 35 a3, 45 h4).**
+"Full detail" saying LESS than the compressed register is the exact inversion
+the no-caps rule exists to prevent. All three are quiet OPPONENT moves. The
+capped cascade reaches for a development/space observation there; the uncapped
+aggregator computes no facet that clears, and emits null. The aggregator is
+missing the opponent-quiet-move facet the cascade has.
+
+**D2 — the plan can name a different file from the one the move just took.**
+Ply 46, student plays Rc8: *"You own the open c-file. The plan from here is to
+seize the open d-file."* Both clauses are board-TRUE (both files are open) —
+this is a sequencing defect, not a hallucination: `deriveNextPlans` reads the
+position without reading the move that produced it, so it proposes a plan the
+student has just declined.
+
+**D3 — "wins material" twice in a row, with no net.** Ply 27 *"Nxd7 captures
+the queen, wins material"*, ply 30 *"Kxd7 captures the knight, wins material."*
+The N7 exchange ledger nets a PROJECTED line; consecutive real-game captures
+are not run through it, so the student hears two unqualified "wins material"
+claims across one trade. The ledger is the right computer; it is wired to the
+wrong inputs here.
+
+### The register question, honestly
+
+Uncapped speaks every ranked facet, in rank order, dropping nothing — so
+low-value facts ride along: *"You're balanced"* at ply 1, *"Undefended right
+now: their pawn on e4"* at ply 4. That is the cost David accepted and it is the
+right trade (a cap hides teaching; noise only bores). But **no-caps is not
+no-ranking**: N9 orders the facets and never drops, and the N2 need bar
+currently gates the PLY, not the FACET. Gating a facet on need — not on a count
+— is the only correct way to quiet ply-1 "you're balanced" without
+reintroducing a cap. That is the N8 `ClauseItem` build (§10), not a new rule.
