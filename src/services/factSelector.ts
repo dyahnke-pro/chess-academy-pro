@@ -38,7 +38,7 @@ import type { WeaknessSignal } from './weaknessSignal';
 
 /** Why a fact did not speak. Kept for the audit trail — silence is a computed
  *  verdict, so it has to be explainable, never just absent. */
-export type QuietReason = 'subsumed' | 'below-bar';
+export type QuietReason = 'subsumed' | 'below-bar' | 'said-already';
 
 export interface QuietFact {
   text: string;
@@ -118,21 +118,48 @@ function jaccard(a: readonly string[], b: readonly string[]): number {
  * @param tier     the moment's importance tier, from `computeImportance`
  * @param signals  this student's weakness spine — raises facts about their holes
  */
+/** Everything optional, in ONE object — never as a positional tail.
+ *
+ *  This was four trailing positional parameters until 2026-09-16, when adding
+ *  `alreadySaid` in the middle silently shifted `order` into its slot and every
+ *  existing caller kept compiling while passing the wrong thing. A long
+ *  positional tail is a trap that springs on the NEXT person; the options
+ *  object cannot mis-bind. */
+export interface FactSelectOptions {
+  /** Facts that describe something the OPPONENT is doing TO the student —
+   *  coupled from the detector's `beneficiary`, never inferred from the prose.
+   *  Used ONLY to break a tie inside a same-claim group (see below). */
+  incoming?: ReadonlySet<string>;
+  /** SENTENCES THIS SURFACE HAS ALREADY SPOKEN — suppressed, with a reason.
+   *
+   *  Subsumption collapses two facts that are one claim about one board.
+   *  Say-once collapses ONE fact that is the same claim about a board that has
+   *  not changed: "your pawn on d4 and your queen share that file" is true for
+   *  as long as the pin geometry stands, so it re-earns its place on every ply
+   *  and the student hears it over and over. That is the repetition a real game
+   *  walk actually shows — not duplicate geometry (2026-09-16 measurement).
+   *
+   *  The SURFACE decides what is eligible, because only it knows which of its
+   *  clauses are standing context and which are live and urgent — a piece that
+   *  is STILL hanging must say so again. This set holds only the sentences it
+   *  has judged safe to say once. */
+  alreadySaid?: ReadonlySet<string>;
+  /** A surface's OWN ranking scale. `rank` and `bar` travel together on
+   *  purpose: a bar is meaningless in a scale it did not come from, and
+   *  splitting them is how they end up disagreeing. Omitted → facts are ranked
+   *  by their `[tag]` and swept by `barForTier`. */
+  order?: { rank: ReadonlyMap<string, number>; bar: number };
+}
+
 export function selectFacts(
   facets: readonly string[],
   squares: ReadonlyMap<string, readonly string[]>,
   tier: ImportanceTier,
   signals: readonly WeaknessSignal[] = [],
-  /** Facts that describe something the OPPONENT is doing TO the student —
-   *  coupled from the detector's `beneficiary`, never inferred from the prose.
-   *  Used ONLY to break a tie inside a same-claim group (see below). */
-  incoming: ReadonlySet<string> = new Set(),
-  /** A surface's OWN ranking scale, when it has one. `rank` and `bar` travel
-   *  together on purpose: a bar is meaningless in a scale it did not come from,
-   *  and splitting them into two optionals is how they end up disagreeing. When
-   *  omitted, facts are ranked by their `[tag]` and swept by `barForTier`. */
-  order?: { rank: ReadonlyMap<string, number>; bar: number },
+  opts: FactSelectOptions = {},
 ): FactSelection {
+  const { incoming = new Set<string>(), alreadySaid, order } = opts;
+  const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
   const rankOf = (text: string): number => (order ? (order.rank.get(text) ?? 0) : facetRank(text, signals));
   const scored = facets.map((text, i) => ({ text, i, rank: rankOf(text), sq: squares.get(text) ?? [] }));
@@ -175,9 +202,11 @@ export function selectFacts(
   }
   winners.sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
   // THE BAR, applied after subsumption so a low-ranked duplicate cannot mask a
-  // high-ranked original by consuming its slot.
+  // high-ranked original by consuming its slot. Say-once runs alongside it: a
+  // sentence already spoken is not worth saying again at any rank.
   const spoken: typeof winners = [];
   for (const w of winners) {
+    if (said.has(w.text)) { quiet.push({ text: w.text, why: 'said-already' }); continue; }
     if (w.rank < bar) { quiet.push({ text: w.text, why: 'below-bar' }); continue; }
     spoken.push(w);
   }

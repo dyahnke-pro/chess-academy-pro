@@ -47,6 +47,15 @@ export interface PositionFactsInput {
    *  mute, and in the other makes a play surface chatty. A new caller fails to
    *  compile until it says which it is. */
   posture: SurfacePosture;
+  /** SENTENCES THIS SURFACE HAS ALREADY SPOKEN in this game/lesson — pass back
+   *  what the previous call returned in `remember`, unioned.
+   *
+   *  A standing fact is true for as long as its geometry stands, so it re-earns
+   *  its place on every ply: "your pawn on d4 and your queen share that file"
+   *  spoke on two consecutive plies of a real game walk. That is the repetition
+   *  these surfaces actually suffer from — not duplicate geometry. Omit it and
+   *  nothing is suppressed (the wire is inert until a caller keeps the set). */
+  alreadySaid?: ReadonlySet<string>;
   fen: string;
   /** The side to move at `fen`. Decision-leverage belongs to this side. */
   moverColor: 'w' | 'b';
@@ -110,9 +119,14 @@ export interface PositionFactsResult {
    *  What survived the deciding computer — subsumed duplicates are gone. */
   clauses: ClauseItem[];
   /** Every clause the door did NOT speak, with its reason (`subsumed` + the
-   *  winner, or `below-bar`). The observability trail: silence here is a
-   *  computed verdict, and this is how you read it back. */
+   *  winner, `below-bar`, or `said-already`). The observability trail: silence
+   *  here is a computed verdict, and this is how you read it back. */
   quiet: QuietFact[];
+  /** The spoken sentences that are STANDING facts — union these into the set
+   *  the caller passes back as `alreadySaid` next ply, and each is said once
+   *  per game instead of once per ply. A caller that ignores this keeps the old
+   *  behaviour; nothing breaks, it just repeats. */
+  remember: string[];
 }
 
 export type ClauseKind = 'status' | 'deliberation' | 'latent-danger' | 'must-defend' | 'key-moment' | 'opponent-intent' | 'student-leans' | 'opponent-leans' | 'fundamental' | 'structure-plan' | 'convert' | 'concept' | 'method';
@@ -171,6 +185,19 @@ export interface ClauseItem {
    *  collapse because it is never a restatement of a fact). */
   squares?: readonly string[];
 }
+
+/** THE STANDING KINDS — say these once per game, not once per ply.
+ *
+ *  A pawn structure, a pin in waiting, which piece is doing the work: all true
+ *  until the board changes, and all re-derived every ply, so without this the
+ *  student hears the same sentence over and over. Deliberately NOT here: a
+ *  `must-defend` (a piece STILL hanging must say so again), and anything
+ *  move-specific — `concept`, `deliberation`, `fundamental`, `opponent-intent`,
+ *  `key-moment`, `method` (which rotates its own stems), `convert`, `status`
+ *  (already fires only on a band CHANGE). */
+const SAY_ONCE_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>([
+  'structure-plan', 'latent-danger', 'student-leans', 'opponent-leans',
+]);
 
 /** The ordered clause TEXT, optionally dropping kinds a surface already covers. */
 export function clauseText(items: readonly ClauseItem[], exclude: readonly ClauseKind[] = []): string[] {
@@ -428,6 +455,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // questions you have to answer; your own assets are not.
       incoming: new Set(composed.filter((c) => c.kind === 'must-defend' || c.kind === 'opponent-intent' || c.kind === 'opponent-leans' || c.kind === 'latent-danger').map((c) => c.text)),
       order: { rank: new Map(composed.map((c) => [c.text, c.rank] as const)), bar: 0 },
+      alreadySaid: input.alreadySaid,
     },
     input.posture,
     // No method context: this composer already emits its own method beat in the
@@ -442,6 +470,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     clauses,
     /** Every clause the door silenced, and why — the observability trail. */
     quiet: decision.quiet,
+    // What the caller should carry forward so a standing fact is said once.
+    remember: clauses.filter((c) => SAY_ONCE_KINDS.has(c.kind)).map((c) => c.text),
   };
 }
 

@@ -123,6 +123,18 @@ function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise
  */
 export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarrationResult {
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks phase narration (Phase 1)
+  // SAY-ONCE across the game — see useLiveCoach for the reasoning. Phase
+  // transitions are rarer, but the structure line is exactly the kind of
+  // standing fact that would open every one of them identically.
+  const saidRef = useRef<Set<string>>(new Set());
+  // …and the set FORGETS when the board goes backwards. This hook has no game
+  // id (it is mounted per play session), so a second game inside one mount
+  // would inherit the first game's silence. The fullmove number going DOWN is
+  // the honest signal that we are on a different game — or at least a rewound
+  // one, and rewinding is the safe direction to be wrong in: forgetting makes
+  // the coach repeat itself, suppressing makes it mute for a reason nobody can
+  // trace.
+  const lastFullmoveRef = useRef(0);
   const [isNarrating, setIsNarrating] = useState(false);
   const [currentText, setCurrentText] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -584,6 +596,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       // drops the eval/decision framing (David 2026-08-23). Reuses the analysis
       // already read; the importance model gates whether anything speaks.
       try {
+        const fullmove = Number.parseInt(event.fen.split(' ')[5] ?? '1', 10) || 1;
+        if (fullmove < lastFullmoveRef.current) saidRef.current = new Set();
+        lastFullmoveRef.current = fullmove;
         if (stockfishAnalysis?.topLines?.length) {
           const pf = await computePositionFacts({
             // Mid-game, unasked-for. The transition has to earn its sentence.
@@ -595,7 +610,9 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
             analysis: stockfishAnalysis,
             evalBoard: (f) => stockfishEngine.evalBoard(f),
             studentWeaknesses: weaknessRef.current,
+            alreadySaid: saidRef.current,
           });
+          for (const t of pf.remember) saidRef.current.add(t);
           const cl = clauseText(pf.clauses, ['key-moment', 'convert']);
           if (cl.length) { transitionSentence += ` ${cl.join(' ')}`; pfConcrete = true; }
         }

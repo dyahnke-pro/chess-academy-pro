@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer, assembleLastMoveAnswer } from './groundedAnswer';
+import { assembleMoveEvalAnswer, assembleCandidateMoveAnswer, assembleTacticsAnswer, assembleProgressAnswer, assembleWeaknessRecommendation, weaknessTopicFromText, trainingAreaFromText, assembleTrainingRecommendation, notationQuestionSan, explainSanNotation, assembleOpeningProfileAnswer, assembleStatsAnswer, assembleStrengthsAnswer, assembleOpeningAccuracyAnswer, assembleOpeningTrapsAnswer, assembleReviewDueAnswer, assembleMistakesAnswer, assembleLastGameMistakeAnswer, assembleRecentGamesMistakeAnswer, assembleErrorsBySituationAnswer, assembleMisconceptionsAnswer, assembleTacticsProfileAnswer, assemblePhaseProfileAnswer, assembleRepertoireGapAnswer, assembleAccuracyAnswer, assembleConsistencyAnswer, assembleConvertingAnswer, assembleColorAnswer, assembleRecordsAnswer, assembleOpeningRecordAnswer, assembleOpponentRecordAnswer, assembleMoveRatingAnswer, assembleSlipNarration, assemblePuzzleStatsAnswer, assembleTransferGapAnswer, assembleSkillRadarAnswer, assembleMasterPlayAnswer, assemblePlanAnswer, assembleConceptAnswer, assembleFundamentalsAnswer, assemblePlayerGamesAnswer, assembleEndgameAnswer, assemblePositionAssessment, assembleTrendAnswer, assembleAppHelpAnswer, explainBestMoveGrounded, explainMoveOrder, describeMoveGeometry, assembleAlternativesAnswer, assembleLastMoveAnswer, assembleBoardPlanAnswer } from './groundedAnswer';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -1568,5 +1568,20 @@ describe('groundedAnswer — Learn voices the computed concept, not just the bar
     expect(out!.facts).toContain('a fork hits two targets at once');
     // The bare description of the SAME fork must not be spoken a second time.
     expect(out!.facts.match(/Knight on d5 forks/g)?.length ?? 0).toBe(1);
+  });
+});
+
+describe('the plan lane: the worst piece needs a bar, not a mention', () => {
+  it('stays quiet about a piece still on its home square in the opening', () => {
+    // "improve your rook on h1" on move one is true and useless — the rook is
+    // UNDEVELOPED, not misplaced, and that is a different lesson.
+    const a = assembleBoardPlanAnswer('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'white', 'me');
+    expect(a?.facts ?? '').not.toMatch(/improve your rook on h1/i);
+  });
+
+  it('names it once the game has left the opening', () => {
+    // Same idea, move 20: a piece that is still doing nothing there IS misplaced.
+    const a = assembleBoardPlanAnswer('3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 20', 'white', 'me');
+    expect(a?.facts ?? '').toMatch(/improve your/i);
   });
 });

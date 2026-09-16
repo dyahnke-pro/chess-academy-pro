@@ -76,6 +76,38 @@ describe('computePositionFacts — the composer', () => {
     expect(md?.squares).toEqual(['e5']);
   });
 
+  // SAY-ONCE. The repetition these surfaces actually suffer from is a STANDING
+  // fact re-earned every ply, not duplicate geometry.
+  it('says a standing fact once and hands the caller what to remember', async () => {
+    // Alapin, after 10...Rd8 — the isolated d-pawn AND the d-file pin geometry
+    // (David's own game; the walk that measured this repetition).
+    const fen = '3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 11';
+    const first = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const standing = first.clauses.filter((c) => c.kind === 'structure-plan' || c.kind === 'latent-danger' || c.kind === 'student-leans' || c.kind === 'opponent-leans');
+    // The fixture must actually produce one, or this test proves nothing.
+    expect(standing.length, 'no standing clause at this position — pick another fixture').toBeGreaterThan(0);
+    expect(first.remember).toEqual(standing.map((c) => c.text));
+
+    const again = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, alreadySaid: new Set(first.remember) });
+    for (const t of first.remember) {
+      expect(again.clauses.some((c) => c.text === t), `still speaking: ${t}`).toBe(false);
+      expect(again.quiet.some((q) => q.text === t && q.why === 'said-already')).toBe(true);
+    }
+  });
+
+  it('a piece that is STILL hanging says so again — urgency is not a standing fact', async () => {
+    const fen = 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14';
+    const first = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat });
+    const hang = first.clauses.find((c) => c.kind === 'must-defend');
+    expect(hang).toBeTruthy();
+    // It is deliberately NOT in `remember`, so it can never be suppressed…
+    expect(first.remember).not.toContain(hang!.text);
+    // …and even if a caller wrongly fed it back, it still speaks? No: the door
+    // honours the set it is given. The protection is that it never gets IN.
+    const again = await computePositionFacts({ posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, alreadySaid: new Set(first.remember) });
+    expect(again.clauses.some((c) => c.kind === 'must-defend')).toBe(true);
+  });
+
   it('teaches no method to a student who is not the one to move', async () => {
     const r = await computePositionFacts({ posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'b', analysis: flat });
     expect(r.clauses.some((c) => c.kind === 'method')).toBe(false);

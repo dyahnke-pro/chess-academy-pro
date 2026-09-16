@@ -6747,6 +6747,11 @@ export function CoachTeachPage(): JSX.Element {
   // THE STUDENT MODEL (Phase 1) — re-ranks the coach-reply teaching briefing
   // toward the holes this student keeps falling in. Ref-held; read at speak-time.
   const weaknessSignalsRef = useWeaknessSignals();
+  // SAY-ONCE across the lesson. A standing fact (the pawn structure, a pin in
+  // waiting, which piece is doing the work) is re-derived at every taught
+  // position, so without this the same sentence opens beat after beat.
+  const saidStandingRef = useRef<Set<string>>(new Set());
+  const lastLessonFullmoveRef = useRef(0);
   const positionNarration = usePositionNarration({
     fen: game.fen,
     pgn: game.history.join(' '),
@@ -8247,6 +8252,14 @@ export function CoachTeachPage(): JSX.Element {
                 // importance model decides what speaks; the perturbation probe
                 // runs only on a moment that earns it.
                 try {
+                  // FORGET WHEN THE BOARD GOES BACKWARDS — a new lesson, a
+                  // restart, a jump back to the start. Same reasoning as the
+                  // phase hook: forgetting makes the coach repeat a standing
+                  // fact; suppressing wrongly makes it mute for a reason nobody
+                  // can trace, so the doubt resolves toward forgetting.
+                  const lessonFullmove = Number.parseInt(probe.fen().split(' ')[5] ?? '1', 10) || 1;
+                  if (lessonFullmove < lastLessonFullmoveRef.current) saidStandingRef.current = new Set();
+                  lastLessonFullmoveRef.current = lessonFullmove;
                   if (studentBest?.topLines?.length) {
                     const pf = await computePositionFacts({
                       // The student asked for this lesson — every taught position
@@ -8259,7 +8272,9 @@ export function CoachTeachPage(): JSX.Element {
                       analysis: studentBest,
                       evalBoard: (f) => stockfishEngine.evalBoard(f),
                       studentWeaknesses: weaknessSignalsRef.current,
+                      alreadySaid: saidStandingRef.current,
                     });
+                    for (const t of pf.remember) saidStandingRef.current.add(t);
                     for (const c of clauseText(pf.clauses, ['must-defend'])) {
                       queueSpokenHint(probe.fen(), c, 'computed');
                     }

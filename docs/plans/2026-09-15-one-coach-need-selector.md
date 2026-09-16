@@ -1173,3 +1173,52 @@ of repetition on the live surfaces, not geometric duplication. `positionFacts` i
 stateless by design, so this needs a caller-owned "recently spoken" set passed
 in — the same shape as the review path's per-lesson dedupe. That is the next
 build, and the walk above is the measurement to re-run against it.
+
+### §17.4 — SAY-ONCE landed (2026-09-16), measured on a real game
+
+The repetition these surfaces suffer from is a STANDING fact re-earned every
+ply, not duplicate geometry. `selectFacts` gained a third quiet reason,
+`said-already`; the door carries `FactBundle.alreadySaid`; the composer declares
+which of its clause kinds are standing (`structure-plan`, `latent-danger`,
+`student-leans`, `opponent-leans`) and returns them as `remember` for the caller
+to carry forward.
+
+**A must-defend is deliberately NOT standing.** A piece that is STILL hanging
+has to say so again — that is urgency, not repetition. The protection is that it
+never enters the set, not that the door second-guesses the set it is given.
+
+**Measured on David's Alapin, all 36 plies, same fixture both runs:**
+
+| | clauses | suppressed | repeated sentences |
+|---|---|---|---|
+| before | 30 | 0 | 6 |
+| say-once | 28 | 2 | 4 |
+
+The two that went were exactly the standing pair: "your pawn on d4 and your
+queen share that file" and "you're playing with the isolated pawn on d4", each
+of which had spoken twice.
+
+**The four remaining repeats in that table are PROBE ARTIFACTS, not product.**
+The measurement feeds a synthetic fan (the first three legal moves) because a
+real engine pass over 36 plies is minutes; that fan barely changes ply to ply, so
+`deliberation` and `opponent-intent` repeat in a way a real PV would not. Do not
+"fix" them off this table — re-measure with a real engine first.
+
+**Resets, and the direction to be wrong in.** `useLiveCoach` clears on `gameId`.
+`usePhaseNarration` and the Learn page have no game id to key on, so they clear
+when the board goes BACKWARDS (the fullmove number drops). A rewind therefore
+clears the set too, which is the safe direction: forgetting makes the coach
+repeat a standing fact, while suppressing wrongly makes it mute for a reason
+nobody can trace back.
+
+**Read-this-position and the "Why?" button pass NO set on purpose.** If the
+student taps twice, they want to hear it twice.
+
+### §17.5 — the worst-piece lever got its bar
+
+`strongestWeakestPiece` always returns a least-active piece, so the plan lane
+said "improve your rook on h1" on move one — true, and not teaching. A piece
+still on its home square in the opening is UNDEVELOPED, a different lesson with
+its own clause. Now barred until the game has left the opening or the piece has
+already moved and landed badly. A bar, not a cap: silence there is the computed
+verdict.

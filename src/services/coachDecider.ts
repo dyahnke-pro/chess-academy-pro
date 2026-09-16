@@ -68,6 +68,11 @@ export interface FactBundle {
   squares: ReadonlyMap<string, readonly string[]>;
   /** Facts describing what the OPPONENT is doing TO the student. */
   incoming?: ReadonlySet<string>;
+  /** SENTENCES THIS SURFACE HAS ALREADY SPOKEN — see `selectFacts`. A standing
+   *  fact is true for as long as its geometry stands, so it re-earns its place
+   *  on every ply and the student hears it again and again. The surface decides
+   *  what is eligible; the door enforces it. */
+  alreadySaid?: ReadonlySet<string>;
   /** THE SURFACE'S OWN SCALE, when it has one — the ranks AND the bar that
    *  belongs to them. Steps 4 and 5 use these instead of `barForTier` +
    *  `rankFacets`.
@@ -164,8 +169,7 @@ export function decide(
     bundle.squares,
     importance.tier,
     student.weaknesses,
-    bundle.incoming ?? new Set(),
-    bundle.order,
+    { incoming: bundle.incoming, alreadySaid: bundle.alreadySaid, order: bundle.order },
   );
   // 5 — THE ORDER. The surface's own ranks when it supplied them, else the
   // review ranker. Either way the student's holes are raised: `rankFacets` does

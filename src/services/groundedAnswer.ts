@@ -364,7 +364,19 @@ export function assembleBoardPlanAnswer(
   if (oppHoles.length) levers.push(`plant a knight on ${orList(oppHoles)}`);
   // Improve your worst-placed piece.
   const sw = strongestWeakestPiece(fen, myC);
-  if (sw.weakest) levers.push(`improve your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
+  // A BAR, NOT A CAP (G4.5): name the worst piece only when it is genuinely
+  // MISPLACED. `strongestWeakestPiece` always returns a least-active piece, so
+  // on move one that is the h1 rook and the coach said "improve your rook on
+  // h1" — not false, not teaching. A piece still sitting on its home square in
+  // the opening is UNDEVELOPED, which is a different lesson with its own
+  // clause; it is misplaced only once the game has left the opening or the
+  // piece has already moved and landed badly. Silence here is the computed
+  // verdict, never a truncation.
+  const homeRank = myC === 'w' ? '1' : '8';
+  const pastOpening = (Number.parseInt(fen.split(' ')[5] ?? '1', 10) || 1) >= 10;
+  if (sw.weakest && (pastOpening || sw.weakest.square[1] !== homeRank)) {
+    levers.push(`improve your ${REVIEW_PIECE_NAME[sw.weakest.piece]} on ${sw.weakest.square}`);
+  }
 
   // Every lever the board earned — no ceiling (G4.5). They are already ordered
   // most→least decisive, so a long list reads as a ranked plan, not a dump.

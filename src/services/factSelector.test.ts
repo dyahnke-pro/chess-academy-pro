@@ -51,7 +51,7 @@ describe('factSelector — the tie-break is a chess judgement', () => {
     // and therefore the same rank, so without this the winner was whichever the
     // authoring order emitted first — which was the pin.
     const incoming = new Set([BATTERY]); // beneficiary = the opponent
-    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], SQ, 'blunder', [], incoming);
+    const r = selectFacts([PIN, LONE, BATTERY, ROYAL], SQ, 'blunder', [], { incoming });
     expect(r.spoken).toContain(BATTERY);
     expect(r.spoken).not.toContain(PIN);
     expect(r.quiet.find((q) => q.text === PIN)?.by).toBe(BATTERY);
@@ -107,7 +107,7 @@ describe("a surface's own scale — rank and bar travel together", () => {
     // would all score the same and the authoring order would decide.
     const facts = ['they are threatening the knight on e5', 'the plan here: take the centre', 'a habit to run next time'];
     const rank = new Map([[facts[0], 75], [facts[1], 38], [facts[2], 10]]);
-    const out = selectFacts(facts, new Map(), 'none', [], new Set(), { rank, bar: 0 });
+    const out = selectFacts(facts, new Map(), 'none', [], { order: { rank, bar: 0 } });
     expect(out.spoken).toEqual(facts);      // 75 > 38 > 10
     expect(out.quiet).toEqual([]);          // bar 0 floors nothing
   });
@@ -115,7 +115,7 @@ describe("a surface's own scale — rank and bar travel together", () => {
   it('a bar in the supplied scale sweeps by THAT scale', () => {
     const facts = ['high', 'low'];
     const rank = new Map([['high', 75], ['low', 10]]);
-    const out = selectFacts(facts, new Map(), 'none', [], new Set(), { rank, bar: 20 });
+    const out = selectFacts(facts, new Map(), 'none', [], { order: { rank, bar: 20 } });
     expect(out.spoken).toEqual(['high']);
     expect(out.quiet).toEqual([{ text: 'low', why: 'below-bar' }]);
   });
@@ -124,7 +124,7 @@ describe("a surface's own scale — rank and bar travel together", () => {
     const facts = ['the pin on the e-file', 'the battery on the e-file'];
     const squares = new Map([[facts[0], ['e1', 'e2', 'e8']], [facts[1], ['e1', 'e2', 'e8']]]);
     const rank = new Map([[facts[0], 40], [facts[1], 70]]);
-    const out = selectFacts(facts, squares, 'none', [], new Set(), { rank, bar: 0 });
+    const out = selectFacts(facts, squares, 'none', [], { order: { rank, bar: 0 } });
     expect(out.spoken).toEqual([facts[1]]);
     expect(out.quiet).toEqual([{ text: facts[0], why: 'subsumed', by: facts[1] }]);
   });
@@ -133,7 +133,7 @@ describe("a surface's own scale — rank and bar travel together", () => {
     const facts = ['the pin on the e-file', 'a habit with no geometry'];
     const squares = new Map([[facts[0], ['e1', 'e2', 'e8']]]);
     const rank = new Map([[facts[0], 70], [facts[1], 10]]);
-    const out = selectFacts(facts, squares, 'none', [], new Set(), { rank, bar: 0 });
+    const out = selectFacts(facts, squares, 'none', [], { order: { rank, bar: 0 } });
     expect(out.spoken).toEqual(facts);
   });
 });

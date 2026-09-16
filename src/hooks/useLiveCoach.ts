@@ -18,7 +18,7 @@
  * WO. The hook does dedupe per-ply (no double-speak on the same ply
  * for the same trigger).
  */
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { groundedMoveFeedback } from '../services/coachApi';
 import { buildFedTacticsContext } from '../services/liveTacticsContext';
 import { getCachedStockfish } from './stockfishFenCache';
@@ -125,6 +125,16 @@ function speakStreamed(text: string): void {
 export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
   const { gameId, playerColor } = args;
   const weaknessRef = useWeaknessSignals(); // student model → re-ranks live interjections (Phase 1)
+  // SAY-ONCE. A standing fact — the pawn structure, a pin in waiting, which
+  // piece is doing the work — is true until the board changes, and it is
+  // re-derived every ply, so without this the student hears the same sentence
+  // move after move. Holds only what `computePositionFacts` judged safe to say
+  // once; a piece still hanging is NOT in here and says so again.
+  const saidRef = useRef<Set<string>>(new Set());
+  // …and a NEW GAME starts from silence. Carrying the set across games would
+  // mute the second game's structure line because the first game happened to
+  // share a pawn structure — a silence nobody could trace back to here.
+  useEffect(() => { saidRef.current = new Set(); }, [gameId]);
 
   // student-perspective eval rolling window, oldest first; used by the
   // recovery detector. Capped at the last 12 plies to keep memory
@@ -233,7 +243,9 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
               // descriptive commentary, which Play allows (Phase 1 slice).
               prevEvalCpWhitePov: playerColor === 'white' ? ctx.studentEvalBefore : -ctx.studentEvalBefore,
               studentWeaknesses: weaknessRef.current,
+              alreadySaid: saidRef.current,
             });
+            for (const t of pf.remember) saidRef.current.add(t);
             const cl = clauseText(pf.clauses, ['must-defend', 'key-moment']);
             if (cl.length) liveExtraFacts = cl.join(' ');
           }
