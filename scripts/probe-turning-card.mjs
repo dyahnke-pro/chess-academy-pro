@@ -68,8 +68,17 @@ const run = async () => {
   log(`[probe] game card: ${await until(() => has(page, cardSel), 25000)}`);
   await page.locator(cardSel).first().click({ timeout: 5000 }).catch(() => undefined);
   await dismiss();
-  const startable = () => has(page, '[data-testid="review-forward-btn"]');
-  log(`[probe] walk startable: ${await until(startable, 300000, 1000)}`);
+  // The FORWARD control does not exist until the walk has been STARTED — the
+  // gate is `start-walk-btn` going enabled once the genuine analysis settles.
+  // Waiting on Forward instead reported "walk startable: false" twice while the
+  // app was fine: the probe simply never pressed Start.
+  const startable = async () => {
+    const b = page.locator('[data-testid="start-walk-btn"]').first();
+    return (await b.count()) > 0 && (await b.getAttribute('disabled', { timeout: 3000 }).catch(() => 'x')) === null;
+  };
+  log(`[probe] walk startable: ${await until(startable, 300000, 1500)}`);
+  await page.locator('[data-testid="start-walk-btn"]').first().click({ timeout: 5000 }).catch(() => undefined);
+  log(`[probe] forward control present: ${await until(() => has(page, '[data-testid="review-forward-btn"]'), 30000, 500)}`);
 
   // PAUSE, then jump to the end by clicking Forward — minutes, not ten.
   await page.locator('[data-testid="review-play-pause-btn"]').first().click({ timeout: 3000 }).catch(() => undefined);
