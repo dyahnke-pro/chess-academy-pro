@@ -38,6 +38,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { seedWeaknessProfile } from './audit-lib/seed-weakness-profile.mjs';
 import { exploreOnFreeBoard, readWalkPly } from './audit-lib/review-explore.mjs';
 import { attachVoiceListener, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 
@@ -148,6 +149,20 @@ const run = async () => {
     return { profiles: profs.length };
   }, { gid: GID, pgn: PGN }).catch((e) => ({ error: String(e) }));
   log(`[seed] ${JSON.stringify(seed)}`);
+
+  // OPT-IN: seed a real weakness spine. A cold prod device has NO accumulated
+  // holes, so `habitNeedFrom` gets an empty array and the method bars stay at
+  // their cold-start defaults — which is correct behaviour, and also means the
+  // run cannot tell us whether the habit layer speaks for a student who HAS
+  // those holes. AUDIT_SEED_WEAKNESS=1 answers that question; the default run
+  // still measures what a genuine fresh install hears.
+  if (process.env.AUDIT_SEED_WEAKNESS === '1') {
+    const w = await seedWeaknessProfile(page).catch((e) => ({ error: String(e) }));
+    log(`[seed-weakness] ${JSON.stringify(w)}`);
+    await page.reload({ waitUntil: 'domcontentloaded' }).catch(() => undefined);
+    await dismiss();
+    await page.waitForTimeout(2000);
+  }
 
   // ── CARD (F) — the list card says WIN, never 0-1 ────────────────────────
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 45000 });
@@ -755,6 +770,21 @@ const run = async () => {
   log(`  Playwright: drove list → open → walk → explore → show-me → end → reopen`);
   log(`  Narration listener: ${spoken().length} spoken lines, ${events().length} other events`);
   log(`  Audit-stream: before=${JSON.stringify(streamBefore)} after=${JSON.stringify(streamAfter)}`);
+  // ── THE METHOD LAYER, REPORTED DIRECTLY ────────────────────────────────
+  // "Built" is not "speaks". The beats are gated on the student's own recurrence
+  // (habitNeedFrom) and say-once per game, so the honest measure is how many
+  // actually reached the voice on a real game — printed here rather than left
+  // for a grep. Stems come from methodBeat.ts; keep the two in sync.
+  const METHOD_STEMS = /habit that catches this|their threat before your plan|what is their move doing|list the checks and the captures|checks and captures first|every check, every capture|moment to slow down|Spend your clock here|fork in the road, and those deserve|Name your candidates|candidate moves, written down|discipline here is listing/i;
+  const methodBeats = spoken().map((x) => x.text).filter((t) => METHOD_STEMS.test(t));
+  log(`\n===== METHOD BEATS (${methodBeats.length}) — seedWeakness=${process.env.AUDIT_SEED_WEAKNESS === '1' ? 'ON' : 'off (cold device)'} =====`);
+  if (methodBeats.length === 0) log('  (none — the habit gates did not clear on this game)');
+  methodBeats.forEach((t, i) => {
+    const m = METHOD_STEMS.exec(t);
+    const at = m ? Math.max(0, m.index - 40) : 0;
+    log(`  [${i + 1}] ...${t.slice(at, at + 260)}`);
+  });
+
   log('\n===== SPOKEN (first 30) =====');
   spoken().slice(0, 30).forEach((s, i) => log(`  [${String(i + 1).padStart(2)}] ${s.text.slice(0, 160)}`));
   log('===== SPOKEN (last 10) =====');
