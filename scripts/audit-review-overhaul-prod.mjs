@@ -332,9 +332,12 @@ const run = async () => {
   // to the beat's LENGTH, so richer narration makes the walk legitimately
   // slower. Three rows then failed for a reason that had nothing to do with
   // them: the recap, the turning-point card and Show-me all need the walk to
-  // REACH the end. Poll more often rather than waiting longer, so the budget
-  // tracks the walk instead of the clock.
-  for (let i = 0; i < 900; i++) {
+  // REACH the end. Poll more often rather than waiting longer.
+  // 600 @1000ms = 10 min — the SAME wall clock as the original 400 @1500ms but
+  // 50% more polls. Do not raise this further without also raising the outer
+  // `timeout` on the command: 900 polls pushed a run past 3300s and it was
+  // killed mid-walk, which reads exactly like the failure it was meant to fix.
+  for (let i = 0; i < 600; i++) {
     await resolveCards();
     const n = (await readWalkPly(page))?.n ?? 0;
     const b = await txt(page, '[data-testid="review-classification-badge"]');
