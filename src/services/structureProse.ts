@@ -53,14 +53,15 @@ function list(items: string[]): string {
  *  Unknown atom shapes are passed through verbatim so no computed fact is lost. */
 export function renderStructureAtoms(atoms: string[], seat: StudentSeat): string {
   const parsed = atoms.map((a) => ({ raw: a, atom: parseStructureAtom(a) }));
+  const known = parsed.filter((p): p is { raw: string; atom: Atom } => p.atom !== null);
   const clauses: string[] = [];
 
-  const files = parsed.filter((p) => p.atom?.kind === 'open-file').map((p) => p.atom!.value);
+  const files = known.filter((p) => p.atom.kind === 'open-file').map((p) => p.atom.value);
   if (files.length) clauses.push(`the ${list(files.map((f) => `${f}-file`))} ${files.length > 1 ? 'are' : 'is'} open`);
 
   for (const kind of ['passed', 'isolated'] as const) {
     for (const side of ['w', 'b'] as const) {
-      const sq = parsed.filter((p) => p.atom?.kind === kind && p.atom.side === side).map((p) => p.atom!.value);
+      const sq = known.filter((p) => p.atom.kind === kind && p.atom.side === side).map((p) => p.atom.value);
       if (!sq.length) continue;
       const poss = possessive(side, seat);
       clauses.push(sq.length > 1
@@ -70,13 +71,13 @@ export function renderStructureAtoms(atoms: string[], seat: StudentSeat): string
   }
 
   for (const side of ['w', 'b'] as const) {
-    const f = parsed.filter((p) => p.atom?.kind === 'doubled' && p.atom.side === side).map((p) => p.atom!.value);
+    const f = known.filter((p) => p.atom.kind === 'doubled' && p.atom.side === side).map((p) => p.atom.value);
     if (!f.length) continue;
     clauses.push(`${possessive(side, seat)} pawns are doubled on the ${list(f.map((x) => `${x}-file`))}`);
   }
 
-  for (const p of parsed) {
-    if (p.atom?.kind !== 'outpost') continue;
+  for (const p of known) {
+    if (p.atom.kind !== 'outpost') continue;
     clauses.push(`${possessive(p.atom.side, seat)} ${p.atom.piece} sits on an outpost at ${p.atom.value}`);
   }
 
