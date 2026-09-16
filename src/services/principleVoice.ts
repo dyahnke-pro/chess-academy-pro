@@ -24,6 +24,107 @@ function listMoves(moves: readonly string[], joiner = ' then '): string {
   return moves.join(joiner);
 }
 
+/** ─── THE "HERE'S HOW" LAYER ────────────────────────────────────────────────
+ *
+ *  David 2026-09-16, reading the review of his own game: "The plan plus here's
+ *  how!!! The how is teaching!! How and why statements critical to this app's
+ *  success!"
+ *
+ *  Measured the same hour: `deriveNextPlans` carried a HOW on 8 of its 8 plans,
+ *  and every OTHER teaching surface carried zero. This file is the worst case —
+ *  it is the DIAGNOSE layer, it names 33 fundamentals by name with board proof,
+ *  and it never once told the student how to stop doing it. Naming the flaw is
+ *  half a lesson; the procedure that prevents it next game is the other half.
+ *
+ *  Each entry is the HABIT, not a restatement of the fault: what to DO, in the
+ *  order to do it, at the board. No square is named here — the verdict above
+ *  already proved the geometry, and a fixed string cannot know the position
+ *  (G0/G3: the how is a procedure, never an invented board claim).
+ *
+ *  `Record<FundamentalId, string>` is deliberate: a 34th fundamental FAILS TO
+ *  COMPILE until someone writes its how. A diagnosis without a remedy cannot
+ *  ship again. */
+const FUNDAMENTAL_HOW: Record<FundamentalId, string> = {
+  // ── opening: development and tempo ──
+  'same-piece-twice':
+    'Before you move a piece a second time, ask what it gains that a NEW piece would not. If the answer is "it gets safer", prefer developing — safety usually comes free once everything is out.',
+  'tempo-handed':
+    'Count it out loud: does this move force them to answer, or do they get a free turn? When a move gives them a tempo, look for one that develops AND asks a question.',
+  'space-conceded':
+    'Before retreating or stepping aside, check whether you can hold the square by DEFENDING it instead — add a defender rather than give the square away, because pawns never come back.',
+  'neglected-development':
+    'Run the checklist every opening move: are all four minors out, is the king castled, are the rooks connected? Answer no anywhere and that is your move — everything else can wait.',
+  'early-queen-sortie':
+    'Keep the queen home until the minors are out. The test is simple: if a knight or bishop can be kicked at your queen with tempo, you are financing their development.',
+  'king-left-in-centre':
+    'Castle by move ten unless a concrete line stops you. When files start opening in the centre, castling is not a luxury move you get to play later — it is the move.',
+  'early-edge-pawns':
+    'Ask what an edge pawn actually attacks. If the answer is nothing, spend the move on a piece — rook pawns win games in the endgame, not the opening.',
+  'knights-before-bishops':
+    'Develop knights first: a knight has one good square early, a bishop has several and you cannot know which until their structure commits. Let them tell you where the bishop belongs.',
+  // ── pieces on bad squares ──
+  'buried-own-bishop':
+    'Before a pawn move, look at your own bishops and ask which squares this shuts. Put your pawns on the colour your bishop does NOT travel on, so it keeps its diagonals.',
+  'knight-to-the-rim':
+    'Ask how many squares the knight will have from there. Route it toward the centre or an outpost instead — count the squares before AND after, and take the bigger number.',
+  'worst-piece-unimproved':
+    'Find your worst piece before you attack. Spend two or three moves walking it somewhere it bites: a piece doing nothing means you are playing a piece down.',
+  'kept-bad-bishop':
+    'Spot the bishop stuck behind its own pawns early, and either trade it off or free it by moving those pawns to the other colour. Do not carry a dead piece into an endgame.',
+  'rook-ignored-open-file':
+    'The moment a file opens, ask which rook takes it. An open file is the rook\'s only road into their position, and whoever claims it first usually keeps it.',
+  'passive-rook-endgame':
+    'Rooks go BEHIND passed pawns and onto the seventh. Before defending passively, look for the active square — an active rook is often worth a pawn in a rook ending.',
+  // ── threats and tactics ──
+  'loose-piece':
+    'End every move with a sweep: what of mine is undefended right now? Loose pieces are what makes their tactic work, so defend it or move it before it becomes their idea.',
+  'ignored-threat':
+    'Their move first, always. Before you look for your own idea, answer what their last move threatens — if it threatens something, that is the move you have to meet.',
+  'passive-when-forcing-existed':
+    'Scan forcing moves first, in order: every check, every capture, every threat. Only when none of them works do you look at quiet moves — that order is what finds shots.',
+  'poisoned-pawn':
+    'Before taking a free pawn, ask why they let you. Play out their reply: if it comes with tempo and you end up worse coordinated, the pawn was the bait.',
+  'greedy-pawn-grab':
+    'Price the pawn in tempi. If collecting it costs two moves and lets them develop with threats, it is not free — count the moves before you count the material.',
+  'overvalued-attack':
+    'Count attackers and defenders before you commit. An attack with fewer attackers than defenders is a plan you have to abandon later, after it has cost you the position.',
+  // ── structure ──
+  'weakened-king-shield':
+    'Do not move the pawns in front of your own king without a concrete reason. Before one, ask which piece of theirs gets a route in once that square is gone.',
+  'created-pawn-weakness':
+    'Look one move ahead of every pawn push: what square does this permanently stop covering, and can a piece of theirs sit there? A pawn move is the only one you cannot undo.',
+  'overextended-pawn':
+    'A pawn far up the board needs support before it goes. Check it is defended and that you can hold the square behind it — otherwise it becomes the target instead of the spearhead.',
+  'premature-centre-break':
+    'Finish development before you open the position. The break is strong only when your pieces are ready to pour through the lines it opens — otherwise it opens them for THEM.',
+  'capture-toward-centre':
+    'When two captures are legal, take toward the centre by default. It builds a pawn mass pointing at the middle instead of a wing pawn nobody needs.',
+  'mistimed-pawn-break':
+    'Prepare the break before playing it: get every piece that touches the break square onto it first. A break played a move early just trades your good pawn for their bad one.',
+  // ── trades ──
+  'traded-active-for-passive':
+    'Before a trade, compare the two pieces honestly: which one is doing more work right now? Trade your worst piece for their best, never the other way round.',
+  'wrong-trade-for-material':
+    'Material is not the only ledger. Ask what the position looks like after the trade — a piece count that improves while your structure or king safety gets worse is a bad deal.',
+  // ── endgame ──
+  'passive-king-endgame':
+    'When the queens come off, the king becomes a fighting piece — march it toward the centre. In endgames the side whose king arrives first usually wins.',
+  'rook-in-front-of-passer':
+    'Put the rook BEHIND the passer, always — yours or theirs. In front it is a blocker doing nothing; behind, it gains scope with every square the pawn advances.',
+  'passed-pawn-neglected':
+    'Passed pawns must be pushed. Clear the square in front, escort it with the king, and advance one safe square at a time until they must give up a piece to stop it.',
+  'lost-the-opposition':
+    'In king-and-pawn endings, count the squares between the kings before you move. Keep an odd number with them to move and the opposition — and the key squares — stay yours.',
+  'botched-conversion':
+    'Winning positions are won by simplifying. Trade pieces at every chance but keep pawns on, steer for the ending where the extra material decides, and refuse every complication.',
+};
+
+/** The habit that prevents this fundamental next game, or null when the id is
+ *  unknown (a caller holding a stale id gets silence, never a guess). */
+export function fundamentalHow(id: FundamentalId): string | null {
+  return FUNDAMENTAL_HOW[id] ?? null;
+}
+
 /** The full verdict for one attribution. `v` picks the stem variant. */
 function fullVerdict(a: PrincipleAttribution, v: number): string {
   const f = a.facts;
@@ -363,7 +464,17 @@ export function renderFundamentalVerdict(attrs: readonly PrincipleAttribution[],
   attrs.forEach((a, i) => {
     const first = !opts.seen.has(a.id);
     opts.seen.add(a.id);
-    parts.push(first ? fullVerdict(a, opts.ply + i) : shortVerdict(a));
+    if (!first) { parts.push(shortVerdict(a)); return; }
+    // THE DIAGNOSIS, THEN THE HOW (David 2026-09-16: "The plan plus here's
+    // how!!! The how is teaching!!"). Naming the flaw is half a lesson; the
+    // procedure that stops it next game is the other half. Attached on the
+    // FIRST appearance only — `opts.seen` is already the say-once ledger, so a
+    // fundamental that recurs gets its short stem and never the lecture twice.
+    // Not capped to one per ply: if two NEW fundamentals were both proved here,
+    // the board earned both and the student hears both (G4.5). They spread
+    // themselves out across the game because each can only fire once.
+    const how = fundamentalHow(a.id);
+    parts.push(how ? `${fullVerdict(a, opts.ply + i)} Here's how: ${how}` : fullVerdict(a, opts.ply + i));
   });
   return parts.join(' ');
 }
