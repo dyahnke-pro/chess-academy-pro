@@ -337,6 +337,20 @@ before the selector exists, or the July silence returns.
   engine by `auditConceptGameplayCues.test.ts`), scope lines per ask, give
   playback its own clock, answer forks and pickers like a student.
 
+- **`npx tsc --noEmit` is NOT the project's typecheck.** ship-check runs
+  `npm run typecheck` = `tsc -b --force`, and only that caught a duplicate
+  `assessPositionalEdge` import that `--noEmit` passed clean. It cost a full
+  ship-check cycle (~10 min). Verify with `npm run typecheck`, never `npx tsc`.
+- **Narration is non-deterministic under CPU load, by design.** Every engine
+  read is `raceTimeout(computePvLine(…), PROJ_TIMEOUT_MS = 7000, null)` — a
+  wall-clock deadline, not a length cap — so on a busy box a beat silently
+  vanishes rather than blocking the walk. This bit twice on 2026-09-16: two
+  `coachFeatureService.causalChain` tests "failed" purely from contention with
+  a concurrent ship-check (both pass alone), and the review audit's REOPEN row
+  went red the same way. **When a beat is missing from an audit or a test, load
+  is the first suspect, not the code** — re-run it alone before diagnosing.
+  Corollary: never run a heavy Playwright audit and ship-check at once.
+
 ## 6b. Open findings after the N0–N6 build (2026-09-15)
 
 - `audit-review-real-game.mjs` is STALE since the 2026-09-05 overhaul (reads
