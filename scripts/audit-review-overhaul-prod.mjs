@@ -341,8 +341,32 @@ const run = async () => {
     const thesisIdx = lines.findIndex((t) => /The game turned at /.test(t));
     const thesisCount = lines.filter((t) => /The game turned at /.test(t)).length;
     const legacyCount = lines.filter((t) => /The turning point was /.test(t)).length;
+    // THE APP TELLS US THE KIND — read it instead of guessing. CoachGameReview
+    // emits `selector read the game: thesis=<kind>@<ply> …`, and the thesis is
+    // spoken ONLY when kind==='turned' AND its ply is the one the card asks
+    // about (otherwise "the game turned at X" would contradict a card whose
+    // answer is Y — a deliberate withhold, not a miss). 2026-09-16: a prod run
+    // hard-failed this check at thesis lines=0 with no way to tell which case
+    // it was.
+    const selLine = events()
+      .map((e) => String(e.summary ?? ''))
+      .filter((t) => /selector read the game/.test(t))
+      .pop() ?? '';
+    const kindM = /thesis=([a-z]+)@([0-9-]+)/.exec(selLine);
+    const thesisKind = kindM ? kindM[1] : null;
+    const thesisPly = kindM ? kindM[2] : null;
+    const cardM = /card=([0-9-]+)/.exec(selLine);
+    const cardPly = cardM ? cardM[1] : null;
+    // Owed only when the selector's thesis is a 'turned' one pointing at the
+    // very ply the card asks about.
+    const owed = thesisKind === 'turned' && (cardPly === null || thesisPly === cardPly);
     if (askIdx === -1) {
       await add('THESIS spoken-once-at-reveal', true, 'no turning-point card this game (fewer than 2 costed moments) — thesis withheld by design');
+    } else if (!kindM) {
+      await add('THESIS spoken-once-at-reveal', false, `card rendered but the selector emitted NO thesis kind — the N1 wire did not run (spoken=${thesisCount})`);
+    } else if (!owed) {
+      await add('THESIS spoken-once-at-reveal', thesisCount === 0,
+        `n/a — selector thesis is ${thesisKind}@${thesisPly} while the card asks about ply ${cardPly ?? '?'}, so it is withheld by design (spoken=${thesisCount}, must be 0)`);
     } else {
       await add('THESIS spoken-once-at-reveal', thesisCount === 1 && legacyCount === 0, `thesis lines=${thesisCount} legacy=${legacyCount}${thesisIdx >= 0 ? ` "${lines[thesisIdx].slice(0, 100)}"` : ''}`);
       await add('THESIS withheld-until-pick', thesisIdx === -1 || thesisIdx > askIdx, `ask@${askIdx} thesis@${thesisIdx}`);

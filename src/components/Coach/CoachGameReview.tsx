@@ -1233,7 +1233,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGameReview.teachingSelector',
-        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
+        // `card=` is the ply the turning-point card asks about. The thesis is
+        // spoken ONLY when kind==='turned' AND its ply equals that one — saying
+        // "the game turned at X" over a card whose answer is Y would contradict
+        // the card. Emitting both lets the prod audit tell a deliberate
+        // withhold from a broken wire instead of hard-failing on silence
+        // (2026-09-16).
+        summary: `selector read the game: thesis=${pkg.thesis.kind}@${pkg.thesis.ply ?? '-'} card=${q.answer.ply} moments=[${pkg.moments.map((m) => m.ply).join(',')}] thread=[${[...pkg.onThread].join(',')}]`,
       });
     } catch { turningThesisRef.current = ''; }
     setTurningQ(q);
