@@ -406,7 +406,15 @@ const run = async () => {
     const b = await txt(page, '[data-testid="review-classification-badge"]');
     if (n > 0 && !plyNarr.has(n)) {
       const nt = await txt(page, '[data-testid="review-narration-banner"]');
-      if (nt) plyNarr.set(n, { badge: b, narr: nt });
+      // THE BANNER IS NOT THE VOICE. On a quiet ply the coach says nothing and
+      // the banner shows the MOVE instead — a deliberate placeholder that
+      // replaced "(passes silently)" printing itself all game (David
+      // 2026-07-19). Scraping it verbatim recorded "a3" as narration, and the
+      // report then told David the coach had read a bare SAN aloud when it had
+      // been correctly silent (2026-09-16). A banner whose whole text is just
+      // the move IS silence — record it as such.
+      const sanOnly = nt && /^[NBRQK]?[a-h]?[1-8]?x?[a-h][1-8](=[NBRQ])?[+#]?$|^O-O(-O)?[+#]?$/.test(nt.trim());
+      if (nt && !sanOnly) plyNarr.set(n, { badge: b, narr: nt });
     }
     if (n % 2 === 0 && n > 0 && /INACCUR|MISTAKE|BLUNDER/i.test(b) && !flaggedLeads.has(n)) {
       const nt = plyNarr.get(n)?.narr ?? '';

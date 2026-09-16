@@ -5579,7 +5579,7 @@ export function seatPieceReferences(
     const ADJ = 'passed|weak|isolated|doubled|backward|extra|lone|bad|connected|protected|central|advanced|remaining|outside';
     return text.replace(
       new RegExp(
-        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
+        `(\\b[Yy]our opponent's\\s+|\\b[Yy]our\\s+|\\b[Tt]heir\\s+|\\b[Tt]he\\s+|\\b[Tt]h(?:at|is|ose|ese)\\s+|\\b[Aa]n?\\s+)?((?:${ADJ})\\s+)?\\b(Knight|Bishop|Rook|Queen|Pawn|King|knight|bishop|rook|queen|pawn|king)\\s+on\\s+([a-h][1-8])\\b`,
         'g',
       ),
       (whole, lead: string | undefined, adj: string | undefined, piece: string, sq: string) => {
@@ -5591,6 +5591,19 @@ export function seatPieceReferences(
         // grammatical — stamping a possessive after it produced "a your passed
         // pawn on c2" (prod line-read, 2026-07-23). Leave indefinite phrases be.
         if (leadLower === 'a' || leadLower === 'an') return whole;
+        // A DEMONSTRATIVE is a determiner, so a possessive cannot follow it —
+        // it REPLACES it. Until 2026-09-16 `that|this` was missing from the lead
+        // alternation entirely, so the regex matched the bare noun, captured no
+        // lead, and stamped the possessive in front of the noun instead of the
+        // determiner: "make that your knight on d4 the boss" (prod line-read of
+        // David's Alapin, plies 34 and 44). Replacing keeps BOTH the grammar and
+        // the seat, which dropping the possessive would have lost.
+        if (/^th(at|is|ose|ese)$/.test(leadLower)) {
+          const cellD = board.get(sq as Square);
+          if (!cellD || cellD.type !== WANT[piece.toLowerCase()]) return whole;
+          const ownerD = cellD.color === studentColorWB ? 'your' : 'their';
+          return `${ownerD} ${adj ?? ''}${piece} on ${sq}`;
+        }
         const cell = board.get(sq as Square);
         if (!cell || cell.type !== WANT[piece.toLowerCase()]) return whole;
         const owner = cell.color === studentColorWB ? 'your' : 'their';
