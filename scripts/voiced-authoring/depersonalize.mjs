@@ -26,7 +26,15 @@ const RULES = [
   [/(^|[.!?]\s+)(?:in|on|for|during)\s+(?:earlier|previous|all of our|our|these|this|the|my|a)\s+speedruns?\b/gi,
     (_m, lead) => `${lead}In top-level play`],
   [/\b(?:in|on|for|during)\s+(?:earlier|previous|all of our|our|these|this|the|my|a)\s+speedruns?\b/gi, 'in top-level play'],
-  [/\b(?:this|our|the|my)\s+speedruns?\b/gi, 'in top-level play'],
+  // BARE NOUN PHRASE — this rule matches NO preposition, so it must not emit one
+  // (bug found 2026-09-16 by reading the shipped Learn narration of the Alapin).
+  // It used to emit 'in top-level play', a phrase carrying its own preposition,
+  // substituted regardless of syntactic position — so "with the aid of my
+  // speedrun" became "with the aid of IN top-level play" and "my speedrun is
+  // about openings" became "IN top-level play is about openings", a
+  // prepositional phrase as a sentence subject. Only the rules ABOVE, which
+  // match the preposition themselves, may emit one.
+  [/\b(?:this|our|the|my)\s+speedruns?\b/gi, 'top-level play'],
   [/\b(?:earlier|previous|all of our|these)\s+speedruns?\b/gi, 'top-level play'],
   [/\bspeedruns?\b/gi, 'top-level play'],
   // The pro's own history verbs, made IMPERSONAL — never first-person plural.
