@@ -143,21 +143,32 @@ describe('no phrasing model on the review walk (David 2026-09-16: "cut but pass 
   });
 });
 
-describe('the full-detail inventory register is CUT (David 2026-09-16)', () => {
-  it('review does not default to the uncapped inventory register', async () => {
+describe('THE COMPUTER CUTS, NOT A CODE BRANCH (David 2026-09-16)', () => {
+  // This block REPLACES a gate written hours earlier that asserted the opposite
+  // — that review must NOT render the full register. That gate matched the first
+  // attempt at "cut it", which flipped a branch in code. David corrected the
+  // shape: "we don't make a cut on the code side, the computer that ranks the
+  // narrations does. At narrations time." The register is back on and
+  // `factSelector` decides. A stale gate that pins a superseded contract is
+  // itself a defect (CLAUDE.md, audits are living), so it is replaced, not kept
+  // alongside.
+  it('the register renders, and the SELECTOR is what decides', async () => {
     const { readFileSync } = await import('node:fs');
     const { join } = await import('node:path');
     const comp = readFileSync(join(process.cwd(), 'src/components/Coach/CoachGameReview.tsx'), 'utf8');
     const fn = comp.slice(comp.indexOf('function isReviewUncapped'), comp.indexOf('interface CoachGameReviewProps'));
-    // Every exit must be false unless a DIAGNOSTIC opt-in fired. A STANDALONE
-    // `return true;` (not guarded by an `if` on the same line) is the default
-    // flipping back — that is the regression this gate exists to catch.
-    expect(fn).not.toMatch(/^\s*return true;\s*$/m);
-    // …and both unguarded exits (fallthrough + catch) must be false.
-    expect(fn.match(/return false;/g) ?? []).toHaveLength(3);
-    expect(fn).toMatch(/get\('uncapped'\) === '1'/);
-    expect(fn).toMatch(/__REVIEW_UNCAPPED__ === true/);
-    // No user-facing switch may reach it — a toggle is not a cut.
+    expect(fn).toMatch(/^\s*return true;\s*$/m);              // default ON
+    expect(fn).toMatch(/get\('uncapped'\) === '0'/);            // manual compare only
+    // The cut lives in the selector, wired into the facet path.
+    const svc = readFileSync(join(process.cwd(), 'src/services/coachFeatureService.ts'), 'utf8');
+    expect(svc).toMatch(/selectFacts\(kept, facetSquares, tier/);
+    // Silence must stay explainable — the quiet facts are emitted with a reason.
+    expect(svc).toMatch(/selection\.quiet/);
+  });
+
+  it('no Settings toggle may turn the inventory back on — a switch is not a decision', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
     const settings = readFileSync(join(process.cwd(), 'src/components/Settings/SettingsPage.tsx'), 'utf8');
     expect(settings).not.toMatch(/review-full-detail-toggle/);
     expect(settings).not.toMatch(/handleToggle\('reviewFullDetail'/);
